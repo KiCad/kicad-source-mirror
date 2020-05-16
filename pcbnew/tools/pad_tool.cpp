@@ -73,6 +73,7 @@ bool PAD_TOOL::Init()
 
         if( m_editModules )
         {
+            menu.AddItem( PCB_ACTIONS::enumeratePads,        SELECTION_CONDITIONS::ShowAlways, 400 );
             menu.AddItem( PCB_ACTIONS::createPadFromShapes,  SELECTION_CONDITIONS::NotEmpty, 400 );
             menu.AddItem( PCB_ACTIONS::explodePadToShapes,   singlePadSel, 400 );
         }
@@ -80,7 +81,6 @@ bool PAD_TOOL::Init()
         menu.AddItem( PCB_ACTIONS::copyPadSettings,      singlePadSel, 400 );
         menu.AddItem( PCB_ACTIONS::applyPadSettings,     padSel, 400 );
         menu.AddItem( PCB_ACTIONS::pushPadSettings,      singlePadSel, 400 );
-        menu.AddItem( PCB_ACTIONS::enumeratePads,        SELECTION_CONDITIONS::ShowAlways, 400 );
     }
 
     return true;
