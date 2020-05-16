@@ -215,8 +215,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     g_ErcSettings = new ERC_SETTINGS();
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
-    m_printMonochrome = true;
-    m_printSheetReference = true;
     m_hasAutoSave = true;
     m_AboutTitle = "Eeschema";
 

@@ -430,16 +430,9 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     SCH_BASE_FRAME::SaveSettings( eeconfig() );
 
-    // TODO(JE) do most of these need to live as class members here, or can the sites that need
-    // the setting just grab a pointer to the EESCHEMA_SETTINGS and look them up directly?
+    // TODO(JE) do we need to keep m_userUnits around?
     if( eeconfig() )
-    {
-        eeconfig()->m_Appearance.print_sheet_reference     = m_printSheetReference;
-
-        eeconfig()->m_Printing.monochrome                  = m_printMonochrome;
-
-        eeconfig()->m_System.units                         = static_cast<int>( m_userUnits );
-    }
+        eeconfig()->m_System.units = static_cast<int>( m_userUnits );
 }
 
 

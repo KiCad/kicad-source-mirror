@@ -98,10 +98,13 @@ public:
 
     struct PRINTING
     {
-        bool   monochrome;
-        double scale;
-        bool   title_block;
-        std::vector<int> layers;      ///< List of enabled layers for printing
+        bool             background;    ///< Whether or not to print background color
+        bool             monochrome;    ///< Whether or not to print in monochrome
+        double           scale;         ///< Printout scale
+        bool             use_theme;     ///< If false, display color theme will be used
+        wxString         color_theme;   ///< Color theme to use for printing
+        bool             title_block;   ///< Whether or not to print title block
+        std::vector<int> layers;        ///< List of enabled layers for printing
     };
 
     struct SYSTEM

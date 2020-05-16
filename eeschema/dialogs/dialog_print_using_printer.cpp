@@ -30,6 +30,8 @@
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <general.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <dialog_print_using_printer_base.h>
@@ -41,6 +43,10 @@ public:
     DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent );
     ~DIALOG_PRINT_USING_PRINTER() override;
 
+protected:
+    void OnMonochromeChecked( wxCommandEvent& event ) override;
+    void OnUseColorThemeChecked( wxCommandEvent& event ) override;
+
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -48,7 +54,7 @@ private:
     void OnPageSetup( wxCommandEvent& event ) override;
     void OnPrintPreview( wxCommandEvent& event ) override;
 
-    void GetPrintOptions();
+    void SavePrintOptions();
 
     SCH_EDIT_FRAME* m_parent;
 };
@@ -132,10 +138,7 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
     DIALOG_PRINT_USING_PRINTER_BASE( aParent ),
     m_parent( aParent )
 {
-    wxASSERT( aParent != NULL );
-
-    m_checkReference->SetValue( aParent->GetPrintSheetReference() );
-    m_checkMonochrome->SetValue( aParent->GetPrintMonochrome() );
+    wxASSERT( aParent );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
@@ -159,12 +162,43 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
 
 DIALOG_PRINT_USING_PRINTER::~DIALOG_PRINT_USING_PRINTER()
 {
-    GetPrintOptions();
+    SavePrintOptions();
 }
 
 
 bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
 {
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
+
+    m_checkReference->SetValue( cfg->m_Printing.title_block );
+    m_checkMonochrome->SetValue( cfg->m_Printing.monochrome );
+    m_checkBackgroundColor->SetValue( cfg->m_Printing.background );
+    m_checkUseColorTheme->SetValue( cfg->m_Printing.use_theme );
+
+    m_colorTheme->Clear();
+
+    int width    = 0;
+    int height   = 0;
+    int minwidth = width;
+
+    wxString target = cfg->m_Printing.use_theme ? cfg->m_Printing.color_theme : cfg->m_ColorTheme;
+
+    for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
+    {
+        int pos = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
+
+        if( settings->GetFilename() == target )
+            m_colorTheme->SetSelection( pos );
+
+        m_colorTheme->GetTextExtent( settings->GetName(), &width, &height );
+        minwidth = std::max( minwidth, width );
+    }
+
+    m_colorTheme->SetMinSize( wxSize( minwidth + 50, -1 ) );
+
+    m_lblTheme->Enable( cfg->m_Printing.use_theme );
+    m_colorTheme->Enable( cfg->m_Printing.use_theme );
+
     // Initialize page specific print setup dialog settings.
     const PAGE_INFO& pageInfo = m_parent->GetScreen()->GetPageSettings();
     wxPageSetupDialogData& pageSetupDialogData = m_parent->GetPageSetupData();
@@ -183,14 +217,44 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
 
     pageSetupDialogData.GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
 
+    Layout();
+
     return true;
 }
 
 
-void DIALOG_PRINT_USING_PRINTER::GetPrintOptions()
+void DIALOG_PRINT_USING_PRINTER::OnUseColorThemeChecked( wxCommandEvent& event )
 {
-    m_parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
-    m_parent->SetPrintSheetReference( m_checkReference->IsChecked() );
+    m_lblTheme->Enable( m_checkUseColorTheme->GetValue() );
+    m_colorTheme->Enable( m_checkUseColorTheme->GetValue() );
+}
+
+
+void DIALOG_PRINT_USING_PRINTER::OnMonochromeChecked( wxCommandEvent& event )
+{
+    m_checkBackgroundColor->Enable( !m_checkMonochrome->GetValue() );
+
+    if( m_checkMonochrome->GetValue() )
+        m_checkBackgroundColor->SetValue( false );
+    else
+        m_checkBackgroundColor->SetValue( m_parent->eeconfig()->m_Printing.background );
+}
+
+
+void DIALOG_PRINT_USING_PRINTER::SavePrintOptions()
+{
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
+
+    cfg->m_Printing.monochrome  = m_checkMonochrome->IsChecked();
+    cfg->m_Printing.title_block = m_checkReference->IsChecked();
+    cfg->m_Printing.background  = m_checkBackgroundColor->IsChecked();
+    cfg->m_Printing.use_theme   = m_checkUseColorTheme->IsChecked();
+
+    COLOR_SETTINGS* theme = static_cast<COLOR_SETTINGS*>(
+            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) );
+
+    if( theme && m_checkUseColorTheme->IsChecked() )
+        cfg->m_Printing.color_theme = theme->GetFilename();
 }
 
 
@@ -209,7 +273,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
  */
 void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 {
-    GetPrintOptions();
+    SavePrintOptions();
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Preview" );
@@ -253,7 +317,7 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataFromWindow()
         return false;
     }
 
-    GetPrintOptions();
+    SavePrintOptions();
 
     wxPrintDialogData printDialogData( m_parent->GetPageSetupData().GetPrintData() );
     printDialogData.SetMaxPage( g_RootSheet->CountSheets() );
@@ -331,13 +395,15 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
         return false;
 
 #ifdef DEBUG
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
+
     wxLogDebug( wxT( "Printer name: " ) +
                 m_parent->GetPageSetupData().GetPrintData().GetPrinterName() );
     wxLogDebug( wxT( "Paper ID: %d" ),
                 m_parent->GetPageSetupData().GetPrintData().GetPaperId() );
     wxLogDebug( wxT( "Color: %d" ),
                 (int)m_parent->GetPageSetupData().GetPrintData().GetColour() );
-    wxLogDebug( wxT( "Monochrome: %d" ), m_parent->GetPrintMonochrome() );
+    wxLogDebug( wxT( "Monochrome: %d" ), cfg->m_Printing.monochrome );
     wxLogDebug( wxT( "Orientation: %d:" ),
                 m_parent->GetPageSetupData().GetPrintData().GetOrientation() );
     wxLogDebug( wxT( "Quality: %d"),
@@ -367,8 +433,12 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     oldZoom = aScreen->GetZoom();
     old_org = aScreen->m_DrawOrg;
 
+    SETTINGS_MANAGER&  mgr   = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg   = m_parent->eeconfig();
+    COLOR_SETTINGS*    theme = mgr.GetColorSettings( cfg->m_Printing.color_theme );
+
     // Change scale factor and offset to print the whole page.
-    bool printReference = m_parent->GetPrintSheetReference();
+    bool printReference = cfg->m_Printing.title_block;
 
     pageSizeIU = aScreen->GetPageSettings().GetSizeIU();
     FitThisSizeToPaper( pageSizeIU );
@@ -415,17 +485,33 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 
     aScreen->m_IsPrinting = true;
 
-    COLOR4D bgColor = m_parent->GetDrawBgColor();
-    m_parent->SetDrawBgColor( COLOR4D::WHITE );
+    COLOR4D savedBgColor = m_parent->GetDrawBgColor();
+    COLOR4D bgColor      = m_parent->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+
+    if( cfg->m_Printing.background )
+    {
+        if( cfg->m_Printing.use_theme && theme )
+            bgColor = theme->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+    }
+    else
+    {
+        bgColor = COLOR4D::WHITE;
+    }
+
+    m_parent->SetDrawBgColor( bgColor );
 
     GRSFilledRect( nullptr, dc, fitRect.GetX(), fitRect.GetY(), fitRect.GetRight(),
-                   fitRect.GetBottom(), 0, COLOR4D::WHITE, COLOR4D::WHITE );
+                   fitRect.GetBottom(), 0, bgColor, bgColor );
 
-    if( m_parent->GetPrintMonochrome() )
+    if( cfg->m_Printing.monochrome )
         GRForceBlackPen( true );
 
     KIGFX::SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
     renderSettings.SetPrintDC( dc );
+
+    if( cfg->m_Printing.use_theme && theme )
+        renderSettings.LoadColors( theme );
+
     // The worksheet item print code is shared between PCBNew and EESchema, so it's easier
     // if they just use the PCB layer.
     renderSettings.SetLayerColor( LAYER_WORKSHEET,
@@ -439,7 +525,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 
     aScreen->Print( &renderSettings );
 
-    m_parent->SetDrawBgColor( bgColor );
+    m_parent->SetDrawBgColor( savedBgColor );
     aScreen->m_IsPrinting = false;
 
     GRForceBlackPen( false );

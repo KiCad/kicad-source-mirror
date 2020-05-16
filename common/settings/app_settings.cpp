@@ -66,9 +66,18 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( std::string aFilename, int aSchemaVersion 
     m_params.emplace_back(
             new PARAM<int>( "lib_tree.column_width", &m_LibTree.column_width, 360 ) );
 
+    m_params.emplace_back(
+            new PARAM<bool>( "printing.background", &m_Printing.background, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "printing.monochrome", &m_Printing.monochrome, true ) );
 
     m_params.emplace_back( new PARAM<double>( "printing.scale", &m_Printing.scale, 1.0 ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "printing.use_theme", &m_Printing.use_theme, false ) );
+
+    m_params.emplace_back(
+            new PARAM<wxString>( "printing.color_theme", &m_Printing.color_theme, "" ) );
 
     m_params.emplace_back( new PARAM<bool>( "printing.title_block",
             &m_Printing.title_block, false ) );

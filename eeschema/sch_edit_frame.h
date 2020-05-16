@@ -126,8 +126,6 @@ private:
     std::vector<PARAM_CFG*> m_projectFileParams;
     std::vector<PARAM_CFG*> m_configSettings;
     wxPageSetupDialogData   m_pageSetupData;
-    bool                    m_printMonochrome;    ///< Print monochrome instead of grey scale.
-    bool                    m_printSheetReference;
     SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
     wxString                m_netListerCommand;   ///< Command line to call a custom net list
                                                   ///< generator.
@@ -559,11 +557,6 @@ public:
     void SetSheetNumberAndCount();
 
     wxPageSetupDialogData& GetPageSetupData() { return m_pageSetupData; }
-
-    bool GetPrintMonochrome() { return m_printMonochrome; }
-    void SetPrintMonochrome( bool aMonochrome ) { m_printMonochrome = aMonochrome; }
-    bool GetPrintSheetReference() { return m_printSheetReference; }
-    void SetPrintSheetReference( bool aShow ) { m_printSheetReference = aShow; }
 
     void NewProject();
     void LoadProject();
