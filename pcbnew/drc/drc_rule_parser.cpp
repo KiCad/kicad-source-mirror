@@ -96,7 +96,17 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_SELECTOR*>& aSelectors,
         ruleMap[ rule->m_Name ] = rule;
 
     for( const std::pair<DRC_SELECTOR*, wxString>& entry : selectorRules )
-        entry.first->m_Rule = ruleMap[ entry.second ];
+    {
+        if( ruleMap.count( entry.second ) )
+        {
+            entry.first->m_Rule = ruleMap[ entry.second ];
+        }
+        else
+        {
+            wxString errText = wxString::Format( _( "Rule \"%s\" not found." ), entry.second );
+            THROW_PARSE_ERROR( errText, CurSource(), "", 0, 0 );
+        }
+    }
 }
 
 

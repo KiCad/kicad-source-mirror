@@ -61,7 +61,8 @@ DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
         m_pcbEditorFrame( nullptr ),
         m_pcb( nullptr ),
-        m_drcDialog( nullptr )
+        m_drcDialog( nullptr ),
+        m_rulesFileLastMod( 0 )
 {
     // establish initial values for everything:
     m_doPad2PadTest     = true;         // enable pad to pad clearance tests
@@ -98,7 +99,7 @@ void DRC::Reset( RESET_REASON aReason )
 
         m_pcb = m_pcbEditorFrame->GetBoard();
 
-        readRules();
+        loadRules();
     }
 }
 
@@ -354,35 +355,51 @@ int DRC::TestZoneToZoneOutlines()
 }
 
 
-void DRC::readRules()
+void DRC::loadRules()
 {
-    wxString rulesFilepath = m_pcbEditorFrame->Prj().AbsolutePath( "drc-rules" );
+    wxString   rulesFilepath = m_pcbEditorFrame->Prj().AbsolutePath( "drc-rules" );
+    wxFileName rulesFile( rulesFilepath );
 
-    BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
-    bds.m_DRCRuleSelectors.clear();
-    bds.m_DRCRules.clear();
-
-    FILE* fp = wxFopen( rulesFilepath, wxT( "rt" ) );
-
-    if( fp )
+    if( rulesFile.FileExists() )
     {
-        try
+        wxLongLong lastMod = rulesFile.GetModificationTime().GetValue();
+
+        if( lastMod > m_rulesFileLastMod )
         {
-            DRC_RULES_PARSER parser( m_pcb, fp, rulesFilepath );
-            parser.Parse( bds.m_DRCRuleSelectors, bds.m_DRCRules );
-        }
-        catch( PARSE_ERROR& pe )
-        {
-            DisplayError( m_drcDialog, pe.What() );
+            m_rulesFileLastMod = lastMod;
+            m_ruleSelectors.clear();
+            m_rules.clear();
+
+            FILE* fp = wxFopen( rulesFilepath, wxT( "rt" ) );
+
+            if( fp )
+            {
+                try
+                {
+                    DRC_RULES_PARSER parser( m_pcb, fp, rulesFilepath );
+                    parser.Parse( m_ruleSelectors, m_rules );
+                }
+                catch( PARSE_ERROR& pe )
+                {
+                    // Don't leave possibly malformed stuff around for us to trip over
+                    m_ruleSelectors.clear();
+                    m_rules.clear();
+
+                    DisplayError( m_drcDialog, pe.What() );
+                }
+            }
         }
     }
+
+    BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
+    bds.m_DRCRuleSelectors = m_ruleSelectors;
+    bds.m_DRCRules = m_rules;
 }
 
 
 void DRC::RunTests( wxTextCtrl* aMessages )
 {
-    // TODO: timestamp file and read only if newer
-    readRules();
+    loadRules();
 
     // be sure m_pcb is the current board, not a old one
     // ( the board can be reloaded )
