@@ -116,8 +116,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     wxString msg = wxString::Format( _( "\nOpen \"%s\"\n" ), zipfiledlg.GetPath() );
     PrintMsg( msg );
 
-    wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
-                        wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+    wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(), wxDD_DEFAULT_STYLE );
 
     if( dirDlg.ShowModal() == wxID_CANCEL )
         return;
