@@ -79,7 +79,7 @@ test_formatting:
 build_linux:
   stage: build
   extends: .only_code
-  interruptible: true
+  interruptible: false
   cache:
     key: "cache-linux"
     paths:
