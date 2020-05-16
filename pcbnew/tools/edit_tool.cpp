@@ -120,6 +120,27 @@ void EDIT_TOOL::Reset( RESET_REASON aReason )
 }
 
 
+class SPECIAL_TOOLS_CONTEXT_MENU : public ACTION_MENU
+{
+public:
+    SPECIAL_TOOLS_CONTEXT_MENU() :
+        ACTION_MENU( true )
+    {
+        SetIcon( options_board_xpm );
+        SetTitle( _( "Special Tools..." ) );
+
+        Add( PCB_ACTIONS::moveExact );
+        Add( PCB_ACTIONS::positionRelative );
+        Add( PCB_ACTIONS::createArray );
+    }
+
+    ACTION_MENU* create() const override
+    {
+        return new SPECIAL_TOOLS_CONTEXT_MENU();
+    }
+};
+
+
 bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
@@ -152,15 +173,20 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::rotateCcw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::mirror, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
+
     menu.AddItem( ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::properties, SELECTION_CONDITIONS::LessThan( 2 )
+    menu.AddItem( PCB_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
                       || SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
 
-    menu.AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::positionRelative, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::mirror, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
+
+    // Add the submenu for create array and special move
+    auto specialToolsSubMenu = std::make_shared<SPECIAL_TOOLS_CONTEXT_MENU>();
+    specialToolsSubMenu->SetTool( this );
+    menu.AddSeparator();
+    m_selectionTool->GetToolMenu().AddSubMenu( specialToolsSubMenu );
+    menu.AddMenu( specialToolsSubMenu.get(), SELECTION_CONDITIONS::NotEmpty );
 
     menu.AddSeparator();
     menu.AddItem( ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
