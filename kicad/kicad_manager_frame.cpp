@@ -310,22 +310,9 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     if( Kiway().PlayersClose( false ) )
     {
-        int px, py;
-
         // Save the currently opened file in the file history
         if( !GetProjectFileName().empty() )
             UpdateFileHistory( GetProjectFileName() );
-
-        if( !IsIconized() )   // save main frame position and size
-        {
-            GetPosition( &px, &py );
-            m_FramePos.x = px;
-            m_FramePos.y = py;
-
-            GetSize( &px, &py );
-            m_FrameSize.x = px;
-            m_FrameSize.y = py;
-        }
 
         Event.SetCanVeto( true );
 
