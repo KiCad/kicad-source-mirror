@@ -952,6 +952,8 @@ public:
 
     void SyncToolbars() override;
 
+    wxString GetCurrentFileName() const override;
+
     DECLARE_EVENT_TABLE()
 };
 

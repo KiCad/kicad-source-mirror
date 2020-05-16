@@ -531,7 +531,15 @@ void EDA_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     // Save the recently used files list
     if( m_fileHistory )
+    {
+        // Save the currently opened file in the file history
+        wxString currentlyOpenedFile = GetCurrentFileName();
+
+        if( !currentlyOpenedFile.IsEmpty() )
+            UpdateFileHistory( currentlyOpenedFile );
+
         m_fileHistory->Save( *aCfg );
+    }
 }
 
 

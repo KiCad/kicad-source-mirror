@@ -215,7 +215,7 @@ void KICAD_MANAGER_FRAME::SetProjectFileName( const wxString& aFullProjectProFil
 }
 
 
-const wxString KICAD_MANAGER_FRAME::GetProjectFileName()
+const wxString KICAD_MANAGER_FRAME::GetProjectFileName() const
 {
     return  Prj().GetProjectFullName();
 }
@@ -310,10 +310,6 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     if( Kiway().PlayersClose( false ) )
     {
-        // Save the currently opened file in the file history
-        if( !GetProjectFileName().empty() )
-            UpdateFileHistory( GetProjectFileName() );
-
         Event.SetCanVeto( true );
 
         m_leftWin->Show( false );

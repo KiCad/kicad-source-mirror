@@ -1257,3 +1257,9 @@ void PCB_EDIT_FRAME::OnExportHyperlynx( wxCommandEvent& event )
 
     ExportBoardToHyperlynx( GetBoard(), fn );
 }
+
+
+wxString PCB_EDIT_FRAME::GetCurrentFileName() const
+{
+    return GetBoard()->GetFileName();
+}

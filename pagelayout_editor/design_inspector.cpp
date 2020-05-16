@@ -207,7 +207,7 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
 
     WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
 
-    wxFileName      fn( ((PL_EDITOR_FRAME*) GetParent())->GetCurrFileName() );
+    wxFileName      fn( ((PL_EDITOR_FRAME*) GetParent())->GetCurrentFileName() );
 
     if( fn.GetName().IsEmpty() )
         SetTitle( "<default page layout>" );

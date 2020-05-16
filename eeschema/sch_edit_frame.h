@@ -567,6 +567,8 @@ public:
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
+    wxString GetCurrentFileName() const override;
+
     void ParseArgs( wxCmdLineParser& aParser ) override;
 
     /**

@@ -259,12 +259,12 @@ public:
      * If this is the default (no loaded file) returns a emtpy name
      * or a new design.
      */
-    const wxString& GetCurrFileName() const;
+    wxString GetCurrentFileName() const override;
 
     /**
      * Stores the current layout descr file filename
      */
-    void SetCurrFileName( const wxString& aName );
+    void SetCurrentFileName( const wxString& aName );
 
     /**
      * Refresh the library tree and redraw the window

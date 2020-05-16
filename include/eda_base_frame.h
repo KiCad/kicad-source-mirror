@@ -409,6 +409,14 @@ public:
     wxString GetMruPath() const { return m_mruPath; }
 
     /**
+     * Get the full filename + path of the currently opened file in the frame.
+     * If no file is open, an empty string is returned.
+     *
+     * @return the filename and full path to the open file
+     */
+    virtual wxString GetCurrentFileName() const { return wxEmptyString; }
+
+    /**
      * Recreates the menu bar.
      *
      * Needed when the language is changed

@@ -282,7 +282,7 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
     if( IsContentModified() )
     {
-        wxFileName filename = GetCurrFileName();
+        wxFileName filename = GetCurrentFileName();
         wxString msg = _( "Save changes to \"%s\" before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ),
@@ -449,7 +449,7 @@ void PL_EDITOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 void PL_EDITOR_FRAME::UpdateTitleAndInfo()
 {
     wxString title;
-    wxString file = GetCurrFileName();
+    wxString file = GetCurrentFileName();
 
     title.Printf( _( "Page Layout Editor" ) + wxT( " \u2014 %s" ),
                   file.Length() ? file : _( "no file selected" ) );
@@ -457,13 +457,13 @@ void PL_EDITOR_FRAME::UpdateTitleAndInfo()
 }
 
 
-const wxString& PL_EDITOR_FRAME::GetCurrFileName() const
+wxString PL_EDITOR_FRAME::GetCurrentFileName() const
 {
     return BASE_SCREEN::m_PageLayoutDescrFileName;
 }
 
 
-void PL_EDITOR_FRAME::SetCurrFileName( const wxString& aName )
+void PL_EDITOR_FRAME::SetCurrentFileName( const wxString& aName )
 {
     BASE_SCREEN::m_PageLayoutDescrFileName = aName;
 }
@@ -774,7 +774,7 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 
-    if( GetCurrFileName().IsEmpty() )
+    if( GetCurrentFileName().IsEmpty() )
     {
         // Default shutdown reason until a file is loaded
         SetShutdownBlockReason( _( "New page layout file is unsaved" ) );

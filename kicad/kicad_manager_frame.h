@@ -97,6 +97,11 @@ public:
     void RecreateBaseHToolbar();
     void RecreateLauncher();
 
+    wxString GetCurrentFileName() const override
+    {
+        return GetProjectFileName();
+    }
+
     /**
      *  Open dialog to import Eagle schematic and board files.
      */
@@ -153,7 +158,7 @@ public:
     void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
     void SetProjectFileName( const wxString& aFullProjectProFileName );
-    const wxString GetProjectFileName();
+    const wxString GetProjectFileName() const;
 
     // read only accessors
     const wxString SchFileName();

@@ -88,7 +88,7 @@ int PL_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     m_frame->SaveCopyInUndoList( true );
 
     DIALOG_PAGES_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
-    dlg.SetWksFileName( m_frame->GetCurrFileName() );
+    dlg.SetWksFileName( m_frame->GetCurrentFileName() );
     dlg.EnableWksFileNamePicker( false );
 
     if( dlg.ShowModal() != wxID_OK )

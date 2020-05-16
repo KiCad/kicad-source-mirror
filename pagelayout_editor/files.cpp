@@ -90,7 +90,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 {
     wxString       msg;
     int            id = event.GetId();
-    wxString       filename = GetCurrFileName();
+    wxString       filename = GetCurrentFileName();
     WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
 
     if( filename.IsEmpty() && id == wxID_SAVE )
@@ -110,7 +110,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     {
     case wxID_NEW:
         pglayout.AllowVoidList( true );
-        SetCurrFileName( wxEmptyString );
+        SetCurrentFileName( wxEmptyString );
         pglayout.ClearList();
         OnNewPageLayout();
         break;
@@ -207,8 +207,8 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
             msg.Printf( _("File \"%s\" written"), GetChars( filename ) );
             SetStatusText( msg );
 
-            if( GetCurrFileName().IsEmpty() )
-                SetCurrFileName( filename );
+            if( GetCurrentFileName().IsEmpty() )
+                SetCurrentFileName( filename );
         }
     }
         break;
@@ -225,7 +225,7 @@ bool PL_EDITOR_FRAME::LoadPageLayoutDescrFile( const wxString& aFullFileName )
     if( wxFileExists( aFullFileName ) )
     {
         WS_DATA_MODEL::GetTheInstance().SetPageLayout( aFullFileName );
-        SetCurrFileName( aFullFileName );
+        SetCurrentFileName( aFullFileName );
         UpdateFileHistory( aFullFileName );
         GetScreen()->ClrModify();
         return true;

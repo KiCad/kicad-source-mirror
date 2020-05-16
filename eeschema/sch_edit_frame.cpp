@@ -1224,3 +1224,14 @@ void SCH_EDIT_FRAME::ConvertTimeStampUuids()
 
     timeStampSheetPaths.ReplaceLegacySheetPaths( oldSheetPaths );
 }
+
+
+wxString SCH_EDIT_FRAME::GetCurrentFileName() const
+{
+    SCH_SCREEN* screen = g_RootSheet->GetScreen();
+
+    if( screen )
+        return screen->GetFileName();
+
+    return wxEmptyString;
+}
