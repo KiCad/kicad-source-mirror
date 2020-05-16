@@ -1016,7 +1016,7 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
         {
             TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
 
-            if( itemData  &&  itemData->GetFileName() == fn )
+            if( itemData && itemData->GetFileName() == fn )
             {
                 m_TreeProject->Delete( kid );
                 return;
@@ -1035,7 +1035,7 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
             {
                 TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
 
-                if( itemData  &&  itemData->GetFileName() == fn )
+                if( itemData && itemData->GetFileName() == fn )
                 {
                     m_TreeProject->Delete( kid );
                     break;
@@ -1044,12 +1044,21 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
                 kid = m_TreeProject->GetNextChild( root_id, cookie );
             }
 
-            wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
-            wxTreeItemId newitem = AddItemToTreeProject( newfn, newroot_id );
+            // Add the new item only if it is not the current project file (root item).
+            // Remember: this code is called by a wxFileSystemWatcherEvent event, and not always
+            // called after an actual file rename, and the cleanup code does not explore the
+            // root item, because it cannot be renamed by the user.
+            TREEPROJECT_ITEM* rootData = GetItemIdData( root_id );
 
-            // If the item exists, select it
-            if( newitem.IsOk() )
-                m_TreeProject->SelectItem( newitem );
+            if( newfn != rootData->GetFileName() )
+            {
+                wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
+                wxTreeItemId newitem = AddItemToTreeProject( newfn, newroot_id );
+
+                // If the item exists, select it
+                if( newitem.IsOk() )
+                    m_TreeProject->SelectItem( newitem );
+            }
 
             m_isRenaming = false;
         }
