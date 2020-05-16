@@ -242,10 +242,12 @@ void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 COLOR_SETTINGS* LIB_EDIT_FRAME::GetColorSettings()
 {
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
     if( GetSettings()->m_UseEeschemaColorSettings )
-        return m_colorSettings;
+        return mgr.GetColorSettings( mgr.GetAppSettings<EESCHEMA_SETTINGS>()->m_ColorTheme );
     else
-        return Pgm().GetSettingsManager().GetColorSettings( GetSettings()->m_ColorTheme );
+        return mgr.GetColorSettings( GetSettings()->m_ColorTheme );
 }
 
 

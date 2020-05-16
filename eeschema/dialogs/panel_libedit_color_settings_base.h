@@ -30,12 +30,21 @@
 ///////////////////////////////////////////////////////////////////////////////
 class PANEL_LIBEDIT_COLOR_SETTINGS_BASE : public wxPanel
 {
+	DECLARE_EVENT_TABLE()
 	private:
+
+		// Private event handlers
+		void _wxFB_OnUseEeschemaThemeChanged( wxCommandEvent& event ){ OnUseEeschemaThemeChanged( event ); }
+
 
 	protected:
 		wxCheckBox* m_useEeschemaTheme;
-		wxStaticText* m_staticText16;
+		wxStaticText* m_txtTheme;
 		wxChoice* m_themeSelection;
+
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnUseEeschemaThemeChanged( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 

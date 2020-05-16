@@ -9,38 +9,38 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+BEGIN_EVENT_TABLE( PANEL_LIBEDIT_COLOR_SETTINGS_BASE, wxPanel )
+	EVT_CHECKBOX( wxID_ANY, PANEL_LIBEDIT_COLOR_SETTINGS_BASE::_wxFB_OnUseEeschemaThemeChanged )
+END_EVENT_TABLE()
+
 PANEL_LIBEDIT_COLOR_SETTINGS_BASE::PANEL_LIBEDIT_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* p1mainSizer;
 	p1mainSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Color Theme") ), wxVERTICAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Color Theme") ), wxHORIZONTAL );
 
 	sbSizer1->SetMinSize( wxSize( 250,-1 ) );
 	m_useEeschemaTheme = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Use Eeschema color theme"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useEeschemaTheme->SetValue(true);
 	sbSizer1->Add( m_useEeschemaTheme, 0, wxALL|wxEXPAND, 10 );
 
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	m_txtTheme = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Theme:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtTheme->Wrap( -1 );
+	m_txtTheme->Enable( false );
 
-	m_staticText16 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Theme:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText16->Wrap( -1 );
-	bSizer3->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	sbSizer1->Add( m_txtTheme, 0, wxALIGN_CENTER_VERTICAL|wxALL, 10 );
 
 	wxArrayString m_themeSelectionChoices;
 	m_themeSelection = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_themeSelectionChoices, 0 );
 	m_themeSelection->SetSelection( 0 );
-	bSizer3->Add( m_themeSelection, 1, wxALL, 5 );
+	m_themeSelection->Enable( false );
+
+	sbSizer1->Add( m_themeSelection, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 10 );
 
 
-	sbSizer1->Add( bSizer3, 0, wxALL|wxEXPAND, 5 );
-
-
-	sbSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	p1mainSizer->Add( sbSizer1, 0, 0, 5 );
+	p1mainSizer->Add( sbSizer1, 0, wxALL, 5 );
 
 
 	p1mainSizer->Add( 0, 0, 1, wxEXPAND, 5 );

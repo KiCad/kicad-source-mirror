@@ -47,13 +47,29 @@ bool PANEL_LIBEDIT_COLOR_SETTINGS::TransferDataToWindow()
 
     COLOR_SETTINGS* current = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
 
+    int width    = 0;
+    int height   = 0;
+    int minwidth = width;
+
+    m_themeSelection->Clear();
+
     for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
     {
         int pos = m_themeSelection->Append( settings->GetName(), static_cast<void*>( settings ) );
 
         if( settings == current )
             m_themeSelection->SetSelection( pos );
+
+        m_themeSelection->GetTextExtent( settings->GetName(), &width, &height );
+        minwidth = std::max( minwidth, width );
     }
+
+    m_themeSelection->SetMinSize( wxSize( minwidth + 50, -1 ) );
+
+    m_txtTheme->Enable( !m_useEeschemaTheme->GetValue() );
+    m_themeSelection->Enable( !m_useEeschemaTheme->GetValue() );
+
+    Fit();
 
     return true;
 }
@@ -61,19 +77,35 @@ bool PANEL_LIBEDIT_COLOR_SETTINGS::TransferDataToWindow()
 
 bool PANEL_LIBEDIT_COLOR_SETTINGS::TransferDataFromWindow()
 {
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
     auto selected = static_cast<COLOR_SETTINGS*>(
             m_themeSelection->GetClientData( m_themeSelection->GetSelection() ) );
 
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    LIBEDIT_SETTINGS* cfg = mgr.GetAppSettings<LIBEDIT_SETTINGS>();
 
     cfg->m_UseEeschemaColorSettings = m_useEeschemaTheme->GetValue();
-    cfg->m_ColorTheme               = selected->GetFilename();
+
+    if( !cfg->m_UseEeschemaColorSettings )
+        cfg->m_ColorTheme = selected->GetFilename();
 
     if( cfg->m_UseEeschemaColorSettings )
-        selected = m_frame->GetColorSettings();
+    {
+        EESCHEMA_SETTINGS* eecfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+        selected                 = mgr.GetColorSettings( eecfg->m_ColorTheme );
+    }
 
     auto settings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
     settings->LoadColors( selected );
 
     return true;
+}
+
+
+void PANEL_LIBEDIT_COLOR_SETTINGS::OnUseEeschemaThemeChanged( wxCommandEvent& event )
+{
+    bool useEeschema = m_useEeschemaTheme->GetValue();
+
+    m_txtTheme->Enable( !useEeschema );
+    m_themeSelection->Enable( !useEeschema );
 }

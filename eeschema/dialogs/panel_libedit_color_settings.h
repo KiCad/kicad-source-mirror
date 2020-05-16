@@ -36,6 +36,9 @@ class PANEL_LIBEDIT_COLOR_SETTINGS : public PANEL_LIBEDIT_COLOR_SETTINGS_BASE
 public:
     PANEL_LIBEDIT_COLOR_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow );
 
+protected:
+    void OnUseEeschemaThemeChanged( wxCommandEvent& event ) override;
+
 private:
     bool TransferDataToWindow() override;
 

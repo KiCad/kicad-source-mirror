@@ -500,7 +500,7 @@ void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
     book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Editing Options" ) );
-    book->AddSubPage( new PANEL_LIBEDIT_COLOR_SETTINGS( this, book ), _( "Color Options" ) );
+    book->AddSubPage( new PANEL_LIBEDIT_COLOR_SETTINGS( this, book ), _( "Colors" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
