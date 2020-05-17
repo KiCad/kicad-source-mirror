@@ -66,6 +66,7 @@ if(DOXYGEN_FOUND AND DOXYTAG2ZEALDB AND SED)
             -P ${CMAKE_MODULE_PATH}/CreateDocsetDoxyfile.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
         OUTPUT ${DOCSET_DOXYFILE}
+        DEPENDS ${CMAKE_BINARY_DIR}/kicad_build_version.h
         COMMENT "Modifying doxyfile for docset creation"
         )
 

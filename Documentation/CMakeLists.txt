@@ -21,8 +21,6 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
-find_package( Doxygen )
-
 if( DOXYGEN_FOUND )
     add_custom_target( doxygen-docs
         ${CMAKE_COMMAND} -E remove_directory Documentation/doxygen

@@ -837,6 +837,8 @@ endif()
 #================================================
 # Add the documentation
 #================================================
+find_package( Doxygen )
+
 add_subdirectory( Documentation )
 
 # Generate config.h.
