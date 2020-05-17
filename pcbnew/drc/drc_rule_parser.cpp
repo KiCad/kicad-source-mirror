@@ -49,28 +49,28 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_SELECTOR*>& aSelectors,
                               std::vector<DRC_RULE*>& aRules )
 {
     std::vector< std::pair<DRC_SELECTOR*, wxString> > selectorRules;
+    bool haveVersion = false;
 
-    T token;
-
-    NeedLEFT();
-
-    if( NextTok() != T_version )
-        Expecting( "version" );
-
-    NeedNUMBER( "version" );
-    m_requiredVersion = (int)strtol( CurText(), NULL, 10 );
-    m_tooRecent       = ( m_requiredVersion > DRC_RULE_FILE_VERSION );
-    NeedRIGHT();
-
-    for( token = NextTok();  token != T_EOF;  token = NextTok() )
+    for( T token = NextTok();  token != T_EOF;  token = NextTok() )
     {
         if( token != T_LEFT )
             Expecting( T_LEFT );
 
         token = NextTok();
 
+        if( !haveVersion && token != T_version )
+            Expecting( "version" );
+
         switch( token )
         {
+        case T_version:
+            NeedNUMBER( "version" );
+            m_requiredVersion = (int)strtol( CurText(), NULL, 10 );
+            m_tooRecent = ( m_requiredVersion > DRC_RULE_FILE_VERSION );
+            haveVersion = true;
+            NeedRIGHT();
+            break;
+
         case T_selector:
         {
             wxString ruleName;
