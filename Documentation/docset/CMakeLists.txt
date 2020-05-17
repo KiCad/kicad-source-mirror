@@ -34,21 +34,8 @@ find_program(SED sed)
 
 if(DOXYGEN_FOUND AND DOXYTAG2ZEALDB AND SED)
 
-    function(get_kicad_doc_version RESULT_NAME)
-
-        include( ${CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
-        create_git_version_header(${CMAKE_SOURCE_DIR})
-
-        # Now we have KICAD_VERSION, but it's got () around it
-        string(REPLACE "(" "" KICAD_VERSION ${KICAD_VERSION})
-        string(REPLACE ")" "" KICAD_VERSION ${KICAD_VERSION})
-
-        set (${RESULT_NAME} ${KICAD_VERSION} PARENT_SCOPE)
-
-    endfunction()
-
     # The DocSet's bundle ID, which is used for most of the ID's
-    set(BUNDLE_ID KiCad)
+    set(DOCSET_BUNDLE_ID KiCad)
 
     # The source for the doxygen config
     set(SRC_DOXYFILE ${CMAKE_SOURCE_DIR}/Doxyfile)
@@ -57,9 +44,9 @@ if(DOXYGEN_FOUND AND DOXYTAG2ZEALDB AND SED)
     set(DOCSET_DOXYFILE ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
     # Various pieces of the docset
-    set(DOCSET_LOC ${CMAKE_CURRENT_BINARY_DIR}/doxygen/html/${BUNDLE_ID}.docset)
+    set(DOCSET_LOC ${CMAKE_CURRENT_BINARY_DIR}/doxygen/html/${DOCSET_BUNDLE_ID}.docset)
     set(DOXY_MAKEFILE ${CMAKE_CURRENT_BINARY_DIR}/doxygen/html/Makefile)
-    set(DOXY_TAG_FILE ${CMAKE_CURRENT_BINARY_DIR}/${BUNDLE_ID}.tag)
+    set(DOXY_TAG_FILE ${CMAKE_CURRENT_BINARY_DIR}/${DOCSET_BUNDLE_ID}.tag)
     set(DOCSET_PLIST ${DOCSET_LOC}/Contents/Info.plist)
     set(DOCSET_DSIDX ${DOCSET_LOC}/Contents/Resources/docSet.dsidx)
 
@@ -67,24 +54,20 @@ if(DOXYGEN_FOUND AND DOXYTAG2ZEALDB AND SED)
     set(DOCSET_SRC_ICON16 ${CMAKE_CURRENT_SOURCE_DIR}/icon-16.png)
     set(DOCSET_ICON16 ${DOCSET_LOC}/icon.png)
 
-    get_kicad_doc_version(KICAD_DOC_VERSION)
-
-    # copy and modify the "normal" Doxyfile
-    file(COPY ${SRC_DOXYFILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-    file(APPEND ${DOCSET_DOXYFILE} "
-
-# Added for DocSet generation
-OUTPUT_DIRECTORY        = ${CMAKE_CURRENT_BINARY_DIR}/doxygen
-PROJECT_NAME            = ${BUNDLE_ID}
-PROJECT_NUMBER          = ${KICAD_DOC_VERSION}
-GENERATE_DOCSET         = YES
-DOCSET_FEEDNAME         = ${BUNDLE_ID}
-DOCSET_BUNDLE_ID        = ${BUNDLE_ID}
-DISABLE_INDEX           = YES
-GENERATE_TREEVIEW       = NO
-SEARCHENGINE            = NO
-GENERATE_TAGFILE        = ${DOXY_TAG_FILE}"
-    )
+    add_custom_command(
+        COMMAND ${CMAKE_COMMAND}
+            -DSRC_DOXYFILE=${SRC_DOXYFILE}
+            -DDOCSET_BUNDLE_ID=${DOCSET_BUNDLE_ID}
+            -DDOXY_TAG_FILE=${DOXY_TAG_FILE}
+            -DDOCSET_BUNDLE_ID=${DOCSET_BUNDLE_ID}
+            -DDOCSET_DOXYFILE=${DOCSET_DOXYFILE}
+            -DOUTPUT_DIRECTORY="${CMAKE_CURRENT_BINARY_DIR}/doxygen"
+            -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}
+            -P ${CMAKE_MODULE_PATH}/CreateDocsetDoxyfile.cmake
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
+        OUTPUT ${DOCSET_DOXYFILE}
+        COMMENT "Modifying doxyfile for docset creation"
+        )
 
     add_custom_command(
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOCSET_DOXYFILE}
@@ -98,7 +81,7 @@ GENERATE_TAGFILE        = ${DOXY_TAG_FILE}"
     # And modify the plist: DocSetPlatformFamily is used for the prefix in Zeal,
     add_custom_command(
         COMMAND make || true
-        COMMAND ${SED} -i "/<key>DocSetPlatformFamily<\\/key>/!b;n;s/doxygen/${BUNDLE_ID}/" ${DOCSET_PLIST}
+        COMMAND ${SED} -i "/<key>DocSetPlatformFamily<\\/key>/!b;n;s/doxygen/${DOCSET_BUNDLE_ID}/" ${DOCSET_PLIST}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen/html
         DEPENDS ${DOXY_MAKEFILE}
         OUTPUT ${DOCSET_PLIST}

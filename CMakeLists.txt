@@ -835,30 +835,9 @@ if( APPLE )
 endif()
 
 #================================================
-# Doxygen Output
+# Add the documentation
 #================================================
-
-find_package( Doxygen )
-if( DOXYGEN_FOUND )
-    add_custom_target( doxygen-docs
-        ${CMAKE_COMMAND} -E remove_directory Documentation/doxygen
-        COMMAND ${DOXYGEN_EXECUTABLE}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        DEPENDS Doxyfile
-        COMMENT "building doxygen docs into directory Documentation/doxygen/html"
-        )
-    add_custom_target( dev-docs
-        ${CMAKE_COMMAND} -E remove_directory Documentation/development/doxygen
-        COMMAND ${DOXYGEN_EXECUTABLE}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Documentation/development
-        DEPENDS Doxyfile
-        COMMENT "building developer's resource docs into directory Documentation/development/doxygen/html"
-        )
-
-    add_subdirectory(Documentation/docset)
-else()
-    message( STATUS "WARNING: Doxygen not found - doxygen-docs (Source Docs) target not created" )
-endif()
+add_subdirectory( Documentation )
 
 # Generate config.h.
 configure_file( ${PROJECT_SOURCE_DIR}/CMakeModules/config.h.cmake
