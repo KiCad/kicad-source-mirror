@@ -41,6 +41,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_tool_base.h>
+#include <tools/zone_filler_tool.h>
 #include <kiface_i.h>
 #include <pcbnew.h>
 #include <drc/drc.h>
@@ -53,7 +54,7 @@
 #include <geometry/shape_arc.h>
 #include <drc/drc_item.h>
 #include <drc/drc_courtyard_tester.h>
-#include <tools/zone_filler_tool.h>
+#include <drc/drc_drilled_hole_tester.h>
 #include <confirm.h>
 #include "drc_rule_parser.h"
 
@@ -776,192 +777,9 @@ void DRC::testPad2Pad()
 
 void DRC::testDrilledHoles()
 {
-    BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
+    DRC_DRILLED_HOLE_TESTER tester( [&]( MARKER_PCB* aMarker ) { addMarkerToPcb( aMarker ); } );
 
-    // Test drilled holes to minimize drill bit breakage.
-    //
-    // Check pad & std. via circular holes for hole-to-hole-min (non-circular holes are milled)
-    // Check pad & std. via holes for via-min-drill (minimum hole classification)
-    // Check uvia holes for uvia-min-drill (laser drill classification)
-
-    struct DRILLED_HOLE
-    {
-        wxPoint     m_location;
-        int         m_drillRadius = 0;
-        BOARD_ITEM* m_owner = nullptr;
-    };
-
-    std::vector<DRILLED_HOLE> holes;
-    DRILLED_HOLE              hole;
-    wxString                  msg;
-
-    for( MODULE* mod : m_pcb->Modules() )
-    {
-        for( D_PAD* pad : mod->Pads( ) )
-        {
-            int holeSize = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
-
-            if( holeSize == 0 )
-                continue;
-
-            NETCLASS* netclass = pad->GetNet()->GetNet() == 0 ? bds.GetDefault().get()
-                                                              : pad->GetNetClass().get();
-            int       minHole = bds.m_MinThroughDrill;
-            wxString  minHoleSource = _( "board" );
-
-            std::vector<DRC_SELECTOR*> matched;
-
-            MatchSelectors( bds.m_DRCRuleSelectors, pad, netclass, nullptr, nullptr, &matched );
-
-            for( DRC_SELECTOR* selector : matched )
-            {
-                if( selector->m_Rule->m_Hole > minHole )
-                {
-                    minHole = selector->m_Rule->m_Hole;
-                    minHoleSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
-                }
-            }
-
-            if( !bds.Ignore( DRCE_TOO_SMALL_PAD_DRILL ) && holeSize < minHole )
-            {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_PAD_DRILL );
-
-                msg.Printf( drcItem->GetErrorText() + _( " (%s min hole %s; actual %s)" ),
-                            minHoleSource,
-                            MessageTextFromValue( userUnits(), minHole, true ),
-                            MessageTextFromValue( userUnits(), holeSize, true ) );
-
-                drcItem->SetErrorMessage( msg );
-                drcItem->SetItems( pad );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
-                addMarkerToPcb( marker );
-            }
-
-            if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
-            {
-                hole.m_location = pad->GetPosition();
-                hole.m_drillRadius = pad->GetDrillSize().x / 2;
-                hole.m_owner = pad;
-                holes.push_back( hole );
-            }
-        }
-    }
-
-    for( TRACK* track : m_pcb->Tracks() )
-    {
-        VIA* via = dynamic_cast<VIA*>( track );
-
-        if( !via )
-            continue;
-
-        NETCLASS* netclass = via->GetNet()->GetNet() == 0 ? bds.GetDefault().get()
-                                                          : via->GetNetClass().get();
-        int       minHole = 0;
-        wxString  minHoleSource;
-
-        std::vector<DRC_SELECTOR*> matched;
-
-        MatchSelectors( bds.m_DRCRuleSelectors, via, netclass, nullptr, nullptr, &matched );
-
-        for( DRC_SELECTOR* selector : matched )
-        {
-            if( selector->m_Rule->m_Hole > minHole )
-            {
-                minHole = selector->m_Rule->m_Hole;
-                minHoleSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
-            }
-        }
-
-        if( via->GetViaType() == VIATYPE::MICROVIA )
-        {
-            if( bds.m_MicroViasMinDrill > minHole )
-            {
-                minHole = bds.m_MicroViasMinDrill;
-                minHoleSource = _( "board" );
-            }
-
-            if( !bds.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL ) && via->GetDrillValue() < minHole )
-            {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA_DRILL );
-
-                msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
-                            minHoleSource,
-                            MessageTextFromValue( userUnits(), minHole, true ),
-                            MessageTextFromValue( userUnits(), via->GetDrillValue(), true ) );
-
-                drcItem->SetErrorMessage( msg );
-                drcItem->SetItems( via );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, via->GetPosition() );
-                addMarkerToPcb( marker );
-            }
-        }
-        else
-        {
-            if( bds.m_MinThroughDrill > minHole )
-            {
-                minHole = bds.m_MinThroughDrill;
-                minHoleSource = _( "board" );
-            }
-
-            if( !bds.Ignore( DRCE_TOO_SMALL_VIA_DRILL ) && via->GetDrillValue() < minHole )
-            {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_DRILL );
-
-                msg.Printf( drcItem->GetErrorText() + _( " (%s min hole %s; actual %s)" ),
-                            minHoleSource,
-                            MessageTextFromValue( userUnits(), minHole, true ),
-                            MessageTextFromValue( userUnits(), via->GetDrillValue(), true ) );
-
-                drcItem->SetErrorMessage( msg );
-                drcItem->SetItems( via );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, via->GetPosition() );
-                addMarkerToPcb( marker );
-            }
-
-            hole.m_location = via->GetPosition();
-            hole.m_drillRadius = via->GetDrillValue() / 2;
-            hole.m_owner = via;
-            holes.push_back( hole );
-        }
-    }
-
-    if( bds.m_HoleToHoleMin == 0 || bds.Ignore( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
-        return;
-
-    for( size_t ii = 0; ii < holes.size(); ++ii )
-    {
-        const DRILLED_HOLE& refHole = holes[ ii ];
-
-        for( size_t jj = ii + 1; jj < holes.size(); ++jj )
-        {
-            const DRILLED_HOLE& checkHole = holes[ jj ];
-
-            // Holes with identical locations are allowable
-            if( checkHole.m_location == refHole.m_location )
-                continue;
-
-            int actual = KiROUND( GetLineLength( checkHole.m_location, refHole.m_location ) );
-            actual = std::max( 0, actual - checkHole.m_drillRadius - refHole.m_drillRadius );
-
-            if( actual < bds.m_HoleToHoleMin )
-            {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DRILLED_HOLES_TOO_CLOSE );
-
-                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), bds.m_HoleToHoleMin, true ),
-                            MessageTextFromValue( userUnits(), actual, true ) );
-
-                drcItem->SetErrorMessage( msg );
-                drcItem->SetItems( refHole.m_owner, checkHole.m_owner );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, refHole.m_location );
-                addMarkerToPcb( marker );
-            }
-        }
-    }
+    tester.RunDRC( userUnits(), *m_pcb );
 }
 
 
@@ -1890,9 +1708,9 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 
 void DRC::doCourtyardsDrc()
 {
-    DRC_COURTYARD_TESTER drc_overlap( [&]( MARKER_PCB* aMarker ) { addMarkerToPcb( aMarker ); } );
+    DRC_COURTYARD_TESTER tester( [&]( MARKER_PCB* aMarker ) { addMarkerToPcb( aMarker ); } );
 
-    drc_overlap.RunDRC( *m_pcb );
+    tester.RunDRC( userUnits(), *m_pcb );
 }
 
 

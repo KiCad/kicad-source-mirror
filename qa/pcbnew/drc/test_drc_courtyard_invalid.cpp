@@ -33,7 +33,6 @@
 #include <widgets/ui_common.h>
 
 #include "../board_test_utils.h"
-#include "drc_test_utils.h"
 
 
 struct COURTYARD_TEST_FIXTURE
@@ -281,9 +280,9 @@ static bool InvalidMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
  * @param aMarkers    list of markers produced by the DRC
  * @param aCollisions list of expected collisions
  */
-static void CheckInvalidsMatchExpected( BOARD&          aBoard,
-        const std::vector<std::unique_ptr<MARKER_PCB>>& aMarkers,
-        const std::vector<COURTYARD_INVALID_INFO>&      aExpInvalids )
+static void CheckInvalidsMatchExpected( BOARD& aBoard,
+                                        const std::vector<std::unique_ptr<MARKER_PCB>>& aMarkers,
+                                        const std::vector<COURTYARD_INVALID_INFO>& aExpInvalids )
 {
     KI_TEST::CheckUnorderedMatches( aExpInvalids, aMarkers,
             [&]( const COURTYARD_INVALID_INFO& aInvalid,
@@ -294,8 +293,8 @@ static void CheckInvalidsMatchExpected( BOARD&          aBoard,
 }
 
 
-void DoCourtyardInvalidTest(
-        const COURTYARD_INVALID_CASE& aCase, const KI_TEST::BOARD_DUMPER& aDumper )
+void DoCourtyardInvalidTest( const COURTYARD_INVALID_CASE& aCase,
+                             const KI_TEST::BOARD_DUMPER& aDumper )
 {
     auto board = MakeBoard( aCase.m_mods );
 
@@ -313,7 +312,7 @@ void DoCourtyardInvalidTest(
                 markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
             } );
 
-    drc_overlap.RunDRC( *board );
+    drc_overlap.RunDRC( EDA_UNITS::MILLIMETRES, *board );
 
     CheckInvalidsMatchExpected( *board, markers, aCase.m_exp_errors );
 }

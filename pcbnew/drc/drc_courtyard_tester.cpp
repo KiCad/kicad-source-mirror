@@ -33,26 +33,15 @@
 
 #include <memory>
 
-/**
- * Flag to enable courtyard DRC debug tracing.
- *
- * Use "KICAD_DRC_COURTYARD" to enable.
- *
- * @ingroup trace_env_vars
- */
-static const wxChar* DRC_COURTYARD_TRACE = wxT( "KICAD_DRC_COURTYARD" );
-
 
 DRC_COURTYARD_TESTER::DRC_COURTYARD_TESTER( MARKER_HANDLER aMarkerHandler ) :
-        DRC_TEST_PROVIDER( aMarkerHandler )
+        DRC_TEST_PROVIDER( std::move( aMarkerHandler ) )
 {
 }
 
 
-bool DRC_COURTYARD_TESTER::RunDRC( BOARD& aBoard ) const
+bool DRC_COURTYARD_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
 {
-    wxLogTrace( DRC_COURTYARD_TRACE, "Running DRC: Courtyard" );
-
     // Detects missing (or malformed) footprint courtyards and courtyard incursions (for those
     // with a courtyard).
     wxString msg;
@@ -96,8 +85,6 @@ bool DRC_COURTYARD_TESTER::RunDRC( BOARD& aBoard ) const
 
     if( !aBoard.GetDesignSettings().Ignore( DRCE_OVERLAPPING_FOOTPRINTS ) )
     {
-        wxLogTrace( DRC_COURTYARD_TRACE, "Checking for courtyard overlap" );
-
         for( auto it1 = aBoard.Modules().begin(); it1 != aBoard.Modules().end(); it1++ )
         {
             MODULE*         footprint = *it1;
@@ -162,8 +149,6 @@ bool DRC_COURTYARD_TESTER::RunDRC( BOARD& aBoard ) const
     if( !aBoard.GetDesignSettings().Ignore( DRCE_PTH_IN_COURTYARD )
             || !aBoard.GetDesignSettings().Ignore( DRCE_NPTH_IN_COURTYARD ) )
     {
-        wxLogTrace( DRC_COURTYARD_TRACE, "Checking for through-holes in courtyards" );
-
         for( MODULE* footprint : aBoard.Modules() )
         {
             SHAPE_POLY_SET& footprintFront = footprint->GetPolyCourtyardFront();

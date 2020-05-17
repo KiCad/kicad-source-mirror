@@ -83,7 +83,7 @@ public:
         DRC_DURATION duration;
         {
             SCOPED_PROF_COUNTER<DRC_DURATION> timer( duration );
-            drc_prov->RunDRC( aBoard );
+            drc_prov->RunDRC( EDA_UNITS::MILLIMETRES, aBoard );
         }
 
         // report results

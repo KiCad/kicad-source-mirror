@@ -24,7 +24,13 @@
 
 /**
  * @file class_track.h
- * @brief Definitions for tracks, vias and zones.
+ * @brief A single base class (TRACK) represents both tracks and vias, with subclasses
+ * for curved tracks (ARC) and vias (VIA).  All told there are three KICAD_Ts:
+ * PCB_TRACK_T, PCB_ARC_T, and PCB_VIA_T.
+ *
+ * For vias there is a further VIATYPE which indicates THROUGH, BLIND_BURIED, or
+ * MICROVIA, which are supported by the synthetic KICAD_Ts PCB_LOCATE_STDVIA_T,
+ * PCB_LOCATE_BBVIA_T, and PCB_LOCATE_UVIA_T.
  */
 
 #ifndef CLASS_TRACK_H
@@ -367,6 +373,9 @@ public:
         return false;
     }
 
+    VIATYPE GetViaType() const { return m_ViaType; }
+    void SetViaType( VIATYPE aViaType ) { m_ViaType = aViaType; }
+
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
     virtual LSET GetLayerSet() const override;
@@ -428,16 +437,6 @@ public:
 #if defined (DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
-
-    VIATYPE GetViaType() const
-    {
-        return m_ViaType;
-    }
-
-    void SetViaType( VIATYPE aViaType )
-    {
-        m_ViaType = aViaType;
-    }
 
     /**
      * Function SetDrill

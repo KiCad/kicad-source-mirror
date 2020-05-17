@@ -50,7 +50,7 @@ public:
      * Note: Board is non-const, as some DRC functions modify the board (e.g. zone fill
      * or polygon coalescing)
      */
-    virtual bool RunDRC( BOARD& aBoard ) const = 0;
+    virtual bool RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) = 0;
 
     virtual ~DRC_TEST_PROVIDER() {}
 

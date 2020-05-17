@@ -423,9 +423,9 @@ static bool CollisionMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
  * @param aMarkers    list of markers produced by the DRC
  * @param aCollisions list of expected collisions
  */
-static void CheckCollisionsMatchExpected( BOARD&        aBoard,
-        const std::vector<std::unique_ptr<MARKER_PCB>>& aMarkers,
-        const std::vector<COURTYARD_COLLISION>&         aExpCollisions )
+static void CheckCollisionsMatchExpected( BOARD& aBoard,
+                                          const std::vector<std::unique_ptr<MARKER_PCB>>& aMarkers,
+                                          const std::vector<COURTYARD_COLLISION>& aExpCollisions )
 {
     for( const auto& marker : aMarkers )
     {
@@ -460,8 +460,8 @@ static BOARD_DESIGN_SETTINGS GetOverlapCheckDesignSettings()
  * Run a single courtyard overlap testcase
  * @param aCase The testcase to run.
  */
-static void DoCourtyardOverlapTest(
-        const COURTYARD_OVERLAP_TEST_CASE& aCase, const KI_TEST::BOARD_DUMPER& aDumper )
+static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase,
+                                    const KI_TEST::BOARD_DUMPER& aDumper )
 {
     auto board = MakeBoard( aCase.m_mods );
 
@@ -479,7 +479,7 @@ static void DoCourtyardOverlapTest(
                 markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
             } );
 
-    drc_overlap.RunDRC( *board );
+    drc_overlap.RunDRC( EDA_UNITS::MILLIMETRES, *board );
 
     CheckCollisionsMatchExpected( *board, markers, aCase.m_collisions );
 }
