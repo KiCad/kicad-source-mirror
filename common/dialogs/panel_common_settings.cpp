@@ -114,9 +114,6 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     }
 
     m_checkBoxIconsInMenus->SetValue( commonSettings->m_Appearance.use_icons_in_menus );
-    m_ZoomCenterOpt->SetValue( commonSettings->m_Input.center_on_zoom );
-    m_MousewheelPANOpt->SetValue( commonSettings->m_Input.mousewheel_pan );
-    m_AutoPANOpt->SetValue( commonSettings->m_Input.auto_pan );
 
     m_PreferSelectToDrag->SetValue( commonSettings->m_Input.prefer_select_to_drag );
     m_warpMouseOnMove->SetValue( commonSettings->m_Input.warp_mouse_on_move );
@@ -152,10 +149,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     commonSettings->m_Appearance.use_icons_in_menus = m_checkBoxIconsInMenus->GetValue();
 
-    commonSettings->m_Input.auto_pan = m_AutoPANOpt->GetValue();
-    commonSettings->m_Input.center_on_zoom = m_ZoomCenterOpt->GetValue();
     commonSettings->m_Input.immediate_actions = !m_NonImmediateActions->GetValue();
-    commonSettings->m_Input.mousewheel_pan = m_MousewheelPANOpt->GetValue();
     commonSettings->m_Input.prefer_select_to_drag = m_PreferSelectToDrag->GetValue();
     commonSettings->m_Input.warp_mouse_on_move = m_warpMouseOnMove->GetValue();
 

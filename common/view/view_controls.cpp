@@ -57,23 +57,29 @@ void VIEW_CONTROLS::Reset()
 
 void VC_SETTINGS::Reset()
 {
-    m_showCursor = false;
-    m_forceCursorPosition = false;
-    m_cursorCaptured = false;
-    m_snappingEnabled = true;
-    m_grabMouse = false;
-    m_autoPanEnabled = false;
-    m_autoPanSettingEnabled = false;
-    m_autoPanMargin = 0.02f;
-    m_autoPanSpeed = 0.15f;
-    m_autoPanAcceleration = 1.5f;
-    m_warpCursor = false;
-    m_enableMousewheelPan = false;
-    m_panWithRightButton = false;
-    m_panWithLeftButton = false;
+    m_showCursor                      = false;
+    m_forceCursorPosition             = false;
+    m_cursorCaptured                  = false;
+    m_snappingEnabled                 = true;
+    m_grabMouse                       = false;
+    m_autoPanEnabled                  = false;
+    m_autoPanSettingEnabled           = false;
+    m_autoPanMargin                   = 0.02f;
+    m_autoPanSpeed                    = 0.15f;
+    m_autoPanAcceleration             = 5.0f;
+    m_warpCursor                      = false;
+    m_horizontalPan                   = false;
+    m_zoomAcceleration                = false;
+    m_zoomSpeed                       = 5;
+    m_zoomSpeedAuto                   = true;
+    m_scrollModifierZoom              = 0;
+    m_scrollModifierPanH              = WXK_CONTROL;
+    m_scrollModifierPanV              = WXK_SHIFT;
+    m_dragMiddle                      = MOUSE_DRAG_ACTION::PAN;
+    m_dragRight                       = MOUSE_DRAG_ACTION::PAN;
     m_lastKeyboardCursorPositionValid = false;
-    m_lastKeyboardCursorPosition = { 0.0, 0.0 };
-    m_lastKeyboardCursorCommand = ACTIONS::CURSOR_NONE;
+    m_lastKeyboardCursorPosition      = { 0.0, 0.0 };
+    m_lastKeyboardCursorCommand       = ACTIONS::CURSOR_NONE;
 }
 
 
@@ -86,6 +92,5 @@ void VIEW_CONTROLS::ApplySettings( const VC_SETTINGS& aSettings )
     SetAutoPan( aSettings.m_autoPanEnabled );
     SetAutoPanMargin( aSettings.m_autoPanMargin );
     SetAutoPanSpeed( aSettings.m_autoPanSpeed );
-    SetAutoPanAcceleration( aSettings.m_autoPanAcceleration );
     ForceCursorPosition( aSettings.m_forceCursorPosition, aSettings.m_forcedPosition );
 }

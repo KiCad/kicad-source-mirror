@@ -265,8 +265,8 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     m_panelShowPadGal->SwitchBackend( m_parent->GetCanvas()->GetBackend() );
     m_panelShowPadGal->SetStealsFocus( false );
 
-    bool mousewheelPan = m_parent->GetCanvas()->GetViewControls()->IsMousewheelPanEnabled();
-    m_panelShowPadGal->GetViewControls()->EnableMousewheelPan( mousewheelPan );
+    m_panelShowPadGal->GetViewControls()->ApplySettings(
+            m_parent->GetCanvas()->GetViewControls()->GetSettings() );
 
     m_panelShowPadGal->Show();
 

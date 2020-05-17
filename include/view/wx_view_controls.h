@@ -103,6 +103,9 @@ public:
 
     void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) ) override;
 
+    ///> Applies VIEW_CONTROLS settings from the program COMMON_SETTINGS
+    void LoadSettings() override;
+
     /// Event that forces mouse move event in the dispatcher (eg. used in autopanning, when mouse
     /// cursor does not move in screen coordinates, but does in world coordinates)
     static const wxEventType EVT_REFRESH_MOUSE;
@@ -114,6 +117,7 @@ private:
         IDLE = 1,           /// Nothing is happening
         DRAG_PANNING,       /// Panning with mouse button pressed
         AUTO_PANNING,       /// Panning on approaching borders of the frame
+        DRAG_ZOOMING,       /// Zooming with mouse button pressed
     };
 
     /**
@@ -161,6 +165,9 @@ private:
 
     /// Current scrollbar position
     VECTOR2I    m_scrollPos;
+
+    /// The zoom scale when a drag zoom started
+    double      m_initialZoomScale;
 
 #ifdef __WXGTK3__
     /// Last event timestamp used to de-bounce mouse wheel

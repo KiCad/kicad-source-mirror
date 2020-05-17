@@ -137,7 +137,8 @@ void PANEL_PREV_3D::loadCommonSettings()
     const DPI_SCALING dpi{ settings, this };
     m_previewPane->SetScaleFactor( dpi.GetScaleFactor() );
 
-    m_boardAdapter.SetFlag( FL_MOUSEWHEEL_PANNING, settings->m_Input.mousewheel_pan );
+    // TODO(JE) use all control options
+    m_boardAdapter.SetFlag( FL_MOUSEWHEEL_PANNING, settings->m_Input.scroll_modifier_zoom != 0  );
 }
 
 

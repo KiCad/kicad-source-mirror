@@ -40,6 +40,17 @@ namespace KIGFX
 {
 class VIEW;
 
+
+///> Action to perform when the mouse is dragged
+enum class MOUSE_DRAG_ACTION
+{
+    SELECT,
+    ZOOM,
+    PAN,
+    NONE
+};
+
+
 ///> Structure to keep VIEW_CONTROLS settings for easy store/restore operations
 struct VC_SETTINGS
 {
@@ -87,14 +98,32 @@ struct VC_SETTINGS
     ///> If the cursor is allowed to be warped
     bool m_warpCursor;
 
-    ///> Mousewheel (2-finger touchpad) panning
-    bool m_enableMousewheelPan;
+    ///> Enable horizontal panning with the horizontal scroll/trackpad input
+    bool m_horizontalPan;
 
-    ///> Allow panning with the right button in addition to middle
-    bool m_panWithRightButton;
+    ///> Enable the accelerating zoom controller
+    bool m_zoomAcceleration;
 
-    ///> Allow panning with the left button in addition to middle
-    bool m_panWithLeftButton;
+    ///> Zoom speed for the non-accelerating zoom controller
+    int m_zoomSpeed;
+
+    ///> When true, ignore zoom_speed and pick a platform-specific default
+    bool m_zoomSpeedAuto;
+
+    ///> What modifier key to enable zoom with the (vertical) scroll wheel
+    int m_scrollModifierZoom;
+
+    ///> What modifier key to enable horizontal pan with the (vertical) scroll wheel
+    int m_scrollModifierPanH;
+
+    ///> What modifier key to enable vertical with the (vertical) scroll wheel
+    int m_scrollModifierPanV;
+
+    ///> What drag action to perform when the middle button is pressed
+    MOUSE_DRAG_ACTION m_dragMiddle;
+
+    ///> What drag action to perform when the right button is pressed
+    MOUSE_DRAG_ACTION m_dragRight;
 
     ///> Is last cursor motion event coming from keyboard arrow cursor motion action
     bool m_lastKeyboardCursorPositionValid;
@@ -353,36 +382,11 @@ public:
     }
 
     /**
-     * Function EnableMousewheelPan()
-     * Enables or disables mousewheel panning.
-     * @param aEnable is true if mouse-wheel panning is enabled.
-     */
-    virtual void EnableMousewheelPan( bool aEnable )
-    {
-        m_settings.m_enableMousewheelPan = aEnable;
-    }
-
-    /**
-     * Function IsMousewheelPanEnabled()
-     * @return the current setting for mousewheel panning
-     */
-    virtual bool IsMousewheelPanEnabled() const
-    {
-        return m_settings.m_enableMousewheelPan;
-    }
-
-    /**
      * Function CenterOnCursor()
      * Sets the viewport center to the current cursor position and warps the cursor to the
      * screen center.
      */
     virtual void CenterOnCursor() const = 0;
-
-    void SetAdditionalPanButtons( bool aLeft = false, bool aRight = false )
-    {
-        m_settings.m_panWithLeftButton = aLeft;
-        m_settings.m_panWithRightButton = aRight;
-    }
 
     /**
      * Function Reset()
@@ -398,6 +402,9 @@ public:
 
     ///> Applies VIEW_CONTROLS settings from an object
     void ApplySettings( const VC_SETTINGS& aSettings );
+
+    ///> Load new settings from program common settings
+    virtual void LoadSettings() {}
 
 protected:
     ///> Pointer to controlled VIEW.

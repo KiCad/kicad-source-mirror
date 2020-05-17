@@ -56,21 +56,6 @@ int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
-        // This is kind of hacky: activate RMB drag on any event.
-        // There doesn't seem to be any other good way to tell when another tool
-        // is canceled and control returns to the selection tool, except by the
-        // fact that the selection tool starts to get events again.
-        if( m_frame->IsCurrentTool( ACTIONS::selectionTool ) )
-        {
-            getViewControls()->SetAdditionalPanButtons( false, true );
-        }
-
-        // Disable RMB pan for other tools; they can re-enable if desired
-        if( evt->IsActivate() )
-        {
-            getViewControls()->SetAdditionalPanButtons( false, false );
-        }
-
         // single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {

@@ -43,11 +43,23 @@ public:
     struct INPUT
     {
         bool auto_pan;
+        int  auto_pan_acceleration;
         bool center_on_zoom;
         bool immediate_actions;
-        bool mousewheel_pan;
         bool prefer_select_to_drag;
         bool warp_mouse_on_move;
+        bool horizontal_pan;
+
+        bool zoom_acceleration;
+        int  zoom_speed;
+        bool zoom_speed_auto;
+
+        int scroll_modifier_zoom;
+        int scroll_modifier_pan_h;
+        int scroll_modifier_pan_v;
+
+        int drag_middle;
+        int drag_right;
     };
 
     struct GRAPHICS
@@ -72,6 +84,11 @@ public:
     virtual ~COMMON_SETTINGS() {}
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
+
+    bool Migrate() override;
+
+private:
+    bool migrateSchema0to1();
 
 public:
     APPEARANCE m_Appearance;

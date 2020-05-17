@@ -32,6 +32,7 @@
 #include <view/zoom_controller.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_dispatcher.h>
+#include <trace_helpers.h>
 #include <settings/common_settings.h>
 #include <math/util.h>      // for KiROUND
 
@@ -68,13 +69,7 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
         m_cursorPos( 0, 0 ),
         m_updateCursor( true )
 {
-    bool enableMousewheelPan = Pgm().GetCommonSettings()->m_Input.mousewheel_pan;
-    bool enableZoomNoCenter = !Pgm().GetCommonSettings()->m_Input.center_on_zoom;
-    bool enableAutoPan = Pgm().GetCommonSettings()->m_Input.auto_pan;
-
-    m_settings.m_enableMousewheelPan = enableMousewheelPan;
-    m_settings.m_warpCursor = !enableZoomNoCenter;
-    m_settings.m_autoPanSettingEnabled = enableAutoPan;
+    LoadSettings();
 
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
@@ -118,8 +113,6 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
     m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEDOWN,
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
 
-    m_zoomController = GetZoomControllerForPlatform();
-
     m_cursorWarped = false;
 
     m_panTimer.SetOwner( this );
@@ -133,6 +126,47 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
 
 WX_VIEW_CONTROLS::~WX_VIEW_CONTROLS()
 {
+}
+
+
+void WX_VIEW_CONTROLS::LoadSettings()
+{
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+
+    m_settings.m_warpCursor            = cfg->m_Input.center_on_zoom;
+    m_settings.m_autoPanSettingEnabled = cfg->m_Input.auto_pan;
+    m_settings.m_autoPanAcceleration   = cfg->m_Input.auto_pan_acceleration;
+    m_settings.m_horizontalPan         = cfg->m_Input.horizontal_pan;
+    m_settings.m_zoomAcceleration      = cfg->m_Input.zoom_acceleration;
+    m_settings.m_zoomSpeed             = cfg->m_Input.zoom_speed;
+    m_settings.m_zoomSpeedAuto         = cfg->m_Input.zoom_speed_auto;
+    m_settings.m_scrollModifierZoom    = cfg->m_Input.scroll_modifier_zoom;
+    m_settings.m_scrollModifierPanH    = cfg->m_Input.scroll_modifier_pan_h;
+    m_settings.m_scrollModifierPanV    = cfg->m_Input.scroll_modifier_pan_v;
+    m_settings.m_dragMiddle            = static_cast<MOUSE_DRAG_ACTION>( cfg->m_Input.drag_middle );
+    m_settings.m_dragRight             = static_cast<MOUSE_DRAG_ACTION>( cfg->m_Input.drag_right );
+
+    m_zoomController.reset();
+
+    if( cfg->m_Input.zoom_speed_auto )
+    {
+        // TODO(JE) this ignores the acceleration option
+        m_zoomController = GetZoomControllerForPlatform();
+    }
+    else
+    {
+        if( cfg->m_Input.zoom_acceleration )
+        {
+            m_zoomController =
+                    std::make_unique<ACCELERATING_ZOOM_CONTROLLER>( cfg->m_Input.zoom_speed );
+        }
+        else
+        {
+            double scale = CONSTANT_ZOOM_CONTROLLER::MANUAL_SCALE_FACTOR * cfg->m_Input.zoom_speed;
+
+            m_zoomController = std::make_unique<CONSTANT_ZOOM_CONTROLLER>( scale );
+        }
+    }
 }
 
 
@@ -152,6 +186,17 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             VECTOR2D delta = m_view->ToWorld( d, false );
 
             m_view->SetCenter( m_lookStartPoint + delta );
+            aEvent.StopPropagation();
+        }
+        else if( m_state == DRAG_ZOOMING )
+        {
+            VECTOR2D d = m_dragStartPoint - mousePos;
+
+            double scale = 1 + ( d.y * m_settings.m_zoomSpeed * 0.001 );
+
+            wxLogTrace( traceZoomScroll, wxString::Format( "dy: %f  scale: %f", d.y, scale ) );
+
+            m_view->SetScale( m_initialZoomScale * scale, m_view->ToWorld( m_dragStartPoint ) );
             aEvent.StopPropagation();
         }
     }
@@ -180,17 +225,34 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     const double wheelPanSpeed = 0.001;
     const int    axis = aEvent.GetWheelAxis();
 
-    // mousewheelpan disabled:
-    //      wheel + ctrl    -> horizontal scrolling;
-    //      wheel + shift   -> vertical scrolling;
-    //      wheel           -> zooming;
-    // mousewheelpan enabled:
-    //      wheel           -> pan;
-    //      wheel + ctrl    -> zooming;
-    //      wheel + shift   -> horizontal scrolling.
+    if( axis == wxMOUSE_WHEEL_HORIZONTAL && !m_settings.m_horizontalPan )
+        return;
 
-    if( ( !m_settings.m_enableMousewheelPan && ( aEvent.ControlDown() || aEvent.ShiftDown() ) ) ||
-        ( m_settings.m_enableMousewheelPan && !aEvent.ControlDown() ) )
+    // Pick the modifier, if any.  Shift beats control beats alt, we don't support more than one.
+    int modifiers =
+            aEvent.ShiftDown() ? WXK_SHIFT :
+            ( aEvent.ControlDown() ? WXK_CONTROL : ( aEvent.AltDown() ? WXK_ALT : 0 ) );
+
+    // Restrict zoom handling to the vertical axis, otherwise horizontal
+    // scrolling events (e.g. touchpads and some mice) end up interpreted
+    // as vertical scroll events and confuse the user.
+    if( axis == wxMOUSE_WHEEL_VERTICAL && modifiers == m_settings.m_scrollModifierZoom )
+    {
+        const int    rotation  = aEvent.GetWheelRotation();
+        const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
+
+        if( IsCursorWarpingEnabled() )
+        {
+            CenterOnCursor();
+            m_view->SetScale( m_view->GetScale() * zoomScale );
+        }
+        else
+        {
+            const VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
+            m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
+        }
+    }
+    else
     {
         // Scrolling
         VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
@@ -198,47 +260,15 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         double scrollX = 0.0;
         double scrollY = 0.0;
 
-        if( m_settings.m_enableMousewheelPan )
-        {
-            if ( axis == wxMOUSE_WHEEL_HORIZONTAL || aEvent.ShiftDown() )
-                scrollX = scrollVec.x;
-            else
-                scrollY = -scrollVec.y;
-        }
+        if( axis == wxMOUSE_WHEEL_HORIZONTAL || modifiers == m_settings.m_scrollModifierPanH )
+            scrollX = scrollVec.x;
         else
-        {
-            if( aEvent.ControlDown() )
-                scrollX = -scrollVec.x;
-            else
-                scrollY = -scrollVec.y;
-        }
+            scrollY = -scrollVec.y;
 
         VECTOR2D delta( scrollX, scrollY );
 
         m_view->SetCenter( m_view->GetCenter() + delta );
         refreshMouse();
-    }
-    else
-    {
-        // Restrict zoom handling to the vertical axis, otherwise horizontal
-        // scrolling events (e.g. touchpads and some mice) end up interpreted
-        // as vertical scroll events and confuse the user.
-        if( axis == wxMOUSE_WHEEL_VERTICAL )
-        {
-            const int    rotation = aEvent.GetWheelRotation();
-            const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
-
-            if( IsCursorWarpingEnabled() )
-            {
-                CenterOnCursor();
-                m_view->SetScale( m_view->GetScale() * zoomScale );
-            }
-            else
-            {
-                const VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
-                m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
-            }
-        }
     }
 
     // Do not skip this event, otherwise wxWidgets will fire
@@ -266,13 +296,19 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
     {
     case IDLE:
     case AUTO_PANNING:
-        if( aEvent.MiddleDown() ||
-            ( aEvent.LeftDown() && m_settings.m_panWithLeftButton ) ||
-            ( aEvent.RightDown() && m_settings.m_panWithRightButton ) )
+        if( ( aEvent.MiddleDown() && m_settings.m_dragMiddle == MOUSE_DRAG_ACTION::PAN ) ||
+            ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::PAN ) )
         {
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             m_lookStartPoint = m_view->GetCenter();
             m_state = DRAG_PANNING;
+        }
+        else if( ( aEvent.MiddleDown() && m_settings.m_dragMiddle == MOUSE_DRAG_ACTION::ZOOM ) ||
+                 ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::ZOOM ) )
+        {
+            m_dragStartPoint   = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
+            m_initialZoomScale = m_view->GetScale();
+            m_state = DRAG_ZOOMING;
         }
 
         if( aEvent.LeftUp() )
@@ -280,6 +316,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 
         break;
 
+    case DRAG_ZOOMING:
     case DRAG_PANNING:
         if( aEvent.MiddleUp() || aEvent.LeftUp() || aEvent.RightUp() )
             m_state = IDLE;
@@ -354,8 +391,10 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 
         VECTOR2D dir( m_panDirection );
 
+        float accel = 0.5f + ( m_settings.m_autoPanAcceleration / 5.0f );
+
         if( dir.EuclideanNorm() > borderSize / 2 )
-            dir = dir.Resize( pow( borderSize, m_settings.m_autoPanAcceleration ) );
+            dir = dir.Resize( pow( borderSize, accel ) );
         else if( dir.EuclideanNorm() > borderSize )
             dir = dir.Resize( borderSize );
 
@@ -368,6 +407,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 
     case IDLE:    // Just remove unnecessary warnings
     case DRAG_PANNING:
+    case DRAG_ZOOMING:
         break;
     }
 }
@@ -633,6 +673,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
         break;
 
     case DRAG_PANNING:
+    case DRAG_ZOOMING:
         return false;
     }
 

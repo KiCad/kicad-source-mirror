@@ -72,6 +72,9 @@ public:
     /// The default timeout, after which a another scroll will not be accelerated
     static constexpr TIMEOUT DEFAULT_TIMEOUT = std::chrono::milliseconds( 500 );
 
+    /// The default minimum step factor for accelerating controller
+    static constexpr double DEFAULT_ACCELERATION_SCALE = 5.0;
+
     /*
      * A class interface that provides timestamps for events
      */
@@ -93,8 +96,9 @@ public:
      * be provided, which is the main steady_clock (this is probably what you
      * want for real usage)
      */
-    ACCELERATING_ZOOM_CONTROLLER( const TIMEOUT& aAccTimeout = DEFAULT_TIMEOUT,
-            TIMESTAMP_PROVIDER*                  aTimestampProv = nullptr );
+    ACCELERATING_ZOOM_CONTROLLER( double aScale = DEFAULT_ACCELERATION_SCALE,
+                                  const TIMEOUT& aAccTimeout = DEFAULT_TIMEOUT,
+                                  TIMESTAMP_PROVIDER* aTimestampProv = nullptr );
 
     double GetScaleForRotation( int aRotation ) override;
 
@@ -119,6 +123,9 @@ private:
     TIME_PT m_lastTimestamp;
     /// The timeout value
     TIMEOUT m_accTimeout;
+
+    /// A multiplier for the minimum zoom step size
+    double m_scale;
 };
 
 
@@ -142,6 +149,9 @@ public:
 
     /// A suitable (magic) scale factor for Mac systems
     static constexpr double MAC_SCALE = 0.01;
+
+    /// Multipler for manual scale ssetting
+    static constexpr double MANUAL_SCALE_FACTOR = 0.001;
 
 private:
     /// The scale factor set by the constructor.

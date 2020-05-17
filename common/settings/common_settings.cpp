@@ -20,15 +20,19 @@
 
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
+#include <view/view_controls.h>
+#include <view/zoom_controller.h>
 #include <wx/config.h>
 #include <wx/log.h>
+
+using KIGFX::MOUSE_DRAG_ACTION;
 
 
 extern const char* traceSettings;
 
 
 ///! Update the schema version whenever a migration is required
-const int commonSchemaVersion = 0;
+const int commonSchemaVersion = 1;
 
 COMMON_SETTINGS::COMMON_SETTINGS() :
         JSON_SETTINGS( "kicad_common", SETTINGS_LOC::USER, commonSchemaVersion ),
@@ -59,19 +63,62 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "input.auto_pan", &m_Input.auto_pan, false ) );
 
     m_params.emplace_back(
+            new PARAM<int>( "input.auto_pan_acceleration", &m_Input.auto_pan_acceleration, 5 ) );
+
+    m_params.emplace_back(
             new PARAM<bool>( "input.center_on_zoom", &m_Input.center_on_zoom, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.immediate_actions",
             &m_Input.immediate_actions, true ) );
-
-    m_params.emplace_back(
-            new PARAM<bool>( "input.mousewheel_pan", &m_Input.mousewheel_pan, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.prefer_select_to_drag",
             &m_Input.prefer_select_to_drag, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.warp_mouse_on_move",
             &m_Input.warp_mouse_on_move, true ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "input.horizontal_pan", &m_Input.horizontal_pan, false ) );
+
+#if defined(__WXMAC__) || defined(__WXGTK3__)
+    bool default_zoom_acceleration = false;
+#else
+    bool default_zoom_acceleration = true;
+#endif
+
+    m_params.emplace_back( new PARAM<bool>(
+            "input.zoom_acceleration", &m_Input.zoom_acceleration, default_zoom_acceleration ) );
+
+#ifdef __WXMAC__
+    int default_zoom_speed = 5;
+#else
+    int default_zoom_speed = 1;
+#endif
+
+    m_params.emplace_back(
+            new PARAM<int>( "input.zoom_speed", &m_Input.zoom_speed, default_zoom_speed ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "input.zoom_speed_auto", &m_Input.zoom_speed_auto, true ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "input.scroll_modifier_zoom", &m_Input.scroll_modifier_zoom, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>(
+            "input.scroll_modifier_pan_h", &m_Input.scroll_modifier_pan_h, WXK_CONTROL ) );
+
+    m_params.emplace_back( new PARAM<int>(
+            "input.scroll_modifier_pan_v", &m_Input.scroll_modifier_pan_v, WXK_SHIFT ) );
+
+    m_params.emplace_back( new PARAM<int>( "input.mouse_middle", &m_Input.drag_middle,
+            static_cast<int>( MOUSE_DRAG_ACTION::PAN ),
+            static_cast<int>( MOUSE_DRAG_ACTION::SELECT ),
+            static_cast<int>( MOUSE_DRAG_ACTION::NONE ) ) );
+
+    m_params.emplace_back( new PARAM<int>( "input.mouse_right", &m_Input.drag_right,
+            static_cast<int>( MOUSE_DRAG_ACTION::PAN ),
+            static_cast<int>( MOUSE_DRAG_ACTION::SELECT ),
+            static_cast<int>( MOUSE_DRAG_ACTION::NONE ) ) );
 
     m_params.emplace_back( new PARAM<int>( "graphics.opengl_antialiasing_mode",
                                        &m_Graphics.opengl_aa_mode, 0, 0, 4 ) );
@@ -99,6 +146,68 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
     m_params.emplace_back( new PARAM<wxString>( "system.working_dir",
             &m_System.working_dir, "" ) );
+}
+
+
+bool COMMON_SETTINGS::Migrate()
+{
+    bool ret = true;
+    int  filever = at( PointerFromString( "meta.version" ) ).get<int>();
+
+    if( filever == 0 )
+    {
+        ret &= migrateSchema0to1();
+
+        if( ret )
+        {
+            ( *this )[PointerFromString( "meta.version" )] = 1;
+        }
+    }
+
+    return ret;
+}
+
+
+bool COMMON_SETTINGS::migrateSchema0to1()
+{
+    /**
+     * Schema version 0 to 1:
+     *
+     * mousewheel_pan is replaced by explicit settings for scroll wheel behavior
+     */
+
+    nlohmann::json::json_pointer mwp_pointer( "/input/mousewheel_pan"_json_pointer );
+
+    bool mwp = false;
+
+    try
+    {
+        mwp = at( mwp_pointer );
+        at( nlohmann::json::json_pointer( "/input"_json_pointer ) ).erase( "mousewheel_pan" );
+    }
+    catch( ... )
+    {
+        wxLogTrace( traceSettings, "COMMON_SETTINGS::Migrate 0->1: mousewheel_pan not found" );
+    }
+
+    if( mwp )
+    {
+        ( *this )[nlohmann::json::json_pointer( "/input/horizontal_pan" )] = true;
+
+        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] = WXK_SHIFT;
+        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = 0;
+        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )]  = WXK_CONTROL;
+    }
+    else
+    {
+        ( *this )[nlohmann::json::json_pointer( "/input/horizontal_pan" )] = false;
+
+        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] = WXK_CONTROL;
+        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = WXK_SHIFT;
+        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )]  = 0;
+    }
+
+    return true;
 }
 
 

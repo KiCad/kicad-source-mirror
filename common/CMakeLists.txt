@@ -179,6 +179,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_common_settings.cpp
     dialogs/panel_common_settings_base.cpp
     dialogs/panel_hotkeys_editor.cpp
+    dialogs/panel_mouse_settings.cpp
+    dialogs/panel_mouse_settings_base.cpp
     dialogs/panel_text_variables.cpp
     dialogs/panel_text_variables_base.cpp
     dialogs/wx_html_report_panel.cpp

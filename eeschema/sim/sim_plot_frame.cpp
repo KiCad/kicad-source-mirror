@@ -41,6 +41,7 @@
 #include "spice_simulator.h"
 #include "spice_reporter.h"
 #include <menus_helpers.h>
+#include <settings/common_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <eeschema_settings.h>
@@ -484,7 +485,7 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
         panel = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, this, wxID_ANY );
 
         panel->GetPlotWin()->EnableMouseWheelPan(
-                m_schematicFrame->GetCanvas()->GetViewControls()->IsMousewheelPanEnabled() );
+                Pgm().GetCommonSettings()->m_Input.scroll_modifier_zoom != 0 );
 
         plotPanel = dynamic_cast<SIM_PANEL_BASE*>( panel );
     }

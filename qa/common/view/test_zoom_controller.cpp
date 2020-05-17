@@ -116,9 +116,9 @@ struct ACCEL_ZOOM_CASE
 
 static const std::vector<ACCEL_ZOOM_CASE> accel_cases = {
     // Scrolls widely spaced, just go up and down by a constant factor
-    { 500, { 0, 1000, 2000, 3000 }, { 120, 120, -120 }, { 1.2, 1.2, 1 / 1.2 } },
+    { 500, { 0, 1000, 2000, 3000 }, { 120, 120, -120 }, { 1.05, 1.05, 1 / 1.05 } },
     // Close scrolls - acceleration on the latter
-    { 500, { 0, 1000, 1100 }, { 120, 120 }, { 1.2, 2.05 } },
+    { 500, { 0, 1000, 1100 }, { 120, 120 }, { 1.05, 2.05 } },
 };
 
 
@@ -134,6 +134,7 @@ BOOST_AUTO_TEST_CASE( AccelController )
         PREDEF_TIMESTAMPER timestamper( c.stamps );
 
         ACCELERATING_ZOOM_CONTROLLER zoom_ctrl(
+                ACCELERATING_ZOOM_CONTROLLER::DEFAULT_ACCELERATION_SCALE,
                 std::chrono::milliseconds( c.timeout ), &timestamper );
 
         for( unsigned i = 0; i < c.scrolls.size(); i++ )

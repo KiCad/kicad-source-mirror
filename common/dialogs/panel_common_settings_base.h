@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -43,11 +43,6 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 	private:
 
 	protected:
-		enum
-		{
-			wxID_AUTOPAN = 1000
-		};
-
 		wxStaticText* m_staticTextautosave;
 		wxSpinCtrl* m_SaveTime;
 		wxStaticText* m_staticTextFileHistorySize;
@@ -67,9 +62,6 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		wxSpinCtrlDouble* m_canvasScaleCtrl;
 		wxCheckBox* m_canvasScaleAuto;
 		wxCheckBox* m_checkBoxIconsInMenus;
-		wxCheckBox* m_ZoomCenterOpt;
-		wxCheckBox* m_MousewheelPANOpt;
-		wxCheckBox* m_AutoPANOpt;
 		wxCheckBox* m_PreferSelectToDrag;
 		wxCheckBox* m_warpMouseOnMove;
 		wxCheckBox* m_NonImmediateActions;

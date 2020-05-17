@@ -26,6 +26,7 @@
 #include <bitmaps.h>
 #include <dialog_shim.h>
 #include <dialogs/panel_common_settings.h>
+#include <dialogs/panel_mouse_settings.h>
 #include <filehistory.h>
 #include <id.h>
 #include <kiface_i.h>
@@ -663,6 +664,8 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     wxTreebook* book = dlg.GetTreebook();
 
     book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );
+
+    book->AddPage( new PANEL_MOUSE_SETTINGS( &dlg, book ), _( "Mouse and Trackpad" ) );
 
     PANEL_HOTKEYS_EDITOR* hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
     book->AddPage( hotkeysPanel, _( "Hotkeys" ) );

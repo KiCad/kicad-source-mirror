@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -174,27 +174,6 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	wxBoxSizer* rightSizer;
 	rightSizer = new wxBoxSizer( wxVERTICAL );
-
-	wxStaticBoxSizer* sbSizer51;
-	sbSizer51 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
-
-	m_ZoomCenterOpt = new wxCheckBox( sbSizer51->GetStaticBox(), wxID_ANY, _("Ce&nter and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ZoomCenterOpt->SetToolTip( _("Center the cursor on screen when zooming.") );
-
-	sbSizer51->Add( m_ZoomCenterOpt, 0, wxTOP|wxRIGHT|wxLEFT, 4 );
-
-	m_MousewheelPANOpt = new wxCheckBox( sbSizer51->GetStaticBox(), wxID_ANY, _("Use touchpad to pan"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MousewheelPANOpt->SetToolTip( _("Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl+scroll).") );
-
-	sbSizer51->Add( m_MousewheelPANOpt, 0, wxALL, 4 );
-
-	m_AutoPANOpt = new wxCheckBox( sbSizer51->GetStaticBox(), wxID_AUTOPAN, _("&Pan while moving object"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_AutoPANOpt->SetToolTip( _("When drawing a track or moving an item, pan when approaching the edge of the display.") );
-
-	sbSizer51->Add( m_AutoPANOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
-
-
-	rightSizer->Add( sbSizer51, 0, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Editing") ), wxVERTICAL );
