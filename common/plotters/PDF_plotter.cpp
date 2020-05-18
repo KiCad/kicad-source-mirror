@@ -821,14 +821,9 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
         aMultilineAllowed = false;  // the text has only one line.
 
-    // Emit native PDF text (if requested)
-    // Currently: is not supported, because only our stroke font is alloxed: disable it
-    // However, shadowed texts (searchable texts) works reasonably well because
-    // pixel accurate precision is not requested, so we add searchable texts
-    // behind our stroked font texts
-    bool use_native_font = false;
-    // render_mode 0 shows the text, render_mode 3 is invisible
-    int render_mode = use_native_font ? 0 : 3;
+    // Render phantom text (which will be searchable) behind the stroke font.  This won't
+    // be pixel-accurate, but it doesn't matter for searching.
+    int render_mode = 3;    // invisible
 
     const char *fontname = aItalic ? (aBold ? "/KicadFontBI" : "/KicadFontI")
         : (aBold ? "/KicadFontB" : "/KicadFont");
@@ -848,44 +843,20 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     /* We use the full CTM instead of the text matrix because the same
        coordinate system will be used for the overlining. Also the %f
        for the trig part of the matrix to avoid %g going in exponential
-       format (which is not supported)
-       render_mode 0 shows the text, render_mode 3 is invisible */
+       format (which is not supported) */
     fprintf( workFile, "q %f %f %f %f %g %g cm BT %s %g Tf %d Tr %g Tz ",
             ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
-            fontname, heightFactor, render_mode,
-            wideningFactor * 100 );
+            fontname, heightFactor, render_mode, wideningFactor * 100 );
 
     // The text must be escaped correctly
     fputsPostscriptString( workFile, aText );
     fputs( " Tj ET\n", workFile );
 
-    // We are in text coordinates, plot the overbars, if we're not doing phantom text
-    if( use_native_font )
-    {
-        std::vector<int> pos_pairs;
-        postscriptOverlinePositions( aText, aSize.x, aItalic, aBold, &pos_pairs );
-        int overbar_y = KiROUND( aSize.y * 1.1 );
-        for( unsigned i = 0; i < pos_pairs.size(); i += 2)
-        {
-            /* This is a nontrivial situation: we are *not* in the user
-               coordinate system, so the userToDeviceCoordinates function
-               can't be used! Strange as it may seem, the userToDeviceSize
-               is the right function to use here... */
-            DPOINT dev_from = userToDeviceSize( wxSize( pos_pairs[i], overbar_y ) );
-            DPOINT dev_to = userToDeviceSize( wxSize( pos_pairs[i + 1], overbar_y ) );
-            fprintf( workFile, "%g %g m %g %g l ",
-                    dev_from.x, dev_from.y, dev_to.x, dev_to.y );
-        }
-    }
-
-    // Stroke and restore the CTM
-    fputs( "S Q\n", workFile );
+    // Restore the CTM
+    fputs( "Q\n", workFile );
 
     // Plot the stroked text (if requested)
-    if( !use_native_font )
-    {
-        PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
-                       aItalic, aBold, aMultilineAllowed );
-    }
+    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
+                   aItalic, aBold, aMultilineAllowed );
 }
 
