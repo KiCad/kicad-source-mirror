@@ -95,6 +95,12 @@ DPOINT PLOTTER::userToDeviceCoordinates( const wxPoint& aCoordinate )
 {
     wxPoint pos = aCoordinate - plotOffset;
 
+    // Don't allow overflows; they can cause rendering failures in some file viewers
+    // (such as Acrobat)
+    int clampSize = MAX_PAGE_SIZE_MILS * m_IUsPerDecimil * 10 / 2;
+    pos.x = std::max( -clampSize, std::min( pos.x, clampSize ) );
+    pos.y = std::max( -clampSize, std::min( pos.y, clampSize ) );
+
     double x = pos.x * plotScale;
     double y = ( paperSize.y - pos.y * plotScale );
 
