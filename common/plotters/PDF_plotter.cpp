@@ -28,14 +28,12 @@
  */
 
 #include <fctsys.h>
-#include <pgm_base.h>
 #include <trigo.h>
 #include <eda_base_frame.h>
 #include <base_struct.h>
 #include <common.h>
 #include <plotter.h>
 #include <macros.h>
-#include <kicad_string.h>
 #include <wx/zstream.h>
 #include <wx/mstream.h>
 #include <math/util.h>      // for KiROUND
@@ -817,16 +815,12 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     if( aSize.x == 0 || aSize.y == 0 )
         return;
 
-    // Fix me: see how to use PDF text mode for multiline texts
-    if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
-        aMultilineAllowed = false;  // the text has only one line.
-
     // Render phantom text (which will be searchable) behind the stroke font.  This won't
     // be pixel-accurate, but it doesn't matter for searching.
     int render_mode = 3;    // invisible
 
-    const char *fontname = aItalic ? (aBold ? "/KicadFontBI" : "/KicadFontI")
-        : (aBold ? "/KicadFontB" : "/KicadFont");
+    const char *fontname = aItalic ? ( aBold ? "/KicadFontBI" : "/KicadFontI" )
+                                   : ( aBold ? "/KicadFontB"  : "/KicadFont"  );
 
     // Compute the copious transformation parameters of the Curent Transform Matrix
     double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
@@ -845,8 +839,8 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
        for the trig part of the matrix to avoid %g going in exponential
        format (which is not supported) */
     fprintf( workFile, "q %f %f %f %f %g %g cm BT %s %g Tf %d Tr %g Tz ",
-            ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
-            fontname, heightFactor, render_mode, wideningFactor * 100 );
+             ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
+             fontname, heightFactor, render_mode, wideningFactor * 100 );
 
     // The text must be escaped correctly
     fputsPostscriptString( workFile, aText );

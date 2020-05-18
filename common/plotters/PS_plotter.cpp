@@ -34,7 +34,6 @@
 #include <common.h>
 #include <plotter.h>
 #include <macros.h>
-#include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND
 
@@ -989,61 +988,6 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
     SetCurrentLineWidth( aWidth );
     SetColor( aColor );
 
-    // Fix me: see how to use PS text mode for multiline texts
-    if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
-        aMultilineAllowed = false;  // the text has only one line.
-
-    bool processSuperSub = aText.Contains( wxT( "^{" ) ) || aText.Contains( wxT( "_{" ) );
-
-    // Draw the native postscript text (if requested)
-    // Currently: does not work: disable it
-    bool use_native = false; // = m_textMode == PLOT_TEXT_MODE::NATIVE
-                             //        && !aMultilineAllowed && !processSuperSub;
-
-    if( use_native )
-    {
-        const char *fontname = aItalic ? (aBold ? "/KicadFont-BoldOblique"
-                : "/KicadFont-Oblique")
-                : (aBold ? "/KicadFont-Bold"
-                : "/KicadFont");
-
-        // Compute the copious transformation parameters
-        double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
-        double wideningFactor, heightFactor;
-        computeTextParameters( aPos, aText, aOrient, aSize, m_plotMirror, aH_justify,
-                aV_justify, aWidth, aItalic, aBold,
-                &wideningFactor, &ctm_a, &ctm_b, &ctm_c,
-                &ctm_d, &ctm_e, &ctm_f, &heightFactor );
-
-
-        // The text must be escaped correctly, the others are the various
-        // parameters. The CTM is formatted with %f since sin/cos tends
-        // to make %g use exponential notation (which is not supported)
-        fputsPostscriptString( outputFile, aText );
-        fprintf( outputFile, " %g [%f %f %f %f %f %f] %g %s textshow\n",
-                wideningFactor, ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
-                heightFactor, fontname );
-
-        /* The textshow operator retained the coordinate system, we use it
-         * to plot the overbars. See the PDF sister function for more
-         * details */
-
-        std::vector<int> pos_pairs;
-        postscriptOverlinePositions( aText, aSize.x, aItalic, aBold, &pos_pairs );
-        int overbar_y = KiROUND( aSize.y * 1.1 );
-
-        for( unsigned i = 0; i < pos_pairs.size(); i += 2)
-        {
-            DPOINT dev_from = userToDeviceSize( wxSize( pos_pairs[i], overbar_y ) );
-            DPOINT dev_to = userToDeviceSize( wxSize( pos_pairs[i + 1], overbar_y ) );
-            fprintf( outputFile, "%g %g %g %g line ",
-                     dev_from.x, dev_from.y, dev_to.x, dev_to.y );
-        }
-
-        // Restore the CTM
-        fputs( "grestore\n", outputFile );
-    }
-
     // Draw the hidden postscript text (if requested)
     if( m_textMode == PLOT_TEXT_MODE::PHANTOM )
     {
@@ -1052,12 +996,8 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
         fprintf( outputFile, " %g %g phantomshow\n", pos_dev.x, pos_dev.y );
     }
 
-    // Draw the stroked text (if requested)
-    if( !use_native )
-    {
-        PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                       aWidth, aItalic, aBold, aMultilineAllowed );
-    }
+    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
+                   aItalic, aBold, aMultilineAllowed );
 }
 
 
