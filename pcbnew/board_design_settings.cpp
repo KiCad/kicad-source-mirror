@@ -1019,12 +1019,16 @@ int BOARD_DESIGN_SETTINGS::GetRuleClearance( const BOARD_ITEM* aItem, const NETC
         if( selector->m_Rule->m_Clearance > 0 )
         {
             clearance = std::max( clearance, selector->m_Rule->m_Clearance );
-            *aSource = wxString::Format( _( "'%s' rule clearance" ), selector->m_Rule->m_Name );
+
+            if( aSource )
+                *aSource = wxString::Format( _( "'%s' rule clearance" ), selector->m_Rule->m_Name );
         }
         else if( selector->m_Rule->m_Clearance < 0 )
         {
             clearance = std::min( clearance, abs( selector->m_Rule->m_Clearance ) );
-            *aSource = wxString::Format( _( "'%s' rule clearance" ), selector->m_Rule->m_Name );
+
+            if( aSource )
+                *aSource = wxString::Format( _( "'%s' rule clearance" ), selector->m_Rule->m_Name );
         }
     }
 

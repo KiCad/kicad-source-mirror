@@ -102,8 +102,8 @@ void MatchSelectors( const std::vector<DRC_SELECTOR*>& aSelectors,
             if( !bItem )
                 continue;
 
-            NETCLASS* firstNetclass = candidate->m_MatchNetclasses[0];
-            NETCLASS* secondNetclass = candidate->m_MatchNetclasses[1];
+            NETCLASS* firstNetclass = candidate->m_MatchNetclasses[0].get();
+            NETCLASS* secondNetclass = candidate->m_MatchNetclasses[1].get();
 
             if( !( aNetclass == firstNetclass && bNetclass == secondNetclass )
                     && !( aNetclass == secondNetclass && bNetclass == firstNetclass ) )
@@ -113,7 +113,7 @@ void MatchSelectors( const std::vector<DRC_SELECTOR*>& aSelectors,
         }
         else if( candidate->m_MatchNetclasses.size() == 1 )
         {
-            NETCLASS* matchNetclass = candidate->m_MatchNetclasses[0];
+            NETCLASS* matchNetclass = candidate->m_MatchNetclasses[0].get();
 
             if( matchNetclass != aNetclass && !( bItem && matchNetclass == bNetclass ) )
                 continue;

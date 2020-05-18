@@ -170,7 +170,6 @@ private:
     bool                       m_drcRun;
     bool                       m_footprintsTested;
 
-    wxLongLong                 m_rulesFileLastMod;
     std::vector<DRC_SELECTOR*> m_ruleSelectors;
     std::vector<DRC_RULE*>     m_rules;
 
@@ -188,8 +187,6 @@ private:
      * Update needed pointers from the one pointer which is known not to change.
      */
     void updatePointers();
-
-    void loadRules();
 
     EDA_UNITS userUnits() const { return m_pcbEditorFrame->GetUserUnits(); }
 
@@ -296,6 +293,11 @@ private:
     //-----</single tests>---------------------------------------------
 
 public:
+    /**
+     * Load the DRC rules.  Must be called after the netclasses have been read.
+     */
+    void LoadRules();
+
     /**
      * Test the board footprints against a netlist.  Will report DRCE_MISSING_FOOTPRINT,
      * DRCE_DUPLICATE_FOOTPRINT and DRCE_EXTRA_FOOTPRINT errors in aDRCList.

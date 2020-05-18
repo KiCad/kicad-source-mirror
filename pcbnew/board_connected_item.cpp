@@ -134,6 +134,19 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) c
         }
     }
 
+    if( aItem && aItem->GetLayer() == Edge_Cuts )
+    {
+        int edgeClearance = bds.m_CopperEdgeClearance;
+
+        if( edgeClearance > clearance )
+        {
+            clearance = edgeClearance;
+
+            if( aSource )
+                *aSource = _( "board edge clearance" );
+        }
+    }
+
     return clearance;
 }
 

@@ -50,7 +50,7 @@ public:
 class DRC_SELECTOR
 {
 public:
-    std::vector<NETCLASS*>    m_MatchNetclasses;
+    std::vector<NETCLASSPTR>  m_MatchNetclasses;
     std::vector<KICAD_T>      m_MatchTypes;
     std::vector<PCB_LAYER_ID> m_MatchLayers;
     std::vector<wxString>     m_MatchAreas;

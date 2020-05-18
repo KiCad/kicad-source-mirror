@@ -463,22 +463,17 @@ int ZONE_CONTAINER::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
     if( m_isKeepout )
         return 0;
 
-    // The actual zone clearance is the biggest of the zone netclass clearance
-    // and the zone clearance setting in the zone properties dialog.
-    int zoneClearance = m_ZoneClearance;
     int clearance = BOARD_CONNECTED_ITEM::GetClearance( aItem, aSource );
 
-    if( clearance > zoneClearance )
+    if( m_ZoneClearance > clearance )
     {
-        return clearance;
-    }
-    else
-    {
+        clearance = m_ZoneClearance;
+
         if( aSource )
             *aSource = _( "zone clearance" );
-
-        return zoneClearance;
     }
+
+    return clearance;
 }
 
 
@@ -1137,35 +1132,19 @@ double ZONE_CONTAINER::CalculateFilledArea()
  * Convert the zone filled areas polygons to polygons
  * inflated (optional) by max( aClearanceValue, the zone clearance)
  * and copy them in aCornerBuffer
- * @param aMinClearanceValue the min clearance around outlines
- * @param aUseNetClearance   true to use a clearance which is the max value between
- *                           aMinClearanceValue and the net clearance
- *                           false to use aMinClearanceValue only
- * @param aPreserveCorners   an optional set of corners which should not be chamfered/filleted
+ * @param aClearance       the clearance around outlines
+ * @param aPreserveCorners an optional set of corners which should not be chamfered/filleted
  */
 void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                   int aMinClearanceValue,
-                                                   bool aUseNetClearance,
-                                                   std::set<VECTOR2I>* aPreserveCorners ) const
+        int aClearance, std::set<VECTOR2I>* aPreserveCorners ) const
 {
     // Creates the zone outline polygon (with holes if any)
     SHAPE_POLY_SET polybuffer;
     BuildSmoothedPoly( polybuffer, aPreserveCorners );
 
-    // add clearance to outline
-    int clearance = aMinClearanceValue;
-
-    if( aUseNetClearance && IsOnCopperLayer() )
-    {
-        clearance = GetClearance();
-
-        if( aMinClearanceValue > clearance )
-            clearance = aMinClearanceValue;
-    }
-
     // Calculate the polygon with clearance
     // holes are linked to the main outline, so only one polygon is created.
-    if( clearance )
+    if( aClearance )
     {
         BOARD* board = GetBoard();
         int maxError = ARC_HIGH_DEF;
@@ -1173,8 +1152,8 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SE
         if( board )
             maxError = board->GetDesignSettings().m_MaxError;
 
-        int segCount = std::max( GetArcToSegmentCount( clearance, maxError, 360.0 ), 3 );
-        polybuffer.Inflate( clearance, segCount );
+        int segCount = std::max( GetArcToSegmentCount( aClearance, maxError, 360.0 ), 3 );
+        polybuffer.Inflate( aClearance, segCount );
     }
 
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );

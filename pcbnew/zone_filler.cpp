@@ -526,18 +526,13 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
     int extra_margin = Millimeter2iu( 0.002 );
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    int zone_clearance = aZone->GetClearance();
-    int edge_clearance = aZone->GetClearance( &dummyEdge );
+    int                    zone_clearance = aZone->GetClearance();
+    EDA_RECT               zone_boundingbox = aZone->GetBoundingBox();
 
-    if( bds.m_CopperEdgeClearance > edge_clearance )
-        edge_clearance = bds.m_CopperEdgeClearance;
-
-    // items outside the zone bounding box are skipped
-    // the bounding box is the zone bounding box + the biggest clearance found in Netclass list
-    EDA_RECT zone_boundingbox = aZone->GetBoundingBox();
-    int      biggest_clearance = bds.GetBiggestClearanceValue();
-    biggest_clearance = std::max( biggest_clearance, zone_clearance ) + extra_margin;
-    zone_boundingbox.Inflate( biggest_clearance );
+    // items outside the zone bounding box are skipped, so it needs to be inflated by
+    // the largest clearance value found in the netclasses and rules
+    int biggest_clearance = std::max( zone_clearance, bds.GetBiggestClearanceValue() );
+    zone_boundingbox.Inflate( biggest_clearance + extra_margin );
 
     // Use a dummy pad to calculate hole clearance when a pad has a hole but is not on the
     // zone's copper layer.  The dummy pad has the size and shape of the original pad's hole.
@@ -564,25 +559,19 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
             if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0
                     || aZone->GetPadConnection( pad ) == ZONE_CONNECTION::NONE )
             {
-                // for pads having a netcode different from the zone, use the net clearance:
-                int gap = std::max( zone_clearance, pad->GetClearance() );
-
-                // for pads having the same netcode as the zone, the net clearance has no
-                // meaning (clearance between object of the same net is 0) and the
-                // zone_clearance can be set to 0 (In this case the netclass clearance is used)
-                // therefore use the antipad clearance (thermal clearance) or the
-                // zone_clearance if bigger.
-                if( pad->GetNetCode() > 0 && pad->GetNetCode() == aZone->GetNetCode() )
+                if( pad->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    int thermalGap = aZone->GetThermalReliefGap( pad );
-                    gap = std::max( zone_clearance, thermalGap );;
-                }
+                    int gap;
 
-                EDA_RECT item_boundingbox = pad->GetBoundingBox();
-                item_boundingbox.Inflate( pad->GetClearance() );
+                    // for pads having the same netcode as the zone, the net clearance has no
+                    // meaning so use the greater of the zone clearance and the thermal relief
+                    if( pad->GetNetCode() > 0 && pad->GetNetCode() == aZone->GetNetCode() )
+                        gap = std::max( zone_clearance, aZone->GetThermalReliefGap( pad ) );
+                    else
+                        gap = aZone->GetClearance( pad );
 
-                if( item_boundingbox.Intersects( zone_boundingbox ) )
                     addKnockout( pad, gap, aHoles );
+                }
             }
         }
     }
@@ -597,38 +586,32 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
         if( track->GetNetCode() == aZone->GetNetCode()  && ( aZone->GetNetCode() != 0) )
             continue;
 
-        int gap = std::max( zone_clearance, track->GetClearance() ) + extra_margin;
-        EDA_RECT item_boundingbox = track->GetBoundingBox();
+        if( track->GetBoundingBox().Intersects( zone_boundingbox ) )
+        {
+            int gap = aZone->GetClearance( track ) + extra_margin;
 
-        if( item_boundingbox.Intersects( zone_boundingbox ) )
             track->TransformShapeWithClearanceToPolygon( aHoles, gap, m_low_def );
+        }
     }
 
     // Add graphic item clearances.  They are by definition unconnected, and have no clearance
     // definitions of their own.
     //
-    auto doGraphicItem = [&]( BOARD_ITEM* aItem )
-    {
-        // A item on the Edge_Cuts is always seen as on any layer:
-        if( !aItem->IsOnLayer( aZone->GetLayer() ) && !aItem->IsOnLayer( Edge_Cuts ) )
-            return;
+    auto doGraphicItem =
+            [&]( BOARD_ITEM* aItem )
+            {
+                // A item on the Edge_Cuts is always seen as on any layer:
+                if( !aItem->IsOnLayer( aZone->GetLayer() ) && !aItem->IsOnLayer( Edge_Cuts ) )
+                    return;
 
-        if( !aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
-            return;
+                if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
+                {
+                    bool ignoreLineWidth = aItem->IsOnLayer( Edge_Cuts );
+                    int  gap = aZone->GetClearance( aItem );
 
-        bool ignoreLineWidth = false;
-        int gap = zone_clearance;
-
-        if( aItem->IsOnLayer( Edge_Cuts ) )
-        {
-            gap = edge_clearance;
-
-            // edge cuts by definition don't have a width
-            ignoreLineWidth = true;
-        }
-
-        addKnockout( aItem, gap, ignoreLineWidth, aHoles );
-    };
+                    addKnockout( aItem, gap, ignoreLineWidth, aHoles );
+                }
+            };
 
     for( auto module : m_board->Modules() )
     {
@@ -660,26 +643,18 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
         // A higher priority zone or keepout area is found: remove this area
         EDA_RECT item_boundingbox = zone->GetBoundingBox();
 
-        if( !item_boundingbox.Intersects( zone_boundingbox ) )
-            continue;
-
-        // Add the zone outline area.  Don't use any clearance for keepouts, or for zones with
-        // the same net (they will be connected but will honor their own clearance, thermal
-        // connections, etc.).
-        bool sameNet = aZone->GetNetCode() == zone->GetNetCode();
-        bool useNetClearance = true;
-        int  minClearance = zone_clearance;
-
-        // The final clearance is obviously the max value of each zone clearance
-        minClearance = std::max( minClearance, zone->GetClearance() );
-
-        if( zone->GetIsKeepout() || sameNet )
+        if( item_boundingbox.Intersects( zone_boundingbox ) )
         {
-            minClearance = 0;
-            useNetClearance = false;
-        }
+            // Add the zone outline area.  Don't use any clearance for keepouts, or for zones
+            // with the same net (they will be connected but will honor their own clearance,
+            // thermal connections, etc.).
+            int  gap = 0;
 
-        zone->TransformOutlinesShapeWithClearanceToPolygon( aHoles, minClearance, useNetClearance );
+            if( !zone->GetIsKeepout() && aZone->GetNetCode() != zone->GetNetCode() )
+                gap = aZone->GetClearance( zone );
+
+            zone->TransformOutlinesShapeWithClearanceToPolygon( aHoles, gap );
+        }
     }
 
     aHoles.Simplify( SHAPE_POLY_SET::PM_FAST );

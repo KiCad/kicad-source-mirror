@@ -859,10 +859,10 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         zone->GetColinearCorners( aBoard, colinearCorners );
 
         // add shapes inflated by aMinThickness/2 in areas
-        zone->TransformOutlinesShapeWithClearanceToPolygon( areas, inflate + zone_margin, false,
+        zone->TransformOutlinesShapeWithClearanceToPolygon( areas, inflate + zone_margin,
                                                             &colinearCorners );
         // add shapes with their exact mask layer size in initialPolys
-        zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys, zone_margin, false,
+        zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys, zone_margin,
                                                             &colinearCorners );
     }
 

@@ -126,9 +126,24 @@ DRC_SELECTOR* DRC_RULES_PARSER::parseDRC_SELECTOR( wxString* aRuleName )
         switch( token )
         {
         case T_match_netclass:
+        {
             NeedSYMBOL();
-            selector->m_MatchNetclasses.push_back( netclasses.Find( FromUTF8() ).get() );
+            NETCLASSPTR netclass = netclasses.Find( FromUTF8() );
+
+            if( netclass )
+            {
+                selector->m_MatchNetclasses.push_back( std::move( netclass ) );
+            }
+            else
+            {
+                // Interesting situation here: if we don't inform the user they may have a typo
+                // and can't figure out why their rules don't work.
+                // If we do tell them then it gets really noisy if they're using a single rule
+                // file for a class of board.
+            }
+
             NeedRIGHT();
+        }
             break;
 
         case T_match_type:

@@ -66,7 +66,7 @@ DRC::DRC() :
         m_pcbEditorFrame( nullptr ),
         m_pcb( nullptr ),
         m_drcDialog( nullptr ),
-        m_rulesFileLastMod( 0 )
+        m_largestClearance( 0 )
 {
     // establish initial values for everything:
     m_doPad2PadTest     = true;         // enable pad to pad clearance tests
@@ -103,8 +103,6 @@ void DRC::Reset( RESET_REASON aReason )
 
         m_pcb = m_pcbEditorFrame->GetBoard();
     }
-
-    loadRules();
 }
 
 
@@ -355,38 +353,32 @@ int DRC::testZoneToZoneOutlines( BOARD_COMMIT& aCommit )
 }
 
 
-void DRC::loadRules()
+void DRC::LoadRules()
 {
     wxString   rulesFilepath = m_pcbEditorFrame->Prj().AbsolutePath( "drc-rules" );
     wxFileName rulesFile( rulesFilepath );
 
     if( rulesFile.FileExists() )
     {
-        wxLongLong lastMod = rulesFile.GetModificationTime().GetValue();
+        m_ruleSelectors.clear();
+        m_rules.clear();
 
-        if( lastMod > m_rulesFileLastMod )
+        FILE* fp = wxFopen( rulesFilepath, wxT( "rt" ) );
+
+        if( fp )
         {
-            m_rulesFileLastMod = lastMod;
-            m_ruleSelectors.clear();
-            m_rules.clear();
-
-            FILE* fp = wxFopen( rulesFilepath, wxT( "rt" ) );
-
-            if( fp )
+            try
             {
-                try
-                {
-                    DRC_RULES_PARSER parser( m_pcb, fp, rulesFilepath );
-                    parser.Parse( m_ruleSelectors, m_rules );
-                }
-                catch( PARSE_ERROR& pe )
-                {
-                    // Don't leave possibly malformed stuff around for us to trip over
-                    m_ruleSelectors.clear();
-                    m_rules.clear();
+                DRC_RULES_PARSER parser( m_pcb, fp, rulesFilepath );
+                parser.Parse( m_ruleSelectors, m_rules );
+            }
+            catch( PARSE_ERROR& pe )
+            {
+                // Don't leave possibly malformed stuff around for us to trip over
+                m_ruleSelectors.clear();
+                m_rules.clear();
 
-                    DisplayError( m_drcDialog, pe.What() );
-                }
+                DisplayError( m_drcDialog, pe.What() );
             }
         }
     }
@@ -399,7 +391,8 @@ void DRC::loadRules()
 
 void DRC::RunTests( wxTextCtrl* aMessages )
 {
-    loadRules();
+    // Make absolutely sure these are up-to-date
+    LoadRules();
 
     wxASSERT( m_pcb == m_pcbEditorFrame->GetBoard() );
 

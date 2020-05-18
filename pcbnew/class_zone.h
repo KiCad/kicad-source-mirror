@@ -316,8 +316,7 @@ public:
      * if both aMinClearanceValue = 0 and aUseNetClearance = false: create the zone outline polygon.
      */
     void TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                int aMinClearanceValue, bool aUseNetClearance,
-                                std::set<VECTOR2I>* aPreserveCorners = nullptr ) const;
+            int aMinClearanceValue, std::set<VECTOR2I>* aPreserveCorners = nullptr ) const;
 
     /**
      * Function TransformShapeWithClearanceToPolygon
