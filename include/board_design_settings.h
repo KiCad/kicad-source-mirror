@@ -214,6 +214,9 @@ public:
     std::vector<DRC_SELECTOR*>       m_DRCRuleSelectors;
     std::vector<DRC_RULE*>           m_DRCRules;
 
+    // Temporary storage for rule matching.
+    std::vector<DRC_SELECTOR*>       m_matched;
+
     bool       m_MicroViasAllowed;          ///< true to allow micro vias
     bool       m_BlindBuriedViaAllowed;     ///< true to allow blind/buried vias
     VIATYPE    m_CurrentViaType;            ///< (VIA_BLIND_BURIED, VIA_THROUGH, VIA_MICROVIA)
@@ -331,9 +334,9 @@ public:
      * Function GetDefault
      * @return the default netclass.
      */
-    inline NETCLASSPTR GetDefault() const
+    inline NETCLASS* GetDefault() const
     {
-        return m_NetClasses.GetDefault();
+        return m_NetClasses.GetDefaultPtr();
     }
 
     /**

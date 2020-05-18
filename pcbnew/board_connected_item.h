@@ -163,11 +163,14 @@ public:
      */
     virtual int GetClearance( BOARD_ITEM* aItem = nullptr, wxString* aSource = nullptr ) const;
 
-     /**
-      * Function GetNetClass
-      * returns the NETCLASS for this item.
-      */
-    std::shared_ptr<NETCLASS> GetNetClass() const;
+    /**
+     * Function GetNetClassPtr
+     * returns the NETCLASS for this item.
+     *
+     * Note: do NOT return a std::shared_ptr from this.  It is used heavily in DRC, and the
+     * std::shared_ptr stuff shows up large in performance profiling.
+     */
+    NETCLASS* GetNetClass() const;
 
     /**
      * Function GetNetClassName

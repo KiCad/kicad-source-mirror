@@ -270,6 +270,11 @@ public:
         return m_default;
     }
 
+    NETCLASS* GetDefaultPtr() const
+    {
+        return m_default.get();
+    }
+
     /**
      * Function Add
      * takes \a aNetclass and puts it into this NETCLASSES container.

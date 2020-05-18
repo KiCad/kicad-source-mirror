@@ -170,7 +170,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
     wxArrayString netclassNames;
     NETCLASSES&   netclasses = m_brd->GetDesignSettings().m_NetClasses;
 
-    netclassNames.push_back(netclasses.GetDefault()->GetName() );
+    netclassNames.push_back( netclasses.GetDefaultPtr()->GetName() );
 
     for( NETCLASSES::const_iterator nc = netclasses.begin(); nc != netclasses.end(); ++nc )
         netclassNames.push_back( nc->second->GetName() );
@@ -199,7 +199,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
     m_netclassGrid->SetCellValue( 0, GRID_uVIADRILL, _( "uVia Drill" ) );
 
     NETCLASSES& netclasses = m_brd->GetDesignSettings().m_NetClasses;
-    NETCLASSPTR defaultNetclass = m_brd->GetDesignSettings().GetDefault();
+    NETCLASS*   defaultNetclass = m_brd->GetDesignSettings().GetDefault();
     m_netclassGrid->AppendRows( netclasses.GetCount() + 1 );
 
     m_netclassGrid->SetCellValue( 1, GRID_NAME, defaultNetclass->GetName() );

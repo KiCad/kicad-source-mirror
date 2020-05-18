@@ -999,15 +999,15 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<rules>--------------------------------------------------------
     {
-        char        rule[80];
-        NETCLASSPTR defaultClass = aBoard->GetDesignSettings().GetDefault();
+        char      rule[80];
+        NETCLASS* defaultClass = aBoard->GetDesignSettings().GetDefault();
 
-        int         defaultTrackWidth   = defaultClass->GetTrackWidth();
-        int         defaultClearance    = defaultClass->GetClearance();
+        int       defaultTrackWidth   = defaultClass->GetTrackWidth();
+        int       defaultClearance    = defaultClass->GetClearance();
 
-        double      clearance = scale( defaultClearance );
+        double    clearance = scale( defaultClearance );
 
-        STRINGS&    rules = pcb->structure->rules->rules;
+        STRINGS&  rules = pcb->structure->rules->rules;
 
         sprintf( rule, "(width %.6g)", scale( defaultTrackWidth ) );
         rules.push_back( rule );

@@ -961,9 +961,9 @@ bool BOARD_DESIGN_SETTINGS::SetCurrentNetClass( const wxString& aNetClassName )
 
 int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
 {
-    int clearance = m_NetClasses.GetDefault()->GetClearance();
+    int clearance = GetDefault()->GetClearance();
 
-    for( const std::pair<wxString, NETCLASSPTR>& netclass : m_NetClasses.NetClasses() )
+    for( const std::pair<const wxString, NETCLASSPTR>& netclass : m_NetClasses.NetClasses() )
         clearance = std::max( clearance, netclass.second->GetClearance() );
 
     for( const DRC_RULE* rule : m_DRCRules )
@@ -975,9 +975,9 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
 
 int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue()
 {
-    int clearance = m_NetClasses.GetDefault()->GetClearance();
+    int clearance = GetDefault()->GetClearance();
 
-    for( const std::pair<wxString, NETCLASSPTR>& netclass : m_NetClasses.NetClasses() )
+    for( const std::pair<const wxString, NETCLASSPTR>& netclass : m_NetClasses.NetClasses() )
         clearance = std::min( clearance, netclass.second->GetClearance() );
 
     return clearance;
@@ -988,11 +988,18 @@ int BOARD_DESIGN_SETTINGS::GetRuleClearance( const BOARD_ITEM* aItem, const NETC
                                              const BOARD_ITEM* bItem, const NETCLASS* bNetclass,
                                              wxString* aSource )
 {
-    std::vector<DRC_SELECTOR*> matched;
+    if( !m_matched.empty() )
+        m_matched.clear();      // yes, the difference can be seen in profiles
 
-    MatchSelectors( m_DRCRuleSelectors, aItem, aNetclass, bItem, bNetclass, &matched );
+    if( m_DRCRuleSelectors.size() == 0 )
+        return 0;
 
-    std::sort( matched.begin(), matched.end(),
+    MatchSelectors( m_DRCRuleSelectors, aItem, aNetclass, bItem, bNetclass, &m_matched );
+
+    if( m_matched.size() == 0 )
+        return 0;
+
+    std::sort( m_matched.begin(), m_matched.end(),
                []( DRC_SELECTOR* a, DRC_SELECTOR* b ) -> bool
                {
                    return a->m_Priority < b->m_Priority;
@@ -1000,7 +1007,7 @@ int BOARD_DESIGN_SETTINGS::GetRuleClearance( const BOARD_ITEM* aItem, const NETC
 
     int clearance = 0;
 
-    for( DRC_SELECTOR* selector : matched )
+    for( DRC_SELECTOR* selector : m_matched )
     {
         // ignore hole rules; we're just interested in copper here
         for( KICAD_T matchType : selector->m_MatchTypes )
@@ -1012,12 +1019,12 @@ int BOARD_DESIGN_SETTINGS::GetRuleClearance( const BOARD_ITEM* aItem, const NETC
         if( selector->m_Rule->m_Clearance > 0 )
         {
             clearance = std::max( clearance, selector->m_Rule->m_Clearance );
-            *aSource = selector->m_Rule->m_Name;
+            *aSource = wxString::Format( _( "'%s' rule clearance" ), selector->m_Rule->m_Name );
         }
         else if( selector->m_Rule->m_Clearance < 0 )
         {
             clearance = std::min( clearance, abs( selector->m_Rule->m_Clearance ) );
-            *aSource = selector->m_Rule->m_Name;
+            *aSource = wxString::Format( _( "'%s' rule clearance" ), selector->m_Rule->m_Name );
         }
     }
 

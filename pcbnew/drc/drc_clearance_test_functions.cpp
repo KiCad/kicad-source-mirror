@@ -136,19 +136,20 @@ bool poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint
 }
 
 
-void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterator aEndIt,
-                      bool aTestZones )
+void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aStartIt,
+                      TRACKS::iterator aEndIt, bool aTestZones )
 {
     BOARD_DESIGN_SETTINGS&     bds = m_pcb->GetDesignSettings();
     std::vector<DRC_SELECTOR*> matched;
 
-    wxString  msg;
-    SEG       refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
-    LSET      layerMask = aRefSeg->GetLayerSet();
-    NETCLASS* netclass = aRefSeg->GetNet()->GetNet() == 0 ? bds.GetDefault().get()
-                                                          : aRefSeg->GetNetClass().get();
-    EDA_RECT  refSegBB = aRefSeg->GetBoundingBox();
-    int       refSegWidth = aRefSeg->GetWidth();
+    SEG          refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+    PCB_LAYER_ID refLayer = aRefSeg->GetLayer();
+    LSET         refLayerSet = aRefSeg->GetLayerSet();
+
+    NETCLASS*    netclass = aRefSeg->GetNet()->GetNet() == 0 ? bds.GetDefault()
+                                                             : aRefSeg->GetNetClass();
+    EDA_RECT     refSegBB = aRefSeg->GetBoundingBox();
+    int          refSegWidth = aRefSeg->GetWidth();
 
     MatchSelectors( bds.m_DRCRuleSelectors, aRefSeg, netclass, nullptr, nullptr, &matched );
 
@@ -159,17 +160,16 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
     if( aRefSeg->Type() == PCB_VIA_T )
     {
-        VIA      *refvia = static_cast<VIA*>( aRefSeg );
-        int      viaAnnulus = ( refvia->GetWidth() - refvia->GetDrill() ) / 2;
-        int      minAnnulus;
-        wxString minAnnulusSource;
+        VIA *refvia = static_cast<VIA*>( aRefSeg );
+        int viaAnnulus = ( refvia->GetWidth() - refvia->GetDrill() ) / 2;
+        int minAnnulus;
 
         for( DRC_SELECTOR* selector : matched )
         {
             if( selector->m_Rule->m_AnnulusWidth > minAnnulus )
             {
                 minAnnulus = selector->m_Rule->m_AnnulusWidth;
-                minAnnulusSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
+                m_clearanceSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
             }
         }
 
@@ -180,31 +180,31 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_ANNULUS );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
-                            minAnnulusSource,
-                            MessageTextFromValue( userUnits(), minAnnulus, true ),
-                            MessageTextFromValue( userUnits(), viaAnnulus, true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+                              m_clearanceSource,
+                              MessageTextFromValue( userUnits(), minAnnulus, true ),
+                              MessageTextFromValue( userUnits(), viaAnnulus, true ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( refvia );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-                addMarkerToPcb( marker );
+                addMarkerToPcb( aCommit, marker );
             }
 
             if( refvia->GetWidth() < bds.m_MicroViasMinSize )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), bds.m_MicroViasMinSize, true ),
-                            MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
+                              MessageTextFromValue( userUnits(), bds.m_MicroViasMinSize, true ),
+                              MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( refvia );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-                addMarkerToPcb( marker );
+                addMarkerToPcb( aCommit, marker );
             }
         }
         else
@@ -212,38 +212,38 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             if( bds.m_ViasMinAnnulus > minAnnulus )
             {
                 minAnnulus = bds.m_ViasMinAnnulus;
-                minAnnulusSource = _( "board" );
+                m_clearanceSource = _( "board" );
             }
 
             if( viaAnnulus < minAnnulus )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_ANNULUS );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
-                            minAnnulusSource,
-                            MessageTextFromValue( userUnits(), minAnnulus, true ),
-                            MessageTextFromValue( userUnits(), viaAnnulus, true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+                              m_clearanceSource,
+                              MessageTextFromValue( userUnits(), minAnnulus, true ),
+                              MessageTextFromValue( userUnits(), viaAnnulus, true ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( refvia );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-                addMarkerToPcb( marker );
+                addMarkerToPcb( aCommit, marker );
             }
 
             if( refvia->GetWidth() < bds.m_ViasMinSize )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), bds.m_ViasMinSize, true ),
-                            MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
+                              MessageTextFromValue( userUnits(), bds.m_ViasMinSize, true ),
+                              MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( refvia );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-                addMarkerToPcb( marker );
+                addMarkerToPcb( aCommit, marker );
             }
         }
 
@@ -254,15 +254,15 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_HOLE_BIGGER );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (diameter %s; drill %s)" ),
-                        MessageTextFromValue( userUnits(), refvia->GetWidth(), true ),
-                        MessageTextFromValue( userUnits(), refvia->GetDrillValue(), true ) );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (diameter %s; drill %s)" ),
+                          MessageTextFromValue( userUnits(), refvia->GetWidth(), true ),
+                          MessageTextFromValue( userUnits(), refvia->GetDrillValue(), true ) );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( refvia );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
         }
 
         // test if the type of via is allowed due to design rules
@@ -270,12 +270,12 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICROVIA_NOT_ALLOWED );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" ) );
-            drcItem->SetErrorMessage( msg );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" ) );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( refvia );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
         }
 
         // test if the type of via is allowed due to design rules
@@ -283,12 +283,12 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_BURIED_VIA_NOT_ALLOWED );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" ) );
-            drcItem->SetErrorMessage( msg );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" ) );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( refvia );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
         }
 
         // For microvias: test if they are blind vias and only between 2 layers
@@ -313,30 +313,30 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICROVIA_TOO_MANY_LAYERS );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (%s and %s not adjacent)" ),
-                            m_pcb->GetLayerName( layer1 ),
-                            m_pcb->GetLayerName( layer2 ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s and %s not adjacent)" ),
+                              m_pcb->GetLayerName( layer1 ),
+                              m_pcb->GetLayerName( layer2 ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( refvia );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-                addMarkerToPcb( marker );
+                addMarkerToPcb( aCommit, marker );
             }
         }
 
     }
     else    // This is a track segment
     {
-        int      minWidth = bds.m_TrackMinWidth;
-        wxString minWidthSource = _( "board" );
+        int minWidth = bds.m_TrackMinWidth;
+        m_clearanceSource = _( "board" );
 
         for( DRC_SELECTOR* selector : matched )
         {
             if( selector->m_Rule->m_TrackWidth > minWidth )
             {
                 minWidth = selector->m_Rule->m_AnnulusWidth;
-                minWidthSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
+                m_clearanceSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
             }
         }
 
@@ -346,16 +346,16 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_TRACK_WIDTH );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
-                        minWidthSource,
-                        MessageTextFromValue( userUnits(), bds.m_TrackMinWidth, true ),
-                        MessageTextFromValue( userUnits(), refSegWidth, true ) );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+                          m_clearanceSource,
+                          MessageTextFromValue( userUnits(), bds.m_TrackMinWidth, true ),
+                          MessageTextFromValue( userUnits(), refSegWidth, true ) );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( aRefSeg );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, refsegMiddle );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
         }
     }
 
@@ -375,12 +375,12 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         {
             // Preflight based on bounding boxes.
             EDA_RECT inflatedBB = refSegBB;
-            inflatedBB.Inflate( pad->GetBoundingRadius() + aRefSeg->GetClearance( pad, nullptr ) );
+            inflatedBB.Inflate( pad->GetBoundingRadius() + m_largestClearance );
 
             if( !inflatedBB.Contains( pad->GetPosition() ) )
                 continue;
 
-            if( !( pad->GetLayerSet() & layerMask ).any() )
+            if( !( pad->GetLayerSet() & refLayerSet ).any() )
                 continue;
 
             // No need to check pads with the same net as the refSeg.
@@ -389,8 +389,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
             if( pad->GetDrillSize().x > 0 )
             {
-                wxString clearanceSource;
-                int      minClearance = aRefSeg->GetClearance( nullptr, &clearanceSource );
+                int minClearance = aRefSeg->GetClearance( nullptr, &m_clearanceSource );
 
                 /* Treat an oval hole as a line segment along the hole's major axis,
                  * shortened by half its minor axis.
@@ -415,41 +414,41 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                     int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_HOLE );
 
-                    msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                                clearanceSource,
-                                MessageTextFromValue( userUnits(), minClearance, true ),
-                                MessageTextFromValue( userUnits(), actual, true ) );
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                                  m_clearanceSource,
+                                  MessageTextFromValue( userUnits(), minClearance, true ),
+                                  MessageTextFromValue( userUnits(), actual, true ) );
 
-                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( aRefSeg, pad );
 
-                    MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, slotSeg ) );
-                    addMarkerToPcb( marker );
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, slotSeg ) );
+                    addMarkerToPcb( aCommit, marker );
 
                     if( !m_reportAllTrackErrors )
                         return;
                 }
             }
 
-            wxString clearanceSource;
-            int      minClearance = aRefSeg->GetClearance( pad, &clearanceSource );
-            int      actual;
+            int minClearance = aRefSeg->GetClearance( pad, &m_clearanceSource );
+            int actual;
 
             if( !checkClearanceSegmToPad( refSeg, refSegWidth, pad, minClearance, &actual ) )
             {
+                actual = std::max( 0, actual );
                 SEG       padSeg( pad->GetPosition(), pad->GetPosition() );
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_PAD );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                            clearanceSource,
-                            MessageTextFromValue( userUnits(), minClearance, true ),
-                            MessageTextFromValue( userUnits(), actual, true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                              m_clearanceSource,
+                              MessageTextFromValue( userUnits(), minClearance, true ),
+                              MessageTextFromValue( userUnits(), actual, true ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( aRefSeg, pad );
 
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, padSeg ) );
-                addMarkerToPcb( marker );
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, padSeg ) );
+                addMarkerToPcb( aCommit, marker );
 
                 if( !m_reportAllTrackErrors )
                     return;
@@ -471,21 +470,39 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             continue;
 
         // No problem if tracks are on different layers:
-        if( !( layerMask & track->GetLayerSet() ).any() )
+        // Note that while the general case of GetLayerSet intersection always works,
+        // the others are much faster.
+        bool sameLayers;
+
+        if( aRefSeg->Type() == PCB_VIA_T )
+        {
+            if( track->Type() == PCB_VIA_T )
+                sameLayers = ( refLayerSet & track->GetLayerSet() ).any();
+            else
+                sameLayers = refLayerSet.test( track->GetLayer() );
+        }
+        else
+        {
+            if( track->Type() == PCB_VIA_T )
+                sameLayers = track->GetLayerSet().test( refLayer );
+            else
+                sameLayers = track->GetLayer() == refLayer;
+        }
+
+        if( !sameLayers )
             continue;
 
-        // Preflight based on inflated bounding boxes:
+        // Preflight based on worst-case inflated bounding boxes:
         EDA_RECT trackBB = track->GetBoundingBox();
-        trackBB.Inflate( aRefSeg->GetClearance( track, nullptr ) );
+        trackBB.Inflate( m_largestClearance );
 
         if( !trackBB.Intersects( refSegBB ) )
             continue;
 
-        wxString clearanceSource;
-        int      minClearance = aRefSeg->GetClearance( track, &clearanceSource );
-        SEG      trackSeg( track->GetStart(), track->GetEnd() );
-        int      widths = ( refSegWidth + track->GetWidth() ) / 2;
-        int      center2centerAllowed = minClearance + widths;
+        int minClearance = aRefSeg->GetClearance( track, &m_clearanceSource );
+        SEG trackSeg( track->GetStart(), track->GetEnd() );
+        int widths = ( refSegWidth + track->GetWidth() ) / 2;
+        int center2centerAllowed = minClearance + widths;
 
         // Avoid square-roots if possible (for performance)
         SEG::ecoord  center2center_squared = refSeg.SquaredDistance( trackSeg );
@@ -495,11 +512,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         if( intersection )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACKS_CROSSING );
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( aRefSeg, track );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, (wxPoint) intersection.get() );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
 
             if( !m_reportAllTrackErrors )
                 return;
@@ -518,16 +535,16 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
             DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                        clearanceSource,
-                        MessageTextFromValue( userUnits(), minClearance, true ),
-                        MessageTextFromValue( userUnits(), actual, true ) );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                          m_clearanceSource,
+                          MessageTextFromValue( userUnits(), minClearance, true ),
+                          MessageTextFromValue( userUnits(), actual, true ) );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( aRefSeg, track );
 
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, trackSeg ) );
-            addMarkerToPcb( marker );
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, trackSeg ) );
+            addMarkerToPcb( aCommit, marker );
 
             if( !m_reportAllTrackErrors )
                 return;
@@ -547,14 +564,13 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             if( zone->GetFilledPolysList().IsEmpty() || zone->GetIsKeepout() )
                 continue;
 
-            if( !( layerMask & zone->GetLayerSet() ).any() )
+            if( !( refLayerSet & zone->GetLayerSet() ).any() )
                 continue;
 
             if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
                 continue;
 
-            wxString        clearanceSource;
-            int             minClearance = aRefSeg->GetClearance( zone, &clearanceSource );
+            int             minClearance = aRefSeg->GetClearance( zone, &m_clearanceSource );
             int             widths = refSegWidth / 2;
             int             center2centerAllowed = minClearance + widths;
             SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
@@ -571,16 +587,16 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                            clearanceSource,
-                            MessageTextFromValue( userUnits(), minClearance, true ),
-                            MessageTextFromValue( userUnits(), actual, true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                              m_clearanceSource,
+                              MessageTextFromValue( userUnits(), minClearance, true ),
+                              MessageTextFromValue( userUnits(), actual, true ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( aRefSeg, zone );
 
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, zone ) );
-                addMarkerToPcb( marker );
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, zone ) );
+                addMarkerToPcb( aCommit, marker );
             }
         }
     }
@@ -592,14 +608,13 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         static DRAWSEGMENT dummyEdge;
         dummyEdge.SetLayer( Edge_Cuts );
 
-        SEG      testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
-        wxString clearanceSource;
-        int      minClearance = aRefSeg->GetClearance( &dummyEdge, &clearanceSource );
+        SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+        int minClearance = aRefSeg->GetClearance( &dummyEdge, &m_clearanceSource );
 
         if( bds.m_CopperEdgeClearance > minClearance )
         {
             minClearance = bds.m_CopperEdgeClearance;
-            clearanceSource = _( "board edge" );
+            m_clearanceSource = _( "board edge" );
         }
 
         int halfWidth = refSegWidth / 2;
@@ -638,16 +653,16 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 int       actual = std::max( 0.0, sqrt( center2center_squared ) - halfWidth );
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_EDGE );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                            clearanceSource,
-                            MessageTextFromValue( userUnits(), minClearance, true ),
-                            MessageTextFromValue( userUnits(), actual, true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              m_clearanceSource,
+                              MessageTextFromValue( userUnits(), minClearance, true ),
+                              MessageTextFromValue( userUnits(), actual, true ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( aRefSeg, edge );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, (wxPoint) pt );
-                addMarkerToPcb( marker );
+                addMarkerToPcb( aCommit, marker );
             }
         }
     }
@@ -934,7 +949,7 @@ bool DRC::checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_P
 
         if( padShape.DoCollide( refSeg, minClearance + widths, &actual ) )
         {
-            *aActualDist = actual - widths;
+            *aActualDist = std::max( 0, actual - widths );
             return false;
         }
     }
@@ -955,7 +970,7 @@ bool DRC::checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_P
                               (wxPoint) refSeg.A, (wxPoint) refSeg.B,
                               minClearance + widths, &actual ) )
         {
-            *aActualDist = actual - widths;
+            *aActualDist = std::max( 0, actual - widths );
             return false;
         }
     }

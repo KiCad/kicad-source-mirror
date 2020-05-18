@@ -94,7 +94,7 @@ void SIZES_SETTINGS::Init( BOARD* aBoard, ITEM* aStartItem, int aNet )
     }
 
     if( !netClass )
-        netClass = bds.GetDefault();
+        netClass = bds.m_NetClasses.GetDefault();
 
     m_trackWidth = 0;
 

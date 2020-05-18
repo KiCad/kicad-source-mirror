@@ -269,8 +269,8 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
 
         if( m_rules->mdWireWire )
         {
-            NETCLASSPTR defaultNetclass = designSettings.GetDefault();
-            int         clearance = KiROUND( m_rules->mdWireWire );
+            NETCLASS* defaultNetclass = designSettings.GetDefault();
+            int       clearance = KiROUND( m_rules->mdWireWire );
 
             if( clearance < defaultNetclass->GetClearance() )
                 defaultNetclass->SetClearance( clearance );

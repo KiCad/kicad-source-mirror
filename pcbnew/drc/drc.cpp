@@ -52,11 +52,14 @@
 #include <wx/progdlg.h>
 #include <board_commit.h>
 #include <geometry/shape_arc.h>
+#include <drc/drc_rule_parser.h>
 #include <drc/drc_item.h>
 #include <drc/drc_courtyard_tester.h>
 #include <drc/drc_drilled_hole_tester.h>
+#include <drc/drc_keepout_tester.h>
+#include <drc/drc_netclass_tester.h>
+#include <drc/drc_textvar_tester.h>
 #include <confirm.h>
-#include "drc_rule_parser.h"
 
 DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -156,7 +159,7 @@ bool DRC::IsDRCDialogShown()
 }
 
 
-void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
+void DRC::addMarkerToPcb( BOARD_COMMIT& aCommit, MARKER_PCB* aMarker )
 {
     if( m_pcb->GetDesignSettings().Ignore( aMarker->GetRCItem()->GetErrorCode() ) )
     {
@@ -164,9 +167,7 @@ void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
         return;
     }
 
-    BOARD_COMMIT commit( m_pcbEditorFrame );
-    commit.Add( aMarker );
-    commit.Push( wxEmptyString, false, false );
+    aCommit.Add( aMarker );
 }
 
 
@@ -180,11 +181,10 @@ void DRC::DestroyDRCDialog( int aReason )
 }
 
 
-int DRC::TestZoneToZoneOutlines()
+int DRC::testZoneToZoneOutlines( BOARD_COMMIT& aCommit )
 {
     BOARD*   board = m_pcbEditorFrame->GetBoard();
     int      nerrors = 0;
-    wxString msg;
 
     std::vector<SHAPE_POLY_SET> smoothed_polys;
     smoothed_polys.resize( board->GetAreaCount() );
@@ -236,8 +236,7 @@ int DRC::TestZoneToZoneOutlines()
             // Get clearance used in zone to zone test.  The policy used to
             // obtain that value is now part of the zone object itself by way of
             // ZONE_CONTAINER::GetClearance().
-            wxString clearanceSource;
-            int      zone2zoneClearance = zoneRef->GetClearance( zoneToTest, &clearanceSource );
+            int zone2zoneClearance = zoneRef->GetClearance( zoneToTest, &m_clearanceSource );
 
             // Keepout areas have no clearance, so set zone2zoneClearance to 1
             // ( zone2zoneClearance = 0  can create problems in test functions)
@@ -256,7 +255,7 @@ int DRC::TestZoneToZoneOutlines()
                     drcItem->SetItems( zoneRef, zoneToTest );
 
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
-                    addMarkerToPcb( marker );
+                    addMarkerToPcb( aCommit, marker );
                     nerrors++;
                 }
             }
@@ -273,7 +272,7 @@ int DRC::TestZoneToZoneOutlines()
                     drcItem->SetItems( zoneToTest, zoneRef );
 
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
-                    addMarkerToPcb( marker );
+                    addMarkerToPcb( aCommit, marker );
                     nerrors++;
                 }
             }
@@ -335,18 +334,18 @@ int DRC::TestZoneToZoneOutlines()
                 {
                     drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
 
-                    msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                                clearanceSource,
-                                MessageTextFromValue( userUnits(), zone2zoneClearance, true ),
-                                MessageTextFromValue( userUnits(), conflict.second, true ) );
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                                  m_clearanceSource,
+                                  MessageTextFromValue( userUnits(), zone2zoneClearance, true ),
+                                  MessageTextFromValue( userUnits(), conflict.second, true ) );
 
-                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetErrorMessage( m_msg );
                 }
 
                 drcItem->SetItems( zoneRef, zoneToTest );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, conflict.first );
-                addMarkerToPcb( marker );
+                addMarkerToPcb( aCommit, marker );
                 nerrors++;
             }
         }
@@ -402,17 +401,23 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 {
     loadRules();
 
-    // be sure m_pcb is the current board, not a old one
-    // ( the board can be reloaded )
-    m_pcb = m_pcbEditorFrame->GetBoard();
+    wxASSERT( m_pcb == m_pcbEditorFrame->GetBoard() );
 
-    if( aMessages )
+    BOARD_COMMIT           commit( m_pcbEditorFrame );
+    BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
+
+    m_largestClearance = bds.GetBiggestClearanceValue();
+
+    if( !bds.Ignore( DRCE_INVALID_OUTLINE ) )
     {
-        aMessages->AppendText( _( "Board Outline...\n" ) );
-        wxSafeYield();
-    }
+        if( aMessages )
+        {
+            aMessages->AppendText( _( "Board Outline...\n" ) );
+            wxSafeYield();
+        }
 
-    testOutline();
+        testOutline( commit );
+    }
 
     if( aMessages )
     {
@@ -420,7 +425,12 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         wxSafeYield();
     }
 
-    if( !testNetClasses() )
+    DRC_NETCLASS_TESTER netclassTester( [&]( MARKER_PCB* aMarker )
+                                        {
+                                            addMarkerToPcb( commit, aMarker );
+                                        } );
+
+    if( !netclassTester.RunDRC( userUnits(), *m_pcb ) )
     {
         // testing the netclasses is a special case because if the netclasses
         // do not pass the BOARD_DESIGN_SETTINGS checks, then every member of a net
@@ -428,6 +438,8 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         // to also fail.  So quit after *all* netclass errors have been reported.
         if( aMessages )
             aMessages->AppendText( _( "NETCLASS VIOLATIONS: Aborting DRC\n" ) );
+
+        commit.Push( wxEmptyString, false, false );
 
         // update the m_drcDialog listboxes
         updatePointers();
@@ -444,17 +456,28 @@ void DRC::RunTests( wxTextCtrl* aMessages )
             wxSafeYield();
         }
 
-        testPad2Pad();
+        testPad2Pad( commit );
     }
 
-    // test clearances between drilled holes
-    if( aMessages )
+    // test drilled holes
+    if( !bds.Ignore( DRCE_DRILLED_HOLES_TOO_CLOSE )
+        || !bds.Ignore( DRCE_TOO_SMALL_PAD_DRILL )
+        || !bds.Ignore( DRCE_TOO_SMALL_VIA_DRILL )
+        || !bds.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL ) )
     {
-        aMessages->AppendText( _( "Drill clearances...\n" ) );
-        wxSafeYield();
-    }
+        if( aMessages )
+        {
+            aMessages->AppendText( _( "Drill sizes and clearances...\n" ) );
+            wxSafeYield();
+        }
 
-    testDrilledHoles();
+        DRC_DRILLED_HOLE_TESTER tester( [&]( MARKER_PCB* aMarker )
+                                        {
+                                            addMarkerToPcb( commit, aMarker );
+                                        } );
+
+        tester.RunDRC( userUnits(), *m_pcb );
+    }
 
     // caller (a wxTopLevelFrame) is the wxDialog or the Pcb Editor frame that call DRC:
     wxWindow* caller = aMessages ? aMessages->GetParent() : m_pcbEditorFrame;
@@ -481,7 +504,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         wxSafeYield();
     }
 
-    testTracks( aMessages ? aMessages->GetParent() : m_pcbEditorFrame, true );
+    testTracks( commit, aMessages ? aMessages->GetParent() : m_pcbEditorFrame, true );
 
     // test zone clearances to other zones
     if( aMessages )
@@ -490,10 +513,11 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         wxSafeYield();
     }
 
-    testZones();
+    testZones( commit );
 
     // find and gather unconnected pads.
-    if( m_doUnconnectedTest && !m_pcb->GetDesignSettings().Ignore( DRCE_UNCONNECTED_ITEMS ) )
+    if( m_doUnconnectedTest
+        && !bds.Ignore( DRCE_UNCONNECTED_ITEMS ) )
     {
         if( aMessages )
         {
@@ -513,24 +537,33 @@ void DRC::RunTests( wxTextCtrl* aMessages )
             aMessages->Refresh();
         }
 
-        testKeepoutAreas();
+        DRC_KEEPOUT_TESTER tester( [&]( MARKER_PCB* aMarker )
+                                   {
+                                       addMarkerToPcb( commit, aMarker );
+                                   } );
+
+        tester.RunDRC( userUnits(), *m_pcb );
     }
 
     // find and gather vias, tracks, pads inside text boxes.
-    if( aMessages )
+    if( !bds.Ignore( DRCE_VIA_NEAR_COPPER )
+        || !bds.Ignore( DRCE_TRACK_NEAR_COPPER ) )
     {
-        aMessages->AppendText( _( "Text and graphic clearances...\n" ) );
-        wxSafeYield();
+        if( aMessages )
+        {
+            aMessages->AppendText( _( "Text and graphic clearances...\n" ) );
+            wxSafeYield();
+        }
+
+        testCopperTextAndGraphics( commit );
     }
 
-    testCopperTextAndGraphics();
-
     // test courtyards
-    if( !m_pcb->GetDesignSettings().Ignore( DRCE_OVERLAPPING_FOOTPRINTS )
-        || !m_pcb->GetDesignSettings().Ignore( DRCE_MISSING_COURTYARD )
-        || !m_pcb->GetDesignSettings().Ignore( DRCE_MALFORMED_COURTYARD )
-        || !m_pcb->GetDesignSettings().Ignore( DRCE_PTH_IN_COURTYARD )
-        || !m_pcb->GetDesignSettings().Ignore( DRCE_NPTH_IN_COURTYARD ) )
+    if( !bds.Ignore( DRCE_OVERLAPPING_FOOTPRINTS )
+        || !bds.Ignore( DRCE_MISSING_COURTYARD )
+        || !bds.Ignore( DRCE_MALFORMED_COURTYARD )
+        || !bds.Ignore( DRCE_PTH_IN_COURTYARD )
+        || !bds.Ignore( DRCE_NPTH_IN_COURTYARD ) )
     {
         if( aMessages )
         {
@@ -538,7 +571,12 @@ void DRC::RunTests( wxTextCtrl* aMessages )
             aMessages->Refresh();
         }
 
-        doCourtyardsDrc();
+        DRC_COURTYARD_TESTER tester( [&]( MARKER_PCB* aMarker )
+                                     {
+                                         addMarkerToPcb( commit, aMarker );
+                                     } );
+
+        tester.RunDRC( userUnits(), *m_pcb );
     }
 
     for( DRC_ITEM* footprintItem : m_footprints )
@@ -566,18 +604,34 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     }
 
     // Check if there are items on disabled layers
-    if( !m_pcb->GetDesignSettings().Ignore( DRCE_DISABLED_LAYER_ITEM ) )
-        testDisabledLayers();
-
-    if( aMessages )
+    if( !bds.Ignore( DRCE_DISABLED_LAYER_ITEM ) )
     {
-        aMessages->AppendText( _( "Items on disabled layers...\n" ) );
-        aMessages->Refresh();
+        if( aMessages )
+        {
+            aMessages->AppendText( _( "Items on disabled layers...\n" ) );
+            aMessages->Refresh();
+        }
+
+        testDisabledLayers( commit );
     }
 
-    if( !m_pcb->GetDesignSettings().Ignore( DRCE_UNRESOLVED_VARIABLE ) )
-        testTextVars();
+    if( !bds.Ignore( DRCE_UNRESOLVED_VARIABLE ) )
+    {
+        if( aMessages )
+        {
+            aMessages->AppendText( _( "Unresolved text variables...\n" ) );
+            aMessages->Refresh();
+        }
 
+        DRC_TEXTVAR_TESTER tester( [&]( MARKER_PCB* aMarker )
+                                   {
+                                       addMarkerToPcb( commit, aMarker );
+                                   } );
+
+        tester.RunDRC( userUnits(), *m_pcb );
+    }
+
+    commit.Push( wxEmptyString, false, false );
     m_drcRun = true;
 
     // update the m_drcDialog listboxes
@@ -610,138 +664,7 @@ void DRC::updatePointers()
 }
 
 
-bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
-{
-    bool ret = true;
-
-    const BOARD_DESIGN_SETTINGS& g = m_pcb->GetDesignSettings();
-
-    if( nc->GetClearance() < g.m_MinClearance )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_CLEARANCE );
-
-        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                    MessageTextFromValue( userUnits(), g.m_MinClearance, true ),
-                    nc->GetName(),
-                    MessageTextFromValue( userUnits(), nc->GetClearance(), true ) );
-
-        drcItem->SetErrorMessage( msg );
-        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
-
-    if( nc->GetTrackWidth() < g.m_TrackMinWidth )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_TRACKWIDTH );
-
-        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                    MessageTextFromValue( userUnits(), g.m_TrackMinWidth, true ),
-                    nc->GetName(),
-                    MessageTextFromValue( userUnits(), nc->GetTrackWidth(), true ) );
-
-        drcItem->SetErrorMessage( msg );
-        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
-
-    if( nc->GetViaDiameter() < g.m_ViasMinSize )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIASIZE );
-
-        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                    MessageTextFromValue( userUnits(), g.m_ViasMinSize, true ),
-                    nc->GetName(),
-                    MessageTextFromValue( userUnits(), nc->GetViaDiameter(), true ) );
-
-        drcItem->SetErrorMessage( msg );
-        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
-
-    if( nc->GetViaDrill() < g.m_MinThroughDrill )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIADRILLSIZE );
-
-        msg.Printf( drcItem->GetErrorText() + _( " (board min through hole %s; %s netclass %s)" ),
-                    MessageTextFromValue( userUnits(), g.m_MinThroughDrill, true ),
-                    nc->GetName(),
-                    MessageTextFromValue( userUnits(), nc->GetViaDrill(), true ) );
-
-        drcItem->SetErrorMessage( msg );
-        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
-
-    int ncViaAnnulus = ( nc->GetViaDiameter() - nc->GetViaDrill() ) / 2;
-
-    if( ncViaAnnulus < g.m_ViasMinAnnulus )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIAANNULUS );
-
-        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                    MessageTextFromValue( userUnits(), g.m_ViasMinAnnulus, true ),
-                    nc->GetName(),
-                    MessageTextFromValue( userUnits(), ncViaAnnulus, true ) );
-
-        drcItem->SetErrorMessage( msg );
-        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
-
-    if( nc->GetuViaDiameter() < g.m_MicroViasMinSize )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIASIZE );
-
-        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                    MessageTextFromValue( userUnits(), g.m_MicroViasMinSize, true ),
-                    nc->GetName(),
-                    MessageTextFromValue( userUnits(), nc->GetuViaDiameter(), true ) );
-
-        drcItem->SetErrorMessage( msg );
-        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
-
-    if( nc->GetuViaDrill() < g.m_MicroViasMinDrill )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIADRILLSIZE );
-
-        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                    MessageTextFromValue( userUnits(), g.m_MicroViasMinDrill, true ),
-                    nc->GetName(),
-                    MessageTextFromValue( userUnits(), nc->GetuViaDrill(), true ) );
-
-        drcItem->SetErrorMessage( msg );
-        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
-
-    return ret;
-}
-
-
-bool DRC::testNetClasses()
-{
-    bool        ret = true;
-    NETCLASSES& netclasses = m_pcb->GetDesignSettings().m_NetClasses;
-    wxString    msg;   // construct this only once here, not in a loop, since somewhat expensive.
-
-    if( !doNetClass( netclasses.GetDefault(), msg ) )
-        ret = false;
-
-    for( NETCLASSES::const_iterator i = netclasses.begin();  i != netclasses.end();  ++i )
-    {
-        NETCLASSPTR nc = i->second;
-
-        if( !doNetClass( nc, msg ) )
-            ret = false;
-    }
-
-    return ret;
-}
-
-
-void DRC::testPad2Pad()
+void DRC::testPad2Pad( BOARD_COMMIT& aCommit )
 {
     std::vector<D_PAD*> sortedPads;
 
@@ -762,28 +685,24 @@ void DRC::testPad2Pad()
             max_size = radius;
     }
 
+    // Better to be fast than accurate; this keeps us from having to look up / calculate the
+    // actual clearances
+    max_size += m_largestClearance;
+
     // Upper limit of pad list (limit not included)
     D_PAD** listEnd = &sortedPads[0] + sortedPads.size();
 
     // Test the pads
     for( auto& pad : sortedPads )
     {
-        int x_limit = pad->GetClearance() + pad->GetBoundingRadius() + pad->GetPosition().x;
+        int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
 
-        doPadToPadsDrc( pad, &pad, listEnd, max_size + x_limit );
+        doPadToPadsDrc( aCommit, pad, &pad, listEnd, x_limit );
     }
 }
 
 
-void DRC::testDrilledHoles()
-{
-    DRC_DRILLED_HOLE_TESTER tester( [&]( MARKER_PCB* aMarker ) { addMarkerToPcb( aMarker ); } );
-
-    tester.RunDRC( userUnits(), *m_pcb );
-}
-
-
-void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
+void DRC::testTracks( BOARD_COMMIT& aCommit, wxWindow *aActiveWindow, bool aShowProgressBar )
 {
     wxProgressDialog* progressDialog = NULL;
     const int         delta = 500;  // This is the number of tests between 2 calls to the
@@ -835,7 +754,7 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
         }
 
         // Test new segment against tracks and pads, optionally against copper zones
-        doTrackDrc( *seg_it, seg_it + 1, m_pcb->Tracks().end(), m_doZonesTest );
+        doTrackDrc( aCommit, *seg_it, seg_it + 1, m_pcb->Tracks().end(), m_doZonesTest );
 
         // Test for dangling items
         int code = (*seg_it)->Type() == PCB_VIA_T ? DRCE_DANGLING_VIA : DRCE_DANGLING_TRACK;
@@ -847,7 +766,7 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
             drcItem->SetItems( *seg_it );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
         }
     }
 
@@ -872,7 +791,7 @@ void DRC::testUnconnected()
     std::vector<CN_EDGE> edges;
     connectivity->GetUnconnectedEdges( edges );
 
-    for( const auto& edge : edges )
+    for( const CN_EDGE& edge : edges )
     {
         DRC_ITEM* item = new DRC_ITEM( DRCE_UNCONNECTED_ITEMS );
         item->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
@@ -881,7 +800,7 @@ void DRC::testUnconnected()
 }
 
 
-void DRC::testZones()
+void DRC::testZones( BOARD_COMMIT& aCommit )
 {
     // Test copper areas for valid netcodes
     // if a netcode is < 0 the netname was not found when reading a netlist
@@ -912,165 +831,24 @@ void DRC::testZones()
                 drcItem->SetItems( zone );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, zone->GetPosition() );
-                addMarkerToPcb( marker );
+                addMarkerToPcb( aCommit, marker );
             }
         }
     }
 
     // Test copper areas outlines, and create markers when needed
-    TestZoneToZoneOutlines();
+    testZoneToZoneOutlines( aCommit );
 }
 
 
-void DRC::testKeepoutAreas()
-{
-    // Get a list of all zones to inspect, from both board and footprints
-    std::list<ZONE_CONTAINER*> areasToInspect = m_pcb->GetZoneList( true );
-
-    // Test keepout areas for vias, tracks and pads inside keepout areas
-    for( ZONE_CONTAINER* area : areasToInspect )
-    {
-        if( !area->GetIsKeepout() )
-            continue;
-
-        for( TRACK* segm : m_pcb->Tracks() )
-        {
-            if( segm->Type() == PCB_TRACE_T )
-            {
-                if( !area->GetDoNotAllowTracks()  )
-                    continue;
-
-                // Ignore if the keepout zone is not on the same layer
-                if( !area->IsOnLayer( segm->GetLayer() ) )
-                    continue;
-
-                int         widths = segm->GetWidth() / 2;
-                SEG         trackSeg( segm->GetStart(), segm->GetEnd() );
-                SEG::ecoord center2center_squared = area->Outline()->SquaredDistance( trackSeg );
-
-                if( center2center_squared <= SEG::Square( widths) )
-                {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_INSIDE_KEEPOUT );
-                    drcItem->SetItems( segm, area );
-
-                    MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( segm, area ) );
-                    addMarkerToPcb( marker );
-                }
-            }
-            else if( segm->Type() == PCB_VIA_T )
-            {
-                if( ! area->GetDoNotAllowVias()  )
-                    continue;
-
-                if( !area->CommonLayerExists( segm->GetLayerSet() ) )
-                    continue;
-
-                int         widths = segm->GetWidth() / 2;
-                wxPoint     viaPos = segm->GetPosition();
-                SEG::ecoord center2center_squared = area->Outline()->SquaredDistance( viaPos );
-
-                if( center2center_squared <= SEG::Square( widths) )
-                {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_INSIDE_KEEPOUT );
-                    drcItem->SetItems( segm, area );
-
-                    MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( segm, area ) );
-                    addMarkerToPcb( marker );
-                }
-            }
-        }
-
-        if( !area->GetDoNotAllowPads() && !area->GetDoNotAllowFootprints() )
-            continue;
-
-        EDA_RECT areaBBox = area->GetBoundingBox();
-        bool     checkFront = area->CommonLayerExists( LSET::FrontMask() );
-        bool     checkBack = area->CommonLayerExists( LSET::BackMask() );
-
-        for( MODULE* fp : m_pcb->Modules() )
-        {
-            if( area->GetDoNotAllowFootprints() && ( fp->IsFlipped() ? checkBack : checkFront ) )
-            {
-                // Fast test to detect a footprint inside the keepout area bounding box.
-                if( areaBBox.Intersects( fp->GetBoundingBox() ) )
-                {
-                    SHAPE_POLY_SET outline;
-
-                    if( fp->BuildPolyCourtyard() )
-                    {
-                        outline = fp->IsFlipped() ? fp->GetPolyCourtyardBack()
-                                                  : fp->GetPolyCourtyardFront();
-                    }
-
-                    if( outline.OutlineCount() == 0 )
-                        outline = fp->GetBoundingPoly();
-
-                    // Build the common area between footprint and the keepout area:
-                    outline.BooleanIntersection( *area->Outline(), SHAPE_POLY_SET::PM_FAST );
-
-                    // If it's not empty then we have a violation
-                    if( outline.OutlineCount() )
-                    {
-                        const VECTOR2I& pt = outline.CVertex( 0, 0, -1 );
-                        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_FOOTPRINT_INSIDE_KEEPOUT );
-                        drcItem->SetItems( fp, area );
-
-                        MARKER_PCB* marker = new MARKER_PCB( drcItem, (wxPoint) pt );
-                        addMarkerToPcb( marker );
-                    }
-                }
-            }
-
-            if( area->GetDoNotAllowPads() )
-            {
-                for( D_PAD* pad : fp->Pads() )
-                {
-                    if( !area->CommonLayerExists( pad->GetLayerSet() ) )
-                        continue;
-
-                    // Fast test to detect a pad inside the keepout area bounding box.
-                    EDA_RECT padBBox( pad->ShapePos(), wxSize() );
-                    padBBox.Inflate( pad->GetBoundingRadius() );
-
-                    if( areaBBox.Intersects( padBBox ) )
-                    {
-                        SHAPE_POLY_SET outline;
-                        pad->TransformShapeWithClearanceToPolygon( outline, 0 );
-
-                        // Build the common area between pad and the keepout area:
-                        outline.BooleanIntersection( *area->Outline(), SHAPE_POLY_SET::PM_FAST );
-
-                        // If it's not empty then we have a violation
-                        if( outline.OutlineCount() )
-                        {
-                            const VECTOR2I& pt = outline.CVertex( 0, 0, -1 );
-                            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_INSIDE_KEEPOUT );
-                            drcItem->SetItems( pad, area );
-
-                            MARKER_PCB* marker = new MARKER_PCB( drcItem, (wxPoint) pt );
-                            addMarkerToPcb( marker );
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-void DRC::testCopperTextAndGraphics()
+void DRC::testCopperTextAndGraphics( BOARD_COMMIT& aCommit )
 {
     // Test copper items for clearance violations with vias, tracks and pads
 
     for( BOARD_ITEM* brdItem : m_pcb->Drawings() )
     {
         if( IsCopperLayer( brdItem->GetLayer() ) )
-        {
-            if( brdItem->Type() == PCB_TEXT_T )
-                testCopperTextItem( brdItem );
-            else if( brdItem->Type() == PCB_LINE_T )
-                testCopperDrawItem( static_cast<DRAWSEGMENT*>( brdItem ));
-        }
+            testCopperDrawItem( aCommit, brdItem );
     }
 
     for( MODULE* module : m_pcb->Modules() )
@@ -1079,10 +857,10 @@ void DRC::testCopperTextAndGraphics()
         TEXTE_MODULE& val = module->Value();
 
         if( ref.IsVisible() && IsCopperLayer( ref.GetLayer() ) )
-            testCopperTextItem( &ref );
+            testCopperDrawItem( aCommit, &ref );
 
         if( val.IsVisible() && IsCopperLayer( val.GetLayer() ) )
-            testCopperTextItem( &val );
+            testCopperDrawItem( aCommit, &val );
 
         if( module->IsNetTie() )
             continue;
@@ -1092,73 +870,97 @@ void DRC::testCopperTextAndGraphics()
             if( IsCopperLayer( item->GetLayer() ) )
             {
                 if( item->Type() == PCB_MODULE_TEXT_T && ( (TEXTE_MODULE*) item )->IsVisible() )
-                    testCopperTextItem( item );
+                    testCopperDrawItem( aCommit, item );
                 else if( item->Type() == PCB_MODULE_EDGE_T )
-                    testCopperDrawItem( static_cast<DRAWSEGMENT*>( item ));
+                    testCopperDrawItem( aCommit, item );
             }
         }
     }
 }
 
 
-void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
+void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
 {
+    EDA_RECT         bbox;
     std::vector<SEG> itemShape;
-    int              itemWidth = aItem->GetWidth();
+    int              itemWidth;
+    DRAWSEGMENT*     drawItem = dynamic_cast<DRAWSEGMENT*>( aItem );
+    EDA_TEXT*        textItem = dynamic_cast<EDA_TEXT*>( aItem );
 
-    switch( aItem->GetShape() )
+    if( drawItem )
     {
-    case S_ARC:
-    {
-        SHAPE_ARC arc( aItem->GetCenter(), aItem->GetArcStart(), (double) aItem->GetAngle() / 10.0 );
+        bbox = drawItem->GetBoundingBox();
+        itemWidth = drawItem->GetWidth();
 
-        auto l = arc.ConvertToPolyline();
-
-        for( int i = 0; i < l.SegmentCount(); i++ )
-            itemShape.push_back( l.Segment( i ) );
-
-        break;
-    }
-
-    case S_SEGMENT:
-        itemShape.emplace_back( SEG( aItem->GetStart(), aItem->GetEnd() ) );
-        break;
-
-    case S_CIRCLE:
-    {
-        // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
-        SHAPE_ARC circle( aItem->GetCenter(), aItem->GetEnd(), 360.0 );
-
-        auto l = circle.ConvertToPolyline();
-
-        for( int i = 0; i < l.SegmentCount(); i++ )
-            itemShape.push_back( l.Segment( i ) );
-
-        break;
-    }
-
-    case S_CURVE:
-    {
-        aItem->RebuildBezierToSegmentsPointsList( aItem->GetWidth() );
-        wxPoint start_pt = aItem->GetBezierPoints()[0];
-
-        for( unsigned int jj = 1; jj < aItem->GetBezierPoints().size(); jj++ )
+        switch( drawItem->GetShape() )
         {
-            wxPoint end_pt = aItem->GetBezierPoints()[jj];
-            itemShape.emplace_back( SEG( start_pt, end_pt ) );
-            start_pt = end_pt;
+        case S_ARC:
+        {
+            SHAPE_ARC arc( drawItem->GetCenter(), drawItem->GetArcStart(),
+                           (double) drawItem->GetAngle() / 10.0 );
+
+            SHAPE_LINE_CHAIN l = arc.ConvertToPolyline();
+
+            for( int i = 0; i < l.SegmentCount(); i++ )
+                itemShape.push_back( l.Segment( i ) );
+
+            break;
         }
 
-        break;
+        case S_SEGMENT:
+            itemShape.emplace_back( SEG( drawItem->GetStart(), drawItem->GetEnd() ) );
+            break;
+
+        case S_CIRCLE:
+        {
+            // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
+            SHAPE_ARC circle( drawItem->GetCenter(), drawItem->GetEnd(), 360.0 );
+
+            SHAPE_LINE_CHAIN l = circle.ConvertToPolyline();
+
+            for( int i = 0; i < l.SegmentCount(); i++ )
+                itemShape.push_back( l.Segment( i ) );
+
+            break;
+        }
+
+        case S_CURVE:
+        {
+            drawItem->RebuildBezierToSegmentsPointsList( drawItem->GetWidth() );
+            wxPoint start_pt = drawItem->GetBezierPoints()[0];
+
+            for( unsigned int jj = 1; jj < drawItem->GetBezierPoints().size(); jj++ )
+            {
+                wxPoint end_pt = drawItem->GetBezierPoints()[jj];
+                itemShape.emplace_back( SEG( start_pt, end_pt ) );
+                start_pt = end_pt;
+            }
+
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+    else if( textItem  )
+    {
+        bbox = textItem->GetTextBox();
+        itemWidth = textItem->GetEffectiveTextPenWidth();
+
+        std::vector<wxPoint> textShape;
+        textItem->TransformTextShapeToSegmentList( textShape );
+
+        for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
+            itemShape.emplace_back( SEG( textShape[jj], textShape[jj+1] ) );
+    }
+    else
+    {
+        wxFAIL_MSG( "unknown item type in testCopperDrawItem()" );
+        return;
     }
 
-    default:
-        break;
-    }
-
-    EDA_RECT   bbox = aItem->GetBoundingBox();
     SHAPE_RECT rect_area( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
-    wxString   msg;
 
     // Test tracks and vias
     for( auto track : m_pcb->Tracks() )
@@ -1166,12 +968,11 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
         if( !track->IsOnLayer( aItem->GetLayer() ) )
             continue;
 
-        wxString    clearanceSource;
-        int         minClearance = track->GetClearance( nullptr, &clearanceSource );
-        int         widths = ( track->GetWidth() + itemWidth ) / 2;
-        int         center2centerAllowed = minClearance + widths;
+        int minClearance = track->GetClearance( aItem, &m_clearanceSource );
+        int widths = ( track->GetWidth() + itemWidth ) / 2;
+        int center2centerAllowed = minClearance + widths;
 
-        SEG         trackSeg( track->GetStart(), track->GetEnd() );
+        SEG trackSeg( track->GetStart(), track->GetEnd() );
 
         // Fast test to detect a track segment candidate inside the text bounding box
         if( !rect_area.Collide( trackSeg, center2centerAllowed ) )
@@ -1198,17 +999,17 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
                                                                  : DRCE_TRACK_NEAR_COPPER;
             DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                        clearanceSource,
-                        MessageTextFromValue( userUnits(), minClearance, true ),
-                        MessageTextFromValue( userUnits(), actual, true ) );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                          m_clearanceSource,
+                          MessageTextFromValue( userUnits(), minClearance, true ),
+                          MessageTextFromValue( userUnits(), actual, true ) );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( track, aItem );
 
-            wxPoint     pos = getLocation( track, minSeg.get() );
+            wxPoint     pos = GetLocation( track, minSeg.get() );
             MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
         }
     }
 
@@ -1219,21 +1020,20 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
             continue;
 
         // Graphic items are allowed to act as net-ties within their own footprint
-        if( pad->GetParent() == aItem->GetParent() )
+        if( drawItem && pad->GetParent() == drawItem->GetParent() )
             continue;
+
+        int minClearance = pad->GetClearance( aItem, &m_clearanceSource );
+        int widths = itemWidth / 2;
+        int center2centerAllowed = minClearance + widths;
 
         // Fast test to detect a pad candidate inside the text bounding box
         // Finer test (time consumming) is made only for pads near the text.
-        int bb_radius = pad->GetBoundingRadius() + pad->GetClearance( nullptr );
+        int      bb_radius = pad->GetBoundingRadius() + minClearance;
         VECTOR2I shape_pos( pad->ShapePos() );
 
         if( !rect_area.Collide( SEG( shape_pos, shape_pos ), bb_radius ) )
             continue;
-
-        wxString clearanceSource;
-        int      minClearance = pad->GetClearance( nullptr, &clearanceSource );
-        int      widths = itemWidth / 2;
-        int      center2centerAllowed = minClearance + widths;
 
         SHAPE_POLY_SET padOutline;
         pad->TransformShapeWithClearanceToPolygon( padOutline, 0 );
@@ -1257,155 +1057,24 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
             int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_COPPER );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                        clearanceSource,
-                        MessageTextFromValue( userUnits(), minClearance, true ),
-                        MessageTextFromValue( userUnits(), actual, true ) );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                          m_clearanceSource,
+                          MessageTextFromValue( userUnits(), minClearance, true ),
+                          MessageTextFromValue( userUnits(), actual, true ) );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( pad, aItem );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
         }
     }
 }
 
 
-void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
+void DRC::testOutline( BOARD_COMMIT& aCommit )
 {
-    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aTextItem );
-
-    if( text == nullptr )
-        return;
-
-    std::vector<wxPoint> textShape;      // a buffer to store the text shape (set of segments)
-    int                  penWidth = text->GetEffectiveTextPenWidth();
-
-    // So far the bounding box makes up the text-area
-    text->TransformTextShapeToSegmentList( textShape );
-
-    if( textShape.size() == 0 )     // Should not happen (empty text?)
-        return;
-
-    EDA_RECT   bbox = text->GetTextBox();
-    SHAPE_RECT rect_area( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
-    wxString   msg;
-
-    // Test tracks and vias
-    for( auto track : m_pcb->Tracks() )
-    {
-        if( !track->IsOnLayer( aTextItem->GetLayer() ) )
-            continue;
-
-        wxString clearanceSource;
-        int      minClearance = track->GetClearance( nullptr, &clearanceSource );
-        int      widths = ( track->GetWidth() + penWidth ) / 2;
-        int      center2centerAllowed = minClearance + widths;
-
-        SEG      trackSeg( track->GetStart(), track->GetEnd() );
-
-        // Fast test to detect a track segment candidate inside the text bounding box
-        if( !rect_area.Collide( trackSeg, center2centerAllowed ) )
-            continue;
-
-        OPT<SEG>    minSeg;
-        SEG::ecoord center2center_squared = 0;
-
-        for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
-        {
-            SEG         textSeg( textShape[jj], textShape[jj+1] );
-            SEG::ecoord thisDist_squared = trackSeg.SquaredDistance( textSeg );
-
-            if( !minSeg || thisDist_squared < center2center_squared )
-            {
-                minSeg = textSeg;
-                center2center_squared = thisDist_squared;
-            }
-        }
-
-        if( center2center_squared < SEG::Square( center2centerAllowed ) )
-        {
-            int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-            int       errorCode = ( track->Type() == PCB_VIA_T ) ? DRCE_VIA_NEAR_COPPER
-                                                                 : DRCE_TRACK_NEAR_COPPER;
-            DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
-
-            msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                        clearanceSource,
-                        MessageTextFromValue( userUnits(), minClearance, true ),
-                        MessageTextFromValue( userUnits(), actual, true ) );
-
-            drcItem->SetErrorMessage( msg );
-            drcItem->SetItems( track, aTextItem );
-
-            wxPoint     pos = getLocation( track, minSeg.get() );
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
-            addMarkerToPcb( marker );
-        }
-    }
-
-    // Test pads
-    for( auto pad : m_pcb->GetPads() )
-    {
-        if( !pad->IsOnLayer( aTextItem->GetLayer() ) )
-            continue;
-
-        // Fast test to detect a pad candidate inside the text bounding box
-        // Finer test (time consumming) is made only for pads near the text.
-        int bb_radius = pad->GetBoundingRadius() + pad->GetClearance( NULL );
-        VECTOR2I shape_pos( pad->ShapePos() );
-
-        if( !rect_area.Collide( SEG( shape_pos, shape_pos ), bb_radius ) )
-            continue;
-
-        wxString clearanceSource;
-        int      minClearance = pad->GetClearance( nullptr, &clearanceSource );
-        int      widths = penWidth / 2;
-        int      center2centerAllowed = minClearance + widths;
-
-        SHAPE_POLY_SET padOutline;
-        pad->TransformShapeWithClearanceToPolygon( padOutline, 0 );
-
-        OPT<SEG>    minSeg;
-        SEG::ecoord center2center_squared = 0;
-
-        for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
-        {
-            SEG         textSeg( textShape[jj], textShape[jj+1] );
-            SEG::ecoord thisCenter2center_squared = padOutline.SquaredDistance( textSeg );
-
-            if( !minSeg || thisCenter2center_squared < center2center_squared )
-            {
-                minSeg = textSeg;
-                center2center_squared = thisCenter2center_squared;
-            }
-        }
-
-        if( center2center_squared < SEG::Square( center2centerAllowed ) )
-        {
-            int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_COPPER );
-
-            msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                        clearanceSource,
-                        MessageTextFromValue( userUnits(), minClearance, true ),
-                        MessageTextFromValue( userUnits(), actual, true ) );
-
-            drcItem->SetErrorMessage( msg );
-            drcItem->SetItems( pad, aTextItem );
-
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
-            addMarkerToPcb( marker );
-        }
-    }
-}
-
-
-void DRC::testOutline()
-{
-    wxString msg;
-    wxPoint  error_loc( m_pcb->GetBoardEdgesBoundingBox().GetPosition() );
+    wxPoint error_loc( m_pcb->GetBoardEdgesBoundingBox().GetPosition() );
 
     m_board_outlines.RemoveAllContours();
 
@@ -1413,24 +1082,23 @@ void DRC::testOutline()
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_INVALID_OUTLINE );
 
-        msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
+        m_msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
 
-        drcItem->SetErrorMessage( msg );
+        drcItem->SetErrorMessage( m_msg );
         drcItem->SetItems( m_pcb );
 
         MARKER_PCB* marker = new MARKER_PCB( drcItem, error_loc );
-        addMarkerToPcb( marker );
+        addMarkerToPcb( aCommit, marker );
     }
 }
 
 
-void DRC::testDisabledLayers()
+void DRC::testDisabledLayers( BOARD_COMMIT& aCommit )
 {
     BOARD*   board = m_pcbEditorFrame->GetBoard();
     wxCHECK( board, /*void*/ );
 
     LSET     disabledLayers = board->GetEnabledLayers().flip();
-    wxString msg;
 
     // Perform the test only for copper layers
     disabledLayers &= LSET::AllCuMask();
@@ -1441,14 +1109,14 @@ void DRC::testDisabledLayers()
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
 
-            msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
-                        track->GetLayerName() );
+            m_msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
+                          track->GetLayerName() );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( track );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, track->GetPosition() );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
         }
     }
 
@@ -1461,14 +1129,14 @@ void DRC::testDisabledLayers()
                         {
                             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
 
-                            msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
-                                        child->GetLayerName() );
+                            m_msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
+                                          child->GetLayerName() );
 
-                            drcItem->SetErrorMessage( msg );
+                            drcItem->SetErrorMessage( m_msg );
                             drcItem->SetItems( child );
 
                             MARKER_PCB* marker = new MARKER_PCB( drcItem, child->GetPosition() );
-                            addMarkerToPcb( marker );
+                            addMarkerToPcb( aCommit, marker );
                         }
                     } );
     }
@@ -1479,64 +1147,21 @@ void DRC::testDisabledLayers()
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
 
-            msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
-                        zone->GetLayerName() );
+            m_msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
+                          zone->GetLayerName() );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( zone );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, zone->GetPosition() );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
         }
     }
 }
 
 
-void DRC::testTextVars()
-{
-    BOARD* board = m_pcbEditorFrame->GetBoard();
-
-    for( MODULE* module : board->Modules() )
-    {
-        module->RunOnChildren(
-            [&]( BOARD_ITEM* child )
-            {
-                if( child->Type() == PCB_MODULE_TEXT_T )
-                {
-                    TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( child );
-
-                    if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
-                    {
-                        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_UNRESOLVED_VARIABLE );
-                        drcItem->SetItems( text );
-
-                        MARKER_PCB* marker = new MARKER_PCB( drcItem, text->GetPosition() );
-                        addMarkerToPcb( marker );
-                    }
-                }
-            } );
-    }
-
-    for( BOARD_ITEM* drawing : board->Drawings() )
-    {
-        if( drawing->Type() == PCB_TEXT_T )
-        {
-            TEXTE_PCB* text = static_cast<TEXTE_PCB*>( drawing );
-
-            if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
-            {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_UNRESOLVED_VARIABLE );
-                drcItem->SetItems( text );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, text->GetPosition() );
-                addMarkerToPcb( marker );
-            }
-        }
-    }
-}
-
-
-bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit )
+bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd,
+                          int x_limit )
 {
     const static LSET all_cu = LSET::AllCuMask();
 
@@ -1548,16 +1173,15 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
      * A pad must have a parent because some functions expect a non null parent
      * to find the parent board, and some other data
      */
-    MODULE  dummymodule( m_pcb );    // Creates a dummy parent
-    D_PAD   dummypad( &dummymodule );
+    MODULE dummymodule( m_pcb );    // Creates a dummy parent
+    D_PAD  dummypad( &dummymodule );
 
     // Ensure the hole is on all copper layers
     dummypad.SetLayerSet( all_cu | dummypad.GetLayerSet() );
 
     for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
-        D_PAD*   pad = *pad_list;
-        wxString msg;
+        D_PAD* pad = *pad_list;
 
         if( pad == aRefPad )
             continue;
@@ -1601,24 +1225,23 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                                                            PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
                 dummypad.SetOrientation( pad->GetOrientation() );
 
-                wxString source;
-                int      minClearance = aRefPad->GetClearance( nullptr, &source );
-                int      actual;
+                int minClearance = aRefPad->GetClearance( nullptr, &m_clearanceSource );
+                int actual;
 
                 if( !checkClearancePadToPad( aRefPad, &dummypad, minClearance, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
 
-                    msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                                source,
-                                MessageTextFromValue( userUnits(), minClearance, true ),
-                                MessageTextFromValue( userUnits(), actual, true ) );
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                                  m_clearanceSource,
+                                  MessageTextFromValue( userUnits(), minClearance, true ),
+                                  MessageTextFromValue( userUnits(), actual, true ) );
 
-                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad, aRefPad );
 
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
-                    addMarkerToPcb( marker );
+                    addMarkerToPcb( aCommit, marker );
                     return false;
                 }
             }
@@ -1631,24 +1254,23 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                                                                PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
                 dummypad.SetOrientation( aRefPad->GetOrientation() );
 
-                wxString source;
-                int      minClearance = pad->GetClearance( nullptr, &source );
-                int      actual;
+                int minClearance = pad->GetClearance( nullptr, &m_clearanceSource );
+                int actual;
 
                 if( !checkClearancePadToPad( pad, &dummypad, minClearance, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
 
-                    msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                                source,
-                                MessageTextFromValue( userUnits(), minClearance, true ),
-                                MessageTextFromValue( userUnits(), actual, true ) );
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                                  m_clearanceSource,
+                                  MessageTextFromValue( userUnits(), minClearance, true ),
+                                  MessageTextFromValue( userUnits(), actual, true ) );
 
-                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( aRefPad, pad );
 
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
-                    addMarkerToPcb( marker );
+                    addMarkerToPcb( aCommit, marker );
                     return false;
                 }
             }
@@ -1680,37 +1302,28 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
             continue;
         }
 
-        wxString source;
-        int      minClearance = aRefPad->GetClearance( nullptr, &source );
-        int      actual;
+        int minClearance = aRefPad->GetClearance( nullptr, &m_clearanceSource );
+        int actual;
 
         if( !checkClearancePadToPad( aRefPad, pad, minClearance, &actual ) )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                        source,
-                        MessageTextFromValue( userUnits(), minClearance, true ),
-                        MessageTextFromValue( userUnits(), actual, true ) );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                          m_clearanceSource,
+                          MessageTextFromValue( userUnits(), minClearance, true ),
+                          MessageTextFromValue( userUnits(), actual, true ) );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( aRefPad, pad );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
-            addMarkerToPcb( marker );
+            addMarkerToPcb( aCommit, marker );
             return false;
         }
     }
 
     return true;
-}
-
-
-void DRC::doCourtyardsDrc()
-{
-    DRC_COURTYARD_TESTER tester( [&]( MARKER_PCB* aMarker ) { addMarkerToPcb( aMarker ); } );
-
-    tester.RunDRC( userUnits(), *m_pcb );
 }
 
 
@@ -1789,7 +1402,7 @@ void DRC::setTransitions()
 const int EPSILON = Mils2iu( 5 );
 
 
-wxPoint DRC::getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone ) const
+wxPoint DRC::GetLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone )
 {
     SHAPE_POLY_SET* conflictOutline;
 
@@ -1822,7 +1435,7 @@ wxPoint DRC::getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone ) const
 }
 
 
-wxPoint DRC::getLocation( TRACK* aTrack, const SEG& aConflictSeg ) const
+wxPoint DRC::GetLocation( TRACK* aTrack, const SEG& aConflictSeg )
 {
     wxPoint pt1 = aTrack->GetPosition();
     wxPoint pt2 = aTrack->GetEnd();

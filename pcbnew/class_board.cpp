@@ -124,7 +124,7 @@ BOARD::BOARD() :
     }
 
     // Initialize default netclass.
-    NETCLASSPTR defaultClass = m_designSettings.GetDefault();
+    NETCLASS* defaultClass = m_designSettings.GetDefault();
     defaultClass->SetDescription( _( "This is the default net class." ) );
     m_designSettings.SetCurrentNetClass( defaultClass->GetName() );
 
@@ -751,6 +751,9 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID )
     for( MARKER_PCB* marker : m_markers )
         if( marker->m_Uuid == aID )
             return marker;
+
+    if( m_Uuid == aID )
+        return this;
 
     // Not found; weak reference has been deleted.
     if( !g_DeletedItem )

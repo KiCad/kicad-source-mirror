@@ -53,8 +53,7 @@ int GLOBAL_EDIT_TOOL::CleanupTracksAndVias( const TOOL_EVENT& aEvent )
 
 
 TRACKS_CLEANER::TRACKS_CLEANER( EDA_UNITS aUnits, BOARD* aPcb, BOARD_COMMIT& aCommit )
-        : m_units( aUnits ),
-          m_brd( aPcb ),
+        : m_brd( aPcb ),
           m_commit( aCommit ),
           m_dryRun( true ),
           m_itemsList( nullptr )

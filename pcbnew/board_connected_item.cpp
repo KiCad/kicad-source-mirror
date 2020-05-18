@@ -81,57 +81,56 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 
 int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
 {
+    BOARD* board = GetBoard();
+
+    // No clearance if "this" is not (yet) linked to a board therefore no available netclass
+    if( !board )
+        return 0;
+
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
     NETCLASS*              myNetclass = nullptr;
     NETCLASS*              itemNetclass = nullptr;
-    BOARD_DESIGN_SETTINGS* bds = nullptr;
 
     // NB: we must check the net first, as when it is 0 GetNetClass() will return the
     // orphaned net netclass, not the default netclass.
-    if( GetBoard() )
+    if( m_netinfo->GetNet() == 0 )
+        myNetclass = bds.GetDefault();
+    else
+        myNetclass = GetNetClass();
+
+    if( aItem && aItem->IsConnected() )
     {
-        if( m_netinfo->GetNet() == 0 )
-            myNetclass = GetBoard()->GetDesignSettings().GetDefault().get();
+        if( static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNet()->GetNet() == 0 )
+            itemNetclass = bds.GetDefault();
         else
-            myNetclass = GetNetClass().get();
-
-        bds = &GetBoard()->GetDesignSettings();
-    }
-    // No clearance if "this" is not (yet) linked to a board therefore no available netclass
-
-    if( aItem && aItem->GetBoard() && dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
-    {
-        if( dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNet()->GetNet() == 0 )
-            itemNetclass = GetBoard()->GetDesignSettings().GetDefault().get();
-        else
-            itemNetclass = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetClass().get();
-
-        bds = &aItem->GetBoard()->GetDesignSettings();
+            itemNetclass = static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetClass();
     }
 
-    int      myClearance = myNetclass ? myNetclass->GetClearance() : 0;
-    int      itemClearance = itemNetclass ? itemNetclass->GetClearance() : 0;
-    wxString ruleSource;
-    int      ruleClearance = bds ? bds->GetRuleClearance( this, myNetclass,
-                                                          aItem, itemNetclass, &ruleSource ) : 0;
-    int      clearance = std::max( std::max( myClearance, itemClearance ), ruleClearance );
+    int clearance = bds.GetRuleClearance( this, myNetclass, aItem, itemNetclass, aSource );
 
-    if( aSource )
+    if( myNetclass )
     {
-        if( clearance == myClearance && myNetclass )
+        int myClearance = myNetclass->GetClearance();
+
+        if( myClearance > clearance )
         {
-            *aSource = wxString::Format( _( "'%s' netclass clearance" ), myNetclass->GetName() );
+            clearance = myClearance;
+
+            if( aSource )
+                *aSource = wxString::Format( _( "'%s' netclass clearance" ), myNetclass->GetName() );
         }
-        else if( clearance == itemClearance && itemNetclass )
+    }
+
+    if( itemNetclass )
+    {
+        int itemClearance = myNetclass->GetClearance();
+
+        if( itemClearance > clearance )
         {
-            *aSource = wxString::Format( _( "'%s' netclass clearance" ), itemNetclass->GetName() );
-        }
-        else if( clearance == ruleClearance && !ruleSource.IsEmpty() )
-        {
-            *aSource = wxString::Format( _( "'%s' rule clearance" ), ruleSource );
-        }
-        else
-        {
-            *aSource = _( "No netclass" );
+            clearance = itemClearance;
+
+            if( aSource )
+                *aSource = wxString::Format( _( "'%s' netclass clearance" ), itemNetclass->GetName() );
         }
     }
 
@@ -139,9 +138,11 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) c
 }
 
 
-NETCLASSPTR BOARD_CONNECTED_ITEM::GetNetClass() const
+// Note: do NOT return a std::shared_ptr from this.  It is used heavily in DRC, and the
+// std::shared_ptr stuff shows up large in performance profiling.
+NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 {
-    NETCLASSPTR netclass = m_netinfo->GetNetClass();
+    NETCLASS* netclass = m_netinfo->GetNetClass();
 
     if( netclass )
         return netclass;

@@ -465,15 +465,11 @@ int ZONE_CONTAINER::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
 
     // The actual zone clearance is the biggest of the zone netclass clearance
     // and the zone clearance setting in the zone properties dialog.
-    int      zoneClearance = m_ZoneClearance;
-    wxString source;
-    int      clearance = BOARD_CONNECTED_ITEM::GetClearance( aItem, &source );
+    int zoneClearance = m_ZoneClearance;
+    int clearance = BOARD_CONNECTED_ITEM::GetClearance( aItem, aSource );
 
     if( clearance > zoneClearance )
     {
-        if( aSource )
-            *aSource = source;
-
         return clearance;
     }
     else

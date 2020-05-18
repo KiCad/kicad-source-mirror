@@ -1432,7 +1432,7 @@ void PCB_PARSER::parseSetup()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as setup." ) );
 
     T token;
-    NETCLASSPTR defaultNetClass = m_board->GetDesignSettings().GetDefault();
+    NETCLASS* defaultNetClass = m_board->GetDesignSettings().GetDefault();
     BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
     ZONE_SETTINGS zoneSettings = m_board->GetZoneSettings();
 

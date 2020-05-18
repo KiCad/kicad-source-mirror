@@ -57,7 +57,7 @@ bool DRC_DRILLED_HOLE_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
     for( MODULE* mod : aBoard.Modules() )
     {
         for( D_PAD* pad : mod->Pads( ) )
-            success |= checkPad( pad );
+            success &= checkPad( pad );
     }
 
     for( TRACK* track : aBoard.Tracks() )
@@ -67,13 +67,13 @@ bool DRC_DRILLED_HOLE_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
         if( via )
         {
             if( via->GetViaType() == VIATYPE::MICROVIA )
-                success |= checkMicroVia( via );
+                success &= checkMicroVia( via );
             else
-                success |= checkVia( via );
+                success &= checkVia( via );
         }
     }
 
-    success |= checkHoles();
+    success &= checkHoles();
 
     return success;
 }
@@ -81,7 +81,6 @@ bool DRC_DRILLED_HOLE_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
 
 bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
 {
-    wxString               msg;
     bool                   success = true;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
@@ -92,8 +91,8 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
 
     if( !bds.Ignore( DRCE_TOO_SMALL_PAD_DRILL ) )
     {
-        NETCLASS* netclass = aPad->GetNet()->GetNet() == 0 ? bds.GetDefault().get()
-                                                           : aPad->GetNetClass().get();
+        NETCLASS* netclass = aPad->GetNet()->GetNet() == 0 ? bds.GetDefault()
+                                                           : aPad->GetNetClass();
         int       minHole = bds.m_MinThroughDrill;
         wxString  minHoleSource = _( "board" );
 
@@ -113,12 +112,12 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_PAD_DRILL );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (%s min hole %s; actual %s)" ),
-                        minHoleSource,
-                        MessageTextFromValue( m_units, minHole, true ),
-                        MessageTextFromValue( m_units, holeSize, true ) );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s min hole %s; actual %s)" ),
+                          minHoleSource,
+                          MessageTextFromValue( m_units, minHole, true ),
+                          MessageTextFromValue( m_units, holeSize, true ) );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( aPad );
 
             HandleMarker( new MARKER_PCB( drcItem, aPad->GetPosition() ) );
@@ -137,14 +136,13 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
 
 bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
 {
-    wxString               msg;
     bool                   success = true;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
     if( !bds.Ignore( DRCE_TOO_SMALL_VIA_DRILL ) )
     {
-        NETCLASS* netclass = via->GetNet()->GetNet() == 0 ? bds.GetDefault().get()
-                                                          : via->GetNetClass().get();
+        NETCLASS* netclass = via->GetNet()->GetNet() == 0 ? bds.GetDefault()
+                                                          : via->GetNetClass();
         int       minHole = bds.m_MinThroughDrill;
         wxString  minHoleSource = _( "board" );
 
@@ -164,12 +162,12 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_DRILL );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (%s min hole %s; actual %s)" ),
-                        minHoleSource,
-                        MessageTextFromValue( m_units, minHole, true ),
-                        MessageTextFromValue( m_units, via->GetDrillValue(), true ) );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s min hole %s; actual %s)" ),
+                          minHoleSource,
+                          MessageTextFromValue( m_units, minHole, true ),
+                          MessageTextFromValue( m_units, via->GetDrillValue(), true ) );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( via );
 
             HandleMarker( new MARKER_PCB( drcItem, via->GetPosition() ) );
@@ -188,14 +186,13 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
 
 bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
 {
-    wxString               msg;
     bool                   success = true;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
     if( !bds.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL ) )
     {
-        NETCLASS* netclass = via->GetNet()->GetNet() == 0 ? bds.GetDefault().get()
-                                                          : via->GetNetClass().get();
+        NETCLASS* netclass = via->GetNet()->GetNet() == 0 ? bds.GetDefault()
+                                                          : via->GetNetClass();
         int       minHole = bds.m_MicroViasMinDrill;
         wxString  minHoleSource = _( "board" );
 
@@ -215,12 +212,12 @@ bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA_DRILL );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
-                        minHoleSource,
-                        MessageTextFromValue( m_units, minHole, true ),
-                        MessageTextFromValue( m_units, via->GetDrillValue(), true ) );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+                          minHoleSource,
+                          MessageTextFromValue( m_units, minHole, true ),
+                          MessageTextFromValue( m_units, via->GetDrillValue(), true ) );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( via );
 
             HandleMarker( new MARKER_PCB( drcItem, via->GetPosition() ) );
@@ -248,7 +245,6 @@ void DRC_DRILLED_HOLE_TESTER::addHole( const wxPoint& aLocation, int aRadius, BO
 
 bool DRC_DRILLED_HOLE_TESTER::checkHoles()
 {
-    wxString               msg;
     bool                   success = true;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
@@ -291,11 +287,11 @@ bool DRC_DRILLED_HOLE_TESTER::checkHoles()
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( m_units, bds.m_HoleToHoleMin, true ),
-                            MessageTextFromValue( m_units, actual, true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
+                              MessageTextFromValue( m_units, bds.m_HoleToHoleMin, true ),
+                              MessageTextFromValue( m_units, actual, true ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( refHole.m_owner, checkHole.m_owner );
 
                 HandleMarker( new MARKER_PCB( drcItem, refHole.m_location ) );

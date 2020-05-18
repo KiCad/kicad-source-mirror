@@ -22,47 +22,31 @@
  */
 
 
-#ifndef DRC_DRILLED_HOLE_TESTER__H
-#define DRC_DRILLED_HOLE_TESTER__H
+#ifndef DRC_KEEPOUT_TESTER__H
+#define DRC_KEEPOUT_TESTER__H
 
 #include <drc/drc_provider.h>
 
 
 class BOARD;
-class BOARD_ITEM;
 
 
-class DRC_DRILLED_HOLE_TESTER : public DRC_TEST_PROVIDER
+class DRC_KEEPOUT_TESTER : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_DRILLED_HOLE_TESTER( MARKER_HANDLER aMarkerHandler );
+    DRC_KEEPOUT_TESTER( MARKER_HANDLER aMarkerHandler );
 
-    virtual ~DRC_DRILLED_HOLE_TESTER() {};
+    virtual ~DRC_KEEPOUT_TESTER() {};
 
     bool RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) override;
 
 private:
-    bool checkPad( D_PAD* aPad );
-    bool checkVia( VIA* aVia );
-    bool checkMicroVia( VIA* aVia );
-
-    void addHole( const wxPoint& aLocation, int aRadius, BOARD_ITEM* aOwner );
-    bool checkHoles();
+    bool checkTracksAndVias( ZONE_CONTAINER* aKeepout );
+    bool checkFootprints( ZONE_CONTAINER* aKeepout );
 
 private:
-    struct DRILLED_HOLE
-    {
-        wxPoint     m_location;
-        int         m_drillRadius = 0;
-        BOARD_ITEM* m_owner = nullptr;
-    };
-
     EDA_UNITS                 m_units;
     BOARD*                    m_board;
-    std::vector<DRILLED_HOLE> m_holes;
-    int                       m_largestRadius;
-
-    wxString                  m_msg;    // Construct only once for performance
 };
 
-#endif // DRC_DRILLED_HOLE_TESTER__H
+#endif // DRC_KEEPOUT_TESTER__H

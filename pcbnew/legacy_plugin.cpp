@@ -832,13 +832,13 @@ void LEGACY_PLUGIN::loadSHEET()
 
 void LEGACY_PLUGIN::loadSETUP()
 {
-    NETCLASSPTR             netclass_default = m_board->GetDesignSettings().GetDefault();
+    NETCLASS*             netclass_default = m_board->GetDesignSettings().GetDefault();
     // TODO Orson: is it really necessary to first operate on a copy and then apply it?
     // would not it be better to use reference here and apply all the changes instantly?
-    BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
-    ZONE_SETTINGS           zs  = m_board->GetZoneSettings();
-    char*                   line;
-    char*                   saveptr;
+    BOARD_DESIGN_SETTINGS bds = m_board->GetDesignSettings();
+    ZONE_SETTINGS         zs  = m_board->GetZoneSettings();
+    char*                 line;
+    char*                 saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {

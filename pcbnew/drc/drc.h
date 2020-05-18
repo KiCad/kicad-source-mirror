@@ -25,6 +25,7 @@
 #ifndef DRC_H
 #define DRC_H
 
+#include <board_commit.h>
 #include <class_board.h>
 #include <class_track.h>
 #include <class_marker_pcb.h>
@@ -173,6 +174,13 @@ private:
     std::vector<DRC_SELECTOR*> m_ruleSelectors;
     std::vector<DRC_RULE*>     m_rules;
 
+    // wxString's c'tor is surprisingly expensive, and in the world of DRC everything matters
+    wxString m_msg;
+    wxString m_clearanceSource;
+
+    // Used during a single DRC run
+    int      m_largestClearance;
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
@@ -188,26 +196,16 @@ private:
     /**
      * Adds a DRC marker to the PCB through the COMMIT mechanism.
      */
-    void addMarkerToPcb( MARKER_PCB* aMarker );
-
-    /**
-     * Fetches a reasonable point for marking a violoation between two non-point objects.
-     */
-    wxPoint getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone ) const;
-    wxPoint getLocation( TRACK* aTrack, const SEG& aConflictSeg ) const;
+    void addMarkerToPcb( BOARD_COMMIT& aCommit, MARKER_PCB* aMarker );
 
     //-----<categorical group tests>-----------------------------------------
 
     /**
-     * Go through each NETCLASS and verifies that its clearance, via size, track width, and
-     * track clearance are larger than those in board.m_designSettings.
-     * This is necessary because the actual DRC checks are run against the NETCLASS
-     * limits, so in order enforce global limits, we first check the NETCLASSes against
-     * the global limits.
-     * @return bool - true if succes, else false but only after
-     *  reporting _all_ NETCLASS violations.
+     * Tests whether distance between zones complies with the DRC rules.
+     *
+     * @return Errors count
      */
-    bool testNetClasses();
+    int testZoneToZoneOutlines( BOARD_COMMIT& aCommit );
 
     /**
      * Perform the DRC on all tracks.
@@ -217,39 +215,27 @@ private:
      * @param aShowProgressBar = true to show a progress bar
      * (Note: it is shown only if there are many tracks)
      */
-    void testTracks( wxWindow * aActiveWindow, bool aShowProgressBar );
+    void testTracks( BOARD_COMMIT& aCommit, wxWindow * aActiveWindow, bool aShowProgressBar );
 
-    void testPad2Pad();
-
-    void testDrilledHoles();
+    void testPad2Pad( BOARD_COMMIT& aCommit );
 
     void testUnconnected();
 
-    void testZones();
+    void testZones( BOARD_COMMIT& aCommit );
 
-    void testKeepoutAreas();
+    void testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aDrawing );
 
-    // aTextItem is type BOARD_ITEM* to accept either TEXTE_PCB or TEXTE_MODULE
-    void testCopperTextItem( BOARD_ITEM* aTextItem );
-
-    void testCopperDrawItem( DRAWSEGMENT* aDrawing );
-
-    void testCopperTextAndGraphics();
+    void testCopperTextAndGraphics( BOARD_COMMIT& aCommit );
 
     // Tests for items placed on disabled layers (causing false connections).
-    void testDisabledLayers();
-
-    // Test for any unresolved text variable references
-    void testTextVars();
+    void testDisabledLayers( BOARD_COMMIT& aCommit );
 
     /**
      * Test that the board outline is contiguous and composed of valid elements
      */
-    void testOutline();
+    void testOutline( BOARD_COMMIT& aCommit );
 
     //-----<single "item" tests>-----------------------------------------
-
-    bool doNetClass( const std::shared_ptr<NETCLASS>& aNetClass, wxString& msg );
 
     /**
      * Test the clearance between aRefPad and other pads.
@@ -263,7 +249,8 @@ private:
      * (i.e. when the current pad pos X in list exceeds this limit, because the list
      * is sorted by X coordinate)
      */
-    bool doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
+    bool doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd,
+                         int x_limit );
 
     /**
      * Test the current segment.
@@ -275,13 +262,8 @@ private:
      * @return bool - true if no problems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
-    void doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterator aEndIt,
-                     bool aTestZones );
-
-    /**
-     * Test for footprint courtyard overlaps.
-     */
-    void doCourtyardsDrc();
+    void doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aStartIt,
+                     TRACKS::iterator aEndIt, bool aTestZones );
 
     //-----<single tests>----------------------------------------------
 
@@ -315,18 +297,17 @@ private:
 
 public:
     /**
-     * Tests whether distance between zones complies with the DRC rules.
-     *
-     * @return Errors count
-     */
-    int TestZoneToZoneOutlines();
-
-    /**
      * Test the board footprints against a netlist.  Will report DRCE_MISSING_FOOTPRINT,
      * DRCE_DUPLICATE_FOOTPRINT and DRCE_EXTRA_FOOTPRINT errors in aDRCList.
      */
     static void TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
                                 std::vector<DRC_ITEM*>& aDRCList );
+
+    /**
+     * Fetches a reasonable point for marking a violoation between two non-point objects.
+     */
+    static wxPoint GetLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone );
+    static wxPoint GetLocation( TRACK* aTrack, const SEG& aConflictSeg );
 
     /**
      * Open a dialog and prompts the user, then if a test run button is

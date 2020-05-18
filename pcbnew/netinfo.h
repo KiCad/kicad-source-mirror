@@ -119,9 +119,15 @@ public:
      */
     void SetClass( const NETCLASSPTR& aNetClass );
 
-    NETCLASSPTR GetNetClass()
+    /**
+     * Function GetNetClass
+     *
+     * Note: do NOT return a std::shared_ptr from this.  It is used heavily in DRC, and the
+     * std::shared_ptr stuff shows up large in performance profiling.
+     */
+    NETCLASS* GetNetClass()
     {
-        return m_NetClass;
+        return m_NetClass.get();
     }
 
     /**
