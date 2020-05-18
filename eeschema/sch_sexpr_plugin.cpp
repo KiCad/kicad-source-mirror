@@ -779,6 +779,8 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, OUTPUTFORMATTER* aForma
 {
     wxCHECK( aSelection && aFormatter, /* void */ );
 
+    LOCALE_IO toggle;
+
     m_out = aFormatter;
 
     size_t i;
@@ -2342,6 +2344,7 @@ LIB_PART* SCH_SEXPR_PLUGIN::ParsePart( LINE_READER& aReader, int aFileVersion )
 
 void SCH_SEXPR_PLUGIN::FormatPart( LIB_PART* part, OUTPUTFORMATTER & formatter )
 {
+
     SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( part, formatter );
 }
 
