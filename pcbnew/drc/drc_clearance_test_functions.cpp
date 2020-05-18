@@ -162,7 +162,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     {
         VIA *refvia = static_cast<VIA*>( aRefSeg );
         int viaAnnulus = ( refvia->GetWidth() - refvia->GetDrill() ) / 2;
-        int minAnnulus;
+        int minAnnulus = 0;
 
         for( DRC_SELECTOR* selector : matched )
         {

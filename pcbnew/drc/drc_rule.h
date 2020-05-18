@@ -35,6 +35,14 @@ class BOARD_ITEM;
 class DRC_RULE
 {
 public:
+    DRC_RULE() :
+            m_Clearance( 0 ),
+            m_AnnulusWidth( 0 ),
+            m_TrackWidth( 0 ),
+            m_Hole( 0 )
+    { }
+
+public:
     wxString m_Name;
 
     // A 0 value means the property is not modified by this rule.
@@ -50,6 +58,11 @@ public:
 class DRC_SELECTOR
 {
 public:
+    DRC_SELECTOR() :
+            m_Priority( 1 )
+    { }
+
+public:
     std::vector<NETCLASSPTR>  m_MatchNetclasses;
     std::vector<KICAD_T>      m_MatchTypes;
     std::vector<PCB_LAYER_ID> m_MatchLayers;
@@ -57,8 +70,6 @@ public:
 
     int                       m_Priority;       // 0 indicates automatic priority generation
     DRC_RULE*                 m_Rule;
-
-public:
 };
 
 
