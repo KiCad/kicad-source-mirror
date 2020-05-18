@@ -587,11 +587,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 bds.SetCopperEdgeClearance( inferLegacyEdgeClearance( loadedBoard ) );
         }
 
-        // 6.0 TODO: some of the 5.1 settings still haven't moved because they're waiting on
-        // the new DRC architecture
+        // We store the severities in the config to keep board-file changes to a minimum
         BOARD_DESIGN_SETTINGS& configBds = GetBoard()->GetDesignSettings();
         bds.m_DRCSeverities              = configBds.m_DRCSeverities;
-        bds.m_HoleToHoleMin              = configBds.m_HoleToHoleMin;
 
         SetBoard( loadedBoard );
 

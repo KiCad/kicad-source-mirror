@@ -515,6 +515,8 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
                   FormatInternalUnits( dsnSettings.m_ViasMinSize ).c_str() );
     m_out->Print( aNestLevel+1, "(through_hole_min %s)\n",
                   FormatInternalUnits( dsnSettings.m_MinThroughDrill ).c_str() );
+    m_out->Print( aNestLevel+1, "(hole_to_hole_min %s)\n",
+                  FormatInternalUnits( dsnSettings.m_HoleToHoleMin ).c_str() );
 
     // Save current default via size, for compatibility with older Pcbnew version;
     m_out->Print( aNestLevel+1, "(via_size %s)\n",

@@ -1519,6 +1519,11 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
+        case T_hole_to_hole_min:
+            designSettings.m_HoleToHoleMin = parseBoardUnits( T_hole_to_hole_min );
+            NeedRIGHT();
+            break;
+
         case T_user_via:
             {
                 int viaSize = parseBoardUnits( "user via size" );

@@ -123,6 +123,7 @@ hatch_orientation
 hatch_smoothing_level
 hatch_smoothing_value
 hide
+hole_to_hole_min
 italic
 justify
 keepout
