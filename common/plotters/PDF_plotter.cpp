@@ -752,7 +752,7 @@ bool PDF_PLOTTER::EndPlot()
              "/CreationDate (%s)\n"
              "/Creator (%s)\n"
              "/Title (%s)\n"
-             "/Trapped No\n",
+             "/Trapped False\n",
              date_buf,
              TO_UTF8( creator ),
              TO_UTF8( title ) );
