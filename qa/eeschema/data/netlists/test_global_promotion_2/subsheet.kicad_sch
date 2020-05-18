@@ -1,6 +1,8 @@
-(kicad_sch (version 20200310) (host eeschema "(5.99.0-1545-g9916f24fa)")
+(kicad_sch (version 20200512) (host eeschema "(5.99.0-1712-g5a9e69b14)")
 
-  (page "A4")
+  (page 2 3)
+
+  (paper "A4")
 
   (lib_symbols
     (symbol "Device:R" (pin_numbers hide) (pin_names (offset 0))
@@ -53,7 +55,7 @@
   )
 
   (symbol (lib_id "Device:R") (at 114.3 66.04 0)
-    (uuid "0810afcf-3b0c-4698-aa30-b2cc44b3f43e")
+    (uuid "00000000-0000-0000-0000-00005cc15f6f")
     (property "Reference" "R3" (id 0) (at 116.332 66.04 90))
     (property "Value" "R" (id 1) (at 114.3 66.04 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 112.522 66.04 90)
@@ -65,7 +67,7 @@
   )
 
   (symbol (lib_id "Device:R") (at 121.92 66.04 0)
-    (uuid "f1b5ef08-ab01-4ced-a2a0-f94e652f1a99")
+    (uuid "00000000-0000-0000-0000-00005ce0545a")
     (property "Reference" "R4" (id 0) (at 123.952 66.04 90))
     (property "Value" "R" (id 1) (at 121.92 66.04 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 120.142 66.04 90)

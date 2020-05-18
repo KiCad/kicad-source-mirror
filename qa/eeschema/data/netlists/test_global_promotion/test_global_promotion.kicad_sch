@@ -1,6 +1,8 @@
-(kicad_sch (version 20200310) (host eeschema "(5.99.0-1545-g9916f24fa)")
+(kicad_sch (version 20200512) (host eeschema "(5.99.0-1712-g5a9e69b14)")
 
-  (page "A4")
+  (page 1 2)
+
+  (paper "A4")
 
   (lib_symbols
     (symbol "Device:C" (pin_numbers hide) (pin_names (offset 0.254))
@@ -112,7 +114,7 @@
   )
 
   (symbol (lib_id "power:GND") (at 92.71 57.15 0) (unit 1)
-    (uuid "266187ff-ad56-4af3-9cc2-037c11869c96")
+    (uuid "00000000-0000-0000-0000-00005e68ce9f")
     (property "Reference" "#PWR0101" (id 0) (at 92.71 63.5 0)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -126,7 +128,7 @@
   )
 
   (symbol (lib_id "Device:R") (at 86.36 43.18 90) (unit 1)
-    (uuid "0646b066-98de-4574-88c2-8048b4e6dfe4")
+    (uuid "00000000-0000-0000-0000-00005e68b6bd")
     (property "Reference" "R1" (id 0) (at 86.36 37.9476 90))
     (property "Value" "R" (id 1) (at 86.36 40.259 90))
     (property "Footprint" "Resistor_THT:R_Axial_Power_L25.0mm_W6.4mm_P30.48mm" (id 2) (at 86.36 44.958 90)
@@ -138,7 +140,7 @@
   )
 
   (symbol (lib_id "Device:C") (at 92.71 50.8 0) (unit 1)
-    (uuid "823c909b-9a81-4cf8-a4e0-bf75c7a5abee")
+    (uuid "00000000-0000-0000-0000-00005e68c688")
     (property "Reference" "C1" (id 0) (at 95.631 49.657 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -154,20 +156,20 @@
   )
 
   (sheet (at 124.46 38.1) (size 11.43 15.24)
-    (stroke (color 132 0 132 1))
+    (stroke (color 174 129 255 1))
     (fill (color 255 255 255 0.0000))
-    (uuid 70020cab-52c8-4c36-b30a-e4d3087b4b82)
-    (property "Reference" "Subcircuit" (id 0) (at 124.46 37.4645 0)
+    (uuid 00000000-0000-0000-0000-00005e68e19b)
+    (property "Sheet name" "Subcircuit" (id 0) (at 124.46 37.4645 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
     )
-    (property "Value" "Sub.kicad_sch" (id 1) (at 124.46 53.8485 0)
+    (property "Sheet file" "Sub.kicad_sch" (id 1) (at 124.46 53.8485 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
   )
 
   (symbol_instances
-    (path "/266187ff-ad56-4af3-9cc2-037c11869c96" (reference "#PWR0101") (unit 1))
-    (path "/823c909b-9a81-4cf8-a4e0-bf75c7a5abee" (reference "C1") (unit 1))
-    (path "/0646b066-98de-4574-88c2-8048b4e6dfe4" (reference "R1") (unit 1))
+    (path "/00000000-0000-0000-0000-00005e68ce9f" (reference "#PWR0101") (unit 1))
+    (path "/00000000-0000-0000-0000-00005e68c688" (reference "C1") (unit 1))
+    (path "/00000000-0000-0000-0000-00005e68b6bd" (reference "R1") (unit 1))
   )
 )

@@ -1,6 +1,8 @@
-(kicad_sch (version 20200310) (host eeschema "(5.99.0-1545-g9916f24fa)")
+(kicad_sch (version 20200512) (host eeschema "(5.99.0-1712-g5a9e69b14)")
 
-  (page "A4")
+  (page 2 3)
+
+  (paper "A4")
 
   (title_block
     (title "Complex hierarchy: demo")
@@ -436,19 +438,19 @@
     )
   )
 
-  (junction (at 200.66 93.98))
-  (junction (at 185.42 83.82))
-  (junction (at 91.44 50.8))
-  (junction (at 226.06 137.16))
-  (junction (at 226.06 113.03))
-  (junction (at 200.66 121.92))
-  (junction (at 138.43 60.96))
   (junction (at 72.39 50.8))
+  (junction (at 91.44 50.8))
   (junction (at 110.49 55.88))
+  (junction (at 130.81 76.2))
+  (junction (at 138.43 60.96))
+  (junction (at 185.42 83.82))
+  (junction (at 200.66 93.98))
+  (junction (at 200.66 121.92))
+  (junction (at 205.74 121.92))
+  (junction (at 226.06 113.03))
+  (junction (at 226.06 137.16))
   (junction (at 231.14 105.41))
   (junction (at 248.92 109.22))
-  (junction (at 205.74 121.92))
-  (junction (at 130.81 76.2))
 
   (wire (pts (xy 43.18 55.88) (xy 45.72 55.88)))
   (wire (pts (xy 45.72 55.88) (xy 45.72 57.15)))
@@ -550,7 +552,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:HT") (at 185.42 67.31 0)
-    (uuid "32744c27-4f64-435b-b420-37a797ebc1ab")
+    (uuid "00000000-0000-0000-0000-00004b3a135f")
     (property "Reference" "#PWR031" (id 0) (at 185.42 64.262 0)
       (effects (font (size 0.508 0.508)) hide)
     )
@@ -566,7 +568,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:HT") (at 200.66 64.77 0)
-    (uuid "09e1ac75-e18c-4761-a8c1-82879933c126")
+    (uuid "00000000-0000-0000-0000-00004b3a135e")
     (property "Reference" "#PWR032" (id 0) (at 200.66 61.722 0)
       (effects (font (size 0.508 0.508)) hide)
     )
@@ -582,7 +584,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:HT") (at 218.44 83.82 0)
-    (uuid "767ec83c-ba33-40ce-8bf5-eea9c30c1ff0")
+    (uuid "00000000-0000-0000-0000-00004b3a135d")
     (property "Reference" "#PWR033" (id 0) (at 218.44 80.772 0)
       (effects (font (size 0.508 0.508)) hide)
     )
@@ -598,7 +600,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:-VAA") (at 120.65 72.39 180)
-    (uuid "b65ea17a-6129-4137-823f-65ef09c030a4")
+    (uuid "00000000-0000-0000-0000-00004b4b1080")
     (property "Reference" "#PWR022" (id 0) (at 120.65 74.93 0)
       (effects (font (size 0.508 0.508)) hide)
     )
@@ -614,7 +616,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:-VAA") (at 160.02 148.59 180)
-    (uuid "568e9fcb-dc19-4a55-9ba8-f8118ccb74ed")
+    (uuid "00000000-0000-0000-0000-00004b4b1086")
     (property "Reference" "#PWR021" (id 0) (at 160.02 151.13 0)
       (effects (font (size 0.508 0.508)) hide)
     )
@@ -630,7 +632,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:+12V") (at 120.65 49.53 0)
-    (uuid "ee393e8e-38ff-422c-a5da-5d7db617687b")
+    (uuid "00000000-0000-0000-0000-00004b3a135b")
     (property "Reference" "#U034" (id 0) (at 120.65 50.8 0)
       (effects (font (size 0.508 0.508)) hide)
     )
@@ -646,7 +648,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:+12V") (at 160.02 125.73 0)
-    (uuid "c425c7d1-5f39-45b7-b429-64d48d6de74b")
+    (uuid "00000000-0000-0000-0000-00004b3a136f")
     (property "Reference" "#U026" (id 0) (at 160.02 127 0)
       (effects (font (size 0.508 0.508)) hide)
     )
@@ -662,7 +664,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 45.72 57.15 0)
-    (uuid "09bee037-f1f1-402a-b191-3b88f92cfe0f")
+    (uuid "00000000-0000-0000-0000-00004b3a136a")
     (property "Reference" "#PWR027" (id 0) (at 45.72 57.15 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -678,7 +680,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 72.39 62.23 0)
-    (uuid "7bf2df7f-fbd0-43e0-b23b-e2178495390a")
+    (uuid "00000000-0000-0000-0000-00004b4f364a")
     (property "Reference" "#PWR020" (id 0) (at 72.39 62.23 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -694,7 +696,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 101.6 69.85 0)
-    (uuid "fccff62b-6928-4227-84c7-1870c81b8eaa")
+    (uuid "00000000-0000-0000-0000-00004b3a1369")
     (property "Reference" "#PWR028" (id 0) (at 101.6 69.85 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -710,7 +712,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 128.27 162.56 270)
-    (uuid "e764ee1a-236b-4415-891a-b8d99f226bfb")
+    (uuid "00000000-0000-0000-0000-00004b3a1361")
     (property "Reference" "#PWR030" (id 0) (at 128.27 162.56 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -726,7 +728,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 177.8 132.08 0)
-    (uuid "b05b9020-28d6-4bb1-aeb1-b34790ad6f8b")
+    (uuid "00000000-0000-0000-0000-00004b3a1378")
     (property "Reference" "#PWR024" (id 0) (at 177.8 132.08 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -742,7 +744,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 185.42 97.79 0)
-    (uuid "c33a428c-1911-4f45-82bc-e4dca3c0323b")
+    (uuid "00000000-0000-0000-0000-00004b3a1373")
     (property "Reference" "#PWR025" (id 0) (at 185.42 97.79 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -758,7 +760,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 205.74 151.13 0)
-    (uuid "b6fe4e72-b904-4fb5-a68a-63c7776b8374")
+    (uuid "00000000-0000-0000-0000-00004b6168a3")
     (property "Reference" "#PWR019" (id 0) (at 205.74 151.13 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -774,7 +776,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 218.44 134.62 0)
-    (uuid "c0b4357d-4528-4f69-b0f6-29e77e35eecf")
+    (uuid "00000000-0000-0000-0000-00004b3a137a")
     (property "Reference" "#PWR023" (id 0) (at 218.44 134.62 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -790,7 +792,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 260.35 115.57 0)
-    (uuid "4d341ed3-d145-4fbe-9104-208e15fc7f44")
+    (uuid "00000000-0000-0000-0000-00004b3a1363")
     (property "Reference" "#PWR029" (id 0) (at 260.35 115.57 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -806,7 +808,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:D_Small") (at 185.42 71.12 90)
-    (uuid "c7f1f9cb-22d0-4859-904e-50c8bb8b3bfd")
+    (uuid "00000000-0000-0000-0000-00004b3a1375")
     (property "Reference" "D5" (id 0) (at 180.34 72.39 90))
     (property "Value" "1N4148" (id 1) (at 180.34 69.85 90))
     (property "Footprint" "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" (id 2) (at 180.34 67.31 90)
@@ -818,7 +820,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:D_Small") (at 185.42 78.74 90)
-    (uuid "7a6d96b3-c8f4-4eec-b022-59d7f1366163")
+    (uuid "00000000-0000-0000-0000-00004b3a1377")
     (property "Reference" "D6" (id 0) (at 180.34 80.01 90))
     (property "Value" "1N4148" (id 1) (at 180.34 77.47 90))
     (property "Footprint" "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" (id 2) (at 180.34 81.28 90)
@@ -830,7 +832,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:D_Small") (at 200.66 101.6 90)
-    (uuid "6204fa96-41d5-49a8-9034-6c1d6b03ba55")
+    (uuid "00000000-0000-0000-0000-00004b616afa")
     (property "Reference" "D9" (id 0) (at 195.58 102.87 90))
     (property "Value" "1N4148" (id 1) (at 195.58 100.33 90))
     (property "Footprint" "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" (id 2) (at 202.4634 101.5746 0)
@@ -842,7 +844,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:D_Small") (at 200.66 114.3 90)
-    (uuid "a2b3403d-9af6-4681-a6b0-8882102cdf27")
+    (uuid "00000000-0000-0000-0000-00004b3a137b")
     (property "Reference" "D7" (id 0) (at 195.58 115.57 90))
     (property "Value" "1N4148" (id 1) (at 195.58 113.03 90))
     (property "Footprint" "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" (id 2) (at 202.3872 114.1476 0)
@@ -854,7 +856,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 62.23 50.8 270)
-    (uuid "517be4f3-5512-46ca-bf77-78a2197c5d5f")
+    (uuid "00000000-0000-0000-0000-00004b4f363e")
     (property "Reference" "R24" (id 0) (at 62.23 48.26 90))
     (property "Value" "1K" (id 1) (at 62.23 50.8 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 62.23 46.99 90)
@@ -866,7 +868,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 82.55 50.8 270)
-    (uuid "80edaf00-e0ce-4baa-bee6-7eb5b8a612ef")
+    (uuid "00000000-0000-0000-0000-00004b3a136b")
     (property "Reference" "R16" (id 0) (at 82.55 48.26 90))
     (property "Value" "22K" (id 1) (at 82.55 50.8 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 83.82 53.34 90)
@@ -878,7 +880,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 100.33 50.8 270)
-    (uuid "d0c13ac0-ad2f-4cd5-8799-cbc5593379ab")
+    (uuid "00000000-0000-0000-0000-00004b3a1359")
     (property "Reference" "R17" (id 0) (at 100.33 48.26 90))
     (property "Value" "22K" (id 1) (at 100.33 50.8 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 100.33 46.99 90)
@@ -890,7 +892,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 133.35 162.56 270)
-    (uuid "fb20df05-4658-4022-a1a6-b97e0d65752e")
+    (uuid "00000000-0000-0000-0000-00004b3a1362")
     (property "Reference" "R21" (id 0) (at 133.35 160.02 90))
     (property "Value" "4,7K" (id 1) (at 133.35 162.56 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 133.35 158.75 90)
@@ -902,7 +904,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 184.15 129.54 270)
-    (uuid "ad7313d5-8e10-4cd8-a5db-4302745fbf38")
+    (uuid "00000000-0000-0000-0000-00004b3a1371")
     (property "Reference" "R18" (id 0) (at 184.15 127 90))
     (property "Value" "1K" (id 1) (at 184.15 129.54 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 184.15 125.73 90)
@@ -914,7 +916,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 185.42 91.44 0)
-    (uuid "aac8903a-6528-43bf-9850-7f4045819e9e")
+    (uuid "00000000-0000-0000-0000-00004b3a1374")
     (property "Reference" "R14" (id 0) (at 187.452 91.44 90))
     (property "Value" "220K" (id 1) (at 185.42 91.44 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 182.88 91.44 90)
@@ -926,7 +928,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 187.96 137.16 270)
-    (uuid "ac372197-7eec-4d0f-9484-fa36cd534600")
+    (uuid "00000000-0000-0000-0000-00004b3a136d")
     (property "Reference" "R19" (id 0) (at 187.96 134.62 90))
     (property "Value" "1K" (id 1) (at 187.96 137.16 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 188.5188 139.065 90)
@@ -938,7 +940,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 200.66 69.85 0)
-    (uuid "1b4d768a-1827-40e5-9c01-39fda1cd680e")
+    (uuid "00000000-0000-0000-0000-00004b3a1376")
     (property "Reference" "R13" (id 0) (at 202.692 69.85 90))
     (property "Value" "470" (id 1) (at 200.66 69.85 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 203.9874 69.6468 90)
@@ -950,7 +952,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 205.74 133.35 0)
-    (uuid "bdc25120-aacf-4348-bcc6-73261064582f")
+    (uuid "00000000-0000-0000-0000-00004b61688c")
     (property "Reference" "R20" (id 0) (at 207.772 133.35 90))
     (property "Value" "5,6K" (id 1) (at 205.74 133.35 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 208.9404 133.1214 90)
@@ -962,7 +964,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 226.06 129.54 180)
-    (uuid "37c3f70a-9dde-4383-95bd-888fb4166462")
+    (uuid "00000000-0000-0000-0000-00004b3a1370")
     (property "Reference" "R22" (id 0) (at 223.52 129.54 90))
     (property "Value" "220K" (id 1) (at 226.06 129.54 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 223.52 129.54 90)
@@ -974,7 +976,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 231.14 129.54 180)
-    (uuid "4bd1f63c-4242-4359-8167-bdbc042884cc")
+    (uuid "00000000-0000-0000-0000-00004b617b88")
     (property "Reference" "R28" (id 0) (at 233.68 129.54 90))
     (property "Value" "220K" (id 1) (at 231.14 129.54 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 234.95 129.54 90)
@@ -986,7 +988,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 240.03 105.41 270)
-    (uuid "db7eab9d-0040-488f-bbf2-de80114da434")
+    (uuid "00000000-0000-0000-0000-00004b3a1364")
     (property "Reference" "R15" (id 0) (at 240.03 107.442 90))
     (property "Value" "47" (id 1) (at 240.03 105.41 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 240.03 104.14 90)
@@ -998,7 +1000,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:R") (at 240.03 113.03 270)
-    (uuid "37153e3e-7860-4372-9018-1f2f4374ea4c")
+    (uuid "00000000-0000-0000-0000-00004b616b96")
     (property "Reference" "R27" (id 0) (at 240.03 115.062 90))
     (property "Value" "47" (id 1) (at 240.03 113.03 90))
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" (id 2) (at 240.03 116.84 90)
@@ -1010,7 +1012,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:C") (at 72.39 57.15 0)
-    (uuid "f9525fb9-5037-46bb-ab1e-0e342ba823b8")
+    (uuid "00000000-0000-0000-0000-00004b4f3641")
     (property "Reference" "C14" (id 0) (at 76.2 55.88 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -1026,7 +1028,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:C") (at 101.6 64.77 0)
-    (uuid "9972825d-930e-4c4d-8cca-da15033be95d")
+    (uuid "00000000-0000-0000-0000-00004b3a1366")
     (property "Reference" "C7" (id 0) (at 104.14 62.23 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -1042,7 +1044,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:C") (at 110.49 40.64 270)
-    (uuid "c2139859-2daf-45ba-ad13-80f682acc0f6")
+    (uuid "00000000-0000-0000-0000-00004b3a1358")
     (property "Reference" "C6" (id 0) (at 110.49 36.83 90))
     (property "Value" "15nF" (id 1) (at 110.49 44.45 90))
     (property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" (id 2) (at 110.49 35.56 90)
@@ -1054,7 +1056,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:C") (at 205.74 146.05 0)
-    (uuid "2b416765-5c7d-4f06-ab5e-2da57ebb7589")
+    (uuid "00000000-0000-0000-0000-00004b3a1365")
     (property "Reference" "C8" (id 0) (at 207.01 143.51 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -1070,7 +1072,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:POT") (at 148.59 162.56 0)
-    (uuid "2d9edd4e-a6e8-49c1-affe-db17b878e368")
+    (uuid "00000000-0000-0000-0000-00004b3a1357")
     (property "Reference" "RV2" (id 0) (at 148.59 165.1 0))
     (property "Value" "4,7K" (id 1) (at 148.59 162.56 0))
     (property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3266W_Vertical" (id 2) (at 148.59 166.37 0)
@@ -1082,7 +1084,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:CONN_2") (at 34.29 53.34 0) (mirror y)
-    (uuid "063c5d08-55cf-459f-b6ca-6d4c3bfd22bd")
+    (uuid "00000000-0000-0000-0000-00004b3a1367")
     (property "Reference" "P6" (id 0) (at 35.56 53.34 90)
       (effects (font (size 1.016 1.016)))
     )
@@ -1098,7 +1100,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:CONN_2") (at 273.05 111.76 0)
-    (uuid "8b920b06-1b82-419d-a107-f4f361a09581")
+    (uuid "00000000-0000-0000-0000-00004b3a136c")
     (property "Reference" "P5" (id 0) (at 271.78 111.76 90)
       (effects (font (size 1.016 1.016)))
     )
@@ -1114,7 +1116,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:MPSA92") (at 198.12 83.82 0) (mirror x)
-    (uuid "bc81bf61-be3e-486d-8e16-af16de0503d1")
+    (uuid "00000000-0000-0000-0000-00004b3a1360")
     (property "Reference" "Q5" (id 0) (at 198.12 80.01 0)
       (effects (font (size 1.524 1.524)) (justify right))
     )
@@ -1130,7 +1132,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:MPSA42") (at 198.12 129.54 0)
-    (uuid "bd4dff75-e116-4e2c-b6e0-d5ffeb67f800")
+    (uuid "00000000-0000-0000-0000-00004b3a1379")
     (property "Reference" "Q8" (id 0) (at 198.12 133.35 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
@@ -1146,7 +1148,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:MPSA42") (at 215.9 93.98 0)
-    (uuid "d9b3690f-ccc1-443c-a86a-dbd2778a00d4")
+    (uuid "00000000-0000-0000-0000-00004b3a137d")
     (property "Reference" "Q6" (id 0) (at 215.9 87.63 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
@@ -1162,7 +1164,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:MPSA92") (at 215.9 121.92 0) (mirror x)
-    (uuid "16b277cf-bc16-4dd7-86f2-5088788426d2")
+    (uuid "00000000-0000-0000-0000-00004b3a137c")
     (property "Reference" "Q7" (id 0) (at 215.9 118.11 0)
       (effects (font (size 1.524 1.524)) (justify right))
     )
@@ -1178,7 +1180,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:LM358N") (at 123.19 60.96 0)
-    (uuid "2113d3e6-e914-47b8-b8f8-e141dff4f33a")
+    (uuid "00000000-0000-0000-0000-00004b3a135c")
     (property "Reference" "U4" (id 0) (at 124.46 55.88 0)
       (effects (font (size 1.524 1.524)))
     )
@@ -1192,7 +1194,7 @@
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:LM358N") (at 162.56 137.16 0)
-    (uuid "d7542c35-499f-4f0d-8c4d-9f4bf8403a72")
+    (uuid "00000000-0000-0000-0000-00004b3a1368")
     (property "Reference" "U4" (id 0) (at 163.83 132.08 0)
       (effects (font (size 1.524 1.524)))
     )

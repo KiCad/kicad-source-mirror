@@ -1,6 +1,8 @@
-(kicad_sch (version 20200310) (host eeschema "(5.99.0-1545-g9916f24fa)")
+(kicad_sch (version 20200512) (host eeschema "(5.99.0-1712-g5a9e69b14)")
 
-  (page "A3")
+  (page 8 8)
+
+  (paper "A3")
 
   (title_block
     (title "Video")
@@ -1570,47 +1572,47 @@
     )
   )
 
-  (junction (at 125.73 240.03))
-  (junction (at 114.3 176.53))
-  (junction (at 53.34 181.61))
-  (junction (at 302.26 209.55))
+  (junction (at 15.24 259.08))
+  (junction (at 17.78 224.79))
   (junction (at 21.59 224.79))
   (junction (at 26.67 259.08))
-  (junction (at 125.73 242.57))
-  (junction (at 172.72 245.11))
-  (junction (at 15.24 259.08))
-  (junction (at 114.3 181.61))
-  (junction (at 53.34 176.53))
-  (junction (at 31.75 273.05))
-  (junction (at 180.34 247.65))
-  (junction (at 17.78 224.79))
-  (junction (at 306.07 156.21))
   (junction (at 26.67 273.05))
-  (junction (at 38.1 54.61))
-  (junction (at 172.72 227.33))
-  (junction (at 55.88 41.91))
-  (junction (at 166.37 227.33))
-  (junction (at 114.3 25.4))
   (junction (at 29.21 224.79))
+  (junction (at 31.75 273.05))
+  (junction (at 38.1 54.61))
+  (junction (at 53.34 176.53))
+  (junction (at 53.34 181.61))
+  (junction (at 55.88 41.91))
+  (junction (at 114.3 25.4))
+  (junction (at 114.3 176.53))
+  (junction (at 114.3 181.61))
+  (junction (at 125.73 240.03))
+  (junction (at 125.73 242.57))
+  (junction (at 166.37 227.33))
+  (junction (at 172.72 227.33))
+  (junction (at 172.72 245.11))
+  (junction (at 180.34 247.65))
   (junction (at 302.26 186.69))
+  (junction (at 302.26 209.55))
+  (junction (at 306.07 156.21))
 
-  (no_connect (at 55.88 179.07))
-  (no_connect (at 111.76 34.29))
-  (no_connect (at 55.88 46.99))
-  (no_connect (at 111.76 130.81))
-  (no_connect (at 55.88 44.45))
-  (no_connect (at 111.76 44.45))
-  (no_connect (at 55.88 62.23))
-  (no_connect (at 55.88 29.21))
-  (no_connect (at 111.76 179.07))
-  (no_connect (at 111.76 54.61))
-  (no_connect (at 55.88 31.75))
-  (no_connect (at 111.76 128.27))
-  (no_connect (at 111.76 49.53))
   (no_connect (at 55.88 52.07))
   (no_connect (at 111.76 74.93))
+  (no_connect (at 55.88 179.07))
+  (no_connect (at 111.76 128.27))
+  (no_connect (at 55.88 44.45))
+  (no_connect (at 111.76 49.53))
+  (no_connect (at 111.76 54.61))
+  (no_connect (at 111.76 44.45))
+  (no_connect (at 111.76 179.07))
+  (no_connect (at 55.88 31.75))
+  (no_connect (at 55.88 46.99))
+  (no_connect (at 111.76 130.81))
   (no_connect (at 111.76 62.23))
   (no_connect (at 111.76 29.21))
+  (no_connect (at 111.76 34.29))
+  (no_connect (at 55.88 62.23))
+  (no_connect (at 55.88 29.21))
 
   (bus_entry (at 279.4 138.43) (size 2.54 -2.54))
   (bus_entry (at 279.4 140.97) (size 2.54 -2.54))
@@ -2860,7 +2862,7 @@
   )
 
   (symbol (lib_id "video_schlib:+12V") (at 114.3 24.13 0) (unit 1)
-    (uuid "91776b17-0bfd-4df7-8563-99d2b4b1858f")
+    (uuid "00000000-0000-0000-0000-00004bf036b6")
     (property "Reference" "#+0131" (id 0) (at 114.3 19.05 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -2876,7 +2878,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 17.78 223.52 0) (unit 1)
-    (uuid "6482f41f-db9b-49b4-8181-e54941cbaba3")
+    (uuid "00000000-0000-0000-0000-00004bf03692")
     (property "Reference" "#+0129" (id 0) (at 17.78 218.44 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -2892,7 +2894,7 @@
   )
 
   (symbol (lib_id "video_schlib:VCC") (at 21.59 223.52 0) (unit 1)
-    (uuid "fd804288-be4b-43ed-9b8f-5a5794f5cf3b")
+    (uuid "00000000-0000-0000-0000-000033b3dc6a")
     (property "Reference" "#PWR081" (id 0) (at 21.59 218.44 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -2908,7 +2910,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 48.26 237.49 0) (unit 1)
-    (uuid "4f8e7590-666d-4cc9-9c94-c673b5208a86")
+    (uuid "00000000-0000-0000-0000-00004bf036a1")
     (property "Reference" "#+0119" (id 0) (at 48.26 232.41 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -2924,7 +2926,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 48.26 257.81 0) (unit 1)
-    (uuid "ee4b95c3-3dd9-45fd-a37e-d592f511370e")
+    (uuid "00000000-0000-0000-0000-00004bf03698")
     (property "Reference" "#+0123" (id 0) (at 48.26 252.73 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -2940,7 +2942,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 50.8 176.53 90) (unit 1)
-    (uuid "143909ca-39ef-406a-8fa6-820dabfd1050")
+    (uuid "00000000-0000-0000-0000-00004bf036c5")
     (property "Reference" "#+0146" (id 0) (at 45.72 176.53 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -2956,7 +2958,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 53.34 41.91 0) (unit 1)
-    (uuid "7b28ba05-93e6-4ee5-b29e-030addd91f23")
+    (uuid "00000000-0000-0000-0000-00004bf036c6")
     (property "Reference" "#+0147" (id 0) (at 53.34 36.83 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -2972,7 +2974,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 53.34 74.93 90) (unit 1)
-    (uuid "2a7be09b-f42d-45be-83fc-31cdd37892cb")
+    (uuid "00000000-0000-0000-0000-00004bf036a4")
     (property "Reference" "#+0148" (id 0) (at 48.26 74.93 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -2988,7 +2990,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 66.04 237.49 0) (unit 1)
-    (uuid "292c771e-7f8a-4088-b8ee-a13579161b2a")
+    (uuid "00000000-0000-0000-0000-00004bf036a3")
     (property "Reference" "#+0120" (id 0) (at 66.04 232.41 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3004,7 +3006,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 66.04 257.81 0) (unit 1)
-    (uuid "4f7c2bd5-50e8-4032-a7fe-2b1f8954aed0")
+    (uuid "00000000-0000-0000-0000-00004bf03697")
     (property "Reference" "#+0124" (id 0) (at 66.04 252.73 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3020,7 +3022,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 83.82 237.49 0) (unit 1)
-    (uuid "83889d49-3a60-4c10-add5-83f9a180141f")
+    (uuid "00000000-0000-0000-0000-00004bf036a2")
     (property "Reference" "#+0121" (id 0) (at 83.82 232.41 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3036,7 +3038,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 83.82 257.81 0) (unit 1)
-    (uuid "0d262387-de2a-4564-ab67-3c842b13bdfb")
+    (uuid "00000000-0000-0000-0000-00004bf03696")
     (property "Reference" "#+0125" (id 0) (at 83.82 252.73 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3052,7 +3054,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 101.6 237.49 0) (unit 1)
-    (uuid "2f44aa26-b5c3-4747-b0bf-34475261e1e0")
+    (uuid "00000000-0000-0000-0000-00004bf036a0")
     (property "Reference" "#+0122" (id 0) (at 101.6 232.41 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3068,7 +3070,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 101.6 257.81 0) (unit 1)
-    (uuid "9f9eeba9-36a0-4263-9509-5649fbfcaa19")
+    (uuid "00000000-0000-0000-0000-00004bf03695")
     (property "Reference" "#+0126" (id 0) (at 101.6 252.73 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3084,7 +3086,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 114.3 46.99 0) (unit 1)
-    (uuid "fe9c58be-099a-4ac1-9ca1-ae8b65498c79")
+    (uuid "00000000-0000-0000-0000-00004bf036ad")
     (property "Reference" "#+0157" (id 0) (at 114.3 41.91 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3100,7 +3102,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 114.3 52.07 0) (unit 1)
-    (uuid "b78184e9-7b3b-4513-906d-b9dba4d4456e")
+    (uuid "00000000-0000-0000-0000-00004bf036ae")
     (property "Reference" "#+0158" (id 0) (at 114.3 46.99 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3116,7 +3118,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 114.3 67.31 270) (unit 1)
-    (uuid "ee03c4c0-8f95-4e42-bb8c-56c803db9944")
+    (uuid "00000000-0000-0000-0000-00004bf036af")
     (property "Reference" "#+0159" (id 0) (at 119.38 67.31 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3132,7 +3134,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 116.84 176.53 270) (unit 1)
-    (uuid "772e4390-ee12-42cd-a172-de4dce5d606a")
+    (uuid "00000000-0000-0000-0000-00004bf036a9")
     (property "Reference" "#+0153" (id 0) (at 121.92 176.53 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3148,7 +3150,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 124.46 38.1 0) (unit 1)
-    (uuid "c63ce681-02a3-4062-83ec-a18e0de08960")
+    (uuid "00000000-0000-0000-0000-00004bf036b5")
     (property "Reference" "#+0130" (id 0) (at 124.46 35.814 0)
       (effects (font (size 0.508 0.508)) hide)
     )
@@ -3164,7 +3166,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 146.05 228.6 0) (unit 1)
-    (uuid "95b83b45-b4b1-4626-9766-769a8029a22e")
+    (uuid "00000000-0000-0000-0000-000054022ee0")
     (property "Reference" "#+0161" (id 0) (at 146.05 223.52 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3180,7 +3182,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 166.37 224.79 0) (unit 1)
-    (uuid "f93e044a-8117-4468-8ab4-5cd02ae3a8fd")
+    (uuid "00000000-0000-0000-0000-00004bf0369f")
     (property "Reference" "#+0118" (id 0) (at 166.37 219.71 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3196,7 +3198,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 322.58 186.69 0) (unit 1)
-    (uuid "75d1e4d0-d256-4581-87cc-67917bacfe8b")
+    (uuid "00000000-0000-0000-0000-00004bf036ab")
     (property "Reference" "#+0155" (id 0) (at 322.58 181.61 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3212,7 +3214,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 322.58 209.55 0) (unit 1)
-    (uuid "908c860b-4ad9-4160-a36a-8b19ef8b0f1f")
+    (uuid "00000000-0000-0000-0000-00004bf036ac")
     (property "Reference" "#+0156" (id 0) (at 322.58 204.47 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3228,7 +3230,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 326.39 156.21 0) (unit 1)
-    (uuid "0fa043e0-d092-4980-801e-9c227b38d012")
+    (uuid "00000000-0000-0000-0000-00004bf036aa")
     (property "Reference" "#+0154" (id 0) (at 326.39 151.13 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3244,7 +3246,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 21.59 0) (unit 1)
-    (uuid "c33dbe4c-8ef8-4818-9e6e-7c93b599f4ae")
+    (uuid "00000000-0000-0000-0000-00004bf036b7")
     (property "Reference" "#+0132" (id 0) (at 355.6 16.51 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3260,7 +3262,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 46.99 0) (unit 1)
-    (uuid "182aed7e-829a-4e1a-8002-a4d77e48aa04")
+    (uuid "00000000-0000-0000-0000-00004bf036b8")
     (property "Reference" "#+0133" (id 0) (at 355.6 41.91 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3276,7 +3278,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 72.39 0) (unit 1)
-    (uuid "f2ed718f-2abc-432f-9a3b-4c79c73ed629")
+    (uuid "00000000-0000-0000-0000-00004bf036b9")
     (property "Reference" "#+0134" (id 0) (at 355.6 67.31 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3292,7 +3294,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 97.79 0) (unit 1)
-    (uuid "118e04dd-3800-4c0c-a5e8-19f0bc7d8a1e")
+    (uuid "00000000-0000-0000-0000-00004bf036ba")
     (property "Reference" "#+0135" (id 0) (at 355.6 92.71 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3308,7 +3310,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 123.19 0) (unit 1)
-    (uuid "ce26e1cb-4881-4374-b313-da2322faf1fd")
+    (uuid "00000000-0000-0000-0000-00004bf036bb")
     (property "Reference" "#+0136" (id 0) (at 355.6 118.11 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3324,7 +3326,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 148.59 0) (unit 1)
-    (uuid "0273c8a6-0264-42a0-829c-074bc2a7cc30")
+    (uuid "00000000-0000-0000-0000-00004bf036bc")
     (property "Reference" "#+0137" (id 0) (at 355.6 143.51 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3340,7 +3342,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 173.99 0) (unit 1)
-    (uuid "1d740b99-9e4c-4d66-bfda-07478d9165d2")
+    (uuid "00000000-0000-0000-0000-00004bf036bd")
     (property "Reference" "#+0138" (id 0) (at 355.6 168.91 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3356,7 +3358,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 199.39 0) (unit 1)
-    (uuid "53b5a138-7db7-47db-8353-56092203dd59")
+    (uuid "00000000-0000-0000-0000-00004bf036be")
     (property "Reference" "#+0139" (id 0) (at 355.6 194.31 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3372,7 +3374,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 15.24 257.81 0) (unit 1)
-    (uuid "1e659b02-28de-4d76-bd15-17a9e4de95be")
+    (uuid "00000000-0000-0000-0000-000033afd455")
     (property "Reference" "#PWR082" (id 0) (at 15.24 252.73 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3388,7 +3390,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 90.17 90) (unit 1)
-    (uuid "2f22e5e2-c616-417b-a555-95503382b143")
+    (uuid "00000000-0000-0000-0000-00004bf036bf")
     (property "Reference" "#+0140" (id 0) (at 48.26 90.17 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3404,7 +3406,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 105.41 90) (unit 1)
-    (uuid "3a34453e-1987-41f5-a4bb-583b1a037efa")
+    (uuid "00000000-0000-0000-0000-00004bf036c0")
     (property "Reference" "#+0141" (id 0) (at 48.26 105.41 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3420,7 +3422,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 118.11 90) (unit 1)
-    (uuid "9ed1fa97-2225-4a04-bfd1-e682be90e6d5")
+    (uuid "00000000-0000-0000-0000-00004bf036c1")
     (property "Reference" "#+0142" (id 0) (at 48.26 118.11 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3436,7 +3438,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 130.81 90) (unit 1)
-    (uuid "5d3e6ad1-85ea-4c3b-adf2-23b555aa8763")
+    (uuid "00000000-0000-0000-0000-00004bf036c2")
     (property "Reference" "#+0143" (id 0) (at 48.26 130.81 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3452,7 +3454,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 135.89 90) (unit 1)
-    (uuid "a96708a8-c109-45fa-9acc-ea3ab9bcd73d")
+    (uuid "00000000-0000-0000-0000-00004bf036c3")
     (property "Reference" "#+0144" (id 0) (at 48.26 135.89 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3468,7 +3470,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 163.83 90) (unit 1)
-    (uuid "9f0083d3-1fb4-4af7-98ed-003058cf0eb7")
+    (uuid "00000000-0000-0000-0000-00004bf036c4")
     (property "Reference" "#+0145" (id 0) (at 48.26 163.83 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3484,7 +3486,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 80.01 270) (unit 1)
-    (uuid "08e23f11-b10c-4fc8-a1e0-2c21ca7f902d")
+    (uuid "00000000-0000-0000-0000-00004bf03694")
     (property "Reference" "#+0127" (id 0) (at 119.38 80.01 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3500,7 +3502,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 95.25 270) (unit 1)
-    (uuid "3a55cc55-2caa-466a-9042-1eda1c80f305")
+    (uuid "00000000-0000-0000-0000-00004bf036a8")
     (property "Reference" "#+0152" (id 0) (at 119.38 95.25 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3516,7 +3518,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 110.49 270) (unit 1)
-    (uuid "42765032-29fe-4371-9b1a-c92d4a6677ac")
+    (uuid "00000000-0000-0000-0000-00004bf036a7")
     (property "Reference" "#+0151" (id 0) (at 119.38 110.49 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3532,7 +3534,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 125.73 270) (unit 1)
-    (uuid "617c3939-5d69-47fb-b130-6bc9a66cf624")
+    (uuid "00000000-0000-0000-0000-00004bf036a6")
     (property "Reference" "#+0150" (id 0) (at 119.38 125.73 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3548,7 +3550,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 140.97 270) (unit 1)
-    (uuid "5ca107cd-4273-4a26-ac9d-219b712c2604")
+    (uuid "00000000-0000-0000-0000-00004bf03693")
     (property "Reference" "#+0128" (id 0) (at 119.38 140.97 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3564,7 +3566,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 161.29 270) (unit 1)
-    (uuid "a05325c3-318e-4734-915a-1e804057fda9")
+    (uuid "00000000-0000-0000-0000-00004bf036a5")
     (property "Reference" "#+0149" (id 0) (at 119.38 161.29 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3580,7 +3582,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 15.24 274.32 0) (unit 1)
-    (uuid "147dba51-7dd6-436e-b132-1f4f406d0a83")
+    (uuid "00000000-0000-0000-0000-00004bf036cc")
     (property "Reference" "#GND084" (id 0) (at 15.24 271.78 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3596,7 +3598,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 17.78 240.03 0) (unit 1)
-    (uuid "bda86425-96bd-4a9c-93e3-daaaecccad66")
+    (uuid "00000000-0000-0000-0000-00002820f094")
     (property "Reference" "#GND0117" (id 0) (at 17.78 237.49 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3612,7 +3614,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 26.67 274.32 0) (unit 1)
-    (uuid "e101b464-52fb-48d4-99a7-24898b65a08d")
+    (uuid "00000000-0000-0000-0000-00004bf036cb")
     (property "Reference" "#GND083" (id 0) (at 26.67 271.78 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3628,7 +3630,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 29.21 240.03 0) (unit 1)
-    (uuid "e9eb2cea-cf8f-4211-9135-d5ba932a4426")
+    (uuid "00000000-0000-0000-0000-00004bf036cd")
     (property "Reference" "#GND085" (id 0) (at 29.21 237.49 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3644,7 +3646,7 @@
   )
 
   (symbol (lib_id "video_schlib:VSS") (at 31.75 274.32 0) (unit 1)
-    (uuid "d054f8d1-e938-4522-8b1c-e3ad8f3bfca6")
+    (uuid "00000000-0000-0000-0000-000033ba4d4a")
     (property "Reference" "#PWR080" (id 0) (at 31.75 274.32 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3660,7 +3662,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 38.1 57.15 0) (unit 1)
-    (uuid "0a7d99a8-e1aa-4a1c-b8b6-66e3ff91d61e")
+    (uuid "00000000-0000-0000-0000-00002691b63c")
     (property "Reference" "#GND0104" (id 0) (at 38.1 57.15 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3676,7 +3678,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 48.26 250.19 0) (unit 1)
-    (uuid "ac3a32af-26b8-4831-a9c7-eadd93167a63")
+    (uuid "00000000-0000-0000-0000-000026b211de")
     (property "Reference" "#GND0109" (id 0) (at 48.26 247.65 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3692,7 +3694,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 48.26 270.51 0) (unit 1)
-    (uuid "f225397c-4db0-4ad9-9833-b916c1875343")
+    (uuid "00000000-0000-0000-0000-000026b21206")
     (property "Reference" "#GND0113" (id 0) (at 48.26 267.97 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3708,7 +3710,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 34.29 270) (unit 1)
-    (uuid "a3c1a16f-88aa-47e2-ae2c-a61424a1b73f")
+    (uuid "00000000-0000-0000-0000-00002691b5bf")
     (property "Reference" "#GND086" (id 0) (at 57.15 34.29 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3724,7 +3726,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 64.77 270) (unit 1)
-    (uuid "32711a55-e2c5-4e01-a7e6-431c227f67ee")
+    (uuid "00000000-0000-0000-0000-00002691b5ce")
     (property "Reference" "#GND087" (id 0) (at 57.15 64.77 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3740,7 +3742,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 69.85 270) (unit 1)
-    (uuid "3a07cdd9-eb12-40a0-982f-7984eca7b1ea")
+    (uuid "00000000-0000-0000-0000-00002691b5d3")
     (property "Reference" "#GND088" (id 0) (at 57.15 69.85 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3756,7 +3758,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 82.55 270) (unit 1)
-    (uuid "0f06b41b-c0e5-4db6-a84a-869e5f9517c6")
+    (uuid "00000000-0000-0000-0000-00002691b5d8")
     (property "Reference" "#GND089" (id 0) (at 57.15 82.55 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3772,7 +3774,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 97.79 270) (unit 1)
-    (uuid "eab139aa-0037-46ea-a783-b462cfc6de4b")
+    (uuid "00000000-0000-0000-0000-00002691b5dd")
     (property "Reference" "#GND090" (id 0) (at 57.15 97.79 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3788,7 +3790,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 113.03 270) (unit 1)
-    (uuid "2dc90e1b-5b6b-4cc7-bd47-0ce287ec2131")
+    (uuid "00000000-0000-0000-0000-00002691b5e2")
     (property "Reference" "#GND091" (id 0) (at 57.15 113.03 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3804,7 +3806,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 123.19 270) (unit 1)
-    (uuid "9dce4038-bfd2-4241-9d1e-b22f75b90fa6")
+    (uuid "00000000-0000-0000-0000-00002691b5e7")
     (property "Reference" "#GND092" (id 0) (at 57.15 123.19 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3820,7 +3822,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 143.51 270) (unit 1)
-    (uuid "1acd3261-82d9-48ba-ade5-313a01abd3c4")
+    (uuid "00000000-0000-0000-0000-00002691b5ec")
     (property "Reference" "#GND093" (id 0) (at 57.15 143.51 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3836,7 +3838,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 151.13 270) (unit 1)
-    (uuid "cf11b0ca-3def-4c48-8d11-3de3b877449f")
+    (uuid "00000000-0000-0000-0000-00002691b5f1")
     (property "Reference" "#GND094" (id 0) (at 57.15 151.13 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3852,7 +3854,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 171.45 270) (unit 1)
-    (uuid "be6fffdd-896e-4268-849d-54f093db91b6")
+    (uuid "00000000-0000-0000-0000-00002691b5f6")
     (property "Reference" "#GND095" (id 0) (at 57.15 171.45 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3868,7 +3870,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 66.04 250.19 0) (unit 1)
-    (uuid "296a9eab-fe16-4066-b4bb-dac18323e34b")
+    (uuid "00000000-0000-0000-0000-000026b211e8")
     (property "Reference" "#GND0110" (id 0) (at 66.04 247.65 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3884,7 +3886,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 66.04 270.51 0) (unit 1)
-    (uuid "140bd6a2-0f42-4f73-841a-69b351d0765f")
+    (uuid "00000000-0000-0000-0000-000026b21210")
     (property "Reference" "#GND0114" (id 0) (at 66.04 267.97 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3900,7 +3902,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 83.82 250.19 0) (unit 1)
-    (uuid "abd4fda6-a7d7-4abc-82de-15764ce94054")
+    (uuid "00000000-0000-0000-0000-000026b211f2")
     (property "Reference" "#GND0111" (id 0) (at 83.82 247.65 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3916,7 +3918,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 83.82 270.51 0) (unit 1)
-    (uuid "b3e679c6-45d1-4c0b-b1bf-f51fadcd61ab")
+    (uuid "00000000-0000-0000-0000-000026b2121a")
     (property "Reference" "#GND0115" (id 0) (at 83.82 267.97 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3932,7 +3934,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 101.6 250.19 0) (unit 1)
-    (uuid "7beb8b9e-b2ce-43ba-a829-eedb6028b15c")
+    (uuid "00000000-0000-0000-0000-000026b211fc")
     (property "Reference" "#GND0112" (id 0) (at 101.6 247.65 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3948,7 +3950,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 101.6 270.51 0) (unit 1)
-    (uuid "ce8ec19a-39a1-4b44-8a36-a35dbf6ec431")
+    (uuid "00000000-0000-0000-0000-000026b21224")
     (property "Reference" "#GND0116" (id 0) (at 101.6 267.97 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3964,7 +3966,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 72.39 90) (unit 1)
-    (uuid "88cc3838-87af-40a3-9782-dd13e9dd92ab")
+    (uuid "00000000-0000-0000-0000-00002691b61e")
     (property "Reference" "#GND0103" (id 0) (at 114.3 72.39 0)
       (effects (font (size 1.016 1.016)) hide)
     )
@@ -3980,7 +3982,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 87.63 90) (unit 1)
-    (uuid "cb7d84f8-6c18-4acd-9973-13a459b346ac")
+    (uuid "00000000-0000-0000-0000-00002691b619")
     (property "Reference" "#GND0102" (id 0) (at 111.76 87.63 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -3996,7 +3998,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 102.87 90) (unit 1)
-    (uuid "212e2805-286a-4472-adc2-d6d13e5f6f8c")
+    (uuid "00000000-0000-0000-0000-00002691b614")
     (property "Reference" "#GND0101" (id 0) (at 111.76 102.87 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -4012,7 +4014,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 115.57 90) (unit 1)
-    (uuid "73047ed4-9a37-42d1-969a-52dc4d1ea582")
+    (uuid "00000000-0000-0000-0000-00002691b60f")
     (property "Reference" "#GND0100" (id 0) (at 111.76 115.57 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -4028,7 +4030,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 120.65 90) (unit 1)
-    (uuid "981a6bc4-4d06-42e5-a60d-441e72d2a807")
+    (uuid "00000000-0000-0000-0000-00002691b60a")
     (property "Reference" "#GND099" (id 0) (at 111.76 120.65 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -4044,7 +4046,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 133.35 90) (unit 1)
-    (uuid "c7b9b4a0-6fca-45ab-af0d-39cda3737eb7")
+    (uuid "00000000-0000-0000-0000-00002691b605")
     (property "Reference" "#GND098" (id 0) (at 111.76 133.35 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -4060,7 +4062,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 148.59 90) (unit 1)
-    (uuid "e5098ea7-5705-40c8-9433-3c705590116f")
+    (uuid "00000000-0000-0000-0000-00002691b600")
     (property "Reference" "#GND097" (id 0) (at 111.76 148.59 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -4076,7 +4078,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 168.91 90) (unit 1)
-    (uuid "6e185e55-4caa-43f4-aeab-0f84f37a8ca5")
+    (uuid "00000000-0000-0000-0000-00002691b5fb")
     (property "Reference" "#GND096" (id 0) (at 111.76 168.91 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -4092,7 +4094,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 125.73 243.84 0) (unit 1)
-    (uuid "540ce71c-d484-445f-aca6-fa5ec7fe8355")
+    (uuid "00000000-0000-0000-0000-000026b211bb")
     (property "Reference" "#GND0108" (id 0) (at 125.73 241.3 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -4108,7 +4110,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 146.05 256.54 0) (unit 1)
-    (uuid "f1dcb261-5e3c-487d-ab5a-8131b6fba346")
+    (uuid "00000000-0000-0000-0000-000054022e29")
     (property "Reference" "#PWR0160" (id 0) (at 146.05 256.54 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -4124,7 +4126,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 302.26 201.93 0) (unit 1)
-    (uuid "6d9a16d1-2360-4899-a6a4-64b52ef3b416")
+    (uuid "00000000-0000-0000-0000-000026a799fc")
     (property "Reference" "#GND0106" (id 0) (at 302.26 199.39 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -4140,7 +4142,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 302.26 224.79 0) (unit 1)
-    (uuid "2c74b929-8809-4c8c-904e-c4b0cc61cfec")
+    (uuid "00000000-0000-0000-0000-000026a79a06")
     (property "Reference" "#GND0107" (id 0) (at 302.26 222.25 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -4156,7 +4158,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 306.07 170.18 0) (unit 1)
-    (uuid "f58f8906-c902-4767-9034-454eb588e9ef")
+    (uuid "00000000-0000-0000-0000-000026a799f2")
     (property "Reference" "#GND0105" (id 0) (at 306.07 167.64 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -4172,7 +4174,7 @@
   )
 
   (symbol (lib_id "video_schlib:PWR_FLAG") (at 26.67 257.81 0) (unit 1)
-    (uuid "17d34195-c6d0-442e-ad9f-b8d0d7e76703")
+    (uuid "00000000-0000-0000-0000-00004bf03691")
     (property "Reference" "#FLG077" (id 0) (at 26.67 250.952 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -4188,7 +4190,7 @@
   )
 
   (symbol (lib_id "video_schlib:PWR_FLAG") (at 29.21 224.79 0) (unit 1)
-    (uuid "b6814e45-2d2e-4053-890a-53850bb7b96a")
+    (uuid "00000000-0000-0000-0000-00004174d80f")
     (property "Reference" "#FLG079" (id 0) (at 29.21 217.932 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -4204,7 +4206,7 @@
   )
 
   (symbol (lib_id "video_schlib:PWR_FLAG") (at 38.1 273.05 0) (unit 1)
-    (uuid "7defa248-9fa9-43d2-b882-de61218d7493")
+    (uuid "00000000-0000-0000-0000-00004174d9fb")
     (property "Reference" "#FLG076" (id 0) (at 38.1 266.192 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -4220,7 +4222,7 @@
   )
 
   (symbol (lib_id "video_schlib:PWR_FLAG") (at 107.95 25.4 0) (unit 1)
-    (uuid "f90f1e98-b4ef-462b-8f0f-07301846e088")
+    (uuid "00000000-0000-0000-0000-00004174d820")
     (property "Reference" "#FLG078" (id 0) (at 107.95 18.542 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -4236,7 +4238,7 @@
   )
 
   (symbol (lib_id "video_schlib:TEST") (at 45.72 49.53 0) (unit 1)
-    (uuid "7db03c40-ef0d-41e0-96c4-20d5c442989f")
+    (uuid "00000000-0000-0000-0000-00002691b637")
     (property "Reference" "W5" (id 0) (at 45.72 48.006 0)
       (effects (font (size 1.016 1.016)))
     )
@@ -4252,7 +4254,7 @@
   )
 
   (symbol (lib_id "video_schlib:TEST") (at 45.72 54.61 0) (unit 1)
-    (uuid "f633fc0e-93d8-45d0-9c73-7a891d9c8b39")
+    (uuid "00000000-0000-0000-0000-00002691b632")
     (property "Reference" "W4" (id 0) (at 45.72 53.086 0)
       (effects (font (size 1.016 1.016)))
     )
@@ -4268,7 +4270,7 @@
   )
 
   (symbol (lib_id "video_schlib:TEST") (at 302.26 194.31 90) (unit 1)
-    (uuid "d45d1aa2-8199-4e4d-8438-37b936e4f377")
+    (uuid "00000000-0000-0000-0000-000026a799f7")
     (property "Reference" "W2" (id 0) (at 299.72 194.31 0)
       (effects (font (size 1.524 1.524)))
     )
@@ -4284,7 +4286,7 @@
   )
 
   (symbol (lib_id "video_schlib:TEST") (at 302.26 217.17 90) (unit 1)
-    (uuid "7b4f8032-6858-4282-bf43-bc04bc491847")
+    (uuid "00000000-0000-0000-0000-000026a79a10")
     (property "Reference" "W3" (id 0) (at 300.736 217.17 0)
       (effects (font (size 1.016 1.016)))
     )
@@ -4300,7 +4302,7 @@
   )
 
   (symbol (lib_id "video_schlib:TEST") (at 306.07 163.83 90) (unit 1)
-    (uuid "3ccdfd75-07a8-41c8-ac41-3cda50372991")
+    (uuid "00000000-0000-0000-0000-000026a799ed")
     (property "Reference" "W1" (id 0) (at 303.53 163.83 0)
       (effects (font (size 1.524 1.524)))
     )
@@ -4316,7 +4318,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 172.72 236.22 0) (unit 1)
-    (uuid "722ff7a2-e710-44cf-be6b-5fa131a7c258")
+    (uuid "00000000-0000-0000-0000-000026b211c0")
     (property "Reference" "R28" (id 0) (at 174.752 236.22 90))
     (property "Value" "2,2K" (id 1) (at 172.72 236.22 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 172.72 236.22 0)
@@ -4328,7 +4330,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 180.34 236.22 0) (unit 1)
-    (uuid "cdb35c7c-d982-4f96-854a-29890deca1ca")
+    (uuid "00000000-0000-0000-0000-000026b211cf")
     (property "Reference" "R29" (id 0) (at 182.372 236.22 90))
     (property "Value" "2,2K" (id 1) (at 180.34 236.22 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 180.34 236.22 0)
@@ -4340,7 +4342,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 313.69 186.69 90) (unit 1)
-    (uuid "3167d505-f974-4e5a-a14c-2329f2e84767")
+    (uuid "00000000-0000-0000-0000-000026a79a01")
     (property "Reference" "R6" (id 0) (at 313.69 184.658 90))
     (property "Value" "10K" (id 1) (at 313.69 186.69 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 313.69 186.69 0)
@@ -4352,7 +4354,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 313.69 209.55 90) (unit 1)
-    (uuid "71789aa5-65d8-48c2-837f-8fca0c366e37")
+    (uuid "00000000-0000-0000-0000-000026a79a0b")
     (property "Reference" "R7" (id 0) (at 313.69 207.518 90))
     (property "Value" "10K" (id 1) (at 313.69 209.55 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 313.69 209.55 0)
@@ -4364,7 +4366,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 317.5 156.21 90) (unit 1)
-    (uuid "76768a14-96fd-4bda-afbf-6fd534fb99c8")
+    (uuid "00000000-0000-0000-0000-000026a799e8")
     (property "Reference" "R5" (id 0) (at 317.5 154.178 90))
     (property "Value" "10K" (id 1) (at 317.5 156.21 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 317.5 156.21 0)
@@ -4376,7 +4378,7 @@
   )
 
   (symbol (lib_id "video_schlib:CP") (at 15.24 266.7 0) (unit 1)
-    (uuid "355cea20-0b6e-436c-9518-71a3c1154fb8")
+    (uuid "00000000-0000-0000-0000-00004bf036d8")
     (property "Reference" "C68" (id 0) (at 16.51 264.16 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4392,7 +4394,7 @@
   )
 
   (symbol (lib_id "video_schlib:CP") (at 17.78 232.41 0) (unit 1)
-    (uuid "9dff941d-af4b-48ba-949e-4fde799c3428")
+    (uuid "00000000-0000-0000-0000-00002820f08a")
     (property "Reference" "C38" (id 0) (at 19.05 229.87 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4408,7 +4410,7 @@
   )
 
   (symbol (lib_id "video_schlib:CP") (at 26.67 266.7 0) (unit 1)
-    (uuid "e3d9e947-509e-4f28-8cf3-286bcd5825e7")
+    (uuid "00000000-0000-0000-0000-000033afd43a")
     (property "Reference" "C69" (id 0) (at 27.94 264.16 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4424,7 +4426,7 @@
   )
 
   (symbol (lib_id "video_schlib:CP") (at 29.21 232.41 0) (unit 1)
-    (uuid "ed4a2c27-7446-4b75-810f-c3fb557867c4")
+    (uuid "00000000-0000-0000-0000-000033afd420")
     (property "Reference" "C67" (id 0) (at 30.48 229.87 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4440,7 +4442,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 48.26 243.84 0) (unit 1)
-    (uuid "d685c7ab-9b88-46f4-92c3-2155a6b30791")
+    (uuid "00000000-0000-0000-0000-000026b211d9")
     (property "Reference" "C24" (id 0) (at 49.53 241.3 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4456,7 +4458,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 48.26 264.16 0) (unit 1)
-    (uuid "4d2c1a67-e6ac-4eb5-b8e5-33b9fedc0ff4")
+    (uuid "00000000-0000-0000-0000-000026b21201")
     (property "Reference" "C28" (id 0) (at 49.53 261.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4472,7 +4474,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 66.04 243.84 0) (unit 1)
-    (uuid "0e3c9ac7-167a-4e80-93c3-c115a3a98e4b")
+    (uuid "00000000-0000-0000-0000-000026b211e3")
     (property "Reference" "C25" (id 0) (at 67.31 241.3 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4488,7 +4490,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 66.04 264.16 0) (unit 1)
-    (uuid "550980ef-3fd1-40c7-835c-e9095dcd4975")
+    (uuid "00000000-0000-0000-0000-000026b2120b")
     (property "Reference" "C29" (id 0) (at 67.31 261.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4504,7 +4506,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 83.82 243.84 0) (unit 1)
-    (uuid "1c51210e-d255-44ed-9235-4f9051625a6a")
+    (uuid "00000000-0000-0000-0000-000026b211ed")
     (property "Reference" "C26" (id 0) (at 85.09 241.3 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4520,7 +4522,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 83.82 264.16 0) (unit 1)
-    (uuid "f21f4795-44fc-4088-9165-ebee40a647d6")
+    (uuid "00000000-0000-0000-0000-000026b21215")
     (property "Reference" "C30" (id 0) (at 85.09 261.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4536,7 +4538,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 101.6 243.84 0) (unit 1)
-    (uuid "ac982dce-80ca-4d04-a3bf-1754daf97c33")
+    (uuid "00000000-0000-0000-0000-000026b211f7")
     (property "Reference" "C27" (id 0) (at 102.87 241.3 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4552,7 +4554,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 101.6 264.16 0) (unit 1)
-    (uuid "75a9edc6-f3f7-4d11-b264-8987da18531a")
+    (uuid "00000000-0000-0000-0000-000026b2121f")
     (property "Reference" "C31" (id 0) (at 102.87 261.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -4568,7 +4570,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 33.02 0) (unit 1)
-    (uuid "8ce73c5d-8783-4bd3-9eba-6edd91060bdf")
+    (uuid "00000000-0000-0000-0000-00007fffffff")
     (property "Reference" "RR1" (id 0) (at 365.76 19.05 0)
       (effects (font (size 1.778 1.778)))
     )
@@ -4584,7 +4586,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 58.42 0) (unit 1)
-    (uuid "3f9ecdbc-9f36-4bae-9c3c-a3a2d11360c9")
+    (uuid "00000000-0000-0000-0000-00007fffffff")
     (property "Reference" "RR2" (id 0) (at 365.76 44.45 0)
       (effects (font (size 1.778 1.778)))
     )
@@ -4600,7 +4602,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 83.82 0) (unit 1)
-    (uuid "05b5d6a1-8403-4ed1-ac8a-69cd4b348c7f")
+    (uuid "00000000-0000-0000-0000-00007fffffff")
     (property "Reference" "RR3" (id 0) (at 365.76 69.85 0)
       (effects (font (size 1.778 1.778)))
     )
@@ -4616,7 +4618,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 109.22 0) (unit 1)
-    (uuid "9dede6ed-987a-439f-91c3-a083aa0c5b7d")
+    (uuid "00000000-0000-0000-0000-00007fffffff")
     (property "Reference" "RR4" (id 0) (at 365.76 95.25 0)
       (effects (font (size 1.778 1.778)))
     )
@@ -4632,7 +4634,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 134.62 0) (unit 1)
-    (uuid "8656c392-fa76-4e8a-8fe0-4b531f10ccb3")
+    (uuid "00000000-0000-0000-0000-00007fffffff")
     (property "Reference" "RR5" (id 0) (at 365.76 120.65 0)
       (effects (font (size 1.778 1.778)))
     )
@@ -4648,7 +4650,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 160.02 0) (unit 1)
-    (uuid "23b776db-1434-433c-8fe3-6efa97cecbf4")
+    (uuid "00000000-0000-0000-0000-00007fffffff")
     (property "Reference" "RR6" (id 0) (at 365.76 146.05 0)
       (effects (font (size 1.778 1.778)))
     )
@@ -4664,7 +4666,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 185.42 0) (unit 1)
-    (uuid "8c772074-8085-4a07-821d-a6e5eb3933bd")
+    (uuid "00000000-0000-0000-0000-00007fffffff")
     (property "Reference" "RR7" (id 0) (at 365.76 171.45 0)
       (effects (font (size 1.778 1.778)))
     )
@@ -4680,7 +4682,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 210.82 0) (unit 1)
-    (uuid "e8850359-c0ad-4267-88ee-ef15fa40fd68")
+    (uuid "00000000-0000-0000-0000-00007fffffff")
     (property "Reference" "RR8" (id 0) (at 365.76 196.85 0)
       (effects (font (size 1.778 1.778)))
     )
@@ -4696,7 +4698,7 @@
   )
 
   (symbol (lib_id "video_schlib:24C16") (at 146.05 242.57 0) (unit 1)
-    (uuid "843e0e62-2820-4093-8150-15a4d87bf10e")
+    (uuid "00000000-0000-0000-0000-00002f5f7e5c")
     (property "Reference" "U1" (id 0) (at 149.86 233.68 0)
       (effects (font (size 1.524 1.524)))
     )
@@ -4712,7 +4714,7 @@
   )
 
   (symbol (lib_id "video_schlib:BUSPCI-5V") (at 83.82 106.68 0) (unit 1)
-    (uuid "9c31255a-3e62-4210-ae7e-dd62b1d3c703")
+    (uuid "00000000-0000-0000-0000-0000269c6109")
     (property "Reference" "BUS1" (id 0) (at 83.82 25.4 0)
       (effects (font (size 1.524 1.524)))
     )
@@ -4728,7 +4730,7 @@
   )
 
   (symbol (lib_id "video_schlib:S5933_PQ160") (at 240.03 129.54 0) (unit 1)
-    (uuid "88f694de-8545-4119-a7dc-2076f7e309df")
+    (uuid "00000000-0000-0000-0000-000021fa8347")
     (property "Reference" "U11" (id 0) (at 240.03 72.39 0)
       (effects (font (size 1.524 1.524)))
     )

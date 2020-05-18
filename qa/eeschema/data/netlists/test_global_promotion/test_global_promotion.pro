@@ -247,5 +247,5 @@ dPairWidth=0.2
 dPairGap=0.25
 dPairViaGap=0.25
 [sheetnames]
-1=f4d3399c-e896-4680-b4af-6676ef6ff711:
-2=70020cab-52c8-4c36-b30a-e4d3087b4b82:Subcircuit
+1=dd57ce69-7dbc-45cf-9f11-a261dd5b9ef6:
+2=00000000-0000-0000-0000-00005e68e19b:Subcircuit

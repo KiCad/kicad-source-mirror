@@ -1,6 +1,8 @@
-(kicad_sch (version 20200310) (host eeschema "(5.99.0-1545-g9916f24fa)")
+(kicad_sch (version 20200512) (host eeschema "(5.99.0-1712-g5a9e69b14)")
 
-  (page "A4")
+  (page 1 3)
+
+  (paper "A4")
 
   (lib_symbols
     (symbol "Connector:Conn_01x03_Male" (pin_names hide)
@@ -64,7 +66,7 @@
   )
 
   (symbol (lib_id "Connector:Conn_01x03_Male") (at 91.44 58.42 0) (unit 1)
-    (uuid "8aa22f17-b4ec-45f7-a99f-b1a4a48d8810")
+    (uuid "00000000-0000-0000-0000-00005ccf482d")
     (property "Reference" "J1" (id 0) (at 91.44 53.34 0))
     (property "Value" "Conn_01x03_Male" (id 1) (at 91.44 63.5 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 91.44 58.42 0)
@@ -76,7 +78,7 @@
   )
 
   (symbol (lib_id "Connector:Conn_01x03_Male") (at 92.71 77.47 0) (unit 1)
-    (uuid "314ca3e2-5367-4068-881d-d9e2fe6226cb")
+    (uuid "00000000-0000-0000-0000-00005cc1686d")
     (property "Reference" "J2" (id 0) (at 92.71 72.39 0))
     (property "Value" "Conn_01x03_Male" (id 1) (at 92.71 82.55 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 92.71 77.47 0)
@@ -88,13 +90,13 @@
   )
 
   (sheet (at 134.62 71.12) (size 27.94 17.78)
-    (stroke (color 132 0 132 1))
+    (stroke (color 174 129 255 1))
     (fill (color 255 255 255 0.0000))
-    (uuid c553ce07-2a0e-4998-8847-480337617a8b)
-    (property "Reference" "Sheet5CC15EF8" (id 0) (at 134.62 70.4845 0)
+    (uuid 00000000-0000-0000-0000-00005cc15ef9)
+    (property "Sheet name" "Sheet5CC15EF8" (id 0) (at 134.62 70.4845 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
     )
-    (property "Value" "subsheet.kicad_sch" (id 1) (at 134.62 89.4085 0)
+    (property "Sheet file" "subsheet.kicad_sch" (id 1) (at 134.62 89.4085 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
     (pin "LIVE" input (at 134.62 74.93 180)
@@ -109,13 +111,13 @@
   )
 
   (sheet (at 134.62 96.52) (size 27.94 17.78)
-    (stroke (color 132 0 132 1))
+    (stroke (color 174 129 255 1))
     (fill (color 255 255 255 0.0000))
-    (uuid 5dfa4056-2305-40f4-b6b9-c726f6d4a7c1)
-    (property "Reference" "sheet5CC165F1" (id 0) (at 134.62 95.8845 0)
+    (uuid 00000000-0000-0000-0000-00005cc165f1)
+    (property "Sheet name" "sheet5CC165F1" (id 0) (at 134.62 95.8845 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
     )
-    (property "Value" "subsheet.kicad_sch" (id 1) (at 134.62 114.8085 0)
+    (property "Sheet file" "subsheet.kicad_sch" (id 1) (at 134.62 114.8085 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
     (pin "LIVE" input (at 134.62 100.33 180)
@@ -130,11 +132,11 @@
   )
 
   (symbol_instances
-    (path "/8aa22f17-b4ec-45f7-a99f-b1a4a48d8810" (reference "J1") (unit 1))
-    (path "/314ca3e2-5367-4068-881d-d9e2fe6226cb" (reference "J2") (unit 1))
-    (path "/c553ce07-2a0e-4998-8847-480337617a8b/0810afcf-3b0c-4698-aa30-b2cc44b3f43e" (reference "R1") (unit 1))
-    (path "/c553ce07-2a0e-4998-8847-480337617a8b/f1b5ef08-ab01-4ced-a2a0-f94e652f1a99" (reference "R2") (unit 1))
-    (path "/5dfa4056-2305-40f4-b6b9-c726f6d4a7c1/0810afcf-3b0c-4698-aa30-b2cc44b3f43e" (reference "R3") (unit 1))
-    (path "/5dfa4056-2305-40f4-b6b9-c726f6d4a7c1/f1b5ef08-ab01-4ced-a2a0-f94e652f1a99" (reference "R4") (unit 1))
+    (path "/00000000-0000-0000-0000-00005ccf482d" (reference "J1") (unit 1))
+    (path "/00000000-0000-0000-0000-00005cc1686d" (reference "J2") (unit 1))
+    (path "/00000000-0000-0000-0000-00005cc15ef9/00000000-0000-0000-0000-00005cc15f6f" (reference "R1") (unit 1))
+    (path "/00000000-0000-0000-0000-00005cc15ef9/00000000-0000-0000-0000-00005ce0545a" (reference "R2") (unit 1))
+    (path "/00000000-0000-0000-0000-00005cc165f1/00000000-0000-0000-0000-00005cc15f6f" (reference "R3") (unit 1))
+    (path "/00000000-0000-0000-0000-00005cc165f1/00000000-0000-0000-0000-00005ce0545a" (reference "R4") (unit 1))
   )
 )
