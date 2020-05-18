@@ -1199,7 +1199,6 @@ void SCH_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
         RefreshItem( aItem );
         lastBrightenedItemID = aItem->m_Uuid;
 
-        // JEY TODO: test this with pins and fields (and with rotated symbols) ....
         FocusOnLocation( aItem->GetFocusPosition() );
     }
 }

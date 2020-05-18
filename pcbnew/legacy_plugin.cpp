@@ -1735,8 +1735,6 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     // Check for a reasonable layer:
     // m_Layer must be >= FIRST_NON_COPPER_LAYER, but because microwave footprints
     // can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
-    // @todo: changes use of EDGE_MODULE these footprints and allows only
-    // m_Layer >= FIRST_NON_COPPER_LAYER
     if( layer < FIRST_LAYER || layer > LAST_NON_COPPER_LAYER )
         layer = SILKSCREEN_N_FRONT;
 

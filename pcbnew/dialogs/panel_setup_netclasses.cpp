@@ -146,7 +146,7 @@ static void netclassToGridRow( EDA_UNITS aUnits, wxGrid* aGrid, int aRow, const 
     SET_MILS_CELL( GRID_uVIADRILL, nc->GetuViaDrill() );
     SET_MILS_CELL( GRID_DIFF_PAIR_WIDTH, nc->GetDiffPairWidth() );
     SET_MILS_CELL( GRID_DIFF_PAIR_GAP, nc->GetDiffPairGap() );
-    // 6.0 TODO: SET_MILS_CELL( GRID_DIFF_PAIR_VIA_GAP, nc->GetDiffPairViaGap() );
+    SET_MILS_CELL( GRID_DIFF_PAIR_VIA_GAP, nc->GetDiffPairViaGap() );
 }
 
 
