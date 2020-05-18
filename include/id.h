@@ -113,6 +113,9 @@ enum main_id
     ID_OPT_TOOLBAR,
     ID_AUX_TOOLBAR,
 
+    // ID for the close button on the frame's infobar
+    ID_CLOSE_INFOBAR,
+
     ID_EDIT_HOTKEY,
     ID_NO_TOOL_SELECTED,
 

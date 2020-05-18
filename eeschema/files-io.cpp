@@ -55,6 +55,7 @@
 #include <tool/actions.h>
 #include <tools/sch_editor_control.h>
 #include <netlist.h>
+#include <widgets/wx_infobar.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName,
@@ -492,6 +493,15 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetScreen()->ClearDrawingState();
 
     UpdateTitle();
+
+    wxFileName fn = Prj().AbsolutePath( GetScreen()->GetFileName() );
+
+    if( fn.FileExists() && !fn.IsFileWritable() )
+    {
+        m_infoBar->RemoveAllButtons();
+        m_infoBar->AddCloseButton();
+        m_infoBar->ShowMessage( "Schematic file is read only.", wxICON_WARNING );
+    }
 
     // If requested, generate a netlist and exit immediately.
     // NOTE: This is intended as a developer-only feature for now, and can be removed in lieu of

@@ -87,6 +87,7 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <wx/wupdlock.h>
 #include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
+#include <widgets/wx_infobar.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -222,19 +223,30 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateOptToolbar();
     ReCreateMicrowaveVToolbar();
 
+    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
+
     m_auimgr.SetManagedWindow( this );
 
     // Horizontal items; layers 4 - 6
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top().Layer(4) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( m_mainToolBar,
+                      EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_auxiliaryToolBar,
+                      EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top().Layer(5) );
+    m_auimgr.AddPane( m_messagePanel,
+                      EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( m_infoBar,
+                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
 
     // Vertical items; layers 1 - 3
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    m_auimgr.AddPane( m_optionsToolBar,
+                      EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
 
-    m_auimgr.AddPane( m_microWaveToolBar, EDA_PANE().VToolbar().Name( "MicrowaveToolbar" ).Right().Layer(1) );
-    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
-    m_auimgr.AddPane( m_Layers, EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(3)
+    m_auimgr.AddPane( m_microWaveToolBar,
+                      EDA_PANE().VToolbar().Name( "MicrowaveToolbar" ).Right().Layer(2) );
+    m_auimgr.AddPane( m_drawToolBar,
+                      EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(3) );
+    m_auimgr.AddPane( m_Layers,
+                      EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(4)
                       .Caption( _( "Layers Manager" ) ).PaneBorder( false )
                       .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ) );
 
@@ -247,6 +259,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReFillLayerWidget();        // this is near end and after ReFillRender()
                                 // because contents establish size
     syncLayerWidgetLayer();
+
+    // We don't want the infobar displayed right away
+    m_auimgr.GetPane( "InfoBar" ).Hide();
 
     m_auimgr.Update();
     GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
@@ -697,6 +712,16 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 void PCB_EDIT_FRAME::onBoardLoaded()
 {
     UpdateTitle();
+
+    wxFileName fn = GetBoard()->GetFileName();
+
+    // Display a warning that the file is read only
+    if( fn.FileExists() && !fn.IsFileWritable() )
+    {
+        m_infoBar->RemoveAllButtons();
+        m_infoBar->AddCloseButton();
+        m_infoBar->ShowMessage( "Board file is read only.", wxICON_WARNING );
+    }
 
     // Re-create layers manager based on layer info in board
     ReFillLayerWidget();

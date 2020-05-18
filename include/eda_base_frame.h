@@ -616,6 +616,17 @@ public:
         Resizable( true );      // expand to fit available space
         return *this;
     }
+
+    /**
+     * Turn *this into a infobar for KiCad.
+     */
+    EDA_PANE& InfoBar()
+    {
+        CaptionVisible( false );
+        Movable( false );
+        Resizable( true );
+        return *this;
+    }
 };
 
 #endif  // EDA_BASE_FRAME_H_

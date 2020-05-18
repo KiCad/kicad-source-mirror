@@ -211,6 +211,7 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_busy_indicator.cpp
     widgets/wx_grid.cpp
     widgets/wx_angle_text.cpp
+    widgets/wx_infobar.cpp
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS

@@ -56,6 +56,7 @@
 #include <tools/pl_point_editor.h>
 #include <invoke_pl_editor_dialog.h>
 #include <tools/pl_editor_control.h>
+#include <widgets/wx_infobar.h>
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( PL_EDITOR_FRAME::OnCloseWindow )
@@ -124,6 +125,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateHToolbar();
     ReCreateVToolbar();
 
+    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
+
     wxWindow* stsbar = GetStatusBar();
     int dims[] = {
 
@@ -159,13 +162,18 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_propertiesPagelayout = new PROPERTIES_FRAME( this );
 
     // Horizontal items; layers 4 - 6
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( m_mainToolBar,
+                      EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_messagePanel,
+                      EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( m_infoBar,
+                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
 
     // Vertical items; layers 1 - 3
-    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
+    m_auimgr.AddPane( m_drawToolBar,
+                      EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
 
-    m_auimgr.AddPane( m_propertiesPagelayout, EDA_PANE().Palette().Name( "Props" ).Right().Layer(2)
+    m_auimgr.AddPane( m_propertiesPagelayout, EDA_PANE().Palette().Name( "Props" ).Right().Layer(3)
                       .Caption( _( "Properties" ) ).MinSize( m_propertiesPagelayout->GetMinSize() )
                       .BestSize( m_propertiesFrameWidth, -1 ) );
 
@@ -173,6 +181,9 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
+
+    // We don't want the infobar displayed right away
+    m_auimgr.GetPane( "InfoBar" ).Hide();
 
     m_auimgr.Update();
 
