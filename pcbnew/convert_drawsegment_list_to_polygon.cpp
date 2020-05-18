@@ -750,6 +750,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
         wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation )
 {
     PCB_TYPE_COLLECTOR  items;
+    bool                success = false;
 
     // Get all the DRAWSEGMENTS and module graphics into 'items',
     // then keep only those on layer == Edge_Cuts.
@@ -765,15 +766,17 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
             segList.push_back( static_cast< DRAWSEGMENT* >( items[ii] ) );
     }
 
-    bool success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText, aTolerance, aErrorLocation );
+    if( segList.size() )
+    {
+        success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText, aTolerance,
+                                           aErrorLocation );
+    }
 
     if( !success || !aOutlines.OutlineCount() )
     {
-        // Creates a valid polygon outline is not possible.
-        // So uses the board edge cuts bounding box to create a
-        // rectangular outline
-        // When no edge cuts items, build a contour
-        // from global bounding box
+        // Couldn't create a valid polygon outline.  Use the board edge cuts bounding box to
+        // create a rectangular outline, or, failing that, the bounding box of the items on
+        // the board.
 
         EDA_RECT bbbox = aBoard->GetBoardEdgesBoundingBox();
 

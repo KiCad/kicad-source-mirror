@@ -604,6 +604,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     /***********************************************/
     /* Phase 4: test DRC with to board edge        */
     /***********************************************/
+    if( m_board_outline_valid )
     {
         static DRAWSEGMENT dummyEdge;
         dummyEdge.SetLayer( Edge_Cuts );
@@ -651,7 +652,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 BOARD::IterateForward<BOARD_ITEM*>( m_pcb->Drawings(), inspector, nullptr, types );
 
                 int       actual = std::max( 0.0, sqrt( center2center_squared ) - halfWidth );
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_EDGE );
+                int       errorCode = ( aRefSeg->Type() == PCB_VIA_T ) ? DRCE_VIA_NEAR_EDGE
+                                                                       : DRCE_TRACK_NEAR_EDGE;
+                DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                               m_clearanceSource,

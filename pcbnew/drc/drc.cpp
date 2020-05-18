@@ -65,11 +65,11 @@ DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
         m_pcbEditorFrame( nullptr ),
         m_pcb( nullptr ),
+        m_board_outline_valid( false ),
         m_drcDialog( nullptr ),
         m_largestClearance( 0 )
 {
     // establish initial values for everything:
-    m_doPad2PadTest     = true;         // enable pad to pad clearance tests
     m_doUnconnectedTest = true;         // enable unconnected tests
     m_doZonesTest = false;              // disable zone to items clearance tests
     m_doKeepoutTest = true;             // enable keepout areas to items clearance tests
@@ -401,7 +401,10 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     m_largestClearance = bds.GetBiggestClearanceValue();
 
-    if( !bds.Ignore( DRCE_INVALID_OUTLINE ) )
+    if( !bds.Ignore( DRCE_INVALID_OUTLINE )
+        || !bds.Ignore( DRCE_TRACK_NEAR_EDGE )
+        || !bds.Ignore( DRCE_VIA_NEAR_EDGE )
+        || !bds.Ignore( DRCE_PAD_NEAR_EDGE ) )
     {
         if( aMessages )
         {
@@ -441,7 +444,9 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     }
 
     // test pad to pad clearances, nothing to do with tracks, vias or zones.
-    if( m_doPad2PadTest )
+    if( !bds.Ignore( DRCE_PAD_NEAR_EDGE )
+        || !bds.Ignore( DRCE_PAD_NEAR_PAD )
+        || !bds.Ignore( DRCE_HOLE_NEAR_PAD ) )
     {
         if( aMessages )
         {
@@ -449,7 +454,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
             wxSafeYield();
         }
 
-        testPad2Pad( commit );
+        testPadClearances( commit );
     }
 
     // test drilled holes
@@ -657,16 +662,17 @@ void DRC::updatePointers()
 }
 
 
-void DRC::testPad2Pad( BOARD_COMMIT& aCommit )
+void DRC::testPadClearances( BOARD_COMMIT& aCommit )
 {
-    std::vector<D_PAD*> sortedPads;
+    BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
+    std::vector<D_PAD*>    sortedPads;
 
     m_pcb->GetSortedPadListByXthenYCoord( sortedPads );
 
     if( sortedPads.empty() )
         return;
 
-    // find the max size of the pads (used to stop the test)
+    // find the max size of the pads (used to stop the pad-to-pad tests)
     int max_size = 0;
 
     for( D_PAD* pad : sortedPads )
@@ -688,9 +694,50 @@ void DRC::testPad2Pad( BOARD_COMMIT& aCommit )
     // Test the pads
     for( auto& pad : sortedPads )
     {
-        int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
+        if( !bds.Ignore( DRCE_PAD_NEAR_EDGE ) && m_board_outline_valid )
+        {
+            static DRAWSEGMENT dummyEdge;
+            dummyEdge.SetLayer( Edge_Cuts );
 
-        doPadToPadsDrc( aCommit, pad, &pad, listEnd, x_limit );
+            int minClearance = pad->GetClearance( &dummyEdge, &m_clearanceSource );
+
+            if( bds.m_CopperEdgeClearance > minClearance )
+            {
+                minClearance = bds.m_CopperEdgeClearance;
+                m_clearanceSource = _( "board edge" );
+            }
+
+            for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )
+            {
+                int actual;
+
+                if( !checkClearanceSegmToPad( *it, 0, pad, minClearance, &actual ) )
+                {
+                    actual = std::max( 0, actual );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_EDGE );
+
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                                  m_clearanceSource,
+                                  MessageTextFromValue( userUnits(), minClearance, true ),
+                                  MessageTextFromValue( userUnits(), actual, true ) );
+
+                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetItems( pad );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
+                    addMarkerToPcb( aCommit, marker );
+
+                    break;
+                }
+            }
+        }
+
+        if( !bds.Ignore( DRCE_PAD_NEAR_PAD ) || !bds.Ignore( DRCE_HOLE_NEAR_PAD ) )
+        {
+            int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
+
+            doPadToPadsDrc( aCommit, pad, &pad, listEnd, x_limit );
+        }
     }
 }
 
@@ -1070,8 +1117,13 @@ void DRC::testOutline( BOARD_COMMIT& aCommit )
     wxPoint error_loc( m_pcb->GetBoardEdgesBoundingBox().GetPosition() );
 
     m_board_outlines.RemoveAllContours();
+    m_board_outline_valid = false;
 
-    if( !m_pcb->GetBoardPolygonOutlines( m_board_outlines, nullptr, &error_loc ) )
+    if( m_pcb->GetBoardPolygonOutlines( m_board_outlines, nullptr, &error_loc ) )
+    {
+        m_board_outline_valid = true;
+    }
+    else
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_INVALID_OUTLINE );
 

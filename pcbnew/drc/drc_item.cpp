@@ -92,6 +92,8 @@ wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     case DRCE_TOO_SMALL_MICROVIA_DRILL: msg = _HKI( "Micro via drill too small" );          break;
     case DRCE_DRILLED_HOLES_TOO_CLOSE:  msg = _HKI( "Drilled holes too close together" );   break;
     case DRCE_TRACK_NEAR_EDGE:          msg = _HKI( "Track too close to board edge" );      break;
+    case DRCE_VIA_NEAR_EDGE:            msg = _HKI( "Via too close to board edge" );        break;
+    case DRCE_PAD_NEAR_EDGE:            msg = _HKI( "Pad too close to board edge" );        break;
     case DRCE_INVALID_OUTLINE:          msg = _HKI( "Board has malformed outline" );        break;
 
     case DRCE_NETCLASS_TRACKWIDTH:      msg = _HKI( "NetClass Track Width too small" );     break;

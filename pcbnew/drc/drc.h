@@ -52,6 +52,8 @@ enum PCB_DRC_CODE {
     DRCE_TRACK_SEGMENTS_TOO_CLOSE,          ///< 2 parallel track segments too close: segm ends between segref ends
     DRCE_TRACKS_CROSSING,                   ///< tracks are crossing
     DRCE_TRACK_NEAR_EDGE,                   ///< track too close to board edge
+    DRCE_VIA_NEAR_EDGE,                     ///< via too close to board edge
+    DRCE_PAD_NEAR_EDGE,                     ///< pad too close to board edge
     DRCE_PAD_NEAR_PAD,                      ///< pad too close to pad
     DRCE_PAD_NEAR_COPPER,                   ///< pad and copper graphic collide or are too close
     DRCE_ZONES_INTERSECT,                   ///< copper area outlines intersect
@@ -163,6 +165,7 @@ private:
     PCB_EDIT_FRAME*            m_pcbEditorFrame;   // The pcb frame editor which owns the board
     BOARD*                     m_pcb;
     SHAPE_POLY_SET             m_board_outlines;   // The board outline including cutouts
+    bool                       m_board_outline_valid;
     DIALOG_DRC*                m_drcDialog;
 
     std::vector<DRC_ITEM*>     m_unconnected;      // list of unconnected pads
@@ -214,7 +217,7 @@ private:
      */
     void testTracks( BOARD_COMMIT& aCommit, wxWindow * aActiveWindow, bool aShowProgressBar );
 
-    void testPad2Pad( BOARD_COMMIT& aCommit );
+    void testPadClearances( BOARD_COMMIT& aCommit );
 
     void testUnconnected();
 
