@@ -97,11 +97,21 @@ static const char* emptyString = "";
  */
 static void formatFill( const LIB_ITEM* aItem, OUTPUTFORMATTER& aFormatter, int aNestLevel )
 {
-    wxCHECK_RET( aItem && aItem->IsFillable() && aItem->GetFillMode() != NO_FILL,
-                 "Invalid fill item." );
+    wxCHECK_RET( aItem && aItem->IsFillable(), "Invalid fill item." );
 
-    aFormatter.Print( aNestLevel, "(fill (type %s))",
-                      aItem->GetFillMode() == FILLED_SHAPE ? "outline" : "background" );
+    const char* fillType;
+
+    switch( aItem->GetFillMode() )
+    {
+    case FILLED_SHAPE:              fillType = "outline";   break;
+    case FILLED_WITH_BG_BODYCOLOR:  fillType = "background";  break;
+    case NO_FILL:
+        KI_FALLTHROUGH;
+    default:
+        fillType = "none";
+    }
+
+    aFormatter.Print( aNestLevel, "(fill (type %s))", fillType );
 }
 
 
@@ -292,22 +302,13 @@ static void formatStroke( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aWidt
 {
     wxASSERT( aFormatter != nullptr );
 
-    aFormatter->Print( aNestLevel, "(stroke" );
-
-    if( !( aWidth == 0 ) )
-        aFormatter->Print( 0, " (width %s)", FormatInternalUnits( aWidth ).c_str() );
-
-    if( !( aStyle == PLOT_DASH_TYPE::DEFAULT || aStyle == PLOT_DASH_TYPE::SOLID ) )
-        aFormatter->Print( 0, " (type %s)", TO_UTF8( getLineStyleToken( aStyle ) ) );
-
-    if( !( aColor == COLOR4D::UNSPECIFIED ) )
-        aFormatter->Print( 0, " (color %d %d %d %s)",
-                           KiROUND( aColor.r * 255.0 ),
-                           KiROUND( aColor.g * 255.0 ),
-                           KiROUND( aColor.b * 255.0 ),
-                           Double2Str( aColor.a ).c_str() );
-
-    aFormatter->Print( 0, ")" );
+    aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s) (color %d %d %d %s))",
+                       FormatInternalUnits( aWidth ).c_str(),
+                       TO_UTF8( getLineStyleToken( aStyle ) ),
+                       KiROUND( aColor.r * 255.0 ),
+                       KiROUND( aColor.g * 255.0 ),
+                       KiROUND( aColor.b * 255.0 ),
+                       Double2Str( aColor.a ).c_str() );
 }
 
 
@@ -744,10 +745,12 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
             for( size_t i = 0; i < instances.GetCount(); i++ )
             {
-                m_out->Print( 2, "(path %s (reference %s) (unit %d))\n",
-                              m_out->Quotew( instances[i].GetPath() ).c_str(),
+                m_out->Print( 2, "(path %s\n",
+                              m_out->Quotew( instances[i].GetPath() ).c_str() );
+                m_out->Print( 3, "(reference %s) (unit %d)\n",
                               m_out->Quotew( instances[i].GetRef() ).c_str(),
                               instances[i].GetUnit() );
+                m_out->Print( 2, ")\n" );
             }
         }
 
@@ -1054,25 +1057,18 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                   FormatInternalUnits( aSheet->GetSize().GetWidth() ).c_str(),
                   FormatInternalUnits( aSheet->GetSize().GetHeight() ).c_str() );
 
-    if( !aSheet->UsesDefaultStroke() )
-    {
-        formatStroke( m_out, aNestLevel + 1, aSheet->GetBorderWidth(), PLOT_DASH_TYPE::SOLID,
-                      aSheet->GetBorderColor() );
-        m_out->Print( 0, "\n" );
-    }
+    formatStroke( m_out, aNestLevel + 1, aSheet->GetBorderWidth(), PLOT_DASH_TYPE::SOLID,
+                  aSheet->GetBorderColor() );
 
-    if( !( aSheet->GetBackgroundColor() == COLOR4D::UNSPECIFIED ) )
-    {
-        m_out->Print( aNestLevel + 1, "(fill (color %d %d %d %0.4f))",
-                      KiROUND( aSheet->GetBackgroundColor().r * 255.0 ),
-                      KiROUND( aSheet->GetBackgroundColor().g * 255.0 ),
-                      KiROUND( aSheet->GetBackgroundColor().b * 255.0 ),
-                      aSheet->GetBackgroundColor().a );
-        m_out->Print( 0, "\n" );
-    }
-
-    m_out->Print( aNestLevel + 1, "(uuid %s)", TO_UTF8( aSheet->m_Uuid.AsString() ) );
     m_out->Print( 0, "\n" );
+
+    m_out->Print( aNestLevel + 1, "(fill (color %d %d %d %0.4f))",
+                  KiROUND( aSheet->GetBackgroundColor().r * 255.0 ),
+                  KiROUND( aSheet->GetBackgroundColor().g * 255.0 ),
+                  KiROUND( aSheet->GetBackgroundColor().b * 255.0 ),
+                  aSheet->GetBackgroundColor().a );
+
+    m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aSheet->m_Uuid.AsString() ) );
 
     m_fieldId = SHEET_MANDATORY_FIELDS;
 
@@ -1083,27 +1079,18 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
     {
-        m_out->Print( aNestLevel + 1, "(pin %s %s (at %s %s %s)",
+        m_out->Print( aNestLevel + 1, "(pin %s %s (at %s %s %s)\n",
                       EscapedUTF8( pin->GetText() ).c_str(),
                       getSheetPinShapeToken( pin->GetShape() ),
                       FormatInternalUnits( pin->GetPosition().x ).c_str(),
                       FormatInternalUnits( pin->GetPosition().y ).c_str(),
                       FormatAngle( getSheetPinAngle( pin->GetEdge() ) * 10.0 ).c_str() );
 
-        if( !pin->IsDefaultFormatting()
-          || ( pin->GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
-        {
-            m_out->Print( 0, "\n" );
-            pin->Format( m_out, aNestLevel + 1, 0 );
-            m_out->Print( aNestLevel + 1, ")\n" );  // Closes pin token with font effects.
-        }
-        else
-        {
-            m_out->Print( 0, ")\n" );               // Closes pin token without font effects.
-        }
+        pin->Format( m_out, aNestLevel + 1, 0 );
+        m_out->Print( aNestLevel + 1, ")\n" );  // Closes pin token with font effects.
     }
 
-    m_out->Print( aNestLevel, ")\n" );              // Closes sheet token.
+    m_out->Print( aNestLevel, ")\n" );          // Closes sheet token.
 }
 
 
@@ -1164,21 +1151,17 @@ void SCH_SEXPR_PLUGIN::saveLine( SCH_LINE* aLine, int aNestLevel )
     default:           lineType = "polyline";  break;
     }
 
-    m_out->Print( aNestLevel, "(%s (pts (xy %s %s) (xy %s %s))",
+    m_out->Print( aNestLevel, "(%s (pts (xy %s %s) (xy %s %s))\n",
                   TO_UTF8( lineType ),
                   FormatInternalUnits( aLine->GetStartPoint().x ).c_str(),
                   FormatInternalUnits( aLine->GetStartPoint().y ).c_str(),
                   FormatInternalUnits( aLine->GetEndPoint().x ).c_str(),
                   FormatInternalUnits( aLine->GetEndPoint().y ).c_str() );
 
-    if( !aLine->UsesDefaultStroke() )
-    {
-        m_out->Print( 0, " " );
-        formatStroke( m_out, 0, aLine->GetLineSize(), aLine->GetLineStyle(),
-                      aLine->GetLineColor() );
-    }
-
-    m_out->Print( 0, ")\n" );
+    formatStroke( m_out, aNestLevel + 1, aLine->GetLineSize(), aLine->GetLineStyle(),
+                  aLine->GetLineColor() );
+    m_out->Print( 0, "\n" );
+    m_out->Print( aNestLevel, ")\n" );
 }
 
 
@@ -1220,17 +1203,9 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
                       FormatAngle( aText->GetTextAngle() ).c_str() );
     }
 
-    if( !aText->IsDefaultFormatting()
-      || ( aText->GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
-    {
-        m_out->Print( 0, "\n" );
-        aText->Format( m_out, aNestLevel, 0 );
-        m_out->Print( aNestLevel, ")\n" );   // Closes text token with font effects.
-    }
-    else
-    {
-        m_out->Print( 0, ")\n" );            // Closes text token without font effects.
-    }
+    m_out->Print( 0, "\n" );
+    aText->Format( m_out, aNestLevel, 0 );
+    m_out->Print( aNestLevel, ")\n" );   // Closes text token.
 }
 
 
@@ -1726,35 +1701,13 @@ void SCH_SEXPR_PLUGIN_CACHE::saveArc( LIB_ARC* aArc,
                       static_cast<double>( x1 ) / 10.0,
                       static_cast<double>( x2 ) / 10.0 );
 
-    bool needsSpace = false;
-    bool onNewLine = false;
+    aFormatter.Print( 0, "\n" );
+    aFormatter.Print( aNestLevel + 1, "(stroke (width %s)) ",
+                      FormatInternalUnits( aArc->GetWidth() ).c_str() );
 
-    if( aArc->GetWidth() != 0 && aArc->GetWidth() != Mils2iu( DEFAULT_LINE_THICKNESS ) )
-    {
-        aFormatter.Print( 0, "\n" );
-        aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
-                          FormatInternalUnits( aArc->GetWidth() ).c_str() );
-        needsSpace = true;
-        onNewLine = true;
-    }
-
-    if( aArc->GetFillMode() != NO_FILL )
-    {
-        if( !onNewLine || needsSpace )
-            aFormatter.Print( 0, " " );
-
-        formatFill( static_cast< LIB_ITEM* >( aArc ), aFormatter, 0 );
-    }
-
-    if( onNewLine )
-    {
-        aFormatter.Print( 0, "\n" );
-        aFormatter.Print( aNestLevel, ")\n" );
-    }
-    else
-    {
-        aFormatter.Print( 0, ")\n" );
-    }
+    formatFill( static_cast< LIB_ITEM* >( aArc ), aFormatter, 0 );
+    aFormatter.Print( 0, "\n" );
+    aFormatter.Print( aNestLevel, ")\n" );
 }
 
 
@@ -1800,33 +1753,11 @@ void SCH_SEXPR_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
         aFormatter.Print( aNestLevel + 1, ")\n" );  // Closes pts token with multiple lines.
     }
 
-    bool needsSpace = false;
+    aFormatter.Print( aNestLevel + 1, "(stroke (width %s)) ",
+                      FormatInternalUnits( aBezier->GetWidth() ).c_str() );
 
-    if( aBezier->GetWidth() != 0 && aBezier->GetWidth() != Mils2iu( DEFAULT_LINE_THICKNESS ) )
-    {
-        aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
-                          FormatInternalUnits( aBezier->GetWidth() ).c_str() );
-        needsSpace = true;
-
-        if( aBezier->GetFillMode() == NO_FILL )
-            aFormatter.Print( 0, "\n" );
-    }
-
-    if( aBezier->GetFillMode() != NO_FILL )
-    {
-        if( needsSpace )
-        {
-            aFormatter.Print( 0, " " );
-            formatFill( static_cast< LIB_ITEM* >( aBezier ), aFormatter, 0 );
-        }
-        else
-        {
-            formatFill( static_cast< LIB_ITEM* >( aBezier ), aFormatter, aNestLevel + 1 );
-        }
-
-        aFormatter.Print( 0, "\n" );
-    }
-
+    formatFill( static_cast< LIB_ITEM* >( aBezier ), aFormatter, 0 );
+    aFormatter.Print( 0, "\n" );
     aFormatter.Print( aNestLevel, ")\n" );
 }
 
@@ -1837,23 +1768,13 @@ void SCH_SEXPR_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle,
 {
     wxCHECK_RET( aCircle && aCircle->Type() == LIB_CIRCLE_T, "Invalid LIB_CIRCLE object." );
 
-    aFormatter.Print( aNestLevel, "(circle (center %s %s) (radius %s)",
+    aFormatter.Print( aNestLevel, "(circle (center %s %s) (radius %s) (stroke (width %s)) ",
                       FormatInternalUnits( aCircle->GetPosition().x ).c_str(),
                       FormatInternalUnits( aCircle->GetPosition().y ).c_str(),
-                      FormatInternalUnits( aCircle->GetRadius() ).c_str() );
+                      FormatInternalUnits( aCircle->GetRadius() ).c_str(),
+                      FormatInternalUnits( aCircle->GetWidth() ).c_str() );
 
-    if( aCircle->GetWidth() != 0 && aCircle->GetWidth() != Mils2iu( DEFAULT_LINE_THICKNESS ) )
-    {
-        aFormatter.Print( 0, " (stroke (width %s))",
-                          FormatInternalUnits( aCircle->GetWidth() ).c_str() );
-    }
-
-    if( aCircle->GetFillMode() != NO_FILL )
-    {
-        aFormatter.Print( 0, " " );
-        formatFill( static_cast< LIB_ITEM* >( aCircle ), aFormatter, 0 );
-    }
-
+    formatFill( static_cast< LIB_ITEM* >( aCircle ), aFormatter, 0 );
     aFormatter.Print( 0, ")\n" );
 }
 
@@ -1864,7 +1785,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
 {
     wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
 
-    aFormatter.Print( aNestLevel, "(property %s %s (id %d) (at %s %s %g)",
+    aFormatter.Print( aNestLevel, "(property %s %s (id %d) (at %s %s %g)\n",
                       aFormatter.Quotew( aField->GetName() ).c_str(),
                       aFormatter.Quotew( aField->GetText() ).c_str(),
                       aField->GetId(),
@@ -1872,17 +1793,8 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
                       FormatInternalUnits( aField->GetPosition().y ).c_str(),
                       static_cast<double>( aField->GetTextAngle() ) / 10.0 );
 
-    if( aField->IsDefaultFormatting()
-      && ( aField->GetTextHeight() == Mils2iu( DEFAULT_SIZE_TEXT ) ) )
-    {
-        aFormatter.Print( 0, ")\n" );           // Close property token if no font effects.
-    }
-    else
-    {
-        aFormatter.Print( 0, "\n" );
-        aField->Format( &aFormatter, aNestLevel, 0 );
-        aFormatter.Print( aNestLevel, ")\n" );  // Close property token.
-    }
+    aField->Format( &aFormatter, aNestLevel, 0 );
+    aFormatter.Print( aNestLevel, ")\n" );
 }
 
 
@@ -1902,47 +1814,23 @@ void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
                       FormatAngle( getPinAngle( aPin->GetOrientation() ) * 10.0 ).c_str(),
                       FormatInternalUnits( aPin->GetLength() ).c_str() );
 
-    int nestLevel = 0;
-
-    if( aPin->GetNameTextSize() != Mils2iu( DEFAULT_PINNAME_SIZE )
-      || aPin->GetNumberTextSize() != Mils2iu( DEFAULT_PINNUM_SIZE ) )
-    {
-        aFormatter.Print( 0, "\n" );
-        aFormatter.Print( aNestLevel + 1, "(name %s",
-                          aFormatter.Quotew( aPin->GetName() ).c_str() );
-
-        // This follows the EDA_TEXT effects formatting for future expansion.
-        if( aPin->GetNameTextSize() != Mils2iu( DEFAULT_PINNAME_SIZE ) )
-            aFormatter.Print( 0, " (effects (font (size %s %s)))",
-                              FormatInternalUnits( aPin->GetNameTextSize() ).c_str(),
-                              FormatInternalUnits( aPin->GetNameTextSize() ).c_str() );
-
-        aFormatter.Print( 0, ")\n" );
-        aFormatter.Print( aNestLevel + 1, "(number %s",
-                          aFormatter.Quotew( aPin->GetNumber() ).c_str() );
-
-        // This follows the EDA_TEXT effects formatting for future expansion.
-        if( aPin->GetNumberTextSize() != Mils2iu( DEFAULT_PINNUM_SIZE ) )
-            aFormatter.Print( 0, " (effects (font (size %s %s)))",
-                              FormatInternalUnits( aPin->GetNumberTextSize() ).c_str(),
-                              FormatInternalUnits( aPin->GetNumberTextSize() ).c_str() );
-        aFormatter.Print( 0, ")\n" );
-        nestLevel = aNestLevel + 1;
-    }
-    else
-    {
-        aFormatter.Print( 0, " (name %s) (number %s)",
-                          aFormatter.Quotew( aPin->GetName() ).c_str(),
-                          aFormatter.Quotew( aPin->GetNumber() ).c_str() );
-    }
-
     if( !aPin->IsVisible() )
-        aFormatter.Print( nestLevel, " hide" );
+        aFormatter.Print( 0, " hide\n" );
+    else
+        aFormatter.Print( 0, "\n" );
 
-    if( nestLevel )
-        nestLevel -= 1;
+    // This follows the EDA_TEXT effects formatting for future expansion.
+    aFormatter.Print( aNestLevel + 1, "(name %s (effects (font (size %s %s))))\n",
+                      aFormatter.Quotew( aPin->GetName() ).c_str(),
+                      FormatInternalUnits( aPin->GetNameTextSize() ).c_str(),
+                      FormatInternalUnits( aPin->GetNameTextSize() ).c_str() );
 
-    aFormatter.Print( nestLevel, ")\n" );
+    aFormatter.Print( aNestLevel + 1, "(number %s (effects (font (size %s %s))))\n",
+                      aFormatter.Quotew( aPin->GetNumber() ).c_str(),
+                      FormatInternalUnits( aPin->GetNumberTextSize() ).c_str(),
+                      FormatInternalUnits( aPin->GetNumberTextSize() ).c_str() );
+
+    aFormatter.Print( aNestLevel, ")\n" );
 }
 
 
@@ -1988,33 +1876,10 @@ void SCH_SEXPR_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
         aFormatter.Print( aNestLevel + 1, ")\n" );  // Closes pts token with multiple lines.
     }
 
-    bool needsSpace = false;
-
-    if( aPolyLine->GetWidth() != 0 && aPolyLine->GetWidth() != Mils2iu( DEFAULT_LINE_THICKNESS ) )
-    {
-        aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
-                          FormatInternalUnits( aPolyLine->GetWidth() ).c_str() );
-        needsSpace = true;
-
-        if( aPolyLine->GetFillMode() == NO_FILL )
-            aFormatter.Print( 0, "\n" );
-    }
-
-    if( aPolyLine->GetFillMode() != NO_FILL )
-    {
-        if( needsSpace )
-        {
-            aFormatter.Print( 0, " " );
-            formatFill( static_cast< LIB_ITEM* >( aPolyLine ), aFormatter, 0 );
-        }
-        else
-        {
-            formatFill( static_cast< LIB_ITEM* >( aPolyLine ), aFormatter, aNestLevel + 1 );
-        }
-
-        aFormatter.Print( 0, "\n" );
-    }
-
+    aFormatter.Print( aNestLevel + 1, "(stroke (width %s)) ",
+                      FormatInternalUnits( aPolyLine->GetWidth() ).c_str() );
+    formatFill( static_cast< LIB_ITEM* >( aPolyLine ), aFormatter, 0 );
+    aFormatter.Print( 0, "\n" );
     aFormatter.Print( aNestLevel, ")\n" );
 }
 
@@ -2026,30 +1891,16 @@ void SCH_SEXPR_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
     wxCHECK_RET( aRectangle && aRectangle->Type() == LIB_RECTANGLE_T,
                  "Invalid LIB_RECTANGLE object." );
 
-    aFormatter.Print( aNestLevel, "(rectangle (start %s %s) (end %s %s)",
+    aFormatter.Print( aNestLevel, "(rectangle (start %s %s) (end %s %s)\n",
                       FormatInternalUnits( aRectangle->GetPosition().x ).c_str(),
                       FormatInternalUnits( aRectangle->GetPosition().y ).c_str(),
                       FormatInternalUnits( aRectangle->GetEnd().x ).c_str(),
                       FormatInternalUnits( aRectangle->GetEnd().y ).c_str() );
-
-    bool needsSpace = false;
-
-    if( aRectangle->GetWidth() != 0 && aRectangle->GetWidth() != Mils2iu( DEFAULT_LINE_THICKNESS ) )
-    {
-        aFormatter.Print( 0, " (stroke (width %s))",
-                          FormatInternalUnits( aRectangle->GetWidth() ).c_str() );
-        needsSpace = true;
-    }
-
-    if( aRectangle->GetFillMode() != NO_FILL )
-    {
-        if( needsSpace )
-            aFormatter.Print( 0, " " );
-
-        formatFill( static_cast< LIB_ITEM* >( aRectangle ), aFormatter, 0 );
-    }
-
-    aFormatter.Print( 0, ")\n" );
+    aFormatter.Print( aNestLevel + 1, "(stroke (width %s)) ",
+                      FormatInternalUnits( aRectangle->GetWidth() ).c_str() );
+    formatFill( static_cast< LIB_ITEM* >( aRectangle ), aFormatter, 0 );
+    aFormatter.Print( 0, "\n" );
+    aFormatter.Print( aNestLevel, ")\n" );
 }
 
 
