@@ -596,8 +596,6 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SC
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
     SCH_SHEET*  sheet;
 
-    m_schematic = aSchematic;
-
     wxFileName fn = aFileName;
 
     // Unfortunately child sheet file names the legacy schematic file format are not fully
@@ -630,6 +628,8 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SC
 
     m_currentPath.push( m_path );
     init( aKiway, aProperties );
+
+    m_schematic = aSchematic;
 
     if( aAppendToMe == NULL )
     {
