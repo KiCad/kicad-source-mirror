@@ -472,7 +472,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
         aDest->Flip( aDest->GetPosition(), m_Settings->m_FlipLeftRight );
 
     if( aDest->GetOrientation() != aSrc->GetOrientation() )
-        aDest->Rotate( aDest->GetPosition(), aSrc->GetOrientation() );
+        aDest->SetOrientation( aSrc->GetOrientation() );
 
     aDest->SetLocked( aSrc->IsLocked() );
 

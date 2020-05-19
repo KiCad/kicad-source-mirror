@@ -1729,12 +1729,16 @@ void SPECCTRA_DB::exportNETCLASS( const NETCLASSPTR& aNetClass, BOARD* aBoard )
 
 void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
 {
+    // DSN Images (=KiCad MODULES and pads) must be presented from the
+    // top view.
+    // Note: to export footprints, the footprints must be flipped around the X axis,
+    // otherwise the rotation angle is not good
     for( auto module : aBoard->Modules() )
     {
         module->SetFlag( 0 );
         if( module->GetLayer() == B_Cu )
         {
-            module->Flip( module->GetPosition(), aBoard->GeneralSettings().m_FlipLeftRight );
+            module->Flip( module->GetPosition(), false );
             module->SetFlag( 1 );
         }
     }
@@ -1750,11 +1754,12 @@ void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
 
     // DSN Images (=KiCad MODULES and pads) must be presented from the
     // top view.  Restore those that were flipped.
+    // Note: to export footprints, the footprints were flipped around the X axis,
     for( auto module : aBoard->Modules() )
     {
         if( module->GetFlag() )
         {
-            module->Flip( module->GetPosition(), aBoard->GeneralSettings().m_FlipLeftRight );
+            module->Flip( module->GetPosition(), false );
             module->SetFlag( 0 );
         }
     }
