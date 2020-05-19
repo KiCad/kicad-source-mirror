@@ -409,13 +409,14 @@ SCH_SEXPR_PLUGIN::~SCH_SEXPR_PLUGIN()
 
 void SCH_SEXPR_PLUGIN::init( KIWAY* aKiway, const PROPERTIES* aProperties )
 {
-    m_version = 0;
-    m_rootSheet = NULL;
-    m_props = aProperties;
-    m_kiway = aKiway;
-    m_cache = NULL;
-    m_out = NULL;
-    m_fieldId = 100;    // number arbitrarily > MANDATORY_FIELDS or SHEET_MANDATORY_FIELDS
+    m_version   = 0;
+    m_rootSheet = nullptr;
+    m_props     = aProperties;
+    m_kiway     = aKiway;
+    m_cache     = nullptr;
+    m_out       = nullptr;
+    m_fieldId   = 100; // number arbitrarily > MANDATORY_FIELDS or SHEET_MANDATORY_FIELDS
+    m_schematic = nullptr;
 }
 
 

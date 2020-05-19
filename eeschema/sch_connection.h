@@ -63,6 +63,8 @@ class SCH_CONNECTION
 public:
     SCH_CONNECTION( SCH_ITEM* aParent = nullptr, SCH_SHEET_PATH aPath = SCH_SHEET_PATH() );
 
+    SCH_CONNECTION( CONNECTION_GRAPH* aGraph );
+
     ~SCH_CONNECTION()
     {}
 

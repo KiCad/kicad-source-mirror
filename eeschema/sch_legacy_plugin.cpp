@@ -578,12 +578,13 @@ SCH_LEGACY_PLUGIN::~SCH_LEGACY_PLUGIN()
 
 void SCH_LEGACY_PLUGIN::init( KIWAY* aKiway, const PROPERTIES* aProperties )
 {
-    m_version = 0;
-    m_rootSheet = NULL;
-    m_props = aProperties;
-    m_kiway = aKiway;
-    m_cache = NULL;
-    m_out = NULL;
+    m_version   = 0;
+    m_rootSheet = nullptr;
+    m_props     = aProperties;
+    m_kiway     = aKiway;
+    m_cache     = nullptr;
+    m_out       = nullptr;
+    m_schematic = nullptr;
 }
 
 
@@ -640,6 +641,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SC
 
         // If we got here, the schematic loaded successfully.
         sheet = newSheet.release();
+        m_rootSheet = nullptr;         // Quiet Coverity warning.
     }
     else
     {

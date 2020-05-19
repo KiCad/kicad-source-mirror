@@ -1990,7 +1990,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
 
     SCH_ITEM* net_item = nullptr;
     SCH_ITEM* bus_item = nullptr;
-    SCH_CONNECTION conn;
+    SCH_CONNECTION conn( this );
 
     for( auto item : aSubgraph->m_items )
     {

@@ -59,7 +59,8 @@ class DRC_SELECTOR
 {
 public:
     DRC_SELECTOR() :
-            m_Priority( 1 )
+            m_Priority( 1 ),
+            m_Rule( nullptr )
     { }
 
 public:

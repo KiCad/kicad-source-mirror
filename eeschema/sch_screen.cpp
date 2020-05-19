@@ -1294,7 +1294,12 @@ void SCH_SCREENS::ClearAnnotation()
 
 void SCH_SCREENS::ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetPathList )
 {
-    SCHEMATIC* sch = GetFirst()->Schematic();
+    SCH_SCREEN* first = GetFirst();
+
+    if( !first )
+        return;
+
+    SCHEMATIC* sch = first->Schematic();
 
     wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::ClearAnnotationOfNewSheetPaths" );
 
@@ -1419,7 +1424,12 @@ void SCH_SCREENS::UpdateSymbolLinks( REPORTER* aReporter )
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
         screen->UpdateSymbolLinks( aReporter );
 
-    SCHEMATIC* sch = GetFirst()->Schematic();
+    SCH_SCREEN* first = GetFirst();
+
+    if( !first )
+        return;
+
+    SCHEMATIC* sch = first->Schematic();
 
     wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::UpdateSymbolLinks" );
 
@@ -1571,7 +1581,12 @@ bool SCH_SCREENS::CanCauseCaseSensitivityIssue( const wxString& aSchematicFileNa
 
 void SCH_SCREENS::BuildClientSheetPathList()
 {
-    SCHEMATIC* sch = GetFirst()->Schematic();
+    SCH_SCREEN* first = GetFirst();
+
+    if( !first )
+        return;
+
+    SCHEMATIC* sch = first->Schematic();
 
     wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::BuildClientSheetPathList" );
 

@@ -33,11 +33,12 @@ struct PRINTOUT_SETTINGS
     PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
         : m_pageInfo( aPageInfo )
     {
-        m_scale      = 1.0;
-        m_titleBlock = false;
-        m_blackWhite = true;
-        m_pageCount  = 0;
-        m_background = false;
+        m_scale         = 1.0;
+        m_titleBlock    = false;
+        m_blackWhite    = true;
+        m_pageCount     = 0;
+        m_background    = false;
+        m_colorSettings = nullptr;
     }
 
     virtual ~PRINTOUT_SETTINGS()

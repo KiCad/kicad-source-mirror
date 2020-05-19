@@ -503,7 +503,9 @@ RESCUER::RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic, SCH_SHEET_PATH* aCur
 
     wxASSERT( m_schematic );
 
-    get_components( m_schematic, m_components );
+    if( m_schematic )
+        get_components( m_schematic, m_components );
+
     m_prj = &aProject;
     m_currentSheet = aCurrentSheet;
     m_galBackEndType = aGalBackEndType;

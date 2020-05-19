@@ -60,7 +60,17 @@
 
 SCH_CONNECTION::SCH_CONNECTION( SCH_ITEM* aParent, SCH_SHEET_PATH aPath ) :
         m_sheet( aPath ),
-        m_parent( aParent )
+        m_parent( aParent ),
+        m_graph( nullptr )
+{
+    Reset();
+}
+
+
+SCH_CONNECTION::SCH_CONNECTION( CONNECTION_GRAPH* aGraph ) :
+        m_sheet( SCH_SHEET_PATH() ),
+        m_parent( nullptr ),
+        m_graph( aGraph )
 {
     Reset();
 }
