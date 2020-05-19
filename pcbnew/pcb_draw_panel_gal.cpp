@@ -361,7 +361,7 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
 void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
                                           std::vector<MSG_PANEL_ITEM>& aList )
 {
-    BOARD* board = static_cast<PCB_BASE_FRAME*>( m_parent )->GetBoard();
+    BOARD* board = static_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() )->GetBoard();
     wxString txt;
     int viasCount = 0;
     int trackSegmentsCount = 0;
@@ -396,7 +396,7 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
 void PCB_DRAW_PANEL_GAL::OnShow()
 {
-    PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
+    PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
 
     try
     {
@@ -406,7 +406,7 @@ void PCB_DRAW_PANEL_GAL::OnShow()
     catch( const std::runtime_error& e )
     {
         // Fallback to software renderer
-        DisplayError( frame, e.what() );
+        DisplayError( GetParent(), e.what() );
         SwitchBackend( GAL_TYPE_CAIRO );
 
         if( frame )

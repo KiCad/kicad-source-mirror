@@ -96,7 +96,7 @@ void GERBVIEW_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
 void GERBVIEW_DRAW_PANEL_GAL::OnShow()
 {
-    GERBVIEW_FRAME* frame = dynamic_cast<GERBVIEW_FRAME*>( GetParent() );
+    GERBVIEW_FRAME* frame = dynamic_cast<GERBVIEW_FRAME*>( GetParentEDAFrame() );
 
     if( frame )
     {
@@ -118,7 +118,7 @@ bool GERBVIEW_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     // after switching to opengl. Clearing m_view and rebuild it is much faster
     if( aGalType == GAL_TYPE_OPENGL )
     {
-        GERBVIEW_FRAME* frame = dynamic_cast<GERBVIEW_FRAME*>( GetParent() );
+        GERBVIEW_FRAME* frame = dynamic_cast<GERBVIEW_FRAME*>( GetParentEDAFrame() );
 
         if( frame )
         {

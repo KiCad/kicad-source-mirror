@@ -52,12 +52,11 @@
 
 SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                 const wxPoint& aPosition, const wxSize& aSize,
-                                KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
-    EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType ),
-    m_parent( aParentWindow )
+                                KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType )
+        : EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType )
 {
     m_currentCursor = wxCURSOR_ARROW;
-    m_view = new KIGFX::SCH_VIEW( true, dynamic_cast<SCH_BASE_FRAME*>( aParentWindow ) );
+    m_view = new KIGFX::SCH_VIEW( true, dynamic_cast<SCH_BASE_FRAME*>( GetParentEDAFrame() ) );
     m_view->SetGAL( m_gal );
 
     m_gal->SetWorldUnitLength( SCH_WORLD_UNIT );
@@ -66,7 +65,7 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
 
     COLOR_SETTINGS* cs = nullptr;
 
-    if( auto frame = dynamic_cast<SCH_BASE_FRAME*>( aParentWindow ) )
+    if( auto frame = dynamic_cast<SCH_BASE_FRAME*>( GetParentEDAFrame() ) )
         cs = frame->GetColorSettings();
     else
         cs = Pgm().GetSettingsManager().GetColorSettings();
@@ -145,7 +144,7 @@ bool SCH_DRAW_PANEL::SwitchBackend( GAL_TYPE aGalType )
 
     // Keep grid size and grid visibility:
     m_gal->SetGridSize( grid_size );
-    SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( GetParent() );
+    SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( GetParentEDAFrame() );
 
     if( frame )
         m_gal->SetGridVisibility( frame->IsGridVisible() );
@@ -190,7 +189,7 @@ KIGFX::SCH_VIEW* SCH_DRAW_PANEL::GetView() const
 
 void SCH_DRAW_PANEL::OnShow()
 {
-    SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( GetParent() );
+    SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( GetParentEDAFrame() );
 
     try
     {

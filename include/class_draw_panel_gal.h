@@ -60,8 +60,17 @@ public:
         GAL_TYPE_LAST           ///< Sentinel, do not use as a parameter
     };
 
-    EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,
-                        const wxSize& aSize, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
+    /**
+     * Create a drawing panel that is contained inside \p aParentWindow.
+     *
+     * If \p aParentWindow is not an EDA frame, a search through all the parents
+     * of the parent window will be done to find the frame.
+     *
+     * @param aParentWindow is the window immeidately containing this panel
+     */
+    EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
+                        const wxPoint& aPosition, const wxSize& aSize,
+                        KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
                         GAL_TYPE aGalType = GAL_TYPE_OPENGL );
     ~EDA_DRAW_PANEL_GAL();
 
@@ -206,16 +215,16 @@ protected:
     void onShowTimer( wxTimerEvent& aEvent );
     void onSetCursor( wxSetCursorEvent& event );
 
-    static const int MinRefreshPeriod = 17;             ///< 60 FPS.
+    static const int MinRefreshPeriod = 17;      ///< 60 FPS.
 
-    wxCursor                 m_currentCursor;    /// Current mouse cursor shape id.
+    wxCursor                 m_currentCursor;    ///< Current mouse cursor shape id.
 
-    wxWindow*                m_parent;           /// Pointer to the parent window
-    EDA_DRAW_FRAME*          m_edaFrame;         /// Parent EDA_DRAW_FRAME (if available)
+    wxWindow*                m_parent;           ///< Pointer to the parent window
+    EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
 
-    wxLongLong               m_lastRefresh;      /// Last timestamp when the panel was refreshed
-    bool                     m_pendingRefresh;   /// Is there a redraw event requested?
-    wxTimer                  m_refreshTimer;     /// Timer to prevent too-frequent refreshing
+    wxLongLong               m_lastRefresh;      ///< Last timestamp when the panel was refreshed
+    bool                     m_pendingRefresh;   ///< Is there a redraw event requested?
+    wxTimer                  m_refreshTimer;     ///< Timer to prevent too-frequent refreshing
 
     /// True if GAL is currently redrawing the view
     bool                     m_drawing;
@@ -239,7 +248,7 @@ protected:
     KIGFX::WX_VIEW_CONTROLS* m_viewControls;
 
     /// Currently used GAL
-    GAL_TYPE                 m_backend;
+    GAL_TYPE                    m_backend;
     KIGFX::GAL_DISPLAY_OPTIONS& m_options;
 
     /// Processes and forwards events to tools

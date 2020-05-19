@@ -49,23 +49,25 @@
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
-                                        KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
-    wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize ),
-    m_options( aOptions )
+                                        KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
+                                        GAL_TYPE aGalType )
+        : wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize ),
+          m_edaFrame( nullptr ),
+          m_gal( nullptr ),
+          m_view( nullptr ),
+          m_painter( nullptr ),
+          m_backend( GAL_TYPE_NONE ),
+          m_options( aOptions ),
+          m_eventDispatcher( nullptr ),
+          m_lostFocus( false ),
+          m_stealsFocus( true )
 {
-    m_parent     = aParentWindow;
-    m_edaFrame   = dynamic_cast<EDA_DRAW_FRAME*>( aParentWindow );
-    m_gal        = NULL;
-    m_backend    = GAL_TYPE_NONE;
-    m_view       = NULL;
-    m_painter    = NULL;
-    m_eventDispatcher = NULL;
-    m_lostFocus  = false;
-    m_stealsFocus = true;
-
+    m_parent        = aParentWindow;
     m_currentCursor = wxStockCursor( wxCURSOR_ARROW );
 
     SetLayoutDirection( wxLayout_LeftToRight );
+
+    m_edaFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_parent );
 
     // If we're in a dialog, we have to go looking for our parent frame
     if( !m_edaFrame )

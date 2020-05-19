@@ -66,8 +66,6 @@ protected:
 
     ///> Sets rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
-
-    wxWindow* m_parent;
 };
 
 #endif

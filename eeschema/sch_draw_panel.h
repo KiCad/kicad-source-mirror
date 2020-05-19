@@ -59,9 +59,6 @@ protected:
 
     void setDefaultLayerOrder();    ///> Reassigns layer order to the initial settings.
     void setDefaultLayerDeps();     ///> Sets rendering targets & dependencies for layers.
-
-protected:
-    wxWindow* m_parent;
 };
 
 #endif
