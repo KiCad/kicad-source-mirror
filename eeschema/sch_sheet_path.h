@@ -453,7 +453,7 @@ public:
      * WARNING: Do not call this on anything other than the full hierarchy.
      * @param aSymbolInstances is the symbol path information loaded from the root schematic.
      */
-    void UpdateSymbolInstances( std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances );
+    void UpdateSymbolInstances( const std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances );
 
     std::vector<KIID_PATH> GetPaths() const;
 

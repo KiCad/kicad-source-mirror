@@ -24,6 +24,13 @@
 
 include_directories( BEFORE ${INC_BEFORE} )
 
+include_directories(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/pcbnew
+    ${INC_AFTER}
+    )
+
 set( QA_EESCHEMA_SRCS
     # stuff from common which is needed...why?
     ${CMAKE_SOURCE_DIR}/common/colors.cpp
@@ -44,6 +51,7 @@ set( QA_EESCHEMA_SRCS
     test_eagle_plugin.cpp
     test_lib_arc.cpp
     test_lib_part.cpp
+    test_netlists.cpp
     test_sch_pin.cpp
     test_sch_rtree.cpp
     test_sch_sheet.cpp
@@ -76,6 +84,7 @@ add_dependencies( qa_eeschema eeschema )
 
 target_link_libraries( qa_eeschema
     common
+    pcbcommon
     kimath
     qa_utils
     unit_test_utils
@@ -102,13 +111,3 @@ set_source_files_properties( eeschema_test_utils.cpp PROPERTIES
 
 kicad_add_boost_test( qa_eeschema eeschema )
 
-# eeschema netlist tests
-# technically this doesn't depend on KICAD_SCRIPTING but if we have that, we know we have Python.
-if( KICAD_SCRIPTING_MODULES AND KICAD_NETLIST_QA )
-
-    add_test( NAME qa_netlist
-        COMMAND ${PYTHON_EXECUTABLE} test_netlists.py ${CMAKE_BINARY_DIR}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-
-endif()

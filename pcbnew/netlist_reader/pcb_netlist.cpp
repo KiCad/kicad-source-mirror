@@ -61,7 +61,7 @@ void COMPONENT::SetModule( MODULE* aModule )
 COMPONENT_NET COMPONENT::m_emptyNet;
 
 
-const COMPONENT_NET& COMPONENT::GetNet( const wxString& aPinName )
+const COMPONENT_NET& COMPONENT::GetNet( const wxString& aPinName ) const
 {
     for( unsigned i = 0;  i < m_nets.size();  i++ )
     {

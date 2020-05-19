@@ -696,7 +696,7 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( SCH_SCREEN* aScreen )
 
 
 void SCH_SHEET_LIST::UpdateSymbolInstances(
-        std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances )
+        const std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances )
 {
     SCH_REFERENCE_LIST symbolInstances;
 
@@ -709,7 +709,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
         wxString path = symbolInstances[i].GetPath();
 
         auto it = std::find_if( aSymbolInstances.begin(), aSymbolInstances.end(),
-                    [ path ]( COMPONENT_INSTANCE_REFERENCE& r )->bool
+                    [ path ]( const COMPONENT_INSTANCE_REFERENCE& r ) -> bool
                     {
                         return path == r.m_Path.AsString();
                     }

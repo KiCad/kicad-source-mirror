@@ -28,8 +28,6 @@
 #include <sch_edit_frame.h>
 #include <settings/settings_manager.h>
 
-// The main sheet of the project
-SCH_SHEET* g_RootSheet = nullptr;
 
 // a transform matrix, to display components in lib editor
 TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );

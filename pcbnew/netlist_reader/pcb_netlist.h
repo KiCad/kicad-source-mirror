@@ -136,7 +136,7 @@ public:
 
     const COMPONENT_NET& GetNet( unsigned aIndex ) const { return m_nets[aIndex]; }
 
-    const COMPONENT_NET& GetNet( const wxString& aPinName );
+    const COMPONENT_NET& GetNet( const wxString& aPinName ) const;
 
     void SortPins() { sort( m_nets.begin(), m_nets.end() ); }
 

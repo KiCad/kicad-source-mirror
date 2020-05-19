@@ -536,6 +536,11 @@ public:
         return m_aliases;
     }
 
+    const std::vector<COMPONENT_INSTANCE_REFERENCE>& GetSymbolInstances() const
+    {
+        return m_symbolInstances;
+    }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
