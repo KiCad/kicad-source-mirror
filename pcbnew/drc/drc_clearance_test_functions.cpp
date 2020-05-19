@@ -335,7 +335,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         {
             if( selector->m_Rule->m_TrackWidth > minWidth )
             {
-                minWidth = selector->m_Rule->m_AnnulusWidth;
+                minWidth = selector->m_Rule->m_TrackWidth;
                 m_clearanceSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
             }
         }
@@ -348,7 +348,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
                           m_clearanceSource,
-                          MessageTextFromValue( userUnits(), bds.m_TrackMinWidth, true ),
+                          MessageTextFromValue( userUnits(), minWidth, true ),
                           MessageTextFromValue( userUnits(), refSegWidth, true ) );
 
             drcItem->SetErrorMessage( m_msg );
