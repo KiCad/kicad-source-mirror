@@ -445,6 +445,8 @@ int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
         SCH_COMPONENT* comp =
                 new SCH_COMPONENT( *part, libId, &schframe->GetCurrentSheet(), unit, convert );
 
+        comp->SetParent( schframe->GetCurrentSheet().LastScreen() );
+
         if( schframe->eeconfig()->m_AutoplaceFields.enable )
             comp->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 

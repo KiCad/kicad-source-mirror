@@ -176,6 +176,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
 
                 component = new SCH_COMPONENT(
                         *part, &m_frame->GetCurrentSheet(), sel, (wxPoint) cursorPos );
+                component->SetParent( m_frame->GetCurrentSheet().LastScreen() );
                 component->SetFlags( IS_NEW | IS_MOVED );
 
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )

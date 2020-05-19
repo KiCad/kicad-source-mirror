@@ -420,6 +420,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_schematic->SetRoot( new SCH_SHEET( m_schematic ) );
 
     SCH_SCREEN* rootScreen = new SCH_SCREEN( &Kiway() );
+    rootScreen->SetParent( m_schematic );
     rootScreen->SetMaxUndoItems( m_UndoRedoCountMax );
     m_schematic->Root().SetScreen( rootScreen );
     SetScreen( Schematic().RootScreen() );
