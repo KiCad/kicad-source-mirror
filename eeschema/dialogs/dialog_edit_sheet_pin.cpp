@@ -48,12 +48,12 @@ DIALOG_EDIT_SHEET_PIN::DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_
         m_choiceConnectionType->Append( sheetPinType );
 
     m_choiceConnectionType->SetSelection( 0 );
-    SetInitialFocus( m_textName );
+    SetInitialFocus( m_comboName );
     m_sdbSizerOK->SetDefault();
 
     // Set invalid label characters list:
     SCH_NETNAME_VALIDATOR validator;
-    m_textName->SetValidator( validator );
+    m_comboName->SetValidator( validator );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -76,8 +76,15 @@ DIALOG_EDIT_SHEET_PIN::DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_
 
 bool DIALOG_EDIT_SHEET_PIN::TransferDataToWindow()
 {
-    m_textName->SetValue( UnescapeString( m_sheetPin->GetText() ) );
-    m_textName->SelectAll();
+    SCH_SCREEN* screen = m_sheetPin->GetParent()->GetScreen();
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
+    {
+        m_comboName->Append( static_cast<SCH_HIERLABEL*>( item )->GetText() );
+    }
+
+    m_comboName->SetValue( UnescapeString( m_sheetPin->GetText() ) );
+    m_comboName->SelectAll();
     // Currently, eeschema uses only the text width as text size
     // (only the text width is saved in files), and expects text width = text height
     m_textSize.SetValue( m_sheetPin->GetTextWidth() );
@@ -92,7 +99,7 @@ bool DIALOG_EDIT_SHEET_PIN::TransferDataFromWindow()
     if( !m_sheetPin->IsNew() )
         m_frame->SaveCopyInUndoList( (SCH_ITEM*) m_sheetPin->GetParent(), UR_CHANGED );
 
-    m_sheetPin->SetText( EscapeString( m_textName->GetValue(), CTX_NETNAME ) );
+    m_sheetPin->SetText( EscapeString( m_comboName->GetValue(), CTX_NETNAME ) );
     // Currently, eeschema uses only the text width as text size,
     // and expects text width = text height
     m_sheetPin->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
@@ -117,4 +124,21 @@ void DIALOG_EDIT_SHEET_PIN::onOKButton( wxCommandEvent& event )
 void DIALOG_EDIT_SHEET_PIN::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
 {
     SCH_TEXT::ShowSyntaxHelp( this );
+}
+
+
+void DIALOG_EDIT_SHEET_PIN::onComboBox( wxCommandEvent& aEvent )
+{
+    SCH_SCREEN* screen = m_sheetPin->GetParent()->GetScreen();
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
+    {
+        auto hierLabelItem = static_cast<SCH_HIERLABEL*>( item );
+
+        if( m_comboName->GetValue().CmpNoCase( hierLabelItem->GetText() ) == 0 )
+        {
+            m_choiceConnectionType->SetSelection( static_cast<int>( hierLabelItem->GetShape() ) );
+            break;
+        }
+    }
 }

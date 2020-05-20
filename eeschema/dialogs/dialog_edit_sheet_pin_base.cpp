@@ -29,10 +29,8 @@ DIALOG_EDIT_SHEET_PIN_BASE::DIALOG_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWind
 	m_staticText1->Wrap( -1 );
 	fgSizer2->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textName->SetMinSize( wxSize( 160,-1 ) );
-
-	fgSizer2->Add( m_textName, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	m_comboName = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	fgSizer2->Add( m_comboName, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxTOP, 5 );
 
 
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -103,6 +101,7 @@ DIALOG_EDIT_SHEET_PIN_BASE::DIALOG_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWind
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	m_comboName->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::onComboBox ), NULL, this );
 	m_hyperlink1->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::OnSyntaxHelp ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::onOKButton ), NULL, this );
 }
@@ -110,6 +109,7 @@ DIALOG_EDIT_SHEET_PIN_BASE::DIALOG_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWind
 DIALOG_EDIT_SHEET_PIN_BASE::~DIALOG_EDIT_SHEET_PIN_BASE()
 {
 	// Disconnect Events
+	m_comboName->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::onComboBox ), NULL, this );
 	m_hyperlink1->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::OnSyntaxHelp ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::onOKButton ), NULL, this );
 

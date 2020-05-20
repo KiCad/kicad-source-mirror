@@ -17,10 +17,11 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
+#include <wx/combobox.h>
 #include <wx/hyperlink.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
+#include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -37,7 +38,7 @@ class DIALOG_EDIT_SHEET_PIN_BASE : public DIALOG_SHIM
 
 	protected:
 		wxStaticText* m_staticText1;
-		wxTextCtrl* m_textName;
+		wxComboBox* m_comboName;
 		wxHyperlinkCtrl* m_hyperlink1;
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_textSizeLabel;
@@ -51,6 +52,7 @@ class DIALOG_EDIT_SHEET_PIN_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void onComboBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSyntaxHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void onOKButton( wxCommandEvent& event ) { event.Skip(); }
 
