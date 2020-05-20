@@ -576,6 +576,7 @@ void SCH_SEXPR_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, int
 {
     wxCHECK( aSheet, /* void */ );
 
+    LOCALE_IO toggle;
     SCH_SEXPR_PARSER parser( &aReader );
 
     parser.ParseSchematic( aSheet, true, aFileVersion );
