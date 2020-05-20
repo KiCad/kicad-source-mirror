@@ -746,9 +746,15 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
 void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 {
+    std::vector<SCH_COMPONENT*> symbols;
+
     for( auto item : Items().OfType( SCH_COMPONENT_T ) )
+        symbols.push_back( static_cast<SCH_COMPONENT*>( item ) );
+
+    for( auto symbol : symbols )
     {
-        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+        // Changing the symbol may adjust the bbox of the symbol; remove and reinsert it afterwards.
+        m_rtree.remove( symbol );
 
         auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
 
@@ -758,6 +764,8 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
             libSymbol = new LIB_PART( *it->second );
 
         symbol->SetLibSymbol( libSymbol );
+
+        m_rtree.insert( symbol );
     }
 }
 
