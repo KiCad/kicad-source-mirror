@@ -22,6 +22,7 @@
 */
 
 #include <fctsys.h>
+#include <eeschema_settings.h>
 #include <lib_edit_frame.h>
 #include <libedit_settings.h>
 #include <pgm_base.h>

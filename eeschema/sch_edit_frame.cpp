@@ -210,6 +210,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 {
     m_schematic = new SCHEMATIC();
 
+    m_defaults = &m_schematic->Settings();
+
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_hasAutoSave = true;
     m_AboutTitle = "Eeschema";

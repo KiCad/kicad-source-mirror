@@ -561,7 +561,7 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
         if( GetItem( aPosition, Mils2iu( 6 ), SCH_BUS_BUS_ENTRY_T) )
             return true;
 
-        if( GetItem( aPosition, SCH_JUNCTION::GetSymbolSize(), SCH_JUNCTION_T ) )
+        if( GetItem( aPosition, Schematic()->Settings().m_JunctionSize, SCH_JUNCTION_T ) )
             return true;
 
         if( GetPin( aPosition, NULL, true ) )

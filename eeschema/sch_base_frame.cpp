@@ -26,6 +26,7 @@
 #include <kiway.h>
 #include <pgm_base.h>
 #include <eeschema_settings.h>
+#include <libedit_settings.h>
 #include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <sch_painter.h>
@@ -83,13 +84,8 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
                                 const wxString& aTitle, const wxPoint& aPosition,
                                 const wxSize& aSize, long aStyle, const wxString& aFrameName ) :
     EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle, aFrameName ),
-    m_defaultLineWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS ),
-    m_defaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
-    m_defaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
-    m_defaultTextSize( DEFAULT_TEXT_SIZE * IU_PER_MILS ),
-    m_textOffsetRatio( 0.08 ),
-    m_pinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
-    m_showPinElectricalTypeName( false )
+    m_showPinElectricalTypeName( false ),
+    m_defaults( &m_base_frame_defaults )
 {
     createCanvas();
 
@@ -122,6 +118,18 @@ void SCH_BASE_FRAME::SetScreen(  BASE_SCREEN* aScreen )
 }
 
 
+EESCHEMA_SETTINGS* SCH_BASE_FRAME::eeconfig() const
+{
+    return dynamic_cast<EESCHEMA_SETTINGS*>( config() );
+}
+
+
+LIBEDIT_SETTINGS* SCH_BASE_FRAME::libeditconfig() const
+{
+    return dynamic_cast<LIBEDIT_SETTINGS*>( config() );
+}
+
+
 const wxString SCH_BASE_FRAME::GetZoomLevelIndicator() const
 {
     return EDA_DRAW_FRAME::GetZoomLevelIndicator();
@@ -130,28 +138,28 @@ const wxString SCH_BASE_FRAME::GetZoomLevelIndicator() const
 
 void SCH_BASE_FRAME::SetDefaultLineWidth( int aWidth )
 {
-    m_defaultLineWidth = aWidth;
+    m_defaults->m_DefaultLineWidth = aWidth;
     GetRenderSettings()->SetDefaultPenWidth( aWidth );
 }
 
 
 void SCH_BASE_FRAME::SetDefaultWireThickness( int aThickness )
 {
-    m_defaultWireThickness = aThickness;
+    m_defaults->m_DefaultWireThickness = aThickness;
     GetRenderSettings()->m_DefaultWireThickness = aThickness;
 }
 
 
 void SCH_BASE_FRAME::SetDefaultBusThickness( int aThickness )
 {
-    m_defaultBusThickness = aThickness;
+    m_defaults->m_DefaultBusThickness = aThickness;
     GetRenderSettings()->m_DefaultBusThickness = aThickness;
 }
 
 
 void SCH_BASE_FRAME::SetPinSymbolSize( int aSize )
 {
-    m_pinSymbolSize = aSize;
+    m_defaults->m_PinSymbolSize = aSize;
     GetRenderSettings()->m_PinSymbolSize = aSize;
 }
 

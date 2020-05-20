@@ -22,6 +22,7 @@
 
 #include <base_struct.h>
 #include <sch_sheet_path.h>
+#include <schematic_settings.h>
 
 
 class BUS_ALIAS;
@@ -56,6 +57,9 @@ private:
 
     /// Holds and calculates connectivity information of this schematic
     CONNECTION_GRAPH* m_connectionGraph;
+
+    /// Project-specific schematic settings
+    SCHEMATIC_SETTINGS m_settings;
 
     /// Holds this schematic's ERC settings
     // TODO: This should be moved to project settings, not schematic
@@ -119,6 +123,11 @@ public:
     CONNECTION_GRAPH* ConnectionGraph() const
     {
         return m_connectionGraph;
+    }
+
+    SCHEMATIC_SETTINGS& Settings()
+    {
+        return m_settings;
     }
 
     /**

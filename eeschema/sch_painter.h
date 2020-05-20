@@ -117,6 +117,7 @@ public:
     int    m_DefaultWireThickness;
     int    m_DefaultBusThickness;
     int    m_PinSymbolSize;
+    int    m_JunctionSize;
 };
 
 

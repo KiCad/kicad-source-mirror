@@ -244,38 +244,40 @@ void SCH_EDIT_FRAME::AddFormattingParameters( std::vector<PARAM_CFG*>& params )
 
     wxCHECK( appSettings, /*void*/ );
 
+    SCHEMATIC_SETTINGS& settings = Schematic().Settings();
+
     params.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
                                      LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
     params.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),
                                      LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
 
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LabSize" ),
-                                     &m_defaultTextSize,
+                                     &settings.m_DefaultTextSize,
                                      Mils2iu( DEFAULT_SIZE_TEXT ),
                                      Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
     params.push_back( new PARAM_CFG_DOUBLE( wxT( "TextOffsetRatio" ),
-                                     &m_textOffsetRatio,
+                                     &settings.m_TextOffsetRatio,
                                      (double) TXT_MARGIN / DEFAULT_SIZE_TEXT,
                                      -200.0, 200.0 ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LineThickness" ),
-                                     &m_defaultLineWidth,
+                                     &settings.m_DefaultLineWidth,
                                      Mils2iu( appSettings->m_Drawing.default_line_thickness ),
                                      Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
 
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "BusThickness" ),
-                                     &m_defaultBusThickness,
+                                     &settings.m_DefaultBusThickness,
                                      Mils2iu( appSettings->m_Drawing.default_bus_thickness ),
                                      Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "WireThickness" ),
-                                     &m_defaultWireThickness,
+                                     &settings.m_DefaultWireThickness,
                                      Mils2iu( appSettings->m_Drawing.default_wire_thickness ),
                                      Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PinSymbolSize" ),
-                                     &m_pinSymbolSize,
+                                     &settings.m_PinSymbolSize,
                                      Mils2iu( appSettings->m_Drawing.pin_symbol_size ),
                                      Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "JunctionSize" ),
-                                     &SCH_JUNCTION::g_SymbolSize,
+                                     &settings.m_JunctionSize,
                                      Mils2iu( appSettings->m_Drawing.default_junction_size ),
                                      Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
 }
@@ -322,9 +324,10 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
 
     GetRenderSettings()->SetDefaultPenWidth( GetDefaultLineWidth() );
     GetRenderSettings()->m_DefaultWireThickness = GetDefaultWireThickness();
-    GetRenderSettings()->m_DefaultBusThickness = GetDefaultBusThickness();
-    GetRenderSettings()->m_TextOffsetRatio = m_textOffsetRatio;
-    GetRenderSettings()->m_PinSymbolSize = m_pinSymbolSize;
+    GetRenderSettings()->m_DefaultBusThickness  = GetDefaultBusThickness();
+    GetRenderSettings()->m_TextOffsetRatio      = m_defaults->m_TextOffsetRatio;
+    GetRenderSettings()->m_PinSymbolSize        = m_defaults->m_PinSymbolSize;
+    GetRenderSettings()->m_JunctionSize         = m_defaults->m_JunctionSize;
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:

@@ -38,6 +38,7 @@
 #include <core/typeinfo.h>
 #include <eda_base_frame.h>
 #include <erc_settings.h>
+#include <eeschema_settings.h>
 #include <math/box2.h>
 #include <sch_base_frame.h>
 #include <sch_text.h> // enum PINSHEETLABEL_SHAPE
@@ -46,7 +47,6 @@
 
 class STATUS_TEXT_POPUP;
 
-class APP_SETTINGS_BASE;
 class SCH_ITEM;
 class EDA_ITEM;
 class SCH_LINE;

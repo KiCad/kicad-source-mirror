@@ -79,7 +79,8 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_TextOffsetRatio( 0.08 ),
         m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
         m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
-        m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 )
+        m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
+        m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS )
 {
     SetDefaultPenWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS );
 }
@@ -1177,7 +1178,7 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( !drawingShadows );
     m_gal->SetFillColor( color );
-    m_gal->DrawCircle( aJct->GetPosition(), SCH_JUNCTION::GetSymbolSize() / 2.0 );
+    m_gal->DrawCircle( aJct->GetPosition(), m_schSettings.m_JunctionSize / 2.0 );
 }
 
 

@@ -28,6 +28,8 @@
 #include <panel_setup_formatting.h>
 #include <sch_junction.h>
 #include <gr_text.h>
+#include <schematic_settings.h>
+
 
 PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame  ) :
         PANEL_SETUP_FORMATTING_BASE( aWindow ),
@@ -70,7 +72,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_busWidth.SetValue( m_frame->GetDefaultBusThickness() );
     m_wireWidth.SetValue( m_frame->GetDefaultWireThickness() );
     m_pinSymbolSize.SetValue( m_frame->GetPinSymbolSize() );
-    m_junctionSize.SetValue( SCH_JUNCTION::g_SymbolSize );
+    m_junctionSize.SetValue( m_frame->GetDefaults().m_JunctionSize );
 
     wxString offsetRatio = wxString::Format( "%f", m_frame->GetTextOffsetRatio() * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );
@@ -100,7 +102,6 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
         firstRefId != LIB_PART::GetSubpartFirstId() )
     {
         LIB_PART::SetSubpartIdNotation( refSeparator, firstRefId );
-        m_frame->SaveProjectSettings();
     }
 
     m_frame->SetDefaultTextSize( (int) m_textSize.GetValue() );
@@ -108,7 +109,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     m_frame->SetDefaultWireThickness( (int) m_wireWidth.GetValue() );
     m_frame->SetDefaultBusThickness( (int) m_busWidth.GetValue() );
     m_frame->SetPinSymbolSize( (int) m_pinSymbolSize.GetValue() );
-    SCH_JUNCTION::g_SymbolSize = (int) m_junctionSize.GetValue();
+
+    m_frame->GetDefaults().m_JunctionSize = (int) m_junctionSize.GetValue();
+
+    m_frame->SaveProjectSettings();
 
     double dtmp = 0.0;
     wxString msg = m_textOffsetRatioCtrl->GetValue();
@@ -117,9 +121,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 
     m_frame->GetRenderSettings()->SetDefaultPenWidth( m_frame->GetDefaultLineWidth() );
     m_frame->GetRenderSettings()->m_DefaultWireThickness = m_frame->GetDefaultWireThickness();
-    m_frame->GetRenderSettings()->m_DefaultBusThickness = m_frame->GetDefaultBusThickness();
-    m_frame->GetRenderSettings()->m_TextOffsetRatio = m_frame->GetTextOffsetRatio();
-    m_frame->GetRenderSettings()->m_PinSymbolSize = m_frame->GetPinSymbolSize();
+    m_frame->GetRenderSettings()->m_DefaultBusThickness  = m_frame->GetDefaultBusThickness();
+    m_frame->GetRenderSettings()->m_TextOffsetRatio      = m_frame->GetTextOffsetRatio();
+    m_frame->GetRenderSettings()->m_PinSymbolSize        = m_frame->GetPinSymbolSize();
+    m_frame->GetRenderSettings()->m_JunctionSize         = m_frame->GetDefaults().m_JunctionSize;
 
     m_frame->GetCanvas()->GetView()->MarkDirty();
     m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );

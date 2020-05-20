@@ -38,16 +38,8 @@
 #include <sch_junction.h>
 #include <netlist_object.h>
 #include <sch_connection.h>
+#include <schematic.h>
 #include <settings/color_settings.h>
-
-
-int SCH_JUNCTION::g_SymbolSize = Mils2iu( 40 );    // Default diameter of the junction symbol
-
-
-int SCH_JUNCTION::GetSymbolSize()
-{
-    return g_SymbolSize;
-}
 
 
 SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos, SCH_LAYER_ID aLayer ) :
@@ -86,8 +78,11 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 {
     EDA_RECT rect;
 
+    int size =
+            Schematic() ? Schematic()->Settings().m_JunctionSize : Mils2iu( DEFAULT_JUNCTION_DIAM );
+
     rect.SetOrigin( m_pos );
-    rect.Inflate( ( GetPenWidth() + GetSymbolSize() ) / 2 );
+    rect.Inflate( ( GetPenWidth() + size ) / 2 );
 
     return rect;
 }
@@ -98,8 +93,8 @@ void SCH_JUNCTION::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
     wxDC*   DC    = aSettings->GetPrintDC();
     COLOR4D color = aSettings->GetLayerColor( GetLayer() );
 
-    GRFilledCircle( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, GetSymbolSize() / 2,
-                    0, color, color );
+    GRFilledCircle( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
+                    Schematic()->Settings().m_JunctionSize / 2, 0, color, color );
 }
 
 
@@ -195,7 +190,7 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
     aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( GetLayer() ) );
-    aPlotter->Circle( m_pos, GetSymbolSize(), FILLED_SHAPE );
+    aPlotter->Circle( m_pos, Schematic()->Settings().m_JunctionSize, FILLED_SHAPE );
 }
 
 

@@ -31,7 +31,7 @@
 #include <page_info.h>
 #include <sch_draw_panel.h>
 #include <sch_screen.h>
-#include <eeschema_settings.h>
+#include <schematic_settings.h>
 
 #include <stddef.h>
 #include <utility>
@@ -57,6 +57,8 @@ class PART_LIB;
 class SCHLIB_FILTER;
 class LIB_ID;
 class SYMBOL_LIB_TABLE;
+class EESCHEMA_SETTINGS;
+class LIBEDIT_SETTINGS;
 
 /**
  * Load symbol from symbol library table.
@@ -88,16 +90,14 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
 protected:
-    int       m_defaultLineWidth;
-    int       m_defaultWireThickness;
-    int       m_defaultBusThickness;
-    int       m_defaultTextSize;
-    double    m_textOffsetRatio;
-    int       m_pinSymbolSize;
-
     TEMPLATES m_templateFieldNames;
 
     bool      m_showPinElectricalTypeName;
+
+    /// These are only used by libedit.  Eeschema should be using the one inside the SCHEMATIC.
+    SCHEMATIC_SETTINGS m_base_frame_defaults;
+
+    SCHEMATIC_SETTINGS* m_defaults;
 
 public:
     SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -114,12 +114,19 @@ public:
     SCH_SCREEN* GetScreen() const override;
     void SetScreen( BASE_SCREEN* aScreen ) override;
 
-    EESCHEMA_SETTINGS* eeconfig() const { return dynamic_cast<EESCHEMA_SETTINGS*>( config() ); }
+    EESCHEMA_SETTINGS* eeconfig() const;
+
+    LIBEDIT_SETTINGS* libeditconfig() const;
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     KIGFX::SCH_RENDER_SETTINGS* GetRenderSettings();
+
+    SCHEMATIC_SETTINGS& GetDefaults()
+    {
+        return *m_defaults;
+    }
 
     /**
      * Allow some frames to show/hide hidden pins.  The default impl shows all pins.
@@ -132,23 +139,23 @@ public:
     bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
     void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
 
-    int GetDefaultLineWidth() const { return m_defaultLineWidth; }
-    void SetDefaultLineWidth( int aWidth );
+    virtual int GetDefaultLineWidth() const { return m_defaults->m_DefaultLineWidth; }
+    virtual void SetDefaultLineWidth( int aWidth );
 
-    int GetDefaultWireThickness() const { return m_defaultWireThickness; }
-    void SetDefaultWireThickness( int aThickness );
+    virtual int GetDefaultWireThickness() const { return m_defaults->m_DefaultWireThickness; }
+    virtual void SetDefaultWireThickness( int aThickness );
 
-    int GetDefaultBusThickness() const { return m_defaultBusThickness; }
-    void SetDefaultBusThickness( int aThickness );
+    virtual int GetDefaultBusThickness() const { return m_defaults->m_DefaultBusThickness; }
+    virtual void SetDefaultBusThickness( int aThickness );
 
-    int GetPinSymbolSize() const { return m_pinSymbolSize; }
-    void SetPinSymbolSize( int aSize );
+    virtual int GetPinSymbolSize() const { return m_defaults->m_PinSymbolSize; }
+    virtual void SetPinSymbolSize( int aSize );
 
-    int GetDefaultTextSize() const { return m_defaultTextSize; }
-    void SetDefaultTextSize( int aSize ) { m_defaultTextSize = aSize; }
+    virtual int GetDefaultTextSize() const { return m_defaults->m_DefaultTextSize; }
+    virtual void SetDefaultTextSize( int aSize ) { m_defaults->m_DefaultTextSize = aSize; }
 
-    double GetTextOffsetRatio() const { return m_textOffsetRatio; }
-    void SetTextOffsetRatio( double aRatio ) { m_textOffsetRatio = aRatio; }
+    virtual double GetTextOffsetRatio() const { return m_defaults->m_TextOffsetRatio; }
+    virtual void SetTextOffsetRatio( double aRatio ) { m_defaults->m_TextOffsetRatio = aRatio; }
 
     /**
      * Function GetZoomLevelIndicator

@@ -473,6 +473,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    previewItem->SetParent( m_frame->GetScreen() );
+
     m_view->ClearPreview();
     m_view->AddToPreview( previewItem->Clone() );
 

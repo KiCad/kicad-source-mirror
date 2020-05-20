@@ -93,7 +93,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
     textItem->SetBold( lastTextBold );
     textItem->SetItalic( lastTextItalic );
     textItem->SetLabelSpinStyle( lastTextOrientation );
-    textItem->SetTextSize( wxSize( m_defaultTextSize, m_defaultTextSize ) );
+    textItem->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
     textItem->SetFlags( IS_NEW | IS_MOVED );
 
     if( InvokeDialogLabelEditor( this, textItem ) != wxID_OK || textItem->GetText().IsEmpty() )

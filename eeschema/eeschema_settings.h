@@ -59,18 +59,20 @@ public:
 
     struct DRAWING
     {
-        int default_bus_thickness;
-        int default_junction_size;
-        int default_line_thickness;
-        int default_repeat_offset_x;
-        int default_repeat_offset_y;
-        int default_wire_thickness;
-        int pin_symbol_size;
-        COLOR4D default_sheet_border_color;
-        COLOR4D default_sheet_background_color;
+        int      default_bus_thickness;
+        int      default_junction_size;
+        int      default_line_thickness;
+        int      default_repeat_offset_x;
+        int      default_repeat_offset_y;
+        int      default_wire_thickness;
+        int      default_text_size;
+        int      pin_symbol_size;
+        double   text_offset_ratio;
+        COLOR4D  default_sheet_border_color;
+        COLOR4D  default_sheet_background_color;
         wxString field_names;
-        bool hv_lines_only;
-        int repeat_label_increment;
+        bool     hv_lines_only;
+        int      repeat_label_increment;
     };
 
     struct INPUT
