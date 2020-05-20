@@ -1,4 +1,4 @@
-(kicad_sch (version 20200512) (host eeschema "(5.99.0-1722-g89c46e683-dirty)")
+(kicad_sch (version 20200512) (host eeschema "(5.99.0-1735-ga49fde5ce-dirty)")
 
   (page 1 8)
 
@@ -581,9 +581,9 @@
   (junction (at 248.92 78.74))
   (junction (at 248.92 119.38))
 
-  (no_connect (at 66.04 73.66))
-  (no_connect (at 66.04 76.2))
   (no_connect (at 66.04 71.12))
+  (no_connect (at 66.04 76.2))
+  (no_connect (at 66.04 73.66))
   (no_connect (at 66.04 78.74))
 
   (wire (pts (xy 24.13 81.28) (xy 24.13 87.63)))

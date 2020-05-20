@@ -21,6 +21,8 @@ uViaDrill=0.127
 dPairWidth=0.2
 dPairGap=0.25
 dPairViaGap=0.25
+update=Wed 20 May 2020 18:03:51 EDT
+last_client=eeschema
 [pcbnew/Netclasses/1]
 Name=pwr
 Clearance=0.2
@@ -32,20 +34,11 @@ uViaDrill=0.127
 dPairWidth=0.2
 dPairGap=0.25
 dPairViaGap=0.25
-[sheetnames]
-1=22778f50-8aef-47b7-a6a4-567e5e632836:
-2=00000000-0000-0000-0000-00004bf03687:buspci.sch
-3=00000000-0000-0000-0000-00004bf03683:graphic
-4=00000000-0000-0000-0000-00004bf03689:ESVIDEO-RVB
-5=00000000-0000-0000-0000-00004bf03681:pal-ntsc.sch
-6=00000000-0000-0000-0000-00004bf03685:RAMS
-7=00000000-0000-0000-0000-00004bf0367d:muxdata
-8=00000000-0000-0000-0000-00004bf0367f:modul
 [schematic_editor]
 version=1
 PageLayoutDescrFile=
 PlotDirectoryName=
-NetFmtName=
+NetFmtName=Pcbnew
 SpiceAjustPassiveValues=0
 SubpartIdSeparator=0
 SubpartFirstId=65
@@ -63,3 +56,12 @@ ERC_CheckBusDriverConflicts=1
 ERC_CheckBusEntryConflicts=1
 ERC_CheckBusToBusConflicts=1
 ERC_CheckBusToNetConflicts=1
+[sheetnames]
+1=84d4d60f-6656-461e-b8d6-5d42ccee0251:
+2=00000000-0000-0000-0000-00004bf03687:buspci.sch
+3=00000000-0000-0000-0000-00004bf03683:graphic
+4=00000000-0000-0000-0000-00004bf03689:ESVIDEO-RVB
+5=00000000-0000-0000-0000-00004bf03681:pal-ntsc.sch
+6=00000000-0000-0000-0000-00004bf03685:RAMS
+7=00000000-0000-0000-0000-00004bf0367d:muxdata
+8=00000000-0000-0000-0000-00004bf0367f:modul
