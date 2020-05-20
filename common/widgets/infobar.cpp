@@ -72,9 +72,6 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
 
     if( m_showTime > 0 )
         m_showTimer->StartOnce( m_showTime );
-
-    Refresh();
-    Update();
 }
 
 
@@ -201,7 +198,7 @@ void EDA_INFOBAR_PANEL::AddInfoBar( WX_INFOBAR* aInfoBar )
     wxASSERT( aInfoBar );
 
     aInfoBar->Reparent( this );
-    m_mainSizer->Add( aInfoBar, 1, wxALIGN_TOP | wxEXPAND, 0 );
+    m_mainSizer->Add( aInfoBar, 1, wxEXPAND, 0 );
     m_mainSizer->Layout();
 }
 
@@ -211,7 +208,7 @@ void EDA_INFOBAR_PANEL::AddOtherItem( wxWindow* aOtherItem )
     wxASSERT( aOtherItem );
 
     aOtherItem->Reparent( this );
-    m_mainSizer->Add( aOtherItem, 1, wxALIGN_BOTTOM | wxEXPAND, 0 );
+    m_mainSizer->Add( aOtherItem, 1, wxEXPAND, 0 );
 
     m_mainSizer->AddGrowableRow( 1, 1 );
     m_mainSizer->Layout();
