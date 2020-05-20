@@ -41,6 +41,7 @@
 #include <settings/color_settings.h>
 #include <netlist_object.h>
 #include <sch_view.h>
+#include <schematic.h>
 
 
 static wxPenStyle getwxPenStyle( PLOT_DASH_TYPE aType )
@@ -292,6 +293,9 @@ void SCH_LINE::SetLineWidth( const int aSize )
 
 int SCH_LINE::GetPenWidth() const
 {
+    if( m_size == 0 && Schematic() )
+        return std::max( Schematic()->Settings().m_DefaultLineWidth, 1 );
+
     return std::max( m_size, 1 );
 }
 
