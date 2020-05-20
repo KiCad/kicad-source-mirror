@@ -1,6 +1,6 @@
-(kicad_sch (version 20200512) (host eeschema "(5.99.0-1712-g5a9e69b14)")
+(kicad_sch (version 20200512) (host eeschema "(5.99.0-1722-g89c46e683-dirty)")
 
-  (page 2 8)
+  (page 1 8)
 
   (paper "A3")
 
@@ -941,26 +941,26 @@
   (junction (at 367.03 218.44))
   (junction (at 367.03 231.14))
 
-  (no_connect (at 151.13 91.44))
-  (no_connect (at 151.13 134.62))
   (no_connect (at 255.27 200.66))
-  (no_connect (at 255.27 177.8))
-  (no_connect (at 255.27 175.26))
-  (no_connect (at 151.13 111.76))
-  (no_connect (at 151.13 124.46))
-  (no_connect (at 151.13 127))
-  (no_connect (at 255.27 218.44))
+  (no_connect (at 255.27 195.58))
   (no_connect (at 151.13 142.24))
-  (no_connect (at 255.27 205.74))
-  (no_connect (at 151.13 88.9))
+  (no_connect (at 255.27 210.82))
+  (no_connect (at 151.13 127))
+  (no_connect (at 255.27 180.34))
+  (no_connect (at 255.27 177.8))
   (no_connect (at 255.27 198.12))
-  (no_connect (at 255.27 182.88))
-  (no_connect (at 255.27 208.28))
+  (no_connect (at 151.13 124.46))
+  (no_connect (at 151.13 111.76))
+  (no_connect (at 255.27 175.26))
+  (no_connect (at 255.27 205.74))
   (no_connect (at 151.13 132.08))
   (no_connect (at 151.13 139.7))
-  (no_connect (at 255.27 210.82))
-  (no_connect (at 255.27 195.58))
-  (no_connect (at 255.27 180.34))
+  (no_connect (at 151.13 88.9))
+  (no_connect (at 255.27 182.88))
+  (no_connect (at 255.27 218.44))
+  (no_connect (at 255.27 208.28))
+  (no_connect (at 151.13 91.44))
+  (no_connect (at 151.13 134.62))
 
   (bus_entry (at 267.97 81.28) (size 2.54 -2.54))
   (bus_entry (at 267.97 83.82) (size 2.54 -2.54))
@@ -1267,9 +1267,8 @@
   (bus (pts (xy 270.51 93.98) (xy 270.51 96.52)))
   (bus (pts (xy 270.51 101.6) (xy 270.51 104.14)))
   (bus (pts (xy 270.51 104.14) (xy 270.51 109.22)))
-  (bus (pts (xy 270.51 109.22) (xy 270.51 111.76)))
-  (bus (pts (xy 270.51 111.76) (xy 270.51 116.84)))
-  (bus (pts (xy 270.51 116.84) (xy 270.51 119.38)))
+  (bus (pts (xy 270.51 109.22) (xy 270.51 114.3)))
+  (bus (pts (xy 270.51 114.3) (xy 270.51 119.38)))
   (bus (pts (xy 270.51 124.46) (xy 270.51 129.54)))
   (bus (pts (xy 270.51 129.54) (xy 270.51 134.62)))
   (bus (pts (xy 270.51 134.62) (xy 270.51 139.7)))
@@ -1529,7 +1528,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 81.28 179.07 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "0d2e61de-51c3-46d3-8a37-9434b131a402")
     (property "Reference" "#GND036" (id 0) (at 81.28 176.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1545,7 +1544,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 91.44 93.98 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "ccebc1e0-dc38-419c-860b-a0cbfba332f3")
     (property "Reference" "#GND044" (id 0) (at 93.98 93.98 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1561,7 +1560,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 97.79 152.4 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "90fa021f-5132-4b96-9d1b-33c0b2a6ee6a")
     (property "Reference" "#GND043" (id 0) (at 100.33 152.4 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1577,7 +1576,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 101.6 184.15 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "bb930ddd-a975-4e09-a026-3b4c6a1f6d23")
     (property "Reference" "#GND035" (id 0) (at 101.6 181.61 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1593,7 +1592,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 118.11 162.56 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "28166900-9f93-4890-abd9-f36ac27bd449")
     (property "Reference" "#GND046" (id 0) (at 120.65 162.56 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1609,7 +1608,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 123.19 36.83 180) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "2560e35b-9002-422d-9af2-fb2a8cc91f69")
     (property "Reference" "#GND047" (id 0) (at 123.19 39.37 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1625,7 +1624,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 132.08 154.94 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "cc989922-aaba-4ec8-a8a3-cc8b3a55d69d")
     (property "Reference" "#GND045" (id 0) (at 134.62 154.94 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1641,7 +1640,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 143.51 36.83 180) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "c756c1db-9bb3-4641-9a81-a7d0195ec1d2")
     (property "Reference" "#GND048" (id 0) (at 143.51 39.37 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1657,7 +1656,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 147.32 104.14 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "1ad8a6ca-dce0-45f3-85d8-6c0e5ef4893a")
     (property "Reference" "#GND049" (id 0) (at 149.86 104.14 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1673,7 +1672,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 151.13 152.4 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "61f6a33c-0aa1-43e7-a68a-171b0094dfd1")
     (property "Reference" "#GND040" (id 0) (at 153.67 152.4 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1689,7 +1688,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 151.13 157.48 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "5c5c6398-9897-4bfc-9479-296a574d95e6")
     (property "Reference" "#GND039" (id 0) (at 153.67 157.48 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1705,7 +1704,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 151.13 167.64 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "f79dd633-569b-4320-92ca-935707937b79")
     (property "Reference" "#GND041" (id 0) (at 153.67 167.64 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1721,7 +1720,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 161.29 251.46 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "d4bbd4b7-4510-44c2-9401-78fd0cf22e40")
     (property "Reference" "#GND037" (id 0) (at 161.29 248.92 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1737,7 +1736,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 227.33 251.46 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "999298c8-14b3-457e-add9-3a6e2443afa3")
     (property "Reference" "#GND038" (id 0) (at 227.33 248.92 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1769,7 +1768,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 273.05 64.77 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "dfb3dcea-8f39-4076-9d0f-68fdae3673c6")
     (property "Reference" "#GND050" (id 0) (at 273.05 64.77 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -1785,7 +1784,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 303.53 91.44 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "21a478be-52cb-408a-8a4a-7845e926e51d")
     (property "Reference" "#GND042" (id 0) (at 303.53 88.9 0)
       (effects (font (size 1.524 1.524)) hide)
     )
@@ -1801,7 +1800,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 331.47 233.68 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "c3dd00ed-075c-4684-83fb-9858b08c1895")
     (property "Reference" "#GND051" (id 0) (at 331.47 233.68 0)
       (effects (font (size 0.762 0.762)) hide)
     )
@@ -1817,7 +1816,7 @@
   )
 
   (symbol (lib_id "video_schlib:INDUCTOR") (at 257.81 45.72 90) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "246efb35-0ab0-44dc-a68f-85e7bff6ce30")
     (property "Reference" "L4" (id 0) (at 257.81 40.64 90))
     (property "Value" "22uF" (id 1) (at 257.81 43.18 90))
     (property "Footprint" "Resistor_SMD:R_1812_4532Metric_Pad1.24x3.50mm_HandSolder" (id 2) (at 257.81 45.72 0)
@@ -1829,7 +1828,7 @@
   )
 
   (symbol (lib_id "video_schlib:DIODESCH") (at 97.79 83.82 180) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "df03259b-fe89-4586-afd2-c9e91a581e71")
     (property "Reference" "D2" (id 0) (at 97.79 81.28 0))
     (property "Value" "BAT46" (id 1) (at 97.79 86.36 0))
     (property "Footprint" "Diode_THT:D_DO-34_SOD68_P7.62mm_Horizontal" (id 2) (at 97.79 83.82 0)
@@ -1841,7 +1840,7 @@
   )
 
   (symbol (lib_id "video_schlib:DIODESCH") (at 97.79 93.98 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "4d8d9429-99d7-4b5a-8a2b-51f85f68a689")
     (property "Reference" "D1" (id 0) (at 97.79 91.44 0))
     (property "Value" "BAT46" (id 1) (at 97.79 96.52 0))
     (property "Footprint" "Diode_THT:D_DO-34_SOD68_P7.62mm_Horizontal" (id 2) (at 97.79 93.98 0)
@@ -1853,7 +1852,7 @@
   )
 
   (symbol (lib_id "video_schlib:DIODESCH") (at 102.87 142.24 0) (mirror y) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "148f769a-b3d0-48e3-99c4-4b664aa228b6")
     (property "Reference" "D4" (id 0) (at 102.87 139.7 0)
       (effects (font (size 1.524 1.524)))
     )
@@ -1869,7 +1868,7 @@
   )
 
   (symbol (lib_id "video_schlib:DIODESCH") (at 102.87 152.4 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "89ec3dc9-7b95-4492-a02f-9e38eba7c3fc")
     (property "Reference" "D3" (id 0) (at 102.87 149.86 0)
       (effects (font (size 1.524 1.524)))
     )
@@ -1885,7 +1884,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 71.12 165.1 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "41e00f1b-33d0-4d15-accd-2ed0a71dbfc5")
     (property "Reference" "R35" (id 0) (at 71.12 167.132 90))
     (property "Value" "470" (id 1) (at 71.12 165.1 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 71.12 165.1 0)
@@ -1897,7 +1896,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 101.6 176.53 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "969568ed-7a43-47d8-b855-ac3a5d1fb997")
     (property "Reference" "R14" (id 0) (at 99.06 171.45 0))
     (property "Value" "1M" (id 1) (at 101.6 176.53 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 101.6 176.53 0)
@@ -1909,7 +1908,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 104.14 106.68 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "9f07ce4d-1ade-4d53-837e-c5c5736386b9")
     (property "Reference" "R3" (id 0) (at 104.14 108.712 90))
     (property "Value" "100" (id 1) (at 104.14 106.68 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 104.14 106.68 0)
@@ -1921,7 +1920,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 104.14 129.54 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "9aa4287b-185c-42fe-8105-660f63b73081")
     (property "Reference" "R2" (id 0) (at 104.14 131.572 90))
     (property "Value" "100" (id 1) (at 104.14 129.54 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 104.14 129.54 0)
@@ -1933,7 +1932,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 132.08 180.34 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "97b8c472-19c2-4dfd-b3db-77351498849d")
     (property "Reference" "R12" (id 0) (at 132.08 182.372 90))
     (property "Value" "1K" (id 1) (at 132.08 180.34 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 132.08 180.34 0)
@@ -1945,7 +1944,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 134.62 66.04 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "5ad74a3d-671c-4c86-9f96-2dbb63b6aed8")
     (property "Reference" "R25" (id 0) (at 134.62 68.072 90))
     (property "Value" "220K" (id 1) (at 134.62 66.04 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 134.62 66.04 0)
@@ -1957,7 +1956,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 139.7 172.72 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "8550e842-9f11-4cca-8c8e-a5e69ec91138")
     (property "Reference" "R27" (id 0) (at 139.7 174.752 90))
     (property "Value" "27K" (id 1) (at 139.7 172.72 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 139.7 172.72 0)
@@ -1969,7 +1968,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 280.67 157.48 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "8dd9927f-91a0-4889-b3ff-3d9479375275")
     (property "Reference" "R19" (id 0) (at 280.67 159.512 90))
     (property "Value" "220" (id 1) (at 280.67 157.48 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 280.67 157.48 0)
@@ -1981,7 +1980,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 281.94 147.32 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "6cdf462e-f089-4724-b9e6-5a4ece7acb64")
     (property "Reference" "R20" (id 0) (at 281.94 149.352 90))
     (property "Value" "220" (id 1) (at 281.94 147.32 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 281.94 147.32 0)
@@ -1993,7 +1992,7 @@
   )
 
   (symbol (lib_id "video_schlib:CP") (at 273.05 58.42 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "166b5563-e486-4d46-b073-28a121bc5bc4")
     (property "Reference" "C62" (id 0) (at 274.32 55.88 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -2009,7 +2008,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 81.28 172.72 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "0da5560a-8933-4738-8790-4cfde717af4c")
     (property "Reference" "C47" (id 0) (at 85.09 170.18 0))
     (property "Value" "220pF" (id 1) (at 85.09 175.26 0))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 81.28 172.72 0)
@@ -2021,7 +2020,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 87.63 106.68 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "e36454bc-eb97-4b2e-8695-52fdae1eb020")
     (property "Reference" "C3" (id 0) (at 87.63 102.87 90))
     (property "Value" "100nF" (id 1) (at 87.63 110.49 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 87.63 106.68 0)
@@ -2033,7 +2032,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 87.63 129.54 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "d16293ac-325b-4453-a944-474e0048a398")
     (property "Reference" "C4" (id 0) (at 87.63 125.73 90))
     (property "Value" "100nF" (id 1) (at 87.63 133.35 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 87.63 129.54 0)
@@ -2045,7 +2044,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 88.9 165.1 90) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "c0355577-15e9-4572-a1e0-243e28fb0d18")
     (property "Reference" "C1" (id 0) (at 85.09 163.83 90))
     (property "Value" "100nF" (id 1) (at 93.98 163.83 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 88.9 165.1 0)
@@ -2057,7 +2056,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 123.19 43.18 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "129abacf-7d98-41d3-afbf-3551cd31a791")
     (property "Reference" "C65" (id 0) (at 127 40.64 0))
     (property "Value" "22pF" (id 1) (at 127 45.72 0))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 123.19 43.18 0)
@@ -2069,7 +2068,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 124.46 162.56 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "0f6e7a01-22e8-4b5b-9363-5fcfe4695103")
     (property "Reference" "C7" (id 0) (at 124.46 158.75 90))
     (property "Value" "100nF" (id 1) (at 124.46 166.37 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 124.46 162.56 0)
@@ -2081,7 +2080,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 138.43 154.94 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "925302e8-32f0-41ac-ae3b-8e9e849ed284")
     (property "Reference" "C6" (id 0) (at 138.43 151.13 90))
     (property "Value" "100nF" (id 1) (at 138.43 158.75 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 138.43 154.94 0)
@@ -2093,7 +2092,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 143.51 43.18 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "c62929b5-36b2-4953-a64b-1f7d976b3515")
     (property "Reference" "C66" (id 0) (at 147.32 40.64 0))
     (property "Value" "22pF" (id 1) (at 147.32 45.72 0))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 143.51 43.18 0)
@@ -2117,7 +2116,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 295.91 147.32 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "ceae812e-87a7-4c7e-b7c1-1dd9e81b6ae2")
     (property "Reference" "C8" (id 0) (at 292.1 144.78 90))
     (property "Value" "100nF" (id 1) (at 300.99 144.78 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 295.91 147.32 0)
@@ -2129,7 +2128,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 295.91 157.48 270) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "3a6062eb-4b84-4bd4-bfad-28a8279c60d4")
     (property "Reference" "C5" (id 0) (at 292.1 154.94 90))
     (property "Value" "100nF" (id 1) (at 300.99 154.94 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" (id 2) (at 295.91 157.48 0)
@@ -2141,7 +2140,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 303.53 82.55 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "59ccc1bf-2708-4b6b-b97e-2c4a51173680")
     (property "Reference" "C2" (id 0) (at 304.8 80.01 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -2157,7 +2156,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 321.31 82.55 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "ea1259f6-1f80-441b-8449-9d16ea212246")
     (property "Reference" "C12" (id 0) (at 322.58 80.01 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -2173,7 +2172,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 331.47 224.79 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "4865c7b0-0db7-4b49-a78c-d42809d40165")
     (property "Reference" "C9" (id 0) (at 332.74 222.25 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -2189,7 +2188,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 339.09 82.55 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "f298ac6d-4d86-4e16-8500-a8ebfbea2b17")
     (property "Reference" "C13" (id 0) (at 340.36 80.01 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -2205,7 +2204,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 349.25 224.79 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "21fbe490-77e6-462d-ae76-d32621ea1205")
     (property "Reference" "C10" (id 0) (at 350.52 222.25 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -2221,7 +2220,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 356.87 82.55 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "87d6a5de-9066-42a7-9667-1c3c31cd789f")
     (property "Reference" "C14" (id 0) (at 358.14 80.01 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -2237,7 +2236,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 367.03 224.79 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "39ef5ee0-3393-447e-a017-caab6ced49f2")
     (property "Reference" "C11" (id 0) (at 368.3 222.25 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -2269,7 +2268,7 @@
   )
 
   (symbol (lib_id "video_schlib:CRYSTAL") (at 133.35 53.34 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "9a261899-9159-4903-82d8-be1105e475c2")
     (property "Reference" "X2" (id 0) (at 133.35 49.53 0)
       (effects (font (size 1.524 1.524)))
     )
@@ -2285,7 +2284,7 @@
   )
 
   (symbol (lib_id "video_schlib:BT812") (at 203.2 154.94 0) (unit 1)
-    (uuid "00000000-0000-0000-0000-00007fffffff")
+    (uuid "9d958521-9016-499d-a078-79e086a3b6b5")
     (property "Reference" "U10" (id 0) (at 203.2 152.4 0)
       (effects (font (size 1.524 1.524)))
     )
