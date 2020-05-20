@@ -791,7 +791,7 @@ INPUT                  = Documentation/development \
                          include \
                          kicad \
                          libs \
-                         pagelayot_editor \
+                         pagelayout_editor \
                          pcb_calculator \
                          pcbnew \
                          plugins \
