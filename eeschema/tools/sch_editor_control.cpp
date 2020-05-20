@@ -455,8 +455,9 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
         wxString msg = searchAllSheets ? _( "Reached end of schematic." )
                                        : _( "Reached end of sheet." );
 
-        m_frame->ShowFindReplaceStatus(
-                msg + _( "\nFind again to wrap around to the start." ), 4000 );
+       // Show the popup during the timeperiod the user can wrap the search
+        m_frame->ShowFindReplaceStatus( msg + _( " Find again to wrap around to the start." ),
+                                        4000 );
         wrapAroundTimer.StartOnce( 4000 );
     }
 
