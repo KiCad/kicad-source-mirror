@@ -78,11 +78,11 @@ private:
     void    export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
-     * write anot filled  polygon item to the board file.
-     * @param aGbrItem = the Gerber item (line, arc) to export
+     * write a non-copper polygon to the board file.
      * @param aLayer = the technical layer to use
      */
-    void    writePcbPolygonItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void    writePcbPolygon( const SHAPE_POLY_SET& aPolys, LAYER_NUM aLayer,
+                             const wxPoint& aOffset = { 0, 0 } );
 
     /**
      * write a zone item to the board file.
@@ -122,14 +122,6 @@ private:
      * @param aLayer = the copper layer to use
      */
     void    export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
-
-    /**
-     * function writePcbLineItem
-     * basic write function to write a DRAWSEGMENT item or a TRACK item
-     * to the board file, from a non flashed item
-     */
-    void    writePcbLineItem( bool aIsArc, wxPoint& aStart, wxPoint& aEnd,
-                              int aWidth, LAYER_NUM aLayer, double aAngle = 0 );
 
     /**
      * function writeCopperLineItem
@@ -188,8 +180,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
 
     if( layercount == 0 )
     {
-        DisplayInfoMessage( this,
-                            _( "None of the Gerber layers contain any data" ) );
+        DisplayInfoMessage( this, _( "None of the Gerber layers contain any data" ) );
         return;
     }
 
@@ -296,38 +287,104 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLa
 
 void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
 {
-    bool isArc = false;
+    // used when a D_CODE is not found. default D_CODE to draw a flashed item
+    static D_CODE  dummyD_CODE( 0 );
 
-    double     angle   = 0;
-    wxPoint seg_start   = aGbrItem->m_Start;
-    wxPoint seg_end     = aGbrItem->m_End;
+    wxPoint        seg_start   = aGbrItem->m_Start;
+    wxPoint        seg_end     = aGbrItem->m_End;
+    D_CODE*        d_codeDescr = aGbrItem->GetDcodeDescr();
+    SHAPE_POLY_SET polygon;
 
-    if( aGbrItem->m_Shape == GBR_POLYGON )
+    if( d_codeDescr == NULL )
+        d_codeDescr = &dummyD_CODE;
+
+    switch( aGbrItem->m_Shape )
     {
-        writePcbPolygonItem( aGbrItem, aLayer );
-        return;
-    }
+    case GBR_POLYGON:
+        writePcbPolygon( aGbrItem->m_Polygon, aLayer );
+        break;
 
-    if( aGbrItem->m_Shape == GBR_ARC )
+    case GBR_SPOT_CIRCLE:
+    case GBR_SPOT_RECT:
+    case GBR_SPOT_OVAL:
+    case GBR_SPOT_POLY:
+    case GBR_SPOT_MACRO:
+        d_codeDescr->ConvertShapeToPolygon();
+        writePcbPolygon( d_codeDescr->m_Polygon, aLayer, aGbrItem->GetABPosition( seg_start ) );
+        break;
+
+    case GBR_ARC:
     {
-        double  a = atan2( (double) ( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y),
-                           (double) ( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
-        double  b = atan2( (double) ( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
-                           (double) ( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
+        double a = atan2( (double) ( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y ),
+                          (double) ( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
+        double b = atan2( (double) ( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
+                          (double) ( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
 
-        isArc       = true;
-        angle       = RAD2DEG(b - a);
-        seg_start   = aGbrItem->m_ArcCentre;
+        double angle = RAD2DEG(b - a);
+        seg_start = aGbrItem->m_ArcCentre;
 
         // Ensure arc orientation is CCW
         if( angle < 0 )
             angle += 360.0;
-    }
 
-    // Reverse Y axis:
-    seg_start.y = -seg_start.y;
-    seg_end.y = -seg_end.y;
-    writePcbLineItem( isArc, seg_start, seg_end, aGbrItem->m_Size.x, aLayer, angle );
+        // Reverse Y axis:
+        seg_start.y = -seg_start.y;
+        seg_end.y = -seg_end.y;
+
+        if( angle == 360.0 ||  angle == 0 )
+        {
+            fprintf( m_fp, "(gr_circle (center %s %s) (end %s %s) (layer %s) (width %s))\n",
+                     Double2Str( MapToPcbUnits(seg_start.x) ).c_str(),
+                     Double2Str( MapToPcbUnits(seg_start.y) ).c_str(),
+                     Double2Str( MapToPcbUnits(seg_end.x) ).c_str(),
+                     Double2Str( MapToPcbUnits(seg_end.y) ).c_str(),
+                     TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
+                     Double2Str( MapToPcbUnits( aGbrItem->m_Size.x ) ).c_str()
+                     );
+        }
+        else
+        {
+            fprintf( m_fp, "(gr_arc (start %s %s) (end %s %s) (angle %s) (layer %s) (width %s))\n",
+                     Double2Str( MapToPcbUnits(seg_start.x) ).c_str(),
+                     Double2Str( MapToPcbUnits(seg_start.y) ).c_str(),
+                     Double2Str( MapToPcbUnits(seg_end.x) ).c_str(),
+                     Double2Str( MapToPcbUnits(seg_end.y) ).c_str(),
+                     Double2Str( angle ).c_str(),
+                     TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
+                     Double2Str( MapToPcbUnits( aGbrItem->m_Size.x ) ).c_str()
+                     );
+        }
+    }
+        break;
+
+    case GBR_CIRCLE:
+        // Reverse Y axis:
+        seg_start.y = -seg_start.y;
+        seg_end.y = -seg_end.y;
+
+        fprintf( m_fp, "(gr_circle (start %s %s) (end %s %s) (layer %s) (width %s))\n",
+                 Double2Str( MapToPcbUnits( seg_start.x ) ).c_str(),
+                 Double2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
+                 Double2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
+                 Double2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
+                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
+                 Double2Str( MapToPcbUnits( aGbrItem->m_Size.x ) ).c_str() );
+        break;
+
+    case GBR_SEGMENT:
+        // Reverse Y axis:
+        seg_start.y = -seg_start.y;
+        seg_end.y = -seg_end.y;
+
+        fprintf( m_fp, "(gr_line (start %s %s) (end %s %s) (layer %s) (width %s))\n",
+                 Double2Str( MapToPcbUnits( seg_start.x ) ).c_str(),
+                 Double2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
+                 Double2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
+                 Double2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
+                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
+                 Double2Str( MapToPcbUnits( aGbrItem->m_Size.x ) ).c_str() );
+        break;
+    }
 }
 
 
@@ -352,7 +409,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_
         // The current way is use a polygon, as the zone export
         // is exprimental and only for tests.
 #if 1
-        writePcbPolygonItem( aGbrItem, aLayer );
+        writePcbPolygon( aGbrItem->m_Polygon, aLayer );
 #else
         // Only for tests:
         writePcbZoneItem( aGbrItem, aLayer );
@@ -509,49 +566,10 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader( LAYER_NUM* aLayerLookUpTable )
 }
 
 
-void GBR_TO_PCB_EXPORTER::writePcbLineItem( bool aIsArc, wxPoint& aStart, wxPoint& aEnd,
-                                            int aWidth, LAYER_NUM aLayer, double aAngle )
+void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, LAYER_NUM aLayer,
+                                           const wxPoint& aOffset )
 {
-    if( aIsArc && ( aAngle == 360.0 ||  aAngle == 0 ) )
-    {
-        fprintf( m_fp, "(gr_circle (center %s %s) (end %s %s)(layer %s) (width %s))\n",
-                 Double2Str( MapToPcbUnits(aStart.x) ).c_str(),
-                 Double2Str( MapToPcbUnits(aStart.y) ).c_str(),
-                 Double2Str( MapToPcbUnits(aEnd.x) ).c_str(),
-                 Double2Str( MapToPcbUnits(aEnd.y) ).c_str(),
-                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
-                 Double2Str( MapToPcbUnits( aWidth ) ).c_str()
-                 );
-    }
-    else if( aIsArc )
-    {
-        fprintf( m_fp, "(gr_arc (start %s %s) (end %s %s) (angle %s)(layer %s) (width %s))\n",
-                 Double2Str( MapToPcbUnits(aStart.x) ).c_str(),
-                 Double2Str( MapToPcbUnits(aStart.y) ).c_str(),
-                 Double2Str( MapToPcbUnits(aEnd.x) ).c_str(),
-                 Double2Str( MapToPcbUnits(aEnd.y) ).c_str(),
-                 Double2Str( aAngle ).c_str(),
-                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
-                 Double2Str( MapToPcbUnits( aWidth ) ).c_str()
-                 );
-    }
-    else
-    {
-        fprintf( m_fp, "(gr_line (start %s %s) (end %s %s)(layer %s) (width %s))\n",
-                 Double2Str( MapToPcbUnits(aStart.x) ).c_str(),
-                 Double2Str( MapToPcbUnits(aStart.y) ).c_str(),
-                 Double2Str( MapToPcbUnits(aEnd.x) ).c_str(),
-                 Double2Str( MapToPcbUnits(aEnd.y) ).c_str(),
-                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
-                 Double2Str( MapToPcbUnits( aWidth ) ).c_str()
-                 );
-    }
-}
-
-
-void GBR_TO_PCB_EXPORTER::writePcbPolygonItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
-{
-    SHAPE_POLY_SET polys = aGbrItem->m_Polygon;
+    SHAPE_POLY_SET polys = aPolys;
 
     // Cleanup the polygon
     polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
@@ -582,8 +600,9 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygonItem( GERBER_DRAW_ITEM* aGbrItem, LAYER
             fprintf( m_fp, "\n" );
         }
 
-        fprintf( m_fp, " (xy %s %s)", Double2Str( MapToPcbUnits( poly.CPoint( ii ).x ) ).c_str(),
-                Double2Str( MapToPcbUnits( -poly.CPoint( ii ).y ) ).c_str() );
+        fprintf( m_fp, " (xy %s %s)",
+                Double2Str( MapToPcbUnits( poly.CPoint( ii ).x + aOffset.x ) ).c_str(),
+                Double2Str( MapToPcbUnits( -poly.CPoint( ii ).y + aOffset.y ) ).c_str() );
     }
 
     fprintf( m_fp, ")" );
