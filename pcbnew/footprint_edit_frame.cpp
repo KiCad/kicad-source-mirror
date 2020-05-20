@@ -65,6 +65,7 @@
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <tools/position_relative_tool.h>
+#include <widgets/infobar.h>
 #include <widgets/lib_tree.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/progress_reporter.h>
@@ -196,6 +197,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_Layers->SelectLayer( F_SilkS );
     m_Layers->OnLayerSelected();
 
+    // Create the infobar and the panel to hold it and the canvas
+    m_infoBar     = new WX_INFOBAR( this );
+    m_canvasPanel = new EDA_INFOBAR_PANEL( this );
+    m_canvasPanel->AddInfoBar( m_infoBar );
+    m_canvasPanel->AddOtherItem( GetCanvas() );
+
     m_auimgr.SetManagedWindow( this );
 
     // Horizontal items; layers 4 - 6
@@ -213,7 +220,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                       .Caption( _( "Layers Manager" ) ).PaneBorder( false )
                       .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ) );
 
-    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( m_canvasPanel, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();

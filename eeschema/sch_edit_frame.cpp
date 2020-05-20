@@ -69,7 +69,7 @@
 #include <tools/sch_editor_control.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
-#include <widgets/wx_infobar.h>
+#include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>
 
@@ -215,7 +215,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_AboutTitle = "Eeschema";
 
     m_findReplaceDialog = nullptr;
-    m_findReplaceStatusPopup = nullptr;
 
     m_generateNetlistAndExit = false;
     m_netlistFilename        = wxEmptyString;
@@ -240,7 +239,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
+    // Create the infobar and the panel to hold it and the canvas
+    m_infoBar     = new WX_INFOBAR( this );
+    m_canvasPanel = new EDA_INFOBAR_PANEL( this );
+    m_canvasPanel->AddInfoBar( m_infoBar );
+    m_canvasPanel->AddOtherItem( GetCanvas() );
 
     // Initialize common print setup dialog settings.
     m_pageSetupData.GetPrintData().SetPrintMode( wxPRINT_MODE_PRINTER );
@@ -256,15 +259,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                       EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_drawToolBar,
                       EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
-    m_auimgr.AddPane( m_infoBar,
-                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
-    m_auimgr.AddPane( GetCanvas(),
+    m_auimgr.AddPane( m_canvasPanel,
                       EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
     m_auimgr.AddPane( m_messagePanel,
                       EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
-
-    // We don't want the infobar displayed right away
-    m_auimgr.GetPane( "InfoBar" ).Hide();
 
     m_auimgr.Update();
 
@@ -527,11 +525,6 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();
         m_replaceStringHistoryList = m_findReplaceDialog->GetReplaceEntries();
 
-        m_findReplaceStatusPopup->Destroy();
-        m_findReplaceStatusPopup = nullptr;
-
-        // Must destroy statusPopup first as it holds a pointer to the dialog
-
         m_findReplaceDialog->Destroy();
         m_findReplaceDialog = nullptr;
     }
@@ -678,11 +671,6 @@ void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool aForceUpdate )
 
 void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
 {
-    if( m_findReplaceStatusPopup )
-        m_findReplaceStatusPopup->Destroy();
-
-    // Must destroy statusPopup first as it holds a pointer to the dialog
-
     if( m_findReplaceDialog )
         m_findReplaceDialog->Destroy();
 
@@ -692,25 +680,22 @@ void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
     m_findReplaceDialog->SetFindEntries( m_findStringHistoryList );
     m_findReplaceDialog->SetReplaceEntries( m_replaceStringHistoryList );
     m_findReplaceDialog->Show( true );
-
-    m_findReplaceStatusPopup = new STATUS_TEXT_POPUP( m_findReplaceDialog );
-    m_findReplaceStatusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
 }
 
 
-void SCH_EDIT_FRAME::ShowFindReplaceStatus( const wxString& aMsg )
+void SCH_EDIT_FRAME::ShowFindReplaceStatus( const wxString& aMsg, int aStatusTime )
 {
-    wxPoint pos = wxGetMousePosition() - m_findReplaceStatusPopup->GetSize() - wxPoint( 10, 10 );
+    // Prepare the infobar, since we don't know its state
+    m_infoBar->RemoveAllButtons();
+    m_infoBar->AddCloseButton();
 
-    m_findReplaceStatusPopup->SetText( aMsg );
-    m_findReplaceStatusPopup->Move( pos );
-    m_findReplaceStatusPopup->PopupFor( 3000 );
+    m_infoBar->ShowMessageFor( aMsg, aStatusTime, wxICON_INFORMATION );
 }
 
 
 void SCH_EDIT_FRAME::ClearFindReplaceStatus()
 {
-    m_findReplaceStatusPopup->Hide();
+    m_infoBar->Dismiss();
 }
 
 
@@ -718,11 +703,6 @@ void SCH_EDIT_FRAME::OnFindDialogClose()
 {
     m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();
     m_replaceStringHistoryList = m_findReplaceDialog->GetReplaceEntries();
-
-    m_findReplaceStatusPopup->Destroy();
-    m_findReplaceStatusPopup = nullptr;
-
-    // Must destroy statusPopup first as it holds a pointer to the dialog
 
     m_findReplaceDialog->Destroy();
     m_findReplaceDialog = nullptr;

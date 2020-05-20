@@ -135,7 +135,6 @@ private:
                                                   ///< to call a custom net list generator.
 
     DIALOG_SCH_FIND*        m_findReplaceDialog;
-    STATUS_TEXT_POPUP*      m_findReplaceStatusPopup;
 
     wxString                m_plotDirectoryName;
     wxString                m_netListFormat;
@@ -314,7 +313,7 @@ public:
      */
     HIERARCHY_NAVIG_DLG* FindHierarchyNavigator();
 
-    void ShowFindReplaceStatus( const wxString& aMsg );
+    void ShowFindReplaceStatus( const wxString& aMsg, int aStatusTime );
     void ClearFindReplaceStatus();
 
     /**

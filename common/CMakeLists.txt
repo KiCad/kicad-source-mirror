@@ -196,6 +196,7 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_icon_text_helpers.cpp
     widgets/grid_text_button_helpers.cpp
     widgets/indicator_icon.cpp
+    widgets/infobar.cpp
     widgets/layer_box_selector.cpp
     widgets/lib_tree.cpp
     widgets/mathplot.cpp
@@ -211,7 +212,6 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_busy_indicator.cpp
     widgets/wx_grid.cpp
     widgets/wx_angle_text.cpp
-    widgets/wx_infobar.cpp
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS

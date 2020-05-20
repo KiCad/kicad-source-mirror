@@ -34,7 +34,7 @@
 #include <pl_editor_frame.h>
 #include <properties_frame.h>
 #include <pl_editor_id.h>
-#include <widgets/wx_infobar.h>
+#include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 
 
@@ -231,6 +231,7 @@ bool PL_EDITOR_FRAME::LoadPageLayoutDescrFile( const wxString& aFullFileName )
         GetScreen()->ClrModify();
 
         wxFileName fn = aFullFileName;
+        m_infoBar->Dismiss();
 
         if( fn.FileExists() && !fn.IsFileWritable() )
         {

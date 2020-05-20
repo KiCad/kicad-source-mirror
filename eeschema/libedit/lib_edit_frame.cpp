@@ -58,6 +58,7 @@
 #include <tools/lib_edit_tool.h>
 #include <tools/lib_move_tool.h>
 #include <tools/lib_pin_tool.h>
+#include <widgets/infobar.h>
 #include <widgets/lib_tree.h>
 #include <widgets/symbol_tree_pane.h>
 #include <wildcards_and_files_ext.h>
@@ -148,6 +149,12 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     DisplayCmpDoc();
     RebuildSymbolUnitsList();
 
+    // Create the infobar and the panel to hold it and the canvas
+    m_infoBar     = new WX_INFOBAR( this );
+    m_canvasPanel = new EDA_INFOBAR_PANEL( this );
+    m_canvasPanel->AddInfoBar( m_infoBar );
+    m_canvasPanel->AddOtherItem( GetCanvas() );
+
     m_auimgr.SetManagedWindow( this );
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
@@ -159,7 +166,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .BestSize( m_settings->m_LibWidth, -1 ).Resizable() );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
 
-    m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
+    m_auimgr.AddPane( m_canvasPanel, wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
 
     m_auimgr.Update();
 

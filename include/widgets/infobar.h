@@ -18,6 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef INFOBAR_H_
+#define INFOBAR_H_
+
 #include <wx/infobar.h>
 #include <wx/wx.h>
 
@@ -28,6 +31,7 @@ class wxAuiManager;
  * A modified version of the wxInfoBar class that allows us to:
  *     * Show the close button along with the other buttons
  *     * Remove all user-provided buttons at once
+ *     * Allow automaticly hiding the infobar after a time period
  *
  * This inherits from the generic infobar because the native infobar
  * on GTK doesn't include the icon on the left and it looks worse.
@@ -43,6 +47,17 @@ public:
      * @param aWinId is the ID for this infobar object
      */
     WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr = nullptr, wxWindowID aWinid = wxID_ANY );
+
+    /**
+     * Set the time period to show the infobar.
+     *
+     * This only applies for the next showing of the infobar,
+     * so it must be reset every time. A value of 0 disables
+     * the automatic hiding (this is the default).
+     *
+     * @param aTime is the time in milliseconds to show the infobar
+     */
+    void SetShowTime( int aTime );
 
     /**
      * Add the default close button to the infobar on the right side.
@@ -74,6 +89,16 @@ public:
     void RemoveAllButtons();
 
     /**
+     * Show the infobar with the provided message and icon for a specific period
+     * of time.
+     *
+     * @param aMessage is the message to display
+     * @param aTime is the amount of time to show the infobar
+     * @param aFlags is the flag containing the icon to display on the left side of the infobar
+     */
+    void ShowMessageFor( const wxString& aMessage, int aTime, int aFlags = wxICON_INFORMATION );
+
+    /**
      * Show the info bar with the provided message and icon.
      *
      * @param aMessage is the message to display
@@ -92,7 +117,12 @@ protected:
      * Event handler for the close button.
      * This is bound to ID_CLOSE_INFOBAR on the infobar.
      */
-    void OnCloseButton( wxCommandEvent& aEvt );
+    void OnCloseButton( wxCommandEvent& aEvent );
+
+    /**
+     * Event handler for the automatic closing timer.
+     */
+    void OnTimer( wxTimerEvent& aEvent );
 
     /**
      * Update the AUI pane to show or hide this infobar.
@@ -101,7 +131,51 @@ protected:
      */
     void UpdateAuiLayout( bool aShow );
 
-    wxAuiManager* m_auiManager;
+    int           m_showTime;       ///< The time to show the infobar. 0 = don't auto hide
+    wxTimer*      m_showTimer;      ///< The timer counting the autoclose period
+    wxAuiManager* m_auiManager;     ///< The AUI manager that contains this infobar
 
     DECLARE_EVENT_TABLE()
 };
+
+
+/**
+ * A wxPanel derived class that hold an infobar and another control.
+ * The infobar is located at the top of the panel, and the other control
+ * is located below it.
+ *
+ * This allows the infobar to be controlled nicely by an AUI manager,
+ * since adding the infobar on its own to the AUI manager produces
+ * artifacts when showing/hiding it due to the AUI pane layout.
+ *
+ */
+class EDA_INFOBAR_PANEL : public wxPanel
+{
+public:
+    EDA_INFOBAR_PANEL( wxWindow* aParent, wxWindowID aId = wxID_ANY,
+                       const wxPoint& aPos = wxDefaultPosition,
+                       const wxSize& aSize = wxSize( -1,-1 ),
+                       long aStyle = wxTAB_TRAVERSAL,
+                       const wxString& aName = wxEmptyString );
+
+    /**
+     * Add the given infobar object to the panel
+     *
+     * @param aInfoBar is the infobar to add
+     */
+    void AddInfoBar( WX_INFOBAR* aInfoBar );
+
+    /**
+     * Add the other item to the panel.
+     * This item will expand to fill up the vertical space left.
+     *
+     * @param aOtherItem is the item to add
+     */
+    void AddOtherItem( wxWindow* aOtherItem );
+
+protected:
+    // The sizer containing the infobar and the other object
+    wxFlexGridSizer* m_mainSizer;
+};
+
+#endif // INFOBAR_H_

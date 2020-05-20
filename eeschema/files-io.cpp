@@ -55,7 +55,7 @@
 #include <tool/actions.h>
 #include <tools/sch_editor_control.h>
 #include <netlist.h>
-#include <widgets/wx_infobar.h>
+#include <widgets/infobar.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName,
@@ -499,6 +499,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     UpdateTitle();
 
     wxFileName fn = Prj().AbsolutePath( GetScreen()->GetFileName() );
+    m_infoBar->Dismiss();
 
     if( fn.FileExists() && !fn.IsFileWritable() )
     {

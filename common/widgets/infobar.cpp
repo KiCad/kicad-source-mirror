@@ -19,20 +19,28 @@
  */
 
 #include <id.h>
-#include <widgets/wx_infobar.h>
+#include <widgets/infobar.h>
 #include <wx/aui/framemanager.h>
+#include <wx/debug.h>
 #include <wx/infobar.h>
+#include <wx/sizer.h>
+#include <wx/timer.h>
 
 
 BEGIN_EVENT_TABLE( WX_INFOBAR, wxInfoBarGeneric )
     EVT_BUTTON( ID_CLOSE_INFOBAR, WX_INFOBAR::OnCloseButton )
+    EVT_TIMER(  ID_CLOSE_INFOBAR, WX_INFOBAR::OnTimer )
 END_EVENT_TABLE()
 
 
 WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager *aMgr, wxWindowID aWinid )
         : wxInfoBarGeneric( aParent, aWinid ),
+        m_showTime( 0 ),
+        m_showTimer( nullptr ),
         m_auiManager( aMgr )
 {
+    m_showTimer = new wxTimer( this, ID_CLOSE_INFOBAR );
+
     // On GTK, the infobar seems to start too small, so increase its height
 #ifdef __WXGTK__
     int sx, sy;
@@ -42,33 +50,60 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager *aMgr, wxWindowID aWinid
 }
 
 
+void WX_INFOBAR::SetShowTime( int aTime )
+{
+    m_showTime = aTime;
+}
+
+
+void WX_INFOBAR::ShowMessageFor( const wxString& aMessage, int aTime, int aFlags )
+{
+    m_showTime = aTime;
+    ShowMessage( aMessage, aFlags );
+}
+
+
 void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
 {
     wxInfoBarGeneric::ShowMessage( aMessage, aFlags );
 
-    UpdateAuiLayout( true );
+    if( m_auiManager )
+        UpdateAuiLayout( true );
+
+    if( m_showTime > 0 )
+        m_showTimer->StartOnce( m_showTime );
+
+    Refresh();
+    Update();
 }
 
 
 void WX_INFOBAR::Dismiss()
 {
     wxInfoBarGeneric::Dismiss();
-    UpdateAuiLayout( false );
+
+    if( m_auiManager )
+        UpdateAuiLayout( false );
 }
 
 
 void WX_INFOBAR::UpdateAuiLayout( bool aShow )
 {
-    // Update the AUI pane that contains the infobar
-    if( m_auiManager )
+    wxASSERT( m_auiManager );
+
+    wxAuiPaneInfo& pane = m_auiManager->GetPane( this );
+
+    // If the infobar is in a pane, then show/hide the pane
+    if( pane.IsOk() )
     {
         if( aShow )
-            m_auiManager->GetPane( this ).Show();
+            pane.Show();
         else
-            m_auiManager->GetPane( this ).Hide();
-
-        m_auiManager->Update();
+            pane.Hide();
     }
+
+    // Update the AUI manager regardless
+    m_auiManager->Update();
 }
 
 
@@ -83,6 +118,8 @@ void WX_INFOBAR::AddButton( wxWindowID aId, const wxString& aLabel )
 void WX_INFOBAR::AddButton( wxButton* aButton )
 {
     wxSizer* sizer = GetSizer();
+
+    wxASSERT( aButton );
 
 #ifdef __WXMAC__
     // Based on the code in the original class:
@@ -130,7 +167,52 @@ void WX_INFOBAR::RemoveAllButtons()
 }
 
 
-void WX_INFOBAR::OnCloseButton( wxCommandEvent& aEvt )
+void WX_INFOBAR::OnCloseButton( wxCommandEvent& aEvent )
 {
     Dismiss();
+}
+
+
+void WX_INFOBAR::OnTimer( wxTimerEvent& aEvent )
+{
+    // Reset and clear the timer
+    m_showTimer->Stop();
+    m_showTime = 0;
+
+    Dismiss();
+}
+
+
+EDA_INFOBAR_PANEL::EDA_INFOBAR_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos,
+                                      const wxSize& aSize, long aStyle, const wxString& aName )
+         : wxPanel( aParent, aId, aPos, aSize, aStyle, aName )
+{
+    m_mainSizer = new wxFlexGridSizer( 1, 0, 0 );
+
+    m_mainSizer->SetFlexibleDirection( wxBOTH );
+    m_mainSizer->AddGrowableCol( 0, 1 );
+
+    SetSizer( m_mainSizer );
+}
+
+
+void EDA_INFOBAR_PANEL::AddInfoBar( WX_INFOBAR* aInfoBar )
+{
+    wxASSERT( aInfoBar );
+
+    aInfoBar->Reparent( this );
+    m_mainSizer->Add( aInfoBar, 1, wxALIGN_TOP | wxEXPAND, 0 );
+    m_mainSizer->Layout();
+}
+
+
+void EDA_INFOBAR_PANEL::AddOtherItem( wxWindow* aOtherItem )
+{
+    wxASSERT( aOtherItem );
+
+    aOtherItem->Reparent( this );
+    m_mainSizer->Add( aOtherItem, 1, wxALIGN_BOTTOM | wxEXPAND, 0 );
+
+    m_mainSizer->AddGrowableRow( 1, 1 );
+    m_mainSizer->Layout();
 }
