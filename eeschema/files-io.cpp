@@ -302,6 +302,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
     }
 
+    // Make sure the project file name is set (it won't be in standalone mode)
+    if( pro.GetFullPath() != Prj().GetProjectFullName() )
+        Prj().SetProjectFullName( pro.GetFullPath() );
+
     LoadProjectFile();
 
     // Load the symbol library table, this will be used forever more.
