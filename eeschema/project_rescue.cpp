@@ -316,9 +316,9 @@ bool RESCUE_CACHE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 
     wxCHECK_MSG( tmp, false, "Both cache and library symbols undefined." );
 
-    LIB_PART new_part( *tmp );
-    new_part.SetName( m_new_name );
-    aRescuer->AddPart( &new_part );
+    std::unique_ptr<LIB_PART> new_part = tmp->Flatten();
+    new_part->SetName( m_new_name );
+    aRescuer->AddPart( new_part.get() );
 
     for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
     {
@@ -477,10 +477,10 @@ bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 
     wxCHECK_MSG( tmp, false, "Both cache and library symbols undefined." );
 
-    LIB_PART new_part( *tmp );
-    new_part.SetLibId( m_new_id );
-    new_part.SetName( m_new_id.GetLibItemName() );
-    aRescuer->AddPart( &new_part );
+    std::unique_ptr<LIB_PART> new_part = tmp->Flatten();
+    new_part->SetLibId( m_new_id );
+    new_part->SetName( m_new_id.GetLibItemName() );
+    aRescuer->AddPart( new_part.get() );
 
     for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
     {
