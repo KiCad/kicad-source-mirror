@@ -300,6 +300,14 @@ public:
      */
     virtual void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
             int aClearanceValue, int aError = ARC_LOW_DEF, bool ignoreLineWidth = false ) const;
+
+protected:
+    /**
+     * Helper function
+     * Return a string (to be shown to the user) describing a layer mask.
+     * The BOARD is needed because layer names are (somewhat) customizable
+     */
+    static wxString LayerMaskDescribe( const BOARD* aBoard, LSET aMask );
 };
 
 #endif /* BOARD_ITEM_STRUCT_H */

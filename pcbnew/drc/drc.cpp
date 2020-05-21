@@ -332,7 +332,7 @@ int DRC::testZoneToZoneOutlines( BOARD_COMMIT& aCommit )
                 {
                     drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
 
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
                                   MessageTextFromValue( userUnits(), zone2zoneClearance, true ),
                                   MessageTextFromValue( userUnits(), conflict.second, true ) );
@@ -716,7 +716,7 @@ void DRC::testPadClearances( BOARD_COMMIT& aCommit )
                     actual = std::max( 0, actual );
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_EDGE );
 
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
                                   MessageTextFromValue( userUnits(), minClearance, true ),
                                   MessageTextFromValue( userUnits(), actual, true ) );
@@ -1039,7 +1039,7 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
                                                                  : DRCE_TRACK_NEAR_COPPER;
             DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           m_clearanceSource,
                           MessageTextFromValue( userUnits(), minClearance, true ),
                           MessageTextFromValue( userUnits(), actual, true ) );
@@ -1097,7 +1097,7 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
             int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_COPPER );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           m_clearanceSource,
                           MessageTextFromValue( userUnits(), minClearance, true ),
                           MessageTextFromValue( userUnits(), actual, true ) );
@@ -1277,7 +1277,7 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
 
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
                                   MessageTextFromValue( userUnits(), minClearance, true ),
                                   MessageTextFromValue( userUnits(), actual, true ) );
@@ -1306,7 +1306,7 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
 
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
                                   MessageTextFromValue( userUnits(), minClearance, true ),
                                   MessageTextFromValue( userUnits(), actual, true ) );
@@ -1354,7 +1354,7 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           m_clearanceSource,
                           MessageTextFromValue( userUnits(), minClearance, true ),
                           MessageTextFromValue( userUnits(), actual, true ) );

@@ -117,7 +117,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) c
             clearance = myClearance;
 
             if( aSource )
-                *aSource = wxString::Format( _( "'%s' netclass clearance" ), myNetclass->GetName() );
+                *aSource = wxString::Format( _( "'%s' netclass" ), myNetclass->GetName() );
         }
     }
 
@@ -130,7 +130,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) c
             clearance = itemClearance;
 
             if( aSource )
-                *aSource = wxString::Format( _( "'%s' netclass clearance" ), itemNetclass->GetName() );
+                *aSource = wxString::Format( _( "'%s' netclass" ), itemNetclass->GetName() );
         }
     }
 
@@ -143,7 +143,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) c
             clearance = edgeClearance;
 
             if( aSource )
-                *aSource = _( "board edge clearance" );
+                *aSource = _( "board edge" );
         }
     }
 

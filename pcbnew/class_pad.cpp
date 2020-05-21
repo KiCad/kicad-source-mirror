@@ -47,16 +47,6 @@
 #include <convert_basic_shapes_to_polygon.h>
 
 
-/**
- * Helper function
- * Return a string (to be shown to the user) describing a layer mask.
- * Useful for showing where is a pad.
- * The BOARD is needed because layer names are (somewhat) customizable
- */
-static wxString LayerMaskDescribe( const BOARD* aBoard, LSET aMask );
-
-int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode
-
 D_PAD::D_PAD( MODULE* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
@@ -633,7 +623,7 @@ int D_PAD::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
         clearance = m_LocalClearance;
 
         if( aSource )
-            *aSource = wxString::Format( _( "pad %s clearance" ), GetName() );
+            *aSource = wxString::Format( _( "pad %s" ), GetName() );
     }
 
     // A footprint can have a specific clearance value
@@ -642,7 +632,7 @@ int D_PAD::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
         clearance = GetParent()->GetLocalClearance();
 
         if( aSource )
-            *aSource = wxString::Format( _( "%s footprint clearance" ), GetParent()->GetReference() );
+            *aSource = wxString::Format( _( "%s footprint" ), GetParent()->GetReference() );
     }
 
     // Otherwise use the baseclass method to fetch the netclass and/or rule setting
@@ -933,28 +923,32 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue,
 
 void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    MODULE*     module;
-    wxString    msg;
-    BOARD*      board;
-
-    module = (MODULE*) m_Parent;
+    EDA_UNITS              units = aFrame->GetUserUnits();
+    wxString               msg, msg2;
+    BOARD*                 board = GetBoard();
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    MODULE*                module = (MODULE*) m_Parent;
 
     if( module )
-    {
         aList.emplace_back( _( "Footprint" ), module->GetReference(), DARKCYAN );
-    }
 
     aList.emplace_back( _( "Pad" ), m_name, BROWN );
 
     if( !GetPinFunction().IsEmpty() )
-        aList.emplace_back( _( "Pin fct" ), GetPinFunction(), BROWN );
+        aList.emplace_back( _( "Pin Name" ), GetPinFunction(), BROWN );
 
     aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ), DARKCYAN );
 
-    board = GetBoard();
+    // Display the netclass name (a pad having a netcode = 0 (no net) use the
+    // default netclass for clearance):
+    if( m_netinfo->GetNet() <= 0 )
+        msg = bds.GetDefault()->GetName();
+    else
+        msg = GetNetClassName();
 
-    aList.emplace_back( _( "Layer" ),
-                        LayerMaskDescribe( board, m_layerMask ), DARKGREEN );
+    aList.emplace_back( _( "NetClass" ), msg, CYAN );
+
+    aList.emplace_back( _( "Layer" ), LayerMaskDescribe( board, m_layerMask ), DARKGREEN );
 
     // Show the pad shape, attribute and property
     wxString props = ShowPadAttr();
@@ -975,13 +969,28 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 
     aList.emplace_back( ShowPadShape(), props, DARKGREEN );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Size.x, true );
-    aList.emplace_back( _( "Width" ), msg, RED );
+    if( (GetShape() == PAD_SHAPE_CIRCLE || GetShape() == PAD_SHAPE_OVAL )
+        && m_Size.x == m_Size.y )
+    {
+        msg = MessageTextFromValue( units, m_Size.x, true );
+        aList.emplace_back( _( "Diameter" ), msg, RED );
+    }
+    else
+    {
+        msg = MessageTextFromValue( units, m_Size.x, true );
+        aList.emplace_back( _( "Width" ), msg, RED );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Size.y, true );
-    aList.emplace_back( _( "Height" ), msg, RED );
+        msg = MessageTextFromValue( units, m_Size.y, true );
+        aList.emplace_back( _( "Height" ), msg, RED );
+    }
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Drill.x, true );
+    if( GetPadToDieLength() )
+    {
+        msg = MessageTextFromValue(units, GetPadToDieLength(), true );
+        aList.emplace_back( _( "Length in Package" ), msg, CYAN );
+    }
+
+    msg = MessageTextFromValue( units, m_Drill.x, true );
 
     if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
     {
@@ -989,46 +998,18 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     }
     else
     {
-        msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Drill.x, true )
+        msg = MessageTextFromValue( units, m_Drill.x, true )
                + wxT( "/" )
-               + MessageTextFromValue( aFrame->GetUserUnits(), m_Drill.y, true );
+               + MessageTextFromValue( units, m_Drill.y, true );
         aList.emplace_back( _( "Drill X / Y" ), msg, RED );
     }
 
-    double module_orient_degrees = module ? module->GetOrientationDegrees() : 0;
+    wxString source;
+    int      clearance = GetClearance( nullptr, &source );
 
-    if( module_orient_degrees != 0.0 )
-        msg.Printf( wxT( "%3.1f(+%3.1f)" ),
-                    GetOrientationDegrees() - module_orient_degrees,
-                    module_orient_degrees );
-    else
-        msg.Printf( wxT( "%3.1f" ), GetOrientationDegrees() );
-
-    aList.emplace_back( _( "Angle" ), msg, LIGHTBLUE );
-
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Pos.x )
-           + wxT( ", " )
-           + MessageTextFromValue( aFrame->GetUserUnits(), m_Pos.y );
-    aList.emplace_back( _( "Position" ), msg, LIGHTBLUE );
-
-    if( GetPadToDieLength() )
-    {
-        msg = MessageTextFromValue( aFrame->GetUserUnits(), GetPadToDieLength(), true );
-        aList.emplace_back( _( "Length in package" ), msg, CYAN );
-    }
-
-    // Display the actual pad clearance:
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetClearance(), true );
-    aList.emplace_back( _( "Pad clearance" ), msg, CYAN );
-
-    // Display the netclass name (a pad having a netcode = 0 (no net) use the
-    // default netclass for clearance):
-    if( m_netinfo->GetNet() <= 0 )
-        msg = GetBoard()->GetDesignSettings().GetDefault()->GetName();
-    else
-        msg = GetNetClassName();
-
-    aList.emplace_back( _( "Net class" ), msg, CYAN );
+    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
+    msg2.Printf( _( "Source: %s" ), source );
+    aList.emplace_back( msg, msg2, BLACK );
 }
 
 
@@ -1245,9 +1226,7 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
 
         // Test rectangular portion between rounded ends
         if( arect.Intersects( shapeRect, m_Orient ) )
-        {
             return true;
-        }
 
         break;
 
@@ -1278,19 +1257,13 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
         for( int ii=0; ii<4; ii++ )
         {
             if( TestPointInsidePolygon( poly, 4, corners[ii] ) )
-            {
                 return true;
-            }
 
             if( arect.Contains( poly[ii] ) )
-            {
                 return true;
-            }
 
             if( arect.Intersects( poly[ii], poly[(ii+1) % 4] ) )
-            {
                 return true;
-            }
         }
 
         return false;
@@ -1427,29 +1400,14 @@ wxString D_PAD::ShowPadShape() const
 {
     switch( GetShape() )
     {
-    case PAD_SHAPE_CIRCLE:
-        return _( "Circle" );
-
-    case PAD_SHAPE_OVAL:
-        return _( "Oval" );
-
-    case PAD_SHAPE_RECT:
-        return _( "Rect" );
-
-    case PAD_SHAPE_TRAPEZOID:
-        return _( "Trap" );
-
-    case PAD_SHAPE_ROUNDRECT:
-        return _( "Roundrect" );
-
-    case PAD_SHAPE_CHAMFERED_RECT:
-        return _( "Chamferedrect" );
-
-    case PAD_SHAPE_CUSTOM:
-        return _( "CustomShape" );
-
-    default:
-        return wxT( "???" );
+    case PAD_SHAPE_CIRCLE:         return _( "Circle" );
+    case PAD_SHAPE_OVAL:           return _( "Oval" );
+    case PAD_SHAPE_RECT:           return _( "Rect" );
+    case PAD_SHAPE_TRAPEZOID:      return _( "Trap" );
+    case PAD_SHAPE_ROUNDRECT:      return _( "Roundrect" );
+    case PAD_SHAPE_CHAMFERED_RECT: return _( "Chamferedrect" );
+    case PAD_SHAPE_CUSTOM:         return _( "CustomShape" );
+    default:                       return wxT( "???" );
     }
 }
 
@@ -1458,20 +1416,11 @@ wxString D_PAD::ShowPadAttr() const
 {
     switch( GetAttribute() )
     {
-    case PAD_ATTRIB_STANDARD:
-        return _( "Std" );
-
-    case PAD_ATTRIB_SMD:
-        return _( "SMD" );
-
-    case PAD_ATTRIB_CONN:
-        return _( "Conn" );
-
-    case PAD_ATTRIB_HOLE_NOT_PLATED:
-        return _( "Not Plated" );
-
-    default:
-        return wxT( "???" );
+    case PAD_ATTRIB_STANDARD:        return _( "Std" );
+    case PAD_ATTRIB_SMD:             return _( "SMD" );
+    case PAD_ATTRIB_CONN:            return _( "Conn" );
+    case PAD_ATTRIB_HOLE_NOT_PLATED: return _( "Not Plated" );
+    default:                         return wxT( "???" );
     }
 }
 
@@ -1647,39 +1596,6 @@ const BOX2I D_PAD::ViewBBox() const
 
     return BOX2I( VECTOR2I( bbox.GetOrigin() ) - VECTOR2I( xMargin, yMargin ),
                   VECTOR2I( bbox.GetSize() ) + VECTOR2I( 2 * xMargin, 2 * yMargin ) );
-}
-
-
-wxString LayerMaskDescribe( const BOARD *aBoard, LSET aMask )
-{
-    // Try to be smart and useful.  Check all copper first.
-    if( aMask[F_Cu] && aMask[B_Cu] )
-        return _( "All copper layers" );
-
-    // Check for copper.
-    auto layer = aBoard->GetEnabledLayers().AllCuMask() & aMask;
-
-    for( int i = 0; i < 2; i++ )
-    {
-        for( int bit = PCBNEW_LAYER_ID_START; bit < PCB_LAYER_ID_COUNT; ++bit )
-        {
-            if( layer[ bit ] )
-            {
-                wxString layerInfo = aBoard->GetLayerName( static_cast<PCB_LAYER_ID>( bit ) );
-
-                if( aMask.count() > 1 )
-                    layerInfo << _( " and others" );
-
-                return layerInfo;
-            }
-        }
-
-        // No copper; check for technicals.
-        layer = aBoard->GetEnabledLayers().AllTechMask() & aMask;
-    }
-
-    // No copper, no technicals: no layer
-    return _( "no layers" );
 }
 
 

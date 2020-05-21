@@ -212,6 +212,8 @@ public:
      */
     int GetClearance( BOARD_ITEM* aItem = nullptr, wxString* aSource = nullptr ) const override;
 
+    int GetMinWidth( wxString* aSource ) const;
+
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
@@ -247,14 +249,6 @@ public:
 #endif
 
 protected:
-    /**
-     * Function GetMsgPanelInfoBase
-     * Display info about the track segment only, and does not calculate the full track length
-     * @param aList A list of #MSG_PANEL_ITEM objects to add status information.
-     */
-    virtual void GetMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
-
-
     void GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 
 
@@ -414,6 +408,8 @@ public:
     const wxPoint GetPosition() const override {  return m_Start; }
     void SetPosition( const wxPoint& aPoint ) override { m_Start = aPoint;  m_End = aPoint; }
 
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
+
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
@@ -437,6 +433,8 @@ public:
 #if defined (DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+    int GetMinAnnulus( wxString* aSource ) const;
 
     /**
      * Function SetDrill
@@ -473,9 +471,6 @@ public:
     bool IsDrillDefault() const { return m_Drill <= 0; }
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
-
-protected:
-    void GetMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 private:
     /// The bottom layer of the via (the top layer is in m_Layer)

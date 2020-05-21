@@ -470,7 +470,7 @@ int ZONE_CONTAINER::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
         clearance = m_ZoneClearance;
 
         if( aSource )
-            *aSource = _( "zone clearance" );
+            *aSource = _( "zone" );
     }
 
     return clearance;
@@ -510,15 +510,21 @@ bool ZONE_CONTAINER::HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx, i
 
 void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
+    EDA_UNITS units = aFrame->GetUserUnits();
+    wxString  msg, msg2;
 
-    msg = _( "Zone Outline" );
+    if( GetIsKeepout() )
+        msg = _( "Keepout Area" );
+    else if( IsOnCopperLayer() )
+        msg = _( "Copper Zone" );
+    else
+        msg = _( "Non-copper Zone" );
 
     // Display Cutout instead of Outline for holes inside a zone
     // i.e. when num contour !=0
     // Check whether the selected corner is in a hole; i.e., in any contour but the first one.
     if( m_CornerSelection != nullptr && m_CornerSelection->m_contour > 0 )
-        msg << wxT( " " ) << _( "(Cutout)" );
+        msg << wxT( " " ) << _( "Cutout" );
 
     aList.emplace_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
@@ -548,59 +554,53 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         if( GetNetCode() >= 0 )
         {
             NETINFO_ITEM* net = GetNet();
+            NETCLASS*     netclass = nullptr;
 
             if( net )
+            {
+                if( net->GetNet() )
+                    netclass = GetNetClass();
+                else
+                    netclass = GetBoard()->GetDesignSettings().GetDefault();
+
                 msg = UnescapeString( net->GetNetname() );
-            else    // Should not occur
-                msg = _( "<unknown>" );
+            }
+            else
+            {
+                msg = wxT( "<no name>" );
+            }
+
+            aList.emplace_back( _( "Net" ), msg, RED );
+
+            if( netclass )
+                aList.emplace_back( _( "NetClass" ), netclass->GetName(), DARKMAGENTA );
         }
-        else    // a netcode < 0 is an error
-            msg = wxT( "<error>" );
-
-        aList.emplace_back( MSG_PANEL_ITEM( _( "NetName" ), msg, RED ) );
-
-        // Display net code : (useful in test or debug)
-        msg.Printf( wxT( "%d" ), GetNetCode() );
-        aList.emplace_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
 
         // Display priority level
         msg.Printf( wxT( "%d" ), GetPriority() );
         aList.emplace_back( MSG_PANEL_ITEM( _( "Priority" ), msg, BLUE ) );
     }
-    else
-    {
-        aList.emplace_back( MSG_PANEL_ITEM( _( "Non Copper Zone" ), wxEmptyString, RED ) );
-    }
 
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BROWN ) );
-
-    msg.Printf( wxT( "%d" ), (int) m_Poly->TotalVertices() );
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Vertices" ), msg, BLUE ) );
+    aList.emplace_back( _( "Layer" ), LayerMaskDescribe( GetBoard(), m_layerSet ), DARKGREEN );
 
     switch( m_FillMode )
     {
-    case ZONE_FILL_MODE::POLYGONS:
-        msg = _( "Solid" ); break;
-    case ZONE_FILL_MODE::HATCH_PATTERN:
-        msg = _( "Hatched" ); break;
-    default:
-        msg = _( "Unknown" ); break;
+    case ZONE_FILL_MODE::POLYGONS:      msg = _( "Solid" ); break;
+    case ZONE_FILL_MODE::HATCH_PATTERN: msg = _( "Hatched" ); break;
+    default:                            msg = _( "Unknown" ); break;
     }
 
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Fill Mode" ), msg, BROWN ) );
+    aList.emplace_back( _( "Fill Mode" ), msg, BROWN );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_area, false, EDA_DATA_TYPE::AREA );
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Filled Area" ), msg, BLUE ) );
+    msg = MessageTextFromValue( units, m_area, false, EDA_DATA_TYPE::AREA );
+    aList.emplace_back( _( "Filled Area" ), msg, BLUE );
 
-    // Useful for statistics :
-    msg.Printf( wxT( "%d" ), (int) m_HatchLines.size() );
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Hatch Lines" ), msg, BLUE ) );
+    wxString source;
+    int      clearance = GetClearance( nullptr, &source );
 
-    if( !m_FilledPolysList.IsEmpty() )
-    {
-        msg.Printf( wxT( "%d" ), m_FilledPolysList.TotalVertices() );
-        aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
-    }
+    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
+    msg2.Printf( _( "Source: %s" ), source );
+    aList.emplace_back( msg, msg2, BLACK );
 }
 
 
@@ -668,13 +668,9 @@ void ZONE_CONTAINER::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     int copperLayerCount = GetBoard()->GetCopperLayerCount();
 
     if( GetIsKeepout() )
-    {
         SetLayerSet( FlipLayerMask( GetLayerSet(), copperLayerCount ) );
-    }
     else
-    {
         SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
-    }
 }
 
 
@@ -749,10 +745,8 @@ void ZONE_CONTAINER::AddPolygon( std::vector< wxPoint >& aPolygon )
     SHAPE_LINE_CHAIN outline;
 
     // Create an outline and populate it with the points of aPolygon
-    for( unsigned i = 0;  i < aPolygon.size();  i++ )
-    {
-        outline.Append( VECTOR2I( aPolygon[i] ) );
-    }
+    for( const wxPoint& pt : aPolygon)
+        outline.Append( pt );
 
     outline.SetClosed( true );
 

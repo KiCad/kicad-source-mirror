@@ -140,18 +140,14 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                       TRACKS::iterator aEndIt, bool aTestZones )
 {
     BOARD_DESIGN_SETTINGS&     bds = m_pcb->GetDesignSettings();
-    std::vector<DRC_SELECTOR*> matched;
 
     SEG          refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
     PCB_LAYER_ID refLayer = aRefSeg->GetLayer();
     LSET         refLayerSet = aRefSeg->GetLayerSet();
 
-    NETCLASS*    netclass = aRefSeg->GetNet()->GetNet() == 0 ? bds.GetDefault()
-                                                             : aRefSeg->GetNetClass();
     EDA_RECT     refSegBB = aRefSeg->GetBoundingBox();
     int          refSegWidth = aRefSeg->GetWidth();
 
-    MatchSelectors( bds.m_DRCRuleSelectors, aRefSeg, netclass, nullptr, nullptr, &matched );
 
 
     /******************************************/
@@ -162,16 +158,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     {
         VIA *refvia = static_cast<VIA*>( aRefSeg );
         int viaAnnulus = ( refvia->GetWidth() - refvia->GetDrill() ) / 2;
-        int minAnnulus = 0;
-
-        for( DRC_SELECTOR* selector : matched )
-        {
-            if( selector->m_Rule->m_AnnulusWidth > minAnnulus )
-            {
-                minAnnulus = selector->m_Rule->m_AnnulusWidth;
-                m_clearanceSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
-            }
-        }
+        int minAnnulus = refvia->GetMinAnnulus( &m_clearanceSource );
 
         // test if the via size is smaller than minimum
         if( refvia->GetViaType() == VIATYPE::MICROVIA )
@@ -328,17 +315,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     }
     else    // This is a track segment
     {
-        int minWidth = bds.m_TrackMinWidth;
-        m_clearanceSource = _( "board" );
-
-        for( DRC_SELECTOR* selector : matched )
-        {
-            if( selector->m_Rule->m_TrackWidth > minWidth )
-            {
-                minWidth = selector->m_Rule->m_TrackWidth;
-                m_clearanceSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
-            }
-        }
+        int minWidth = aRefSeg->GetMinWidth( &m_clearanceSource );
 
         if( refSegWidth < minWidth )
         {
@@ -414,7 +391,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                     int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_HOLE );
 
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
                                   MessageTextFromValue( userUnits(), minClearance, true ),
                                   MessageTextFromValue( userUnits(), actual, true ) );
@@ -439,7 +416,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 SEG       padSeg( pad->GetPosition(), pad->GetPosition() );
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_PAD );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                               m_clearanceSource,
                               MessageTextFromValue( userUnits(), minClearance, true ),
                               MessageTextFromValue( userUnits(), actual, true ) );
@@ -535,7 +512,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
             DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           m_clearanceSource,
                           MessageTextFromValue( userUnits(), minClearance, true ),
                           MessageTextFromValue( userUnits(), actual, true ) );
@@ -587,7 +564,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                               m_clearanceSource,
                               MessageTextFromValue( userUnits(), minClearance, true ),
                               MessageTextFromValue( userUnits(), actual, true ) );

@@ -125,6 +125,78 @@ int TRACK::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
 }
 
 
+int TRACK::GetMinWidth( wxString* aSource ) const
+{
+    BOARD_DESIGN_SETTINGS&     bds = GetBoard()->GetDesignSettings();
+    NETCLASS*                  netclass = nullptr;
+    std::vector<DRC_SELECTOR*> matched;
+
+    // NB: we must check the net first, as when it is 0 GetNetClass() will return the
+    // orphaned net netclass, not the default netclass.
+    if( m_netinfo->GetNet() == 0 )
+        netclass = bds.GetDefault();
+    else
+        netclass = GetNetClass();
+
+    MatchSelectors( bds.m_DRCRuleSelectors, this, netclass, nullptr, nullptr, &matched );
+
+    int minWidth = bds.m_TrackMinWidth;
+
+    if( aSource )
+        *aSource = _( "board" );
+
+    for( DRC_SELECTOR* selector : matched )
+    {
+        if( selector->m_Rule->m_TrackWidth > minWidth )
+        {
+            minWidth = selector->m_Rule->m_TrackWidth;
+
+            if( aSource )
+                *aSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
+        }
+    }
+
+    return minWidth;
+}
+
+
+int VIA::GetMinAnnulus( wxString* aSource ) const
+{
+    BOARD_DESIGN_SETTINGS&     bds = GetBoard()->GetDesignSettings();
+    NETCLASS*                  netclass = nullptr;
+    std::vector<DRC_SELECTOR*> matched;
+
+    // NB: we must check the net first, as when it is 0 GetNetClass() will return the
+    // orphaned net netclass, not the default netclass.
+    if( m_netinfo->GetNet() == 0 )
+        netclass = bds.GetDefault();
+    else
+        netclass = GetNetClass();
+
+    MatchSelectors( bds.m_DRCRuleSelectors, this, netclass, nullptr, nullptr, &matched );
+
+    int minAnnulus = bds.m_ViasMinAnnulus;
+
+    if( aSource )
+        *aSource = _( "board" );
+
+    MatchSelectors( bds.m_DRCRuleSelectors, this, netclass, nullptr, nullptr, &matched );
+
+    for( DRC_SELECTOR* selector : matched )
+    {
+        if( selector->m_Rule->m_AnnulusWidth > minAnnulus )
+        {
+            minAnnulus = selector->m_Rule->m_AnnulusWidth;
+
+            if( aSource )
+                *aSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
+        }
+    }
+
+    return minAnnulus;
+}
+
+
 int VIA::GetDrillValue() const
 {
     if( m_Drill > 0 ) // Use the specific value.
@@ -512,11 +584,27 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 // see class_track.h
 void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
-    BOARD*   board = GetBoard();
+    EDA_UNITS units = aFrame->GetUserUnits();
+    wxString  msg;
+    wxString  msg2;
+    wxString  source;
+    BOARD*    board = GetBoard();
 
     // Display basic infos
-    GetMsgPanelInfoBase( aFrame, aList );
+    aList.emplace_back( _( "Type" ), _( "Track" ), DARKCYAN );
+
+    GetMsgPanelInfoBase_Common( aFrame, aList );
+
+    // Display layer
+    if( board )
+        msg = board->GetLayerName( m_Layer );
+    else
+        msg.Printf(wxT("%d"), m_Layer );
+
+    // Display width
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
+
+    aList.emplace_back( _( "Width" ), msg, DARKCYAN );
 
     // Display full track length (in Pcbnew)
     if( board )
@@ -532,135 +620,40 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 
         if( lenPadToDie != 0 )
         {
-            msg = MessageTextFromValue( aFrame->GetUserUnits(), trackLen + lenPadToDie );
-            aList.emplace_back( _( "Full Length" ), msg, DARKCYAN );
-
             msg = MessageTextFromValue( aFrame->GetUserUnits(), lenPadToDie, true );
             aList.emplace_back( _( "Pad To Die Length" ), msg, DARKCYAN );
+
+            msg = MessageTextFromValue( aFrame->GetUserUnits(), trackLen + lenPadToDie );
+            aList.emplace_back( _( "Full Length" ), msg, DARKCYAN );
         }
     }
 
-    NETCLASS* netclass = GetNetClass();
+    int clearance = GetClearance( nullptr, &source );
 
-    if( netclass )
-    {
-        aList.emplace_back( _( "NC Name" ), netclass->GetName(), DARKMAGENTA );
+    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
+    msg2.Printf( _( "Source: %s" ), source );
+    aList.emplace_back( msg, msg2, BLACK );
 
-        msg = MessageTextFromValue( aFrame->GetUserUnits(), netclass->GetClearance(), true );
-        aList.emplace_back( _( "NC Clearance" ), msg, DARKMAGENTA );
+    int minWidth = GetMinWidth( &source );
 
-        msg = MessageTextFromValue( aFrame->GetUserUnits(), netclass->GetTrackWidth(), true );
-        aList.emplace_back( _( "NC Width" ), msg, DARKMAGENTA );
-
-        msg = MessageTextFromValue( aFrame->GetUserUnits(), netclass->GetViaDiameter(), true );
-        aList.emplace_back( _( "NC Via Size" ), msg, DARKMAGENTA );
-
-        msg = MessageTextFromValue( aFrame->GetUserUnits(), netclass->GetViaDrill(), true );
-        aList.emplace_back( _( "NC Via Drill"), msg, DARKMAGENTA );
-    }
-}
-
-void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
-{
-    wxString msg;
-
-    // Display Net Name
-    if( GetBoard() )
-    {
-        NETINFO_ITEM* net = GetNet();
-
-        if( net )
-            msg = UnescapeString( net->GetNetname() );
-        else
-            msg = wxT( "<no name>" );
-
-        aList.emplace_back( _( "NetName" ), msg, RED );
-
-        // Display net code : (useful in test or debug)
-        msg.Printf( wxT( "%d" ), GetNetCode() );
-        aList.emplace_back( _( "NetCode" ), msg, RED );
-    }
-
-#if defined(DEBUG)
-
-    // Display the flags
-    msg.Printf( wxT( "0x%08X" ), m_Flags );
-    aList.emplace_back( wxT( "Flags" ), msg, BLUE );
-
-#if 0
-    // Display start and end pointers:
-    msg.Printf( wxT( "%p" ), start );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "start ptr" ), msg, BLUE ) );
-    msg.Printf( wxT( "%p" ), end );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "end ptr" ), msg, BLUE ) );
-    // Display this ptr
-    msg.Printf( wxT( "%p" ), this );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "this" ), msg, BLUE ) );
-#endif
-
-#if 0
-    // Display start and end positions:
-    msg.Printf( wxT( "%d %d" ), m_Start.x, m_Start.y );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "Start pos" ), msg, BLUE ) );
-    msg.Printf( wxT( "%d %d" ), m_End.x, m_End.y );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "End pos" ), msg, BLUE ) );
-#endif
-
-#endif  // defined(DEBUG)
-
-    // Display the State member
-    msg = wxT( ". . " );
-
-    if( GetState( TRACK_LOCKED ) )
-        msg[0] = 'L';
-
-    if( GetState( TRACK_AR ) )
-        msg[2] = 'A';
-
-    aList.emplace_back( _( "Status" ), msg, MAGENTA );
+    msg.Printf( _( "Min Width: %s" ), MessageTextFromValue( units, minWidth, true ) );
+    msg2.Printf( _( "Source: %s" ), source );
+    aList.emplace_back( msg, msg2, BLACK );
 }
 
 
-void TRACK::GetMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
-    BOARD* board = GetBoard();
+    EDA_UNITS units = aFrame->GetUserUnits();
+    wxString  msg;
+    wxString  msg2;
+    wxString  source;
+    BOARD*    board = GetBoard();
 
-    aList.emplace_back( _( "Type" ), _( "Track" ), DARKCYAN );
-
-    GetMsgPanelInfoBase_Common( aFrame, aList );
-
-    // Display layer
-    if( board )
-        msg = board->GetLayerName( m_Layer );
-    else
-        msg.Printf(wxT("%d"), m_Layer );
-
-    aList.emplace_back( _( "Layer" ), msg, BROWN );
-
-    // Display width
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
-
-    aList.emplace_back( _( "Width" ), msg, DARKCYAN );
-
-    // Display segment length
-    msg = ::MessageTextFromValue( aFrame->GetUserUnits(), GetLength() );
-    aList.emplace_back( _( "Segment Length" ), msg, DARKCYAN );
-}
-
-
-void VIA::GetMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
-{
-    wxString msg;
-    BOARD*   board = GetBoard();
-
+    // Display basic infos
     switch( GetViaType() )
     {
     default:
-    case VIATYPE::NOT_DEFINED:
-        msg = wxT( "???" ); // Not used yet, does not exist currently
-        break;
-
     case VIATYPE::MICROVIA:
         msg = _( "Micro Via" ); // from external layer (TOP or BOTTOM) from
                                 // the near neighbor inner layer only
@@ -674,12 +667,15 @@ void VIA::GetMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     case VIATYPE::THROUGH:
         msg = _( "Through Via" ); // Usual via (from TOP to BOTTOM layer only )
         break;
+
+    case VIATYPE::NOT_DEFINED:
+        msg = wxT( "???" ); // Not used yet, does not exist currently
+        break;
     }
 
     aList.emplace_back( _( "Type" ), msg, DARKCYAN );
 
     GetMsgPanelInfoBase_Common( aFrame, aList );
-
 
     // Display layer pair
     PCB_LAYER_ID top_layer, bottom_layer;
@@ -687,8 +683,7 @@ void VIA::GetMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     LayerPair( &top_layer, &bottom_layer );
 
     if( board )
-        msg = board->GetLayerName( top_layer ) + wxT( "/" )
-            + board->GetLayerName( bottom_layer );
+        msg = board->GetLayerName( top_layer ) + wxT( "/" ) + board->GetLayerName( bottom_layer );
     else
         msg.Printf( wxT( "%d/%d" ), top_layer, bottom_layer );
 
@@ -703,34 +698,81 @@ void VIA::GetMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     // Display drill value
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetDrillValue() );
 
-    wxString title = _( "Drill" );
-    title += wxT( " " );
+    aList.emplace_back( _( "Drill" ), msg, RED );
 
-    bool drl_specific = true;
+    int clearance = GetClearance( nullptr, &source );
 
+    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
+    msg2.Printf( _( "Source: %s" ), source );
+    aList.emplace_back( msg, msg2, BLACK );
+
+    int minAnnulus = GetMinAnnulus( &source );
+
+    msg.Printf( _( "Min Annulus: %s" ), MessageTextFromValue( units, minAnnulus, true ) );
+    msg2.Printf( _( "Source: %s" ), source );
+    aList.emplace_back( msg, msg2, BLACK );
+}
+
+
+void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+{
+    wxString msg;
+
+    // Display Net Name
     if( GetBoard() )
     {
         NETINFO_ITEM* net = GetNet();
-        int drill_class_value = 0;
+        NETCLASS*     netclass = nullptr;
 
         if( net )
         {
-            if( GetViaType() == VIATYPE::MICROVIA )
-                drill_class_value = net->GetMicroViaDrillSize();
+            if( net->GetNet() )
+                netclass = GetNetClass();
             else
-                drill_class_value = net->GetViaDrillSize();
+                netclass = GetBoard()->GetDesignSettings().GetDefault();
+
+            msg = UnescapeString( net->GetNetname() );
+        }
+        else
+        {
+            msg = wxT( "<no name>" );
         }
 
-        drl_specific = GetDrillValue() != drill_class_value;
+        aList.emplace_back( _( "Net" ), msg, RED );
+
+        if( netclass )
+            aList.emplace_back( _( "NetClass" ), netclass->GetName(), DARKMAGENTA );
     }
 
+#if 0   // Enable for debugging
+    if( GetBoard() )
+    {
+        // Display net code:
+        msg.Printf( wxT( "%d" ), GetNetCode() );
+        aList.emplace_back( _( "NetCode" ), msg, RED );
+    }
 
-    if( drl_specific )
-        title += _( "(Specific)" );
-    else
-        title += _( "(NetClass)" );
+    // Display the flags:
+    msg.Printf( wxT( "0x%08X" ), m_Flags );
+    aList.emplace_back( wxT( "Flags" ), msg, BLUE );
 
-    aList.emplace_back( title, msg, RED );
+    // Display start and end positions:
+    msg.Printf( wxT( "%d %d" ), m_Start.x, m_Start.y );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "Start pos" ), msg, BLUE ) );
+    msg.Printf( wxT( "%d %d" ), m_End.x, m_End.y );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "End pos" ), msg, BLUE ) );
+#endif
+
+    // Display the State member
+    msg = wxT( ". . " );
+
+    if( GetState( TRACK_LOCKED ) )
+        msg[0] = 'L';
+
+    if( GetState( TRACK_AR ) )
+        msg[2] = 'A';
+
+    aList.emplace_back( _( "Status" ), msg, MAGENTA );
 }
 
 

@@ -77,6 +77,39 @@ wxString BOARD_ITEM::GetLayerName() const
 }
 
 
+wxString BOARD_ITEM::LayerMaskDescribe( const BOARD* aBoard, LSET aMask )
+{
+    // Try to be smart and useful.  Check all copper first.
+    if( aMask[F_Cu] && aMask[B_Cu] )
+        return _( "All copper layers" );
+
+    // Check for copper.
+    auto layer = aBoard->GetEnabledLayers().AllCuMask() & aMask;
+
+    for( int i = 0; i < 2; i++ )
+    {
+        for( int bit = PCBNEW_LAYER_ID_START; bit < PCB_LAYER_ID_COUNT; ++bit )
+        {
+            if( layer[ bit ] )
+            {
+                wxString layerInfo = aBoard->GetLayerName( static_cast<PCB_LAYER_ID>( bit ) );
+
+                if( aMask.count() > 1 )
+                    layerInfo << _( " and others" );
+
+                return layerInfo;
+            }
+        }
+
+        // No copper; check for technicals.
+        layer = aBoard->GetEnabledLayers().AllTechMask() & aMask;
+    }
+
+    // No copper, no technicals: no layer
+    return _( "no layers" );
+}
+
+
 void BOARD_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     // Basic fallback
