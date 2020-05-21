@@ -192,9 +192,12 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
+    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
+    // hidding it.
+    m_auimgr.Update();
+
     // We don't want the infobar displayed right away
     m_auimgr.GetPane( "InfoBar" ).Hide();
-
     m_auimgr.Update();
 
     // Add the exit key handler
