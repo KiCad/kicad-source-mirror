@@ -407,23 +407,22 @@ SCH_SEXPR_PLUGIN::~SCH_SEXPR_PLUGIN()
 }
 
 
-void SCH_SEXPR_PLUGIN::init( KIWAY* aKiway, const PROPERTIES* aProperties )
+void SCH_SEXPR_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aProperties )
 {
     m_version   = 0;
     m_rootSheet = nullptr;
     m_props     = aProperties;
-    m_kiway     = aKiway;
+    m_schematic = aSchematic;
     m_cache     = nullptr;
     m_out       = nullptr;
     m_fieldId   = 100; // number arbitrarily > MANDATORY_FIELDS or SHEET_MANDATORY_FIELDS
-    m_schematic = nullptr;
 }
 
 
-SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCHEMATIC* aSchematic,
+SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                                    SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
-    wxASSERT( !aFileName || aKiway != NULL );
+    wxASSERT( !aFileName || aSchematic != nullptr );
 
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
     SCH_SHEET*  sheet;
@@ -449,19 +448,17 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCH
         }
 
         if( m_path.IsEmpty() )
-            m_path = aKiway->Prj().GetProjectPath();
+            m_path = aSchematic->Prj().GetProjectPath();
 
         wxLogTrace( traceSchLegacyPlugin, "Normalized append path \"%s\".", m_path );
     }
     else
     {
-        m_path = aKiway->Prj().GetProjectPath();
+        m_path = aSchematic->Prj().GetProjectPath();
     }
 
     m_currentPath.push( m_path );
-    init( aKiway, aProperties );
-
-    m_schematic = aSchematic;
+    init( aSchematic, aProperties );
 
     if( aAppendToMe == NULL )
     {
@@ -582,7 +579,7 @@ void SCH_SEXPR_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, int
 }
 
 
-void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, KIWAY* aKiway,
+void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
                              const PROPERTIES* aProperties )
 {
     wxCHECK_RET( aSheet != NULL, "NULL SCH_SHEET object." );
@@ -590,7 +587,7 @@ void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, KIWAY
 
     LOCALE_IO   toggle;     // toggles on, then off, the C locale, to write floating point values.
 
-    init( aKiway, aProperties );
+    init( aSchematic, aProperties );
 
     wxFileName fn = aFileName;
 
@@ -609,7 +606,7 @@ void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, KIWAY
 void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 {
     wxCHECK_RET( aSheet != NULL, "NULL SCH_SHEET* object." );
-    wxCHECK_RET( m_kiway != NULL, "NULL KIWAY* object." );
+    wxCHECK_RET( m_schematic != NULL, "NULL SCHEMATIC* object." );
 
     SCH_SCREEN* screen = aSheet->GetScreen();
 

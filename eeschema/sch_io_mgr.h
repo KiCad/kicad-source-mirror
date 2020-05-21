@@ -209,7 +209,7 @@ public:
      *                 wrong, using line number and character offsets of the input file if
      *                 possible.
      */
-    virtual SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway, SCHEMATIC* aSchematic,
+    virtual SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                              SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
 
     /**
@@ -219,13 +219,13 @@ public:
      *
      * @param aFileName is the name of a file to save to on disk.
      *
-     * @param aSchematic is the class #SCH_SHEET in memory document tree from which to extract
+     * @param aSheet     is the class #SCH_SHEET in memory document tree from which to extract
      *                   information when writing to \a aFileName.  The caller continues to
      *                   own the SCHEMATIC, and the plugin should refrain from modifying the
      *                   SCHEMATIC if possible.
      *
-     * @param aKiway is the #KIWAY object used to access the component libraries loaded
-     *               by the project.
+     * @param aSchematic is the #SCHEMATIC object used to access any schematic-wide or project
+     *                   information needed to save the document.
      *
      * @param aProperties is an associative array that can be used to tell the saver how to
      *                    save the file, because it can take any number of additional named
@@ -237,7 +237,7 @@ public:
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
-    virtual void Save( const wxString& aFileName, SCH_SHEET* aSchematic, KIWAY* aKiway,
+    virtual void Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
                        const PROPERTIES* aProperties = NULL );
 
     /**

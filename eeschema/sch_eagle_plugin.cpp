@@ -391,18 +391,16 @@ int SCH_EAGLE_PLUGIN::GetModifyHash() const
 }
 
 
-SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCHEMATIC* aSchematic,
-        SCH_SHEET* aAppendToMe,
-        const PROPERTIES* aProperties )
+SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                   SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
-    wxASSERT( !aFileName || aKiway != NULL );
+    wxASSERT( !aFileName || aSchematic != nullptr );
     LOCALE_IO toggle; // toggles on, then off, the C locale.
 
     // Load the document
     wxXmlDocument xmlDocument;
 
     m_filename  = aFileName;
-    m_kiway     = aKiway;
     m_schematic = aSchematic;
 
     if( !xmlDocument.Load( m_filename.GetFullPath() ) )

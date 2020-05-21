@@ -84,14 +84,14 @@ public:
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway, SCHEMATIC* aSchematic,
+    SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                      SCH_SHEET* aAppendToMe = nullptr,
                      const PROPERTIES* aProperties = nullptr ) override;
 
     void LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet,
                       int aVersion = SEXPR_SCHEMATIC_FILE_VERSION );
 
-    void Save( const wxString& aFileName, SCH_SHEET* aSheet, KIWAY* aKiway,
+    void Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
                const PROPERTIES* aProperties = nullptr ) override;
 
     void Format( SCH_SHEET* aSheet );
@@ -154,14 +154,13 @@ protected:
     wxString             m_path;       ///< Root project path for loading child sheets.
     std::stack<wxString> m_currentPath;///< Stack to maintain nested sheet paths
     const PROPERTIES*    m_props;      ///< Passed via Save() or Load(), no ownership, may be nullptr.
-    KIWAY*               m_kiway;      ///< Required for path to legacy component libraries.
     SCH_SHEET*           m_rootSheet;  ///< The root sheet of the schematic being loaded..
     SCHEMATIC*           m_schematic;  ///< Passed to Load(), the schematic object being loaded
     OUTPUTFORMATTER*     m_out;        ///< The output formatter for saving SCH_SCREEN objects.
     SCH_SEXPR_PLUGIN_CACHE* m_cache;
 
     /// initialize PLUGIN like a constructor would.
-    void init( KIWAY* aKiway, const PROPERTIES* aProperties = nullptr );
+    void init( SCHEMATIC* aSchematic, const PROPERTIES* aProperties = nullptr );
 };
 
 #endif  // _SCH_SEXPR_PLUGIN_H_

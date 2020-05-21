@@ -496,7 +496,7 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
 
             try
             {
-                pi->Save( newAbsoluteFilename, m_sheet, &Kiway() );
+                pi->Save( newAbsoluteFilename, m_sheet, &m_frame->Schematic() );
             }
             catch( const IO_ERROR& ioe )
             {

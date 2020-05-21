@@ -134,7 +134,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName,
 
     try
     {
-        pi->Save( schematicFileName.GetFullPath(), aSheet, &Kiway() );
+        pi->Save( schematicFileName.GetFullPath(), aSheet, &Schematic() );
         success = true;
     }
     catch( const IO_ERROR& ioe )
@@ -332,7 +332,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         try
         {
-            Schematic().SetRoot( pi->Load( fullFileName, &Kiway(), &Schematic() ) );
+            Schematic().SetRoot( pi->Load( fullFileName, &Schematic() ) );
 
             GetCurrentSheet().push_back( &Schematic().Root() );
 
@@ -803,7 +803,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             Schematic().Reset();
 
             SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
-            Schematic().SetRoot( pi->Load( aFileName, &Kiway(), &Schematic() ) );
+            Schematic().SetRoot( pi->Load( aFileName, &Schematic() ) );
 
             // Eagle sheets do not use a worksheet frame by default, so set it to an empty one
             WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();

@@ -134,12 +134,12 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     {
         if( aSheet->GetScreen() != nullptr )
         {
-            newSheet.reset( pi->Load( fullFilename, &Kiway(), &Schematic() ) );
+            newSheet.reset( pi->Load( fullFilename, &Schematic() ) );
         }
         else
         {
             newSheet->SetFileName( fullFilename );
-            pi->Load( fullFilename, &Kiway(), &Schematic(), newSheet.get() );
+            pi->Load( fullFilename, &Schematic(), newSheet.get() );
         }
 
         if( !pi->GetError().IsEmpty() )
