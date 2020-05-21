@@ -122,7 +122,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
     if( processTextVars )
     {
         if( Schematic() )
-            project = &Schematic()->RootScreen()->Kiway().Prj();
+            project = &Schematic()->Prj();
 
         if( aDepth < 10 )
         {

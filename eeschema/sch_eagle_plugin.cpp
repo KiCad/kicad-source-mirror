@@ -425,9 +425,8 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCH
 
     if( !m_rootSheet->GetScreen() )
     {
-        SCH_SCREEN* screen = new SCH_SCREEN( aKiway );
+        SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
         screen->SetFileName( aFileName );
-        screen->SetParent( m_schematic );
         m_rootSheet->SetScreen( screen );
     }
 
@@ -600,11 +599,10 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         {
             wxPoint                    pos = wxPoint( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
             std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET( m_rootSheet, pos ) );
-            SCH_SCREEN*                screen = new SCH_SCREEN( m_kiway );
+            SCH_SCREEN*                screen = new SCH_SCREEN( m_schematic );
 
             sheet->SetScreen( screen );
             sheet->GetScreen()->SetFileName( sheet->GetFileName() );
-            sheet->GetScreen()->SetParent( m_schematic );
 
             m_currentSheet = sheet.get();
             loadSheet( sheetNode, i );

@@ -39,7 +39,7 @@ class PROJECT;
 class KIWAY_HOLDER
 {
 public:
-    enum HOLDER_TYPE { DIALOG, FRAME, PANEL, SCREEN };
+    enum HOLDER_TYPE { DIALOG, FRAME, PANEL };
 
     KIWAY_HOLDER( KIWAY* aKiway, HOLDER_TYPE aType ) :
         m_kiway( aKiway ),

@@ -90,7 +90,7 @@ struct COMPONENT_SELECTION
     }
 };
 
-class SCH_SCREEN : public BASE_SCREEN, public KIWAY_HOLDER
+class SCH_SCREEN : public BASE_SCREEN
 {
 private:
 
@@ -153,7 +153,7 @@ public:
     /**
      * Constructor
      */
-    SCH_SCREEN( KIWAY* aKiway );
+    SCH_SCREEN( EDA_ITEM* aParent = nullptr );
 
     ~SCH_SCREEN();
 

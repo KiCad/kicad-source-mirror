@@ -139,7 +139,12 @@ public:
     bool                m_IsPrinting;
 
 public:
-    BASE_SCREEN( KICAD_T aType = SCREEN_T );
+    BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType = SCREEN_T );
+
+    BASE_SCREEN( KICAD_T aType = SCREEN_T ) :
+            BASE_SCREEN( nullptr, aType )
+    {}
+
     ~BASE_SCREEN() override { }
 
     void InitDataPoints( const wxSize& aPageSizeInternalUnits );

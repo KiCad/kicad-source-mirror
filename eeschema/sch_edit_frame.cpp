@@ -208,7 +208,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
     m_item_to_repeat( nullptr )
 {
-    m_schematic = new SCHEMATIC();
+    m_schematic = new SCHEMATIC( &Prj() );
 
     m_defaults = &m_schematic->Settings();
 
@@ -419,8 +419,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_schematic->Reset();
     m_schematic->SetRoot( new SCH_SHEET( m_schematic ) );
 
-    SCH_SCREEN* rootScreen = new SCH_SCREEN( &Kiway() );
-    rootScreen->SetParent( m_schematic );
+    SCH_SCREEN* rootScreen = new SCH_SCREEN( m_schematic );
     rootScreen->SetMaxUndoItems( m_UndoRedoCountMax );
     m_schematic->Root().SetScreen( rootScreen );
     SetScreen( Schematic().RootScreen() );
@@ -431,7 +430,7 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     if( GetScreen() == NULL )
     {
-        SCH_SCREEN* screen = new SCH_SCREEN( &Kiway() );
+        SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
         screen->SetMaxUndoItems( m_UndoRedoCountMax );
         SetScreen( screen );
     }

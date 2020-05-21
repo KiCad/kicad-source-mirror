@@ -344,7 +344,7 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
                 if( !bufferedParent )
                 {
                     bufferedParent = new LIB_PART( *parent.get() );
-                    libBuf.CreateBuffer( bufferedParent, new SCH_SCREEN( &m_frame.Kiway() ) );
+                    libBuf.CreateBuffer( bufferedParent, new SCH_SCREEN );
                 }
             }
 
@@ -353,7 +353,7 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
             if( bufferedParent )
                 bufferedPart->SetParent( bufferedParent );
 
-            libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
+            libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN );
         }
         catch( const IO_ERROR& e )
         {
@@ -402,7 +402,7 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
 
         partCopy->SetLibId( LIB_ID( aLibrary, aPart->GetLibId().GetLibItemName() ) );
 
-        SCH_SCREEN* screen = new SCH_SCREEN( &m_frame.Kiway() );
+        SCH_SCREEN* screen = new SCH_SCREEN;
         libBuf.CreateBuffer( partCopy, screen );
         screen->SetModify();
     }
@@ -724,16 +724,16 @@ LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary
             if( !libParent )
             {
                 libParent = new LIB_PART( *oldParent.get() );
-                buf.CreateBuffer( libParent, new SCH_SCREEN( &m_frame.Kiway() ) );
+                buf.CreateBuffer( libParent, new SCH_SCREEN );
             }
 
             newSymbol = new LIB_PART( *part );
             newSymbol->SetParent( libParent );
-            buf.CreateBuffer( newSymbol, new SCH_SCREEN( &m_frame.Kiway() ) );
+            buf.CreateBuffer( newSymbol, new SCH_SCREEN );
         }
         else if( !buf.GetPart( part->GetName() ) )
         {
-            buf.CreateBuffer( new LIB_PART( *part ), new SCH_SCREEN( &m_frame.Kiway() ) );
+            buf.CreateBuffer( new LIB_PART( *part ), new SCH_SCREEN );
         }
     }
 

@@ -130,7 +130,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     // Initialize grid id to the default value (50 mils):
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
-    SetScreen( new SCH_SCREEN( aKiway ) );
+    SetScreen( new SCH_SCREEN );
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
     LoadSettings( config() );
 

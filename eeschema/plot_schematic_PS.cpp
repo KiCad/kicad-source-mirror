@@ -165,7 +165,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     if( aPlotFrameRef )
     {
-        PlotWorkSheet( plotter, &aScreen->Prj(), m_parent->GetTitleBlock(), aPageInfo,
+        PlotWorkSheet( plotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(), aPageInfo,
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(), aScreen->GetFileName(),
                        plotter->GetColorMode() ?

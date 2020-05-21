@@ -124,7 +124,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
     gal_opts.m_axesEnabled = true;
 
-    m_dummyScreen = new SCH_SCREEN( aKiway );
+    m_dummyScreen = new SCH_SCREEN();
     SetScreen( m_dummyScreen );
     GetScreen()->m_Center = true;
     GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );

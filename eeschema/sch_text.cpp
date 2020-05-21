@@ -520,8 +520,8 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
 
         PROJECT* project = nullptr;
 
-        if( Schematic()->RootScreen() )
-            project = &Schematic()->RootScreen()->Kiway().Prj();
+        if( Schematic() )
+            project = &Schematic()->Prj();
 
         if( aDepth < 10 )
             text = ExpandTextVars( text, &textResolver, project );

@@ -523,9 +523,8 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         }
         else
         {
-            aSheet->SetScreen( new SCH_SCREEN( m_kiway ) );
+            aSheet->SetScreen( new SCH_SCREEN( m_schematic ) );
             aSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
-            aSheet->GetScreen()->SetParent( m_schematic );
 
             try
             {

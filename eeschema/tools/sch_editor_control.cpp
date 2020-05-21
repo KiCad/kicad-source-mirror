@@ -1185,7 +1185,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     SCH_SEXPR_PLUGIN  plugin;
 
     SCH_SHEET paste_sheet;
-    SCH_SCREEN* paste_screen = new SCH_SCREEN( &m_frame->GetScreen()->Kiway() );
+    SCH_SCREEN* paste_screen = new SCH_SCREEN( &m_frame->Schematic() );
 
     // Screen object on heap is owned by the sheet.
     paste_sheet.SetScreen( paste_screen );

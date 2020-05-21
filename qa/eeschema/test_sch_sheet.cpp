@@ -39,7 +39,10 @@
 class TEST_SCH_SHEET_FIXTURE
 {
 public:
-    TEST_SCH_SHEET_FIXTURE() : m_sheet(), m_csheet( m_sheet )
+    TEST_SCH_SHEET_FIXTURE() :
+            m_schematic( nullptr ),
+            m_sheet(),
+            m_csheet( m_sheet )
     {
     }
 

@@ -36,6 +36,7 @@
 #include <sch_sheet.h>
 #include <sch_screen.h>
 #include <sch_component.h>
+#include <schematic.h>
 #include <lib_pin.h>
 #include <preview_items/selection_area.h>
 #include <sch_edit_frame.h>
@@ -97,7 +98,7 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
 
     m_worksheet.reset( new KIGFX::WS_PROXY_VIEW_ITEM( static_cast< int >( IU_PER_MILS ),
                                                       &aScreen->GetPageSettings(),
-                                                      &aScreen->Prj(),
+                                                      &aScreen->Schematic()->Prj(),
                                                       &aScreen->GetTitleBlock() ) );
     m_worksheet->SetSheetNumber( aScreen->m_ScreenNumber );
     m_worksheet->SetSheetCount( aScreen->m_NumberOfScreens );

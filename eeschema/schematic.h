@@ -29,6 +29,7 @@ class BUS_ALIAS;
 class CONNECTION_GRAPH;
 class EDA_BASE_FRAME;
 class ERC_SETTINGS;
+class PROJECT;
 class SCH_SCREEN;
 class SCH_SHEET;
 
@@ -43,6 +44,7 @@ class SCHEMATIC : public EDA_ITEM
     friend class SCH_EDIT_FRAME;
 
 private:
+    PROJECT* m_project;
 
     /// The top-level sheet in this schematic hierarchy (or potentially the only one)
     SCH_SHEET* m_rootSheet;
@@ -66,7 +68,7 @@ private:
     ERC_SETTINGS* m_ercSettings;
 
 public:
-    SCHEMATIC();
+    SCHEMATIC( PROJECT* aPrj );
 
     ~SCHEMATIC();
 
@@ -77,6 +79,17 @@ public:
 
     /// Initializes this schematic to a blank one, unloading anything existing
     void Reset();
+
+    /// Return a reference to the project this schematic is part of
+    PROJECT& Prj() const
+    {
+        return *const_cast<PROJECT*>( m_project );
+    }
+
+    void SetProject( PROJECT& aPrj )
+    {
+        m_project = &aPrj;
+    }
 
     /**
      * Builds and returns an updated schematic hierarchy

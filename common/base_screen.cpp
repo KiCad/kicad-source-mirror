@@ -44,8 +44,8 @@
 wxString BASE_SCREEN::m_PageLayoutDescrFileName;   // the name of the page layout descr file.
 
 
-BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) :
-    EDA_ITEM( aType )
+BASE_SCREEN::BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType ) :
+    EDA_ITEM( aParent, aType )
 {
     m_UndoRedoCountMax = DEFAULT_MAX_UNDO_ITEMS;
     m_Initialized      = false;

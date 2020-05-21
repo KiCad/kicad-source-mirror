@@ -159,7 +159,7 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
 
     if( aPlotFrameRef )
     {
-        PlotWorkSheet( aPlotter, &aScreen->Prj(), m_parent->GetTitleBlock(),
+        PlotWorkSheet( aPlotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(),
                        m_parent->GetPageSettings(), aScreen->m_ScreenNumber,
                        aScreen->m_NumberOfScreens, m_parent->GetScreenDesc(),
                        aScreen->GetFileName(),

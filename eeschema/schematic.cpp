@@ -25,8 +25,9 @@
 #include <sch_marker.h>
 
 
-SCHEMATIC::SCHEMATIC() :
+SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
           EDA_ITEM( nullptr, SCHEMATIC_T ),
+          m_project( aPrj ),
           m_rootSheet( nullptr )
 {
     m_currentSheet    = new SCH_SHEET_PATH();
