@@ -223,11 +223,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateOptToolbar();
     ReCreateMicrowaveVToolbar();
 
-    // Create the infobar and the panel to hold it and the canvas
-    m_infoBar     = new WX_INFOBAR( this );
-    m_canvasPanel = new EDA_INFOBAR_PANEL( this );
-    m_canvasPanel->AddInfoBar( m_infoBar );
-    m_canvasPanel->AddOtherItem( GetCanvas() );
+    // Create the infobar
+    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -238,6 +235,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top().Layer(5) );
     m_auimgr.AddPane( m_messagePanel,
                       EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( m_infoBar,
+                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
 
     // Vertical items; layers 1 - 3
     m_auimgr.AddPane( m_optionsToolBar,
@@ -252,7 +251,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Caption( _( "Layers Manager" ) ).PaneBorder( false )
                       .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ) );
 
-    m_auimgr.AddPane( m_canvasPanel, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
@@ -262,7 +261,14 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                                 // because contents establish size
     syncLayerWidgetLayer();
 
+    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
+    // hidding it.
     m_auimgr.Update();
+
+    // We don't want the infobar displayed right away
+    m_auimgr.GetPane( "InfoBar" ).Hide();
+    m_auimgr.Update();
+
     GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
 

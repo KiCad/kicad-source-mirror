@@ -148,6 +148,10 @@ protected:
  * since adding the infobar on its own to the AUI manager produces
  * artifacts when showing/hiding it due to the AUI pane layout.
  *
+ * Note that this implementation currently has issues on Windows with
+ * event processing inside the GAL canvas, see:
+ * https://gitlab.com/kicad/code/kicad/-/issues/4501
+ *
  */
 class EDA_INFOBAR_PANEL : public wxPanel
 {

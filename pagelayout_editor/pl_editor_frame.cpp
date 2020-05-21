@@ -125,17 +125,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateHToolbar();
     ReCreateVToolbar();
 
-    // TODO (ISM): Figure out why using the infobar panel doesn't work here (it works
-    // in the other frames) but using the AUI pane version does.
-    // When the panel is used, the infobar isn't shown until the window is resized
-    // (but the sizer has a space for it), and the sizer space doesn't disappear
-    // when it is dismissed until the window is resized.
-
-    // Create the infobar and the panel to hold it and the canvas
-    m_infoBar     = new WX_INFOBAR( this, &m_auimgr );
-    //m_canvasPanel = new EDA_INFOBAR_PANEL( this );
-    //m_canvasPanel->AddInfoBar( m_infoBar );
-    //m_canvasPanel->AddOtherItem( GetCanvas() );
+    // Create the infobar
+    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
 
     wxWindow* stsbar = GetStatusBar();
     int dims[] = {

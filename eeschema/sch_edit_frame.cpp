@@ -241,11 +241,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    // Create the infobar and the panel to hold it and the canvas
-    m_infoBar     = new WX_INFOBAR( this );
-    m_canvasPanel = new EDA_INFOBAR_PANEL( this );
-    m_canvasPanel->AddInfoBar( m_infoBar );
-    m_canvasPanel->AddOtherItem( GetCanvas() );
+    // Create the infobar
+    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
 
     // Initialize common print setup dialog settings.
     m_pageSetupData.GetPrintData().SetPrintMode( wxPRINT_MODE_PRINTER );
@@ -261,11 +258,19 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                       EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_drawToolBar,
                       EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
-    m_auimgr.AddPane( m_canvasPanel,
+    m_auimgr.AddPane( m_infoBar,
+                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
+    m_auimgr.AddPane( GetCanvas(),
                       EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
     m_auimgr.AddPane( m_messagePanel,
                       EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
+    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
+    // hidding it.
+    m_auimgr.Update();
+
+    // We don't want the infobar displayed right away
+    m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );

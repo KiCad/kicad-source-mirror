@@ -116,7 +116,6 @@ protected:
     int                m_MsgFrameHeight;
 
     WX_INFOBAR*        m_infoBar;
-    EDA_INFOBAR_PANEL* m_canvasPanel;       // The panel that holds the canvas and infobar
 
     COLOR_SETTINGS*    m_colorSettings;
 

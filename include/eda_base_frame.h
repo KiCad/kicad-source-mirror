@@ -625,6 +625,8 @@ public:
         CaptionVisible( false );
         Movable( false );
         Resizable( true );
+        PaneBorder( false );
+        DockFixed( true );
         return *this;
     }
 };
