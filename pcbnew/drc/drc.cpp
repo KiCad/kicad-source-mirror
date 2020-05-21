@@ -1347,7 +1347,7 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
             continue;
         }
 
-        int minClearance = aRefPad->GetClearance( nullptr, &m_clearanceSource );
+        int minClearance = aRefPad->GetClearance( pad, &m_clearanceSource );
         int actual;
 
         if( !checkClearancePadToPad( aRefPad, pad, minClearance, &actual ) )
