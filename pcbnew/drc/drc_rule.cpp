@@ -146,7 +146,7 @@ void MatchSelectors( const std::vector<DRC_SELECTOR*>& aSelectors,
             PCB_LAYER_ID matchLayer = candidate->m_MatchLayers[0];
 
             if( !aItem->GetLayerSet().test( matchLayer )
-                    || !( bItem && bItem->GetLayerSet().test( matchLayer ) ) )
+                    || ( bItem && !bItem->GetLayerSet().test( matchLayer ) ) )
             {
                 continue;
             }
