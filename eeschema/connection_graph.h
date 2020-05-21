@@ -275,6 +275,15 @@ public:
 
     const NET_MAP& GetNetMap() const { return m_net_code_to_subgraphs_map; }
 
+    /**
+     * Returns the subgraph for a given net name on a given sheet
+     * @param aNetName is the local net name to look for
+     * @param aPath is a sheet path to look on
+     * @return the subgraph matching the query, or nullptr if none is found
+     */
+    CONNECTION_SUBGRAPH* FindSubgraphByName( const wxString& aNetName,
+                                             const SCH_SHEET_PATH& aPath );
+
     // TODO(JE) Remove this when pressure valve is removed
     static bool m_allowRealTime;
 

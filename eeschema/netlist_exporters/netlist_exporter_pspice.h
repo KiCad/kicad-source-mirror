@@ -87,7 +87,7 @@ struct SPICE_ITEM
     bool m_enabled;
 
     ///> Array containing Standard Pin Name
-    std::vector<NETLIST_OBJECT*> m_pins;
+    std::vector<wxString> m_pins;
 
     ///> Numeric indices into m_SortedComponentPinList
     std::vector<int> m_pinSequence;
@@ -101,10 +101,8 @@ struct SPICE_ITEM
 class NETLIST_EXPORTER_PSPICE : public NETLIST_EXPORTER
 {
 public:
-    NETLIST_EXPORTER_PSPICE( NETLIST_OBJECT_LIST* aMasterList, SCHEMATIC* aSchematic,
-            PROJECT* aProject = nullptr ) :
-            NETLIST_EXPORTER( aMasterList, aSchematic ),
-            m_project( aProject )
+    NETLIST_EXPORTER_PSPICE( SCHEMATIC* aSchematic ) :
+            NETLIST_EXPORTER( aSchematic )
     {
     }
 
@@ -244,9 +242,6 @@ private:
 
     ///> List of items representing schematic components in the Spice world
     SPICE_ITEM_LIST m_spiceItems;
-
-    ///> Project object to fetch its settings (e.g. paths)
-    PROJECT* m_project;
 
     // Component fields that are processed during netlist export & simulation
     static const std::vector<wxString> m_spiceFields;

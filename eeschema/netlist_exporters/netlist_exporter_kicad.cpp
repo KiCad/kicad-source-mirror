@@ -36,8 +36,6 @@
 
 bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
-    wxASSERT( m_graph );
-
     try
     {
         FILE_OUTPUTFORMATTER formatter( aOutFileName );
@@ -56,10 +54,6 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
 
 void NETLIST_EXPORTER_KICAD::Format( OUTPUTFORMATTER* aOut, int aCtl )
 {
-    // Prepare list of nets generation
-    for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
-        m_masterList->GetItem( ii )->m_Flag = 0;
-
     std::unique_ptr<XNODE> xroot( makeRoot( aCtl ) );
 
     xroot->Format( aOut, 0 );

@@ -62,19 +62,9 @@ class NETLIST_EXPORTER_GENERIC : public NETLIST_EXPORTER
 private:
     std::set< wxString >  m_libraries;    ///< Set of library nicknames.
 
-    SYMBOL_LIB_TABLE*     m_libTable;
-
-protected:
-    CONNECTION_GRAPH*     m_graph;
-
 public:
-    NETLIST_EXPORTER_GENERIC( SCH_EDIT_FRAME* aFrame,
-                              NETLIST_OBJECT_LIST* aMasterList,
-                              SCHEMATIC* aSchematic,
-                              CONNECTION_GRAPH* aGraph = nullptr  ) :
-        NETLIST_EXPORTER( aMasterList, aSchematic ),
-        m_libTable( aFrame->Prj().SchSymbolLibTable() ),
-        m_graph( aGraph )
+    NETLIST_EXPORTER_GENERIC( SCHEMATIC* aSchematic ) :
+        NETLIST_EXPORTER( aSchematic )
     {}
 
     /**
@@ -132,7 +122,7 @@ protected:
      * fills out an XML node with a list of nets and returns it.
      * @return XNODE* - the list of nets nodes
      */
-    XNODE* makeListOfNets( bool aUseGraph = true );
+    XNODE* makeListOfNets();
 
     /**
      * Function makeLibraries

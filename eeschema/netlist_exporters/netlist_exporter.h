@@ -88,13 +88,14 @@ struct LIB_PART_LESS_THAN
 class NETLIST_EXPORTER
 {
 protected:
-    NETLIST_OBJECT_LIST*  m_masterList;       /// yes ownership, connected items flat list
-
+// TODO(JE) NETLISTING
+#if 0
     /// Used to temporarily store and filter the list of pins of a schematic component
     /// when generating schematic component data in netlist (comp section). No ownership
     /// of members.
     /// TODO(snh): Descope this object
     NETLIST_OBJECTS       m_SortedComponentPinList;
+#endif
 
     /// Used for "multi parts per package" components,
     /// avoids processing a lib component more than once.
@@ -106,67 +107,9 @@ protected:
     /// The schematic we're generating a netlist for
     SCHEMATIC* m_schematic;
 
-    /**
-     * Function sprintPinNetName
-     * formats the net name for \a aPin using \a aNetNameFormat into \a aResult.
-     * <p>
-     *  Net name is:
-     *  <ul>
-     * <li> "?" if pin not connected
-     * <li> "netname" for global net (like gnd, vcc ..
-     * <li> "/path/netname" for the usual nets
-     * </ul>
-     * if aUseNetcodeAsNetName is true, the net name is just the net code (SPICE only)
-     */
-    static void sprintPinNetName( wxString& aResult, const wxString& aNetNameFormat,
-                                  NETLIST_OBJECT* aPin, bool aUseNetcodeAsNetName = false );
 
-    /**
-     * Function findNextComponentAndCreatePinList
-     * finds a component from the DrawList and builds
-     * its pin list in m_SortedComponentPinList. This list is sorted by pin num.
-     * the component is the next actual component after aItem
-     * (power symbols and virtual components that have their reference starting by '#'are skipped).
-     */
-    void CreatePinList( SCH_COMPONENT* aItem, SCH_SHEET_PATH* aSheetPath );
 
     SCH_COMPONENT* findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
-
-
-    /**
-     * Function eraseDuplicatePins
-     * erase duplicate Pins from m_SortedComponentPinList (i.e. set pointer in this list to NULL).
-     * (This is a list of pins found in the whole schematic, for a single
-     * component.) These duplicate pins were put in list because some pins (powers... )
-     * are found more than one time when we have a multiple parts per package
-     * component. For instance, a 74ls00 has 4 parts, and therefore the VCC pin
-     * and GND pin appears 4 times in the list.
-     * Note: this list *MUST* be sorted by pin number (.m_PinNum member value)
-     * Also set the m_Flag member of "removed" NETLIST_OBJECT pin item to 1
-     */
-    void eraseDuplicatePins();
-
-    /**
-     * Function addPinToComponentPinList
-     * adds a new pin description to the pin list m_SortedComponentPinList.
-     * A pin description is a pointer to the corresponding structure
-     * created by BuildNetList() in the table g_NetObjectslist.
-     */
-    bool addPinToComponentPinList( SCH_COMPONENT*  Component,
-                                   SCH_SHEET_PATH* sheet,
-                                   LIB_PIN*        PinEntry );
-
-    /**
-     * Function findAllUnitsOfComponent
-     * is used for "multiple parts per package" components.
-     * <p>
-     * Search the entire design for all units of \a aComponent based on
-     * matching reference designator, and for each unit, add all its pins
-     * to the temporary sorted pin list, m_SortedComponentPinList.
-     */
-    void findAllUnitsOfComponent( SCH_COMPONENT*  aComponent,
-                                  LIB_PART*       aEntry,
-                                  SCH_SHEET_PATH* aSheetPath );
 
 public:
 
@@ -175,16 +118,14 @@ public:
      * @param aMasterList we take ownership of this here.
      * @param aLibTable is the symbol library table of the project.
      */
-    NETLIST_EXPORTER( NETLIST_OBJECT_LIST* aMasterList, SCHEMATIC* aSchematic ) :
-        m_masterList( aMasterList ),
+    NETLIST_EXPORTER( SCHEMATIC* aSchematic ) :
         m_schematic( aSchematic )
     {
-        wxASSERT( aMasterList );
+        wxASSERT( aSchematic );
     }
 
     virtual ~NETLIST_EXPORTER()
     {
-        delete m_masterList;    // I own the list itself in this instance.
     }
 
     /**

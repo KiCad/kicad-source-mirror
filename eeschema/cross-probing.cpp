@@ -404,9 +404,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         }
 
         {
-            NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
-            NETLIST_EXPORTER_KICAD exporter(
-                    this, net_atoms, &Schematic(), Schematic().ConnectionGraph() );
+            NETLIST_EXPORTER_KICAD exporter( &Schematic() );
             STRING_FORMATTER formatter;
 
             exporter.Format( &formatter, GNL_ALL );

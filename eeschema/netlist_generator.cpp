@@ -67,20 +67,19 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
     switch( aFormat )
     {
     case NET_TYPE_PCBNEW:
-        helper = new NETLIST_EXPORTER_KICAD(
-                this, aConnectedItemsList, sch, sch->ConnectionGraph() );
+        helper = new NETLIST_EXPORTER_KICAD( sch );
         break;
 
     case NET_TYPE_ORCADPCB2:
-        helper = new NETLIST_EXPORTER_ORCADPCB2( aConnectedItemsList, sch );
+        helper = new NETLIST_EXPORTER_ORCADPCB2( sch );
         break;
 
     case NET_TYPE_CADSTAR:
-        helper = new NETLIST_EXPORTER_CADSTAR( aConnectedItemsList, sch );
+        helper = new NETLIST_EXPORTER_CADSTAR( sch );
         break;
 
     case NET_TYPE_SPICE:
-        helper = new NETLIST_EXPORTER_PSPICE( aConnectedItemsList, sch );
+        helper = new NETLIST_EXPORTER_PSPICE( sch );
         break;
 
     default:
@@ -89,8 +88,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
             tmpFile.SetExt( GENERIC_INTERMEDIATE_NETLIST_EXT );
             fileName = tmpFile.GetFullPath();
 
-            helper = new NETLIST_EXPORTER_GENERIC( this, aConnectedItemsList, sch,
-                    sch->ConnectionGraph() );
+            helper = new NETLIST_EXPORTER_GENERIC( sch );
             executeCommandLine = true;
         }
         break;
@@ -193,8 +191,7 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
 
 void SCH_EDIT_FRAME::sendNetlistToCvpcb()
 {
-    NETLIST_OBJECT_LIST*   net_atoms = BuildNetListBase();
-    NETLIST_EXPORTER_KICAD exporter( this, net_atoms, &Schematic(), Schematic().ConnectionGraph() );
+    NETLIST_EXPORTER_KICAD exporter( &Schematic() );
     STRING_FORMATTER       formatter;
 
     // @todo : trim GNL_ALL down to minimum for CVPCB

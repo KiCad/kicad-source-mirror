@@ -27,6 +27,7 @@
 #include <build_version.h>
 #include <confirm.h>
 
+#include <connection_graph.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 
@@ -62,10 +63,6 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
     ret |= fprintf( f, "\"%s\"\n", TO_UTF8( title ) );
     ret |= fprintf( f, ".TYP FULL\n\n" );
 
-    // Prepare list of nets generation
-    for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
-        m_masterList->GetItem( ii )->m_Flag = 0;
-
     // Create netlist module section
     m_ReferencesAlreadyFound.Clear();
 
@@ -81,8 +78,6 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
 
             if( !component )
                 continue;
-
-            CreatePinList( component, &sheetList[i] );
 
             if( !component->GetField( FOOTPRINT )->IsVoid() )
                 footprint = component->GetField( FOOTPRINT )->GetText();
@@ -103,8 +98,6 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
 
     ret |= fprintf( f, "\n" );
 
-    m_SortedComponentPinList.clear();
-
     if( ! writeListOfNets( f ) )
         ret = -1;   // set error
 
@@ -118,78 +111,99 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
 
 bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
 {
-    int ret = 0;
+    int ret       = 0;
+    int print_ter = 0;
+
     wxString InitNetDesc  = StartLine + wxT( "ADD_TER" );
     wxString StartNetDesc = StartLine + wxT( "TER" );
-    wxString netcodeName, InitNetDescLine;
-    unsigned ii;
-    int print_ter = 0;
-    int NetCode, lastNetCode = -1;
-    SCH_COMPONENT* Cmp;
+    wxString InitNetDescLine;
     wxString netName;
 
-    for( ii = 0; ii < m_masterList->size(); ii++ )
+    for( const auto& it : m_schematic->ConnectionGraph()->GetNetMap() )
     {
-        NETLIST_OBJECT* nitem = m_masterList->GetItem( ii );
+        auto subgraphs = it.second;
 
-        // Get the NetName of the current net :
-        if( ( NetCode = nitem->GetNet() ) != lastNetCode )
+        netName.Printf( wxT( "\"%s\"" ), it.first.first );
+
+        std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
+
+        for( auto subgraph : subgraphs )
         {
-            netName = nitem->GetNetName();
-            netcodeName = wxT( "\"" );
+            auto sheet = subgraph->m_sheet;
 
-            if( !netName.IsEmpty() )
-                netcodeName << netName;
-            else  // this net has no name: create a default name $<net number>
-                netcodeName << wxT( "$" ) << NetCode;
-
-            netcodeName += wxT( "\"" );
-            lastNetCode  = NetCode;
-            print_ter    = 0;
+            for( auto item : subgraph->m_items )
+                if( item->Type() == SCH_PIN_T )
+                    sorted_items.emplace_back(
+                            std::make_pair( static_cast<SCH_PIN*>( item ), sheet ) );
         }
 
+        // Netlist ordering: Net name, then ref des, then pin name
+        std::sort( sorted_items.begin(), sorted_items.end(),
+                []( auto a, auto b )
+                {
+                    wxString ref_a = a.first->GetParentComponent()->GetRef( &a.second );
+                    wxString ref_b = b.first->GetParentComponent()->GetRef( &b.second );
 
-        if( nitem->m_Type != NETLIST_ITEM::PIN )
-            continue;
+                    if( ref_a == ref_b )
+                        return a.first->GetNumber() < b.first->GetNumber();
 
-        if( nitem->m_Flag != 0 )
-            continue;
+                    return ref_a < ref_b;
+                } );
 
-        Cmp = nitem->GetComponentParent();
-        wxString refstr = Cmp->GetRef( &nitem->m_SheetPath );
-        if( refstr[0] == '#' )
-            continue;  // Power supply symbols.
+        // Some duplicates can exist, for example on multi-unit parts with duplicated
+        // pins across units.  If the user connects the pins on each unit, they will
+        // appear on separate subgraphs.  Remove those here:
+        sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
+                []( auto a, auto b )
+                {
+                    auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
+                    auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
 
-        switch( print_ter )
+                    return ref_a == ref_b && a.first->GetNumber() == b.first->GetNumber();
+                } ),
+                sorted_items.end() );
+
+        for( const auto& pair : sorted_items )
         {
-        case 0:
+            SCH_PIN*       pin   = pair.first;
+            SCH_SHEET_PATH sheet = pair.second;
+
+            wxString refText = pin->GetParentComponent()->GetRef( &sheet );
+            wxString pinText = pin->GetNumber();
+
+            // Skip power symbols and virtual components
+            if( refText[0] == wxChar( '#' ) )
+                continue;
+
+            switch( print_ter )
             {
-                InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
-                                       GetChars( InitNetDesc ),
-                                       GetChars( refstr ),
-                                       GetChars( nitem->m_PinNum ),
-                                       GetChars( netcodeName ) );
+            case 0:
+                {
+                    InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
+                                            GetChars( InitNetDesc ),
+                                            GetChars( refText ),
+                                            GetChars( pinText ),
+                                            GetChars( netName ) );
+                }
+                print_ter++;
+                break;
+
+            case 1:
+                ret |= fprintf( f, "%s\n", TO_UTF8( InitNetDescLine ) );
+                ret |= fprintf( f, "%s       %s   %.4s\n",
+                                TO_UTF8( StartNetDesc ),
+                                TO_UTF8( refText ),
+                                TO_UTF8( pinText ) );
+                print_ter++;
+                break;
+
+            default:
+                ret |= fprintf( f, "            %s   %.4s\n",
+                                TO_UTF8( refText ),
+                                TO_UTF8( pinText ) );
+                break;
             }
-            print_ter++;
-            break;
-
-        case 1:
-            ret |= fprintf( f, "%s\n", TO_UTF8( InitNetDescLine ) );
-            ret |= fprintf( f, "%s       %s   %.4s\n",
-                            TO_UTF8( StartNetDesc ),
-                            TO_UTF8( refstr ),
-                            TO_UTF8( nitem->m_PinNum ) );
-            print_ter++;
-            break;
-
-        default:
-            ret |= fprintf( f, "            %s   %.4s\n",
-                            TO_UTF8( refstr ),
-                            TO_UTF8( nitem->m_PinNum ) );
-            break;
         }
-
-        nitem->m_Flag = 1;
     }
 
     return ret >= 0;

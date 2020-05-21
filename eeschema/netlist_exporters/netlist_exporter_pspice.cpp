@@ -31,8 +31,8 @@
 #include <map>
 #include <search_stack.h>
 
+#include <connection_graph.h>
 #include <sch_edit_frame.h>
-#include <netlist.h>
 #include <sch_reference_list.h>
 #include <env_paths.h>
 
@@ -97,7 +97,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
         if( ( aCtl & NET_ADJUST_INCLUDE_PATHS ) )
         {
             // Look for the library in known search locations
-            full_path = ResolveFile( lib, &Pgm().GetLocalEnvVariables(), m_project );
+            full_path = ResolveFile( lib, &Pgm().GetLocalEnvVariables(), &m_schematic->Prj() );
 
             if( full_path.IsEmpty() )
             {
@@ -135,19 +135,16 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
                 continue;
             }
 
-            NETLIST_OBJECT* pin = item.m_pins[activePinIndex];
-            assert( pin );
-            wxString netName = pin->GetNetName();
+            wxString netName = item.m_pins[activePinIndex];
+
+            wxASSERT( m_netMap.count( netName ) );
 
             if( useNetcodeAsNetName )
             {
-                assert( m_netMap.count( netName ) );
                 aFormatter->Print( 0, "%d ", m_netMap[netName] );
             }
             else
             {
-                sprintPinNetName( netName , wxT( "N-%.6d" ), pin, useNetcodeAsNetName );
-
                 // Replace parenthesis with underscore to prevent parse issues with simulators
                 ReplaceForbiddenChars( netName );
 
@@ -272,30 +269,28 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
     // Set of reference names, to check for duplications
     std::set<wxString>  refNames;
 
-    // Prepare list of nets generation (not used here, but...
-    for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
-        m_masterList->GetItem( ii )->m_Flag = 0;
-
     m_netMap.clear();
     m_netMap["GND"] = 0;        // 0 is reserved for "GND"
     int netIdx = 1;
 
     m_libraries.clear();
     m_ReferencesAlreadyFound.Clear();
+    m_LibParts.clear();
 
     UpdateDirectives( aCtl );
 
     for( unsigned sheet_idx = 0; sheet_idx < sheetList.size(); sheet_idx++ )
     {
+        SCH_SHEET_PATH sheet = sheetList[sheet_idx];
+
         // Process component attributes to find Spice directives
-        for( auto item : sheetList[sheet_idx].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( auto item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* comp = findNextComponent( item, &sheetList[sheet_idx] );
+            SCH_COMPONENT* comp = findNextComponent( item, &sheet );
 
             if( !comp )
                 continue;
 
-            CreatePinList( comp, &sheetList[sheet_idx] );
             SPICE_ITEM spiceItem;
             spiceItem.m_parent = comp;
 
@@ -305,7 +300,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
 
             spiceItem.m_primitive = GetSpiceField( SF_PRIMITIVE, comp, aCtl )[0];
             spiceItem.m_model     = GetSpiceField( SF_MODEL, comp, aCtl );
-            spiceItem.m_refName   = comp->GetRef( &sheetList[sheet_idx] );
+            spiceItem.m_refName   = comp->GetRef( &sheet );
 
             // Duplicate references will result in simulation errors
             if( refNames.count( spiceItem.m_refName ) )
@@ -326,21 +321,26 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             wxArrayString pinNames;
 
             // Store pin information
-            for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
+            for( const auto& pin : comp->GetSchPins( &sheet ) )
             {
-                NETLIST_OBJECT* pin = m_SortedComponentPinList[ii];
+                if( auto conn = pin->Connection( sheet ) )
+                {
+                    const wxString& netName = conn->Name();
 
-                // NETLIST_EXPORTER marks removed pins by setting them to NULL
-                if( !pin )
-                    continue;
+                    // Skip unconnected pins
+                    CONNECTION_SUBGRAPH* sg =
+                            m_schematic->ConnectionGraph()->FindSubgraphByName( netName, sheet );
 
-                spiceItem.m_pins.push_back( pin );
-                pinNames.Add( pin->GetPinNumText() );
+                    if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
+                        continue;
 
-                // Create net mapping
-                const wxString& netName = pin->GetNetName();
-                if( m_netMap.count( netName ) == 0 )
-                    m_netMap[netName] = netIdx++;
+                    // Create net mapping
+                    spiceItem.m_pins.push_back( netName );
+                    pinNames.Add( pin->GetName() );
+
+                    if( m_netMap.count( netName ) == 0 )
+                        m_netMap[netName] = netIdx++;
+                }
             }
 
             // Check if an alternative pin sequence is available:

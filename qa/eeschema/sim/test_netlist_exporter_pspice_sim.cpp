@@ -33,18 +33,24 @@
 #include <wx/string.h>
 
 // Code under test
+#include <project.h>
+#include <schematic.h>
 #include <sim/netlist_exporter_pspice_sim.h>
 
 class TEST_NETLIST_EXPORTER_PSPICE_SIM
 {
 public:
-    TEST_NETLIST_EXPORTER_PSPICE_SIM()
-            : m_netlist( new NETLIST_OBJECT_LIST ),
-              m_exporter( m_netlist, nullptr )
+    TEST_NETLIST_EXPORTER_PSPICE_SIM() :
+            m_project(),
+            m_schematic( &m_project ),
+            m_exporter( &m_schematic )
     {
     }
 
-    NETLIST_OBJECT_LIST*        m_netlist;
+    PROJECT m_project;
+
+    SCHEMATIC m_schematic;
+
     NETLIST_EXPORTER_PSPICE_SIM m_exporter;
 };
 

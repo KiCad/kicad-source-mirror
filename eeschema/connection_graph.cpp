@@ -1416,6 +1416,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     }
 
     m_net_code_to_subgraphs_map.clear();
+    m_net_name_to_subgraphs_map.clear();
 
     for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
     {
@@ -1433,6 +1434,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         auto key = std::make_pair( subgraph->GetNetName(),
                                    subgraph->m_driver_connection->NetCode() );
         m_net_code_to_subgraphs_map[ key ].push_back( subgraph );
+
+        m_net_name_to_subgraphs_map[subgraph->m_driver_connection->Name()].push_back( subgraph );
     }
 
     // Clean up and deallocate stale subgraphs
@@ -1926,6 +1929,25 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
     }
 
     return ret;
+}
+
+
+CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindSubgraphByName(
+        const wxString& aNetName, const SCH_SHEET_PATH& aPath )
+{
+    if( !m_net_name_to_subgraphs_map.count( aNetName ) )
+        return nullptr;
+
+    for( auto sg : m_net_name_to_subgraphs_map.at( aNetName ) )
+    {
+        // Cache is supposed to be valid by now
+        wxASSERT( sg && !sg->m_absorbed && sg->m_driver_connection );
+
+        if( sg->m_sheet == aPath && sg->m_driver_connection->Name() == aNetName )
+            return sg;
+    }
+
+    return nullptr;
 }
 
 

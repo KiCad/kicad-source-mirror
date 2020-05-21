@@ -40,10 +40,6 @@ static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 );
 
 bool NETLIST_EXPORTER_GENERIC::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
-    // Prepare list of nets generation
-    for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
-        m_masterList->GetItem( ii )->m_Flag = 0;
-
     // output the XML format netlist.
     wxXmlDocument   xdoc;
 
@@ -201,6 +197,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
     XNODE*      xcomps = node( "components" );
 
     m_ReferencesAlreadyFound.Clear();
+    m_LibParts.clear();
 
     SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
 
@@ -379,11 +376,12 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibraries()
         wxString    libNickname = *it;
         XNODE*      xlibrary;
 
-        if( m_libTable->HasLibrary( libNickname ) )
+        if( m_schematic->Prj().SchSymbolLibTable()->HasLibrary( libNickname ) )
         {
             xlibs->AddChild( xlibrary = node( "library" ) );
             xlibrary->AddAttribute( "logical", libNickname );
-            xlibrary->AddChild( node( "uri",  m_libTable->GetFullURI( libNickname ) ) );
+            xlibrary->AddChild( node(
+                    "uri", m_schematic->Prj().SchSymbolLibTable()->GetFullURI( libNickname ) ) );
         }
 
         // @todo: add more fun stuff here
@@ -496,7 +494,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
+XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
 {
     XNODE*      xnets = node( "nets" );      // auto_ptr if exceptions ever get used.
     wxString    netCodeTxt;
@@ -504,10 +502,6 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
     wxString    ref;
 
     XNODE*      xnet = 0;
-    int         netCode;
-    int         lastNetCode = -1;
-    int         sameNetcodeCount = 0;
-
 
     /*  output:
         <net code="123" name="/cfcard.sch/WAIT#">
@@ -516,137 +510,85 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
         </net>
     */
 
-    m_LibParts.clear();     // must call this function before using m_LibParts.
+    int code = 0;
 
-    if( aUseGraph )
+    for( const auto& it : m_schematic->ConnectionGraph()->GetNetMap() )
     {
-        wxASSERT( m_graph );
-        int code = 0;
+        bool     added     = false;
+        wxString net_name  = it.first.first;
+        auto     subgraphs = it.second;
 
-        for( const auto& it : m_graph->GetNetMap() )
+        // Code starts at 1
+        code++;
+
+        XNODE* xnode;
+        std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
+
+        for( auto subgraph : subgraphs )
         {
-            bool     added     = false;
-            wxString net_name  = it.first.first;
-            auto     subgraphs = it.second;
+            auto sheet = subgraph->m_sheet;
 
-            // Code starts at 1
-            code++;
-
-            XNODE* xnode;
-            std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
-
-            for( auto subgraph : subgraphs )
-            {
-                auto sheet = subgraph->m_sheet;
-
-                for( auto item : subgraph->m_items )
-                    if( item->Type() == SCH_PIN_T )
-                        sorted_items.emplace_back(
-                                std::make_pair( static_cast<SCH_PIN*>( item ), sheet ) );
-            }
-
-            // Netlist ordering: Net name, then ref des, then pin name
-            std::sort( sorted_items.begin(), sorted_items.end(), [] ( auto a, auto b ) {
-                        auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
-                        auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
-
-                        if( ref_a == ref_b )
-                            return a.first->GetNumber() < b.first->GetNumber();
-
-                        return ref_a < ref_b;
-                    } );
-
-            // Some duplicates can exist, for example on multi-unit parts with duplicated
-            // pins across units.  If the user connects the pins on each unit, they will
-            // appear on separate subgraphs.  Remove those here:
-            sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
-                    [] ( auto a, auto b ) {
-                        auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
-                        auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
-
-                        return ref_a == ref_b && a.first->GetNumber() == b.first->GetNumber();
-                    } ), sorted_items.end() );
-
-            for( const auto& pair : sorted_items )
-            {
-                SCH_PIN* pin = pair.first;
-                SCH_SHEET_PATH sheet = pair.second;
-
-                auto refText = pin->GetParentComponent()->GetRef( &sheet );
-                const auto& pinText = pin->GetNumber();
-
-                // Skip power symbols and virtual components
-                if( refText[0] == wxChar( '#' ) )
-                    continue;
-
-                if( !added )
-                {
-                    xnets->AddChild( xnet = node( "net" ) );
-                    netCodeTxt.Printf( "%d", code );
-                    xnet->AddAttribute( "code", netCodeTxt );
-                    xnet->AddAttribute( "name", net_name );
-
-                    added = true;
-                }
-
-                xnet->AddChild( xnode = node( "node" ) );
-                xnode->AddAttribute( "ref", refText );
-                xnode->AddAttribute( "pin", pinText );
-
-                wxString pinName;
-
-                if( pin->GetName() != "~" ) //  ~ is a char used to code empty strings in libs.
-                    pinName = pin->GetName();
-
-                if( !pinName.IsEmpty() )
-                    xnode->AddAttribute( "pinfunction", pinName );
-
-            }
+            for( auto item : subgraph->m_items )
+                if( item->Type() == SCH_PIN_T )
+                    sorted_items.emplace_back(
+                            std::make_pair( static_cast<SCH_PIN*>( item ), sheet ) );
         }
-    }
-    else
-    {
-        for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
+
+        // Netlist ordering: Net name, then ref des, then pin name
+        std::sort( sorted_items.begin(), sorted_items.end(), [] ( auto a, auto b ) {
+                    auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
+                    auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
+
+                    if( ref_a == ref_b )
+                        return a.first->GetNumber() < b.first->GetNumber();
+
+                    return ref_a < ref_b;
+                } );
+
+        // Some duplicates can exist, for example on multi-unit parts with duplicated
+        // pins across units.  If the user connects the pins on each unit, they will
+        // appear on separate subgraphs.  Remove those here:
+        sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
+                [] ( auto a, auto b ) {
+                    auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
+                    auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
+
+                    return ref_a == ref_b && a.first->GetNumber() == b.first->GetNumber();
+                } ), sorted_items.end() );
+
+        for( const auto& pair : sorted_items )
         {
-            NETLIST_OBJECT* nitem = m_masterList->GetItem( ii );
-            SCH_COMPONENT*  comp;
+            SCH_PIN* pin = pair.first;
+            SCH_SHEET_PATH sheet = pair.second;
 
-            // New net found, write net id;
-            if( ( netCode = nitem->GetNet() ) != lastNetCode )
-            {
-                sameNetcodeCount = 0;   // item count for this net
-                netName = nitem->GetNetName();
-                lastNetCode  = netCode;
-            }
+            auto refText = pin->GetParentComponent()->GetRef( &sheet );
+            const auto& pinText = pin->GetNumber();
 
-            if( nitem->m_Type != NETLIST_ITEM::PIN )
+            // Skip power symbols and virtual components
+            if( refText[0] == wxChar( '#' ) )
                 continue;
 
-            if( nitem->m_Flag != 0 )     // Redundant pin, skip it
-                continue;
-
-            comp = nitem->GetComponentParent();
-
-            // Get the reference for the net name and the main parent component
-            ref = comp->GetRef( &nitem->m_SheetPath );
-            if( ref[0] == wxChar( '#' ) )
-                continue;
-
-            if( ++sameNetcodeCount == 1 )
+            if( !added )
             {
                 xnets->AddChild( xnet = node( "net" ) );
-                netCodeTxt.Printf( "%d", netCode );
+                netCodeTxt.Printf( "%d", code );
                 xnet->AddAttribute( "code", netCodeTxt );
-                xnet->AddAttribute( "name", netName );
+                xnet->AddAttribute( "name", net_name );
+
+                added = true;
             }
 
-            XNODE*      xnode;
             xnet->AddChild( xnode = node( "node" ) );
-            xnode->AddAttribute( "ref", ref );
-            xnode->AddAttribute( "pin",  nitem->GetPinNumText() );
+            xnode->AddAttribute( "ref", refText );
+            xnode->AddAttribute( "pin", pinText );
 
-            if( !nitem->GetPinNameText().IsEmpty() )
-                xnode->AddAttribute( "pinfunction", nitem->GetPinNameText() );
+            wxString pinName;
+
+            if( pin->GetName() != "~" ) //  ~ is a char used to code empty strings in libs.
+                pinName = pin->GetName();
+
+            if( !pinName.IsEmpty() )
+                xnode->AddAttribute( "pinfunction", pinName );
         }
     }
 

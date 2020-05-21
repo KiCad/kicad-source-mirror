@@ -35,8 +35,8 @@
 class NETLIST_EXPORTER_ORCADPCB2 : public NETLIST_EXPORTER
 {
 public:
-    NETLIST_EXPORTER_ORCADPCB2( NETLIST_OBJECT_LIST* aMasterList, SCHEMATIC* aSchematic ) :
-        NETLIST_EXPORTER( aMasterList, aSchematic )
+    NETLIST_EXPORTER_ORCADPCB2( SCHEMATIC* aSchematic ) :
+        NETLIST_EXPORTER( aSchematic )
     {
     }
 
