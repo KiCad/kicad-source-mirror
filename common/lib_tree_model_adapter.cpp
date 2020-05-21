@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -155,6 +155,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
     {
         wxWindowUpdateLocker updateLock( m_widget );
 
+        Freeze();
         // Even with the updateLock, wxWidgets sometimes ties its knickers in
         // a knot when trying to run a wxdataview_selection_changed_callback()
         // on a row that has been deleted.
@@ -162,7 +163,11 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
         m_widget->UnselectAll();
 
         Cleared();
-#ifndef __WINDOWS__
+        Thaw();
+
+        // This was fixed in wxWidgets 3.0.5 and 3.1.3.
+#if defined( __WXGTK__ ) && ( (wxVERSION_NUMBER < 030005 ) || \
+        ( ( wxVERSION_NUMBER >= 030100 ) && ( wxVERSION_NUMBER < 030103 ) ) )
         // The fastest method to update wxDataViewCtrl is to rebuild from
         // scratch by calling Cleared(). Linux requires to reassociate model to
         // display data, but Windows will create multiple associations.
@@ -310,6 +315,9 @@ bool LIB_TREE_MODEL_ADAPTER::IsContainer( wxDataViewItem const& aItem ) const
 
 wxDataViewItem LIB_TREE_MODEL_ADAPTER::GetParent( wxDataViewItem const& aItem ) const
 {
+    if( m_freeze )
+        return ToItem( nullptr );
+
     auto node = ToNode( aItem );
     auto parent = node ? node->Parent : nullptr;
 
