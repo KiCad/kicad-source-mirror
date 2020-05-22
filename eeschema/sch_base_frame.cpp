@@ -84,7 +84,6 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
                                 const wxString& aTitle, const wxPoint& aPosition,
                                 const wxSize& aSize, long aStyle, const wxString& aFrameName ) :
     EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle, aFrameName ),
-    m_showPinElectricalTypeName( false ),
     m_defaults( &m_base_frame_defaults )
 {
     createCanvas();

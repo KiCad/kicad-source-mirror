@@ -93,8 +93,8 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	defaults->Add( fgSizer, 0, wxBOTTOM|wxEXPAND, 5 );
 
-	m_checkShowPinElectricalType = new wxCheckBox( defaults->GetStaticBox(), wxID_ANY, _("Show pin &electrical type"), wxDefaultPosition, wxDefaultSize, 0 );
-	defaults->Add( m_checkShowPinElectricalType, 0, wxBOTTOM, 5 );
+    m_cbShowPinElectricalType = new wxCheckBox( defaults->GetStaticBox(), wxID_ANY, _( "Show pin &electrical type"), wxDefaultPosition, wxDefaultSize, 0 );
+	defaults->Add( m_cbShowPinElectricalType, 0, wxBOTTOM, 5 );
 
 
 	leftColumn->Add( defaults, 0, wxEXPAND|wxALL, 5 );

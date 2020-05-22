@@ -24,8 +24,8 @@
 #include <macros.h>
 #include "class_library.h"
 #include "eeschema_id.h"
-#include "general.h"
 #include "lib_view_frame.h"
+#include "sch_painter.h"
 #include <symbol_lib_table.h>
 #include <tool/action_toolbar.h>
 #include <tool/conditional_menu.h>
@@ -116,7 +116,7 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
         return IsGridVisible();
     };
     auto electricalTypesShownCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetShowElectricalType();
+        return GetRenderSettings()->m_ShowPinsElectricalType;
     };
 
     viewMenu->AddItem( ACTIONS::zoomInCenter,             EE_CONDITIONS::ShowAlways );

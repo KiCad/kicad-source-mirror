@@ -92,8 +92,6 @@ class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 protected:
     TEMPLATES m_templateFieldNames;
 
-    bool      m_showPinElectricalTypeName;
-
     /// These are only used by libedit.  Eeschema should be using the one inside the SCHEMATIC.
     SCHEMATIC_SETTINGS m_base_frame_defaults;
 
@@ -132,12 +130,6 @@ public:
      * Allow some frames to show/hide hidden pins.  The default impl shows all pins.
      */
     virtual bool GetShowAllPins() const { return true; }
-
-    /**
-     * Allow some frames to show/hide pin electrical type names.
-     */
-    bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
-    void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
 
     virtual int GetDefaultLineWidth() const { return m_defaults->m_DefaultLineWidth; }
     virtual void SetDefaultLineWidth( int aWidth );

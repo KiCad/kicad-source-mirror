@@ -27,6 +27,7 @@
 #include <eeschema_id.h>
 #include <general.h>
 #include <lib_edit_frame.h>
+#include <sch_painter.h>
 #include <dialog_helpers.h>
 #include <bitmaps.h>
 #include <lib_manager.h>
@@ -151,6 +152,7 @@ void LIB_EDIT_FRAME::ReCreateOptToolbar()
 
 void LIB_EDIT_FRAME::SyncToolbars()
 {
+    KIGFX::SCH_RENDER_SETTINGS* settings = GetRenderSettings();
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
 
     bool isEditable = m_my_part && m_my_part->IsRoot();
@@ -173,10 +175,10 @@ void LIB_EDIT_FRAME::SyncToolbars()
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,            GetUserUnits() != EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,          GetUserUnits() == EDA_UNITS::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,      galOpts.m_fullscreenCursor );
-    m_optionsToolBar->Toggle( EE_ACTIONS::showElectricalTypes, GetShowElectricalType() );
+    m_optionsToolBar->Toggle( EE_ACTIONS::showElectricalTypes, settings->m_ShowPinsElectricalType );
     m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree,   IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 

@@ -59,7 +59,7 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
     m_choicePinDisplacement->SetSelection( settings->m_Repeat.pin_step == 50 ? 1 : 0 );
     m_spinRepeatLabel->SetValue( settings->m_Repeat.label_delta );
 
-    m_checkShowPinElectricalType->SetValue( m_frame->GetShowElectricalType() );
+    m_cbShowPinElectricalType->SetValue( m_frame->GetRenderSettings()->m_ShowPinsElectricalType );
 
     return true;
 }
@@ -79,9 +79,7 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataFromWindow()
     settings->m_Repeat.label_delta = m_spinRepeatLabel->GetValue();
     settings->m_Repeat.pin_step = m_choicePinDisplacement->GetSelection() == 1 ? 50 : 100;
 
-    m_frame->SetShowElectricalType( m_checkShowPinElectricalType->GetValue() );
-
-    m_frame->GetRenderSettings()->m_ShowPinsElectricalType = m_frame->GetShowElectricalType();
+    m_frame->GetRenderSettings()->m_ShowPinsElectricalType = m_cbShowPinElectricalType->GetValue();
     m_frame->GetCanvas()->Refresh();
 
     return true;

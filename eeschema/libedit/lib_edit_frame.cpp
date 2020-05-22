@@ -101,7 +101,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_DrawSpecificConvert = true;
     m_DrawSpecificUnit    = false;
     m_SyncPinEdit         = false;
-    SetShowElectricalType( true );
 
     m_my_part = nullptr;
     m_treePane = nullptr;
@@ -228,9 +227,8 @@ void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     SetDefaultLineWidth( Mils2iu( m_settings->m_Defaults.line_width ) );
     SetDefaultTextSize( Mils2iu( m_settings->m_Defaults.text_size ) );
-    m_showPinElectricalTypeName = m_settings->m_ShowPinElectricalType;
 
-    GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
+    GetRenderSettings()->m_ShowPinsElectricalType = m_settings->m_ShowPinElectricalType;
 
     // Hidden elements must be editable
     GetRenderSettings()->m_ShowHiddenText = true;
@@ -247,7 +245,7 @@ void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     m_settings->m_Defaults.line_width    = Iu2Mils( GetDefaultLineWidth() );
     m_settings->m_Defaults.text_size     = Iu2Mils( GetDefaultTextSize() );
-    m_settings->m_ShowPinElectricalType  = GetShowElectricalType();
+    m_settings->m_ShowPinElectricalType  = GetRenderSettings()->m_ShowPinsElectricalType;
     m_settings->m_LibWidth               = m_treePane->GetSize().x;
 }
 

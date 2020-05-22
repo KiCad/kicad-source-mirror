@@ -33,7 +33,6 @@
 #include <symbol_tree_model_adapter.h>
 #include <wildcards_and_files_ext.h>
 #include <gestfich.h>
-#include <project.h>
 #include <confirm.h>
 
 
@@ -283,10 +282,10 @@ int LIB_CONTROL::ShowComponentTree( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetShowElectricalType( !m_frame->GetShowElectricalType() );
+    KIGFX::SCH_RENDER_SETTINGS* renderSettings = m_frame->GetRenderSettings();
+    renderSettings->m_ShowPinsElectricalType = !renderSettings->m_ShowPinsElectricalType;
 
     // Update canvas
-    m_frame->GetRenderSettings()->m_ShowPinsElectricalType = m_frame->GetShowElectricalType();
     m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
     m_frame->GetCanvas()->Refresh();
 

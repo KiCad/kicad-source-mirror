@@ -29,7 +29,6 @@
 #include <confirm.h>
 #include <dialog_helpers.h>
 #include <dialog_choose_component.h>
-#include <eda_doc.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
 #include <fctsys.h>
@@ -37,7 +36,6 @@
 #include <kiway.h>
 #include <lib_view_frame.h>
 #include <msgpanel.h>
-#include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <sch_painter.h>
 #include <symbol_lib_table.h>
@@ -134,15 +132,12 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
     LoadSettings( config() );
 
-    // Synchronize some draw options
-    SetShowElectricalType( true );
     // Ensure axis are always drawn (initial default display was not drawn)
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
     gal_opts.m_axesEnabled = true;
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
     GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 
-    GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
     GetRenderSettings()->m_ShowHiddenText = true;
     GetRenderSettings()->m_ShowHiddenPins = true;
     GetRenderSettings()->SetDefaultPenWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS );
@@ -629,7 +624,8 @@ void LIB_VIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     m_libListWidth = cfg->m_LibViewPanel.lib_list_width;
     m_cmpListWidth = cfg->m_LibViewPanel.cmp_list_width;
-    m_showPinElectricalTypeName = cfg->m_LibViewPanel.show_pin_electrical_type;
+
+    GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_LibViewPanel.show_pin_electrical_type;
 
     // Set parameters to a reasonable value.
     if( m_libListWidth > m_FrameSize.x/2 )
@@ -642,7 +638,7 @@ void LIB_VIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 void LIB_VIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 {
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
     EDA_DRAW_FRAME::SaveSettings( cfg );
 
@@ -653,7 +649,7 @@ void LIB_VIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 
     cfg->m_LibViewPanel.lib_list_width = m_libListWidth;
     cfg->m_LibViewPanel.cmp_list_width = m_cmpListWidth;
-    cfg->m_LibViewPanel.show_pin_electrical_type = m_showPinElectricalTypeName;
+    cfg->m_LibViewPanel.show_pin_electrical_type = GetRenderSettings()->m_ShowPinsElectricalType;
 }
 
 

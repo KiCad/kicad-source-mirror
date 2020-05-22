@@ -50,7 +50,7 @@ class PANEL_LIBEDIT_SETTINGS_BASE : public wxPanel
 		wxStaticText* m_pinNameSizeLabel;
 		wxTextCtrl* m_pinNameSizeCtrl;
 		wxStaticText* m_pinNameSizeUnits;
-		wxCheckBox* m_checkShowPinElectricalType;
+		wxCheckBox* m_cbShowPinElectricalType;
 		wxStaticText* m_hPitchLabel;
 		wxTextCtrl* m_hPitchCtrl;
 		wxStaticText* m_hPitchUnits;
