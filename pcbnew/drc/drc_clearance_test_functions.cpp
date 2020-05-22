@@ -911,7 +911,8 @@ bool DRC::checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_P
             return false;
         }
     }
-    else if( pad->GetShape() == PAD_SHAPE_RECT || pad->GetShape() == PAD_SHAPE_ROUNDRECT )
+    else if( ( pad->GetShape() == PAD_SHAPE_RECT || pad->GetShape() == PAD_SHAPE_ROUNDRECT )
+            && ( (int) pad->GetOrientation() % 900 == 0 ) )
     {
         EDA_RECT padBBox = pad->GetBoundingBox();
         int     widths = refSegWidth / 2;
