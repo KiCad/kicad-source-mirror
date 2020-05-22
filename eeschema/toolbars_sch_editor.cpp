@@ -99,7 +99,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( EE_ACTIONS::showPcbNew );
-    m_mainToolBar->Add( EE_ACTIONS::importFPAssignments );
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
