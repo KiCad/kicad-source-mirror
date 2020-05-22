@@ -1,9 +1,11 @@
 # KiCad README
 
-For specific documentation like Compiling, GUI translation, old
+For specific documentation like [Compiling](Documentation/development/compiling.md), GUI translation, old
 changelogs see the [Documentation](Documentation) subfolder.
 
-You may also take a look into the [Wiki](https://gitlab.com/kicad/code/kicad/-/wikis/home)
+You may also take a look into the [Wiki](https://gitlab.com/kicad/code/kicad/-/wikis/home),
+the [Developers](https://kicad-pcb.org/contribute/developers/) section on our [Website](https://kicad-pcb.org/) and
+our [Forum](https://forum.kicad.info/).
 
 ## Build state
 
