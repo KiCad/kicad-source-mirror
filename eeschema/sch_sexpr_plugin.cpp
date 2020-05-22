@@ -2175,7 +2175,9 @@ bool SCH_SEXPR_PLUGIN::CheckHeader( const wxString& aFileName )
 
 bool SCH_SEXPR_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
 {
-    return wxFileName::IsFileWritable( aLibraryPath );
+    wxFileName fn( aLibraryPath );
+
+    return ( fn.FileExists() && fn.IsFileWritable() ) || fn.IsDirWritable();
 }
 
 

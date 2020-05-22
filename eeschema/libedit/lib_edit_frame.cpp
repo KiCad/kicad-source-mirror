@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -696,7 +696,7 @@ bool LIB_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString
     if( aOriginalFile.FileExists() )
     {
         wxFileName backupFileName( aOriginalFile );
-        backupFileName.SetExt( "bck" );
+        backupFileName.SetExt( aBackupExt );
 
         if( backupFileName.FileExists() )
             wxRemoveFile( backupFileName.GetFullPath() );

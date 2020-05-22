@@ -4537,7 +4537,8 @@ bool SCH_LEGACY_PLUGIN::CheckHeader( const wxString& aFileName )
 
 bool SCH_LEGACY_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
 {
-    return wxFileName::IsFileWritable( aLibraryPath );
+    // Writing legacy symbol libraries is deprecated.
+    return false;
 }
 
 

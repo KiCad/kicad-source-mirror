@@ -272,18 +272,7 @@ bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 {
     wxCHECK( LibraryExists( aLibrary ), true );
 
-    wxFileName fn( symTable()->GetFullURI( aLibrary ) );
-
-    // From hence forth, legacy symbol libraries are not writable.
-    const SYMBOL_LIB_TABLE_ROW* row = dynamic_cast<const SYMBOL_LIB_TABLE_ROW*>(
-            symTable()->FindRowByURI( fn.GetFullPath() ) );
-    SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN;
-
-    if( row )
-        fileType = SCH_IO_MGR::EnumFromStr( row->GetType() );
-
-    return ( fileType == SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY ) ||
-            ( fn.FileExists() && !fn.IsFileWritable() ) || !fn.IsDirWritable();
+    return !symTable()->IsSymbolLibWritable( aLibrary );
 }
 
 
