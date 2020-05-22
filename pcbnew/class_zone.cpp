@@ -526,7 +526,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     if( m_CornerSelection != nullptr && m_CornerSelection->m_contour > 0 )
         msg << wxT( " " ) << _( "Cutout" );
 
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
+    aList.emplace_back( _( "Type" ), msg, DARKCYAN );
 
     if( GetIsKeepout() )
     {
@@ -578,7 +578,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
         // Display priority level
         msg.Printf( wxT( "%d" ), GetPriority() );
-        aList.emplace_back( MSG_PANEL_ITEM( _( "Priority" ), msg, BLUE ) );
+        aList.emplace_back( _( "Priority" ), msg, BLUE  );
     }
 
     aList.emplace_back( _( "Layer" ), LayerMaskDescribe( GetBoard(), m_layerSet ), DARKGREEN );
@@ -599,7 +599,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     int      clearance = GetClearance( nullptr, &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
-    msg2.Printf( _( "Source: %s" ), source );
+    msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 }
 

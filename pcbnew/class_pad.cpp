@@ -1008,7 +1008,7 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     int      clearance = GetClearance( nullptr, &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
-    msg2.Printf( _( "Source: %s" ), source );
+    msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 }
 

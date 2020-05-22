@@ -143,7 +143,7 @@ int TRACK::GetMinWidth( wxString* aSource ) const
     int minWidth = bds.m_TrackMinWidth;
 
     if( aSource )
-        *aSource = _( "board" );
+        *aSource = _( "board minumum" );
 
     for( DRC_SELECTOR* selector : matched )
     {
@@ -178,7 +178,7 @@ int VIA::GetMinAnnulus( wxString* aSource ) const
     int minAnnulus = bds.m_ViasMinAnnulus;
 
     if( aSource )
-        *aSource = _( "board" );
+        *aSource = _( "board minumum" );
 
     MatchSelectors( bds.m_DRCRuleSelectors, this, netclass, nullptr, nullptr, &matched );
 
@@ -631,13 +631,13 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     int clearance = GetClearance( nullptr, &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
-    msg2.Printf( _( "Source: %s" ), source );
+    msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 
     int minWidth = GetMinWidth( &source );
 
     msg.Printf( _( "Min Width: %s" ), MessageTextFromValue( units, minWidth, true ) );
-    msg2.Printf( _( "Source: %s" ), source );
+    msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 }
 
@@ -703,13 +703,13 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     int clearance = GetClearance( nullptr, &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
-    msg2.Printf( _( "Source: %s" ), source );
+    msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 
     int minAnnulus = GetMinAnnulus( &source );
 
     msg.Printf( _( "Min Annulus: %s" ), MessageTextFromValue( units, minAnnulus, true ) );
-    msg2.Printf( _( "Source: %s" ), source );
+    msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 }
 

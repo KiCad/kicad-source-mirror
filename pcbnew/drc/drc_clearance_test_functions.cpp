@@ -167,7 +167,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_ANNULUS );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                               m_clearanceSource,
                               MessageTextFromValue( userUnits(), minAnnulus, true ),
                               MessageTextFromValue( userUnits(), viaAnnulus, true ) );
@@ -199,14 +199,14 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             if( bds.m_ViasMinAnnulus > minAnnulus )
             {
                 minAnnulus = bds.m_ViasMinAnnulus;
-                m_clearanceSource = _( "board" );
+                m_clearanceSource = _( "board minimum" );
             }
 
             if( viaAnnulus < minAnnulus )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_ANNULUS );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                               m_clearanceSource,
                               MessageTextFromValue( userUnits(), minAnnulus, true ),
                               MessageTextFromValue( userUnits(), viaAnnulus, true ) );
@@ -323,7 +323,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_TRACK_WIDTH );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           m_clearanceSource,
                           MessageTextFromValue( userUnits(), minWidth, true ),
                           MessageTextFromValue( userUnits(), refSegWidth, true ) );

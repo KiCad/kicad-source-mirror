@@ -32,8 +32,6 @@
 #include <kicad_string.h>
 #include <pcbnew.h>
 #include <refdes_utils.h>
-#include <richio.h>
-#include <filter_reader.h>
 #include <macros.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
@@ -43,7 +41,6 @@
 #include <class_edge_mod.h>
 #include <class_module.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <validators.h>
 #include <view/view.h>
 
 MODULE::MODULE( BOARD* parent ) :
@@ -545,77 +542,60 @@ SHAPE_POLY_SET MODULE::GetBoundingPoly() const
 
 void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
+    wxString msg, msg2;
 
-    aList.emplace_back( MSG_PANEL_ITEM( m_Reference->GetShownText(), m_Value->GetShownText(), DARKCYAN ) );
+    aList.emplace_back( m_Reference->GetShownText(), m_Value->GetShownText(), DARKCYAN );
 
-    // Display last date the component was edited (useful in Module Editor).
-    wxDateTime date( static_cast<time_t>( m_LastEditTime ) );
+    if( aFrame->IsType( FRAME_FOOTPRINT_VIEWER )
+        || aFrame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
+        || aFrame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+    {
+        wxDateTime date( static_cast<time_t>( m_LastEditTime ) );
 
-    if( m_LastEditTime && date.IsValid() )
-    // Date format: see http://www.cplusplus.com/reference/ctime/strftime
-        msg = date.Format( wxT( "%b %d, %Y" ) ); // Abbreviated_month_name Day, Year
-    else
-        msg = _( "Unknown" );
+        // Date format: see http://www.cplusplus.com/reference/ctime/strftime
+        if( m_LastEditTime && date.IsValid() )
+            msg = date.Format( wxT( "%b %d, %Y" ) ); // Abbreviated_month_name Day, Year
+        else
+            msg = _( "Unknown" );
 
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Last Change" ), msg, BROWN ) );
+        aList.emplace_back( _( "Last Change" ), msg, BROWN );
+    }
+    else if( aFrame->IsType( FRAME_PCB_EDITOR ) )
+    {
+        aList.emplace_back( _( "Board Side" ), IsFlipped() ? _( "Back (Flipped)" )
+                                                           : _( "Front" ), RED );
+    }
 
-    // display the board side placement
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Board Side" ),
-                        IsFlipped()? _( "Back (Flipped)" ) : _( "Front" ), RED ) );
-
-    msg.Printf( wxT( "%zu" ), m_pads.size() );
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Pads" ), msg, BLUE ) );
-
-    msg = wxT( ".." );
+    msg = wxT( ". ." );
 
     if( IsLocked() )
         msg[0] = 'L';
 
     if( m_ModuleStatus & MODULE_is_PLACED )
-        msg[1] = 'P';
+        msg[2] = 'P';
 
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Status" ), msg, MAGENTA ) );
-
-    msg.Printf( wxT( "%.1f" ), GetOrientationDegrees() );
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Rotation" ), msg, BROWN ) );
+    aList.emplace_back( _( "Status" ), msg, MAGENTA );
 
     // Controls on right side of the dialog
     switch( m_Attributs & 255 )
     {
-    case 0:
-        msg = _( "Normal" );
-        break;
-
-    case MOD_CMS:
-        msg = _( "Insert" );
-        break;
-
-    case MOD_VIRTUAL:
-        msg = _( "Virtual" );
-        break;
-
-    default:
-        msg = wxT( "???" );
-        break;
+    case 0:           msg = _( "Normal" );  break;
+    case MOD_CMS:     msg = _( "Insert" );  break;
+    case MOD_VIRTUAL: msg = _( "Virtual" ); break;
+    default:          msg = wxT( "???" );   break;
     }
 
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Attributes" ), msg, BROWN ) );
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Footprint" ), FROM_UTF8( m_fpid.Format().c_str() ), BLUE ) );
+    aList.emplace_back( _( "Attributes" ), msg, BROWN );
 
-    if( m_3D_Drawings.empty() )
-        msg = _( "No 3D shape" );
-    else
-        msg = m_3D_Drawings.front().m_Filename;
+    msg.Printf( _( "Footprint: %s" ),
+                GetChars( m_fpid.Format().c_str() ) );
+    msg2.Printf( _( "3D-Shape: %s" ),
+                 m_3D_Drawings.empty() ? _( "none" ) : m_3D_Drawings.front().m_Filename );
+    aList.emplace_back( msg, msg2, BLUE );
 
-    // Search the first active 3D shape in list
-
-    aList.emplace_back( MSG_PANEL_ITEM( _( "3D-Shape" ), msg, RED ) );
-
-    wxString doc, keyword;
-    doc.Printf( _( "Doc: %s" ), m_Doc );
-    keyword.Printf( _( "Key Words: %s" ), m_KeyWord );
-    aList.emplace_back( MSG_PANEL_ITEM( doc, keyword, BLACK ) );
+    msg.Printf( _( "Doc: %s" ), m_Doc );
+    msg2.Printf( _( "Keywords: %s" ), m_KeyWord );
+    aList.emplace_back( msg, msg2, BLACK );
 }
 
 
@@ -707,8 +687,7 @@ D_PAD* MODULE::GetTopLeftPad()
         wxPoint pnt = p->GetPosition(); // GetPosition() returns the center of the pad
 
         if( ( pnt.x < topLeftPad->GetPosition().x ) ||
-            ( ( topLeftPad->GetPosition().x == pnt.x ) &&
-              ( pnt.y < topLeftPad->GetPosition().y ) ) )
+            ( topLeftPad->GetPosition().x == pnt.x && pnt.y < topLeftPad->GetPosition().y ) )
         {
             topLeftPad = p;
         }

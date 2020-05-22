@@ -94,7 +94,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
         NETCLASS* netclass = aPad->GetNet()->GetNet() == 0 ? bds.GetDefault()
                                                            : aPad->GetNetClass();
         int       minHole = bds.m_MinThroughDrill;
-        wxString  minHoleSource = _( "board" );
+        wxString  minHoleSource = _( "board minimum" );
 
         std::vector<DRC_SELECTOR*> matched;
         MatchSelectors( bds.m_DRCRuleSelectors, aPad, netclass, nullptr, nullptr, &matched );
@@ -112,7 +112,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_PAD_DRILL );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s min hole %s; actual %s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           minHoleSource,
                           MessageTextFromValue( m_units, minHole, true ),
                           MessageTextFromValue( m_units, holeSize, true ) );
@@ -144,7 +144,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
         NETCLASS* netclass = via->GetNet()->GetNet() == 0 ? bds.GetDefault()
                                                           : via->GetNetClass();
         int       minHole = bds.m_MinThroughDrill;
-        wxString  minHoleSource = _( "board" );
+        wxString  minHoleSource = _( "board minimum" );
 
         std::vector<DRC_SELECTOR*> matched;
         MatchSelectors( bds.m_DRCRuleSelectors, via, netclass, nullptr, nullptr, &matched );
@@ -162,7 +162,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_DRILL );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s min hole %s; actual %s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           minHoleSource,
                           MessageTextFromValue( m_units, minHole, true ),
                           MessageTextFromValue( m_units, via->GetDrillValue(), true ) );
@@ -194,7 +194,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
         NETCLASS* netclass = via->GetNet()->GetNet() == 0 ? bds.GetDefault()
                                                           : via->GetNetClass();
         int       minHole = bds.m_MicroViasMinDrill;
-        wxString  minHoleSource = _( "board" );
+        wxString  minHoleSource = _( "board minimum" );
 
         std::vector<DRC_SELECTOR*> matched;
         MatchSelectors( bds.m_DRCRuleSelectors, via, netclass, nullptr, nullptr, &matched );
@@ -212,7 +212,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA_DRILL );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           minHoleSource,
                           MessageTextFromValue( m_units, minHole, true ),
                           MessageTextFromValue( m_units, via->GetDrillValue(), true ) );
