@@ -1182,6 +1182,11 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
 
             aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
 
+#if 0       // Display component flags, for debug only
+            aList.push_back( MSG_PANEL_ITEM( _( "flags" ),
+                             wxString::Format("%X", GetEditFlags()), BROWN ) );
+#endif
+
             // Display component reference in library and library
             aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName(), BROWN ) );
 

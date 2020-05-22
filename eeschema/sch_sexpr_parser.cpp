@@ -2193,6 +2193,9 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
     if( !libName.IsEmpty() && ( symbol->GetLibId().Format().wx_str() != libName ) )
         symbol->SetSchSymbolLibraryName( libName );
 
+    // Ensure edit/status flags are cleared after these initializations:
+    symbol->ClearFlags();
+
     return symbol.release();
 }
 
