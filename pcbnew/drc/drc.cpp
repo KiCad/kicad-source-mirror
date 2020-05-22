@@ -1209,6 +1209,7 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
                           int x_limit )
 {
     const static LSET all_cu = LSET::AllCuMask();
+    constexpr int TOLERANCE = 1;    // 1nm tolerance for rotated pad rounding errors.
 
     LSET layerMask = aRefPad->GetLayerSet() & all_cu;
 
@@ -1347,8 +1348,8 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
             continue;
         }
 
-        int minClearance = aRefPad->GetClearance( pad, &m_clearanceSource );
-        int actual;
+        int  minClearance = aRefPad->GetClearance( pad, &m_clearanceSource ) - TOLERANCE;
+        int  actual;
 
         if( !checkClearancePadToPad( aRefPad, pad, minClearance, &actual ) )
         {
