@@ -285,6 +285,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
     m_object_container.Clear();
     m_containerWithObjectsToDelete.Clear();
 
+    setupMaterials();
 
     // Create and add the outline board
     // /////////////////////////////////////////////////////////////////////////
@@ -697,7 +698,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
     if( m_boardAdapter.GetFlag( FL_SOLDERMASK ) &&
         (m_outlineBoard2dObjects->GetList().size() >= 1) )
     {
-        CMATERIAL *materialLayer = &m_materials.m_SolderMask;
+        const CMATERIAL *materialLayer = &m_materials.m_SolderMask;
 
         for( MAP_CONTAINER_2D::const_iterator ii = m_boardAdapter.GetMapLayers().begin();
              ii != m_boardAdapter.GetMapLayers().end();
@@ -1012,8 +1013,6 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endAcceleratorTime = GetRunningMicroSecs();
 #endif
-
-    setupMaterials();
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     printf( "C3D_RENDER_RAYTRACING::reload times:\n" );
@@ -1399,6 +1398,13 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
     wxASSERT( a3DModel->m_Meshes != NULL );
     wxASSERT( a3DModel->m_MaterialsSize > 0 );
     wxASSERT( a3DModel->m_MeshesSize > 0 );
+    wxASSERT( aModuleOpacity > 0.0f );
+    wxASSERT( aModuleOpacity <= 1.0f );
+
+    if( aModuleOpacity > 1.0f )
+    {
+        aModuleOpacity = 1.0f;
+    }
 
     if( (a3DModel->m_Materials != NULL) && (a3DModel->m_Meshes != NULL) &&
         (a3DModel->m_MaterialsSize > 0) && (a3DModel->m_MeshesSize > 0) )
@@ -1558,6 +1564,8 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
             {
                 const CBLINN_PHONG_MATERIAL &blinn_material = (*materialVector)[mesh.m_MaterialIdx];
 
+                const float moduleTransparency = 1.0f - ( ( 1.0f - blinn_material.GetTransparency() ) * aModuleOpacity );
+
                 // Add all face triangles
                 for( unsigned int faceIdx = 0;
                      faceIdx < mesh.m_FaceIdxSize;
@@ -1597,8 +1605,6 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
 
                         m_object_container.Add( newTriangle );
                         newTriangle->SetMaterial( (const CMATERIAL *)&blinn_material );
-
-                        const float moduleTransparency = 1.0f - ( ( 1.0f - blinn_material.GetTransparency() ) * aModuleOpacity );
 
                         newTriangle->SetModelTransparency( moduleTransparency );
 

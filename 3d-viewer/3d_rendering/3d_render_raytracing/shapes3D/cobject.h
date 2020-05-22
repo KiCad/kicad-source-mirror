@@ -63,7 +63,12 @@ public:
 
     explicit COBJECT( OBJECT3D_TYPE aObjType );
 
-    void SetMaterial( const CMATERIAL *aMaterial ) { m_material = aMaterial; }
+    void SetMaterial( const CMATERIAL *aMaterial )
+    {
+        m_material = aMaterial;
+        m_modelTransparency = aMaterial->GetTransparency(); // Default transparency is from material
+    }
+
     const CMATERIAL *GetMaterial() const { return m_material; }
     float GetModelTransparency() const { return m_modelTransparency; }
     void SetModelTransparency( float aModelTransparency ) { m_modelTransparency = aModelTransparency; }
