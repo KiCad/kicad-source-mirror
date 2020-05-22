@@ -177,7 +177,7 @@ bool EE_SELECTION_TOOL::Init()
     auto havePartCondition =
             [&]( const SELECTION& sel )
             {
-                return m_isLibEdit && libEditFrame->GetCurPart();
+                return m_isLibEdit && static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
             };
 
     auto& menu = m_menu.GetMenu();
