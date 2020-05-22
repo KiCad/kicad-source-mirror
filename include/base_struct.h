@@ -199,8 +199,8 @@ public:
     EDA_ITEM* GetParent() const { return m_Parent; }
     virtual void SetParent( EDA_ITEM* aParent )   { m_Parent = aParent; }
 
-    inline bool IsNew() const { return m_Flags & IS_NEW; }
     inline bool IsModified() const { return m_Flags & IS_CHANGED; }
+    inline bool IsNew() const { return m_Flags & IS_NEW; }
     inline bool IsMoving() const { return m_Flags & IS_MOVED; }
     inline bool IsDragging() const { return m_Flags & IS_DRAGGED; }
     inline bool IsWireImage() const { return m_Flags & IS_WIRE_IMAGE; }
@@ -243,15 +243,16 @@ public:
 
     STATUS_FLAGS GetEditFlags() const
     {
-        int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | TEMP_SELECTED | HIGHLIGHTED | BRIGHTENED |
-                                          STARTPOINT | ENDPOINT | IS_DANGLING |
-                                          BEGIN_ONPAD | END_ONPAD | DP_COUPLED );
+        constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVED | IS_RESIZED | IS_DRAGGED |
+                               IS_WIRE_IMAGE | STRUCT_DELETED );
+
         return m_Flags & mask;
     }
 
     void ClearTempFlags()
     {
-        ClearFlags( STARTPOINT | ENDPOINT | CANDIDATE | IS_LINKED | SKIP_STRUCT | DO_NOT_DRAW );
+        ClearFlags( STARTPOINT | ENDPOINT | CANDIDATE | TEMP_SELECTED | IS_LINKED | SKIP_STRUCT |
+                    DO_NOT_DRAW | FLAG0 | FLAG1 | BUSY );
     }
 
     void ClearEditFlags()
