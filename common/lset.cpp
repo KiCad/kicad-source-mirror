@@ -643,6 +643,30 @@ PCB_LAYER_ID LSET::ExtractLayer() const
 }
 
 
+LSET LSET::FrontAssembly()
+{
+    static const PCB_LAYER_ID front_assembly[] = {
+        F_SilkS,
+        F_Mask,
+    };
+
+    static const LSET saved( front_assembly, arrayDim( front_assembly ) );
+    return saved;
+}
+
+
+LSET LSET::BackAssembly()
+{
+    static const PCB_LAYER_ID back_assembly[] = {
+        B_SilkS,
+        B_Mask,
+    };
+
+    static const LSET saved( back_assembly, arrayDim( back_assembly ) );
+    return saved;
+}
+
+
 LSET LSET::InternalCuMask()
 {
     static const PCB_LAYER_ID cu_internals[] = {

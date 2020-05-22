@@ -180,6 +180,9 @@ void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
 
     menu.AppendSeparator();
 
+    AddMenuItem( &menu, ID_SHOW_ONLY_FRONT_ASSEMBLY, _( "Show Only Front Assembly Layers" ),
+            KiBitmap( shape_3d_xpm ) );
+
     AddMenuItem( &menu, ID_SHOW_ONLY_FRONT, _( "Show Only Front Layers" ),
                  KiBitmap( show_all_front_layers_xpm ) );
 
@@ -192,6 +195,9 @@ void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
 
     AddMenuItem( &menu, ID_SHOW_ONLY_BACK, _( "Show Only Back Layers" ),
                  KiBitmap( show_all_back_layers_xpm ) );
+
+    AddMenuItem( &menu, ID_SHOW_ONLY_BACK_ASSEMBLY, _( "Show Only Back Assembly Layers" ),
+            KiBitmap( shape_3d_back_xpm ) );
 }
 
 
@@ -254,6 +260,13 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             layersToShow = LSET::AllNonCuMask();
             break;
 
+        case ID_SHOW_ONLY_FRONT_ASSEMBLY:
+            // Include the edgecuts layer as well as the front assembly layers and hide the other layers
+            layersToShow = LSET::FrontAssembly().set( Edge_Cuts );
+            layersToHide = ~layersToShow;
+            myframe->SetActiveLayer( F_SilkS );
+            break;
+
         case ID_SHOW_ONLY_FRONT:
             // Include the edgecuts layer as well as the front layers and hide the other layers
             layersToShow = LSET::FrontMask().set( Edge_Cuts );
@@ -270,6 +283,13 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             // Include the edgecuts layer as well as the back layers and hide the other layers
             layersToShow = LSET::BackMask().set( Edge_Cuts );
             layersToHide = ~layersToShow;
+            break;
+
+        case ID_SHOW_ONLY_BACK_ASSEMBLY:
+            // Include the edgecuts layer as well as the back assembly layers and hide the other layers
+            layersToShow = LSET::BackAssembly().set( Edge_Cuts );
+            layersToHide = ~layersToShow;
+            myframe->SetActiveLayer( B_SilkS );
             break;
     }
 

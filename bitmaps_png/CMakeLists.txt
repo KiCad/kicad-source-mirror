@@ -1,4 +1,3 @@
-
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
 # Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
@@ -449,6 +448,7 @@ set( BMAPS_MID
     select_w_layer
     select_same_sheet
     shape_3d
+    shape_3d_back
     sheetset
     simulator
     sim_run

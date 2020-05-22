@@ -507,6 +507,20 @@ public:
     static LSET InternalCuMask();
 
     /**
+     * Function FrontAssembly()
+     * returns a complete set of all top assembly layers, which is all F_SilkS
+     * and F_Mask
+     */
+    static LSET FrontAssembly();
+
+    /**
+     * Function BackAssembly()
+     * returns a complete set of all bottom assembly layers, which is all B_SilkS
+     * and B_Mask
+     */
+    static LSET BackAssembly();
+
+    /**
      * Function AllCuMask
      * returns a mask holding the requested number of Cu PCB_LAYER_IDs.
      */
