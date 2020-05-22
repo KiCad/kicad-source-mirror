@@ -490,6 +490,11 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest_viewitem.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/sel_layer.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/zone_settings.cpp
+
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/grid_helper.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_actions.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_viewer_tools.cpp
+
     widgets/net_selector.cpp
 )
 

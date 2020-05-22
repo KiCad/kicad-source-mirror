@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_DISPLAY_OPTIONS_BASE_H__
-#define __DIALOG_DISPLAY_OPTIONS_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -26,7 +25,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_PADFILL_OPT 1000
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE
@@ -34,11 +32,10 @@
 class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
-		wxCheckBox* m_EdgesDisplayOption;
-		wxCheckBox* m_TextDisplayOption;
-		wxCheckBox* m_ShowPadSketch;
+		wxCheckBox* m_MagneticPads;
+		wxCheckBox* m_MagneticGraphics;
 		wxCheckBox* m_ShowPadNum;
 		wxCheckBox* m_autoZoomOption;
 		wxStaticLine* m_staticline1;
@@ -46,16 +43,15 @@ class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerApply;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnApplyClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE();
-	
+
 };
 
-#endif //__DIALOG_DISPLAY_OPTIONS_BASE_H__

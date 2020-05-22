@@ -251,12 +251,12 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
     auto& pnss = m_router->Settings();
 
     pnss.SetSnapToPads(
-            frame()->Settings().m_MagneticPads == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ||
-            frame()->Settings().m_MagneticPads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+            frame()->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ||
+            frame()->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
 
     pnss.SetSnapToTracks(
-            frame()->Settings().m_MagneticTracks == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL
-            || frame()->Settings().m_MagneticTracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+            frame()->GetMagneticItemsSettings()->tracks == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL
+            || frame()->GetMagneticItemsSettings()->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
 
     if( aItem )
     {

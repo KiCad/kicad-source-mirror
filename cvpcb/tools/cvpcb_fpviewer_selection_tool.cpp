@@ -96,130 +96,24 @@ int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
+int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 {
-    auto& view = *getView();
-    auto& controls = *getViewControls();
-    auto  previous_settings = controls.GetSettings();
+    ACTION_MENU*      actionMenu      = aEvent.Parameter<ACTION_MENU*>();
+    CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
 
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
+    if( conditionalMenu )
+        conditionalMenu->Evaluate( m_selection );
 
-    KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
-    KIGFX::PREVIEW::RULER_ITEM                 ruler( twoPtMgr, m_frame->GetUserUnits() );
+    if( actionMenu )
+        actionMenu->UpdateAll();
 
-    view.Add( &ruler );
-    view.SetVisible( &ruler, false );
-
-    bool originSet = false;
-
-    controls.ShowCursor( true );
-    controls.SetSnapping( true );
-    controls.SetAdditionalPanButtons( false, true );
-
-    while( TOOL_EVENT* evt = Wait() )
-    {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
-        const VECTOR2I cursorPos = controls.GetCursorPosition();
-
-        auto clearRuler = [&]() {
-            view.SetVisible( &ruler, false );
-            controls.SetAutoPan( false );
-            controls.CaptureCursor( false );
-            originSet = false;
-        };
-
-        if( evt->IsCancelInteractive() )
-        {
-            if( originSet )
-                clearRuler();
-            else
-            {
-                m_frame->PopTool( tool );
-                break;
-            }
-        }
-
-        else if( evt->IsActivate() )
-        {
-            if( originSet )
-                clearRuler();
-
-            if( evt->IsMoveTool() )
-            {
-                // leave ourselves on the stack so we come back after the move
-                break;
-            }
-            else
-            {
-                m_frame->PopTool( tool );
-                break;
-            }
-        }
-
-        // click or drag starts
-        else if( !originSet && ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
-        {
-            if( !evt->IsDrag( BUT_LEFT ) )
-            {
-                twoPtMgr.SetOrigin( cursorPos );
-                twoPtMgr.SetEnd( cursorPos );
-            }
-
-            controls.CaptureCursor( true );
-            controls.SetAutoPan( true );
-
-            originSet = true;
-        }
-
-        else if( !originSet && evt->IsMotion() )
-        {
-            // make sure the origin is set before a drag starts
-            // otherwise you can miss a step
-            twoPtMgr.SetOrigin( cursorPos );
-            twoPtMgr.SetEnd( cursorPos );
-        }
-
-        // second click or mouse up after drag ends
-        else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
-        {
-            originSet = false;
-
-            controls.SetAutoPan( false );
-            controls.CaptureCursor( false );
-
-            view.SetVisible( &ruler, false );
-        }
-
-        // move or drag when origin set updates rules
-        else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
-        {
-            twoPtMgr.SetAngleSnap( evt->Modifier( MD_CTRL ) );
-            twoPtMgr.SetEnd( cursorPos );
-
-            view.SetVisible( &ruler, true );
-            view.Update( &ruler, KIGFX::GEOMETRY );
-        }
-
-        else if( evt->IsClick( BUT_RIGHT ) )
-        {
-            m_menu.ShowContextMenu( m_selection );
-        }
-
-        else
-            evt->SetPassEvent();
-    }
-
-    view.SetVisible( &ruler, false );
-    view.Remove( &ruler );
-    controls.ApplySettings( previous_settings );
     return 0;
 }
 
+
 void CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::setTransitions()
 {
+    Go( &CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::UpdateMenu, ACTIONS::updateMenu.MakeEvent() );
     Go( &CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main,
             CVPCB_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::MeasureTool, ACTIONS::measureTool.MakeEvent() );
 }

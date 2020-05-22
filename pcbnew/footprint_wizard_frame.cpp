@@ -646,6 +646,12 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
 }
 
 
+BOARD_ITEM_CONTAINER* FOOTPRINT_WIZARD_FRAME::GetModel() const
+{
+    return GetBoard()->GetFirstModule();
+}
+
+
 void FOOTPRINT_WIZARD_FRAME::ReCreateVToolbar()
 {
     // Currently, there is no vertical toolbar

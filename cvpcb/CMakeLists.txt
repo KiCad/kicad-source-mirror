@@ -28,7 +28,6 @@ set( CVPCB_DIALOGS
 
 set( CVPCB_SRCS
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/tools/grid_helper.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_stackup_manager/stackup_predefined_prms.cpp
     auto_associate.cpp
     cfg.cpp
@@ -45,7 +44,6 @@ set( CVPCB_SRCS
     tools/cvpcb_actions.cpp
     tools/cvpcb_association_tool.cpp
     tools/cvpcb_control.cpp
-    tools/cvpcb_fpviewer_control.cpp
     tools/cvpcb_fpviewer_selection_tool.cpp
     )
 

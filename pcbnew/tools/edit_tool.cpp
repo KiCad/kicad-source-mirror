@@ -56,7 +56,6 @@ using namespace std::placeholders;
 #include <router/router_tool.h>
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
-#include <preview_items/ruler_item.h>
 #include <board_commit.h>
 #include <zone_filler.h>
 
@@ -203,7 +202,7 @@ bool EDIT_TOOL::Init()
 
     // Populate the context menu displayed during the edit tool (primarily the measure tool)
     auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
-        return frame()->ToolStackIsEmpty();
+        return !frame()->ToolStackIsEmpty();
     };
 
     auto frame = getEditFrame<PCB_BASE_FRAME>();
@@ -1286,134 +1285,6 @@ void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector 
 }
 
 
-int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
-{
-    if( EditingModules() && !frame()->GetModel())
-        return 0;
-
-    auto& view = *getView();
-    auto& controls = *getViewControls();
-
-    std::string tool = aEvent.GetCommandStr().get();
-    frame()->PushTool( tool );
-    Activate();
-
-    EDA_UNITS                                  units = frame()->GetUserUnits();
-    KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
-    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units );
-
-    view.Add( &ruler );
-    view.SetVisible( &ruler, false );
-
-    GRID_HELPER grid( frame() );
-
-    bool originSet = false;
-
-    controls.ShowCursor( true );
-    controls.SetAutoPan( false );
-    controls.CaptureCursor( false );
-
-    while( auto evt = Wait() )
-    {
-        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
-        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        controls.SetSnapping( !evt->Modifier( MD_ALT ) );
-        const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );
-        controls.ForceCursorPosition(true, cursorPos );
-
-        auto clearRuler = [&] () {
-            view.SetVisible( &ruler, false );
-            controls.SetAutoPan( false );
-            controls.CaptureCursor( false );
-            originSet = false;
-        };
-
-        if( evt->IsCancelInteractive() )
-        {
-            if( originSet )
-                clearRuler();
-            else
-            {
-                frame()->PopTool( tool );
-                break;
-            }
-        }
-
-        else if( evt->IsActivate() )
-        {
-            if( originSet )
-                clearRuler();
-
-            if( evt->IsMoveTool() )
-            {
-                // leave ourselves on the stack so we come back after the move
-                break;
-            }
-            else
-            {
-                frame()->PopTool( tool );
-                break;
-            }
-        }
-
-        // click or drag starts
-        else if( !originSet && ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
-        {
-            twoPtMgr.SetOrigin( cursorPos );
-            twoPtMgr.SetEnd( cursorPos );
-
-            controls.CaptureCursor( true );
-            controls.SetAutoPan( true );
-
-            originSet = true;
-        }
-
-        // second click or mouse up after drag ends
-        else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
-        {
-            originSet = false;
-
-            controls.SetAutoPan( false );
-            controls.CaptureCursor( false );
-        }
-
-        // move or drag when origin set updates rules
-        else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
-        {
-            twoPtMgr.SetAngleSnap( evt->Modifier( MD_CTRL ) );
-            twoPtMgr.SetEnd( cursorPos );
-
-            view.SetVisible( &ruler, true );
-            view.Update( &ruler, KIGFX::GEOMETRY );
-        }
-
-        else if( evt->IsAction( &ACTIONS::toggleUnits )
-                    || evt->IsAction( &PCB_ACTIONS::updateUnits ) )
-        {
-            if( frame()->GetUserUnits() != units )
-            {
-                units = frame()->GetUserUnits();
-                ruler.SwitchUnits();
-                view.Update( &ruler, KIGFX::GEOMETRY );
-            }
-        }
-
-        else if( evt->IsClick( BUT_RIGHT ) )
-        {
-            m_menu.ShowContextMenu();
-        }
-
-        else
-            evt->SetPassEvent();
-    }
-
-    view.SetVisible( &ruler, false );
-    view.Remove( &ruler );
-    return 0;
-}
-
-
 bool EDIT_TOOL::updateModificationPoint( PCBNEW_SELECTION& aSelection )
 {
     if( m_dragging && aSelection.HasReferencePoint() )
@@ -1589,7 +1460,6 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::ChangeTrackWidth,    PCB_ACTIONS::changeTrackWidth.MakeEvent() );
 
     Go( &EDIT_TOOL::EditFpInFpEditor,    PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
-    Go( &EDIT_TOOL::MeasureTool,         ACTIONS::measureTool.MakeEvent() );
 
     Go( &EDIT_TOOL::copyToClipboard,     ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::cutToClipboard,      ACTIONS::cut.MakeEvent() );

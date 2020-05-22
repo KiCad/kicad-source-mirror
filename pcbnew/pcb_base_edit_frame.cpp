@@ -117,9 +117,6 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
     PCB_BASE_FRAME::unitsChangeRefresh();
 
     ReCreateAuxiliaryToolbar();
-
-    if( m_toolManager )
-        m_toolManager->RunAction( PCB_ACTIONS::updateUnits, true );
 }
 
 

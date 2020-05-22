@@ -668,7 +668,7 @@ public:
     ///> @copydoc PCB_BASE_FRAME::SetBoard()
     void SetBoard( BOARD* aBoard ) override;
 
-    ///> @copydoc PCB_BASE_EDIT_FRAME::GetModel()
+    ///> @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
     ///> @copydoc EDA_BASE_FRAME::GetSeverity()

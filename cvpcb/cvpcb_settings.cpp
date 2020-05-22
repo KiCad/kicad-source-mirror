@@ -35,6 +35,10 @@ CVPCB_SETTINGS::CVPCB_SETTINGS() :
     // Make Coverity happy:
     m_FilterFootprint = 0;
 
+    m_FootprintViewerMagneticSettings.pads     = MAGNETIC_OPTIONS::NO_EFFECT;
+    m_FootprintViewerMagneticSettings.tracks   = MAGNETIC_OPTIONS::NO_EFFECT;
+    m_FootprintViewerMagneticSettings.graphics = false;
+
     // Init settings:
     m_params.emplace_back( new PARAM<int>( "filter_footprint", &m_FilterFootprint, 0 ) );
 
@@ -52,6 +56,13 @@ CVPCB_SETTINGS::CVPCB_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "footprint_viewer.graphic_items_fill",
             &m_FootprintViewerDisplayOptions.m_DisplayDrawItemsFill, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.magnetic_graphics",
+            &m_FootprintViewerMagneticSettings.graphics, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "footprint_viewer.magnetic_pads",
+            reinterpret_cast<int*>( &m_FootprintViewerMagneticSettings.pads ),
+            static_cast<int>( MAGNETIC_OPTIONS::NO_EFFECT ) ) );
 }
 
 

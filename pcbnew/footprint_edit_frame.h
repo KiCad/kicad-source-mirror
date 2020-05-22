@@ -59,7 +59,7 @@ public:
      */
     static const wxChar* GetFootprintEditorFrameName();
 
-    ///> @copydoc PCB_BASE_EDIT_FRAME::GetModel()
+    ///> @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
     /**
@@ -78,6 +78,8 @@ public:
 
     const PCB_PLOT_PARAMS& GetPlotSettings() const override;
     void SetPlotSettings( const PCB_PLOT_PARAMS& aSettings ) override;
+
+    MAGNETIC_SETTINGS* GetMagneticItemsSettings() override;
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;

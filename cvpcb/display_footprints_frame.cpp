@@ -32,6 +32,7 @@
 #include <footprint_editor_settings.h>
 #include <fp_lib_table.h>
 #include <id.h>
+#include <kiface_i.h>
 #include <lib_id.h>
 #include <macros.h>
 #include <msgpanel.h>
@@ -47,7 +48,8 @@
 #include <cvpcb_mainframe.h>
 #include <display_footprints_frame.h>
 #include <tools/cvpcb_actions.h>
-#include <tools/cvpcb_fpviewer_control.h>
+#include <tools/pcb_actions.h>
+#include <tools/pcb_viewer_tools.h>       // shared tools with other pcbnew frames
 #include <tools/cvpcb_fpviewer_selection_tool.h>
 
 
@@ -113,8 +115,11 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new CVPCB_FOOTPRINT_VIEWER_CONTROL );
     m_toolManager->RegisterTool( new CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
+
+    m_toolManager->GetTool<PCB_VIEWER_TOOLS>()->SetFootprintFrame( true );
+
     m_toolManager->InitTools();
 
     // Run the control tool, it is supposed to be always active
@@ -190,28 +195,20 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
     // TODO: these can be moved to the 'proper' right vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable
     // toolbars.
-    m_optionsToolBar->Add( ACTIONS::selectionTool,       ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::measureTool,         ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::selectionTool,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::measureTool,            ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
-    m_optionsToolBar->Add( ACTIONS::toggleGrid,          ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::togglePolarCoords,   ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::imperialUnits,       ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::metricUnits,         ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::togglePolarCoords,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,            ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
-                               KiScaledBitmap( pad_sketch_xpm, this ),
-                               _( "Show pads in outline mode" ), wxITEM_CHECK  );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, wxEmptyString,
-                               KiScaledBitmap( text_sketch_xpm, this ),
-                               _( "Show texts in line mode" ), wxITEM_CHECK  );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, wxEmptyString,
-                               KiScaledBitmap( show_mod_edge_xpm, this ),
-                               _( "Show outlines in line mode" ), wxITEM_CHECK  );
+    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,     ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::moduleTextOutlines, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::moduleEdgeOutlines, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->Realize();
 }
@@ -293,6 +290,14 @@ WINDOW_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetWindowSettings( APP_SETTINGS_BASE*
     auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
     wxCHECK( cfg, nullptr );
     return &cfg->m_FootprintViewer;
+}
+
+
+MAGNETIC_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetMagneticItemsSettings()
+{
+    auto cfg = dynamic_cast<CVPCB_SETTINGS*>( Kiface().KifaceSettings() );
+    wxCHECK( cfg, nullptr );
+    return &cfg->m_FootprintViewerMagneticSettings;
 }
 
 
@@ -449,7 +454,7 @@ void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,    IsGridVisible() );
     m_optionsToolBar->Toggle( ACTIONS::selectionTool, IsCurrentTool( ACTIONS::selectionTool ) );
     m_optionsToolBar->Toggle( ACTIONS::measureTool,   IsCurrentTool( ACTIONS::measureTool ) );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,   GetUserUnits() != EDA_UNITS::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
     m_optionsToolBar->Refresh();
 }
@@ -463,4 +468,10 @@ COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings()
         return Pgm().GetSettingsManager().GetColorSettings( settings->m_ColorTheme );
     else
         return Pgm().GetSettingsManager().GetColorSettings();
+}
+
+
+BOARD_ITEM_CONTAINER* DISPLAY_FOOTPRINTS_FRAME::GetModel() const
+{
+    return GetBoard()->GetFirstModule();
 }

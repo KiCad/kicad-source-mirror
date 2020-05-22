@@ -38,7 +38,7 @@ const int fpEditSchemaVersion = 1;
 FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         APP_SETTINGS_BASE( "fpedit", fpEditSchemaVersion ),
         m_DesignSettings(),
-        m_MagneticPads(),
+        m_MagneticItems(),
         m_Display(),
         m_UserGrid(),
         m_PolarCoords( false ),
@@ -47,6 +47,10 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_LastImportExportPath(),
         m_FootprintTextShownColumns()
 {
+    m_MagneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
+    m_MagneticItems.tracks   = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
+    m_MagneticItems.graphics = false;
+
     m_params.emplace_back( new PARAM<int>( "window.lib_width",
             &m_LibWidth, 250 ) );
 
@@ -57,7 +61,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
             &m_FootprintTextShownColumns, "0 1 2 3 4 5 6" ) );
 
     m_params.emplace_back( new PARAM<int>( "editing.magnetic_pads",
-            reinterpret_cast<int*>( &m_MagneticPads ),
+            reinterpret_cast<int*>( &m_MagneticItems.pads ),
             static_cast<int>( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords", &m_PolarCoords, false ) );

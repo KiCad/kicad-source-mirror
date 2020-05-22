@@ -48,7 +48,7 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataToWindow()
     // Editing options
     m_Segments_45_Only_Ctrl->SetValue( m_frame->Settings().m_Use45DegreeGraphicSegments );
     m_MagneticPads->SetValue(
-            m_frame->Settings().m_MagneticPads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+            m_frame->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
 
     return true;
 }
@@ -63,7 +63,7 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataFromWindow()
 
     // Editing options
     m_frame->Settings().m_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
-    m_frame->Settings().m_MagneticPads = m_MagneticPads->GetValue() ?
+    m_frame->GetMagneticItemsSettings()->pads = m_MagneticPads->GetValue() ?
             MAGNETIC_OPTIONS::CAPTURE_ALWAYS : MAGNETIC_OPTIONS::NO_EFFECT;
 
     return true;

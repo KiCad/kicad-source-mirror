@@ -317,10 +317,8 @@ set( PCBNEW_CLASS_SRCS
     tools/drawing_tool.cpp
     tools/edit_tool.cpp
     tools/global_edit_tool.cpp
-    tools/grid_helper.cpp
     tools/footprint_editor_tools.cpp
     tools/pad_tool.cpp
-    tools/pcb_actions.cpp
     tools/pcb_bright_box.cpp
     tools/pcb_editor_control.cpp
     tools/pcb_inspection_tool.cpp

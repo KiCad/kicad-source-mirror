@@ -57,10 +57,12 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
 
     auto& displ_opts = m_Parent->GetDisplayOptions();
 
-    m_EdgesDisplayOption->SetValue( not displ_opts.m_DisplayModEdgeFill );
-    m_TextDisplayOption->SetValue( not displ_opts.m_DisplayModTextFill );
-    m_ShowPadSketch->SetValue( not displ_opts.m_DisplayPadFill );
     m_ShowPadNum->SetValue( displ_opts.m_DisplayPadNum );
+
+    MAGNETIC_SETTINGS* magSettings = m_Parent->GetMagneticItemsSettings();
+
+    m_MagneticPads->SetValue( magSettings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+    m_MagneticGraphics->SetValue( magSettings->graphics );
 
     m_autoZoomOption->SetValue( m_Parent->GetAutoZoom() );
 }
@@ -70,12 +72,16 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
 {
     PCB_DISPLAY_OPTIONS displ_opts = m_Parent->GetDisplayOptions();
 
-    displ_opts.m_DisplayModEdgeFill = not m_EdgesDisplayOption->GetValue();
-    displ_opts.m_DisplayModTextFill = not m_TextDisplayOption->GetValue();
     displ_opts.m_DisplayPadNum  = m_ShowPadNum->GetValue();
-    displ_opts.m_DisplayPadFill = not m_ShowPadSketch->GetValue();
+
     m_Parent->ApplyDisplaySettingsToGAL();
     m_Parent->SetDisplayOptions( displ_opts );
+
+    MAGNETIC_SETTINGS* magSettings = m_Parent->GetMagneticItemsSettings();
+
+    magSettings->pads = m_MagneticPads->GetValue() ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
+                                                   : MAGNETIC_OPTIONS::NO_EFFECT;
+    magSettings->graphics = m_MagneticGraphics->GetValue();
 
     m_Parent->SetAutoZoom( m_autoZoomOption->GetValue() );
 }

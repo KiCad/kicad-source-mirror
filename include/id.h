@@ -210,15 +210,9 @@ enum main_id
     ID_OFFCENTER_ZOOM_OUT,
     ID_ZOOM_END,
 
-
+    // KiFace server for standalone operation
     ID_EDA_SOCKET_EVENT_SERV,
     ID_EDA_SOCKET_EVENT,
-
-    // Common to Pcbnew and CvPcb
-    ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
-    ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
-    ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH,
-    ID_TB_OPTIONS_SHOW_PADS_SKETCH,
 
     ID_DIALOG_ERC,      ///< eeschema ERC modeless dialog ID
 

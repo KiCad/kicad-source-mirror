@@ -61,6 +61,7 @@ class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
 class PCBNEW_SETTINGS;
 class FOOTPRINT_EDITOR_SETTINGS;
+struct MAGNETIC_SETTINGS;
 
 
 wxDECLARE_EVENT( BOARD_CHANGED, wxCommandEvent );
@@ -218,6 +219,12 @@ public:
         wxASSERT( m_Pcb );
         return m_Pcb;
     }
+
+    /**
+     * Function GetModel()
+     * @return the primary data model.
+     */
+    virtual BOARD_ITEM_CONTAINER* GetModel() const = 0;
 
     EDA_ITEM* GetItem( const KIID& aId ) override;
 
@@ -414,12 +421,9 @@ public:
 
     FOOTPRINT_EDITOR_SETTINGS* GetFootprintEditorSettings();
 
-    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
+    virtual MAGNETIC_SETTINGS* GetMagneticItemsSettings();
 
-    void OnTogglePadDrawMode( wxCommandEvent& aEvent );
-    void OnToggleGraphicDrawMode( wxCommandEvent& aEvent );
-    void OnToggleEdgeDrawMode( wxCommandEvent& aEvent );
-    void OnToggleTextDrawMode( wxCommandEvent& aEvent );
+    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
     // User interface update event handlers.
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );

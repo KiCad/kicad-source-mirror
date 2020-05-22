@@ -25,6 +25,7 @@
 #define _CVPCB_SETTINGS_H
 
 #include <pcb_display_options.h>
+#include <pcbnew_settings.h>
 #include <settings/app_settings.h>
 
 class CVPCB_SETTINGS : public APP_SETTINGS_BASE
@@ -39,6 +40,8 @@ public:
     WINDOW_SETTINGS m_FootprintViewer;
 
     PCB_DISPLAY_OPTIONS m_FootprintViewerDisplayOptions;
+
+    MAGNETIC_SETTINGS m_FootprintViewerMagneticSettings;
 
     int m_FilterFootprint;
 

@@ -169,26 +169,6 @@ int PCBNEW_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
-{
-    auto opts = displayOptions();
-
-    Flip( opts.m_DisplayPadFill );
-    m_frame->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
-
-    for( auto module : board()->Modules() ) // fixme: move to PCB_VIEW
-    {
-        for( auto pad : module->Pads() )
-            view()->Update( pad, KIGFX::GEOMETRY );
-    }
-
-    canvas()->Refresh();
-
-    return 0;
-}
-
-
 int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
@@ -220,55 +200,6 @@ int PCBNEW_CONTROL::GraphicDisplayMode( const TOOL_EVENT& aEvent )
     for( auto item : board()->Drawings() )
     {
         view()->Update( item, KIGFX::GEOMETRY );
-    }
-
-    canvas()->Refresh();
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
-{
-    auto opts = displayOptions();
-
-    Flip( opts.m_DisplayModEdgeFill );
-    m_frame->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
-
-    for( auto module : board()->Modules() )
-    {
-        for( auto item : module->GraphicalItems() )
-        {
-            if( item->Type() == PCB_MODULE_EDGE_T )
-                view()->Update( item, KIGFX::GEOMETRY );
-        }
-    }
-
-    canvas()->Refresh();
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::ModuleTextOutlines( const TOOL_EVENT& aEvent )
-{
-    auto opts = displayOptions();
-
-    Flip( opts.m_DisplayModTextFill );
-    m_frame->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
-
-    for( auto module : board()->Modules() )
-    {
-        view()->Update( &module->Reference(), KIGFX::GEOMETRY );
-        view()->Update( &module->Value(), KIGFX::GEOMETRY );
-
-        for( auto item : module->GraphicalItems() )
-        {
-            if( item->Type() == PCB_MODULE_TEXT_T )
-                view()->Update( item, KIGFX::GEOMETRY );
-        }
     }
 
     canvas()->Refresh();
@@ -1049,29 +980,6 @@ int PCBNEW_CONTROL::Redo( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
-{
-    EDA_3D_VIEWER* draw3DFrame = m_frame->CreateAndShow3D_Frame();
-
-    // Suppress warnings on non-Mac systems
-    [&draw3DFrame] {}();
-
-    if( m_frame->IsType( FRAME_FOOTPRINT_VIEWER )
-     || m_frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
-     || m_frame->IsType( FRAME_FOOTPRINT_WIZARD ) )
-    {
-        m_frame->Update3DView( true );
-
-#ifdef  __WXMAC__
-        // A stronger version of Raise() which promotes the window to its parent's level.
-        draw3DFrame->ReparentQuasiModal();
-#endif
-    }
-
-    return 0;
-}
-
-
 void PCBNEW_CONTROL::updateGrid()
 {
     BASE_SCREEN* screen = m_frame->GetScreen();
@@ -1157,11 +1065,8 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::TrackDisplayMode,     PCB_ACTIONS::trackDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToggleRatsnest,       PCB_ACTIONS::showRatsnest.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToggleRatsnest,       PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::PadDisplayMode,       PCB_ACTIONS::padDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ViaDisplayMode,       PCB_ACTIONS::viaDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::GraphicDisplayMode,   PCB_ACTIONS::graphicDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ModuleEdgeOutlines,   PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ModuleTextOutlines,   PCB_ACTIONS::moduleTextOutlines.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
@@ -1218,7 +1123,6 @@ void PCBNEW_CONTROL::setTransitions()
 
     // Miscellaneous
     Go( &PCBNEW_CONTROL::DeleteItemCursor,     ACTIONS::deleteTool.MakeEvent() );
-    Go( &PCBNEW_CONTROL::Show3DViewer,         ACTIONS::show3DViewer.MakeEvent() );
 
     // Append control
     Go( &PCBNEW_CONTROL::AppendBoardFromFile,  PCB_ACTIONS::appendBoard.MakeEvent() );

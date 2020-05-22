@@ -1014,3 +1014,9 @@ void FOOTPRINT_VIEWER_FRAME::CloseFootprintViewer( wxCommandEvent& event )
 {
     Close( false );
 }
+
+
+BOARD_ITEM_CONTAINER* FOOTPRINT_VIEWER_FRAME::GetModel() const
+{
+    return GetBoard()->GetFirstModule();
+}

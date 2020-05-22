@@ -36,6 +36,20 @@ enum class MAGNETIC_OPTIONS
     CAPTURE_ALWAYS
 };
 
+struct MAGNETIC_SETTINGS
+{
+    MAGNETIC_OPTIONS pads;
+    MAGNETIC_OPTIONS tracks;
+    bool             graphics;
+
+    MAGNETIC_SETTINGS()
+            : pads( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
+              tracks( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
+              graphics( false )
+    {
+    }
+};
+
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
 typedef std::vector<std::pair<wxString, bool>> ACTION_PLUGIN_SETTINGS_LIST;
 #endif
@@ -235,6 +249,8 @@ public:
 
     PCB_DISPLAY_OPTIONS m_Display;
 
+    MAGNETIC_SETTINGS m_MagneticItems;
+
     int m_FastGrid1;
 
     int m_FastGrid2;
@@ -253,12 +269,6 @@ public:
     bool m_ShowPageLimits;
 
     wxString m_FootprintTextShownColumns;
-
-    MAGNETIC_OPTIONS m_MagneticPads;
-
-    MAGNETIC_OPTIONS m_MagneticTracks;
-
-    bool             m_MagneticGraphics;
 
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_PnsSettings;
 

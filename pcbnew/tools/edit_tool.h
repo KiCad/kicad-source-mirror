@@ -140,9 +140,6 @@ public:
      */
     int CreateArray( const TOOL_EVENT& aEvent );
 
-    ///> Launches a tool to measure between points
-    int MeasureTool( const TOOL_EVENT& aEvent );
-
     /**
      * Function FootprintFilter()
      * A selection filter which prunes the selection to contain only items of type PCB_MODULE_T

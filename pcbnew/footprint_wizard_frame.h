@@ -76,6 +76,9 @@ public:
 
     ~FOOTPRINT_WIZARD_FRAME();
 
+    ///> @copydoc PCB_BASE_FRAME::GetModel()
+    BOARD_ITEM_CONTAINER* GetModel() const override;
+
     MODULE*             GetBuiltFootprint();
 
     /**

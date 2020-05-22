@@ -54,15 +54,11 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
+#include <pcbnew_settings.h>
 
 wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
 
 BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnTogglePadDrawMode )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH, PCB_BASE_FRAME::OnToggleGraphicDrawMode )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, PCB_BASE_FRAME::OnToggleEdgeDrawMode )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, PCB_BASE_FRAME::OnToggleTextDrawMode )
-
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
 END_EVENT_TABLE()
@@ -467,77 +463,6 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 }
 
 
-void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
-{
-    auto displ_opts = GetDisplayOptions();
-
-    displ_opts.m_DisplayPadFill = !displ_opts.m_DisplayPadFill;
-
-    if( GetCanvas() )
-    {
-        // Apply new display options to the GAL canvas
-        auto view = static_cast<KIGFX::PCB_VIEW*>( GetCanvas()->GetView() );
-        view->UpdateDisplayOptions( displ_opts );
-
-        // Update pads
-        BOARD* board = GetBoard();
-        for( auto module : board->Modules() )
-        {
-            for( auto pad : module->Pads() )
-                view->Update( pad, KIGFX::GEOMETRY );
-        }
-    }
-
-    SetDisplayOptions( displ_opts );
-    GetCanvas()->Refresh();
-}
-
-
-void PCB_BASE_FRAME::OnToggleGraphicDrawMode( wxCommandEvent& aEvent )
-{
-    auto displ_opts = GetDisplayOptions();
-    displ_opts.m_DisplayDrawItemsFill = !displ_opts.m_DisplayDrawItemsFill;
-    SetDisplayOptions( displ_opts );
-    GetCanvas()->Refresh();
-}
-
-
-void PCB_BASE_FRAME::OnToggleEdgeDrawMode( wxCommandEvent& aEvent )
-{
-    auto displ_opts = GetDisplayOptions();
-    displ_opts.m_DisplayModEdgeFill = !displ_opts.m_DisplayModEdgeFill;
-
-    if( GetCanvas() )
-    {
-        // Apply new display options to the GAL canvas
-        auto view = static_cast<KIGFX::PCB_VIEW*>( GetCanvas()->GetView() );
-        view->UpdateDisplayOptions( displ_opts );
-        view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    }
-
-    SetDisplayOptions( displ_opts );
-    GetCanvas()->Refresh();
-}
-
-
-void PCB_BASE_FRAME::OnToggleTextDrawMode( wxCommandEvent& aEvent )
-{
-    auto displ_opts = GetDisplayOptions();
-    displ_opts.m_DisplayModTextFill = !displ_opts.m_DisplayModTextFill;
-
-    if( GetCanvas() )
-    {
-        // Apply new display options to the canvas
-        auto view = static_cast<KIGFX::PCB_VIEW*>( GetCanvas()->GetView() );
-        view->UpdateDisplayOptions( displ_opts );
-        view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    }
-
-    SetDisplayOptions( displ_opts );
-    GetCanvas()->Refresh();
-}
-
-
 void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 {
     if( m_zoomSelectBox == NULL || m_zoomSelectBox->GetParent() == NULL )
@@ -717,6 +642,10 @@ void PCB_BASE_FRAME::unitsChangeRefresh()
 {
     EDA_DRAW_FRAME::unitsChangeRefresh();    // Update the status bar.
 
+    // Notify all tools the units have changed
+    if( m_toolManager )
+        m_toolManager->RunAction( PCB_ACTIONS::updateUnits, true );
+
     UpdateGridSelectBox();
 }
 
@@ -773,6 +702,12 @@ PCBNEW_SETTINGS* PCB_BASE_FRAME::GetPcbNewSettings()
 FOOTPRINT_EDITOR_SETTINGS* PCB_BASE_FRAME::GetFootprintEditorSettings()
 {
     return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+}
+
+MAGNETIC_SETTINGS* PCB_BASE_FRAME::GetMagneticItemsSettings()
+{
+    wxCHECK( m_Settings, nullptr );
+    return &m_Settings->m_MagneticItems;
 }
 
 

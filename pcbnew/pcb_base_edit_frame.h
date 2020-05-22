@@ -43,12 +43,6 @@ public:
     virtual ~PCB_BASE_EDIT_FRAME();
 
     /**
-     * Function GetModel()
-     * @return the primary data model.
-     */
-    virtual BOARD_ITEM_CONTAINER* GetModel() const = 0;
-
-    /**
      * Function CreateNewLibrary
      * If a library name is given, creates a new footprint library in the project folder
      * with the given name. If no library name is given it prompts user for a library path,

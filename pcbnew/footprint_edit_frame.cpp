@@ -64,6 +64,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
+#include <tools/pcb_viewer_tools.h>
 #include <tools/position_relative_tool.h>
 #include <widgets/infobar.h>
 #include <widgets/lib_tree.h>
@@ -476,6 +477,15 @@ COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetColorSettings()
 }
 
 
+MAGNETIC_SETTINGS* FOOTPRINT_EDIT_FRAME::GetMagneticItemsSettings()
+{
+    // Get the actual frame settings for magnetic items
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
+    wxCHECK( cfg, nullptr );
+    return &cfg->m_MagneticItems;
+}
+
+
 const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents() const
 {
     MODULE* module = GetBoard()->GetFirstModule();
@@ -868,6 +878,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
     m_toolManager->RegisterTool( new PCBNEW_PICKER_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
+    m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
 
     m_toolManager->GetTool<SELECTION_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<EDIT_TOOL>()->SetEditModules( true );
@@ -878,6 +889,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->GetTool<PCBNEW_PICKER_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<POSITION_RELATIVE_TOOL>()->SetEditModules( true );
 
+    m_toolManager->GetTool<PCB_VIEWER_TOOLS>()->SetFootprintFrame( true );
     m_toolManager->InitTools();
 
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );

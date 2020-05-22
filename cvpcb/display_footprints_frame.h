@@ -29,6 +29,7 @@
 #define DISPLAY_FOOTPRINTS_FRAME_H
 
 #include <pcb_base_frame.h>
+#include <pcbnew_settings.h>
 
 // The name (for wxWidgets) of the footprint viewer frame
 #define FOOTPRINTVIEWER_FRAME_NAME wxT( "FootprintViewerFrame" )
@@ -61,6 +62,9 @@ public:
      */
     void InitDisplay();
 
+    ///> @copydoc PCB_BASE_FRAME::GetModel()
+    BOARD_ITEM_CONTAINER* GetModel() const override;
+
     /**
      * update the gal canvas (view, colors ...)
      */
@@ -70,6 +74,8 @@ public:
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    MAGNETIC_SETTINGS* GetMagneticItemsSettings() override;
 
     /// Updates the GAL with display settings changes
     void ApplyDisplaySettingsToGAL();

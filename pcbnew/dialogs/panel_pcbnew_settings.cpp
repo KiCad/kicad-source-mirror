@@ -57,9 +57,9 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
     m_RotationAngle->SetValue( rotationAngle );
 
     m_Segments_45_Only_Ctrl->SetValue( general_opts.m_Use45DegreeGraphicSegments );
-    m_magneticPadChoice->SetSelection( static_cast<int>( general_opts.m_MagneticPads ) );
-    m_magneticTrackChoice->SetSelection( static_cast<int>( general_opts.m_MagneticTracks ) );
-    m_magneticGraphicsChoice->SetSelection( !general_opts.m_MagneticGraphics );
+    m_magneticPadChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.pads ) );
+    m_magneticTrackChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.tracks ) );
+    m_magneticGraphicsChoice->SetSelection( !general_opts.m_MagneticItems.graphics );
     m_FlipLeftRight->SetValue( general_opts.m_FlipLeftRight );
 
     m_Show_Page_Limits->SetValue( m_Frame->ShowPageLimits() );
@@ -76,12 +76,14 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
 
     m_Frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
 
-    /* Updating the combobox to display the active layer. */
-
     m_Frame->Settings().m_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
-    m_Frame->Settings().m_MagneticPads = (MAGNETIC_OPTIONS) m_magneticPadChoice->GetSelection();
-    m_Frame->Settings().m_MagneticTracks = (MAGNETIC_OPTIONS) m_magneticTrackChoice->GetSelection();
-    m_Frame->Settings().m_MagneticGraphics = !m_magneticGraphicsChoice->GetSelection();
+
+    m_Frame->Settings().m_MagneticItems.pads =
+            static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
+    m_Frame->Settings().m_MagneticItems.tracks =
+            static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
+    m_Frame->Settings().m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
+
     m_Frame->Settings().m_FlipLeftRight = m_FlipLeftRight->GetValue();
 
     m_Frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );

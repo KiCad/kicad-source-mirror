@@ -47,11 +47,12 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
         m_Use45DegreeGraphicSegments( false ),
         m_FlipLeftRight( false ),
         m_ShowPageLimits( true ),
-        m_MagneticPads( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
-        m_MagneticTracks( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
-        m_MagneticGraphics( true ),
         m_PnsSettings( nullptr )
 {
+    m_MagneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
+    m_MagneticItems.tracks   = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
+    m_MagneticItems.graphics = false;
+
     m_params.emplace_back( new PARAM<bool>( "aui.show_layer_manager",
             &m_AuiPanels.show_layer_manager, true ) );
 
@@ -81,14 +82,14 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
     m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right", &m_FlipLeftRight, true ) );
 
     m_params.emplace_back(
-            new PARAM<bool>( "editing.magnetic_graphics", &m_MagneticGraphics, true ) );
+            new PARAM<bool>( "editing.magnetic_graphics", &m_MagneticItems.graphics, true ) );
 
     m_params.emplace_back( new PARAM<int>( "editing.magnetic_pads",
-            reinterpret_cast<int*>( &m_MagneticPads ),
+            reinterpret_cast<int*>( &m_MagneticItems.pads ),
             static_cast<int>( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ) ) );
 
     m_params.emplace_back( new PARAM<int>( "editing.magnetic_tracks",
-            reinterpret_cast<int*>( &m_MagneticTracks ),
+            reinterpret_cast<int*>( &m_MagneticItems.tracks ),
             static_cast<int>( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords", &m_PolarCoords, false ) );
