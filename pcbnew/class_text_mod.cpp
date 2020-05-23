@@ -168,11 +168,7 @@ void TEXTE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     // adjust justified text for mirroring
     if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT || GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
     {
-        if( ( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT ) == IsMirrored() )
-            SetHorizJustify( (EDA_TEXT_HJUSTIFY_T)-GetHorizJustify() );
-        else
-            SetHorizJustify( (EDA_TEXT_HJUSTIFY_T)-GetHorizJustify() );
-
+        SetHorizJustify( static_cast<EDA_TEXT_HJUSTIFY_T>( -GetHorizJustify() ) );
         SetDrawCoord();
     }
 }
