@@ -55,6 +55,16 @@ void SCHEMATIC::Reset()
 }
 
 
+void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
+{
+    wxCHECK_RET( aRootSheet, "Call to SetRoot with null SCH_SHEET!" );
+
+    m_rootSheet = aRootSheet;
+
+    m_connectionGraph->Reset();
+}
+
+
 SCH_SCREEN* SCHEMATIC::RootScreen() const
 {
     return IsValid() ? m_rootSheet->GetScreen() : nullptr;

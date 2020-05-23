@@ -106,10 +106,13 @@ public:
         return *m_rootSheet;
     }
 
-    void SetRoot( SCH_SHEET* aRootSheet )
-    {
-        m_rootSheet = aRootSheet;
-    }
+    /**
+     * Initializes the schematic with a new root sheet.
+     * This is typically done by calling a file loader that returns the new root sheet
+     * As a side-effect, takes care of some post-load initialization.
+     * @param aRootSheet is the new root sheet for this schematic.
+     */
+    void SetRoot( SCH_SHEET* aRootSheet );
 
     /// A simple test if the schematic is loaded, not a complete one
     bool IsValid() const
