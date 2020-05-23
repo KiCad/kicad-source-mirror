@@ -59,8 +59,8 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 
     m_maxError.SetValue( m_BrdSettings->m_MaxError );
 
-    m_cbOutlinePolygonFastest->SetValue( m_BrdSettings->m_ZoneUseNoOutlineInFill );
-    m_cbOutlinePolygonBestQ->SetValue( !m_BrdSettings->m_ZoneUseNoOutlineInFill );
+    m_rbOutlinePolygonFastest->SetValue( m_BrdSettings->m_ZoneUseNoOutlineInFill );
+    m_rbOutlinePolygonBestQ->SetValue( !m_BrdSettings->m_ZoneUseNoOutlineInFill );
 
     m_minClearance.SetValue( m_BrdSettings->m_MinClearance );
     m_trackMinWidth.SetValue( m_BrdSettings->m_TrackMinWidth );
@@ -107,7 +107,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
     m_BrdSettings->m_MaxError = Clamp<int>( IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
             m_maxError.GetValue(), IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
 
-    m_BrdSettings->m_ZoneUseNoOutlineInFill = m_cbOutlinePolygonFastest->GetValue();
+    m_BrdSettings->m_ZoneUseNoOutlineInFill = m_rbOutlinePolygonFastest->GetValue();
 
     m_BrdSettings->m_MinClearance = m_minClearance.GetValue();
     m_BrdSettings->m_TrackMinWidth = m_trackMinWidth.GetValue();
@@ -169,8 +169,8 @@ void PANEL_SETUP_FEATURE_CONSTRAINTS::onChangeOutlineOpt( wxCommandEvent& event 
 {
     wxObject* item =event.GetEventObject();
 
-    if( item == m_cbOutlinePolygonBestQ )
-        m_cbOutlinePolygonFastest->SetValue( not m_cbOutlinePolygonBestQ->GetValue() );
+    if( item == m_rbOutlinePolygonBestQ )
+        m_rbOutlinePolygonFastest->SetValue( not m_rbOutlinePolygonBestQ->GetValue() );
     else
-        m_cbOutlinePolygonBestQ->SetValue( not m_cbOutlinePolygonFastest->GetValue() );
+        m_rbOutlinePolygonBestQ->SetValue( not m_rbOutlinePolygonFastest->GetValue() );
 }

@@ -104,12 +104,12 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	wxBoxSizer* bSizerOutlinesOpts;
 	bSizerOutlinesOpts = new wxBoxSizer( wxVERTICAL );
 
-	m_cbOutlinePolygonBestQ = new wxCheckBox( this, wxID_ANY, _("Stroked outlines (legacy)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerOutlinesOpts->Add( m_cbOutlinePolygonBestQ, 0, wxALL, 4 );
+	m_rbOutlinePolygonBestQ = new wxRadioButton( this, wxID_ANY, _("Stroked outlines (legacy)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerOutlinesOpts->Add( m_rbOutlinePolygonBestQ, 0, wxALL, 4 );
 
-	m_cbOutlinePolygonFastest = new wxCheckBox( this, wxID_ANY, _("Smoothed polygons (best performance)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbOutlinePolygonFastest->SetValue(true);
-	bSizerOutlinesOpts->Add( m_cbOutlinePolygonFastest, 0, wxALL, 4 );
+	m_rbOutlinePolygonFastest = new wxRadioButton( this, wxID_ANY, _("Smoothed polygons (best performance)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbOutlinePolygonFastest->SetValue( true );
+	bSizerOutlinesOpts->Add( m_rbOutlinePolygonFastest, 0, wxALL, 4 );
 
 
 	bSizer5->Add( bSizerOutlinesOpts, 1, wxEXPAND, 5 );
@@ -337,14 +337,14 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	bMainSizer->Fit( this );
 
 	// Connect Events
-	m_cbOutlinePolygonBestQ->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
-	m_cbOutlinePolygonFastest->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+	m_rbOutlinePolygonBestQ->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+	m_rbOutlinePolygonFastest->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
 }
 
 PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::~PANEL_SETUP_FEATURE_CONSTRAINTS_BASE()
 {
 	// Disconnect Events
-	m_cbOutlinePolygonBestQ->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
-	m_cbOutlinePolygonFastest->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+	m_rbOutlinePolygonBestQ->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+	m_rbOutlinePolygonFastest->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
 
 }

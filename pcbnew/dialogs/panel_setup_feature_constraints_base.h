@@ -25,6 +25,7 @@
 #include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
+#include <wx/radiobut.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -51,8 +52,8 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_stZoneFilledPolysOpt;
 		wxStaticBitmap* m_bitmapZoneFillOpt;
-		wxCheckBox* m_cbOutlinePolygonBestQ;
-		wxCheckBox* m_cbOutlinePolygonFastest;
+		wxRadioButton* m_rbOutlinePolygonBestQ;
+		wxRadioButton* m_rbOutlinePolygonFastest;
 		wxStaticText* m_staticText23;
 		wxStaticBitmap* m_bitmapClearance;
 		wxStaticText* m_clearanceTitle;
