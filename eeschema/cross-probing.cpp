@@ -399,7 +399,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         if( payload.find( "no-annotate" ) == std::string::npos )
         {
             // Ensure schematic is OK for netlist creation (especially that it is fully annotated):
-            if( !prepareForNetlist() )
+            if( !ReadyToNetlist() )
                 return;
         }
 

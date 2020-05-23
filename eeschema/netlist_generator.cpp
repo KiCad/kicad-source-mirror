@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema/netform.cpp
- * @brief Net list generation code.
- */
-
 #include <fctsys.h>
 #include <kicad_string.h>
 #include <gestfich.h>
@@ -46,13 +41,14 @@
 #include <netlist_exporter_kicad.h>
 #include <netlist_exporter_generic.h>
 
-#include <invoke_sch_dialog.h>
 
-bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
-                                       int aFormat, const wxString& aFullFileName,
+bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileName,
                                        unsigned aNetlistOptions, REPORTER* aReporter )
 {
-    if( aConnectedItemsList == nullptr )    // Schematic netlist not available.
+    // Ensure all power symbols have a valid reference
+    Schematic().GetSheets().AnnotatePowerSymbols();
+
+    if( !ReadyToNetlist( false ) )
         return false;
 
     bool res = true;
@@ -163,25 +159,37 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
 int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker );
 
 
-bool SCH_EDIT_FRAME::prepareForNetlist()
+bool SCH_EDIT_FRAME::ReadyToNetlist( bool aSilent, bool aSilentAnnotate )
 {
     // Ensure all power symbols have a valid reference
     Schematic().GetSheets().AnnotatePowerSymbols();
 
-    // Performs some controls:
-    if( CheckAnnotate( NULL_REPORTER::GetInstance(), 0 ) )
+    // Components must be annotated
+    if( CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
     {
-        // Schematic must be annotated: call Annotate dialog and tell the user why.
-        ModalAnnotate( _( "Exporting the netlist requires a completely annotated schematic." ) );
+        if( aSilentAnnotate )
+        {
+            AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
+                                NULL_REPORTER::GetInstance() );
+        }
+        else
+        {
+            if( aSilent )
+                return false;
 
-        if( CheckAnnotate( NULL_REPORTER::GetInstance(), 0 ) )
-            return false;
+            // Schematic must be annotated: call Annotate dialog and tell the user why.
+            ModalAnnotate(
+                    _( "Exporting the netlist requires a completely annotated schematic." ) );
+
+            if( CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
+                return false;
+        }
     }
 
     // Test duplicate sheet names:
     if( TestDuplicateSheetNames( &Schematic(), false ) > 0 )
     {
-        if( !IsOK( this, _( "Error: duplicate sheet names. Continue?" ) ) )
+        if( aSilent || !IsOK( this, _( "Error: duplicate sheet names. Continue?" ) ) )
             return false;
     }
 
@@ -199,30 +207,6 @@ void SCH_EDIT_FRAME::sendNetlistToCvpcb()
 
     std::string packet = formatter.GetString();  // an abbreviated "kicad" (s-expr) netlist
     Kiway().ExpressMail( FRAME_CVPCB, MAIL_EESCHEMA_NETLIST, packet, this );
-}
-
-
-NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::CreateNetlist( bool aSilent,
-                                                    bool aSilentAnnotate )
-{
-    if( !aSilent ) // checks for errors and invokes annotation dialog as necessary
-    {
-        if( !prepareForNetlist() )
-            return nullptr;
-    }
-    else // performs similar function as prepareForNetlist but without a dialog.
-    {
-        Schematic().GetSheets().AnnotatePowerSymbols();
-
-        if( aSilentAnnotate )
-            AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
-                                NULL_REPORTER::GetInstance() );
-    }
-
-    // TODO(JE) This is really going to turn into "PrepareForNetlist"
-    // when the old netlister (BuildNetListBase) is removed
-
-    return BuildNetListBase();
 }
 
 

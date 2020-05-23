@@ -168,14 +168,6 @@ protected:
     bool isAutoSaveRequired() const override;
 
     /**
-     * Verify that annotation is complete so that a proper netlist is even
-     * possible.  If not, asks the user if annotation should be done.
-     *
-     * @return bool - true if annotation is complete, else false.
-     */
-    bool prepareForNetlist();
-
-    /**
      * Send the kicad netlist over to CVPCB.
      */
     void sendNetlistToCvpcb();
@@ -400,6 +392,7 @@ public:
 
     /**
      * Create a flat list which stores all connected objects.
+     * TODO(JE) Remove this once ERC is moved off of it
      *
      * @param updateStatusText decides if window StatusText should be modified.
      * @return NETLIST_OBJECT_LIST* - caller owns the object.
@@ -407,23 +400,19 @@ public:
     NETLIST_OBJECT_LIST* BuildNetListBase( bool updateStatusText = true );
 
     /**
-     * Create a netlist for the current schematic.
+     * Checks if we are ready to write a netlist file for the current schematic
      *
      * - Test for some issues (missing or duplicate references and sheet names)
-     * - Build netlist info
-     * - Create the netlist file (different formats)
      *
      * @param aSilent is true if annotation error dialog should be skipped
      * @param aSilentAnnotate is true if components should be reannotated silently
-     * @returns a unique_ptr to the netlist
+     * @returns true if all is well (i.e. you can call WriteNetListFile next)
      */
-    NETLIST_OBJECT_LIST* CreateNetlist( bool aSilent = false,
-                                        bool aSilentAnnotate = false );
+    bool ReadyToNetlist( bool aSilent = false, bool aSilentAnnotate = false );
 
     /**
      * Create a netlist file.
      *
-     * @param aConnectedItemsList = the initialized list of connected items, take ownership.
      * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
      * @param aFullFileName = full netlist file name
      * @param aNetlistOptions = netlist options using OR'ed bits.
@@ -437,8 +426,7 @@ public:
      *          mainly if a command line must be run (can be NULL
      * @return true if success.
      */
-    bool WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
-                           int             aFormat,
+    bool WriteNetListFile( int             aFormat,
                            const wxString& aFullFileName,
                            unsigned        aNetlistOptions,
                            REPORTER*       aReporter = NULL );

@@ -839,7 +839,7 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
     wxFileName fn = Prj().AbsolutePath( Schematic().GetFileName() );
     fn.SetExt( NetlistFileExtension );
 
-    if( !prepareForNetlist() )
+    if( !ReadyToNetlist() )
         return;
 
     try

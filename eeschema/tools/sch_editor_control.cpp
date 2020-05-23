@@ -638,6 +638,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
             if( item->IsType( wires ) )
             {
+                // TODO(JE) Port to connection graph
                 std::unique_ptr<NETLIST_OBJECT_LIST> netlist( m_frame->BuildNetListBase() );
 
                 for( NETLIST_OBJECT* obj : *netlist )

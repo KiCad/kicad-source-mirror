@@ -518,8 +518,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( m_generateNetlistAndExit )
     {
         wxLogDebug( wxT( "Writing netlist to %s and exiting..." ), m_netlistFilename );
-        NETLIST_OBJECT_LIST* netlist = CreateNetlist( false, false );
-        WriteNetListFile( netlist, NET_TYPE_PCBNEW, m_netlistFilename, 0, nullptr );
+        WriteNetListFile( NET_TYPE_PCBNEW, m_netlistFilename, 0, nullptr );
         Close( false );
     }
 

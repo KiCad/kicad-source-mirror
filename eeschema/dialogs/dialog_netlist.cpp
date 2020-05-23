@@ -498,12 +498,10 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
     else
         m_Parent->SetNetListerCommand( wxEmptyString );
 
-    auto netlist = m_Parent->CreateNetlist( false, false );
-
-    if( netlist == nullptr )
-        wxMessageBox( _( "Schematic netlist not available" ) );
+    if( m_Parent->ReadyToNetlist( false, false ) )
+        m_Parent->WriteNetListFile( currPage->m_IdNetType, fullpath, netlist_opt, nullptr );
     else
-        m_Parent->WriteNetListFile( netlist, currPage->m_IdNetType, fullpath, netlist_opt, NULL );
+        wxMessageBox( _( "Schematic netlist not available" ) );
 
     WriteCurrentNetlistSetup();
 

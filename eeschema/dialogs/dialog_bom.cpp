@@ -474,10 +474,8 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
         m_parent->SetExecFlags( wxEXEC_SHOW_CONSOLE );
 #endif
 
-    auto netlist = m_parent->CreateNetlist( false, false );
-
-    m_parent->WriteNetListFile( netlist, -1,
-                                fullfilename, 0, &reporter );
+    if( m_parent->ReadyToNetlist( false, false ) )
+        m_parent->WriteNetListFile( -1, fullfilename, 0, &reporter );
 
     m_Messages->SetValue( reportmsg );
 
