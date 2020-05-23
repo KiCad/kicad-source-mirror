@@ -88,15 +88,6 @@ struct LIB_PART_LESS_THAN
 class NETLIST_EXPORTER
 {
 protected:
-// TODO(JE) NETLISTING
-#if 0
-    /// Used to temporarily store and filter the list of pins of a schematic component
-    /// when generating schematic component data in netlist (comp section). No ownership
-    /// of members.
-    /// TODO(snh): Descope this object
-    NETLIST_OBJECTS       m_SortedComponentPinList;
-#endif
-
     /// Used for "multi parts per package" components,
     /// avoids processing a lib component more than once.
     UNIQUE_STRINGS        m_ReferencesAlreadyFound;
@@ -107,8 +98,13 @@ protected:
     /// The schematic we're generating a netlist for
     SCHEMATIC* m_schematic;
 
-
-
+    /**
+     * Checks if the given component should be processed for netlisting.
+     * Prevents processing multi-unit components more than once, etc.
+     * @param aItem is a component to check
+     * @param aSheetPath is the sheet to check the component for
+     * @return the component if it should be processed, or nullptr
+     */
     SCH_COMPONENT* findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
 
 public:
