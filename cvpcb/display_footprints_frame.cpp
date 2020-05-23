@@ -51,6 +51,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_viewer_tools.h>       // shared tools with other pcbnew frames
 #include <tools/cvpcb_fpviewer_selection_tool.h>
+#include <widgets/infobar.h>
 
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
@@ -128,12 +129,28 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
+    // Create the infobar
+    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
+
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
-    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( m_mainToolBar,
+                     EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_optionsToolBar,
+                      EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    m_auimgr.AddPane( m_infoBar,
+                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
+    m_auimgr.AddPane( GetCanvas(),
+                      EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( m_messagePanel,
+                      EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+
+    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
+    // hidding it.
+    m_auimgr.Update();
+
+    // We don't want the infobar displayed right away
+    m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
 
     auto& galOpts = GetGalDisplayOptions();
@@ -221,7 +238,6 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                         KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    m_mainToolBar->AddSeparator();
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
@@ -326,25 +342,51 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 {
     MODULE* footprint = NULL;
 
+    // Prep the infobar. The infobar is used for as many notifications as possible
+    // since it doesn't steal focus into the frame like a dialog does.
+    m_infoBar->Dismiss();
+    m_infoBar->RemoveAllButtons();
+    m_infoBar->AddCloseButton();
+
+    LIB_ID fpid;
+
+    if( fpid.Parse( aFootprintName, LIB_ID::ID_PCB ) >= 0 )
+    {
+        wxString msg = wxString::Format( _( "Footprint ID \"%s\" is not valid." ),
+                                         GetChars( aFootprintName ) );
+        m_infoBar->ShowMessage( msg, wxICON_ERROR );
+        return NULL;
+    }
+
+    wxString libNickname = FROM_UTF8( fpid.GetLibNickname().c_str() );
+    wxString fpName      = FROM_UTF8( fpid.GetLibItemName().c_str() );
+
+    wxLogDebug( wxT( "Load footprint \"%s\" from library \"%s\"." ), fpName, libNickname );
+
+
+    FP_LIB_TABLE* fpTable = Prj().PcbFootprintLibs( Kiway() );
+    wxASSERT( fpTable );
+
+    // See if the library requested is in the library table
+    if( !fpTable->HasLibrary( libNickname ) )
+    {
+        wxString msg = wxString::Format( _( "Library \"%s\" is not in the footprint library table." ),
+                                         libNickname );
+        m_infoBar->ShowMessage( msg, wxICON_ERROR );
+        return NULL;
+    }
+
+    // See if the footprint requested is in the library
+    if( !fpTable->FootprintExists( libNickname, fpName ) )
+    {
+        wxString msg = wxString::Format( _( "Footprint \"%s\" not found." ), aFootprintName );
+        m_infoBar->ShowMessage( msg, wxICON_ERROR );
+        return NULL;
+    }
+
     try
     {
-        LIB_ID fpid;
-
-        if( fpid.Parse( aFootprintName, LIB_ID::ID_PCB ) >= 0 )
-        {
-            DisplayInfoMessage( this, wxString::Format( _( "Footprint ID \"%s\" is not valid." ),
-                                                        GetChars( aFootprintName ) ) );
-            return NULL;
-        }
-
-        std::string nickname = fpid.GetLibNickname();
-        std::string fpname   = fpid.GetLibItemName();
-
-        wxLogDebug( wxT( "Load footprint \"%s\" from library \"%s\"." ),
-                    fpname.c_str(), nickname.c_str()  );
-
-        footprint = Prj().PcbFootprintLibs( Kiway() )->FootprintLoad(
-                FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
+        footprint = fpTable->FootprintLoad( libNickname, fpName );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -359,8 +401,8 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
         return footprint;
     }
 
-    wxString msg = wxString::Format( _( "Footprint \"%s\" not found" ), aFootprintName.GetData() );
-    DisplayError( this, msg );
+    wxString msg = wxString::Format( _( "Footprint \"%s\" not found." ), aFootprintName );
+    m_infoBar->ShowMessage( msg, wxICON_ERROR );
     return NULL;
 }
 
