@@ -146,6 +146,8 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::Show( bool aShow )
         m_bitmapEdgeClearance->SetBitmap( KiBitmap( edge_to_copper_clearance_xpm ) );
         m_bitmapBlindBuried->SetBitmap( KiBitmap( via_buried_xpm ) );
         m_bitmap_uVia->SetBitmap( KiBitmap( via_microvia_xpm ) );
+
+        Layout();
     }
 
     return retVal;

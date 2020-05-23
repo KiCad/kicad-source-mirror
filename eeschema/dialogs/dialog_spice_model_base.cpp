@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -237,6 +237,14 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_modelType = new wxComboBox( m_model, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	fgSizer3->Add( m_modelType, 0, wxALL|wxEXPAND, 5 );
 
+	m_staticTextNote = new wxStaticText( m_model, wxID_ANY, _("Note:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNote->Wrap( -1 );
+	fgSizer3->Add( m_staticTextNote, 0, wxALL, 5 );
+
+	m_stInfoNote = new wxStaticText( m_model, wxID_ANY, _("note"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stInfoNote->Wrap( -1 );
+	fgSizer3->Add( m_stInfoNote, 0, wxALL, 5 );
+
 
 	bSizer6->Add( fgSizer3, 0, wxEXPAND, 5 );
 
@@ -253,6 +261,10 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_libraryContents->SetMarginWidth( 1, 0 );
 	m_libraryContents->SetMarginType( 0, wxSTC_MARGIN_NUMBER );
 	m_libraryContents->SetMarginWidth( 0, m_libraryContents->TextWidth( wxSTC_STYLE_LINENUMBER, wxT("_99999") ) );
+	{
+		wxFont font = wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString );
+		m_libraryContents->StyleSetFont( wxSTC_STYLE_DEFAULT, font );
+	}
 	m_libraryContents->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
 	m_libraryContents->MarkerSetBackground( wxSTC_MARKNUM_FOLDER, wxColour( wxT("BLACK") ) );
 	m_libraryContents->MarkerSetForeground( wxSTC_MARKNUM_FOLDER, wxColour( wxT("WHITE") ) );
@@ -270,6 +282,8 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_libraryContents->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
 	m_libraryContents->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 	m_libraryContents->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+	m_libraryContents->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+
 	bSizer6->Add( m_libraryContents, 1, wxEXPAND | wxALL, 5 );
 
 
@@ -965,6 +979,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_selectLibrary->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSelectLibrary ), NULL, this );
 	m_modelName->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelSelected ), NULL, this );
 	m_modelName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelSelected ), NULL, this );
+	m_modelType->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onTypeSelected ), NULL, this );
 	m_pwlAddButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlAdd ), NULL, this );
 	m_pwlRemoveBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlRemove ), NULL, this );
 	m_rnType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onRandomSourceType ), NULL, this );
@@ -977,6 +992,7 @@ DIALOG_SPICE_MODEL_BASE::~DIALOG_SPICE_MODEL_BASE()
 	m_selectLibrary->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSelectLibrary ), NULL, this );
 	m_modelName->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelSelected ), NULL, this );
 	m_modelName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelSelected ), NULL, this );
+	m_modelType->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onTypeSelected ), NULL, this );
 	m_pwlAddButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlAdd ), NULL, this );
 	m_pwlRemoveBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlRemove ), NULL, this );
 	m_rnType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onRandomSourceType ), NULL, this );

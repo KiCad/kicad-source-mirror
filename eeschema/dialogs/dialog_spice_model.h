@@ -107,12 +107,18 @@ private:
      */
     void Init();
 
+    /**
+     * Display a note info about pin order
+     */
+    void showPinOrderNote( int aModelType );
+
     // Event handlers
     void onSelectLibrary( wxCommandEvent& event ) override;
     void onModelSelected( wxCommandEvent& event ) override;
     void onPwlAdd( wxCommandEvent& event ) override;
     void onPwlRemove( wxCommandEvent& event ) override;
     void onRandomSourceType( wxCommandEvent& event ) override;
+    void onTypeSelected( wxCommandEvent& event ) override;
 
     ///> Edited component
     SCH_COMPONENT& m_component;

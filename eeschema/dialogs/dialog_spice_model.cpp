@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019  KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2020  KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2016-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -338,7 +338,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
     }
 
     // Analyze the component fields to fill out the dialog
-    char primitive = toupper( m_fieldsTmp[SF_PRIMITIVE][0] );
+    unsigned int primitive = toupper( m_fieldsTmp[SF_PRIMITIVE][0] );
 
     switch( primitive )
     {
@@ -395,7 +395,46 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
         m_nodeSeqVal->SetValue( m_fieldsTmp[SF_NODE_SEQUENCE] );
     }
 
+    showPinOrderNote( primitive );
+
     return DIALOG_SPICE_MODEL_BASE::TransferDataToWindow();
+}
+
+
+void DIALOG_SPICE_MODEL::showPinOrderNote( int aModelType )
+{
+    // Display a note info about pin order, according to aModelType
+    wxString msg;
+
+    msg = _( "Symbol pin numbering don't always match the required SPICE pin order\n"
+             "Check the symbol and \"useAlternate node sequence\" to reorder the pins"
+             ", if necessary" );
+
+    msg += '\n';
+
+    switch( aModelType )
+    {
+    case SP_DIODE:
+        msg += _( "For a Diode, pin order is anode, cathode" );
+        break;
+
+    case SP_BJT:
+        msg += _( "For a BJT, pin order is collector, base, emitter, substrate (optional)" );
+        break;
+
+    case SP_MOSFET:
+        msg += _( "For a MOSFET, pin order is drain, grid, source" );
+        break;
+
+    case SP_JFET:
+        msg += _( "For a JFET, pin order is drain, grid, source" );
+        break;
+
+    default:
+        break;
+    }
+
+    m_stInfoNote->SetLabel( msg );
 }
 
 
@@ -971,6 +1010,14 @@ void DIALOG_SPICE_MODEL::onModelSelected( wxCommandEvent& event )
     {
         m_libraryContents->ShowPosition( 0 );
     }
+}
+
+
+void DIALOG_SPICE_MODEL::onTypeSelected( wxCommandEvent& event )
+{
+    int type = m_modelType->GetSelection();
+    int primitive = type >= 0 ? modelTypes[type].type : SP_SUBCKT;
+    showPinOrderNote( primitive );
 }
 
 

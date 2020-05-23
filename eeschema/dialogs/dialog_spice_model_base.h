@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -92,6 +92,8 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxComboBox* m_modelName;
 		wxStaticText* m_staticText4;
 		wxComboBox* m_modelType;
+		wxStaticText* m_staticTextNote;
+		wxStaticText* m_stInfoNote;
 		wxStyledTextCtrl* m_libraryContents;
 		wxPanel* m_power;
 		wxStaticText* m_staticText10;
@@ -241,6 +243,7 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		virtual void onInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onSelectLibrary( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModelSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTypeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlAdd( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlRemove( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRandomSourceType( wxCommandEvent& event ) { event.Skip(); }
