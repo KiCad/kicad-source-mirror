@@ -192,7 +192,7 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
 
 XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
 {
-    XNODE*      xcomps = node( "components" );
+    XNODE* xcomps = node( "components" );
 
     m_ReferencesAlreadyFound.Clear();
     m_LibParts.clear();
@@ -202,12 +202,16 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
     // Output is xml, so there is no reason to remove spaces from the field values.
     // And XML element names need not be translated to various languages.
 
-    for( unsigned i = 0;  i < sheetList.size();  i++ )
+    for( unsigned i = 0; i < sheetList.size(); i++ )
     {
+        SCH_SHEET_PATH sheet = sheetList[i];
 
-        auto cmp = []( const SCH_COMPONENT* a, const SCH_COMPONENT* b ) {
-            return a->GetField( REFERENCE )->GetText() < b->GetField( REFERENCE )->GetText();
-        };
+        auto cmp =
+                [sheet]( SCH_COMPONENT* a, SCH_COMPONENT* b )
+                {
+                    return ( UTIL::RefDesStringCompare( a->GetRef( &sheet ),
+                                                        b->GetRef( &sheet ) ) < 0 );
+                };
 
         std::set<SCH_COMPONENT*, decltype( cmp )> ordered_components( cmp );
 
@@ -226,10 +230,9 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             }
         }
 
-
         for( auto item : ordered_components )
         {
-            SCH_COMPONENT* comp = findNextComponent( item, &sheetList[i] );
+            SCH_COMPONENT* comp = findNextComponent( item, &sheet );
 
             if( !comp )
                 continue;
@@ -242,7 +245,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             // an element.
 
             xcomps->AddChild( xcomp = node( "comp" ) );
-            xcomp->AddAttribute( "ref", comp->GetRef( &sheetList[i] ) );
+            xcomp->AddAttribute( "ref", comp->GetRef( &sheet ) );
 
             addComponentFields( xcomp, comp, &sheetList[i] );
 
@@ -263,8 +266,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             XNODE* xsheetpath;
 
             xcomp->AddChild( xsheetpath = node( "sheetpath" ) );
-            xsheetpath->AddAttribute( "names", sheetList[i].PathHumanReadable() );
-            xsheetpath->AddAttribute( "tstamps", sheetList[i].PathAsString() );
+            xsheetpath->AddAttribute( "names", sheet.PathHumanReadable() );
+            xsheetpath->AddAttribute( "tstamps", sheet.PathAsString() );
             xcomp->AddChild( node( "tstamp", comp->m_Uuid.AsString() ) );
         }
     }
