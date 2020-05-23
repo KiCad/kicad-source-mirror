@@ -20,8 +20,6 @@ include_directories(
 set( CVPCB_DIALOGS
     dialogs/fp_conflict_assignment_selector_base.cpp
     dialogs/fp_conflict_assignment_selector.cpp
-    dialogs/dialog_display_options.cpp
-    dialogs/dialog_display_options_base.cpp
     dialogs/dialog_config_equfiles_base.cpp
     dialogs/dialog_config_equfiles.cpp
     )

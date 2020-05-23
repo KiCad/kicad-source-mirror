@@ -41,9 +41,6 @@
  */
 class DISPLAY_FOOTPRINTS_FRAME : public PCB_BASE_FRAME
 {
-    bool   m_autoZoom;
-    double m_lastZoom;
-
 public:
     DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~DISPLAY_FOOTPRINTS_FRAME() override;
@@ -83,9 +80,6 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
     void UpdateMsgPanel() override;
 
-    bool GetAutoZoom() const { return m_autoZoom; }
-    void SetAutoZoom( bool aEnable ) { m_autoZoom = aEnable; }
-
     COLOR_SETTINGS* GetColorSettings() override;
 
     /**
@@ -94,7 +88,6 @@ public:
      */
     COLOR4D GetGridColor() override;
 
-    void    InstallOptionsDisplay( wxCommandEvent& event );
     MODULE* Get_Module( const wxString& CmpName );
 
     /* SaveCopyInUndoList() virtual
@@ -123,6 +116,20 @@ public:
     }
 
     void SyncToolbars() override;
+
+    /**
+     * Set if the canvas should automatically zoom to the footprint on load.
+     *
+     * @param aAutoZoom is true if it should automatically zoom
+     */
+    void SetAutoZoom( bool aAutoZoom ) override;
+
+    /**
+     * Get if the canvas should automatically zoom to the footprint on load.
+     *
+     * @return true if it should automatically zoom
+     */
+    bool GetAutoZoom() override;
 
     DECLARE_EVENT_TABLE()
 };

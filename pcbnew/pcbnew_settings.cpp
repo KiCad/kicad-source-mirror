@@ -43,11 +43,14 @@
 const int pcbnewSchemaVersion = 0;
 
 
-PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
-        m_Use45DegreeGraphicSegments( false ),
-        m_FlipLeftRight( false ),
-        m_ShowPageLimits( true ),
-        m_PnsSettings( nullptr )
+PCBNEW_SETTINGS::PCBNEW_SETTINGS()
+        : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
+          m_Use45DegreeGraphicSegments( false ),
+          m_FlipLeftRight( false ),
+          m_ShowPageLimits( true ),
+          m_PnsSettings( nullptr ),
+          m_FootprintViewerAutoZoom( false ),
+          m_FootprintViewerZoom( 1.0 )
 {
     m_MagneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
     m_MagneticItems.tracks   = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
@@ -74,10 +77,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
     m_params.emplace_back( new PARAM<int>( "grid.fast_grid_1", &m_FastGrid1, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "grid.fast_grid_2", &m_FastGrid2, 0 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "window.auto_zoom", &m_Window.auto_zoom, true ) );
-
-    m_params.emplace_back( new PARAM<double>( "window.zoom", &m_Window.zoom, 10.0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right", &m_FlipLeftRight, true ) );
 
@@ -396,6 +395,12 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
 
     addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );
 
+    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.auto_zoom",
+            &m_FootprintViewerAutoZoom, false ) );
+
+    m_params.emplace_back( new PARAM<double>( "footprint_viewer.zoom",
+            &m_FootprintViewerZoom, 1.0 ) );
+
     addParamsForWindow( &m_FootprintWizard, "footprint_wizard" );
 }
 
@@ -595,6 +600,9 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>( aCfg, "FpWizardListHeight",       "footprint_wizard_list.height" );
 
     migrateWindowConfig( aCfg, "ModViewFrame", "footprint_viewer" );
+
+    ret &= fromLegacy<bool>( aCfg, "ModViewFrameAutoZoom",   "footprint_viewer.auto_zoom" );
+    ret &= fromLegacy<double>( aCfg, "ModViewFrameZoom",     "footprint_viewer.zoom" );
 
     migrateWindowConfig( aCfg, "FootprintWizard", "footprint_wizard" );
     ret &= fromLegacyString( aCfg, "Fpwizard_auiPerspective", "footprint_wizard.perspective" );

@@ -86,6 +86,34 @@ template<class T> void Flip( T& aValue )
 }
 
 
+int PCB_VIEWER_TOOLS::ZoomAutomatically( const TOOL_EVENT& aEvent )
+{
+    frame()->SetAutoZoom( !frame()->GetAutoZoom() );
+
+    return 0;
+}
+
+
+int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
+{
+    auto opts = displayOptions();
+
+    Flip( opts.m_DisplayPadNum );
+    frame()->SetDisplayOptions( opts );
+    view()->UpdateDisplayOptions( opts );
+
+    for( auto module : board()->Modules() )
+    {
+        for( auto pad : module->Pads() )
+            view()->Update( pad, KIGFX::GEOMETRY );
+    }
+
+    canvas()->Refresh();
+
+    return 0;
+}
+
+
 int PCB_VIEWER_TOOLS::PadDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
@@ -292,9 +320,12 @@ void PCB_VIEWER_TOOLS::setTransitions()
     Go( &PCB_VIEWER_TOOLS::Show3DViewer,         ACTIONS::show3DViewer.MakeEvent() );
 
     // Display modes
+    Go( &PCB_VIEWER_TOOLS::ShowPadNumbers,       PCB_ACTIONS::showPadNumbers.MakeEvent() );
     Go( &PCB_VIEWER_TOOLS::PadDisplayMode,       PCB_ACTIONS::padDisplayMode.MakeEvent() );
     Go( &PCB_VIEWER_TOOLS::ModuleEdgeOutlines,   PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
     Go( &PCB_VIEWER_TOOLS::ModuleTextOutlines,   PCB_ACTIONS::moduleTextOutlines.MakeEvent() );
+    Go( &PCB_VIEWER_TOOLS::ZoomAutomatically,
+            PCB_ACTIONS::zoomFootprintAutomatically.MakeEvent() );
 
     Go( &PCB_VIEWER_TOOLS::MeasureTool,          ACTIONS::measureTool.MakeEvent() );
 }

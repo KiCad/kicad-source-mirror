@@ -50,11 +50,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT  );
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_MODVIEW_OPTIONS, wxEmptyString,
-                            KiScaledBitmap( config_xpm, this ),
-                            _( "Display options" ) );
-
-    m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MODVIEW_PREVIOUS, wxEmptyString,
                             KiScaledBitmap( lib_previous_xpm, this ),
                             _( "Display previous footprint" ) );
@@ -67,6 +62,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    m_mainToolBar->Add( ACTIONS::zoomTool,                       ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( PCB_ACTIONS::zoomFootprintAutomatically, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( ACTIONS::show3DViewer );
@@ -101,8 +98,60 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 }
 
 
+void FOOTPRINT_VIEWER_FRAME::ReCreateOptToolbar()
+{
+    if( m_optionsToolBar )
+        return;
+
+    // Create options tool bar.
+    m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                           KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+
+    m_optionsToolBar->Add( ACTIONS::selectionTool,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::measureTool,            ACTION_TOOLBAR::TOGGLE );
+
+    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::togglePolarCoords,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,            ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
+
+    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->Add( PCB_ACTIONS::showPadNumbers,     ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,     ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::moduleTextOutlines, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::moduleEdgeOutlines, ACTION_TOOLBAR::TOGGLE );
+
+    m_optionsToolBar->Realize();
+}
+
+
 void FOOTPRINT_VIEWER_FRAME::ReCreateVToolbar()
 {
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::SyncToolbars()
+{
+    m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
+    m_mainToolBar->Toggle( PCB_ACTIONS::zoomFootprintAutomatically, GetAutoZoom() );
+    m_mainToolBar->Refresh();
+
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,    IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::selectionTool, IsCurrentTool( ACTIONS::selectionTool ) );
+    m_optionsToolBar->Toggle( ACTIONS::measureTool,   IsCurrentTool( ACTIONS::measureTool ) );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,   GetUserUnits() != EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
+
+    const PCB_DISPLAY_OPTIONS& opts = GetDisplayOptions();
+
+    m_optionsToolBar->Toggle( PCB_ACTIONS::showPadNumbers,     opts.m_DisplayPadNum );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,     !opts.m_DisplayPadFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::moduleTextOutlines, !opts.m_DisplayModTextFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines, !opts.m_DisplayModEdgeFill );
+
+    m_optionsToolBar->Refresh();
 }
 
 

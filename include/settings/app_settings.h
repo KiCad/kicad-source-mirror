@@ -61,8 +61,6 @@ struct WINDOW_SETTINGS
 
     CURSOR_SETTINGS cursor;
     GRID_SETTINGS grid;
-    bool auto_zoom;
-    double zoom;
 };
 
 /**

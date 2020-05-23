@@ -379,6 +379,7 @@ set( BMAPS_MID
     pad_sketch
     pad
     pad_enumerate
+    pad_number
     pads_mask_layers
     path
     pagelayout_load
@@ -517,6 +518,7 @@ set( BMAPS_MID
     zone_unfill
     zoom
     zoom_area
+    zoom_auto_fit_in_page
     zoom_fit_in_page
     zoom_center_on_screen
     zoom_in

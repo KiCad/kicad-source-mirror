@@ -52,6 +52,8 @@
 #include <tool/common_tools.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
+#include <tool/zoom_tool.h>
+#include <tools/pcb_viewer_tools.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcbnew_control.h>
 #include <tools/pcbnew_picker_tool.h>
@@ -77,7 +79,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_CLOSE, FOOTPRINT_VIEWER_FRAME::CloseFootprintViewer )
 
     // Toolbar events
-    EVT_TOOL( ID_MODVIEW_OPTIONS, FOOTPRINT_VIEWER_FRAME::InstallDisplayOptions )
     EVT_TOOL( ID_MODVIEW_NEXT, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
     EVT_TOOL( ID_MODVIEW_PREVIOUS, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
     EVT_TOOL( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB )
@@ -126,6 +127,11 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
         SetModal( true );
 
     m_AboutTitle = "Footprint Library Viewer";
+
+    // Force the items to always snap
+    m_magneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+    m_magneticItems.tracks   = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+    m_magneticItems.graphics = true;
 
     // Force the frame name used in config. the footprint viewer frame has a name
     // depending on aFrameType (needed to identify the frame by wxWidgets),
@@ -210,12 +216,18 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->RegisterTool( new COMMON_TOOLS );    // for std context menus (zoom & grid)
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new PCBNEW_PICKER_TOOL ); // for setting grid origin
+    m_toolManager->RegisterTool( new ZOOM_TOOL );
+    m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
+
+    m_toolManager->GetTool<PCB_VIEWER_TOOLS>()->SetFootprintFrame( true );
+
     m_toolManager->InitTools();
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
+    ReCreateOptToolbar();
 
     ReCreateLibraryList();
     UpdateTitle();
@@ -236,6 +248,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     // Horizontal items; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().VToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
     // Vertical items; layers 1 - 3
@@ -256,7 +269,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     ActivateGalCanvas();
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
-    GetCanvas()->GetView()->SetScale( m_lastZoom );
+    PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
+    wxASSERT( cfg );
+    GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
 
     updateView();
     InitExitKey();
@@ -715,9 +730,6 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     SetGridVisibility( fpedit->m_Window.grid.show );
 
     GetGalDisplayOptions().ReadWindowSettings( fpedit->m_Window );
-
-    m_autoZoom = cfg->m_FootprintViewer.auto_zoom;
-    m_lastZoom = cfg->m_FootprintViewer.zoom;
 }
 
 
@@ -729,8 +741,7 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     // We don't want to store anything other than the window settings
     EDA_BASE_FRAME::SaveSettings( cfg );
 
-    cfg->m_FootprintViewer.auto_zoom = m_autoZoom;
-    cfg->m_FootprintViewer.zoom      = GetCanvas()->GetView()->GetScale();
+    cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
 }
 
 
@@ -751,6 +762,24 @@ COLOR_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetColorSettings()
         return Pgm().GetSettingsManager().GetColorSettings( settings->m_ColorTheme );
     else
         return Pgm().GetSettingsManager().GetColorSettings();
+}
+
+
+bool FOOTPRINT_VIEWER_FRAME::GetAutoZoom()
+{
+    // It is stored in pcbnew's settings
+    PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
+    wxCHECK( cfg, false );
+    return cfg->m_FootprintViewerAutoZoom;
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::SetAutoZoom( bool aAutoZoom )
+{
+    // It is stored in pcbnew's settings
+    PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
+    wxASSERT( cfg );
+    cfg->m_FootprintViewerAutoZoom = aAutoZoom;
 }
 
 
@@ -995,7 +1024,7 @@ void FOOTPRINT_VIEWER_FRAME::updateView()
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    if( m_autoZoom )
+    if( GetAutoZoom() )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     else
         m_toolManager->RunAction( ACTIONS::centerContents, true );
@@ -1020,3 +1049,4 @@ BOARD_ITEM_CONTAINER* FOOTPRINT_VIEWER_FRAME::GetModel() const
 {
     return GetBoard()->GetFirstModule();
 }
+

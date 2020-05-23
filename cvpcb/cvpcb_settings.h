@@ -43,6 +43,10 @@ public:
 
     MAGNETIC_SETTINGS m_FootprintViewerMagneticSettings;
 
+    bool m_FootprintViewerAutoZoom;
+
+    double m_FootprintViewerZoom;
+
     int m_FilterFootprint;
 
 protected:

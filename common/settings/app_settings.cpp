@@ -221,9 +221,6 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
     ret &= fromLegacy<int>(    aCfg, aFrame + gd + "GridStyle",       aJsonPath + ".grid.style" );
     ret &= fromLegacyColor(    aCfg, aFrame + gd + "GridColor",       aJsonPath + ".grid.color" );
 
-    ret &= fromLegacy<bool>(   aCfg, aFrame + "AutoZoom",            aJsonPath + ".auto_zoom" );
-    ret &= fromLegacy<double>( aCfg, aFrame + "Zoom",                aJsonPath + ".zoom" );
-
     return ret;
 }
 

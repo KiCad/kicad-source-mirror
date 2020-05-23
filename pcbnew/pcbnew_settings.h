@@ -272,6 +272,10 @@ public:
 
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_PnsSettings;
 
+    bool m_FootprintViewerAutoZoom;     ///< Should the footprint viewer auto zoom on select
+
+    double m_FootprintViewerZoom;       ///< The last zoom level in the footprint viewer
+
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     ACTION_PLUGIN_SETTINGS_LIST m_VisibleActionPlugins;
 #endif

@@ -698,6 +698,16 @@ TOOL_ACTION PCB_ACTIONS::moduleTextOutlines( "pcbnew.Control.fpTextOutlines",
         _( "Line Mode Footprint Text Items" ), _( "Show footprint texts in line mode" ),
         text_sketch_xpm );
 
+TOOL_ACTION PCB_ACTIONS::showPadNumbers( "pcbnew.Control.showPadNumbers",
+        AS_GLOBAL, 0, "",
+        _( "Show pad numbers" ), _( "Show pad numbers" ),
+        pad_number_xpm );
+
+TOOL_ACTION PCB_ACTIONS::zoomFootprintAutomatically( "pcbnew.Control.zoomFootprintAutomatically",
+        AS_GLOBAL, 0, "",
+        _( "Automatically zoom to fit" ), _( "Zoom to fit when changing footprint" ),
+        zoom_auto_fit_in_page_xpm );
+
 TOOL_ACTION PCB_ACTIONS::zoneDisplayEnable( "pcbnew.Control.zoneDisplayEnable",
         AS_GLOBAL, 0, "",
         _( "Fill Zones" ), _( "Show filled areas of zones" ),

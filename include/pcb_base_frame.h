@@ -473,6 +473,18 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
     virtual void ActivateGalCanvas() override;
 
+    /**
+     * Doesn't do anything. Should be overrided in child classes if they
+     * support an auto zoom setting.
+     */
+    virtual void SetAutoZoom( bool aAutoZoom ) {}
+
+    /**
+     * Always returns false. Should be overriden in child classes if they
+     * support an autozoom setting.
+     */
+    virtual bool GetAutoZoom() { return false; }
+
     DECLARE_EVENT_TABLE()
 };
 

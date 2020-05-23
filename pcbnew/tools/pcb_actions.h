@@ -227,6 +227,8 @@ public:
     static TOOL_ACTION zoneDisplayDisable;
     static TOOL_ACTION zoneDisplayOutlines;
     static TOOL_ACTION zoneDisplayToggle;
+    static TOOL_ACTION showPadNumbers;
+    static TOOL_ACTION zoomFootprintAutomatically;
 
     // Layer control
     static TOOL_ACTION layerTop;

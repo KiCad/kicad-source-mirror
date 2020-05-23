@@ -29,15 +29,16 @@
 ///! Update the schema version whenever a migration is required
 const int cvpcbSchemaVersion = 0;
 
-CVPCB_SETTINGS::CVPCB_SETTINGS() :
-        APP_SETTINGS_BASE( "cvpcb", cvpcbSchemaVersion )
+CVPCB_SETTINGS::CVPCB_SETTINGS()
+        : APP_SETTINGS_BASE( "cvpcb", cvpcbSchemaVersion ),
+          m_FootprintViewerAutoZoom( false ),
+          m_FootprintViewerZoom( 1.0 ),
+          m_FilterFootprint( 0 )
 {
-    // Make Coverity happy:
-    m_FilterFootprint = 0;
-
-    m_FootprintViewerMagneticSettings.pads     = MAGNETIC_OPTIONS::NO_EFFECT;
-    m_FootprintViewerMagneticSettings.tracks   = MAGNETIC_OPTIONS::NO_EFFECT;
-    m_FootprintViewerMagneticSettings.graphics = false;
+    // We always snap and don't let the user configure it
+    m_FootprintViewerMagneticSettings.pads     = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+    m_FootprintViewerMagneticSettings.tracks   = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+    m_FootprintViewerMagneticSettings.graphics = true;
 
     // Init settings:
     m_params.emplace_back( new PARAM<int>( "filter_footprint", &m_FilterFootprint, 0 ) );
@@ -57,12 +58,12 @@ CVPCB_SETTINGS::CVPCB_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "footprint_viewer.graphic_items_fill",
             &m_FootprintViewerDisplayOptions.m_DisplayDrawItemsFill, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.magnetic_graphics",
-            &m_FootprintViewerMagneticSettings.graphics, false ) );
+    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.auto_zoom",
+            &m_FootprintViewerAutoZoom, false ) );
 
-    m_params.emplace_back( new PARAM<int>( "footprint_viewer.magnetic_pads",
-            reinterpret_cast<int*>( &m_FootprintViewerMagneticSettings.pads ),
-            static_cast<int>( MAGNETIC_OPTIONS::NO_EFFECT ) ) );
+    m_params.emplace_back( new PARAM<double>( "footprint_viewer.zoom",
+            &m_FootprintViewerZoom, 1.0 ) );
+
 }
 
 
@@ -78,6 +79,9 @@ bool CVPCB_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "FootprintViewerFrameDiPadNu", "footprint_viewer.pad_numbers" );
     ret &= fromLegacy<bool>(
             aCfg, "FootprintViewerFrameDiModTx", "footprint_viewer.footprint_text_fill" );
+
+    ret &= fromLegacy<bool>( aCfg, "FootprintViewerFrameAutoZoom",   "footprint_viewer.auto_zoom" );
+    ret &= fromLegacy<double>( aCfg, "FootprintViewerFrameZoom",     "footprint_viewer.zoom" );
 
     return ret;
 }

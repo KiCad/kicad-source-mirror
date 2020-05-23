@@ -28,6 +28,7 @@
 
 #include <wx/gdicmn.h>
 #include <pcb_base_frame.h>
+#include <pcbnew_settings.h>
 
 class wxSashLayoutWindow;
 class wxListBox;
@@ -46,6 +47,8 @@ class FOOTPRINT_VIEWER_FRAME : public PCB_BASE_FRAME
 protected:
     FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType );
 
+    MAGNETIC_SETTINGS m_magneticItems;
+
 
 public:
     ~FOOTPRINT_VIEWER_FRAME();
@@ -58,8 +61,13 @@ public:
 
     virtual COLOR4D GetGridColor() override;
 
-    bool GetAutoZoom() const { return m_autoZoom; }
-    void SetAutoZoom( bool aEnable ) { m_autoZoom = aEnable; }
+    bool GetAutoZoom() override;
+    void SetAutoZoom( bool aAutoZoom ) override;
+
+    MAGNETIC_SETTINGS* GetMagneticItemsSettings() override
+    {
+        return &m_magneticItems;
+    }
 
     /**
      * Function ReCreateLibraryList
@@ -117,7 +125,9 @@ private:
 
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
+    void ReCreateOptToolbar() override;
     void ReCreateMenuBar() override;
+    void SyncToolbars() override;
 
     void OnLibFilter( wxCommandEvent& aEvent );
     void OnFPFilter( wxCommandEvent& aEvent );
@@ -128,8 +138,6 @@ private:
     void ClickOnLibList( wxCommandEvent& aEvent );
     void ClickOnFootprintList( wxCommandEvent& aEvent );
     void DClickOnFootprintList( wxCommandEvent& aEvent );
-
-    void InstallDisplayOptions( wxCommandEvent& aEvent );
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;

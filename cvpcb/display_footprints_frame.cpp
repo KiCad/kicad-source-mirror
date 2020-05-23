@@ -55,7 +55,6 @@
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
-    EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectGrid )
 END_EVENT_TABLE()
@@ -145,7 +144,9 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     ActivateGalCanvas();
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
-    GetCanvas()->GetView()->SetScale( m_lastZoom );
+    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
+    wxASSERT( cfg );
+    GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
 
     updateView();
 
@@ -192,9 +193,6 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
     m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    // TODO: these can be moved to the 'proper' right vertical toolbar if and when there are
-    // actual tools to put there. That, or I'll get around to implementing configurable
-    // toolbars.
     m_optionsToolBar->Add( ACTIONS::selectionTool,          ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::measureTool,            ACTION_TOOLBAR::TOGGLE );
 
@@ -206,6 +204,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->Add( PCB_ACTIONS::showPadNumbers,     ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,     ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::moduleTextOutlines, ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::moduleEdgeOutlines, ACTION_TOOLBAR::TOGGLE );
@@ -222,15 +221,13 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                         KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    m_mainToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, KiScaledBitmap( config_xpm, this ),
-                            _( "Display options" ) );
-
     m_mainToolBar->AddSeparator();
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( ACTIONS::zoomTool,                       ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( PCB_ACTIONS::zoomFootprintAutomatically, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->Add( ACTIONS::show3DViewer );
@@ -265,9 +262,6 @@ void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     EDA_DRAW_FRAME::LoadSettings( cfg );
 
     SetDisplayOptions( cfg->m_FootprintViewerDisplayOptions );
-
-    m_autoZoom = cfg->m_FootprintViewer.auto_zoom;
-    m_lastZoom = cfg->m_FootprintViewer.zoom;
 }
 
 
@@ -280,8 +274,7 @@ void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     cfg->m_FootprintViewerDisplayOptions = GetDisplayOptions();
 
-    cfg->m_FootprintViewer.auto_zoom = m_autoZoom;
-    cfg->m_FootprintViewer.zoom      = GetCanvas()->GetView()->GetScale();
+    cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
 }
 
 
@@ -425,7 +418,7 @@ void DISPLAY_FOOTPRINTS_FRAME::updateView()
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    if( m_autoZoom )
+    if( GetAutoZoom() )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     else
         m_toolManager->RunAction( ACTIONS::centerContents, true );
@@ -449,6 +442,7 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
 {
     m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
+    m_mainToolBar->Toggle( PCB_ACTIONS::zoomFootprintAutomatically, GetAutoZoom() );
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,    IsGridVisible() );
@@ -456,6 +450,14 @@ void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( ACTIONS::measureTool,   IsCurrentTool( ACTIONS::measureTool ) );
     m_optionsToolBar->Toggle( ACTIONS::metricUnits,   GetUserUnits() != EDA_UNITS::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
+
+    const PCB_DISPLAY_OPTIONS& opts = GetDisplayOptions();
+
+    m_optionsToolBar->Toggle( PCB_ACTIONS::showPadNumbers,     opts.m_DisplayPadNum );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,     !opts.m_DisplayPadFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::moduleTextOutlines, !opts.m_DisplayModTextFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines, !opts.m_DisplayModEdgeFill );
+
     m_optionsToolBar->Refresh();
 }
 
@@ -474,4 +476,20 @@ COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings()
 BOARD_ITEM_CONTAINER* DISPLAY_FOOTPRINTS_FRAME::GetModel() const
 {
     return GetBoard()->GetFirstModule();
+}
+
+
+void DISPLAY_FOOTPRINTS_FRAME::SetAutoZoom( bool aAutoZoom )
+{
+    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
+    wxASSERT( cfg );
+    cfg->m_FootprintViewerAutoZoom = aAutoZoom;
+}
+
+
+bool DISPLAY_FOOTPRINTS_FRAME::GetAutoZoom()
+{
+    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
+    wxASSERT( cfg );
+    return cfg->m_FootprintViewerAutoZoom;
 }

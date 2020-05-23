@@ -105,8 +105,6 @@ enum main_id
     ID_GEN_EXPORT_FILE,
     ID_GEN_IMPORT_FILE,
 
-    ID_OPTIONS_SETUP,
-
     // id for toolbars
     ID_H_TOOLBAR,
     ID_V_TOOLBAR,
