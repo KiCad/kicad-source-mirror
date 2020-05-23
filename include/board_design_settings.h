@@ -397,10 +397,6 @@ public:
      */
     int GetSmallestClearanceValue();
 
-    int GetRuleClearance( const BOARD_ITEM* aItem, const NETCLASS* aItemNetclass,
-                          const BOARD_ITEM* bItem, const NETCLASS* bItemNetclass,
-                          wxString* aSource );
-
     /**
      * Function GetCurrentMicroViaSize
      * @return the current micro via size,

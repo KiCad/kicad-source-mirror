@@ -29,31 +29,12 @@
 #include <class_board_item.h>
 
 /*
- * Match tokens:
- *     match_netclass
- *     match_type
- *     match_layer
- *     match_all
- *     match_area
+ * Rule tokens:
+ *     disallow
+ *     constraint
+ *     condition
  *
- *     (selector (match_area "$board") (rule "OSHParkClass3") (priority 100))
- *
- *     (selector (match_netclass "HV") (rule "HV_internal"))
- *     (selector (match_netclass "HV") (match_layer "F_Cu") (rule "HV_external"))
- *     (selector (match_netclass "HV") (match_layer "B_Cu") (rule "HV_external"))
- *
- *     (selector (match_netclass "HV") (match_netclass "HV") (rule "HV2HV"))
- *     (selector (match_netclass "HV") (match_netclass "HV") (match_layer "F_Cu") (rule "HV2HV_external"))
- *     (selector (match_netclass "HV") (match_netclass "HV") (match_layer "B_Cu") (rule "HV2HV_external"))
- *
- *   TODO: pads for connector pins or wire pads have even larger clearances.  How to encode?
- *   User attributes on parent footprint?
- *
- *     (selector (match_netclass "HV") (match_type "pad") (match_netclass "HV") (match_type "pad") (rule "pad2PadHV"))
- *
- *     (selector (match_netclass "signal") (match_area "BGA") (rule "neckdown"))
- *
- * Type tokens:
+ * Disallow types:
  *     track
  *     via
  *     micro_via
@@ -62,40 +43,46 @@
  *     zone
  *     text
  *     graphic
- *     board_edge
  *     hole
- *     npth
- *     pth
  *
- * Rule tokens:
- *     allow
+ * Constraint types:
  *     clearance
  *     annulus_width
  *     track_width
  *     hole
  *
- * Rule modifiers:
- *     relaxed
  *
- *     (rule "HV" (clearance 200) (priority 200))
- *     (rule "HV_external" (clearance 400) (priority 200))
- *     (rule "HV2HV" (clearance 200) (priority 200))
- *     (rule "HV2HV_external" (clearance 500) (priority 200))
- *     (rule "pad2padHV" (clearance 500) (priority 200))
+ *     (rule "HV" (constraint clearance (min 200)))
+ *     (rule "HV_external" (constraint clearance (min 400)))
+ *     (rule "HV2HV" (constraint clearance (min 200)))
+ *     (rule "HV2HV_external" (constraint clearance (min 500)))
+ *     (rule "pad2padHV" (constraint clearance (min 500)))
  *
- *     (rule "signal" (clearance 20))                       // implied priority of 1
- *     (rule "neckdown" (clearance relaxed 15) (priority 2))
+ *     (rule "signal" (constraint clearance (min 20)))
+ *     (rule "neckdown" (constraint clearance (min 15)))
  *
- *     (rule "allowMicrovias" (allow microvia))
+ *     (rule "disallowMicrovias" (disallow micro_via))
  */
 
-
-void MatchSelectors( const std::vector<DRC_SELECTOR*>& aSelectors,
-                     const BOARD_ITEM* aItem, const NETCLASS* aNetclass,
-                     const BOARD_ITEM* bItem, const NETCLASS* bNetclass,
-                     std::vector<DRC_SELECTOR*>* aSelected )
+DRC_RULE* GetRule( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem, int aConstraint )
 {
-    for( DRC_SELECTOR* candidate : aSelectors )
+    // JEY TODO: the bulk of this will be replaced by Tom's expression evaluator
+
+    BOARD* board = aItem->GetBoard();
+
+    if( !board )
+        return nullptr;
+
+    NETCLASS* aNetclass = nullptr;
+    NETCLASS* bNetclass = nullptr;
+
+    if( aItem->IsConnected() )
+        aNetclass = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetEffectiveNetclass();
+
+    if( bItem && bItem->IsConnected() )
+        bNetclass = static_cast<const BOARD_CONNECTED_ITEM*>( bItem )->GetEffectiveNetclass();
+
+    for( DRC_SELECTOR* candidate : board->GetDesignSettings().m_DRCRuleSelectors )
     {
         if( candidate->m_MatchNetclasses.size() == 2 )
         {
@@ -145,11 +132,8 @@ void MatchSelectors( const std::vector<DRC_SELECTOR*>& aSelectors,
         {
             PCB_LAYER_ID matchLayer = candidate->m_MatchLayers[0];
 
-            if( !aItem->GetLayerSet().test( matchLayer )
-                    || ( bItem && !bItem->GetLayerSet().test( matchLayer ) ) )
-            {
+            if( !aItem->GetLayerSet().test( matchLayer ) )
                 continue;
-            }
         }
 
         if( candidate->m_MatchAreas.size() )
@@ -165,8 +149,12 @@ void MatchSelectors( const std::vector<DRC_SELECTOR*>& aSelectors,
         }
 
         // All tests done; if we're still here then it matches
-        aSelected->push_back( candidate );
+
+        if( ( candidate->m_Rule->m_ConstraintFlags & aConstraint ) > 0 )
+            return candidate->m_Rule;
     }
+
+    return nullptr;
 }
 
 

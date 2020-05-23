@@ -65,6 +65,7 @@ enum PCB_DRC_CODE {
     DRCE_HOLE_NEAR_TRACK,                   ///< hole too close to track
     DRCE_DRILLED_HOLES_TOO_CLOSE,           ///< overlapping drilled holes break drill bits
     DRCE_TOO_SMALL_TRACK_WIDTH,             ///< Too small track width
+    DRCE_TOO_LARGE_TRACK_WIDTH,             ///< Too small track width
     DRCE_TOO_SMALL_VIA,                     ///< Too small via size
     DRCE_TOO_SMALL_VIA_ANNULUS,             ///< Via size and drill leave annulus too small
     DRCE_TOO_SMALL_VIA_DRILL,               ///< Too small via drill

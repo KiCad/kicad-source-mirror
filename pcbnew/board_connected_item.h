@@ -173,6 +173,15 @@ public:
     NETCLASS* GetNetClass() const;
 
     /**
+     * Function GetEffectiveNetclass
+     * returns the NETCLASS for this item, or the default netclass if none is defined.
+     *
+     * Note: do NOT return a std::shared_ptr from this.  It is used heavily in DRC, and the
+     * std::shared_ptr stuff shows up large in performance profiling.
+     */
+    NETCLASS* GetEffectiveNetclass() const;
+
+    /**
      * Function GetNetClassName
      * returns a pointer to the netclass of the zone.
      * If the net is not found (can happen when a netlist is reread,

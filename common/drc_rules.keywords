@@ -1,8 +1,10 @@
-allow
 annulus_width
 blind_via
 board_edge
 clearance
+condition
+constraint
+disallow
 track_width
 graphic
 hole
@@ -10,10 +12,12 @@ match_area
 match_layer
 match_netclass
 match_type
+max
 micro_via
+min
 npth
+opt
 pad
-priority
 pth
 relaxed
 rule

@@ -155,10 +155,10 @@
                                             <property name="close_button">1</property>
                                             <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
                                             <property name="col_label_size">24</property>
-                                            <property name="col_label_values">&quot;Name&quot; &quot;Clearance&quot; &quot;Track Width&quot; &quot;Via Size&quot; &quot;Via Drill&quot; &quot;uVia Size&quot; &quot;uVia Drill&quot; &quot;dPair Width&quot; &quot;dPair Gap&quot;</property>
+                                            <property name="col_label_values">&quot;Name&quot; &quot;Clearance&quot; &quot;Track Width&quot; &quot;Via Size&quot; &quot;Via Drill&quot; &quot;uVia Size&quot; &quot;uVia Drill&quot; &quot;DP Width&quot; &quot;DP Gap&quot; &quot;DP Via Gap&quot;</property>
                                             <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
-                                            <property name="cols">9</property>
-                                            <property name="column_sizes">130,96,96,96,96,96,96,96,96</property>
+                                            <property name="cols">10</property>
+                                            <property name="column_sizes">130,96,96,96,96,96,96,60,60,60</property>
                                             <property name="context_help"></property>
                                             <property name="context_menu">1</property>
                                             <property name="default_pane">0</property>

@@ -32,26 +32,55 @@
 class BOARD_ITEM;
 
 
+#define CLEARANCE_CONSTRAINT (1 << 0)
+#define ANNULUS_CONSTRAINT   (1 << 1)
+#define TRACK_CONSTRAINT     (1 << 2)
+#define HOLE_CONSTRAINT      (1 << 3)
+
+#define DISALLOW_VIAS        (1 << 0)
+#define DISALLOW_MICRO_VIAS  (1 << 1)
+#define DISALLOW_BB_VIAS     (1 << 2)
+#define DISALLOW_TRACKS      (1 << 3)
+#define DISALLOW_PADS        (1 << 4)
+#define DISALLOW_ZONES       (1 << 5)
+#define DISALLOW_TEXTS       (1 << 6)
+#define DISALLOW_GRAPHICS    (1 << 7)
+#define DISALLOW_HOLES       (1 << 8)
+#define DISALLOW_FOOTPRINTS  (1 << 9)
+
+
 class DRC_RULE
 {
 public:
     DRC_RULE() :
-            m_Clearance( 0 ),
-            m_AnnulusWidth( 0 ),
-            m_TrackWidth( 0 ),
-            m_Hole( 0 )
+            m_ConstraintFlags( 0 ),
+            m_DisallowFlags( 0 ),
+            m_Clearance( { 0, 0, INT_MAX / 2 } ),
+            m_MinAnnulusWidth( 0 ),
+            m_TrackConstraint( { 0, 0, INT_MAX / 2 } ),
+            m_MinHole( 0 )
     { }
 
+    struct MINOPTMAX
+    {
+        int Min;
+        int Opt;
+        int Max;
+    };
+
 public:
-    wxString m_Name;
+    wxString  m_Name;
+    int       m_ConstraintFlags;
+    int       m_DisallowFlags;
 
     // A 0 value means the property is not modified by this rule.
-    // A positive value is a minimum.  A negative value is a relaxed constraint: the minimum
-    // is reduced to the absolute value of the constraint.
-    int      m_Clearance;
-    int      m_AnnulusWidth;
-    int      m_TrackWidth;
-    int      m_Hole;
+    // A positive value is a minimum.
+    MINOPTMAX m_Clearance;
+    int       m_MinAnnulusWidth;
+    MINOPTMAX m_TrackConstraint;
+    int       m_MinHole;
+
+    wxString  m_Condition;
 };
 
 
@@ -74,10 +103,7 @@ public:
 };
 
 
-void MatchSelectors( const std::vector<DRC_SELECTOR*>& aSelectors,
-                     const BOARD_ITEM* aItem, const NETCLASS* aNetclass,
-                     const BOARD_ITEM* bItem, const NETCLASS* bNetclass,
-                     std::vector<DRC_SELECTOR*>* aSelected );
+DRC_RULE* GetRule( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem, int aConstraint );
 
 
 

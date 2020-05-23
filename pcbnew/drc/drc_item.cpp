@@ -84,6 +84,7 @@ wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     case DRCE_HOLE_NEAR_PAD:            msg = _HKI( "Hole too close to pad" );              break;
     case DRCE_HOLE_NEAR_TRACK:          msg = _HKI( "Hole too close to track" );            break;
     case DRCE_TOO_SMALL_TRACK_WIDTH:    msg = _HKI( "Track width too small" );              break;
+    case DRCE_TOO_LARGE_TRACK_WIDTH:    msg = _HKI( "Track width too large" );              break;
     case DRCE_TOO_SMALL_VIA:            msg = _HKI( "Via size too small" );                 break;
     case DRCE_TOO_SMALL_VIA_ANNULUS:    msg = _HKI( "Via annulus too small" );              break;
     case DRCE_TOO_SMALL_MICROVIA:       msg = _HKI( "Micro via size too small" );           break;

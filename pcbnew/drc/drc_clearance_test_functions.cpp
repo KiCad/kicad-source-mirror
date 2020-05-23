@@ -315,17 +315,32 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     }
     else    // This is a track segment
     {
-        int minWidth = aRefSeg->GetMinWidth( &m_clearanceSource );
+        int minWidth, maxWidth;
+        aRefSeg->GetWidthConstraints( &minWidth, &maxWidth, &m_clearanceSource );
+
+        int errorCode = 0;
+        int constraintWidth;
 
         if( refSegWidth < minWidth )
         {
+            errorCode = DRCE_TOO_SMALL_TRACK_WIDTH;
+            constraintWidth = minWidth;
+        }
+        else if( refSegWidth > maxWidth )
+        {
+            errorCode = DRCE_TOO_LARGE_TRACK_WIDTH;
+            constraintWidth = maxWidth;
+        }
+
+        if( errorCode )
+        {
             wxPoint refsegMiddle = ( aRefSeg->GetStart() + aRefSeg->GetEnd() ) / 2;
 
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_TRACK_WIDTH );
+            DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           m_clearanceSource,
-                          MessageTextFromValue( userUnits(), minWidth, true ),
+                          MessageTextFromValue( userUnits(), constraintWidth, true ),
                           MessageTextFromValue( userUnits(), refSegWidth, true ) );
 
             drcItem->SetErrorMessage( m_msg );

@@ -212,7 +212,7 @@ public:
      */
     int GetClearance( BOARD_ITEM* aItem = nullptr, wxString* aSource = nullptr ) const override;
 
-    int GetMinWidth( wxString* aSource ) const;
+    void GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

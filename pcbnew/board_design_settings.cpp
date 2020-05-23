@@ -21,11 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file board_design_settings.cpp
- * BOARD_DESIGN_SETTINGS class functions.
- */
-
 #include <fctsys.h>
 #include <common.h>
 #include <class_board.h>
@@ -967,7 +962,7 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
         clearance = std::max( clearance, netclass.second->GetClearance() );
 
     for( const DRC_RULE* rule : m_DRCRules )
-        clearance = std::max( clearance, rule->m_Clearance );
+        clearance = std::max( clearance, rule->m_Clearance.Min );
 
     return clearance;
 }
@@ -979,58 +974,6 @@ int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue()
 
     for( const std::pair<const wxString, NETCLASSPTR>& netclass : m_NetClasses.NetClasses() )
         clearance = std::min( clearance, netclass.second->GetClearance() );
-
-    return clearance;
-}
-
-
-int BOARD_DESIGN_SETTINGS::GetRuleClearance( const BOARD_ITEM* aItem, const NETCLASS* aNetclass,
-                                             const BOARD_ITEM* bItem, const NETCLASS* bNetclass,
-                                             wxString* aSource )
-{
-    if( !m_matched.empty() )
-        m_matched.clear();      // yes, the difference can be seen in profiles
-
-    if( m_DRCRuleSelectors.size() == 0 )
-        return 0;
-
-    MatchSelectors( m_DRCRuleSelectors, aItem, aNetclass, bItem, bNetclass, &m_matched );
-
-    if( m_matched.size() == 0 )
-        return 0;
-
-    std::sort( m_matched.begin(), m_matched.end(),
-               []( DRC_SELECTOR* a, DRC_SELECTOR* b ) -> bool
-               {
-                   return a->m_Priority < b->m_Priority;
-               });
-
-    int clearance = 0;
-
-    for( DRC_SELECTOR* selector : m_matched )
-    {
-        // ignore hole rules; we're just interested in copper here
-        for( KICAD_T matchType : selector->m_MatchTypes )
-        {
-            if( BaseType( matchType ) == PCB_LOCATE_HOLE_T )
-                continue;
-        }
-
-        if( selector->m_Rule->m_Clearance > 0 )
-        {
-            clearance = std::max( clearance, selector->m_Rule->m_Clearance );
-
-            if( aSource )
-                *aSource = wxString::Format( _( "'%s' rule clearance" ), selector->m_Rule->m_Name );
-        }
-        else if( selector->m_Rule->m_Clearance < 0 )
-        {
-            clearance = std::min( clearance, abs( selector->m_Rule->m_Clearance ) );
-
-            if( aSource )
-                *aSource = wxString::Format( _( "'%s' rule clearance" ), selector->m_Rule->m_Name );
-        }
-    }
 
     return clearance;
 }
@@ -1122,26 +1065,11 @@ void BOARD_DESIGN_SETTINGS::SetElementVisibility( GAL_LAYER_ID aElementCategory,
 
 void BOARD_DESIGN_SETTINGS::SetCopperLayerCount( int aNewLayerCount )
 {
-    // if( aNewLayerCount < 2 ) aNewLayerCount = 2;
-
     m_copperLayerCount = aNewLayerCount;
 
-    // ensure consistency with the m_EnabledLayers member
-#if 0
-    // was:
-    m_enabledLayers &= ~ALL_CU_LAYERS;
-    m_enabledLayers |= LAYER_BACK;
-
-    if( m_copperLayerCount > 1 )
-        m_enabledLayers |= LAYER_FRONT;
-
-    for( LAYER_NUM ii = LAYER_N_2; ii < aNewLayerCount - 1; ++ii )
-        m_enabledLayers |= GetLayerSet( ii );
-#else
     // Update only enabled copper layers mask
     m_enabledLayers &= ~LSET::AllCuMask();
     m_enabledLayers |= LSET::AllCuMask( aNewLayerCount );
-#endif
 }
 
 

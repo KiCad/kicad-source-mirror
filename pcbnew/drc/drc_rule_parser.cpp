@@ -183,14 +183,8 @@ DRC_SELECTOR* DRC_RULES_PARSER::parseDRC_SELECTOR( wxString* aRuleName )
             NeedRIGHT();
             break;
 
-        case T_priority:
-            NeedNUMBER( "priority" );
-            selector->m_Priority = (int)strtol( CurText(), NULL, 10 );
-            NeedRIGHT();
-            break;
-
         default:
-            Expecting( "match_netclass, match_type, match_layer, match_area, rule, or priority" );
+            Expecting( "match_netclass, match_type, match_layer, match_area, or rule" );
         }
     }
 
@@ -211,65 +205,120 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
         if( token != T_LEFT )
             Expecting( T_LEFT );
 
-        int sign = 1;
         token = NextTok();
 
         switch( token )
         {
-        case T_allow:
-            // TODO
-            break;
-
-        case T_clearance:
-            if( NextTok() == T_relaxed )
+        case T_disallow:
+            switch( NextTok() )
             {
-                sign = -1;
-                NextTok();
+            case T_track:     rule->m_DisallowFlags |= DISALLOW_TRACKS;     break;
+            case T_via:       rule->m_DisallowFlags |= DISALLOW_VIAS;       break;
+            case T_micro_via: rule->m_DisallowFlags |= DISALLOW_MICRO_VIAS; break;
+            case T_blind_via: rule->m_DisallowFlags |= DISALLOW_BB_VIAS;    break;
+            case T_pad:       rule->m_DisallowFlags |= DISALLOW_PADS;       break;
+            case T_zone:      rule->m_DisallowFlags |= DISALLOW_ZONES;      break;
+            case T_text:      rule->m_DisallowFlags |= DISALLOW_TEXTS;      break;
+            case T_graphic:   rule->m_DisallowFlags |= DISALLOW_GRAPHICS;   break;
+            case T_hole:      rule->m_DisallowFlags |= DISALLOW_HOLES;      break;
+            default: Expecting( "track, via, micro_via, blind_via, pad, zone, text, "
+                                "graphic, or hole" );
             }
-
-            rule->m_Clearance = parseValue( T_clearance ) * sign;
             NeedRIGHT();
             break;
 
-        case T_track_width:
-            if( NextTok() == T_relaxed )
-            {
-                sign = -1;
-                NextTok();
-            }
-
-            rule->m_TrackWidth = parseValue( T_track_width ) * sign;
-            NeedRIGHT();
+        case T_constraint:
+            parseConstraint( rule );
             break;
 
-        case T_annulus_width:
-            if( NextTok() == T_relaxed )
-            {
-                sign = -1;
-                NextTok();
-            }
-
-            rule->m_AnnulusWidth = parseValue( T_annulus_width ) * sign;
-            NeedRIGHT();
-            break;
-
-        case T_hole:
-            if( NextTok() == T_relaxed )
-            {
-                sign = -1;
-                NextTok();
-            }
-
-            rule->m_Hole = parseValue( T_hole ) * sign;
+        case T_condition:
+            NeedSYMBOL();
+            rule->m_Condition = FromUTF8();
             NeedRIGHT();
             break;
 
         default:
-            Expecting( "allow, clearance, track_width, annulus_width, or hole" );
+            Expecting( "disallow, constraint or condition" );
         }
     }
 
     return rule;
+}
+
+
+void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
+{
+    T   token;
+    int constraintType;
+    int value;
+
+    switch( NextTok() )
+    {
+    case T_clearance:     constraintType = CLEARANCE_CONSTRAINT; break;
+    case T_track_width:   constraintType = TRACK_CONSTRAINT;     break;
+    case T_annulus_width: constraintType = ANNULUS_CONSTRAINT;   break;
+    case T_hole:          constraintType = HOLE_CONSTRAINT;      break;
+    default: Expecting( "clearance, track_width, annulus_width, or hole" ); return;
+    }
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_min:
+            NextTok();
+            value = parseValue( token );
+
+            switch( constraintType )
+            {
+            case CLEARANCE_CONSTRAINT: aRule->m_Clearance.Min = value;       break;
+            case TRACK_CONSTRAINT:     aRule->m_TrackConstraint.Min = value; break;
+            case ANNULUS_CONSTRAINT:   aRule->m_MinAnnulusWidth = value;     break;
+            case HOLE_CONSTRAINT:      aRule->m_MinHole = value;             break;
+            }
+
+            NeedRIGHT();
+            break;
+
+        case T_max:
+            NextTok();
+            value = parseValue( token );
+
+            switch( constraintType )
+            {
+            case CLEARANCE_CONSTRAINT: aRule->m_Clearance.Max = value;       break;
+            case TRACK_CONSTRAINT:     aRule->m_TrackConstraint.Max = value; break;
+            default: Expecting( "min" );
+            }
+
+            NeedRIGHT();
+            break;
+
+        case T_opt:
+            NextTok();
+            value = parseValue( token );
+
+            switch( constraintType )
+            {
+            case CLEARANCE_CONSTRAINT: aRule->m_Clearance.Opt = value;       break;
+            case TRACK_CONSTRAINT:     aRule->m_TrackConstraint.Opt = value; break;
+            default: Expecting( "min" );
+            }
+
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "allow or constraint" );
+        }
+    }
+
+    aRule->m_ConstraintFlags |= constraintType;
 }
 
 
@@ -283,20 +332,14 @@ int DRC_RULES_PARSER::parseValue( DRCRULE_T::T aToken )
 
     if( errno )
     {
-        wxString error;
-        error.Printf( _( "Invalid floating point number in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-                      GetChars( CurSource() ), CurLineNumber(), CurOffset() );
-
-        THROW_IO_ERROR( error );
+        THROW_PARSE_ERROR( _( "Invalid floating point number" ), CurSource(), CurLine(),
+                           CurLineNumber(), CurOffset() );
     }
 
     if( CurText() == tmp )
     {
-        wxString error;
-        error.Printf( _( "Missing floating point number in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-                      GetChars( CurSource() ), CurLineNumber(), CurOffset() );
-
-        THROW_IO_ERROR( error );
+        THROW_PARSE_ERROR( _( "Missing floating point number" ), CurSource(), CurLine(),
+                           CurLineNumber(), CurOffset() );
     }
 
     return KiROUND( fval * IU_PER_MM );

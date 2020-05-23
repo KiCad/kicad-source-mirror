@@ -125,75 +125,52 @@ int TRACK::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
 }
 
 
-int TRACK::GetMinWidth( wxString* aSource ) const
+/*
+ * Width constraints exist in a hiearchy:
+ * 1) accumulated board & netclass constraints
+ * 2) last rule whose condition evaluates to true
+ */
+void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 {
-    BOARD_DESIGN_SETTINGS&     bds = GetBoard()->GetDesignSettings();
-    NETCLASS*                  netclass = nullptr;
-    std::vector<DRC_SELECTOR*> matched;
+    DRC_RULE* rule = GetRule( this, nullptr, TRACK_CONSTRAINT );
 
-    // NB: we must check the net first, as when it is 0 GetNetClass() will return the
-    // orphaned net netclass, not the default netclass.
-    if( m_netinfo->GetNet() == 0 )
-        netclass = bds.GetDefault();
-    else
-        netclass = GetNetClass();
-
-    MatchSelectors( bds.m_DRCRuleSelectors, this, netclass, nullptr, nullptr, &matched );
-
-    int minWidth = bds.m_TrackMinWidth;
-
-    if( aSource )
-        *aSource = _( "board minumum" );
-
-    for( DRC_SELECTOR* selector : matched )
+    if( rule )
     {
-        if( selector->m_Rule->m_TrackWidth > minWidth )
-        {
-            minWidth = selector->m_Rule->m_TrackWidth;
+        *aMin = rule->m_TrackConstraint.Min;
+        *aMax = rule->m_TrackConstraint.Max;
 
-            if( aSource )
-                *aSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
-        }
+        if( aSource )
+            *aSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
     }
+    else
+    {
+        *aMin = GetBoard()->GetDesignSettings().m_TrackMinWidth;
+        *aMax = INT_MAX / 2;
 
-    return minWidth;
+        if( aSource )
+            *aSource = _( "board minumum" );
+    }
 }
 
 
 int VIA::GetMinAnnulus( wxString* aSource ) const
 {
-    BOARD_DESIGN_SETTINGS&     bds = GetBoard()->GetDesignSettings();
-    NETCLASS*                  netclass = nullptr;
-    std::vector<DRC_SELECTOR*> matched;
+    DRC_RULE* rule = GetRule( this, nullptr, ANNULUS_CONSTRAINT );
 
-    // NB: we must check the net first, as when it is 0 GetNetClass() will return the
-    // orphaned net netclass, not the default netclass.
-    if( m_netinfo->GetNet() == 0 )
-        netclass = bds.GetDefault();
-    else
-        netclass = GetNetClass();
-
-    MatchSelectors( bds.m_DRCRuleSelectors, this, netclass, nullptr, nullptr, &matched );
-
-    int minAnnulus = bds.m_ViasMinAnnulus;
-
-    if( aSource )
-        *aSource = _( "board minumum" );
-
-    MatchSelectors( bds.m_DRCRuleSelectors, this, netclass, nullptr, nullptr, &matched );
-
-    for( DRC_SELECTOR* selector : matched )
+    if( rule )
     {
-        if( selector->m_Rule->m_AnnulusWidth > minAnnulus )
-        {
-            minAnnulus = selector->m_Rule->m_AnnulusWidth;
+        if( aSource )
+            *aSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
 
-            if( aSource )
-                *aSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
-        }
+        return rule->m_MinAnnulusWidth;
     }
+    else
+    {
+        if( aSource )
+            *aSource = _( "board minumum" );
 
-    return minAnnulus;
+        return GetBoard()->GetDesignSettings().m_ViasMinAnnulus;
+    }
 }
 
 
@@ -634,7 +611,8 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 
-    int minWidth = GetMinWidth( &source );
+    int minWidth, maxWidth;
+    GetWidthConstraints( &minWidth, &maxWidth, &source );
 
     msg.Printf( _( "Min Width: %s" ), MessageTextFromValue( units, minWidth, true ) );
     msg2.Printf( _( "(from %s)" ), source );

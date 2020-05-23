@@ -91,21 +91,14 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
 
     if( !bds.Ignore( DRCE_TOO_SMALL_PAD_DRILL ) )
     {
-        NETCLASS* netclass = aPad->GetNet()->GetNet() == 0 ? bds.GetDefault()
-                                                           : aPad->GetNetClass();
         int       minHole = bds.m_MinThroughDrill;
         wxString  minHoleSource = _( "board minimum" );
+        DRC_RULE* rule = GetRule( aPad, nullptr, HOLE_CONSTRAINT );
 
-        std::vector<DRC_SELECTOR*> matched;
-        MatchSelectors( bds.m_DRCRuleSelectors, aPad, netclass, nullptr, nullptr, &matched );
-
-        for( DRC_SELECTOR* selector : matched )
+        if( rule )
         {
-            if( selector->m_Rule->m_Hole > minHole )
-            {
-                minHole = selector->m_Rule->m_Hole;
-                minHoleSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
-            }
+            minHole = rule->m_MinHole;
+            minHoleSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
         }
 
         if( holeSize < minHole )
@@ -141,21 +134,14 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
 
     if( !bds.Ignore( DRCE_TOO_SMALL_VIA_DRILL ) )
     {
-        NETCLASS* netclass = via->GetNet()->GetNet() == 0 ? bds.GetDefault()
-                                                          : via->GetNetClass();
         int       minHole = bds.m_MinThroughDrill;
         wxString  minHoleSource = _( "board minimum" );
+        DRC_RULE* rule = GetRule( via, nullptr, HOLE_CONSTRAINT );
 
-        std::vector<DRC_SELECTOR*> matched;
-        MatchSelectors( bds.m_DRCRuleSelectors, via, netclass, nullptr, nullptr, &matched );
-
-        for( DRC_SELECTOR* selector : matched )
+        if( rule )
         {
-            if( selector->m_Rule->m_Hole > minHole )
-            {
-                minHole = selector->m_Rule->m_Hole;
-                minHoleSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
-            }
+            minHole = rule->m_MinHole;
+            minHoleSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
         }
 
         if( via->GetDrillValue() < minHole )
@@ -191,21 +177,14 @@ bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
 
     if( !bds.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL ) )
     {
-        NETCLASS* netclass = via->GetNet()->GetNet() == 0 ? bds.GetDefault()
-                                                          : via->GetNetClass();
         int       minHole = bds.m_MicroViasMinDrill;
         wxString  minHoleSource = _( "board minimum" );
+        DRC_RULE* rule = GetRule( via, nullptr, HOLE_CONSTRAINT );
 
-        std::vector<DRC_SELECTOR*> matched;
-        MatchSelectors( bds.m_DRCRuleSelectors, via, netclass, nullptr, nullptr, &matched );
-
-        for( DRC_SELECTOR* selector : matched )
+        if( rule )
         {
-            if( selector->m_Rule->m_Hole > minHole )
-            {
-                minHole = selector->m_Rule->m_Hole;
-                minHoleSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
-            }
+            minHole = rule->m_MinHole;
+            minHoleSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
         }
 
         if(  via->GetDrillValue() < minHole )

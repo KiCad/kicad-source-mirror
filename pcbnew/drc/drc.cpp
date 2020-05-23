@@ -383,6 +383,8 @@ void DRC::LoadRules()
         }
     }
 
+    std::reverse( std::begin( m_ruleSelectors ), std::end( m_ruleSelectors ) );
+
     BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
     bds.m_DRCRuleSelectors = m_ruleSelectors;
     bds.m_DRCRules = m_rules;
