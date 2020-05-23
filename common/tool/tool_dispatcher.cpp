@@ -411,7 +411,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     bool            buttonEvents = false;
     VECTOR2D        pos;
     OPT<TOOL_EVENT> evt;
-    int             key = 0;    // key = 0 if the event is not a key event
+    bool            keyIsEscape  = false;  // True if the keypress was the escape key
     bool            keyIsSpecial = false;  // True if the key is a special key code
 
     int type = aEvent.GetEventType();
@@ -480,7 +480,10 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     }
     else if( type == wxEVT_CHAR_HOOK || type == wxEVT_CHAR )
     {
-        evt = GetToolEvent( static_cast<wxKeyEvent*>( &aEvent ), &keyIsSpecial );
+        wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
+
+        keyIsEscape = ( ke->GetKeyCode() == WXK_ESCAPE );
+        evt = GetToolEvent( ke, &keyIsSpecial );
     }
     else if( type == wxEVT_MENU_OPEN || type == wxEVT_MENU_CLOSE || type == wxEVT_MENU_HIGHLIGHT )
     {
@@ -533,9 +536,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         handled = m_toolMgr->ProcessEvent( *evt );
 
-        // ESC is the special key for canceling tools, and is therefore seen as handled
-        if( key == WXK_ESCAPE )
-            handled = true;
+        wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxEvent - Handled: %s  %s",
+                    ( handled ? "true" : "false" ), evt->Format() );
     }
 
     // pass the event to the GUI, it might still be interested in it
@@ -557,8 +559,16 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     // Not handled wxEVT_CHAR must be Skipped (sent to GUI).
     // Otherwise accelerators and shortcuts in main menu or toolbars are not seen.
-    if( (type == wxEVT_CHAR || type == wxEVT_CHAR_HOOK) && !keyIsSpecial && !handled )
+    // Escape key presses are never skipped by the handler since they correspond to tool cancel
+    // events, and if they aren't skipped then they are propagated to other frames (which we don't want).
+    if( (type == wxEVT_CHAR || type == wxEVT_CHAR_HOOK)
+         && !keyIsSpecial
+         && !handled
+         && !keyIsEscape )
         aEvent.Skip();
+
+    wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxEvent - Wx event skipped: %s",
+                ( aEvent.GetSkipped() ? "true" : "false" ) );
 }
 
 
