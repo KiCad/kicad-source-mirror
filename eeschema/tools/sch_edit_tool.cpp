@@ -56,9 +56,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <libedit_settings.h>
-
-char g_lastBusEntryShape = '/';
-
+#include <dialogs/dialog_edit_label.h>
 
 class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
@@ -1351,12 +1349,15 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
-        if( InvokeDialogLabelEditor( m_frame, (SCH_TEXT*) item ) == wxID_OK )
+    {
+        DIALOG_LABEL_EDITOR dlg( m_frame, (SCH_TEXT*) item );
+
+        if( dlg.ShowModal() == wxID_OK )
         {
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();
         }
-
+    }
         break;
 
     case SCH_FIELD_T:
@@ -1450,7 +1451,8 @@ int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
         }
     }
 
-    g_lastBusEntryShape = shape;
+    SCH_DRAWING_TOOLS* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOLS>();
+    drawingTool->SetLastBusEntryShape( shape );
 
     return 0;
 }

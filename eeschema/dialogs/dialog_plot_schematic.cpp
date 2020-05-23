@@ -116,11 +116,11 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
 
         if( fmt == PLOT_FORMAT::DXF || fmt == PLOT_FORMAT::HPGL )
             m_plotBackgroundColor->Disable();
-    }
 
-    // Set the default line width (pen width which should be used for
-    // items that do not have a pen size defined (like frame ref)
-    m_defaultLineWidth.SetValue( m_parent->GetDefaultLineWidth() );
+        // Set the default line width (pen width which should be used for
+        // items that do not have a pen size defined (like frame ref)
+        m_defaultLineWidth.SetValue( cfg->m_Drawing.default_line_thickness );
+    }
 
     // Initialize HPGL specific widgets
     m_penWidth.SetValue( m_HPGLPenSize );

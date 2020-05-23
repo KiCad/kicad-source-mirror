@@ -322,9 +322,9 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
     bool ret = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT,
                                  GetProjectFileParameters() );
 
-    GetRenderSettings()->SetDefaultPenWidth( GetDefaultLineWidth() );
-    GetRenderSettings()->m_DefaultWireThickness = GetDefaultWireThickness();
-    GetRenderSettings()->m_DefaultBusThickness  = GetDefaultBusThickness();
+    GetRenderSettings()->SetDefaultPenWidth( m_defaults->m_DefaultLineWidth );
+    GetRenderSettings()->m_DefaultWireThickness = m_defaults->m_DefaultWireThickness;
+    GetRenderSettings()->m_DefaultBusThickness  = m_defaults->m_DefaultBusThickness;
     GetRenderSettings()->m_TextOffsetRatio      = m_defaults->m_TextOffsetRatio;
     GetRenderSettings()->m_PinSymbolSize        = m_defaults->m_PinSymbolSize;
     GetRenderSettings()->m_JunctionSize         = m_defaults->m_JunctionSize;

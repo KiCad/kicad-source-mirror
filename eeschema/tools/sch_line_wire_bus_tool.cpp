@@ -369,17 +369,17 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
 SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 {
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    SCHEMATIC_SETTINGS& cfg = getModel<SCHEMATIC>()->Settings();
+    wxPoint             pos = (wxPoint) getViewControls()->GetCursorPosition();
 
-    wxPoint  pos = (wxPoint) getViewControls()->GetCursorPosition();
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos, '\\' );
     m_busUnfold.entry->SetParent( m_frame->GetScreen() );
     m_frame->AddToScreen( m_busUnfold.entry );
 
     m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->m_End(), aNet );
-    m_busUnfold.label->SetTextSize( wxSize( m_frame->GetDefaultTextSize(),
-                                            m_frame->GetDefaultTextSize() ) );
+    m_busUnfold.label->SetTextSize( wxSize( cfg.m_DefaultTextSize, cfg.m_DefaultTextSize ) );
     m_busUnfold.label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
     m_busUnfold.label->SetParent( m_frame->GetScreen() );
     m_busUnfold.label->SetFlags( IS_NEW | IS_MOVED );

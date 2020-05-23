@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -55,23 +55,6 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	wxStaticBoxSizer* sbSizer5;
 	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Defaults for New Objects") ), wxVERTICAL );
 
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_textSizeLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Schematic text size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textSizeLabel->Wrap( -1 );
-	bSizer5->Add( m_textSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-	m_textSizeCtrl = new wxTextCtrl( sbSizer5->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP );
-	bSizer5->Add( m_textSizeCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-	m_textSizeUnits = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textSizeUnits->Wrap( -1 );
-	bSizer5->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	sbSizer5->Add( bSizer5, 0, wxEXPAND, 5 );
-
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 
@@ -96,7 +79,7 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	bSizer6->Add( m_backgroundColorSwatch, 1, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizer5->Add( bSizer6, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	sbSizer5->Add( bSizer6, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
 	bLeftColumn->Add( sbSizer5, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -104,7 +87,7 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	wxStaticBoxSizer* sbSizerPinSel;
 	sbSizerPinSel = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Selection") ), wxVERTICAL );
 
-	m_cbPinSelectionOpt = new wxCheckBox( sbSizerPinSel->GetStaticBox(), wxID_ANY, _("Select a pin select the symbol"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbPinSelectionOpt = new wxCheckBox( sbSizerPinSel->GetStaticBox(), wxID_ANY, _("Clicking on a pin selects the symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbPinSelectionOpt->SetToolTip( _("In schematic editor:\nIf enabled, clicking on a pin select the parent symbol.\nIf disabled, clicking on a pin select only the pin.") );
 
 	sbSizerPinSel->Add( m_cbPinSelectionOpt, 0, wxALL, 5 );

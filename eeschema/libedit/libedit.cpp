@@ -28,6 +28,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <tools/ee_actions.h>
+#include <tools/lib_drawing_tools.h>
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <class_library.h>
@@ -776,7 +777,8 @@ void LIB_EDIT_FRAME::LoadPart( const wxString& aAlias, const wxString& aLibrary,
     // Optimize default edit options for this symbol
     // Usually if units are locked, graphic items are specific to each unit
     // and if units are interchangeable, graphic items are common to units
-    m_DrawSpecificUnit = part->UnitsLocked();
+    LIB_DRAWING_TOOLS* tools = GetToolManager()->GetTool<LIB_DRAWING_TOOLS>();
+    tools->SetDrawSpecificUnit( part->UnitsLocked() );
 
     LoadOneLibraryPartAux( part, aLibrary, aUnit, 0 );
 }

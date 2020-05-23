@@ -27,8 +27,11 @@
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <lib_text.h>
-
+#include <settings/settings_manager.h>
 #include <dialog_lib_edit_text.h>
+#include <libedit/libedit_settings.h>
+#include <pgm_base.h>
+#include <tools/lib_drawing_tools.h>
 
 
 DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* aText ) :
@@ -89,11 +92,14 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
     }
     else
     {
-        m_textSize.SetValue( m_parent->GetDefaultTextSize() );
+        LIBEDIT_SETTINGS*  cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        LIB_DRAWING_TOOLS* tools = m_parent->GetToolManager()->GetTool<LIB_DRAWING_TOOLS>();
 
-        m_CommonUnit->SetValue( !m_parent->m_DrawSpecificUnit );
-        m_CommonConvert->SetValue( !m_parent->m_DrawSpecificConvert );
-        m_orientChoice->SetSelection( m_parent->g_LastTextAngle == TEXT_ANGLE_HORIZ ? 0 : 1 );
+        m_textSize.SetValue( Mils2iu( cfg->m_Defaults.text_size ) );
+
+        m_CommonUnit->SetValue( !tools->GetDrawSpecificUnit() );
+        m_CommonConvert->SetValue( !tools->GetDrawSpecificConvert() );
+        m_orientChoice->SetSelection( tools->GetLastTextAngle() == TEXT_ANGLE_HORIZ ? 0 : 1 );
     }
 
     return true;
@@ -102,11 +108,6 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
 
 bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
 {
-    m_parent->g_LastTextAngle = m_orientChoice->GetSelection() ? TEXT_ANGLE_VERT
-                                                               : TEXT_ANGLE_HORIZ;
-    m_parent->m_DrawSpecificConvert = !m_CommonConvert->GetValue();
-    m_parent->m_DrawSpecificUnit = !m_CommonUnit->GetValue();
-
     if( m_graphicText )
     {
         if( m_TextValue->GetValue().IsEmpty() )
@@ -116,14 +117,16 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
 
         m_graphicText->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
         m_graphicText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
-        m_graphicText->SetTextAngle( m_parent->g_LastTextAngle );
 
-        if( m_parent->m_DrawSpecificUnit )
+        m_graphicText->SetTextAngle( m_orientChoice->GetSelection() ? TEXT_ANGLE_VERT
+                                                                    : TEXT_ANGLE_HORIZ );
+
+        if( !m_CommonUnit->GetValue() )
             m_graphicText->SetUnit( m_parent->GetUnit() );
         else
             m_graphicText->SetUnit( 0 );
 
-        if( m_parent->m_DrawSpecificConvert )
+        if( !m_CommonConvert->GetValue() )
             m_graphicText->SetConvert( m_parent->GetConvert() );
         else
             m_graphicText->SetConvert( 0 );
@@ -144,6 +147,12 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
         case 1: m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER ); break;
         case 2: m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM ); break;
         }
+
+        // Record settings used for next time:
+        LIB_DRAWING_TOOLS* tools = m_parent->GetToolManager()->GetTool<LIB_DRAWING_TOOLS>();
+        tools->SetLastTextAngle( m_graphicText->GetTextAngle() );
+        tools->SetDrawSpecificConvert( !m_CommonConvert->GetValue() );
+        tools->SetDrawSpecificUnit( !m_CommonUnit->GetValue() );
     }
 
     m_parent->SetMsgPanel( m_graphicText );

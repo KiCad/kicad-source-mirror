@@ -442,8 +442,9 @@ void LIB_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify( );
 
-    m_frame->m_DrawSpecificConvert = !dialog.GetApplyToAllConversions();
-    m_frame->m_DrawSpecificUnit    = !dialog.GetApplyToAllUnits();
+    LIB_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<LIB_DRAWING_TOOLS>();
+    drawingTools->SetDrawSpecificConvert( !dialog.GetApplyToAllConversions() );
+    drawingTools->SetDrawSpecificUnit( !dialog.GetApplyToAllUnits() );
 
     MSG_PANEL_ITEMS items;
     aItem->GetMsgPanelInfo( m_frame, items );
@@ -539,12 +540,15 @@ void LIB_EDIT_TOOL::editSymbolProperties()
     // to the best value
     if( partLocked != part->UnitsLocked() )
     {
+        LIB_DRAWING_TOOLS* tools = m_toolMgr->GetTool<LIB_DRAWING_TOOLS>();
+
         // Enable synchronized pin edit mode for symbols with interchangeable units
         m_frame->m_SyncPinEdit = !part->UnitsLocked();
+
         // also set default edit options to the better value
         // Usually if units are locked, graphic items are specific to each unit
         // and if units are interchangeable, graphic items are common to units
-        m_frame->m_DrawSpecificUnit = part->UnitsLocked();
+        tools->SetDrawSpecificUnit( part->UnitsLocked() );
     }
 }
 

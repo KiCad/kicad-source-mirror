@@ -35,7 +35,6 @@
 PANEL_EESCHEMA_SETTINGS::PANEL_EESCHEMA_SETTINGS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow ) :
         PANEL_EESCHEMA_SETTINGS_BASE( aWindow ),
         m_frame( aFrame ),
-        m_defaultTextSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
         m_hPitch( aFrame, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits, true ),
         m_vPitch( aFrame, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits, true )
 {}
@@ -47,7 +46,6 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 
     m_choiceUnits->SetSelection( m_frame->GetUserUnits() == EDA_UNITS::INCHES ? 0 : 1 );
 
-    m_defaultTextSize.SetValue( m_frame->GetDefaultTextSize() );
     m_hPitch.SetValue( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ) );
     m_vPitch.SetValue( Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) );
     m_spinLabelRepeatStep->SetValue( cfg->m_Drawing.repeat_label_increment );
@@ -82,8 +80,6 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
 
     m_frame->SetUserUnits( m_choiceUnits->GetSelection() == 0 ? EDA_UNITS::INCHES
                                                               : EDA_UNITS::MILLIMETRES );
-
-    m_frame->SetDefaultTextSize( (int) m_defaultTextSize.GetValue() );
 
     cfg->m_Drawing.default_sheet_border_color = m_borderColorSwatch->GetSwatchColor();
     cfg->m_Drawing.default_sheet_background_color = m_backgroundColorSwatch->GetSwatchColor();

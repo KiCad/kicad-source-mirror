@@ -49,8 +49,8 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
 {
     LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
 
-    m_lineWidth.SetValue( m_frame->GetDefaultLineWidth() );
-    m_textSize.SetValue( m_frame->GetDefaultTextSize() );
+    m_lineWidth.SetValue( Mils2iu( settings->m_Defaults.line_width ) );
+    m_textSize.SetValue( Mils2iu( settings->m_Defaults.text_size ) );
     m_pinLength.SetValue( Mils2iu( settings->m_Defaults.pin_length ) );
     m_pinNumberSize.SetValue( Mils2iu( settings->m_Defaults.pin_num_size ) );
     m_pinNameSize.SetValue( Mils2iu( settings->m_Defaults.pin_name_size ) );
@@ -69,8 +69,8 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataFromWindow()
 {
     LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
 
-    m_frame->SetDefaultLineWidth( (int) m_lineWidth.GetValue() );
-    m_frame->SetDefaultTextSize( (int) m_textSize.GetValue() );
+    settings->m_Defaults.line_width = Iu2Mils( (int) m_lineWidth.GetValue() );
+    settings->m_Defaults.text_size = Iu2Mils( (int) m_textSize.GetValue() );
     settings->m_Defaults.pin_length = Iu2Mils( (int) m_pinLength.GetValue() );
     settings->m_Defaults.pin_num_size = Iu2Mils( (int) m_pinNumberSize.GetValue() );
     settings->m_Defaults.pin_name_size = Iu2Mils( (int) m_pinNameSize.GetValue() );

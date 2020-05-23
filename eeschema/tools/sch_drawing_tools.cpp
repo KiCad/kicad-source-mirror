@@ -27,8 +27,6 @@
 #include "ee_point_editor.h"
 #include <ee_actions.h>
 #include <sch_edit_frame.h>
-#include <sch_view.h>
-#include <class_draw_panel_gal.h>
 #include <project.h>
 #include <id.h>
 #include <eeschema_id.h>
@@ -46,9 +44,15 @@
 #include <schematic.h>
 #include <class_library.h>
 #include <eeschema_settings.h>
+#include <dialogs/dialog_edit_label.h>
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
-    EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" )
+        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
+        m_lastBusEntryShape( '/' ),
+        m_lastGlobalLabelShape( PINSHEETLABEL_SHAPE::PS_INPUT ),
+        m_lastTextOrientation( LABEL_SPIN_STYLE::LEFT ),
+        m_lastTextBold( false ),
+        m_lastTextItalic( false )
 {
 }
 
@@ -70,22 +74,17 @@ bool SCH_DRAWING_TOOLS::Init()
 }
 
 
-// History lists for PlaceComponent()
-static SCH_BASE_FRAME::HISTORY_LIST s_SymbolHistoryList;
-static SCH_BASE_FRAME::HISTORY_LIST s_PowerHistoryList;
-
-
 int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
 {
-    SCH_COMPONENT* component = aEvent.Parameter<SCH_COMPONENT*>();
-    SCHLIB_FILTER  filter;
-    SCH_BASE_FRAME::HISTORY_LIST* historyList = nullptr;
+    SCH_COMPONENT*                    component = aEvent.Parameter<SCH_COMPONENT*>();
+    SCHLIB_FILTER                     filter;
+    std::vector<COMPONENT_SELECTION>* historyList = nullptr;
 
     if( aEvent.IsAction( &EE_ACTIONS::placeSymbol ) )
-        historyList = &s_SymbolHistoryList;
+        historyList = &m_symbolHistoryList;
     else if (aEvent.IsAction( &EE_ACTIONS::placePower ) )
     {
-        historyList = &s_PowerHistoryList;
+        historyList = &m_powerHistoryList;
         filter.FilterPowerParts( true );
     }
     else
@@ -463,10 +462,10 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         previewItem = new SCH_JUNCTION( cursorPos );
         break;
     case SCH_BUS_WIRE_ENTRY_T:
-        previewItem = new SCH_BUS_WIRE_ENTRY( cursorPos, g_lastBusEntryShape );
+        previewItem = new SCH_BUS_WIRE_ENTRY( cursorPos, m_lastBusEntryShape );
         break;
     case SCH_BUS_BUS_ENTRY_T:
-        previewItem = new SCH_BUS_BUS_ENTRY( cursorPos, g_lastBusEntryShape );
+        previewItem = new SCH_BUS_BUS_ENTRY( cursorPos, m_lastBusEntryShape );
         break;
     default:
         wxASSERT_MSG( false, "Unknown item type in SCH_DRAWING_TOOLS::SingleClickPlace" );
@@ -553,9 +552,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             {
                 // Update the shape of the bus entry
                 if( evt->IsAction( &EE_ACTIONS::toShapeSlash ) )
-                    g_lastBusEntryShape = '/';
+                    m_lastBusEntryShape = '/';
                 else if( evt->IsAction( &EE_ACTIONS::toShapeBackslash ) )
-                    g_lastBusEntryShape = '\\';
+                    m_lastBusEntryShape = '\\';
 
                 SCH_BUS_ENTRY_BASE* busItem = static_cast<SCH_BUS_ENTRY_BASE*>( previewItem );
 
@@ -569,7 +568,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     busItem->MirrorY( busItem->GetPosition().y );
                 else if( evt->IsAction( &EE_ACTIONS::toShapeBackslash )
                          || evt->IsAction( &EE_ACTIONS::toShapeSlash ) )
-                    busItem->SetBusEntryShape( g_lastBusEntryShape );
+                    busItem->SetBusEntryShape( m_lastBusEntryShape );
 
                 m_view->ClearPreview();
                 m_view->AddToPreview( previewItem->Clone() );
@@ -583,6 +582,153 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     m_view->ClearPreview();
 
     return 0;
+}
+
+
+// History lists for placing labels and text
+
+SCH_TEXT* SCH_DRAWING_TOOLS::getNextNewText()
+{
+    if( m_queuedTexts.empty() )
+        return nullptr;
+
+    auto next_text = std::move( m_queuedTexts.front() );
+    m_queuedTexts.pop_front();
+
+    return next_text.release();
+}
+
+
+SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType )
+{
+    SCHEMATIC*          schematic = getModel<SCHEMATIC>();
+    SCHEMATIC_SETTINGS& settings = schematic->Settings();
+    SCH_TEXT*           textItem = nullptr;
+
+    m_queuedTexts.clear();
+
+    switch( aType )
+    {
+    case LAYER_NOTES:
+        textItem = new SCH_TEXT( (wxPoint) aPosition );
+        break;
+
+    case LAYER_LOCLABEL:
+        textItem = new SCH_LABEL( (wxPoint) aPosition );
+        break;
+
+    case LAYER_HIERLABEL:
+        textItem = new SCH_HIERLABEL( (wxPoint) aPosition );
+        textItem->SetShape( m_lastGlobalLabelShape );
+        break;
+
+    case LAYER_GLOBLABEL:
+        textItem = new SCH_GLOBALLABEL( (wxPoint) aPosition );
+        textItem->SetShape( m_lastGlobalLabelShape );
+        break;
+
+    default:
+        DisplayError( m_frame, wxT( "SCH_EDIT_FRAME::CreateNewText() Internal error" ) );
+        return nullptr;
+    }
+
+    textItem->SetParent( schematic );
+    textItem->SetBold( m_lastTextBold );
+    textItem->SetItalic( m_lastTextItalic );
+    textItem->SetLabelSpinStyle( m_lastTextOrientation );
+    textItem->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+    textItem->SetFlags( IS_NEW | IS_MOVED );
+
+    DIALOG_LABEL_EDITOR dlg( m_frame, textItem );
+
+    if( dlg.ShowModal() != wxID_OK || textItem->GetText().IsEmpty() )
+    {
+        delete textItem;
+        return nullptr;
+    }
+
+    if( aType != LAYER_NOTES )
+    {
+        UTF8 text( textItem->GetText() );
+        int  brace_count = 0;
+        int  bracket_count = 0;
+        bool last_space = false;
+        UTF8 token;
+
+        for( auto chIt = text.ubegin(); chIt != text.uend(); chIt++ )
+        {
+            switch( *chIt )
+            {
+            case '{':
+                brace_count++;
+                last_space = false;
+                break;
+
+            case '[':
+                bracket_count++;
+                last_space = false;
+                break;
+
+            case '}':
+                brace_count = std::max( 0, brace_count - 1 );
+                last_space = false;
+                break;
+
+            case ']':
+                bracket_count = std::max( 0, bracket_count - 1 );
+                last_space = false;
+                break;
+
+            case ' ':
+            case '\n':
+            case '\r':
+            case '\t':
+                if( !token.empty() && bracket_count == 0 && brace_count == 0 )
+                {
+                    std::unique_ptr<SCH_TEXT> nextitem( static_cast<SCH_TEXT*>( textItem->Clone() ) );
+                    nextitem->SetText( token.wx_str() );
+                    m_queuedTexts.push_back( std::move( nextitem ) );
+                    token.clear();
+                    continue;
+                }
+
+                // Skip leading whitespace
+                if( token.empty() || last_space )
+                    continue;
+
+                last_space = true;
+                break;
+
+            default:
+                last_space = false;
+                break;
+            }
+
+            token += *chIt;
+        }
+
+        if( !token.empty() )
+        {
+            std::unique_ptr<SCH_TEXT> nextitem( static_cast<SCH_TEXT*>( textItem->Clone() ) );
+            nextitem->SetText( token.wx_str() );
+            m_queuedTexts.push_back( std::move( nextitem ) );
+        }
+
+        delete textItem;
+        textItem = getNextNewText();
+
+        if( !textItem )
+            return nullptr;
+    }
+
+    m_lastTextBold = textItem->IsBold();
+    m_lastTextItalic = textItem->IsItalic();
+    m_lastTextOrientation = textItem->GetLabelSpinStyle();
+
+    if( textItem->Type() == SCH_GLOBAL_LABEL_T || textItem->Type() == SCH_HIER_LABEL_T )
+        m_lastGlobalLabelShape = textItem->GetShape();
+
+    return textItem;
 }
 
 
@@ -656,16 +802,16 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 switch( type )
                 {
                 case SCH_LABEL_T:
-                    item = m_frame->CreateNewText( LAYER_LOCLABEL );
+                    item = createNewText( cursorPos, LAYER_LOCLABEL );
                     break;
                 case SCH_HIER_LABEL_T:
-                    item = m_frame->CreateNewText( LAYER_HIERLABEL );
+                    item = createNewText( cursorPos, LAYER_HIERLABEL );
                     break;
                 case SCH_GLOBAL_LABEL_T:
-                    item = m_frame->CreateNewText( LAYER_GLOBLABEL );
+                    item = createNewText( cursorPos, LAYER_GLOBLABEL );
                     break;
                 case SCH_TEXT_T:
-                    item = m_frame->CreateNewText( LAYER_NOTES );
+                    item = createNewText( cursorPos, LAYER_NOTES );
                     break;
                 case SCH_SHEET_PIN_T:
                 {
@@ -721,7 +867,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             {
                 item->ClearFlags( IS_MOVED );
                 m_frame->AddItemToScreenAndUndoList( (SCH_ITEM*) item );
-                item = m_frame->GetNextNewText();
+                item = getNextNewText();
 
                 if( item )
                 {
@@ -849,7 +995,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                     m_frame->GetCurrentSheet().Last(), static_cast<wxPoint>( cursorPos ) );
             sheet->SetFlags( IS_NEW | IS_RESIZED );
             sheet->SetScreen( NULL );
-            sheet->SetBorderWidth( m_frame->GetDefaultLineWidth() );
+            sheet->SetBorderWidth( cfg->m_Drawing.default_line_thickness );
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
             sheet->SetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
             sizeSheet( sheet, cursorPos );

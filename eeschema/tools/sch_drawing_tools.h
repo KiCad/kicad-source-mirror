@@ -58,7 +58,16 @@ public:
     int DrawSheet( const TOOL_EVENT& aEvent );
     int PlaceImage( const TOOL_EVENT& aEvent );
 
+    void SetLastBusEntryShape( char aShape ) { m_lastBusEntryShape = aShape; }
+
 private:
+    /**
+     * Gets the next queued text item
+     * @return next SCH_TEXT* or nullptr if empty
+     */
+    SCH_TEXT* getNextNewText();
+
+    SCH_TEXT* createNewText( const VECTOR2I& aPosition, int aType );
 
     void sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos );
 
@@ -66,7 +75,20 @@ private:
     void setTransitions() override;
 
 private:
-    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
+// History lists for PlaceComponent()
+    std::vector<COMPONENT_SELECTION>      m_symbolHistoryList;
+    std::vector<COMPONENT_SELECTION>      m_powerHistoryList;
+
+    char                                  m_lastBusEntryShape;
+
+    PINSHEETLABEL_SHAPE                   m_lastGlobalLabelShape;
+    LABEL_SPIN_STYLE                      m_lastTextOrientation;
+    bool                                  m_lastTextBold;
+    bool                                  m_lastTextItalic;
+
+    std::deque<std::unique_ptr<SCH_TEXT>> m_queuedTexts;
+
+    std::unique_ptr<STATUS_TEXT_POPUP>    m_statusPopup;
 };
 
 #endif /* SCH_DRAWING_TOOLS_H */

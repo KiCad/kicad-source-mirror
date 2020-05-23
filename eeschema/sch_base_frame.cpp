@@ -105,18 +105,6 @@ SCH_SCREEN* SCH_BASE_FRAME::GetScreen() const
 }
 
 
-void SCH_BASE_FRAME::SetScreen(  BASE_SCREEN* aScreen )
-{
-    EDA_DRAW_FRAME::SetScreen( aScreen );
-
-    if( m_toolManager )
-    {
-        m_toolManager->SetEnvironment( aScreen, GetCanvas()->GetView(),
-                                       GetCanvas()->GetViewControls(), this );
-    }
-}
-
-
 EESCHEMA_SETTINGS* SCH_BASE_FRAME::eeconfig() const
 {
     return dynamic_cast<EESCHEMA_SETTINGS*>( config() );
@@ -132,34 +120,6 @@ LIBEDIT_SETTINGS* SCH_BASE_FRAME::libeditconfig() const
 const wxString SCH_BASE_FRAME::GetZoomLevelIndicator() const
 {
     return EDA_DRAW_FRAME::GetZoomLevelIndicator();
-}
-
-
-void SCH_BASE_FRAME::SetDefaultLineWidth( int aWidth )
-{
-    m_defaults->m_DefaultLineWidth = aWidth;
-    GetRenderSettings()->SetDefaultPenWidth( aWidth );
-}
-
-
-void SCH_BASE_FRAME::SetDefaultWireThickness( int aThickness )
-{
-    m_defaults->m_DefaultWireThickness = aThickness;
-    GetRenderSettings()->m_DefaultWireThickness = aThickness;
-}
-
-
-void SCH_BASE_FRAME::SetDefaultBusThickness( int aThickness )
-{
-    m_defaults->m_DefaultBusThickness = aThickness;
-    GetRenderSettings()->m_DefaultBusThickness = aThickness;
-}
-
-
-void SCH_BASE_FRAME::SetPinSymbolSize( int aSize )
-{
-    m_defaults->m_PinSymbolSize = aSize;
-    GetRenderSettings()->m_PinSymbolSize = aSize;
 }
 
 

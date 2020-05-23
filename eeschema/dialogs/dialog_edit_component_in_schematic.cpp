@@ -31,7 +31,7 @@
 #include <pgm_base.h>
 
 #include <widgets/wx_grid.h>
-
+#include <settings/settings_manager.h>
 #include <ee_collectors.h>
 #include <class_library.h>
 #include <eeschema_settings.h>
@@ -230,7 +230,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnBrowseLibrary( wxCommandEvent& event )
 {
-    SCH_BASE_FRAME::HISTORY_LIST dummy;
+    std::vector<COMPONENT_SELECTION> dummy;
 
     LIB_ID id;
     id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH );
@@ -562,14 +562,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    int       fieldID = m_fields->size();
-    SCH_FIELD newField( wxPoint( 0, 0 ), fieldID, m_cmp,
-                        TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID ) );
+    SCHEMATIC_SETTINGS& settings = m_cmp->Schematic()->Settings();
+    int                 fieldID = m_fields->size();
+    SCH_FIELD           newField( wxPoint( 0, 0 ), fieldID, m_cmp,
+                                  TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID ) );
 
+    newField.SetParent( m_cmp->GetParent() );
     newField.SetTextAngle( m_fields->at( REFERENCE ).GetTextAngle() );
-
-    newField.SetTextSize( wxSize( GetParent()->GetDefaultTextSize(),
-                                  GetParent()->GetDefaultTextSize() ) );
+    newField.SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
 
     m_fields->push_back( newField );
 

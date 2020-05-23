@@ -31,74 +31,16 @@
 #include <general.h>
 #include <gr_text.h>
 #include <confirm.h>
-#include <sch_text.h>
 #include <sch_component.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
 #include <widgets/unit_binder.h>
-#include <dialog_edit_label_base.h>
+#include <dialog_edit_label.h>
 #include <kicad_string.h>
 #include <tool/actions.h>
-#include <html_messagebox.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
-
-
-class DIALOG_LABEL_EDITOR : public DIALOG_LABEL_EDITOR_BASE
-{
-public:
-    DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
-    ~DIALOG_LABEL_EDITOR();
-
-    void SetTitle( const wxString& aTitle ) override
-    {
-        // This class is shared for numerous tasks: a couple of single line labels and
-        // multi-line text fields.  Since the desired size of the multi-line text field editor
-        // is often larger, we retain separate sizes based on the dialog titles.
-        switch( m_CurrentText->Type() )
-        {
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_LABEL_T:
-            // labels can share retained settings probably.
-            break;
-
-        default:
-            m_hash_key = TO_UTF8( aTitle );
-            m_hash_key += typeid(*this).name();
-        }
-
-        DIALOG_LABEL_EDITOR_BASE::SetTitle( aTitle );
-    }
-
-private:
-    void OnEnterKey( wxCommandEvent& aEvent ) override;
-    void OnCharHook( wxKeyEvent& aEvent );
-    void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
-
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    wxString convertKIIDsToReferences( const wxString& aSource ) const;
-
-    wxString convertReferencesToKIIDs( const wxString& aSource ) const;
-
-    SCH_EDIT_FRAME* m_Parent;
-    SCH_TEXT*       m_CurrentText;
-    wxWindow*       m_activeTextCtrl;
-    wxTextEntry*    m_activeTextEntry;
-    UNIT_BINDER     m_textSize;
-    SCH_NETNAME_VALIDATOR m_netNameValidator;
-};
-
-
-int InvokeDialogLabelEditor( SCH_EDIT_FRAME* aCaller, SCH_TEXT* aTextItem )
-{
-    DIALOG_LABEL_EDITOR dialog( aCaller, aTextItem );
-
-    return dialog.ShowModal();
-}
 
 
 // Don't allow text to disappear; it can be difficult to correct if you can't select it

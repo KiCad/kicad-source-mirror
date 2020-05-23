@@ -320,7 +320,7 @@ void SCH_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
+    m_toolManager->SetEnvironment( &Schematic(), GetCanvas()->GetView(),
                                    GetCanvas()->GetViewControls(), this );
     m_actions = new EE_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );

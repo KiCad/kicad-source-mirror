@@ -66,10 +66,6 @@
 
 
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
-double LIB_EDIT_FRAME::        g_LastTextAngle   = TEXT_ANGLE_HORIZ;
-
-FILL_T LIB_EDIT_FRAME::        g_LastFillStyle   = NO_FILL;
-
 
 BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
@@ -98,9 +94,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_unitSelectBox( nullptr )
 {
     SetShowDeMorgan( false );
-    m_DrawSpecificConvert = true;
-    m_DrawSpecificUnit    = false;
-    m_SyncPinEdit         = false;
+    m_SyncPinEdit = false;
 
     m_my_part = nullptr;
     m_treePane = nullptr;
@@ -225,9 +219,6 @@ void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     SCH_BASE_FRAME::LoadSettings( GetSettings() );
 
-    SetDefaultLineWidth( Mils2iu( m_settings->m_Defaults.line_width ) );
-    SetDefaultTextSize( Mils2iu( m_settings->m_Defaults.text_size ) );
-
     GetRenderSettings()->m_ShowPinsElectricalType = m_settings->m_ShowPinElectricalType;
 
     // Hidden elements must be editable
@@ -243,8 +234,6 @@ void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     SCH_BASE_FRAME::SaveSettings( GetSettings() );
 
-    m_settings->m_Defaults.line_width    = Iu2Mils( GetDefaultLineWidth() );
-    m_settings->m_Defaults.text_size     = Iu2Mils( GetDefaultTextSize() );
     m_settings->m_ShowPinElectricalType  = GetRenderSettings()->m_ShowPinsElectricalType;
     m_settings->m_LibWidth               = m_treePane->GetSize().x;
 }

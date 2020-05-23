@@ -91,20 +91,6 @@ public:
      */
     bool          m_SyncPinEdit;
 
-    /** Convert of the item currently being drawn. */
-    bool          m_DrawSpecificConvert;
-
-    /**
-     * Specify which component parts the current draw item applies to.
-     *
-     * If true, the item being drawn or edited applies only to the selected part.  Otherwise
-     * it applies to all parts in the component.
-     */
-    bool          m_DrawSpecificUnit;
-
-    static double g_LastTextAngle;
-    static FILL_T g_LastFillStyle;
-
 public:
     LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 

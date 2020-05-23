@@ -110,7 +110,6 @@ public:
 
     SCH_DRAW_PANEL* GetCanvas() const override;
     SCH_SCREEN* GetScreen() const override;
-    void SetScreen( BASE_SCREEN* aScreen ) override;
 
     EESCHEMA_SETTINGS* eeconfig() const;
 
@@ -130,24 +129,6 @@ public:
      * Allow some frames to show/hide hidden pins.  The default impl shows all pins.
      */
     virtual bool GetShowAllPins() const { return true; }
-
-    virtual int GetDefaultLineWidth() const { return m_defaults->m_DefaultLineWidth; }
-    virtual void SetDefaultLineWidth( int aWidth );
-
-    virtual int GetDefaultWireThickness() const { return m_defaults->m_DefaultWireThickness; }
-    virtual void SetDefaultWireThickness( int aThickness );
-
-    virtual int GetDefaultBusThickness() const { return m_defaults->m_DefaultBusThickness; }
-    virtual void SetDefaultBusThickness( int aThickness );
-
-    virtual int GetPinSymbolSize() const { return m_defaults->m_PinSymbolSize; }
-    virtual void SetPinSymbolSize( int aSize );
-
-    virtual int GetDefaultTextSize() const { return m_defaults->m_DefaultTextSize; }
-    virtual void SetDefaultTextSize( int aSize ) { m_defaults->m_DefaultTextSize = aSize; }
-
-    virtual double GetTextOffsetRatio() const { return m_defaults->m_TextOffsetRatio; }
-    virtual void SetTextOffsetRatio( double aRatio ) { m_defaults->m_TextOffsetRatio = aRatio; }
 
     /**
      * Function GetZoomLevelIndicator
@@ -177,8 +158,6 @@ public:
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
     void UpdateStatusBar() override;
-
-    typedef std::vector<COMPONENT_SELECTION> HISTORY_LIST;
 
     /**
      * Function SelectComponentFromLib

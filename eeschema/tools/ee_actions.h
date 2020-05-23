@@ -32,8 +32,6 @@
 class TOOL_EVENT;
 class TOOL_MANAGER;
 
-extern char g_lastBusEntryShape;
-
 /**
  * EESCHEMA_ACTIONS
  *

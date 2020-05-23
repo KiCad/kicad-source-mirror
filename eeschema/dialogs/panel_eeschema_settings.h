@@ -30,7 +30,6 @@ class PANEL_EESCHEMA_SETTINGS : public PANEL_EESCHEMA_SETTINGS_BASE
 {
     SCH_EDIT_FRAME* m_frame;
 
-    UNIT_BINDER     m_defaultTextSize;
     UNIT_BINDER     m_hPitch;
     UNIT_BINDER     m_vPitch;
 

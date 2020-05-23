@@ -37,13 +37,20 @@
 #include <lib_circle.h>
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
+#include <pgm_base.h>
+#include <libedit/libedit_settings.h>
+#include <settings/settings_manager.h>
 #include "ee_point_editor.h"
 
 static void* g_lastPinWeakPtr;
 
 
 LIB_DRAWING_TOOLS::LIB_DRAWING_TOOLS() :
-    EE_TOOL_BASE<LIB_EDIT_FRAME>( "eeschema.SymbolDrawing" )
+        EE_TOOL_BASE<LIB_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
+        m_lastTextAngle( 0.0 ),
+        m_lastFillStyle( NO_FILL ),
+        m_drawSpecificConvert( true ),
+        m_drawSpecificUnit( false )
 {
 }
 
@@ -65,10 +72,11 @@ bool LIB_DRAWING_TOOLS::Init()
 
 int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
-    KICAD_T       type = aEvent.Parameter<KICAD_T>();
-    LIB_PIN_TOOL* pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<LIB_PIN_TOOL>() : nullptr;
-    VECTOR2I      cursorPos;
-    EDA_ITEM*     item = nullptr;
+    KICAD_T           type = aEvent.Parameter<KICAD_T>();
+    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    LIB_PIN_TOOL*     pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<LIB_PIN_TOOL>() : nullptr;
+    VECTOR2I          cursorPos;
+    EDA_ITEM*         item = nullptr;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -144,10 +152,11 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 case LIB_TEXT_T:
                 {
                     LIB_TEXT* text = new LIB_TEXT( part );
+
                     text->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
-                    text->SetTextSize( wxSize( m_frame->GetDefaultTextSize(),
-                                               m_frame->GetDefaultTextSize() ) );
-                    text->SetTextAngle( m_frame->g_LastTextAngle );
+                    text->SetTextSize( wxSize( Mils2iu( settings->m_Defaults.text_size ),
+                                               Mils2iu( settings->m_Defaults.text_size ) ) );
+                    text->SetTextAngle( m_lastTextAngle );
 
                     DIALOG_LIB_EDIT_TEXT dlg( m_frame, text );
 
@@ -231,8 +240,9 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
 int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
-    KICAD_T          type = aEvent.Parameter<KICAD_T>();
-    EE_POINT_EDITOR* pointEditor = m_toolMgr->GetTool<EE_POINT_EDITOR>();
+    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    KICAD_T           type = aEvent.Parameter<KICAD_T>();
+    EE_POINT_EDITOR*  pointEditor = m_toolMgr->GetTool<EE_POINT_EDITOR>();
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
@@ -317,15 +327,15 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             wxASSERT( item );
 
-            item->SetWidth( m_frame->GetDefaultLineWidth() );
-            item->SetFillMode( LIB_EDIT_FRAME::g_LastFillStyle );
+            item->SetWidth( settings->m_Defaults.line_width );
+            item->SetFillMode( m_lastFillStyle );
             item->SetFlags( IS_NEW );
             item->BeginEdit( wxPoint( cursorPos.x, -cursorPos.y ) );
 
-            if( m_frame->m_DrawSpecificUnit )
+            if( m_drawSpecificUnit )
                 item->SetUnit( m_frame->GetUnit() );
 
-            if( m_frame->m_DrawSpecificConvert )
+            if( m_drawSpecificConvert )
                 item->SetConvert( m_frame->GetConvert() );
 
             m_selectionTool->AddItemToSel( item );

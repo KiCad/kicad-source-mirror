@@ -405,11 +405,12 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddField( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    int       fieldID = m_fields->size();
-    LIB_FIELD newField( m_libEntry, fieldID );
+    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    int               fieldID = m_fields->size();
+    LIB_FIELD         newField( m_libEntry, fieldID );
 
-    newField.SetTextSize( wxSize( m_Parent->GetDefaultTextSize(),
-                                  m_Parent->GetDefaultTextSize() ) );
+    newField.SetTextSize( wxSize( Mils2iu( settings->m_Defaults.text_size ),
+                                  Mils2iu( settings->m_Defaults.text_size ) ) );
 
     m_fields->push_back( newField );
 

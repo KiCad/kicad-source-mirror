@@ -500,8 +500,9 @@ PINSHEETLABEL_SHAPE SCH_EDIT_FRAME::m_lastSheetPinType = PINSHEETLABEL_SHAPE::PS
 
 SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel )
 {
-    wxString       text;
-    SCH_SHEET_PIN* sheetPin;
+    SCHEMATIC_SETTINGS& settings = aSheet->Schematic()->Settings();
+    wxString            text;
+    SCH_SHEET_PIN*      sheetPin;
 
     if( aLabel )
     {
@@ -511,7 +512,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL*
 
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), text );
     sheetPin->SetFlags( IS_NEW );
-    sheetPin->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+    sheetPin->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
     sheetPin->SetShape( m_lastSheetPinType );
 
     if( !aLabel )

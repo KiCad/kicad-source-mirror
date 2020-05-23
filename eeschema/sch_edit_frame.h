@@ -609,14 +609,6 @@ public:
                                bool aFinal = true );
 
     /**
-     * Gets the next queued text item
-     * @return next SCH_TEXT* or nullptr if empty
-     */
-    SCH_TEXT* GetNextNewText();
-
-    SCH_TEXT* CreateNewText( int aType );
-
-    /**
      * Performs routine schematic cleaning including breaking wire and buses and deleting
      * identical objects superimposed on top of each other.
      *

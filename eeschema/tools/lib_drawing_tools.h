@@ -52,12 +52,26 @@ public:
 
     int RepeatDrawItem( const TOOL_EVENT& aEvent );
 
-private:
+    void SetLastTextAngle( double aAngle ) { m_lastTextAngle = aAngle; }
+    double GetLastTextAngle() const { return m_lastTextAngle; }
 
+    void SetDrawSpecificConvert( bool aSpecific ) { m_drawSpecificConvert = aSpecific; }
+    bool GetDrawSpecificConvert() const { return m_drawSpecificConvert; }
+
+    void SetDrawSpecificUnit( bool aSpecific ) { m_drawSpecificUnit = aSpecific; }
+    bool GetDrawSpecificUnit() const { return m_drawSpecificUnit; }
+
+private:
     int doTwoClickPlace( KICAD_T aType, bool aImmediateMode );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
+
+private:
+    double m_lastTextAngle;
+    FILL_T m_lastFillStyle;
+    bool   m_drawSpecificConvert;
+    bool   m_drawSpecificUnit;
 };
 
 #endif /* LIB_DRAWING_TOOLS_H */
