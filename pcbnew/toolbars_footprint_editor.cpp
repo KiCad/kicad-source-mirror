@@ -182,6 +182,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::moduleTextOutlines,  ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::moduleEdgeOutlines,  ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::highContrastMode,        ACTION_TOOLBAR::TOGGLE );
 
@@ -240,6 +241,7 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,       GetShowPolarCoords() );
     m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,      !opts.m_DisplayPadFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::moduleTextOutlines,  !opts.m_DisplayModTextFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines,  !opts.m_DisplayModEdgeFill );
     m_optionsToolBar->Toggle( ACTIONS::highContrastMode,        opts.m_ContrastModeDisplay );
     m_optionsToolBar->Toggle( PCB_ACTIONS::toggleFootprintTree, IsSearchTreeShown() );
