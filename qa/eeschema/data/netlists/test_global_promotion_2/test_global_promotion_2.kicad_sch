@@ -1,4 +1,4 @@
-(kicad_sch (version 20200512) (host eeschema "(5.99.0-1712-g5a9e69b14)")
+(kicad_sch (version 20200512) (host eeschema "(5.99.0-1770-gd6a274607)")
 
   (page 1 3)
 
@@ -11,7 +11,7 @@
       (property "Footprint" "" (id 2) (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "Datasheet" "~" (id 3) (at 0 0 0)
+      (property "Datasheet" "" (id 3) (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_keywords" "connector" (id 4) (at 0 0 0)
@@ -61,6 +61,10 @@
   (wire (pts (xy 134.62 74.93) (xy 97.79 74.93)))
   (wire (pts (xy 134.62 78.74) (xy 133.35 78.74)))
 
+  (label "LIVE_2" (at 107.95 77.47 180)
+    (effects (font (size 1.27 1.27)) (justify right bottom))
+  )
+
   (global_label "LIVE" (shape input) (at 133.35 55.88 0)
     (effects (font (size 1.27 1.27)) (justify left))
   )
@@ -90,7 +94,7 @@
   )
 
   (sheet (at 134.62 71.12) (size 27.94 17.78)
-    (stroke (color 174 129 255 1))
+    (stroke (width 0.1524) (color 174 129 255 1))
     (fill (color 255 255 255 0.0000))
     (uuid 00000000-0000-0000-0000-00005cc15ef9)
     (property "Sheet name" "Sheet5CC15EF8" (id 0) (at 134.62 70.4845 0)
@@ -111,7 +115,7 @@
   )
 
   (sheet (at 134.62 96.52) (size 27.94 17.78)
-    (stroke (color 174 129 255 1))
+    (stroke (width 0.1524) (color 174 129 255 1))
     (fill (color 255 255 255 0.0000))
     (uuid 00000000-0000-0000-0000-00005cc165f1)
     (property "Sheet name" "sheet5CC165F1" (id 0) (at 134.62 95.8845 0)

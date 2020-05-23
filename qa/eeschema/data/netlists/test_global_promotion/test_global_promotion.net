@@ -1,6 +1,6 @@
 (export (version "D")
   (design
-    (source "/home/jon/work/kicad-master/qa/eeschema/data/netlists/test_global_promotion/test_global_promotion.sch")
+    (source "test_global_promotion.sch")
     (date "Sun 19 Apr 2020 16:13:42 EDT")
     (tool "Eeschema (5.99.0-1347-g0d2b30b74-dirty)")
     (sheet (number "1") (name "/") (tstamps "/")
@@ -75,9 +75,7 @@
       (pins
         (pin (num "1") (name "~") (type "passive"))
         (pin (num "2") (name "~") (type "passive")))))
-  (libraries
-    (library (logical "Device")
-      (uri "/home/jon/kicad-library/kicad-symbols//Device.lib")))
+  (libraries)
   (nets
     (net (code "1") (name "5V")
       (node (ref "R1") (pin "1")))

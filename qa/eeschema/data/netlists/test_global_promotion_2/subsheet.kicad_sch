@@ -1,6 +1,6 @@
-(kicad_sch (version 20200512) (host eeschema "(5.99.0-1712-g5a9e69b14)")
+(kicad_sch (version 20200512) (host eeschema "(5.99.0-1770-gd6a274607)")
 
-  (page 2 3)
+  (page 1 3)
 
   (paper "A4")
 
@@ -11,7 +11,7 @@
       (property "Footprint" "" (id 2) (at -1.778 0 90)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "Datasheet" "~" (id 3) (at 0 0 0)
+      (property "Datasheet" "" (id 3) (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_keywords" "R res resistor" (id 4) (at 0 0 0)
