@@ -258,15 +258,27 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const wxPoint& aPos )
     int    logicalOriginX, logicalOriginY;
     aDC->GetUserScale( &scale, &scale );
     aDC->GetLogicalOrigin( &logicalOriginX, &logicalOriginY );
-    aDC->SetUserScale( scale * GetScalingFactor(), scale * GetScalingFactor() );
-    aDC->SetLogicalOrigin( logicalOriginX / GetScalingFactor(),
-                           logicalOriginY / GetScalingFactor() );
 
-    pos.x  = KiROUND( pos.x / GetScalingFactor() );
-    pos.y  = KiROUND( pos.y / GetScalingFactor() );
-    size.x = KiROUND( size.x / GetScalingFactor() );
-    size.y = KiROUND( size.y / GetScalingFactor() );
-    aDC->SetClippingRegion( pos, size );
+    bool useTransform = aDC->CanUseTransformMatrix();
+    wxAffineMatrix2D init_matrix = aDC->GetTransformMatrix();
+
+    if( useTransform )
+    {
+        wxAffineMatrix2D matrix = aDC->GetTransformMatrix();
+        matrix.Translate( pos.x, pos.y );
+        matrix.Scale( GetScalingFactor(), GetScalingFactor() );
+        aDC->SetTransformMatrix( matrix );
+        pos.x = pos.y = 0;
+    }
+    else
+    {
+        aDC->SetUserScale( scale * GetScalingFactor(), scale * GetScalingFactor() );
+        aDC->SetLogicalOrigin( logicalOriginX / GetScalingFactor(),
+                               logicalOriginY / GetScalingFactor() );
+
+        pos.x  = KiROUND( pos.x / GetScalingFactor() );
+        pos.y  = KiROUND( pos.y / GetScalingFactor() );
+    }
 
     if( GetGRForceBlackPenState() )
     {
@@ -278,9 +290,13 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const wxPoint& aPos )
         aDC->DrawBitmap( *m_bitmap, pos.x, pos.y, true );
     }
 
-    aDC->DestroyClippingRegion();
-    aDC->SetUserScale( scale, scale );
-    aDC->SetLogicalOrigin( logicalOriginX, logicalOriginY );
+    if( useTransform )
+        aDC->SetTransformMatrix( init_matrix );
+    else
+    {
+        aDC->SetUserScale( scale, scale );
+        aDC->SetLogicalOrigin( logicalOriginX, logicalOriginY );
+    }
 }
 
 
