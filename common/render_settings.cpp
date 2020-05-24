@@ -27,6 +27,7 @@ using namespace KIGFX;
 
 
 RENDER_SETTINGS::RENDER_SETTINGS() :
+        m_highlightNetcodes(),
         m_printDC( nullptr )
 {
     // Set the default initial values
@@ -36,7 +37,6 @@ RENDER_SETTINGS::RENDER_SETTINGS() :
     m_highlightEnabled   = false;
     m_hiContrastEnabled  = false;
     m_hiContrastFactor   = 0.2f; //TODO: Make this user-configurable
-    m_highlightNetcode   = -1;
     m_outlineWidth       = 1;
     m_worksheetLineWidth = 100000;
     m_defaultPenWidth    = 0;

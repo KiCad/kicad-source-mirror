@@ -116,9 +116,9 @@ public:
      * Returns netcode of currently highlighted net.
      * @return Netcode of currently highlighted net.
      */
-    inline int GetHighlightNetCode() const
+    inline const std::set<int>& GetHighlightNetCodes() const
     {
-        return m_highlightNetcode;
+        return m_highlightNetcodes;
     }
 
     /**
@@ -129,10 +129,21 @@ public:
      * @param aNetcode is optional and if specified, turns on higlighting only for the net with
      * number given as the parameter.
      */
-    inline void SetHighlight( bool aEnabled, int aNetcode = -1, bool aHighlightItems = false )
+    inline void SetHighlight( bool aEnabled, int aNetcode = -1, bool aHighlightItems = false,
+                              bool aMulti = false )
     {
         m_highlightEnabled = aEnabled;
-        m_highlightNetcode = aEnabled ? aNetcode : -1;
+
+        if( aEnabled )
+        {
+            if( !aMulti )
+                m_highlightNetcodes.clear();
+
+            m_highlightNetcodes.insert( aNetcode );
+        }
+        else
+            m_highlightNetcodes.clear();
+
         m_highlightItems = aEnabled ? aHighlightItems : false;
     }
 
@@ -250,9 +261,9 @@ protected:
     float   m_hiContrastFactor;     // Factor used for computing high contrast color
 
     bool    m_highlightEnabled;     // Highlight display mode on/off
-    int     m_highlightNetcode;     // Net number that is displayed in highlight
-                                    // -1 means that there is no specific net, and whole active
-                                    // layer is highlighted
+
+    std::set<int> m_highlightNetcodes; // Set of net cods to be highlighted
+
     bool    m_highlightItems;       // Highlight items with their HIGHLIGHT flags set
     float   m_highlightFactor;      // Factor used for computing highlight color
 

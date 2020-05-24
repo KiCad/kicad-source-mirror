@@ -31,24 +31,25 @@
  * Note: these ports must be enabled for firewall protection
  */
 
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <kiface_i.h>
-#include <kiway_express.h>
-#include <pcb_edit_frame.h>
-#include <eda_dde.h>
-#include <macros.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
 #include <collectors.h>
-#include <pcbnew.h>
+#include <eda_dde.h>
+#include <fctsys.h>
+#include <kiface_i.h>
+#include <kiway_express.h>
+#include <macros.h>
 #include <netlist_reader/pcb_netlist.h>
-#include <tools/pcb_actions.h>
-#include <tool/tool_manager.h>
-#include <tools/selection_tool.h>
+#include <pcb_edit_frame.h>
 #include <pcb_painter.h>
+#include <pcbnew.h>
+#include <pgm_base.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+#include <tools/selection_tool.h>
+#include <wx/tokenzr.h>
 
 /* Execute a remote command send by Eeschema via a socket,
  * port KICAD_PCB_PORT_SERVICE_NUMBER
@@ -68,6 +69,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     char*       idcmd;
     char*       text;
     int         netcode = -1;
+    bool        multiHighlight = false;
     MODULE*     module = NULL;
     D_PAD*      pad = NULL;
     BOARD*      pcb = GetBoard();
@@ -98,6 +100,39 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             netinfo->GetMsgPanelInfo( this, items );
             SetMsgPanel( items );
         }
+    }
+    if( strcmp( idcmd, "$NETS:" ) == 0 )
+    {
+        wxStringTokenizer netsTok = wxStringTokenizer( FROM_UTF8( text ), "," );
+        bool first = true;
+
+        while( netsTok.HasMoreTokens() )
+        {
+            NETINFO_ITEM* netinfo = pcb->FindNet( netsTok.GetNextToken() );
+
+            if( netinfo )
+            {
+                if( first )
+                {
+                    // TODO: Once buses are included in netlist, show bus name
+                    MSG_PANEL_ITEMS items;
+                    netinfo->GetMsgPanelInfo( this, items );
+                    SetMsgPanel( items );
+                    first = false;
+
+                    pcb->SetHighLightNet( netinfo->GetNet() );
+                    renderSettings->SetHighlight( true, netinfo->GetNet() );
+                    multiHighlight = true;
+                }
+                else
+                {
+                    pcb->SetHighLightNet( netinfo->GetNet(), true );
+                    renderSettings->SetHighlight( true, netinfo->GetNet(), false, true );
+                }
+            }
+        }
+
+        netcode = -1;
     }
     else if( strcmp( idcmd, "$PIN:" ) == 0 )
     {
@@ -174,11 +209,19 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         else
             m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, (void*) module );
     }
-    else if( netcode > 0 )
+    else if( netcode > 0 || multiHighlight )
     {
-        renderSettings->SetHighlight( ( netcode >= 0 ), netcode );
+        if( !multiHighlight )
+        {
+            renderSettings->SetHighlight( ( netcode >= 0 ), netcode );
+            pcb->SetHighLightNet( netcode );
+        }
+        else
+        {
+            // Just pick the first one for area calculation
+            netcode = *pcb->GetHighLightNetCodes().begin();
+        }
 
-        pcb->SetHighLightNet( netcode );
         pcb->HighLightON();
 
         auto merge_area = [netcode, &bbox]( BOARD_CONNECTED_ITEM* aItem )

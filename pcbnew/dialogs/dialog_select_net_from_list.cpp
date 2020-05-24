@@ -489,8 +489,8 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardHighlightNetChanged( BOARD& aBoard )
 {
     if( !m_brd->IsHighLightNetON() )
         m_netsList->UnselectAll();
-    else
-        HighlightNet( m_brd->FindNet( m_brd->GetHighLightNetCode() ) );
+    else if( !m_brd->GetHighLightNetCodes().empty() )
+        HighlightNet( m_brd->FindNet( *m_brd->GetHighLightNetCodes().begin() ) );
 }
 
 

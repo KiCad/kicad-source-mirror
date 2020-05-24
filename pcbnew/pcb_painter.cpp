@@ -280,7 +280,7 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
     }
 
     // Single net highlight mode
-    if( m_highlightEnabled && netCode == m_highlightNetcode )
+    if( m_highlightEnabled && m_highlightNetcodes.count( netCode ) )
         return m_layerColorsHi[aLayer];
 
     // Return grayish color for non-highlighted layers in the high contrast mode

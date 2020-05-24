@@ -367,6 +367,55 @@ void SCH_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 }
 
 
+void SCH_EDIT_FRAME::SetCrossProbeConnection( const SCH_CONNECTION* aConnection )
+{
+    if( !aConnection )
+    {
+        SendCrossProbeClearHighlight();
+        return;
+    }
+
+    if( aConnection->IsNet() )
+    {
+        SendCrossProbeNetName( aConnection->Name() );
+        return;
+    }
+
+    if( aConnection->Members().empty() )
+        return;
+
+    wxString nets = aConnection->Members()[0]->Name();
+
+    if( aConnection->Members().size() == 1 )
+    {
+        SendCrossProbeNetName( nets );
+        return;
+    }
+
+    // TODO: This could be replaced by just sending the bus name once we have bus contents
+    // included as part of the netlist sent from eeschema to pcbnew (and thus pcbnew can
+    // natively keep track of bus membership)
+
+    for( size_t i = 1; i < aConnection->Members().size(); i++ )
+        nets << "," << aConnection->Members()[i]->Name();
+
+    std::string packet = StrPrintf( "$NETS: \"%s\"", TO_UTF8( nets ) );
+
+    if( !packet.empty() )
+    {
+        if( Kiface().IsSingle() )
+            SendCommand( MSG_TO_PCB, packet.c_str() );
+        else
+        {
+            // Typically ExpressMail is going to be s-expression packets, but since
+            // we have existing interpreter of the cross probe packet on the other
+            // side in place, we use that here.
+            Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_CROSS_PROBE, packet, this );
+        }
+    }
+}
+
+
 void SCH_EDIT_FRAME::SendCrossProbeClearHighlight()
 {
     std::string packet = "$CLEAR\n";

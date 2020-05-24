@@ -59,7 +59,8 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
     // Get the current default settings for zones
     ZONE_SETTINGS zoneInfo = frame.GetZoneSettings();
     zoneInfo.m_CurrentZone_Layer = m_params.m_layer;
-    zoneInfo.m_NetcodeSelection = board.GetHighLightNetCode();
+    zoneInfo.m_NetcodeSelection =
+            board.GetHighLightNetCodes().empty() ? -1 : *board.GetHighLightNetCodes().begin();
     zoneInfo.SetIsKeepout( m_params.m_keepout );
     zoneInfo.m_Zone_45_Only = ( m_params.m_leaderMode == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
 

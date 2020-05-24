@@ -164,7 +164,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
     // Populate the net filter list with net names
     m_netFilter->SetBoard( m_brd );
     m_netFilter->SetNetInfo( &m_brd->GetNetInfo() );
-    m_netFilter->SetSelectedNetcode( m_brd->GetHighLightNetCode() );
+
+    if( !m_brd->GetHighLightNetCodes().empty() )
+        m_netFilter->SetSelectedNetcode( *m_brd->GetHighLightNetCodes().begin() );
 
     // Populate the netclass filter list with netclass names
     wxArrayString netclassNames;

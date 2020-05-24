@@ -230,7 +230,8 @@ void TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
     {
         // If the user has previously set the current net to be highlighted,
         // we assume they want to keep it highlighted after routing
-        m_startHighlight = ( rs->IsHighlightEnabled() && rs->GetHighlightNetCode() == aNetcode );
+        m_startHighlight =
+                ( rs->IsHighlightEnabled() && rs->GetHighlightNetCodes().count( aNetcode ) );
 
         rs->SetHighlight( true, aNetcode );
     }

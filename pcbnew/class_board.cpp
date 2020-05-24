@@ -1874,11 +1874,14 @@ void BOARD::ResetNetHighLight()
 }
 
 
-void BOARD::SetHighLightNet( int aNetCode )
+void BOARD::SetHighLightNet( int aNetCode, bool aMulti )
 {
-    if( m_highLight.m_netCode != aNetCode )
+    if( !m_highLight.m_netCodes.count( aNetCode ) )
     {
-        m_highLight.m_netCode = aNetCode;
+        if( !aMulti )
+            m_highLight.m_netCodes.clear();
+
+        m_highLight.m_netCodes.insert( aNetCode );
         InvokeListeners( &BOARD_LISTENER::OnBoardHighlightNetChanged, *this );
     }
 }

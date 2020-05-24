@@ -378,6 +378,12 @@ public:
     void SendCrossProbeNetName( const wxString& aNetName );
 
     /**
+     * Sends a connection (net or bus) to pcbnew for highlighting
+     * @param aConnection is the connection to highlight
+     */
+    void SetCrossProbeConnection( const SCH_CONNECTION* aConnection );
+
+    /**
      * Tells PcbNew to clear the existing highlighted net, if one exists
      */
     void SendCrossProbeClearHighlight();

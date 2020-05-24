@@ -137,7 +137,7 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
             }
         }
 
-        enableHighlight = ( net >= 0 && net != settings->GetHighlightNetCode() );
+        enableHighlight = ( net >= 0 && !settings->GetHighlightNetCodes().count( net ) );
     }
 
     // If we didn't get a net to highlight from the selection, use the cursor
@@ -175,13 +175,13 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     }
 
     // Toggle highlight when the same net was picked
-    if( net > 0 && net == settings->GetHighlightNetCode() )
+    if( net > 0 && settings->GetHighlightNetCodes().count( net ) )
         enableHighlight = !settings->IsHighlightEnabled();
 
     if( enableHighlight != settings->IsHighlightEnabled()
-            || net != settings->GetHighlightNetCode() )
+            || !settings->GetHighlightNetCodes().count( net ) )
     {
-        m_lastNetcode = settings->GetHighlightNetCode();
+        m_lastNetcode = *settings->GetHighlightNetCodes().begin();
         settings->SetHighlight( enableHighlight, net );
         m_toolMgr->GetView()->UpdateAllLayersColor();
     }
@@ -220,13 +220,13 @@ int PCB_INSPECTION_TOOL::HighlightNet( const TOOL_EVENT& aEvent )
 
     if( netcode > 0 )
     {
-        m_lastNetcode = settings->GetHighlightNetCode();
+        m_lastNetcode = *settings->GetHighlightNetCodes().begin();
         settings->SetHighlight( true, netcode );
         m_toolMgr->GetView()->UpdateAllLayersColor();
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::toggleLastNetHighlight ) )
     {
-        int temp = settings->GetHighlightNetCode();
+        int temp = *settings->GetHighlightNetCodes().begin();
         settings->SetHighlight( true, m_lastNetcode );
         m_toolMgr->GetView()->UpdateAllLayersColor();
         m_lastNetcode = temp;

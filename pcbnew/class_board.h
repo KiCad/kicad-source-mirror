@@ -134,12 +134,12 @@ class HIGH_LIGHT_INFO
     friend class BOARD;
 
 protected:
-    int m_netCode;           // net selected for highlight (-1 when no net selected )
-    bool m_highLightOn;      // highlight active
+    std::set<int> m_netCodes;    // net(s) selected for highlight (-1 when no net selected )
+    bool          m_highLightOn; // highlight active
 
     void Clear()
     {
-        m_netCode = -1;
+        m_netCodes.clear();
         m_highLightOn = false;
     }
 
@@ -378,15 +378,20 @@ public:
 
     /**
      * Function GetHighLightNetCode
-     * @return netcode of net to highlight (-1 when no net selected)
+     * @return the set of net codes that should be highlighted
      */
-    int GetHighLightNetCode() const       { return m_highLight.m_netCode; }
+    const std::set<int>& GetHighLightNetCodes() const
+    {
+        return m_highLight.m_netCodes;
+    }
 
     /**
       * Function SetHighLightNet
       * Select the netcode to be highlighted.
+      * @param aNetCode is the net to highlight
+      * @param aMulti is true if you want to add a highlighted net without clearing the old one
       */
-    void SetHighLightNet( int aNetCode );
+    void SetHighLightNet( int aNetCode, bool aMulti = false );
 
     /**
      * Function IsHighLightNetON
