@@ -501,6 +501,7 @@ set( BMAPS_MID
     up
     update_fields
     update_pcb_from_sch
+    update_sch_from_pcb
     use_3D_copper_thickness
     via
     via_annulus
