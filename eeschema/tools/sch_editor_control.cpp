@@ -949,6 +949,17 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                     highlight = true;
                     break;
                 }
+                else if( member->IsBus() )
+                {
+                    for( auto& child_member : member->Members() )
+                    {
+                        if( child_member->Name() == itemConn->Name() )
+                        {
+                            highlight = true;
+                            break;
+                        }
+                    }
+                }
             }
         }
         else if( selectedConn && itemConn && selectedName == itemConn->Name() )
