@@ -362,6 +362,7 @@ void CONNECTION_GRAPH::Reset()
     m_bus_name_to_code_map.clear();
     m_net_code_to_subgraphs_map.clear();
     m_net_name_to_subgraphs_map.clear();
+    m_item_to_subgraph_map.clear();
     m_local_label_cache.clear();
     m_global_label_cache.clear();
     m_last_net_code = 1;
@@ -670,6 +671,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 subgraph->AddItem( item );
 
                 connection->SetSubgraphCode( subgraph->m_code );
+                m_item_to_subgraph_map[item] = subgraph;
 
                 std::list<SCH_ITEM*> members;
 
@@ -703,6 +705,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     if( connected_conn->SubgraphCode() == 0 )
                     {
                         connected_conn->SetSubgraphCode( subgraph->m_code );
+                        m_item_to_subgraph_map[connected_item] = subgraph;
                         subgraph->AddItem( connected_item );
 
                         std::copy_if( connected_item->ConnectedItems( sheet ).begin(),
@@ -1987,6 +1990,31 @@ CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindSubgraphByName(
     }
 
     return nullptr;
+}
+
+
+CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindFirstSubgraphByName( const wxString& aNetName )
+{
+    if( !m_net_name_to_subgraphs_map.count( aNetName ) )
+        return nullptr;
+
+    wxASSERT( !m_net_name_to_subgraphs_map.at( aNetName ).empty() );
+
+    return m_net_name_to_subgraphs_map.at( aNetName )[0];
+}
+
+
+CONNECTION_SUBGRAPH* CONNECTION_GRAPH::GetSubgraphForItem( SCH_ITEM* aItem )
+{
+    if( !m_item_to_subgraph_map.count( aItem ) )
+        return nullptr;
+
+    CONNECTION_SUBGRAPH* ret = m_item_to_subgraph_map.at( aItem );
+
+    while( ret->m_absorbed )
+        ret = ret->m_absorbed_by;
+
+    return ret;
 }
 
 

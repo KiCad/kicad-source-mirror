@@ -685,14 +685,13 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
             EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
             SCH_LINE* wire = dynamic_cast<SCH_LINE*>( item );
-            wxString  netName;
+
+            const SCH_CONNECTION* conn = nullptr;
 
             if( wire )
             {
                 item = nullptr;
-
-                if( wire->Connection( m_frame->GetCurrentSheet() ) )
-                    netName = wire->Connection( m_frame->GetCurrentSheet() )->Name();
+                conn = wire->Connection( m_frame->GetCurrentSheet() );
             }
 
             if( item && item->Type() == SCH_PIN_T )
@@ -712,9 +711,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                     selectionTool->BrightenItem( m_pickerItem );
             }
 
-            if( m_frame->GetSelectedNetName() != netName )
+            if( m_frame->GetHighlightedConnection() != conn )
             {
-                m_frame->SetSelectedNetName( netName );
+                m_frame->SetHighlightedConnection( conn );
 
                 TOOL_EVENT dummyEvent;
                 UpdateNetHighlighting( dummyEvent );
@@ -727,9 +726,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             if( m_pickerItem )
                 m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
-            if( !m_frame->GetSelectedNetName().IsEmpty() )
+            if( m_frame->GetHighlightedConnection() )
             {
-                m_frame->SetSelectedNetName( wxEmptyString );
+                m_frame->SetHighlightedConnection( nullptr );
 
                 TOOL_EVENT dummyEvent;
                 UpdateNetHighlighting( dummyEvent );
@@ -821,14 +820,13 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 static VECTOR2D CLEAR;
 
 
-// TODO(JE) Probably use netcode rather than connection name here eventually
 static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
-    SCH_EDIT_FRAME*     editFrame = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetToolHolder() );
-    EE_SELECTION_TOOL*  selTool = aToolMgr->GetTool<EE_SELECTION_TOOL>();
+    SCH_EDIT_FRAME*     editFrame     = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetToolHolder() );
+    EE_SELECTION_TOOL*  selTool       = aToolMgr->GetTool<EE_SELECTION_TOOL>();
     SCH_EDITOR_CONTROL* editorControl = aToolMgr->GetTool<SCH_EDITOR_CONTROL>();
-    wxString            netName;
-    bool                retVal = true;
+    SCH_CONNECTION*     conn          = nullptr;
+    bool                retVal        = true;
 
     if( aPosition != CLEAR )
     {
@@ -846,30 +844,28 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
             {
                 if( item->Type() == SCH_FIELD_T )
                     comp = dynamic_cast<SCH_COMPONENT*>( item->GetParent() );
-                else
-                    comp = dynamic_cast<SCH_COMPONENT*>( item );
-            }
 
-            if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
-                netName = comp->GetPartRef()->GetName();
-            else if( item && item->Connection( editFrame->GetCurrentSheet() ) )
-                netName = item->Connection( editFrame->GetCurrentSheet() )->Name();
+                if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
+                    conn = comp->Connection( editFrame->GetCurrentSheet() );
+                else
+                    conn = item->Connection( editFrame->GetCurrentSheet() );
+            }
         }
     }
 
-    if( netName.empty() )
+    if( !conn )
     {
         editFrame->SetStatusText( wxT( "" ) );
         editFrame->SendCrossProbeClearHighlight();
     }
     else
     {
-        editFrame->SendCrossProbeNetName( netName );
+        editFrame->SendCrossProbeNetName( conn->Name() );
         editFrame->SetStatusText( wxString::Format( _( "Highlighted net: %s" ),
-                                                    UnescapeString( netName ) ) );
+                                                    UnescapeString( conn->Name() ) ) );
     }
 
-    editFrame->SetSelectedNetName( netName );
+    editFrame->SetHighlightedConnection( conn );
     TOOL_EVENT dummy;
     editorControl->UpdateNetHighlighting( dummy );
 
@@ -900,33 +896,67 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 {
     SCH_SCREEN*            screen = m_frame->GetCurrentSheet().LastScreen();
     std::vector<EDA_ITEM*> itemsToRedraw;
-    wxString               selectedNetName = m_frame->GetSelectedNetName();
+    const SCH_CONNECTION*  selectedConn = m_frame->GetHighlightedConnection();
 
     if( !screen )
         return 0;
 
+    bool     selectedIsBus = selectedConn ? selectedConn->IsBus() : false;
+    wxString selectedName  = selectedConn ? selectedConn->Name() : "";
+
+    bool                 selectedIsNoNet  = false;
+    CONNECTION_SUBGRAPH* selectedSubgraph = nullptr;
+
+    if( selectedConn && selectedConn->Driver() == nullptr )
+    {
+        selectedIsNoNet  = true;
+        selectedSubgraph = m_frame->Schematic().ConnectionGraph()->GetSubgraphForItem(
+                selectedConn->Parent() );
+    }
+
     for( SCH_ITEM* item : screen->Items() )
     {
-        wxString        itemConnectionName;
-        SCH_COMPONENT*  comp = nullptr;
-        bool            redraw = item->IsBrightened();
+        SCH_CONNECTION* itemConn  = nullptr;
+        SCH_COMPONENT*  comp      = nullptr;
+        bool            redraw    = item->IsBrightened();
+        bool            highlight = false;
 
         if( item->Type() == SCH_COMPONENT_T )
             comp = static_cast<SCH_COMPONENT*>( item );
 
         if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
-        {
-            itemConnectionName = comp->GetPartRef()->GetName();
-        }
+            itemConn = comp->Connection( m_frame->GetCurrentSheet() );
         else
-        {
-            SCH_CONNECTION* connection = item->Connection( m_frame->GetCurrentSheet() );
+            itemConn = item->Connection( m_frame->GetCurrentSheet() );
 
-            if( connection )
-                itemConnectionName = connection->Name();
+        if( selectedIsNoNet && selectedSubgraph )
+        {
+            for( SCH_ITEM* subgraphItem : selectedSubgraph->m_items )
+            {
+                if( item == subgraphItem )
+                {
+                    highlight = true;
+                    break;
+                }
+            }
+        }
+        else if( selectedIsBus && itemConn && itemConn->IsNet() )
+        {
+            for( auto& member : selectedConn->Members() )
+            {
+                if( member->Name() == itemConn->Name() )
+                {
+                    highlight = true;
+                    break;
+                }
+            }
+        }
+        else if( selectedConn && itemConn && selectedName == itemConn->Name() )
+        {
+            highlight = true;
         }
 
-        if( !selectedNetName.IsEmpty() && itemConnectionName == selectedNetName )
+        if( highlight )
             item->SetBrightened();
         else
             item->ClearBrightened();
@@ -946,7 +976,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                 SCH_CONNECTION* pin_conn =
                         comp->GetConnectionForPin( pin, m_frame->GetCurrentSheet() );
 
-                if( comp && pin_conn && pin_conn->Name( false ) == selectedNetName )
+                if( comp && pin_conn && pin_conn->Name() == selectedName )
                 {
                     comp->BrightenPin( pin );
                     redraw = true;
@@ -973,15 +1003,13 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                 SCH_CONNECTION* pin_conn = pin->Connection( m_frame->GetCurrentSheet() );
                 bool            redrawPin = pin->IsBrightened();
 
-                if( pin_conn && pin_conn->Name() == selectedNetName )
+                if( pin_conn && pin_conn->Name() == selectedName )
                     pin->SetBrightened();
                 else
                     pin->ClearBrightened();
 
-                redrawPin |= pin->IsBrightened();
-
-                if( redrawPin )
-                    itemsToRedraw.push_back( pin );
+                redrawPin ^= pin->IsBrightened();
+                redraw    |= redrawPin;
             }
         }
 

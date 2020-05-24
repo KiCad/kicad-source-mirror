@@ -173,9 +173,9 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
         m_netFilter->SetValue( g_netFilter );
         m_netFilterOpt->SetValue( true );
     }
-    else if( !m_parent->GetSelectedNetName().IsEmpty() )
+    else if( m_parent->GetHighlightedConnection() )
     {
-        m_netFilter->SetValue( m_parent->GetSelectedNetName() );
+        m_netFilter->SetValue( m_parent->GetHighlightedConnection()->Name() );
     }
     else if( selection.GetSize() )
     {

@@ -29,6 +29,7 @@
 #include <kiway_express.h>
 #include <macros.h>
 #include <eda_dde.h>
+#include <connection_graph.h>
 #include <sch_edit_frame.h>
 #include <general.h>
 #include <lib_item.h>
@@ -187,10 +188,14 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$NET:" ) == 0 )
     {
-        m_SelectedNetName = FROM_UTF8( text );
+        wxString netName = FROM_UTF8( text );
+
+        if( auto sg = Schematic().ConnectionGraph()->FindFirstSubgraphByName( netName ) )
+            m_highlightedConn = sg->m_driver_connection;
+
         GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting, true );
 
-        SetStatusText( _( "Selected net: " ) + UnescapeString( m_SelectedNetName ) );
+        SetStatusText( _( "Selected net: " ) + UnescapeString( netName ) );
         return;
     }
 

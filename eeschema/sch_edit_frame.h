@@ -123,7 +123,7 @@ class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 
 private:
     SCHEMATIC*              m_schematic;          ///< The currently loaded schematic
-    wxString                m_SelectedNetName;
+    const SCH_CONNECTION*   m_highlightedConn;    ///< The highlighted net or bus, or nullptr
 
     std::vector<PARAM_CFG*> m_projectFileParams;
     std::vector<PARAM_CFG*> m_configSettings;
@@ -382,8 +382,15 @@ public:
      */
     void SendCrossProbeClearHighlight();
 
-    const wxString& GetSelectedNetName() const { return m_SelectedNetName; }
-    void SetSelectedNetName( const wxString& aNetName ) { m_SelectedNetName = aNetName; }
+    const SCH_CONNECTION* GetHighlightedConnection() const
+    {
+        return m_highlightedConn;
+    }
+
+    void SetHighlightedConnection( const SCH_CONNECTION* aConnection )
+    {
+        m_highlightedConn = aConnection;
+    }
 
     /**
      * Create a flat list which stores all connected objects.

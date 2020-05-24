@@ -284,6 +284,16 @@ public:
     CONNECTION_SUBGRAPH* FindSubgraphByName( const wxString& aNetName,
                                              const SCH_SHEET_PATH& aPath );
 
+    /**
+     * Retrieves a subgraph for the given net name, if one exists.
+     * Searches every sheet
+     * @param aNetName is the full net name to search for
+     * @return the subgraph matching the query, or nullptr if none is found
+     */
+    CONNECTION_SUBGRAPH* FindFirstSubgraphByName( const wxString& aNetName );
+
+    CONNECTION_SUBGRAPH* GetSubgraphForItem( SCH_ITEM* aItem );
+
     // TODO(JE) Remove this when pressure valve is removed
     static bool m_allowRealTime;
 
@@ -316,6 +326,8 @@ private:
 
     std::unordered_map<wxString,
                        std::vector<CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
+
+    std::map<SCH_ITEM*, CONNECTION_SUBGRAPH*> m_item_to_subgraph_map;
 
     NET_MAP m_net_code_to_subgraphs_map;
 
