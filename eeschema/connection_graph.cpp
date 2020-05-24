@@ -1429,7 +1429,46 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         }
 
         if( subgraph->m_driver_connection->IsBus() )
+        {
+            // No other processing to do on buses
             continue;
+        }
+        else
+        {
+            // As a visual aid, we can check sheet pins that are driven by themselves to see
+            // if they should be promoted to buses
+
+            if( subgraph->m_driver->Type() == SCH_SHEET_PIN_T )
+            {
+                SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( subgraph->m_driver );
+
+                if( SCH_SHEET* sheet = pin->GetParent() )
+                {
+                    wxString pinText = pin->GetText();
+
+                    for( auto item : sheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
+                    {
+                        auto label = static_cast<SCH_HIERLABEL*>( item );
+
+                        if( label->GetText() == pinText )
+                        {
+                            SCH_SHEET_PATH path = subgraph->m_sheet;
+                            path.push_back( sheet );
+
+                            SCH_CONNECTION* parent_conn = label->Connection( path );
+
+                            if( parent_conn && parent_conn->IsBus() )
+                                subgraph->m_driver_connection->SetType( CONNECTION_TYPE::BUS );
+
+                            break;
+                        }
+                    }
+
+                    if( subgraph->m_driver_connection->IsBus() )
+                        continue;
+                }
+            }
+        }
 
         auto key = std::make_pair( subgraph->GetNetName(),
                                    subgraph->m_driver_connection->NetCode() );
