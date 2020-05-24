@@ -48,7 +48,123 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
     m_textEditor->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight );
     m_textEditor->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
 
+    m_textEditor->Bind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
     m_textEditor->Bind( wxEVT_STC_UPDATEUI, &PANEL_SETUP_RULES::onScintillaUpdateUI, this );
+}
+
+
+void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
+{
+    constexpr int flags = wxSTC_FIND_REGEXP| wxSTC_FIND_POSIX;
+
+    m_textEditor->SearchAnchor();
+
+    int i = std::max( 0, m_textEditor->SearchPrev( flags, "\( *rule " ) );
+    int currentPos = m_textEditor->GetCurrentPos();
+
+    enum
+    {
+        NONE,
+        STRING,
+        SEXPR_OPEN,
+        SEXPR_TOKEN,
+    };
+
+    std::stack<wxString> sexprs;
+    wxString             partial;
+    int                  context = NONE;
+
+    for( ; i < currentPos; ++i )
+    {
+        char c = (char) m_textEditor->GetCharAt( i );
+
+        if( c == '\\' )
+        {
+            i++;  // skip escaped char
+            continue;
+        }
+
+        if( context == STRING )
+        {
+            if( c == '"' )
+                context = NONE;
+            else
+                partial += c;
+
+            continue;
+        }
+
+        if( c == '"' )
+        {
+            partial = wxEmptyString;
+            context = STRING;
+        }
+        else if( c == '(' )
+        {
+            if( context == SEXPR_OPEN && !partial.IsEmpty() )
+                sexprs.push( partial );
+
+            partial = wxEmptyString;
+            context = SEXPR_OPEN;
+        }
+        else if( c == ')' )
+        {
+            sexprs.pop();
+            context = NONE;
+        }
+        else if( c == ' ' )
+        {
+            if( context == SEXPR_OPEN && !partial.IsEmpty() )
+            {
+                sexprs.push( partial );
+
+                wxString top = sexprs.size() ? sexprs.top() : wxEmptyString;
+
+                if( top == "constraint" || top == "disallow" )
+                {
+                    partial = wxEmptyString;
+                    context = SEXPR_TOKEN;
+                    continue;
+                }
+            }
+
+            context = NONE;
+        }
+        else
+        {
+            partial += c;
+        }
+    }
+
+    // NB: tokens MUST be in alphabetical order because the Scintilla engine is going
+    // to do a binary search on them
+    wxString tokens;
+
+    if( context == SEXPR_OPEN )
+    {
+        if( sexprs.empty() )
+            tokens = "rule version";
+        else if( sexprs.top() == "rule" )
+            tokens = "condition constraint disallow";
+        else if( sexprs.top() == "constraint" )
+            tokens = "max min opt";
+
+        if( !tokens.IsEmpty() )
+            m_textEditor->AutoCompShow( partial.size(), tokens );
+    }
+    else if( context == SEXPR_TOKEN )
+    {
+        if( sexprs.top() == "constraint" )
+            tokens = "annulus_width clearance hole track_width";
+        else if( sexprs.top() == "disallow" )
+            tokens = "blind_via graphic hole micro_via pad text track via zone";
+
+        int wordStartPos = m_textEditor->WordStartPosition( currentPos, true );
+        wxASSERT( currentPos - wordStartPos == partial.size() );
+
+        if( !tokens.IsEmpty() )
+            m_textEditor->AutoCompShow( partial.size(), tokens );
+    }
 }
 
 

@@ -43,6 +43,7 @@ public:
     ~PANEL_SETUP_RULES( ) override { };
 
 private:
+    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
     void onScintillaUpdateUI( wxStyledTextEvent& aEvent );
 
     bool TransferDataToWindow() override;
