@@ -152,7 +152,7 @@ private:
         for( const auto& member : connection->Members() )
         {
             int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-            wxString name = SCH_CONNECTION::PrintBusForUI( member->LocalName() );
+            wxString name = SCH_CONNECTION::PrintBusForUI( member->FullLocalName() );
 
             if( member->Type() == CONNECTION_TYPE::BUS )
             {
@@ -163,7 +163,7 @@ private:
                 for( const auto& sub_member : member->Members() )
                 {
                     id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-                    name = SCH_CONNECTION::PrintBusForUI( sub_member->LocalName() );
+                    name = SCH_CONNECTION::PrintBusForUI( sub_member->FullLocalName() );
                     submenu->Append( id, name, wxEmptyString );
                 }
             }

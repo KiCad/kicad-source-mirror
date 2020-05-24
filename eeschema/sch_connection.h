@@ -162,6 +162,11 @@ public:
 
     wxString LocalName() const { return m_local_name; }
 
+    wxString FullLocalName() const
+    {
+        return m_prefix + m_local_name + m_suffix;
+    }
+
     void SetName( const wxString& aName )
     {
         m_name = aName;
