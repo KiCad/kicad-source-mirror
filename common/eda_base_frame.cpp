@@ -665,7 +665,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 
     book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );
 
-    book->AddPage( new PANEL_MOUSE_SETTINGS( &dlg, book ), _( "Mouse and Trackpad" ) );
+    book->AddPage( new PANEL_MOUSE_SETTINGS( &dlg, book ), _( "Mouse and Touchpad" ) );
 
     PANEL_HOTKEYS_EDITOR* hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
     book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
