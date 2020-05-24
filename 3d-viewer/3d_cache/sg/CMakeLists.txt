@@ -44,7 +44,7 @@ if( APPLE )
 endif()
 
 find_file( S3DSG_VERSION_FILE sg_version.h
-        PATHS ${CMAKE_SOURCE_DIR}/include/plugins/3dapi NO_DEFAULT_PATH )
+        PATHS ${CMAKE_SOURCE_DIR}/include/plugins/3dapi NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
 
 if( NOT ${S3DSG_VERSION_FILE} STREQUAL "S3DSG_VERSION_FILE-NOTFOUND" )
 
