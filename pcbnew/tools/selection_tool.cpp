@@ -405,7 +405,6 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     GENERAL_COLLECTORS_GUIDE guide = getCollectorsGuide();
     GENERAL_COLLECTOR        collector;
     auto&                    displayOpts = m_frame->GetDisplayOptions();
-    bool                     cleared = false;
 
     guide.SetIgnoreZoneFills( displayOpts.m_DisplayZonesMode != 0 );
 
@@ -454,31 +453,40 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         {
             // Don't fire an event now as it will end up redundant if we fire a SelectedEvent
             // or an UnselectedEvent.
-            cleared = true;
-            ClearSelection( true );
+            ClearSelection( true /*quiet mode*/ );
         }
     }
 
-    if( collector.GetCount() == 1 )
+    bool anyAdded      = false;
+    bool anySubtracted = false;
+
+    if( collector.GetCount() > 0 )
     {
-        BOARD_ITEM* item = collector[ 0 ];
-
-        if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
+        for( int i = 0; i < collector.GetCount(); ++i )
         {
-            unselect( item );
-            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-            return false;
-        }
-        else
-        {
-            select( item );
-            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-            return true;
+            if( m_subtractive || ( m_exclusive_or && collector[i]->IsSelected() ) )
+            {
+                unselect( collector[i] );
+                anySubtracted = true;
+            }
+            else
+            {
+                select( collector[i] );
+                anyAdded = true;
+            }
         }
     }
 
-    if( cleared )
-        m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
+    if( anyAdded )
+    {
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+        return true;
+    }
+    else if( anySubtracted )
+    {
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+        return true;
+    }
 
     return false;
 }
@@ -1159,7 +1167,7 @@ void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
         // Don't fire an event now; most of the time it will be redundant as we're about to
         // fire a SelectedEvent.
         cleared = true;
-        ClearSelection(  true /*quiet mode*/ );
+        ClearSelection( true /*quiet mode*/ );
     }
 
     if( aItem )
@@ -1359,6 +1367,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
     BOARD_ITEM*      current = nullptr;
     PCBNEW_SELECTION highlightGroup;
     ACTION_MENU      menu( true );
+    bool             selectAll = false;
 
     highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
     getView()->Add( &highlightGroup );
@@ -1371,9 +1380,12 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
         BOARD_ITEM* item = ( *aCollector )[i];
         text = item->GetSelectMenuText( m_frame->GetUserUnits() );
 
-        wxString menuText = wxString::Format("&%d. %s", i + 1, text );
+        wxString menuText = wxString::Format( "&%d. %s\t%d", i + 1, text, i + 1 );
         menu.Add( menuText, i + 1, item->GetMenuImage() );
     }
+
+    menu.AppendSeparator();
+    menu.Add( _( "Select &All\tA" ), limit + 1, net_highlight_xpm );
 
     if( aTitle.Length() )
         menu.SetTitle( aTitle );
@@ -1386,7 +1398,12 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
     {
         if( evt->Action() == TA_CHOICE_MENU_UPDATE )
         {
-            if( current )
+            if( selectAll )
+            {
+                for( int i = 0; i < aCollector->GetCount(); ++i )
+                    unhighlight( ( *aCollector )[i], BRIGHTENED, &highlightGroup );
+            }
+            else if( current )
                 unhighlight( current, BRIGHTENED, &highlightGroup );
 
             int id = *evt->GetCommandId();
@@ -1398,29 +1415,56 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
                 highlight( current, BRIGHTENED, &highlightGroup );
             }
             else
+                current = nullptr;
+
+            // User has pointed on the "Select All" option
+            if( id == limit + 1 )
             {
-                current = NULL;
+                for( int i = 0; i < aCollector->GetCount(); ++i )
+                    highlight( ( *aCollector )[i], BRIGHTENED, &highlightGroup );
+                selectAll = true;
             }
+            else
+                selectAll = false;
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
-            if( current )
+            if( selectAll )
+            {
+                for( int i = 0; i < aCollector->GetCount(); ++i )
+                    unhighlight( ( *aCollector )[i], BRIGHTENED, &highlightGroup );
+            }
+            else if( current )
                 unhighlight( current, BRIGHTENED, &highlightGroup );
 
             OPT<int> id = evt->GetCommandId();
 
+            // User has selected the "Select All" option
+            if( id == limit + 1 )
+            {
+                selectAll = true;
+                current   = nullptr;
+            }
             // User has selected an item, so this one will be returned
-            if( id && ( *id > 0 ) )
+            else if( id && ( *id > 0 ) && ( *id <= limit ) )
+            {
+                selectAll = false;
                 current = ( *aCollector )[*id - 1];
+            }
             else
-                current = NULL;
+            {
+                selectAll = false;
+                current   = nullptr;
+            }
 
             break;
         }
     }
     getView()->Remove( &highlightGroup );
 
-    if( current )
+    if( selectAll )
+        return true;
+    else if( current )
     {
         aCollector->Empty();
         aCollector->Append( current );

@@ -91,19 +91,21 @@ public:
     EE_SELECTION& RequestSelection( const KICAD_T* aFilterList = EE_COLLECTOR::AllItems );
 
     /**
-     * Function selectPoint()
-     * Selects an item pointed by the parameter aWhere. If there is more than one item at that
-     * place, there is a menu displayed that allows one to choose the item.
+     * Function SelectPoint()
+     * Selects one or all items pointed by the parameter aWhere.
+     * If there is more than one item at that place,
+     * there is a menu displayed that allows one to choose the item or all of them.
      *
      * @param aWhere is the place where the item should be selected.
+     * @param aItem is set to the newly selected item if only one was selected, otherwise is unchanged.
      * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
      * was cancelled (for instance, by clicking outside of the disambiguation menu).
-     * @param aCheckLocked indicates if locked items should be excluded
+     * @param aCheckLocked indicates if locked items should be excluded.
      */
-    EDA_ITEM* SelectPoint( const VECTOR2I& aWhere,
-                           const KICAD_T* aFilterList = EE_COLLECTOR::AllItems,
-                           bool* aSelectionCancelledFlag = NULL, bool aCheckLocked = false,
-                           bool aAdd = false, bool aSubtract = false, bool aExclusiveOr = false );
+    bool SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList = EE_COLLECTOR::AllItems,
+                      EDA_ITEM** aItem = nullptr, bool* aSelectionCancelledFlag = nullptr,
+                      bool aCheckLocked = false, bool aAdd = false, bool aSubtract = false,
+                      bool aExclusiveOr = false );
 
     int AddItemToSel( const TOOL_EVENT& aEvent );
     void AddItemToSel( EDA_ITEM* aItem, bool aQuietMode = false );

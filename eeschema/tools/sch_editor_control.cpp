@@ -631,7 +631,8 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
         [this, simFrame] ( const VECTOR2D& aPosition )
         {
             EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-            EDA_ITEM*          item = selTool->SelectPoint( aPosition, wiresAndPins );
+            EDA_ITEM*          item;
+            selTool->SelectPoint( aPosition, wiresAndPins, &item );
 
             if( !item )
                 return false;
@@ -755,7 +756,8 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
         [this] ( const VECTOR2D& aPosition )
         {
             EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-            EDA_ITEM*          item = selTool->SelectPoint( aPosition, fieldsAndComponents );
+            EDA_ITEM*          item;
+            selTool->SelectPoint( aPosition, fieldsAndComponents, &item );
 
             if( !item )
                 return false;
