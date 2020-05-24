@@ -146,6 +146,7 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
             member->m_local_name   = vector_member;
             member->m_vector_index = i++;
             member->SetName( vector_member );
+            member->SetGraph( m_graph );
             m_members.push_back( member );
         }
     }
@@ -212,6 +213,7 @@ void SCH_CONNECTION::Reset()
 
 void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
 {
+    m_graph = aOther.m_graph;
     m_type = aOther.Type();
     m_driver = aOther.Driver();
     m_sheet = aOther.Sheet();

@@ -1825,6 +1825,7 @@ std::shared_ptr<SCH_CONNECTION> CONNECTION_GRAPH::getDefaultConnection( SCH_ITEM
         if( pin->IsPowerConnection() )
         {
             c = std::make_shared<SCH_CONNECTION>( aItem, aSheet );
+            c->SetGraph( this );
             c->ConfigureFromLabel( pin->GetName() );
         }
         break;
@@ -1837,6 +1838,7 @@ std::shared_ptr<SCH_CONNECTION> CONNECTION_GRAPH::getDefaultConnection( SCH_ITEM
         auto text = static_cast<SCH_TEXT*>( aItem );
 
         c = std::make_shared<SCH_CONNECTION>( aItem, aSheet );
+        c->SetGraph( this );
         c->ConfigureFromLabel( text->GetShownText() );
         break;
     }
