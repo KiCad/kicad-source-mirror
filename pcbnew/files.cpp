@@ -593,8 +593,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         SetBoard( loadedBoard );
 
-        m_toolManager->GetTool<DRC>()->LoadRules();
-
         // we should not ask PLUGINs to do these items:
         loadedBoard->BuildListOfNets();
         loadedBoard->SynchronizeNetsAndNetClasses();

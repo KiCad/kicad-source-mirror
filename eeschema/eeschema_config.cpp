@@ -347,13 +347,12 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
 }
 
 
-void SCH_EDIT_FRAME::DoShowSchematicSetupDialog( const wxString& aInitialPage,
-                                                 const wxString& aInitialParentPage )
+void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 {
     DIALOG_SCHEMATIC_SETUP dlg( this );
 
     if( !aInitialPage.IsEmpty() )
-        dlg.SetInitialPage( aInitialPage, aInitialParentPage );
+        dlg.SetInitialPage( aInitialPage, wxEmptyString );
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {

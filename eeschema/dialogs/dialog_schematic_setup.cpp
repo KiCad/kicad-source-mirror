@@ -49,7 +49,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
     /*
-     * WARNING: If you change page names you MUST update calls to DoShowSchematicSetupDialog().
+     * WARNING: If you change page names you MUST update calls to ShowSchematicSetupDialog().
      */
 
     m_treebook->AddPage( new wxPanel( this ), _( "General" ) );

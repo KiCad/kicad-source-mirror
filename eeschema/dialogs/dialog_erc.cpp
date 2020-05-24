@@ -511,11 +511,11 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 7:
-        m_parent->DoShowSchematicSetupDialog( _( "Pin Conflicts Map" ) );
+        m_parent->ShowSchematicSetupDialog( _( "Pin Conflicts Map" ) );
         break;
 
     case 8:
-        m_parent->DoShowSchematicSetupDialog( _( "Violation Severity" ) );
+        m_parent->ShowSchematicSetupDialog( _( "Violation Severity" ) );
         break;
     }
 }

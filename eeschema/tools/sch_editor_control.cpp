@@ -90,7 +90,7 @@ int SCH_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::ShowSchematicSetup( const TOOL_EVENT& aEvent )
 {
-    m_frame->DoShowSchematicSetupDialog();
+    m_frame->ShowSchematicSetupDialog();
     return 0;
 }
 

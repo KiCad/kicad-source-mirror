@@ -623,13 +623,16 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
 }
 
 
-void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
-                                             const wxString& aInitialParentPage )
+void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const wxString& aErrorMsg,
+                                           int aErrorCtrlId, int aErrorLine, int aErrorCol )
 {
     DIALOG_BOARD_SETUP dlg( this );
 
     if( !aInitialPage.IsEmpty() )
-        dlg.SetInitialPage( aInitialPage, aInitialParentPage );
+        dlg.SetInitialPage( aInitialPage, wxEmptyString );
+
+    if( !aErrorMsg.IsEmpty() )
+        dlg.SetError( aErrorMsg, aInitialPage, aErrorCtrlId, aErrorLine, aErrorCol );
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
@@ -752,6 +755,8 @@ void PCB_EDIT_FRAME::onBoardLoaded()
 
     SetMsgPanel( GetBoard() );
     SetStatusText( wxEmptyString );
+
+    m_toolManager->GetTool<DRC>()->LoadRules();
 
     SetShutdownBlockReason( _( "PCB file changes are unsaved" ) );
 }

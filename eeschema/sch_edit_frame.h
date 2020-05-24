@@ -214,8 +214,7 @@ public:
      */
     bool LoadProjectFile();
 
-    void DoShowSchematicSetupDialog( const wxString& aInitialPage = wxEmptyString,
-                                     const wxString& aInitialParentPage = wxEmptyString );
+    void ShowSchematicSetupDialog( const wxString& aInitialPage = wxEmptyString );
 
     /**
      * Insert or append a wanted symbol field name into the field names template.

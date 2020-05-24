@@ -31,7 +31,7 @@ private:
     wxString    m_title;
 
     wxString    m_errorMessage;
-    wxObject*   m_errorCtrl;    // the control associated with m_errorMessage
+    wxWindow*   m_errorCtrl;    // the control associated with m_errorMessage
     int         m_errorRow;     // the row if m_errorCtrl is a grid
     int         m_errorCol;     // the column if m_errorCtrl is a grid
 
@@ -46,8 +46,11 @@ public:
 
     void SetInitialPage( const wxString& aPage, const wxString& aParentPage = wxEmptyString );
 
-    void SetError( const wxString& aMessage, wxWindow* aPage, wxObject* aCtrl,
-                   int aRow = -1, int aCol = -1 );
+    void SetError( const wxString& aMessage, const wxString& aPageName, int aCtrlId, int aRow = -1,
+                   int aCol = -1 );
+
+    void SetError( const wxString& aMessage, wxWindow* aPage, wxWindow* aCtrl, int aRow = -1,
+                   int aCol = -1 );
 
 protected:
     void finishInitialization();

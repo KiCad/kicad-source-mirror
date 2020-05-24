@@ -44,14 +44,13 @@
 #include <tools/zone_filler_tool.h>
 #include <kiface_i.h>
 #include <pcbnew.h>
-#include <drc/drc.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <math/util.h>      // for KiROUND
-
 #include <dialog_drc.h>
 #include <wx/progdlg.h>
 #include <board_commit.h>
 #include <geometry/shape_arc.h>
+#include <drc/drc.h>
 #include <drc/drc_rule_parser.h>
 #include <drc/drc_item.h>
 #include <drc/drc_courtyard_tester.h>
@@ -59,11 +58,12 @@
 #include <drc/drc_keepout_tester.h>
 #include <drc/drc_netclass_tester.h>
 #include <drc/drc_textvar_tester.h>
+#include <dialogs/panel_setup_rules.h>
 #include <confirm.h>
 
 DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
-        m_pcbEditorFrame( nullptr ),
+        m_editFrame( nullptr ),
         m_pcb( nullptr ),
         m_board_outline_valid( false ),
         m_drcDialog( nullptr ),
@@ -94,14 +94,14 @@ DRC::~DRC()
 
 void DRC::Reset( RESET_REASON aReason )
 {
-    m_pcbEditorFrame = getEditFrame<PCB_EDIT_FRAME>();
+    m_editFrame = getEditFrame<PCB_EDIT_FRAME>();
 
-    if( m_pcb != m_pcbEditorFrame->GetBoard() )
+    if( m_pcb != m_editFrame->GetBoard() )
     {
         if( m_drcDialog )
             DestroyDRCDialog( wxID_OK );
 
-        m_pcb = m_pcbEditorFrame->GetBoard();
+        m_pcb = m_editFrame->GetBoard();
     }
 }
 
@@ -117,7 +117,7 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
         // if any parent is specified, the dialog is modal.
         // if this is the default PCB editor frame, it is not modal
         show_dlg_modal = false;
-        aParent = m_pcbEditorFrame;
+        aParent = m_editFrame;
     }
 
     Activate();
@@ -125,7 +125,7 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
 
     if( !m_drcDialog )
     {
-        m_drcDialog = new DIALOG_DRC( this, m_pcbEditorFrame, aParent );
+        m_drcDialog = new DIALOG_DRC( this, m_editFrame, aParent );
         updatePointers();
 
         if( show_dlg_modal )
@@ -181,7 +181,7 @@ void DRC::DestroyDRCDialog( int aReason )
 
 int DRC::testZoneToZoneOutlines( BOARD_COMMIT& aCommit )
 {
-    BOARD*   board = m_pcbEditorFrame->GetBoard();
+    BOARD*   board = m_editFrame->GetBoard();
     int      nerrors = 0;
 
     std::vector<SHAPE_POLY_SET> smoothed_polys;
@@ -353,9 +353,9 @@ int DRC::testZoneToZoneOutlines( BOARD_COMMIT& aCommit )
 }
 
 
-void DRC::LoadRules()
+bool DRC::LoadRules()
 {
-    wxString   rulesFilepath = m_pcbEditorFrame->Prj().AbsolutePath( "drc-rules" );
+    wxString   rulesFilepath = m_editFrame->Prj().AbsolutePath( "drc-rules" );
     wxFileName rulesFile( rulesFilepath );
 
     if( rulesFile.FileExists() )
@@ -378,7 +378,11 @@ void DRC::LoadRules()
                 m_ruleSelectors.clear();
                 m_rules.clear();
 
-                DisplayError( m_drcDialog, pe.What() );
+                wxSafeYield( m_editFrame );
+                m_editFrame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
+                                                   pe.lineNumber, pe.byteIndex );
+
+                return false;
             }
         }
     }
@@ -388,17 +392,20 @@ void DRC::LoadRules()
     BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
     bds.m_DRCRuleSelectors = m_ruleSelectors;
     bds.m_DRCRules = m_rules;
+
+    return true;
 }
 
 
 void DRC::RunTests( wxTextCtrl* aMessages )
 {
     // Make absolutely sure these are up-to-date
-    LoadRules();
+    if( !LoadRules() )
+        return;
 
-    wxASSERT( m_pcb == m_pcbEditorFrame->GetBoard() );
+    wxASSERT( m_pcb == m_editFrame->GetBoard() );
 
-    BOARD_COMMIT           commit( m_pcbEditorFrame );
+    BOARD_COMMIT           commit( m_editFrame );
     BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
 
     m_largestClearance = bds.GetBiggestClearanceValue();
@@ -480,7 +487,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     }
 
     // caller (a wxTopLevelFrame) is the wxDialog or the Pcb Editor frame that call DRC:
-    wxWindow* caller = aMessages ? aMessages->GetParent() : m_pcbEditorFrame;
+    wxWindow* caller = aMessages ? aMessages->GetParent() : m_editFrame;
 
     if( m_refillZones )
     {
@@ -504,7 +511,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         wxSafeYield();
     }
 
-    testTracks( commit, aMessages ? aMessages->GetParent() : m_pcbEditorFrame, true );
+    testTracks( commit, aMessages ? aMessages->GetParent() : m_editFrame, true );
 
     // test zone clearances to other zones
     if( aMessages )
@@ -594,7 +601,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         }
 
         NETLIST netlist;
-        m_pcbEditorFrame->FetchNetlistFromSchematic( netlist, PCB_EDIT_FRAME::ANNOTATION_DIALOG );
+        m_editFrame->FetchNetlistFromSchematic( netlist, PCB_EDIT_FRAME::ANNOTATION_DIALOG );
 
         if( m_drcDialog )
             m_drcDialog->Raise();
@@ -648,17 +655,17 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
 void DRC::updatePointers()
 {
-    // update my pointers, m_pcbEditorFrame is the only unchangeable one
-    m_pcb = m_pcbEditorFrame->GetBoard();
+    // update my pointers, m_editFrame is the only unchangeable one
+    m_pcb = m_editFrame->GetBoard();
 
-    m_pcbEditorFrame->ResolveDRCExclusions();
+    m_editFrame->ResolveDRCExclusions();
 
     if( m_drcDialog )  // Use diag list boxes only in DRC dialog
     {
         m_drcDialog->SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( m_pcb ) );
-        m_drcDialog->SetUnconnectedProvider( new RATSNEST_DRC_ITEMS_PROVIDER( m_pcbEditorFrame,
+        m_drcDialog->SetUnconnectedProvider( new RATSNEST_DRC_ITEMS_PROVIDER( m_editFrame,
                                                                               &m_unconnected ) );
-        m_drcDialog->SetFootprintsProvider( new VECTOR_DRC_ITEMS_PROVIDER( m_pcbEditorFrame,
+        m_drcDialog->SetFootprintsProvider( new VECTOR_DRC_ITEMS_PROVIDER( m_editFrame,
                                                                            &m_footprints ) );
     }
 }
@@ -1142,7 +1149,7 @@ void DRC::testOutline( BOARD_COMMIT& aCommit )
 
 void DRC::testDisabledLayers( BOARD_COMMIT& aCommit )
 {
-    BOARD*   board = m_pcbEditorFrame->GetBoard();
+    BOARD*   board = m_editFrame->GetBoard();
     wxCHECK( board, /*void*/ );
 
     LSET     disabledLayers = board->GetEnabledLayers().flip();

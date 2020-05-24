@@ -22,7 +22,7 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	m_title->Wrap( -1 );
 	m_topMargin->Add( m_title, 0, wxTOP|wxBOTTOM, 5 );
 
-	m_textEditor = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
+	m_textEditor = new wxStyledTextCtrl( this, ID_RULES_EDITOR, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
 	m_textEditor->SetUseTabs( true );
 	m_textEditor->SetTabWidth( 4 );
 	m_textEditor->SetIndent( 4 );

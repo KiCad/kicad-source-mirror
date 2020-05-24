@@ -204,7 +204,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         else if( ii == int( m_SelTrackWidthBox->GetCount() - 1 ) )
         {
             m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
-            DoShowBoardSetupDialog( _( "Tracks & Vias" ) );
+            ShowBoardSetupDialog( _( "Tracks & Vias" ) );
         }
         else
             GetDesignSettings().SetTrackWidthIndex( ii );
@@ -222,7 +222,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         else if( ii == int( m_SelViaSizeBox->GetCount() - 1 ) )
         {
             m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
-            DoShowBoardSetupDialog( _( "Tracks & Vias" ) );
+            ShowBoardSetupDialog( _( "Tracks & Vias" ) );
         }
         else
             GetDesignSettings().SetViaSizeIndex( ii );

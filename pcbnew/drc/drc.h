@@ -163,7 +163,7 @@ private:
     bool     m_reportAllTrackErrors;    // Report all tracks errors (or only 4 first errors)
     bool     m_testFootprints;          // Test footprints against schematic
 
-    PCB_EDIT_FRAME*            m_pcbEditorFrame;   // The pcb frame editor which owns the board
+    PCB_EDIT_FRAME*            m_editFrame;        // The pcb frame editor which owns the board
     BOARD*                     m_pcb;
     SHAPE_POLY_SET             m_board_outlines;   // The board outline including cutouts
     bool                       m_board_outline_valid;
@@ -171,8 +171,8 @@ private:
 
     std::vector<DRC_ITEM*>     m_unconnected;      // list of unconnected pads
     std::vector<DRC_ITEM*>     m_footprints;       // list of footprint warnings
-    bool                       m_drcRun;
-    bool                       m_footprintsTested;
+    bool                       m_drcRun;           // indicates DRC has been run at least once
+    bool                       m_footprintsTested; // indicates footprints were tested in last run
 
     std::vector<DRC_SELECTOR*> m_ruleSelectors;
     std::vector<DRC_RULE*>     m_rules;
@@ -192,7 +192,7 @@ private:
      */
     void updatePointers();
 
-    EDA_UNITS userUnits() const { return m_pcbEditorFrame->GetUserUnits(); }
+    EDA_UNITS userUnits() const { return m_editFrame->GetUserUnits(); }
 
     /**
      * Adds a DRC marker to the PCB through the COMMIT mechanism.
@@ -300,7 +300,7 @@ public:
     /**
      * Load the DRC rules.  Must be called after the netclasses have been read.
      */
-    void LoadRules();
+    bool LoadRules();
 
     /**
      * Test the board footprints against a netlist.  Will report DRCE_MISSING_FOOTPRINT,

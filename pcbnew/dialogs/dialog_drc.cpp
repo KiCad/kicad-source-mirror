@@ -388,7 +388,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 6:
-        m_brdEditor->DoShowBoardSetupDialog( _( "Violation Severity" ) );
+        m_brdEditor->ShowBoardSetupDialog( _( "Violation Severity" ) );
         break;
     }
 

@@ -24,7 +24,7 @@
 #include <wx/statline.h>
 
 #include <widgets/paged_dialog.h>
-
+#include <wx/stc/stc.h>
 
 // Maps from dialogTitle <-> pageTitle for keeping track of last-selected pages.
 // This is not a simple page index because some dialogs have dynamic page sets.
@@ -219,7 +219,14 @@ bool PAGED_DIALOG::TransferDataFromWindow()
 }
 
 
-void PAGED_DIALOG::SetError( const wxString& aMessage, wxWindow* aPage, wxObject* aCtrl,
+void PAGED_DIALOG::SetError( const wxString& aMessage, const wxString& aPageName, int aCtrlId,
+                             int aRow, int aCol )
+{
+    SetError( aMessage, FindWindow( aPageName ), FindWindow( aCtrlId ), aRow, aCol );
+}
+
+
+void PAGED_DIALOG::SetError( const wxString& aMessage, wxWindow* aPage, wxWindow* aCtrl,
                              int aRow, int aCol )
 {
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
@@ -250,19 +257,31 @@ void PAGED_DIALOG::OnUpdateUI( wxUpdateUIEvent& event )
     {
         // We will re-enter this routine when the error dialog is displayed, so make
         // sure we don't keep putting up more dialogs.
-        wxObject* ctrl = m_errorCtrl;
+        wxWindow* ctrl = m_errorCtrl;
         m_errorCtrl = nullptr;
 
-        DisplayErrorMessage( this, m_errorMessage );
+        DisplayErrorMessage( ctrl, m_errorMessage );
 
-        if( auto textCtrl = dynamic_cast<wxTextCtrl*>( ctrl ) )
+        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ctrl ) )
         {
             textCtrl->SetSelection( -1, -1 );
             textCtrl->SetFocus();
             return;
         }
 
-        if( auto grid = dynamic_cast<wxGrid*>( ctrl ) )
+        if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( ctrl ) )
+        {
+            if( m_errorRow > 0 )
+            {
+                int pos = scintilla->PositionFromLine( m_errorRow - 1 ) + ( m_errorCol - 1 );
+                scintilla->GotoPos( pos );
+            }
+
+            scintilla->SetFocus();
+            return;
+        }
+
+        if( wxGrid* grid = dynamic_cast<wxGrid*>( ctrl ) )
         {
             grid->SetFocus();
             grid->MakeCellVisible( m_errorRow, m_errorCol );

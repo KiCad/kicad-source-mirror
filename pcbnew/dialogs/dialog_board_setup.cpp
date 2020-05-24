@@ -55,7 +55,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_textVars = new PANEL_TEXT_VARIABLES( this, &Prj() );
 
     /*
-     * WARNING: If you change page names you MUST update calls to DoShowBoardSetupDialog().
+     * WARNING: If you change page names you MUST update calls to ShowBoardSetupDialog().
      */
 
     m_treebook->AddPage( new wxPanel( this ),  _( "Board Stackup" ) );

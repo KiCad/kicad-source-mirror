@@ -312,7 +312,7 @@ int PCB_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::BoardSetup( const TOOL_EVENT& aEvent )
 {
-    getEditFrame<PCB_EDIT_FRAME>()->DoShowBoardSetupDialog();
+    getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog();
     return 0;
 }
 

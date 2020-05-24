@@ -540,8 +540,9 @@ public:
     /**
      * Function ShowBoardSetupDialog
      */
-    void DoShowBoardSetupDialog( const wxString& aInitialPage = wxEmptyString,
-                                 const wxString& aInitialParentPage = wxEmptyString );
+    void ShowBoardSetupDialog( const wxString& aInitialPage = wxEmptyString,
+                               const wxString& aErrorMsg = wxEmptyString, int aErrorCtrlId = -1,
+                               int aErrorLine = -1, int aErrorCol = -1 );
 
     /* toolbars update UI functions: */
 
