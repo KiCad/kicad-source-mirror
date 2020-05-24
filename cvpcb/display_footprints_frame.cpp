@@ -275,6 +275,9 @@ void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
     wxCHECK( cfg, /* void */ );
 
+    // We don't allow people to change this right now, so make sure it's on
+    GetWindowSettings( cfg )->cursor.always_show_cursor = true;
+
     EDA_DRAW_FRAME::LoadSettings( cfg );
 
     SetDisplayOptions( cfg->m_FootprintViewerDisplayOptions );

@@ -722,6 +722,9 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
 
+    // We don't allow people to change this right now, so make sure it's on
+    GetWindowSettings( cfg )->cursor.always_show_cursor = true;
+
     PCB_BASE_FRAME::LoadSettings( aCfg );
 
     // Fetch grid settings from Footprint Editor
