@@ -41,6 +41,7 @@
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <symbol_lib_table.h>
+#include <schematic.h>
 
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
