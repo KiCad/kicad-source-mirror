@@ -218,9 +218,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_findReplaceDialog = nullptr;
 
-    m_generateNetlistAndExit = false;
-    m_netlistFilename        = wxEmptyString;
-
     SetSpiceAdjustPassiveValues( false );
 
     // Give an icon
@@ -775,16 +772,6 @@ void SCH_EDIT_FRAME::LoadProject()
         OpenProjectFiles( std::vector<wxString>( 1, dlg.GetPath() ) );
         m_mruPath = Prj().GetProjectPath();
     }
-}
-
-
-void SCH_EDIT_FRAME::ParseArgs( wxCmdLineParser& aParser )
-{
-    aParser.AddOption( "n", "netlist" );
-    aParser.Parse();
-
-    if( aParser.Found( "netlist", &m_netlistFilename ) )
-        m_generateNetlistAndExit = true;
 }
 
 

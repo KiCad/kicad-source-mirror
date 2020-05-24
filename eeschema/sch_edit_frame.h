@@ -149,11 +149,6 @@ private:
 
     static PINSHEETLABEL_SHAPE m_lastSheetPinType;    ///< Last sheet pin type.
 
-    // NOTE: This is a developer-only feature and can be replaced by appropriate Python
-    // functionality once that is possible.
-    bool     m_generateNetlistAndExit; ///< For command-line netlist generation
-    wxString m_netlistFilename;
-
 protected:
     /**
      * Save the schematic files that have been modified and not yet saved.
@@ -556,8 +551,6 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     wxString GetCurrentFileName() const override;
-
-    void ParseArgs( wxCmdLineParser& aParser ) override;
 
     /**
      * Import a KiCad schematic into the current sheet.
