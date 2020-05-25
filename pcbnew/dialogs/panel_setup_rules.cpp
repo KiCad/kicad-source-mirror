@@ -128,9 +128,8 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 m_textEditor->AutoCompCancel();
                 sexprs.push( partial );
 
-                wxString top = sexprs.size() ? sexprs.top() : wxEmptyString;
-
-                if( top == "constraint" || top == "disallow" )
+                if( sexprs.size()
+                    && ( sexprs.top() == "constraint" || sexprs.top() == "disallow" ) )
                 {
                     partial = wxEmptyString;
                     context = SEXPR_TOKEN;
@@ -146,16 +145,16 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
     }
 
-    auto autocomplete = [&]( const wxString& partial, const wxString& tokenStr )
+    auto autocomplete = [this]( const wxString& aPartial, const wxString& aTokenStr )
                         {
-                            wxArrayString tokens = wxSplit( tokenStr, ' ' );
-                            bool          match = partial.IsEmpty();
+                            wxArrayString tokens = wxSplit( aTokenStr, ' ' );
+                            bool          match = aPartial.IsEmpty();
 
-                            for( int i = 0; i < tokens.size() && !match; ++i )
-                                match = tokens[i].StartsWith( partial );
+                            for( size_t ii = 0; ii < tokens.size() && !match; ++ii )
+                                match = tokens[ii].StartsWith( aPartial );
 
                             if( match )
-                                m_textEditor->AutoCompShow( partial.size(), tokenStr );
+                                m_textEditor->AutoCompShow( aPartial.size(), aTokenStr );
                         };
 
     // NB: tokens MUST be in alphabetical order because the Scintilla engine is going
@@ -180,9 +179,6 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             tokens = "annulus_width clearance hole track_width";
         else if( sexprs.top() == "disallow" )
             tokens = "buried_via graphic hole micro_via pad text track via zone";
-
-        int wordStartPos = m_textEditor->WordStartPosition( currentPos, true );
-        wxASSERT( currentPos - wordStartPos == partial.size() );
 
         if( !tokens.IsEmpty() )
             autocomplete( partial, tokens );
