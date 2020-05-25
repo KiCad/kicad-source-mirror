@@ -106,9 +106,14 @@ wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     case DRCE_NETCLASS_uVIADRILLSIZE:   msg = _HKI( "NetClass uVia Drill too small" );      break;
 
     case DRCE_VIA_INSIDE_KEEPOUT:       msg = _HKI( "Via inside keepout area" );            break;
+    case DRCE_MICROVIA_INSIDE_KEEPOUT:  msg = _HKI( "Micro via inside keepout area" );      break;
+    case DRCE_BBVIA_INSIDE_KEEPOUT:     msg = _HKI( "Buried via inside keepout area" );     break;
     case DRCE_TRACK_INSIDE_KEEPOUT:     msg = _HKI( "Track inside keepout area" );          break;
     case DRCE_PAD_INSIDE_KEEPOUT:       msg = _HKI( "Pad inside keepout area" );            break;
     case DRCE_FOOTPRINT_INSIDE_KEEPOUT: msg = _HKI( "Footprint inside keepout area" );      break;
+    case DRCE_HOLE_INSIDE_KEEPOUT:      msg = _HKI( "Hole inside keepout area" );           break;
+    case DRCE_TEXT_INSIDE_KEEPOUT:      msg = _HKI( "Text inside keepout area" );           break;
+    case DRCE_GRAPHICS_INSIDE_KEEPOUT:  msg = _HKI( "Graphic inside keepout area" );        break;
 
     case DRCE_VIA_NEAR_COPPER:          msg = _HKI( "Via too close to copper item" );       break;
     case DRCE_TRACK_NEAR_COPPER:        msg = _HKI( "Track too close to copper item" );     break;

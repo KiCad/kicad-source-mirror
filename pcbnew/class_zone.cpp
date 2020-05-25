@@ -350,6 +350,82 @@ int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad ) const
 }
 
 
+int ZONE_CONTAINER::GetKeepouts( std::map<int, wxString>* aSources ) const
+{
+    wxString source;
+    int      keepouts = 0;
+
+    auto     setFlag = [&]( int aFlag )
+                       {
+                           keepouts |= aFlag;
+
+                           if( aSources )
+                               (*aSources)[ aFlag ] = source;
+                       };
+
+    if( m_isKeepout )
+    {
+        if( aSources )
+            source = _( "zone properties" );
+
+        if( m_doNotAllowTracks )
+            setFlag( DISALLOW_TRACKS );
+
+        if( m_doNotAllowVias )
+            setFlag( DISALLOW_VIAS );
+
+        if( m_doNotAllowPads )
+            setFlag( DISALLOW_PADS );
+
+        if( m_doNotAllowFootprints )
+            setFlag( DISALLOW_FOOTPRINTS );
+
+        if( m_doNotAllowCopperPour )
+            setFlag( DISALLOW_ZONES );
+    }
+
+    DRC_RULE* rule = GetRule( this, nullptr, DISALLOW_CONSTRAINT );
+
+    if( rule )
+    {
+        if( aSources )
+            source = wxString::Format( _( "'%s' rule" ), rule->m_Name );
+
+        if( ( rule->m_DisallowFlags & DISALLOW_VIAS ) > 0 )
+            setFlag( DISALLOW_VIAS );
+
+        if( ( rule->m_DisallowFlags & DISALLOW_MICRO_VIAS ) > 0 )
+            setFlag( DISALLOW_MICRO_VIAS );
+
+        if( ( rule->m_DisallowFlags & DISALLOW_BB_VIAS ) > 0 )
+            setFlag( DISALLOW_BB_VIAS );
+
+        if( ( rule->m_DisallowFlags & DISALLOW_TRACKS ) > 0 )
+            setFlag( DISALLOW_TRACKS );
+
+        if( ( rule->m_DisallowFlags & DISALLOW_PADS ) > 0 )
+            setFlag( DISALLOW_PADS );
+
+        if( ( rule->m_DisallowFlags & DISALLOW_ZONES ) > 0 )
+            setFlag( DISALLOW_ZONES );
+
+        if( ( rule->m_DisallowFlags & DISALLOW_TEXTS ) > 0 )
+            setFlag( DISALLOW_TEXTS );
+
+        if( ( rule->m_DisallowFlags & DISALLOW_GRAPHICS ) > 0 )
+            setFlag( DISALLOW_GRAPHICS );
+
+        if( ( rule->m_DisallowFlags & DISALLOW_HOLES ) > 0 )
+            setFlag( DISALLOW_HOLES );
+
+        if( ( rule->m_DisallowFlags & DISALLOW_FOOTPRINTS ) > 0 )
+            setFlag( DISALLOW_FOOTPRINTS );
+    }
+
+    return keepouts;
+}
+
+
 void ZONE_CONTAINER::SetCornerRadius( unsigned int aRadius )
 {
     if( m_cornerRadius != aRadius )

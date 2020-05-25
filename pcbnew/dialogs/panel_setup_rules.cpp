@@ -157,7 +157,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         if( sexprs.top() == "constraint" )
             tokens = "annulus_width clearance hole track_width";
         else if( sexprs.top() == "disallow" )
-            tokens = "blind_via graphic hole micro_via pad text track via zone";
+            tokens = "buried_via graphic hole micro_via pad text track via zone";
 
         int wordStartPos = m_textEditor->WordStartPosition( currentPos, true );
         wxASSERT( currentPos - wordStartPos == partial.size() );

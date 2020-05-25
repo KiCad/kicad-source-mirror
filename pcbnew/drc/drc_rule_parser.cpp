@@ -152,7 +152,7 @@ DRC_SELECTOR* DRC_RULES_PARSER::parseDRC_SELECTOR( wxString* aRuleName )
             case T_track:      selector->m_MatchTypes.push_back( PCB_TRACE_T );             break;
             case T_via:        selector->m_MatchTypes.push_back( PCB_LOCATE_STDVIA_T );     break;
             case T_micro_via:  selector->m_MatchTypes.push_back( PCB_LOCATE_UVIA_T );       break;
-            case T_blind_via:  selector->m_MatchTypes.push_back( PCB_LOCATE_BBVIA_T );      break;
+            case T_buried_via: selector->m_MatchTypes.push_back( PCB_LOCATE_BBVIA_T );      break;
             case T_pad:        selector->m_MatchTypes.push_back( PCB_PAD_T );               break;
             case T_zone:       selector->m_MatchTypes.push_back( PCB_ZONE_AREA_T );         break;
             case T_text:       selector->m_MatchTypes.push_back( PCB_LOCATE_TEXT_T );       break;
@@ -161,7 +161,7 @@ DRC_SELECTOR* DRC_RULES_PARSER::parseDRC_SELECTOR( wxString* aRuleName )
             case T_npth:       selector->m_MatchTypes.push_back( PCB_LOCATE_NPTH_T );       break;
             case T_pth:        selector->m_MatchTypes.push_back( PCB_LOCATE_PTH_T );        break;
             case T_board_edge: selector->m_MatchTypes.push_back( PCB_LOCATE_BOARD_EDGE_T ); break;
-            default:           Expecting( "track, via, micro_via, blind_via, pad, zone, text, "
+            default:           Expecting( "track, via, micro_via, buried_via, pad, zone, text, "
                                           "graphic, hole, npth, pth, or board_edge" );
             }
             NeedRIGHT();
@@ -214,18 +214,21 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
         case T_disallow:
             switch( NextTok() )
             {
-            case T_track:     rule->m_DisallowFlags |= DISALLOW_TRACKS;     break;
-            case T_via:       rule->m_DisallowFlags |= DISALLOW_VIAS;       break;
-            case T_micro_via: rule->m_DisallowFlags |= DISALLOW_MICRO_VIAS; break;
-            case T_blind_via: rule->m_DisallowFlags |= DISALLOW_BB_VIAS;    break;
-            case T_pad:       rule->m_DisallowFlags |= DISALLOW_PADS;       break;
-            case T_zone:      rule->m_DisallowFlags |= DISALLOW_ZONES;      break;
-            case T_text:      rule->m_DisallowFlags |= DISALLOW_TEXTS;      break;
-            case T_graphic:   rule->m_DisallowFlags |= DISALLOW_GRAPHICS;   break;
-            case T_hole:      rule->m_DisallowFlags |= DISALLOW_HOLES;      break;
+            case T_track:      rule->m_DisallowFlags |= DISALLOW_TRACKS;     break;
+            case T_via:        rule->m_DisallowFlags |= DISALLOW_VIAS;       break;
+            case T_micro_via:  rule->m_DisallowFlags |= DISALLOW_MICRO_VIAS; break;
+            case T_buried_via: rule->m_DisallowFlags |= DISALLOW_BB_VIAS;    break;
+            case T_pad:        rule->m_DisallowFlags |= DISALLOW_PADS;       break;
+            case T_zone:       rule->m_DisallowFlags |= DISALLOW_ZONES;      break;
+            case T_text:       rule->m_DisallowFlags |= DISALLOW_TEXTS;      break;
+            case T_graphic:    rule->m_DisallowFlags |= DISALLOW_GRAPHICS;   break;
+            case T_hole:       rule->m_DisallowFlags |= DISALLOW_HOLES;      break;
+            case T_footprint:  rule->m_DisallowFlags |= DISALLOW_FOOTPRINTS; break;
             default: Expecting( "track, via, micro_via, blind_via, pad, zone, text, "
                                 "graphic, or hole" );
             }
+
+            rule->m_ConstraintFlags = DISALLOW_CONSTRAINT;
             NeedRIGHT();
             break;
 
@@ -262,6 +265,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_hole:          constraintType = HOLE_CONSTRAINT;      break;
     default: Expecting( "clearance, track_width, annulus_width, or hole" ); return;
     }
+
+    aRule->m_ConstraintFlags |= constraintType;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -319,8 +324,6 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             Expecting( "allow or constraint" );
         }
     }
-
-    aRule->m_ConstraintFlags |= constraintType;
 }
 
 

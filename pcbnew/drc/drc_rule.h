@@ -36,6 +36,7 @@ class BOARD_ITEM;
 #define ANNULUS_CONSTRAINT   (1 << 1)
 #define TRACK_CONSTRAINT     (1 << 2)
 #define HOLE_CONSTRAINT      (1 << 3)
+#define DISALLOW_CONSTRAINT  (1 << 4)
 
 #define DISALLOW_VIAS        (1 << 0)
 #define DISALLOW_MICRO_VIAS  (1 << 1)

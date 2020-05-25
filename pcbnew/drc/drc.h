@@ -84,9 +84,14 @@ enum PCB_DRC_CODE {
     DRCE_NETCLASS_uVIASIZE,                 ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinSize
     DRCE_NETCLASS_uVIADRILLSIZE,            ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinDrill
     DRCE_VIA_INSIDE_KEEPOUT,
+    DRCE_MICROVIA_INSIDE_KEEPOUT,
+    DRCE_BBVIA_INSIDE_KEEPOUT,
     DRCE_TRACK_INSIDE_KEEPOUT,
     DRCE_PAD_INSIDE_KEEPOUT,
     DRCE_FOOTPRINT_INSIDE_KEEPOUT,
+    DRCE_HOLE_INSIDE_KEEPOUT,
+    DRCE_TEXT_INSIDE_KEEPOUT,
+    DRCE_GRAPHICS_INSIDE_KEEPOUT,
     DRCE_OVERLAPPING_FOOTPRINTS,            ///< footprint courtyards overlap
     DRCE_MISSING_COURTYARD,                 ///< footprint has no courtyard defined
     DRCE_MALFORMED_COURTYARD,               ///< footprint has a courtyard but malformed

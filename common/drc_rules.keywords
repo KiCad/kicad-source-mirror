@@ -1,11 +1,11 @@
 annulus_width
-blind_via
 board_edge
+buried_via
 clearance
 condition
 constraint
 disallow
-track_width
+footprint
 graphic
 hole
 match_area
@@ -19,11 +19,11 @@ npth
 opt
 pad
 pth
-relaxed
 rule
 selector
 text
 track
+track_width
 version
 via
 zone

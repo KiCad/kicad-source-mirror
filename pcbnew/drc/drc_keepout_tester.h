@@ -41,12 +41,21 @@ public:
     bool RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) override;
 
 private:
-    bool checkTracksAndVias( ZONE_CONTAINER* aKeepout );
-    bool checkFootprints( ZONE_CONTAINER* aKeepout );
+    bool checkTracksAndVias();
+    bool checkFootprints();
+    bool checkPads( MODULE* aModule );
+    bool checkDrawings();
 
 private:
     EDA_UNITS                 m_units;
     BOARD*                    m_board;
+
+    // Temp variables for use while testing:
+    ZONE_CONTAINER*           m_zone;
+    EDA_RECT                  m_zoneBBox;
+    int                       m_keepoutFlags;   // bitset of DISALLOW_* flags
+    std::map<int, wxString>   m_sources;        // map of DISALLOW_* flag to source
+    wxString                  m_msg;            // avoid lots of calls to wxString's c'tor.
 };
 
 #endif // DRC_KEEPOUT_TESTER__H
