@@ -643,6 +643,18 @@ bool SCH_CONNECTION::ParseBusGroup( wxString aGroup, wxString* aName,
 }
 
 
+const std::vector< std::shared_ptr< SCH_CONNECTION > > SCH_CONNECTION::AllMembers() const
+{
+    std::vector< std::shared_ptr< SCH_CONNECTION > > ret( m_members );
+
+    for( const auto& member : m_members )
+        if( member->IsBus() )
+            ret.insert( ret.end(), member->Members().begin(), member->Members().end() );
+
+    return ret;
+}
+
+
 wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
 {
     size_t   groupLen = aGroup.length();

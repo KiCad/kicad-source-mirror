@@ -384,9 +384,11 @@ void SCH_EDIT_FRAME::SetCrossProbeConnection( const SCH_CONNECTION* aConnection 
     if( aConnection->Members().empty() )
         return;
 
-    wxString nets = aConnection->Members()[0]->Name();
+    auto all_members = aConnection->AllMembers();
 
-    if( aConnection->Members().size() == 1 )
+    wxString nets = all_members[0]->Name();
+
+    if( all_members.size() == 1 )
     {
         SendCrossProbeNetName( nets );
         return;
@@ -396,8 +398,8 @@ void SCH_EDIT_FRAME::SetCrossProbeConnection( const SCH_CONNECTION* aConnection 
     // included as part of the netlist sent from eeschema to pcbnew (and thus pcbnew can
     // natively keep track of bus membership)
 
-    for( size_t i = 1; i < aConnection->Members().size(); i++ )
-        nets << "," << aConnection->Members()[i]->Name();
+    for( size_t i = 1; i < all_members.size(); i++ )
+        nets << "," << all_members[i]->Name();
 
     std::string packet = StrPrintf( "$NETS: \"%s\"", TO_UTF8( nets ) );
 

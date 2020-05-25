@@ -258,6 +258,8 @@ public:
         return m_members;
     }
 
+    const std::vector< std::shared_ptr< SCH_CONNECTION > > AllMembers() const;
+
     static wxString PrintBusForUI( const wxString& aString );
 
     /**
