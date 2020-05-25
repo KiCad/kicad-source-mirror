@@ -196,11 +196,11 @@ bool SCH_SCREEN::HasItems( KICAD_T aItemType ) const
 
 void SCH_SCREEN::Append( SCH_ITEM* aItem )
 {
-    // Ensure the item can reach the SCHEMATIC through this screen
-    aItem->SetParent( this );
-
     if( aItem->Type() != SCH_SHEET_PIN_T && aItem->Type() != SCH_FIELD_T )
     {
+        // Ensure the item can reach the SCHEMATIC through this screen
+        aItem->SetParent( this );
+
         if( aItem->Type() == SCH_COMPONENT_T )
         {
             SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( aItem );

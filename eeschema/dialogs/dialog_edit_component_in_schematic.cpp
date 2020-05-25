@@ -568,7 +568,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
     SCH_FIELD           newField( wxPoint( 0, 0 ), fieldID, m_cmp,
                                   TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID ) );
 
-    newField.SetParent( m_cmp->GetParent() );
     newField.SetTextAngle( m_fields->at( REFERENCE ).GetTextAngle() );
     newField.SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
 
