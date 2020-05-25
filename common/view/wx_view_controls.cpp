@@ -63,6 +63,7 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
         m_state( IDLE ),
         m_parentPanel( aParentPanel ),
         m_scrollScale( 1.0, 1.0 ),
+        m_initialZoomScale( 0.0 ),
 #ifdef __WXGTK3__
         m_lastTimestamp( 0 ),
 #endif

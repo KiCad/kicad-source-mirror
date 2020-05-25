@@ -30,7 +30,8 @@ using KIGFX::MOUSE_DRAG_ACTION;
 
 PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent ) :
         PANEL_MOUSE_SETTINGS_BASE( aParent ),
-        m_dialog( aDialog )
+        m_dialog( aDialog ),
+        m_currentScrollMod( {} )
 {
     m_checkAutoZoomSpeed->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,
             [&]( wxCommandEvent& aEvt )
