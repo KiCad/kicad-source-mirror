@@ -27,13 +27,13 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <base_units.h>
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
 #include <dialog_helpers.h>
 #include <ws_draw_item.h>
 #include <ws_data_item.h>
+#include <ws_data_model.h>
 #include <dialog_page_settings.h>
 #include <invoke_pl_editor_dialog.h>
 
@@ -185,6 +185,19 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     renderSettings.SetLayerColor( LAYER_WORKSHEET, COLOR4D( RED ) );
     renderSettings.SetPrintDC( dc );
 
+    // Ensure the scaling factor (used only in printing) of bitmaps is up to date
+    WS_DATA_MODEL&     model = WS_DATA_MODEL::GetTheInstance();
+
+    for( WS_DATA_ITEM* dataItem : model.GetItems() )
+    {
+        if( dataItem->GetType() != WS_DATA_ITEM::WS_BITMAP )
+            continue;
+
+        WS_DATA_ITEM_BITMAP* itemBM = static_cast<WS_DATA_ITEM_BITMAP*>( dataItem );
+        itemBM->m_ImageBitmap->SetPixelScaleFactor( IU_PER_MILS * 1000 /
+                                                    itemBM->m_ImageBitmap->GetPPI() );
+    }
+
     m_parent->PrintWorkSheet( &renderSettings, screen, IU_PER_MILS, wxEmptyString );
 
     m_parent->SetDrawBgColor( bg_color );
@@ -195,6 +208,10 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     screen->m_StartVisu = tmp_startvisu;
     screen->m_DrawOrg   = old_org;
     screen->SetZoom( oldZoom );
+
+    // PrintWorkSheet clears the current display list when calling BuildWorkSheetGraphicList()
+    // So rebuild and redraw it.
+    m_parent->GetCanvas()->DisplayWorksheet();
 }
 
 

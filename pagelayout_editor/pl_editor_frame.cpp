@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -352,7 +352,7 @@ void PL_EDITOR_FRAME::ToPrinter( bool doPreview )
 {
     // static print data and page setup data, to remember settings during the session
     static wxPrintData* s_PrintData;
-    static wxPageSetupDialogData* s_pageSetupData = (wxPageSetupDialogData*) NULL;
+    static wxPageSetupDialogData* s_pageSetupData = nullptr;
 
     const PAGE_INFO& pageInfo = GetPageSettings();
 
@@ -687,7 +687,23 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 void PL_EDITOR_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
 {
     GetScreen()->m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
+    WS_DATA_MODEL&     model = WS_DATA_MODEL::GetTheInstance();
+
+    for( WS_DATA_ITEM* dataItem : model.GetItems() )
+    {
+        // Ensure the scaling factor (used only in printing) of bitmaps is up to date
+        if( dataItem->GetType() != WS_DATA_ITEM::WS_BITMAP )
+            continue;
+
+        WS_DATA_ITEM_BITMAP* itemBM = static_cast<WS_DATA_ITEM_BITMAP*>( dataItem );
+        itemBM->m_ImageBitmap->SetPixelScaleFactor( IU_PER_MILS * 1000
+                                                    / itemBM->m_ImageBitmap->GetPPI() );
+    }
+
     PrintWorkSheet( aSettings, GetScreen(), IU_PER_MILS, wxEmptyString );
+
+    GetCanvas()->DisplayWorksheet();
+    GetCanvas()->Refresh();
 }
 
 
@@ -761,6 +777,8 @@ WS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
             break;
         }
 
+        // Set the scale factor for pl_editor (it is set for eeschema by default)
+        image->SetPixelScaleFactor( 25400.0 / image->GetPPI() );
         item = new WS_DATA_ITEM_BITMAP( image );
     }
     break;
