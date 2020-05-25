@@ -419,7 +419,7 @@ int DSNLEXER::NeedSYMBOLorNUMBER()
 {
     int  tok = NextTok();
     if( !IsSymbol( tok ) && tok!=DSN_NUMBER )
-        Expecting( "symbol|number" );
+        Expecting( "a symbol or number" );
     return tok;
 }
 
@@ -430,7 +430,7 @@ int DSNLEXER::NeedNUMBER( const char* aExpectation )
     if( tok != DSN_NUMBER )
     {
         wxString errText = wxString::Format(
-            _( "need a NUMBER for \"%s\"" ), wxString::FromUTF8( aExpectation ).GetData() );
+            _( "need a number for '%s'" ), wxString::FromUTF8( aExpectation ).GetData() );
         THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
     return tok;

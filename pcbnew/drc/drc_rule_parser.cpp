@@ -195,9 +195,11 @@ DRC_SELECTOR* DRC_RULES_PARSER::parseDRC_SELECTOR( wxString* aRuleName )
 DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 {
     DRC_RULE* rule = new DRC_RULE();
-    T         token;
+    T         token = NextTok();
 
-    NeedSYMBOL();
+    if( !IsSymbol( token ) )
+        Expecting( "rule name" );
+
     rule->m_Name = FromUTF8();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
