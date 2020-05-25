@@ -55,6 +55,7 @@ public:
     int ShowHelp( const TOOL_EVENT& aEvent );
     int ListHotKeys( const TOOL_EVENT& aEvent );
     int GetInvolved( const TOOL_EVENT& aEvent );
+    int ReportBug( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
@@ -62,6 +63,9 @@ public:
 private:
     ///> Pointer to the currently used edit frame.
     EDA_BASE_FRAME* m_frame;
+
+    static wxString m_bugReportUrl;
+    static wxString m_bugReportTemplate;
 };
 
 #endif

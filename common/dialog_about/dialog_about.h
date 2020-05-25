@@ -54,22 +54,12 @@ private:
 
     ABOUT_APP_INFO& m_info;
 
-    static wxString m_bugReportUrl;
-    static wxString m_bugReportTemplate;
-
 public:
     DIALOG_ABOUT( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aAppInfo );
     ~DIALOG_ABOUT();
 
 private:
     void         initDialog();
-
-    /** build the version info message
-     * @param aMsg is the result
-     * @param aFormatHtml = true to use a minimal HTML format
-     * false to use a plain text
-     */
-    void buildVersionInfoData( wxString& aMsg, bool aFormatHtml );
 
     void onHtmlLinkClicked( wxHtmlLinkEvent& event );
 

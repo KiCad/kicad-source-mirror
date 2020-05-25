@@ -61,4 +61,14 @@ wxString GetMajorMinorVersion();
  */
 wxString GetBuildDate();
 
+
+/**
+ * Create a version info string for bug reports and the about dialog
+ * @param aTitle is the application title to include at the top of the report
+ * @param aBrief = true to condense information for the bug report URL
+ * @param aHtml = true to use a minimal HTML format, false for plan text
+ * @return the version info string
+ */
+wxString GetVersionInfoData( const wxString& aTitle, bool aHtml = false, bool aBrief = false );
+
 #endif	// KICAD_BUILD_VERSION_H

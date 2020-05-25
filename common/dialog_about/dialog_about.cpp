@@ -24,23 +24,8 @@
 
 
 #include <config.h>
-#include <kicad_curl/kicad_curl_easy.h>
-#include <launch_ext.h>
 #include <string>
 
-// kicad_curl.h must be included before wx headers, to avoid
-// conflicts for some defines, at least on Windows
-// kicad_curl.h can create conflicts for some defines, at least on Windows
-// so we are using here 2 proxy functions to know Curl version to avoid
-// including kicad_curl.h to know Curl version
-extern std::string GetKicadCurlVersion();
-extern std::string GetCurlLibVersion();
-
-#if defined( KICAD_USE_OCC ) | defined( KICAD_USE_OCE )
-#include <Standard_Version.hxx>
-#endif
-
-#include <boost/version.hpp>
 #include <wx/clipbrd.h>
 #include <wx/msgdlg.h>
 #include <wx/hyperlink.h>
@@ -58,37 +43,9 @@ extern std::string GetCurlLibVersion();
 #include <bitmaps.h>
 #include <build_version.h>
 #include <html_messagebox.h>
+#include <tool/tool_manager.h>
 
 #include "dialog_about.h"
-
-
-/// URL to launch a new issue with pre-populated description
-wxString DIALOG_ABOUT::m_bugReportUrl =
-        "https://gitlab.com/kicad/code/kicad/issues/new?issue[description]=%s";
-
-/// Issue template to use for reporting bugs (this should not be translated)
-wxString DIALOG_ABOUT::m_bugReportTemplate =
-        "<!-- --------Before Creating a New Issue-----------\n"
-        "* Search the issue tracker to verify the issue has not already been reported.\n"
-        "* Keep report contents limited to the necessary information required to fix the issue.\n"
-        "\n"
-        "---------Add your issue details below----------- -->\n"
-        "\n"
-        "# Description\n"
-        "<!-- What is the current behavior and what is the expected behavior?  -->\n"
-        "<!-- If the issue is visual/graphical, please attach screenshots of the problem. -->\n"
-        "\n"
-        "# Steps to reproduce\n"
-        "<!-- If there are multiple steps to reproduce it or it is a visual issue, then providing a"
-        "screen recording as an attachment to this report is recommended. -->\n"
-        "<!-- If this issue is specific to a project, please attach it to this issue. -->\n"
-        "1.\n"
-        "1.\n"
-        "# KiCad Version\n"
-        "\n"
-        "```\n"
-        "%s\n"
-        "```";
 
 
 DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
@@ -155,8 +112,7 @@ void DIALOG_ABOUT::createNotebooks()
     createNotebookHtmlPage( m_auiNotebook, _( "About" ), m_picInformation,
             m_info.GetDescription() );
 
-    wxString version;
-    buildVersionInfoData( version, true );
+    wxString version = GetVersionInfoData( m_titleName, true );
 
     createNotebookHtmlPage( m_auiNotebook, _( "Version" ), m_picVersion, version, true );
 
@@ -475,177 +431,6 @@ void DIALOG_ABOUT::onHtmlLinkClicked( wxHtmlLinkEvent& event )
 }
 
 
-void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
-{
-    // DO NOT translate information in the msg_version string
-
-    wxString eol = aFormatHtml ? "<br>" : "\n";
-    wxString indent4 = aFormatHtml ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "    ";
-
-    #define ON "ON" << eol
-    #define OFF "OFF" << eol
-
-    wxPlatformInfo platform;
-    aMsg << "Application: " << m_titleName << eol;
-    aMsg << "Version: " << m_info.GetBuildVersion() << eol;
-    aMsg << "Libraries:" << eol;
-    aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
-
-    aMsg << indent4 << GetKicadCurlVersion() << eol;
-
-    aMsg << "Platform: " << wxGetOsDescription() << ", "
-         << platform.GetArchName() << ", "
-         << platform.GetEndiannessName() << ", "
-         << platform.GetPortIdName() << eol;
-
-    aMsg << "Build Info:" << eol;
-    aMsg << indent4 << "Build date: " << m_info.GetBuildDate() << eol;
-    aMsg << indent4 << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
-    aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")";
-
-    // Get the GTK+ version where possible.
-#ifdef __WXGTK__
-    int major, minor;
-
-    major = wxPlatformInfo().Get().GetToolkitMajorVersion();
-    minor = wxPlatformInfo().Get().GetToolkitMinorVersion();
-    aMsg << " GTK+ " <<  major << "." << minor;
-#endif
-
-    aMsg << eol;
-
-    aMsg << indent4 << "Boost: " << ( BOOST_VERSION / 100000 ) << wxT( "." )
-                      << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
-                      << ( BOOST_VERSION % 100 ) << eol;
-
-#ifdef KICAD_USE_OCC
-    aMsg << indent4 << "OpenCASCADE Technology: " << OCC_VERSION_COMPLETE << eol;
-#endif
-
-#ifdef KICAD_USE_OCE
-    aMsg << indent4 << "OpenCASCADE Community Edition: " << OCC_VERSION_COMPLETE << eol;
-#endif
-
-    aMsg << indent4 << "Curl: " << GetCurlLibVersion() << eol;
-
-    aMsg << indent4 << "Compiler: ";
-#if defined(__clang__)
-    aMsg << "Clang " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__;
-#elif defined(__GNUG__)
-    aMsg << "GCC " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__;
-#elif defined(_MSC_VER)
-    aMsg << "Visual C++ " << _MSC_VER;
-#elif defined(__INTEL_COMPILER)
-    aMsg << "Intel C++ " << __INTEL_COMPILER;
-#else
-    aMsg << "Other Compiler ";
-#endif
-
-#if defined(__GXX_ABI_VERSION)
-    aMsg << " with C++ ABI " << __GXX_ABI_VERSION << eol;
-#else
-    aMsg << " without C++ ABI";
-#endif
-
-    aMsg << eol;
-
-    // Add build settings config (build options):
-    aMsg << "Build settings:" << eol;
-
-    aMsg << indent4 << "KICAD_SCRIPTING=";
-#ifdef KICAD_SCRIPTING
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-    aMsg << indent4 << "KICAD_SCRIPTING_MODULES=";
-#ifdef KICAD_SCRIPTING_MODULES
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-    aMsg << indent4 << "KICAD_SCRIPTING_PYTHON3=";
-#ifdef KICAD_SCRIPTING_PYTHON3
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-    aMsg << indent4 << "KICAD_SCRIPTING_WXPYTHON=";
-#ifdef KICAD_SCRIPTING_WXPYTHON
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-    aMsg << indent4 << "KICAD_SCRIPTING_WXPYTHON_PHOENIX=";
-#ifdef KICAD_SCRIPTING_WXPYTHON_PHOENIX
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-    aMsg << indent4 << "KICAD_SCRIPTING_ACTION_MENU=";
-#ifdef KICAD_SCRIPTING_ACTION_MENU
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-    aMsg << indent4 << "BUILD_GITHUB_PLUGIN=";
-#ifdef BUILD_GITHUB_PLUGIN
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-    aMsg << indent4 << "KICAD_USE_OCE=";
-#ifdef KICAD_USE_OCE
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-    aMsg << indent4 << "KICAD_USE_OCC=";
-#ifdef KICAD_USE_OCC
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-    aMsg << indent4 << "KICAD_SPICE=";
-#ifdef KICAD_SPICE
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-#ifndef NDEBUG
-        aMsg << indent4 << "KICAD_STDLIB_DEBUG=";
-    #ifdef KICAD_STDLIB_DEBUG
-        aMsg << ON;
-    #else
-        aMsg << OFF;
-        aMsg << indent4 << "KICAD_STDLIB_LIGHT_DEBUG=";
-        #ifdef KICAD_STDLIB_LIGHT_DEBUG
-            aMsg << ON;
-        #else
-            aMsg << OFF;
-        #endif
-    #endif
-
-        aMsg << indent4 << "KICAD_SANITIZE=";
-    #ifdef KICAD_SANITIZE
-        aMsg << ON;
-    #else
-        aMsg << OFF;
-    #endif
-#endif
-}
-
-
 void DIALOG_ABOUT::onCopyVersionInfo( wxCommandEvent& event )
 {
     if( !wxTheClipboard->Open() )
@@ -655,8 +440,7 @@ void DIALOG_ABOUT::onCopyVersionInfo( wxCommandEvent& event )
         return;
     }
 
-    wxString msg_version;
-    buildVersionInfoData( msg_version, false );
+    wxString msg_version = GetVersionInfoData( m_titleName );
 
     wxTheClipboard->SetData( new wxTextDataObject( msg_version ) );
     wxTheClipboard->Close();
@@ -666,15 +450,6 @@ void DIALOG_ABOUT::onCopyVersionInfo( wxCommandEvent& event )
 
 void DIALOG_ABOUT::onReportBug( wxCommandEvent& event )
 {
-    wxString version;
-    buildVersionInfoData( version, false );
-
-    wxString message;
-    message.Printf( m_bugReportTemplate, version );
-
-    KICAD_CURL_EASY kcurl;
-    wxString url_string;
-    url_string.Printf( m_bugReportUrl, kcurl.Escape( message.ToStdString() ) );
-
-    LaunchURL( url_string );
+    if( TOOL_MANAGER* mgr = static_cast<EDA_BASE_FRAME*>( GetParent() )->GetToolManager() )
+        mgr->RunAction( "common.SuiteControl.reportBug", true );
 }

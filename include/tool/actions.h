@@ -170,6 +170,7 @@ public:
     static TOOL_ACTION help;
     static TOOL_ACTION listHotKeys;
     static TOOL_ACTION getInvolved;
+    static TOOL_ACTION reportBug;
 
     /**
      * Function TranslateLegacyId()

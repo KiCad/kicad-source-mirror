@@ -24,6 +24,19 @@
 
 // Date for KiCad build version
 #include <fctsys.h>
+#include <boost/version.hpp>
+
+// kicad_curl.h must be included before wx headers, to avoid
+// conflicts for some defines, at least on Windows
+// kicad_curl.h can create conflicts for some defines, at least on Windows
+// so we are using here 2 proxy functions to know Curl version to avoid
+// including kicad_curl.h to know Curl version
+extern std::string GetKicadCurlVersion();
+extern std::string GetCurlLibVersion();
+
+#if defined( KICAD_USE_OCC ) | defined( KICAD_USE_OCE )
+#include <Standard_Version.hxx>
+#endif
 
 // The include file version.h is always created even if the repo version cannot be
 // determined.  In this case KICAD_VERSION_FULL will default to the KICAD_VERSION
@@ -56,4 +69,189 @@ wxString GetMajorMinorVersion()
 {
     wxString msg = wxString::Format( wxT( "%s" ), wxT( KICAD_MAJOR_MINOR_VERSION ) );
     return msg;
+}
+
+
+wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
+{
+    wxString aMsg;
+    // DO NOT translate information in the msg_version string
+
+    wxString eol = aHtml ? "<br>" : "\n";
+
+    // Tabs instead of spaces for the plaintext version for shorter string length
+    wxString indent4 = aHtml ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "\t";
+
+#define ON "ON" << eol
+#define OFF "OFF" << eol
+
+    wxString version;
+    version << GetBuildVersion()
+#ifdef DEBUG
+            << ", debug"
+#else
+            << ", release"
+#endif
+            << " build";
+
+    wxPlatformInfo platform;
+    aMsg << "Application: " << aTitle << eol;
+    aMsg << "Version: " << version << eol;
+    aMsg << "Libraries:" << eol;
+
+    aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
+
+    if( !aBrief )
+        aMsg << indent4 << GetKicadCurlVersion() << eol;
+
+    aMsg << "Platform: " << wxGetOsDescription() << ", "
+         << platform.GetArchName() << ", "
+         << platform.GetEndiannessName() << ", "
+         << platform.GetPortIdName() << eol;
+
+    if( !aBrief )
+        aMsg << "Build Info:" << eol;
+
+    if( !aBrief )
+        aMsg << indent4 << "Build date: " << GetBuildDate() << eol;
+
+    aMsg << indent4 << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
+    aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")";
+
+    // Get the GTK+ version where possible.
+#ifdef __WXGTK__
+    int major, minor;
+
+    major = wxPlatformInfo().Get().GetToolkitMajorVersion();
+    minor = wxPlatformInfo().Get().GetToolkitMinorVersion();
+    aMsg << " GTK+ " <<  major << "." << minor;
+#endif
+
+    aMsg << eol;
+
+    aMsg << indent4 << "Boost: " << ( BOOST_VERSION / 100000 ) << wxT( "." )
+         << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
+         << ( BOOST_VERSION % 100 ) << eol;
+
+#ifdef KICAD_USE_OCC
+    aMsg << indent4 << "OCC: " << OCC_VERSION_COMPLETE << eol;
+#endif
+
+#ifdef KICAD_USE_OCE
+    aMsg << indent4 << "OCE: " << OCC_VERSION_COMPLETE << eol;
+#endif
+
+    aMsg << indent4 << "Curl: " << GetCurlLibVersion() << eol;
+
+    aMsg << indent4 << "Compiler: ";
+#if defined(__clang__)
+    aMsg << "Clang " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__;
+#elif defined(__GNUG__)
+    aMsg << "GCC " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__;
+#elif defined(_MSC_VER)
+    aMsg << "Visual C++ " << _MSC_VER;
+#elif defined(__INTEL_COMPILER)
+    aMsg << "Intel C++ " << __INTEL_COMPILER;
+#else
+    aMsg << "Other Compiler ";
+#endif
+
+#if defined(__GXX_ABI_VERSION)
+    aMsg << " with C++ ABI " << __GXX_ABI_VERSION << eol;
+#else
+    aMsg << " without C++ ABI";
+#endif
+
+    aMsg << eol;
+
+    // Add build settings config (build options):
+    aMsg << "Build settings:" << eol;
+
+    aMsg << indent4 << "KICAD_SCRIPTING=";
+#ifdef KICAD_SCRIPTING
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SCRIPTING_MODULES=";
+#ifdef KICAD_SCRIPTING_MODULES
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SCRIPTING_PYTHON3=";
+#ifdef KICAD_SCRIPTING_PYTHON3
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SCRIPTING_WXPYTHON=";
+#ifdef KICAD_SCRIPTING_WXPYTHON
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SCRIPTING_WXPYTHON_PHOENIX=";
+#ifdef KICAD_SCRIPTING_WXPYTHON_PHOENIX
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SCRIPTING_ACTION_MENU=";
+#ifdef KICAD_SCRIPTING_ACTION_MENU
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "BUILD_GITHUB_PLUGIN=";
+#ifdef BUILD_GITHUB_PLUGIN
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+#ifdef KICAD_USE_OCE
+    aMsg << indent4 << "KICAD_USE_OCE=" << ON;
+#endif
+
+#ifdef KICAD_USE_OCC
+    aMsg << indent4 << "KICAD_USE_OCC=" << ON;
+#endif
+
+    aMsg << indent4 << "KICAD_SPICE=";
+#ifdef KICAD_SPICE
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+#ifndef NDEBUG
+    aMsg << indent4 << "KICAD_STDLIB_DEBUG=";
+#ifdef KICAD_STDLIB_DEBUG
+    aMsg << ON;
+#else
+    aMsg << OFF;
+    aMsg << indent4 << "KICAD_STDLIB_LIGHT_DEBUG=";
+#ifdef KICAD_STDLIB_LIGHT_DEBUG
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+#endif
+
+    aMsg << indent4 << "KICAD_SANITIZE=";
+#ifdef KICAD_SANITIZE
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+#endif
+
+    return aMsg;
 }

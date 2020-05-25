@@ -23,6 +23,7 @@
  */
 
 #include <bitmaps.h>
+#include <build_version.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <eda_draw_frame.h>
@@ -35,10 +36,37 @@
 #include <id.h>
 #include <project.h>
 #include <kiface_i.h>
+#include <kicad_curl/kicad_curl_easy.h>
 #include <dialog_configure_paths.h>
 #include <eda_doc.h>
 
 #define URL_GET_INVOLVED "http://kicad-pcb.org/contribute/"
+
+
+/// URL to launch a new issue with pre-populated description
+wxString COMMON_CONTROL::m_bugReportUrl =
+        "https://gitlab.com/kicad/code/kicad/issues/new?issue[description]=%s";
+
+/// Issue template to use for reporting bugs (this should not be translated)
+wxString COMMON_CONTROL::m_bugReportTemplate =
+        "<!-- Before Creating a New Issue:\n"
+        "* Search the issue tracker to verify the issue has not already been reported.\n"
+        "* Only report one problem per issue. -->\n"
+        "\n"
+        "# Description\n"
+        "<!-- What is the current behavior and what is the expected behavior? -->\n"
+        "<!-- Please attach screenshots if they will help explain the problem. -->\n"
+        "\n"
+        "# Steps to reproduce\n"
+        "<!-- Please include a screen recording if it will help explain how to reproduce. -->\n"
+        "<!-- If this issue is specific to a project, please attach it. -->\n"
+        "1.\n"
+        "2.\n"
+        "# KiCad Version\n"
+        "\n"
+        "```\n"
+        "%s\n"
+        "```";
 
 
 void COMMON_CONTROL::Reset( RESET_REASON aReason )
@@ -197,6 +225,23 @@ int COMMON_CONTROL::GetInvolved( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_CONTROL::ReportBug( const TOOL_EVENT& aEvent )
+{
+    wxString version = GetVersionInfoData( m_frame->GetAboutTitle(), false, true );
+
+    wxString message;
+    message.Printf( m_bugReportTemplate, version );
+
+    KICAD_CURL_EASY kcurl;
+    wxString url_string;
+    url_string.Printf( m_bugReportUrl, kcurl.Escape( message.ToStdString() ) );
+
+    wxLaunchDefaultBrowser( url_string );
+
+    return 0;
+}
+
+
 void COMMON_CONTROL::setTransitions()
 {
     Go( &COMMON_CONTROL::ConfigurePaths,     ACTIONS::configurePaths.MakeEvent() );
@@ -211,6 +256,7 @@ void COMMON_CONTROL::setTransitions()
     Go( &COMMON_CONTROL::ShowHelp,           ACTIONS::help.MakeEvent() );
     Go( &COMMON_CONTROL::ListHotKeys,        ACTIONS::listHotKeys.MakeEvent() );
     Go( &COMMON_CONTROL::GetInvolved,        ACTIONS::getInvolved.MakeEvent() );
+    Go( &COMMON_CONTROL::ReportBug,          ACTIONS::reportBug.MakeEvent() );
 }
 
 

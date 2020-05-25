@@ -605,6 +605,12 @@ TOOL_ACTION ACTIONS::getInvolved( "common.SuiteControl.getInvolved",
         _( "Open \"Contribute to KiCad\" in a web browser" ),
         info_xpm );
 
+TOOL_ACTION ACTIONS::reportBug( "common.SuiteControl.reportBug",
+        AS_GLOBAL, 0, "",
+        _( "Report Bug" ),
+        _( "Report a problem with KiCad" ),
+        drc_xpm );
+
 
 // System-wide selection Events
 
