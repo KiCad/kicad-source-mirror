@@ -46,6 +46,8 @@ private:
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
     void onScintillaUpdateUI( wxStyledTextEvent& aEvent );
 
+    void OnSyntaxHelp( wxHyperlinkEvent& aEvent ) override;
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 };

@@ -27,7 +27,7 @@
 #include <tool/tool_manager.h>
 #include <drc/drc.h>
 #include <panel_setup_rules.h>
-
+#include <html_messagebox.h>
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParent->GetTreebook() ),
@@ -47,6 +47,12 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
     m_textEditor->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText );
     m_textEditor->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight );
     m_textEditor->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
+
+    int    size = wxNORMAL_FONT->GetPointSize();
+    wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTSTYLE_NORMAL );
+
+    for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
+        m_textEditor->StyleSetFont( i, fixedFont );
 
     m_textEditor->Bind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
     m_textEditor->Bind( wxEVT_STC_UPDATEUI, &PANEL_SETUP_RULES::onScintillaUpdateUI, this );
@@ -102,7 +108,10 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         else if( c == '(' )
         {
             if( context == SEXPR_OPEN && !partial.IsEmpty() )
+            {
+                m_textEditor->AutoCompCancel();
                 sexprs.push( partial );
+            }
 
             partial = wxEmptyString;
             context = SEXPR_OPEN;
@@ -116,6 +125,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         {
             if( context == SEXPR_OPEN && !partial.IsEmpty() )
             {
+                m_textEditor->AutoCompCancel();
                 sexprs.push( partial );
 
                 wxString top = sexprs.size() ? sexprs.top() : wxEmptyString;
@@ -136,6 +146,18 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
     }
 
+    auto autocomplete = [&]( const wxString& partial, const wxString& tokenStr )
+                        {
+                            wxArrayString tokens = wxSplit( tokenStr, ' ' );
+                            bool          match = partial.IsEmpty();
+
+                            for( int i = 0; i < tokens.size() && !match; ++i )
+                                match = tokens[i].StartsWith( partial );
+
+                            if( match )
+                                m_textEditor->AutoCompShow( partial.size(), tokenStr );
+                        };
+
     // NB: tokens MUST be in alphabetical order because the Scintilla engine is going
     // to do a binary search on them
     wxString tokens;
@@ -150,7 +172,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             tokens = "max min opt";
 
         if( !tokens.IsEmpty() )
-            m_textEditor->AutoCompShow( partial.size(), tokens );
+            autocomplete( partial, tokens );
     }
     else if( context == SEXPR_TOKEN )
     {
@@ -163,7 +185,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         wxASSERT( currentPos - wordStartPos == partial.size() );
 
         if( !tokens.IsEmpty() )
-            m_textEditor->AutoCompShow( partial.size(), tokens );
+            autocomplete( partial, tokens );
     }
 }
 
@@ -240,3 +262,52 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 }
 
 
+void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
+{
+    wxString msg = _(
+            "<b>Top-level Expressions</b>"
+            "<pre>"
+            "(version &lt;number>)\r"
+            "(rule &lt;rule_name> &lt;rule_expression> ...)\r"
+            "\r</pre>"
+            "<b>Rule Expressions</b>"
+            "<pre>"
+            "(disallow &lt;item_type>)\r"
+            "(constraint &lt;constraint_type> ...)\r"
+            "(condition \"&lt;expression>\")\r"
+            "\r</pre>"
+            "<b>Item Types</b>"
+            "<pre>"
+            "track         via               zone\r"
+            "pad           micro_via         text\r"
+            "hole          buried_via        graphic\r"
+            "\r</pre>"
+            "<b>Constraint Types</b>"
+            "<pre>"
+            "clearance    annulus_width   track_width     hole\r"
+            "\r</pre>"
+            "<b>Examples</b>"
+            "<pre>"
+            "(rule \"copper keepout\"\r"
+            "   (disallow track) (disallow via) (disallow zone)\r"
+            "   (condition \"a.name == no_copper\"))\r"
+            "\r"
+            "(rule neckdown\r"
+            "   (constraint track_width (min 0.2mm) (opt 0.25mm) (max 1.0mm)\r"
+            "   (condition \"a.name == BGA\"))\r"
+            "\r"
+            "(rule HV\r"
+            "   (constraint clearance (min 1.5mm)\r"
+            "   (condition \"a.netclass == HV\"))\r"
+            "\r"
+            "(rule HV-HV\r"
+            "   (constraint clearance (min 2.0mm)\r"
+            "   (condition \"a.netclass == HV && b.netclass == HV\"))\r"
+            "</pre>" );
+
+    HTML_MESSAGE_BOX dlg( m_parent, _( "Syntax Help" ) );
+    dlg.SetDialogSizeInDU( 320, 320 );
+
+    dlg.AddHTML_Text( msg );
+    dlg.ShowModal();
+}

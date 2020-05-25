@@ -18,9 +18,21 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 
 	m_topMargin = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_title = new wxStaticText( this, wxID_ANY, _("DRC rules:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	m_topMargin->Add( m_title, 0, wxTOP|wxBOTTOM, 5 );
+	bSizer4->Add( m_title, 0, wxTOP|wxBOTTOM, 5 );
+
+
+	bSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxT("http://www.wxformbuilder.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	bSizer4->Add( m_syntaxHelp, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
+
+
+	m_topMargin->Add( bSizer4, 0, wxEXPAND, 5 );
 
 	m_textEditor = new wxStyledTextCtrl( this, ID_RULES_EDITOR, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
 	m_textEditor->SetUseTabs( true );
@@ -64,8 +76,14 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	this->SetSizer( bPanelSizer );
 	this->Layout();
 	bPanelSizer->Fit( this );
+
+	// Connect Events
+	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_SETUP_RULES_BASE::OnSyntaxHelp ), NULL, this );
 }
 
 PANEL_SETUP_RULES_BASE::~PANEL_SETUP_RULES_BASE()
 {
+	// Disconnect Events
+	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_SETUP_RULES_BASE::OnSyntaxHelp ), NULL, this );
+
 }

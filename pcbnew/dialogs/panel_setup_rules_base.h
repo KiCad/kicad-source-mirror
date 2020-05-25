@@ -16,8 +16,9 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stc/stc.h>
+#include <wx/hyperlink.h>
 #include <wx/sizer.h>
+#include <wx/stc/stc.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -35,7 +36,12 @@ class PANEL_SETUP_RULES_BASE : public wxPanel
 		wxBoxSizer* m_leftMargin;
 		wxBoxSizer* m_topMargin;
 		wxStaticText* m_title;
+		wxHyperlinkCtrl* m_syntaxHelp;
 		wxStyledTextCtrl* m_textEditor;
+
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnSyntaxHelp( wxHyperlinkEvent& event ) { event.Skip(); }
+
 
 	public:
 
