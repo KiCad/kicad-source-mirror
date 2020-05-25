@@ -26,6 +26,8 @@
 
 class COLOR_SETTINGS;
 class COMMON_SETTINGS;
+class PROJECT;
+class PROJECT_FILE;
 
 
 class SETTINGS_MANAGER
@@ -180,6 +182,20 @@ public:
     void ReloadColorSettings();
 
     /**
+     * Registers a project and attempts to load the associated PROJECT_FILE
+     * @param aProject is the project object to load
+     * @return true if the PROJECT_FILE was successfully loaded
+     */
+    bool LoadProject( PROJECT& aProject );
+
+    /**
+     * Saves, unloads and unregisters the given project
+     * @param aProject is the project object to unload
+     * @return true if the PROJECT file was successfully saved
+     */
+    bool UnloadProject( PROJECT& aProject );
+
+    /**
      * Checks if a given path is probably a valid KiCad configuration directory.
      * Actually it just checks if a file called "kicad_common" exists, because that's probably
      * good enough for now.
@@ -269,6 +285,12 @@ private:
 
     /// True if settings loaded successfully at construction
     bool m_ok;
+
+    /// Project files, mapped according to project full name
+    std::map<wxString, PROJECT_FILE*> m_project_files;
+
+    /// A list of project settings objects for each loaded project
+    // std::map<wxString, std::vector<PROJECT_SETTINGS*>> m_project_settings;
 };
 
 #endif

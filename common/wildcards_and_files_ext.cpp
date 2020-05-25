@@ -120,7 +120,8 @@ const std::string LegacySymbolLibFileExtension( "lib" );
 
 const std::string VrmlFileExtension( "wrl" );
 
-const std::string ProjectFileExtension( "pro" );
+const std::string ProjectFileExtension( "kicad_pro" );
+const std::string LegacyProjectFileExtension( "pro" );
 const std::string LegacySchematicFileExtension( "sch" );
 const std::string KiCadSchematicFileExtension( "kicad_sch" );
 const std::string NetlistFileExtension( "net" );

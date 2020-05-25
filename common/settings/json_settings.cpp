@@ -84,14 +84,16 @@ void JSON_SETTINGS::Load()
 }
 
 
-void JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
+bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
 {
     // First, load all params to default values
     clear();
     Load();
 
-    bool      migrated        = false;
-    bool      legacy_migrated = false;
+    bool success         = true;
+    bool migrated        = false;
+    bool legacy_migrated = false;
+
     LOCALE_IO locale;
 
     auto migrateFromLegacy = [&] ( wxFileName& aPath ) {
@@ -114,12 +116,22 @@ void JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
         legacy_migrated = true;
     };
 
-    wxFileName path( aDirectory, m_filename, "json" );
+    wxFileName path;
+
+    if( aDirectory.empty() )
+    {
+        path.Assign( m_filename );
+        path.SetExt( wxT( "json" ) );
+    }
+    else
+    {
+        path.Assign( aDirectory, m_filename, wxT( "json" ) );
+    }
 
     if( !path.Exists() )
     {
         // Case 1: legacy migration, no .json extension yet
-        path.ClearExt();
+        path.SetExt( getLegacyFileExt() );
 
         if( path.Exists() )
         {
@@ -132,6 +144,10 @@ void JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
 
             if( path.Exists() )
                 migrateFromLegacy( path );
+        }
+        else
+        {
+            success = false;
         }
     }
     else
@@ -151,6 +167,7 @@ void JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
             catch( ... )
             {
                 wxLogTrace( traceSettings, "%s: file version could not be read!", m_filename );
+                success = false;
             }
 
             if( filever >= 0 && filever < m_schemaVersion )
@@ -204,6 +221,8 @@ void JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
         // And write-out immediately so that we don't lose data if the program later crashes.
         SaveToFile( aDirectory );
     }
+
+    return success;
 }
 
 
@@ -233,7 +252,17 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
     if( !m_writeFile )
         return false;
 
-    wxFileName path( aDirectory, m_filename, "json" );
+    wxFileName path;
+
+    if( aDirectory.empty() )
+    {
+        path.Assign( m_filename );
+        path.SetExt( wxT( "json" ) );
+    }
+    else
+    {
+        path.Assign( aDirectory, m_filename, wxT( "json" ) );
+    }
 
     if( !m_createIfMissing && !path.FileExists() )
     {

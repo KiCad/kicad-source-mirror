@@ -260,7 +260,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
 
     wxFileName pro = fullFileName;
-    pro.SetExt( ProjectFileExtension );
+    pro.SetExt( LegacyProjectFileExtension );
 
     bool is_new = !wxFileName::IsFileReadable( fullFileName );
 
@@ -605,7 +605,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     if( setProject )
     {
         wxFileName projectFn( dlg.GetPath() );
-        projectFn.SetExt( ProjectFileExtension );
+        projectFn.SetExt( LegacyProjectFileExtension );
         Prj().SetProjectFullName( projectFn.GetFullPath() );
     }
 

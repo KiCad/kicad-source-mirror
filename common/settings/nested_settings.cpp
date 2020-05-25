@@ -46,9 +46,10 @@ NESTED_SETTINGS::~NESTED_SETTINGS()
 }
 
 
-void NESTED_SETTINGS::LoadFromFile( const std::string& aDirectory )
+bool NESTED_SETTINGS::LoadFromFile( const std::string& aDirectory )
 {
     clear();
+    bool success = false;
 
     if( m_parent )
     {
@@ -58,6 +59,8 @@ void NESTED_SETTINGS::LoadFromFile( const std::string& aDirectory )
 
             wxLogTrace( traceSettings, "Loaded NESTED_SETTINGS %s with schema %d", GetFilename(),
                     m_schemaVersion );
+
+            success = true;
         }
         catch( ... )
         {
@@ -67,6 +70,8 @@ void NESTED_SETTINGS::LoadFromFile( const std::string& aDirectory )
     }
 
     Load();
+
+    return success;
 }
 
 

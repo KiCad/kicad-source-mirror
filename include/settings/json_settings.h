@@ -38,6 +38,7 @@ enum class SETTINGS_LOC {
     PROJECT,    ///< The settings directory inside a project folder
     COLORS,     ///< The color scheme directory (e.g. ~/.config/kicad/colors/)
     NESTED,     ///< Not stored in a file, but inside another JSON_SETTINGS
+    NONE,       ///< No directory prepended, full path in filename (used for PROJECT_FILE)
 };
 
 
@@ -73,8 +74,9 @@ public:
     /**
      * Loads the backing file from disk and then calls Load()
      * @param aDirectory is the path to the file
+     * @return true if the file was found on disk and loaded or migrated
      */
-    virtual void LoadFromFile( const std::string& aDirectory );
+    virtual bool LoadFromFile( const std::string& aDirectory = "" );
 
     /**
      * Calls Store() and then writes the contents of the JSON document to a file
@@ -82,7 +84,7 @@ public:
      * @param aForce if true will always save, even if contents are not modified
      * @return true if the file was saved
      */
-    virtual bool SaveToFile( const std::string& aDirectory, bool aForce = false );
+    virtual bool SaveToFile( const std::string& aDirectory = "", bool aForce = false );
 
     /**
      * Resets all parameters to default values.  Does NOT write to file or update underlying JSON.
@@ -210,6 +212,11 @@ protected:
     */
     bool fromLegacyColor( wxConfigBase* aConfig, const std::string& aKey,
                           const std::string& aDest );
+
+    virtual wxString getLegacyFileExt() const
+    {
+        return wxEmptyString;
+    }
 
     /// The filename (not including path) of this settings file
     std::string m_filename;

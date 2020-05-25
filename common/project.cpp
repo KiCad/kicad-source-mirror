@@ -92,7 +92,7 @@ void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
 
         wxASSERT( m_project_name.IsAbsolute() );
 
-        wxASSERT( m_project_name.GetExt() == ProjectFileExtension );
+        wxASSERT( m_project_name.GetExt() == LegacyProjectFileExtension );
 
         // until multiple projects are in play, set an environment variable for the
         // the project pointer.
@@ -279,7 +279,7 @@ static bool copy_pro_file_template( const SEARCH_STACK& aSearchS, const wxString
         return false;
     }
 
-    wxString templateFile = wxT( "kicad." ) + ProjectFileExtension;
+    wxString templateFile = wxT( "kicad." ) + LegacyProjectFileExtension;
 
     wxString kicad_pro_template = aSearchS.FindValidPath( templateFile );
 
@@ -289,7 +289,7 @@ static bool copy_pro_file_template( const SEARCH_STACK& aSearchS, const wxString
                     __func__, TO_UTF8( templateFile ) );
 
         wxFileName  templ( wxStandardPaths::Get().GetDocumentsDir(),
-                            wxT( "kicad" ), ProjectFileExtension );
+                            wxT( "kicad" ), LegacyProjectFileExtension );
 
         if( !templ.IsFileReadable() )
         {

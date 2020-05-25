@@ -308,7 +308,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
             return false;
 
         wxFileName fn( wxStandardPaths::Get().GetDocumentsDir(), wxT( "noname" ),
-                       ProjectFileExtension );
+                       LegacyProjectFileExtension );
 
         Prj().SetProjectFullName( fn.GetFullPath() );
 
@@ -477,7 +477,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     ReleaseFile();
 
     wxFileName pro = fullFileName;
-    pro.SetExt( ProjectFileExtension );
+    pro.SetExt( LegacyProjectFileExtension );
 
     bool is_new = !wxFileName::IsFileReadable( fullFileName );
 

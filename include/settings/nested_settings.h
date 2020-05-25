@@ -40,7 +40,7 @@ public:
      * Loads the JSON document from the parent and then calls Load()
      * @param aDirectory
      */
-    void LoadFromFile( const std::string& aDirectory = "" ) override;
+    bool LoadFromFile( const std::string& aDirectory = "" ) override;
 
     /**
      * Calls Store() and then saves the JSON document contents into the parent JSON_SETTINGS

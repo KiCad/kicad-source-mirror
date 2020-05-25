@@ -95,10 +95,10 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     // wxFileName automatically extracts an extension.  But if it isn't
     // a .pro extension, we should keep it as part of the filename
     if( !pro.GetExt().IsEmpty()
-        && pro.GetExt().ToStdString() != ProjectFileExtension )
+        && pro.GetExt().ToStdString() != LegacyProjectFileExtension )
         pro.SetName( pro.GetName() + wxT( "." ) + pro.GetExt() );
 
-    pro.SetExt( ProjectFileExtension );     // enforce extension
+    pro.SetExt( LegacyProjectFileExtension );     // enforce extension
 
     if( !pro.IsAbsolute() )
         pro.MakeAbsolute();
@@ -193,10 +193,10 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     // wxFileName automatically extracts an extension.  But if it isn't
     // a .pro extension, we should keep it as part of the filename
     if( !fn.GetExt().IsEmpty()
-        && fn.GetExt().ToStdString() != ProjectFileExtension )
+        && fn.GetExt().ToStdString() != LegacyProjectFileExtension )
         fn.SetName( fn.GetName() + wxT( "." ) + fn.GetExt() );
 
-    fn.SetExt( ProjectFileExtension );     // enforce extension
+    fn.SetExt( LegacyProjectFileExtension );     // enforce extension
 
     if( !fn.IsAbsolute() )
         fn.MakeAbsolute();
@@ -300,7 +300,7 @@ int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
         return -1;
 
     wxFileName pro( dlg.GetPath() );
-    pro.SetExt( ProjectFileExtension );     // enforce extension
+    pro.SetExt( LegacyProjectFileExtension );     // enforce extension
 
     if( !pro.IsAbsolute() )
         pro.MakeAbsolute();

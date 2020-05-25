@@ -115,6 +115,7 @@ extern const std::string SchematicBackupFileExtension;
 
 extern const std::string VrmlFileExtension;
 extern const std::string ProjectFileExtension;
+extern const std::string LegacyProjectFileExtension;
 extern const std::string LegacySchematicFileExtension;
 extern const std::string KiCadSchematicFileExtension;
 extern const std::string NetlistFileExtension;

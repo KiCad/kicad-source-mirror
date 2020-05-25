@@ -29,10 +29,12 @@
 #include <dialogs/dialog_migrate_settings.h>
 #include <gestfich.h>
 #include <macros.h>
+#include <project.h>
 #include <settings/app_settings.h>
-#include <settings/common_settings.h>
-#include <settings/settings_manager.h>
 #include <settings/color_settings.h>
+#include <settings/common_settings.h>
+#include <settings/project_file.h>
+#include <settings/settings_manager.h>
 
 
 /**
@@ -329,6 +331,9 @@ std::string SETTINGS_MANAGER::GetPathForSettingsFile( JSON_SETTINGS* aSettings )
 
     case SETTINGS_LOC::COLORS:
         return GetColorSettingsPath();
+
+    case SETTINGS_LOC::NONE:
+        return "";
 
     default:
         wxASSERT_MSG( false, "Unknown settings location!" );
@@ -653,4 +658,50 @@ bool SETTINGS_MANAGER::extractVersion( const std::string& aVersionString, int* a
     }
 
     return false;
+}
+
+
+bool SETTINGS_MANAGER::LoadProject( PROJECT& aProject )
+{
+    wxString name = aProject.GetProjectFullName();
+    std::string fn( name.ToUTF8() );
+
+    // Unload if already loaded
+    if( m_project_files.count( name ) )
+        UnloadProject( aProject );
+
+    PROJECT_FILE* file =
+            static_cast<PROJECT_FILE*>( RegisterSettings( new PROJECT_FILE( fn ), false ) );
+
+    m_project_files[aProject.GetProjectFullName()] = file;
+
+    return file->LoadFromFile();
+}
+
+
+bool SETTINGS_MANAGER::UnloadProject( PROJECT& aProject )
+{
+    wxString name = aProject.GetProjectFullName();
+
+    if( !m_project_files.count( name ) )
+        return false;
+
+    PROJECT_FILE* file = m_project_files[name];
+
+    auto it = std::find_if( m_settings.begin(), m_settings.end(),
+                            [&file]( const std::unique_ptr<JSON_SETTINGS>& aPtr )
+                            {
+                              return aPtr.get() == file;
+                            } );
+
+    if( it != m_settings.end() )
+    {
+        wxLogTrace( traceSettings, "Unload project %s", ( *it )->GetFilename() );
+        ( *it )->SaveToFile();
+        m_settings.erase( it );
+    }
+
+    m_project_files.erase( name );
+
+    return true;
 }

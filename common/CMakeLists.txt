@@ -398,6 +398,7 @@ set( COMMON_SRCS
     settings/common_settings.cpp
     settings/json_settings.cpp
     settings/nested_settings.cpp
+    settings/project_file.cpp
     settings/settings_manager.cpp
 
     libeval/numeric_evaluator.cpp

@@ -509,7 +509,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
         fn.Clear();
         fn.SetPath( wxStandardPaths::Get().GetDocumentsDir() );
         fn.SetName( NAMELESS_PROJECT );
-        fn.SetExt( ProjectFileExtension );
+        fn.SetExt( LegacyProjectFileExtension );
     }
 
     bool prjOpened = fn.FileExists();
