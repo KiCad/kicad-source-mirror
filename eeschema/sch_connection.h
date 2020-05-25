@@ -263,12 +263,8 @@ public:
     static wxString PrintBusForUI( const wxString& aString );
 
     /**
-     * Returns true if aOther is a subset of this connection or vice versa.
-     *
-     * For plain nets, this just tests whether or not the connectio names are
-     * the same.  For buses, this tests whether the two have any shared members.
-     *
-     * Will always return false if one connection is a bus and the other a net.
+     * Returns true if this connection is contained within aOther (but not the same as aOther)
+     * @return true if this connection is a member of aOther
      */
     bool IsSubsetOf( SCH_CONNECTION* aOther ) const;
 

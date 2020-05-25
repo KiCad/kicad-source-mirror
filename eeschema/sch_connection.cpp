@@ -739,27 +739,16 @@ wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
 
 bool SCH_CONNECTION::IsSubsetOf( SCH_CONNECTION* aOther ) const
 {
-    if( aOther->IsNet() )
-        return IsNet() ? ( aOther->Name( true ) == Name( true ) ) : false;
-
-    if( !IsBus() )
+    if( !aOther->IsBus() )
         return false;
 
-    std::vector<wxString> mine, theirs;
+    for( const auto& member : aOther->Members() )
+    {
+        if( member->FullLocalName() == FullLocalName() )
+            return true;
+    }
 
-    for( const auto& m : Members() )
-        mine.push_back( m->Name( true ) );
-
-    for( const auto& m : aOther->Members() )
-        theirs.push_back( m->Name( true ) );
-
-    std::set<wxString> subset;
-
-    std::set_intersection( mine.begin(), mine.end(),
-                           theirs.begin(), theirs.end(),
-                           std::inserter(subset, subset.begin() ) );
-
-    return ( !subset.empty() );
+    return false;
 }
 
 

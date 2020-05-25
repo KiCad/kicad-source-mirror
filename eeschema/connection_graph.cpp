@@ -112,8 +112,15 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
             {
                 // For all other driver types, sort by name
                 std::sort( candidates.begin(), candidates.end(),
-                           [&] ( SCH_ITEM* a, SCH_ITEM* b) -> bool
+                           [&]( SCH_ITEM* a, SCH_ITEM* b ) -> bool
                            {
+                               SCH_CONNECTION* ac = a->Connection( m_sheet );
+                               SCH_CONNECTION* bc = b->Connection( m_sheet );
+
+                               // Ensure we don't pick the subset over the superset
+                               if( ac->IsBus() && bc->IsBus() )
+                                   return bc->IsSubsetOf( ac );
+
                                return GetNameForDriver( a ) < GetNameForDriver( b );
                            } );
             }
