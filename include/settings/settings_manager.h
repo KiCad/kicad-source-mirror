@@ -182,18 +182,24 @@ public:
     void ReloadColorSettings();
 
     /**
-     * Registers a project and attempts to load the associated PROJECT_FILE
-     * @param aProject is the project object to load
+     * Loads a project
+     * @param aFullPath is the full path to the project
      * @return true if the PROJECT_FILE was successfully loaded
      */
-    bool LoadProject( PROJECT& aProject );
+    bool LoadProject( const wxString& aFullPath );
 
     /**
-     * Saves, unloads and unregisters the given project
+     * Saves, unloads and unregisters the given PROJECT
      * @param aProject is the project object to unload
      * @return true if the PROJECT file was successfully saved
      */
     bool UnloadProject( PROJECT& aProject );
+
+    /**
+     * A helper while we are not MDI-capable -- return the one and only project
+     * @return the loaded project
+     */
+    PROJECT& Prj() const;
 
     /**
      * Checks if a given path is probably a valid KiCad configuration directory.
@@ -274,6 +280,22 @@ private:
 
     void loadAllColorSettings();
 
+    /**
+     * Registers a PROJECT_FILE and attempts to load it from disk
+     * @param aProject is the project object to load the file for
+     * @return true if the PROJECT_FILE was successfully loaded
+     */
+    bool loadProjectFile( PROJECT& aProject );
+
+    /**
+     * Saves, unloads and unregisters the given PROJECT_FILE
+     * @param aProject is the project object to unload the file for
+     * @return true if the PROJECT file was successfully saved
+     */
+    bool unloadProjectFile( PROJECT& aProject );
+
+private:
+
     std::vector<std::unique_ptr<JSON_SETTINGS>> m_settings;
 
     std::unordered_map<wxString, COLOR_SETTINGS*> m_color_settings;
@@ -286,7 +308,10 @@ private:
     /// True if settings loaded successfully at construction
     bool m_ok;
 
-    /// Project files, mapped according to project full name
+    /// Loaded projects, mapped according to project full name
+    std::map<wxString, std::unique_ptr<PROJECT>> m_projects;
+
+    /// Loaded project files, mapped according to project full name
     std::map<wxString, PROJECT_FILE*> m_project_files;
 
     /// A list of project settings objects for each loaded project

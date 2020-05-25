@@ -68,6 +68,7 @@ SETTINGS_MANAGER::~SETTINGS_MANAGER()
 {
     m_settings.clear();
     m_color_settings.clear();
+    m_projects.clear();
 }
 
 
@@ -661,14 +662,52 @@ bool SETTINGS_MANAGER::extractVersion( const std::string& aVersionString, int* a
 }
 
 
-bool SETTINGS_MANAGER::LoadProject( PROJECT& aProject )
+bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath )
 {
-    wxString name = aProject.GetProjectFullName();
-    std::string fn( name.ToUTF8() );
-
     // Unload if already loaded
-    if( m_project_files.count( name ) )
-        UnloadProject( aProject );
+    if( m_projects.count( aFullPath ) && !UnloadProject( *m_projects.at( aFullPath ).get() ) )
+        return false;
+
+    // No MDI yet
+    if( !m_projects.empty() && !UnloadProject( *m_projects.begin()->second ) )
+        return false;
+
+    wxLogTrace( traceSettings, "Load project %s", aFullPath );
+
+    m_projects[aFullPath] = std::make_unique<PROJECT>();
+    m_projects[aFullPath]->SetProjectFullName( aFullPath );
+
+    return loadProjectFile( *m_projects[aFullPath] );
+}
+
+
+bool SETTINGS_MANAGER::UnloadProject( PROJECT& aProject )
+{
+    if( !m_projects.count( aProject.GetProjectFullName() ) )
+        return false;
+
+    if( !unloadProjectFile( aProject ) )
+        return false;
+
+    wxLogTrace( traceSettings, "Unload project %s", aProject.GetProjectFullName() );
+
+    m_projects.erase( aProject.GetProjectFullName() );
+
+    return true;
+}
+
+
+PROJECT& SETTINGS_MANAGER::Prj() const
+{
+    // No MDI yet
+    wxASSERT( m_projects.size() == 1 );
+    return *m_projects.begin()->second;
+}
+
+
+bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
+{
+    std::string fn( aProject.GetProjectFullName().ToUTF8() );
 
     PROJECT_FILE* file =
             static_cast<PROJECT_FILE*>( RegisterSettings( new PROJECT_FILE( fn ), false ) );
@@ -679,7 +718,7 @@ bool SETTINGS_MANAGER::LoadProject( PROJECT& aProject )
 }
 
 
-bool SETTINGS_MANAGER::UnloadProject( PROJECT& aProject )
+bool SETTINGS_MANAGER::unloadProjectFile( PROJECT& aProject )
 {
     wxString name = aProject.GetProjectFullName();
 
@@ -696,7 +735,6 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT& aProject )
 
     if( it != m_settings.end() )
     {
-        wxLogTrace( traceSettings, "Unload project %s", ( *it )->GetFilename() );
         ( *it )->SaveToFile();
         m_settings.erase( it );
     }

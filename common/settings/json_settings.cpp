@@ -252,6 +252,10 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
     if( !m_writeFile )
         return false;
 
+    // Default PROJECT won't have a filename set
+    if( m_filename.empty() )
+        return false;
+
     wxFileName path;
 
     if( aDirectory.empty() )
@@ -291,6 +295,8 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
                 m_filename );
         return false;
     }
+
+    wxLogTrace( traceSettings, "Saving %s", m_filename );
 
     if( !path.DirExists() && !path.Mkdir() )
     {

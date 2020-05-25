@@ -31,6 +31,7 @@
 #include <pgm_base.h>
 #include <config.h>
 #include <id.h>
+#include <settings/settings_manager.h>
 
 #include <wx/stdpaths.h>
 #include <wx/debug.h>
@@ -170,7 +171,7 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
 
 PROJECT& KIWAY::Prj() const
 {
-    return *(PROJECT*) &m_project;      // strip const-ness, function really is const.
+    return Pgm().GetSettingsManager().Prj();
 }
 
 

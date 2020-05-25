@@ -441,8 +441,6 @@ private:
     // wxWindow::FindWindowByName( m_playerFrameName[aFrameType] )
     // to know if still exists (or GetPlayerFrame( FRAME_T aFrameType )
     wxArrayString  m_playerFrameName;
-
-    PROJECT         m_project;      // do not assume this is here, use Prj().
 };
 
 
