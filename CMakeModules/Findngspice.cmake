@@ -37,8 +37,19 @@ if( WIN32 AND MSYS )
     # Note: libngspice-0.dll or libngspice-1.dll must be in a executable path
     find_library( NGSPICE_DLL NAMES libngspice-0.dll libngspice-1.dll )
 
+    # Some msys versions do not find xxx.dll lib files, only xxx.dll.a files
+    # so try a find_file in exec paths
+    if( NGSPICE_DLL STREQUAL "NGSPICE_DLL-NOTFOUND" )
+        find_file( NGSPICE_DLL NAMES libngspice-0.dll libngspice-1.dll
+            PATHS ${NGSPICE_ROOT_DIR}
+            PATH_SUFFIXES bin lib
+            )
+    endif()
+
     if( NGSPICE_DLL STREQUAL "NGSPICE_DLL-NOTFOUND" )
         message( ERROR ":\n***** libngspice-x.dll not found in any executable path *****\n\n" )
+    else()
+        message( info ": libngspice shared lib found: ${NGSPICE_DLL}\n" )
     endif()
 else()
     set( NGSPICE_DLL "${NGSPICE_LIBRARY}" )
