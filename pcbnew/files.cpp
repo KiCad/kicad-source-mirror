@@ -682,7 +682,7 @@ wxString PCB_EDIT_FRAME::createBackupFile( const wxString& aFileName )
     // rename it to the backup file name.
     if( fn.FileExists() )
     {
-        // Remove the old file xxx.000 if it exists.
+        // Remove the old file xxx.kicad_pcb-bak if it exists.
         if( backupFileName.FileExists() )
             wxRemoveFile( backupFileName.GetFullPath() );
 
@@ -691,8 +691,7 @@ wxString PCB_EDIT_FRAME::createBackupFile( const wxString& aFileName )
         {
             wxString msg = wxString::Format( _(
                     "Warning: unable to create backup file \"%s\"" ),
-                    GetChars( backupFileName.GetFullPath() )
-                    );
+                    backupFileName.GetFullPath() );
             DisplayError( NULL, msg );
         }
     }
@@ -718,8 +717,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         wxString msg = wxString::Format( _(
             "No access rights to write to file \"%s\"" ),
-            GetChars( pcbFileName.GetFullPath() )
-            );
+            pcbFileName.GetFullPath() );
 
         DisplayError( this, msg );
         return false;
@@ -758,12 +756,11 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         wxString msg = wxString::Format( _(
                 "Error saving board file \"%s\".\n%s" ),
-                GetChars( pcbFileName.GetFullPath() ),
-                GetChars( ioe.What() )
+                pcbFileName.GetFullPath(), ioe.What()
                 );
         DisplayError( this, msg );
 
-        lowerTxt.Printf( _( "Failed to create \"%s\"" ), GetChars( pcbFileName.GetFullPath() ) );
+        lowerTxt.Printf( _( "Failed to create \"%s\"" ), pcbFileName.GetFullPath() );
 
         AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 
@@ -787,9 +784,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         wxRemoveFile( autoSaveFileName.GetFullPath() );
 
     if( !!backupFileName )
-        upperTxt.Printf( _( "Backup file: \"%s\"" ), GetChars( backupFileName ) );
+        upperTxt.Printf( _( "Backup file: \"%s\"" ), backupFileName );
 
-    lowerTxt.Printf( _( "Wrote board file: \"%s\"" ), GetChars( pcbFileName.GetFullPath() ) );
+    lowerTxt.Printf( _( "Wrote board file: \"%s\"" ), pcbFileName.GetFullPath() );
 
     AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 
@@ -810,8 +807,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
     {
         wxString msg = wxString::Format( _(
             "No access rights to write to file \"%s\"" ),
-            GetChars( pcbFileName.GetFullPath() )
-            );
+            pcbFileName.GetFullPath() );
 
         DisplayError( this, msg );
         return false;
@@ -835,8 +831,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
     {
         wxString msg = wxString::Format( _(
                 "Error saving board file \"%s\".\n%s" ),
-                GetChars( pcbFileName.GetFullPath() ),
-                GetChars( ioe.What() )
+                pcbFileName.GetFullPath(), ioe.What()
                 );
         DisplayError( this, msg );
 
@@ -844,7 +839,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
     }
 
     DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n\"%s\"" ),
-                                                GetChars( pcbFileName.GetFullPath() ) ) );
+                                                pcbFileName.GetFullPath() ) );
 
     return true;
 }
@@ -954,8 +949,7 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                 {
                     wxString msg = wxString::Format( _(
                                     "Error occurred saving project specific footprint library "
-                                    "table:\n\n%s" ),
-                            GetChars( ioe.What() ) );
+                                    "table:\n\n%s" ), ioe.What() );
                     wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
                 }
             }
