@@ -37,6 +37,7 @@
 #include <launch_ext.h>
 #include <panel_hotkeys_editor.h>
 #include <settings/common_settings.h>
+#include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/tool_manager.h>
@@ -203,8 +204,6 @@ void KICAD_MANAGER_FRAME::SetProjectFileName( const wxString& aFullProjectProFil
     if( !fn.IsAbsolute() )
         fn.MakeAbsolute();
 
-    Prj().SetProjectFullName( fn.GetFullPath() );
-
     SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
     wxString title = GetTitle() + " " + fn.GetFullPath();
 
@@ -343,12 +342,13 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 
     // Save the project file for the currently loaded project.
     if( m_active_project )
-        Prj().ConfigLoad( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+        Pgm().GetSettingsManager().SaveProject();
 
     m_active_project = true;
     ClearMsg();
-    SetProjectFileName( aProjectFileName.GetFullPath() );
-    Prj().ConfigLoad( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+
+    Pgm().GetSettingsManager().LoadProject( aProjectFileName.GetFullPath() );
+    SetProjectFileName( Prj().GetProjectFullName() );
 
     if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?
@@ -381,13 +381,17 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
     // Copy kicad.pro file from template folder.
     if( !aProjectFileName.FileExists() )
     {
+        // TODO(JE) provide in new format
         wxString srcFileName = sys_search().FindValidPath( "kicad.pro" );
+
+        wxFileName destFileName( aProjectFileName );
+        destFileName.SetExt( LegacyProjectFileExtension );
 
         // Create a minimal project (.pro) file if the template project file could not be copied.
         if( !wxFileName::FileExists( srcFileName )
-            || !wxCopyFile( srcFileName, aProjectFileName.GetFullPath() ) )
+            || !wxCopyFile( srcFileName, destFileName.GetFullPath() ) )
         {
-            Prj().ConfigSave( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+            Pgm().GetSettingsManager().SaveProject();
         }
     }
 

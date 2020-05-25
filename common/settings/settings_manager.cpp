@@ -35,6 +35,7 @@
 #include <settings/common_settings.h>
 #include <settings/project_file.h>
 #include <settings/settings_manager.h>
+#include <wildcards_and_files_ext.h>
 
 
 /**
@@ -42,6 +43,10 @@
  * @ingroup trace_env_vars
  */
 const char* traceSettings = "SETTINGS";
+
+
+/// Project settings path will be <projectname> + this
+#define PROJECT_SETTINGS_DIR_SUFFIX wxT( "-settings" )
 
 
 SETTINGS_MANAGER::SETTINGS_MANAGER() :
@@ -664,20 +669,28 @@ bool SETTINGS_MANAGER::extractVersion( const std::string& aVersionString, int* a
 
 bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath )
 {
+    // Normalize path to new format even if migrating from a legacy file
+    wxFileName path( aFullPath );
+
+    if( path.GetExt() == LegacyProjectFileExtension )
+        path.SetExt( ProjectFileExtension );
+
+    wxString fullPath = path.GetFullPath();
+
     // Unload if already loaded
-    if( m_projects.count( aFullPath ) && !UnloadProject( *m_projects.at( aFullPath ).get() ) )
+    if( m_projects.count( fullPath ) && !UnloadProject( *m_projects.at( fullPath ).get() ) )
         return false;
 
     // No MDI yet
     if( !m_projects.empty() && !UnloadProject( *m_projects.begin()->second ) )
         return false;
 
-    wxLogTrace( traceSettings, "Load project %s", aFullPath );
+    wxLogTrace( traceSettings, "Load project %s", fullPath );
 
-    m_projects[aFullPath] = std::make_unique<PROJECT>();
-    m_projects[aFullPath]->SetProjectFullName( aFullPath );
+    m_projects[fullPath] = std::make_unique<PROJECT>();
+    m_projects[fullPath]->setProjectFullName( fullPath );
 
-    return loadProjectFile( *m_projects[aFullPath] );
+    return loadProjectFile( *m_projects[fullPath] );
 }
 
 
@@ -705,6 +718,25 @@ PROJECT& SETTINGS_MANAGER::Prj() const
 }
 
 
+bool SETTINGS_MANAGER::SaveProject()
+{
+    wxString name = Prj().GetProjectFullName();
+
+    if( !m_project_files.count( name ) )
+        return false;
+
+    m_project_files[name]->SaveToFile();
+
+    return true;
+}
+
+
+wxString SETTINGS_MANAGER::GetProjectSettingsPath() const
+{
+    return Prj().GetProjectPath() + Prj().GetProjectName() + PROJECT_SETTINGS_DIR_SUFFIX;
+}
+
+
 bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
 {
     std::string fn( aProject.GetProjectFullName().ToUTF8() );
@@ -713,6 +745,8 @@ bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
             static_cast<PROJECT_FILE*>( RegisterSettings( new PROJECT_FILE( fn ), false ) );
 
     m_project_files[aProject.GetProjectFullName()] = file;
+
+    aProject.setProjectFile( file );
 
     return file->LoadFromFile();
 }

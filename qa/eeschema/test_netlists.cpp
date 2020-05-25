@@ -81,9 +81,10 @@ void TEST_NETLISTS_FIXTURE::loadSchematic( const wxString& aBaseName )
     BOOST_TEST_MESSAGE( fn );
 
     wxFileName pro( fn );
-    pro.SetExt( LegacyProjectFileExtension );
+    pro.SetExt( ProjectFileExtension );
 
-    m_project.SetProjectFullName( pro.GetFullPath() );
+    // TODO(JE) Make this not required
+    m_project.setProjectFullName( pro.GetFullPath() );
     m_project.SetElem( PROJECT::ELEM_SCH_PART_LIBS, nullptr );
 
     m_schematic.Reset();

@@ -51,6 +51,7 @@
 #include <ratsnest/ratsnest_data.h>
 
 #include <wx/wupdlock.h>
+#include <settings/settings_manager.h>
 
 
 //#define     USE_INSTRUMENTATION     1
@@ -310,7 +311,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         wxFileName fn( wxStandardPaths::Get().GetDocumentsDir(), wxT( "noname" ),
                        LegacyProjectFileExtension );
 
-        Prj().SetProjectFullName( fn.GetFullPath() );
+        GetSettingsManager()->LoadProject( fn.GetFullPath() );
 
         onBoardLoaded();
 
@@ -507,7 +508,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // The calling code should know not to ask me here to change projects unless
         // it knows what consequences that will have on other KIFACEs running and using
         // this same PROJECT.  It can be very harmful if that calling code is stupid.
-        Prj().SetProjectFullName( pro.GetFullPath() );
+        GetSettingsManager()->LoadProject( pro.GetFullPath() );
 
         // load project settings before BOARD
         LoadProjectSettings();

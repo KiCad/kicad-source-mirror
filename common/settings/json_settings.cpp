@@ -45,6 +45,7 @@ JSON_SETTINGS::JSON_SETTINGS( const std::string& aFilename, SETTINGS_LOC aLocati
         m_createIfMissing( aCreateIfMissing ),
         m_createIfDefault( aCreateIfDefault ),
         m_writeFile( aWriteFile ),
+        m_deleteLegacyAfterMigration( true ),
         m_schemaVersion( aSchemaVersion ),
         m_manager( nullptr )
 {
@@ -121,11 +122,11 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     if( aDirectory.empty() )
     {
         path.Assign( m_filename );
-        path.SetExt( wxT( "json" ) );
+        path.SetExt( getFileExt() );
     }
     else
     {
-        path.Assign( aDirectory, m_filename, wxT( "json" ) );
+        path.Assign( aDirectory, m_filename, getFileExt() );
     }
 
     if( !path.Exists() )
@@ -212,7 +213,7 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     // If we migrated, clean up the legacy file (with no extension)
     if( legacy_migrated || migrated )
     {
-        if( legacy_migrated && !wxRemoveFile( path.GetFullPath() ) )
+        if( legacy_migrated && m_deleteLegacyAfterMigration && !wxRemoveFile( path.GetFullPath() ) )
         {
             wxLogTrace(
                     traceSettings, "Warning: could not remove legacy file %s", path.GetFullPath() );
@@ -261,11 +262,11 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
     if( aDirectory.empty() )
     {
         path.Assign( m_filename );
-        path.SetExt( wxT( "json" ) );
+        path.SetExt( getFileExt() );
     }
     else
     {
-        path.Assign( aDirectory, m_filename, wxT( "json" ) );
+        path.Assign( aDirectory, m_filename, getFileExt() );
     }
 
     if( !m_createIfMissing && !path.FileExists() )

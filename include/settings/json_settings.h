@@ -213,6 +213,11 @@ protected:
     bool fromLegacyColor( wxConfigBase* aConfig, const std::string& aKey,
                           const std::string& aDest );
 
+    virtual wxString getFileExt() const
+    {
+        return wxT( "json" );
+    }
+
     virtual wxString getLegacyFileExt() const
     {
         return wxEmptyString;
@@ -244,6 +249,9 @@ protected:
 
     /// Whether or not the backing store file should be written
     bool m_writeFile;
+
+    /// Whether or not to delete legacy file after migration
+    bool m_deleteLegacyAfterMigration;
 
     /// Version of this settings schema.
     int m_schemaVersion;

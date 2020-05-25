@@ -47,6 +47,7 @@ class S3D_CACHE;
 class KIWAY;
 class SYMBOL_LIB_TABLE;
 class FILENAME_RESOLVER;
+class PROJECT_FILE;
 
 #define VTBL_ENTRY      virtual
 
@@ -58,6 +59,9 @@ class FILENAME_RESOLVER;
  */
 class PROJECT
 {
+    friend class SETTINGS_MANAGER; // so that SM can set project path
+    friend class TEST_NETLISTS_FIXTURE; // TODO(JE) make this not required
+
 public:
 
     /// A PROJECT can hold stuff it knows nothing about, in the form of
@@ -83,16 +87,6 @@ public:
     VTBL_ENTRY std::map<wxString, wxString>& GetTextVars() { return m_textVars; }
 
     // VTBL_ENTRY bool MaybeLoadProjectSettings( const std::vector<wxString>& aFileSet );
-
-    /**
-     * Function SetProjectFullName
-     * sets the:
-     * 1) full directory, 2) basename, and 3) extension of the project.  This is
-     * the name of the *.pro file with full absolute path and it also defines
-     * the name of the project.  The project name and the *.pro file names are
-     * exactly the same, providing the *.pro filename is absolute.
-     */
-    VTBL_ENTRY void SetProjectFullName( const wxString& aFullPathAndName );
 
     /**
      * Function GetProjectFullName
@@ -322,6 +316,25 @@ public:
 private:
 
     /**
+     * Sets the:
+     * 1) full directory, 2) basename, and 3) extension of the project.  This is
+     * the name of the *.pro file with full absolute path and it also defines
+     * the name of the project.  The project name and the *.pro file names are
+     * exactly the same, providing the *.pro filename is absolute.
+     */
+    VTBL_ENTRY void setProjectFullName( const wxString& aFullPathAndName );
+
+    /**
+     * Sets the backing store file for this project
+     * Should only be called by SETTINGS_MANGER on load.
+     * @param aFile is a loaded PROJECT_FILE
+     */
+    VTBL_ENTRY void setProjectFile( PROJECT_FILE* aFile )
+    {
+        m_projectFile = aFile;
+    }
+
+    /**
      * Function configCreate
      * loads a *.pro file and returns a wxConfigBase.
      *
@@ -339,6 +352,9 @@ private:
 
     wxFileName      m_project_name;         ///< \<fullpath\>/\<basename\>.pro
     wxString        m_pro_date_and_time;
+
+    /// Backing store for project data -- owned by SETTINGS_MANAGER
+    PROJECT_FILE*   m_projectFile;
 
     std::map<KIID, wxString>     m_sheetNames;
     std::map<wxString, wxString> m_textVars;

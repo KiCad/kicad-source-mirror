@@ -52,6 +52,8 @@ public:
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyFile ) override;
 
 protected:
+    wxString getFileExt() const override;
+
     wxString getLegacyFileExt() const override;
 
 private:
@@ -61,13 +63,6 @@ private:
 
     /// A list of board files in this project
     std::vector<FILE_INFO_PAIR> m_boards;
-
-    /**
-     * Stores all K/V pairs migrated from a legacy (.pro) file so that the legacy file can be
-     * removed before these settings are migrated in by PROJECT_SETTINGS objects later.
-     */
-    std::map<std::string, wxString> m_legacyVars;
-
 };
 
 // Specializations to allow directly reading/writing FILE_INFO_PAIRs from JSON

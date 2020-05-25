@@ -87,6 +87,8 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     m_mruPath       = wxStandardPaths::Get().GetDocumentsDir();
     m_FrameSize     = wxSize( s_minsize_x, s_minsize_y );
 
+    m_settingsManager = &Pgm().GetSettingsManager();
+
     // Set a reasonable minimal size for the frame
     SetSizeHints( s_minsize_x, s_minsize_y, -1, -1, -1, -1 );
 

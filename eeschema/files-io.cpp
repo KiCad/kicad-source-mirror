@@ -54,6 +54,7 @@
 #include <connection_graph.h>
 #include <tool/actions.h>
 #include <tools/sch_editor_control.h>
+#include <settings/settings_manager.h>
 #include <netlist.h>
 #include <widgets/infobar.h>
 
@@ -303,7 +304,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         if( pro.GetFullPath() != Prj().GetProjectFullName()
           || !Prj().GetElem( PROJECT::ELEM_SCH_PART_LIBS ) )
         {
-            Prj().SetProjectFullName( pro.GetFullPath() );
+            GetSettingsManager()->LoadProject( pro.GetFullPath() );
 
             // load the libraries here, not in SCH_SCREEN::Draw() which is a context
             // that will not tolerate DisplayError() dialog since we're already in an
@@ -322,7 +323,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     // Make sure the project file name is set (it won't be in standalone mode)
     if( pro.GetFullPath() != Prj().GetProjectFullName() )
-        Prj().SetProjectFullName( pro.GetFullPath() );
+        GetSettingsManager()->LoadProject( pro.GetFullPath() );
 
     LoadProjectFile();
 
@@ -605,8 +606,8 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     if( setProject )
     {
         wxFileName projectFn( dlg.GetPath() );
-        projectFn.SetExt( LegacyProjectFileExtension );
-        Prj().SetProjectFullName( projectFn.GetFullPath() );
+        projectFn.SetExt( ProjectFileExtension );
+        GetSettingsManager()->LoadProject( projectFn.GetFullPath() );
     }
 
     // For now there is only one import plugin

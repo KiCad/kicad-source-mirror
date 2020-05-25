@@ -34,13 +34,14 @@ const int projectFileSchemaVersion = 1;
 
 PROJECT_FILE::PROJECT_FILE( const std::string& aFullPath ) :
         JSON_SETTINGS( aFullPath, SETTINGS_LOC::NONE, projectFileSchemaVersion ),
-        m_sheets(), m_boards(), m_legacyVars()
+        m_sheets(), m_boards()
 {
+    // Keep old files around
+    m_deleteLegacyAfterMigration = false;
+
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "sheets", &m_sheets, {} ) );
 
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "boards", &m_boards, {} ) );
-
-    m_params.emplace_back( new PARAM_MAP<wxString>( "legacy", &m_legacyVars, {} ) );
 }
 
 
@@ -48,7 +49,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aLegacyFile )
 {
     bool     ret = true;
     wxString str;
-    long     dummy;
+    long     index = 0;
 
     // Legacy files don't store board info; they assume board matches project name
     // We will leave m_boards empty here so it can be populated with other code
@@ -56,18 +57,28 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aLegacyFile )
     auto loadSheetNames =
             [&]() -> bool
             {
-                int index = 1;
-                wxString entry;
+                int            sheet = 1;
+                wxString       entry;
+                nlohmann::json arr   = nlohmann::json::array();
+
+                wxLogTrace( traceSettings, "Migrating sheet names" );
 
                 aLegacyFile->SetPath( GROUP_SHEET_NAMES );
 
-                while( aLegacyFile->Read( wxString::Format( "%d", index++ ), &entry ) )
+                while( aLegacyFile->Read( wxString::Format( "%d", sheet++ ), &entry ) )
                 {
                     wxArrayString tokens = wxSplit( entry, ':' );
 
                     if( tokens.size() == 2 )
-                        m_sheets.emplace_back( std::make_pair( KIID( tokens[0] ), tokens[1] ) );
+                    {
+                        wxLogTrace( traceSettings, "%d: %s = %s", sheet, tokens[0], tokens[1] );
+                        arr.push_back( nlohmann::json::array( { tokens[0], tokens[1] } ) );
+                    }
                 }
+
+              ( *this )[PointerFromString( "sheets" )] = arr;
+
+                aLegacyFile->SetPath( "/" );
 
                 // TODO: any reason we want to fail on this?
                 return true;
@@ -75,43 +86,70 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aLegacyFile )
 
     std::vector<wxString> groups;
 
-    bool more = aLegacyFile->GetFirstGroup( str, dummy );
-
-    while( more )
+    while( aLegacyFile->GetNextGroup( str, index ) )
     {
-        if( str == GROUP_SHEET_NAMES )
+        if( str == wxString( GROUP_SHEET_NAMES ).Mid( 1 ) )
             ret |= loadSheetNames();
         else
-            groups.emplace_back( str );
-
-        more = aLegacyFile->GetNextGroup( str, dummy );
+            groups.emplace_back( "/" + str );
     }
 
     auto loadLegacyPairs =
-            [&]( const wxString& aGroup = wxEmptyString ) -> bool
+            [&]( const std::string& aGroup ) -> bool
             {
-                aLegacyFile->SetPath( aGroup );
+                wxLogTrace( traceSettings, "Migrating group %s", aGroup );
+                bool     success = true;
+                wxString keyStr;
+                wxString val;
 
-                bool morePairs = aLegacyFile->GetFirstEntry( str, dummy );
+                index = 0;
 
-                while( morePairs )
+                while( aLegacyFile->GetNextEntry( keyStr, index ) )
                 {
-                    wxString    val = aLegacyFile->Read( str );
-                    std::string key( str.ToUTF8() );
-                    m_legacyVars[key] = val;
-                    morePairs         = aLegacyFile->GetNextEntry( str, dummy );
+                    if( !aLegacyFile->Read( keyStr, &val ) )
+                        continue;
+
+                    std::string key( keyStr.ToUTF8() );
+
+                    wxLogTrace( traceSettings, "    %s = %s", key, val );
+
+                    try
+                    {
+                        nlohmann::json::json_pointer ptr( "/legacy" + aGroup + "/" + key );
+                        ( *this )[ptr] = val;
+                    }
+                    catch( ... )
+                    {
+                        success = false;
+                    }
                 }
 
-                // TODO: any reason we want to fail on this?
-                return true;
+                return success;
             };
 
-    ret &= loadLegacyPairs();
+    ret &= loadLegacyPairs( "" );
 
-    for( const auto& groupName : groups )
-        ret &= loadLegacyPairs( groupName );
+    for( size_t i = 0; i < groups.size(); i++ )
+    {
+        aLegacyFile->SetPath( groups[i] );
+
+        ret &= loadLegacyPairs( groups[i].ToStdString() );
+
+        index = 0;
+
+        while( aLegacyFile->GetNextGroup( str, index ) )
+            groups.emplace_back( groups[i] + "/" + str );
+
+        aLegacyFile->SetPath( "/" );
+    }
 
     return ret;
+}
+
+
+wxString PROJECT_FILE::getFileExt() const
+{
+    return ProjectFileExtension;
 }
 
 

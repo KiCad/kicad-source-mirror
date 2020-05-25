@@ -36,9 +36,11 @@
 #include <kiway.h>
 #include <kiface_ids.h>
 #include <trace_helpers.h>
+#include <settings/project_file.h>
 
 
-PROJECT::PROJECT()
+PROJECT::PROJECT() :
+        m_projectFile( nullptr )
 {
     memset( m_elems, 0, sizeof(m_elems) );
 }
@@ -73,7 +75,7 @@ bool PROJECT::TextVarResolver( wxString* aToken ) const
 }
 
 
-void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
+void PROJECT::setProjectFullName( const wxString& aFullPathAndName )
 {
     // Compare paths, rather than inodes, to be less surprising to the user.
     // Create a temporary wxFileName to normalize the path
@@ -92,7 +94,7 @@ void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
 
         wxASSERT( m_project_name.IsAbsolute() );
 
-        wxASSERT( m_project_name.GetExt() == LegacyProjectFileExtension );
+        wxASSERT( m_project_name.GetExt() == ProjectFileExtension );
 
         // until multiple projects are in play, set an environment variable for the
         // the project pointer.
@@ -332,6 +334,14 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList,
 {
     wxConfigBase*   cfg = 0;
     wxString        cur_pro_fn = !aProjectFileName ? GetProjectFullName() : aProjectFileName;
+
+    wxFileName filename( cur_pro_fn );
+
+    if( filename.GetExt() == ProjectFileExtension )
+    {
+        filename.SetExt( LegacyProjectFileExtension );
+        cur_pro_fn = filename.GetFullPath();
+    }
 
     // If we do not have a project name or specified name, choose an empty file to store the
     // temporary configuration data in.

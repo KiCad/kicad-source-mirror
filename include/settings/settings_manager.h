@@ -182,9 +182,9 @@ public:
     void ReloadColorSettings();
 
     /**
-     * Loads a project
+     * Loads a project or sets up a new project with a specified path
      * @param aFullPath is the full path to the project
-     * @return true if the PROJECT_FILE was successfully loaded
+     * @return true if the PROJECT_FILE was successfully loaded from disk
      */
     bool LoadProject( const wxString& aFullPath );
 
@@ -200,6 +200,18 @@ public:
      * @return the loaded project
      */
     PROJECT& Prj() const;
+
+    /**
+     * Saves the one and only project
+     * TODO: Update for MDI
+     * @return true if save was successful
+     */
+    bool SaveProject();
+
+    /**
+     * @return the path to the settings folder for the loaded project
+     */
+    wxString GetProjectSettingsPath() const;
 
     /**
      * Checks if a given path is probably a valid KiCad configuration directory.
