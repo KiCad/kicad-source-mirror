@@ -372,11 +372,15 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
 
         std::vector<MARKER_PCB*>& markers = m_brdEditor->GetBoard()->Markers();
+        KIGFX::VIEW*              view = m_parentFrame->GetToolManager()->GetView();
 
         for( unsigned i = 0; i < markers.size(); )
         {
             if( markers[i]->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
+            {
+                view->Remove( markers.at( i ) );
                 markers.erase( markers.begin() + i );
+            }
             else
                 ++i;
         }
