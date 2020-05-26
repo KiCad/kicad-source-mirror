@@ -54,6 +54,7 @@
 #include <connection_graph.h>
 #include <tool/actions.h>
 #include <tools/sch_editor_control.h>
+#include <settings/project_file.h>
 #include <settings/settings_manager.h>
 #include <netlist.h>
 #include <widgets/infobar.h>
@@ -716,22 +717,16 @@ bool SCH_EDIT_FRAME::SaveProject()
         UpdateFileHistory( Schematic().RootScreen()->GetFileName() );
 
     // Save the sheet name map to the project file
-    wxString      configFile = Prj().GetProjectFullName();
-    wxConfigBase* config = new wxFileConfig( wxEmptyString, wxEmptyString, configFile );
-    int           index = 1;
-
-    config->DeleteGroup( GROUP_SHEET_NAMES );
-    config->SetPath( GROUP_SHEET_NAMES );
+    std::vector<FILE_INFO_PAIR>& sheets = Prj().GetProjectFile().GetSheets();
+    sheets.clear();
 
     for( SCH_SHEET_PATH& sheetPath : Schematic().GetSheets() )
     {
         SCH_SHEET* sheet = sheetPath.Last();
-        config->Write( wxString::Format( "%d", index++ ),
-                       wxString::Format( "%s:%s", sheet->m_Uuid.AsString(), sheet->GetName() ) );
+        sheets.emplace_back( std::make_pair( sheet->m_Uuid, sheet->GetName() ) );
     }
 
-    config->Flush();
-    delete config;
+    Pgm().GetSettingsManager().SaveProject();
 
     UpdateTitle();
 

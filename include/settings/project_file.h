@@ -51,6 +51,16 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyFile ) override;
 
+    std::vector<FILE_INFO_PAIR>& GetSheets()
+    {
+        return m_sheets;
+    }
+
+    std::vector<FILE_INFO_PAIR>& GetBoards()
+    {
+        return m_boards;
+    }
+
 protected:
     wxString getFileExt() const override;
 
@@ -63,6 +73,28 @@ private:
 
     /// A list of board files in this project
     std::vector<FILE_INFO_PAIR> m_boards;
+
+    /**
+     * Below are project-level settings that have not been moved to a dedicated file
+     */
+public:
+
+    /**
+     * Shared params, used by more than one application
+     */
+
+    /// The list of pinned symbol libraries
+    std::vector<wxString> m_PinnedSymbolLibs;
+
+    /// The list of pinned footprint libraries
+    std::vector<wxString> m_PinnedFootprintLibs;
+
+    /**
+     * CvPcb params
+     */
+
+    /// List of equivalence (equ) files used in the project
+    std::vector<wxString> m_EquivalenceFiles;
 };
 
 // Specializations to allow directly reading/writing FILE_INFO_PAIRs from JSON

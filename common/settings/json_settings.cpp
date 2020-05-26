@@ -98,6 +98,18 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     LOCALE_IO locale;
 
     auto migrateFromLegacy = [&] ( wxFileName& aPath ) {
+        // Backup and restore during migration so that the original can be mutated if convenient
+        wxFileName temp;
+        temp.AssignTempFileName( aPath.GetFullPath() );
+
+        bool backed_up = true;
+
+        if( !wxCopyFile( aPath.GetFullPath(), temp.GetFullPath() ) )
+        {
+            wxLogTrace( traceSettings, "%s: could not create temp file for migration", m_filename );
+            backed_up = false;
+        }
+
         wxConfigBase::DontCreateOnDemand();
         auto cfg = std::make_unique<wxFileConfig>( wxT( "" ), wxT( "" ), aPath.GetFullPath() );
 
@@ -111,6 +123,13 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
         else
         {
             wxLogTrace( traceSettings, "%s: migrated from legacy format", m_filename );
+        }
+
+        if( backed_up )
+        {
+            cfg.reset();
+            wxCopyFile( temp.GetFullPath(), aPath.GetFullPath() );
+            wxRemoveFile( temp.GetFullPath() );
         }
 
         // Either way, we want to clean up the old file afterwards

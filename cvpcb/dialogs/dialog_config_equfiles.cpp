@@ -35,6 +35,8 @@
 
 #include <cvpcb_mainframe.h>
 #include <dialog_config_equfiles.h>
+#include <settings/project_file.h>
+#include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 
 
@@ -59,8 +61,17 @@ void DIALOG_CONFIG_EQUFILES::Init()
     m_sdbSizerOK->SetDefault();
     m_ListChanged = false;
 
-    if( !m_Parent->m_EquFilesNames.IsEmpty() )
-        m_ListEquiv->InsertItems( m_Parent->m_EquFilesNames, 0 );
+    PROJECT_FILE& project = Prj().GetProjectFile();
+
+    if( !project.m_EquivalenceFiles.empty() )
+    {
+        wxArrayString arr;
+
+        for( const auto& entry : project.m_EquivalenceFiles )
+            arr.Add( entry );
+
+        m_ListEquiv->InsertItems( arr, 0 );
+    }
 
     if( getEnvVarCount() < 2 )
         m_gridEnvVars->AppendRows(2 - getEnvVarCount() );
@@ -113,14 +124,16 @@ void DIALOG_CONFIG_EQUFILES::OnOkClick( wxCommandEvent& event )
     // Save new equ file list if the files list was modified
     if( m_ListChanged  )
     {
+        PROJECT_FILE& project = Prj().GetProjectFile();
+
         // Recreate equ list
-        m_Parent->m_EquFilesNames.Clear();
+        project.m_EquivalenceFiles.clear();
 
         for( unsigned ii = 0; ii < m_ListEquiv->GetCount(); ii++ )
-            m_Parent->m_EquFilesNames.Add( m_ListEquiv->GetString( ii ) );
+            project.m_EquivalenceFiles.emplace_back( m_ListEquiv->GetString( ii ) );
 
         wxCommandEvent evt( ID_SAVE_PROJECT );
-        m_Parent->SaveProjectFile();
+        Pgm().GetSettingsManager().SaveProject();
     }
 
     EndModal( wxID_OK );

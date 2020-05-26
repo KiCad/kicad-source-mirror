@@ -186,20 +186,8 @@ const wxString PROJECT::GetSheetName( const KIID& aSheetID )
 {
     if( m_sheetNames.empty() )
     {
-        std::unique_ptr<wxConfigBase> config( configCreate( SEARCH_STACK(), GROUP_SHEET_NAMES ) );
-
-        config->SetPath( GROUP_SHEET_NAMES );
-
-        int index = 1;
-        wxString entry;
-
-        while( config->Read( wxString::Format( "%d", index++ ), &entry ) )
-        {
-            wxArrayString tokens = wxSplit( entry, ':' );
-
-            if( tokens.size() == 2 )
-                m_sheetNames[ KIID( tokens[0] ) ] = tokens[1];
-        }
+        for( auto pair : GetProjectFile().GetSheets() )
+            m_sheetNames[pair.first] = pair.second;
     }
 
     if( m_sheetNames.count( aSheetID ) )

@@ -126,6 +126,12 @@ public:
      */
     VTBL_ENTRY const wxString SymbolLibTableName() const;
 
+    VTBL_ENTRY PROJECT_FILE& GetProjectFile() const
+    {
+        wxASSERT( m_projectFile );
+        return *m_projectFile;
+    }
+
     /**
      * Function ConfigSave
      * saves the current "project" parameters into the wxConfigBase* derivative.

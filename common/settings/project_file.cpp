@@ -42,6 +42,15 @@ PROJECT_FILE::PROJECT_FILE( const std::string& aFullPath ) :
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "sheets", &m_sheets, {} ) );
 
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "boards", &m_boards, {} ) );
+
+    m_params.emplace_back(
+            new PARAM_LIST<wxString>( "libraries.pinned_symbol_libs", &m_PinnedSymbolLibs, {} ) );
+
+    m_params.emplace_back( new PARAM_LIST<wxString>(
+            "libraries.pinned_footprint_libs", &m_PinnedFootprintLibs, {} ) );
+
+    m_params.emplace_back(
+            new PARAM_PATH_LIST( "cvpcb.equivalence_files", &m_EquivalenceFiles, {} ) );
 }
 
 
@@ -51,8 +60,66 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aLegacyFile )
     wxString str;
     long     index = 0;
 
+    std::set<wxString> group_blacklist;
+
     // Legacy files don't store board info; they assume board matches project name
     // We will leave m_boards empty here so it can be populated with other code
+
+    // First handle migration of data that will be stored locally in this object
+
+    auto loadPinnedLibs =
+            [&]( const std::string& aDest )
+            {
+                int      libIndex = 1;
+                wxString libKey   = wxT( "PinnedItems" );
+                libKey << libIndex;
+
+                nlohmann::json libs = nlohmann::json::array();
+
+                while( aLegacyFile->Read( libKey, &str ) )
+                {
+                    libs.push_back( str );
+
+                    aLegacyFile->DeleteEntry( libKey, true );
+
+                    libKey = wxT( "PinnedItems" );
+                    libKey << ++libIndex;
+                }
+
+                ( *this )[PointerFromString( aDest )] = libs;
+            };
+
+    aLegacyFile->SetPath( wxT( "/LibeditFrame" ) );
+    loadPinnedLibs( "libraries.pinned_symbol_libs" );
+
+    aLegacyFile->SetPath( wxT( "/ModEditFrame" ) );
+    loadPinnedLibs( "libraries.pinned_footprint_libs" );
+
+    aLegacyFile->SetPath( wxT( "/cvpcb/equfiles" ) );
+
+    {
+        int      eqIdx = 1;
+        wxString eqKey = wxT( "EquName" );
+        eqKey << eqIdx;
+
+        nlohmann::json eqs = nlohmann::json::array();
+
+        while( aLegacyFile->Read( eqKey, &str ) )
+        {
+            eqs.push_back( str );
+
+            eqKey = wxT( "EquName" );
+            eqKey << ++eqIdx;
+        }
+
+        ( *this )[PointerFromString( "cvpcb.equivalence_files" )] = eqs;
+    }
+
+    // No other cvpcb params are currently used
+    group_blacklist.insert( "/cvpcb" );
+
+    // Next load sheet names and put all other legacy data in the legacy dict
+    aLegacyFile->SetPath( "/" );
 
     auto loadSheetNames =
             [&]() -> bool
@@ -63,7 +130,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aLegacyFile )
 
                 wxLogTrace( traceSettings, "Migrating sheet names" );
 
-                aLegacyFile->SetPath( GROUP_SHEET_NAMES );
+                aLegacyFile->SetPath( wxT( "/sheetnames" ) );
 
                 while( aLegacyFile->Read( wxString::Format( "%d", sheet++ ), &entry ) )
                 {
@@ -76,7 +143,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aLegacyFile )
                     }
                 }
 
-              ( *this )[PointerFromString( "sheets" )] = arr;
+                ( *this )[PointerFromString( "sheets" )] = arr;
 
                 aLegacyFile->SetPath( "/" );
 
@@ -86,13 +153,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aLegacyFile )
 
     std::vector<wxString> groups;
 
-    while( aLegacyFile->GetNextGroup( str, index ) )
-    {
-        if( str == wxString( GROUP_SHEET_NAMES ).Mid( 1 ) )
-            ret |= loadSheetNames();
-        else
-            groups.emplace_back( "/" + str );
-    }
+    groups.emplace_back( "" );
 
     auto loadLegacyPairs =
             [&]( const std::string& aGroup ) -> bool
@@ -127,18 +188,31 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aLegacyFile )
                 return success;
             };
 
-    ret &= loadLegacyPairs( "" );
-
     for( size_t i = 0; i < groups.size(); i++ )
     {
         aLegacyFile->SetPath( groups[i] );
+
+        if( groups[i] == wxT( "/sheetnames" ) )
+        {
+            ret |= loadSheetNames();
+            continue;
+        }
+
+        aLegacyFile->DeleteEntry( wxT( "last_client" ), true );
+        aLegacyFile->DeleteEntry( wxT( "update" ), true );
+        aLegacyFile->DeleteEntry( wxT( "version" ), true );
 
         ret &= loadLegacyPairs( groups[i].ToStdString() );
 
         index = 0;
 
         while( aLegacyFile->GetNextGroup( str, index ) )
-            groups.emplace_back( groups[i] + "/" + str );
+        {
+            wxString group = groups[i] + "/" + str;
+
+            if( !group_blacklist.count( group ) )
+                groups.emplace_back( group );
+        }
 
         aLegacyFile->SetPath( "/" );
     }

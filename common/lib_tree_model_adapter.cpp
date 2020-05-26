@@ -29,7 +29,6 @@
 #include <wx/wupdlock.h>
 
 
-#define LIST_COLUMN_WIDTH_KEY wxT( "SelectorColumnWidth" )
 #define PINNED_ITEMS_KEY      wxT( "PinnedItems" )
 
 static const int kDataViewIndent = 20;
@@ -91,9 +90,12 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent ) :
     auto cfg = Kiface().KifaceSettings();
     m_colWidths[PART_COL] = cfg->m_LibTree.column_width;
 
+    // TODO(JE) PROJECT
+#if 0
     // Read the pinned entries from the project config
     m_parent->Kiway().Prj().ConfigLoad( Kiface().KifaceSearch(), m_parent->GetName(),
                                         GetProjectFileParameters() );
+#endif
 }
 
 
@@ -136,8 +138,11 @@ void LIB_TREE_MODEL_ADAPTER::SavePinnedItems()
             m_pinnedLibs.push_back( child->m_LibId.GetLibNickname() );
     }
 
+    // TODO(JE) PROJECT
+#if 0
     m_parent->Kiway().Prj().ConfigSave( Kiface().KifaceSearch(), m_parent->GetName(),
                                         GetProjectFileParameters() );
+#endif
 }
 
 

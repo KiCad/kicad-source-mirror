@@ -39,6 +39,7 @@
 #include <cvpcb_association.h>
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
+#include <settings/project_file.h>
 
 #define QUOTE   '\''
 
@@ -83,13 +84,14 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
     wxFileName  fn;
     wxString    tmp, error_msg;
 
-    SEARCH_STACK& search = Kiface().KifaceSearch();
+    SEARCH_STACK& search  = Kiface().KifaceSearch();
+    PROJECT_FILE& project = Prj().GetProjectFile();
 
     // Find equivalences in all available files, and populates the
     // equiv_List with all equivalences found in .equ files
-    for( unsigned ii = 0; ii < m_EquFilesNames.GetCount(); ii++ )
+    for( const auto& equfile : project.m_EquivalenceFiles )
     {
-        fn =  wxExpandEnvVars( m_EquFilesNames[ii] );
+        fn =  wxExpandEnvVars( equfile );
 
         tmp = search.FindValidPath( fn.GetFullPath() );
 

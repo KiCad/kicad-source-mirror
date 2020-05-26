@@ -75,9 +75,6 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
     wxButton*                 m_saveAndContinue;
 
 public:
-    wxArrayString             m_ModuleLibNames;
-    wxArrayString             m_EquFilesNames;
-
     FOOTPRINT_LIST*           m_FootprintsList;
 
 protected:
@@ -85,7 +82,6 @@ protected:
     bool                      m_skipComponentSelect;   // skip component selection event during
                                                        // automatic selection/deletion of
                                                        // associations
-    std::vector<PARAM_CFG*>   m_projectFileParams;
 
     bool                      m_initialized;
 
@@ -283,18 +279,6 @@ public:
      */
     int ReadSchematicNetlist( const std::string& aNetlist );
 
-    /**
-     * Function LoadProjectFile
-     * reads the CvPcb configuration parameter from the project (.pro) file \a aFileName
-     */
-    void LoadProjectFile();
-
-    /**
-     * Function SaveProjectFile
-     * Saves the CvPcb configuration parameter from the project (.pro) file \a aFileName
-     */
-    void SaveProjectFile();
-
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
@@ -325,21 +309,6 @@ public:
      * @return true if libraries are found, false otherwise.
      */
     bool LoadFootprintFiles();
-
-    /**
-     * Function GetProjectFileParameters
-     * return project file parameter list for CvPcb.
-     * <p>
-     * Populate the project file parameter array specific to CvPcb if it hasn't
-     * already been populated and return a reference to the array to the caller.
-     * Creating the parameter list at run time has the advantage of being able
-     * to define local variables.  The old method of statically building the array
-     * at compile time requiring global variable definitions.
-     * </p>
-     *
-     * @return reference to a std::vector<PARAM_CFG*> contain the project settings for CvPcb.
-     */
-    std::vector<PARAM_CFG*>& GetProjectFileParameters( void );
 
     /**
      * Function SendMessageToEESCHEMA

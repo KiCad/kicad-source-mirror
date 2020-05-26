@@ -28,7 +28,6 @@ set( CVPCB_SRCS
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_stackup_manager/stackup_predefined_prms.cpp
     auto_associate.cpp
-    cfg.cpp
     components_listbox.cpp
     display_footprints_frame.cpp
     footprints_listbox.cpp

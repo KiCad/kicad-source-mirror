@@ -88,8 +88,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
     if( m_compListBox == NULL )
         return false;
 
-    LoadProjectFile();
-
     wxSafeYield();
 
     LoadFootprintFiles();

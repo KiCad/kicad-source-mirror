@@ -292,8 +292,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 
 int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
 {
-    wxString wildcard = ProjectFileWildcard() + "|" + LegacyProjectFileWildcard() + "|"
-                        + AllProjectFilesWildcard();
+    wxString wildcard = AllProjectFilesWildcard() + "|" + ProjectFileWildcard() + "|"
+                        + LegacyProjectFileWildcard();
 
     wxString     default_dir = m_frame->GetMruPath();
     wxFileDialog dlg( m_frame, _( "Open Existing Project" ), default_dir, wxEmptyString,

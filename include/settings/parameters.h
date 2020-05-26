@@ -422,12 +422,85 @@ public:
         return false;
     }
 
-private:
+protected:
     std::vector<Type>* m_ptr;
 
     std::vector<Type> m_default;
 };
 
+/**
+ * Represents a list of strings holding directory paths.
+ * Normalizes paths to unix directory separator style in the file.
+ */
+class PARAM_PATH_LIST : public PARAM_LIST<wxString>
+{
+public:
+    PARAM_PATH_LIST( const std::string& aJsonPath, std::vector<wxString>* aPtr,
+                     std::initializer_list<wxString> aDefault, bool aReadOnly = false ) :
+            PARAM_LIST( aJsonPath, aPtr, aDefault, aReadOnly )
+    { }
+
+    PARAM_PATH_LIST( const std::string& aJsonPath, std::vector<wxString>* aPtr,
+                     std::vector<wxString> aDefault, bool aReadOnly = false ) :
+            PARAM_LIST( aJsonPath, aPtr, aDefault, aReadOnly )
+    { }
+
+    void Load( JSON_SETTINGS* aSettings ) const override
+    {
+        if( m_readOnly )
+            return;
+
+        PARAM_LIST::Load( aSettings );
+
+        for( size_t i = 0; i < m_ptr->size(); i++ )
+            ( *m_ptr )[i] = fromFileFormat( ( *m_ptr )[i] );
+    }
+
+    void Store( JSON_SETTINGS* aSettings) const override
+    {
+        nlohmann::json js = nlohmann::json::array();
+
+        for( const auto& el : *m_ptr )
+            js.push_back( toFileFormat( el ) );
+
+        aSettings->Set<nlohmann::json>( m_path, js );
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( OPT<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            if( js->is_array() )
+            {
+                std::vector<wxString> val;
+
+                for( const auto& el : js->items() )
+                    val.emplace_back( fromFileFormat( el.value().get<wxString>() ) );
+
+                return val == *m_ptr;
+            }
+        }
+
+        return false;
+    }
+
+private:
+    wxString toFileFormat( const wxString& aString ) const
+    {
+        wxString ret = aString;
+        ret.Replace( wxT( "\\" ), wxT( "/" ) );
+        return ret;
+    }
+
+    wxString fromFileFormat( const wxString& aString ) const
+    {
+        wxString ret = aString;
+#ifdef __WINDOWS__
+        ret.Replace( wxT( "/" ), wxT( "\\" ) );
+#endif
+        return ret;
+    }
+};
 
 /**
  * Represents a map of <std::string, Value>.  The key parameter has to be a string in JSON.
