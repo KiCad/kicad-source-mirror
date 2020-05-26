@@ -648,6 +648,7 @@ LSET LSET::FrontAssembly()
     static const PCB_LAYER_ID front_assembly[] = {
         F_SilkS,
         F_Mask,
+        F_Fab,
     };
 
     static const LSET saved( front_assembly, arrayDim( front_assembly ) );
@@ -660,6 +661,7 @@ LSET LSET::BackAssembly()
     static const PCB_LAYER_ID back_assembly[] = {
         B_SilkS,
         B_Mask,
+        B_Fab,
     };
 
     static const LSET saved( back_assembly, arrayDim( back_assembly ) );
