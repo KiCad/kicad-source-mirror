@@ -58,9 +58,8 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_zoneOutlines = true;
     m_displayZone = DZ_SHOW_FILLED;
     m_clearance = CL_NONE;
-    m_sketchBoardGfx = false;
-    m_sketchFpGfx = false;
-    m_sketchFpTxtfx = false;
+    m_sketchGraphics = false;
+    m_sketchText = false;
     m_selectionCandidateColor = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
 
     // By default everything should be displayed as filled
@@ -130,9 +129,8 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
 {
     m_hiContrastEnabled = aOptions.m_ContrastModeDisplay;
     m_padNumbers        = aOptions.m_DisplayPadNum;
-    m_sketchBoardGfx    = !aOptions.m_DisplayDrawItemsFill;
-    m_sketchFpGfx       = !aOptions.m_DisplayModEdgeFill;
-    m_sketchFpTxtfx     = !aOptions.m_DisplayModTextFill;
+    m_sketchGraphics    = !aOptions.m_DisplayGraphicsFill;
+    m_sketchText        = !aOptions.m_DisplayTextFill;
     m_curvedRatsnestlines = aOptions.m_DisplayRatsnestLinesCurved;
     m_globalRatsnestlines = aOptions.m_ShowGlobalRatsnest;
 
@@ -899,9 +897,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 {
     const COLOR4D& color = m_pcbSettings.GetColor( aSegment, aSegment->GetLayer() );
-    bool sketch = ( aSegment->Type() == PCB_LINE_T && m_pcbSettings.m_sketchBoardGfx )
-        || ( aSegment->Type() == PCB_MODULE_EDGE_T && m_pcbSettings.m_sketchFpGfx );
-
+    bool sketch = m_pcbSettings.m_sketchGraphics;
     int thickness = getLineThickness( aSegment->GetWidth() );
     VECTOR2D start( aSegment->GetStart() );
     VECTOR2D end( aSegment->GetEnd() );
@@ -1011,7 +1007,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
     VECTOR2D position( aText->GetTextPos().x, aText->GetTextPos().y );
 
-    if( m_pcbSettings.m_sketchMode[aLayer] )
+    if( m_pcbSettings.m_sketchText || m_pcbSettings.m_sketchMode[aLayer] )
     {
         // Outline mode
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
@@ -1033,17 +1029,14 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
 void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 {
     wxString shownText( aText->GetShownText() );
+
     if( shownText.Length() == 0 )
         return;
-
-    bool sketch = m_pcbSettings.m_sketchFpTxtfx;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
     VECTOR2D position( aText->GetTextPos().x, aText->GetTextPos().y );
 
-    // Currently, draw text routines do not know the true outline mode.
-    // so draw the text in "line" mode (no thickness)
-    if( sketch )
+    if( m_pcbSettings.m_sketchText )
     {
         // Outline mode
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
@@ -1169,7 +1162,17 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getLineThickness( aDimension->GetWidth() ) );
+
+    if( m_pcbSettings.m_sketchGraphics )
+    {
+        // Outline mode
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+    }
+    else
+    {
+        // Filled mode
+        m_gal->SetLineWidth( getLineThickness( aDimension->GetWidth() ) );
+    }
 
     // Draw an arrow
     m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_crossBarF ) );
@@ -1186,7 +1189,17 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
     TEXTE_PCB& text = aDimension->Text();
     VECTOR2D position( text.GetTextPos().x, text.GetTextPos().y );
 
-    m_gal->SetLineWidth( getLineThickness( text.GetEffectiveTextPenWidth() ) );
+    if( m_pcbSettings.m_sketchText )
+    {
+        // Outline mode
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+    }
+    else
+    {
+        // Filled mode
+        m_gal->SetLineWidth( getLineThickness( text.GetEffectiveTextPenWidth() ) );
+    }
+
     m_gal->SetTextAttributes( &text );
     m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngleRadians() );
 }

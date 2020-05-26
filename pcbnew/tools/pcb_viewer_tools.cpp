@@ -135,21 +135,29 @@ int PCB_VIEWER_TOOLS::PadDisplayMode( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_VIEWER_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
+int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
 {
-    auto opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = displayOptions();
 
-    Flip( opts.m_DisplayModEdgeFill );
+    Flip( opts.m_DisplayGraphicsFill );
     frame()->SetDisplayOptions( opts );
     view()->UpdateDisplayOptions( opts );
 
-    for( auto module : board()->Modules() )
+    for( MODULE* module : board()->Modules() )
     {
-        for( auto item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : module->GraphicalItems() )
         {
             if( item->Type() == PCB_MODULE_EDGE_T )
                 view()->Update( item, KIGFX::GEOMETRY );
         }
+    }
+
+    for( BOARD_ITEM* item : board()->Drawings() )
+    {
+        KICAD_T t = item->Type();
+
+        if( t == PCB_LINE_T || t == PCB_DIMENSION_T || t == PCB_TARGET_T )
+            view()->Update( item, KIGFX::GEOMETRY );
     }
 
     canvas()->Refresh();
@@ -158,24 +166,32 @@ int PCB_VIEWER_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_VIEWER_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
+int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
 {
-    auto opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = displayOptions();
 
-    Flip( opts.m_DisplayModTextFill );
+    Flip( opts.m_DisplayTextFill );
     frame()->SetDisplayOptions( opts );
     view()->UpdateDisplayOptions( opts );
 
-    for( auto module : board()->Modules() )
+    for( MODULE* module : board()->Modules() )
     {
         view()->Update( &module->Reference(), KIGFX::GEOMETRY );
         view()->Update( &module->Value(), KIGFX::GEOMETRY );
 
-        for( auto item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : module->GraphicalItems() )
         {
             if( item->Type() == PCB_MODULE_TEXT_T )
                 view()->Update( item, KIGFX::GEOMETRY );
         }
+    }
+
+    for( BOARD_ITEM* item : board()->Drawings() )
+    {
+        KICAD_T t = item->Type();
+
+        if( t == PCB_TEXT_T || t == PCB_DIMENSION_T )
+            view()->Update( item, KIGFX::GEOMETRY );
     }
 
     canvas()->Refresh();
@@ -318,15 +334,14 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
 
 void PCB_VIEWER_TOOLS::setTransitions()
 {
-    Go( &PCB_VIEWER_TOOLS::Show3DViewer,         ACTIONS::show3DViewer.MakeEvent() );
+    Go( &PCB_VIEWER_TOOLS::Show3DViewer,      ACTIONS::show3DViewer.MakeEvent() );
 
     // Display modes
-    Go( &PCB_VIEWER_TOOLS::ShowPadNumbers,       PCB_ACTIONS::showPadNumbers.MakeEvent() );
-    Go( &PCB_VIEWER_TOOLS::PadDisplayMode,       PCB_ACTIONS::padDisplayMode.MakeEvent() );
-    Go( &PCB_VIEWER_TOOLS::ModuleEdgeOutlines,   PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
-    Go( &PCB_VIEWER_TOOLS::ModuleTextOutlines,   PCB_ACTIONS::moduleTextOutlines.MakeEvent() );
-    Go( &PCB_VIEWER_TOOLS::ZoomAutomatically,
-            PCB_ACTIONS::zoomFootprintAutomatically.MakeEvent() );
+    Go( &PCB_VIEWER_TOOLS::ShowPadNumbers,    PCB_ACTIONS::showPadNumbers.MakeEvent() );
+    Go( &PCB_VIEWER_TOOLS::PadDisplayMode,    PCB_ACTIONS::padDisplayMode.MakeEvent() );
+    Go( &PCB_VIEWER_TOOLS::GraphicOutlines,   PCB_ACTIONS::graphicsOutlines.MakeEvent() );
+    Go( &PCB_VIEWER_TOOLS::TextOutlines,      PCB_ACTIONS::textOutlines.MakeEvent() );
+    Go( &PCB_VIEWER_TOOLS::ZoomAutomatically, PCB_ACTIONS::zoomFootprintAutomatically.MakeEvent() );
 
-    Go( &PCB_VIEWER_TOOLS::MeasureTool,          ACTIONS::measureTool.MakeEvent() );
+    Go( &PCB_VIEWER_TOOLS::MeasureTool,       ACTIONS::measureTool.MakeEvent() );
 }

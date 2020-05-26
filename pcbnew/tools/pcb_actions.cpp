@@ -683,19 +683,14 @@ TOOL_ACTION PCB_ACTIONS::viaDisplayMode( "pcbnew.Control.viaDisplayMode",
         _( "Sketch Vias" ), _( "Show vias in outline mode" ),
         via_sketch_xpm );
 
-TOOL_ACTION PCB_ACTIONS::graphicDisplayMode( "pcbnew.Control.graphicDisplayMode",
+TOOL_ACTION PCB_ACTIONS::graphicsOutlines( "pcbnew.Control.graphicOutlines",
         AS_GLOBAL, 0, "",
-        _( "Sketch Board Graphic Items" ), _( "Show board graphic items in outline mode" ),
-        show_graphics_mode_xpm );
-
-TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.Control.graphicOutlines",
-        AS_GLOBAL, 0, "",
-        _( "Sketch Footprint Graphic Items" ), _( "Show footprint graphic items in outline mode" ),
+        _( "Sketch Graphic Items" ), _( "Show graphic items in outline mode" ),
         show_mod_edge_xpm );
 
-TOOL_ACTION PCB_ACTIONS::moduleTextOutlines( "pcbnew.Control.fpTextOutlines",
+TOOL_ACTION PCB_ACTIONS::textOutlines( "pcbnew.Control.textOutlines",
         AS_GLOBAL, 0, "",
-        _( "Line Mode Footprint Text Items" ), _( "Show footprint texts in line mode" ),
+        _( "Sketch Text Items" ), _( "Show footprint texts in line mode" ),
         text_sketch_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showPadNumbers( "pcbnew.Control.showPadNumbers",

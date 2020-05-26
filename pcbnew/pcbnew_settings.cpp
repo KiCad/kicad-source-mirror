@@ -104,16 +104,16 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<double>( "grid.user.size_y", &m_UserGrid.size_y, 0.01 ) );
 
     m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.graphic_items_fill", &m_Display.m_DisplayDrawItemsFill, true ) );
+            "pcb_display.graphic_items_fill", &m_Display.m_DisplayGraphicsFill, true ) );
 
     m_params.emplace_back( new PARAM<int>(
             "pcb_display.max_links_shown", &m_Display.m_MaxLinksShowed, 3, 0, 15 ) );
 
     m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.footprint_edge_fill", &m_Display.m_DisplayModEdgeFill, true ) );
+            "pcb_display.graphics_fill", &m_Display.m_DisplayGraphicsFill, true ) );
 
     m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.footprint_text_fill", &m_Display.m_DisplayModTextFill, true ) );
+            "pcb_display.text_fill", &m_Display.m_DisplayTextFill, true ) );
 
     m_params.emplace_back( new PARAM<int>(
             "pcb_display.net_names_mode", &m_Display.m_DisplayNetNamesMode, 3, 0, 3 ) );

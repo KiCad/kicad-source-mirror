@@ -222,7 +222,6 @@ public:
     static TOOL_ACTION trackDisplayMode;
     static TOOL_ACTION padDisplayMode;
     static TOOL_ACTION viaDisplayMode;
-    static TOOL_ACTION graphicDisplayMode;
     static TOOL_ACTION zoneDisplayEnable;
     static TOOL_ACTION zoneDisplayDisable;
     static TOOL_ACTION zoneDisplayOutlines;
@@ -363,11 +362,10 @@ public:
     static TOOL_ACTION createArray;
 
     /// Display module edges as outlines
-    static TOOL_ACTION moduleEdgeOutlines;
+    static TOOL_ACTION graphicsOutlines;
 
-    /// Display module texts as lines       // JEY TODO: if we're going to keep this, it needs
-                                            // to be all text, not just module text....
-    static TOOL_ACTION moduleTextOutlines;
+    /// Display texts as lines
+    static TOOL_ACTION textOutlines;
 
     // Pad tools
 

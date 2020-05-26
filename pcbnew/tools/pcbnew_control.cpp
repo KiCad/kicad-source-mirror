@@ -189,25 +189,6 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::GraphicDisplayMode( const TOOL_EVENT& aEvent )
-{
-    auto opts = displayOptions();
-
-    Flip( opts.m_DisplayDrawItemsFill );
-    m_frame->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
-
-    for( auto item : board()->Drawings() )
-    {
-        view()->Update( item, KIGFX::GEOMETRY );
-    }
-
-    canvas()->Refresh();
-
-    return 0;
-}
-
-
 int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
@@ -1066,7 +1047,6 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::ToggleRatsnest,       PCB_ACTIONS::showRatsnest.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToggleRatsnest,       PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ViaDisplayMode,       PCB_ACTIONS::viaDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GraphicDisplayMode,   PCB_ACTIONS::graphicDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );

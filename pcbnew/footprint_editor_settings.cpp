@@ -69,11 +69,11 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_graphic_segments",
             &m_Use45DegreeGraphicSegments, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "pcb_display.footprint_text",
-            &m_Display.m_DisplayModTextFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.text_fill",
+            &m_Display.m_DisplayTextFill, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.graphic_items_fill",
-            &m_Display.m_DisplayDrawItemsFill, true ) );
+            &m_Display.m_DisplayGraphicsFill, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
             &m_Display.m_DisplayPadFill, true ) );

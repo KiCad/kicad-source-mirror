@@ -38,8 +38,8 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
     m_DisplayPadNum           = true;
     m_DisplayPadIsol          = true;
 
-    m_DisplayModEdgeFill      = FILLED;
-    m_DisplayModTextFill      = FILLED;
+    m_DisplayGraphicsFill     = FILLED;
+    m_DisplayTextFill         = FILLED;
     m_DisplayPcbTrackFill     = FILLED;   // false = sketch , true = filled
     m_ShowTrackClearanceMode  = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
 
@@ -50,7 +50,6 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
                                          * 1 show netnames on pads
                                          * 2 show netnames on tracks
                                          * 3 show netnames on tracks and pads */
-    m_DisplayDrawItemsFill    = FILLED;
     m_ContrastModeDisplay     = false;
     m_MaxLinksShowed          = 3;        // in track creation: number of hairwires shown
     m_ShowModuleRatsnest      = true;     // When moving a footprint: allows displaying a ratsnest

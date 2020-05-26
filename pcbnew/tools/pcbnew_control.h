@@ -59,7 +59,6 @@ public:
     int ZoneDisplayMode( const TOOL_EVENT& aEvent );
     int TrackDisplayMode( const TOOL_EVENT& aEvent );
     int ViaDisplayMode( const TOOL_EVENT& aEvent );
-    int GraphicDisplayMode( const TOOL_EVENT& aEvent );
     int HighContrastMode( const TOOL_EVENT& aEvent );
 
     // Layer control

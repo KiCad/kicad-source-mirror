@@ -160,8 +160,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     auto sketchPadsCondition = [ this ] ( const SELECTION& aSel ) {
         return !GetDisplayOptions().m_DisplayPadFill;
     };
-    auto sketchEdgesCondition = [ this ] ( const SELECTION& aSel ) {
-        return !GetDisplayOptions().m_DisplayModEdgeFill;
+    auto sketchGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return !GetDisplayOptions().m_DisplayGraphicsFill;
     };
     auto contrastModeCondition = [ this ] ( const SELECTION& aSel ) {
         return !GetDisplayOptions().m_ContrastModeDisplay;
@@ -201,8 +201,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     drawingModeSubMenu->SetTitle( _( "&Drawing Mode" ) );
     drawingModeSubMenu->SetIcon( add_zone_xpm );
 
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::padDisplayMode,     sketchPadsCondition );
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::moduleEdgeOutlines, sketchEdgesCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::padDisplayMode,   sketchPadsCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::graphicsOutlines, sketchGraphicsCondition );
     viewMenu->AddMenu( drawingModeSubMenu );
 
     // Contrast Mode Submenu

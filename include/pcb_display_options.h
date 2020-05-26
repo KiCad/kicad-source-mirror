@@ -65,8 +65,8 @@ public:
     bool m_DisplayViaFill;
     bool m_DisplayPadNum;           // show pads numbers
     bool m_DisplayPadIsol;
-    bool m_DisplayModEdgeFill;      // How to display module drawings ( sketch/ filled )
-    bool m_DisplayModTextFill;      // How to display module texts ( sketch/ filled )
+    bool m_DisplayGraphicsFill;     // How to display module drawings ( sketch/ filled )
+    bool m_DisplayTextFill;         // How to display module texts ( sketch/ filled )
     bool m_DisplayPcbTrackFill;     // false : tracks are show in sketch mode, true = filled.
 
     /// How trace clearances are displayed.  @see TRACE_CLEARANCE_DISPLAY_MODE_T.
@@ -79,7 +79,6 @@ public:
                                      * 3 show netnames on tracks and pads
                                      */
 
-    bool m_DisplayDrawItemsFill;        // How to display graphic items on board ( sketch/ filled )
     bool m_ContrastModeDisplay;
     int  m_MaxLinksShowed;              // in track creation: number of hairwires shown
     bool m_ShowModuleRatsnest;          // When moving a footprint: allows displaying a ratsnest

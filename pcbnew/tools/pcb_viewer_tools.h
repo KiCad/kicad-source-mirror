@@ -57,8 +57,8 @@ public:
     // Display modes
     int ShowPadNumbers( const TOOL_EVENT& aEvent );
     int PadDisplayMode( const TOOL_EVENT& aEvent );
-    int ModuleEdgeOutlines( const TOOL_EVENT& aEvent );
-    int ModuleTextOutlines( const TOOL_EVENT& aEvent );
+    int GraphicOutlines( const TOOL_EVENT& aEvent );
+    int TextOutlines( const TOOL_EVENT& aEvent );
     int ZoomAutomatically( const TOOL_EVENT& aEvent );
 
     /// Show the 3D viewer

@@ -325,15 +325,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     };
     auto sketchGraphicsCondition = [ &disp_opt ]( const SELECTION &aSel )
     {
-        return !disp_opt.m_DisplayDrawItemsFill;
+        return !disp_opt.m_DisplayGraphicsFill;
     };
-    auto sketchModuleEdgeOutlinesCondition = [ &disp_opt ]( const SELECTION &aSel )
+    auto sketchTextOutlinesCondition = [ &disp_opt ]( const SELECTION &aSel )
     {
-        return !disp_opt.m_DisplayModEdgeFill;
-    };
-    auto sketchModuleTextOutlinesCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return !disp_opt.m_DisplayModTextFill;
+        return !disp_opt.m_DisplayTextFill;
     };
 
     viewMenu->AddCheckItem( PCB_ACTIONS::showLayersManager,    layersPaletteShownCondition );
@@ -383,9 +379,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::trackDisplayMode,    sketchTracksCondition );
 
     drawingModeSubMenu->AddSeparator();
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::graphicDisplayMode,  sketchGraphicsCondition );
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::moduleEdgeOutlines,  sketchModuleEdgeOutlinesCondition );
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::moduleTextOutlines,  sketchModuleTextOutlinesCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::graphicsOutlines,    sketchGraphicsCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::textOutlines,        sketchTextOutlinesCondition );
 
     viewMenu->AddMenu( drawingModeSubMenu );
 
