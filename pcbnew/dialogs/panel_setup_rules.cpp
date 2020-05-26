@@ -49,7 +49,7 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
     m_textEditor->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
 
     int    size = wxNORMAL_FONT->GetPointSize();
-    wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTSTYLE_NORMAL );
+    wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
 
     for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
         m_textEditor->StyleSetFont( i, fixedFont );
@@ -260,46 +260,48 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 
 void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
 {
-    wxString msg = _(
+    // Do not make this full sentence translatable: it contains keywords
+    // Only a few titles can be traslated.
+    wxString msg =
             "<b>Top-level Expressions</b>"
             "<pre>"
-            "(version &lt;number>)\r"
-            "(rule &lt;rule_name> &lt;rule_expression> ...)\r"
-            "\r</pre>"
+            "(version &lt;number>)<br>"
+            "(rule &lt;rule_name> &lt;rule_expression> ...)<br>"
+            "<br></pre>"
             "<b>Rule Expressions</b>"
             "<pre>"
-            "(disallow &lt;item_type>)\r"
-            "(constraint &lt;constraint_type> ...)\r"
-            "(condition \"&lt;expression>\")\r"
-            "\r</pre>"
+            "(disallow &lt;item_type>)<br>"
+            "(constraint &lt;constraint_type> ...)<br>"
+            "(condition \"&lt;expression>\")<br>"
+            "<br></pre>"
             "<b>Item Types</b>"
             "<pre>"
-            "track         via               zone\r"
-            "pad           micro_via         text\r"
-            "hole          buried_via        graphic\r"
-            "\r</pre>"
+            "track         via               zone<br>"
+            "pad           micro_via         text<br>"
+            "hole          buried_via        graphic<br>"
+            "<br></pre>"
             "<b>Constraint Types</b>"
             "<pre>"
-            "clearance    annulus_width   track_width     hole\r"
-            "\r</pre>"
+            "clearance    annulus_width   track_width     hole<br>"
+            "<br></pre>"
             "<b>Examples</b>"
             "<pre>"
-            "(rule \"copper keepout\"\r"
-            "   (disallow track) (disallow via) (disallow zone)\r"
-            "   (condition \"a.name == no_copper\"))\r"
-            "\r"
-            "(rule neckdown\r"
-            "   (constraint track_width (min 0.2mm) (opt 0.25mm) (max 1.0mm)\r"
-            "   (condition \"a.name == BGA\"))\r"
-            "\r"
-            "(rule HV\r"
-            "   (constraint clearance (min 1.5mm)\r"
-            "   (condition \"a.netclass == HV\"))\r"
-            "\r"
-            "(rule HV-HV\r"
-            "   (constraint clearance (min 2.0mm)\r"
-            "   (condition \"a.netclass == HV && b.netclass == HV\"))\r"
-            "</pre>" );
+            "(rule \"copper keepout\"<br>"
+            "   (disallow track) (disallow via) (disallow zone)<br>"
+            "   (condition \"a.name == no_copper\"))<br>"
+            "<br>"
+            "(rule neckdown<br>"
+            "   (constraint track_width (min 0.2mm) (opt 0.25mm) (max 1.0mm)<br>"
+            "   (condition \"a.name == BGA\"))<br>"
+            "<br>"
+            "(rule HV<br>"
+            "   (constraint clearance (min 1.5mm)<br>"
+            "   (condition \"a.netclass == HV\"))<br>"
+            "<br>"
+            "(rule HV-HV<br>"
+            "   (constraint clearance (min 2.0mm)<br>"
+            "   (condition \"a.netclass == HV && b.netclass == HV\"))<br>"
+            "</pre>";
 
     HTML_MESSAGE_BOX dlg( m_parent, _( "Syntax Help" ) );
     dlg.SetDialogSizeInDU( 320, 320 );

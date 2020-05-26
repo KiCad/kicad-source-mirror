@@ -407,7 +407,7 @@ void DIALOG_SPICE_MODEL::showPinOrderNote( int aModelType )
     wxString msg;
 
     msg = _( "Symbol pin numbering don't always match the required SPICE pin order\n"
-             "Check the symbol and \"useAlternate node sequence\" to reorder the pins"
+             "Check the symbol and use \"Alternate node sequence\" to reorder the pins"
              ", if necessary" );
 
     msg += '\n';

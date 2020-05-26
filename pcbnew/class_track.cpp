@@ -148,7 +148,7 @@ void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
         *aMax = INT_MAX / 2;
 
         if( aSource )
-            *aSource = _( "board minumum" );
+            *aSource = _( "board minimum" );
     }
 }
 
@@ -167,7 +167,7 @@ int VIA::GetMinAnnulus( wxString* aSource ) const
     else
     {
         if( aSource )
-            *aSource = _( "board minumum" );
+            *aSource = _( "board minimum" );
 
         return GetBoard()->GetDesignSettings().m_ViasMinAnnulus;
     }
