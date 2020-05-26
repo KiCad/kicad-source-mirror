@@ -988,7 +988,17 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
             break;
         }
 
+        case S_POLYGON:
+        {
+            SHAPE_LINE_CHAIN l = drawItem->GetPolyShape().Outline( 0 );
+
+            for( int i = 0; i < l.SegmentCount(); i++ )
+                itemShape.push_back( l.Segment( i ) );
+        }
+            break;
+
         default:
+            wxFAIL_MSG( "unknown shape type" );
             break;
         }
     }
@@ -1010,6 +1020,9 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
     }
 
     SHAPE_RECT rect_area( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
+
+    if( itemShape.empty() )
+        return;
 
     // Test tracks and vias
     for( auto track : m_pcb->Tracks() )
