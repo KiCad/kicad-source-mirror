@@ -52,7 +52,32 @@
 using KIGFX::SCH_RENDER_SETTINGS;
 
 
-extern void IncrementLabelMember( wxString& name, int aIncrement );
+void IncrementLabelMember( wxString& name, int aIncrement )
+{
+    int  ii, nn;
+    long number = 0;
+
+    ii = name.Len() - 1; nn = 0;
+
+    if( !wxIsdigit( name.GetChar( ii ) ) )
+        return;
+
+    while( ii >= 0 && wxIsdigit( name.GetChar( ii ) ) )
+    {
+        ii--;
+        nn++;
+    }
+
+    ii++;   /* digits are starting at ii position */
+    wxString litt_number = name.Right( nn );
+
+    if( litt_number.ToLong( &number ) )
+    {
+        number += aIncrement;
+        name.Remove( ii ); name << number;
+    }
+}
+
 
 /* Coding polygons for global symbol graphic shapes.
  *  the first parml is the number of corners

@@ -155,7 +155,6 @@ set( EESCHEMA_SRCS
     component_references_lister.cpp
     connection_graph.cpp
     cross-probing.cpp
-    edit_label.cpp
     eeschema_config.cpp
     eeschema_settings.cpp
     erc.cpp

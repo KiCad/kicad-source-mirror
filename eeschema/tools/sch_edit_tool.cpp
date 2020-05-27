@@ -1468,8 +1468,85 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
     {
         SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( selection.GetItem( i ) );
 
-        if( text )
-            m_frame->ConvertTextType( text, convertTo );
+        if( text && text->Type() != convertTo )
+        {
+            bool             selected    = text->IsSelected();
+            SCH_TEXT*        newtext     = nullptr;
+            const wxPoint&   position    = text->GetPosition();
+            LABEL_SPIN_STYLE orientation = text->GetLabelSpinStyle();
+            wxString         txt         = UnescapeString( text->GetText() );
+
+            // There can be characters in a SCH_TEXT object that can break labels so we have to
+            // fix them here.
+            if( text->Type() == SCH_TEXT_T )
+            {
+                txt.Replace( "\n", "_" );
+                txt.Replace( "\r", "_" );
+                txt.Replace( "\t", "_" );
+                txt.Replace( " ", "_" );
+            }
+
+            // label strings are "escaped" i.e. a '/' is replaced by "{slash}"
+            if( convertTo != SCH_TEXT_T )
+                txt = EscapeString( txt, CTX_NETNAME );
+
+            switch( convertTo )
+            {
+            case SCH_LABEL_T:        newtext = new SCH_LABEL( position, txt );        break;
+            case SCH_GLOBAL_LABEL_T: newtext = new SCH_GLOBALLABEL( position, txt );  break;
+            case SCH_HIER_LABEL_T:   newtext = new SCH_HIERLABEL( position, txt );    break;
+            case SCH_TEXT_T:         newtext = new SCH_TEXT( position, txt );         break;
+
+            default:
+                wxFAIL_MSG( wxString::Format( "Invalid text type: %d.", convertTo ) );
+                return 0;
+            }
+
+            // Copy the old text item settings to the new one.  Justifications are not copied
+            // because they are not used in labels.  Justifications will be set to default value
+            // in the new text item type.
+            //
+            newtext->SetFlags( text->GetEditFlags() );
+            newtext->SetShape( text->GetShape() );
+            newtext->SetLabelSpinStyle( orientation );
+            newtext->SetTextSize( text->GetTextSize() );
+            newtext->SetTextThickness( text->GetTextThickness() );
+            newtext->SetItalic( text->IsItalic() );
+            newtext->SetBold( text->IsBold() );
+            newtext->SetIsDangling( text->IsDangling() );
+
+            if( selected )
+                m_toolMgr->RunAction( EE_ACTIONS::removeItemFromSel, true, text );
+
+            if( !text->IsNew() )
+            {
+                m_frame->SaveCopyInUndoList( text, UR_DELETED );
+                m_frame->SaveCopyInUndoList( newtext, UR_NEW, true );
+
+                m_frame->RemoveFromScreen( text );
+                m_frame->AddToScreen( newtext );
+            }
+
+            if( selected )
+                m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newtext );
+
+            // Otherwise, pointer is owned by the undo stack
+            if( text->IsNew() )
+                delete text;
+
+            if( convertTo == SCH_TEXT_T )
+            {
+                if( newtext->IsDangling() )
+                {
+                    newtext->SetIsDangling( false );
+                    getView()->Update( newtext, KIGFX::REPAINT );
+                }
+            }
+            else
+                m_frame->TestDanglingEnds();
+
+            m_frame->OnModify();
+        }
     }
 
     if( selection.IsHover() )
