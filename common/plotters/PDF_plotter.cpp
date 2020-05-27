@@ -93,7 +93,8 @@ void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
         return;
     else if( aWidth == USE_DEFAULT_LINE_WIDTH )
         aWidth = m_renderSettings->GetDefaultPenWidth();
-    else if( aWidth == 0 )
+
+    if( aWidth == 0 )
         aWidth = 1;
 
     wxASSERT_MSG( aWidth > 0, "Plotter called to set negative pen width" );
