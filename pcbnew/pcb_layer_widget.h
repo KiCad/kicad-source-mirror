@@ -77,6 +77,11 @@ public:
     void SyncLayerAlphaIndicators();
 
     /**
+     * Updates the color for each layer and item from the active color theme
+     */
+    void SyncLayerColors();
+
+    /**
      * Function SetLayersManagerTabsText
      * Update the layer manager tabs labels
      * Useful when changing Language or to set labels to a non default value

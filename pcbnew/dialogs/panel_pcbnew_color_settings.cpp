@@ -26,6 +26,7 @@
 #include <panel_pcbnew_color_settings.h>
 #include <pcbnew_settings.h>
 #include <pcb_edit_frame.h>
+#include <pcb_layer_widget.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
@@ -101,8 +102,7 @@ bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataFromWindow()
     PCBNEW_SETTINGS* app_settings = settingsMgr.GetAppSettings<PCBNEW_SETTINGS>();
     app_settings->m_ColorTheme = m_currentSettings->GetFilename();
 
-    m_frame->ReFillLayerWidget();
-    m_frame->SyncRenderStates();
+    m_frame->GetLayerManager()->SyncLayerColors();
 
     return true;
 }

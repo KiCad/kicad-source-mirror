@@ -443,6 +443,43 @@ void PCB_LAYER_WIDGET::SyncLayerAlphaIndicators()
 }
 
 
+void PCB_LAYER_WIDGET::SyncLayerColors()
+{
+    COLOR_SETTINGS* cs = myframe->GetColorSettings();
+
+    COLOR4D bg = cs->GetColor( LAYER_PCB_BACKGROUND );
+
+    int count = GetLayerRowCount();
+    int row;
+    int col = 1;    // bitmap button is column 1 in layers tab
+
+    for( row = 0; row < count; ++row )
+    {
+        COLOR_SWATCH* swatch = dynamic_cast<COLOR_SWATCH*>( getLayerComp( row, col ) );
+
+        if( swatch )
+        {
+            swatch->SetSwatchBackground( bg );
+            swatch->SetSwatchColor( cs->GetColor( getDecodedId( swatch->GetId() ) ), false );
+        }
+    }
+
+    count = GetRenderRowCount();
+    col = 0;    // bitmap button is column 0 in render tab
+
+    for( row = 0; row < count; ++row )
+    {
+        COLOR_SWATCH* swatch = dynamic_cast<COLOR_SWATCH*>( getRenderComp( row, col ) );
+
+        if( swatch )
+        {
+            swatch->SetSwatchBackground( bg );
+            swatch->SetSwatchColor( cs->GetColor( getDecodedId( swatch->GetId() ) ), false );
+        }
+    }
+}
+
+
 void PCB_LAYER_WIDGET::ReFill()
 {
     BOARD*  brd = myframe->GetBoard();
