@@ -87,7 +87,7 @@ you can still commit:
 
     git commit --no-verify
 
-### Correcting Formatting Errors ## {#correcting-formatting-errors}
+### 1.3.1 Correcting Formatting Errors ### {#correcting-formatting-errors}
 
 There is a Git aliases file that provides the right commands to show and correct
 formatting errors. Add to your repository config by running this command from
@@ -107,6 +107,7 @@ other uses:
 * Make (or see only) violations in files modified in the previous commit (useful
 when interactive-rebasing):
     * `check_coding.sh --amend [--diff]`
+
 
 # 2. Naming Conventions # {#naming_conventions}
 Before delving into anything as esoteric as indentation and formatting,
@@ -214,8 +215,9 @@ us.
 ## 2.8 Use of 'auto' ##
 We do -not- use `auto` to reduce repetition.  We do use it to increase
 readability.  This generally means -only- use `auto` where std::lib gets
-overly verbose (such as iterators or `std::make_shared`), or when not using 
+overly verbose (such as iterators or `std::make_shared`), or when not using
 `auto` would cause line-wraps that can't otherwise be avoided.
+
 
 # 3. Commenting # {#commenting}
 Comments in KiCad typically fall into two categories: in line code
@@ -496,11 +498,11 @@ reject clang-format's suggested changes, if you use it:
 ~~~~~~~~~~~~~
 
 ## 4.10 Lamdas ## {#lamda_formatting}
-The braces and statements of the body should be indented as you would a method, 
+The braces and statements of the body should be indented as you would a method,
 with the braces lined up under the capture block:
 
 ~~~~~~~~~~~~~{.cpp}
-    auto belowCondition = []( const SELECTION& aSel ) 
+    auto belowCondition = []( const SELECTION& aSel )
                           {
                               return g_CurrentSheet->Last() != g_RootSheet;
                           };
@@ -509,8 +511,8 @@ with the braces lined up under the capture block:
 or:
 
 ~~~~~~~~~~~~~{.cpp}
-    auto belowCondition = 
-        []( const SELECTION& aSel ) 
+    auto belowCondition =
+        []( const SELECTION& aSel )
         {
             return g_CurrentSheet->Last() != g_RootSheet;
         };
@@ -596,12 +598,11 @@ is exposed in the header file, merely by including that one header
 file.
 
 
-# 7. When in Rome... #
-Anywhere there are multiple acceptable options, follow the formatting 
-elsewhere in the same file.
+# 7. When in Doubt... # {#when_in_doubt}
+When editing existing source code files and there are multiple acceptable
+code formatting options or no formatting is defined, follow the existing
+formatting in the file.
 
-If you encounter a situation that has no guidance, follow the formatting
-elsewhere in the same file.
 
 # 8. I Wrote X Lines of Code Before I Read This Document # {#x_lines}
 It's OK. We all make mistakes. Fortunately, KiCad provides a
