@@ -215,8 +215,9 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     bool onCopperLayer = ( LSET::AllCuMask() & aLayerMask ).any();
     bool onSolderMaskLayer = ( LSET( 2, F_Mask, B_Mask ) & aLayerMask ).any();
     bool onSolderPasteLayer = ( LSET( 2, F_Paste, B_Paste ) & aLayerMask ).any();
-    bool onFabLayer = ( LSET( 2, F_Fab, B_Fab ) & aLayerMask ).any();
-    bool sketchPads = onFabLayer && aPlotOpt.GetSketchPadsOnFabLayers();
+    bool onFrontFab = ( LSET(  F_Fab ) & aLayerMask ).any();
+    bool onBackFab  = ( LSET( B_Fab ) & aLayerMask ).any();
+    bool sketchPads = ( onFrontFab || onBackFab ) && aPlotOpt.GetSketchPadsOnFabLayers();
 
      // Plot edge layer and graphic items
     itemplotter.PlotBoardGraphicItems();
@@ -240,7 +241,9 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
             if( !( pad->GetLayerSet() & aLayerMask ).any() )
             {
-                if( sketchPads )
+                if( sketchPads &&
+                        ( ( onFrontFab && pad->GetLayerSet().Contains( F_Cu ) ) ||
+                          ( onBackFab && pad->GetLayerSet().Contains( B_Cu ) ) ) )
                     padPlotMode = SKETCH;
                 else
                     continue;
