@@ -262,29 +262,36 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
 {
     // Do not make this full sentence translatable: it contains keywords
     // Only a few titles can be traslated.
-    wxString msg =
-            "<b>Top-level Clauses</b>"
-            "<pre>"
+    wxString msg;
+    msg << "<b>" << _( "Top-level Clauses" ) << "</b>";
+    msg <<  "<pre>"
             "(version &lt;number>)\r"
             "(rule &lt;rule_name> &lt;rule_clause> ...)\r"
-            "\r</pre>"
-            "<b>Rule Clauses</b>"
+            "\r</pre><b>";
+    msg << _( "Rule Clauses" );
+    msg <<  "</b>"
             "<pre>"
             "(disallow &lt;item_type>)\r"
             "(constraint &lt;constraint_type> ...)\r"
             "(condition \"&lt;expression>\")\r"
             "\r</pre>"
-            "<b>Item Types</b>"
+            "<b>";
+    msg << _( "Item Types" );
+    msg <<  "</b>"
             "<pre>"
             "track         via               zone\r"
             "pad           micro_via         text\r"
             "hole          buried_via        graphic\r"
             "\r</pre>"
-            "<b>Constraint Types</b>"
+            "<b>";
+    msg << _( "Constraint Types" );
+    msg <<  "</b>"
             "<pre>"
             "clearance    annulus_width   track_width     hole\r"
             "\r</pre>"
-            "<b>Examples</b>"
+            "<b>";
+    msg << _( "Examples" );
+    msg <<  "</b>"
             "<pre>"
             "(rule \"copper keepout\"\r"
             "   (disallow track) (disallow via) (disallow zone)\r"
