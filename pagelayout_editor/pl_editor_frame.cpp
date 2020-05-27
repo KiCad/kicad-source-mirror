@@ -29,6 +29,7 @@
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
+#include <dialogs/panel_pl_editor_color_settings.h>
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
 #include <pl_editor_settings.h>
@@ -91,7 +92,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
     m_originSelectChoice = 0;
-    SetDrawBgColor( WHITE );            // default value, user option (WHITE/BLACK)
     WS_DATA_MODEL::GetTheInstance().m_EditMode = true;
     SetShowPageLimits( true );
     m_AboutTitle = "PlEditor";
@@ -418,6 +418,7 @@ void PL_EDITOR_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     wxTreebook* book = aParent->GetTreebook();
 
     book->AddPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddPage( new PANEL_PL_EDITOR_COLOR_SETTINGS( this, aParent ), _( "Colors" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
