@@ -58,7 +58,7 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
     m_fieldId = VALUE;
     m_isPower = false;
 
-    m_scintillaTricks = new SCINTILLA_TRICKS( m_StyledTextCtrl, "{}" );
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_StyledTextCtrl, wxT( "{}" ) );
 
     m_text = aTextItem->GetText();
     m_isItalic = aTextItem->IsItalic();

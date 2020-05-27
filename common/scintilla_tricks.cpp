@@ -116,6 +116,10 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     {
         m_te->Paste();
     }
+    else if( aEvent.GetUnicodeKey() > 60 )
+    {
+        aEvent.Skip();  // This crashes the Scintilla engine....
+    }
     else
     {
         aEvent.Skip();
@@ -127,7 +131,7 @@ void SCINTILLA_TRICKS::onScintillaUpdateUI( wxStyledTextEvent& aEvent )
 {
     auto isBrace = [this]( int c ) -> bool
                    {
-                       return m_braces.Find( (char) c ) >= 0;
+                       return m_braces.Find( (wxChar) c ) >= 0;
                    };
 
     // Has the caret changed position?

@@ -35,7 +35,7 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
         m_frame( aFrame ),
         m_scintillaTricks( nullptr )
 {
-    m_scintillaTricks = new SCINTILLA_TRICKS( m_textEditor, "{}" );
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_textEditor, wxT( "{}" ) );
 
     int    size = wxNORMAL_FONT->GetPointSize();
     wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
@@ -76,7 +76,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
     for( ; i < currentPos; ++i )
     {
-        char c = (char) m_textEditor->GetCharAt( i );
+        wxChar c = m_textEditor->GetCharAt( i );
 
         if( c == '\\' )
         {
