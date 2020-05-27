@@ -649,7 +649,7 @@ public:
 
     bool IsReplaceable() const override { return true; }
 
-    const wxPoint GetPosition() const override { return m_Pos; }
+    wxPoint GetPosition() const override { return m_Pos; }
     void SetPosition( const wxPoint& aPosition ) override { Move( aPosition - m_Pos ); }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;

@@ -630,7 +630,7 @@ static struct EDA_TEXT_DESC
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _( "Text" ),
                     &EDA_TEXT::SetText, &EDA_TEXT::GetText ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _( "Thickness" ),
-                    &EDA_TEXT::SetThickness, &EDA_TEXT::GetThickness, PROPERTY_DISPLAY::DISTANCE ) );
+                    &EDA_TEXT::SetTextThickness, &EDA_TEXT::GetTextThickness, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _( "Italic" ),
                     &EDA_TEXT::SetItalic, &EDA_TEXT::IsItalic ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _( "Bold" ),

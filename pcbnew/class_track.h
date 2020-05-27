@@ -298,7 +298,7 @@ public:
         m_Start = aPos;
     }
 
-    virtual const wxPoint GetPosition() const override;
+    virtual wxPoint GetPosition() const override;
 
     double GetRadius() const;
     double GetAngle() const;
@@ -408,7 +408,7 @@ public:
      */
     void SanitizeLayers();
 
-    const wxPoint GetPosition() const override {  return m_Start; }
+    wxPoint GetPosition() const override {  return m_Start; }
     void SetPosition( const wxPoint& aPoint ) override { m_Start = aPoint;  m_End = aPoint; }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;

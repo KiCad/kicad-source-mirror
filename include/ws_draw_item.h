@@ -130,7 +130,7 @@ public:
     const wxPoint&  GetEnd() const { return m_end; }
     void SetEnd( wxPoint aPos ) override { m_end = aPos; }
 
-    const wxPoint GetPosition() const override { return GetStart(); }
+    wxPoint GetPosition() const override { return GetStart(); }
     void SetPosition( wxPoint aPos ) override { SetStart( aPos ); }
 
     const EDA_RECT GetBoundingBox() const override;
@@ -170,7 +170,7 @@ public:
 
     // Accessors:
     SHAPE_POLY_SET& GetPolygons() { return m_Polygons; }
-    const wxPoint GetPosition() const override { return m_pos; }
+    wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( wxPoint aPos ) override;
 
     const EDA_RECT GetBoundingBox() const override;
@@ -210,7 +210,7 @@ public:
     const wxPoint&  GetEnd() const { return m_end; }
     void SetEnd( wxPoint aPos ) override { m_end = aPos; }
 
-    const wxPoint GetPosition() const override { return GetStart(); }
+    wxPoint GetPosition() const override { return GetStart(); }
     void SetPosition( wxPoint aPos ) override { SetStart( aPos ); }
 
     void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
@@ -252,7 +252,7 @@ public:
     void SetMarkerPos( wxPoint aPos ) { m_markerPos = aPos; }
     double GetMarkerSize() const { return m_markerSize; }
 
-    const wxPoint GetPosition() const override { return wxPoint( 0, 0 ); }
+    wxPoint GetPosition() const override { return wxPoint( 0, 0 ); }
     void SetPosition( wxPoint aPos ) override { /* do nothing */ }
 
     void PrintWsItem( RENDER_SETTINGS* , const wxPoint&  ) override { /* do nothing */ }
@@ -295,7 +295,7 @@ public:
         EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
     }
 
-    const wxPoint GetPosition() const override { return GetTextPos(); }
+    wxPoint GetPosition() const override { return GetTextPos(); }
     void SetPosition( wxPoint aPos ) override { SetTextPos( aPos ); }
 
     const EDA_RECT GetBoundingBox() const override;
@@ -325,7 +325,7 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_BITMAP" ); }
 
-    const wxPoint GetPosition() const override { return m_pos; }
+    wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( wxPoint aPos ) override { m_pos = aPos; }
 
     void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;

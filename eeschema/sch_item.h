@@ -136,7 +136,7 @@ public:
                 || ( m_pos == rhs.m_pos && m_item < rhs.m_item ) );
     }
 
-    const wxPoint GetPosition() const { return m_pos; }
+    wxPoint GetPosition() const { return m_pos; }
     EDA_ITEM* GetItem() const { return m_item; }
     const EDA_ITEM* GetParent() const { return m_parent; }
     DANGLING_END_T GetType() const { return m_type; }

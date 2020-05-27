@@ -78,7 +78,7 @@ public:
 
     void Rotate( wxPoint aPosition ) override {}
 
-    const wxPoint GetPosition() const override { return GetTransformedPosition(); }
+    wxPoint GetPosition() const override { return GetTransformedPosition(); }
     const wxPoint GetLocalPosition() const { return m_position; }
     void SetPosition( const wxPoint& aPosition ) override { m_position = aPosition; }
 

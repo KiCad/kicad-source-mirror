@@ -576,7 +576,7 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
 }
 
 
-const wxPoint SCH_FIELD::GetPosition() const
+wxPoint SCH_FIELD::GetPosition() const
 {
     if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
     {

@@ -74,7 +74,7 @@ public:
 
     void MoveTo( const wxPoint& aPosition ) override;
 
-    const wxPoint GetPosition() const override;
+    wxPoint GetPosition() const override;
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;

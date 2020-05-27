@@ -351,7 +351,7 @@ void LIB_BEZIER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     aList.emplace_back( _( "Bounding Box" ), msg, BROWN );
 }
 
-const wxPoint LIB_BEZIER::GetPosition() const
+wxPoint LIB_BEZIER::GetPosition() const
 {
     if( !m_PolyPoints.size() )
         return wxPoint(0, 0);

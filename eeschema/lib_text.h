@@ -81,7 +81,7 @@ public:
 
     void MoveTo( const wxPoint& aPosition ) override;
 
-    const wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
+    wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;

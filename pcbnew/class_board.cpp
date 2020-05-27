@@ -72,6 +72,11 @@ public:
     // pure virtuals:
     void SetPosition( const wxPoint& ) override {}
 
+    wxPoint GetPosition() const override {
+        return wxPoint(0, 0);
+    }
+
+
 #if defined(DEBUG)
     void Show( int , std::ostream&  ) const override {}
 #endif

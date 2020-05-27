@@ -427,7 +427,7 @@ public:
 
     void MoveTo( const wxPoint& aPosition ) override;
 
-    const wxPoint GetPosition() const override { return m_position; }
+    wxPoint GetPosition() const override { return m_position; }
 
     /**
      * move this and all linked pins to the new position

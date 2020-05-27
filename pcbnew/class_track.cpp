@@ -896,7 +896,7 @@ void VIA::SwapData( BOARD_ITEM* aImage )
 }
 
 
-const wxPoint ARC::GetPosition() const
+wxPoint ARC::GetPosition() const
 {
     auto center = GetArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ) );
     return wxPoint( center.x, center.y );

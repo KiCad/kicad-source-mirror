@@ -98,7 +98,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    const wxPoint GetPosition() const override { return m_Pos; }
+    wxPoint GetPosition() const override { return m_Pos; }
     void SetPosition( const wxPoint& aPosition ) override { m_Pos = aPosition; }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;

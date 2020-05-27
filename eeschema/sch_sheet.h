@@ -567,7 +567,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    const wxPoint GetPosition() const override { return m_pos; }
+    wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( const wxPoint& aPosition ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;

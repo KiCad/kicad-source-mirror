@@ -68,7 +68,7 @@ public:
 
     void MoveTo( const wxPoint& aPosition ) override;
 
-    const wxPoint GetPosition() const override { return m_Pos; }
+    wxPoint GetPosition() const override { return m_Pos; }
 
     void SetEnd( const wxPoint& aPosition ) { m_EndPos = aPosition; }
     wxPoint GetEnd() const { return m_EndPos; }

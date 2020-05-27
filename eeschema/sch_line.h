@@ -207,7 +207,7 @@ public:
 
     bool operator <( const SCH_ITEM& aItem ) const override;
 
-    const wxPoint GetPosition() const override { return m_start; }
+    wxPoint GetPosition() const override { return m_start; }
     void SetPosition( const wxPoint& aPosition ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;

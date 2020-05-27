@@ -310,7 +310,7 @@ public:
 
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
 
-    const wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
+    wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
     void SetPosition( const wxPoint& aPosition ) override { EDA_TEXT::SetTextPos( aPosition ); }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
