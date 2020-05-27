@@ -24,6 +24,7 @@
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -45,6 +46,7 @@ class DIALOG_MIGRATE_SETTINGS_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_btnCustomPath;
 		wxStaticText* m_lblPathError;
 		wxRadioButton* m_btnUseDefaults;
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_standardButtons;
 		wxButton* m_standardButtonsOK;
 		wxButton* m_standardButtonsCancel;

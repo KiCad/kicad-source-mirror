@@ -24,26 +24,32 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 
 	bSizer6->Add( m_lblWelcome, 0, wxALL|wxEXPAND, 5 );
 
+
+	bSizer6->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("How would you like to configure KiCad?"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
 	bSizer6->Add( m_staticText2, 0, wxALL|wxEXPAND, 5 );
 
 	m_btnPrevVer = new wxRadioButton( this, wxID_ANY, wxT("Import settings from a previous version at:"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_btnPrevVer, 0, wxALL|wxEXPAND, 5 );
+	bSizer6->Add( m_btnPrevVer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
+
+	bSizer5->Add( 20, 0, 0, wxEXPAND, 5 );
+
 	m_cbPath = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_cbPath->SetMinSize( wxSize( 480,-1 ) );
 
-	bSizer5->Add( m_cbPath, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer5->Add( m_cbPath, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_btnCustomPath = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_btnCustomPath->SetToolTip( wxT("Choose a different path") );
-	m_btnCustomPath->SetMinSize( wxSize( 40,30 ) );
+	m_btnCustomPath->SetMinSize( wxSize( 30,29 ) );
 
-	bSizer5->Add( m_btnCustomPath, 0, wxALL, 5 );
+	bSizer5->Add( m_btnCustomPath, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bSizer6->Add( bSizer5, 1, wxEXPAND, 5 );
@@ -59,10 +65,10 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 	bSizer6->Add( m_btnUseDefaults, 0, wxALL|wxEXPAND, 5 );
 
 
-	m_sizer->Add( bSizer6, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_sizer->Add( bSizer6, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
-
-	m_sizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_sizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_standardButtons = new wxStdDialogButtonSizer();
 	m_standardButtonsOK = new wxButton( this, wxID_OK );
@@ -72,7 +78,7 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 	m_standardButtons->Realize();
 	m_standardButtons->SetMinSize( wxSize( -1,50 ) );
 
-	m_sizer->Add( m_standardButtons, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 10 );
+	m_sizer->Add( m_standardButtons, 0, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( m_sizer );
