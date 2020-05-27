@@ -52,7 +52,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_severities = new PANEL_SETUP_SEVERITIES( this, dummyItem, bds.m_DRCSeverities,
                                                DRCE_FIRST, DRCE_LAST );
 
-    m_textVars = new PANEL_TEXT_VARIABLES( this, &Prj() );
+    m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
     /*
      * WARNING: If you change page names you MUST update calls to ShowBoardSetupDialog().
