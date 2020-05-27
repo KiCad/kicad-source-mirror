@@ -816,8 +816,13 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 case SCH_SHEET_PIN_T:
                 {
                     SCH_HIERLABEL* label = nullptr;
-                    SCH_SHEET*     sheet = (SCH_SHEET*) m_selectionTool->SelectPoint( cursorPos,
-                                                                       EE_COLLECTOR::SheetsOnly );
+                    SCH_SHEET*     sheet = nullptr;
+
+                    if( m_selectionTool->SelectPoint( cursorPos, EE_COLLECTOR::SheetsOnly, &item ) )
+                        sheet = dynamic_cast<SCH_SHEET*>( item );
+
+                    item = nullptr;
+
                     if( !sheet )
                     {
                         m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );

@@ -541,12 +541,12 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFil
             if( aSubtract || ( aExclusiveOr && collector[i]->IsSelected() ) )
             {
                 unselect( collector[i] );
-                anySubtracted = false;
+                anySubtracted = true;
             }
             else
             {
                 select( collector[i] );
-                anySubtracted = true;
+                anyAdded = true;
             }
         }
     }
