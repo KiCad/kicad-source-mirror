@@ -398,6 +398,11 @@ public:
     }
 
     /**
+     * Return the list of system text vars for this footprint.
+     */
+    void GetContextualTextVars( wxArrayString* aVars ) const;
+
+    /**
      * Resolve any references to system tokens supported by the component.
      * @param aDepth a counter to limit recursion and circular references.
      */

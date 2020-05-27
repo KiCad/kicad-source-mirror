@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,35 +21,34 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#ifndef PANEL_SETUP_RULES_H
-#define PANEL_SETUP_RULES_H
-
-#include <panel_setup_rules_base.h>
-
-class DRC;
-class PAGED_DIALOG;
-class PCB_EDIT_FRAME;
-class SCINTILLA_TRICKS;
+#ifndef SCINTILLA_TRICKS_H
+#define SCINTILLA_TRICKS_H
 
 
-class PANEL_SETUP_RULES : public PANEL_SETUP_RULES_BASE
+#include <wx/stc/stc.h>
+
+/**
+ * SCINTILLA_TRICKS
+ * is used to add cut/copy/paste, autocomplete and brace highlighting to a wxStyleTextCtrl 
+ * instance.
+ */
+class SCINTILLA_TRICKS : public wxEvtHandler
 {
-private:
-    PCB_EDIT_FRAME*   m_frame;
-    SCINTILLA_TRICKS* m_scintillaTricks;
-
 public:
-    PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
-    ~PANEL_SETUP_RULES( ) override;
 
-private:
-    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
+    SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces );
 
-    void OnSyntaxHelp( wxHyperlinkEvent& aEvent ) override;
+    void DoAutocomplete( const wxString& aPartial, wxArrayString aTokens );
 
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
+protected:
+    void onCharHook( wxKeyEvent& aEvent );
+    void onScintillaUpdateUI( wxStyledTextEvent& aEvent );
+
+protected:
+    wxStyledTextCtrl* m_te;
+    wxString          m_braces;
+
+    int               m_lastCaretPos;
 };
 
-#endif //PANEL_SETUP_RULES_H
+#endif  // SCINTILLA_TRICKS_H

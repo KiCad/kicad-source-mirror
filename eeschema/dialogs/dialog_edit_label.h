@@ -32,6 +32,7 @@
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
+class SCINTILLA_TRICKS;
 
 
 class DIALOG_LABEL_EDITOR : public DIALOG_LABEL_EDITOR_BASE
@@ -62,8 +63,9 @@ public:
     }
 
 private:
+    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
+
     void OnEnterKey( wxCommandEvent& aEvent ) override;
-    void OnCharHook( wxKeyEvent& aEvent );
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
 
     bool TransferDataToWindow() override;
@@ -79,6 +81,7 @@ private:
     wxTextEntry*          m_activeTextEntry;
     UNIT_BINDER           m_textSize;
     SCH_NETNAME_VALIDATOR m_netNameValidator;
+    SCINTILLA_TRICKS*     m_scintillaTricks;
 };
 
 

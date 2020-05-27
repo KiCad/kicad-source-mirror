@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 #include <dialog_edit_label.h>
 #include <kicad_string.h>
 #include <tool/actions.h>
+#include <scintilla_tricks.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -51,7 +52,8 @@ const int MAX_TEXTSIZE = INT_MAX;
 DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
     DIALOG_LABEL_EDITOR_BASE( aParent ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
-    m_netNameValidator( true )
+    m_netNameValidator( true ),
+    m_scintillaTricks( nullptr )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
@@ -67,10 +69,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
     m_valueMultiLine->SetEOLMode( wxSTC_EOL_LF );
 
-    // A hack which causes Scintilla to auto-size the text editor canvas
-    // See: https://github.com/jacobslusser/ScintillaNET/issues/216
-    m_valueMultiLine->SetScrollWidth( 1 );
-    m_valueMultiLine->SetScrollWidthTracking( true );
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_valueMultiLine, "()" );
 
     if( m_CurrentText->IsMultilineAllowed() )
     {
@@ -131,9 +130,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     m_sdbSizer1OK->SetDefault();
     Layout();
 
-    // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
-    // so we have to listen to wxEVT_CHAR_HOOK events instead.
-    m_valueMultiLine->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ), nullptr, this );
+    m_valueMultiLine->Bind( wxEVT_STC_CHARADDED, &DIALOG_LABEL_EDITOR::onScintillaCharAdded, this );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient because the
     // various versions have different controls so we want to store sizes for each version.
@@ -147,7 +144,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
 DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
 {
-    m_valueMultiLine->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ), nullptr, this );
+    delete m_scintillaTricks;
 }
 
 
@@ -332,51 +329,61 @@ void DIALOG_LABEL_EDITOR::OnEnterKey( wxCommandEvent& aEvent )
 }
 
 
-/*!
- * wxEVT_CHAR_HOOK event handler for multi-line control
- */
-void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvt )
+void DIALOG_LABEL_EDITOR::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
-    if( aEvt.GetKeyCode() == WXK_TAB )
-    {
-        if( aEvt.ControlDown() )
-        {
-            int flags = 0;
+    wxStyledTextCtrl* te = m_valueMultiLine;
+    wxArrayString     autocompleteTokens;
+    int               pos = te->GetCurrentPos();
+    int               start = te->WordStartPosition( pos, true );
+    wxString          partial;
 
-            if( !aEvt.ShiftDown() )
-                flags |= wxNavigationKeyEvent::IsForward;
+    auto textVarRef =
+            [&]( int pos )
+            {
+                return pos >= 2 && te->GetCharAt( pos-2 ) == '$' && te->GetCharAt( pos-1 ) == '{';
+            };
 
-            NavigateIn( flags );
-        }
-        else
+    // Check for cross-reference
+    if( start > 1 && te->GetCharAt( start-1 ) == ':' )
+    {
+        int refStart = te->WordStartPosition( start-1, true );
+
+        if( textVarRef( refStart ) )
         {
-            m_valueMultiLine->Tab();
+            partial = te->GetRange( start+1, pos );
+
+            wxString           ref = te->GetRange( refStart, start-1 );
+            SCH_SHEET_LIST     sheets = m_Parent->Schematic().GetSheets();
+            SCH_REFERENCE_LIST refs;
+            SCH_COMPONENT*     refComponent = nullptr;
+
+            sheets.GetComponents( refs );
+
+            for( size_t jj = 0; jj < refs.GetCount(); jj++ )
+            {
+                if( refs[ jj ].GetComp()->GetRef( &refs[ jj ].GetSheetPath(), true ) == ref )
+                {
+                    refComponent = refs[ jj ].GetComp();
+                    break;
+                }
+            }
+
+            if( refComponent )
+                refComponent->GetContextualTextVars( &autocompleteTokens );
         }
     }
-    else if( m_valueMultiLine->IsShown() && IsCtrl( 'Z', aEvt ) )
+    else if( textVarRef( start ) )
     {
-        m_valueMultiLine->Undo();
+        partial = te->GetTextRange( start, pos );
+
+        m_CurrentText->GetContextualTextVars( &autocompleteTokens );
+
+        for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
+            autocompleteTokens.push_back( entry.first );
     }
-    else if( m_valueMultiLine->IsShown() && ( IsShiftCtrl( 'Z', aEvt ) || IsCtrl( 'Y', aEvt ) ) )
-    {
-        m_valueMultiLine->Redo();
-    }
-    else if( IsCtrl( 'X', aEvt ) )
-    {
-        m_valueMultiLine->Cut();
-    }
-    else if( IsCtrl( 'C', aEvt ) )
-    {
-        m_valueMultiLine->Copy();
-    }
-    else if( IsCtrl( 'V', aEvt ) )
-    {
-        m_valueMultiLine->Paste();
-    }
-    else
-    {
-        aEvt.Skip();
-    }
+
+    m_scintillaTricks->DoAutocomplete( partial, autocompleteTokens );
+    m_valueMultiLine->SetFocus();
 }
 
 

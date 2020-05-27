@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 class SCH_BASE_FRAME;
 class SCH_FIELD;
 class EDA_TEXT;
+class SCINTILLA_TRICKS;
 
 
 /**
@@ -53,7 +54,7 @@ public:
     DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                            const EDA_TEXT* aTextItem );
 
-    ~DIALOG_EDIT_ONE_FIELD() override {}
+    ~DIALOG_EDIT_ONE_FIELD() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -63,7 +64,6 @@ public:
     const wxString& GetText() const { return m_text; }
 
 protected:
-
     void init();
 
     void updateText( EDA_TEXT* aText );
@@ -101,6 +101,8 @@ protected:
     int         m_verticalJustification;
     int         m_horizontalJustification;
     bool        m_isVisible;
+
+    SCINTILLA_TRICKS* m_scintillaTricks;
 };
 
 
@@ -147,7 +149,12 @@ public:
 
     ~DIALOG_SCH_EDIT_ONE_FIELD() {}
 
+    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
+
     void UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath );
+
+private:
+    const SCH_FIELD* m_field;
 };
 
 #endif    // DIALOG_EDIT_ONE_FIELD_H_

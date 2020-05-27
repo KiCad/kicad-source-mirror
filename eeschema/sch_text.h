@@ -207,6 +207,12 @@ public:
         return wxT( "SCH_TEXT" );
     }
 
+    /**
+     * Returns the set of contextual text variable tokens for this text item.
+     * @param aVars [out]
+     */
+    void GetContextualTextVars( wxArrayString* aVars ) const;
+
     wxString GetShownText( int aDepth = 0 ) const override;
 
     /**

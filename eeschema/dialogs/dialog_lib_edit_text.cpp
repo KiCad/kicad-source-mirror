@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2001 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,7 @@
  */
 
 #include <fctsys.h>
-#include <sch_draw_panel.h>
 #include <lib_edit_frame.h>
-#include <class_libentry.h>
 #include <lib_text.h>
 #include <settings/settings_manager.h>
 #include <dialog_lib_edit_text.h>
@@ -52,7 +50,8 @@ DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* a
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_PowerComponentValues->SetFont( infoFont );
 
-    SetInitialFocus( m_TextValue );
+    SetInitialFocus( m_TextCtrl );
+    m_StyledTextCtrl->Show( false );
 
     m_sdbSizerButtonsOK->SetDefault();
 
@@ -68,7 +67,7 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
         m_posX.SetValue( m_graphicText->GetPosition().x );
         m_posY.SetValue( m_graphicText->GetPosition().y );
         m_textSize.SetValue( m_graphicText->GetTextWidth() );
-        m_TextValue->SetValue( m_graphicText->GetText() );
+        m_TextCtrl->SetValue( m_graphicText->GetText() );
 
         m_italic->SetValue( m_graphicText->IsItalic() );
         m_bold->SetValue( m_graphicText->IsBold() );
@@ -110,10 +109,10 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
 {
     if( m_graphicText )
     {
-        if( m_TextValue->GetValue().IsEmpty() )
+        if( m_TextCtrl->GetValue().IsEmpty() )
             m_graphicText->SetText( wxT( "[null]" ) );
         else
-            m_graphicText->SetText( m_TextValue->GetValue() );
+            m_graphicText->SetText( m_TextCtrl->GetValue() );
 
         m_graphicText->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
         m_graphicText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );

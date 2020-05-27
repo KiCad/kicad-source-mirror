@@ -257,6 +257,14 @@ MODULE& MODULE::operator=( const MODULE& aOther )
 }
 
 
+void MODULE::GetContextualTextVars( wxArrayString* aVars ) const
+{
+    aVars->push_back( wxT( "REFERENCE" ) );
+    aVars->push_back( wxT( "VALUE" ) );
+    aVars->push_back( wxT( "LAYER" ) );
+}
+
+
 bool MODULE::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( token->IsSameAs( wxT( "REFERENCE" ) ) )

@@ -326,6 +326,11 @@ public:
     int GetOrientation();
 
     /**
+     * Return the list of system text vars & fields for this symbol.
+     */
+    void GetContextualTextVars( wxArrayString* aVars ) const;
+
+    /**
      * Resolve any references to system tokens supported by the component.
      * @param aDepth a counter to limit recursion and circular references.
      */

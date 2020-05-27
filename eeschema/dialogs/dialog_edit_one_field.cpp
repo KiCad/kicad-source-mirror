@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,16 +37,18 @@
 #include <template_fieldnames.h>
 #include <class_library.h>
 #include <sch_validators.h>
-
+#include <schematic.h>
 #include <dialog_edit_one_field.h>
 #include <sch_text.h>
+#include <scintilla_tricks.h>
 
 DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                                               const EDA_TEXT* aTextItem ) :
     DIALOG_LIB_EDIT_TEXT_BASE( aParent ),
     m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
     m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
-    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true )
+    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
+    m_scintillaTricks( nullptr )
 {
     wxASSERT( aTextItem );
 
@@ -55,6 +57,8 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
     // The field ID and power status are Initialized in the derived object's ctor.
     m_fieldId = VALUE;
     m_isPower = false;
+
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_StyledTextCtrl, "{}" );
 
     m_text = aTextItem->GetText();
     m_isItalic = aTextItem->IsItalic();
@@ -68,16 +72,32 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
 }
 
 
+DIALOG_EDIT_ONE_FIELD::~DIALOG_EDIT_ONE_FIELD()
+{
+    delete m_scintillaTricks;
+}
+
+
 void DIALOG_EDIT_ONE_FIELD::init()
 {
-    SetInitialFocus( m_TextValue );
     SCH_BASE_FRAME* parent = GetParent();
     bool libedit = parent->IsType( FRAME_SCH_LIB_EDITOR );
-    m_TextValue->SetValidator( SCH_FIELD_VALIDATOR( libedit, m_fieldId, &m_text ) );
+    m_TextCtrl->SetValidator( SCH_FIELD_VALIDATOR( libedit, m_fieldId, &m_text ) );
 
     // Disable options for graphic text editing which are not needed for fields.
     m_CommonConvert->Show( false );
     m_CommonUnit->Show( false );
+
+    if( !libedit && ( m_fieldId == REFERENCE || m_fieldId == VALUE ) )
+    {
+        m_StyledTextCtrl->Show( false );
+        SetInitialFocus( m_TextCtrl );
+    }
+    else
+    {
+        m_TextCtrl->Show( false );
+        SetInitialFocus( m_StyledTextCtrl );
+    }
 
     // Show the footprint selection dialog if this is the footprint field.
     m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT );
@@ -87,15 +107,27 @@ void DIALOG_EDIT_ONE_FIELD::init()
     if( m_fieldId == VALUE && m_isPower )
     {
         m_PowerComponentValues->Show( true );
-        m_TextValue->Enable( false );
+        m_TextCtrl->Enable( false );
     }
     else
     {
         m_PowerComponentValues->Show( false );
-        m_TextValue->Enable( true );
+        m_TextCtrl->Enable( true );
     }
 
     m_sdbSizerButtonsOK->SetDefault();
+
+    GetSizer()->SetSizeHints( this );
+
+    // Adjust the height of the scintilla text editor after the first layout
+    if( m_StyledTextCtrl->IsShown() )
+    {
+        wxSize maxSize = m_StyledTextCtrl->GetSize();
+        maxSize.y = m_xPosCtrl->GetSize().y;
+        m_StyledTextCtrl->SetMaxSize( maxSize );
+        m_StyledTextCtrl->SetUseVerticalScrollBar( false );
+        m_StyledTextCtrl->SetUseHorizontalScrollBar( false );
+    }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -105,13 +137,13 @@ void DIALOG_EDIT_ONE_FIELD::init()
 void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent )
 {
     // pick a footprint using the footprint picker.
-    wxString fpid = m_TextValue->GetValue();
+    wxString fpid = m_TextCtrl->GetValue();
 
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true );
 
     if( frame->ShowModal( &fpid, this ) )
     {
-        m_TextValue->SetValue( fpid );
+        m_TextCtrl->SetValue( fpid );
     }
 
     frame->Destroy();
@@ -127,13 +159,14 @@ void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
     // Note that we can't do this on OSX as it tends to provoke Apple's
     // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
     // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
-    m_TextValue->Update();
+    if( m_fieldId == REFERENCE || m_fieldId == VALUE )
+        m_TextCtrl->Update();
 #endif
 
     if( m_fieldId == REFERENCE )
-        SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextValue ) );
-    else
-        m_TextValue->SetSelection( -1, -1 );
+        SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextCtrl ) );
+    else if( m_fieldId == VALUE )
+        m_TextCtrl->SetSelection( -1, -1 );
 
     event.Skip();
 }
@@ -141,7 +174,10 @@ void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
 
 bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
 {
-    m_TextValue->SetValue( m_text );
+    if( m_TextCtrl->IsShown() )
+        m_TextCtrl->SetValue( m_text );
+    else if( m_StyledTextCtrl->IsShown() )
+        m_StyledTextCtrl->SetValue( m_text );
 
     m_posX.SetValue( m_position.x );
     m_posY.SetValue( m_position.y );
@@ -159,7 +195,10 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
 
 bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
 {
-    m_text = m_TextValue->GetValue();
+    if( m_TextCtrl->IsShown() )
+        m_text = m_TextCtrl->GetValue();
+    else if( m_StyledTextCtrl->IsShown() )
+        m_text = m_StyledTextCtrl->GetValue();
 
     if( m_fieldId == REFERENCE )
     {
@@ -205,9 +244,10 @@ void DIALOG_EDIT_ONE_FIELD::updateText( EDA_TEXT* aText )
 }
 
 
-DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD(
-        SCH_BASE_FRAME* aParent, const wxString& aTitle, const LIB_FIELD* aField )
-        : DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField )
+DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
+                                                      const wxString& aTitle,
+                                                      const LIB_FIELD* aField ) :
+        DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField )
 {
     m_fieldId = aField->GetId();
 
@@ -220,7 +260,8 @@ DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD(
 DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
                                                       const wxString& aTitle,
                                                       const SCH_FIELD* aField ) :
-        DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField )
+        DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField ),
+        m_field( aField )
 {
     m_fieldId = aField->GetId();
     m_isPower = false;
@@ -238,7 +279,75 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
             m_isPower = true;
     }
 
+    m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED, &DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded, this );
+
     init();
+}
+
+
+void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent )
+{
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    wxArrayString   autocompleteTokens;
+    int             pos = m_StyledTextCtrl->GetCurrentPos();
+    int             start = m_StyledTextCtrl->WordStartPosition( pos, true );
+    wxString        partial;
+
+    auto textVarRef =
+            [&]( int pos )
+            {
+                return pos >= 2
+                        && m_StyledTextCtrl->GetCharAt( pos-2 ) == '$'
+                        && m_StyledTextCtrl->GetCharAt( pos-1 ) == '{';
+            };
+
+    // Check for cross-reference
+    if( start > 1 && m_StyledTextCtrl->GetCharAt( start-1 ) == ':' )
+    {
+        int refStart = m_StyledTextCtrl->WordStartPosition( start-1, true );
+
+        if( textVarRef( refStart ) )
+        {
+            partial = m_StyledTextCtrl->GetRange( start, pos );
+
+            wxString           ref = m_StyledTextCtrl->GetRange( refStart, start-1 );
+            SCH_SHEET_LIST     sheets = editFrame->Schematic().GetSheets();
+            SCH_REFERENCE_LIST refs;
+            SCH_COMPONENT*     refComponent = nullptr;
+
+            sheets.GetComponents( refs );
+
+            for( size_t jj = 0; jj < refs.GetCount(); jj++ )
+            {
+                if( refs[ jj ].GetComp()->GetRef( &refs[ jj ].GetSheetPath(), true ) == ref )
+                {
+                    refComponent = refs[ jj ].GetComp();
+                    break;
+                }
+            }
+
+            if( refComponent )
+                refComponent->GetContextualTextVars( &autocompleteTokens );
+        }
+    }
+    else if( textVarRef( start ) )
+    {
+        partial = m_StyledTextCtrl->GetTextRange( start, pos );
+
+        SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( m_field->GetParent() );
+        SCH_SHEET*     sheet = dynamic_cast<SCH_SHEET*>( m_field->GetParent() );
+
+        if( comp )
+            comp->GetContextualTextVars( &autocompleteTokens );
+        else if( sheet )
+            sheet->GetContextualTextVars( &autocompleteTokens );
+
+        for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
+            autocompleteTokens.push_back( entry.first );
+    }
+
+    m_scintillaTricks->DoAutocomplete( partial, autocompleteTokens );
+    m_StyledTextCtrl->SetFocus();
 }
 
 

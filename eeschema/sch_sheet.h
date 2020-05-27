@@ -331,6 +331,11 @@ public:
     int GetScreenCount() const;
 
     /**
+     * Return the list of system text vars & fields for this sheet.
+     */
+    void GetContextualTextVars( wxArrayString* aVars ) const;
+
+    /**
      * Resolve any references to system tokens supported by the sheet.
      * @param aDepth a counter to limit recursion and circular references.
      */

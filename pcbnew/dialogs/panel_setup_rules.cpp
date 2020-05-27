@@ -28,25 +28,14 @@
 #include <drc/drc.h>
 #include <panel_setup_rules.h>
 #include <html_messagebox.h>
+#include <scintilla_tricks.h>
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParent->GetTreebook() ),
         m_frame( aFrame ),
-        m_lastCaretPos( -1 )
+        m_scintillaTricks( nullptr )
 {
-    m_textEditor->SetIndentationGuides( wxSTC_IV_LOOKBOTH );
-
-    wxColour highlight = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
-   	wxColour highlightText = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-
-    if( KIGFX::COLOR4D( highlightText ).GetBrightness() > 0.5 )
-        highlight = highlight.ChangeLightness( 75 );
-    else
-        highlight = highlight.ChangeLightness( 125 );
-
-    m_textEditor->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText );
-    m_textEditor->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight );
-    m_textEditor->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_textEditor, "{}" );
 
     int    size = wxNORMAL_FONT->GetPointSize();
     wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
@@ -55,8 +44,13 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
         m_textEditor->StyleSetFont( i, fixedFont );
 
     m_textEditor->Bind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
-    m_textEditor->Bind( wxEVT_STC_UPDATEUI, &PANEL_SETUP_RULES::onScintillaUpdateUI, this );
 }
+
+
+PANEL_SETUP_RULES::~PANEL_SETUP_RULES( )
+{
+    delete m_scintillaTricks;
+};
 
 
 void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
@@ -145,20 +139,6 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
     }
 
-    auto autocomplete = [this]( const wxString& aPartial, const wxString& aTokenStr )
-                        {
-                            wxArrayString tokens = wxSplit( aTokenStr, ' ' );
-                            bool          match = aPartial.IsEmpty();
-
-                            for( size_t ii = 0; ii < tokens.size() && !match; ++ii )
-                                match = tokens[ii].StartsWith( aPartial );
-
-                            if( match )
-                                m_textEditor->AutoCompShow( aPartial.size(), aTokenStr );
-                        };
-
-    // NB: tokens MUST be in alphabetical order because the Scintilla engine is going
-    // to do a binary search on them
     wxString tokens;
 
     if( context == SEXPR_OPEN )
@@ -171,7 +151,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             tokens = "max min opt";
 
         if( !tokens.IsEmpty() )
-            autocomplete( partial, tokens );
+            m_scintillaTricks->DoAutocomplete( partial, wxSplit( tokens, ' ' ) );
     }
     else if( context == SEXPR_TOKEN )
     {
@@ -181,55 +161,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             tokens = "buried_via graphic hole micro_via pad text track via zone";
 
         if( !tokens.IsEmpty() )
-            autocomplete( partial, tokens );
-    }
-}
-
-
-void PANEL_SETUP_RULES::onScintillaUpdateUI( wxStyledTextEvent& aEvent )
-{
-    auto isBrace = []( int c ) -> bool
-                   {
-                       return c == '(' || c == ')';
-                   };
-
-    // Has the caret changed position?
-    int caretPos = m_textEditor->GetCurrentPos();
-
-    if( m_lastCaretPos != caretPos )
-    {
-        m_lastCaretPos = caretPos;
-        int bracePos1 = -1;
-        int bracePos2 = -1;
-
-        // Is there a brace to the left or right?
-        if( caretPos > 0 && isBrace( m_textEditor->GetCharAt( caretPos-1 ) ) )
-            bracePos1 = ( caretPos - 1 );
-        else if( isBrace( m_textEditor->GetCharAt( caretPos ) ) )
-            bracePos1 = caretPos;
-
-        if( bracePos1 >= 0 )
-        {
-            // Find the matching brace
-            bracePos2 = m_textEditor->BraceMatch( bracePos1 );
-
-            if( bracePos2 == -1 )
-            {
-                m_textEditor->BraceBadLight( bracePos1 );
-                m_textEditor->SetHighlightGuide( 0 );
-            }
-            else
-            {
-                m_textEditor->BraceHighlight( bracePos1, bracePos2 );
-                m_textEditor->SetHighlightGuide( m_textEditor->GetColumn( bracePos1 ) );
-            }
-        }
-        else
-        {
-            // Turn off brace matching
-            m_textEditor->BraceHighlight( -1, -1 );
-            m_textEditor->SetHighlightGuide( 0 );
-        }
+            m_scintillaTricks->DoAutocomplete( partial, wxSplit( tokens, ' ' ) );
     }
 }
 

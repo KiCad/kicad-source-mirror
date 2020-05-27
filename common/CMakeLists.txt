@@ -331,6 +331,7 @@ set( COMMON_SRCS
     render_settings.cpp
     reporter.cpp
     richio.cpp
+    scintilla_tricks.cpp
     search_stack.cpp
     searchhelpfilefullpath.cpp
     status_popup.cpp
