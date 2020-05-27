@@ -257,7 +257,10 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         {
             tmp = m_fieldNameAttr->Clone();
             tmp->SetReadOnly( true );
-            tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+
+            if( rowIsReadOnly )
+                tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+
             return tmp;
         }
         else
