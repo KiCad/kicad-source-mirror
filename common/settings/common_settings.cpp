@@ -249,9 +249,19 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     load_env_vars();
 
+    bool mousewheel_pan = false;
+
+    if( aCfg->Read( "MousewheelPAN", &mousewheel_pan ) && mousewheel_pan )
+    {
+        ( *this )[PointerFromString( "input.horizontal_pan" )] = true;
+
+        ( *this )[PointerFromString( "input.scroll_modifier_pan_h" )] = WXK_SHIFT;
+        ( *this )[PointerFromString( "input.scroll_modifier_pan_v" )] = 0;
+        ( *this )[PointerFromString( "input.scroll_modifier_zoom" )]  = WXK_CONTROL;
+    }
+
     ret &= fromLegacy<bool>( aCfg, "AutoPAN",                   "input.auto_pan" );
     ret &= fromLegacy<bool>( aCfg, "ImmediateActions",          "input.immediate_actions" );
-    ret &= fromLegacy<bool>( aCfg, "MousewheelPAN",             "input.mousewheel_pan" );
     ret &= fromLegacy<bool>( aCfg, "PreferSelectionToDragging", "input.prefer_select_to_drag" );
     ret &= fromLegacy<bool>( aCfg, "MoveWarpsCursor",           "input.warp_mouse_on_move" );
     ret &= fromLegacy<bool>( aCfg, "ZoomNoCenter",              "input.center_on_zoom" );
