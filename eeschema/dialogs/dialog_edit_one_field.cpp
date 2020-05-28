@@ -287,7 +287,7 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 
 void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
-    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( GetParent() );
     wxArrayString   autocompleteTokens;
     int             pos = m_StyledTextCtrl->GetCurrentPos();
     int             start = m_StyledTextCtrl->WordStartPosition( pos, true );
