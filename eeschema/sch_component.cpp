@@ -785,7 +785,10 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 void SCH_COMPONENT::GetContextualTextVars( wxArrayString* aVars ) const
 {
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
-        aVars->push_back( m_Fields[i].GetCanonicalName() );
+        aVars->push_back( m_Fields[i].GetCanonicalName().Upper() );
+
+    for( size_t i = MANDATORY_FIELDS; i < m_Fields.size(); ++i )
+        aVars->push_back( m_Fields[i].GetName() );
 
     aVars->push_back( wxT( "FOOTPRINT_LIBRARY" ) );
     aVars->push_back( wxT( "FOOTPRINT_NAME" ) );
