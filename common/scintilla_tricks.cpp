@@ -116,10 +116,6 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     {
         m_te->Paste();
     }
-    else if( aEvent.GetUnicodeKey() > 60 )
-    {
-        aEvent.Skip();  // This crashes the Scintilla engine....
-    }
     else
     {
         aEvent.Skip();

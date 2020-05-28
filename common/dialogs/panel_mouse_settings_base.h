@@ -18,8 +18,8 @@
 #include <wx/settings.h>
 #include <wx/stattext.h>
 #include <wx/slider.h>
-#include <wx/gbsizer.h>
 #include <wx/sizer.h>
+#include <wx/gbsizer.h>
 #include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/radiobut.h>
@@ -40,9 +40,9 @@ class PANEL_MOUSE_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_checkZoomAcceleration;
 		wxStaticText* m_staticText1;
 		wxSlider* m_zoomSpeed;
+		wxCheckBox* m_checkAutoZoomSpeed;
 		wxStaticText* m_staticText22;
 		wxSlider* m_autoPanSpeed;
-		wxCheckBox* m_checkAutoZoomSpeed;
 		wxStaticText* m_staticText3;
 		wxChoice* m_choiceMiddleButtonDrag;
 		wxStaticText* m_staticText31;

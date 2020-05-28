@@ -78,7 +78,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bLeftSizer->Add( gbSizer1, 0, wxEXPAND|wxALL, 10 );
 
 	wxStaticBoxSizer* sizerHelperApps;
-	sizerHelperApps = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Helper Applications") ), wxVERTICAL );
+	sizerHelperApps = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Helper Applications") ), wxHORIZONTAL );
 
 	wxGridBagSizer* gridHelperApps;
 	gridHelperApps = new wxGridBagSizer( 3, 3 );
@@ -94,33 +94,33 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_textEditorPath = new wxTextCtrl( sizerHelperApps->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textEditorPath->SetMinSize( wxSize( 280,-1 ) );
 
-	gridHelperApps->Add( m_textEditorPath, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	gridHelperApps->Add( m_textEditorPath, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxEXPAND, 8 );
 
 	m_textEditorBtn = new wxBitmapButton( sizerHelperApps->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_textEditorBtn->SetMinSize( wxSize( 29,29 ) );
 
-	gridHelperApps->Add( m_textEditorBtn, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gridHelperApps->Add( m_textEditorBtn, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_defaultPDFViewer = new wxRadioButton( sizerHelperApps->GetStaticBox(), wxID_ANY, _("System default PDF viewer"), wxDefaultPosition, wxDefaultSize, 0 );
-	gridHelperApps->Add( m_defaultPDFViewer, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), 0, 4 );
+	gridHelperApps->Add( m_defaultPDFViewer, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), 0, 4 );
 
 	m_otherPDFViewer = new wxRadioButton( sizerHelperApps->GetStaticBox(), wxID_ANY, _("Other:"), wxDefaultPosition, wxDefaultSize, 0 );
-	gridHelperApps->Add( m_otherPDFViewer, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 4 );
+	gridHelperApps->Add( m_otherPDFViewer, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 4 );
 
 	m_PDFViewerPath = new wxTextCtrl( sizerHelperApps->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_PDFViewerPath->SetMinSize( wxSize( 280,-1 ) );
 
-	gridHelperApps->Add( m_PDFViewerPath, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	gridHelperApps->Add( m_PDFViewerPath, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxEXPAND, 8 );
 
 	m_pdfViewerBtn = new wxBitmapButton( sizerHelperApps->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_pdfViewerBtn->SetMinSize( wxSize( 29,29 ) );
 
-	gridHelperApps->Add( m_pdfViewerBtn, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gridHelperApps->Add( m_pdfViewerBtn, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	gridHelperApps->AddGrowableCol( 1 );
 
-	sizerHelperApps->Add( gridHelperApps, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	sizerHelperApps->Add( gridHelperApps, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 
 
 	bLeftSizer->Add( sizerHelperApps, 0, wxEXPAND|wxALL, 5 );
@@ -129,16 +129,16 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	sbSizerIconsOpts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Interface") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer11;
-	fgSizer11 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer11 = new wxFlexGridSizer( 0, 3, 3, 0 );
 	fgSizer11->AddGrowableCol( 1 );
 	fgSizer11->SetFlexibleDirection( wxBOTH );
 	fgSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTexticonscale = new wxStaticText( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Icon scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTexticonscale->Wrap( -1 );
-	fgSizer11->Add( m_staticTexticonscale, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 4 );
+	fgSizer11->Add( m_staticTexticonscale, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	m_iconScaleSlider = new STEPPED_SLIDER( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, 100, 50, 275, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
+	m_iconScaleSlider = new STEPPED_SLIDER( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, 100, 50, 275, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_VALUE_LABEL );
 	m_iconScaleSlider->SetMinSize( wxSize( 140,-1 ) );
 
 	fgSizer11->Add( m_iconScaleSlider, 1, wxBOTTOM|wxEXPAND, 4 );
@@ -158,13 +158,16 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	fgSizer11->Add( m_canvasScaleAuto, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 25 );
 
 
-	fgSizer11->Add( 0, 0, 0, wxEXPAND, 5 );
+	sbSizerIconsOpts->Add( fgSizer11, 0, wxEXPAND|wxRIGHT, 5 );
 
 
-	sbSizerIconsOpts->Add( fgSizer11, 1, wxEXPAND|wxRIGHT, 5 );
+	sbSizerIconsOpts->Add( 0, 15, 0, wxEXPAND, 5 );
 
 	m_checkBoxIconsInMenus = new wxCheckBox( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Show icons in menus"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerIconsOpts->Add( m_checkBoxIconsInMenus, 0, 0, 4 );
+
+
+	sbSizerIconsOpts->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	bLeftSizer->Add( sbSizerIconsOpts, 1, wxEXPAND|wxALL, 5 );
