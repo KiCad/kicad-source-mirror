@@ -38,9 +38,11 @@ class PANEL_MOUSE_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_checkZoomCenter;
 		wxCheckBox* m_checkAutoPan;
 		wxCheckBox* m_checkZoomAcceleration;
+		wxBoxSizer* m_zoomSizer;
 		wxStaticText* m_staticText1;
 		wxSlider* m_zoomSpeed;
 		wxCheckBox* m_checkAutoZoomSpeed;
+		wxBoxSizer* m_panSizer;
 		wxStaticText* m_staticText22;
 		wxSlider* m_autoPanSpeed;
 		wxStaticText* m_staticText3;

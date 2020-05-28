@@ -40,44 +40,42 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	gbSizer1->Add( m_checkZoomAcceleration, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
+	m_zoomSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticText1 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Zoom speed:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	bSizer2->Add( m_staticText1, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
+	m_zoomSizer->Add( m_staticText1, 0, wxRIGHT|wxLEFT, 8 );
 
 	m_zoomSpeed = new wxSlider( sbSizer1->GetStaticBox(), wxID_ANY, 5, 1, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	m_zoomSpeed->Enable( false );
 	m_zoomSpeed->SetToolTip( _("How far to zoom in for each rotation of the mouse wheel") );
 	m_zoomSpeed->SetMinSize( wxSize( 150,-1 ) );
 
-	bSizer2->Add( m_zoomSpeed, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 4 );
+	m_zoomSizer->Add( m_zoomSpeed, 0, wxTOP|wxRIGHT|wxLEFT, 0 );
 
 	m_checkAutoZoomSpeed = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkAutoZoomSpeed->SetValue(true);
 	m_checkAutoZoomSpeed->SetToolTip( _("Pick the zoom speed automatically") );
 
-	bSizer2->Add( m_checkAutoZoomSpeed, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
+	m_zoomSizer->Add( m_checkAutoZoomSpeed, 0, wxRIGHT|wxLEFT, 10 );
 
 
-	gbSizer1->Add( bSizer2, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 5 );
+	gbSizer1->Add( m_zoomSizer, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 5 );
 
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	m_panSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticText22 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Auto pan speed:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText22->Wrap( -1 );
-	bSizer3->Add( m_staticText22, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
+	m_panSizer->Add( m_staticText22, 0, wxRIGHT|wxLEFT, 8 );
 
 	m_autoPanSpeed = new wxSlider( sbSizer1->GetStaticBox(), wxID_ANY, 5, 1, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	m_autoPanSpeed->SetToolTip( _("How fast to pan when moving an object off the edge of the screen") );
 	m_autoPanSpeed->SetMinSize( wxSize( 150,-1 ) );
 
-	bSizer3->Add( m_autoPanSpeed, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 4 );
+	m_panSizer->Add( m_autoPanSpeed, 0, wxTOP|wxRIGHT|wxLEFT, 0 );
 
 
-	gbSizer1->Add( bSizer3, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 5 );
+	gbSizer1->Add( m_panSizer, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 5 );
 
 
 	gbSizer1->AddGrowableCol( 1 );

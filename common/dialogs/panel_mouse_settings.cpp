@@ -33,6 +33,20 @@ PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aPar
         m_dialog( aDialog ),
         m_currentScrollMod( {} )
 {
+#ifdef __WXOSX_MAC__
+    for( wxSizerItem* child : m_zoomSizer->GetChildren() )
+    {
+        if( child->GetWindow() == m_zoomSpeed )
+            child->SetBorder( 8 );
+    }
+
+    for( wxSizerItem* child : m_panSizer->GetChildren() )
+    {
+        if( child->GetWindow() == m_autoPanSpeed )
+            child->SetBorder( 8 );
+    }
+#endif
+
     m_checkAutoZoomSpeed->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,
             [&]( wxCommandEvent& aEvt )
             {
