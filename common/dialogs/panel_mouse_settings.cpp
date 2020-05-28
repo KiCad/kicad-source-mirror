@@ -37,13 +37,13 @@ PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aPar
     for( wxSizerItem* child : m_zoomSizer->GetChildren() )
     {
         if( child->GetWindow() == m_zoomSpeed )
-            child->SetBorder( 8 );
+            child->SetBorder( 14 );
     }
 
     for( wxSizerItem* child : m_panSizer->GetChildren() )
     {
         if( child->GetWindow() == m_autoPanSpeed )
-            child->SetBorder( 8 );
+            child->SetBorder( 14 );
     }
 #endif
 
