@@ -38,7 +38,8 @@
 #include <wx_html_report_panel.h>
 
 
-void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
+void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef,
+                                           RENDER_SETTINGS*  aRenderSettings )
 {
     SCH_EDIT_FRAME* schframe  = m_parent;
     SCH_SCREEN*     screen    = schframe->GetScreen();
@@ -75,8 +76,8 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
             wxString ext = DXF_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
-            if( PlotOneSheetDXF( plotFileName.GetFullPath(), screen, plot_offset, 1.0,
-                                 aPlotFrameRef ) )
+            if( PlotOneSheetDXF( plotFileName.GetFullPath(), screen, aRenderSettings,
+                                 plot_offset, 1.0, aPlotFrameRef ) )
             {
                 msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ACTION );
@@ -104,20 +105,20 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
 }
 
 
-bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString& aFileName,
-                                             SCH_SCREEN*     aScreen,
-                                             wxPoint         aPlotOffset,
-                                             double          aScale,
-                                             bool            aPlotFrameRef )
+bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&  aFileName,
+                                             SCH_SCREEN*      aScreen,
+                                             RENDER_SETTINGS* aRenderSettings,
+                                             wxPoint          aPlotOffset,
+                                             double           aScale,
+                                             bool             aPlotFrameRef )
 {
-    KIGFX::SCH_RENDER_SETTINGS renderSettings;
-    renderSettings.LoadColors( getColorSettings() );
-    renderSettings.SetDefaultPenWidth( 0 );
+    aRenderSettings->LoadColors( getColorSettings() );
+    aRenderSettings->SetDefaultPenWidth( 0 );
 
     const PAGE_INFO& pageInfo = aScreen->GetPageSettings();
     DXF_PLOTTER*     plotter = new DXF_PLOTTER();
 
-    plotter->SetRenderSettings( &renderSettings );
+    plotter->SetRenderSettings( aRenderSettings );
     plotter->SetPageSettings( pageInfo );
     plotter->SetColorMode( getModeColor() );
     // Currently, plot units are in decimil

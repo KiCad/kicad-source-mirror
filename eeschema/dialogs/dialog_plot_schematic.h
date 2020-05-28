@@ -106,8 +106,9 @@ private:
     void    restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOldsheetpath );
 
     // DXF
-    void    CreateDXFFile( bool aPlotAll, bool aPlotFrameRef );
+    void    CreateDXFFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS*  aRenderSettings );
     bool    PlotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScreen,
+                             RENDER_SETTINGS*  aRenderSettings,
                              wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // HPGL
@@ -121,10 +122,10 @@ private:
         m_plotOriginOpt->SetSelection( aCenter ? 1 : 0 );
     }
 
-    void    createHPGLFile( bool aPlotAll, bool aPlotFrameRef );
+    void    createHPGLFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aRenderSettings );
     void    SetHPGLPenWidth();
     bool    Plot_1_Page_HPGL( const wxString& aFileName, SCH_SCREEN* aScreen,
-                              const PAGE_INFO& aPageInfo,
+                              const PAGE_INFO& aPageInfo, RENDER_SETTINGS* aRenderSettings,
                               wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // PS

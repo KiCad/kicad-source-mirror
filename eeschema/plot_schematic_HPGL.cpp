@@ -85,7 +85,8 @@ void DIALOG_PLOT_SCHEMATIC::SetHPGLPenWidth()
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
+void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef,
+                                            RENDER_SETTINGS* aRenderSettings )
 {
     SCH_SCREEN*     screen = m_parent->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
@@ -147,8 +148,8 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
 
             LOCALE_IO toggle;
 
-            if( Plot_1_Page_HPGL( plotFileName.GetFullPath(), screen, plotPage, plotOffset,
-                                  plot_scale, aPlotFrameRef ) )
+            if( Plot_1_Page_HPGL( plotFileName.GetFullPath(), screen, plotPage, aRenderSettings,
+                                  plotOffset, plot_scale, aPlotFrameRef ) )
             {
                 msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ACTION );
@@ -176,6 +177,7 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
 bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
                                               SCH_SCREEN*       aScreen,
                                               const PAGE_INFO&  aPageInfo,
+                                              RENDER_SETTINGS*  aRenderSettings,
                                               wxPoint           aPlot0ffset,
                                               double            aScale,
                                               bool              aPlotFrameRef )
@@ -184,6 +186,7 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
     // Currently, plot units are in decimil
 
     plotter->SetPageSettings( aPageInfo );
+    plotter->SetRenderSettings( aRenderSettings );
     plotter->RenderSettings()->LoadColors( getColorSettings() );
     plotter->SetColorMode( getModeColor() );
     plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );

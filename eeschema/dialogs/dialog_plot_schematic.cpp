@@ -321,7 +321,7 @@ void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
         createPSFile( aPlotAll, getPlotFrameRef(), &renderSettings );
         break;
     case PLOT_FORMAT::DXF:
-        CreateDXFFile( aPlotAll, getPlotFrameRef() );
+        CreateDXFFile( aPlotAll, getPlotFrameRef(), &renderSettings );
         break;
     case PLOT_FORMAT::PDF:
         createPDFFile( aPlotAll, getPlotFrameRef(), &renderSettings );
@@ -330,7 +330,7 @@ void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
         createSVGFile( aPlotAll, getPlotFrameRef(), &renderSettings );
         break;
     case PLOT_FORMAT::HPGL:
-        createHPGLFile( aPlotAll, getPlotFrameRef() );
+        createHPGLFile( aPlotAll, getPlotFrameRef(), &renderSettings );
         break;
     }
 }
