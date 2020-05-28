@@ -26,6 +26,7 @@
 #ifndef SELECTION_H
 #define SELECTION_H
 
+#include <algorithm>
 #include <core/optional.h>
 #include <deque>
 #include <eda_rect.h>
