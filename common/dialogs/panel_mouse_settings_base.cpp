@@ -18,8 +18,8 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
 
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 0, 20 );
-	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1->SetFlexibleDirection( wxHORIZONTAL );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_checkZoomCenter = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -27,34 +27,38 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	gbSizer1->Add( m_checkZoomCenter, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+
+	gbSizer1->Add( 30, 0, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+
 	m_checkAutoPan = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Automatically pan while moving object"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkAutoPan->SetToolTip( _("When drawing a track or moving an item, pan when approaching the edge of the display.") );
 
-	gbSizer1->Add( m_checkAutoPan, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_checkAutoPan, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkZoomAcceleration = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Use zoom acceleration"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkZoomAcceleration->SetToolTip( _("Zoom faster when scrolling quickly") );
 
-	gbSizer1->Add( m_checkZoomAcceleration, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
+	gbSizer1->Add( m_checkZoomAcceleration, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticText1 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Zoom speed:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	bSizer2->Add( m_staticText1, 0, wxBOTTOM|wxRIGHT|wxLEFT, 7 );
+	bSizer2->Add( m_staticText1, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
 
 	m_zoomSpeed = new wxSlider( sbSizer1->GetStaticBox(), wxID_ANY, 5, 1, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	m_zoomSpeed->Enable( false );
 	m_zoomSpeed->SetToolTip( _("How far to zoom in for each rotation of the mouse wheel") );
+	m_zoomSpeed->SetMinSize( wxSize( 150,-1 ) );
 
-	bSizer2->Add( m_zoomSpeed, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer2->Add( m_zoomSpeed, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 4 );
 
 	m_checkAutoZoomSpeed = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkAutoZoomSpeed->SetValue(true);
 	m_checkAutoZoomSpeed->SetToolTip( _("Pick the zoom speed automatically") );
 
-	bSizer2->Add( m_checkAutoZoomSpeed, 0, wxBOTTOM|wxRIGHT|wxLEFT, 7 );
+	bSizer2->Add( m_checkAutoZoomSpeed, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
 
 
 	gbSizer1->Add( bSizer2, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 5 );
@@ -64,18 +68,21 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_staticText22 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Auto pan speed:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText22->Wrap( -1 );
-	bSizer3->Add( m_staticText22, 0, wxBOTTOM|wxRIGHT|wxLEFT, 7 );
+	bSizer3->Add( m_staticText22, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
 
 	m_autoPanSpeed = new wxSlider( sbSizer1->GetStaticBox(), wxID_ANY, 5, 1, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	m_autoPanSpeed->SetToolTip( _("How fast to pan when moving an object off the edge of the screen") );
+	m_autoPanSpeed->SetMinSize( wxSize( 150,-1 ) );
 
-	bSizer3->Add( m_autoPanSpeed, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	gbSizer1->Add( bSizer3, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 5 );
+	bSizer3->Add( m_autoPanSpeed, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 4 );
 
 
-	sbSizer1->Add( gbSizer1, 1, wxEXPAND, 5 );
+	gbSizer1->Add( bSizer3, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 5 );
+
+
+	gbSizer1->AddGrowableCol( 1 );
+
+	sbSizer1->Add( gbSizer1, 1, wxEXPAND|wxRIGHT, 10 );
 
 
 	bSizer1->Add( sbSizer1, 0, wxALL|wxEXPAND, 10 );

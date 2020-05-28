@@ -67,15 +67,15 @@
                         <property name="parent">1</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
+                            <property name="border">10</property>
+                            <property name="flag">wxEXPAND|wxRIGHT</property>
                             <property name="proportion">1</property>
                             <object class="wxGridBagSizer" expanded="1">
                                 <property name="empty_cell_size"></property>
-                                <property name="flexible_direction">wxBOTH</property>
-                                <property name="growablecols"></property>
+                                <property name="flexible_direction">wxHORIZONTAL</property>
+                                <property name="growablecols">1</property>
                                 <property name="growablerows"></property>
-                                <property name="hgap">20</property>
+                                <property name="hgap">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">gbSizer1</property>
                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
@@ -148,10 +148,23 @@
                                         <property name="window_style"></property>
                                     </object>
                                 </object>
-                                <object class="gbsizeritem" expanded="0">
+                                <object class="gbsizeritem" expanded="1">
                                     <property name="border">5</property>
                                     <property name="colspan">1</property>
                                     <property name="column">1</property>
+                                    <property name="flag">wxEXPAND</property>
+                                    <property name="row">0</property>
+                                    <property name="rowspan">1</property>
+                                    <object class="spacer" expanded="1">
+                                        <property name="height">0</property>
+                                        <property name="permission">protected</property>
+                                        <property name="width">30</property>
+                                    </object>
+                                </object>
+                                <object class="gbsizeritem" expanded="0">
+                                    <property name="border">5</property>
+                                    <property name="colspan">1</property>
+                                    <property name="column">2</property>
                                     <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                     <property name="row">0</property>
                                     <property name="rowspan">1</property>
@@ -219,7 +232,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">3</property>
                                     <property name="column">0</property>
-                                    <property name="flag">wxALL</property>
+                                    <property name="flag">wxRIGHT|wxLEFT</property>
                                     <property name="row">1</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxCheckBox" expanded="0">
@@ -295,7 +308,7 @@
                                         <property name="orient">wxHORIZONTAL</property>
                                         <property name="permission">none</property>
                                         <object class="sizeritem" expanded="1">
-                                            <property name="border">7</property>
+                                            <property name="border">6</property>
                                             <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticText" expanded="0">
@@ -356,7 +369,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="1">
-                                            <property name="border">5</property>
+                                            <property name="border">4</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxSlider" expanded="0">
@@ -394,7 +407,7 @@
                                                 <property name="minValue">1</property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
-                                                <property name="minimum_size"></property>
+                                                <property name="minimum_size">150,-1</property>
                                                 <property name="moveable">1</property>
                                                 <property name="name">m_zoomSpeed</property>
                                                 <property name="pane_border">1</property>
@@ -421,7 +434,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="1">
-                                            <property name="border">7</property>
+                                            <property name="border">6</property>
                                             <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="0">
@@ -489,7 +502,7 @@
                                 <object class="gbsizeritem" expanded="1">
                                     <property name="border">5</property>
                                     <property name="colspan">1</property>
-                                    <property name="column">1</property>
+                                    <property name="column">2</property>
                                     <property name="flag">wxEXPAND|wxTOP</property>
                                     <property name="row">2</property>
                                     <property name="rowspan">1</property>
@@ -499,7 +512,7 @@
                                         <property name="orient">wxHORIZONTAL</property>
                                         <property name="permission">none</property>
                                         <object class="sizeritem" expanded="1">
-                                            <property name="border">7</property>
+                                            <property name="border">6</property>
                                             <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticText" expanded="1">
@@ -560,7 +573,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="1">
-                                            <property name="border">5</property>
+                                            <property name="border">4</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxSlider" expanded="1">
@@ -598,7 +611,7 @@
                                                 <property name="minValue">1</property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
-                                                <property name="minimum_size"></property>
+                                                <property name="minimum_size">150,-1</property>
                                                 <property name="moveable">1</property>
                                                 <property name="name">m_autoPanSpeed</property>
                                                 <property name="pane_border">1</property>
