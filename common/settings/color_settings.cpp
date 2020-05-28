@@ -72,8 +72,8 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "schematic.component_body",    LAYER_DEVICE_BACKGROUND,    COLOR4D( LIGHTYELLOW ) );
     CLR( "schematic.component_outline", LAYER_DEVICE,               COLOR4D( RED ) );
     CLR( "schematic.cursor",            LAYER_SCHEMATIC_CURSOR,     COLOR4D( BLACK ) );
-    CLR( "schematic.erc_error",         LAYER_ERC_ERR,              COLOR4D( RED ).WithAlpha( 0.8 ) );
-    CLR( "schematic.erc_warning",       LAYER_ERC_WARN,             COLOR4D( GREEN ).WithAlpha( 0.8 ) );
+    CLR( "schematic.erc_error",         LAYER_ERC_ERR,              COLOR4D( PURERED ).WithAlpha( 0.8 ) );
+    CLR( "schematic.erc_warning",       LAYER_ERC_WARN,             COLOR4D( PUREGREEN ).WithAlpha( 0.8 ) );
     CLR( "schematic.fields",            LAYER_FIELDS,               COLOR4D( MAGENTA ) );
     CLR( "schematic.grid",              LAYER_SCHEMATIC_GRID,       COLOR4D( DARKGRAY ) );
     CLR( "schematic.grid_axes",         LAYER_SCHEMATIC_GRID_AXES,  COLOR4D( BLUE ) );

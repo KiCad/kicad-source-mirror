@@ -29,7 +29,6 @@
  */
 
 #include <fctsys.h>
-#include <sch_draw_panel.h>
 #include <kicad_string.h>
 #include <sch_edit_frame.h>
 #include <netlist_object.h>
@@ -40,6 +39,8 @@
 #include <sch_reference_list.h>
 #include <schematic.h>
 #include <wx/ffile.h>
+#include <ws_draw_item.h>
+#include <ws_proxy_view_item.h>
 
 
 /* ERC tests :
@@ -171,7 +172,7 @@ int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker )
 
         for( size_t i = 0; i < list.size(); i++ )
         {
-            SCH_SHEET* item = list[i];
+            SCH_SHEET* sheet = list[i];
 
             for( size_t j = i + 1; j < list.size(); j++ )
             {
@@ -180,14 +181,14 @@ int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker )
                 // We have found a second sheet: compare names
                 // we are using case insensitive comparison to avoid mistakes between
                 // similar names like Mysheet and mysheet
-                if( item->GetName().CmpNoCase( test_item->GetName() ) == 0 )
+                if( sheet->GetName().CmpNoCase( test_item->GetName() ) == 0 )
                 {
                     if( aCreateMarker )
                     {
                         ERC_ITEM* ercItem = new ERC_ITEM( ERCE_DUPLICATE_SHEET_NAME );
-                        ercItem->SetItems( item, test_item );
+                        ercItem->SetItems( sheet, test_item );
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem, sheet->GetPosition() );
                         screen->Append( marker );
                     }
 
@@ -201,8 +202,16 @@ int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker )
 }
 
 
-void TestTextVars( SCHEMATIC* aSchematic )
+void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
 {
+    WS_DRAW_ITEM_LIST wsItems;
+
+    if( aWorksheet )
+    {
+        wsItems.SetMilsToIUfactor( IU_PER_MILS );
+        wsItems.BuildWorkSheetGraphicList( aWorksheet->GetPageInfo(), aWorksheet->GetTitleBlock() );
+    }
+
     SCH_SCREENS screens( aSchematic->Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
@@ -263,6 +272,21 @@ void TestTextVars( SCHEMATIC* aSchematic )
                 {
                     ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( text );
+
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
+                    screen->Append( marker );
+                }
+            }
+        }
+
+        for( WS_DRAW_ITEM_BASE* item = wsItems.GetFirst(); item; item = wsItems.GetNext() )
+        {
+            if( WS_DRAW_ITEM_TEXT* text = dynamic_cast<WS_DRAW_ITEM_TEXT*>( item ) )
+            {
+                if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                {
+                    ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
+                    ercItem->SetErrorMessage( _( "Unresolved text variable in worksheet." ) );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
                     screen->Append( marker );

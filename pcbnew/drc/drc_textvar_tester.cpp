@@ -26,12 +26,15 @@
 
 #include <class_module.h>
 #include <class_pcb_text.h>
+#include <ws_draw_item.h>
+#include <ws_proxy_view_item.h>
 
-
-DRC_TEXTVAR_TESTER::DRC_TEXTVAR_TESTER( MARKER_HANDLER aMarkerHandler ) :
+DRC_TEXTVAR_TESTER::DRC_TEXTVAR_TESTER( MARKER_HANDLER aMarkerHandler,
+                                        KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet ) :
         DRC_TEST_PROVIDER( std::move( aMarkerHandler ) ),
         m_units( EDA_UNITS::MILLIMETRES ),
-        m_board( nullptr )
+        m_board( nullptr ),
+        m_worksheet( aWorksheet )
 {
 }
 
@@ -80,6 +83,32 @@ bool DRC_TEXTVAR_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
             }
         }
     }
+
+    WS_DRAW_ITEM_LIST wsItems;
+
+    if( m_worksheet )
+    {
+        wsItems.SetMilsToIUfactor( IU_PER_MILS );
+        wsItems.BuildWorkSheetGraphicList( m_worksheet->GetPageInfo(),
+                                           m_worksheet->GetTitleBlock() );
+
+        for( WS_DRAW_ITEM_BASE* item = wsItems.GetFirst(); item; item = wsItems.GetNext() )
+        {
+            if( WS_DRAW_ITEM_TEXT* text = dynamic_cast<WS_DRAW_ITEM_TEXT*>( item ) )
+            {
+                if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                {
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_UNRESOLVED_VARIABLE );
+                    drcItem->SetErrorMessage( _( "Unresolved text variable in worksheet." ) );
+
+                    HandleMarker( new MARKER_PCB( drcItem, text->GetPosition() ) );
+                    success = false;
+                }
+            }
+        }
+    }
+
+    // JEY TODO: Test text vars in worksheet...
 
     return success;
 }

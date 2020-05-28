@@ -34,15 +34,16 @@ class BOARD;
 class DRC_TEXTVAR_TESTER : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEXTVAR_TESTER( MARKER_HANDLER aMarkerHandler );
+    DRC_TEXTVAR_TESTER( MARKER_HANDLER aMarkerHandler, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
 
     virtual ~DRC_TEXTVAR_TESTER() {};
 
     bool RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) override;
 
 private:
-    EDA_UNITS                 m_units;
-    BOARD*                    m_board;
+    EDA_UNITS                  m_units;
+    BOARD*                     m_board;
+    KIGFX::WS_PROXY_VIEW_ITEM* m_worksheet;
 };
 
 #endif // DRC_TEXTVAR_TESTER__H

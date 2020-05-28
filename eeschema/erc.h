@@ -36,6 +36,11 @@ class NETLIST_OBJECT_LIST;
 class SCH_SHEET_LIST;
 class SCHEMATIC;
 
+namespace KIGFX
+{
+class WS_PROXY_VIEW_ITEM;
+}
+
 /* For ERC markers: error types (used in diags, and to set the color):
 */
 enum errortype
@@ -122,7 +127,7 @@ int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker );
  * Function TestTextVars()
  * Checks for any unresolved text variable references.
  */
-void TestTextVars( SCHEMATIC* aSchematic );
+void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
 
 /**
  * Checks that there are not conflicting bus alias definitions in the schematic

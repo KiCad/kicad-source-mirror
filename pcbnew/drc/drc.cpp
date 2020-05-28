@@ -633,7 +633,8 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         DRC_TEXTVAR_TESTER tester( [&]( MARKER_PCB* aMarker )
                                    {
                                        addMarkerToPcb( commit, aMarker );
-                                   } );
+                                   },
+                                   m_editFrame->GetCanvas()->GetWorksheet() );
 
         tester.RunDRC( userUnits(), *m_pcb );
     }

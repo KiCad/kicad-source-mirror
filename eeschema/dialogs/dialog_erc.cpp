@@ -323,7 +323,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     }
 
     if( settings->IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
-        TestTextVars( sch );
+        TestTextVars( sch, m_parent->GetCanvas()->GetView()->GetWorksheet() );
 
     // Display diags:
     m_markerTreeModel->SetProvider( m_markerProvider );

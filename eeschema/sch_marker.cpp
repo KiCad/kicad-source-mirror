@@ -37,7 +37,7 @@
 #include <erc_item.h>
 
 /// Factor to convert the maker unit shape to internal units:
-#define SCALING_FACTOR  Millimeter2iu( 0.1 )
+#define SCALING_FACTOR  Millimeter2iu( 0.15 )
 
 
 SCH_MARKER::SCH_MARKER( ERC_ITEM* aItem, const wxPoint& aPos ) :

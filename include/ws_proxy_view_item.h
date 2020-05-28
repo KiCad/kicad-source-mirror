@@ -80,6 +80,9 @@ public:
         m_colorLayer = aLayerId;
     }
 
+    const PAGE_INFO& GetPageInfo() { return *m_pageInfo; }
+    const TITLE_BLOCK& GetTitleBlock() { return *m_titleBlock; }
+
     /// @copydoc VIEW_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
 
