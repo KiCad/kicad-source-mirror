@@ -1433,8 +1433,6 @@ void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 
 LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 {
-    UpdatePins();
-
     if( m_part )
     {
         // Calculate the position relative to the component.
