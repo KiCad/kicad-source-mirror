@@ -238,6 +238,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc.cpp
     drc/drc_clearance_test_functions.cpp
     drc/drc_rule_parser.cpp
+    drc/footprint_tester.cpp
     )
 
 set( PCBNEW_NETLIST_SRCS

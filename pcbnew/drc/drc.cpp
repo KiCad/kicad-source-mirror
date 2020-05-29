@@ -58,8 +58,8 @@
 #include <drc/drc_keepout_tester.h>
 #include <drc/drc_netclass_tester.h>
 #include <drc/drc_textvar_tester.h>
+#include <drc/footprint_tester.h>
 #include <dialogs/panel_setup_rules.h>
-#include <confirm.h>
 
 DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -71,7 +71,7 @@ DRC::DRC() :
 {
     // establish initial values for everything:
     m_doUnconnectedTest = true;         // enable unconnected tests
-    m_doZonesTest = false;              // disable zone to items clearance tests
+    m_testTracksAgainstZones = false;   // disable zone to items clearance tests
     m_doKeepoutTest = true;             // enable keepout areas to items clearance tests
     m_refillZones = false;              // Only fill zones if requested by user.
     m_reportAllTrackErrors = false;
@@ -176,180 +176,6 @@ void DRC::DestroyDRCDialog( int aReason )
         m_drcDialog->Destroy();
         m_drcDialog = nullptr;
     }
-}
-
-
-int DRC::testZoneToZoneOutlines( BOARD_COMMIT& aCommit )
-{
-    BOARD*   board = m_editFrame->GetBoard();
-    int      nerrors = 0;
-
-    std::vector<SHAPE_POLY_SET> smoothed_polys;
-    smoothed_polys.resize( board->GetAreaCount() );
-
-    for( int ia = 0; ia < board->GetAreaCount(); ia++ )
-    {
-        ZONE_CONTAINER*    zoneRef = board->GetArea( ia );
-        std::set<VECTOR2I> colinearCorners;
-        zoneRef->GetColinearCorners( board, colinearCorners );
-
-        zoneRef->BuildSmoothedPoly( smoothed_polys[ia], &colinearCorners );
-    }
-
-    // iterate through all areas
-    for( int ia = 0; ia < board->GetAreaCount(); ia++ )
-    {
-        ZONE_CONTAINER* zoneRef = board->GetArea( ia );
-
-        if( !zoneRef->IsOnCopperLayer() )
-            continue;
-
-        // If we are testing a single zone, then iterate through all other zones
-        // Otherwise, we have already tested the zone combination
-        for( int ia2 = ia + 1; ia2 < board->GetAreaCount(); ia2++ )
-        {
-            ZONE_CONTAINER* zoneToTest = board->GetArea( ia2 );
-
-            if( zoneRef == zoneToTest )
-                continue;
-
-            // test for same layer
-            if( zoneRef->GetLayer() != zoneToTest->GetLayer() )
-                continue;
-
-            // Test for same net
-            if( zoneRef->GetNetCode() == zoneToTest->GetNetCode() && zoneRef->GetNetCode() >= 0 )
-                continue;
-
-            // test for different priorities
-            if( zoneRef->GetPriority() != zoneToTest->GetPriority() )
-                continue;
-
-            // test for different types
-            if( zoneRef->GetIsKeepout() != zoneToTest->GetIsKeepout() )
-                continue;
-
-            // Examine a candidate zone: compare zoneToTest to zoneRef
-
-            // Get clearance used in zone to zone test.  The policy used to
-            // obtain that value is now part of the zone object itself by way of
-            // ZONE_CONTAINER::GetClearance().
-            int zone2zoneClearance = zoneRef->GetClearance( zoneToTest, &m_clearanceSource );
-
-            // Keepout areas have no clearance, so set zone2zoneClearance to 1
-            // ( zone2zoneClearance = 0  can create problems in test functions)
-            if( zoneRef->GetIsKeepout() )
-                zone2zoneClearance = 1;
-
-            // test for some corners of zoneRef inside zoneToTest
-            for( auto iterator = smoothed_polys[ia].IterateWithHoles(); iterator; iterator++ )
-            {
-                VECTOR2I currentVertex = *iterator;
-                wxPoint pt( currentVertex.x, currentVertex.y );
-
-                if( smoothed_polys[ia2].Contains( currentVertex ) )
-                {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
-                    drcItem->SetItems( zoneRef, zoneToTest );
-
-                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
-                    addMarkerToPcb( aCommit, marker );
-                    nerrors++;
-                }
-            }
-
-            // test for some corners of zoneToTest inside zoneRef
-            for( auto iterator = smoothed_polys[ia2].IterateWithHoles(); iterator; iterator++ )
-            {
-                VECTOR2I currentVertex = *iterator;
-                wxPoint pt( currentVertex.x, currentVertex.y );
-
-                if( smoothed_polys[ia].Contains( currentVertex ) )
-                {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
-                    drcItem->SetItems( zoneToTest, zoneRef );
-
-                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
-                    addMarkerToPcb( aCommit, marker );
-                    nerrors++;
-                }
-            }
-
-            // Iterate through all the segments of refSmoothedPoly
-            std::map<wxPoint, int> conflictPoints;
-
-            for( auto refIt = smoothed_polys[ia].IterateSegmentsWithHoles(); refIt; refIt++ )
-            {
-                // Build ref segment
-                SEG refSegment = *refIt;
-
-                // Iterate through all the segments in smoothed_polys[ia2]
-                for( auto testIt = smoothed_polys[ia2].IterateSegmentsWithHoles(); testIt; testIt++ )
-                {
-                    // Build test segment
-                    SEG testSegment = *testIt;
-                    wxPoint pt;
-
-                    int ax1, ay1, ax2, ay2;
-                    ax1 = refSegment.A.x;
-                    ay1 = refSegment.A.y;
-                    ax2 = refSegment.B.x;
-                    ay2 = refSegment.B.y;
-
-                    int bx1, by1, bx2, by2;
-                    bx1 = testSegment.A.x;
-                    by1 = testSegment.A.y;
-                    bx2 = testSegment.B.x;
-                    by2 = testSegment.B.y;
-
-                    int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2,
-                                                         0,
-                                                         ax1, ay1, ax2, ay2,
-                                                         0,
-                                                         zone2zoneClearance,
-                                                         &pt.x, &pt.y );
-
-                    if( d < zone2zoneClearance )
-                    {
-                        if( conflictPoints.count( pt ) )
-                            conflictPoints[ pt ] = std::min( conflictPoints[ pt ], d );
-                        else
-                            conflictPoints[ pt ] = d;
-                    }
-                }
-            }
-
-            for( const std::pair<const wxPoint, int>& conflict : conflictPoints )
-            {
-                int       actual = conflict.second;
-                DRC_ITEM* drcItem;
-
-                if( actual <= 0 )
-                {
-                    drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
-                }
-                else
-                {
-                    drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
-
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                                  m_clearanceSource,
-                                  MessageTextFromValue( userUnits(), zone2zoneClearance, true ),
-                                  MessageTextFromValue( userUnits(), conflict.second, true ) );
-
-                    drcItem->SetErrorMessage( m_msg );
-                }
-
-                drcItem->SetItems( zoneRef, zoneToTest );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, conflict.first );
-                addMarkerToPcb( aCommit, marker );
-                nerrors++;
-            }
-        }
-    }
-
-    return nerrors;
 }
 
 
@@ -606,7 +432,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         if( m_drcDialog )
             m_drcDialog->Raise();
 
-        TestFootprints( netlist, m_pcb, m_drcDialog->GetUserUnits(), m_footprints );
+        TestFootprints( netlist, m_pcb, m_footprints );
         m_footprintsTested = true;
     }
 
@@ -802,7 +628,7 @@ void DRC::testTracks( BOARD_COMMIT& aCommit, wxWindow *aActiveWindow, bool aShow
         }
 
         // Test new segment against tracks and pads, optionally against copper zones
-        doTrackDrc( aCommit, *seg_it, seg_it + 1, m_pcb->Tracks().end(), m_doZonesTest );
+        doTrackDrc( aCommit, *seg_it, seg_it + 1, m_pcb->Tracks().end(), m_testTracksAgainstZones );
 
         // Test for dangling items
         int code = (*seg_it)->Type() == PCB_VIA_T ? DRCE_DANGLING_VIA : DRCE_DANGLING_TRACK;
@@ -850,6 +676,9 @@ void DRC::testUnconnected()
 
 void DRC::testZones( BOARD_COMMIT& aCommit )
 {
+    BOARD*                 board = m_editFrame->GetBoard();
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+
     // Test copper areas for valid netcodes
     // if a netcode is < 0 the netname was not found when reading a netlist
     // if a netcode is == 0 the netname is void, and the zone is not connected.
@@ -858,17 +687,18 @@ void DRC::testZones( BOARD_COMMIT& aCommit )
     // In recent Pcbnew versions, the netcode is always >= 0, but an internal net name
     // is stored, and initialized from the file or the zone properties editor.
     // if it differs from the net name from net code, there is a DRC issue
-    if( !m_pcb->GetDesignSettings().Ignore( DRCE_ZONE_HAS_EMPTY_NET ) )
+
+    std::vector<SHAPE_POLY_SET> smoothed_polys;
+    smoothed_polys.resize( board->GetAreaCount() );
+
+    for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
     {
-        for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
+        ZONE_CONTAINER* zone = m_pcb->GetArea( ii );
+
+        if( !bds.Ignore( DRCE_ZONE_HAS_EMPTY_NET ) && zone->IsOnCopperLayer() )
         {
-            ZONE_CONTAINER* zone = m_pcb->GetArea( ii );
-
-            if( !zone->IsOnCopperLayer() )
-                continue;
-
             int netcode = zone->GetNetCode();
-            // a netcode < 0 or > 0 and no pad in net  is a error or strange
+            // a netcode < 0 or > 0 and no pad in net is a error or strange
             // perhaps a "dead" net, which happens when all pads in this net were removed
             // Remark: a netcode < 0 should not happen (this is more a bug somewhere)
             int pads_in_net = ( netcode > 0 ) ? m_pcb->GetConnectivity()->GetPadCount( netcode ) : 1;
@@ -882,10 +712,163 @@ void DRC::testZones( BOARD_COMMIT& aCommit )
                 addMarkerToPcb( aCommit, marker );
             }
         }
+
+        ZONE_CONTAINER*    zoneRef = board->GetArea( ii );
+        std::set<VECTOR2I> colinearCorners;
+        zoneRef->GetColinearCorners( board, colinearCorners );
+
+        zoneRef->BuildSmoothedPoly( smoothed_polys[ii], &colinearCorners );
     }
 
-    // Test copper areas outlines, and create markers when needed
-    testZoneToZoneOutlines( aCommit );
+    // iterate through all areas
+    for( int ia = 0; ia < board->GetAreaCount(); ia++ )
+    {
+        ZONE_CONTAINER* zoneRef = board->GetArea( ia );
+
+        if( !zoneRef->IsOnCopperLayer() )
+            continue;
+
+        // If we are testing a single zone, then iterate through all other zones
+        // Otherwise, we have already tested the zone combination
+        for( int ia2 = ia + 1; ia2 < board->GetAreaCount(); ia2++ )
+        {
+            ZONE_CONTAINER* zoneToTest = board->GetArea( ia2 );
+
+            if( zoneRef == zoneToTest )
+                continue;
+
+            // test for same layer
+            if( zoneRef->GetLayer() != zoneToTest->GetLayer() )
+                continue;
+
+            // Test for same net
+            if( zoneRef->GetNetCode() == zoneToTest->GetNetCode() && zoneRef->GetNetCode() >= 0 )
+                continue;
+
+            // test for different priorities
+            if( zoneRef->GetPriority() != zoneToTest->GetPriority() )
+                continue;
+
+            // test for different types
+            if( zoneRef->GetIsKeepout() != zoneToTest->GetIsKeepout() )
+                continue;
+
+            // Examine a candidate zone: compare zoneToTest to zoneRef
+
+            // Get clearance used in zone to zone test.  The policy used to
+            // obtain that value is now part of the zone object itself by way of
+            // ZONE_CONTAINER::GetClearance().
+            int zone2zoneClearance = zoneRef->GetClearance( zoneToTest, &m_clearanceSource );
+
+            // Keepout areas have no clearance, so set zone2zoneClearance to 1
+            // ( zone2zoneClearance = 0  can create problems in test functions)
+            if( zoneRef->GetIsKeepout() )
+                zone2zoneClearance = 1;
+
+            // test for some corners of zoneRef inside zoneToTest
+            for( auto iterator = smoothed_polys[ia].IterateWithHoles(); iterator; iterator++ )
+            {
+                VECTOR2I currentVertex = *iterator;
+                wxPoint pt( currentVertex.x, currentVertex.y );
+
+                if( smoothed_polys[ia2].Contains( currentVertex ) )
+                {
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                    drcItem->SetItems( zoneRef, zoneToTest );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
+                    addMarkerToPcb( aCommit, marker );
+                }
+            }
+
+            // test for some corners of zoneToTest inside zoneRef
+            for( auto iterator = smoothed_polys[ia2].IterateWithHoles(); iterator; iterator++ )
+            {
+                VECTOR2I currentVertex = *iterator;
+                wxPoint pt( currentVertex.x, currentVertex.y );
+
+                if( smoothed_polys[ia].Contains( currentVertex ) )
+                {
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                    drcItem->SetItems( zoneToTest, zoneRef );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
+                    addMarkerToPcb( aCommit, marker );
+                }
+            }
+
+            // Iterate through all the segments of refSmoothedPoly
+            std::map<wxPoint, int> conflictPoints;
+
+            for( auto refIt = smoothed_polys[ia].IterateSegmentsWithHoles(); refIt; refIt++ )
+            {
+                // Build ref segment
+                SEG refSegment = *refIt;
+
+                // Iterate through all the segments in smoothed_polys[ia2]
+                for( auto testIt = smoothed_polys[ia2].IterateSegmentsWithHoles(); testIt; testIt++ )
+                {
+                    // Build test segment
+                    SEG testSegment = *testIt;
+                    wxPoint pt;
+
+                    int ax1, ay1, ax2, ay2;
+                    ax1 = refSegment.A.x;
+                    ay1 = refSegment.A.y;
+                    ax2 = refSegment.B.x;
+                    ay2 = refSegment.B.y;
+
+                    int bx1, by1, bx2, by2;
+                    bx1 = testSegment.A.x;
+                    by1 = testSegment.A.y;
+                    bx2 = testSegment.B.x;
+                    by2 = testSegment.B.y;
+
+                    int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2,
+                                                         0,
+                                                         ax1, ay1, ax2, ay2,
+                                                         0,
+                                                         zone2zoneClearance,
+                                                         &pt.x, &pt.y );
+
+                    if( d < zone2zoneClearance )
+                    {
+                        if( conflictPoints.count( pt ) )
+                            conflictPoints[ pt ] = std::min( conflictPoints[ pt ], d );
+                        else
+                            conflictPoints[ pt ] = d;
+                    }
+                }
+            }
+
+            for( const std::pair<const wxPoint, int>& conflict : conflictPoints )
+            {
+                int       actual = conflict.second;
+                DRC_ITEM* drcItem;
+
+                if( actual <= 0 )
+                {
+                    drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                }
+                else
+                {
+                    drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
+
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                                  m_clearanceSource,
+                                  MessageTextFromValue( userUnits(), zone2zoneClearance, true ),
+                                  MessageTextFromValue( userUnits(), conflict.second, true ) );
+
+                    drcItem->SetErrorMessage( m_msg );
+                }
+
+                drcItem->SetItems( zoneRef, zoneToTest );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, conflict.first );
+                addMarkerToPcb( aCommit, marker );
+            }
+        }
+    }
 }
 
 
@@ -1391,72 +1374,6 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
     }
 
     return true;
-}
-
-
-void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
-                          std::vector<DRC_ITEM*>& aDRCList )
-{
-    wxString msg;
-
-    auto comp = []( const MODULE* x, const MODULE* y )
-    {
-        return x->GetReference().CmpNoCase( y->GetReference() ) < 0;
-    };
-    auto mods = std::set<MODULE*, decltype( comp )>( comp );
-
-    if( !aPCB->GetDesignSettings().Ignore( DRCE_DUPLICATE_FOOTPRINT ) )
-    {
-        // Search for duplicate footprints on the board
-        for( MODULE* mod : aPCB->Modules() )
-        {
-            auto ins = mods.insert( mod );
-
-            if( !ins.second )
-            {
-                DRC_ITEM* item = new DRC_ITEM( DRCE_DUPLICATE_FOOTPRINT );
-                item->SetItems( mod, *ins.first );
-                aDRCList.push_back( item );
-            }
-        }
-    }
-
-    if( !aPCB->GetDesignSettings().Ignore( DRCE_MISSING_FOOTPRINT ) )
-    {
-        // Search for component footprints in the netlist but not on the board.
-        for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
-        {
-            COMPONENT* component = aNetlist.GetComponent( ii );
-            MODULE*    module = aPCB->FindModuleByReference( component->GetReference() );
-
-            if( module == NULL )
-            {
-                msg.Printf( _( "Missing footprint %s (%s)" ),
-                            component->GetReference(),
-                            component->GetValue() );
-
-                DRC_ITEM* item = new DRC_ITEM( DRCE_MISSING_FOOTPRINT );
-                item->SetErrorMessage( msg );
-                aDRCList.push_back( item );
-            }
-        }
-    }
-
-    if( !aPCB->GetDesignSettings().Ignore( DRCE_EXTRA_FOOTPRINT ) )
-    {
-        // Search for component footprints found on board but not in netlist.
-        for( auto module : mods )
-        {
-            COMPONENT* component = aNetlist.GetComponentByReference( module->GetReference() );
-
-            if( component == NULL )
-            {
-                DRC_ITEM* item = new DRC_ITEM( DRCE_EXTRA_FOOTPRINT );
-                item->SetItems( module );
-                aDRCList.push_back( item );
-            }
-        }
-    }
 }
 
 

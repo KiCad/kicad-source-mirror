@@ -158,11 +158,8 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
 private:
-
-    //  protected or private functions() are lowercase first character.
-    bool     m_doPad2PadTest;           // enable pad to pad clearance tests
     bool     m_doUnconnectedTest;       // enable unconnected tests
-    bool     m_doZonesTest;             // enable zone to items clearance tests
+    bool     m_testTracksAgainstZones;  // enable zone to items clearance tests
     bool     m_doKeepoutTest;           // enable keepout areas to items clearance tests
     bool     m_refillZones;             // refill zones if requested (by user).
     bool     m_reportAllTrackErrors;    // Report all tracks errors (or only 4 first errors)
@@ -182,13 +179,15 @@ private:
     std::vector<DRC_SELECTOR*> m_ruleSelectors;
     std::vector<DRC_RULE*>     m_rules;
 
+    // Temp variables for performance during a single DRC run
+    //
     // wxString's c'tor is surprisingly expensive, and in the world of DRC everything matters
-    wxString m_msg;
-    wxString m_clearanceSource;
+    //
+    wxString                   m_msg;
+    wxString                   m_clearanceSource;
+    int                        m_largestClearance;
 
-    // Used during a single DRC run
-    int      m_largestClearance;
-
+private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
@@ -205,13 +204,6 @@ private:
     void addMarkerToPcb( BOARD_COMMIT& aCommit, MARKER_PCB* aMarker );
 
     //-----<categorical group tests>-----------------------------------------
-
-    /**
-     * Tests whether distance between zones complies with the DRC rules.
-     *
-     * @return Errors count
-     */
-    int testZoneToZoneOutlines( BOARD_COMMIT& aCommit );
 
     /**
      * Perform the DRC on all tracks.
@@ -306,13 +298,6 @@ public:
      * Load the DRC rules.  Must be called after the netclasses have been read.
      */
     bool LoadRules();
-
-    /**
-     * Test the board footprints against a netlist.  Will report DRCE_MISSING_FOOTPRINT,
-     * DRCE_DUPLICATE_FOOTPRINT and DRCE_EXTRA_FOOTPRINT errors in aDRCList.
-     */
-    static void TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
-                                std::vector<DRC_ITEM*>& aDRCList );
 
     /**
      * Fetches a reasonable point for marking a violoation between two non-point objects.

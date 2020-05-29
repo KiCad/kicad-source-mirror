@@ -182,10 +182,10 @@ void DIALOG_DRC::syncCheckboxes()
 void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 {
     setDRCParameters();
-    m_tester->m_doZonesTest          = m_cbReportTracksToZonesErrors->GetValue();
-    m_tester->m_refillZones          = m_cbRefillZones->GetValue();
-    m_tester->m_reportAllTrackErrors = m_cbReportAllTrackErrors->GetValue();
-    m_tester->m_testFootprints       = m_cbTestFootprints->GetValue();
+    m_tester->m_testTracksAgainstZones = m_cbReportTracksToZonesErrors->GetValue();
+    m_tester->m_refillZones            = m_cbRefillZones->GetValue();
+    m_tester->m_reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
+    m_tester->m_testFootprints         = m_cbTestFootprints->GetValue();
 
     m_brdEditor->RecordDRCExclusions();
     deleteAllMarkers();
