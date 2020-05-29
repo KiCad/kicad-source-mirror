@@ -333,8 +333,8 @@ void DIALOG_LABEL_EDITOR::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
     wxStyledTextCtrl* te = m_valueMultiLine;
     wxArrayString     autocompleteTokens;
-    int               pos = te->GetCurrentPos();
-    int               start = te->WordStartPosition( pos, true );
+    int               text_pos = te->GetCurrentPos();
+    int               start = te->WordStartPosition( text_pos, true );
     wxString          partial;
 
     auto textVarRef =
@@ -350,7 +350,7 @@ void DIALOG_LABEL_EDITOR::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
         if( textVarRef( refStart ) )
         {
-            partial = te->GetRange( start+1, pos );
+            partial = te->GetRange( start+1, text_pos );
 
             wxString           ref = te->GetRange( refStart, start-1 );
             SCH_SHEET_LIST     sheets = m_Parent->Schematic().GetSheets();
@@ -374,7 +374,7 @@ void DIALOG_LABEL_EDITOR::onScintillaCharAdded( wxStyledTextEvent &aEvent )
     }
     else if( textVarRef( start ) )
     {
-        partial = te->GetTextRange( start, pos );
+        partial = te->GetTextRange( start, text_pos );
 
         m_CurrentText->GetContextualTextVars( &autocompleteTokens );
 
