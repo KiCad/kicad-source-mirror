@@ -194,7 +194,10 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     // List of file extensions to save.
     static const wxChar* extensionList[] = {
         wxT( "*.pro" ),
-        wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.dcm" ), // Schematic related files
+        wxT( "*.sch" ),                         // Legacy schematic files
+        wxT( "*.kicad_sch" ),                   // Schematic files
+        wxT( "*.lib" ), wxT( "*.dcm" ),         // Legacy schematic library files
+        wxT( "*.kicad_sym" ),                   // schematic library files
         wxT( "*.cmp" ),
         wxT( "*.brd" ), wxT( "*.kicad_pcb" ),   // Brd files
         wxT( "*.mod" ), wxT( "*.kicad_mod" ),   // fp files
