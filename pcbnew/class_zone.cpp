@@ -534,73 +534,15 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 }
 
 
-int ZONE_CONTAINER::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
+int ZONE_CONTAINER::GetLocalClearance( wxString* aSource ) const
 {
     if( m_isKeepout )
         return 0;
 
-    BOARD* board = GetBoard();
-
-    // No clearance if "this" is not (yet) linked to a board
-    if( !board )
-        return 0;
-
-    DRC_RULE* rule = GetRule( this, aItem, CLEARANCE_CONSTRAINT );
-
-    if( rule )
-    {
-        if( aSource )
-            *aSource = wxString::Format( _( "'%s' rule clearance" ), rule->m_Name );
-
-        return rule->m_Clearance.Min;
-    }
-
-    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-    int                    clearance = bds.m_MinClearance;
-
     if( aSource )
-        *aSource = _( "board minimum" );
+        *aSource = _( "zone" );
 
-    NETCLASS* netclass = GetEffectiveNetclass();
-
-    if( netclass && netclass->GetClearance() > clearance )
-    {
-        clearance = netclass->GetClearance();
-
-        if( aSource )
-            *aSource = wxString::Format( _( "'%s' netclass" ), netclass->GetName() );
-    }
-
-    if( aItem && aItem->IsConnected() )
-    {
-        netclass = static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetEffectiveNetclass();
-
-        if( netclass && netclass->GetClearance() > clearance )
-        {
-            clearance = netclass->GetClearance();
-
-            if( aSource )
-                *aSource = wxString::Format( _( "'%s' netclass" ), netclass->GetName() );
-        }
-    }
-
-    if( aItem && aItem->GetLayer() == Edge_Cuts && bds.m_CopperEdgeClearance > clearance )
-    {
-        clearance = bds.m_CopperEdgeClearance;
-
-        if( aSource )
-            *aSource = _( "board edge" );
-    }
-
-    if( m_ZoneClearance > clearance )
-    {
-        clearance = m_ZoneClearance;
-
-        if( aSource )
-            *aSource = _( "zone" );
-    }
-
-    return clearance;
+    return m_ZoneClearance;
 }
 
 

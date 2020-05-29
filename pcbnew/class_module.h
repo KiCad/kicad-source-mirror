@@ -227,7 +227,14 @@ public:
     int GetLocalSolderMaskMargin() const { return m_LocalSolderMaskMargin; }
     void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
 
-    int GetLocalClearance() const { return m_LocalClearance; }
+    int GetLocalClearance( wxString* aSource = nullptr ) const
+    {
+        if( aSource )
+            *aSource = wxString::Format( _( "footprint %s" ), GetReference() );
+
+        return m_LocalClearance;
+    }
+
     void SetLocalClearance( int aClearance ) { m_LocalClearance = aClearance; }
 
     int GetLocalSolderPasteMargin() const { return m_LocalSolderPasteMargin; }

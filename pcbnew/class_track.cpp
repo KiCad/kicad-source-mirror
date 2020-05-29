@@ -117,21 +117,28 @@ BITMAP_DEF VIA::GetMenuImage() const
 }
 
 
-int TRACK::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
+int TRACK::GetLocalClearance( wxString* aSource ) const
 {
-    // Currently tracks have no specific clearance parameter on a per track or per
-    // segment basis.  The NETCLASS clearance is used.
-    return BOARD_CONNECTED_ITEM::GetClearance( aItem, aSource );
+    // Not currently implemented
+    return 0;
 }
 
 
 /*
- * Width constraints exist in a hiearchy:
- * 1) accumulated board & netclass constraints
- * 2) last rule whose condition evaluates to true
+ * Width constraints exist in a hiearchy.  If a given level is specified then the remaining
+ * levels are NOT consulted.
+ *
+ * LEVEL 1: (highest priority) local overrides (not currently implemented.)
+ * LEVEL 2: Rules
+ * LEVEL 3: Accumulated local settings, netclass settings, & board design settings
  */
 void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 {
+    // LEVEL 1: local overrides
+    //
+    // Not currently implemented
+
+    // LEVEL 2: Rules
     DRC_RULE* rule = GetRule( this, nullptr, TRACK_CONSTRAINT );
 
     if( rule )
@@ -141,15 +148,21 @@ void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 
         if( aSource )
             *aSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
-    }
-    else
-    {
-        *aMin = GetBoard()->GetDesignSettings().m_TrackMinWidth;
-        *aMax = INT_MAX / 2;
 
-        if( aSource )
-            *aSource = _( "board minimum" );
+        return;
     }
+
+    // LEVEL 3: Netclasses & board design settings
+    //
+    // Note that local settings aren't currently implemented, and netclasses don't contain a
+    // minimum width (only a default width), so only the board design settings are relevant
+    // here.
+    //
+    *aMin = GetBoard()->GetDesignSettings().m_TrackMinWidth;
+    *aMax = INT_MAX / 2;
+
+    if( aSource )
+        *aSource = _( "board minimum" );
 }
 
 

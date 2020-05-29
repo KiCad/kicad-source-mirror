@@ -35,8 +35,7 @@ PANEL_MODEDIT_COLOR_SETTINGS::PANEL_MODEDIT_COLOR_SETTINGS( FOOTPRINT_EDIT_FRAME
         : PANEL_COLOR_SETTINGS( aParent ),
           m_frame( aFrame ),
           m_page( nullptr ),
-          m_titleBlock( nullptr ),
-          m_ws( nullptr )
+          m_titleBlock( nullptr )
 {
      // Currently this only applies to eeschema
     m_optOverrideColors->Hide();

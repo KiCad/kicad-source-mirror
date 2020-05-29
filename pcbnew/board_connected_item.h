@@ -164,6 +164,32 @@ public:
     virtual int GetClearance( BOARD_ITEM* aItem = nullptr, wxString* aSource = nullptr ) const;
 
     /**
+     * Function GetRuleClearance
+     * returns any rule-based clearance.
+     * @param aClearance [out] the clearance value in internal units
+     * @param aSource [out] reports the source as a user-readable string
+     * @return true if a rule was fired
+     */
+    virtual bool GetRuleClearance( BOARD_ITEM* aItem, int* aClearance, wxString* aSource ) const;
+
+    /**
+     * Function GetLocalClearanceOverrides
+     * returns any local clearance overrides set in the "classic" (ie: pre-rule) system.
+     * @param aSource [out] optionally reports the source as a user-readable string
+     * @return int - the clearance in internal units.
+     */
+    virtual int GetLocalClearanceOverrides( wxString* aSource = nullptr ) const { return 0; }
+
+    /**
+     * Function GetLocalClearance
+     * returns any local clearances set in the "classic" (ie: pre-rule) system.  These are
+     * things like zone clearance which are NOT an override.
+     * @param aSource [out] optionally reports the source as a user-readable string
+     * @return int - the clearance in internal units.
+     */
+    virtual int GetLocalClearance( wxString* aSource = nullptr ) const { return 0; }
+
+    /**
      * Function GetNetClassPtr
      * returns the NETCLASS for this item.
      *

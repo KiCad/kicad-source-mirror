@@ -157,9 +157,16 @@ public:
     STRINGSET& NetNames()                   { return m_Members; }       ///< for SWIG
 
     const wxString& GetDescription() const  { return m_Description; }
-    void    SetDescription( const wxString& aDesc ) { m_Description = aDesc; }
+    void  SetDescription( const wxString& aDesc ) { m_Description = aDesc; }
 
-    int     GetClearance() const            { return m_Clearance; }
+    int GetClearance( wxString* aSource = nullptr ) const
+    {
+        if( aSource )
+            *aSource = wxString::Format( _( "'%s' netclass" ), m_Name );
+
+        return m_Clearance;
+    }
+
     void    SetClearance( int aClearance )  { m_Clearance = aClearance; }
 
     int     GetTrackWidth() const           { return m_TrackWidth; }

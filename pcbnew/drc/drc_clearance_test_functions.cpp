@@ -598,18 +598,16 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     /***********************************************/
     if( m_board_outline_valid )
     {
+        int minClearance = bds.m_CopperEdgeClearance;
+        m_clearanceSource = _( "board edge" );
+
         static DRAWSEGMENT dummyEdge;
         dummyEdge.SetLayer( Edge_Cuts );
 
+        if( aRefSeg->GetRuleClearance( &dummyEdge, &minClearance, &m_clearanceSource ) )
+            /* minClearance and m_clearanceSource set in GetRuleClearance() */;
+
         SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
-        int minClearance = aRefSeg->GetClearance( &dummyEdge, &m_clearanceSource );
-
-        if( bds.m_CopperEdgeClearance > minClearance )
-        {
-            minClearance = bds.m_CopperEdgeClearance;
-            m_clearanceSource = _( "board edge" );
-        }
-
         int halfWidth = refSegWidth / 2;
         int center2centerAllowed = minClearance + halfWidth;
 

@@ -613,27 +613,26 @@ wxPoint D_PAD::ShapePos() const
 }
 
 
-int D_PAD::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
+int D_PAD::GetLocalClearanceOverrides( wxString* aSource ) const
 {
     // A pad can have specific clearance that overrides its NETCLASS clearance value
-    if( m_LocalClearance )
-    {
-        if( aSource )
-            *aSource = wxString::Format( _( "pad %s" ), GetName() );
-
-        return m_LocalClearance;
-    }
+    if( GetLocalClearance() )
+        return GetLocalClearance( aSource );
 
     // A footprint can have a specific clearance value
     if( GetParent() && GetParent()->GetLocalClearance() )
-    {
-        if( aSource )
-            *aSource = wxString::Format( _( "%s footprint" ), GetParent()->GetReference() );
+        return GetParent()->GetLocalClearance( aSource );
 
-        return GetParent()->GetLocalClearance();
-    }
+    return 0;
+}
 
-    return BOARD_CONNECTED_ITEM::GetClearance( aItem, aSource );
+
+int D_PAD::GetLocalClearance( wxString* aSource ) const
+{
+    if( aSource )
+        *aSource = wxString::Format( _( "pad %s" ), GetName() );
+
+    return m_LocalClearance;
 }
 
 

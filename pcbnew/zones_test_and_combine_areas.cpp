@@ -205,7 +205,7 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
         // Filled zone specific tests
         else
         {
-            if( area_to_test->GetClearance() != area2->GetClearance() )
+            if( area_to_test->GetLocalClearance() != area2->GetLocalClearance() )
                 continue;
 
             if( area_to_test->GetThermalReliefGap() != area2->GetThermalReliefGap() )

@@ -452,12 +452,8 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     bool                         hasInnerLayers = m_pcb->GetCopperLayerCount() > 2;
 
     // Search a smaller clearance in other net classes, if any.
-    for( NETCLASSES::const_iterator it = dsnSettings.m_NetClasses.begin();
-            it != dsnSettings.m_NetClasses.end(); ++it )
-    {
-        NETCLASS netclass = *it->second;
-        minclearanceOuter = std::min( minclearanceOuter, netclass.GetClearance() );
-    }
+    for( const std::pair<wxString, NETCLASSPTR>& entry : dsnSettings.m_NetClasses )
+        minclearanceOuter = std::min( minclearanceOuter, entry.second->GetClearance() );
 
     // job file knows different clearance types.
     // Kicad knows only one clearance for pads and tracks

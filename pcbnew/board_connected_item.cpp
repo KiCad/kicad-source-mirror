@@ -84,22 +84,87 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
 
 
 /*
- * Clearances exist in a hiearchy:
- * 1) accumulated board & netclass constraints
- * 2) last rule whose condition evaluates to true
- * 4) footprint override
- * 5) pad override
+ * Clearances exist in a hiearchy.  If a given level is specified then the remaining levels
+ * are NOT consulted.
  *
- * The base class handles (1) and (2).
+ * LEVEL 1: (highest priority) local overrides (pad, footprint, etc.)
+ * LEVEL 2: Rules
+ * LEVEL 3: Accumulated local settings, netclass settings, & board design settings
  */
 int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
 {
-    BOARD* board = GetBoard();
+    BOARD*                board = GetBoard();
+    int                   clearance = 0;
+    wxString              source;
+    wxString*             localSource = aSource ? &source : nullptr;
+    BOARD_CONNECTED_ITEM* second = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
 
     // No clearance if "this" is not (yet) linked to a board therefore no available netclass
     if( !board )
-        return 0;
+        return clearance;
 
+    // LEVEL 1: local overrides (pad, footprint, etc.)
+    //
+    if( GetLocalClearanceOverrides() > clearance )
+        clearance = GetLocalClearanceOverrides( localSource );
+
+    if( second && second->GetLocalClearanceOverrides() > clearance )
+        clearance = second->GetLocalClearanceOverrides( localSource );
+
+    if( clearance )
+    {
+        if( aSource )
+            *aSource = *localSource;
+
+        return clearance;
+    }
+
+    // LEVEL 2: Rules
+    //
+    if( GetRuleClearance( aItem, &clearance, aSource ) )
+        return clearance;
+
+    // LEVEL 3: Accumulated local settings, netclass settings, & board design settings
+    //
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    NETCLASS*              netclass = GetEffectiveNetclass();
+    NETCLASS*              secondNetclass = second ? second->GetEffectiveNetclass() : nullptr;
+
+    if( bds.m_MinClearance > clearance )
+    {
+        if( aSource )
+            *aSource = _( "board minimum" );
+
+        clearance = bds.m_MinClearance;
+    }
+
+    if( netclass && netclass->GetClearance() > clearance )
+        clearance = netclass->GetClearance( aSource );
+
+    if( secondNetclass && secondNetclass->GetClearance() > clearance )
+        clearance = secondNetclass->GetClearance( aSource );
+
+    if( aItem && aItem->GetLayer() == Edge_Cuts && bds.m_CopperEdgeClearance > clearance )
+    {
+        if( aSource )
+            *aSource = _( "board edge" );
+
+        clearance = bds.m_CopperEdgeClearance;
+    }
+
+    if( GetLocalClearance() > clearance )
+        clearance = GetLocalClearance( aSource );
+
+    if( second && second->GetLocalClearance() > clearance )
+        clearance = second->GetLocalClearance( aSource );
+
+    return clearance;
+}
+
+
+bool BOARD_CONNECTED_ITEM::GetRuleClearance( BOARD_ITEM* aItem, int* aClearance,
+                                             wxString* aSource ) const
+{
     DRC_RULE* rule = GetRule( this, aItem, CLEARANCE_CONSTRAINT );
 
     if( rule )
@@ -107,47 +172,11 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) c
         if( aSource )
             *aSource = wxString::Format( _( "'%s' rule clearance" ), rule->m_Name );
 
-        return rule->m_Clearance.Min;
+        *aClearance = rule->m_Clearance.Min;
+        return true;
     }
 
-    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-    int                    clearance = bds.m_MinClearance;
-
-    if( aSource )
-        *aSource = _( "board minimum" );
-
-    NETCLASS* netclass = GetEffectiveNetclass();
-
-    if( netclass && netclass->GetClearance() > clearance )
-    {
-        clearance = netclass->GetClearance();
-
-        if( aSource )
-            *aSource = wxString::Format( _( "'%s' netclass" ), netclass->GetName() );
-    }
-
-    if( aItem && aItem->IsConnected() )
-    {
-        netclass = static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetEffectiveNetclass();
-
-        if( netclass && netclass->GetClearance() > clearance )
-        {
-            clearance = netclass->GetClearance();
-
-            if( aSource )
-                *aSource = wxString::Format( _( "'%s' netclass" ), netclass->GetName() );
-        }
-    }
-
-    if( aItem && aItem->GetLayer() == Edge_Cuts && bds.m_CopperEdgeClearance > clearance )
-    {
-        clearance = bds.m_CopperEdgeClearance;
-
-        if( aSource )
-            *aSource = _( "board edge" );
-    }
-
-    return clearance;
+    return false;
 }
 
 

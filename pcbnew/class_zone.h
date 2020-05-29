@@ -110,7 +110,14 @@ public:
      */
     const EDA_RECT GetBoundingBox() const override;
 
-    int GetClearance( BOARD_ITEM* aItem = nullptr, wxString* aSource = nullptr ) const override;
+    /**
+     * Function GetLocalClearance
+     * returns any local clearances set in the "classic" (ie: pre-rule) system.  These are
+     * things like zone clearance which are NOT an override.
+     * @param aSource [out] optionally reports the source as a user-readable string
+     * @return int - the clearance in internal units.
+     */
+    int GetLocalClearance( wxString* aSource = nullptr ) const override;
 
     /**
      * Function IsOnCopperLayer

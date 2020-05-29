@@ -450,7 +450,7 @@ public:
     int GetLocalSolderMaskMargin() const        { return m_LocalSolderMaskMargin; }
     void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
 
-    int GetLocalClearance() const               { return m_LocalClearance; }
+    int GetLocalClearance( wxString* aSource = nullptr ) const override;
     void SetLocalClearance( int aClearance )    { m_LocalClearance = aClearance; }
 
     int GetLocalSolderPasteMargin() const       { return m_LocalSolderPasteMargin; }
@@ -475,16 +475,12 @@ public:
             int aMaxError = ARC_HIGH_DEF, bool ignoreLineWidth = false ) const override;
 
     /**
-     * Function GetClearance
-     * returns the clearance in internal units.  If \a aItem is not NULL then the
-     * returned clearance is the greater of this object's clearance and
-     * aItem's clearance.  If \a aItem is NULL, then this objects clearance
-     * is returned.
-     * @param aItem is an optional BOARD_ITEM
+     * Function GetLocalClearanceOverrides
+     * returns any local clearance overrides set in the "classic" (ie: pre-rule) system.
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    int GetClearance( BOARD_ITEM* aItem = nullptr, wxString* aSource = nullptr ) const override;
+    int GetLocalClearanceOverrides( wxString* aSource = nullptr ) const override;
 
    // Mask margins handling:
 

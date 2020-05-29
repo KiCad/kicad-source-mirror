@@ -526,7 +526,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
     int extra_margin = Millimeter2iu( 0.002 );
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    int                    zone_clearance = aZone->GetClearance();
+    int                    zone_clearance = aZone->GetLocalClearance();
     EDA_RECT               zone_boundingbox = aZone->GetBoundingBox();
 
     // items outside the zone bounding box are skipped, so it needs to be inflated by

@@ -706,16 +706,14 @@ void DRC::testPadClearances( BOARD_COMMIT& aCommit )
     {
         if( !bds.Ignore( DRCE_PAD_NEAR_EDGE ) && m_board_outline_valid )
         {
+            int minClearance = bds.m_CopperEdgeClearance;
+            m_clearanceSource = _( "board edge" );
+
             static DRAWSEGMENT dummyEdge;
             dummyEdge.SetLayer( Edge_Cuts );
 
-            int minClearance = pad->GetClearance( &dummyEdge, &m_clearanceSource );
-
-            if( bds.m_CopperEdgeClearance > minClearance )
-            {
-                minClearance = bds.m_CopperEdgeClearance;
-                m_clearanceSource = _( "board edge" );
-            }
+            if( pad->GetRuleClearance( &dummyEdge, &minClearance, &m_clearanceSource ) )
+                /* minClearance and m_clearanceSource set in GetRuleClearance() */;
 
             for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )
             {
