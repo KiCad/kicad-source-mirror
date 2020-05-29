@@ -313,22 +313,19 @@ float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows )
 
 float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
 {
-    wxCHECK( aItem && aItem->Type() == SCH_LINE_T,
-            static_cast<float>( m_schSettings.m_DefaultWireThickness ) );
+    wxCHECK( aItem, static_cast<float>( m_schSettings.m_DefaultWireThickness ) );
 
     float width;
     const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( aItem );
 
-    wxCHECK( line, static_cast<float>( m_schSettings.m_DefaultWireThickness ) );
-
-    if( aItem->GetLayer() == LAYER_WIRE )
+    if( line && aItem->GetLayer() == LAYER_WIRE )
     {
         if( line->GetLineSize() != 0 )
             width = (float) line->GetLineSize();
         else
             width = (float)  m_schSettings.m_DefaultWireThickness;
     }
-    else if( aItem->GetLayer() == LAYER_BUS )
+    else if( line && aItem->GetLayer() == LAYER_BUS )
     {
         if( line->GetLineSize() != 0 )
             width = (float) line->GetLineSize();
