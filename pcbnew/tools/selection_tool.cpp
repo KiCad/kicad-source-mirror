@@ -1083,7 +1083,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 void SELECTION_TOOL::zoomFitSelection()
 {
     //Should recalculate the view to zoom in on the selection
-    auto selectionBox = m_selection.ViewBBox();
+    auto selectionBox = m_selection.GetBoundingBox();
     auto view = getView();
 
     VECTOR2D screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
