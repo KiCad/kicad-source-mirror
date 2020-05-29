@@ -77,16 +77,31 @@ void COMMON_CONTROL::Reset( RESET_REASON aReason )
 
 int COMMON_CONTROL::ConfigurePaths( const TOOL_EVENT& aEvent )
 {
-    try     // _pcbnew.kiface must be available: it contains the configure path dialog.
+    // If _pcbnew.kiface is running have it put up the dialog so the 3D paths can also
+    // be edited
+    KIFACE* pcbnew = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB, false );
+
+    if( pcbnew )
     {
-        KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
-        kiface->CreateWindow( m_frame, DIALOG_CONFIGUREPATHS, &m_frame->Kiway() );
+        try
+        {
+            pcbnew->CreateWindow( m_frame, DIALOG_CONFIGUREPATHS, &m_frame->Kiway() );
+        }
+        catch( ... )
+        {
+            // Do nothing here.
+            // A error message is displayed after trying to load _pcbnew.kiface.
+        }
     }
-    catch( ... )
+    else
     {
-        // Do nothing here.
-        // A error message is displayed after trying to load _pcbnew.kiface.
+        DIALOG_CONFIGURE_PATHS dlg( m_frame, nullptr );
+
+        if( dlg.ShowModal() == wxID_OK )
+            m_frame->Kiway().CommonSettingsChanged( true );
     }
+
+
     return 0;
 }
 

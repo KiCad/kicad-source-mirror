@@ -114,6 +114,11 @@ static struct IFACE : public KIFACE_I
         {
             DIALOG_CONFIGURE_PATHS dlg( aParent, aKiway->Prj().Get3DFilenameResolver() );
 
+            // The dialog's constructor probably failed to set its Kiway because the
+            // dynamic_cast fails when aParent was allocated by a separate compiliation
+            // module.  So set it directly.
+            dlg.SetKiway( &dlg, aKiway );
+
             if( dlg.ShowModal() == wxID_OK )
                 aKiway->CommonSettingsChanged( true );
 
