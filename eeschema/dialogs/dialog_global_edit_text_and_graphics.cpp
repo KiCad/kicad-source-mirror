@@ -216,6 +216,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     auto sch_text = dynamic_cast<SCH_TEXT*>( aItem );
     auto lineItem = dynamic_cast<SCH_LINE*>( aItem );
 
+    m_parent->SaveCopyInUndoList( aItem, UR_CHANGED, m_hasChange );
+
     if( eda_text )
     {
         if( !m_textSize.IsIndeterminate() )
@@ -428,6 +430,8 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     if( !m_textSize.Validate( Mils2iu( 1 ), Mils2iu( 10000 ) ) )  // 1 mil .. 10 inches
         return false;
 
+    SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
+
     // Go through sheets
     for( const SCH_SHEET_PATH& sheetPath : m_parent->Schematic().GetSheets() )
     {
@@ -435,6 +439,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 
         if( screen )
         {
+            m_parent->SetCurrentSheet( sheetPath );
             m_hasChange = false;
 
             for( auto item : screen->Items() )
@@ -447,6 +452,9 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
             }
         }
     }
+
+    // Reset the view to where we left the user
+    m_parent->SetCurrentSheet( currentSheet );
 
     return true;
 }
