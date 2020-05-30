@@ -191,7 +191,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 20 );
+	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 25 );
 
 	m_Italic = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Italic"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	fgSizer1->Add( m_Italic, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
@@ -237,7 +237,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( m_Visible, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer1->Add( 80, 0, 1, wxEXPAND, 5 );
 
 	vAlignLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("V Alignment (fields only):"), wxDefaultPosition, wxDefaultSize, 0 );
 	vAlignLabel->Wrap( -1 );
@@ -293,16 +293,16 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_setColor = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Line color (sheets && graphics):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_setColor = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Line color:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_setColor, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_colorSwatch = new COLOR_SWATCH( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_colorSwatch->SetMinSize( wxSize( 48,24 ) );
 
-	fgSizer1->Add( m_colorSwatch, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_colorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	lineStyleLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Line style (graphics only):"), wxDefaultPosition, wxDefaultSize, 0 );
+	lineStyleLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Line style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	lineStyleLabel->Wrap( -1 );
 	fgSizer1->Add( lineStyleLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -318,14 +318,14 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_setBgColor = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Background color (sheets only):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_setBgColor = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Sheet background color:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_setBgColor, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_bgColorSwatch = new COLOR_SWATCH( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_bgColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_bgColorSwatch->SetMinSize( wxSize( 48,24 ) );
 
-	fgSizer1->Add( m_bgColorSwatch, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_bgColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer2->Add( fgSizer1, 1, wxEXPAND|wxTOP, 2 );

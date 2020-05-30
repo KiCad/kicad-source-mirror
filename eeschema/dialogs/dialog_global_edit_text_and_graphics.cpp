@@ -273,19 +273,16 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
             m_hasChange = true;
         }
 
-        if( lineItem->GetLayer() == LAYER_NOTES )
+        if( m_lineStyle->GetStringSelection() != INDETERMINATE_ACTION )
         {
-            if( m_lineStyle->GetStringSelection() != INDETERMINATE_ACTION )
-            {
-                lineItem->SetLineStyle( m_lineStyle->GetSelection() );
-                m_hasChange = true;
-            }
+            lineItem->SetLineStyle( m_lineStyle->GetSelection() );
+            m_hasChange = true;
+        }
 
-            if( m_setColor->GetValue() )
-            {
-                lineItem->SetLineColor( m_colorSwatch->GetSwatchColor() );
-                m_hasChange = true;
-            }
+        if( m_setColor->GetValue() )
+        {
+            lineItem->SetLineColor( m_colorSwatch->GetSwatchColor() );
+            m_hasChange = true;
         }
     }
 }
