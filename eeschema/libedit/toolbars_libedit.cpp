@@ -112,7 +112,9 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_unitSelectBox = new wxComboBox( m_mainToolBar, ID_LIBEDIT_SELECT_PART_NUMBER, wxEmptyString,
+
+    if( m_unitSelectBox == nullptr )
+        m_unitSelectBox = new wxComboBox( m_mainToolBar, ID_LIBEDIT_SELECT_PART_NUMBER, wxEmptyString,
                                       wxDefaultPosition, wxSize( LISTBOX_WIDTH, -1 ), 0, nullptr,
                                       wxCB_READONLY );
     m_mainToolBar->AddControl( m_unitSelectBox );
