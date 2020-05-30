@@ -26,15 +26,22 @@
 #include <fctsys.h>
 #include <ws_draw_item.h>
 #include <ws_data_model.h>
+#include <project.h>
 #include <properties_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pl_selection_tool.h>
 #include <pl_draw_panel_gal.h>
+#include <scintilla_tricks.h>
 
-PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ):
-    PANEL_PROPERTIES_BASE( aParent )
+PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
+        PANEL_PROPERTIES_BASE( aParent ),
+        m_scintillaTricks( nullptr )
 {
     m_parent = aParent;
+
+    m_stcText->SetUseVerticalScrollBar( false );
+    m_stcText->SetUseHorizontalScrollBar( false );
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_stcText, wxT( "{}" ) );
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
@@ -43,11 +50,14 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ):
     m_staticTextInfoThickness->SetFont( infoFont );
 
     m_buttonOK->SetDefault();
+
+    m_stcText->Bind( wxEVT_STC_CHARADDED, &PROPERTIES_FRAME::onScintillaCharAdded, this );
 }
 
 
 PROPERTIES_FRAME::~PROPERTIES_FRAME()
 {
+    delete m_scintillaTricks;
 }
 
 
@@ -195,7 +205,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
         item->m_FullText = item->m_TextBase;
         // Replace our '\' 'n' sequence by the EOL char
         item->ReplaceAntiSlashSequence();
-        m_textCtrlText->SetValue( item->m_FullText );
+        m_stcText->SetValue( item->m_FullText );
 
         msg.Printf( wxT("%d"), item->m_IncrementLabel );
         m_textCtrlTextIncrement->SetValue( msg );
@@ -402,7 +412,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
     {
         WS_DATA_ITEM_TEXT* item = (WS_DATA_ITEM_TEXT*) aItem;
 
-        item->m_TextBase = m_textCtrlText->GetValue();
+        item->m_TextBase = m_stcText->GetValue();
 
         msg = m_textCtrlTextIncrement->GetValue();
         msg.ToLong( &itmp );
@@ -464,3 +474,26 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
     return true;
 }
 
+
+void PROPERTIES_FRAME::onScintillaCharAdded( wxStyledTextEvent &aEvent )
+{
+    wxArrayString   autocompleteTokens;
+    int             pos = m_stcText->GetCurrentPos();
+    int             start = m_stcText->WordStartPosition( pos, true );
+    wxString        partial;
+
+    if( start >= 2
+            && m_stcText->GetCharAt( start-2 ) == '$'
+            && m_stcText->GetCharAt( start-1 ) == '{' )
+    {
+        WS_DRAW_ITEM_LIST::GetTextVars( &autocompleteTokens );
+
+        partial = m_stcText->GetTextRange( start, pos );
+
+        for( std::pair<wxString, wxString> entry : m_parent->Prj().GetTextVars() )
+            autocompleteTokens.push_back( entry.first );
+    }
+
+    m_scintillaTricks->DoAutocomplete( partial, autocompleteTokens );
+    m_stcText->SetFocus();
+}

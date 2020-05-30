@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -46,8 +46,36 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticTextText->Wrap( -1 );
 	m_SizerTextOptions->Add( m_staticTextText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_textCtrlText = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-	m_SizerTextOptions->Add( m_textCtrlText, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_stcText = new wxStyledTextCtrl( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
+	m_stcText->SetUseTabs( true );
+	m_stcText->SetTabWidth( 4 );
+	m_stcText->SetIndent( 4 );
+	m_stcText->SetTabIndents( true );
+	m_stcText->SetBackSpaceUnIndents( true );
+	m_stcText->SetViewEOL( false );
+	m_stcText->SetViewWhiteSpace( false );
+	m_stcText->SetMarginWidth( 2, 0 );
+	m_stcText->SetIndentationGuides( false );
+	m_stcText->SetMarginWidth( 1, 0 );
+	m_stcText->SetMarginWidth( 0, 0 );
+	m_stcText->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
+	m_stcText->MarkerSetBackground( wxSTC_MARKNUM_FOLDER, wxColour( wxT("BLACK") ) );
+	m_stcText->MarkerSetForeground( wxSTC_MARKNUM_FOLDER, wxColour( wxT("WHITE") ) );
+	m_stcText->MarkerDefine( wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_BOXMINUS );
+	m_stcText->MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPEN, wxColour( wxT("BLACK") ) );
+	m_stcText->MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPEN, wxColour( wxT("WHITE") ) );
+	m_stcText->MarkerDefine( wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_EMPTY );
+	m_stcText->MarkerDefine( wxSTC_MARKNUM_FOLDEREND, wxSTC_MARK_BOXPLUS );
+	m_stcText->MarkerSetBackground( wxSTC_MARKNUM_FOLDEREND, wxColour( wxT("BLACK") ) );
+	m_stcText->MarkerSetForeground( wxSTC_MARKNUM_FOLDEREND, wxColour( wxT("WHITE") ) );
+	m_stcText->MarkerDefine( wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUS );
+	m_stcText->MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPENMID, wxColour( wxT("BLACK") ) );
+	m_stcText->MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPENMID, wxColour( wxT("WHITE") ) );
+	m_stcText->MarkerDefine( wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY );
+	m_stcText->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
+	m_stcText->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+	m_stcText->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+	m_SizerTextOptions->Add( m_stcText, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerFontOpt;
 	bSizerFontOpt = new wxBoxSizer( wxVERTICAL );

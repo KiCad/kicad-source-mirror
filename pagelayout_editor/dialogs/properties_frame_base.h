@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,8 +19,9 @@
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
-#include <wx/textctrl.h>
+#include <wx/stc/stc.h>
 #include <wx/checkbox.h>
+#include <wx/textctrl.h>
 #include <wx/combobox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -48,7 +49,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticLine* m_staticline5;
 		wxBoxSizer* m_SizerTextOptions;
 		wxStaticText* m_staticTextText;
-		wxTextCtrl* m_textCtrlText;
+		wxStyledTextCtrl* m_stcText;
 		wxStaticText* m_staticTextHjust;
 		wxChoice* m_choiceHjustify;
 		wxCheckBox* m_checkBoxBold;

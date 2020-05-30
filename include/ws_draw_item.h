@@ -513,6 +513,8 @@ public:
      */
     void BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo, const TITLE_BLOCK& aTitleBlock );
 
+    static void GetTextVars( wxArrayString* aVars );
+
     /**
      * Function BuildFullText
      * returns the full text corresponding to the aTextbase,

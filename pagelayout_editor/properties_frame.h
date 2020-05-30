@@ -31,6 +31,7 @@
 
 #include <pl_editor_frame.h>
 #include <dialogs/properties_frame_base.h>
+#include <scintilla_tricks.h>
 
 class WS_DATA_ITEM;
 
@@ -40,7 +41,8 @@ class WS_DATA_ITEM;
 
 class PROPERTIES_FRAME : public PANEL_PROPERTIES_BASE
 {
-    PL_EDITOR_FRAME* m_parent;
+    PL_EDITOR_FRAME*  m_parent;
+    SCINTILLA_TRICKS* m_scintillaTricks;
 
 public:
     PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent );
@@ -50,7 +52,7 @@ public:
     void OnPageChanged( wxNotebookEvent& event ) override;
     void OnAcceptPrms( wxCommandEvent& event ) override;
     void OnSetDefaultValues( wxCommandEvent& event ) override;
-
+    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 
     // Data transfert from general properties to widgets
     void CopyPrmsFromGeneralToPanel();
