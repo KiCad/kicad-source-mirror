@@ -483,7 +483,10 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
 
         keyIsEscape = ( ke->GetKeyCode() == WXK_ESCAPE );
-        evt = GetToolEvent( ke, &keyIsSpecial );
+
+        // Never process key events for tools when a text entry has focus
+        if( !dynamic_cast<wxTextEntry*>( wxWindow::FindFocus() ) )
+            evt = GetToolEvent( ke, &keyIsSpecial );
     }
     else if( type == wxEVT_MENU_OPEN || type == wxEVT_MENU_CLOSE || type == wxEVT_MENU_HIGHLIGHT )
     {

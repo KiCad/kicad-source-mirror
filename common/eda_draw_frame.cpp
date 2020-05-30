@@ -196,6 +196,10 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
 
 bool EDA_DRAW_FRAME::DispatchBehindModalDialog( wxKeyEvent& aEvent )
 {
+    // Never process hotkeys when a text entry field is focused
+    if( dynamic_cast<wxTextEntry*>( FindFocus() ) )
+        return false;
+
     static std::set<const TOOL_ACTION*> whiteList = { &ACTIONS::toggleUnits,
                                                       &ACTIONS::imperialUnits,
                                                       &ACTIONS::metricUnits };
