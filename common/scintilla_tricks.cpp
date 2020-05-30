@@ -50,6 +50,11 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
     m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight );
     m_te->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
 
+    // Set up autocomplete
+    m_te->AutoCompSetIgnoreCase( true );
+    m_te->AutoCompSetFillUps( m_braces[1] );
+    m_te->AutoCompSetMaxHeight( 20 );
+
     // Hook up events
     m_te->Bind( wxEVT_STC_UPDATEUI, &SCINTILLA_TRICKS::onScintillaUpdateUI, this );
 
@@ -180,23 +185,25 @@ void SCINTILLA_TRICKS::onScintillaUpdateUI( wxStyledTextEvent& aEvent )
 }
 
 
-void SCINTILLA_TRICKS::DoAutocomplete( const wxString& aPartial, wxArrayString aTokens )
+void SCINTILLA_TRICKS::DoAutocomplete( const wxString& aPartial, const wxArrayString& aTokens )
 {
-    if( aTokens.size() > 0 )
+    wxArrayString matchedTokens;
+
+    wxString filter = wxT( "*" ) + aPartial.Lower() + wxT( "*" );
+
+    for( const wxString& token : aTokens )
     {
-        bool  match = aPartial.IsEmpty();
+        if( token.Lower().Matches( filter ) )
+            matchedTokens.push_back( token );
+    }
 
-        for( size_t ii = 0; ii < aTokens.size() && !match; ++ii )
-            match = aTokens[ii].StartsWith( aPartial );
+    if( matchedTokens.size() > 0 )
+    {
+        // NB: tokens MUST be in alphabetical order because the Scintilla engine is going
+        // to do a binary search on them
+        matchedTokens.Sort();
 
-        if( match )
-        {
-            // NB: tokens MUST be in alphabetical order because the Scintilla engine is going
-            // to do a binary search on them
-            aTokens.Sort();
-
-            m_te->AutoCompShow( aPartial.size(), wxJoin( aTokens, ' ' ) );
-        }
+        m_te->AutoCompShow( aPartial.size(), wxJoin( matchedTokens, ' ' ) );
     }
 }
 

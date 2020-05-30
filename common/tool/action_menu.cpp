@@ -37,6 +37,7 @@
 #include <wx/log.h>
 #include <wx/stc/stc.h>
 #include <textentry_tricks.h>
+#include <wx/listctrl.h>
 
 using namespace std::placeholders;
 
@@ -386,7 +387,9 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
         // in TOOL_DISPATCHER::DispatchWxEvent, wxWidgets sometimes converts those it knows
         // about into menu commands without ever generating the appropriate CHAR_HOOK and CHAR
         // events first.
-        if( dynamic_cast<wxStyledTextCtrl*>( focus ) || dynamic_cast<wxTextEntry*>( focus ) )
+        if( dynamic_cast<wxTextEntry*>( focus )
+                || dynamic_cast<wxStyledTextCtrl*>( focus )
+                || dynamic_cast<wxListView*>( focus ) )
         {
             // Original key event has been lost, so we have to re-create it from the menu's
             // wxAcceleratorEntry.

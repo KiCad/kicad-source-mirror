@@ -38,7 +38,7 @@ public:
 
     SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces );
 
-    void DoAutocomplete( const wxString& aPartial, wxArrayString aTokens );
+    void DoAutocomplete( const wxString& aPartial, const wxArrayString& aTokens );
 
 protected:
     bool isCtrl( int aChar, const wxKeyEvent& e );
