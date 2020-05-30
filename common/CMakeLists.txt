@@ -337,6 +337,7 @@ set( COMMON_SRCS
     status_popup.cpp
     systemdirsappend.cpp
     template_fieldnames.cpp
+    textentry_tricks.cpp
     trace_helpers.cpp
     undo_redo_container.cpp
     utf8.cpp

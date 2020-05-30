@@ -31,6 +31,7 @@
 #include <functional>
 
 #include <wx/menu.h>
+#include <wx/textentry.h>
 #include <tool/tool_action.h>
 
 class TOOL_INTERACTIVE;

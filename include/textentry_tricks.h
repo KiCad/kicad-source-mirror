@@ -21,37 +21,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCINTILLA_TRICKS_H
-#define SCINTILLA_TRICKS_H
+#ifndef TEXTENTRY_TRICKS_H
+#define TEXTENTRY_TRICKS_H
 
 
-#include <wx/stc/stc.h>
+#include <wx/textentry.h>
 
 /**
- * SCINTILLA_TRICKS
- * is used to add cut/copy/paste, autocomplete and brace highlighting to a wxStyleTextCtrl 
- * instance.
+ * TEXTENTRY_TRICKS
+ * is used to add cut/copy/paste to a wxTextEntry instance.  While these are normally handled
+ * witout our intervention, this is not always the case.
  */
-class SCINTILLA_TRICKS : public wxEvtHandler
+struct TEXTENTRY_TRICKS
 {
-public:
-
-    SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces );
-
-    void DoAutocomplete( const wxString& aPartial, wxArrayString aTokens );
+    static void OnCharHook( wxTextEntry* aTextEntry, wxKeyEvent& aEvent );
 
 protected:
-    bool isCtrl( int aChar, const wxKeyEvent& e );
-    bool isShiftCtrl( int aChar, const wxKeyEvent& e );
-
-    void onCharHook( wxKeyEvent& aEvent );
-    void onScintillaUpdateUI( wxStyledTextEvent& aEvent );
-
-protected:
-    wxStyledTextCtrl* m_te;
-    wxString          m_braces;
-
-    int               m_lastCaretPos;
+    static bool isCtrl( int aChar, const wxKeyEvent& e );
+    static bool isShiftCtrl( int aChar, const wxKeyEvent& e );
 };
 
-#endif  // SCINTILLA_TRICKS_H
+#endif  // TEXTENTRY_TRICKS_H

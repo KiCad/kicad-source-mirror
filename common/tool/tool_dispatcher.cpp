@@ -37,7 +37,7 @@
 #include <eda_draw_frame.h>
 
 #include <core/optional.h>
-
+#include <wx/stc/stc.h>
 
 ///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
@@ -413,6 +413,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     OPT<TOOL_EVENT> evt;
     bool            keyIsEscape  = false;  // True if the keypress was the escape key
     bool            keyIsSpecial = false;  // True if the key is a special key code
+    wxWindow*       focus = wxWindow::FindFocus();
 
     int type = aEvent.GetEventType();
 
@@ -420,7 +421,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     // is opened and is iconized on Windows).
     // In this case, give the focus to the parent frame (GAL canvas itself does not accept the
     // focus when iconized for some obscure reason)
-    if( wxWindow::FindFocus() == nullptr )
+    if( focus == nullptr )
     {
         wxWindow* window = dynamic_cast<wxWindow*>( m_toolMgr->GetToolHolder() );
 
@@ -484,9 +485,14 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         keyIsEscape = ( ke->GetKeyCode() == WXK_ESCAPE );
 
-        // Never process key events for tools when a text entry has focus
-        if( !dynamic_cast<wxTextEntry*>( wxWindow::FindFocus() ) )
-            evt = GetToolEvent( ke, &keyIsSpecial );
+        if( dynamic_cast<wxTextEntry*>( focus ) || dynamic_cast<wxStyledTextCtrl*>( focus ) )
+        {
+            // Never process key events for tools when a text entry has focus
+            aEvent.Skip();
+            return;
+        }
+
+        evt = GetToolEvent( ke, &keyIsSpecial );
     }
     else if( type == wxEVT_MENU_OPEN || type == wxEVT_MENU_CLOSE || type == wxEVT_MENU_HIGHLIGHT )
     {

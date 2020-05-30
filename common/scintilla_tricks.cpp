@@ -58,14 +58,14 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
 }
 
 
-bool IsCtrl( int aChar, const wxKeyEvent& e )
+bool SCINTILLA_TRICKS::isCtrl( int aChar, const wxKeyEvent& e )
 {
     return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() &&
             !e.ShiftDown() && !e.MetaDown();
 }
 
 
-bool IsShiftCtrl( int aChar, const wxKeyEvent& e )
+bool SCINTILLA_TRICKS::isShiftCtrl( int aChar, const wxKeyEvent& e )
 {
     return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() &&
             e.ShiftDown() && !e.MetaDown();
@@ -96,25 +96,34 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
             m_te->Tab();
         }
     }
-    else if( m_te->IsShown() && IsCtrl( 'Z', aEvent ) )
+    else if( isCtrl( 'Z', aEvent ) )
     {
         m_te->Undo();
     }
-    else if( m_te->IsShown() && ( IsShiftCtrl( 'Z', aEvent ) || IsCtrl( 'Y', aEvent ) ) )
+    else if( isShiftCtrl( 'Z', aEvent ) || isCtrl( 'Y', aEvent ) )
     {
         m_te->Redo();
     }
-    else if( IsCtrl( 'X', aEvent ) )
+    else if( isCtrl( 'X', aEvent ) )
     {
         m_te->Cut();
     }
-    else if( IsCtrl( 'C', aEvent ) )
+    else if( isCtrl( 'C', aEvent ) )
     {
         m_te->Copy();
     }
-    else if( IsCtrl( 'V', aEvent ) )
+    else if( isCtrl( 'V', aEvent ) )
     {
         m_te->Paste();
+    }
+    else if( aEvent.GetKeyCode() == WXK_BACK )
+    {
+        m_te->DeleteBack();
+    }
+    else if( aEvent.GetKeyCode() == WXK_DELETE )
+    {
+        if( m_te->GetSelectionEnd() > m_te->GetSelectionStart() )
+            m_te->DeleteBack();
     }
     else
     {

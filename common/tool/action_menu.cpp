@@ -35,7 +35,8 @@
 #include <tool/tool_manager.h>
 #include <trace_helpers.h>
 #include <wx/log.h>
-
+#include <wx/stc/stc.h>
+#include <textentry_tricks.h>
 
 using namespace std::placeholders;
 
@@ -357,6 +358,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     OPT_TOOL_EVENT evt;
     wxString       menuText;
     wxEventType    type = aEvent.GetEventType();
+    wxWindow*      focus = wxWindow::FindFocus();
 
     if( type == wxEVT_MENU_OPEN )
     {
@@ -380,6 +382,40 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     }
     else if( type == wxEVT_COMMAND_MENU_SELECTED )
     {
+        // Despite our attempts to catch the theft of text editor CHAR_HOOK and CHAR events
+        // in TOOL_DISPATCHER::DispatchWxEvent, wxWidgets sometimes converts those it knows
+        // about into menu commands without ever generating the appropriate CHAR_HOOK and CHAR
+        // events first.
+        if( dynamic_cast<wxStyledTextCtrl*>( focus ) || dynamic_cast<wxTextEntry*>( focus ) )
+        {
+            // Original key event has been lost, so we have to re-create it from the menu's
+            // wxAcceleratorEntry.
+            wxMenuItem* menuItem = FindItem( aEvent.GetId() );
+            wxAcceleratorEntry* acceleratorKey = menuItem ? menuItem->GetAccel() : nullptr;
+
+            if( acceleratorKey )
+            {
+                wxKeyEvent keyEvent( wxEVT_CHAR_HOOK );
+                keyEvent.m_keyCode = acceleratorKey->GetKeyCode();
+                keyEvent.m_controlDown = ( acceleratorKey->GetFlags() & wxMOD_CONTROL ) > 0;
+                keyEvent.m_shiftDown = ( acceleratorKey->GetFlags() & wxMOD_SHIFT ) > 0;
+                keyEvent.m_altDown = ( acceleratorKey->GetFlags() & wxMOD_ALT ) > 0;
+
+                if( dynamic_cast<wxStyledTextCtrl*>( focus ) )
+                    focus->HandleWindowEvent( keyEvent );
+                else if( dynamic_cast<wxTextEntry*>( focus ) )
+                    TEXTENTRY_TRICKS::OnCharHook( dynamic_cast<wxTextEntry*>( focus ), keyEvent );
+
+                if( keyEvent.GetSkipped() )
+                {
+                    keyEvent.SetEventType( wxEVT_CHAR );
+                    focus->HandleWindowEvent( keyEvent );
+                }
+            }
+
+            return;
+        }
+
         // Store the selected position, so it can be checked by the tools
         m_selected = aEvent.GetId();
 
