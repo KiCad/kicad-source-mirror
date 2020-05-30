@@ -44,13 +44,11 @@ enum class SETTINGS_LOC {
 class JSON_SETTINGS : public nlohmann::json
 {
 public:
-    JSON_SETTINGS( const std::string& aFilename, SETTINGS_LOC aLocation, int aSchemaVersion,
-                   nlohmann::json aDefaultJson = nlohmann::json( {} ) ) :
-            JSON_SETTINGS( aFilename, aLocation, aSchemaVersion, true, true, aDefaultJson ) {}
+    JSON_SETTINGS( const std::string& aFilename, SETTINGS_LOC aLocation, int aSchemaVersion ) :
+            JSON_SETTINGS( aFilename, aLocation, aSchemaVersion, true, true, true ) {}
 
     JSON_SETTINGS( const std::string& aFilename, SETTINGS_LOC aLocation, int aSchemaVersion,
-                   bool aCreateIfMissing, bool aWriteFile,
-                   nlohmann::json aDefaultJson = nlohmann::json( {} ) );
+                   bool aCreateIfMissing, bool aCreateIfDefault, bool aWriteFile );
 
     virtual ~JSON_SETTINGS();
 
@@ -68,8 +66,9 @@ public:
     /**
      * Stores the current parameters into the JSON document represented by this object
      * Note: this doesn't do any writing to disk; that's handled by SETTINGS_MANAGER
+     * @return true if any part of the JSON document was updated
      */
-    virtual void Store();
+    virtual bool Store();
 
     /**
      * Loads the backing file from disk and then calls Load()
@@ -80,8 +79,10 @@ public:
     /**
      * Calls Store() and then writes the contents of the JSON document to a file
      * @param aDirectory is the directory to save to, including trailing separator
+     * @param aForce if true will always save, even if contents are not modified
+     * @return true if the file was saved
      */
-    virtual void SaveToFile( const std::string& aDirectory );
+    virtual bool SaveToFile( const std::string& aDirectory, bool aForce = false );
 
     /**
      * Resets all parameters to default values.  Does NOT write to file or update underlying JSON.
@@ -227,6 +228,12 @@ protected:
 
     /// Whether or not the backing store file should be created it if doesn't exist
     bool m_createIfMissing;
+
+    /**
+     * Whether or not the  backing store file should be created if all parameters are still
+     * at their default values.  Ignored if m_createIfMissing is false or m_writeFile is false.
+     */
+    bool m_createIfDefault;
 
     /// Whether or not the backing store file should be written
     bool m_writeFile;

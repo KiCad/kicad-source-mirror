@@ -133,14 +133,30 @@ public:
         return m_default;
     }
 
-    virtual void SetDefault() override
+    void SetDefault() override
     {
         ( *m_map )[ m_key ] = m_default;
     }
 
+    bool IsDefault() const override
+    {
+        return ( *m_map )[ m_key ] == m_default;
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( OPT<COLOR4D> optval = aSettings->Get<COLOR4D>( m_path ) )
+            return m_map->count( m_key ) && ( *optval == m_map->at( m_key ) );
+
+        // If the JSON doesn't exist, the map shouldn't exist either
+        return !m_map->count( m_key );
+    }
+
 private:
     int m_key;
+
     COLOR4D m_default;
+
     std::unordered_map<int, COLOR4D>* m_map;
 };
 

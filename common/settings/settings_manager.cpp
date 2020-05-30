@@ -290,7 +290,12 @@ void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::
 
     nlohmann::json::json_pointer ptr = JSON_SETTINGS::PointerFromString( aNamespace );
 
-    aSettings->Store();
+    if( !aSettings->Store() )
+    {
+        wxLogTrace( traceSettings, "Color scheme %s not modified; skipping save",
+                aSettings->GetFilename(), aNamespace );
+        return;
+    }
 
     wxASSERT( aSettings->contains( ptr ) );
 
@@ -305,7 +310,7 @@ void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::
     ( *aSettings )[ptr].update( backup );
     aSettings->Load();
 
-    aSettings->SaveToFile( path );
+    aSettings->SaveToFile( path, true );
 }
 
 

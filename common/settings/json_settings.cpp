@@ -36,13 +36,14 @@ extern const char* traceSettings;
 
 
 JSON_SETTINGS::JSON_SETTINGS( const std::string& aFilename, SETTINGS_LOC aLocation,
-                              int aSchemaVersion, bool aCreateIfMissing, bool aWriteFile,
-                              nlohmann::json aDefault ) :
-        nlohmann::json( std::move( aDefault ) ),
+                              int aSchemaVersion, bool aCreateIfMissing, bool aCreateIfDefault,
+                              bool aWriteFile ) :
+        nlohmann::json(),
         m_filename( aFilename ),
         m_legacy_filename( "" ),
         m_location( aLocation ),
         m_createIfMissing( aCreateIfMissing ),
+        m_createIfDefault( aCreateIfDefault ),
         m_writeFile( aWriteFile ),
         m_schemaVersion( aSchemaVersion ),
         m_manager( nullptr )
@@ -206,10 +207,17 @@ void JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
 }
 
 
-void JSON_SETTINGS::Store()
+bool JSON_SETTINGS::Store()
 {
+    bool modified = false;
+
     for( auto param : m_params )
+    {
+        modified |= !param->MatchesFile( this );
         param->Store( this );
+    }
+
+    return modified;
 }
 
 
@@ -220,29 +228,49 @@ void JSON_SETTINGS::ResetToDefaults()
 }
 
 
-void JSON_SETTINGS::SaveToFile( const std::string& aDirectory )
+bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
 {
     if( !m_writeFile )
-        return;
-
-    wxLogTrace( traceSettings, "Saving %s", m_filename );
+        return false;
 
     wxFileName path( aDirectory, m_filename, "json" );
 
     if( !m_createIfMissing && !path.FileExists() )
-        return;
+    {
+        wxLogTrace( traceSettings,
+                "File for %s doesn't exist and m_createIfMissing == false; not saving",
+                m_filename );
+        return false;
+    }
+
+    bool modified = false;
+
+    for( auto settings : m_nested_settings )
+        modified |= settings->SaveToFile();
+
+    modified |= Store();
+
+    if( !modified && !aForce && path.FileExists() )
+    {
+        wxLogTrace( traceSettings, "%s contents not modified, skipping save", m_filename );
+        return false;
+    }
+    else if( !modified && !aForce && !m_createIfDefault )
+    {
+        wxLogTrace( traceSettings,
+                "%s contents still default and m_createIfDefault == false; not saving",
+                m_filename );
+        return false;
+    }
 
     if( !path.DirExists() && !path.Mkdir() )
     {
         wxLogTrace( traceSettings, "Warning: could not create path %s, can't save %s",
-                path.GetPath(), m_filename );
-        return;
+                    path.GetPath(), m_filename );
+        return false;
     }
 
-    for( auto settings : m_nested_settings )
-        settings->SaveToFile();
-
-    Store();
+    wxLogTrace( traceSettings, "Saving %s", m_filename );
 
     LOCALE_IO dummy;
 
@@ -258,6 +286,8 @@ void JSON_SETTINGS::SaveToFile( const std::string& aDirectory )
     catch( ... )
     {
     }
+
+    return true;
 }
 
 

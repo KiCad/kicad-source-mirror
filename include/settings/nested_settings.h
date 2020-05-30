@@ -32,7 +32,7 @@ class NESTED_SETTINGS : public JSON_SETTINGS
 {
 public:
     NESTED_SETTINGS( const std::string& aName, int aSchemaVersion, JSON_SETTINGS* aParent,
-                     const std::string& aPath, nlohmann::json aDefault = nlohmann::json( {} ) );
+                     const std::string& aPath );
 
     virtual ~NESTED_SETTINGS();
 
@@ -40,13 +40,14 @@ public:
      * Loads the JSON document from the parent and then calls Load()
      * @param aDirectory
      */
-    virtual void LoadFromFile( const std::string& aDirectory = "" ) override;
+    void LoadFromFile( const std::string& aDirectory = "" ) override;
 
     /**
      * Calls Store() and then saves the JSON document contents into the parent JSON_SETTINGS
      * @param aDirectory is ignored
+     * @return true if the document contents were updated
      */
-    virtual void SaveToFile( const std::string& aDirectory = "" ) override;
+    bool SaveToFile( const std::string& aDirectory = "", bool aForce = false ) override;
 
 private:
 

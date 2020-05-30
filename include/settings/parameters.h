@@ -54,6 +54,19 @@ public:
     virtual void SetDefault() = 0;
 
     /**
+     * Checks whether or not this param has been changed from its default value
+     * @return true if the parameter in memory matches its default value
+     */
+    virtual bool IsDefault() const = 0;
+
+    /**
+     * Checks whether the parameter in memory matches the one in a given JSON file
+     * @param aSettings is a JSON_SETTINGS to check the JSON file contents of
+     * @return true if the parameter in memory matches its value in the file
+     */
+    virtual bool MatchesFile( JSON_SETTINGS* aSettings ) const = 0;
+
+    /**
      * @return the path name of the parameter used to store it in the json file
      * mainly usefull in error messages
      */
@@ -115,7 +128,7 @@ public:
         *m_ptr = val;
     }
 
-    void Store( JSON_SETTINGS* aSettings) const override
+    void Store( JSON_SETTINGS* aSettings ) const override
     {
         aSettings->Set<ValueType>( m_path, *m_ptr );
     }
@@ -125,9 +138,22 @@ public:
         return m_default;
     }
 
-    virtual void SetDefault() override
+    void SetDefault() override
     {
         *m_ptr = m_default;
+    }
+
+    bool IsDefault() const override
+    {
+        return *m_ptr == m_default;
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( OPT<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+            return *optval == *m_ptr;
+
+        return false;
     }
 
 private:
@@ -193,9 +219,31 @@ public:
         return m_default;
     }
 
-    virtual void SetDefault() override
+    void SetDefault() override
     {
         m_setter( m_default );
+    }
+
+    bool IsDefault() const override
+    {
+        return m_getter() == m_default;
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( std::is_same<ValueType, nlohmann::json>::value )
+        {
+            if( OPT<nlohmann::json> optval = aSettings->GetJson( m_path ) )
+                return *optval == m_default;
+        }
+        else
+        {
+            if( OPT<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+                return *optval == m_default;
+        }
+
+        // Not in file
+        return false;
     }
 
 private:
@@ -275,6 +323,19 @@ public:
         *m_ptr = m_default;
     }
 
+    bool IsDefault() const override
+    {
+        return *m_ptr == m_default;
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( OPT<double> optval = aSettings->Get<double>( m_path ) )
+            return *optval == ( *m_ptr * m_scale );
+
+        return false;
+    }
+
 private:
     ValueType* m_ptr;
     ValueType m_default;
@@ -333,9 +394,32 @@ public:
         aSettings->Set<nlohmann::json>( m_path, js );
     }
 
-    virtual void SetDefault() override
+    void SetDefault() override
     {
         *m_ptr = m_default;
+    }
+
+    bool IsDefault() const override
+    {
+        return *m_ptr == m_default;
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( OPT<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            if( js->is_array() )
+            {
+                std::vector<Type> val;
+
+                for( const auto& el : js->items() )
+                    val.emplace_back( el.value().get<Type>() );
+
+                return val == *m_ptr;
+            }
+        }
+
+        return false;
     }
 
 private:
@@ -403,6 +487,29 @@ public:
     virtual void SetDefault() override
     {
         *m_ptr = m_default;
+    }
+
+    bool IsDefault() const override
+    {
+        return *m_ptr == m_default;
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( OPT<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            if( js->is_object() )
+            {
+                std::map<std::string, Value> val;
+
+                for( const auto& el : js->items() )
+                    val[ el.key() ] = el.value().get<Value>();
+
+                return val == *m_ptr;
+            }
+        }
+
+        return false;
     }
 
 private:

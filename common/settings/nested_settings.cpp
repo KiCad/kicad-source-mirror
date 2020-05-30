@@ -26,8 +26,8 @@ extern const char* traceSettings;
 
 
 NESTED_SETTINGS::NESTED_SETTINGS( const std::string& aName, int aVersion, JSON_SETTINGS* aParent,
-                                  const std::string& aPath, nlohmann::json aDefault ) :
-        JSON_SETTINGS( aName, SETTINGS_LOC::NESTED, aVersion, std::move( aDefault ) ),
+                                  const std::string& aPath ) :
+        JSON_SETTINGS( aName, SETTINGS_LOC::NESTED, aVersion ),
         m_parent( aParent ), m_path( aPath )
 {
     if( m_parent )
@@ -70,9 +70,23 @@ void NESTED_SETTINGS::LoadFromFile( const std::string& aDirectory )
 }
 
 
-void NESTED_SETTINGS::SaveToFile( const std::string& aDirectory )
+bool NESTED_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
 {
-    Store();
+    bool modified = Store();
+
+    try
+    {
+        nlohmann::json patch =
+                nlohmann::json::diff( *this, ( *m_parent )[PointerFromString( m_path )] );
+        modified |= !patch.empty();
+    }
+    catch( ... )
+    {
+        modified = true;
+    }
+
+    if( !modified && !aForce )
+        return false;
 
     try
     {
@@ -86,4 +100,6 @@ void NESTED_SETTINGS::SaveToFile( const std::string& aDirectory )
         wxLogTrace( traceSettings, "NESTED_SETTINGS %s: Could not store to %s at %s",
                     m_filename, m_parent->GetFilename(), m_path );
     }
+
+    return modified;
 }
