@@ -95,8 +95,10 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
 
-    m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
-            wxDefaultPosition, wxSize( 150, -1 ) );
+    if( m_unitChoice == nullptr )
+        m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
+                wxDefaultPosition, wxSize( 150, -1 ) );
+
     m_mainToolBar->AddControl( m_unitChoice );
 
     m_mainToolBar->AddSeparator();

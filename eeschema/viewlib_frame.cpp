@@ -107,6 +107,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                     wxDefaultPosition, wxDefaultSize,
                     aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_STYLE_MODAL : LIB_VIEW_STYLE,
                     aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_NAME_MODAL : LIB_VIEW_NAME ),
+    m_unitChoice( nullptr ),
     m_libList( nullptr ),
     m_cmpList( nullptr ),
     m_previewItem( nullptr )

@@ -177,12 +177,12 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    m_partSelectBox = new wxComboBox( m_mainToolBar,
-                                      ID_LIBEDIT_SELECT_PART_NUMBER,
-                                      wxEmptyString,
-                                      wxDefaultPosition,
-                                      wxSize( LISTBOX_WIDTH, -1 ),
-                                      0, nullptr, wxCB_READONLY );
+    if( m_partSelectBox == nullptr )
+        m_partSelectBox = new wxComboBox( m_mainToolBar, ID_LIBEDIT_SELECT_PART_NUMBER,
+                                          wxEmptyString,
+                                          wxDefaultPosition, wxSize( LISTBOX_WIDTH, -1 ),
+                                          0, nullptr, wxCB_READONLY );
+
     m_mainToolBar->AddControl( m_partSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );
