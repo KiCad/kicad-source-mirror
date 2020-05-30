@@ -319,37 +319,9 @@ void LIB_PART::SetName( const wxString& aName )
 void LIB_PART::SetParent( LIB_PART* aParent )
 {
     if( aParent )
-    {
         m_parent = aParent->SharedPtr();
-
-        // Inherit the parent mandatory field attributes.
-        for( int id=0;  id<MANDATORY_FIELDS;  ++id )
-        {
-            LIB_FIELD* field = GetField( id );
-
-            // the MANDATORY_FIELDS are exactly that in RAM.
-            wxASSERT( field );
-
-            LIB_FIELD* parentField = aParent->GetField( id );
-
-            wxASSERT( parentField );
-
-            wxString name = field->GetText();
-
-            *field = *parentField;
-
-            if( id == VALUE )
-                field->SetText( name );
-            else if( id == DATASHEET && !GetDocFileName().IsEmpty() )
-                field->SetText( GetDocFileName() );
-
-            field->SetParent( this );
-        }
-    }
     else
-    {
         m_parent.reset();
-    }
 }
 
 

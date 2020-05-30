@@ -360,6 +360,26 @@ void LIB_EDIT_FRAME::CreateNewPart()
         LIB_PART* parent = m_libMgr->GetAlias( parentSymbolName, lib );
         wxCHECK( parent, /* void */ );
         new_part.SetParent( parent );
+
+        // Inherit the parent mandatory field attributes.
+        for( int id=0;  id<MANDATORY_FIELDS;  ++id )
+        {
+            LIB_FIELD* field = new_part.GetField( id );
+
+            // the MANDATORY_FIELDS are exactly that in RAM.
+            wxCHECK( field, /* void */ );
+
+            LIB_FIELD* parentField = parent->GetField( id );
+
+            wxCHECK( parentField, /* void */ );
+
+            *field = *parentField;
+
+            if( id == VALUE )
+                field->SetText( name );
+
+            field->SetParent( &new_part );
+        }
     }
 
     m_libMgr->UpdatePart( &new_part, lib );
