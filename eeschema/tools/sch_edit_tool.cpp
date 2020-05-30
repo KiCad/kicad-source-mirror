@@ -218,7 +218,7 @@ bool SCH_EDIT_TOOL::Init()
                     {
                         SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
 
-                        if( !line || !line->IsGraphicLine() )
+                        if( !line )
                             return false;
                     }
 
