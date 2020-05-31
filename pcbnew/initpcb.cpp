@@ -29,6 +29,9 @@
 #include <fctsys.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
+#include <project.h>
+#include <project/net_settings.h>
+#include <project/project_file.h>
 
 #include <class_board.h>
 
@@ -55,18 +58,11 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
     GetScreen()->ClearUndoRedoList();
     GetScreen()->ClrModify();
 
-    // Items visibility flags will be set because a new board will be created.
-    // Grid and ratsnest can be left to their previous state
-    bool showGrid = IsElementVisible( LAYER_GRID );
-    bool showRats = GetDisplayOptions().m_ShowGlobalRatsnest;
-
     if( !aFinal )
     {
         // delete the old BOARD and create a new BOARD so that the default
         // layer names are put into the BOARD.
         SetBoard( new BOARD() );
-        SetElementVisibility( LAYER_GRID, showGrid );
-        SetElementVisibility( LAYER_RATSNEST, showRats );
 
         // clear filename, to avoid overwriting an old file
         GetBoard()->SetFileName( wxEmptyString );
@@ -117,10 +113,6 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     GetScreen()->ClrModify();
 
     BOARD* board = new BOARD;
-
-    // Transfer current design settings
-    if( GetBoard() )
-        board->SetDesignSettings( GetBoard()->GetDesignSettings() );
 
     board->SynchronizeNetsAndNetClasses();
     SetBoard( board );

@@ -39,7 +39,7 @@ LIB_TREE_MODEL_ADAPTER::PTR SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( LIB_EDIT_
 
 SYMBOL_TREE_SYNCHRONIZING_ADAPTER::SYMBOL_TREE_SYNCHRONIZING_ADAPTER( LIB_EDIT_FRAME* aParent,
                                                                       LIB_MANAGER* aLibMgr ) :
-        LIB_TREE_MODEL_ADAPTER( aParent ),
+        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs" ),
         m_frame( aParent ),
         m_libMgr( aLibMgr ),
         m_lastSyncHash( -1 )

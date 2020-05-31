@@ -499,7 +499,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                                                   GetChars( psid ) ) );
             }
 
-            NETCLASSPTR netclass = aBoard->GetDesignSettings().m_NetClasses.GetDefault();
+            NETCLASSPTR netclass = aBoard->GetDesignSettings().GetNetClasses().GetDefault();
 
             int via_drill_default = netclass->GetViaDrill();
 

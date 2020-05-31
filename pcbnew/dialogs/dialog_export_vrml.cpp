@@ -35,6 +35,7 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pcbnew.h>
+#include <project/project_file.h>  // LAST_PATH_TYPE
 
 
 /* the dialog to create VRML files, derived from DIALOG_EXPORT_3DFILE_BASE,

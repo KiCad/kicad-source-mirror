@@ -56,7 +56,7 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCo
     m_parent = aParent;
 
     if( aParent )
-        m_NetClass = aParent->GetDesignSettings().m_NetClasses.GetDefault();
+        m_NetClass = aParent->GetDesignSettings().GetNetClasses().GetDefault();
     else
         m_NetClass = std::make_shared<NETCLASS>( "<invalid>" );
 }
@@ -71,7 +71,7 @@ NETINFO_ITEM::~NETINFO_ITEM()
 void NETINFO_ITEM::SetClass( const NETCLASSPTR& aNetClass )
 {
     wxCHECK( m_parent, /* void */ );
-    m_NetClass = aNetClass ? aNetClass : m_parent->GetDesignSettings().m_NetClasses.GetDefault();
+    m_NetClass = aNetClass ? aNetClass : m_parent->GetDesignSettings().GetNetClasses().GetDefault();
 }
 
 

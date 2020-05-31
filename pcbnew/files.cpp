@@ -52,6 +52,8 @@
 
 #include <wx/wupdlock.h>
 #include <settings/settings_manager.h>
+#include <project/project_file.h>
+#include <project/project_local_settings.h>
 
 
 //#define     USE_INSTRUMENTATION     1
@@ -305,13 +307,18 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 return false;
         }
 
-        if( !Clear_Pcb( false ) )
-            return false;
+        GetSettingsManager()->SaveProject( GetSettingsManager()->Prj().GetProjectFullName() );
+        GetBoard()->ClearProject();
 
         wxFileName fn( wxStandardPaths::Get().GetDocumentsDir(), wxT( "noname" ),
-                       LegacyProjectFileExtension );
+                       ProjectFileExtension );
 
         GetSettingsManager()->LoadProject( fn.GetFullPath() );
+
+        LoadProjectSettings();
+
+        if( !Clear_Pcb( false ) )
+            return false;
 
         onBoardLoaded();
 
@@ -478,7 +485,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     ReleaseFile();
 
     wxFileName pro = fullFileName;
-    pro.SetExt( LegacyProjectFileExtension );
+    pro.SetExt( ProjectFileExtension );
 
     bool is_new = !wxFileName::IsFileReadable( fullFileName );
 
@@ -494,7 +501,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     wxWindowUpdateLocker no_update( m_Layers );     // Avoid flicker when rebuilding m_Layers
 
-    Clear_Pcb( false );     // pass false since we prompted above for a modified board
+    // Unlink the old project if needed
+    GetBoard()->ClearProject();
+
+    // No save prompt (we already prompted above), and only reset to a new blank board if new
+    Clear_Pcb( false, !is_new );
 
     IO_MGR::PCB_FILE_T  pluginType = plugin_type( fullFileName, aCtl );
 
@@ -502,8 +513,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( !converted )
     {
-        // PROJECT::SetProjectFullName() is an impactful function.  It should only be
-        // called under carefully considered circumstances.
+        // Loading a project should only be done under carefully considered circumstances.
 
         // The calling code should know not to ask me here to change projects unless
         // it knows what consequences that will have on other KIFACEs running and using
@@ -560,40 +570,30 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 DisplayErrorMessage( this, msg, ioe.What() );
             }
 
+            // We didn't create a new blank board above, so do that now
+            Clear_Pcb( false );
+
             return false;
         }
 
-        BOARD_DESIGN_SETTINGS& bds = loadedBoard->m_designSettings;
+        SetBoard( loadedBoard );
 
-        if( bds.m_CopperEdgeClearance == Millimeter2iu( LEGACY_COPPEREDGECLEARANCE ) )
+        // On save; design settings will be removed from the board
+        if( loadedBoard->m_LegacyDesignSettingsLoaded )
+            loadedBoard->SetModified();
+
+        // Move legacy view settings to local project settings
+        if( !loadedBoard->m_LegacyVisibleLayers.test( Rescue ) )
         {
-            // 5.1 boards stored some settings in the config so as not to bump the file version.
-            // These will have been loaded into the config-initialized board, so we copy them
-            // from there.
-            BOARD_DESIGN_SETTINGS& configBds = GetBoard()->GetDesignSettings();
-
-            bds.m_DRCSeverities                     = configBds.m_DRCSeverities;
-            bds.m_HoleToHoleMin                     = configBds.m_HoleToHoleMin;
-            bds.m_LineThickness[LAYER_CLASS_OTHERS] = configBds.m_LineThickness[LAYER_CLASS_OTHERS];
-            bds.m_TextSize[LAYER_CLASS_OTHERS]      = configBds.m_TextSize[LAYER_CLASS_OTHERS];
-            bds.m_TextThickness[LAYER_CLASS_OTHERS] = configBds.m_TextThickness[LAYER_CLASS_OTHERS];
-            std::copy( configBds.m_TextItalic,  configBds.m_TextItalic + 4,  bds.m_TextItalic );
-            std::copy( configBds.m_TextUpright, configBds.m_TextUpright + 4, bds.m_TextUpright );
-            bds.m_DiffPairDimensionsList            = configBds.m_DiffPairDimensionsList;
-            bds.m_CopperEdgeClearance               = configBds.m_CopperEdgeClearance;
-
-            // Before we had a copper edge clearance setting, the edge line widths could be used
-            // as a kludge to control them.  So if there's no setting then infer it from the
-            // edge widths.
-            if( bds.m_CopperEdgeClearance == Millimeter2iu( LEGACY_COPPEREDGECLEARANCE ) )
-                bds.SetCopperEdgeClearance( inferLegacyEdgeClearance( loadedBoard ) );
+            Prj().GetLocalSettings().m_VisibleLayers = loadedBoard->m_LegacyVisibleLayers;
+            loadedBoard->SetModified();
         }
 
-        // We store the severities in the config to keep board-file changes to a minimum
-        BOARD_DESIGN_SETTINGS& configBds = GetBoard()->GetDesignSettings();
-        bds.m_DRCSeverities              = configBds.m_DRCSeverities;
-
-        SetBoard( loadedBoard );
+        if( !loadedBoard->m_LegacyVisibleItems.test( GAL_LAYER_INDEX( GAL_LAYER_ID_BITMASK_END ) ) )
+        {
+            Prj().GetLocalSettings().m_VisibleItems = loadedBoard->m_LegacyVisibleItems;
+            loadedBoard->SetModified();
+        }
 
         // we should not ask PLUGINs to do these items:
         loadedBoard->BuildListOfNets();
@@ -723,6 +723,21 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         return false;
     }
 
+    // TODO: this will break if we ever go multi-board
+    wxFileName projectFile( pcbFileName );
+    projectFile.SetExt( ProjectFileExtension );
+
+    if( !projectFile.FileExists() )
+    {
+        // If this is a new board, project filename won't be set yet
+        if( projectFile.GetFullPath() != Prj().GetProjectFullName() )
+        {
+            GetBoard()->ClearProject();
+            GetSettingsManager()->LoadProject( projectFile.GetFullPath() );
+            GetBoard()->SetProject( &Prj() );
+        }
+    }
+
     wxString backupFileName;
 
     if( aCreateBackupFile )
@@ -742,6 +757,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     // Save various DRC parameters, such as violation severities (which may have been
     // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
     SaveProjectSettings();
+
+    GetSettingsManager()->SaveProject();
 
     ClearMsgPanel();
 

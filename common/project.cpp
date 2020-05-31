@@ -23,20 +23,20 @@
 
 #include <wx/stdpaths.h>
 
+#include <common.h> // NAMELESS_PROJECT
+#include <config_params.h>
+#include <confirm.h>
 #include <fctsys.h>
+#include <fp_lib_table.h>
+#include <kicad_string.h>
+#include <kiface_ids.h>
+#include <kiway.h>
 #include <macros.h>
 #include <pgm_base.h>
 #include <project.h>
-#include <common.h>         // NAMELESS_PROJECT
-#include <confirm.h>
-#include <kicad_string.h>
-#include <config_params.h>
-#include <wildcards_and_files_ext.h>
-#include <fp_lib_table.h>
-#include <kiway.h>
-#include <kiface_ids.h>
+#include <project/project_file.h>
 #include <trace_helpers.h>
-#include <settings/project_file.h>
+#include <wildcards_and_files_ext.h>
 
 
 PROJECT::PROJECT() :

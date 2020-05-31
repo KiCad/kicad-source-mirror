@@ -45,6 +45,7 @@
 #include <pcbnew.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
+#include <project/project_file.h> // LAST_PATH_TYPE
 #include <trigo.h>
 
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* frame );

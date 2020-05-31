@@ -24,6 +24,7 @@
 #include <fctsys.h>
 #include <widgets/paged_dialog.h>
 #include <footprint_edit_frame.h>
+#include <footprint_editor_settings.h>
 #include <widgets/wx_grid.h>
 #include <grid_tricks.h>
 
@@ -361,7 +362,8 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataFromWindow()
         m_brdSettings.m_DefaultFPTextItems.emplace_back( text, visible, layer );
     }
 
-    m_frame->SetDesignSettings( m_brdSettings );
+    if( FOOTPRINT_EDITOR_SETTINGS* cfg = m_frame->GetSettings() )
+        cfg->m_DesignSettings = m_brdSettings;
 
     return true;
 }

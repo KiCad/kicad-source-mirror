@@ -126,7 +126,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
         ent.coupledNet = DpCoupledNet( i );
 
         wxString netClassName = ni->GetClassName();
-        NETCLASSPTR nc = m_board->GetDesignSettings().m_NetClasses.Find( netClassName );
+        NETCLASSPTR nc = m_board->GetDesignSettings().GetNetClasses().Find( netClassName );
 
         int clearance = nc->GetClearance();
         ent.clearance = clearance;
@@ -154,7 +154,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
         }
     }
 
-    auto defaultRule = m_board->GetDesignSettings().m_NetClasses.Find ("Default");
+    auto defaultRule = m_board->GetDesignSettings().GetNetClasses().Find ("Default");
 
     if( defaultRule )
     {

@@ -442,21 +442,6 @@ static void CheckCollisionsMatchExpected( BOARD& aBoard,
 
 
 /**
- * Get a #BOARD_DESIGN_SETTINGS object that will cause DRC to check for courtyard overlaps
- */
-static BOARD_DESIGN_SETTINGS GetOverlapCheckDesignSettings()
-{
-    BOARD_DESIGN_SETTINGS des_settings;
-    des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
-
-    // we might not always have courtyards - that's a separate test
-    des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_IGNORE;
-
-    return des_settings;
-}
-
-
-/**
  * Run a single courtyard overlap testcase
  * @param aCase The testcase to run.
  */
@@ -468,7 +453,12 @@ static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase,
     // Dump if env var set
     aDumper.DumpBoardToFile( *board, aCase.m_case_name );
 
-    board->SetDesignSettings( GetOverlapCheckDesignSettings() );
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+
+    bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
+
+    // we might not always have courtyards - that's a separate test
+    bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_IGNORE;
 
     // list of markers to collect
     std::vector<std::unique_ptr<MARKER_PCB>> markers;

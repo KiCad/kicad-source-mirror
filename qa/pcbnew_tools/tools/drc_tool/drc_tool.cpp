@@ -69,7 +69,7 @@ public:
         if( m_exec_context.m_verbose )
             std::cout << "Running DRC check: " << getRunnerIntro() << std::endl;
 
-        aBoard.SetDesignSettings( getDesignSettings() );
+        setDesignSettings( aBoard.GetDesignSettings() );
 
         std::vector<std::unique_ptr<MARKER_PCB>> markers;
 
@@ -101,9 +101,10 @@ private:
     virtual std::string getRunnerIntro() const = 0;
 
     /**
-     * Get suitable design settings for this DRC runner
+     * Set suitable design settings for this DRC runner
+     * @param aSettings is a reference to the design settings object of the board under test
      */
-    virtual BOARD_DESIGN_SETTINGS getDesignSettings() const = 0;
+    virtual void setDesignSettings( BOARD_DESIGN_SETTINGS& aSettings ) const = 0;
 
     virtual std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(
             BOARD& aBoard, DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) = 0;
@@ -157,13 +158,10 @@ private:
         return "Courtyard overlap";
     }
 
-    BOARD_DESIGN_SETTINGS getDesignSettings() const override
+    void setDesignSettings( BOARD_DESIGN_SETTINGS& aSettings ) const override
     {
-        BOARD_DESIGN_SETTINGS des_settings;
-        des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_IGNORE;
-        des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
-
-        return des_settings;
+        aSettings.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_IGNORE;
+        aSettings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
     }
 
     std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(
@@ -194,13 +192,10 @@ private:
         return "Courtyard missing";
     }
 
-    BOARD_DESIGN_SETTINGS getDesignSettings() const override
+    void setDesignSettings( BOARD_DESIGN_SETTINGS& aSettings ) const override
     {
-        BOARD_DESIGN_SETTINGS des_settings;
-        des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_ERROR;
-        des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_IGNORE;
-
-        return des_settings;
+        aSettings.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_ERROR;
+        aSettings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_IGNORE;
     }
 
     std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(

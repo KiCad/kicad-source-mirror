@@ -30,6 +30,7 @@
 #include <dialog_export_idf_base.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
+#include <project/project_file.h> // LAST_PATH_TYPE
 #include <confirm.h>
 
 

@@ -33,6 +33,7 @@
 #include "class_board.h"
 #include "dialog_export_step_base.h"
 #include <pcbnew_settings.h>
+#include <project/project_file.h> // LAST_PATH_TYPE
 #include <widgets/text_ctrl_eval.h>
 #include <wx_html_report_panel.h>
 

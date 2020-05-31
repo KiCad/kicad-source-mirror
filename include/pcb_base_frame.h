@@ -148,12 +148,10 @@ public:
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
     /**
-     * Function GetDesignSettings
-     * returns the BOARD_DESIGN_SETTINGS for the BOARD owned by this frame.
+     * Returns the BOARD_DESIGN_SETTINGS for the open project
      * Overloaded in FOOTPRINT_EDIT_FRAME.
      */
     virtual BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
-    virtual void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );
 
     /**
      * Helper to retrieve the current color settings

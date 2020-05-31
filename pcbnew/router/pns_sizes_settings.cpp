@@ -89,12 +89,12 @@ void SIZES_SETTINGS::Init( BOARD* aBoard, ITEM* aStartItem, int aNet )
         if( ni )
         {
             wxString netClassName = ni->GetClassName();
-            netClass = bds.m_NetClasses.Find( netClassName );
+            netClass = bds.GetNetClasses().Find( netClassName );
         }
     }
 
     if( !netClass )
-        netClass = bds.m_NetClasses.GetDefault();
+        netClass = bds.GetNetClasses().GetDefault();
 
     m_trackWidth = 0;
 

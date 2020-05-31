@@ -35,7 +35,7 @@
 
 #include <cvpcb_mainframe.h>
 #include <dialog_config_equfiles.h>
-#include <settings/project_file.h>
+#include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 

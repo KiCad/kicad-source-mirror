@@ -24,6 +24,7 @@
 #include <kiface_i.h>
 #include <config_params.h>
 #include <lib_tree_model_adapter.h>
+#include <project/project_file.h>
 #include <settings/app_settings.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
@@ -73,7 +74,7 @@ unsigned int LIB_TREE_MODEL_ADAPTER::IntoArray( LIB_TREE_NODE const& aNode,
 }
 
 
-LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent ) :
+LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, wxString aPinnedKey ) :
         m_parent( aParent ),
         m_filter( CMP_FILTER_NONE ),
         m_show_units( true ),
@@ -81,7 +82,9 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent ) :
         m_freeze( 0 ),
         m_col_part( nullptr ),
         m_col_desc( nullptr ),
-        m_widget( nullptr )
+        m_widget( nullptr ),
+        m_pinnedLibs(),
+        m_pinnedKey( aPinnedKey )
 {
     // Default column widths
     m_colWidths[PART_COL] = 360;
@@ -90,12 +93,15 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent ) :
     auto cfg = Kiface().KifaceSettings();
     m_colWidths[PART_COL] = cfg->m_LibTree.column_width;
 
-    // TODO(JE) PROJECT
-#if 0
     // Read the pinned entries from the project config
-    m_parent->Kiway().Prj().ConfigLoad( Kiface().KifaceSearch(), m_parent->GetName(),
-                                        GetProjectFileParameters() );
-#endif
+    PROJECT_FILE& project = m_parent->Kiway().Prj().GetProjectFile();
+
+    std::vector<wxString>& entries = ( m_pinnedKey == "pinned_symbol_libs" ) ?
+                                             project.m_PinnedSymbolLibs :
+                                             project.m_PinnedFootprintLibs;
+
+    for( const wxString& entry : entries )
+        m_pinnedLibs.push_back( entry );
 }
 
 
@@ -117,32 +123,27 @@ void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
 }
 
 
-std::vector<PARAM_CFG*>& LIB_TREE_MODEL_ADAPTER::GetProjectFileParameters()
-{
-    if( !m_projectFileParams.empty() )
-        return m_projectFileParams;
-
-    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( PINNED_ITEMS_KEY, &m_pinnedLibs ) );
-
-    return m_projectFileParams;
-}
-
-
 void LIB_TREE_MODEL_ADAPTER::SavePinnedItems()
 {
+    PROJECT_FILE& project = m_parent->Kiway().Prj().GetProjectFile();
+
+    std::vector<wxString>& entries = ( m_pinnedKey == "pinned_symbol_libs" ) ?
+                                     project.m_PinnedSymbolLibs :
+                                     project.m_PinnedFootprintLibs;
+
+    entries.clear();
     m_pinnedLibs.clear();
 
     for( auto& child: m_tree.m_Children )
     {
         if( child->m_Pinned )
+        {
             m_pinnedLibs.push_back( child->m_LibId.GetLibNickname() );
+            entries.push_back( child->m_LibId.GetLibNickname() );
+        }
     }
 
-    // TODO(JE) PROJECT
-#if 0
-    m_parent->Kiway().Prj().ConfigSave( Kiface().KifaceSearch(), m_parent->GetName(),
-                                        GetProjectFileParameters() );
-#endif
+
 }
 
 

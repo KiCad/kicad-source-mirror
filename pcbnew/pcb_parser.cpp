@@ -577,6 +577,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
         case T_net_class:
             parseNETCLASS();
+            m_board->m_LegacyNetclassesLoaded = true;
             break;
 
         case T_gr_arc:
@@ -1253,6 +1254,7 @@ void PCB_PARSER::parseLayers()
     LSET    enabledLayers;
     int     copperLayerCount = 0;
     LAYER   layer;
+    bool    anyHidden = false;
 
     std::unordered_map< std::string, std::string > v3_layer_names;
     std::vector<LAYER>  cu;
@@ -1292,6 +1294,8 @@ void PCB_PARSER::parseLayers()
 
             if( it->m_visible )
                 visibleLayers.set( it->m_number );
+            else
+                anyHidden = true;
 
             m_board->SetLayerDescr( PCB_LAYER_ID( it->m_number ), *it );
 
@@ -1341,6 +1345,8 @@ void PCB_PARSER::parseLayers()
 
         if( layer.m_visible )
             visibleLayers.set( layer.m_number );
+        else
+            anyHidden = true;
 
         m_board->SetLayerDescr( it->second, layer );
 
@@ -1364,8 +1370,10 @@ void PCB_PARSER::parseLayers()
     m_board->SetCopperLayerCount( copperLayerCount );
     m_board->SetEnabledLayers( enabledLayers );
 
-    // call SetEnabledLayers before SetVisibleLayers()
-    m_board->SetVisibleLayers( visibleLayers );
+    // Only set this if any layers were explicitly marked as hidden.  Otherwise, we want to leave
+    // this alone; default visibility will show everything
+    if( anyHidden )
+        m_board->m_LegacyVisibleLayers = visibleLayers;
 }
 
 
@@ -1433,9 +1441,9 @@ void PCB_PARSER::parseSetup()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as setup." ) );
 
     T token;
-    NETCLASS* defaultNetClass = m_board->GetDesignSettings().GetDefault();
-    BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
-    ZONE_SETTINGS zoneSettings = m_board->GetZoneSettings();
+    NETCLASS*              defaultNetClass = m_board->GetDesignSettings().GetDefault();
+    BOARD_DESIGN_SETTINGS& designSettings  = m_board->GetDesignSettings();
+    ZONE_SETTINGS&         zoneSettings    = designSettings.GetDefaultZoneSettings();
 
     // Missing soldermask min width value means that the user has set the value to 0 and
     // not the default value (0.25mm)
@@ -1461,67 +1469,80 @@ void PCB_PARSER::parseSetup()
 
         case T_user_trace_width:
             designSettings.m_TrackWidthList.push_back( parseBoardUnits( T_user_trace_width ) );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_trace_clearance:
             defaultNetClass->SetClearance( parseBoardUnits( T_trace_clearance ) );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_zone_clearance:
             zoneSettings.m_ZoneClearance = parseBoardUnits( T_zone_clearance );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_zone_45_only:
             zoneSettings.m_Zone_45_Only = parseBool();
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_clearance_min:
             designSettings.m_MinClearance = parseBoardUnits( T_clearance_min );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_trace_min:
             designSettings.m_TrackMinWidth = parseBoardUnits( T_trace_min );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_via_size:
             defaultNetClass->SetViaDiameter( parseBoardUnits( T_via_size ) );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_via_drill:
             defaultNetClass->SetViaDrill( parseBoardUnits( T_via_drill ) );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_via_min_annulus:
             designSettings.m_ViasMinAnnulus = parseBoardUnits( T_via_min_annulus );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_via_min_size:
             designSettings.m_ViasMinSize = parseBoardUnits( T_via_min_size );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_through_hole_min:
             designSettings.m_MinThroughDrill = parseBoardUnits( T_through_hole_min );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         // Legacy token for T_through_hole_min
         case T_via_min_drill:
             designSettings.m_MinThroughDrill = parseBoardUnits( T_via_min_drill );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_hole_to_hole_min:
             designSettings.m_HoleToHoleMin = parseBoardUnits( T_hole_to_hole_min );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
@@ -1530,37 +1551,44 @@ void PCB_PARSER::parseSetup()
                 int viaSize = parseBoardUnits( "user via size" );
                 int viaDrill = parseBoardUnits( "user via drill" );
                 designSettings.m_ViasDimensionsList.emplace_back( VIA_DIMENSION( viaSize, viaDrill ) );
+                m_board->m_LegacyDesignSettingsLoaded = true;
                 NeedRIGHT();
             }
             break;
 
         case T_uvia_size:
             defaultNetClass->SetuViaDiameter( parseBoardUnits( T_uvia_size ) );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_uvia_drill:
             defaultNetClass->SetuViaDrill( parseBoardUnits( T_uvia_drill ) );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_uvias_allowed:
             designSettings.m_MicroViasAllowed = parseBool();
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_blind_buried_vias_allowed:
             designSettings.m_BlindBuriedViaAllowed = parseBool();
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_uvia_min_size:
             designSettings.m_MicroViasMinSize = parseBoardUnits( T_uvia_min_size );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_uvia_min_drill:
             designSettings.m_MicroViasMinDrill = parseBoardUnits( T_uvia_min_drill );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
@@ -1570,49 +1598,58 @@ void PCB_PARSER::parseSetup()
                 int gap = parseBoardUnits( "user diff-pair gap" );
                 int viaGap = parseBoardUnits( "user diff-pair via gap" );
                 designSettings.m_DiffPairDimensionsList.emplace_back( DIFF_PAIR_DIMENSION( width, gap, viaGap ) );
+                m_board->m_LegacyDesignSettingsLoaded = true;
                 NeedRIGHT();
             }
             break;
 
         case T_segment_width:   // note: legacy (pre-6.0) token
             designSettings.m_LineThickness[ LAYER_CLASS_COPPER ] = parseBoardUnits( T_segment_width );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_edge_width:      // note: legacy (pre-6.0) token
             designSettings.m_LineThickness[ LAYER_CLASS_EDGES ] = parseBoardUnits( T_edge_width );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_mod_edge_width:  // note: legacy (pre-6.0) token
             designSettings.m_LineThickness[ LAYER_CLASS_SILK ] = parseBoardUnits( T_mod_edge_width );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_pcb_text_width:  // note: legacy (pre-6.0) token
             designSettings.m_TextThickness[ LAYER_CLASS_COPPER ] = parseBoardUnits( T_pcb_text_width );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_mod_text_width:  // note: legacy (pre-6.0) token
             designSettings.m_TextThickness[ LAYER_CLASS_SILK ] = parseBoardUnits( T_mod_text_width );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_pcb_text_size:   // note: legacy (pre-6.0) token
             designSettings.m_TextSize[ LAYER_CLASS_COPPER ].x = parseBoardUnits( "pcb text width" );
             designSettings.m_TextSize[ LAYER_CLASS_COPPER ].y = parseBoardUnits( "pcb text height" );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_mod_text_size:   // note: legacy (pre-6.0) token
             designSettings.m_TextSize[ LAYER_CLASS_SILK ].x = parseBoardUnits( "module text width" );
             designSettings.m_TextSize[ LAYER_CLASS_SILK ].y = parseBoardUnits( "module text height" );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_defaults:
             parseDefaults( designSettings );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             break;
 
         case T_pad_size:
@@ -1621,6 +1658,7 @@ void PCB_PARSER::parseSetup()
                 sz.SetWidth( parseBoardUnits( "master pad width" ) );
                 sz.SetHeight( parseBoardUnits( "master pad height" ) );
                 designSettings.m_Pad_Master.SetSize( sz );
+                m_board->m_LegacyDesignSettingsLoaded = true;
                 NeedRIGHT();
             }
             break;
@@ -1629,27 +1667,32 @@ void PCB_PARSER::parseSetup()
             {
                 int drillSize = parseBoardUnits( T_pad_drill );
                 designSettings.m_Pad_Master.SetDrillSize( wxSize( drillSize, drillSize ) );
+                m_board->m_LegacyDesignSettingsLoaded = true;
                 NeedRIGHT();
             }
             break;
 
         case T_pad_to_mask_clearance:
             designSettings.m_SolderMaskMargin = parseBoardUnits( T_pad_to_mask_clearance );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_solder_mask_min_width:
             designSettings.m_SolderMaskMinWidth = parseBoardUnits( T_solder_mask_min_width );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_pad_to_paste_clearance:
             designSettings.m_SolderPasteMargin = parseBoardUnits( T_pad_to_paste_clearance );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_pad_to_paste_clearance_ratio:
             designSettings.m_SolderPasteMarginRatio = parseDouble( T_pad_to_paste_clearance_ratio );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
@@ -1657,8 +1700,9 @@ void PCB_PARSER::parseSetup()
             {
                 int x = parseBoardUnits( "auxiliary origin X" );
                 int y = parseBoardUnits( "auxiliary origin Y" );
-                // m_board->SetAuxOrigin( wxPoint( x, y ) );    gets overwritten via SetDesignSettings below
                 designSettings.m_AuxOrigin = wxPoint( x, y );
+                // Aux origin still stored in board for the moment
+                //m_board->m_LegacyDesignSettingsLoaded = true;
                 NeedRIGHT();
             }
             break;
@@ -1667,24 +1711,36 @@ void PCB_PARSER::parseSetup()
             {
                 int x = parseBoardUnits( "grid origin X" );
                 int y = parseBoardUnits( "grid origin Y" );
-                // m_board->SetGridOrigin( wxPoint( x, y ) );   gets overwritten SetDesignSettings below
                 designSettings.m_GridOrigin = wxPoint( x, y );
+                // Grid origin still stored in board for the moment
+                //m_board->m_LegacyDesignSettingsLoaded = true;
                 NeedRIGHT();
             }
             break;
 
+        // Stored in board prior to 6.0
         case T_visible_elements:
-            designSettings.SetVisibleElements( parseHex() | MIN_VISIBILITY_MASK );
-            NeedRIGHT();
+            {
+                m_board->m_LegacyVisibleItems.reset();
+
+                int visible = parseHex() | MIN_VISIBILITY_MASK;
+
+                for( size_t i = 0; i < sizeof( int ) * CHAR_BIT; i++ )
+                    m_board->m_LegacyVisibleItems.set( i, visible & ( 1u << i ) );
+
+                NeedRIGHT();
+            }
             break;
 
         case T_max_error:
             designSettings.m_MaxError = parseBoardUnits( T_max_error );
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_filled_areas_thickness:
             designSettings.m_ZoneUseNoOutlineInFill = not parseBool();
+            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
@@ -1707,9 +1763,6 @@ void PCB_PARSER::parseSetup()
             Unexpected( CurText() );
         }
     }
-
-    //m_board->SetDesignSettings( designSettings );
-    m_board->SetZoneSettings( zoneSettings );
 }
 
 
@@ -1925,7 +1978,7 @@ void PCB_PARSER::parseNETCLASS()
         NeedRIGHT();
     }
 
-    if( !m_board->GetDesignSettings().m_NetClasses.Add( nc ) )
+    if( !m_board->GetDesignSettings().GetNetClasses().Add( nc ) )
     {
         // Must have been a name conflict, this is a bad board file.
         // User may have done a hand edit to the file.

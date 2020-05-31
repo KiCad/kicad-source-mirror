@@ -42,7 +42,6 @@
 
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
-class PCBNEW_SETTINGS;
 class PICKED_ITEMS_LIST;
 class BOARD;
 class ZONE_CONTAINER;
@@ -211,13 +210,24 @@ private:
 
     std::shared_ptr<CONNECTIVITY_DATA>      m_connectivity;
 
-    BOARD_DESIGN_SETTINGS   m_designSettings;
-    PCBNEW_SETTINGS*        m_generalSettings;      // reference only; I have no ownership
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;               // text in lower right of screen and plots
     PCB_PLOT_PARAMS         m_plotOptions;
+    PROJECT*                m_project;              // project this board is a part of
+
+    /**
+     * All of the board design settings are stored as a JSON object inside the project file.  The
+     * object itself is located here because the alternative is to require a valid project be
+     * passed in when constructing a BOARD, since things in the BOARD constructor rely on access
+     * to the BOARD_DESIGN_SETTINGS object.
+     *
+     * A reference to this object is set up in the PROJECT_FILE for the PROJECT this board is
+     * part of, so that the JSON load/store operations work.  This link is established when
+     * boards are loaded from disk.
+     */
+    std::unique_ptr<BOARD_DESIGN_SETTINGS> m_designSettings;
+
     NETINFO_LIST            m_NetInfo;              // net info list (name, design constraints ..
-    PROJECT*                m_project;              // project this board is a part of (if any)
 
     std::vector<BOARD_LISTENER*> m_listeners;
 
@@ -281,6 +291,16 @@ public:
 
     /// zone contour currently in progress
     ZONE_CONTAINER*             m_CurrentZoneContour;
+
+    /// Visibility settings stored in board prior to 6.0, only used for loading legacy files
+    LSET    m_LegacyVisibleLayers;
+    GAL_SET m_LegacyVisibleItems;
+
+    /// True if the legacy board design settings were loaded from a file
+    bool m_LegacyDesignSettingsLoaded;
+
+    /// True if netclasses were loaded from the file
+    bool m_LegacyNetclassesLoaded;
 
     BOARD();
     ~BOARD();
@@ -354,7 +374,15 @@ public:
     void DeleteZONEOutlines();
 
     PROJECT* GetProject() const            { return m_project; }
-    void SetProject( PROJECT* aProject )   { m_project = aProject; }
+
+    /**
+     * Links a board to a given project.  Should be called immediately after loading board in
+     * order for everything to work
+     * @param aProject is a loaded project to link to
+     */
+    void SetProject( PROJECT* aProject );
+
+    void ClearProject();
 
     /**
      * Function ResetNetHighLight
@@ -434,7 +462,7 @@ public:
      */
     bool IsLayerEnabled( PCB_LAYER_ID aLayer ) const
     {
-        return m_designSettings.IsLayerEnabled( aLayer );
+        return GetDesignSettings().IsLayerEnabled( aLayer );
     }
 
     /**
@@ -444,10 +472,7 @@ public:
      * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool IsLayerVisible( PCB_LAYER_ID aLayer ) const
-    {
-        return m_designSettings.IsLayerVisible( aLayer );
-    }
+    bool IsLayerVisible( PCB_LAYER_ID aLayer ) const;
 
     /**
      * Function GetVisibleLayers
@@ -469,13 +494,11 @@ public:
     // are not stored in the bitmap.
 
     /**
-     * Function GetVisibleElements
-     * is a proxy function that calls the correspondent function in m_BoardSettings
-     * returns a bit-mask of all the element categories that are visible
-     * @return int - the visible element bitmap or-ed from enum GAL_LAYER_ID
+     * Returns a set of all the element categories that are visible
+     * @return the set of visible GAL layers
      * @see enum GAL_LAYER_ID
      */
-    int GetVisibleElements() const;
+    GAL_SET GetVisibleElements() const;
 
     /**
      * Function SetVisibleElements
@@ -484,7 +507,7 @@ public:
      * @param aMask = The new bit-mask of visible element bitmap or-ed from enum GAL_LAYER_ID
      * @see enum GAL_LAYER_ID
      */
-    void SetVisibleElements( int aMask );
+    void SetVisibleElements( const GAL_SET& aMask );
 
     /**
      * Function SetVisibleAlls
@@ -528,16 +551,22 @@ public:
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const
     {
         // remove const-ness with cast. TODO(snh): Make GetDesignSettings const
-        return const_cast<BOARD_DESIGN_SETTINGS&>( m_designSettings );
+        // NOTE(JE) If we want this to be const, it's going to have to involve making BOARD and
+        // everything else that relies on BOARD_DESIGN_SETTINGS aware of the PROJECT so that it
+        // can be retrieved from there.  This will also currently require constructing BOARD with
+        // a valid PROJECT passed in to the ctor.
+
+        return const_cast<BOARD_DESIGN_SETTINGS&>( *m_designSettings.get() );
     }
 
-    /**
-     * Function SetDesignSettings
-     * @param aDesignSettings the new BOARD_DESIGN_SETTINGS to use
-     */
-    void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aDesignSettings )
+    const ZONE_SETTINGS& GetZoneSettings() const override
     {
-        m_designSettings = aDesignSettings;
+        return GetDesignSettings().GetDefaultZoneSettings();
+    }
+
+    void SetZoneSettings( const ZONE_SETTINGS& aSettings ) override
+    {
+        GetDesignSettings().SetDefaultZoneSettings( aSettings );
     }
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
@@ -550,13 +579,6 @@ public:
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
-
-    const PCBNEW_SETTINGS& GeneralSettings() const { return *m_generalSettings; }
-
-    void SetGeneralSettings( PCBNEW_SETTINGS* aSettings )
-    {
-        m_generalSettings = aSettings;
-    }
 
     /**
      * Function GetBoardPolygonOutlines

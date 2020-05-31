@@ -52,6 +52,7 @@
 #include <kicad_string.h>
 #include <pcb_draw_panel_gal.h>
 #include <functional>
+#include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -369,6 +370,9 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 
 void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
+    if( m_Pcb )
+        m_Pcb->ClearProject();
+
     PCB_BASE_EDIT_FRAME::SetBoard( aBoard );
 
     aBoard->SetProject( &Prj() );
@@ -497,39 +501,42 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::RecordDRCExclusions()
 {
-    m_drcExclusions.clear();
+    BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+    bds.m_DrcExclusions.clear();
 
     for( MARKER_PCB* marker : GetBoard()->Markers() )
     {
         if( marker->IsExcluded() )
-            m_drcExclusions.insert( marker->Serialize() );
+            bds.m_DrcExclusions.insert( marker->Serialize() );
     }
 }
 
 
 void PCB_EDIT_FRAME::ResolveDRCExclusions()
 {
+    BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+
     for( MARKER_PCB* marker : GetBoard()->Markers() )
     {
-        auto i = m_drcExclusions.find( marker->Serialize() );
+        auto i = bds.m_DrcExclusions.find( marker->Serialize() );
 
-        if( i != m_drcExclusions.end() )
+        if( i != bds.m_DrcExclusions.end() )
         {
             marker->SetExcluded( true );
-            m_drcExclusions.erase( i );
+            bds.m_DrcExclusions.erase( i );
         }
     }
 
     BOARD_COMMIT commit( this );
 
-    for( const wxString& exclusionData : m_drcExclusions )
+    for( const wxString& exclusionData : bds.m_DrcExclusions )
     {
         MARKER_PCB* marker = MARKER_PCB::Deserialize( exclusionData );
         marker->SetExcluded( true );
         commit.Add( marker );
     }
 
-    m_drcExclusions.clear();
+    bds.m_DrcExclusions.clear();
 
     commit.Push( wxEmptyString, false, false );
 }
@@ -847,10 +854,12 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
 
 wxString PCB_EDIT_FRAME::GetLastPath( LAST_PATH_TYPE aType )
 {
-    if( m_lastPath[ aType ].IsEmpty() )
+    PROJECT_FILE& project = Prj().GetProjectFile();
+
+    if( project.m_PcbLastPath[ aType ].IsEmpty() )
         return wxEmptyString;
 
-    wxFileName absoluteFileName = m_lastPath[ aType ];
+    wxFileName absoluteFileName = project.m_PcbLastPath[ aType ];
     wxFileName pcbFileName = GetBoard()->GetFileName();
 
     absoluteFileName.MakeAbsolute( pcbFileName.GetPath() );
@@ -860,14 +869,16 @@ wxString PCB_EDIT_FRAME::GetLastPath( LAST_PATH_TYPE aType )
 
 void PCB_EDIT_FRAME::SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPath )
 {
+    PROJECT_FILE& project = Prj().GetProjectFile();
+
     wxFileName relativeFileName = aLastPath;
     wxFileName pcbFileName = GetBoard()->GetFileName();
 
     relativeFileName.MakeRelativeTo( pcbFileName.GetPath() );
 
-    if( relativeFileName.GetFullPath() != m_lastPath[ aType ] )
+    if( relativeFileName.GetFullPath() != project.m_PcbLastPath[ aType ] )
     {
-        m_lastPath[ aType ] = relativeFileName.GetFullPath();
+        project.m_PcbLastPath[ aType ] = relativeFileName.GetFullPath();
         SaveProjectSettings();
     }
 }

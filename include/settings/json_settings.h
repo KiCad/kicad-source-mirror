@@ -55,6 +55,8 @@ public:
 
     std::string GetFilename() const { return m_filename; }
 
+    wxString GetFullFilename() const;
+
     SETTINGS_LOC GetLocation() const { return m_location; }
 
     void SetLegacyFilename( const std::string& aFilename ) { m_legacy_filename = aFilename; }
@@ -81,8 +83,7 @@ public:
     /**
      * Calls Store() and then writes the contents of the JSON document to a file
      * @param aDirectory is the directory to save to, including trailing separator
-     * @param aForce if true will always save, even if contents are not modified
-     * @return true if the file was saved
+c     * @return true if the file was saved
      */
     virtual bool SaveToFile( const std::string& aDirectory = "", bool aForce = false );
 
@@ -97,7 +98,7 @@ public:
      * @param aPath is a string containing one or more keys separated by '.'
      * @return a JSON object from within this one
      */
-    OPT<nlohmann::json> GetJson( std::string aPath ) const;
+    OPT<nlohmann::json> GetJson( const std::string& aPath ) const;
 
     /**
      * Fetches a value from within the JSON document.
@@ -107,9 +108,9 @@ public:
      * @return a value from within this document
      */
     template<typename ValueType>
-    OPT<ValueType> Get( std::string aPath ) const
+    OPT<ValueType> Get( const std::string& aPath ) const
     {
-        if( OPT<nlohmann::json> ret = GetJson( std::move( aPath ) ) )
+        if( OPT<nlohmann::json> ret = GetJson( aPath ) )
         {
             try
             {
@@ -131,9 +132,9 @@ public:
      * @param aVal is the value to store
      */
     template<typename ValueType>
-    void Set( std::string aPath, ValueType aVal )
+    void Set( const std::string& aPath, ValueType aVal )
     {
-        ( *this )[PointerFromString( std::move( aPath ) ) ] = aVal;
+        ( *this )[PointerFromString( aPath ) ] = aVal;
     }
 
     /**
@@ -253,6 +254,9 @@ protected:
     /// Whether or not to delete legacy file after migration
     bool m_deleteLegacyAfterMigration;
 
+    /// Whether or not to set parameters to their default value if missing from JSON on Load()
+    bool m_resetParamsIfMissing;
+
     /// Version of this settings schema.
     int m_schemaVersion;
 
@@ -265,9 +269,9 @@ protected:
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API
 
-template<> OPT<wxString> JSON_SETTINGS::Get( std::string aPath ) const;
+template<> OPT<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const;
 
-template<> void JSON_SETTINGS::Set<wxString>( std::string aPath, wxString aVal );
+template<> void JSON_SETTINGS::Set<wxString>( const std::string& aPath, wxString aVal );
 
 // Specializations to allow directly reading/writing wxStrings from JSON
 

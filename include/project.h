@@ -48,6 +48,7 @@ class KIWAY;
 class SYMBOL_LIB_TABLE;
 class FILENAME_RESOLVER;
 class PROJECT_FILE;
+class PROJECT_LOCAL_SETTINGS;
 
 #define VTBL_ENTRY      virtual
 
@@ -130,6 +131,12 @@ public:
     {
         wxASSERT( m_projectFile );
         return *m_projectFile;
+    }
+
+    VTBL_ENTRY PROJECT_LOCAL_SETTINGS& GetLocalSettings() const
+    {
+        wxASSERT( m_localSettings );
+        return *m_localSettings;
     }
 
     /**
@@ -341,6 +348,15 @@ private:
     }
 
     /**
+     * Sets the local settings backing store.  Should only be called by SETTINGS_MANAGER on load.
+     * @param aSettings is the local settings object (may or may not exist on disk at this point)
+     */
+    VTBL_ENTRY void setLocalSettings( PROJECT_LOCAL_SETTINGS* aSettings )
+    {
+        m_localSettings = aSettings;
+    }
+
+    /**
      * Function configCreate
      * loads a *.pro file and returns a wxConfigBase.
      *
@@ -361,6 +377,9 @@ private:
 
     /// Backing store for project data -- owned by SETTINGS_MANAGER
     PROJECT_FILE*   m_projectFile;
+
+    /// Backing store for project local settings -- owned by SETTINGS_MANAGER
+    PROJECT_LOCAL_SETTINGS* m_localSettings;
 
     std::map<KIID, wxString>     m_sheetNames;
     std::map<wxString, wxString> m_textVars;

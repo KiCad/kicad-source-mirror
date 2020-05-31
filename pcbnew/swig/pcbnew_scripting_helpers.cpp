@@ -42,8 +42,18 @@
 #include <pcbnew.h>
 #include <pcbnew_scripting_helpers.h>
 #include <project.h>
+#include <settings/settings_manager.h>
+#include <wildcards_and_files_ext.h>
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;
+
+/**
+ * We need to track the loaded PROJECTs for each loaded BOARD here, since in Python you can
+ * easily load more than one board if desired.
+ */
+static std::map<wxString, PROJECT*> s_Projects;
+
+static SETTINGS_MANAGER* s_SettingsManager = nullptr;
 
 BOARD* GetBoard()
 {
@@ -73,17 +83,72 @@ BOARD* LoadBoard( wxString& aFileName )
 }
 
 
+SETTINGS_MANAGER* GetSettingsManager()
+{
+    if( !s_SettingsManager )
+        s_SettingsManager = new SETTINGS_MANAGER;
+
+    return s_SettingsManager;
+}
+
+
+PROJECT* GetDefaultProject()
+{
+    PROJECT* project = nullptr;
+
+    if( s_Projects.count( "" ) )
+        project = s_Projects.at( "" );
+    else
+    {
+        GetSettingsManager()->LoadProject( "" );
+        project = GetSettingsManager()->GetProject( "" );
+        s_Projects[""] = project;
+    }
+
+    return project;
+}
+
+
 BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 {
+    wxFileName pro = aFileName;
+    pro.SetExt( ProjectFileExtension );
+    pro.MakeAbsolute();
+    wxString projectPath = pro.GetFullPath();
+
+    PROJECT* project = nullptr;
+
+    if( s_Projects.count( projectPath ) )
+        project = s_Projects.at( projectPath );
+    else if( GetSettingsManager()->LoadProject( projectPath ) )
+    {
+        project = GetSettingsManager()->GetProject( projectPath );
+        s_Projects[projectPath] = project;
+    }
+
+    // Board cannot be loaded without a project, so create the default project
+    if( !project )
+        project = GetDefaultProject();
+
     BOARD* brd = IO_MGR::Load( aFormat, aFileName );
 
     if( brd )
     {
+        brd->SetProject( project );
         brd->BuildConnectivity();
         brd->BuildListOfNets();
         brd->SynchronizeNetsAndNetClasses();
     }
 
+    return brd;
+}
+
+
+BOARD* CreateEmptyBoard()
+{
+    BOARD* brd = new BOARD();
+
+    brd->SetProject( GetDefaultProject() );
 
     return brd;
 }
@@ -96,6 +161,13 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat )
     aBoard->GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
 
     IO_MGR::Save( aFormat, aFileName, aBoard, NULL );
+
+    wxFileName pro = aFileName;
+    pro.SetExt( ProjectFileExtension );
+    pro.MakeAbsolute();
+    wxString projectPath = pro.GetFullPath();
+
+    GetSettingsManager()->SaveProject( pro.GetFullPath() );
 
     return true;
 }

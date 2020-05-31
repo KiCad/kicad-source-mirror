@@ -24,14 +24,15 @@
  */
 
 #include <fctsys.h>
-#include <common.h>
 #include <kicad_string.h>
-#include <pcbnew.h>
-#include <richio.h>
 #include <macros.h>
 
-#include <class_board.h>
 #include <netclass.h>
+
+#ifndef PCBNEW
+#define PCBNEW // needed to define the right value of Millimeter2iu(x)
+#endif
+#include <base_units.h>
 
 // This will get mapped to "kicad_default" in the specctra_export.
 const char NETCLASS::Default[] = "Default";
@@ -152,84 +153,6 @@ NETCLASSPTR NETCLASSES::Find( const wxString& aName ) const
 }
 
 
-void BOARD::SynchronizeNetsAndNetClasses()
-{
-    NETCLASSES& netClasses = m_designSettings.m_NetClasses;
-    NETCLASSPTR defaultNetClass = netClasses.GetDefault();
-
-    // set all NETs to the default NETCLASS, then later override some
-    // as we go through the NETCLASSes.
-
-    for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
-                net != netEnd; ++net )
-    {
-        net->SetClass( defaultNetClass );
-    }
-
-    // Add netclass name and pointer to nets.  If a net is in more than one netclass,
-    // set the net's name and pointer to only the first netclass.  Subsequent
-    // and therefore bogus netclass memberships will be deleted in logic below this loop.
-    for( NETCLASSES::iterator clazz = netClasses.begin(); clazz != netClasses.end(); ++clazz )
-    {
-        NETCLASSPTR netclass = clazz->second;
-
-        for( NETCLASS::const_iterator member = netclass->begin(); member != netclass->end(); ++member )
-        {
-            const wxString& netname = *member;
-
-            // although this overall function seems to be adequately fast,
-            // FindNet( wxString ) uses now a fast binary search and is fast
-            // event for large net lists
-            NETINFO_ITEM* net = FindNet( netname );
-
-            if( net && net->GetClassName() == NETCLASS::Default )
-            {
-                net->SetClass( netclass );
-            }
-        }
-    }
-
-    // Finally, make sure that every NET is in a NETCLASS, even if that
-    // means the Default NETCLASS.  And make sure that all NETCLASSes do not
-    // contain netnames that do not exist, by deleting all netnames from
-    // every netclass and re-adding them.
-
-    for( NETCLASSES::iterator clazz = netClasses.begin(); clazz != netClasses.end(); ++clazz )
-    {
-        NETCLASSPTR netclass = clazz->second;
-
-        netclass->Clear();
-    }
-
-    defaultNetClass->Clear();
-
-    for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
-            net != netEnd; ++net )
-    {
-        const wxString& classname = net->GetClassName();
-
-        // because of the std:map<> this should be fast, and because of
-        // prior logic, netclass should not be NULL.
-        NETCLASSPTR netclass = netClasses.Find( classname );
-
-        wxASSERT( netclass );
-
-        netclass->Add( net->GetNetname() );
-    }
-
-    // Set initial values for custom track width & via size to match the default netclass settings
-    m_designSettings.UseCustomTrackViaSize( false );
-    m_designSettings.SetCustomTrackWidth( defaultNetClass->GetTrackWidth() );
-    m_designSettings.SetCustomViaSize( defaultNetClass->GetViaDiameter() );
-    m_designSettings.SetCustomViaDrill( defaultNetClass->GetViaDrill() );
-    m_designSettings.SetCustomDiffPairWidth( defaultNetClass->GetDiffPairWidth() );
-    m_designSettings.SetCustomDiffPairGap( defaultNetClass->GetDiffPairGap() );
-    m_designSettings.SetCustomDiffPairViaGap( defaultNetClass->GetDiffPairViaGap() );
-
-    InvokeListeners( &BOARD_LISTENER::OnBoardNetSettingsChanged, *this );
-}
-
-
 #if defined(DEBUG)
 
 void NETCLASS::Show( int nestLevel, std::ostream& os ) const
@@ -250,38 +173,3 @@ void NETCLASS::Show( int nestLevel, std::ostream& os ) const
 }
 
 #endif
-
-
-void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-{
-    aFormatter->Print( aNestLevel, "(net_class %s %s\n",
-                       aFormatter->Quotew( GetName() ).c_str(),
-                       aFormatter->Quotew( GetDescription() ).c_str() );
-
-    aFormatter->Print( aNestLevel+1, "(clearance %s)\n", FormatInternalUnits( GetClearance() ).c_str() );
-    aFormatter->Print( aNestLevel+1, "(trace_width %s)\n", FormatInternalUnits( GetTrackWidth() ).c_str() );
-
-    aFormatter->Print( aNestLevel+1, "(via_dia %s)\n", FormatInternalUnits( GetViaDiameter() ).c_str() );
-    aFormatter->Print( aNestLevel+1, "(via_drill %s)\n", FormatInternalUnits( GetViaDrill() ).c_str() );
-
-    aFormatter->Print( aNestLevel+1, "(uvia_dia %s)\n", FormatInternalUnits( GetuViaDiameter() ).c_str() );
-    aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n", FormatInternalUnits( GetuViaDrill() ).c_str() );
-
-    // Save the diff_pair_gap and diff_pair_width values only if not the default, to avoid unnecessary
-    // incompatibility  with previous Pcbnew versions.
-    if( ( DEFAULT_DIFF_PAIR_WIDTH != GetDiffPairWidth() ) ||
-        ( DEFAULT_DIFF_PAIR_GAP != GetDiffPairGap() ) )
-    {
-        aFormatter->Print( aNestLevel+1, "(diff_pair_width %s)\n",
-                FormatInternalUnits( GetDiffPairWidth() ).c_str() );
-        aFormatter->Print( aNestLevel+1, "(diff_pair_gap %s)\n",
-                FormatInternalUnits( GetDiffPairGap() ).c_str() );
-
-        // 6.0 TODO: figure out what to do with DiffPairViaGap...
-    }
-
-    for( NETCLASS::const_iterator it = begin(); it != end(); ++it )
-        aFormatter->Print( aNestLevel+1, "(add_net %s)\n", aFormatter->Quotew( *it ).c_str() );
-
-    aFormatter->Print( aNestLevel, ")\n\n" );
-}

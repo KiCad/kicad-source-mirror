@@ -136,7 +136,6 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
     {
         delete m_Pcb;
         m_Pcb = aBoard;
-        m_Pcb->SetGeneralSettings( m_Settings );
 
         wxCommandEvent e( BOARD_CHANGED );
         ProcessEventLocally( e );
@@ -277,13 +276,6 @@ BOARD_DESIGN_SETTINGS& PCB_BASE_FRAME::GetDesignSettings() const
 }
 
 
-void PCB_BASE_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
-{
-    wxASSERT( m_Pcb );
-    m_Pcb->SetDesignSettings( aSettings );
-}
-
-
 void PCB_BASE_FRAME::SetDrawBgColor( COLOR4D aColor )
 {
     m_drawBgColor= aColor;
@@ -294,14 +286,14 @@ void PCB_BASE_FRAME::SetDrawBgColor( COLOR4D aColor )
 const ZONE_SETTINGS& PCB_BASE_FRAME::GetZoneSettings() const
 {
     wxASSERT( m_Pcb );
-    return m_Pcb->GetZoneSettings();
+    return m_Pcb->GetDesignSettings().GetDefaultZoneSettings();
 }
 
 
 void PCB_BASE_FRAME::SetZoneSettings( const ZONE_SETTINGS& aSettings )
 {
     wxASSERT( m_Pcb );
-    m_Pcb->SetZoneSettings( aSettings );
+    m_Pcb->GetDesignSettings().SetDefaultZoneSettings( aSettings );
 }
 
 
@@ -734,8 +726,6 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
         m_toolManager->SetEnvironment( m_Pcb, GetCanvas()->GetView(),
                                        GetCanvas()->GetViewControls(), config(), this );
     }
-
-    SetBoard( m_Pcb );
 
     if( m_toolManager )
         m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );

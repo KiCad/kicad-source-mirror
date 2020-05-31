@@ -24,18 +24,24 @@
 #include <panel_setup_tracks_and_vias.h>
 #include <panel_setup_mask_and_paste.h>
 #include <../board_stackup_manager/panel_board_stackup.h>
+#include <confirm.h>
 #include <kiface_i.h>
 #include <drc/drc.h>
 #include <drc/drc_item.h>
 #include <dialog_import_settings.h>
+#include <io_mgr.h>
 #include <panel_setup_severities.h>
 #include <panel_text_variables.h>
+#include <project.h>
+#include <project/project_file.h>
+#include <settings/settings_manager.h>
+#include <wildcards_and_files_ext.h>
 
 #include "dialog_board_setup.h"
 #include "panel_setup_rules.h"
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
-        PAGED_DIALOG( aFrame, _( "Board Setup" ), _( "Import Settings from Another Project..." ) ),
+        PAGED_DIALOG( aFrame, _( "Board Setup" ), _( "Import Settings from Another Board..." ) ),
         m_frame( aFrame )
 {
     m_layers = new PANEL_SETUP_LAYERS( this, aFrame );
@@ -127,30 +133,59 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     if( importDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxConfigBase* cfg = new wxFileConfig( wxEmptyString, wxEmptyString, importDlg.GetFilePath() );
+    wxFileName boardFn( importDlg.GetFilePath() );
+    wxFileName projectFn( boardFn );
 
-    // We do not want expansion of env var values when reading our project config file
-    cfg->SetExpandEnvVars( false );
-    cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
+    projectFn.SetExt( ProjectFileExtension );
 
-    BOARD* dummyBoard = new BOARD();
-    std::vector<PARAM_CFG*> designSettingsConfig;
+    if( !m_frame->GetSettingsManager()->LoadProject( projectFn.GetFullPath(), false ) )
+    {
+        wxString msg = wxString::Format( _( "Error importing settings from borad:\n"
+                                            "Associated project file %s could not be loaded" ),
+                                         projectFn.GetFullPath() );
+        DisplayErrorMessage( this, msg );
 
-    dummyBoard->GetDesignSettings().AppendConfigs( dummyBoard, &designSettingsConfig );
-    wxConfigLoadParams( cfg, designSettingsConfig, GROUP_PCB );
+        return;
+    }
+
+    PROJECT* otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
+
+    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
+
+    BOARD* otherBoard = new BOARD();
+
+    try
+    {
+        otherBoard = pi->Load( boardFn.GetFullPath(), nullptr, nullptr );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        if( ioe.Problem() != wxT( "CANCEL" ) )
+        {
+            wxString msg =
+                    wxString::Format( _( "Error loading board file:\n%s" ), boardFn.GetFullPath() );
+            DisplayErrorMessage( this, msg, ioe.What() );
+        }
+
+        m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
+
+        return;
+    }
+
+    otherBoard->SetProject( otherPrj );
 
     if( importDlg.m_LayersOpt->GetValue() )
-        m_layers->ImportSettingsFrom( dummyBoard );
+        m_layers->ImportSettingsFrom( otherBoard );
     if( importDlg.m_TextAndGraphicsOpt->GetValue() )
-        m_textAndGraphics->ImportSettingsFrom( dummyBoard );
+        m_textAndGraphics->ImportSettingsFrom( otherBoard );
     if( importDlg.m_ConstraintsOpt->GetValue() )
-        m_constraints->ImportSettingsFrom( dummyBoard );
+        m_constraints->ImportSettingsFrom( otherBoard );
     if( importDlg.m_NetclassesOpt->GetValue() )
-        m_netclasses->ImportSettingsFrom( dummyBoard );
+        m_netclasses->ImportSettingsFrom( otherBoard );
     if( importDlg.m_TracksAndViasOpt->GetValue() )
-        m_tracksAndVias->ImportSettingsFrom( dummyBoard );
+        m_tracksAndVias->ImportSettingsFrom( otherBoard );
     if( importDlg.m_MaskAndPasteOpt->GetValue() )
-        m_maskAndPaste->ImportSettingsFrom( dummyBoard );
+        m_maskAndPaste->ImportSettingsFrom( otherBoard );
 
     // If layers options are imported, import also the stackup
     // layers options and stackup are linked, so they cannot be imported
@@ -159,12 +194,16 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     // Note also currently only the list of enabled layers can be imported, because
     // we import settings from a .pro project file, not the settings inside
     // a board, and info only living in the board is not imported.
+    // TODO: Add import of physical settings now that we are actually loading the board here
     if( importDlg.m_LayersOpt->GetValue() )
-        m_physicalStackup->ImportSettingsFrom( dummyBoard );
+        m_physicalStackup->ImportSettingsFrom( otherBoard );
 
     if( importDlg.m_SeveritiesOpt->GetValue() )
-        m_severities->ImportSettingsFrom( dummyBoard->GetDesignSettings().m_DRCSeverities );
+        m_severities->ImportSettingsFrom( otherBoard->GetDesignSettings().m_DRCSeverities );
 
-    delete dummyBoard;
-    delete cfg;
+    otherBoard->ClearProject();
+
+    m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
+
+    delete otherBoard;
 }

@@ -54,7 +54,7 @@
 #include <connection_graph.h>
 #include <tool/actions.h>
 #include <tools/sch_editor_control.h>
-#include <settings/project_file.h>
+#include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <netlist.h>
 #include <widgets/infobar.h>
@@ -262,7 +262,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
 
     wxFileName pro = fullFileName;
-    pro.SetExt( LegacyProjectFileExtension );
+    pro.SetExt( ProjectFileExtension );
 
     bool is_new = !wxFileName::IsFileReadable( fullFileName );
 
@@ -331,6 +331,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Load the symbol library table, this will be used forever more.
     Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
     Prj().SchSymbolLibTable();
+
+    Schematic().SetProject( Prj() );
 
     SetShutdownBlockReason( _( "Schematic file changes are unsaved" ) );
 

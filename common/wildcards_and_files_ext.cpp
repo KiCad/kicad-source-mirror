@@ -122,6 +122,7 @@ const std::string VrmlFileExtension( "wrl" );
 
 const std::string ProjectFileExtension( "kicad_pro" );
 const std::string LegacyProjectFileExtension( "pro" );
+const std::string ProjectLocalSettingsFileExtension( "kicad_prl" );
 const std::string LegacySchematicFileExtension( "sch" );
 const std::string KiCadSchematicFileExtension( "kicad_sch" );
 const std::string NetlistFileExtension( "net" );

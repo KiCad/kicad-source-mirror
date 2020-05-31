@@ -23,7 +23,9 @@
 
 #include <common.h>
 #include <settings/json_settings.h>
+#include <settings/nested_settings.h>
 
+class NET_SETTINGS;
 
 /**
  * For files like sheets and boards, a pair of that object KIID and display name
@@ -31,6 +33,20 @@
  */
 typedef std::pair<KIID, wxString> FILE_INFO_PAIR;
 
+/**
+ * For storing PcbNew MRU paths of various types
+ */
+enum LAST_PATH_TYPE : unsigned int
+{
+    LAST_PATH_NETLIST = 0,
+    LAST_PATH_STEP,
+    LAST_PATH_IDF,
+    LAST_PATH_VRML,
+    LAST_PATH_SPECCTRADSN,
+    LAST_PATH_GENCAD,
+
+    LAST_PATH_SIZE
+};
 
 /**
  * PROJECT_FILE is the backing store for a PROJECT, in JSON format.
@@ -47,9 +63,16 @@ public:
      */
     PROJECT_FILE( const std::string& aFullPath );
 
-    virtual ~PROJECT_FILE() {}
+    virtual ~PROJECT_FILE() = default;
 
-    virtual bool MigrateFromLegacy( wxConfigBase* aLegacyFile ) override;
+    virtual bool MigrateFromLegacy( wxConfigBase* aCfg ) override;
+
+    bool SaveToFile( const std::string& aDirectory = "", bool aForce = false ) override;
+
+    void SetProject( PROJECT* aProject )
+    {
+        m_project = aProject;
+    }
 
     std::vector<FILE_INFO_PAIR>& GetSheets()
     {
@@ -59,6 +82,11 @@ public:
     std::vector<FILE_INFO_PAIR>& GetBoards()
     {
         return m_boards;
+    }
+
+    NET_SETTINGS& NetSettings()
+    {
+        return *m_NetSettings;
     }
 
 protected:
@@ -73,6 +101,9 @@ private:
 
     /// A list of board files in this project
     std::vector<FILE_INFO_PAIR> m_boards;
+
+    /// A link to the owning PROJECT
+    PROJECT* m_project;
 
     /**
      * Below are project-level settings that have not been moved to a dedicated file
@@ -95,6 +126,31 @@ public:
 
     /// List of equivalence (equ) files used in the project
     std::vector<wxString> m_EquivalenceFiles;
+
+    /**
+     * PcbNew params
+     */
+
+    /// Page layout description file
+    wxString m_PageLayoutDescrFile;
+
+    /// MRU path storage
+    wxString m_PcbLastPath[LAST_PATH_SIZE];
+
+    /**
+     * Board design settings for this project's board.  This will be initialized by PcbNew after
+     * loading a board so that BOARD_DESIGN_SETTINGS doesn't need to live in common for now.
+     * Owned by the BOARD; may be null if a board isn't loaded: be careful
+     */
+    NESTED_SETTINGS* m_BoardSettings;
+
+    /**
+     * Net settings for this project (owned here)
+     * NOTE: If we go multi-board in the future, we have to decide whether to use a global
+     * NET_SETTINGS or have one per board.  Right now I think global makes more sense (one set of
+     * schematics, one netlist partitioned into multiple boards)
+     */
+     std::shared_ptr<NET_SETTINGS> m_NetSettings;
 };
 
 // Specializations to allow directly reading/writing FILE_INFO_PAIRs from JSON

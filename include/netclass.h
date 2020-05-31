@@ -201,16 +201,6 @@ public:
      */
     void SetParams( const NETCLASS& aDefaults );
 
-    /**
-     * Function Format
-     * outputs the net class to \a aFormatter in s-expression form.
-     *
-     * @param aFormatter The #OUTPUTFORMATTER object to write to.
-     * @param aNestLevel The indentation next level.
-     * @param aControlBits The control bit definition for object specific formatting.
-     * @throw IO_ERROR on write error.
-     */
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;

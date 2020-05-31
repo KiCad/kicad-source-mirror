@@ -34,7 +34,7 @@ FP_TREE_MODEL_ADAPTER::PTR FP_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParen
 
 
 FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
-        LIB_TREE_MODEL_ADAPTER( aParent ),
+        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_footprint_libs" ),
         m_libs( (FP_LIB_TABLE*) aLibs )
 {}
 

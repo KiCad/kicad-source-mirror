@@ -96,11 +96,16 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 }
 %{
 #include <layers_id_colors_and_visibility.h>
+#include <pcbnew_scripting_helpers.h>
 %}
 
 
 // std::vector templates
 %template(VIA_DIMENSION_Vector) std::vector<VIA_DIMENSION>;
+
+// Do not permit default BOARD ctor since it won't initialize the project
+%ignore BOARD::BOARD();
+
 %include class_board.h
 %{
 #include <class_board.h>
@@ -123,11 +128,25 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
 %extend BOARD
 {
+    // NOTE: this does not generate a ctor, despite swig docs saying it should.  Not sure why.
+    // Because of this, we use the __init__ override hack below.
+    // BOARD()
+    // {
+    //     return CreateEmptyBoard();
+    // }
+
     // BOARD_ITEM_CONTAINER's interface functions will be implemented by SWIG
     // automatically and inherited by the python wrapper class.
 
     %pythoncode
     %{
+    def __init__(self, *args):
+        this = CreateEmptyBoard()
+
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
 
     def GetModules(self):             return self.Modules()
     def GetDrawings(self):            return self.Drawings()

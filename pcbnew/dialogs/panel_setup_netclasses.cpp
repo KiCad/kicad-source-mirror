@@ -152,8 +152,8 @@ static void netclassToGridRow( EDA_UNITS aUnits, wxGrid* aGrid, int aRow, const 
 
 bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
 {
-    NETCLASSES& netclasses = m_BrdSettings->m_NetClasses;
-    NETCLASSPTR netclass = netclasses.GetDefault();
+    NETCLASSES& netclasses = m_BrdSettings->GetNetClasses();
+    NETCLASSPTR netclass   = netclasses.GetDefault();
 
     if( m_netclassGrid->GetNumberRows() )
         m_netclassGrid->DeleteRows( 0, m_netclassGrid->GetNumberRows() );
@@ -250,7 +250,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     if( !validateData() )
         return false;
 
-    NETCLASSES& netclasses = m_BrdSettings->m_NetClasses;
+    NETCLASSES& netclasses = m_BrdSettings->GetNetClasses();
 
     // Remove all netclasses from board. We'll copy new list after
     netclasses.Clear();
@@ -263,7 +263,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     {
         NETCLASSPTR nc = std::make_shared<NETCLASS>( m_netclassGrid->GetCellValue( row, GRID_NAME ) );
 
-        if( m_BrdSettings->m_NetClasses.Add( nc ) )
+        if( netclasses.Add( nc ) )
             gridRowToNetclass( m_Frame->GetUserUnits(), m_netclassGrid, row, nc );
     }
 

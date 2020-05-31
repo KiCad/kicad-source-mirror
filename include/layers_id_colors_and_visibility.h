@@ -218,6 +218,8 @@ enum GAL_LAYER_ID: int
 /// Use this macro to convert a GAL layer to a 0-indexed offset from LAYER_VIAS
 #define GAL_LAYER_INDEX( x ) ( x - GAL_LAYER_ID_START )
 
+constexpr int GAL_LAYER_ID_COUNT = GAL_LAYER_ID_END - GAL_LAYER_ID_START;
+
 inline GAL_LAYER_ID operator++( GAL_LAYER_ID& a )
 {
     a = GAL_LAYER_ID( int( a ) + 1 );
@@ -402,6 +404,7 @@ public:
     }
 };
 
+typedef std::bitset<GAL_LAYER_ID_COUNT>     GAL_SET;
 
 typedef std::bitset<PCB_LAYER_ID_COUNT>     BASE_SET;
 

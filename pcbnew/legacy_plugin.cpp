@@ -832,13 +832,13 @@ void LEGACY_PLUGIN::loadSHEET()
 
 void LEGACY_PLUGIN::loadSETUP()
 {
-    NETCLASS*             netclass_default = m_board->GetDesignSettings().GetDefault();
-    // TODO Orson: is it really necessary to first operate on a copy and then apply it?
-    // would not it be better to use reference here and apply all the changes instantly?
-    BOARD_DESIGN_SETTINGS bds = m_board->GetDesignSettings();
-    ZONE_SETTINGS         zs  = m_board->GetZoneSettings();
-    char*                 line;
-    char*                 saveptr;
+    BOARD_DESIGN_SETTINGS& bds              = m_board->GetDesignSettings();
+    ZONE_SETTINGS          zs               = m_board->GetZoneSettings();
+    NETCLASS*              netclass_default = bds.GetDefault();
+    char*                  line;
+    char*                  saveptr;
+
+    m_board->m_LegacyDesignSettingsLoaded = true;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -1118,12 +1118,17 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "VisibleElements" ) )
         {
             int visibleElements = hexParse( line + SZ( "VisibleElements" ) );
-            bds.SetVisibleElements( visibleElements );
+
+            GAL_SET visibles;
+
+            for( size_t i = 0; i < visibles.size(); i++ )
+                visibles.set( i, visibleElements & ( 1u << i ) );
+
+            m_board->SetVisibleElements( visibles );
         }
 
         else if( TESTLINE( "$EndSETUP" ) )
         {
-            m_board->SetDesignSettings( bds );
             m_board->SetZoneSettings( zs );
 
             // Very old *.brd file does not have  NETCLASSes
@@ -2399,7 +2404,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
         else if( TESTLINE( "$EndNCLASS" ) )
         {
-            if( !m_board->GetDesignSettings().m_NetClasses.Add( nc ) )
+            if( !m_board->GetDesignSettings().GetNetClasses().Add( nc ) )
             {
                 // Must have been a name conflict, this is a bad board file.
                 // User may have done a hand edit to the file.

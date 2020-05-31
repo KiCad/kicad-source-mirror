@@ -229,25 +229,6 @@ std::unique_ptr<BOARD> MakeBoard( const std::vector<COURTYARD_INVALID_TEST_MODUL
 
 
 /**
- * Get a #BOARD_DESIGN_SETTINGS object that will cause DRC to
- * check for courtyard invalidity
- */
-static BOARD_DESIGN_SETTINGS GetOverlapCheckDesignSettings()
-{
-    BOARD_DESIGN_SETTINGS des_settings;
-
-    // do the overlap tests - that's a different test, but if not set,
-    // the invalid courtyard checks don't run either
-    des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
-
-    // we will also check for missing courtyards here
-    des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_ERROR;
-
-    return des_settings;
-}
-
-
-/**
  * Check if a #MARKER_PCB is described by a particular #COURTYARD_INVALID_INFO object.
  */
 static bool InvalidMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
@@ -301,7 +282,14 @@ void DoCourtyardInvalidTest( const COURTYARD_INVALID_CASE& aCase,
     // Dump if env var set
     aDumper.DumpBoardToFile( *board, aCase.m_case_name );
 
-    board->SetDesignSettings( GetOverlapCheckDesignSettings() );
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+
+    // do the overlap tests - that's a different test, but if not set,
+    // the invalid courtyard checks don't run either
+    bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
+
+    // we will also check for missing courtyards here
+    bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_ERROR;
 
     // list of markers to collect
     std::vector<std::unique_ptr<MARKER_PCB>> markers;

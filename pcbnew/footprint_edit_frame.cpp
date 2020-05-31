@@ -401,12 +401,6 @@ BOARD_DESIGN_SETTINGS& FOOTPRINT_EDIT_FRAME::GetDesignSettings() const
 }
 
 
-void FOOTPRINT_EDIT_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
-{
-    GetBoard()->SetDesignSettings( aSettings );
-}
-
-
 const PCB_PLOT_PARAMS& FOOTPRINT_EDIT_FRAME::GetPlotSettings() const
 {
     wxFAIL_MSG( "Plotting not supported in Footprint Editor" );

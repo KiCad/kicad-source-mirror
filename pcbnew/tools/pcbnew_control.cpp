@@ -883,7 +883,7 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
         props["page_width"]  = xbuf;
         props["page_height"] = ybuf;
 
-        editFrame->GetDesignSettings().m_NetClasses.Clear();
+        editFrame->GetDesignSettings().GetNetClasses().Clear();
         pi.Load( fileName, brd, &props );
     }
     catch( const IO_ERROR& ioe )

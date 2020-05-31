@@ -39,7 +39,7 @@ const int fpEditSchemaVersion = 1;
 
 FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         APP_SETTINGS_BASE( "fpedit", fpEditSchemaVersion ),
-        m_DesignSettings(),
+        m_DesignSettings( nullptr, "fpedit.settings" ),
         m_MagneticItems(),
         m_Display(),
         m_UserGrid(),

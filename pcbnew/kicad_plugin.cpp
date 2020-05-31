@@ -472,8 +472,6 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 
 void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
 {
-    const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
-
     // Setup
     m_out->Print( aNestLevel, "(setup\n" );
 
@@ -483,104 +481,7 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
     if( aBoard->GetDesignSettings().m_HasStackup )
         stackup.FormatBoardStackup( m_out,aBoard, aNestLevel+1 );
 
-    // Save current default track width, for compatibility with older Pcbnew version;
-    m_out->Print( aNestLevel+1, "(last_trace_width %s)\n",
-                  FormatInternalUnits( dsnSettings.GetCurrentTrackWidth() ).c_str() );
-
-    // Save custom track widths list (the first is not saved here: it's the netclass value)
-    for( unsigned ii = 1; ii < dsnSettings.m_TrackWidthList.size(); ii++ )
-    {
-        m_out->Print( aNestLevel+1, "(user_trace_width %s)\n",
-                      FormatInternalUnits( dsnSettings.m_TrackWidthList[ii] ).c_str() );
-    }
-
-    m_out->Print( aNestLevel+1, "(trace_clearance %s)\n",
-                  FormatInternalUnits( dsnSettings.GetDefault()->GetClearance() ).c_str() );
-
-    // ZONE_SETTINGS
-    m_out->Print( aNestLevel+1, "(zone_clearance %s)\n",
-                  FormatInternalUnits( aBoard->GetZoneSettings().m_ZoneClearance ).c_str() );
-    m_out->Print( aNestLevel+1, "(zone_45_only %s)\n",
-                  aBoard->GetZoneSettings().m_Zone_45_Only ? "yes" : "no" );
-
-    m_out->Print( aNestLevel+1, "(trace_min %s)\n",
-                  FormatInternalUnits( dsnSettings.m_TrackMinWidth ).c_str() );
-    m_out->Print( aNestLevel+1, "(clearance_min %s)\n",
-                  FormatInternalUnits( dsnSettings.m_MinClearance ).c_str() );
-    m_out->Print( aNestLevel+1, "(via_min_annulus %s)\n",
-                  FormatInternalUnits( dsnSettings.m_ViasMinAnnulus ).c_str() );
-    m_out->Print( aNestLevel+1, "(via_min_size %s)\n",
-                  FormatInternalUnits( dsnSettings.m_ViasMinSize ).c_str() );
-    m_out->Print( aNestLevel+1, "(through_hole_min %s)\n",
-                  FormatInternalUnits( dsnSettings.m_MinThroughDrill ).c_str() );
-    m_out->Print( aNestLevel+1, "(hole_to_hole_min %s)\n",
-                  FormatInternalUnits( dsnSettings.m_HoleToHoleMin ).c_str() );
-
-    // Save current default via size, for compatibility with older Pcbnew version;
-    m_out->Print( aNestLevel+1, "(via_size %s)\n",
-                  FormatInternalUnits( dsnSettings.GetDefault()->GetViaDiameter() ).c_str() );
-    m_out->Print( aNestLevel+1, "(via_drill %s)\n",
-                  FormatInternalUnits( dsnSettings.GetDefault()->GetViaDrill() ).c_str() );
-
-    // Save custom via dimensions list (the first is not saved here: it's the netclass value)
-    for( unsigned ii = 1; ii < dsnSettings.m_ViasDimensionsList.size(); ii++ )
-        m_out->Print( aNestLevel+1, "(user_via %s %s)\n",
-                      FormatInternalUnits( dsnSettings.m_ViasDimensionsList[ii].m_Diameter ).c_str(),
-                      FormatInternalUnits( dsnSettings.m_ViasDimensionsList[ii].m_Drill ).c_str() );
-
-    // Save custom diff-pair dimensions (the first is not saved here: it's the netclass value)
-    for( unsigned ii = 1; ii < dsnSettings.m_DiffPairDimensionsList.size(); ii++ )
-    {
-        m_out->Print( aNestLevel+1, "(user_diff_pair %s %s %s)\n",
-                      FormatInternalUnits( dsnSettings.m_DiffPairDimensionsList[ii].m_Width ).c_str(),
-                      FormatInternalUnits( dsnSettings.m_DiffPairDimensionsList[ii].m_Gap ).c_str(),
-                      FormatInternalUnits( dsnSettings.m_DiffPairDimensionsList[ii].m_ViaGap ).c_str() );
-    }
-
-    // for old versions compatibility:
-    if( dsnSettings.m_BlindBuriedViaAllowed )
-        m_out->Print( aNestLevel+1, "(blind_buried_vias_allowed yes)\n" );
-
-    m_out->Print( aNestLevel+1, "(uvia_size %s)\n",
-                  FormatInternalUnits( dsnSettings.GetDefault()->GetuViaDiameter() ).c_str() );
-    m_out->Print( aNestLevel+1, "(uvia_drill %s)\n",
-                  FormatInternalUnits( dsnSettings.GetDefault()->GetuViaDrill() ).c_str() );
-    m_out->Print( aNestLevel+1, "(uvias_allowed %s)\n",
-                  ( dsnSettings.m_MicroViasAllowed ) ? "yes" : "no" );
-    m_out->Print( aNestLevel+1, "(uvia_min_size %s)\n",
-                  FormatInternalUnits( dsnSettings.m_MicroViasMinSize ).c_str() );
-    m_out->Print( aNestLevel+1, "(uvia_min_drill %s)\n",
-                  FormatInternalUnits( dsnSettings.m_MicroViasMinDrill ).c_str() );
-
-    m_out->Print( aNestLevel+1, "(max_error %s)\n",
-                  FormatInternalUnits( dsnSettings.m_MaxError ).c_str() );
-
-    // Store this option only if it is not the legacy option:
-    if( dsnSettings.m_ZoneUseNoOutlineInFill )
-        m_out->Print( aNestLevel+1, "(filled_areas_thickness no)\n" );
-
-    formatDefaults( dsnSettings, aNestLevel+1 );
-
-    m_out->Print( aNestLevel+1, "(pad_size %s %s)\n",
-                  FormatInternalUnits( dsnSettings.m_Pad_Master.GetSize().x ).c_str(),
-                  FormatInternalUnits( dsnSettings.m_Pad_Master.GetSize().y ).c_str() );
-    m_out->Print( aNestLevel+1, "(pad_drill %s)\n",
-                  FormatInternalUnits( dsnSettings.m_Pad_Master.GetDrillSize().x ).c_str() );
-
-    m_out->Print( aNestLevel+1, "(pad_to_mask_clearance %s)\n",
-                  FormatInternalUnits( dsnSettings.m_SolderMaskMargin ).c_str() );
-
-    if( dsnSettings.m_SolderMaskMinWidth )
-        m_out->Print( aNestLevel+1, "(solder_mask_min_width %s)\n",
-                      FormatInternalUnits( dsnSettings.m_SolderMaskMinWidth ).c_str() );
-
-    if( dsnSettings.m_SolderPasteMargin != 0 )
-        m_out->Print( aNestLevel+1, "(pad_to_paste_clearance %s)\n",
-                      FormatInternalUnits( dsnSettings.m_SolderPasteMargin ).c_str() );
-
-    if( dsnSettings.m_SolderPasteMarginRatio != 0 )
-        m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %s)\n",
-                      Double2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
+    BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 
     if( dsnSettings.m_AuxOrigin != wxPoint( 0, 0 ) )
         m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
@@ -592,68 +493,9 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
                       FormatInternalUnits( dsnSettings.m_GridOrigin.x ).c_str(),
                       FormatInternalUnits( dsnSettings.m_GridOrigin.y ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(visible_elements %X)\n",
-                  dsnSettings.GetVisibleElements() );
-
     aBoard->GetPlotOptions().Format( m_out, aNestLevel+1 );
 
     m_out->Print( aNestLevel, ")\n\n" );
-}
-
-
-void PCB_IO::formatDefaults( const BOARD_DESIGN_SETTINGS& aSettings, int aNestLevel ) const
-{
-    m_out->Print( aNestLevel, "(defaults\n" );
-
-    m_out->Print( aNestLevel+1, "(edge_clearance %s)\n",
-                  FormatInternalUnits( aSettings.m_CopperEdgeClearance ).c_str() );
-
-    m_out->Print( aNestLevel+1, "(edge_cuts_line_width %s)\n",
-                  FormatInternalUnits( aSettings.m_LineThickness[ LAYER_CLASS_EDGES ] ).c_str() );
-
-    m_out->Print( aNestLevel+1, "(courtyard_line_width %s)\n",
-                  FormatInternalUnits( aSettings.m_LineThickness[ LAYER_CLASS_COURTYARD ] ).c_str() );
-
-    m_out->Print( aNestLevel+1, "(copper_line_width %s)\n",
-                  FormatInternalUnits( aSettings.m_LineThickness[ LAYER_CLASS_COPPER ] ).c_str() );
-    m_out->Print( aNestLevel+1, "(copper_text_dims (size %s %s) (thickness %s)%s%s)\n",
-                  FormatInternalUnits( aSettings.m_TextSize[ LAYER_CLASS_COPPER ].x ).c_str(),
-                  FormatInternalUnits( aSettings.m_TextSize[ LAYER_CLASS_COPPER ].y ).c_str(),
-                  FormatInternalUnits( aSettings.m_TextThickness[ LAYER_CLASS_COPPER ] ).c_str(),
-                  aSettings.m_TextItalic[ LAYER_CLASS_COPPER ] ? " italic" : "",
-                  aSettings.m_TextUpright[ LAYER_CLASS_COPPER ] ? " keep_upright" : "" );
-
-    m_out->Print( aNestLevel+1, "(silk_line_width %s)\n",
-                  FormatInternalUnits( aSettings.m_LineThickness[ LAYER_CLASS_SILK ] ).c_str() );
-    m_out->Print( aNestLevel+1, "(silk_text_dims (size %s %s) (thickness %s)%s%s)\n",
-                  FormatInternalUnits( aSettings.m_TextSize[ LAYER_CLASS_SILK ].x ).c_str(),
-                  FormatInternalUnits( aSettings.m_TextSize[ LAYER_CLASS_SILK ].y ).c_str(),
-                  FormatInternalUnits( aSettings.m_TextThickness[ LAYER_CLASS_SILK ] ).c_str(),
-                  aSettings.m_TextItalic[ LAYER_CLASS_SILK ] ? " italic" : "",
-                  aSettings.m_TextUpright[ LAYER_CLASS_SILK ] ? " keep_upright" : "" );
-
-    m_out->Print( aNestLevel+1, "(fab_layers_line_width %s)\n",
-                  FormatInternalUnits( aSettings.m_LineThickness[ LAYER_CLASS_FAB ] ).c_str() );
-    m_out->Print( aNestLevel+1, "(fab_layers_text_dims (size %s %s) (thickness %s)%s%s)\n",
-                  FormatInternalUnits( aSettings.m_TextSize[ LAYER_CLASS_FAB ].x ).c_str(),
-                  FormatInternalUnits( aSettings.m_TextSize[ LAYER_CLASS_FAB ].y ).c_str(),
-                  FormatInternalUnits( aSettings.m_TextThickness[ LAYER_CLASS_FAB ] ).c_str(),
-                  aSettings.m_TextItalic[ LAYER_CLASS_OTHERS ] ? " italic" : "",
-                  aSettings.m_TextUpright[ LAYER_CLASS_OTHERS ] ? " keep_upright" : "" );
-
-    m_out->Print( aNestLevel+1, "(other_layers_line_width %s)\n",
-                  FormatInternalUnits( aSettings.m_LineThickness[ LAYER_CLASS_OTHERS ] ).c_str() );
-    m_out->Print( aNestLevel+1, "(other_layers_text_dims (size %s %s) (thickness %s)%s%s)\n",
-                  FormatInternalUnits( aSettings.m_TextSize[ LAYER_CLASS_OTHERS ].x ).c_str(),
-                  FormatInternalUnits( aSettings.m_TextSize[ LAYER_CLASS_OTHERS ].y ).c_str(),
-                  FormatInternalUnits( aSettings.m_TextThickness[ LAYER_CLASS_OTHERS ] ).c_str(),
-                  aSettings.m_TextItalic[ LAYER_CLASS_OTHERS ] ? " italic" : "",
-                  aSettings.m_TextUpright[ LAYER_CLASS_OTHERS ] ? " keep_upright" : "" );
-
-    m_out->Print( aNestLevel+1, "(dimension_units %d)\n", aSettings.m_DimensionUnits );
-    m_out->Print( aNestLevel+1, "(dimension_precision %d)\n", aSettings.m_DimensionPrecision );
-
-    m_out->Print( aNestLevel, ")\n" );
 }
 
 
@@ -683,7 +525,6 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel, "(layers\n" );
 
     // Save only the used copper layers from front to back.
-    LSET visible_layers = aBoard->GetVisibleLayers();
 
     for( LSEQ cu = aBoard->GetEnabledLayers().CuStack();  cu;  ++cu )
     {
@@ -692,9 +533,6 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(%d %s %s", layer,
                       m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str(),
                       LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
-
-        if( !visible_layers[layer] )
-            m_out->Print( 0, " hide" );
 
         m_out->Print( 0, ")\n" );
     }
@@ -730,9 +568,6 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(%d %s user", layer,
                       m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
 
-        if( !visible_layers[layer] )
-            m_out->Print( 0, " hide" );
-
         m_out->Print( 0, ")\n" );
     }
 
@@ -742,7 +577,6 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
 
 void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
 {
-    const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
     for( NETINFO_ITEM* net : *m_mapping )
     {
         m_out->Print( aNestLevel, "(net %d %s)\n",
@@ -751,19 +585,6 @@ void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
     }
 
     m_out->Print( 0, "\n" );
-
-    // Save the default net class first.
-    NETCLASS defaultNC = *dsnSettings.GetDefault();
-    filterNetClass( *aBoard, defaultNC );       // Remove empty nets (from a copy of a netclass)
-    defaultNC.Format( m_out, aNestLevel, m_ctl );
-
-    // Save the rest of the net classes alphabetically.
-    for( const auto& it : dsnSettings.m_NetClasses )
-    {
-        NETCLASS netclass = *it.second;
-        filterNetClass( *aBoard, netclass );    // Remove empty nets (from a copy of a netclass)
-        netclass.Format( m_out, aNestLevel, m_ctl );
-    }
 }
 
 

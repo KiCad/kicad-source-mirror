@@ -49,7 +49,14 @@ public:
      */
     bool SaveToFile( const std::string& aDirectory = "", bool aForce = false ) override;
 
-private:
+    void SetParent( JSON_SETTINGS* aParent );
+
+    JSON_SETTINGS* GetParent()
+    {
+        return m_parent;
+    }
+
+protected:
 
     /// A pointer to the parent object to load and store from
     JSON_SETTINGS* m_parent;

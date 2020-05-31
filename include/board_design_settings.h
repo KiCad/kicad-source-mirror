@@ -30,6 +30,9 @@
 #include <config_params.h>
 #include <board_stackup_manager/class_board_stackup.h>
 #include <drc/drc_rule.h>
+#include <settings/nested_settings.h>
+#include <widgets/ui_common.h>
+#include <zone_settings.h>
 
 
 #define DEFAULT_SILK_LINE_WIDTH       0.12
@@ -208,7 +211,7 @@ enum class VIATYPE : int;
  * BOARD_DESIGN_SETTINGS
  * contains design settings for a BOARD object.
  */
-class BOARD_DESIGN_SETTINGS
+class BOARD_DESIGN_SETTINGS : public NESTED_SETTINGS
 {
 public:
     // Note: the first value in each dimensions list is the current netclass value
@@ -217,7 +220,7 @@ public:
     std::vector<DIFF_PAIR_DIMENSION> m_DiffPairDimensionsList;
 
     // List of netclasses. There is always the default netclass.
-    NETCLASSES                       m_NetClasses;
+    //NETCLASSES                       m_NetClasses;
     std::vector<DRC_SELECTOR*>       m_DRCRuleSelectors;
     std::vector<DRC_RULE*>           m_DRCRules;
 
@@ -241,6 +244,9 @@ public:
     int        m_HoleToHoleMin;             // Min width of peninsula between two drilled holes
 
     std::map< int, int > m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
+
+    /// Excluded DRC items
+    std::set<wxString> m_DrcExclusions;
 
     /** Option to handle filled polygons in zones:
      * the "legacy" option is using thick outlines around filled polygons: give the best shape
@@ -310,9 +316,7 @@ private:
     int        m_copperLayerCount; ///< Number of copper layers for this design
 
     LSET       m_enabledLayers;    ///< Bit-mask for layer enabling
-    LSET       m_visibleLayers;    ///< Bit-mask for layer visibility
 
-    int        m_visibleElements;  ///< Bit-mask for element category visibility
     int        m_boardThickness;   ///< Board thickness for 3D viewer
 
     /// Current net class name used to display netclass info.
@@ -325,8 +329,25 @@ private:
      */
     BOARD_STACKUP m_stackup;
 
+    /// Net classes that are loaded from the board file before these were stored in the project
+    NETCLASSES m_internalNetClasses;
+
+    /// This will point to m_internalNetClasses until it is repointed to the project after load
+    NETCLASSES* m_netClasses;
+
+    /// The defualt settings that will be used for new zones
+    ZONE_SETTINGS m_defaultZoneSettings;
+
+    SEVERITY severityFromString( const wxString& aSeverity );
+
+    wxString severityToString( const SEVERITY& aSeverity );
+
 public:
-    BOARD_DESIGN_SETTINGS();
+    BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
+
+    virtual ~BOARD_DESIGN_SETTINGS();
+
+    bool LoadFromFile( const std::string& aDirectory = "" ) override;
 
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
 
@@ -337,13 +358,36 @@ public:
      */
     bool Ignore( int aDRCErrorCode );
 
+    NETCLASSES& GetNetClasses() const
+    {
+        return *m_netClasses;
+    }
+
+    void SetNetClasses( NETCLASSES* aNetClasses )
+    {
+        if( aNetClasses )
+            m_netClasses = aNetClasses;
+        else
+            m_netClasses = &m_internalNetClasses;
+    }
+
+    ZONE_SETTINGS& GetDefaultZoneSettings()
+    {
+        return m_defaultZoneSettings;
+    }
+
+    void SetDefaultZoneSettings( const ZONE_SETTINGS& aSettings )
+    {
+        m_defaultZoneSettings = aSettings;
+    }
+
     /**
      * Function GetDefault
      * @return the default netclass.
      */
     inline NETCLASS* GetDefault() const
     {
-        return m_NetClasses.GetDefaultPtr();
+        return GetNetClasses().GetDefaultPtr();
     }
 
     /**
@@ -713,95 +757,6 @@ public:
     void SetCopperEdgeClearance( int aDistance );
 
     /**
-     * Function GetVisibleLayers
-     * returns a bit-mask of all the layers that are visible
-     * @return int - the visible layers in bit-mapped form.
-     */
-    inline LSET GetVisibleLayers() const
-    {
-        return m_visibleLayers;
-    }
-
-    /**
-     * Function SetVisibleAlls
-     * Set the bit-mask of all visible elements categories,
-     * including enabled layers
-     */
-    void SetVisibleAlls();
-
-    /**
-     * Function SetVisibleLayers
-     * changes the bit-mask of visible layers
-     * @param aMask = The new bit-mask of visible layers
-     */
-    inline void SetVisibleLayers( LSET aMask )
-    {
-        m_visibleLayers = aMask & m_enabledLayers;
-    }
-
-    /**
-     * Function IsLayerVisible
-     * tests whether a given layer is visible
-     * @param aLayerId = The layer to be tested
-     * @return bool - true if the layer is visible.
-     */
-    inline bool IsLayerVisible( PCB_LAYER_ID aLayerId ) const
-    {
-        // If a layer is disabled, it is automatically invisible
-        return (m_visibleLayers & m_enabledLayers)[aLayerId];
-    }
-
-    /**
-     * Function SetLayerVisibility
-     * changes the visibility of a given layer
-     * @param aLayerId = The layer to be changed
-     * @param aNewState = The new visibility state of the layer
-     */
-    void SetLayerVisibility( PCB_LAYER_ID aLayerId, bool aNewState );
-
-    /**
-     * Function GetVisibleElements
-     * returns a bit-mask of all the element categories that are visible
-     * @return int - the visible element categories in bit-mapped form.
-     */
-    inline int GetVisibleElements() const
-    {
-        return m_visibleElements;
-    }
-
-    /**
-     * Function SetVisibleElements
-     * changes the bit-mask of visible element categories
-     * @param aMask = The new bit-mask of visible element categories
-     */
-    inline void SetVisibleElements( int aMask )
-    {
-        m_visibleElements = aMask;
-    }
-
-    /**
-     * Function IsElementVisible
-     * tests whether a given element category is visible. Keep this as an
-     * inline function.
-     * @param aElementCategory is from the enum by the same name
-     * @return bool - true if the element is visible.
-     * @see enum GAL_LAYER_ID
-     */
-    inline bool IsElementVisible( GAL_LAYER_ID aElementCategory ) const
-    {
-        return ( m_visibleElements & ( 1 << GAL_LAYER_INDEX( aElementCategory ) ) );
-    }
-
-    /**
-     * Function SetElementVisibility
-     * changes the visibility of an element category
-     * @param aElementCategory is from the enum by the same name
-     * @param aNewState = The new visibility state of the element category
-     * @see enum GAL_LAYER_ID
-     */
-    void SetElementVisibility( GAL_LAYER_ID aElementCategory, bool aNewState );
-
-    /**
      * Function GetEnabledLayers
      * returns a bit-mask of all the layers that are enabled
      * @return int - the enabled layers in bit-mapped form.
@@ -844,14 +799,6 @@ public:
      * @param aNewLayerCount = The new number of enabled copper layers
      */
     void SetCopperLayerCount( int aNewLayerCount );
-
-    /**
-     * Function AppendConfigs
-     * appends to @a aResult the configuration setting accessors which will later
-     * allow reading or writing of configuration file information directly into
-     * this object.
-     */
-    void AppendConfigs( BOARD* aBoard, std::vector<PARAM_CFG*>* aResult );
 
     inline int GetBoardThickness() const { return m_boardThickness; }
     inline void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }

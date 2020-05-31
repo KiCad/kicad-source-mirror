@@ -32,8 +32,8 @@
 #include <board_commit.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_track.h>
 #include <class_pcb_target.h>
+#include <class_track.h>
 #include <class_zone.h>
 #include <collectors.h>
 #include <confirm.h>
@@ -52,6 +52,7 @@
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include <project.h>
+#include <project/project_file.h> // LAST_PATH_TYPE
 #include <tool/tool_manager.h>
 #include <tools/tool_event_utils.h>
 #include <view/view_controls.h>

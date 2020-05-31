@@ -448,7 +448,6 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
         DEPENDS swig/pcb_target.i
         DEPENDS swig/pcb_plot_params.i
         DEPENDS swig/footprint.i
-        DEPENDS swig/netclass.i
         DEPENDS swig/netinfo.i
         DEPENDS swig/pad.i
         DEPENDS swig/pcb_text.i
@@ -463,6 +462,7 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
         DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/kicad.i
         DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/wx.i
         DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/ki_exception.i
+        DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/netclass.i
         DEPENDS ${CMAKE_SOURCE_DIR}/scripting/kicadplugins.i
 
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docstrings

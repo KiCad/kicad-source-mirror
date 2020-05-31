@@ -452,7 +452,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     bool                         hasInnerLayers = m_pcb->GetCopperLayerCount() > 2;
 
     // Search a smaller clearance in other net classes, if any.
-    for( const std::pair<const wxString, NETCLASSPTR>& entry : dsnSettings.m_NetClasses )
+    for( const std::pair<const wxString, NETCLASSPTR>& entry : dsnSettings.GetNetClasses() )
         minclearanceOuter = std::min( minclearanceOuter, entry.second->GetClearance() );
 
     // job file knows different clearance types.

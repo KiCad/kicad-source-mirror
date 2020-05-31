@@ -188,8 +188,7 @@ bool BOARD_ADAPTER::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
 
     case B_Cu:
     case F_Cu:
-        return m_board->GetDesignSettings().IsLayerVisible( aLayer ) ||
-               GetFlag( FL_USE_REALISTIC_MODE );
+        return m_board->IsLayerVisible( aLayer ) || GetFlag( FL_USE_REALISTIC_MODE );
         break;
 
     default:
@@ -201,7 +200,7 @@ bool BOARD_ADAPTER::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
             return false;
         }
 
-        return m_board->GetDesignSettings().IsLayerVisible( aLayer );
+        return m_board->IsLayerVisible( aLayer );
     }
 
     // The layer has a flag, return the flag

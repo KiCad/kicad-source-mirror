@@ -46,6 +46,7 @@
 #include <invoke_pcb_dialog.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/paged_dialog.h>
+#include <project/project_file.h>
 
 
 void PCB_EDIT_FRAME::On3DShapeLibWizard( wxCommandEvent& event )
@@ -77,7 +78,9 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 {
     wxLogDebug( wxT( "Loading project '%s' settings." ), GetChars( Prj().GetProjectFullName() ) );
 
-    bool rc = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_PCB, GetProjectFileParameters() );
+    PROJECT_FILE& project = Prj().GetProjectFile();
+
+    BASE_SCREEN::m_PageLayoutDescrFileName = project.m_PageLayoutDescrFile;
 
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
@@ -88,7 +91,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 
     pglayout.SetPageLayout( filename );
 
-    return rc;
+    return true;
 }
 
 
@@ -105,45 +108,12 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     if( !IsWritable( fn ) )
         return;
 
-    wxString pro_name = fn.GetFullPath();
+    PROJECT_FILE& project = Prj().GetProjectFile();
+
+    // TODO: Can this be pulled out of BASE_SCREEN?
+    project.m_PageLayoutDescrFile = BASE_SCREEN::m_PageLayoutDescrFileName;
 
     RecordDRCExclusions();
-    Prj().ConfigSave( Kiface().KifaceSearch(), GROUP_PCB, GetProjectFileParameters(), pro_name );
-}
 
-
-std::vector<PARAM_CFG*>& PCB_EDIT_FRAME::GetProjectFileParameters()
-{
-    m_projectFileParams.clear();
-
-    // This one cannot be cached because some settings are going to/from the BOARD,
-    // so pointers into that cannot be saved for long.
-
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
-                                                           &BASE_SCREEN::m_PageLayoutDescrFileName ) );
-
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ),
-                                                           &m_lastPath[ LAST_PATH_NETLIST ] ) );
-
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastSTEPExportPath" ),
-                                                           &m_lastPath[ LAST_PATH_STEP ] ) );
-
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastIDFExportPath" ),
-                                                           &m_lastPath[ LAST_PATH_IDF ] ) );
-
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastVRMLExportPath" ),
-                                                           &m_lastPath[ LAST_PATH_VRML ] ) );
-
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastSpecctraDSNExportPath" ),
-                                                           &m_lastPath[ LAST_PATH_SPECCTRADSN ] ) );
-
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastGenCADExportPath" ),
-                                                           &m_lastPath[ LAST_PATH_GENCAD ] ) );
-
-    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING_SET( wxT( "DRCExclusion" ),
-                                                               &m_drcExclusions ) );
-
-    GetBoard()->GetDesignSettings().AppendConfigs( GetBoard(), &m_projectFileParams);
-
-    return m_projectFileParams;
+    GetSettingsManager()->SaveProject();
 }

@@ -331,7 +331,6 @@ void PCB_LAYER_WIDGET::SetLayersManagerTabsText()
 void PCB_LAYER_WIDGET::ReFillRender()
 {
     BOARD* board = myframe->GetBoard();
-    auto settings = board->GetDesignSettings();
 
     ClearRenderRows();
 
@@ -345,17 +344,6 @@ void PCB_LAYER_WIDGET::ReFillRender()
 
         if( m_fp_editor_mode && !isAllowedInFpMode( renderRow.id ) )
             continue;
-
-        // Don't remove microvia and bblind vias if they're not allowed: that's only a DRC
-        // setting (which might be set to ignore) and the user can add them irrespective of
-        // the setting.
-        /*
-        if( renderRow.id == LAYER_VIA_MICROVIA && !settings.m_MicroViasAllowed )
-            continue;
-
-        if( renderRow.id == LAYER_VIA_BBLIND && !settings.m_BlindBuriedViaAllowed )
-            continue;
-        */
 
         if( !renderRow.spacer )
         {
@@ -640,10 +628,6 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
 
         brd->SetVisibleLayers( visibleLayers );
 
-        // Layer visibility is not stored in .kicad_mod files
-        if( !m_fp_editor_mode )
-            myframe->OnModify();
-
         if( myframe->GetCanvas() )
             myframe->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
     }
@@ -684,14 +668,6 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
     BOARD*  brd = myframe->GetBoard();
     wxASSERT( aId > GAL_LAYER_ID_START && aId < GAL_LAYER_ID_END );
-
-    if( myframe->IsType( FRAME_PCB_EDITOR ) )
-    {
-        // The layer visibility status is saved in the board file so set the board
-        // modified state so the user has the option to save the changes.
-        if( brd->IsElementVisible( static_cast<GAL_LAYER_ID>( aId ) ) != isEnabled )
-            myframe->OnModify();
-    }
 
     // Grid is not set through the board visibility
     if( aId == LAYER_GRID )

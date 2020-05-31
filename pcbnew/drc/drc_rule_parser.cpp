@@ -132,7 +132,7 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_SELECTOR*>& aSelectors,
 
 DRC_SELECTOR* DRC_RULES_PARSER::parseDRC_SELECTOR( wxString* aRuleName )
 {
-    NETCLASSES&   netclasses = m_board->GetDesignSettings().m_NetClasses;
+    NETCLASSES&   netclasses = m_board->GetDesignSettings().GetNetClasses();
     DRC_SELECTOR* selector = new DRC_SELECTOR();
     T             token;
 

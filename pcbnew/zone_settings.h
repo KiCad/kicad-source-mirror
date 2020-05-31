@@ -32,7 +32,8 @@
 
 #include <layers_id_colors_and_visibility.h>
 #include <zones.h>
-#include <wx/dataview.h>
+
+class wxDataViewListCtrl;
 
 enum class ZONE_FILL_MODE
 {

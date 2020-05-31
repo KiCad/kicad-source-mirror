@@ -39,7 +39,7 @@ bool DRC_NETCLASS_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
     m_board = &aBoard;
 
     bool        success = true;
-    NETCLASSES& netclasses = m_board->GetDesignSettings().m_NetClasses;
+    NETCLASSES& netclasses = m_board->GetDesignSettings().GetNetClasses();
 
     success &= checkNetClass( netclasses.GetDefault() );
 

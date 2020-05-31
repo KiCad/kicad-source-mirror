@@ -72,7 +72,7 @@ public:
     /**
      * @brief Fetch the zone settings for this container
      */
-    const ZONE_SETTINGS& GetZoneSettings() const
+    virtual const ZONE_SETTINGS& GetZoneSettings() const
     {
         return m_zoneSettings;
     }
@@ -81,7 +81,7 @@ public:
      * @brief Set the zone settings for this container
      * @param aSettings new Zone settings for this container
      */
-    void SetZoneSettings( const ZONE_SETTINGS& aSettings )
+    virtual void SetZoneSettings( const ZONE_SETTINGS& aSettings )
     {
         m_zoneSettings = aSettings;
     }

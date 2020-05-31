@@ -551,14 +551,6 @@ public:
      */
     wxString ShowPadAttr() const;
 
-    /**
-     * Function AppendConfigs
-     * appends to @a aResult the configuration setting accessors which will later
-     * allow reading or writing of configuration file information directly into
-     * this object.
-     */
-    void AppendConfigs( std::vector<PARAM_CFG*>* aResult );
-
     EDA_ITEM* Clone() const override;
 
     /**

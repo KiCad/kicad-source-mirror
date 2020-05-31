@@ -48,6 +48,7 @@ using namespace std::placeholders;
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
+#include <project/project_file.h>  // LAST_PATH_TYPE
 #include <view/view.h>
 
 extern void SpreadFootprints( std::vector<MODULE*>* aFootprints,

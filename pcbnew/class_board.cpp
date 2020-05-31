@@ -41,6 +41,10 @@
 #include <connectivity/connectivity_data.h>
 #include <pgm_base.h>
 #include <pcbnew_settings.h>
+#include <project.h>
+#include <project/net_settings.h>
+#include <project/project_file.h>
+#include <project/project_local_settings.h>
 #include <ratsnest/ratsnest_data.h>
 #include <ratsnest/ratsnest_viewitem.h>
 
@@ -81,22 +85,18 @@ DELETED_BOARD_ITEM* g_DeletedItem = nullptr;
  */
 wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
-// Dummy settings used to initialize the board.
-// This is needed because some APIs that make use of BOARD without the context of a frame or
-// application, and so the BOARD needs to store a valid pointer to a PCBNEW_SETTINGS even if
-// one hasn't been provided by the application.
-static PCBNEW_SETTINGS dummyGeneralSettings;
 
 BOARD::BOARD() :
         BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
         m_paper( PAGE_INFO::A4 ),
+        m_project( nullptr ),
+        m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
         m_NetInfo( this ),
-        m_project( nullptr )
+        m_LegacyDesignSettingsLoaded( false ),
+        m_LegacyNetclassesLoaded( false )
 {
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
-
-    m_generalSettings = &dummyGeneralSettings;
 
     m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
                                             // zone contour currently in progress
@@ -113,19 +113,25 @@ BOARD::BOARD() :
             m_Layer[layer].m_type = LT_UNDEFINED;
     }
 
+    BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
+
     // Initialize default netclass.
-    NETCLASS* defaultClass = m_designSettings.GetDefault();
+    NETCLASS* defaultClass = bds.GetDefault();
     defaultClass->SetDescription( _( "This is the default net class." ) );
-    m_designSettings.SetCurrentNetClass( defaultClass->GetName() );
+    bds.SetCurrentNetClass( defaultClass->GetName() );
 
     // Set sensible initial values for custom track width & via size
-    m_designSettings.UseCustomTrackViaSize( false );
-    m_designSettings.SetCustomTrackWidth( m_designSettings.GetCurrentTrackWidth() );
-    m_designSettings.SetCustomViaSize( m_designSettings.GetCurrentViaSize() );
-    m_designSettings.SetCustomViaDrill( m_designSettings.GetCurrentViaDrill() );
+    bds.UseCustomTrackViaSize( false );
+    bds.SetCustomTrackWidth( bds.GetCurrentTrackWidth() );
+    bds.SetCustomViaSize( bds.GetCurrentViaSize() );
+    bds.SetCustomViaDrill( bds.GetCurrentViaDrill() );
 
     // Initialize ratsnest
     m_connectivity.reset( new CONNECTIVITY_DATA() );
+
+    // Set flag bits on these that will only be cleared if these are loaded from a legacy file
+    m_LegacyVisibleLayers.reset().set( Rescue );
+    m_LegacyVisibleItems.reset().set( GAL_LAYER_INDEX( GAL_LAYER_ID_BITMASK_END ) );
 }
 
 
@@ -167,6 +173,54 @@ BOARD::~BOARD()
 void BOARD::BuildConnectivity()
 {
     GetConnectivity()->Build( this );
+}
+
+
+void BOARD::SetProject( PROJECT* aProject )
+{
+    m_project = aProject;
+
+    if( aProject )
+    {
+        PROJECT_FILE& project = aProject->GetProjectFile();
+
+        // Link the design settings object to the project file
+        project.m_BoardSettings  = &GetDesignSettings();
+
+        // Set parent, which also will load the values from JSON stored in the project
+        project.m_BoardSettings->SetParent( &project );
+
+        // The netclasses pointer will be pointing to the internal netclasses list at this point. If
+        // it has anything other than the default net, this means we loaded some netclasses from a
+        // board saved in legacy format where the netclass info is included.  Move this info to the
+        // netclasses stored in the project.
+
+        NETCLASSES& local = GetDesignSettings().GetNetClasses();
+
+        if( m_LegacyNetclassesLoaded )
+            project.NetSettings().m_NetClasses = local;
+
+        GetDesignSettings().SetNetClasses( &project.NetSettings().m_NetClasses );
+    }
+}
+
+
+void BOARD::ClearProject()
+{
+    if( !m_project )
+        return;
+
+    PROJECT_FILE& project = m_project->GetProjectFile();
+
+    // Owned by the BOARD
+    if( project.m_BoardSettings )
+    {
+        project.ReleaseNestedSettings( project.m_BoardSettings );
+        project.m_BoardSettings = nullptr;
+    }
+
+    GetDesignSettings().SetParent( nullptr );
+    m_project = nullptr;
 }
 
 
@@ -392,50 +446,56 @@ LAYER_T LAYER::ParseType( const char* aType )
 
 int BOARD::GetCopperLayerCount() const
 {
-    return m_designSettings.GetCopperLayerCount();
+    return GetDesignSettings().GetCopperLayerCount();
 }
 
 
 void BOARD::SetCopperLayerCount( int aCount )
 {
-    m_designSettings.SetCopperLayerCount( aCount );
+    GetDesignSettings().SetCopperLayerCount( aCount );
 }
 
 
 LSET BOARD::GetEnabledLayers() const
 {
-    return m_designSettings.GetEnabledLayers();
+    return GetDesignSettings().GetEnabledLayers();
+}
+
+
+bool BOARD::IsLayerVisible( PCB_LAYER_ID aLayer ) const
+{
+    // If there is no project, assume layer is visible always
+    return GetDesignSettings().IsLayerEnabled( aLayer )
+           && ( !m_project || m_project->GetLocalSettings().m_VisibleLayers[aLayer] );
 }
 
 
 LSET BOARD::GetVisibleLayers() const
 {
-    return m_designSettings.GetVisibleLayers();
+    return m_project ? m_project->GetLocalSettings().m_VisibleLayers : LSET::AllLayersMask();
 }
 
 
 void BOARD::SetEnabledLayers( LSET aLayerSet )
 {
-    m_designSettings.SetEnabledLayers( aLayerSet );
+    GetDesignSettings().SetEnabledLayers( aLayerSet );
 }
 
 
 void BOARD::SetVisibleLayers( LSET aLayerSet )
 {
-    m_designSettings.SetVisibleLayers( aLayerSet );
+    if( m_project )
+        m_project->GetLocalSettings().m_VisibleLayers = aLayerSet;
 }
 
 
-void BOARD::SetVisibleElements( int aMask )
+void BOARD::SetVisibleElements( const GAL_SET& aSet )
 {
     // Call SetElementVisibility for each item
     // to ensure specific calculations that can be needed by some items,
     // just changing the visibility flags could be not sufficient.
-    for( GAL_LAYER_ID ii = GAL_LAYER_ID_START; ii < GAL_LAYER_ID_BITMASK_END; ++ii )
-    {
-        int item_mask = 1 << GAL_LAYER_INDEX( ii );
-        SetElementVisibility( ii, aMask & item_mask );
-    }
+    for( size_t i = 0; i < aSet.size(); i++ )
+        SetElementVisibility( GAL_LAYER_ID_START + static_cast<int>( i ), aSet[i] );
 }
 
 
@@ -450,21 +510,22 @@ void BOARD::SetVisibleAlls()
 }
 
 
-int BOARD::GetVisibleElements() const
+GAL_SET BOARD::GetVisibleElements() const
 {
-    return m_designSettings.GetVisibleElements();
+    return m_project ? m_project->GetLocalSettings().m_VisibleItems : GAL_SET().set();
 }
 
 
 bool BOARD::IsElementVisible( GAL_LAYER_ID aLayer ) const
 {
-    return m_designSettings.IsElementVisible( aLayer );
+    return !m_project || m_project->GetLocalSettings().m_VisibleItems[aLayer - GAL_LAYER_ID_START];
 }
 
 
 void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
 {
-    m_designSettings.SetElementVisibility( aLayer, isEnabled );
+    if( m_project )
+        m_project->GetLocalSettings().m_VisibleItems.set( aLayer - GAL_LAYER_ID_START, isEnabled );
 
     switch( aLayer )
     {
@@ -1213,6 +1274,86 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
         aNames.Add( UnescapeString( net->GetNetname() ) );
 
     return netBuffer.size();
+}
+
+
+void BOARD::SynchronizeNetsAndNetClasses()
+{
+    NETCLASSES& netClasses      = GetDesignSettings().GetNetClasses();
+    NETCLASSPTR defaultNetClass = netClasses.GetDefault();
+
+    // set all NETs to the default NETCLASS, then later override some
+    // as we go through the NETCLASSes.
+
+    for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
+         net != netEnd; ++net )
+    {
+        net->SetClass( defaultNetClass );
+    }
+
+    // Add netclass name and pointer to nets.  If a net is in more than one netclass,
+    // set the net's name and pointer to only the first netclass.  Subsequent
+    // and therefore bogus netclass memberships will be deleted in logic below this loop.
+    for( NETCLASSES::iterator clazz = netClasses.begin(); clazz != netClasses.end(); ++clazz )
+    {
+        NETCLASSPTR netclass = clazz->second;
+
+        for( NETCLASS::const_iterator member = netclass->begin(); member != netclass->end(); ++member )
+        {
+            const wxString& netname = *member;
+
+            // although this overall function seems to be adequately fast,
+            // FindNet( wxString ) uses now a fast binary search and is fast
+            // event for large net lists
+            NETINFO_ITEM* net = FindNet( netname );
+
+            if( net && net->GetClassName() == NETCLASS::Default )
+            {
+                net->SetClass( netclass );
+            }
+        }
+    }
+
+    // Finally, make sure that every NET is in a NETCLASS, even if that
+    // means the Default NETCLASS.  And make sure that all NETCLASSes do not
+    // contain netnames that do not exist, by deleting all netnames from
+    // every netclass and re-adding them.
+
+    for( NETCLASSES::iterator clazz = netClasses.begin(); clazz != netClasses.end(); ++clazz )
+    {
+        NETCLASSPTR netclass = clazz->second;
+
+        netclass->Clear();
+    }
+
+    defaultNetClass->Clear();
+
+    for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
+         net != netEnd; ++net )
+    {
+        const wxString& classname = net->GetClassName();
+
+        // because of the std:map<> this should be fast, and because of
+        // prior logic, netclass should not be NULL.
+        NETCLASSPTR netclass = netClasses.Find( classname );
+
+        wxASSERT( netclass );
+
+        netclass->Add( net->GetNetname() );
+    }
+
+    BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
+
+    // Set initial values for custom track width & via size to match the default netclass settings
+    bds.UseCustomTrackViaSize( false );
+    bds.SetCustomTrackWidth( defaultNetClass->GetTrackWidth() );
+    bds.SetCustomViaSize( defaultNetClass->GetViaDiameter() );
+    bds.SetCustomViaDrill( defaultNetClass->GetViaDrill() );
+    bds.SetCustomDiffPairWidth( defaultNetClass->GetDiffPairWidth() );
+    bds.SetCustomDiffPairGap( defaultNetClass->GetDiffPairGap() );
+    bds.SetCustomDiffPairViaGap( defaultNetClass->GetDiffPairViaGap() );
+
+    InvokeListeners( &BOARD_LISTENER::OnBoardNetSettingsChanged, *this );
 }
 
 

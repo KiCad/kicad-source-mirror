@@ -61,7 +61,7 @@ public:
      * If the given settings object is registered, save it to disk and unregister it
      * @param aSettings is the object to release
      */
-    void FlushAndRelease( JSON_SETTINGS* aSettings );
+    void FlushAndRelease( JSON_SETTINGS* aSettings, bool aSave = true );
 
     /**
      * Returns a handle to the a given settings by type
@@ -184,16 +184,18 @@ public:
     /**
      * Loads a project or sets up a new project with a specified path
      * @param aFullPath is the full path to the project
+     * @param aSetActive if true will set the loaded project as the active project
      * @return true if the PROJECT_FILE was successfully loaded from disk
      */
-    bool LoadProject( const wxString& aFullPath );
+    bool LoadProject( const wxString& aFullPath, bool aSetActive = true );
 
     /**
      * Saves, unloads and unregisters the given PROJECT
      * @param aProject is the project object to unload
+     * @param aSave if true will save the project before unloading
      * @return true if the PROJECT file was successfully saved
      */
-    bool UnloadProject( PROJECT& aProject );
+    bool UnloadProject( PROJECT* aProject, bool aSave = true );
 
     /**
      * A helper while we are not MDI-capable -- return the one and only project
@@ -202,16 +204,23 @@ public:
     PROJECT& Prj() const;
 
     /**
-     * Saves the one and only project
-     * TODO: Update for MDI
-     * @return true if save was successful
+     * Retrieves a loaded project by name
+     * @param aFullPath is the full path including name and extension to the project file
+     * @return a pointer to the project if loaded, or nullptr
      */
-    bool SaveProject();
+    PROJECT* GetProject( const wxString& aFullPath ) const;
 
     /**
-     * @return the path to the settings folder for the loaded project
+     * Saves a loaded project.
+     * @param aFullPath is the project name to save.  If empty, will save the first loaded project.
+     * @return true if save was successful
      */
-    wxString GetProjectSettingsPath() const;
+    bool SaveProject( const wxString& aFullPath = wxEmptyString );
+
+    /**
+     * @return the path to the backups folder for the loaded project
+     */
+    wxString GetProjectBackupsPath() const;
 
     /**
      * Checks if a given path is probably a valid KiCad configuration directory.
@@ -300,11 +309,12 @@ private:
     bool loadProjectFile( PROJECT& aProject );
 
     /**
-     * Saves, unloads and unregisters the given PROJECT_FILE
+     * Optionally saves, and then unloads and unregisters the given PROJECT_FILE
      * @param aProject is the project object to unload the file for
+     * @param aSave if true will save the project file before unloading
      * @return true if the PROJECT file was successfully saved
      */
-    bool unloadProjectFile( PROJECT& aProject );
+    bool unloadProjectFile( PROJECT* aProject, bool aSave );
 
 private:
 

@@ -105,17 +105,15 @@ public:
             m_map( aMap )
     {}
 
-    void Load( JSON_SETTINGS* aSettings ) const override
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
-        COLOR4D val = m_default;
-
         if( OPT<COLOR4D> optval = aSettings->Get<COLOR4D>( m_path ) )
-            val = *optval;
-
-        ( *m_map )[ m_key ] = val;
+            ( *m_map )[ m_key ] = *optval;
+        else if( aResetIfMissing )
+            ( *m_map )[ m_key ] = m_default;
     }
 
     void Store( JSON_SETTINGS* aSettings) const override

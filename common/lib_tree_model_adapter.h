@@ -136,8 +136,6 @@ public:
     void SaveColWidths();
     void SavePinnedItems();
 
-    std::vector<PARAM_CFG*>& GetProjectFileParameters();
-
     /**
      * Set the component filter type. Must be set before adding libraries
      *
@@ -282,7 +280,12 @@ protected:
 
     LIB_TREE_NODE_ROOT m_tree;
 
-    LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent );
+    /**
+     * Creates the adapter
+     * @param aParent is the parent frame
+     * @param aPinnedKey is the key to load the pinned libraries list from the project file
+     */
+    LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, wxString aPinnedKey );
 
     LIB_TREE_NODE_LIB& DoAddLibraryNode( wxString const& aNodeName, wxString const& aDesc );
 
@@ -368,6 +371,7 @@ private:
 
     int                     m_colWidths[NUM_COLS];
     wxArrayString           m_pinnedLibs;
+    wxString                m_pinnedKey;
 
     /**
      * Find any results worth highlighting and expand them, according to given criteria

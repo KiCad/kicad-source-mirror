@@ -42,8 +42,9 @@ public:
     /**
      * Loads the value of this parameter from JSON to the underlying storage
      * @param aSettings is the JSON_SETTINGS object to load from.
+     * @param aResetIfMissing if true will set the parameter to its default value if load fails
      */
-    virtual void Load( JSON_SETTINGS* aSettings ) const = 0;
+    virtual void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const = 0;
 
     /**
      * Stores the value of this parameter to the given JSON_SETTINGS object
@@ -90,42 +91,42 @@ public:
     PARAM( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault,
            bool aReadOnly = false ) :
             PARAM_BASE( aJsonPath, aReadOnly ),
-            m_ptr( aPtr ),
-            m_default( aDefault ),
             m_min(),
             m_max(),
-            m_use_minmax( false )
+            m_use_minmax( false ),
+            m_ptr( aPtr ),
+            m_default( aDefault )
     { }
 
     PARAM( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault, ValueType aMin,
            ValueType aMax, bool aReadOnly = false ) :
             PARAM_BASE( aJsonPath, aReadOnly ),
-            m_ptr( aPtr ),
-            m_default( aDefault ),
             m_min( aMin ),
             m_max( aMax ),
-            m_use_minmax( true )
+            m_use_minmax( true ),
+            m_ptr( aPtr ),
+            m_default( aDefault )
     { }
 
-    void Load( JSON_SETTINGS* aSettings ) const override
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
-        ValueType val = m_default;
-
         if( OPT<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
         {
-            val = *optval;
+            ValueType val = *optval;
 
             if( m_use_minmax )
             {
                 if( m_max < val || val < m_min )
                     val = m_default;
             }
-        }
 
-        *m_ptr = val;
+            *m_ptr = val;
+        }
+        else if( aResetIfMissing )
+            *m_ptr = m_default;
     }
 
     void Store( JSON_SETTINGS* aSettings ) const override
@@ -157,13 +158,66 @@ public:
     }
 
 private:
-    ValueType* m_ptr;
-    ValueType m_default;
     ValueType m_min;
     ValueType m_max;
     bool m_use_minmax;
+
+protected:
+    ValueType* m_ptr;
+    ValueType m_default;
 };
 
+/**
+ * Stores a path as a string with directory separators normalized to unix-style
+ */
+class PARAM_PATH : public PARAM<wxString>
+{
+public:
+    PARAM_PATH( const std::string& aJsonPath, wxString* aPtr, wxString aDefault,
+                bool aReadOnly = false ) :
+            PARAM( aJsonPath, aPtr, aDefault, aReadOnly )
+    { }
+
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    {
+        if( m_readOnly )
+            return;
+
+        PARAM::Load( aSettings, aResetIfMissing );
+
+        *m_ptr = fromFileFormat( *m_ptr );
+    }
+
+    void Store( JSON_SETTINGS* aSettings ) const override
+    {
+        aSettings->Set<wxString>( m_path, toFileFormat( *m_ptr ) );
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( OPT<wxString> optval = aSettings->Get<wxString>( m_path ) )
+            return fromFileFormat( *optval ) == *m_ptr;
+
+        return false;
+    }
+
+private:
+    wxString toFileFormat( const wxString& aString ) const
+    {
+        wxString ret = aString;
+        ret.Replace( wxT( "\\" ), wxT( "/" ) );
+        return ret;
+    }
+
+    wxString fromFileFormat( const wxString& aString ) const
+    {
+        wxString ret = aString;
+#ifdef __WINDOWS__
+        ret.Replace( wxT( "/" ), wxT( "\\" ) );
+#endif
+        return ret;
+    }
+};
 
 /**
  * Like a normal param, but with custom getter and setter functions
@@ -182,28 +236,28 @@ public:
             m_setter( aSetter )
     { }
 
-    void Load( JSON_SETTINGS* aSettings ) const override
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
-        ValueType val = m_default;
-
         if( std::is_same<ValueType, nlohmann::json>::value )
         {
             if( OPT<nlohmann::json> optval = aSettings->GetJson( m_path ) )
-                val = *optval;
+                m_setter( *optval );
+            else
+                m_setter( m_default );
         }
         else
         {
             if( OPT<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
-                val = *optval;
+                m_setter( *optval );
+            else
+                m_setter( m_default );
         }
-
-        m_setter( val );
     }
 
-    void Store( JSON_SETTINGS* aSettings) const override
+    void Store( JSON_SETTINGS* aSettings ) const override
     {
         try
         {
@@ -287,7 +341,7 @@ public:
             m_scale( aScale )
     { }
 
-    void Load( JSON_SETTINGS* aSettings ) const override
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
@@ -296,6 +350,8 @@ public:
 
         if( OPT<double> optval = aSettings->Get<double>( m_path ) )
             dval = *optval;
+        else if( !aResetIfMissing )
+            return;
 
         ValueType val = KiROUND<ValueType>( dval / m_scale );
 
@@ -363,25 +419,25 @@ public:
             m_default( aDefault )
     { }
 
-    void Load( JSON_SETTINGS* aSettings ) const override
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
-        std::vector<Type> val = m_default;
-
         if( OPT<nlohmann::json> js = aSettings->GetJson( m_path ) )
         {
+            std::vector<Type> val;
+
             if( js->is_array() )
             {
-                val.clear();
-
                 for( const auto& el : js->items() )
                     val.push_back( el.value().get<Type>() );
             }
-        }
 
-        *m_ptr = val;
+            *m_ptr = val;
+        }
+        else if( aResetIfMissing )
+            *m_ptr = m_default;
     }
 
     void Store( JSON_SETTINGS* aSettings) const override
@@ -445,12 +501,12 @@ public:
             PARAM_LIST( aJsonPath, aPtr, aDefault, aReadOnly )
     { }
 
-    void Load( JSON_SETTINGS* aSettings ) const override
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
-        PARAM_LIST::Load( aSettings );
+        PARAM_LIST::Load( aSettings, aResetIfMissing );
 
         for( size_t i = 0; i < m_ptr->size(); i++ )
             ( *m_ptr )[i] = fromFileFormat( ( *m_ptr )[i] );
@@ -526,7 +582,7 @@ public:
             m_default( aDefault )
     { }
 
-    void Load( JSON_SETTINGS* aSettings ) const override
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;

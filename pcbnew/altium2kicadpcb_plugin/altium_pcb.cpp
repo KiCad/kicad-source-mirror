@@ -757,7 +757,7 @@ void ALTIUM_PCB::ParseClasses6Data(
         if( elem.kind == ALTIUM_CLASS_KIND::NET_CLASS )
         {
             const NETCLASSPTR& netclass = std::make_shared<NETCLASS>( elem.name );
-            designSettings.m_NetClasses.Add( netclass );
+            designSettings.GetNetClasses().Add( netclass );
 
             for( const auto& name : elem.names )
             {

@@ -56,14 +56,6 @@
 
 #define SEP()   wxFileName::GetPathSeparator()
 
-// Not really useful, provided to save/restore params in project config file,
-// (Add them in s_KicadManagerParams if any)
-// Used also to create new .pro files from the kicad.pro template file
-// for new projects
-#define     GeneralGroupName            wxT( "/general" )
-
-std::vector<PARAM_CFG*>     s_KicadManagerParams;
-
 
 // Menubar and toolbar event table
 BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )

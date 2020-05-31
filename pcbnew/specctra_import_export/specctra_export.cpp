@@ -1430,7 +1430,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----< output vias used in netclasses >-----------------------------------
     {
-        NETCLASSES& nclasses = aBoard->GetDesignSettings().m_NetClasses;
+        NETCLASSES& nclasses = aBoard->GetDesignSettings().GetNetClasses();
 
         // Assume the netclass vias are all the same kind of thru, blind, or buried vias.
         // This is in lieu of either having each netclass via have its own layer pair in
@@ -1641,7 +1641,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
 
     //-----<output NETCLASSs>----------------------------------------------------
-    NETCLASSES& nclasses = aBoard->GetDesignSettings().m_NetClasses;
+    NETCLASSES& nclasses = aBoard->GetDesignSettings().GetNetClasses();
 
     exportNETCLASS( nclasses.GetDefault(), aBoard );
 

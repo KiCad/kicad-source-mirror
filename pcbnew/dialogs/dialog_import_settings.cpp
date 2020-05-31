@@ -59,7 +59,7 @@ void DIALOG_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
     fn.SetExt( LegacyProjectFileExtension );
 
     wxFileDialog dlg( this, _( "Import Settings From" ), fn.GetPath(), fn.GetFullName(),
-                      ProjectFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+                      PcbFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
     if( dlg.ShowModal() == wxID_OK )
         m_filePathCtrl->SetValue( dlg.GetPath() );
