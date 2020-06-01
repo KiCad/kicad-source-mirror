@@ -315,9 +315,9 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
             if( selection.Empty() )
             {
                 // Clear the previous local ratsnest if we click off all items
-                for( auto mod : board->Modules() )
+                for( MODULE* mod : board->Modules() )
                 {
-                    for( auto pad : mod->Pads() )
+                    for( D_PAD* pad : mod->Pads() )
                         pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
                 }
             }
@@ -325,16 +325,19 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
             {
                 for( auto item : selection )
                 {
-                    if( auto pad = dyn_cast<D_PAD*>(item) )
+                    if( D_PAD* pad = dyn_cast<D_PAD*>(item) )
                     {
                         pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
                     }
-                    else if( auto mod = dyn_cast<MODULE*>(item) )
+                    else if( MODULE* mod = dyn_cast<MODULE*>(item) )
                     {
-                        bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
+                        if( !mod->Pads().empty() )
+                        {
+                            bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
 
-                        for( auto modpad : mod->Pads() )
-                            modpad->SetLocalRatsnestVisible( enable );
+                            for( auto modpad : mod->Pads() )
+                                modpad->SetLocalRatsnestVisible( enable );
+                        }
                     }
                 }
             }
