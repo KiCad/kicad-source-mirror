@@ -270,7 +270,10 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
     {
         EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
 
-        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+        if( item )
+            aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+        else
+            aVariant = _( "item not found (Please, rerun ERC)" );
     }
         break;
 
@@ -278,7 +281,10 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
     {
         EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
 
-        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+        if( item )
+            aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+        else
+            aVariant = _( "item not found (Please, rerun ERC)" );
     }
         break;
     }
