@@ -60,6 +60,7 @@ private:
     void OnSizeMembershipGrid( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent &event ) override;
     void OnNetclassGridCellChanging( wxGridEvent& event );
+    void OnMembershipKillFocus( wxFocusEvent& event ) override;
     void OnShowAll( wxCommandEvent& event ) override { doApplyFilters( true ); }
     void OnApplyFilters( wxCommandEvent& event ) override { doApplyFilters( false ); }
     void OnAssignAll( wxCommandEvent& event ) override { doAssignments( true ); }
