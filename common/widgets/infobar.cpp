@@ -20,6 +20,7 @@
 
 #include <id.h>
 #include <widgets/infobar.h>
+#include "wx/artprov.h"
 #include <wx/aui/framemanager.h>
 #include <wx/debug.h>
 #include <wx/infobar.h>
@@ -35,21 +36,29 @@ END_EVENT_TABLE()
 
 WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager *aMgr, wxWindowID aWinid )
         : wxInfoBarGeneric( aParent, aWinid ),
-        m_showTime( 0 ),
-        m_showTimer( nullptr ),
-        m_auiManager( aMgr )
+          m_showTime( 0 ),
+          m_showTimer( nullptr ),
+          m_auiManager( aMgr )
 {
     m_showTimer = new wxTimer( this, ID_CLOSE_INFOBAR );
 
     // Don't use any effects since they leave the sizer area visible under the infobar
     SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
 
-    // On GTK, the infobar seems to start too small, so increase its height
-#ifdef __WXGTK__
+    // The infobar seems to start too small, so increase its height
     int sx, sy;
     GetSize( &sx, &sy );
-    SetSize( sx, 1.5 * sy );
-#endif
+    sy = 1.5 * sy;
+    SetSize( sx, sy );
+
+    // The bitmap gets cutoff sometimes with the default size, so force it to be the same
+    // height as the infobar.
+    wxSizer* sizer    = GetSizer();
+    wxSize   iconSize = wxArtProvider::GetSizeHint( wxART_BUTTON );
+
+    sizer->SetItemMinSize( (size_t) 0, iconSize.x, sy );
+
+    Layout();
 }
 
 
