@@ -1067,6 +1067,15 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
         break;
     }
 
+    case S_POLYGON:
+    {
+        SHAPE_LINE_CHAIN l = aItem->GetPolyShape().Outline( 0 );
+
+        for( int i = 0; i < l.SegmentCount(); i++ )
+            itemShape.push_back( l.Segment( i ) );
+    }
+        break;
+
     default:
         break;
     }
