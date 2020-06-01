@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -190,7 +192,7 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
                 if( fieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE ) )
                     fieldValue = alias->GetName();
                 else if( fieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET ) )
-                    fieldValue = alias->GetDocFileName();
+                    fieldValue = alias->GetDatasheetField().GetText();
             }
 
             if( fieldValue.IsEmpty() )

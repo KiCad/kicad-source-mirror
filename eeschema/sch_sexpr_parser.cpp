@@ -765,13 +765,6 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
     {
         existingField = aSymbol->GetField( field->GetId() );
 
-        /// @todo Remove this once the legacy file format is deprecated.
-        if( field->GetId() == DATASHEET )
-        {
-            aSymbol->SetDocFileName( value );
-            field->SetText( wxEmptyString );
-        }
-
         *existingField = *field;
     }
     else if( name == "ki_keywords" )

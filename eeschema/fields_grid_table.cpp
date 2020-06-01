@@ -247,20 +247,13 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
 {
     wxGridCellAttr* tmp;
 
-    // Only the VALUE and DATASHEET fields can be edited for inherited symbols.
-    bool rowIsReadOnly = m_part && m_part->IsAlias() && ( aRow == REFERENCE || aRow == FOOTPRINT );
-
     switch( aCol )
     {
     case FDC_NAME:
-        if( aRow < m_mandatoryFieldCount || rowIsReadOnly )
+        if( aRow < m_mandatoryFieldCount )
         {
             tmp = m_fieldNameAttr->Clone();
             tmp->SetReadOnly( true );
-
-            if( rowIsReadOnly )
-                tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-
             return tmp;
         }
         else
@@ -272,25 +265,14 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
     case FDC_VALUE:
         if( m_parentType == SCH_COMPONENT_T && aRow == REFERENCE )
         {
-            if( rowIsReadOnly )
-            {
-                tmp = m_referenceAttr->Clone();
-                tmp->SetReadOnly( true );
-                tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-                return tmp;
-            }
-            else
-            {
-                m_referenceAttr->IncRef();
-                return m_referenceAttr;
-            }
+            m_referenceAttr->IncRef();
+            return m_referenceAttr;
         }
         else if( m_parentType == SCH_COMPONENT_T && aRow == VALUE )
         {
             // For power symbols, the value is not editable, because value and pin name must
             // be the same and can be edited only in library editor.
-            if( ( m_part && m_part->IsPower() && !m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
-              || rowIsReadOnly )
+            if( ( m_part && m_part->IsPower() && !m_frame->IsType( FRAME_SCH_LIB_EDITOR ) ) )
             {
                 tmp = m_readOnlyAttr->Clone();
                 tmp->SetReadOnly( true );
@@ -305,18 +287,8 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         }
         else if( m_parentType == SCH_COMPONENT_T && aRow == FOOTPRINT )
         {
-            if( rowIsReadOnly )
-            {
-                tmp = m_footprintAttr->Clone();
-                tmp->SetReadOnly( true );
-                tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-                return tmp;
-            }
-            else
-            {
-                m_footprintAttr->IncRef();
-                return m_footprintAttr;
-            }
+            m_footprintAttr->IncRef();
+            return m_footprintAttr;
         }
         else if( m_parentType == SCH_COMPONENT_T && aRow == DATASHEET )
         {
@@ -340,33 +312,13 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
 
             if( templateFn && templateFn->m_URL )
             {
-                if( rowIsReadOnly )
-                {
-                    tmp = m_urlAttr->Clone();
-                    tmp->SetReadOnly( true );
-                    tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-                    return tmp;
-                }
-                else
-                {
-                    m_urlAttr->IncRef();
-                    return m_urlAttr;
-                }
+                m_urlAttr->IncRef();
+                return m_urlAttr;
             }
             else
             {
-                if( rowIsReadOnly )
-                {
-                    tmp = m_nonUrlAttr->Clone();
-                    tmp->SetReadOnly( true );
-                    tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-                    return tmp;
-                }
-                else
-                {
-                    m_nonUrlAttr->IncRef();
-                    return m_nonUrlAttr;
-                }
+                m_nonUrlAttr->IncRef();
+                return m_nonUrlAttr;
             }
         }
 
@@ -375,74 +327,25 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
     case FDC_TEXT_SIZE:
     case FDC_POSX:
     case FDC_POSY:
-        if( rowIsReadOnly )
-        {
-            tmp = m_readOnlyAttr->Clone();
-            tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-            return tmp;
-        }
-        else
-        {
-            return nullptr;
-        }
+        return nullptr;
 
     case FDC_H_ALIGN:
-        if( rowIsReadOnly )
-        {
-            tmp = m_hAlignAttr->Clone();
-            tmp->SetReadOnly( true );
-            tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-            return tmp;
-        }
-        else
-        {
-            m_hAlignAttr->IncRef();
-            return m_hAlignAttr;
-        }
+        m_hAlignAttr->IncRef();
+        return m_hAlignAttr;
 
     case FDC_V_ALIGN:
-        if( rowIsReadOnly )
-        {
-            tmp = m_vAlignAttr->Clone();
-            tmp->SetReadOnly( true );
-            tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-            return tmp;
-        }
-        else
-        {
-            m_vAlignAttr->IncRef();
-            return m_vAlignAttr;
-        }
+        m_vAlignAttr->IncRef();
+        return m_vAlignAttr;
 
     case FDC_ORIENTATION:
-        if( rowIsReadOnly )
-        {
-            tmp = m_orientationAttr->Clone();
-            tmp->SetReadOnly( true );
-            tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-            return tmp;
-        }
-        else
-        {
-            m_orientationAttr->IncRef();
-            return m_orientationAttr;
-        }
+        m_orientationAttr->IncRef();
+        return m_orientationAttr;
 
     case FDC_SHOWN:
     case FDC_ITALIC:
     case FDC_BOLD:
-        if( rowIsReadOnly )
-        {
-            tmp = m_boolAttr->Clone();
-            tmp->SetReadOnly( true );
-            tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-            return tmp;
-        }
-        else
-        {
-            m_boolAttr->IncRef();
-            return m_boolAttr;
-        }
+        m_boolAttr->IncRef();
+        return m_boolAttr;
 
     default:
         wxFAIL;

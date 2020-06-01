@@ -1226,19 +1226,8 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
     case LIB_PART_T:    // In libedit we do not want to select the symbol itself.
         return false;
 
-    case LIB_FIELD_T:
-    {
-        if( symbeditFrame )
-        {
-            LIB_PART* currentPart = symbeditFrame->GetCurPart();
-
-            // Nothing in derived symbols is editable at the moment.
-            if( currentPart && currentPart->IsAlias() )
-                return false;
-        }
-
+    case LIB_FIELD_T:   // LIB_FIELD object can always be edited.
         break;
-    }
 
     case LIB_ARC_T:
     case LIB_CIRCLE_T:

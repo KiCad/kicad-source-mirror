@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,7 +263,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
         if( !part )
             return 0;
 
-        datasheet = part->GetDocFileName();
+        datasheet = part->GetDatasheetField().GetText();
     }
     else if( m_frame->IsType( FRAME_SCH_VIEWER ) || m_frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
     {
@@ -272,7 +272,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
         if( !entry )
             return 0;
 
-        datasheet = entry->GetDocFileName();
+        datasheet = entry->GetDatasheetField().GetText();
     }
     else if( m_frame->IsType( FRAME_SCH ) )
     {

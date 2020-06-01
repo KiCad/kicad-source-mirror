@@ -1471,6 +1471,8 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 {
     wxCHECK_RET( aSymbol, "Invalid LIB_PART pointer." );
 
+    int lastFieldId;
+    LIB_FIELDS fields;
     std::string name = aFormatter.Quotew( aSymbol->GetLibId().Format().wx_str() );
     std::string unitName = aSymbol->GetLibId().GetLibItemName();
 
@@ -1520,14 +1522,12 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         aFormatter.Print( 0, "\n" );
 
-        LIB_FIELDS fields;
-
         aSymbol->GetFields( fields );
 
         for( auto field : fields )
             saveField( &field, aFormatter, aNestLevel + 1 );
 
-        int lastFieldId = fields.back().GetId() + 1;
+        lastFieldId = fields.back().GetId() + 1;
 
         // @todo At some point in the future the lock status (all units interchangeable) should
         // be set deterministically.  For now a custom lock properter is used to preserve the
@@ -1565,18 +1565,14 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
                           name.c_str(),
                           aFormatter.Quotew( parent->GetName() ).c_str() );
 
-        LIB_FIELD tmp = parent->GetValueField();
-        tmp.SetText( aSymbol->GetName() );
-        saveField( &tmp, aFormatter, aNestLevel + 1 );
+        aSymbol->GetFields( fields );
 
-        if( !aSymbol->GetDocFileName().IsEmpty() )
-        {
-            tmp = *aSymbol->GetField( DATASHEET );
-            tmp.SetText( aSymbol->GetDocFileName() );
-            saveField( &tmp, aFormatter, aNestLevel + 1 );
-        }
+        for( auto field : fields )
+            saveField( &field, aFormatter, aNestLevel + 1 );
 
-        saveDcmInfoAsFields( aSymbol, aFormatter, aNestLevel, MANDATORY_FIELDS );
+        lastFieldId = fields.back().GetId() + 1;
+
+        saveDcmInfoAsFields( aSymbol, aFormatter, aNestLevel, lastFieldId );
     }
 
     aFormatter.Print( aNestLevel, ")\n" );

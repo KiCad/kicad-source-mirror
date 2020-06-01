@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -151,7 +151,7 @@ void LIB_VIEW_FRAME::SyncToolbars()
     LIB_PART* symbol = GetSelectedSymbol();
 
     m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet,
-                           symbol && !symbol->GetDocFileName().IsEmpty() );
+                           symbol && !symbol->GetDatasheetField().GetText().IsEmpty() );
     m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard, symbol && symbol->HasConversion(),
                            m_convert == LIB_FIELD::LIB_CONVERT::BASE );
     m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganAlternate, symbol && symbol->HasConversion(),

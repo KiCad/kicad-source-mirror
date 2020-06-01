@@ -136,9 +136,9 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
 
     // Update the reference -- just the prefix for now.
     if( sheet )
-        SetRef( sheet, aPart.GetReferenceField().GetText() + wxT( "?" ) );
+        SetRef( sheet, m_part->GetReferenceField().GetText() + wxT( "?" ) );
     else
-        m_prefix = aPart.GetReferenceField().GetText() + wxT( "?" );
+        m_prefix = m_part->GetReferenceField().GetText() + wxT( "?" );
 }
 
 
@@ -269,9 +269,7 @@ wxString SCH_COMPONENT::GetDescription() const
 wxString SCH_COMPONENT::GetDatasheet() const
 {
     if( m_part )
-    {
-        return m_part->GetDocFileName();
-    }
+        return m_part->GetDatasheetField().GetText();
 
     return wxEmptyString;
 }
@@ -660,7 +658,9 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
                 continue;
 
             if( idx >= 0 && idx < MANDATORY_FIELDS )
+            {
                 schField = GetField( idx );
+            }
             else
             {
                 schField = FindField( libField.GetCanonicalName() );
@@ -687,12 +687,6 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
             else if( idx == DATASHEET )
             {
                 schField->SetText( GetDatasheet() );            // fetch alias-specific value
-
-                // Some older libraries may be broken and the alias datasheet information
-                // in the document file for the root part may have been dropped.  This only
-                // happens for the root part.
-                if( schField->GetText().IsEmpty() && symbolName == m_part->GetName() )
-                    schField->SetText( m_part->GetField( DATASHEET )->GetText() );
             }
             else
             {

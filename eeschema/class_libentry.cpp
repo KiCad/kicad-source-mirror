@@ -133,7 +133,6 @@ LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
     m_libId               = aPart.m_libId;
     m_description         = aPart.m_description;
     m_keyWords            = aPart.m_keyWords;
-    m_docFileName         = aPart.m_docFileName;
 
     ClearSelected();
 
@@ -187,7 +186,6 @@ const LIB_PART& LIB_PART::operator=( const LIB_PART& aPart )
     m_libId               = aPart.m_libId;
     m_description         = aPart.m_description;
     m_keyWords            = aPart.m_keyWords;
-    m_docFileName         = aPart.m_docFileName;
 
     m_drawings.clear();
 
@@ -278,11 +276,6 @@ int LIB_PART::Compare( const LIB_PART& aRhs ) const
     if( retv )
         return retv;
 
-    retv = m_docFileName.Cmp( aRhs.m_docFileName );
-
-    if( retv )
-        return retv;
-
     if( m_pinNameOffset != aRhs.m_pinNameOffset )
         return m_pinNameOffset - aRhs.m_pinNameOffset;
 
@@ -339,12 +332,20 @@ std::unique_ptr< LIB_PART > LIB_PART::Flatten() const
         // Copy the parent.
         retv.reset( new LIB_PART( *parent.get() ) );
 
-        // Now add the inherited part (this) information.
+        // Now add the inherited part mandator field (this) information.
         retv->SetName( m_name );
 
-        const LIB_FIELD* datasheetField = GetField( DATASHEET );
-        retv->GetField( DATASHEET )->SetText( datasheetField->GetText() );
-        retv->SetDocFileName( m_docFileName );
+        for( int i = 0; i < MANDATORY_FIELDS; i++ )
+        {
+            wxString tmp = GetField( i )->GetText();
+
+            // If the field isn't defined then inherit the parent field value.
+            if( tmp.IsEmpty() )
+                retv->GetField( i )->SetText( parent->GetField( i )->GetText() );
+            else
+                *retv->GetField( i ) = *GetField( i );
+        }
+
         retv->SetKeyWords( m_keyWords );
         retv->SetDescription( m_description );
     }
@@ -882,6 +883,14 @@ LIB_FIELD& LIB_PART::GetReferenceField()
 LIB_FIELD& LIB_PART::GetFootprintField()
 {
     LIB_FIELD* field = GetField( FOOTPRINT );
+    wxASSERT( field != NULL );
+    return *field;
+}
+
+
+LIB_FIELD& LIB_PART::GetDatasheetField()
+{
+    LIB_FIELD* field = GetField( DATASHEET );
     wxASSERT( field != NULL );
     return *field;
 }

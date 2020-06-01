@@ -418,8 +418,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
         if( !lcomp->GetDescription().IsEmpty() )
             xlibpart->AddChild( node( "description", lcomp->GetDescription() ) );
 
-        if( !lcomp->GetDocFileName().IsEmpty() )
-            xlibpart->AddChild( node( "docs",  lcomp->GetDocFileName() ) );
+        if( !lcomp->GetDatasheetField().GetText().IsEmpty() )
+            xlibpart->AddChild( node( "docs",  lcomp->GetDatasheetField().GetText() ) );
 
         // Write the footprint list
         if( lcomp->GetFootprints().GetCount() )

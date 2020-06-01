@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,10 +145,6 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
     // Push a copy of each field into m_updateFields
     m_libEntry->GetFields( *m_fields );
 
-    // Copy the data sheet field from the old alias document file name if it's not empty.
-    if( !m_libEntry->GetDocFileName().IsEmpty() )
-        m_fields->at( DATASHEET ).SetText( m_libEntry->GetDocFileName() );
-
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign for editing
     for( size_t i = 0; i < m_fields->size(); ++i )
@@ -203,7 +199,9 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
         m_inheritanceSelectCombo->SetSelection( selection );
 
         // Copy the reference field from the root symbol to prevent validation errors.
-        m_fields->at( REFERENCE ).SetText( rootPart->GetReferenceField().GetText() );
+        if( m_fields->at( REFERENCE ).GetText().IsEmpty() )
+            m_fields->at( REFERENCE ).SetText( rootPart->GetReferenceField().GetText() );
+
         m_lastOpenedPage = 0;
     }
 
@@ -313,8 +311,6 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
         m_fields->at( i ).SetPosition( pos );
     }
 
-    // Datasheet field is special; copy it to the root alias docfilename
-    m_libEntry->SetDocFileName( m_fields->at( DATASHEET ).GetText() );
     m_libEntry->SetFields( *m_fields );
 
     // We need to keep the name and the value the same at the moment!

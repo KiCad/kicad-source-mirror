@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -240,5 +240,5 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
     AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
     AppendMsgPanel( _( "Description" ), m_my_part->GetDescription(), CYAN, 8 );
     AppendMsgPanel( _( "Key words" ), m_my_part->GetKeyWords(), DARKDARKGRAY );
-    AppendMsgPanel( _( "Datasheet" ), m_my_part->GetDocFileName(), DARKDARKGRAY );
+    AppendMsgPanel( _( "Datasheet" ), m_my_part->GetDatasheetField().GetText(), DARKDARKGRAY );
 }

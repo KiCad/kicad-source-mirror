@@ -323,17 +323,6 @@ BOOST_AUTO_TEST_CASE( Compare )
     m_part_no_data.SetKeyWords( wxEmptyString );
     testPart.SetKeyWords( wxEmptyString );
 
-    // Documentation file string tests.
-    m_part_no_data.SetDocFileName( "b" );
-    testPart.SetDocFileName( "b" );
-    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
-    m_part_no_data.SetDocFileName( "a" );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
-    m_part_no_data.SetDocFileName( "c" );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
-    m_part_no_data.SetDocFileName( wxEmptyString );
-    testPart.SetDocFileName( wxEmptyString );
-
     // Pin name offset comparison tests.
     testPart.SetPinNameOffset( testPart.GetPinNameOffset() + 1 );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );

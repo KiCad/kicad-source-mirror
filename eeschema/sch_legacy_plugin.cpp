@@ -2728,10 +2728,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
 
             case 'F':
                 if( symbol )
-                {
-                    symbol->SetDocFileName( text );
                     symbol->GetField( DATASHEET )->SetText( text );
-                }
                 break;
 
             case 0:
@@ -4268,7 +4265,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveDocFile()
     {
         wxString description =  it->second->GetDescription();
         wxString keyWords = it->second->GetKeyWords();
-        wxString docFileName = it->second->GetDocFileName();
+        wxString docFileName = it->second->GetDatasheetField().GetText();
 
         if( description.IsEmpty() && keyWords.IsEmpty() && docFileName.IsEmpty() )
             continue;
