@@ -294,23 +294,23 @@ void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent 
     wxString        partial;
 
     auto textVarRef =
-            [&]( int pos )
+            [&]( int pt )
             {
-                return pos >= 2
-                        && m_StyledTextCtrl->GetCharAt( pos-2 ) == '$'
-                        && m_StyledTextCtrl->GetCharAt( pos-1 ) == '{';
+                return pt >= 2
+                        && m_StyledTextCtrl->GetCharAt( pt - 2 ) == '$'
+                        && m_StyledTextCtrl->GetCharAt( pt - 1 ) == '{';
             };
 
     // Check for cross-reference
-    if( start > 1 && m_StyledTextCtrl->GetCharAt( start-1 ) == ':' )
+    if( start > 1 && m_StyledTextCtrl->GetCharAt( start - 1 ) == ':' )
     {
-        int refStart = m_StyledTextCtrl->WordStartPosition( start-1, true );
+        int refStart = m_StyledTextCtrl->WordStartPosition( start - 1, true );
 
         if( textVarRef( refStart ) )
         {
             partial = m_StyledTextCtrl->GetRange( start, pos );
 
-            wxString           ref = m_StyledTextCtrl->GetRange( refStart, start-1 );
+            wxString           ref = m_StyledTextCtrl->GetRange( refStart, start - 1 );
             SCH_SHEET_LIST     sheets = editFrame->Schematic().GetSheets();
             SCH_REFERENCE_LIST refs;
             SCH_COMPONENT*     refComponent = nullptr;
