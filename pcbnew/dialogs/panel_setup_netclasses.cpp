@@ -297,7 +297,7 @@ bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, wxString aName, boo
 
     for( int ii = 0; ii < m_netclassGrid->GetNumberRows(); ii++ )
     {
-        if( ii != aRow && m_netclassGrid->GetRowLabelValue( ii ).CmpNoCase( aName ) == 0 )
+        if( ii != aRow && m_netclassGrid->GetCellValue( ii, GRID_NAME ).CmpNoCase( aName ) == 0 )
         {
             wxString msg = _( "Netclass name already in use." );
             m_Parent->SetError( msg, this, m_netclassGrid, focusFirst ? aRow : ii, GRID_NAME );
@@ -314,7 +314,18 @@ void PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging( wxGridEvent& event )
     if( event.GetCol() == GRID_NAME )
     {
         if( validateNetclassName( event.GetRow(), event.GetString() ) )
+        {
+            wxString oldName = m_netclassGrid->GetCellValue( event.GetRow(), GRID_NAME );
+            wxString newName = event.GetString();
+
+            for( int row = 0; row < m_membershipGrid->GetNumberRows(); ++row )
+            {
+                if( m_membershipGrid->GetCellValue( row, 1 ) == oldName )
+                    m_membershipGrid->SetCellValue( row, 1, newName );
+            }
+
             m_netclassesDirty = true;
+        }
         else
             event.Veto();
     }
@@ -396,6 +407,12 @@ void PANEL_SETUP_NETCLASSES::OnSizeNetclassGrid( wxSizeEvent& event )
     AdjustNetclassGridColumns( event.GetSize().GetX() );
 
     event.Skip();
+}
+
+
+void PANEL_SETUP_NETCLASSES::OnMembershipKillFocus( wxFocusEvent& event )
+{
+    m_membershipGrid->CommitPendingChanges();
 }
 
 
