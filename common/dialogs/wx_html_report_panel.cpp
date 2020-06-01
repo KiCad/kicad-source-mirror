@@ -174,16 +174,14 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
     switch( aLine.severity )
     {
     case RPT_SEVERITY_ERROR:
-        retv = "<font color=\"red\" size=3><b>" + _( "Error: " ) + "</b></font><font size=2>" +
-               aLine.message + "</font><br>";
+        retv = "<font color=\"red\" size=3>" + _( "Error: " ) + "</font>"
+               "<font size=3>" + aLine.message + "</font><br>";
         break;
     case RPT_SEVERITY_WARNING:
-        retv = "<font color=\"orange\" size=3><b>" + _( "Warning: " ) +
-               "</b></font><font size=2>" + aLine.message + "</font><br>";
+        retv = "<font size=3>" + _( "Warning: " ) + aLine.message + "</font><br>";
         break;
     case RPT_SEVERITY_INFO:
-        retv = "<font color=\"dark gray\" size=3><b>" + _( "Info: " ) + "</b>" + aLine.message +
-               "</font><br>";
+        retv = "<font color=\"dark gray\" size=3>" + _( "Info: " ) + aLine.message + "</font><br>";
         break;
     case RPT_SEVERITY_ACTION:
         retv = "<font color=\"dark green\" size=3>" + aLine.message + "</font><br>";
