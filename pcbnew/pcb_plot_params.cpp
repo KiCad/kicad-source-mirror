@@ -147,6 +147,8 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     // it is a "local" parameter
     m_skipNPTH_Pads              = false;
 
+    m_sketchPadLineWidth         = Millimeter2iu( 0.1 );    // line width to plot items in outline mode
+
     if( PgmOrNull() )
     {
         SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
