@@ -143,8 +143,14 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
         if( item.Type() != LIB_FIELD_T )
             continue;
 
-        if( static_cast< LIB_FIELD* >( &item )->IsMandatory() )
-            Add( &item );
+        LIB_FIELD* field = static_cast< LIB_FIELD* >( &item );
+
+        wxCHECK2( field, continue );
+
+        if( field->GetText().IsEmpty() )
+            continue;
+
+        Add( &item );
     }
 
     // Draw the parent items if the symbol is inherited from another symbol.
@@ -159,12 +165,10 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
 
     for( auto& item : drawnPart->GetDrawItems() )
     {
-        // The mandatory fields are already in place so we only add user defined fields.
-        if( item.Type() == LIB_FIELD_T )
-        {
-            if( static_cast< LIB_FIELD* >( &item )->IsMandatory() )
-                continue;
-        }
+        // Don't show parent symbol fields.  Users may be confused by shown fields that can not
+        // be edited.
+        if( aPart->IsAlias() && item.Type() == LIB_FIELD_T )
+            continue;
 
         Add( &item );
     }

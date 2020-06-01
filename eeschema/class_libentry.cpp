@@ -332,9 +332,9 @@ std::unique_ptr< LIB_PART > LIB_PART::Flatten() const
         // Copy the parent.
         retv.reset( new LIB_PART( *parent.get() ) );
 
-        // Now add the inherited part mandator field (this) information.
         retv->SetName( m_name );
 
+        // Now add the inherited part mandatory field (this) information.
         for( int i = 0; i < MANDATORY_FIELDS; i++ )
         {
             wxString tmp = GetField( i )->GetText();
@@ -344,6 +344,33 @@ std::unique_ptr< LIB_PART > LIB_PART::Flatten() const
                 retv->GetField( i )->SetText( parent->GetField( i )->GetText() );
             else
                 *retv->GetField( i ) = *GetField( i );
+        }
+
+        // Grab all the rest of derived symbol fields.
+        for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+        {
+            const LIB_FIELD* aliasField = dynamic_cast<const LIB_FIELD*>( &item );
+
+            wxCHECK2( aliasField, continue );
+
+            // Mandatory fields were already resolved.
+            if( aliasField->IsMandatory() )
+                continue;
+
+            LIB_FIELD* newField = new LIB_FIELD( *aliasField );
+            newField->SetParent( retv.get() );
+
+            LIB_FIELD* parentField = retv->FindField( aliasField->GetName() );
+
+            if( !parentField )  // Derived symbol field does not exist in parent symbol.
+            {
+                retv->AddDrawItem( newField );
+            }
+            else                // Derived symbol field overrides the parent symbol field.
+            {
+                retv->RemoveDrawItem( parentField );
+                retv->AddDrawItem( newField );
+            }
         }
 
         retv->SetKeyWords( m_keyWords );

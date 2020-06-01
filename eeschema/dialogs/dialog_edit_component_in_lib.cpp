@@ -198,10 +198,6 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
         wxCHECK( selection != wxNOT_FOUND, false );
         m_inheritanceSelectCombo->SetSelection( selection );
 
-        // Copy the reference field from the root symbol to prevent validation errors.
-        if( m_fields->at( REFERENCE ).GetText().IsEmpty() )
-            m_fields->at( REFERENCE ).SetText( rootPart->GetReferenceField().GetText() );
-
         m_lastOpenedPage = 0;
     }
 
@@ -216,7 +212,9 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::Validate()
     if( !m_grid->CommitPendingChanges() )
         return false;
 
-    if( !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE ).GetText() ) )
+    // Alias symbol reference can be empty because it inherits from the parent symbol.
+    if( m_libEntry->IsRoot() &&
+        !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE ).GetText() ) )
     {
         if( m_NoteBook->GetSelection() != 0 )
             m_NoteBook->SetSelection( 0 );
@@ -711,7 +709,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::syncControlStates( bool aIsAlias )
         m_NoteBook->RemovePage( 1 );
 
     bSizerLowerBasicPanel->Show( !aIsAlias );
-    bButtonSize->Show( !aIsAlias );
+    // bButtonSize->Show( !aIsAlias );
 
 #ifdef KICAD_SPICE
     m_spiceFieldsButton->Show( !aIsAlias );
