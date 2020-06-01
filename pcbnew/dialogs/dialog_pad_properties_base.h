@@ -20,25 +20,26 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <widgets/net_selector.h>
-#include <wx/choice.h>
-#include <wx/combobox.h>
-#include <wx/checkbox.h>
+#include <wx/gbsizer.h>
+#include <wx/statline.h>
 #include <wx/sizer.h>
+#include <wx/panel.h>
+#include <wx/checkbox.h>
+#include <wx/simplebook.h>
+#include <wx/combobox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
-#include <wx/panel.h>
-#include <wx/simplebook.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
 #include <pcb_base_frame.h>
 #include <pcb_draw_panel_gal.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 #include <wx/spinctrl.h>
 #include <wx/grid.h>
@@ -62,46 +63,39 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 
 		wxNotebook* m_notebook;
 		wxPanel* m_panelGeneral;
+		wxStaticText* m_padTypeLabel;
+		wxChoice* m_PadType;
 		wxStaticText* m_PadNumText;
 		wxTextCtrl* m_PadNumCtrl;
 		wxStaticText* m_PadNameText;
 		NET_SELECTOR* m_PadNetSelector;
-		wxStaticText* m_staticText44;
-		wxChoice* m_PadType;
-		wxStaticText* m_staticText45;
-		wxChoice* m_PadShape;
 		wxStaticText* m_posXLabel;
 		wxTextCtrl* m_posXCtrl;
 		wxStaticText* m_posXUnits;
 		wxStaticText* m_posYLabel;
 		wxTextCtrl* m_posYCtrl;
 		wxStaticText* m_posYUnits;
-		wxStaticText* m_sizeXLabel;
-		wxTextCtrl* m_sizeXCtrl;
-		wxStaticText* m_sizeXUnits;
-		wxStaticText* m_sizeYLabel;
-		wxTextCtrl* m_sizeYCtrl;
-		wxStaticText* m_sizeYUnits;
-		wxStaticText* m_PadOrientText;
-		wxComboBox* m_orientation;
-		wxStaticText* m_staticText491;
-		wxStaticText* m_offsetXLabel;
-		wxTextCtrl* m_offsetXCtrl;
-		wxStaticText* m_offsetXUnits;
-		wxStaticText* m_offsetYLabel;
-		wxTextCtrl* m_offsetYCtrl;
-		wxStaticText* m_offsetYUnits;
+		wxStaticLine* m_staticline5;
+		wxStaticText* m_shapeLabel;
+		wxChoice* m_PadShape;
+		wxSimplebook* m_shapePropsBook;
+		wxPanel* m_pageSimple;
+		wxPanel* m_pageTrap;
+		wxFlexGridSizer* fgSizerTrapProps;
 		wxStaticText* m_trapDeltaLabel;
 		wxTextCtrl* m_trapDeltaCtrl;
 		wxStaticText* m_trapDeltaUnits;
 		wxStaticText* m_trapAxisLabel;
 		wxChoice* m_trapAxisCtrl;
+		wxPanel* m_pageRounding;
+		wxFlexGridSizer* fgSizerRoundingProps;
 		wxStaticText* m_staticTextCornerSizeRatio;
 		TEXT_CTRL_EVAL* m_tcCornerSizeRatio;
 		wxStaticText* m_staticTextCornerSizeRatioUnit;
 		wxStaticText* m_cornerRadiusLabel;
 		wxTextCtrl* m_tcCornerRadius;
 		wxStaticText* m_cornerRadiusUnits;
+		wxPanel* m_pageChamfer;
 		wxStaticText* m_staticTextChamferRatio;
 		TEXT_CTRL_EVAL* m_tcChamferRatio;
 		wxStaticText* m_staticTextChamferRatioUnit;
@@ -110,19 +104,39 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbTopRight;
 		wxCheckBox* m_cbBottomLeft;
 		wxCheckBox* m_cbBottomRight;
-		wxBoxSizer* m_middleBoxSizer;
+		wxStaticText* m_sizeXLabel;
+		wxTextCtrl* m_sizeXCtrl;
+		wxStaticText* m_sizeXUnits;
+		wxStaticText* m_sizeYLabel;
+		wxTextCtrl* m_sizeYCtrl;
+		wxStaticText* m_sizeYUnits;
+		wxStaticText* m_PadOrientText;
+		wxComboBox* m_orientation;
+		wxStaticText* m_orientationUnits;
+		wxStaticLine* m_staticline6;
 		wxStaticText* m_holeShapeLabel;
 		wxChoice* m_holeShapeCtrl;
-		wxStaticText* m_staticText51;
 		wxStaticText* m_holeXLabel;
 		wxTextCtrl* m_holeXCtrl;
 		wxStaticText* m_holeXUnits;
 		wxStaticText* m_holeYLabel;
 		wxTextCtrl* m_holeYCtrl;
 		wxStaticText* m_holeYUnits;
+		wxStaticLine* m_staticline7;
+		wxCheckBox* m_offsetShapeOpt;
+		wxStaticText* m_offsetShapeOptLabel;
+		wxFlexGridSizer* m_offsetCtrls;
+		wxStaticText* m_offsetXLabel;
+		wxTextCtrl* m_offsetXCtrl;
+		wxStaticText* m_offsetXUnits;
+		wxStaticText* m_offsetYLabel;
+		wxTextCtrl* m_offsetYCtrl;
+		wxStaticText* m_offsetYUnits;
+		wxCheckBox* m_padToDieOpt;
 		wxStaticText* m_padToDieLabel;
 		wxTextCtrl* m_padToDieCtrl;
 		wxStaticText* m_padToDieUnits;
+		wxBoxSizer* m_middleBoxSizer;
 		wxBoxSizer* m_FlippedWarningSizer;
 		wxStaticBitmap* m_FlippedWarningIcon;
 		wxStaticText* m_staticText86;
@@ -178,11 +192,11 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextPrimitivesList;
 		wxStaticText* m_staticTextPrimitiveListWarning;
 		wxListView* m_listCtrlPrimitives;
-		wxButton* m_buttonDel;
-		wxButton* m_buttonEditShape;
 		wxButton* m_buttonAddShape;
+		wxButton* m_buttonEditShape;
 		wxButton* m_buttonDup;
 		wxButton* m_buttonGeometry;
+		wxButton* m_buttonDel;
 		wxStaticText* m_parentInfoLine1;
 		wxStaticText* m_parentInfoLine2;
 		PCB_DRAW_PANEL_GAL* m_panelShowPadGal;
@@ -196,29 +210,31 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void PadTypeSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadShapeSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void PadOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCornerSizePercentChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCornerRadiusChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void PadOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOffsetCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPadToDieCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onPrimitiveDClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnPrimitiveSelection( wxListEvent& event ) { event.Skip(); }
-		virtual void onDeletePrimitive( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onEditPrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAddPrimitive( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onEditPrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDuplicatePrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGeometryTransform( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDeletePrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangePadMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 764,581 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PAD_PROPERTIES_BASE();
 
 };

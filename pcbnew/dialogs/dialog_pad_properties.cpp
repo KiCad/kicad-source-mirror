@@ -37,7 +37,6 @@
 #include <macros.h>
 #include <pcb_base_frame.h>
 #include <pcb_painter.h>
-#include <pcbnew.h>
 #include <pcbnew_settings.h>
 #include <settings/color_settings.h>
 #include <view/view_controls.h>
@@ -184,6 +183,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_staticTextInfoPaste->SetFont( infoFont );
     m_staticTextInfoNegVal->SetFont( infoFont );
     m_staticTextInfoPosValue->SetFont( infoFont );
+    m_staticTextPrimitiveListWarning->SetFont( infoFont );
 
     // Usually, TransferDataToWindow is called by OnInitDialog
     // calling it here fixes all widget sizes so FinishDialogSettings can safely fix minsizes
@@ -200,6 +200,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
+
+    wxUpdateUIEvent dummy;
+    OnUpdateUI( dummy );
 }
 
 
@@ -486,6 +489,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_sizeX.SetValue( m_dummyPad->GetSize().x );
     m_sizeY.SetValue( m_dummyPad->GetSize().y );
 
+    m_offsetShapeOpt->SetValue( m_dummyPad->GetOffset() != wxPoint() );
     m_offsetX.SetValue( m_dummyPad->GetOffset().x );
     m_offsetY.SetValue( m_dummyPad->GetOffset().y );
 
@@ -500,6 +504,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_trapAxisCtrl->SetSelection( 1 );
     }
 
+    m_padToDieOpt->SetValue( m_dummyPad->GetPadToDieLength() != 0 );
     m_padToDie.SetValue( m_dummyPad->GetPadToDieLength() );
 
     m_clearance.SetValue( m_dummyPad->GetLocalClearance() );
@@ -629,14 +634,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_choiceFabProperty->SetSelection( 0 );
         m_choiceFabProperty->Enable( false );
     }
-
-
-    // Disable Pad name,and pad to die length for mechanical and aperture pads
-    m_PadNumText->Enable( !mechanical && !aperture );
-    m_PadNumCtrl->Enable( !mechanical && !aperture );
-    m_PadNameText->Enable( !mechanical && !aperture && m_canEditNetName && m_currentPad );
-    m_PadNetSelector->Enable( !mechanical && !aperture && m_canEditNetName && m_currentPad );
-    m_padToDie.Enable( !mechanical && !aperture );
 
     if( m_dummyPad->GetDrillShape() != PAD_DRILL_SHAPE_OBLONG )
         m_holeShapeCtrl->SetSelection( 0 );
@@ -769,88 +766,60 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 {
-    bool is_custom = false;
-
     switch( m_PadShape->GetSelection() )
     {
     case CHOICE_SHAPE_CIRCLE:
-        m_trapDelta.Enable( false );
-        m_trapAxisLabel->Enable( false );
-        m_trapAxisCtrl->Enable( false );
-        m_sizeY.Enable( false );
-        m_offsetX.Enable( false );
-        m_offsetY.Enable( false );
-        break;
-
     case CHOICE_SHAPE_OVAL:
-        m_trapDelta.Enable( false );
-        m_trapAxisLabel->Enable( false );
-        m_trapAxisCtrl->Enable( false );
-        m_sizeY.Enable( true );
-        m_offsetX.Enable( true );
-        m_offsetY.Enable( true );
-        break;
-
     case CHOICE_SHAPE_RECT:
-        m_trapDelta.Enable( false );
-        m_trapAxisLabel->Enable( false );
-        m_trapAxisCtrl->Enable( false );
-        m_sizeY.Enable( true );
-        m_offsetX.Enable( true );
-        m_offsetY.Enable( true );
+        m_shapePropsBook->SetSelection( 0 );
         break;
 
     case CHOICE_SHAPE_TRAPEZOID:
-        m_trapDelta.Enable( true );
-        m_trapAxisLabel->Enable( true );
-        m_trapAxisCtrl->Enable( true );
-        m_sizeY.Enable( true );
-        m_offsetX.Enable( true );
-        m_offsetY.Enable( true );
+        m_shapePropsBook->SetSelection( 1 );
         break;
 
     case CHOICE_SHAPE_ROUNDRECT:
-    case CHOICE_SHAPE_CHAMFERED_RECT:
-        m_trapDelta.Enable( false );
-        m_trapAxisLabel->Enable( false );
-        m_trapAxisCtrl->Enable( false );
-        m_sizeY.Enable( true );
-        m_offsetX.Enable( true );
-        m_offsetY.Enable( true );
+        m_shapePropsBook->SetSelection( 2 );
+
         // Ensure m_tcCornerSizeRatio contains the right value:
         m_tcCornerSizeRatio->ChangeValue( wxString::Format( "%.1f",
-                                m_dummyPad->GetRoundRectRadiusRatio()*100 ) );
+                                          m_dummyPad->GetRoundRectRadiusRatio()*100 ) );
+        break;
+
+    case CHOICE_SHAPE_CHAMFERED_RECT:
+        m_shapePropsBook->SetSelection( 3 );
+
+        // A reasonable default is all corners chamferred.
+        if( !m_cbTopLeft->GetValue() && !m_cbTopRight->GetValue()
+                && !m_cbBottomLeft->GetValue() && !m_cbBottomRight->GetValue() )
+        {
+            m_cbTopLeft->SetValue( true );
+            m_cbTopRight->SetValue( true );
+            m_cbBottomLeft->SetValue( true );
+            m_cbBottomRight->SetValue( true );
+        }
         break;
 
     case CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR:     // PAD_SHAPE_CUSTOM, circular anchor
     case CHOICE_SHAPE_CUSTOM_RECT_ANCHOR:     // PAD_SHAPE_CUSTOM, rect anchor
-        is_custom = true;
-        m_trapDelta.Enable( false );
-        m_trapAxisLabel->Enable( false );
-        m_trapAxisCtrl->Enable( false );
-        m_sizeY.Enable( m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
-        m_offsetX.Enable( false );
-        m_offsetY.Enable( false );
+        m_shapePropsBook->SetSelection( 0 );
         break;
     }
 
+    m_sizeY.Enable( m_PadShape->GetSelection() != CHOICE_SHAPE_CIRCLE
+                    && m_PadShape->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
+
+    m_offsetShapeOpt->Enable( m_PadShape->GetSelection() != CHOICE_SHAPE_CIRCLE
+                              && m_PadShape->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
+                              && m_PadShape->GetSelection() != CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
+
+    if( !m_offsetShapeOpt->IsEnabled() )
+        m_offsetShapeOpt->SetValue( false );
+
+    bool is_custom = m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
+                  || m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR;
+
     enablePrimitivePage( is_custom );
-
-    // A few widgets are enabled only for rounded rect and chamfered pads:
-    bool chamfered_rect_enable = m_PadShape->GetSelection() == CHOICE_SHAPE_CHAMFERED_RECT;
-    bool round_rect_enable = m_PadShape->GetSelection() == CHOICE_SHAPE_ROUNDRECT ||
-                             chamfered_rect_enable;
-    m_staticTextCornerSizeRatio->Enable( round_rect_enable );
-    m_tcCornerSizeRatio->Enable( round_rect_enable );
-    m_staticTextCornerSizeRatioUnit->Enable( round_rect_enable );
-    m_cornerRadius.Enable( round_rect_enable );
-
-    m_cbTopLeft->Enable( chamfered_rect_enable );
-    m_cbTopRight->Enable( chamfered_rect_enable );
-    m_cbBottomLeft->Enable( chamfered_rect_enable );
-    m_cbBottomRight->Enable( chamfered_rect_enable );
-    m_tcChamferRatio->Enable( chamfered_rect_enable );
-
     m_staticTextcps->Enable( is_custom );
     m_ZoneCustomPadShape->Enable( is_custom );
 
@@ -882,22 +851,16 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     if( (unsigned)ii >= arrayDim( code_type ) ) // catches < 0 also
         ii = 0;
 
-    bool hasHole, hasConnection;
-    bool hasProperty = true;
+    bool hasHole, hasConnection, hasProperty;
 
     switch( ii )
     {
     default:
-    case 0: /* PTH */      hasHole = true;  hasConnection = true;  break;
-    case 1: /* SMD */      hasHole = false; hasConnection = true;  break;
-    case 2: /* CONN */     hasHole = false; hasConnection = true;  break;
-    case 3: /* NPTH */
-        hasHole = true;
-        hasConnection = false;
-        hasProperty = false;
-        break;
-
-    case 4: /* Aperture */ hasHole = false; hasConnection = false; break;
+    case 0: /* PTH */      hasHole = true;  hasConnection = true;  hasProperty = true;  break;
+    case 1: /* SMD */      hasHole = false; hasConnection = true;  hasProperty = true;  break;
+    case 2: /* CONN */     hasHole = false; hasConnection = true;  hasProperty = true;  break;
+    case 3: /* NPTH */     hasHole = true;  hasConnection = false; hasProperty = false; break;
+    case 4: /* Aperture */ hasHole = false; hasConnection = false; hasProperty = true;  break;
     }
 
     LSET layer_mask = std_pad_layers[ii];
@@ -918,7 +881,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     {
         m_PadNumCtrl->SetValue( wxEmptyString );
         m_PadNetSelector->SetSelectedNetcode( 0 );
-        m_padToDie.SetValue( 0 );
+        m_padToDieOpt->SetValue( false );
     }
     else if( m_PadNumCtrl->GetValue().IsEmpty() && m_currentPad )
     {
@@ -966,10 +929,24 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     m_PadNumCtrl->Enable( hasConnection );
     m_PadNameText->Enable( hasConnection );
     m_PadNetSelector->Enable( hasConnection && m_canEditNetName && m_currentPad );
-    m_padToDie.Enable( hasConnection );
+    m_padToDieOpt->Enable( hasConnection );
+
+    if( !m_padToDieOpt->IsEnabled() )
+        m_padToDieOpt->SetValue( false );
+
+    // Show/hide extra properties
+    m_shapePropsBook->Show( m_shapePropsBook->GetSelection() > 0 );
+
+    // Show/hide offset controls
+    m_offsetCtrls->Show( m_offsetShapeOpt->GetValue() );
+    m_offsetShapeOptLabel->Show( m_offsetShapeOpt->GetValue() );
+    m_padToDie.Show( m_padToDieOpt->GetValue() );
 
     // Enable/disable Copper Layers control
     m_rbCopperLayersSel->Enable( ii != 4 );
+
+    // Adjust for any shown/hidden elements
+    Layout();
 }
 
 
@@ -1497,18 +1474,10 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     switch( m_ZoneConnectionChoice->GetSelection() )
     {
     default:
-    case 0:
-        aPad->SetZoneConnection( ZONE_CONNECTION::INHERITED );
-        break;
-    case 1:
-        aPad->SetZoneConnection( ZONE_CONNECTION::FULL );
-        break;
-    case 2:
-        aPad->SetZoneConnection( ZONE_CONNECTION::THERMAL );
-        break;
-    case 3:
-        aPad->SetZoneConnection( ZONE_CONNECTION::NONE );
-        break;
+    case 0: aPad->SetZoneConnection( ZONE_CONNECTION::INHERITED ); break;
+    case 1: aPad->SetZoneConnection( ZONE_CONNECTION::FULL );      break;
+    case 2: aPad->SetZoneConnection( ZONE_CONNECTION::THERMAL );   break;
+    case 3: aPad->SetZoneConnection( ZONE_CONNECTION::NONE );      break;
     }
 
     aPad->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
@@ -1530,19 +1499,14 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     else
         aPad->SetSize( wxSize( m_sizeX.GetValue(), m_sizeY.GetValue() ) );
 
-    // Read pad length die
-    aPad->SetPadToDieLength( m_padToDie.GetValue() );
-
     // For a trapezoid, test delta value (be sure delta is not too large for pad size)
     // remember DeltaSize.x is the Y size variation
     bool   error    = false;
+    wxSize delta( 0, 0 );
 
     if( aPad->GetShape() == PAD_SHAPE_TRAPEZOID )
     {
-        wxSize delta;
-
-        // For a trapezoid, only one of delta.x or delta.y is not 0, depending on
-        // the direction.
+        // For a trapezoid, only one of delta.x or delta.y is not 0, depending on axis.
         if( m_trapAxisCtrl->GetSelection() == 0 )
             delta.x = m_trapDelta.GetValue();
         else
@@ -1571,59 +1535,46 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
             delta.y = aPad->GetSize().x - 2;
             error = true;
         }
-
-        aPad->SetDelta( delta );
     }
 
-    aPad->SetOffset( wxPoint( m_offsetX.GetValue(), m_offsetY.GetValue() ) );
+    aPad->SetDelta( delta );
+
+    if( m_offsetShapeOpt->GetValue() )
+        aPad->SetOffset( wxPoint( m_offsetX.GetValue(), m_offsetY.GetValue() ) );
+    else
+        aPad->SetOffset( wxPoint() );
+
+    // Read pad length die
+    if( m_padToDieOpt->GetValue() )
+        aPad->SetPadToDieLength( m_padToDie.GetValue() );
+    else
+        aPad->SetPadToDieLength( 0 );
+
     aPad->SetOrientation( m_OrientValue * 10.0 );
     aPad->SetName( m_PadNumCtrl->GetValue() );
     aPad->SetNetCode( m_PadNetSelector->GetSelectedNetcode() );
 
     int chamfers = 0;
 
-    if( m_cbTopLeft->GetValue() )
-        chamfers |= RECT_CHAMFER_TOP_LEFT;
+    if( aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
+    {
+        if( m_cbTopLeft->GetValue() )
+            chamfers |= RECT_CHAMFER_TOP_LEFT;
 
-    if( m_cbTopRight->GetValue() )
-        chamfers |= RECT_CHAMFER_TOP_RIGHT;
+        if( m_cbTopRight->GetValue() )
+            chamfers |= RECT_CHAMFER_TOP_RIGHT;
 
-    if( m_cbBottomLeft->GetValue() )
-        chamfers |= RECT_CHAMFER_BOTTOM_LEFT;
+        if( m_cbBottomLeft->GetValue() )
+            chamfers |= RECT_CHAMFER_BOTTOM_LEFT;
 
-    if( m_cbBottomRight->GetValue() )
-        chamfers |= RECT_CHAMFER_BOTTOM_RIGHT;
+        if( m_cbBottomRight->GetValue() )
+            chamfers |= RECT_CHAMFER_BOTTOM_RIGHT;
+    }
 
     aPad->SetChamferPositions( chamfers );
 
-    // Clear some values, according to the pad type and shape
-    switch( aPad->GetShape() )
+    if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
     {
-    case PAD_SHAPE_CIRCLE:
-        aPad->SetOffset( wxPoint( 0, 0 ) );
-        aPad->SetDelta( wxSize( 0, 0 ) );
-        break;
-
-    case PAD_SHAPE_RECT:
-        aPad->SetDelta( wxSize( 0, 0 ) );
-        break;
-
-    case PAD_SHAPE_OVAL:
-        aPad->SetDelta( wxSize( 0, 0 ) );
-        break;
-
-    case PAD_SHAPE_TRAPEZOID:
-        break;
-
-    case PAD_SHAPE_ROUNDRECT:
-    case PAD_SHAPE_CHAMFERED_RECT:
-        aPad->SetDelta( wxSize( 0, 0 ) );
-        break;
-
-    case PAD_SHAPE_CUSTOM:
-        aPad->SetOffset( wxPoint( 0, 0 ) );
-        aPad->SetDelta( wxSize( 0, 0 ) );
-
         // The pad custom has a "anchor pad" (a basic shape: round or rect pad)
         // that is the minimal area of this pad, and is usefull to ensure a hole
         // diameter is acceptable, and is used in Gerber files as flashed area
@@ -1635,10 +1586,6 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         aPad->SetCustomShapeInZoneOpt( m_ZoneCustomPadShape->GetSelection() == 0 ?
                                        CUST_PAD_SHAPE_IN_ZONE_OUTLINE :
                                        CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL );
-        break;
-
-    default:
-        ;
     }
 
     switch( aPad->GetAttribute() )
@@ -1669,19 +1616,12 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         break;
     }
 
-    if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT || aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
-    {
-        wxString value = m_tcCornerSizeRatio->GetValue();
-        double ratioPercent;
+    double ratioPercent = 0.0;
 
-        if( value.ToDouble( &ratioPercent ) )
-            aPad->SetRoundRectRadiusRatio( ratioPercent / 100.0 );
+    if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT )
+        m_tcCornerSizeRatio->GetValue().ToDouble( &ratioPercent );
 
-        value = m_tcChamferRatio->GetValue();
-
-        if( value.ToDouble( &ratioPercent ) )
-            aPad->SetChamferRectRatio( ratioPercent / 100.0 );
-    }
+    aPad->SetRoundRectRadiusRatio( ratioPercent / 100.0 );
 
     aPad->SetProperty( getSelectedProperty() );
 
@@ -1731,6 +1671,27 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetLayerSet( padLayerMask );
 
     return error;
+}
+
+
+void DIALOG_PAD_PROPERTIES::OnOffsetCheckbox( wxCommandEvent& event )
+{
+    if( m_offsetShapeOpt->GetValue() && m_currentPad )
+    {
+        m_offsetX.SetValue( m_currentPad->GetOffset().x );
+        m_offsetY.SetValue( m_currentPad->GetOffset().y );
+    }
+
+    OnValuesChanged( event );
+}
+
+
+void DIALOG_PAD_PROPERTIES::OnPadToDieCheckbox( wxCommandEvent& event )
+{
+    if( m_padToDieOpt->GetValue() && m_currentPad )
+        m_padToDie.SetValue( m_currentPad->GetPadToDieLength() );
+
+    OnValuesChanged( event );
 }
 
 
