@@ -1141,17 +1141,20 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECT
     {
         for( auto item : selection )
         {
-            if( auto pad = dyn_cast<D_PAD*>(item) )
+            if( D_PAD* pad = dyn_cast<D_PAD*>(item) )
             {
                 pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
             }
-            else if( auto mod = dyn_cast<MODULE*>(item) )
+            else if( MODULE* mod = dyn_cast<MODULE*>(item) )
             {
-                bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
-
-                for( auto modpad : mod->Pads() )
+                if( mod->PadsList() )
                 {
-                    modpad->SetLocalRatsnestVisible( enable );
+                    bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
+
+                    for( D_PAD* modpad : mod->Pads() )
+                    {
+                        modpad->SetLocalRatsnestVisible( enable );
+                    }
                 }
             }
         }
