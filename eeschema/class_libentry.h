@@ -271,10 +271,7 @@ public:
      */
     LIB_FIELD* FindField( const wxString& aFieldName );
 
-    const LIB_FIELD* FindField( const wxString& aFieldName ) const
-    {
-        return const_cast<LIB_FIELD*>( FindField( aFieldName ) );
-    }
+    const LIB_FIELD* FindField( const wxString& aFieldName ) const;
 
     /**
      * Return pointer to the requested field.

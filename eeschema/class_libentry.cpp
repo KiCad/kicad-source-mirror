@@ -881,10 +881,20 @@ LIB_FIELD* LIB_PART::FindField( const wxString& aFieldName )
 {
     for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
-        LIB_FIELD* field = ( LIB_FIELD* ) &item;
+        if( static_cast<LIB_FIELD*>( &item )->GetCanonicalName() == aFieldName )
+            return static_cast<LIB_FIELD*>( &item );
+    }
 
-        if( field->GetCanonicalName() == aFieldName )
-            return field;
+    return NULL;
+}
+
+
+const LIB_FIELD* LIB_PART::FindField( const wxString& aFieldName ) const
+{
+    for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    {
+        if( static_cast<const LIB_FIELD*>( &item )->GetCanonicalName() == aFieldName )
+            return static_cast<const LIB_FIELD*>( &item );
     }
 
     return NULL;
