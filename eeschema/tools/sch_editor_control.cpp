@@ -616,8 +616,8 @@ static KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
 
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
-    auto picker = m_toolMgr->GetTool<PICKER_TOOL>();
-    auto simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+    PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
     if( !simFrame )     // Defensive coding; shouldn't happen.
         return 0;
@@ -897,6 +897,7 @@ int SCH_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 {
     SCH_SCREEN*            screen = m_frame->GetCurrentSheet().LastScreen();
+    CONNECTION_GRAPH*      connectionGraph = m_frame->Schematic().ConnectionGraph();
     std::vector<EDA_ITEM*> itemsToRedraw;
     const SCH_CONNECTION*  selectedConn = m_frame->GetHighlightedConnection();
 
@@ -912,8 +913,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     if( selectedConn && selectedConn->Driver() == nullptr )
     {
         selectedIsNoNet  = true;
-        selectedSubgraph = m_frame->Schematic().ConnectionGraph()->GetSubgraphForItem(
-                selectedConn->Parent() );
+        selectedSubgraph = connectionGraph->GetSubgraphForItem( selectedConn->Parent() );
     }
 
     for( SCH_ITEM* item : screen->Items() )
@@ -926,7 +926,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         if( item->Type() == SCH_COMPONENT_T )
             comp = static_cast<SCH_COMPONENT*>( item );
 
-        if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
+        if( comp->GetPartRef() && comp->GetPartRef()->IsPower() )
             itemConn = comp->Connection( m_frame->GetCurrentSheet() );
         else
             itemConn = item->Connection( m_frame->GetCurrentSheet() );
@@ -944,7 +944,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         }
         else if( selectedIsBus && itemConn && itemConn->IsNet() )
         {
-            for( auto& member : selectedConn->Members() )
+            for( const std::shared_ptr<SCH_CONNECTION>& member : selectedConn->Members() )
             {
                 if( member->Name() == itemConn->Name() )
                 {
@@ -953,7 +953,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                 }
                 else if( member->IsBus() )
                 {
-                    for( auto& child_member : member->Members() )
+                    for( const std::shared_ptr<SCH_CONNECTION>& child_member : member->Members() )
                     {
                         if( child_member->Name() == itemConn->Name() )
                         {
@@ -989,7 +989,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                 SCH_CONNECTION* pin_conn =
                         comp->GetConnectionForPin( pin, m_frame->GetCurrentSheet() );
 
-                if( comp && pin_conn && pin_conn->Name() == selectedName )
+                if( pin_conn && pin_conn->Name() == selectedName )
                 {
                     comp->BrightenPin( pin );
                     redraw = true;
