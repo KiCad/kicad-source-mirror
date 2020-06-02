@@ -526,6 +526,25 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging( wxGridEvent& event 
         m_delayedFocusRow = event.GetRow();
         m_delayedFocusColumn = event.GetCol();
     }
+    else if( event.GetCol() == FDC_NAME )
+    {
+        wxString newName = event.GetString();
+
+        for( int i = 0; i < m_grid->GetNumberRows(); ++i )
+        {
+            if( i == event.GetRow() )
+                continue;
+
+            if( newName.CmpNoCase( m_grid->GetCellValue( i, FDC_NAME ) ) == 0 )
+            {
+                DisplayError( this, wxString::Format( _( "The name '%s' is already in use." ),
+                                                      newName ) );
+                event.Veto();
+                m_delayedFocusRow = event.GetRow();
+                m_delayedFocusColumn = event.GetCol();
+            }
+        }
+    }
 
     editor->DecRef();
 }
