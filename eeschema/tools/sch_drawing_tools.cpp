@@ -996,13 +996,15 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-            sheet = new SCH_SHEET(
-                    m_frame->GetCurrentSheet().Last(), static_cast<wxPoint>( cursorPos ) );
+            sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(),
+                                   static_cast<wxPoint>( cursorPos ) );
             sheet->SetFlags( IS_NEW | IS_RESIZED );
             sheet->SetScreen( NULL );
             sheet->SetBorderWidth( cfg->m_Drawing.default_line_thickness );
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
             sheet->SetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
+            sheet->GetFields()[ SHEETNAME ].SetText( _( "Untitled Sheet" ) );
+            sheet->GetFields()[ SHEETFILENAME ].SetText( _( "untitled.kicad_sch" ) );
             sizeSheet( sheet, cursorPos );
 
             m_view->ClearPreview();
@@ -1016,8 +1018,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             getViewControls()->SetAutoPan( false );
             getViewControls()->CaptureCursor( false );
 
-            if( m_frame->EditSheetProperties(
-                        static_cast<SCH_SHEET*>( sheet ), &m_frame->GetCurrentSheet(), nullptr ) )
+            if( m_frame->EditSheetProperties( static_cast<SCH_SHEET*>( sheet ),
+                                              &m_frame->GetCurrentSheet(), nullptr ) )
             {
                 sheet->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 

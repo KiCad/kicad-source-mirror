@@ -274,7 +274,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
 
     bool filename_changed = oldFilename != newRelativeFilename;
 
-    if( filename_changed )
+    if( filename_changed || m_sheet->IsNew() )
     {
         if( !onSheetFilenameChanged( newRelativeFilename ) )
             return false;
