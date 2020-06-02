@@ -1239,18 +1239,27 @@ void DIALOG_PAD_PROPERTIES::redraw()
 
     if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
     {
-        // gives a size to the full drawable area
-        BOX2I drawbox;
-        drawbox.Move( m_dummyPad->GetPosition() );
-        drawbox.Inflate( bbox.GetSize().x * 2, bbox.GetSize().y * 2 );
+        // The origin always goes in the middle of the canvas; we want offsetting the pad
+        // shape to move the pad, not the hole
+        bbox.Move( -m_dummyPad->GetPosition() );
+        int maxXExtent = std::max( abs( bbox.GetLeft() ), abs( bbox.GetRight() ) );
+        int maxYExtent = std::max( abs( bbox.GetTop() ), abs( bbox.GetBottom() ) );
 
-        view->SetBoundary( drawbox );
+        // Don't blow up the GAL on too-large numbers
+        if( maxXExtent > INT_MAX / 4 )
+            maxXExtent = INT_MAX / 4;
+
+        if( maxYExtent > INT_MAX / 4 )
+            maxYExtent = INT_MAX / 4;
+
+        BOX2D viewBox, canvasBox;
+        viewBox.Inflate( maxXExtent * 1.4, maxYExtent * 1.4 );  // add a margin
+        canvasBox.Inflate( maxXExtent * 2.0, maxYExtent * 2.0 );
+
+        view->SetBoundary( canvasBox );
 
         // Autozoom
-        view->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
-
-        // Add a margin
-        view->SetScale( m_panelShowPadGal->GetView()->GetScale() * 0.7 );
+        view->SetViewport( viewBox );
 
         m_panelShowPadGal->StartDrawing();
         m_panelShowPadGal->Refresh();
