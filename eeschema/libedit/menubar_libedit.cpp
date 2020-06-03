@@ -53,10 +53,9 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
             return ( !readOnly && m_libMgr->IsPartModified( partName, libName ) );
     };
 
-    auto saveAllEnableCondition = [this] ( const SELECTION& sel )
-            {
-                return m_libMgr->HasModifications();
-            };
+    auto saveAllEnableCondition = [this] ( const SELECTION& sel ) {
+        return m_libMgr->HasModifications();
+    };
 
     //-- File menu -----------------------------------------------
     //
@@ -100,8 +99,11 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
         return m_my_part && GetScreen() && GetScreen()->GetRedoCommandCount() != 0;
     };
-    auto havePartCondition = [ this ] ( const SELECTION& sel ) {
+    auto haveSymbolCondition = [ this ] ( const SELECTION& sel ) {
         return m_my_part != nullptr;
+    };
+    auto isRootSymbolCondition = [ this ] ( const SELECTION& sel ) {
+        return m_my_part != nullptr && m_my_part->IsRoot();
     };
 
     editMenu->AddItem( ACTIONS::undo,                enableUndoCondition );
@@ -115,8 +117,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::duplicate,           EE_CONDITIONS::NotEmpty );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( EE_ACTIONS::symbolProperties, havePartCondition );
-    editMenu->AddItem( EE_ACTIONS::pinTable,         havePartCondition );
+    editMenu->AddItem( EE_ACTIONS::symbolProperties, haveSymbolCondition );
+    editMenu->AddItem( EE_ACTIONS::pinTable,         isRootSymbolCondition );
 
     editMenu->Resolve();
 
@@ -170,18 +172,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     //-- Place menu -----------------------------------------------
     //
-    auto enableIsEditableCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_my_part && m_my_part->IsRoot();
-    };
-
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
-    placeMenu->AddItem( EE_ACTIONS::placeSymbolPin,        enableIsEditableCondition );
-    placeMenu->AddItem( EE_ACTIONS::placeSymbolText,       enableIsEditableCondition );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolRectangle,   enableIsEditableCondition );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolCircle,      enableIsEditableCondition );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolArc,         enableIsEditableCondition );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolLines,       enableIsEditableCondition );
+    placeMenu->AddItem( EE_ACTIONS::placeSymbolPin,        isRootSymbolCondition );
+    placeMenu->AddItem( EE_ACTIONS::placeSymbolText,       isRootSymbolCondition );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolRectangle,   isRootSymbolCondition );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolCircle,      isRootSymbolCondition );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolArc,         isRootSymbolCondition );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolLines,       isRootSymbolCondition );
 
     placeMenu->Resolve();
 
@@ -189,12 +187,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
 
-    auto datasheetAvailableCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetCurPart() != nullptr;
-    };
-
-    inspectMenu->AddItem( EE_ACTIONS::showDatasheet,       datasheetAvailableCondition );
-    inspectMenu->AddItem( EE_ACTIONS::runERC,              EE_CONDITIONS::ShowAlways );
+    inspectMenu->AddItem( EE_ACTIONS::showDatasheet,       haveSymbolCondition );
+    inspectMenu->AddItem( EE_ACTIONS::runERC,              isRootSymbolCondition );
 
     inspectMenu->Resolve();
 

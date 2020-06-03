@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,9 +114,9 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     KiScaledSeparator( m_mainToolBar, this );
 
     if( m_unitSelectBox == nullptr )
-        m_unitSelectBox = new wxComboBox( m_mainToolBar, ID_LIBEDIT_SELECT_PART_NUMBER, wxEmptyString,
-                                      wxDefaultPosition, wxSize( LISTBOX_WIDTH, -1 ), 0, nullptr,
-                                      wxCB_READONLY );
+        m_unitSelectBox = new wxComboBox( m_mainToolBar, ID_LIBEDIT_SELECT_PART_NUMBER,
+                wxEmptyString, wxDefaultPosition, wxSize( LISTBOX_WIDTH, -1 ), 0,
+                nullptr, wxCB_READONLY );
     m_mainToolBar->AddControl( m_unitSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );
@@ -160,10 +160,13 @@ void LIB_EDIT_FRAME::SyncToolbars()
     bool isEditable = m_my_part && m_my_part->IsRoot();
 
     m_mainToolBar->Toggle( ACTIONS::saveAll,  m_libMgr->HasModifications() );
-    m_mainToolBar->Toggle( ACTIONS::undo,     GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::redo,     GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::undo,
+            GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo,
+            GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
     m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, (bool) m_my_part );
+    m_mainToolBar->Toggle( EE_ACTIONS::runERC, isEditable );
     m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard,
                            GetShowDeMorgan(),
                            m_convert == LIB_ITEM::LIB_CONVERT::BASE );
@@ -177,8 +180,10 @@ void LIB_EDIT_FRAME::SyncToolbars()
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits,            GetUserUnits() != EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,          GetUserUnits() == EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,
+            GetUserUnits() != EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,
+            GetUserUnits() == EDA_UNITS::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,      galOpts.m_fullscreenCursor );
     m_optionsToolBar->Toggle( EE_ACTIONS::showElectricalTypes, settings->m_ShowPinsElectricalType );
     m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree,   IsSearchTreeShown() );
