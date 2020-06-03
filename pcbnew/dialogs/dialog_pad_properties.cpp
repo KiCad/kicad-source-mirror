@@ -945,7 +945,8 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     m_rbCopperLayersSel->Enable( ii != 4 );
 
     // Adjust for any shown/hidden elements
-    Layout();
+    for( int i = 0; i < m_notebook->GetPageCount(); ++i )
+        m_notebook->GetPage( i )->Layout();
 }
 
 
