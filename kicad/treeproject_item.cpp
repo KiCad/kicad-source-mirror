@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,6 +226,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
         break;
 
     case TREE_SCHEMATIC_LIBFILE:
+    case TREE_SEXPR_SYMBOL_LIB_FILE:
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSymbols, true );
         packet = fullFileName.ToStdString();
         kiway.ExpressMail( FRAME_SCH_LIB_EDITOR, MAIL_LIB_EDIT, packet );

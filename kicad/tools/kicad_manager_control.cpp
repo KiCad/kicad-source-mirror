@@ -374,6 +374,8 @@ public:
                  || ext == "sch-bak"
                  || ext == "sym"
                  || ext == "lib"
+                 || ext == "dcm"
+                 || ext == "kicad_sym"
                  || ext == "net"
                  || destFile.GetName() == "sym-lib-table" )
         {
@@ -410,7 +412,7 @@ public:
         }
         else
         {
-            // Everything we don't recognize just gets a straight copy
+            // Everything we don't recognize just gets a straight copy.
             wxString destPath = destFile.GetPath();
             wxString destName = destFile.GetName();
 
@@ -421,25 +423,10 @@ public:
             }
 
             if( destName == m_projectName )
-            {
                 destFile.SetName( m_newProjectName );
-            }
-            else if( destName.StartsWith( m_projectName + "-" ) )
-            {
-                destName.Replace( m_projectName, m_newProjectName, false );
-                destFile.SetName( destName );
-            }
 
             CopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
         }
-
-        /* TODO: what about these?
-        KiCadFootprintLibPathExtension;
-        GedaPcbFootprintLibFileExtension;
-        EagleFootprintLibPathExtension;
-        SpecctraDsnFileExtension;
-        IpcD356FileExtension;
-         */
 
         return wxDIR_CONTINUE;
     }

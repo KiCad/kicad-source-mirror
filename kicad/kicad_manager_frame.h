@@ -35,7 +35,7 @@ class TREE_PROJECT_FRAME;
 class ACTION_TOOLBAR;
 class KICAD_SETTINGS;
 
-// Identify the type of files handled by Kicad manager
+// Identify the type of files handled by KiCad manager
 //
 // When changing this enum  please verify (and perhaps update)
 // TREE_PROJECT_FRAME::GetFileExt(),
@@ -57,7 +57,7 @@ enum TreeFileType {
     TREE_DIRECTORY,
     TREE_CMP_LINK,          // cmp/footprint link file (.cmp)
     TREE_REPORT,            // report file (.rpt)
-    TREE_FP_PLACE,          // fooprints position (place) file (.pos)
+    TREE_FP_PLACE,          // footprints position (place) file (.pos)
     TREE_DRILL,             // Excellon drill file (.drl)
     TREE_DRILL_NC,          // Similar Excellon drill file (.nc)
     TREE_DRILL_XNC,         // Similar Excellon drill file (.xnc)
@@ -65,6 +65,7 @@ enum TreeFileType {
     TREE_PAGE_LAYOUT_DESCR, // Page layout and title block descr file (.kicad_wks)
     TREE_FOOTPRINT_FILE,    // footprint file (.kicad_mod)
     TREE_SCHEMATIC_LIBFILE, // schematic library file (.lib)
+    TREE_SEXPR_SYMBOL_LIB_FILE, // s-expression symbol library file (.kicad_sym)
     TREE_MAX
 };
 
@@ -115,7 +116,7 @@ public:
     void PrintMsg( const wxString& aText );
 
     /**
-     * Prints the current working directory name and the projet name on the text panel.
+     * Prints the current working directory name and the project name on the text panel.
      */
     void PrintPrjInfo();
 
@@ -149,7 +150,7 @@ public:
 
     /**
      * Called by sending a event with id = ID_INIT_WATCHED_PATHS
-     * rebuild the list of wahtched paths
+     * rebuild the list of watched paths
      */
     void OnChangeWatchedPaths( wxCommandEvent& aEvent );
 

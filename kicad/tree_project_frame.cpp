@@ -88,7 +88,7 @@ static const wxChar* s_allowedExtensionsToList[] = {
     wxT( "^.*\\.rpt$" ),           // Report files
     wxT( "^.*\\.csv$" ),           // Report files in comma separated format
     wxT( "^.*\\.pos$" ),           // Footprint position files
-    wxT( "^.*\\.cmp$" ),           // Cvpcb cmp/footprint link files
+    wxT( "^.*\\.cmp$" ),           // CvPcb cmp/footprint link files
     wxT( "^.*\\.drl$" ),           // Excellon drill files
     wxT( "^.*\\.nc$" ),            // Excellon NC drill files (alternate file ext)
     wxT( "^.*\\.xnc$" ),           // Excellon NC drill files (alternate file ext)
@@ -264,27 +264,28 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
 {
     switch( type )
     {
-    case TREE_PROJECT:           return ProjectFileExtension;
-    case TREE_LEGACY_SCHEMATIC:  return LegacySchematicFileExtension;
-    case TREE_SEXPR_SCHEMATIC:   return KiCadSchematicFileExtension;
-    case TREE_LEGACY_PCB:        return LegacyPcbFileExtension;
-    case TREE_SEXPR_PCB:         return KiCadPcbFileExtension;
-    case TREE_GERBER:            return GerberFileExtensionWildCard;
-    case TREE_HTML:              return HtmlFileExtension;
-    case TREE_PDF:               return PdfFileExtension;
-    case TREE_TXT:               return TextFileExtension;
-    case TREE_NET:               return NetlistFileExtension;
-    case TREE_CMP_LINK:          return ComponentFileExtension;
-    case TREE_REPORT:            return ReportFileExtension;
-    case TREE_FP_PLACE:          return FootprintPlaceFileExtension;
-    case TREE_DRILL:             return DrillFileExtension;
-    case TREE_DRILL_NC:          return "nc";
-    case TREE_DRILL_XNC:         return "xnc";
-    case TREE_SVG:               return SVGFileExtension;
-    case TREE_PAGE_LAYOUT_DESCR: return PageLayoutDescrFileExtension;
-    case TREE_FOOTPRINT_FILE:    return KiCadFootprintFileExtension;
-    case TREE_SCHEMATIC_LIBFILE: return LegacySymbolLibFileExtension;
-    default:                     return wxEmptyString;
+    case TREE_PROJECT:               return ProjectFileExtension;
+    case TREE_LEGACY_SCHEMATIC:      return LegacySchematicFileExtension;
+    case TREE_SEXPR_SCHEMATIC:       return KiCadSchematicFileExtension;
+    case TREE_LEGACY_PCB:            return LegacyPcbFileExtension;
+    case TREE_SEXPR_PCB:             return KiCadPcbFileExtension;
+    case TREE_GERBER:                return GerberFileExtensionWildCard;
+    case TREE_HTML:                  return HtmlFileExtension;
+    case TREE_PDF:                   return PdfFileExtension;
+    case TREE_TXT:                   return TextFileExtension;
+    case TREE_NET:                   return NetlistFileExtension;
+    case TREE_CMP_LINK:              return ComponentFileExtension;
+    case TREE_REPORT:                return ReportFileExtension;
+    case TREE_FP_PLACE:              return FootprintPlaceFileExtension;
+    case TREE_DRILL:                 return DrillFileExtension;
+    case TREE_DRILL_NC:              return "nc";
+    case TREE_DRILL_XNC:             return "xnc";
+    case TREE_SVG:                   return SVGFileExtension;
+    case TREE_PAGE_LAYOUT_DESCR:     return PageLayoutDescrFileExtension;
+    case TREE_FOOTPRINT_FILE:        return KiCadFootprintFileExtension;
+    case TREE_SCHEMATIC_LIBFILE:     return LegacySymbolLibFileExtension;
+    case TREE_SEXPR_SYMBOL_LIB_FILE: return KiCadSymbolLibFileExtension;
+    default:                         return wxEmptyString;
     }
 }
 

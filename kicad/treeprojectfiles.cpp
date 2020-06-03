@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2012 Jean-Pierre Charras
- * Copyright (C) 2004-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,7 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent )
     m_ImageList->Add( KiBitmap( pagelayout_load_xpm ) );        // TREE_PAGE_LAYOUT_DESCR
     m_ImageList->Add( KiBitmap( module_xpm ) );                 // TREE_FOOTPRINT_FILE
     m_ImageList->Add( KiBitmap( library_xpm ) );                // TREE_SCHEMATIC_LIBFILE
+    m_ImageList->Add( KiBitmap( library_xpm ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
 
     SetImageList( m_ImageList );
 }

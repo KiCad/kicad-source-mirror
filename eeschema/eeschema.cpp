@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -246,18 +246,9 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
     if( destPath.StartsWith( aProjectBasePath + pathSep ) )
         destPath.Replace( aProjectBasePath, aNewProjectBasePath, false );
 
-#if 0
-    // WAYNE STAMBAUGH TODO:
-    // If we end up with a symbol equivalent to ".pretty" we'll want to handle it here....
-    wxString srcProjectSymbolLib = pathSep + aProjectName + ".sym_lib_dir_extension" + pathSep;
-    wxString newProjectSymbolLib = pathSep + aNewProjectName + ".sym_lib_dir_extension" + pathSep;
-
-    destPath.Replace( srcProjectSymbolLib, newProjectSymbolLib, true );
-#endif
-
     destFile.SetPath( destPath );
 
-    if( ext == "sch" || ext == "sch-bak" )
+    if( ext == "sch" || ext == "sch-bak" || ext == "kicad_sch" || ext == "kicad_sch-bak" )
     {
         if( destFile.GetName() == aProjectName )
             destFile.SetName( aNewProjectName  );
@@ -278,14 +269,10 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
         // Symbols are not project-specific.  Keep their source names.
         CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == "lib" )
+    else if( ext == "lib" || ext == "dcm" || ext == "kicad_sym" )
     {
-        if( destFile.GetName() == aProjectName )
-            destFile.SetName( aNewProjectName  );
-        else if( destFile.GetName() == aProjectName + "-cache" )
+        if( destFile.GetName() == aProjectName + "-cache" )
             destFile.SetName( aNewProjectName + "-cache"  );
-        else if( destFile.GetName() == aProjectName + "-rescue" )
-            destFile.SetName( aNewProjectName + "-rescue"  );
 
         CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
