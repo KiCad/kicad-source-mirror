@@ -170,7 +170,7 @@ bool BOARD_CONNECTED_ITEM::GetRuleClearance( BOARD_ITEM* aItem, int* aClearance,
     if( rule )
     {
         if( aSource )
-            *aSource = wxString::Format( _( "'%s' rule clearance" ), rule->m_Name );
+            *aSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
 
         *aClearance = rule->m_Clearance.Min;
         return true;

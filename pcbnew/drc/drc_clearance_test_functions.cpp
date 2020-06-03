@@ -381,7 +381,28 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             if( pad->GetDrillSize().x > 0 )
             {
-                int minClearance = aRefSeg->GetClearance( nullptr, &m_clearanceSource );
+                // For hole testing we use a dummy pad which is a copy of the current pad
+                // shrunk down to nothing but its hole.
+                D_PAD dummypad( *pad );
+                dummypad.SetSize( pad->GetDrillSize() );
+                dummypad.SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ?
+                                                           PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
+                // Ensure the hole is on all copper layers
+                const static LSET all_cu = LSET::AllCuMask();
+                dummypad.SetLayerSet( all_cu | dummypad.GetLayerSet() );
+
+                int       minClearance;
+                DRC_RULE* rule = GetRule( aRefSeg, &dummypad, CLEARANCE_CONSTRAINT );
+
+                if( rule )
+                {
+                    m_clearanceSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
+                    minClearance = rule->m_Clearance.Min;
+                }
+                else
+                {
+                    minClearance = aRefSeg->GetClearance( nullptr, &m_clearanceSource );
+                }
 
                 /* Treat an oval hole as a line segment along the hole's major axis,
                  * shortened by half its minor axis.

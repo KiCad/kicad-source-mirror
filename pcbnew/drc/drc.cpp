@@ -1217,12 +1217,9 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
 
     LSET layerMask = aRefPad->GetLayerSet() & all_cu;
 
-    /* used to test DRC pad to holes: this dummy pad has the size and shape of the hole
-     * to test pad to pad hole DRC, using the pad to pad DRC test function.
-     * Therefore, this dummy pad is a circle or an oval.
-     * A pad must have a parent because some functions expect a non null parent
-     * to find the parent board, and some other data
-     */
+    // For hole testing we use a dummy pad which is given the shape of the hole.  Note that
+    // this pad must have a parent because some functions expect a non-null parent to find
+    // the pad's board.
     MODULE dummymodule( m_pcb );    // Creates a dummy parent
     D_PAD  dummypad( &dummymodule );
 
