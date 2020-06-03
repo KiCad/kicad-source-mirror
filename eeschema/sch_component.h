@@ -126,6 +126,8 @@ private:
 
     bool        m_isInNetlist;  ///< True if the component should appear in the netlist
 
+    bool        m_inBom;        ///< True to include in bill of materials export.
+
     // Defines the hierarchical path and reference of the component.  This allows support
     // for multiple references to a single sub-sheet.
     std::vector<COMPONENT_INSTANCE_REFERENCE> m_instanceReferences;
@@ -677,6 +679,9 @@ public:
     bool HasHighlightedPins();
 
     void HighlightPin( LIB_PIN* aPin );
+
+    bool GetIncludeInBom() const { return m_inBom; }
+    void SetIncludeInBom( bool aIncludeInBom ) { m_inBom = aIncludeInBom; }
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;

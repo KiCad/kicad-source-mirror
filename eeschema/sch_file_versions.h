@@ -43,4 +43,6 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200506  // Used "page" instead of "paper" for paper
                                                  // sizes.
 
-#define SEXPR_SCHEMATIC_FILE_VERSION   20200512
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20200512  // Add support for exclude from BOM.
+
+#define SEXPR_SCHEMATIC_FILE_VERSION 20200602

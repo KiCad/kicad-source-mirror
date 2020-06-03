@@ -69,6 +69,21 @@ SCH_SEXPR_PARSER::SCH_SEXPR_PARSER( LINE_READER* aLineReader ) :
 }
 
 
+bool SCH_SEXPR_PARSER::parseBool()
+{
+    T token = NextTok();
+
+    if( token == T_yes )
+        return true;
+    else if( token == T_no )
+        return false;
+    else
+        Expecting( "yes or no" );
+
+    return false;
+}
+
+
 bool SCH_SEXPR_PARSER::IsTooRecent() const
 {
     return m_requiredVersion && m_requiredVersion > SEXPR_SYMBOL_LIB_FILE_VERSION;
@@ -2127,6 +2142,11 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
         case T_convert:
             symbol->SetConvert( parseInt( "symbol convert" ) );
+            NeedRIGHT();
+            break;
+
+        case T_in_bom:
+            symbol->SetIncludeInBom( parseBool() );
             NeedRIGHT();
             break;
 

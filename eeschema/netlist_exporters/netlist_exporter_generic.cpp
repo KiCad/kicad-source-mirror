@@ -234,7 +234,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
         {
             SCH_COMPONENT* comp = findNextComponent( item, &sheet );
 
-            if( !comp )
+            if( !comp || !comp->GetIncludeInBom() )
                 continue;
 
             XNODE* xcomp;  // current component being constructed

@@ -166,6 +166,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_convert     = aComponent.m_convert;
     m_lib_id      = aComponent.m_lib_id;
     m_isInNetlist = aComponent.m_isInNetlist;
+    m_inBom       = aComponent.m_inBom;
 
     if( aComponent.m_part )
         SetLibSymbol( new LIB_PART( *aComponent.m_part.get() ) );
@@ -209,6 +210,7 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
 
     m_prefix = wxString( wxT( "U" ) );
     m_isInNetlist = true;
+    m_inBom = true;
 }
 
 

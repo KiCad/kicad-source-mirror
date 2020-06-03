@@ -180,6 +180,8 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
         return xy;
     }
 
+    bool parseBool();
+
     /**
      * Parse stroke definition \a aStroke.
      *

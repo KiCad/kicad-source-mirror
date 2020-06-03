@@ -223,6 +223,8 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     // Set the component's library name.
     m_libraryNameTextCtrl->SetValue( m_cmp->GetLibId().Format() );
 
+    m_cbExcludeFromBom->SetValue( !m_cmp->GetIncludeInBom() );
+
     Layout();
 
     return true;
@@ -515,8 +517,10 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     // reference.
     m_cmp->SetRef( &GetParent()->GetCurrentSheet(), m_fields->at( REFERENCE ).GetText() );
 
-    // The value, footprint and datasheet fields should be kept in sync in multi-unit
-    // parts.
+    m_cmp->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
+
+    // The value, footprint and datasheet fields and exclude from bill of materials setting
+    // should be kept in sync in multi-unit parts.
     if( m_cmp->GetUnitCount() > 1 )
     {
         std::vector<SCH_COMPONENT*> otherUnits;
@@ -529,6 +533,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
             otherUnit->GetField( VALUE )->SetText( m_fields->at( VALUE ).GetText() );
             otherUnit->GetField( FOOTPRINT )->SetText( m_fields->at( FOOTPRINT ).GetText() );
             otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
+            otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
             GetParent()->RefreshItem( otherUnit );
         }
     }

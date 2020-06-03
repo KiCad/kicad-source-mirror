@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Nov  6 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -76,19 +76,16 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 
 	m_bpAdd = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpAdd->SetToolTip( _("Add field") );
-	m_bpAdd->SetMinSize( wxSize( 30,30 ) );
 
 	bButtonSize->Add( m_bpAdd, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_bpMoveUp = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpMoveUp->SetToolTip( _("Move up") );
-	m_bpMoveUp->SetMinSize( wxSize( 30,30 ) );
 
 	bButtonSize->Add( m_bpMoveUp, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_bpMoveDown = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpMoveDown->SetToolTip( _("Move down") );
-	m_bpMoveDown->SetMinSize( wxSize( 30,30 ) );
 
 	bButtonSize->Add( m_bpMoveDown, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
@@ -97,7 +94,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 
 	m_bpDelete = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpDelete->SetToolTip( _("Delete field") );
-	m_bpDelete->SetMinSize( wxSize( 30,30 ) );
 
 	bButtonSize->Add( m_bpDelete, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
@@ -122,7 +118,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	sbSizerLibraryReference = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbol") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 3, 2, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 4, 2, 0, 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -141,7 +137,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 
 	m_buttonBrowseLibrary = new wxBitmapButton( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonBrowseLibrary->SetToolTip( _("Browse library") );
-	m_buttonBrowseLibrary->SetMinSize( wxSize( 30,29 ) );
 
 	bLibraryReferenceSizer->Add( m_buttonBrowseLibrary, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -166,6 +161,14 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_cbAlternateSymbol->SetToolTip( _("Use the alternate shape of this symbol.\nFor gates, this is the \"De Morgan\" conversion") );
 
 	fgSizer1->Add( m_cbAlternateSymbol, 0, wxRIGHT|wxTOP, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_cbExcludeFromBom = new wxCheckBox( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExcludeFromBom->SetToolTip( _("This is useful for adding symbols for board footprints such as fiducials\nand logos that you do not want to appear in the bill of materials export") );
+
+	fgSizer1->Add( m_cbExcludeFromBom, 0, wxBOTTOM, 5 );
 
 
 	sbSizerLibraryReference->Add( fgSizer1, 0, wxEXPAND, 5 );
@@ -209,7 +212,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_textCtrlTimeStamp->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the symbol") );
 
-	bSizerUUID->Add( m_textCtrlTimeStamp, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizerUUID->Add( m_textCtrlTimeStamp, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
 
 
 	bSizerBottom->Add( bSizerUUID, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -238,6 +241,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnInitDlg ) );

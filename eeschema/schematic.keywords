@@ -43,6 +43,7 @@ input
 input_low
 inverted
 inverted_clock
+in_bom
 italic
 junction
 justify
@@ -59,6 +60,7 @@ members
 mid
 mirror
 name
+no
 no_connect
 non_logic
 none
@@ -119,3 +121,4 @@ wire
 xy
 x
 y
+yes

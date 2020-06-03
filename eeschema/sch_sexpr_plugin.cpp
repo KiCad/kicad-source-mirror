@@ -940,6 +940,10 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
 
     m_out->Print( 0, "\n" );
 
+    m_out->Print( aNestLevel + 1, "(in_bom %s)", ( aSymbol->GetIncludeInBom() ) ? "yes" : "no" );
+
+    m_out->Print( 0, "\n" );
+
     // @todo Convert to full UUID if current UUID is a legacy time stamp.
     m_out->Print( aNestLevel + 1, "(uuid %s)\n",
                   m_out->Quotew( aSymbol->m_Uuid.AsString() ).c_str() );
