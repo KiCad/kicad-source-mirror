@@ -312,21 +312,24 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
             && ( fieldType == VALUE || fieldType == FOOTPRINT || fieldType == DATASHEET ) )
     {
         const wxString thisRef   = component->GetRef( &( editFrame->GetCurrentSheet() ) );
-        int            thisUnit  = component->GetUnit();
 
-        SCH_REFERENCE_LIST components;
-        editFrame->GetCurrentSheet().GetComponents( components );
-
-        for( unsigned i = 0; i < components.GetCount(); i++ )
+        if( thisRef.Last() != '?' )     // Obvioulsy, the component must be annotated
         {
-            SCH_REFERENCE componentRef = components[i];
+            int thisUnit  = component->GetUnit();
+            SCH_REFERENCE_LIST components;
+            editFrame->GetCurrentSheet().GetComponents( components );
 
-            if( componentRef.GetRef() == thisRef && componentRef.GetUnit() != thisUnit )
+            for( unsigned i = 0; i < components.GetCount(); i++ )
             {
-                SCH_COMPONENT* otherUnit = componentRef.GetComp();
-                editFrame->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
-                otherUnit->GetField( fieldType )->SetText( m_text );
-                editFrame->RefreshItem( otherUnit );
+                SCH_REFERENCE componentRef = components[i];
+
+                if( componentRef.GetRef() == thisRef && componentRef.GetUnit() != thisUnit )
+                {
+                    SCH_COMPONENT* otherUnit = componentRef.GetComp();
+                    editFrame->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
+                    otherUnit->GetField( fieldType )->SetText( m_text );
+                    editFrame->RefreshItem( otherUnit );
+                }
             }
         }
     }
