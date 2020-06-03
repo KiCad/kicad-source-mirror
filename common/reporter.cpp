@@ -27,6 +27,7 @@
 
 #include <macros.h>
 #include <reporter.h>
+#include <widgets/infobar.h>
 #include <wx_html_report_panel.h>
 
 REPORTER& REPORTER::Report( const char* aText, SEVERITY aSeverity )
@@ -139,4 +140,67 @@ REPORTER& STDOUT_REPORTER::GetInstance()
         s_stdoutReporter = new STDOUT_REPORTER();
 
     return *s_stdoutReporter;
+}
+
+
+REPORTER& STATUSBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    if( m_statusBar )
+        m_statusBar->SetStatusText( aText, m_position );
+
+    return *this;
+}
+
+bool STATUSBAR_REPORTER::HasMessage() const
+{
+    if( m_statusBar )
+        return m_statusBar->GetStatusText().IsEmpty();
+
+    return false;
+}
+
+
+REPORTER& INFOBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    m_message    = aText;
+    m_severity   = aSeverity;
+    m_messageSet = true;
+
+    return *this;
+}
+
+
+bool INFOBAR_REPORTER::HasMessage() const
+{
+    return !m_message.IsEmpty();
+}
+
+
+void INFOBAR_REPORTER::Finalize()
+{
+    // Don't do anything if no message was ever given
+    if( !m_infoBar || !m_messageSet )
+        return;
+
+    // Short circuit if the message is empty and it is already hidden
+    if( !HasMessage() && !m_infoBar->IsShown() )
+        return;
+
+    int icon = wxICON_NONE;
+
+    switch( m_severity )
+    {
+        case RPT_SEVERITY_UNDEFINED: icon = wxICON_INFORMATION; break;
+        case RPT_SEVERITY_INFO:      icon = wxICON_INFORMATION; break;
+        case RPT_SEVERITY_EXCLUSION: icon = wxICON_WARNING;     break;
+        case RPT_SEVERITY_ACTION:    icon = wxICON_WARNING;     break;
+        case RPT_SEVERITY_WARNING:   icon = wxICON_WARNING;     break;
+        case RPT_SEVERITY_ERROR:     icon = wxICON_ERROR;       break;
+        case RPT_SEVERITY_IGNORE:    icon = wxICON_INFORMATION; break;
+    }
+
+    if( HasMessage() )
+        m_infoBar->QueueShowMessage( m_message, icon );
+    else
+        m_infoBar->QueueDismiss();
 }

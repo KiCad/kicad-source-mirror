@@ -274,7 +274,7 @@ double BOARD_ADAPTER::GetCircleCorrectionFactor( int aNrSides ) const
 }
 
 
-void BOARD_ADAPTER::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
+void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
 {
     wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::InitSettings" ) );
 
@@ -426,23 +426,23 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarn
     unsigned stats_startCreateBoardPolyTime = GetRunningMicroSecs();
 #endif
 
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Build board body" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Build board body" ) );
 
     if( !createBoardPolygon() )
-        aWarningTextReporter->Report( _( "Warning: Board outline is not closed" ) );
+        aWarningReporter->Report( _( "Board outline is not closed" ), RPT_SEVERITY_WARNING );
     else
-        aWarningTextReporter->Report( wxEmptyString );
+        aWarningReporter->Report( wxEmptyString );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_stopCreateBoardPolyTime = GetRunningMicroSecs();
     unsigned stats_startCreateLayersTime = stats_stopCreateBoardPolyTime;
 #endif
 
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Create layers" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Create layers" ) );
 
-    createLayers( aStatusTextReporter );
+    createLayers( aStatusReporter );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_stopCreateLayersTime = GetRunningMicroSecs();

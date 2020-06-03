@@ -34,6 +34,7 @@
 #include <wx/timer.h>
 
 
+class WX_INFOBAR;
 class wxStatusBar;
 class BOARD;
 class C3D_RENDER_RAYTRACING;
@@ -67,7 +68,15 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
      */
     void SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher );
 
-    void SetStatusBar( wxStatusBar *aStatusBar ) { m_parentStatusBar = aStatusBar; }
+    void SetStatusBar( wxStatusBar* aStatusBar )
+    {
+        m_parentStatusBar = aStatusBar;
+    }
+
+    void SetInfoBar( WX_INFOBAR* aInfoBar )
+    {
+        m_parentInfoBar = aInfoBar;
+    }
 
     void ReloadRequest( BOARD *aBoard = NULL, S3D_CACHE *aCachePointer = NULL );
 
@@ -218,6 +227,7 @@ private:
 
     TOOL_DISPATCHER*       m_eventDispatcher;
     wxStatusBar*           m_parentStatusBar;         // Parent statusbar to report progress
+    WX_INFOBAR*            m_parentInfoBar;
 
     wxGLContext*           m_glRC;                    // Current OpenGL context
     bool                   m_is_opengl_initialized;

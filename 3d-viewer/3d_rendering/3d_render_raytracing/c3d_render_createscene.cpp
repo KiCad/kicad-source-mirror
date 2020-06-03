@@ -257,7 +257,7 @@ void C3D_RENDER_RAYTRACING::create_3d_object_from( CCONTAINER& aDstContainer,
 }
 
 
-void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
+void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
 {
     m_reloadRequested = false;
 
@@ -272,7 +272,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
 
     unsigned stats_startReloadTime = GetRunningMicroSecs();
 
-    m_boardAdapter.InitSettings( aStatusTextReporter, aWarningTextReporter );
+    m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endReloadTime = GetRunningMicroSecs();
@@ -1041,14 +1041,13 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
     COBJECT3D_STATS::Instance().PrintStats();
 #endif
 
-    if( aStatusTextReporter )
+    if( aStatusReporter )
     {
         // Calculation time in seconds
         const double calculation_time = (double)( GetRunningMicroSecs() -
                                                   stats_startReloadTime ) / 1e6;
 
-        aStatusTextReporter->Report( wxString::Format( _( "Reload time %.3f s" ),
-                                                       calculation_time ) );
+        aStatusReporter->Report( wxString::Format( _( "Reload time %.3f s" ), calculation_time ) );
     }
 }
 

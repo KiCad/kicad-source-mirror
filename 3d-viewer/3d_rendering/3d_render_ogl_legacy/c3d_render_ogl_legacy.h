@@ -65,14 +65,13 @@ public:
 
     // Imported from C3D_RENDER_BASE
     void SetCurWindowSize( const wxSize &aSize ) override;
-    bool Redraw( bool aIsMoving, REPORTER* aStatusTextReporter,
-                 REPORTER* aWarningTextReporter ) override;
+    bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
 
     int GetWaitForEditingTimeOut() override;
 
 private:
     bool initializeOpenGL();
-    void reload( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter );
+    void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     void ogl_set_arrow_material();
 
@@ -173,7 +172,7 @@ private:
 
     void generate_3D_Vias_and_Pads();
 
-    void load_3D_models( REPORTER *aStatusTextReporter );
+    void load_3D_models( REPORTER* aStatusReporter );
 
     /**
      * @brief render_3D_models

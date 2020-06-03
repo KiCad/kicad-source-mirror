@@ -55,7 +55,6 @@
 enum EDA_3D_VIEWER_STATUSBAR
 {
     STATUS_TEXT = 0,
-    WARN_TEXT,
     X_POS,
     Y_POS
 };

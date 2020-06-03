@@ -28,15 +28,22 @@
 #include <wx/timer.h>
 
 
+wxDEFINE_EVENT( KIEVT_SHOW_INFOBAR,    wxCommandEvent );
+wxDEFINE_EVENT( KIEVT_DISMISS_INFOBAR, wxCommandEvent );
+
 BEGIN_EVENT_TABLE( WX_INFOBAR, wxInfoBarGeneric )
+    EVT_COMMAND( wxID_ANY, KIEVT_SHOW_INFOBAR,    WX_INFOBAR::OnShowInfoBar )
+    EVT_COMMAND( wxID_ANY, KIEVT_DISMISS_INFOBAR, WX_INFOBAR::OnDismissInfoBar )
+
     EVT_BUTTON( ID_CLOSE_INFOBAR, WX_INFOBAR::OnCloseButton )
     EVT_TIMER(  ID_CLOSE_INFOBAR, WX_INFOBAR::OnTimer )
 END_EVENT_TABLE()
 
 
-WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager *aMgr, wxWindowID aWinid )
+WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid )
         : wxInfoBarGeneric( aParent, aWinid ),
           m_showTime( 0 ),
+          m_updateLock( false ),
           m_showTimer( nullptr ),
           m_auiManager( aMgr )
 {
@@ -58,7 +65,18 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager *aMgr, wxWindowID aWinid
 
     sizer->SetItemMinSize( (size_t) 0, iconSize.x, sy );
 
+    // Forcefully remove all existing buttons added by the wx constructors.
+    // The default close button doesn't work with the AUI manager update scheme, so this
+    // ensures any close button displayed is ours.
+    RemoveAllButtons();
+
     Layout();
+}
+
+
+WX_INFOBAR::~WX_INFOBAR()
+{
+    delete m_showTimer;
 }
 
 
@@ -68,8 +86,31 @@ void WX_INFOBAR::SetShowTime( int aTime )
 }
 
 
+void WX_INFOBAR::QueueShowMessage( const wxString& aMessage, int aFlags )
+{
+    wxCommandEvent* evt = new wxCommandEvent( KIEVT_SHOW_INFOBAR );
+
+    evt->SetString( aMessage.c_str() );
+    evt->SetInt( aFlags );
+
+    GetEventHandler()->QueueEvent( evt );
+}
+
+
+void WX_INFOBAR::QueueDismiss()
+{
+    wxCommandEvent* evt = new wxCommandEvent( KIEVT_DISMISS_INFOBAR );
+
+    GetEventHandler()->QueueEvent( evt );
+}
+
+
 void WX_INFOBAR::ShowMessageFor( const wxString& aMessage, int aTime, int aFlags )
 {
+    // Don't do anything if we requested the UI update
+    if( m_updateLock )
+        return;
+
     m_showTime = aTime;
     ShowMessage( aMessage, aFlags );
 }
@@ -77,6 +118,12 @@ void WX_INFOBAR::ShowMessageFor( const wxString& aMessage, int aTime, int aFlags
 
 void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
 {
+    // Don't do anything if we requested the UI update
+    if( m_updateLock )
+        return;
+
+    m_updateLock = true;
+
     wxInfoBarGeneric::ShowMessage( aMessage, aFlags );
 
     if( m_auiManager )
@@ -84,15 +131,25 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
 
     if( m_showTime > 0 )
         m_showTimer->StartOnce( m_showTime );
+
+    m_updateLock = false;
 }
 
 
 void WX_INFOBAR::Dismiss()
 {
+    // Don't do anything if we requested the UI update
+    if( m_updateLock )
+        return;
+
+    m_updateLock = true;
+
     wxInfoBarGeneric::Dismiss();
 
     if( m_auiManager )
         UpdateAuiLayout( false );
+
+    m_updateLock = false;
 }
 
 
@@ -173,6 +230,20 @@ void WX_INFOBAR::RemoveAllButtons()
 
         delete sItem->GetWindow();
     }
+}
+
+
+void WX_INFOBAR::OnShowInfoBar( wxCommandEvent& aEvent )
+{
+    RemoveAllButtons();
+    AddCloseButton();
+    ShowMessage( aEvent.GetString(), aEvent.GetInt() );
+}
+
+
+void WX_INFOBAR::OnDismissInfoBar( wxCommandEvent& aEvent )
+{
+    Dismiss();
 }
 
 

@@ -334,7 +334,7 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
 }
 
 
-void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
+void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
 {
     m_reloadRequested = false;
 
@@ -348,7 +348,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
 
     unsigned stats_startReloadTime = GetRunningMicroSecs();
 
-    m_boardAdapter.InitSettings( aStatusTextReporter, aWarningTextReporter );
+    m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endReloadTime = GetRunningMicroSecs();
@@ -361,8 +361,8 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
     unsigned stats_start_OpenGL_Load_Time = GetRunningMicroSecs();
 #endif
 
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Load OpenGL: board" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Load OpenGL: board" ) );
 
     // Create Board
     // /////////////////////////////////////////////////////////////////////////
@@ -433,8 +433,8 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
     // Create Through Holes and vias
     // /////////////////////////////////////////////////////////////////////////
 
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Load OpenGL: holes and vias" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Load OpenGL: holes and vias" ) );
 
     m_ogl_disp_list_through_holes_outer = generate_holes_display_list(
             m_boardAdapter.GetThroughHole_Outer().GetList(),
@@ -523,8 +523,8 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
 
     // Add layers maps
 
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Load OpenGL: layers" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Load OpenGL: layers" ) );
 
     for( MAP_CONTAINER_2D::const_iterator ii = m_boardAdapter.GetMapLayers().begin();
          ii != m_boardAdapter.GetMapLayers().end();
@@ -623,10 +623,10 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
     unsigned stats_start_models_Load_Time = GetRunningMicroSecs();
 #endif
 
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Loading 3D models" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Loading 3D models" ) );
 
-    load_3D_models( aStatusTextReporter );
+    load_3D_models( aStatusReporter );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_end_models_Load_Time = GetRunningMicroSecs();
@@ -642,14 +642,13 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
     COBJECT2D_STATS::Instance().PrintStats();
 #endif
 
-    if( aStatusTextReporter )
+    if( aStatusReporter )
     {
         // Calculation time in seconds
         const double calculation_time = (double)( GetRunningMicroSecs() -
                                                   stats_startReloadTime) / 1e6;
 
-        aStatusTextReporter->Report( wxString::Format( _( "Reload time %.3f s" ),
-                                                       calculation_time ) );
+        aStatusReporter->Report( wxString::Format( _( "Reload time %.3f s" ), calculation_time ) );
     }
 }
 
@@ -894,7 +893,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
  * cache for this render. (cache based on C_OGL_3DMODEL with associated
  * openGL lists in GPU memory)
  */
-void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER *aStatusTextReporter )
+void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER* aStatusReporter )
 {
     if((!m_boardAdapter.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL )) &&
        (!m_boardAdapter.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT )) &&
@@ -914,14 +913,14 @@ void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER *aStatusTextReporter )
             {
                 if( sM->m_Show && !sM->m_Filename.empty() )
                 {
-                    if( aStatusTextReporter )
+                    if( aStatusReporter )
                     {
                         // Display the short filename of the 3D model loaded:
                         // (the full name is usually too long to be displayed)
                         wxFileName fn( sM->m_Filename );
                         wxString msg;
                         msg.Printf( _( "Loading %s" ), fn.GetFullName() );
-                        aStatusTextReporter->Report( msg );
+                        aStatusReporter->Report( msg );
                     }
 
                     // Check if the model is not present in our cache map

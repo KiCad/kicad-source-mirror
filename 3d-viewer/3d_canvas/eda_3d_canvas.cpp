@@ -37,7 +37,7 @@
 #include <3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.h>
 #include <3d_viewer_id.h>
 #include <class_board.h>
-#include <status_text_reporter.h>
+#include <reporter.h>
 #include <gl_context_mgr.h>
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <bitmaps.h>
@@ -359,10 +359,9 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
 
     // !TODO: implement error reporter
     //WX_STRING_REPORTER errorReporter( &err_messages );
-    STATUS_TEXT_REPORTER activityReporter(
+    INFOBAR_REPORTER   warningReporter( m_parentInfoBar );
+    STATUSBAR_REPORTER activityReporter(
             m_parentStatusBar, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT ) );
-    STATUS_TEXT_REPORTER warningReporter(
-            m_parentStatusBar, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::WARN_TEXT ) );
 
     unsigned strtime = GetRunningMicroSecs();
 
@@ -485,6 +484,8 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
 
     // This will reset the flag of camera parameters changed
     m_camera.ParametersChanged();
+
+    warningReporter.Finalize();
 
     if( !err_messages.IsEmpty() )
         wxLogMessage( err_messages );

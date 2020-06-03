@@ -65,8 +65,7 @@ public:
 
     // Imported from C3D_RENDER_BASE
     void SetCurWindowSize( const wxSize &aSize ) override;
-    bool Redraw( bool aIsMoving, REPORTER* aStatusTextReporter,
-            REPORTER* aWarningTextReporter ) override;
+    bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
 
     int GetWaitForEditingTimeOut() override;
 
@@ -75,12 +74,12 @@ private:
     void initializeNewWindowSize();
     void opengl_init_pbo();
     void opengl_delete_pbo();
-    void reload( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter );
+    void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     void restart_render_state();
-    void rt_render_tracing( GLubyte *ptrPBO , REPORTER *aStatusTextReporter );
-    void rt_render_post_process_shade( GLubyte *ptrPBO , REPORTER *aStatusTextReporter );
-    void rt_render_post_process_blur_finish( GLubyte *ptrPBO , REPORTER *aStatusTextReporter );
+    void rt_render_tracing( GLubyte* ptrPBO, REPORTER* aStatusReporter );
+    void rt_render_post_process_shade( GLubyte* ptrPBO, REPORTER* aStatusReporter );
+    void rt_render_post_process_blur_finish( GLubyte* ptrPBO, REPORTER* aStatusReporter );
     void rt_render_trace_block( GLubyte *ptrPBO , signed int iBlock );
     void rt_final_color( GLubyte *ptrPBO, const SFVEC3F &rgbColor, bool applyColorSpaceConversion );
 
@@ -205,7 +204,7 @@ private:
 
     void initialize_block_positions();
 
-    void render( GLubyte *ptrPBO, REPORTER *aStatusTextReporter );
+    void render( GLubyte* ptrPBO, REPORTER* aStatusReporter );
     void render_preview( GLubyte *ptrPBO );
 };
 

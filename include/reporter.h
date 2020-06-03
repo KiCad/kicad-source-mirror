@@ -35,9 +35,11 @@
  *       me to write this.
  */
 
+class wxStatusBar;
 class wxTextCtrl;
 class wxHtmlListbox;
 class WX_HTML_REPORT_PANEL;
+class WX_INFOBAR;
 
 
 /**
@@ -224,6 +226,7 @@ public:
     bool HasMessage() const override { return false; }
 };
 
+
 /**
  * STDOUT_REPORTER
  *
@@ -245,6 +248,63 @@ public:
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override { return false; }
+};
+
+
+/**
+ * STATUSBAR_REPORTER
+ * is a wrapper for reporting to a specific text location in a statusbar
+ */
+class STATUSBAR_REPORTER : public REPORTER
+{
+private:
+    wxStatusBar* m_statusBar;
+    int          m_position;
+
+public:
+    STATUSBAR_REPORTER( wxStatusBar* aStatusBar, int aPosition = 0 )
+            : REPORTER(), m_statusBar( aStatusBar ), m_position( aPosition )
+    {
+    }
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    bool HasMessage() const override;
+};
+
+
+/**
+ * INFOBAR_REPORTER
+ * is a wrapper for reporting to a WX_INFOBAR UI element.
+ *
+ * The infobar is not updated until the @c Finalize() method is called. That method will
+ * queue either a show message or a dismiss event for the infobar - so this reporter is
+ * safe to use inside a paint event without causing an infinite paint event loop.
+ *
+ * No action is taken if no message is given to the reporter.
+ */
+class INFOBAR_REPORTER : public REPORTER
+{
+private:
+    bool        m_messageSet;
+    WX_INFOBAR* m_infoBar;
+    wxString    m_message;
+    SEVERITY    m_severity;
+
+public:
+    INFOBAR_REPORTER( WX_INFOBAR* aInfoBar )
+            : REPORTER(), m_messageSet( false ), m_infoBar( aInfoBar )
+    {
+    }
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    bool HasMessage() const override;
+
+    /**
+     * Update the infobar with the reported text.
+     */
+    void Finalize();
 };
 
 #endif     // _REPORTER_H_

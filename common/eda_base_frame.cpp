@@ -72,19 +72,20 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString& aFrameName, KIWAY* aKiway ) :
         wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName ),
+        TOOLS_HOLDER(),
         KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME ),
+        m_Ident( aFrameType ),
+        m_infoBar( nullptr ),
+        m_settingsManager( nullptr ),
         m_fileHistory( nullptr ),
+        m_hasAutoSave( false ),
+        m_autoSaveState( false ),
+        m_autoSaveInterval(-1 ),
         m_userUnits( EDA_UNITS::MILLIMETRES )
 {
-    m_Ident = aFrameType;
-    m_hasAutoSave = false;
-    m_autoSaveState = false;
-    m_autoSaveInterval = -1;
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
-    m_mruPath = wxStandardPaths::Get().GetDocumentsDir();
-    m_toolManager = nullptr;
-    m_settingsManager = nullptr;
-    m_FrameSize = wxSize( s_minsize_x, s_minsize_y );
+    m_mruPath       = wxStandardPaths::Get().GetDocumentsDir();
+    m_FrameSize     = wxSize( s_minsize_x, s_minsize_y );
 
     // Set a reasonable minimal size for the frame
     SetSizeHints( s_minsize_x, s_minsize_y, -1, -1, -1, -1 );

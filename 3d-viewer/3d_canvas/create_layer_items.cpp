@@ -113,7 +113,7 @@ void BOARD_ADAPTER::destroyLayers()
 }
 
 
-void BOARD_ADAPTER::createLayers( REPORTER *aStatusTextReporter )
+void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 {
     destroyLayers();
 
@@ -211,8 +211,8 @@ void BOARD_ADAPTER::createLayers( REPORTER *aStatusTextReporter )
     start_Time = GetRunningMicroSecs();
 #endif
 
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Create tracks and vias" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Create tracks and vias" ) );
 
     // Create tracks as objects and add it to container
     // /////////////////////////////////////////////////////////////////////////
@@ -685,8 +685,8 @@ void BOARD_ADAPTER::createLayers( REPORTER *aStatusTextReporter )
 
     if( GetFlag( FL_ZONE ) )
     {
-        if( aStatusTextReporter )
-            aStatusTextReporter->Report( _( "Create zones" ) );
+        if( aStatusReporter )
+            aStatusReporter->Report( _( "Create zones" ) );
 
         // Add zones objects
         // /////////////////////////////////////////////////////////////////////
@@ -754,8 +754,8 @@ void BOARD_ADAPTER::createLayers( REPORTER *aStatusTextReporter )
     // Simplify layer polygons
     // /////////////////////////////////////////////////////////////////////////
 
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Simplifying copper layers polygons" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Simplifying copper layers polygons" ) );
 
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
@@ -798,8 +798,8 @@ void BOARD_ADAPTER::createLayers( REPORTER *aStatusTextReporter )
 
     // Simplify holes polygon contours
     // /////////////////////////////////////////////////////////////////////////
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Simplify holes contours" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Simplify holes contours" ) );
 
     for( PCB_LAYER_ID layer : layer_id )
     {
@@ -840,8 +840,8 @@ void BOARD_ADAPTER::createLayers( REPORTER *aStatusTextReporter )
     unsigned stats_startTechLayersTime = GetRunningMicroSecs();
 #endif
 
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Build Tech layers" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Build Tech layers" ) );
 
     // draw graphic items, on technical layers
     static const PCB_LAYER_ID teckLayerList[] = {
@@ -1036,8 +1036,8 @@ void BOARD_ADAPTER::createLayers( REPORTER *aStatusTextReporter )
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_startHolesBVHTime = GetRunningMicroSecs();
 #endif
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( _( "Build BVH for holes and vias" ) );
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Build BVH for holes and vias" ) );
 
     m_through_holes_inner.BuildBVH();
     m_through_holes_outer.BuildBVH();

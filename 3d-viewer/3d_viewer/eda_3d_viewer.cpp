@@ -48,6 +48,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
+#include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 
 /**
@@ -103,7 +104,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     SetIcon( icon );
 
     // Create the status line
-    static const int status_dims[5] = { -1, -1, 130, 130, 170 };
+    static const int status_dims[4] = { -1, 130, 130, 170 };
 
     wxStatusBar *status_bar = CreateStatusBar( arrayDim( status_dims ) );
     SetStatusWidths( arrayDim( status_dims ), status_dims );
@@ -111,9 +112,6 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     m_canvas = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( m_boardAdapter.AntiAliasingGet() ),
                                   aParent->GetBoard(), m_boardAdapter, m_currentCamera,
                                   Prj().Get3DCacheManager() );
-
-    if( m_canvas )
-        m_canvas->SetStatusBar( status_bar );
 
     auto config = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
     LoadSettings( config );
@@ -140,12 +138,31 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     CreateMenuBar();
     ReCreateMainToolbar();
 
+    // Create the infobar
+    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
+
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( m_mainToolBar,
+                      EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_infoBar,
+                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
+    m_auimgr.AddPane( m_canvas,
+                      EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
+    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
+    // hidding it.
     m_auimgr.Update();
+
+    // We don't want the infobar displayed right away
+    m_auimgr.GetPane( "InfoBar" ).Hide();
+    m_auimgr.Update();
+
+    if( m_canvas )
+    {
+        m_canvas->SetInfoBar( m_infoBar );
+        m_canvas->SetStatusBar( status_bar );
+    }
 
     // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus
     // in order to receive mouse events.  Otherwise, the user has to click somewhere on

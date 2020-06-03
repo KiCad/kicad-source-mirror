@@ -21,20 +21,49 @@
 #ifndef INFOBAR_H_
 #define INFOBAR_H_
 
+#include <wx/event.h>
 #include <wx/infobar.h>
 #include <wx/wx.h>
 
 class wxAuiManager;
 
 
+enum
+{
+    /// ID for the close button on the frame's infobar
+    ID_CLOSE_INFOBAR = 2000,
+};
+
+
+wxDECLARE_EVENT( KIEVT_SHOW_INFOBAR,    wxCommandEvent );
+wxDECLARE_EVENT( KIEVT_DISMISS_INFOBAR, wxCommandEvent );
+
 /**
  * A modified version of the wxInfoBar class that allows us to:
  *     * Show the close button along with the other buttons
  *     * Remove all user-provided buttons at once
  *     * Allow automaticly hiding the infobar after a time period
+ *     * Show/hide using events
+ *     * Place it inside an AUI manager
  *
  * This inherits from the generic infobar because the native infobar
  * on GTK doesn't include the icon on the left and it looks worse.
+ *
+ * There are 2 events associated with the infobar:
+ *
+ * KIEVT_SHOW_INFOBAR:
+ *   An event that tells the infobar to show a message.
+ *
+ *   The message text is contained inside the string component,
+ *   and the message flag is contained inside the int component.
+ *
+ *   Sample event creation code:
+ *       wxCommandEvent* evt = new wxCommandEvent( KIEVT_SHOW_INFOBAR );
+ *       evt->SetString( "A message to show" );
+ *       evt->SetInt( wxICON_WARNING );
+ *
+ * KIEVT_DISMISS_INFOBAR:
+ *   An event that tells the infobar to hide itself.
  */
 class WX_INFOBAR : public wxInfoBarGeneric
 {
@@ -47,6 +76,8 @@ public:
      * @param aWinId is the ID for this infobar object
      */
     WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr = nullptr, wxWindowID aWinid = wxID_ANY );
+
+    ~WX_INFOBAR();
 
     /**
      * Set the time period to show the infobar.
@@ -112,7 +143,33 @@ public:
      */
     void Dismiss() override;
 
+    /**
+     * Send the infobar an event telling it to show a message.
+     *
+     * @param aMessage is the message to display
+     * @param aFlags is the flag containing the icon to display on the left side of the infobar
+     */
+    void QueueShowMessage( const wxString& aMessage, int aFlags = wxICON_INFORMATION );
+
+    /**
+     * Send the infobar an event telling it to hide itself.
+     */
+    void QueueDismiss();
+
 protected:
+    /**
+     * Event handler for showing the infobar using a wxCommandEvent of the type
+     * KIEVT_SHOW_INFOBAR. The message is stored inside the string field, and the
+     * icon flag is stored inside the int field.
+     */
+    void OnShowInfoBar( wxCommandEvent& aEvent );
+
+    /**
+     * Event handler for dismissing the infobar using a wxCommandEvent of the type
+     * KIEVT_DISMISS_INFOBAR.
+     */
+    void OnDismissInfoBar( wxCommandEvent& aEvent );
+
     /**
      * Event handler for the close button.
      * This is bound to ID_CLOSE_INFOBAR on the infobar.
@@ -132,6 +189,7 @@ protected:
     void UpdateAuiLayout( bool aShow );
 
     int           m_showTime;       ///< The time to show the infobar. 0 = don't auto hide
+    bool          m_updateLock;     ///< True if this infobar requested the UI update
     wxTimer*      m_showTimer;      ///< The timer counting the autoclose period
     wxAuiManager* m_auiManager;     ///< The AUI manager that contains this infobar
 

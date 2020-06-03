@@ -79,6 +79,7 @@ class PANEL_HOTKEYS_EDITOR;
 class FILE_HISTORY;
 class SETTINGS_MANAGER;
 class APP_SETTINGS_BASE;
+class WX_INFOBAR;
 struct WINDOW_SETTINGS;
 
 enum id_librarytype {
@@ -132,6 +133,8 @@ protected:
 
     wxAuiManager    m_auimgr;
     wxString        m_perspective;          // wxAuiManager perspective.
+
+    WX_INFOBAR*     m_infoBar;              // Infobar for the frame
 
     wxString        m_configName;           // Prefix used to identify some params (frame size...)
                                             // and to name some config files (legacy hotkey files)

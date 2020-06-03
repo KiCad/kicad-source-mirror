@@ -527,7 +527,7 @@ void init_lights(void)
 
 
 bool C3D_RENDER_OGL_LEGACY::Redraw(
-        bool aIsMoving, REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
+        bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter )
 {
     // Initialize openGL
     if( !m_is_opengl_initialized )
@@ -540,10 +540,10 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
     {
         std::unique_ptr<BUSY_INDICATOR> busy = CreateBusyIndicator();
 
-        if( aStatusTextReporter )
-            aStatusTextReporter->Report( _( "Loading..." ) );
+        if( aStatusReporter )
+            aStatusReporter->Report( _( "Loading..." ) );
 
-        reload( aStatusTextReporter, aWarningTextReporter );
+        reload( aStatusReporter, aWarningReporter );
         setupMaterials();
 
         // generate a new 3D grid as the size of the board may had changed

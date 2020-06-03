@@ -148,7 +148,7 @@ static inline void SetPixel( GLubyte *p, const CCOLORRGB &v )
 
 
 bool C3D_RENDER_RAYTRACING::Redraw(
-        bool aIsMoving, REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
+        bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter )
 {
     bool requestRedraw = false;
 
@@ -174,12 +174,12 @@ bool C3D_RENDER_RAYTRACING::Redraw(
     // /////////////////////////////////////////////////////////////////////////
     if( m_reloadRequested )
     {
-        if( aStatusTextReporter )
-            aStatusTextReporter->Report( _( "Loading..." ) );
+        if( aStatusReporter )
+            aStatusReporter->Report( _( "Loading..." ) );
 
         //aIsMoving = true;
         requestRedraw = true;
-        reload( aStatusTextReporter, aWarningTextReporter );
+        reload( aStatusReporter, aWarningReporter );
     }
 
 
@@ -260,7 +260,7 @@ bool C3D_RENDER_RAYTRACING::Redraw(
 
             if( ptrPBO )
             {
-                render( ptrPBO, aStatusTextReporter );
+                render( ptrPBO, aStatusReporter );
 
                 if( m_rt_render_state != RT_RENDER_STATE_FINISH )
                     requestRedraw = true;
@@ -299,7 +299,7 @@ bool C3D_RENDER_RAYTRACING::Redraw(
 }
 
 
-void C3D_RENDER_RAYTRACING::render( GLubyte *ptrPBO , REPORTER *aStatusTextReporter )
+void C3D_RENDER_RAYTRACING::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
 {
     if( (m_rt_render_state == RT_RENDER_STATE_FINISH) ||
         (m_rt_render_state >= RT_RENDER_STATE_MAX) )
@@ -332,15 +332,15 @@ void C3D_RENDER_RAYTRACING::render( GLubyte *ptrPBO , REPORTER *aStatusTextRepor
     switch( m_rt_render_state )
     {
     case RT_RENDER_STATE_TRACING:
-            rt_render_tracing( ptrPBO, aStatusTextReporter );
+        rt_render_tracing( ptrPBO, aStatusReporter );
         break;
 
     case RT_RENDER_STATE_POST_PROCESS_SHADE:
-            rt_render_post_process_shade( ptrPBO, aStatusTextReporter );
+        rt_render_post_process_shade( ptrPBO, aStatusReporter );
         break;
 
     case RT_RENDER_STATE_POST_PROCESS_BLUR_AND_FINISH:
-            rt_render_post_process_blur_finish( ptrPBO, aStatusTextReporter );
+        rt_render_post_process_blur_finish( ptrPBO, aStatusReporter );
         break;
 
     default:
@@ -349,20 +349,20 @@ void C3D_RENDER_RAYTRACING::render( GLubyte *ptrPBO , REPORTER *aStatusTextRepor
         break;
     }
 
-    if( aStatusTextReporter && (m_rt_render_state == RT_RENDER_STATE_FINISH) )
+    if( aStatusReporter && ( m_rt_render_state == RT_RENDER_STATE_FINISH ) )
     {
         // Calculation time in seconds
         const double calculation_time = (double)( GetRunningMicroSecs() -
                                                   m_stats_start_rendering_time ) / 1e6;
 
-        aStatusTextReporter->Report( wxString::Format( _( "Rendering time %.3f s" ),
+        aStatusReporter->Report( wxString::Format( _( "Rendering time %.3f s" ),
                                                        calculation_time ) );
     }
 }
 
 
-void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte *ptrPBO ,
-                                               REPORTER *aStatusTextReporter )
+void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte* ptrPBO ,
+                                               REPORTER* aStatusReporter )
 {
     m_isPreview = false;
 
@@ -409,8 +409,8 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte *ptrPBO ,
 
     m_nrBlocksRenderProgress += numBlocksRendered;
 
-    if( aStatusTextReporter )
-        aStatusTextReporter->Report( wxString::Format( _( "Rendering: %.0f %%" ),
+    if( aStatusReporter )
+        aStatusReporter->Report( wxString::Format( _( "Rendering: %.0f %%" ),
                                                        (float)(m_nrBlocksRenderProgress * 100) /
                                                        (float)m_blockPositions.size() ) );
 
@@ -906,15 +906,15 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
 }
 
 
-void C3D_RENDER_RAYTRACING::rt_render_post_process_shade( GLubyte *ptrPBO,
-                                                          REPORTER *aStatusTextReporter )
+void C3D_RENDER_RAYTRACING::rt_render_post_process_shade( GLubyte* ptrPBO,
+                                                          REPORTER* aStatusReporter )
 {
     (void)ptrPBO; // unused
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
     {
-        if( aStatusTextReporter )
-            aStatusTextReporter->Report( _("Rendering: Post processing shader") );
+        if( aStatusReporter )
+            aStatusReporter->Report( _( "Rendering: Post processing shader" ) );
 
         std::atomic<size_t> nextBlock( 0 );
         std::atomic<size_t> threadsFinished( 0 );
@@ -958,9 +958,9 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_shade( GLubyte *ptrPBO,
 
 
 void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
-                                                                REPORTER *aStatusTextReporter )
+                                                                REPORTER *aStatusReporter )
 {
-    (void)aStatusTextReporter; //unused
+    (void) aStatusReporter; //unused
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
     {

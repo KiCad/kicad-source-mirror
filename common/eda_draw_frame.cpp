@@ -80,7 +80,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_canvas              = NULL;
     m_toolDispatcher      = NULL;
     m_messagePanel        = NULL;
-    m_infoBar             = nullptr;
     m_currentScreen       = NULL;
     m_showBorderAndTitleBlock = false;  // true to display reference sheet.
     m_LastGridSizeId      = 0;

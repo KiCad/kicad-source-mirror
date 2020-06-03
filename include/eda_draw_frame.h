@@ -41,7 +41,6 @@ class COLOR_SETTINGS;
 class TOOL_MENU;
 class APP_SETTINGS_BASE;
 class EDA_INFOBAR_PANEL;
-class WX_INFOBAR;
 
 namespace KIGFX
 {
@@ -114,8 +113,6 @@ protected:
 
     EDA_MSG_PANEL*     m_messagePanel;
     int                m_MsgFrameHeight;
-
-    WX_INFOBAR*        m_infoBar;
 
     COLOR_SETTINGS*    m_colorSettings;
 

@@ -145,10 +145,10 @@ class BOARD_ADAPTER
     /**
      * @brief InitSettings - Function to be called by the render when it need to
      * reload the settings for the board.
-     * @param aStatusTextReporter: the pointer for the status reporter
-     * @param aWarningTextReporter: pointer for the warning reporter
+     * @param aStatusReporter: the pointer for the status reporter
+     * @param aWarningReporter: pointer for the warning reporter
      */
-    void InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter );
+    void InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     /**
      * @brief BiuTo3Dunits - Board integer units To 3D units
@@ -266,7 +266,7 @@ class BOARD_ADAPTER
      * @param aAAmode = antialiasing mode value
      */
     void AntiAliasingSet( ANTIALIASING_MODE aAAmode ) { m_antialiasing_mode = aAAmode; }
-    
+
     /**
      * @brief RenderEngineSet
      * @param aRenderEngine = the render engine mode selected
@@ -543,7 +543,7 @@ class BOARD_ADAPTER
      * @return false if the outline could not be created
      */
     bool createBoardPolygon();
-    void createLayers( REPORTER *aStatusTextReporter );
+    void createLayers( REPORTER* aStatusReporter );
     void destroyLayers();
 
     // Helper functions to create the board
