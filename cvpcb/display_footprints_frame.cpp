@@ -39,6 +39,7 @@
 #include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
 #include <pgm_base.h>
+#include <reporter.h>
 #include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
@@ -341,31 +342,22 @@ COLOR4D DISPLAY_FOOTPRINTS_FRAME::GetGridColor()
 }
 
 
-MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
+MODULE* DISPLAY_FOOTPRINTS_FRAME::GetModule( const wxString& aFootprintName, REPORTER& aReporter )
 {
     MODULE* footprint = NULL;
-
-    // Prep the infobar. The infobar is used for as many notifications as possible
-    // since it doesn't steal focus into the frame like a dialog does.
-    m_infoBar->Dismiss();
-    m_infoBar->RemoveAllButtons();
-    m_infoBar->AddCloseButton();
 
     LIB_ID fpid;
 
     if( fpid.Parse( aFootprintName, LIB_ID::ID_PCB ) >= 0 )
     {
-        wxString msg = wxString::Format( _( "Footprint ID \"%s\" is not valid." ),
-                                         GetChars( aFootprintName ) );
-        m_infoBar->ShowMessage( msg, wxICON_ERROR );
+        aReporter.Report( wxString::Format( _( "Footprint ID \"%s\" is not valid." ),
+                                            aFootprintName ),
+                          RPT_SEVERITY_ERROR );
         return NULL;
     }
 
     wxString libNickname = FROM_UTF8( fpid.GetLibNickname().c_str() );
     wxString fpName      = FROM_UTF8( fpid.GetLibItemName().c_str() );
-
-    wxLogDebug( wxT( "Load footprint \"%s\" from library \"%s\"." ), fpName, libNickname );
-
 
     FP_LIB_TABLE* fpTable = Prj().PcbFootprintLibs( Kiway() );
     wxASSERT( fpTable );
@@ -373,17 +365,17 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
     // See if the library requested is in the library table
     if( !fpTable->HasLibrary( libNickname ) )
     {
-        wxString msg = wxString::Format( _( "Library \"%s\" is not in the footprint library table." ),
-                                         libNickname );
-        m_infoBar->ShowMessage( msg, wxICON_ERROR );
+        aReporter.Report( wxString::Format( _( "Library \"%s\" is not in the footprint library table." ),
+                                            libNickname ),
+                          RPT_SEVERITY_ERROR );
         return NULL;
     }
 
     // See if the footprint requested is in the library
     if( !fpTable->FootprintExists( libNickname, fpName ) )
     {
-        wxString msg = wxString::Format( _( "Footprint \"%s\" not found." ), aFootprintName );
-        m_infoBar->ShowMessage( msg, wxICON_ERROR );
+        aReporter.Report( wxString::Format( _( "Footprint \"%s\" not found." ), aFootprintName ),
+                          RPT_SEVERITY_ERROR );
         return NULL;
     }
 
@@ -404,8 +396,8 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
         return footprint;
     }
 
-    wxString msg = wxString::Format( _( "Footprint \"%s\" not found." ), aFootprintName );
-    m_infoBar->ShowMessage( msg, wxICON_ERROR );
+    aReporter.Report( wxString::Format( _( "Footprint \"%s\" not found." ), aFootprintName ),
+                      RPT_SEVERITY_ERROR );
     return NULL;
 }
 
@@ -429,11 +421,14 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
             footprintName = comp->GetFPID().GetUniStringLibId();
     }
 
+    INFOBAR_REPORTER infoReporter( m_infoBar );
+    m_infoBar->Dismiss();
+
     if( !footprintName.IsEmpty() )
     {
         SetTitle( wxString::Format( _( "Footprint: %s" ), footprintName ) );
 
-        module = Get_Module( footprintName );
+        module = GetModule( footprintName, infoReporter );
 
         module_info = parentframe->m_FootprintsList->GetModuleInfo( footprintName );
     }
@@ -445,6 +440,8 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
         SetStatusText( wxString::Format( _( "Lib: %s" ), module_info->GetLibNickname() ), 0 );
     else
         SetStatusText( wxEmptyString, 0 );
+
+    infoReporter.Finalize();
 
     updateView();
 

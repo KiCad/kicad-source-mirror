@@ -31,6 +31,8 @@
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 
+class REPORTER;
+
 // The name (for wxWidgets) of the footprint viewer frame
 #define FOOTPRINTVIEWER_FRAME_NAME wxT( "FootprintViewerFrame" )
 
@@ -88,7 +90,7 @@ public:
      */
     COLOR4D GetGridColor() override;
 
-    MODULE* Get_Module( const wxString& CmpName );
+    MODULE* GetModule( const wxString& CmpName, REPORTER& aReporter );
 
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in CvPcb.
