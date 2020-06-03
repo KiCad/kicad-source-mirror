@@ -174,7 +174,9 @@ Most of these will not be available in general distributions until v3.2.
   C.f. [this commit](https://github.com/wxWidgets/wxWidgets/commit/f95fd11e08482697c3b0c0a9d2ccd661134480ee)
   `dpi_scaling.cpp` should continue to work normally, but the config should
   no longer be required and the scaling should auto-detect.
-
+* Once the minimum version is greater than 3.1.3, the code inside the constructor of the `HIDPI_GL_CANVAS`
+  should be removed, since the default behavior of a `wxGLCanvas` was changed in 3.1.3 to always want the
+  best resolution.
 
 [Boost test]: https://github.com/boostorg/test
 [GCC 7]: https://gcc.gnu.org/gcc-7/changes.html

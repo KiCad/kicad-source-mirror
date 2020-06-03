@@ -35,6 +35,8 @@ HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( wxWindow* parent, wxWindowID id, const int* at
         : wxGLCanvas( parent, id, attribList, pos, size, style, name, palette ),
           m_scale_factor( DPI_SCALING::GetDefaultScaleFactor() )
 {
+    // As of wxWidgets version 3.1.3, this is the default behavior of the wxGLCanvas on OSX
+    // so this piece of code can be removed once our minimum version is >3.1.3 for OSX.
 #ifdef RETINA_OPENGL_PATCH
     SetViewWantsBestResolution( true );
 #endif
@@ -45,25 +47,11 @@ wxSize HIDPI_GL_CANVAS::GetNativePixelSize() const
 {
     wxSize size = wxGLCanvas::GetClientSize();
 
-    const float scaleFactor = GetBackingScaleFactor();
+    const double scaleFactor = GetScaleFactor();
     size.x *= scaleFactor;
     size.y *= scaleFactor;
 
     return size;
-}
-
-
-float HIDPI_GL_CANVAS::GetBackingScaleFactor() const
-{
-#ifdef RETINA_OPENGL_PATCH
-    // this is ugly, but original method isn't marked const although it doesn't modify anything
-    // => clean up when it officially has arrived in wxWidgets
-    return static_cast< wxGLCanvas* >( const_cast< HIDPI_GL_CANVAS* >( this ))->GetBackingScaleFactor();
-#else
-
-    // Return the cached value (which originally was set from config or automatically)
-    return m_scale_factor;
-#endif
 }
 
 

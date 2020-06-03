@@ -34,8 +34,6 @@
  * @brief wxGLCanvas wrapper for HiDPI/Retina support.
  *
  * This is a small wrapper class to enable HiDPI/Retina support for wxGLCanvas.
- * HiDPI currently only works with a patched wxWidgets version, see:
- *   http://trac.wxwidgets.org/ticket/15700
  */
 class HIDPI_GL_CANVAS : public wxGLCanvas
 {
@@ -52,7 +50,6 @@ public:
 
 
     virtual wxSize GetNativePixelSize() const;
-    virtual float GetBackingScaleFactor() const;
 
     /**
      * Set the canvas scale factor, probably for a hi-DPI display.

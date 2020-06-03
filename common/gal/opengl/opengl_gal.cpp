@@ -374,7 +374,7 @@ double OPENGL_GAL::getWorldPixelSize() const
 
 VECTOR2D OPENGL_GAL::getScreenPixelSize() const
 {
-    auto sf = GetBackingScaleFactor();
+    auto sf = GetScaleFactor();
     return VECTOR2D( 2.0 / (double) ( screenSize.x * sf ), 2.0 / (double) ( screenSize.y * sf ) );
 }
 
@@ -500,7 +500,7 @@ void OPENGL_GAL::beginDrawing()
     }
 
     shader->Use();
-    shader->SetParameter( ufm_worldPixelSize, (float) getWorldPixelSize() / GetBackingScaleFactor() );
+    shader->SetParameter( ufm_worldPixelSize, (float) ( getWorldPixelSize() / GetScaleFactor() ) );
     shader->SetParameter( ufm_screenPixelSize, getScreenPixelSize() );
     double pixelSizeMultiplier = compositor->GetAntialiasSupersamplingFactor();
     shader->SetParameter( ufm_pixelSizeMultiplier, (float) pixelSizeMultiplier );
@@ -1245,7 +1245,7 @@ void OPENGL_GAL::DrawGrid()
 
     // sub-pixel lines all render the same
     float minorLineWidth =
-            std::fmax( 1.0f, gridLineWidth ) * getWorldPixelSize() / GetBackingScaleFactor();
+            std::fmax( 1.0f, gridLineWidth ) * getWorldPixelSize() / GetScaleFactor();
     float majorLineWidth = minorLineWidth * 2.0f;
 
     // Draw the axis and grid
@@ -1399,7 +1399,7 @@ void OPENGL_GAL::ResizeScreen( int aWidth, int aHeight )
     screenSize = VECTOR2I( aWidth, aHeight );
 
     // Resize framebuffers
-    const float scaleFactor = GetBackingScaleFactor();
+    const float scaleFactor = GetScaleFactor();
     compositor->Resize( aWidth * scaleFactor, aHeight * scaleFactor );
     isFramebufferInitialized = false;
 
