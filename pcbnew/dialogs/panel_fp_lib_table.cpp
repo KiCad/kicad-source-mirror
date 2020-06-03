@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 CERN
- * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,23 +85,43 @@ enum {
 };
 
 /**
-* Map with event id as the key to supported file types that will be listed for the add a library option.
+* Map with event id as the key to supported file types that will be listed for the add a
+* library option.
 *
 */
 static const std::map<int, supportedFileType>& fileTypes()
 {
     /*
      * TODO(C++20): Clean this up
-     * This is wrapped inside a function to prevent a static initialization order fiasco with the file extension
-     * variables. Once C++20 is allowed in KiCad code, those file extensions can be made constexpr and this can
-     * be removed from a function call and placed in the file normally.
+     * This is wrapped inside a function to prevent a static initialization order fiasco
+     * with the file extension  variables. Once C++20 is allowed in KiCad code, those file
+     * extensions can be made constexpr and this can be removed from a function call and
+     * placed in the file normally.
      */
     static const std::map<int, supportedFileType> fileTypes =
     {
-        { ID_PANEL_FPLIB_ADD_KICADMOD,    { "KiCad (folder with .kicad_mod files)", "",                               KiCadFootprintFileExtension,      false, IO_MGR::KICAD_SEXP } },
-        { ID_PANEL_FPLIB_ADD_EAGLE6,      { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(),  "",               true,  IO_MGR::EAGLE } },
-        { ID_PANEL_FPLIB_ADD_KICADLEGACY, { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), "",               true,  IO_MGR::LEGACY } },
-        { ID_PANEL_FPLIB_ADD_GEDA,        { "Geda (folder with *.fp files)",        "",                               GedaPcbFootprintLibFileExtension,             false, IO_MGR::GEDA_PCB } },
+        { ID_PANEL_FPLIB_ADD_KICADMOD,
+            {
+                "KiCad (folder with .kicad_mod files)", "", KiCadFootprintFileExtension,
+                false, IO_MGR::KICAD_SEXP
+            }
+        },
+        { ID_PANEL_FPLIB_ADD_EAGLE6,
+            {
+                "Eagle 6.x (*.lbr)", EagleFootprintLibPathWildcard(), "", true,  IO_MGR::EAGLE
+            }
+        },
+        { ID_PANEL_FPLIB_ADD_KICADLEGACY,
+            {
+                "KiCad legacy (*.mod)", LegacyFootprintLibPathWildcard(), "", true, IO_MGR::LEGACY
+            }
+        },
+        { ID_PANEL_FPLIB_ADD_GEDA,
+            {
+                "Geda (folder with *.fp files)", "", GedaPcbFootprintLibFileExtension, false,
+                IO_MGR::GEDA_PCB
+            }
+        },
     };
 
     return fileTypes;
@@ -427,10 +447,13 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_move_up_button->SetBitmap( KiBitmap( small_up_xpm ) );
     m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
 
+    wxSize buttonSize = m_append_button->GetSize();
+
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
+
     // We must set the size to match the other bitmaps manually
     m_browseButton->SetWidthPadding( 4 );
-    m_browseButton->SetMinSize( wxSize( 30, 30 ) );
+    m_browseButton->SetMinSize( buttonSize );
 
     // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
     // a currentCell which is sometimes not highlighted.
@@ -440,8 +463,11 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     if( m_project_grid->GetNumberRows() > 0 )
         m_project_grid->SelectRow( 0 );
 
+    wxSize textSize;
+
     // Populate the browse library options
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
+
     for( auto& fileType : fileTypes() )
     {
         browseMenu->Append( fileType.first, fileType.second.m_Description );
@@ -488,7 +514,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
                 // button.
                 model->DeleteRows( r, 1 );
             }
-        else if( ( illegalCh = LIB_ID::FindIllegalLibNicknameChar( nick, LIB_ID::ID_PCB ) ) )
+            else if( ( illegalCh = LIB_ID::FindIllegalLibNicknameChar( nick, LIB_ID::ID_PCB ) ) )
             {
                 wxString msg = wxString::Format( _( "Illegal character '%c' in Nickname: \"%s\"" ),
                                                  illegalCh,
@@ -620,6 +646,7 @@ void PANEL_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 
     // Remove selected rows (note: a row can be stored more than once in list)
     int last_row = -1;
+
     for( int ii = selectedRows.GetCount()-1; ii >= 0; ii-- )
     {
         int row = selectedRows[ii];

@@ -14,6 +14,7 @@
         <property name="file">dialog_edit_footprint_for_BoardEditor_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_edit_footprint_for_BoardEditor_base</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -45,7 +47,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_FOOTPRINT_BOARD_EDITOR_BASE</property>
             <property name="pos"></property>
-            <property name="size">859,600</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Footprint Properties</property>
@@ -121,7 +123,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">General</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -301,6 +303,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
@@ -333,7 +336,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">30,29</property>
+                                                            <property name="minimum_size">-1,-1</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_bpAdd</property>
                                                             <property name="pane_border">1</property>
@@ -384,6 +387,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
@@ -416,7 +420,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">30,29</property>
+                                                            <property name="minimum_size">-1,-1</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_bpDelete</property>
                                                             <property name="pane_border">1</property>
@@ -1862,6 +1866,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -1935,6 +1940,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -2008,6 +2014,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -2091,6 +2098,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -3522,7 +3530,7 @@
                         <object class="notebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">3D Settings</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -3703,6 +3711,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
@@ -3735,7 +3744,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">30,29</property>
+                                                            <property name="minimum_size">-1,-1</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_buttonAdd</property>
                                                             <property name="pane_border">1</property>
@@ -3776,6 +3785,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
@@ -3808,7 +3818,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">30,29</property>
+                                                            <property name="minimum_size">-1,-1</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_buttonBrowse</property>
                                                             <property name="pane_border">1</property>
@@ -3859,6 +3869,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
@@ -3891,7 +3902,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">30,29</property>
+                                                            <property name="minimum_size">-1,-1</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_buttonRemove</property>
                                                             <property name="pane_border">1</property>
@@ -3942,6 +3953,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>

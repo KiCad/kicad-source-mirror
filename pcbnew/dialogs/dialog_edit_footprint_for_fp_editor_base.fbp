@@ -122,7 +122,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">General</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -302,6 +302,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
@@ -334,7 +335,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">30,29</property>
+                                                            <property name="minimum_size">-1,-1</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_bpAdd</property>
                                                             <property name="pane_border">1</property>
@@ -385,6 +386,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
@@ -417,7 +419,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">30,29</property>
+                                                            <property name="minimum_size">-1,-1</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_bpDelete</property>
                                                             <property name="pane_border">1</property>
@@ -2573,7 +2575,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">3D Settings</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -2754,6 +2756,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
@@ -2799,7 +2802,7 @@
                                                             <property name="pressed"></property>
                                                             <property name="resize">Resizable</property>
                                                             <property name="show">1</property>
-                                                            <property name="size">30,29</property>
+                                                            <property name="size">-1,-1</property>
                                                             <property name="style"></property>
                                                             <property name="subclass">; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
@@ -2827,6 +2830,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
@@ -2872,7 +2876,7 @@
                                                             <property name="pressed"></property>
                                                             <property name="resize">Resizable</property>
                                                             <property name="show">1</property>
-                                                            <property name="size">30,29</property>
+                                                            <property name="size">-1,-1</property>
                                                             <property name="style"></property>
                                                             <property name="subclass">; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
@@ -2910,6 +2914,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
@@ -2955,7 +2960,7 @@
                                                             <property name="pressed"></property>
                                                             <property name="resize">Resizable</property>
                                                             <property name="show">1</property>
-                                                            <property name="size">30,29</property>
+                                                            <property name="size">-1,-1</property>
                                                             <property name="style"></property>
                                                             <property name="subclass">; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
@@ -2993,6 +2998,7 @@
                                                             <property name="aui_name"></property>
                                                             <property name="aui_position"></property>
                                                             <property name="aui_row"></property>
+                                                            <property name="auth_needed">0</property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
                                                             <property name="bitmap"></property>
