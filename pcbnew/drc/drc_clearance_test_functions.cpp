@@ -149,7 +149,6 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     int          refSegWidth = aRefSeg->GetWidth();
 
 
-
     /******************************************/
     /* Phase 0 : via DRC tests :              */
     /******************************************/
@@ -356,6 +355,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     /* Phase 1 : test DRC track to pads :     */
     /******************************************/
 
+    // Allow an epsilon at least as great as our allowed polygonisation error.
+    int epsilon = m_pcb->GetDesignSettings().m_MaxError;
+
     // Compute the min distance to pads
     for( MODULE* mod : m_pcb->Modules() )
     {
@@ -417,7 +419,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
                 SEG     slotSeg( slotStart, slotEnd );
                 int     widths = ( slotWidth + refSegWidth ) / 2;
-                int     center2centerAllowed = minClearance + widths;
+                int     center2centerAllowed = minClearance + widths + epsilon;
 
                 // Avoid square-roots if possible (for performance)
                 SEG::ecoord center2center_squared = refSeg.SquaredDistance( slotSeg );
@@ -444,9 +446,10 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             }
 
             int minClearance = aRefSeg->GetClearance( pad, &m_clearanceSource );
+            int clearanceAllowed = minClearance - epsilon;
             int actual;
 
-            if( !checkClearanceSegmToPad( refSeg, refSegWidth, pad, minClearance, &actual ) )
+            if( !checkClearanceSegmToPad( refSeg, refSegWidth, pad, clearanceAllowed, &actual ) )
             {
                 actual = std::max( 0, actual );
                 SEG       padSeg( pad->GetPosition(), pad->GetPosition() );

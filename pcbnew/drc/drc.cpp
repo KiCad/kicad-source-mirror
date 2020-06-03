@@ -676,8 +676,7 @@ void DRC::testUnconnected()
 
 void DRC::testZones( BOARD_COMMIT& aCommit )
 {
-    BOARD*                 board = m_editFrame->GetBoard();
-    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
 
     // Test copper areas for valid netcodes
     // if a netcode is < 0 the netname was not found when reading a netlist
@@ -689,7 +688,7 @@ void DRC::testZones( BOARD_COMMIT& aCommit )
     // if it differs from the net name from net code, there is a DRC issue
 
     std::vector<SHAPE_POLY_SET> smoothed_polys;
-    smoothed_polys.resize( board->GetAreaCount() );
+    smoothed_polys.resize( m_pcb->GetAreaCount() );
 
     for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
     {
@@ -713,26 +712,26 @@ void DRC::testZones( BOARD_COMMIT& aCommit )
             }
         }
 
-        ZONE_CONTAINER*    zoneRef = board->GetArea( ii );
+        ZONE_CONTAINER*    zoneRef = m_pcb->GetArea( ii );
         std::set<VECTOR2I> colinearCorners;
-        zoneRef->GetColinearCorners( board, colinearCorners );
+        zoneRef->GetColinearCorners( m_pcb, colinearCorners );
 
         zoneRef->BuildSmoothedPoly( smoothed_polys[ii], &colinearCorners );
     }
 
     // iterate through all areas
-    for( int ia = 0; ia < board->GetAreaCount(); ia++ )
+    for( int ia = 0; ia < m_pcb->GetAreaCount(); ia++ )
     {
-        ZONE_CONTAINER* zoneRef = board->GetArea( ia );
+        ZONE_CONTAINER* zoneRef = m_pcb->GetArea( ia );
 
         if( !zoneRef->IsOnCopperLayer() )
             continue;
 
         // If we are testing a single zone, then iterate through all other zones
         // Otherwise, we have already tested the zone combination
-        for( int ia2 = ia + 1; ia2 < board->GetAreaCount(); ia2++ )
+        for( int ia2 = ia + 1; ia2 < m_pcb->GetAreaCount(); ia2++ )
         {
-            ZONE_CONTAINER* zoneToTest = board->GetArea( ia2 );
+            ZONE_CONTAINER* zoneToTest = m_pcb->GetArea( ia2 );
 
             if( zoneRef == zoneToTest )
                 continue;
@@ -1144,15 +1143,12 @@ void DRC::testOutline( BOARD_COMMIT& aCommit )
 
 void DRC::testDisabledLayers( BOARD_COMMIT& aCommit )
 {
-    BOARD*   board = m_editFrame->GetBoard();
-    wxCHECK( board, /*void*/ );
-
-    LSET     disabledLayers = board->GetEnabledLayers().flip();
+    LSET disabledLayers = m_pcb->GetEnabledLayers().flip();
 
     // Perform the test only for copper layers
     disabledLayers &= LSET::AllCuMask();
 
-    for( TRACK* track : board->Tracks() )
+    for( TRACK* track : m_pcb->Tracks() )
     {
         if( disabledLayers.test( track->GetLayer() ) )
         {
@@ -1169,7 +1165,7 @@ void DRC::testDisabledLayers( BOARD_COMMIT& aCommit )
         }
     }
 
-    for( MODULE* module : board->Modules() )
+    for( MODULE* module : m_pcb->Modules() )
     {
         module->RunOnChildren(
                     [&]( BOARD_ITEM* child )
@@ -1190,7 +1186,7 @@ void DRC::testDisabledLayers( BOARD_COMMIT& aCommit )
                     } );
     }
 
-    for( ZONE_CONTAINER* zone : board->Zones() )
+    for( ZONE_CONTAINER* zone : m_pcb->Zones() )
     {
         if( disabledLayers.test( zone->GetLayer() ) )
         {
@@ -1213,9 +1209,10 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
                           int x_limit )
 {
     const static LSET all_cu = LSET::AllCuMask();
-    constexpr int TOLERANCE = 1;    // 1nm tolerance for rotated pad rounding errors.
 
-    LSET layerMask = aRefPad->GetLayerSet() & all_cu;
+    // Allow an epsilon at least as great as our allowed polygonisation error.
+    int    epsilon = m_pcb->GetDesignSettings().m_MaxError;
+    LSET   layerMask = aRefPad->GetLayerSet() & all_cu;
 
     // For hole testing we use a dummy pad which is given the shape of the hole.  Note that
     // this pad must have a parent because some functions expect a non-null parent to find
@@ -1349,10 +1346,11 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
             continue;
         }
 
-        int  minClearance = aRefPad->GetClearance( pad, &m_clearanceSource ) - TOLERANCE;
+        int  minClearance = aRefPad->GetClearance( pad, &m_clearanceSource );
+        int  clearanceAllowed = minClearance - epsilon;
         int  actual;
 
-        if( !checkClearancePadToPad( aRefPad, pad, minClearance, &actual ) )
+        if( !checkClearancePadToPad( aRefPad, pad, clearanceAllowed, &actual ) )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD );
 
