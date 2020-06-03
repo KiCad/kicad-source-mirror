@@ -600,7 +600,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     // Type of pad selection
     bool aperture = m_dummyPad->GetAttribute() == PAD_ATTRIB_CONN && m_dummyPad->IsAperturePad();
-    bool mechanical = m_dummyPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED;
 
     if( aperture )
     {
@@ -1252,7 +1251,8 @@ void DIALOG_PAD_PROPERTIES::redraw()
         if( maxYExtent > INT_MAX / 4 )
             maxYExtent = INT_MAX / 4;
 
-        BOX2D viewBox, canvasBox;
+        BOX2D viewBox( m_dummyPad->GetPosition(), {0, 0} );
+        BOX2D canvasBox( m_dummyPad->GetPosition(), {0, 0} );
         viewBox.Inflate( maxXExtent * 1.4, maxYExtent * 1.4 );  // add a margin
         canvasBox.Inflate( maxXExtent * 2.0, maxYExtent * 2.0 );
 
