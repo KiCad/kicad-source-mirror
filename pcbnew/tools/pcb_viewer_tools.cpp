@@ -22,6 +22,7 @@
  */
 
 #include <3d_viewer/eda_3d_viewer.h>
+#include <kiplatform/ui.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 #include <preview_items/ruler_item.h>
@@ -63,19 +64,14 @@ int PCB_VIEWER_TOOLS::Show3DViewer( const TOOL_EVENT& aEvent )
 {
     EDA_3D_VIEWER* draw3DFrame = frame()->CreateAndShow3D_Frame();
 
-    // Suppress warnings on non-Mac systems
-    [&draw3DFrame] {}();
-
     if( frame()->IsType( FRAME_FOOTPRINT_VIEWER )
      || frame()->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
      || frame()->IsType( FRAME_FOOTPRINT_WIZARD ) )
     {
         frame()->Update3DView( true );
 
-#ifdef __WXMAC__
         // A stronger version of Raise() which promotes the window to its parent's level.
-        draw3DFrame->ReparentQuasiModal();
-#endif
+        KIPLATFORM::UI::ReparentQuasiModal( draw3DFrame );
     }
     return 0;
 }

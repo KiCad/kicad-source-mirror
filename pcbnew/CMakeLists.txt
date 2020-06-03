@@ -665,6 +665,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     pnsrouter
     pcad2kicadpcb
     altium2kicadpcb
+    kiplatform
     common
     gal
     dxflib_qcad

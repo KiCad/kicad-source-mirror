@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <kiplatform/ui.h>
 
 #include <widgets/net_selector.h>
 
@@ -501,11 +502,7 @@ protected:
 
     void doSetFocus( wxWindow* aWindow )
     {
-#ifdef __WXOSX_MAC__
-        aWindow->OSXForceFocus();
-#else
-        aWindow->SetFocus();
-#endif
+        KIPLATFORM::UI::ForceFocus( aWindow );
     }
 
 protected:

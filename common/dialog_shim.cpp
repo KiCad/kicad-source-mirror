@@ -23,12 +23,15 @@
  */
 
 #include <dialog_shim.h>
+#include <eda_rect.h>
 #include <kiway_player.h>
-#include <wx/evtloop.h>
 #include <pgm_base.h>
 #include <tool/tool_manager.h>
-#include <eda_rect.h>
+
+#include <kiplatform/ui.h>
+
 #include <wx/display.h>
+#include <wx/evtloop.h>
 #include <wx/grid.h>
 
 /// Toggle a window's "enable" status to disabled, then enabled on destruction.
@@ -395,13 +398,13 @@ int DIALOG_SHIM::ShowQuasiModal()
     // quasi-modal: disable only my "optimal" parent
     m_qmodal_parent_disabler = new WDO_ENABLE_DISABLE( parent );
 
-#ifdef  __WXMAC__
+
     // Apple in its infinite wisdom will raise a disabled window before even passing
     // us the event, so we have no way to stop it.  Instead, we must set an order on
     // the windows so that the quasi-modal will be pushed in front of the disabled
     // window when it is raised.
-    ReparentQuasiModal();
-#endif
+    KIPLATFORM::UI::ReparentQuasiModal( this );
+
     Show( true );
 
     m_qmodal_showing = true;

@@ -418,6 +418,7 @@ add_dependencies( common version_header )
 
 target_link_libraries( common
     kimath
+    kiplatform
     bitmaps
     gal
     ${Boost_LIBRARIES}
@@ -515,6 +516,7 @@ target_include_directories( pcbcommon PUBLIC
 target_link_libraries( pcbcommon PUBLIC
     common
     kimath
+    kiplatform
 )
 
 
