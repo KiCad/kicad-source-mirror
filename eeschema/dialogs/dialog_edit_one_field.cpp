@@ -143,7 +143,10 @@ void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent
 
     if( frame->ShowModal( &fpid, this ) )
     {
-        m_TextCtrl->SetValue( fpid );
+        if( m_StyledTextCtrl->IsShown() )
+            m_StyledTextCtrl->SetValue( fpid );
+        else
+            m_TextCtrl->SetValue( fpid );
     }
 
     frame->Destroy();
