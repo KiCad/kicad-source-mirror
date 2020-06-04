@@ -95,7 +95,7 @@ public:
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         TYPE_ID thisType = TYPE_HASH( *this );
         void* object = propMgr.TypeCast( this, thisType, aProperty->OwnerHash() );
-        return object ? aProperty->get<T>( object ) : wxAny();
+        return object ? aProperty->get<T>( object ) : T();
     }
 
     template<typename T>
