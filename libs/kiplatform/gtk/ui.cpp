@@ -35,7 +35,7 @@ void KIPLATFORM::UI::ReparentQuasiModal( wxNonOwnedWindow* aWindow )
 }
 
 
-void KIPLATFORM::UI::FixupCancelButtonCmdCopyCollision( wxWindow *aWindow )
+void KIPLATFORM::UI::FixupCancelButtonCmdKeyCollision( wxWindow *aWindow )
 {
     // Not needed on this platform
 }
