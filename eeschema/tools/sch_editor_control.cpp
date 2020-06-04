@@ -926,7 +926,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         if( item->Type() == SCH_COMPONENT_T )
             comp = static_cast<SCH_COMPONENT*>( item );
 
-        if( comp->GetPartRef() && comp->GetPartRef()->IsPower() )
+        if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
             itemConn = comp->Connection( m_frame->GetCurrentSheet() );
         else
             itemConn = item->Connection( m_frame->GetCurrentSheet() );
