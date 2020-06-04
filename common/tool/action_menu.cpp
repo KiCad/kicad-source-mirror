@@ -404,19 +404,19 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
                 keyEvent.m_shiftDown = ( acceleratorKey->GetFlags() & wxMOD_SHIFT ) > 0;
                 keyEvent.m_altDown = ( acceleratorKey->GetFlags() & wxMOD_ALT ) > 0;
 
-                if( dynamic_cast<wxStyledTextCtrl*>( focus ) )
-                    focus->HandleWindowEvent( keyEvent );
-                else if( dynamic_cast<wxTextEntry*>( focus ) )
+                if( dynamic_cast<wxTextEntry*>( focus ) )
                     TEXTENTRY_TRICKS::OnCharHook( dynamic_cast<wxTextEntry*>( focus ), keyEvent );
+                else
+                    focus->HandleWindowEvent( keyEvent );
 
                 if( keyEvent.GetSkipped() )
                 {
                     keyEvent.SetEventType( wxEVT_CHAR );
                     focus->HandleWindowEvent( keyEvent );
                 }
-            }
 
-            return;
+                return;
+            }
         }
 
         // Store the selected position, so it can be checked by the tools
