@@ -582,6 +582,9 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     FRAME_T       playerType = aEvent.Parameter<FRAME_T>();
     KIWAY_PLAYER* player;
 
+    // Prevent multiple KIWAY_PLAYER loading at one time
+    const std::lock_guard<std::mutex> lock( m_loading );
+
     try
     {
         player = m_frame->Kiway().Player( playerType, true );
