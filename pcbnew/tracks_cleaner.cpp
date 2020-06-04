@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -267,7 +267,10 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
         // Ensure the connectivity is up to date, especially after removind a dangling segment
         m_brd->BuildConnectivity();
 
-        for( TRACK* track : m_brd->Tracks() )
+        // Keep a duplicate deque to all deleting in the primary
+        std::deque<TRACK*> temp_tracks( m_brd->Tracks() );
+
+        for( TRACK* track : temp_tracks )
         {
             bool    flag_erase = false; // Start without a good reason to erase it
             wxPoint pos;
@@ -393,8 +396,11 @@ bool TRACKS_CLEANER::cleanupSegments()
 
     modified |= removeItems( toRemove );
 
+    // Keep a duplicate deque to all deleting in the primary
+    std::deque<TRACK*> temp_segments( m_brd->Tracks() );
+
     // merge collinear segments:
-    for( TRACK* segment : m_brd->Tracks() )
+    for( TRACK* segment : temp_segments )
     {
         if( segment->Type() != PCB_TRACE_T )    // one can merge only track collinear segments, not vias.
             continue;
