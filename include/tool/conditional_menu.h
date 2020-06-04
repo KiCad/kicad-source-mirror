@@ -160,14 +160,15 @@ private:
             m_data.menu = aMenu;
         }
 
-        ENTRY( wxMenuItem* aItem, const BITMAP_OPAQUE* aWxMenuBitmap,
-                SELECTION_CONDITION aCondition, int aOrder, bool aCheckmark ) :
+        ENTRY( const wxMenuItem& aItem, const BITMAP_OPAQUE* aWxMenuBitmap,
+               SELECTION_CONDITION aCondition, int aOrder, bool aCheckmark ) :
             m_type( WXITEM ), m_icon( aWxMenuBitmap ),
             m_condition( aCondition ),
             m_order( aOrder ),
             m_isCheckmarkEntry( aCheckmark )
         {
-            m_data.wxItem = aItem;
+            m_data.wxItem = new wxMenuItem( nullptr, aItem.GetId(), aItem.GetItemLabel(),
+                                            aItem.GetHelp(), aItem.GetKind() );
         }
 
         // Separator
@@ -178,6 +179,10 @@ private:
             m_isCheckmarkEntry( false )
         {
         }
+
+        ENTRY( const ENTRY& aEntry );
+
+        ~ENTRY();
 
         ///> Possible entry types.
         enum ENTRY_TYPE {
@@ -239,6 +244,8 @@ private:
         ENTRY_TYPE m_type;
         const BITMAP_OPAQUE* m_icon;
 
+        // This class owns the wxItem object and needs to create, copy and delete it accordingly
+        // But it does not own the action nor menu item
         union {
             const TOOL_ACTION* action;
             ACTION_MENU*       menu;

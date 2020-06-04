@@ -64,10 +64,10 @@ void CONDITIONAL_MENU::AddItem( int aId, const wxString& aText, const wxString& 
                                 BITMAP_DEF aIcon, const SELECTION_CONDITION& aCondition,
                                 int aOrder )
 {
-    wxMenuItem* item = new wxMenuItem( nullptr, aId, aText, aTooltip, wxITEM_NORMAL );
+    wxMenuItem item( nullptr, aId, aText, aTooltip, wxITEM_NORMAL );
 
     if( aIcon )
-        AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
+        AddBitmapToMenuItem( &item, KiBitmap( aIcon ) );
 
     addEntry( ENTRY( item, aIcon, aCondition, aOrder, false ) );
 }
@@ -77,10 +77,10 @@ void CONDITIONAL_MENU::AddCheckItem( int aId, const wxString& aText, const wxStr
                                      BITMAP_DEF aIcon, const SELECTION_CONDITION& aCondition,
                                      int aOrder )
 {
-    wxMenuItem* item = new wxMenuItem( nullptr, aId, aText, aTooltip, wxITEM_CHECK );
+    wxMenuItem item( nullptr, aId, aText, aTooltip, wxITEM_CHECK );
 
     if( aIcon )
-        AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
+        AddBitmapToMenuItem( &item, KiBitmap( aIcon ) );
 
     addEntry( ENTRY( item, aIcon, aCondition, aOrder, true ) );
 }
@@ -249,3 +249,39 @@ void CONDITIONAL_MENU::addEntry( ENTRY aEntry )
 
     m_entries.insert( it, aEntry );
 }
+
+CONDITIONAL_MENU::ENTRY::ENTRY( const ENTRY& aEntry )
+{
+    m_type = aEntry.m_type;
+    m_icon = aEntry.m_icon;
+
+    switch( aEntry.m_type )
+    {
+    case ACTION:
+        m_data.action = aEntry.m_data.action;
+        break;
+    case MENU:
+        m_data.menu = aEntry.m_data.menu;
+        break;
+    case WXITEM:
+        // We own the wxItem, so we need to make a new one for the new object
+        m_data.wxItem = new wxMenuItem( nullptr,
+                                        aEntry.m_data.wxItem->GetId(),
+                                        aEntry.m_data.wxItem->GetItemLabel(),
+                                        aEntry.m_data.wxItem->GetHelp(),
+                                        aEntry.m_data.wxItem->GetKind() );
+        break;
+    case SEPARATOR:
+        break; //No data to copy
+    }
+    m_condition        = aEntry.m_condition;
+    m_order            = aEntry.m_order;
+    m_isCheckmarkEntry = aEntry.m_isCheckmarkEntry;
+}
+
+CONDITIONAL_MENU::ENTRY::~ENTRY()
+{
+    if( WXITEM == m_type )
+        delete m_data.wxItem;
+}
+
