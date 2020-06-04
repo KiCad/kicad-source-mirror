@@ -44,11 +44,11 @@
 #include <cvpcb_mainframe.h>
 #include <cvpcb_settings.h>
 #include <display_footprints_frame.h>
+#include <kiplatform/ui.h>
 #include <listboxes.h>
 #include <tools/cvpcb_actions.h>
 #include <tools/cvpcb_association_tool.h>
 #include <tools/cvpcb_control.h>
-#include <libs/kiplatform/include/kiplatform/ui.h>
 
 #define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
 
