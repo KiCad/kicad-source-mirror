@@ -24,7 +24,7 @@
 
 #include <wx/nonownedwnd.h>
 #include <wx/toplevel.h>
-#include <wx/window.h>
+#include <wx/button.h>
 
 void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 {
@@ -45,3 +45,21 @@ void KIPLATFORM::UI::ReparentQuasiModal( wxNonOwnedWindow* aWindow )
 
     [parentWindow addChildWindow:theWindow ordered:NSWindowAbove];
 }
+
+
+void KIPLATFORM::UI::FixupCancelButtonCmdKeyCollision( wxWindow *aWindow )
+{
+    wxButton* button = dynamic_cast<wxButton*>( wxWindow::FindWindowById( wxID_CANCEL, aWindow ) );
+
+    if( button )
+    {
+        static const wxString placeholder = wxT( "{amp}" );
+
+        wxString buttonLabel = button->GetLabel();
+        buttonLabel.Replace( wxT( "&&" ), placeholder );
+        buttonLabel.Replace( wxT( "&" ), wxEmptyString );
+        buttonLabel.Replace( placeholder, wxT( "&" ) );
+        button->SetLabel( buttonLabel );
+    }
+}
+

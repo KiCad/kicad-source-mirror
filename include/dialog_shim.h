@@ -70,7 +70,6 @@ class WX_EVENT_LOOP;
  #define SHOWQUASIMODAL     ShowQuasiModal
  #define ENDQUASIMODAL      EndQuasiModal
 
-
 /**
  * Dialog helper object to sit in the inheritance tree between wxDialog and any class written
  * by wxFormBuilder.
@@ -145,6 +144,8 @@ public:
         return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() &&
                 e.ShiftDown() && !e.MetaDown();
     }
+
+    static void FixOSXCancelButtonIssue( wxWindow *aWindow );
 
 protected:
 

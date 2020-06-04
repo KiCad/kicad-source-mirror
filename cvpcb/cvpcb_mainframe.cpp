@@ -48,6 +48,7 @@
 #include <tools/cvpcb_actions.h>
 #include <tools/cvpcb_association_tool.h>
 #include <tools/cvpcb_control.h>
+#include <libs/kiplatform/include/kiplatform/ui.h>
 
 #define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
 
@@ -149,6 +150,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     bottomPanel->Fit();
 
     sdbSizerOK->SetDefault();
+    KIPLATFORM::UI::FixupCancelButtonCmdKeyCollision( this );
 
     m_auimgr.AddPane( bottomPanel, EDA_PANE().HToolbar().Name( "Buttons" ).Bottom().Layer(6) );
 

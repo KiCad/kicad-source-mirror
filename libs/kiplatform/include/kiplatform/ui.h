@@ -50,6 +50,16 @@ namespace KIPLATFORM
          * @param aWindow is the window to reparent
          */
         void ReparentQuasiModal( wxNonOwnedWindow* aWindow );
+
+        /*
+         * An ugly hack to fix an issue on OSX: cmd+c closes the dialog instead of copying the
+         * text if a button with wxID_CANCEL is used in a wxStdDialogButtonSizer created by
+         * wxFormBuilder: the label is &Cancel, and this accelerator key has priority over the
+         * standard copy accelerator.
+         * Note: problem also exists in other languages; for instance cmd+a closes dialogs in
+         * German because the button is &Abbrechen.
+         */
+        void FixupCancelButtonCmdKeyCollision( wxWindow* aWindow );
     }
 }
 
