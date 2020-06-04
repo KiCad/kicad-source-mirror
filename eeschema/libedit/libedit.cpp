@@ -861,7 +861,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     }
 
     // Verify the user has write privileges before attempting to save the library file.
-    if( m_libMgr->IsLibraryReadOnly( aLibrary ) )
+    if( !aNewFile && m_libMgr->IsLibraryReadOnly( aLibrary ) )
         return false;
 
     ClearMsgPanel();
