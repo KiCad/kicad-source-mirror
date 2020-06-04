@@ -1210,9 +1210,7 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
 {
     const static LSET all_cu = LSET::AllCuMask();
 
-    // Allow an epsilon at least as great as our allowed polygonisation error.
-    int    epsilon = m_pcb->GetDesignSettings().m_MaxError;
-    LSET   layerMask = aRefPad->GetLayerSet() & all_cu;
+    LSET layerMask = aRefPad->GetLayerSet() & all_cu;
 
     // For hole testing we use a dummy pad which is given the shape of the hole.  Note that
     // this pad must have a parent because some functions expect a non-null parent to find
@@ -1347,7 +1345,7 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
         }
 
         int  minClearance = aRefPad->GetClearance( pad, &m_clearanceSource );
-        int  clearanceAllowed = minClearance - epsilon;
+        int  clearanceAllowed = minClearance - m_pcb->GetDesignSettings().GetDRCEpsilon();
         int  actual;
 
         if( !checkClearancePadToPad( aRefPad, pad, clearanceAllowed, &actual ) )
@@ -1378,7 +1376,7 @@ void DRC::setTransitions()
 }
 
 
-const int EPSILON = Mils2iu( 5 );
+const int UI_EPSILON = Mils2iu( 5 );
 
 
 wxPoint DRC::GetLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone )
@@ -1400,7 +1398,7 @@ wxPoint DRC::GetLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone )
     // Otherwise do a binary search for a "good enough" marker location
     else
     {
-        while( GetLineLength( pt1, pt2 ) > EPSILON )
+        while( GetLineLength( pt1, pt2 ) > UI_EPSILON )
         {
             if( conflictOutline->SquaredDistance( pt1 ) < conflictOutline->SquaredDistance( pt2 ) )
                 pt2 = ( pt1 + pt2 ) / 2;
@@ -1408,7 +1406,7 @@ wxPoint DRC::GetLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone )
                 pt1 = ( pt1 + pt2 ) / 2;
         }
 
-        // Once we're within EPSILON pt1 and pt2 are "equivalent"
+        // Once we're within UI_EPSILON pt1 and pt2 are "equivalent"
         return pt1;
     }
 }
@@ -1420,7 +1418,7 @@ wxPoint DRC::GetLocation( TRACK* aTrack, const SEG& aConflictSeg )
     wxPoint pt2 = aTrack->GetEnd();
 
     // Do a binary search along the track for a "good enough" marker location
-    while( GetLineLength( pt1, pt2 ) > EPSILON )
+    while( GetLineLength( pt1, pt2 ) > UI_EPSILON )
     {
         if( aConflictSeg.SquaredDistance( pt1 ) < aConflictSeg.SquaredDistance( pt2 ) )
             pt2 = ( pt1 + pt2 ) / 2;
@@ -1428,7 +1426,7 @@ wxPoint DRC::GetLocation( TRACK* aTrack, const SEG& aConflictSeg )
             pt1 = ( pt1 + pt2 ) / 2;
     }
 
-    // Once we're within EPSILON pt1 and pt2 are "equivalent"
+    // Once we're within UI_EPSILON pt1 and pt2 are "equivalent"
     return pt1;
 }
 

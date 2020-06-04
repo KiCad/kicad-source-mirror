@@ -83,6 +83,10 @@
 #define MINIMUM_ERROR_SIZE_MM         0.001
 #define MAXIMUM_ERROR_SIZE_MM         0.1
 
+#define DRC_EPSILON                   5;      // An epsilon to account for rounding errors, etc.
+                                              // 5nm is small enough not to materially violate
+                                              // any constraints.
+
 /**
  * Struct VIA_DIMENSION
  * is a small helper container to handle a stock of specific vias each with
@@ -848,6 +852,13 @@ public:
 
     inline int GetBoardThickness() const { return m_boardThickness; }
     inline void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
+
+    /*
+     * Function GetDRCEpsilon
+     * an epsilon which accounts for rounding errors, etc.  While currently a global, going
+     * through this API allows us to easily change it to board-specific if so desired.
+     */
+    int GetDRCEpsilon() const { return DRC_EPSILON; }
 
     /**
      * Function GetLineThickness
