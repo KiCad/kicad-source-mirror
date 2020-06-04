@@ -1,0 +1,77 @@
+/*
+    This file is part of libeval, a simple math expression evaluator
+
+    Copyright (C) 2017 Michael Geselbracht, mgeselbracht3@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+%token_type { LIBEVAL::TREE_NODE }
+%extra_argument { LIBEVAL::COMPILER* pEval }
+
+%nonassoc G_IDENTIFIER G_ASSIGN G_SEMCOL.
+%nonassoc G_BOOL_OR G_BOOL_AND G_BOOL_XOR.
+%nonassoc G_LESS_THAN G_GREATER_THAN G_LESS_EQUAL_THAN G_GREATER_EQUAL_THAN.
+%nonassoc G_EQUAL G_NOT_EQUAL.
+%right G_UNIT.
+%left G_BOOL_NOT.
+%left G_PLUS G_MINUS.
+%left G_DIVIDE G_MULT.
+%nonassoc G_STRUCT_REF.
+
+%include {
+#include <assert.h>
+#include "libeval_compiler.h"
+}
+
+%syntax_error {
+  pEval->parseError("Syntax error");
+}
+
+%parse_accept {
+  pEval->parseOk();
+}
+
+main ::= in.
+
+/* Allow multiple statements in input string: x=1; y=2 */
+in ::= stmt.
+in ::= in stmt.
+
+/* A statement can be empty, an expr or an expr followed by ';' */
+stmt ::= G_ENDS.
+stmt ::= expr(A) G_ENDS.                    { pEval->setRoot(A); }
+//stmt ::= expr G_SEMCOL.                   { pEval->setRoot(NULL) }
+
+expr(A) ::= G_VALUE(B).                     { A.op = TR_NUMBER; A.value = B.value; A.leaf[0] = A.leaf[1] = NULL; A.valid = true; }
+expr(A) ::= G_VALUE(B) G_UNIT(C).           { A.op = TR_NUMBER; A.value = B.value; A.leaf[0] = newNode( TR_UNIT, C.value.type, ""); A.leaf[1] = NULL; A.valid = true; }
+expr(A) ::= G_STRING(B).                    { A.op = TR_STRING; A.value = B.value; A.leaf[0] = A.leaf[1] = NULL; A.valid = true; }
+expr(A) ::= G_IDENTIFIER(B).                { A.op = TR_IDENTIFIER; A.value = B.value; A.leaf[0] = A.leaf[1] = NULL; A.valid = true; }
+expr(A) ::= expr(B) G_LESS_THAN expr(C).    { A.op = TR_OP_LESS; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_GREATER_THAN expr(C). { A.op = TR_OP_GREATER; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_LESS_EQUAL_THAN expr(C).    { A.op = TR_OP_LESS_EQUAL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_GREATER_EQUAL_THAN expr(C). { A.op = TR_OP_GREATER_EQUAL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_NOT_EQUAL expr(C).    { A.op = TR_OP_NOT_EQUAL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_BOOL_AND expr(C).     { A.op = TR_OP_BOOL_AND; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_BOOL_OR expr(C).      { A.op = TR_OP_BOOL_OR; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_PLUS expr(C).         { A.op = TR_OP_ADD; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_MINUS expr(C).        { A.op = TR_OP_SUB; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_MULT expr(C).         { A.op = TR_OP_MUL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_DIVIDE expr(C).       { A.op = TR_OP_DIV; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+expr(A) ::= expr(B) G_EQUAL expr(C).        { A.op = TR_OP_EQUAL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+
+expr(A) ::= expr(B) G_STRUCT_REF expr(C).       { A.op = TR_STRUCT_REF; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C);  A.valid=B.valid && C.valid; }
+
+expr(A) ::= G_PARENL expr(B) G_PARENR.        { A.op = B.op; A.value = B.value; A.valid=B.valid;  A.leaf[0] = B.leaf[0]; A.leaf[1] = B.leaf[1]; }
+expr(A) ::= G_IDENTIFIER(func_name) G_PARENL expr(B) G_PARENR.        { A.op = TR_OP_FUNC_CALL;  A.leaf[0] = copyNode(func_name); A.leaf[1] = copyNode(B);  A.valid=1; }

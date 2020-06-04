@@ -121,6 +121,7 @@ program;
 
 PGM_BASE& Pgm()
 {
+    printf("Pgm @ %p\n", &program );
     return program;
 }
 
@@ -129,7 +130,7 @@ PGM_BASE& Pgm()
 // is run from a python script, mot from a Kicad application
 PGM_BASE* PgmOrNull()
 {
-    return &program;
+    return nullptr; //&program;
 }
 
 
