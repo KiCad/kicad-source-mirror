@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -777,7 +777,13 @@ void ROUTER_TOOL::performRouting()
         frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
 
         // Don't crash if we missed an operation that cancelled routing.
-        wxCHECK2( m_router->RoutingInProgress(), break );
+        if( !m_router->RoutingInProgress() )
+        {
+            if( evt->IsCancelInteractive() )
+                m_cancelled = true;
+
+            break;
+        }
 
         handleCommonEvents( *evt );
 
