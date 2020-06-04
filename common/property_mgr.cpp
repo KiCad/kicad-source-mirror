@@ -56,7 +56,7 @@ PROPERTY_BASE* PROPERTY_MANAGER::GetProperty( TYPE_ID aType, const wxString& aPr
 
     for( const auto& property : classDesc.m_allProperties )
     {
-        if( property->Name() == aProperty )
+        if( !aProperty.CmpNoCase( property->Name() ) )
             return property;
     }
 
