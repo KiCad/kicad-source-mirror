@@ -36,6 +36,7 @@
 #include <id.h>
 #include <eda_base_frame.h>
 #include <kiway_player.h>
+#include <mutex>
 
 #define KICAD_MANAGER_FRAME_NAME   wxT( "KicadFrame" )
 
@@ -304,6 +305,9 @@ private:
     void language_change( wxCommandEvent& event );
 
     bool m_active_project;
+
+    // Mutex to allow only a single KiFace to load at one time (released when loaded)
+    std::mutex m_loading;
 };
 
 

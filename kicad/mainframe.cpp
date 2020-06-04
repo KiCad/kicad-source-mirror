@@ -316,6 +316,9 @@ void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName
 {
     KIWAY_PLAYER* frame;
 
+    // Prevent multiple KiFace loading at one time
+    const std::lock_guard<std::mutex> lock( m_loading );
+
     try
     {
         frame = Kiway().Player( FRAME_SCH, true );
@@ -361,6 +364,9 @@ void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
 {
     KIWAY_PLAYER* frame;
 
+    // Prevent multiple KiFace loading at one time
+    const std::lock_guard<std::mutex> lock( m_loading );
+
     try
     {
         frame = Kiway().Player( FRAME_SCH_LIB_EDITOR, true );
@@ -386,6 +392,9 @@ void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
 {
     KIWAY_PLAYER* frame;
+
+    // Prevent multiple KiFace loading at one time
+    const std::lock_guard<std::mutex> lock( m_loading );
 
     try
     {
@@ -429,6 +438,9 @@ void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
 {
     KIWAY_PLAYER* frame;
+
+    // Prevent multiple KiFace loading at one time
+    const std::lock_guard<std::mutex> lock( m_loading );
 
     try
     {
