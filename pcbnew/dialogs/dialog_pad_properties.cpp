@@ -663,6 +663,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     wxCommandEvent cmd_event;
     setPadLayersList( m_dummyPad->GetLayerSet() );
     OnPadShapeSelection( cmd_event );
+    OnOffsetCheckbox( cmd_event );
 
     // Update basic shapes list
     displayPrimitivesList();
@@ -838,6 +839,14 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         break;
     }
 
+    // Readjust props book size
+    wxSize size = m_shapePropsBook->GetSize();
+    size.y = m_shapePropsBook->GetPage( m_shapePropsBook->GetSelection() )->GetBestSize().y;
+    m_shapePropsBook->SetMaxSize( size );
+
+    for( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
+        m_notebook->GetPage( i )->Layout();
+
     m_sizeY.Enable( m_PadShape->GetSelection() != CHOICE_SHAPE_CIRCLE
                     && m_PadShape->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
 
@@ -966,22 +975,13 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     if( !m_padToDieOpt->IsEnabled() )
         m_padToDieOpt->SetValue( false );
 
-    // Show/hide extra properties
-    wxSize size = m_shapePropsBook->GetSize();
-    size.y = m_shapePropsBook->GetPage( m_shapePropsBook->GetSelection() )->GetBestSize().y;
-    m_shapePropsBook->SetMaxSize( size );
-
-    // Show/hide offset controls
-    m_offsetCtrls->Show( m_offsetShapeOpt->GetValue() );
-    m_offsetShapeOptLabel->Show( m_offsetShapeOpt->GetValue() );
+    // We can show/hide this here because it doesn't require the layout to be refreshed.
+    // All the others have to be done in their event handlers because doing a layout here
+    // causes infinite looping on MSW.
     m_padToDie.Show( m_padToDieOpt->GetValue() );
 
     // Enable/disable Copper Layers control
     m_rbCopperLayersSel->Enable( ii != 4 );
-
-    // Adjust for any shown/hidden elements
-    for( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
-        m_notebook->GetPage( i )->Layout();
 }
 
 
@@ -1757,6 +1757,13 @@ void DIALOG_PAD_PROPERTIES::OnOffsetCheckbox( wxCommandEvent& event )
         m_offsetX.SetValue( m_currentPad->GetOffset().x );
         m_offsetY.SetValue( m_currentPad->GetOffset().y );
     }
+
+    // Show/hide controls
+    m_offsetCtrls->Show( m_offsetShapeOpt->GetValue() );
+    m_offsetShapeOptLabel->Show( m_offsetShapeOpt->GetValue() );
+
+    for( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
+        m_notebook->GetPage( i )->Layout();
 
     OnValuesChanged( event );
 }
