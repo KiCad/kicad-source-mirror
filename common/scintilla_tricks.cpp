@@ -129,6 +129,11 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     {
         if( m_te->GetSelectionEnd() > m_te->GetSelectionStart() )
             m_te->DeleteBack();
+        else
+        {
+            m_te->CharRight();
+            m_te->DeleteBack();
+        }
     }
     else
     {

@@ -59,12 +59,12 @@ void TEXTENTRY_TRICKS::OnCharHook( wxTextEntry* aTextEntry, wxKeyEvent& aEvent )
         long start, end;
         aTextEntry->GetSelection( &start, &end );
 
-        if( start > end )
+        if( end > start )
         {
             aTextEntry->Remove( start, end );
             aTextEntry->SetInsertionPoint( start );
         }
-        else if (start == end && start > 0 )
+        else if ( start == end && start > 0 )
         {
             aTextEntry->Remove( start-1, start );
             aTextEntry->SetInsertionPoint( start-1 );
@@ -79,6 +79,10 @@ void TEXTENTRY_TRICKS::OnCharHook( wxTextEntry* aTextEntry, wxKeyEvent& aEvent )
         {
             aTextEntry->Remove( start, end );
             aTextEntry->SetInsertionPoint( start );
+        }
+        else if( start == end && start < aTextEntry->GetLastPosition() )
+        {
+            aTextEntry->Remove( start, start+1 );
         }
     }
     else
