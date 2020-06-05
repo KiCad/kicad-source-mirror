@@ -234,7 +234,7 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 {
     // Mandatory to avoid m_panelShowPadGal trying to draw something
     // in a non valid context during closing process:
-    m_panelShowPadGal->StopDrawing();
+    m_padPreviewGAL->StopDrawing();
 
     // Now call default handler for wxID_CANCEL command event
     event.Skip();
@@ -256,6 +256,16 @@ void DIALOG_PAD_PROPERTIES::enablePrimitivePage( bool aEnable )
 void DIALOG_PAD_PROPERTIES::prepareCanvas()
 {
     // Initialize the canvas to display the pad
+#ifdef __WXMAC__
+    // Cairo renderer doesn't handle Retina displays
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+#else
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+#endif
+    m_padPreviewGAL = new PCB_DRAW_PANEL_GAL( this, -1, wxDefaultPosition, wxDefaultSize,
+                                              m_parent->GetGalDisplayOptions(), backend );
+
+    m_padPreviewSizer->Add( m_padPreviewGAL, 12, wxEXPAND | wxALL, 5 );
 
     // Show the X and Y axis. It is usefull because pad shape can have an offset
     // or be a complex shape.
@@ -266,16 +276,15 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
                                                VECTOR2D( m_dummyPad->GetPosition() ) );
     m_axisOrigin->SetDrawAtZero( true );
 
-    m_panelShowPadGal->UpdateColors();
-    m_panelShowPadGal->SwitchBackend( m_parent->GetCanvas()->GetBackend() );
-    m_panelShowPadGal->SetStealsFocus( false );
+    m_padPreviewGAL->UpdateColors();
+    m_padPreviewGAL->SetStealsFocus( false );
 
-    m_panelShowPadGal->GetViewControls()->ApplySettings(
+    m_padPreviewGAL->GetViewControls()->ApplySettings(
             m_parent->GetCanvas()->GetViewControls()->GetSettings() );
 
-    m_panelShowPadGal->Show();
+    m_padPreviewGAL->Show();
 
-    KIGFX::VIEW* view = m_panelShowPadGal->GetView();
+    KIGFX::VIEW* view = m_padPreviewGAL->GetView();
 
     // fix the pad render mode (filled/not filled)
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
@@ -293,7 +302,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     view->Add( m_dummyPad );
     view->Add( m_axisOrigin );
 
-    m_panelShowPadGal->StartDrawing();
+    m_padPreviewGAL->StartDrawing();
     Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PAD_PROPERTIES::OnResize ) );
 }
 
@@ -766,7 +775,7 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
 {
     m_sketchPreview = m_cbShowPadOutline->GetValue();
 
-    KIGFX::VIEW* view = m_panelShowPadGal->GetView();
+    KIGFX::VIEW* view = m_padPreviewGAL->GetView();
 
     // fix the pad render mode (filled/not filled)
     KIGFX::PCB_RENDER_SETTINGS* settings =
@@ -1199,8 +1208,11 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
 void DIALOG_PAD_PROPERTIES::redraw()
 {
-    KIGFX::VIEW* view = m_panelShowPadGal->GetView();
-    m_panelShowPadGal->StopDrawing();
+    if( !m_canUpdate )
+        return;
+
+    KIGFX::VIEW* view = m_padPreviewGAL->GetView();
+    m_padPreviewGAL->StopDrawing();
 
     // The layer used to place primitive items selected when editing custom pad shapes
     // we use here a layer never used in a pad:
@@ -1298,8 +1310,8 @@ void DIALOG_PAD_PROPERTIES::redraw()
         // Autozoom
         view->SetViewport( viewBox );
 
-        m_panelShowPadGal->StartDrawing();
-        m_panelShowPadGal->Refresh();
+        m_padPreviewGAL->StartDrawing();
+        m_padPreviewGAL->Refresh();
     }
 }
 

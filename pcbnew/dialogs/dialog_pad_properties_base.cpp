@@ -852,6 +852,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerDisplayPad;
 	bSizerDisplayPad = new wxBoxSizer( wxVERTICAL );
 
+	bSizerDisplayPad->SetMinSize( wxSize( 290,-1 ) );
 
 	bSizerDisplayPad->Add( 0, 0, 0, wxBOTTOM|wxEXPAND|wxTOP, 3 );
 
@@ -870,10 +871,11 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	bSizerDisplayPad->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_panelShowPadGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, m_galOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO);
-	m_panelShowPadGal->SetMinSize( wxSize( 280,-1 ) );
+	m_padPreviewSizer = new wxBoxSizer( wxVERTICAL );
 
-	bSizerDisplayPad->Add( m_panelShowPadGal, 12, wxEXPAND|wxALL, 5 );
+	m_padPreviewSizer->SetMinSize( wxSize( 280,-1 ) );
+
+	bSizerDisplayPad->Add( m_padPreviewSizer, 12, wxEXPAND, 5 );
 
 	m_cbShowPadOutline = new wxCheckBox( this, wxID_ANY, _("Show pad in outline mode"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerDisplayPad->Add( m_cbShowPadOutline, 0, wxBOTTOM|wxRIGHT|wxTOP, 5 );

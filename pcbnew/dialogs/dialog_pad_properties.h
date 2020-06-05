@@ -69,6 +69,7 @@ private:
                                                    //     editing a custom pad shape
 
     std::vector<DRAWSEGMENT*>     m_highlight;     // shapes highlighted in GAL mode
+    PCB_DRAW_PANEL_GAL*           m_padPreviewGAL;
     KIGFX::ORIGIN_VIEWITEM*       m_axisOrigin;    // origin of the preview canvas
     static bool                   m_sketchPreview; // session storage
 

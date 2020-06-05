@@ -38,8 +38,6 @@ class WX_GRID;
 #include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
-#include <pcb_base_frame.h>
-#include <pcb_draw_panel_gal.h>
 #include <wx/dialog.h>
 #include <wx/spinctrl.h>
 #include <wx/grid.h>
@@ -211,8 +209,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_buttonDel;
 		wxStaticText* m_parentInfoLine1;
 		wxStaticText* m_parentInfoLine2;
-		PCB_DRAW_PANEL_GAL* m_panelShowPadGal;
-		KIGFX::GAL_DISPLAY_OPTIONS m_galOptions;
+		wxBoxSizer* m_padPreviewSizer;
 		wxCheckBox* m_cbShowPadOutline;
 		wxStaticLine* m_staticline13;
 		wxStdDialogButtonSizer* m_sdbSizer;
