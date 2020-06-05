@@ -650,44 +650,12 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
                 {
                     wxPoint start;
                     wxPoint end;
-                    wxPoint corner;
 
-                    SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
+                    int w = aPad->BuildSegmentFromOvalShape( start, end, aPad->GetOrientation(),
+                            wxSize( 0, 0 ) );
 
-                    int w = aPad->BuildSegmentFromOvalShape( start, end, 0.0, wxSize( 0, 0 ) );
-
-                    if( start.y == 0 )
-                        corner = wxPoint( start.x, -( w / 2 ) );
-                    else
-                        corner = wxPoint( w / 2, start.y );
-
-                    RotatePoint( &start, aPad->GetOrientation() );
-                    RotatePoint( &corner, aPad->GetOrientation() );
-                    shape->Append( wx_c + corner );
-
-                    for( int rot = 100; rot <= 1800; rot += 100 )
-                    {
-                        wxPoint p( corner );
-                        RotatePoint( &p, start, rot );
-                        shape->Append( wx_c + p );
-                    }
-
-                    if( end.y == 0 )
-                        corner = wxPoint( end.x, w / 2 );
-                    else
-                        corner = wxPoint( -( w / 2 ), end.y );
-
-                    RotatePoint( &end, aPad->GetOrientation() );
-                    RotatePoint( &corner, aPad->GetOrientation() );
-                    shape->Append( wx_c + corner );
-
-                    for( int rot = 100; rot <= 1800; rot += 100 )
-                    {
-                        wxPoint p( corner );
-                        RotatePoint( &p, end, rot );
-                        shape->Append( wx_c + p );
-                    }
-
+                    SHAPE_SEGMENT* shape = new SHAPE_SEGMENT( start, end, w );
+                    shape->Move( aPad->ShapePos() );
                     solid->SetShape( shape );
                 }
                 break;
