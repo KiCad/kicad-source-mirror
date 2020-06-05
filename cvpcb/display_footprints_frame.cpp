@@ -163,8 +163,9 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
     CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
-    wxASSERT( cfg );
-    GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
+
+    if( cfg )
+        GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
 
     updateView();
 
@@ -524,7 +525,7 @@ BOARD_ITEM_CONTAINER* DISPLAY_FOOTPRINTS_FRAME::GetModel() const
 void DISPLAY_FOOTPRINTS_FRAME::SetAutoZoom( bool aAutoZoom )
 {
     CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
-    wxASSERT( cfg );
+    wxCHECK( cfg, /* void */ );
     cfg->m_FootprintViewerAutoZoom = aAutoZoom;
 }
 
@@ -532,6 +533,6 @@ void DISPLAY_FOOTPRINTS_FRAME::SetAutoZoom( bool aAutoZoom )
 bool DISPLAY_FOOTPRINTS_FRAME::GetAutoZoom()
 {
     CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
-    wxASSERT( cfg );
+    wxCHECK( cfg, false );
     return cfg->m_FootprintViewerAutoZoom;
 }

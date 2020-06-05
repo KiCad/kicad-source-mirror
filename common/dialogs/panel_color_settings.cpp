@@ -279,7 +279,7 @@ void PANEL_COLOR_SETTINGS::updateColor( int aLayer, const KIGFX::COLOR4D& aColor
 
     m_swatches[aLayer]->SetSwatchColor( aColor, false );
 
-    if( aLayer == m_backgroundLayer )
+    if( m_currentSettings && aLayer == m_backgroundLayer )
     {
         COLOR4D background = m_currentSettings->GetColor( m_backgroundLayer );
 

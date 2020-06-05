@@ -31,8 +31,10 @@ using KIGFX::COLOR4D;
 const int viewer3dSchemaVersion = 0;
 
 
-EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
-        APP_SETTINGS_BASE( "3d_viewer", viewer3dSchemaVersion ), m_Render()
+EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
+        : APP_SETTINGS_BASE( "3d_viewer", viewer3dSchemaVersion ),
+          m_Render(),
+          m_Camera()
 {
     m_params.emplace_back( new PARAM<int>( "render.engine", &m_Render.engine,
             static_cast<int>( RENDER_ENGINE::OPENGL_LEGACY ),

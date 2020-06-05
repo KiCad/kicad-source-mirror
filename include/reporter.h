@@ -293,7 +293,11 @@ private:
 
 public:
     INFOBAR_REPORTER( WX_INFOBAR* aInfoBar )
-            : REPORTER(), m_messageSet( false ), m_infoBar( aInfoBar )
+            : REPORTER(),
+              m_messageSet( false ),
+              m_infoBar( aInfoBar ),
+              m_message( wxEmptyString ),
+              m_severity( RPT_SEVERITY_UNDEFINED )
     {
     }
 

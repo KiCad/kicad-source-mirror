@@ -86,15 +86,27 @@ END_EVENT_TABLE()
 
 EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* aBoard,
                               BOARD_ADAPTER& aBoardAdapter, CCAMERA& aCamera,
-                              S3D_CACHE* a3DCachePointer ) :
-        HIDPI_GL_CANVAS( aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
-                         wxFULL_REPAINT_ON_RESIZE ),
-        m_eventDispatcher( nullptr ),
-        m_parentStatusBar( nullptr ),
-        m_glRC( nullptr ),
-        m_boardAdapter( aBoardAdapter ),
-        m_camera( aCamera ),
-        m_3d_render( nullptr )
+                              S3D_CACHE* a3DCachePointer )
+        : HIDPI_GL_CANVAS( aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
+                           wxFULL_REPAINT_ON_RESIZE ),
+          m_eventDispatcher( nullptr ),
+          m_parentStatusBar( nullptr ),
+          m_parentInfoBar( nullptr ),
+          m_glRC( nullptr ),
+          m_is_opengl_initialized( false ),
+          m_mouse_is_moving( false ),
+          m_mouse_was_moved( false ),
+          m_camera_is_moving( false ),
+          m_render_pivot( false ),
+          m_camera_moving_speed( 1.0f ),
+          m_strtime_camera_movement( 0 ),
+          m_animation_enabled( true ),
+          m_moving_speed_multiplier( 3 ),
+          m_boardAdapter( aBoardAdapter ),
+          m_camera( aCamera ),
+          m_3d_render( nullptr ),
+          m_opengl_supports_raytracing( false ),
+          m_render_raytracing_was_requested( false )
 {
     wxLogTrace( m_logTrace, "EDA_3D_CANVAS::EDA_3D_CANVAS" );
 
@@ -111,21 +123,6 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
              wxTimerEventHandler( EDA_3D_CANVAS::OnTimerTimeout_Redraw ),
              NULL,
              this );
-
-    m_mouse_was_moved = false;
-    m_mouse_is_moving = false;
-    m_camera_is_moving = false;
-    m_render_pivot = false;
-    m_camera_moving_speed = 1.0f;
-    m_animation_enabled = true;
-    m_moving_speed_multiplier = 3;
-
-    m_strtime_camera_movement = 0;
-
-    m_is_opengl_initialized = false;
-
-    m_render_raytracing_was_requested = false;
-    m_opengl_supports_raytracing = false;
 
     m_3d_render_raytracing = new C3D_RENDER_RAYTRACING( m_boardAdapter, m_camera );
     m_3d_render_ogl_legacy = new C3D_RENDER_OGL_LEGACY( m_boardAdapter, m_camera );

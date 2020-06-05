@@ -976,7 +976,8 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
         redraw |= item->IsBrightened();
 
-        if( item->Type() == SCH_COMPONENT_T )
+        // comp is only non-null if the item is a SCH_COMPONENT_T
+        if( comp )
         {
             redraw |= comp->HasBrightenedPins();
 
