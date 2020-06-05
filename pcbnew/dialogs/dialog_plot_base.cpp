@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -160,6 +160,18 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_PlotOptionsSizer->Add( sbOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 
+	m_SizerSolderMaskAlert = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bitmapAlert = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_CMN_DIALOG ), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizerSolderMaskAlert->Add( m_bitmapAlert, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_staticTextAlert = new wxStaticText( this, wxID_ANY, _("Global solder mask min width and margin are not set to 0\nMost of board houses expect a 0 value and use their constraints\nPlease ensure the  solder mask min width and margin value are valid\nand use a non 0 value only when required."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAlert->Wrap( -1 );
+	m_SizerSolderMaskAlert->Add( m_staticTextAlert, 0, wxALL, 5 );
+
+
+	m_PlotOptionsSizer->Add( m_SizerSolderMaskAlert, 1, wxEXPAND, 5 );
+
 	m_GerberOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Gerber Options") ), wxHORIZONTAL );
 
 	wxGridBagSizer* gbSizer2;
@@ -174,6 +186,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	gbSizer2->Add( m_useGerberExtensions, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_generateGerberJobFile = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Generate Gerber job file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_generateGerberJobFile->SetValue(true);
 	m_generateGerberJobFile->SetToolTip( _("Generate a Gerber job file that contains info about the board,\nand the list of generated Gerber plot files") );
 
 	gbSizer2->Add( m_generateGerberJobFile, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
@@ -266,12 +279,12 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_widthAdjustLabel = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Track width correction:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthAdjustLabel->Wrap( -1 );
-	fgSizer2->Add( m_widthAdjustLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer2->Add( m_widthAdjustLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_widthAdjustCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthAdjustCtrl->SetToolTip( _("Set global width correction for exact width postscript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.") );
 
-	fgSizer2->Add( m_widthAdjustCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer2->Add( m_widthAdjustCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_widthAdjustUnits = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthAdjustUnits->Wrap( -1 );
@@ -286,25 +299,34 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_PlotOptionsSizer->Add( m_PSOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 
-	m_SizerDXF_options = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxVERTICAL );
+	m_SizerDXF_options = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxHORIZONTAL );
+
+	wxBoxSizer* bSizerdxfLeft;
+	bSizerdxfLeft = new wxBoxSizer( wxVERTICAL );
 
 	m_DXF_plotModeOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Plot graphic items using their contours"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DXF_plotModeOpt->SetValue(true);
 	m_DXF_plotModeOpt->SetToolTip( _("Uncheck to plot graphic items using their center lines") );
 
-	m_SizerDXF_options->Add( m_DXF_plotModeOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerdxfLeft->Add( m_DXF_plotModeOpt, 0, wxALL, 5 );
 
 	m_DXF_plotTextStrokeFontOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Use Pcbnew font to plot texts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DXF_plotTextStrokeFontOpt->SetToolTip( _("Check to use Pcbnew stroke font\nUncheck to plot oneline ASCII texts as editable text (using DXF font)") );
 
-	m_SizerDXF_options->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 5 );
+	bSizerdxfLeft->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 5 );
 
-	wxBoxSizer* dxfSizer1;
-	dxfSizer1 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_SizerDXF_options->Add( bSizerdxfLeft, 1, wxEXPAND, 5 );
+
+
+	m_SizerDXF_options->Add( 20, 0, 0, 0, 5 );
+
+	wxBoxSizer* dxfSizerRight;
+	dxfSizerRight = new wxBoxSizer( wxHORIZONTAL );
 
 	DXF_exportUnitsLabel = new wxStaticText( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Export units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	DXF_exportUnitsLabel->Wrap( -1 );
-	dxfSizer1->Add( DXF_exportUnitsLabel, 0, wxALIGN_CENTER|wxALIGN_LEFT|wxALL, 5 );
+	dxfSizerRight->Add( DXF_exportUnitsLabel, 0, wxALIGN_CENTER|wxALIGN_LEFT|wxALL, 5 );
 
 	wxString m_DXF_plotUnitsChoices[] = { _("Inches"), _("Millimeters") };
 	int m_DXF_plotUnitsNChoices = sizeof( m_DXF_plotUnitsChoices ) / sizeof( wxString );
@@ -312,10 +334,10 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_DXF_plotUnits->SetSelection( 0 );
 	m_DXF_plotUnits->SetToolTip( _("The units to use for the exported DXF file") );
 
-	dxfSizer1->Add( m_DXF_plotUnits, 0, wxALIGN_CENTER|wxALL, 5 );
+	dxfSizerRight->Add( m_DXF_plotUnits, 0, wxALIGN_CENTER|wxALL, 5 );
 
 
-	m_SizerDXF_options->Add( dxfSizer1, 1, wxEXPAND, 5 );
+	m_SizerDXF_options->Add( dxfSizerRight, 1, wxEXPAND, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_SizerDXF_options, 0, wxEXPAND|wxALL, 5 );

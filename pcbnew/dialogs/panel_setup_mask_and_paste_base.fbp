@@ -14,6 +14,7 @@
         <property name="file">panel_setup_mask_and_paste_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">panel_setup_mask_and_paste_base</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Panel" expanded="1">
@@ -293,7 +295,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Note: Set Solder mask minimum bridge width to 0,&#x0A;unless your board house asks for a specific value</property>
+                                                <property name="label">Note: Set Solder mask minimum bridge width and Solder mask clearance to 0,&#x0A;unless your board house asks for a specific value</property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
