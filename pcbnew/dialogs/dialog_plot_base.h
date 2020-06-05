@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,6 +31,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
+#include <wx/statbmp.h>
 #include <wx/panel.h>
 #include <wx/menu.h>
 #include <wx/dialog.h>
@@ -86,6 +87,9 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
 		wxCheckBox* m_zoneFillCheck;
+		wxBoxSizer* m_SizerSolderMaskAlert;
+		wxStaticBitmap* m_bitmapAlert;
+		wxStaticText* m_staticTextAlert;
 		wxStaticBoxSizer* m_GerberOptionsSizer;
 		wxCheckBox* m_useGerberExtensions;
 		wxCheckBox* m_generateGerberJobFile;
@@ -137,7 +141,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 762,695 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PLOT_BASE();
 
 		void DIALOG_PLOT_BASEOnContextMenu( wxMouseEvent &event )

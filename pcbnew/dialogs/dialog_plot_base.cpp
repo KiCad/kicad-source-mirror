@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,7 +27,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxString m_plotFormatOptChoices[] = { _("Gerber"), _("Postscript"), _("SVG"), _("DXF"), _("HPGL"), _("PDF") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 0 );
-	m_plotFormatOpt->SetSelection( 0 );
+	m_plotFormatOpt->SetSelection( 4 );
 	bupperSizer->Add( m_plotFormatOpt, 0, wxALL, 6 );
 
 
@@ -176,53 +176,65 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_PlotOptionsSizer->Add( sbOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 
+	m_SizerSolderMaskAlert = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bitmapAlert = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_CMN_DIALOG ), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizerSolderMaskAlert->Add( m_bitmapAlert, 0, wxALL, 5 );
+
+	m_staticTextAlert = new wxStaticText( this, wxID_ANY, _("Global solder mask min width and margin are not set to 0\nMost of board houses expect a 0 value and use their constraints\nPlease ensure the  solder mask min width and margin value are valid\nand use a non 0 value only when required."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAlert->Wrap( -1 );
+	m_SizerSolderMaskAlert->Add( m_staticTextAlert, 0, wxALL, 5 );
+
+
+	m_PlotOptionsSizer->Add( m_SizerSolderMaskAlert, 1, wxEXPAND, 5 );
+
 	m_GerberOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Gerber Options") ), wxHORIZONTAL );
 
-	wxGridBagSizer* gbSizer2;
-	gbSizer2 = new wxGridBagSizer( 3, 0 );
-	gbSizer2->SetFlexibleDirection( wxHORIZONTAL );
-	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizerOptions;
+	gbSizerOptions = new wxGridBagSizer( 3, 0 );
+	gbSizerOptions->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizerOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_useGerberExtensions = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Use Protel filename extensions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useGerberExtensions->SetToolTip( _("Use Protel Gerber extensions (.GBL, .GTL, etc...)\nNo longer recommended. The official extension is .gbr") );
 	m_useGerberExtensions->SetMinSize( wxSize( 280,-1 ) );
 
-	gbSizer2->Add( m_useGerberExtensions, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizerOptions->Add( m_useGerberExtensions, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_generateGerberJobFile = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Generate Gerber job file"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_generateGerberJobFile->SetToolTip( _("Generate a Gerber job file that contains info about the board,\nand the list of generated Gerber plot files") );
 
-	gbSizer2->Add( m_generateGerberJobFile, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizerOptions->Add( m_generateGerberJobFile, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_subtractMaskFromSilk = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_subtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
 
-	gbSizer2->Add( m_subtractMaskFromSilk, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizerOptions->Add( m_subtractMaskFromSilk, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	coordFormatLabel = new wxStaticText( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Coordinate format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	coordFormatLabel->Wrap( -1 );
-	gbSizer2->Add( coordFormatLabel, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	gbSizerOptions->Add( coordFormatLabel, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	wxString m_coordFormatCtrlChoices[] = { _("4.5, unit mm"), _("4.6, unit mm") };
 	int m_coordFormatCtrlNChoices = sizeof( m_coordFormatCtrlChoices ) / sizeof( wxString );
 	m_coordFormatCtrl = new wxChoice( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_coordFormatCtrlNChoices, m_coordFormatCtrlChoices, 0 );
 	m_coordFormatCtrl->SetSelection( 0 );
-	gbSizer2->Add( m_coordFormatCtrl, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	gbSizerOptions->Add( m_coordFormatCtrl, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_useGerberX2Format = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Use extended X2 format"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useGerberX2Format->SetToolTip( _("Use X2 Gerber file format.\nInclude  mainly X2 attributes in Gerber headers.\nIf not checked, use X1 format.\nIn X1 format, these attributes are included as comments in files.") );
 
-	gbSizer2->Add( m_useGerberX2Format, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	gbSizerOptions->Add( m_useGerberX2Format, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_useGerberNetAttributes = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Include netlist attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useGerberNetAttributes->SetToolTip( _("Include netlist metadata and aperture attributes in Gerber files.\nIn X1 format, they are comments.\nUsed to check connectivity in CAM tools and Gerber viewers.") );
 
-	gbSizer2->Add( m_useGerberNetAttributes, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 30 );
+	gbSizerOptions->Add( m_useGerberNetAttributes, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 30 );
 
 
-	gbSizer2->AddGrowableCol( 2 );
+	gbSizerOptions->AddGrowableCol( 2 );
 
-	m_GerberOptionsSizer->Add( gbSizer2, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_GerberOptionsSizer->Add( gbSizerOptions, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_GerberOptionsSizer, 0, wxALL|wxEXPAND, 5 );
@@ -302,25 +314,34 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_PlotOptionsSizer->Add( m_PSOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 
-	m_SizerDXF_options = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxVERTICAL );
+	m_SizerDXF_options = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxHORIZONTAL );
+
+	wxBoxSizer* bSizerDxfLeft;
+	bSizerDxfLeft = new wxBoxSizer( wxVERTICAL );
 
 	m_DXF_plotModeOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Plot graphic items using their contours"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DXF_plotModeOpt->SetValue(true);
 	m_DXF_plotModeOpt->SetToolTip( _("Uncheck to plot graphic items using their center lines") );
 
-	m_SizerDXF_options->Add( m_DXF_plotModeOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerDxfLeft->Add( m_DXF_plotModeOpt, 0, wxALL, 5 );
 
 	m_DXF_plotTextStrokeFontOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Use Pcbnew font to plot texts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DXF_plotTextStrokeFontOpt->SetToolTip( _("Check to use Pcbnew stroke font\nUncheck to plot oneline ASCII texts as editable text (using DXF font)") );
 
-	m_SizerDXF_options->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 5 );
+	bSizerDxfLeft->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 5 );
 
-	wxBoxSizer* dxfSizer1;
-	dxfSizer1 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_SizerDXF_options->Add( bSizerDxfLeft, 1, wxEXPAND, 5 );
+
+
+	m_SizerDXF_options->Add( 20, 0, 0, 0, 5 );
+
+	wxBoxSizer* dxfSizerRight;
+	dxfSizerRight = new wxBoxSizer( wxHORIZONTAL );
 
 	DXF_exportUnitsLabel = new wxStaticText( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Export units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	DXF_exportUnitsLabel->Wrap( -1 );
-	dxfSizer1->Add( DXF_exportUnitsLabel, 0, wxALIGN_CENTER|wxALIGN_LEFT|wxALL, 5 );
+	dxfSizerRight->Add( DXF_exportUnitsLabel, 0, wxALIGN_CENTER|wxALIGN_LEFT|wxALL, 5 );
 
 	wxString m_DXF_plotUnitsChoices[] = { _("Inches"), _("Millimeters") };
 	int m_DXF_plotUnitsNChoices = sizeof( m_DXF_plotUnitsChoices ) / sizeof( wxString );
@@ -328,10 +349,10 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_DXF_plotUnits->SetSelection( 0 );
 	m_DXF_plotUnits->SetToolTip( _("The units to use for the exported DXF file") );
 
-	dxfSizer1->Add( m_DXF_plotUnits, 0, wxALIGN_CENTER|wxALL, 5 );
+	dxfSizerRight->Add( m_DXF_plotUnits, 0, wxALIGN_CENTER|wxALL, 5 );
 
 
-	m_SizerDXF_options->Add( dxfSizer1, 1, wxEXPAND, 5 );
+	m_SizerDXF_options->Add( dxfSizerRight, 1, wxEXPAND, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_SizerDXF_options, 0, wxEXPAND|wxALL, 5 );
@@ -375,7 +396,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	this->SetSizer( m_MainSizer );
 	this->Layout();
-	m_MainSizer->Fit( this );
 	m_popMenu = new wxMenu();
 	wxMenuItem* m_menuItem1;
 	m_menuItem1 = new wxMenuItem( m_popMenu, ID_LAYER_FAB, wxString( _("Select Fab Layers") ) , wxEmptyString, wxITEM_NORMAL );

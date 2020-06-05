@@ -49,7 +49,10 @@
 
 #define DEFAULT_PCB_EDGE_THICKNESS    0.15
 
-#define DEFAULT_SOLDERMASK_CLEARANCE  0.05  // soldermask to pad clearance
+// soldermask to pad clearance. The default is 0 because usually board houses
+// create a clearance depending on their fab process:
+// mask material, color, price ...
+#define DEFAULT_SOLDERMASK_CLEARANCE  0.0
 
 // DEFAULT_SOLDERMASK_MIN_WIDTH is only used in Gerber files: soldermask minimum size.
 // Set to 0, because using non 0 value creates an annoying issue in Gerber files:

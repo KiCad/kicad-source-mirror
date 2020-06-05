@@ -379,6 +379,17 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     // this option exist only in DXF format:
     m_DXF_plotModeOpt->Enable( getPlotFormat() == PLOT_FORMAT_DXF );
 
+    // The alert message about non 0 solder mask min width and margin is shown
+    // only in gerber format and if min mask width or mask margin is not 0
+    BOARD* board = m_parent->GetBoard();
+    const BOARD_DESIGN_SETTINGS& brd_settings = board->GetDesignSettings();
+
+    if( getPlotFormat() == PLOT_FORMAT_GERBER &&
+        ( brd_settings.m_SolderMaskMargin || brd_settings.m_SolderMaskMinWidth ) )
+        m_PlotOptionsSizer->Show( m_SizerSolderMaskAlert );
+    else
+        m_PlotOptionsSizer->Hide( m_SizerSolderMaskAlert );
+
     switch( getPlotFormat() )
     {
     case PLOT_FORMAT_PDF:
