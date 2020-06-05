@@ -50,6 +50,21 @@ BOARD*  LoadBoard( wxString& aFileName );
 bool    SaveBoard( wxString& aFileName, BOARD* aBoard );
 
 /**
+ * will get the nicknames of all of the footprint libraries configured in
+ * pcbnew in both the project and global library tables
+ * @return the list of footprint library nicknames, empty on error
+ */
+wxArrayString GetFootprintLibraries();
+
+/**
+ * will get the names of all of the footprints available in a footprint library
+ * @param aNickName is the nickname specifying which footprint library to fetch
+ * from
+ * @return the list of footprint names, empty on error
+ */
+wxArrayString GetFootprints( const wxString& aNickName );
+
+/**
  * will export the current BOARD to a specctra dsn file.
  * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
  * specification.

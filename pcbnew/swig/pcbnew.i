@@ -77,6 +77,8 @@ class BASE_SET {};
 #include <exporters/gerber_jobfile_writer.h>
 
 BOARD *GetBoard(); /* get current editor board */
+wxArrayString GetFootprintLibraries();
+wxArrayString GetFootprints(const wxString& aNickName);
 %}
 
 
