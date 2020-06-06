@@ -31,6 +31,7 @@
 
 #include <cvpcb_mainframe.h>
 #include <tools/cvpcb_actions.h>
+#include <widgets/wx_menubar.h>
 
 
 void CVPCB_MAINFRAME::ReCreateMenuBar()
@@ -39,7 +40,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();
-    wxMenuBar*  menuBar = new wxMenuBar();
+    WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
     //-- File menu -----------------------------------------------------------
     //

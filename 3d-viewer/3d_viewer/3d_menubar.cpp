@@ -32,14 +32,15 @@
 #include <3d_viewer/tools/3d_actions.h>
 #include <tool/tool_manager.h>
 #include <tool/common_control.h>
+#include <widgets/wx_menubar.h>
 
 
 void EDA_3D_VIEWER::CreateMenuBar()
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::CreateMenuBar" );
 
-    COMMON_CONTROL* tool = m_toolManager->GetTool<COMMON_CONTROL>();
-    wxMenuBar* menuBar   = new wxMenuBar;
+    COMMON_CONTROL* tool    = m_toolManager->GetTool<COMMON_CONTROL>();
+    WX_MENUBAR*     menuBar = new WX_MENUBAR();
 
 
     //-- File menu -----------------------------------------------------------

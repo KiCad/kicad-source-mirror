@@ -33,6 +33,7 @@
 #include <tool/tool_manager.h>
 #include <tools/gerbview_actions.h>
 #include <tools/gerbview_selection_tool.h>
+#include <widgets/wx_menubar.h>
 
 
 void GERBVIEW_FRAME::ReCreateMenuBar()
@@ -40,8 +41,8 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     GERBVIEW_SELECTION_TOOL* selTool = m_toolManager->GetTool<GERBVIEW_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
-    wxMenuBar* oldMenuBar = GetMenuBar();
-    wxMenuBar* menuBar = new wxMenuBar();
+    wxMenuBar*  oldMenuBar = GetMenuBar();
+    WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
     //-- File menu -------------------------------------------------------
     //

@@ -32,6 +32,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/lib_control.h>
+#include <widgets/wx_menubar.h>
 
 void LIB_VIEW_FRAME::ReCreateHToolbar()
 {
@@ -98,8 +99,8 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
     LIB_CONTROL* libControl = m_toolManager->GetTool<LIB_CONTROL>();
     // wxWidgets handles the OSX Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
-    wxMenuBar* oldMenuBar = GetMenuBar();
-    wxMenuBar* menuBar = new wxMenuBar();
+    wxMenuBar*  oldMenuBar = GetMenuBar();
+    WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
     //-- File menu -----------------------------------------------------------
     //

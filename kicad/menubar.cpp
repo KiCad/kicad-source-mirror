@@ -34,6 +34,7 @@
 #include "kicad_manager_frame.h"
 #include "pgm_kicad.h"
 #include "kicad_id.h"
+#include <widgets/wx_menubar.h>
 
 
 void KICAD_MANAGER_FRAME::ReCreateMenuBar()
@@ -42,7 +43,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();
-    wxMenuBar*  menuBar = new wxMenuBar();
+    WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
     //-- File menu -----------------------------------------------------------
     //

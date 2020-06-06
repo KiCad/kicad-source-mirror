@@ -34,6 +34,7 @@
 #include <tools/pl_selection_tool.h>
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
+#include <widgets/wx_menubar.h>
 
 
 void PL_EDITOR_FRAME::ReCreateMenuBar()
@@ -42,7 +43,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();
-    wxMenuBar*  menuBar = new wxMenuBar();
+    WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
     auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
         return IsContentModified();

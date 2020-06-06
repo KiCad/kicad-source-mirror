@@ -40,6 +40,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
+#include <widgets/wx_menubar.h>
 
 
 void PCB_EDIT_FRAME::ReCreateMenuBar()
@@ -47,8 +48,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
-    wxMenuBar* oldMenuBar = GetMenuBar();
-    wxMenuBar* menuBar = new wxMenuBar();
+    wxMenuBar*  oldMenuBar = GetMenuBar();
+    WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
     auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
         return IsContentModified();
