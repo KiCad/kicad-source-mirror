@@ -1643,7 +1643,7 @@ void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to
 ZONE_CONTAINER* BOARD::InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLayer, int aCornerX,
         int aCornerY, ZONE_HATCH_STYLE aHatch )
 {
-    ZONE_CONTAINER* new_area = (ZONE_CONTAINER*) this->Duplicate();
+    ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
 
     new_area->SetNetCode( aNetcode );
     new_area->SetLayer( aLayer );
