@@ -399,9 +399,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     switch( getPlotFormat() )
     {
     case PLOT_FORMAT::SVG:
-        m_PlotOptionsSizer->Show( m_svgOptionsSizer );
-        KI_FALLTHROUGH;
-
     case PLOT_FORMAT::PDF:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( false );
@@ -419,6 +416,11 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotPSNegativeOpt->Enable( true );
         m_forcePSA4OutputOpt->Enable( false );
         m_forcePSA4OutputOpt->SetValue( false );
+
+        if( getPlotFormat() == PLOT_FORMAT::SVG )
+            m_PlotOptionsSizer->Show( m_svgOptionsSizer );
+        else
+            m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
 
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
