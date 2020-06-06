@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,16 +46,15 @@ enum layer_sel_id {
 };
 
 
-class SELECT_LAYER_DIALOG : public wxDialog
+class SELECT_LAYER_DIALOG : public DIALOG_SHIM
 {
 private:
-    wxRadioBox*     m_layerList;
+    wxRadioBox*     m_layerRadioBox;
     std::vector <int> m_layerId;
 
 public:
     // Constructor and destructor
-    SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, int aDefaultLayer,
-                         int aCopperLayerCount, bool aShowDeselectOption );
+    SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, int aDefaultLayer, int aCopperLayerCount );
     ~SELECT_LAYER_DIALOG() { };
 
 private:
@@ -88,12 +87,9 @@ END_EVENT_TABLE()
  * different radiobutton is clicked on) prior to then clicking on the "Deselect"
  * button provided within the "Layer selection:" dialog box).
  */
-int GERBVIEW_FRAME::SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount,
-                                          bool aShowDeselectOption )
+int GERBVIEW_FRAME::SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount )
 {
-    SELECT_LAYER_DIALOG* frame = new SELECT_LAYER_DIALOG( this, aDefaultLayer,
-                                                          aCopperLayerCount,
-                                                          aShowDeselectOption );
+    SELECT_LAYER_DIALOG* frame = new SELECT_LAYER_DIALOG( this, aDefaultLayer, aCopperLayerCount );
 
     int layer = frame->ShowModal();
     frame->Destroy();
@@ -107,17 +103,15 @@ int GERBVIEW_FRAME::SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount,
  * radiobuttons, in which case they are positioned (in a vertical line)
  * to the right of that radiobox.
  */
-SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
-                                          int aDefaultLayer, int aCopperLayerCount,
-                                          bool aShowDeselectOption ) :
-    wxDialog( parent, -1, _( "Select Layer:" ), wxPoint( -1, -1 ),
-              wxSize( 470, 250 ),
-              wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, int aDefaultLayer,
+                                          int aCopperLayerCount ) :
+        DIALOG_SHIM( parent, -1, _( "Select Layer:" ), wxDefaultPosition, wxDefaultSize,
+                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxButton* button;
     int ii;
     wxArrayString  layerList;
-    int layerSelect = -1;
+    int selected = -1;
 
     // Build the layer list; first build copper layers list
     int layerCount = 0;
@@ -128,8 +122,8 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
         {
             layerList.Add( GetPCBDefaultLayerName( ii ) );
 
-            if( ii == aDefaultLayer )
-                layerSelect = layerCount;
+            if( aDefaultLayer == ii )
+                selected = layerCount;
 
             m_layerId.push_back( ii );
             layerCount++;
@@ -144,46 +138,54 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
 
         layerList.Add( GetPCBDefaultLayerName( ii ) );
 
-        if( ii == aDefaultLayer )
-            layerSelect = layerCount;
+        if( aDefaultLayer == ii )
+            selected = layerCount;
 
         m_layerId.push_back( ii );
         layerCount++;
     }
 
-    // When appropriate, also provide a "(Deselect)" radiobutton
-    if( aShowDeselectOption )
-    {
-        layerList.Add( _( "Do not export" ) );
+    layerList.Add( _( "Hole data" ) );
 
-        if( UNSELECTED_LAYER == aDefaultLayer )
-            layerSelect = layerCount;
+    if( aDefaultLayer == UNDEFINED_LAYER )
+        selected = layerCount;
 
-        m_layerId.push_back( UNSELECTED_LAYER );
-        layerCount++;
-    }
+    m_layerId.push_back( UNDEFINED_LAYER );
+    layerCount++;
 
-    m_layerList = new wxRadioBox( this, ID_LAYER_SELECT, _( "Layer" ),
-                                  wxPoint( -1, -1 ), wxSize( -1, -1 ),
-                                  layerList,
-                                  (layerCount < 8) ? layerCount : 8,
-                                  wxRA_SPECIFY_ROWS );
+    layerList.Add( _( "Do not export" ) );
 
-    if( layerSelect >= 0 )
-        m_layerList->SetSelection( layerSelect );
+    if( aDefaultLayer == UNSELECTED_LAYER )
+        selected = layerCount;
 
-    wxBoxSizer* FrameBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    SetSizer( FrameBoxSizer );
-    FrameBoxSizer->Add( m_layerList, 0, wxALIGN_TOP | wxALL, 5 );
-    wxBoxSizer* ButtonBoxSizer = new wxBoxSizer( wxVERTICAL );
-    FrameBoxSizer->Add( ButtonBoxSizer, 0, wxALIGN_BOTTOM | wxALL, 0 );
+    m_layerId.push_back( UNSELECTED_LAYER );
+    layerCount++;
+
+    m_layerRadioBox = new wxRadioBox( this, ID_LAYER_SELECT, _( "Layer" ), wxDefaultPosition,
+                                      wxDefaultSize, layerList, std::min( layerCount, 12 ),
+                                      wxRA_SPECIFY_ROWS );
+
+    if( selected >= 0 )
+        m_layerRadioBox->SetSelection( selected );
+
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxHORIZONTAL );
+    SetSizer( mainSizer );
+    mainSizer->Add( m_layerRadioBox, 1, wxEXPAND | wxALIGN_TOP | wxALL, 5 );
+    wxBoxSizer* buttonsSizer = new wxBoxSizer( wxVERTICAL );
+    mainSizer->Add( buttonsSizer, 0, wxALIGN_BOTTOM | wxALL, 5 );
 
     button = new wxButton( this, wxID_OK, _( "OK" ) );
     button->SetDefault();
-    ButtonBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
+    buttonsSizer->Add( button, 0, wxGROW | wxALL, 5 );
 
     button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    ButtonBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
+    buttonsSizer->Add( button, 0, wxGROW | wxALL, 5 );
+
+#ifdef __WXOSX__
+    // Hack to fix clipped radio buttons on OSX
+    wxSize size = m_layerRadioBox->GetBestSize() + wxSize( 20, 0 );
+    m_layerRadioBox->SetMinSize( size );
+#endif
 
     GetSizer()->SetSizeHints( this );
 
@@ -193,7 +195,7 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
 
 void SELECT_LAYER_DIALOG::OnLayerSelected( wxCommandEvent& event )
 {
-    int ii = m_layerId[m_layerList->GetSelection()];
+    int ii = m_layerId[m_layerRadioBox->GetSelection()];
 
     EndModal( ii );
 }

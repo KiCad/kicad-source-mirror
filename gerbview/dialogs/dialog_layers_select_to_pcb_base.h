@@ -1,18 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_LAYERS_SELECT_TO_PCB_BASE_H__
-#define __DIALOG_LAYERS_SELECT_TO_PCB_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -23,6 +20,9 @@ class DIALOG_SHIM;
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/combobox.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -43,15 +43,15 @@ class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
-		
+
 		// Private event handlers
 		void _wxFB_OnBrdLayersCountSelection( wxCommandEvent& event ){ OnBrdLayersCountSelection( event ); }
 		void _wxFB_OnStoreSetup( wxCommandEvent& event ){ OnStoreSetup( event ); }
 		void _wxFB_OnGetSetup( wxCommandEvent& event ){ OnGetSetup( event ); }
 		void _wxFB_OnResetClick( wxCommandEvent& event ){ OnResetClick( event ); }
 		void _wxFB_OnOkClick( wxCommandEvent& event ){ OnOkClick( event ); }
-		
-	
+
+
 	protected:
 		wxStaticText* m_staticTextLayerSel;
 		wxBoxSizer* m_bSizerLayerList;
@@ -67,20 +67,19 @@ class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnBrdLayersCountSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStoreSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGetSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnResetClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id = ID_LAYERS_MAP_DIALOG_BASE, const wxString& title = _("Layer Selection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 386,333 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id = ID_LAYERS_MAP_DIALOG_BASE, const wxString& title = _("Layer Selection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~LAYERS_MAP_DIALOG_BASE();
-	
+
 };
 
-#endif //__DIALOG_LAYERS_SELECT_TO_PCB_BASE_H__

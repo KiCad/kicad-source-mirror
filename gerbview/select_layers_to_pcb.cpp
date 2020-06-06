@@ -158,24 +158,18 @@ void LAYERS_MAP_DIALOG::initDialog()
         // Provide a text string to identify the Gerber layer
         msg.Printf( _( "Layer %d" ), m_buttonTable[ii] + 1 );
 
-        label = new wxStaticText( this,
-                                  wxID_STATIC, msg, wxDefaultPosition,
-                                  wxDefaultSize, 0 );
+        label = new wxStaticText( this, wxID_STATIC, msg );
         flexColumnBoxSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
         /* Add file name and extension without path. */
         wxFileName fn( images->GetGbrImage( ii )->m_FileName );
-        label = new wxStaticText( this,
-                                  wxID_STATIC, fn.GetFullName(),
-                                  wxDefaultPosition, wxDefaultSize );
-        flexColumnBoxSizer->Add( label, 0,
-                                 wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+        label = new wxStaticText( this, wxID_STATIC, fn.GetFullName() );
+        flexColumnBoxSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
         // Provide a button for this layer (which will invoke a child dialog box)
         item_ID = ID_BUTTON_0 + ii;
-        wxButton * Button = new wxButton( this,
-                                          item_ID, wxT( "..." ),
-                                          wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+        wxButton * Button = new wxButton( this, item_ID, wxT( "..." ), wxDefaultPosition,
+                                          wxDefaultSize, wxBU_EXACTFIT );
 
         flexColumnBoxSizer->Add( Button, 0, wxALIGN_CENTER_VERTICAL | wxALL );
 
@@ -195,14 +189,13 @@ void LAYERS_MAP_DIALOG::initDialog()
         if( ii == 0 )
         {
             msg  = _( "Do not export" );
-            text = new wxStaticText( this,
-                                     item_ID, msg, wxDefaultPosition,
-                                     wxDefaultSize, 0 );
+            text = new wxStaticText( this, item_ID, msg );
             goodSize = text->GetSize();
 
             for( LAYER_NUM jj = 0; jj < GERBER_DRAWLAYERS_COUNT; ++jj )
             {
                 text->SetLabel( GetPCBDefaultLayerName( jj ) );
+
                 if( goodSize.x < text->GetSize().x )
                     goodSize.x = text->GetSize().x;
             }
@@ -213,13 +206,10 @@ void LAYERS_MAP_DIALOG::initDialog()
         else
         {
             msg  = GetPCBDefaultLayerName( m_layersLookUpTable[m_buttonTable[ii]] );
-            text = new wxStaticText( this,
-                                     item_ID, msg, wxDefaultPosition,
-                                     wxDefaultSize, 0 );
+            text = new wxStaticText( this, item_ID, msg );
         }
         text->SetMinSize( goodSize );
-        flexColumnBoxSizer->Add( text, 1, wxALIGN_CENTER_VERTICAL | wxALL,
-                                 5 );
+        flexColumnBoxSizer->Add( text, 1, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
         m_layersList[ii] = text;
     }
@@ -310,6 +300,11 @@ void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
             m_layersList[ii]->SetLabel( _( "Do not export" ) );
             m_layersList[ii]->SetForegroundColour( *wxBLUE );
         }
+        else if( layer == UNDEFINED_LAYER )
+        {
+            m_layersList[ii]->SetLabel( _( "Hole data" ) );
+            m_layersList[ii]->SetForegroundColour( wxColour( 255, 0, 128 ) );
+        }
         else
         {
             m_layersList[ii]->SetLabel( GetPCBDefaultLayerName( layer ) );
@@ -332,12 +327,12 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
 
     LAYER_NUM jj = m_layersLookUpTable[m_buttonTable[ii]];
 
-    if( jj != UNSELECTED_LAYER && !IsValidLayer( jj ) )
+    if( jj != UNSELECTED_LAYER && jj != UNDEFINED_LAYER && !IsValidLayer( jj ) )
         jj = B_Cu;  // (Defaults to "Copper" layer.)
 
-    jj = m_Parent->SelectPCBLayer( jj, m_exportBoardCopperLayersCount, true );
+    jj = m_Parent->SelectPCBLayer( jj, m_exportBoardCopperLayersCount );
 
-    if( jj != UNSELECTED_LAYER && !IsValidLayer( jj ) )
+    if( jj != UNSELECTED_LAYER && jj != UNDEFINED_LAYER && !IsValidLayer( jj ) )
         return;
 
     if( jj != m_layersLookUpTable[m_buttonTable[ii]] )
@@ -351,6 +346,14 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
             // Change the text color to blue (to highlight
             // that this layer is *not* being exported)
             m_layersList[ii]->SetForegroundColour( *wxBLUE );
+        }
+        else if( jj == UNDEFINED_LAYER )
+        {
+            m_layersList[ii]->SetLabel( _( "Hole data" ) );
+
+            // Change the text color to fuchsia (to highlight
+            // that this layer *is* being exported)
+            m_layersList[ii]->SetForegroundColour( wxColour( 255, 0, 128 ) );
         }
         else
         {
@@ -387,7 +390,7 @@ void LAYERS_MAP_DIALOG::OnOkClick( wxCommandEvent& event )
     if( inner_layer_max > m_exportBoardCopperLayersCount-2 )
     {
         wxMessageBox(
-        _("The exported board has not enough copper layers to handle selected inner layers") );
+        _("Exported board does not have enough copper layers to handle selected inner layers") );
         return;
     }
 

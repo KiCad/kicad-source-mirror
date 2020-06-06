@@ -122,7 +122,6 @@ public:
     /** Install the dialog box for layer selection
      * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
      * @param aCopperLayerCount = number of copper layers
-     * @param aShowDeselectOption = display a "(Deselect)" radiobutton (when set to true)
      * @return new layer value (NB_PCB_LAYERS when "(Deselect)" radiobutton selected),
      *                         or -1 if canceled
      *
@@ -134,7 +133,7 @@ public:
      * different radiobutton is clicked on) prior to then clicking on the "Deselect"
      * button provided within the "Layer selection:" dialog box).
      */
-    int SelectPCBLayer( int aDefaultLayer, int aOpperLayerCount, bool aNullLayer = false );
+    int SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount );
 
     ///> @copydoc EDA_DRAW_FRAME::SetGridColor()
     virtual void SetGridColor( COLOR4D aColor ) override;

@@ -34,17 +34,30 @@
 #include <confirm.h>
 #include <macros.h>
 #include <trigo.h>
-#include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <select_layers_to_pcb.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
-
+#include "excellon_image.h"
 
 // Imported function
 extern const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber );
+
+
+struct EXPORT_VIA
+{
+    EXPORT_VIA( const wxPoint& aPos, int aSize, int aDrill ) :
+            m_Pos( aPos ),
+            m_Size( aSize ),
+            m_Drill( aDrill )
+    { }
+
+    wxPoint m_Pos;
+    int     m_Size;
+    int     m_Drill;
+};
 
 
 /* A helper class to export a Gerber set of files to Pcbnew
@@ -56,9 +69,7 @@ private:
     wxString                m_pcb_file_name;    // BOARD file to write to
     FILE*                   m_fp;               // the board file
     int                     m_pcbCopperLayersCount;
-    std::vector<wxPoint>    m_vias_coordinates; // list of already generated vias,
-                                                // used to export only once a via
-                                                // having a given coordinate
+    std::vector<EXPORT_VIA> m_vias;
 public:
     GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME* aFrame, const wxString& aFileName );
     ~GBR_TO_PCB_EXPORTER();
@@ -70,6 +81,22 @@ public:
     bool    ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLayers );
 
 private:
+    /**
+     * collect holes from a drill layer.
+     * We'll use these later when writing pads & vias.
+     * @param aGbrItem
+     */
+    void    collect_hole( GERBER_DRAW_ITEM* aGbrItem );
+
+    /**
+     * write a via to the board file.
+     * Some of these will represent actual vias while others are used to represent
+     * holes in pads.  (We can't generate actual pads because the Gerbers don't contain
+     * info on how to group them into modules.)
+     * @param aVia
+     */
+    void    export_via( const EXPORT_VIA& aVia );
+
     /**
      * write a non copper line or arc to the board file.
      * @param aGbrItem = the Gerber item (line, arc) to export
@@ -93,7 +120,7 @@ private:
     void    writePcbZoneItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
-     * write a track or via) to the board file.
+     * write a track (or via) to the board file.
      * @param aGbrItem = the Gerber item (line, arc, flashed) to export
      * @param aLayer = the copper layer to use
      */
@@ -101,10 +128,13 @@ private:
 
     /**
      * Function export_flashed_copper_item
-     * write a via to the board file (always uses a via through).
+     * write a synthetic pad to the board file.
+     * We can't create real pads because the Gerbers don't store grouping/footprint info.
+     * So we synthesize a pad with a via for the hole (if present) and a copper polygon for
+     * the pad.
      * @param aGbrItem = the flashed Gerber item to export
      */
-    void    export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem );
+    void    export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
      * Function export_segline_copper_item
@@ -237,10 +267,22 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLa
     writePcbHeader( aLayerLookUpTable );
 
     // create an image of gerber data
-    // First: non copper layers:
     const int pcbCopperLayerMax = 31;
     GERBER_FILE_IMAGE_LIST* images = m_gerbview_frame->GetGerberLayout()->GetImagesList();
 
+    // First collect all the holes.  We'll use these to generate pads, vias, etc.
+    for( unsigned layer = 0; layer < images->ImagesMaxCount(); ++layer )
+    {
+        EXCELLON_IMAGE* excellon = dynamic_cast<EXCELLON_IMAGE*>( images->GetGbrImage( layer ) );
+
+        if( excellon == NULL )    // Layer not yet used or not a drill image
+            continue;
+
+        for(  GERBER_DRAW_ITEM* gerb_item : excellon->GetItems() )
+            collect_hole( gerb_item );
+    }
+
+    // Next: non copper layers:
     for( unsigned layer = 0; layer < images->ImagesMaxCount(); ++layer )
     {
         GERBER_FILE_IMAGE* gerber = images->GetGbrImage( layer );
@@ -276,6 +318,10 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLa
         for( GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
             export_copper_item( gerb_item, pcb_layer_number );
     }
+
+    // Now write out the holes we collected earlier as vias
+    for( const EXPORT_VIA& via : m_vias )
+        export_via( via );
 
     fprintf( m_fp, ")\n" );
 
@@ -388,6 +434,44 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LA
 }
 
 
+/*
+ * Many holes will be pads, but we have no way to create those without modules, and creating
+ * a module per pad is not really viable.
+ *
+ * So we use vias to mimic holes, with the loss of any hole shape (as we only have round holes
+ * in vias at present).
+ *
+ * We start out with a via size minimally larger than the hole.  We'll leave it this way if
+ * the pad gets drawn as a copper polygon, or increase it to the proper size if it has a
+ * circular, concentric copper flashing.
+ */
+void GBR_TO_PCB_EXPORTER::collect_hole( GERBER_DRAW_ITEM* aGbrItem )
+{
+    int size = std::min( aGbrItem->m_Size.x, aGbrItem->m_Size.y );
+    m_vias.emplace_back( aGbrItem->m_Start, size + 1, size );
+}
+
+
+void GBR_TO_PCB_EXPORTER::export_via( const EXPORT_VIA& aVia )
+{
+    wxPoint via_pos = aVia.m_Pos;
+
+    // Reverse Y axis:
+    via_pos.y = -via_pos.y;
+
+    // Layers are Front to Back
+    fprintf( m_fp, " (via (at %s %s) (size %s) (drill %s)",
+                  Double2Str( MapToPcbUnits( via_pos.x ) ).c_str(),
+                  Double2Str( MapToPcbUnits( via_pos.y ) ).c_str(),
+                  Double2Str( MapToPcbUnits( aVia.m_Size ) ).c_str(),
+                  Double2Str( MapToPcbUnits( aVia.m_Drill ) ).c_str() );
+
+    fprintf( m_fp, " (layers %s %s))\n",
+                  TO_UTF8( GetPCBDefaultLayerName( F_Cu ) ),
+                  TO_UTF8( GetPCBDefaultLayerName( B_Cu ) ) );
+}
+
+
 void GBR_TO_PCB_EXPORTER::export_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
 {
     switch( aGbrItem->m_Shape )
@@ -395,8 +479,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_
     case GBR_SPOT_CIRCLE:
     case GBR_SPOT_RECT:
     case GBR_SPOT_OVAL:
-        // replace spots with vias when possible
-        export_flashed_copper_item( aGbrItem );
+        export_flashed_copper_item( aGbrItem, aLayer );
         break;
 
     case GBR_ARC:
@@ -505,36 +588,43 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
 
 
 /*
- * creates a via from a flashed gerber item.
- * Flashed items are usually pads or vias, so we try to export all of them
- * using vias
+ * Flashed items are usually pads or vias.  Pads are problematic because we have no way to
+ * represent one in Pcbnew outside of a module (and creating a module per pad isn't really
+ * viable).
+ * If we've already created a via from a hole, and the flashed copper item is a simple circle
+ * then we'll enlarge the via to the proper size.  Otherwise we create a copper polygon to
+ * represent the flashed item (which is presumably a pad).
  */
-void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem )
+void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem,
+                                                      LAYER_NUM aLayer )
 {
-    // First, explore already created vias, before creating a new via
-    for( unsigned ii = 0; ii < m_vias_coordinates.size(); ii++ )
+    static D_CODE  flashed_item_D_CODE( 0 );
+
+    D_CODE*        d_codeDescr = aGbrItem->GetDcodeDescr();
+    SHAPE_POLY_SET polygon;
+
+    if( d_codeDescr == NULL )
+        d_codeDescr = &flashed_item_D_CODE;
+
+    if( aGbrItem->m_Shape == GBR_SPOT_CIRCLE )
     {
-        if( m_vias_coordinates[ii] == aGbrItem->m_Start ) // Already created
-            return;
+        // See if there's a via that we can enlarge to fit this flashed item
+        for( EXPORT_VIA& via : m_vias )
+        {
+            if( via.m_Pos == aGbrItem->m_Start )
+            {
+                via.m_Size = std::max( via.m_Size, aGbrItem->m_Size.x );
+                return;
+            }
+        }
     }
 
-    m_vias_coordinates.push_back( aGbrItem->m_Start );
+    d_codeDescr->ConvertShapeToPolygon();
+    wxPoint offset = aGbrItem->GetABPosition( aGbrItem->m_Start );
 
-    wxPoint via_pos = aGbrItem->m_Start;
-    int width   = (aGbrItem->m_Size.x + aGbrItem->m_Size.y) / 2;
-    // Reverse Y axis:
-    via_pos.y = -via_pos.y;
-
-    // Layers are Front to Back
-    fprintf( m_fp, " (via (at %s %s) (size %s)",
-                  Double2Str( MapToPcbUnits(via_pos.x) ).c_str(),
-                  Double2Str( MapToPcbUnits(via_pos.y) ).c_str(),
-                  Double2Str( MapToPcbUnits( width ) ).c_str() );
-
-    fprintf( m_fp, " (layers %s %s))\n",
-                  TO_UTF8( GetPCBDefaultLayerName( F_Cu ) ),
-                  TO_UTF8( GetPCBDefaultLayerName( B_Cu ) ) );
+    writePcbPolygon( d_codeDescr->m_Polygon, aLayer, offset );
 }
+
 
 void GBR_TO_PCB_EXPORTER::writePcbHeader( LAYER_NUM* aLayerLookUpTable )
 {
