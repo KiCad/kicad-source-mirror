@@ -738,6 +738,11 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     applyPlotSettings();
 
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+
+    m_plotOpts.SetColorSettings( mgr.GetColorSettings( cfg->m_ColorTheme ) );
+
     m_plotOpts.SetSketchPadLineWidth( board->GetDesignSettings().GetLineThickness( F_Fab ) );
 
     // If no layer selected, we have nothing plotted.

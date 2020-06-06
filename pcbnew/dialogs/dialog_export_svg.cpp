@@ -310,6 +310,11 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
         m_board->SetAuxOrigin( origin );
     }
 
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+
+    plot_opts.SetColorSettings( mgr.GetColorSettings( cfg->m_ColorTheme ) );
+
     LOCALE_IO    toggle;
 
     SVG_PLOTTER* plotter = (SVG_PLOTTER*) StartPlotBoard( m_board, &plot_opts, UNDEFINED_LAYER,

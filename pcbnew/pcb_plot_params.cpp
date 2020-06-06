@@ -28,11 +28,8 @@
 #include <math/util.h> // for KiROUND
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
-#include <pcbnew_settings.h>
-#include <pgm_base.h>
 #include <plotter.h>
 #include <settings/color_settings.h>
-#include <settings/settings_manager.h>
 
 
 #define PLOT_LINEWIDTH_MIN        ( 0.02 * IU_PER_MM )  // min value for default line thickness
@@ -149,19 +146,8 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 
     m_sketchPadLineWidth         = Millimeter2iu( 0.1 );    // line width to plot items in outline mode
 
-    if( PgmOrNull() )
-    {
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-        auto              app = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-
-        m_colors         = mgr.GetColorSettings( app->m_ColorTheme );
-        m_default_colors = nullptr;
-    }
-    else
-    {
-        m_default_colors = std::make_shared<COLOR_SETTINGS>();
-        m_colors         = m_default_colors.get();
-    }
+    m_default_colors = std::make_shared<COLOR_SETTINGS>();
+    m_colors         = m_default_colors.get();
 }
 
 void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
