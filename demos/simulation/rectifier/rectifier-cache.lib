@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# C
+# rectifier_schlib_C
 #
-DEF C C 0 10 N Y 1 F N
+DEF rectifier_schlib_C C 0 10 N Y 1 F N
 F0 "C" 25 100 50 H V L CNN
-F1 "C" 25 -100 50 H V L CNN
+F1 "rectifier_schlib_C" 25 -100 50 H V L CNN
 F2 "" 38 -150 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 $FPLIST
@@ -26,11 +26,11 @@ X ~ 2 0 -150 110 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# D
+# rectifier_schlib_D
 #
-DEF D D 0 40 N N 1 F N
+DEF rectifier_schlib_D D 0 40 N N 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "D" 0 -100 50 H V C CNN
+F1 "rectifier_schlib_D" 0 -100 50 H V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 $FPLIST
@@ -48,11 +48,11 @@ X A 2 150 0 100 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# GND
+# rectifier_schlib_GND
 #
-DEF GND #PWR 0 0 Y Y 1 F P
+DEF rectifier_schlib_GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "GND" 0 -123 30 H V C CNN
+F1 "rectifier_schlib_GND" 0 -123 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -61,11 +61,11 @@ X GND 1 0 0 0 D 20 30 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# R
+# rectifier_schlib_R
 #
-DEF R R 0 0 N Y 1 F N
+DEF rectifier_schlib_R R 0 0 N Y 1 F N
 F0 "R" 80 0 50 V V C CNN
-F1 "R" 0 0 50 V V C CNN
+F1 "rectifier_schlib_R" 0 0 50 V V C CNN
 F2 "" -70 0 50 V V C CNN
 F3 "" 0 0 50 H V C CNN
 $FPLIST
@@ -79,11 +79,11 @@ X ~ 2 0 -150 50 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# VSOURCE
+# rectifier_schlib_VSOURCE
 #
-DEF ~VSOURCE V 0 40 Y Y 1 F N
+DEF rectifier_schlib_VSOURCE V 0 40 Y Y 1 F N
 F0 "V" 200 200 50 H V C CNN
-F1 "VSOURCE" 250 100 50 H I C CNN
+F1 "rectifier_schlib_VSOURCE" 250 100 50 H I C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 F4 "Value" 0 0 60 H I C CNN "Fieldname"

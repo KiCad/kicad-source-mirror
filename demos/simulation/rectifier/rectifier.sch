@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:rectifier-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -64,6 +63,9 @@ F 3 "" H 5100 3700 50  0000 C CNN
 F 4 "Value" H 5100 3700 60  0001 C CNN "Fieldname"
 F 5 "D" H 5100 3700 60  0001 C CNN "Spice_Primitive"
 F 6 "2 1" H 5100 3700 60  0001 C CNN "Spice_Node_Sequence"
+F 7 "1N4148" H 5100 3700 50  0001 C CNN "Spice_Model"
+F 8 "Y" H 5100 3700 50  0001 C CNN "Spice_Netlist_Enabled"
+F 9 "diode.mod" H 5100 3700 50  0001 C CNN "Spice_Lib_File"
 	1    5100 3700
 	-1   0    0    1   
 $EndComp
@@ -98,12 +100,12 @@ $EndComp
 Text Notes 4300 4900 0    60   ~ 0
 .tran 1u 10m\n
 Wire Wire Line
-	4400 4350 4400 4250
+	4400 4350 4400 4300
 Wire Wire Line
-	4400 4300 5750 4300
+	4400 4300 5400 4300
 Connection ~ 4400 4300
 Wire Wire Line
-	5250 3700 5750 3700
+	5250 3700 5400 3700
 Wire Wire Line
 	5750 3700 5750 3850
 Wire Wire Line
@@ -126,4 +128,10 @@ Text Label 5750 3700 0    60   ~ 0
 rect_out
 Text Notes 4300 5000 0    60   ~ 0
 *.ac dec 10 1 1Meg\n
+Wire Wire Line
+	4400 4300 4400 4250
+Wire Wire Line
+	5400 3700 5750 3700
+Wire Wire Line
+	5400 4300 5750 4300
 $EndSCHEMATC
