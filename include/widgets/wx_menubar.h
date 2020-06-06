@@ -31,9 +31,16 @@
 /**
  * Wrapper around a wxMenuBar object that prevents the accelerator table from being used.
  *
- * It appears that on MSW the accelerator table of a wxMenuBar will be searched before key events are
- * passed to other items. To work around this, simply don't let the menubar have an accelerator table.
+ * It appears that on MSW the accelerator table of a wxMenuBar will be searched before key events
+ * are passed to other items. This means key events matching hotkey combinations are converted to
+ * menu events and never get passed to text controls. To work around this, simply don't let the
+ * menubar have an accelerator table.
  * See https://gitlab.com/kicad/code/kicad/-/issues/1941
+ *
+ * Note that on OSX, menus also steal the key events from text controls, but that is done by OSX
+ * itself, so other workarounds are included inside ACTION_MENU::OnMenuEvent() and
+ * TOOL_DISPATCHER::DispatchWxEvent() to redirect key presses to text-based controls when they
+ * have focus.
  */
 class WX_MENUBAR : public wxMenuBar
 {
