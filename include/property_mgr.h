@@ -172,6 +172,19 @@ public:
      */
     void Rebuild();
 
+    struct CLASS_INFO
+    {
+        wxString name;
+        TYPE_ID type;
+        std::vector<PROPERTY_BASE*> properties;
+    };
+
+    typedef std::vector<CLASS_INFO> CLASSES_INFO;
+
+    CLASSES_INFO GetAllClasses();
+
+    std::vector<TYPE_ID> GetMatchingClasses( PROPERTY_BASE* aProperty );
+
 private:
     PROPERTY_MANAGER()
         : m_dirty( false ), m_units( EDA_UNITS::MILLIMETRES )

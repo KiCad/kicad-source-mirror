@@ -212,3 +212,39 @@ void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult, PR
     for( const auto& base : m_bases )
         base.get().collectPropsRecur( aResult, aReplaced );
 }
+
+std::vector<TYPE_ID> PROPERTY_MANAGER::GetMatchingClasses( PROPERTY_BASE* aProperty )
+{
+    std::vector<TYPE_ID> ids;
+    
+    for( auto& cls : m_classes )
+    {
+        CLASS_INFO info;
+
+        for( auto prop : cls.second.m_allProperties )
+            info.properties.push_back(prop);
+
+        
+    }
+
+    return ids;
+}
+
+PROPERTY_MANAGER::CLASSES_INFO PROPERTY_MANAGER::GetAllClasses()
+{
+    CLASSES_INFO rv;
+    for( auto& cls : m_classes )
+    {
+        CLASS_INFO info;
+
+        info.type = cls.first;
+        info.name = m_classNames[cls.first];
+
+        for( auto prop : cls.second.m_allProperties )
+            info.properties.push_back(prop);
+
+        rv.push_back(info);
+    }
+
+    return rv;
+}
