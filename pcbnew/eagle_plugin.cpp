@@ -1273,6 +1273,10 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     if( p.pour == EPOLYGON::CUTOUT )
     {
         zone->SetIsKeepout( true );
+        zone->SetDoNotAllowVias( false );
+        zone->SetDoNotAllowTracks( false );
+        zone->SetDoNotAllowPads( false );
+        zone->SetDoNotAllowFootprints( false );
         zone->SetDoNotAllowCopperPour( true );
         zone->SetHatchStyle( ZONE_HATCH_STYLE::NO_HATCH );
     }
