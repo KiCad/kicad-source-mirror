@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,6 +25,7 @@
 #include <wx/statbox.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
+#include <wx/spinctrl.h>
 #include <wx/slider.h>
 #include <wx/panel.h>
 #include <wx/choice.h>
@@ -72,6 +73,10 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxComments;
 		wxStaticBitmap* m_bitmapECO;
 		wxCheckBox* m_checkBoxECO;
+		wxStaticText* m_staticTextRotAngle;
+		wxSpinCtrlDouble* m_spinCtrlRotationAngle;
+		wxStaticText* m_staticTextRotAngleUnits;
+		wxStaticLine* m_staticline3;
 		wxCheckBox* m_checkBoxEnableAnimation;
 		wxStaticText* m_staticAnimationSpeed;
 		wxSlider* m_sliderAnimationSpeed;
@@ -105,7 +110,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 659,485 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 659,567 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_3D_VIEW_OPTIONS_BASE();
 
 };

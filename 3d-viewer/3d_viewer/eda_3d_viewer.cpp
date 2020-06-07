@@ -132,6 +132,9 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     m_toolManager->RegisterTool( new EDA_3D_CONTROLLER );
     m_toolManager->InitTools();
 
+    if( EDA_3D_CONTROLLER* ctrlTool = GetToolManager()->GetTool<EDA_3D_CONTROLLER>() )
+        ctrlTool->SetRotationIncrement( config->m_Camera.rotation_increment );
+
     // Run the viewer control tool, it is supposed to be always active
     m_toolManager->InvokeTool( "3DViewer.Control" );
 
@@ -519,6 +522,9 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
         cfg->m_Camera.animation_enabled       = m_canvas->AnimationEnabledGet();
         cfg->m_Camera.moving_speed_multiplier = m_canvas->MovingSpeedMultiplierGet();
+
+        if( EDA_3D_CONTROLLER* ctrlTool = GetToolManager()->GetTool<EDA_3D_CONTROLLER>() )
+            cfg->m_Camera.rotation_increment = ctrlTool->GetRotationIncrement();
 
         TRANSFER_SETTING( opengl_AA_disableOnMove,        FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE );
         TRANSFER_SETTING( opengl_copper_thickness,        FL_RENDER_OPENGL_COPPER_THICKNESS );

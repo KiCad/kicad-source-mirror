@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -132,8 +132,8 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Board Layers") ), wxVERTICAL );
+	wxStaticBoxSizer* sbBoardLayers;
+	sbBoardLayers = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Board Layers") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerShowBrdLayersOpts;
 	fgSizerShowBrdLayersOpts = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -143,47 +143,47 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	fgSizerShowBrdLayersOpts->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_bitmapSilkscreen = new wxStaticBitmap( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmapSilkscreen = new wxStaticBitmap( sbBoardLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowBrdLayersOpts->Add( m_bitmapSilkscreen, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_checkBoxSilkscreen = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Show silkscreen layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxSilkscreen = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show silkscreen layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowBrdLayersOpts->Add( m_checkBoxSilkscreen, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	fgSizerShowBrdLayersOpts->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_bitmapSolderMask = new wxStaticBitmap( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmapSolderMask = new wxStaticBitmap( sbBoardLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowBrdLayersOpts->Add( m_bitmapSolderMask, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_checkBoxSolderMask = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Show solder mask layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxSolderMask = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show solder mask layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowBrdLayersOpts->Add( m_checkBoxSolderMask, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerShowBrdLayersOpts->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_bitmapSolderPaste = new wxStaticBitmap( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmapSolderPaste = new wxStaticBitmap( sbBoardLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowBrdLayersOpts->Add( m_bitmapSolderPaste, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_checkBoxSolderpaste = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Show solder paste layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxSolderpaste = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show solder paste layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowBrdLayersOpts->Add( m_checkBoxSolderpaste, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerShowBrdLayersOpts->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_bitmapAdhesive = new wxStaticBitmap( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmapAdhesive = new wxStaticBitmap( sbBoardLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowBrdLayersOpts->Add( m_bitmapAdhesive, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_checkBoxAdhesive = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Show adhesive layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxAdhesive = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show adhesive layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowBrdLayersOpts->Add( m_checkBoxAdhesive, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizer3->Add( fgSizerShowBrdLayersOpts, 0, wxEXPAND, 5 );
+	sbBoardLayers->Add( fgSizerShowBrdLayersOpts, 0, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( sbSizer3, 0, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( sbBoardLayers, 0, wxALL|wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("User Layers (not shown in realistic mode)") ), wxVERTICAL );
+	wxStaticBoxSizer* sbUserLayers;
+	sbUserLayers = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("User Layers (not shown in realistic mode)") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerShowUserLayersOpts;
 	fgSizerShowUserLayersOpts = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -193,51 +193,72 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	fgSizerShowUserLayersOpts->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_bitmapComments = new wxStaticBitmap( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmapComments = new wxStaticBitmap( sbUserLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowUserLayersOpts->Add( m_bitmapComments, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_checkBoxComments = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Show comments and drawings layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxComments = new wxCheckBox( sbUserLayers->GetStaticBox(), wxID_ANY, _("Show comments and drawings layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowUserLayersOpts->Add( m_checkBoxComments, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerShowUserLayersOpts->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_bitmapECO = new wxStaticBitmap( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmapECO = new wxStaticBitmap( sbUserLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowUserLayersOpts->Add( m_bitmapECO, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_checkBoxECO = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxECO = new wxCheckBox( sbUserLayers->GetStaticBox(), wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerShowUserLayersOpts->Add( m_checkBoxECO, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizer4->Add( fgSizerShowUserLayersOpts, 0, wxEXPAND, 5 );
+	sbUserLayers->Add( fgSizerShowUserLayersOpts, 0, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( sbSizer4, 0, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( sbUserLayers, 0, wxALL|wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizerAnimation;
-	sbSizerAnimation = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Camera Options") ), wxVERTICAL );
+	wxStaticBoxSizer* sbCameraOptions;
+	sbCameraOptions = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Camera Options") ), wxVERTICAL );
 
-	m_checkBoxEnableAnimation = new wxCheckBox( sbSizerAnimation->GetStaticBox(), wxID_ANY, _("Enable animation"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizerRotAngle;
+	bSizerRotAngle = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticTextRotAngle = new wxStaticText( sbCameraOptions->GetStaticBox(), wxID_ANY, _("Rotation Increment:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotAngle->Wrap( -1 );
+	bSizerRotAngle->Add( m_staticTextRotAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_spinCtrlRotationAngle = new wxSpinCtrlDouble( sbCameraOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 359, 10, 1 );
+	m_spinCtrlRotationAngle->SetDigits( 0 );
+	bSizerRotAngle->Add( m_spinCtrlRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_staticTextRotAngleUnits = new wxStaticText( sbCameraOptions->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotAngleUnits->Wrap( -1 );
+	bSizerRotAngle->Add( m_staticTextRotAngleUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	sbCameraOptions->Add( bSizerRotAngle, 1, wxEXPAND, 5 );
+
+	m_staticline3 = new wxStaticLine( sbCameraOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	sbCameraOptions->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+
+	m_checkBoxEnableAnimation = new wxCheckBox( sbCameraOptions->GetStaticBox(), wxID_ANY, _("Enable animation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxEnableAnimation->SetValue(true);
-	sbSizerAnimation->Add( m_checkBoxEnableAnimation, 0, wxALL, 5 );
+	sbCameraOptions->Add( m_checkBoxEnableAnimation, 0, wxALL, 5 );
 
 	wxBoxSizer* bSizerSlider;
 	bSizerSlider = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticAnimationSpeed = new wxStaticText( sbSizerAnimation->GetStaticBox(), wxID_ANY, _("Animation speed:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticAnimationSpeed = new wxStaticText( sbCameraOptions->GetStaticBox(), wxID_ANY, _("Animation speed:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticAnimationSpeed->Wrap( -1 );
 	bSizerSlider->Add( m_staticAnimationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_sliderAnimationSpeed = new wxSlider( sbSizerAnimation->GetStaticBox(), wxID_ANY, 3, 1, 5, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_sliderAnimationSpeed = new wxSlider( sbCameraOptions->GetStaticBox(), wxID_ANY, 3, 1, 5, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sliderAnimationSpeed->SetMinSize( wxSize( 100,-1 ) );
 
 	bSizerSlider->Add( m_sliderAnimationSpeed, 1, wxALL|wxEXPAND, 5 );
 
 
-	sbSizerAnimation->Add( bSizerSlider, 1, wxEXPAND, 5 );
+	sbCameraOptions->Add( bSizerSlider, 1, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( sbSizerAnimation, 0, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( sbCameraOptions, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizerDisplayOptions->Add( bSizerRight, 0, wxALL|wxEXPAND, 5 );

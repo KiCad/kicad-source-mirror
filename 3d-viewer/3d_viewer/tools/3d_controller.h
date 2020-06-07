@@ -39,11 +39,12 @@ class BOARD_ADAPTER;
 class EDA_3D_CONTROLLER : public TOOL_INTERACTIVE
 {
 public:
-    EDA_3D_CONTROLLER() :
-            TOOL_INTERACTIVE( "3DViewer.Control" ),
-            m_canvas( nullptr ),
-            m_boardAdapter( nullptr ),
-            m_camera( nullptr )
+    EDA_3D_CONTROLLER()
+            : TOOL_INTERACTIVE( "3DViewer.Control" ),
+              m_canvas( nullptr ),
+              m_boardAdapter( nullptr ),
+              m_camera( nullptr ),
+              m_rotationIncrement( 10.0 )
     { }
 
     ~EDA_3D_CONTROLLER() override { }
@@ -57,6 +58,26 @@ public:
     int UpdateMenu( const TOOL_EVENT& aEvent );
 
     int Main( const TOOL_EVENT& aEvent );
+
+    /**
+     * Set the increment used by the RotateView actions.
+     *
+     * @param aRotIncrement is the rotation increment in degrees
+     */
+    void SetRotationIncrement( double aRotIncrement )
+    {
+        m_rotationIncrement = aRotIncrement;
+    }
+
+    /**
+     * Get the increment used by the RotateView actions.
+     *
+     * @return the rotation increment in degrees
+     */
+    double GetRotationIncrement()
+    {
+        return m_rotationIncrement;
+    }
 
     // View controls
     int ZoomRedraw( const TOOL_EVENT& aEvent );
@@ -83,6 +104,7 @@ private:
     EDA_3D_CANVAS* m_canvas;
     BOARD_ADAPTER* m_boardAdapter;
     CCAMERA*       m_camera;
+    double         m_rotationIncrement;     ///< Rotation increment for the rotate actions (degrees)
 };
 
 #endif

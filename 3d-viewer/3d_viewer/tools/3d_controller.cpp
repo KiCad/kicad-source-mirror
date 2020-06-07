@@ -143,19 +143,19 @@ int EDA_3D_CONTROLLER::PanControl( const TOOL_EVENT& aEvent )
 }
 
 
-#define ROT_ANGLE 10.0
-
 int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
 {
+    double rotIncrement = glm::radians( m_rotationIncrement );
+
     switch( aEvent.Parameter<intptr_t>() )
     {
-    case ID_ROTATE3D_X_NEG: m_camera->RotateX( -glm::radians( ROT_ANGLE ) ); break;
-    case ID_ROTATE3D_X_POS: m_camera->RotateX( glm::radians( ROT_ANGLE ) );  break;
-    case ID_ROTATE3D_Y_NEG: m_camera->RotateY( -glm::radians( ROT_ANGLE ) ); break;
-    case ID_ROTATE3D_Y_POS: m_camera->RotateY( glm::radians( ROT_ANGLE ) );  break;
-    case ID_ROTATE3D_Z_NEG: m_camera->RotateZ( -glm::radians( ROT_ANGLE ) ); break;
-    case ID_ROTATE3D_Z_POS: m_camera->RotateZ( glm::radians( ROT_ANGLE ) );  break;
-    default:                wxFAIL;                                          break;
+    case ID_ROTATE3D_X_NEG: m_camera->RotateX( -rotIncrement ); break;
+    case ID_ROTATE3D_X_POS: m_camera->RotateX( rotIncrement );  break;
+    case ID_ROTATE3D_Y_NEG: m_camera->RotateY( -rotIncrement ); break;
+    case ID_ROTATE3D_Y_POS: m_camera->RotateY( rotIncrement );  break;
+    case ID_ROTATE3D_Z_NEG: m_camera->RotateZ( -rotIncrement ); break;
+    case ID_ROTATE3D_Z_POS: m_camera->RotateZ( rotIncrement );  break;
+    default:                wxFAIL;                             break;
     }
 
     if( m_boardAdapter->RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )

@@ -66,8 +66,9 @@ public:
 
     struct CAMERA_SETTINGS
     {
-        bool animation_enabled;
-        int  moving_speed_multiplier;
+        bool   animation_enabled;
+        int    moving_speed_multiplier;
+        double rotation_increment;
     };
 
     EDA_3D_VIEWER_SETTINGS();

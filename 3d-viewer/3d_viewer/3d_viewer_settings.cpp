@@ -117,6 +117,8 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
             &m_Camera.animation_enabled, true ) );
     m_params.emplace_back( new PARAM<int>( "camera.moving_speed_multiplier",
             &m_Camera.moving_speed_multiplier, 3 ) );
+    m_params.emplace_back( new PARAM<double>( "camera.rotation_increment",
+            &m_Camera.rotation_increment, 10.0 ) );
 
 }
 

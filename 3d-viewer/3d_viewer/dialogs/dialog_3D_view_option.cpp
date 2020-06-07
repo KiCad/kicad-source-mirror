@@ -23,14 +23,21 @@
  */
 
 #include "dialog_3D_view_option_base.h"
-#include <3d_viewer/eda_3d_viewer.h>
 #include <3d_canvas/board_adapter.h>
+#include <3d_viewer/eda_3d_viewer.h>
+#include <3d_viewer/tools/3d_controller.h>
 #include <bitmaps.h>
+#include <tool/tool_manager.h>
 
 class DIALOG_3D_VIEW_OPTIONS : public DIALOG_3D_VIEW_OPTIONS_BASE
 {
 public:
     explicit DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* aParent );
+
+    EDA_3D_VIEWER* GetParent()
+    {
+        return static_cast<EDA_3D_VIEWER*>( DIALOG_SHIM::GetParent() );
+    }
 
 private:
     BOARD_ADAPTER& m_settings;
@@ -141,6 +148,9 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     m_staticAnimationSpeed->Enable( m_canvas->AnimationEnabledGet() );
     m_sliderAnimationSpeed->Enable( m_canvas->AnimationEnabledGet() );
 
+    EDA_3D_CONTROLLER* ctrlTool = GetParent()->GetToolManager()->GetTool<EDA_3D_CONTROLLER>();
+    m_spinCtrlRotationAngle->SetValue( ctrlTool->GetRotationIncrement() );
+
     return true;
 }
 
@@ -189,6 +199,9 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     // Camera Options
     m_canvas->AnimationEnabledSet( m_checkBoxEnableAnimation->GetValue() );
     m_canvas->MovingSpeedMultiplierSet( m_sliderAnimationSpeed->GetValue() );
+
+    EDA_3D_CONTROLLER* ctrlTool = GetParent()->GetToolManager()->GetTool<EDA_3D_CONTROLLER>();
+    ctrlTool->SetRotationIncrement( m_spinCtrlRotationAngle->GetValue() );
 
     return true;
 }
