@@ -109,6 +109,25 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
 
     for( wxEventType eventType : { wxEVT_MENU_OPEN, wxEVT_MENU_CLOSE, wxEVT_MENU_HIGHLIGHT } )
         Connect( eventType, wxMenuEventHandler( PANEL_PREV_3D::OnMenuEvent ), NULL, this );
+
+#ifdef __WXOSX__
+    // Call layout once to get the proper button sizes after the bitmaps have been set
+    Layout();
+
+    // The rounded-button style used has a small border on the left/right sides.
+    // This is automatically fixed in wx for buttons with a bitmap < 20, but not
+    // when the bitmap is set to be 26x26.
+    wxSize borderFix = wxSize(4, 4);
+
+    m_bpvTop->SetMinSize( m_bpvTop->GetSize() + borderFix );
+    m_bpvFront->SetMinSize( m_bpvFront->GetSize() + borderFix );
+    m_bpvBack->SetMinSize( m_bpvBack->GetSize() + borderFix );
+    m_bpvLeft->SetMinSize( m_bpvLeft->GetSize() + borderFix );
+    m_bpvRight->SetMinSize( m_bpvRight->GetSize() + borderFix );
+    m_bpvBottom->SetMinSize( m_bpvBottom->GetSize() + borderFix );
+    m_bpvISO->SetMinSize( m_bpvISO->GetSize() + borderFix );
+    m_bpUpdate->SetMinSize( m_bpUpdate->GetSize() + borderFix );
+#endif
 }
 
 
