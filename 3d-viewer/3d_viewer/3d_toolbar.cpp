@@ -88,6 +88,9 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
     m_mainToolBar->Add( EDA_3D_ACTIONS::rotateZCCW );
 
     KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::flipView );
+
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( EDA_3D_ACTIONS::moveLeft );
     m_mainToolBar->Add( EDA_3D_ACTIONS::moveRight );
     m_mainToolBar->Add( EDA_3D_ACTIONS::moveUp );

@@ -104,3 +104,8 @@ CMakeSettings.json
 
 # Sublime Text
 *.sublime-*
+
+# KDevelop
+.kdev4/
+*.kdev4
+

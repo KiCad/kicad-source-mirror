@@ -948,6 +948,13 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         request_start_moving_camera( glm::min( glm::max( m_camera.ZoomGet(), 0.5f ), 1.125f ) );
         return true;
 
+    case ID_VIEW3D_FLIP:
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.RotateY_T1( glm::radians( 179.999f ) );
+        request_start_moving_camera();
+        return true;
+
     default:
         return false;
     }
