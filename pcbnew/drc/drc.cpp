@@ -237,9 +237,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     m_largestClearance = bds.GetBiggestClearanceValue();
 
     if( !bds.Ignore( DRCE_INVALID_OUTLINE )
-        || !bds.Ignore( DRCE_TRACK_NEAR_EDGE )
-        || !bds.Ignore( DRCE_VIA_NEAR_EDGE )
-        || !bds.Ignore( DRCE_PAD_NEAR_EDGE ) )
+        || !bds.Ignore( DRCE_COPPER_EDGE_CLEARANCE ) )
     {
         if( aMessages )
         {
@@ -268,7 +266,8 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         // class (a NET) will cause its items such as tracks, vias, and pads
         // to also fail.  So quit after *all* netclass errors have been reported.
         if( aMessages )
-            aMessages->AppendText( _( "NETCLASS VIOLATIONS: Aborting DRC\n" ) );
+            aMessages->AppendText( _( "Netclasses are not valid: Cannot run DRC\n"
+                                      "Please open Board Setup and\ncheck netclass definitions" ) );
 
         commit.Push( wxEmptyString, false, false );
 
@@ -279,9 +278,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     }
 
     // test pad to pad clearances, nothing to do with tracks, vias or zones.
-    if( !bds.Ignore( DRCE_PAD_NEAR_EDGE )
-        || !bds.Ignore( DRCE_PAD_NEAR_PAD )
-        || !bds.Ignore( DRCE_HOLE_NEAR_PAD ) )
+    if( !bds.Ignore( DRCE_COPPER_EDGE_CLEARANCE ) )
     {
         if( aMessages )
         {
@@ -294,8 +291,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     // test drilled holes
     if( !bds.Ignore( DRCE_DRILLED_HOLES_TOO_CLOSE )
-        || !bds.Ignore( DRCE_TOO_SMALL_PAD_DRILL )
-        || !bds.Ignore( DRCE_TOO_SMALL_VIA_DRILL )
+        || !bds.Ignore( DRCE_TOO_SMALL_DRILL )
         || !bds.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL ) )
     {
         if( aMessages )
@@ -379,8 +375,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     }
 
     // find and gather vias, tracks, pads inside text boxes.
-    if( !bds.Ignore( DRCE_VIA_NEAR_COPPER )
-        || !bds.Ignore( DRCE_TRACK_NEAR_COPPER ) )
+    if( !bds.Ignore( DRCE_CLEARANCE ) )
     {
         if( aMessages )
         {
@@ -530,7 +525,7 @@ void DRC::testPadClearances( BOARD_COMMIT& aCommit )
     // Test the pads
     for( auto& pad : sortedPads )
     {
-        if( !bds.Ignore( DRCE_PAD_NEAR_EDGE ) && m_board_outline_valid )
+        if( !bds.Ignore( DRCE_COPPER_EDGE_CLEARANCE ) && m_board_outline_valid )
         {
             int minClearance = bds.m_CopperEdgeClearance;
             m_clearanceSource = _( "board edge" );
@@ -548,7 +543,7 @@ void DRC::testPadClearances( BOARD_COMMIT& aCommit )
                 if( !checkClearanceSegmToPad( *it, 0, pad, minClearance, &actual ) )
                 {
                     actual = std::max( 0, actual );
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_EDGE );
+                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
@@ -566,7 +561,7 @@ void DRC::testPadClearances( BOARD_COMMIT& aCommit )
             }
         }
 
-        if( !bds.Ignore( DRCE_PAD_NEAR_PAD ) || !bds.Ignore( DRCE_HOLE_NEAR_PAD ) )
+        if( !bds.Ignore( DRCE_CLEARANCE ) )
         {
             int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
 
@@ -636,7 +631,7 @@ void DRC::testTracks( BOARD_COMMIT& aCommit, wxWindow *aActiveWindow, bool aShow
 
         if( !settings.Ignore( code ) && connectivity->TestTrackEndpointDangling( *seg_it, &pos ) )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( code );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( code );
             drcItem->SetItems( *seg_it );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
@@ -667,7 +662,7 @@ void DRC::testUnconnected()
 
     for( const CN_EDGE& edge : edges )
     {
-        DRC_ITEM* item = new DRC_ITEM( DRCE_UNCONNECTED_ITEMS );
+        DRC_ITEM* item = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );
         item->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
         m_unconnected.push_back( item );
     }
@@ -704,7 +699,7 @@ void DRC::testZones( BOARD_COMMIT& aCommit )
 
             if( ( netcode < 0 ) || pads_in_net == 0 )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONE_HAS_EMPTY_NET );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ZONE_HAS_EMPTY_NET );
                 drcItem->SetItems( zone );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, zone->GetPosition() );
@@ -772,7 +767,7 @@ void DRC::testZones( BOARD_COMMIT& aCommit )
 
                 if( smoothed_polys[ia2].Contains( currentVertex ) )
                 {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
                     drcItem->SetItems( zoneRef, zoneToTest );
 
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
@@ -788,7 +783,7 @@ void DRC::testZones( BOARD_COMMIT& aCommit )
 
                 if( smoothed_polys[ia].Contains( currentVertex ) )
                 {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
                     drcItem->SetItems( zoneToTest, zoneRef );
 
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
@@ -847,11 +842,11 @@ void DRC::testZones( BOARD_COMMIT& aCommit )
 
                 if( actual <= 0 )
                 {
-                    drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                    drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
                 }
                 else
                 {
-                    drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
+                    drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
@@ -1051,9 +1046,7 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
         if( center2center_squared < SEG::Square( center2centerAllowed ) )
         {
             int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-            int       errorCode = ( track->Type() == PCB_VIA_T ) ? DRCE_VIA_NEAR_COPPER
-                                                                 : DRCE_TRACK_NEAR_COPPER;
-            DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           m_clearanceSource,
@@ -1110,7 +1103,7 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
         if( center2center_squared < SEG::Square( center2centerAllowed ) )
         {
             int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_COPPER );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           m_clearanceSource,
@@ -1140,7 +1133,7 @@ void DRC::testOutline( BOARD_COMMIT& aCommit )
     }
     else
     {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_INVALID_OUTLINE );
+        DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
 
         m_msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
 
@@ -1164,7 +1157,7 @@ void DRC::testDisabledLayers( BOARD_COMMIT& aCommit )
     {
         if( disabledLayers.test( track->GetLayer() ) )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
             m_msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
                           track->GetLayerName() );
@@ -1184,7 +1177,7 @@ void DRC::testDisabledLayers( BOARD_COMMIT& aCommit )
                     {
                         if( disabledLayers.test( child->GetLayer() ) )
                         {
-                            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
+                            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
                             m_msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
                                           child->GetLayerName() );
@@ -1202,7 +1195,7 @@ void DRC::testDisabledLayers( BOARD_COMMIT& aCommit )
     {
         if( disabledLayers.test( zone->GetLayer() ) )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
             m_msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
                           zone->GetLayerName() );
@@ -1284,7 +1277,7 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
 
                 if( !checkClearancePadToPad( aRefPad, &dummypad, minClearance, &actual ) )
                 {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
+                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
@@ -1313,7 +1306,7 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
 
                 if( !checkClearancePadToPad( pad, &dummypad, minClearance, &actual ) )
                 {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
+                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
@@ -1362,7 +1355,7 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
 
         if( !checkClearancePadToPad( aRefPad, pad, clearanceAllowed, &actual ) )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           m_clearanceSource,

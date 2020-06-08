@@ -587,20 +587,18 @@ public:
         if( m_readOnly )
             return;
 
-        std::map<std::string, Value> val = m_default;
-
         if( OPT<nlohmann::json> js = aSettings->GetJson( m_path ) )
         {
             if( js->is_object() )
             {
-                val.clear();
+                m_ptr->clear();
 
                 for( const auto& el : js->items() )
-                    val[ el.key() ] = el.value().get<Value>();
+                    ( *m_ptr )[ el.key() ] = el.value().get<Value>();
             }
         }
-
-        *m_ptr = val;
+        else if( aResetIfMissing )
+            *m_ptr = m_default;
     }
 
     void Store( JSON_SETTINGS* aSettings) const override
@@ -629,6 +627,9 @@ public:
         {
             if( js->is_object() )
             {
+                if( m_ptr->size() != js->size() )
+                    return false;
+
                 std::map<std::string, Value> val;
 
                 for( const auto& el : js->items() )
@@ -645,6 +646,96 @@ private:
     std::map<std::string, Value>* m_ptr;
 
     std::map<std::string, Value> m_default;
+};
+
+
+/**
+ * A helper for <wxString, wxString> maps
+ */
+class PARAM_WXSTRING_MAP : public PARAM_BASE
+{
+public:
+    PARAM_WXSTRING_MAP( const std::string& aJsonPath, std::map<wxString, wxString>* aPtr,
+               std::initializer_list<std::pair<const wxString, wxString>> aDefault,
+               bool aReadOnly = false ) :
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_default( aDefault )
+    { }
+
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    {
+        if( m_readOnly )
+            return;
+
+        if( OPT<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            if( js->is_object() )
+            {
+                m_ptr->clear();
+
+                for( const auto& el : js->items() )
+                {
+                    ( *m_ptr )[wxString( el.key().c_str(), wxConvUTF8 )] =
+                            el.value().get<wxString>();
+                }
+            }
+        }
+        else if( aResetIfMissing )
+            *m_ptr = m_default;
+    }
+
+    void Store( JSON_SETTINGS* aSettings) const override
+    {
+        nlohmann::json js( {} );
+
+        for( const auto& el : *m_ptr )
+        {
+            std::string key( el.first.ToUTF8() );
+            js[ key ] = el.second;
+        }
+
+        aSettings->Set<nlohmann::json>( m_path, js );
+    }
+
+    virtual void SetDefault() override
+    {
+        *m_ptr = m_default;
+    }
+
+    bool IsDefault() const override
+    {
+        return *m_ptr == m_default;
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( OPT<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            if( js->is_object() )
+            {
+                if( m_ptr->size() != js->size() )
+                    return false;
+
+                std::map<wxString, wxString> val;
+
+                for( const auto& el : js->items() )
+                {
+                    wxString key( el.key().c_str(), wxConvUTF8 );
+                    val[key] = el.value().get<wxString>();
+                }
+
+                return val == *m_ptr;
+            }
+        }
+
+        return false;
+    }
+
+private:
+    std::map<wxString, wxString>* m_ptr;
+
+    std::map<wxString, wxString> m_default;
 };
 
 #endif

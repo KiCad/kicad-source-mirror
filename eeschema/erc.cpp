@@ -185,7 +185,7 @@ int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker )
                 {
                     if( aCreateMarker )
                     {
-                        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_DUPLICATE_SHEET_NAME );
+                        ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_DUPLICATE_SHEET_NAME );
                         ercItem->SetItems( sheet, test_item );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, sheet->GetPosition() );
@@ -230,7 +230,7 @@ void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet 
                         pos = component->GetTransform().TransformCoordinate( pos );
                         pos += component->GetPosition();
 
-                        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
+                        ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
@@ -246,7 +246,7 @@ void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet 
                 {
                     if( field.GetShownText().Matches( wxT( "*${*}*" ) ) )
                     {
-                        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
+                        ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
@@ -258,7 +258,7 @@ void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet 
                 {
                     if( pin->GetShownText().Matches( wxT( "*${*}*" ) ) )
                     {
-                        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
+                        ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( pin );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
@@ -270,7 +270,7 @@ void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet 
             {
                 if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
-                    ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
+                    ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( text );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
@@ -285,7 +285,7 @@ void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet 
             {
                 if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
-                    ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
+                    ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetErrorMessage( _( "Unresolved text variable in worksheet." ) );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
@@ -320,7 +320,7 @@ int TestConflictingBusAliases( SCHEMATIC* aSchematic )
                                 alias->GetParent()->GetFileName(),
                                 test->GetParent()->GetFileName() );
 
-                    ERC_ITEM* ercItem = new ERC_ITEM( ERCE_BUS_ALIAS_CONFLICT );
+                    ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_BUS_ALIAS_CONFLICT );
                     ercItem->SetErrorMessage( msg );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, wxPoint() );
@@ -386,7 +386,7 @@ int TestMultiunitFootprints( const SCH_SHEET_LIST& aSheetList )
                 msg.Printf( _( "Different footprints assigned to %s and %s" ),
                             unitName, secondName );
 
-                ERC_ITEM* ercItem = new ERC_ITEM( ERCE_DIFFERENT_UNIT_FP );
+                ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_DIFFERENT_UNIT_FP );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( unit, secondUnit );
 
@@ -413,7 +413,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMi
     {
         if( aMinConn == NOD )    /* Nothing driving the net. */
         {
-            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_PIN_NOT_DRIVEN );
+            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_DRIVEN );
             ercItem->SetItems( pin );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );
@@ -424,7 +424,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMi
 
     if( aNetItemTst && aNetItemTst->m_Type == NETLIST_ITEM::PIN )  /* Error between 2 pins */
     {
-        ERC_ITEM* ercItem = new ERC_ITEM( aDiag == ERR ? ERCE_PIN_TO_PIN_ERROR
+        ERC_ITEM* ercItem = ERC_ITEM::Create( aDiag == ERR ? ERCE_PIN_TO_PIN_ERROR
                                                        : ERCE_PIN_TO_PIN_WARNING );
         ercItem->SetItems( pin, static_cast<SCH_PIN*>( aNetItemTst->m_Comp ) );
 
@@ -764,7 +764,7 @@ static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_O
 // Helper function: creates a marker for similar labels ERC warning
 static void SimilarLabelsDiagnose( NETLIST_OBJECT* aItemA, NETLIST_OBJECT* aItemB )
 {
-    ERC_ITEM* ercItem = new ERC_ITEM( ERCE_SIMILAR_LABELS );
+    ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_SIMILAR_LABELS );
     ercItem->SetItems( aItemA->m_Comp, aItemB->m_Comp );
 
     SCH_MARKER* marker = new SCH_MARKER( ercItem, aItemA->m_Start );

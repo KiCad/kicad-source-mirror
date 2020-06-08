@@ -38,16 +38,27 @@ class PANEL_SETUP_SEVERITIES : public wxPanel
 {
 private:
     std::map<int, int>& m_severities;
-    int                 m_firstErrorCode;
-    int                 m_lastErrorCode;
-    int                 m_pinMapSpecialCase;
+
+    /// A list of item templates (to get descriptive text and error codes from)
+    std::vector<std::reference_wrapper<RC_ITEM>> m_items;
+
+    /// For ERC settings; a pointer to ERC_ITEM::pinTableConflict
+    RC_ITEM* m_pinMapSpecialCase;
 
     std::map<int, wxRadioButton*[4]> m_buttonMap;   // map from DRC error code to button group
 
 public:
-    PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& aDummyItem,
-                            std::map<int, int>& aSeverities, int aFirstError, int aLastError,
-                            int aPinMapSpecialCase = -1 );
+    /**
+     * Creates the severities setup panel
+     * @param aParent is the dialog parent
+     * @param aItems is a list of error types that can have a severity.  Must have one or more!
+     * @param aSeverities is a map of error code to severity
+     * @param aPinMapSpecialCase is used to special-case the ERCE_PIN_TO_PIN_WARNING
+     */
+    PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
+                            std::vector<std::reference_wrapper<RC_ITEM>> aItems,
+                            std::map<int, int>& aSeverities,
+                            RC_ITEM* aPinMapSpecialCase = nullptr );
 
     void ImportSettingsFrom( std::map<int, int>& aSettings );
 

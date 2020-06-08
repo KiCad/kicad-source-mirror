@@ -29,84 +29,179 @@
 #include <erc_item.h>
 #include <i18n_utility.h>
 
-wxString ERC_ITEM::GetErrorText( int aErrorCode, bool aTranslate ) const
+
+// These, being statically-defined, require specialized I18N handling.  We continue to
+// use the _() macro so that string harvesting by the I18N framework doesn't have to be
+// specialized, but we don't translate on initialization and instead do it in the getters.
+
+#undef _
+#define _(s) s
+
+ERC_ITEM ERC_ITEM::duplicateSheetName( ERCE_DUPLICATE_SHEET_NAME,
+        _( "Duplicate sheet names within a given sheet" ),
+        wxT( "duplicate_sheet_names" ) );
+
+ERC_ITEM ERC_ITEM::pinNotConnected( ERCE_PIN_NOT_CONNECTED,
+        _( "Pin not connected" ),
+        wxT( "pin_not_connected" ) );
+
+ERC_ITEM ERC_ITEM::pinNotDriven( ERCE_PIN_NOT_DRIVEN,
+        _( "Pin connected to other pins, but not driven by any pin" ),
+        wxT( "pin_not_driven" ) );
+
+ERC_ITEM ERC_ITEM::pinTableConflict( ERCE_PIN_TO_PIN_ERROR,
+        _( "Conflict problem between pins" ),
+        wxT( "pin_to_pin" ) );
+
+ERC_ITEM ERC_ITEM::hierLabelMismatch( ERCE_HIERACHICAL_LABEL,
+        _( "Mismatch between hierarchical labels and pins sheets" ),
+        wxT( "hier_label_mismatch" ) );
+
+ERC_ITEM ERC_ITEM::noConnectConnected( ERCE_NOCONNECT_CONNECTED,
+        _( "A pin with a \"no connection\" flag is connected" ),
+        wxT( "no_connect_connected" ) );
+
+ERC_ITEM ERC_ITEM::noConnectDangling( ERCE_NOCONNECT_NOT_CONNECTED,
+        _( "Unconnected \"no connection\" flag" ),
+        wxT( "no_connect_dangling" ) );
+
+ERC_ITEM ERC_ITEM::labelDangling( ERCE_LABEL_NOT_CONNECTED,
+        _( "Label not connected anywhere else in the schematic" ),
+        wxT( "label_dangling" ) );
+
+ERC_ITEM ERC_ITEM::globalLabelDangling( ERCE_GLOBLABEL,
+        _( "Global label not connected anywhere else in the schematic" ),
+        wxT( "global_label_dangling" ) );
+
+ERC_ITEM ERC_ITEM::similarLabels( ERCE_SIMILAR_LABELS,
+        _( "Labels are similar (lower/upper case difference only) "),
+        wxT( "similar_labels" ) );
+
+ERC_ITEM ERC_ITEM::differentUnitFootprint( ERCE_DIFFERENT_UNIT_FP,
+        _( "Different footprint assigned in another unit of the same component" ),
+        wxT( "different_unit_footprint" ) );
+
+ERC_ITEM ERC_ITEM::differentUnitNet( ERCE_DIFFERENT_UNIT_NET,
+        _( "Different net assigned to a shared pin in another unit of the same component" ),
+        wxT( "different_unit_net" ) );
+
+ERC_ITEM ERC_ITEM::busDefinitionConflict( ERCE_BUS_ALIAS_CONFLICT,
+        _( "Conflict between bus alias definitions across schematic sheets" ),
+        wxT( "bus_definition_conflict" ) );
+
+ERC_ITEM ERC_ITEM::multipleNetNames( ERCE_DRIVER_CONFLICT,
+        _( "More than one name given to this bus or net" ),
+        wxT( "multiple_net_names" ) );
+
+ERC_ITEM ERC_ITEM::netNotBusMember( ERCE_BUS_ENTRY_CONFLICT,
+        _( "Net is graphically connected to a bus but not a bus member" ),
+        wxT( "net_not_bus_member" ) );
+
+ERC_ITEM ERC_ITEM::busLabelSyntax( ERCE_BUS_LABEL_ERROR,
+        _( "Label attached to bus item does not describe a bus" ),
+        wxT( "bus_label_syntax" ) );
+
+ERC_ITEM ERC_ITEM::busToBusConflict( ERCE_BUS_TO_BUS_CONFLICT,
+        _( "Buses are graphically connected but share no bus members" ),
+        wxT( "bus_to_bus_conflict" ) );
+
+ERC_ITEM ERC_ITEM::busToNetConflict( ERCE_BUS_TO_NET_CONFLICT,
+        _( "Invalid connection between bus and net items" ),
+        wxT( "bus_to_net_conflict" ) );
+
+ERC_ITEM ERC_ITEM::unresolvedVariable( ERCE_UNRESOLVED_VARIABLE,
+        _( "Unresolved text variable" ),
+        wxT( "unresolved_variable" ) );
+
+std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
+                 ERC_ITEM::duplicateSheetName,
+                 ERC_ITEM::pinNotConnected,
+                 ERC_ITEM::pinNotDriven,
+                 ERC_ITEM::pinTableConflict,
+                 ERC_ITEM::hierLabelMismatch,
+                 ERC_ITEM::noConnectConnected,
+                 ERC_ITEM::noConnectDangling,
+                 ERC_ITEM::labelDangling,
+                 ERC_ITEM::globalLabelDangling,
+                 ERC_ITEM::similarLabels,
+                 ERC_ITEM::differentUnitFootprint,
+                 ERC_ITEM::differentUnitNet,
+                 ERC_ITEM::busDefinitionConflict,
+                 ERC_ITEM::multipleNetNames,
+                 ERC_ITEM::netNotBusMember,
+                 ERC_ITEM::busLabelSyntax,
+                 ERC_ITEM::busToBusConflict,
+                 ERC_ITEM::busToNetConflict,
+                 ERC_ITEM::unresolvedVariable
+         } );
+
+
+
+ERC_ITEM* ERC_ITEM::Create( int aErrorCode )
 {
-    wxString msg;
-
-    if( aErrorCode < 0 )
-        aErrorCode = m_errorCode;
-
     switch( aErrorCode )
     {
-    case ERCE_UNSPECIFIED:
-        msg = _HKI("ERC err unspecified" );
-        break;
     case ERCE_DUPLICATE_SHEET_NAME:
-        msg = _HKI("Duplicate sheet names within a given sheet" );
-        break;
+        return new ERC_ITEM( duplicateSheetName );
+
     case ERCE_PIN_NOT_CONNECTED:
-        msg = _HKI("Pin not connected" );
-        break;
+        return new ERC_ITEM( pinNotConnected );
+
     case ERCE_PIN_NOT_DRIVEN:
-        msg = _HKI( "Pin connected to other pins, but not driven by any pin" );
-        break;
+        return new ERC_ITEM( pinNotDriven );
+
     case ERCE_PIN_TO_PIN_WARNING:
     case ERCE_PIN_TO_PIN_ERROR:
-        msg = _HKI("Conflict problem between pins" );
-        break;
-    case ERCE_HIERACHICAL_LABEL:
-        msg = _HKI("Mismatch between hierarchical labels and pins sheets" );
-        break;
-    case ERCE_NOCONNECT_CONNECTED:
-        msg = _HKI("A pin with a \"no connection\" flag is connected" );
-        break;
-    case ERCE_NOCONNECT_NOT_CONNECTED:
-        msg = _HKI("Unconnected \"no connection\" flag" );
-        break;
-    case ERCE_LABEL_NOT_CONNECTED:
-        msg = _HKI("Label not connected anywhere else in the schematic" );
-        break;
-    case ERCE_SIMILAR_LABELS:
-        msg = _HKI("Labels are similar (lower/upper case difference only)" );
-        break;
-    case ERCE_DIFFERENT_UNIT_FP:
-        msg = _HKI("Different footprint assigned in another unit of the same component" );
-        break;
-    case ERCE_DIFFERENT_UNIT_NET:
-        msg = _HKI("Different net assigned to a shared pin in another unit of the same component" );
-        break;
-    case ERCE_BUS_ALIAS_CONFLICT:
-        msg = _HKI("Conflict between bus alias definitions across schematic sheets" );
-        break;
-    case ERCE_DRIVER_CONFLICT:
-        msg = _HKI( "More than one name given to this bus or net" );
-        break;
-    case ERCE_BUS_ENTRY_CONFLICT:
-        msg = _HKI( "Net is graphically connected to a bus but not a bus member" );
-        break;
-    case ERCE_BUS_LABEL_ERROR:
-        msg = _HKI( "Label attached to bus item does not describe a bus" );
-        break;
-    case ERCE_BUS_TO_BUS_CONFLICT:
-        msg = _HKI( "Buses are graphically connected but share no bus members" );
-        break;
-    case ERCE_BUS_TO_NET_CONFLICT:
-        msg = _HKI( "Invalid connection between bus and net items" );
-        break;
-    case ERCE_GLOBLABEL:
-        msg = _HKI( "Global label not connected anywhere else in the schematic" );
-        break;
-    case ERCE_UNRESOLVED_VARIABLE:
-        msg = _HKI( "Unresolved text variable" );
-        break;
-    default:
-        wxFAIL_MSG( "Missing ERC error description" );
-        msg = _HKI( "Unknown ERC violation" );
-        break;
-    }
+        return new ERC_ITEM( pinTableConflict );
 
-    if( aTranslate )
-        return wxGetTranslation( msg );
-    else
-        return msg;
+    case ERCE_HIERACHICAL_LABEL:
+        return new ERC_ITEM( hierLabelMismatch );
+
+    case ERCE_NOCONNECT_CONNECTED:
+        return new ERC_ITEM( noConnectConnected );
+
+    case ERCE_NOCONNECT_NOT_CONNECTED:
+        return new ERC_ITEM( noConnectDangling );
+
+    case ERCE_LABEL_NOT_CONNECTED:
+        return new ERC_ITEM( labelDangling );
+
+    case ERCE_SIMILAR_LABELS:
+        return new ERC_ITEM( similarLabels );
+
+    case ERCE_DIFFERENT_UNIT_FP:
+        return new ERC_ITEM( differentUnitFootprint );
+
+    case ERCE_DIFFERENT_UNIT_NET:
+        return new ERC_ITEM( differentUnitNet );
+
+    case ERCE_BUS_ALIAS_CONFLICT:
+        return new ERC_ITEM( busDefinitionConflict );
+
+    case ERCE_DRIVER_CONFLICT:
+        return new ERC_ITEM( multipleNetNames );
+
+    case ERCE_BUS_ENTRY_CONFLICT:
+        return new ERC_ITEM( netNotBusMember );
+
+    case ERCE_BUS_LABEL_ERROR:
+        return new ERC_ITEM( busLabelSyntax );
+
+    case ERCE_BUS_TO_BUS_CONFLICT:
+        return new ERC_ITEM( busToBusConflict );
+
+    case ERCE_BUS_TO_NET_CONFLICT:
+        return new ERC_ITEM( busToNetConflict );
+
+    case ERCE_GLOBLABEL:
+        return new ERC_ITEM( globalLabelDangling );
+
+    case ERCE_UNRESOLVED_VARIABLE:
+        return new ERC_ITEM( unresolvedVariable );
+
+    case ERCE_UNSPECIFIED:
+    default:
+        wxFAIL_MSG( "Unknown ERC error code" );
+        return nullptr;
+    }
 }

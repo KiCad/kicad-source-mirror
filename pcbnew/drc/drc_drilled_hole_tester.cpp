@@ -89,7 +89,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
     if( holeSize == 0 )
         return true;
 
-    if( !bds.Ignore( DRCE_TOO_SMALL_PAD_DRILL ) )
+    if( !bds.Ignore( DRCE_TOO_SMALL_DRILL ) )
     {
         int       minHole = bds.m_MinThroughDrill;
         wxString  minHoleSource = _( "board minimum" );
@@ -103,7 +103,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
 
         if( holeSize < minHole )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_PAD_DRILL );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           minHoleSource,
@@ -132,7 +132,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
     bool                   success = true;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    if( !bds.Ignore( DRCE_TOO_SMALL_VIA_DRILL ) )
+    if( !bds.Ignore( DRCE_TOO_SMALL_DRILL ) )
     {
         int       minHole = bds.m_MinThroughDrill;
         wxString  minHoleSource = _( "board minimum" );
@@ -146,7 +146,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
 
         if( via->GetDrillValue() < minHole )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_DRILL );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           minHoleSource,
@@ -189,7 +189,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
 
         if(  via->GetDrillValue() < minHole )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA_DRILL );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_MICROVIA_DRILL );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           minHoleSource,
@@ -264,7 +264,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkHoles()
 
             if( actual < bds.m_HoleToHoleMin )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DRILLED_HOLES_TOO_CLOSE );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                               MessageTextFromValue( m_units, bds.m_HoleToHoleMin, true ),

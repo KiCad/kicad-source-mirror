@@ -244,18 +244,18 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             [&]() -> nlohmann::json
             {
                 nlohmann::json ret = {};
-                DRC_ITEM drc( 0 );
 
-                for( int i = DRCE_FIRST; i <= DRCE_LAST; ++i )
+                for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities() )
                 {
-                    if( !m_DRCSeverities.count( i ) )
+                    int code = item.GetErrorCode();
+
+                    if( !m_DRCSeverities.count( code ) )
                         continue;
 
-                    wxString name = drc.GetErrorText( i, false );
-                    name.Replace( wxT( " " ), wxT( "_" ) );
+                    wxString name = item.GetSettingsKey();
 
                     ret[std::string( name.ToUTF8() )] =
-                            severityToString( static_cast<SEVERITY>( m_DRCSeverities[i] ) );
+                            SeverityToString( static_cast<SEVERITY>( m_DRCSeverities[code] ) );
                 }
 
                 return ret;
@@ -265,17 +265,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 if( !aJson.is_object() )
                     return;
 
-                DRC_ITEM drc( 0 );
-
-                for( int i = DRCE_FIRST; i <= DRCE_LAST; ++i )
+                for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities() )
                 {
-                    wxString name = drc.GetErrorText( i, false );
-                    name.Replace( wxT( " " ), wxT( "_" ) );
-
+                    wxString name = item.GetSettingsKey();
                     std::string key( name.ToUTF8() );
 
                     if( aJson.contains( key ) )
-                        m_DRCSeverities[i] = severityFromString( aJson[key] );
+                        m_DRCSeverities[item.GetErrorCode()] = SeverityFromString( aJson[key] );
                 }
             }, {} ) );
 
@@ -573,27 +569,6 @@ BOARD_DESIGN_SETTINGS::~BOARD_DESIGN_SETTINGS()
 }
 
 
-SEVERITY BOARD_DESIGN_SETTINGS::severityFromString( const wxString& aSeverity )
-{
-    if( aSeverity == wxT( "warning" ) )
-        return RPT_SEVERITY_WARNING;
-    else if( aSeverity == wxT( "ignore" ) )
-        return RPT_SEVERITY_IGNORE;
-    else
-        return RPT_SEVERITY_ERROR;
-}
-
-wxString BOARD_DESIGN_SETTINGS::severityToString( const SEVERITY& aSeverity )
-{
-    if( aSeverity == RPT_SEVERITY_IGNORE )
-        return wxT( "ignore" );
-    else if( aSeverity == RPT_SEVERITY_WARNING )
-        return wxT( "warning" );
-    else
-        return wxT( "error" );
-}
-
-
 bool BOARD_DESIGN_SETTINGS::LoadFromFile( const std::string& aDirectory )
 {
     bool ret = NESTED_SETTINGS::LoadFromFile( aDirectory );
@@ -609,13 +584,12 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const std::string& aDirectory )
 
     bool migrated = false;
 
-    DRC_ITEM drc( 0 );
-
     auto drcName =
-            [drc]( int aCode ) -> std::string
+            []( int aCode ) -> std::string
             {
-                wxString name = drc.GetErrorText( aCode, false );
-                name.Replace( wxT( " " ), wxT( "_" ) );
+                DRC_ITEM* item = DRC_ITEM::Create( aCode );
+                wxString name = item->GetSettingsKey();
+                delete item;
                 return std::string( name.ToUTF8() );
             };
 
@@ -634,32 +608,19 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const std::string& aDirectory )
         migrated = true;
     }
 
-    if( OPT<bool> v = project->Get<bool>( PointerFromString( bp + "legacy_ourtyards_overlap" ) ) )
+    if( OPT<bool> v = project->Get<bool>( PointerFromString( bp + "legacy_courtyards_overlap" ) ) )
     {
         if( *v )
             ( *this )[PointerFromString( rs + drcName( DRCE_OVERLAPPING_FOOTPRINTS ) )] = "error";
         else
             ( *this )[PointerFromString( rs + drcName( DRCE_OVERLAPPING_FOOTPRINTS ) )] = "ignore";
 
-        project->erase( PointerFromString( bp + "legacy_ourtyards_overlap" ) );
+        project->erase( PointerFromString( bp + "legacy_courtyards_overlap" ) );
         migrated = true;
     }
 
-    if( project->contains( PointerFromString( "legacy.pcbnew" ) ) )
-    {
-        // DRC Severities
-        for( int i = DRCE_FIRST; i <= DRCE_LAST; ++i )
-        {
-            std::string key( severityToString( static_cast<SEVERITY>( i ) ).ToUTF8() );
-
-            if( OPT<wxString> v = project->Get<wxString>( "legacy.pcbnew." + key ) )
-                ( *this )[PointerFromString( rs + key )] = *v;
-        }
-
-        // We are the only place that needs this info, so now it can be deleted
+    if( project->contains( "legacy" ) )
         project->at( "legacy" ).erase( "pcbnew" );
-        migrated = true;
-    }
 
     // Now that we have everything, we need to load again
     if( migrated )

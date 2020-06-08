@@ -413,7 +413,10 @@ wxString SCH_EDIT_FRAME::GetScreenDesc() const
 void SCH_EDIT_FRAME::CreateScreens()
 {
     m_schematic->Reset();
+    m_schematic->SetProject( &Prj() );
     m_schematic->SetRoot( new SCH_SHEET( m_schematic ) );
+
+    m_defaults = &m_schematic->Settings();
 
     SCH_SCREEN* rootScreen = new SCH_SCREEN( m_schematic );
     rootScreen->SetMaxUndoItems( m_UndoRedoCountMax );

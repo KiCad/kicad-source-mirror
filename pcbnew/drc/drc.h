@@ -40,58 +40,24 @@
 enum PCB_DRC_CODE {
     DRCE_FIRST = 1,
     DRCE_UNCONNECTED_ITEMS = DRCE_FIRST,    ///< items are unconnected
-    DRCE_TRACK_NEAR_HOLE,                   ///< thru hole is too close to track
-    DRCE_TRACK_NEAR_PAD,                    ///< pad too close to track
-    DRCE_TRACK_NEAR_VIA,                    ///< track too close to via
-    DRCE_TRACK_NEAR_ZONE,                   ///< track & zone collide or are too close together
-    DRCE_TRACK_NEAR_COPPER,                 ///< track & copper graphic collide or are too close
-    DRCE_VIA_NEAR_VIA,                      ///< via too close to via
-    DRCE_VIA_NEAR_TRACK,                    ///< via too close to track
-    DRCE_VIA_NEAR_COPPER,                   ///< via and copper graphic collide or are too close
-    DRCE_TRACK_ENDS,                        ///< track ends are too close
-    DRCE_TRACK_SEGMENTS_TOO_CLOSE,          ///< 2 parallel track segments too close: segm ends between segref ends
+    DRCE_ALLOWED_ITEMS,                     ///< a disallowed item has been used
+    DRCE_CLEARANCE,                         ///< items are too close together
     DRCE_TRACKS_CROSSING,                   ///< tracks are crossing
-    DRCE_TRACK_NEAR_EDGE,                   ///< track too close to board edge
-    DRCE_VIA_NEAR_EDGE,                     ///< via too close to board edge
-    DRCE_PAD_NEAR_EDGE,                     ///< pad too close to board edge
-    DRCE_PAD_NEAR_PAD,                      ///< pad too close to pad
-    DRCE_PAD_NEAR_COPPER,                   ///< pad and copper graphic collide or are too close
+    DRCE_COPPER_EDGE_CLEARANCE,             ///< a copper item is too close to the board edge
     DRCE_ZONES_INTERSECT,                   ///< copper area outlines intersect
-    DRCE_ZONES_TOO_CLOSE,                   ///< copper area outlines are too close
     DRCE_ZONE_HAS_EMPTY_NET,                ///< copper area has a net but no pads in nets, which is suspicious
     DRCE_DANGLING_VIA,                      ///< via which isn't connected to anything
     DRCE_DANGLING_TRACK,                    ///< track with at least one end not connected to anything
-    DRCE_HOLE_NEAR_PAD,                     ///< hole too close to pad
-    DRCE_HOLE_NEAR_TRACK,                   ///< hole too close to track
     DRCE_DRILLED_HOLES_TOO_CLOSE,           ///< overlapping drilled holes break drill bits
-    DRCE_TOO_SMALL_TRACK_WIDTH,             ///< Too small track width
-    DRCE_TOO_LARGE_TRACK_WIDTH,             ///< Too small track width
+    DRCE_TRACK_WIDTH,                       ///< Track width is too small or too large
     DRCE_TOO_SMALL_VIA,                     ///< Too small via size
-    DRCE_TOO_SMALL_VIA_ANNULUS,             ///< Via size and drill leave annulus too small
-    DRCE_TOO_SMALL_VIA_DRILL,               ///< Too small via drill
-    DRCE_TOO_SMALL_PAD_DRILL,               ///< Too small via drill
+    DRCE_VIA_ANNULUS,                       ///< Via size and drill leave annulus too small or too large
+    DRCE_TOO_SMALL_DRILL,                   ///< Too small via or pad drill
     DRCE_VIA_HOLE_BIGGER,                   ///< via's hole is bigger than its diameter
-    DRCE_MICROVIA_NOT_ALLOWED,              ///< micro vias are not allowed
-    DRCE_MICROVIA_TOO_MANY_LAYERS,          ///< micro via's layer pair incorrect (layers must be adjacent)
+    DRCE_PADSTACK,                          ///< something is wrong with a pad or via stackup
     DRCE_TOO_SMALL_MICROVIA,                ///< Too small micro via size
     DRCE_TOO_SMALL_MICROVIA_DRILL,          ///< Too small micro via drill
-    DRCE_BURIED_VIA_NOT_ALLOWED,            ///< buried vias are not allowed
-    DRCE_NETCLASS_TRACKWIDTH,               ///< netclass has TrackWidth < board.m_designSettings->m_TrackMinWidth
-    DRCE_NETCLASS_CLEARANCE,                ///< netclass has Clearance < board.m_designSettings->m_TrackClearance
-    DRCE_NETCLASS_VIAANNULUS,               ///< netclass ViaSize & ViaDrill leave annulus < board.m_designSettings->m_ViasMinAnnulus
-    DRCE_NETCLASS_VIASIZE,                  ///< netclass has ViaSize < board.m_designSettings->m_ViasMinSize
-    DRCE_NETCLASS_VIADRILLSIZE,             ///< netclass has ViaDrillSize < board.m_designSettings->m_MinThroughDrill
-    DRCE_NETCLASS_uVIASIZE,                 ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinSize
-    DRCE_NETCLASS_uVIADRILLSIZE,            ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinDrill
-    DRCE_VIA_INSIDE_KEEPOUT,
-    DRCE_MICROVIA_INSIDE_KEEPOUT,
-    DRCE_BBVIA_INSIDE_KEEPOUT,
-    DRCE_TRACK_INSIDE_KEEPOUT,
-    DRCE_PAD_INSIDE_KEEPOUT,
-    DRCE_FOOTPRINT_INSIDE_KEEPOUT,
-    DRCE_HOLE_INSIDE_KEEPOUT,
-    DRCE_TEXT_INSIDE_KEEPOUT,
-    DRCE_GRAPHICS_INSIDE_KEEPOUT,
+    DRCE_KEEPOUT,                           ///< A disallowed object is inside a keepout
     DRCE_OVERLAPPING_FOOTPRINTS,            ///< footprint courtyards overlap
     DRCE_MISSING_COURTYARD,                 ///< footprint has no courtyard defined
     DRCE_MALFORMED_COURTYARD,               ///< footprint has a courtyard but malformed

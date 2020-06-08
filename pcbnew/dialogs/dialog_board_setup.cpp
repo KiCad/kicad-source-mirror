@@ -53,10 +53,9 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
     m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, aFrame, m_layers );
 
-    DRC_ITEM               dummyItem( 0 );
     BOARD_DESIGN_SETTINGS& bds = aFrame->GetDesignSettings();
-    m_severities = new PANEL_SETUP_SEVERITIES( this, dummyItem, bds.m_DRCSeverities,
-                                               DRCE_FIRST, DRCE_LAST );
+    m_severities = new PANEL_SETUP_SEVERITIES( this, DRC_ITEM::GetItemsWithSeverities(),
+                                               bds.m_DRCSeverities );
 
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
@@ -140,7 +139,7 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
 
     if( !m_frame->GetSettingsManager()->LoadProject( projectFn.GetFullPath(), false ) )
     {
-        wxString msg = wxString::Format( _( "Error importing settings from borad:\n"
+        wxString msg = wxString::Format( _( "Error importing settings from board:\n"
                                             "Associated project file %s could not be loaded" ),
                                          projectFn.GetFullPath() );
         DisplayErrorMessage( this, msg );

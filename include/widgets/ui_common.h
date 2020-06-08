@@ -54,6 +54,10 @@ enum SEVERITY {
 
 wxBitmap MakeBadge( SEVERITY aStyle, int aCount, wxWindow* aWindow, int aDepth = 1 );
 
+SEVERITY SeverityFromString( const wxString& aSeverity );
+
+wxString SeverityToString( const SEVERITY& aSeverity );
+
 
 
 

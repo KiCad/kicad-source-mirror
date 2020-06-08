@@ -159,6 +159,7 @@ set( EESCHEMA_SRCS
     eeschema_settings.cpp
     erc.cpp
     erc_item.cpp
+    erc_settings.cpp
     fields_grid_table.cpp
     files-io.cpp
     generate_alias_info.cpp
@@ -216,6 +217,7 @@ set( EESCHEMA_SRCS
     sch_text.cpp
     sch_validators.cpp
     schematic.cpp
+    schematic_settings.cpp
     schematic_undo_redo.cpp
     sch_edit_frame.cpp
     sheet.cpp

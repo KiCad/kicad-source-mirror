@@ -306,20 +306,20 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     if( bds().m_DRCSeverities[ rcItem->GetErrorCode() ] == RPT_SEVERITY_WARNING )
     {
         msg.Printf( _( "Change severity to Error for all '%s' violations" ),
-                    rcItem->GetErrorText( rcItem->GetErrorCode() ),
+                    rcItem->GetErrorText(),
                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
         menu.Append( 3, msg );
     }
     else
     {
         msg.Printf( _( "Change severity to Warning for all '%s' violations" ),
-                    rcItem->GetErrorText( rcItem->GetErrorCode() ),
+                    rcItem->GetErrorText(),
                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
         menu.Append( 4, msg );
     }
 
     msg.Printf( _( "Ignore all '%s' violations" ),
-                rcItem->GetErrorText( rcItem->GetErrorCode() ),
+                rcItem->GetErrorText(),
                 _( "Violations will not be checked or reported" ) );
     menu.Append( 5, msg );
 

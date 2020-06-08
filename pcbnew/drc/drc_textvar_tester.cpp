@@ -57,7 +57,7 @@ bool DRC_TEXTVAR_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
 
                     if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                     {
-                        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_UNRESOLVED_VARIABLE );
+                        DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                         drcItem->SetItems( text );
 
                         HandleMarker( new MARKER_PCB( drcItem, text->GetPosition() ) );
@@ -75,7 +75,7 @@ bool DRC_TEXTVAR_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
 
             if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_UNRESOLVED_VARIABLE );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                 drcItem->SetItems( text );
 
                 HandleMarker( new MARKER_PCB( drcItem, text->GetPosition() ) );
@@ -98,7 +98,7 @@ bool DRC_TEXTVAR_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
             {
                 if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_UNRESOLVED_VARIABLE );
+                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                     drcItem->SetErrorMessage( _( "Unresolved text variable in worksheet." ) );
 
                     HandleMarker( new MARKER_PCB( drcItem, text->GetPosition() ) );

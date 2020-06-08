@@ -166,7 +166,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                               static_cast<SCH_PIN*>( candidates[0] )->GetTransformedPosition() :
                               candidates[0]->GetPosition();
 
-            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_DRIVER_CONFLICT );
+            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_DRIVER_CONFLICT );
             ercItem->SetItems( candidates[0], second_item );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
@@ -2023,7 +2023,7 @@ int CONNECTION_GRAPH::RunERC()
 
     wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" );
 
-    ERC_SETTINGS* settings = m_schematic->ErcSettings();
+    ERC_SETTINGS& settings = m_schematic->ErcSettings();
 
     for( auto&& subgraph : m_subgraphs )
     {
@@ -2041,18 +2041,18 @@ int CONNECTION_GRAPH::RunERC()
          * format due to their TestDanglingEnds() implementation.
          */
 
-        if( settings->IsTestEnabled( ERCE_DRIVER_CONFLICT ) && !subgraph->ResolveDrivers() )
+        if( settings.IsTestEnabled( ERCE_DRIVER_CONFLICT ) && !subgraph->ResolveDrivers() )
             error_count++;
 
-        if( settings->IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT )
+        if( settings.IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT )
                 && !ercCheckBusToNetConflicts( subgraph ) )
             error_count++;
 
-        if( settings->IsTestEnabled( ERCE_BUS_ENTRY_CONFLICT )
+        if( settings.IsTestEnabled( ERCE_BUS_ENTRY_CONFLICT )
                 && !ercCheckBusToBusEntryConflicts( subgraph ) )
             error_count++;
 
-        if( settings->IsTestEnabled( ERCE_BUS_TO_BUS_CONFLICT )
+        if( settings.IsTestEnabled( ERCE_BUS_TO_BUS_CONFLICT )
                 && !ercCheckBusToBusConflicts( subgraph ) )
             error_count++;
 
@@ -2062,8 +2062,8 @@ int CONNECTION_GRAPH::RunERC()
         if( !ercCheckNoConnects( subgraph ) )
             error_count++;
 
-        if( ( settings->IsTestEnabled( ERCE_LABEL_NOT_CONNECTED )
-                || settings->IsTestEnabled( ERCE_GLOBLABEL ) ) && !ercCheckLabels( subgraph ) )
+        if( ( settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED )
+                || settings.IsTestEnabled( ERCE_GLOBLABEL ) ) && !ercCheckLabels( subgraph ) )
             error_count++;
     }
 
@@ -2114,7 +2114,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
 
     if( net_item && bus_item )
     {
-        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_BUS_TO_NET_CONFLICT );
+        ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_BUS_TO_NET_CONFLICT );
         ercItem->SetItems( net_item, bus_item );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, net_item->GetPosition() );
@@ -2182,7 +2182,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSu
 
         if( !match )
         {
-            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_BUS_TO_BUS_CONFLICT );
+            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_BUS_TO_BUS_CONFLICT );
             ercItem->SetItems( label, port );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, label->GetPosition() );
@@ -2262,7 +2262,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
     if( conflict )
     {
-        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_BUS_ENTRY_CONFLICT );
+        ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_CONFLICT );
         ercItem->SetItems( bus_entry, bus_wire );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, bus_entry->GetPosition() );
@@ -2315,7 +2315,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
         if( pin && has_invalid_items )
         {
-            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_NOCONNECT_CONNECTED );
+            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
             ercItem->SetItems( pin );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
@@ -2326,7 +2326,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
         if( !has_other_items )
         {
-            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_NOCONNECT_NOT_CONNECTED );
+            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_NOT_CONNECTED );
             ercItem->SetItems( aSubgraph->m_no_connect );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, aSubgraph->m_no_connect->GetPosition() );
@@ -2381,7 +2381,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
         if( pin && !has_other_connections && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
         {
-            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_PIN_NOT_CONNECTED );
+            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
             ercItem->SetItems( pin );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
@@ -2437,7 +2437,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" );
 
     // Global label check can be disabled independently
-    if( !m_schematic->ErcSettings()->IsTestEnabled( ERCE_GLOBLABEL ) && is_global )
+    if( !m_schematic->ErcSettings().IsTestEnabled( ERCE_GLOBLABEL ) && is_global )
         return true;
 
     wxString name = text->GetShownText();
@@ -2475,7 +2475,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
     if( !has_other_connections )
     {
-        ERC_ITEM* ercItem = new ERC_ITEM( is_global ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED );
+        ERC_ITEM* ercItem = ERC_ITEM::Create( is_global ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED );
         ercItem->SetItems( text );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );

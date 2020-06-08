@@ -17,6 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <confirm.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <kiface_i.h>
@@ -27,6 +28,8 @@
 #include <eeschema_config.h>
 #include <erc_item.h>
 #include <panel_text_variables.h>
+#include <project/project_file.h>
+#include <settings/settings_manager.h>
 #include "dialog_schematic_setup.h"
 #include "panel_eeschema_template_fieldnames.h"
 
@@ -41,10 +44,9 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_fieldNameTemplates = new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( aFrame, m_treebook, false );
     m_pinMap = new PANEL_SETUP_PINMAP( m_treebook, aFrame );
 
-    ERC_ITEM dummyItem( 0 );
-    m_severities = new PANEL_SETUP_SEVERITIES( this, dummyItem,
-            m_frame->Schematic().ErcSettings()->m_Severities, ERCE_FIRST, ERCE_LAST,
-            ERCE_PIN_TO_PIN_WARNING );
+    m_pinToPinError = ERC_ITEM::Create( ERCE_PIN_TO_PIN_WARNING );
+    m_severities = new PANEL_SETUP_SEVERITIES( this, ERC_ITEM::GetItemsWithSeverities(),
+            m_frame->Schematic().ErcSettings().m_Severities, m_pinToPinError );
 
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
@@ -76,6 +78,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
 DIALOG_SCHEMATIC_SETUP::~DIALOG_SCHEMATIC_SETUP()
 {
+    delete m_pinToPinError;
+
 	m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED,
                          wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), NULL, this );
 }
@@ -108,29 +112,35 @@ void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     if( importDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxConfigBase* cfg = new wxFileConfig( wxEmptyString, wxEmptyString, importDlg.GetFilePath() );
+    wxFileName projectFn( importDlg.GetFilePath() );
 
-    // We do not want expansion of env var values when reading our project config file
-    cfg->SetExpandEnvVars( false );
-    cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
+    if( !m_frame->GetSettingsManager()->LoadProject( projectFn.GetFullPath(), false ) )
+    {
+        wxString msg = wxString::Format( _( "Error importing settings from project:\n"
+                                            "Project file %s could not be loaded" ),
+                                         projectFn.GetFullPath() );
+        DisplayErrorMessage( this, msg );
+
+        return;
+    }
+
+    PROJECT* otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
+
+    SCHEMATIC otherSch( otherPrj );
+
+    TEMPLATES templateMgr;
+    PROJECT_FILE& file = otherPrj->GetProjectFile();
+
+    wxASSERT( file.m_SchematicSettings );
+
+    file.m_SchematicSettings->m_TemplateFieldNames = &templateMgr;
+    file.m_SchematicSettings->LoadFromFile();
 
     if( importDlg.m_formattingOpt->GetValue() )
-    {
-        std::vector<PARAM_CFG*> params;
-        m_frame->AddFormattingParameters( params );
-
-        wxConfigLoadParams( cfg, params, GROUP_SCH_EDIT );
-        m_formatting->TransferDataToWindow();
-    }
+        m_formatting->ImportSettingsFrom( *file.m_SchematicSettings );
 
     if( importDlg.m_fieldNameTemplatesOpt->GetValue() )
-    {
-        TEMPLATES templateMgr;
-        PARAM_CFG_FIELDNAMES param( &templateMgr );
-        param.ReadParam( cfg );
-
-        m_fieldNameTemplates->ImportSettingsFrom( &templateMgr );
-    }
+        m_fieldNameTemplates->ImportSettingsFrom( file.m_SchematicSettings->m_TemplateFieldNames );
 
     if( importDlg.m_pinMapOpt->GetValue() )
     {
@@ -138,13 +148,7 @@ void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     }
 
     if( importDlg.m_SeveritiesOpt->GetValue() )
-    {
-        ERC_SETTINGS settings;
-        settings.LoadDefaults();
-        wxConfigLoadParams( cfg, settings.GetProjectFileParameters(), GROUP_SCH_EDIT );
+        m_severities->ImportSettingsFrom( file.m_ErcSettings->m_Severities );
 
-        m_severities->ImportSettingsFrom( settings.m_Severities );
-    }
-
-    delete cfg;
+    m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
 }

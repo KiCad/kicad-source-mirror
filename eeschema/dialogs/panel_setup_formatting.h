@@ -24,6 +24,7 @@
 #include "panel_setup_formatting_base.h"
 
 class SCH_EDIT_FRAME;
+class SCHEMATIC_SETTINGS;
 class GAL_OPTIONS_PANEL;
 
 
@@ -44,6 +45,8 @@ public:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    void ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings );
 };
 
 

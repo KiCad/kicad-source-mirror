@@ -36,7 +36,13 @@ const int projectFileSchemaVersion = 1;
 
 PROJECT_FILE::PROJECT_FILE( const std::string& aFullPath ) :
         JSON_SETTINGS( aFullPath, SETTINGS_LOC::PROJECT, projectFileSchemaVersion ),
-        m_sheets(), m_boards(), m_BoardSettings()
+        m_sheets(),
+        m_boards(),
+        m_project( nullptr ),
+        m_ErcSettings( nullptr ),
+        m_SchematicSettings( nullptr ),
+        m_TemplateFieldNames( nullptr ),
+        m_BoardSettings()
 {
     // Keep old files around
     m_deleteLegacyAfterMigration = false;
@@ -44,6 +50,8 @@ PROJECT_FILE::PROJECT_FILE( const std::string& aFullPath ) :
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "sheets", &m_sheets, {} ) );
 
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "boards", &m_boards, {} ) );
+
+    m_params.emplace_back( new PARAM_WXSTRING_MAP( "text_variables", &m_TextVars, {} ) );
 
     m_params.emplace_back(
             new PARAM_LIST<wxString>( "libraries.pinned_symbol_libs", &m_PinnedSymbolLibs, {} ) );
@@ -55,7 +63,7 @@ PROJECT_FILE::PROJECT_FILE( const std::string& aFullPath ) :
             new PARAM_PATH_LIST( "cvpcb.equivalence_files", &m_EquivalenceFiles, {} ) );
 
     m_params.emplace_back(
-            new PARAM_PATH( "pcbnew.page_layout_descr_file", &m_PageLayoutDescrFile, "" ) );
+            new PARAM_PATH( "pcbnew.page_layout_descr_file", &m_BoardPageLayoutDescrFile, "" ) );
 
     m_params.emplace_back(
             new PARAM_PATH( "pcbnew.last_paths.netlist", &m_PcbLastPath[LAST_PATH_NETLIST], "" ) );
@@ -74,6 +82,29 @@ PROJECT_FILE::PROJECT_FILE( const std::string& aFullPath ) :
 
     m_params.emplace_back(
             new PARAM_PATH( "pcbnew.last_paths.gencad", &m_PcbLastPath[LAST_PATH_GENCAD], "" ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "schematic.legacy_lib_dir", &m_LegacyLibDir, "" ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "schematic.legacy_lib_list",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::array();
+
+                for( const wxString& libName : m_LegacyLibNames )
+                    ret.push_back( libName );
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( aJson.empty() || !aJson.is_array() )
+                    return;
+
+                m_LegacyLibNames.clear();
+
+                for( const nlohmann::json& entry : aJson )
+                    m_LegacyLibNames.push_back( entry.get<wxString>() );
+            }, {} ) );
 
     m_NetSettings = std::make_shared<NET_SETTINGS>( this, "net_settings" );
 }
@@ -142,6 +173,78 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 
     // All CvPcb params that we want to keep have been migrated above
     group_blacklist.insert( wxT( "/cvpcb" ) );
+
+    aCfg->SetPath( wxT( "/eeschema" ) );
+    fromLegacyString( aCfg, "LibDir", "schematic.legacy_lib_dir" );
+
+    aCfg->SetPath( wxT( "/eeschema/libraries" ) );
+
+    {
+        int      libIdx = 1;
+        wxString libKey = wxT( "LibName" );
+        libKey << libIdx;
+
+        nlohmann::json libs = nlohmann::json::array();
+
+        while( aCfg->Read( libKey, &str ) )
+        {
+            libs.push_back( str );
+
+            libKey = wxT( "LibName" );
+            libKey << ++libIdx;
+        }
+
+        ( *this )[PointerFromString( "schematic.legacy_lib_list" )] = libs;
+    }
+
+    group_blacklist.insert( wxT( "/eeschema" ) );
+
+    aCfg->SetPath( wxT( "/text_variables" ) );
+
+    {
+        int      txtIdx = 1;
+        wxString txtKey;
+        txtKey << txtIdx;
+
+        nlohmann::json vars = nlohmann::json();
+
+        while( aCfg->Read( txtKey, &str ) )
+        {
+            wxArrayString tokens = wxSplit( str, ':' );
+
+            if( tokens.size() == 2 )
+                vars[ tokens[0].ToStdString() ] = tokens[1];
+
+            txtKey.clear();
+            txtKey << ++txtIdx;
+        }
+
+        ( *this )[PointerFromString( "text_variables" )] = vars;
+    }
+
+    group_blacklist.insert( wxT( "/text_variables" ) );
+
+    aCfg->SetPath( wxT( "/schematic_editor" ) );
+
+    fromLegacyString( aCfg, "PageLayoutDescrFile",     "schematic.page_layout_descr_file" );
+    fromLegacyString( aCfg, "PlotDirectoryName",       "schematic.plot_directory" );
+    fromLegacyString( aCfg, "NetFmtName",              "schematic.net_format_name" );
+    fromLegacy<bool>( aCfg, "SpiceAjustPassiveValues", "schematic.spice_adjust_passive_values" );
+    fromLegacy<int>(  aCfg, "SubpartIdSeparator",      "schematic.subpart_id_separator" );
+    fromLegacy<int>(  aCfg, "SubpartFirstId",          "schematic.subpart_first_id" );
+
+    fromLegacy<int>( aCfg, "LineThickness",         "schematic.drawing.default_line_thickness" );
+    fromLegacy<int>( aCfg, "WireThickness",         "schematic.drawing.default_wire_thickness" );
+    fromLegacy<int>( aCfg, "BusThickness",          "schematic.drawing.default_bus_thickness" );
+    fromLegacy<int>( aCfg, "LabSize",               "schematic.drawing.default_text_size" );
+    fromLegacy<int>( aCfg, "PinSymbolSize",         "schematic.drawing.pin_symbol_size" );
+    fromLegacy<int>( aCfg, "JunctionSize",          "schematic.drawing.default_junction_size" );
+
+    fromLegacyString(   aCfg, "FieldNameTemplates", "schematic.drawing.field_names" );
+    fromLegacy<double>( aCfg, "TextOffsetRatio",    "schematic.drawing.text_offset_ratio" );
+
+    // All schematic_editor keys we keep are migrated above
+    group_blacklist.insert( wxT( "/schematic_editor" ) );
 
     aCfg->SetPath( wxT( "/pcbnew" ) );
 
@@ -252,7 +355,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
     fromLegacy<bool>(
             aCfg, "RequireCourtyardDefinitions", sev + "legacy_no_courtyard_defined" );
 
-    fromLegacy<bool>( aCfg, "ProhibitOverlappingCourtyards", sev + "legacy_ourtyards_overlap" );
+    fromLegacy<bool>( aCfg, "ProhibitOverlappingCourtyards", sev + "legacy_courtyards_overlap" );
 
     {
         int      idx     = 1;
@@ -330,10 +433,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
         ( *this )[PointerFromString( bp + "diff_pair_dimensions" )] = pairs;
     }
 
-    // NOTE: severities are just left alone to be migrated by BOARD_DESIGN_SETTINGS when it
-    // initializes, so that common doesn't need knowledge of the DRC error list (this is the
-    // downside of storing them as string keys...  Do not blacklist the /pcbnew group so that
-    // this works!
+    group_blacklist.insert( wxT( "/pcbnew" ) );
 
     // General group is unused these days, we can throw it away
     group_blacklist.insert( wxT( "/general" ) );

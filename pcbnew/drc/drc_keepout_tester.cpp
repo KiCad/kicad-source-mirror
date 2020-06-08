@@ -96,10 +96,10 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
 
             if( center2center_squared <= SEG::Square( widths) )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_INSIDE_KEEPOUT );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
-                              m_sources.at(DISALLOW_TRACKS ) );
+                              m_sources.at( DISALLOW_TRACKS ) );
 
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( segm, m_zone );
@@ -110,30 +110,25 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
         }
         else if( segm->Type() == PCB_VIA_T && ( m_keepoutFlags & CHECK_VIAS_MASK ) != 0 )
         {
-            VIA* via = static_cast<VIA*>( segm );
-            int  errorCode = 0;
+            VIA* via      = static_cast<VIA*>( segm );
             int  sourceId = 0;
 
             if( ( m_keepoutFlags & DISALLOW_VIAS ) > 0 )
             {
-                errorCode = DRCE_VIA_INSIDE_KEEPOUT;
                 sourceId = DISALLOW_VIAS;
             }
             else if( via->GetViaType() == VIATYPE::MICROVIA
                         && ( m_keepoutFlags & DISALLOW_MICRO_VIAS ) > 0 )
             {
-                errorCode = DRCE_MICROVIA_INSIDE_KEEPOUT;
                 sourceId = DISALLOW_MICRO_VIAS;
             }
             else if( via->GetViaType() == VIATYPE::BLIND_BURIED
                         && ( m_keepoutFlags & DISALLOW_BB_VIAS ) > 0 )
             {
-                errorCode = DRCE_BBVIA_INSIDE_KEEPOUT;
                 sourceId = DISALLOW_BB_VIAS;
             }
             else if( ( m_keepoutFlags & DISALLOW_HOLES ) > 0 )
             {
-                errorCode = DRCE_HOLE_INSIDE_KEEPOUT;
                 sourceId = DISALLOW_HOLES;
             }
             else
@@ -142,14 +137,14 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
             int     widths = via->GetWidth() / 2;
             wxPoint viaPos = via->GetPosition();
 
-            if( errorCode == DRCE_HOLE_INSIDE_KEEPOUT )
+            if( sourceId == DISALLOW_HOLES )
                 widths = via->GetDrillValue() / 2;
 
             SEG::ecoord center2center_squared = m_zone->Outline()->SquaredDistance( viaPos );
 
             if( center2center_squared <= SEG::Square( widths ) )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ), m_sources.at( sourceId ) );
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( segm, m_zone );
@@ -198,7 +193,7 @@ bool DRC_KEEPOUT_TESTER::checkFootprints()
             if( poly.OutlineCount() )
             {
                 const VECTOR2I& pt = poly.CVertex( 0, 0, -1 );
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_FOOTPRINT_INSIDE_KEEPOUT );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
                               m_sources.at( DISALLOW_FOOTPRINTS ) );
@@ -249,7 +244,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
             if( outline.OutlineCount() )
             {
                 const VECTOR2I& pt = outline.CVertex( 0, 0, -1 );
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_INSIDE_KEEPOUT );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
                               m_sources.at( DISALLOW_PADS ) );
@@ -276,7 +271,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
 
             if( center2center_sq <= SEG::Square( slotWidth) )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_INSIDE_KEEPOUT );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
                               m_sources.at( DISALLOW_HOLES ) );
@@ -309,19 +304,12 @@ bool DRC_KEEPOUT_TESTER::checkDrawings()
         if( !m_zoneBBox.Intersects( drawing->GetBoundingBox() ) )
             continue;
 
-        int  errorCode = 0;
         int  sourceId = 0;
 
         if( drawing->IsType( graphicTypes ) && ( m_keepoutFlags & DISALLOW_GRAPHICS ) > 0 )
-        {
-            errorCode = DRCE_GRAPHICS_INSIDE_KEEPOUT;
             sourceId = DISALLOW_GRAPHICS;
-        }
         else if( drawing->Type() == PCB_TEXT_T && ( m_keepoutFlags & DISALLOW_TEXTS ) > 0 )
-        {
-            errorCode = DRCE_TEXT_INSIDE_KEEPOUT;
             sourceId = DISALLOW_TEXTS;
-        }
         else
             continue;
 
@@ -335,7 +323,7 @@ bool DRC_KEEPOUT_TESTER::checkDrawings()
         if( poly.OutlineCount() )
         {
             const VECTOR2I& pt = poly.CVertex( 0, 0, -1 );
-            DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ), m_sources.at( sourceId ) );
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( drawing, m_zone );

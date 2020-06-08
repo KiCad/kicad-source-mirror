@@ -85,9 +85,8 @@ public:
     //-----<Cross Module API>----------------------------------------------------
 
     VTBL_ENTRY bool TextVarResolver( wxString* aToken ) const;
-    VTBL_ENTRY std::map<wxString, wxString>& GetTextVars() { return m_textVars; }
 
-    // VTBL_ENTRY bool MaybeLoadProjectSettings( const std::vector<wxString>& aFileSet );
+    VTBL_ENTRY std::map<wxString, wxString>& GetTextVars() const;
 
     /**
      * Function GetProjectFullName
@@ -138,45 +137,6 @@ public:
         wxASSERT( m_localSettings );
         return *m_localSettings;
     }
-
-    /**
-     * Function ConfigSave
-     * saves the current "project" parameters into the wxConfigBase* derivative.
-     * Then the wxConfigBase derivative is written to the *.pro file for the project.
-     *
-     * @param aSList a SEARCH_STACK
-     * @param aGroupName is the name of the group inside the config which contains parameters
-     * @param aParams is a ptr vector of PARAM_CFG derivatives.
-     *  Saved parameters are the subset in this array having the .m_Setup member
-     *  set to false.
-     * @param aFileName is where to save the *.pro file and if NULL means use this PROJECT's
-     *   @a m_project_name.
-     */
-    VTBL_ENTRY void ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName,
-                                const std::vector<PARAM_CFG*>& aParams,
-                                const wxString& aFileName = wxEmptyString );
-
-    /**
-     * Function ConfigLoad
-     * reads a subset of parameters from the "project" file.  Parameters are the
-     * subset of variables given in @a aParams array which have the .m_Setup member
-     * set to false.  The file which is read in and then extracted from is the
-     * '*.pro' file for the project.
-     * <p>
-     * set:
-     *  m_pro_date_and_time
-     *
-     * @param aSearchS a SEARCH_STACK where a kicad.pro template file may be found.
-     * @param aGroupName
-     * @param aParams is ptr vector of PARAM_CFG derivatives.
-     * @param aForeignConfigFileName when NULL means load the *.pro filename given
-     *  in this PROJECT's @a m_project_name field, otherwise load the provided filename.
-     *
-     * @return bool - true if loaded OK.
-     */
-    VTBL_ENTRY bool ConfigLoad( const SEARCH_STACK& aSearchS, const wxString& aGroupName,
-                                const std::vector<PARAM_CFG*>& aParams,
-                                const wxString& aForeignConfigFileName = wxEmptyString );
 
     /// Retain a number of project specific wxStrings, enumerated here:
     enum RSTRING_T
@@ -382,7 +342,6 @@ private:
     PROJECT_LOCAL_SETTINGS* m_localSettings;
 
     std::map<KIID, wxString>     m_sheetNames;
-    std::map<wxString, wxString> m_textVars;
 
     /// @see this::SetRString(), GetRString(), and enum RSTRING_T.
     wxString        m_rstrings[RSTRING_COUNT];

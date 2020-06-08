@@ -60,13 +60,6 @@ private:
     /// Holds and calculates connectivity information of this schematic
     CONNECTION_GRAPH* m_connectionGraph;
 
-    /// Project-specific schematic settings
-    SCHEMATIC_SETTINGS m_settings;
-
-    /// Holds this schematic's ERC settings
-    // TODO: This should be moved to project settings, not schematic
-    ERC_SETTINGS* m_ercSettings;
-
 public:
     SCHEMATIC( PROJECT* aPrj );
 
@@ -86,10 +79,7 @@ public:
         return *const_cast<PROJECT*>( m_project );
     }
 
-    void SetProject( PROJECT& aPrj )
-    {
-        m_project = &aPrj;
-    }
+    void SetProject( PROJECT* aPrj );
 
     /**
      * Builds and returns an updated schematic hierarchy
@@ -141,10 +131,9 @@ public:
         return m_connectionGraph;
     }
 
-    SCHEMATIC_SETTINGS& Settings()
-    {
-        return m_settings;
-    }
+    SCHEMATIC_SETTINGS& Settings() const;
+
+    ERC_SETTINGS& ErcSettings() const;
 
     /**
      * Returns a pointer to a bus alias object for the given label,
@@ -152,53 +141,9 @@ public:
      */
     std::shared_ptr<BUS_ALIAS> GetBusAlias( const wxString& aLabel ) const;
 
-    ERC_SETTINGS* ErcSettings() const
-    {
-        return m_ercSettings;
-    }
-
-    // TODO(JE) Move out of SCHEMATIC
-    int GetErcSeverity( int aErrorCode ) const;
-
-    // TODO(JE) Move out of SCHEMATIC
-    void SetErcSeverity( int aErrorCode, int aSeverity );
-
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif
-
 };
-
-
-/**
- * SHEETLIST_ERC_ITEMS_PROVIDER
- * is an implementation of the RC_ITEM_LISTinterface which uses the global SHEETLIST
- * to fulfill the contract.
- */
-class SHEETLIST_ERC_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
-{
-private:
-    SCHEMATIC*               m_schematic;
-    int                      m_severities;
-    std::vector<SCH_MARKER*> m_filteredMarkers;
-
-public:
-    SHEETLIST_ERC_ITEMS_PROVIDER( SCHEMATIC* aSchematic ) :
-            m_schematic( aSchematic ),
-            m_severities( 0 )
-    { }
-
-    void SetSeverities( int aSeverities ) override;
-
-    int GetCount( int aSeverity = -1 ) override;
-
-    ERC_ITEM* GetItem( int aIndex ) override;
-
-    void DeleteItem( int aIndex, bool aDeep ) override;
-
-    void DeleteAllItems() override;
-};
-
-
 
 #endif

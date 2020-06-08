@@ -39,6 +39,7 @@
 #include <richio.h>
 #include <config_params.h>
 #include <wildcards_and_files_ext.h>
+#include <project/project_file.h>
 #include <project_rescue.h>
 #include <properties.h>
 
@@ -439,47 +440,25 @@ int PART_LIBS::GetModifyHash()
 void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
                                   wxString* aPaths, wxArrayString* aNames )
 {
-    wxString pro = aProject->GetProjectFullName();
+    wxCHECK_RET( aProject, "Null PROJECT in LibNamesAndPaths" );
 
-    std::vector<PARAM_CFG*> ca;
-
-    try
-    {
-        if( aPaths )
-            ca.push_back( new PARAM_CFG_FILENAME( "LibDir", aPaths ) );
-
-        if( aNames )
-            ca.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),  aNames, GROUP_SCH_LIBS ) );
-    }
-    catch( boost::bad_pointer& )
-    {
-        // Out of memory?  Ship's going down anyway....
-    }
+    PROJECT_FILE& project = aProject->GetProjectFile();
 
     if( doSave )
     {
-        aProject->ConfigSave( Kiface().KifaceSearch(), GROUP_SCH, ca );
+        if( aPaths )
+            project.m_LegacyLibDir = *aPaths;
 
-        /*
-        {
-            wxString msg = wxString::Format( _(
-                "Unable save project's \"%s\" file" ),
-                GetChars( pro )
-                );
-            THROW_IO_ERROR( msg );
-        }
-        */
+        if( aNames )
+            project.m_LegacyLibNames = *aNames;
     }
     else
     {
-        if( !aProject->ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH, ca ) )
-        {
-            wxString msg = wxString::Format( _(
-                "Unable to load project's \"%s\" file" ),
-                GetChars( pro )
-                );
-            THROW_IO_ERROR( msg );
-        }
+        if( aPaths )
+            *aPaths = project.m_LegacyLibDir;
+
+        if( aNames )
+            *aNames = project.m_LegacyLibNames;
     }
 }
 

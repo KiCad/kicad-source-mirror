@@ -32,115 +32,220 @@
 #include <class_board.h>
 
 
-DRC_ITEM::DRC_ITEM( int aErrorCode )
-{
-    m_errorCode = aErrorCode;
-}
+// These, being statically-defined, require specialized I18N handling.  We continue to
+// use the _() macro so that string harvesting by the I18N framework doesn't have to be
+// specialized, but we don't translate on initialization and instead do it in the getters.
+
+#undef _
+#define _(s) s
+
+DRC_ITEM DRC_ITEM::unconnectedItems( DRCE_UNCONNECTED_ITEMS,
+        _( "Unconnected items" ),
+        wxT( "unconnected_items" ) );
+
+DRC_ITEM DRC_ITEM::itemsNotAllowed( DRCE_ALLOWED_ITEMS,
+        _( "Items not allowed" ),
+        wxT( "items_not_allowed" ) );
+
+DRC_ITEM DRC_ITEM::clearance( DRCE_CLEARANCE,
+        _( "Clearance violation" ),
+        wxT( "clearance" ) );
+
+DRC_ITEM DRC_ITEM::tracksCrossing( DRCE_TRACKS_CROSSING,
+        _( "Tracks crossing" ),
+        wxT( "tracks_crossing" ) );
+
+DRC_ITEM DRC_ITEM::copperEdgeClearance( DRCE_COPPER_EDGE_CLEARANCE,
+        _( "Board edge clearance violation" ),
+        wxT( "copper_edge_clearance" ) );
+
+DRC_ITEM DRC_ITEM::zonesIntersect( DRCE_ZONES_INTERSECT,
+       _( "Copper areas intersect" ),
+       wxT( "zones_intersect" ) );
+
+DRC_ITEM DRC_ITEM::zoneHasEmptyNet( DRCE_ZONE_HAS_EMPTY_NET,
+        _( "Copper zone net has no pads" ),
+        wxT( "zone_has_empty_net" ) );
+
+DRC_ITEM DRC_ITEM::viaDangling( DRCE_DANGLING_VIA,
+        _( "Via is not connected" ),
+        wxT( "via_dangling" ) );
+
+DRC_ITEM DRC_ITEM::trackDangling( DRCE_DANGLING_TRACK,
+        _( "Track has unconnected end" ),
+        wxT( "track_dangling" ) );
+
+DRC_ITEM DRC_ITEM::holeNearHole( DRCE_DRILLED_HOLES_TOO_CLOSE,
+        _( "Drilled holes too close together" ),
+        wxT( "hole_near_hole" ) );
+
+DRC_ITEM DRC_ITEM::trackWidth( DRCE_TRACK_WIDTH,
+        _( "Track width outside allowed limits" ),
+        wxT( "track_width" ) );
+
+DRC_ITEM DRC_ITEM::viaTooSmall( DRCE_TOO_SMALL_VIA,
+        _( "Via size too small" ),
+        wxT( "via_too_small" ) );
+
+DRC_ITEM DRC_ITEM::viaAnnulus( DRCE_VIA_ANNULUS,
+        _( "Via annulus" ),
+        wxT( "via_annulus" ) );
+
+DRC_ITEM DRC_ITEM::drillTooSmall( DRCE_TOO_SMALL_DRILL,
+        _( "Drill too small" ),
+        wxT( "drill_too_small" ) );
+
+DRC_ITEM DRC_ITEM::viaHoleLargerThanPad( DRCE_VIA_HOLE_BIGGER,
+        _( "Via hole larger than diameter" ),
+        wxT( "via_hole_larger_than_pad" ) );
+
+DRC_ITEM DRC_ITEM::padstack( DRCE_PADSTACK,
+        _( "Padstack is not valid" ),
+        wxT( "padstack" ) );
+
+DRC_ITEM DRC_ITEM::microviaTooSmall( DRCE_TOO_SMALL_MICROVIA,
+        _( "Micro via size too small" ),
+        wxT( "microvia_too_small" ) );
+
+DRC_ITEM DRC_ITEM::microviaDrillTooSmall( DRCE_TOO_SMALL_MICROVIA_DRILL,
+        _( "Micro via drill too small" ),
+        wxT( "microvia_drill_too_small" ) );
+
+DRC_ITEM DRC_ITEM::keepout( DRCE_KEEPOUT,
+        _( "Keepout violation" ),
+        wxT( "keepout" ) );
+
+DRC_ITEM DRC_ITEM::courtyardsOverlap( DRCE_OVERLAPPING_FOOTPRINTS,
+        _( "Courtyards overlap" ),
+        wxT( "courtyards_overlap" ) );
+
+DRC_ITEM DRC_ITEM::missingCourtyard( DRCE_MISSING_COURTYARD,
+        _( "Footprint has no courtyard defined" ),
+        wxT( "missing_courtyard" ) );
+
+DRC_ITEM DRC_ITEM::malformedCourtyard( DRCE_MALFORMED_COURTYARD,
+        _( "Footprint has malformed courtyard" ),
+        wxT( "malformed_courtyard" ) );
+
+DRC_ITEM DRC_ITEM::pthInsideCourtyard( DRCE_PTH_IN_COURTYARD,
+        _( "PTH inside courtyard" ),
+        wxT( "pth_inside_courtyard" ) );
+
+DRC_ITEM DRC_ITEM::npthInsideCourtyard( DRCE_NPTH_IN_COURTYARD,
+        _( "NPTH inside courtyard" ),
+        wxT( "npth_inside_courtyard" ) );
+
+DRC_ITEM DRC_ITEM::itemOnDisabledLayer( DRCE_DISABLED_LAYER_ITEM,
+        _( "Item on a disabled layer" ),
+        wxT( "item_on_disabled_layer" ) );
+
+DRC_ITEM DRC_ITEM::invalidOutline( DRCE_INVALID_OUTLINE,
+        _( "Board has malformed outline" ),
+        wxT( "invalid_outline" ) );
+
+DRC_ITEM DRC_ITEM::duplicateFootprints( DRCE_DUPLICATE_FOOTPRINT,
+        _( "Duplicate footprints" ),
+        wxT( "duplicate_footprints" ) );
+
+DRC_ITEM DRC_ITEM::missingFootprint( DRCE_MISSING_FOOTPRINT,
+        _( "Missing footprint" ),
+        wxT( "missing_footprint" ) );
+
+DRC_ITEM DRC_ITEM::extraFootprint( DRCE_EXTRA_FOOTPRINT,
+        _( "Extra footprint" ),
+        wxT( "extra_footprint" ) );
+
+DRC_ITEM DRC_ITEM::unresolvedVariable( DRCE_UNRESOLVED_VARIABLE,
+        _( "Unresolved text variable" ),
+        wxT( "unresolved_variable" ) );
 
 
-DRC_ITEM::DRC_ITEM( const wxString& aErrorText )
+std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
+            DRC_ITEM::unconnectedItems,
+            DRC_ITEM::itemsNotAllowed,
+            DRC_ITEM::clearance,
+            DRC_ITEM::tracksCrossing,
+            DRC_ITEM::copperEdgeClearance,
+            DRC_ITEM::zonesIntersect,
+            DRC_ITEM::zoneHasEmptyNet,
+            DRC_ITEM::viaDangling,
+            DRC_ITEM::trackDangling,
+            DRC_ITEM::holeNearHole,
+            DRC_ITEM::trackWidth,
+            DRC_ITEM::viaTooSmall,
+            DRC_ITEM::viaAnnulus,
+            DRC_ITEM::drillTooSmall,
+            DRC_ITEM::viaHoleLargerThanPad,
+            DRC_ITEM::padstack,
+            DRC_ITEM::microviaTooSmall,
+            DRC_ITEM::microviaDrillTooSmall,
+            DRC_ITEM::keepout,
+            DRC_ITEM::courtyardsOverlap,
+            DRC_ITEM::missingCourtyard,
+            DRC_ITEM::malformedCourtyard,
+            DRC_ITEM::pthInsideCourtyard,
+            DRC_ITEM::npthInsideCourtyard,
+            DRC_ITEM::itemOnDisabledLayer,
+            DRC_ITEM::invalidOutline,
+            DRC_ITEM::duplicateFootprints,
+            DRC_ITEM::missingFootprint,
+            DRC_ITEM::extraFootprint,
+            DRC_ITEM::unresolvedVariable
+        } );
+
+
+DRC_ITEM* DRC_ITEM::Create( int aErrorCode )
 {
-    for( int errorCode = DRCE_FIRST; errorCode <= DRCE_LAST; ++errorCode )
+    switch( aErrorCode )
     {
-        if( aErrorText == GetErrorText( errorCode, false ) )
-        {
-            m_errorCode = errorCode;
-            break;
-        }
-    }
-}
-
-
-wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
-{
-    wxString msg;
-
-    if( aCode < 0 )
-        aCode = m_errorCode;
-
-    switch( aCode )
-    {
-    case DRCE_UNCONNECTED_ITEMS:        msg = _HKI( "Unconnected items" );                  break;
-    case DRCE_TRACK_NEAR_HOLE:          msg = _HKI( "Track too close to hole" );            break;
-    case DRCE_TRACK_NEAR_PAD:           msg = _HKI( "Track too close to pad" );             break;
-    case DRCE_TRACK_NEAR_VIA:           msg = _HKI( "Track too close to via" );             break;
-    case DRCE_VIA_NEAR_VIA:             msg = _HKI( "Vias too close" );                     break;
-    case DRCE_VIA_NEAR_TRACK:           msg = _HKI( "Via too close to track" );             break;
-    case DRCE_TRACK_ENDS:               msg = _HKI( "Track ends too close" );               break;
-    case DRCE_TRACK_SEGMENTS_TOO_CLOSE: msg = _HKI( "Parallel tracks too close" );          break;
-    case DRCE_TRACKS_CROSSING:          msg = _HKI( "Tracks crossing" );                    break;
-    case DRCE_TRACK_NEAR_ZONE:          msg = _HKI( "Track too close to copper area" );     break;
-    case DRCE_PAD_NEAR_PAD:             msg = _HKI( "Pads too close" );                     break;
-    case DRCE_VIA_HOLE_BIGGER:          msg = _HKI( "Via hole larger than diameter" );      break;
-    case DRCE_MICROVIA_TOO_MANY_LAYERS: msg = _HKI( "Micro via through too many layers" );  break;
-    case DRCE_MICROVIA_NOT_ALLOWED:     msg = _HKI( "Micro via not allowed" );              break;
-    case DRCE_BURIED_VIA_NOT_ALLOWED:   msg = _HKI( "Buried via not allowed" );             break;
-    case DRCE_DISABLED_LAYER_ITEM:      msg = _HKI( "Item on a disabled layer" );           break;
-    case DRCE_ZONES_INTERSECT:          msg = _HKI( "Copper areas intersect" );             break;
-    case DRCE_ZONES_TOO_CLOSE:          msg = _HKI( "Copper areas too close" );             break;
-    case DRCE_ZONE_HAS_EMPTY_NET:       msg = _HKI( "Copper zone net has no pads" );        break;
-    case DRCE_DANGLING_VIA:             msg = _HKI( "Via is not connected" );               break;
-    case DRCE_DANGLING_TRACK:           msg = _HKI( "Track has unconnected end" );          break;
-    case DRCE_HOLE_NEAR_PAD:            msg = _HKI( "Hole too close to pad" );              break;
-    case DRCE_HOLE_NEAR_TRACK:          msg = _HKI( "Hole too close to track" );            break;
-    case DRCE_TOO_SMALL_TRACK_WIDTH:    msg = _HKI( "Track width too small" );              break;
-    case DRCE_TOO_LARGE_TRACK_WIDTH:    msg = _HKI( "Track width too large" );              break;
-    case DRCE_TOO_SMALL_VIA:            msg = _HKI( "Via size too small" );                 break;
-    case DRCE_TOO_SMALL_VIA_ANNULUS:    msg = _HKI( "Via annulus too small" );              break;
-    case DRCE_TOO_SMALL_MICROVIA:       msg = _HKI( "Micro via size too small" );           break;
-    case DRCE_TOO_SMALL_VIA_DRILL:      msg = _HKI( "Via drill too small" );                break;
-    case DRCE_TOO_SMALL_PAD_DRILL:      msg = _HKI( "Pad drill too small" );                break;
-    case DRCE_TOO_SMALL_MICROVIA_DRILL: msg = _HKI( "Micro via drill too small" );          break;
-    case DRCE_DRILLED_HOLES_TOO_CLOSE:  msg = _HKI( "Drilled holes too close together" );   break;
-    case DRCE_TRACK_NEAR_EDGE:          msg = _HKI( "Track too close to board edge" );      break;
-    case DRCE_VIA_NEAR_EDGE:            msg = _HKI( "Via too close to board edge" );        break;
-    case DRCE_PAD_NEAR_EDGE:            msg = _HKI( "Pad too close to board edge" );        break;
-    case DRCE_INVALID_OUTLINE:          msg = _HKI( "Board has malformed outline" );        break;
-
-    case DRCE_NETCLASS_TRACKWIDTH:      msg = _HKI( "NetClass Track Width too small" );     break;
-    case DRCE_NETCLASS_CLEARANCE:       msg = _HKI( "NetClass Clearance too small" );       break;
-    case DRCE_NETCLASS_VIAANNULUS:      msg = _HKI( "NetClass via annulus too small" );     break;
-    case DRCE_NETCLASS_VIASIZE:         msg = _HKI( "NetClass Via Dia too small" );         break;
-    case DRCE_NETCLASS_VIADRILLSIZE:    msg = _HKI( "NetClass Via Drill too small" );       break;
-    case DRCE_NETCLASS_uVIASIZE:        msg = _HKI( "NetClass uVia Dia too small" );        break;
-    case DRCE_NETCLASS_uVIADRILLSIZE:   msg = _HKI( "NetClass uVia Drill too small" );      break;
-
-    case DRCE_VIA_INSIDE_KEEPOUT:       msg = _HKI( "Via inside keepout area" );            break;
-    case DRCE_MICROVIA_INSIDE_KEEPOUT:  msg = _HKI( "Micro via inside keepout area" );      break;
-    case DRCE_BBVIA_INSIDE_KEEPOUT:     msg = _HKI( "Buried via inside keepout area" );     break;
-    case DRCE_TRACK_INSIDE_KEEPOUT:     msg = _HKI( "Track inside keepout area" );          break;
-    case DRCE_PAD_INSIDE_KEEPOUT:       msg = _HKI( "Pad inside keepout area" );            break;
-    case DRCE_FOOTPRINT_INSIDE_KEEPOUT: msg = _HKI( "Footprint inside keepout area" );      break;
-    case DRCE_HOLE_INSIDE_KEEPOUT:      msg = _HKI( "Hole inside keepout area" );           break;
-    case DRCE_TEXT_INSIDE_KEEPOUT:      msg = _HKI( "Text inside keepout area" );           break;
-    case DRCE_GRAPHICS_INSIDE_KEEPOUT:  msg = _HKI( "Graphic inside keepout area" );        break;
-
-    case DRCE_VIA_NEAR_COPPER:          msg = _HKI( "Via too close to copper item" );       break;
-    case DRCE_TRACK_NEAR_COPPER:        msg = _HKI( "Track too close to copper item" );     break;
-    case DRCE_PAD_NEAR_COPPER:          msg = _HKI( "Pad too close to copper item" );       break;
-
-    case DRCE_OVERLAPPING_FOOTPRINTS:   msg = _HKI( "Courtyards overlap" );                 break;
-    case DRCE_MISSING_COURTYARD:        msg = _HKI( "Footprint has no courtyard defined" ); break;
-    case DRCE_MALFORMED_COURTYARD:      msg = _HKI( "Footprint has malformed courtyard" );  break;
-    case DRCE_PTH_IN_COURTYARD:         msg = _HKI( "PTH inside courtyard" );               break;
-    case DRCE_NPTH_IN_COURTYARD:        msg = _HKI( "NPTH inside courtyard" );              break;
-
-    case DRCE_DUPLICATE_FOOTPRINT:      msg = _HKI( "Duplicate footprints" );               break;
-    case DRCE_MISSING_FOOTPRINT:        msg = _HKI( "Missing footprint" );                  break;
-    case DRCE_EXTRA_FOOTPRINT:          msg = _HKI( "Extra footprint" );                    break;
-
-    case DRCE_UNRESOLVED_VARIABLE:      msg = _HKI( "Unresolved text variable" );           break;
+    case DRCE_UNCONNECTED_ITEMS:        return new DRC_ITEM( unconnectedItems );
+    case DRCE_ALLOWED_ITEMS:            return new DRC_ITEM( itemsNotAllowed );
+    case DRCE_CLEARANCE:                return new DRC_ITEM( clearance );
+    case DRCE_TRACKS_CROSSING:          return new DRC_ITEM( tracksCrossing );
+    case DRCE_COPPER_EDGE_CLEARANCE:    return new DRC_ITEM( copperEdgeClearance );
+    case DRCE_ZONES_INTERSECT:          return new DRC_ITEM( zonesIntersect );
+    case DRCE_ZONE_HAS_EMPTY_NET:       return new DRC_ITEM( zoneHasEmptyNet );
+    case DRCE_DANGLING_VIA:             return new DRC_ITEM( viaDangling );
+    case DRCE_DANGLING_TRACK:           return new DRC_ITEM( trackDangling );
+    case DRCE_DRILLED_HOLES_TOO_CLOSE:  return new DRC_ITEM( holeNearHole );
+    case DRCE_TRACK_WIDTH:              return new DRC_ITEM( trackWidth );
+    case DRCE_TOO_SMALL_VIA:            return new DRC_ITEM( viaTooSmall );
+    case DRCE_VIA_ANNULUS:              return new DRC_ITEM( viaAnnulus );
+    case DRCE_TOO_SMALL_DRILL:          return new DRC_ITEM( drillTooSmall );
+    case DRCE_VIA_HOLE_BIGGER:          return new DRC_ITEM( viaHoleLargerThanPad );
+    case DRCE_PADSTACK:                 return new DRC_ITEM( padstack );
+    case DRCE_TOO_SMALL_MICROVIA:       return new DRC_ITEM( microviaTooSmall );
+    case DRCE_TOO_SMALL_MICROVIA_DRILL: return new DRC_ITEM( microviaDrillTooSmall );
+    case DRCE_KEEPOUT:                  return new DRC_ITEM( keepout );
+    case DRCE_OVERLAPPING_FOOTPRINTS:   return new DRC_ITEM( courtyardsOverlap );
+    case DRCE_MISSING_COURTYARD:        return new DRC_ITEM( missingCourtyard );
+    case DRCE_MALFORMED_COURTYARD:      return new DRC_ITEM( malformedCourtyard );
+    case DRCE_PTH_IN_COURTYARD:         return new DRC_ITEM( pthInsideCourtyard );
+    case DRCE_NPTH_IN_COURTYARD:        return new DRC_ITEM( npthInsideCourtyard );
+    case DRCE_DISABLED_LAYER_ITEM:      return new DRC_ITEM( itemOnDisabledLayer );
+    case DRCE_INVALID_OUTLINE:          return new DRC_ITEM( invalidOutline );
+    case DRCE_MISSING_FOOTPRINT:        return new DRC_ITEM( duplicateFootprints );
+    case DRCE_DUPLICATE_FOOTPRINT:      return new DRC_ITEM( missingFootprint );
+    case DRCE_EXTRA_FOOTPRINT:          return new DRC_ITEM( extraFootprint );
+    case DRCE_UNRESOLVED_VARIABLE:      return new DRC_ITEM( unresolvedVariable );
 
     default:
-        wxFAIL_MSG( "Missing DRC error description" );
-        msg = _HKI( "Unknown DRC violation" );
-        break;
+        wxFAIL_MSG( "Unknown DRC error code" );
+        return nullptr;
+    }
+}
+
+
+DRC_ITEM* DRC_ITEM::Create( const wxString& aErrorKey )
+{
+    for( const RC_ITEM& item : allItemTypes )
+    {
+        if( aErrorKey == item.GetSettingsKey() )
+            return new DRC_ITEM( static_cast<const DRC_ITEM&>( item ) );
     }
 
-    if( aTranslate )
-        return wxGetTranslation( msg );
-    else
-        return msg;
+    wxFAIL_MSG( "Unknown DRC settings key: " + aErrorKey );
+    return nullptr;
 }
 
 
@@ -156,7 +261,7 @@ wxString DRC_ITEM::ShowHtml( PCB_BASE_FRAME* aFrame ) const
 {
     BOARD_ITEM* mainItem = nullptr;
     BOARD_ITEM* auxItem = nullptr;
-    wxString    msg = m_errorMessage.IsEmpty() ? GetErrorText( m_errorCode ) : m_errorMessage;
+    wxString    msg = m_errorMessage.IsEmpty() ? GetErrorText() : m_errorMessage;
     wxString    mainText;
     wxString    auxText;
 

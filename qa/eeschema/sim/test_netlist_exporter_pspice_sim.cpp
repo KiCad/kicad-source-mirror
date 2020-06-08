@@ -35,19 +35,21 @@
 // Code under test
 #include <project.h>
 #include <schematic.h>
+#include <settings/settings_manager.h>
 #include <sim/netlist_exporter_pspice_sim.h>
 
 class TEST_NETLIST_EXPORTER_PSPICE_SIM
 {
 public:
     TEST_NETLIST_EXPORTER_PSPICE_SIM() :
-            m_project(),
-            m_schematic( &m_project ),
+            m_schematic( nullptr ),
             m_exporter( &m_schematic )
     {
+        m_manager.LoadProject( "" );
+        m_schematic.SetProject( &m_manager.Prj() );
     }
 
-    PROJECT m_project;
+    SETTINGS_MANAGER m_manager;
 
     SCHEMATIC m_schematic;
 

@@ -62,7 +62,7 @@ MARKER_PCB::~MARKER_PCB()
 wxString MARKER_PCB::Serialize() const
 {
     return wxString::Format( wxT( "%s|%d|%d|%s|%s" ),
-                             m_rcItem->GetErrorText( m_rcItem->GetErrorCode(), false ),
+                             m_rcItem->GetSettingsKey(),
                              m_Pos.x,
                              m_Pos.y,
                              m_rcItem->GetMainItemID().AsString(),
@@ -76,7 +76,7 @@ MARKER_PCB* MARKER_PCB::Deserialize( const wxString& data )
     wxPoint       markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
                              (int) strtol( props[2].c_str(), nullptr, 10 ) );
 
-    DRC_ITEM* drcItem = new DRC_ITEM( props[0] );
+    DRC_ITEM* drcItem = DRC_ITEM::Create( props[0] );
     drcItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
 
     return new MARKER_PCB( drcItem, markerPos );
@@ -141,8 +141,7 @@ wxString MARKER_PCB::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     // m_rcItem->GetErrorMessage() could be used instead, but is probably too long
     // for menu duty.
-    return wxString::Format( _( "Marker (%s)" ),
-                             m_rcItem->GetErrorText( m_rcItem->GetErrorCode() ) );
+    return wxString::Format( _( "Marker (%s)" ), m_rcItem->GetErrorText() );
 }
 
 

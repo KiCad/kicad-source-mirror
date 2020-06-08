@@ -30,7 +30,6 @@
 #include <dialogs/panel_libedit_color_settings.h>
 #include <dialogs/panel_libedit_settings.h>
 #include <eeschema_config.h>
-#include <eeschema_settings.h>
 #include <fctsys.h>
 #include <gestfich.h>
 #include <gr_text.h>
@@ -39,6 +38,7 @@
 #include <panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <pgm_base.h>
+#include <project/project_file.h>
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
 #include <sch_painter.h>
@@ -238,90 +238,8 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 }
 
 
-void SCH_EDIT_FRAME::AddFormattingParameters( std::vector<PARAM_CFG*>& params )
+bool SCH_EDIT_FRAME::LoadProjectSettings()
 {
-    EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
-    wxCHECK( appSettings, /*void*/ );
-
-    SCHEMATIC_SETTINGS& settings = Schematic().Settings();
-
-    params.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
-                                     LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
-    params.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),
-                                     LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
-
-    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LabSize" ),
-                                     &settings.m_DefaultTextSize,
-                                     Mils2iu( DEFAULT_SIZE_TEXT ),
-                                     Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
-    params.push_back( new PARAM_CFG_DOUBLE( wxT( "TextOffsetRatio" ),
-                                     &settings.m_TextOffsetRatio,
-                                     (double) TXT_MARGIN / DEFAULT_SIZE_TEXT,
-                                     -200.0, 200.0 ) );
-    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LineThickness" ),
-                                     &settings.m_DefaultLineWidth,
-                                     Mils2iu( appSettings->m_Drawing.default_line_thickness ),
-                                     Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
-
-    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "BusThickness" ),
-                                     &settings.m_DefaultBusThickness,
-                                     Mils2iu( appSettings->m_Drawing.default_bus_thickness ),
-                                     Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
-    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "WireThickness" ),
-                                     &settings.m_DefaultWireThickness,
-                                     Mils2iu( appSettings->m_Drawing.default_wire_thickness ),
-                                     Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
-    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PinSymbolSize" ),
-                                     &settings.m_PinSymbolSize,
-                                     Mils2iu( appSettings->m_Drawing.pin_symbol_size ),
-                                     Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
-    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "JunctionSize" ),
-                                     &settings.m_JunctionSize,
-                                     Mils2iu( appSettings->m_Drawing.default_junction_size ),
-                                     Mils2iu( 5 ), Mils2iu( 1000 ), nullptr, 1 / IU_PER_MILS ) );
-}
-
-
-std::vector<PARAM_CFG*>& SCH_EDIT_FRAME::GetProjectFileParameters()
-{
-    if( !m_projectFileParams.empty() )
-        return m_projectFileParams;
-
-    std::vector<PARAM_CFG*>& params = m_projectFileParams;
-
-    params.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
-                                              &BASE_SCREEN::m_PageLayoutDescrFileName ) );
-    params.push_back( new PARAM_CFG_FILENAME( wxT( "PlotDirectoryName" ), &m_plotDirectoryName ) );
-    params.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ), &m_netListFormat) );
-    params.push_back( new PARAM_CFG_BOOL( wxT( "SpiceAjustPassiveValues" ),
-                                          &m_spiceAjustPassiveValues, false ) );
-
-    AddFormattingParameters( params );
-
-    params.push_back( new PARAM_CFG_FIELDNAMES( &m_templateFieldNames ) );
-
-    params.push_back( new PARAM_CFG_SEVERITIES( Schematic().ErcSettings() ) );
-
-    return params;
-}
-
-
-std::vector<PARAM_CFG*> ERC_SETTINGS::GetProjectFileParameters()
-{
-    std::vector<PARAM_CFG*> params;
-
-    params.push_back( new PARAM_CFG_SEVERITIES( this ) );
-
-    return params;
-}
-
-
-bool SCH_EDIT_FRAME::LoadProjectFile()
-{
-    bool ret = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT,
-                                 GetProjectFileParameters() );
-
     GetRenderSettings()->SetDefaultPenWidth( m_defaults->m_DefaultLineWidth );
     GetRenderSettings()->m_DefaultWireThickness = m_defaults->m_DefaultWireThickness;
     GetRenderSettings()->m_DefaultBusThickness  = m_defaults->m_DefaultBusThickness;
@@ -343,7 +261,9 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
 
     pglayout.SetPageLayout( filename );
 
-    return ret;
+    Prj().GetProjectFile().m_TemplateFieldNames = &m_templateFieldNames;
+
+    return true;
 }
 
 
@@ -366,17 +286,14 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
 void SCH_EDIT_FRAME::SaveProjectSettings()
 {
-    PROJECT&        prj = Prj();
-    wxFileName      fn = Schematic().RootScreen()->GetFileName();  //ConfigFileName
+    wxFileName fn = Schematic().RootScreen()->GetFileName();  //ConfigFileName
 
-    fn.SetExt( LegacyProjectFileExtension );
+    fn.SetExt( ProjectFileExtension );
 
     if( !fn.HasName() || !IsWritable( fn ) )
         return;
 
-    wxString path = fn.GetFullPath();
-
-    prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDIT, GetProjectFileParameters(), path );
+    GetSettingsManager()->SaveProject( fn.GetFullPath() );
 }
 
 

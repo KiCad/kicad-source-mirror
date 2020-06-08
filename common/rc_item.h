@@ -78,7 +78,9 @@ class RC_ITEM
 {
 protected:
     int           m_errorCode;         // the error code's numeric value
-    wxString      m_errorMessage;
+    wxString      m_errorMessage;      ///< A message describing the details of this specific error
+    wxString      m_errorTitle;        ///< The string describing the type of error
+    wxString      m_settingsKey;       ///< The key used to describe this type of error in settings
     MARKER_BASE*  m_parent;            // The marker this item belongs to, if any
     KIID          m_mainItemUuid;
     KIID          m_auxItemUuid;
@@ -99,11 +101,13 @@ public:
 
     RC_ITEM( RC_ITEM* aItem )
     {
-        m_errorCode = aItem->m_errorCode;
+        m_errorCode    = aItem->m_errorCode;
         m_errorMessage = aItem->m_errorMessage;
-        m_parent = aItem->m_parent;
+        m_errorTitle   = aItem->m_errorTitle;
+        m_settingsKey  = aItem->m_settingsKey;
+        m_parent       = aItem->m_parent;
         m_mainItemUuid = aItem->m_mainItemUuid;
-        m_auxItemUuid = aItem->m_auxItemUuid;
+        m_auxItemUuid  = aItem->m_auxItemUuid;
         m_auxItem2Uuid = aItem->m_auxItem2Uuid;
         m_auxItem3Uuid = aItem->m_auxItem3Uuid;
     }
@@ -157,16 +161,20 @@ public:
     void SetErrorCode( int aCode ) { m_errorCode = aCode; }
 
     /**
-     * Function GetErrorText
-     * returns the string form of a RC error code
-     */
-    virtual wxString GetErrorText( int aCode = -1, bool aTranslate = true ) const = 0;
-
-    /**
      * Function GetErrorMessage
      * returns the error message of a RC_ITEM
      */
     virtual wxString GetErrorMessage() const;
+
+    wxString GetErrorText() const
+    {
+        return wxGetTranslation( m_errorTitle );
+    }
+
+    wxString GetSettingsKey() const
+    {
+        return m_settingsKey;
+    }
 
     /**
      * Function ShowCoord

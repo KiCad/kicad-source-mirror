@@ -52,111 +52,32 @@ bool DRC_NETCLASS_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
 
 bool DRC_NETCLASS_TESTER::checkNetClass( const NETCLASSPTR& nc )
 {
-    bool ret = true;
-
     const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
     if( nc->GetClearance() < bds.m_MinClearance )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_CLEARANCE );
-
-        m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                      MessageTextFromValue( m_units, bds.m_MinClearance, true ),
-                      nc->GetName(),
-                      MessageTextFromValue( m_units, nc->GetClearance(), true ) );
-
-        drcItem->SetErrorMessage( m_msg );
-        HandleMarker( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
+        return false;
 
     if( nc->GetTrackWidth() < bds.m_TrackMinWidth )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_TRACKWIDTH );
-
-        m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                      MessageTextFromValue( m_units, bds.m_TrackMinWidth, true ),
-                      nc->GetName(),
-                      MessageTextFromValue( m_units, nc->GetTrackWidth(), true ) );
-
-        drcItem->SetErrorMessage( m_msg );
-        HandleMarker( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
+        return false;
 
     if( nc->GetViaDiameter() < bds.m_ViasMinSize )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIASIZE );
-
-        m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                      MessageTextFromValue( m_units, bds.m_ViasMinSize, true ),
-                      nc->GetName(),
-                      MessageTextFromValue( m_units, nc->GetViaDiameter(), true ) );
-
-        drcItem->SetErrorMessage( m_msg );
-        HandleMarker( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
+        return false;
 
     if( nc->GetViaDrill() < bds.m_MinThroughDrill )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIADRILLSIZE );
-
-        m_msg.Printf( drcItem->GetErrorText() + _( " (board min through hole %s; %s netclass %s)" ),
-                      MessageTextFromValue( m_units, bds.m_MinThroughDrill, true ),
-                      nc->GetName(),
-                      MessageTextFromValue( m_units, nc->GetViaDrill(), true ) );
-
-        drcItem->SetErrorMessage( m_msg );
-        HandleMarker( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
+        return false;
 
     int ncViaAnnulus = ( nc->GetViaDiameter() - nc->GetViaDrill() ) / 2;
 
     if( ncViaAnnulus < bds.m_ViasMinAnnulus )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIAANNULUS );
-
-        m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                      MessageTextFromValue( m_units, bds.m_ViasMinAnnulus, true ),
-                      nc->GetName(),
-                      MessageTextFromValue( m_units, ncViaAnnulus, true ) );
-
-        drcItem->SetErrorMessage( m_msg );
-        HandleMarker( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
+        return false;
 
     if( nc->GetuViaDiameter() < bds.m_MicroViasMinSize )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIASIZE );
-
-        m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                      MessageTextFromValue( m_units, bds.m_MicroViasMinSize, true ),
-                      nc->GetName(),
-                      MessageTextFromValue( m_units, nc->GetuViaDiameter(), true ) );
-
-        drcItem->SetErrorMessage( m_msg );
-        HandleMarker( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
+        return false;
 
     if( nc->GetuViaDrill() < bds.m_MicroViasMinDrill )
-    {
-        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIADRILLSIZE );
+        return false;
 
-        m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                      MessageTextFromValue( m_units, bds.m_MicroViasMinDrill, true ),
-                      nc->GetName(),
-                      MessageTextFromValue( m_units, nc->GetuViaDrill(), true ) );
-
-        drcItem->SetErrorMessage( m_msg );
-        HandleMarker( new MARKER_PCB( drcItem, wxPoint() ) );
-        ret = false;
-    }
-
-    return ret;
+    return true;
 }
 
 

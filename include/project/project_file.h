@@ -25,7 +25,11 @@
 #include <settings/json_settings.h>
 #include <settings/nested_settings.h>
 
+class BOARD_DESIGN_SETTINGS;
+class ERC_SETTINGS;
 class NET_SETTINGS;
+class SCHEMATIC_SETTINGS;
+class TEMPLATES;
 
 /**
  * For files like sheets and boards, a pair of that object KIID and display name
@@ -120,6 +124,34 @@ public:
     /// The list of pinned footprint libraries
     std::vector<wxString> m_PinnedFootprintLibs;
 
+    std::map<wxString, wxString> m_TextVars;
+
+    /**
+     * Eeschema params
+     */
+
+    // Schematic ERC settings: lifecycle managed by SCHEMATIC
+    ERC_SETTINGS* m_ErcSettings;
+
+    // Schematic editing and misc settings: lifecycle managed by SCHEMATIC
+    SCHEMATIC_SETTINGS* m_SchematicSettings;
+
+    /**
+     * A pointer to the template fieldnames object owned by the parent SCH_BASE_FRAME.
+     * Note that this coupling is unfortunate; but the TEMPLATES object has to outlive any
+     * SCHEMATIC_SETTINGS object because it holds both global and project field names.
+     * This will be null if the project is opened outside a SCH_BASE_FRAME.  It is placed here
+     * instead of in SCHEMATIC_SETTINGS because SCHEMATIC_SETTINGS objects are created and destroyed
+     * when schematics are loaded, and it's inconvenient to make sure this pointer is set early so
+     * that load of the SCHEMATIC_SETTINGS works.
+     */
+    TEMPLATES* m_TemplateFieldNames;
+
+    // Legacy parameters LibDir and LibName, for importing old projects
+    wxString m_LegacyLibDir;
+
+    wxArrayString m_LegacyLibNames;
+
     /**
      * CvPcb params
      */
@@ -132,7 +164,7 @@ public:
      */
 
     /// Page layout description file
-    wxString m_PageLayoutDescrFile;
+    wxString m_BoardPageLayoutDescrFile;
 
     /// MRU path storage
     wxString m_PcbLastPath[LAST_PATH_SIZE];
@@ -142,7 +174,7 @@ public:
      * loading a board so that BOARD_DESIGN_SETTINGS doesn't need to live in common for now.
      * Owned by the BOARD; may be null if a board isn't loaded: be careful
      */
-    NESTED_SETTINGS* m_BoardSettings;
+    BOARD_DESIGN_SETTINGS* m_BoardSettings;
 
     /**
      * Net settings for this project (owned here)

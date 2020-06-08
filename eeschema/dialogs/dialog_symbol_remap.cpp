@@ -39,6 +39,7 @@
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
 #include <env_paths.h>
 

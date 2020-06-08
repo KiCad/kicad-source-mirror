@@ -56,7 +56,7 @@ bool DRC_COURTYARD_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
                     && footprint->GetPolyCourtyardFront().OutlineCount() == 0
                     && footprint->GetPolyCourtyardBack().OutlineCount() == 0 )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MISSING_COURTYARD );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );
                 drcItem->SetItems( footprint );
                 HandleMarker( new MARKER_PCB( drcItem, footprint->GetPosition() ) );
                 success = false;
@@ -71,7 +71,7 @@ bool DRC_COURTYARD_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
         {
             if( !aBoard.GetDesignSettings().Ignore( DRCE_MALFORMED_COURTYARD ) )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MALFORMED_COURTYARD );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
 
                 msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
 
@@ -137,7 +137,7 @@ bool DRC_COURTYARD_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
 
                 if( overlap )
                 {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_OVERLAPPING_FOOTPRINTS );
+                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
                     drcItem->SetItems( footprint, test );
                     HandleMarker( new MARKER_PCB( drcItem, pos ) );
                     success = false;
@@ -175,7 +175,7 @@ bool DRC_COURTYARD_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
                         int code = pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED ?
                                                                        DRCE_NPTH_IN_COURTYARD :
                                                                        DRCE_PTH_IN_COURTYARD;
-                        DRC_ITEM* drcItem = new DRC_ITEM( code );
+                        DRC_ITEM* drcItem = DRC_ITEM::Create( code );
                         drcItem->SetItems( footprint, pad );
                         HandleMarker( new MARKER_PCB( drcItem, pos ) );
                         success = false;

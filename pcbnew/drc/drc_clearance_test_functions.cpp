@@ -103,9 +103,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         {
             if( viaAnnulus < minAnnulus )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_ANNULUS );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                m_msg.Printf( _( "Via annulus too small (%s %s; actual %s)" ),
                               m_clearanceSource,
                               MessageTextFromValue( userUnits(), minAnnulus, true ),
                               MessageTextFromValue( userUnits(), viaAnnulus, true ) );
@@ -119,7 +119,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             if( refvia->GetWidth() < bds.m_MicroViasMinSize )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_MICROVIA );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                               MessageTextFromValue( userUnits(), bds.m_MicroViasMinSize, true ),
@@ -142,9 +142,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             if( viaAnnulus < minAnnulus )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_ANNULUS );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                m_msg.Printf( _( "Via annulus too small  (%s %s; actual %s)" ),
                               m_clearanceSource,
                               MessageTextFromValue( userUnits(), minAnnulus, true ),
                               MessageTextFromValue( userUnits(), viaAnnulus, true ) );
@@ -158,7 +158,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             if( refvia->GetWidth() < bds.m_ViasMinSize )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_VIA );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                               MessageTextFromValue( userUnits(), bds.m_ViasMinSize, true ),
@@ -177,7 +177,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         // and a default via hole can be bigger than some vias sizes
         if( refvia->GetDrillValue() > refvia->GetWidth() )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_HOLE_BIGGER );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_VIA_HOLE_BIGGER );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (diameter %s; drill %s)" ),
                           MessageTextFromValue( userUnits(), refvia->GetWidth(), true ),
@@ -193,9 +193,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         // test if the type of via is allowed due to design rules
         if( refvia->GetViaType() == VIATYPE::MICROVIA && !bds.m_MicroViasAllowed )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICROVIA_NOT_ALLOWED );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" ) );
+            m_msg.Printf( _( "Microvia not allowed (board design rule constraints)" ) );
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( refvia );
 
@@ -206,9 +206,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         // test if the type of via is allowed due to design rules
         if( refvia->GetViaType() == VIATYPE::BLIND_BURIED && !bds.m_BlindBuriedViaAllowed )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_BURIED_VIA_NOT_ALLOWED );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" ) );
+            m_msg.Printf( _( "Blind/buried via not allowed (board design rule constraints)" ) );
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( refvia );
 
@@ -236,9 +236,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             if( err )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICROVIA_TOO_MANY_LAYERS );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_PADSTACK );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s and %s not adjacent)" ),
+                m_msg.Printf( _( "Microvia through too many layers (%s and %s not adjacent)" ),
                               m_pcb->GetLayerName( layer1 ),
                               m_pcb->GetLayerName( layer2 ) );
 
@@ -261,12 +261,12 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
         if( refSegWidth < minWidth )
         {
-            errorCode = DRCE_TOO_SMALL_TRACK_WIDTH;
+            errorCode = DRCE_TRACK_WIDTH;
             constraintWidth = minWidth;
         }
         else if( refSegWidth > maxWidth )
         {
-            errorCode = DRCE_TOO_LARGE_TRACK_WIDTH;
+            errorCode = DRCE_TRACK_WIDTH;
             constraintWidth = maxWidth;
         }
 
@@ -274,7 +274,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         {
             wxPoint refsegMiddle = ( aRefSeg->GetStart() + aRefSeg->GetEnd() ) / 2;
 
-            DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( errorCode );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           m_clearanceSource,
@@ -363,7 +363,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 if( center2center_squared < SEG::Square( center2centerAllowed ) )
                 {
                     int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_HOLE );
+                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
@@ -389,7 +389,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             {
                 actual = std::max( 0, actual );
                 SEG       padSeg( pad->GetPosition(), pad->GetPosition() );
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_PAD );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                               m_clearanceSource,
@@ -463,7 +463,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         // Check two tracks crossing first as it reports a DRCE without distances
         if( intersection )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACKS_CROSSING );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TRACKS_CROSSING );
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( aRefSeg, track );
 
@@ -475,17 +475,8 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         }
         else if( center2center_squared < SEG::Square( center2centerAllowed ) )
         {
-            int errorCode = DRCE_TRACK_ENDS;
-
-            if( aRefSeg->Type() == PCB_VIA_T && track->Type() == PCB_VIA_T )
-                errorCode = DRCE_VIA_NEAR_VIA;
-            else if( aRefSeg->Type() == PCB_VIA_T || track->Type() == PCB_VIA_T )
-                errorCode = DRCE_VIA_NEAR_TRACK;
-            else if( refSeg.ApproxParallel( trackSeg ) )
-                errorCode = DRCE_TRACK_SEGMENTS_TOO_CLOSE;
-
-            int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-            DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
+            int       actual  = std::max( 0.0, sqrt( center2center_squared ) - widths );
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           m_clearanceSource,
@@ -540,7 +531,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 if( center2center_squared + THRESHOLD_DIST < SEG::Square( center2centerAllowed ) )
                 {
                     int       actual  = std::max( 0.0, sqrt( center2center_squared ) - widths );
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
+                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                             m_clearanceSource,
@@ -605,10 +596,8 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 // Best-efforts search for edge segment
                 BOARD::IterateForward<BOARD_ITEM*>( m_pcb->Drawings(), inspector, nullptr, types );
 
-                int       actual = std::max( 0.0, sqrt( center2center_squared ) - halfWidth );
-                int       errorCode = ( aRefSeg->Type() == PCB_VIA_T ) ? DRCE_VIA_NEAR_EDGE
-                                                                       : DRCE_TRACK_NEAR_EDGE;
-                DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
+                int       actual  = std::max( 0.0, sqrt( center2center_squared ) - halfWidth );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                               m_clearanceSource,

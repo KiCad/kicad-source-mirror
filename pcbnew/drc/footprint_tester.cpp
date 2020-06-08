@@ -44,7 +44,7 @@ void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<DRC_ITEM*>& a
 
             if( !ins.second )
             {
-                DRC_ITEM* item = new DRC_ITEM( DRCE_DUPLICATE_FOOTPRINT );
+                DRC_ITEM* item = DRC_ITEM::Create( DRCE_DUPLICATE_FOOTPRINT );
                 item->SetItems( mod, *ins.first );
                 aDRCList.push_back( item );
             }
@@ -65,7 +65,7 @@ void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<DRC_ITEM*>& a
                             component->GetReference(),
                             component->GetValue() );
 
-                DRC_ITEM* item = new DRC_ITEM( DRCE_MISSING_FOOTPRINT );
+                DRC_ITEM* item = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
                 item->SetErrorMessage( msg );
                 aDRCList.push_back( item );
             }
@@ -81,7 +81,7 @@ void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<DRC_ITEM*>& a
 
             if( component == NULL )
             {
-                DRC_ITEM* item = new DRC_ITEM( DRCE_EXTRA_FOOTPRINT );
+                DRC_ITEM* item = DRC_ITEM::Create( DRCE_EXTRA_FOOTPRINT );
                 item->SetItems( module );
                 aDRCList.push_back( item );
             }

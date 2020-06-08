@@ -283,9 +283,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         CreateScreens();
     }
 
-    GetScreen()->SetFileName( fullFileName );
-    Schematic().Root().SetFileName( fullFileName );
-
     SetStatusText( wxEmptyString );
     ClearMsgPanel();
 
@@ -326,13 +323,15 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( pro.GetFullPath() != Prj().GetProjectFullName() )
         GetSettingsManager()->LoadProject( pro.GetFullPath() );
 
-    LoadProjectFile();
-
     // Load the symbol library table, this will be used forever more.
     Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
     Prj().SchSymbolLibTable();
 
-    Schematic().SetProject( Prj() );
+    Schematic().SetProject( &Prj() );
+
+    // Load project settings after schematic has been set up with the project link, since this will
+    // update some of the needed schematic settings such as drawing defaults
+    LoadProjectSettings();
 
     SetShutdownBlockReason( _( "Schematic file changes are unsaved" ) );
 
@@ -344,7 +343,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     else
     {
         SetScreen( nullptr );
-        Schematic().Reset();
 
         SCH_PLUGIN* plugin = SCH_IO_MGR::FindPlugin( schFileType );
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( plugin );

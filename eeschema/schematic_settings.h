@@ -22,6 +22,8 @@
 
 #include <convert_to_biu.h>
 #include <default_values.h>
+#include <settings/nested_settings.h>
+#include <template_fieldnames.h>
 
 /**
  * These settings were stored in SCH_BASE_FRAME previously.
@@ -31,17 +33,13 @@
  * These are loaded from eeschema settings but then overwritten by the project settings.
  * All of the values are stored in IU, but the backing file stores in mils.
  */
-struct SCHEMATIC_SETTINGS
+struct SCHEMATIC_SETTINGS : public NESTED_SETTINGS
 {
-    SCHEMATIC_SETTINGS() :
-            m_DefaultLineWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS ),
-            m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
-            m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
-            m_DefaultTextSize( DEFAULT_TEXT_SIZE * IU_PER_MILS ),
-            m_TextOffsetRatio( 0.08 ),
-            m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
-            m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS )
-    {}
+    SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
+
+    virtual ~SCHEMATIC_SETTINGS();
+
+    // Default sizes are all stored in IU here, and im mils in the JSON file
 
     int    m_DefaultLineWidth;
     int    m_DefaultWireThickness;
@@ -50,6 +48,17 @@ struct SCHEMATIC_SETTINGS
     double m_TextOffsetRatio;
     int    m_PinSymbolSize;
     int    m_JunctionSize;
+
+    wxString m_PageLayoutDescrFile;
+
+    wxString m_PlotDirectoryName;
+
+    wxString m_NetFormatName;
+
+    bool m_SpiceAdjustPassiveValues;
+
+    /// @see PROJECT_FILE::m_TemplateFieldNames
+    TEMPLATES* m_TemplateFieldNames;
 };
 
 #endif

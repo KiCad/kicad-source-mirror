@@ -65,13 +65,19 @@ PROJECT::~PROJECT()
 
 bool PROJECT::TextVarResolver( wxString* aToken ) const
 {
-    if( m_textVars.count( *aToken ) > 0 )
+    if( GetTextVars().count( *aToken ) > 0 )
     {
-        *aToken = m_textVars.at( *aToken );
+        *aToken = GetTextVars().at( *aToken );
         return true;
     }
 
     return false;
+}
+
+
+std::map<wxString, wxString>& PROJECT::GetTextVars() const
+{
+    return GetProjectFile().m_TextVars;
 }
 
 
@@ -354,91 +360,6 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList,
     cfg = new wxFileConfig( wxEmptyString, wxEmptyString, cur_pro_fn, wxEmptyString );
 
     return cfg;
-}
-
-
-void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName,
-                          const std::vector<PARAM_CFG*>& aParams, const wxString& aFileName )
-{
-    std::unique_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName, aFileName ) );
-
-    if( !cfg.get() )
-    {
-        // could not find template
-        return;
-    }
-
-    cfg->SetPath( wxT( "/" ) );
-
-    cfg->Write( wxT( "update" ), DateAndTime() );
-
-    // @todo: pass in aLastClient wxString:
-    cfg->Write( wxT( "last_client" ), Pgm().App().GetAppName() );
-
-    // Save parameters
-    cfg->DeleteGroup( aGroupName );     // Erase all data
-    cfg->Flush();
-
-    cfg->SetPath( aGroupName );
-    cfg->Write( wxT( "version" ), CONFIG_VERSION );
-
-    cfg->SetPath( wxT( "/" ) );
-
-    wxConfigSaveParams( cfg.get(), aParams, aGroupName );
-
-    cfg->DeleteGroup( GROUP_TEXT_VARS );
-    cfg->SetPath( GROUP_TEXT_VARS );
-    int index = 1;
-
-    for( const auto& textvar : m_textVars )
-    {
-        cfg->Write( wxString::Format( "%d", index++ ),
-                    wxString::Format( "%s:%s", textvar.first, textvar.second ) );
-    }
-
-    cfg->SetPath( wxT( "/" ) );
-
-    cfg->Flush();
-}
-
-
-bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString&  aGroupName,
-                          const std::vector<PARAM_CFG*>& aParams,
-                          const wxString& aForeignProjectFileName )
-{
-    std::unique_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName,
-                                                     aForeignProjectFileName ) );
-
-    if( !cfg.get() )
-    {
-        // could not find template
-        return false;
-    }
-
-    // We do not want expansion of env var values when reading our project config file
-    cfg->SetExpandEnvVars( false );
-
-    cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
-
-    wxString timestamp = cfg->Read( wxT( "update" ) );
-
-    m_pro_date_and_time = timestamp;
-
-    wxConfigLoadParams( cfg.get(), aParams, aGroupName );
-
-    cfg->SetPath( GROUP_TEXT_VARS );
-
-    int index = 1;
-    wxString entry;
-
-    while( cfg->Read( wxString::Format( "%d", index++ ), &entry ) )
-    {
-        wxArrayString tokens = wxSplit( entry, ':' );
-
-        if( tokens.size() == 2 )
-            m_textVars[ tokens[0] ] = tokens[1];
-    }
-    return true;
 }
 
 

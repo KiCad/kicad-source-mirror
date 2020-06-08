@@ -20,19 +20,20 @@
 #include <bus_alias.h>
 #include <connection_graph.h>
 #include <erc_settings.h>
+#include <project.h>
+#include <project/project_file.h>
 #include <schematic.h>
 #include <sch_screen.h>
-#include <sch_marker.h>
 
 
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
           EDA_ITEM( nullptr, SCHEMATIC_T ),
-          m_project( aPrj ),
           m_rootSheet( nullptr )
 {
     m_currentSheet    = new SCH_SHEET_PATH();
     m_connectionGraph = new CONNECTION_GRAPH( this );
-    m_ercSettings     = new ERC_SETTINGS();
+
+    SetProject( aPrj );
 }
 
 
@@ -40,18 +41,47 @@ SCHEMATIC::~SCHEMATIC()
 {
     delete m_currentSheet;
     delete m_connectionGraph;
-    delete m_ercSettings;
 }
 
 
 void SCHEMATIC::Reset()
 {
+    // Assume project already saved
+    if( m_project )
+    {
+        PROJECT_FILE& project = m_project->GetProjectFile();
+
+        delete project.m_ErcSettings;
+        delete project.m_SchematicSettings;
+
+        project.m_ErcSettings       = nullptr;
+        project.m_SchematicSettings = nullptr;
+    }
+
     delete m_rootSheet;
 
     m_rootSheet = nullptr;
 
     m_connectionGraph->Reset();
     m_currentSheet->clear();
+}
+
+
+void SCHEMATIC::SetProject( PROJECT* aPrj )
+{
+    m_project = aPrj;
+
+    if( m_project )
+    {
+        PROJECT_FILE& project       = m_project->GetProjectFile();
+        project.m_ErcSettings       = new ERC_SETTINGS( &project, "erc" );
+        project.m_SchematicSettings = new SCHEMATIC_SETTINGS( &project, "schematic" );
+
+        project.m_SchematicSettings->m_TemplateFieldNames = project.m_TemplateFieldNames;
+        project.m_SchematicSettings->LoadFromFile();
+
+        project.m_ErcSettings->LoadFromFile();
+    }
 }
 
 
@@ -77,6 +107,20 @@ wxString SCHEMATIC::GetFileName() const
 }
 
 
+SCHEMATIC_SETTINGS& SCHEMATIC::Settings() const
+{
+    wxASSERT( m_project );
+    return *m_project->GetProjectFile().m_SchematicSettings;
+}
+
+
+ERC_SETTINGS& SCHEMATIC::ErcSettings() const
+{
+    wxASSERT( m_project );
+    return *m_project->GetProjectFile().m_ErcSettings;
+}
+
+
 std::shared_ptr<BUS_ALIAS> SCHEMATIC::GetBusAlias( const wxString& aLabel ) const
 {
     for( const auto& sheet : GetSheets() )
@@ -92,123 +136,4 @@ std::shared_ptr<BUS_ALIAS> SCHEMATIC::GetBusAlias( const wxString& aLabel ) cons
 }
 
 
-int SCHEMATIC::GetErcSeverity( int aErrorCode ) const
-{
-    // Special-case pin-to-pin errors:
-    // Ignore-or-not is controlled by ERCE_PIN_TO_PIN_WARNING (for both)
-    // Warning-or-error is controlled by which errorCode it is
-    if( aErrorCode == ERCE_PIN_TO_PIN_ERROR )
-    {
-        if( m_ercSettings->m_Severities[ ERCE_PIN_TO_PIN_WARNING ] == RPT_SEVERITY_IGNORE )
-            return RPT_SEVERITY_IGNORE;
-        else
-            return RPT_SEVERITY_ERROR;
-    }
-    else if( aErrorCode == ERCE_PIN_TO_PIN_WARNING )
-    {
-        if( m_ercSettings->m_Severities[ ERCE_PIN_TO_PIN_WARNING ] == RPT_SEVERITY_IGNORE )
-            return RPT_SEVERITY_IGNORE;
-        else
-            return RPT_SEVERITY_WARNING;
-    }
 
-    return m_ercSettings->m_Severities[ aErrorCode ];
-}
-
-
-void SCHEMATIC::SetErcSeverity( int aErrorCode, int aSeverity )
-{
-    m_ercSettings->m_Severities[ aErrorCode ] = aSeverity;
-}
-
-
-void SHEETLIST_ERC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
-{
-    m_severities = aSeverities;
-
-    m_filteredMarkers.clear();
-
-    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-
-    for( unsigned i = 0; i < sheetList.size(); i++ )
-    {
-        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
-            int markerSeverity;
-
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
-
-            if( marker->IsExcluded() )
-                markerSeverity = RPT_SEVERITY_EXCLUSION;
-            else
-                markerSeverity = m_schematic->GetErcSeverity( marker->GetRCItem()->GetErrorCode() );
-
-            if( markerSeverity & m_severities )
-                m_filteredMarkers.push_back( marker );
-        }
-    }
-}
-
-
-int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity )
-{
-    if( aSeverity < 0 )
-        return m_filteredMarkers.size();
-
-    int count = 0;
-
-    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-
-    for( unsigned i = 0; i < sheetList.size(); i++ )
-    {
-        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
-            int markerSeverity;
-
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
-
-            if( marker->IsExcluded() )
-                markerSeverity = RPT_SEVERITY_EXCLUSION;
-            else
-                markerSeverity = m_schematic->GetErcSeverity( marker->GetRCItem()->GetErrorCode() );
-
-            if( markerSeverity == aSeverity )
-                count++;
-        }
-    }
-
-    return count;
-}
-
-
-ERC_ITEM* SHEETLIST_ERC_ITEMS_PROVIDER::GetItem( int aIndex )
-{
-    SCH_MARKER* marker = m_filteredMarkers[ aIndex ];
-
-    return marker ? static_cast<ERC_ITEM*>( marker->GetRCItem() ) : nullptr;
-}
-
-
-void SHEETLIST_ERC_ITEMS_PROVIDER::DeleteItem( int aIndex, bool aDeep )
-{
-    SCH_MARKER* marker = m_filteredMarkers[ aIndex ];
-    m_filteredMarkers.erase( m_filteredMarkers.begin() + aIndex );
-
-    if( aDeep )
-    {
-        SCH_SCREENS screens( m_schematic->Root() );
-        screens.DeleteMarker( marker );
-    }
-}
-
-
-void SHEETLIST_ERC_ITEMS_PROVIDER::DeleteAllItems()
-{
-    SCH_SCREENS screens( m_schematic->Root() );
-    screens.DeleteAllMarkers( MARKER_BASE::MARKER_ERC );
-    m_filteredMarkers.clear();
-}

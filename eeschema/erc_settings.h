@@ -22,11 +22,12 @@
 #define _ERC_SETTINGS_H
 
 #include <erc.h>
+#include <erc_item.h>
+#include <settings/nested_settings.h>
 #include <widgets/ui_common.h>
 
 
-class PARAM_CFG;
-
+class SCH_MARKER;
 
 /**
  * Container for ERC settings
@@ -34,25 +35,21 @@ class PARAM_CFG;
  * Currently only stores flags about checks to run, but could later be expanded
  * to contain the matrix of electrical pin types.
  */
-class ERC_SETTINGS
+class ERC_SETTINGS : public NESTED_SETTINGS
 {
 public:
-    ERC_SETTINGS()
-    {
-        for( int i = ERCE_FIRST; i <= ERCE_LAST; ++i )
-            m_Severities[ i ] = RPT_SEVERITY_ERROR;
+    ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
 
-        m_Severities[ ERCE_UNSPECIFIED ] = RPT_SEVERITY_UNDEFINED;
-    }
+    virtual ~ERC_SETTINGS();
 
     void LoadDefaults()
     {
-        m_Severities[ ERCE_SIMILAR_LABELS ] = RPT_SEVERITY_WARNING;
-        m_Severities[ ERCE_GLOBLABEL ] = RPT_SEVERITY_WARNING;
-        m_Severities[ ERCE_DRIVER_CONFLICT ] = RPT_SEVERITY_WARNING;
-        m_Severities[ ERCE_BUS_ENTRY_CONFLICT ] = RPT_SEVERITY_WARNING;
-        m_Severities[ ERCE_BUS_TO_BUS_CONFLICT ] = RPT_SEVERITY_ERROR;
-        m_Severities[ ERCE_BUS_TO_NET_CONFLICT ] = RPT_SEVERITY_ERROR;
+        m_Severities[ERCE_SIMILAR_LABELS]      = RPT_SEVERITY_WARNING;
+        m_Severities[ERCE_GLOBLABEL]           = RPT_SEVERITY_WARNING;
+        m_Severities[ERCE_DRIVER_CONFLICT]     = RPT_SEVERITY_WARNING;
+        m_Severities[ERCE_BUS_ENTRY_CONFLICT]  = RPT_SEVERITY_WARNING;
+        m_Severities[ERCE_BUS_TO_BUS_CONFLICT] = RPT_SEVERITY_ERROR;
+        m_Severities[ERCE_BUS_TO_NET_CONFLICT] = RPT_SEVERITY_ERROR;
     }
 
     bool operator==( const ERC_SETTINGS& other ) const
@@ -70,9 +67,41 @@ public:
         return m_Severities.at( aErrorCode ) != RPT_SEVERITY_IGNORE;
     }
 
-    std::vector<PARAM_CFG*> GetProjectFileParameters();
+    int GetSeverity( int aErrorCode ) const;
+
+    void SetSeverity( int aErrorCode, int aSeverity );
 
     std::map<int, int> m_Severities;
 };
+
+/**
+ * SHEETLIST_ERC_ITEMS_PROVIDER
+ * is an implementation of the RC_ITEM_LISTinterface which uses the global SHEETLIST
+ * to fulfill the contract.
+ */
+class SHEETLIST_ERC_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
+{
+private:
+    SCHEMATIC*               m_schematic;
+    int                      m_severities;
+    std::vector<SCH_MARKER*> m_filteredMarkers;
+
+public:
+    SHEETLIST_ERC_ITEMS_PROVIDER( SCHEMATIC* aSchematic ) :
+            m_schematic( aSchematic ),
+            m_severities( 0 )
+    { }
+
+    void SetSeverities( int aSeverities ) override;
+
+    int GetCount( int aSeverity = -1 ) override;
+
+    ERC_ITEM* GetItem( int aIndex ) override;
+
+    void DeleteItem( int aIndex, bool aDeep ) override;
+
+    void DeleteAllItems() override;
+};
+
 
 #endif

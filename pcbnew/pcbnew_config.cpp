@@ -80,7 +80,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 
     PROJECT_FILE& project = Prj().GetProjectFile();
 
-    BASE_SCREEN::m_PageLayoutDescrFileName = project.m_PageLayoutDescrFile;
+    BASE_SCREEN::m_PageLayoutDescrFileName = project.m_BoardPageLayoutDescrFile;
 
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
@@ -111,7 +111,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     PROJECT_FILE& project = Prj().GetProjectFile();
 
     // TODO: Can this be pulled out of BASE_SCREEN?
-    project.m_PageLayoutDescrFile = BASE_SCREEN::m_PageLayoutDescrFileName;
+    project.m_BoardPageLayoutDescrFile = BASE_SCREEN::m_PageLayoutDescrFileName;
 
     RecordDRCExclusions();
 

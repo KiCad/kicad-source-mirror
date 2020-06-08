@@ -138,3 +138,17 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 }
 
 
+void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
+{
+    m_textSize.SetValue( aSettings.m_DefaultTextSize );
+    m_lineWidth.SetValue( aSettings.m_DefaultLineWidth );
+    m_busWidth.SetValue( aSettings.m_DefaultBusThickness );
+    m_wireWidth.SetValue( aSettings.m_DefaultWireThickness );
+    m_pinSymbolSize.SetValue( aSettings.m_PinSymbolSize );
+    m_junctionSize.SetValue( aSettings.m_JunctionSize );
+
+    wxString offsetRatio = wxString::Format( "%f", aSettings.m_TextOffsetRatio * 100.0 );
+    m_textOffsetRatioCtrl->SetValue( offsetRatio );
+}
+
+

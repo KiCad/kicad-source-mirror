@@ -47,6 +47,7 @@ protected:
     PANEL_SETUP_PINMAP*                 m_pinMap;
     PANEL_SETUP_SEVERITIES*             m_severities;
     PANEL_TEXT_VARIABLES*               m_textVars;
+    ERC_ITEM*                           m_pinToPinError;
 
     std::vector<bool>                   m_macHack;
 

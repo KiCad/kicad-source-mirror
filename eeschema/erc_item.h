@@ -30,16 +30,47 @@
 class ERC_ITEM : public RC_ITEM
 {
 public:
-    ERC_ITEM( int aErrorCode )
+    /**
+     * Constructs an ERC_ITEM for the given error code
+     * @see ERCE_T
+     */
+    static ERC_ITEM* Create( int aErrorCode );
+
+    static std::vector<std::reference_wrapper<RC_ITEM>> GetItemsWithSeverities()
     {
-        m_errorCode = aErrorCode;
+        return allItemTypes;
     }
 
-    /**
-     * Function GetErrorText
-     * returns the string form of an erc error code.
-     */
-    wxString GetErrorText( int aErrorCode = -1, bool aTranslate = true ) const override;
+private:
+    ERC_ITEM( int aErrorCode = 0, const wxString& aTitle = "", const wxString& aSettingsKey = "" )
+    {
+        m_errorCode   = aErrorCode;
+        m_errorTitle  = aTitle;
+        m_settingsKey = aSettingsKey;
+    }
+
+    /// A list of all ERC_ITEM types which are valid error codes
+    static std::vector<std::reference_wrapper<RC_ITEM>> allItemTypes;
+
+    static ERC_ITEM duplicateSheetName;
+    static ERC_ITEM pinNotConnected;
+    static ERC_ITEM pinNotDriven;
+    static ERC_ITEM pinTableConflict;
+    static ERC_ITEM hierLabelMismatch;
+    static ERC_ITEM noConnectConnected;
+    static ERC_ITEM noConnectDangling;
+    static ERC_ITEM labelDangling;
+    static ERC_ITEM globalLabelDangling;
+    static ERC_ITEM similarLabels;
+    static ERC_ITEM differentUnitFootprint;
+    static ERC_ITEM differentUnitNet;
+    static ERC_ITEM busDefinitionConflict;
+    static ERC_ITEM multipleNetNames;
+    static ERC_ITEM netNotBusMember;
+    static ERC_ITEM busLabelSyntax;
+    static ERC_ITEM busToBusConflict;
+    static ERC_ITEM busToNetConflict;
+    static ERC_ITEM unresolvedVariable;
 };
 
 

@@ -373,7 +373,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
     // Copy kicad.pro file from template folder.
     if( !aProjectFileName.FileExists() )
     {
-        // TODO(JE) provide in new format
+        // TODO(JE) PROJECT provide in new format
         wxString srcFileName = sys_search().FindValidPath( "kicad.pro" );
 
         wxFileName destFileName( aProjectFileName );

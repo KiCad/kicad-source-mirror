@@ -27,14 +27,13 @@
 #include "panel_setup_severities.h"
 
 
-PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& aDummyItem,
+PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
+                                                std::vector<std::reference_wrapper<RC_ITEM>> aItems,
                                                 std::map<int, int>& aSeverities,
-                                                int aFirstErrorCode, int aLastErrorCode,
-                                                int aPinMapSpecialCase ) :
+                                                RC_ITEM* aPinMapSpecialCase ) :
         wxPanel( aParent->GetTreebook() ),
         m_severities( aSeverities ),
-        m_firstErrorCode( aFirstErrorCode ),
-        m_lastErrorCode( aLastErrorCode ),
+        m_items( aItems ),
         m_pinMapSpecialCase( aPinMapSpecialCase )
 {
     wxString          severities[] = { _( "Error" ), _( "Warning" ), _( "Ignore" ) };
@@ -50,9 +49,10 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& 
     wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 5 );
     gridSizer->SetFlexibleDirection( wxBOTH );
 
-   	for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
+   	for( const RC_ITEM& item : m_items )
     {
-   	    wxString msg = aDummyItem.GetErrorText( errorCode );
+        int      errorCode = item.GetErrorCode();
+        wxString msg       = item.GetErrorText();
 
         // When msg is empty, for some reason, the current errorCode is not supported
         // by the RC_ITEM aDummyItem.
@@ -84,11 +84,11 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& 
         }
     }
 
-   	if( m_pinMapSpecialCase >= 0 )
+   	if( m_pinMapSpecialCase )
     {
         wxString pinMapSeverities[] = { _( "From Pin Conflicts Map" ), wxT( "" ), _( "Ignore" ) };
-   	    int      errorCode = m_pinMapSpecialCase;
-        wxString msg = aDummyItem.GetErrorText( errorCode );
+        int      errorCode          = m_pinMapSpecialCase->GetErrorCode();
+        wxString msg                = m_pinMapSpecialCase->GetErrorText();
 
         wxStaticText* errorLabel = new wxStaticText( scrollWin, wxID_ANY, msg + wxT( ":" ) );
         gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 4  );
@@ -133,8 +133,10 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& 
 
 void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, int>& aSettings )
 {
-    for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
+    for( const RC_ITEM& item : m_items )
     {
+        int errorCode = item.GetErrorCode();
+
         if(! m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
             continue;
 
@@ -147,20 +149,23 @@ void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, int>& aSettings )
         }
     }
 
-    if( m_pinMapSpecialCase >= 0 )
+    if( m_pinMapSpecialCase )
     {
-        int newSeverity = aSettings[ m_pinMapSpecialCase ];
+        int pinMapCode  = m_pinMapSpecialCase->GetErrorCode();
+        int newSeverity = aSettings[ pinMapCode ];
 
-        m_buttonMap[ m_pinMapSpecialCase ][0]->SetValue( newSeverity != RPT_SEVERITY_IGNORE );
-        m_buttonMap[ m_pinMapSpecialCase ][1]->SetValue( newSeverity == RPT_SEVERITY_IGNORE );
+        m_buttonMap[ pinMapCode ][0]->SetValue( newSeverity != RPT_SEVERITY_IGNORE );
+        m_buttonMap[ pinMapCode ][1]->SetValue( newSeverity == RPT_SEVERITY_IGNORE );
     }
 }
 
 
 bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
 {
-    for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
+    for( const RC_ITEM& item : m_items )
     {
+        int errorCode = item.GetErrorCode();
+
         if( !m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
             continue;
 
@@ -173,12 +178,13 @@ bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
         }
     }
 
-    if( m_pinMapSpecialCase >= 0 )
+    if( m_pinMapSpecialCase )
     {
-        int severity = m_severities[ m_pinMapSpecialCase ];
+        int pinMapCode = m_pinMapSpecialCase->GetErrorCode();
+        int severity   = m_severities[pinMapCode];
 
-        m_buttonMap[ m_pinMapSpecialCase ][0]->SetValue( severity != RPT_SEVERITY_IGNORE );
-        m_buttonMap[ m_pinMapSpecialCase ][2]->SetValue( severity == RPT_SEVERITY_IGNORE );
+        m_buttonMap[ pinMapCode ][0]->SetValue( severity != RPT_SEVERITY_IGNORE );
+        m_buttonMap[ pinMapCode ][2]->SetValue( severity == RPT_SEVERITY_IGNORE );
     }
 
     return true;
@@ -187,8 +193,10 @@ bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
 
 bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
 {
-    for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
+    for( const RC_ITEM& item : m_items )
     {
+        int errorCode = item.GetErrorCode();
+
         if( !m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
             continue;
 
@@ -204,16 +212,17 @@ bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
         m_severities[ errorCode ] = severity;
     }
 
-    if( m_pinMapSpecialCase >= 0 )
+    if( m_pinMapSpecialCase )
     {
-        int severity = RPT_SEVERITY_UNDEFINED;
+        int pinMapCode = m_pinMapSpecialCase->GetErrorCode();
+        int severity   = RPT_SEVERITY_UNDEFINED;
 
-        if( m_buttonMap[ m_pinMapSpecialCase ][0]->GetValue() )
+        if( m_buttonMap[ pinMapCode ][0]->GetValue() )
             severity = RPT_SEVERITY_ERROR;
-        else if( m_buttonMap[ m_pinMapSpecialCase ][2]->GetValue() )
+        else if( m_buttonMap[ pinMapCode ][2]->GetValue() )
             severity = RPT_SEVERITY_IGNORE;
 
-        m_severities[ m_pinMapSpecialCase ] = severity;
+        m_severities[ pinMapCode ] = severity;
     }
 
     return true;

@@ -36,7 +36,7 @@
 wxString RC_ITEM::GetErrorMessage() const
 {
     if( m_errorMessage.IsEmpty() )
-        return GetErrorText( m_errorCode );
+        return GetErrorText();
     else
         return m_errorMessage;
 }

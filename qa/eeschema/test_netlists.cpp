@@ -28,6 +28,7 @@
 #include <sch_io_mgr.h>
 #include <sch_sheet.h>
 #include <schematic.h>
+#include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 
 
@@ -35,7 +36,7 @@ class TEST_NETLISTS_FIXTURE
 {
 public:
     TEST_NETLISTS_FIXTURE() :
-            m_schematic( &m_project )
+            m_schematic( nullptr )
     {
         m_pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
     }
@@ -55,10 +56,9 @@ public:
     ///> Schematic to load
     SCHEMATIC m_schematic;
 
-    ///> Dummy project
-    PROJECT m_project;
-
     SCH_PLUGIN* m_pi;
+
+    SETTINGS_MANAGER m_manager;
 };
 
 
@@ -83,11 +83,12 @@ void TEST_NETLISTS_FIXTURE::loadSchematic( const wxString& aBaseName )
     wxFileName pro( fn );
     pro.SetExt( ProjectFileExtension );
 
-    // TODO(JE) Make this not required
-    m_project.setProjectFullName( pro.GetFullPath() );
-    m_project.SetElem( PROJECT::ELEM_SCH_PART_LIBS, nullptr );
+    m_manager.LoadProject( pro.GetFullPath() );
+
+    m_manager.Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, nullptr );
 
     m_schematic.Reset();
+    m_schematic.SetProject( &m_manager.Prj() );
     m_schematic.SetRoot( m_pi->Load( fn, &m_schematic ) );
 
     BOOST_REQUIRE_EQUAL( m_pi->GetError().IsEmpty(), true );

@@ -195,17 +195,17 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     }
 
     SCH_SCREENS screens( sch->Root() );
-    ERC_SETTINGS* settings = sch->ErcSettings();
+    ERC_SETTINGS& settings = sch->ErcSettings();
 
     // Test duplicate sheet names inside a given sheet.  While one can have multiple references
     // to the same file, each must have a unique name.
-    if( settings->IsTestEnabled( ERCE_DUPLICATE_SHEET_NAME ) )
+    if( settings.IsTestEnabled( ERCE_DUPLICATE_SHEET_NAME ) )
     {
         aReporter.ReportTail( _( "Checking sheet names...\n" ), RPT_SEVERITY_INFO );
         TestDuplicateSheetNames( sch, true );
     }
 
-    if( settings->IsTestEnabled( ERCE_BUS_ALIAS_CONFLICT ) )
+    if( settings.IsTestEnabled( ERCE_BUS_ALIAS_CONFLICT ) )
     {
         aReporter.ReportTail( _( "Checking bus conflicts...\n" ), RPT_SEVERITY_INFO );
         TestConflictingBusAliases( sch );
@@ -217,7 +217,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     sch->ConnectionGraph()->RunERC();
 
     // Test is all units of each multiunit component have the same footprint assigned.
-    if( settings->IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
+    if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
     {
         aReporter.ReportTail( _( "Checking footprints...\n" ), RPT_SEVERITY_INFO );
         SCH_SHEET_LIST sheets = sch->GetSheets();
@@ -277,7 +277,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
         case NETLIST_ITEM::PIN:
         {
             // Check if this pin has appeared before on a different net
-            if( item->m_Link && settings->IsTestEnabled( ERCE_DIFFERENT_UNIT_NET ) )
+            if( item->m_Link && settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_NET ) )
             {
                 wxString ref = item->GetComponentParent()->GetRef( &item->m_SheetPath );
                 wxString pin_name = ref + "_" + item->m_PinNum;
@@ -294,7 +294,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
                                 pin_to_net_map[pin_name],
                                 item->GetNetName() );
 
-                    ERC_ITEM* ercItem = new ERC_ITEM( ERCE_DIFFERENT_UNIT_NET );
+                    ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_DIFFERENT_UNIT_NET );
                     ercItem->SetErrorMessage( msg );
                     ercItem->SetItems( item->m_Comp );
 
@@ -316,13 +316,13 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
     // Test similar labels (i;e. labels which are identical when
     // using case insensitive comparisons)
-    if( settings->IsTestEnabled( ERCE_SIMILAR_LABELS ) )
+    if( settings.IsTestEnabled( ERCE_SIMILAR_LABELS ) )
     {
         aReporter.ReportTail( _( "Checking labels...\n" ), RPT_SEVERITY_INFO );
         objectsConnectedList->TestforSimilarLabels();
     }
 
-    if( settings->IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
+    if( settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
         TestTextVars( sch, m_parent->GetCanvas()->GetView()->GetWorksheet() );
 
     // Display diags:
@@ -393,14 +393,14 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     if( !node )
         return;
 
-    SCHEMATIC& sch = m_parent->Schematic();
+    ERC_SETTINGS& settings = m_parent->Schematic().ErcSettings();
 
     RC_ITEM*  rcItem = node->m_RcItem;
     wxString  listName;
     wxMenu    menu;
     wxString  msg;
 
-    switch( sch.GetErcSeverity( rcItem->GetErrorCode() ) )
+    switch( settings.GetSeverity( rcItem->GetErrorCode() ) )
     {
     case RPT_SEVERITY_ERROR:   listName = _( "errors" );      break;
     case RPT_SEVERITY_WARNING: listName = _( "warnings" );    break;
@@ -425,21 +425,20 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     {
         // Pin to pin severities edited through pin conflict map
     }
-    else if( sch.GetErcSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
+    else if( settings.GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
     {
         menu.Append( 4, wxString::Format( _( "Change severity to Error for all '%s' violations" ),
-                                          rcItem->GetErrorText( rcItem->GetErrorCode() ) ),
+                                          rcItem->GetErrorText() ),
                      _( "Violation severities can also be edited in the Board Setup... dialog" ) );
     }
     else
     {
         menu.Append( 5, wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
-                                          rcItem->GetErrorText( rcItem->GetErrorCode() ) ),
+                                          rcItem->GetErrorText() ),
                      _( "Violation severities can also be edited in the Board Setup... dialog" ) );
     }
 
-    menu.Append( 6, wxString::Format( _( "Ignore all '%s' violations" ),
-                                      rcItem->GetErrorText( rcItem->GetErrorCode() ) ),
+    menu.Append( 6, wxString::Format( _( "Ignore all '%s' violations" ), rcItem->GetErrorText() ),
                  _( "Violations will not be checked or reported" ) );
 
     menu.AppendSeparator();
@@ -478,7 +477,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 4:
-        sch.SetErcSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_ERROR );
+        settings.SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_ERROR );
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
@@ -486,7 +485,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 5:
-        sch.SetErcSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_WARNING );
+        settings.SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_WARNING );
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
@@ -495,12 +494,12 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
     case 6:
     {
-        sch.SetErcSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_IGNORE );
+        settings.SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_IGNORE );
 
         if( rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_ERROR )
-            sch.SetErcSeverity( ERCE_PIN_TO_PIN_WARNING, RPT_SEVERITY_IGNORE );
+            settings.SetSeverity( ERCE_PIN_TO_PIN_WARNING, RPT_SEVERITY_IGNORE );
 
-        SCH_SCREENS ScreenList( sch.Root() );
+        SCH_SCREENS ScreenList( m_parent->Schematic().Root() );
         ScreenList.DeleteMarkers( MARKER_BASE::MARKER_ERC, rcItem->GetErrorCode() );
 
         // Rebuild model and view
@@ -615,6 +614,8 @@ bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
 
     sheetList.FillItemMap( itemMap );
 
+    ERC_SETTINGS& settings = m_parent->Schematic().ErcSettings();
+
     for( unsigned i = 0;  i < sheetList.size(); i++ )
     {
         msg << wxString::Format( _( "\n***** Sheet %s\n" ), sheetList[i].PathHumanReadable() );
@@ -628,7 +629,7 @@ bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
 
             total_count++;
 
-            switch( m_parent->Schematic().GetErcSeverity( marker->GetRCItem()->GetErrorCode() ) )
+            switch( settings.GetSeverity( marker->GetRCItem()->GetErrorCode() ) )
             {
             case RPT_SEVERITY_ERROR:   err_count++;  break;
             case RPT_SEVERITY_WARNING: warn_count++; break;

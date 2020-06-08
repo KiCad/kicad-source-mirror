@@ -56,7 +56,7 @@ bool DIALOG_SCH_IMPORT_SETTINGS::TransferDataToWindow()
 void DIALOG_SCH_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
 {
     wxFileName fn = m_frame->Schematic().Root().GetFileName();
-    fn.SetExt( LegacyProjectFileExtension );
+    fn.SetExt( ProjectFileExtension );
 
     wxFileDialog dlg( this, _( "Import Settings From" ), fn.GetPath(), fn.GetFullName(),
                       ProjectFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
