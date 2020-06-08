@@ -1542,8 +1542,8 @@ static struct MODULE_DESC
                     &MODULE::SetValue, &MODULE::GetValue ) );
         propMgr.AddProperty( new PROPERTY<MODULE, double>( _( "Orientation" ),
                     &MODULE::SetOrientationDegrees, &MODULE::GetOrientationDegrees, PROPERTY_DISPLAY::DEGREE ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Local Clearance" ),
-                    &MODULE::SetLocalClearance, &MODULE::GetLocalClearance, PROPERTY_DISPLAY::DISTANCE ) );
+        //propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Local Clearance" ),
+//                    &MODULE::SetLocalClearance, &MODULE::GetLocalClearance, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Local Solderpaste Margin" ),
                     &MODULE::SetLocalSolderPasteMargin, &MODULE::GetLocalSolderPasteMargin, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<MODULE, double>( _( "Local Solderpaste Margin Ratio" ),

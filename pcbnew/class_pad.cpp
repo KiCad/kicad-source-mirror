@@ -1231,8 +1231,8 @@ static struct PAD_DESC
                 { return aItem->Get( shape ) == PAD_SHAPE_ROUNDRECT; } );
         propMgr.AddProperty( roundRadiusRatio );
 
-        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Local Clearance" ),
-                    &D_PAD::SetLocalClearance, &D_PAD::GetLocalClearance, PROPERTY_DISPLAY::DISTANCE ) );
+        //propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Local Clearance" ),
+        //            &D_PAD::SetLocalClearance, &D_PAD::GetLocalClearance, PROPERTY_DISPLAY::DISTANCE ) );
         // TODO delta, size, drill size, dirill shape offset, layerset, zone connection
     }
 } _PAD_DESC;
