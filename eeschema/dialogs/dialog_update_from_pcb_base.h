@@ -39,6 +39,7 @@ class DIALOG_UPDATE_FROM_PCB_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbIgnoreOtherProjects;
 		wxCheckBox* m_cbUpdateValues;
 		wxCheckBox* m_cbUpdateFootprints;
+		wxCheckBox* m_cbUpdateNetNames;
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

@@ -236,6 +236,21 @@ public:
      */
     const wxString& GetShortNetname() const { return m_ShortNetname; }
 
+    /**
+     * Function SetNetname
+     * Sets the long netname to \a aNetName, and the short netname to the last token in
+     * the long netname's path.
+     */
+    void SetNetname( const wxString& aNewName )
+    {
+        m_Netname = aNewName;
+
+        if( aNewName.Contains( "/" ) )
+            m_ShortNetname = aNewName.AfterLast( '/' );
+        else
+            m_ShortNetname = aNewName;
+    }
+
     bool IsCurrent() const { return m_isCurrent; }
 
     void SetIsCurrent( bool isCurrent ) { m_isCurrent = isCurrent; }

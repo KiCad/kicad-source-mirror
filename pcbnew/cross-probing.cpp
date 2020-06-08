@@ -34,7 +34,6 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
 #include <collectors.h>
 #include <eda_dde.h>
 #include <fctsys.h>
@@ -43,14 +42,10 @@
 #include <macros.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <pcb_edit_frame.h>
-#include <pcb_painter.h>
-#include <pcbnew.h>
 #include <pcbnew_settings.h>
-#include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
-#include <wx/tokenzr.h>
 
 /* Execute a remote command send by Eeschema via a socket,
  * port KICAD_PCB_PORT_SERVICE_NUMBER
@@ -402,13 +397,24 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     {
         NETLIST          netlist;
         STRING_FORMATTER sf;
-        for( auto& module : this->GetBoard()->Modules() )
+
+        for( MODULE* module : this->GetBoard()->Modules() )
         {
-            netlist.AddComponent( new COMPONENT( module->GetFPID(), module->GetReference(),
-                                                 module->GetValue(), module->GetPath() ) );
+            COMPONENT* component = new COMPONENT( module->GetFPID(), module->GetReference(),
+                                                  module->GetValue(), module->GetPath() );
+
+            for( D_PAD* pad : module->Pads() )
+            {
+                const wxString& netname = pad->GetShortNetname();
+
+                if( !netname.IsEmpty() )
+                    component->AddNet( pad->GetName(), netname, wxEmptyString );
+            }
+
+            netlist.AddComponent( component );
         }
-        netlist.Format(
-                "pcb_netlist", &sf, 0, CTL_OMIT_FILTERS | CTL_OMIT_NETS | CTL_OMIT_FILTERS );
+
+        netlist.Format( "pcb_netlist", &sf, 0, CTL_OMIT_FILTERS );
         payload = sf.GetString();
         break;
     }

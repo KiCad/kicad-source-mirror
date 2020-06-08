@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Oleg Endo <olegendo@gcc.gnu.org>
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,19 +24,18 @@
  */
 
 #include <fctsys.h>
-#include <kicad_string.h>
-#include <pcbnew.h>
 #include <tools/pcb_inspection_tool.h>
 #include <class_board.h>
 #include <class_track.h>
 #include <dialog_select_net_from_list.h>
 #include <eda_pattern_match.h>
 #include <wildcards_and_files_ext.h>
-#include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
-#include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
+#include <dialogs/dialog_text_entry.h>
+#include <validators.h>
+#include <bitmaps.h>
 
 struct DIALOG_SELECT_NET_FROM_LIST::COLUMN_ID
 {
@@ -122,27 +121,23 @@ struct DIALOG_SELECT_NET_FROM_LIST::ROW_DESC
 };
 
 
-DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST(
-        PCB_EDIT_FRAME* aParent, const SETTINGS& aSettings )
-        : DIALOG_SELECT_NET_FROM_LIST_BASE( aParent ), m_frame( aParent )
+DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent,
+                                                          const SETTINGS& aSettings ) :
+        DIALOG_SELECT_NET_FROM_LIST_BASE( aParent ),
+        m_frame( aParent )
 {
     m_brd = aParent->GetBoard();
     m_wasSelected = false;
 
-    m_netsList->AppendTextColumn(
-            COLUMN_NET.display_name, wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
-    m_netsList->AppendTextColumn(
-            COLUMN_NAME.display_name, wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
-    m_netsList->AppendTextColumn(
-            COLUMN_PAD_COUNT.display_name, wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
-    m_netsList->AppendTextColumn(
-            COLUMN_VIA_COUNT.display_name, wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
-    m_netsList->AppendTextColumn(
-            COLUMN_BOARD_LENGTH.display_name, wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
-    m_netsList->AppendTextColumn(
-            COLUMN_CHIP_LENGTH.display_name, wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
-    m_netsList->AppendTextColumn(
-            COLUMN_TOTAL_LENGTH.display_name, wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
+#define ADD_COL( name, flag, align ) m_netsList->AppendTextColumn( name, flag, 0, align, 0 );
+
+    ADD_COL( COLUMN_NET.display_name,          wxDATAVIEW_CELL_INERT, wxALIGN_LEFT );
+    ADD_COL( COLUMN_NAME.display_name,         wxDATAVIEW_CELL_INERT, wxALIGN_LEFT );
+    ADD_COL( COLUMN_PAD_COUNT.display_name,    wxDATAVIEW_CELL_INERT, wxALIGN_CENTER );
+    ADD_COL( COLUMN_VIA_COUNT.display_name,    wxDATAVIEW_CELL_INERT, wxALIGN_CENTER );
+    ADD_COL( COLUMN_BOARD_LENGTH.display_name, wxDATAVIEW_CELL_INERT, wxALIGN_CENTER );
+    ADD_COL( COLUMN_CHIP_LENGTH.display_name,  wxDATAVIEW_CELL_INERT, wxALIGN_CENTER );
+    ADD_COL( COLUMN_TOTAL_LENGTH.display_name, wxDATAVIEW_CELL_INERT, wxALIGN_CENTER );
 
     // The fact that we're a list should keep the control from reserving space for the
     // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
@@ -154,6 +149,10 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST(
     buildNetsList();
 
     adjustListColumns();
+
+    m_addNet->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_renameNet->SetBitmap( KiBitmap( small_edit_xpm ) );
+    m_deleteNet->SetBitmap( KiBitmap( trash_xpm ) );
 
     m_sdbSizerOK->SetDefault();
 
@@ -277,7 +276,7 @@ std::vector<CN_ITEM*> DIALOG_SELECT_NET_FROM_LIST::relevantConnectivityItems() c
     std::vector<CN_ITEM*> cn_items;
     cn_items.reserve( 1024 );
 
-    for( auto& cn_item : m_brd->GetConnectivity()->GetConnectivityAlgo()->ItemList() )
+    for( CN_ITEM* cn_item : m_brd->GetConnectivity()->GetConnectivityAlgo()->ItemList() )
     {
         if( cn_item->Valid() && type_bits[cn_item->Parent()->Type()] )
             cn_items.push_back( cn_item );
@@ -323,8 +322,8 @@ void DIALOG_SELECT_NET_FROM_LIST::deleteRow( const ROW_DESC& aRow )
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::setValue(
-        const ROW_DESC& aRow, const COLUMN_ID& aCol, wxString aVal )
+void DIALOG_SELECT_NET_FROM_LIST::setValue( const ROW_DESC& aRow, const COLUMN_ID& aCol,
+                                            wxString aVal )
 {
     if( aRow )
         m_netsList->SetValue( aVal, aRow.row_num, aCol.col_num );
@@ -369,7 +368,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
             std::sort( m_list_items_by_net.begin(), m_list_items_by_net.end(),
                     LIST_ITEM_NET_CMP_LESS( m_list_items ) );
 
-            auto& new_i       = m_list_items.back();
+            LIST_ITEM& new_i   = m_list_items.back();
             new_i.m_pad_count = m_brd->GetNodesCount( net->GetNet() );
 
             wxVector<wxVariant> new_row( 7 );
@@ -386,14 +385,14 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
 
         return;
     }
-    else if( auto* i = dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
+    else if( BOARD_CONNECTED_ITEM* i = dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
     {
-        auto r = findRow( i->GetNet() );
+        const ROW_DESC& r = findRow( i->GetNet() );
 
         if( r )
         {
             // try to handle frequent operations quickly.
-            if( auto* track = dynamic_cast<TRACK*>( i ) )
+            if( TRACK* track = dynamic_cast<TRACK*>( i ) )
             {
                 int len = track->GetLength();
                 r.by_row->m_board_wire_length += len;
@@ -420,16 +419,16 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
 
 void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
-    if( auto* net = dynamic_cast<NETINFO_ITEM*>( aBoardItem ) )
+    if( NETINFO_ITEM* net = dynamic_cast<NETINFO_ITEM*>( aBoardItem ) )
     {
         deleteRow( findRow( net ) );
         return;
     }
-    else if( auto* mod = dynamic_cast<MODULE*>( aBoardItem ) )
+    else if( MODULE* mod = dynamic_cast<MODULE*>( aBoardItem ) )
     {
         for( const D_PAD* pad : mod->Pads() )
         {
-            auto r = findRow( pad->GetNet() );
+            const ROW_DESC& r = findRow( pad->GetNet() );
 
             if( r )
             {
@@ -442,14 +441,14 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM*
             }
         }
     }
-    else if( auto* i = dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
+    else if( BOARD_CONNECTED_ITEM* i = dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
     {
-        auto r = findRow( i->GetNet() );
+        const ROW_DESC& r = findRow( i->GetNet() );
 
         if( r )
         {
             // try to handle frequent operations quickly.
-            if( auto* track = dynamic_cast<TRACK*>( i ) )
+            if( TRACK* track = dynamic_cast<TRACK*>( i ) )
             {
                 int len = track->GetLength();
                 r.by_row->m_board_wire_length -= len;
@@ -520,22 +519,22 @@ void DIALOG_SELECT_NET_FROM_LIST::updateNet( NETINFO_ITEM* aNet )
         return;
     }
 
-    auto all_cn_items = relevantConnectivityItems();
+    std::vector<CN_ITEM*> all_cn_items = relevantConnectivityItems();
 
     LIST_ITEM list_item( aNet );
     list_item.m_pad_count = node_count;
 
-    const auto cn_items = std::equal_range(
-            all_cn_items.begin(), all_cn_items.end(), aNet->GetNet(), NETCODE_CMP_LESS() );
+    const auto cn_items = std::equal_range( all_cn_items.begin(), all_cn_items.end(),
+                                            aNet->GetNet(), NETCODE_CMP_LESS() );
 
     for( auto i = cn_items.first; i != cn_items.second; ++i )
     {
-        auto item = ( *i )->Parent();
+        BOARD_CONNECTED_ITEM* item = ( *i )->Parent();
 
         if( item->Type() == PCB_PAD_T )
             list_item.m_chip_wire_length += static_cast<D_PAD*>( item )->GetPadToDieLength();
 
-        else if( auto* track = dynamic_cast<TRACK*>( item ) )
+        else if( TRACK* track = dynamic_cast<TRACK*>( item ) )
         {
             list_item.m_board_wire_length += track->GetLength();
 
@@ -589,7 +588,6 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 
     std::vector<CN_ITEM*> prefiltered_cn_items = relevantConnectivityItems();
 
-
     // collect all nets which pass the filter string.
 
     struct NET_INFO
@@ -618,7 +616,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
     std::vector<NET_INFO> nets;
     nets.reserve( m_brd->GetNetInfo().NetsByNetcode().size() );
 
-    for( auto&& ni : m_brd->GetNetInfo().NetsByNetcode() )
+    for( const std::pair<const int, NETINFO_ITEM*>& ni : m_brd->GetNetInfo().NetsByNetcode() )
     {
         if( netFilterMatches( ni.second ) )
             nets.emplace_back( NET_INFO{ ni.first, ni.second, 0 } );
@@ -627,37 +625,37 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
     // count the pads for each net.  since the nets are sorted by netcode
     // this way around is faster than using counting pads for each net.
 
-    for( auto&& mod : m_brd->Modules() )
+    for( MODULE* mod : m_brd->Modules() )
     {
-        for( auto&& pad : mod->Pads() )
+        for( D_PAD* pad : mod->Pads() )
         {
-            auto i = std::lower_bound(
-                    nets.begin(), nets.end(), pad->GetNetCode(), NET_INFO_CMP_LESS() );
+            auto i = std::lower_bound( nets.begin(), nets.end(), pad->GetNetCode(),
+                                       NET_INFO_CMP_LESS() );
 
             if( i != nets.end() && i->netcode == pad->GetNetCode() )
                 i->pad_count += 1;
         }
     }
 
-    for( auto&& ni : nets )
+    for( NET_INFO& ni : nets )
     {
         if( !m_cbShowZeroPad->IsChecked() && ni.pad_count == 0 )
             continue;
 
         m_list_items.emplace_back( ni.net );
-        auto& list_item = m_list_items.back();
+        LIST_ITEM& list_item = m_list_items.back();
 
         const auto cn_items = std::equal_range( prefiltered_cn_items.begin(),
                 prefiltered_cn_items.end(), ni.netcode, NETCODE_CMP_LESS() );
 
         for( auto i = cn_items.first; i != cn_items.second; ++i )
         {
-            auto item = ( *i )->Parent();
+            BOARD_CONNECTED_ITEM* item = ( *i )->Parent();
 
             if( item->Type() == PCB_PAD_T )
                 list_item.m_chip_wire_length += static_cast<D_PAD*>( item )->GetPadToDieLength();
 
-            else if( auto* track = dynamic_cast<TRACK*>( item ) )
+            else if( TRACK* track = dynamic_cast<TRACK*>( item ) )
             {
                 list_item.m_board_wire_length += track->GetLength();
 
@@ -673,7 +671,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
     wxVector<wxVariant> dataLine;
     dataLine.resize( 7 );
 
-    for( auto& i : m_list_items )
+    for( LIST_ITEM& i : m_list_items )
     {
         dataLine[COLUMN_NET]          = formatNetCode( i.m_net );
         dataLine[COLUMN_NAME]         = formatNetName( i.m_net );
@@ -699,14 +697,14 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
         m_wasSelected = false;
     else
     {
-        auto r = findRow( prev_selected_netcode );
+        const ROW_DESC& r = findRow( prev_selected_netcode );
 
         if( r )
         {
             m_selection   = r.by_row->m_net->GetNetname();
             m_wasSelected = true;
 
-            auto i = m_netsList->RowToItem( r.row_num );
+            wxDataViewItem i = m_netsList->RowToItem( r.row_num );
             m_netsList->Select( i );
             m_netsList->EnsureVisible( i );
         }
@@ -716,11 +714,11 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 
 void DIALOG_SELECT_NET_FROM_LIST::HighlightNet( NETINFO_ITEM* aNet )
 {
-    const auto r = findRow( aNet );
+    const ROW_DESC& r = findRow( aNet );
 
     if( r )
     {
-        auto i = m_netsList->RowToItem( r.row_num );
+        wxDataViewItem i = m_netsList->RowToItem( r.row_num );
         m_netsList->Select( i );
         m_netsList->EnsureVisible( i );
     }
@@ -754,7 +752,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onSelChanged( wxDataViewEvent&  )
 
     if( selected_row >= 0 && selected_row < static_cast<int>( m_list_items.size() ) )
     {
-        auto* net = m_list_items[selected_row].m_net;
+        NETINFO_ITEM* net = m_list_items[selected_row].m_net;
 
         m_selection   = net->GetNetname();
         m_wasSelected = true;
@@ -772,10 +770,9 @@ void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
     int w0, w1, w2, w3, w4, w5, w6;
 
     /**
-     * Calculating optimal width of the first (Net) and
-     * the last (Pad Count) columns. That width must be
-     * enough to fit column header label and be not less
-     * than width of four chars (0000).
+     * Calculating optimal width of the first (Net) and the last (Pad Count) columns.
+     * That width must be enough to fit column header label and be not less than width of
+     * four chars (0000).
      */
 
     wxClientDC dc( GetParent() );
@@ -792,26 +789,19 @@ void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
 
     // Considering left and right margins.
     // For wxRenderGeneric it is 5px.
-    w0 = std::max( w0+10, minw_col0);
-    w2 = std::max( w2+10, minw);
-    w3 = std::max( w3+10, minw);
-    w4 = std::max( w4+10, minw);
-    w5 = std::max( w5+10, minw);
-    w6 = std::max( w6+10, minw);
-
-    m_netsList->GetColumn( 0 )->SetWidth( w0 );
-    m_netsList->GetColumn( 2 )->SetWidth( w2 );
-    m_netsList->GetColumn( 3 )->SetWidth( w3 );
-    m_netsList->GetColumn( 4 )->SetWidth( w4 );
-    m_netsList->GetColumn( 5 )->SetWidth( w5 );
-    m_netsList->GetColumn( 6 )->SetWidth( w6 );
+    m_netsList->GetColumn( 0 )->SetWidth( std::max( w0 + 10, minw_col0 ) );
+    m_netsList->GetColumn( 2 )->SetWidth( w2 + 10 );
+    m_netsList->GetColumn( 3 )->SetWidth( w3 + 10 );
+    m_netsList->GetColumn( 4 )->SetWidth( std::max( w4 + 10, minw ) );
+    m_netsList->GetColumn( 5 )->SetWidth( std::max( w5 + 10, minw ) );
+    m_netsList->GetColumn( 6 )->SetWidth( std::max( w6 + 10, minw ) );
 
     // At resizing of the list the width of middle column (Net Names) changes only.
     int width = m_netsList->GetClientSize().x;
     w1 = width - w0 - w2 - w3 - w4 - w5 - w6;
 
     // Column 1 (net names) need a minimal width to display net names
-    dc.GetTextExtent( "MMMMMMMMMMMMMMMMMMMM", &minw, &h );
+    dc.GetTextExtent( "MMMMMMMMMMMMMMMMMM", &minw, &h );
     w1 = std::max( w1, minw );
 
     m_netsList->GetColumn( 1 )->SetWidth( w1 );
@@ -831,6 +821,129 @@ bool DIALOG_SELECT_NET_FROM_LIST::GetNetName( wxString& aName ) const
 {
     aName = m_selection;
     return m_wasSelected;
+}
+
+
+void DIALOG_SELECT_NET_FROM_LIST::onAddNet( wxCommandEvent& aEvent )
+{
+    wxString          newNetName;
+    NETNAME_VALIDATOR validator( &newNetName );
+
+    WX_TEXT_ENTRY_DIALOG dlg( this, _( "Net name:" ), _( "New Net" ), newNetName );
+    dlg.SetTextValidator( validator );
+
+    while( true )
+    {
+        if( dlg.ShowModal() != wxID_OK || dlg.GetValue().IsEmpty() )
+            return;    //Aborted by user
+
+        newNetName = dlg.GetValue();
+
+        if( m_brd->FindNet( newNetName ) )
+        {
+            DisplayError( this, wxString::Format( _( "Net name '%s' is already in use." ),
+                                                  newNetName ) );
+            newNetName = wxEmptyString;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    NETINFO_ITEM *newnet = new NETINFO_ITEM( m_brd, dlg.GetValue(), 0 );
+
+    m_brd->Add( newnet );
+    m_frame->OnModify();
+
+    // We'll get an OnBoardItemChanged callback from this to update our listbox
+}
+
+
+void DIALOG_SELECT_NET_FROM_LIST::onRenameNet( wxCommandEvent& aEvent )
+{
+    int selected_row = m_netsList->GetSelectedRow();
+
+    if( selected_row >= 0 && selected_row < static_cast<int>( m_list_items.size() ) )
+    {
+        NETINFO_ITEM* net = m_list_items[selected_row].m_net;
+        wxString      fullNetName = net->GetNetname();
+        wxString      netPath;
+        wxString      shortNetName;
+
+        if( fullNetName.Contains( "/" ) )
+        {
+            netPath = fullNetName.BeforeLast( '/' ) + '/';
+            shortNetName = fullNetName.AfterLast( '/' );
+        }
+        else
+        {
+            shortNetName = fullNetName;
+        }
+
+        wxString unescapedShortName = UnescapeString( shortNetName );
+
+        WX_TEXT_ENTRY_DIALOG dlg( this, _( "Net name:" ), _( "Rename Net" ), unescapedShortName );
+        NETNAME_VALIDATOR    validator( &unescapedShortName );
+        dlg.SetTextValidator( validator );
+
+        while( true )
+        {
+            if( dlg.ShowModal() != wxID_OK )
+                return;    //Aborted by user
+
+            unescapedShortName = dlg.GetValue();
+
+            if( unescapedShortName.IsEmpty() )
+            {
+                DisplayError( this, wxString::Format( _( "Net name cannot be empty." ),
+                                                      unescapedShortName ) );
+                continue;
+            }
+
+            shortNetName = EscapeString( unescapedShortName, CTX_NETNAME );
+            fullNetName = netPath + shortNetName;
+
+            if( m_brd->FindNet( shortNetName ) || m_brd->FindNet( fullNetName ) )
+            {
+                DisplayError( this, wxString::Format( _( "Net name '%s' is already in use." ),
+                                                      unescapedShortName ) );
+                unescapedShortName = wxEmptyString;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        net->SetNetname( fullNetName );
+        m_frame->OnModify();
+
+        buildNetsList();
+        m_netsList->Refresh();
+    }
+}
+
+
+void DIALOG_SELECT_NET_FROM_LIST::onDeleteNet( wxCommandEvent& aEvent )
+{
+    int selected_row = m_netsList->GetSelectedRow();
+
+    if( selected_row >= 0 && selected_row < static_cast<int>( m_list_items.size() ) )
+    {
+        NETINFO_ITEM* net = m_list_items[selected_row].m_net;
+
+        if( m_list_items[selected_row].m_pad_count > 0 )
+        {
+            if( !IsOK( this, _( "Net is in use.  Delete anyway?" ) ) )
+                return;
+        }
+
+        m_brd->Remove( net );
+        m_frame->OnModify();
+
+        // We'll get an OnBoardItemChanged callback from this to update our listbox
+    }
 }
 
 
@@ -860,13 +973,14 @@ void DIALOG_SELECT_NET_FROM_LIST::onReport( wxCommandEvent& aEvent )
     // Print list of nets:
    for( int row = 1; row < rows; row++ )
    {
-       txt.Printf( "%s;\"%s\";%s;%s;%s;%s;%s;", m_netsList->GetTextValue( row, COLUMN_NET ),
-               m_netsList->GetTextValue( row, COLUMN_NAME ),
-               m_netsList->GetTextValue( row, COLUMN_PAD_COUNT ),
-               m_netsList->GetTextValue( row, COLUMN_VIA_COUNT ),
-               m_netsList->GetTextValue( row, COLUMN_BOARD_LENGTH ),
-               m_netsList->GetTextValue( row, COLUMN_CHIP_LENGTH ),
-               m_netsList->GetTextValue( row, COLUMN_TOTAL_LENGTH ) );
+       txt.Printf( "%s;\"%s\";%s;%s;%s;%s;%s;",
+                   m_netsList->GetTextValue( row, COLUMN_NET ),
+                   m_netsList->GetTextValue( row, COLUMN_NAME ),
+                   m_netsList->GetTextValue( row, COLUMN_PAD_COUNT ),
+                   m_netsList->GetTextValue( row, COLUMN_VIA_COUNT ),
+                   m_netsList->GetTextValue( row, COLUMN_BOARD_LENGTH ),
+                   m_netsList->GetTextValue( row, COLUMN_CHIP_LENGTH ),
+                   m_netsList->GetTextValue( row, COLUMN_TOTAL_LENGTH ) );
 
        f.AddLine( txt );
    }

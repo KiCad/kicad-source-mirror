@@ -864,6 +864,5 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         return false;
     }
 
-    m_reporter->ReportTail( _( "Netlist update successful!" ), RPT_SEVERITY_ACTION );
     return true;
 }

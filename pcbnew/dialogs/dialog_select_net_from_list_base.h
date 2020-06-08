@@ -21,10 +21,12 @@
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/dataview.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -42,7 +44,11 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlFilter;
 		wxCheckBox* m_cbShowZeroPad;
 		wxDataViewListCtrl* m_netsList;
+		wxBitmapButton* m_addNet;
+		wxBitmapButton* m_renameNet;
+		wxBitmapButton* m_deleteNet;
 		wxButton* m_ReportButt;
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -51,12 +57,15 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 		virtual void onFilterChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSelChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onListSize( wxSizeEvent& event ) { event.Skip(); }
+		virtual void onAddNet( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onRenameNet( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDeleteNet( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onReport( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Net Inspector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 720,397 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Net Inspector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_SELECT_NET_FROM_LIST_BASE();
 
 };

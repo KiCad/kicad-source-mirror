@@ -54,6 +54,12 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_cbUpdateFootprints, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_cbUpdateNetNames = new wxCheckBox( sbSizerOptions->GetStaticBox(), wxID_ANY, _("Update net names"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_cbUpdateNetNames, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
 	sbSizerOptions->Add( fgSizer1, 1, wxEXPAND, 5 );
 
 
@@ -91,6 +97,7 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 	m_cbIgnoreOtherProjects->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateValues->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_cbUpdateNetNames->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnUpdateClick ), NULL, this );
 }
 
@@ -101,6 +108,7 @@ DIALOG_UPDATE_FROM_PCB_BASE::~DIALOG_UPDATE_FROM_PCB_BASE()
 	m_cbIgnoreOtherProjects->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateValues->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_cbUpdateNetNames->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnUpdateClick ), NULL, this );
 
 }

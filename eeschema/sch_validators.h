@@ -31,7 +31,7 @@
 #define _SCH_VALIDATORS_H_
 
 #include <wx/valtext.h>
-
+#include <validators.h>
 
 #define FIELD_NAME  -1
 #define FIELD_VALUE -2
@@ -71,38 +71,27 @@ public:
 };
 
 
-class SCH_NETNAME_VALIDATOR : public wxValidator
+/*
+ * A refinement of the NETNAME_VALIDATOR which also allows (and checks) bus definitions.
+ */
+class SCH_NETNAME_VALIDATOR : public NETNAME_VALIDATOR
 {
 public:
-    SCH_NETNAME_VALIDATOR( wxString *aVal = nullptr );
+    SCH_NETNAME_VALIDATOR( wxString *aVal = nullptr ) :
+            NETNAME_VALIDATOR( aVal )
+    { }
 
-    SCH_NETNAME_VALIDATOR( bool aAllowSpaces );
+    SCH_NETNAME_VALIDATOR( bool aAllowSpaces ) :
+            NETNAME_VALIDATOR( aAllowSpaces )
+    { }
 
-    SCH_NETNAME_VALIDATOR( const SCH_NETNAME_VALIDATOR& aValidator );
-
-    void SetAllowSpaces( bool aAllowSpaces = true ) { m_allowSpaces = aAllowSpaces; }
-
-    bool GetAllowSpaces() const { return m_allowSpaces; }
-
-    bool Copy( const SCH_NETNAME_VALIDATOR& val );
-
-    virtual wxObject* Clone() const override { return new SCH_NETNAME_VALIDATOR( *this ); }
-
-    virtual bool TransferToWindow() override { return true; }
-
-    virtual bool TransferFromWindow() override { return true; }
-
-    wxTextEntry* GetTextEntry();
-
-    virtual bool Validate( wxWindow *aParent ) override;
+    SCH_NETNAME_VALIDATOR( const SCH_NETNAME_VALIDATOR& aValidator ) :
+            NETNAME_VALIDATOR( aValidator )
+    { }
 
 protected:
-
     // returns the error message if the contents of 'val' are invalid
-    virtual wxString IsValid( const wxString& aVal ) const;
-
-private:
-    bool m_allowSpaces;
+    wxString IsValid( const wxString& aVal ) const override;
 };
 
 #endif // _SCH_VALIDATORS_H_

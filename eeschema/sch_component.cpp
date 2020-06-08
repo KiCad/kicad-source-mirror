@@ -142,9 +142,9 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT(
-        LIB_PART& aPart, SCH_SHEET_PATH* aSheet, COMPONENT_SELECTION& aSel, const wxPoint& pos )
-        : SCH_COMPONENT( aPart, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
+SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet, COMPONENT_SELECTION& aSel,
+                              const wxPoint& pos ) :
+    SCH_COMPONENT( aPart, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
 {
     // Set any fields that were modified as part of the component selection
     for( auto const& i : aSel.Fields )
@@ -262,9 +262,7 @@ void SCH_COMPONENT::SetLibSymbol( LIB_PART* aLibSymbol )
 wxString SCH_COMPONENT::GetDescription() const
 {
     if( m_part )
-    {
         return m_part->GetDescription();
-    }
 
     return wxEmptyString;
 }

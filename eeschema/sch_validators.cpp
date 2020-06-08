@@ -27,6 +27,7 @@
  * @brief Implementation of control validators for schematic dialogs.
  */
 
+#include <sch_connection.h>
 #include <wx/combo.h>
 #include <sch_validators.h>
 #include <project/net_settings.h>
@@ -183,73 +184,6 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
 }
 
 
-SCH_NETNAME_VALIDATOR::SCH_NETNAME_VALIDATOR( wxString *aVal )
-    : wxValidator(),
-      m_allowSpaces( false )
-{
-}
-
-
-SCH_NETNAME_VALIDATOR::SCH_NETNAME_VALIDATOR( const SCH_NETNAME_VALIDATOR& aValidator )
-    : wxValidator(),
-      m_allowSpaces( aValidator.m_allowSpaces )
-{
-}
-
-
-SCH_NETNAME_VALIDATOR::SCH_NETNAME_VALIDATOR( bool aAllowSpaces )
-    : wxValidator(),
-      m_allowSpaces( aAllowSpaces )
-{
-}
-
-
-wxTextEntry *SCH_NETNAME_VALIDATOR::GetTextEntry()
-{
-#if wxUSE_TEXTCTRL
-    if( wxDynamicCast( m_validatorWindow, wxTextCtrl ) )
-        return static_cast<wxTextCtrl*>( m_validatorWindow );
-#endif
-
-#if wxUSE_COMBOBOX
-    if( wxDynamicCast( m_validatorWindow, wxComboBox ) )
-        return static_cast<wxComboBox*>( m_validatorWindow );
-#endif
-
-#if wxUSE_COMBOCTRL
-    if( wxDynamicCast( m_validatorWindow, wxComboCtrl ) )
-        return static_cast<wxComboCtrl*>( m_validatorWindow );
-#endif
-
-    wxFAIL_MSG( "SCH_NETNAME_VALIDATOR can only be used with wxTextCtrl, wxComboBox, or wxComboCtrl" );
-    return nullptr;
-}
-
-
-bool SCH_NETNAME_VALIDATOR::Validate( wxWindow *aParent )
-{
-    // If window is disabled, simply return
-    if ( !m_validatorWindow->IsEnabled() )
-        return true;
-
-    wxTextEntry * const text = GetTextEntry();
-
-    if ( !text )
-        return false;
-
-    const wxString& errormsg = IsValid( text->GetValue() );
-
-    if( !errormsg.empty() )
-    {
-        m_validatorWindow->SetFocus();
-        wxMessageBox( errormsg, _( "Invalid signal name" ), wxOK | wxICON_EXCLAMATION, aParent );
-        return false;
-    }
-
-    return true;
-}
-
-
 wxString SCH_NETNAME_VALIDATOR::IsValid( const wxString& str ) const
 {
     if( NET_SETTINGS::ParseBusGroup( str, nullptr, nullptr ) )
@@ -259,11 +193,5 @@ wxString SCH_NETNAME_VALIDATOR::IsValid( const wxString& str ) const
         !NET_SETTINGS::ParseBusVector( str, nullptr, nullptr ) )
         return _( "Signal name contains '[' or ']' but is not a valid vector bus name" );
 
-    if( str.Contains( '\r' ) || str.Contains( '\n' ) )
-        return _( "Signal names cannot contain CR or LF characters" );
-
-    if( !m_allowSpaces && ( str.Contains( ' ' ) || str.Contains( '\t' ) ) )
-        return _( "Signal names cannot contain spaces" );
-
-    return wxString();
+    return NETNAME_VALIDATOR::IsValid( str );
 }

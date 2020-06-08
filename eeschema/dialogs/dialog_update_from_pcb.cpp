@@ -1,12 +1,8 @@
-/**
- * @file eeschema/dialogs/dialog_update_from_pcb.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin <Jasuramme@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,20 +23,14 @@
  */
 
 #include <backannotate.h>
-#include <class_draw_panel_gal.h>
-#include <common.h>
-#include <confirm.h>
 #include <dialog_update_from_pcb.h>
-#include <functional>
 #include <sch_edit_frame.h>
 #include <sch_editor_control.h>
-#include <tool/tool_manager.h>
-#include <view/view.h>
 #include <wx_html_report_panel.h>
 
 // Saved dialog settings
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB_SAVED_STATE
-        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ true, false, false, false };
+        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ true, true, true, true, false };
 
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
         : DIALOG_UPDATE_FROM_PCB_BASE( aParent ),
@@ -55,6 +45,7 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
     m_cbUpdateReferences->SetValue( s_savedDialogState.UpdateReferences );
     m_cbUpdateFootprints->SetValue( s_savedDialogState.UpdateFootprints );
     m_cbUpdateValues->SetValue( s_savedDialogState.UpdateValues );
+    m_cbUpdateNetNames->SetValue( s_savedDialogState.UpdateNetNames );
     m_cbIgnoreOtherProjects->SetValue( s_savedDialogState.IgnoreOtherProjectsErrors );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
@@ -67,22 +58,23 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
     FinishDialogSettings();
 }
 
-BACK_ANNOTATE::SETTINGS DIALOG_UPDATE_FROM_PCB::getSettings( bool aDryRun )
-{
-    return BACK_ANNOTATE::SETTINGS{ m_messagePanel->Reporter(), m_cbUpdateFootprints->GetValue(),
-        m_cbUpdateValues->GetValue(), m_cbUpdateReferences->GetValue(),
-        m_cbIgnoreOtherProjects->GetValue(), aDryRun };
-}
-
 void DIALOG_UPDATE_FROM_PCB::updateData()
 {
     bool successfulRun = false;
     m_messagePanel->Clear();
-    BACK_ANNOTATE backAnno( this->m_frame, getSettings( true ) );
+    BACK_ANNOTATE backAnno( this->m_frame,
+                            m_messagePanel->Reporter(),
+                            m_cbUpdateFootprints->GetValue(),
+                            m_cbUpdateValues->GetValue(),
+                            m_cbUpdateReferences->GetValue(),
+                            m_cbUpdateNetNames->GetValue(),
+                            m_cbIgnoreOtherProjects->GetValue(),
+                            true );
     std::string   netlist;
 
     if( backAnno.FetchNetlistFromPCB( netlist ) )
         successfulRun = backAnno.BackAnnotateSymbols( netlist );
+
     m_sdbSizerOK->Enable( successfulRun );
     m_messagePanel->Flush( false );
 }
@@ -103,23 +95,22 @@ void DIALOG_UPDATE_FROM_PCB::OnOptionChanged( wxCommandEvent& event )
     s_savedDialogState.UpdateReferences = m_cbUpdateReferences->GetValue();
     s_savedDialogState.UpdateFootprints = m_cbUpdateFootprints->GetValue();
     s_savedDialogState.UpdateValues = m_cbUpdateValues->GetValue();
+    s_savedDialogState.UpdateNetNames = m_cbUpdateNetNames->GetValue();
     s_savedDialogState.IgnoreOtherProjectsErrors = m_cbIgnoreOtherProjects->GetValue();
 }
 
 void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
 {
-    KIDIALOG dlg( this,
-            _( "\n\nThis operation will change the existing annotation and cannot be undone." ),
-            _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-    dlg.SetOKLabel( _( "Back annotate" ) );
-    dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
     std::string netlist;
     m_messagePanel->Clear();
-    BACK_ANNOTATE backAnno( this->m_frame, getSettings( false ) );
+    BACK_ANNOTATE backAnno( m_frame,
+                            m_messagePanel->Reporter(),
+                            m_cbUpdateFootprints->GetValue(),
+                            m_cbUpdateValues->GetValue(),
+                            m_cbUpdateReferences->GetValue(),
+                            m_cbUpdateNetNames->GetValue(),
+                            m_cbIgnoreOtherProjects->GetValue(),
+                            false );
 
     if( backAnno.FetchNetlistFromPCB( netlist ) && backAnno.BackAnnotateSymbols( netlist ) )
     {

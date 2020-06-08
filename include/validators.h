@@ -194,6 +194,33 @@ protected:
     LIB_ID::LIB_ID_TYPE m_idType;
 };
 
+
+class NETNAME_VALIDATOR : public wxTextValidator
+{
+public:
+    NETNAME_VALIDATOR( wxString *aVal = nullptr );
+
+    NETNAME_VALIDATOR( bool aAllowSpaces );
+
+    NETNAME_VALIDATOR( const NETNAME_VALIDATOR& aValidator );
+
+    virtual wxObject* Clone() const override { return new NETNAME_VALIDATOR( *this ); }
+
+    virtual bool TransferToWindow() override { return true; }
+
+    virtual bool TransferFromWindow() override { return true; }
+
+    virtual bool Validate( wxWindow *aParent ) override;
+
+protected:
+    // returns the error message if the contents of 'val' are invalid
+    wxString IsValid( const wxString& aVal ) const override;
+
+private:
+    bool m_allowSpaces;
+};
+
+
 namespace KIUI
 {
 /**

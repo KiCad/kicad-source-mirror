@@ -97,7 +97,6 @@ class COMPONENT
     /// The #LIB_ID of the footprint assigned to the component.
     LIB_ID         m_fpid;
 
-
     /// The alt LIB_ID of the footprint, when there are 2 different assigned footprints,
     /// One from the netlist, the other from the .cmp file.
     /// this one is a copy of the netlist footprint assignment
@@ -106,15 +105,12 @@ class COMPONENT
     /// The #MODULE loaded for #m_fpid.
     std::unique_ptr< MODULE > m_footprint;
 
-    /// Set to true if #m_fpid was changed when the footprint link file was read.
-    bool           m_footprintChanged;
-
     static COMPONENT_NET    m_emptyNet;
 
 public:
-    COMPONENT( const LIB_ID&      aFPID,
-               const wxString&    aReference,
-               const wxString&    aValue,
+    COMPONENT( const LIB_ID&    aFPID,
+               const wxString&  aReference,
+               const wxString&  aValue,
                const KIID_PATH& aPath )
     {
         m_fpid             = aFPID;
@@ -122,7 +118,6 @@ public:
         m_value            = aValue;
         m_pinCount         = 0;
         m_path             = aPath;
-        m_footprintChanged = false;
     }
 
     virtual ~COMPONENT() { };
@@ -150,35 +145,18 @@ public:
 
     const wxString& GetValue() const { return m_value; }
 
-    void SetFPID( const LIB_ID& aFPID )
-    {
-        m_footprintChanged = !m_fpid.empty() && (m_fpid != aFPID);
-        m_fpid = aFPID;
-    }
-
-    void SetAltFPID( const LIB_ID& aFPID )
-    {
-        m_altFpid = aFPID;
-    }
-
+    void SetFPID( const LIB_ID& aFPID ) { m_fpid = aFPID;  }
     const LIB_ID& GetFPID() const { return m_fpid; }
 
+    void SetAltFPID( const LIB_ID& aFPID ) { m_altFpid = aFPID; }
     const LIB_ID& GetAltFPID() const { return m_altFpid; }
 
     const KIID_PATH& GetPath() const { return m_path; }
 
-    void SetFootprintFilters( const wxArrayString& aFilterList )
-    {
-        m_footprintFilters = aFilterList;
-    }
-
+    void SetFootprintFilters( const wxArrayString& aFilters ) { m_footprintFilters = aFilters; }
     const wxArrayString& GetFootprintFilters() const { return m_footprintFilters; }
 
-    void SetPinCount( int aPinCount )
-    {
-        m_pinCount = aPinCount;
-    }
-
+    void SetPinCount( int aPinCount ) { m_pinCount = aPinCount; }
     int GetPinCount() const { return m_pinCount; }
 
     MODULE* GetModule( bool aRelease = false )
@@ -193,15 +171,11 @@ public:
         return aLibrary == m_library && aName == m_name;
     }
 
-    bool FootprintChanged() const { return m_footprintChanged; }
-
     void Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl );
 };
 
 
 typedef boost::ptr_vector< COMPONENT > COMPONENTS;
-typedef COMPONENTS::iterator           COMPONENTS_ITER;
-typedef COMPONENTS::const_iterator     COMPONENTS_CITER;
 
 
 /**
@@ -300,12 +274,6 @@ public:
         m_deleteExtraFootprints = aDeleteExtraFootprints;
     }
 
-    bool GetDeleteExtraFootprints() const { return m_deleteExtraFootprints; }
-
-    void SetIsDryRun( bool aIsDryRun ) { m_isDryRun = aIsDryRun; }
-
-    bool IsDryRun() const { return m_isDryRun; }
-
     void SetFindByTimeStamp( bool aFindByTimeStamp ) { m_findByTimeStamp = aFindByTimeStamp; }
 
     bool IsFindByTimeStamp() const { return m_findByTimeStamp; }
@@ -322,25 +290,6 @@ public:
      * @return true if any component with a footprint link is found.
      */
     bool AnyFootprintsLinked() const;
-
-    /**
-     * Function AllFootprintsLinked
-     * @return true if all components have a footprint link.
-     */
-    bool AllFootprintsLinked() const;
-
-    /**
-     * Function NoFootprintsLinked
-     * @return true if none of the components have a footprint link.
-     */
-    bool NoFootprintsLinked() const { return !AnyFootprintsLinked(); }
-
-    /**
-     * Function AnyFootprintsChanged
-     * @return true if any components footprints were changed when the footprint link file
-     *         (*.cmp)  was loaded.
-     */
-    bool AnyFootprintsChanged() const;
 
     void Format( const char* aDocName, OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl = 0 );
 

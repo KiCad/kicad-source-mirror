@@ -1,12 +1,8 @@
-/**
- * @file eeschema/dialogs/dialog_update_from_pcb.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin <Jasuramme@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +34,6 @@ class SCH_EDITOR_CONTROL;
 
 class DIALOG_UPDATE_FROM_PCB : public DIALOG_UPDATE_FROM_PCB_BASE
 {
-
     /**
      * Struct containing the dialog last saved state
      */
@@ -48,6 +43,7 @@ class DIALOG_UPDATE_FROM_PCB : public DIALOG_UPDATE_FROM_PCB_BASE
         bool UpdateReferences;
         bool UpdateFootprints;
         bool UpdateValues;
+        bool UpdateNetNames;
         bool IgnoreOtherProjectsErrors;
     };
 
@@ -63,13 +59,6 @@ public:
 
 private:
     void updateData();
-
-    /**
-     * @brief Creates back annotate settings from dialog ui
-     * @param aDryRun - is it dry run
-     * @return back annotation settings structure
-     */
-    BACK_ANNOTATE::SETTINGS getSettings( bool aDryRun );
 
     bool TransferDataToWindow() override;
     void OnOptionChanged( wxCommandEvent& event ) override;

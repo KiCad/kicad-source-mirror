@@ -36,7 +36,7 @@
 #include <wx/textctrl.h>
 #include <wx/textentry.h>
 #include <wx/log.h>
-
+#include <wx/combo.h>
 
 GRID_CELL_TEXT_EDITOR::GRID_CELL_TEXT_EDITOR() : wxGridCellTextEditor()
 {
@@ -313,6 +313,63 @@ bool LIB_ID_VALIDATOR::Validate( wxWindow *aParent )
     }
 
     return true;
+}
+
+
+NETNAME_VALIDATOR::NETNAME_VALIDATOR( wxString *aVal ) :
+         wxTextValidator(),
+         m_allowSpaces( false )
+{
+}
+
+
+NETNAME_VALIDATOR::NETNAME_VALIDATOR( const NETNAME_VALIDATOR& aValidator ) :
+        wxTextValidator( aValidator ),
+        m_allowSpaces( aValidator.m_allowSpaces )
+{
+}
+
+
+NETNAME_VALIDATOR::NETNAME_VALIDATOR( bool aAllowSpaces ) :
+        wxTextValidator(),
+        m_allowSpaces( aAllowSpaces )
+{
+}
+
+
+bool NETNAME_VALIDATOR::Validate( wxWindow *aParent )
+{
+    // If window is disabled, simply return
+    if ( !m_validatorWindow->IsEnabled() )
+        return true;
+
+    wxTextEntry * const text = GetTextEntry();
+
+    if ( !text )
+        return false;
+
+    const wxString& errormsg = IsValid( text->GetValue() );
+
+    if( !errormsg.empty() )
+    {
+        m_validatorWindow->SetFocus();
+        wxMessageBox( errormsg, _( "Invalid signal name" ), wxOK | wxICON_EXCLAMATION, aParent );
+        return false;
+    }
+
+    return true;
+}
+
+
+wxString NETNAME_VALIDATOR::IsValid( const wxString& str ) const
+{
+    if( str.Contains( '\r' ) || str.Contains( '\n' ) )
+        return _( "Signal names cannot contain CR or LF characters" );
+
+    if( !m_allowSpaces && ( str.Contains( ' ' ) || str.Contains( '\t' ) ) )
+        return _( "Signal names cannot contain spaces" );
+
+    return wxString();
 }
 
 

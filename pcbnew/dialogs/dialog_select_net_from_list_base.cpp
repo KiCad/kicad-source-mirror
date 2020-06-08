@@ -41,14 +41,35 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 
 	bSizerMain->Add( m_netsList, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
-	wxBoxSizer* bSizerBottom;
-	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerListButtons;
+	bSizerListButtons = new wxBoxSizer( wxHORIZONTAL );
+
+	m_addNet = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizerListButtons->Add( m_addNet, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+	m_renameNet = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizerListButtons->Add( m_renameNet, 0, wxALL, 5 );
+
+
+	bSizerListButtons->Add( 15, 0, 0, wxEXPAND, 5 );
+
+	m_deleteNet = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizerListButtons->Add( m_deleteNet, 0, wxALL, 5 );
+
+
+	bSizerListButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_ReportButt = new wxButton( this, wxID_ANY, _("Create Report..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBottom->Add( m_ReportButt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerListButtons->Add( m_ReportButt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerListButtons, 0, wxEXPAND|wxALL, 5 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerMain->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+
+	wxBoxSizer* bSizerBottom;
+	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -57,7 +78,7 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizerBottom->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
+	bSizerBottom->Add( m_sdbSizer, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizerMain->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 5 );
@@ -65,6 +86,7 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 
@@ -73,6 +95,9 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 	m_cbShowZeroPad->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
 	m_netsList->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onSelChanged ), NULL, this );
 	m_netsList->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onListSize ), NULL, this );
+	m_addNet->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onAddNet ), NULL, this );
+	m_renameNet->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onRenameNet ), NULL, this );
+	m_deleteNet->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onDeleteNet ), NULL, this );
 	m_ReportButt->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onReport ), NULL, this );
 }
 
@@ -83,6 +108,9 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::~DIALOG_SELECT_NET_FROM_LIST_BASE()
 	m_cbShowZeroPad->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
 	m_netsList->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onSelChanged ), NULL, this );
 	m_netsList->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onListSize ), NULL, this );
+	m_addNet->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onAddNet ), NULL, this );
+	m_renameNet->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onRenameNet ), NULL, this );
+	m_deleteNet->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onDeleteNet ), NULL, this );
 	m_ReportButt->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onReport ), NULL, this );
 
 }

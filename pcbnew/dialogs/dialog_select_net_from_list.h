@@ -94,6 +94,9 @@ private:
     void onSelChanged( wxDataViewEvent& event ) override;
     void onFilterChange( wxCommandEvent& event ) override;
     void onListSize( wxSizeEvent& event ) override;
+    void onAddNet( wxCommandEvent& event ) override;
+    void onRenameNet( wxCommandEvent& event ) override;
+    void onDeleteNet( wxCommandEvent& event ) override;
     void onReport( wxCommandEvent& event ) override;
 
     void buildNetsList();

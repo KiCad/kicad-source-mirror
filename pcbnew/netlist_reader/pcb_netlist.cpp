@@ -1,12 +1,9 @@
-/**
- * @file pcb_netlist.cpp
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 Jean-Pierre Charras.
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,13 +24,9 @@
  */
 
 
-#include <macros.h>
 #include <refdes_utils.h>
-#include <reporter.h>
-
 #include "pcb_netlist.h"
 #include <class_module.h>
-#include <eda_pattern_match.h>
 
 
 int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
@@ -219,15 +212,4 @@ bool NETLIST::AnyFootprintsLinked() const
     return false;
 }
 
-
-bool NETLIST::AllFootprintsLinked() const
-{
-    for( unsigned i = 0;  i < m_components.size();  i++ )
-    {
-        if( m_components[i].GetFPID().empty() )
-            return false;
-    }
-
-    return true;
-}
 

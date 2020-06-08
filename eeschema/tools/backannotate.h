@@ -1,12 +1,8 @@
-/**
- * @file eeschema/tools/backannotate.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin <Jasuramme@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,8 +40,9 @@ class SCH_EDIT_FRAME;
 
 
 /**
- * @brief Back annotation algorithm class. It used to recieve, check and apply \ref NETLIST
- * from PCBNEW. Class check for following collisions:
+ * @brief Back annotation algorithm class used to recieve, check, and apply a \ref NETLIST from
+ * PCBNEW.
+ * The following checks are made:
  * - Schematic symbol exists, but linked PCBnew module missing
  * - PCBnew module exists but no schematic symbol connected to
  * - PCBnew module is standalone
@@ -59,30 +56,22 @@ class BACK_ANNOTATE
 {
 public:
     /**
-     * @brief settings struct to set up back annotation
-     */
-    struct SETTINGS
-    {
-        REPORTER& reporter;
-        bool      processFootprints;
-        bool      processValues;
-        bool      processReferences;
-        bool      ignoreOtherProjects;
-        bool      dryRun;
-    };
-
-    /**
      * @brief Struct to hold PCBnew module data
      */
     struct PCB_MODULE_DATA
     {
-        PCB_MODULE_DATA(wxString aRef, wxString aFootprint, wxString aValue) :
-            ref(aRef),
-            footprint(aFootprint),
-            value(aValue){};
-        wxString ref;
-        wxString footprint;
-        wxString value;
+        PCB_MODULE_DATA( const wxString& aRef, const wxString& aFootprint,
+                         const wxString& aValue, const std::map<wxString, wxString> aPinMap ) :
+                m_ref( aRef ),
+                m_footprint( aFootprint ),
+                m_value( aValue ),
+                m_pinMap( aPinMap )
+        {};
+
+        wxString m_ref;
+        wxString m_footprint;
+        wxString m_value;
+        std::map<wxString, wxString> m_pinMap;
     };
 
     ///> Map to hold NETLIST modules data
@@ -90,11 +79,9 @@ public:
 
     using CHANGELIST_ITEM = std::pair<SCH_REFERENCE, std::shared_ptr<PCB_MODULE_DATA>>;
 
-    ///> To hold match between reference and PCBnew module
-    using CHANGELIST = std::deque<CHANGELIST_ITEM>;
-
-
-    BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, SETTINGS aSettings );
+    BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aProcessFootprints,
+                   bool aProcessValues, bool aProcessReferences, bool aProcessNetNames,
+                   bool aIgnoreOtherProjects, bool aDryRun );
     ~BACK_ANNOTATE();
 
     /**
@@ -113,11 +100,19 @@ public:
     bool BackAnnotateSymbols( const std::string& aNetlist );
 
 private:
-    SETTINGS                     m_settings;
+    REPORTER&                    m_reporter;
+
+    bool                         m_processFootprints;
+    bool                         m_processValues;
+    bool                         m_processReferences;
+    bool                         m_processNetNames;
+    bool                         m_ignoreOtherProjects;
+    bool                         m_dryRun;
+
     PCB_MODULES_MAP              m_pcbModules;
     SCH_REFERENCE_LIST           m_refs;
     SCH_MULTI_UNIT_REFERENCE_MAP m_multiUnitsRefs;
-    CHANGELIST                   m_changelist;
+    std::deque<CHANGELIST_ITEM>  m_changelist;
     SCH_EDIT_FRAME*              m_frame;
 
     ///> To count number of changes applied to the schematic
@@ -140,28 +135,29 @@ private:
      * @param aPayload - netlist from PCBnew
      * @return number of errors during parsing
      */
-    int getPcbModulesFromString( const std::string& aPayload );
+    void getPcbModulesFromString( const std::string& aPayload );
 
     ///> Create changelist
-    int getChangeList();
+    void getChangeList();
 
     /**
      * @brief Check if some symbols are not represented in PCB modules and vice versa.
      * \ref m_refs must be sorted by path
-     * @return number of errors
      */
-    int checkForUnusedSymbols();
+    void checkForUnusedSymbols();
 
     /**
      * @brief Check for errors connected to reusing schematic in project or between projects
-     * @return number of errors
      */
-    int checkSharedSchematicErrors();
+    void checkSharedSchematicErrors();
 
     /**
     * @brief Apply changelist to the schematic
     */
     void applyChangelist();
+
+    void processNetNameChange( SCH_CONNECTION* aConn, const wxString& aOldName,
+                               const wxString& aNewName );
 };
 
 #endif
