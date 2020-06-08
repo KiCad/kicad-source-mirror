@@ -446,24 +446,24 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_delete_button->SetBitmap( KiBitmap( trash_xpm ) );
     m_move_up_button->SetBitmap( KiBitmap( small_up_xpm ) );
     m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
-
-    wxSize buttonSize = m_append_button->GetSize();
-
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
-    // We must set the size to match the other bitmaps manually
+    // For aesthetic reasons, we must set the size of m_browseButton to match
+    // the other bitmaps manually (for instance m_append_button)
+    Layout();   // Needed at least on MSW to compute the actual buttons sizes,
+                // after initializing their bitmaps
+    wxSize buttonSize = m_append_button->GetSize();
+
     m_browseButton->SetWidthPadding( 4 );
     m_browseButton->SetMinSize( buttonSize );
 
-    // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
+    // Gives a selection to each grid, mainly for delete button. wxGrid's wake up with
     // a currentCell which is sometimes not highlighted.
     if( m_global_grid->GetNumberRows() > 0 )
         m_global_grid->SelectRow( 0 );
 
     if( m_project_grid->GetNumberRows() > 0 )
         m_project_grid->SelectRow( 0 );
-
-    wxSize textSize;
 
     // Populate the browse library options
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
@@ -475,6 +475,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
         browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_FP_LIB_TABLE::browseLibrariesHandler,
                 this, fileType.first );
     }
+
+    Layout();
 
     // This is the button only press for the browse button instead of the menu
     m_browseButton->Bind( wxEVT_BUTTON, &PANEL_FP_LIB_TABLE::browseLibrariesHandler, this );
