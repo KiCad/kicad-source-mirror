@@ -19,6 +19,7 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/stc/stc.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -39,11 +40,11 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_staticText1;
+		wxStaticText* m_textLabel;
 		wxTextCtrl* m_TextCtrl;
 		wxStyledTextCtrl* m_StyledTextCtrl;
 		wxStaticText* m_PowerComponentValues;
-		wxButton* m_TextValueSelectButton;
+		wxBitmapButton* m_TextValueSelectButton;
 		wxCheckBox* m_visible;
 		wxStaticText* m_xPosLabel;
 		wxTextCtrl* m_xPosCtrl;

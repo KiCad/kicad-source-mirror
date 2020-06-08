@@ -82,6 +82,16 @@ void DIALOG_EDIT_ONE_FIELD::init()
 {
     SCH_BASE_FRAME* parent = GetParent();
     bool libedit = parent->IsType( FRAME_SCH_LIB_EDITOR );
+
+    switch( m_fieldId )
+    {
+    case REFERENCE: m_textLabel->SetLabel( _( "Reference designator:" ) ); break;
+    case VALUE:     m_textLabel->SetLabel( _( "Value:" ) );                break;
+    case FOOTPRINT: m_textLabel->SetLabel( _( "Footprint ID:" ) );         break;
+    case DATASHEET: m_textLabel->SetLabel( _( "Datasheet URL:" ) );        break;
+    default:                                                               break;
+    }
+
     m_TextCtrl->SetValidator( SCH_FIELD_VALIDATOR( libedit, m_fieldId, &m_text ) );
 
     // Disable options for graphic text editing which are not needed for fields.
@@ -100,6 +110,7 @@ void DIALOG_EDIT_ONE_FIELD::init()
     }
 
     // Show the footprint selection dialog if this is the footprint field.
+    m_TextValueSelectButton->SetBitmap( KiBitmap( small_library_xpm ) );
     m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT );
 
     // Value fields of power components cannot be modified. This will grey out
@@ -137,7 +148,12 @@ void DIALOG_EDIT_ONE_FIELD::init()
 void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent )
 {
     // pick a footprint using the footprint picker.
-    wxString fpid = m_TextCtrl->GetValue();
+    wxString fpid;
+
+    if( m_StyledTextCtrl->IsShown() )
+        fpid = m_StyledTextCtrl->GetValue();
+    else
+        fpid = m_TextCtrl->GetValue();
 
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true );
 
