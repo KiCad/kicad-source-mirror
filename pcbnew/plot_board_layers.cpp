@@ -744,7 +744,6 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  * TODO: remove old code after more testing.
  */
 #define NEW_ALGO 1
-extern void KeepPolyInside( bool aInside );
 
 void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                           const PCB_PLOT_PARAMS& aPlotOpt, int aMinThickness )

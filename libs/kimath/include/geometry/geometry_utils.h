@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,8 +53,8 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree );
  * In some cases (in fact only one: when building layer solder mask) modifying
  * shapes when converting them to polygons is not acceptable (the modification
  * can break calculations)
- * so one can disable the shape expansion by calling KeepPolyInsideShape( true )
- * Important: calling KeepPolyInsideShape( false ) after calculations is
+ * so one can disable the shape expansion by calling DisableArcRadiusCorrection( true )
+ * Important: calling DisableArcRadiusCorrection( false ) after calculations is
  * mandatory to break oher calculations
  * @param aDisable = false to create polygons same or outside the original shape
  *  = true to create polygons same or inside the original shape and minimize
