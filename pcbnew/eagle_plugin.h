@@ -204,8 +204,8 @@ private:
     int kicad_y( const ECOORD& y ) const { return -y.ToPcbUnits(); }
     int kicad_x( const ECOORD& x ) const { return x.ToPcbUnits(); }
 
-    /// create a font size (fontz) from an eagle font size scalar
-    wxSize  kicad_fontz( const ECOORD& d ) const;
+    /// create a font size (fontz) from an eagle font size scalar and KiCAD font thickness
+    wxSize  kicad_fontz( const ECOORD& d, int aTextThickness ) const;
 
     /// Convert an Eagle layer to a KiCad layer.
     PCB_LAYER_ID kicad_layer( int aLayer ) const;

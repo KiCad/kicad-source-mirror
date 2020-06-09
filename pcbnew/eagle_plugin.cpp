@@ -240,11 +240,11 @@ const wxString EAGLE_PLUGIN::GetFileExtension() const
 }
 
 
-wxSize inline EAGLE_PLUGIN::kicad_fontz( const ECOORD& d ) const
+wxSize inline EAGLE_PLUGIN::kicad_fontz( const ECOORD& d, int aTextThickness ) const
 {
-    // texts seem to better match eagle when scaled down by 0.95
-    int kz = d.ToPcbUnits() * 95 / 100;
-    return wxSize( kz, kz );
+    // Eagle includes stroke thickness in the text size, KiCAD does not
+    int kz = d.ToPcbUnits();
+    return wxSize( kz - aTextThickness, kz - aTextThickness );
 }
 
 
@@ -578,11 +578,10 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
                 pcbtxt->SetTextPos( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
 
-                pcbtxt->SetTextSize( kicad_fontz( t.size ) );
-
                 double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
-
-                pcbtxt->SetTextThickness( KiROUND( t.size.ToPcbUnits() * ratio / 100 ));
+                int textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100 );
+                pcbtxt->SetTextThickness( textThickness );
+                pcbtxt->SetTextSize( kicad_fontz( t.size, textThickness ) );
 
                 int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
 
@@ -1364,17 +1363,19 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
         // a case where ratio is present but size is not.
         double  ratio = 8;
         wxSize  fontz = txt->GetTextSize();
+        int     textThickness = KiROUND( fontz.y * ratio / 100 );
 
+        txt->SetTextThickness( textThickness );
         if( a.size )
         {
-            fontz = kicad_fontz( *a.size );
+            fontz = kicad_fontz( *a.size, textThickness );
             txt->SetTextSize( fontz );
 
             if( a.ratio )
                 ratio = *a.ratio;
         }
 
-        txt->SetTextThickness( KiROUND( fontz.y * ratio / 100 ));
+
 
         int align = ETEXT::BOTTOM_LEFT;     // bottom-left is eagle default
 
@@ -1722,11 +1723,13 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     txt->SetPos0( pos - aModule->GetPosition() );
 
     txt->SetLayer( layer );
-    txt->SetTextSize( kicad_fontz( t.size ) );
+
 
     double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
+    int textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100 );
 
-    txt->SetTextThickness( KiROUND( t.size.ToPcbUnits() * ratio / 100 ));
+    txt->SetTextThickness( textThickness );
+    txt->SetTextSize( kicad_fontz( t.size, textThickness ) );
 
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 
