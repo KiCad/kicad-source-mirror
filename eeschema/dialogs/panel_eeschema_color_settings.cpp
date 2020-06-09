@@ -195,6 +195,12 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
 
     for( int layer : layers )
         createSwatch( layer, LayerName( layer ) );
+
+    // Give a minimal width to m_colorsListWindow, in order to always having
+    // a full row shown
+    int min_width = m_colorsGridSizer->GetMinSize().x;
+    const int margin = 20;  // A margin around the sizer
+    m_colorsListWindow->SetMinSize( wxSize( min_width + margin, -1 ) );
 }
 
 
