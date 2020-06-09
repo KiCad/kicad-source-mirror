@@ -118,7 +118,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	sbSizerLibraryReference = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbol") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 4, 2, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 5, 2, 0, 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -168,7 +168,15 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_cbExcludeFromBom = new wxCheckBox( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExcludeFromBom->SetToolTip( _("This is useful for adding symbols for board footprints such as fiducials\nand logos that you do not want to appear in the bill of materials export") );
 
-	fgSizer1->Add( m_cbExcludeFromBom, 0, wxBOTTOM, 5 );
+	fgSizer1->Add( m_cbExcludeFromBom, 0, 0, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_cbExcludeFromBoard = new wxCheckBox( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExcludeFromBoard->SetToolTip( _("This is useful for adding symbols that only get exported to the bill of materials but\nnot required to layout the board such as mechanical fasteners and enclosures") );
+
+	fgSizer1->Add( m_cbExcludeFromBoard, 0, wxBOTTOM, 5 );
 
 
 	sbSizerLibraryReference->Add( fgSizer1, 0, wxEXPAND, 5 );

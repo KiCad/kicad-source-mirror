@@ -475,7 +475,7 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
 #endif
 
     if( m_parent->ReadyToNetlist( false, false ) )
-        m_parent->WriteNetListFile( -1, fullfilename, 0, &reporter );
+        m_parent->WriteNetListFile( -1, fullfilename, GNL_OPT_BOM, &reporter );
 
     m_Messages->SetValue( reportmsg );
 

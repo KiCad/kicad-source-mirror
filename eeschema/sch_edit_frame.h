@@ -267,10 +267,22 @@ public:
     wxString GetScreenDesc() const override;
 
     /**
-     * Execute a remote command send by Pcbnew via a socket,
-     * port KICAD_SCH_PORT_SERVICE_NUMBER (currently 4243)
-     * this is a virtual function called by EDA_DRAW_FRAME::OnSockRequest().
-     * @param cmdline = received command from socket
+     * Execute a remote command sent by Pcbnew via a socket connection.
+     * <p>
+     * When user selects a module or pin in Pcbnew, Eeschema shows that same
+     * component or pin and moves cursor on the item.  The socket port used
+     * is #KICAD_SCH_PORT_SERVICE_NUMBER which defaults to 4243.
+     *
+     * Valid commands are:
+     * \li \c \$PART: \c "reference" Put cursor on component.
+     * \li \c \$PART: \c "reference" \c \$REF: \c "ref" Put cursor on component reference.
+     * \li \c \$PART: \c "reference" \c \$VAL: \c "value" Put cursor on component value.
+     * \li \c \$PART: \c "reference" \c \$PAD: \c "pin name" Put cursor on the component pin.
+     * \li \c \$NET: \c "netname" Highlight a specified net
+     * \li \c \$CLEAR: \c "HIGHLIGHTED" Clear components highlight
+     * <p>
+     * They are a keyword followed by a quoted string.
+     * @param cmdline = received command from Pcbnew
      */
     void ExecuteRemoteCommand( const char* cmdline ) override;
 

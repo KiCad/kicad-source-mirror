@@ -45,4 +45,6 @@
 
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200512  // Add support for exclude from BOM.
 
-#define SEXPR_SCHEMATIC_FILE_VERSION 20200602
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20200602  // Add support for exclude from board.
+
+#define SEXPR_SCHEMATIC_FILE_VERSION 20200608

@@ -36,7 +36,8 @@
 
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 );
 
-bool NETLIST_EXPORTER_GENERIC::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_GENERIC::WriteNetlist( const wxString& aOutFileName,
+        unsigned aNetlistOptions )
 {
     // output the XML format netlist.
     wxXmlDocument   xdoc;
@@ -58,7 +59,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeRoot( int aCtl )
         xroot->AddChild( makeDesignHeader() );
 
     if( aCtl & GNL_COMPONENTS )
-        xroot->AddChild( makeComponents() );
+        xroot->AddChild( makeComponents( aCtl ) );
 
     if( aCtl & GNL_PARTS )
         xroot->AddChild( makeLibParts() );
@@ -85,7 +86,8 @@ struct COMP_FIELDS
 };
 
 
-void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* comp, SCH_SHEET_PATH* aSheet )
+void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* comp,
+        SCH_SHEET_PATH* aSheet )
 {
     COMP_FIELDS fields;
 
@@ -117,7 +119,8 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
                 int unit = comp2->GetUnit();
 
                 // The lowest unit number wins.  User should only set fields in any one unit.
-                // remark: IsVoid() returns true for empty strings or the "~" string (empty field value)
+                // remark: IsVoid() returns true for empty strings or the "~" string (empty
+                // field value)
                 if( !comp2->GetField( VALUE )->IsVoid()
                         && ( unit < minUnit || fields.value.IsEmpty() ) )
                     fields.value = comp2->GetField( VALUE )->GetText();
@@ -190,7 +193,7 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
+XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
 {
     XNODE* xcomps = node( "components" );
 
@@ -234,7 +237,9 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
         {
             SCH_COMPONENT* comp = findNextComponent( item, &sheet );
 
-            if( !comp || !comp->GetIncludeInBom() )
+            if( !comp
+               || ( ( aCtl & GNL_OPT_BOM ) && !comp->GetIncludeInBom() )
+               || ( ( aCtl & GNL_OPT_KICAD ) && !comp->GetIncludeOnBoard() ) )
                 continue;
 
             XNODE* xcomp;  // current component being constructed
@@ -597,7 +602,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::node( const wxString& aName, const wxString& aTextualContent /* = wxEmptyString*/ )
+XNODE* NETLIST_EXPORTER_GENERIC::node( const wxString& aName,
+        const wxString& aTextualContent /* = wxEmptyString*/ )
 {
     XNODE* n = new XNODE( wxXML_ELEMENT_NODE, aName );
 

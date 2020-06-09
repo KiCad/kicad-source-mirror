@@ -125,8 +125,8 @@ private:
     SCH_PIN_MAP m_pinMap;       ///< the component's pins mapped by LIB_PIN*
 
     bool        m_isInNetlist;  ///< True if the component should appear in the netlist
-
     bool        m_inBom;        ///< True to include in bill of materials export.
+    bool        m_onBoard;      ///< True to include in netlist when updating board.
 
     // Defines the hierarchical path and reference of the component.  This allows support
     // for multiple references to a single sub-sheet.
@@ -608,7 +608,7 @@ public:
 
     wxPoint GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
 
-    bool IsConnectable() const override { return true; }
+    bool IsConnectable() const override { return m_onBoard; }
 
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
@@ -682,6 +682,9 @@ public:
 
     bool GetIncludeInBom() const { return m_inBom; }
     void SetIncludeInBom( bool aIncludeInBom ) { m_inBom = aIncludeInBom; }
+
+    bool GetIncludeOnBoard() const { return m_onBoard; }
+    void SetIncludeOnBoard( bool aIncludeOnBoard ) { m_onBoard = aIncludeOnBoard; }
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;

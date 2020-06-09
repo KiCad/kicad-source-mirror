@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2018 KiCad Developers
+ * Copyright (C) 1992-2020 KiCad Developers
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +39,7 @@ class SYMBOL_LIB_TABLE;
 #define GENERIC_INTERMEDIATE_NETLIST_EXT wxT( "xml" )
 
 /**
- * Enum GNL
- * is a set of bit which control the totality of the tree built by makeRoot()
+ * A set of bits which control the totality of the tree built by makeRoot()
  */
 enum GNL_T
 {
@@ -49,13 +48,16 @@ enum GNL_T
     GNL_PARTS       = 1 << 2,
     GNL_HEADER      = 1 << 3,
     GNL_NETS        = 1 << 4,
+    GNL_OPT_KICAD   = 1 << 5,
+    GNL_OPT_BOM     = 1 << 6,
 };
 
 
 /**
- * NETLIST_EXPORTER_GENERIC
- * generates a generic XML based netlist file. This allows using XSLT or other methods to
- * transform the XML to other netlist formats outside of the C++ codebase.
+ * Generate a generic XML based netlist file.
+ *
+ * This allows using XSLT or other methods to transform the XML to other netlist formats
+ * outside of the C++ codebase.
  */
 class NETLIST_EXPORTER_GENERIC : public NETLIST_EXPORTER
 {
@@ -68,8 +70,12 @@ public:
     {}
 
     /**
-     * Function WriteNetlist
-     * writes to specified output file
+     * Write generic netlist to \a aOutFileName.
+     *
+     * @param aOutFileName is the file name to write.
+     * @param aNetlistOptions are the options used to control the netlist output.
+     *
+     * @return true if the netlist was written successfully.
      */
     bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
 
@@ -77,8 +83,7 @@ public:
 
 protected:
    /**
-     * Function node
-     * is a convenience function that creates a new XNODE with an optional textual child.
+     * A convenience function that creates a new XNODE with an optional textual child.
      * It also provides some insulation from a possible change in XML library.
      *
      * @param aName is the name to associate with a new node of type wxXML_ELEMENT_NODE.
@@ -88,8 +93,7 @@ protected:
     XNODE* node( const wxString& aName, const wxString& aTextualContent = wxEmptyString );
 
     /**
-     * Function makeGenericRoot
-     * builds the entire document tree for the generic export.  This is factored
+     * Build the entire document tree for the generic export.  This is factored
      * out here so we can write the tree in either S-expression file format
      * or in XML if we put the tree built here into a wxXmlDocument.
      * @param aCtl - a bitset or-ed together from GNL_ENUM values
@@ -98,35 +102,30 @@ protected:
     XNODE* makeRoot( int aCtl = GNL_ALL );
 
     /**
-     * Function makeComponents
      * @return XNODE* - returns a sub-tree holding all the schematic components.
      */
-    XNODE* makeComponents();
+    XNODE* makeComponents( unsigned aCtl );
 
     /**
-     * Function makeDesignHeader
-     * fills out a project "design" header into an XML node.
+     * Fills out a project "design" header into an XML node.
      * @return XNODE* - the design header
      */
     XNODE* makeDesignHeader();
 
     /**
-     * Function makeLibParts
-     * fills out an XML node with the unique library parts and returns it.
+     * Fill out an XML node with the unique library parts and returns it.
      * @return XNODE* - the library parts nodes
      */
     XNODE* makeLibParts();
 
     /**
-     * Function makeListOfNets
-     * fills out an XML node with a list of nets and returns it.
+     * Fill out an XML node with a list of nets and returns it.
      * @return XNODE* - the list of nets nodes
      */
     XNODE* makeListOfNets();
 
     /**
-     * Function makeLibraries
-     * fills out an XML node with a list of used libraries and returns it.
+     * Fill out an XML node with a list of used libraries and returns it.
      * Must have called makeGenericLibParts() before this function.
      * @return XNODE* - the library nodes
      */

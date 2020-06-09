@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers
+ * Copyright (C) 1992-2020 KiCad Developers
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,9 +31,8 @@
 class OUTPUTFORMATTER;
 
 /**
- * NETLIST_EXPORTER_KICAD
- * generates the kicad netlist format supported by pcbnew. It is basically
- * the generic netlist format just formatted slightly different.
+ * Generate the KiCad netlist format supported by Pcbnew. It is basically the generic
+ * netlist format just formatted slightly different.
  */
 class NETLIST_EXPORTER_KICAD : public NETLIST_EXPORTER_GENERIC
 {
@@ -43,14 +42,13 @@ public:
     {}
 
     /**
-     * Function WriteNetlist
-     * writes to specified output file
+     * Write netlist to \a aOutFileName.
      */
     bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
 
     /**
-     * Function Format
-     * outputs this s-expression netlist into @a aOutputFormatter.
+     * Output this s-expression netlist into @a aOutputFormatter.
+     *
      * @param aOutputFormatter is the destination of the serialization to text.
      * @param aCtl is bit set composed by OR-ing together enum GNL bits, it allows outputting
      *  a subset of the full document model.

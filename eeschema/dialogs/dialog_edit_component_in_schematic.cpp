@@ -224,6 +224,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     m_libraryNameTextCtrl->SetValue( m_cmp->GetLibId().Format() );
 
     m_cbExcludeFromBom->SetValue( !m_cmp->GetIncludeInBom() );
+    m_cbExcludeFromBoard->SetValue( !m_cmp->GetIncludeOnBoard() );
 
     Layout();
 
@@ -518,6 +519,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     m_cmp->SetRef( &GetParent()->GetCurrentSheet(), m_fields->at( REFERENCE ).GetText() );
 
     m_cmp->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
+    m_cmp->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
 
     // The value, footprint and datasheet fields and exclude from bill of materials setting
     // should be kept in sync in multi-unit parts.

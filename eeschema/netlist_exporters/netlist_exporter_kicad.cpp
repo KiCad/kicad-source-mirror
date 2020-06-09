@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
     try
     {
         FILE_OUTPUTFORMATTER formatter( aOutFileName );
-        Format( &formatter, GNL_ALL );
+        Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
     }
 
     catch( const IO_ERROR& ioe )

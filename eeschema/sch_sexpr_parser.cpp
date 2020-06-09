@@ -2150,6 +2150,11 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             NeedRIGHT();
             break;
 
+        case T_on_board:
+            symbol->SetIncludeOnBoard( parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_uuid:
             NeedSYMBOL();
             const_cast<KIID&>( symbol->m_Uuid ) = KIID( FromUTF8() );

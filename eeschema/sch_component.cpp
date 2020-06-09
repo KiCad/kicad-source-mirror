@@ -167,6 +167,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_lib_id      = aComponent.m_lib_id;
     m_isInNetlist = aComponent.m_isInNetlist;
     m_inBom       = aComponent.m_inBom;
+    m_onBoard     = aComponent.m_onBoard;
 
     if( aComponent.m_part )
         SetLibSymbol( new LIB_PART( *aComponent.m_part.get() ) );
@@ -211,6 +212,7 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     m_prefix = wxString( wxT( "U" ) );
     m_isInNetlist = true;
     m_inBom = true;
+    m_onBoard = true;
 }
 
 
@@ -1526,7 +1528,7 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
 void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                     SCH_SHEET_PATH*      aSheetPath )
 {
-    if( !m_part )
+    if( !m_part || !m_onBoard )
         return;
 
     for( LIB_PIN* pin = m_part->GetNextPin();  pin;  pin = m_part->GetNextPin( pin ) )
