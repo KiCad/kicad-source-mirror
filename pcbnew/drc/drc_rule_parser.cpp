@@ -31,11 +31,28 @@
 using namespace DRCRULE_T;
 
 
+DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource,
+                                    const wxString& aSourceDescr ) :
+        DRC_RULES_LEXER( aSource, aSourceDescr ),
+        m_board( aBoard ),
+        m_requiredVersion( 0 ),
+        m_tooRecent( false )
+{
+    initLayerMap();
+}
+
+
 DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename ) :
         DRC_RULES_LEXER( aFile, aFilename ),
         m_board( aBoard ),
         m_requiredVersion( 0 ),
         m_tooRecent( false )
+{
+    initLayerMap();
+}
+
+
+void DRC_RULES_PARSER::initLayerMap()
 {
     for( LAYER_NUM layer = 0;  layer < PCB_LAYER_ID_COUNT;  ++layer )
     {

@@ -29,9 +29,11 @@
 #include <panel_setup_rules.h>
 #include <html_messagebox.h>
 #include <scintilla_tricks.h>
+#include <drc/drc_rule_parser.h>
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParent->GetTreebook() ),
+        m_Parent( aParent ),
         m_frame( aFrame ),
         m_scintillaTricks( nullptr )
 {
@@ -174,15 +176,35 @@ bool PANEL_SETUP_RULES::TransferDataToWindow()
     if( rulesFile.FileExists() )
         m_textEditor->LoadFile( rulesFile.GetFullPath() );
 
+    m_originalText = m_textEditor->GetText();
+
     return true;
 }
 
 
 bool PANEL_SETUP_RULES::TransferDataFromWindow()
 {
+    if( m_originalText == m_textEditor->GetText() )
+        return true;
+
+    try
+    {
+        std::vector<DRC_SELECTOR*> dummySelectors;
+        std::vector<DRC_RULE*>     dummyRules;
+
+        DRC_RULES_PARSER parser( m_frame->GetBoard(), m_textEditor->GetText(), _( "DRC rules" ) );
+
+        parser.Parse( dummySelectors, dummyRules );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        m_Parent->SetError( pe.What(), this, m_textEditor, pe.lineNumber, pe.byteIndex );
+        return false;
+    }
+
     if( m_textEditor->SaveFile( m_frame->Prj().AbsolutePath( "drc-rules" ) ) )
     {
-        m_frame->GetToolManager()->GetTool<DRC>()->Reset( TOOL_BASE::MODEL_RELOAD );
+        m_frame->GetToolManager()->GetTool<DRC>()->LoadRules();
         return true;
     }
 

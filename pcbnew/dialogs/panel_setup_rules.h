@@ -36,8 +36,10 @@ class SCINTILLA_TRICKS;
 class PANEL_SETUP_RULES : public PANEL_SETUP_RULES_BASE
 {
 private:
+    PAGED_DIALOG*     m_Parent;
     PCB_EDIT_FRAME*   m_frame;
     SCINTILLA_TRICKS* m_scintillaTricks;
+    wxString          m_originalText;
 
 public:
     PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
