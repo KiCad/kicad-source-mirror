@@ -670,6 +670,17 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
     msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
+
+    // Useful for statistics, especially when zones are complex the number of hatches
+    // and filled polygons can explain the display and DRC calculation time:
+    msg.Printf( wxT( "%d" ), (int) m_HatchLines.size() );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Hatch Lines" ), msg, BLUE ) );
+
+    if( !m_FilledPolysList.IsEmpty() )
+    {
+        msg.Printf( wxT( "%d" ), m_FilledPolysList.TotalVertices() );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
+    }
 }
 
 

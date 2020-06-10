@@ -86,7 +86,7 @@ wxString BOARD_ITEM::LayerMaskDescribe( const BOARD* aBoard, LSET aMask )
     // Check for copper.
     auto layer = aBoard->GetEnabledLayers().AllCuMask() & aMask;
 
-    for( int i = 0; i < 2; i++ )
+    for( int i = 0; i < 3; i++ )
     {
         for( int bit = PCBNEW_LAYER_ID_START; bit < PCB_LAYER_ID_COUNT; ++bit )
         {
@@ -101,8 +101,11 @@ wxString BOARD_ITEM::LayerMaskDescribe( const BOARD* aBoard, LSET aMask )
             }
         }
 
-        // No copper; check for technicals.
-        layer = aBoard->GetEnabledLayers().AllTechMask() & aMask;
+        // No copper; first, check for technicals and then for all layers.
+        if( i < 1 )     // first, check for technicals
+            layer = aBoard->GetEnabledLayers().AllTechMask() & aMask;
+        else            // then check for all other layers
+            layer = aMask;
     }
 
     // No copper, no technicals: no layer
