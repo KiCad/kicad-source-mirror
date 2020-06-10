@@ -33,7 +33,7 @@ using namespace DRCRULE_T;
 
 DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource,
                                     const wxString& aSourceDescr ) :
-        DRC_RULES_LEXER( aSource, aSourceDescr ),
+        DRC_RULES_LEXER( aSource.ToStdString(), aSourceDescr ),
         m_board( aBoard ),
         m_requiredVersion( 0 ),
         m_tooRecent( false )
