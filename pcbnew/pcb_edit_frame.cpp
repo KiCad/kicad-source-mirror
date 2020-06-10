@@ -1039,9 +1039,23 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST
 
     if( !frame->IsShown() )
     {
-        wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), KiCadSchematicFileExtension );
+        wxFileName fn( Prj().GetProjectPath(), Prj().GetProjectName(),
+                KiCadSchematicFileExtension );
 
-        frame->OpenProjectFiles( std::vector<wxString>( 1, schfn.GetFullPath() ) );
+        // Maybe the file hasn't been converted to the new s-expression file format so
+        // see if the legacy schematic file is still in play.
+        if( !fn.FileExists() )
+        {
+            fn.SetExt( LegacySchematicFileExtension );
+
+            if( !fn.FileExists() )
+            {
+                DisplayError( this, _( "The schematic for this board cannot be found." ) );
+                return false;
+            }
+        }
+
+        frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
 
         // we show the schematic editor frame, because do not show is seen as
         // a not yet opened schematic by Kicad manager, which is not the case
