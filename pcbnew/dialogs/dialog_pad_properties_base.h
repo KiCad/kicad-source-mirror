@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,8 +10,10 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 class WX_GRID;
+class wxListView;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -59,8 +61,10 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 			wxID_PADNUMCTRL
 		};
 
+		wxBoxSizer* m_MainSizer;
 		wxNotebook* m_notebook;
 		wxPanel* m_panelGeneral;
+		wxBoxSizer* m_LeftBoxSizer;
 		wxStaticText* m_padTypeLabel;
 		wxChoice* m_PadType;
 		wxStaticText* m_PadNumText;

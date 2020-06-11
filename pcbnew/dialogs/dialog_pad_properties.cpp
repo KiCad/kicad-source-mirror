@@ -4,7 +4,7 @@
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -853,9 +853,6 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     size.y = m_shapePropsBook->GetPage( m_shapePropsBook->GetSelection() )->GetBestSize().y;
     m_shapePropsBook->SetMaxSize( size );
 
-    for( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
-        m_notebook->GetPage( i )->Layout();
-
     m_sizeY.Enable( m_PadShape->GetSelection() != CHOICE_SHAPE_CIRCLE
                     && m_PadShape->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
 
@@ -865,6 +862,10 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 
     if( !m_offsetShapeOpt->IsEnabled() )
         m_offsetShapeOpt->SetValue( false );
+
+    // Show/hide controls depending on m_offsetShapeOpt being enabled
+    m_offsetCtrls->Show( m_offsetShapeOpt->GetValue() );
+    m_offsetShapeOptLabel->Show( m_offsetShapeOpt->GetValue() );
 
     bool is_custom = m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
                   || m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR;
@@ -876,6 +877,14 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     transferDataToPad( m_dummyPad );
 
     updateRoundRectCornerValues();
+
+    for( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
+        m_notebook->GetPage( i )->Layout();
+
+    // Resize the dialog if its height is too small to show all widgets:
+    if( m_MainSizer->GetSize().y < m_MainSizer->GetMinSize().y )
+        m_MainSizer->SetSizeHints( this );
+
     redraw();
 }
 
@@ -1770,7 +1779,7 @@ void DIALOG_PAD_PROPERTIES::OnOffsetCheckbox( wxCommandEvent& event )
         m_offsetY.SetValue( m_currentPad->GetOffset().y );
     }
 
-    // Show/hide controls
+    // Show/hide controls depending on m_offsetShapeOpt being enabled
     m_offsetCtrls->Show( m_offsetShapeOpt->GetValue() );
     m_offsetShapeOptLabel->Show( m_offsetShapeOpt->GetValue() );
 

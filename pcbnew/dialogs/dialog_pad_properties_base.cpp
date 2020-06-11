@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,7 +16,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
-	wxBoxSizer* m_MainSizer;
 	m_MainSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bSizerUpper;
@@ -27,7 +26,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bGeneralSizer;
 	bGeneralSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* m_LeftBoxSizer;
 	m_LeftBoxSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxGridBagSizer* gbSizerCommon;
@@ -107,7 +105,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	int m_PadShapeNChoices = sizeof( m_PadShapeChoices ) / sizeof( wxString );
 	m_PadShape = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PadShapeNChoices, m_PadShapeChoices, 0 );
 	m_PadShape->SetSelection( 0 );
-	bSizerShape->Add( m_PadShape, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerShape->Add( m_PadShape, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_LeftBoxSizer->Add( bSizerShape, 0, wxEXPAND|wxTOP, 5 );
@@ -421,28 +419,28 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_offsetXLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetXLabel->Wrap( -1 );
-	m_offsetCtrls->Add( m_offsetXLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_offsetCtrls->Add( m_offsetXLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT, 5 );
 
 	m_offsetXCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_offsetCtrls->Add( m_offsetXCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	m_offsetCtrls->Add( m_offsetXCtrl, 0, wxBOTTOM|wxEXPAND|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_offsetXUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetXUnits->Wrap( -1 );
-	m_offsetCtrls->Add( m_offsetXUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_offsetCtrls->Add( m_offsetXUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT, 5 );
 
 	m_offsetYLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetYLabel->Wrap( -1 );
 	m_offsetCtrls->Add( m_offsetYLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_offsetYCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_offsetCtrls->Add( m_offsetYCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	m_offsetCtrls->Add( m_offsetYCtrl, 0, wxBOTTOM|wxEXPAND|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_offsetYUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetYUnits->Wrap( -1 );
-	m_offsetCtrls->Add( m_offsetYUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_offsetCtrls->Add( m_offsetYUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT, 5 );
 
 
-	m_LeftBoxSizer->Add( m_offsetCtrls, 0, wxEXPAND|wxLEFT, 25 );
+	m_LeftBoxSizer->Add( m_offsetCtrls, 0, wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 25 );
 
 	wxFlexGridSizer* fgSizerPadToDie;
 	fgSizerPadToDie = new wxFlexGridSizer( 14, 3, 0, 0 );
@@ -458,17 +456,17 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_padToDieLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _(":"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_padToDieLabel->Wrap( -1 );
-	bSizer34->Add( m_padToDieLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	bSizer34->Add( m_padToDieLabel, 0, wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT|wxTOP, 5 );
 
 
 	fgSizerPadToDie->Add( bSizer34, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_padToDieCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPadToDie->Add( m_padToDieCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+	fgSizerPadToDie->Add( m_padToDieCtrl, 0, wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxTOP, 5 );
 
 	m_padToDieUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_padToDieUnits->Wrap( -1 );
-	fgSizerPadToDie->Add( m_padToDieUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerPadToDie->Add( m_padToDieUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT|wxTOP, 5 );
 
 
 	m_LeftBoxSizer->Add( fgSizerPadToDie, 0, wxEXPAND, 5 );
@@ -797,13 +795,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticTextPrimitivesList->Wrap( -1 );
 	m_staticTextPrimitivesList->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizerAboveList->Add( m_staticTextPrimitivesList, 1, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerAboveList->Add( m_staticTextPrimitivesList, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_staticTextPrimitiveListWarning = new wxStaticText( m_panelCustomShapePrimitives, wxID_ANY, _("Note: coordinates are relative to anchor pad, orientation 0."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPrimitiveListWarning->Wrap( -1 );
 	m_staticTextPrimitiveListWarning->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizerAboveList->Add( m_staticTextPrimitiveListWarning, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxALIGN_BOTTOM|wxTOP|wxRIGHT|wxLEFT, 7 );
+	bSizerAboveList->Add( m_staticTextPrimitiveListWarning, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 7 );
 
 
 	m_bSizerPanelPrimitives->Add( bSizerAboveList, 0, wxEXPAND|wxBOTTOM, 3 );
@@ -836,10 +834,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerButtonsUpper->Add( m_buttonDel, 0, wxALL, 5 );
 
 
-	bSizerButtons->Add( bSizerButtonsUpper, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bSizerButtons->Add( bSizerButtonsUpper, 0, wxEXPAND, 5 );
 
 
-	m_bSizerPanelPrimitives->Add( bSizerButtons, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	m_bSizerPanelPrimitives->Add( bSizerButtons, 0, wxEXPAND, 5 );
 
 
 	m_panelCustomShapePrimitives->SetSizer( m_bSizerPanelPrimitives );
