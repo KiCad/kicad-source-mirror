@@ -313,13 +313,15 @@ public:
 
     /**
      * Function GetLength
-     * returns the length of the arc track using a series of segment approximations.
+     * returns the length of the arc track
      * @return double - the length of the track
      */
     virtual double GetLength() const override
     {
-        //TODO(snh): Add proper arc length calc
-        return GetLineLength( m_Start, m_Mid ) + GetLineLength( m_Mid, m_End );
+        double radius = GetRadius();
+        double angle  = GetAngle();
+
+        return radius * M_PI * angle / 180.0;
     }
 
     EDA_ITEM* Clone() const override;
