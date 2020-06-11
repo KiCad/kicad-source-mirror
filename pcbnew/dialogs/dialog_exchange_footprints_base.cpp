@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -58,8 +58,6 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	bSizer4->Add( m_specifiedID, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_specifiedIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_specifiedIDBrowseButton->SetMinSize( wxSize( 30,29 ) );
-
 	bSizer4->Add( m_specifiedIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
 
 
@@ -85,8 +83,6 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	bSizer3->Add( m_newID, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_newIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_newIDBrowseButton->SetMinSize( wxSize( 30,29 ) );
-
 	bSizer3->Add( m_newIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
 
 
