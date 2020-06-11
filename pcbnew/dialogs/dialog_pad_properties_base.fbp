@@ -4072,7 +4072,7 @@
                                                                 <property name="border">5</property>
                                                                 <property name="colspan">1</property>
                                                                 <property name="column">2</property>
-                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
+                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                                                                 <property name="row">1</property>
                                                                 <property name="rowspan">1</property>
                                                                 <object class="wxStaticText" expanded="0">
