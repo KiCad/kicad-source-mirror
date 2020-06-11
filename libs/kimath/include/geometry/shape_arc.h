@@ -64,7 +64,7 @@ public:
         m_bbox = aOther.m_bbox;
     }
 
-    ~SHAPE_ARC() {}
+    virtual ~SHAPE_ARC() {}
 
     SHAPE* Clone() const override
     {
