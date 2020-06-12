@@ -1015,6 +1015,9 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const wxPoint& aRectCenter, const wx
     rr_outline.push_back( curr_edge );
 
     // Move relative coordinates to the actual location and rotation:
+    wxPoint arc_last_center;
+    int arc_last_angle = curr_edge.m_arc_angle_start+arc_angle;
+
     for( RR_EDGE& rr_edge: rr_outline )
     {
         RotatePoint( &rr_edge.m_start, aOrient );
@@ -1023,19 +1026,38 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const wxPoint& aRectCenter, const wx
         rr_edge.m_start += aRectCenter;
         rr_edge.m_end += aRectCenter;
         rr_edge.m_center += aRectCenter;
+        arc_last_center = rr_edge.m_center;
     }
 
-    fputs( "G36*\n", outputFile );      // Start region
-    fputs( "G01*\n", outputFile );      // Set linear interpolation.
-    MoveTo( rr_outline[0].m_start );    // Start point of region
+    // Ensure the region is a closed polygon, i.e. the end point of last segment
+    // (end of arc) is the same as the first point. Rounding issues can create a
+    // small difference, mainly for rotated pads.
+    // calculate last point (end of last arc):
+    wxPoint last_pt;
+    last_pt.x = arc_last_center.x + KiROUND( cosdecideg( aCornerRadius, arc_last_angle ) );
+    last_pt.y = arc_last_center.y - KiROUND( sindecideg( aCornerRadius, arc_last_angle ) );
+
+    wxPoint first_pt = rr_outline[0].m_start;
+
+#if 0    // For test only:
+    if( last_pt != first_pt )
+        wxLogMessage( "first pt %d %d last pt %d %d",
+                      first_pt.x, first_pt.y, last_pt.x, last_pt.y );
+#endif
+
+    fputs( "G36*\n", outputFile );  // Start region
+    fputs( "G01*\n", outputFile );  // Set linear interpolation.
+    first_pt = last_pt;
+    MoveTo( first_pt );             // Start point of region, must be same as end point
 
     for( RR_EDGE& rr_edge: rr_outline )
     {
         if( aCornerRadius )     // Guard: ensure we do not create arcs with radius = 0
         {
             // LineTo( rr_edge.m_end ); // made in plotArc()
-            plotArc( rr_edge.m_center, rr_edge.m_arc_angle_start, rr_edge.m_arc_angle_start+arc_angle,
-                 aCornerRadius, true );
+            plotArc( rr_edge.m_center,
+                     rr_edge.m_arc_angle_start, rr_edge.m_arc_angle_start+arc_angle,
+                     aCornerRadius, true );
         }
         else
             LineTo( rr_edge.m_end );
