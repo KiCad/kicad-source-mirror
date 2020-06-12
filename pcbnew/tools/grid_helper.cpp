@@ -190,10 +190,9 @@ VECTOR2I GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& aArc 
     VECTOR2I nearest( KiROUND( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
                       KiROUND( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
 
-    auto line = aArc.ConvertToPolyline();
     int min_d = std::numeric_limits<int>::max();
 
-    for( auto pt : line.CPoints() )
+    for( auto pt : { aArc.GetP0(), aArc.GetP1() } )
     {
         int d = ( pt - aPoint ).EuclideanNorm();
 
