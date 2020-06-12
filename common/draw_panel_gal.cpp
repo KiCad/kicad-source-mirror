@@ -367,7 +367,9 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     if( aGalType == m_backend && m_gal != NULL )
         return true;
 
-    bool result = true; // assume everything will be fine
+    VECTOR2D grid_size = m_gal ? m_gal->GetGridSize() : VECTOR2D();
+    bool     grid_visibility = m_gal ? m_gal->GetGridVisibility() : true;
+    bool     result = true; // assume everything will be fine
 
     // Prevent refreshing canvas during backend switch
     StopDrawing();
@@ -436,6 +438,11 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     clientSize.x = std::max( 10, clientSize.x );
     clientSize.y = std::max( 10, clientSize.y );
     m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
+
+    if( grid_size.x > 0 && grid_size.y > 0 )
+        m_gal->SetGridSize( grid_size );
+
+    m_gal->SetGridVisibility( grid_visibility );
 
     if( m_painter )
         m_painter->SetGAL( m_gal );

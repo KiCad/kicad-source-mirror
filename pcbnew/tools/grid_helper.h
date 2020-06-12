@@ -150,6 +150,7 @@ private:
     }
 
     PCB_BASE_FRAME* m_frame;
+    TOOL_MANAGER*   m_toolMgr;
     OPT<VECTOR2I>   m_auxAxis;
 
     bool     m_enableSnap;          ///< If true, allow snapping to other items on the layers

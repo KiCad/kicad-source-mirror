@@ -38,6 +38,7 @@ class TOOLS_HOLDER;
 class TOOL_BASE;
 class ACTION_MANAGER;
 class ACTION_MENU;
+class APP_SETTINGS_BASE;
 
 
 /**
@@ -274,28 +275,24 @@ public:
      * These are made available to the tool. Called by the parent frame when it is set up.
      */
     void SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
-                         KIGFX::VIEW_CONTROLS* aViewControls, TOOLS_HOLDER* aFrame );
+                         KIGFX::VIEW_CONTROLS* aViewControls, APP_SETTINGS_BASE* aSettings,
+                         TOOLS_HOLDER* aFrame );
 
-    /* Accessors for the environment objects (view, model, etc.) */
-    KIGFX::VIEW* GetView() const
-    {
-        return m_view;
-    }
+    /*
+     * Accessors for the environment objects (view, model, etc.)
+     * */
+    KIGFX::VIEW* GetView() const { return m_view; }
 
-    inline KIGFX::VIEW_CONTROLS* GetViewControls() const
-    {
-        return m_viewControls;
-    }
+    KIGFX::VIEW_CONTROLS* GetViewControls() const { return m_viewControls; }
 
     VECTOR2D GetMousePosition();
     VECTOR2D GetCursorPosition();
 
-    inline EDA_ITEM* GetModel() const
-    {
-        return m_model;
-    }
+    EDA_ITEM* GetModel() const { return m_model; }
 
-    inline TOOLS_HOLDER* GetToolHolder() const { return m_frame; }
+    APP_SETTINGS_BASE* GetSettings() const { return m_settings; }
+
+    TOOLS_HOLDER* GetToolHolder() const { return m_frame; }
 
     /**
      * Returns id of the tool that is on the top of the active tools stack
@@ -545,6 +542,7 @@ private:
     KIGFX::VIEW*          m_view;
     KIGFX::VIEW_CONTROLS* m_viewControls;
     TOOLS_HOLDER*         m_frame;
+    APP_SETTINGS_BASE*    m_settings;
 
     /// Queue that stores events to be processed at the end of the event processing cycle.
     std::list<TOOL_EVENT> m_eventQueue;

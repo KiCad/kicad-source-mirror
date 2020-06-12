@@ -76,9 +76,6 @@ public:
 
     MAGNETIC_SETTINGS* GetMagneticItemsSettings() override;
 
-    /// Updates the GAL with display settings changes
-    void ApplyDisplaySettingsToGAL();
-
     ///> @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
     void UpdateMsgPanel() override;
 

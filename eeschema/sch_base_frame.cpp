@@ -442,8 +442,6 @@ void SCH_BASE_FRAME::RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
 
 void SCH_BASE_FRAME::SyncView()
 {
-    auto gs = GetScreen()->GetGridSize();
-    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( gs.x, gs.y ));
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 }
 

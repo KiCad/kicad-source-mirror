@@ -116,9 +116,8 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
         return;
 
     wxString    msg;
-    wxRealPoint curr_grid_size = m_frame->GetScreen()->GetGridSize();
     const int   min_grid_size = 25;
-    const int   grid_size = KiROUND( curr_grid_size.x );
+    const int   grid_size = KiROUND( getView()->GetGAL()->GetGridSize().x );
     const int   clamped_grid_size = ( grid_size < min_grid_size ) ? min_grid_size : grid_size;
     LIB_PINS    pinList;
 

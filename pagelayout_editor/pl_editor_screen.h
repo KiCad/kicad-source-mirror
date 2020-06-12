@@ -1,7 +1,3 @@
-/**
- * @file pl_editor_screen.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -30,13 +26,11 @@
 #define CLASS_PL_EDITOR_SCREEN_H_
 
 
-#include <base_units.h>
 #include <base_screen.h>
 
 class WS_DATA_ITEM;
 
 
-/* Handle info to display a board */
 class PL_EDITOR_SCREEN : public BASE_SCREEN
 {
 public:

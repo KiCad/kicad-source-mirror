@@ -59,7 +59,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_PlaceFile(),
           m_Plot(),
           m_FootprintChooser(),
-          m_UserGrid(),
           m_Zones(),
           m_FootprintViewer(),
           m_FootprintWizard(),
@@ -119,13 +118,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_graphic_segments",
             &m_Use45DegreeGraphicSegments, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "grid.user.units",
-            &m_UserGrid.units, static_cast<int>( EDA_UNITS::INCHES ) ) );
-
-    m_params.emplace_back( new PARAM<double>( "grid.user.size_x", &m_UserGrid.size_x, 0.01 ) );
-
-    m_params.emplace_back( new PARAM<double>( "grid.user.size_y", &m_UserGrid.size_y, 0.01 ) );
 
     m_params.emplace_back( new PARAM<bool>(
             "pcb_display.graphic_items_fill", &m_Display.m_DisplayGraphicsFill, true ) );
@@ -459,10 +451,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>(  aCfg, "DisplayPolarCoords",      "editing.polar_coords" );
     ret &= fromLegacy<bool>(  aCfg, "Use45DegreeGraphicSegments",
                               "editing.use_45_degree_graphic_segments" );
-
-    ret &= fromLegacy<int>(  aCfg, f + "PcbUserGrid_X",        "grid.user.size_x" );
-    ret &= fromLegacy<int>(  aCfg, f + "PcbUserGrid_Y",        "grid.user.size_y" );
-    ret &= fromLegacy<int>(  aCfg, f + "PcbUserGrid_Unit",     "grid.user.units" );
 
     ret &= fromLegacy<bool>(  aCfg, "PcbAffT",                 "pcb_display.graphic_items_fill" );
     ret &= fromLegacy<int>(   aCfg, "MaxLnkS",                 "pcb_display.max_links_shown" );

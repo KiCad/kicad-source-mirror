@@ -22,17 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file gbr_screen.h
- */
-
 #ifndef GBR_SCREEN_H
 #define GBR_SCREEN_H
 
 #include <base_units.h>
-
 #include <base_screen.h>
-#include <layers_id_colors_and_visibility.h>
 
 #define ZOOM_FACTOR( x )       ( x * IU_PER_MILS )
 
@@ -46,13 +40,13 @@ public:
      * @param aPageSizeIU is the size of the initial paper page in internal units.
      */
     GBR_SCREEN( const wxSize& aPageSizeIU );
-    ~GBR_SCREEN();
 
     /**
      * Function ClearUndoORRedoList
      * virtual pure in BASE_SCREEN, so it must be defined here
      */
-    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
+    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override
+    { }
 };
 
 

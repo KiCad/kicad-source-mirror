@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@
 #include <base_screen.h>
 #include <bitmaps.h>
 #include <confirm.h>
-#include <dialog_helpers.h>
 #include <dialog_shim.h>
 #include <eda_draw_frame.h>
 #include <fctsys.h>
@@ -82,8 +81,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_messagePanel        = NULL;
     m_currentScreen       = NULL;
     m_showBorderAndTitleBlock = false;  // true to display reference sheet.
-    m_LastGridSizeId      = 0;
-    m_drawGrid            = true;       // hide/Show grid. default = show
     m_gridColor           = COLOR4D( DARKGRAY );   // Default grid color
     m_showPageLimits      = false;
     m_drawBgColor         = COLOR4D( BLACK );   // the background color of the draw canvas:
@@ -242,19 +239,10 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
     if( m_gridSelectBox == NULL )
         return;
 
-    int select = wxNOT_FOUND;
+    int idx = config()->m_Window.grid.last_size_idx;
 
-    for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
-    {
-        if( GetScreen()->GetGridCmdId() == GetScreen()->GetGrid( i ).m_CmdId )
-        {
-            select = (int) i;
-            break;
-        }
-    }
-
-    if( select != m_gridSelectBox->GetSelection() )
-        m_gridSelectBox->SetSelection( select );
+    if( idx >= 0 && idx < m_gridSelectBox->GetCount() && idx != m_gridSelectBox->GetSelection() )
+        m_gridSelectBox->SetSelection( idx );
 }
 
 
@@ -271,32 +259,58 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 {
     wxCHECK_RET( m_gridSelectBox, "m_gridSelectBox uninitialized" );
 
-    int id = m_gridSelectBox->GetCurrentSelection() + ID_POPUP_GRID_FIRST;
+    int idx = m_gridSelectBox->GetCurrentSelection();
 
-    if( id == ID_POPUP_GRID_SEPARATOR )
+    if( idx == m_gridSelectBox->GetCount() - 2 )
     {
         // wxWidgets will check the separator, which we don't want.
         // Re-check the current grid.
         wxUpdateUIEvent dummy;
         OnUpdateSelectGrid( dummy );
     }
-    else if( id == ID_POPUP_GRID_SETTINGS )
+    else if( idx == m_gridSelectBox->GetCount() - 1 )
     {
         // wxWidgets will check the Grid Settings... entry, which we don't want.
-        // R-check the current grid.
+        // Re-check the current grid.
         wxUpdateUIEvent dummy;
         OnUpdateSelectGrid( dummy );
         // Now run the Grid Settings... dialog
         wxCommandEvent dummy2;
         OnGridSettings( dummy2 );
     }
-    else if( id >= ID_POPUP_GRID_FIRST && id < ID_POPUP_GRID_SEPARATOR  )
+    else
     {
-        m_toolManager->RunAction( ACTIONS::gridPreset, true, id - ID_POPUP_GRID_FIRST );
+        m_toolManager->RunAction( ACTIONS::gridPreset, true, idx );
     }
 
     UpdateStatusBar();
     m_canvas->Refresh();
+}
+
+
+bool EDA_DRAW_FRAME::IsGridVisible() const
+{
+    return config()->m_Window.grid.show;
+}
+
+
+void EDA_DRAW_FRAME::SetGridVisibility( bool aVisible )
+{
+    config()->m_Window.grid.show = aVisible;
+
+    // Update the display with the new grid
+    if( GetCanvas() )
+    {
+        // Check to ensure these exist, since this function could be called before
+        // the GAL and View have been created
+        if( GetCanvas()->GetGAL() )
+            GetCanvas()->GetGAL()->SetGridVisibility( aVisible );
+
+        if( GetCanvas()->GetView() )
+            GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+
+        GetCanvas()->Refresh();
+    }
 }
 
 
@@ -392,21 +406,12 @@ void EDA_DRAW_FRAME::DisplayGridMsg()
 
     switch( m_userUnits )
     {
-    case EDA_UNITS::INCHES:
-        gridformatter = "grid %.3f";
-        break;
-
-    case EDA_UNITS::MILLIMETRES:
-        gridformatter = "grid %.4f";
-        break;
-
-    default:
-        gridformatter = "grid %f";
-        break;
+    case EDA_UNITS::INCHES:      gridformatter = "grid %.3f"; break;
+    case EDA_UNITS::MILLIMETRES: gridformatter = "grid %.4f"; break;
+    default:                     gridformatter = "grid %f";   break;
     }
 
-    wxRealPoint curr_grid_size = GetScreen()->GetGridSize();
-    double grid = To_User_Unit( m_userUnits, curr_grid_size.x );
+    double grid = To_User_Unit( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().x );
     line.Printf( gridformatter, grid );
 
     SetStatusText( line, 4 );
@@ -419,13 +424,9 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 
     switch( m_userUnits )
     {
-    case EDA_UNITS::INCHES:
-        msg = _( "Inches" );
-        break;
-    case EDA_UNITS::MILLIMETRES:
-        msg = _( "mm" );
-        break;
-    default:          msg = _( "Units" );  break;
+    case EDA_UNITS::INCHES:      msg = _( "Inches" ); break;
+    case EDA_UNITS::MILLIMETRES: msg = _( "mm" );     break;
+    default:                     msg = _( "Units" );  break;
     }
 
     SetStatusText( msg, 5 );
@@ -470,15 +471,6 @@ void EDA_DRAW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // Read units used in dialogs and toolbars
     SetUserUnits( static_cast<EDA_UNITS>( aCfg->m_System.units ) );
 
-    // Read show/hide grid entry
-    SetGridVisibility( window->grid.show );
-
-    m_LastGridSizeId = window->grid.last_size;
-
-    // m_LastGridSizeId is an offset, expected to be >= 0
-    if( m_LastGridSizeId < 0 )
-        m_LastGridSizeId = 0;
-
     m_UndoRedoCountMax = aCfg->m_System.max_undo_items;
     m_firstRunDialogSetting = aCfg->m_System.first_run_shown;
 
@@ -504,9 +496,6 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     aCfg->m_System.units = static_cast<int>( m_userUnits );
     aCfg->m_System.first_run_shown = m_firstRunDialogSetting;
-
-    window->grid.show = IsGridVisible();
-    window->grid.last_size = m_LastGridSizeId;
 
     if( GetScreen() )
         aCfg->m_System.max_undo_items = GetScreen()->GetMaxUndoItems();
@@ -660,14 +649,20 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
     return false;
 }
 
-//-----< BASE_SCREEN API moved here >--------------------------------------------
 
 wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition ) const
 {
-    return GetScreen()->getNearestGridPosition( aPosition, GetGridOrigin() );
+    const wxPoint& gridOrigin = GetGridOrigin();
+    VECTOR2D       gridSize = GetCanvas()->GetGAL()->GetGridSize();
+
+    double xOffset = fmod( gridOrigin.x, gridSize.x );
+    int    x = KiROUND( (aPosition.x - xOffset) / gridSize.x );
+    double yOffset = fmod( gridOrigin.y, gridSize.y );
+    int    y = KiROUND( (aPosition.y - yOffset) / gridSize.y );
+
+    return wxPoint( KiROUND( x * gridSize.x + xOffset ), KiROUND( y * gridSize.y + yOffset ) );
 }
 
-//-----</BASE_SCREEN API moved here >--------------------------------------------
 
 const BOX2I EDA_DRAW_FRAME::GetDocumentExtents() const
 {

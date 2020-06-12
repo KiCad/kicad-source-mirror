@@ -25,24 +25,12 @@
  */
 
 #include <fctsys.h>
-#include <common.h>
-#include <macros.h>
-#include <trigo.h>
 #include <pcb_screen.h>
-#include <eda_text.h>                // FILLED
 #include <base_units.h>
-
-#include <pcbnew.h>
-#include <board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
-
-#include <id.h>
 
 
 #define ZOOM_FACTOR( x )       ( x * IU_PER_MILS / 10 )
-#define DMIL_GRID( x )         wxRealPoint( x * IU_PER_MILS / 10, x * IU_PER_MILS / 10 )
-#define MM_GRID( x )           wxRealPoint( x * IU_PER_MM, x * IU_PER_MM )
-
 
 /**
     Default Pcbnew zoom values.
@@ -122,48 +110,11 @@ static const double pcbZoomList[] =
 };
 
 
-// Default grid sizes for PCB editor screens.
-static GRID_TYPE pcbGridList[] =
-{
-    // predefined grid list in 0.0001 inches
-    { ID_POPUP_GRID_LEVEL_1000,     DMIL_GRID( 1000 )  },
-    { ID_POPUP_GRID_LEVEL_500,      DMIL_GRID( 500 )   },
-    { ID_POPUP_GRID_LEVEL_250,      DMIL_GRID( 250 )   },
-    { ID_POPUP_GRID_LEVEL_200,      DMIL_GRID( 200 )   },
-    { ID_POPUP_GRID_LEVEL_100,      DMIL_GRID( 100 )   },
-    { ID_POPUP_GRID_LEVEL_50,       DMIL_GRID( 50 )    },
-    { ID_POPUP_GRID_LEVEL_25,       DMIL_GRID( 25 )    },
-    { ID_POPUP_GRID_LEVEL_20,       DMIL_GRID( 20 )    },
-    { ID_POPUP_GRID_LEVEL_10,       DMIL_GRID( 10 )    },
-    { ID_POPUP_GRID_LEVEL_5,        DMIL_GRID( 5 )     },
-    { ID_POPUP_GRID_LEVEL_2,        DMIL_GRID( 2 )     },
-    { ID_POPUP_GRID_LEVEL_1,        DMIL_GRID( 1 )     },
-
-    // predefined grid list in mm
-    { ID_POPUP_GRID_LEVEL_5MM,      MM_GRID( 5.0 )     },
-    { ID_POPUP_GRID_LEVEL_2_5MM,    MM_GRID( 2.5 )     },
-    { ID_POPUP_GRID_LEVEL_1MM,      MM_GRID( 1.0 )     },
-    { ID_POPUP_GRID_LEVEL_0_5MM,    MM_GRID( 0.5 )     },
-    { ID_POPUP_GRID_LEVEL_0_25MM,   MM_GRID( 0.25 )    },
-    { ID_POPUP_GRID_LEVEL_0_2MM,    MM_GRID( 0.2 )     },
-    { ID_POPUP_GRID_LEVEL_0_1MM,    MM_GRID( 0.1 )     },
-    { ID_POPUP_GRID_LEVEL_0_0_5MM,  MM_GRID( 0.05 )    },
-    { ID_POPUP_GRID_LEVEL_0_0_25MM, MM_GRID( 0.025 )   },
-    { ID_POPUP_GRID_LEVEL_0_0_1MM,  MM_GRID( 0.01 )    }
-};
-
-
 PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
     for( double zoom : pcbZoomList )
         m_ZoomList.push_back( zoom );
-
-    for( GRID_TYPE grid : pcbGridList )
-        AddGrid( grid );
-
-    // Set the working grid size to a reasonable value (in 1/10000 inch)
-    SetGrid( DMIL_GRID( 500 ) );
 
     m_Active_Layer       = F_Cu;     // default active layer = front layer
     m_Route_Layer_TOP    = F_Cu;     // default layers pair for vias (bottom to top)

@@ -24,14 +24,10 @@
  */
 
 #include <fctsys.h>
-#include <common.h>
-#include <macros.h>
 #include <pl_editor_screen.h>
 #include <base_units.h>
-#include <pl_editor_id.h>
 
 
-#define MM_GRID( x )      wxRealPoint( x * IU_PER_MM, x * IU_PER_MM )
 #define ZOOM_FACTOR( x )  ( x * IU_PER_MM / 1000 )
 
 
@@ -62,32 +58,14 @@ static const double pl_editorZoomList[] =
 };
 
 
-// Default grid sizes for page layout editor screens.
-static GRID_TYPE pl_editorGridList[] =
-{
-    // predefined grid list in mm
-    { ID_POPUP_GRID_LEVEL_1MM,      MM_GRID( 1.0 )     },
-    { ID_POPUP_GRID_LEVEL_0_5MM,    MM_GRID( 0.5 )     },
-    { ID_POPUP_GRID_LEVEL_0_25MM,   MM_GRID( 0.25 )    },
-    { ID_POPUP_GRID_LEVEL_0_2MM,    MM_GRID( 0.2 )     },
-    { ID_POPUP_GRID_LEVEL_0_1MM,    MM_GRID( 0.1 )     },
-};
-
-
 PL_EDITOR_SCREEN::PL_EDITOR_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
     for( double zoom : pl_editorZoomList )
         m_ZoomList.push_back( zoom );
 
-    for( GRID_TYPE grid : pl_editorGridList )
-        AddGrid( grid );
-
     // pl_editor uses the same frame position as schematic and board editors
     m_Center = false;
-
-    // Set the working grid size to a reasonable value
-    SetGrid( MM_GRID( 1.0 ) );
 
     InitDataPoints( aPageSizeIU );
     m_NumberOfScreens = 2;

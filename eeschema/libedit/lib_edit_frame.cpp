@@ -103,9 +103,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_convert = 1;
     m_AboutTitle = "LibEdit";
 
-    // Initialize grid id to the default value 50 mils:
-    m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
-
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_libedit_xpm ) );
     SetIcon( icon );
@@ -168,15 +165,12 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
 
-    GetToolManager()->RunAction( "common.Control.gridPreset", true, m_LastGridSizeId );
-
     Raise();
     Show( true );
 
     SyncView();
     GetCanvas()->GetViewControls()->SetSnapping( true );
     GetCanvas()->GetView()->UseDrawPriority( true );
-    GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
 
     // Set the working/draw area size to display a symbol to a reasonable value:
@@ -255,7 +249,7 @@ void LIB_EDIT_FRAME::setupTools()
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), this );
+                                   GetCanvas()->GetViewControls(), config(), this );
     m_actions = new EE_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 

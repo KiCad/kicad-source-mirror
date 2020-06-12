@@ -23,11 +23,10 @@
 
 #include <dialog_set_grid_base.h>
 #include <common.h>
+#include <tool/tool_manager.h>
+#include <settings/app_settings.h>
 #include <sch_base_frame.h>
-#include <class_draw_panel_gal.h>
-#include <sch_view.h>
-#include <gal/graphics_abstraction_layer.h>
-
+#include <tool/grid_menu.h>
 
 class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
 {
@@ -53,16 +52,16 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( SCH_BASE_FRAME* aParent ):
 
 bool DIALOG_SET_GRID::TransferDataToWindow()
 {
-    const GRIDS& gridSizes = m_frame->GetScreen()->GetGrids();
+    int           idx = m_frame->config()->m_Window.grid.last_size_idx;
+    wxArrayString grids;
 
-    for( size_t i = 0; i < gridSizes.size(); i++ )
-    {
-        m_choiceGridSize->Append( wxString::Format( "%0.1f",
-                static_cast<float>( Iu2Mils( gridSizes[i].m_Size.x ) ) ) );
+    GRID_MENU::BuildChoiceList( &grids, m_frame->config(), GetUserUnits() != EDA_UNITS::INCHES );
 
-        if( gridSizes[i].m_CmdId == m_frame->GetScreen()->GetGridCmdId() )
-            m_choiceGridSize->SetSelection( (int) i );
-    }
+    for( const wxString& grid : grids )
+        m_choiceGridSize->Append( grid );
+
+    if( idx >= 0 && idx < m_choiceGridSize->GetCount() )
+        m_choiceGridSize->SetSelection( idx );
 
     return true;
 }
@@ -70,12 +69,9 @@ bool DIALOG_SET_GRID::TransferDataToWindow()
 
 bool DIALOG_SET_GRID::TransferDataFromWindow()
 {
-    const GRIDS& gridSizes = m_frame->GetScreen()->GetGrids();
-    wxRealPoint gridSize = gridSizes[ (size_t) m_choiceGridSize->GetSelection() ].m_Size;
-    m_frame->SetLastGridSizeId( m_frame->GetScreen()->SetGrid( gridSize ) );
+    int idx = m_choiceGridSize->GetSelection();
 
-    m_frame->GetCanvas()->GetView()->GetGAL()->SetGridSize( VECTOR2D( gridSize ) );
-    m_frame->GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    m_frame->GetToolManager()->RunAction( "common.Control.gridPreset", true, idx );
 
     return true;
 }

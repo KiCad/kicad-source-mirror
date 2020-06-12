@@ -235,10 +235,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     wxASSERT( screen );
 
-    // Switch to current sheet,
-    // and update the grid size, because it can be modified in latest screen
     SetScreen( screen );
-    GetScreen()->SetGrid( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 );
 
     // update the References
     GetCurrentSheet().UpdateAllScreenReferences();

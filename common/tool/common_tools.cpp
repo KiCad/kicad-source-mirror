@@ -30,16 +30,30 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <settings/app_settings.h>
 #include <base_screen.h>
 #include <tool/common_tools.h>
 #include <id.h>
 #include <project.h>
 #include <kiface_i.h>
 #include <dialog_configure_paths.h>
+#include <base_units.h>
+
 
 void COMMON_TOOLS::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<EDA_DRAW_FRAME>();
+
+    m_grids.clear();
+
+    for( const wxString& gridDef : m_toolMgr->GetSettings()->m_Window.grid.sizes )
+    {
+        int gridSize = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridDef, true );
+        m_grids.emplace_back( gridSize, gridSize );
+    }
+
+    if( aReason == GAL_SWITCH )
+        OnGridChanged();
 }
 
 
@@ -62,7 +76,7 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
     bool mirroredX = getView()->IsMirroredX();
 
     VECTOR2D cursor = getViewControls()->GetRawCursorPosition( false );
-    VECTOR2I gridSize = VECTOR2D( m_frame->GetScreen()->GetGridSize() );
+    VECTOR2D gridSize = getView()->GetGAL()->GetGridSize();
 
     if( fastMove )
         gridSize = gridSize * 10;
@@ -125,7 +139,7 @@ int COMMON_TOOLS::PanControl( const TOOL_EVENT& aEvent )
     long type = aEvent.Parameter<intptr_t>();
     KIGFX::VIEW* view = getView();
     VECTOR2D center = view->GetCenter();
-    VECTOR2I gridSize = VECTOR2D( m_frame->GetScreen()->GetGridSize() ) * 10;
+    VECTOR2D gridSize = getView()->GetGAL()->GetGridSize() * 10;
     bool mirroredX = view->IsMirroredX();
 
     switch( type )
@@ -336,56 +350,26 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
 }
 
 
-/**
- * Advance a BASE_SCREEN's grid forwards or backwards by the given offset and
- * return the cmd ID of that grid (doesn't change the grid).
- *
- * This works even if the base screen's grid do not have consecutive command IDs.
- *
- * @param aScreen the base screen to use
- * @param aOffset how many grids to advance by (negative to go backwards)
- * @return the cmd ID of the requested grid, or empty if it can't be found
- */
-static OPT<int> getNextPreviousGrid( const BASE_SCREEN& aScreen, int aOffset )
-{
-    const GRIDS&     grids = aScreen.GetGrids();
-    const GRID_TYPE& currGrid = aScreen.GetGrid();
-
-    auto iter = std::find_if( grids.begin(), grids.end(),
-            [&]( const GRID_TYPE& aCandidate ) { return aCandidate.m_CmdId == currGrid.m_CmdId; } );
-
-    wxCHECK_MSG( iter != grids.end(), {}, "Grid not found in screen's grid list" );
-
-    int index = std::distance( grids.begin(), iter ) + aOffset;
-
-    // If we go off the end, return invalid, but we could also wrap around if wanted.
-    if( index < 0 || static_cast<size_t>( index ) >= grids.size() )
-        return {};
-
-    return grids[index].m_CmdId;
-}
-
-
 // Grid control
 int COMMON_TOOLS::GridNext( const TOOL_EVENT& aEvent )
 {
-    const OPT<int> next_grid_id = getNextPreviousGrid( *m_frame->GetScreen(), 1 );
+    int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
-    if( next_grid_id )
-        return GridPreset( *next_grid_id - ID_POPUP_GRID_LEVEL_1000 );
+    if( currentGrid + 1 < m_grids.size() )
+        currentGrid++;
 
-    return 1;
+    return OnGridChanged();
 }
 
 
 int COMMON_TOOLS::GridPrev( const TOOL_EVENT& aEvent )
 {
-    const OPT<int> next_grid_id = getNextPreviousGrid( *m_frame->GetScreen(), -1 );
+    int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
-    if( next_grid_id )
-        return GridPreset( *next_grid_id - ID_POPUP_GRID_LEVEL_1000 );
+    if( currentGrid > 0 )
+        currentGrid--;
 
-    return 1;
+    return OnGridChanged();
 }
 
 
@@ -397,27 +381,31 @@ int COMMON_TOOLS::GridPreset( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::GridPreset( int idx )
 {
-    BASE_SCREEN* screen = m_frame->GetScreen();
+    int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
-    if( !screen->GridExists( idx + ID_POPUP_GRID_LEVEL_1000 ) )
-        idx = 0;
+    currentGrid = std::max( 0, std::min( idx, (int) m_grids.size() - 1 ) );
 
-    screen->SetGrid( idx + ID_POPUP_GRID_LEVEL_1000 );
+    return OnGridChanged();
+}
 
-    // Be sure m_LastGridSizeId is up to date.
-    m_frame->SetLastGridSizeId( idx );
+
+int COMMON_TOOLS::OnGridChanged()
+{
+    int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
     // Update the combobox (if any)
     wxUpdateUIEvent dummy;
     m_frame->OnUpdateSelectGrid( dummy );
 
     // Update GAL canvas from screen
-    getView()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
+    getView()->GetGAL()->SetGridSize( m_grids[ currentGrid ] );
+    getView()->GetGAL()->SetGridVisibility( m_toolMgr->GetSettings()->m_Window.grid.show );
     getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     // Put cursor on new grid
     VECTOR2D gridCursor = getViewControls()->GetCursorPosition( true );
     getViewControls()->SetCrossHairCursorPosition( gridCursor, false );
+
     return 0;
 }
 
@@ -425,10 +413,6 @@ int COMMON_TOOLS::GridPreset( int idx )
 int COMMON_TOOLS::ToggleGrid( const TOOL_EVENT& aEvent )
 {
     m_frame->SetGridVisibility( !m_frame->IsGridVisible() );
-
-    m_frame->GetCanvas()->GetGAL()->SetGridVisibility( m_frame->IsGridVisible() );
-    getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    m_frame->GetCanvas()->Refresh();
 
     return 0;
 }

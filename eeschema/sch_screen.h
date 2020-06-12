@@ -115,7 +115,7 @@ private:
     /// Origin of the auxiliary axis, which is used in exports mostly, but not yet in EESCHEMA
     wxPoint     m_aux_origin;
 
-    EE_RTREE m_rtree;
+    EE_RTREE    m_rtree;
 
     int m_modification_sync; ///< inequality with PART_LIBS::GetModificationHash()
                              ///< will trigger ResolveAll().
@@ -159,15 +159,8 @@ public:
 
     SCHEMATIC* Schematic() const;
 
-    EE_RTREE& Items()
-    {
-        return m_rtree;
-    }
-
-    const EE_RTREE& Items() const
-    {
-        return m_rtree;
-    }
+    EE_RTREE& Items() { return m_rtree; }
+    const EE_RTREE& Items() const { return m_rtree; }
 
     bool IsEmpty()
     {
@@ -203,9 +196,7 @@ public:
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
     void DecRefCount();
-
     void IncRefCount();
-
     int GetRefCount() const                                 { return m_refCount; }
 
     /**
@@ -254,8 +245,8 @@ public:
      * @param aType The type of item to find.
      * @return The item found that meets the search criteria or NULL if none found.
      */
-    SCH_ITEM* GetItem(
-            const wxPoint& aPosition, int aAccuracy = 0, KICAD_T aType = SCH_LOCATE_ANY_T );
+    SCH_ITEM* GetItem( const wxPoint& aPosition, int aAccuracy = 0,
+                       KICAD_T aType = SCH_LOCATE_ANY_T );
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 
@@ -405,7 +396,7 @@ public:
      * @return The pin item if found, otherwise NULL.
      */
     LIB_PIN* GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent = NULL,
-            bool aEndPointOnly = false );
+                     bool aEndPointOnly = false );
 
     /**
      * Test the screen if \a aPosition is a sheet label object.

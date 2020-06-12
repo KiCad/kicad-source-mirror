@@ -190,7 +190,7 @@ void CVPCB_MAINFRAME::setupTools()
     // Create the manager
     m_actions = new CVPCB_ACTIONS();
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, this );
+    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, config(), this );
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools

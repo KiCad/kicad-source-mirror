@@ -56,9 +56,6 @@ public:
     ///> @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
-    /// Updates the GAL with display settings changes
-    void ApplyDisplaySettingsToGAL();
-
     virtual COLOR4D GetGridColor() override;
 
     bool GetAutoZoom() override;

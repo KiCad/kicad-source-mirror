@@ -434,7 +434,7 @@ void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_L
         if( aPosition.x == connectedPin->GetPosition().x )  // push outside sheet boundary
         {
             int direction = ( force == SHEET_LEFT_SIDE ) ? -1 : 1;
-            aPosition.x += int( m_frame->GetScreen()->GetGridSize().x * direction );
+            aPosition.x += KiROUND( getView()->GetGAL()->GetGridSize().x * direction );
         }
 
         midPoint.x = aPosition.x;

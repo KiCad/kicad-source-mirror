@@ -126,9 +126,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_cmpListWidth = 300;
     m_listPowerCmpOnly = false;
 
-    // Initialize grid id to the default value (50 mils):
-    m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
-
     SetScreen( new SCH_SCREEN );
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
     LoadSettings( config() );
@@ -137,7 +134,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
     gal_opts.m_axesEnabled = true;
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
-    GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 
     GetRenderSettings()->m_ShowHiddenText = true;
     GetRenderSettings()->m_ShowHiddenPins = true;
@@ -188,8 +184,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     m_auimgr.Update();
 
-    GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
-
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {
         Raise();
@@ -228,7 +222,7 @@ void LIB_VIEW_FRAME::setupTools()
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), this );
+                                   GetCanvas()->GetViewControls(), config(), this );
     m_actions = new EE_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
@@ -618,7 +612,7 @@ void LIB_VIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
-    EDA_DRAW_FRAME::LoadSettings( cfg );
+    SCH_BASE_FRAME::LoadSettings( cfg );
 
     // Grid shape, etc.
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_LibViewPanel.window );
@@ -641,7 +635,7 @@ void LIB_VIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 {
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
-    EDA_DRAW_FRAME::SaveSettings( cfg );
+    SCH_BASE_FRAME::SaveSettings( cfg );
 
     if( m_libListWidth && m_libList )
         m_libListWidth = m_libList->GetSize().x;

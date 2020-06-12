@@ -173,7 +173,6 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
 
     GRResetPenAndBrush( dc );
     GRForceBlackPen( true );
-    screen->m_IsPrinting = true;
 
     COLOR4D bg_color = m_parent->GetDrawBgColor();
     m_parent->SetDrawBgColor( MakeColour( WHITE ) );
@@ -201,7 +200,6 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     m_parent->PrintWorkSheet( &renderSettings, screen, IU_PER_MILS, wxEmptyString );
 
     m_parent->SetDrawBgColor( bg_color );
-    screen->m_IsPrinting = false;
 
     GRForceBlackPen( false );
 

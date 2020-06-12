@@ -1013,12 +1013,14 @@ TOOL_ID TOOL_MANAGER::MakeToolId( const std::string& aToolName )
 
 
 void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
-                                   KIGFX::VIEW_CONTROLS* aViewControls, TOOLS_HOLDER* aFrame )
+                                   KIGFX::VIEW_CONTROLS* aViewControls,
+                                   APP_SETTINGS_BASE* aSettings, TOOLS_HOLDER* aFrame )
 {
     m_model = aModel;
     m_view = aView;
     m_viewControls = aViewControls;
     m_frame = aFrame;
+    m_settings = aSettings;
 }
 
 

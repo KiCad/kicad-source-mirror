@@ -481,7 +481,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         GetScreen()->m_Initialized = true;
     }
 
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     SetSheetNumberAndCount();
 
@@ -538,7 +537,6 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     SCH_SCREENS screens( GetCurrentSheet().Last() );
     screens.TestDanglingEnds();
 
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     SetSheetNumberAndCount();
 
@@ -844,7 +842,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
 
-            GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
             m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
             SetSheetNumberAndCount();
             SyncView();

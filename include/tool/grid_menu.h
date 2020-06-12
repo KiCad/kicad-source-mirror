@@ -28,11 +28,14 @@
 #include <tool/action_menu.h>
 
 class EDA_DRAW_FRAME;
+class APP_SETTINGS_BASE;
 
 class GRID_MENU : public ACTION_MENU
 {
 public:
     GRID_MENU( EDA_DRAW_FRAME* aParent );
+
+    static void BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg, bool mmFirst );
 
 private:
     ACTION_MENU* create() const override

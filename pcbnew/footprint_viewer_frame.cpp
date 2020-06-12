@@ -195,8 +195,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     LoadSettings( config() );
     GetGalDisplayOptions().m_axesEnabled = true;
 
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
-
     // Create GAL canvas
     m_canvasType = LoadCanvasTypeSetting();
     auto drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
@@ -206,7 +204,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
-                                   drawPanel->GetViewControls(), this );
+                                   drawPanel->GetViewControls(), config(), this );
     m_actions = new PCB_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
     drawPanel->SetEventDispatcher( m_toolDispatcher );
@@ -730,8 +728,6 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // Fetch grid settings from Footprint Editor
     auto fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
-    SetGridVisibility( fpedit->m_Window.grid.show );
-
     GetGalDisplayOptions().ReadWindowSettings( fpedit->m_Window );
 }
 
@@ -742,7 +738,7 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     wxCHECK( cfg, /*void*/ );
 
     // We don't want to store anything other than the window settings
-    EDA_BASE_FRAME::SaveSettings( cfg );
+    PCB_BASE_FRAME::SaveSettings( cfg );
 
     cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
 }
@@ -1005,17 +1001,6 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
 
     UpdateTitle();
 
-    GetCanvas()->Refresh();
-}
-
-
-void FOOTPRINT_VIEWER_FRAME::ApplyDisplaySettingsToGAL()
-{
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->LoadDisplayOptions( m_DisplayOptions, false );
-
-    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
     GetCanvas()->Refresh();
 }
 

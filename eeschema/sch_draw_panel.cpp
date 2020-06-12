@@ -137,17 +137,9 @@ void SCH_DRAW_PANEL::setDefaultLayerOrder()
 
 bool SCH_DRAW_PANEL::SwitchBackend( GAL_TYPE aGalType )
 {
-    VECTOR2D grid_size = m_gal->GetGridSize();
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
     setDefaultLayerDeps();
     m_gal->SetWorldUnitLength( SCH_WORLD_UNIT );
-
-    // Keep grid size and grid visibility:
-    m_gal->SetGridSize( grid_size );
-    SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( GetParentEDAFrame() );
-
-    if( frame )
-        m_gal->SetGridVisibility( frame->IsGridVisible() );
 
     Refresh();
 

@@ -226,9 +226,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     icon.CopyFromBitmap( KiBitmap( icon_eeschema_xpm ) );
     SetIcon( icon );
 
-    // Initialize grid id to the default value (50 mils):
-    m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
-
     LoadSettings( eeconfig() );
 
     CreateScreens();
@@ -273,12 +270,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
 
-    // Init grid size and visibility
-    GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
-
     if( GetCanvas() )
     {
-        GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
         GetCanvas()->GetGAL()->SetAxesEnabled( false );
 
         if( auto p = dynamic_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() ) )
@@ -319,7 +312,7 @@ void SCH_EDIT_FRAME::setupTools()
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( &Schematic(), GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), this );
+                                   GetCanvas()->GetViewControls(), config(), this );
     m_actions = new EE_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 

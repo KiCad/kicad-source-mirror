@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,36 +36,6 @@
 #include <undo_redo_container.h>
 #include <common.h>
 
-/**
- * GRID_TYPE
- * is for grid arrays.
- */
-class GRID_TYPE
-{
-public:
-    int         m_CmdId;    // The command id of this grid ( first id is ID_POPUP_GRID_LEVEL_1000 )
-    wxRealPoint m_Size;     // the size in internal unit of the grid (can differ for X and Y axis)
-
-    GRID_TYPE& operator=( const GRID_TYPE& item )
-    {
-        if( this != &item )
-        {
-            m_CmdId   = item.m_CmdId;
-            m_Size = item.m_Size;
-        }
-
-        return *this;
-    }
-
-    const bool operator==( const GRID_TYPE& item ) const
-    {
-        return m_Size == item.m_Size && m_CmdId == item.m_CmdId;
-    }
-};
-
-
-typedef std::vector<GRID_TYPE> GRIDS;
-
 
 /**
  * BASE_SCREEN
@@ -85,25 +55,7 @@ private:
      */
     wxPoint     m_crossHairPosition;
 
-    GRIDS       m_grids;            ///< List of valid grid sizes.
-    GRID_TYPE   m_Grid;             ///< Current grid selection.
     double      m_Zoom;             ///< Current zoom coefficient.
-
-    //----< Old public API now is private, and migratory>------------------------
-    // called only from EDA_DRAW_FRAME
-    friend class EDA_DRAW_FRAME;
-
-    /**
-     * Function getNearestGridPosition
-     * returns the nearest \a aGridSize location to \a aPosition.
-     * @param aPosition The position to check.
-     * @param aGridOrigin The origin point of the snap grid.
-     * @return The nearst grid position.
-     */
-    wxPoint getNearestGridPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin ) const;
-
-    //----</Old public API now is private, and migratory>------------------------
-
 
 public:
     static  wxString m_PageLayoutDescrFileName; ///< the name of the page layout descr file,
@@ -136,7 +88,6 @@ public:
     int                 m_NumberOfScreens;
 
     std::vector<double> m_ZoomList;         ///< standard zoom (i.e. scale) coefficients.
-    bool                m_IsPrinting;
 
 public:
     BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType = SCREEN_T );
@@ -266,97 +217,6 @@ public:
      * in m_ZoomList.
      */
     double GetMinAllowedZoom() const    { return m_ZoomList.size() ? *m_ZoomList.begin() : 1.0; }
-
-    //----<grid stuff>----------------------------------------------------------
-
-    /**
-     * Return the command ID of the currently selected grid.
-     *
-     * @return int - Currently selected grid command ID.
-     */
-    int GetGridCmdId() const { return m_Grid.m_CmdId; }
-
-    /**
-     * Return the grid size of the currently selected grid.
-     *
-     * @return wxRealPoint - The currently selected grid size.
-     */
-    const wxRealPoint& GetGridSize() const { return m_Grid.m_Size; }
-
-    /**
-     * Return the grid object of the currently selected grid.
-     *
-     * @return GRID_TYPE - The currently selected grid.
-     */
-    const GRID_TYPE& GetGrid() const { return m_Grid; }
-
-    /**
-     * set the current grid size m_Grid.
-     * The size must be existing in grid list (in m_grids)
-     * If not, the near existing grid size is used
-     * @param size = the size of the new grid
-     * @return the grid id offset (id from ID_POPUP_GRID_LEVEL_1000 )
-     * of the currently selected grid.
-     */
-    int SetGrid( const wxRealPoint& size );
-
-    /**
-     * Function SetGrid
-     * sets the grid size from command ID (not an index in grid list, but a wxID).
-     * @param aCommandId = the wxWidgets command ID
-     * @return the grid id offset (id from ID_POPUP_GRID_LEVEL_1000 )
-     * of the currently selected grid.
-     */
-    int SetGrid( int aCommandId );
-
-    void AddGrid( const GRID_TYPE& aGrid );
-    void AddGrid( const wxRealPoint& size, EDA_UNITS aUnit, int id );
-
-    /**
-     * Function GridExists
-     * tests for grid command ID (not an index in grid list, but a wxID) exists in grid list.
-     * @param aCommandId = the wxWidgets command ID
-     * @return true if the grid exists in grid list.
-     */
-    bool GridExists( int aCommandId );
-
-    /**
-     * Function GetGridCount().
-     * Return the size of the grid list.
-     *
-     * @returns - The size of the grid list.
-     */
-    size_t GetGridCount() const { return m_grids.size(); }
-
-    /**
-     * Function GetGrid()
-     * Returns the grid object at \a aIndex.
-     *
-     * @param aIndex - The grid list index.
-     * @return - The grid object at \a aIndex or the current grid if the grid list is empty.
-     */
-    GRID_TYPE& GetGrid( size_t aIndex );
-
-    /**
-     * Function GetGrids().
-     * Returns the current list of grids.
-     */
-    const GRIDS& GetGrids() const
-    {
-        return m_grids;
-    }
-
-    /**
-     * Function BuildGridsChoiceList().
-     * Build the human readable list of grid list, for menus or combo boxes
-     * the list shows the grid size both in mils or mm.
-     * @param aGridsList = a wxArrayString to populate
-     * @param aMmFirst = true to have mm first and mils after
-     *                   false to have mils first and mm after
-     * @return the index of the curr grid in list, if found or -1
-     */
-    int BuildGridsChoiceList( wxArrayString& aGridsList, bool aMmFirst) const;
-
 
     /**
      * Function GetClass

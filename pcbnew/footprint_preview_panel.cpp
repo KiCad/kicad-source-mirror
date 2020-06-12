@@ -31,7 +31,6 @@
 #include <fp_lib_table.h>
 #include <id.h>
 #include <io_mgr.h>
-#include <kiface_i.h>
 #include <kiway.h>
 #include <math/box2.h>
 #include <painter.h>
@@ -419,23 +418,17 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
     auto panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, std::move( gal_opts ), canvasType );
 
     if( pcbnew )
-    {
-        panel->GetGAL()->SetGridVisibility( pcbnew->IsGridVisible() );
-        panel->GetGAL()->SetGridSize( VECTOR2D( pcbnew->GetScreen()->GetGridSize() ) );
-
         panel->GetView()->GetPainter()->GetSettings()->LoadColors( pcbnew->GetColorSettings() );
-    }
     else
-    {
-        panel->GetGAL()->SetGridVisibility( cfg->m_Window.grid.show );
-
-        // Read grid size:
-        std::unique_ptr<PCB_SCREEN> temp_screen = std::make_unique<PCB_SCREEN>( wxSize() );
-        temp_screen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + cfg->m_Window.grid.last_size );
-        panel->GetGAL()->SetGridSize( VECTOR2D( temp_screen->GetGridSize() ) );
-
         panel->UpdateColors();
-    }
+
+    const GRID_SETTINGS& gridCfg = cfg->m_Window.grid;
+
+    panel->GetGAL()->SetGridVisibility( gridCfg.show );
+
+    int gridIdx = std::max( 0, std::min( gridCfg.last_size_idx, (int) gridCfg.sizes.size() ) );
+    int gridSize = (int) ValueFromString( EDA_UNITS::INCHES, gridCfg.sizes[ gridIdx ], true );
+    panel->GetGAL()->SetGridSize( VECTOR2D( gridSize, gridSize ) );
 
     return panel;
 }

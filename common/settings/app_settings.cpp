@@ -26,13 +26,12 @@
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
 
-
 ///! Update the schema version whenever a migration is required
 const int appSettingsSchemaVersion = 0;
 
 
-APP_SETTINGS_BASE::APP_SETTINGS_BASE( std::string aFilename, int aSchemaVersion ) :
-        JSON_SETTINGS( std::move( aFilename ), SETTINGS_LOC::USER, aSchemaVersion ),
+APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion ) :
+        JSON_SETTINGS( aFilename, SETTINGS_LOC::USER, aSchemaVersion ),
         m_Printing(), m_System(), m_Window(), m_appSettingsSchemaVersion( aSchemaVersion )
 {
     // Make Coverity happy:
@@ -211,6 +210,19 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
 
     ret &= fromLegacy<int>(    aCfg,
             aFrame + "_LastGridSize",        aJsonPath + ".grid.last_size" );
+
+#if defined( PCBNEW )
+    double x, y;
+
+    if( aCfg->Read( aFrame + "PcbUserGrid_X", &x ) && aCfg->Read( aFrame + "PcbUserGrid_Y", &y ) )
+    {
+        EDA_UNITS u = (EDA_UNITS)aCfg->Read( aFrame + "PcbUserGrid_Unit", (int)EDA_UNITS::INCHES );
+
+        ( *this )[PointerFromString( ".grid.user_grid_x" )] = StringFromValue( u, x, true, true );
+        ( *this )[PointerFromString( ".grid.user_grid_y" )] = StringFromValue( u, y, true, true );
+    }
+#endif
+
     ret &= fromLegacy<bool>(   aCfg,
             aFrame + gd + "GridAxesEnabled", aJsonPath + ".grid.axes_enabled" );
     ret &= fromLegacy<double>( aCfg,
@@ -227,17 +239,18 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
 
 void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std::string& aJsonPath )
 {
-    m_params.emplace_back(
-            new PARAM<bool>( aJsonPath + ".maximized", &aWindow->maximized, false ) );
+    m_params.emplace_back( new PARAM<bool>( aJsonPath + ".maximized",
+            &aWindow->maximized, false ) );
 
-    m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".mru_path", &aWindow->mru_path, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".mru_path",
+            &aWindow->mru_path, "" ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_x", &aWindow->size_x, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_y", &aWindow->size_y, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<wxString>( aJsonPath + ".perspective", &aWindow->perspective, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".perspective",
+            &aWindow->perspective, "" ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_x", &aWindow->pos_x, 0 ) );
 
@@ -246,18 +259,28 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.axes_enabled",
             &aWindow->grid.axes_enabled, false ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( aJsonPath + ".grid.last_size", &aWindow->grid.last_size, 0 ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.last_size",
+            &aWindow->grid.last_size_idx, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( aJsonPath + ".grid.line_width", &aWindow->grid.line_width, 1.0 ) );
+    m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
+            &aWindow->grid.sizes, {} ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( aJsonPath + ".grid.min_spacing", &aWindow->grid.min_spacing, 10 ) );
+    m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_x",
+            &aWindow->grid.user_grid_x, "12.5 mil" ) );
+    m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_x",
+            &aWindow->grid.user_grid_x, "12.5 mil" ) );
 
-    m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.show", &aWindow->grid.show, true ) );
+    m_params.emplace_back( new PARAM<double>( aJsonPath + ".grid.line_width",
+            &aWindow->grid.line_width, 1.0 ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.style", &aWindow->grid.style, 0 ) );
+    m_params.emplace_back( new PARAM<double>( aJsonPath + ".grid.min_spacing",
+            &aWindow->grid.min_spacing, 10 ) );
+
+    m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.show",
+            &aWindow->grid.show, true ) );
+
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.style",
+            &aWindow->grid.style, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".cursor.always_show_cursor",
             &aWindow->cursor.always_show_cursor, true ) );

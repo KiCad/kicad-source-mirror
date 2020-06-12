@@ -27,16 +27,13 @@
 using namespace std::placeholders;
 
 #include <pcb_edit_frame.h>
-
 #include <class_board.h>
 #include <class_dimension.h>
-#include <class_draw_panel_gal.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
-
-#include <gal/graphics_abstraction_layer.h>
+#include <tool/tool_manager.h>
 #include <geometry/shape_line_chain.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
@@ -50,14 +47,15 @@ using namespace std::placeholders;
 
 
 GRID_HELPER::GRID_HELPER( PCB_BASE_FRAME* aFrame ) :
-    m_frame( aFrame )
+    m_frame( aFrame ),
+    m_toolMgr( aFrame->GetToolManager() )
 {
     m_enableSnap = true;
     m_enableGrid = true;
     m_enableSnapLine = true;
     m_snapSize = 100;
     m_snapItem = nullptr;
-    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+    KIGFX::VIEW* view = m_toolMgr->GetView();
 
     m_viewAxis.SetSize( 20000 );
     m_viewAxis.SetStyle( KIGFX::ORIGIN_VIEWITEM::CROSS );
@@ -87,9 +85,7 @@ GRID_HELPER::~GRID_HELPER()
 
 VECTOR2I GRID_HELPER::GetGrid() const
 {
-    PCB_SCREEN* screen = m_frame->GetScreen();
-
-    const wxRealPoint& size = screen->GetGridSize();
+    VECTOR2D size = m_toolMgr->GetView()->GetGAL()->GetGridSize();
 
     return VECTOR2I( KiROUND( size.x ), KiROUND( size.y ) );
 }
@@ -97,7 +93,9 @@ VECTOR2I GRID_HELPER::GetGrid() const
 
 VECTOR2I GRID_HELPER::GetOrigin() const
 {
-    return VECTOR2I( m_frame->GetGridOrigin() );
+    VECTOR2D origin = m_toolMgr->GetView()->GetGAL()->GetGridOrigin();
+
+    return VECTOR2I( origin );
 }
 
 
@@ -107,12 +105,12 @@ void GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin )
     {
         m_auxAxis = aOrigin;
         m_viewAxis.SetPosition( aOrigin );
-        m_frame->GetCanvas()->GetView()->SetVisible( &m_viewAxis, true );
+        m_toolMgr->GetView()->SetVisible( &m_viewAxis, true );
     }
     else
     {
         m_auxAxis = OPT<VECTOR2I>();
-        m_frame->GetCanvas()->GetView()->SetVisible( &m_viewAxis, false );
+        m_toolMgr->GetView()->SetVisible( &m_viewAxis, false );
     }
 }
 
@@ -219,7 +217,7 @@ VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, std::vector<BOA
     for( auto item : aItems )
         computeAnchors( item, aMousePos, true );
 
-    double worldScale = m_frame->GetCanvas()->GetGAL()->GetWorldScale();
+    double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
     double lineSnapMinCornerDistance = 50.0 / worldScale;
 
     ANCHOR* nearestOutline = nearestAnchor( aMousePos, OUTLINE, LSET::AllLayersMask() );
@@ -263,9 +261,11 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
     std::set<BOARD_ITEM*> items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
 
-    auto view = m_frame->GetCanvas()->GetView();
-    auto activeLayers = view->GetPainter()->GetSettings()->GetActiveLayers();
-    bool isHighContrast = view->GetPainter()->GetSettings()->GetHighContrast();
+    KIGFX::VIEW*                  view = m_toolMgr->GetView();
+    RENDER_SETTINGS*              settings = view->GetPainter()->GetSettings();
+    const std::set<unsigned int>& activeLayers = settings->GetActiveLayers();
+    bool                          isHighContrast = settings->GetHighContrast();
+
     view->Query( aArea, selectedItems );
 
     for( auto it : selectedItems )
@@ -273,9 +273,12 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
         // The item must be visible and on an active layer
-        if( view->IsVisible( item ) && ( !isHighContrast || activeLayers.count( it.second ) )
+        if( view->IsVisible( item )
+                && ( !isHighContrast || activeLayers.count( it.second ) )
                 && item->ViewGetLOD( it.second, view ) < view->GetScale() )
+        {
             items.insert ( item );
+        }
     }
 
 
@@ -306,7 +309,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
 VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
         const std::vector<BOARD_ITEM*>& aSkip )
 {
-    double worldScale = m_frame->GetCanvas()->GetGAL()->GetWorldScale();
+    double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
     int snapRange = (int) ( m_snapSize / worldScale );
 
     BOX2I bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ), VECTOR2I( snapRange, snapRange ) );
@@ -328,12 +331,12 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
         {
             m_viewSnapPoint.SetPosition( nearest->pos );
             m_viewSnapLine.SetPosition( nearest->pos );
-            m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapLine, false );
+            m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
 
-            if( m_frame->GetCanvas()->GetView()->IsVisible( &m_viewSnapPoint ) )
-                m_frame->GetCanvas()->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
+            if( m_toolMgr->GetView()->IsVisible( &m_viewSnapPoint ) )
+                m_toolMgr->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
             else
-                m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapPoint, true );
+                m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, true );
 
             m_snapItem = nearest;
             return nearest->pos;
@@ -359,20 +362,20 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
         if( snapLine && m_skipPoint != VECTOR2I( m_viewSnapLine.GetPosition() ) )
         {
             m_viewSnapLine.SetEndPosition( nearestGrid );
-            m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapPoint, false );
+            m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
 
-            if( m_frame->GetCanvas()->GetView()->IsVisible( &m_viewSnapLine ) )
-                m_frame->GetCanvas()->GetView()->Update( &m_viewSnapLine, KIGFX::GEOMETRY );
+            if( m_toolMgr->GetView()->IsVisible( &m_viewSnapLine ) )
+                m_toolMgr->GetView()->Update( &m_viewSnapLine, KIGFX::GEOMETRY );
             else
-                m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapLine, true );
+                m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, true );
 
             return nearestGrid;
         }
     }
 
     m_snapItem = nullptr;
-    m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapPoint, false );
-    m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapLine, false );
+    m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
+    m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
     return nearestGrid;
 }
 
@@ -389,9 +392,10 @@ BOARD_ITEM* GRID_HELPER::GetSnapped( void ) const
 void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom )
 {
     VECTOR2I origin;
-    auto     view = m_frame->GetCanvas()->GetView();
-    auto     activeLayers = view->GetPainter()->GetSettings()->GetActiveLayers();
-    bool     isHighContrast = view->GetPainter()->GetSettings()->GetHighContrast();
+    KIGFX::VIEW*                  view = m_toolMgr->GetView();
+    RENDER_SETTINGS*              settings = view->GetPainter()->GetSettings();
+    const std::set<unsigned int>& activeLayers = settings->GetActiveLayers();
+    bool                          isHighContrast = settings->GetHighContrast();
 
     switch( aItem->Type() )
     {
@@ -399,7 +403,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
         {
             MODULE* mod = static_cast<MODULE*>( aItem );
 
-            for( auto pad : mod->Pads() )
+            for( D_PAD* pad : mod->Pads() )
             {
                 // Getting pads from the module requires re-checking that the pad is shown
                 if( ( aFrom ||

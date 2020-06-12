@@ -72,12 +72,6 @@ wxDECLARE_EVENT( BOARD_CHANGED, wxCommandEvent );
  */
 class PCB_BASE_FRAME : public EDA_DRAW_FRAME
 {
-public:
-    wxPoint m_UserGridSize;
-
-    int m_FastGrid1;                // 1st fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
-    int m_FastGrid2;                // 2nd fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
-
 protected:
     BOARD*                  m_Pcb;
 
@@ -181,19 +175,11 @@ public:
 
     /**
      * Function GetDisplayOptions
-     * returns the display options current in use
-     * Display options are relative to the way tracks, vias, outlines
-     * and other things are shown (for instance solid or sketch mode)
+     * Display options control the way tracks, vias, outlines and other things are shown
+     * (for instance solid or sketch mode)
      */
-    const PCB_DISPLAY_OPTIONS& GetDisplayOptions() const
-    {
-        return m_DisplayOptions;
-    }
-
-    void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
-    {
-        m_DisplayOptions = aOptions;
-    }
+    const PCB_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_DisplayOptions; }
+    void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions ) { m_DisplayOptions = aOptions; }
 
     const ZONE_SETTINGS& GetZoneSettings() const;
     void SetZoneSettings( const ZONE_SETTINGS& aSettings );
@@ -243,9 +229,7 @@ public:
 
     /**
      * Function GetZoomLevelIndicator
-     * returns a human readable value which can be displayed as zoom
-     * level indicator in dialogs.
-     * Virtual from the base class
+     * returns a human readable value for display in dialogs.
      */
     const wxString GetZoomLevelIndicator() const override;
 
@@ -258,8 +242,7 @@ public:
 
     /**
      * Function GetCollectorsGuide
-     * @return GENERAL_COLLECTORS_GUIDE - that considers the global
-     *configuration options.
+     * @return GENERAL_COLLECTORS_GUIDE - that considers the global configuration options.
      */
     GENERAL_COLLECTORS_GUIDE GetCollectorsGuide();
 
@@ -274,20 +257,18 @@ public:
 
     /**
      * Function GetFootprintFromBoardByReference
-     * @return a reference to the footprint found by its refence
-     * on the curent board. the reference is entered by the user from
-     * a dialog (by awxTextCtlr, or a list of available references)
+     * @return a reference to the footprint found by its refence on the curent board. The
+     *         reference is entered by the user from a dialog (by awxTextCtlr, or a list of
+     *         available references)
      */
     MODULE* GetFootprintFromBoardByReference();
 
     /**
      * Function OnModify
-     * Virtual
-     * Must be called after a change
-     * in order to set the "modify" flag of the current screen
-     * and update the date in frame reference
-     * do not forget to call this basic OnModify function to update info
-     * in derived OnModify functions
+     * Must be called after a change in order to set the "modify" flag of the current screen
+     * and update the date in frame reference.
+     * Do not forget to call this basic OnModify function to update info in derived OnModify
+     * functions.
      */
     virtual void OnModify();
 
@@ -305,8 +286,6 @@ public:
      * @return a reference to the new module
      */
     MODULE* CreateNewModule( const wxString& aModuleName );
-
-    void Edit_Module( MODULE* module, wxDC* DC );
 
     /**
      * Function PlaceModule
@@ -343,7 +322,6 @@ public:
      */
     wxString SelectFootprintFromLibBrowser();
 
-    //  ratsnest functions
     /**
      * Function Compile_Ratsnest
      *  Create the entire board ratsnest.
@@ -365,8 +343,7 @@ public:
      * @param aTransformPoint = the reference point of the transformation, for
      *                          commands like move
      */
-    virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
-                                     UNDO_REDO_T aTypeCommand,
+    virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy, UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
 
     /**
@@ -378,8 +355,7 @@ public:
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
-    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                     UNDO_REDO_T aTypeCommand,
+    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
 
 
@@ -390,9 +366,8 @@ public:
      * @param aDlgPosition = position of dialog ( defualt = centered)
      * @return the selected layer id
      */
-    PCB_LAYER_ID SelectLayer( PCB_LAYER_ID aDefaultLayer,
-                          LSET aNotAllowedLayersMask = LSET(),
-                          wxPoint aDlgPosition = wxDefaultPosition );
+    PCB_LAYER_ID SelectLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask = LSET(),
+                              wxPoint aDlgPosition = wxDefaultPosition );
 
     virtual void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer );
 
@@ -431,42 +406,11 @@ public:
     virtual void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) {}
 
     /**
-     * Function SetFastGrid1()
-     *
-     * Switches grid settings to the 1st "fast" setting predefined by user.
-     */
-    void SetFastGrid1();
-
-    /**
-     * Function SetFastGrid2()
-     *
-     * Switches grid settings to the 1st "fast" setting predefined by user.
-     */
-    void SetFastGrid2();
-
-    /**
-     * Function IsGridVisible()
-     *
-     * @return true if the grid is shown
-     */
-    virtual bool IsGridVisible() const override;
-
-    /**
-     * Function SetGridVisibility()
-     * Turn the display of the canvas grid on/off
-     *
-     * Note: After calling, the view must be refreshed to update the grid display
-     *
-     * @param aVisible = true if the grid is shown
-     */
-    virtual void SetGridVisibility( bool aVisible ) override;
-
-    /**
      * Function DisplayGridMsg()
      *
      * Display the current grid pane on the status bar.
      */
-    void DisplayGridMsg();
+    void DisplayGridMsg() override;
 
     PCB_DRAW_PANEL_GAL* GetCanvas() const override;
 
@@ -474,14 +418,12 @@ public:
     virtual void ActivateGalCanvas() override;
 
     /**
-     * Doesn't do anything. Should be overrided in child classes if they
-     * support an auto zoom setting.
+     * Does nothing. Should be overriden in derived classes which support autozoom.
      */
     virtual void SetAutoZoom( bool aAutoZoom ) {}
 
     /**
-     * Always returns false. Should be overriden in child classes if they
-     * support an autozoom setting.
+     * Always returns false. Should be overriden in derived classes which support autozoom.
      */
     virtual bool GetAutoZoom() { return false; }
 

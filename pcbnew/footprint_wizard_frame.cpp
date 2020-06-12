@@ -132,8 +132,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
-
     // Create GAL canvas
 #ifdef __WXMAC__
     // Cairo renderer doesn't handle Retina displays
@@ -148,7 +146,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetBoard(), gal_drawPanel->GetView(),
-                                   gal_drawPanel->GetViewControls(), this );
+                                   gal_drawPanel->GetViewControls(), config(), this );
     m_actions = new PCB_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
     gal_drawPanel->SetEventDispatcher( m_toolDispatcher );
@@ -520,29 +518,23 @@ void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
 
 void FOOTPRINT_WIZARD_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxCHECK( cfg, /*void*/ );
 
-    if( cfg )
-    {
-        EDA_DRAW_FRAME::LoadSettings( cfg );
+    PCB_BASE_FRAME::LoadSettings( cfg );
 
-        m_auiPerspective = cfg->m_FootprintViewer.perspective;
-    }
+    m_auiPerspective = cfg->m_FootprintViewer.perspective;
 }
 
 
 void FOOTPRINT_WIZARD_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxCHECK( cfg, /*void*/ );
 
-    if( cfg )
-        {
-        EDA_DRAW_FRAME::SaveSettings( cfg );
+    PCB_BASE_FRAME::SaveSettings( cfg );
 
-        cfg->m_FootprintViewer.perspective = m_auimgr.SavePerspective().ToStdString();
-    }
+    cfg->m_FootprintViewer.perspective = m_auimgr.SavePerspective().ToStdString();
 }
 
 

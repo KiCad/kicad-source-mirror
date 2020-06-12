@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,57 +27,89 @@
 #include <id.h>
 #include <eda_draw_frame.h>
 #include <base_screen.h>
+#include <settings/app_settings.h>
 #include <tool/actions.h>
 #include <bitmaps.h>
+#include <base_units.h>
 
-#include <functional>
 using namespace std::placeholders;
 
 GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
         ACTION_MENU( true ),
         m_parent( aParent )
 {
-    BASE_SCREEN* screen = m_parent->GetScreen();
-
     SetTitle( _( "Grid" ) );
     SetIcon( grid_select_xpm );
 
-    wxArrayString gridsList;
-    screen->BuildGridsChoiceList( gridsList, m_parent->GetUserUnits() != EDA_UNITS::INCHES );
+    APP_SETTINGS_BASE* settings = m_parent->config();
+    wxArrayString      gridsList;
+    int                i = 0;
 
-    for( unsigned int i = 0; i < gridsList.GetCount(); ++i )
-    {
-        GRID_TYPE& grid = screen->GetGrid( i );
-        Append( grid.m_CmdId, gridsList[i], wxEmptyString, wxITEM_CHECK );
-    }
+    BuildChoiceList( &gridsList, settings, m_parent->GetUserUnits() != EDA_UNITS::INCHES );
+
+    for( const wxString& grid : gridsList )
+        Append( i++, grid, wxEmptyString, wxITEM_CHECK );
 }
 
 
 OPT_TOOL_EVENT GRID_MENU::eventHandler( const wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT event( ACTIONS::gridPreset.MakeEvent() );
-    intptr_t idx = aEvent.GetId() - ID_POPUP_GRID_SELECT - 1;
-    event->SetParameter( idx );
-
+    event->SetParameter( (intptr_t) aEvent.GetId() );
     return event;
 }
 
 
 void GRID_MENU::update()
 {
-    BASE_SCREEN*  screen = m_parent->GetScreen();
-    int           currentId = screen->GetGridCmdId();
-    wxArrayString gridsList;
+    APP_SETTINGS_BASE* settings = m_parent->config();
+    int                current = settings->m_Window.grid.last_size_idx;
+    wxArrayString      gridsList;
 
-    screen->BuildGridsChoiceList( gridsList, m_parent->GetUserUnits() != EDA_UNITS::INCHES );
+    BuildChoiceList( &gridsList, settings, m_parent->GetUserUnits() != EDA_UNITS::INCHES );
 
     for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
     {
-        GRID_TYPE&  grid = screen->GetGrid( i );
         wxMenuItem* menuItem = FindItemByPosition( i );
 
-        menuItem->SetId( grid.m_CmdId );
-        menuItem->SetItemLabel( gridsList[ i ] );      // Refresh label in case units have changed
-        menuItem->Check( grid.m_CmdId == currentId );  // Refresh checkmark
+        menuItem->SetItemLabel( gridsList[ i ] );  // Refresh label in case units have changed
+        menuItem->Check( i == current );           // Refresh checkmark
     }
 }
+
+
+void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg, bool mmFirst )
+{
+    wxString msg;
+
+    for( const wxString& gridSize : aCfg->m_Window.grid.sizes )
+    {
+        int val = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridSize, true );
+        double gridValueMils = To_User_Unit( EDA_UNITS::INCHES, val ) * 1000;
+        double gridValue_mm = To_User_Unit( EDA_UNITS::MILLIMETRES, val );
+
+        if( mmFirst )
+            msg.Printf( _( "Grid: %.4f mm (%.2f mils)" ), gridValue_mm, gridValueMils );
+        else
+            msg.Printf( _( "Grid: %.2f mils (%.4f mm)" ), gridValueMils, gridValue_mm );
+
+        aGridsList->Add( msg );
+    }
+
+
+    if( !aCfg->m_Window.grid.user_grid_x.empty() )
+    {
+        int val = (int) ValueFromString( EDA_UNITS::INCHES, aCfg->m_Window.grid.user_grid_x, true );
+        double gridValueMils = To_User_Unit( EDA_UNITS::INCHES, val ) * 1000;
+        double gridValue_mm = To_User_Unit( EDA_UNITS::MILLIMETRES, val );
+
+        if( mmFirst )
+            msg.Printf( _( "User grid: %.4f mm (%.2f mils)" ), gridValue_mm, gridValueMils );
+        else
+            msg.Printf( _( "User grid: %.2f mils (%.4f mm)" ), gridValueMils, gridValue_mm );
+
+        aGridsList->Add( msg );
+    }
+}
+
+

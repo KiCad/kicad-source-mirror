@@ -66,7 +66,6 @@
 // TODO(JE) Debugging only
 #include <profile.h>
 
-#define EESCHEMA_FILE_STAMP   "EESchema"
 #define ZOOM_FACTOR( x )       ( x * IU_PER_MILS )
 
 
@@ -97,29 +96,6 @@ static double SchematicZoomList[] =
 };
 
 
-/* Default grid sizes for the schematic editor.
- * Do NOT add others values (mainly grid values in mm), because they
- * can break the schematic: Because wires and pins are considered as
- * connected when the are to the same coordinate we cannot mix
- * coordinates in mils (internal units) and mm (that cannot exactly
- * converted in mils in many cases).  In fact schematic must only use
- * 50 and 25 mils to place labels, wires and components others values
- * are useful only for graphic items (mainly in library editor) so use
- * integer values in mils only.  The 100 mil grid is added to help
- * conform to the KiCad Library Convention. Which states: "Using a
- * 100mil grid, pin ends and origin must lie on grid nodes IEC-60617"
-*/
-static GRID_TYPE SchematicGridList[] = {
-    { ID_POPUP_GRID_LEVEL_100, wxRealPoint( Mils2iu( 100 ), Mils2iu( 100 ) ) },
-    { ID_POPUP_GRID_LEVEL_50, wxRealPoint( Mils2iu( 50 ), Mils2iu( 50 ) ) },
-    { ID_POPUP_GRID_LEVEL_25, wxRealPoint( Mils2iu( 25 ), Mils2iu( 25 ) ) },
-    { ID_POPUP_GRID_LEVEL_10, wxRealPoint( Mils2iu( 10 ), Mils2iu( 10 ) ) },
-    { ID_POPUP_GRID_LEVEL_5, wxRealPoint( Mils2iu( 5 ), Mils2iu( 5 ) ) },
-    { ID_POPUP_GRID_LEVEL_2, wxRealPoint( Mils2iu( 2 ), Mils2iu( 2 ) ) },
-    { ID_POPUP_GRID_LEVEL_1, wxRealPoint( Mils2iu( 1 ), Mils2iu( 1 ) ) },
-};
-
-
 SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
     BASE_SCREEN( aParent, SCH_SCREEN_T ),
     m_paper( wxT( "A4" ) )
@@ -130,12 +106,6 @@ SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
 
     for( unsigned zoom : SchematicZoomList )
         m_ZoomList.push_back( zoom );
-
-    for( GRID_TYPE grid : SchematicGridList )
-        AddGrid( grid );
-
-    // Set the default grid size, now that the grid list is populated
-    SetGrid( wxRealPoint( Mils2iu( 50 ), Mils2iu( 50 ) ) );
 
     m_refCount = 0;
 

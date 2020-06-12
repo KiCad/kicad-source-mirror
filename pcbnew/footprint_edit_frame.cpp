@@ -174,9 +174,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
     GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
 
-    GetScreen()->AddGrid( m_UserGridSize, EDA_UNITS::UNSCALED, ID_POPUP_GRID_USER );
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-
     // In modedit, set the default paper size to A4 for plot/print
     SetPageSettings( PAGE_INFO( PAGE_INFO::A4 ) );
 
@@ -233,7 +230,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
 
-    GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
     updateTitle();
     InitExitKey();
@@ -272,7 +268,6 @@ void FOOTPRINT_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasTyp
     PCB_BASE_FRAME::SwitchCanvas( aCanvasType );
 
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
-    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
 
     // The base class method *does not reinit* the layers manager. We must upate the layer
     // widget to match board visibility states, both layers and render columns, and and some
@@ -448,7 +443,7 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // aCfg will be the PCBNEW_SETTINGS
     FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
 
-    EDA_DRAW_FRAME::LoadSettings( cfg );
+    PCB_BASE_FRAME::LoadSettings( cfg );
 
     GetDesignSettings() = cfg->m_DesignSettings;
 
@@ -462,7 +457,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     // aCfg will be the PCBNEW_SETTINGS
     auto cfg = GetSettings();
 
-    EDA_DRAW_FRAME::SaveSettings( cfg );
+    PCB_BASE_FRAME::SaveSettings( cfg );
 
     cfg->m_DesignSettings = GetDesignSettings();
     cfg->m_Display = m_DisplayOptions;
@@ -859,7 +854,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetBoard(), GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), this );
+                                   GetCanvas()->GetViewControls(), config(), this );
     m_actions = new PCB_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 

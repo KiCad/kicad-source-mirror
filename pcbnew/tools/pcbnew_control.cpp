@@ -42,13 +42,11 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <io_mgr.h>
 #include <kicad_clipboard.h>
-#include <kicad_plugin.h>
 #include <kiway.h>
 #include <origin_viewitem.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcb_screen.h>
-#include <pcbnew_settings.h>
 #include <properties.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
@@ -120,6 +118,7 @@ template<class T> void Flip( T& aValue )
 {
     aValue = !aValue;
 }
+
 
 int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 {
@@ -368,16 +367,14 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 // Grid control
 int PCBNEW_CONTROL::GridFast1( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetFastGrid1();
-    updateGrid();
+    m_toolMgr->RunAction( "common.Control.gridPreset", true, m_frame->Settings().m_FastGrid1 );
     return 0;
 }
 
 
 int PCBNEW_CONTROL::GridFast2( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetFastGrid2();
-    updateGrid();
+    m_toolMgr->RunAction( "common.Control.gridPreset", true, m_frame->Settings().m_FastGrid2 );
     return 0;
 }
 
@@ -958,14 +955,6 @@ int PCBNEW_CONTROL::Redo( const TOOL_EVENT& aEvent )
         editFrame->RestoreCopyFromRedoList( dummy );
 
     return 0;
-}
-
-
-void PCBNEW_CONTROL::updateGrid()
-{
-    BASE_SCREEN* screen = m_frame->GetScreen();
-    getView()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
-    getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
 
 

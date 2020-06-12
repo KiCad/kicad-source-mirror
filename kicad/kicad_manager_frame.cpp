@@ -127,7 +127,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, this );
+    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, config(), this );
     m_actions = new KICAD_MANAGER_ACTIONS();
 
     // Register tools

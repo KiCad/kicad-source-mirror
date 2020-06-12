@@ -187,13 +187,6 @@ public:
         int sash_v;
     };
 
-    struct USER_GRID
-    {
-        double size_x;
-        double size_y;
-        int    units;
-    };
-
     struct ZONES
     {
         int         hatching_style;
@@ -238,8 +231,6 @@ public:
     DIALOG_PLOT m_Plot;
 
     FOOTPRINT_CHOOSER m_FootprintChooser;
-
-    USER_GRID m_UserGrid;
 
     ZONES m_Zones;
 

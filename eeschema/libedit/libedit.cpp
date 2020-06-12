@@ -34,15 +34,11 @@
 #include <class_library.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
-#include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <lib_manager.h>
 #include <symbol_tree_pane.h>
 #include <widgets/lib_tree.h>
 #include <sch_legacy_plugin.h>
-#include <dialog_choose_component.h>
-#include <symbol_tree_model_adapter.h>
-#include <tool/tool_manager.h>
 #include <dialogs/dialog_lib_new_component.h>
 #include <dialog_helpers.h>
 #include <wx/clipbrd.h>
@@ -200,23 +196,6 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
     return true;
 }
 
-/**
- * Synchronize screen settings from a current screen into another screen.
- *
- * This can be used, for example, when loading a new screen into a frame,
- * but you want the new screen to inherit some settings (e.g. grids) from the
- * frame's current screen.
- *
- * @param aCurrentScreen    the existing frame screen
- * @param aIncomingScreen   a screen that is intended to replace the current screen
- */
-static void synchronizeLibEditScreenSettings( const SCH_SCREEN& aCurrentScreen,
-                                              SCH_SCREEN& aIncomingScreen )
-{
-    aIncomingScreen.SetGrid( aCurrentScreen.GetGridSize() );
-}
-
-
 bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aLibrary,
                                             int aUnit, int aConvert )
 {
@@ -239,14 +218,6 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aL
 
     // The buffered screen for the part
     SCH_SCREEN* part_screen = m_libMgr->GetScreen( lib_part->GetName(), aLibrary );
-
-    const SCH_SCREEN* curr_screen = GetScreen();
-
-    // Before we set the frame screen, transfer any settings from the current
-    // screen that we want to keep to the incoming (buffered) part's screen
-    // which could be out of date relative to the current screen.
-    if( curr_screen )
-        synchronizeLibEditScreenSettings( *curr_screen, *part_screen );
 
     SetScreen( part_screen );
     SetCurPart( new LIB_PART( *lib_part ) );

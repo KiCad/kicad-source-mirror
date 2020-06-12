@@ -44,7 +44,6 @@
 #include <view/view_controls.h>
 #include <pcb_painter.h>
 #include <invoke_pcb_dialog.h>
-#include <class_track.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <ws_proxy_view_item.h>
@@ -67,7 +66,6 @@
 #include <tools/edit_tool.h>
 #include <tools/global_edit_tool.h>
 #include <tools/drawing_tool.h>
-#include <tools/point_editor.h>
 #include <tools/pcbnew_control.h>
 #include <tools/pcb_editor_control.h>
 #include <tools/pcb_inspection_tool.h>
@@ -213,9 +211,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // PCB drawings start in the upper left corner.
     GetScreen()->m_Center = false;
 
-    GetScreen()->AddGrid( m_UserGridSize, EDA_UNITS::UNSCALED, ID_POPUP_GRID_USER );
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
-
     setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -270,7 +265,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
 
-    GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
 
     m_canvasType = LoadCanvasTypeSetting();
@@ -430,7 +424,7 @@ void PCB_EDIT_FRAME::setupTools()
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( m_Pcb, GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), this );
+                                   GetCanvas()->GetViewControls(), config(), this );
     m_actions = new PCB_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
@@ -961,9 +955,7 @@ void PCB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
     // switches currently used canvas (Cairo / OpenGL).
     PCB_BASE_FRAME::SwitchCanvas( aCanvasType );
 
-    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
-
-    // The base class method *does not reinit* the layers manager. We must upate the
+    // The base class method *does not* reinitialize the layers manager. We must upate the
     // layer widget to match board visibility states, both layers and render columns.
     syncLayerVisibilities();
     syncLayerWidgetLayer();

@@ -60,20 +60,8 @@ class GERBVIEW_FRAME : public EDA_DRAW_FRAME    // PCB_BASE_FRAME
     GBR_DISPLAY_OPTIONS m_DisplayOptions;
 
 public:
-
-    /**
-     * Function GetDisplayOptions
-     * returns the display options current in use
-     */
-    const GBR_DISPLAY_OPTIONS& GetDisplayOptions() const
-    {
-        return m_DisplayOptions;
-    }
-
-    void SetDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
-    {
-        m_DisplayOptions = aOptions;
-    }
+    const GBR_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_DisplayOptions; }
+    void SetDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions ) { m_DisplayOptions = aOptions; }
 
     /**
      * Function SetLayout
@@ -164,8 +152,6 @@ public:
                                                 // gerber data (format..)
 
 private:
-    std::vector<PARAM_CFG*> m_configSettings;
-
     int             m_displayMode;      // Gerber images ("layers" in Gerbview) can be drawn:
                                         // - in fast mode (write mode) but if there are negative
                                         // items only the last image is correctly drawn (no
@@ -224,18 +210,15 @@ public:
     /**
      * Function ReCreateVToolbar
      * creates or updates the right vertical toolbar.
-     *
-     * @note This is currently not used.
      */
     void ReCreateVToolbar() override;
 
     /**
-     * Create or update the left vertical toolbar (option toolbar
+     * Create or update the left vertical toolbar (option toolbar)
      */
     void ReCreateOptToolbar() override;
 
     void ReCreateMenuBar() override;
-    void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
     void UpdateStatusBar() override;
 
     /**
@@ -317,37 +300,26 @@ public:
 
     void SetVisibleElementColor( int aLayerID, COLOR4D aColor );
 
-    /**
-     * Function GetLayerColor
-     * gets a layer color for any valid layer.
-     */
     COLOR4D GetLayerColor( int aLayer ) const;
-
-    /**
-     * Function SetLayerColor
-     * changes a layer color for any valid layer.
-     */
     void SetLayerColor( int aLayer, COLOR4D aColor );
 
     /**
      * Function GetNegativeItemsColor
      * @return the color of negative items.
-     * This is usually the background color, but can be another color
-     * in order to see negative objects
+     * This is usually the background color, but can be another color in order to see
+     * negative objects
      */
     COLOR4D GetNegativeItemsColor();
 
     /**
      * Function ReFillLayerWidget
-     * changes out all the layers in m_Layers and may be called upon
-     * loading new gerber files.
+     * changes out all the layers in m_Layers; called upon loading new gerber files.
      */
     void ReFillLayerWidget();
 
     /**
      * Function SetActiveLayer
-     * will change the currently active layer to \a aLayer and also
-     * update the GERBER_LAYER_WIDGET.
+     * will change the currently active layer to \a aLayer and update the GERBER_LAYER_WIDGET.
      */
     void SetActiveLayer( int aLayer, bool doLayerWidgetUpdate = true );
 
@@ -366,26 +338,20 @@ public:
      */
     int getNextAvailableLayer( int aLayer = 0 ) const;
 
-    bool hasAvailableLayers() const
-    {
-        return getNextAvailableLayer() != NO_AVAILABLE_LAYERS;
-    }
-
     /**
      * Function syncLayerWidget
      * updates the currently "selected" layer within the GERBER_LAYER_WIDGET.
      * The currently active layer is defined by the return value of GetActiveLayer().
      * <p>
-     * This function cannot be inline without including layer_widget.h in
-     * here and we do not want to do that.
+     * This function cannot be inline without including layer_widget.h in here and we do not
+     * want to do that.
      */
     void syncLayerWidget();
 
     /**
      * Function syncLayerBox
      * updates the currently "selected" layer within m_SelLayerBox
-     * The currently active layer, as defined by the return value of
-     * GetActiveLayer().
+     * The currently active layer, as defined by the return value of GetActiveLayer().
      * @param aRebuildLayerBox = true to rebuild the layer box
      *  false to just updates the selection.
      */
@@ -393,9 +359,8 @@ public:
 
     /**
      * Function UpdateTitleAndInfo
-     * displays the short filename (if exists) of the selected layer
-     * on the caption of the main GerbView window
-     * and some other parameters
+     * displays the short filename (if exists) of the selected layer on the caption of the main
+     * GerbView window and some other parameters
      *    Name of the layer (found in the gerber file: LN &ltname&gt command) in the status bar
      *    Name of the Image (found in the gerber file: IN &ltname&gt command) in the status bar
      *    and other data in toolbar
@@ -407,7 +372,7 @@ public:
      *
      * Display the current grid pane on the status bar.
      */
-    void DisplayGridMsg();
+    void DisplayGridMsg() override;
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 

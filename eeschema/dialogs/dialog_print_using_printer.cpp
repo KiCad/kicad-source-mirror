@@ -486,8 +486,6 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     dc->SetLogicalFunction( wxCOPY );
     GRResetPenAndBrush( dc );
 
-    aScreen->m_IsPrinting = true;
-
     COLOR4D savedBgColor = m_parent->GetDrawBgColor();
     COLOR4D bgColor      = m_parent->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
@@ -529,7 +527,6 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     aScreen->Print( &renderSettings );
 
     m_parent->SetDrawBgColor( savedBgColor );
-    aScreen->m_IsPrinting = false;
 
     GRForceBlackPen( false );
 

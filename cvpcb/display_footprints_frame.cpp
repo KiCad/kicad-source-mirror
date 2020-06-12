@@ -92,12 +92,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     LoadSettings( config() );
 
-    // Initialize grid id to a default value if not found in config or incorrect:
-    if( !( GetScreen()->GridExists( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) ) )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
-
-    GetScreen()->SetGrid( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 );
-
     // Initialize some display options
     auto displ_opts = GetDisplayOptions();
     displ_opts.m_DisplayPadIsol = false;      // Pad clearance has no meaning here
@@ -109,7 +103,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetBoard(), gal_drawPanel->GetView(),
-                                   gal_drawPanel->GetViewControls(), this );
+                                   gal_drawPanel->GetViewControls(), config(), this );
     m_actions = new CVPCB_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
     gal_drawPanel->SetEventDispatcher( m_toolDispatcher );
@@ -135,16 +129,11 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar,
-                     EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_optionsToolBar,
-                      EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
-    m_auimgr.AddPane( m_infoBar,
-                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
-    m_auimgr.AddPane( GetCanvas(),
-                      EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
-    m_auimgr.AddPane( m_messagePanel,
-                      EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
     // hidding it.
@@ -199,7 +188,6 @@ void DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow( wxCloseEvent& event )
 void DISPLAY_FOOTPRINTS_FRAME::ReCreateVToolbar()
 {
     // Currently, no vertical right toolbar.
-    // So do nothing
 }
 
 
@@ -280,7 +268,7 @@ void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // We don't allow people to change this right now, so make sure it's on
     GetWindowSettings( cfg )->cursor.always_show_cursor = true;
 
-    EDA_DRAW_FRAME::LoadSettings( cfg );
+    PCB_BASE_FRAME::LoadSettings( cfg );
 
     SetDisplayOptions( cfg->m_FootprintViewerDisplayOptions );
 }
@@ -291,7 +279,7 @@ void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
     wxCHECK( cfg, /* void */ );
 
-    EDA_DRAW_FRAME::SaveSettings( cfg );
+    PCB_BASE_FRAME::SaveSettings( cfg );
 
     cfg->m_FootprintViewerDisplayOptions = GetDisplayOptions();
 
@@ -312,17 +300,6 @@ MAGNETIC_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetMagneticItemsSettings()
     auto cfg = dynamic_cast<CVPCB_SETTINGS*>( Kiface().KifaceSettings() );
     wxCHECK( cfg, nullptr );
     return &cfg->m_FootprintViewerMagneticSettings;
-}
-
-
-void DISPLAY_FOOTPRINTS_FRAME::ApplyDisplaySettingsToGAL()
-{
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
-
-    painter->GetSettings()->LoadDisplayOptions( GetDisplayOptions(), false );
-
-    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
-    GetCanvas()->Refresh();
 }
 
 

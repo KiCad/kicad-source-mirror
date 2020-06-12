@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -57,6 +57,7 @@
 #include <dialogs/panel_gerbview_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <wx/wupdlock.h>
+#include <tool/grid_menu.h>
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
         : EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ), wxDefaultPosition,
@@ -122,12 +123,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
     LoadSettings( config() );
-
-    if( m_LastGridSizeId < 0 )
-        m_LastGridSizeId = 0;
-
-    if( m_LastGridSizeId > ID_POPUP_GRID_LEVEL_0_0_1MM-ID_POPUP_GRID_LEVEL_1000 )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_0_0_1MM-ID_POPUP_GRID_LEVEL_1000;
 
     setupTools();
     ReCreateMenuBar();
@@ -206,10 +201,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
-    GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
-
-    if( GetCanvas() )
-        GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 
     // Update the checked state of tools
     SyncToolbars();
@@ -311,6 +302,32 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
+
+    if( cfg->m_Window.grid.sizes.empty() )
+    {
+        cfg->m_Window.grid.sizes = { "100 mil",
+                                     "50 mil",
+                                     "25 mil",
+                                     "20 mil",
+                                     "10 mil",
+                                     "5 mil",
+                                     "2.5 mil",
+                                     "2 mil",
+                                     "1 mil",
+                                     "0.5 mil",
+                                     "0.2 mil",
+                                     "0.1 mil",
+                                     "5.0 mm",
+                                     "2.5 mm",
+                                     "1.0 mm",
+                                     "0.5 mm",
+                                     "0.25 mm",
+                                     "0.2 mm",
+                                     "0.1 mm",
+                                     "0.05 mm",
+                                     "0.025 mm",
+                                     "0.01 mm" };
+    }
 
     SetElementVisibility( LAYER_WORKSHEET, cfg->m_Appearance.show_border_and_titleblock );
 
@@ -953,26 +970,13 @@ void GERBVIEW_FRAME::DisplayGridMsg()
 
     switch( m_userUnits )
     {
-    case EDA_UNITS::INCHES:
-        gridformatter = "grid X %.6f  Y %.6f";
-        break;
-
-    case EDA_UNITS::MILLIMETRES:
-        gridformatter = "grid X %.6f  Y %.6f";
-        break;
-
-    default:
-        gridformatter = "grid X %f  Y %f";
-        break;
+    case EDA_UNITS::INCHES:      gridformatter = "grid X %.6f  Y %.6f"; break;
+    case EDA_UNITS::MILLIMETRES: gridformatter = "grid X %.6f  Y %.6f"; break;
+    default:                     gridformatter = "grid X %f  Y %f";     break;
     }
 
-    BASE_SCREEN* screen = GetScreen();
-    wxArrayString gridsList;
-
-    int        icurr = screen->BuildGridsChoiceList( gridsList, m_userUnits != EDA_UNITS::INCHES );
-    GRID_TYPE& grid = screen->GetGrid( icurr );
-    double grid_x = To_User_Unit( m_userUnits, grid.m_Size.x );
-    double grid_y = To_User_Unit( m_userUnits, grid.m_Size.y );
+    double grid_x = To_User_Unit( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().x );
+    double grid_y = To_User_Unit( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().y );
     line.Printf( gridformatter, grid_x, grid_y );
 
     SetStatusText( line, 4 );
@@ -1001,16 +1005,10 @@ void GERBVIEW_FRAME::UpdateStatusBar()
 
         switch( GetUserUnits() )
         {
-        case EDA_UNITS::INCHES:
-            formatter = wxT( "r %.6f  theta %.1f" );
-            break;
-        case EDA_UNITS::MILLIMETRES:
-            formatter = wxT( "r %.5f  theta %.1f" );
-            break;
-        case EDA_UNITS::UNSCALED:
-            formatter = wxT( "r %f  theta %f" );
-            break;
-        default:             wxASSERT( false );                       break;
+        case EDA_UNITS::INCHES:      formatter = wxT( "r %.6f  theta %.1f" ); break;
+        case EDA_UNITS::MILLIMETRES: formatter = wxT( "r %.5f  theta %.1f" ); break;
+        case EDA_UNITS::UNSCALED:    formatter = wxT( "r %f  theta %f" );     break;
+        default:                     wxASSERT( false );                       break;
         }
 
         line.Printf( formatter, To_User_Unit( GetUserUnits(), ro ), theta );
@@ -1101,7 +1099,7 @@ void GERBVIEW_FRAME::ActivateGalCanvas()
     if( m_toolManager )
     {
         m_toolManager->SetEnvironment( m_gerberLayout, GetCanvas()->GetView(),
-                                       GetCanvas()->GetViewControls(), this );
+                                       GetCanvas()->GetViewControls(), config(), this );
         m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
     }
 
@@ -1143,7 +1141,7 @@ void GERBVIEW_FRAME::setupTools()
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( m_gerberLayout, GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), this );
+                                   GetCanvas()->GetViewControls(), config(), this );
     m_actions = new GERBVIEW_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
@@ -1171,15 +1169,13 @@ void GERBVIEW_FRAME::updateGridSelectBox()
     // Update grid values with the current units setting.
     m_gridSelectBox->Clear();
     wxArrayString gridsList;
-    int icurr = GetScreen()->BuildGridsChoiceList( gridsList, GetUserUnits() != EDA_UNITS::INCHES );
 
-    for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
-    {
-        GRID_TYPE& grid = GetScreen()->GetGrid( i );
-        m_gridSelectBox->Append( gridsList[i], (void*) &grid.m_CmdId );
-    }
+    GRID_MENU::BuildChoiceList( &gridsList, config(), GetUserUnits() != EDA_UNITS::INCHES );
 
-    m_gridSelectBox->SetSelection( icurr );
+    for( const wxString& grid : gridsList )
+        m_gridSelectBox->Append( grid );
+
+    m_gridSelectBox->SetSelection( config()->m_Window.grid.last_size_idx );
 }
 
 
@@ -1207,30 +1203,6 @@ void GERBVIEW_FRAME::updateZoomSelectBox()
         if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
             m_zoomSelectBox->SetSelection( i + 1 );
     }
-}
-
-
-void GERBVIEW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
-{
-    if( m_zoomSelectBox == NULL || m_auxiliaryToolBar == NULL )
-        return;
-
-    int current = 0;    // display Auto if no match found
-
-    // check for a match within 1%
-    double zoom = GetCanvas()->GetLegacyZoom();
-
-    for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
-    {
-        if( std::fabs( zoom - GetScreen()->m_ZoomList[i] ) < ( zoom / 100.0 ) )
-        {
-            current = i + 1;
-            break;
-        }
-    }
-
-    if( current != m_zoomSelectBox->GetSelection() )
-        m_zoomSelectBox->SetSelection( current );
 }
 
 

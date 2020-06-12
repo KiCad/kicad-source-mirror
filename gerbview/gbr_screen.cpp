@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,19 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file gbr_screen.cpp
- */
-
 #include <fctsys.h>
-#include <common.h>
 #include <macros.h>
 #include <gbr_screen.h>
-#include <gerbview_id.h>
-
-
-#define MIL_GRID( x ) wxRealPoint( x * IU_PER_MILS, x * IU_PER_MILS)
-#define MM_GRID( x )   wxRealPoint( x * IU_PER_MM, x * IU_PER_MM )
 
 
 /**
@@ -67,67 +57,15 @@ static const double gbrZoomList[] =
 };
 
 
-// Default grid sizes for PCB editor screens.
-static GRID_TYPE gbrGridList[] =
-{
-    // predefined grid list in mils
-    { ID_POPUP_GRID_LEVEL_1000,     MIL_GRID( 100 )    },
-    { ID_POPUP_GRID_LEVEL_500,      MIL_GRID( 50 )     },
-    { ID_POPUP_GRID_LEVEL_250,      MIL_GRID( 25 )     },
-    { ID_POPUP_GRID_LEVEL_200,      MIL_GRID( 20 )     },
-    { ID_POPUP_GRID_LEVEL_100,      MIL_GRID( 10 )     },
-    { ID_POPUP_GRID_LEVEL_50,       MIL_GRID( 5 )      },
-    { ID_POPUP_GRID_LEVEL_25,       MIL_GRID( 2.5 )    },
-    { ID_POPUP_GRID_LEVEL_20,       MIL_GRID( 2 )      },
-    { ID_POPUP_GRID_LEVEL_10,       MIL_GRID( 1 )      },
-    { ID_POPUP_GRID_LEVEL_5,        MIL_GRID( 0.5 )    },
-    { ID_POPUP_GRID_LEVEL_2,        MIL_GRID( 0.2 )    },
-    { ID_POPUP_GRID_LEVEL_1,        MIL_GRID( 0.1 )    },
-
-    // predefined grid list in mm
-    { ID_POPUP_GRID_LEVEL_5MM,      MM_GRID( 5.0 )     },
-    { ID_POPUP_GRID_LEVEL_2_5MM,    MM_GRID( 2.5 )     },
-    { ID_POPUP_GRID_LEVEL_1MM,      MM_GRID( 1.0 )     },
-    { ID_POPUP_GRID_LEVEL_0_5MM,    MM_GRID( 0.5 )     },
-    { ID_POPUP_GRID_LEVEL_0_25MM,   MM_GRID( 0.25 )    },
-    { ID_POPUP_GRID_LEVEL_0_2MM,    MM_GRID( 0.2 )     },
-    { ID_POPUP_GRID_LEVEL_0_1MM,    MM_GRID( 0.1 )     },
-    { ID_POPUP_GRID_LEVEL_0_0_5MM,  MM_GRID( 0.05 )    },
-    { ID_POPUP_GRID_LEVEL_0_0_25MM, MM_GRID( 0.025 )   },
-    { ID_POPUP_GRID_LEVEL_0_0_1MM,  MM_GRID( 0.01 )    }
-};
-
-
 GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
     for( unsigned i = 0; i < arrayDim( gbrZoomList );  ++i )
         m_ZoomList.push_back( gbrZoomList[i] );
 
-    for( unsigned i = 0; i < arrayDim( gbrGridList );  ++i )
-        AddGrid( gbrGridList[i] );
-
-    // Set the working grid size to a reasonable value
-    SetGrid( MIL_GRID( 50 ) );
     SetZoom( ZOOM_FACTOR( 350 ) );  // a default value for zoom
 
     m_Active_Layer       = 0;       // default active layer = first graphic layer
 
     InitDataPoints( aPageSizeIU );
-}
-
-
-GBR_SCREEN::~GBR_SCREEN()
-{
-    ClearUndoRedoList();
-}
-
-
-/* Virtual function needed by classes derived from BASE_SCREEN
- * this is a virtual pure function in BASE_SCREEN
- * do nothing in GerbView
- * could be removed later
- */
-void GBR_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
-{
 }

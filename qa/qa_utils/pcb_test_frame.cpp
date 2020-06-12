@@ -128,7 +128,7 @@ void PCB_TEST_FRAME::SetBoard( BOARD* b )
     m_galPanel->DisplayBoard( m_board.get() );
 #ifdef USE_TOOL_MANAGER
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
-            m_galPanel->GetViewControls(), nullptr );
+            m_galPanel->GetViewControls(), nullptr, nullptr );
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 #endif
@@ -204,7 +204,7 @@ PCB_TEST_FRAME::PCB_TEST_FRAME( wxFrame* frame, const wxString& title, const wxP
 #ifdef USE_TOOL_MANAGER
     m_toolManager = std::make_unique<TOOL_MANAGER>( );
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
-            m_galPanel->GetViewControls(), nullptr );
+            m_galPanel->GetViewControls(), nullptr, nullptr );
 
     m_pcbActions = std::make_unique<TEST_ACTIONS>( );
     m_toolDispatcher = std::make_unique<TOOL_DISPATCHER>( m_toolManager.get(), m_pcbActions.get() );

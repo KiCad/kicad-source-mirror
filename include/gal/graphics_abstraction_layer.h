@@ -847,10 +847,9 @@ public:
      *
      * @param aVisibility is the new visibility setting of the grid.
      */
-    inline void SetGridVisibility( bool aVisibility )
-    {
-        gridVisibility = aVisibility;
-    }
+    void SetGridVisibility( bool aVisibility ) { gridVisibility = aVisibility; }
+
+    bool GetGridVisibility() const { return gridVisibility; }
 
     /**
      * @brief Set the origin point for the grid.
@@ -866,6 +865,11 @@ public:
         else
             gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
                                    (long) gridOrigin.y % (long) gridSize.y );
+    }
+
+    inline const VECTOR2D& GetGridOrigin() const
+    {
+        return gridOrigin;
     }
 
     /**

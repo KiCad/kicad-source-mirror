@@ -24,6 +24,8 @@
 #include <dialog_set_grid_base.h>
 #include <base_units.h>
 #include <common.h>
+#include <settings/app_settings.h>
+#include <pcbnew_settings.h>
 #include <widgets/unit_binder.h>
 #include <pcb_base_edit_frame.h>
 #include <tools/pcb_actions.h>
@@ -31,6 +33,7 @@
 #include <id.h>
 #include <tool/common_tools.h>
 #include <math/util.h>      // for KiROUND
+#include <tool/grid_menu.h>
 
 // Max values for grid size
 static const int MAX_GRID_SIZE = KiROUND( 1000.0 * IU_PER_MM );
@@ -40,11 +43,10 @@ static const int MIN_GRID_SIZE = KiROUND( 0.001 * IU_PER_MM );
 class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
 {
     PCB_BASE_FRAME* m_parent;
-    wxArrayString   m_fast_grid_opts;
 
 public:
     /// This has no dependencies on calling wxFrame derivative, such as PCB_BASE_FRAME.
-    DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& aGridChoices );
+    DIALOG_SET_GRID( PCB_BASE_FRAME* aParent );
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -59,17 +61,18 @@ private:
 };
 
 
-DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& aGridChoices ):
+DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent ):
     DIALOG_SET_GRID_BASE( aParent ),
     m_parent( aParent ),
-    m_fast_grid_opts( aGridChoices ),
     m_gridOriginX( aParent, m_staticTextGridPosX, m_GridOriginXCtrl, m_TextPosXUnits ),
     m_gridOriginY( aParent, m_staticTextGridPosY, m_GridOriginYCtrl, m_TextPosYUnits ),
-    m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits ),
-    m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits )
+    m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits, true ),
+    m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits, true )
 {
-    m_grid1Ctrl->Append( m_fast_grid_opts );
-    m_grid2Ctrl->Append( m_fast_grid_opts );
+    wxArrayString grids;
+    GRID_MENU::BuildChoiceList( &grids, m_parent->config(), GetUserUnits() != EDA_UNITS::INCHES );
+    m_grid1Ctrl->Append( grids );
+    m_grid2Ctrl->Append( grids );
 
     m_sdbSizerOK->SetDefault();         // set OK button as default response to 'Enter' key
     SetInitialFocus( m_GridOriginXCtrl );
@@ -91,26 +94,19 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
         return false;
 
     // Apply the new settings
+    GRID_SETTINGS& gridCfg = m_parent->config()->m_Window.grid;
 
     // Because grid origin is saved in board, show as modified
     m_parent->OnModify();
     m_parent->SetGridOrigin( wxPoint( m_gridOriginX.GetValue(), m_gridOriginY.GetValue() ) );
-    m_parent->m_UserGridSize = wxPoint( m_userGridX.GetValue(), m_userGridY.GetValue() );
-    m_parent->m_FastGrid1 = m_grid1Ctrl->GetSelection();
-    m_parent->m_FastGrid2 = m_grid2Ctrl->GetSelection();
-
-    // User grid
-    BASE_SCREEN* screen = m_parent->GetScreen();
-    screen->AddGrid( m_parent->m_UserGridSize, EDA_UNITS::UNSCALED, ID_POPUP_GRID_USER );
-
-    // If the user grid is the current option, recall SetGrid()
-    // to force new values put in list as current grid value
-    if( screen->GetGridCmdId() == ID_POPUP_GRID_USER )
-        screen->SetGrid( ID_POPUP_GRID_USER );
+    gridCfg.user_grid_x = StringFromValue( GetUserUnits(), m_userGridX.GetValue(), true, true );
+    gridCfg.user_grid_y = StringFromValue( GetUserUnits(), m_userGridY.GetValue(), true, true );
+    m_parent->Settings().m_FastGrid1 = m_grid1Ctrl->GetSelection();
+    m_parent->Settings().m_FastGrid2 = m_grid2Ctrl->GetSelection();
 
     // Notify GAL
     TOOL_MANAGER* mgr = m_parent->GetToolManager();
-    mgr->GetTool<COMMON_TOOLS>()->GridPreset( screen->GetGridCmdId() - ID_POPUP_GRID_LEVEL_1000 );
+    mgr->RunAction( ACTIONS::gridPreset, true, gridCfg.last_size_idx );
     mgr->RunAction( ACTIONS::gridSetOrigin, true, new VECTOR2D( m_parent->GetGridOrigin() ) );
 
     m_parent->UpdateGridSelectBox();
@@ -121,14 +117,16 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
 
 bool DIALOG_SET_GRID::TransferDataToWindow()
 {
-    m_userGridX.SetValue( m_parent->m_UserGridSize.x );
-    m_userGridY.SetValue( m_parent->m_UserGridSize.y );
+    GRID_SETTINGS& settings = m_parent->config()->m_Window.grid;
+
+    m_userGridX.SetValue( ValueFromString( GetUserUnits(), settings.user_grid_x, true ) );
+    m_userGridY.SetValue( ValueFromString( GetUserUnits(), settings.user_grid_y, true ) );
 
     m_gridOriginX.SetValue( m_parent->GetGridOrigin().x );
     m_gridOriginY.SetValue( m_parent->GetGridOrigin().y );
 
-    m_grid1Ctrl->SetSelection( m_parent->m_FastGrid1 );
-    m_grid2Ctrl->SetSelection( m_parent->m_FastGrid2 );
+    m_grid1Ctrl->SetSelection( m_parent->Settings().m_FastGrid1 );
+    m_grid2Ctrl->SetSelection( m_parent->Settings().m_FastGrid2 );
 
     int hk1 = ACTIONS::gridFast1.GetHotKey();
     int hk2 = ACTIONS::gridFast2.GetHotKey();
@@ -148,7 +146,7 @@ void DIALOG_SET_GRID::OnResetGridOrgClick( wxCommandEvent& event )
 
 void PCB_BASE_EDIT_FRAME::OnGridSettings( wxCommandEvent& event )
 {
-    DIALOG_SET_GRID dlg( this, m_gridSelectBox->GetStrings() );
+    DIALOG_SET_GRID dlg( this );
 
     dlg.ShowModal();
 

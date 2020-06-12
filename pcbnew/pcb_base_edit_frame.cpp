@@ -104,7 +104,7 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
         GetCanvas()->UpdateColors();
         m_toolManager->SetEnvironment( aBoard, GetCanvas()->GetView(),
-                                       GetCanvas()->GetViewControls(), this );
+                                       GetCanvas()->GetViewControls(), config(), this );
 
         if( new_board )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );

@@ -81,6 +81,7 @@ public:
     int ToggleGrid( const TOOL_EVENT& aEvent );
     int GridProperties( const TOOL_EVENT& aEvent );
     int GridPreset( int idx );
+    int OnGridChanged();
 
     int SwitchCanvas( const TOOL_EVENT& aEvent );
 
@@ -95,6 +96,8 @@ private:
 
     ///> Note: idx == 0 is Auto; idx == 1 is first entry in zoomList
     int doZoomToPreset( int idx, bool aCenterOnCursor );
+
+    std::vector<VECTOR2I> m_grids;  // grids from APP_SETTINGS converted to internal units
 };
 
 #endif

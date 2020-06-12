@@ -598,15 +598,12 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 
     GRResetPenAndBrush( &dc );
     GRForceBlackPen( false );
-    screen->m_IsPrinting = true;
     dc.SetUserScale( scale, scale );
 
     dc.Clear();
     GetRenderSettings()->SetPrintDC( &dc );
 
     PrintPage( GetRenderSettings() );
-
-    screen->m_IsPrinting = false;
 
     if( wxTheClipboard->Open() )
     {

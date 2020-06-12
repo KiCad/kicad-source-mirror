@@ -92,7 +92,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
 
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( m_dummyBoard, nullptr, nullptr, this );
+    m_toolManager->SetEnvironment( m_dummyBoard, nullptr, nullptr, nullptr, this );
 
     m_actions = new EDA_3D_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
