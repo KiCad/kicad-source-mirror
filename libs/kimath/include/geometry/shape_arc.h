@@ -30,6 +30,7 @@
 #include <geometry/shape.h>
 #include <math/box2.h>       // for BOX2I
 #include <math/vector2d.h>   // for VECTOR2I
+#include <trigo.h>
 
 class SHAPE_LINE_CHAIN;
 
@@ -37,7 +38,7 @@ class SHAPE_ARC : public SHAPE
 {
 public:
     SHAPE_ARC() :
-        SHAPE( SH_ARC ), m_centralAngle( 0.0 ), m_width( 0 ) {};
+        SHAPE( SH_ARC ), m_width( 0 ) {};
 
     /**
      * SHAPE_ARC ctor.
@@ -47,22 +48,19 @@ public:
      * @param aWidth is the arc line thickness
      */
     SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
-               double aCenterAngle, int aWidth = 0 ) :
-        SHAPE( SH_ARC ), m_p0( aArcStartPoint ), m_pc( aArcCenter ), m_centralAngle( aCenterAngle ),
-        m_width( aWidth )
-    {
-        update_bbox();
-    }
+               double aCenterAngle, int aWidth = 0 );
 
-    SHAPE_ARC( const SHAPE_ARC& aOther )
-        : SHAPE( SH_ARC )
-    {
-        m_p0 = aOther.m_p0;
-        m_pc = aOther.m_pc;
-        m_centralAngle = aOther.m_centralAngle;
-        m_width = aOther.m_width;
-        m_bbox = aOther.m_bbox;
-    }
+    /**
+     * SHAPE_ARC ctor.
+     * @param aArcStart is the arc start point
+     * @param aArcEnd is the arc end point
+     * @param aArcMid is the arc mid point
+     * @param aWidth is the arc line thickness
+     */
+    SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
+               const VECTOR2I& aArcEnd, int aWidth );
+
+    SHAPE_ARC( const SHAPE_ARC& aOther );
 
     virtual ~SHAPE_ARC() {}
 
@@ -71,10 +69,10 @@ public:
         return new SHAPE_ARC( *this );
     }
 
-    const VECTOR2I& GetP0() const { return m_p0; }
-    const VECTOR2I GetP1() const;
-    const VECTOR2I GetArcMid() const;
-    const VECTOR2I& GetCenter() const { return m_pc; }
+    const VECTOR2I& GetP0() const { return m_start; }
+    const VECTOR2I& GetP1() const { return m_end; }
+    const VECTOR2I& GetArcMid() const { return m_mid; }
+    VECTOR2I GetCenter() const;
 
     const BOX2I BBox( int aClearance = 0 ) const override;
 
@@ -96,12 +94,7 @@ public:
         return true;
     }
 
-    void Move( const VECTOR2I& aVector ) override
-    {
-        m_p0 += aVector;
-        m_pc += aVector;
-        update_bbox();
-    }
+    void Move( const VECTOR2I& aVector ) override;
 
     /**
      * Function Rotate
@@ -109,60 +102,20 @@ public:
      * @param aCenter is the rotation center
      * @param aAngle rotation angle in radians
      */
-    void Rotate( double aAngle, const VECTOR2I& aCenter )
-    {
-        m_p0 -= aCenter;
-        m_pc -= aCenter;
+    void Rotate( double aAngle, const VECTOR2I& aCenter );
 
-        m_p0.Rotate( aAngle );
-        m_pc.Rotate( aAngle );
-
-        m_pc += aCenter;
-        m_p0 += aCenter;
-        update_bbox();
-    }
-
-    void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aVector = { 0, 0 } )
-    {
-        if( aX )
-        {
-            m_p0.x = -m_p0.x + 2 * aVector.x;
-            m_pc.x = -m_pc.x + 2 * aVector.x;
-            m_centralAngle = - m_centralAngle;
-        }
-
-        if( aY )
-        {
-            m_p0.y = -m_p0.y + 2 * aVector.y;
-            m_pc.y = -m_pc.y + 2 * aVector.y;
-            m_centralAngle = - m_centralAngle;
-        }
-
-        update_bbox();
-    }
+    void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aVector = { 0, 0 } );
 
     int GetRadius() const;
 
     SEG GetChord() const
     {
-        return SEG( m_p0, GetP1() );
+        return SEG( m_start, m_end );
     }
 
     double  GetCentralAngle() const;
     double  GetStartAngle() const;
     double  GetEndAngle() const;
-
-/*
-    bool ConstructFromCorners( VECTOR2I aP0, VECTOR2I aP1, double aCenterAngle );
-    bool ConstructFromCircle( VECTOR2I aP0, double aRadius );
-
-    bool ConstructFromCenterAndAngles( VECTOR2I aCenter, double aRadius, double aStartAngle, double aCenterAngle );
-
-    bool ConstructFromCornerAndAngles( VECTOR2I aP0,
-            double aStartAngle,
-            double aCenterAngle,
-            double aRadius );
-*/
 
     /**
      * Constructs a SHAPE_LINE_CHAIN of segments from a given arc
@@ -187,8 +140,9 @@ private:
     void update_bbox();
 
 
-    VECTOR2I m_p0, m_pc;
-    double m_centralAngle;
+    VECTOR2I m_start;
+    VECTOR2I m_mid;
+    VECTOR2I m_end;
 
     int m_width;
     BOX2I m_bbox;

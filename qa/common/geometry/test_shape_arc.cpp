@@ -54,9 +54,9 @@ struct ARC_PROPERTIES
  */
 static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps )
 {
-    // Angular error - not this can get quite large for very small arcs,
+    // Angular error - note this can get quite large for very small arcs,
     // as the integral position rounding has a relatively greater effect
-    const double angle_tol_deg = 0.01;
+    const double angle_tol_deg = 1.0;
 
     // Position error - rounding to nearest integer
     const int pos_tol = 1;
@@ -67,12 +67,12 @@ static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps )
             KI_TEST::IsVecWithinTol<VECTOR2I>, ( aArc.GetP1() )( aProps.m_end_point )( pos_tol ) );
     BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
             ( aArc.GetCenter() )( aProps.m_center_point )( pos_tol ) );
-    BOOST_CHECK_PREDICATE( KI_TEST::IsWithin<double>,
-            ( aArc.GetCentralAngle() )( aProps.m_center_angle )( angle_tol_deg ) );
-    BOOST_CHECK_PREDICATE( KI_TEST::IsWithin<double>,
-            ( aArc.GetStartAngle() )( aProps.m_start_angle )( angle_tol_deg ) );
-    BOOST_CHECK_PREDICATE( KI_TEST::IsWithin<double>,
-            ( aArc.GetEndAngle() )( aProps.m_end_angle )( angle_tol_deg ) );
+    BOOST_CHECK_PREDICATE( KI_TEST::IsWithinWrapped<double>,
+            ( aArc.GetCentralAngle() )( aProps.m_center_angle )( 360.0 )( angle_tol_deg ) );
+    BOOST_CHECK_PREDICATE( KI_TEST::IsWithinWrapped<double>,
+            ( aArc.GetStartAngle() )( aProps.m_start_angle )( 360.0 )( angle_tol_deg ) );
+    BOOST_CHECK_PREDICATE( KI_TEST::IsWithinWrapped<double>,
+            ( aArc.GetEndAngle() )( aProps.m_end_angle )( 360.0 )( angle_tol_deg ) );
     BOOST_CHECK_PREDICATE(
             KI_TEST::IsWithin<double>, ( aArc.GetRadius() )( aProps.m_radius )( pos_tol ) );
 

@@ -29,8 +29,25 @@
 #ifndef NUMERIC__H
 #define NUMERIC__H
 
+#include <cmath>
+
 namespace KI_TEST
 {
+
+/**
+ * Check if a value is within a tolerance of a nominal value, wrapping to a given val
+ *
+ * @return value is in [( aNominal - aError ) % aWrap, ( aNominal + aError ) % aWrap]
+ */
+template <typename T> bool IsWithinWrapped( T aValue, T aNominal, T aWrap, T aError )
+{
+    double diff = std::fmod( aNominal - aValue + aWrap / 2.0, aWrap );
+
+    if( diff < 0 )
+        diff += aWrap;
+
+    return diff - aWrap / 2.0 <= aError;
+}
 
 /**
  * Check if a value is within a tolerance of a nominal value

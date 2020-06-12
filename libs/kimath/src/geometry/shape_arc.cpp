@@ -37,17 +37,53 @@
 #include <type_traits>                  // for swap
 
 
+SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
+           double aCenterAngle, int aWidth ) :
+    SHAPE( SH_ARC ), m_width( aWidth )
+{
+    m_start = aArcStartPoint;
+    m_mid = aArcStartPoint;
+    m_end = aArcStartPoint;
+
+    RotatePoint( m_mid, aArcCenter, -aCenterAngle * 10.0 / 2.0 );
+    RotatePoint( m_end, aArcCenter, -aCenterAngle * 10.0 );
+
+    update_bbox();
+}
+
+
+SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
+           const VECTOR2I& aArcEnd, int aWidth ) :
+    SHAPE( SH_ARC ), m_start( aArcStart ), m_mid( aArcMid ), m_end( aArcEnd ),
+    m_width( aWidth )
+{
+    update_bbox();
+}
+
+
+SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther )
+    : SHAPE( SH_ARC )
+{
+    m_start = aOther.m_start;
+    m_end = aOther.m_end;
+    m_mid = aOther.m_mid;
+    m_width = aOther.m_width;
+    m_bbox = aOther.m_bbox;
+}
+
+
 bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
 {
-    int minDist = aClearance + m_width / 2;
-    auto centerDist = aSeg.Distance( m_pc );
+    int  minDist = aClearance + m_width / 2;
+    auto center = GetCenter();
+    auto centerDist = aSeg.Distance( center );
     auto p1 = GetP1();
 
     if( centerDist < minDist )
         return true;
 
     auto ab = (aSeg.B - aSeg.A );
-    auto ac = ( m_pc - aSeg.A );
+    auto ac = ( center - aSeg.A );
 
     auto lenAbSq = ab.SquaredEuclideanNorm();
 
@@ -61,7 +97,7 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
         p.x = (double) aSeg.A.x * lambda + (double) aSeg.B.x * (1.0 - lambda);
         p.y = (double) aSeg.A.y * lambda + (double) aSeg.B.y * (1.0 - lambda);
 
-        auto p0pdist = ( m_p0 - p ).EuclideanNorm();
+        auto p0pdist = ( m_start - p ).EuclideanNorm();
 
         if( p0pdist < minDist )
             return true;
@@ -72,7 +108,7 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
             return true;
     }
 
-    auto p0dist = aSeg.Distance( m_p0 );
+    auto p0dist = aSeg.Distance( m_start );
 
     if( p0dist > minDist )
         return true;
@@ -86,99 +122,13 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
     return true;
 }
 
-#if 0
-bool SHAPE_ARC::ConstructFromCorners( VECTOR2I aP0, VECTOR2I aP1, double aCenterAngle )
-{
-    VECTOR2D mid = ( VECTOR2D( aP0 ) + VECTOR2D( aP1 ) ) * 0.5;
-    VECTOR2D chord = VECTOR2D( aP1 ) - VECTOR2D( aP0 );
-    double c = (aP1 - aP0).EuclideanNorm() / 2;
-    VECTOR2D d = chord.Rotate( M_PI / 2.0 ).Resize( c );
-
-    m_pc = mid + d * ( 1.0 / tan( aCenterAngle / 2.0 * M_PI / 180.0 ) );
-    m_p0 = aP0;
-    m_p1 = aP1;
-
-    return true;
-}
-
-bool SHAPE_ARC::ConstructFromCornerAndAngles( VECTOR2I aP0,
-        double aStartAngle,
-        double aCenterAngle,
-        double aRadius )
-{
-    m_p0 = aP0;
-    auto d1 = VECTOR2D( 1.0, 0.0 ).Rotate( aStartAngle * M_PI / 180.0 ) * aRadius;
-    auto d2 =
-        VECTOR2D( 1.0, 0.0 ).Rotate( (aStartAngle + aCenterAngle) * M_PI / 180.0 ) * aRadius;
-
-    m_pc = m_p0 - (VECTOR2I) d1;
-    m_p1 = m_pc + (VECTOR2I) d2;
-
-    if( aCenterAngle < 0 )
-        std::swap( m_p0, m_p1 );
-
-    return true;
-}
-
-bool SHAPE_ARC::ConstructFromCenterAndAngles( VECTOR2I aCenter, double aRadius, double aStartAngle, double aCenterAngle )
-{
-    double ea = aStartAngle + aCenterAngle;
-
-    m_fullCircle = false;
-    m_pc = aCenter;
-    m_p0.x = (int) ( (double) aCenter.x + aRadius * cos( aStartAngle * M_PI / 180.0 ) );
-    m_p0.y = (int) ( (double) aCenter.y + aRadius * sin( aStartAngle * M_PI / 180.0 ) );
-    m_p1.x = (int) ( (double) aCenter.x + aRadius * cos( ea * M_PI / 180.0 ) );
-    m_p1.y = (int) ( (double) aCenter.y + aRadius * sin( ea * M_PI / 180.0 ) );
-
-    if( aCenterAngle == 360.0 )
-    {
-        m_fullCircle = true;
-        return true;
-    }
-    else if ( aCenterAngle < 0.0 )
-    {
-        std::swap(m_p0, m_p1);
-    }
-
-    return true;
-}
-#endif
-
-
-const VECTOR2I SHAPE_ARC::GetP1() const
-{
-    VECTOR2D rvec = m_p0 - m_pc;
-    auto ca = m_centralAngle * M_PI / 180.0;
-    VECTOR2I p1;
-
-    p1.x = KiROUND( m_pc.x + rvec.x * cos( ca ) - rvec.y * sin( ca ) );
-    p1.y = KiROUND( m_pc.y + rvec.x * sin( ca ) + rvec.y * cos( ca ) );
-
-    return p1;
-}
-
-
-const VECTOR2I SHAPE_ARC::GetArcMid() const
-{
-    VECTOR2D rvec = m_p0 - m_pc;
-    auto ca = m_centralAngle / 2.0 * M_PI / 180.0;
-    VECTOR2I p1;
-
-    p1.x = KiROUND( m_pc.x + rvec.x * cos( ca ) - rvec.y * sin( ca ) );
-    p1.y = KiROUND( m_pc.y + rvec.x * sin( ca ) + rvec.y * cos( ca ) );
-
-    return p1;
-}
-
 
 void SHAPE_ARC::update_bbox()
 {
     std::vector<VECTOR2I> points;
     // Put start and end points in the point list
-    points.push_back( m_p0 );
-    points.push_back( GetP1() );
-    // points.push_back( m_pc );     the center point is not necessary in the BBox
+    points.push_back( m_start );
+    points.push_back( m_end );
 
     double start_angle = GetStartAngle();
     double end_angle = start_angle + GetCentralAngle();
@@ -194,7 +144,7 @@ void SHAPE_ARC::update_bbox()
     for( int quad_angle = quad_angle_start; quad_angle <= quad_angle_end; ++quad_angle )
     {
         const int radius = GetRadius();
-        VECTOR2I  quad_pt = m_pc;
+        VECTOR2I  quad_pt = GetCenter();
 
         switch( quad_angle % 4 )
         {
@@ -242,41 +192,57 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance ) const
 
 double SHAPE_ARC::GetStartAngle() const
 {
-    VECTOR2D d( m_p0 - m_pc );
+    VECTOR2D d( m_start - GetCenter() );
 
     auto ang = 180.0 / M_PI * atan2( d.y, d.x );
 
-    return ang;
+    return NormalizeAngleDegrees( ang, 0.0, 360.0 );
 }
+
 
 double SHAPE_ARC::GetEndAngle() const
 {
-    double a =  GetStartAngle() + m_centralAngle;
+    VECTOR2D d( m_end - GetCenter() );
 
-    if( a < 0.0 )
-        a += 360.0;
-    else if ( a >= 360.0 )
-        a -= 360.0;
+    auto ang = 180.0 / M_PI * atan2( d.y, d.x );
 
-    return a;
+    return NormalizeAngleDegrees( ang, 0.0, 360.0 );
 }
+
+
+VECTOR2I SHAPE_ARC::GetCenter() const
+{
+    return GetArcCenter( m_start, m_mid, m_end );
+}
+
 
 double SHAPE_ARC::GetCentralAngle() const
 {
-    return m_centralAngle;
+    VECTOR2I center = GetCenter();
+    VECTOR2I p0 = m_start - center;
+    VECTOR2I p1 = m_mid - center;
+    VECTOR2I p2 = m_end - center;
+    double   angle1 = ArcTangente( p1.y, p1.x ) - ArcTangente( p0.y, p0.x );
+    double   angle2 = ArcTangente( p2.y, p2.x ) - ArcTangente( p1.y, p1.x );
+
+    return ( NormalizeAngle180( angle1 ) + NormalizeAngle180( angle2 ) ) / 10.0;
 }
+
 
 int SHAPE_ARC::GetRadius() const
 {
-    return (m_p0 - m_pc).EuclideanNorm();
+    return ( m_start - GetCenter() ).EuclideanNorm();
 }
+
 
 const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
 {
     SHAPE_LINE_CHAIN rv;
     double r = GetRadius();
     double sa = GetStartAngle();
-    auto c = GetCenter();
+    auto   c = GetCenter();
+    double ca = GetCentralAngle();
+
     int n;
 
     if( r == 0.0 )
@@ -285,7 +251,7 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
     }
     else
     {
-        n = GetArcToSegmentCount( r, aAccuracy, m_centralAngle );
+        n = GetArcToSegmentCount( r, aAccuracy, ca );
     }
 
     for( int i = 0; i <= n ; i++ )
@@ -293,13 +259,59 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
         double a = sa;
 
         if( n != 0 )
-            a += m_centralAngle * (double) i / (double) n;
+            a += ( ca * i ) / n;
 
         double x = c.x + r * cos( a * M_PI / 180.0 );
         double y = c.y + r * sin( a * M_PI / 180.0 );
 
-        rv.Append( (int) x, (int) y );
+        rv.Append( KiROUND( x ), KiROUND( y ) );
     }
 
     return rv;
+}
+
+
+void SHAPE_ARC::Move( const VECTOR2I& aVector )
+{
+    m_start += aVector;
+    m_end += aVector;
+    m_mid += aVector;
+    update_bbox();
+}
+
+
+void SHAPE_ARC::Rotate( double aAngle, const VECTOR2I& aCenter )
+{
+    m_start -= aCenter;
+    m_end -= aCenter;
+    m_mid -= aCenter;
+
+    m_start.Rotate( aAngle );
+    m_end.Rotate( aAngle );
+    m_mid.Rotate( aAngle );
+
+    m_start += aCenter;
+    m_end += aCenter;
+    m_mid += aCenter;
+    update_bbox();
+}
+
+
+void SHAPE_ARC::Mirror( bool aX, bool aY, const VECTOR2I& aVector )
+{
+    if( aX )
+    {
+        m_start.x = -m_start.x + 2 * aVector.x;
+        m_end.x = -m_end.x + 2 * aVector.x;
+        m_mid.x = -m_mid.x + 2 * aVector.x;
+    }
+
+    if( aY )
+    {
+        m_start.y = -m_start.y + 2 * aVector.y;
+        m_end.y = -m_end.y + 2 * aVector.y;
+        m_mid.y = -m_mid.y + 2 * aVector.y;
+    }
+
+    update_bbox();
 }

@@ -57,7 +57,7 @@ public:
 
     ARC( const LINE& aParentLine, const SHAPE_ARC& aArc ) :
         LINKED_ITEM( ARC_T ),
-        m_arc( aArc.GetCenter(), aArc.GetP0(), aArc.GetCentralAngle(), aParentLine.Width() )
+        m_arc( aArc.GetP0(), aArc.GetArcMid(), aArc.GetP1(), aParentLine.Width() )
     {
         m_net = aParentLine.Net();
         m_layers = aParentLine.Layers();
