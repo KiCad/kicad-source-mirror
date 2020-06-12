@@ -223,6 +223,12 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>( aCfg,    "IconScale",       "appearance.icon_scale" );
     ret &= fromLegacy<bool>( aCfg,   "UseIconsInMenus", "appearance.use_icons_in_menus" );
 
+// Force OSX to automatically scale the canvas. Before v6, the user setting wasn't used on OSX and was
+// set to 1.0. In v6, the setting is now used by OSX and should default to automatic scaling.
+#ifdef __WXMAC__
+    ( *this )[PointerFromString( "appearance.canvas_scale" )] = 0.0;
+#endif
+
     ret &= fromLegacy<bool>( aCfg, "ShowEnvVarWarningDialog", "environment.show_warning_dialog" );
 
     auto load_env_vars = [&] () {
