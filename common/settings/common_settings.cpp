@@ -39,15 +39,19 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
         m_Appearance(), m_Env(), m_Input(), m_Graphics(), m_System()
 {
     // This only effect the first time KiCad is run.  The user's setting will be used for all
-    // subsequent runs.  Menu icons are off by default on OSX and on for all other platforms.
+    // subsequent runs.
+    // Menu icons are off by default on OSX and on for all other platforms.
+    // Use automatic canvas scaling on OSX, but not on the other platforms (their detection isn't as good).
 #if defined( __WXMAC__ )
-    bool defaultUseIconsInMenus = false;
+    bool   defaultUseIconsInMenus = false;
+    double canvasScale = 0.0;
 #else
-    bool defaultUseIconsInMenus = true;
+    bool   defaultUseIconsInMenus = true;
+    double canvasScale = 1.0;
 #endif
 
     m_params.emplace_back( new PARAM<double>( "appearance.canvas_scale",
-            &m_Appearance.canvas_scale, 1.0 ) );
+            &m_Appearance.canvas_scale, canvasScale ) );
 
     m_params.emplace_back( new PARAM<int>( "appearance.icon_scale",
             &m_Appearance.icon_scale, 0 ) );
