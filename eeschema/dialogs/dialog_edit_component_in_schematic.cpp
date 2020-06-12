@@ -536,6 +536,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
             otherUnit->GetField( FOOTPRINT )->SetText( m_fields->at( FOOTPRINT ).GetText() );
             otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
             otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
+            otherUnit->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
             GetParent()->RefreshItem( otherUnit );
         }
     }
