@@ -24,7 +24,7 @@
 #include <stdarg.h>
 #endif
 
-#include "libeval_compiler.h"
+#include <libeval_compiler/libeval_compiler.h>
 
 /* The (generated) lemon parser is written in C.
  * In order to keep its symbol from the global namespace include the parser code with
@@ -46,14 +46,17 @@ namespace LIBEVAL
 #pragma GCC diagnostic pop
 #endif
 
-static void libeval_dbg( const char* fmt, ... )
+static void libeval_dbg( int level, const char* fmt, ... )
 {
 #ifdef DEBUG
-    va_list ap;
-    va_start( ap, fmt );
-    fprintf( stderr, "libeval: " );
-    vfprintf( stderr, fmt, ap );
-    va_end( ap );
+    if(level <= 10) // fixme: tom's debugging.
+    {
+        va_list ap;
+        va_start( ap, fmt );
+        fprintf( stderr, "libeval: " );
+        vfprintf( stderr, fmt, ap );
+        va_end( ap );
+    }
 #endif
 }
 
@@ -146,8 +149,8 @@ bool TOKENIZER::MatchAhead( std::string match, std::function<bool( int )> stopCo
 
 COMPILER::COMPILER()
 {
+    m_errorStatus.pendingError = false;
     m_localeDecimalSeparator = '.';
-    m_parseError             = false;
     m_parseFinished          = false;
     m_unitResolver.reset( new UNIT_RESOLVER );
     m_parser = LIBEVAL::ParseAlloc( malloc );
@@ -169,13 +172,15 @@ void COMPILER::Clear()
 {
     //free( current.token );
     m_tokenizer.Clear();
-    m_parseError = true;
+    
 }
 
 
 void COMPILER::parseError( const char* s )
 {
-    m_parseError = true;
+    libeval_dbg(0, "PARSE ERROR: %s\n", s );
+    m_errorStatus.pendingError = true;
+    m_errorStatus.message = s;
 }
 
 
@@ -189,13 +194,14 @@ bool COMPILER::Compile( const std::string& aString, UCODE* aCode )
 {
     // Feed parser token after token until end of input.
 
+
     newString( aString );
+    m_errorStatus.pendingError = false;
     m_tree          = nullptr;
-    m_parseError    = false;
     m_parseFinished = false;
     T_TOKEN tok;
 
-    libeval_dbg( "str: '%s' empty: %d\n", aString.c_str(), !!aString.empty() );
+    libeval_dbg(0, "str: '%s' empty: %d\n", aString.c_str(), !!aString.empty() );
 
     if( aString.empty() )
     {
@@ -206,14 +212,15 @@ bool COMPILER::Compile( const std::string& aString, UCODE* aCode )
     do
     {
         tok = getToken();
-        libeval_dbg( "parse: tok %d\n", tok.token );
+        libeval_dbg(10, "parse: tok %d\n", tok.token );
         Parse( m_parser, tok.token, tok.value, this );
-        //printf('error')
-        if( m_parseError )
+        
+        if( m_errorStatus.pendingError )
         {
-            //printf( "PARSE ERR\n" );
-            m_parseErrorToken = "";
-            m_parseErrorPos   = m_tokenizer.GetPos();
+            m_errorStatus.stage = ERROR_STATUS::CST_PARSE;
+            m_errorStatus.failingPosition = m_tokenizer.GetPos();
+            m_errorStatus.failingObject = tok.value.value.str;
+            m_errorStatus.message = "Parse error";
             return false;
         }
 
@@ -282,7 +289,7 @@ int COMPILER::resolveUnits()
     {
         if( m_tokenizer.MatchAhead( unitName, []( int c ) -> bool { return !isalnum( c ); } ) )
         {
-            libeval_dbg( "Match unit '%s'\n", unitName.c_str() );
+            libeval_dbg(10, "Match unit '%s'\n", unitName.c_str() );
             m_tokenizer.NextChar( unitName.length() );
             return unitId;
         }
@@ -356,7 +363,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
             break;
     }
 
-    libeval_dbg( "LEX ch '%c' pos %d\n", ch, m_tokenizer.GetPos() );
+    libeval_dbg(10, "LEX ch '%c' pos %d\n", ch, m_tokenizer.GetPos() );
 
     if( ch == 0 )
     {
@@ -466,7 +473,10 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
             retval.token = G_STRUCT_REF;
             break;
         default:
-            m_parseError = true;
+            m_errorStatus.stage = ERROR_STATUS::CST_PARSE;
+            m_errorStatus.failingPosition = m_tokenizer.GetPos();
+            m_errorStatus.failingObject = ch;
+            m_errorStatus.message = "Syntax error";
             break; /* invalid character */
         }
 
@@ -538,6 +548,12 @@ void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
     }
 }
 
+ERROR_STATUS COMPILER::GetErrorStatus()
+{
+    ERROR_STATUS dummy;
+    return dummy;
+}
+
 void COMPILER::setRoot( TREE_NODE root )
 {
     m_tree = copyNode( root );
@@ -576,7 +592,7 @@ bool COMPILER::generateUCode( UCODE* aCode )
             assert( node->leaf[0]->op == TR_IDENTIFIER );
             assert( node->leaf[1]->op == TR_IDENTIFIER );
 
-            auto vref = aCode->createVarRef( node->leaf[0]->value.str, node->leaf[1]->value.str );
+            auto vref = aCode->createVarRef( this, node->leaf[0]->value.str, node->leaf[1]->value.str );
             aCode->AddOp( TR_UOP_PUSH_VAR, vref );
             break;
         }
@@ -730,6 +746,22 @@ VALUE* UCODE::Run()
 
     assert( ctx.SP() == 1 );
     return ctx.Pop();
+}
+
+void UCODE::RuntimeError( const std::string aErrorMsg )
+{
+
+}
+
+std::string ERROR_STATUS::Format() const
+{
+    if( !pendingError )
+        return "";
+
+    char str[1024];
+    sprintf(str,"%s (pos: %d, near: '%s')", message.c_str(), failingPosition, failingObject.c_str() );
+
+    return str;
 }
 
 } // namespace LIBEVAL

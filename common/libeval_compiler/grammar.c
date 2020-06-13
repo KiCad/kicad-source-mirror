@@ -28,7 +28,7 @@
 #line 33 "grammar.lemon"
 
 #include <assert.h>
-#include "libeval_compiler.h"
+#include <libeval_compiler/libeval_compiler.h>
 #line 33 "grammar.c"
 /**************** End of %include directives **********************************/
 /* These constants specify the various numeric values for terminal symbols

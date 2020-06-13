@@ -32,7 +32,7 @@
 
 %include {
 #include <assert.h>
-#include "libeval_compiler.h"
+#include <libeval_compiler/libeval_compiler.h>
 }
 
 %syntax_error {

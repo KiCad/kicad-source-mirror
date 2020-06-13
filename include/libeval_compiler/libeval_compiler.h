@@ -52,6 +52,8 @@
 namespace LIBEVAL
 {
 
+class COMPILER;
+
 struct ERROR_STATUS
 {
         bool pendingError;
@@ -62,9 +64,12 @@ struct ERROR_STATUS
             CST_RUNTIME
         };
 
+        STAGE stage;
         std::string message;
         std::string failingObject;
         int failingPosition;
+
+        std::string Format() const;
 };
 
 
@@ -230,6 +235,15 @@ private:
       std::string m_valueStr;
     };
 
+class UCODE;
+
+class VAR_REF
+    {
+    public:
+        virtual VAR_TYPE_T GetType( UCODE* aUcode ) = 0;
+        virtual VALUE GetValue( UCODE* aUcode ) = 0;
+    };
+
 class UCODE
 {
 public:
@@ -289,14 +303,6 @@ public:
       void *m_arg;
     };
 
-    class VAR_REF
-    {
-    public:
-        virtual VAR_TYPE_T GetType( const UCODE* aUcode ) const  = 0;
-        virtual VALUE GetValue( const UCODE* aUcode ) const = 0;
-    };
-
-   
     void AddOp( int op, double value )
     {
         auto uop = new UOP( op, new VALUE( value ) );
@@ -317,10 +323,11 @@ public:
 
     VALUE* Run();
     std::string Dump() const;
+    void RuntimeError( const std::string aErrorMsg );
 
-    virtual VAR_REF* createVarRef( const std::string& var, const std::string& field )
+    virtual VAR_REF* createVarRef( COMPILER* aCompiler, const std::string& var, const std::string& field )
     {
-        return NULL;
+        return nullptr;
     };
 
 private:
@@ -392,28 +399,15 @@ public:
     /* Check if previous invokation of process() was successful */
     inline bool IsValid() const
     {
-        return !m_parseError;
-    }
-
-    const std::string GetParseErrorToken() const
-    {
-        return m_parseErrorToken;
-    }
-
-    const std::string GetParseErrorMessage() const
-    {
-        return m_parseErrorMessage;
-    }
-
-    int GetParseErrorPosition() const
-    {
-        return m_parseErrorPos;
+        return !m_errorStatus.pendingError;
     }
 
     void         setRoot( LIBEVAL::TREE_NODE root );
     
     bool Compile( const std::string& aString, UCODE* aCode );
     std::string DumpTree();
+    void ReportError( const std::string aErrorMsg );
+    ERROR_STATUS GetErrorStatus();
 
 protected:
     enum LEXER_STATE
@@ -461,6 +455,7 @@ protected:
     int m_parseErrorPos;
 
     std::unique_ptr<UNIT_RESOLVER> m_unitResolver;
+    ERROR_STATUS m_errorStatus;
 
     TREE_NODE* m_tree;
 };
