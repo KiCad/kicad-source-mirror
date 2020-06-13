@@ -33,7 +33,8 @@
 
 #include <class_board_item.h>
 #include <marker_base.h>
-#include <drc/drc_item.h>
+
+class DRC_ITEM;
 
 // Coordinates count for the basic shape marker
 #define MARKER_SHAPE_POINT_COUNT 9

@@ -26,6 +26,7 @@
 
 #include <class_module.h>
 #include <drc/drc.h>
+#include <drc/drc_item.h>
 
 
 DRC_KEEPOUT_TESTER::DRC_KEEPOUT_TESTER( MARKER_HANDLER aMarkerHandler ) :

@@ -24,6 +24,7 @@
 #include <fctsys.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <drc/footprint_tester.h>
+#include <drc/drc_item.h>
 
 void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<DRC_ITEM*>& aDRCList )
 {
