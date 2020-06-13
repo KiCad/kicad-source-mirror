@@ -106,7 +106,7 @@ public:
 
     void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aVector = { 0, 0 } );
 
-    int GetRadius() const;
+    double GetRadius() const;
 
     SEG GetChord() const
     {

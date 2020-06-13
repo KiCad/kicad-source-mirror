@@ -143,7 +143,7 @@ void SHAPE_ARC::update_bbox()
     // count through quadrants included in arc
     for( int quad_angle = quad_angle_start; quad_angle <= quad_angle_end; ++quad_angle )
     {
-        const int radius = GetRadius();
+        const int radius = KiROUND( GetRadius() );
         VECTOR2I  quad_pt = GetCenter();
 
         switch( quad_angle % 4 )
@@ -184,7 +184,7 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance ) const
     if( !bbox.Contains( aP ) )
         return false;
 
-    auto dist =  ( aP - GetCenter() ).SquaredEuclideanNorm();
+    auto dist =  ( aP - GetCenter() ).EuclideanNorm();
 
     return dist <= ( GetRadius() + minDist ) && dist >= ( GetRadius() - minDist );
 }
@@ -229,7 +229,7 @@ double SHAPE_ARC::GetCentralAngle() const
 }
 
 
-int SHAPE_ARC::GetRadius() const
+double SHAPE_ARC::GetRadius() const
 {
     return ( m_start - GetCenter() ).EuclideanNorm();
 }
