@@ -216,7 +216,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
 
-    GRID_HELPER grid( frame() );
+    GRID_HELPER grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
 
     bool originSet = false;
 

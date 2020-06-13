@@ -115,7 +115,7 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 
     m_router->LoadSettings( settings->m_PnsSettings.get() );
 
-    m_gridHelper = new GRID_HELPER( frame() );
+    m_gridHelper = new GRID_HELPER( m_toolMgr, frame()->GetMagneticItemsSettings() );
 }
 
 

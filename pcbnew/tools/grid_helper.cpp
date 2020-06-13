@@ -26,7 +26,6 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_dimension.h>
 #include <class_edge_mod.h>
@@ -46,9 +45,9 @@ using namespace std::placeholders;
 #include "grid_helper.h"
 
 
-GRID_HELPER::GRID_HELPER( PCB_BASE_FRAME* aFrame ) :
-    m_frame( aFrame ),
-    m_toolMgr( aFrame->GetToolManager() )
+GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSettings ) :
+    m_toolMgr( aToolMgr ),
+    m_magneticSettings( aMagneticSettings )
 {
     m_enableSnap = true;
     m_enableGrid = true;
@@ -179,8 +178,6 @@ VECTOR2I GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSeg )
 
 VECTOR2I GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& aArc )
 {
-    OPT_VECTOR2I pts[6];
-
     if( !m_enableSnap )
         return aPoint;
 
@@ -213,7 +210,7 @@ VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, std::vector<BOA
 {
     clearAnchors();
 
-    for( auto item : aItems )
+    for( BOARD_ITEM* item : aItems )
         computeAnchors( item, aMousePos, true );
 
     double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
@@ -255,7 +252,7 @@ VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, std::vector<BOA
 
 
 std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
-        const std::vector<BOARD_ITEM*>& aSkip ) const
+                                                 const std::vector<BOARD_ITEM*>& aSkip ) const
 {
     std::set<BOARD_ITEM*> items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
@@ -267,7 +264,7 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
 
     view->Query( aArea, selectedItems );
 
-    for( auto it : selectedItems )
+    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : selectedItems )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
@@ -281,8 +278,8 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
     }
 
 
-    for( auto ii : aSkip )
-        items.erase( ii );
+    for( BOARD_ITEM* skipItem : aSkip )
+        items.erase( skipItem );
 
     return items;
 }
@@ -306,21 +303,22 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
 
 
 VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
-        const std::vector<BOARD_ITEM*>& aSkip )
+                                      const std::vector<BOARD_ITEM*>& aSkip )
 {
     double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
     int snapRange = (int) ( m_snapSize / worldScale );
 
-    BOX2I bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ), VECTOR2I( snapRange, snapRange ) );
+    BOX2I bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ),
+              VECTOR2I( snapRange, snapRange ) );
 
     clearAnchors();
 
     for( BOARD_ITEM* item : queryVisible( bb, aSkip ) )
         computeAnchors( item, aOrigin );
 
-    ANCHOR* nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayers );
+    ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayers );
     VECTOR2I nearestGrid = Align( aOrigin );
-    double gridDist = ( nearestGrid - aOrigin ).EuclideanNorm();
+    double   gridDist = ( nearestGrid - aOrigin ).EuclideanNorm();
 
     if( nearest && m_enableSnap )
     {
@@ -379,7 +377,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
 }
 
 
-BOARD_ITEM* GRID_HELPER::GetSnapped( void ) const
+BOARD_ITEM* GRID_HELPER::GetSnapped() const
 {
     if( !m_snapItem )
         return nullptr;
@@ -390,7 +388,7 @@ BOARD_ITEM* GRID_HELPER::GetSnapped( void ) const
 
 void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom )
 {
-    VECTOR2I origin;
+    VECTOR2I                      origin;
     KIGFX::VIEW*                  view = m_toolMgr->GetView();
     RENDER_SETTINGS*              settings = view->GetPainter()->GetSettings();
     const std::set<unsigned int>& activeLayers = settings->GetActiveLayers();
@@ -405,8 +403,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
             for( D_PAD* pad : mod->Pads() )
             {
                 // Getting pads from the module requires re-checking that the pad is shown
-                if( ( aFrom ||
-                      m_frame->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
+                if( ( aFrom || m_magneticSettings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
                         && pad->GetBoundingBox().Contains( wxPoint( aRefPos.x, aRefPos.y ) )
                         && view->IsVisible( pad )
                         && ( !isHighContrast || activeLayers.count( pad->GetLayer() ) )
@@ -424,7 +421,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
 
         case PCB_PAD_T:
         {
-            if( aFrom || m_frame->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
+            if( aFrom || m_magneticSettings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
             {
                 D_PAD* pad = static_cast<D_PAD*>( aItem );
                 addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
@@ -436,7 +433,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
         case PCB_MODULE_EDGE_T:
         case PCB_LINE_T:
         {
-            if( !m_frame->GetMagneticItemsSettings()->graphics )
+            if( !m_magneticSettings->graphics )
                 break;
 
             DRAWSEGMENT* dseg = static_cast<DRAWSEGMENT*>( aItem );
@@ -480,7 +477,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
                     break;
 
                 case S_POLYGON:
-                    for( const auto& p : dseg->BuildPolyPointsList() )
+                    for( const VECTOR2I& p : dseg->BuildPolyPointsList() )
                         addAnchor( p, CORNER | SNAPPABLE, dseg );
 
                     break;
@@ -501,7 +498,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
         case PCB_TRACE_T:
         case PCB_ARC_T:
         {
-            if( aFrom || m_frame->GetMagneticItemsSettings()->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
+            if( aFrom || m_magneticSettings->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
             {
                 TRACK* track = static_cast<TRACK*>( aItem );
                 VECTOR2I start = track->GetStart();
@@ -523,7 +520,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
 
         case PCB_VIA_T:
         {
-            if( aFrom || m_frame->GetMagneticItemsSettings()->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
+            if( aFrom || m_magneticSettings->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
                 addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem );
 
             break;
@@ -568,9 +565,10 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
 }
 
 
-GRID_HELPER::ANCHOR* GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int aFlags, LSET aMatchLayers )
+GRID_HELPER::ANCHOR* GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int aFlags,
+                                                 LSET aMatchLayers )
 {
-    double minDist = std::numeric_limits<double>::max();
+    double  minDist = std::numeric_limits<double>::max();
     ANCHOR* best = NULL;
 
     for( ANCHOR& a : m_anchors )

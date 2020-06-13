@@ -34,12 +34,11 @@
 #include <geometry/seg.h>
 #include <geometry/shape_arc.h>
 
-class PCB_BASE_FRAME;
 
 class GRID_HELPER {
 public:
 
-    GRID_HELPER( PCB_BASE_FRAME* aFrame );
+    GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSettings );
     ~GRID_HELPER();
 
     VECTOR2I GetGrid() const;
@@ -149,16 +148,18 @@ private:
         m_anchors.clear();
     }
 
-    PCB_BASE_FRAME* m_frame;
-    TOOL_MANAGER*   m_toolMgr;
-    OPT<VECTOR2I>   m_auxAxis;
+    TOOL_MANAGER* m_toolMgr;
+    OPT<VECTOR2I> m_auxAxis;
 
-    bool     m_enableSnap;          ///< If true, allow snapping to other items on the layers
-    bool     m_enableGrid;          ///< If true, allow snapping to grid
-    bool     m_enableSnapLine;      ///< If true, allow drawing lines from snap points
-    int      m_snapSize;            ///< Sets the radius in screen units for snapping to items
-    ANCHOR*  m_snapItem;            ///< Pointer to the currently snapped item in m_anchors (NULL if not snapped)
-    VECTOR2I m_skipPoint;           ///< When drawing a line, we avoid snapping to the source point
+    bool          m_enableSnap;      // If true, allow snapping to other items on the layers
+    bool          m_enableGrid;      // If true, allow snapping to grid
+    bool          m_enableSnapLine;  // If true, allow drawing lines from snap points
+    int           m_snapSize;        // Sets the radius in screen units for snapping to items
+    ANCHOR*       m_snapItem;        // Pointer to the currently snapped item in m_anchors
+                                     //   (NULL if not snapped)
+    VECTOR2I      m_skipPoint;       // When drawing a line, we avoid snapping to the source point
+
+    MAGNETIC_SETTINGS*     m_magneticSettings;
 
     KIGFX::ORIGIN_VIEWITEM m_viewSnapPoint;
     KIGFX::ORIGIN_VIEWITEM m_viewSnapLine;

@@ -334,7 +334,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 
     bool        restore_state = false;
     VECTOR2I    totalMovement;
-    GRID_HELPER grid( editFrame );
+    GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
     VECTOR2I    prevPos;
 

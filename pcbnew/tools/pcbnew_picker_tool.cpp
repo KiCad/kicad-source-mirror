@@ -41,18 +41,18 @@ PCBNEW_PICKER_TOOL::PCBNEW_PICKER_TOOL()
 int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    auto tool_frame = getEditFrame<PCB_BASE_FRAME>();
-    GRID_HELPER grid( tool_frame );
-    int finalize_state = WAIT_CANCEL;
+    PCB_BASE_FRAME*       frame = getEditFrame<PCB_BASE_FRAME>();
+    GRID_HELPER           grid( m_toolMgr, frame->GetMagneticItemsSettings() );
+    int                   finalize_state = WAIT_CANCEL;
 
     std::string tool = *aEvent.Parameter<std::string*>();
-    tool_frame->PushTool( tool );
+    frame->PushTool( tool );
     Activate();
     setControls();
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        tool_frame->GetCanvas()->SetCursor( m_cursor );
+        frame->GetCanvas()->SetCursor( m_cursor );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
@@ -156,7 +156,7 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     reset();
     controls->ForceCursorPosition( false );
-    tool_frame->PopTool( tool );
+    frame->PopTool( tool );
     return 0;
 }
 

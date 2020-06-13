@@ -477,7 +477,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
     DIMENSION*    dimension = NULL;
     BOARD_COMMIT  commit( m_frame );
-    GRID_HELPER   grid( m_frame );
+    GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     const BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
 
@@ -859,7 +859,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         return 0;
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
-    GRID_HELPER      grid( m_frame );
+    GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -920,7 +920,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
 {
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
-    GRID_HELPER   grid( m_frame );
+    GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
 
     m_lineWidth = getSegmentWidth( getDrawingLayer() );
@@ -1192,7 +1192,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bo
     PCBNEW_SELECTION preview;
     m_view->Add( &preview );
     m_view->Add( &arcAsst );
-    GRID_HELPER grid( m_frame );
+    GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
@@ -1440,7 +1440,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     m_controls->SetSnapping( true );
 
     bool    started     = false;
-    GRID_HELPER grid( m_frame );
+    GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     STATUS_TEXT_POPUP status( m_frame );
     status.SetTextColor( wxColour( 255, 0, 0 ) );
     status.SetText( _( "Self-intersecting polygons are not allowed" ) );
@@ -1595,7 +1595,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
     {
         GRID_HELPER m_gridHelper;
 
-        VIA_PLACER( PCB_BASE_EDIT_FRAME* aFrame ) : m_gridHelper( aFrame )
+        VIA_PLACER( PCB_BASE_EDIT_FRAME* aFrame ) :
+            m_gridHelper( aFrame->GetToolManager(), aFrame->GetMagneticItemsSettings() )
         {}
 
         virtual ~VIA_PLACER()

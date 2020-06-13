@@ -303,7 +303,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     controls->ShowCursor( true );
 
-    GRID_HELPER grid( editFrame );
+    GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
     if( !item )
