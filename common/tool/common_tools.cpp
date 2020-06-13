@@ -53,8 +53,7 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
         m_grids.emplace_back( gridSize, gridSize );
     }
 
-    if( aReason == GAL_SWITCH )
-        OnGridChanged();
+    OnGridChanged();
 }
 
 
