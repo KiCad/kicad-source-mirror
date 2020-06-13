@@ -60,7 +60,7 @@ bool DIALOG_SET_GRID::TransferDataToWindow()
     for( const wxString& grid : grids )
         m_choiceGridSize->Append( grid );
 
-    if( idx >= 0 && idx < m_choiceGridSize->GetCount() )
+    if( idx >= 0 && idx < int( m_choiceGridSize->GetCount() ) )
         m_choiceGridSize->SetSelection( idx );
 
     return true;

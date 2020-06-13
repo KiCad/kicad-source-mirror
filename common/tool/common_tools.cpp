@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -355,7 +356,7 @@ int COMMON_TOOLS::GridNext( const TOOL_EVENT& aEvent )
 {
     int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
-    if( currentGrid + 1 < m_grids.size() )
+    if( currentGrid + 1 < int( m_grids.size() ) )
         currentGrid++;
 
     return OnGridChanged();

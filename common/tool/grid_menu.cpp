@@ -63,7 +63,7 @@ OPT_TOOL_EVENT GRID_MENU::eventHandler( const wxMenuEvent& aEvent )
 void GRID_MENU::update()
 {
     APP_SETTINGS_BASE* settings = m_parent->config();
-    int                current = settings->m_Window.grid.last_size_idx;
+    unsigned int       current = settings->m_Window.grid.last_size_idx;
     wxArrayString      gridsList;
 
     BuildChoiceList( &gridsList, settings, m_parent->GetUserUnits() != EDA_UNITS::INCHES );

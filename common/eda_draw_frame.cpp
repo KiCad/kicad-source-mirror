@@ -241,7 +241,8 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 
     int idx = config()->m_Window.grid.last_size_idx;
 
-    if( idx >= 0 && idx < m_gridSelectBox->GetCount() && idx != m_gridSelectBox->GetSelection() )
+    if( idx >= 0 && idx < int( m_gridSelectBox->GetCount() )
+            && idx != m_gridSelectBox->GetSelection() )
         m_gridSelectBox->SetSelection( idx );
 }
 
@@ -261,14 +262,14 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     int idx = m_gridSelectBox->GetCurrentSelection();
 
-    if( idx == m_gridSelectBox->GetCount() - 2 )
+    if( idx == int( m_gridSelectBox->GetCount() ) - 2 )
     {
         // wxWidgets will check the separator, which we don't want.
         // Re-check the current grid.
         wxUpdateUIEvent dummy;
         OnUpdateSelectGrid( dummy );
     }
-    else if( idx == m_gridSelectBox->GetCount() - 1 )
+    else if( idx == int( m_gridSelectBox->GetCount() ) - 1 )
     {
         // wxWidgets will check the Grid Settings... entry, which we don't want.
         // Re-check the current grid.
