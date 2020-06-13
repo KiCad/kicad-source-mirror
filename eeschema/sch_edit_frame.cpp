@@ -430,8 +430,6 @@ void SCH_EDIT_FRAME::CreateScreens()
         screen->SetMaxUndoItems( m_UndoRedoCountMax );
         SetScreen( screen );
     }
-
-    GetScreen()->SetZoom( 32.0 );
 }
 
 

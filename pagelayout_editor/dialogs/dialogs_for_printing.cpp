@@ -147,7 +147,6 @@ void PLEDITOR_PRINTOUT::GetPageInfo( int* minPage, int* maxPage,
  */
 void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
 {
-    int      oldZoom;
     wxPoint  tmp_startvisu;
     wxSize   pageSizeIU;             // Page size in internal units
     wxPoint  old_org;
@@ -155,9 +154,8 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     wxDC*    dc = GetDC();
     PL_EDITOR_SCREEN* screen = m_parent->GetScreen();
 
-    // Save current scale factor, offsets, and clip box.
+    // Save current offsets and clip box.
     tmp_startvisu = screen->m_StartVisu;
-    oldZoom = screen->GetZoom();
     old_org = screen->m_DrawOrg;
 
     // Change scale factor and offset to print the whole page.
@@ -205,7 +203,6 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
 
     screen->m_StartVisu = tmp_startvisu;
     screen->m_DrawOrg   = old_org;
-    screen->SetZoom( oldZoom );
 
     // PrintWorkSheet clears the current display list when calling BuildWorkSheetGraphicList()
     // So rebuild and redraw it.

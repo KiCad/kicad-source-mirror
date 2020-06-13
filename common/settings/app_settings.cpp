@@ -255,6 +255,9 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_y", &aWindow->pos_y, 0 ) );
 
+    m_params.emplace_back( new PARAM_LIST<double>( aJsonPath + ".zoom_factors",
+            &aWindow->zoom_factors, {} ) );
+
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.axes_enabled",
             &aWindow->grid.axes_enabled, false ) );
 

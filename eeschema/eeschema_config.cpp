@@ -440,6 +440,29 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
                                      "1 mil" };
     }
 
+    if( aCfg->m_Window.zoom_factors.empty() )
+    {
+        aCfg->m_Window.zoom_factors = { 0.5,
+                                        0.7,
+                                        1.0,
+                                        1.5,
+                                        2.0,
+                                        3.0,
+                                        4.5,
+                                        6.5,
+                                        10.0,
+                                        15.0,
+                                        20.0,
+                                        30.0,
+                                        45.0,
+                                        65.0,
+                                        100.0,
+                                        150.0 };
+    }
+
+    for( double& factor : aCfg->m_Window.zoom_factors )
+        factor = std::min( factor, MAX_ZOOM_FACTOR );
+
     wxString templateFieldNames = cfg->m_Drawing.field_names;
 
     if( !templateFieldNames.IsEmpty() )

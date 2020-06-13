@@ -433,7 +433,6 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
                 m_frame->Schematic().SetCurrentSheet( *sheet );
                 m_frame->GetCurrentSheet().UpdateAllScreenReferences();
 
-                screen->SetZoom( m_frame->GetScreen()->GetZoom() );
                 screen->TestDanglingEnds();
 
                 m_frame->SetScreen( screen );

@@ -63,6 +63,8 @@ struct WINDOW_SETTINGS
     int pos_x;
     int pos_y;
 
+    std::vector<double> zoom_factors;
+
     CURSOR_SETTINGS cursor;
     GRID_SETTINGS grid;
 };

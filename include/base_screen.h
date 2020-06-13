@@ -55,8 +55,6 @@ private:
      */
     wxPoint     m_crossHairPosition;
 
-    double      m_Zoom;             ///< Current zoom coefficient.
-
 public:
     static  wxString m_PageLayoutDescrFileName; ///< the name of the page layout descr file,
                                                 ///< or emty to used the default pagelayout
@@ -87,10 +85,14 @@ public:
     int                 m_ScreenNumber;
     int                 m_NumberOfScreens;
 
-    std::vector<double> m_ZoomList;         ///< standard zoom (i.e. scale) coefficients.
-
 public:
     BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType = SCREEN_T );
+
+    BASE_SCREEN( const wxSize& aPageSizeIU, KICAD_T aType = SCREEN_T ) :
+            BASE_SCREEN( nullptr, aType )
+    {
+        InitDataPoints( aPageSizeIU );
+    }
 
     BASE_SCREEN( KICAD_T aType = SCREEN_T ) :
             BASE_SCREEN( nullptr, aType )
@@ -114,7 +116,8 @@ public:
      *                     old commands this will empty the list of commands.
      *  Commands are deleted from the older to the last.
      */
-    virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) = 0;
+    virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 )
+    { }
 
     /**
      * Function ClearUndoRedoList
@@ -183,40 +186,6 @@ public:
     void ClrSave()          { m_FlagSave = false; }
     bool IsModify() const   { return m_FlagModified; }
     bool IsSave() const     { return m_FlagSave; }
-
-
-    //----<zoom stuff>---------------------------------------------------------
-
-    /**
-     * Function GetZoom
-     * returns the current "zoom factor", which is a measure of
-     * "internal units per device unit", or "world units per device unit".
-     * A device unit is typically a pixel.
-     */
-    double GetZoom() const      { return m_Zoom; }
-
-    /**
-     * Function SetZoom
-     * adjusts the current zoom factor.
-     *
-     * @param iu_per_du is the number of internal units (world units) per
-     *   device units (pixels typically).
-     */
-    virtual bool SetZoom( double iu_per_du );
-
-    /**
-     * Function GetMaxAllowedZoom
-     * returns the maximum allowed zoom factor, which was established as the last entry
-     * in m_ZoomList.
-     */
-    double GetMaxAllowedZoom() const    { return m_ZoomList.size() ? *m_ZoomList.rbegin() : 1.0; }
-
-    /**
-     * Function GetMinAllowedZoom
-     * returns the minimum allowed zoom factor, which was established as the first entry
-     * in m_ZoomList.
-     */
-    double GetMinAllowedZoom() const    { return m_ZoomList.size() ? *m_ZoomList.begin() : 1.0; }
 
     /**
      * Function GetClass

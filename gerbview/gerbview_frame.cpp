@@ -50,6 +50,7 @@
 #include <tools/gerbview_selection_tool.h>
 #include <tools/gerbview_control.h>
 #include <view/view.h>
+#include <base_screen.h>
 #include <gerbview_painter.h>
 #include <geometry/shape_poly_set.h>
 #include <widgets/paged_dialog.h>
@@ -62,28 +63,24 @@
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
         : EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ), wxDefaultPosition,
                 wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME ),
+          m_activeLayer( 0 ),
           m_zipFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_ZIP_FILE1,
                   ID_GERBVIEW_ZIP_FILE_LIST_CLEAR, _( "Clear Recent Zip Files" ) ),
           m_drillFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_DRILL_FILE1,
                   ID_GERBVIEW_DRILL_FILE_LIST_CLEAR, _( "Clear Recent Drill Files" ) ),
           m_jobFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_JOB_FILE1,
-                  ID_GERBVIEW_JOB_FILE_LIST_CLEAR, _( "Clear Recent Job Files" ) )
+                  ID_GERBVIEW_JOB_FILE_LIST_CLEAR, _( "Clear Recent Job Files" ) ),
+          m_TextInfo( nullptr )
 {
     m_gerberLayout = NULL;
-    m_zoomLevelCoeff = ZOOM_FACTOR( 110 );   // Adjusted to roughly displays zoom level = 1
-                                             // when the screen shows a 1:1 image
-                                             // obviously depends on the monitor,
-                                             // but this is an acceptable value
-
     m_show_layer_manager_tools = true;
-
     m_showBorderAndTitleBlock = false;      // true for reference drawings.
-    m_SelLayerBox   = NULL;
+    m_SelLayerBox = NULL;
     m_DCodeSelector = NULL;
     m_SelComponentBox = nullptr;
     m_SelNetnameBox = nullptr;
     m_SelAperAttributesBox = nullptr;
-    m_displayMode   = 0;
+    m_displayMode = 0;
     m_AboutTitle = "GerbView";
 
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
@@ -115,7 +112,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     SetVisibleLayers( LSET::AllLayersMask() );         // All draw layers visible.
 
-    SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
+    SetScreen( new BASE_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetLayout():
     m_LayersManager = new GERBER_LAYER_WIDGET( this, GetCanvas() );
@@ -300,34 +297,61 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
+    if( aCfg->m_Window.grid.sizes.empty() )
+    {
+        aCfg->m_Window.grid.sizes = { "100 mil",
+                                      "50 mil",
+                                      "25 mil",
+                                      "20 mil",
+                                      "10 mil",
+                                      "5 mil",
+                                      "2.5 mil",
+                                      "2 mil",
+                                      "1 mil",
+                                      "0.5 mil",
+                                      "0.2 mil",
+                                      "0.1 mil",
+                                      "5.0 mm",
+                                      "2.5 mm",
+                                      "1.0 mm",
+                                      "0.5 mm",
+                                      "0.25 mm",
+                                      "0.2 mm",
+                                      "0.1 mm",
+                                      "0.05 mm",
+                                      "0.025 mm",
+                                      "0.01 mm" };
+    }
+
+    if( aCfg->m_Window.zoom_factors.empty() )
+    {
+        aCfg->m_Window.zoom_factors = { 0.022,
+                                        0.035,
+                                        0.05,
+                                        0.08,
+                                        0.13,
+                                        0.22,
+                                        0.35,
+                                        0.6,
+                                        1.0,
+                                        2.2,
+                                        3.5,
+                                        5.0,
+                                        8.0,
+                                        13.0,
+                                        22.0,
+                                        35.0,
+                                        50.0,
+                                        80.0,
+                                        130.0,
+                                        220.0 };
+    }
+
+    for( double& factor : aCfg->m_Window.zoom_factors )
+        factor = std::min( factor, MAX_ZOOM_FACTOR );
+
     GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
-
-    if( cfg->m_Window.grid.sizes.empty() )
-    {
-        cfg->m_Window.grid.sizes = { "100 mil",
-                                     "50 mil",
-                                     "25 mil",
-                                     "20 mil",
-                                     "10 mil",
-                                     "5 mil",
-                                     "2.5 mil",
-                                     "2 mil",
-                                     "1 mil",
-                                     "0.5 mil",
-                                     "0.2 mil",
-                                     "0.1 mil",
-                                     "5.0 mm",
-                                     "2.5 mm",
-                                     "1.0 mm",
-                                     "0.5 mm",
-                                     "0.25 mm",
-                                     "0.2 mm",
-                                     "0.1 mm",
-                                     "0.05 mm",
-                                     "0.025 mm",
-                                     "0.01 mm" };
-    }
 
     SetElementVisibility( LAYER_WORKSHEET, cfg->m_Appearance.show_border_and_titleblock );
 
@@ -860,15 +884,9 @@ void GERBVIEW_FRAME::SetLayerColor( int aLayer, COLOR4D aColor )
 }
 
 
-int GERBVIEW_FRAME::GetActiveLayer()
-{
-    return ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer;
-}
-
-
 void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 {
-    ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
+    m_activeLayer = aLayer;
 
     if( doLayerWidgetUpdate )
         m_LayersManager->SelectLayer( aLayer );
@@ -886,10 +904,9 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     m_paper = aPageSettings;
-    GBR_SCREEN* screen = static_cast<GBR_SCREEN*>( GetScreen() );
 
-    if( screen )
-        screen->InitDataPoints( aPageSettings.GetSizeIU() );
+    if( GetScreen() )
+        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
 
     auto drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetCanvas() );
 
@@ -897,7 +914,7 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     auto worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS, &GetPageSettings(),
                                                     &Prj(), &GetTitleBlock() );
 
-    if( screen != NULL )
+    if( GetScreen() )
     {
         worksheet->SetSheetNumber( 1 );
         worksheet->SetSheetCount( 1 );
@@ -987,9 +1004,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
 {
     EDA_DRAW_FRAME::UpdateStatusBar();
 
-    GBR_SCREEN* screen = (GBR_SCREEN*) GetScreen();
-
-    if( !screen )
+    if( !GetScreen() )
         return;
 
     wxString line;
@@ -997,8 +1012,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
 
     if( GetShowPolarCoords() )  // display relative polar coordinates
     {
-        double   dx = cursorPos.x - screen->m_LocalOrigin.x;
-        double   dy = cursorPos.y - screen->m_LocalOrigin.y;
+        double   dx = cursorPos.x - GetScreen()->m_LocalOrigin.x;
+        double   dy = cursorPos.y - GetScreen()->m_LocalOrigin.y;
         double   theta = RAD2DEG( atan2( -dy, dx ) );
         double   ro = hypot( dx, dy );
         wxString formatter;
@@ -1051,8 +1066,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     if( !GetShowPolarCoords() )  // display relative cartesian coordinates
     {
         // Display relative coordinates:
-        dXpos = To_User_Unit( GetUserUnits(), cursorPos.x - screen->m_LocalOrigin.x );
-        dYpos = To_User_Unit( GetUserUnits(), cursorPos.y - screen->m_LocalOrigin.y );
+        dXpos = To_User_Unit( GetUserUnits(), cursorPos.x - GetScreen()->m_LocalOrigin.x );
+        dYpos = To_User_Unit( GetUserUnits(), cursorPos.y - GetScreen()->m_LocalOrigin.y );
 
         // We already decided the formatter above
         line.Printf( relformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
@@ -1060,12 +1075,6 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     }
 
     DisplayGridMsg();
-}
-
-
-const wxString GERBVIEW_FRAME::GetZoomLevelIndicator() const
-{
-    return EDA_DRAW_FRAME::GetZoomLevelIndicator();
 }
 
 
@@ -1184,23 +1193,19 @@ void GERBVIEW_FRAME::updateZoomSelectBox()
     if( m_zoomSelectBox == NULL )
         return;
 
-    wxString msg;
+    double zoom = GetCanvas()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
 
     m_zoomSelectBox->Clear();
     m_zoomSelectBox->Append( _( "Zoom Auto" ) );
     m_zoomSelectBox->SetSelection( 0 );
 
-    for( unsigned i = 0;  i < GetScreen()->m_ZoomList.size();  ++i )
+    for( unsigned i = 0;  i < config()->m_Window.zoom_factors.size();  ++i )
     {
-        msg = _( "Zoom " );
+        double current = config()->m_Window.zoom_factors[i];
 
-        double level =  m_zoomLevelCoeff / (double)GetScreen()->m_ZoomList[i];
-        wxString value = wxString::Format( wxT( "%.2f" ), level );
-        msg += value;
+        m_zoomSelectBox->Append( wxString::Format( _( "Zoom %.2f" ), current ) );
 
-        m_zoomSelectBox->Append( msg );
-
-        if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
+        if( zoom == current )
             m_zoomSelectBox->SetSelection( i + 1 );
     }
 }

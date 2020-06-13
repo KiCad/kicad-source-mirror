@@ -361,7 +361,6 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
 
             m_parent->SetCurrentSheet( sheet );
             m_parent->DisplayCurrentSheet();
-            sheet.LastScreen()->SetZoom( m_parent->GetScreen()->GetZoom() );
             m_parent->RedrawScreen( (wxPoint) m_parent->GetScreen()->m_ScrollCenter, false );
         }
 

@@ -103,7 +103,6 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
     {
         if( *sheetWithComponentFound != m_frame->GetCurrentSheet() )
         {
-            sheetWithComponentFound->LastScreen()->SetZoom( m_frame->GetScreen()->GetZoom() );
             m_frame->Schematic().SetCurrentSheet( *sheetWithComponentFound );
             m_frame->DisplayCurrentSheet();
         }

@@ -85,10 +85,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                         KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
 {
     m_userUnits = EDA_UNITS::MILLIMETRES;
-    m_zoomLevelCoeff = 290.0;   // Adjusted to roughly displays zoom level = 1
-                                // when the screen shows a 1:1 image
-                                // obviously depends on the monitor,
-                                // but this is an acceptable value
 
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
     m_originSelectChoice = 0;
@@ -180,7 +176,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
-    GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
@@ -423,17 +418,44 @@ void PL_EDITOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
+    if( aCfg->m_Window.grid.sizes.empty() )
+    {
+        aCfg->m_Window.grid.sizes = { "1.0 mm",
+                                      "0.50 mm",
+                                      "0.25 mm",
+                                      "0.20 mm",
+                                      "0.10 mm" };
+    }
+
+    if( aCfg->m_Window.zoom_factors.empty() )
+    {
+        aCfg->m_Window.zoom_factors = { 0.022,
+                                        0.035,
+                                        0.05,
+                                        0.08,
+                                        0.13,
+                                        0.22,
+                                        0.35,
+                                        0.6,
+                                        1.0,
+                                        2.2,
+                                        3.5,
+                                        5.0,
+                                        8.0,
+                                        13.0,
+                                        22.0,
+                                        35.0,
+                                        50.0,
+                                        80.0,
+                                        130.0,
+                                        220.0 };
+    }
+
+    for( double& factor : aCfg->m_Window.zoom_factors )
+        factor = std::min( factor, MAX_ZOOM_FACTOR );
+
     PL_EDITOR_SETTINGS* cfg = dynamic_cast<PL_EDITOR_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
-
-    if( cfg->m_Window.grid.sizes.empty() )
-    {
-        cfg->m_Window.grid.sizes = { "1.0 mm",
-                                     "0.50 mm",
-                                     "0.25 mm",
-                                     "0.20 mm",
-                                     "0.10 mm" };
-    }
 
     m_propertiesFrameWidth = cfg->m_PropertiesFrameWidth;
     m_originSelectChoice = cfg->m_CornerOrigin;
@@ -819,9 +841,4 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
     }
 }
 
-
-const wxString PL_EDITOR_FRAME::GetZoomLevelIndicator() const
-{
-    return EDA_DRAW_FRAME::GetZoomLevelIndicator();
-}
 

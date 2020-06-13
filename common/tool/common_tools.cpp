@@ -195,30 +195,19 @@ int COMMON_TOOLS::ZoomInOutCenter( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::doZoomInOut( bool aDirection, bool aCenterOnCursor )
 {
-    double zoom = m_frame->GetCanvas()->GetLegacyZoom();
+    double zoom = getView()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
 
     // Step must be AT LEAST 1.3
     if( aDirection )
-        zoom /= 1.3;
-    else
         zoom *= 1.3;
+    else
+        zoom /= 1.3;
 
     // Now look for the next closest menu step
-    std::vector<double>& zoomList = m_frame->GetScreen()->m_ZoomList;
+    std::vector<double>& zoomList = m_toolMgr->GetSettings()->m_Window.zoom_factors;
     int idx;
 
     if( aDirection )
-    {
-        for( idx = zoomList.size() - 1; idx >= 0; --idx )
-        {
-            if( zoomList[idx] <= zoom )
-                break;
-        }
-
-        if( idx < 0 )
-            idx = 0;        // if we ran off the end then peg to the end
-    }
-    else
     {
         for( idx = 0; idx < (int)zoomList.size(); ++idx )
         {
@@ -226,8 +215,19 @@ int COMMON_TOOLS::doZoomInOut( bool aDirection, bool aCenterOnCursor )
                 break;
         }
 
-        if( idx >= (int)zoomList.size() )
-            idx = zoomList.size() - 1;        // if we ran off the end then peg to the end
+        if( idx >= zoomList.size() )
+            idx = (int) zoomList.size() - 1;        // if we ran off the end then peg to the end
+    }
+    else
+    {
+        for( idx = (int) zoomList.size() - 1; idx >= 0; --idx )
+        {
+            if( zoomList[idx] <= zoom )
+                break;
+        }
+
+        if( idx < 0 )
+            idx = 0;        // if we ran off the end then peg to the end
     }
 
     return doZoomToPreset( idx + 1, aCenterOnCursor );
@@ -313,15 +313,14 @@ int COMMON_TOOLS::CenterContents( const TOOL_EVENT& aEvent )
 int COMMON_TOOLS::ZoomPreset( const TOOL_EVENT& aEvent )
 {
     unsigned int idx = aEvent.Parameter<intptr_t>();
-    return doZoomToPreset( idx, false );
+    return doZoomToPreset( (int) idx, false );
 }
 
 
 // Note: idx == 0 is Auto; idx == 1 is first entry in zoomList
 int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
 {
-    std::vector<double>& zoomList = m_frame->GetScreen()->m_ZoomList;
-    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+    std::vector<double>& zoomList = m_toolMgr->GetSettings()->m_Window.zoom_factors;
 
     if( idx == 0 )      // Zoom Auto
     {
@@ -333,18 +332,18 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
         idx--;
     }
 
-    double scale = m_frame->GetZoomLevelCoeff() / zoomList[idx];
+    double scale = zoomList[idx] * ZOOM_COEFF;
 
     if( aCenterOnCursor )
     {
-        view->SetScale( scale, getViewControls()->GetCursorPosition() );
+        getView()->SetScale( scale, getViewControls()->GetCursorPosition() );
 
         if( getViewControls()->IsCursorWarpingEnabled() )
             getViewControls()->CenterOnCursor();
     }
     else
     {
-        view->SetScale( scale );
+        getView()->SetScale( scale );
     }
 
     return 0;

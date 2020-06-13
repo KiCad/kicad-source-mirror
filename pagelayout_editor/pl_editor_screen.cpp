@@ -25,49 +25,14 @@
 
 #include <fctsys.h>
 #include <pl_editor_screen.h>
-#include <base_units.h>
-
-
-#define ZOOM_FACTOR( x )  ( x * IU_PER_MM / 1000 )
-
-
-/**
-    Default zoom values.
-    Roughly a 1.5 progression.
-*/
-static const double pl_editorZoomList[] =
-{
-    ZOOM_FACTOR( 10.0 ),        // Zoom in
-    ZOOM_FACTOR( 15.0 ),
-    ZOOM_FACTOR( 22.0 ),
-    ZOOM_FACTOR( 35.0 ),
-    ZOOM_FACTOR( 50.0 ),
-    ZOOM_FACTOR( 80.0 ),
-    ZOOM_FACTOR( 120.0 ),
-    ZOOM_FACTOR( 160.0 ),
-    ZOOM_FACTOR( 230.0 ),
-    ZOOM_FACTOR( 290.0 ),
-    ZOOM_FACTOR( 380.0 ),
-    ZOOM_FACTOR( 500.0 ),
-    ZOOM_FACTOR( 750.0 ),
-    ZOOM_FACTOR( 1000.0 ),
-    ZOOM_FACTOR( 1500.0 ),
-    ZOOM_FACTOR( 2000.0 ),
-    ZOOM_FACTOR( 3000.0 ),
-    ZOOM_FACTOR( 4500.0 ),      // Zoom out
-};
 
 
 PL_EDITOR_SCREEN::PL_EDITOR_SCREEN( const wxSize& aPageSizeIU ) :
-    BASE_SCREEN( SCREEN_T )
+    BASE_SCREEN( aPageSizeIU )
 {
-    for( double zoom : pl_editorZoomList )
-        m_ZoomList.push_back( zoom );
-
     // pl_editor uses the same frame position as schematic and board editors
     m_Center = false;
 
-    InitDataPoints( aPageSizeIU );
     m_NumberOfScreens = 2;
 }
 

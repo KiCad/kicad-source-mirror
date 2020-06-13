@@ -122,12 +122,6 @@ public:
     const PAGE_INFO& GetPageSettings () const override;
     const wxSize GetPageSizeIU() const override;
 
-    /**
-     * Function GetZoomLevelIndicator
-     * returns a human readable value which can be displayed in dialogs.
-     */
-    const wxString GetZoomLevelIndicator() const override;
-
     PL_DRAW_PANEL_GAL* GetCanvas() const override;
 
     PL_EDITOR_SCREEN* GetScreen() const override

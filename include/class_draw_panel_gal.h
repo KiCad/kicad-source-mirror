@@ -162,12 +162,6 @@ public:
     }
 
     /**
-     * Function GetLegacyZoom()
-     * Returns current view scale converted to zoom value used by the legacy canvas.
-     */
-    double GetLegacyZoom() const;
-
-    /**
      * Function GetParentEDAFrame()
      * Returns parent EDA_DRAW_FRAME, if available or NULL otherwise.
      */

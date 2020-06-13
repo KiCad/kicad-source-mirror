@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
- * @author Maciej Suminski <maciej.suminski@cern.ch>
  * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@
 #include <tool/grid_menu.h>
 #include <id.h>
 #include <eda_draw_frame.h>
-#include <base_screen.h>
 #include <settings/app_settings.h>
 #include <tool/actions.h>
 #include <bitmaps.h>

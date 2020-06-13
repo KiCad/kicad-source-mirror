@@ -30,7 +30,6 @@ set( GERBVIEW_SRCS
     am_param.cpp
     am_primitive.cpp
     DCodeSelectionbox.cpp
-    gbr_screen.cpp
     gbr_layout.cpp
     gerber_file_image.cpp
     gerber_file_image_list.cpp

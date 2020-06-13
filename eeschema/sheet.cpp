@@ -585,12 +585,9 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
     // Set draw offset, zoom... to values needed to draw in the memory DC
     // after saving initial values:
     wxPoint tmp_startvisu = screen->m_StartVisu;
-    double tmpzoom = screen->GetZoom();
-    wxPoint old_org = screen->m_DrawOrg;
+    wxPoint old_org       = screen->m_DrawOrg;
     screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
-
-    screen->SetZoom( 1 );   // we use zoom = 1 in draw functions.
 
     wxMemoryDC dc;
     wxBitmap image( dcsize );
@@ -620,7 +617,6 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 
     screen->m_StartVisu = tmp_startvisu;
     screen->m_DrawOrg   = old_org;
-    screen->SetZoom( tmpzoom );
 }
 
 

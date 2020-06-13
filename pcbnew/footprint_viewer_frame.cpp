@@ -263,7 +263,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // The canvas should not steal the focus from the list boxes
     GetCanvas()->SetCanFocus( false );
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
-    GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)

@@ -30,9 +30,9 @@
 #include <gerbview.h>
 #include <convert_to_biu.h>
 #include <gbr_layout.h>
-#include <gbr_screen.h>
 #include <page_info.h>
 #include <gbr_display_options.h>
+#include <undo_redo_container.h>
 
 #define NO_AVAILABLE_LAYERS UNDEFINED_LAYER
 
@@ -55,6 +55,7 @@ class REPORTER;
 class GERBVIEW_FRAME : public EDA_DRAW_FRAME    // PCB_BASE_FRAME
 {
     GBR_LAYOUT*         m_gerberLayout;
+    int                 m_activeLayer;
     wxPoint             m_grid_origin;
     PAGE_INFO           m_paper;            // used only to show paper limits to screen
     GBR_DISPLAY_OPTIONS m_DisplayOptions;
@@ -222,14 +223,6 @@ public:
     void UpdateStatusBar() override;
 
     /**
-     * Function GetZoomLevelIndicator
-     * returns a human readable value which can be displayed as zoom
-     * level indicator in dialogs.
-     * Virtual from the base class
-     */
-    const wxString GetZoomLevelIndicator() const override;
-
-    /**
      * Function GetDisplayMode
      *  @return 0 for fast mode (not fully compatible with negative objects)
      *          1 for exact mode, write mode
@@ -327,7 +320,7 @@ public:
      * Function SetActiveLayer
      * returns the active layer
      */
-    int GetActiveLayer();
+    int GetActiveLayer() const { return m_activeLayer; }
 
     /**
      * Function getNextAvailableLayer

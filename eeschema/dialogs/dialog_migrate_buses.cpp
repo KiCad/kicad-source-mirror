@@ -178,7 +178,6 @@ void DIALOG_MIGRATE_BUSES::onItemSelected( wxListEvent& aEvent )
 
     if( sheet != current )
     {
-        sheet.LastScreen()->SetZoom( m_frame->GetScreen()->GetZoom() );
         sheet.UpdateAllScreenReferences();
         m_frame->Schematic().SetCurrentSheet( sheet );
         sheet.LastScreen()->TestDanglingEnds();

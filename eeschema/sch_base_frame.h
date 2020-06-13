@@ -130,14 +130,6 @@ public:
      */
     virtual bool GetShowAllPins() const { return true; }
 
-    /**
-     * Function GetZoomLevelIndicator
-     * returns a human readable value which can be displayed as zoom
-     * level indicator in dialogs.
-     * Virtual from the base class
-     */
-    const wxString GetZoomLevelIndicator() const override;
-
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
     const PAGE_INFO& GetPageSettings () const override;
     const wxSize GetPageSizeIU() const override;

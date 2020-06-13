@@ -311,7 +311,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     InitExitKey();
 
     GetCanvas()->SwitchBackend( m_canvasType );
-    GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     // Default shutdown reason until a file is loaded

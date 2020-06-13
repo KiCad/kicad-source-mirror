@@ -27,7 +27,6 @@
 #include <base_screen.h>
 #include <base_struct.h>
 #include <fctsys.h>
-#include <id.h>
 #include <trace_helpers.h>
 
 
@@ -41,7 +40,6 @@ BASE_SCREEN::BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType ) :
     m_Initialized      = false;
     m_ScreenNumber     = 1;
     m_NumberOfScreens  = 1;      // Hierarchy: Root: ScreenNumber = 1
-    m_Zoom             = 32.0;
     m_Center           = true;
 
     m_FlagModified     = false;     // Set when any change is made on board.
@@ -69,25 +67,6 @@ void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeIU )
     }
 
     m_LocalOrigin = { 0, 0 };
-}
-
-
-bool BASE_SCREEN::SetZoom( double iu_per_du )
-{
-    if( iu_per_du == m_Zoom )
-        return false;
-
-    wxLogTrace( traceScreen, "Zoom:%.16g  1/Zoom:%.16g", iu_per_du, 1/iu_per_du );
-
-    if( iu_per_du < GetMinAllowedZoom() )
-        return false;
-
-    if( iu_per_du > GetMaxAllowedZoom() )
-        return false;
-
-    m_Zoom = iu_per_du;
-
-    return true;
 }
 
 

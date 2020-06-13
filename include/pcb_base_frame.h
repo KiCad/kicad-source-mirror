@@ -228,12 +228,6 @@ public:
     void UpdateGridSelectBox();
 
     /**
-     * Function GetZoomLevelIndicator
-     * returns a human readable value for display in dialogs.
-     */
-    const wxString GetZoomLevelIndicator() const override;
-
-    /**
      * Shows the 3D view frame.
      * If it does not exist, it is created.
      * If it exists, it is bring to the foreground

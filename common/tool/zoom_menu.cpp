@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,61 +24,49 @@
  */
 
 #include <tool/zoom_menu.h>
-#include <id.h>
 #include <eda_draw_frame.h>
-#include <base_screen.h>
+#include <settings/app_settings.h>
 #include <tool/actions.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <bitmaps.h>
-
+#include <convert_to_biu.h>
 #include <functional>
+
 using namespace std::placeholders;
 
 ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) :
         ACTION_MENU( true ),
         m_parent( aParent )
 {
-    BASE_SCREEN* screen = aParent->GetScreen();
-
     SetTitle( _( "Zoom" ) );
     SetIcon( zoom_selection_xpm );
 
-    //int zoom = screen->GetZoom();
-    int maxZoomIds = std::min( ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START,
-                               (int) screen->m_ZoomList.size() );
+    int i = 1;  // 0 reserved for menus which support auto-zoom
 
-    for( int i = 0; i < maxZoomIds; ++i )
-    {
-        Append( ID_POPUP_ZOOM_LEVEL_START+1 + i,   // ID_POPUP_ZOOM_LEVEL_START == Auto
-            wxString::Format( _( "Zoom: %.2f" ), aParent->GetZoomLevelCoeff() / screen->m_ZoomList[i] ),
-            wxEmptyString, wxITEM_CHECK );
-    }
+    for( double factor : m_parent->config()->m_Window.zoom_factors )
+        Append( i++, wxString::Format( _( "Zoom: %.2f" ), factor ), wxEmptyString, wxITEM_CHECK );
 }
 
 
 OPT_TOOL_EVENT ZOOM_MENU::eventHandler( const wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT event( ACTIONS::zoomPreset.MakeEvent() );
-    intptr_t idx = aEvent.GetId() - ID_POPUP_ZOOM_LEVEL_START;
-    event->SetParameter( idx );
-
+    event->SetParameter( (intptr_t) aEvent.GetId() );
     return event;
 }
 
 
 void ZOOM_MENU::update()
 {
-    BASE_SCREEN* screen = m_parent->GetScreen();
-    double zoom = screen->GetZoom();
-    const std::vector<double>& zoomList = m_parent->GetScreen()->m_ZoomList;
+    double zoom = m_parent->GetCanvas()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
 
-    // Check the current zoom
-    int maxZoomIds = std::min( ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START,
-                               (int) screen->m_ZoomList.size() );
+    const std::vector<double>& zoomList = m_parent->config()->m_Window.zoom_factors;
 
-    for( int i = 0; i < maxZoomIds; ++i )
+    for( int i = 0; i < zoomList.size(); ++i )
     {
         // Search for a value near the current zoom setting:
-        double rel_error = std::fabs( zoomList[i] - zoom )/zoom;
-        Check( ID_POPUP_ZOOM_LEVEL_START+1 + i, rel_error < 0.1 );
+        double rel_error = std::fabs( zoomList[i] - zoom ) / zoom;
+        // IDs start with 1 (leaving 0 for auto-zoom)
+        Check( i+1, rel_error < 0.1 );
     }
 }

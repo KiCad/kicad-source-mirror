@@ -66,46 +66,12 @@
 // TODO(JE) Debugging only
 #include <profile.h>
 
-#define ZOOM_FACTOR( x )       ( x * IU_PER_MILS )
-
-
-/* Default zoom values. Limited to these values to keep a decent size
- * to menus
- */
-static double SchematicZoomList[] =
-{
-    ZOOM_FACTOR( 0.5 ),
-    ZOOM_FACTOR( 0.7 ),
-    ZOOM_FACTOR( 1.0 ),
-    ZOOM_FACTOR( 1.5 ),
-    ZOOM_FACTOR( 2.0 ),
-    ZOOM_FACTOR( 3.0 ),
-    ZOOM_FACTOR( 4.0 ),
-    ZOOM_FACTOR( 6.0 ),
-    ZOOM_FACTOR( 8.0 ),
-    ZOOM_FACTOR( 11.0 ),
-    ZOOM_FACTOR( 13.0 ),
-    ZOOM_FACTOR( 16.0 ),
-    ZOOM_FACTOR( 20.0 ),
-    ZOOM_FACTOR( 26.0 ),
-    ZOOM_FACTOR( 32.0 ),
-    ZOOM_FACTOR( 48.0 ),
-    ZOOM_FACTOR( 64.0 ),
-    ZOOM_FACTOR( 80.0 ),
-    ZOOM_FACTOR( 128.0 )
-};
-
 
 SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
     BASE_SCREEN( aParent, SCH_SCREEN_T ),
     m_paper( wxT( "A4" ) )
 {
     m_modification_sync = 0;
-
-    SetZoom( 32 );
-
-    for( unsigned zoom : SchematicZoomList )
-        m_ZoomList.push_back( zoom );
 
     m_refCount = 0;
 

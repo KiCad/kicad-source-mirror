@@ -211,7 +211,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     galOpts.m_forceDisplayCursor = true;
     galOpts.m_axesEnabled = true;
 
-    GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
     updateView();
 

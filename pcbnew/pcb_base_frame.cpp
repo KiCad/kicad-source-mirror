@@ -26,9 +26,7 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <eda_base_frame.h>
 #include <confirm.h>
-#include <kiface_i.h>
 #include <dialog_helpers.h>
 #include <pcb_base_frame.h>
 #include <base_units.h>
@@ -40,12 +38,10 @@
 #include <fp_lib_table.h>
 #include <pcbnew_id.h>
 #include <class_board.h>
-#include <class_track.h>
 #include <class_module.h>
 #include <class_drawsegment.h>
 #include <collectors.h>
 #include <pcb_draw_panel_gal.h>
-#include <pcb_view.h>
 #include <math/vector2d.h>
 #include <trigo.h>
 #include <pcb_painter.h>
@@ -54,7 +50,6 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
-#include <pcbnew_settings.h>
 #include <tool/grid_menu.h>
 
 wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
@@ -71,11 +66,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
     m_Pcb( nullptr )
 {
-    m_zoomLevelCoeff      = 11.0 * IU_PER_MILS;  // Adjusted to roughly displays zoom level = 1
-                                        // when the screen shows a 1:1 image
-                                        // obviously depends on the monitor,
-                                        // but this is an acceptable value
-
     m_Settings = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 }
 
@@ -467,11 +457,11 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
     int current = 0;    // display Auto if no match found
 
     // check for a match within 1%
-    double zoom = GetCanvas()->GetLegacyZoom();
+    double zoom = GetCanvas()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
 
-    for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
+    for( unsigned i = 0; i < config()->m_Window.zoom_factors.size(); i++ )
     {
-        if( std::fabs( zoom - GetScreen()->m_ZoomList[i] ) < ( zoom / 100.0 ) )
+        if( std::fabs( zoom - config()->m_Window.zoom_factors[i] ) < ( zoom / 100.0 ) )
         {
             current = i + 1;
             break;
@@ -663,6 +653,34 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
                                       "0.01 mm" };
     }
 
+    if( aCfg->m_Window.zoom_factors.empty() )
+    {
+        aCfg->m_Window.zoom_factors = { 0.035,
+                                        0.05,
+                                        0.08,
+                                        0.13,
+                                        0.22,
+                                        0.35,
+                                        0.6,
+                                        1.0,
+                                        1.5,
+                                        2.2,
+                                        3.5,
+                                        5.0,
+                                        8.0,
+                                        13.0,
+                                        20.0,
+                                        35.0,
+                                        50.0,
+                                        80.0,
+                                        130.0,
+                                        220.0,
+                                        300.0 };
+    }
+
+    for( double& factor : aCfg->m_Window.zoom_factors )
+        factor = std::min( factor, MAX_ZOOM_FACTOR );
+
     // Some, but not all derived classes have a PCBNEW_SETTINGS.
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
 
@@ -731,12 +749,6 @@ void PCB_BASE_FRAME::OnModify()
 }
 
 
-const wxString PCB_BASE_FRAME::GetZoomLevelIndicator() const
-{
-    return EDA_DRAW_FRAME::GetZoomLevelIndicator();
-}
-
-
 void PCB_BASE_FRAME::UpdateGridSelectBox()
 {
     UpdateStatusBar();
@@ -766,23 +778,19 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
     if( m_zoomSelectBox == NULL )
         return;
 
-    wxString msg;
+    double zoom = GetCanvas()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
 
     m_zoomSelectBox->Clear();
     m_zoomSelectBox->Append( _( "Zoom Auto" ) );
     m_zoomSelectBox->SetSelection( 0 );
 
-    for( unsigned i = 0;  i < GetScreen()->m_ZoomList.size();  ++i )
+    for( unsigned i = 0;  i < config()->m_Window.zoom_factors.size();  ++i )
     {
-        msg = _( "Zoom " );
+        double current = config()->m_Window.zoom_factors[i];
 
-        double level =  m_zoomLevelCoeff / (double)GetScreen()->m_ZoomList[i];
-        wxString value = wxString::Format( wxT( "%.2f" ), level );
-        msg += value;
+        m_zoomSelectBox->Append( wxString::Format( _( "Zoom %.2f" ), current ) );
 
-        m_zoomSelectBox->Append( msg );
-
-        if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
+        if( zoom == current )
             m_zoomSelectBox->SetSelection( i + 1 );
     }
 }
