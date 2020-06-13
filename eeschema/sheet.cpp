@@ -564,14 +564,14 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
     // scale is the ratio resolution (in PPI) / internal units
     double ppi = 300;   // Use 300 pixels per inch to create bitmap images on start
     double inch2Iu = 1000.0 * IU_PER_MILS;
-    double  scale = ppi / inch2Iu;
+    double scale = ppi / inch2Iu;
 
     wxSize dcsize = DrawArea.GetSize();
 
     int maxdim = std::max( dcsize.x, dcsize.y );
 
-    // the max size in pixels of the bitmap used to byuild the sheet copy
-    const int maxbitmapsize = 3000;
+    // the max size in pixels of the bitmap used to build the sheet copy
+    const int maxbitmapsize = 5600;
 
     while( int( maxdim * scale ) > maxbitmapsize )
     {
@@ -592,12 +592,12 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
     wxMemoryDC dc;
     wxBitmap image( dcsize );
     dc.SelectObject( image );
+    dc.Clear();
 
     GRResetPenAndBrush( &dc );
     GRForceBlackPen( false );
     dc.SetUserScale( scale, scale );
 
-    dc.Clear();
     GetRenderSettings()->SetPrintDC( &dc );
 
     PrintPage( GetRenderSettings() );
