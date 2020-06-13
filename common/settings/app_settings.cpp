@@ -25,6 +25,7 @@
 #include <settings/app_settings.h>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
+#include <base_units.h>
 
 ///! Update the schema version whenever a migration is required
 const int appSettingsSchemaVersion = 0;
@@ -211,7 +212,6 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
     ret &= fromLegacy<int>(    aCfg,
             aFrame + "_LastGridSize",        aJsonPath + ".grid.last_size" );
 
-#if defined( PCBNEW )
     double x, y;
 
     if( aCfg->Read( aFrame + "PcbUserGrid_X", &x ) && aCfg->Read( aFrame + "PcbUserGrid_Y", &y ) )
@@ -221,7 +221,6 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
         ( *this )[PointerFromString( ".grid.user_grid_x" )] = StringFromValue( u, x, true, true );
         ( *this )[PointerFromString( ".grid.user_grid_y" )] = StringFromValue( u, y, true, true );
     }
-#endif
 
     ret &= fromLegacy<bool>(   aCfg,
             aFrame + gd + "GridAxesEnabled", aJsonPath + ".grid.axes_enabled" );

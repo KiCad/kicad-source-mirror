@@ -86,12 +86,13 @@ constexpr inline int Iu2Mils( int iu )
     return static_cast< int >( mils < 0 ? mils - 0.5 : mils + 0.5 );
 }
 #else
-// Here, we do not know the value of internal units: do not define
-// conversion functions (They do not have meaning)
-#define UNKNOWN_IU
+// Here, we do not know the value of internal units: just use something safe to allow
+// easier packaging of compilation units
+constexpr double IU_PER_MM = 1;
+constexpr double IU_PER_MILS = IU_PER_MM * 0.0254;
 #endif
 
-#ifndef UNKNOWN_IU
+
 // Other definitions used in a few files
 constexpr double MM_PER_IU = ( 1 / IU_PER_MM );
 
@@ -120,7 +121,5 @@ constexpr inline double Iu2Millimeter( int iu )
 
 constexpr int ARC_LOW_DEF  = Millimeter2iu( 0.02 );
 constexpr int ARC_HIGH_DEF = Millimeter2iu( 0.005 );
-
-#endif
 
 #endif  // CONVERT_TO_BIU_H_

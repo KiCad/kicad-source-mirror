@@ -41,16 +41,12 @@
 #include <title_block.h>
 
 
-#if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA ) || defined( GERBVIEW ) || defined( PL_EDITOR )
 #define IU_TO_MM( x )       ( x / IU_PER_MM )
 #define IU_TO_IN( x )       ( x / IU_PER_MILS / 1000 )
 #define IU_TO_MILS( x )     ( x / IU_PER_MILS )
 #define MM_TO_IU( x )       ( x * IU_PER_MM )
 #define IN_TO_IU( x )       ( x * IU_PER_MILS * 1000 )
 #define MILS_TO_IU( x )     ( x * IU_PER_MILS )
-#else
-#error "Cannot resolve internal units due to no definition of EESCHEMA, CVPCB or PCBNEW."
-#endif
 
 
 // Helper function to print a float number without using scientific notation

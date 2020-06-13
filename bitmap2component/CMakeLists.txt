@@ -10,8 +10,8 @@ include_directories( BEFORE ${INC_BEFORE} )
 include_directories( ${INC_AFTER} )
 
 set( BITMAP2COMPONENT_SRCS
+    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     ${CMAKE_SOURCE_DIR}/common/single_top.cpp
-
     bitmap2cmp_main.cpp
     bitmap2cmp_settings.cpp
     bitmap2component.cpp

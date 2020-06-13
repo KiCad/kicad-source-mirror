@@ -10,6 +10,7 @@ include_directories(
     )
 
 set( PCB_CALCULATOR_SRCS
+    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     attenuators.cpp
     board_classes_values.cpp
     colorcode.cpp
