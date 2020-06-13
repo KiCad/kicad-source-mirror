@@ -1,0 +1,17 @@
+condition
+max
+min
+opt
+allow
+rule
+version
+name
+priority
+expression
+enable
+severity
+type
+error
+warning
+info
+ignore
