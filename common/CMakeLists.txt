@@ -449,6 +449,7 @@ set( PCB_COMMON_SRCS
     origin_viewitem.cpp
     page_info.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_base_frame.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_expr_evaluator.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_commit.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_connected_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_design_settings.cpp
