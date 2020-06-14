@@ -427,7 +427,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
 
 bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 {
-    if( !m_textSize.Validate( Mils2iu( 1 ), Mils2iu( 10000 ) ) )  // 1 mil .. 10 inches
+    if( !m_textSize.Validate( 1.0, 10000.0, EDA_UNITS::INCHES, true ) )  // 1 mil .. 10 inches
         return false;
 
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();

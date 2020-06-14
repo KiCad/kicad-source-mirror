@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_set_grid_base.h"
+#include "dialog_grid_settings_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -19,8 +19,11 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 
+	m_book = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	wxPanel* gridOriginPage;
+	gridOriginPage = new wxPanel( m_book, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxStaticBoxSizer* sbLeftSizer;
-	sbLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid Origin") ), wxVERTICAL );
+	sbLeftSizer = new wxStaticBoxSizer( new wxStaticBox( gridOriginPage, wxID_ANY, _("Grid Origin") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerGridOrigin;
 	fgSizerGridOrigin = new wxFlexGridSizer( 2, 3, 0, 0 );
@@ -54,7 +57,27 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	sbLeftSizer->Add( fgSizerGridOrigin, 0, wxEXPAND|wxALL, 5 );
 
 
-	bUpperSizer->Add( sbLeftSizer, 1, wxEXPAND|wxALL, 5 );
+	gridOriginPage->SetSizer( sbLeftSizer );
+	gridOriginPage->Layout();
+	sbLeftSizer->Fit( gridOriginPage );
+	m_book->AddPage( gridOriginPage, _("a page"), false );
+	wxPanel* currentGridPage;
+	currentGridPage = new wxPanel( m_book, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxStaticBoxSizer* sbSizer5;
+	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( currentGridPage, wxID_ANY, _("Current Grid") ), wxVERTICAL );
+
+	wxArrayString m_currentGridCtrlChoices;
+	m_currentGridCtrl = new wxChoice( sbSizer5->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_currentGridCtrlChoices, 0 );
+	m_currentGridCtrl->SetSelection( 0 );
+	sbSizer5->Add( m_currentGridCtrl, 0, wxALL|wxEXPAND, 5 );
+
+
+	currentGridPage->SetSizer( sbSizer5 );
+	currentGridPage->Layout();
+	sbSizer5->Fit( currentGridPage );
+	m_book->AddPage( currentGridPage, _("a page"), false );
+
+	bUpperSizer->Add( m_book, 1, wxEXPAND | wxALL, 5 );
 
 	wxStaticBoxSizer* sbUserGridSizer;
 	sbUserGridSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Defined Grid") ), wxVERTICAL );
@@ -136,7 +159,7 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizer3->Add( m_grid2HotKey, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbFastSwitchSizer->Add( fgSizer3, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	sbFastSwitchSizer->Add( fgSizer3, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizerMain->Add( sbFastSwitchSizer, 0, wxEXPAND|wxALL, 10 );
@@ -171,18 +194,18 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerMain->Fit( this );
 
 	// Connect Events
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SET_GRID_BASE::OnInitDlg ) );
-	m_buttonReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_GRID_BASE::OnResetGridOrgClick ), NULL, this );
-	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_GRID_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_GRID_BASE::OnOkClick ), NULL, this );
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GRID_SETTINGS_BASE::OnInitDlg ) );
+	m_buttonReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnResetGridOriginClick ), NULL, this );
+	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnCancelClick ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnOkClick ), NULL, this );
 }
 
-DIALOG_SET_GRID_BASE::~DIALOG_SET_GRID_BASE()
+DIALOG_GRID_SETTINGS_BASE::~DIALOG_GRID_SETTINGS_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SET_GRID_BASE::OnInitDlg ) );
-	m_buttonReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_GRID_BASE::OnResetGridOrgClick ), NULL, this );
-	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_GRID_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_GRID_BASE::OnOkClick ), NULL, this );
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GRID_SETTINGS_BASE::OnInitDlg ) );
+	m_buttonReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnResetGridOriginClick ), NULL, this );
+	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnCancelClick ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnOkClick ), NULL, this );
 
 }

@@ -80,25 +80,25 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 
 bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
 {
-    if( !m_minClearance.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+    if( !m_minClearance.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
-    if( !m_trackMinWidth.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+    if( !m_trackMinWidth.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
-    if( !m_viaMinAnnulus.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+    if( !m_viaMinAnnulus.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
-    if( !m_viaMinSize.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+    if( !m_viaMinSize.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
-    if( !m_edgeClearance.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+    if( !m_edgeClearance.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
-    if( !m_throughHoleMin.Validate( Mils2iu( 2 ), Mils2iu( 1000 ) ) )   // #107 to 1 inch
+    if( !m_throughHoleMin.Validate( 2, 1000, EDA_UNITS::INCHES, true ) )   // #107 to 1 inch
         return false;
 
-    if( !m_holeToHoleMin.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+    if( !m_holeToHoleMin.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
     m_BrdSettings->m_BlindBuriedViaAllowed = m_OptAllowBlindBuriedVias->GetValue();

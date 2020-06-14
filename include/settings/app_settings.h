@@ -43,6 +43,8 @@ struct GRID_SETTINGS
     wxString user_grid_x;
     wxString user_grid_y;
     int last_size_idx;
+    int fast_grid_1;
+    int fast_grid_2;
     double line_width;
     double min_spacing;
     bool show;

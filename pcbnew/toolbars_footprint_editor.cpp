@@ -111,7 +111,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
         m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
                                     wxDefaultPosition, wxDefaultSize, 0, NULL );
 
-    updateZoomSelectBox();
+    UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );

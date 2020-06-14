@@ -70,8 +70,6 @@ public:
     int LayerAlphaDec( const TOOL_EVENT& aEvent );
 
     // Grid control
-    int GridFast1( const TOOL_EVENT& aEvent );
-    int GridFast2( const TOOL_EVENT& aEvent );
     int GridSetOrigin( const TOOL_EVENT& aEvent );
     int GridResetOrigin( const TOOL_EVENT& aEvent );
 

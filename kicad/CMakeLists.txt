@@ -15,7 +15,6 @@ include_directories(
 
 
 set( KICAD_SRCS
-    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     dialogs/dialog_template_selector_base.cpp
     dialogs/dialog_template_selector.cpp
     files-io.cpp

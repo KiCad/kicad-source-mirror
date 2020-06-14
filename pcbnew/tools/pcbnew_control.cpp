@@ -365,20 +365,6 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 
 
 // Grid control
-int PCBNEW_CONTROL::GridFast1( const TOOL_EVENT& aEvent )
-{
-    m_toolMgr->RunAction( "common.Control.gridPreset", true, m_frame->Settings().m_FastGrid1 );
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::GridFast2( const TOOL_EVENT& aEvent )
-{
-    m_toolMgr->RunAction( "common.Control.gridPreset", true, m_frame->Settings().m_FastGrid2 );
-    return 0;
-}
-
-
 void PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                       BOARD_ITEM* originViewItem, const VECTOR2D& aPoint )
 {
@@ -1082,8 +1068,6 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::LayerAlphaDec,        PCB_ACTIONS::layerAlphaDec.MakeEvent() );
 
     // Grid control
-    Go( &PCBNEW_CONTROL::GridFast1,            ACTIONS::gridFast1.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GridFast2,            ACTIONS::gridFast2.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridSetOrigin,        ACTIONS::gridSetOrigin.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridResetOrigin,      ACTIONS::gridResetOrigin.MakeEvent() );
 

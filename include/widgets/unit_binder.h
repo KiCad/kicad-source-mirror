@@ -121,11 +121,14 @@ public:
      * Function Validate
      * Validates the control against the given range, informing the user of any errors found.
      *
-     * @param aMin a minimum value (in internal units) for validation
-     * @param aMax a maximum value (in internal units) for validation
+     * @param aMin a minimum value for validation
+     * @param aMax a maximum value for validation
+     * @param aUnits the units of the min/max parameters (use UNSCALED for internal units)
+     * @param aUseMils if \a aUnits is EDA_UNITS::INCHES, interpret as mils
      * @return false on error.
      */
-    virtual bool Validate( long long int aMin, long long int aMax, bool setFocusOnError = true );
+    virtual bool Validate( double aMin, double aMax, EDA_UNITS aUnits = EDA_UNITS::UNSCALED,
+                           bool aUseMils = false );
 
     void SetLabel( const wxString& aLabel );
 

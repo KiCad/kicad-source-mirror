@@ -168,7 +168,7 @@ void UNIT_BINDER::delayedFocusHandler( wxCommandEvent& )
 }
 
 
-bool UNIT_BINDER::Validate( long long int aMin, long long int aMax, bool setFocusOnError )
+bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits, bool aUseMils )
 {
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_value );
 
@@ -179,34 +179,28 @@ bool UNIT_BINDER::Validate( long long int aMin, long long int aMax, bool setFocu
         return true;
     }
 
-    if( GetValue() < aMin )
+    if( GetValue() < From_User_Unit( aUnits, aMin, aUseMils ) )
     {
         m_errorMessage = wxString::Format( _( "%s must be at least %s." ),
                                            valueDescriptionFromLabel( m_label ),
                                            StringFromValue( m_units, aMin, true ) );
 
-        if( setFocusOnError )
-        {
-            textEntry->SelectAll();
-            // Don't focus directly; we might be inside a KillFocus event handler
-            wxPostEvent( this, wxCommandEvent( DELAY_FOCUS ) );
-        }
+        textEntry->SelectAll();
+        // Don't focus directly; we might be inside a KillFocus event handler
+        wxPostEvent( this, wxCommandEvent( DELAY_FOCUS ) );
 
         return false;
     }
 
-    if( GetValue() > aMax )
+    if( GetValue() > From_User_Unit( aUnits, aMax, aUseMils ) )
     {
         m_errorMessage = wxString::Format( _( "%s must be less than %s." ),
                                            valueDescriptionFromLabel( m_label ),
                                            StringFromValue( m_units, aMax, true ) );
 
-        if( setFocusOnError )
-        {
-            textEntry->SelectAll();
-            // Don't focus directly; we might be inside a KillFocus event handler
-            wxPostEvent( this, wxCommandEvent( DELAY_FOCUS ) );
-        }
+        textEntry->SelectAll();
+        // Don't focus directly; we might be inside a KillFocus event handler
+        wxPostEvent( this, wxCommandEvent( DELAY_FOCUS ) );
 
         return false;
     }

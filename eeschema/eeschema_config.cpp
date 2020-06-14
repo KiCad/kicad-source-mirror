@@ -416,10 +416,7 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
-    wxCHECK( cfg, /*void*/ );
-
-    if( cfg->m_Window.grid.sizes.empty() )
+    if( aCfg->m_Window.grid.sizes.empty() )
     {
         /*
          * Do NOT add others values (mainly grid values in mm), because they can break the
@@ -431,13 +428,13 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
          * The 100 mil grid is added to help conform to the KiCad Library Convention which
          * states: "Using a 100mil grid, pin ends and origin must lie on grid nodes IEC-60617"
          */
-        cfg->m_Window.grid.sizes = { "100 mil",
-                                     "50 mil",
-                                     "25 mil",
-                                     "10 mil",
-                                     "5 mil",
-                                     "2 mil",
-                                     "1 mil" };
+        aCfg->m_Window.grid.sizes = { "100 mil",
+                                      "50 mil",
+                                      "25 mil",
+                                      "10 mil",
+                                      "5 mil",
+                                      "2 mil",
+                                      "1 mil" };
     }
 
     if( aCfg->m_Window.zoom_factors.empty() )
@@ -463,20 +460,25 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     for( double& factor : aCfg->m_Window.zoom_factors )
         factor = std::min( factor, MAX_ZOOM_FACTOR );
 
-    wxString templateFieldNames = cfg->m_Drawing.field_names;
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
 
-    if( !templateFieldNames.IsEmpty() )
+    if( cfg )
     {
-        TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
+        wxString templateFieldNames = cfg->m_Drawing.field_names;
 
-        try
+        if( !templateFieldNames.IsEmpty() )
         {
-            m_templateFieldNames.Parse( &lexer, true );
-        }
-        catch( const IO_ERROR& DBG( e ) )
-        {
-            // @todo show error msg
-            DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
+            TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
+
+            try
+            {
+                m_templateFieldNames.Parse( &lexer, true );
+            }
+            catch( const IO_ERROR& DBG( e ) )
+            {
+                // @todo show error msg
+                DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
+            }
         }
     }
 }

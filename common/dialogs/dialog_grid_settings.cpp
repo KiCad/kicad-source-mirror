@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,48 +21,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_set_grid_base.h>
+#include <dialog_grid_settings.h>
 #include <base_units.h>
 #include <common.h>
 #include <settings/app_settings.h>
-#include <pcbnew_settings.h>
-#include <widgets/unit_binder.h>
-#include <pcb_base_edit_frame.h>
-#include <tools/pcb_actions.h>
+#include <eda_draw_frame.h>
 #include <tool/tool_manager.h>
-#include <id.h>
-#include <tool/common_tools.h>
-#include <math/util.h>      // for KiROUND
+#include <tool/actions.h>
 #include <tool/grid_menu.h>
 
-// Max values for grid size
-static const int MAX_GRID_SIZE = KiROUND( 1000.0 * IU_PER_MM );
-static const int MIN_GRID_SIZE = KiROUND( 0.001 * IU_PER_MM );
 
-
-class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
-{
-    PCB_BASE_FRAME* m_parent;
-
-public:
-    /// This has no dependencies on calling wxFrame derivative, such as PCB_BASE_FRAME.
-    DIALOG_SET_GRID( PCB_BASE_FRAME* aParent );
-
-    bool TransferDataFromWindow() override;
-    bool TransferDataToWindow() override;
-
-private:
-    void OnResetGridOrgClick( wxCommandEvent& event ) override;
-
-    UNIT_BINDER m_gridOriginX;
-    UNIT_BINDER m_gridOriginY;
-    UNIT_BINDER m_userGridX;
-    UNIT_BINDER m_userGridY;
-};
-
-
-DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent ):
-    DIALOG_SET_GRID_BASE( aParent ),
+DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
+    DIALOG_GRID_SETTINGS_BASE( aParent ),
     m_parent( aParent ),
     m_gridOriginX( aParent, m_staticTextGridPosX, m_GridOriginXCtrl, m_TextPosXUnits ),
     m_gridOriginY( aParent, m_staticTextGridPosY, m_GridOriginYCtrl, m_TextPosYUnits ),
@@ -71,8 +41,22 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent ):
 {
     wxArrayString grids;
     GRID_MENU::BuildChoiceList( &grids, m_parent->config(), GetUserUnits() != EDA_UNITS::INCHES );
+    m_currentGridCtrl->Append( grids );
     m_grid1Ctrl->Append( grids );
     m_grid2Ctrl->Append( grids );
+
+    if( m_parent->IsType( FRAME_SCH )
+        || m_parent->IsType( FRAME_SCH_LIB_EDITOR )
+        || m_parent->IsType( FRAME_SCH_VIEWER )
+        || m_parent->IsType( FRAME_SCH_VIEWER_MODAL )
+        || m_parent->IsType( FRAME_SIMULATOR ) )
+    {
+        m_book->SetSelection( 1 );
+    }
+    else
+    {
+        m_book->SetSelection( 0 );
+    }
 
     m_sdbSizerOK->SetDefault();         // set OK button as default response to 'Enter' key
     SetInitialFocus( m_GridOriginXCtrl );
@@ -84,25 +68,24 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent ):
 }
 
 
-bool DIALOG_SET_GRID::TransferDataFromWindow()
+bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 {
     // Validate new settings
-    if( !m_userGridX.Validate( MIN_GRID_SIZE, MAX_GRID_SIZE ) )
+    if( !m_userGridX.Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
         return false;
 
-    if( !m_userGridY.Validate( MIN_GRID_SIZE, MAX_GRID_SIZE ) )
+    if( !m_userGridY.Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
         return false;
 
     // Apply the new settings
     GRID_SETTINGS& gridCfg = m_parent->config()->m_Window.grid;
 
-    // Because grid origin is saved in board, show as modified
-    m_parent->OnModify();
+    gridCfg.last_size_idx = m_currentGridCtrl->GetSelection();
     m_parent->SetGridOrigin( wxPoint( m_gridOriginX.GetValue(), m_gridOriginY.GetValue() ) );
     gridCfg.user_grid_x = StringFromValue( GetUserUnits(), m_userGridX.GetValue(), true, true );
     gridCfg.user_grid_y = StringFromValue( GetUserUnits(), m_userGridY.GetValue(), true, true );
-    m_parent->Settings().m_FastGrid1 = m_grid1Ctrl->GetSelection();
-    m_parent->Settings().m_FastGrid2 = m_grid2Ctrl->GetSelection();
+    gridCfg.fast_grid_1 = m_grid1Ctrl->GetSelection();
+    gridCfg.fast_grid_2 = m_grid2Ctrl->GetSelection();
 
     // Notify GAL
     TOOL_MANAGER* mgr = m_parent->GetToolManager();
@@ -115,18 +98,20 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
 }
 
 
-bool DIALOG_SET_GRID::TransferDataToWindow()
+bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
 {
-    GRID_SETTINGS& settings = m_parent->config()->m_Window.grid;
+    GRID_SETTINGS& gridCfg = m_parent->config()->m_Window.grid;
 
-    m_userGridX.SetValue( ValueFromString( GetUserUnits(), settings.user_grid_x, true ) );
-    m_userGridY.SetValue( ValueFromString( GetUserUnits(), settings.user_grid_y, true ) );
+    m_currentGridCtrl->SetSelection( m_parent->config()->m_Window.grid.last_size_idx );
+
+    m_userGridX.SetValue( ValueFromString( GetUserUnits(), gridCfg.user_grid_x, true ) );
+    m_userGridY.SetValue( ValueFromString( GetUserUnits(), gridCfg.user_grid_y, true ) );
 
     m_gridOriginX.SetValue( m_parent->GetGridOrigin().x );
     m_gridOriginY.SetValue( m_parent->GetGridOrigin().y );
 
-    m_grid1Ctrl->SetSelection( m_parent->Settings().m_FastGrid1 );
-    m_grid2Ctrl->SetSelection( m_parent->Settings().m_FastGrid2 );
+    m_grid1Ctrl->SetSelection( gridCfg.fast_grid_1 );
+    m_grid2Ctrl->SetSelection( gridCfg.fast_grid_2 );
 
     int hk1 = ACTIONS::gridFast1.GetHotKey();
     int hk2 = ACTIONS::gridFast2.GetHotKey();
@@ -137,19 +122,10 @@ bool DIALOG_SET_GRID::TransferDataToWindow()
 }
 
 
-void DIALOG_SET_GRID::OnResetGridOrgClick( wxCommandEvent& event )
+void DIALOG_GRID_SETTINGS::OnResetGridOriginClick( wxCommandEvent& event )
 {
     m_gridOriginX.SetValue( 0 );
     m_gridOriginY.SetValue( 0 );
 }
 
 
-void PCB_BASE_EDIT_FRAME::OnGridSettings( wxCommandEvent& event )
-{
-    DIALOG_SET_GRID dlg( this );
-
-    dlg.ShowModal();
-
-    UpdateStatusBar();
-    GetCanvas()->Refresh();
-}

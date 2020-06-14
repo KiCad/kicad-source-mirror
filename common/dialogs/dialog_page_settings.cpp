@@ -257,10 +257,10 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
 void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
 {
-    if( !m_customSizeX.Validate( Mils2iu( MIN_PAGE_SIZE ), Mils2iu( m_maxPageSizeMils.x ) ) )
+    if( !m_customSizeX.Validate( MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.x, EDA_UNITS::INCHES, true ) )
         return;
 
-    if( !m_customSizeY.Validate( Mils2iu( MIN_PAGE_SIZE ), Mils2iu( m_maxPageSizeMils.y ) ) )
+    if( !m_customSizeY.Validate( MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.y, EDA_UNITS::INCHES, true ) )
         return;
 
     if( SavePageSettings() )
@@ -701,8 +701,8 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 {
     int lyWidth, lyHeight;
 
-    wxSize clamped_layout_size( Clamp( MIN_PAGE_SIZE, m_layout_size.x, m_maxPageSizeMils.x ),
-                                Clamp( MIN_PAGE_SIZE, m_layout_size.y, m_maxPageSizeMils.y ) );
+    wxSize clamped_layout_size( Clamp( MIN_PAGE_SIZE_MILS, m_layout_size.x, m_maxPageSizeMils.x ),
+                                Clamp( MIN_PAGE_SIZE_MILS, m_layout_size.y, m_maxPageSizeMils.y ) );
 
     double lyRatio = clamped_layout_size.x < clamped_layout_size.y ?
                         (double) clamped_layout_size.y / clamped_layout_size.x :

@@ -55,9 +55,15 @@
 #include <view/view.h>
 #include <ws_draw_item.h>
 #include <wx/snglinst.h>
-
+#include <dialogs/dialog_grid_settings.h>
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum size of the find/replace history stacks.
+
+
+BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
+    EVT_UPDATE_UI( ID_ON_GRID_SELECT, EDA_DRAW_FRAME::OnUpdateSelectGrid )
+    EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, EDA_DRAW_FRAME::OnUpdateSelectZoom )
+END_EVENT_TABLE()
 
 
 EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
@@ -231,6 +237,30 @@ void EDA_DRAW_FRAME::EraseMsgBox()
 }
 
 
+void EDA_DRAW_FRAME::UpdateGridSelectBox()
+{
+    UpdateStatusBar();
+    DisplayUnitsMsg();
+
+    if( m_gridSelectBox == NULL )
+        return;
+
+    // Update grid values with the current units setting.
+    m_gridSelectBox->Clear();
+    wxArrayString gridsList;
+
+    GRID_MENU::BuildChoiceList( &gridsList, config(), GetUserUnits() != EDA_UNITS::INCHES );
+
+    for( const wxString& grid : gridsList )
+        m_gridSelectBox->Append( grid );
+
+    m_gridSelectBox->Append( wxT( "---" ) );
+    m_gridSelectBox->Append( _( "Edit User Grid..." ) );
+
+    m_gridSelectBox->SetSelection( config()->m_Window.grid.last_size_idx );
+}
+
+
 void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 {
     // No need to update the grid select box if it doesn't exist or the grid setting change
@@ -239,9 +269,9 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
         return;
 
     int idx = config()->m_Window.grid.last_size_idx;
+    idx = std::max( 0, std::min( idx, (int) m_gridSelectBox->GetCount() - 1 ) );
 
-    if( idx >= 0 && idx < int( m_gridSelectBox->GetCount() )
-            && idx != m_gridSelectBox->GetSelection() )
+    if( idx != m_gridSelectBox->GetSelection() )
         m_gridSelectBox->SetSelection( idx );
 }
 
@@ -288,6 +318,18 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 }
 
 
+void EDA_DRAW_FRAME::OnGridSettings( wxCommandEvent& aEvent )
+{
+    DIALOG_GRID_SETTINGS dlg( this );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        UpdateStatusBar();
+        GetCanvas()->Refresh();
+    }
+}
+
+
 bool EDA_DRAW_FRAME::IsGridVisible() const
 {
     return config()->m_Window.grid.show;
@@ -314,12 +356,50 @@ void EDA_DRAW_FRAME::SetGridVisibility( bool aVisible )
 }
 
 
-void EDA_DRAW_FRAME::InitExitKey()
+void EDA_DRAW_FRAME::UpdateZoomSelectBox()
 {
-    wxAcceleratorEntry entries[1];
-    entries[0].Set( wxACCEL_CTRL, int( 'Q' ), wxID_EXIT );
-    wxAcceleratorTable accel( 1, entries );
-    SetAcceleratorTable( accel );
+    if( m_zoomSelectBox == NULL )
+        return;
+
+    double zoom = m_canvas->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
+
+    m_zoomSelectBox->Clear();
+    m_zoomSelectBox->Append( _( "Zoom Auto" ) );
+    m_zoomSelectBox->SetSelection( 0 );
+
+    for( unsigned i = 0;  i < config()->m_Window.zoom_factors.size();  ++i )
+    {
+        double current = config()->m_Window.zoom_factors[i];
+
+        m_zoomSelectBox->Append( wxString::Format( _( "Zoom %.2f" ), current ) );
+
+        if( zoom == current )
+            m_zoomSelectBox->SetSelection( i + 1 );
+    }
+}
+
+
+void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
+{
+    if( m_zoomSelectBox == NULL || m_zoomSelectBox->GetParent() == NULL )
+        return;
+
+    int current = 0;    // display Auto if no match found
+
+    // check for a match within 1%
+    double zoom = GetCanvas()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
+
+    for( unsigned i = 0; i < config()->m_Window.zoom_factors.size(); i++ )
+    {
+        if( std::fabs( zoom - config()->m_Window.zoom_factors[i] ) < ( zoom / 100.0 ) )
+        {
+            current = i + 1;
+            break;
+        }
+    }
+
+    if( current != m_zoomSelectBox->GetSelection() )
+        m_zoomSelectBox->SetSelection( current );
 }
 
 
@@ -381,6 +461,15 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
 
     aMenu.AddMenu( zoomMenu.get(),   SELECTION_CONDITIONS::ShowAlways, 1000 );
     aMenu.AddMenu( gridMenu.get(), SELECTION_CONDITIONS::ShowAlways, 1000 );
+}
+
+
+void EDA_DRAW_FRAME::InitExitKey()
+{
+    wxAcceleratorEntry entries[1];
+    entries[0].Set( wxACCEL_CTRL, int( 'Q' ), wxID_EXIT );
+    wxAcceleratorTable accel( 1, entries );
+    SetAcceleratorTable( accel );
 }
 
 

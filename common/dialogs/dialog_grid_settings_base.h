@@ -20,7 +20,9 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/panel.h>
 #include <wx/choice.h>
+#include <wx/simplebook.h>
 #include <wx/statline.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -32,19 +34,21 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_SET_GRID_BASE
+/// Class DIALOG_GRID_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SET_GRID_BASE : public DIALOG_SHIM
+class DIALOG_GRID_SETTINGS_BASE : public DIALOG_SHIM
 {
 	private:
 
 	protected:
+		wxSimplebook* m_book;
 		wxStaticText* m_staticTextGridPosX;
 		wxTextCtrl* m_GridOriginXCtrl;
 		wxStaticText* m_TextPosXUnits;
 		wxStaticText* m_staticTextGridPosY;
 		wxTextCtrl* m_GridOriginYCtrl;
 		wxStaticText* m_TextPosYUnits;
+		wxChoice* m_currentGridCtrl;
 		wxStaticText* m_staticTextSizeX;
 		wxTextCtrl* m_OptGridSizeX;
 		wxStaticText* m_TextSizeXUnits;
@@ -65,15 +69,15 @@ class DIALOG_SET_GRID_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
-		virtual void OnResetGridOrgClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnResetGridOriginClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Grid Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_SET_GRID_BASE();
+		DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Grid Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_GRID_SETTINGS_BASE();
 
 };
 

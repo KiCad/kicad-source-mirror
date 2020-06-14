@@ -409,6 +409,18 @@ int COMMON_TOOLS::OnGridChanged()
 }
 
 
+int COMMON_TOOLS::GridFast1( const TOOL_EVENT& aEvent )
+{
+    return GridPreset( m_frame->config()->m_Window.grid.fast_grid_1 );
+}
+
+
+int COMMON_TOOLS::GridFast2( const TOOL_EVENT& aEvent )
+{
+    return GridPreset( m_frame->config()->m_Window.grid.fast_grid_2 );
+}
+
+
 int COMMON_TOOLS::ToggleGrid( const TOOL_EVENT& aEvent )
 {
     m_frame->SetGridVisibility( !m_frame->IsGridVisible() );
@@ -551,6 +563,8 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::GridNext,           ACTIONS::gridNext.MakeEvent() );
     Go( &COMMON_TOOLS::GridPrev,           ACTIONS::gridPrev.MakeEvent() );
     Go( &COMMON_TOOLS::GridPreset,         ACTIONS::gridPreset.MakeEvent() );
+    Go( &COMMON_TOOLS::GridFast1,          ACTIONS::gridFast1.MakeEvent() );
+    Go( &COMMON_TOOLS::GridFast2,          ACTIONS::gridFast2.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleGrid,         ACTIONS::toggleGrid.MakeEvent() );
     Go( &COMMON_TOOLS::GridProperties,     ACTIONS::gridProperties.MakeEvent() );
 

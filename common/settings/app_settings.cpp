@@ -113,14 +113,14 @@ bool APP_SETTINGS_BASE::MigrateFromLegacy( wxConfigBase* aCfg )
 
     migrateFindReplace( aCfg );
 
-    ret &= fromLegacy<int>( aCfg, "canvas_type",            "graphics.canvas_type" );
+    ret &= fromLegacy<int>(    aCfg, "canvas_type",         "graphics.canvas_type" );
 
-    ret &= fromLegacy<int>( aCfg, "P22LIB_TREE_MODEL_ADAPTERSelectorColumnWidth",
-            "lib_tree.column_width" );
+    ret &= fromLegacy<int>(    aCfg, "P22LIB_TREE_MODEL_ADAPTERSelectorColumnWidth",
+                                                            "lib_tree.column_width" );
 
-    ret &= fromLegacy<bool>(   aCfg, "PrintMonochrome",         "printing.monochrome" );
-    ret &= fromLegacy<double>( aCfg, "PrintScale",              "printing.scale" );
-    ret &= fromLegacy<bool>(   aCfg, "PrintPageFrame",          "printing.title_block" );
+    ret &= fromLegacy<bool>(   aCfg, "PrintMonochrome",     "printing.monochrome" );
+    ret &= fromLegacy<double>( aCfg, "PrintScale",          "printing.scale" );
+    ret &= fromLegacy<bool>(   aCfg, "PrintPageFrame",      "printing.title_block" );
 
     {
         nlohmann::json js = nlohmann::json::array();
@@ -194,7 +194,9 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
 {
     bool ret = true;
 
-    const std::string gd = "GalDisplayOptions";
+    const std::string frameGDO = aFrame + "GalDisplayOptions";
+    const std::string cursorPath = aJsonPath + ".cursor";
+    const std::string gridPath = aJsonPath + ".grid";
 
     ret &= fromLegacy<bool>( aCfg, aFrame + "Maximized",            aJsonPath + ".maximized" );
     ret &= fromLegacyString( aCfg, aFrame + "MostRecentlyUsedPath", aJsonPath + ".mru_path" );
@@ -204,34 +206,20 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
     ret &= fromLegacy<int>(  aCfg, aFrame + "Pos_x",                aJsonPath + ".pos_x" );
     ret &= fromLegacy<int>(  aCfg, aFrame + "Pos_y",                aJsonPath + ".pos_y" );
 
-    ret &= fromLegacy<bool>(   aCfg,
-            aFrame + gd + "ForceDisplayCursor", aJsonPath + ".cursor.always_show_cursor" );
-    ret &= fromLegacy<bool>(   aCfg,
-            aFrame + gd + "CursorFullscreen",   aJsonPath + ".cursor.fullscreen_cursor" );
+    ret &= fromLegacy<bool>( aCfg, frameGDO + "ForceDisplayCursor", cursorPath + ".always_show_cursor" );
+    ret &= fromLegacy<bool>( aCfg, frameGDO + "CursorFullscreen",   cursorPath + ".fullscreen_cursor" );
 
-    ret &= fromLegacy<int>(    aCfg,
-            aFrame + "_LastGridSize",        aJsonPath + ".grid.last_size" );
+    ret &= fromLegacy<int>(  aCfg, aFrame + "_LastGridSize",        gridPath + ".last_size" );
 
-    double x, y;
+    ret &= fromLegacy<int>(  aCfg, aFrame + "FastGrid1",            gridPath + ".fast_grid_1" );
+    ret &= fromLegacy<int>(  aCfg, aFrame + "FastGrid2",            gridPath + ".fast_grid_2" );
 
-    if( aCfg->Read( aFrame + "PcbUserGrid_X", &x ) && aCfg->Read( aFrame + "PcbUserGrid_Y", &y ) )
-    {
-        EDA_UNITS u = static_cast<EDA_UNITS>( aCfg->ReadLong( aFrame + "PcbUserGrid_Unit",
-                static_cast<long>( EDA_UNITS::INCHES ) ) );
-
-        ( *this )[PointerFromString( ".grid.user_grid_x" )] = StringFromValue( u, x, true, true );
-        ( *this )[PointerFromString( ".grid.user_grid_y" )] = StringFromValue( u, y, true, true );
-    }
-
-    ret &= fromLegacy<bool>(   aCfg,
-            aFrame + gd + "GridAxesEnabled", aJsonPath + ".grid.axes_enabled" );
-    ret &= fromLegacy<double>( aCfg,
-            aFrame + gd + "GridLineWidth",   aJsonPath + ".grid.line_width" );
-    ret &= fromLegacy<double>( aCfg,
-            aFrame + gd + "GridMaxDensity",  aJsonPath + ".grid.min_spacing" );
-    ret &= fromLegacy<bool>(   aCfg, aFrame + gd + "ShowGrid",        aJsonPath + ".grid.show" );
-    ret &= fromLegacy<int>(    aCfg, aFrame + gd + "GridStyle",       aJsonPath + ".grid.style" );
-    ret &= fromLegacyColor(    aCfg, aFrame + gd + "GridColor",       aJsonPath + ".grid.color" );
+    ret &= fromLegacy<bool>(   aCfg, frameGDO + "GridAxesEnabled",  gridPath + ".axes_enabled" );
+    ret &= fromLegacy<double>( aCfg, frameGDO + "GridLineWidth",    gridPath + ".line_width" );
+    ret &= fromLegacy<double>( aCfg, frameGDO + "GridMaxDensity",   gridPath + ".min_spacing" );
+    ret &= fromLegacy<bool>(   aCfg, frameGDO + "ShowGrid",         gridPath + ".show" );
+    ret &= fromLegacy<int>(    aCfg, frameGDO + "GridStyle",        gridPath + ".style" );
+    ret &= fromLegacyColor(    aCfg, frameGDO + "GridColor",        gridPath + ".color" );
 
     return ret;
 }
@@ -262,16 +250,22 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.axes_enabled",
             &aWindow->grid.axes_enabled, false ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.last_size",
-            &aWindow->grid.last_size_idx, 0 ) );
-
     m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
             &aWindow->grid.sizes, {} ) );
 
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.last_size",
+            &aWindow->grid.last_size_idx, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.fast_grid_1",
+            &aWindow->grid.fast_grid_1, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.fast_grid_2",
+            &aWindow->grid.fast_grid_2, 1 ) );
+
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_x",
             &aWindow->grid.user_grid_x, "12.5 mil" ) );
-    m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_x",
-            &aWindow->grid.user_grid_x, "12.5 mil" ) );
+    m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_y",
+            &aWindow->grid.user_grid_y, "12.5 mil" ) );
 
     m_params.emplace_back( new PARAM<double>( aJsonPath + ".grid.line_width",
             &aWindow->grid.line_width, 1.0 ) );

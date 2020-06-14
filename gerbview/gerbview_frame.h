@@ -169,8 +169,6 @@ private:
     void            updateNetnameListSelectBox();
     void            updateAperAttributesSelectBox();
     void            updateDCodeSelectBox();
-    void            updateGridSelectBox();
-    void            updateZoomSelectBox();
     void            unitsChangeRefresh() override;      // See class EDA_DRAW_FRAME
 
     void OnClearJobFileHistory( wxCommandEvent& aEvent );

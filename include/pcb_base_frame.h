@@ -79,7 +79,6 @@ protected:
 
     PCBNEW_SETTINGS*        m_Settings; // No ownership, just a shortcut
 
-    void updateZoomSelectBox();
     virtual void unitsChangeRefresh() override;
 
     /**
@@ -224,8 +223,6 @@ public:
     virtual void UpdateStatusBar() override;
 
     PCB_SCREEN* GetScreen() const override { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
-
-    void UpdateGridSelectBox();
 
     /**
      * Shows the 3D view frame.
@@ -394,9 +391,6 @@ public:
 
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
-    // User interface update event handlers.
-    void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
-
     virtual void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) {}
 
     /**
@@ -420,8 +414,6 @@ public:
      * Always returns false. Should be overriden in derived classes which support autozoom.
      */
     virtual bool GetAutoZoom() { return false; }
-
-    DECLARE_EVENT_TABLE()
 };
 
 #endif  // PCB_BASE_FRAME_H

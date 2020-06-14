@@ -54,12 +54,6 @@
 
 wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
 
-BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
-    EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
-    EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
-END_EVENT_TABLE()
-
-
 PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString & aFrameName ) :
@@ -449,30 +443,6 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 }
 
 
-void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
-{
-    if( m_zoomSelectBox == NULL || m_zoomSelectBox->GetParent() == NULL )
-        return;
-
-    int current = 0;    // display Auto if no match found
-
-    // check for a match within 1%
-    double zoom = GetCanvas()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
-
-    for( unsigned i = 0; i < config()->m_Window.zoom_factors.size(); i++ )
-    {
-        if( std::fabs( zoom - config()->m_Window.zoom_factors[i] ) < ( zoom / 100.0 ) )
-        {
-            current = i + 1;
-            break;
-        }
-    }
-
-    if( current != m_zoomSelectBox->GetSelection() )
-        m_zoomSelectBox->SetSelection( current );
-}
-
-
 GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
 {
     GENERAL_COLLECTORS_GUIDE guide( m_Pcb->GetVisibleLayers(), GetActiveLayer(),
@@ -746,53 +716,6 @@ void PCB_BASE_FRAME::OnModify()
 
     UpdateStatusBar();
     UpdateMsgPanel();
-}
-
-
-void PCB_BASE_FRAME::UpdateGridSelectBox()
-{
-    UpdateStatusBar();
-    DisplayUnitsMsg();
-
-    if( m_gridSelectBox == NULL )
-        return;
-
-    // Update grid values with the current units setting.
-    m_gridSelectBox->Clear();
-    wxArrayString gridsList;
-
-    GRID_MENU::BuildChoiceList( &gridsList, config(), GetUserUnits() != EDA_UNITS::INCHES );
-
-    for( const wxString& grid : gridsList )
-        m_gridSelectBox->Append( grid );
-
-    m_gridSelectBox->Append( wxT( "---" ) );
-    m_gridSelectBox->Append( _( "Edit User Grid..." ) );
-
-    m_gridSelectBox->SetSelection( config()->m_Window.grid.last_size_idx );
-}
-
-
-void PCB_BASE_FRAME::updateZoomSelectBox()
-{
-    if( m_zoomSelectBox == NULL )
-        return;
-
-    double zoom = GetCanvas()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
-
-    m_zoomSelectBox->Clear();
-    m_zoomSelectBox->Append( _( "Zoom Auto" ) );
-    m_zoomSelectBox->SetSelection( 0 );
-
-    for( unsigned i = 0;  i < config()->m_Window.zoom_factors.size();  ++i )
-    {
-        double current = config()->m_Window.zoom_factors[i];
-
-        m_zoomSelectBox->Append( wxString::Format( _( "Zoom %.2f" ), current ) );
-
-        if( zoom == current )
-            m_zoomSelectBox->SetSelection( i + 1 );
-    }
 }
 
 

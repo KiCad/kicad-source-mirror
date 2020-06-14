@@ -182,8 +182,6 @@ public:
     ///> @copydoc PCB_BASE_FRAME::SetBoard()
     virtual void SetBoard( BOARD* aBoard ) override;
 
-    void OnGridSettings( wxCommandEvent& aEvent ) override;
-
     COLOR_SETTINGS* GetColorSettings() override;
 
 protected:

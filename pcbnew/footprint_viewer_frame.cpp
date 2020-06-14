@@ -36,14 +36,10 @@
 #include <footprint_viewer_frame.h>
 #include <fp_lib_table.h>
 #include <kiway.h>
-#include <lib_id.h>
-#include <memory>
 #include <msgpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
-#include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <pcbnew_settings.h>
 #include <footprint_editor_settings.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -85,8 +81,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, FOOTPRINT_VIEWER_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, FOOTPRINT_VIEWER_FRAME::OnSelectGrid )
 
-    EVT_UPDATE_UI( ID_ON_GRID_SELECT, FOOTPRINT_VIEWER_FRAME::OnUpdateSelectGrid )
-    EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, FOOTPRINT_VIEWER_FRAME::OnUpdateSelectZoom )
     EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton )
 
     EVT_TEXT( ID_MODVIEW_LIB_FILTER, FOOTPRINT_VIEWER_FRAME::OnLibFilter )

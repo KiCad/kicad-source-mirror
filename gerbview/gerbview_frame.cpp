@@ -52,13 +52,11 @@
 #include <view/view.h>
 #include <base_screen.h>
 #include <gerbview_painter.h>
-#include <geometry/shape_poly_set.h>
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_gerbview_settings.h>
 #include <dialogs/panel_gerbview_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <wx/wupdlock.h>
-#include <tool/grid_menu.h>
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
         : EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ), wxDefaultPosition,
@@ -1095,7 +1093,7 @@ void GERBVIEW_FRAME::unitsChangeRefresh()
     // Called on units change (see EDA_DRAW_FRAME)
     EDA_DRAW_FRAME::unitsChangeRefresh();
     updateDCodeSelectBox();
-    updateGridSelectBox();
+    UpdateGridSelectBox();
 }
 
 
@@ -1164,50 +1162,6 @@ void GERBVIEW_FRAME::setupTools()
 
     // Run the selection tool, it is supposed to be always active
     m_toolManager->InvokeTool( "gerbview.InteractiveSelection" );
-}
-
-
-void GERBVIEW_FRAME::updateGridSelectBox()
-{
-    UpdateStatusBar();
-    DisplayUnitsMsg();
-
-    if( m_gridSelectBox == NULL )
-        return;
-
-    // Update grid values with the current units setting.
-    m_gridSelectBox->Clear();
-    wxArrayString gridsList;
-
-    GRID_MENU::BuildChoiceList( &gridsList, config(), GetUserUnits() != EDA_UNITS::INCHES );
-
-    for( const wxString& grid : gridsList )
-        m_gridSelectBox->Append( grid );
-
-    m_gridSelectBox->SetSelection( config()->m_Window.grid.last_size_idx );
-}
-
-
-void GERBVIEW_FRAME::updateZoomSelectBox()
-{
-    if( m_zoomSelectBox == NULL )
-        return;
-
-    double zoom = GetCanvas()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
-
-    m_zoomSelectBox->Clear();
-    m_zoomSelectBox->Append( _( "Zoom Auto" ) );
-    m_zoomSelectBox->SetSelection( 0 );
-
-    for( unsigned i = 0;  i < config()->m_Window.zoom_factors.size();  ++i )
-    {
-        double current = config()->m_Window.zoom_factors[i];
-
-        m_zoomSelectBox->Append( wxString::Format( _( "Zoom %.2f" ), current ) );
-
-        if( zoom == current )
-            m_zoomSelectBox->SetSelection( i + 1 );
-    }
 }
 
 

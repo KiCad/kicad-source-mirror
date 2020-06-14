@@ -165,8 +165,8 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     updateNetnameListSelectBox();
     updateAperAttributesSelectBox();
     updateDCodeSelectBox();
-    updateGridSelectBox();
-    updateZoomSelectBox();
+    UpdateGridSelectBox();
+    UpdateZoomSelectBox();
 
     // combobox sizes can have changed: apply new best sizes
     auto item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );

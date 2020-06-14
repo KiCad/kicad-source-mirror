@@ -128,8 +128,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_print_pcbnew.cpp
     dialogs/dialog_select_net_from_list.cpp
     dialogs/dialog_select_net_from_list_base.cpp
-    dialogs/dialog_set_grid.cpp
-    dialogs/dialog_set_grid_base.cpp
     dialogs/dialog_swap_layers.cpp
     dialogs/dialog_swap_layers_base.cpp
     dialogs/dialog_target_properties.cpp

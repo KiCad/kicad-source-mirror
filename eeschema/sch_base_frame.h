@@ -144,8 +144,6 @@ public:
     }
     void SetGridOrigin( const wxPoint& aPoint ) override {}
 
-    void OnGridSettings( wxCommandEvent& aEvent ) override;
-
     const TITLE_BLOCK& GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 

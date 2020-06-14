@@ -35,6 +35,7 @@
 #include <wx/tokenzr.h>
 #include <zones.h>
 #include <widgets/ui_common.h>
+#include <base_units.h>
 
 #include "../3d-viewer/3d_viewer/3d_viewer_settings.h"
 
@@ -63,8 +64,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_FootprintViewer(),
           m_FootprintWizard(),
           m_Display(),
-          m_FastGrid1( 0 ),
-          m_FastGrid2( 0 ),
           m_Use45DegreeGraphicSegments( false ),
           m_FlipLeftRight( false ),
           m_PolarCoords( false ),
@@ -96,10 +95,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<int>( "footprint_chooser.sash_v",
             &m_FootprintChooser.sash_v, -1 ) );
-
-    m_params.emplace_back( new PARAM<int>( "grid.fast_grid_1", &m_FastGrid1, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "grid.fast_grid_2", &m_FastGrid2, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right", &m_FlipLeftRight, true ) );
 
@@ -441,9 +436,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>(  aCfg, "FootprintChooserWidth",         "footprint_chooser.width" );
     ret &= fromLegacy<int>(  aCfg, "FootprintChooserHeight",        "footprint_chooser.height" );
 
-    ret &= fromLegacy<int>(  aCfg, f + "FastGrid1",            "grid.fast_grid_1" );
-    ret &= fromLegacy<int>(  aCfg, f + "FastGrid2",            "grid.fast_grid_2" );
-
     ret &= fromLegacy<bool>(  aCfg, "FlipLeftRight",           "editing.flip_left_right" );
     ret &= fromLegacy<bool>(  aCfg, "MagneticGraphics",        "editing.magnetic_graphics" );
     ret &= fromLegacy<int>(   aCfg, "MagneticPads",            "editing.magnetic_pads" );
@@ -635,11 +627,9 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, p + "StartDiagonal",         "tools.pns.start_diagonal" );
     ret &= fromLegacy<int>(  aCfg, p + "ShoveTimeLimit",        "tools.pns.shove_time_limit" );
     ret &= fromLegacy<int>(  aCfg, p + "ShoveIterationLimit",   "tools.pns.shove_iteration_limit" );
-    ret &= fromLegacy<int>(  aCfg,
-            p + "WalkaroundIterationLimit", "tools.pns.walkaround_iteration_limit" );
+    ret &= fromLegacy<int>(  aCfg, p + "WalkaroundIterationLimit", "tools.pns.walkaround_iteration_limit" );
     ret &= fromLegacy<bool>( aCfg, p + "JumpOverObstacles",     "tools.pns.jump_over_obstacles" );
-    ret &= fromLegacy<bool>( aCfg,
-            p + "SmoothDraggedSegments", "tools.pns.smooth_dragged_segments" );
+    ret &= fromLegacy<bool>( aCfg, p + "SmoothDraggedSegments", "tools.pns.smooth_dragged_segments" );
     ret &= fromLegacy<bool>( aCfg, p + "CanViolateDRC",         "tools.pns.can_violate_drc" );
     ret &= fromLegacy<bool>( aCfg, p + "SuggestFinish",         "tools.pns.suggest_finish" );
     ret &= fromLegacy<bool>( aCfg, p + "FreeAngleMode",         "tools.pns.free_angle_mode" );
@@ -682,6 +672,21 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DWorksheet",          LAYER_WORKSHEET );
 
     Pgm().GetSettingsManager().SaveColorSettings( cs, "board" );
+
+    double x, y;
+
+    if( aCfg->Read( f + "PcbUserGrid_X", &x ) && aCfg->Read( f + "PcbUserGrid_Y", &y ) )
+    {
+        EDA_UNITS u = static_cast<EDA_UNITS>( aCfg->ReadLong( f + "PcbUserGrid_Unit",
+                static_cast<long>( EDA_UNITS::INCHES ) ) );
+
+        // Convert to internal units
+        x = From_User_Unit( u, x );
+        y = From_User_Unit( u, y );
+
+        ( *this )[PointerFromString( "window.grid.user_grid_x" )] = StringFromValue( u, x, true, true );
+        ( *this )[PointerFromString( "window.grid.user_grid_y" )] = StringFromValue( u, y, true, true );
+    }
 
     // Footprint editor settings were stored in pcbnew config file.  Migrate them here.
     auto fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( false );

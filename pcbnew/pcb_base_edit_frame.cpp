@@ -36,6 +36,7 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <tools/pcb_actions.h>
+#include <dialogs/dialog_grid_settings.h>
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                           FRAME_T aFrameType, const wxString& aTitle,

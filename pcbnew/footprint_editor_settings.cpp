@@ -26,7 +26,7 @@
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 #include <wx/config.h>
-
+#include <base_units.h>
 
 extern const char* traceSettings;
 
@@ -267,7 +267,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>( aCfg,  "FpEditorValueDefaultLayer",      "design_settings.default_footprint_text_items.1.2" );
 
 
-    const std::string f = "ModEdit";
+    std::string f = "ModEdit";
 
     // Migrate color settings that were stored in the pcbnew config file
     // We create a copy of the user scheme for the footprint editor context
@@ -314,6 +314,22 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     manager.SaveColorSettings( cs, "board" );
 
     ( *this )[PointerFromString( "appearance.color_theme" )] = "user_footprints";
+
+    double x, y;
+    f = "ModEditFrame";
+
+    if( aCfg->Read( f + "PcbUserGrid_X", &x ) && aCfg->Read( f + "PcbUserGrid_Y", &y ) )
+    {
+        EDA_UNITS u = static_cast<EDA_UNITS>( aCfg->ReadLong( f + "PcbUserGrid_Unit",
+                static_cast<long>( EDA_UNITS::INCHES ) ) );
+
+        // Convert to internal units
+        x = From_User_Unit( u, x );
+        y = From_User_Unit( u, y );
+
+        ( *this )[PointerFromString( "window.grid.user_grid_x" )] = StringFromValue( u, x, true, true );
+        ( *this )[PointerFromString( "window.grid.user_grid_y" )] = StringFromValue( u, y, true, true );
+    }
 
     return ret;
 }

@@ -249,7 +249,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     // Zoom selection choice box.
     m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
                                     wxDefaultPosition, wxDefaultSize, 0, NULL );
-    updateZoomSelectBox();
+    UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect

@@ -488,7 +488,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
         m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT,
                                         wxDefaultPosition, wxDefaultSize, 0, NULL );
 
-    updateZoomSelectBox();
+    UpdateZoomSelectBox();
     m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
 
     // after adding the buttons to the toolbar, must call Realize()

@@ -240,11 +240,6 @@ public:
      */
     virtual void ExecuteRemoteCommand( const char* cmdline ){}
 
-    /**
-     * Return a human readable value for display in dialogs.
-     */
-    const wxString GetZoomLevelIndicator() const;
-
     void EraseMsgBox();
 
     void ReCreateMenuBar() override { }
@@ -273,9 +268,36 @@ public:
      * @param event - Command event passed by selecting grid size from the
      *                grid size combobox on the toolbar.
      */
-    virtual void OnSelectGrid( wxCommandEvent& event );
+    void OnSelectGrid( wxCommandEvent& event );
 
-    virtual void OnGridSettings( wxCommandEvent& event ) { };
+    void OnGridSettings( wxCommandEvent& event );
+
+    /**
+     * Rebuild the grid combobox to respond to any changes in the GUI (units, user
+     * grid changes, etc.)
+     */
+    void UpdateGridSelectBox();
+
+    /**
+     * Update the checked item in the grid combobox.
+     */
+    void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
+
+    /**
+     * Rebuild the grid combobox to respond to any changes in the GUI (units, user
+     * grid changes, etc.)
+     */
+    void UpdateZoomSelectBox();
+
+    /**
+     * Update the checked item in the zoom combobox.
+     */
+    void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
+
+    /**
+     * Return a human readable value for display in dialogs.
+     */
+    const wxString GetZoomLevelIndicator() const;
 
     /**
      * Set the zoom factor when selected by the zoom list box in the main tool bar.
@@ -285,10 +307,6 @@ public:
      *       Last list position is custom zoom not in zoom list.
      */
     virtual void OnSelectZoom( wxCommandEvent& event );
-
-    // Update user interface event handlers shared by all applications derived from
-    // EDA_DRAW_FRAME.
-    void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
 
     /**
      * Recalculate the size of toolbars and display panel when the frame size changes.
@@ -459,6 +477,8 @@ public:
      * Rebuild all toolbars, and update the checked state of ckeck tools
      */
     void RecreateToolbars();
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif  // DRAW_FRAME_H_

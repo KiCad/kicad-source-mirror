@@ -242,10 +242,6 @@ public:
 
     MAGNETIC_SETTINGS m_MagneticItems;
 
-    int m_FastGrid1;
-
-    int m_FastGrid2;
-
     bool m_Use45DegreeGraphicSegments;   // True to constraint graphic lines to horizontal,
     // vertical and 45º
     bool m_FlipLeftRight;                // True: Flip footprints across Y axis
