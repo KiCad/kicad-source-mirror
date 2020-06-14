@@ -216,7 +216,8 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
 
     if( aCfg->Read( aFrame + "PcbUserGrid_X", &x ) && aCfg->Read( aFrame + "PcbUserGrid_Y", &y ) )
     {
-        EDA_UNITS u = (EDA_UNITS)aCfg->Read( aFrame + "PcbUserGrid_Unit", (int)EDA_UNITS::INCHES );
+        EDA_UNITS u = static_cast<EDA_UNITS>( aCfg->ReadLong( aFrame + "PcbUserGrid_Unit",
+                static_cast<long>( EDA_UNITS::INCHES ) ) );
 
         ( *this )[PointerFromString( ".grid.user_grid_x" )] = StringFromValue( u, x, true, true );
         ( *this )[PointerFromString( ".grid.user_grid_y" )] = StringFromValue( u, y, true, true );
