@@ -965,6 +965,17 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
             }
             break;
 
+        case PCB_MODULE_ZONE_AREA_T:
+            {
+                auto zone = static_cast<MODULE_ZONE_CONTAINER*>( item );
+                auto parent = static_cast<MODULE*>( item->GetParent() );
+
+                m_commit->Modify( parent );
+                getView()->Remove( zone );
+                parent->Remove( zone );
+            }
+            break;
+
         case PCB_ZONE_AREA_T:
             // We process the zones special so that cutouts can be deleted when the delete tool
             // is called from inside a cutout when the zone is selected.
