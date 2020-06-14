@@ -941,6 +941,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
         case PCB_PAD_T:
         case PCB_MODULE_TEXT_T:
         case PCB_MODULE_EDGE_T:
+        case PCB_MODULE_ZONE_AREA_T:
 
             // this calls MODULE::Visit() on each module.
             result = IterateForward<MODULE*>( m_modules, inspector, testData, p );
@@ -954,6 +955,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 case PCB_PAD_T:
                 case PCB_MODULE_TEXT_T:
                 case PCB_MODULE_EDGE_T:
+                case PCB_MODULE_ZONE_AREA_T:
                     continue;
 
                 default:

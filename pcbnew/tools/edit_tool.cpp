@@ -762,6 +762,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         {
         case PCB_MODULE_EDGE_T:
         case PCB_MODULE_TEXT_T:
+        case PCB_MODULE_ZONE_AREA_T:
         case PCB_PAD_T:
             // Only create undo entry for items on the board
             if( !item->IsNew() && !EditingModules() )
@@ -779,6 +780,13 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         {
             auto& edge = static_cast<EDGE_MODULE&>( *item );
             edge.Mirror( mirrorPoint, false );
+            break;
+        }
+
+        case PCB_MODULE_ZONE_AREA_T:
+        {
+            auto& zone = static_cast<MODULE_ZONE_CONTAINER&>( *item );
+            zone.Mirror( mirrorPoint, false );
             break;
         }
 

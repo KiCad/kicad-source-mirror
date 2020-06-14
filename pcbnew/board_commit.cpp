@@ -149,7 +149,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                         board->Modules().front()->Add( boardItem );
                 }
                 else if( boardItem->Type() == PCB_MODULE_TEXT_T ||
-                         boardItem->Type() == PCB_MODULE_EDGE_T )
+                         boardItem->Type() == PCB_MODULE_EDGE_T ||
+                         boardItem->Type() == PCB_MODULE_ZONE_AREA_T )
                 {
                     wxASSERT( boardItem->GetParent() &&
                               boardItem->GetParent()->Type() == PCB_MODULE_T );

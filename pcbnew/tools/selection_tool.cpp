@@ -646,6 +646,7 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
 
         case PCB_MODULE_EDGE_T:
         case PCB_MODULE_TEXT_T:
+        case PCB_MODULE_ZONE_AREA_T:
             if( static_cast<MODULE*>( item->GetParent() )->IsLocked() )
                 containsLocked = true;
             break;
@@ -1546,6 +1547,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     switch( aItem->Type() )
     {
     case PCB_ZONE_AREA_T:
+    case PCB_MODULE_ZONE_AREA_T:
     {
         // Check to see if this keepout is part of a footprint
         // If it is, and we are not editing the footprint, it should not be selectable

@@ -82,6 +82,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
         // check if it not one of the module primitives
         if( ( i->Type() != PCB_MODULE_EDGE_T ) &&
                 ( i->Type() != PCB_MODULE_TEXT_T ) &&
+                ( i->Type() != PCB_MODULE_ZONE_AREA_T ) &&
                 ( i->Type() != PCB_PAD_T ) )
         {
             onlyModuleParts = false;
@@ -167,6 +168,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
             // Dont format stuff that cannot exist standalone!
             if( ( i->Type() != PCB_MODULE_EDGE_T ) &&
                 ( i->Type() != PCB_MODULE_TEXT_T ) &&
+                ( i->Type() != PCB_MODULE_ZONE_AREA_T ) &&
                 ( i->Type() != PCB_PAD_T ) )
             {
                 auto item = static_cast<BOARD_ITEM*>( i );
