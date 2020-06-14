@@ -7,7 +7,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 {
     COLOR4D color = m_board->Colors().GetLayerColor( aLayer );
 
-    // A hack to avoid plotting ahite itmen in white color, expecting the paper
+    // A hack to avoid plotting a white itemn in white color, expecting the paper
     // is also white: use a non white color:
     if( color == COLOR4D::WHITE )
         color = COLOR4D( LIGHTGRAY );
@@ -72,19 +72,25 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
     wxPoint shape_pos = aPad->ShapePos();
     GBR_METADATA gbr_metadata;
 
-    bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
-    bool isOnExternalCopperLayer = ( m_layerMask & LSET::ExternalCuMask() ).any();
-    bool isPadOnBoardTechLayers = ( aPad->GetLayerSet() & LSET::AllBoardTechMask() ).any();
+    bool plotOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
+    bool plotOnExternalCopperLayer = ( m_layerMask & LSET::ExternalCuMask() ).any();
+    // Pad not on the solder mask layer cannot be soldered.
+    // therefore it can have a specific aperture attribute.
+    // Not yet in use.
+    // bool isPadOnBoardTechLayers = ( aPad->GetLayerSet() & LSET::AllBoardTechMask() ).any();
 
     gbr_metadata.SetCmpReference( aPad->GetParent()->GetReference() );
 
-    if( isOnCopperLayer )
+    if( plotOnCopperLayer )
     {
         gbr_metadata.SetNetAttribType( GBR_NETINFO_ALL );
         gbr_metadata.SetCopper( true );
-
-        if( isOnExternalCopperLayer )
-            gbr_metadata.SetPadName( aPad->GetName() );
+        // Gives a default attribute, for instance for pads used as tracks in net ties:
+        // Connector pads and SMD pads are on external layers
+        // if on internal layers, they are certainly used as net tie
+        // and are similar to tracks: just conductor items
+        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
+        gbr_metadata.SetPadName( aPad->GetName() );
 
         gbr_metadata.SetNetName( aPad->GetNetname() );
 
@@ -95,62 +101,47 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
             aPad->GetName().IsEmpty() )
             gbr_metadata.m_NetlistMetadata.m_NotInNet = true;
 
-        if( !isOnExternalCopperLayer || !isPadOnBoardTechLayers )
+        if( !plotOnExternalCopperLayer )
         {
-            // On internal layers one cannot use the GBR_NETLIST_METADATA::GBR_INFO_FLASHED_PAD
-            // attribute when the component is on an external layer (most of the case)
-            // Also, if a SMD pad is not on a tech layer (masks) use also net+cmp attribute, because
-            // it is not really a pad (can be a "pad", actually a node in a virtual component)
+            // the .P object attribute (GBR_NETLIST_METADATA::GBR_NETINFO_PAD)
+            // is used on outer layers, unless the component is embedded
+            // or a "etched" component (fp only drawn, not a physical component)
+            // Currently, Pcbnew does not handle embedded component, so we disable the .P
+            // attribute on internal layers
+            // Note the Gerber doc is not really clear about through holes pads about the .P
             gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_NET |
                                            GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
 
-            if( !isPadOnBoardTechLayers )
-                // such a pad is not soldered and is not a connecting point.
-                // Just set aperture attribute as conductor
-                // If it is a through hole pad, it will be adjusted later
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
-
-            switch( aPad->GetAttribute() )
-            {
-            case PAD_ATTRIB_HOLE_NOT_PLATED:    // Mechanical pad through hole
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_WASHERPAD );
-                break;
-
-            case PAD_ATTRIB_STANDARD :  // Pad through hole, a hole is also expected
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_VIAPAD );
-                break;
-
-            default:
-                break;
-            }
         }
-        else    // Some attributes are reserved to the external copper layers
+
+        // Some attributes are reserved to the external copper layers:
+        // GBR_APERTURE_ATTRIB_CONNECTORPAD and GBR_APERTURE_ATTRIB_SMDPAD_CUDEF
+        // for instance.
+        // Pad with type PAD_ATTRIB_CONN or PAD_ATTRIB_SMD that is not on an outer layer
+        // has its aperture attribute set to GBR_APERTURE_ATTRIB_CONDUCTOR
+        switch( aPad->GetAttribute() )
         {
-            switch( aPad->GetAttribute() )
-            {
-            case PAD_ATTRIB_HOLE_NOT_PLATED:    // Mechanical pad through hole
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_WASHERPAD );
-                break;
+        case PAD_ATTRIB_HOLE_NOT_PLATED:    // Mechanical pad through hole
+            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_WASHERPAD );
+            break;
 
-            case PAD_ATTRIB_STANDARD :  // Pad through hole, a hole is also expected
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_COMPONENTPAD );
-                break;
+        case PAD_ATTRIB_STANDARD :  // Pad through hole, a hole is also expected
+            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_COMPONENTPAD );
+            break;
 
-            case PAD_ATTRIB_CONN:      // Connector pads have no solder paste.
+        case PAD_ATTRIB_CONN:       // Connector pads, no solder paste but with solder mask.
+            if( plotOnExternalCopperLayer )
                 gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONNECTORPAD );
-                break;
+            break;
 
-            case PAD_ATTRIB_SMD:       // SMD pads (One external copper layer only) with solder paste
-                // If round shape, perhaps a BGA pad but not sure: so use currently SMDPAD attribute,
-                // until an explicit BGA pad attribute is added in Pcbnew
-//                if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
-//                    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_BGAPAD_CUDEF );
-//                else
-                    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_SMDPAD_CUDEF );
-                break;
-            }
+        case PAD_ATTRIB_SMD:        // SMD pads (on external copper layer only)
+                                    // usually with solder paste and mask
+            if( plotOnExternalCopperLayer )
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_SMDPAD_CUDEF );
+            break;
         }
 
+        // Guard: Ensure NPTH pads have *always* the GBR_APERTURE_ATTRIB_WASHERPAD attribute
         if( aPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_WASHERPAD );
     }
