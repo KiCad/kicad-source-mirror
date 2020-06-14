@@ -71,6 +71,20 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags )
         {
             aCollector.Remove( item );
         }
+        else if( item->Type() == PCB_MODULE_ZONE_AREA_T )
+        {
+            MODULE* mod = static_cast<MODULE*>( item->GetParent() );
+
+            // case 1: handle locking
+            if( ( aFlags & EXCLUDE_LOCKED ) && mod && mod->IsLocked() )
+            {
+                aCollector.Remove( item );
+            }
+
+            // case 2: selection contains both the module and its pads - remove the pads
+            if( !( aFlags & INCLUDE_PADS_AND_MODULES ) && mod && aCollector.HasItem( mod ) )
+                aCollector.Remove( item );
+        }
         else if( item->Type() == PCB_PAD_T )
         {
             MODULE* mod = static_cast<MODULE*>( item->GetParent() );
