@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,14 +121,11 @@ public:
 
     std::map<wxString, wxString> ReadProperties();
 
-    static int32_t ConvertToKicadUnit( const int32_t aValue )
-    {
-        return ( ( (int64_t) aValue ) * 254L ) / 100;
-    }
-
     static int32_t ConvertToKicadUnit( const double aValue )
     {
-        return KiROUND( aValue * 2.54L );
+        double int_limit = std::numeric_limits<int>::max() * 0.7071;    // 0.7071 = roughly 1/sqrt(2)
+
+        return KiROUND( Clamp<double>( -int_limit, aValue * 2.54, int_limit ) );
     }
 
     static int PropertiesReadInt(
