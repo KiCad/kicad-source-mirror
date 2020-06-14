@@ -543,7 +543,8 @@ void PANEL_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
         }
     }
 
-    m_cur_grid->SetGridCursor( std::min( curRow, m_cur_grid->GetNumberRows() - 1 ), curCol );
+    if( m_cur_grid->GetNumberRows() > 0 && curRow >= 0 )
+        m_cur_grid->SetGridCursor( std::min( curRow, m_cur_grid->GetNumberRows() - 1 ), curCol );
 }
 
 
