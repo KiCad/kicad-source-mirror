@@ -750,8 +750,18 @@ static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
         export_vrml_polygon( aModel, layer, drawseg, 0.0, wxPoint( 0, 0 ) );
         break;
 
-    default:
+    case S_SEGMENT:
         export_vrml_line( aModel, layer, x, y, xf, yf, w );
+        break;
+
+    case S_RECT:
+        export_vrml_line( aModel, layer, x, y, xf, y, w );
+        export_vrml_line( aModel, layer, xf, y, xf, yf, w );
+        export_vrml_line( aModel, layer, xf, yf, x, yf, w );
+        export_vrml_line( aModel, layer, x, yf, x, y, w );
+        break;
+
+    default:
         break;
     }
 }

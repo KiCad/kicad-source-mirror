@@ -30,7 +30,6 @@
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <gr_basic.h>
-#include <macros.h>
 #include <msgpanel.h>
 #include <class_board.h>
 #include <class_module.h>
@@ -43,7 +42,6 @@
 #include <widgets/progress_reporter.h>
 
 #include "ar_autoplacer.h"
-#include "ar_cell.h"
 #include "ar_matrix.h"
 #include <memory>
 
@@ -52,6 +50,15 @@
 #define AR_ABORT_PLACEMENT -1
 
 #define STEP_AR_MM 1.0
+
+/* Bits characterizing cell */
+#define CELL_IS_EMPTY  0x00
+#define CELL_IS_HOLE   0x01   /* a conducting hole or obstacle */
+#define CELL_IS_MODULE 0x02   /* auto placement occupied by a module */
+#define CELL_IS_EDGE   0x20   /* Area and auto-placement: limiting cell contour (Board, Zone) */
+#define CELL_IS_FRIEND 0x40   /* Area and auto-placement: cell part of the net */
+#define CELL_IS_ZONE   0x80   /* Area and auto-placement: cell available */
+
 
 /* Penalty (cost) for CntRot90 and CntRot180:
  * CntRot90 and CntRot180 are from 0 (rotation allowed) to 10 (rotation not allowed)
@@ -263,7 +270,6 @@ bool AR_AUTOPLACER::fillMatrix()
 
     return success;
 }
-
 
 
 void AR_AUTOPLACER::rotateModule( MODULE* module, double angle, bool incremental )
@@ -481,22 +487,6 @@ int AR_AUTOPLACER::testRectangle( const EDA_RECT& aRect, int side )
                 return AR_OCCUIPED_BY_MODULE;
         }
     }
-
-    return AR_FREE_CELL;
-}
-
-int AR_AUTOPLACER::testModuleByPolygon( MODULE* aModule, int aSide, const wxPoint& aOffset )
-{
-    // Test for footprint out of board:
-    // If a footprint is not fully inside the board, substract board polygon
-    // to the footprint polygon gives a non null area.
-    SHAPE_POLY_SET fp_area = m_fpAreaTop;
-    fp_area.Move( -aOffset );
-    SHAPE_POLY_SET out_of_board_area;
-    out_of_board_area.BooleanSubtract( fp_area, m_topFreeArea, SHAPE_POLY_SET::PM_FAST );
-
-    if( out_of_board_area.OutlineCount() )
-        return AR_OCCUIPED_BY_MODULE;
 
     return AR_FREE_CELL;
 }

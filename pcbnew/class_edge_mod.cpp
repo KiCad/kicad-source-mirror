@@ -30,14 +30,10 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <trigo.h>
 #include <pcb_screen.h>
-#include <confirm.h>
 #include <kicad_string.h>
-#include <richio.h>
 #include <macros.h>
-#include <math_for_graphics.h>
 #include <pcb_base_frame.h>
 #include <msgpanel.h>
 #include <base_units.h>
@@ -46,15 +42,12 @@
 #include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
-
 #include <view/view.h>
 
-#include <cstdio>
 
 EDGE_MODULE::EDGE_MODULE( MODULE* parent, STROKE_T aShape ) :
     DRAWSEGMENT( parent, PCB_MODULE_EDGE_T )

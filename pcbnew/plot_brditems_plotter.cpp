@@ -529,6 +529,18 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
         m_plotter->ThickSegment( pos, end, thickness, GetPlotMode(), &gbr_metadata );
         break;
 
+    case S_RECT:
+    {
+        std::vector<wxPoint> pts;
+        aEdge->GetRectCorners( &pts );
+
+        m_plotter->ThickSegment( pts[0], pts[1], thickness, GetPlotMode(), &gbr_metadata );
+        m_plotter->ThickSegment( pts[1], pts[2], thickness, GetPlotMode(), &gbr_metadata );
+        m_plotter->ThickSegment( pts[2], pts[3], thickness, GetPlotMode(), &gbr_metadata );
+        m_plotter->ThickSegment( pts[3], pts[0], thickness, GetPlotMode(), &gbr_metadata );
+    }
+        break;
+
     case S_CIRCLE:
         radius = KiROUND( GetLineLength( end, pos ) );
         m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode(), &gbr_metadata );

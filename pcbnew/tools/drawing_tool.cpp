@@ -183,6 +183,48 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 }
 
 
+int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
+{
+    if( m_editModules && !m_frame->GetModel() )
+        return 0;
+
+    MODULE*          module = dynamic_cast<MODULE*>( m_frame->GetModel() );
+    DRAWSEGMENT*     rect = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
+    BOARD_COMMIT     commit( m_frame );
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECT );
+    OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
+
+    rect->SetFlags(IS_NEW );
+
+    if( aEvent.HasPosition() )
+        startingPoint = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
+    Activate();
+
+    while( drawSegment( tool, S_RECT, rect, startingPoint ) )
+    {
+        if( rect )
+        {
+            if( m_editModules )
+                static_cast<EDGE_MODULE*>( rect )->SetLocalCoord();
+
+            commit.Add( rect );
+            commit.Push( _( "Draw a rectangle" ) );
+
+            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, rect );
+        }
+
+        rect = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
+        rect->SetFlags(IS_NEW );
+        startingPoint = NULLOPT;
+    }
+
+    return 0;
+}
+
+
 int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 {
     if( m_editModules && !m_frame->GetModel() )
@@ -918,8 +960,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMENT*& aGraphic,
                                 OPT<VECTOR2D> aStartingPoint )
 {
-    // Only two shapes are currently supported
-    assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
+    // Only three shapes are currently supported
+    assert( aShape == S_SEGMENT || aShape == S_CIRCLE || aShape == S_RECT );
     GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
 
@@ -1938,6 +1980,7 @@ void DRAWING_TOOL::setTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine,              PCB_ACTIONS::drawLine.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawPolygon.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawRectangle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle,            PCB_ACTIONS::drawCircle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawDimension.MakeEvent() );

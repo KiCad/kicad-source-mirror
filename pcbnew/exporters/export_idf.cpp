@@ -102,6 +102,30 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
             }
             break;
 
+        case S_RECT:
+            {
+                if( ( graphic->GetStart().x == graphic->GetEnd().x )
+                    && ( graphic->GetStart().y == graphic->GetEnd().y ) )
+                    break;
+
+                double top = graphic->GetStart().y * scale + offY;
+                double left = graphic->GetStart().x * scale + offX;
+                double bottom = graphic->GetEnd().y * scale + offY;
+                double right = graphic->GetEnd().x * scale + offX;
+
+                IDF_POINT corners[4];
+                corners[0] = IDF_POINT( left, top );
+                corners[1] = IDF_POINT( right, top );
+                corners[2] = IDF_POINT( right, bottom );
+                corners[3] = IDF_POINT( left, bottom );
+
+                lines.push_back( new IDF_SEGMENT( corners[0], corners[1] ) );
+                lines.push_back( new IDF_SEGMENT( corners[1], corners[2] ) );
+                lines.push_back( new IDF_SEGMENT( corners[2], corners[3] ) );
+                lines.push_back( new IDF_SEGMENT( corners[3], corners[0] ) );
+            }
+            break;
+
         case S_ARC:
             {
                 if( ( graphic->GetCenter().x == graphic->GetArcStart().x )

@@ -985,6 +985,18 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aI
 
         break;
 
+    case S_RECT:
+    {
+        std::vector<wxPoint> pts;
+        aItem->GetRectCorners( &pts );
+
+        segs.push_back( new SHAPE_SEGMENT( pts[0], pts[1], aItem->GetWidth() ) );
+        segs.push_back( new SHAPE_SEGMENT( pts[1], pts[2], aItem->GetWidth() ) );
+        segs.push_back( new SHAPE_SEGMENT( pts[2], pts[3], aItem->GetWidth() ) );
+        segs.push_back( new SHAPE_SEGMENT( pts[3], pts[0], aItem->GetWidth() ) );
+    }
+        break;
+
     case S_CIRCLE:
     {
         // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC

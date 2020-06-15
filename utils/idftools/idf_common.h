@@ -480,6 +480,12 @@ public:
         y = 0.0;
     }
 
+    IDF_POINT( double aX, double aY )
+    {
+        x = aX;
+        y = aY;
+    }
+
     /**
      * Function Matches()
      * returns true if the given coordinate point is within the given radius

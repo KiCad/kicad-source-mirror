@@ -150,6 +150,7 @@ public:
     const wxPoint& GetArcStart() const      { return m_End; }
     const wxPoint GetArcEnd() const;
     const wxPoint GetArcMid() const;
+    void GetRectCorners( std::vector<wxPoint>* pts ) const;
 
     /**
      * function GetArcAngleStart()
@@ -180,6 +181,11 @@ public:
     /** For arcs and circles:
      */
     void SetCenter( const wxPoint& aCenterPoint ) { m_Start = aCenterPoint; }
+
+    const wxPoint GetFocusPosition() const override
+    {
+        return GetCenter();
+    }
 
     /**
      * Function GetParentModule

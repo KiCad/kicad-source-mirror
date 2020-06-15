@@ -29,7 +29,6 @@
 #ifndef __AR_AUTOPLACER_H
 #define __AR_AUTOPLACER_H
 
-#include "ar_cell.h"
 #include "ar_matrix.h"
 
 #include <class_board.h>
@@ -62,13 +61,6 @@ public:
 
     AR_RESULT AutoplaceModules( std::vector<MODULE*> aModules, BOARD_COMMIT* aCommit,
             bool aPlaceOffboardModules = false );
-
-    const std::vector<MODULE*> QueryOffboardModules();
-
-    void SetPlacementGrid( int aGrid )
-    {
-        m_gridSize = aGrid;
-    }
 
     /**
      * Set a VIEW overlay to draw items during a autoplace session.
@@ -104,7 +96,6 @@ private:
     void         genModuleOnRoutingMatrix( MODULE* Module );
 
     int          testRectangle( const EDA_RECT& aRect, int side );
-    int          testModuleByPolygon( MODULE* aModule,int aSide, const wxPoint& aOffset );
     unsigned int calculateKeepOutArea( const EDA_RECT& aRect, int side );
     int          testModuleOnBoard( MODULE* aModule, bool TstOtherSide, const wxPoint& aOffset );
     int          getOptimalModulePlacement( MODULE* aModule );
@@ -140,7 +131,6 @@ private:
     BOARD* m_board;
 
     wxPoint m_curPosition;
-    wxPoint m_moduleOffset;
     double  m_minCost;
     int     m_gridSize;
 

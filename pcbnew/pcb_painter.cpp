@@ -915,8 +915,15 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         break;
 
     case S_RECT:
-        wxASSERT_MSG( false, "Not tested yet" );
-        m_gal->DrawRectangle( start, end );
+    {
+        std::vector<wxPoint> pts;
+        aSegment->GetRectCorners( &pts );
+
+        m_gal->DrawSegment( pts[0], pts[1], thickness );
+        m_gal->DrawSegment( pts[1], pts[2], thickness );
+        m_gal->DrawSegment( pts[2], pts[3], thickness );
+        m_gal->DrawSegment( pts[3], pts[0], thickness );
+    }
         break;
 
     case S_ARC:

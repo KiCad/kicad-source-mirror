@@ -23,7 +23,6 @@
  */
 
 #include <fctsys.h>
-#include <kicad_string.h>
 #include <common.h>
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
 #include <macros.h>
@@ -39,7 +38,6 @@
 #include <class_drawsegment.h>
 #include <class_pcb_target.h>
 #include <class_edge_mod.h>
-#include <pcb_plot_params.h>
 #include <zones.h>
 #include <kicad_plugin.h>
 #include <pcb_parser.h>
@@ -888,6 +886,12 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
 
         break;
 
+    case S_RECT:  // Rectangle
+        m_out->Print( aNestLevel, "(gr_rect (start %s) (end %s)",
+                      FormatInternalUnits( aSegment->GetStart() ).c_str(),
+                      FormatInternalUnits( aSegment->GetEnd() ).c_str() );
+        break;
+
     case S_CIRCLE:  // Circle
         m_out->Print( aNestLevel, "(gr_circle (center %s) (end %s)",
                       FormatInternalUnits( aSegment->GetStart() ).c_str(),
@@ -957,6 +961,12 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
     {
     case S_SEGMENT:  // Line
         m_out->Print( aNestLevel, "(fp_line (start %s) (end %s)",
+                      FormatInternalUnits( aModuleDrawing->GetStart0() ).c_str(),
+                      FormatInternalUnits( aModuleDrawing->GetEnd0() ).c_str() );
+        break;
+
+    case S_RECT:    // Rectangle
+        m_out->Print( aNestLevel, "(fp_rect (start %s) (end %s)",
                       FormatInternalUnits( aModuleDrawing->GetStart0() ).c_str(),
                       FormatInternalUnits( aModuleDrawing->GetEnd0() ).c_str() );
         break;

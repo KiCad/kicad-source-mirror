@@ -582,6 +582,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         case T_gr_arc:
         case T_gr_circle:
         case T_gr_curve:
+        case T_gr_rect:
         case T_gr_line:
         case T_gr_poly:
             m_board->Add( parseDRAWSEGMENT(), ADD_MODE::APPEND );
@@ -1942,7 +1943,7 @@ void PCB_PARSER::parseNETCLASS()
 DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 {
     wxCHECK_MSG( CurTok() == T_gr_arc || CurTok() == T_gr_circle || CurTok() == T_gr_curve ||
-                 CurTok() == T_gr_line || CurTok() == T_gr_poly, NULL,
+                 CurTok() == T_gr_rect || CurTok() == T_gr_line || CurTok() == T_gr_poly, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as DRAWSEGMENT." ) );
 
     T token;
@@ -2017,6 +2018,30 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
         NeedRIGHT();
         break;
 
+    case T_gr_rect:
+        segment->SetShape( S_RECT );
+        NeedLEFT();
+        token = NextTok();
+
+        if( token != T_start )
+            Expecting( T_start );
+
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetStart( pt );
+        NeedRIGHT();
+        NeedLEFT();
+        token = NextTok();
+
+        if( token != T_end )
+            Expecting( T_end );
+
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetEnd( pt );
+        NeedRIGHT();
+        break;
+
     case T_gr_line:
         // Default DRAWSEGMENT type is S_SEGMENT.
         NeedLEFT();
@@ -2061,7 +2086,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
         break;
 
     default:
-        Expecting( "gr_arc, gr_circle, gr_curve, gr_line, or gr_poly" );
+        Expecting( "gr_arc, gr_circle, gr_curve, gr_line, gr_poly, or gp_rect" );
     }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -2107,7 +2132,9 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
     // However in custom pad shapes, zero-line width is allowed for filled circles
     if( segment->GetShape() != S_POLYGON && segment->GetWidth() == 0 &&
         !( segment->GetShape() == S_CIRCLE && aAllowCirclesZeroWidth ) )
+    {
         segment->SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
+    }
 
     return segment.release();
 }
@@ -2588,6 +2615,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_fp_circle:
         case T_fp_curve:
+        case T_fp_rect:
         case T_fp_line:
         case T_fp_poly:
         {
@@ -2628,7 +2656,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
                     "autoplace_cost90, autoplace_cost180, solder_mask_margin, "
                     "solder_paste_margin, solder_paste_ratio, clearance, "
                     "zone_connect, thermal_width, thermal_gap, attr, fp_text, "
-                    "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, pad, "
+                    "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, fp_rect, pad, "
                     "zone, or model" );
         }
     }
@@ -2738,7 +2766,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE()
 EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 {
     wxCHECK_MSG( CurTok() == T_fp_arc || CurTok() == T_fp_circle || CurTok() == T_fp_curve ||
-                 CurTok() == T_fp_line || CurTok() == T_fp_poly, NULL,
+                 CurTok() == T_fp_rect || CurTok() == T_fp_line || CurTok() == T_fp_poly, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDGE_MODULE." ) );
 
     wxPoint pt;
@@ -2821,6 +2849,31 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
         NeedRIGHT();
         break;
 
+    case T_fp_rect:
+        segment->SetShape( S_RECT );
+        NeedLEFT();
+        token = NextTok();
+
+        if( token != T_start )
+            Expecting( T_start );
+
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetStart0( pt );
+
+        NeedRIGHT();
+        NeedLEFT();
+        token = NextTok();
+
+        if( token != T_end )
+            Expecting( T_end );
+
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetEnd0( pt );
+        NeedRIGHT();
+        break;
+
     case T_fp_line:
         // Default DRAWSEGMENT type is S_SEGMENT.
         NeedLEFT();
@@ -2865,7 +2918,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
         break;
 
     default:
-        Expecting( "fp_arc, fp_circle, fp_curve, fp_line, or fp_poly" );
+        Expecting( "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, or fp_rect" );
     }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )

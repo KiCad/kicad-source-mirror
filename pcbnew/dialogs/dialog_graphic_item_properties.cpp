@@ -180,6 +180,10 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_sizerLeft->Show( false );
         break;
 
+    case S_RECT:
+        SetTitle( _( "Rectangle Properties" ) );
+        break;
+
     case S_SEGMENT:
         if( m_item->GetStart().x == m_item->GetEnd().x )
             m_flipStartEnd = m_item->GetStart().y > m_item->GetEnd().y;

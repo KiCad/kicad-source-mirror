@@ -26,16 +26,12 @@
  */
 
 #include "ar_matrix.h"
-#include "ar_cell.h"
-
-#include <common.h>
 #include <math/util.h>      // for KiROUND
 #include <math_for_graphics.h>
 #include <trigo.h>
 
 #include <class_drawsegment.h>
 #include <class_pad.h>
-#include <class_track.h>
 
 AR_MATRIX::AR_MATRIX()
 {
@@ -46,7 +42,6 @@ AR_MATRIX::AR_MATRIX()
     m_DirSide[0]         = nullptr;
     m_DirSide[1]         = nullptr;
     m_opWriteCell        = nullptr;
-    m_InitMatrixDone     = false;
     m_Nrows              = 0;
     m_Ncols              = 0;
     m_MemSize            = 0;
@@ -100,8 +95,6 @@ int AR_MATRIX::InitRoutingMatrix()
     if( m_Nrows <= 0 || m_Ncols <= 0 )
         return 0;
 
-    m_InitMatrixDone = true; // we have been called
-
     // give a small margin for memory allocation:
     int ii = ( m_Nrows + 1 ) * ( m_Ncols + 1 );
 
@@ -147,8 +140,6 @@ void AR_MATRIX::UnInitRoutingMatrix()
 {
     int ii;
 
-    m_InitMatrixDone = false;
-
     for( ii = 0; ii < AR_MAX_ROUTING_LAYERS_COUNT; ii++ )
     {
         // de-allocate Dir matrix
@@ -182,14 +173,10 @@ void AR_MATRIX::SetCellOperation( AR_MATRIX::CELL_OP aLogicOp )
     switch( aLogicOp )
     {
     default:
-    case WRITE_CELL: m_opWriteCell = &AR_MATRIX::SetCell; break;
-
-    case WRITE_OR_CELL: m_opWriteCell = &AR_MATRIX::OrCell; break;
-
+    case WRITE_CELL:     m_opWriteCell = &AR_MATRIX::SetCell; break;
+    case WRITE_OR_CELL:  m_opWriteCell = &AR_MATRIX::OrCell;  break;
     case WRITE_XOR_CELL: m_opWriteCell = &AR_MATRIX::XorCell; break;
-
     case WRITE_AND_CELL: m_opWriteCell = &AR_MATRIX::AndCell; break;
-
     case WRITE_ADD_CELL: m_opWriteCell = &AR_MATRIX::AddCell; break;
     }
 }
@@ -281,116 +268,6 @@ void AR_MATRIX::SetDist( int aRow, int aCol, int aSide, DIST_CELL x )
 }
 
 
-// fetch direction cell
-int AR_MATRIX::GetDir( int aRow, int aCol, int aSide )
-{
-    DIR_CELL* p;
-
-    p = m_DirSide[aSide];
-    return (int) ( p[aRow * m_Ncols + aCol] );
-}
-
-
-// store direction cell
-void AR_MATRIX::SetDir( int aRow, int aCol, int aSide, int x )
-{
-    DIR_CELL* p;
-
-    p = m_DirSide[aSide];
-    p[aRow * m_Ncols + aCol] = (char) x;
-}
-
-/* The tables of distances and keep out areas are established on the basis of a
- * 50 units grid size (the pitch between the cells is 50 units).
- * The actual distance could be computed by a scaling factor, but this is
- * not needed, we can use only reduced values
- */
-
-/* calculate approximate distance (manhattan distance)
- */
-int AR_MATRIX::GetApxDist( int r1, int c1, int r2, int c2 )
-{
-    int d1, d2; /* row and column deltas */
-
-    if( ( d1 = r1 - r2 ) < 0 ) /* get absolute row delta */
-        d1 = -d1;
-
-    if( ( d2 = c1 - c2 ) < 0 ) /* get absolute column delta */
-        d2 = -d2;
-
-    return ( d1 + d2 ) * 50;
-}
-
-
-/* distance to go thru a cell (en mils) */
-static const int dist[10][10] = { /* OT=Otherside, OR=Origin (source) cell */
-                                  /*..........N, NE,  E, SE,  S, SW,  W, NW,   OT, OR */
-    /* N  */ { 50, 60, 35, 60, 99, 60, 35, 60, 12, 12 },
-    /* NE */ { 60, 71, 60, 71, 60, 99, 60, 71, 23, 23 },
-    /* E  */ { 35, 60, 50, 60, 35, 60, 99, 60, 12, 12 },
-    /* SE */ { 60, 71, 60, 71, 60, 71, 60, 99, 23, 23 },
-    /* S  */ { 99, 60, 35, 60, 50, 60, 35, 60, 12, 12 },
-    /* SW */ { 60, 99, 60, 71, 60, 71, 60, 71, 23, 23 },
-    /* W  */ { 35, 60, 99, 60, 35, 60, 50, 60, 12, 12 },
-    /* NW */ { 60, 71, 60, 99, 60, 71, 60, 71, 23, 23 },
-
-    /* OT */ { 12, 23, 12, 23, 12, 23, 12, 23, 99, 99 },
-    /* OR */ { 99, 99, 99, 99, 99, 99, 99, 99, 99, 99 }
-};
-
-
-/* penalty for extraneous holes and corners, scaled by sharpness of turn */
-static const int penalty[10][10] = { /* OT=Otherside, OR=Origin (source) cell */
-                                     /*......... N, NE,  E, SE,  S, SW,  W, NW,   OT, OR */
-    /* N  */ { 0, 5, 10, 15, 20, 15, 10, 5, 50, 0 },
-    /* NE */ { 5, 0, 5, 10, 15, 20, 15, 10, 50, 0 },
-    /* E  */ { 10, 5, 0, 5, 10, 15, 20, 15, 50, 0 },
-    /* SE */ { 15, 10, 5, 0, 5, 10, 15, 20, 50, 0 },
-    /* S  */ { 20, 15, 10, 5, 0, 5, 10, 15, 50, 0 },
-    /* SW */ { 15, 20, 15, 10, 5, 0, 5, 10, 50, 0 },
-    /* W  */ { 10, 15, 20, 15, 10, 5, 0, 5, 50, 0 },
-    /* NW */ { 5, 10, 15, 20, 15, 10, 5, 0, 50, 0 },
-
-    /* OT */ { 50, 50, 50, 50, 50, 50, 50, 50, 100, 0 },
-    /* OR */ { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-};
-
-
-/* penalty pour directions preferencielles */
-#define PN 20
-static const int dir_penalty_TOP[10][10] = {
-    /* OT=Otherside, OR=Origin (source) cell */
-    /*......... N, NE,  E, SE,  S, SW,  W, NW,   OT, OR */
-    /* N  */ { PN, 0, 0, 0, PN, 0, 0, 0, 0, 0 },
-    /* NE */ { PN, 0, 0, 0, PN, 0, 0, 0, 0, 0 },
-    /* E  */ { PN, 0, 0, 0, PN, 0, 0, 0, 0, 0 },
-    /* SE */ { PN, 0, 0, 0, PN, 0, 0, 0, 0, 0 },
-    /* S  */ { PN, 0, 0, 0, PN, 0, 0, 0, 0, 0 },
-    /* SW */ { PN, 0, 0, 0, PN, 0, 0, 0, 0, 0 },
-    /* W  */ { PN, 0, 0, 0, PN, 0, 0, 0, 0, 0 },
-    /* NW */ { PN, 0, 0, 0, PN, 0, 0, 0, 0, 0 },
-
-    /* OT */ { PN, 0, 0, 0, PN, 0, 0, 0, 0, 0 },
-    /* OR */ { PN, 0, 0, 0, PN, 0, 0, 0, 0, 0 }
-};
-
-
-static int dir_penalty_BOTTOM[10][10] = {
-    /* OT=Otherside, OR=Origin (source) cell */
-    /*......... N, NE,  E, SE,  S, SW,  W, NW,   OT, OR */
-    /* N  */ { 0, 0, PN, 0, 0, 0, PN, 0, 0, 0 },
-    /* NE */ { 0, 0, PN, 0, 0, 0, PN, 0, 0, 0 },
-    /* E  */ { 0, 0, PN, 0, 0, 0, PN, 0, 0, 0 },
-    /* SE */ { 0, 0, PN, 0, 0, 0, PN, 0, 0, 0 },
-    /* S  */ { 0, 0, PN, 0, 0, 0, PN, 0, 0, 0 },
-    /* SW */ { 0, 0, PN, 0, 0, 0, PN, 0, 0, 0 },
-    /* W  */ { 0, 0, PN, 0, 0, 0, PN, 0, 0, 0 },
-    /* NW */ { 0, 0, PN, 0, 0, 0, PN, 0, 0, 0 },
-
-    /* OT */ { 0, 0, PN, 0, 0, 0, PN, 0, 0, 0 },
-    /* OR */ { 0, 0, PN, 0, 0, 0, PN, 0, 0, 0 }
-};
-
 /*
 ** x is the direction to enter the cell of interest.
 ** y is the direction to exit the cell of interest.
@@ -399,44 +276,6 @@ static int dir_penalty_BOTTOM[10][10] = {
 ** return the distance of the trace through the cell of interest.
 ** the calculation is driven by the tables above.
 */
-
-
-/* calculate distance (with penalty) of a trace through a cell
-*/
-int AR_MATRIX::CalcDist( int x, int y, int z, int side )
-{
-    int adjust, ldist;
-
-    adjust = 0; /* set if hole is encountered */
-
-    if( x == CELL_IS_EMPTY )
-        x = 10;
-
-    if( y == CELL_IS_EMPTY )
-    {
-        y = 10;
-    }
-    else if( y == FROM_OTHERSIDE )
-    {
-        if( z == CELL_IS_EMPTY )
-            z = 10;
-
-        adjust = penalty[x - 1][z - 1];
-    }
-
-    ldist = dist[x - 1][y - 1] + penalty[x - 1][y - 1] + adjust;
-
-    if( m_RouteCount > 1 )
-    {
-        if( side == AR_SIDE_BOTTOM )
-            ldist += dir_penalty_TOP[x - 1][y - 1];
-
-        if( side == AR_SIDE_TOP )
-            ldist += dir_penalty_BOTTOM[x - 1][y - 1];
-    }
-
-    return ldist * 10;
-}
 
 
 #define OP_CELL( layer, dy, dx )                             \
@@ -947,147 +786,6 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, LSET a
 }
 
 
-/* Draws a line, if layer = -1 on all layers
- */
-void AR_MATRIX::tracePcbLine(
-        int x0, int y0, int x1, int y1, LAYER_NUM layer, int color, AR_MATRIX::CELL_OP op_logic )
-{
-    int dx, dy, lim;
-    int cumul, inc, il, delta;
-
-    SetCellOperation( op_logic );
-
-    if( x0 == x1 ) // Vertical.
-    {
-        if( y1 < y0 )
-            std::swap( y0, y1 );
-
-        dy = y0 / m_GridRouting;
-        lim = y1 / m_GridRouting;
-        dx = x0 / m_GridRouting;
-
-        // Clipping limits of board.
-        if( ( dx < 0 ) || ( dx >= m_Ncols ) )
-            return;
-
-        if( dy < 0 )
-            dy = 0;
-
-        if( lim >= m_Nrows )
-            lim = m_Nrows - 1;
-
-        for( ; dy <= lim; dy++ )
-        {
-            OP_CELL( layer, dy, dx );
-        }
-
-        return;
-    }
-
-    if( y0 == y1 ) // Horizontal
-    {
-        if( x1 < x0 )
-            std::swap( x0, x1 );
-
-        dx = x0 / m_GridRouting;
-        lim = x1 / m_GridRouting;
-        dy = y0 / m_GridRouting;
-
-        // Clipping limits of board.
-        if( ( dy < 0 ) || ( dy >= m_Nrows ) )
-            return;
-
-        if( dx < 0 )
-            dx = 0;
-
-        if( lim >= m_Ncols )
-            lim = m_Ncols - 1;
-
-        for( ; dx <= lim; dx++ )
-        {
-            OP_CELL( layer, dy, dx );
-        }
-
-        return;
-    }
-
-    // Here is some perspective: using the algorithm LUCAS.
-    if( abs( x1 - x0 ) >= abs( y1 - y0 ) ) // segment slightly inclined/
-    {
-        if( x1 < x0 )
-        {
-            std::swap( x1, x0 );
-            std::swap( y1, y0 );
-        }
-
-        dx = x0 / m_GridRouting;
-        lim = x1 / m_GridRouting;
-        dy = y0 / m_GridRouting;
-        inc = 1;
-
-        if( y1 < y0 )
-            inc = -1;
-
-        il = lim - dx;
-        cumul = il / 2;
-        delta = abs( y1 - y0 ) / m_GridRouting;
-
-        for( ; dx <= lim; )
-        {
-            if( ( dx >= 0 ) && ( dy >= 0 ) && ( dx < m_Ncols ) && ( dy < m_Nrows ) )
-            {
-                OP_CELL( layer, dy, dx );
-            }
-
-            dx++;
-            cumul += delta;
-
-            if( cumul > il )
-            {
-                cumul -= il;
-                dy += inc;
-            }
-        }
-    }
-    else
-    {
-        if( y1 < y0 )
-        {
-            std::swap( x1, x0 );
-            std::swap( y1, y0 );
-        }
-
-        dy = y0 / m_GridRouting;
-        lim = y1 / m_GridRouting;
-        dx = x0 / m_GridRouting;
-        inc = 1;
-
-        if( x1 < x0 )
-            inc = -1;
-
-        il = lim - dy;
-        cumul = il / 2;
-        delta = abs( x1 - x0 ) / m_GridRouting;
-
-        for( ; dy <= lim; )
-        {
-            if( ( dx >= 0 ) && ( dy >= 0 ) && ( dx < m_Ncols ) && ( dy < m_Nrows ) )
-            {
-                OP_CELL( layer, dy, dx );
-            }
-
-            dy++;
-            cumul += delta;
-
-            if( cumul > il )
-            {
-                cumul -= il;
-                dx += inc;
-            }
-        }
-    }
-}
-
 void AR_MATRIX::TraceSegmentPcb(
         DRAWSEGMENT* pt_segm, int color, int marge, AR_MATRIX::CELL_OP op_logic )
 {
@@ -1101,69 +799,24 @@ void AR_MATRIX::TraceSegmentPcb(
 
     //printf("traceSegm %d %d %d %d\n", ux0, uy0, ux1, uy1);
 
-    LAYER_NUM layer = pt_segm->GetLayer();
-
-    //if( color == VIA_IMPOSSIBLE )
-    layer = UNDEFINED_LAYER;
-
+    LAYER_NUM layer = UNDEFINED_LAYER;    // Draw on all layers
 
     switch( pt_segm->GetShape() )
     {
-    // The segment is here a straight line or a circle or an arc.:
-    case S_CIRCLE: traceCircle( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic ); break;
+    case S_CIRCLE:
+        traceCircle( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
+        break;
 
     case S_ARC:
         traceArc( ux0, uy0, ux1, uy1, pt_segm->GetAngle(), half_width, layer, color, op_logic );
         break;
 
-    // The segment is here a line segment.
-    default: drawSegmentQcq( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic ); break;
-    }
-}
-
-
-void AR_MATRIX::TraceSegmentPcb( TRACK* aTrack, int color, int marge, AR_MATRIX::CELL_OP op_logic )
-{
-    int half_width = ( aTrack->GetWidth() / 2 ) + marge;
-
-    // Test if VIA (filled circle need to be drawn)
-    if( aTrack->Type() == PCB_VIA_T )
-    {
-        LSET layer_mask;
-
-        if( aTrack->IsOnLayer( m_routeLayerBottom ) )
-            layer_mask.set( m_routeLayerBottom );
-
-        if( aTrack->IsOnLayer( m_routeLayerTop ) )
-        {
-            if( !layer_mask.any() )
-                layer_mask = LSET( m_routeLayerTop );
-            else
-                layer_mask.set();
-        }
-
-        if( color == VIA_IMPOSSIBLE )
-            layer_mask.set();
-
-        if( layer_mask.any() )
-            traceFilledCircle( aTrack->GetStart().x, aTrack->GetStart().y, half_width, layer_mask,
-                    color, op_logic );
-    }
-    else
-    {
-        // Calculate the bounding rectangle of the segment
-        int ux0 = aTrack->GetStart().x - GetBrdCoordOrigin().x;
-        int uy0 = aTrack->GetStart().y - GetBrdCoordOrigin().y;
-        int ux1 = aTrack->GetEnd().x - GetBrdCoordOrigin().x;
-        int uy1 = aTrack->GetEnd().y - GetBrdCoordOrigin().y;
-
-        // Ordinary track
-        PCB_LAYER_ID layer = aTrack->GetLayer();
-
-        if( color == VIA_IMPOSSIBLE )
-            layer = UNDEFINED_LAYER;
-
+    case S_SEGMENT:
         drawSegmentQcq( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
+        break;
+
+    default:
+        break;
     }
 }
 

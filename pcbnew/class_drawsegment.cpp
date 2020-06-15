@@ -25,7 +25,6 @@
  */
 
 #include <fctsys.h>
-#include <macros.h>
 #include <gr_basic.h>
 #include <bezier_curves.h>
 #include <pcb_screen.h>
@@ -87,8 +86,13 @@ double DRAWSEGMENT::GetLength() const
 
         break;
 
-    default:
+    case S_SEGMENT:
         length = GetLineLength( GetStart(), GetEnd() );
+        break;
+
+    default:
+        wxASSERT_MSG( false, "DRAWSEGMENT::GetLength not implemented for shape"
+                + ShowShape( GetShape() ) );
         break;
     }
 
@@ -116,10 +120,8 @@ void DRAWSEGMENT::Move( const wxPoint& aMoveVector )
         m_BezierC1 += aMoveVector;
         m_BezierC2 += aMoveVector;
 
-        for( unsigned int ii = 0; ii < m_BezierPoints.size(); ii++ )
-        {
-            m_BezierPoints[ii] += aMoveVector;
-        }
+        for( wxPoint& pt : m_BezierPoints)
+            pt += aMoveVector;
 
         break;
 
@@ -136,6 +138,7 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
     case S_ARC:
     case S_SEGMENT:
     case S_CIRCLE:
+    case S_RECT:
         // these can all be done by just rotating the start and end points
         RotatePoint( &m_Start, aRotCentre, aAngle);
         RotatePoint( &m_End, aRotCentre, aAngle);
@@ -151,13 +154,11 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
         RotatePoint( &m_BezierC1, aRotCentre, aAngle);
         RotatePoint( &m_BezierC2, aRotCentre, aAngle);
 
-        for( unsigned int ii = 0; ii < m_BezierPoints.size(); ii++ )
-        {
-            RotatePoint( &m_BezierPoints[ii], aRotCentre, aAngle);
-        }
+        for( wxPoint& pt : m_BezierPoints )
+            RotatePoint( &pt, aRotCentre, aAngle);
+
         break;
 
-    case S_RECT:
     default:
         // un-handled edge transform
         wxASSERT_MSG( false, wxT( "DRAWSEGMENT::Rotate not implemented for "
@@ -385,7 +386,17 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
         aList.emplace_back( _( "Points" ), msg, DARKGREEN );
         break;
 
-    default:
+    case S_RECT:
+        aList.emplace_back( shape, _( "Rectangle" ), RED );
+
+        msg = MessageTextFromValue( units, std::abs( m_End.x - m_Start.x ) );
+        aList.emplace_back( _( "Width" ), msg, DARKGREEN );
+
+        msg = MessageTextFromValue( units, std::abs( m_End.y - m_Start.y ) );
+        aList.emplace_back( _( "Height" ), msg, DARKGREEN );
+        break;
+
+    case S_SEGMENT:
     {
         aList.emplace_back( shape, _( "Segment" ), RED );
 
@@ -398,6 +409,11 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
         msg.Printf( wxT( "%.1f" ), deg );
         aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
     }
+        break;
+
+    default:
+        aList.emplace_back( shape, _( "Unrecognized" ), RED );
+        break;
     }
 
     if( m_Shape == S_POLYGON )
@@ -436,6 +452,18 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 
     switch( m_Shape )
     {
+    case S_RECT:
+    {
+        std::vector<wxPoint> pts;
+        GetRectCorners( &pts );
+
+        bbox = EDA_RECT();  // re-init for merging
+
+        for( wxPoint& pt : pts )
+            bbox.Merge( pt );
+    }
+        break;
+
     case S_SEGMENT:
         bbox.SetEnd( m_End );
         break;
@@ -452,9 +480,8 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
         if( m_Poly.IsEmpty() )
             break;
     {
-        wxPoint p_end;
         MODULE* module = GetParentModule();
-        bool first = true;
+        bbox = EDA_RECT();  // re-init for merging
 
         for( auto iter = m_Poly.CIterate(); iter; iter++ )
         {
@@ -466,31 +493,12 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
                 pt += module->GetPosition();
             }
 
-
-            if( first )
-            {
-                p_end = pt;
-                bbox.SetX( pt.x );
-                bbox.SetY( pt.y );
-                first = false;
-            }
-            else
-            {
-
-                bbox.SetX( std::min( bbox.GetX(), pt.x ) );
-                bbox.SetY( std::min( bbox.GetY(), pt.y ) );
-
-                p_end.x   = std::max( p_end.x, pt.x );
-                p_end.y   = std::max( p_end.y, pt.y );
-            }
+            bbox.Merge( pt );
         }
-
-        bbox.SetEnd( p_end );
+    }
         break;
-	}
 
     case S_CURVE:
-
         bbox.Merge( m_BezierC1 );
         bbox.Merge( m_BezierC2 );
         bbox.Merge( m_End );
@@ -572,6 +580,21 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
             return true;
         break;
 
+    case S_RECT:
+    {
+        std::vector<wxPoint> pts;
+        GetRectCorners( &pts );
+
+        if( TestSegmentHit( aPosition, pts[0], pts[1], maxdist )
+                || TestSegmentHit( aPosition, pts[1], pts[2], maxdist )
+                || TestSegmentHit( aPosition, pts[2], pts[3], maxdist )
+                || TestSegmentHit( aPosition, pts[3], pts[0], maxdist ) )
+        {
+            return true;
+        }
+    }
+        break;
+
     case S_POLYGON:
         {
             if( !IsPolygonFilled() )
@@ -642,6 +665,26 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
             return arcRect.Intersects( arect ) &&
                    arcRect.IntersectsCircleEdge( GetCenter(), GetRadius(), GetWidth() );
         }
+        break;
+
+    case S_RECT:
+        if( aContained )
+        {
+            return arect.Contains( bb );
+        }
+        else
+        {
+            std::vector<wxPoint> pts;
+            GetRectCorners( &pts );
+
+            // Account for the width of the lines
+            arect.Inflate( GetWidth() / 2 );
+            return ( arect.Intersects( pts[0], pts[1] )
+                  || arect.Intersects( pts[1], pts[2] )
+                  || arect.Intersects( pts[2], pts[3] )
+                  || arect.Intersects( pts[3], pts[0] ) );
+        }
+
         break;
 
     case S_SEGMENT:
@@ -734,9 +777,8 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 
 wxString DRAWSEGMENT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Pcb Graphic %s, length %s on %s" ),
+    return wxString::Format( _( "Pcb Graphic %s on %s" ),
                              ShowShape( m_Shape ),
-                             MessageTextFromValue( aUnits, GetLength() ),
                              GetLayerName() );
 }
 
@@ -766,6 +808,40 @@ const BOX2I DRAWSEGMENT::ViewBBox() const
     }
 
     return EDA_ITEM::ViewBBox();
+}
+
+
+void DRAWSEGMENT::GetRectCorners( std::vector<wxPoint>* pts ) const
+{
+    MODULE* module = GetParentModule();
+    wxPoint topLeft = GetStart();
+    wxPoint botRight = GetEnd();
+
+    // Un-rotate rect topLeft and botRight
+    if( module && KiROUND( module->GetOrientation() ) % 900 != 0 )
+    {
+        topLeft -= module->GetPosition();
+        RotatePoint( &topLeft, -module->GetOrientation() );
+
+        botRight -= module->GetPosition();
+        RotatePoint( &botRight, -module->GetOrientation() );
+    }
+
+    // Set up the un-rotated 4 corners
+    pts->emplace_back( topLeft );
+    pts->emplace_back( botRight.x, topLeft.y );
+    pts->emplace_back( botRight );
+    pts->emplace_back( topLeft.x, botRight.y );
+
+    // Now re-rotate the 4 corners to get a diamond
+    if( module && KiROUND( module->GetOrientation() ) % 900 != 0 )
+    {
+        for( wxPoint& pt : *pts )
+        {
+            RotatePoint( &pt,module->GetOrientation() );
+            pt += module->GetPosition();
+        }
+    }
 }
 
 
@@ -816,21 +892,10 @@ void DRAWSEGMENT::computeArcBBox( EDA_RECT& aBBox ) const
     {
         switch( quarter )
         {
-        case 0:
-            aBBox.Merge( wxPoint( m_Start.x, m_Start.y + radius ) );     // down
-            break;
-
-        case 1:
-            aBBox.Merge( wxPoint( m_Start.x - radius, m_Start.y ) );     // left
-            break;
-
-        case 2:
-            aBBox.Merge( wxPoint( m_Start.x, m_Start.y - radius ) );     // up
-            break;
-
-        case 3:
-            aBBox.Merge( wxPoint( m_Start.x + radius, m_Start.y ) );     // right
-            break;
+        case 0: aBBox.Merge( wxPoint( m_Start.x,          m_Start.y + radius ) ); break;  // down
+        case 1: aBBox.Merge( wxPoint( m_Start.x - radius, m_Start.y          ) ); break;  // left
+        case 2: aBBox.Merge( wxPoint( m_Start.x,          m_Start.y - radius ) ); break;  // up
+        case 3: aBBox.Merge( wxPoint( m_Start.x + radius, m_Start.y          ) ); break;  // right
         }
 
         if( directionCW )
@@ -849,10 +914,8 @@ void DRAWSEGMENT::SetPolyPoints( const std::vector<wxPoint>& aPoints )
     m_Poly.RemoveAllContours();
     m_Poly.NewOutline();
 
-    for ( auto p : aPoints )
-    {
+    for ( const wxPoint& p : aPoints )
         m_Poly.Append( p.x, p.y );
-    }
 }
 
 
@@ -865,9 +928,7 @@ const std::vector<wxPoint> DRAWSEGMENT::BuildPolyPointsList() const
         if( m_Poly.COutline( 0 ).PointCount() )
         {
             for ( auto iter = m_Poly.CIterate(); iter; iter++ )
-            {
                 rv.emplace_back( iter->x, iter->y );
-            }
         }
     }
 

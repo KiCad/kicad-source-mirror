@@ -58,7 +58,6 @@ public:
                                                            // distance to cells
     DIR_CELL* m_DirSide[AR_MAX_ROUTING_LAYERS_COUNT];      // the image map of 2 board sides:
                                                            // pointers back to source
-    bool     m_InitMatrixDone;
     int      m_RoutingLayersCount; // Number of layers for autorouting (0 or 1)
     int      m_GridRouting;        // Size of grid for autoplace/autoroute
     EDA_RECT m_BrdBox;             // Actual board bounding box
@@ -133,18 +132,8 @@ public:
     void        AddCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell );
     DIST_CELL   GetDist( int aRow, int aCol, int aSide );
     void        SetDist( int aRow, int aCol, int aSide, DIST_CELL );
-    int         GetDir( int aRow, int aCol, int aSide );
-    void        SetDir( int aRow, int aCol, int aSide, int aDir );
-
-    // calculate distance (with penalty) of a trace through a cell
-    int CalcDist( int x, int y, int z, int side );
-
-    // calculate approximate distance (manhattan distance)
-    int GetApxDist( int r1, int c1, int r2, int c2 );
-
 
     void TraceSegmentPcb( DRAWSEGMENT* pt_segm, int color, int marge, AR_MATRIX::CELL_OP op_logic );
-    void TraceSegmentPcb( TRACK* aTrack, int color, int marge, AR_MATRIX::CELL_OP op_logic );
     void CreateKeepOutRectangle(
             int ux0, int uy0, int ux1, int uy1, int marge, int aKeepOut, LSET aLayerMask );
     void PlacePad( D_PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op_logic );
@@ -154,7 +143,6 @@ public:
             AR_MATRIX::CELL_OP op_logic );
 
 private:
-
     void drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer, int color,
             CELL_OP op_logic );
 
@@ -164,8 +152,6 @@ private:
             int cx, int cy, int radius, LSET aLayerMask, int color, AR_MATRIX::CELL_OP op_logic );
     void traceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, int lg, LAYER_NUM layer,
             int color, AR_MATRIX::CELL_OP op_logic );
-    void tracePcbLine( int x0, int y0, int x1, int y1, LAYER_NUM layer, int color,
-            AR_MATRIX::CELL_OP op_logic );
 };
 
 #endif

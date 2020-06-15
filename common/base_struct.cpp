@@ -656,6 +656,7 @@ void EDA_RECT::Merge( const wxPoint& aPoint )
     {
         m_Pos = aPoint;
         m_Size = wxSize( 0, 0 );
+        m_init = true;
         return;
     }
 

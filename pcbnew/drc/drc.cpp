@@ -941,6 +941,18 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
             itemShape.emplace_back( SEG( drawItem->GetStart(), drawItem->GetEnd() ) );
             break;
 
+        case S_RECT:
+        {
+            std::vector<wxPoint> pts;
+            drawItem->GetRectCorners( &pts );
+
+            itemShape.emplace_back( SEG( pts[0], pts[1] ) );
+            itemShape.emplace_back( SEG( pts[1], pts[2] ) );
+            itemShape.emplace_back( SEG( pts[2], pts[3] ) );
+            itemShape.emplace_back( SEG( pts[3], pts[0] ) );
+        }
+            break;
+
         case S_CIRCLE:
         {
             // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC

@@ -63,6 +63,7 @@ public:
     {
         NONE,
         LINE,
+        RECT,
         CIRCLE,
         ARC,
         TEXT,
@@ -90,6 +91,14 @@ public:
      * more clicks, the line is drawn as a continous polyline.
      */
     int DrawLine( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function DrawRectangle()
+     * Starts interactively drawing a rectangle. After invoking the function it expects the user
+     * to first click on a point that is going to be used as the top-left of the rectangle. The
+     * second click determines the bottom-right.
+     */
+    int DrawRectangle( const TOOL_EVENT& aEvent );
 
     /**
      * Function DrawCircle()

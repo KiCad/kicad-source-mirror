@@ -1259,6 +1259,31 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aS
                              -PtEdge->m_End0.y / SCALE_FACTOR );
                     break;
 
+                case S_RECT:
+                {
+                    fprintf( aFile, "LINE %g %g %g %g\n",
+                             PtEdge->m_Start0.x / SCALE_FACTOR,
+                             -PtEdge->m_Start0.y / SCALE_FACTOR,
+                             PtEdge->m_End0.x / SCALE_FACTOR,
+                             -PtEdge->m_Start0.y / SCALE_FACTOR );
+                    fprintf( aFile, "LINE %g %g %g %g\n",
+                             PtEdge->m_End0.x / SCALE_FACTOR,
+                             -PtEdge->m_Start0.y / SCALE_FACTOR,
+                             PtEdge->m_End0.x / SCALE_FACTOR,
+                             -PtEdge->m_End0.y / SCALE_FACTOR );
+                    fprintf( aFile, "LINE %g %g %g %g\n",
+                             PtEdge->m_End0.x / SCALE_FACTOR,
+                             -PtEdge->m_End0.y / SCALE_FACTOR,
+                             PtEdge->m_Start0.x / SCALE_FACTOR,
+                             -PtEdge->m_End0.y / SCALE_FACTOR );
+                    fprintf( aFile, "LINE %g %g %g %g\n",
+                             PtEdge->m_Start0.x / SCALE_FACTOR,
+                             -PtEdge->m_End0.y / SCALE_FACTOR,
+                             PtEdge->m_Start0.x / SCALE_FACTOR,
+                             -PtEdge->m_Start0.y / SCALE_FACTOR );
+                }
+                    break;
+
                 case S_CIRCLE:
                 {
                     int radius = KiROUND( GetLineLength( PtEdge->m_End0,

@@ -66,6 +66,11 @@ TOOL_ACTION PCB_ACTIONS::drawPolygon( "pcbnew.InteractiveDrawing.graphicPolygon"
         _( "Draw Graphic Polygon" ), _( "Draw a graphic polygon" ),
         add_graphical_polygon_xpm, AF_ACTIVATE, (void*) ZONE_MODE::GRAPHIC_POLYGON );
 
+TOOL_ACTION PCB_ACTIONS::drawRectangle( "pcbnew.InteractiveDrawing.rectangle",
+        AS_GLOBAL, 0, "",
+        _( "Draw Rectangle" ), _( "Draw a rectangle" ),
+        add_rectangle_xpm, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'C', LEGACY_HK_NAME( "Draw Circle" ),

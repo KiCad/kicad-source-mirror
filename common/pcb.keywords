@@ -106,6 +106,7 @@ fp_circle
 fp_curve
 fp_line
 fp_poly
+fp_rect
 fp_text
 full
 general
@@ -115,6 +116,7 @@ gr_circle
 gr_curve
 gr_line
 gr_poly
+gr_rect
 gr_text
 hatch
 hatch_thickness

@@ -145,22 +145,23 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_drawToolBar->Add( ACTIONS::selectionTool,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::selectionTool,       ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->Add( PCB_ACTIONS::placePad, ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawLine, ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawCircle, ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawArc, ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawPolygon, ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::placePad,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawLine,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawRectangle,   ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawCircle,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawArc,         ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawPolygon,     ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawZoneKeepout, ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::placeText, ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( ACTIONS::deleteTool, ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::placeText,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::deleteTool,          ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->Add( PCB_ACTIONS::setAnchor, ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin, ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( ACTIONS::measureTool, ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::setAnchor,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,   ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::measureTool,         ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -237,8 +238,8 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,              IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,         GetUserUnits() != EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,       GetUserUnits() == EDA_UNITS::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,       GetShowPolarCoords() );
     m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,      !opts.m_DisplayPadFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::textOutlines,        !opts.m_DisplayTextFill );
@@ -252,6 +253,7 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
         // If there is no footprint loaded, disable the editing tools
         m_drawToolBar->Toggle( PCB_ACTIONS::placePad,        false, false );
         m_drawToolBar->Toggle( PCB_ACTIONS::drawLine,        false, false );
+        m_drawToolBar->Toggle( PCB_ACTIONS::drawRectangle,   false, false );
         m_drawToolBar->Toggle( PCB_ACTIONS::drawCircle,      false, false );
         m_drawToolBar->Toggle( PCB_ACTIONS::drawArc,         false, false );
         m_drawToolBar->Toggle( PCB_ACTIONS::drawPolygon,     false, false );
@@ -266,6 +268,7 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     {
         TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placePad );
         TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawLine );
+        TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawRectangle );
         TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawCircle );
         TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawArc );
         TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawPolygon );

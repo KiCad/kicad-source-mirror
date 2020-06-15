@@ -50,6 +50,11 @@ enum SEG_POINTS
     SEG_START, SEG_END
 };
 
+enum RECT_POINTS
+{
+    RECT_TOP_LEFT, RECT_TOP_RIGHT, RECT_BOT_RIGHT, RECT_BOT_LEFT
+};
+
 enum ARC_POINTS
 {
     ARC_CENTER, ARC_START, ARC_MID, ARC_END
@@ -144,6 +149,13 @@ public:
                     points->AddPoint( segment->GetEnd() );
                     break;
 
+                case S_RECT:
+                    points->AddPoint( segment->GetStart() );
+                    points->AddPoint( wxPoint( segment->GetEnd().x, segment->GetStart().y ) );
+                    points->AddPoint( segment->GetEnd() );
+                    points->AddPoint( wxPoint( segment->GetStart().x, segment->GetEnd().y ) );
+                    break;
+
                 case S_ARC:
                     points->AddPoint( segment->GetCenter() );
                     points->AddPoint( segment->GetArcStart() );
@@ -163,7 +175,6 @@ public:
                 case S_CIRCLE:
                     points->AddPoint( segment->GetCenter() );
                     points->AddPoint( segment->GetEnd() );
-
                     break;
 
                 case S_POLYGON:
@@ -441,6 +452,29 @@ void POINT_EDITOR::updateItem() const
 
             break;
 
+        case S_RECT:
+        {
+            if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) ) )
+            {
+                segment->SetStart( (wxPoint) m_editPoints->Point( RECT_TOP_LEFT ).GetPosition() );
+            }
+            else if( isModified( m_editPoints->Point( RECT_TOP_RIGHT ) ) )
+            {
+                segment->SetStartY( m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y );
+                segment->SetEndX( m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x );
+            }
+            else if( isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
+            {
+                segment->SetEnd( (wxPoint) m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition() );
+            }
+            else if( isModified( m_editPoints->Point( RECT_BOT_LEFT ) ) )
+            {
+                segment->SetStartX( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x );
+                segment->SetEndY( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y );
+            }
+        }
+            break;
+
         case S_ARC:
         {
             VECTOR2I center = m_editPoints->Point( ARC_CENTER ).GetPosition();
@@ -482,9 +516,8 @@ void POINT_EDITOR::updateItem() const
 
                 segment->SetAngle( newAngle );
             }
-
-            break;
         }
+            break;
 
         case S_CIRCLE:
         {
@@ -500,9 +533,8 @@ void POINT_EDITOR::updateItem() const
             {
                 segment->SetEnd( wxPoint( end.x, end.y ) );
             }
-
-            break;
         }
+            break;
 
         case S_POLYGON:
         {
@@ -512,8 +544,8 @@ void POINT_EDITOR::updateItem() const
                 outline.SetVertex( i, m_editPoints->Point( i ).GetPosition() );
 
             validatePolygon( outline );
-            break;
         }
+            break;
 
         case S_CURVE:
             if( isModified( m_editPoints->Point( BEZIER_CURVE_START ) ) )
@@ -683,6 +715,15 @@ void POINT_EDITOR::updatePoints()
         case S_SEGMENT:
             m_editPoints->Point( SEG_START ).SetPosition( segment->GetStart() );
             m_editPoints->Point( SEG_END ).SetPosition( segment->GetEnd() );
+            break;
+
+        case S_RECT:
+            m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( segment->GetStart() );
+            m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( segment->GetEnd().x,
+                                                               segment->GetStart().y );
+            m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( segment->GetEnd() );
+            m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( segment->GetStart().x,
+                                                              segment->GetEnd().y );
             break;
 
         case S_ARC:

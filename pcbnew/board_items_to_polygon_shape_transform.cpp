@@ -368,6 +368,18 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         TransformRingToPolygon( aCornerBuffer, GetCenter(), GetRadius(), aError, width );
         break;
 
+    case S_RECT:
+    {
+        std::vector<wxPoint> pts;
+        GetRectCorners( &pts );
+
+        aCornerBuffer.NewOutline();
+
+        for( const wxPoint& pt : pts )
+            aCornerBuffer.Append( pt );
+    }
+        break;
+
     case S_ARC:
         TransformArcToPolygon( aCornerBuffer, GetCenter(), GetArcStart(), m_Angle, aError, width );
         break;
