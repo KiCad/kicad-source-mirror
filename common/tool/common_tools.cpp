@@ -208,18 +208,18 @@ int COMMON_TOOLS::doZoomInOut( bool aDirection, bool aCenterOnCursor )
 
     if( aDirection )
     {
-        for( idx = 0; idx < (int)zoomList.size(); ++idx )
+        for( idx = 0; idx < int( zoomList.size() ); ++idx )
         {
             if( zoomList[idx] >= zoom )
                 break;
         }
 
-        if( idx >= zoomList.size() )
+        if( idx >= int( zoomList.size() ) )
             idx = (int) zoomList.size() - 1;        // if we ran off the end then peg to the end
     }
     else
     {
-        for( idx = (int) zoomList.size() - 1; idx >= 0; --idx )
+        for( idx = int( zoomList.size() ) - 1; idx >= 0; --idx )
         {
             if( zoomList[idx] <= zoom )
                 break;
