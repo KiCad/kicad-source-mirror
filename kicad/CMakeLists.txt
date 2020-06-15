@@ -95,17 +95,31 @@ if( APPLE )
         set( SCRIPTING_HELPER "0" )
     endif()
 
+    if( KICAD_SPICE )
+        set( SPICE_HELPER "1" )
+    else()
+        set( SPICE_HELPER "0" )
+    endif()
+
     if( KICAD_USE_OCC )
         set( KICAD_BUNDLE_LIBS ${OCC_LIBRARY_DIR} )
     endif()
 
     # make main bundle relocatable
     install( CODE "
-        # find all libs and modules
+        # find all kicad libs and modules
         file( GLOB PLUGINS_KIFACE ${OSX_BUNDLE_INSTALL_KIFACE_DIR}/*.kiface )
         file( GLOB_RECURSE PLUGINS_SO ${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/*.so )
         file( GLOB_RECURSE PLUGINS_3D ${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/3d/*.dylib )
         set( BUNDLE_FIX_LIBS \${PLUGINS_KIFACE} \${PLUGINS_SO} \${PLUGINS_3D} )
+
+        # Find ngspice if it is being packaged
+        if( ${SPICE_HELPER} )
+            file( GLOB_RECURSE PLUGINS_NGSPICE ${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim/*.dylib )
+            set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PLUGINS_NGSPICE} )
+        endif()
+
+        # Find python if it is requested
         if( ${SCRIPTING_HELPER} )
             file( GLOB WXPYTHON_DIR RELATIVE ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR} ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR}/wx-?.?-osx_cocoa )
             file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR}/*.so )
@@ -124,6 +138,12 @@ if( APPLE )
             \"\${BUNDLE_FIX_LIBS}\"
             \" ${KICAD_BUNDLE_LIBS}\"
             )
+
+        if( ${SPICE_HELPER} )
+            execute_process( COMMAND install_name_tool -id @executable_path/../PlugIns/sim/libngspice.0.dylib libngspice.0.dylib
+                             WORKING_DIRECTORY ${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim )
+        endif()
+
         " COMPONENT Runtime
         )
 
