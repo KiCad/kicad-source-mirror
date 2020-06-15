@@ -959,12 +959,12 @@ TOOL_ACTION PCB_ACTIONS::alignRight( "pcbnew.AlignAndDistribute.alignRight",
 
 TOOL_ACTION PCB_ACTIONS::alignCenterX( "pcbnew.AlignAndDistribute.alignCenterX",
         AS_GLOBAL, 0, "",
-        _( "Align to Middle" ),
+        _( "Align to Vertical Center" ),
         _( "Aligns selected items to the vertical center" ), align_items_middle_xpm );
 
 TOOL_ACTION PCB_ACTIONS::alignCenterY( "pcbnew.AlignAndDistribute.alignCenterY",
         AS_GLOBAL, 0, "",
-        _( "Align to Center" ),
+        _( "Align to Horizontal Center" ),
         _( "Aligns selected items to the horizontal center" ), align_items_center_xpm );
 
 TOOL_ACTION PCB_ACTIONS::distributeHorizontally( "pcbnew.AlignAndDistribute.distributeHorizontally",

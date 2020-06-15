@@ -66,12 +66,14 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     m_placementMenu->SetTitle( _( "Align/Distribute" ) );
 
     // Add all align/distribute commands
-    m_placementMenu->Add( PCB_ACTIONS::alignTop );
-    m_placementMenu->Add( PCB_ACTIONS::alignBottom );
     m_placementMenu->Add( PCB_ACTIONS::alignLeft );
-    m_placementMenu->Add( PCB_ACTIONS::alignRight );
     m_placementMenu->Add( PCB_ACTIONS::alignCenterX );
+    m_placementMenu->Add( PCB_ACTIONS::alignRight );
+    
+    m_placementMenu->AppendSeparator();
+    m_placementMenu->Add( PCB_ACTIONS::alignTop );
     m_placementMenu->Add( PCB_ACTIONS::alignCenterY );
+    m_placementMenu->Add( PCB_ACTIONS::alignBottom );
 
     m_placementMenu->AppendSeparator();
     m_placementMenu->Add( PCB_ACTIONS::distributeHorizontally );
