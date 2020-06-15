@@ -271,8 +271,6 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
 
 void SCH_BASE_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
 {
-    KIGFX::GAL* gal = GetCanvas()->GetGAL();
-
     GetCanvas()->GetView()->SetCenter( aCenterPoint );
 
     if( aWarpPointer )
