@@ -392,6 +392,8 @@ int COMMON_TOOLS::OnGridChanged()
 {
     int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
+    currentGrid = std::max( 0, std::min( currentGrid, static_cast<int>( m_grids.size() ) - 1 ) );
+
     // Update the combobox (if any)
     wxUpdateUIEvent dummy;
     m_frame->OnUpdateSelectGrid( dummy );
