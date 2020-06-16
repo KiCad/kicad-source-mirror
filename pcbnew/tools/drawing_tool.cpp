@@ -159,7 +159,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( tool, S_SEGMENT, line, startingPoint ) )
+    while( drawSegment( tool, S_SEGMENT, &line, startingPoint ) )
     {
         if( line )
         {
@@ -203,7 +203,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( tool, S_RECT, rect, startingPoint ) )
+    while( drawSegment( tool, S_RECT, &rect, startingPoint ) )
     {
         if( rect )
         {
@@ -245,7 +245,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( tool, S_CIRCLE, circle, startingPoint ) )
+    while( drawSegment( tool, S_CIRCLE, &circle, startingPoint ) )
     {
         if( circle )
         {
@@ -284,7 +284,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawArc( tool, arc, immediateMode ) )
+    while( drawArc( tool, &arc, immediateMode ) )
     {
         if( arc )
         {
@@ -957,13 +957,14 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 }
 
 
-bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMENT*& aGraphic,
+bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMENT** aGraphic,
                                 OPT<VECTOR2D> aStartingPoint )
 {
     // Only three shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE || aShape == S_RECT );
     GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
+    DRAWSEGMENT*& graphic = *aGraphic;
 
     m_lineWidth = getSegmentWidth( getDrawingLayer() );
     m_frame->SetActiveLayer( getDrawingLayer() );
@@ -1010,27 +1011,27 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
 
             if( direction45 )
             {
-                const VECTOR2I lineVector( cursorPos - VECTOR2I( aGraphic->GetStart() ) );
+                const VECTOR2I lineVector( cursorPos - VECTOR2I( graphic->GetStart() ) );
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
                 auto newEnd = GetVectorSnapped45( lineVector );
-                aGraphic->SetEnd( aGraphic->GetStart() + (wxPoint) newEnd );
-                m_controls->ForceCursorPosition( true, VECTOR2I( aGraphic->GetEnd() ) );
+                graphic->SetEnd( graphic->GetStart() + (wxPoint) newEnd );
+                m_controls->ForceCursorPosition( true, VECTOR2I( graphic->GetEnd() ) );
             }
             else
             {
-                aGraphic->SetEnd( (wxPoint) cursorPos );
+                graphic->SetEnd( (wxPoint) cursorPos );
             }
 
             m_view->Update( &preview );
-            frame()->SetMsgPanel( aGraphic );
+            frame()->SetMsgPanel( graphic );
         }
 
         auto cleanup = [&] () {
             preview.Clear();
             m_view->Update( &preview );
-            delete aGraphic;
-            aGraphic = nullptr;
+            delete graphic;
+            graphic = nullptr;
 
             if( !isLocalOriginSet )
                 m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
@@ -1072,10 +1073,10 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
             m_lineWidth = getSegmentWidth( getDrawingLayer() );
-            aGraphic->SetLayer( getDrawingLayer() );
-            aGraphic->SetWidth( m_lineWidth );
+            graphic->SetLayer( getDrawingLayer() );
+            graphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
-            frame()->SetMsgPanel( aGraphic );
+            frame()->SetMsgPanel( graphic );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -1096,18 +1097,18 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
                 m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
                 // Init the new item attributes
-                aGraphic->SetShape( (STROKE_T) aShape );
-                aGraphic->SetWidth( m_lineWidth );
-                aGraphic->SetStart( (wxPoint) cursorPos );
-                aGraphic->SetEnd( (wxPoint) cursorPos );
-                aGraphic->SetLayer( getDrawingLayer() );
+                graphic->SetShape( (STROKE_T) aShape );
+                graphic->SetWidth( m_lineWidth );
+                graphic->SetStart( (wxPoint) cursorPos );
+                graphic->SetEnd( (wxPoint) cursorPos );
+                graphic->SetLayer( getDrawingLayer() );
                 grid.SetSkipPoint( cursorPos );
 
                 if( !isLocalOriginSet )
                     m_frame->GetScreen()->m_LocalOrigin = cursorPos;
 
-                preview.Add( aGraphic );
-                frame()->SetMsgPanel( aGraphic );
+                preview.Add( graphic );
+                frame()->SetMsgPanel( graphic );
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
 
@@ -1117,7 +1118,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
             {
                 auto snapItem = dyn_cast<DRAWSEGMENT*>( grid.GetSnapped() );
 
-                if( aGraphic->GetEnd() == aGraphic->GetStart()
+                if( graphic->GetEnd() == graphic->GetStart()
                     || ( evt->IsDblClick( BUT_LEFT ) && aShape == S_SEGMENT )
                     || snapItem )
                 // User has clicked twice in the same spot
@@ -1127,18 +1128,18 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
 
                     // If the user clicks on an existing snap point from a drawsegment
                     //  we finish the segment as they are likely closing a path
-                    if( snapItem && aGraphic->GetLength() > 0.0 )
+                    if( snapItem && graphic->GetLength() > 0.0 )
                     {
-                        commit.Add( aGraphic );
+                        commit.Add( graphic );
                         commit.Push( _( "Draw a line segment" ) );
-                        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, aGraphic );
+                        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, graphic );
                     }
                     else
                     {
-                        delete aGraphic;
+                        delete graphic;
                     }
 
-                    aGraphic = nullptr;
+                    graphic = nullptr;
                 }
 
                 preview.Clear();
@@ -1150,36 +1151,36 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
             // 45 degree lines
             if( direction45 && aShape == S_SEGMENT )
             {
-                const VECTOR2I lineVector( cursorPos - VECTOR2I( aGraphic->GetStart() ) );
+                const VECTOR2I lineVector( cursorPos - VECTOR2I( graphic->GetStart() ) );
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
                 auto newEnd = GetVectorSnapped45( lineVector );
-                aGraphic->SetEnd( aGraphic->GetStart() + (wxPoint) newEnd );
-                m_controls->ForceCursorPosition( true, VECTOR2I( aGraphic->GetEnd() ) );
+                graphic->SetEnd( graphic->GetStart() + (wxPoint) newEnd );
+                m_controls->ForceCursorPosition( true, VECTOR2I( graphic->GetEnd() ) );
             }
             else
-                aGraphic->SetEnd( (wxPoint) cursorPos );
+                graphic->SetEnd( (wxPoint) cursorPos );
 
             m_view->Update( &preview );
 
             if( started )
-                frame()->SetMsgPanel( aGraphic );
+                frame()->SetMsgPanel( graphic );
             else
                 frame()->SetMsgPanel( board() );
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
             m_lineWidth += WIDTH_STEP;
-            aGraphic->SetWidth( m_lineWidth );
+            graphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
-            frame()->SetMsgPanel( aGraphic );
+            frame()->SetMsgPanel( graphic );
         }
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && ( m_lineWidth > WIDTH_STEP ) )
         {
             m_lineWidth -= WIDTH_STEP;
-            aGraphic->SetWidth( m_lineWidth );
+            graphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
-            frame()->SetMsgPanel( aGraphic );
+            frame()->SetMsgPanel( graphic );
         }
         else if( evt->IsAction( &ACTIONS::resetLocalCoords ) )
         {
@@ -1220,8 +1221,9 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 }
 
 
-bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bool aImmediateMode )
+bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bool aImmediateMode )
 {
+    DRAWSEGMENT*& graphic = *aGraphic;
     m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
     // Arc geometric construction manager
@@ -1252,13 +1254,13 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bo
     while( TOOL_EVENT* evt = Wait() )
     {
         PCB_LAYER_ID layer = getDrawingLayer();
-        aGraphic->SetLayer( layer );
+        graphic->SetLayer( layer );
 
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), aGraphic );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         auto cleanup = [&] () {
@@ -1313,10 +1315,10 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bo
 
                 // Init the new item attributes
                 // (non-geometric, those are handled by the manager)
-                aGraphic->SetShape( S_ARC );
-                aGraphic->SetWidth( m_lineWidth );
+                graphic->SetShape( S_ARC );
+                graphic->SetWidth( m_lineWidth );
 
-                preview.Add( aGraphic );
+                preview.Add( graphic );
                 firstPoint = true;
             }
 
@@ -1337,10 +1339,10 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bo
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
             m_lineWidth = getSegmentWidth( getDrawingLayer() );
-            aGraphic->SetLayer( getDrawingLayer() );
-            aGraphic->SetWidth( m_lineWidth );
+            graphic->SetLayer( getDrawingLayer() );
+            graphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
-            frame()->SetMsgPanel( aGraphic );
+            frame()->SetMsgPanel( graphic );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -1349,16 +1351,16 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bo
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
             m_lineWidth += WIDTH_STEP;
-            aGraphic->SetWidth( m_lineWidth );
+            graphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
-            frame()->SetMsgPanel( aGraphic );
+            frame()->SetMsgPanel( graphic );
         }
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && m_lineWidth > WIDTH_STEP )
         {
             m_lineWidth -= WIDTH_STEP;
-            aGraphic->SetWidth( m_lineWidth );
+            graphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
-            frame()->SetMsgPanel( aGraphic );
+            frame()->SetMsgPanel( graphic );
         }
         else if( evt->IsAction( &PCB_ACTIONS::arcPosture ) )
         {
@@ -1373,18 +1375,18 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bo
         }
         else if( arcManager.HasGeometryChanged() )
         {
-            updateArcFromConstructionMgr( arcManager, *aGraphic );
+            updateArcFromConstructionMgr( arcManager, *graphic );
             m_view->Update( &preview );
             m_view->Update( &arcAsst );
 
             if( firstPoint )
-                frame()->SetMsgPanel( aGraphic );
+                frame()->SetMsgPanel( graphic );
             else
                 frame()->SetMsgPanel( board() );
         }
     }
 
-    preview.Remove( aGraphic );
+    preview.Remove( graphic );
     m_view->Remove( &arcAsst );
     m_view->Remove( &preview );
     frame()->SetMsgPanel( board() );
@@ -1396,10 +1398,10 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bo
 }
 
 
-bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZone )
+bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER** aZone )
 {
     bool clearSelection = false;
-    aZone = nullptr;
+    *aZone = nullptr;
 
     // not an action that needs a source zone
     if( aMode == ZONE_MODE::ADD || aMode == ZONE_MODE::GRAPHIC_POLYGON )
@@ -1416,10 +1418,10 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZo
 
     // we want a single zone
     if( selection.Size() == 1 )
-        aZone = dyn_cast<ZONE_CONTAINER*>( selection[0] );
+        *aZone = dyn_cast<ZONE_CONTAINER*>( selection[0] );
 
     // expected a zone, but didn't get one
-    if( !aZone )
+    if( !*aZone )
     {
         if( clearSelection )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -1451,7 +1453,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     // ZONE_MODE::SIMILAR (creating a new zone using settings of source zone
     ZONE_CONTAINER* sourceZone = nullptr;
 
-    if( !getSourceZoneForAction( zoneMode, sourceZone ) )
+    if( !getSourceZoneForAction( zoneMode, &sourceZone ) )
         return 0;
 
     ZONE_CREATE_HELPER::PARAMS params;
