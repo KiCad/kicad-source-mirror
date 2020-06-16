@@ -52,8 +52,9 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
+#include <ratsnest/ratsnest_data.h>
+
 #include <pgm_base.h>
-#include <ratsnest_data.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

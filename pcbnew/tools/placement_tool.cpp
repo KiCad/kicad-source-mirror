@@ -26,11 +26,12 @@
 #include "pcb_actions.h"
 #include "selection_tool.h"
 #include "edit_tool.h"
+
+#include <ratsnest/ratsnest_data.h>
 #include <tool/tool_manager.h>
 
 #include <pcb_edit_frame.h>
 #include <class_board.h>
-#include <ratsnest_data.h>
 #include <board_commit.h>
 #include <bitmaps.h>
 

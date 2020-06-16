@@ -31,7 +31,7 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <pcbnew.h>
-#include <ratsnest_data.h>
+#include <ratsnest/ratsnest_data.h>
 
 /**
  * Function Compile_Ratsnest

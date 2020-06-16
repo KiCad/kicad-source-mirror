@@ -296,7 +296,6 @@ set( PCBNEW_CLASS_SRCS
     pcbplot.cpp
     plot_board_layers.cpp
     plot_brditems_plotter.cpp
-    ratsnest.cpp
     specctra_import_export/specctra.cpp
     specctra_import_export/specctra_export.cpp
     specctra_import_export/specctra_import.cpp
@@ -311,6 +310,8 @@ set( PCBNEW_CLASS_SRCS
     zones_functions_for_undo_redo.cpp
     zones_test_and_combine_areas.cpp
 
+    ratsnest/ratsnest.cpp
+    
     tools/drawing_tool.cpp
     tools/edit_tool.cpp
     tools/global_edit_tool.cpp

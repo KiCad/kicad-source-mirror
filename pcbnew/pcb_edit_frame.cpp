@@ -48,7 +48,6 @@
 #include <class_module.h>
 #include <ws_proxy_view_item.h>
 #include <connectivity/connectivity_data.h>
-#include <ratsnest_viewitem.h>
 #include <wildcards_and_files_ext.h>
 #include <kicad_string.h>
 #include <pcb_draw_panel_gal.h>
@@ -86,6 +85,8 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <wx/wupdlock.h>
 #include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
+#include <ratsnest/ratsnest_viewitem.h>
+
 #include <widgets/infobar.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)

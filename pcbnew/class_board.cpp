@@ -38,8 +38,6 @@
 #include <pcb_base_frame.h>
 #include <msgpanel.h>
 #include <reporter.h>
-#include <ratsnest_data.h>
-#include <ratsnest_viewitem.h>
 #include <ws_proxy_view_item.h>
 #include <pcbnew.h>
 #include <collectors.h>
@@ -53,6 +51,8 @@
 #include <connectivity/connectivity_data.h>
 #include <pgm_base.h>
 #include <pcbnew_settings.h>
+#include <ratsnest/ratsnest_data.h>
+#include <ratsnest/ratsnest_viewitem.h>
 
 /**
  * A singleton item of this class is returned for a weak reference that no longer exists.

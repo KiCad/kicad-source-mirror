@@ -34,7 +34,6 @@
 #include <pgm_base.h>
 #include <msgpanel.h>
 #include <fp_lib_table.h>
-#include <ratsnest_data.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <trace_helpers.h>
@@ -49,6 +48,8 @@
 #include <class_board.h>
 #include <wx/stdpaths.h>
 #include <pcb_layer_widget.h>
+#include <ratsnest/ratsnest_data.h>
+
 #include <wx/wupdlock.h>
 
 

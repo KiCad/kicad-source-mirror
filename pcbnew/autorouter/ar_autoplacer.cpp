@@ -38,12 +38,12 @@
 #include <class_pad.h>
 #include <board_commit.h>
 #include <connectivity/connectivity_data.h>
-#include <ratsnest_data.h>
 #include <widgets/progress_reporter.h>
 
 #include "ar_autoplacer.h"
 #include "ar_matrix.h"
 #include <memory>
+#include <ratsnest/ratsnest_data.h>
 
 #define AR_GAIN            16
 #define AR_KEEPOUT_MARGIN  500

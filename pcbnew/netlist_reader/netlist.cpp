@@ -41,7 +41,7 @@ using namespace std::placeholders;
 #include <fp_lib_table.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <ratsnest_data.h>
+#include <ratsnest/ratsnest_data.h>
 #include <pcbnew.h>
 #include <io_mgr.h>
 #include "board_netlist_updater.h"

@@ -28,6 +28,8 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <dialog_update_pcb.h>
+
+#include <ratsnest/ratsnest_data.h>
 #include <wx_html_report_panel.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>
@@ -35,7 +37,6 @@
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
 #include <class_board.h>
-#include <ratsnest_data.h>
 #include <kiface_i.h>
 
 using namespace std::placeholders;

@@ -33,7 +33,7 @@
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
-#include <ratsnest_data.h>
+#include <ratsnest/ratsnest_data.h>
 
 CONNECTIVITY_DATA::CONNECTIVITY_DATA()
 {

@@ -493,8 +493,8 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_view.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcbnew_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/plugin.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest_data.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest_viewitem.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest/ratsnest_data.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest/ratsnest_viewitem.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/sel_layer.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/zone_settings.cpp
 

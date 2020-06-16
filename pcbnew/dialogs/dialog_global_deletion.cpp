@@ -28,7 +28,7 @@ using namespace std::placeholders;
 #include <confirm.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
-#include <ratsnest_data.h>
+#include <ratsnest/ratsnest_data.h>
 #include <board_commit.h>
 #include <class_board.h>
 #include <class_module.h>

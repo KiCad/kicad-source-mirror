@@ -27,8 +27,6 @@
 #include <view/wx_view_controls.h>
 #include <pcb_painter.h>
 #include <ws_proxy_view_item.h>
-#include <ratsnest_viewitem.h>
-#include <ratsnest_data.h>
 #include <connectivity/connectivity_data.h>
 
 #include <class_board.h>
@@ -37,6 +35,9 @@
 #include <class_marker_pcb.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
+#include <ratsnest/ratsnest_data.h>
+#include <ratsnest/ratsnest_viewitem.h>
+
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <confirm.h>

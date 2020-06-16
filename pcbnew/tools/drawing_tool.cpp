@@ -37,7 +37,6 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <geometry/geometry_utils.h>
-#include <ratsnest_data.h>
 #include <board_commit.h>
 #include <scoped_set_reset.h>
 #include <bitmaps.h>
@@ -59,6 +58,7 @@
 #include <tools/selection_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
+#include <ratsnest/ratsnest_data.h>
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
