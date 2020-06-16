@@ -1,14 +1,81 @@
 #include <cstdio>
 
 #include "class_board.h"
-
 #include "pcb_expr_evaluator.h"
+
+
+class PCB_EXPR_BUILTIN_FUNCTIONS
+{
+    public:
+
+        using FPTR = LIBEVAL::UCODE::FUNC_PTR;
+
+        PCB_EXPR_BUILTIN_FUNCTIONS();
+
+        static PCB_EXPR_BUILTIN_FUNCTIONS& Instance() 
+        {
+            static PCB_EXPR_BUILTIN_FUNCTIONS self;
+            return self;
+        }
+
+        std::string tolower( const std::string str ) const
+        {
+            std::string rv;
+              std::transform(str.begin(),
+                 str.end(),
+                 rv.begin(),
+                 ::tolower);
+                return rv;
+        }
+
+        FPTR Get( const std::string &name ) const
+        {
+            auto it = m_funcs.find( name );
+
+            if( it == m_funcs.end() )
+                return nullptr;
+
+            //printf("Cfc2\n");
+            //it->second(nullptr, nullptr, nullptr);
+
+            return it->second;
+        }
+
+    private:
+
+        std::map<std::string, FPTR> m_funcs;
+
+        static void onLayer( LIBEVAL::UCODE* aUcode, LIBEVAL::UCODE::CONTEXT* aCtx, void *self )
+        {
+            
+            //auto item  = ucode->GetItem( self );
+            auto arg = aCtx->Pop();
+            printf("SP: %d\n", aCtx->SP() );
+
+            printf("OnLayer('%s') called!\n", arg->AsString().c_str() );
+
+            auto rv =  aCtx->AllocValue();
+            rv->Set( 1.0 );
+            aCtx->Push( rv );
+        }
+};
+
+PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
+{
+    m_funcs[ "onlayer" ] = onLayer;
+    //m_funcs[ "onlayer" ]( nullptr, nullptr, nullptr );
+}
+
+BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::UCODE* aUcode ) const
+{   
+    auto ucode = static_cast<const PCB_EXPR_UCODE*>( aUcode );
+    auto item  = ucode->GetItem( m_itemIndex );
+    return item;
+}
 
 LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode ) 
 {
-    auto ucode = static_cast<const PCB_EXPR_UCODE*>( aUcode );
-    auto item  = ucode->GetItem( m_itemIndex );
-
+    auto item  = GetObject( aUcode );
     auto it = m_matchingTypes.find( TYPE_HASH( *item ) );
 
     if( it == m_matchingTypes.end() )
@@ -24,39 +91,71 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode )
             return LIBEVAL::VALUE( (double) item->Get<int>( it->second ) );
         else
         {
-            wxString str = item->Get<wxString>( it->second );
-            //printf("item %p GetStr '%s'\n", item, (const char*) str.c_str());
+            wxString str;
+            if( !m_isEnum )
+            {
+                //printf("item %p Get string '%s'\n", item, (const char*) it->second->Name().c_str() );
+                str = item->Get<wxString>( it->second );
+            } else {
+                const auto& any = item->Get( it->second );
+                any.GetAs<wxString>( &str );
+                //printf("item %p get enum: '%s'\n", item , (const char*) str.c_str() );
+            }
             return LIBEVAL::VALUE( (const char*) str.c_str() );
         }
     }
 }
 
+LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::createFuncCall( LIBEVAL::COMPILER* aCompiler, const std::string& name )
+{
+    auto registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
+
+    //printf("CreateFCall '%s' found %d\n", name.c_str(),  registry.Get(name) != nullptr ? 1 : 0 );
+
+    auto f = registry.Get( name );
+    //printf("Cfc3\n");
+    //f(nullptr,nullptr,nullptr);
+            
+    return f;
+}
+
 LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler,
         const std::string& var, const std::string& field )
 {
-    PCB_EXPR_VAR_REF* rv;
-
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
 
     auto classes = propMgr.GetAllClasses();
     auto vref    = new PCB_EXPR_VAR_REF( var == "A" ? 0 : 1 );
+
+    if( field.empty() ) // return reference to base object
+        return vref;
 
     for( auto cls : classes )
     {
         if( propMgr.IsOfType( cls.type, TYPE_HASH( BOARD_ITEM ) ) )
         {
             PROPERTY_BASE* prop = propMgr.GetProperty( cls.type, field );
+        
             if( prop )
             {
-                //printf("Field '%s' class %s ptr %p\n", field.c_str(), (const char *) cls.name.c_str(), prop );
+                //printf("Field '%s' class %s ptr %p haschoices %d typeid %s\n", field.c_str(), (const char *) cls.name.c_str(), prop, !!prop->HasChoices(), typeid(*prop).name() );
                 vref->AddAllowedClass( cls.type, prop );
                 if( prop->TypeHash() == TYPE_HASH( int ) )
                     vref->SetType( LIBEVAL::VT_NUMERIC );
                 else if( prop->TypeHash() == TYPE_HASH( wxString ) )
                     vref->SetType( LIBEVAL::VT_STRING );
+                else if ( prop->HasChoices() )
+                {   // it's an enum, we treat it as string
+                    vref->SetType( LIBEVAL::VT_STRING );
+                    vref->SetIsEnum ( true );
+                }
                 else
                 {
-                    printf( "Unknown property type\n" );
+                    (void) 0; // should we do anything here?
+                    //printf("unmatched type for prop '%s'\n", field.c_str() );
+                    //wxString msg;
+                    //msg.Printf("Unrecognized type for property '%s'", field.c_str() );
+                    //aCompiler->ReportError( (const char*) msg.c_str() );
                 }
             }
         }

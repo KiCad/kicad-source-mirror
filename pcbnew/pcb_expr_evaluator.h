@@ -19,6 +19,8 @@ public:
     virtual LIBEVAL::VAR_REF* createVarRef( LIBEVAL::COMPILER *aCompiler,
             const std::string& var, const std::string& field ) override;
 
+    virtual FUNC_PTR createFuncCall( LIBEVAL::COMPILER* aCompiler, const std::string& name ) override;
+
     void SetItems( BOARD_ITEM* a, BOARD_ITEM* b = nullptr )
     {
         m_items[0] = a;
@@ -38,10 +40,15 @@ private:
 class PCB_EXPR_VAR_REF : public LIBEVAL::VAR_REF
 {
 public:
-    PCB_EXPR_VAR_REF( int aItemIndex ) : m_itemIndex( aItemIndex )
+    PCB_EXPR_VAR_REF( int aItemIndex ) : 
+        m_itemIndex( aItemIndex ),
+        m_isEnum( false )
     {
         //printf("*** createVarRef %p %d\n", this, aItemIndex );
     }
+
+    void SetIsEnum( bool s ) { m_isEnum = s; }
+    bool IsEnum() const { return m_isEnum; }
 
     void SetType( LIBEVAL::VAR_TYPE_T type )
     {
@@ -60,10 +67,14 @@ public:
 
     virtual LIBEVAL::VALUE GetValue( LIBEVAL::UCODE* aUcode ) override;
 
+
+    BOARD_ITEM* GetObject( LIBEVAL::UCODE* aUcode ) const;
+
 private:
     std::unordered_map<TYPE_ID, PROPERTY_BASE*> m_matchingTypes;
     int                                         m_itemIndex;
     LIBEVAL::VAR_TYPE_T                         m_type;
+    bool m_isEnum;
 };
 
 
