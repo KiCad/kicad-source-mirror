@@ -4,7 +4,9 @@ if( COMPILER_SUPPORTS_WARNINGS )
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${WARN_FLAGS_C}")
 endif()
 
-add_subdirectory( libeval libeval_compiler )
+add_subdirectory( libeval  )
+add_subdirectory( libeval_compiler )
+
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
@@ -91,7 +93,7 @@ endif()
 # a single_top link image.  By not linking to common, we control what does
 # statically go into single_top link images.  My current thinking is that only
 # wxWidgets should be a shared link from single top, everything else should be
-# statically bound into it. Otherwise you will have DSO loading problems. After it
+# statically bound into it. Otherwise you will have DSO loading probs. After it
 # sets the LIB PATHS however, we want the *.kiface modules to use shared linking.
 add_library( singletop STATIC EXCLUDE_FROM_ALL
     confirm.cpp
@@ -423,6 +425,8 @@ target_include_directories( common PRIVATE
 
 add_dependencies( common libcontext )
 add_dependencies( common version_header )
+add_dependencies( common libeval_grammar )
+add_dependencies( common libeval_grammar2 )
 
 target_link_libraries( common
     kimath
@@ -556,6 +560,7 @@ make_lexer(
     drc_rules_keywords.cpp
     DRCRULE_T
     )
+
 
 # auto-generate pcbnew_sexpr.h and pcbnew_sexpr.cpp
 make_lexer(

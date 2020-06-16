@@ -21,14 +21,15 @@
 %extra_argument { LIBEVAL::COMPILER* pEval }
 
 %nonassoc G_IDENTIFIER G_ASSIGN G_SEMCOL.
-%nonassoc G_BOOL_OR G_BOOL_AND G_BOOL_XOR.
-%nonassoc G_LESS_THAN G_GREATER_THAN G_LESS_EQUAL_THAN G_GREATER_EQUAL_THAN.
-%nonassoc G_EQUAL G_NOT_EQUAL.
-%right G_UNIT.
-%left G_BOOL_NOT.
+%left G_BOOL_AND.
+%left G_BOOL_OR.
+%left G_BOOL_XOR.
+%nonassoc G_LESS_THAN G_GREATER_THAN G_LESS_EQUAL_THAN G_GREATER_EQUAL_THAN G_EQUAL G_NOT_EQUAL.
+%right G_BOOL_NOT.
 %left G_PLUS G_MINUS.
 %left G_DIVIDE G_MULT.
 %nonassoc G_STRUCT_REF.
+%nonassoc G_UNIT.
 
 %include {
 #include <assert.h>

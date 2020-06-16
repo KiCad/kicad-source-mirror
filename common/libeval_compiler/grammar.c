@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <assert.h>
 /************ Begin %include sections from the grammar ************************/
-#line 33 "grammar.lemon"
+#line 34 "grammar.lemon"
 
 #include <assert.h>
 #include <libeval_compiler/libeval_compiler.h>
@@ -190,57 +190,59 @@ typedef union {
 **  yy_default[]       Default action for each state.
 **
 *********** Begin parsing tables **********************************************/
-#define YY_ACTTAB_COUNT (118)
+#define YY_ACTTAB_COUNT (135)
 static const YYACTIONTYPE yy_action[] = {
- /*     0 */    68,    1,    1,   19,    9,   10,   17,   16,   14,   13,
- /*    10 */    12,    4,   11,   92,   19,    8,    7,    5,    6,    3,
- /*    20 */    87,   26,    9,   10,   61,   16,   14,   13,   12,    4,
- /*    30 */    11,   31,   32,    8,    7,    5,    6,    3,   28,   29,
- /*    40 */     9,   10,   62,   16,   14,   13,   12,    4,   11,   20,
- /*    50 */    21,    8,    7,    5,    6,    3,   43,   67,   67,   27,
- /*    60 */    16,   14,   13,   12,    4,   11,   23,   24,    8,    7,
- /*    70 */     5,    6,    3,   67,   67,   67,   67,    4,   11,   90,
- /*    80 */    33,    8,    7,    5,    6,    3,   67,   67,   33,   25,
- /*    90 */     8,    7,    5,    6,    3,   33,   18,   22,   45,   66,
- /*   100 */    34,   46,    2,    5,    6,    3,   15,   66,   34,   46,
- /*   110 */     2,   67,    3,   69,   69,   34,   46,    2,
+ /*     0 */    68,    1,    1,   19,   10,    9,   17,   16,   14,   13,
+ /*    10 */    12,    4,   11,   87,    8,    7,    5,    6,    3,    5,
+ /*    20 */     6,    3,   10,    9,   61,   16,   14,   13,   12,    4,
+ /*    30 */    11,   67,    8,    7,    5,    6,    3,   92,   19,   22,
+ /*    40 */    10,    9,   62,   16,   14,   13,   12,    4,   11,   31,
+ /*    50 */     8,    7,    5,    6,    3,   32,   43,    9,   28,   16,
+ /*    60 */    14,   13,   12,    4,   11,   29,    8,    7,    5,    6,
+ /*    70 */     3,   67,   67,   67,   67,   67,   67,   23,    8,    7,
+ /*    80 */     5,    6,    3,   16,   14,   13,   12,    4,   11,   33,
+ /*    90 */     8,    7,    5,    6,    3,   90,   33,   20,   24,   25,
+ /*   100 */    26,   27,   18,   21,    3,   15,   45,   69,   66,   34,
+ /*   110 */    46,    2,   33,   69,   69,   66,   34,   46,    2,   69,
+ /*   120 */    69,   69,   69,   69,   69,   69,   69,   69,   69,   69,
+ /*   130 */    69,   69,   34,   46,    2,
 };
 static const YYCODETYPE yy_lookahead[] = {
  /*     0 */    25,   26,   27,   28,    4,    5,   28,    7,    8,    9,
- /*    10 */    10,   11,   12,   27,   28,   15,   16,   17,   18,   19,
- /*    20 */    28,   28,    4,    5,   24,    7,    8,    9,   10,   11,
- /*    30 */    12,   28,   28,   15,   16,   17,   18,   19,   28,   28,
+ /*    10 */    10,   11,   12,   28,   14,   15,   16,   17,   18,   16,
+ /*    20 */    17,   18,    4,    5,   24,    7,    8,    9,   10,   11,
+ /*    30 */    12,   18,   14,   15,   16,   17,   18,   27,   28,   28,
  /*    40 */     4,    5,   24,    7,    8,    9,   10,   11,   12,   28,
- /*    50 */    28,   15,   16,   17,   18,   19,   20,    4,    5,   28,
- /*    60 */     7,    8,    9,   10,   11,   12,   28,   28,   15,   16,
- /*    70 */    17,   18,   19,    7,    8,    9,   10,   11,   12,    0,
- /*    80 */     1,   15,   16,   17,   18,   19,   11,   12,    1,   28,
- /*    90 */    15,   16,   17,   18,   19,    1,   28,   28,   13,   20,
- /*   100 */    21,   22,   23,   17,   18,   19,   23,   20,   21,   22,
- /*   110 */    23,   19,   19,   29,   29,   21,   22,   23,   29,   29,
+ /*    50 */    14,   15,   16,   17,   18,   28,   20,    5,   28,    7,
+ /*    60 */     8,    9,   10,   11,   12,   28,   14,   15,   16,   17,
+ /*    70 */    18,    7,    8,    9,   10,   11,   12,   28,   14,   15,
+ /*    80 */    16,   17,   18,    7,    8,    9,   10,   11,   12,    1,
+ /*    90 */    14,   15,   16,   17,   18,    0,    1,   28,   28,   28,
+ /*   100 */    28,   28,   28,   28,   18,   23,   19,   29,   20,   21,
+ /*   110 */    22,   23,    1,   29,   29,   20,   21,   22,   23,   29,
  /*   120 */    29,   29,   29,   29,   29,   29,   29,   29,   29,   29,
- /*   130 */    29,   29,   29,   29,   29,   29,   29,   29,
+ /*   130 */    29,   29,   21,   22,   23,   29,   29,   29,
 };
 #define YY_SHIFT_COUNT    (34)
 #define YY_SHIFT_MIN      (0)
-#define YY_SHIFT_MAX      (94)
+#define YY_SHIFT_MAX      (111)
 static const unsigned char yy_shift_ofst[] = {
- /*     0 */    87,   79,   94,   94,   94,   94,   94,   94,   94,   94,
- /*    10 */    94,   94,   94,   94,   94,   94,   94,    0,   18,   36,
- /*    20 */    53,   53,   66,   66,   66,   66,   75,   75,   86,   86,
- /*    30 */    92,   93,   93,   83,   85,
+ /*     0 */    88,   95,  111,  111,  111,  111,  111,  111,  111,  111,
+ /*    10 */   111,  111,  111,  111,  111,  111,  111,    0,   18,   36,
+ /*    20 */    52,   64,   64,   76,   64,   64,   64,   64,    3,    3,
+ /*    30 */    13,   86,   86,   82,   87,
 };
 #define YY_REDUCE_COUNT (16)
 #define YY_REDUCE_MIN   (-25)
-#define YY_REDUCE_MAX   (69)
+#define YY_REDUCE_MAX   (75)
 static const signed char yy_reduce_ofst[] = {
- /*     0 */   -25,  -14,  -22,   -8,   -7,    3,    4,   10,   11,   21,
- /*    10 */    22,   31,   38,   39,   61,   68,   69,
+ /*     0 */   -25,   10,  -22,  -15,   11,   21,   27,   30,   37,   49,
+ /*    10 */    69,   70,   71,   72,   73,   74,   75,
 };
 static const YYACTIONTYPE yy_default[] = {
  /*     0 */    67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
  /*    10 */    67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
- /*    20 */    81,   80,   75,   78,   77,   76,   86,   79,   83,   82,
+ /*    20 */    80,   75,   86,   81,   79,   78,   77,   76,   83,   82,
  /*    30 */    87,   85,   84,   74,   71,
 };
 /********** End of lemon-generated parsing tables *****************************/
@@ -352,8 +354,8 @@ static const char *const yyTokenName[] = {
   /*    1 */ "G_IDENTIFIER",
   /*    2 */ "G_ASSIGN",
   /*    3 */ "G_SEMCOL",
-  /*    4 */ "G_BOOL_OR",
-  /*    5 */ "G_BOOL_AND",
+  /*    4 */ "G_BOOL_AND",
+  /*    5 */ "G_BOOL_OR",
   /*    6 */ "G_BOOL_XOR",
   /*    7 */ "G_LESS_THAN",
   /*    8 */ "G_GREATER_THAN",
@@ -361,13 +363,13 @@ static const char *const yyTokenName[] = {
   /*   10 */ "G_GREATER_EQUAL_THAN",
   /*   11 */ "G_EQUAL",
   /*   12 */ "G_NOT_EQUAL",
-  /*   13 */ "G_UNIT",
-  /*   14 */ "G_BOOL_NOT",
-  /*   15 */ "G_PLUS",
-  /*   16 */ "G_MINUS",
-  /*   17 */ "G_DIVIDE",
-  /*   18 */ "G_MULT",
-  /*   19 */ "G_STRUCT_REF",
+  /*   13 */ "G_BOOL_NOT",
+  /*   14 */ "G_PLUS",
+  /*   15 */ "G_MINUS",
+  /*   16 */ "G_DIVIDE",
+  /*   17 */ "G_MULT",
+  /*   18 */ "G_STRUCT_REF",
+  /*   19 */ "G_UNIT",
   /*   20 */ "G_ENDS",
   /*   21 */ "G_VALUE",
   /*   22 */ "G_STRING",
@@ -963,121 +965,121 @@ static YYACTIONTYPE yy_reduce(
 /********** Begin reduce actions **********************************************/
         YYMINORTYPE yylhsminor;
       case 0: /* stmt ::= expr G_ENDS */
-#line 54 "grammar.lemon"
+#line 55 "grammar.lemon"
 { pEval->setRoot(yymsp[-1].minor.yy0); }
-#line 969 "grammar.c"
+#line 971 "grammar.c"
         break;
       case 1: /* expr ::= G_VALUE */
-#line 57 "grammar.lemon"
+#line 58 "grammar.lemon"
 { yylhsminor.yy0.op = TR_NUMBER; yylhsminor.yy0.value = yymsp[0].minor.yy0.value; yylhsminor.yy0.leaf[0] = yylhsminor.yy0.leaf[1] = NULL; yylhsminor.yy0.valid = true; }
-#line 974 "grammar.c"
+#line 976 "grammar.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 2: /* expr ::= G_VALUE G_UNIT */
-#line 58 "grammar.lemon"
+#line 59 "grammar.lemon"
 { yylhsminor.yy0.op = TR_NUMBER; yylhsminor.yy0.value = yymsp[-1].minor.yy0.value; yylhsminor.yy0.leaf[0] = newNode( TR_UNIT, yymsp[0].minor.yy0.value.type, ""); yylhsminor.yy0.leaf[1] = NULL; yylhsminor.yy0.valid = true; }
-#line 980 "grammar.c"
+#line 982 "grammar.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 3: /* expr ::= G_STRING */
-#line 59 "grammar.lemon"
+#line 60 "grammar.lemon"
 { yylhsminor.yy0.op = TR_STRING; yylhsminor.yy0.value = yymsp[0].minor.yy0.value; yylhsminor.yy0.leaf[0] = yylhsminor.yy0.leaf[1] = NULL; yylhsminor.yy0.valid = true; }
-#line 986 "grammar.c"
+#line 988 "grammar.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 4: /* expr ::= G_IDENTIFIER */
-#line 60 "grammar.lemon"
+#line 61 "grammar.lemon"
 { yylhsminor.yy0.op = TR_IDENTIFIER; yylhsminor.yy0.value = yymsp[0].minor.yy0.value; yylhsminor.yy0.leaf[0] = yylhsminor.yy0.leaf[1] = NULL; yylhsminor.yy0.valid = true; }
-#line 992 "grammar.c"
+#line 994 "grammar.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 5: /* expr ::= expr G_LESS_THAN expr */
-#line 61 "grammar.lemon"
+#line 62 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_LESS; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 998 "grammar.c"
+#line 1000 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 6: /* expr ::= expr G_GREATER_THAN expr */
-#line 62 "grammar.lemon"
+#line 63 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_GREATER; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1004 "grammar.c"
+#line 1006 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 7: /* expr ::= expr G_LESS_EQUAL_THAN expr */
-#line 63 "grammar.lemon"
+#line 64 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_LESS_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1010 "grammar.c"
+#line 1012 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 8: /* expr ::= expr G_GREATER_EQUAL_THAN expr */
-#line 64 "grammar.lemon"
+#line 65 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_GREATER_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1016 "grammar.c"
+#line 1018 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 9: /* expr ::= expr G_NOT_EQUAL expr */
-#line 65 "grammar.lemon"
+#line 66 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_NOT_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1022 "grammar.c"
+#line 1024 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 10: /* expr ::= expr G_BOOL_AND expr */
-#line 66 "grammar.lemon"
+#line 67 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_BOOL_AND; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1028 "grammar.c"
+#line 1030 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 11: /* expr ::= expr G_BOOL_OR expr */
-#line 67 "grammar.lemon"
+#line 68 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_BOOL_OR; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1034 "grammar.c"
+#line 1036 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 12: /* expr ::= expr G_PLUS expr */
-#line 68 "grammar.lemon"
+#line 69 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_ADD; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1040 "grammar.c"
+#line 1042 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 13: /* expr ::= expr G_MINUS expr */
-#line 69 "grammar.lemon"
+#line 70 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_SUB; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1046 "grammar.c"
+#line 1048 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 14: /* expr ::= expr G_MULT expr */
-#line 70 "grammar.lemon"
+#line 71 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_MUL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1052 "grammar.c"
+#line 1054 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 15: /* expr ::= expr G_DIVIDE expr */
-#line 71 "grammar.lemon"
+#line 72 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_DIV; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1058 "grammar.c"
+#line 1060 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 16: /* expr ::= expr G_EQUAL expr */
-#line 72 "grammar.lemon"
+#line 73 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1064 "grammar.c"
+#line 1066 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 17: /* expr ::= expr G_STRUCT_REF expr */
-#line 74 "grammar.lemon"
+#line 75 "grammar.lemon"
 { yylhsminor.yy0.op = TR_STRUCT_REF; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; }
-#line 1070 "grammar.c"
+#line 1072 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 18: /* expr ::= G_PARENL expr G_PARENR */
-#line 76 "grammar.lemon"
+#line 77 "grammar.lemon"
 { yymsp[-2].minor.yy0.op = yymsp[-1].minor.yy0.op; yymsp[-2].minor.yy0.value = yymsp[-1].minor.yy0.value; yymsp[-2].minor.yy0.valid=yymsp[-1].minor.yy0.valid;  yymsp[-2].minor.yy0.leaf[0] = yymsp[-1].minor.yy0.leaf[0]; yymsp[-2].minor.yy0.leaf[1] = yymsp[-1].minor.yy0.leaf[1]; }
-#line 1076 "grammar.c"
+#line 1078 "grammar.c"
         break;
       case 19: /* expr ::= G_IDENTIFIER G_PARENL expr G_PARENR */
-#line 77 "grammar.lemon"
+#line 78 "grammar.lemon"
 { yylhsminor.yy0.op = TR_OP_FUNC_CALL;  yylhsminor.yy0.leaf[0] = copyNode(yymsp[-3].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[-1].minor.yy0);  yylhsminor.yy0.valid=1; }
-#line 1081 "grammar.c"
+#line 1083 "grammar.c"
   yymsp[-3].minor.yy0 = yylhsminor.yy0;
         break;
       default:
@@ -1144,10 +1146,10 @@ static void yy_syntax_error(
   ParseCTX_FETCH
 #define TOKEN yyminor
 /************ Begin %syntax_error code ****************************************/
-#line 38 "grammar.lemon"
+#line 39 "grammar.lemon"
 
   pEval->parseError("Syntax error");
-#line 1151 "grammar.c"
+#line 1153 "grammar.c"
 /************ End %syntax_error code ******************************************/
   ParseARG_STORE /* Suppress warning about unused %extra_argument variable */
   ParseCTX_STORE
@@ -1173,10 +1175,10 @@ static void yy_accept(
   /* Here code is inserted which will be executed whenever the
   ** parser accepts */
 /*********** Begin %parse_accept code *****************************************/
-#line 42 "grammar.lemon"
+#line 43 "grammar.lemon"
 
   pEval->parseOk();
-#line 1180 "grammar.c"
+#line 1182 "grammar.c"
 /*********** End %parse_accept code *******************************************/
   ParseARG_STORE /* Suppress warning about unused %extra_argument variable */
   ParseCTX_STORE

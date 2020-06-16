@@ -49,7 +49,7 @@ namespace LIBEVAL
 static void libeval_dbg( int level, const char* fmt, ... )
 {
 #ifdef DEBUG
-    if(level <= 10) // fixme: tom's debugging.
+    if(level < 10) // fixme: tom's debugging.
     {
         va_list ap;
         va_start( ap, fmt );
@@ -409,8 +409,12 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
     else if( m_tokenizer.MatchAhead( "==", []( int c ) -> bool { return c != '='; } ) )
     {
         retval.token = G_EQUAL;
+        m_tokenizer.NextChar( 2 );  
+    }
+    else if( m_tokenizer.MatchAhead( "!=", []( int c ) -> bool { return c != '='; } ) )
+    {
+        retval.token = G_NOT_EQUAL;
         m_tokenizer.NextChar( 2 );
-        //printf( "nc pos %d\n", m_tokenizer.GetPos() );
     }
     else if( m_tokenizer.MatchAhead( "<=", []( int c ) -> bool { return c != '='; } ) )
     {
@@ -541,6 +545,11 @@ void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
         dumpNode( buf, tok->leaf[0], depth + 1 );
         dumpNode( buf, tok->leaf[1], depth + 1 );
         break;
+     case TR_OP_FUNC_CALL:
+        sprintf( str, "CALL '%s': ", tok->leaf[0]->value.str );
+        buf += str;
+        dumpNode( buf, tok->leaf[1], depth + 1 );
+        break;
     case TR_UNIT:
         sprintf( str, "UNIT: %d ", tok->value.type );
         buf += str;
@@ -552,6 +561,12 @@ ERROR_STATUS COMPILER::GetErrorStatus()
 {
     ERROR_STATUS dummy;
     return dummy;
+}
+
+void COMPILER::ReportError( const std::string aErrorMsg )
+{
+    m_errorStatus.pendingError = true;
+    m_errorStatus.message = aErrorMsg;
 }
 
 void COMPILER::setRoot( TREE_NODE root )
@@ -575,14 +590,21 @@ bool COMPILER::generateUCode( UCODE* aCode )
 
     stack.push_back( m_tree );
 
-    //printf("compile: tree %p\n", m_tree);
+    std::string dump;
+
+    dumpNode( dump, m_tree, 0 );
+
+    libeval_dbg(3,"Tree: %s", dump.c_str() );
+
+
 
     while( !stack.empty() )
     {
         auto node           = stack.back();
         bool isTerminalNode = true;
 
-        //   printf( "process node %p [op %d] [stack %d]\n", node, node->op, stack.size() );
+
+        libeval_dbg( 4, "process node %p [op %d] [stack %d]\n", node, node->op, stack.size() );
 
         // process terminal nodes first
         switch( node->op )
@@ -590,10 +612,54 @@ bool COMPILER::generateUCode( UCODE* aCode )
         case TR_STRUCT_REF:
         {
             assert( node->leaf[0]->op == TR_IDENTIFIER );
-            assert( node->leaf[1]->op == TR_IDENTIFIER );
+            //assert( node->leaf[1]->op == TR_IDENTIFIER );
 
-            auto vref = aCode->createVarRef( this, node->leaf[0]->value.str, node->leaf[1]->value.str );
-            aCode->AddOp( TR_UOP_PUSH_VAR, vref );
+
+            switch( node->leaf[1]->op )
+            {
+                case TR_IDENTIFIER:
+                {
+                    auto vref = aCode->createVarRef( this, node->leaf[0]->value.str, node->leaf[1]->value.str );
+
+                    if( m_errorStatus.pendingError )
+                    {
+                        printf("varref fail\n");
+                        return false;
+                    }
+                    aCode->AddOp( TR_UOP_PUSH_VAR, vref );
+                    break;
+                }
+                case TR_OP_FUNC_CALL:
+                {
+
+                    //printf("got a method call... [%s], this = %s\n", node->leaf[1]->leaf[0]->value.str, node->leaf[0]->value.str);
+                    auto vref = aCode->createVarRef( this, node->leaf[0]->value.str, "");
+                    auto func = aCode->createFuncCall( this, node->leaf[1]->leaf[0]->value.str );
+
+                    if(!func)
+                    {
+                        m_errorStatus.pendingError = true;
+                        m_errorStatus.stage = ERROR_STATUS::CST_CODEGEN;
+                        return false;
+                        // fixme: generate a message
+                    }
+
+//                    printf("cfc4 test\n");
+  //                  func(nullptr, nullptr, nullptr);
+
+                    aCode->AddOp( TR_OP_METHOD_CALL, func, vref );
+
+                    isTerminalNode = false;
+                    visitedNodes.insert( node );
+                    visitedNodes.insert( node->leaf[0] );
+                    //visitedNodes.insert( node->leaf[1]->leaf[1] );
+
+
+                    break;
+                }
+            }
+
+
             break;
         }
 
@@ -665,8 +731,14 @@ void UCODE::UOP::Exec( CONTEXT* ctx, UCODE* ucode )
         ctx->Push( value );
         break;
     }
+
     case TR_UOP_PUSH_VALUE:
         ctx->Push( reinterpret_cast<VALUE*>( m_arg ) );
+        return;
+
+    case TR_OP_METHOD_CALL:
+        //printf("CALL METHOD %s\n" );
+        m_func( ucode, ctx, m_arg );
         return;
     default:
         break;
