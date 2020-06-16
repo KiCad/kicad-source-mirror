@@ -896,8 +896,8 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     // (layer and items visibility, colors ...)
 
     // Rebuild list of nets (full ratsnest rebuild)
-    Compile_Ratsnest( true );
     GetBoard()->BuildConnectivity();
+    Compile_Ratsnest( true );
 
     // Update info shown by the horizontal toolbars
     ReCreateLayerBox();

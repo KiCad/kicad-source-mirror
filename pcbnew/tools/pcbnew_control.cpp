@@ -669,8 +669,8 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
             {
                 placeBoardItems( clipBoard, true );
 
-                m_frame->Compile_Ratsnest( true );
                 m_frame->GetBoard()->BuildConnectivity();
+                m_frame->Compile_Ratsnest( true );
             }
 
             break;
