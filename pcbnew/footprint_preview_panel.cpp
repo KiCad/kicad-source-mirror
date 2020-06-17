@@ -388,39 +388,71 @@ wxWindow* FOOTPRINT_PREVIEW_PANEL::GetWindow()
 
 FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* aParent )
 {
-    PCB_EDIT_FRAME* pcbnew =
-            static_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
-
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    // Fetch grid & display settings from PCBNew if it's running; otherwise fetch them
-    // from PCBNew's config settings.
-    // We need a copy with a lifetime that matches the panel
+    if( cfg->m_Window.grid.sizes.empty() )
+    {
+        cfg->m_Window.grid.sizes = { "1000 mil",
+                                     "500 mil",
+                                     "250 mil",
+                                     "200 mil",
+                                     "100 mil",
+                                     "50 mil",
+                                     "25 mil",
+                                     "20 mil",
+                                     "10 mil",
+                                     "5 mil",
+                                     "2 mil",
+                                     "1 mil",
+                                     "5.0 mm",
+                                     "2.5 mm",
+                                     "1.0 mm",
+                                     "0.5 mm",
+                                     "0.25 mm",
+                                     "0.2 mm",
+                                     "0.1 mm",
+                                     "0.05 mm",
+                                     "0.025 mm",
+                                     "0.01 mm" };
+    }
+
+    if( cfg->m_Window.zoom_factors.empty() )
+    {
+        cfg->m_Window.zoom_factors = { 0.035,
+                                       0.05,
+                                       0.08,
+                                       0.13,
+                                       0.22,
+                                       0.35,
+                                       0.6,
+                                       1.0,
+                                       1.5,
+                                       2.2,
+                                       3.5,
+                                       5.0,
+                                       8.0,
+                                       13.0,
+                                       20.0,
+                                       35.0,
+                                       50.0,
+                                       80.0,
+                                       130.0,
+                                       220.0,
+                                       300.0 };
+    }
+
+    for( double& factor : cfg->m_Window.zoom_factors )
+        factor = std::min( factor, MAX_ZOOM_FACTOR );
+
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> gal_opts;
 
-    if( pcbnew )
-    {
-        // Copy the existing Pcbnew options
-        // REVIEW: This also copies the current subscription list of the options
-        // to the new options. This is probably not what is intended, but because
-        // this widget doesn't change the options it should be OK.
-        gal_opts = std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>( pcbnew->GetGalDisplayOptions() );
-    }
-    else
-    {
-
-        // Make and populate a new one from config
-        gal_opts = std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>();
-        gal_opts->ReadConfig( *Pgm().GetCommonSettings(), cfg->m_Window, aParent );
-    }
+    gal_opts = std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>();
+    gal_opts->ReadConfig( *Pgm().GetCommonSettings(), cfg->m_Window, aParent );
 
     auto canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );
     auto panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, std::move( gal_opts ), canvasType );
 
-    if( pcbnew )
-        panel->GetView()->GetPainter()->GetSettings()->LoadColors( pcbnew->GetColorSettings() );
-    else
-        panel->UpdateColors();
+    panel->UpdateColors();
 
     const GRID_SETTINGS& gridCfg = cfg->m_Window.grid;
 
