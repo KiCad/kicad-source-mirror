@@ -37,6 +37,8 @@ class UCODE;
 class ERROR_STATUS;
 };
 
+class PCB_EXPR_UCODE;
+
 namespace test
 {
 
@@ -73,6 +75,10 @@ private:
 
 class DRC_CONSTRAINT
 {
+    public:
+    const MINOPTMAX<int>& GetValue() const { return m_Value; }
+    bool Allowed() const { return m_Allow; }
+
     public:
         MINOPTMAX<int> m_Value;
         bool      m_Allow;
@@ -128,7 +134,7 @@ public:
 
 private:
     LIBEVAL::ERROR_STATUS m_compileError;
-    LIBEVAL::UCODE* m_ucode;
+    PCB_EXPR_UCODE* m_ucode;
 };
 
 

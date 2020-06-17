@@ -20,8 +20,8 @@ namespace test {
 class DRC_TEST_PROVIDER_CLEARANCE : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_CLEARANCE ( DRC_ENGINE *aDrc ) :
-        DRC_TEST_PROVIDER( aDrc )
+    DRC_TEST_PROVIDER_CLEARANCE () :
+        DRC_TEST_PROVIDER()
         {
 
         }
@@ -38,7 +38,11 @@ public:
     virtual std::set<test::DRC_RULE_ID_T> GetMatchingRuleIds() const override;
 
 private:
-    void testPadClearances( );
+    void testPadClearances();
+    void testTrackClearances();
+
+    void doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt,
+                      TRACKS::iterator aEndIt, bool aTestZones );
     bool doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
 
     bool checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_PAD* pad,
@@ -48,6 +52,8 @@ private:
                       int aDist, int* aActual );
     bool poly2polyDRC( wxPoint* aTref, int aTrefCount, wxPoint* aTtest, int aTtestCount,
                    int aAllowedDist, int* actualDist );
+
+    wxPoint getLocation( TRACK* aTrack, const SEG& aConflictSeg );
 
     BOARD* m_board;
     int m_largestClearance;
@@ -59,6 +65,27 @@ private:
 
 };
 
+const int UI_EPSILON = Mils2iu( 5 );
+
+wxPoint test::DRC_TEST_PROVIDER_CLEARANCE::getLocation( TRACK* aTrack, const SEG& aConflictSeg )
+{
+    wxPoint pt1 = aTrack->GetPosition();
+    wxPoint pt2 = aTrack->GetEnd();
+
+    // Do a binary search along the track for a "good enough" marker location
+    while( GetLineLength( pt1, pt2 ) > UI_EPSILON )
+    {
+        if( aConflictSeg.SquaredDistance( pt1 ) < aConflictSeg.SquaredDistance( pt2 ) )
+            pt2 = ( pt1 + pt2 ) / 2;
+        else
+            pt1 = ( pt1 + pt2 ) / 2;
+    }
+
+    // Once we're within UI_EPSILON pt1 and pt2 are "equivalent"
+    return pt1;
+}
+
+
 bool test::DRC_TEST_PROVIDER_CLEARANCE::Run()
 {
     auto bds = m_drcEngine->GetDesignSettings();
@@ -66,11 +93,271 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE::Run()
     m_board = m_drcEngine->GetBoard();
     m_largestClearance = bds->GetBiggestClearanceValue();
 
+    ReportStage(_("Testing pad copper clerances"), 0, 2 );
     testPadClearances();
+    ReportStage(_("Testing track/via copper clerances"), 0, 2 );
+    testTrackClearances();
 
-    return false;
+    return true;
 }
 
+void test::DRC_TEST_PROVIDER_CLEARANCE::testTrackClearances()
+{
+    const int         delta = 500;  // This is the number of tests between 2 calls to the
+                                    // progress bar
+    int               count = m_board->Tracks().size();
+    int               deltamax = count/delta;
+
+    ReportProgress(0.0);
+
+    int ii = 0;
+    count = 0;
+
+    for( auto seg_it = m_board->Tracks().begin(); seg_it != m_board->Tracks().end(); seg_it++ )
+    {
+        if( ii++ > delta )
+        {
+            ii = 0;
+            count++;
+
+            ReportProgress( (double) ii / (double ) count );
+        }
+
+        // Test new segment against tracks and pads, optionally against copper zones
+        doTrackDrc( *seg_it, seg_it + 1, m_board->Tracks().end(), true );
+    }
+}
+
+void test::DRC_TEST_PROVIDER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt,
+                      TRACKS::iterator aEndIt, bool aTestZones )
+{
+    BOARD_DESIGN_SETTINGS&     bds = m_board->GetDesignSettings();
+
+    SEG          refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+    PCB_LAYER_ID refLayer = aRefSeg->GetLayer();
+    LSET         refLayerSet = aRefSeg->GetLayerSet();
+
+    EDA_RECT     refSegBB = aRefSeg->GetBoundingBox();
+    int          refSegWidth = aRefSeg->GetWidth();
+
+
+    /******************************************/
+    /* Phase 0 : via DRC tests :              */
+    /******************************************/
+
+    // fixme: via annulus and other nin-coppper clearance tests moved elsewhere
+
+    /******************************************/
+    /* Phase 1 : test DRC track to pads :     */
+    /******************************************/
+
+    // Compute the min distance to pads
+    for( MODULE* mod : m_board->Modules() )
+    {
+        // Don't preflight at the module level.  Getting a module's bounding box goes
+        // through all its pads anyway (so it's no faster), and also all its drawings
+        // (so it's in fact slower).
+
+        for( D_PAD* pad : mod->Pads() )
+        {
+            // Preflight based on bounding boxes.
+            EDA_RECT inflatedBB = refSegBB;
+            inflatedBB.Inflate( pad->GetBoundingRadius() + m_largestClearance );
+
+            if( !inflatedBB.Contains( pad->GetPosition() ) )
+                continue;
+
+            if( !( pad->GetLayerSet() & refLayerSet ).any() )
+                continue;
+
+            // No need to check pads with the same net as the refSeg.
+            if( pad->GetNetCode() && aRefSeg->GetNetCode() == pad->GetNetCode() )
+                continue;
+
+            // fixme: hole to hole clearance moved elsewhere
+
+            auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefSeg, pad );
+            auto minClearance = rule->GetConstraint().GetValue().Min();
+            int clearanceAllowed = minClearance - bds.GetDRCEpsilon();
+            int actual;
+
+            if( !checkClearanceSegmToPad( refSeg, refSegWidth, pad, clearanceAllowed, &actual ) )
+            {
+                actual = std::max( 0, actual );
+                SEG       padSeg( pad->GetPosition(), pad->GetPosition() );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_PAD );
+
+                wxString msg;
+
+                msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              /*m_clearanceSource fixme*/ "",
+                              MessageTextFromValue( userUnits(), minClearance, true ),
+                              MessageTextFromValue( userUnits(), actual, true ) );
+
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( aRefSeg, pad );
+
+                ReportWithMarker( drcItem, rule, getLocation( aRefSeg, padSeg ) );
+
+                if( isErrorLimitExceeded( DRCE_TRACK_NEAR_PAD ) )
+                    return;
+            }
+        }
+    }
+
+    /***********************************************/
+    /* Phase 2: test DRC with other track segments */
+    /***********************************************/
+
+    // Test the reference segment with other track segments
+    for( auto it = aStartIt; it != aEndIt; it++ )
+    {
+        TRACK* track = *it;
+
+        // No problem if segments have the same net code:
+        if( aRefSeg->GetNetCode() == track->GetNetCode() )
+            continue;
+
+        // No problem if tracks are on different layers:
+        // Note that while the general case of GetLayerSet intersection always works,
+        // the others are much faster.
+        bool sameLayers;
+
+        if( aRefSeg->Type() == PCB_VIA_T )
+        {
+            if( track->Type() == PCB_VIA_T )
+                sameLayers = ( refLayerSet & track->GetLayerSet() ).any();
+            else
+                sameLayers = refLayerSet.test( track->GetLayer() );
+        }
+        else
+        {
+            if( track->Type() == PCB_VIA_T )
+                sameLayers = track->GetLayerSet().test( refLayer );
+            else
+                sameLayers = track->GetLayer() == refLayer;
+        }
+
+        if( !sameLayers )
+            continue;
+
+        // Preflight based on worst-case inflated bounding boxes:
+        EDA_RECT trackBB = track->GetBoundingBox();
+        trackBB.Inflate( m_largestClearance );
+
+        if( !trackBB.Intersects( refSegBB ) )
+            continue;
+
+        auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefSeg, track );
+        auto minClearance = rule->GetConstraint().GetValue().Min();
+
+        SEG trackSeg( track->GetStart(), track->GetEnd() );
+        int widths = ( refSegWidth + track->GetWidth() ) / 2;
+        int center2centerAllowed = minClearance + widths;
+
+        // Avoid square-roots if possible (for performance)
+        SEG::ecoord  center2center_squared = refSeg.SquaredDistance( trackSeg );
+        OPT_VECTOR2I intersection = refSeg.Intersect( trackSeg );
+
+        // Check two tracks crossing first as it reports a DRCE without distances
+        if( intersection )
+        {
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACKS_CROSSING );
+
+            // fixme
+            drcItem->SetErrorMessage( "FIXME" );
+            drcItem->SetItems( aRefSeg, track );
+
+            ReportWithMarker( drcItem, rule, (wxPoint) intersection.get() );
+
+            if( isErrorLimitExceeded( DRCE_TRACKS_CROSSING ) )
+                return;
+        }
+        else if( center2center_squared < SEG::Square( center2centerAllowed ) )
+        {
+            int errorCode = DRCE_TRACK_ENDS;
+
+            if( aRefSeg->Type() == PCB_VIA_T && track->Type() == PCB_VIA_T )
+                errorCode = DRCE_VIA_NEAR_VIA;
+            else if( aRefSeg->Type() == PCB_VIA_T || track->Type() == PCB_VIA_T )
+                errorCode = DRCE_VIA_NEAR_TRACK;
+            else if( refSeg.ApproxParallel( trackSeg ) )
+                errorCode = DRCE_TRACK_SEGMENTS_TOO_CLOSE;
+
+            int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
+            DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
+
+            wxString msg;
+            msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                          /*m_clearanceSource fixme*/"",
+                          MessageTextFromValue( userUnits(), minClearance, true ),
+                          MessageTextFromValue( userUnits(), actual, true ) );
+
+            drcItem->SetErrorMessage( msg );
+            drcItem->SetItems( aRefSeg, track );
+
+            ReportWithMarker( drcItem, rule, getLocation( aRefSeg, trackSeg ) );
+
+            if( isErrorLimitExceeded( errorCode ) )
+                return;
+        }
+    }
+
+    #if 0
+
+    /***************************************/
+    /* Phase 3: test DRC with copper zones */
+    /***************************************/
+    // Can be *very* time consumming.
+    if( aTestZones )
+    {
+        SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+
+        for( ZONE_CONTAINER* zone : m_pcb->Zones() )
+        {
+            if( zone->GetFilledPolysList().IsEmpty() || zone->GetIsKeepout() )
+                continue;
+
+            if( !( refLayerSet & zone->GetLayerSet() ).any() )
+                continue;
+
+            if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
+                continue;
+
+            int             minClearance = aRefSeg->GetClearance( zone, &m_clearanceSource );
+            int             widths = refSegWidth / 2;
+            int             center2centerAllowed = minClearance + widths;
+            SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
+
+            SEG::ecoord     center2center_squared = outline->SquaredDistance( testSeg );
+
+            // to avoid false positive, due to rounding issues and approxiamtions
+            // in distance and clearance calculations, use a small threshold for distance
+            // (1 micron)
+            #define THRESHOLD_DIST Millimeter2iu( 0.001 )
+
+            if( center2center_squared + THRESHOLD_DIST < SEG::Square( center2centerAllowed ) )
+            {
+                int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
+
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              m_clearanceSource,
+                              MessageTextFromValue( userUnits(), minClearance, true ),
+                              MessageTextFromValue( userUnits(), actual, true ) );
+
+                drcItem->SetErrorMessage( m_msg );
+                drcItem->SetItems( aRefSeg, zone );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, zone ) );
+                addMarkerToPcb( aCommit, marker );
+            }
+        }
+    }
+#endif
+
+// fixme: board edge clearance to another rule
+}
 
 
 void test::DRC_TEST_PROVIDER_CLEARANCE::testPadClearances( )
@@ -80,6 +367,10 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::testPadClearances( )
 
     m_board->GetSortedPadListByXthenYCoord( sortedPads );
 
+    //Report("testing pads: %d pads\n", sortedPads.size() );
+
+    for( auto p : sortedPads )
+        
     if( sortedPads.empty() )
         return;
 
@@ -102,10 +393,14 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::testPadClearances( )
     // Upper limit of pad list (limit not included)
     D_PAD** listEnd = &sortedPads[0] + sortedPads.size();
 
+    int ii = 0;
     // Test the pads
     for( auto& pad : sortedPads )
     {
+        if( ii % 100 == 0 )
+            ReportProgress( (double) ii / (double) sortedPads.size() );
 
+        ii++;
 #if 0
     // fixme: move Board outline clearance to separate provider 
         if( m_boardOutlineValid )
@@ -192,7 +487,7 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** 
 // fixme move hole clearance check to another provider
 
         // No problem if pads which are on copper layers are on different copper layers,
-        // (pads can be only on a technical layer, to build complex pads)
+        // (pads can be p on a technical layer, to build complex pads)
         // but their hole (if any ) can create DRC error because they are on all
         // copper layers, so we test them
         if( ( pad->GetLayerSet() & layerMask ) == 0 &&
@@ -314,10 +609,10 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** 
             continue;
         }
 
-        auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefPad, pad );
+        auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefPad, pad );
+        auto minClearance = rule->GetConstraint().GetValue().Min();
 
-        //int  minClearance = aRefPad->GetClearance( pad, *&m_clearanceSource );
-        int minClearance; // fixme
+        drc_dbg(4, "pad %p vs %p constraint %d\n", aRefPad, pad, minClearance );
 
         int  clearanceAllowed = minClearance - m_drcEngine->GetDesignSettings()->GetDRCEpsilon();
         int  actual;
@@ -334,9 +629,7 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** 
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( aRefPad, pad );
 
-            MARKER_PCB* marker = nullptr; // fixme new MARKER_PCB( drcItem, aRefPad->GetPosition() );
-            AddMarkerToPcb( marker );
-
+            ReportWithMarker( drcItem, rule, aRefPad->GetPosition() );
             return false;
         }
     }
@@ -752,7 +1045,8 @@ std::set<test::DRC_RULE_ID_T> test::DRC_TEST_PROVIDER_CLEARANCE::GetMatchingRule
     return { DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE };
 }
 
-test::DRC_TEST_PROVIDER *drcCreateClearanceTestProvider( test::DRC_ENGINE *engine )
+
+namespace detail
 {
-    return new test::DRC_TEST_PROVIDER_CLEARANCE( engine );
+    static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_CLEARANCE> dummy;
 }

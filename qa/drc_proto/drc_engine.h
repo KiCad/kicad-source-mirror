@@ -51,10 +51,8 @@ class NETCLASS;
 class EDA_TEXT;
 class DRAWSEGMENT;
 class NETLIST;
-class wxWindow;
-class wxString;
-class wxTextCtrl;
 class PROGRESS_REPORTER;
+class REPORTER;
 
 namespace test
 {
@@ -181,10 +179,8 @@ public:
         return m_board;
     }
 
-    DRC_CONSTRAINT EvalRulesForItems(
-            DRC_RULE_ID_T ruleID, const BOARD_ITEM* a, const BOARD_ITEM* b = nullptr );
-
-    //void IterateOverMatchingRules( DRC_RULE_ID_IT ruleID );
+    DRC_RULE* EvalRulesForItems(
+            DRC_RULE_ID_T ruleID,  BOARD_ITEM* a, BOARD_ITEM* b = nullptr );
 
     EDA_UNITS UserUnits() const
     {
@@ -204,6 +200,7 @@ private:
     struct RULE_SET
     {
         std::vector<RULE_WITH_CONDITIONS*> sortedRules;
+        DRC_RULE* defaultRule;
         DRC_TEST_PROVIDER* provider;
     };
 
@@ -220,12 +217,16 @@ private:
     std::vector<DRC_RULE_CONDITION*> m_ruleConditions;
     std::vector<DRC_RULE*>           m_rules;
     std::vector<DRC_TEST_PROVIDER*>  m_testProviders;
+    std::unordered_map<EDA_ITEM*, RULE_SET*> m_implicitRules;
     std::vector<::MARKER_PCB*>       m_markers;
     RULE_MAP m_ruleMap;
+    REPORTER* m_reporter;
+    PROGRESS_REPORTER* m_progressReporter;
 
     // condition -> rule -> provider
 };
 
+void drc_dbg( int level, const char* fmt, ... );
 
 }; // namespace test
 

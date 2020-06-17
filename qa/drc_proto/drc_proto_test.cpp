@@ -12,6 +12,9 @@
 
 int main( int argc, char *argv[] )
 {
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.Rebuild();
+
     auto brd =  KI_TEST::ReadBoardFromFileOrStream(argv[1]);
 
     test::DRC_ENGINE drcEngine( brd.get(), &brd->GetDesignSettings() );

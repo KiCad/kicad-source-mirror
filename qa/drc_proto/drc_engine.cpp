@@ -121,10 +121,6 @@ bool test::DRC_ENGINE::LoadRules( wxFileName aPath )
 
 test::DRC_TEST_PROVIDER *drcCreateClearanceTestProvider( test::DRC_ENGINE *engine );
 
-void test::DRC_ENGINE::loadTestProviders()
-{
-    m_testProviders.push_back( drcCreateClearanceTestProvider( this ) );
-}
 
 
 void test::DRC_ENGINE::inferImplicitRules()
@@ -133,10 +129,12 @@ void test::DRC_ENGINE::inferImplicitRules()
 }
 
 
-static void drc_dbg( int level, const char* fmt, ... )
+static const int drc_debug_level = 0;
+
+void test::drc_dbg( int level, const char* fmt, ... )
 {
 #ifdef DEBUG
-    if(level < 10) // fixme: tom's debugging.
+    if(level < drc_debug_level) // fixme: tom's debugging.
     {
         va_list ap;
         va_start( ap, fmt );
@@ -161,6 +159,7 @@ bool test::DRC_ENGINE::CompileRules()
                 m_ruleMap[id] = new RULE_SET;
             
             m_ruleMap[ id ]->provider = provider;
+            m_ruleMap[ id ]->defaultRule = nullptr;
 
             for( auto rule : m_rules )
             {   
@@ -170,6 +169,12 @@ bool test::DRC_ENGINE::CompileRules()
                    if( rule->IsEnabled() )
                    {
                         auto rcons = new RULE_WITH_CONDITIONS;
+
+                        if( rule->GetPriority() == 0 )
+                        {
+                            m_ruleMap[ id ]->defaultRule = rule;
+                            continue;
+                        }
 
                        for( auto condition : m_ruleConditions )
                        {
@@ -200,20 +205,48 @@ void test::DRC_ENGINE::RunTests( )
 {
     //m_largestClearance = m_designSettings->GetBiggestClearanceValue();
 
-    loadTestProviders();
+    m_testProviders = DRC_TEST_PROVIDER_REGISTRY::Instance().GetTestProviders();
+
+    for( auto provider : m_testProviders )
+        provider->SetDRCEngine( this );
+
     inferImplicitRules();
 
     CompileRules();
+    for( auto provider : m_testProviders )
+    {
+        drc_dbg(0, "Running test provider: '%s'\n", (const char *) provider->GetName().c_str() );
+        provider->Run();
+    }
 }
 
 
-test::DRC_CONSTRAINT test::DRC_ENGINE::EvalRulesForItems( test::DRC_RULE_ID_T ruleID, const BOARD_ITEM* a, const BOARD_ITEM* b  )
+test::DRC_RULE* test::DRC_ENGINE::EvalRulesForItems( test::DRC_RULE_ID_T ruleID, BOARD_ITEM* a, BOARD_ITEM* b  )
 {
-    test::DRC_CONSTRAINT rv;
+    test::DRC_RULE* rv;
     auto ruleset = m_ruleMap[ ruleID ];
 
+    for( auto rcond : ruleset->sortedRules )
+    {
+        for( auto condition : rcond->conditions )
+        {
+            bool result = condition->EvaluateFor( a, b );
+            if( result )
+            {
+                drc_dbg(8, "   -> rule '%s' matches, triggered by condition '%s'\n", (const char*) rcond->rule->m_Name.c_str(), (const char*) condition->m_Expression );
+                return rcond->rule;
+            }
+        }
+    }
 
-    return rv;
+    if( ruleset->defaultRule )
+    {
+        drc_dbg(8, "   -> default rule '%s' matches\n", (const char*) ruleset->defaultRule->m_Name.c_str() );
+        return ruleset->defaultRule;
+    }
+
+    assert(false); // should never hapen
+    return nullptr;
 }
 
 

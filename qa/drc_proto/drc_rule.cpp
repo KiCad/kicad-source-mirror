@@ -55,7 +55,10 @@ test::DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 
 bool test::DRC_RULE_CONDITION::EvaluateFor( BOARD_ITEM* aItemA, BOARD_ITEM* aItemB )
 {
+    m_ucode->SetItems( aItemA, aItemB );
 
+// fixme: handle error conditions
+    return m_ucode->Run()->AsDouble() != 0.0;
 }
 
 bool test::DRC_RULE_CONDITION::Compile()
