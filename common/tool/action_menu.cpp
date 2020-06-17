@@ -415,7 +415,12 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
                     focus->HandleWindowEvent( keyEvent );
                 }
 
-                return;
+                // If the event was used as KEY event (not skipped) by the focused window,
+                // just finish.
+                // Otherwise this is actually a wxEVT_COMMAND_MENU_SELECTED, or the
+                // focused window is read only
+                if( !keyEvent.GetSkipped() )
+                    return;
             }
         }
 
