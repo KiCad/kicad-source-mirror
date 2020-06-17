@@ -39,7 +39,12 @@
 
 void GERBVIEW_FRAME::ReCreateHToolbar()
 {
-    wxString      msg;
+    // Note:
+    // To rebuild the aui toolbar, the more easy way is to clear ( calling m_mainToolBar.Clear() )
+    // all wxAuiToolBarItems.
+    // However the wxAuiToolBarItems are not the owners of controls managed by
+    // them ( m_TextInfo and m_SelLayerBox ), and therefore do not delete them
+    // So we do not recreate them after clearing the tools.
 
     if( m_mainToolBar )
         m_mainToolBar->Clear();
@@ -59,11 +64,11 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( GERBVIEW_ACTIONS::openGerber );
     m_mainToolBar->Add( GERBVIEW_ACTIONS::openDrillFile );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),
                             _( "Print layers" ) );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
@@ -71,17 +76,20 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
-    m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( m_mainToolBar,
-                                                ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
-                                                wxDefaultPosition, wxDefaultSize, 0, NULL );
+    if( !m_SelLayerBox )
+        m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( m_mainToolBar,
+                                                    ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
+                                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+
     m_SelLayerBox->Resync();
-
     m_mainToolBar->AddControl( m_SelLayerBox );
 
-    m_TextInfo = new wxTextCtrl( m_mainToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                 wxDefaultSize, wxTE_READONLY );
+    if( !m_TextInfo )
+        m_TextInfo = new wxTextCtrl( m_mainToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                     wxDefaultSize, wxTE_READONLY );
+
     m_mainToolBar->AddControl( m_TextInfo );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
@@ -94,7 +102,9 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     wxWindowUpdateLocker dummy( this );
     wxStaticText* text;
 
-    if( !m_auxiliaryToolBar )
+    if( m_auxiliaryToolBar )
+        m_auxiliaryToolBar->Clear();
+    else
         m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR,
                                                  wxDefaultPosition, wxDefaultSize,
                                                  KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
@@ -147,7 +157,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     if( !m_gridSelectBox )
     {
-        KiScaledSeparator( m_auxiliaryToolBar, this );
+        m_auxiliaryToolBar->AddScaledSeparator( this );
         m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT,
                                         wxDefaultPosition, wxDefaultSize, 0, nullptr );
         m_auxiliaryToolBar->AddControl( m_gridSelectBox );
@@ -155,7 +165,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     if( !m_zoomSelectBox )
     {
-        KiScaledSeparator( m_auxiliaryToolBar, this );
+        m_auxiliaryToolBar->AddScaledSeparator( this );
         m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT,
                                         wxDefaultPosition, wxDefaultSize, 0, nullptr );
         m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
@@ -191,16 +201,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
 void GERBVIEW_FRAME::ReCreateVToolbar()
 {
-    if( m_drawToolBar )
-        return;
-
-    m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                        KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
-
-    m_optionsToolBar->Add( ACTIONS::selectionTool, ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->AddSeparator();
-
-    m_drawToolBar->Realize();
+    // This toolbar isn't used currently
 }
 
 
@@ -218,14 +219,14 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::selectionTool,                    ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::measureTool,                      ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( ACTIONS::toggleGrid,                       ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::togglePolarCoords,                ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::imperialUnits,                    ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::metricUnits,                      ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,                ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::flashedDisplayOutlines,  ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::linesDisplayOutlines,    ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::polygonsDisplayOutlines, ACTION_TOOLBAR::TOGGLE );
@@ -235,7 +236,7 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::highContrastMode,                 ACTION_TOOLBAR::TOGGLE );
 
     // Tools to show/hide toolbars:
-    KiScaledSeparator( m_mainToolBar, this );
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
                                wxEmptyString,
                                KiScaledBitmap( layers_manager_xpm, this ),

@@ -43,14 +43,11 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
                                             wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    ACTION_TOOLBAR* toolbar = static_cast<ACTION_TOOLBAR*>( m_mainToolBar );
-    wxString msg;
-
     m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
                             KiScaledBitmap( add_component_xpm, this ),
                             _( "Select symbol to browse" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
                             KiScaledBitmap( lib_previous_xpm, this ),
                             _( "Display previous symbol" ) );
@@ -59,27 +56,27 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
                             KiScaledBitmap( lib_next_xpm, this ),
                             _( "Display next symbol" ) );
 
-    toolbar->AddSeparator();
-    toolbar->Add( ACTIONS::zoomRedraw );
-    toolbar->Add( ACTIONS::zoomInCenter );
-    toolbar->Add( ACTIONS::zoomOutCenter );
-    toolbar->Add( ACTIONS::zoomFitScreen );
+    m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
+    m_mainToolBar->Add( ACTIONS::zoomInCenter );
+    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
-    KiScaledSeparator( m_mainToolBar, this );
-    toolbar->Add( EE_ACTIONS::showDeMorganStandard, ACTION_TOOLBAR::TOGGLE );
-    toolbar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
     if( m_unitChoice == nullptr )
         m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
                                      wxDefaultPosition, wxSize( 150, -1 ) );
     m_mainToolBar->AddControl( m_unitChoice );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::showDatasheet );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::addSymbolToSchematic );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes

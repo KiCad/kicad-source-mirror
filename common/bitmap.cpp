@@ -164,24 +164,6 @@ wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, wxWindow* aWindow )
 }
 
 
-void KiScaledSeparator( wxAuiToolBar* aToolbar, wxWindow* aWindow )
-{
-    const int scale = get_scale_factor( aWindow );
-
-    if( scale > 4 )
-    {
-        aToolbar->AddSpacer( 16 * ( scale - 4 ) / 4 );
-    }
-
-    aToolbar->AddSeparator();
-
-    if( scale > 4 )
-    {
-        aToolbar->AddSpacer( 16 * ( scale - 4 ) / 4 );
-    }
-}
-
-
 wxBitmap* KiBitmapNew( BITMAP_DEF aBitmap )
 {
     wxMemoryInputStream is( aBitmap->png, aBitmap->byteCount );

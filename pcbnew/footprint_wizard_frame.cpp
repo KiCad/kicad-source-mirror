@@ -588,52 +588,48 @@ void FOOTPRINT_WIZARD_FRAME::Update3DView( bool aForceReload, const wxString* aT
 
 void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
 {
-    wxString msg;
-
-    if( !m_mainToolBar )
-    {
+    if( m_mainToolBar )
+        m_mainToolBar->Clear();
+    else
         m_mainToolBar = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-        // Set up toolbar
-        m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, wxEmptyString,
-                                KiBitmap( module_wizard_xpm ),
-                                _( "Select wizard script to run" ) );
+    // Set up toolbar
+    m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, wxEmptyString,
+                            KiBitmap( module_wizard_xpm ),
+                            _( "Select wizard script to run" ) );
 
-        m_mainToolBar->AddSeparator();
-        m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, wxEmptyString,
-                                KiBitmap( reload_xpm ),
-                                _( "Reset wizard parameters to default") );
+    m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, wxEmptyString,
+                            KiBitmap( reload_xpm ),
+                            _( "Reset wizard parameters to default") );
 
-        m_mainToolBar->AddSeparator();
-        m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_PREVIOUS, wxEmptyString,
-                                KiBitmap( lib_previous_xpm ),
-                                _( "Select previous parameters page" ) );
-        m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_NEXT, wxEmptyString,
-                                KiBitmap( lib_next_xpm ),
-                                _( "Select next parameters page" ) );
+    m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_PREVIOUS, wxEmptyString,
+                            KiBitmap( lib_previous_xpm ),
+                            _( "Select previous parameters page" ) );
+    m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_NEXT, wxEmptyString,
+                            KiBitmap( lib_next_xpm ),
+                            _( "Select next parameters page" ) );
 
-        m_mainToolBar->AddSeparator();
-        m_mainToolBar->Add( ACTIONS::show3DViewer );
+    m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->Add( ACTIONS::show3DViewer );
 
-        m_mainToolBar->AddSeparator();
-        m_mainToolBar->Add( ACTIONS::zoomRedraw );
-        m_mainToolBar->Add( ACTIONS::zoomInCenter );
-        m_mainToolBar->Add( ACTIONS::zoomOutCenter );
-        m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
+    m_mainToolBar->Add( ACTIONS::zoomInCenter );
+    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
-        // The footprint wizard always can export the current footprint
-        m_mainToolBar->AddSeparator();
-        m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_DONE,
-                                wxEmptyString, KiBitmap( export_footprint_names_xpm ),
-                                _( "Export footprint to editor" ) );
+    // The footprint wizard always can export the current footprint
+    m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_DONE,
+                            wxEmptyString, KiBitmap( export_footprint_names_xpm ),
+                            _( "Export footprint to editor" ) );
 
-        // after adding the buttons to the toolbar, must call Realize() to
-        // reflect the changes
-        m_mainToolBar->Realize();
-    }
-
-    m_mainToolBar->Refresh();
+    // after adding the buttons to the toolbar, must call Realize() to
+    // reflect the changes
+    m_mainToolBar->Realize();
 }
 
 

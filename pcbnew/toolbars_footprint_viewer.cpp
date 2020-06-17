@@ -42,8 +42,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     // them ( m_zoomSelectBox and m_gridSelectBox ), and therefore do not delete them
     // So we do not recreate them after clearing the tools.
 
-    wxString msg;
-
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
@@ -58,7 +56,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
                             KiScaledBitmap( lib_next_xpm, this ),
                             _( "Display next footprint" ) );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
@@ -66,13 +64,13 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomTool,                       ACTION_TOOLBAR::TOGGLE );
     m_mainToolBar->Add( PCB_ACTIONS::zoomFootprintAutomatically, ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::show3DViewer );
     m_mainToolBar->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
                             KiScaledBitmap( export_xpm, this ),
                             _( "Insert footprint in board" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
     // Grid selection choice box.
     if( m_gridSelectBox == nullptr )
@@ -82,7 +80,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
     // Zoom selection choice box.
     if( m_zoomSelectBox == nullptr )
@@ -95,30 +93,28 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     // after adding the buttons to the toolbar, must call Realize() to
     // reflect the changes
     m_mainToolBar->Realize();
-    m_mainToolBar->Refresh();
 }
 
 
 void FOOTPRINT_VIEWER_FRAME::ReCreateOptToolbar()
 {
     if( m_optionsToolBar )
-        return;
-
-    // Create options tool bar.
-    m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                           KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_optionsToolBar->Clear();
+    else
+        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     m_optionsToolBar->Add( ACTIONS::selectionTool,          ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::measureTool,            ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::togglePolarCoords,      ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::imperialUnits,          ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::metricUnits,            ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::showPadNumbers,     ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,     ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::textOutlines,       ACTION_TOOLBAR::TOGGLE );
@@ -130,6 +126,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateOptToolbar()
 
 void FOOTPRINT_VIEWER_FRAME::ReCreateVToolbar()
 {
+    // This toolbar is not currently used
 }
 
 

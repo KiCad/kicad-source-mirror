@@ -192,23 +192,22 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateVToolbar()
 void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
 {
     if( m_optionsToolBar )
-        return;
-
-    // Create options tool bar.
-    m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                           KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_optionsToolBar->Clear();
+    else
+        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     m_optionsToolBar->Add( ACTIONS::selectionTool,          ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::measureTool,            ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::togglePolarCoords,      ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::imperialUnits,          ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::metricUnits,            ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::showPadNumbers,     ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,     ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::textOutlines,       ACTION_TOOLBAR::TOGGLE );
@@ -220,11 +219,18 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
 
 void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 {
-    if( m_mainToolBar != NULL )
-        return;
+    // Note:
+    // To rebuild the aui toolbar, the more easy way is to clear ( calling m_mainToolBar.Clear() )
+    // all wxAuiToolBarItems.
+    // However the wxAuiToolBarItems are not the owners of controls managed by
+    // them ( m_zoomSelectBox and m_gridSelectBox ), and therefore do not delete them
+    // So we do not recreate them after clearing the tools.
 
-    m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                        KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+    if( m_mainToolBar )
+        m_mainToolBar->Clear();
+    else
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
@@ -233,22 +239,26 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomTool,                       ACTION_TOOLBAR::TOGGLE );
     m_mainToolBar->Add( PCB_ACTIONS::zoomFootprintAutomatically, ACTION_TOOLBAR::TOGGLE );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::show3DViewer );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
     // Grid selection choice box.
-    m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
-                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+    if( !m_gridSelectBox )
+        m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
+                                        wxDefaultPosition, wxDefaultSize, 0, NULL );
+
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
     // Zoom selection choice box.
-    m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
-                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+    if( !m_zoomSelectBox )
+        m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
+                                        wxDefaultPosition, wxDefaultSize, 0, NULL );
+
     UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 

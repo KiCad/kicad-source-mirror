@@ -184,7 +184,7 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
     m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
     m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::openProject );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
                             KiScaledBitmap( zip_xpm, this ),
                             _( "Archive all project files" ) );
@@ -193,10 +193,10 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
                             KiScaledBitmap( unzip_xpm, this ),
                             _( "Unarchive project files from zip archive" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_BROWSE_IN_FILE_EXPLORER, wxEmptyString,
                             KiScaledBitmap( directory_browser_xpm, this ),
 #ifdef __APPLE__
@@ -223,11 +223,11 @@ void KICAD_MANAGER_FRAME::RecreateLauncher()
     m_launcher->Add( KICAD_MANAGER_ACTIONS::editSchematic );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::editSymbols );
 
-    KiScaledSeparator( m_launcher, this );
+    m_launcher->AddScaledSeparator( this );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::editPCB );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::editFootprints );
 
-    KiScaledSeparator( m_launcher, this );
+    m_launcher->AddScaledSeparator( this );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::viewGerbers );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::convertImage );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::showCalculator );

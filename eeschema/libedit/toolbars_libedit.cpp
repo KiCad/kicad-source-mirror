@@ -53,7 +53,7 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
     // Set up toolbar
     m_drawToolBar->Add( ACTIONS::selectionTool,           ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_drawToolBar, this );
+    m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbolPin,       ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbolText,      ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawSymbolRectangle,  ACTION_TOOLBAR::TOGGLE );
@@ -88,30 +88,30 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::newSymbol );
     m_mainToolBar->Add( ACTIONS::saveAll );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::undo );
     m_mainToolBar->Add( ACTIONS::redo );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::symbolProperties );
     m_mainToolBar->Add( EE_ACTIONS::pinTable );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::showDatasheet );
     m_mainToolBar->Add( EE_ACTIONS::runERC );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard, ACTION_TOOLBAR::TOGGLE );
     m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
     if( m_unitSelectBox == nullptr )
         m_unitSelectBox = new wxComboBox( m_mainToolBar, ID_LIBEDIT_SELECT_PART_NUMBER,
@@ -119,10 +119,10 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                 nullptr, wxCB_READONLY );
     m_mainToolBar->AddControl( m_unitSelectBox );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::toggleSyncedPinsMode, ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::addSymbolToSchematic );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
@@ -139,14 +139,12 @@ void LIB_EDIT_FRAME::ReCreateOptToolbar()
                                                wxDefaultPosition, wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    ACTION_TOOLBAR* optToolbar = static_cast<ACTION_TOOLBAR*>( m_optionsToolBar );
-
-    optToolbar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
-    optToolbar->Add( ACTIONS::imperialUnits,          ACTION_TOOLBAR::TOGGLE );
-    optToolbar->Add( ACTIONS::metricUnits,            ACTION_TOOLBAR::TOGGLE );
-    optToolbar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
-    optToolbar->Add( EE_ACTIONS::showElectricalTypes, ACTION_TOOLBAR::TOGGLE );
-    optToolbar->Add( EE_ACTIONS::showComponentTree,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,            ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( EE_ACTIONS::showElectricalTypes, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( EE_ACTIONS::showComponentTree,   ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->Realize();
 }

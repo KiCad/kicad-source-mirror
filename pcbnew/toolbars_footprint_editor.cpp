@@ -60,25 +60,25 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     else
         m_mainToolBar->Add( PCB_ACTIONS::saveToLibrary );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::print );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::undo );
     m_mainToolBar->Add( ACTIONS::redo );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( PCB_ACTIONS::footprintProperties );
     m_mainToolBar->Add( PCB_ACTIONS::defaultPadProperties );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, wxEmptyString,
                             KiScaledBitmap( load_module_board_xpm, this ),
                             _( "Load footprint from current board" ) );
@@ -88,13 +88,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "Insert footprint into current board" ) );
 
 #if 0       // Currently there is no check footprint function defined, so do not show this tool
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_MODEDIT_CHECK, wxEmptyString,
                             KiScaledBitmap( module_check_xpm, this ),
                             _( "Check footprint" ) );
 #endif
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
     // Grid selection choice box.
     if( m_gridSelectBox == nullptr )
@@ -104,7 +104,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
     // Zoom selection choice box.
     if( m_zoomSelectBox == nullptr )
@@ -114,7 +114,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
     // Layer selection choice box.
     if( m_selLayerBox == nullptr )
@@ -147,7 +147,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
 
     m_drawToolBar->Add( ACTIONS::selectionTool,       ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_drawToolBar, this );
+    m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( PCB_ACTIONS::placePad,        ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawLine,        ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawRectangle,   ACTION_TOOLBAR::TOGGLE );
@@ -158,7 +158,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( PCB_ACTIONS::placeText,       ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::deleteTool,          ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_drawToolBar, this );
+    m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( PCB_ACTIONS::setAnchor,       ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,   ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::measureTool,         ACTION_TOOLBAR::TOGGLE );
@@ -181,13 +181,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::metricUnits,             ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,       ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,      ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::graphicsOutlines,    ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::textOutlines,        ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::highContrastMode,        ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::toggleFootprintTree, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->Realize();

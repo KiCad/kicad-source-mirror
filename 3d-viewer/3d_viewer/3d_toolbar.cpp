@@ -52,51 +52,49 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
     m_mainToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
                             KiScaledBitmap( import3d_xpm, this ), _( "Reload board" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
-
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString,
                             KiScaledBitmap( copy_xpm, this ),
                             _( "Copy 3D image to clipboard" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
-
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_TOOL_SET_VISIBLE_ITEMS, wxEmptyString,
                             KiScaledBitmap( read_setup_xpm, this ),
                             _( "Set display options, and some layers visibility" ) );
-    m_mainToolBar->AddSeparator();
 
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString,
                             KiScaledBitmap( render_mode_xpm, this ),
                             _( "Render current view using Raytracing" ), wxITEM_CHECK );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EDA_3D_ACTIONS::rotateXCW );
     m_mainToolBar->Add( EDA_3D_ACTIONS::rotateXCCW );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EDA_3D_ACTIONS::rotateYCW );
     m_mainToolBar->Add( EDA_3D_ACTIONS::rotateYCCW );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EDA_3D_ACTIONS::rotateZCW );
     m_mainToolBar->Add( EDA_3D_ACTIONS::rotateZCCW );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EDA_3D_ACTIONS::flipView );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EDA_3D_ACTIONS::moveLeft );
     m_mainToolBar->Add( EDA_3D_ACTIONS::moveRight );
     m_mainToolBar->Add( EDA_3D_ACTIONS::moveUp );
     m_mainToolBar->Add( EDA_3D_ACTIONS::moveDown );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EDA_3D_ACTIONS::toggleOrtho, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->Realize();

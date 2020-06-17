@@ -396,9 +396,9 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
         if( GetActionPluginButtonVisible( ap->GetPluginPath(), ap->GetShowToolbarButton() ) )
         {
 
-            if ( need_separator )
+            if( need_separator )
             {
-                KiScaledSeparator( m_mainToolBar, this );
+                m_mainToolBar->AddScaledSeparator( this );
                 need_separator = false;
             }
 

@@ -44,7 +44,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR,
                                             wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-    wxString msg;
 
     // Set up toolbar
     if( Kiface().IsSingle() )   // not when under a project mgr
@@ -55,49 +54,49 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->Add( ACTIONS::save );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::schematicSetup );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::pageSettings );
     m_mainToolBar->Add( ACTIONS::print );
     m_mainToolBar->Add( ACTIONS::plot );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::paste );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::undo );
     m_mainToolBar->Add( ACTIONS::redo );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::find );
     m_mainToolBar->Add( ACTIONS::findAndReplace );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::navigateHierarchy );
     m_mainToolBar->Add( EE_ACTIONS::leaveSheet );
 
-    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::showSymbolEditor );
     m_mainToolBar->Add( ACTIONS::showSymbolBrowser );
     m_mainToolBar->Add( ACTIONS::showFootprintEditor );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::annotate );
     m_mainToolBar->Add( EE_ACTIONS::runERC );
     m_mainToolBar->Add( EE_ACTIONS::assignFootprints );
     m_mainToolBar->Add( EE_ACTIONS::editSymbolFields );
     m_mainToolBar->Add( EE_ACTIONS::generateBOM );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::showPcbNew );
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
@@ -119,7 +118,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( ACTIONS::selectionTool,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::highlightNetTool, ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_drawToolBar, this );
+    m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbol,            ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placePower,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawWire,               ACTION_TOOLBAR::TOGGLE );
@@ -133,7 +132,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::drawSheet,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::importSheetPin,         ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_drawToolBar, this );
+    m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( EE_ACTIONS::drawLines,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSchematicText,     ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeImage,             ACTION_TOOLBAR::TOGGLE );

@@ -62,6 +62,14 @@ public:
     void AddButton( const TOOL_ACTION& aAction );
 
     /**
+     * Add a separator that introduces space on either side to not squash the tools
+     * when scaled.
+     *
+     * @param aWindow is the window to get the scaling factor of
+     */
+    void AddScaledSeparator( wxWindow* aWindow );
+
+    /**
      * Function SetToolBitmap()
      * Updates the bitmap of a particular tool.  Not icon-based because we use it
      * for the custom-drawn layer pair bitmap.

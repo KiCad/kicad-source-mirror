@@ -42,26 +42,26 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::open );
     m_mainToolBar->Add( ACTIONS::save );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::print );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::undo );
     m_mainToolBar->Add( ACTIONS::redo );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( PL_ACTIONS::showInspector );
     m_mainToolBar->Add( PL_ACTIONS::previewSettings );
 
     // Display mode switch
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_SHOW_REAL_MODE, wxEmptyString,
                             KiScaledBitmap( pagelayout_normal_view_mode_xpm, this ),
                             _( "Show title block in preview mode:\n"
@@ -73,7 +73,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
                                "text placeholders are shown as ${keyword} tokens."),
                             wxITEM_CHECK );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddScaledSeparator( this );
 
     wxString choiceList[5] =
     {
@@ -127,14 +127,14 @@ void PL_EDITOR_FRAME::ReCreateVToolbar()
 
     m_drawToolBar->Add( ACTIONS::selectionTool,              ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_drawToolBar, this );
+    m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( PL_ACTIONS::drawLine,                ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PL_ACTIONS::drawRectangle,           ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PL_ACTIONS::placeText,               ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PL_ACTIONS::placeImage,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PL_ACTIONS::appendImportedWorksheet, ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_drawToolBar, this );
+    m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( ACTIONS::deleteTool,                 ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();

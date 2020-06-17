@@ -22,13 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <functional>
+#include <bitmaps.h>
 #include <eda_draw_frame.h>
+#include <functional>
+#include <tool/action_toolbar.h>
 #include <tool/actions.h>
 #include <tool/tool_event.h>
-#include <tool/tool_manager.h>
 #include <tool/tool_interactive.h>
-#include <tool/action_toolbar.h>
+#include <tool/tool_manager.h>
 
 
 ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxPoint& pos,
@@ -63,6 +64,23 @@ void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
 
     m_toolKinds[ toolId ] = false;
     m_toolActions[ toolId ] = &aAction;
+}
+
+
+void ACTION_TOOLBAR::AddScaledSeparator( wxWindow* aWindow )
+{
+    int scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
+
+    if( scale == 0 )
+        scale = KiIconScale( aWindow );
+
+    if( scale > 4 )
+        AddSpacer( 16 * ( scale - 4 ) / 4 );
+
+    AddSeparator();
+
+    if( scale > 4 )
+        AddSpacer( 16 * ( scale - 4 ) / 4 );
 }
 
 
