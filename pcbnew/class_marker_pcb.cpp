@@ -29,6 +29,7 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <base_units.h>
+#include <pcb_base_frame.h>
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_marker_pcb.h>

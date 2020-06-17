@@ -41,6 +41,44 @@
 #include <wx/filename.h>
 #include "erc_item.h"
 
+
+/**
+ * A singleton item of this class is returned for a weak reference that no longer exists.
+ * Its sole purpose is to flag the item as having been deleted.
+ */
+class DELETED_SHEET_ITEM : public SCH_ITEM
+{
+public:
+    DELETED_SHEET_ITEM() :
+        SCH_ITEM( nullptr, NOT_USED )
+    {}
+
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
+    {
+        return _( "(Deleted Item)" );
+    }
+
+    wxString GetClass() const override
+    {
+        return wxT( "DELETED_SHEET_ITEM" );
+    }
+
+    // pure virtuals:
+    void SetPosition( const wxPoint& ) override {}
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint&  aOffset ) override {}
+    void Move( const wxPoint& aMoveVector ) override {}
+    void MirrorY( int aYaxis_position ) override {}
+    void MirrorX( int aXaxis_position ) override {}
+    void Rotate( wxPoint aPosition ) override {}
+
+#if defined(DEBUG)
+    void Show( int , std::ostream&  ) const override {}
+#endif
+};
+
+DELETED_SHEET_ITEM* g_DeletedItem = nullptr;
+
+
 namespace std
 {
     size_t hash<SCH_SHEET_PATH>::operator()( const SCH_SHEET_PATH& path ) const
@@ -491,7 +529,11 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
         }
     }
 
-    return nullptr;
+    // Not found; weak reference has been deleted.
+    if( !g_DeletedItem )
+        g_DeletedItem = new DELETED_SHEET_ITEM();
+
+    return g_DeletedItem;
 }
 
 

@@ -251,6 +251,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::deleteTool,                 SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( PCB_ACTIONS::globalDeletions,        SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( PCB_ACTIONS::cleanupTracksAndVias,   SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::cleanupGraphics,        SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->Resolve();
 

@@ -297,6 +297,7 @@ public:
     static TOOL_ACTION editTextAndGraphics;
     static TOOL_ACTION globalDeletions;
     static TOOL_ACTION cleanupTracksAndVias;
+    static TOOL_ACTION cleanupGraphics;
     static TOOL_ACTION updateFootprint;
     static TOOL_ACTION updateFootprints;
     static TOOL_ACTION changeFootprint;

@@ -362,23 +362,17 @@ public:
 
     virtual void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer );
 
-    /**
-     * Function SetActiveLayer
-     * will change the currently active layer to \a aLayer.
-     */
     virtual void SetActiveLayer( PCB_LAYER_ID aLayer )
     {
         GetScreen()->m_Active_Layer = aLayer;
     }
 
-    /**
-     * Function GetActiveLayer
-     * returns the active layer
-     */
     virtual PCB_LAYER_ID GetActiveLayer() const
     {
         return GetScreen()->m_Active_Layer;
     }
+
+    int GetSeverity( int aErrorCode ) const override;
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;

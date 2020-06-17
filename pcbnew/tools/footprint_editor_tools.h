@@ -67,6 +67,8 @@ public:
     int ToggleFootprintTree( const TOOL_EVENT& aEvent );
     int Properties( const TOOL_EVENT& aEvent );
 
+    int CleanupGraphics( const TOOL_EVENT& aEvent );
+
     /**
      * Edit the properties used for new pad creation.
      */

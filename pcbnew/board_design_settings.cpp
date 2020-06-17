@@ -93,15 +93,6 @@ public:
                 bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_IGNORE;
         }
 
-        bds.m_DRCSeverities[ CLEANUP_SHORT ] = RPT_SEVERITY_ACTION;
-        bds.m_DRCSeverities[ CLEANUP_REDUNDANT_VIA ] = RPT_SEVERITY_ACTION;
-        bds.m_DRCSeverities[ CLEANUP_DUPLICATE_TRACK ] = RPT_SEVERITY_ACTION;
-        bds.m_DRCSeverities[ CLEANUP_MERGE_TRACKS ] = RPT_SEVERITY_ACTION;
-        bds.m_DRCSeverities[ CLEANUP_DANGLING_TRACK ] = RPT_SEVERITY_ACTION;
-        bds.m_DRCSeverities[ CLEANUP_DANGLING_VIA ] = RPT_SEVERITY_ACTION;
-        bds.m_DRCSeverities[ CLEANUP_ZERO_LENGTH_TRACK ] = RPT_SEVERITY_ACTION;
-        bds.m_DRCSeverities[ CLEANUP_TRACK_IN_PAD ] = RPT_SEVERITY_ACTION;
-
         DRC_ITEM drc( 0 );
         wxString severity;
 

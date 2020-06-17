@@ -108,6 +108,8 @@ KIID RC_TREE_MODEL::ToUUID( wxDataViewItem aItem )
 
         case RC_TREE_NODE::MAIN_ITEM: return rc_item->GetMainItemID();
         case RC_TREE_NODE::AUX_ITEM:  return rc_item->GetAuxItemID();
+        case RC_TREE_NODE::AUX_ITEM2: return rc_item->GetAuxItem2ID();
+        case RC_TREE_NODE::AUX_ITEM3: return rc_item->GetAuxItem3ID();
         }
     }
 
@@ -162,16 +164,22 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
 
     for( int i = 0; m_rcItemsProvider && i < m_rcItemsProvider->GetCount(); ++i )
     {
-        RC_ITEM* drcItem = m_rcItemsProvider->GetItem( i );
+        RC_ITEM* rcItem = m_rcItemsProvider->GetItem( i );
 
-        m_tree.push_back( new RC_TREE_NODE( nullptr, drcItem, RC_TREE_NODE::MARKER ) );
+        m_tree.push_back( new RC_TREE_NODE( nullptr, rcItem, RC_TREE_NODE::MARKER ) );
         RC_TREE_NODE* n = m_tree.back();
 
-        if( drcItem->GetMainItemID() != niluuid )
-            n->m_Children.push_back( new RC_TREE_NODE( n, drcItem, RC_TREE_NODE::MAIN_ITEM ) );
+        if( rcItem->GetMainItemID() != niluuid )
+            n->m_Children.push_back( new RC_TREE_NODE( n, rcItem, RC_TREE_NODE::MAIN_ITEM ) );
 
-        if( drcItem->GetAuxItemID() != niluuid )
-            n->m_Children.push_back( new RC_TREE_NODE( n, drcItem, RC_TREE_NODE::AUX_ITEM ) );
+        if( rcItem->GetAuxItemID() != niluuid )
+            n->m_Children.push_back( new RC_TREE_NODE( n, rcItem, RC_TREE_NODE::AUX_ITEM ) );
+
+        if( rcItem->GetAuxItem2ID() != niluuid )
+            n->m_Children.push_back( new RC_TREE_NODE( n, rcItem, RC_TREE_NODE::AUX_ITEM2 ) );
+
+        if( rcItem->GetAuxItem3ID() != niluuid )
+            n->m_Children.push_back( new RC_TREE_NODE( n, rcItem, RC_TREE_NODE::AUX_ITEM3 ) );
     }
 
     // Must be called after a significant change of items to force the
@@ -256,11 +264,16 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
     {
     case RC_TREE_NODE::MARKER:
     {
-        bool     excluded = rcItem->GetParent() && rcItem->GetParent()->IsExcluded();
-        bool     error = m_editFrame->GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_ERROR;
-        wxString prefix = wxString::Format( wxT( "%s%s" ),
-                                            excluded ? _( "Excluded " ) : wxString( "" ),
-                                            error  ? _( "Error: " ) : _( "Warning: " ) );
+        wxString prefix;
+
+        if( rcItem->GetParent() && rcItem->GetParent()->IsExcluded() )
+            prefix = _( "Excluded " );
+
+        switch( m_editFrame->GetSeverity( rcItem->GetErrorCode() ) )
+        {
+        case RPT_SEVERITY_ERROR:   prefix += _( "Error: " ); break;
+        case RPT_SEVERITY_WARNING: prefix += _( "Warning: " ); break;
+        }
 
         aVariant = prefix + rcItem->GetErrorMessage();
     }
@@ -269,22 +282,28 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
     case RC_TREE_NODE::MAIN_ITEM:
     {
         EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
-
-        if( item )
-            aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
-        else
-            aVariant = _( "item not found (Please, rerun ERC)" );
+        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
     }
         break;
 
     case RC_TREE_NODE::AUX_ITEM:
     {
         EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
+        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+    }
+        break;
 
-        if( item )
-            aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
-        else
-            aVariant = _( "item not found (Please, rerun ERC)" );
+    case RC_TREE_NODE::AUX_ITEM2:
+    {
+        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem2ID() );
+        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+    }
+        break;
+
+    case RC_TREE_NODE::AUX_ITEM3:
+    {
+        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem3ID() );
+        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
     }
         break;
     }

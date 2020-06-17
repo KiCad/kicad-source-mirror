@@ -21,21 +21,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <bitmaps.h>
 #include <class_track.h>
-#include <class_zone.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
 #include <tools/edit_tool.h>
-#include <dialogs/dialog_track_via_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
+#include <dialogs/dialog_cleanup_tracks_and_vias.h>
 #include <dialogs/dialog_swap_layers.h>
 #include <tools/global_edit_tool.h>
 #include <board_commit.h>
-
-#include <memory>
-
+#include <dialogs/dialog_cleanup_graphics.h>
 
 GLOBAL_EDIT_TOOL::GLOBAL_EDIT_TOOL() :
         PCB_TOOL_BASE( "pcbnew.GlobalEdit" ),
@@ -175,6 +170,26 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
 }
 
 
+int GLOBAL_EDIT_TOOL::CleanupTracksAndVias( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    DIALOG_CLEANUP_TRACKS_AND_VIAS dlg( editFrame );
+
+    dlg.ShowModal();
+    return 0;
+}
+
+
+int GLOBAL_EDIT_TOOL::CleanupGraphics( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    DIALOG_CLEANUP_GRAPHICS dlg( editFrame, false );
+
+    dlg.ShowModal();
+    return 0;
+}
+
+
 void GLOBAL_EDIT_TOOL::setTransitions()
 {
     Go( &GLOBAL_EDIT_TOOL::ExchangeFootprints,   PCB_ACTIONS::updateFootprint.MakeEvent() );
@@ -188,6 +203,7 @@ void GLOBAL_EDIT_TOOL::setTransitions()
     Go( &GLOBAL_EDIT_TOOL::EditTextAndGraphics,  PCB_ACTIONS::editTextAndGraphics.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::GlobalDeletions,      PCB_ACTIONS::globalDeletions.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::CleanupTracksAndVias, PCB_ACTIONS::cleanupTracksAndVias.MakeEvent() );
+    Go( &GLOBAL_EDIT_TOOL::CleanupGraphics,      PCB_ACTIONS::cleanupGraphics.MakeEvent() );
 }
 
 

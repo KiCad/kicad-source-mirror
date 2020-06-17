@@ -82,6 +82,8 @@ protected:
     MARKER_BASE*  m_parent;            // The marker this item belongs to, if any
     KIID          m_mainItemUuid;
     KIID          m_auxItemUuid;
+    KIID          m_auxItem2Uuid;
+    KIID          m_auxItem3Uuid;
 
 public:
 
@@ -91,6 +93,8 @@ public:
         m_parent        = nullptr;
         m_mainItemUuid  = niluuid;
         m_auxItemUuid   = niluuid;
+        m_auxItem2Uuid   = niluuid;
+        m_auxItem3Uuid   = niluuid;
     }
 
     RC_ITEM( RC_ITEM* aItem )
@@ -100,28 +104,42 @@ public:
         m_parent = aItem->m_parent;
         m_mainItemUuid = aItem->m_mainItemUuid;
         m_auxItemUuid = aItem->m_auxItemUuid;
+        m_auxItem2Uuid = aItem->m_auxItem2Uuid;
+        m_auxItem3Uuid = aItem->m_auxItem3Uuid;
     }
 
     virtual ~RC_ITEM() { }
 
     void SetErrorMessage( const wxString& aMessage ) { m_errorMessage = aMessage; }
 
-    void SetItems( EDA_ITEM* aItem, EDA_ITEM* bItem = nullptr )
+    void SetItems( EDA_ITEM* aItem, EDA_ITEM* bItem = nullptr, EDA_ITEM* cItem = nullptr,
+                   EDA_ITEM* dItem = nullptr )
     {
         m_mainItemUuid = aItem->m_Uuid;
 
         if( bItem )
             m_auxItemUuid = bItem->m_Uuid;
+
+        if( cItem )
+            m_auxItem2Uuid = cItem->m_Uuid;
+
+        if( dItem )
+            m_auxItem3Uuid = dItem->m_Uuid;
     }
 
-    void SetItems( const KIID& aItem, const KIID& bItem = niluuid )
+    void SetItems( const KIID& aItem, const KIID& bItem = niluuid, const KIID& cItem = niluuid,
+                   const KIID& dItem = niluuid )
     {
         m_mainItemUuid = aItem;
         m_auxItemUuid = bItem;
+        m_auxItem2Uuid = cItem;
+        m_auxItem3Uuid = dItem;
     }
 
     KIID GetMainItemID() const { return m_mainItemUuid; }
     KIID GetAuxItemID() const { return m_auxItemUuid; }
+    KIID GetAuxItem2ID() const { return m_auxItem2Uuid; }
+    KIID GetAuxItem3ID() const { return m_auxItem3Uuid; }
 
     void SetParent( MARKER_BASE* aMarker ) { m_parent = aMarker; }
     MARKER_BASE* GetParent() const { return m_parent; }
@@ -161,7 +179,7 @@ public:
 class RC_TREE_NODE
 {
 public:
-    enum NODE_TYPE { MARKER, MAIN_ITEM, AUX_ITEM };
+    enum NODE_TYPE { MARKER, MAIN_ITEM, AUX_ITEM, AUX_ITEM2, AUX_ITEM3 };
 
     RC_TREE_NODE( RC_TREE_NODE* aParent, RC_ITEM* aRcItem, NODE_TYPE aType ) :
             m_Type( aType ),

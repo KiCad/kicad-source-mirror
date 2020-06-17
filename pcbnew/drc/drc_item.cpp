@@ -129,16 +129,6 @@ wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     case DRCE_MISSING_FOOTPRINT:        msg = _HKI( "Missing footprint" );                  break;
     case DRCE_EXTRA_FOOTPRINT:          msg = _HKI( "Extra footprint" );                    break;
 
-    // For cleanup tracks and vias:
-    case CLEANUP_SHORT:                 msg = _HKI( "Remove track shorting two nets" );     break;
-    case CLEANUP_REDUNDANT_VIA:         msg = _HKI( "Remove redundant via" );               break;
-    case CLEANUP_DUPLICATE_TRACK:       msg = _HKI( "Remove duplicate track" );             break;
-    case CLEANUP_MERGE_TRACKS:          msg = _HKI( "Merge co-linear tracks" );             break;
-    case CLEANUP_DANGLING_TRACK:        msg = _HKI( "Remove dangling track" );              break;
-    case CLEANUP_DANGLING_VIA:          msg = _HKI( "Remove dangling via" );                break;
-    case CLEANUP_ZERO_LENGTH_TRACK:     msg = _HKI( "Remove zero-length track" );           break;
-    case CLEANUP_TRACK_IN_PAD:          msg = _HKI( "Remove track inside pad" );            break;
-
     case DRCE_UNRESOLVED_VARIABLE:      msg = _HKI( "Unresolved text variable" );           break;
 
     default:

@@ -22,19 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_CLEANUP_TRACKS_AND_VIAS_H_
-#define DIALOG_CLEANUP_TRACKS_AND_VIAS_H_
+#ifndef DIALOG_CLEANUP_GRAPHICS_H_
+#define DIALOG_CLEANUP_GRAPHICS_H_
 
-#include <dialog_cleanup_tracks_and_vias_base.h>
+#include <dialog_cleanup_graphics_base.h>
 #include <cleanup_item.h>
 
 
-class PCB_EDIT_FRAME;
+class PCB_BASE_FRAME;
 
 
-class DIALOG_CLEANUP_TRACKS_AND_VIAS: public DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE
+class DIALOG_CLEANUP_GRAPHICS: public DIALOG_CLEANUP_GRAPHICS_BASE
 {
-    PCB_EDIT_FRAME*            m_parentFrame;
+    PCB_BASE_FRAME*            m_parentFrame;
+    bool                       m_isModEdit;
     std::vector<CLEANUP_ITEM*> m_items;
     RC_TREE_MODEL*             m_changesTreeModel;
 
@@ -48,8 +49,8 @@ class DIALOG_CLEANUP_TRACKS_AND_VIAS: public DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE
     bool TransferDataFromWindow() override;
 
 public:
-    DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* parent );
-    ~DIALOG_CLEANUP_TRACKS_AND_VIAS();
+    DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent, bool isModEdit );
+    ~DIALOG_CLEANUP_GRAPHICS();
 };
 
-#endif // DIALOG_CLEANUP_TRACKS_AND_VIAS_H_
+#endif // DIALOG_CLEANUP_GRAPHICS_H_

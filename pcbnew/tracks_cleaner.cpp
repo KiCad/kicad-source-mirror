@@ -24,14 +24,9 @@
  */
 
 #include <fctsys.h>
-#include <pcb_edit_frame.h>
-#include <pcbnew.h>
-#include <class_board.h>
-#include <class_track.h>
-#include <dialog_cleanup_tracks_and_vias.h>
 #include <reporter.h>
 #include <board_commit.h>
-#include <drc/drc_item.h>
+#include <cleanup_item.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_data.h>
 #include <tool/tool_manager.h>
@@ -40,23 +35,11 @@
 #include <tracks_cleaner.h>
 
 
-/* Install the cleanup dialog frame to know what should be cleaned
-*/
-int GLOBAL_EDIT_TOOL::CleanupTracksAndVias( const TOOL_EVENT& aEvent )
-{
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-    DIALOG_CLEANUP_TRACKS_AND_VIAS dlg( editFrame );
-
-    dlg.ShowModal();
-    return 0;
-}
-
-
-TRACKS_CLEANER::TRACKS_CLEANER( EDA_UNITS aUnits, BOARD* aPcb, BOARD_COMMIT& aCommit )
-        : m_brd( aPcb ),
-          m_commit( aCommit ),
-          m_dryRun( true ),
-          m_itemsList( nullptr )
+TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit ) :
+        m_brd( aPcb ),
+        m_commit( aCommit ),
+        m_dryRun( true ),
+        m_itemsList( nullptr )
 {
 }
 
@@ -67,42 +50,39 @@ TRACKS_CLEANER::TRACKS_CLEANER( EDA_UNITS aUnits, BOARD* aPcb, BOARD_COMMIT& aCo
  * - vias on pad
  * - null length segments
  */
-bool TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<DRC_ITEM*>* aItemsList,
+void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<CLEANUP_ITEM*>* aItemsList,
                                    bool aRemoveMisConnected, bool aCleanVias, bool aMergeSegments,
                                    bool aDeleteUnconnected, bool aDeleteTracksinPad )
 {
     m_dryRun = aDryRun;
     m_itemsList = aItemsList;
-    bool modified = false;
 
     // Clear the flag used to mark some segments as deleted, in dry run:
-    for( auto segment : m_brd->Tracks() )
+    for( TRACK* segment : m_brd->Tracks() )
         segment->ClearFlags( IS_DELETED );
 
     // delete redundant vias
     if( aCleanVias )
-        modified |= cleanupVias();
+        cleanupVias();
 
     // Remove null segments and intermediate points on aligned segments
     // If not asked, remove null segments only if remove misconnected is asked
     if( aMergeSegments )
-        modified |= cleanupSegments();
+        cleanupSegments();
     else if( aRemoveMisConnected )
-        modified |= deleteNullSegments( m_brd->Tracks() );
+        deleteNullSegments( m_brd->Tracks() );
 
     if( aRemoveMisConnected )
-        modified |= removeBadTrackSegments();
+        removeBadTrackSegments();
 
     if( aDeleteTracksinPad )
-        modified |= deleteTracksInPads();
+        deleteTracksInPads();
 
     // Delete dangling tracks
     if( aDeleteUnconnected )
     {
         if( deleteDanglingTracks() )
         {
-            modified = true;
-
             // Removed tracks can leave aligned segments
             // (when a T was formed by tracks and the "vertical" segment is removed)
             if( aMergeSegments )
@@ -111,20 +91,18 @@ bool TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<DRC_ITEM*>* aItemsL
     }
 
     // Clear the flag used to mark some segments:
-    for( auto segment : m_brd->Tracks() )
+    for( TRACK* segment : m_brd->Tracks() )
         segment->ClearFlags( IS_DELETED );
-
-    return modified;
 }
 
 
-bool TRACKS_CLEANER::removeBadTrackSegments()
+void TRACKS_CLEANER::removeBadTrackSegments()
 {
-    auto connectivity = m_brd->GetConnectivity();
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_brd->GetConnectivity();
 
     std::set<BOARD_ITEM *> toRemove;
 
-    for( auto segment : m_brd->Tracks() )
+    for( TRACK* segment : m_brd->Tracks() )
     {
         segment->SetState( FLAG0, false );
 
@@ -132,7 +110,7 @@ bool TRACKS_CLEANER::removeBadTrackSegments()
         {
             if( segment->GetNetCode() != testedPad->GetNetCode() )
             {
-                DRC_ITEM* item = new DRC_ITEM( CLEANUP_SHORT );
+                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_SHORT );
                 item->SetItems( segment );
                 m_itemsList->push_back( item );
 
@@ -140,11 +118,11 @@ bool TRACKS_CLEANER::removeBadTrackSegments()
             }
         }
 
-        for( auto testedTrack : connectivity->GetConnectedTracks( segment ) )
+        for( TRACK* testedTrack : connectivity->GetConnectedTracks( segment ) )
         {
             if( segment->GetNetCode() != testedTrack->GetNetCode() && !testedTrack->GetState( FLAG0 ) )
             {
-                DRC_ITEM* item = new DRC_ITEM( CLEANUP_SHORT );
+                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_SHORT );
                 item->SetItems( segment );
                 m_itemsList->push_back( item );
 
@@ -153,16 +131,17 @@ bool TRACKS_CLEANER::removeBadTrackSegments()
         }
     }
 
-    return removeItems( toRemove );
+    if( !m_dryRun )
+        removeItems( toRemove );
 }
 
 
-bool TRACKS_CLEANER::cleanupVias()
+void TRACKS_CLEANER::cleanupVias()
 {
     std::set<BOARD_ITEM*> toRemove;
     std::vector<VIA*>     vias;
 
-    for( auto track : m_brd->Tracks() )
+    for( TRACK* track : m_brd->Tracks() )
     {
         if( auto via = dyn_cast<VIA*>( track ) )
             vias.push_back( via );
@@ -170,7 +149,7 @@ bool TRACKS_CLEANER::cleanupVias()
 
     for( auto via1_it = vias.begin(); via1_it != vias.end(); via1_it++ )
     {
-        auto via1 = *via1_it;
+        VIA* via1 = *via1_it;
 
         if( via1->IsLocked() )
             continue;
@@ -182,14 +161,15 @@ bool TRACKS_CLEANER::cleanupVias()
         // Examine the list of connected pads:
         // if a through pad is found, the via can be removed
 
-        const auto pads = m_brd->GetConnectivity()->GetConnectedPads( via1 );
-        for( const auto pad : pads )
+        const std::vector<D_PAD*> pads = m_brd->GetConnectivity()->GetConnectedPads( via1 );
+
+        for( D_PAD* pad : pads )
         {
             const LSET all_cu = LSET::AllCuMask();
 
             if( ( pad->GetLayerSet() & all_cu ) == all_cu )
             {
-                DRC_ITEM* item = new DRC_ITEM( CLEANUP_REDUNDANT_VIA );
+                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_REDUNDANT_VIA );
                 item->SetItems( via1, pad );
                 m_itemsList->push_back( item );
 
@@ -201,14 +181,14 @@ bool TRACKS_CLEANER::cleanupVias()
 
         for( auto via2_it = via1_it + 1; via2_it != vias.end(); via2_it++ )
         {
-            auto via2 = *via2_it;
+            VIA* via2 = *via2_it;
 
             if( via1->GetPosition() != via2->GetPosition() || via2->IsLocked() )
                 continue;
 
             if( via1->GetViaType() == via2->GetViaType() )
             {
-                DRC_ITEM* item = new DRC_ITEM( CLEANUP_REDUNDANT_VIA );
+                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_REDUNDANT_VIA );
                 item->SetItems( via1, via2 );
                 m_itemsList->push_back( item );
 
@@ -218,8 +198,8 @@ bool TRACKS_CLEANER::cleanupVias()
         }
     }
 
-
-    return removeItems( toRemove );
+    if( !m_dryRun )
+        removeItems( toRemove );
 }
 
 
@@ -282,7 +262,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
             if( flag_erase )
             {
                 int errorCode = track->IsTrack() ? CLEANUP_DANGLING_TRACK : CLEANUP_DANGLING_VIA;
-                DRC_ITEM* item = new DRC_ITEM( errorCode );
+                CLEANUP_ITEM* item = new CLEANUP_ITEM( errorCode );
                 item->SetItems( track );
                 m_itemsList->push_back( item );
 
@@ -307,15 +287,15 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
 
 
 // Delete null length track segments
-bool TRACKS_CLEANER::deleteNullSegments( TRACKS& aTracks )
+void TRACKS_CLEANER::deleteNullSegments( TRACKS& aTracks )
 {
     std::set<BOARD_ITEM *> toRemove;
 
-    for( auto segment : aTracks )
+    for( TRACK* segment : aTracks )
     {
         if( segment->IsNull() && segment->Type() == PCB_TRACE_T && !segment->IsLocked() )
         {
-            DRC_ITEM* item = new DRC_ITEM( CLEANUP_ZERO_LENGTH_TRACK );
+            CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_ZERO_LENGTH_TRACK );
             item->SetItems( segment );
             m_itemsList->push_back( item );
 
@@ -323,25 +303,26 @@ bool TRACKS_CLEANER::deleteNullSegments( TRACKS& aTracks )
         }
     }
 
-    return removeItems( toRemove );
+    if( !m_dryRun )
+        removeItems( toRemove );
 }
 
 
-bool TRACKS_CLEANER::deleteTracksInPads()
+void TRACKS_CLEANER::deleteTracksInPads()
 {
     std::set<BOARD_ITEM*> toRemove;
 
     // Delete tracks that start and end on the same pad
-    auto connectivity = m_brd->GetConnectivity();
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_brd->GetConnectivity();
 
-    for( auto track : m_brd->Tracks() )
+    for( TRACK* track : m_brd->Tracks() )
     {
         // Mark track if connected to pads
-        for( auto pad : connectivity->GetConnectedPads( track ) )
+        for( D_PAD* pad : connectivity->GetConnectedPads( track ) )
         {
             if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
             {
-                DRC_ITEM* item = new DRC_ITEM( CLEANUP_TRACK_IN_PAD );
+                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_TRACK_IN_PAD );
                 item->SetItems( track );
                 m_itemsList->push_back( item );
 
@@ -350,31 +331,30 @@ bool TRACKS_CLEANER::deleteTracksInPads()
         }
     }
 
-    return removeItems( toRemove );
+    if( !m_dryRun )
+        removeItems( toRemove );
 }
 
 
 // Delete null length segments, and intermediate points ..
-bool TRACKS_CLEANER::cleanupSegments()
+void TRACKS_CLEANER::cleanupSegments()
 {
-    bool modified = false;
-
     // Easy things first
-    modified |= deleteNullSegments( m_brd->Tracks() );
+    deleteNullSegments( m_brd->Tracks() );
 
     std::set<BOARD_ITEM*> toRemove;
 
     // Remove duplicate segments (2 superimposed identical segments):
     for( auto it = m_brd->Tracks().begin(); it != m_brd->Tracks().end(); it++ )
     {
-        auto track1 = *it;
+        TRACK* track1 = *it;
 
         if( track1->Type() != PCB_TRACE_T || track1->HasFlag( IS_DELETED ) || track1->IsLocked() )
             continue;
 
         for( auto it2 = it + 1; it2 != m_brd->Tracks().end(); it2++ )
         {
-            auto track2 = *it2;
+            TRACK* track2 = *it2;
 
             if( track2->HasFlag( IS_DELETED ) )
                 continue;
@@ -384,7 +364,7 @@ bool TRACKS_CLEANER::cleanupSegments()
                     && track1->GetWidth() == track2->GetWidth()
                     && track1->GetLayer() == track2->GetLayer() )
             {
-                DRC_ITEM* item = new DRC_ITEM( CLEANUP_DUPLICATE_TRACK );
+                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_DUPLICATE_TRACK );
                 item->SetItems( track2 );
                 m_itemsList->push_back( item );
 
@@ -394,7 +374,8 @@ bool TRACKS_CLEANER::cleanupSegments()
         }
     }
 
-    modified |= removeItems( toRemove );
+    if( !m_dryRun )
+        removeItems( toRemove );
 
     // Keep a duplicate deque to all deleting in the primary
     std::deque<TRACK*> temp_segments( m_brd->Tracks() );
@@ -412,9 +393,9 @@ bool TRACKS_CLEANER::cleanupSegments()
 
         auto& entry = connectivity->GetConnectivityAlgo()->ItemEntry( segment );
 
-        for( auto citem : entry.GetItems() )
+        for( CN_ITEM* citem : entry.GetItems() )
         {
-            for( auto connected : citem->ConnectedItems() )
+            for( CN_ITEM* connected : citem->ConnectedItems() )
             {
                 if( !connected->Valid() )
                     continue;
@@ -431,20 +412,18 @@ bool TRACKS_CLEANER::cleanupSegments()
                         continue;
 
                     if( segment->ApproxCollinear( *candidateSegment ) )
-                        modified |= mergeCollinearSegments( segment, candidateSegment );
+                        mergeCollinearSegments( segment, candidateSegment );
                 }
             }
         }
     }
-
-    return modified;
 }
 
 
-bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
+void TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
 {
     if( aSeg1->IsLocked() || aSeg2->IsLocked() )
-        return false;
+        return;
 
     auto connectivity = m_brd->GetConnectivity();
 
@@ -478,16 +457,16 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
     if( aSeg1->GetStart() != dummy_seg.GetStart() && aSeg1->GetStart() != dummy_seg.GetEnd() )
     {
         if( testTrackEndpointIsNode( aSeg1, true ) )
-            return false;
+            return;
     }
 
     if( aSeg1->GetEnd() != dummy_seg.GetStart() && aSeg1->GetEnd() != dummy_seg.GetEnd() )
     {
         if( testTrackEndpointIsNode( aSeg1, false ) )
-            return false;
+            return;
     }
 
-    DRC_ITEM* item = new DRC_ITEM( CLEANUP_MERGE_TRACKS );
+    CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_MERGE_TRACKS );
     item->SetItems( aSeg1, aSeg2 );
     m_itemsList->push_back( item );
 
@@ -511,21 +490,14 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
         m_brd->Remove( aSeg2 );
         m_commit.Removed( aSeg2 );
     }
-
-    return true;
 }
 
 
-bool TRACKS_CLEANER::removeItems( std::set<BOARD_ITEM*>& aItems )
+void TRACKS_CLEANER::removeItems( std::set<BOARD_ITEM*>& aItems )
 {
-    if( m_dryRun )
-        return false;
-
     for( auto item : aItems )
     {
         m_brd->Remove( item );
         m_commit.Removed( item );
     }
-
-    return !aItems.empty();
 }

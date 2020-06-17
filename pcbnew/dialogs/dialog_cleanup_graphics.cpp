@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,27 +22,17 @@
  */
 
 #include <wx/wx.h>
-#include <dialog_cleanup_tracks_and_vias.h>
-#include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
+#include <dialog_cleanup_graphics.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tracks_cleaner.h>
-#include <drc/drc_item.h>
-#include <drc/drc_provider.h>
+#include <graphics_cleaner.h>
 
-DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParentFrame ) :
-        DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( aParentFrame ),
-        m_parentFrame( aParentFrame )
+
+DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent, bool isModEdit ) :
+        DIALOG_CLEANUP_GRAPHICS_BASE( aParent ),
+        m_parentFrame( aParent ),
+        m_isModEdit( isModEdit )
 {
-    auto cfg = m_parentFrame->GetPcbNewSettings();
-
-    m_cleanViasOpt->SetValue( cfg->m_Cleanup.cleanup_vias );
-    m_mergeSegmOpt->SetValue( cfg->m_Cleanup.merge_segments );
-    m_deleteUnconnectedOpt->SetValue( cfg->m_Cleanup.cleanup_unconnected );
-    m_cleanShortCircuitOpt->SetValue( cfg->m_Cleanup.cleanup_short_circuits );
-    m_deleteTracksInPadsOpt->SetValue( cfg->m_Cleanup.cleanup_tracks_in_pad );
-
     m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
 
@@ -50,7 +40,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
-    m_sdbSizerOK->SetLabel( _( "Update PCB" ) );
+    m_sdbSizerOK->SetLabel( isModEdit ? _( "Update Footprint" ) : _( "Update PCB" ) );
 
     m_sdbSizerOK->SetDefault();
     GetSizer()->SetSizeHints(this);
@@ -58,16 +48,8 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 }
 
 
-DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
+DIALOG_CLEANUP_GRAPHICS::~DIALOG_CLEANUP_GRAPHICS()
 {
-    auto cfg = m_parentFrame->GetPcbNewSettings();
-
-    cfg->m_Cleanup.cleanup_vias           = m_cleanViasOpt->GetValue();
-    cfg->m_Cleanup.merge_segments         = m_mergeSegmOpt->GetValue();
-    cfg->m_Cleanup.cleanup_unconnected    = m_deleteUnconnectedOpt->GetValue();
-    cfg->m_Cleanup.cleanup_short_circuits = m_cleanShortCircuitOpt->GetValue();
-    cfg->m_Cleanup.cleanup_tracks_in_pad  = m_deleteTracksInPadsOpt->GetValue();
-
     for( CLEANUP_ITEM* item : m_items )
         delete item;
 
@@ -75,13 +57,13 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 }
 
 
-void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnCheckBox( wxCommandEvent& anEvent )
+void DIALOG_CLEANUP_GRAPHICS::OnCheckBox( wxCommandEvent& anEvent )
 {
     doCleanup( true );
 }
 
 
-bool DIALOG_CLEANUP_TRACKS_AND_VIAS::TransferDataToWindow()
+bool DIALOG_CLEANUP_GRAPHICS::TransferDataToWindow()
 {
     doCleanup( true );
 
@@ -89,7 +71,7 @@ bool DIALOG_CLEANUP_TRACKS_AND_VIAS::TransferDataToWindow()
 }
 
 
-bool DIALOG_CLEANUP_TRACKS_AND_VIAS::TransferDataFromWindow()
+bool DIALOG_CLEANUP_GRAPHICS::TransferDataFromWindow()
 {
     doCleanup( false );
 
@@ -97,11 +79,14 @@ bool DIALOG_CLEANUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 }
 
 
-void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
+void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
 {
     wxBusyCursor busy;
-    BOARD_COMMIT commit( m_parentFrame );
-    TRACKS_CLEANER cleaner( m_parentFrame->GetBoard(), commit );
+
+    BOARD_COMMIT     commit( m_parentFrame );
+    BOARD*           board = m_parentFrame->GetBoard();
+    MODULE*          fp = m_isModEdit ? board->GetFirstModule() : nullptr;
+    GRAPHICS_CLEANER cleaner( fp ? fp->GraphicalItems() : board->Drawings(), fp, commit );
 
     if( !aDryRun )
     {
@@ -120,11 +105,8 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     // Old model has to be refreshed, GAL normally does not keep updating it
     m_parentFrame->Compile_Ratsnest( false );
 
-    cleaner.CleanupBoard( aDryRun, &m_items, m_cleanShortCircuitOpt->GetValue(),
-                                             m_cleanViasOpt->GetValue(),
-                                             m_mergeSegmOpt->GetValue(),
-                                             m_deleteUnconnectedOpt->GetValue(),
-                                             m_deleteTracksInPadsOpt->GetValue() );
+    cleaner.CleanupBoard( aDryRun, &m_items, m_createRectanglesOpt->GetValue(),
+                                             m_deleteRedundantOpt->GetValue() );
 
     if( aDryRun )
     {
@@ -134,13 +116,13 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     else if( !commit.Empty() )
     {
         // Clear undo and redo lists to avoid inconsistencies between lists
-        commit.Push( _( "Board cleanup" ) );
+        commit.Push( _( "Graphics cleanup" ) );
         m_parentFrame->GetCanvas()->Refresh( true );
     }
 }
 
 
-void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxDataViewEvent& aEvent )
+void DIALOG_CLEANUP_GRAPHICS::OnSelectItem( wxDataViewEvent& aEvent )
 {
     const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
     BOARD_ITEM*   item = m_parentFrame->GetBoard()->GetItem( itemID );
@@ -153,7 +135,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxDataViewEvent& aEvent )
 }
 
 
-void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnLeftDClickItem( wxMouseEvent& event )
+void DIALOG_CLEANUP_GRAPHICS::OnLeftDClickItem( wxMouseEvent& event )
 {
     event.Skip();
 

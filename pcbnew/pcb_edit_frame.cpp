@@ -370,14 +370,6 @@ BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 }
 
 
-int PCB_EDIT_FRAME::GetSeverity( int aErrorCode ) const
-{
-    BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-
-    return bds.m_DRCSeverities[ aErrorCode ];
-}
-
-
 void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     PCB_BASE_FRAME::SetPageSettings( aPageSettings );

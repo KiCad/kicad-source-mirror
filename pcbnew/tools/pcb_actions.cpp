@@ -405,9 +405,14 @@ TOOL_ACTION PCB_ACTIONS::globalDeletions( "pcbnew.GlobalEdit.globalDeletions",
 TOOL_ACTION PCB_ACTIONS::cleanupTracksAndVias( "pcbnew.GlobalEdit.cleanupTracksAndVias",
         AS_GLOBAL, 0, "",
         _( "Cleanup Tracks & Vias..." ),
-        _( "Clean stubs, vias, delete break points or unconnected tracks" ),
+        _( "Cleanup redundant items, shorting items, etc." ),
         delete_xpm );
 
+TOOL_ACTION PCB_ACTIONS::cleanupGraphics( "pcbnew.GlobalEdit.cleanupGraphics",
+        AS_GLOBAL, 0, "",
+        _( "Cleanup Graphics..." ),
+        _( "Cleanup redundant items, etc." ),
+        delete_xpm );
 
 // MICROWAVE_TOOL
 //

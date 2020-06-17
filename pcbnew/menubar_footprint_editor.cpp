@@ -137,6 +137,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( PCB_ACTIONS::footprintProperties,  haveFootprintCondition );
     editMenu->AddItem( PCB_ACTIONS::defaultPadProperties, SELECTION_CONDITIONS::ShowAlways );
 
+    editMenu->AddSeparator();
+    editMenu->AddItem( PCB_ACTIONS::cleanupGraphics,      haveFootprintCondition );
+
     editMenu->Resolve();
 
     //-- View menu -------------------------------------------------------

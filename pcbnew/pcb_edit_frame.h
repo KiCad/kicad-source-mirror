@@ -672,9 +672,6 @@ public:
     ///> @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
-    ///> @copydoc EDA_BASE_FRAME::GetSeverity()
-    int GetSeverity( int aErrorCode ) const override;
-
     ///> @copydoc PCB_BASE_FRAME::SetPageSettings()
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
 

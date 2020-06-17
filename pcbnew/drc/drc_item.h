@@ -25,13 +25,9 @@
 #ifndef DRC_ITEM_H
 #define DRC_ITEM_H
 
-#include <macros.h>
-#include <base_struct.h>
 #include <rc_item.h>
-#include <marker_base.h>
-#include <class_board.h>
-#include <pcb_base_frame.h>
-#include "drc.h"
+
+class PCB_BASE_FRAME;
 
 class DRC_ITEM : public RC_ITEM
 {

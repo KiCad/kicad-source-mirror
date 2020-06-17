@@ -27,32 +27,21 @@
 #include <pad_naming.h>
 #include "kicad_clipboard.h"
 #include "selection_tool.h"
-#include "pcb_actions.h"
 #include <core/optional.h>
 #include <tool/tool_manager.h>
-#include <class_draw_panel_gal.h>
+#include <tools/pcb_actions.h>
 #include <view/view_controls.h>
-#include <view/view_group.h>
 #include <pcb_painter.h>
-#include <origin_viewitem.h>
-#include <status_popup.h>
 #include <footprint_edit_frame.h>
-#include <kicad_plugin.h>
 #include <pcbnew_id.h>
-#include <collectors.h>
 #include <confirm.h>
 #include <bitmaps.h>
-#include <pcb_edit_frame.h>
-#include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <board_commit.h>
 #include <project.h>
-#include <tools/tool_event_utils.h>
 #include <fp_lib_table.h>
-#include <functional>
-using namespace std::placeholders;
-#include <wx/defs.h>
+#include <dialogs/dialog_cleanup_graphics.h>
 
 
 FOOTPRINT_EDITOR_TOOLS::FOOTPRINT_EDITOR_TOOLS() :
@@ -605,6 +594,17 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
+int FOOTPRINT_EDITOR_TOOLS::CleanupGraphics( const TOOL_EVENT& aEvent )
+{
+    FOOTPRINT_EDIT_FRAME* editFrame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
+    DIALOG_CLEANUP_GRAPHICS dlg( editFrame, true );
+
+    dlg.ShowModal();
+    return 0;
+}
+
+
 void FOOTPRINT_EDITOR_TOOLS::setTransitions()
 {
     Go( &FOOTPRINT_EDITOR_TOOLS::NewFootprint,         PCB_ACTIONS::newFootprint.MakeEvent() );
@@ -624,6 +624,8 @@ void FOOTPRINT_EDITOR_TOOLS::setTransitions()
 
     Go( &FOOTPRINT_EDITOR_TOOLS::ImportFootprint,      PCB_ACTIONS::importFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_TOOLS::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
+
+    Go( &FOOTPRINT_EDITOR_TOOLS::CleanupGraphics,      PCB_ACTIONS::cleanupGraphics.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_TOOLS::PinLibrary,           ACTIONS::pinLibrary.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_TOOLS::UnpinLibrary,         ACTIONS::unpinLibrary.MakeEvent() );

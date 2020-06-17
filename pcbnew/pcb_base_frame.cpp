@@ -51,6 +51,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
 #include <tool/grid_menu.h>
+#include "cleanup_item.h"
 
 wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
 
@@ -659,6 +660,17 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         m_DisplayOptions = cfg->m_Display;
         m_PolarCoords = cfg->m_PolarCoords;
     }
+}
+
+
+int PCB_BASE_FRAME::GetSeverity( int aErrorCode ) const
+{
+    if( aErrorCode >= CLEANUP_FIRST )
+        return RPT_SEVERITY_ACTION;
+
+    BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+
+    return bds.m_DRCSeverities[ aErrorCode ];
 }
 
 
