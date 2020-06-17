@@ -42,7 +42,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
 
     APP_SETTINGS_BASE* settings = m_parent->config();
     wxArrayString      gridsList;
-    int                i = 0;
+    int                i = ID_POPUP_GRID_START;
 
     BuildChoiceList( &gridsList, settings, m_parent->GetUserUnits() != EDA_UNITS::INCHES );
 
@@ -54,7 +54,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
 OPT_TOOL_EVENT GRID_MENU::eventHandler( const wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT event( ACTIONS::gridPreset.MakeEvent() );
-    event->SetParameter( (intptr_t) aEvent.GetId() );
+    event->SetParameter( (intptr_t) aEvent.GetId() - ID_POPUP_GRID_START );
     return event;
 }
 

@@ -157,12 +157,12 @@ enum main_id
      * than 15 entries in a context submenu may get too large to display
      * cleanly.  Add any additional popup zoom IDs above here or the
      * zoom event handler will not work properly.
-     * currently room is provided for 32 levels (this is a very large value).
-     * Pcbnew use 18 values. For schematic 15 is enought
      */
     ID_POPUP_ZOOM_LEVEL_START,
-    ID_POPUP_ZOOM_LEVEL_END = ID_POPUP_ZOOM_LEVEL_START + 32,
-    ID_POPUP_ZOOM_END_RANGE,         // last zoom id
+    ID_POPUP_ZOOM_LEVEL_END = ID_POPUP_ZOOM_LEVEL_START + 99,
+
+    ID_POPUP_GRID_START,
+    ID_POPUP_GRID_END = ID_POPUP_ZOOM_LEVEL_START + 99,
 
     ID_ON_GRID_SELECT,
     ID_GRID_SETTINGS,

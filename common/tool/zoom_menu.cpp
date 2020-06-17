@@ -24,6 +24,7 @@
  */
 
 #include <tool/zoom_menu.h>
+#include <id.h>
 #include <eda_draw_frame.h>
 #include <settings/app_settings.h>
 #include <tool/actions.h>
@@ -41,7 +42,7 @@ ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) :
     SetTitle( _( "Zoom" ) );
     SetIcon( zoom_selection_xpm );
 
-    int i = 1;  // 0 reserved for menus which support auto-zoom
+    int i = ID_POPUP_ZOOM_LEVEL_START + 1;  // 0 reserved for menus which support auto-zoom
 
     for( double factor : m_parent->config()->m_Window.zoom_factors )
         Append( i++, wxString::Format( _( "Zoom: %.2f" ), factor ), wxEmptyString, wxITEM_CHECK );
@@ -51,7 +52,7 @@ ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) :
 OPT_TOOL_EVENT ZOOM_MENU::eventHandler( const wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT event( ACTIONS::zoomPreset.MakeEvent() );
-    event->SetParameter( (intptr_t) aEvent.GetId() );
+    event->SetParameter( (intptr_t) aEvent.GetId() - ID_POPUP_ZOOM_LEVEL_START );
     return event;
 }
 
@@ -67,6 +68,6 @@ void ZOOM_MENU::update()
         // Search for a value near the current zoom setting:
         double rel_error = std::fabs( zoomList[i] - zoom ) / zoom;
         // IDs start with 1 (leaving 0 for auto-zoom)
-        Check( i+1, rel_error < 0.1 );
+        Check( ID_POPUP_ZOOM_LEVEL_START + i + 1, rel_error < 0.1 );
     }
 }
