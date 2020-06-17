@@ -30,7 +30,11 @@
 #include <vector>
 
 #include <base_struct.h>
-#include <general.h>
+#include <plotter.h>
+
+#include <gal/color4d.h>
+
+#include <default_values.h>
 #include <sch_sheet_path.h>
 #include <render_settings.h>
 
@@ -73,8 +77,7 @@ enum DANGLING_END_T
 
 
 /**
- * DANGLING_END_ITEM
- * is a helper class used to store the state of schematic  items that can be connected to
+ * Helper class used to store the state of schematic items that can be connected to
  * other schematic items.
  */
 class DANGLING_END_ITEM
@@ -141,12 +144,43 @@ public:
 
 typedef std::unordered_set<SCH_ITEM*> ITEM_SET;
 
+
 /**
- * SCH_ITEM
- * is a base class for any item which can be embedded within the SCHEMATIC
- * container class, and therefore instances of derived classes should only be
- * found in EESCHEMA or other programs that use class SCHEMATIC and its contents.
- * The corresponding class in Pcbnew is BOARD_ITEM.
+ * Simple container to manage line stroke parameters.
+ */
+class STROKE_PARAMS
+{
+    int m_width;
+    PLOT_DASH_TYPE m_type;
+    COLOR4D m_color;
+
+public:
+    STROKE_PARAMS( int aWidth = Mils2iu( DEFAULT_LINE_THICKNESS ),
+                   PLOT_DASH_TYPE aType = PLOT_DASH_TYPE::DEFAULT,
+                   const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) :
+            m_width( aWidth ),
+            m_type( aType ),
+            m_color( aColor )
+    {
+    }
+
+    int GetWidth() const { return m_width; }
+    void SetWidth( int aWidth ) { m_width = aWidth; }
+
+    PLOT_DASH_TYPE GetType() const { return m_type; }
+    void SetType( PLOT_DASH_TYPE aType ) { m_type = aType; }
+
+    COLOR4D GetColor() const { return m_color; }
+    void SetColor( const COLOR4D& aColor ) { m_color = aColor; }
+};
+
+
+/**
+ * Base class for any item which can be embedded within the #SCHEMATIC container class,
+ * and therefore instances of derived classes should only be found in EESCHEMA or other
+ * programs that use class SCHEMATIC and its contents.
+ *
+ * The corresponding class in Pcbnew is #BOARD_ITEM.
  */
 class SCH_ITEM : public EDA_ITEM
 {
@@ -181,8 +215,7 @@ public:
     }
 
     /**
-     * Function SwapData
-     * swap the internal data structures \a aItem with the schematic item.
+     * Swap the internal data structures \a aItem with the schematic item.
      * Obviously, aItem must have the same type than me
      * @param aItem The item to swap the data structures with.
      */
@@ -198,7 +231,6 @@ public:
     SCH_ITEM* Duplicate( bool doClone = false ) const;
 
     /**
-     * Virtual function IsMovableFromAnchorPoint
      * @return true for items which are moved with the anchor point at mouse cursor
      *  and false for items moved with no reference to anchor
      * Usually return true for small items (labels, junctions) and false for
@@ -223,91 +255,77 @@ public:
     SCHEMATIC* Schematic() const;
 
     /**
-     * Function IsLocked
      * @return bool - true if the object is locked, else false
      */
     virtual bool IsLocked() const { return false; }
 
     /**
-     * Function SetLocked
-     * modifies 'lock' status for of the item.
+     * Set the  'lock' status to \a aLocked for of this item.
      */
     virtual void SetLocked( bool aLocked ) {}
 
     /**
-     * Function GetLayer
-     * returns the layer this item is on.
+     * Return the layer this item is on.
      */
     SCH_LAYER_ID GetLayer() const { return m_Layer; }
 
     /**
-     * Function SetLayer
-     * sets the layer this item is on.
+     * Set the layer this item is on.
+     *
      * @param aLayer The layer number.
      */
     void SetLayer( SCH_LAYER_ID aLayer )  { m_Layer = aLayer; }
 
     /**
-     * Function ViewGetLayers
-     * returns the layers the item is drawn on (which may be more than its "home" layer)
+     * Return the layers the item is drawn on (which may be more than its "home" layer)
      */
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /**
-     * Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenWidth() const { return 0; }
 
     /**
-     * Function Print
-     * Print a schematic item. Each schematic item should have its own method
+     * Print a schematic item.
+     *
+     * Each schematic item should have its own method
+     *
      * @param aOffset drawing offset (usually {0,0} but can be different when moving an object)
      */
     virtual void Print( RENDER_SETTINGS* aSettings, const wxPoint&  aOffset ) = 0;
 
     /**
-     * Function Move
-     * moves the item by \a aMoveVector to a new position.
+     * Move the item by \a aMoveVector to a new position.
+     *
      * @param aMoveVector = the displacement vector
      */
     virtual void Move( const wxPoint& aMoveVector ) = 0;
 
     /**
-     * Function MirrorY
-     * mirrors item relative to the Y axis about \a aYaxis_position.
+     * Mirror item relative to the Y axis about \a aYaxis_position.
+     *
      * @param aYaxis_position The Y axis position to mirror around.
      */
     virtual void MirrorY( int aYaxis_position ) = 0;
 
     /**
-     * Function MirrorX
-     * mirrors item relative to the X axis about \a aXaxis_position.
+     * Mirror item relative to the X axis about \a aXaxis_position.
+     *
      * @param aXaxis_position The X axis position to mirror around.
      */
     virtual void MirrorX( int aXaxis_position ) = 0;
 
     /**
-     * Function Rotate
-     * rotates the item around \a aPosition 90 degrees in the clockwise direction.
+     * Rotate the item around \a aPosition 90 degrees in the clockwise direction.
+     *
      * @param aPosition A reference to a wxPoint object containing the coordinates to
      *                  rotate around.
      */
     virtual void Rotate( wxPoint aPosition ) = 0;
 
     /**
-     * Function Load
-     * reads a schematic item from \a aLine in a .sch file.
-     *
-     * @param aLine - Essentially this is file to read the object from.
-     * @param aErrorMsg - Description of the error if an error occurs while loading the object.
-     * @return True if the object loaded successfully.
-     */
-    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg ) { return false; }
-
-    /**
-     * Function GetEndPoints
-     * adds the schematic item end points to \a aItemList if the item has end points.
+     * Add the schematic item end points to \a aItemList if the item has end points.
      *
      * The default version doesn't do anything since many of the schematic object cannot
      * be tested for dangling ends.  If you add a new schematic item that can have a
@@ -319,8 +337,7 @@ public:
     virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) {}
 
     /**
-     * Function IsDanglingStateChanged
-     * tests the schematic item to \a aItemList to check if it's dangling state has changed.
+     * Test the schematic item to \a aItemList to check if it's dangling state has changed.
      *
      * Note that the return value only true when the state of the test has changed.  Use
      * the IsDangling() method to get the current dangling state of the item.  Some of
@@ -346,14 +363,12 @@ public:
     virtual bool CanConnect( const SCH_ITEM* aItem ) const { return m_Layer == aItem->GetLayer(); }
 
     /**
-     * Function IsConnectable
-     * returns true if the schematic item can connect to another schematic item.
+     * @return true if the schematic item can connect to another schematic item.
      */
     virtual bool IsConnectable() const { return false; }
 
     /**
-     * Function GetConnectionPoints
-     * add all the connection points for this item to \a aPoints.
+     * Add all the connection points for this item to \a aPoints.
      *
      * Not all schematic items have connection points so the default method does nothing.
      *
@@ -362,8 +377,7 @@ public:
     virtual void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const { }
 
     /**
-     * Function ClearConnections
-     * clears all of the connection items from the list.
+     * Clears all of the connection items from the list.
      *
      * The vector release method is used to prevent the item pointers from being deleted.
      * Do not use the vector erase method on the connection list.
@@ -371,8 +385,7 @@ public:
     void ClearConnections() { m_connections.clear(); }
 
     /**
-     * Function IsConnected
-     * tests the item to see if it is connected to \a aPoint.
+     * Test the item to see if it is connected to \a aPoint.
      *
      * @param aPoint A reference to a wxPoint object containing the coordinates to test.
      * @return True if connection to \a aPoint exists.
@@ -380,8 +393,9 @@ public:
     bool IsConnected( const wxPoint& aPoint ) const;
 
     /**
-     * Retrieves the connection associated with this object in the given sheet
-     * Note: the returned value can be nullptr.
+     * Retrieve the connection associated with this object in the given sheet
+     *
+     * @note The returned value can be nullptr.
      */
     SCH_CONNECTION* Connection( const SCH_SHEET_PATH& aPath ) const;
 
@@ -438,17 +452,24 @@ public:
     virtual void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) { }
 
     /**
-     * Function Plot
-     * plots the schematic item to \a aPlotter.
+     * Check if this schematic item has line stoke properties.
+     *
+     * @see #STROKE_PARAMS
+     *
+     * @return true if this schematic item support line stroke properties.  Otherwise, false.
+     */
+    virtual bool HasLineStroke() const { return false; }
+
+    /**
+     * Plot the schematic item to \a aPlotter.
      *
      * @param aPlotter A pointer to a #PLOTTER object.
      */
     virtual void Plot( PLOTTER* aPlotter );
 
     /**
-     * Function GetNetListItem
-     * creates a new #NETLIST_OBJECT for the schematic object and adds it to
-     * \a aNetListItems.
+     * Create a new #NETLIST_OBJECT for the schematic object and adds it to \a aNetListItems.
+     *
      * <p>
      * Not all schematic objects have net list items associated with them.  This
      * method only needs to be overridden for those schematic objects that have
@@ -459,8 +480,7 @@ public:
                                  SCH_SHEET_PATH*      aSheetPath ) { }
 
     /**
-     * Function SetPosition
-     * set the schematic item position to \a aPosition.
+     * Set the schematic item position to \a aPosition.
      *
      * @param aPosition A reference to a wxPoint object containing the new position.
      */
@@ -470,8 +490,7 @@ public:
 
 private:
     /**
-     * Function doIsConnected
-     * provides the object specific test to see if it is connected to \a aPosition.
+     * Provide the object specific test to see if it is connected to \a aPosition.
      *
      * @note Override this function if the derived object can be connect to another
      *       object such as a wire, bus, or junction.  Do not override this function

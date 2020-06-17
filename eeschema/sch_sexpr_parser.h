@@ -63,27 +63,6 @@ class TITLE_BLOCK;
 
 
 /**
- * Simple container to manage line stroke parameters.
- */
-class STROKE_PARAMS
-{
-public:
-    int m_Width;
-    PLOT_DASH_TYPE m_Type;
-    COLOR4D m_Color;
-
-    STROKE_PARAMS( int aWidth = Mils2iu( DEFAULT_LINE_THICKNESS ),
-                   PLOT_DASH_TYPE aType = PLOT_DASH_TYPE::DEFAULT,
-                   const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) :
-            m_Width( aWidth ),
-            m_Type( aType ),
-            m_Color( aColor )
-    {
-    }
-};
-
-
-/**
  * Simple container to manage fill parameters.
  */
 class FILL_PARAMS

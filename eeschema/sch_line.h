@@ -25,7 +25,6 @@
 #ifndef _SCH_LINE_H_
 #define _SCH_LINE_H_
 
-#include <plotter.h>
 #include <sch_item.h>
 
 class NETLIST_OBJECT_LIST;
@@ -41,9 +40,7 @@ class SCH_LINE : public SCH_ITEM
     bool    m_endIsDangling;    ///< True if end point is not connected.
     wxPoint m_start;            ///< Line start point
     wxPoint m_end;              ///< Line end point
-    int     m_size;             ///< Line pensize
-    PLOT_DASH_TYPE m_style;     ///< Line style
-    COLOR4D m_color;            ///< Line color
+    STROKE_PARAMS m_stroke;     ///< Line stroke properties.
 
 public:
 
@@ -114,7 +111,7 @@ public:
     /// (mainly to read style from .sch file
     static PLOT_DASH_TYPE GetLineStyleByName( const wxString& aStyleName );
 
-    void SetLineColor( const COLOR4D aColor );
+    void SetLineColor( const COLOR4D& aColor );
 
     void SetLineColor( const double r, const double g, const double b, const double a );
 
@@ -122,6 +119,10 @@ public:
     COLOR4D GetLineColor() const;
 
     void SetLineWidth( const int aSize );
+
+    virtual bool HasLineStroke() const override { return true; }
+    STROKE_PARAMS GetStroke() const { return m_stroke; }
+    void SetStroke( const STROKE_PARAMS& aStroke ) { m_stroke = aStroke; }
 
     /**
      * Test if the #SCH_LINE object uses the default stroke settings.
@@ -132,7 +133,7 @@ public:
      */
     bool UsesDefaultStroke() const;
 
-    int GetLineSize() const { return m_size; }
+    int GetLineSize() const { return m_stroke.GetWidth(); }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
