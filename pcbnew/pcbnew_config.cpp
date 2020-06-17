@@ -26,18 +26,16 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <project.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <plotter.h>
-#include <ws_painter.h>
 #include <panel_hotkeys_editor.h>
-#include <panel_pcbnew_settings.h>
+#include <panel_edit_options.h>
 #include <panel_pcbnew_color_settings.h>
-#include <panel_pcbnew_display_options.h>
+#include <panel_display_options.h>
 #include <panel_pcbnew_action_plugins.h>
 #include <fp_lib_table.h>
 #include <ws_data_model.h>
@@ -64,9 +62,9 @@ void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     wxTreebook* book = aParent->GetTreebook();
 
     book->AddPage( new wxPanel( book ), _( "Pcbnew" ) );
-    book->AddSubPage( new PANEL_PCBNEW_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_PCBNEW_COLOR_SETTINGS( this, book ), _( "Colors" ) );
-    book->AddSubPage( new PANEL_PCBNEW_SETTINGS( this, aParent ), _( "Editing Options" ) );
+    book->AddSubPage( new PANEL_EDIT_OPTIONS( this, aParent ), _( "Editing Options" ) );
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     book->AddSubPage( new PANEL_PCBNEW_ACTION_PLUGINS( this, aParent ), _( "Action Plugins" ) );
 #endif

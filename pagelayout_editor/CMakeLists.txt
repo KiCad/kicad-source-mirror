@@ -47,7 +47,7 @@ set( PL_EDITOR_EXTRA_SRCS
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
     ${CMAKE_SOURCE_DIR}/common/dialogs/dialog_page_settings.cpp
-    ${CMAKE_SOURCE_DIR}/common/dialogs/panel_display_options.cpp
+    ${CMAKE_SOURCE_DIR}/common/dialogs/panel_gal_display_options.cpp
     ${CMAKE_SOURCE_DIR}/common/page_info.cpp
 )
 

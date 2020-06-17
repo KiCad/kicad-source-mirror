@@ -38,7 +38,7 @@
 #include <ws_data_model.h>
 #include <properties_frame.h>
 #include <widgets/paged_dialog.h>
-#include <panel_display_options.h>
+#include <panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <view/view.h>
 #include <confirm.h>
@@ -407,7 +407,7 @@ void PL_EDITOR_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     wxTreebook* book = aParent->GetTreebook();
 
-    book->AddPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddPage( new PANEL_GAL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddPage( new PANEL_PL_EDITOR_COLOR_SETTINGS( this, aParent ), _( "Colors" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );

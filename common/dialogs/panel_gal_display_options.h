@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,21 +17,27 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "panel_pcbnew_display_options_base.h"
+
+#ifndef PANEL_DISPLAY_OPTIONS_H
+#define PANEL_DISPLAY_OPTIONS_H
+
+#include <wx/panel.h>
 
 class GAL_OPTIONS_PANEL;
+class EDA_DRAW_FRAME;
+class PAGED_DIALOG;
 
-class PANEL_PCBNEW_DISPLAY_OPTIONS : public PANEL_PCBNEW_DISPLAY_OPTIONS_BASE
+class PANEL_GAL_DISPLAY_OPTIONS : public wxPanel
 {
 public:
-   PANEL_PCBNEW_DISPLAY_OPTIONS( PCB_EDIT_FRAME* aFrame, PAGED_DIALOG* aWindow );
-
-   bool TransferDataFromWindow() override;
-   bool TransferDataToWindow() override;
+    PANEL_GAL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aParent, PAGED_DIALOG* aWindow );
 
 private:
-   PCB_EDIT_FRAME*    m_frame;
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
-   GAL_OPTIONS_PANEL* m_galOptsPanel;
+    EDA_DRAW_FRAME*     m_frame;
+    GAL_OPTIONS_PANEL*  m_galOptsPanel;
 };
 
+#endif //PANEL_DISPLAY_OPTIONS_H

@@ -22,10 +22,10 @@
 #include <widgets/gal_options_panel.h>
 #include <widgets/paged_dialog.h>
 
-#include <panel_display_options.h>
+#include <panel_gal_display_options.h>
 
 
-PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aFrame, PAGED_DIALOG* aParent ) :
+PANEL_GAL_DISPLAY_OPTIONS::PANEL_GAL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aFrame, PAGED_DIALOG* aParent ) :
     wxPanel( aParent->GetTreebook(), wxID_ANY ),
     m_frame( aFrame )
 {
@@ -44,14 +44,14 @@ PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aFrame, PAGED_DIAL
 }
 
 
-bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
+bool PANEL_GAL_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     m_galOptsPanel->TransferDataToWindow();
     return true;
 }
 
 
-bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
+bool PANEL_GAL_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     m_galOptsPanel->TransferDataFromWindow();
 

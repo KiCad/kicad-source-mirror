@@ -21,15 +21,16 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/choice.h>
 #include <wx/panel.h>
+#include <wx/choice.h>
+#include <wx/simplebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_PCBNEW_SETTINGS_BASE
+/// Class PANEL_EDIT_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel
+class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 {
 	private:
 
@@ -43,10 +44,12 @@ class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel
 
 		wxRadioBox* m_PolarDisplay;
 		wxRadioBox* m_UnitsSelection;
+		wxCheckBox* m_MagneticPads;
 		wxCheckBox* m_Segments_45_Only_Ctrl;
 		wxCheckBox* m_FlipLeftRight;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_RotationAngle;
+		wxSimplebook* m_optionsBook;
 		wxStaticText* m_staticText2;
 		wxChoice* m_magneticPadChoice;
 		wxStaticText* m_staticText21;
@@ -60,8 +63,8 @@ class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel
 
 	public:
 
-		PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
-		~PANEL_PCBNEW_SETTINGS_BASE();
+		PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		~PANEL_EDIT_OPTIONS_BASE();
 
 };
 

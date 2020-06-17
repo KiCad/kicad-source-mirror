@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "panel_pcbnew_display_options_base.h"
+#include "panel_display_options_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_PCBNEW_DISPLAY_OPTIONS_BASE::PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -22,11 +22,17 @@ PANEL_PCBNEW_DISPLAY_OPTIONS_BASE::PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* 
 
 	bupperSizer->Add( m_galOptionsSizer, 1, wxEXPAND, 5 );
 
-	wxBoxSizer* bRightSizer;
-	bRightSizer = new wxBoxSizer( wxVERTICAL );
+	m_optionsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	wxPanel* emptyPage;
+	emptyPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_optionsBook->AddPage( emptyPage, _("a page"), false );
+	wxPanel* pcbPage;
+	pcbPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* pcbOptionsSizer;
+	pcbOptionsSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbAnnotations;
-	sbAnnotations = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Annotations") ), wxVERTICAL );
+	sbAnnotations = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Annotations") ), wxVERTICAL );
 
 	wxString m_ShowNetNamesOptionChoices[] = { _("Do not show"), _("Show on pads"), _("Show on tracks"), _("Show on pads and tracks") };
 	int m_ShowNetNamesOptionNChoices = sizeof( m_ShowNetNamesOptionChoices ) / sizeof( wxString );
@@ -45,10 +51,10 @@ PANEL_PCBNEW_DISPLAY_OPTIONS_BASE::PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* 
 	sbAnnotations->Add( m_OptDisplayPadNoConn, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 
 
-	bRightSizer->Add( sbAnnotations, 0, wxEXPAND|wxBOTTOM, 5 );
+	pcbOptionsSizer->Add( sbAnnotations, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	wxStaticBoxSizer* sbClearance;
-	sbClearance = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Clearance Outlines") ), wxVERTICAL );
+	sbClearance = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Clearance Outlines") ), wxVERTICAL );
 
 	wxString m_OptDisplayTracksClearanceChoices[] = { _("Do not show"), _("Show when creating tracks"), _("Show with via clearance at end"), _("Show when creating and editing tracks"), _("Show always") };
 	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
@@ -62,10 +68,15 @@ PANEL_PCBNEW_DISPLAY_OPTIONS_BASE::PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* 
 	sbClearance->Add( m_OptDisplayPadClearence, 0, wxALL, 6 );
 
 
-	bRightSizer->Add( sbClearance, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	pcbOptionsSizer->Add( sbClearance, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
-	bupperSizer->Add( bRightSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	pcbPage->SetSizer( pcbOptionsSizer );
+	pcbPage->Layout();
+	pcbOptionsSizer->Fit( pcbPage );
+	m_optionsBook->AddPage( pcbPage, _("a page"), false );
+
+	bupperSizer->Add( m_optionsBook, 1, wxEXPAND | wxALL, 5 );
 
 
 	bMainSizer->Add( bupperSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -76,6 +87,6 @@ PANEL_PCBNEW_DISPLAY_OPTIONS_BASE::PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* 
 	bMainSizer->Fit( this );
 }
 
-PANEL_PCBNEW_DISPLAY_OPTIONS_BASE::~PANEL_PCBNEW_DISPLAY_OPTIONS_BASE()
+PANEL_DISPLAY_OPTIONS_BASE::~PANEL_DISPLAY_OPTIONS_BASE()
 {
 }

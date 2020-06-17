@@ -25,50 +25,66 @@
 #include <board_design_settings.h>
 #include <class_board.h>
 #include <fctsys.h>
-#include <panel_pcbnew_settings.h>
+#include <panel_edit_options.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcb_view.h>
 #include <pcbnew.h>
 #include <pcbnew_settings.h>
 #include <widgets/paged_dialog.h>
+#include <footprint_edit_frame.h>
 
-PANEL_PCBNEW_SETTINGS::PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent ) :
-        PANEL_PCBNEW_SETTINGS_BASE( aParent->GetTreebook() ),
+PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( PCB_BASE_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent ) :
+        PANEL_EDIT_OPTIONS_BASE( aParent->GetTreebook() ),
         m_Frame( aFrame )
-{}
-
-
-bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
 {
-    const PCB_DISPLAY_OPTIONS&  displ_opts = m_Frame->GetDisplayOptions();
-    const PCBNEW_SETTINGS& general_opts = m_Frame->Settings();
+    m_MagneticPads->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_Frame ) != nullptr );
+    m_FlipLeftRight->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) != nullptr );\
 
-    /* Set display options */
+    m_optionsBook->SetSelection( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) ? 1 : 0 );
+}
+
+
+bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
+{
+    const PCB_DISPLAY_OPTIONS& displ_opts = m_Frame->GetDisplayOptions();
+    const PCBNEW_SETTINGS&     general_opts = m_Frame->Settings();
+
     m_PolarDisplay->SetSelection( m_Frame->GetShowPolarCoords() ? 1 : 0 );
     m_UnitsSelection->SetSelection( m_Frame->GetUserUnits() == EDA_UNITS::INCHES ? 0 : 1 );
-    m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
-    m_showGlobalRatsnest->SetValue( displ_opts.m_ShowGlobalRatsnest );
-    m_showSelectedRatsnest->SetValue( displ_opts.m_ShowModuleRatsnest );
-    m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
+
+    m_Segments_45_Only_Ctrl->SetValue( general_opts.m_Use45DegreeGraphicSegments );
 
     wxString rotationAngle;
     rotationAngle = AngleToStringDegrees( (double)m_Frame->GetRotationAngle() );
     m_RotationAngle->SetValue( rotationAngle );
 
-    m_Segments_45_Only_Ctrl->SetValue( general_opts.m_Use45DegreeGraphicSegments );
-    m_magneticPadChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.pads ) );
-    m_magneticTrackChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.tracks ) );
-    m_magneticGraphicsChoice->SetSelection( !general_opts.m_MagneticItems.graphics );
-    m_FlipLeftRight->SetValue( general_opts.m_FlipLeftRight );
+    if( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) )
+    {
+        /* Set display options */
+        m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
+        m_showGlobalRatsnest->SetValue( displ_opts.m_ShowGlobalRatsnest );
+        m_showSelectedRatsnest->SetValue( displ_opts.m_ShowModuleRatsnest );
+        m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
 
-    m_Show_Page_Limits->SetValue( m_Frame->ShowPageLimits() );
+        m_magneticPadChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.pads ) );
+        m_magneticTrackChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.tracks ) );
+        m_magneticGraphicsChoice->SetSelection( !general_opts.m_MagneticItems.graphics );
+        m_FlipLeftRight->SetValue( general_opts.m_FlipLeftRight );
+
+        m_Show_Page_Limits->SetValue( m_Frame->ShowPageLimits() );
+    }
+    else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_Frame ) )
+    {
+        m_MagneticPads->SetValue(
+                m_Frame->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+    }
 
     return true;
 }
 
 
-bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
+bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 {
     m_Frame->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
     m_Frame->SetUserUnits(

@@ -36,7 +36,7 @@
 #include <gr_text.h>
 #include <kiface_i.h>
 #include <lib_edit_frame.h>
-#include <panel_display_options.h>
+#include <panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <pgm_base.h>
 #include <sch_edit_frame.h>
@@ -511,7 +511,7 @@ void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     wxTreebook* book = aParent->GetTreebook();
 
     book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
-    book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_GAL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_LIBEDIT_COLOR_SETTINGS( this, book ), _( "Colors" ) );
 

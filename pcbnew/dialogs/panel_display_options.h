@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,27 +18,21 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef KICAD_PANEL_MODEDIT_DISPLAY_OPTIONS_H
-#define KICAD_PANEL_MODEDIT_DISPLAY_OPTIONS_H
-
-#include <wx/panel.h>
+#include "panel_display_options_base.h"
 
 class GAL_OPTIONS_PANEL;
-class FOOTPRINT_EDIT_FRAME;
-class PAGED_DIALOG;
 
-class PANEL_MODEDIT_DISPLAY_OPTIONS : public wxPanel
+class PANEL_DISPLAY_OPTIONS : public PANEL_DISPLAY_OPTIONS_BASE
 {
 public:
-    PANEL_MODEDIT_DISPLAY_OPTIONS( FOOTPRINT_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent );
+   PANEL_DISPLAY_OPTIONS( PCB_BASE_FRAME* aFrame, PAGED_DIALOG* aWindow );
+
+   bool TransferDataFromWindow() override;
+   bool TransferDataToWindow() override;
 
 private:
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
+   PCB_BASE_FRAME*    m_frame;
 
-    FOOTPRINT_EDIT_FRAME* m_frame;
-    GAL_OPTIONS_PANEL*    m_galOptsPanel;
+   GAL_OPTIONS_PANEL* m_galOptsPanel;
 };
 
-#endif //KICAD_PANEL_MODEDIT_DISPLAY_OPTIONS_H

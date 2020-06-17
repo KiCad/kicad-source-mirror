@@ -37,8 +37,8 @@
 #include <confirm.h>
 #include <dialogs/panel_modedit_color_settings.h>
 #include <dialogs/panel_modedit_defaults.h>
-#include <dialogs/panel_modedit_display_options.h>
-#include <dialogs/panel_modedit_settings.h>
+#include <dialogs/panel_display_options.h>
+#include <dialogs/panel_edit_options.h>
 #include <fctsys.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
@@ -839,9 +839,9 @@ void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     wxTreebook* book = aParent->GetTreebook();
 
     book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
-    book->AddSubPage( new PANEL_MODEDIT_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_MODEDIT_COLOR_SETTINGS( this, book ), _( "Colors" ) );
-    book->AddSubPage( new PANEL_MODEDIT_SETTINGS( this, aParent ), _( "Editing Options" ) );
+    book->AddSubPage( new PANEL_EDIT_OPTIONS( this, aParent ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_MODEDIT_DEFAULTS( this, aParent ), _( "Default Values" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );

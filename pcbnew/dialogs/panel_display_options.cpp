@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,8 +23,7 @@
 #include <pcb_edit_frame.h>
 #include <pcb_display_options.h>
 #include <config_map.h>
-#include <panel_pcbnew_display_options.h>
-#include <pcb_draw_panel_gal.h>
+#include <panel_display_options.h>
 #include <pcb_view.h>
 #include <pcb_painter.h>
 #include <widgets/paged_dialog.h>
@@ -41,29 +40,36 @@ static const UTIL::CFG_MAP<PCB_DISPLAY_OPTIONS::TRACE_CLEARANCE_DISPLAY_MODE_T> 
 };
 
 
-PANEL_PCBNEW_DISPLAY_OPTIONS::PANEL_PCBNEW_DISPLAY_OPTIONS( PCB_EDIT_FRAME* aFrame,
-                                                            PAGED_DIALOG* aParent ) :
-    PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( aParent->GetTreebook() ),
+PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( PCB_BASE_FRAME* aFrame,
+                                              PAGED_DIALOG* aParent ) :
+    PANEL_DISPLAY_OPTIONS_BASE( aParent->GetTreebook() ),
     m_frame( aFrame )
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_frame->GetGalDisplayOptions();
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
 
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
+
+    m_optionsBook->SetSelection( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) ? 1 : 0 );
 }
 
 
-bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataToWindow()
+bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    auto& displ_opts = m_frame->GetDisplayOptions();
+    PCB_EDIT_FRAME* pcbEdit = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
 
-    m_OptDisplayTracksClearance->SetSelection( UTIL::GetConfigForVal(
-            traceClearanceSelectMap, displ_opts.m_ShowTrackClearanceMode ) );
+    if( pcbEdit )
+    {
+        const PCB_DISPLAY_OPTIONS& displ_opts = pcbEdit->GetDisplayOptions();
 
-    m_OptDisplayPadClearence->SetValue( displ_opts.m_DisplayPadIsol );
-    m_OptDisplayPadNumber->SetValue( displ_opts.m_DisplayPadNum );
-    m_OptDisplayPadNoConn->SetValue( m_frame->IsElementVisible( LAYER_NO_CONNECTS ) );
-    m_ShowNetNamesOption->SetSelection( displ_opts.m_DisplayNetNamesMode );
+        m_OptDisplayTracksClearance->SetSelection( UTIL::GetConfigForVal(
+                traceClearanceSelectMap, displ_opts.m_ShowTrackClearanceMode ) );
+
+        m_OptDisplayPadClearence->SetValue( displ_opts.m_DisplayPadIsol );
+        m_OptDisplayPadNumber->SetValue( displ_opts.m_DisplayPadNum );
+        m_OptDisplayPadNoConn->SetValue( pcbEdit->IsElementVisible( LAYER_NO_CONNECTS ) );
+        m_ShowNetNamesOption->SetSelection( displ_opts.m_DisplayNetNamesMode );
+    }
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -74,20 +80,8 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataToWindow()
 /*
  * Update variables with new options
  */
-bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
+bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    PCB_DISPLAY_OPTIONS displ_opts = m_frame->GetDisplayOptions();
-
-    displ_opts.m_ShowTrackClearanceMode = UTIL::GetValFromConfig(
-            traceClearanceSelectMap, m_OptDisplayTracksClearance->GetSelection() );
-
-    displ_opts.m_DisplayPadIsol = m_OptDisplayPadClearence->GetValue();
-    displ_opts.m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();
-
-    m_frame->SetElementVisibility( LAYER_NO_CONNECTS, m_OptDisplayPadNoConn->GetValue() );
-
-    displ_opts.m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
-
     m_galOptsPanel->TransferDataFromWindow();
 
     // Apply changes to the GAL
@@ -95,9 +89,26 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
 
-    m_frame->SetDisplayOptions( displ_opts );
-    settings->LoadDisplayOptions( displ_opts, m_frame->ShowPageLimits() );
-    m_frame->SetElementVisibility( LAYER_RATSNEST, displ_opts.m_ShowGlobalRatsnest );
+    PCB_EDIT_FRAME* pcbEdit = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+
+    if( pcbEdit )
+    {
+        PCB_DISPLAY_OPTIONS displ_opts = pcbEdit->GetDisplayOptions();
+
+        displ_opts.m_ShowTrackClearanceMode = UTIL::GetValFromConfig(
+                traceClearanceSelectMap, m_OptDisplayTracksClearance->GetSelection() );
+
+        displ_opts.m_DisplayPadIsol = m_OptDisplayPadClearence->GetValue();
+        displ_opts.m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();
+
+        pcbEdit->SetElementVisibility( LAYER_NO_CONNECTS, m_OptDisplayPadNoConn->GetValue() );
+
+        displ_opts.m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
+
+        pcbEdit->SetDisplayOptions( displ_opts );
+        settings->LoadDisplayOptions( displ_opts, pcbEdit->ShowPageLimits() );
+        pcbEdit->SetElementVisibility( LAYER_RATSNEST, displ_opts.m_ShowGlobalRatsnest );
+    }
 
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );

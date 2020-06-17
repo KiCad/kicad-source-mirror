@@ -60,6 +60,7 @@ using KIGFX::RENDER_SETTINGS;
 #define FOOTPRINT_VIEWER_FRAME_NAME         wxT( "ModViewFrame" )
 #define FOOTPRINT_VIEWER_FRAME_NAME_MODAL   wxT( "ModViewFrameModal" )
 #define PCB_EDIT_FRAME_NAME                 wxT( "PcbFrame" )
+#define SHAPE_EDIT_FRAME_NAME               wxT( "ShapeEditFrame" )
 
 
 /**

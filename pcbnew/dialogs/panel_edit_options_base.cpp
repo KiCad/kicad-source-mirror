@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "panel_pcbnew_settings_base.h"
+#include "panel_edit_options_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bPanelSizer;
 	bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -38,6 +38,9 @@ PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	wxStaticBoxSizer* bOptionsSizer;
 	bOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Editing Options") ), wxVERTICAL );
+
+	m_MagneticPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Magnetic pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	bOptionsSizer->Add( m_MagneticPads, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_Segments_45_Only_Ctrl = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Segments_45_Only_Ctrl->SetToolTip( _("Force line segment directions to H, V or 45 degrees when drawing on technical layers.") );
@@ -71,11 +74,17 @@ PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	bMargins->Add( bMiddleLeftSizer, 1, wxEXPAND|wxRIGHT, 5 );
 
-	wxBoxSizer* bRightSizer;
-	bRightSizer = new wxBoxSizer( wxVERTICAL );
+	m_optionsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	wxPanel* emptyPage;
+	emptyPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_optionsBook->AddPage( emptyPage, _("a page"), false );
+	wxPanel* pcbPage;
+	pcbPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* pcbOptionsSizer;
+	pcbOptionsSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbMagnets;
-	sbMagnets = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Magnetic Points") ), wxVERTICAL );
+	sbMagnets = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Magnetic Points") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 2, 3, 0 );
@@ -128,10 +137,10 @@ PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWind
 	sbMagnets->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bRightSizer->Add( sbMagnets, 1, wxEXPAND, 5 );
+	pcbOptionsSizer->Add( sbMagnets, 1, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Ratsnest") ), wxVERTICAL );
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Ratsnest") ), wxVERTICAL );
 
 	m_showGlobalRatsnest = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Show ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer3->Add( m_showGlobalRatsnest, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -143,20 +152,25 @@ PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWind
 	sbSizer3->Add( m_OptDisplayCurvedRatsnestLines, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bRightSizer->Add( sbSizer3, 1, wxEXPAND, 5 );
+	pcbOptionsSizer->Add( sbSizer3, 1, wxEXPAND|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Annotations") ), wxVERTICAL );
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Annotations") ), wxVERTICAL );
 
 	m_Show_Page_Limits = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Show page limits"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Show_Page_Limits->SetValue(true);
 	sbSizer4->Add( m_Show_Page_Limits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bRightSizer->Add( sbSizer4, 1, wxEXPAND, 5 );
+	pcbOptionsSizer->Add( sbSizer4, 0, wxEXPAND|wxTOP, 5 );
 
 
-	bMargins->Add( bRightSizer, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	pcbPage->SetSizer( pcbOptionsSizer );
+	pcbPage->Layout();
+	pcbOptionsSizer->Fit( pcbPage );
+	m_optionsBook->AddPage( pcbPage, _("a page"), false );
+
+	bMargins->Add( m_optionsBook, 1, wxEXPAND | wxALL, 5 );
 
 
 	bPanelSizer->Add( bMargins, 1, wxRIGHT, 5 );
@@ -167,6 +181,6 @@ PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWind
 	bPanelSizer->Fit( this );
 }
 
-PANEL_PCBNEW_SETTINGS_BASE::~PANEL_PCBNEW_SETTINGS_BASE()
+PANEL_EDIT_OPTIONS_BASE::~PANEL_EDIT_OPTIONS_BASE()
 {
 }

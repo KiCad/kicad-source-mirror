@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,21 +12,22 @@
 #include <wx/intl.h>
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
-#include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/panel.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/radiobox.h>
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
-#include <wx/panel.h>
+#include <wx/simplebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_PCBNEW_DISPLAY_OPTIONS_BASE
+/// Class PANEL_DISPLAY_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PCBNEW_DISPLAY_OPTIONS_BASE : public wxPanel
+class PANEL_DISPLAY_OPTIONS_BASE : public wxPanel
 {
 	private:
 
@@ -37,6 +38,7 @@ class PANEL_PCBNEW_DISPLAY_OPTIONS_BASE : public wxPanel
 		};
 
 		wxBoxSizer* m_galOptionsSizer;
+		wxSimplebook* m_optionsBook;
 		wxRadioBox* m_ShowNetNamesOption;
 		wxCheckBox* m_OptDisplayPadNumber;
 		wxCheckBox* m_OptDisplayPadNoConn;
@@ -45,8 +47,8 @@ class PANEL_PCBNEW_DISPLAY_OPTIONS_BASE : public wxPanel
 
 	public:
 
-		PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
-		~PANEL_PCBNEW_DISPLAY_OPTIONS_BASE();
+		PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		~PANEL_DISPLAY_OPTIONS_BASE();
 
 };
 
