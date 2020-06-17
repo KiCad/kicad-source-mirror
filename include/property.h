@@ -522,12 +522,18 @@ public:
     {
         wxASSERT_MSG( m_choices.Index( aName ) == wxNOT_FOUND, "Redefined string for a value in ENUM_MAP" );
         m_choices.Add( aName, static_cast<int>( aValue ) );
+        m_reverseMap[ aName ] = aValue;
         return *this;
     }
 
     const wxString& ToString( T value ) const
     {
         return m_choices.GetLabel( static_cast<int>( value ) );
+    }
+
+    const T ToEnum( const wxString value )
+    {
+        return m_reverseMap[value];
     }
 
     const wxPGChoices& Choices() const
@@ -537,6 +543,7 @@ public:
 
 private:
     wxPGChoices m_choices;
+    std::unordered_map<wxString, T> m_reverseMap;
 
     ENUM_MAP<T>()
     {
