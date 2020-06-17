@@ -10,7 +10,7 @@ USE_GIT_TAG=1
 NGSPICE_GIT_TAG="ngspice-31.3"
 NGSPICE_GIT_HASH="33985ae1e5eff44065a52bea45489a1dba0af8f3"
 
-NGSPICE_GIT="git://git.code.sf.net/p/ngspice/ngspice"
+NGSPICE_GIT="https://git.code.sf.net/p/ngspice/ngspice
 
 BUILD_DIR="/tmp/libngspice_so"
 SRC_DIR="${BUILD_DIR}/ngspice"
