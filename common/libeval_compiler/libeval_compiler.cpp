@@ -84,7 +84,7 @@ static const std::string formatOpName( int op )
 }
 
 
-std::string UCODE::UOP::Format() const
+std::string UOP::Format() const
 {
     char str[1024];
 
@@ -102,8 +102,14 @@ std::string UCODE::UOP::Format() const
             sprintf( str, "PUSH STR [%s]", val->AsString().c_str() );
         break;
     }
+    case TR_OP_METHOD_CALL:
+        sprintf(str, "MCALL" );
+        break;
+    case TR_OP_FUNC_CALL:
+        sprintf(str, "FCALL" );
+        break;
     default:
-        sprintf( str, "%s", formatOpName( m_op ).c_str() );
+        sprintf( str, "%s %d", formatOpName( m_op ).c_str(), m_op );
         break;
     }
     return str;
@@ -504,7 +510,7 @@ const std::string formatNode( TREE_NODE* tok )
 void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
 {
     char str[1024];
-    sprintf( str, "\n[%p] ", tok ); //[tok %p] ", tok);
+    sprintf( str, "\n[%p L0:%-20p L1:%-20p] ", tok, tok->leaf[0], tok->leaf[1] ); //[tok %p] ", tok);
     buf += str;
     for( int i = 0; i < 2 * depth; i++ )
         buf += "  ";
@@ -584,8 +590,6 @@ bool COMPILER::generateUCode( UCODE* aCode )
         return visitedNodes.find( node ) != visitedNodes.end();
     };
 
-    UCODE code;
-
     assert( m_tree );
 
     stack.push_back( m_tree );
@@ -594,21 +598,21 @@ bool COMPILER::generateUCode( UCODE* aCode )
 
     dumpNode( dump, m_tree, 0 );
 
-    libeval_dbg(3,"Tree: %s", dump.c_str() );
+    libeval_dbg(3,"Tree dump:\n%s\n\n", dump.c_str() );
 
 
 
     while( !stack.empty() )
     {
         auto node           = stack.back();
-        bool isTerminalNode = true;
-
 
         libeval_dbg( 4, "process node %p [op %d] [stack %d]\n", node, node->op, stack.size() );
 
         // process terminal nodes first
         switch( node->op )
         {
+        case TR_OP_FUNC_CALL:
+            break;
         case TR_STRUCT_REF:
         {
             assert( node->leaf[0]->op == TR_IDENTIFIER );
@@ -623,16 +627,17 @@ bool COMPILER::generateUCode( UCODE* aCode )
 
                     if( m_errorStatus.pendingError )
                     {
-                        printf("varref fail\n");
+                        libeval_dbg(4, "varref fail\n");
                         return false;
                     }
-                    aCode->AddOp( TR_UOP_PUSH_VAR, vref );
+                    node->uop = makeUop( TR_UOP_PUSH_VAR, vref );
+                    node->isTerminal = true;
                     break;
                 }
                 case TR_OP_FUNC_CALL:
                 {
 
-                    //printf("got a method call... [%s], this = %s\n", node->leaf[1]->leaf[0]->value.str, node->leaf[0]->value.str);
+                    libeval_dbg(4, "got a method call... [%s], this = %s\n", node->leaf[1]->leaf[0]->value.str, node->leaf[0]->value.str);
                     auto vref = aCode->createVarRef( this, node->leaf[0]->value.str, "");
                     auto func = aCode->createFuncCall( this, node->leaf[1]->leaf[0]->value.str );
 
@@ -640,6 +645,7 @@ bool COMPILER::generateUCode( UCODE* aCode )
                     {
                         m_errorStatus.pendingError = true;
                         m_errorStatus.stage = ERROR_STATUS::CST_CODEGEN;
+                        libeval_dbg(0, "unable to resolve func %s\n", node->leaf[1]->leaf[0]->value.str );
                         return false;
                         // fixme: generate a message
                     }
@@ -647,13 +653,11 @@ bool COMPILER::generateUCode( UCODE* aCode )
 //                    printf("cfc4 test\n");
   //                  func(nullptr, nullptr, nullptr);
 
-                    aCode->AddOp( TR_OP_METHOD_CALL, func, vref );
-
-                    isTerminalNode = false;
-                    visitedNodes.insert( node );
                     visitedNodes.insert( node->leaf[0] );
-                    //visitedNodes.insert( node->leaf[1]->leaf[1] );
+                    visitedNodes.insert( node->leaf[1]->leaf[0] );
 
+                    node->uop = makeUop( TR_OP_METHOD_CALL, func, vref );
+                    node->isTerminal = false;
 
                     break;
                 }
@@ -677,49 +681,50 @@ bool COMPILER::generateUCode( UCODE* aCode )
                 visitedNodes.insert( son );
             }
 
-            aCode->AddOp( TR_UOP_PUSH_VALUE, value );
+            node->uop = makeUop( TR_UOP_PUSH_VALUE, value );
+            node->isTerminal = true;
 
             break;
         }
         case TR_STRING:
         {
-            aCode->AddOp( TR_UOP_PUSH_VALUE, node->value.str );
+            node->uop = makeUop( TR_UOP_PUSH_VALUE, node->value.str );
+            node->isTerminal = true;
             break;
         }
         default:
-            isTerminalNode = false;
+            node->uop = makeUop( node->op );
             break;
         }
 
-        if( isTerminalNode )
-        {
-            visitedNodes.insert( node );
-            stack.pop_back();
-            continue;
-        }
-
-        if( node->leaf[0] && !visited( node->leaf[0] ) )
+        if( !node->isTerminal && node->leaf[0] && !visited( node->leaf[0] ) )
         {
             stack.push_back( node->leaf[0] );
+            visitedNodes.insert( node->leaf[0] );
+            continue;
         }
-        else if( node->leaf[1] && !visited( node->leaf[1] ) )
+        else if( !node->isTerminal && node->leaf[1] && !visited( node->leaf[1] ) )
         {
             stack.push_back( node->leaf[1] );
+            visitedNodes.insert( node->leaf[1] );
+            continue;
         }
-        else
-        {
-            aCode->AddOp( node->op );
-            visitedNodes.insert( node );
-            stack.pop_back();
-        }
+        
+        visitedNodes.insert( node );
+        if(node->uop)
+            aCode->AddOp(node->uop);
+        stack.pop_back();
+        
     }
+
+    libeval_dbg(2,"DUMp: \n%s\n", aCode->Dump().c_str() );
 
 
     return true;
 }
 
 
-void UCODE::UOP::Exec( CONTEXT* ctx, UCODE* ucode )
+void UOP::Exec( UCODE::CONTEXT* ctx, UCODE* ucode )
 {
 
     switch( m_op )

@@ -44,7 +44,7 @@
 #define TR_OP_BOOL_OR  0x20c
 #define TR_OP_BOOL_NOT 0x100
 #define TR_OP_FUNC_CALL 24
-
+#define TR_OP_METHOD_CALL 25
 #define TR_UOP_PUSH_VAR 1
 #define TR_UOP_PUSH_VALUE 2
 
@@ -92,6 +92,8 @@ enum TOKEN_TYPE_T
 
 #define LIBEVAL_MAX_LITERAL_LENGTH 1024
 
+class UOP;
+
 struct TREE_NODE
 {
     struct value_s
@@ -101,7 +103,9 @@ struct TREE_NODE
     } value;
     int          op;
     TREE_NODE*   leaf[2];
+    UOP* uop;
     bool valid;
+    bool isTerminal;
 };
 
 static inline TREE_NODE* copyNode( TREE_NODE& t )
@@ -113,6 +117,8 @@ static inline TREE_NODE* copyNode( TREE_NODE& t )
     t2->value.type      = t.value.type;
     t2->leaf[0] = t.leaf[0];
     t2->leaf[1] = t.leaf[1];
+    t2->isTerminal = false;
+    t2->uop = nullptr;
     return t2;
 }
 
@@ -127,6 +133,8 @@ static inline TREE_NODE* newNode( int op, int type, std::string value )
     t2->value.type    = type;
     t2->leaf[0] = nullptr;
     t2->leaf[1] = nullptr;
+    t2->isTerminal = false;
+    t2->uop = nullptr;
     return t2;
 }
 
@@ -244,10 +252,12 @@ class VAR_REF
         virtual VALUE GetValue( UCODE* aUcode ) = 0;
     };
 
+
 class UCODE
 {
 public:
-
+    
+    
     class CONTEXT
     {
     public:
@@ -289,36 +299,11 @@ public:
             int    m_memPos = 0;
     };
 
-    class UOP
+    typedef std::function<void(UCODE*, CONTEXT*, void*)> FUNC_PTR;
+
+    void AddOp( UOP* uop )
     {
-    public:
-        UOP( int op, void* arg ) : m_op( op ), m_arg( arg )
-          {};
-
-        void        Exec( CONTEXT* ctx, UCODE *ucode );
-        std::string Format() const;
-
-    private:
-      int                 m_op;
-      void *m_arg;
-    };
-
-    void AddOp( int op, double value )
-    {
-        auto uop = new UOP( op, new VALUE( value ) );
-        m_ucode.push_back( uop );
-    }
-
-    void AddOp( int op, std::string value )
-    {
-        auto uop = new UOP( op, new VALUE( value ) );
-        m_ucode.push_back( uop );
-    }
-
-    void AddOp( int op, VAR_REF* aRef = nullptr )
-    {
-        auto uop = new UOP( op, aRef );
-        m_ucode.push_back( uop );
+        m_ucode.push_back(uop);
     }
 
     VALUE* Run();
@@ -330,9 +315,32 @@ public:
         return nullptr;
     };
 
+    virtual FUNC_PTR createFuncCall( COMPILER* aCompiler, const std::string& name )
+    {
+        return nullptr;
+    };
+
 private:
     std::vector<UOP*> m_ucode;
 };
+
+
+class UOP
+    {
+    public:
+        UOP( int op, void* arg ) : m_op( op ), m_arg( arg )
+          {};
+        UOP( int op, UCODE::FUNC_PTR func, void *arg ) : m_op( op ), m_arg(arg), m_func( func )
+          {};
+
+        void        Exec( UCODE::CONTEXT* ctx, UCODE *ucode );
+        std::string Format() const;
+
+    private:
+      int                 m_op;
+      void *m_arg;
+      UCODE::FUNC_PTR m_func;
+    };
 
 class TOKENIZER
 {
@@ -439,11 +447,36 @@ protected:
     /* Used by processing loop */
     void parse( int token, TREE_NODE value );
 
-    void* m_parser; // the current lemon parser state machine
     int resolveUnits();
+
+    UOP* makeUop( int op, double value )
+    {
+        auto uop = new UOP( op, new VALUE( value ) );
+        return uop;
+    }
+
+    UOP* makeUop( int op, std::string value )
+    {
+        auto uop = new UOP( op, new VALUE( value ) );
+        return uop;
+    }
+
+    UOP* makeUop( int op, VAR_REF* aRef = nullptr )
+    {
+        auto uop = new UOP( op, aRef );
+        return uop;
+    }
+
+    UOP* makeUop( int op, UCODE::FUNC_PTR aFunc, void *arg = nullptr )
+    {
+        auto uop = new UOP( op, aFunc, arg );
+        return uop;
+    }
+
 
     /* Token state for input string. */
     
+    void* m_parser; // the current lemon parser state machine
     TOKENIZER m_tokenizer;
     char      m_localeDecimalSeparator;
 
