@@ -47,15 +47,12 @@ class PCB_EXPR_BUILTIN_FUNCTIONS
 
         static void onLayer( LIBEVAL::UCODE* aUcode, LIBEVAL::UCODE::CONTEXT* aCtx, void *self )
         {
-            
-            //auto item  = ucode->GetItem( self );
             auto arg = aCtx->Pop();
-            printf("SP: %d\n", aCtx->SP() );
-
-            printf("OnLayer('%s') called!\n", arg->AsString().c_str() );
-
+            auto vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+            auto conv = ENUM_MAP<PCB_LAYER_ID>::Instance();
+            bool value = vref->GetObject(aUcode)->IsOnLayer( conv.ToEnum( arg->AsString() ) );
             auto rv =  aCtx->AllocValue();
-            rv->Set( 1.0 );
+            rv->Set( value ? 1.0 : 0.0 );
             aCtx->Push( rv );
         }
 };
@@ -63,7 +60,6 @@ class PCB_EXPR_BUILTIN_FUNCTIONS
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
     m_funcs[ "onlayer" ] = onLayer;
-    //m_funcs[ "onlayer" ]( nullptr, nullptr, nullptr );
 }
 
 BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::UCODE* aUcode ) const
