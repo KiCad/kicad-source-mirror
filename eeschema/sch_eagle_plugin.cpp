@@ -136,7 +136,7 @@ wxString SCH_EAGLE_PLUGIN::getLibName()
     if( m_libName.IsEmpty() )
     {
         // Try to come up with a meaningful name
-        m_libName = m_kiway->Prj().GetProjectName();
+        m_libName = m_schematic->Prj().GetProjectName();
 
         if( m_libName.IsEmpty() )
         {
@@ -157,7 +157,7 @@ wxString SCH_EAGLE_PLUGIN::getLibName()
 
 wxFileName SCH_EAGLE_PLUGIN::getLibFileName()
 {
-    wxFileName fn( m_kiway->Prj().GetProjectPath(), getLibName(), KiCadSymbolLibFileExtension );
+    wxFileName fn( m_schematic->Prj().GetProjectPath(), getLibName(), KiCadSymbolLibFileExtension );
 
     return fn;
 }
@@ -428,7 +428,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
         m_rootSheet->SetScreen( screen );
     }
 
-    SYMBOL_LIB_TABLE* libTable = m_kiway->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libTable = m_schematic->Prj().SchSymbolLibTable();
 
     wxCHECK_MSG( libTable, NULL, "Could not load symbol lib table." );
 
@@ -449,8 +449,8 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
                 new SYMBOL_LIB_TABLE_ROW( getLibName(), libTableUri, wxString( "KiCad" ) ) );
 
         // Save project symbol library table.
-        wxFileName fn(
-                m_kiway->Prj().GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+        wxFileName fn( m_schematic->Prj().GetProjectPath(),
+                SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
         // So output formatter goes out of scope and closes the file before reloading.
         {
@@ -459,8 +459,8 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
         }
 
         // Relaod the symbol library table.
-        m_kiway->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
-        m_kiway->Prj().SchSymbolLibTable();
+        m_schematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
+        m_schematic->Prj().SchSymbolLibTable();
     }
 
     // Retrieve the root as current node
@@ -1278,7 +1278,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     }
 
     // Save the pin positions
-    SYMBOL_LIB_TABLE& schLibTable = *m_kiway->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE& schLibTable = *m_schematic->Prj().SchSymbolLibTable();
     LIB_PART* libSymbol = schLibTable.LoadSymbol( component->GetLibId() );
 
     wxCHECK( libSymbol, /*void*/ );
