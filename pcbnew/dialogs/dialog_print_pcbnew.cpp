@@ -107,7 +107,6 @@ DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent, PCBNEW_P
     DIALOG_PRINT_GENERIC( aParent, aSettings ), m_parent( aParent )
 {
     m_config = Kiface().KifaceSettings();
-    memset( m_layers, 0, sizeof( m_layers ) );
 
     createExtraOptions();
     createLeftPanel();
