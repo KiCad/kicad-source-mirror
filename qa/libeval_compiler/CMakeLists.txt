@@ -24,34 +24,16 @@
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
-find_program(LEMON lemon)
-
-if( LEMON )
-
-    macro( generate_lemon_grammar TGT_NAME GRAMMAR_LEMON GRAMMAR_C )
-        add_custom_target( ${TGT_NAME}
-            DEPENDS ${GRAMMAR_LEMON}
-            COMMAND ${LEMON} -q ${GRAMMAR_LEMON}
-            COMMENT "Running Lemon on ${GRAMMAR_LEMON} -> ${GRAMMAR_C}"
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        )
-    endmacro()
-
-    generate_lemon_grammar( libeval_grammar2 grammar.lemon grammar.c )
-
-endif()
-
 add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW)
 
 if( BUILD_GITHUB_PLUGIN )
     set( GITHUB_PLUGIN_LIBRARIES github_plugin )
 endif()
 
-add_dependencies( pnsrouter pcbcommon pcad2kicadpcb libeval_grammar2 ${GITHUB_PLUGIN_LIBRARIES} )
+add_dependencies( pnsrouter pcbcommon pcad2kicadpcb ${GITHUB_PLUGIN_LIBRARIES} )
 
 add_executable( libeval_compiler_test
     libeval_compiler_test.cpp
-    libeval_compiler.cpp
     ../qa_utils/mocks.cpp
     ../../common/base_units.cpp
     ../../3d-viewer/3d_viewer/3d_viewer_settings.cpp
