@@ -64,6 +64,11 @@ class PROGRESS_REPORTER
         void Report( const wxString& aMessage );
 
         /**
+         * Set the progress value to aProgress (0..1)
+         */
+        void SetCurrentProgress( double aProgress );
+
+        /**
          * Fix the value thar gives the 100 precent progress bar length
          * (inside the current virtual zone)
          */

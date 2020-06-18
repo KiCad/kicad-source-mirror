@@ -61,6 +61,12 @@ void PROGRESS_REPORTER::SetMaxProgress( int aMaxProgress )
     m_maxProgress.store( aMaxProgress );
 }
 
+void PROGRESS_REPORTER::SetCurrentProgress( double aProgress )
+{
+    m_maxProgress.store( 10000 );
+    m_progress.store( (int) (aProgress * 10000.0) );
+}
+
 
 void PROGRESS_REPORTER::AdvanceProgress()
 {
