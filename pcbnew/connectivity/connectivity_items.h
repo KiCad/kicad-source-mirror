@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2018  KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020  KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -79,6 +79,11 @@ public:
     const VECTOR2I& Pos() const
     {
         return m_pos;
+    }
+
+    const unsigned int Dist( const CN_ANCHOR& aSecond )
+    {
+        return ( m_pos - aSecond.Pos() ).EuclideanNorm();
     }
 
     /// Returns tag, common identifier for connected nodes

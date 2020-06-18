@@ -148,6 +148,9 @@ protected:
     ///> Recomputes ratsnest from scratch.
     void compute();
 
+    ///> Compute the minimum spanning tree using Kruskal's algorithm
+    void kruskalMST( std::priority_queue<CN_EDGE> &aEdges );
+
     ///> Vector of nodes
     std::vector<CN_ANCHOR_PTR> m_nodes;
 

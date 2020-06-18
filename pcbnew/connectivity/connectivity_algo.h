@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -58,19 +59,32 @@ class PROGRESS_REPORTER;
 class CN_EDGE
 {
 public:
-    CN_EDGE() {};
-    CN_EDGE( CN_ANCHOR_PTR aSource, CN_ANCHOR_PTR aTarget, int aWeight = 0 ) :
-        m_source( aSource ),
-        m_target( aTarget ),
-        m_weight( aWeight ) {}
+    CN_EDGE()
+            : m_weight( 0 ), m_visible( true )
+    {}
+
+    CN_EDGE( CN_ANCHOR_PTR aSource, CN_ANCHOR_PTR aTarget, unsigned aWeight = 0 )
+            : m_source( aSource ), m_target( aTarget ), m_weight( aWeight ), m_visible( true )
+    {}
+
+    /**
+     * This sort operator implements the reverse sort such that the smallest weight will be placed first
+     * in a priority queue
+     * @param aOther Other edge to compare
+     * @return true if our weight is larger than the other weight
+     */
+    bool operator<( CN_EDGE aOther ) const
+    {
+        return m_weight > aOther.m_weight;
+    }
 
     CN_ANCHOR_PTR GetSourceNode() const { return m_source; }
     CN_ANCHOR_PTR GetTargetNode() const { return m_target; }
-    int GetWeight() const { return m_weight; }
+    unsigned GetWeight() const { return m_weight; }
 
     void SetSourceNode( const CN_ANCHOR_PTR& aNode ) { m_source = aNode; }
     void SetTargetNode( const CN_ANCHOR_PTR& aNode ) { m_target = aNode; }
-    void SetWeight( unsigned int weight ) { m_weight = weight; }
+    void SetWeight( unsigned weight ) { m_weight = weight; }
 
     void SetVisible( bool aVisible )
     {
@@ -95,8 +109,8 @@ public:
 private:
     CN_ANCHOR_PTR m_source;
     CN_ANCHOR_PTR m_target;
-    unsigned int m_weight = 0;
-    bool m_visible = true;
+    unsigned m_weight;
+    bool m_visible;
 };
 
 class CN_CONNECTIVITY_ALGO

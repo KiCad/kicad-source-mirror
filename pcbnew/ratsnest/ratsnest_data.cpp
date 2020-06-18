@@ -2,6 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -36,117 +38,97 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <cassert>
 #include <algorithm>
+#include <cassert>
 #include <limits>
+#include <queue>
 
-static uint64_t getDistance( const CN_ANCHOR_PTR& aNode1, const CN_ANCHOR_PTR& aNode2 )
+class disjoint_set
 {
-    double  dx = ( aNode1->Pos().x - aNode2->Pos().x );
-    double  dy = ( aNode1->Pos().y - aNode2->Pos().y );
 
-    return sqrt( dx * dx + dy * dy );
-}
-
-
-static bool sortWeight( const CN_EDGE& aEdge1, const CN_EDGE& aEdge2 )
-{
-    return aEdge1.GetWeight() < aEdge2.GetWeight();
-}
-
-
-static const std::vector<CN_EDGE> kruskalMST( std::list<CN_EDGE>& aEdges,
-        std::vector<CN_ANCHOR_PTR>& aNodes )
-{
-    unsigned int    nodeNumber = aNodes.size();
-    unsigned int    mstExpectedSize = nodeNumber - 1;
-    unsigned int    mstSize = 0;
-    bool ratsnestLines = false;
-
-    // The output
-    std::vector<CN_EDGE> mst;
-
-    // Set tags for marking cycles
-    std::unordered_map<CN_ANCHOR_PTR, int> tags;
-    unsigned int tag = 0;
-
-    for( auto& node : aNodes )
+public:
+    disjoint_set( size_t size )
     {
-        node->SetTag( tag );
-        tags[node] = tag++;
+        m_data.resize( size );
+        m_depth.resize( size, 0 );
+
+        for( size_t i = 0; i < size; i++ )
+            m_data[i]  = i;
     }
 
-    // Lists of nodes connected together (subtrees) to detect cycles in the graph
-    std::vector<std::list<int> > cycles( nodeNumber );
-
-    for( unsigned int i = 0; i < nodeNumber; ++i )
-        cycles[i].push_back( i );
-
-    // Kruskal algorithm requires edges to be sorted by their weight
-    aEdges.sort( sortWeight );
-
-    while( mstSize < mstExpectedSize && !aEdges.empty() )
+    int find( int aVal )
     {
-        //printf("mstSize %d %d\n", mstSize, mstExpectedSize);
-        auto& dt = aEdges.front();
+        int root = aVal;
 
-        int srcTag  = tags[dt.GetSourceNode()];
-        int trgTag  = tags[dt.GetTargetNode()];
+        while( m_data[root] != root )
+            root = m_data[root];
 
-        // Check if by adding this edge we are going to join two different forests
-        if( srcTag != trgTag )
+        // Compress the path
+        while( m_data[aVal] != aVal )
         {
-            // Because edges are sorted by their weight, first we always process connected
-            // items (weight == 0). Once we stumble upon an edge with non-zero weight,
-            // it means that the rest of the lines are ratsnest.
-            if( !ratsnestLines && dt.GetWeight() != 0 )
-                ratsnestLines = true;
+            auto& tmp = m_data[aVal];
+            aVal      = tmp;
+            tmp       = root;
+        }
 
-            // Update tags
-            if( ratsnestLines )
+        return root;
+    }
+
+
+    bool unite( int aVal1, int aVal2 )
+    {
+        aVal1 = find( aVal1 );
+        aVal2 = find( aVal2 );
+
+        if( aVal1 != aVal2 )
+        {
+            if( m_depth[aVal1] < m_depth[aVal2] )
             {
-                for( auto it = cycles[trgTag].begin(); it != cycles[trgTag].end(); ++it )
-                {
-                    tags[aNodes[*it]] = srcTag;
-                }
-
-                // Do a copy of edge, but make it RN_EDGE_MST. In contrary to RN_EDGE,
-                // RN_EDGE_MST saves both source and target node and does not require any other
-                // edges to exist for getting source/target nodes
-                CN_EDGE newEdge ( dt.GetSourceNode(), dt.GetTargetNode(), dt.GetWeight() );
-
-                assert( newEdge.GetSourceNode()->GetTag() != newEdge.GetTargetNode()->GetTag() );
-                assert( newEdge.GetWeight() > 0 );
-
-                mst.push_back( newEdge );
-                ++mstSize;
+                m_data[aVal1] = aVal2;
             }
             else
             {
-                // for( it = cycles[trgTag].begin(), itEnd = cycles[trgTag].end(); it != itEnd; ++it )
-                // for( auto it : cycles[trgTag] )
-                for( auto it = cycles[trgTag].begin(); it != cycles[trgTag].end(); ++it )
-                {
-                    tags[aNodes[*it]] = srcTag;
-                    aNodes[*it]->SetTag( srcTag );
-                }
+                m_data[aVal2] = aVal1;
 
-                // Processing a connection, decrease the expected size of the ratsnest MST
-                --mstExpectedSize;
+                if( m_depth[aVal1] == m_depth[aVal2] )
+                    m_depth[aVal1]++;
             }
 
-            // Move nodes that were marked with old tag to the list marked with the new tag
-            cycles[srcTag].splice( cycles[srcTag].end(), cycles[trgTag] );
+            return true;
         }
 
-        // Remove the edge that was just processed
-        aEdges.erase( aEdges.begin() );
+        return false;
     }
 
-    // Probably we have discarded some of edges, so reduce the size
-    mst.resize( mstSize );
+private:
+    std::vector<int> m_data;
+    std::vector<int> m_depth;
+};
 
-    return mst;
+void RN_NET::kruskalMST( std::priority_queue<CN_EDGE> &aEdges )
+{
+    disjoint_set dset( m_nodes.size() );
+
+    m_rnEdges.clear();
+
+    for( size_t i = 0; i < m_nodes.size(); i++ )
+        m_nodes[i]->SetTag( i );
+
+    while( !aEdges.empty() )
+    {
+        auto& tmp = aEdges.top();
+
+        int u = tmp.GetSourceNode()->GetTag();
+        int v = tmp.GetTargetNode()->GetTag();
+
+        if( dset.unite( u, v ) )
+        {
+            if( tmp.GetWeight() > 0 )
+                m_rnEdges.push_back( tmp );
+        }
+
+        aEdges.pop();
+    }
 }
 
 
@@ -201,9 +183,9 @@ public:
         m_allNodes.push_back( aNode );
     }
 
-    const std::list<CN_EDGE> Triangulate()
+    const std::priority_queue<CN_EDGE> Triangulate()
     {
-        std::list<CN_EDGE> mstEdges;
+        std::priority_queue<CN_EDGE> mstEdges;
         std::list<hed::EDGE_PTR> triangEdges;
         std::vector<hed::NODE_PTR> triNodes;
 
@@ -270,7 +252,7 @@ public:
             {
                 auto src = m_allNodes[ triNodes[i]->Id() ];
                 auto dst = m_allNodes[ triNodes[i + 1]->Id() ];
-                mstEdges.emplace_back( src, dst, getDistance( src, dst ) );
+                mstEdges.emplace( src, dst, src->Dist( *dst ) );
             }
         }
         else
@@ -284,7 +266,7 @@ public:
                 auto    src = m_allNodes[ e->GetSourceNode()->Id() ];
                 auto    dst = m_allNodes[ e->GetTargetNode()->Id() ];
 
-                mstEdges.emplace_back( src, dst, getDistance( src, dst ) );
+                mstEdges.emplace( src, dst, src->Dist( *dst ) );
             }
         }
 
@@ -305,7 +287,7 @@ public:
                 const auto& prevNode    = chain[j - 1];
                 const auto& curNode     = chain[j];
                 int weight = prevNode->GetCluster() != curNode->GetCluster() ? 1 : 0;
-                mstEdges.emplace_back( prevNode, curNode, weight );
+                mstEdges.emplace( prevNode, curNode, weight );
             }
         }
 
@@ -367,13 +349,13 @@ void RN_NET::compute()
     #endif
 
     for( const auto& e : m_boardEdges )
-        triangEdges.push_back( e );
+        triangEdges.push( e );
 
 // Get the minimal spanning tree
 #ifdef PROFILE
     PROF_COUNTER cnt2("mst");
 #endif
-    m_rnEdges = kruskalMST( triangEdges, m_nodes );
+    kruskalMST( triangEdges );
 #ifdef PROFILE
     cnt2.Show();
 #endif
@@ -442,19 +424,22 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
 
     for( const auto& nodeA : m_nodes )
     {
+        if( nodeA->GetNoLine() )
+            continue;
+
         for( const auto& nodeB : aOtherNet.m_nodes )
         {
-            if( !nodeA->GetNoLine() )
-            {
-                auto squaredDist = (nodeA->Pos() - nodeB->Pos() ).SquaredEuclideanNorm();
+            if( nodeB->GetNoLine() )
+                continue;
 
-                if( squaredDist < distMax )
-                {
-                    rv = true;
-                    distMax = squaredDist;
-                    aNode1  = nodeA;
-                    aNode2  = nodeB;
-                }
+            auto squaredDist = ( nodeA->Pos() - nodeB->Pos() ).SquaredEuclideanNorm();
+
+            if( squaredDist < distMax )
+            {
+                rv      = true;
+                distMax = squaredDist;
+                aNode1  = nodeA;
+                aNode2  = nodeB;
             }
         }
     }
