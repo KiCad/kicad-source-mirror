@@ -67,8 +67,8 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_LINE_CHAIN& aOutline ) :
 }
 
 
-SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther, bool aDeepCopy ) :
-    SHAPE( SH_POLY_SET ), m_polys( aOther.m_polys )
+SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther ) :
+    SHAPE( aOther ), m_polys( aOther.m_polys )
 {
     if( aOther.IsTriangulationUpToDate() )
     {
@@ -78,6 +78,12 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther, bool aDeepCopy ) :
 
         m_hash = aOther.GetHash();
         m_triangulationValid = true;
+    }
+    else
+    {
+        m_triangulationValid = false;
+        m_hash = MD5_HASH();
+        m_triangulatedPolys.clear();
     }
 }
 
@@ -1519,6 +1525,11 @@ void SHAPE_POLY_SET::Move( const VECTOR2I& aVector )
         for( SHAPE_LINE_CHAIN& path : poly )
             path.Move( aVector );
     }
+
+    for( auto& tri : m_triangulatedPolys )
+        tri->Move( aVector );
+
+    m_hash = checksum();
 }
 
 
@@ -1873,11 +1884,19 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
 {
     static_cast<SHAPE&>(*this) = aOther;
     m_polys = aOther.m_polys;
-
-    // reset poly cache:
-    m_hash = MD5_HASH{};
-    m_triangulationValid = false;
     m_triangulatedPolys.clear();
+    m_triangulationValid = false;
+
+    if( aOther.IsTriangulationUpToDate() )
+    {
+        for( unsigned i = 0; i < aOther.TriangulatedPolyCount(); i++ )
+            m_triangulatedPolys.push_back(
+                    std::make_unique<TRIANGULATED_POLYGON>( *aOther.TriangulatedPolygon( i ) ) );
+
+        m_hash = aOther.GetHash();
+        m_triangulationValid = true;
+    }
+
     return *this;
 }
 

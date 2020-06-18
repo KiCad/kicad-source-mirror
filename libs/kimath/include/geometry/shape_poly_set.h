@@ -119,6 +119,12 @@ class SHAPE_POLY_SET : public SHAPE
                 return m_vertices.size();
             }
 
+            void Move( const VECTOR2I& aVec )
+            {
+                for( auto& vertex : m_vertices )
+                    vertex += aVec;
+            }
+
         private:
 
             std::deque<TRI> m_triangles;
@@ -448,9 +454,8 @@ class SHAPE_POLY_SET : public SHAPE
          * Copy constructor SHAPE_POLY_SET
          * Performs a deep copy of \p aOther into \p this.
          * @param aOther is the SHAPE_POLY_SET object that will be copied.
-         * @param aDeepCopy if true, make new copies of the triangulated unique_ptr vector
          */
-        SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther, bool aDeepCopy = false );
+        SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther );
 
         ~SHAPE_POLY_SET();
 

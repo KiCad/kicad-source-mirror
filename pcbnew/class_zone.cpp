@@ -107,10 +107,11 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
     SetHatchStyle( aOther.GetHatchStyle() );
     SetHatchPitch( aOther.GetHatchPitch() );
     m_HatchLines = aOther.m_HatchLines;     // copy vector <SEG>
-    m_FilledPolysList.RemoveAllContours();
-    m_FilledPolysList.Append( aOther.m_FilledPolysList );
-    m_FillSegmList.clear();
-    m_FillSegmList = aOther.m_FillSegmList;
+
+    m_FilledPolysList = aOther.m_FilledPolysList;
+    m_RawPolysList = aOther.m_RawPolysList;
+    m_filledPolysHash = aOther.m_filledPolysHash;
+    m_FillSegmList = aOther.m_FillSegmList;      // vector <> copy
 
     m_HatchFillTypeThickness = aOther.m_HatchFillTypeThickness;
     m_HatchFillTypeGap = aOther.m_HatchFillTypeGap;
@@ -158,7 +159,9 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_PadConnection = aZone.m_PadConnection;
     m_ThermalReliefGap = aZone.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
-    m_FilledPolysList.Append( aZone.m_FilledPolysList );
+    m_FilledPolysList = aZone.m_FilledPolysList;
+    m_RawPolysList = aZone.m_RawPolysList;
+    m_filledPolysHash = aZone.m_filledPolysHash;
     m_FillSegmList = aZone.m_FillSegmList;      // vector <> copy
 
     m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;

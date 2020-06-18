@@ -875,7 +875,7 @@ void BOARD_ADAPTER::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneC
                                                     PCB_LAYER_ID aLayerId )
 {
     // Copy the polys list because we have to simplify it
-    SHAPE_POLY_SET polyList = SHAPE_POLY_SET( aZoneContainer->GetFilledPolysList(), true );
+    SHAPE_POLY_SET polyList = SHAPE_POLY_SET( aZoneContainer->GetFilledPolysList() );
 
     // This convert the poly in outline and holes
     Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits,
