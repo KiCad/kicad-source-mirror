@@ -59,7 +59,7 @@ void DRC_RULES_PARSER::initLayerMap()
         std::string untranslated = TO_UTF8( wxString( LSET::Name( PCB_LAYER_ID( layer ) ) ) );
         m_layerMap[ untranslated ] = PCB_LAYER_ID( layer );
 
-        std::string userName = m_board->GetLayerName( PCB_LAYER_ID( layer ) );
+        std::string userName = m_board->GetLayerName( PCB_LAYER_ID( layer ) ).ToStdString();
         m_layerMap[ userName ] = PCB_LAYER_ID( layer );
     }
 }
