@@ -40,7 +40,10 @@ public:
 private:
     void testPadClearances();
     void testTrackClearances();
+    void testCopperTextAndGraphics();
+    void testZones();
 
+    void testCopperDrawItem( BOARD_ITEM* aItem );
     void doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt,
                       TRACKS::iterator aEndIt, bool aTestZones );
     bool doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
@@ -54,18 +57,49 @@ private:
                    int aAllowedDist, int* actualDist );
 
     wxPoint getLocation( TRACK* aTrack, const SEG& aConflictSeg );
+    wxPoint getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone );
 
     BOARD* m_board;
     int m_largestClearance;
     SHAPE_POLY_SET             m_boardOutline;   // The board outline including cutouts
     bool                       m_boardOutlineValid;
-    
-
 };
 
 };
 
 const int UI_EPSILON = Mils2iu( 5 );
+
+wxPoint test::DRC_TEST_PROVIDER_CLEARANCE::getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone )
+{
+    SHAPE_POLY_SET* conflictOutline;
+
+    if( aConflictZone->IsFilled() )
+        conflictOutline = const_cast<SHAPE_POLY_SET*>( &aConflictZone->GetFilledPolysList() );
+    else
+        conflictOutline = aConflictZone->Outline();
+
+    wxPoint pt1 = aTrack->GetPosition();
+    wxPoint pt2 = aTrack->GetEnd();
+
+    // If the mid-point is in the zone, then that's a fine place for the marker
+    if( conflictOutline->SquaredDistance( ( pt1 + pt2 ) / 2 ) == 0 )
+        return ( pt1 + pt2 ) / 2;
+
+    // Otherwise do a binary search for a "good enough" marker location
+    else
+    {
+        while( GetLineLength( pt1, pt2 ) > UI_EPSILON )
+        {
+            if( conflictOutline->SquaredDistance( pt1 ) < conflictOutline->SquaredDistance( pt2 ) )
+                pt2 = ( pt1 + pt2 ) / 2;
+            else
+                pt1 = ( pt1 + pt2 ) / 2;
+        }
+
+        // Once we're within UI_EPSILON pt1 and pt2 are "equivalent"
+        return pt1;
+    }
+}
 
 wxPoint test::DRC_TEST_PROVIDER_CLEARANCE::getLocation( TRACK* aTrack, const SEG& aConflictSeg )
 {
@@ -93,13 +127,266 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE::Run()
     m_board = m_drcEngine->GetBoard();
     m_largestClearance = bds->GetBiggestClearanceValue();
 
-    ReportStage(_("Testing pad copper clerances"), 0, 2 );
+    ReportStage( ("Testing pad copper clerances"), 0, 2 );
     testPadClearances();
-    ReportStage(_("Testing track/via copper clerances"), 0, 2 );
+    ReportStage( ("Testing track/via copper clerances"), 1, 2 );
     testTrackClearances();
+    ReportStage( ("Testing copper drawing/text clerances"), 1, 2 );
+    testCopperTextAndGraphics();
+    ReportStage( ("Testing copper zone clearances"), 1, 2 );
+    testZones();
 
     return true;
 }
+
+void test::DRC_TEST_PROVIDER_CLEARANCE::testCopperTextAndGraphics()
+{
+    // Test copper items for clearance violations with vias, tracks and pads
+
+    for( BOARD_ITEM* brdItem : m_board->Drawings() )
+    {
+        if( IsCopperLayer( brdItem->GetLayer() ) )
+            testCopperDrawItem( brdItem );
+    }
+
+    for( MODULE* module : m_board->Modules() )
+    {
+        TEXTE_MODULE& ref = module->Reference();
+        TEXTE_MODULE& val = module->Value();
+
+        if( ref.IsVisible() && IsCopperLayer( ref.GetLayer() ) )
+            testCopperDrawItem( &ref );
+
+        if( val.IsVisible() && IsCopperLayer( val.GetLayer() ) )
+            testCopperDrawItem( &val );
+
+        if( module->IsNetTie() )
+            continue;
+
+        for( BOARD_ITEM* item : module->GraphicalItems() )
+        {
+            if( IsCopperLayer( item->GetLayer() ) )
+            {
+                if( item->Type() == PCB_MODULE_TEXT_T && ( (TEXTE_MODULE*) item )->IsVisible() )
+                    testCopperDrawItem( item );
+                else if( item->Type() == PCB_MODULE_EDGE_T )
+                    testCopperDrawItem( item );
+            }
+        }
+    }
+}
+
+
+void test::DRC_TEST_PROVIDER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
+{
+    EDA_RECT         bbox;
+    std::vector<SEG> itemShape;
+    int              itemWidth;
+    DRAWSEGMENT*     drawItem = dynamic_cast<DRAWSEGMENT*>( aItem );
+    EDA_TEXT*        textItem = dynamic_cast<EDA_TEXT*>( aItem );
+
+    if( drawItem )
+    {
+        bbox = drawItem->GetBoundingBox();
+        itemWidth = drawItem->GetWidth();
+
+        switch( drawItem->GetShape() )
+        {
+        case S_ARC:
+        {
+            SHAPE_ARC arc( drawItem->GetCenter(), drawItem->GetArcStart(),
+                           (double) drawItem->GetAngle() / 10.0 );
+
+            SHAPE_LINE_CHAIN l = arc.ConvertToPolyline();
+
+            for( int i = 0; i < l.SegmentCount(); i++ )
+                itemShape.push_back( l.Segment( i ) );
+
+            break;
+        }
+
+        case S_SEGMENT:
+            itemShape.emplace_back( SEG( drawItem->GetStart(), drawItem->GetEnd() ) );
+            break;
+
+        case S_CIRCLE:
+        {
+            // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
+            SHAPE_ARC circle( drawItem->GetCenter(), drawItem->GetEnd(), 360.0 );
+
+            SHAPE_LINE_CHAIN l = circle.ConvertToPolyline();
+
+            for( int i = 0; i < l.SegmentCount(); i++ )
+                itemShape.push_back( l.Segment( i ) );
+
+            break;
+        }
+
+        case S_CURVE:
+        {
+            drawItem->RebuildBezierToSegmentsPointsList( drawItem->GetWidth() );
+            wxPoint start_pt = drawItem->GetBezierPoints()[0];
+
+            for( unsigned int jj = 1; jj < drawItem->GetBezierPoints().size(); jj++ )
+            {
+                wxPoint end_pt = drawItem->GetBezierPoints()[jj];
+                itemShape.emplace_back( SEG( start_pt, end_pt ) );
+                start_pt = end_pt;
+            }
+
+            break;
+        }
+
+        case S_POLYGON:
+        {
+            SHAPE_LINE_CHAIN l = drawItem->GetPolyShape().Outline( 0 );
+
+            for( int i = 0; i < l.SegmentCount(); i++ )
+                itemShape.push_back( l.Segment( i ) );
+        }
+            break;
+
+        default:
+            wxFAIL_MSG( "unknown shape type" );
+            break;
+        }
+    }
+    else if( textItem  )
+    {
+        bbox = textItem->GetTextBox();
+        itemWidth = textItem->GetEffectiveTextPenWidth();
+
+        std::vector<wxPoint> textShape;
+        textItem->TransformTextShapeToSegmentList( textShape );
+
+        for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
+            itemShape.emplace_back( SEG( textShape[jj], textShape[jj+1] ) );
+    }
+    else
+    {
+        wxFAIL_MSG( "unknown item type in testCopperDrawItem()" );
+        return;
+    }
+
+    SHAPE_RECT rect_area( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
+
+    if( itemShape.empty() )
+        return;
+
+    // Test tracks and vias
+    for( auto track : m_board->Tracks() )
+    {
+        if( !track->IsOnLayer( aItem->GetLayer() ) )
+            continue;
+
+        auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aItem, track );
+        auto minClearance = rule->GetConstraint().GetValue().Min();
+        int widths = ( track->GetWidth() + itemWidth ) / 2;
+        int center2centerAllowed = minClearance + widths;
+
+        SEG trackSeg( track->GetStart(), track->GetEnd() );
+
+        // Fast test to detect a track segment candidate inside the text bounding box
+        if( !rect_area.Collide( trackSeg, center2centerAllowed ) )
+            continue;
+
+        OPT<SEG>    minSeg;
+        SEG::ecoord center2center_squared = 0;
+
+        for( const SEG& itemSeg : itemShape )
+        {
+            SEG::ecoord thisDist_squared = trackSeg.SquaredDistance( itemSeg );
+
+            if( !minSeg || thisDist_squared < center2center_squared )
+            {
+                minSeg = itemSeg;
+                center2center_squared = thisDist_squared;
+            }
+        }
+
+        if( center2center_squared < SEG::Square( center2centerAllowed ) )
+        {
+            int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
+            int       errorCode = ( track->Type() == PCB_VIA_T ) ? DRCE_VIA_NEAR_COPPER
+                                                                 : DRCE_TRACK_NEAR_COPPER;
+            DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
+            wxString msg;
+            msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                          rule->GetName(),
+                          MessageTextFromValue( userUnits(), minClearance, true ),
+                          MessageTextFromValue( userUnits(), actual, true ) );
+
+            drcItem->SetErrorMessage( msg );
+            drcItem->SetItems( track, aItem );
+            drcItem->SetViolatingRule( rule );
+
+            wxPoint     pos = getLocation( track, minSeg.get() );
+            ReportWithMarker( drcItem, pos );
+        }
+    }
+
+    // Test pads
+    for( auto pad : m_board->GetPads() )
+    {
+        if( !pad->IsOnLayer( aItem->GetLayer() ) )
+            continue;
+
+        // Graphic items are allowed to act as net-ties within their own footprint
+        if( drawItem && pad->GetParent() == drawItem->GetParent() )
+            continue;
+
+        auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aItem, pad );
+        auto minClearance = rule->GetConstraint().GetValue().Min();
+
+        int widths = itemWidth / 2;
+        int center2centerAllowed = minClearance + widths;
+
+        // Fast test to detect a pad candidate inside the text bounding box
+        // Finer test (time consumming) is made only for pads near the text.
+        int      bb_radius = pad->GetBoundingRadius() + minClearance;
+        VECTOR2I shape_pos( pad->ShapePos() );
+
+        if( !rect_area.Collide( SEG( shape_pos, shape_pos ), bb_radius ) )
+            continue;
+
+        SHAPE_POLY_SET padOutline;
+        pad->TransformShapeWithClearanceToPolygon( padOutline, 0 );
+
+        OPT<SEG>    minSeg;
+        SEG::ecoord center2center_squared = 0;
+
+        for( const SEG& itemSeg : itemShape )
+        {
+            SEG::ecoord thisCenter2center_squared = padOutline.SquaredDistance( itemSeg );
+
+            if( !minSeg || thisCenter2center_squared < center2center_squared )
+            {
+                minSeg = itemSeg;
+                center2center_squared = thisCenter2center_squared;
+            }
+        }
+
+        if( center2center_squared < SEG::Square( center2centerAllowed ) )
+        {
+            int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_COPPER );
+
+            wxString msg;
+
+            msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                          rule->GetName(),
+                          MessageTextFromValue( userUnits(), minClearance, true ),
+                          MessageTextFromValue( userUnits(), actual, true ) );
+
+            drcItem->SetErrorMessage( msg );
+            drcItem->SetItems( pad, aItem );
+            drcItem->SetViolatingRule( rule );
+
+            ReportWithMarker( drcItem, pad->GetPosition() );
+        }
+    }
+}
+
 
 void test::DRC_TEST_PROVIDER_CLEARANCE::testTrackClearances()
 {
@@ -109,6 +396,7 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::testTrackClearances()
     int               deltamax = count/delta;
 
     ReportProgress(0.0);
+    ReportAux("Testing %d tracks...", count );
 
     int ii = 0;
     count = 0;
@@ -124,7 +412,7 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::testTrackClearances()
         }
 
         // Test new segment against tracks and pads, optionally against copper zones
-        doTrackDrc( *seg_it, seg_it + 1, m_board->Tracks().end(), true );
+        doTrackDrc( *seg_it, seg_it + 1, m_board->Tracks().end(), false /*fixme: control for copper zones*/ );
     }
 }
 
@@ -196,8 +484,9 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACKS::iter
 
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( aRefSeg, pad );
+                drcItem->SetViolatingRule( rule );
 
-                ReportWithMarker( drcItem, rule, getLocation( aRefSeg, padSeg ) );
+                ReportWithMarker( drcItem, getLocation( aRefSeg, padSeg ) );
 
                 if( isErrorLimitExceeded( DRCE_TRACK_NEAR_PAD ) )
                     return;
@@ -267,8 +556,9 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACKS::iter
             // fixme
             drcItem->SetErrorMessage( "FIXME" );
             drcItem->SetItems( aRefSeg, track );
+            drcItem->SetViolatingRule( rule );
 
-            ReportWithMarker( drcItem, rule, (wxPoint) intersection.get() );
+            ReportWithMarker( drcItem, (wxPoint) intersection.get() );
 
             if( isErrorLimitExceeded( DRCE_TRACKS_CROSSING ) )
                 return;
@@ -295,15 +585,14 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACKS::iter
 
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( aRefSeg, track );
+            drcItem->SetViolatingRule( rule );
 
-            ReportWithMarker( drcItem, rule, getLocation( aRefSeg, trackSeg ) );
+            ReportWithMarker( drcItem, getLocation( aRefSeg, trackSeg ) );
 
             if( isErrorLimitExceeded( errorCode ) )
                 return;
         }
     }
-
-    #if 0
 
     /***************************************/
     /* Phase 3: test DRC with copper zones */
@@ -313,7 +602,7 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACKS::iter
     {
         SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
 
-        for( ZONE_CONTAINER* zone : m_pcb->Zones() )
+        for( ZONE_CONTAINER* zone : m_board->Zones() )
         {
             if( zone->GetFilledPolysList().IsEmpty() || zone->GetIsKeepout() )
                 continue;
@@ -324,7 +613,9 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACKS::iter
             if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
                 continue;
 
-            int             minClearance = aRefSeg->GetClearance( zone, &m_clearanceSource );
+            auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefSeg, zone );
+            auto minClearance = rule->GetConstraint().GetValue().Min();
+
             int             widths = refSegWidth / 2;
             int             center2centerAllowed = minClearance + widths;
             SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
@@ -340,21 +631,21 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACKS::iter
             {
                 int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
+                wxString msg;
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                              m_clearanceSource,
+                msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              rule->GetName(),
                               MessageTextFromValue( userUnits(), minClearance, true ),
                               MessageTextFromValue( userUnits(), actual, true ) );
 
-                drcItem->SetErrorMessage( m_msg );
+                drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( aRefSeg, zone );
+                drcItem->SetViolatingRule( rule );
 
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, zone ) );
-                addMarkerToPcb( aCommit, marker );
+                ReportWithMarker( drcItem, getLocation( aRefSeg, zone ) );
             }
         }
     }
-#endif
 
 // fixme: board edge clearance to another rule
 }
@@ -367,7 +658,7 @@ void test::DRC_TEST_PROVIDER_CLEARANCE::testPadClearances( )
 
     m_board->GetSortedPadListByXthenYCoord( sortedPads );
 
-    //Report("testing pads: %d pads\n", sortedPads.size() );
+    ReportAux("Testing %d pads...", sortedPads.size() );
 
     for( auto p : sortedPads )
         
@@ -628,8 +919,9 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** 
 
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( aRefPad, pad );
+            drcItem->SetViolatingRule( rule );
 
-            ReportWithMarker( drcItem, rule, aRefPad->GetPosition() );
+            ReportWithMarker( drcItem, aRefPad->GetPosition() );
             return false;
         }
     }
@@ -1038,6 +1330,176 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE::poly2polyDRC( wxPoint* aTref, int aTrefC
     return true;
 }
 
+
+
+void test::DRC_TEST_PROVIDER_CLEARANCE::testZones()
+{
+    // Test copper areas for valid netcodes -> fixme, goes to connectivity checks
+
+    std::vector<SHAPE_POLY_SET> smoothed_polys;
+    smoothed_polys.resize( m_board->GetAreaCount() );
+
+    for( int ii = 0; ii < m_board->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = m_board->GetArea( ii );
+        ZONE_CONTAINER*    zoneRef = m_board->GetArea( ii );
+        std::set<VECTOR2I> colinearCorners;
+
+        zoneRef->GetColinearCorners( m_board, colinearCorners );
+        zoneRef->BuildSmoothedPoly( smoothed_polys[ii], &colinearCorners );
+    }
+
+    // iterate through all areas
+    for( int ia = 0; ia < m_board->GetAreaCount(); ia++ )
+    {
+        ZONE_CONTAINER* zoneRef = m_board->GetArea( ia );
+
+        if( !zoneRef->IsOnCopperLayer() )
+            continue;
+
+        // If we are testing a single zone, then iterate through all other zones
+        // Otherwise, we have already tested the zone combination
+        for( int ia2 = ia + 1; ia2 < m_board->GetAreaCount(); ia2++ )
+        {
+            ZONE_CONTAINER* zoneToTest = m_board->GetArea( ia2 );
+
+            if( zoneRef == zoneToTest )
+                continue;
+
+            // test for same layer
+            if( zoneRef->GetLayer() != zoneToTest->GetLayer() )
+                continue;
+
+            // Test for same net
+            if( zoneRef->GetNetCode() == zoneToTest->GetNetCode() && zoneRef->GetNetCode() >= 0 )
+                continue;
+
+            // test for different priorities
+            if( zoneRef->GetPriority() != zoneToTest->GetPriority() )
+                continue;
+
+            // test for different types
+            if( zoneRef->GetIsKeepout() != zoneToTest->GetIsKeepout() )
+                continue;
+
+            // Examine a candidate zone: compare zoneToTest to zoneRef
+
+            // Get clearance used in zone to zone test.
+            auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, zoneRef, zoneToTest );
+            auto zone2zoneClearance = rule->GetConstraint().GetValue().Min();
+
+            // Keepout areas have no clearance, so set zone2zoneClearance to 1
+            // ( zone2zoneClearance = 0  can create problems in test functions)
+            if( zoneRef->GetIsKeepout() ) // fixme: really?
+                zone2zoneClearance = 1;
+
+            // test for some corners of zoneRef inside zoneToTest
+            for( auto iterator = smoothed_polys[ia].IterateWithHoles(); iterator; iterator++ )
+            {
+                VECTOR2I currentVertex = *iterator;
+                wxPoint pt( currentVertex.x, currentVertex.y );
+
+                if( smoothed_polys[ia2].Contains( currentVertex ) )
+                {
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                    drcItem->SetItems( zoneRef, zoneToTest );
+                    drcItem->SetViolatingRule( rule );
+
+                    ReportWithMarker( drcItem, pt );
+                }
+            }
+
+            // test for some corners of zoneToTest inside zoneRef
+            for( auto iterator = smoothed_polys[ia2].IterateWithHoles(); iterator; iterator++ )
+            {
+                VECTOR2I currentVertex = *iterator;
+                wxPoint pt( currentVertex.x, currentVertex.y );
+
+                if( smoothed_polys[ia].Contains( currentVertex ) )
+                {
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                    drcItem->SetItems( zoneToTest, zoneRef );
+                    drcItem->SetViolatingRule( rule );
+
+                    ReportWithMarker( drcItem, pt );
+                }
+            }
+
+            // Iterate through all the segments of refSmoothedPoly
+            std::map<wxPoint, int> conflictPoints;
+
+            for( auto refIt = smoothed_polys[ia].IterateSegmentsWithHoles(); refIt; refIt++ )
+            {
+                // Build ref segment
+                SEG refSegment = *refIt;
+
+                // Iterate through all the segments in smoothed_polys[ia2]
+                for( auto testIt = smoothed_polys[ia2].IterateSegmentsWithHoles(); testIt; testIt++ )
+                {
+                    // Build test segment
+                    SEG testSegment = *testIt;
+                    wxPoint pt;
+
+                    int ax1, ay1, ax2, ay2;
+                    ax1 = refSegment.A.x;
+                    ay1 = refSegment.A.y;
+                    ax2 = refSegment.B.x;
+                    ay2 = refSegment.B.y;
+
+                    int bx1, by1, bx2, by2;
+                    bx1 = testSegment.A.x;
+                    by1 = testSegment.A.y;
+                    bx2 = testSegment.B.x;
+                    by2 = testSegment.B.y;
+
+                    int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2,
+                                                         0,
+                                                         ax1, ay1, ax2, ay2,
+                                                         0,
+                                                         zone2zoneClearance,
+                                                         &pt.x, &pt.y );
+
+                    if( d < zone2zoneClearance )
+                    {
+                        if( conflictPoints.count( pt ) )
+                            conflictPoints[ pt ] = std::min( conflictPoints[ pt ], d );
+                        else
+                            conflictPoints[ pt ] = d;
+                    }
+                }
+            }
+
+            for( const std::pair<const wxPoint, int>& conflict : conflictPoints )
+            {
+                int       actual = conflict.second;
+                DRC_ITEM* drcItem;
+
+                if( actual <= 0 )
+                {
+                    drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                }
+                else
+                {
+                    drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
+                    wxString msg;
+
+                    msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                                  /* fixme */"",
+                                  MessageTextFromValue( userUnits(), zone2zoneClearance, true ),
+                                  MessageTextFromValue( userUnits(), conflict.second, true ) );
+
+                    drcItem->SetErrorMessage( msg );
+                    
+                }
+
+                drcItem->SetViolatingRule( rule );
+                drcItem->SetItems( zoneRef, zoneToTest );
+
+                ReportWithMarker( drcItem, conflict.first );
+            }
+        }
+    }
+}
 
 
 std::set<test::DRC_RULE_ID_T> test::DRC_TEST_PROVIDER_CLEARANCE::GetMatchingRuleIds() const

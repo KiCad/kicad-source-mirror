@@ -43,7 +43,9 @@ namespace test
 {
 
 enum class DRC_RULE_ID_T {
-    DRC_RULE_ID_CLEARANCE = 0
+    DRC_RULE_ID_CLEARANCE = 0,
+    DRC_RULE_ID_HOLE_CLEARANCE,
+    DRC_RULE_ID_EDGE_CLEARANCE
 };
 
 enum class DRC_RULE_SEVERITY_T {

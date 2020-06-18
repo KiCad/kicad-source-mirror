@@ -34,9 +34,11 @@ namespace test {
 #include <class_board.h>
 #include <pcb_base_frame.h>
 
-#include "drc_engine.h"
+#include <drc_proto/drc_engine.h>
 
 class DRC_RULE;
+class DRC_TEST_PROVIDER;
+
 
 class DRC_ITEM : public RC_ITEM
 {
@@ -44,6 +46,12 @@ public:
     DRC_ITEM( int aErrorCode ) {}// fixme
 
     DRC_ITEM( const wxString& aErrorText ) {} // fixme
+
+    void SetViolatingRule ( test::DRC_RULE *aRule ) { m_violatingRule = aRule; }
+    test::DRC_RULE* GetViolatingRule() const { return m_violatingRule; }
+
+    void SetViolatingTest( test::DRC_TEST_PROVIDER *aProvider ) { m_violatingTest = aProvider; }
+    test::DRC_TEST_PROVIDER* GetViolatingTest() const { return m_violatingTest; }
 
     /**
      * Function GetErrorText
@@ -61,6 +69,8 @@ public:
 protected:
 
     DRC_RULE *m_violatingRule;
+    DRC_TEST_PROVIDER *m_violatingTest;
+
     //std::vector<BOARD_ITEM*> m_violatingObjects;
 };
 

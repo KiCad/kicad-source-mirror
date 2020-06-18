@@ -163,7 +163,15 @@ public:
     DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS* aSettings );
     ~DRC_ENGINE();
 
-    void SetProgressReporter( PROGRESS_REPORTER* aProgRep );
+    void SetProgressReporter( PROGRESS_REPORTER* aProgRep )
+    {
+        m_progressReporter = aProgRep;
+    }
+
+    void SetLogReporter( REPORTER* aReporter )
+    {
+        m_reporter = aReporter;
+    }
 
     bool LoadRules( wxFileName aPath );
     void RunTests();
@@ -188,6 +196,11 @@ public:
     }
 
     bool CompileRules();
+
+    void Report( DRC_ITEM* aItem, ::MARKER_PCB *Marker );
+    void ReportProgress( double aProgress );
+    void ReportStage ( const wxString& aStageName, int index, int total );
+    void ReportAux( const wxString& aStr );
 
 private:
 

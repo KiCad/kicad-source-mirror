@@ -117,8 +117,6 @@ test::DRC_RULE_CONDITION* test::DRC_RULES_PARSER::parseCONDITION()
     test::DRC_RULE_CONDITION* cond = new test::DRC_RULE_CONDITION();
     T                         token;
 
-    printf( "parsecondition\n" );
-
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
@@ -126,7 +124,7 @@ test::DRC_RULE_CONDITION* test::DRC_RULES_PARSER::parseCONDITION()
 
         token = NextTok();
 
-        printf( "Do token xxx %d '%s'\n", token, (const char*) FromUTF8().c_str() );
+        //printf( "Do token xxx %d '%s'\n", token, (const char*) FromUTF8().c_str() );
 
         switch( token )
         {
@@ -248,11 +246,11 @@ void test::DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aR
     if( !ok )
     {
         auto err = evaluator.GetErrorString();
-        printf( "eval error: '%s'\n", (const char*) err.c_str() );
-
+        //printf( "eval error: '%s'\n", (const char*) err.c_str() );
+        // fixme: message
         THROW_PARSE_ERROR( err, "", "", 0, 0 );
     }
 
     aResult = evaluator.Result();
-    printf("parseValueWithUnits: value %d\n", aResult );
+    //printf("parseValueWithUnits: value %d\n", aResult );
 };

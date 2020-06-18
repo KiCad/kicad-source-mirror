@@ -96,8 +96,9 @@ public:
     virtual const wxString GetName() const;
     virtual const wxString GetDescription() const;
 
-    virtual void Report( DRC_ITEM* item, test::DRC_RULE* violatingRule );
-    virtual void ReportWithMarker( DRC_ITEM* item, test::DRC_RULE* violatingRule, wxPoint aMarkerPos );
+    virtual void ReportAux( const wxString fmt, ... );
+    virtual void Report( DRC_ITEM* item );
+    virtual void ReportWithMarker( DRC_ITEM* item, wxPoint aMarkerPos );
     virtual void ReportProgress( double aProgress );
     virtual void ReportStage ( const wxString& aStageName, int index, int total );
 
