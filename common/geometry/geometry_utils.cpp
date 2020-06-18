@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,25 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
 }
 
 
+// When creating polygons to create a clearance polygonal area, the polygon must
+// be same or bigger than the original shape.
+// Polygons are bigger if the original shape has arcs (round rectangles, ovals, circles...)
+// In some cases (in fact only one: when building layer solder mask) modifying
+// shapes when converting them to polygons is not acceptable (the modification
+// can break calculations)
+// so one can disable the shape expansion by calling KeepPolyInsideShape( true )
+// Important: calling KeepPolyInsideShape( false ) after calculations is
+// mandatory to break oher calculations
+static bool s_disable_arc_correction = false;
+
+// Enable (aInside = false) or disable (aInside = true) polygonal shape expansion
+// when converting pads shapes and other items shapes to polygons:
+void DisableArcRadiusCorrection( bool aDisable )
+{
+    s_disable_arc_correction = aDisable;
+}
+
+
 double GetCircletoPolyCorrectionFactor( int aSegCountforCircle )
 {
     /* calculates the coeff to compensate radius reduction of circle
@@ -66,7 +85,7 @@ double GetCircletoPolyCorrectionFactor( int aSegCountforCircle )
     if( aSegCountforCircle < MIN_SEGCOUNT_FOR_CIRCLE )
         aSegCountforCircle = MIN_SEGCOUNT_FOR_CIRCLE;
 
-    return 1.0 / cos( M_PI / aSegCountforCircle );
+    return s_disable_arc_correction ? 1.0 : 1.0 / cos( M_PI / aSegCountforCircle );
 }
 
 

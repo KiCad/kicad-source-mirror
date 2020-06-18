@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,8 +45,25 @@ class EDA_RECT;
  */
 int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree );
 
+/** When creating polygons to create a clearance polygonal area, the polygon must
+ * be same or bigger than the original shape.
+ * Polygons are bigger if the original shape has arcs (round rectangles, ovals, circles...)
+ * In some cases (in fact only one: when building layer solder mask) modifying
+ * shapes when converting them to polygons is not acceptable (the modification
+ * can break calculations)
+ * so one can disable the shape expansion by calling KeepPolyInsideShape( true )
+ * Important: calling DisableArcRadiusCorrection( false ) after calculations is
+ * mandatory to break oher calculations
+ * @param aDisable = false to create polygons same or outside the original shape
+ *  = true to create polygons same or inside the original shape and minimize
+ * shape geometric changes
+ */
+void DisableArcRadiusCorrection( bool aDisable );
+
+
 /**
- * @return the correction factor to approximate a circle by segments
+ * @return the correction factor to approximate a circle by segments or 1.0
+ * depending on the last call to DisableArcRadiusCorrection()
  * @param aSegCountforCircle is the number of segments to approximate the circle
  *
  * When creating a polygon from a circle, the polygon is inside the circle.
