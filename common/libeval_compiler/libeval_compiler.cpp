@@ -49,7 +49,7 @@ namespace LIBEVAL
 static void libeval_dbg( int level, const char* fmt, ... )
 {
 #ifdef DEBUG
-    if(level < 10) // fixme: tom's debugging.
+    if(level < -10) // fixme: tom's debugging.
     {
         va_list ap;
         va_start( ap, fmt );
