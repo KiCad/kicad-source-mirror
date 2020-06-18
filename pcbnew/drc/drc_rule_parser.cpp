@@ -58,6 +58,9 @@ void DRC_RULES_PARSER::initLayerMap()
     {
         std::string untranslated = TO_UTF8( wxString( LSET::Name( PCB_LAYER_ID( layer ) ) ) );
         m_layerMap[ untranslated ] = PCB_LAYER_ID( layer );
+
+        std::string userName = m_board->GetLayerName( PCB_LAYER_ID( layer ) );
+        m_layerMap[ userName ] = PCB_LAYER_ID( layer );
     }
 }
 
@@ -346,23 +349,5 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
 int DRC_RULES_PARSER::parseValue( DRCRULE_T::T aToken )
 {
-    char* tmp;
-
-    errno = 0;
-
-    double fval = strtod( CurText(), &tmp );
-
-    if( errno )
-    {
-        THROW_PARSE_ERROR( _( "Invalid floating point number" ), CurSource(), CurLine(),
-                           CurLineNumber(), CurOffset() );
-    }
-
-    if( CurText() == tmp )
-    {
-        THROW_PARSE_ERROR( _( "Missing floating point number" ), CurSource(), CurLine(),
-                           CurLineNumber(), CurOffset() );
-    }
-
-    return KiROUND( fval * IU_PER_MM );
+    return (int) ValueFromString( EDA_UNITS::MILLIMETRES, CurText(), true );
 }
