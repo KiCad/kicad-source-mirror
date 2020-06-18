@@ -350,6 +350,7 @@ public:
 
     static TOOL_ACTION footprintProperties;
     static TOOL_ACTION defaultPadProperties;
+    static TOOL_ACTION shapeProperties;
 
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;

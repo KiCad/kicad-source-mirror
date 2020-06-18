@@ -94,13 +94,9 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 
-/* Note:
- * FOOTPRINT_VIEWER_FRAME can be created in "modal mode", or as a usual frame.
- * In modal mode:
- *  a tool to export the selected footprint is shown in the toolbar
- *  the style is wxFRAME_FLOAT_ON_PARENT
+/*
+ * Note: FOOTPRINT_VIEWER_FRAME can be created in "modal mode", or as a usual frame.
  */
-
 #define PARENT_STYLE   ( KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT )
 #define MODAL_STYLE    ( KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP )
 #define NONMODAL_STYLE ( KICAD_DEFAULT_DRAWFRAME_STYLE )
@@ -786,25 +782,25 @@ void FOOTPRINT_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 
 const wxString FOOTPRINT_VIEWER_FRAME::getCurNickname()
 {
-    return Prj().GetRString( PROJECT::PCB_FOOTPRINT_VIEWER_NICKNAME );
+    return Prj().GetRString( PROJECT::PCB_FOOTPRINT_VIEWER_LIB_NICKNAME );
 }
 
 
 void FOOTPRINT_VIEWER_FRAME::setCurNickname( const wxString& aNickname )
 {
-    Prj().SetRString( PROJECT::PCB_FOOTPRINT_VIEWER_NICKNAME, aNickname );
+    Prj().SetRString( PROJECT::PCB_FOOTPRINT_VIEWER_LIB_NICKNAME, aNickname );
 }
 
 
 const wxString FOOTPRINT_VIEWER_FRAME::getCurFootprintName()
 {
-    return Prj().GetRString( PROJECT::PCB_FOOTPRINT_VIEWER_FPNAME );
+    return Prj().GetRString( PROJECT::PCB_FOOTPRINT_VIEWER_FP_NAME );
 }
 
 
 void FOOTPRINT_VIEWER_FRAME::setCurFootprintName( const wxString& aName )
 {
-    Prj().SetRString( PROJECT::PCB_FOOTPRINT_VIEWER_FPNAME, aName );
+    Prj().SetRString( PROJECT::PCB_FOOTPRINT_VIEWER_FP_NAME, aName );
 }
 
 

@@ -356,6 +356,14 @@ TOOL_ACTION PCB_ACTIONS::defaultPadProperties( "pcbnew.ModuleEditor.defaultPadPr
         options_pad_xpm );
 
 
+// SHAPE_EDITOR_TOOLS
+//
+TOOL_ACTION PCB_ACTIONS::shapeProperties( "pcbnew.ShapeEditor.shapeProperties",
+        AS_GLOBAL, 0, "",
+        _( "Shape Properties..." ), "",
+        options_pad_xpm );
+
+
 // GLOBAL_EDIT_TOOL
 //
 TOOL_ACTION PCB_ACTIONS::updateFootprint( "pcbnew.GlobalEdit.updateFootprint",

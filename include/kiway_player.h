@@ -173,7 +173,7 @@ public:
      */
     bool Destroy() override;
 
-    bool IsModal()                      { return m_modal; }
+    bool IsModal() const                { return m_modal; }
     void SetModal( bool aIsModal )      { m_modal = aIsModal; }
 
     /**

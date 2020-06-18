@@ -147,6 +147,9 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     {
         ReCreateMenuBar();
         ReCreateHToolbar();
+
+        if( IsSearchTreeShown() )
+            ToggleSearchTree();
     }
 
     Update3DView( true );
