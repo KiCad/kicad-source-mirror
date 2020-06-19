@@ -47,4 +47,6 @@
 
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200602  // Add support for exclude from board.
 
-#define SEXPR_SCHEMATIC_FILE_VERSION 20200608
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20200608  // Add support for bus and junction properties.
+
+#define SEXPR_SCHEMATIC_FILE_VERSION 20200618

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,8 @@
 #ifndef _SCH_BUS_ENTRY_H_
 #define _SCH_BUS_ENTRY_H_
 
+#include <gal/color4d.h>
+#include <plotter.h>
 #include <sch_item.h>
 
 #define TARGET_BUSENTRY_RADIUS Mils2iu( 12 )   // Circle diameter drawn at the ends
@@ -43,7 +45,9 @@ class SCH_BUS_ENTRY_BASE : public SCH_ITEM
 protected:
     wxPoint m_pos;
     wxSize  m_size;
-    bool m_isDanglingStart, m_isDanglingEnd;
+    bool m_isDanglingStart;
+    bool m_isDanglingEnd;
+    STROKE_PARAMS m_stroke;
 
 public:
     SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos = wxPoint( 0, 0 ), char shape = '\\' );
@@ -77,6 +81,18 @@ public:
     wxSize GetSize() const { return m_size; }
 
     void SetSize( const wxSize& aSize ) { m_size = aSize; }
+
+    void SetPenWidth( int aWidth ) { m_stroke.SetWidth( aWidth ); }
+
+    virtual bool HasLineStroke() const override { return true; }
+    virtual STROKE_PARAMS GetStroke() const override { return m_stroke; }
+    virtual void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
+
+    PLOT_DASH_TYPE GetStrokeStyle() const { return m_stroke.GetType(); }
+    void SetStrokeStyle( PLOT_DASH_TYPE aStyle ) { m_stroke.SetType( aStyle ); }
+
+    COLOR4D GetStrokeColor() const { return m_stroke.GetColor(); }
+    void SetStrokeColor( const COLOR4D& aColor ) { m_stroke.SetColor( aColor ); }
 
     void SwapData( SCH_ITEM* aItem ) override;
 

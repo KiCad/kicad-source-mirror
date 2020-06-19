@@ -121,8 +121,8 @@ public:
     void SetLineWidth( const int aSize );
 
     virtual bool HasLineStroke() const override { return true; }
-    STROKE_PARAMS GetStroke() const { return m_stroke; }
-    void SetStroke( const STROKE_PARAMS& aStroke ) { m_stroke = aStroke; }
+    virtual STROKE_PARAMS GetStroke() const override { return m_stroke; }
+    virtual void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
 
     /**
      * Test if the #SCH_LINE object uses the default stroke settings.

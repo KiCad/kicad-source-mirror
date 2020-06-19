@@ -460,6 +460,10 @@ public:
      */
     virtual bool HasLineStroke() const { return false; }
 
+    virtual STROKE_PARAMS GetStroke() const { wxCHECK( false, STROKE_PARAMS() ); }
+
+    virtual void SetStroke( const STROKE_PARAMS& aStroke ) { wxCHECK( false, /* void */ ); }
+
     /**
      * Plot the schematic item to \a aPlotter.
      *

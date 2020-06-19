@@ -29,7 +29,6 @@
 #include <trigo.h>
 #include <common.h>
 #include <richio.h>
-#include <plotter.h>
 #include <bitmaps.h>
 #include <eeschema_config.h>
 #include <general.h>
@@ -104,6 +103,7 @@ void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
 
     std::swap( m_pos, item->m_pos );
     std::swap( m_size, item->m_size );
+    std::swap( m_stroke, item->m_stroke );
 }
 
 
@@ -131,7 +131,7 @@ const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 
 int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
 {
-    return 1;
+    return ( m_stroke.GetWidth() == 0 ) ? 1 : m_stroke.GetWidth();
 }
 
 

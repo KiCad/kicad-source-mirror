@@ -2440,6 +2440,7 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bus entry." ) );
 
     T token;
+    STROKE_PARAMS stroke;
     std::unique_ptr<SCH_BUS_WIRE_ENTRY> busEntry( new SCH_BUS_WIRE_ENTRY() );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -2471,8 +2472,13 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
             break;
         }
 
+        case T_stroke:
+            parseStroke( stroke );
+            busEntry->SetStroke( stroke );
+            break;
+
         default:
-            Expecting( "at or size" );
+            Expecting( "at, size, or stroke" );
         }
     }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Seth Hillbrand <hillbrand@ucdavis.edu>
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,10 +53,10 @@ const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames = {
 
 
 DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent,
-                                                std::deque<SCH_LINE*>& lines ) :
+                                                std::deque<SCH_ITEM*>& strokeItems ) :
           DIALOG_EDIT_LINE_STYLE_BASE( aParent ),
           m_frame( aParent ),
-          m_lines( lines ),
+          m_strokeItems( strokeItems ),
           m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true )
 {
     m_sdbSizerApply->SetLabel( _( "Default" ) );
@@ -77,41 +77,41 @@ DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent,
 
 bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
 {
-    auto first_line = m_lines.front();
+    auto first_stroke_item = m_strokeItems.front();
 
-    if( std::all_of( m_lines.begin() + 1, m_lines.end(),
-        [&]( const SCH_LINE* r )
+    if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
+        [&]( const SCH_ITEM* r )
         {
-			return r->GetPenWidth() == first_line->GetPenWidth();
+			return r->GetPenWidth() == first_stroke_item->GetPenWidth();
 		} ) )
     {
-        m_width.SetValue( first_line->GetPenWidth() );
+        m_width.SetValue( first_stroke_item->GetPenWidth() );
     }
     else
     {
         m_width.SetValue( INDETERMINATE_ACTION );
     }
 
-    if( std::all_of( m_lines.begin() + 1, m_lines.end(),
-        [&]( const SCH_LINE* r )
+    if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
+        [&]( const SCH_ITEM* r )
         {
-            return r->GetLineColor() == first_line->GetLineColor();
+            return r->GetStroke().GetColor() == first_stroke_item->GetStroke().GetColor();
         } ) )
     {
-        setColor( first_line->GetLineColor() );
+        setColor( first_stroke_item->GetStroke().GetColor() );
     }
     else
     {
         setColor( COLOR4D::UNSPECIFIED );
     }
 
-    if( std::all_of( m_lines.begin() + 1, m_lines.end(),
-        [&]( const SCH_LINE* r )
+    if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
+        [&]( const SCH_ITEM* r )
         {
-            return r->GetLineStyle() == first_line->GetLineStyle();
+            return r->GetStroke().GetType() == first_stroke_item->GetStroke().GetType();
         } ) )
     {
-        int style = static_cast<int>( first_line->GetLineStyle() );
+        int style = static_cast<int>( first_stroke_item->GetStroke().GetType() );
         wxCHECK_MSG( style < (int)lineTypeNames.size(), false,
                 "Line type for first line is not found in the type lookup map" );
         m_typeCombo->SetSelection( style );
@@ -178,7 +178,11 @@ void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
     m_width.SetValue( 0 );
     setColor( COLOR4D::UNSPECIFIED );
 
-    auto typeIt = lineTypeNames.find( m_lines.front()->GetDefaultStyle() );
+    SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( m_strokeItems.front() );
+
+    wxCHECK( item, /* void */ );
+
+    auto typeIt = lineTypeNames.find( item->GetStroke().GetType() );
     wxCHECK_RET( typeIt != lineTypeNames.end(),
             "Default line type not found line dialogs line type lookup map" );
 
@@ -194,7 +198,7 @@ void DIALOG_EDIT_LINE_STYLE::setColor( const COLOR4D& aColor )
     if( aColor == COLOR4D::UNSPECIFIED )
     {
         COLOR4D defaultColor = Pgm().GetSettingsManager().GetColorSettings()->GetColor(
-                m_lines.front()->GetLayer() );
+                m_strokeItems.front()->GetLayer() );
         updateColorButton( defaultColor );
     }
     else
@@ -204,17 +208,26 @@ void DIALOG_EDIT_LINE_STYLE::setColor( const COLOR4D& aColor )
 
 bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
 {
-    for( auto& line : m_lines )
-    {
-        m_frame->SaveCopyInUndoList( line, UR_CHANGED );
+    PICKED_ITEMS_LIST pickedItems;
+    STROKE_PARAMS stroke;
 
+    for( auto& strokeItem : m_strokeItems )
+        pickedItems.PushItem( ITEM_PICKER( strokeItem, UR_CHANGED ) );
+
+    m_frame->SaveCopyInUndoList( pickedItems, UR_CHANGED );
+
+    for( auto& strokeItem : m_strokeItems )
+    {
         if( !m_width.IsIndeterminate() )
         {
-            line->SetLineWidth( m_width.GetValue() );
+            stroke = strokeItem->GetStroke();
+            stroke.SetWidth( m_width.GetValue() );
+            strokeItem->SetStroke( stroke );
         }
 
         if( m_typeCombo->GetSelection() != wxNOT_FOUND )
         {
+            stroke = strokeItem->GetStroke();
             int selection = m_typeCombo->GetSelection();
             wxCHECK_MSG( selection < (int)lineTypeNames.size(), false,
                     "Selected line type index exceeds size of line type lookup map" );
@@ -222,12 +235,15 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
             auto it = lineTypeNames.begin();
             std::advance( it, selection );
 
-            line->SetLineStyle( it->first );
+            stroke.SetType( it->first );
+            strokeItem->SetStroke( stroke );
         }
 
-        line->SetLineColor( m_selectedColor );
+        stroke = strokeItem->GetStroke();
+        stroke.SetColor( m_selectedColor );
+        strokeItem->SetStroke( stroke );
 
-        m_frame->RefreshItem( line );
+        m_frame->RefreshItem( strokeItem );
     }
 
     m_frame->GetCanvas()->Refresh();

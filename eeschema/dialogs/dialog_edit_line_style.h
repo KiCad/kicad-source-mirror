@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Seth Hillbrand <hillbrand@ucdavis.edu>
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,14 +36,14 @@ class SCH_LINE;
 class DIALOG_EDIT_LINE_STYLE : public DIALOG_EDIT_LINE_STYLE_BASE
 {
 public:
-    DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent, std::deque<SCH_LINE*>& lines );
+    DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent, std::deque<SCH_ITEM*>& strokeItems );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
     SCH_EDIT_FRAME*       m_frame;
-    std::deque<SCH_LINE*> m_lines;
+    std::deque<SCH_ITEM*> m_strokeItems;
 
     UNIT_BINDER     m_width;
     COLOR4D         m_selectedColor;

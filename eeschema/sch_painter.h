@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 CERN
+ * Copyright (C) 2019-2020 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -174,7 +174,7 @@ private:
     void draw( SCH_BUS_ENTRY_BASE* aEntry, int aLayer );
 
     void drawPinDanglingSymbol( const VECTOR2I& aPos, bool aDrawingShadows );
-    void drawDanglingSymbol( const wxPoint& aPos, bool aDrawingShadows );
+    void drawDanglingSymbol( const wxPoint& aPos, int aWidth, bool aDrawingShadows );
 
     int internalPinDecoSize( const LIB_PIN &aPin );
     int externalPinDecoSize( const LIB_PIN &aPin );

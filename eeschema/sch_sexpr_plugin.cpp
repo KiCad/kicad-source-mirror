@@ -297,18 +297,18 @@ static const char* getTextTypeToken( KICAD_T aType )
  * @param aStyle The stroke line style.
  * @param aColor The stroke line color.
  */
-static void formatStroke( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aWidth,
-                          PLOT_DASH_TYPE aStyle, const COLOR4D& aColor )
+static void formatStroke( OUTPUTFORMATTER* aFormatter, int aNestLevel,
+                          const STROKE_PARAMS& aStroke )
 {
     wxASSERT( aFormatter != nullptr );
 
     aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s) (color %d %d %d %s))",
-                       FormatInternalUnits( aWidth ).c_str(),
-                       TO_UTF8( getLineStyleToken( aStyle ) ),
-                       KiROUND( aColor.r * 255.0 ),
-                       KiROUND( aColor.g * 255.0 ),
-                       KiROUND( aColor.b * 255.0 ),
-                       Double2Str( aColor.a ).c_str() );
+                       FormatInternalUnits( aStroke.GetWidth() ).c_str(),
+                       TO_UTF8( getLineStyleToken( aStroke.GetType() ) ),
+                       KiROUND( aStroke.GetColor().r * 255.0 ),
+                       KiROUND( aStroke.GetColor().g * 255.0 ),
+                       KiROUND( aStroke.GetColor().b * 255.0 ),
+                       Double2Str( aStroke.GetColor().a ).c_str() );
 }
 
 
@@ -1062,8 +1062,11 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                   FormatInternalUnits( aSheet->GetSize().GetWidth() ).c_str(),
                   FormatInternalUnits( aSheet->GetSize().GetHeight() ).c_str() );
 
-    formatStroke( m_out, aNestLevel + 1, aSheet->GetBorderWidth(), PLOT_DASH_TYPE::SOLID,
-                  aSheet->GetBorderColor() );
+    STROKE_PARAMS stroke( aSheet->GetBorderWidth(), PLOT_DASH_TYPE::SOLID,
+                          aSheet->GetBorderColor() );
+
+    stroke.SetWidth( aSheet->GetBorderWidth() );
+    formatStroke( m_out, aNestLevel + 1, stroke );
 
     m_out->Print( 0, "\n" );
 
@@ -1133,11 +1136,15 @@ void SCH_SEXPR_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLev
     }
     else
     {
-        m_out->Print( aNestLevel, "(bus_entry (at %s %s) (size %s %s))\n",
+        m_out->Print( aNestLevel, "(bus_entry (at %s %s) (size %s %s) ",
                       FormatInternalUnits( aBusEntry->GetPosition().x ).c_str(),
                       FormatInternalUnits( aBusEntry->GetPosition().y ).c_str(),
                       FormatInternalUnits( aBusEntry->GetSize().GetWidth() ).c_str(),
                       FormatInternalUnits( aBusEntry->GetSize().GetHeight() ).c_str() );
+
+        formatStroke( m_out, 0, aBusEntry->GetStroke() );
+
+        m_out->Print( 0, ")\n" );
     }
 }
 
@@ -1163,8 +1170,7 @@ void SCH_SEXPR_PLUGIN::saveLine( SCH_LINE* aLine, int aNestLevel )
                   FormatInternalUnits( aLine->GetEndPoint().x ).c_str(),
                   FormatInternalUnits( aLine->GetEndPoint().y ).c_str() );
 
-    formatStroke( m_out, aNestLevel + 1, aLine->GetLineSize(), aLine->GetLineStyle(),
-                  aLine->GetLineColor() );
+    formatStroke( m_out, aNestLevel + 1, aLine->GetStroke() );
     m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel, ")\n" );
 }

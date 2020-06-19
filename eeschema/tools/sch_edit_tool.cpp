@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -193,12 +193,20 @@ bool SCH_EDIT_TOOL::Init()
                 if( aSel.GetSize() == 0 )
                     return true;            // Show worksheet properties
 
-                if( aSel.GetSize() != 1
-                        && !( aSel.GetSize() >= 1 && aSel.Front()->Type() == SCH_LINE_T
-                                   && aSel.AreAllItemsIdentical() ) )
-                    return false;
+                SCH_ITEM* firstItem = dynamic_cast<SCH_ITEM*>( aSel.Front() );
 
-                EDA_ITEM* firstItem = static_cast<EDA_ITEM*>( aSel.Front() );
+                wxCHECK( firstItem, false );
+
+                const EE_SELECTION* eeSelection = dynamic_cast<const EE_SELECTION*>( &aSel );
+
+                wxCHECK( eeSelection, false );
+
+                if( aSel.GetSize() != 1
+                        && !( aSel.GetSize() >= 1
+                            && ( firstItem->Type() == SCH_LINE_T
+                               || firstItem->Type() == SCH_BUS_WIRE_ENTRY_T )
+                  && eeSelection->AllItemsHaveLineStroke() ) )
+                    return false;
 
                 switch( firstItem->Type() )
                 {
@@ -214,11 +222,12 @@ bool SCH_EDIT_TOOL::Init()
                     return aSel.GetSize() == 1;
 
                 case SCH_LINE_T:
+                case SCH_BUS_WIRE_ENTRY_T:
                     for( EDA_ITEM* item : aSel.GetItems() )
                     {
-                        SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
+                        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item );
 
-                        if( !line )
+                        if( !schItem || !schItem->HasLineStroke() )
                             return false;
                     }
 
@@ -1263,7 +1272,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     switch( item->Type() )
     {
     case SCH_LINE_T:
-        if( !selection.AreAllItemsIdentical() )
+    case SCH_BUS_WIRE_ENTRY_T:
+        if( !selection.AllItemsHaveLineStroke() )
             return 0;
 
         break;
@@ -1386,20 +1396,21 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
 
     case SCH_LINE_T:
+    case SCH_BUS_WIRE_ENTRY_T:
     {
-        std::deque<SCH_LINE*> lines;
+        std::deque<SCH_ITEM*> strokeItems;
 
         for( auto selItem : selection.Items() )
         {
-            SCH_LINE* line = dynamic_cast<SCH_LINE*>( selItem );
+            SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( selItem );
 
-            if( line )
-                lines.push_back( line );
+            if( schItem && schItem->HasLineStroke() )
+                strokeItems.push_back( schItem );
             else
                 return 0;
         }
 
-        DIALOG_EDIT_LINE_STYLE dlg( m_frame, lines );
+        DIALOG_EDIT_LINE_STYLE dlg( m_frame, strokeItems );
 
         if( dlg.ShowModal() == wxID_OK )
         {

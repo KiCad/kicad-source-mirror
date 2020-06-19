@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -53,6 +53,7 @@ const KICAD_T EE_COLLECTOR::EditableItems[] = {
     SCH_SHEET_T,
     SCH_BITMAP_T,
     SCH_LINE_T,
+    SCH_BUS_WIRE_ENTRY_T,
     EOT
 };
 

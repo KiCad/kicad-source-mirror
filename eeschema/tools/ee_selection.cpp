@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@
  */
 
 #include <tools/ee_selection.h>
+
+#include <sch_item.h>
 
 
 EE_SELECTION::EE_SELECTION( SCH_SCREEN* aScreen ) :
@@ -53,4 +55,18 @@ EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
     }
 
     return topLeftItem;
+}
+
+
+bool EE_SELECTION::AllItemsHaveLineStroke() const
+{
+    for( const EDA_ITEM* item : m_items )
+    {
+        const SCH_ITEM* schItem = dynamic_cast<const SCH_ITEM*>( item );
+
+        if( !schItem || !schItem->HasLineStroke() )
+            return false;
+    }
+
+    return true;
 }
