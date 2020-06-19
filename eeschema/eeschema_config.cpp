@@ -382,6 +382,9 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
 
 void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
+    // For now, axes are forced off in eeschema even if turned on in config
+    eeconfig()->m_Window.grid.axes_enabled = false;
+
     SCH_BASE_FRAME::LoadSettings( eeconfig() );
 
     GetRenderSettings()->m_ShowPinsElectricalType = false;

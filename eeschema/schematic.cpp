@@ -55,7 +55,6 @@ void SCHEMATIC::Reset()
 }
 
 
-
 void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
 {
     wxCHECK_RET( aRootSheet, "Call to SetRoot with null SCH_SHEET!" );

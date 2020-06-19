@@ -194,7 +194,14 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
                } );
 
     for( int layer : layers )
-        createSwatch( layer, LayerName( layer ) );
+    {
+        wxString name = LayerName( layer );
+
+        if( layer == LAYER_SCHEMATIC_GRID_AXES )
+            name += _( " (symbol editor only)" );
+
+        createSwatch( layer, name );
+    }
 
     // Give a minimal width to m_colorsListWindow, in order to always having
     // a full row shown
