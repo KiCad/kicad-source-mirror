@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <wx/wfstream.h>
 #include <wx/log.h>
 
+#include <wildcards_and_files_ext.h>
 #include "project_template.h"
 
 
@@ -128,7 +129,7 @@ size_t PROJECT_TEMPLATE::GetDestinationFiles( const wxFileName& aNewProjectPath,
 
     for( wxFileName& file : srcFiles )
     {
-        if( file.GetExt() == wxT( "pro" ) )
+        if( file.GetExt() == ProjectFileExtension || file.GetExt() == LegacyProjectFileExtension )
         {
             basename = file.GetName();
             projectCount++;
@@ -174,7 +175,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
     for( wxFileName& file : srcFiles )
     {
-        if( file.GetExt() == wxT( "pro" ) )
+        if( file.GetExt() == ProjectFileExtension || file.GetExt() == LegacyProjectFileExtension )
         {
             basename = file.GetName();
             projectCount++;

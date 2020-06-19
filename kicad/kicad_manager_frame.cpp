@@ -370,20 +370,33 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
     // Init project filename.  This clears all elements from the project object.
     SetProjectFileName( aProjectFileName.GetFullPath() );
 
-    // Copy kicad.pro file from template folder.
+    // If the project is legacy, convert it
     if( !aProjectFileName.FileExists() )
     {
-        // TODO(JE) PROJECT provide in new format
-        wxString srcFileName = sys_search().FindValidPath( "kicad.pro" );
+        wxFileName legacyPro( aProjectFileName );
+        legacyPro.SetExt( LegacyProjectFileExtension );
 
-        wxFileName destFileName( aProjectFileName );
-        destFileName.SetExt( LegacyProjectFileExtension );
-
-        // Create a minimal project (.pro) file if the template project file could not be copied.
-        if( !wxFileName::FileExists( srcFileName )
-            || !wxCopyFile( srcFileName, destFileName.GetFullPath() ) )
+        if( legacyPro.FileExists() )
         {
-            Pgm().GetSettingsManager().SaveProject();
+            GetSettingsManager()->LoadProject( legacyPro.GetFullPath() );
+            GetSettingsManager()->SaveProject();
+
+            wxRemoveFile( legacyPro.GetFullPath() );
+        }
+        else
+        {
+            // Copy template project file from template folder.
+            wxString srcFileName = sys_search().FindValidPath( "kicad.kicad_pro" );
+
+            wxFileName destFileName( aProjectFileName );
+            destFileName.SetExt( ProjectFileExtension );
+
+            // Create a minimal project file if the template project file could not be copied
+            if( !wxFileName::FileExists( srcFileName )
+                || !wxCopyFile( srcFileName, destFileName.GetFullPath() ) )
+            {
+                Pgm().GetSettingsManager().SaveProject();
+            }
         }
     }
 

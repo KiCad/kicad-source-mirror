@@ -77,7 +77,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     wxFileName pro = sch;
 
-    pro.SetExt( LegacyProjectFileExtension );
+    pro.SetExt( ProjectFileExtension );
 
     wxString protitle = _( "KiCad Project Destination" );
 
@@ -115,7 +115,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
     }
 
     wxFileName pcb( sch );
-    pro.SetExt( LegacyProjectFileExtension );         // enforce extension
+    pro.SetExt( ProjectFileExtension );
     pcb.SetExt( LegacyPcbFileExtension );       // enforce extension
 
     if( !pro.IsAbsolute() )

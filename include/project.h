@@ -317,17 +317,6 @@ private:
     }
 
     /**
-     * Function configCreate
-     * loads a *.pro file and returns a wxConfigBase.
-     *
-     * @param aSList is the KIFACE or PGM's SEARCH_STACK
-     * @param aGroupName is the default config file subset to use.
-     * @param aProjectFileName is the *.pro file to open.
-     */
-    wxConfigBase* configCreate( const SEARCH_STACK& aSList,
-            const wxString& aGroupName, const wxString& aProjectFileName = wxEmptyString );
-
-    /**
      * Return the full path and file name of the project specific library table \a aLibTableName..
      */
     const wxString libTableName( const wxString& aLibTableName ) const;
