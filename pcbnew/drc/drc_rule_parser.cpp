@@ -189,7 +189,18 @@ DRC_SELECTOR* DRC_RULES_PARSER::parseDRC_SELECTOR( wxString* aRuleName )
 
         case T_match_layer:
             NeedSYMBOL();
-            selector->m_MatchLayers.push_back( m_layerMap[ curText ] );
+
+            if( m_layerMap.count( curText ) )
+            {
+                selector->m_MatchLayers.push_back( m_layerMap[ curText ] );
+            }
+            else
+            {
+                wxString errText = wxString::Format( _( "Layer \"%s\" not found." ),
+                                                     wxString( curText ) );
+                THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+            }
+
             NeedRIGHT();
             break;
 
