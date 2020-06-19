@@ -304,17 +304,19 @@ public:
      *   a curve
      */
     void AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness,
-            bool aMergePrimitives = true ); ///< add a polygonal basic shape
+                           bool aMergePrimitives = true );
     void AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness,
-            bool aMergePrimitives = true ); ///< add a polygonal basic shape
-    void AddPrimitiveSegment( wxPoint aStart, wxPoint aEnd, int aThickness,
-            bool aMergePrimitives = true ); ///< segment basic shape
-    void AddPrimitiveCircle( wxPoint aCenter, int aRadius, int aThickness,
-            bool aMergePrimitives = true ); ///< ring or circle basic shape
-    void AddPrimitiveArc( wxPoint aCenter, wxPoint aStart, int aArcAngle, int aThickness,
-            bool aMergePrimitives = true ); ///< arc basic shape
-    void AddPrimitiveCurve( wxPoint aStart, wxPoint aEnd, wxPoint aCtrl1, wxPoint aCtrl2,
-            int aThickness, bool aMergePrimitives = true ); ///< curve basic shape
+                           bool aMergePrimitives = true );
+    void AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
+                              bool aMergePrimitives = true );
+    void AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness,
+                             bool aMergePrimitives = true ); ///< ring or circle basic shape
+    void AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
+                           bool aMergePrimitives = true );
+    void AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
+                          int aThickness, bool aMergePrimitives = true );
+    void AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,
+                            const wxPoint& aCtrl2, int aThickness, bool aMergePrimitives = true );
 
 
     bool GetBestAnchorPosition( VECTOR2I& aPos );

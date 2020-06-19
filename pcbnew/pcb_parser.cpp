@@ -3352,37 +3352,45 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                 case T_gr_arc:
                     dummysegm = parseDRAWSEGMENT();
                     pad->AddPrimitiveArc( dummysegm->GetCenter(), dummysegm->GetArcStart(),
-                            dummysegm->GetAngle(), dummysegm->GetWidth(), false );
+                                          dummysegm->GetAngle(), dummysegm->GetWidth(), false );
                     break;
 
                 case T_gr_line:
                     dummysegm = parseDRAWSEGMENT();
                     pad->AddPrimitiveSegment( dummysegm->GetStart(), dummysegm->GetEnd(),
-                            dummysegm->GetWidth(), false );
+                                              dummysegm->GetWidth(), false );
                     break;
 
                 case T_gr_circle:
                     dummysegm = parseDRAWSEGMENT( true );   // Circles with 0 thickness are allowed
                                                             // ( filled circles )
                     pad->AddPrimitiveCircle( dummysegm->GetCenter(), dummysegm->GetRadius(),
-                            dummysegm->GetWidth(), false );
+                                             dummysegm->GetWidth(), false );
                     break;
+
+                case T_gr_rect:
+                    dummysegm = parseDRAWSEGMENT( true );
+                    pad->AddPrimitiveRect( dummysegm->GetStart(), dummysegm->GetEnd(),
+                                           dummysegm->GetWidth(), false );
+                    break;
+
 
                 case T_gr_poly:
                     dummysegm = parseDRAWSEGMENT();
-                    pad->AddPrimitivePoly(
-                            dummysegm->BuildPolyPointsList(), dummysegm->GetWidth(), false );
+                    pad->AddPrimitivePoly( dummysegm->BuildPolyPointsList(),
+                                           dummysegm->GetWidth(), false );
                     break;
 
                 case T_gr_curve:
                     dummysegm = parseDRAWSEGMENT();
                     pad->AddPrimitiveCurve( dummysegm->GetStart(), dummysegm->GetEnd(),
-                            dummysegm->GetBezControl1(), dummysegm->GetBezControl2(),
-                            dummysegm->GetWidth(), false );
+                                            dummysegm->GetBezControl1(),
+                                            dummysegm->GetBezControl2(),
+                                            dummysegm->GetWidth(), false );
                     break;
 
                 default:
-                    Expecting( "gr_line, gr_arc, gr_circle, gr_curve or gr_poly" );
+                    Expecting( "gr_line, gr_arc, gr_circle, gr_curve, gr_rect or gr_poly" );
                     break;
                 }
 

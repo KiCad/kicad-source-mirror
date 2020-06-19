@@ -174,7 +174,7 @@ void D_PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness,
 }
 
 
-void D_PAD::AddPrimitiveSegment( wxPoint aStart, wxPoint aEnd, int aThickness,
+void D_PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
                                  bool aMergePrimitives )
 {
     PAD_CS_PRIMITIVE shape( S_SEGMENT );
@@ -188,8 +188,8 @@ void D_PAD::AddPrimitiveSegment( wxPoint aStart, wxPoint aEnd, int aThickness,
 }
 
 
-void D_PAD::AddPrimitiveArc( wxPoint aCenter, wxPoint aStart, int aArcAngle, int aThickness,
-                             bool aMergePrimitives )
+void D_PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
+                             int aThickness, bool aMergePrimitives )
 {
     PAD_CS_PRIMITIVE shape( S_ARC );
     shape.m_Start = aCenter;
@@ -203,8 +203,8 @@ void D_PAD::AddPrimitiveArc( wxPoint aCenter, wxPoint aStart, int aArcAngle, int
 }
 
 
-void D_PAD::AddPrimitiveCurve( wxPoint aStart, wxPoint aEnd, wxPoint aCtrl1, wxPoint aCtrl2,
-                               int aThickness, bool aMergePrimitives )
+void D_PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,
+                               const wxPoint& aCtrl2, int aThickness, bool aMergePrimitives )
 {
     PAD_CS_PRIMITIVE shape( S_CURVE );
     shape.m_Start = aStart;
@@ -219,12 +219,26 @@ void D_PAD::AddPrimitiveCurve( wxPoint aStart, wxPoint aEnd, wxPoint aCtrl1, wxP
 }
 
 
-void D_PAD::AddPrimitiveCircle( wxPoint aCenter, int aRadius, int aThickness,
+void D_PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness,
                                 bool aMergePrimitives )
 {
     PAD_CS_PRIMITIVE shape( S_CIRCLE );
     shape.m_Start = aCenter;
     shape.m_Radius = aRadius;
+    shape.m_Thickness = aThickness;
+    m_basicShapes.push_back( shape );
+
+    if( aMergePrimitives )
+        MergePrimitivesAsPolygon();
+}
+
+
+void D_PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
+                              bool aMergePrimitives )
+{
+    PAD_CS_PRIMITIVE shape( S_RECT );
+    shape.m_Start = aStart;
+    shape.m_End = aEnd;
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
 
