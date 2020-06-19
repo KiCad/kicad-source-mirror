@@ -40,7 +40,9 @@ add_executable( drc_proto
     drc_rule_parser.cpp
     drc_rules_proto_keywords.cpp
     drc_test_provider.cpp
-    drc_clearance_test.cpp
+    drc_test_provider_clearance_base.cpp
+    drc_test_provider_copper_clearance.cpp
+    drc_test_provider_hole_clearance.cpp
     drc_engine.cpp
     ../qa_utils/mocks.cpp
     ../pcbnew_utils/board_file_utils.cpp

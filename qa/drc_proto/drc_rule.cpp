@@ -44,13 +44,13 @@ test::DRC_RULE::~DRC_RULE()
 
 test::DRC_RULE_CONDITION::DRC_RULE_CONDITION()
 {
-    if( m_ucode )
-        delete m_ucode;
+    m_ucode = nullptr;
 }
 
 test::DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 {
-
+    if( m_ucode )
+        delete m_ucode;
 }
 
 bool test::DRC_RULE_CONDITION::EvaluateFor( BOARD_ITEM* aItemA, BOARD_ITEM* aItemB )

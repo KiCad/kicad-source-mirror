@@ -39,7 +39,9 @@
 
 test::DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) : 
     m_board( aBoard ),
-    m_designSettings ( aSettings )
+    m_designSettings ( aSettings ),
+    m_reporter( nullptr ),
+    m_progressReporter( nullptr )
     {
 
     }
@@ -109,7 +111,7 @@ void test::DRC_ENGINE::inferImplicitRules()
 }
 
 
-static const int drc_debug_level = 0;
+static const int drc_debug_level = 10;
 
 void test::drc_dbg( int level, const char* fmt, ... )
 {
@@ -128,7 +130,7 @@ void test::drc_dbg( int level, const char* fmt, ... )
 
 bool test::DRC_ENGINE::CompileRules()
 {
-    ReportAux( wxString::Format( "Compiling Rules: " ) );
+    ReportAux( wxString::Format( "Compiling Rules (%d rules, %d conditions): ", m_rules.size(), m_ruleConditions.size() ) );
 
     for( auto provider : m_testProviders )
     {
