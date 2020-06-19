@@ -33,7 +33,6 @@ set( common_srcs
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp
 
     # stuff from common which is needed...why?
-    ${CMAKE_SOURCE_DIR}/common/colors.cpp
     ${CMAKE_SOURCE_DIR}/common/observable.cpp
 
     wximage_test_utils.cpp

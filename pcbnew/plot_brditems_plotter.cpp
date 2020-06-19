@@ -39,7 +39,6 @@
 #include <trigo.h>
 
 #include <board_design_settings.h>            // for BOARD_DESIGN_SETTINGS
-#include <colors.h>                           // for LIGHTGRAY, WHITE
 #include <core/typeinfo.h>                    // for dyn_cast, PCB_DIMENSION_T
 #include <eda_text.h>                         // for FILLED, EDA_DRAW_MODE_T
 #include <gal/color4d.h>                      // for COLOR4D, operator!=

@@ -27,9 +27,68 @@
 #ifndef COLOR4D_H_
 #define COLOR4D_H_
 
-#include <colors.h>
 #include <cassert>
 #include <nlohmann/json_fwd.hpp>
+
+#ifdef WX_COMPATIBILITY
+#include <wx/wx.h>
+#endif
+
+/**
+ * Legacy color enumeration. Also contains a flag and the alpha value in
+ * the upper bits
+ */
+enum EDA_COLOR_T
+{
+    UNSPECIFIED_COLOR = -1,
+    BLACK = 0,
+    DARKDARKGRAY,
+    DARKGRAY,
+    LIGHTGRAY,
+    WHITE,
+    LIGHTYELLOW,
+    DARKBLUE,
+    DARKGREEN,
+    DARKCYAN,
+    DARKRED,
+    DARKMAGENTA,
+    DARKBROWN,
+    BLUE,
+    GREEN,
+    CYAN,
+    RED,
+    MAGENTA,
+    BROWN,
+    LIGHTBLUE,
+    LIGHTGREEN,
+    LIGHTCYAN,
+    LIGHTRED,
+    LIGHTMAGENTA,
+    YELLOW,
+    PUREBLUE,
+    PUREGREEN,
+    PURECYAN,
+    PURERED,
+    PUREMAGENTA,
+    PUREYELLOW,
+    NBCOLORS,                    ///< Number of colors
+    HIGHLIGHT_FLAG =  ( 1<<19 ),
+    MASKCOLOR      =    31       ///< mask for color index into g_ColorRefs[]
+};
+
+struct StructColors
+{
+    unsigned char m_Blue;
+    unsigned char m_Green;
+    unsigned char m_Red;
+    EDA_COLOR_T   m_Numcolor;
+    std::string   m_ColorName;
+    EDA_COLOR_T   m_LightColor;
+};
+
+/// Global list of legacy color names, still used all over the place for constructing COLOR4D's
+extern const StructColors g_ColorRefs[NBCOLORS];
+
 
 namespace KIGFX
 {
@@ -297,6 +356,11 @@ public:
      * @param aInV is value component.
      */
     void FromHSV( double aInH, double aInS, double aInV );
+
+    /**
+     * Returns a legacy color ID that is closest to the given 8-bit RGB values.
+     */
+    static EDA_COLOR_T FindNearestLegacyColor( int aR, int aG, int aB );
 
     // Color components: red, green, blue, alpha
     double r; ///< Red component

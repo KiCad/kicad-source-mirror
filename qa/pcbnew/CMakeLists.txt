@@ -31,7 +31,6 @@ add_executable( qa_pcbnew
     ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
 
     # stuff from common which is needed...why?
-    ${CMAKE_SOURCE_DIR}/common/colors.cpp
     ${CMAKE_SOURCE_DIR}/common/observable.cpp
 
     # The main test entry points

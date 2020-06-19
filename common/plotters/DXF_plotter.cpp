@@ -118,9 +118,9 @@ static const char* getDXFLineType( PLOT_DASH_TYPE aType )
 // DXF files do not use a RGB definition
 static wxString getDXFColorName( COLOR4D aColor )
 {
-    EDA_COLOR_T color = ColorFindNearest( int( aColor.r*255 ),
-                                          int( aColor.g*255 ),
-                                          int( aColor.b*255 ) );
+    EDA_COLOR_T color = COLOR4D::FindNearestLegacyColor( int( aColor.r * 255 ),
+                                                         int( aColor.g * 255 ),
+                                                         int( aColor.b * 255 ) );
     wxString cname( dxf_layer[color].name );
     return cname;
 }
@@ -357,7 +357,9 @@ bool DXF_PLOTTER::StartPlot()
        - Greys (251 - 255)
      */
 
-    for( EDA_COLOR_T i = BLACK; i < numLayers; i = NextColor(i) )
+    wxASSERT( numLayers < NBCOLORS );
+
+    for( EDA_COLOR_T i = BLACK; i < numLayers; i = static_cast<EDA_COLOR_T>( int( i ) + 1 )  )
     {
         fprintf( outputFile,
                  "  0\n"

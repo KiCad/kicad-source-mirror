@@ -107,8 +107,7 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 # Functions and data all need to use the #include <import_export.h> and be declared
 # as APIEXPORT
 set( LIB_KICAD_SRCS
-    colors.cpp
-    string.cpp
+        string.cpp
     )
 
 if( future )
@@ -272,8 +271,7 @@ set( COMMON_SRCS
     bitmap_base.cpp
     board_printout.cpp
     build_version.cpp
-    colors.cpp
-    commit.cpp
+        commit.cpp
     common.cpp
     config_params.cpp
     confirm.cpp

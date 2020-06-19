@@ -173,7 +173,7 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     GRForceBlackPen( true );
 
     COLOR4D bg_color = m_parent->GetDrawBgColor();
-    m_parent->SetDrawBgColor( MakeColour( WHITE ) );
+    m_parent->SetDrawBgColor( WHITE );
 
     screen->m_ScreenNumber = aPageNum;
 

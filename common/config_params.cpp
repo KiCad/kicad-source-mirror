@@ -24,7 +24,6 @@
  */
 
 
-#include <colors.h>              // for ColorByName, EDA_COLOR_T, UNSPECIFIE...
 #include <common.h>              // for LOCALE_IO
 #include <config_params.h>       // for PARAM_CFG_INT_WITH_SCALE, PARAM_CFG_...
 #include <gal/color4d.h>         // for COLOR4D
@@ -240,73 +239,6 @@ void PARAM_CFG_INT_WITH_SCALE::SaveParam( wxConfigBase* aConfig ) const
     // and truncature issues are frequent.
     // We uses our function.
     ConfigBaseWriteDouble( aConfig, m_Ident, *m_Pt_param * m_BIU_to_cfgunit );
-}
-
-
-PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxString& ident, COLOR4D* ptparam,
-                                        COLOR4D default_val,
-                                        const wxChar* group ) :
-        PARAM_CFG( ident, PARAM_SETCOLOR, group )
-{
-    m_Pt_param = ptparam;
-    m_Default  = default_val;
-}
-
-
-PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
-                                        const wxString& ident,
-                                        COLOR4D*      ptparam,
-                                        COLOR4D       default_val,
-                                        const wxChar* group ) :
-        PARAM_CFG( ident, PARAM_SETCOLOR, group )
-{
-    m_Pt_param = ptparam;
-    m_Default  = default_val;
-    m_Setup    = Insetup;
-}
-
-
-void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
-{
-    if( !m_Pt_param || !aConfig )
-        return;
-
-    COLOR4D temp;
-
-    if( aConfig->HasEntry( m_Ident ) )
-    {
-        if( temp.SetFromWxString( aConfig->Read( m_Ident, wxT( "NONE" ) ) ) )
-        {
-            *m_Pt_param = temp;
-            return;
-        }
-    }
-
-    // If no luck, try reading legacy format
-    wxString legacy_Ident = m_Ident;
-    legacy_Ident.Replace( wxT( "4D" ), wxEmptyString );
-
-    EDA_COLOR_T old = ColorByName( aConfig->Read( legacy_Ident, wxT( "NONE" ) ) );
-
-    if( old != UNSPECIFIED_COLOR )
-    {
-        if( m_Ident == wxT( "Color4DErcWEx" ) || m_Ident == wxT( "Color4DErcEEx" ) )
-            *m_Pt_param = COLOR4D( old ).WithAlpha( 0.8 );
-        else
-            *m_Pt_param = COLOR4D( old );
-        return;
-    }
-
-    *m_Pt_param = m_Default;
-}
-
-
-void PARAM_CFG_SETCOLOR::SaveParam( wxConfigBase* aConfig ) const
-{
-    if( !m_Pt_param || !aConfig )
-        return;
-
-    aConfig->Write( m_Ident, m_Pt_param->ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
 }
 
 

@@ -70,7 +70,6 @@ void ConfigBaseWriteDouble( wxConfigBase* aConfig, const wxString& aKey, double 
 enum paramcfg_id {
     PARAM_INT,
     PARAM_INT_WITH_SCALE,
-    PARAM_SETCOLOR,
     PARAM_DOUBLE,
     PARAM_BOOL,
     PARAM_LIBNAME_LIST,
@@ -180,27 +179,6 @@ public:
                               int max = std::numeric_limits<int>::max(),
                               const wxChar* group = NULL, double aBiu2cfgunit = 1.0,
                               const wxString& legacy_ident = wxEmptyString );
-
-    virtual void ReadParam( wxConfigBase* aConfig ) const override;
-    virtual void SaveParam( wxConfigBase* aConfig ) const override;
-};
-
-
-/**
- * Configuration parameter - SetColor Class
- *
- */
-class PARAM_CFG_SETCOLOR : public PARAM_CFG
-{
-public:
-    COLOR4D* m_Pt_param;    ///<  Pointer to the parameter value
-    COLOR4D  m_Default;     ///<  The default value of the parameter
-
-public:
-    PARAM_CFG_SETCOLOR( const wxString& ident, COLOR4D* ptparam,
-                        COLOR4D default_val, const wxChar* group = NULL );
-    PARAM_CFG_SETCOLOR( bool Insetup, const wxString& ident, COLOR4D* ptparam,
-                        COLOR4D default_val, const wxChar* group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;

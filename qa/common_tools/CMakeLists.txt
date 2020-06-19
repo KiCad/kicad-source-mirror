@@ -27,7 +27,6 @@ add_executable( qa_common_tools
     # ../../common/eda_text.cpp
 
     # stuff from common which is needed...why?
-    ${CMAKE_SOURCE_DIR}/common/colors.cpp
     ${CMAKE_SOURCE_DIR}/common/observable.cpp
 
     # Mock Pgm needed for advanced_config in coroutines

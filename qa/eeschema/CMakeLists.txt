@@ -33,7 +33,6 @@ include_directories(
 
 set( QA_EESCHEMA_SRCS
     # stuff from common which is needed...why?
-    ${CMAKE_SOURCE_DIR}/common/colors.cpp
     ${CMAKE_SOURCE_DIR}/common/observable.cpp
 
     # need the mock Pgm for many functions
