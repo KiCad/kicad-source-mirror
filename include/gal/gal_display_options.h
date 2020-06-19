@@ -24,7 +24,7 @@
 #ifndef GAL_DISPLAY_OPTIONS_H__
 #define GAL_DISPLAY_OPTIONS_H__
 
-#include <dpi_scaling.h>
+#include <gal/dpi_scaling.h>
 #include <observable.h>
 
 class COMMON_SETTINGS;

@@ -38,8 +38,8 @@
 #include <board_stackup_manager/class_board_stackup.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
 #include <class_board.h>
-#include <dpi_scaling.h>
 #include <layers_id_colors_and_visibility.h>
+#include <gal/dpi_scaling.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <settings/common_settings.h>

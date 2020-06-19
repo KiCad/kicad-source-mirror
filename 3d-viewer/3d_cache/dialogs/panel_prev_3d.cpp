@@ -34,7 +34,7 @@
 #include <bitmaps.h>
 #include <class_board.h>
 #include <common_ogl/cogl_att_list.h>
-#include <dpi_scaling.h>
+#include <gal/dpi_scaling.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <settings/common_settings.h>
