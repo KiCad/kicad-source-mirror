@@ -65,7 +65,7 @@ namespace KIGFX
 class PAD_CS_PRIMITIVE
 {
 public:
-    STROKE_T m_Shape;   /// S_SEGMENT, S_ARC, S_CIRCLE, S_POLYGON only (same as DRAWSEGMENT)
+    STROKE_T m_Shape;   /// S_SEGMENT, S_RECT, S_ARC, S_CIRCLE, S_POLYGON only (same as DRAWSEGMENT)
     int m_Thickness;    /// thickness of segment or outline
                         /// For filled S_CIRCLE shape, thickness = 0.
                         // if thickness is not = 0 S_CIRCLE shape is a ring

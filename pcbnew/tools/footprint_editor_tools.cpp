@@ -466,7 +466,7 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
                 shape.m_Ctrl2 = em->GetBezControl2();
                 shape.m_Poly = em->BuildPolyPointsList();
 
-                shapes.push_back(shape);
+                shapes.push_back( shape );
 
                 break;
             }
@@ -501,19 +501,49 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    double refOrientation = 0.0;
+    double deltaAngle = 0.0;
 
-    if( refPad )
+    if( refPad && refPad->GetShape() == PAD_SHAPE_CUSTOM )
+    {
+        // it's already a pad anchor
+    }
+    else if( refPad )
     {
         pad.reset( static_cast<D_PAD*>( refPad->Clone() ) );
 
         if( refPad->GetShape() == PAD_SHAPE_RECT )
+        {
             pad->SetAnchorPadShape( PAD_SHAPE_RECT );
+            deltaAngle = 0.0;
+        }
+        else if( refPad->GetShape() == PAD_SHAPE_CIRCLE )
+        {
+            pad->SetAnchorPadShape( PAD_SHAPE_CIRCLE );
+            deltaAngle = 0.0;
+        }
+        else
+        {
+            // Create a new minimally-sized circular anchor and convert existing pad
+            // to a polygon primitive
+            pad->SetAnchorPadShape( PAD_SHAPE_CIRCLE );
+            int r = refPad->GetDrillSize().x + Millimeter2iu( 0.2 );
+            pad->SetSize( wxSize( r, r ) );
+            pad->SetOffset( wxPoint( 0, 0 ) );
 
-        // ignore the pad offset for the moment. Makes more trouble than it's worth.
-        pad->SetOffset( wxPoint( 0, 0 ) );
-        refOrientation = pad->GetOrientation();
-        pad->SetOrientation( 0.0 );
+            SHAPE_POLY_SET existingOutline;
+            int maxError = board()->GetDesignSettings().m_MaxError;
+            refPad->TransformShapeWithClearanceToPolygon( existingOutline, 0, maxError );
+
+            PAD_CS_PRIMITIVE shape( S_POLYGON );
+
+            for( auto ii = existingOutline.Iterate(); ii; ii++ )
+                shape.m_Poly.emplace_back( ii->x, ii->y );
+
+            shapes.push_back( shape );
+
+            deltaAngle = refPad->GetOrientation();
+            pad->SetOrientation( 0.0 );
+        }
     }
     else
     {
@@ -562,7 +592,7 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     for( auto& shape : shapes )
     {
         shape.Move( wxPoint( -anchor->x, -anchor->y ) );
-        shape.Rotate( wxPoint( 0, 0 ), -refOrientation );
+        shape.Rotate( wxPoint( 0, 0 ), -deltaAngle );
     }
 
     pad->SetPosition( wxPoint( anchor->x, anchor->y ) );
@@ -570,7 +600,7 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     pad->ClearFlags();
 
     bool result = pad->MergePrimitivesAsPolygon();
-    pad->Rotate( wxPoint( anchor->x, anchor->y ), refOrientation );
+    pad->Rotate( wxPoint( anchor->x, anchor->y ), deltaAngle );
 
     if( !result )
     {

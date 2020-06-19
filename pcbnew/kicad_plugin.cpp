@@ -1538,6 +1538,13 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                               FormatInternalUnits( primitive.m_Thickness ).c_str() );
                 break;
 
+            case S_RECT:
+                m_out->Print( nested_level, "(gr_rect (start %s) (end %s) (width %s))",
+                              FormatInternalUnits( primitive.m_Start ).c_str(),
+                              FormatInternalUnits( primitive.m_End ).c_str(),
+                              FormatInternalUnits( primitive.m_Thickness ).c_str() );
+                break;
+
             case S_ARC:             // Arc with rounded ends
                 m_out->Print( nested_level, "(gr_arc (start %s) (end %s) (angle %s) (width %s))",
                               FormatInternalUnits( primitive.m_Start ).c_str(),
