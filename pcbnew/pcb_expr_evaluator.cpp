@@ -55,11 +55,27 @@ class PCB_EXPR_BUILTIN_FUNCTIONS
             rv->Set( value ? 1.0 : 0.0 );
             aCtx->Push( rv );
         }
+
+        static void isPlated( LIBEVAL::UCODE* aUcode, LIBEVAL::UCODE::CONTEXT* aCtx, void *self )
+        {
+            auto vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+            auto item = vref->GetObject(aUcode);
+            bool result = false;
+            if( item->Type() == PCB_PAD_T )
+            {
+                auto pad = static_cast<D_PAD*>( item );
+                result = pad->GetAttribute() == PAD_ATTRIB_STANDARD;
+            }
+            auto rv =  aCtx->AllocValue();
+            rv->Set( result ? 1.0 : 0.0 );
+            aCtx->Push( rv );
+        }
 };
 
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
     m_funcs[ "onlayer" ] = onLayer;
+    m_funcs[ "isplated" ] = isPlated;
 }
 
 BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::UCODE* aUcode ) const
