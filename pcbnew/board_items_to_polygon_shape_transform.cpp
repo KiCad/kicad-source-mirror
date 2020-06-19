@@ -377,6 +377,14 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 
         for( const wxPoint& pt : pts )
             aCornerBuffer.Append( pt );
+
+        if( width != 0 )     // Add thick outlines
+        {
+            TransformSegmentToPolygon( aCornerBuffer, pts[0], pts[1], aError, width );
+            TransformSegmentToPolygon( aCornerBuffer, pts[1], pts[2], aError, width );
+            TransformSegmentToPolygon( aCornerBuffer, pts[2], pts[3], aError, width );
+            TransformSegmentToPolygon( aCornerBuffer, pts[3], pts[0], aError, width );
+        }
     }
         break;
 
