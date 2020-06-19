@@ -43,17 +43,15 @@ our [Forum](https://forum.kicad.info/).
 * [include](include)           - Interfaces to the common library
 * [kicad](kicad)             - Sourcecode of the project manager
 * [libs](libs)           - Sourcecode of kicad utilities (geometry and others)
-* [new](new)               - Staging area for the new schematic library format
 * [pagelayout_editor](pagelayout_editor) - Sourcecode of the pagelayout editor
 * [patches](patches)           - Collection of patches for external dependencies
 * [pcbnew](pcbnew)           - Sourcecode of the printed circuit board editor
-* [plugins](plugins)           - Sourcecode of the new plugin concept
-* [polygon](polygon)           - Sourcecode of the polygon library
-* [qa](qa)                - Testcases using the python interface
+* [plugins](plugins)           - Sourcecode for the 3d viewer plugins
+* [qa](qa)                - Unit testing framework for KiCad
 * [resources](resources)         - Resources for freedesktop mime-types for linux
 * [scripting](scripting)         - SWIG Python scripting definitions and build scripts
 * [scripts](scripts)           - Example scripts for distribution with KiCad
-* [template](template)          - Project and pagelayout templates
+* [template](template)          - Project template
 * [thirdparty](thirdparty)           - Sourcecode of external libraries used in kicad but not written by Kicad team
 * [tools](tools)             - Other miscellaneous helpers for testing
 * [utils](utils)             - Small utils for kicad, e.g. IDF, STEP and OGL tools and converters
