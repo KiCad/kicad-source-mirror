@@ -55,11 +55,15 @@ void SCHEMATIC::Reset()
 }
 
 
+
 void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
 {
     wxCHECK_RET( aRootSheet, "Call to SetRoot with null SCH_SHEET!" );
 
     m_rootSheet = aRootSheet;
+
+    m_currentSheet->clear();
+    m_currentSheet->push_back( m_rootSheet );
 
     m_connectionGraph->Reset();
 }

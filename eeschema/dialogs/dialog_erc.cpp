@@ -350,11 +350,11 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
     SCH_SHEET_PATH  sheet;
     SCH_ITEM*       item = m_parent->Schematic().GetSheets().GetItem( itemID, &sheet );
 
-    if( item )
+    if( item && item->GetClass() != wxT( "DELETED_SHEET_ITEM" ) )
     {
         WINDOW_THAWER thawer( m_parent );
 
-        if( sheet != m_parent->GetCurrentSheet() )
+        if( !sheet.empty() && sheet != m_parent->GetCurrentSheet() )
         {
             m_parent->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
             m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
