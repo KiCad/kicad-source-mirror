@@ -87,7 +87,7 @@ struct StructColors
 };
 
 /// Global list of legacy color names, still used all over the place for constructing COLOR4D's
-extern const StructColors g_ColorRefs[NBCOLORS];
+const StructColors* colorRefs();
 
 
 namespace KIGFX

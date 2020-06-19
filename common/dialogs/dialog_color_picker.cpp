@@ -237,7 +237,7 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
                 grid_row++;
             }
 
-            int ii = grid_row + (grid_col*table_row_count); // The index in g_ColorRefs
+            int ii = grid_row + (grid_col*table_row_count); // The index in colorRefs()
 
             int butt_ID = ID_COLOR_BLACK + ii;
             wxMemoryDC iconDC;
@@ -246,7 +246,7 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
 
             iconDC.SelectObject( ButtBitmap );
 
-            KIGFX::COLOR4D buttcolor = KIGFX::COLOR4D( g_ColorRefs[ii].m_Numcolor );
+            KIGFX::COLOR4D buttcolor = KIGFX::COLOR4D( colorRefs()[ii].m_Numcolor );
             m_Color4DList[ butt_ID - ID_COLOR_BLACK ] = buttcolor;
 
             iconDC.SetPen( *wxBLACK_PEN );
@@ -265,7 +265,7 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
                                wxLEFT | wxBOTTOM, 5 );
 
             wxStaticText* label = new wxStaticText( m_panelDefinedColors, -1,
-                                                    wxGetTranslation( g_ColorRefs[ii].m_ColorName ),
+                                                    wxGetTranslation( colorRefs()[ii].m_ColorName ),
                                                     wxDefaultPosition, wxDefaultSize, 0 );
             m_fgridColor->Add( label, 1,
                                wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
