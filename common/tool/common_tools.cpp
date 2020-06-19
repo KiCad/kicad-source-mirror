@@ -270,7 +270,6 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
 
     // Leave a bigger margin for library editors & viewers
     if( frame->IsType( FRAME_FOOTPRINT_VIEWER ) || frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
-         || frame->IsType( FRAME_SHAPE_EDITOR ) || frame->IsType( FRAME_SHAPE_EDITOR_MODAL )
          || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
     {
         margin_scale_factor = 1.4;
