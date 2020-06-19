@@ -329,6 +329,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
         // Check angle of arc.
         if( m_angle.GetValue() == 0 )
             error_msgs.Add( _( "The arc angle cannot be zero." ) );
+
         KI_FALLTHROUGH;
 
     case S_CIRCLE:
@@ -337,30 +338,21 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
             error_msgs.Add( _( "The radius must be greater than zero." ) );
         break;
 
+    case S_RECT:
+        // Check for null rect.
+        if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
+            error_msgs.Add( _( "The rectangle can not be empty." ) );
+        break;
+
     case S_POLYGON:
+    case S_SEGMENT:
+    case S_CURVE:
         break;
 
     default:
-        // Check start and end are not the same.
-        if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
-            error_msgs.Add( _( "The start and end points cannot be the same." ) );
+        wxASSERT_MSG( false, "DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate not implemented for shape"
+                      + DRAWSEGMENT::ShowShape( m_item->GetShape() ) );
         break;
-    }
-
-    // Check the item thickness. Note the polygon outline thickness is allowed
-    // to be set to 0, because if the shape is exactly the polygon, its outline
-    // thickness must be 0
-    int thickness = m_thickness.GetValue();
-
-    if( m_item->GetShape() == S_POLYGON )
-    {
-        if( thickness < 0 )
-            error_msgs.Add( _( "The polygon outline thickness must be >= 0." ) );
-    }
-    else
-    {
-        if( thickness <= 0 )
-            error_msgs.Add( _( "The item thickness must be greater than zero." ) );
     }
 
     if( error_msgs.GetCount() )

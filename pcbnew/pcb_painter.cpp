@@ -919,10 +919,23 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         std::vector<wxPoint> pts;
         aSegment->GetRectCorners( &pts );
 
-        m_gal->DrawSegment( pts[0], pts[1], thickness );
-        m_gal->DrawSegment( pts[1], pts[2], thickness );
-        m_gal->DrawSegment( pts[2], pts[3], thickness );
-        m_gal->DrawSegment( pts[3], pts[0], thickness );
+        if( aSegment->GetWidth() > 0 )
+        {
+           m_gal->DrawSegment( pts[0], pts[1], thickness );
+           m_gal->DrawSegment( pts[1], pts[2], thickness );
+           m_gal->DrawSegment( pts[2], pts[3], thickness );
+           m_gal->DrawSegment( pts[3], pts[0], thickness );
+        }
+        else
+        {
+            SHAPE_POLY_SET poly;
+            poly.NewOutline();
+
+            for( const wxPoint& pt : pts )
+                poly.Append( pt );
+
+            m_gal->DrawPolygon( poly );
+        }
     }
         break;
 
@@ -942,15 +955,15 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         else
         {
             m_gal->SetLineWidth( thickness );
-            m_gal->SetIsFill( false );
-            m_gal->SetIsStroke( true );
+            m_gal->SetIsFill( aSegment->GetWidth() == 0 );
+            m_gal->SetIsStroke( aSegment->GetWidth() > 0 );
             m_gal->DrawCircle( start, aSegment->GetRadius() );
         }
         break;
 
     case S_POLYGON:
     {
-        SHAPE_POLY_SET& shape = ((DRAWSEGMENT*)aSegment)->GetPolyShape();
+        SHAPE_POLY_SET& shape = const_cast<DRAWSEGMENT*>( aSegment )->GetPolyShape();
 
         if( shape.OutlineCount() == 0 )
             break;

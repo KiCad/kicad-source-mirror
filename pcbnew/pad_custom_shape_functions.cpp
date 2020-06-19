@@ -161,6 +161,7 @@ void D_PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool 
     AddPrimitivePoly( points, aThickness, aMergePrimitives );
 }
 
+
 void D_PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness,
                               bool aMergePrimitives )
 {
@@ -259,6 +260,7 @@ bool D_PAD::SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList 
     // Only one polygon is expected (pad area = only one copper area)
     return MergePrimitivesAsPolygon();
 }
+
 
 bool D_PAD::AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList )
 {

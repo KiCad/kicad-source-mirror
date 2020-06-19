@@ -777,32 +777,49 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSe
         if( inner_radius < 0 )
             inner_radius = 0;
 
-        aDstContainer->Add( new CRING2D( center3DU, inner_radius, outer_radius, *aDrawSegment ) );
+        if( aDrawSegment->GetWidth() > 0 )
+            aDstContainer->Add( new CRING2D( center3DU, inner_radius, outer_radius, *aDrawSegment ) );
+        else
+            aDstContainer->Add( new CFILLEDCIRCLE2D( center3DU, outer_radius, *aDrawSegment ) );
     }
     break;
 
     case S_RECT:
     {
-        std::vector<wxPoint> pts;
-        aDrawSegment->GetRectCorners( &pts );
+        if( aDrawSegment->GetWidth() > 0 )
+        {
+            std::vector<wxPoint> pts;
+            aDrawSegment->GetRectCorners( &pts );
 
-        const SFVEC2F topLeft3DU(  pts[0].x * m_biuTo3Dunits, -pts[0].y * m_biuTo3Dunits );
-        const SFVEC2F topRight3DU( pts[1].x * m_biuTo3Dunits, -pts[1].y * m_biuTo3Dunits );
-        const SFVEC2F botRight3DU( pts[2].x * m_biuTo3Dunits, -pts[2].y * m_biuTo3Dunits );
-        const SFVEC2F botLeft3DU(  pts[3].x * m_biuTo3Dunits, -pts[3].y * m_biuTo3Dunits );
+            const SFVEC2F topLeft3DU(  pts[0].x * m_biuTo3Dunits, -pts[0].y * m_biuTo3Dunits );
+            const SFVEC2F topRight3DU( pts[1].x * m_biuTo3Dunits, -pts[1].y * m_biuTo3Dunits );
+            const SFVEC2F botRight3DU( pts[2].x * m_biuTo3Dunits, -pts[2].y * m_biuTo3Dunits );
+            const SFVEC2F botLeft3DU(  pts[3].x * m_biuTo3Dunits, -pts[3].y * m_biuTo3Dunits );
 
-        aDstContainer->Add( new CROUNDSEGMENT2D( topLeft3DU, topRight3DU,
-                                                 linewidth * m_biuTo3Dunits,
-                                                 *aDrawSegment ) );
-        aDstContainer->Add( new CROUNDSEGMENT2D( topRight3DU, botRight3DU,
-                                                 linewidth * m_biuTo3Dunits,
-                                                 *aDrawSegment ) );
-        aDstContainer->Add( new CROUNDSEGMENT2D( botRight3DU, botLeft3DU,
-                                                 linewidth * m_biuTo3Dunits,
-                                                 *aDrawSegment ) );
-        aDstContainer->Add( new CROUNDSEGMENT2D( botLeft3DU, topLeft3DU,
-                                                 linewidth * m_biuTo3Dunits,
-                                                 *aDrawSegment ) );
+            aDstContainer->Add( new CROUNDSEGMENT2D( topLeft3DU, topRight3DU,
+                                                     linewidth * m_biuTo3Dunits,
+                                                     *aDrawSegment ) );
+            aDstContainer->Add( new CROUNDSEGMENT2D( topRight3DU, botRight3DU,
+                                                     linewidth * m_biuTo3Dunits,
+                                                     *aDrawSegment ) );
+            aDstContainer->Add( new CROUNDSEGMENT2D( botRight3DU, botLeft3DU,
+                                                     linewidth * m_biuTo3Dunits,
+                                                     *aDrawSegment ) );
+            aDstContainer->Add( new CROUNDSEGMENT2D( botLeft3DU, topLeft3DU,
+                                                     linewidth * m_biuTo3Dunits,
+                                                     *aDrawSegment ) );
+        }
+        else
+        {
+            SHAPE_POLY_SET polyList;
+
+            aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aClearanceValue );
+
+            polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+            Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits,
+                                                     *aDrawSegment );
+        }
     }
         break;
 
