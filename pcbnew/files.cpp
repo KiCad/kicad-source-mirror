@@ -685,8 +685,8 @@ wxString PCB_EDIT_FRAME::createBackupFile( const wxString& aFileName )
         if( backupFileName.FileExists() )
             wxRemoveFile( backupFileName.GetFullPath() );
 
-        // Rename the current file from <xxx>.kicad_pcb to <xxx>.kicad_pcb-bak
-        if( !wxRenameFile( fn.GetFullPath(), backupFileName.GetFullPath() ) )
+        // Copy the current file from <xxx>.kicad_pcb to <xxx>.kicad_pcb-bak
+        if( !wxCopyFile( fn.GetFullPath(), backupFileName.GetFullPath() ) )
         {
             wxString msg = wxString::Format( _(
                     "Warning: unable to create backup file \"%s\"" ),
@@ -707,7 +707,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 {
     // please, keep it simple.  prompting goes elsewhere.
 
-    wxFileName  pcbFileName = aFileName;
+    wxFileName pcbFileName = aFileName;
 
     if( pcbFileName.GetExt() == LegacyPcbFileExtension )
         pcbFileName.SetExt( KiCadPcbFileExtension );
@@ -729,6 +729,10 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         backupFileName = createBackupFile( aFileName );
     }
 
+    wxFileName tempFile( aFileName );
+    tempFile.SetName( wxT( "." ) + tempFile.GetName() );
+    tempFile.SetExt( tempFile.GetExt() + wxT( "$" ) );
+
     GetBoard()->SynchronizeNetsAndNetClasses();
 
     // Select default Netclass before writing file. Useful to save default values in headers.
@@ -747,9 +751,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         PLUGIN::RELEASER    pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
 
-        wxASSERT( pcbFileName.IsAbsolute() );
+        wxASSERT( tempFile.IsAbsolute() );
 
-        pi->Save( pcbFileName.GetFullPath(), GetBoard(), NULL );
+        pi->Save( tempFile.GetFullPath(), GetBoard(), NULL );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -759,7 +763,26 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
                 );
         DisplayError( this, msg );
 
-        lowerTxt.Printf( _( "Failed to create \"%s\"" ), pcbFileName.GetFullPath() );
+        lowerTxt.Printf( _( "Failed to create temporary file \"%s\"" ), tempFile.GetFullPath() );
+
+        AppendMsgPanel( upperTxt, lowerTxt, CYAN );
+
+        // In case we started a file but didn't fully write it, clean up
+        wxRemoveFile( tempFile.GetFullPath() );
+
+        return false;
+    }
+
+    // If save succeeded, replace the original with what we just wrote
+    if( !wxRenameFile( tempFile.GetFullPath(), pcbFileName.GetFullPath() ) )
+    {
+        wxString msg = wxString::Format( _(
+                "Error saving board file \"%s\".\nFailed to rename temporary file \"%s\"" ),
+                pcbFileName.GetFullPath(), tempFile.GetFullPath()
+                );
+        DisplayError( this, msg );
+
+        lowerTxt.Printf( _( "Failed to rename temporary file \"%s\"" ), tempFile.GetFullPath() );
 
         AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 

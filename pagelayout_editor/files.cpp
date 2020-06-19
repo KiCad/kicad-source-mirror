@@ -263,9 +263,27 @@ bool PL_EDITOR_FRAME::InsertPageLayoutDescrFile( const wxString& aFullFileName )
 
 bool PL_EDITOR_FRAME::SavePageLayoutDescrFile( const wxString& aFullFileName )
 {
-    if( ! aFullFileName.IsEmpty() )
+    if( !aFullFileName.IsEmpty() )
     {
-        WS_DATA_MODEL::GetTheInstance().Save( aFullFileName );
+        wxFileName tempFile( aFullFileName );
+        tempFile.SetName( wxT( "." ) + tempFile.GetName() );
+        tempFile.SetExt( tempFile.GetExt() + wxT( "$" ) );
+
+        try
+        {
+            WS_DATA_MODEL::GetTheInstance().Save( tempFile.GetFullPath() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            // In case we started a file but didn't fully write it, clean up
+            wxRemoveFile( tempFile.GetFullPath() );
+
+            return false;
+        }
+
+        if( !wxRenameFile( tempFile.GetFullPath(), aFullFileName ) )
+            return false;
+
         GetScreen()->ClrModify();
         return true;
     }
