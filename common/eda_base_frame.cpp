@@ -823,9 +823,11 @@ void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
     // When we maximize the window, we want to save the old information
     // so that we can add it to the settings on next window load.
     // Contrary to the documentation, this event seems to be generated
-    // when the window is also being unmaximized, so we only capture the
-    // size information when we maximize the window.
+    // when the window is also being unmaximized on OSX, so we only
+    // capture the size information when we maximize the window when on OSX.
+#ifdef __WXOSX__
     if( !IsMaximized() )
+#endif
     {
         m_NormalFrameSize = GetWindowSize();
         m_NormalFramePos  = GetPosition();
@@ -840,18 +842,18 @@ void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
 
 wxSize EDA_BASE_FRAME::GetWindowSize()
 {
-    #ifdef __WXGTK__
-        // GTK includes the window decorations in the normal GetSize call,
-        // so we have to use a GTK-specific sizing call that returns the
-        // non-decorated window size.
-        int width  = 0;
-        int height = 0;
-        GTKDoGetSize( &width, &height );
+#ifdef __WXGTK__
+    // GTK includes the window decorations in the normal GetSize call,
+    // so we have to use a GTK-specific sizing call that returns the
+    // non-decorated window size.
+    int width  = 0;
+    int height = 0;
+    GTKDoGetSize( &width, &height );
 
-        wxSize winSize( width, height );
-    #else
-        wxSize winSize = GetSize();
-    #endif
+    wxSize winSize( width, height );
+#else
+    wxSize winSize = GetSize();
+#endif
 
     return winSize;
 }

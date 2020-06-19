@@ -73,7 +73,7 @@ enum EDA_COLOR_T
     PUREYELLOW,
     NBCOLORS,                    ///< Number of colors
     HIGHLIGHT_FLAG =  ( 1<<19 ),
-    MASKCOLOR      =    31       ///< mask for color index into g_ColorRefs[]
+    MASKCOLOR      =    31       ///< mask for color index into colorRefs()[]
 };
 
 struct StructColors

@@ -171,12 +171,12 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
     // Size of color swatches
     const int w = 32, h = 32;
 
-    // Colors are built from the g_ColorRefs table (size NBCOLORS).
-    // The look is better when g_ColorRefs order is displayed in a grid matrix
+    // Colors are built from the colorRefs() table (size NBCOLORS).
+    // The look is better when colorRefs() order is displayed in a grid matrix
     // of 6 row and 5 columns, first filling a row, and after the next column.
     // But the wxFlexGrid used here must be filled by columns, then next row
-    // the best interval g_ColorRefs from a matrix row to the next row is 6
-    // So when have to reorder the index used to explore g_ColorRefs
+    // the best interval colorRefs() from a matrix row to the next row is 6
+    // So when have to reorder the index used to explore colorRefs()
     int grid_col = 0;
     int grid_row = 0;
     int table_row_count = 6;
