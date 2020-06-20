@@ -60,8 +60,7 @@
 #include <widgets/infobar.h>
 
 
-bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName,
-                                 bool aCreateBackupFile )
+bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 {
     wxString msg;
     wxFileName schematicFileName;
@@ -100,25 +99,6 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName,
 
     if( !IsWritable( schematicFileName ) )
         return false;
-
-    // Create backup if requested
-    if( aCreateBackupFile && schematicFileName.FileExists() )
-    {
-        wxFileName backupFileName = schematicFileName;
-
-        // Rename the old file to a '-bak' suffixed one:
-        backupFileName.SetExt( schematicFileName.GetExt() + GetBackupSuffix()  );
-
-        if( backupFileName.FileExists() )
-            wxRemoveFile( backupFileName.GetFullPath() );
-
-        if( !wxCopyFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
-        {
-            msg.Printf( _( "Could not save backup of file \"%s\"" ),
-                        schematicFileName.GetFullPath() );
-            DisplayError( this, msg );
-        }
-    }
 
     wxFileName tempFile( schematicFileName );
     tempFile.SetName( wxT( "." ) + tempFile.GetName() );
@@ -764,7 +744,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
         screens.GetScreen( i )->SetFileName( fn.GetFullPath() );
 
-        if( SaveEEFile( screens.GetSheet( i ), false, NO_BACKUP_FILE ) )
+        if( SaveEEFile( screens.GetSheet( i ), false ) )
             screens.GetScreen( i )->SetModify();
         else
             autoSaveOk = false;

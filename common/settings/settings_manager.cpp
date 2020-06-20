@@ -761,12 +761,6 @@ bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath )
 }
 
 
-wxString SETTINGS_MANAGER::GetProjectBackupsPath() const
-{
-    return Prj().GetProjectPath() + Prj().GetProjectName() + PROJECT_BACKUPS_DIR_SUFFIX;
-}
-
-
 bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
 {
     wxFileName fullFn( aProject.GetProjectFullName() );

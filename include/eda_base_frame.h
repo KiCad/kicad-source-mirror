@@ -56,10 +56,6 @@
 #define KICAD_MANAGER_FRAME_NAME   wxT( "KicadFrame" )
 
 
-// Readability helper definitions for creating backup files.
-#define CREATE_BACKUP_FILE    true
-#define NO_BACKUP_FILE        false
-
 class EDA_ITEM;
 class EDA_RECT;
 class EDA_DRAW_PANEL_GAL;

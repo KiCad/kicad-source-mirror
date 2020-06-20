@@ -106,11 +106,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                        _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
                        rescue_xpm,                   SELECTION_CONDITIONS::ShowAlways );
 
-    fileMenu->AddItem( ID_MENU_READ_BOARD_BACKUP_FILE,
-                       _( "Revert to Last Backup" ),
-                       _( "Clear board and get previous backup version of board" ),
-                       undo_xpm,                     SELECTION_CONDITIONS::ShowAlways );
-
     // Import submenu
     ACTION_MENU* submenuImport = new ACTION_MENU( false );
     submenuImport->SetTool( selTool );

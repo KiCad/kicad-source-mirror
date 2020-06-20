@@ -248,22 +248,13 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                        && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
         }
 
-    case ID_MENU_READ_BOARD_BACKUP_FILE:
     case ID_MENU_RECOVER_BOARD_AUTOSAVE:
         {
             wxFileName currfn = Prj().AbsolutePath( GetBoard()->GetFileName() );
             wxFileName fn = currfn;
 
-            if( id == ID_MENU_RECOVER_BOARD_AUTOSAVE )
-            {
-                wxString rec_name = GetAutoSaveFilePrefix() + fn.GetName();
-                fn.SetName( rec_name );
-            }
-            else
-            {
-                wxString backup_ext = fn.GetExt() + GetBackupSuffix();
-                fn.SetExt( backup_ext );
-            }
+            wxString rec_name = GetAutoSaveFilePrefix() + fn.GetName();
+            fn.SetName( rec_name );
 
             if( !fn.FileExists() )
             {
@@ -272,7 +263,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 return false;
             }
 
-            msg.Printf( _( "OK to load recovery or backup file \"%s\"" ), fn.GetFullPath() );
+            msg.Printf( _( "OK to load recovery file \"%s\"" ), fn.GetFullPath() );
 
             if( !IsOK( this, msg ) )
                 return false;
@@ -351,7 +342,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 if( id == ID_COPY_BOARD_AS )
                     return SavePcbCopy( filename );
                 else
-                    return SavePcbFile( filename, NO_BACKUP_FILE );
+                    return SavePcbFile( filename, false );
             }
             return false;
         }
@@ -475,7 +466,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( IsContentModified() )
     {
         if( !HandleUnsavedChanges( this, _( "The current PCB has been modified.  Save changes?" ),
-            [&]()->bool { return SavePcbFile( GetBoard()->GetFileName(), CREATE_BACKUP_FILE ); } ) )
+            [&]()->bool { return SavePcbFile( GetBoard()->GetFileName() ); } ) )
         {
             return false;
         }
@@ -671,40 +662,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 }
 
 
-wxString PCB_EDIT_FRAME::createBackupFile( const wxString& aFileName )
-{
-    wxFileName  fn = aFileName;
-    wxFileName  backupFileName = aFileName;
-
-    backupFileName.SetExt( fn.GetExt() + GetBackupSuffix() );
-
-    // If an old backup file exists, delete it.  If an old board file exists,
-    // rename it to the backup file name.
-    if( fn.FileExists() )
-    {
-        // Remove the old file xxx.kicad_pcb-bak if it exists.
-        if( backupFileName.FileExists() )
-            wxRemoveFile( backupFileName.GetFullPath() );
-
-        // Copy the current file from <xxx>.kicad_pcb to <xxx>.kicad_pcb-bak
-        if( !wxCopyFile( fn.GetFullPath(), backupFileName.GetFullPath() ) )
-        {
-            wxString msg = wxString::Format( _(
-                    "Warning: unable to create backup file \"%s\"" ),
-                    backupFileName.GetFullPath() );
-            DisplayError( NULL, msg );
-        }
-    }
-    else
-    {
-        backupFileName.Clear();
-    }
-
-    return backupFileName.GetFullPath();
-}
-
-
-bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupFile )
+bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory )
 {
     // please, keep it simple.  prompting goes elsewhere.
 
@@ -736,13 +694,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
             GetSettingsManager()->LoadProject( projectFile.GetFullPath() );
             GetBoard()->SetProject( &Prj() );
         }
-    }
-
-    wxString backupFileName;
-
-    if( aCreateBackupFile )
-    {
-        backupFileName = createBackupFile( aFileName );
     }
 
     wxFileName tempFile( aFileName );
@@ -810,9 +761,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     GetBoard()->SetFileName( pcbFileName.GetFullPath() );
     UpdateTitle();
 
-    // Put the saved file in File History, unless aCreateBackupFile is false (which indicates
-    // an autosave -- and we don't want autosave files in the file history).
-    if( aCreateBackupFile )
+    // Put the saved file in File History if requested
+    if( addToHistory )
         UpdateFileHistory( GetBoard()->GetFileName() );
 
     // Delete auto save file on successful save.
@@ -823,8 +773,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     if( autoSaveFileName.FileExists() )
         wxRemoveFile( autoSaveFileName.GetFullPath() );
 
-    if( !!backupFileName )
-        upperTxt.Printf( _( "Backup file: \"%s\"" ), backupFileName );
 
     lowerTxt.Printf( _( "Wrote board file: \"%s\"" ), pcbFileName.GetFullPath() );
 
@@ -920,7 +868,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
 
     wxLogTrace( traceAutoSave, "Creating auto save file <" + autoSaveFileName.GetFullPath() + ">" );
 
-    if( SavePcbFile( autoSaveFileName.GetFullPath(), NO_BACKUP_FILE ) )
+    if( SavePcbFile( autoSaveFileName.GetFullPath(), false ) )
     {
         GetScreen()->SetModify();
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );

@@ -218,11 +218,6 @@ public:
     bool SaveProject( const wxString& aFullPath = wxEmptyString );
 
     /**
-     * @return the path to the backups folder for the loaded project
-     */
-    wxString GetProjectBackupsPath() const;
-
-    /**
      * Checks if a given path is probably a valid KiCad configuration directory.
      * Actually it just checks if a file called "kicad_common" exists, because that's probably
      * good enough for now.

@@ -119,8 +119,6 @@ protected:
     // The Tool Framework initalization
     void setupTools();
 
-    wxString createBackupFile( const wxString& aFileName );
-
     /**
      * switches currently used canvas (Cairo / OpenGL).
      * It also reinit the layers manager that slightly changes with canvases
@@ -572,7 +570,6 @@ public:
      * Read and write board files
      * @param aId is an event ID ciming from file command events:
      * ID_LOAD_FILE
-     * ID_MENU_READ_BOARD_BACKUP_FILE
      * ID_MENU_RECOVER_BOARD_AUTOSAVE
      * ID_NEW_BOARD
      * ID_SAVE_BOARD
@@ -605,12 +602,10 @@ public:
      *
      * @param aFileName The file name to write or wxEmptyString to prompt user for
      *                  file name.
-     * @param aCreateBackupFile Creates a back of \a aFileName if true.  Helper
-     *                          definitions #CREATE_BACKUP_FILE and #NO_BACKUP_FILE
-     *                          are defined for improved code readability.
+     * @param addToHistory controsl whether or not to add the saved file to the recent file list
      * @return True if file was saved successfully.
      */
-    bool SavePcbFile( const wxString& aFileName, bool aCreateBackupFile = CREATE_BACKUP_FILE );
+    bool SavePcbFile( const wxString& aFileName, bool addToHistory = true );
 
     /**
      * Function SavePcbCopy

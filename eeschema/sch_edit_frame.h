@@ -580,15 +580,10 @@ public:
      *               the current screen only.
      * @param aSaveUnderNewName Controls how the file is to be saved;: using  previous name
      *                          or under a new name .
-     * @param aCreateBackupFile Creates a back of the file associated with \a aScreen
-     *                          if true.
-     *                           Helper definitions #CREATE_BACKUP_FILE and
-     *                          #NO_BACKUP_FILE are defined for improved code readability.
      * @return True if the file has been saved.
      */
     bool SaveEEFile( SCH_SHEET* aSheet,
-                     bool       aSaveUnderNewName = false,
-                     bool       aCreateBackupFile = CREATE_BACKUP_FILE );
+                     bool       aSaveUnderNewName = false );
 
 
     /**
