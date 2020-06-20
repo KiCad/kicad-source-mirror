@@ -53,6 +53,14 @@ static boost::uuids::nil_generator nilGenerator;
 KIID niluuid( 0 );
 
 
+// For static initialization
+KIID& NilUuid()
+{
+    static KIID nil( 0 );
+    return nil;
+}
+
+
 KIID::KIID() :
         m_uuid( randomGenerator() ),
         m_cached_timestamp( 0 )

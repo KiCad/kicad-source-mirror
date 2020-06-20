@@ -27,6 +27,7 @@
 #include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <confirm.h>
+#include <env_paths.h>
 #include <gestfich.h>
 #include <sch_edit_frame.h>
 #include <pgm_base.h>
@@ -282,6 +283,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         if( pro.GetFullPath() != Prj().GetProjectFullName()
           || !Prj().GetElem( PROJECT::ELEM_SCH_PART_LIBS ) )
         {
+            GetSettingsManager()->SaveProject();
+            GetSettingsManager()->UnloadProject( &Prj() );
+
             GetSettingsManager()->LoadProject( pro.GetFullPath() );
 
             // load the libraries here, not in SCH_SCREEN::Draw() which is a context

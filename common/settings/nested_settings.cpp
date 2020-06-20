@@ -48,19 +48,24 @@ bool NESTED_SETTINGS::LoadFromFile( const std::string& aDirectory )
 
     if( m_parent )
     {
-        try
-        {
-            update( ( *m_parent )[PointerFromString( m_path )] );
+        nlohmann::json::json_pointer ptr = PointerFromString( m_path );
 
-            wxLogTrace( traceSettings, "Loaded NESTED_SETTINGS %s with schema %d", GetFilename(),
-                    m_schemaVersion );
-
-            success = true;
-        }
-        catch( ... )
+        if( m_parent->contains( ptr ) )
         {
-            wxLogTrace( traceSettings, "NESTED_SETTINGS %s: Could not load from %s at %s",
-                    m_filename, m_parent->GetFilename(), m_path );
+            try
+            {
+                update( ( *m_parent )[ptr] );
+
+                wxLogTrace( traceSettings, "Loaded NESTED_SETTINGS %s with schema %d",
+                        GetFilename(), m_schemaVersion );
+
+                success = true;
+            }
+            catch( ... )
+            {
+                wxLogTrace( traceSettings, "NESTED_SETTINGS %s: Could not load from %s at %s",
+                        m_filename, m_parent->GetFilename(), m_path );
+            }
         }
     }
 

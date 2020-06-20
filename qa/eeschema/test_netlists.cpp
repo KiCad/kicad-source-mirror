@@ -36,7 +36,8 @@ class TEST_NETLISTS_FIXTURE
 {
 public:
     TEST_NETLISTS_FIXTURE() :
-            m_schematic( nullptr )
+            m_schematic( nullptr ),
+            m_manager( true )
     {
         m_pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
     }

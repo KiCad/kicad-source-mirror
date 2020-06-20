@@ -114,6 +114,8 @@ private:
 
 extern KIID niluuid;
 
+KIID& NilUuid();
+
 // declare KIID_VECT_LIST as std::vector<KIID> both for c++ and swig:
 DECL_VEC_FOR_SWIG( KIID_VECT_LIST, KIID )
 

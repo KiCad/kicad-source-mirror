@@ -279,7 +279,6 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         SaveProjectSettings();
 
         GetCanvas()->Refresh();
-        OnModify();
     }
 }
 

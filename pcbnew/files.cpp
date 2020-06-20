@@ -298,13 +298,17 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 return false;
         }
 
-        GetSettingsManager()->SaveProject( GetSettingsManager()->Prj().GetProjectFullName() );
+        SETTINGS_MANAGER* mgr = GetSettingsManager();
+
+        mgr->SaveProject( mgr->Prj().GetProjectFullName() );
+        mgr->UnloadProject( &mgr->Prj() );
+
         GetBoard()->ClearProject();
 
         wxFileName fn( wxStandardPaths::Get().GetDocumentsDir(), wxT( "noname" ),
                        ProjectFileExtension );
 
-        GetSettingsManager()->LoadProject( fn.GetFullPath() );
+        mgr->LoadProject( fn.GetFullPath() );
 
         LoadProjectSettings();
 
@@ -509,7 +513,15 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // The calling code should know not to ask me here to change projects unless
         // it knows what consequences that will have on other KIFACEs running and using
         // this same PROJECT.  It can be very harmful if that calling code is stupid.
-        GetSettingsManager()->LoadProject( pro.GetFullPath() );
+        SETTINGS_MANAGER* mgr = GetSettingsManager();
+
+        if( pro.GetFullPath() != mgr->Prj().GetProjectFullName() )
+        {
+            mgr->SaveProject( mgr->Prj().GetProjectFullName() );
+            mgr->UnloadProject( &mgr->Prj() );
+
+            mgr->LoadProject( pro.GetFullPath() );
+        }
 
         // load project settings before BOARD
         LoadProjectSettings();
@@ -691,7 +703,13 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory )
         if( projectFile.GetFullPath() != Prj().GetProjectFullName() )
         {
             GetBoard()->ClearProject();
-            GetSettingsManager()->LoadProject( projectFile.GetFullPath() );
+
+            SETTINGS_MANAGER* mgr = GetSettingsManager();
+
+            mgr->SaveProject( Prj().GetProjectFullName() );
+            mgr->UnloadProject( &Prj() );
+
+            mgr->LoadProject( projectFile.GetFullPath() );
             GetBoard()->SetProject( &Prj() );
         }
     }

@@ -50,7 +50,8 @@ const char* traceSettings = "SETTINGS";
 #define PROJECT_BACKUPS_DIR_SUFFIX wxT( "-backups" )
 
 
-SETTINGS_MANAGER::SETTINGS_MANAGER() :
+SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
+        m_headless( aHeadless ),
         m_common_settings( nullptr ),
         m_migration_source()
 {
@@ -427,6 +428,12 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
         }
     }
 
+    if( m_headless )
+    {
+        wxLogTrace( traceSettings, "Manual settings migration required but running headless!" );
+        return false;
+    }
+
     // Now we have an empty path, let's figure out what to put in it
     DIALOG_MIGRATE_SETTINGS dlg( this );
 
@@ -680,9 +687,11 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 
     wxString fullPath = path.GetFullPath();
 
-    // Unload if already loaded
-    if( m_projects.count( fullPath ) && !UnloadProject( m_projects.at( fullPath ).get() ) )
-        return false;
+    // If already loaded, we are all set.  This might be called more than once over a project's
+    // lifetime in case the project is first loaded by the KiCad manager and then eeschema or
+    // pcbnew try to load it again when they are launched.
+    if( m_projects.count( fullPath ) )
+        return true;
 
     // No MDI yet
     if( aSetActive && !m_projects.empty() && !UnloadProject( m_projects.begin()->second.get() ) )

@@ -89,14 +89,14 @@ protected:
 
 public:
 
-    RC_ITEM()
+    RC_ITEM() :
+        m_errorCode( 0 ),
+        m_parent( nullptr ),
+        m_mainItemUuid( NilUuid() ),
+        m_auxItemUuid( NilUuid() ),
+        m_auxItem2Uuid( NilUuid() ),
+        m_auxItem3Uuid( NilUuid() )
     {
-        m_errorCode     = 0;
-        m_parent        = nullptr;
-        m_mainItemUuid  = niluuid;
-        m_auxItemUuid   = niluuid;
-        m_auxItem2Uuid   = niluuid;
-        m_auxItem3Uuid   = niluuid;
     }
 
     RC_ITEM( RC_ITEM* aItem )

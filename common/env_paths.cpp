@@ -177,3 +177,33 @@ wxString ResolveFile( const wxString& aFileName, const ENV_VAR_MAP* aEnvVars,
 
     return wxEmptyString;
 }
+
+
+bool PathIsInsideProject( const wxString& aFileName, const PROJECT* aProject, wxFileName* aSubPath )
+{
+    wxFileName fn( aFileName );
+    wxFileName prj( aProject->GetProjectPath() );
+
+    wxArrayString pdirs = prj.GetDirs();
+    wxArrayString fdirs = fn.GetDirs();
+
+    if( fdirs.size() < pdirs.size() )
+        return false;
+
+    for( size_t i = 0; i < pdirs.size(); i++ )
+    {
+        if( fdirs[i] != pdirs[i] )
+            return false;
+    }
+
+    // Now we know that fn is inside prj
+    if( aSubPath )
+    {
+        aSubPath->Clear();
+
+        for( size_t i = pdirs.size(); i < fdirs.size(); i++ )
+            aSubPath->AppendDir( fdirs[i] );
+    }
+
+    return true;
+}

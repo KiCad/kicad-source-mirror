@@ -33,8 +33,9 @@
  * These are loaded from eeschema settings but then overwritten by the project settings.
  * All of the values are stored in IU, but the backing file stores in mils.
  */
-struct SCHEMATIC_SETTINGS : public NESTED_SETTINGS
+class SCHEMATIC_SETTINGS : public NESTED_SETTINGS
 {
+public:
     SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
 
     virtual ~SCHEMATIC_SETTINGS();

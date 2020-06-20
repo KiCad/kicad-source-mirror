@@ -334,7 +334,10 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 
     // Save the project file for the currently loaded project.
     if( m_active_project )
+    {
         Pgm().GetSettingsManager().SaveProject();
+        Pgm().GetSettingsManager().UnloadProject( &Prj() );
+    }
 
     m_active_project = true;
     ClearMsg();

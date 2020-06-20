@@ -47,12 +47,6 @@
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;
 
-/**
- * We need to track the loaded PROJECTs for each loaded BOARD here, since in Python you can
- * easily load more than one board if desired.
- */
-static std::map<wxString, PROJECT*> s_Projects;
-
 static SETTINGS_MANAGER* s_SettingsManager = nullptr;
 
 BOARD* GetBoard()
@@ -86,7 +80,7 @@ BOARD* LoadBoard( wxString& aFileName )
 SETTINGS_MANAGER* GetSettingsManager()
 {
     if( !s_SettingsManager )
-        s_SettingsManager = new SETTINGS_MANAGER;
+        s_SettingsManager = new SETTINGS_MANAGER( true );
 
     return s_SettingsManager;
 }
@@ -94,15 +88,12 @@ SETTINGS_MANAGER* GetSettingsManager()
 
 PROJECT* GetDefaultProject()
 {
-    PROJECT* project = nullptr;
+    PROJECT* project = GetSettingsManager()->GetProject( "" );
 
-    if( s_Projects.count( "" ) )
-        project = s_Projects.at( "" );
-    else
+    if( !project )
     {
         GetSettingsManager()->LoadProject( "" );
         project = GetSettingsManager()->GetProject( "" );
-        s_Projects[""] = project;
     }
 
     return project;
@@ -116,14 +107,12 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
     pro.MakeAbsolute();
     wxString projectPath = pro.GetFullPath();
 
-    PROJECT* project = nullptr;
+    PROJECT* project = GetSettingsManager()->GetProject( projectPath );
 
-    if( s_Projects.count( projectPath ) )
-        project = s_Projects.at( projectPath );
-    else if( GetSettingsManager()->LoadProject( projectPath ) )
+    if( !project )
     {
-        project = GetSettingsManager()->GetProject( projectPath );
-        s_Projects[projectPath] = project;
+        GetSettingsManager()->LoadProject( projectPath );
+        GetSettingsManager()->GetProject( projectPath );
     }
 
     // Board cannot be loaded without a project, so create the default project

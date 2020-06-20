@@ -42,6 +42,7 @@ class TEST_NETLIST_EXPORTER_PSPICE_SIM
 {
 public:
     TEST_NETLIST_EXPORTER_PSPICE_SIM() :
+            m_manager( true ),
             m_schematic( nullptr ),
             m_exporter( &m_schematic )
     {

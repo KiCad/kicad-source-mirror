@@ -33,7 +33,7 @@ class PROJECT_FILE;
 class SETTINGS_MANAGER
 {
 public:
-    SETTINGS_MANAGER();
+    SETTINGS_MANAGER( bool aHeadless = false );
 
     ~SETTINGS_MANAGER();
 
@@ -312,6 +312,9 @@ private:
     bool unloadProjectFile( PROJECT* aProject, bool aSave );
 
 private:
+
+    /// True if running outside a UI context
+    bool m_headless;
 
     std::vector<std::unique_ptr<JSON_SETTINGS>> m_settings;
 
