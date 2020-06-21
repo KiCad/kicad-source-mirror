@@ -16,6 +16,7 @@ set( BITMAP2COMPONENT_SRCS
     bitmap2component.cpp
     bitmap2cmp_gui_base.cpp
     bitmap2cmp_gui.cpp
+    ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 
 set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
@@ -50,7 +51,6 @@ add_executable( bitmap2component WIN32 MACOSX_BUNDLE
 
 target_link_libraries( bitmap2component
     common
-    gal
     ${wxWidgets_LIBRARIES}
     potrace
     )

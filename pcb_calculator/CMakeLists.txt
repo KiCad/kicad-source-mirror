@@ -36,6 +36,7 @@ set( PCB_CALCULATOR_SRCS
     attenuators/attenuator_classes.cpp
     dialogs/pcb_calculator_frame_base.cpp
     dialogs/dialog_regulator_data_base.cpp
+    ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 
 if( MINGW )
@@ -67,8 +68,6 @@ set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIE
 target_link_libraries( pcb_calculator
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
-    common
-    gal
     common
     ${wxWidgets_LIBRARIES}
     )
