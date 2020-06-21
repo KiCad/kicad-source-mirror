@@ -165,7 +165,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_bitmapAlert = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_CMN_DIALOG ), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizerSolderMaskAlert->Add( m_bitmapAlert, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticTextAlert = new wxStaticText( this, wxID_ANY, _("Global solder mask min width and margin are not set to 0\nMost of board houses expect a 0 value and use their constraints\nPlease ensure the  solder mask min width and margin value are valid\nand use a non 0 value only when required."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAlert = new wxStaticText( this, wxID_ANY, _("Global solder mask min width and/or margin are not set to 0\nMost of board houses expect a 0 value and use their constraints, especially for solder mask min width.\nPlease ensure the  solder mask min width (and margin value) are valid\nUse non 0 values only when required."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAlert->Wrap( -1 );
 	m_SizerSolderMaskAlert->Add( m_staticTextAlert, 0, wxALL, 5 );
 

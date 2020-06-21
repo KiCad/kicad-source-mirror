@@ -1764,7 +1764,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Global solder mask min width and margin are not set to 0&#x0A;Most of board houses expect a 0 value and use their constraints&#x0A;Please ensure the  solder mask min width and margin value are valid&#x0A;and use a non 0 value only when required.</property>
+                                                <property name="label">Global solder mask min width and/or margin are not set to 0&#x0A;Most of board houses expect a 0 value and use their constraints, especially for solder mask min width.&#x0A;Please ensure the  solder mask min width (and margin value) are valid&#x0A;Use non 0 values only when required.</property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
