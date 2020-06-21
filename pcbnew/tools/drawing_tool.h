@@ -64,7 +64,7 @@ public:
     {
         NONE,
         LINE,
-        RECT,
+        RECTANGLE,
         CIRCLE,
         ARC,
         TEXT,

@@ -191,7 +191,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     MODULE*          module = dynamic_cast<MODULE*>( m_frame->GetModel() );
     DRAWSEGMENT*     rect = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
     BOARD_COMMIT     commit( m_frame );
-    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECT );
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECTANGLE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
     rect->SetFlags(IS_NEW );
