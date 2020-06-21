@@ -851,31 +851,103 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         case F_Mask:
         case B_Mask:
             {
-            int clearance = aPad->GetSolderMaskMargin();
-            aPad->TransformShapeWithClearanceToPolygon( polySet, clearance );
+                int clearance = aPad->GetSolderMaskMargin();
+
+                if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
+                {
+                    int radius = (aPad->GetSize().x/2) + clearance;
+                    m_gal->DrawCircle( VECTOR2D( aPad->ShapePos() ), radius );
+                }
+                else if( aPad->GetShape() == PAD_SHAPE_OVAL )
+                {
+                    if( aPad->GetSize().x == aPad->GetSize().y )
+                    {
+                        int radius = (aPad->GetSize().x/2) + clearance;
+                        m_gal->DrawCircle( VECTOR2D( aPad->ShapePos() ), radius );
+                    }
+                    else
+                    {
+                        wxPoint seg_start, seg_end;
+                        aPad->BuildSegmentFromOvalShape( seg_start, seg_end,
+                                                         aPad->GetOrientation(),
+                                                         wxSize( 0, 0 ) );
+                        int seg_width = std::min( aPad->GetSize().x, aPad->GetSize().y )
+                                        + 2*clearance;
+                        m_gal->DrawSegment( VECTOR2D( aPad->ShapePos()+seg_start ),
+                                            VECTOR2D( aPad->ShapePos()+seg_end ),
+                                            seg_width );
+                    }
+                }
+                else
+                {
+                    aPad->TransformShapeWithClearanceToPolygon( polySet, clearance );
+                    m_gal->DrawPolygon( polySet );
+                }
             }
             break;
 
         case F_Paste:
         case B_Paste:
             {
-            wxSize pad_size = aPad->GetSize();
-            wxSize margin = aPad->GetSolderPasteMargin();
-            const_cast<D_PAD*>(aPad)->SetSize( pad_size + margin + margin );
-            aPad->TransformShapeWithClearanceToPolygon( polySet, 0 );
-            const_cast<D_PAD*>(aPad)->SetSize( pad_size );
+                wxSize pad_size = aPad->GetSize();
+                wxSize margin = aPad->GetSolderPasteMargin();
+                const_cast<D_PAD*>(aPad)->SetSize( pad_size + margin + margin );
+
+                if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
+                    m_gal->DrawCircle( VECTOR2D( aPad->ShapePos() ), aPad->GetSize().x/2 );
+                else if( aPad->GetShape() == PAD_SHAPE_OVAL )
+                {
+                    if( aPad->GetSize().x == aPad->GetSize().y )
+                        m_gal->DrawCircle( VECTOR2D( aPad->ShapePos() ), aPad->GetSize().x/2 );
+                    else
+                    {
+                        wxPoint seg_start, seg_end;
+                        aPad->BuildSegmentFromOvalShape( seg_start, seg_end,
+                                                         aPad->GetOrientation(),
+                                                         wxSize( 0, 0 ) );
+                        int seg_width = std::min( aPad->GetSize().x, aPad->GetSize().y );
+                        m_gal->DrawSegment( VECTOR2D( aPad->ShapePos()+seg_start ),
+                                            VECTOR2D( aPad->ShapePos()+seg_end ),
+                                            seg_width );
+                    }
+                }
+                else
+                {
+                    aPad->TransformShapeWithClearanceToPolygon( polySet, 0 );
+                    m_gal->DrawPolygon( polySet );
+                }
+                const_cast<D_PAD*>(aPad)->SetSize( pad_size );
             }
             break;
 
         default:
-            aPad->TransformShapeWithClearanceToPolygon( polySet, 0 );
+            if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
+                m_gal->DrawCircle( VECTOR2D( aPad->ShapePos() ), aPad->GetSize().x/2 );
+            else if( aPad->GetShape() == PAD_SHAPE_OVAL )
+            {
+                if( aPad->GetSize().x == aPad->GetSize().y )
+                    m_gal->DrawCircle( VECTOR2D( aPad->ShapePos() ), aPad->GetSize().x/2 );
+                else
+                {
+                    wxPoint seg_start, seg_end;
+                    aPad->BuildSegmentFromOvalShape( seg_start, seg_end,
+                                                     aPad->GetOrientation(),
+                                                     wxSize( 0, 0 ) );
+                    m_gal->DrawSegment( VECTOR2D( aPad->ShapePos()+seg_start ),
+                                        VECTOR2D( aPad->ShapePos()+seg_end ),
+                                        std::min( aPad->GetSize().x, aPad->GetSize().y ) );
+                }
+            }
+            else
+            {
+                aPad->TransformShapeWithClearanceToPolygon( polySet, 0 );
+                m_gal->DrawPolygon( polySet );
+            }
             break;
         }
-
-        m_gal->DrawPolygon( polySet );
     }
 
-    // Clearance lines
+    // Clearance outlines
     constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_PADS;
 
     if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
@@ -883,13 +955,44 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                 || aLayer == LAYER_PAD_BK
                 || aLayer == LAYER_PADS_TH ) )
     {
-        SHAPE_POLY_SET polySet;
-        aPad->TransformShapeWithClearanceToPolygon( polySet, aPad->GetClearance() );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );
         m_gal->SetStrokeColor( color );
-        m_gal->DrawPolygon( polySet );
+        int clearance = aPad->GetClearance();
+
+        if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
+        {
+            int radius = (aPad->GetSize().x/2) + clearance;
+            m_gal->DrawCircle( VECTOR2D( aPad->ShapePos() ), radius );
+        }
+        else if( aPad->GetShape() == PAD_SHAPE_OVAL )
+        {
+            if( aPad->GetSize().x == aPad->GetSize().y )
+            {
+                int radius = (aPad->GetSize().x/2) + clearance;
+                m_gal->DrawCircle( VECTOR2D( aPad->ShapePos() ), radius );
+            }
+            else
+            {
+                wxPoint seg_start, seg_end;
+
+                aPad->BuildSegmentFromOvalShape( seg_start, seg_end,
+                                                 aPad->GetOrientation(),
+                                                 wxSize( 0, 0 ) );
+                int seg_width = std::min( aPad->GetSize().x, aPad->GetSize().y )
+                                + 2*clearance;
+                m_gal->DrawSegment( VECTOR2D( aPad->ShapePos()+seg_start ),
+                                    VECTOR2D( aPad->ShapePos()+seg_end ),
+                                    seg_width );
+            }
+        }
+        else
+        {
+            SHAPE_POLY_SET polySet;
+            aPad->TransformShapeWithClearanceToPolygon( polySet, clearance );
+            m_gal->DrawPolygon( polySet );
+        }
     }
 }
 
