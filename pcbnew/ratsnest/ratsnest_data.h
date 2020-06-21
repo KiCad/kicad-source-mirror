@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -33,24 +34,14 @@
 #include <core/typeinfo.h>
 #include <math/box2.h>
 
-#include <deque>
 #include <set>
-#include <unordered_set>
-#include <unordered_map>
-
-#include <ttl/halfedge/hetriang.h>
-#include <ttl/halfedge/hetraits.h>
+#include <vector>
 
 #include <connectivity/connectivity_algo.h>
 
-class BOARD;
 class BOARD_ITEM;
 class BOARD_CONNECTED_ITEM;
 class CN_CLUSTER;
-class CN_CONNECTIVITY_ALGO;
-
-struct RN_NODE_OR_FILTER;
-struct RN_NODE_AND_FILTER;
 
 struct CN_PTR_CMP
 {
@@ -160,7 +151,7 @@ protected:
     void compute();
 
     ///> Compute the minimum spanning tree using Kruskal's algorithm
-    void kruskalMST( std::priority_queue<CN_EDGE> &aEdges );
+    void kruskalMST( const std::vector<CN_EDGE> &aEdges );
 
     ///> Vector of nodes
     std::multiset<CN_ANCHOR_PTR, CN_PTR_CMP> m_nodes;

@@ -68,14 +68,13 @@ public:
     {}
 
     /**
-     * This sort operator implements the reverse sort such that the smallest weight will be placed first
-     * in a priority queue
+     * This sort operator provides a sort-by-weight for the ratsnest operation
      * @param aOther Other edge to compare
-     * @return true if our weight is larger than the other weight
+     * @return true if our weight is smaller than the other weight
      */
     bool operator<( CN_EDGE aOther ) const
     {
-        return m_weight > aOther.m_weight;
+        return m_weight < aOther.m_weight;
     }
 
     CN_ANCHOR_PTR GetSourceNode() const { return m_source; }

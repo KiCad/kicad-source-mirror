@@ -1,7 +1,7 @@
 #
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
-#  Copyright (C) 2007-2018 Kicad Developers, see AUTHORS.txt for contributors.
+#  Copyright (C) 2007-2020 Kicad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 
 add_subdirectory( clipper )
 add_subdirectory( compoundfilereader )
+add_subdirectory( delaunator )
 add_subdirectory( dxflib_qcad )
 add_subdirectory( libcontext )
 add_subdirectory( markdown2html )
@@ -30,6 +31,5 @@ add_subdirectory( nanosvg )
 add_subdirectory( other_math )
 add_subdirectory( rtree )
 add_subdirectory( tinyspline_lib )
-add_subdirectory( ttl )
 add_subdirectory( potrace )
 add_subdirectory( nlohmann_json )

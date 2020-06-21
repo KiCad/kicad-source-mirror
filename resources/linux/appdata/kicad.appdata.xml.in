@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright (C) 2016-2017 Lubomir Rintel <lkundrak@v3.sk> -->
-<!-- Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors. -->
+<!-- Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors. -->
 <component type="desktop">
   <id>org.kicad_pcb.kicad</id>
   <name>KiCad</name>
 
-  <project_license>AGPL-3.0-or-later</project_license>
+  <project_license>GPL-3.0-or-later</project_license>
   <metadata_license>CC-BY-SA-4.0</metadata_license>
 
   <summary>EDA Suite</summary>

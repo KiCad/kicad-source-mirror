@@ -67,7 +67,6 @@ set( GAL_SRCS
 add_library( gal STATIC ${GAL_SRCS} )
 
 target_link_libraries( gal
-    ttl
     kimath
     bitmaps
     ${GLEW_LIBRARIES}
@@ -511,14 +510,17 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
 
 target_include_directories( pcbcommon PUBLIC
+    $<TARGET_PROPERTY:delaunator,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 target_link_libraries( pcbcommon PUBLIC
     common
+    delaunator
     kimath
     kiplatform
 )
 
+add_dependencies( pcbcommon delaunator )
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
 make_lexer(

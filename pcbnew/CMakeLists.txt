@@ -623,7 +623,6 @@ target_include_directories( pcbnew_kiface_objects PRIVATE
     $<TARGET_PROPERTY:common,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:dxflib_qcad,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:nanosvg,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:ttl,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:tinyspline_lib,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
     )
@@ -633,7 +632,6 @@ target_include_directories( pcbnew_kiface_objects PRIVATE
 add_dependencies( pcbnew_kiface_objects common )
 add_dependencies( pcbnew_kiface_objects dxflib_qcad )
 add_dependencies( pcbnew_kiface_objects tinyspline_lib )
-add_dependencies( pcbnew_kiface_objects ttl )
 add_dependencies( pcbnew_kiface_objects nanosvg )
 
 add_library( pcbnew_kiface MODULE $<TARGET_OBJECTS:pcbnew_kiface_objects> )
@@ -670,7 +668,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     gal
     dxflib_qcad
     tinyspline_lib
-    ttl
     idf3
     nanosvg
     ${wxWidgets_LIBRARIES}

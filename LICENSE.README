@@ -1,22 +1,20 @@
 The majority of KiCad's source code is developed and distributed under the terms
 of the GPLv3 or later. However, It does include some third-party code licensed
-under AGPLv3 or later as well as sections licensed under the BOOST license v1.0,
-the ISC license and the MIT license.
+under licensed under the BOOST license v1.0, the ISC license and the MIT license.
 
 These licenses are compatible, but a combined works as is will be governed under
-the terms of the AGPLv3 (or later). This includes any binary distribution of the
+the terms of the GPLv3 (or later). This includes any binary distribution of the
 KiCad EDA suite by the KiCad project or any third party, e.g. Linux distributor.
 
 You are free to use the *sources* under the terms of their respective licenses.
 
-Licensed under AGPLv3 (or later):
-- TTL [https://www.sintef.no/projectweb/geometry-toolkits/ttl/], sources in include/ttl/*
 Licensed under BOOSTv1:
 - libcontext [https://github.com/boostorg/context] in thirdparty/libcontext
 - clipper in thirdparty/clipper
 Licensed under ISC:
 - portions of code in include/geometry/polygon_triangulation.h
 Licensed under MIT:
+- delaunator in thirdparty/delaunator
 - tinyspline_lib in thirdparty/tinyspline_lib
 - nlohmann/json in thirdparty/nlohmann_json
 - nlohmann/fifo_map in thirdparty/nlohmann_json

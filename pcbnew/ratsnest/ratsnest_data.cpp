@@ -41,7 +41,8 @@ using namespace std::placeholders;
 #include <algorithm>
 #include <cassert>
 #include <limits>
-#include <queue>
+
+#include <delaunator.hpp>
 
 class disjoint_set
 {
@@ -105,7 +106,7 @@ private:
     std::vector<int> m_depth;
 };
 
-void RN_NET::kruskalMST( std::priority_queue<CN_EDGE> &aEdges )
+void RN_NET::kruskalMST( const std::vector<CN_EDGE> &aEdges )
 {
     disjoint_set dset( m_nodes.size() );
 
@@ -116,10 +117,8 @@ void RN_NET::kruskalMST( std::priority_queue<CN_EDGE> &aEdges )
     for( auto& node : m_nodes )
         node->SetTag( i++ );
 
-    while( !aEdges.empty() )
+    for( auto& tmp : aEdges )
     {
-        auto& tmp = aEdges.top();
-
         int u = tmp.GetSourceNode()->GetTag();
         int v = tmp.GetTargetNode()->GetTag();
 
@@ -128,8 +127,6 @@ void RN_NET::kruskalMST( std::priority_queue<CN_EDGE> &aEdges )
             if( tmp.GetWeight() > 0 )
                 m_rnEdges.push_back( tmp );
         }
-
-        aEdges.pop();
     }
 }
 
@@ -137,37 +134,25 @@ void RN_NET::kruskalMST( std::priority_queue<CN_EDGE> &aEdges )
 class RN_NET::TRIANGULATOR_STATE
 {
 private:
-    std::vector<CN_ANCHOR_PTR>  m_allNodes;
-
-    std::list<hed::EDGE_PTR> hedTriangulation( std::vector<hed::NODE_PTR>& aNodes )
-    {
-        hed::TRIANGULATION triangulator;
-        triangulator.CreateDelaunay( aNodes.begin(), aNodes.end() );
-        std::list<hed::EDGE_PTR> edges;
-        triangulator.GetEdges( edges );
-
-        return edges;
-    }
+    std::multiset<CN_ANCHOR_PTR, CN_PTR_CMP> m_allNodes;
 
 
     // Checks if all nodes in aNodes lie on a single line. Requires the nodes to
     // have unique coordinates!
-    bool areNodesColinear( const std::vector<hed::NODE_PTR>& aNodes ) const
+    bool areNodesColinear( const std::vector<CN_ANCHOR_PTR>& aNodes ) const
     {
         if ( aNodes.size() <= 2 )
             return true;
 
-        const auto p0 = aNodes[0]->Pos();
-        const auto v0 = aNodes[1]->Pos() - p0;
+        const VECTOR2I p0( aNodes[0]->Pos() );
+        const VECTOR2I v0( aNodes[1]->Pos() - p0 );
 
         for( unsigned i = 2; i < aNodes.size(); i++ )
         {
-            const auto v1 = aNodes[i]->Pos() - p0;
+            const VECTOR2I v1 = aNodes[i]->Pos() - p0;
 
             if( v0.Cross( v1 ) != 0 )
-            {
                 return false;
-            }
         }
 
         return true;
@@ -182,97 +167,84 @@ public:
 
     void AddNode( CN_ANCHOR_PTR aNode )
     {
-        m_allNodes.push_back( aNode );
+        m_allNodes.insert( aNode );
     }
 
-    const std::priority_queue<CN_EDGE> Triangulate()
+    void Triangulate( std::vector<CN_EDGE>& mstEdges)
     {
-        std::priority_queue<CN_EDGE> mstEdges;
-        std::list<hed::EDGE_PTR> triangEdges;
-        std::vector<hed::NODE_PTR> triNodes;
+        std::vector<double>          node_pts;
 
         using ANCHOR_LIST = std::vector<CN_ANCHOR_PTR>;
-        std::vector<ANCHOR_LIST> anchorChains;
 
-        triNodes.reserve( m_allNodes.size() );
-        anchorChains.resize( m_allNodes.size() );
+        ANCHOR_LIST              anchors;
+        std::vector<ANCHOR_LIST> anchorChains( m_allNodes.size() );
 
-        std::sort( m_allNodes.begin(), m_allNodes.end(),
-                [] ( const CN_ANCHOR_PTR& aNode1, const CN_ANCHOR_PTR& aNode2 )
-        {
-            if( aNode1->Pos().y < aNode2->Pos().y )
-                return true;
-            else if( aNode1->Pos().y == aNode2->Pos().y )
-            {
-                return aNode1->Pos().x < aNode2->Pos().x;
-            }
+        node_pts.reserve( 2 * m_allNodes.size() );
+        anchors.reserve( m_allNodes.size() );
 
-            return false;
-        }
-                );
-
-        CN_ANCHOR_PTR prev, last;
-        int id = 0;
+        CN_ANCHOR_PTR prev = nullptr;
 
         for( const auto& n : m_allNodes )
         {
             if( !prev || prev->Pos() != n->Pos() )
             {
-                auto tn = std::make_shared<hed::NODE> ( n->Pos().x, n->Pos().y );
-
-                tn->SetId( id );
-                triNodes.push_back( tn );
+                node_pts.push_back( n->Pos().x );
+                node_pts.push_back( n->Pos().y );
+                anchors.push_back( n );
+                prev = n;
             }
 
-            id++;
-            prev = n;
+            anchorChains[anchors.size() - 1].push_back( n );
         }
 
-        int prevId = 0;
-
-        for( const auto& n : triNodes )
+        if( anchors.size() < 2 )
         {
-            for( int i = prevId; i < n->Id(); i++ )
-                anchorChains[prevId].push_back( m_allNodes[ i ] );
-
-            prevId = n->Id();
+            return;
         }
-
-        for( int i = prevId; i < id; i++ )
-            anchorChains[prevId].push_back( m_allNodes[ i ] );
-
-        if( triNodes.size() == 1 )
-        {
-            return mstEdges;
-        }
-        else if( areNodesColinear( triNodes ) )
+        else if( areNodesColinear( anchors ) )
         {
             // special case: all nodes are on the same line - there's no
             // triangulation for such set. In this case, we sort along any coordinate
             // and chain the nodes together.
-            for(int i = 0; i < (int)triNodes.size() - 1; i++ )
+            for( size_t i = 0; i < anchors.size() - 1; i++ )
             {
-                auto src = m_allNodes[ triNodes[i]->Id() ];
-                auto dst = m_allNodes[ triNodes[i + 1]->Id() ];
-                mstEdges.emplace( src, dst, src->Dist( *dst ) );
+                auto src = anchors[i];
+                auto dst = anchors[i + 1];
+                mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
             }
         }
         else
         {
-            hed::TRIANGULATION triangulator;
-            triangulator.CreateDelaunay( triNodes.begin(), triNodes.end() );
-            triangulator.GetEdges( triangEdges );
+            delaunator::Delaunator delaunator( node_pts );
+            auto& triangles = delaunator.triangles;
 
-            for( const auto& e : triangEdges )
+            for( size_t i = 0; i < triangles.size(); i += 3 )
             {
-                auto    src = m_allNodes[ e->GetSourceNode()->Id() ];
-                auto    dst = m_allNodes[ e->GetTargetNode()->Id() ];
+                auto src = anchors[triangles[i]];
+                auto dst = anchors[triangles[i + 1]];
+                mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
 
-                mstEdges.emplace( src, dst, src->Dist( *dst ) );
+                src = anchors[triangles[i + 1]];
+                dst = anchors[triangles[i + 2]];
+                mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
+
+                src = anchors[triangles[i + 2]];
+                dst = anchors[triangles[i]];
+                mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
+            }
+
+            for( size_t i = 0; i < delaunator.halfedges.size(); i++ )
+            {
+                if( delaunator.halfedges[i] == delaunator::INVALID_INDEX )
+                    continue;
+
+                auto src = anchors[triangles[i]];
+                auto dst = anchors[triangles[delaunator.halfedges[i]]];
+                mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
             }
         }
 
-        for( unsigned int i = 0; i < anchorChains.size(); i++ )
+        for( size_t i = 0; i < anchorChains.size(); i++ )
         {
             auto& chain = anchorChains[i];
 
@@ -289,11 +261,9 @@ public:
                 const auto& prevNode    = chain[j - 1];
                 const auto& curNode     = chain[j];
                 int weight = prevNode->GetCluster() != curNode->GetCluster() ? 1 : 0;
-                mstEdges.emplace( prevNode, curNode, weight );
+                mstEdges.emplace_back( prevNode, curNode, weight );
             }
         }
-
-        return mstEdges;
     }
 };
 
@@ -342,16 +312,21 @@ void RN_NET::compute()
         m_triangulator->AddNode( n );
     }
 
+    std::vector<CN_EDGE> triangEdges;
+    triangEdges.reserve( m_nodes.size() + m_boardEdges.size() );
+
     #ifdef PROFILE
     PROF_COUNTER cnt("triangulate");
     #endif
-    auto triangEdges = m_triangulator->Triangulate();
+    m_triangulator->Triangulate( triangEdges );
     #ifdef PROFILE
     cnt.Show();
     #endif
 
     for( const auto& e : m_boardEdges )
-        triangEdges.push( e );
+        triangEdges.emplace_back( e );
+
+    std::sort( triangEdges.begin(), triangEdges.end() );
 
 // Get the minimal spanning tree
 #ifdef PROFILE
