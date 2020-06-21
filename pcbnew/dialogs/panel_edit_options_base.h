@@ -23,6 +23,7 @@
 #include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/choice.h>
+#include <wx/radiobut.h>
 #include <wx/simplebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -60,6 +61,10 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 		wxCheckBox* m_showSelectedRatsnest;
 		wxCheckBox* m_OptDisplayCurvedRatsnestLines;
 		wxCheckBox* m_Show_Page_Limits;
+		wxStaticText* m_staticText5;
+		wxRadioButton* m_rbTrackDragMove;
+		wxRadioButton* m_rbTrackDrag45;
+		wxRadioButton* m_rbTrackDragFree;
 
 	public:
 

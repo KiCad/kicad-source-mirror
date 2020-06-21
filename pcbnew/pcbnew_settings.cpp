@@ -111,6 +111,10 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords", &m_PolarCoords, false ) );
 
+    m_params.emplace_back( new PARAM<int>( "editing.track_drag_action",
+            reinterpret_cast<int*>( &m_TrackDragAction ),
+            static_cast<int>( TRACK_DRAG_ACTION::DRAG ) ) );
+
     m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_graphic_segments",
             &m_Use45DegreeGraphicSegments, false ) );
 

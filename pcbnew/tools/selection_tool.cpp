@@ -43,6 +43,7 @@ using namespace std::placeholders;
 #include <preview_items/selection_area.h>
 #include <painter.h>
 #include <bitmaps.h>
+#include <pcbnew_settings.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <router/router_tool.h>
@@ -191,6 +192,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
         bool dragAlwaysSelects = getEditFrame<PCB_BASE_FRAME>()->GetDragSelects();
+        TRACK_DRAG_ACTION dragAction = getEditFrame<PCB_BASE_FRAME>()->Settings().m_TrackDragAction;
         m_additive = m_subtractive = m_exclusive_or = false;
 
         // OSX uses CTRL for context menu, and SHIFT is exclusive-or
@@ -266,7 +268,14 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
-                    m_toolMgr->RunAction( PCB_ACTIONS::drag, true );
+                    TRACK* track = dynamic_cast<TRACK*>( m_selection.GetItem( 0 ) );
+
+                    if( track && dragAction == TRACK_DRAG_ACTION::DRAG )
+                        m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree, true );
+                    else if( track && dragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
+                        m_toolMgr->RunAction( PCB_ACTIONS::dragFreeAngle, true );
+                    else
+                        m_toolMgr->RunAction( PCB_ACTIONS::drag, true );
                 }
                 else
                 {

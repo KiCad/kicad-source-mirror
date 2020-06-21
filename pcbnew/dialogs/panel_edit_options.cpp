@@ -73,6 +73,13 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
         m_FlipLeftRight->SetValue( general_opts.m_FlipLeftRight );
 
         m_Show_Page_Limits->SetValue( m_Frame->ShowPageLimits() );
+
+        switch( general_opts.m_TrackDragAction )
+        {
+        case TRACK_DRAG_ACTION::MOVE:            m_rbTrackDragMove->SetValue( true ); break;
+        case TRACK_DRAG_ACTION::DRAG:            m_rbTrackDrag45->SetValue( true );   break;
+        case TRACK_DRAG_ACTION::DRAG_FREE_ANGLE: m_rbTrackDragFree->SetValue( true ); break;
+        }
     }
     else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_Frame ) )
     {
@@ -103,6 +110,18 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
     m_Frame->Settings().m_FlipLeftRight = m_FlipLeftRight->GetValue();
 
     m_Frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
+
+    if( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) )
+    {
+        PCBNEW_SETTINGS& settings = m_Frame->Settings();
+
+        if( m_rbTrackDragMove->GetValue() )
+            settings.m_TrackDragAction = TRACK_DRAG_ACTION::MOVE;
+        else if( m_rbTrackDrag45->GetValue() )
+            settings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG;
+        else if( m_rbTrackDragFree->GetValue() )
+            settings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG_FREE_ANGLE;
+    }
 
     // Apply changes to the GAL
     PCB_DISPLAY_OPTIONS         displ_opts = m_Frame->GetDisplayOptions();

@@ -50,6 +50,13 @@ struct MAGNETIC_SETTINGS
     }
 };
 
+enum class TRACK_DRAG_ACTION
+{
+    MOVE,
+    DRAG,
+    DRAG_FREE_ANGLE
+};
+
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
 typedef std::vector<std::pair<wxString, bool>> ACTION_PLUGIN_SETTINGS_LIST;
 #endif
@@ -241,6 +248,8 @@ public:
     PCB_DISPLAY_OPTIONS m_Display;
 
     MAGNETIC_SETTINGS m_MagneticItems;
+
+    TRACK_DRAG_ACTION m_TrackDragAction;
 
     bool m_Use45DegreeGraphicSegments;   // True to constraint graphic lines to horizontal,
     // vertical and 45º

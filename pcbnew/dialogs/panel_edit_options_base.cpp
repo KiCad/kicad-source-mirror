@@ -164,6 +164,33 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	pcbOptionsSizer->Add( sbSizer4, 0, wxEXPAND|wxTOP, 5 );
 
+	wxStaticBoxSizer* sbSizer41;
+	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Track Editing") ), wxVERTICAL );
+
+	m_staticText5 = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("Track mouse drag behavior:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	m_staticText5->SetToolTip( _("Choose the action to perform when dragging a track segment with the mouse") );
+
+	sbSizer41->Add( m_staticText5, 0, wxALL, 5 );
+
+	m_rbTrackDragMove = new wxRadioButton( sbSizer41->GetStaticBox(), wxID_ANY, _("Move"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbTrackDragMove->SetToolTip( _("Moves the track segment without moving connected tracks") );
+
+	sbSizer41->Add( m_rbTrackDragMove, 0, wxALL, 5 );
+
+	m_rbTrackDrag45 = new wxRadioButton( sbSizer41->GetStaticBox(), wxID_ANY, _("Drag (45 degree mode)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbTrackDrag45->SetToolTip( _("Drags the track segment while keeping connected tracks at 45 degrees.") );
+
+	sbSizer41->Add( m_rbTrackDrag45, 0, wxALL, 5 );
+
+	m_rbTrackDragFree = new wxRadioButton( sbSizer41->GetStaticBox(), wxID_ANY, _("Drag (free angle)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbTrackDragFree->SetToolTip( _("Drags the nearest joint in the track without restricting the track angle.") );
+
+	sbSizer41->Add( m_rbTrackDragFree, 0, wxALL, 5 );
+
+
+	pcbOptionsSizer->Add( sbSizer41, 1, wxEXPAND|wxTOP, 5 );
+
 
 	pcbPage->SetSizer( pcbOptionsSizer );
 	pcbPage->Layout();
