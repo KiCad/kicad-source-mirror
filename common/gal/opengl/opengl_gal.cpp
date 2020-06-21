@@ -431,8 +431,15 @@ void OPENGL_GAL::beginDrawing()
         // Prepare rendering target buffers
         compositor->Initialize();
         mainBuffer = compositor->CreateBuffer();
-        overlayBuffer = compositor->CreateBuffer();
-
+        try
+        {
+            overlayBuffer = compositor->CreateBuffer();
+        }
+        catch( const std::runtime_error& error )
+        {
+            wxLogVerbose( "Could not create a framebuffer for overlays.\n" );
+            overlayBuffer = 0;
+        }
         isFramebufferInitialized = true;
     }
 
@@ -558,7 +565,8 @@ void OPENGL_GAL::endDrawing()
     cachedManager->EndDrawing();
 
     // Overlay container is rendered to a different buffer
-    compositor->SetBuffer( overlayBuffer );
+    if( overlayBuffer )
+        compositor->SetBuffer( overlayBuffer );
     overlayManager->EndDrawing();
 
     // Be sure that the framebuffer is not colorized (happens on specific GPU&drivers combinations)
@@ -566,7 +574,10 @@ void OPENGL_GAL::endDrawing()
 
     // Draw the remaining contents, blit the rendering targets to the screen, swap the buffers
     compositor->DrawBuffer( mainBuffer );
-    compositor->DrawBuffer( overlayBuffer );
+
+    if( overlayBuffer )
+        compositor->DrawBuffer( overlayBuffer );
+
     compositor->Present();
     blitCursor();
 
@@ -1610,18 +1621,34 @@ void OPENGL_GAL::ClearTarget( RENDER_TARGET aTarget )
         break;
 
     case TARGET_OVERLAY:
-        compositor->SetBuffer( overlayBuffer );
+        if( overlayBuffer )
+            compositor->SetBuffer( overlayBuffer );
         break;
     }
 
 
     if( aTarget != TARGET_OVERLAY )
         compositor->ClearBuffer( m_clearColor );
-    else
+    else if( overlayBuffer )
         compositor->ClearBuffer( COLOR4D::BLACK );
 
     // Restore the previous state
     compositor->SetBuffer( oldTarget );
+}
+
+
+bool OPENGL_GAL::HasTarget( RENDER_TARGET aTarget )
+{
+    switch( aTarget )
+    {
+    default:
+    case TARGET_CACHED:
+    case TARGET_NONCACHED:
+        return true;
+
+    case TARGET_OVERLAY:
+        return ( overlayBuffer != 0 );
+    }
 }
 
 

@@ -198,6 +198,12 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
         KIGFX::GAL_DRAWING_CONTEXT ctx( m_gal );
 
+        if( m_view->IsTargetDirty( KIGFX::TARGET_OVERLAY )
+                && !m_gal->HasTarget( KIGFX::TARGET_OVERLAY ) )
+        {
+            m_view->MarkDirty();
+        }
+
         m_gal->SetClearColor( settings->GetBackgroundColor() );
         m_gal->SetGridColor( settings->GetGridColor() );
         m_gal->SetCursorColor( settings->GetCursorColor() );

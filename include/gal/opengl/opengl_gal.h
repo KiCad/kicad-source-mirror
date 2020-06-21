@@ -235,6 +235,9 @@ public:
     /// @copydoc GAL::ClearTarget()
     void ClearTarget( RENDER_TARGET aTarget ) override;
 
+    /// @copydoc GAL::HasTarget()
+    virtual bool HasTarget( RENDER_TARGET aTarget ) override;
+
     /// @copydoc GAL::SetNegativeDrawMode()
     void SetNegativeDrawMode( bool aSetting ) override {}
 

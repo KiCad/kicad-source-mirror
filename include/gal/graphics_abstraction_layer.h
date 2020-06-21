@@ -826,6 +826,16 @@ public:
     virtual void ClearTarget( RENDER_TARGET aTarget ) {};
 
     /**
+     * @brief Returns true if the target exists.
+     *
+     * @param aTarget is the target to be checked.
+     */
+    virtual bool HasTarget( RENDER_TARGET aTarget )
+    {
+        return true;
+    };
+
+    /**
      * @brief Sets negative draw mode in the renderer
      *
      * When negative mode is enabled, drawn items will subtract from
