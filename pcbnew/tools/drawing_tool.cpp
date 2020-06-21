@@ -1265,8 +1265,8 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bo
 
         auto cleanup = [&] () {
             preview.Clear();
-            delete aGraphic;
-            aGraphic = nullptr;
+            delete *aGraphic;
+            *aGraphic = nullptr;
         };
 
         if( evt->IsCancelInteractive() )
