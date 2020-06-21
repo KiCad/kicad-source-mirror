@@ -52,6 +52,13 @@ public:
         m_points.SetClosed( true );
     }
 
+    SHAPE_SIMPLE( const SHAPE_LINE_CHAIN& aPoly ) :
+        SHAPE( SH_SIMPLE ),
+        m_points( aPoly )
+    {
+        m_points.SetClosed( true );
+    }
+
     SHAPE_SIMPLE( const SHAPE_SIMPLE& aOther ) :
        SHAPE( SH_SIMPLE ), m_points( aOther.m_points )
     {}

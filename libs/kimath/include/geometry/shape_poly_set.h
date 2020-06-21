@@ -1176,7 +1176,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return int -  The minimum distance between aPoint and all the segments of the aIndex-th
          *                polygon. If the point is contained in the polygon, the distance is zero.
          */
-        SEG::ecoord SquaredDistanceToPolygon( VECTOR2I aPoint, int aIndex );
+        SEG::ecoord SquaredDistanceToPolygon( VECTOR2I aPoint, int aIndex ) const;
 
         /**
          * Function DistanceToPolygon
@@ -1190,7 +1190,7 @@ class SHAPE_POLY_SET : public SHAPE
          *                  aIndex-th polygon. If the point is contained in the polygon, the
          *                  distance is zero.
          */
-        SEG::ecoord SquaredDistanceToPolygon( const SEG& aSegment, int aIndex );
+        SEG::ecoord SquaredDistanceToPolygon( const SEG& aSegment, int aIndex ) const;
 
         /**
          * Function SquaredDistance
@@ -1200,7 +1200,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return The minimum distance squared between aPoint and all the polygons in the set.
          *         If the point is contained in any of the polygons, the distance is zero.
          */
-        SEG::ecoord SquaredDistance( VECTOR2I aPoint );
+        SEG::ecoord SquaredDistance( VECTOR2I aPoint ) const;
 
         /**
          * Function SquaredDistance
@@ -1211,7 +1211,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return  The minimum distance squared between aSegment and all the polygons in the set.
          *          If the point is contained in the polygon, the distance is zero.
          */
-        SEG::ecoord SquaredDistance( const SEG& aSegment );
+        SEG::ecoord SquaredDistance( const SEG& aSegment ) const;
 
         /**
          * Function IsVertexInHole.

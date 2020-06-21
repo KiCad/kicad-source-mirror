@@ -1584,7 +1584,7 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::FilletPolygon( unsigned int aRadius, int
 }
 
 
-SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex )
+SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex ) const
 {
     // We calculate the min dist between the segment and each outline segment.  However, if the
     // segment to test is inside the outline, and does not cross any edge, it can be seen outside
@@ -1593,7 +1593,7 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( VECTOR2I aPoint, int aPoly
     if( containsSingle( aPoint, aPolygonIndex, 1 ) )
         return 0;
 
-    SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );
+    CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles( aPolygonIndex );
 
     SEG polygonEdge = *iterator;
     SEG::ecoord minDistance = polygonEdge.SquaredDistance( aPoint );
@@ -1612,7 +1612,7 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( VECTOR2I aPoint, int aPoly
 }
 
 
-SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int aPolygonIndex )
+SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int aPolygonIndex ) const
 {
     // We calculate the min dist between the segment and each outline segment.  However, if the
     // segment to test is inside the outline, and does not cross any edge, it can be seen outside
@@ -1621,9 +1621,9 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int a
     if( containsSingle( aSegment.A, aPolygonIndex, 1 ) )
         return 0;
 
-    SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );
-    SEG              polygonEdge = *iterator;
-    SEG::ecoord      minDistance = polygonEdge.SquaredDistance( aSegment );
+    CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles( aPolygonIndex );
+    SEG                    polygonEdge = *iterator;
+    SEG::ecoord            minDistance = polygonEdge.SquaredDistance( aSegment );
 
     for( iterator++; iterator && minDistance > 0; iterator++ )
     {
@@ -1640,7 +1640,7 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int a
 }
 
 
-SEG::ecoord SHAPE_POLY_SET::SquaredDistance( VECTOR2I aPoint )
+SEG::ecoord SHAPE_POLY_SET::SquaredDistance( VECTOR2I aPoint ) const
 {
     SEG::ecoord currentDistance;
     SEG::ecoord minDistance = SquaredDistanceToPolygon( aPoint, 0 );
@@ -1658,7 +1658,7 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistance( VECTOR2I aPoint )
 }
 
 
-SEG::ecoord SHAPE_POLY_SET::SquaredDistance( const SEG& aSegment )
+SEG::ecoord SHAPE_POLY_SET::SquaredDistance( const SEG& aSegment ) const
 {
     SEG::ecoord currentDistance;
     SEG::ecoord minDistance = SquaredDistanceToPolygon( aSegment, 0 );
