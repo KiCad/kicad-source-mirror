@@ -361,6 +361,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 controls->SetAutoPan( true );
                 inDrag = true;
                 grid.SetAuxAxes( true, m_original.GetPosition() );
+                m_editedPoint->SetActive();
             }
 
             //TODO: unify the constraints to solve simultaneously instead of sequentially
@@ -387,6 +388,12 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
         else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
         {
+            if( m_editedPoint )
+            {
+                m_editedPoint->SetActive( false );
+                getView()->Update( m_editPoints.get() );
+            }
+
             controls->SetAutoPan( false );
             setAltConstraint( false );
 
@@ -648,6 +655,8 @@ void POINT_EDITOR::updateItem() const
     default:
         break;
     }
+
+    getView()->Update( item );
 
     if( frame() )
         frame()->SetMsgPanel( item );

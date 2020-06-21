@@ -243,19 +243,32 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     auto gal = aView->GetGAL();
 
-    if( aView->GetGAL()->GetClearColor().GetBrightness() > 0.5 )
-        gal->SetFillColor( KIGFX::COLOR4D( 0, 0, 0, 1.0 ) );
-    else
-        gal->SetFillColor( KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
+    KIGFX::COLOR4D drawColor = aView->GetPainter()->GetSettings()->GetLayerColor( LAYER_AUX_ITEMS );
+
+    KIGFX::COLOR4D highlightColor =
+            aView->GetPainter()->GetSettings()->GetLayerColor( LAYER_SELECT_OVERLAY );
+
+    gal->SetFillColor( drawColor );
     gal->SetIsFill( true );
     gal->SetIsStroke( false );
     gal->PushDepth();
     gal->SetLayerDepth( gal->GetMinDepth() );
 
-    float size = aView->ToWorld( EDIT_POINT::POINT_SIZE );
+    float size       = aView->ToWorld( EDIT_POINT::POINT_SIZE );
+    float shadowSize = aView->ToWorld( EDIT_POINT::POINT_SIZE * 1.5 );
 
     for( const EDIT_POINT& point : m_points )
+    {
+        if( point.IsActive() )
+        {
+            gal->SetFillColor( highlightColor );
+            gal->DrawRectangle( point.GetPosition() - shadowSize / 2,
+                                point.GetPosition() + shadowSize / 2 );
+            gal->SetFillColor( drawColor );
+        }
+
         gal->DrawRectangle( point.GetPosition() - size / 2, point.GetPosition() + size / 2 );
+    }
 
     for( const EDIT_LINE& line : m_lines )
     {

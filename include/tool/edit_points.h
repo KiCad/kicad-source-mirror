@@ -53,7 +53,8 @@ public:
      */
     EDIT_POINT( const VECTOR2I& aPoint, EDA_ITEM* aConnection = nullptr ) :
         m_position( aPoint ),
-        m_connection( aConnection )
+        m_connection( aConnection ),
+        m_isActive( false )
     {
     }
 
@@ -176,6 +177,16 @@ public:
             m_constraint->Apply();
     }
 
+    inline bool IsActive() const
+    {
+        return m_isActive;
+    }
+
+    inline void SetActive( bool aActive = true )
+    {
+        m_isActive = aActive;
+    }
+
     bool operator==( const EDIT_POINT& aOther ) const
     {
         return m_position == aOther.m_position;
@@ -194,6 +205,9 @@ private:
 
     ///> Constraint for the point, NULL if none
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_constraint;
+
+    ///> True if this point is being manipulated
+    bool m_isActive;
 };
 
 

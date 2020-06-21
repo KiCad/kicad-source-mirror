@@ -198,7 +198,7 @@ wxString LayerName( int aLayer )
         return _( "Cursor" );
 
     case LAYER_AUX_ITEMS:
-        return _( "Aux Items" );
+        return _( "Helper items" );
 
     case LAYER_GRID:
         return _( "Grid" );
