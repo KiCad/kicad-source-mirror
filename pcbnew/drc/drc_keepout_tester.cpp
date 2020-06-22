@@ -231,7 +231,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
             continue;
 
         // Fast test to detect a pad inside the keepout area bounding box.
-        EDA_RECT padBBox( pad->ShapePos(), wxSize() );
+        EDA_RECT padBBox( pad->GetPosition(), wxSize() );
         padBBox.Inflate( pad->GetBoundingRadius() );
 
         if( !m_zoneBBox.Intersects( padBBox ) )
