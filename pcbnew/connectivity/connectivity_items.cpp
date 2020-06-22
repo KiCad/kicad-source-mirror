@@ -105,7 +105,7 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
                 RotatePoint( pt1, pad->ShapePos(), pad->GetOrientation() );
 
             SHAPE_POLY_SET padPolySet;
-            pad->BuildPadShapePolygon( padPolySet, wxSize( 0, 0 ), ARC_LOW_DEF );
+            pad->TransformShapeWithClearanceToPolygon( padPolySet, 0, ARC_LOW_DEF );
             const SHAPE_LINE_CHAIN& padOutline = padPolySet.COutline( 0 );
             SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
 

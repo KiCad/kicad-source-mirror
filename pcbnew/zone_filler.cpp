@@ -391,18 +391,14 @@ void ZONE_FILLER::addKnockout( D_PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
 {
     if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
     {
-        // the pad shape in zone can be its convex hull or the shape itself
-        SHAPE_POLY_SET outline( aPad->GetCustomShapeAsPolygon() );
-        int numSegs = std::max( GetArcToSegmentCount( aGap, m_high_def, 360.0 ), 6 );
-        double correction = GetCircletoPolyCorrectionFactor( numSegs );
-        outline.Inflate( KiROUND( aGap * correction ), numSegs );
-        aPad->CustomShapeAsPolygonToBoardPosition( &outline, aPad->GetPosition(),
-                                                   aPad->GetOrientation() );
+        SHAPE_POLY_SET poly;
+        aPad->TransformShapeWithClearanceToPolygon( poly, aGap, m_high_def );
 
+        // the pad shape in zone can be its convex hull or the shape itself
         if( aPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
         {
             std::vector<wxPoint> convex_hull;
-            BuildConvexHull( convex_hull, outline );
+            BuildConvexHull( convex_hull, poly );
 
             aHoles.NewOutline();
 
@@ -410,7 +406,7 @@ void ZONE_FILLER::addKnockout( D_PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
                 aHoles.Append( pt );
         }
         else
-            aHoles.Append( outline );
+            aHoles.Append( poly );
     }
     else
     {

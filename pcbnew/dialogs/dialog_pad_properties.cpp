@@ -551,7 +551,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     else
         m_SolderPasteMarginRatioCtrl->SetValue( msg );
 
-    switch( m_dummyPad->GetLocalZoneConnection() )
+    switch( m_dummyPad->GetZoneConnection() )
     {
     default:
     case ZONE_CONNECTION::INHERITED: m_ZoneConnectionChoice->SetSelection( 0 ); break;
@@ -1199,7 +1199,10 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     if( m_dummyPad->GetShape() == PAD_SHAPE_CUSTOM )
     {
-        if( !m_dummyPad->MergePrimitivesAsPolygon( ) )
+        SHAPE_POLY_SET mergedPolygon;
+        m_dummyPad->MergePrimitivesAsPolygon( &mergedPolygon );
+
+        if( mergedPolygon.OutlineCount() > 1 )
             error_msgs.Add( _( "Incorrect pad shape: the shape must be equivalent to only one polygon" ) );
     }
 
@@ -1446,7 +1449,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetRoundRectRadiusRatio( m_padMaster->GetRoundRectRadiusRatio() );
     m_currentPad->SetChamferRectRatio( m_padMaster->GetChamferRectRatio() );
     m_currentPad->SetChamferPositions( m_padMaster->GetChamferPositions() );
-    m_currentPad->SetZoneConnection( m_padMaster->GetZoneConnection() );
+    m_currentPad->SetZoneConnection( m_padMaster->GetEffectiveZoneConnection() );
 
     // rounded rect pads with radius ratio = 0 are in fact rect pads.
     // So set the right shape (and perhaps issues with a radius = 0)

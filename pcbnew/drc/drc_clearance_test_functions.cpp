@@ -685,230 +685,37 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
 bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActual )
 {
-    // relativePadPos is the aPad shape position relative to the aRefPad shape position
-    wxPoint relativePadPos = aPad->ShapePos() - aRefPad->ShapePos();
-
-    int center2center = KiROUND( EuclideanNorm( relativePadPos ) );
+    int center2center = KiROUND( EuclideanNorm( aPad->ShapePos() - aRefPad->ShapePos() ) );
 
     // Quick test: Clearance is OK if the bounding circles are further away than aMinClearance
     if( center2center - aRefPad->GetBoundingRadius() - aPad->GetBoundingRadius() >= aMinClearance )
         return true;
 
-    /* Here, pads are near and DRC depends on the pad shapes.  We must compare distance using
-     * a fine shape analysis.
-     * Because a circle or oval shape is the easier shape to test, swap pads to have aRefPad be
-     * a PAD_SHAPE_CIRCLE or PAD_SHAPE_OVAL.  If aRefPad = TRAPEZOID and aPad = RECT, also swap.
-     */
-    bool swap_pads;
-    swap_pads = false;
+    // JEY TODO:
+    // TOM TODO: MTV only works as a proxy for actual-distance for convex shapes
 
-    // swap pads to make comparisons easier
-    // Note also a ROUNDRECT pad with a corner radius = r can be considered as
-    // a smaller RECT (size - 2*r) with a clearance increased by r
-    // priority is aRefPad = ROUND then OVAL then RECT/ROUNDRECT then other
-    if( aRefPad->GetShape() != aPad->GetShape() && aRefPad->GetShape() != PAD_SHAPE_CIRCLE )
+    VECTOR2I mtv;
+    VECTOR2I maxMtv( 0, 0 );
+
+    for( const std::shared_ptr<SHAPE>& aShape : aRefPad->GetEffectiveShapes() )
     {
-        // pad ref shape is here oval, rect, roundrect, chamfered rect, trapezoid or custom
-        switch( aPad->GetShape() )
+        for( const std::shared_ptr<SHAPE>& bShape : aPad->GetEffectiveShapes() )
         {
-            case PAD_SHAPE_CIRCLE:
-                swap_pads = true;
-                break;
-
-            case PAD_SHAPE_OVAL:
-                swap_pads = true;
-                break;
-
-            case PAD_SHAPE_RECT:
-            case PAD_SHAPE_ROUNDRECT:
-                if( aRefPad->GetShape() != PAD_SHAPE_OVAL )
-                    swap_pads = true;
-                break;
-
-            case PAD_SHAPE_TRAPEZOID:
-            case PAD_SHAPE_CHAMFERED_RECT:
-            case PAD_SHAPE_CUSTOM:
-                break;
+            if( aShape->Collide( bShape.get(), aMinClearance, mtv ) )
+            {
+                if( mtv.SquaredEuclideanNorm() > maxMtv.SquaredEuclideanNorm() )
+                    maxMtv = mtv;
+            }
         }
     }
 
-    if( swap_pads )
+    if( maxMtv.x > 0 || maxMtv.y > 0 )
     {
-        std::swap( aRefPad, aPad );
-        relativePadPos = -relativePadPos;
+        *aActual = std::max( 0, aMinClearance - maxMtv.EuclideanNorm() );
+        return false;
     }
 
-    bool diag = true;
-
-    if( ( aRefPad->GetShape() == PAD_SHAPE_CIRCLE || aRefPad->GetShape() == PAD_SHAPE_OVAL ) )
-    {
-        /* Treat an oval pad as a line segment along the hole's major axis,
-         * shortened by half its minor axis.
-         * A circular pad is just a degenerate case of an oval hole.
-         */
-        wxPoint refPadStart, refPadEnd;
-        int     refPadWidth;
-
-        aRefPad->GetOblongGeometry( aRefPad->GetSize(), &refPadStart, &refPadEnd, &refPadWidth );
-        refPadStart += aRefPad->ShapePos();
-        refPadEnd += aRefPad->ShapePos();
-
-        SEG refPadSeg( refPadStart, refPadEnd );
-        diag = checkClearanceSegmToPad( refPadSeg, refPadWidth, aPad, aMinClearance, aActual );
-    }
-    else
-    {
-        int dist_extra = 0;
-
-        // corners of aRefPad (used only for rect/roundrect/trap pad)
-        wxPoint polyref[4];
-        // corners of aRefPad (used only for custom pad)
-        SHAPE_POLY_SET polysetref;
-
-        if( aRefPad->GetShape() == PAD_SHAPE_ROUNDRECT )
-        {
-            int padRadius = aRefPad->GetRoundRectCornerRadius();
-            dist_extra = padRadius;
-            GetRoundRectCornerCenters( polyref, padRadius, wxPoint( 0, 0 ), aRefPad->GetSize(),
-                                       aRefPad->GetOrientation() );
-        }
-        else if( aRefPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
-        {
-            BOARD* board = aRefPad->GetBoard();
-            int maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
-
-            // The reference pad can be rotated.  Calculate the rotated coordinates.
-            // (note, the ref pad position is the origin of coordinates for this drc test)
-            int padRadius = aRefPad->GetRoundRectCornerRadius();
-
-            TransformRoundChamferedRectToPolygon( polysetref, wxPoint( 0, 0 ), aRefPad->GetSize(),
-                                                  aRefPad->GetOrientation(),
-                                                  padRadius, aRefPad->GetChamferRectRatio(),
-                                                  aRefPad->GetChamferPositions(), maxError );
-        }
-        else if( aRefPad->GetShape() == PAD_SHAPE_CUSTOM )
-        {
-            polysetref.Append( aRefPad->GetCustomShapeAsPolygon() );
-
-            // The reference pad can be rotated.  Calculate the rotated coordinates.
-            // (note, the ref pad position is the origin of coordinates for this drc test)
-            aRefPad->CustomShapeAsPolygonToBoardPosition( &polysetref, wxPoint( 0, 0 ),
-                                                          aRefPad->GetOrientation() );
-        }
-        else
-        {
-            // BuildPadPolygon has meaning for rect a trapeziod shapes and returns the 4 corners.
-            aRefPad->BuildPadPolygon( polyref, wxSize( 0, 0 ), aRefPad->GetOrientation() );
-        }
-
-        // corners of aPad (used only for rect/roundrect/trap pad)
-        wxPoint polycompare[4];
-        // corners of aPad (used only custom pad)
-        SHAPE_POLY_SET polysetcompare;
-
-        switch( aPad->GetShape() )
-        {
-        case PAD_SHAPE_ROUNDRECT:
-        case PAD_SHAPE_RECT:
-        case PAD_SHAPE_CHAMFERED_RECT:
-        case PAD_SHAPE_TRAPEZOID:
-        case PAD_SHAPE_CUSTOM:
-            if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT )
-            {
-                int padRadius = aPad->GetRoundRectCornerRadius();
-                dist_extra = padRadius;
-                GetRoundRectCornerCenters( polycompare, padRadius, relativePadPos, aPad->GetSize(),
-                                           aPad->GetOrientation() );
-            }
-            else if( aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
-            {
-                BOARD* board = aRefPad->GetBoard();
-                int maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
-
-                // The pad to compare can be rotated. Calculate the rotated coordinates.
-                // ( note, the pad to compare position is the relativePadPos for this drc test)
-                int padRadius = aPad->GetRoundRectCornerRadius();
-
-                TransformRoundChamferedRectToPolygon( polysetcompare, relativePadPos,
-                                                      aPad->GetSize(), aPad->GetOrientation(),
-                                                      padRadius, aPad->GetChamferRectRatio(),
-                                                      aPad->GetChamferPositions(), maxError );
-            }
-            else if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
-            {
-                polysetcompare.Append( aPad->GetCustomShapeAsPolygon() );
-
-                // The pad to compare can be rotated. Calculate the rotated coordinates.
-                // ( note, the pad to compare position is the relativePadPos for this drc test)
-                aPad->CustomShapeAsPolygonToBoardPosition( &polysetcompare, relativePadPos,
-                                                           aPad->GetOrientation() );
-            }
-            else
-            {
-                aPad->BuildPadPolygon( polycompare, wxSize( 0, 0 ), aPad->GetOrientation() );
-
-                // Move aPad shape to relativePadPos
-                for( int ii = 0; ii < 4; ii++ )
-                    polycompare[ii] += relativePadPos;
-            }
-
-            // And now test polygons: We have 3 cases:
-            // one poly is complex and the other is basic (has only 4 corners)
-            // both polys are complex
-            // both polys are basic (have only 4 corners) the most usual case
-            if( polysetref.OutlineCount() && polysetcompare.OutlineCount() == 0)
-            {
-                const SHAPE_LINE_CHAIN& refpoly = polysetref.COutline( 0 );
-                // And now test polygons:
-                if( !poly2polyDRC( (wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
-                                   polycompare, 4, aMinClearance + dist_extra, aActual ) )
-                {
-                    *aActual = std::max( 0, *aActual - dist_extra );
-                    diag = false;
-                }
-            }
-            else if( polysetref.OutlineCount() == 0 && polysetcompare.OutlineCount())
-            {
-                const SHAPE_LINE_CHAIN& cmppoly = polysetcompare.COutline( 0 );
-                // And now test polygons:
-                if( !poly2polyDRC((wxPoint*) &cmppoly.CPoint( 0 ), cmppoly.PointCount(),
-                                  polyref, 4, aMinClearance + dist_extra, aActual ) )
-                {
-                    *aActual = std::max( 0, *aActual - dist_extra );
-                    diag = false;
-                }
-            }
-            else if( polysetref.OutlineCount() && polysetcompare.OutlineCount() )
-            {
-                const SHAPE_LINE_CHAIN& refpoly = polysetref.COutline( 0 );
-                const SHAPE_LINE_CHAIN& cmppoly = polysetcompare.COutline( 0 );
-
-                // And now test polygons:
-                if( !poly2polyDRC((wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
-                                  (wxPoint*) &cmppoly.CPoint( 0 ), cmppoly.PointCount(),
-                                  aMinClearance + dist_extra, aActual ) )
-                {
-                    *aActual = std::max( 0, *aActual - dist_extra );
-                    diag = false;
-                }
-            }
-            else
-            {
-                if( !poly2polyDRC( polyref, 4, polycompare, 4, aMinClearance + dist_extra, aActual ) )
-                {
-                    *aActual = std::max( 0, *aActual - dist_extra );
-                    diag = false;
-                }
-            }
-            break;
-
-        default:
-            wxLogDebug( wxT( "DRC::checkClearancePadToPad: unexpected pad shape %d" ), aPad->GetShape() );
-            break;
-        }
-    }
-
-    return diag;
+    return true;
 }
 
 

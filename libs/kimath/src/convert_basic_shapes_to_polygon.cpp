@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,7 @@
 #include <trigo.h>
 
 
-void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer,
-                               wxPoint aCenter, int aRadius,
+void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter, int aRadius,
                                int aError )
 {
     wxPoint corner_position;
@@ -56,10 +55,10 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer,
         double angle = (ii * delta) + halfstep;
         RotatePoint( &corner_position, angle );
         corner_position += aCenter;
-        aBuffer.Append( corner_position.x, corner_position.y );
+        aCornerBuffer.Append( corner_position.x, corner_position.y );
     }
 
-    aBuffer.SetClosed( true );
+    aCornerBuffer.SetClosed( true );
 }
 
 
@@ -192,8 +191,8 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPo
 }
 
 
-void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
-                const wxPoint& aPosition, const wxSize& aSize, double aRotation )
+void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius, const wxPoint& aPosition,
+                                const wxSize& aSize, double aRotation )
 {
     wxSize size( aSize/2 );
 
@@ -202,25 +201,16 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
 
     // Ensure size is > 0, to avoid generating unusable shapes
     // which can crash kicad.
-    if( size.x <= 1 )
-        size.x = 1;
-    if( size.y <= 1 )
-        size.y = 1;
+    size.x = std::max( 1, size.x );
+    size.y = std::max( 1, size.y );
 
-    aCenters[0].x = -size.x;
-    aCenters[0].y = size.y;
-
-    aCenters[1].x = size.x;
-    aCenters[1].y = size.y;
-
-    aCenters[2].x = size.x;
-    aCenters[2].y = -size.y;
-
-    aCenters[3].x = -size.x;
-    aCenters[3].y = -size.y;
+    aCenters[0] = wxPoint( -size.x,  size.y );
+    aCenters[1] = wxPoint(  size.x,  size.y );
+    aCenters[2] = wxPoint(  size.x, -size.y );
+    aCenters[3] = wxPoint( -size.x, -size.y );
 
     // Rotate the polygon
-    if( aRotation )
+    if( aRotation != 0.0 )
     {
         for( int ii = 0; ii < 4; ii++ )
             RotatePoint( &aCenters[ii], aRotation );
@@ -232,11 +222,10 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
 }
 
 
-void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                  const wxPoint& aPosition, const wxSize& aSize,
-                                  double aRotation, int aCornerRadius,
-                                  double aChamferRatio, int aChamferCorners,
-                                  int aApproxErrorMax, int aMinSegPerCircleCount )
+void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aPosition,
+                                           const wxSize& aSize, double aRotation,
+                                           int aCornerRadius, double aChamferRatio,
+                                           int aChamferCorners, int aError )
 {
     // Build the basic shape in orientation 0.0, position 0,0 for chamfered corners
     // or in actual position/orientation for round rect only
@@ -248,11 +237,12 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     SHAPE_POLY_SET outline;
     outline.NewOutline();
 
-    for( int ii = 0; ii < 4; ++ii )
-        outline.Append( corners[ii].x, corners[ii].y );
+    for( const wxPoint& corner : corners)
+        outline.Append( corner );
 
-    int     numSegs = std::max( GetArcToSegmentCount( aCornerRadius, aApproxErrorMax, 360.0 ),
-                                                      aMinSegPerCircleCount );
+    // These are small radius corners (of which there may be many), so peg the segs-per-circle
+    // to no more than 16.
+    int numSegs = std::max( GetArcToSegmentCount( aCornerRadius, aError, 360.0 ), 16 );
     outline.Inflate( aCornerRadius, numSegs );
 
     if( aChamferCorners == RECT_NO_CHAMFER )      // no chamfer
@@ -322,8 +312,7 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 }
 
 
-void TransformSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                wxPoint aStart, wxPoint aEnd,
+void TransformSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
                                 int aError, int aWidth )
 {
     int      radius  = aWidth / 2;
@@ -392,9 +381,8 @@ void TransformSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 }
 
 
-void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                            wxPoint aCentre, wxPoint aStart, double aArcAngle,
-                            int aError, int aWidth )
+void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, wxPoint aStart,
+                            double aArcAngle, int aError, int aWidth )
 {
     wxPoint arc_start, arc_end;
     int     dist = EuclideanNorm( aCentre - aStart );
@@ -404,9 +392,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     arc_end = arc_start = aStart;
 
     if( aArcAngle != 3600 )
-    {
         RotatePoint( &arc_end, aCentre, -aArcAngle );
-    }
 
     if( aArcAngle < 0 )
     {
@@ -422,8 +408,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     {
         curr_end = arc_start;
         RotatePoint( &curr_end, aCentre, -ii );
-        TransformSegmentToPolygon( aCornerBuffer, curr_start, curr_end, aError,
-                                   aWidth );
+        TransformSegmentToPolygon( aCornerBuffer, curr_start, curr_end, aError, aWidth );
         curr_start = curr_end;
     }
 
@@ -432,14 +417,12 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 }
 
 
-void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                             wxPoint aCentre, int aRadius,
+void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, int aRadius,
                              int aError, int aWidth )
 {
     // Compute the corners positions and creates the poly
-    wxPoint curr_point;
-    int     inner_radius    = aRadius - ( aWidth / 2 );
-    int     outer_radius    = inner_radius + aWidth;
+    int inner_radius = aRadius - ( aWidth / 2 );
+    int outer_radius = inner_radius + aWidth;
 
     if( inner_radius <= 0 )
     {   //In this case, the ring is just a circle (no hole inside)

@@ -817,10 +817,10 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
                     double correctionFactor = m_boardAdapter.GetCircleCorrectionFactor( nrSegments );
                     int    correction = radius * ( correctionFactor - 1 );
 
-                    pad->BuildPadDrillShapePolygon(
-                            tht_outer_holes_poly, copperThickness + correction );
+                    pad->TransformHoleWithClearanceToPolygon( tht_outer_holes_poly,
+                                                              copperThickness + correction );
 
-                    pad->BuildPadDrillShapePolygon( tht_inner_holes_poly, correction );
+                    pad->TransformHoleWithClearanceToPolygon( tht_inner_holes_poly, correction );
                 }
             }
         }

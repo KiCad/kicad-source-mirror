@@ -3352,33 +3352,33 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                 case T_gr_arc:
                     dummysegm = parseDRAWSEGMENT();
                     pad->AddPrimitiveArc( dummysegm->GetCenter(), dummysegm->GetArcStart(),
-                                          dummysegm->GetAngle(), dummysegm->GetWidth(), false );
+                                          dummysegm->GetAngle(), dummysegm->GetWidth() );
                     break;
 
                 case T_gr_line:
                     dummysegm = parseDRAWSEGMENT();
                     pad->AddPrimitiveSegment( dummysegm->GetStart(), dummysegm->GetEnd(),
-                                              dummysegm->GetWidth(), false );
+                                              dummysegm->GetWidth() );
                     break;
 
                 case T_gr_circle:
                     dummysegm = parseDRAWSEGMENT( true );   // Circles with 0 thickness are allowed
                                                             // ( filled circles )
                     pad->AddPrimitiveCircle( dummysegm->GetCenter(), dummysegm->GetRadius(),
-                                             dummysegm->GetWidth(), false );
+                                             dummysegm->GetWidth() );
                     break;
 
                 case T_gr_rect:
                     dummysegm = parseDRAWSEGMENT( true );
                     pad->AddPrimitiveRect( dummysegm->GetStart(), dummysegm->GetEnd(),
-                                           dummysegm->GetWidth(), false );
+                                           dummysegm->GetWidth() );
                     break;
 
 
                 case T_gr_poly:
                     dummysegm = parseDRAWSEGMENT();
                     pad->AddPrimitivePoly( dummysegm->BuildPolyPointsList(),
-                                           dummysegm->GetWidth(), false );
+                                           dummysegm->GetWidth() );
                     break;
 
                 case T_gr_curve:
@@ -3386,7 +3386,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                     pad->AddPrimitiveCurve( dummysegm->GetStart(), dummysegm->GetEnd(),
                                             dummysegm->GetBezControl1(),
                                             dummysegm->GetBezControl2(),
-                                            dummysegm->GetWidth(), false );
+                                            dummysegm->GetWidth() );
                     break;
 
                 default:
@@ -3410,10 +3410,6 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                        "zone_connect, fp_poly, primitives, thermal_width, or thermal_gap" );
         }
     }
-
-    // Be sure the custom shape polygon is built:
-    if( pad->GetShape() == PAD_SHAPE_CUSTOM )
-        pad->MergePrimitivesAsPolygon();
 
     return pad.release();
 }

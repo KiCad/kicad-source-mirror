@@ -1084,10 +1084,9 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
 
         // Fast test to detect a pad candidate inside the text bounding box
         // Finer test (time consumming) is made only for pads near the text.
-        int      bb_radius = pad->GetBoundingRadius() + minClearance;
-        VECTOR2I shape_pos( pad->ShapePos() );
+        int bb_radius = pad->GetBoundingRadius() + minClearance;
 
-        if( !rect_area.Collide( SEG( shape_pos, shape_pos ), bb_radius ) )
+        if( !rect_area.Collide( SEG( pad->GetPosition(), pad->GetPosition() ), bb_radius ) )
             continue;
 
         SHAPE_POLY_SET padOutline;

@@ -35,6 +35,7 @@
 #include <base_struct.h>
 #include <gr_text.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/shape_segment.h>
 #include <trigo.h>
 #include <pcb_base_frame.h>
 #include <macros.h>
@@ -249,70 +250,6 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                     continue;
             }
 
-            wxSize margin;
-            double width_adj = 0;
-
-            if( onCopperLayer )
-                width_adj =  itemplotter.getFineWidthAdj();
-
-            if( onSolderMaskLayer )
-                margin.x = margin.y = pad->GetSolderMaskMargin();
-
-            if( onSolderPasteLayer )
-                margin = pad->GetSolderPasteMargin();
-
-            // Now offset the pad size by margin + width_adj
-            // this is easy for most shapes, but not for a trapezoid or a custom shape
-            wxSize padPlotsSize;
-            wxSize extraSize = margin * 2;
-            extraSize.x += width_adj;
-            extraSize.y += width_adj;
-
-            // Store these parameters that can be modified to plot inflated/deflated pads shape
-            wxSize deltaSize = pad->GetDelta(); // has meaning only for trapezoidal pads
-            PAD_SHAPE_T padShape = pad->GetShape();
-            double padCornerRadius = pad->GetRoundRectCornerRadius();
-
-            if( pad->GetShape() == PAD_SHAPE_TRAPEZOID )
-            {   // The easy way is to use BuildPadPolygon to calculate
-                // size and delta of the trapezoidal pad after offseting:
-                wxPoint coord[4];
-                pad->BuildPadPolygon( coord, extraSize/2, 0.0 );
-                // Calculate the size and delta from polygon corners coordinates:
-                // coord[0] is the lower left
-                // coord[1] is the upper left
-                // coord[2] is the upper right
-                // coord[3] is the lower right
-
-                // the size is the distance between middle of segments
-                // (left/right or top/bottom)
-                // size X is the dist between left and right middle points:
-                padPlotsSize.x = ( ( -coord[0].x + coord[3].x )     // the lower segment X length
-                                 + ( -coord[1].x + coord[2].x ) )   // the upper segment X length
-                                 / 2;           // the Y size is the half sum
-                // size Y is the dist between top and bottom middle points:
-                padPlotsSize.y = ( ( coord[0].y - coord[1].y )      // the left segment Y lenght
-                                 + ( coord[3].y - coord[2].y ) )    // the right segment Y lenght
-                                 / 2;           // the Y size is the half sum
-
-                // calculate the delta ( difference of lenght between 2 opposite edges )
-                // The delta.x is the delta along the X axis, therefore the delta of Y lenghts
-                wxSize delta;
-
-                if( coord[0].y != coord[3].y )
-                    delta.x = coord[0].y - coord[3].y;
-                else
-                    delta.y = coord[1].x - coord[0].x;
-
-                pad->SetDelta( delta );
-            }
-            else
-                padPlotsSize = pad->GetSize() + extraSize;
-
-            // Don't draw a null size item :
-            if( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 )
-                continue;
-
             COLOR4D color = COLOR4D::BLACK;
 
             if( pad->GetLayerSet()[B_Cu] )
@@ -326,8 +263,30 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             else if( sketchPads && aLayerMask[B_Fab] )
                 color = aPlotOpt.ColorSettings()->GetColor( B_Fab );
 
-            // Temporary set the pad size to the required plot size:
-            wxSize tmppadsize = pad->GetSize();
+            wxSize margin;
+            int width_adj = 0;
+
+            if( onCopperLayer )
+                width_adj =  itemplotter.getFineWidthAdj();
+
+            if( onSolderMaskLayer )
+                margin.x = margin.y = pad->GetSolderMaskMargin();
+
+            if( onSolderPasteLayer )
+                margin = pad->GetSolderPasteMargin();
+
+            // Now offset the pad size by margin + width_adj
+            wxSize padPlotsSize = pad->GetSize() + margin * 2 + wxSize( width_adj, width_adj );
+
+            // Store these parameters that can be modified to plot inflated/deflated pads shape
+            PAD_SHAPE_T padShape = pad->GetShape();
+            wxSize      padSize = pad->GetSize();
+            wxSize      padDelta = pad->GetDelta(); // has meaning only for trapezoidal pads
+            double      padCornerRadius = pad->GetRoundRectCornerRadius();
+
+            // Don't draw a null size item :
+            if( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 )
+                continue;
 
             switch( pad->GetShape() )
             {
@@ -348,14 +307,26 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 if( margin.x > 0 )
                 {
                     pad->SetShape( PAD_SHAPE_ROUNDRECT );
-                    pad->SetSize( padPlotsSize );
                     pad->SetRoundRectCornerRadius( margin.x );
                 }
-                KI_FALLTHROUGH;
+
+                pad->SetSize( padPlotsSize );
+                itemplotter.PlotPad( pad, color, padPlotMode );
+                break;
 
             case PAD_SHAPE_TRAPEZOID:
+            {
+                wxSize scale( padPlotsSize.x / padSize.x, padPlotsSize.y / padSize.y );
+                pad->SetDelta( wxSize( padDelta.x * scale.x, padDelta.y * scale.y ) );
+
+                pad->SetSize( padPlotsSize );
+                itemplotter.PlotPad( pad, color, padPlotMode );
+            }
+                break;
+
             case PAD_SHAPE_ROUNDRECT:
             case PAD_SHAPE_CHAMFERED_RECT:
+                // Chamfer and rounding are stored as a percent and so don't need scaling
                 pad->SetSize( padPlotsSize );
                 itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
@@ -373,8 +344,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 int numSegs = std::max( GetArcToSegmentCount( margin.x, maxError, 360.0 ), 6 );
                 shape.InflateWithLinkedHoles( margin.x, numSegs, SHAPE_POLY_SET::PM_FAST );
                 dummy.DeletePrimitivesList();
-                dummy.AddPrimitivePoly( shape, 0, false );
-                dummy.MergePrimitivesAsPolygon();
+                dummy.AddPrimitivePoly( shape, 0 );
 
                 // Be sure the anchor pad is not bigger than the deflated shape because this
                 // anchor will be added to the pad shape when plotting the pad. So now the
@@ -388,8 +358,8 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             }
 
             // Restore the pad parameters modified by the plot code
-            pad->SetSize( tmppadsize );
-            pad->SetDelta( deltaSize );
+            pad->SetSize( padSize );
+            pad->SetDelta( padDelta );
             pad->SetShape( padShape );
             pad->SetRoundRectCornerRadius( padCornerRadius );
         }
@@ -630,7 +600,6 @@ static const PCB_LAYER_ID plot_seq[] = {
 void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt )
 {
-
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
     itemplotter.SetLayerSet( aLayerMask );
 
@@ -646,7 +615,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         outlines.Simplify( SHAPE_POLY_SET::PM_FAST );
 
         // Plot outlines
-        std::vector< wxPoint > cornerList;
+        std::vector<wxPoint> cornerList;
 
         // Now we have one or more basic polygons: plot each polygon
         for( int ii = 0; ii < outlines.OutlineCount(); ii++ )
@@ -673,9 +642,9 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             int smallDrill = (aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE)
                                   ? SMALL_DRILL : INT_MAX;
 
-            for( auto module : aBoard->Modules() )
+            for( MODULE* module : aBoard->Modules() )
             {
-                for( auto pad : module->Pads() )
+                for( D_PAD* pad : module->Pads() )
                 {
                     wxSize hole = pad->GetDrillSize();
 
@@ -690,19 +659,17 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     else
                     {
                         // Note: small drill marks have no significance when applied to slots
-                        wxPoint drl_start, drl_end;
-                        int width;
-
-                        pad->GetOblongGeometry( pad->GetDrillSize(), &drl_start, &drl_end, &width );
-                        aPlotter->ThickSegment( pad->GetPosition() + drl_start,
-                                                pad->GetPosition() + drl_end, width, SKETCH, NULL );
+                        const std::shared_ptr<SHAPE_SEGMENT>& seg = pad->GetEffectiveHoleShape();
+                        aPlotter->ThickSegment( (wxPoint) seg->GetSeg().A,
+                                                (wxPoint) seg->GetSeg().B,
+                                                seg->GetWidth(), SKETCH, NULL );
                     }
                 }
             }
         }
 
         // Plot vias holes
-        for( auto track : aBoard->Tracks() )
+        for( TRACK* track : aBoard->Tracks() )
         {
             const VIA* via = dyn_cast<const VIA*>( track );
 

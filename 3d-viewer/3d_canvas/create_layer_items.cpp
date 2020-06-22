@@ -33,13 +33,7 @@
 #include "board_adapter.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cring2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cfilledcircle2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/croundsegment2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/cpolygon4pts2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/cpolygon2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/ctriangle2d.h"
-#include "../3d_rendering/3d_render_raytracing/accelerators/ccontainer2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes3D/ccylinder.h"
-#include "../3d_rendering/3d_render_raytracing/shapes3D/clayeritem.h"
 
 #include <class_board.h>
 #include <class_module.h>
@@ -47,16 +41,17 @@
 #include <class_pcb_text.h>
 #include <class_edge_mod.h>
 #include <class_zone.h>
-#include <class_text_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
-#include <utility>
 #include <vector>
 #include <thread>
 #include <algorithm>
 #include <atomic>
 
+#ifdef PRINT_STATISTICS_3D_VIEWER
 #include <profile.h>
+#endif
+
 
 void BOARD_ADAPTER::destroyLayers()
 {
@@ -501,13 +496,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             if( pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED )
             {
-                pad->BuildPadDrillShapePolygon( m_through_outer_holes_poly, inflate );
-                pad->BuildPadDrillShapePolygon( m_through_inner_holes_poly, 0 );
+                pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly, inflate );
+                pad->TransformHoleWithClearanceToPolygon( m_through_inner_holes_poly, 0 );
             }
             else
             {
                 // If not plated, no copper.
-                pad->BuildPadDrillShapePolygon( m_through_outer_holes_poly_NPTH, inflate );
+                pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly_NPTH, inflate );
             }
         }
     }
@@ -568,11 +563,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                 // Note: NPTH pads are not drawn on copper layers when the pad
                 // has same shape as its hole
-                transformPadsShapesWithClearanceToPolygon( module->Pads(),
-                                                           curr_layer_id,
-                                                           *layerPoly,
-                                                           0,
-                                                           true );
+                module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id,
+                                                                   *layerPoly,
+                                                                   0,
+                                                                   true );
 
                 // Micro-wave modules may have items on copper layers
                 module->TransformGraphicTextWithClearanceToPolygonSet( curr_layer_id,
@@ -983,8 +977,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
             else
             {
-                transformPadsShapesWithClearanceToPolygon(
-                        module->Pads(), curr_layer_id, *layerPoly, 0, false );
+                module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id, *layerPoly, 0,
+                                                                   false );
             }
 
             // On tech layers, use a poor circle approximation, only for texts (stroke font)

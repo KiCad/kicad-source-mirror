@@ -146,7 +146,7 @@ void PAD_CS_PRIMITIVE::Rotate( const wxPoint& aRotCentre, double aAngle )
  * the shape is a polygon (can be with thick outline), segment, circle or arc
  */
 
-void D_PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aMergePrimitives )
+void D_PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness )
 {
     std::vector<wxPoint> points;
 
@@ -158,39 +158,33 @@ void D_PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool 
     for( auto iter = poly_no_hole.CIterate(); iter; iter++ )
         points.emplace_back( iter->x, iter->y );
 
-    AddPrimitivePoly( points, aThickness, aMergePrimitives );
+    AddPrimitivePoly( points, aThickness );
 }
 
 
-void D_PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness,
-                              bool aMergePrimitives )
+void D_PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_POLYGON );
     shape.m_Poly = aPoly;
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
-
-    if( aMergePrimitives )
-        MergePrimitivesAsPolygon();
+    m_shapesDirty = true;
 }
 
 
-void D_PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
-                                 bool aMergePrimitives )
+void D_PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_SEGMENT );
     shape.m_Start = aStart;
     shape.m_End = aEnd;
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
-
-    if( aMergePrimitives )
-        MergePrimitivesAsPolygon();
+    m_shapesDirty = true;
 }
 
 
 void D_PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
-                             int aThickness, bool aMergePrimitives )
+                             int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_ARC );
     shape.m_Start = aCenter;
@@ -198,14 +192,12 @@ void D_PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int 
     shape.m_ArcAngle = aArcAngle;
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
-
-    if( aMergePrimitives )
-        MergePrimitivesAsPolygon();
+    m_shapesDirty = true;
 }
 
 
 void D_PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,
-                               const wxPoint& aCtrl2, int aThickness, bool aMergePrimitives )
+                               const wxPoint& aCtrl2, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_CURVE );
     shape.m_Start = aStart;
@@ -214,41 +206,33 @@ void D_PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const
     shape.m_Ctrl2 = aCtrl2;
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
-
-    if( aMergePrimitives )
-        MergePrimitivesAsPolygon();
+    m_shapesDirty = true;
 }
 
 
-void D_PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness,
-                                bool aMergePrimitives )
+void D_PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_CIRCLE );
     shape.m_Start = aCenter;
     shape.m_Radius = aRadius;
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
-
-    if( aMergePrimitives )
-        MergePrimitivesAsPolygon();
+    m_shapesDirty = true;
 }
 
 
-void D_PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
-                              bool aMergePrimitives )
+void D_PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_RECT );
     shape.m_Start = aStart;
     shape.m_End = aEnd;
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
-
-    if( aMergePrimitives )
-        MergePrimitivesAsPolygon();
+    m_shapesDirty = true;
 }
 
 
-bool D_PAD::SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList )
+void D_PAD::SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList )
 {
     // clear old list
     m_basicShapes.clear();
@@ -257,17 +241,16 @@ bool D_PAD::SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList 
     if( aPrimitivesList.size() )
         m_basicShapes = aPrimitivesList;
 
-    // Only one polygon is expected (pad area = only one copper area)
-    return MergePrimitivesAsPolygon();
+    m_shapesDirty = true;
 }
 
 
-bool D_PAD::AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList )
+void D_PAD::AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList )
 {
     for( const auto& prim : aPrimitivesList )
         m_basicShapes.push_back( prim );
 
-    return MergePrimitivesAsPolygon();
+    m_shapesDirty = true;
 }
 
 
@@ -275,44 +258,44 @@ bool D_PAD::AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList 
 void D_PAD::DeletePrimitivesList()
 {
     m_basicShapes.clear();
-    m_customShapeAsPolygon.RemoveAllContours();
+    m_shapesDirty = true;
 }
 
 
-bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError )
-
+void D_PAD::addCustomPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError ) const
 {
-    SHAPE_POLY_SET aux_polyset;
+    SHAPE_POLY_SET polyset;
 
-    for( PAD_CS_PRIMITIVE& bshape : m_basicShapes )
+    for( const PAD_CS_PRIMITIVE& bshape : m_basicShapes )
     {
         switch( bshape.m_Shape )
         {
         case S_CURVE:
         {
-            std::vector<wxPoint> ctrlPoints = { bshape.m_Start, bshape.m_Ctrl1, bshape.m_Ctrl2, bshape.m_End };
+            std::vector<wxPoint> ctrlPoints = { bshape.m_Start, bshape.m_Ctrl1, bshape.m_Ctrl2,
+                                                bshape.m_End };
             BEZIER_POLY converter( ctrlPoints );
             std::vector< wxPoint> poly;
             converter.GetPoly( poly, bshape.m_Thickness );
 
             for( unsigned ii = 1; ii < poly.size(); ii++ )
             {
-                TransformSegmentToPolygon(
-                        aux_polyset, poly[ ii - 1 ], poly[ ii ], aError, bshape.m_Thickness );
+                TransformSegmentToPolygon( polyset, poly[ ii - 1 ], poly[ ii ], aError,
+                                           bshape.m_Thickness );
             }
             break;
         }
 
         case S_SEGMENT:         // usual segment : line with rounded ends
         {
-            TransformSegmentToPolygon( aux_polyset, bshape.m_Start, bshape.m_End, aError,
+            TransformSegmentToPolygon( polyset, bshape.m_Start, bshape.m_End, aError,
                                        bshape.m_Thickness );
             break;
         }
 
         case S_ARC:             // Arc with rounded ends
         {
-            TransformArcToPolygon( aux_polyset, bshape.m_Start, bshape.m_End, bshape.m_ArcAngle,
+            TransformArcToPolygon( polyset, bshape.m_Start, bshape.m_End, bshape.m_ArcAngle,
                                    aError, bshape.m_Thickness );
             break;
         }
@@ -320,80 +303,63 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError )
         case S_CIRCLE:          //  ring or circle
         {
             if( bshape.m_Thickness )    // ring
-                TransformRingToPolygon( aux_polyset, bshape.m_Start, bshape.m_Radius, aError,
+                TransformRingToPolygon( polyset, bshape.m_Start, bshape.m_Radius, aError,
                                         bshape.m_Thickness );
             else                // Filled circle
-                TransformCircleToPolygon( aux_polyset, bshape.m_Start, bshape.m_Radius, aError );
+                TransformCircleToPolygon( polyset, bshape.m_Start, bshape.m_Radius, aError );
             break;
         }
 
         case S_RECT:
-            bshape.m_Poly.clear();
-            bshape.m_Poly.emplace_back( bshape.m_Start );
-            bshape.m_Poly.emplace_back( bshape.m_End.x, bshape.m_Start.y );
-            bshape.m_Poly.emplace_back( bshape.m_End );
-            bshape.m_Poly.emplace_back( bshape.m_Start.x, bshape.m_End.y );
-
-            KI_FALLTHROUGH;
-
         case S_POLYGON:         // polygon
         {
-            if( bshape.m_Poly.size() < 2 )
-                break;      // Malformed polygon.
+            SHAPE_POLY_SET poly;
+            poly.NewOutline();
 
-            // Insert the polygon:
-            const std::vector< wxPoint>& poly = bshape.m_Poly;
-            aux_polyset.NewOutline();
-
-            if( bshape.m_Thickness )
+            if( bshape.m_Shape == S_RECT )
             {
-                SHAPE_POLY_SET polyset;
-                polyset.NewOutline();
-
-                for( const wxPoint& pt : poly )
-                    polyset.Append( pt.x, pt.y );
-
-                int numSegs = std::max( GetArcToSegmentCount( bshape.m_Thickness / 2, aError, 360.0 ), 6 );
-                polyset.Inflate( bshape.m_Thickness / 2, numSegs );
-
-                aux_polyset.Append( polyset );
+                poly.Append( bshape.m_Start );
+                poly.Append( bshape.m_End.x, bshape.m_Start.y );
+                poly.Append( bshape.m_End );
+                poly.Append( bshape.m_Start.x, bshape.m_End.y );
             }
             else
             {
-                for( const wxPoint& pt : poly )
-                    aux_polyset.Append( pt.x, pt.y );
+                for( const wxPoint& pt : bshape.m_Poly )
+                    poly.Append( pt );
             }
 
-            if( bshape.m_Shape == S_RECT )
-                bshape.m_Poly.clear();
+            if( bshape.m_Thickness )
+            {
+                int numSegs = std::max( GetArcToSegmentCount( bshape.m_Thickness / 2, aError, 360.0 ), 6 );
+                poly.Inflate( bshape.m_Thickness / 2, numSegs );
+            }
+
+            // Insert the polygon:
+            polyset.NewOutline();
+            polyset.Append( poly );
         }
             break;
 
         default:
             // un-handled primitive
-            wxASSERT_MSG( false, wxT( "D_PAD::buildCustomPadPolygon not implemented for "
-                                         + BOARD_ITEM::ShowShape( bshape.m_Shape ) ) );
+            wxASSERT_MSG( false, "D_PAD::addCustomPadPrimitivesToPolygon not implemented for "
+                                 + BOARD_ITEM::ShowShape( bshape.m_Shape ) );
             break;
         }
     }
 
-    aux_polyset.Simplify( SHAPE_POLY_SET::PM_FAST );
+    polyset.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     // Merge all polygons with the initial pad anchor shape
-    if( aux_polyset.OutlineCount() )
+    if( polyset.OutlineCount() )
     {
-        aMergedPolygon->BooleanAdd( aux_polyset, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        aMergedPolygon->BooleanAdd( polyset, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
         aMergedPolygon->Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     }
-
-    return aMergedPolygon->OutlineCount() <= 1;
 }
 
-/* Merge all basic shapes, converted to a polygon in one polygon,
- * return true if OK, false in there is more than one polygon
- * in aMergedPolygon
- */
-bool D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon )
+void D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon ) const
 {
     auto board = GetBoard();
     int maxError = ARC_HIGH_DEF;
@@ -401,58 +367,35 @@ bool D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon )
     if( board )
         maxError = board->GetDesignSettings().m_MaxError;
 
-    // if aMergedPolygon == NULL, use m_customShapeAsPolygon as target
-
-    if( !aMergedPolygon )
-        aMergedPolygon = &m_customShapeAsPolygon;
-
     aMergedPolygon->RemoveAllContours();
 
     // Add the anchor pad shape in aMergedPolygon, others in aux_polyset:
     // The anchor pad is always at 0,0
     switch( GetAnchorPadShape() )
     {
-    default:
-    case PAD_SHAPE_CIRCLE:
-        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, maxError );
-        break;
-
     case PAD_SHAPE_RECT:
     {
         SHAPE_RECT rect( -GetSize().x / 2, -GetSize().y / 2, GetSize().x, GetSize().y );
         aMergedPolygon->AddOutline( rect.Outline() );
+    }
+        break;
 
+    default:
+    case PAD_SHAPE_CIRCLE:
+        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, maxError );
         break;
     }
-    }
 
-    if( !buildCustomPadPolygon( aMergedPolygon, maxError ) )
-        return false;
-
-    m_boundingRadius = -1;  // The current bounding radius is no longer valid.
-
-    return aMergedPolygon->OutlineCount() <= 1;
-}
-
-
-void D_PAD::CustomShapeAsPolygonToBoardPosition( SHAPE_POLY_SET * aMergedPolygon,
-                                                 wxPoint aPosition, double aRotation ) const
-{
-    if( aMergedPolygon->OutlineCount() == 0 )
-        return;
-
-    // Move, rotate, ... coordinates in aMergedPolygon according to the
-    // pad position and orientation
-    aMergedPolygon->Rotate( -DECIDEG2RAD( aRotation ) );
-    aMergedPolygon->Move( VECTOR2I( aPosition ) );
+    addCustomPadPrimitivesToPolygon( aMergedPolygon, maxError );
 }
 
 
 bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
 {
     SHAPE_POLY_SET poly;
+    addCustomPadPrimitivesToPolygon( &poly, ARC_LOW_DEF );
 
-    if( !buildCustomPadPolygon( &poly, ARC_LOW_DEF ) )
+    if( poly.OutlineCount() > 1 )
         return false;
 
     const int minSteps = 10;

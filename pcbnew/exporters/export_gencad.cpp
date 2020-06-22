@@ -594,8 +594,14 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
             {
                 fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
+                int  ddx = pad->GetDelta().x / 2;
+                int  ddy = pad->GetDelta().y / 2;
+
                 wxPoint poly[4];
-                pad->BuildPadPolygon( poly, wxSize( 0, 0 ), 0 );
+                poly[0] = wxPoint( -dx + ddy,  dy + ddx );
+                poly[1] = wxPoint(  dx - ddy,  dy - ddx );
+                poly[2] = wxPoint(  dx + ddy, -dy + ddx );
+                poly[3] = wxPoint( -dx - ddy, -dy - ddx );
 
                 for( int cur = 0; cur < 4; ++cur )
                 {
@@ -613,7 +619,8 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
             {
                 fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
-                const SHAPE_POLY_SET& outline = pad->GetCustomShapeAsPolygon();
+                SHAPE_POLY_SET outline;
+                pad->MergePrimitivesAsPolygon( &outline );
 
                 for( int jj = 0; jj < outline.OutlineCount(); ++jj )
                 {

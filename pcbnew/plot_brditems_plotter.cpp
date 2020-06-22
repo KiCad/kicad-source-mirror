@@ -224,13 +224,9 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
                                  aPad->GetOrientation(), aPlotMode, &gbr_metadata );
         break;
 
-    case PAD_SHAPE_TRAPEZOID:
-        {
-        wxPoint coord[4];
-        aPad->BuildPadPolygon( coord, wxSize(0,0), 0 );
-        m_plotter->FlashPadTrapez( shape_pos, coord,
-                                   aPad->GetOrientation(), aPlotMode, &gbr_metadata );
-        }
+    case PAD_SHAPE_RECT:
+        m_plotter->FlashPadRect( shape_pos, aPad->GetSize(), aPad->GetOrientation(), aPlotMode,
+                                 &gbr_metadata );
         break;
 
     case PAD_SHAPE_ROUNDRECT:
@@ -238,39 +234,20 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
                                       aPad->GetOrientation(), aPlotMode, &gbr_metadata );
         break;
 
-    case PAD_SHAPE_CHAMFERED_RECT:
-        {
-        SHAPE_POLY_SET polygons;
-        const int corner_radius = aPad->GetRoundRectCornerRadius( aPad->GetSize() );
-        TransformRoundChamferedRectToPolygon( polygons, shape_pos, aPad->GetSize(),
-                aPad->GetOrientation(), corner_radius, aPad->GetChamferRectRatio(),
-                aPad->GetChamferPositions(), m_board->GetDesignSettings().m_MaxError );
-
-        if( polygons.OutlineCount() == 0 )
-            break;
-
-        int min_dim = std::min( aPad->GetSize().x, aPad->GetSize().y ) /2;
-        m_plotter->FlashPadCustom( shape_pos,wxSize( min_dim, min_dim ), &polygons, aPlotMode, &gbr_metadata );
-        }
-        break;
-
-    case PAD_SHAPE_CUSTOM:
-        {
-        SHAPE_POLY_SET polygons;
-        aPad->MergePrimitivesAsPolygon( &polygons );
-
-        if( polygons.OutlineCount() == 0 )
-            break;
-
-        aPad->CustomShapeAsPolygonToBoardPosition( &polygons, shape_pos, aPad->GetOrientation() );
-        m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(), &polygons, aPlotMode, &gbr_metadata );
-        }
-        break;
-
-    case PAD_SHAPE_RECT:
     default:
-        m_plotter->FlashPadRect( shape_pos, aPad->GetSize(),
-                                 aPad->GetOrientation(), aPlotMode, &gbr_metadata );
+    case PAD_SHAPE_TRAPEZOID:
+    case PAD_SHAPE_CHAMFERED_RECT:
+    case PAD_SHAPE_CUSTOM:
+    {
+        SHAPE_POLY_SET polygons;
+        aPad->TransformShapeWithClearanceToPolygon( polygons, 0 );
+
+        if( polygons.OutlineCount() == 0 )
+            break;
+
+        m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(), &polygons, aPlotMode,
+                                   &gbr_metadata );
+    }
         break;
     }
 }

@@ -40,6 +40,8 @@
 
 class DRAWSEGMENT;
 class PARAM_CFG;
+class SHAPE;
+class SHAPE_SEGMENT;
 
 enum CUST_PAD_SHAPE_IN_ZONE
 {
@@ -52,7 +54,6 @@ class EDA_3D_CANVAS;
 class MODULE;
 class EDGE_MODULE;
 class TRACK;
-class MSG_PANEL_INFO;
 
 namespace KIGFX
 {
@@ -116,10 +117,6 @@ public:
 class D_PAD : public BOARD_CONNECTED_ITEM
 {
 public:
-    static int  m_PadSketchModePenSize; ///< Pen size used to draw pads in sketch mode
-                                        ///< (mode used to print pads on silkscreen layer)
-
-public:
     D_PAD( MODULE* parent );
 
     // Do not create a copy constructor & operator=.
@@ -181,34 +178,14 @@ public:
      * Set the pad name (sometimes called pad number, although
      * it can be an array reference like AA12).
      */
-    void SetName( const wxString& aName )
-    {
-        m_name = aName;
-    }
+    void SetName( const wxString& aName ) { m_name = aName; }
+    const wxString& GetName() const { return m_name; }
 
     /**
      * Set the pad function (pin name in schematic)
      */
-    void SetPinFunction( const wxString& aName )
-    {
-        m_pinFunction = aName;
-    }
-
-    /**
-     * @return the pad name
-     */
-    const wxString& GetName() const
-    {
-        return m_name;
-    }
-
-    /**
-     * @return the pad function (pin name in schematic)
-     */
-    const wxString& GetPinFunction() const
-    {
-        return m_pinFunction;
-    }
+    void SetPinFunction( const wxString& aName ) { m_pinFunction = aName; }
+    const wxString& GetPinFunction() const { return m_pinFunction; }
 
     bool PadNameEqual( const D_PAD* other ) const
     {
@@ -219,8 +196,8 @@ public:
      * Function GetShape
      * @return the shape of this pad.
      */
-    PAD_SHAPE_T GetShape() const                { return m_padShape; }
-    void SetShape( PAD_SHAPE_T aShape )         { m_padShape = aShape; m_boundingRadius = -1; }
+    void SetShape( PAD_SHAPE_T aShape ) { m_padShape = aShape; m_shapesDirty = true; }
+    PAD_SHAPE_T GetShape() const { return m_padShape; }
 
     void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
     const wxPoint GetPosition() const override { return m_Pos; }
@@ -259,7 +236,7 @@ public:
     void SetAnchorPadShape( PAD_SHAPE_T aShape )
     {
         m_anchorPadShape = ( aShape ==  PAD_SHAPE_RECT ) ? PAD_SHAPE_RECT : PAD_SHAPE_CIRCLE;
-        m_boundingRadius = -1;
+        m_shapesDirty = true;
     }
 
     /**
@@ -272,8 +249,8 @@ public:
         return ( GetLayerSet() & LSET::AllCuMask() ) != 0;
     }
 
-    void SetY( int y )                          { m_Pos.y = y; }
-    void SetX( int x )                          { m_Pos.x = x; }
+    void SetY( int y )                          { m_Pos.y = y; m_shapesDirty = true; }
+    void SetX( int x )                          { m_Pos.x = x; m_shapesDirty = true; }
 
     void SetPos0( const wxPoint& aPos )         { m_Pos0 = aPos; }
     const wxPoint& GetPos0() const              { return m_Pos0; }
@@ -281,16 +258,16 @@ public:
     void SetY0( int y )                         { m_Pos0.y = y; }
     void SetX0( int x )                         { m_Pos0.x = x; }
 
-    void SetSize( const wxSize& aSize )         { m_Size = aSize;  m_boundingRadius = -1; }
+    void SetSize( const wxSize& aSize )         { m_Size = aSize; m_shapesDirty = true; }
     const wxSize& GetSize() const               { return m_Size; }
 
-    void SetDelta( const wxSize& aSize )        { m_DeltaSize = aSize;  m_boundingRadius = -1; }
+    void SetDelta( const wxSize& aSize )        { m_DeltaSize = aSize; m_shapesDirty = true; }
     const wxSize& GetDelta() const              { return m_DeltaSize; }
 
-    void SetDrillSize( const wxSize& aSize )    { m_Drill = aSize; }
+    void SetDrillSize( const wxSize& aSize )    { m_Drill = aSize; m_shapesDirty = true; }
     const wxSize& GetDrillSize() const          { return m_Drill; }
 
-    void SetOffset( const wxPoint& aOffset )    { m_Offset = aOffset; }
+    void SetOffset( const wxPoint& aOffset )    { m_Offset = aOffset; m_shapesDirty = true; }
     const wxPoint& GetOffset() const            { return m_Offset; }
 
     /**
@@ -303,36 +280,24 @@ public:
      *   a arc
      *   a curve
      */
-    void AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness,
-                           bool aMergePrimitives = true );
-    void AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness,
-                           bool aMergePrimitives = true );
-    void AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
-                              bool aMergePrimitives = true );
-    void AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness,
-                             bool aMergePrimitives = true ); ///< ring or circle basic shape
-    void AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
-                           bool aMergePrimitives = true );
+    void AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness );
+    void AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness );
+    void AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness );
+    void AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness );
+    void AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness );
     void AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
-                          int aThickness, bool aMergePrimitives = true );
+                          int aThickness );
     void AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,
-                            const wxPoint& aCtrl2, int aThickness, bool aMergePrimitives = true );
+                            const wxPoint& aCtrl2, int aThickness );
 
 
     bool GetBestAnchorPosition( VECTOR2I& aPos );
 
     /**
-     * Merge all basic shapes, converted to a polygon in one polygon,
-     * in m_customShapeAsPolygon
-     * @return true if OK, false in there is more than one polygon
-     * in m_customShapeAsPolygon
-     * @param aMergedPolygon = the SHAPE_POLY_SET to fill.
-     * if NULL, m_customShapeAsPolygon is the target
-     * @param aCircleToSegmentsCount = number of segment to approximate a circle
-     * (default = 32)
+     * Merge all basic shapes to a SHAPE_POLY_SET
      * Note: The corners coordinates are relative to the pad position, orientation 0,
      */
-    bool MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon = NULL );
+    void MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon ) const;
 
     /**
      * clear the basic shapes list
@@ -340,29 +305,9 @@ public:
     void DeletePrimitivesList();
 
     /**
-     * When created, the corners coordinates are relative to the pad position, orientation 0,
-     * in m_customShapeAsPolygon
-     * CustomShapeAsPolygonToBoardPosition transform these coordinates to actual
-     * (board) coordinates
-     * @param aMergedPolygon = the corners coordinates, relative to aPosition and
-     *  rotated by aRotation
-     * @param aPosition = the position of the shape (usually the pad shape, but
-     * not always, when moving the pad)
-     * @param aRotation = the rotation of the shape (usually the pad rotation, but
-     * not always, in DRC)
-     */
-    void CustomShapeAsPolygonToBoardPosition( SHAPE_POLY_SET * aMergedPolygon,
-                                    wxPoint aPosition, double aRotation ) const;
-
-    /**
      * Accessor to the basic shape list
      */
     const std::vector<PAD_CS_PRIMITIVE>& GetPrimitives() const { return m_basicShapes; }
-
-    /**
-     * Accessor to the custom shape as one polygon
-     */
-    const SHAPE_POLY_SET& GetCustomShapeAsPolygon() const { return m_customShapeAsPolygon; }
 
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
@@ -373,24 +318,18 @@ public:
 
     /**
      * Mirror the primitives about a coordinate
-     *
-     * @param aX the x coordinate about which to mirror
      */
     void MirrorXPrimitives( int aX );
 
     /**
      * Import to the basic shape list
-     * @return true if OK, false if issues
-     * (more than one polygon to build the polygon shape list)
      */
-    bool SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList );
+    void SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList );
 
     /**
      * Add to the basic shape list
-     * @return true if OK, false if issues
-     * (more than one polygon to build the polygon shape list)
      */
-    bool AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList );
+    void AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList );
 
 
     /**
@@ -414,21 +353,11 @@ public:
     double GetOrientationDegrees() const   { return m_Orient/10.0; }
     double GetOrientationRadians() const   { return m_Orient*M_PI/1800; }
 
-    void SetDrillShape( PAD_DRILL_SHAPE_T aDrillShape )
-        { m_drillShape = aDrillShape; }
+    void SetDrillShape( PAD_DRILL_SHAPE_T aShape ) { m_drillShape = aShape; m_shapesDirty = true; }
     PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
 
     /**
-     * Function GetOblongGeometry calculates the start point, end point and width of an
-     * equivalent segment which have the same position and width as the pad (for circular
-     * of oval pads) or hole
-     *
-     * NB: points returned are RELATIVE to the PAD POSITION.  For board coordinates holes
-     * will need to be offset by GetPosition() and pads by ShapePos().
-     *
-     * @param aStartPoint = first point of the equivalent segment, relative to the pad position.
-     * @param aEndPoint = second point of the equivalent segment, relative to the pad position.
-     * @param aWidth = width equivalent segment.
+     * JEY TODO: temporary until Tom is done with DRC stuff....
      */
     void GetOblongGeometry( const wxSize& aDrillOrPadSize,
                             wxPoint* aStartPoint, wxPoint* aEndPoint, int* aWidth ) const;
@@ -461,20 +390,47 @@ public:
     double GetLocalSolderPasteMarginRatio() const { return m_LocalSolderPasteMarginRatio; }
     void SetLocalSolderPasteMarginRatio( double aRatio ) { m_LocalSolderPasteMarginRatio = aRatio; }
 
-
     /**
      * Function TransformShapeWithClearanceToPolygon
-     * Convert the pad shape to a closed polygon
-     * Used in filling zones calculations
-     * Circles and arcs are approximated by segments
+     * Convert the pad shape to a closed polygon. Circles and arcs are approximated by segments.
      * @param aCornerBuffer = a buffer to store the polygon
      * @param aClearanceValue = the clearance around the pad
-     * @param aMaxError = Maximum error from true when converting arcs
-     * @param ignoreLineWidth = used for edge cut items where the line width is only
-     * for visualization
+     * @param aMaxError = maximum error from true when converting arcs
+     * @param ignoreLineWidth = used for edge cuts where the line width is only for visualization
      */
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue,
-            int aMaxError = ARC_HIGH_DEF, bool ignoreLineWidth = false ) const override;
+                                               int aMaxError = ARC_HIGH_DEF,
+                                               bool ignoreLineWidth = false ) const override;
+
+    /**
+     * Function TransformHoleWithClearanceToPolygon
+     * Build the Corner list of the polygonal drill shape in the board coordinate system.
+     * @param aCornerBuffer = a buffer to fill.
+     * @param aInflateValue = the clearance or margin value.
+     * @param aError = maximum deviation of an arc from the polygon approximation
+     * @return false if the pad has no hole, true otherwise
+     */
+    bool TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
+                                              int aError = ARC_HIGH_DEF ) const;
+
+    /**
+     * Function GetEffectiveShapes
+     * Returns a list of SHAPE objects representing the pad's copper.
+     */
+    const std::vector<std::shared_ptr<SHAPE>>& GetEffectiveShapes() const;
+
+    /**
+     * Function GetEffectiveHoleShape
+     * Returns a list of SHAPE objects representing the pad's hole.
+     */
+    const std::shared_ptr<SHAPE_SEGMENT>& GetEffectiveHoleShape() const;
+
+    /**
+     * Function GetBoundingRadius
+     * returns the radius of a minimum sized circle which fully encloses this pad.
+     * The center is the pad position NOT THE SHAPE POS!
+     */
+    int GetBoundingRadius() const;
 
     /**
      * Function GetLocalClearanceOverrides
@@ -515,17 +471,14 @@ public:
     */
     wxSize GetSolderPasteMargin() const;
 
-    void SetZoneConnection( ZONE_CONNECTION aType )
-    {
-        m_ZoneConnection = aType;
-    }
+    void SetZoneConnection( ZONE_CONNECTION aType ) { m_ZoneConnection = aType; }
+    ZONE_CONNECTION GetZoneConnection() const { return m_ZoneConnection; }
 
-    ZONE_CONNECTION GetZoneConnection() const;
-
-    ZONE_CONNECTION GetLocalZoneConnection() const
-    {
-        return m_ZoneConnection;
-    }
+    /**
+     * Return the zone connection in effect (either locally overridden or overridden in the
+     * parent module).
+     */
+    ZONE_CONNECTION GetEffectiveZoneConnection() const;
 
     void SetThermalWidth( int aWidth ) { m_ThermalWidth = aWidth; }
     int GetThermalWidth() const;
@@ -534,110 +487,12 @@ public:
     int GetThermalGap() const;
 
     /**
-     * Function BuildPadPolygon
-     * Has meaning only for polygonal pads (trapezoid and rectangular)
-     * Build the Corner list of the polygonal shape,
-     * depending on shape, extra size (clearance ...) and orientation
-     * @param aCoord = a buffer to fill (4 corners).
-     * @param aInflateValue = wxSize: the clearance or margin value. value > 0:
-     *                        inflate, < 0 deflate
-     * @param aRotation = full rotation of the polygon
-     */
-    void BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, double aRotation ) const;
-
-    /**
-     * Function GetRoundRectCornerRadius
+     * Function SetRoundRectCornerRadius
      * Has meaning only for rounded rect pads
      * @return The radius of the rounded corners for this pad.
      */
-    int GetRoundRectCornerRadius() const
-    {
-        return GetRoundRectCornerRadius( m_Size );
-    }
-
-    /**
-     * Helper function GetRoundRectCornerRadius
-     * Has meaning only for rounded rect pads
-     * Returns the radius of the rounded corners of a rectangle
-     * size aSize, using others setting of the pad
-     * @param aSize = size of the of the round rect. Usually the pad size
-     * but can be the size of the pad on solder mask or solder paste
-     * @return The radius of the rounded corners for this pad size.
-     */
-    int GetRoundRectCornerRadius( const wxSize& aSize ) const;
-
-    /**
-     * Set the rounded rectangle radius ratio based on a given radius
-     * @param aRadius = desired radius of curvature
-     */
     void SetRoundRectCornerRadius( double aRadius );
-
-    /**
-     * Function BuildPadShapePolygon
-     * Build the Corner list of the polygonal shape,
-     * depending on shape, extra size (clearance ...) pad and orientation
-     * This function is similar to TransformShapeWithClearanceToPolygon,
-     * but the difference is BuildPadShapePolygon creates a polygon shape exactly
-     * similar to pad shape, which a size inflated by aInflateValue
-     * and TransformShapeWithClearanceToPolygon creates a more complex shape (for instance
-     * a rectangular pad is converted in a rectangulr shape with ronded corners)
-     * @param aCornerBuffer = a buffer to fill.
-     * @param aInflateValue = the clearance or margin value.
-     *              value > 0: inflate, < 0 deflate, = 0 : no change
-     *              the clearance can have different values for x and y directions
-     *              (relative to the pad)
-     * @param aError = Maximum deviation of an arc from the polygon segment
-     */
-    void BuildPadShapePolygon(
-            SHAPE_POLY_SET& aCornerBuffer, wxSize aInflateValue, int aError = ARC_HIGH_DEF ) const;
-
-    /**
-     * Function BuildPadDrillShapePolygon
-     * Build the Corner list of the polygonal drill shape,
-     * depending on shape pad hole and orientation
-     * @param aCornerBuffer = a buffer to fill.
-     * @param aInflateValue = the clearance or margin value.
-     *              value > 0: inflate, < 0 deflate, = 0 : no change
-     * @param aError = Maximum deviation of an arc from the polygon approximation
-     * @return false if the pad has no hole, true otherwise
-     */
-    bool BuildPadDrillShapePolygon(
-            SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF ) const;
-
-    /**
-     * Function BuildSegmentFromOvalShape
-     * Has meaning only for OVAL (and ROUND) pads
-     * Build an equivalent segment having the same shape as the OVAL shape,
-     * Useful in draw function and in DRC and HitTest functions,
-     *  because segments are already well handled by track tests
-     * @param aSegStart = the starting point of the equivalent segment relative to the shape
-     *                    position.
-     * @param aSegEnd = the ending point of the equivalent segment, relative to the shape position
-     * @param aRotation = full rotation of the segment
-     * @param aRotation = full rotation of the segment
-     * @param aMargin = a margin around the shape (for instance mask margin)
-     * @return the width of the segment
-     */
-    int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd,
-                                   double aRotation, const wxSize& aMargin ) const;
-
-    /**
-     * Function GetBoundingRadius
-     * returns the radius of a minimum sized circle which fully encloses this pad.
-     * The center is the pad position
-     */
-    int GetBoundingRadius() const
-    {
-        // Any member function which would affect this calculation should set
-        // m_boundingRadius to -1 to re-trigger the calculation from here.
-        // Currently that is only m_Size, m_DeltaSize, and m_padShape accessors.
-        if( m_boundingRadius == -1 )
-        {
-            m_boundingRadius = boundingRadius();
-        }
-
-        return m_boundingRadius;
-    }
+    int GetRoundRectCornerRadius() const;
 
     wxPoint ShapePos() const;
 
@@ -648,36 +503,8 @@ public:
      * Cannot be > 0.5
      * the normalized IPC-7351C value is 0.25
      */
-    double GetRoundRectRadiusRatio() const
-    {
-        return m_padRoundRectRadiusScale;
-    }
-
-    /**
-     * has meaning only for rounded rect pads
-     * Set the scaling factor between the smaller Y or Y size and the radius
-     * of the rounded corners.
-     * Cannot be < 0.5 and obviously must be > 0
-     * the normalized IPC-7351C value is 0.25
-     */
-    void SetRoundRectRadiusRatio( double aRadiusScale )
-    {
-        if( aRadiusScale < 0.0 )
-            aRadiusScale = 0.0;
-
-        m_padRoundRectRadiusScale = std::min( aRadiusScale, 0.5 );
-    }
-
-    /**
-     * has meaning only for chamfered rect pads
-     * @return the ratio between the smaller Y or Y size and the radius
-     * of the rounded corners.
-     * Cannot be > 0.5
-     */
-    double GetChamferRectRatio() const
-    {
-        return m_padChamferRectScale;
-    }
+    void SetRoundRectRadiusRatio( double aRadiusScale );
+    double GetRoundRectRadiusRatio() const { return m_padRoundRectRadiusScale; }
 
     /**
      * has meaning only for chamfered rect pads
@@ -685,19 +512,8 @@ public:
      * of the rounded corners.
      * Cannot be < 0.5 and obviously must be > 0
      */
-    void SetChamferRectRatio( double aChamferScale )
-    {
-        if( aChamferScale < 0.0 )
-            aChamferScale = 0.0;
-
-        m_padChamferRectScale = std::min( aChamferScale, 0.5 );
-    }
-
-    /**
-     * has meaning only for chamfered rect pads
-     * @return the position of the chamfer for a 0 orientation
-     */
-    int GetChamferPositions() const { return m_chamferPositions; }
+    void SetChamferRectRatio( double aChamferScale );
+    double GetChamferRectRatio() const { return m_padChamferRectScale; }
 
     /**
      * has meaning only for chamfered rect pads
@@ -705,10 +521,8 @@ public:
      * RECT_CHAMFER_TOP_LEFT, RECT_CHAMFER_TOP_RIGHT,
      * RECT_CHAMFER_BOTTOM_LEFT, RECT_CHAMFER_BOTTOM_RIGHT
      */
-    void SetChamferPositions( int aChamferPositions )
-    {
-        m_chamferPositions = aChamferPositions;
-    }
+    void SetChamferPositions( int aPositions ) { m_chamferPositions = aPositions; }
+    int GetChamferPositions() const { return m_chamferPositions; }
 
     /**
      * Function GetSubRatsnest
@@ -814,39 +628,35 @@ public:
 
 private:
     /**
-     * Function boundingRadius
+     * Function calcBoundingRadius
      * returns a calculated radius of a bounding circle for this pad.
      */
-    int boundingRadius() const;
+    int calcBoundingRadius() const;
 
-    bool buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError );
+    void addCustomPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError ) const;
 
-private:    // Private variable members:
+    void buildEffectiveShapes() const;
 
-    // Actually computed and cached on demand by the accessor
-    mutable int m_boundingRadius;   ///< radius of the circle containing the pad shape
-
+private:
     wxString    m_name;             ///< pad name (pin number in schematic)
-
     wxString    m_pinFunction;      ///< pin function in schematic
 
-    // TODO: Remove m_Pos from Pad or make private.  View positions calculated from m_Pos0
     wxPoint     m_Pos;              ///< pad Position on board
 
     PAD_SHAPE_T m_padShape;         ///< Shape: PAD_SHAPE_CIRCLE, PAD_SHAPE_RECT,
                                     ///< PAD_SHAPE_OVAL, PAD_SHAPE_TRAPEZOID,
                                     ///< PAD_SHAPE_ROUNDRECT, PAD_SHAPE_POLYGON
 
+    mutable bool                                m_shapesDirty;
+    mutable int                                 m_effectiveBoundingRadius;
+    mutable std::vector<std::shared_ptr<SHAPE>> m_effectiveShapes;
+    mutable std::shared_ptr<SHAPE_SEGMENT>      m_effectiveHoleShape;
+
     /** for free shape pads: a list of basic shapes,
      * in local coordinates, orient 0, coordinates relative to m_Pos
      * They are expected to define only one copper area.
      */
     std::vector<PAD_CS_PRIMITIVE> m_basicShapes;
-
-    /** for free shape pads: the set of basic shapes, merged as one polygon,
-     * in local coordinates, orient 0, coordinates relative to m_Pos
-     */
-    SHAPE_POLY_SET m_customShapeAsPolygon;
 
     /**
      * How to build the custom shape in zone, to create the clearance area:
@@ -871,10 +681,10 @@ private:    // Private variable members:
                                             ///< to corner radius, default 0.25
     double      m_padChamferRectScale;      ///< scaling factor from smallest m_Size coord
                                             ///< to chamfer value, default 0.25
-    int m_chamferPositions;                 ///< the positions of the chamfered position for a 0 orientation
+    int         m_chamferPositions;         ///< the positions of the chamfers for a 0 orientation
 
-    PAD_SHAPE_T m_anchorPadShape;         ///< for custom shaped pads: shape of pad anchor,
-                                          ///< PAD_SHAPE_RECT, PAD_SHAPE_CIRCLE
+    PAD_SHAPE_T m_anchorPadShape;           ///< for custom shaped pads: shape of pad anchor,
+                                            ///< PAD_SHAPE_RECT, PAD_SHAPE_CIRCLE
 
     /**
      * m_Offset is useful only for oblong and rect pads (it can be used for other

@@ -1151,7 +1151,7 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
     case PAD_SHAPE_CHAMFERED_RECT:
     {
         SHAPE_POLY_SET polySet;
-        const int corner_radius = aPad->GetRoundRectCornerRadius( aPad->GetSize() );
+        const int corner_radius = aPad->GetRoundRectCornerRadius();
         TransformRoundChamferedRectToPolygon( polySet, wxPoint( 0, 0 ), aPad->GetSize(),
                 0.0, corner_radius, 0.0, 0, ARC_HIGH_DEF );
         std::vector< wxRealPoint > cornerList;

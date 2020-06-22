@@ -596,13 +596,14 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     }
 
     pad->SetPosition( wxPoint( anchor->x, anchor->y ) );
+    pad->Rotate( wxPoint( anchor->x, anchor->y ), deltaAngle );
     pad->AddPrimitives( shapes );
     pad->ClearFlags();
 
-    bool result = pad->MergePrimitivesAsPolygon();
-    pad->Rotate( wxPoint( anchor->x, anchor->y ), deltaAngle );
+    SHAPE_POLY_SET mergedPolygon;
+    pad->MergePrimitivesAsPolygon( &mergedPolygon );
 
-    if( !result )
+    if( mergedPolygon.OutlineCount() > 1 )
     {
         DisplayErrorMessage( m_frame, _( "Cannot convert items to a custom-shaped pad:\n"
                                          "selected items do not form a single solid shape.") );

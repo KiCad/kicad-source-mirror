@@ -36,16 +36,18 @@
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
 #include <eda_draw_frame.h>
-#include <geometry/geometry_utils.h>
+#include <geometry/shape_circle.h>
+#include <geometry/shape_segment.h>
+#include <geometry/shape_simple.h>
 #include <pcbnew.h>
 #include <view/view.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <geometry/polygon_test_point_inside.h>
 #include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
 
+#include <memory>
 
 D_PAD::D_PAD( MODULE* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
@@ -87,7 +89,8 @@ D_PAD::D_PAD( MODULE* parent ) :
 
     SetSubRatsnest( 0 );                       // used in ratsnest calculations
 
-    m_boundingRadius      = -1;
+    m_shapesDirty = true;
+    m_effectiveBoundingRadius = 0;
 }
 
 
@@ -133,77 +136,31 @@ bool D_PAD::IsFlipped() const
     return false;
 }
 
-int D_PAD::boundingRadius() const
+
+int D_PAD::calcBoundingRadius() const
 {
-    int x, y;
-    int radius;
+    int radius = 0;
+    SHAPE_POLY_SET polygons;
+    TransformShapeWithClearanceToPolygon( polygons, 0 );
 
-    switch( GetShape() )
+    for( int cnt = 0; cnt < polygons.OutlineCount(); ++cnt )
     {
-    case PAD_SHAPE_CIRCLE:
-        radius = m_Size.x / 2;
-        break;
+        const SHAPE_LINE_CHAIN& poly = polygons.COutline( cnt );
 
-    case PAD_SHAPE_OVAL:
-        radius = std::max( m_Size.x, m_Size.y ) / 2;
-        break;
-
-    case PAD_SHAPE_RECT:
-        radius = 1 + KiROUND( EuclideanNorm( m_Size ) / 2 );
-        break;
-
-    case PAD_SHAPE_TRAPEZOID:
-        x = m_Size.x + std::abs( m_DeltaSize.y );   // Remember: m_DeltaSize.y is the m_Size.x change
-        y = m_Size.y + std::abs( m_DeltaSize.x );   // Remember: m_DeltaSize.x is the m_Size.y change
-        radius = 1 + KiROUND( hypot( x, y ) / 2 );
-        break;
-
-    case PAD_SHAPE_ROUNDRECT:
-        radius = GetRoundRectCornerRadius();
-        x = m_Size.x >> 1;
-        y = m_Size.y >> 1;
-        radius += 1 + KiROUND( EuclideanNorm( wxSize( x - radius, y - radius )));
-        break;
-
-    case PAD_SHAPE_CHAMFERED_RECT:
-        radius = GetRoundRectCornerRadius();
-        x = m_Size.x >> 1;
-        y = m_Size.y >> 1;
-        radius += 1 + KiROUND( EuclideanNorm( wxSize( x - radius, y - radius )));
-        // TODO: modify radius if the chamfer is smaller than corner radius
-        break;
-
-    case PAD_SHAPE_CUSTOM:
-        radius = 0;
-
-        for( int cnt = 0; cnt < m_customShapeAsPolygon.OutlineCount(); ++cnt )
+        for( int ii = 0; ii < poly.PointCount(); ++ii )
         {
-            const SHAPE_LINE_CHAIN& poly = m_customShapeAsPolygon.COutline( cnt );
-            for( int ii = 0; ii < poly.PointCount(); ++ii )
-            {
-                int dist = KiROUND( poly.CPoint( ii ).EuclideanNorm() );
-                radius = std::max( radius, dist );
-            }
+            int dist = KiROUND( ( poly.CPoint( ii ) - m_Pos ).EuclideanNorm() );
+            radius = std::max( radius, dist );
         }
-
-        radius += 1;
-        break;
-
-    default:
-        radius = 0;
     }
 
-    return radius;
+    return radius + 1;
 }
 
 
-int D_PAD::GetRoundRectCornerRadius( const wxSize& aSize ) const
+int D_PAD::GetRoundRectCornerRadius() const
 {
-    // radius of rounded corners, usually 25% of shorter pad edge for now
-    int r = aSize.x > aSize.y ? aSize.y : aSize.x;
-    r = int( r * m_padRoundRectRadiusScale );
-
-    return r;
+    return KiROUND( std::min( m_Size.x, m_Size.y ) * m_padRoundRectRadiusScale );
 }
 
 
@@ -216,207 +173,194 @@ void D_PAD::SetRoundRectCornerRadius( double aRadius )
 }
 
 
-/**
- * Function BuildSegmentFromOvalShape
- * Has meaning only for OVAL (and ROUND) pads.
- * Build an equivalent segment having the same shape as the OVAL shape,
- * aSegStart and aSegEnd are the ending points of the equivalent segment of the shape
- * aRotation is the asked rotation of the segment (usually m_Orient)
- */
-int D_PAD::BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, double aRotation,
-                                      const wxSize& aMargin ) const
+void D_PAD::SetRoundRectRadiusRatio( double aRadiusScale )
 {
-    int width;
+    m_padRoundRectRadiusScale = std::max( 0.0, std::min( aRadiusScale, 0.5 ) );
 
-    if( m_Size.y < m_Size.x )     // Build an horizontal equiv segment
+    m_shapesDirty = true;
+}
+
+
+void D_PAD::SetChamferRectRatio( double aChamferScale )
+{
+    m_padChamferRectScale = std::max( 0.0, std::min( aChamferScale, 0.5 ) );
+
+    m_shapesDirty = true;
+}
+
+
+const std::vector<std::shared_ptr<SHAPE>>& D_PAD::GetEffectiveShapes() const
+{
+    if( m_shapesDirty )
+        buildEffectiveShapes();
+
+    return m_effectiveShapes;
+}
+
+
+const std::shared_ptr<SHAPE_SEGMENT>& D_PAD::GetEffectiveHoleShape() const
+{
+    if( m_shapesDirty )
+        buildEffectiveShapes();
+
+    return m_effectiveHoleShape;
+}
+
+
+int D_PAD::GetBoundingRadius() const
+{
+    if( m_shapesDirty )
+        buildEffectiveShapes();
+
+    return m_effectiveBoundingRadius;
+}
+
+
+void D_PAD::buildEffectiveShapes() const
+{
+    m_effectiveShapes.clear();
+    m_effectiveHoleShape = nullptr;
+
+    auto add = [this]( SHAPE* aShape )
+               {
+                   m_effectiveShapes.emplace_back( aShape );
+               };
+
+    wxPoint shapePos = ShapePos();  // Fetch only once; rotation involves trig
+    PAD_SHAPE_T effectiveShape = GetShape();
+
+    if( GetShape() == PAD_SHAPE_CUSTOM )
+        effectiveShape = GetAnchorPadShape();
+
+    switch( effectiveShape )
     {
-        int delta   = ( m_Size.x - m_Size.y ) / 2;
-        aSegStart.x = -delta - aMargin.x;
-        aSegStart.y = 0;
-        aSegEnd.x = delta + aMargin.x;
-        aSegEnd.y = 0;
-        width = m_Size.y + ( aMargin.y * 2 );
+    case PAD_SHAPE_CIRCLE:
+        add( new SHAPE_CIRCLE( shapePos, m_Size.x / 2 ) );
+        break;
+
+    case PAD_SHAPE_OVAL:
+    {
+        wxSize  half_size = m_Size / 2;
+        int     half_width = std::min( half_size.x, half_size.y );
+        wxPoint half_len( half_size.x - half_width, half_size.y - half_width );
+
+        RotatePoint( &half_len, m_Orient );
+
+        add( new SHAPE_SEGMENT( shapePos - half_len, shapePos + half_len, half_width * 2 ) );
     }
-    else        // Vertical oval: build a vertical equiv segment
+        break;
+
+    case PAD_SHAPE_RECT:
+    case PAD_SHAPE_TRAPEZOID:
+    case PAD_SHAPE_ROUNDRECT:
     {
-        int delta   = ( m_Size.y -m_Size.x ) / 2;
-        aSegStart.x = 0;
-        aSegStart.y = -delta - aMargin.y;
-        aSegEnd.x = 0;
-        aSegEnd.y = delta + aMargin.y;
-        width = m_Size.x + ( aMargin.x * 2 );
+        int     r = GetRoundRectCornerRadius();
+        wxPoint half_size( m_Size.x / 2, m_Size.y / 2 );
+        wxSize  trap_delta( 0, 0 );
+
+        if( effectiveShape == PAD_SHAPE_ROUNDRECT )
+            half_size -= wxPoint( r, r );
+        else if( effectiveShape == PAD_SHAPE_TRAPEZOID )
+            trap_delta = m_DeltaSize / 2;
+
+        SHAPE_LINE_CHAIN corners;
+
+        corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
+        corners.Append(  half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
+        corners.Append(  half_size.x + trap_delta.y,  half_size.y - trap_delta.x );
+        corners.Append( -half_size.x - trap_delta.y,  half_size.y + trap_delta.x );
+
+        corners.Rotate( -DECIDEG2RAD( m_Orient ) );
+        corners.Move( shapePos );
+
+        add( new SHAPE_SIMPLE( corners ) );
+
+        if( effectiveShape == PAD_SHAPE_ROUNDRECT )
+        {
+            add( new SHAPE_SEGMENT( corners.CPoint( 0 ), corners.CPoint( 1 ), r * 2 ) );
+            add( new SHAPE_SEGMENT( corners.CPoint( 1 ), corners.CPoint( 2 ), r * 2 ) );
+            add( new SHAPE_SEGMENT( corners.CPoint( 2 ), corners.CPoint( 3 ), r * 2 ) );
+            add( new SHAPE_SEGMENT( corners.CPoint( 3 ), corners.CPoint( 0 ), r * 2 ) );
+        }
+    }
+        break;
+
+    case PAD_SHAPE_CHAMFERED_RECT:
+    {
+        SHAPE_POLY_SET outline;
+        auto board = GetBoard();
+        int maxError = ARC_HIGH_DEF;
+
+        if( board )
+            maxError = board->GetDesignSettings().m_MaxError;
+
+        TransformRoundChamferedRectToPolygon( outline, wxPoint(0,0), GetSize(), m_Orient,
+                                              GetRoundRectCornerRadius(), GetChamferRectRatio(),
+                                              GetChamferPositions(), maxError );
+
+        add( new SHAPE_SIMPLE( outline.COutline( 0 ) ) );
+    }
+        break;
+
+    default:
+        wxFAIL_MSG( "D_PAD::buildEffectiveShapes: Unsupported pad shape" );
+        break;
     }
 
-    if( aRotation )
+    if( GetShape() == PAD_SHAPE_CUSTOM )
     {
-        RotatePoint( &aSegStart, aRotation);
-        RotatePoint( &aSegEnd, aRotation);
+#if 1
+        // For now we add these in as a single SHAPE_POLY_SET, but once we've moved them
+        // over to shapes themselves then we can just copy them across (with the requisite
+        // rotating and offsetting).
+        SHAPE_POLY_SET* poly = new SHAPE_POLY_SET();
+        MergePrimitivesAsPolygon( poly );
+        poly->Rotate( -DECIDEG2RAD( m_Orient ) );
+        poly->Move( shapePos );
+        add( poly );
+#else
+        for( const std::shared_ptr<SHAPE>& primitive : m_basicShapes )
+        {
+            SHAPE* copy = primitive->Clone();
+            copy->Rotate( -DECIDEG2RAD( m_Orient ) );
+            copy->Move( shapePos );
+            add( copy );
+        }
+#endif
     }
 
-    return width;
+    // Bounding radius
+    //
+    m_effectiveBoundingRadius = calcBoundingRadius();
+
+    // Hole shape
+    //
+    wxSize  half_size = m_Drill / 2;
+    int     half_width = std::min( half_size.x, half_size.y );
+    wxPoint half_len( half_size.x - half_width, half_size.y - half_width );
+
+    RotatePoint( &half_len, m_Orient );
+
+    m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( m_Pos - half_len, m_Pos + half_len,
+                                                            half_width * 2 );
+
+    // All done
+    //
+    m_shapesDirty = false;
 }
 
 
 const EDA_RECT D_PAD::GetBoundingBox() const
 {
-    EDA_RECT area;
-    wxPoint quadrant1, quadrant2, quadrant3, quadrant4;
-    int x, y, r, dx, dy;
+    EDA_RECT bbox;
 
-    wxPoint center = ShapePos();
-    wxPoint endPoint;
-
-    EDA_RECT endRect;
-
-    switch( GetShape() )
+    for( const std::shared_ptr<SHAPE>& shape : GetEffectiveShapes() )
     {
-    case PAD_SHAPE_CIRCLE:
-        area.SetOrigin( center );
-        area.Inflate( m_Size.x / 2 );
-        break;
-
-    case PAD_SHAPE_OVAL:
-        /* To get the BoundingBox of an oval pad:
-         * a) If the pad is ROUND, see method for PAD_SHAPE_CIRCLE above
-         * OTHERWISE:
-         * b) Construct EDA_RECT for portion between circular ends
-         * c) Rotate that EDA_RECT
-         * d) Add the circular ends to the EDA_RECT
-         */
-
-        // Test if the shape is circular
-        if( m_Size.x == m_Size.y )
-        {
-            area.SetOrigin( center );
-            area.Inflate( m_Size.x / 2 );
-            break;
-        }
-
-        if( m_Size.x > m_Size.y )
-        {
-            // Pad is horizontal
-            dx = ( m_Size.x - m_Size.y ) / 2;
-            dy = m_Size.y / 2;
-
-            // Location of end-points
-            x = dx;
-            y = 0;
-            r = dy;
-        }
-        else
-        {
-            // Pad is vertical
-            dx = m_Size.x / 2;
-            dy = ( m_Size.y - m_Size.x ) / 2;
-
-            x = 0;
-            y = dy;
-            r = dx;
-        }
-
-        // Construct the center rectangle and rotate
-        area.SetOrigin( center );
-        area.Inflate( dx, dy );
-        area = area.GetBoundingBoxRotated( center, m_Orient );
-
-        endPoint = wxPoint( x, y );
-        RotatePoint( &endPoint, m_Orient );
-
-        // Add points at each quadrant of circular regions
-        endRect.SetOrigin( center + endPoint );
-        endRect.Inflate( r );
-
-        area.Merge( endRect );
-
-        endRect.SetSize( 0, 0 );
-        endRect.SetOrigin( center - endPoint );
-        endRect.Inflate( r );
-
-        area.Merge( endRect );
-
-        break;
-
-    case PAD_SHAPE_RECT:
-    case PAD_SHAPE_ROUNDRECT:
-    case PAD_SHAPE_CHAMFERED_RECT:
-        // Use two opposite corners and track their rotation
-        // (use symmetry for other points)
-        quadrant1.x =  m_Size.x/2;
-        quadrant1.y =  m_Size.y/2;
-        quadrant2.x = -m_Size.x/2;
-        quadrant2.y =  m_Size.y/2;
-
-        RotatePoint( &quadrant1, m_Orient );
-        RotatePoint( &quadrant2, m_Orient );
-        dx = std::max( std::abs( quadrant1.x ) , std::abs( quadrant2.x )  );
-        dy = std::max( std::abs( quadrant1.y ) , std::abs( quadrant2.y )  );
-
-        // Set the bbox
-        area.SetOrigin( ShapePos() );
-        area.Inflate( dx, dy );
-        break;
-
-    case PAD_SHAPE_TRAPEZOID:
-        // Use the four corners and track their rotation
-        // (Trapezoids will not be symmetric)
-
-        quadrant1.x =  (m_Size.x + m_DeltaSize.y)/2;
-        quadrant1.y =  (m_Size.y - m_DeltaSize.x)/2;
-
-        quadrant2.x = -(m_Size.x + m_DeltaSize.y)/2;
-        quadrant2.y =  (m_Size.y + m_DeltaSize.x)/2;
-
-        quadrant3.x = -(m_Size.x - m_DeltaSize.y)/2;
-        quadrant3.y = -(m_Size.y + m_DeltaSize.x)/2;
-
-        quadrant4.x =  (m_Size.x - m_DeltaSize.y)/2;
-        quadrant4.y = -(m_Size.y - m_DeltaSize.x)/2;
-
-        RotatePoint( &quadrant1, m_Orient );
-        RotatePoint( &quadrant2, m_Orient );
-        RotatePoint( &quadrant3, m_Orient );
-        RotatePoint( &quadrant4, m_Orient );
-
-        x  = std::min( quadrant1.x, std::min( quadrant2.x, std::min( quadrant3.x, quadrant4.x) ) );
-        y  = std::min( quadrant1.y, std::min( quadrant2.y, std::min( quadrant3.y, quadrant4.y) ) );
-        dx = std::max( quadrant1.x, std::max( quadrant2.x, std::max( quadrant3.x, quadrant4.x) ) );
-        dy = std::max( quadrant1.y, std::max( quadrant2.y, std::max( quadrant3.y, quadrant4.y) ) );
-
-        area.SetOrigin( ShapePos().x + x, ShapePos().y + y );
-        area.SetSize( dx-x, dy-y );
-        break;
-
-    case PAD_SHAPE_CUSTOM:
-        {
-        SHAPE_POLY_SET polySet( m_customShapeAsPolygon );
-        // Move shape to actual position
-        CustomShapeAsPolygonToBoardPosition( &polySet, GetPosition(), GetOrientation() );
-        quadrant1 = m_Pos;
-        quadrant2 = m_Pos;
-
-        for( int cnt = 0; cnt < polySet.OutlineCount(); ++cnt )
-        {
-            const SHAPE_LINE_CHAIN& poly = polySet.COutline( cnt );
-
-            for( int ii = 0; ii < poly.PointCount(); ++ii )
-            {
-                quadrant1.x = std::min( quadrant1.x, poly.CPoint( ii ).x );
-                quadrant1.y = std::min( quadrant1.y, poly.CPoint( ii ).y );
-                quadrant2.x = std::max( quadrant2.x, poly.CPoint( ii ).x );
-                quadrant2.y = std::max( quadrant2.y, poly.CPoint( ii ).y );
-            }
-        }
-
-        area.SetOrigin( quadrant1 );
-        area.SetEnd( quadrant2 );
-        }
-        break;
-
-    default:
-        break;
+        BOX2I r = shape->BBox();
+        bbox.Merge( EDA_RECT( (wxPoint) r.GetOrigin(), wxSize( r.GetWidth(), r.GetHeight() ) ) );
     }
 
-    return area;
+    return bbox;
 }
 
 
@@ -457,12 +401,16 @@ void D_PAD::SetAttribute( PAD_ATTR_T aAttribute )
 
     if( aAttribute == PAD_ATTRIB_SMD )
         m_Drill = wxSize( 0, 0 );
+
+    m_shapesDirty = true;
 }
 
 
 void D_PAD::SetProperty( PAD_PROP_T aProperty )
 {
     m_Property = aProperty;
+
+    m_shapesDirty = true;
 }
 
 
@@ -470,6 +418,8 @@ void D_PAD::SetOrientation( double aAngle )
 {
     NORMALIZE_ANGLE_POS( aAngle );
     m_Orient = aAngle;
+
+    m_shapesDirty = true;
 }
 
 
@@ -501,7 +451,7 @@ void D_PAD::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     // Flip the basic shapes, in custom pads
     FlipPrimitives();
 
-    // m_boundingRadius = -1;  the shape has not been changed
+    m_shapesDirty = true;
 }
 
 
@@ -509,19 +459,17 @@ void D_PAD::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 void D_PAD::FlipPrimitives()
 {
     // Flip custom shapes
-    for( unsigned ii = 0; ii < m_basicShapes.size(); ++ii )
+    for( PAD_CS_PRIMITIVE& primitive : m_basicShapes )
     {
-        PAD_CS_PRIMITIVE& primitive = m_basicShapes[ii];
-
         MIRROR( primitive.m_Start.y, 0 );
         MIRROR( primitive.m_End.y, 0 );
         primitive.m_ArcAngle = -primitive.m_ArcAngle;
 
         switch( primitive.m_Shape )
         {
-        case S_POLYGON:         // polygon
-            for( unsigned jj = 0; jj < primitive.m_Poly.size(); jj++ )
-                MIRROR( primitive.m_Poly[jj].y, 0 );
+        case S_POLYGON:
+            for( wxPoint& pt : primitive.m_Poly )
+                MIRROR( pt.y, 0 );
             break;
 
         default:
@@ -529,18 +477,15 @@ void D_PAD::FlipPrimitives()
         }
     }
 
-    // Flip local coordinates in merged Polygon
-    m_customShapeAsPolygon.Mirror( false, true );
+    m_shapesDirty = true;
 }
 
 
 void D_PAD::MirrorXPrimitives( int aX )
 {
     // Mirror custom shapes
-    for( unsigned ii = 0; ii < m_basicShapes.size(); ++ii )
+    for( PAD_CS_PRIMITIVE& primitive : m_basicShapes )
     {
-        PAD_CS_PRIMITIVE& primitive = m_basicShapes[ii];
-
         MIRROR( primitive.m_Start.x, aX );
         MIRROR( primitive.m_End.x, aX );
         primitive.m_ArcAngle = -primitive.m_ArcAngle;
@@ -548,8 +493,8 @@ void D_PAD::MirrorXPrimitives( int aX )
         switch( primitive.m_Shape )
         {
         case S_POLYGON:         // polygon
-            for( unsigned jj = 0; jj < primitive.m_Poly.size(); jj++ )
-                MIRROR( primitive.m_Poly[jj].x, 0 );
+            for( wxPoint& pt : primitive.m_Poly )
+                MIRROR( pt.x, 0 );
             break;
 
         default:
@@ -557,12 +502,7 @@ void D_PAD::MirrorXPrimitives( int aX )
         }
     }
 
-    // Mirror the local coordinates in merged Polygon
-    for( int cnt = 0; cnt < m_customShapeAsPolygon.OutlineCount(); ++cnt )
-    {
-        SHAPE_LINE_CHAIN& poly = m_customShapeAsPolygon.Outline( cnt );
-        poly.Mirror( true, false );
-    }
+    m_shapesDirty = true;
 }
 
 
@@ -735,7 +675,7 @@ wxSize D_PAD::GetSolderPasteMargin() const
 }
 
 
-ZONE_CONNECTION D_PAD::GetZoneConnection() const
+ZONE_CONNECTION D_PAD::GetEffectiveZoneConnection() const
 {
     MODULE* module = GetParent();
 
@@ -765,150 +705,6 @@ int D_PAD::GetThermalGap() const
         return module->GetThermalGap();
     else
         return m_ThermalGap;
-}
-
-
-void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue,
-                             double aRotation ) const
-{
-    wxSize delta;
-    wxSize halfsize;
-
-    halfsize.x = m_Size.x >> 1;
-    halfsize.y = m_Size.y >> 1;
-
-    switch( GetShape() )
-    {
-        case PAD_SHAPE_RECT:
-            // For rectangular shapes, inflate is easy
-            halfsize += aInflateValue;
-
-            // Verify if do not deflate more than than size
-            // Only possible for inflate negative values.
-            if( halfsize.x < 0 )
-                halfsize.x = 0;
-
-            if( halfsize.y < 0 )
-                halfsize.y = 0;
-            break;
-
-        case PAD_SHAPE_TRAPEZOID:
-            // Trapezoidal pad: verify delta values
-            delta.x = ( m_DeltaSize.x >> 1 );
-            delta.y = ( m_DeltaSize.y >> 1 );
-
-            // be sure delta values are not to large
-            if( (delta.x < 0) && (delta.x <= -halfsize.y) )
-                delta.x = -halfsize.y + 1;
-
-            if( (delta.x > 0) && (delta.x >= halfsize.y) )
-                delta.x = halfsize.y - 1;
-
-            if( (delta.y < 0) && (delta.y <= -halfsize.x) )
-                delta.y = -halfsize.x + 1;
-
-            if( (delta.y > 0) && (delta.y >= halfsize.x) )
-                delta.y = halfsize.x - 1;
-        break;
-
-        default:    // is used only for rect and trap. pads
-            return;
-    }
-
-    // Build the basic rectangular or trapezoid shape
-    // delta is null for rectangular shapes
-    aCoord[0].x = -halfsize.x - delta.y;     // lower left
-    aCoord[0].y = +halfsize.y + delta.x;
-
-    aCoord[1].x = -halfsize.x + delta.y;     // upper left
-    aCoord[1].y = -halfsize.y - delta.x;
-
-    aCoord[2].x = +halfsize.x - delta.y;     // upper right
-    aCoord[2].y = -halfsize.y + delta.x;
-
-    aCoord[3].x = +halfsize.x + delta.y;     // lower right
-    aCoord[3].y = +halfsize.y - delta.x;
-
-    // Offsetting the trapezoid shape id needed
-    // It is assumed delta.x or/and delta.y == 0
-    if( GetShape() == PAD_SHAPE_TRAPEZOID && (aInflateValue.x != 0 || aInflateValue.y != 0) )
-    {
-        double angle;
-        wxSize corr;
-
-        if( delta.y )    // lower and upper segment is horizontal
-        {
-            // Calculate angle of left (or right) segment with vertical axis
-            angle = atan2( (double) m_DeltaSize.y, (double) m_Size.y );
-
-            // left and right sides are moved by aInflateValue.x in their perpendicular direction
-            // We must calculate the corresponding displacement on the horizontal axis
-            // that is delta.x +- corr.x depending on the corner
-            corr.x  = KiROUND( tan( angle ) * aInflateValue.x );
-            delta.x = KiROUND( aInflateValue.x / cos( angle ) );
-
-            // Horizontal sides are moved up and down by aInflateValue.y
-            delta.y = aInflateValue.y;
-
-            // corr.y = 0 by the constructor
-        }
-        else if( delta.x )          // left and right segment is vertical
-        {
-            // Calculate angle of lower (or upper) segment with horizontal axis
-            angle = atan2( (double) m_DeltaSize.x, (double) m_Size.x );
-
-            // lower and upper sides are moved by aInflateValue.x in their perpendicular direction
-            // We must calculate the corresponding displacement on the vertical axis
-            // that is delta.y +- corr.y depending on the corner
-            corr.y  = KiROUND( tan( angle ) * aInflateValue.y );
-            delta.y = KiROUND( aInflateValue.y / cos( angle ) );
-
-            // Vertical sides are moved left and right by aInflateValue.x
-            delta.x = aInflateValue.x;
-
-            // corr.x = 0 by the constructor
-        }
-        else                                    // the trapezoid is a rectangle
-        {
-            delta = aInflateValue;              // this pad is rectangular (delta null).
-        }
-
-        aCoord[0].x += -delta.x - corr.x;       // lower left
-        aCoord[0].y += delta.y + corr.y;
-
-        aCoord[1].x += -delta.x + corr.x;     // upper left
-        aCoord[1].y += -delta.y - corr.y;
-
-        aCoord[2].x += delta.x - corr.x;     // upper right
-        aCoord[2].y += -delta.y + corr.y;
-
-        aCoord[3].x += delta.x + corr.x;     // lower right
-        aCoord[3].y += delta.y - corr.y;
-
-        /* test coordinates and clamp them if the offset correction is too large:
-         * Note: if a coordinate is bad, the other "symmetric" coordinate is bad
-         * So when a bad coordinate is found, the 2 symmetric coordinates
-         * are set to the minimun value (0)
-         */
-
-        if( aCoord[0].x > 0 )       // lower left x coordinate must be <= 0
-            aCoord[0].x = aCoord[3].x = 0;
-
-        if( aCoord[1].x > 0 )       // upper left x coordinate must be <= 0
-            aCoord[1].x = aCoord[2].x = 0;
-
-        if( aCoord[0].y < 0 )       // lower left y coordinate must be >= 0
-            aCoord[0].y = aCoord[1].y = 0;
-
-        if( aCoord[3].y < 0 )       // lower right y coordinate must be >= 0
-            aCoord[3].y = aCoord[2].y = 0;
-    }
-
-    if( aRotation )
-    {
-        for( int ii = 0; ii < 4; ii++ )
-            RotatePoint( &aCoord[ii], aRotation );
-    }
 }
 
 
@@ -1039,103 +835,16 @@ void D_PAD::GetOblongGeometry( const wxSize& aDrillOrPadSize,
 
 bool D_PAD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int dx, dy;
+    VECTOR2I delta = aPosition - GetPosition();
+    int      boundingRadius = GetBoundingRadius() + aAccuracy;
 
-    wxPoint shape_pos = ShapePos();
-
-    wxPoint delta = aPosition - shape_pos;
-
-    // first test: a test point must be inside a minimum sized bounding circle.
-    int radius = GetBoundingRadius();
-
-    if( ( abs( delta.x ) > radius ) || ( abs( delta.y ) > radius ) )
+    if( delta.SquaredEuclideanNorm() > SEG::Square( boundingRadius ) )
         return false;
 
-    dx = m_Size.x >> 1; // dx also is the radius for rounded pads
-    dy = m_Size.y >> 1;
+    SHAPE_POLY_SET polySet;
+    TransformShapeWithClearanceToPolygon( polySet, aAccuracy );
 
-    switch( GetShape() )
-    {
-    case PAD_SHAPE_CIRCLE:
-        if( KiROUND( EuclideanNorm( delta ) ) <= dx )
-            return true;
-
-        break;
-
-    case PAD_SHAPE_TRAPEZOID:
-    {
-        wxPoint poly[4];
-        BuildPadPolygon( poly, wxSize(0,0), 0 );
-        RotatePoint( &delta, -m_Orient );
-
-        return TestPointInsidePolygon( poly, 4, delta );
-    }
-
-    case PAD_SHAPE_OVAL:
-    {
-        RotatePoint( &delta, -m_Orient );
-        // An oval pad has the same shape as a segment with rounded ends
-        // After rotation, the test point is relative to an horizontal pad
-        int dist;
-        wxPoint offset;
-        if( dy > dx )   // shape is a vertical oval
-        {
-            offset.y = dy - dx;
-            dist = dx;
-        }
-        else    //if( dy <= dx ) shape is an horizontal oval
-        {
-            offset.x = dy - dx;
-            dist = dy;
-        }
-        return TestSegmentHit( delta, - offset, offset, dist );
-    }
-        break;
-
-    case PAD_SHAPE_RECT:
-        RotatePoint( &delta, -m_Orient );
-
-        if( (abs( delta.x ) <= dx ) && (abs( delta.y ) <= dy) )
-            return true;
-
-        break;
-
-    case PAD_SHAPE_CHAMFERED_RECT:
-    case PAD_SHAPE_ROUNDRECT:
-        {
-        // Check for hit in polygon
-        SHAPE_POLY_SET outline;
-        bool doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
-        auto board = GetBoard();
-        int maxError = ARC_HIGH_DEF;
-
-        if( board )
-            maxError = board->GetDesignSettings().m_MaxError;
-
-        TransformRoundChamferedRectToPolygon( outline, wxPoint(0,0), GetSize(), m_Orient,
-                                              GetRoundRectCornerRadius(),
-                                              doChamfer ? GetChamferRectRatio() : 0.0,
-                                              doChamfer ? GetChamferPositions() : 0,
-                                              maxError );
-
-        const SHAPE_LINE_CHAIN &poly = outline.COutline( 0 );
-        return TestPointInsidePolygon( (const wxPoint*)&poly.CPoint(0), poly.PointCount(), delta );
-        }
-        break;
-
-    case PAD_SHAPE_CUSTOM:
-        // Check for hit in polygon
-        RotatePoint( &delta, -m_Orient );
-
-        if( m_customShapeAsPolygon.OutlineCount() )
-        {
-            const SHAPE_LINE_CHAIN& poly = m_customShapeAsPolygon.COutline( 0 );
-            return TestPointInsidePolygon( (const wxPoint*)&poly.CPoint(0), poly.PointCount(), delta );
-        }
-        break;
-    }
-
-    return false;
+    return polySet.Contains( aPosition );
 }
 
 
@@ -1145,181 +854,36 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     arect.Normalize();
     arect.Inflate( aAccuracy );
 
-    wxPoint shapePos = ShapePos();
+    EDA_RECT bbox = GetBoundingBox();
 
-    EDA_RECT shapeRect;
-
-    int r;
-
-    EDA_RECT bb = GetBoundingBox();
-
-    wxPoint endCenter;
-    int radius;
-
-    if( !arect.Intersects( bb ) )
+    if( !arect.Intersects( bbox ) )
         return false;
 
     // This covers total containment for all test cases
-    if( arect.Contains( bb ) )
+    if( arect.Contains( bbox ) )
         return true;
 
-    switch( GetShape() )
-    {
-    case PAD_SHAPE_CIRCLE:
-        return arect.IntersectsCircle( GetPosition(), GetBoundingRadius() );
+    SHAPE_POLY_SET selRect;
+    selRect.NewOutline();
+    selRect.Append( arect.GetOrigin() );
+    selRect.Append( VECTOR2I( arect.GetRight(), arect.GetTop() ) );
+    selRect.Append( VECTOR2I( arect.GetRight(), arect.GetBottom() ) );
+    selRect.Append( VECTOR2I( arect.GetLeft(), arect.GetBottom() ) );
 
-    case PAD_SHAPE_RECT:
-    case PAD_SHAPE_CHAMFERED_RECT:    // TODO use a finer shape analysis
-        shapeRect.SetOrigin( shapePos );
-        shapeRect.Inflate( m_Size.x / 2, m_Size.y / 2 );
-        return arect.Intersects( shapeRect, m_Orient );
+    SHAPE_POLY_SET padPoly;
+    TransformShapeWithClearanceToPolygon( padPoly, aAccuracy );
 
-    case PAD_SHAPE_OVAL:
-        // Circlular test if dimensions are equal
-        if( m_Size.x == m_Size.y )
-            return arect.IntersectsCircle( shapePos, GetBoundingRadius() );
+    selRect.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
 
-        shapeRect.SetOrigin( shapePos );
+    double padArea = padPoly.Outline( 0 ).Area();
+    double intersection = selRect.Outline( 0 ).Area();
 
-        // Horizontal dimension is greater
-        if( m_Size.x > m_Size.y )
-        {
-            radius = m_Size.y / 2;
-
-            shapeRect.Inflate( m_Size.x / 2 - radius, radius );
-
-            endCenter = wxPoint( m_Size.x / 2 - radius, 0 );
-            RotatePoint( &endCenter, m_Orient );
-
-            // Test circular ends
-            if( arect.IntersectsCircle( shapePos + endCenter, radius ) ||
-                arect.IntersectsCircle( shapePos - endCenter, radius ) )
-            {
-                return true;
-            }
-        }
-        else
-        {
-            radius = m_Size.x / 2;
-
-            shapeRect.Inflate( radius, m_Size.y / 2 - radius );
-
-            endCenter = wxPoint( 0, m_Size.y / 2 - radius );
-            RotatePoint( &endCenter, m_Orient );
-
-            // Test circular ends
-            if( arect.IntersectsCircle( shapePos + endCenter, radius ) ||
-                arect.IntersectsCircle( shapePos - endCenter, radius ) )
-            {
-                return true;
-            }
-        }
-
-        // Test rectangular portion between rounded ends
-        if( arect.Intersects( shapeRect, m_Orient ) )
-            return true;
-
-        break;
-
-    case PAD_SHAPE_TRAPEZOID:
-        /* Trapezoid intersection tests:
-         * A) Any points of rect inside trapezoid
-         * B) Any points of trapezoid inside rect
-         * C) Any sides of trapezoid cross rect
-         */
-        {
-
-        wxPoint poly[4];
-        BuildPadPolygon( poly, wxSize( 0, 0 ), 0 );
-
-        wxPoint corners[4];
-
-        corners[0] = wxPoint( arect.GetLeft(),  arect.GetTop() );
-        corners[1] = wxPoint( arect.GetRight(), arect.GetTop() );
-        corners[2] = wxPoint( arect.GetRight(), arect.GetBottom() );
-        corners[3] = wxPoint( arect.GetLeft(),  arect.GetBottom() );
-
-        for( int i=0; i<4; i++ )
-        {
-            RotatePoint( &poly[i], m_Orient );
-            poly[i] += shapePos;
-        }
-
-        for( int ii=0; ii<4; ii++ )
-        {
-            if( TestPointInsidePolygon( poly, 4, corners[ii] ) )
-                return true;
-
-            if( arect.Contains( poly[ii] ) )
-                return true;
-
-            if( arect.Intersects( poly[ii], poly[(ii+1) % 4] ) )
-                return true;
-        }
-
-        return false;
-        }
-
-    case PAD_SHAPE_ROUNDRECT:
-        /* RoundRect intersection can be broken up into simple tests:
-         * a) Test intersection of horizontal rect
-         * b) Test intersection of vertical rect
-         * c) Test intersection of each corner
-         */
-        r = GetRoundRectCornerRadius();
-
-        /* Test A - intersection of horizontal rect */
-        shapeRect.SetSize( 0, 0 );
-        shapeRect.SetOrigin( shapePos );
-        shapeRect.Inflate( m_Size.x / 2, m_Size.y / 2 - r );
-
-        // Short-circuit test for zero width or height
-        if( shapeRect.GetWidth() > 0 && shapeRect.GetHeight() > 0 &&
-            arect.Intersects( shapeRect, m_Orient ) )
-        {
-            return true;
-        }
-
-        /* Test B - intersection of vertical rect */
-        shapeRect.SetSize( 0, 0 );
-        shapeRect.SetOrigin( shapePos );
-        shapeRect.Inflate( m_Size.x / 2 - r, m_Size.y / 2 );
-
-        // Short-circuit test for zero width or height
-        if( shapeRect.GetWidth() > 0 && shapeRect.GetHeight() > 0 &&
-            arect.Intersects( shapeRect, m_Orient ) )
-        {
-            return true;
-        }
-
-        /* Test C - intersection of each corner */
-
-        endCenter = wxPoint( m_Size.x / 2 - r, m_Size.y / 2 - r );
-        RotatePoint( &endCenter, m_Orient );
-
-        if( arect.IntersectsCircle( shapePos + endCenter, r ) ||
-            arect.IntersectsCircle( shapePos - endCenter, r ) )
-        {
-            return true;
-        }
-
-        endCenter = wxPoint( m_Size.x / 2 - r, -m_Size.y / 2 + r );
-        RotatePoint( &endCenter, m_Orient );
-
-        if( arect.IntersectsCircle( shapePos + endCenter, r ) ||
-            arect.IntersectsCircle( shapePos - endCenter, r ) )
-        {
-            return true;
-        }
-
-        break;
-
-    default:
-        break;
-    }
-
-    return false;
+    if( intersection > ( padArea * 0.99 ) )
+        return true;
+    else
+        return !aContained && intersection > 0;
 }
+
 
 int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 {
@@ -1384,6 +948,8 @@ void D_PAD::Rotate( const wxPoint& aRotCentre, double aAngle )
     m_Orient = NormalizeAngle360Min( m_Orient + aAngle );
 
     SetLocalCoord();
+
+    m_shapesDirty = true;
 }
 
 
@@ -1653,15 +1219,17 @@ void D_PAD::ImportSettingsFrom( const D_PAD& aMasterPad )
     SetLocalSolderPasteMargin( aMasterPad.GetLocalSolderPasteMargin() );
     SetLocalSolderPasteMarginRatio( aMasterPad.GetLocalSolderPasteMarginRatio() );
 
-    SetZoneConnection( aMasterPad.GetZoneConnection() );
+    SetZoneConnection( aMasterPad.GetEffectiveZoneConnection() );
     SetThermalWidth( aMasterPad.GetThermalWidth() );
     SetThermalGap( aMasterPad.GetThermalGap() );
 
     // Add or remove custom pad shapes:
     SetPrimitives( aMasterPad.GetPrimitives() );
     SetAnchorPadShape( aMasterPad.GetAnchorPadShape() );
-    MergePrimitivesAsPolygon();
+
+    m_shapesDirty = true;
 }
+
 
 void D_PAD::SwapData( BOARD_ITEM* aImage )
 {

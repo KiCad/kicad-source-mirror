@@ -110,8 +110,8 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius, const wxPoint&
  *  4 = BOTTOM_LEFT
  *  8 = BOTTOM_RIGHT
  * One can have more than one chamfered corner by ORing the corner identifers
- * @param aApproxErrorMax = the IU allowed for error in approximation
- * @param aMinSegPerCircleCount = the minimal segments per circle count in approximation
+ * @param aError = the IU allowed for error in approximation
+ * @param aSegsPerCircle = the minimal segments per circle count in approximation
  *   (aApproxErrorMax can generate must more seg  count than aMinSegPerCircleCount)
  * To allow a reasonable good shape even for very small shapes, the min count is 16
  * (must be a multiple of 4 becauseusually arcs are 90 deg.
@@ -119,8 +119,7 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius, const wxPoint&
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                            const wxPoint& aPosition, const wxSize& aSize,
                                            double aRotation, int aCornerRadius,
-                                           double aChamferRatio, int aChamferCorners,
-                                           int aApproxErrorMax, int aMinSegPerCircleCount = 16 );
+                                           double aChamferRatio, int aChamferCorners, int aError );
 
 /**
  * Function TransformRoundedEndsSegmentToPolygon

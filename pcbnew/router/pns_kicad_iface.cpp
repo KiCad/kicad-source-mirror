@@ -617,24 +617,23 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
     wxPoint offset = aPad->GetOffset();
 
     VECTOR2I c( wx_c.x, wx_c.y );
-    VECTOR2I sz( wx_sz.x, wx_sz.y );
 
     RotatePoint( &offset, aPad->GetOrientation() );
 
     solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
     solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
 
-    double orient = aPad->GetOrientation() / 10.0;
-
-    if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
+    if( aPad->GetEffectiveShapes().size() == 1 )
     {
-        solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
+        solid->SetShape( aPad->GetEffectiveShapes()[0]->Clone() );
     }
-    else if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
+    else
     {
+        // JEY TODO:
+        // TOM TODO: move to SHAPE_COMPOUND...
+
         SHAPE_POLY_SET outline;
-        outline.Append( aPad->GetCustomShapeAsPolygon() );
-        aPad->CustomShapeAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
+        aPad->TransformShapeWithClearanceToPolygon( outline, 0 );
 
         SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
 
@@ -643,138 +642,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 
         solid->SetShape( shape );
     }
-    else
-    {
-        if( orient == 0.0 || orient == 90.0 || orient == 180.0 || orient == 270.0 )
-        {
-            if( orient == 90.0 || orient == 270.0 )
-                sz = VECTOR2I( sz.y, sz.x );
 
-            switch( aPad->GetShape() )
-            {
-            case PAD_SHAPE_OVAL:
-                if( sz.x == sz.y )
-                    solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
-                else
-                {
-                    VECTOR2I delta;
-
-                    if( sz.x > sz.y )
-                        delta = VECTOR2I( ( sz.x - sz.y ) / 2, 0 );
-                    else
-                        delta = VECTOR2I( 0, ( sz.y - sz.x ) / 2 );
-
-                    SHAPE_SEGMENT* shape = new SHAPE_SEGMENT( c - delta, c + delta,
-                                                              std::min( sz.x, sz.y ) );
-                    solid->SetShape( shape );
-                }
-                break;
-
-            case PAD_SHAPE_RECT:
-                solid->SetShape( new SHAPE_RECT( c - sz / 2, sz.x, sz.y ) );
-                break;
-
-            case PAD_SHAPE_TRAPEZOID:
-            {
-                wxPoint coords[4];
-                aPad->BuildPadPolygon( coords, wxSize( 0, 0 ), aPad->GetOrientation() );
-                SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
-
-                for( int ii = 0; ii < 4; ii++ )
-                {
-                    shape->Append( wx_c + coords[ii] );
-                }
-
-                solid->SetShape( shape );
-                break;
-            }
-
-            case PAD_SHAPE_CHAMFERED_RECT:
-            case PAD_SHAPE_ROUNDRECT:
-            {
-                SHAPE_POLY_SET outline;
-                aPad->BuildPadShapePolygon( outline, wxSize( 0, 0 ) );
-
-                // TransformRoundRectToPolygon creates only one convex polygon
-                SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
-                SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
-
-                for( int ii = 0; ii < poly.PointCount(); ++ii )
-                    shape->Append( poly.CPoint( ii ) );
-
-                solid->SetShape( shape );
-            }
-                break;
-
-            default:
-                wxLogTrace( "PNS", "unsupported pad shape" );
-                return nullptr;
-            }
-        }
-        else
-        {
-            switch( aPad->GetShape() )
-            {
-            // PAD_SHAPE_CIRCLE and PAD_SHAPE_CUSTOM already handled above
-
-            case PAD_SHAPE_OVAL:
-                if( sz.x == sz.y )
-                    solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
-                else
-                {
-                    wxPoint start;
-                    wxPoint end;
-
-                    int w = aPad->BuildSegmentFromOvalShape( start, end, aPad->GetOrientation(),
-                            wxSize( 0, 0 ) );
-
-                    SHAPE_SEGMENT* shape = new SHAPE_SEGMENT( start, end, w );
-                    shape->Move( aPad->ShapePos() );
-                    solid->SetShape( shape );
-                }
-                break;
-
-            case PAD_SHAPE_RECT:
-            case PAD_SHAPE_TRAPEZOID:
-            {
-                wxPoint coords[4];
-                aPad->BuildPadPolygon( coords, wxSize( 0, 0 ), aPad->GetOrientation() );
-
-                SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
-                for( int ii = 0; ii < 4; ii++ )
-                {
-                    shape->Append( wx_c + coords[ii] );
-                }
-
-                solid->SetShape( shape );
-                break;
-            }
-
-            case PAD_SHAPE_CHAMFERED_RECT:
-            case PAD_SHAPE_ROUNDRECT:
-            {
-                SHAPE_POLY_SET outline;
-                aPad->BuildPadShapePolygon( outline, wxSize( 0, 0 ) );
-
-                // TransformRoundRectToPolygon creates only one convex polygon
-                SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
-                SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
-
-                for( int ii = 0; ii < poly.PointCount(); ++ii )
-                {
-                    shape->Append( wxPoint( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
-                }
-
-                solid->SetShape( shape );
-                break;
-            }
-
-            default:
-                wxLogTrace( "PNS", "unsupported pad shape" );
-                return nullptr;
-            }
-        }
-    }
     return solid;
 }
 

@@ -243,15 +243,8 @@ public:
     double GetLocalSolderPasteMarginRatio() const { return m_LocalSolderPasteMarginRatio; }
     void SetLocalSolderPasteMarginRatio( double aRatio ) { m_LocalSolderPasteMarginRatio = aRatio; }
 
-    void SetZoneConnection( ZONE_CONNECTION aType )
-    {
-        m_ZoneConnection = aType;
-    }
-
-    ZONE_CONNECTION GetZoneConnection() const
-    {
-        return m_ZoneConnection;
-    }
+    void SetZoneConnection( ZONE_CONNECTION aType ) { m_ZoneConnection = aType; }
+    ZONE_CONNECTION GetZoneConnection() const { return m_ZoneConnection; }
 
     void SetThermalWidth( int aWidth ) { m_ThermalWidth = aWidth; }
     int GetThermalWidth() const { return m_ThermalWidth; }

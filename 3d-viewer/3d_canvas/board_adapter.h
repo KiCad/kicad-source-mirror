@@ -603,20 +603,9 @@ class BOARD_ADAPTER
                                              SHAPE_POLY_SET &aCornerBuffer,
                                              int aWidth) const;
 
-    void transformPadsShapesWithClearanceToPolygon( const PADS &aPads,
-                                                    PCB_LAYER_ID aLayer,
-                                                    SHAPE_POLY_SET &aCornerBuffer,
-                                                    int aInflateValue,
-                                                    bool aSkipNPTHPadsWihNoCopper) const;
-
     void transformGraphicModuleEdgeToPolygonSet( const MODULE *aModule,
                                                  PCB_LAYER_ID aLayer,
                                                  SHAPE_POLY_SET& aCornerBuffer ) const;
-
-    void buildPadShapePolygon( const D_PAD *aPad,
-                               SHAPE_POLY_SET &aCornerBuffer,
-                               wxSize aInflateValue ) const;
-
 
 public:
     SFVEC3D m_BgColorBot;         ///< background bottom color

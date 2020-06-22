@@ -534,15 +534,17 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
     case PAD_SHAPE_CUSTOM:
         {
             std::vector<wxPoint> polygonal_shape;
-            const SHAPE_POLY_SET& pad_shape = aPad->GetCustomShapeAsPolygon();
+            SHAPE_POLY_SET pad_shape;
+            aPad->MergePrimitivesAsPolygon( &pad_shape );
 
-            #ifdef EXPORT_CUSTOM_PADS_CONVEX_HULL
+#ifdef EXPORT_CUSTOM_PADS_CONVEX_HULL
             BuildConvexHull( polygonal_shape, pad_shape );
-            #else
+#else
             const SHAPE_LINE_CHAIN& p_outline = pad_shape.COutline( 0 );
+
             for( int ii = 0; ii < p_outline.PointCount(); ++ii )
                 polygonal_shape.push_back( wxPoint( p_outline.CPoint( ii ) ) );
-            #endif
+#endif
 
             // The polygon must be closed
             if( polygonal_shape.front() != polygonal_shape.back() )

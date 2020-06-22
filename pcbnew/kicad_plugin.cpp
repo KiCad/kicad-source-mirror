@@ -1479,8 +1479,8 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     if( aPad->GetLocalClearance() != 0 )
         StrPrintf( &output, " (clearance %s)", FormatInternalUnits( aPad->GetLocalClearance() ).c_str() );
 
-    if( aPad->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
-        StrPrintf( &output, " (zone_connect %d)", static_cast<int>( aPad->GetZoneConnection() ) );
+    if( aPad->GetEffectiveZoneConnection() != ZONE_CONNECTION::INHERITED )
+        StrPrintf( &output, " (zone_connect %d)", static_cast<int>( aPad->GetEffectiveZoneConnection() ) );
 
     if( aPad->GetThermalWidth() != 0 )
         StrPrintf( &output, " (thermal_width %s)", FormatInternalUnits( aPad->GetThermalWidth() ).c_str() );

@@ -33,7 +33,6 @@
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cring2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cfilledcircle2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/croundsegment2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/cpolygon4pts2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/ctriangle2d.h"
 #include <board_adapter.h>
 #include <class_board.h>
@@ -45,11 +44,13 @@
 #include <class_text_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
+#include <geometry/shape_segment.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/shape_circle.h>
+#include <geometry/shape_simple.h>
 #include <gr_text.h>
 #include <utility>
 #include <vector>
-
 
 
 // These variables are parameters used in addTextSegmToContainer.
@@ -310,261 +311,89 @@ void BOARD_ADAPTER::createNewTrack( const TRACK* aTrack, CGENERICCONTAINER2D *aD
 }
 
 
-// Based on:
-// void D_PAD:: TransformShapeWithClearanceToPolygon(
-// board_items_to_polygon_shape_transform.cpp
 void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
                                                CGENERICCONTAINER2D *aDstContainer,
                                                wxSize aClearanceValue ) const
 {
-    // note: for most of shapes, aClearanceValue.x = aClearanceValue.y
-    // only rectangular and oval shapes can have different values
-    // when drawn on the solder paste layer, because we can have a margin that is a
-    // percent of pad size
-    const int dx = (aPad->GetSize().x / 2) + aClearanceValue.x;
-    const int dy = (aPad->GetSize().y / 2) + aClearanceValue.y;
+    SHAPE_POLY_SET poly;
 
-    if( !dx || !dy )
+    if( aClearanceValue.x != aClearanceValue.y )
     {
-        wxLogTrace( m_logTrace,
-                    wxT( "BOARD_ADAPTER::createNewPadWithClearance - found an invalid pad" ) );
-
-        return;
+        // Our shape-based builder can't handle differing x:y clearance values (which
+        // get generated when relative paste margin is used with an oblong pad).  So
+        // we fake a larger pad and run the general-purpose polygon builder on it.
+        D_PAD dummy( *aPad );
+        dummy.SetSize( aPad->GetSize() + aClearanceValue + aClearanceValue );
+        dummy.TransformShapeWithClearanceToPolygon( poly, 0 );
     }
-
-    wxPoint PadShapePos = aPad->ShapePos(); // Note: for pad having a shape offset,
-                                            // the pad position is NOT the shape position
-
-    switch( aPad->GetShape() )
+    else
     {
-    case PAD_SHAPE_CIRCLE:
-    {
-        const float radius = dx * m_biuTo3Dunits;
-
-        const SFVEC2F center(  PadShapePos.x * m_biuTo3Dunits,
-                              -PadShapePos.y * m_biuTo3Dunits );
-
-        aDstContainer->Add( new CFILLEDCIRCLE2D( center, radius, *aPad ) );
-    }
-    break;
-
-    case PAD_SHAPE_OVAL:
-    {
-        if( dx == dy )
+        for( const std::shared_ptr<SHAPE>& shape : aPad->GetEffectiveShapes() )
         {
-            // The segment object cannot store start and end the same position,
-            // so add a circle instead
-            const float radius = dx * m_biuTo3Dunits;
-
-            const SFVEC2F center(  PadShapePos.x * m_biuTo3Dunits,
-                                  -PadShapePos.y * m_biuTo3Dunits );
-
-            aDstContainer->Add( new CFILLEDCIRCLE2D( center, radius, *aPad ) );
-        }
-        else
-        {
-            // An oval pad has the same shape as a segment with rounded ends
-
-            int iwidth;
-            wxPoint shape_offset = wxPoint( 0, 0 );
-
-            if( dy > dx )   // Oval pad X/Y ratio for choosing translation axis
+            switch( shape->Type() )
             {
-                shape_offset.y = dy - dx;
-                iwidth = dx * 2;
-            }
-            else    //if( dy < dx )
+            case SH_SEGMENT:
             {
-                shape_offset.x = dy - dx;
-                iwidth = dy * 2;
-            }
+                const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shape.get();
+                const SFVEC2F        start3DU(  seg->GetSeg().A.x * m_biuTo3Dunits,
+                                               -seg->GetSeg().A.y * m_biuTo3Dunits );
+                const SFVEC2F        end3DU  (  seg->GetSeg().B.x * m_biuTo3Dunits,
+                                               -seg->GetSeg().B.y * m_biuTo3Dunits );
+                const int            width = seg->GetWidth() + aClearanceValue.x * 2;
 
-            RotatePoint( &shape_offset, aPad->GetOrientation() );
-
-            const wxPoint start = PadShapePos - shape_offset;
-            const wxPoint end   = PadShapePos + shape_offset;
-
-            const SFVEC2F start3DU(  start.x * m_biuTo3Dunits, -start.y * m_biuTo3Dunits );
-            const SFVEC2F end3DU  (    end.x * m_biuTo3Dunits,   -end.y * m_biuTo3Dunits );
-
-             // Cannot add segments that have the same start and end point
-            if( Is_segment_a_circle( start3DU, end3DU ) )
-            {
-                aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU,
-                                                         (iwidth / 2) * m_biuTo3Dunits,
-                                                         *aPad ) );
-            }
-            else
-            {
-                aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU,
-                                                         iwidth * m_biuTo3Dunits,
-                                                         *aPad ) );
-            }
-        }
-    }
-    break;
-
-    case PAD_SHAPE_TRAPEZOID:
-    case PAD_SHAPE_RECT:
-    {
-        // see pcbnew/board_items_to_polygon_shape_transform.cpp
-        wxPoint corners[4];
-        bool drawOutline;
-
-        // For aClearanceValue.x == aClearanceValue.y and > 0 we use the pad shape
-        // and draw outlines with thicknes = aClearanceValue.
-        // Otherwise we draw only the inflated/deflated shape
-        if( aClearanceValue.x > 0 && aClearanceValue.x == aClearanceValue.y )
-        {
-            drawOutline = true;
-            aPad->BuildPadPolygon( corners, wxSize( 0, 0 ), aPad->GetOrientation() );
-        }
-        else
-        {
-            drawOutline = false;
-            aPad->BuildPadPolygon( corners, aClearanceValue, aPad->GetOrientation() );
-        }
-
-        SFVEC2F corners3DU[4];
-
-        // Note: for pad having a shape offset,
-        // the pad position is NOT the shape position
-        for( unsigned int ii = 0; ii < 4; ++ii )
-        {
-            corners[ii] += aPad->ShapePos();          // Shift origin to position
-
-            corners3DU[ii] = SFVEC2F( corners[ii].x * m_biuTo3Dunits,
-                                      -corners[ii].y * m_biuTo3Dunits );
-        }
-
-
-        // Learn more at:
-        // https://lists.launchpad.net/kicad-developers/msg18729.html
-
-        // Add the PAD polygon
-        aDstContainer->Add( new CPOLYGON4PTS2D( corners3DU[0],
-                                                corners3DU[1],
-                                                corners3DU[2],
-                                                corners3DU[3],
-                                                *aPad ) );
-
-        // Add the PAD contours
-        // Round segments cannot have 0-length elements, so we approximate them
-        // as a small circle
-        if( drawOutline )
-        {
-            for( int i = 1; i <= 4; i++ )
-            {
-                if( Is_segment_a_circle( corners3DU[i - 1], corners3DU[i & 3] ) )
+                 // Cannot add segments that have the same start and end point
+                if( Is_segment_a_circle( start3DU, end3DU ) )
                 {
-                    aDstContainer->Add( new CFILLEDCIRCLE2D( corners3DU[i - 1],
-                                            aClearanceValue.x * m_biuTo3Dunits,
-                                            *aPad ) );
+                    aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU,
+                                                             ( width / 2) * m_biuTo3Dunits,
+                                                             *aPad ) );
                 }
                 else
                 {
-                    aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[i - 1],
-                                                             corners3DU[i & 3],
-                                                             aClearanceValue.x * 2.0f * m_biuTo3Dunits,
+                    aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU,
+                                                             width * m_biuTo3Dunits,
                                                              *aPad ) );
                 }
             }
-        }
-    }
-    break;
+                break;
 
-    case PAD_SHAPE_ROUNDRECT:
-    {
-        wxSize shapesize( aPad->GetSize() );
-        shapesize.x += aClearanceValue.x * 2;
-        shapesize.y += aClearanceValue.y * 2;
-
-        int rounding_radius = aPad->GetRoundRectCornerRadius( shapesize );
-
-        wxPoint corners[4];
-
-        GetRoundRectCornerCenters( corners,
-                                   rounding_radius,
-                                   PadShapePos,
-                                   shapesize,
-                                   aPad->GetOrientation() );
-
-        SFVEC2F corners3DU[4];
-
-        for( unsigned int ii = 0; ii < 4; ++ii )
-            corners3DU[ii] = SFVEC2F( corners[ii].x * m_biuTo3Dunits,
-                                     -corners[ii].y * m_biuTo3Dunits );
-
-        // Add the PAD polygon (For some reason the corners need
-        // to be inverted to display with the correctly orientation)
-        aDstContainer->Add( new CPOLYGON4PTS2D( corners3DU[0],
-                                                corners3DU[3],
-                                                corners3DU[2],
-                                                corners3DU[1],
-                                                *aPad ) );
-
-        // Add the PAD contours
-        // Round segments cannot have 0-length elements, so we approximate them
-        // as a small circle
-        for( int i = 1; i <= 4; i++ )
-        {
-            if( Is_segment_a_circle( corners3DU[i - 1], corners3DU[i & 3] ) )
+            case SH_CIRCLE:
             {
-                aDstContainer->Add( new CFILLEDCIRCLE2D( corners3DU[i - 1],
-                                        rounding_radius * m_biuTo3Dunits,
-                                        *aPad ) );
+                const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shape.get();
+                const int           radius = circle->GetRadius() + aClearanceValue.x;
+                const SFVEC2F       center(  circle->GetCenter().x * m_biuTo3Dunits,
+                                            -circle->GetCenter().y * m_biuTo3Dunits );
+
+                aDstContainer->Add( new CFILLEDCIRCLE2D( center, radius * m_biuTo3Dunits, *aPad ) );
             }
-            else
-            {
-                aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[i - 1],
-                                        corners3DU[i & 3],
-                                        rounding_radius * 2.0f * m_biuTo3Dunits,
-                                        *aPad ) );
+                break;
+
+            case SH_SIMPLE:
+                poly.AddOutline( static_cast<SHAPE_SIMPLE*>( shape.get() )->Vertices() );
+                break;
+
+            case SH_POLY_SET:
+                poly = *(SHAPE_POLY_SET*) shape.get();
+                break;
+
+            default:
+                wxFAIL_MSG( "BOARD_ADAPTER::createNewPadWithClearance unimplemented shape" );
+                break;
             }
         }
     }
-    break;
 
-    case PAD_SHAPE_CHAMFERED_RECT:
+    if( !poly.IsEmpty() )
     {
-        wxSize shapesize( aPad->GetSize() );
-        shapesize.x += aClearanceValue.x * 2;
-        shapesize.y += aClearanceValue.y * 2;
-
-        SHAPE_POLY_SET polyList;     // Will contain the pad outlines in board coordinates
-
-        int corner_radius = aPad->GetRoundRectCornerRadius( shapesize );
-        TransformRoundChamferedRectToPolygon( polyList, PadShapePos, shapesize, aPad->GetOrientation(),
-                                         corner_radius, aPad->GetChamferRectRatio(),
-                                         aPad->GetChamferPositions(), ARC_HIGH_DEF );
-
-        // Add the PAD polygon
-        Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits, *aPad );
-
-    }
-        break;
-
-    case PAD_SHAPE_CUSTOM:
-    {
-        SHAPE_POLY_SET polyList;     // Will contain the pad outlines in board coordinates
-        polyList.Append( aPad->GetCustomShapeAsPolygon() );
-        aPad->CustomShapeAsPolygonToBoardPosition( &polyList, aPad->ShapePos(), aPad->GetOrientation() );
-
         if( aClearanceValue.x )
-            polyList.Inflate( aClearanceValue.x, 32 );
+            poly.Inflate( aClearanceValue.x, 32 );
 
         // Add the PAD polygon
-        Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits, *aPad );
-
-    }
-        break;
+        Convert_shape_line_polygon_to_triangles( poly, *aDstContainer, m_biuTo3Dunits, *aPad );
     }
 }
 
 
-// Based on:
-// BuildPadDrillShapePolygon
-// board_items_to_polygon_shape_transform.cpp
 COBJECT2D *BOARD_ADAPTER::createNewPadDrill( const D_PAD* aPad, int aInflateValue )
 {
     wxSize drillSize = aPad->GetDrillSize();
@@ -587,29 +416,16 @@ COBJECT2D *BOARD_ADAPTER::createNewPadDrill( const D_PAD* aPad, int aInflateValu
     }
     else                                // Oblong hole
     {
-        wxPoint start, end;
-        int width;
+        const std::shared_ptr<SHAPE_SEGMENT>& seg = aPad->GetEffectiveHoleShape();
+        float width = seg->GetWidth() + aInflateValue * 2;
 
-        aPad->GetOblongGeometry( aPad->GetDrillSize(), &start, &end, &width );
+        SFVEC2F start3DU(  seg->GetSeg().A.x * m_biuTo3Dunits,
+                          -seg->GetSeg().A.y * m_biuTo3Dunits );
 
-        width += aInflateValue * 2;
-        start += aPad->GetPosition();
-        end   += aPad->GetPosition();
+        SFVEC2F end3DU (  seg->GetSeg().B.x * m_biuTo3Dunits,
+                         -seg->GetSeg().B.y * m_biuTo3Dunits );
 
-        SFVEC2F start3DU(  start.x * m_biuTo3Dunits,
-                          -start.y * m_biuTo3Dunits );
-
-        SFVEC2F end3DU (  end.x * m_biuTo3Dunits,
-                         -end.y * m_biuTo3Dunits );
-
-        if( Is_segment_a_circle( start3DU, end3DU ) )
-        {
-            return new CFILLEDCIRCLE2D( start3DU, (width / 2) * m_biuTo3Dunits, *aPad );
-        }
-        else
-        {
-            return new CROUNDSEGMENT2D( start3DU, end3DU, width * m_biuTo3Dunits, *aPad );
-        }
+        return new CROUNDSEGMENT2D( start3DU, end3DU, width * m_biuTo3Dunits, *aPad );
     }
 
     return NULL;
@@ -951,15 +767,13 @@ void BOARD_ADAPTER::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneC
                     float radius = line_thickness/2;
 
                     if( radius > 0.0 )  // degenerated circles crash 3D viewer
-                        aDstContainer->Add(
-                                    new CFILLEDCIRCLE2D( start3DU, radius,
-                                                         *aZoneContainer ) );
+                        aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU, radius,
+                                                                 *aZoneContainer ) );
                 }
                 else
                 {
-                    aDstContainer->Add(
-                                new CROUNDSEGMENT2D( start3DU, end3DU, line_thickness,
-                                                     *aZoneContainer ) );
+                    aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU, line_thickness,
+                                                             *aZoneContainer ) );
                 }
             }
         }
@@ -986,12 +800,9 @@ void BOARD_ADAPTER::buildPadShapeThickOutlineAsSegments( const D_PAD*  aPad,
         return;
     }
 
-    // For other shapes, draw polygon outlines
+    // For other shapes, add outlines as thick segments in polygon buffer
     SHAPE_POLY_SET corners;
-    aPad->BuildPadShapePolygon( corners, wxSize( 0, 0 ) );
-
-
-    // Add outlines as thick segments in polygon buffer
+    aPad->TransformShapeWithClearanceToPolygon( corners, 0 );
 
     const SHAPE_LINE_CHAIN& path = corners.COutline( 0 );
 
@@ -1005,13 +816,13 @@ void BOARD_ADAPTER::buildPadShapeThickOutlineAsSegments( const D_PAD*  aPad,
 
         if( Is_segment_a_circle( start3DU, end3DU ) )
         {
-            aDstContainer->Add(
-                    new CFILLEDCIRCLE2D( start3DU, ( aWidth / 2 ) * m_biuTo3Dunits, *aPad ) );
+            aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU, ( aWidth / 2 ) * m_biuTo3Dunits,
+                                                     *aPad ) );
         }
         else
         {
-            aDstContainer->Add(
-                    new CROUNDSEGMENT2D( start3DU, end3DU, aWidth * m_biuTo3Dunits, *aPad ) );
+            aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU, aWidth * m_biuTo3Dunits,
+                                                     *aPad ) );
         }
     }
 }

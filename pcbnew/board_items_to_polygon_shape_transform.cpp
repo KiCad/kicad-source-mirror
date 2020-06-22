@@ -40,7 +40,9 @@
 #include <class_edge_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/shape_segment.h>
 #include <math/util.h>      // for KiROUND
+
 
 // A helper struct for the callback function
 // These variables are parameters used in addTextSegmToPoly.
@@ -519,8 +521,8 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     // Most of time pads are using the segment count given by aError value.
     const int pad_min_seg_per_circle_count = 16;
     double  angle = m_Orient;
-    int     dx = (m_Size.x / 2) + aClearanceValue;
-    int     dy = (m_Size.y / 2) + aClearanceValue;
+    int     dx = m_Size.x / 2;
+    int     dy = m_Size.y / 2;
 
     wxPoint padShapePos = ShapePos();         // Note: for pad having a shape offset,
                                               // the pad position is NOT the shape position
@@ -528,35 +530,20 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     switch( GetShape() )
     {
     case PAD_SHAPE_CIRCLE:
-        TransformCircleToPolygon( aCornerBuffer, padShapePos, dx, aError );
-        break;
-
     case PAD_SHAPE_OVAL:
-
-        // If the oval is actually a circle (same x/y size), treat it the same
         if( dx == dy )
         {
-            TransformCircleToPolygon( aCornerBuffer, padShapePos, dx, aError );
+            TransformCircleToPolygon( aCornerBuffer, padShapePos, dx + aClearanceValue, aError );
         }
         else
         {
-            int width;
-            wxPoint shape_offset;
-            if( dy > dx )   // Oval pad X/Y ratio for choosing translation axis
-            {
-                shape_offset.y = dy - dx;
-                width = dx * 2;
-            }
-            else    //if( dy <= dx )
-            {
-                shape_offset.x = dy - dx;
-                width = dy * 2;
-            }
+            int     half_width = std::min( dx, dy );
+            wxPoint delta( dx - half_width, dy - half_width );
 
-            RotatePoint( &shape_offset, angle );
-            wxPoint start = padShapePos - shape_offset;
-            wxPoint end = padShapePos + shape_offset;
-            TransformOvalToPolygon( aCornerBuffer, start, end, width, aError );
+            RotatePoint( &delta, angle );
+
+            TransformOvalToPolygon( aCornerBuffer, padShapePos - delta, padShapePos + delta,
+                                    half_width * 2 + aClearanceValue, aError );
         }
 
         break;
@@ -564,14 +551,21 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_TRAPEZOID:
     case PAD_SHAPE_RECT:
     {
+        int  ddx = GetShape() == PAD_SHAPE_TRAPEZOID ? m_DeltaSize.x / 2 : 0;
+        int  ddy = GetShape() == PAD_SHAPE_TRAPEZOID ? m_DeltaSize.y / 2 : 0;
+
         wxPoint corners[4];
-        BuildPadPolygon( corners, wxSize( 0, 0 ), angle );
+        corners[0] = wxPoint( -dx + ddy,  dy + ddx );
+        corners[1] = wxPoint(  dx - ddy,  dy - ddx );
+        corners[2] = wxPoint(  dx + ddy, -dy + ddx );
+        corners[3] = wxPoint( -dx - ddy, -dy - ddx );
 
         SHAPE_POLY_SET outline;
         outline.NewOutline();
 
         for( wxPoint& corner : corners )
         {
+            RotatePoint( &corner, angle );
             corner += padShapePos;
             outline.Append( corner.x, corner.y );
         }
@@ -615,9 +609,11 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     case PAD_SHAPE_CUSTOM:
     {
-        SHAPE_POLY_SET outline;     // Will contain the corners in board coordinates
-        outline.Append( m_customShapeAsPolygon );
-        CustomShapeAsPolygonToBoardPosition( &outline, GetPosition(), GetOrientation() );
+        SHAPE_POLY_SET outline;
+        MergePrimitivesAsPolygon( &outline );
+        outline.Rotate( -DECIDEG2RAD( m_Orient ) );
+        outline.Move( VECTOR2I( m_Pos ) );
+
         // TODO: do we need the Simplify() & Fracture() if we're not inflating?
         outline.Simplify( SHAPE_POLY_SET::PM_FAST );
 
@@ -640,91 +636,18 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
 
 
-/*
- * Function BuildPadShapePolygon
- * Build the corner list of the polygonal shape, depending on shape, clearance and orientation
- * Note: for round & oval pads this function is equivalent to TransformShapeWithClearanceToPolygon,
- * but not for other shapes
- */
-void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer, wxSize aInflateValue,
-                                  int aError ) const
-{
-    switch( GetShape() )
-    {
-    case PAD_SHAPE_CIRCLE:
-    case PAD_SHAPE_OVAL:
-    case PAD_SHAPE_ROUNDRECT:
-    case PAD_SHAPE_CHAMFERED_RECT:
-    {
-        // We are using TransformShapeWithClearanceToPolygon to build the shape.
-        // Currently, this method uses only the same inflate value for X and Y dirs.
-        // so because here this is not the case, we use a inflated dummy pad to build
-        // the polygonal shape
-        // TODO: remove this dummy pad when TransformShapeWithClearanceToPolygon will use
-        // a wxSize to inflate the pad size
-        D_PAD dummy( *this );
-        dummy.SetSize( GetSize() + aInflateValue + aInflateValue );
-        dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, 0 );
-    }
-        break;
-
-    case PAD_SHAPE_TRAPEZOID:
-    case PAD_SHAPE_RECT:
-    {
-        wxPoint corners[4];
-        wxPoint padShapePos = ShapePos();    // Note: for pad having a shape offset,
-                                             // the pad position is NOT the shape position
-
-        aCornerBuffer.NewOutline();
-        BuildPadPolygon( corners, aInflateValue, m_Orient );
-
-        for( wxPoint& corner : corners )
-        {
-            corner += padShapePos;          // Shift origin to position
-            aCornerBuffer.Append( corner.x, corner.y );
-        }
-    }
-        break;
-
-    case PAD_SHAPE_CUSTOM:
-    {
-        // For a custom shape, that is in fact a polygon (with holes), we use only a single
-        // inflate value (different values for X and Y have no definition for a custom pad).
-        int inflate = ( aInflateValue.x + aInflateValue.y ) / 2;
-
-        TransformShapeWithClearanceToPolygon( aCornerBuffer, inflate );
-    }
-        break;
-    }
-}
-
-
-bool D_PAD::BuildPadDrillShapePolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
-                                       int aError ) const
+bool D_PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
+                                                 int aError ) const
 {
     wxSize drillsize = GetDrillSize();
 
     if( !drillsize.x || !drillsize.y )
         return false;
 
-    if( drillsize.x == drillsize.y )    // usual round hole
-    {
-        int radius = ( drillsize.x / 2 ) + aInflateValue;
-        TransformCircleToPolygon( aCornerBuffer, GetPosition(), radius, aError );
-    }
-    else    // Oblong hole
-    {
-        wxPoint start, end;
-        int width;
+    const std::shared_ptr<SHAPE_SEGMENT>& seg = GetEffectiveHoleShape();
 
-        GetOblongGeometry( GetDrillSize(), &start, &end, &width );
-
-        start += GetPosition();
-        end += GetPosition();
-        width += aInflateValue * 2;
-
-        TransformSegmentToPolygon( aCornerBuffer, start, end, aError, width );
-    }
+    TransformSegmentToPolygon( aCornerBuffer, (wxPoint) seg->GetSeg().A, (wxPoint) seg->GetSeg().B,
+                               aError, seg->GetWidth() + aInflateValue * 2 );
 
     return true;
 }
