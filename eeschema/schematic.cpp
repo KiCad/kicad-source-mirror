@@ -61,9 +61,6 @@ void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
 
     m_rootSheet = aRootSheet;
 
-    m_currentSheet->clear();
-    m_currentSheet->push_back( m_rootSheet );
-
     m_connectionGraph->Reset();
 }
 
