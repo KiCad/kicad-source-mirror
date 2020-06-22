@@ -150,10 +150,11 @@ public:
     // m_Start, m_End, and m_Angle.
     // No Set...() function for these attributes.
 
-    const wxPoint GetCenter() const override;
-    const wxPoint& GetArcStart() const      { return m_End; }
-    const wxPoint GetArcEnd() const;
-    const wxPoint GetArcMid() const;
+    wxPoint GetCenter() const override;
+    wxPoint GetArcStart() const      { return m_End; }
+    wxPoint GetArcEnd() const;
+    wxPoint GetArcMid() const;
+    void GetRectCorners( std::vector<wxPoint>* pts ) const;
 
     /**
      * function GetArcAngleStart()
@@ -184,6 +185,11 @@ public:
     /** For arcs and circles:
      */
     void SetCenter( const wxPoint& aCenterPoint ) { m_Start = aCenterPoint; }
+
+    const wxPoint GetFocusPosition() const override
+    {
+        return GetCenter();
+    }
 
     /**
      * Function GetParentModule
