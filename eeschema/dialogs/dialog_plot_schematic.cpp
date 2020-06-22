@@ -262,22 +262,29 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
+    COLOR_SETTINGS* colors = getColorSettings();
+
     if( cfg )
     {
         cfg->m_PlotPanel.background_color = m_plotBackgroundColor->GetValue();
-        cfg->m_PlotPanel.color = getModeColor();
-        cfg->m_PlotPanel.color_theme = getColorSettings()->GetFilename();
-        cfg->m_PlotPanel.frame_reference = getPlotFrameRef();
-        cfg->m_PlotPanel.format = static_cast<int>( GetPlotFileFormat() );
-        cfg->m_PlotPanel.hpgl_origin = GetPlotOriginCenter();
-        cfg->m_PlotPanel.hpgl_paper_size = m_HPGLPaperSizeSelect;
+        cfg->m_PlotPanel.color            = getModeColor();
+        cfg->m_PlotPanel.color_theme      = colors->GetFilename();
+        cfg->m_PlotPanel.frame_reference  = getPlotFrameRef();
+        cfg->m_PlotPanel.format           = static_cast<int>( GetPlotFileFormat() );
+        cfg->m_PlotPanel.hpgl_origin      = GetPlotOriginCenter();
+        cfg->m_PlotPanel.hpgl_paper_size  = m_HPGLPaperSizeSelect;
 
         // HPGL Pen Size is stored in mm in config
         cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / IU_PER_MM;
     }
 
-    aSettings->LoadColors( getColorSettings() );
+    aSettings->LoadColors( colors );
     aSettings->SetDefaultPenWidth( (int) m_defaultLineWidth.GetValue() );
+
+     if( m_plotBackgroundColor->GetValue() )
+         aSettings->SetBackgroundColor( colors->GetColor( LAYER_SCHEMATIC_BACKGROUND ) );
+     else
+         aSettings->SetBackgroundColor( COLOR4D::UNSPECIFIED );
 
     // Plot directory
     wxString path = m_outputDirectoryName->GetValue();

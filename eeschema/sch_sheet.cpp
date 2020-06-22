@@ -34,6 +34,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
+#include <sch_painter.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
 #include <netlist_object.h>
@@ -963,10 +964,23 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     wxString    Text;
     wxPoint     pos;
 
-    COLOR4D borderColor = GetBorderColor();
+    bool override = false;
 
-    if( borderColor == COLOR4D::UNSPECIFIED )
+    if( KIGFX::SCH_RENDER_SETTINGS* settings =
+                    dynamic_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() ) )
+        override = settings->m_OverrideItemColors;
+
+    COLOR4D borderColor     = GetBorderColor();
+    COLOR4D backgroundColor = GetBackgroundColor();
+
+    if( override || borderColor == COLOR4D::UNSPECIFIED )
         borderColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET );
+
+    if( override || backgroundColor == COLOR4D::UNSPECIFIED )
+        backgroundColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET_BACKGROUND );
+
+    aPlotter->SetColor( backgroundColor );
+    aPlotter->Rect( m_pos, m_pos + m_size, FILLED_SHAPE, 1.0 );
 
     aPlotter->SetColor( borderColor );
 
