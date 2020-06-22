@@ -111,3 +111,145 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_P
 
     return comp;
 }
+
+
+/// Comparison routine for sorting by pin numbers.
+static bool sortPinsByNum( PIN_INFO& aPin1, PIN_INFO& aPin2 )
+{
+    // return "lhs < rhs"
+    return UTIL::RefDesStringCompare( aPin1.num, aPin2.num ) < 0;
+}
+
+
+void NETLIST_EXPORTER::CreatePinList( SCH_COMPONENT* comp, SCH_SHEET_PATH* aSheetPath )
+{
+    wxString ref( comp->GetRef( aSheetPath ) );
+
+    // Power symbols and other components which have the reference starting
+    // with "#" are not included in netlist (pseudo or virtual components)
+
+    if( ref[0] == wxChar( '#' ) )
+        return;
+
+    // if( Component->m_FlagControlMulti == 1 )
+    //    continue;                                      /* yes */
+    // removed because with multiple instances of one schematic
+    // (several sheets pointing to 1 screen), this will be erroneously be
+    // toggled.
+
+    if( !comp->GetPartRef() )
+        return;
+
+    m_SortedComponentPinList.clear();
+
+    // If component is a "multi parts per package" type
+    if( comp->GetPartRef()->GetUnitCount() > 1 )
+    {
+        // Collect all pins for this reference designator by searching
+        // the entire design for other parts with the same reference designator.
+        // This is only done once, it would be too expensive otherwise.
+        findAllUnitsOfComponent( comp, comp->GetPartRef().get(), aSheetPath );
+    }
+
+    else // entry->GetUnitCount() <= 1 means one part per package
+    {
+        for( const auto& pin : comp->GetSchPins( aSheetPath ) )
+        {
+            if( auto conn = pin->Connection( *aSheetPath ) )
+            {
+                const wxString& netName = conn->Name();
+
+                // Skip unconnected pins
+                CONNECTION_SUBGRAPH* sg =
+                        m_schematic->ConnectionGraph()->FindSubgraphByName( netName, *aSheetPath );
+
+                if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
+                    continue;
+
+                m_SortedComponentPinList.emplace_back( pin->GetNumber(), netName );
+            }
+        }
+    }
+
+    // Sort pins in m_SortedComponentPinList by pin number
+    sort( m_SortedComponentPinList.begin(), m_SortedComponentPinList.end(), sortPinsByNum );
+
+    // Remove duplicate Pins in m_SortedComponentPinList
+    eraseDuplicatePins();
+
+    // record the usage of this library component entry.
+    m_LibParts.insert( comp->GetPartRef().get() ); // rejects non-unique pointers
+}
+
+
+void NETLIST_EXPORTER::eraseDuplicatePins()
+{
+    for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
+    {
+        if( m_SortedComponentPinList[ii].num.empty() ) /* already deleted */
+            continue;
+
+        /* Search for duplicated pins
+         * If found, remove duplicates. The priority is to keep connected pins
+         * and remove unconnected
+         * - So this allows (for instance when using multi op amps per package
+         * - to connect only one op amp to power
+         * Because the pin list is sorted by m_PinNum value, duplicated pins
+         * are necessary successive in list
+         */
+        int idxref = ii;
+
+        for( unsigned jj = ii + 1; jj < m_SortedComponentPinList.size(); jj++ )
+        {
+            if(  m_SortedComponentPinList[jj].num.empty() )   // Already removed
+                continue;
+
+            // if other pin num, stop search,
+            // because all pins having the same number are consecutive in list.
+            if( m_SortedComponentPinList[idxref].num != m_SortedComponentPinList[jj].num )
+                break;
+
+            m_SortedComponentPinList[jj].num.clear();
+        }
+    }
+}
+
+
+void NETLIST_EXPORTER::findAllUnitsOfComponent( SCH_COMPONENT* aComponent,
+                                                LIB_PART* aEntry, SCH_SHEET_PATH* aSheetPath )
+{
+    wxString    ref = aComponent->GetRef( aSheetPath );
+    wxString    ref2;
+
+    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
+
+    for( unsigned i = 0;  i < sheetList.size();  i++ )
+    {
+        for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        {
+            SCH_COMPONENT* comp2 = static_cast<SCH_COMPONENT*>( item );
+
+            ref2 = comp2->GetRef( &sheetList[i] );
+
+            if( ref2.CmpNoCase( ref ) != 0 )
+                continue;
+
+            for( const auto& pin : comp2->GetSchPins( aSheetPath ) )
+            {
+                if( auto conn = pin->Connection( *aSheetPath ) )
+                {
+                    const wxString& netName = conn->Name();
+
+                    // Skip unconnected pins
+                    CONNECTION_SUBGRAPH* sg = m_schematic->ConnectionGraph()->FindSubgraphByName(
+                            netName, *aSheetPath );
+
+                    if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
+                        continue;
+
+                    m_SortedComponentPinList.emplace_back( pin->GetNumber(), netName );
+                }
+            }
+        }
+    }
+}

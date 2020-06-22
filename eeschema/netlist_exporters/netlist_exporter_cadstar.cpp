@@ -163,6 +163,8 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
                 } ),
                 sorted_items.end() );
 
+        print_ter = 0;
+
         for( const auto& pair : sorted_items )
         {
             SCH_PIN*       pin   = pair.first;

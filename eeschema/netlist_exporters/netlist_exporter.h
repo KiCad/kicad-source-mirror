@@ -81,6 +81,17 @@ struct LIB_PART_LESS_THAN
     }
 };
 
+struct PIN_INFO
+{
+    PIN_INFO( const wxString& aPinNumber, const wxString& aNetName ) :
+            num( aPinNumber ),
+            netName( aNetName )
+    {}
+
+    wxString num;
+    wxString netName;
+};
+
 /**
  * NETLIST_EXPORTER
  * is a abstract class used for the netlist exporters that eeschema supports.
@@ -88,15 +99,31 @@ struct LIB_PART_LESS_THAN
 class NETLIST_EXPORTER
 {
 protected:
+    /// Used to temporarily store and filter the list of pins of a schematic component
+    /// when generating schematic component data in netlist (comp section). No ownership
+    /// of members.
+    /// TODO(snh): Descope this object
+    std::vector<PIN_INFO> m_SortedComponentPinList;
+
     /// Used for "multi parts per package" components,
     /// avoids processing a lib component more than once.
     UNIQUE_STRINGS        m_ReferencesAlreadyFound;
 
-    /// unique library parts used. LIB_PART items are sorted by names
+    /// unique library parts used. LIB_PART items are s
+    /// orted by names
     std::set<LIB_PART*, LIB_PART_LESS_THAN> m_LibParts;
 
     /// The schematic we're generating a netlist for
     SCHEMATIC* m_schematic;
+
+    /**
+     * Function findNextComponentAndCreatePinList
+     * finds a component from the DrawList and builds
+     * its pin list in m_SortedComponentPinList. This list is sorted by pin num.
+     * the component is the next actual component after aItem
+     * (power symbols and virtual components that have their reference starting by '#'are skipped).
+     */
+    void CreatePinList( SCH_COMPONENT* aItem, SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Checks if the given component should be processed for netlisting.
@@ -106,6 +133,32 @@ protected:
      * @return the component if it should be processed, or nullptr
      */
     SCH_COMPONENT* findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
+
+    /**
+     * Function eraseDuplicatePins
+     * erase duplicate Pins from m_SortedComponentPinList (i.e. set pointer in this list to NULL).
+     * (This is a list of pins found in the whole schematic, for a single
+     * component.) These duplicate pins were put in list because some pins (powers... )
+     * are found more than one time when we have a multiple parts per package
+     * component. For instance, a 74ls00 has 4 parts, and therefore the VCC pin
+     * and GND pin appears 4 times in the list.
+     * Note: this list *MUST* be sorted by pin number (.m_PinNum member value)
+     * Also set the m_Flag member of "removed" NETLIST_OBJECT pin item to 1
+     */
+    void eraseDuplicatePins();
+
+    /**
+     * Function findAllUnitsOfComponent
+     * is used for "multiple parts per package" components.
+     * <p>
+     * Search the entire design for all units of \a aComponent based on
+     * matching reference designator, and for each unit, add all its pins
+     * to the temporary sorted pin list, m_SortedComponentPinList.
+     */
+    void findAllUnitsOfComponent( SCH_COMPONENT*  aComponent,
+                                  LIB_PART*       aEntry,
+                                  SCH_SHEET_PATH* aSheetPath );
+
 
 public:
 

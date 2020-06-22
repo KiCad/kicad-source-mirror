@@ -291,6 +291,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             if( !comp )
                 continue;
 
+            CreatePinList( comp, &sheet );
             SPICE_ITEM spiceItem;
             spiceItem.m_parent = comp;
 
@@ -321,26 +322,14 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             wxArrayString pinNames;
 
             // Store pin information
-            for( const auto& pin : comp->GetSchPins( &sheet ) )
+            for( const PIN_INFO& pin : m_SortedComponentPinList )
             {
-                if( auto conn = pin->Connection( sheet ) )
-                {
-                    const wxString& netName = conn->Name();
-
-                    // Skip unconnected pins
-                    CONNECTION_SUBGRAPH* sg =
-                            m_schematic->ConnectionGraph()->FindSubgraphByName( netName, sheet );
-
-                    if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
-                        continue;
-
                     // Create net mapping
-                    spiceItem.m_pins.push_back( netName );
-                    pinNames.Add( pin->GetName() );
+                spiceItem.m_pins.push_back( pin.netName );
+                pinNames.Add( pin.num );
 
-                    if( m_netMap.count( netName ) == 0 )
-                        m_netMap[netName] = netIdx++;
-                }
+                if( m_netMap.count( pin.netName ) == 0 )
+                    m_netMap[pin.netName] = netIdx++;
             }
 
             // Check if an alternative pin sequence is available:

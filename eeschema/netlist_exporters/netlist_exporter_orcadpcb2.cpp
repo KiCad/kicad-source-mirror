@@ -78,6 +78,8 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             if( !comp )
                 continue;
 
+            CreatePinList( comp, &sheet );
+
             if( comp->GetPartRef() && comp->GetPartRef()->GetFootprints().GetCount() != 0  )
                 cmpList.push_back( SCH_REFERENCE( comp, comp->GetPartRef().get(), sheet ) );
 
@@ -106,28 +108,12 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             ret |= fprintf( f, "\n" );
 
             // Write pin list:
-            std::vector<SCH_PIN*> pins;
-
-            for( const auto& pin : comp->GetSchPins( &sheet ) )
-                pins.emplace_back( pin );
-
-            std::sort( pins.begin(), pins.end(),
-                    []( const SCH_PIN* a, const SCH_PIN* b )
-                    {
-                        return UTIL::RefDesStringCompare( a->GetNumber(), b->GetNumber() ) < 0;
-                    } );
-
-            for( const auto* pin : pins )
+            for( const PIN_INFO& pin : m_SortedComponentPinList )
             {
-                if( auto conn = pin->Connection( sheet ) )
-                    netName = conn->Name();
-                else
-                    netName = wxT( "?" );
-
+                netName = pin.netName;
                 netName.Replace( wxT( " " ), wxT( "_" ) );
 
-                ret |= fprintf( f, "  ( %4.4s %s )\n", TO_UTF8( pin->GetNumber() ),
-                                TO_UTF8( netName ) );
+                ret |= fprintf( f, "  ( %4.4s %s )\n", TO_UTF8( pin.num ), TO_UTF8( netName ) );
             }
 
             ret |= fprintf( f, " )\n" );
