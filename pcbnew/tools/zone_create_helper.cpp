@@ -64,6 +64,18 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
     zoneInfo.SetIsKeepout( m_params.m_keepout );
     zoneInfo.m_Zone_45_Only = ( m_params.m_leaderMode == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
 
+    // If we don't have a net from highlighing, maybe we can get one from the selection
+    SELECTION_TOOL* selectionTool = m_tool.GetManager()->GetTool<SELECTION_TOOL>();
+
+    if( selectionTool && !selectionTool->GetSelection().Empty()
+            && zoneInfo.m_NetcodeSelection == -1 )
+    {
+        EDA_ITEM* item = *selectionTool->GetSelection().GetItems().begin();
+
+        if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+            zoneInfo.m_NetcodeSelection = bci->GetNetCode();
+    }
+
     if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON )
     {
         // Get the current default settings for zones
@@ -241,8 +253,6 @@ bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
     // the user's choice here can affect things like the colour of the preview
     if( !m_zone )
     {
-        m_tool.GetManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-
         if( m_params.m_sourceZone )
             m_zone = createZoneFromExisting( *m_params.m_sourceZone );
         else
@@ -250,6 +260,8 @@ bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
 
         if( m_zone )
         {
+            m_tool.GetManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+
             // set up poperties from zone
             const auto& settings = *m_parentView.GetPainter()->GetSettings();
             COLOR4D color = settings.GetColor( nullptr, m_zone->GetLayer() );
