@@ -424,15 +424,48 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
 
     VECTOR2I::extended_type distMax = VECTOR2I::ECOORD_MAX;
 
-    for( const auto& nodeA : m_nodes )
+    for( const auto& nodeA : aOtherNet.m_nodes )
     {
         if( nodeA->GetNoLine() )
             continue;
 
-        for( const auto& nodeB : aOtherNet.m_nodes )
+        auto fwd_it = m_nodes.lower_bound( nodeA );
+        auto rev_it = std::make_reverse_iterator( fwd_it );
+
+        for( ; fwd_it != m_nodes.end(); ++fwd_it )
         {
+            auto nodeB = *fwd_it;
+
             if( nodeB->GetNoLine() )
                 continue;
+
+            VECTOR2I::extended_type distX = nodeA->Pos().x - nodeB->Pos().x;
+
+            if( distX * distX > distMax )
+                break;
+
+            auto squaredDist = ( nodeA->Pos() - nodeB->Pos() ).SquaredEuclideanNorm();
+
+            if( squaredDist < distMax )
+            {
+                rv      = true;
+                distMax = squaredDist;
+                aNode1  = nodeA;
+                aNode2  = nodeB;
+            }
+        }
+
+        for( ++rev_it; rev_it != m_nodes.rend(); ++rev_it )
+        {
+            auto nodeB = *rev_it;
+
+            if( nodeB->GetNoLine() )
+                continue;
+
+            VECTOR2I::extended_type distX = nodeA->Pos().x - nodeB->Pos().x;
+
+            if( distX * distX > distMax )
+                break;
 
             auto squaredDist = ( nodeA->Pos() - nodeB->Pos() ).SquaredEuclideanNorm();
 

@@ -85,10 +85,10 @@ public:
      * Function MarkDirty()
      * Marks ratsnest for given net as 'dirty', i.e. requiring recomputation.
      */
-//    void MarkDirty()
-//    {
-//        m_dirty = true;
-//    }
+    void MarkDirty()
+    {
+        m_dirty = true;
+    }
 
     /**
      * Function IsDirty()
