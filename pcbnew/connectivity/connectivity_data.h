@@ -83,7 +83,7 @@ public:
     CONNECTIVITY_DATA();
     ~CONNECTIVITY_DATA();
 
-    CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems );
+    CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems, bool aSkipItems = false );
 
     /**
      * Function Build()
@@ -227,10 +227,6 @@ public:
     const std::vector<BOARD_CONNECTED_ITEM*> GetNetItems( int aNetCode,
             const KICAD_T aTypes[] ) const;
 
-    const std::vector<VECTOR2I> NearestUnconnectedTargets( const BOARD_CONNECTED_ITEM* aRef,
-            const VECTOR2I& aPos,
-            int aMaxCount = -1 );
-
     void BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aItems );
 
     std::shared_ptr<CN_CONNECTIVITY_ALGO> GetConnectivityAlgo() const
@@ -247,6 +243,8 @@ public:
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
 #ifndef SWIG
+    const std::vector<CN_EDGE> GetRatsnestForItems( const std::vector<BOARD_ITEM*> aItems );
+
     const std::vector<CN_EDGE> GetRatsnestForComponent( MODULE* aComponent, bool aSkipInternalConnections = false );
 #endif
 
@@ -261,6 +259,8 @@ private:
     std::vector<RN_NET*> m_nets;
 
     PROGRESS_REPORTER* m_progressReporter;
+
+    bool m_skipRatsnest = false;
 
     std::mutex m_lock;
 };
