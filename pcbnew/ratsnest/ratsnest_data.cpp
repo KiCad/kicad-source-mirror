@@ -424,6 +424,19 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
 
     VECTOR2I::extended_type distMax = VECTOR2I::ECOORD_MAX;
 
+    auto verify = [&]( auto& aTestNode1, auto& aTestNode2 )
+        {
+            auto squaredDist = ( aTestNode1->Pos() - aTestNode2->Pos() ).SquaredEuclideanNorm();
+
+            if( squaredDist < distMax )
+            {
+                rv      = true;
+                distMax = squaredDist;
+                aNode1  = aTestNode1;
+                aNode2  = aTestNode2;
+            }
+        };
+
     for( const auto& nodeA : aOtherNet.m_nodes )
     {
         if( nodeA->GetNoLine() )
@@ -444,18 +457,13 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
             if( distX * distX > distMax )
                 break;
 
-            auto squaredDist = ( nodeA->Pos() - nodeB->Pos() ).SquaredEuclideanNorm();
-
-            if( squaredDist < distMax )
-            {
-                rv      = true;
-                distMax = squaredDist;
-                aNode1  = nodeA;
-                aNode2  = nodeB;
-            }
+            verify( nodeA, nodeB );
         }
 
-        for( ++rev_it; rev_it != m_nodes.rend(); ++rev_it )
+        if( rev_it != m_nodes.rend() )
+            ++rev_it;
+
+        for( ; rev_it != m_nodes.rend(); ++rev_it )
         {
             auto nodeB = *rev_it;
 
@@ -467,15 +475,7 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
             if( distX * distX > distMax )
                 break;
 
-            auto squaredDist = ( nodeA->Pos() - nodeB->Pos() ).SquaredEuclideanNorm();
-
-            if( squaredDist < distMax )
-            {
-                rv      = true;
-                distMax = squaredDist;
-                aNode1  = nodeA;
-                aNode2  = nodeB;
-            }
+            verify( nodeA, nodeB );
         }
     }
 
