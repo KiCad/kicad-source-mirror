@@ -82,7 +82,7 @@ public:
     CONNECTIVITY_DATA();
     ~CONNECTIVITY_DATA();
 
-    CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems );
+    CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems, bool aSkipItems = false );
 
     /**
      * Function Build()
@@ -244,6 +244,8 @@ public:
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
 #ifndef SWIG
+    const std::vector<CN_EDGE> GetRatsnestForItems( const std::vector<BOARD_ITEM*> aItems );
+
     const std::vector<CN_EDGE> GetRatsnestForComponent( MODULE* aComponent, bool aSkipInternalConnections = false );
 #endif
 
@@ -258,6 +260,8 @@ private:
     std::vector<RN_NET*> m_nets;
 
     PROGRESS_REPORTER* m_progressReporter;
+
+    bool m_skipRatsnest = false;
 
     std::mutex m_lock;
 };

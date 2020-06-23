@@ -42,7 +42,8 @@ CONNECTIVITY_DATA::CONNECTIVITY_DATA()
 }
 
 
-CONNECTIVITY_DATA::CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems )
+CONNECTIVITY_DATA::CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems, bool aSkipRatsnest )
+    : m_skipRatsnest( aSkipRatsnest )
 {
     Build( aItems );
     m_progressReporter = nullptr;
@@ -187,7 +188,8 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
 
     m_connAlgo->ClearDirtyFlags();
 
-    updateRatsnest();
+    if( !m_skipRatsnest )
+        updateRatsnest();
 }
 
 
@@ -254,7 +256,7 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
         return ;
     }
 
-    CONNECTIVITY_DATA connData( aItems );
+    CONNECTIVITY_DATA connData( aItems, true );
     BlockRatsnestItems( aItems );
 
     for( unsigned int nc = 1; nc < connData.m_nets.size(); nc++ )
@@ -278,27 +280,19 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
         }
     }
 
-    for( auto net : connData.m_nets )
+    const auto& edges = GetRatsnestForItems( aItems );
+
+    for( const auto& edge : edges )
     {
-        if( !net )
-            continue;
+        const auto& nodeA   = edge.GetSourceNode();
+        const auto& nodeB   = edge.GetTargetNode();
+        RN_DYNAMIC_LINE l;
 
-        const auto& edges = net->GetUnconnected();
-
-        if( edges.empty() )
-            continue;
-
-        for( const auto& edge : edges )
-        {
-            const auto& nodeA   = edge.GetSourceNode();
-            const auto& nodeB   = edge.GetTargetNode();
-            RN_DYNAMIC_LINE l;
-
-            l.a = nodeA->Pos();
-            l.b = nodeB->Pos();
-            l.netCode = 0;
-            m_dynamicRatsnest.push_back( l );
-        }
+        // Use the parents' positions
+        l.a = nodeA->Parent()->GetPosition();
+        l.b = nodeB->Parent()->GetPosition();
+        l.netCode = 0;
+        m_dynamicRatsnest.push_back( l );
     }
 }
 
@@ -660,6 +654,56 @@ void CONNECTIVITY_DATA::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
     m_connAlgo->SetProgressReporter( m_progressReporter );
+}
+
+
+const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<BOARD_ITEM*> aItems )
+{
+    std::set<int> nets;
+    std::vector<CN_EDGE> edges;
+    std::set<BOARD_ITEM*> item_set( aItems.begin(), aItems.end() );
+
+    for( auto item : aItems )
+    {
+        auto conn_item = static_cast<BOARD_CONNECTED_ITEM*>( item );
+
+        if( item->Type() == PCB_MODULE_T )
+        {
+            auto component = static_cast<MODULE*>( item );
+
+            for( auto pad : component->Pads() )
+            {
+                nets.insert( pad->GetNetCode() );
+                item_set.insert( pad );
+            }
+        }
+        else
+        {
+            nets.insert( conn_item->GetNetCode() );
+        }
+    }
+
+    for( const auto& netcode : nets )
+    {
+        const auto& net = GetRatsnestForNet( netcode );
+
+        for( const auto& edge : net->GetEdges() )
+        {
+            auto srcNode = edge.GetSourceNode();
+            auto dstNode = edge.GetTargetNode();
+
+            auto srcParent = static_cast<BOARD_ITEM*>( srcNode->Parent() );
+            auto dstParent = static_cast<BOARD_ITEM*>( dstNode->Parent() );
+
+            bool srcFound = ( item_set.find(srcParent) != item_set.end() );
+            bool dstFound = ( item_set.find(dstParent) != item_set.end() );
+
+            if ( srcFound && dstFound )
+                edges.push_back( edge );
+        }
+    }
+
+    return edges;
 }
 
 
