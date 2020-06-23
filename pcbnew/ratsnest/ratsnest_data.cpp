@@ -111,8 +111,10 @@ void RN_NET::kruskalMST( std::priority_queue<CN_EDGE> &aEdges )
 
     m_rnEdges.clear();
 
-    for( size_t i = 0; i < m_nodes.size(); i++ )
-        m_nodes[i]->SetTag( i );
+    int i = 0;
+
+    for( auto& node : m_nodes )
+        node->SetTag( i++ );
 
     while( !aEdges.empty() )
     {
@@ -316,7 +318,7 @@ void RN_NET::compute()
             auto last = ++m_nodes.begin();
 
             // There can be only one possible connection, but it is missing
-            CN_EDGE edge (*m_nodes.begin(), *last );
+            CN_EDGE edge ( *m_nodes.begin(), *last );
             edge.GetSourceNode()->SetTag( 0 );
             edge.GetTargetNode()->SetTag( 1 );
 
@@ -397,7 +399,7 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
         for( unsigned int i = 0; i < nAnchors; i++ )
         {
             anchors[i]->SetCluster( aCluster );
-            m_nodes.push_back(anchors[i]);
+            m_nodes.insert( anchors[i] );
 
             if( firstAnchor )
             {

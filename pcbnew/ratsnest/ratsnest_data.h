@@ -34,6 +34,7 @@
 #include <math/box2.h>
 
 #include <deque>
+#include <set>
 #include <unordered_set>
 #include <unordered_map>
 
@@ -51,6 +52,16 @@ class CN_CONNECTIVITY_ALGO;
 struct RN_NODE_OR_FILTER;
 struct RN_NODE_AND_FILTER;
 
+struct CN_PTR_CMP
+{
+    bool operator()( const CN_ANCHOR_PTR& aItem, const CN_ANCHOR_PTR& bItem ) const
+    {
+        if( aItem->Pos().x == bItem->Pos().x )
+            return aItem->Pos().y < bItem->Pos().y;
+        else
+            return aItem->Pos().x < bItem->Pos().x;
+    }
+};
 
 /**
  * RN_NET
@@ -74,10 +85,10 @@ public:
      * Function MarkDirty()
      * Marks ratsnest for given net as 'dirty', i.e. requiring recomputation.
      */
-    void MarkDirty()
-    {
-        m_dirty = true;
-    }
+//    void MarkDirty()
+//    {
+//        m_dirty = true;
+//    }
 
     /**
      * Function IsDirty()
@@ -152,7 +163,7 @@ protected:
     void kruskalMST( std::priority_queue<CN_EDGE> &aEdges );
 
     ///> Vector of nodes
-    std::vector<CN_ANCHOR_PTR> m_nodes;
+    std::multiset<CN_ANCHOR_PTR, CN_PTR_CMP> m_nodes;
 
     ///> Vector of edges that make pre-defined connections
     std::vector<CN_EDGE> m_boardEdges;
