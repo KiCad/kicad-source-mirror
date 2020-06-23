@@ -195,23 +195,13 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
 }
 
 
-bool EDA_DRAW_FRAME::DispatchBehindModalDialog( wxKeyEvent& aEvent )
+void EDA_DRAW_FRAME::ToggleUserUnits()
 {
-    // Never process hotkeys when a text entry field is focused
-    if( dynamic_cast<wxTextEntry*>( FindFocus() ) )
-        return false;
+    SetUserUnits( m_userUnits == EDA_UNITS::INCHES ? EDA_UNITS::MILLIMETRES : EDA_UNITS::INCHES );
+    unitsChangeRefresh();
 
-    static std::set<const TOOL_ACTION*> whiteList = { &ACTIONS::toggleUnits,
-                                                      &ACTIONS::imperialUnits,
-                                                      &ACTIONS::metricUnits };
-
-    bool dummy;
-    OPT<TOOL_EVENT> evt = m_toolDispatcher->GetToolEvent( &aEvent, &dummy );
-
-    if( evt && evt->Action() == TA_KEY_PRESSED )
-        return m_toolManager->DispatchHotKey( *evt, &whiteList );
-
-    return false;
+    wxCommandEvent e( UNITS_CHANGED );
+    ProcessEventLocally( e );
 }
 
 

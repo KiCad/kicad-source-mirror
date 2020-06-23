@@ -420,11 +420,9 @@ public:
      * Function dispatchHotKey()
      * Handles specific events, that are intended for TOOL_MANAGER rather than tools.
      * @param aEvent is the event to be processed.
-     * @param aWhiteList an optional list of allowed actions to run
      * @return true if the event was processed and should not go any further.
      */
-    bool DispatchHotKey( const TOOL_EVENT& aEvent,
-                         std::set<const TOOL_ACTION*>* aWhiteList = nullptr );
+    bool DispatchHotKey( const TOOL_EVENT& aEvent );
 
 private:
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;

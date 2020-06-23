@@ -222,7 +222,7 @@ public:
 
     void ChangeUserUnits( EDA_UNITS aUnits );
 
-    virtual bool DispatchBehindModalDialog( wxKeyEvent& aEvent ) { return false; }
+    virtual void ToggleUserUnits() { }
 
     SETTINGS_MANAGER* GetSettingsManager() const { return m_settingsManager; }
 

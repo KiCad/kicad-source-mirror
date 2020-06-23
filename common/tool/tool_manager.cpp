@@ -767,11 +767,10 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 }
 
 
-bool TOOL_MANAGER::DispatchHotKey( const TOOL_EVENT& aEvent,
-                                   std::set<const TOOL_ACTION*>* aWhiteList )
+bool TOOL_MANAGER::DispatchHotKey( const TOOL_EVENT& aEvent )
 {
     if( aEvent.Action() == TA_KEY_PRESSED )
-        return m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode(), aWhiteList );
+        return m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() );
 
     return false;
 }

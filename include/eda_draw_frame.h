@@ -60,8 +60,6 @@ using KIGFX::RENDER_SETTINGS;
 #define FOOTPRINT_VIEWER_FRAME_NAME         wxT( "ModViewFrame" )
 #define FOOTPRINT_VIEWER_FRAME_NAME_MODAL   wxT( "ModViewFrameModal" )
 #define PCB_EDIT_FRAME_NAME                 wxT( "PcbFrame" )
-#define SHAPE_EDIT_FRAME_NAME               wxT( "ShapeEditFrame" )
-#define SHAPE_EDIT_FRAME_NAME_MODAL         wxT( "ShapeEditFrameModal" )
 
 
 /**
@@ -116,8 +114,6 @@ protected:
     virtual void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
     void unitsChangeRefresh() override;
-
-    bool DispatchBehindModalDialog( wxKeyEvent& aEvent ) override;
 
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
@@ -186,6 +182,8 @@ public:
      */
     bool GetShowPolarCoords() const { return m_PolarCoords; }
     void SetShowPolarCoords( bool aShow ) { m_PolarCoords = aShow; }
+
+    void ToggleUserUnits() override;
 
     /**
      * Return the origin of the axis used for plotting and various exports.

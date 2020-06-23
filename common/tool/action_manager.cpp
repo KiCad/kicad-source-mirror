@@ -85,7 +85,7 @@ TOOL_ACTION* ACTION_MANAGER::FindAction( const std::string& aActionName ) const
 }
 
 
-bool ACTION_MANAGER::RunHotKey( int aHotKey, std::set<const TOOL_ACTION*>* aWhiteList ) const
+bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 {
     int key = aHotKey & ~MD_MODIFIER_MASK;
     int mod = aHotKey & MD_MODIFIER_MASK;
@@ -125,9 +125,6 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey, std::set<const TOOL_ACTION*>* aWhit
 
     for( const TOOL_ACTION* action : actions )
     {
-        if( aWhiteList && !aWhiteList->count( action ) )
-            continue;
-
         if( action->GetScope() == AS_GLOBAL )
         {
             // Store the global action in case there are no context actions to run

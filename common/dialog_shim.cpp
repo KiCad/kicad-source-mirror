@@ -487,11 +487,16 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
 
 void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
 {
-    if( m_parentFrame && m_parentFrame->DispatchBehindModalDialog( aEvt ) )
-        return;
-
+    if( aEvt.GetKeyCode() == 'U' && aEvt.GetModifiers() == wxMOD_CONTROL )
+    {
+        if( m_parentFrame )
+        {
+            m_parentFrame->ToggleUserUnits();
+            return;
+        }
+    }
     // shift-return (Mac default) or Ctrl-Return (GTK) for OK
-    if( aEvt.GetKeyCode() == WXK_RETURN && ( aEvt.ShiftDown() || aEvt.ControlDown() ) )
+    else if( aEvt.GetKeyCode() == WXK_RETURN && ( aEvt.ShiftDown() || aEvt.ControlDown() ) )
     {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
         return;
