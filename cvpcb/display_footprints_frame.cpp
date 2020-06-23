@@ -192,7 +192,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateVToolbar()
 void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
 {
     if( m_optionsToolBar )
-        m_optionsToolBar->Clear();
+        m_optionsToolBar->ClearToolbar();
     else
         m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
@@ -227,7 +227,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     // So we do not recreate them after clearing the tools.
 
     if( m_mainToolBar )
-        m_mainToolBar->Clear();
+        m_mainToolBar->ClearToolbar();
     else
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );

@@ -37,7 +37,7 @@
 void LIB_VIEW_FRAME::ReCreateHToolbar()
 {
     if( m_mainToolBar )
-        m_mainToolBar->Clear();
+        m_mainToolBar->ClearToolbar();
     else
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR,
                                             wxDefaultPosition, wxDefaultSize,

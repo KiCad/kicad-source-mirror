@@ -43,7 +43,7 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
     wxWindowUpdateLocker dummy( this );
 
     if( m_mainToolBar )
-        m_mainToolBar->Clear();
+        m_mainToolBar->ClearToolbar();
     else
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );

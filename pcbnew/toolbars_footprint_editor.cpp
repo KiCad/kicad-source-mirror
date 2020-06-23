@@ -42,7 +42,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     // So we do not recreate them after clearing the tools.
 
     if( m_mainToolBar )
-        m_mainToolBar->Clear();
+        m_mainToolBar->ClearToolbar();
     else
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
@@ -140,7 +140,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
 {
     if( m_drawToolBar )
-        m_drawToolBar->Clear();
+        m_drawToolBar->ClearToolbar();
     else
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
@@ -170,7 +170,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
 void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
 {
     if( m_optionsToolBar )
-        m_optionsToolBar->Clear();
+        m_optionsToolBar->ClearToolbar();
     else
         m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );

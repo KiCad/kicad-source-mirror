@@ -589,7 +589,7 @@ void FOOTPRINT_WIZARD_FRAME::Update3DView( bool aForceReload, const wxString* aT
 void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
 {
     if( m_mainToolBar )
-        m_mainToolBar->Clear();
+        m_mainToolBar->ClearToolbar();
     else
         m_mainToolBar = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
