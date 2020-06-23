@@ -912,6 +912,12 @@ int ROUTER_TOOL::ChangeRouterMode( const TOOL_EVENT& aEvent )
 }
 
 
+PNS::PNS_MODE ROUTER_TOOL::GetRouterMode()
+{
+    return m_router->Settings().Mode();
+}
+
+
 void ROUTER_TOOL::breakTrack()
 {
     if( m_startItem && m_startItem->OfKind( PNS::ITEM::SEGMENT_T ) )

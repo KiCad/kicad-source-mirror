@@ -46,6 +46,8 @@ public:
     int ChangeRouterMode( const TOOL_EVENT& aEvent );
     int CustomTrackWidthDialog( const TOOL_EVENT& aEvent );
 
+    PNS::PNS_MODE GetRouterMode();
+
     void setTransitions() override;
 
     // A filter for narrowing a collection representing a simple corner

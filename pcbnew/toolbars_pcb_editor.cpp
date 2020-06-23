@@ -37,11 +37,15 @@
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
+#include <router/pns_routing_settings.h>
+#include <router/router_tool.h>
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>
 #include <tool/action_toolbar.h>
 #include <tool/actions.h>
+#include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/selection_tool.h>
 #include <view/view.h>
 #include <wx/wupdlock.h>
 
@@ -379,6 +383,41 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( PCB_ACTIONS::drillOrigin,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,        ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::measureTool,              ACTION_TOOLBAR::TOGGLE );
+
+    auto isHighlightMode =
+        [this]( const SELECTION& aSel )
+        {
+            ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
+            return tool->GetRouterMode() == PNS::RM_MarkObstacles;
+        };
+
+    auto isShoveMode =
+        [this]( const SELECTION& aSel )
+        {
+            ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
+            return tool->GetRouterMode() == PNS::RM_Shove;
+        };
+
+    auto isWalkaroundMode =
+        [this]( const SELECTION& aSel )
+        {
+            ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
+            return tool->GetRouterMode() == PNS::RM_Walkaround;
+        };
+
+    SELECTION_TOOL*   selTool   = m_toolManager->GetTool<SELECTION_TOOL>();
+    CONDITIONAL_MENU* routeMenu = new CONDITIONAL_MENU( false, selTool );
+    routeMenu->AddCheckItem( PCB_ACTIONS::routerHighlightMode, isHighlightMode );
+    routeMenu->AddCheckItem( PCB_ACTIONS::routerShoveMode, isShoveMode );
+    routeMenu->AddCheckItem( PCB_ACTIONS::routerWalkaroundMode, isWalkaroundMode );
+    routeMenu->AddSeparator();
+    routeMenu->AddItem( PCB_ACTIONS::routerSettingsDialog, SELECTION_CONDITIONS::ShowAlways );
+    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, routeMenu );
+
+    CONDITIONAL_MENU* zoneMenu = new CONDITIONAL_MENU( false, selTool );
+    zoneMenu->AddItem( PCB_ACTIONS::zoneFillAll, SELECTION_CONDITIONS::ShowAlways );
+    zoneMenu->AddItem( PCB_ACTIONS::zoneUnfillAll, SELECTION_CONDITIONS::ShowAlways );
+    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::drawZone, zoneMenu );
 
     m_drawToolBar->Realize();
 }
