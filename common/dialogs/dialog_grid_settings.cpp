@@ -29,7 +29,7 @@
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <tool/grid_menu.h>
-
+#include <tool/common_tools.h>
 
 DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
     DIALOG_GRID_SETTINGS_BASE( aParent ),
@@ -87,8 +87,11 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
     gridCfg.fast_grid_1 = m_grid1Ctrl->GetSelection();
     gridCfg.fast_grid_2 = m_grid2Ctrl->GetSelection();
 
-    // Notify GAL
+    // Notify TOOLS
     TOOL_MANAGER* mgr = m_parent->GetToolManager();
+    mgr->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+    // Notify GAL
     mgr->RunAction( ACTIONS::gridPreset, true, gridCfg.last_size_idx );
     mgr->RunAction( ACTIONS::gridSetOrigin, true, new VECTOR2D( m_parent->GetGridOrigin() ) );
 

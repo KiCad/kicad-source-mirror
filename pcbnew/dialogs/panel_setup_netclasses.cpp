@@ -279,8 +279,8 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     m_Pcb->SynchronizeNetsAndNetClasses();
     m_BrdSettings->SetCurrentNetClass( NETCLASS::Default );
 
-    if( auto toolmgr = m_Frame->GetToolManager() )
-        toolmgr->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    if( m_Frame->GetToolManager() )
+        m_Frame->GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     return true;
 }

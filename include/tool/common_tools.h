@@ -100,6 +100,7 @@ private:
     int doZoomToPreset( int idx, bool aCenterOnCursor );
 
     std::vector<VECTOR2I> m_grids;  // grids from APP_SETTINGS converted to internal units
+                                    // and with the user grid appended
 };
 
 #endif

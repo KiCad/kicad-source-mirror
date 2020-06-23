@@ -45,13 +45,18 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<EDA_DRAW_FRAME>();
 
+    GRID_SETTINGS& settings = m_toolMgr->GetSettings()->m_Window.grid;
+
     m_grids.clear();
 
-    for( const wxString& gridDef : m_toolMgr->GetSettings()->m_Window.grid.sizes )
+    for( const wxString& gridDef : settings.sizes )
     {
         int gridSize = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridDef, true );
         m_grids.emplace_back( gridSize, gridSize );
     }
+
+    m_grids.emplace_back( ValueFromString( EDA_UNITS::MILLIMETRES, settings.user_grid_x, true ),
+                          ValueFromString( EDA_UNITS::MILLIMETRES, settings.user_grid_y, true ) );
 
     OnGridChanged();
 }
