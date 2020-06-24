@@ -437,11 +437,17 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
             }
         };
 
+    /// Sweep-line algorithm to cut the number of comparisons to find the closest point
+    ///
+    /// Step 1: The outer loop needs to be the subset (selected nodes) as it is a linear search
     for( const auto& nodeA : aOtherNet.m_nodes )
     {
         if( nodeA->GetNoLine() )
             continue;
 
+        /// Step 2: O( log n ) search to identify a close element ordered by x
+        /// The fwd_it iterator will move forward through the elements while
+        /// the rev_it iterator will move backward through the same set
         auto fwd_it = m_nodes.lower_bound( nodeA );
         auto rev_it = std::make_reverse_iterator( fwd_it );
 
@@ -454,12 +460,15 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
 
             VECTOR2I::extended_type distX = nodeA->Pos().x - nodeB->Pos().x;
 
+            /// As soon as the x distance (primary sort) is larger than the smallest distance,
+            /// stop checking further elements
             if( distX * distX > distMax )
                 break;
 
             verify( nodeA, nodeB );
         }
 
+        /// Step 3: using the same starting point, check points backwards for closer points
         if( rev_it != m_nodes.rend() )
             ++rev_it;
 
