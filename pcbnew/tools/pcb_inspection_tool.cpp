@@ -174,14 +174,18 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
             net = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] )->GetNetCode();
     }
 
+    auto& netcodes = settings->GetHighlightNetCodes();
+
     // Toggle highlight when the same net was picked
-    if( net > 0 && settings->GetHighlightNetCodes().count( net ) )
+    if( net > 0 && netcodes.count( net ) )
         enableHighlight = !settings->IsHighlightEnabled();
 
     if( enableHighlight != settings->IsHighlightEnabled()
-            || !settings->GetHighlightNetCodes().count( net ) )
+            || !netcodes.count( net ) )
     {
-        m_lastNetcode = *settings->GetHighlightNetCodes().begin();
+        if( !netcodes.empty() )
+            m_lastNetcode = *netcodes.begin();
+
         settings->SetHighlight( enableHighlight, net );
         m_toolMgr->GetView()->UpdateAllLayersColor();
     }
