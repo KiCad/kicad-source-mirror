@@ -2394,6 +2394,25 @@ SCH_JUNCTION* SCH_SEXPR_PARSER::parseJunction()
             NeedRIGHT();
             break;
 
+        case T_diameter:
+            junction->SetDiameter( parseInternalUnits( "junction diameter" ) );
+            NeedRIGHT();
+            break;
+
+        case T_color:
+        {
+            COLOR4D color;
+
+            color.r = parseInt( "red" ) / 255.0;
+            color.g = parseInt( "green" ) / 255.0;
+            color.b = parseInt( "blue" ) / 255.0;
+            color.a = Clamp( parseDouble( "alpha" ), 0.0, 1.0 );
+
+            junction->SetColor( color );
+            NeedRIGHT();
+            break;
+        }
+
         default:
             Expecting( "at" );
         }

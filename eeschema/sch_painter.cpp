@@ -261,6 +261,20 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
         if( lineColor != COLOR4D::UNSPECIFIED )
             color = lineColor;
     }
+    else if( aItem->Type() == SCH_BUS_WIRE_ENTRY_T )
+    {
+        COLOR4D busEntryColor = static_cast<const SCH_BUS_WIRE_ENTRY*>( aItem )->GetStrokeColor();
+
+        if( busEntryColor != COLOR4D::UNSPECIFIED )
+            color = busEntryColor;
+    }
+    else if( aItem->Type() == SCH_JUNCTION_T )
+    {
+        COLOR4D junctionColor = static_cast<const SCH_JUNCTION*>( aItem )->GetColor();
+
+        if( junctionColor != COLOR4D::UNSPECIFIED )
+            color = junctionColor;
+    }
     else if( aItem->Type() == SCH_SHEET_T )
     {
         SCH_SHEET* sheet = (SCH_SHEET*) aItem;
@@ -1189,12 +1203,17 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 
     COLOR4D color = getRenderColor( aJct, aJct->GetLayer(), drawingShadows );
 
+    int junctionSize = m_schSettings.m_JunctionSize / 2.0;
+
+    if( aJct->GetDiameter() != 0 )
+        junctionSize = aJct->GetDiameter() / 2;
+
     m_gal->SetIsStroke( drawingShadows );
     m_gal->SetLineWidth( getLineWidth( aJct, drawingShadows ) );
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( !drawingShadows );
     m_gal->SetFillColor( color );
-    m_gal->DrawCircle( aJct->GetPosition(), m_schSettings.m_JunctionSize / 2.0 );
+    m_gal->DrawCircle( aJct->GetPosition(), junctionSize );
 }
 
 

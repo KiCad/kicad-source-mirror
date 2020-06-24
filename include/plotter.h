@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,6 +94,16 @@ enum class PLOT_DASH_TYPE
     DASHDOT,
     LAST_TYPE = DASHDOT
 };
+
+/**
+ * Convert KiCad line plot styles to wxWidgets device context styles.
+ *
+ * @param aType The KiCad line plot style to convert.
+ *
+ * @return The equivalent wxPenStyle of \a aType.
+ */
+wxPenStyle GetwxPenStyle( PLOT_DASH_TYPE aType );
+
 
 /**
  * Base plotter engine class. General rule: all the interface with the caller

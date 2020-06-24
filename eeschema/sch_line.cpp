@@ -44,26 +44,6 @@
 #include <schematic.h>
 
 
-static wxPenStyle getwxPenStyle( PLOT_DASH_TYPE aType )
-{
-    switch( aType )
-    {
-    case PLOT_DASH_TYPE::DEFAULT:
-    case PLOT_DASH_TYPE::SOLID:
-        return wxPENSTYLE_SOLID;
-    case PLOT_DASH_TYPE::DASH:
-        return wxPENSTYLE_SHORT_DASH;
-    case PLOT_DASH_TYPE::DOT:
-        return wxPENSTYLE_DOT;
-    case PLOT_DASH_TYPE::DASHDOT:
-        return wxPENSTYLE_DOT_DASH;
-    default:
-        wxFAIL_MSG( "Unhandled PlotDashType" );
-        return wxPENSTYLE_SOLID;
-    }
-}
-
-
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     SCH_ITEM( NULL, SCH_LINE_T )
 {
@@ -310,7 +290,7 @@ void SCH_LINE::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
         color = aSettings->GetLayerColor( m_Layer );
 
     GRLine( nullptr, DC, start.x, start.y, end.x, end.y, penWidth, color,
-            getwxPenStyle( (PLOT_DASH_TYPE) GetLineStyle() ) );
+            GetwxPenStyle( GetLineStyle() ) );
 }
 
 
@@ -750,7 +730,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter )
     if( m_stroke.GetColor() != COLOR4D::UNSPECIFIED )
         aPlotter->SetColor( m_stroke.GetColor() );
     else
-        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( GetLayer() ) );
+        aPlotter->SetColor( settings->GetLayerColor( GetLayer() ) );
 
     switch( m_Layer )
     {
@@ -760,6 +740,9 @@ void SCH_LINE::Plot( PLOTTER* aPlotter )
     }
 
     penWidth = std::max( penWidth, aPlotter->RenderSettings()->GetDefaultPenWidth() );
+
+    if( m_stroke.GetWidth() != 0 )
+        penWidth = m_stroke.GetWidth();
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetDash( GetLineStyle() );
@@ -784,12 +767,14 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     switch( GetLayer() )
     {
-    case LAYER_WIRE: msg = _( "Net Wire" );  break;
-    case LAYER_BUS:  msg = _( "Bus Wire" );  break;
-    default:         msg = _( "Graphical" ); return;
+    case LAYER_WIRE: msg = _( "Wire" );      break;
+    case LAYER_BUS:  msg = _( "Bus" );       break;
+    default:         msg = _( "Graphical" ); break;
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Type" ), msg, DARKCYAN ) );
+    msg = GetLineStyleName( GetLineStyle() );
+    aList.push_back( MSG_PANEL_ITEM( _( "Line Style" ), msg, DARKCYAN ) );
 
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
 

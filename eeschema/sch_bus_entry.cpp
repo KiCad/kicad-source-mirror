@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 #include <bitmaps.h>
 #include <eeschema_config.h>
 #include <general.h>
+#include <schematic.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
 #include <sch_line.h>
@@ -131,13 +132,19 @@ const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 
 int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
 {
+    if( m_stroke.GetWidth() == 0 && Schematic() )
+        return std::max( Schematic()->Settings().m_DefaultWireThickness, 1 );
+
     return ( m_stroke.GetWidth() == 0 ) ? 1 : m_stroke.GetWidth();
 }
 
 
 int SCH_BUS_BUS_ENTRY::GetPenWidth() const
 {
-    return 1;
+    if( m_stroke.GetWidth() == 0 && Schematic() )
+        return std::max( Schematic()->Settings().m_DefaultBusThickness, 1 );
+
+    return ( m_stroke.GetWidth() == 0 ) ? 1 : m_stroke.GetWidth();
 }
 
 
@@ -164,11 +171,13 @@ void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLis
 void SCH_BUS_ENTRY_BASE::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = aSettings->GetLayerColor( m_Layer );
-    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    COLOR4D color = ( GetStrokeColor()  == COLOR4D::UNSPECIFIED ) ?
+            aSettings->GetLayerColor( m_Layer ) : GetStrokeColor();
+    int     penWidth = ( GetPenWidth() == 0 ) ? aSettings->GetDefaultPenWidth() : GetPenWidth();
 
     GRLine( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, m_End().x + aOffset.x,
-            m_End().y + aOffset.y, penWidth, color );
+            m_End().y + aOffset.y, penWidth, color,
+            GetwxPenStyle( (PLOT_DASH_TYPE) GetStrokeStyle() ) );
 }
 
 
@@ -356,10 +365,15 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aA
 
 void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter )
 {
-    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    auto* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+
+    COLOR4D color = ( GetStrokeColor() == COLOR4D::UNSPECIFIED ) ?
+            settings->GetLayerColor( m_Layer ) : GetStrokeColor();
+    int     penWidth = ( GetPenWidth() == 0 ) ? settings->GetDefaultPenWidth() : GetPenWidth();
 
     aPlotter->SetCurrentLineWidth( penWidth );
-    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( GetLayer() ) );
+    aPlotter->SetColor( color );
+    aPlotter->SetDash( GetStrokeStyle() );
     aPlotter->MoveTo( m_pos );
     aPlotter->FinishTo( m_End() );
 }

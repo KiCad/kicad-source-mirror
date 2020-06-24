@@ -39,6 +39,7 @@
 #include <sch_view.h>
 #include <sch_line.h>
 #include <sch_bus_entry.h>
+#include <sch_junction.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <ws_proxy_view_item.h>
@@ -51,6 +52,7 @@
 #include <dialogs/dialog_edit_component_in_schematic.h>
 #include <dialogs/dialog_edit_sheet_pin.h>
 #include <dialogs/dialog_edit_one_field.h>
+#include <dialogs/dialog_junction_props.h>
 #include "sch_drawing_tools.h"
 #include <math/util.h>      // for KiROUND
 #include <pgm_base.h>
@@ -208,6 +210,12 @@ bool SCH_EDIT_TOOL::Init()
                   && eeSelection->AllItemsHaveLineStroke() ) )
                     return false;
 
+                if( aSel.GetSize() != 1
+                        && !( aSel.GetSize() >= 1
+                            && ( firstItem->Type() == SCH_JUNCTION_T )
+                            && eeSelection->AreAllItemsIdentical() ) )
+                    return false;
+
                 switch( firstItem->Type() )
                 {
                 case SCH_COMPONENT_T:
@@ -231,6 +239,9 @@ bool SCH_EDIT_TOOL::Init()
                             return false;
                     }
 
+                    return true;
+
+                case SCH_JUNCTION_T:
                     return true;
 
                 default:
@@ -1278,6 +1289,12 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         break;
 
+    case SCH_JUNCTION_T:
+        if( !selection.AreAllItemsIdentical() )
+            return 0;
+
+        break;
+
     default:
         if( selection.Size() > 1 )
             return 0;
@@ -1420,8 +1437,29 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     }
     break;
 
-    case SCH_MARKER_T:        // These items have no properties to edit
     case SCH_JUNCTION_T:
+    {
+        std::deque<SCH_JUNCTION*> junctions;
+
+        for( auto selItem : selection.Items() )
+        {
+            SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( selItem );
+
+            wxCHECK( junction, 0 );
+
+            junctions.push_back( junction );
+        }
+
+        DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+            m_frame->OnModify();
+        }
+    }
+
+    case SCH_MARKER_T:        // These items have no properties to edit
     case SCH_NO_CONNECT_T:
         break;
 

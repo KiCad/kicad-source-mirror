@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include <plotter.h>
 #include <bitmaps.h>
 
+#include <sch_painter.h>
 #include <sch_junction.h>
 #include <netlist_object.h>
 #include <sch_connection.h>
@@ -42,10 +43,12 @@
 #include <settings/color_settings.h>
 
 
-SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos, SCH_LAYER_ID aLayer ) :
+SCH_JUNCTION::SCH_JUNCTION( const wxPoint& aPosition, int aDiameter, SCH_LAYER_ID aLayer ) :
     SCH_ITEM( NULL, SCH_JUNCTION_T )
 {
-    m_pos   = pos;
+    m_pos   = aPosition;
+    m_color = COLOR4D::UNSPECIFIED;
+    m_diameter = aDiameter;
     m_Layer = aLayer;
 }
 
@@ -63,6 +66,8 @@ void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
 
     SCH_JUNCTION* item = (SCH_JUNCTION*) aItem;
     std::swap( m_pos, item->m_pos );
+    std::swap( m_diameter, item->m_diameter );
+    std::swap( m_color, item->m_color );
 }
 
 
@@ -81,6 +86,9 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
     int size =
             Schematic() ? Schematic()->Settings().m_JunctionSize : Mils2iu( DEFAULT_JUNCTION_DIAM );
 
+    if( m_diameter != 0 )
+        size = m_diameter;
+
     rect.SetOrigin( m_pos );
     rect.Inflate( ( GetPenWidth() + size ) / 2 );
 
@@ -91,10 +99,16 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 void SCH_JUNCTION::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC    = aSettings->GetPrintDC();
-    COLOR4D color = aSettings->GetLayerColor( GetLayer() );
+    COLOR4D color = ( m_color == COLOR4D::UNSPECIFIED ) ? aSettings->GetLayerColor( GetLayer() ) :
+            m_color ;
+    int diameter =
+            Schematic() ? Schematic()->Settings().m_JunctionSize : Mils2iu( DEFAULT_JUNCTION_DIAM );
+
+    if( m_diameter != 0 )
+        diameter = m_diameter;
 
     GRFilledCircle( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
-                    Schematic()->Settings().m_JunctionSize / 2, 0, color, color );
+                    diameter / 2, 0, color, color );
 }
 
 
@@ -150,7 +164,8 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os ) const
     // XML output:
     wxString s = GetClass();
 
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << m_pos << "/>\n";
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << m_pos << ", " << m_diameter
+                                 << "/>\n";
 }
 #endif
 
@@ -189,8 +204,18 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( GetLayer() ) );
-    aPlotter->Circle( m_pos, Schematic()->Settings().m_JunctionSize, FILLED_SHAPE );
+    auto* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+
+    COLOR4D color = ( m_color == COLOR4D::UNSPECIFIED ) ? settings->GetLayerColor( GetLayer() ) :
+            m_color;
+    int diameter =
+            Schematic() ? Schematic()->Settings().m_JunctionSize : Mils2iu( DEFAULT_JUNCTION_DIAM );
+
+    if( m_diameter != 0 )
+        diameter = m_diameter;
+
+    aPlotter->SetColor( color );
+    aPlotter->Circle( m_pos, diameter, FILLED_SHAPE );
 }
 
 
@@ -213,7 +238,12 @@ bool SCH_JUNCTION::operator <( const SCH_ITEM& aItem ) const
     if( GetPosition().x != junction->GetPosition().x )
         return GetPosition().x < junction->GetPosition().x;
 
-    return GetPosition().y < junction->GetPosition().y;
+    if( GetPosition().y != junction->GetPosition().y )
+        return GetPosition().y < junction->GetPosition().y;
 
+    if( GetDiameter() != junction->GetDiameter() )
+        return GetDiameter() < junction->GetDiameter();
+
+    return GetColor() < junction->GetColor();
 }
 

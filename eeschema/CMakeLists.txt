@@ -60,6 +60,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_global_sym_lib_table_config.cpp
     dialogs/dialog_global_edit_text_and_graphics.cpp
     dialogs/dialog_global_edit_text_and_graphics_base.cpp
+    dialogs/dialog_junction_props.cpp
+    dialogs/dialog_junction_props_base.cpp
     dialogs/dialog_lib_edit_draw_item.cpp
     dialogs/dialog_lib_edit_draw_item_base.cpp
     dialogs/dialog_lib_edit_pin.cpp

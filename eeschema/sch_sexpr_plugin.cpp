@@ -1106,9 +1106,14 @@ void SCH_SEXPR_PLUGIN::saveJunction( SCH_JUNCTION* aJunction, int aNestLevel )
 {
     wxCHECK_RET( aJunction != nullptr && m_out != nullptr, "" );
 
-    m_out->Print( aNestLevel, "(junction (at %s %s))\n",
+    m_out->Print( aNestLevel, "(junction (at %s %s) (diameter %s) (color %d %d %d %s))\n",
                   FormatInternalUnits( aJunction->GetPosition().x ).c_str(),
-                  FormatInternalUnits( aJunction->GetPosition().y ).c_str() );
+                  FormatInternalUnits( aJunction->GetPosition().y ).c_str(),
+                  FormatInternalUnits( aJunction->GetDiameter() ).c_str(),
+                  KiROUND( aJunction->GetColor().r * 255.0 ),
+                  KiROUND( aJunction->GetColor().g * 255.0 ),
+                  KiROUND( aJunction->GetColor().b * 255.0 ),
+                  Double2Str( aJunction->GetColor().a ).c_str() );
 }
 
 
@@ -1136,15 +1141,16 @@ void SCH_SEXPR_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLev
     }
     else
     {
-        m_out->Print( aNestLevel, "(bus_entry (at %s %s) (size %s %s) ",
+        m_out->Print( aNestLevel, "(bus_entry (at %s %s) (size %s %s)\n",
                       FormatInternalUnits( aBusEntry->GetPosition().x ).c_str(),
                       FormatInternalUnits( aBusEntry->GetPosition().y ).c_str(),
                       FormatInternalUnits( aBusEntry->GetSize().GetWidth() ).c_str(),
                       FormatInternalUnits( aBusEntry->GetSize().GetHeight() ).c_str() );
 
-        formatStroke( m_out, 0, aBusEntry->GetStroke() );
+        formatStroke( m_out, aNestLevel + 1, aBusEntry->GetStroke() );
 
-        m_out->Print( 0, ")\n" );
+        m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel, ")\n" );
     }
 }
 

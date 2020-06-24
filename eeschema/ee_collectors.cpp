@@ -54,6 +54,7 @@ const KICAD_T EE_COLLECTOR::EditableItems[] = {
     SCH_BITMAP_T,
     SCH_LINE_T,
     SCH_BUS_WIRE_ENTRY_T,
+    SCH_JUNCTION_T,
     EOT
 };
 
