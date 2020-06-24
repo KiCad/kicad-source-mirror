@@ -625,11 +625,14 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
 {
     std::set<int> nets;
     std::vector<CN_EDGE> edges;
-    std::set<BOARD_ITEM*> item_set( aItems.begin(), aItems.end() );
+    std::set<BOARD_CONNECTED_ITEM*> item_set;
 
     for( auto item : aItems )
     {
-        auto conn_item = static_cast<BOARD_CONNECTED_ITEM*>( item );
+        auto conn_item = dyn_cast<BOARD_CONNECTED_ITEM*>( item );
+
+        if( !conn_item )
+            continue;
 
         if( item->Type() == PCB_MODULE_T )
         {
@@ -643,6 +646,7 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
         }
         else
         {
+            item_set.insert( conn_item );
             nets.insert( conn_item->GetNetCode() );
         }
     }
@@ -656,8 +660,8 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
             auto srcNode = edge.GetSourceNode();
             auto dstNode = edge.GetTargetNode();
 
-            auto srcParent = static_cast<BOARD_ITEM*>( srcNode->Parent() );
-            auto dstParent = static_cast<BOARD_ITEM*>( dstNode->Parent() );
+            auto srcParent = srcNode->Parent();
+            auto dstParent = dstNode->Parent();
 
             bool srcFound = ( item_set.find(srcParent) != item_set.end() );
             bool dstFound = ( item_set.find(dstParent) != item_set.end() );
