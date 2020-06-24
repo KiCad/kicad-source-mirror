@@ -62,9 +62,9 @@ private:
     bool    m_canUpdate;
     bool    m_canEditNetName;       // true only if the caller is the board editor
 
-    std::vector<PAD_CS_PRIMITIVE> m_primitives;    // the list of custom shape primitives (basic
-                                                   //     shapes), in local coords, orient 0
-                                                   //     must define a single copper area
+    std::vector<std::shared_ptr<DRAWSEGMENT>> m_primitives;   // the custom shape primitives in
+                                                              // local coords, orient 0
+                                                              // must define a single copper area
     COLOR4D                       m_selectedColor; // color used to draw selected primitives when
                                                    //     editing a custom pad shape
 
@@ -167,7 +167,7 @@ class DIALOG_PAD_PRIMITIVES_PROPERTIES: public DIALOG_PAD_PRIMITIVES_PROPERTIES_
 {
 public:
     DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
-                                      PAD_CS_PRIMITIVE * aShape );
+                                      DRAWSEGMENT* aShape );
 
     /**
      * Function TransferDataFromWindow
@@ -183,18 +183,18 @@ private:
     bool TransferDataToWindow() override;
 
     // The basic shape currently edited
-    PAD_CS_PRIMITIVE * m_shape;
+    DRAWSEGMENT* m_shape;
 
-    UNIT_BINDER        m_startX;
-    UNIT_BINDER        m_startY;
-    UNIT_BINDER        m_ctrl1X;
-    UNIT_BINDER        m_ctrl1Y;
-    UNIT_BINDER        m_ctrl2X;
-    UNIT_BINDER        m_ctrl2Y;
-    UNIT_BINDER        m_endX;
-    UNIT_BINDER        m_endY;
-    UNIT_BINDER        m_radius;
-    UNIT_BINDER        m_thickness;
+    UNIT_BINDER  m_startX;
+    UNIT_BINDER  m_startY;
+    UNIT_BINDER  m_ctrl1X;
+    UNIT_BINDER  m_ctrl1Y;
+    UNIT_BINDER  m_ctrl2X;
+    UNIT_BINDER  m_ctrl2Y;
+    UNIT_BINDER  m_endX;
+    UNIT_BINDER  m_endY;
+    UNIT_BINDER  m_radius;
+    UNIT_BINDER  m_thickness;
 };
 
 
@@ -204,16 +204,16 @@ private:
 class DIALOG_PAD_PRIMITIVE_POLY_PROPS: public DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE
 {
     // The basic shape currently edited
-    PAD_CS_PRIMITIVE * m_shape;
+    DRAWSEGMENT*         m_shape;
 
     // The working copy of the basic shape currently edited
-    PAD_CS_PRIMITIVE m_currshape;
+    std::vector<wxPoint> m_currPoints;
 
-    UNIT_BINDER      m_thickness;
+    UNIT_BINDER          m_thickness;
 
 public:
     DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
-                                     PAD_CS_PRIMITIVE * aShape );
+                                     DRAWSEGMENT* aShape );
     ~DIALOG_PAD_PRIMITIVE_POLY_PROPS();
 
     /**
@@ -235,7 +235,6 @@ private:
     bool Validate() override;
 
     // Events handlers:
-    void OnValidateButton( wxCommandEvent& event );
     void OnButtonAdd( wxCommandEvent& event ) override;
     void OnButtonDelete( wxCommandEvent& event ) override;
     void onPaintPolyPanel( wxPaintEvent& event ) override;
@@ -263,7 +262,8 @@ class DIALOG_PAD_PRIMITIVES_TRANSFORM : public DIALOG_PAD_PRIMITIVES_TRANSFORM_B
 {
 public:
     DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
-                                     std::vector<PAD_CS_PRIMITIVE*>& aList, bool aShowDuplicate );
+                                     std::vector<std::shared_ptr<DRAWSEGMENT>>& aList,
+                                     bool aShowDuplicate );
 
     /**
      * Apply geometric transform (rotation, move, scale) defined in dialog
@@ -272,7 +272,8 @@ public:
      * The duplicated items are transformed, but the initial shpes are not modified.
      * The duplicated items are added to aList
      */
-    void Transform( std::vector<PAD_CS_PRIMITIVE>* aList = NULL, int aDuplicateCount = 0 );
+    void Transform( std::vector<std::shared_ptr<DRAWSEGMENT>>* aList = NULL,
+                    int aDuplicateCount = 0 );
 
     /**
      * @return the number of duplicate, chosen by user
@@ -280,7 +281,7 @@ public:
     int GetDuplicateCount() { return m_spinCtrlDuplicateCount->GetValue(); }
 
 private:
-    std::vector<PAD_CS_PRIMITIVE*>& m_list;
+    std::vector<std::shared_ptr<DRAWSEGMENT>>& m_list;
 
     UNIT_BINDER  m_vectorX;
     UNIT_BINDER  m_vectorY;

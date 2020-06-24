@@ -44,102 +44,6 @@
 #include <geometry/shape_rect.h>
 
 
-void PAD_CS_PRIMITIVE::ExportTo( DRAWSEGMENT* aTarget )
-{
-    aTarget->SetShape( m_Shape );
-    aTarget->SetWidth( m_Thickness );
-    aTarget->SetStart( m_Start );
-    aTarget->SetEnd( m_End );
-    aTarget->SetBezControl1( m_Ctrl1 );
-    aTarget->SetBezControl2( m_Ctrl2 );
-
-    // in a DRAWSEGMENT the radius of a circle is calculated from the
-    // center and one point on the circle outline (stored in m_End)
-    if( m_Shape == S_CIRCLE )
-    {
-        wxPoint end = m_Start;
-        end.x += m_Radius;
-        aTarget->SetEnd( end );
-    }
-
-    aTarget->SetAngle( m_ArcAngle );
-    aTarget->SetPolyPoints( m_Poly );
-}
-
-
-void PAD_CS_PRIMITIVE::ExportTo( EDGE_MODULE* aTarget )
-{
-    ExportTo( static_cast<DRAWSEGMENT*>( aTarget ) );
-    // Initialize coordinates specific to the EDGE_MODULE (m_Start0 and m_End0)
-    aTarget->SetLocalCoord();
-}
-
-
-void PAD_CS_PRIMITIVE::Move( wxPoint aMoveVector )
-{
-    m_Start += aMoveVector;
-    m_End   += aMoveVector;
-    m_Ctrl1 += aMoveVector;
-    m_Ctrl2 += aMoveVector;
-
-    for( auto& corner : m_Poly )
-        corner += aMoveVector;
-}
-
-
-void PAD_CS_PRIMITIVE::Rotate( const wxPoint& aRotCentre, double aAngle )
-{
-    switch( m_Shape )
-    {
-    case S_ARC:
-    case S_SEGMENT:
-    case S_CIRCLE:
-        // these can all be done by just rotating the start and end points
-        RotatePoint( &m_Start, aRotCentre, aAngle );
-        RotatePoint( &m_End, aRotCentre, aAngle );
-        break;
-
-    case S_RECT:
-        if( KiROUND( aAngle ) % 900 == 0 )
-        {
-            RotatePoint( &m_Start, aRotCentre, aAngle );
-            RotatePoint( &m_End, aRotCentre, aAngle );
-            break;
-        }
-
-        // Convert non-cartesian-rotated rect to a diamond
-        m_Shape = S_POLYGON;
-
-        m_Poly.clear();
-        m_Poly.emplace_back( m_Start );
-        m_Poly.emplace_back( m_End.x, m_Start.y );
-        m_Poly.emplace_back( m_End );
-        m_Poly.emplace_back( m_Start.x, m_End.y );
-
-        KI_FALLTHROUGH;
-
-    case S_POLYGON:
-        for( auto& pt : m_Poly )
-            RotatePoint( &pt, aRotCentre, aAngle );
-
-        break;
-
-    case S_CURVE:
-        RotatePoint( &m_Start, aRotCentre, aAngle );
-        RotatePoint( &m_End, aRotCentre, aAngle );
-        RotatePoint( &m_Ctrl1, aRotCentre, aAngle );
-        RotatePoint( &m_Ctrl2, aRotCentre, aAngle );
-        break;
-
-    default:
-        // un-handled edge transform
-        wxASSERT_MSG( false, wxT( "PAD_CS_PRIMITIVE::Rotate not implemented for "
-                                     + BOARD_ITEM::ShowShape( m_Shape ) ) );
-        break;
-    }
-}
-
-
 /*
  * Has meaning only for free shape pads.
  * add a free shape to the shape list.
@@ -164,21 +68,22 @@ void D_PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness )
 
 void D_PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness )
 {
-    PAD_CS_PRIMITIVE shape( S_POLYGON );
-    shape.m_Poly = aPoly;
-    shape.m_Thickness = aThickness;
-    m_basicShapes.push_back( shape );
+    DRAWSEGMENT* item = new DRAWSEGMENT();
+    item->SetShape( S_POLYGON );
+    item->SetPolyPoints( aPoly );
+    item->SetWidth( aThickness );
+    m_editPrimitives.emplace_back( item );
     m_shapesDirty = true;
 }
 
 
 void D_PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
 {
-    PAD_CS_PRIMITIVE shape( S_SEGMENT );
-    shape.m_Start = aStart;
-    shape.m_End = aEnd;
-    shape.m_Thickness = aThickness;
-    m_basicShapes.push_back( shape );
+    DRAWSEGMENT* item = new DRAWSEGMENT();
+    item->SetStart( aStart );
+    item->SetEnd( aEnd );
+    item->SetWidth( aThickness );
+    m_editPrimitives.emplace_back( item );
     m_shapesDirty = true;
 }
 
@@ -186,12 +91,13 @@ void D_PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int
 void D_PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
                              int aThickness )
 {
-    PAD_CS_PRIMITIVE shape( S_ARC );
-    shape.m_Start = aCenter;
-    shape.m_End = aStart;
-    shape.m_ArcAngle = aArcAngle;
-    shape.m_Thickness = aThickness;
-    m_basicShapes.push_back( shape );
+    DRAWSEGMENT* item = new DRAWSEGMENT();
+    item->SetShape( S_ARC );
+    item->SetCenter( aCenter );
+    item->SetArcStart( aStart );
+    item->SetAngle( aArcAngle );
+    item->SetWidth( aThickness );
+    m_editPrimitives.emplace_back( item );
     m_shapesDirty = true;
 }
 
@@ -199,56 +105,59 @@ void D_PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int 
 void D_PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,
                                const wxPoint& aCtrl2, int aThickness )
 {
-    PAD_CS_PRIMITIVE shape( S_CURVE );
-    shape.m_Start = aStart;
-    shape.m_End = aEnd;
-    shape.m_Ctrl1 = aCtrl1;
-    shape.m_Ctrl2 = aCtrl2;
-    shape.m_Thickness = aThickness;
-    m_basicShapes.push_back( shape );
+    DRAWSEGMENT* item = new DRAWSEGMENT();
+    item->SetShape( S_CURVE );
+    item->SetStart( aStart );
+    item->SetEnd( aEnd );
+    item->SetBezControl1( aCtrl1 );
+    item->SetBezControl2( aCtrl2 );
+    item->SetWidth( aThickness );
+    m_editPrimitives.emplace_back( item );
     m_shapesDirty = true;
 }
 
 
 void D_PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness )
 {
-    PAD_CS_PRIMITIVE shape( S_CIRCLE );
-    shape.m_Start = aCenter;
-    shape.m_Radius = aRadius;
-    shape.m_Thickness = aThickness;
-    m_basicShapes.push_back( shape );
+    DRAWSEGMENT* item = new DRAWSEGMENT();
+    item->SetShape( S_CIRCLE );
+    item->SetStart( aCenter );
+    item->SetEnd( wxPoint( aCenter.x + aRadius, aCenter.y ) );
+    item->SetWidth( aThickness );
+    m_editPrimitives.emplace_back( item );
     m_shapesDirty = true;
 }
 
 
 void D_PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
 {
-    PAD_CS_PRIMITIVE shape( S_RECT );
-    shape.m_Start = aStart;
-    shape.m_End = aEnd;
-    shape.m_Thickness = aThickness;
-    m_basicShapes.push_back( shape );
+    DRAWSEGMENT* item = new DRAWSEGMENT();
+    item->SetShape( S_RECT );
+    item->SetStart( aStart );
+    item->SetEnd( aEnd );
+    item->SetWidth( aThickness );
+    m_editPrimitives.emplace_back( item );
     m_shapesDirty = true;
 }
 
 
-void D_PAD::SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList )
+void D_PAD::SetPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList )
 {
     // clear old list
-    m_basicShapes.clear();
+    m_editPrimitives.clear();
 
     // Import to the basic shape list
     if( aPrimitivesList.size() )
-        m_basicShapes = aPrimitivesList;
+        m_editPrimitives = aPrimitivesList;
 
     m_shapesDirty = true;
 }
 
 
-void D_PAD::AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList )
+void D_PAD::AddPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList )
 {
-    for( const auto& prim : aPrimitivesList )
-        m_basicShapes.push_back( prim );
+    for( const std::shared_ptr<DRAWSEGMENT>& prim : aPrimitivesList )
+        m_editPrimitives.push_back( prim );
 
     m_shapesDirty = true;
 }
@@ -257,56 +166,62 @@ void D_PAD::AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList 
 // clear the basic shapes list and associated data
 void D_PAD::DeletePrimitivesList()
 {
-    m_basicShapes.clear();
+    m_editPrimitives.clear();
     m_shapesDirty = true;
 }
 
 
-void D_PAD::addCustomPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError ) const
+void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError ) const
 {
     SHAPE_POLY_SET polyset;
 
-    for( const PAD_CS_PRIMITIVE& bshape : m_basicShapes )
+    for( const std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
     {
-        switch( bshape.m_Shape )
+        int lineWidth = primitive->GetWidth();
+
+        switch( primitive->GetShape() )
         {
         case S_CURVE:
         {
-            std::vector<wxPoint> ctrlPoints = { bshape.m_Start, bshape.m_Ctrl1, bshape.m_Ctrl2,
-                                                bshape.m_End };
+            std::vector<wxPoint> ctrlPoints = { primitive->GetStart(), primitive->GetBezControl1(),
+                                                primitive->GetBezControl2(), primitive->GetEnd() };
             BEZIER_POLY converter( ctrlPoints );
             std::vector< wxPoint> poly;
-            converter.GetPoly( poly, bshape.m_Thickness );
+            converter.GetPoly( poly, lineWidth );
 
             for( unsigned ii = 1; ii < poly.size(); ii++ )
             {
-                TransformSegmentToPolygon( polyset, poly[ ii - 1 ], poly[ ii ], aError,
-                                           bshape.m_Thickness );
+                TransformSegmentToPolygon( polyset, poly[ ii - 1 ], poly[ ii ], aError, lineWidth );
             }
             break;
         }
 
         case S_SEGMENT:         // usual segment : line with rounded ends
         {
-            TransformSegmentToPolygon( polyset, bshape.m_Start, bshape.m_End, aError,
-                                       bshape.m_Thickness );
+            TransformSegmentToPolygon( polyset, primitive->GetStart(), primitive->GetEnd(),
+                                       aError, lineWidth );
             break;
         }
 
         case S_ARC:             // Arc with rounded ends
         {
-            TransformArcToPolygon( polyset, bshape.m_Start, bshape.m_End, bshape.m_ArcAngle,
-                                   aError, bshape.m_Thickness );
+            TransformArcToPolygon( polyset, primitive->GetStart(), primitive->GetEnd(),
+                                   primitive->GetAngle(), aError, lineWidth );
             break;
         }
 
         case S_CIRCLE:          //  ring or circle
         {
-            if( bshape.m_Thickness )    // ring
-                TransformRingToPolygon( polyset, bshape.m_Start, bshape.m_Radius, aError,
-                                        bshape.m_Thickness );
+            if( primitive->GetWidth() )    // ring
+            {
+                TransformRingToPolygon( polyset, primitive->GetStart(), primitive->GetRadius(),
+                                        aError, lineWidth );
+            }
             else                // Filled circle
-                TransformCircleToPolygon( polyset, bshape.m_Start, bshape.m_Radius, aError );
+            {
+                TransformCircleToPolygon( polyset, primitive->GetStart(), primitive->GetRadius(),
+                                          aError );
+            }
             break;
         }
 
@@ -316,23 +231,23 @@ void D_PAD::addCustomPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int
             SHAPE_POLY_SET poly;
             poly.NewOutline();
 
-            if( bshape.m_Shape == S_RECT )
+            if( primitive->GetShape() == S_RECT )
             {
-                poly.Append( bshape.m_Start );
-                poly.Append( bshape.m_End.x, bshape.m_Start.y );
-                poly.Append( bshape.m_End );
-                poly.Append( bshape.m_Start.x, bshape.m_End.y );
+                poly.Append( primitive->GetStart() );
+                poly.Append( primitive->GetEnd().x, primitive->GetStart().y );
+                poly.Append( primitive->GetEnd() );
+                poly.Append( primitive->GetStart().x, primitive->GetEnd().y );
             }
             else
             {
-                for( const wxPoint& pt : bshape.m_Poly )
+                for( const VECTOR2I& pt : primitive->GetPolyShape().Outline( 0 ).CPoints() )
                     poly.Append( pt );
             }
 
-            if( bshape.m_Thickness )
+            if( primitive->GetWidth() > 0 )
             {
-                int numSegs = std::max( GetArcToSegmentCount( bshape.m_Thickness / 2, aError, 360.0 ), 6 );
-                poly.Inflate( bshape.m_Thickness / 2, numSegs );
+                int numSegs = std::max( GetArcToSegmentCount( lineWidth / 2, aError, 360.0 ), 6 );
+                poly.Inflate( lineWidth / 2, numSegs );
             }
 
             // Insert the polygon:
@@ -343,8 +258,8 @@ void D_PAD::addCustomPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int
 
         default:
             // un-handled primitive
-            wxASSERT_MSG( false, "D_PAD::addCustomPadPrimitivesToPolygon not implemented for "
-                                 + BOARD_ITEM::ShowShape( bshape.m_Shape ) );
+            wxASSERT_MSG( false, "D_PAD::addPadPrimitivesToPolygon not implemented for "
+                                 + BOARD_ITEM::ShowShape( primitive->GetShape() ) );
             break;
         }
     }
@@ -386,14 +301,14 @@ void D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon ) const
         break;
     }
 
-    addCustomPadPrimitivesToPolygon( aMergedPolygon, maxError );
+    addPadPrimitivesToPolygon( aMergedPolygon, maxError );
 }
 
 
 bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
 {
     SHAPE_POLY_SET poly;
-    addCustomPadPrimitivesToPolygon( &poly, ARC_LOW_DEF );
+    addPadPrimitivesToPolygon( &poly, ARC_LOW_DEF );
 
     if( poly.OutlineCount() > 1 )
         return false;

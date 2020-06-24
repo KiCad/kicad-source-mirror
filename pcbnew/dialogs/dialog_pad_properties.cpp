@@ -700,49 +700,48 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
 
     for( unsigned ii = 0; ii < m_primitives.size(); ++ii )
     {
-        const PAD_CS_PRIMITIVE& primitive = m_primitives[ii];
+        const std::shared_ptr<DRAWSEGMENT>& primitive = m_primitives[ii];
 
         for( unsigned jj = 0; jj < 5; ++jj )
             bs_info[jj].Empty();
 
-        bs_info[4] = wxString::Format( _( "width %s" ),
-                                    MessageTextFromValue( m_units, primitive.m_Thickness, true ) );
+        bs_info[4] = _( "width " ) + MessageTextFromValue( m_units, primitive->GetWidth(), true );
 
-        switch( primitive.m_Shape )
+        switch( primitive->GetShape() )
         {
         case S_SEGMENT:         // usual segment : line with rounded ends
             bs_info[0] = _( "Segment" );
-            bs_info[1] = _( "from " ) + formatCoord( m_units, primitive.m_Start );
-            bs_info[2] = _( "to " ) +  formatCoord( m_units, primitive.m_End );
+            bs_info[1] = _( "from " ) + formatCoord( m_units, primitive->GetStart() );
+            bs_info[2] = _( "to " ) +  formatCoord( m_units, primitive->GetEnd() );
             break;
 
         case S_CURVE:         // Bezier segment
             bs_info[0] = _( "Bezier" );
-            bs_info[1] = _( "from " ) + formatCoord( m_units, primitive.m_Start );
-            bs_info[2] = _( "to " ) +  formatCoord( m_units, primitive.m_End );
+            bs_info[1] = _( "from " ) + formatCoord( m_units, primitive->GetStart() );
+            bs_info[2] = _( "to " ) +  formatCoord( m_units, primitive->GetEnd() );
             break;
 
         case S_ARC:             // Arc with rounded ends
             bs_info[0] = _( "Arc" );
-            bs_info[1] = _( "center " ) + formatCoord( m_units, primitive.m_Start );// Center
-            bs_info[2] = _( "start " ) + formatCoord( m_units, primitive.m_End );   // Start point
-            bs_info[3] = wxString::Format( _( "angle %s" ), FormatAngle( primitive.m_ArcAngle ) );
+            bs_info[1] = _( "center " ) + formatCoord( m_units, primitive->GetCenter() );
+            bs_info[2] = _( "start " ) + formatCoord( m_units, primitive->GetArcStart() );
+            bs_info[3] = _( "angle " ) + FormatAngle( primitive->GetAngle() );
             break;
 
         case S_CIRCLE:          //  ring or circle
-            if( primitive.m_Thickness )
+            if( primitive->GetWidth() )
                 bs_info[0] = _( "ring" );
             else
                 bs_info[0] = _( "circle" );
 
-            bs_info[1] = formatCoord( m_units, primitive.m_Start );
-            bs_info[2] = wxString::Format( _( "radius %s" ),
-                                       MessageTextFromValue( m_units, primitive.m_Radius, true ) );
+            bs_info[1] = formatCoord( m_units, primitive->GetStart() );
+            bs_info[2] = _( "radius " ) + MessageTextFromValue( m_units, primitive->GetRadius(), true );
             break;
 
         case S_POLYGON:         // polygon
             bs_info[0] = "Polygon";
-            bs_info[1] = wxString::Format( _( "corners count %d" ), (int) primitive.m_Poly.size() );
+            bs_info[1] = wxString::Format( _( "corners count %d" ),
+                                           (int) primitive->GetPolyShape().Outline( 0 ).PointCount() );
             break;
 
         default:
@@ -1249,48 +1248,13 @@ void DIALOG_PAD_PROPERTIES::redraw()
 
     while( select >= 0 )
     {
-        PAD_CS_PRIMITIVE& primitive = m_primitives[select];
-
-        DRAWSEGMENT* dummySegment = new DRAWSEGMENT;
+        DRAWSEGMENT* dummySegment = (DRAWSEGMENT*) m_primitives[select]->Clone();
         dummySegment->SetLayer( SELECTED_ITEMS_LAYER );
-        primitive.ExportTo( dummySegment );
         dummySegment->Rotate( wxPoint( 0, 0), m_dummyPad->GetOrientation() );
         dummySegment->Move( m_dummyPad->GetPosition() );
 
-        // Update selected primitive (highlight selected)
-        switch( primitive.m_Shape )
-        {
-        case S_SEGMENT:
-        case S_ARC:
-        case S_CURVE:
-            break;
-
-        case S_CIRCLE:          //  ring or circle
-            if( primitive.m_Thickness == 0 )    // filled circle
-            {   // the filled circle option does not exist in a DRAWSEGMENT
-                // but it is easy to create it with a circle having the
-                // right radius and outline width
-                wxPoint end = dummySegment->GetCenter();
-                end.x += primitive.m_Radius / 2;
-                dummySegment->SetEnd( end );
-                dummySegment->SetWidth( primitive.m_Radius );
-            }
-            break;
-
-        case S_POLYGON:
-            break;
-
-        default:
-            delete dummySegment;
-            dummySegment = nullptr;
-            break;
-        }
-
-        if( dummySegment )
-        {
-            view->Add( dummySegment );
-            m_highlight.push_back( dummySegment );
-        }
+        view->Add( dummySegment );
+        m_highlight.push_back( dummySegment );
 
         select = m_listCtrlPrimitives->GetNextSelected( select );
     }
@@ -1825,11 +1789,11 @@ void DIALOG_PAD_PROPERTIES::editPrimitive()
         return;
     }
 
-    PAD_CS_PRIMITIVE& shape = m_primitives[select];
+    std::shared_ptr<DRAWSEGMENT>& shape = m_primitives[select];
 
-    if( shape.m_Shape == S_POLYGON )
+    if( shape->GetShape() == S_POLYGON )
     {
-        DIALOG_PAD_PRIMITIVE_POLY_PROPS dlg( this, m_parent, &shape );
+        DIALOG_PAD_PRIMITIVE_POLY_PROPS dlg( this, m_parent, shape.get() );
 
         if( dlg.ShowModal() != wxID_OK )
             return;
@@ -1839,7 +1803,7 @@ void DIALOG_PAD_PROPERTIES::editPrimitive()
 
     else
     {
-        DIALOG_PAD_PRIMITIVES_PROPERTIES dlg( this, m_parent, &shape );
+        DIALOG_PAD_PRIMITIVES_PROPERTIES dlg( this, m_parent, shape.get() );
 
         if( dlg.ShowModal() != wxID_OK )
             return;
@@ -1922,25 +1886,26 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
 
     STROKE_T listtype[] = { S_SEGMENT, S_ARC, S_CURVE, S_CIRCLE, S_POLYGON };
 
-    PAD_CS_PRIMITIVE primitive( listtype[type] );
-    primitive.m_Thickness = m_board->GetDesignSettings().GetLineThickness( F_Cu );
+    DRAWSEGMENT* primitive = new DRAWSEGMENT();
+    primitive->SetShape( listtype[type] );
+    primitive->SetWidth( m_board->GetDesignSettings().GetLineThickness( F_Cu ) );
 
     if( listtype[type] == S_POLYGON )
     {
-        DIALOG_PAD_PRIMITIVE_POLY_PROPS dlg( this, m_parent, &primitive );
+        DIALOG_PAD_PRIMITIVE_POLY_PROPS dlg( this, m_parent, primitive );
 
         if( dlg.ShowModal() != wxID_OK )
             return;
     }
     else
     {
-        DIALOG_PAD_PRIMITIVES_PROPERTIES dlg( this, m_parent, &primitive );
+        DIALOG_PAD_PRIMITIVES_PROPERTIES dlg( this, m_parent, primitive );
 
         if( dlg.ShowModal() != wxID_OK )
             return;
     }
 
-    m_primitives.push_back( primitive );
+    m_primitives.emplace_back( primitive );
 
     displayPrimitivesList();
 
@@ -1963,18 +1928,17 @@ void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
     }
 
     // Multiple selections are allowed. Build selected shapes list
-    std::vector<PAD_CS_PRIMITIVE*> shapeList;
-    shapeList.push_back( &m_primitives[select] );
+    std::vector<std::shared_ptr<DRAWSEGMENT>> shapeList;
+    shapeList.emplace_back( m_primitives[select] );
 
     while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
-        shapeList.push_back( &m_primitives[select] );
+        shapeList.emplace_back( m_primitives[select] );
 
     DIALOG_PAD_PRIMITIVES_TRANSFORM dlg( this, m_parent, shapeList, false );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    // Transfert new settings:
     dlg.Transform();
 
     displayPrimitivesList();
@@ -1998,11 +1962,11 @@ void DIALOG_PAD_PROPERTIES::onDuplicatePrimitive( wxCommandEvent& event )
     }
 
     // Multiple selections are allowed. Build selected shapes list
-    std::vector<PAD_CS_PRIMITIVE*> shapeList;
-    shapeList.push_back( &m_primitives[select] );
+    std::vector<std::shared_ptr<DRAWSEGMENT>> shapeList;
+    shapeList.emplace_back( m_primitives[select] );
 
     while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
-        shapeList.push_back( &m_primitives[select] );
+        shapeList.emplace_back( m_primitives[select] );
 
     DIALOG_PAD_PRIMITIVES_TRANSFORM dlg( this, m_parent, shapeList, true );
 
@@ -2012,7 +1976,7 @@ void DIALOG_PAD_PROPERTIES::onDuplicatePrimitive( wxCommandEvent& event )
     // Transfer new settings
     // save duplicates to a separate vector to avoid m_primitives reallocation,
     // as shapeList contains pointers to its elements
-    std::vector<PAD_CS_PRIMITIVE> duplicates;
+    std::vector<std::shared_ptr<DRAWSEGMENT>> duplicates;
     dlg.Transform( &duplicates, dlg.GetDuplicateCount() );
     std::move( duplicates.begin(), duplicates.end(), std::back_inserter( m_primitives ) );
 

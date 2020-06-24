@@ -1523,72 +1523,68 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         int nested_level = aNestLevel+2;
 
         // Output all basic shapes
-        for( unsigned icnt = 0; icnt < aPad->GetPrimitives().size(); ++icnt )
+        for( const std::shared_ptr<DRAWSEGMENT> primitive : aPad->GetPrimitives() )
         {
             m_out->Print( 0, "\n");
 
-            const PAD_CS_PRIMITIVE& primitive = aPad->GetPrimitives()[icnt];
-
-            switch( primitive.m_Shape )
+            switch( primitive->GetShape() )
             {
             case S_SEGMENT:         // usual segment : line with rounded ends
                 m_out->Print( nested_level, "(gr_line (start %s) (end %s) (width %s))",
-                              FormatInternalUnits( primitive.m_Start ).c_str(),
-                              FormatInternalUnits( primitive.m_End ).c_str(),
-                              FormatInternalUnits( primitive.m_Thickness ).c_str() );
+                              FormatInternalUnits( primitive->GetStart() ).c_str(),
+                              FormatInternalUnits( primitive->GetEnd() ).c_str(),
+                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
                 break;
 
             case S_RECT:
                 m_out->Print( nested_level, "(gr_rect (start %s) (end %s) (width %s))",
-                              FormatInternalUnits( primitive.m_Start ).c_str(),
-                              FormatInternalUnits( primitive.m_End ).c_str(),
-                              FormatInternalUnits( primitive.m_Thickness ).c_str() );
+                              FormatInternalUnits( primitive->GetStart() ).c_str(),
+                              FormatInternalUnits( primitive->GetEnd() ).c_str(),
+                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
                 break;
 
             case S_ARC:             // Arc with rounded ends
                 m_out->Print( nested_level, "(gr_arc (start %s) (end %s) (angle %s) (width %s))",
-                              FormatInternalUnits( primitive.m_Start ).c_str(),
-                              FormatInternalUnits( primitive.m_End ).c_str(),
-                              FormatAngle( primitive.m_ArcAngle ).c_str(),
-                              FormatInternalUnits( primitive.m_Thickness ).c_str() );
+                              FormatInternalUnits( primitive->GetStart() ).c_str(),
+                              FormatInternalUnits( primitive->GetEnd() ).c_str(),
+                              FormatAngle( primitive->GetAngle() ).c_str(),
+                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
                 break;
 
             case S_CIRCLE:          //  ring or circle (circle if width == 0
-                m_out->Print( nested_level, "(gr_circle (center %s) (end %s %s) (width %s))",
-                              FormatInternalUnits( primitive.m_Start ).c_str(),
-                              FormatInternalUnits( primitive.m_Start.x + primitive.m_Radius ).c_str(),
-                              FormatInternalUnits( primitive.m_Start.y ).c_str(),
-                              FormatInternalUnits( primitive.m_Thickness ).c_str() );
+                m_out->Print( nested_level, "(gr_circle (center %s) (end %s) (width %s))",
+                              FormatInternalUnits( primitive->GetStart() ).c_str(),
+                              FormatInternalUnits( primitive->GetEnd() ).c_str(),
+                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
                 break;
 
             case S_CURVE:          //  Bezier Curve
                 m_out->Print( aNestLevel, "(gr_curve (pts (xy %s) (xy %s) (xy %s) (xy %s)) (width %s))",
-                              FormatInternalUnits( primitive.m_Start ).c_str(),
-                              FormatInternalUnits( primitive.m_Ctrl1 ).c_str(),
-                              FormatInternalUnits( primitive.m_Ctrl2 ).c_str(),
-                              FormatInternalUnits( primitive.m_End ).c_str(),
-                              FormatInternalUnits( primitive.m_Thickness ).c_str() );
+                              FormatInternalUnits( primitive->GetStart() ).c_str(),
+                              FormatInternalUnits( primitive->GetBezControl1() ).c_str(),
+                              FormatInternalUnits( primitive->GetBezControl2() ).c_str(),
+                              FormatInternalUnits( primitive->GetEnd() ).c_str(),
+                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
                 break;
 
             case S_POLYGON:         // polygon
-                if( primitive.m_Poly.size() < 2 )
+                if( primitive->GetPolyShape().COutline( 0 ).CPoints().size() < 2 )
                     break;      // Malformed polygon.
 
                 {
                 m_out->Print( nested_level, "(gr_poly (pts\n");
 
                 // Write the polygon corners coordinates:
-                const std::vector< wxPoint>& poly = primitive.m_Poly;
                 int newLine = 0;
 
-                for( unsigned ii = 0; ii < poly.size(); ii++ )
+                for( const VECTOR2I &pt : primitive->GetPolyShape().COutline( 0 ).CPoints() )
                 {
                     if( newLine == 0 )
                         m_out->Print( nested_level+1, " (xy %s)",
-                                      FormatInternalUnits( wxPoint( poly[ii].x, poly[ii].y ) ).c_str() );
+                                      FormatInternalUnits( (wxPoint) pt ).c_str() );
                     else
                         m_out->Print( 0, " (xy %s)",
-                                      FormatInternalUnits( wxPoint( poly[ii].x, poly[ii].y ) ).c_str() );
+                                      FormatInternalUnits( (wxPoint) pt ).c_str() );
 
                     if( ++newLine > 4 )
                     {
@@ -1597,7 +1593,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                     }
                 }
 
-                m_out->Print( 0, ") (width %s))", FormatInternalUnits( primitive.m_Thickness ).c_str() );
+                m_out->Print( 0, ") (width %s))", FormatInternalUnits( primitive->GetWidth() ).c_str() );
                 }
                 break;
 

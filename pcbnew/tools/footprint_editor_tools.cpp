@@ -396,11 +396,20 @@ int FOOTPRINT_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
 
     wxPoint anchor = pad->GetPosition();
 
-    for( auto prim : pad->GetPrimitives() )
+    for( const std::shared_ptr<DRAWSEGMENT>& primitive : pad->GetPrimitives() )
     {
-        auto ds = new EDGE_MODULE( board()->GetFirstModule() );
+        EDGE_MODULE* ds = new EDGE_MODULE( board()->GetFirstModule() );
 
-        prim.ExportTo( ds );    // ExportTo exports to a DRAWSEGMENT
+        ds->SetShape( primitive->GetShape() );
+        ds->SetWidth( primitive->GetWidth() );
+        ds->SetStart( primitive->GetStart() );
+        ds->SetEnd( primitive->GetEnd() );
+        ds->SetBezControl1( primitive->GetBezControl1() );
+        ds->SetBezControl2( primitive->GetBezControl2() );
+        ds->SetAngle( primitive->GetAngle() );
+        ds->SetPolyShape( primitive->GetPolyShape() );
+        ds->SetLocalCoord();
+
         // Fix an arbitray draw layer for this EDGE_MODULE
         ds->SetLayer( Dwgs_User ); //pad->GetLayer() );
         ds->Move( anchor );
@@ -435,11 +444,11 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     bool multipleRefPadsFound = false;
     bool illegalItemsFound = false;
 
-    std::vector<PAD_CS_PRIMITIVE> shapes;
+    std::vector<std::shared_ptr<DRAWSEGMENT>> shapes;
 
     BOARD_COMMIT commit( m_frame );
 
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
     {
         switch( item->Type() )
         {
@@ -454,19 +463,18 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
             case PCB_MODULE_EDGE_T:
             {
-                auto em = static_cast<EDGE_MODULE*> ( item );
+                EDGE_MODULE* em = static_cast<EDGE_MODULE*>( item );
+                DRAWSEGMENT* ds = new DRAWSEGMENT;
 
-                PAD_CS_PRIMITIVE shape( em->GetShape() );
-                shape.m_Start = em->GetStart();
-                shape.m_End = em->GetEnd();
-                shape.m_Radius = em->GetRadius();
-                shape.m_Thickness = em->GetWidth();
-                shape.m_ArcAngle = em->GetAngle();
-                shape.m_Ctrl1 = em->GetBezControl1();
-                shape.m_Ctrl2 = em->GetBezControl2();
-                shape.m_Poly = em->BuildPolyPointsList();
-
-                shapes.push_back( shape );
+                ds->SetShape( em->GetShape() );
+                ds->SetWidth( em->GetWidth() );
+                ds->SetStart( em->GetStart() );
+                ds->SetEnd( em->GetEnd() );
+                ds->SetBezControl1( em->GetBezControl1() );
+                ds->SetBezControl2( em->GetBezControl2() );
+                ds->SetAngle( em->GetAngle() );
+                ds->SetPolyShape( em->GetPolyShape() );
+                shapes.emplace_back( ds );
 
                 break;
             }
@@ -534,12 +542,11 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
             int maxError = board()->GetDesignSettings().m_MaxError;
             refPad->TransformShapeWithClearanceToPolygon( existingOutline, 0, maxError );
 
-            PAD_CS_PRIMITIVE shape( S_POLYGON );
+            DRAWSEGMENT* shape = new DRAWSEGMENT;
+            shape->SetShape( S_POLYGON );
+            shape->SetPolyShape( existingOutline );
 
-            for( auto ii = existingOutline.Iterate(); ii; ii++ )
-                shape.m_Poly.emplace_back( ii->x, ii->y );
-
-            shapes.push_back( shape );
+            shapes.emplace_back( shape );
 
             deltaAngle = refPad->GetOrientation();
             pad->SetOrientation( 0.0 );
@@ -589,10 +596,10 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
 
     // relocate the shapes, they are relative to the anchor pad position
-    for( auto& shape : shapes )
+    for( std::shared_ptr<DRAWSEGMENT>& shape : shapes )
     {
-        shape.Move( wxPoint( -anchor->x, -anchor->y ) );
-        shape.Rotate( wxPoint( 0, 0 ), -deltaAngle );
+        shape->Move( wxPoint( -anchor->x, -anchor->y ) );
+        shape->Rotate( wxPoint( 0, 0 ), -deltaAngle );
     }
 
     pad->SetPosition( wxPoint( anchor->x, anchor->y ) );
@@ -610,13 +617,12 @@ int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    auto padPtr = pad.release();
+    D_PAD* padPtr = pad.release();
 
     commit.Add( padPtr );
-    for ( auto item : selection )
-    {
+
+    for ( EDA_ITEM* item : selection )
         commit.Remove( item );
-    }
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     commit.Push(_("Create Pad from Selected Shapes") );

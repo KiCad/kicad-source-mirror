@@ -47,7 +47,7 @@
 
 DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aParent,
                                                                     PCB_BASE_FRAME* aFrame,
-                                                                    PAD_CS_PRIMITIVE * aShape ) :
+                                                                    DRAWSEGMENT* aShape ) :
         DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( aParent ),
         m_shape( aShape ),
         m_startX( aFrame, m_startXLabel, m_startXCtrl, m_startXUnits, true ),
@@ -76,19 +76,19 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         return false;
 
     // Shows the text info about circle or ring only for S_CIRCLE shape
-    if( m_shape->m_Shape != S_CIRCLE )
+    if( m_shape->GetShape() != S_CIRCLE )
         m_staticTextInfo->Show( false );
 
-    m_thickness.SetValue( m_shape->m_Thickness );
+    m_thickness.SetValue( m_shape->GetWidth() );
 
-    switch( m_shape->m_Shape )
+    switch( m_shape->GetShape() )
     {
     case S_SEGMENT:         // Segment with rounded ends
         SetTitle( _( "Segment" ) );
-        m_startX.SetValue( m_shape->m_Start.x );
-        m_startY.SetValue( m_shape->m_Start.y );
-        m_endX.SetValue( m_shape->m_End.x );
-        m_endY.SetValue( m_shape->m_End.y );
+        m_startX.SetValue( m_shape->GetStart().x );
+        m_startY.SetValue( m_shape->GetStart().y );
+        m_endX.SetValue( m_shape->GetEnd().x );
+        m_endY.SetValue( m_shape->GetEnd().y );
         m_ctrl1X.Show( false, true );
         m_ctrl1Y.Show( false, true );
         m_ctrl2X.Show( false, true );
@@ -102,27 +102,27 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
 
     case S_CURVE:         // Bezier line
         SetTitle( _( "Bezier" ) );
-        m_startX.SetValue( m_shape->m_Start.x );
-        m_startY.SetValue( m_shape->m_Start.y );
-        m_endX.SetValue( m_shape->m_End.x );
-        m_endY.SetValue( m_shape->m_End.y );
-        m_ctrl1X.SetValue( m_shape->m_Ctrl1.x );
-        m_ctrl1Y.SetValue( m_shape->m_Ctrl1.y );
-        m_ctrl2X.SetValue( m_shape->m_Ctrl2.x );
-        m_ctrl2Y.SetValue( m_shape->m_Ctrl2.y );
+        m_startX.SetValue( m_shape->GetStart().x );
+        m_startY.SetValue( m_shape->GetStart().y );
+        m_endX.SetValue( m_shape->GetEnd().x );
+        m_endY.SetValue( m_shape->GetEnd().y );
+        m_ctrl1X.SetValue( m_shape->GetBezControl1().x );
+        m_ctrl1Y.SetValue( m_shape->GetBezControl1().y );
+        m_ctrl2X.SetValue( m_shape->GetBezControl2().x );
+        m_ctrl2Y.SetValue( m_shape->GetBezControl2().y );
         m_radius.Show( false );
         break;
 
     case S_ARC:             // Arc with rounded ends
         SetTitle( _( "Arc" ) );
-        m_startX.SetValue( m_shape->m_End.x );     // confusingly, the start point of the arc
-        m_startY.SetValue( m_shape->m_End.y );
+        m_startX.SetValue( m_shape->GetEnd().x );     // confusingly, the start point of the arc
+        m_startY.SetValue( m_shape->GetEnd().y );
         m_staticTextPosEnd->SetLabel( _( "Center" ) );
-        m_endX.SetValue( m_shape->m_Start.x );     // arc center
-        m_endY.SetValue( m_shape->m_Start.y );
+        m_endX.SetValue( m_shape->GetStart().x );     // arc center
+        m_endY.SetValue( m_shape->GetStart().y );
         m_radiusLabel->SetLabel( _( "Angle:" ) );
         m_radius.SetUnits( EDA_UNITS::DEGREES );
-        m_radius.SetValue( m_shape->m_ArcAngle );
+        m_radius.SetValue( m_shape->GetAngle() );
         m_ctrl1X.Show( false, true );
         m_ctrl1Y.Show( false, true );
         m_ctrl2X.Show( false, true );
@@ -134,7 +134,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         break;
 
     case S_CIRCLE:          //  ring or circle
-        if( m_shape->m_Thickness )
+        if( m_shape->GetWidth() )
             SetTitle( _( "Ring" ) );
         else
             SetTitle( _( "Circle" ) );
@@ -146,9 +146,9 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
 
         // Circle center uses position controls:
         m_staticTextPosStart->SetLabel( _( "Center:" ) );
-        m_startX.SetValue( m_shape->m_Start.x );
-        m_startY.SetValue( m_shape->m_Start.y );
-        m_radius.SetValue( m_shape->m_Radius );
+        m_startX.SetValue( m_shape->GetStart().x );
+        m_startY.SetValue( m_shape->GetStart().y );
+        m_radius.SetValue( m_shape->GetRadius() );
         m_ctrl1X.Show( false, true );
         m_ctrl1Y.Show( false, true );
         m_ctrl2X.Show( false, true );
@@ -174,43 +174,34 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
 bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
 {
     // Transfer data out of the GUI.
-    m_shape->m_Thickness = m_thickness.GetValue();
+    m_shape->SetWidth( m_thickness.GetValue() );
 
-    switch( m_shape->m_Shape )
+    switch( m_shape->GetShape() )
     {
     case S_SEGMENT:         // Segment with rounded ends
-        m_shape->m_Start.x = m_startX.GetValue();
-        m_shape->m_Start.y = m_startY.GetValue();
-        m_shape->m_End.x = m_endX.GetValue();
-        m_shape->m_End.y = m_endY.GetValue();
+        m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
+        m_shape->SetEnd( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
         break;
 
     case S_CURVE:         // Segment with rounded ends
-        m_shape->m_Start.x = m_startX.GetValue();
-        m_shape->m_Start.y = m_startY.GetValue();
-        m_shape->m_End.x = m_endX.GetValue();
-        m_shape->m_End.y = m_endY.GetValue();
-        m_shape->m_Ctrl1.x = m_ctrl1X.GetValue();
-        m_shape->m_Ctrl1.y = m_ctrl1Y.GetValue();
-        m_shape->m_Ctrl2.x = m_ctrl2X.GetValue();
-        m_shape->m_Ctrl2.y = m_ctrl2Y.GetValue();
+        m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
+        m_shape->SetEnd( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
+        m_shape->SetBezControl1( wxPoint( m_ctrl1X.GetValue(), m_ctrl1Y.GetValue() ) );
+        m_shape->SetBezControl1( wxPoint( m_ctrl2X.GetValue(), m_ctrl2Y.GetValue() ) );
         break;
 
     case S_ARC:             // Arc with rounded ends
         // NB: we store the center of the arc in m_Start, and, confusingly,
         // the start point in m_End
-        m_shape->m_Start.x = m_endX.GetValue();
-        m_shape->m_Start.y = m_endY.GetValue();
-        m_shape->m_End.x = m_startX.GetValue();
-        m_shape->m_End.y = m_startY.GetValue();
+        m_shape->SetStart( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
+        m_shape->SetEnd( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
         // arc angle
-        m_shape->m_ArcAngle = m_radius.GetValue();
+        m_shape->SetAngle( m_radius.GetValue() );
         break;
 
     case S_CIRCLE:          //  ring or circle
-        m_shape->m_Start.x = m_startX.GetValue();
-        m_shape->m_Start.y = m_startY.GetValue();
-        m_shape->m_Radius = m_radius.GetValue();
+        m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
+        m_shape->SetEnd( m_shape->GetStart() + wxPoint( m_radius.GetValue(), 0 ) );
         break;
 
     case S_POLYGON:         // polygon
@@ -228,12 +219,14 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
 
 DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aParent,
                                                                   PCB_BASE_FRAME* aFrame,
-                                                                  PAD_CS_PRIMITIVE * aShape ) :
+                                                                  DRAWSEGMENT* aShape ) :
         DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( aParent ),
         m_shape( aShape ),
-        m_currshape( *m_shape ),
         m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true )
 {
+    for( const VECTOR2I& pt : m_shape->GetPolyShape().Outline( 0 ).CPoints() )
+        m_currPoints.emplace_back( pt );
+
     m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_deleteButton->SetBitmap( KiBitmap( trash_xpm ) );
     m_warningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
@@ -265,10 +258,10 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
     if( m_shape == NULL )
         return false;
 
-    m_thickness.SetValue( m_currshape.m_Thickness );
+    m_thickness.SetValue( m_shape->GetWidth() );
 
     // Populates the list of corners
-    int extra_rows = m_currshape.m_Poly.size() - m_gridCornersList->GetNumberRows();
+    int extra_rows = m_currPoints.size() - m_gridCornersList->GetNumberRows();
 
     if( extra_rows > 0 )
     {
@@ -282,16 +275,16 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
 
     // enter others corner coordinates
     wxString msg;
-    for( unsigned row = 0; row < m_currshape.m_Poly.size(); ++row )
+    for( unsigned row = 0; row < m_currPoints.size(); ++row )
     {
         // Row label is "Corner x"
         msg.Printf( "Corner %d", row+1 );
         m_gridCornersList->SetRowLabelValue( row, msg );
 
-        msg = StringFromValue( GetUserUnits(), m_currshape.m_Poly[row].x, true, true );
+        msg = StringFromValue( GetUserUnits(), m_currPoints[row].x, true, true );
         m_gridCornersList->SetCellValue( row, 0, msg );
 
-        msg = StringFromValue( GetUserUnits(), m_currshape.m_Poly[row].y, true, true );
+        msg = StringFromValue( GetUserUnits(), m_currPoints[row].y, true, true );
         m_gridCornersList->SetCellValue( row, 1, msg );
     }
 
@@ -303,9 +296,8 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataFromWindow()
     if( !Validate() )
         return false;
 
-    m_currshape.m_Thickness = m_thickness.GetValue();
-
-    *m_shape = m_currshape;
+    m_shape->SetPolyPoints( m_currPoints );
+    m_shape->SetWidth( m_thickness.GetValue() );
 
     return true;
 }
@@ -324,7 +316,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
     if( !m_gridCornersList->CommitPendingChanges() )
         return false;
 
-    if( m_currshape.m_Poly.size() < 3 )
+    if( m_currPoints.size() < 3 )
     {
         m_warningText->SetLabel( _("Polygon must have at least 3 corners" ) );
         m_warningText->Show( true );
@@ -334,13 +326,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
 
     bool valid = true;
 
-    SHAPE_LINE_CHAIN polyline;
-
-    for( unsigned ii = 0; ii < m_currshape.m_Poly.size(); ++ii )
-        polyline.Append( m_currshape.m_Poly[ii].x, m_currshape.m_Poly[ii].y );
-
-    // The polyline describes a polygon: close it.
-    polyline.SetClosed( true );
+    SHAPE_LINE_CHAIN polyline( m_currPoints, true );
 
     // Remove redundant corners:
     polyline.Simplify();
@@ -362,12 +348,12 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
 
     if( aRemoveRedundantCorners )
     {
-        if( polyline.PointCount() != (int)m_currshape.m_Poly.size() )
+        if( polyline.PointCount() != (int) m_currPoints.size() )
         {   // Happens after simplification
-            m_currshape.m_Poly.clear();
+            m_currPoints.clear();
 
-            for( int ii = 0; ii < polyline.PointCount(); ++ii )
-                m_currshape.m_Poly.emplace_back( polyline.CPoint( ii ).x, polyline.CPoint( ii ).y );
+            for( const VECTOR2I& pt : polyline.CPoints() )
+                m_currPoints.emplace_back( pt );
 
             m_warningIcon->Show( true );
             m_warningText->Show( true );
@@ -401,10 +387,10 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonAdd( wxCommandEvent& event )
         return;
     }
 
-    if( m_currshape.m_Poly.size() == 0 || row >= (int) m_currshape.m_Poly.size() )
-        m_currshape.m_Poly.emplace_back( 0, 0 );
+    if( m_currPoints.size() == 0 || row >= (int) m_currPoints.size() )
+        m_currPoints.emplace_back( 0, 0 );
     else
-        m_currshape.m_Poly.insert( m_currshape.m_Poly.begin() + row, wxPoint( 0, 0 ) );
+        m_currPoints.insert( m_currPoints.begin() + row, wxPoint( 0, 0 ) );
 
     Validate();
     TransferDataToWindow();
@@ -439,7 +425,7 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonDelete( wxCommandEvent& event )
     std::sort( selections.begin(), selections.end() );
 
     for( int ii = selections.size()-1; ii >= 0 ; --ii )
-        m_currshape.m_Poly.erase( m_currshape.m_Poly.begin() + selections[ii] );
+        m_currPoints.erase( m_currPoints.begin() + selections[ii] );
 
     Validate();
     TransferDataToWindow();
@@ -460,16 +446,16 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
     // Calculate a suitable scale to fit the available draw area
     int minsize( Millimeter2iu( 0.5 ) );
 
-    for( unsigned ii = 0; ii < m_currshape.m_Poly.size(); ++ii )
+    for( unsigned ii = 0; ii < m_currPoints.size(); ++ii )
     {
-        minsize = std::max( minsize, std::abs( m_currshape.m_Poly[ii].x ) );
-        minsize = std::max( minsize, std::abs( m_currshape.m_Poly[ii].y ) );
+        minsize = std::max( minsize, std::abs( m_currPoints[ii].x ) );
+        minsize = std::max( minsize, std::abs( m_currPoints[ii].y ) );
     }
 
     // The draw origin is the center of the window.
     // Therefore the window size is twice the minsize just calculated
     minsize *= 2;
-    minsize += m_currshape.m_Thickness;
+    minsize += m_thickness.GetValue();
 
     // Give a margin
     double scale = std::min( double( dc_size.x ) / minsize, double( dc_size.y ) / minsize ) * 0.9;
@@ -487,7 +473,7 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
     EDA_COLOR_T normalcolor = WHITE;
     EDA_COLOR_T selectcolor = RED;
 
-    for( unsigned ii = 0; ii < m_currshape.m_Poly.size(); ++ii )
+    for( unsigned ii = 0; ii < m_currPoints.size(); ++ii )
     {
         EDA_COLOR_T color = normalcolor;
 
@@ -498,10 +484,10 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
 
         unsigned jj = ii + 1;
 
-        if( jj >= m_currshape.m_Poly.size() )
+        if( jj >= m_currPoints.size() )
             jj = 0;
 
-        GRLine( NULL, &dc, m_currshape.m_Poly[ii] * scale, m_currshape.m_Poly[jj] * scale, m_currshape.m_Thickness * scale, color );
+        GRLine( NULL, &dc, m_currPoints[ii] * scale, m_currPoints[jj] * scale, m_thickness.GetValue() * scale, color );
     }
 
     event.Skip();
@@ -528,11 +514,9 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging( wxGridEvent& event )
         return;
 
     if( col == 0 )  // Set the X value
-        m_currshape.m_Poly[row].x = ValueFromString( GetUserUnits(), msg, true );
+        m_currPoints[row].x = ValueFromString( GetUserUnits(), msg, true );
     else            // Set the Y value
-        m_currshape.m_Poly[row].y = ValueFromString( GetUserUnits(), msg, true );
-
-    m_currshape.m_Thickness = m_thickness.GetValue();
+        m_currPoints[row].y = ValueFromString( GetUserUnits(), msg, true );
 
     Validate();
 
@@ -544,7 +528,7 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging( wxGridEvent& event )
 // (move, rotate around origin, scaling factor, duplication).
 DIALOG_PAD_PRIMITIVES_TRANSFORM::DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aParent,
                                                                   PCB_BASE_FRAME* aFrame,
-                                                                  std::vector<PAD_CS_PRIMITIVE*>& aList,
+                                                                  std::vector<std::shared_ptr<DRAWSEGMENT>>& aList,
                                                                   bool aShowDuplicate ) :
     DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE( aParent ),
     m_list( aList ),
@@ -575,7 +559,8 @@ inline void geom_transf( wxPoint& aCoord, wxPoint& aMove, double aScale, double 
 }
 
 
-void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* aList, int aDuplicateCount )
+void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<DRAWSEGMENT>>* aList,
+                                                 int aDuplicateCount )
 {
     wxPoint move_vect( m_vectorX.GetValue(), m_vectorY.GetValue() );
     double  rotation = m_rotation.GetValue();
@@ -599,48 +584,21 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* 
     do {
         for( unsigned idx = 0; idx < m_list.size(); ++idx )
         {
-            PAD_CS_PRIMITIVE* shape;
+            std::shared_ptr<DRAWSEGMENT> shape;
 
             if( aList == NULL )
                 shape = m_list[idx];
             else
             {
-                PAD_CS_PRIMITIVE new_shape( *m_list[idx] );
-                aList->push_back( new_shape );
-                shape = &aList->back();
+                aList->emplace_back( std::make_shared<DRAWSEGMENT>( *m_list[idx] ) );
+                shape = aList->back();
             }
 
             // Transform parameters common to all shape types (some can be unused)
-            shape->m_Thickness = KiROUND( shape->m_Thickness * scale );
-            geom_transf( shape->m_Start, currMoveVect, scale, curr_rotation );
-            geom_transf( shape->m_End, currMoveVect, scale, curr_rotation );
-
-            // specific parameters:
-            switch( shape->m_Shape )
-            {
-            case S_SEGMENT:         // Segment with rounded ends
-                break;
-
-            case S_ARC:             // Arc with rounded ends
-                break;
-
-            case S_CURVE:           // Bezier with rounded ends
-                geom_transf( shape->m_Ctrl1, currMoveVect, scale, curr_rotation );
-                geom_transf( shape->m_Ctrl2, currMoveVect, scale, curr_rotation );
-                break;
-
-            case S_CIRCLE:          //  ring or circle
-                shape->m_Radius = KiROUND( shape->m_Radius * scale );
-                break;
-
-            case S_POLYGON:         // polygon
-                for( unsigned ii = 0; ii < shape->m_Poly.size(); ++ii )
-                    geom_transf( shape->m_Poly[ii], currMoveVect, scale, curr_rotation );
-                break;
-
-            default:
-                break;
-            }
+            shape->SetWidth( KiROUND( shape->GetWidth() * scale ) );
+            shape->Move( currMoveVect );
+            shape->Scale( scale );
+            shape->Rotate( wxPoint( 0, 0 ), curr_rotation );
         }
 
         // Prepare new transform on duplication:

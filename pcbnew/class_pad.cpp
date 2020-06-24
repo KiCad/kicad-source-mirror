@@ -43,6 +43,7 @@
 #include <view/view.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <class_drawsegment.h>
 #include <geometry/polygon_test_point_inside.h>
 #include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -309,24 +310,11 @@ void D_PAD::buildEffectiveShapes() const
 
     if( GetShape() == PAD_SHAPE_CUSTOM )
     {
-#if 1
-        // For now we add these in as a single SHAPE_POLY_SET, but once we've moved them
-        // over to shapes themselves then we can just copy them across (with the requisite
-        // rotating and offsetting).
         SHAPE_POLY_SET* poly = new SHAPE_POLY_SET();
         MergePrimitivesAsPolygon( poly );
         poly->Rotate( -DECIDEG2RAD( m_Orient ) );
         poly->Move( shapePos );
         add( poly );
-#else
-        for( const std::shared_ptr<SHAPE>& primitive : m_basicShapes )
-        {
-            SHAPE* copy = primitive->Clone();
-            copy->Rotate( -DECIDEG2RAD( m_Orient ) );
-            copy->Move( shapePos );
-            add( copy );
-        }
-#endif
     }
 
     // Bounding radius
@@ -458,24 +446,8 @@ void D_PAD::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 // Flip the basic shapes, in custom pads
 void D_PAD::FlipPrimitives()
 {
-    // Flip custom shapes
-    for( PAD_CS_PRIMITIVE& primitive : m_basicShapes )
-    {
-        MIRROR( primitive.m_Start.y, 0 );
-        MIRROR( primitive.m_End.y, 0 );
-        primitive.m_ArcAngle = -primitive.m_ArcAngle;
-
-        switch( primitive.m_Shape )
-        {
-        case S_POLYGON:
-            for( wxPoint& pt : primitive.m_Poly )
-                MIRROR( pt.y, 0 );
-            break;
-
-        default:
-            break;
-        }
-    }
+    for( std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
+        primitive->Flip( wxPoint( 0, 0 ), false );
 
     m_shapesDirty = true;
 }
@@ -483,24 +455,8 @@ void D_PAD::FlipPrimitives()
 
 void D_PAD::MirrorXPrimitives( int aX )
 {
-    // Mirror custom shapes
-    for( PAD_CS_PRIMITIVE& primitive : m_basicShapes )
-    {
-        MIRROR( primitive.m_Start.x, aX );
-        MIRROR( primitive.m_End.x, aX );
-        primitive.m_ArcAngle = -primitive.m_ArcAngle;
-
-        switch( primitive.m_Shape )
-        {
-        case S_POLYGON:         // polygon
-            for( wxPoint& pt : primitive.m_Poly )
-                MIRROR( pt.x, 0 );
-            break;
-
-        default:
-            break;
-        }
-    }
+    for( std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
+        primitive->Flip( wxPoint( aX, 0 ), true );
 
     m_shapesDirty = true;
 }

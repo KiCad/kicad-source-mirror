@@ -659,7 +659,6 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
 void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 {
-    double m, n;
     double orientation = aPad->GetOrientation();
 
     // Draw description layer

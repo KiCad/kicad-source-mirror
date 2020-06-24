@@ -262,6 +262,8 @@ public:
 
     virtual void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
+    void Scale( double aScale );
+
     /**
      * Function TransformShapeWithClearanceToPolygon
      * Convert the draw segment to a closed polygon

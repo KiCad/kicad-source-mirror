@@ -131,6 +131,52 @@ void DRAWSEGMENT::Move( const wxPoint& aMoveVector )
 }
 
 
+void DRAWSEGMENT::Scale( double aScale )
+{
+    auto scalePt = [&]( wxPoint& pt )
+                   {
+                       pt.x = KiROUND( pt.x * aScale );
+                       pt.y = KiROUND( pt.y * aScale );
+                   };
+
+    int radius = GetRadius();
+
+    scalePt( m_Start );
+    scalePt( m_End );
+
+    // specific parameters:
+    switch( m_Shape )
+    {
+    case S_CURVE:
+        scalePt( m_BezierC1 );
+        scalePt( m_BezierC2 );
+        break;
+
+    case S_CIRCLE:          //  ring or circle
+        m_End.x = m_Start.x + KiROUND( radius * aScale );
+        m_End.y = m_Start.y;
+        break;
+
+    case S_POLYGON:         // polygon
+    {
+        std::vector<wxPoint> pts;
+
+        for( const VECTOR2I& pt : m_Poly.Outline( 0 ).CPoints() )
+        {
+            pts.emplace_back( pt );
+            scalePt( pts.back() );
+        }
+
+        SetPolyPoints( pts );
+    }
+        break;
+
+    default:
+        break;
+    }
+}
+
+
 void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     switch( m_Shape )
@@ -138,11 +184,29 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
     case S_ARC:
     case S_SEGMENT:
     case S_CIRCLE:
-    case S_RECT:
         // these can all be done by just rotating the start and end points
         RotatePoint( &m_Start, aRotCentre, aAngle);
         RotatePoint( &m_End, aRotCentre, aAngle);
         break;
+
+    case S_RECT:
+        if( KiROUND( aAngle ) % 900 == 0 )
+        {
+            RotatePoint( &m_Start, aRotCentre, aAngle );
+            RotatePoint( &m_End, aRotCentre, aAngle );
+            break;
+        }
+
+        // Convert non-cartesian-rotated rect to a diamond
+        m_Shape = S_POLYGON;
+        m_Poly.RemoveAllContours();
+        m_Poly.NewOutline();
+        m_Poly.Append( m_Start );
+        m_Poly.Append( m_End.x, m_Start.y );
+        m_Poly.Append( m_End );
+        m_Poly.Append( m_Start.x, m_End.y );
+
+        KI_FALLTHROUGH;
 
     case S_POLYGON:
         m_Poly.Rotate( -DECIDEG2RAD( aAngle ), VECTOR2I( aRotCentre ) );

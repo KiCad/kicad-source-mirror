@@ -60,60 +60,6 @@ namespace KIGFX
     class VIEW;
 }
 
-/** Helper class to handle a primitive (basic shape: polygon, segment, circle or arc)
- * to build a custom pad full shape from a set of primitives
- */
-class PAD_CS_PRIMITIVE
-{
-public:
-    STROKE_T m_Shape;   /// S_SEGMENT, S_RECT, S_ARC, S_CIRCLE, S_POLYGON only (same as DRAWSEGMENT)
-    int m_Thickness;    /// thickness of segment or outline
-                        /// For filled S_CIRCLE shape, thickness = 0.
-                        // if thickness is not = 0 S_CIRCLE shape is a ring
-    int m_Radius;       /// radius of a circle
-    double m_ArcAngle;  /// angle of an arc, from its starting point, in 0.1 deg
-    wxPoint m_Start;    /// is also the center of the circle and arc
-    wxPoint m_End;      /// is also the start point of the arc
-    wxPoint m_Ctrl1;    /// Bezier Control point 1
-    wxPoint m_Ctrl2;    /// Bezier Control point 2
-    std::vector<wxPoint> m_Poly;
-
-    PAD_CS_PRIMITIVE( STROKE_T aShape ):
-        m_Shape( aShape ), m_Thickness( 0 ), m_Radius( 0 ), m_ArcAngle( 0 )
-    {
-    }
-
-    // Accessors (helpers for arc and circle shapes)
-    wxPoint GetCenter() { return m_Start; }     /// returns the center of a circle or arc
-    wxPoint GetArcStart() { return m_End; }     /// returns the start point of an arc
-
-    // Geometric transform
-    /** Move the primitive
-     * @param aMoveVector is the deplacement vector
-     */
-    void Move( wxPoint aMoveVector );
-
-    /**
-     * Rotates the primitive about a point
-     * @param aRotCentre center of rotation
-     * @param aAngle angle in tenths of degree
-     */
-    void Rotate( const wxPoint& aRotCentre, double aAngle );
-
-    /** Export the PAD_CS_PRIMITIVE parameters to a DRAWSEGMENT
-     * useful to draw a primitive shape
-     * @param aTarget is the DRAWSEGMENT to initialize
-     */
-    void ExportTo( DRAWSEGMENT* aTarget );
-
-    /** Export the PAD_CS_PRIMITIVE parameters to a EDGE_MODULE
-     * useful to convert a primitive shape to a EDGE_MODULE shape for editing in footprint editor
-     * @param aTarget is the EDGE_MODULE to initialize
-     */
-    void ExportTo( EDGE_MODULE* aTarget );
-};
-
-
 class D_PAD : public BOARD_CONNECTED_ITEM
 {
 public:
@@ -307,7 +253,10 @@ public:
     /**
      * Accessor to the basic shape list
      */
-    const std::vector<PAD_CS_PRIMITIVE>& GetPrimitives() const { return m_basicShapes; }
+    const std::vector<std::shared_ptr<DRAWSEGMENT>>& GetPrimitives() const
+    {
+        return m_editPrimitives;
+    }
 
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
@@ -324,12 +273,12 @@ public:
     /**
      * Import to the basic shape list
      */
-    void SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList );
+    void SetPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList );
 
     /**
      * Add to the basic shape list
      */
-    void AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList );
+    void AddPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList );
 
 
     /**
@@ -633,7 +582,7 @@ private:
      */
     int calcBoundingRadius() const;
 
-    void addCustomPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError ) const;
+    void addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError ) const;
 
     void buildEffectiveShapes() const;
 
@@ -647,16 +596,14 @@ private:
                                     ///< PAD_SHAPE_OVAL, PAD_SHAPE_TRAPEZOID,
                                     ///< PAD_SHAPE_ROUNDRECT, PAD_SHAPE_POLYGON
 
+    // Edit definitions of primitives for custom pad shapes.  In local coordinates relative
+    // to m_Pos (NOT shapePos) at orient 0.
+    std::vector<std::shared_ptr<DRAWSEGMENT>>   m_editPrimitives;
+
     mutable bool                                m_shapesDirty;
     mutable int                                 m_effectiveBoundingRadius;
     mutable std::vector<std::shared_ptr<SHAPE>> m_effectiveShapes;
     mutable std::shared_ptr<SHAPE_SEGMENT>      m_effectiveHoleShape;
-
-    /** for free shape pads: a list of basic shapes,
-     * in local coordinates, orient 0, coordinates relative to m_Pos
-     * They are expected to define only one copper area.
-     */
-    std::vector<PAD_CS_PRIMITIVE> m_basicShapes;
 
     /**
      * How to build the custom shape in zone, to create the clearance area:

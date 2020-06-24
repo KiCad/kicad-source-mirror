@@ -1,7 +1,4 @@
 
-%ignore std::vector<PAD_CS_PRIMITIVE>::resize;
-%ignore std::vector<PAD_CS_PRIMITIVE>::vector(size_type);
-%template(PAD_CS_PRIMITIVE_Vector) std::vector<PAD_CS_PRIMITIVE>;
 
 %include pad_shapes.h
 %include class_pad.h
