@@ -1118,7 +1118,7 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
     // offset it a bit so it can more easily be picked.
     if( oldZone->GetIsKeepout() && ( oldZone->GetLayerSet() == zoneSettings.m_Layers ) )
         newZone->Move( wxPoint( IU_PER_MM, IU_PER_MM ) );
-    else if( !oldZone->GetIsKeepout() && ( oldZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
+    else if( !oldZone->GetIsKeepout() && zoneSettings.m_Layers.test( oldZone->GetLayer() ) )
         newZone->Move( wxPoint( IU_PER_MM, IU_PER_MM ) );
 
     commit.Add( newZone.release() );

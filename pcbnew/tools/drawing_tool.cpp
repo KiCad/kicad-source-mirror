@@ -1774,8 +1774,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( ZONE_CONTAINER* zone : m_board->Zones() )
             {
-                if( zone->HitTestFilledArea( position ) )
-                    foundZones.push_back( zone );
+                for( PCB_LAYER_ID layer : LSET( zone->GetLayerSet() & lset ).Seq() )
+                    if( zone->HitTestFilledArea( layer, position ) )
+                        foundZones.push_back( zone );
             }
 
             std::sort( foundZones.begin(), foundZones.end(),

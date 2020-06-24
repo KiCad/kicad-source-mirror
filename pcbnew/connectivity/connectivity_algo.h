@@ -243,7 +243,8 @@ public:
      */
     void    PropagateNets( BOARD_COMMIT* aCommit = nullptr );
 
-    void    FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std::vector<int>& aIslands );
+    void    FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                       std::vector<int>& aIslands );
 
     /**
      * Finds the copper islands that are not connected to a net.  These are added to

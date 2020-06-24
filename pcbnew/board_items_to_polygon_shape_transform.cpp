@@ -89,10 +89,9 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
     for( int ii = 0; ii < GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = GetArea( ii );
-        PCB_LAYER_ID    zonelayer = zone->GetLayer();
 
-        if( zonelayer == aLayer )
-            zone->TransformSolidAreasShapesToPolygonSet( aOutlines );
+        if( zone->GetLayerSet().test( aLayer ) )
+            zone->TransformSolidAreasShapesToPolygonSet( aLayer, aOutlines );
     }
 
     // convert graphic items on copper layers (texts)
@@ -242,14 +241,17 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
 }
 
 
-void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
+void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet( PCB_LAYER_ID aLayer,
+                                                            SHAPE_POLY_SET& aCornerBuffer,
                                                             int aError ) const
 {
-    if( GetFilledPolysList().IsEmpty() )
+    if( !m_FilledPolysList.count( aLayer ) || m_FilledPolysList.at( aLayer ).IsEmpty() )
         return;
 
+    const SHAPE_POLY_SET& polys = m_FilledPolysList.at( aLayer );
+
     // add filled areas polygons
-    aCornerBuffer.Append( m_FilledPolysList );
+    aCornerBuffer.Append( polys );
     auto board = GetBoard();
     int maxError = ARC_HIGH_DEF;
 
@@ -257,9 +259,9 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet( SHAPE_POLY_SET& aCor
         maxError = board->GetDesignSettings().m_MaxError;
 
     // add filled areas outlines, which are drawn with thick lines
-    for( int i = 0; i < m_FilledPolysList.OutlineCount(); i++ )
+    for( int i = 0; i < polys.OutlineCount(); i++ )
     {
-        const SHAPE_LINE_CHAIN& path = m_FilledPolysList.COutline( i );
+        const SHAPE_LINE_CHAIN& path = polys.COutline( i );
 
         for( int j = 0; j < path.PointCount(); j++ )
         {
@@ -652,8 +654,16 @@ void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorn
                                                            int aClearanceValue, int aError,
                                                            bool ignoreLineWidth ) const
 {
-    wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for zones." );
+    // Now that zones are multilayer, we cannot implement this without a layer argument.
+    // But, at the time of adding multilayer zones, this is never called for zones anyway
+    // so let's just disable it and fail.
+    wxFAIL_MSG( "TransformShapeWithClearanceToPolygon is not supported for zones" );
 
-    aCornerBuffer = m_FilledPolysList;
+#if 0
+    if( !m_FilledPolysList.count( aLayer ) )
+        return;
+
+    aCornerBuffer = m_FilledPolysList.at( aLayer );
     aCornerBuffer.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+#endif
 }

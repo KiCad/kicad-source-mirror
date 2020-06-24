@@ -431,7 +431,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
                         if( zone->HitTestForCorner( m_RefPos, accuracy * 2 )
                             || zone->HitTestForEdge( m_RefPos, accuracy )
-                            || ( testFill && zone->HitTestFilledArea( m_RefPos ) ) )
+                            || ( testFill && zone->HitTestFilledArea( layer, m_RefPos ) ) )
                         {
                             Append( item );
                             goto exit;
@@ -495,7 +495,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
                         if( zone->HitTestForCorner( m_RefPos, accuracy * 2 )
                             || zone->HitTestForEdge( m_RefPos, accuracy )
-                            || ( testFill && zone->HitTestFilledArea( m_RefPos ) ) )
+                            || ( testFill && zone->HitTestFilledArea( layer, m_RefPos ) ) )
                         {
                             Append2nd( item );
                             goto exit;

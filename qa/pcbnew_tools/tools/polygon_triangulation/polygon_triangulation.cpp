@@ -236,12 +236,18 @@ int polygon_triangulation_main( int argc, char *argv[] )
                         areaId = zonesToTriangulate.fetch_add( 1 ) )
             {
                 auto zone = brd->GetArea( areaId );
-                SHAPE_POLY_SET poly = zone->GetFilledPolysList();
 
-                poly.CacheTriangulation();
+                // NOTE: this could be refactored to do multiple layers from the same zone in
+                // parallel, but since the test case doesn't have any of these, I'm not bothering
+                // to do that right now.
+                for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                {
+                    SHAPE_POLY_SET poly = zone->GetFilledPolysList( layer );
 
-                (void) poly;
-                printf("zone %zu/%d\n", ( areaId + 1 ), brd->GetAreaCount() );
+                    poly.CacheTriangulation();
+
+                    (void) poly;
+                    printf( "zone %zu/%d\n", ( areaId + 1 ), brd->GetAreaCount() );
 #if 0
                 PROF_COUNTER unfrac("unfrac");
                 poly.Unfracture( SHAPE_POLY_SET::PM_FAST );
@@ -255,6 +261,7 @@ int polygon_triangulation_main( int argc, char *argv[] )
                 }
                 triangulate.Show();
 #endif
+                }
             }
 
             threadsFinished++;

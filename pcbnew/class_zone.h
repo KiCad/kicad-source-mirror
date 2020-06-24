@@ -250,8 +250,17 @@ public:
     int GetLocalFlags() const { return m_localFlgs; }
     void SetLocalFlags( int aFlags ) { m_localFlgs = aFlags; }
 
-    ZONE_SEGMENT_FILL& FillSegments() { return m_FillSegmList; }
-    const ZONE_SEGMENT_FILL& FillSegments() const { return m_FillSegmList; }
+    ZONE_SEGMENT_FILL& FillSegments( PCB_LAYER_ID aLayer )
+    {
+        wxASSERT( m_FillSegmList.count( aLayer ) );
+        return m_FillSegmList.at( aLayer );
+    }
+
+    const ZONE_SEGMENT_FILL& FillSegments( PCB_LAYER_ID aLayer ) const
+    {
+        wxASSERT( m_FillSegmList.count( aLayer ) );
+        return m_FillSegmList.at( aLayer );
+    }
 
     SHAPE_POLY_SET* Outline() { return m_Poly; }
     const SHAPE_POLY_SET* Outline() const { return const_cast< SHAPE_POLY_SET* >( m_Poly ); }
@@ -269,10 +278,11 @@ public:
     /**
      * Function HitTestFilledArea
      * tests if the given wxPoint is within the bounds of a filled area of this zone.
+     * @param aLayer is the layer to test on
      * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTestFilledArea( const wxPoint& aRefPos ) const;
+    bool HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint& aRefPos ) const;
 
     /**
      * Tests if the given point is contained within a cutout of the zone.
@@ -305,10 +315,11 @@ public:
      * (the full shape is the polygon area with a thick outline)
      * Used in 3D view
      * Arcs (ends of segments) are approximated by segments
+     * @param aLayer is the layer of the zone to retrieve
      * @param aCornerBuffer = a buffer to store the polygons
      * @param aError = Maximum error allowed between true arc and polygon approx
      */
-    void TransformSolidAreasShapesToPolygonSet(
+    void TransformSolidAreasShapesToPolygonSet( PCB_LAYER_ID aLayer,
             SHAPE_POLY_SET& aCornerBuffer, int aError = ARC_HIGH_DEF ) const;
 
     /**
@@ -334,14 +345,16 @@ public:
      * Convert the zone shape to a closed polygon
      * Used in filling zones calculations
      * Circles and arcs are approximated by segments
+     * @param aLayer is the layer of the filled zone to retrieve
      * @param aCornerBuffer = a buffer to store the polygon
      * @param aClearanceValue = the clearance around the pad
      * @param aError = the maximum deviation from true circle
      * @param ignoreLineWidth = used for edge cut items where the line width is only
      * for visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue,
-            int aError = ARC_HIGH_DEF, bool ignoreLineWidth = false ) const override;
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+            int aClearanceValue, int aError = ARC_HIGH_DEF,
+            bool ignoreLineWidth = false ) const override;
 
     /**
      * Function HitTestForCorner
@@ -568,7 +581,8 @@ public:
      */
     void ClearFilledPolysList()
     {
-        m_FilledPolysList.RemoveAllContours();
+        for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
+            pair.second.RemoveAllContours();
     }
 
    /**
@@ -576,9 +590,10 @@ public:
      * returns a reference to the list of filled polygons.
      * @return Reference to the list of filled polygons.
      */
-    const SHAPE_POLY_SET& GetFilledPolysList() const
+    const SHAPE_POLY_SET& GetFilledPolysList( PCB_LAYER_ID aLayer ) const
     {
-        return m_FilledPolysList;
+        wxASSERT( m_FilledPolysList.count( aLayer ) );
+        return m_FilledPolysList.at( aLayer );
     }
 
     /** (re)create a list of triangles that "fill" the solid areas.
@@ -590,18 +605,18 @@ public:
      * Function SetFilledPolysList
      * sets the list of filled polygons.
      */
-    void SetFilledPolysList( SHAPE_POLY_SET& aPolysList )
+    void SetFilledPolysList( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aPolysList )
     {
-        m_FilledPolysList = aPolysList;
+        m_FilledPolysList[aLayer] = aPolysList;
     }
 
     /**
       * Function SetFilledPolysList
       * sets the list of filled polygons.
       */
-    void SetRawPolysList( SHAPE_POLY_SET& aPolysList )
+    void SetRawPolysList( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aPolysList )
     {
-        m_RawPolysList = aPolysList;
+        m_RawPolysList[aLayer] = aPolysList;
     }
 
 
@@ -643,14 +658,15 @@ public:
 
     void AddPolygon( const SHAPE_LINE_CHAIN& aPolygon );
 
-    void SetFillSegments( const ZONE_SEGMENT_FILL& aSegments )
+    void SetFillSegments( PCB_LAYER_ID aLayer, const ZONE_SEGMENT_FILL& aSegments )
     {
-        m_FillSegmList = aSegments;
+        m_FillSegmList[aLayer] = aSegments;
     }
 
-    SHAPE_POLY_SET& RawPolysList()
+    SHAPE_POLY_SET& RawPolysList( PCB_LAYER_ID aLayer )
     {
-        return m_RawPolysList;
+        wxASSERT( m_RawPolysList.count( aLayer ) );
+        return m_RawPolysList.at( aLayer );
     }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
@@ -684,6 +700,9 @@ public:
     void SetDoNotAllowTracks( bool aEnable ) { m_doNotAllowTracks = aEnable; }
     void SetDoNotAllowPads( bool aEnable ) { m_doNotAllowPads = aEnable; }
     void SetDoNotAllowFootprints( bool aEnable ) { m_doNotAllowFootprints = aEnable; }
+
+    bool GetRemoveIslands() const { return m_removeIslands; }
+    void SetRemoveIslands( bool aRemove ) { m_removeIslands = aRemove; }
 
     /**
      * Hatch related methods
@@ -740,13 +759,25 @@ public:
     /** @return the hash value previously calculated by BuildHashValue().
      * used in zone filling calculations
      */
-    MD5_HASH GetHashValue() { return m_filledPolysHash; }
+    MD5_HASH GetHashValue( PCB_LAYER_ID aLayer )
+    {
+        if( !m_filledPolysHash.count( aLayer ) )
+            return MD5_HASH();
+
+        return m_filledPolysHash.at( aLayer );
+    }
 
     /** Build the hash value of m_FilledPolysList, and store it internally
      *  in m_filledPolysHash.
      *  Used in zone filling calculations, to know if m_FilledPolysList is up to date.
      */
-    void BuildHashValue() { m_filledPolysHash = m_FilledPolysList.GetHash(); }
+    void BuildHashValue( PCB_LAYER_ID aLayer )
+    {
+        if( !m_FilledPolysList.count( aLayer ) )
+            return;
+
+        m_filledPolysHash[aLayer] = m_FilledPolysList.at( aLayer ).GetHash();
+    }
 
 
 
@@ -797,6 +828,9 @@ protected:
     int                   m_ZoneMinThickness;        ///< Minimum thickness value in filled areas.
     bool                  m_FilledPolysUseThickness;    ///< outline of filled polygons have thickness.
 
+    /// True if isolated copper (islands) should be removed after fill (default)
+    bool m_removeIslands;
+
     /** True when a zone was filled, false after deleting the filled areas. */
     bool                  m_IsFilled;
 
@@ -845,7 +879,7 @@ protected:
     /** Segments used to fill the zone (#m_FillMode ==1 ), when fill zone by segment is used.
      *  In this case the segments have #m_ZoneMinThickness width.
      */
-    ZONE_SEGMENT_FILL          m_FillSegmList;
+    std::map<PCB_LAYER_ID, ZONE_SEGMENT_FILL> m_FillSegmList;
 
     /* set of filled polygons used to draw a zone as a filled area.
      * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole
@@ -855,10 +889,11 @@ protected:
      * connecting "holes" with external main outline.  In complex cases an outline
      * described by m_Poly can have many filled areas
      */
-    SHAPE_POLY_SET        m_FilledPolysList;
-    SHAPE_POLY_SET        m_RawPolysList;
-    MD5_HASH              m_filledPolysHash;    // A hash value used in zone filling calculations
-                                                // to see if the filled areas are up to date
+    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_FilledPolysList;
+    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_RawPolysList;
+
+    /// A hash value used in zone filling calculations to see if the filled areas are up to date
+    std::map<PCB_LAYER_ID, MD5_HASH>       m_filledPolysHash;
 
     ZONE_HATCH_STYLE      m_hatchStyle;     // hatch style, see enum above
     int                   m_hatchPitch;     // for DIAGONAL_EDGE, distance between 2 hatch lines

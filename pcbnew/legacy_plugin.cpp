@@ -2657,7 +2657,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 makeNewOutline = end_contour;
             }
 
-            zc->SetFilledPolysList( polysList );
+            zc->SetFilledPolysList( zc->GetLayer(), polysList );
         }
 
         else if( TESTLINE( "$FILLSEGMENTS" ) )
@@ -2673,7 +2673,8 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 BIU ex = biuParse( data, &data );
                 BIU ey = biuParse( data );
 
-                zc->FillSegments().push_back( SEG( VECTOR2I( sx, sy ), VECTOR2I( ex, ey ) ) );
+                zc->FillSegments( zc->GetLayer() )
+                        .push_back( SEG( VECTOR2I( sx, sy ), VECTOR2I( ex, ey ) ) );
             }
         }
 

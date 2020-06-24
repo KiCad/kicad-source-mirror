@@ -682,6 +682,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         if( aStatusReporter )
             aStatusReporter->Report( _( "Create zones" ) );
 
+        std::vector<std::pair<const ZONE_CONTAINER*, PCB_LAYER_ID>> zones;
+
+        for( size_t i = 0; i < m_board->GetAreaCount(); i++ )
+        {
+            const ZONE_CONTAINER* zone = m_board->GetArea( i );
+
+            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                zones.emplace_back( std::make_pair( zone, layer ) );
+        }
+
         // Add zones objects
         // /////////////////////////////////////////////////////////////////////
         std::atomic<size_t> nextZone( 0 );
@@ -693,19 +703,20 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             std::thread t = std::thread( [&]()
             {
                 for( size_t areaId = nextZone.fetch_add( 1 );
-                            areaId < static_cast<size_t>( m_board->GetAreaCount() );
+                            areaId < zones.size();
                             areaId = nextZone.fetch_add( 1 ) )
                 {
-                    const ZONE_CONTAINER* zone = m_board->GetArea( areaId );
+                    const ZONE_CONTAINER* zone = zones[areaId].first;
 
                     if( zone == nullptr )
                         break;
 
-                    auto layerContainer = m_layers_container2D.find( zone->GetLayer() );
+                    PCB_LAYER_ID layer = zones[areaId].second;
+
+                    auto layerContainer = m_layers_container2D.find( layer );
 
                     if( layerContainer != m_layers_container2D.end() )
-                        AddSolidAreasShapesToContainer( zone, layerContainer->second,
-                                                        zone->GetLayer() );
+                        AddSolidAreasShapesToContainer( zone, layerContainer->second, layer );
                 }
 
                 threadsFinished++;
@@ -733,10 +744,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( zone == nullptr )
                 break;
 
-            auto layerContainer = m_layers_poly.find( zone->GetLayer() );
+            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            {
+                auto layerContainer = m_layers_poly.find( layer );
 
-            if( layerContainer != m_layers_poly.end() )
-                zone->TransformSolidAreasShapesToPolygonSet( *layerContainer->second );
+                if( layerContainer != m_layers_poly.end() )
+                    zone->TransformSolidAreasShapesToPolygonSet( layer, *layerContainer->second );
+            }
         }
     }
 
@@ -1010,7 +1024,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 if( !zone->IsOnLayer( curr_layer_id ) )
                     continue;
 
-                zone->TransformSolidAreasShapesToPolygonSet( *layerPoly );
+                zone->TransformSolidAreasShapesToPolygonSet( curr_layer_id, *layerPoly );
             }
         }
 

@@ -1023,37 +1023,39 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
     {
         ZONE_CONTAINER* zone = aPcb->GetArea( ii );
 
-        VRML_LAYER* vl;
-
-        if( !GetLayer( aModel, zone->GetLayer(), &vl ) )
-            continue;
-
-        // fixme: this modifies the board where it shouldn't, but I don't have the time
-        // to clean this up - TW
-        if( !zone->IsFilled() )
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
-            ZONE_FILLER filler( aPcb );
-            zone->SetFillMode( ZONE_FILL_MODE::POLYGONS ); // use filled polygons
-            filler.Fill( { zone } );
-        }
+            VRML_LAYER* vl;
 
-        const SHAPE_POLY_SET& poly = zone->GetFilledPolysList();
+            if( !GetLayer( aModel, layer, &vl ) )
+                continue;
 
-        for( int i = 0; i < poly.OutlineCount(); i++ )
-        {
-            const SHAPE_LINE_CHAIN& outline = poly.COutline( i );
-
-            int seg = vl->NewContour();
-
-            for( int j = 0; j < outline.PointCount(); j++ )
+            // fixme: this modifies the board where it shouldn't, but I don't have the time
+            // to clean this up - TW
+            if( !zone->IsFilled() )
             {
-                if( !vl->AddVertex( seg, (double)outline.CPoint( j ).x * BOARD_SCALE,
-                                         -((double)outline.CPoint( j ).y * BOARD_SCALE ) ) )
-                    throw( std::runtime_error( vl->GetError() ) );
-
+                ZONE_FILLER filler( aPcb );
+                zone->SetFillMode( ZONE_FILL_MODE::POLYGONS ); // use filled polygons
+                filler.Fill( { zone } );
             }
 
-            vl->EnsureWinding( seg, false );
+            const SHAPE_POLY_SET& poly = zone->GetFilledPolysList( layer );
+
+            for( int i = 0; i < poly.OutlineCount(); i++ )
+            {
+                const SHAPE_LINE_CHAIN& outline = poly.COutline( i );
+
+                int seg = vl->NewContour();
+
+                for( int j = 0; j < outline.PointCount(); j++ )
+                {
+                    if( !vl->AddVertex( seg, (double) outline.CPoint( j ).x * BOARD_SCALE,
+                                -( (double) outline.CPoint( j ).y * BOARD_SCALE ) ) )
+                        throw( std::runtime_error( vl->GetError() ) );
+                }
+
+                vl->EnsureWinding( seg, false );
+            }
         }
     }
 }

@@ -83,9 +83,7 @@ public:
 
     int  m_NetcodeSelection;            ///< Net code selection for the current zone
 
-    LSET m_Layers;
-
-    PCB_LAYER_ID    m_CurrentZone_Layer;    ///< Layer used to create the current zone
+    LSET m_Layers;                      ///< Layers that this zone exists on
 
     /// Option to show the zone area (outlines only, short hatches or full hatches
     ZONE_HATCH_STYLE m_Zone_HatchingStyle;
@@ -114,6 +112,7 @@ private:
     bool m_keepoutDoNotAllowPads;
     bool m_keepoutDoNotAllowFootprints;
 
+    bool m_removeIslands;
 
 public:
     ZONE_SETTINGS();
@@ -181,6 +180,9 @@ public:
     void SetDoNotAllowTracks( bool aEnable ) { m_keepoutDoNotAllowTracks = aEnable; }
     void SetDoNotAllowPads( bool aEnable ) { m_keepoutDoNotAllowPads = aEnable; }
     void SetDoNotAllowFootprints( bool aEnable ) { m_keepoutDoNotAllowFootprints = aEnable; }
+
+    const bool GetRemoveIslands() const { return m_removeIslands; }
+    void SetRemoveIslands( bool aRemove ) { m_removeIslands = aRemove; }
 };
 
 

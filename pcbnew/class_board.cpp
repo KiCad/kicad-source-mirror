@@ -1216,31 +1216,6 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 }
 
 
-ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos, PCB_LAYER_ID aStartLayer,
-                                                PCB_LAYER_ID aEndLayer, int aNetCode )
-{
-    if( aEndLayer < 0 )
-        aEndLayer = aStartLayer;
-
-    if( aEndLayer <  aStartLayer )
-        std::swap( aEndLayer, aStartLayer );
-
-    for( ZONE_CONTAINER* area : m_ZoneDescriptorList )
-    {
-        if( area->GetLayer() < aStartLayer || area->GetLayer() > aEndLayer )
-            continue;
-
-        if( aNetCode >= 0 && area->GetNetCode() != aNetCode )
-            continue;
-
-        if( area->HitTestFilledArea( aRefPos ) )
-            return area;
-    }
-
-    return NULL;
-}
-
-
 int BOARD::SetAreasNetCodesFromNetNames()
 {
     int error_count = 0;

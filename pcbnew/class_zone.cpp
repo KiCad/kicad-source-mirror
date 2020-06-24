@@ -30,6 +30,7 @@
 #include <pcb_screen.h>
 #include <class_board.h>
 #include <class_zone.h>
+#include <pcb_edit_frame.h> // current layer for msgpanel
 #include <math_for_graphics.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
@@ -63,6 +64,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
     SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
     m_Poly = new SHAPE_POLY_SET();              // Outlines
     m_FilledPolysUseThickness = true;           // set the "old" way to build filled polygon areas (before 6.0.x)
+    m_removeIslands           = true;
     aParent->GetZoneSettings().ExportSetting( *this );
 
     m_needRefill = false;   // True only after some edition.
@@ -192,10 +194,20 @@ EDA_ITEM* ZONE_CONTAINER::Clone() const
 
 bool ZONE_CONTAINER::UnFill()
 {
-    bool change = ( !m_FilledPolysList.IsEmpty() || m_FillSegmList.size() > 0 );
+    bool change = false;
 
-    m_FilledPolysList.RemoveAllContours();
-    m_FillSegmList.clear();
+    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+    {
+        change |= !pair.second.IsEmpty();
+        pair.second.RemoveAllContours();
+    }
+
+    for( std::pair<PCB_LAYER_ID, ZONE_SEGMENT_FILL> pair : m_FillSegmList )
+    {
+        change |= !pair.second.empty();
+        pair.second.clear();
+    }
+
     m_IsFilled = false;
 
     return change;
@@ -216,14 +228,7 @@ PCB_LAYER_ID ZONE_CONTAINER::GetLayer() const
 
 bool ZONE_CONTAINER::IsOnCopperLayer() const
 {
-    if( GetIsKeepout() )
-    {
-        return ( m_layerSet & LSET::AllCuMask() ).count() > 0;
-    }
-    else
-    {
-        return IsCopperLayer( GetLayer() );
-    }
+    return ( m_layerSet & LSET::AllCuMask() ).count() > 0;
 }
 
 
@@ -255,12 +260,24 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
         return;
 
     if( m_layerSet != aLayerSet )
+    {
         SetNeedRefill( true );
+
+        UnFill();
+
+        for( PCB_LAYER_ID layer : aLayerSet.Seq() )
+        {
+            m_FillSegmList[layer]    = {};
+            m_FilledPolysList[layer] = {};
+            m_RawPolysList[layer]    = {};
+            m_filledPolysHash[layer] = {};
+        }
+    }
 
     m_layerSet = aLayerSet;
 
     // Set the single layer parameter.
-    // For keepout zones that can be on many layers, this parameter does not have
+    // For zones that can be on many layers, this parameter does not have
     // really meaning and is a bit arbitrary if more than one layer is set.
     // But many functions are using it.
     // So we need to initialize it to a reasonable value.
@@ -274,43 +291,24 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
 
 LSET ZONE_CONTAINER::GetLayerSet() const
 {
-    // TODO - Enable multi-layer zones for all zone types
-    // not just keepout zones
-    if( GetIsKeepout() )
-    {
-        return m_layerSet;
-    }
-    else
-    {
-        return LSET( m_Layer );
-    }
+    return m_layerSet;
 }
+
 
 void ZONE_CONTAINER::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    if( GetIsKeepout() )
-    {
-        LSEQ layers = m_layerSet.Seq();
+    LSEQ layers = m_layerSet.Seq();
 
-        for( unsigned int idx = 0; idx < layers.size(); idx++ )
-            aLayers[idx] = layers[idx];
+    for( unsigned int idx = 0; idx < layers.size(); idx++ )
+        aLayers[idx] = layers[idx];
 
-        aCount = layers.size();
-    }
-    else
-    {
-        aLayers[0] = m_Layer;
-        aCount = 1;
-    }
+    aCount = layers.size();
 }
 
 
 bool ZONE_CONTAINER::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
-    if( GetIsKeepout() )
-        return m_layerSet.test( aLayer );
-
-    return BOARD_ITEM::IsOnLayer( aLayer );
+    return m_layerSet.test( aLayer );
 }
 
 
@@ -538,9 +536,12 @@ int ZONE_CONTAINER::GetLocalClearance( wxString* aSource ) const
 }
 
 
-bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
+bool ZONE_CONTAINER::HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint& aRefPos ) const
 {
-    return m_FilledPolysList.Contains( VECTOR2I( aRefPos.x, aRefPos.y ) );
+    if( !m_FilledPolysList.count( aLayer ) )
+        return false;
+
+    return m_FilledPolysList.at( aLayer ).Contains( VECTOR2I( aRefPos.x, aRefPos.y ) );
 }
 
 
@@ -642,7 +643,21 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         aList.emplace_back( _( "Priority" ), msg, BLUE );
     }
 
-    aList.emplace_back( _( "Layer" ), LayerMaskDescribe( GetBoard(), m_layerSet ), DARKGREEN );
+    wxString layerDesc;
+    int count = 0;
+
+    for( PCB_LAYER_ID layer : m_layerSet.Seq() )
+    {
+        if( count == 0 )
+            layerDesc = GetBoard()->GetLayerName( layer );
+
+        count++;
+    }
+
+    if( count > 1 )
+        layerDesc.Printf( _( "%s and %d more" ), layerDesc, count - 1 );
+
+    aList.emplace_back( _( "Layer" ), layerDesc, DARKGREEN );
 
     if( !m_zoneName.empty() )
         aList.emplace_back( _( "Name" ), m_zoneName, DARKMAGENTA );
@@ -671,9 +686,19 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     msg.Printf( wxT( "%d" ), (int) m_HatchLines.size() );
     aList.emplace_back( MSG_PANEL_ITEM( _( "Hatch Lines" ), msg, BLUE ) );
 
-    if( !m_FilledPolysList.IsEmpty() )
+    PCB_LAYER_ID layer = m_Layer;
+
+    // NOTE: This brings in dependence on PCB_EDIT_FRAME to the qa tests, which isn't ideal.
+    // TODO: Figure out a way for items to know the active layer without the whole edit frame?
+#if 0
+    if( PCB_EDIT_FRAME* pcbframe = dynamic_cast<PCB_EDIT_FRAME*>( aFrame ) )
+        if( m_FilledPolysList.count( pcbframe->GetActiveLayer() ) )
+            layer = pcbframe->GetActiveLayer();
+#endif
+
+    if( !m_FilledPolysList.at( layer ).IsEmpty() )
     {
-        msg.Printf( wxT( "%d" ), m_FilledPolysList.TotalVertices() );
+        msg.Printf( wxT( "%d" ), m_FilledPolysList.at( layer ).TotalVertices() );
         aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
     }
 }
@@ -688,12 +713,16 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 
     Hatch();
 
-    m_FilledPolysList.Move( offset );
+    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+        pair.second.Move( offset );
 
-    for( SEG& seg : m_FillSegmList )
+    for( std::pair<PCB_LAYER_ID, ZONE_SEGMENT_FILL> pair : m_FillSegmList )
     {
-        seg.A += VECTOR2I( offset );
-        seg.B += VECTOR2I( offset );
+        for( SEG& seg : pair.second )
+        {
+            seg.A += VECTOR2I( offset );
+            seg.B += VECTOR2I( offset );
+        }
     }
 }
 
@@ -723,16 +752,20 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
     Hatch();
 
     /* rotate filled areas: */
-    m_FilledPolysList.Rotate( angle, VECTOR2I( centre ) );
+    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+        pair.second.Rotate( angle, VECTOR2I( centre ) );
 
-    for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
+    for( std::pair<PCB_LAYER_ID, ZONE_SEGMENT_FILL> pair : m_FillSegmList )
     {
-        wxPoint a( m_FillSegmList[ic].A );
-        RotatePoint( &a, centre, angle );
-        m_FillSegmList[ic].A = a;
-        wxPoint b( m_FillSegmList[ic].B );
-        RotatePoint( &b, centre, angle );
-        m_FillSegmList[ic].B = a;
+        for( SEG& seg : pair.second )
+        {
+            wxPoint a( seg.A );
+            RotatePoint( &a, centre, angle );
+            seg.A = a;
+            wxPoint b( seg.B );
+            RotatePoint( &b, centre, angle );
+            seg.B = a;
+        }
     }
 }
 
@@ -756,19 +789,23 @@ void ZONE_CONTAINER::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
 
     Hatch();
 
-    m_FilledPolysList.Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
+    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+        pair.second.Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
 
-    for( SEG& seg : m_FillSegmList )
+    for( std::pair<PCB_LAYER_ID, ZONE_SEGMENT_FILL> pair : m_FillSegmList )
     {
-        if( aMirrorLeftRight )
+        for( SEG& seg : pair.second )
         {
-            MIRROR( seg.A.x, aMirrorRef.x );
-            MIRROR( seg.B.x, aMirrorRef.x );
-        }
-        else
-        {
-            MIRROR( seg.A.y, aMirrorRef.y );
-            MIRROR( seg.B.y, aMirrorRef.y );
+            if( aMirrorLeftRight )
+            {
+                MIRROR( seg.A.x, aMirrorRef.x );
+                MIRROR( seg.B.x, aMirrorRef.x );
+            }
+            else
+            {
+                MIRROR( seg.A.y, aMirrorRef.y );
+                MIRROR( seg.B.y, aMirrorRef.y );
+            }
         }
     }
 }
@@ -862,7 +899,21 @@ wxString ZONE_CONTAINER::GetSelectMenuText( EDA_UNITS aUnits ) const
     else
         text << GetNetnameMsg();
 
-    return wxString::Format( _( "Zone Outline %s on %s" ), text, GetLayerName() );
+    wxString layerDesc;
+    int count = 0;
+
+    for( PCB_LAYER_ID layer : m_layerSet.Seq() )
+    {
+        if( count == 0 )
+            layerDesc = GetBoard()->GetLayerName( layer );
+
+        count++;
+    }
+
+    if( count > 1 )
+        layerDesc.Printf( _( "%s and %d more" ), layerDesc, count - 1 );
+
+    return wxString::Format( _( "Zone Outline %s on %s" ), text, layerDesc );
 }
 
 
@@ -1087,7 +1138,8 @@ void ZONE_CONTAINER::SwapData( BOARD_ITEM* aImage )
 
 void ZONE_CONTAINER::CacheTriangulation()
 {
-    m_FilledPolysList.CacheTriangulation();
+    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+        pair.second.CacheTriangulation();
 }
 
 
@@ -1183,13 +1235,18 @@ double ZONE_CONTAINER::CalculateFilledArea()
 
     // Iterate over each outline polygon in the zone and then iterate over
     // each hole it has to compute the total area.
-    for( int i = 0; i < m_FilledPolysList.OutlineCount(); i++ )
+    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
     {
-        m_area += m_FilledPolysList.Outline( i ).Area();
+        SHAPE_POLY_SET& poly = pair.second;
 
-        for( int j = 0; j < m_FilledPolysList.HoleCount( i ); j++ )
+        for( int i = 0; i < poly.OutlineCount(); i++ )
         {
-            m_area -= m_FilledPolysList.Hole( i, j ).Area();
+            m_area += poly.Outline( i ).Area();
+
+            for( int j = 0; j < poly.HoleCount( i ); j++ )
+            {
+                m_area -= poly.Hole( i, j ).Area();
+            }
         }
     }
 

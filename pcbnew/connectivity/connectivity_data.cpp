@@ -235,7 +235,10 @@ int CONNECTIVITY_DATA::GetNetCount() const
 void CONNECTIVITY_DATA::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone,
         std::vector<int>& aIslands )
 {
+    // TODO(JE) ZONES
+#if 0
     m_connAlgo->FindIsolatedCopperIslands( aZone, aIslands );
+#endif
 }
 
 void CONNECTIVITY_DATA::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones )

@@ -856,21 +856,6 @@ public:
     /*************************/
 
     /**
-     * Function HitTestForAnyFilledArea
-     * tests if the given wxPoint is within the bounds of a filled area of this zone.
-     * the test is made on zones on layer from aStartLayer to aEndLayer
-     * @param aRefPos A wxPoint to test
-     * @param aStartLayer the first layer to test
-     * @param aEndLayer the last layer to test
-     * @param aNetCode = the netcode used to filter zones (-1 to to test all zones)
-     * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else NULL
-     */
-    ZONE_CONTAINER* HitTestForAnyFilledArea( const wxPoint& aRefPos,
-                                             PCB_LAYER_ID      aStartLayer,
-                                             PCB_LAYER_ID      aEndLayer,
-                                             int aNetCode );
-
-    /**
      * Function SetAreasNetCodesFromNetNames
      * Set the .m_NetCode member of all copper areas, according to the area Net Name
      * The SetNetCodesFromNetNames is an equivalent to net name, for fast comparisons.

@@ -57,10 +57,11 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_HatchFillTypeSmoothingLevel = 0;   // Grid pattern smoothing type. 0 = no smoothing
     m_HatchFillTypeSmoothingValue = 0.1; // Grid pattern chamfer value relative to the gap value
     m_NetcodeSelection = 0;              // Net code selection for the current zone
-    m_CurrentZone_Layer = F_Cu;          // Layer used to create the current zone
     m_Zone_HatchingStyle =
             ZONE_HATCH_STYLE::DIAGONAL_EDGE; // Option to show the zone area (outlines only,
                                              //short hatches or full hatches
+
+    m_Layers.reset().set( F_Cu );
 
     // thickness of the gap in thermal reliefs:
     m_ThermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );
@@ -73,6 +74,8 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 
     m_cornerSmoothingType = SMOOTHING_NONE;
     m_cornerRadius = 0;
+
+    m_removeIslands = true;
 
     SetIsKeepout( false );
     SetDoNotAllowCopperPour( false );
@@ -108,8 +111,8 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_keepoutDoNotAllowPads = aSource.GetDoNotAllowPads();
     m_keepoutDoNotAllowFootprints = aSource.GetDoNotAllowFootprints();
     m_Zone_45_Only = aSource.GetHV45();
+    m_removeIslands = aSource.GetRemoveIslands();
 
-    m_CurrentZone_Layer  = aSource.GetLayer();
     m_Layers = aSource.GetLayerSet();
 
     return *this;
@@ -138,21 +141,15 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.SetDoNotAllowPads( GetDoNotAllowPads() );
     aTarget.SetDoNotAllowFootprints( GetDoNotAllowFootprints() );
     aTarget.SetHV45( m_Zone_45_Only );
+    aTarget.SetRemoveIslands( GetRemoveIslands() );
 
     if( aFullExport )
     {
         aTarget.SetPriority( m_ZonePriority );
+        aTarget.SetLayerSet( m_Layers );
 
-        // Keepout zones can have multiple layers and have no net
-        if( m_isKeepout )
-        {
-            aTarget.SetLayerSet( m_Layers );
-        }
-        else
-        {
+        if( !m_isKeepout )
             aTarget.SetNetCode( m_NetcodeSelection );
-            aTarget.SetLayer( m_CurrentZone_Layer );
-        }
     }
 
     // call SetHatch last, because hatch lines will be rebuilt,
@@ -214,7 +211,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
         row.push_back( wxVariant( wxString::Format( "%i", layerID ) ) );
         aList->AppendItem( row );
 
-        if( m_CurrentZone_Layer == layerID )
+        if( m_Layers.test( layerID ) )
             aList->SetToggleValue( true, (unsigned) aList->GetItemCount() - 1, 0 );
     }
 

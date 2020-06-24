@@ -3723,8 +3723,10 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
     wxString    netnameFromfile;    // the zone net name find in file
 
     // bigger scope since each filled_polygon is concatenated in here
-    SHAPE_POLY_SET pts;
+    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> pts;
     bool inModule = false;
+    PCB_LAYER_ID filledLayer;
+    bool addedFilledPolygons = false;
 
     if( dynamic_cast<MODULE*>( aParent ) )      // The zone belongs a footprint
         inModule = true;
@@ -3771,8 +3773,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
             NeedRIGHT();
             break;
 
-        case T_layers:  // keyword for zones that can live on a set of layer
-                        // currently: keepout zones
+        case T_layers:  // keyword for zones that can live on a set of layers
             zone->SetLayerSet( parseBoardItemLayersAsMask() );
             break;
 
@@ -4069,17 +4070,40 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                 NeedLEFT();
                 token = NextTok();
 
+                if( token == T_layer )
+                {
+                    filledLayer = parseBoardItemLayer();
+                    NeedRIGHT();
+                    token = NextTok();
+
+                    if( token != T_LEFT )
+                        Expecting( T_LEFT );
+
+                    token = NextTok();
+                }
+                else
+                {
+                    filledLayer = zone->GetLayer();
+                }
+
                 if( token != T_pts )
                     Expecting( T_pts );
 
-                pts.NewOutline();
+                if( !pts.count( filledLayer ) )
+                    pts[filledLayer] = SHAPE_POLY_SET();
+
+                SHAPE_POLY_SET& poly = pts.at( filledLayer );
+
+                poly.NewOutline();
 
                 for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
                 {
-                    pts.Append( parseXY() );
+                    poly.Append( parseXY() );
                 }
 
                 NeedRIGHT();
+
+                addedFilledPolygons |= !poly.IsEmpty();
             }
             break;
 
@@ -4094,6 +4118,22 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
 
                     token = NextTok();
 
+                    if( token == T_layer )
+                    {
+                        filledLayer = parseBoardItemLayer();
+                        NeedRIGHT();
+                        token = NextTok();
+
+                        if( token != T_LEFT )
+                            Expecting( T_LEFT );
+
+                        token = NextTok();
+                    }
+                    else
+                    {
+                        filledLayer = zone->GetLayer();
+                    }
+
                     if( token != T_pts )
                         Expecting( T_pts );
 
@@ -4102,7 +4142,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                     segs.push_back( segment );
                 }
 
-                zone->SetFillSegments( segs );
+                zone->SetFillSegments( filledLayer, segs );
             }
             break;
 
@@ -4132,9 +4172,11 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
         zone->SetHatch( hatchStyle, hatchPitch, true );
     }
 
-    if( !pts.IsEmpty() )
+    if( addedFilledPolygons )
     {
-        zone->SetFilledPolysList( pts );
+        for( auto& pair : pts )
+            zone->SetFilledPolysList( pair.first, pair.second );
+
         zone->CalculateFilledArea();
     }
 

@@ -193,21 +193,12 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::OnLayerSelection( wxDataViewEvent& event )
     if( event.GetColumn() != 0 )
         return;
 
-    int row = m_layers->ItemToRow( event.GetItem() );
+    int row  = m_layers->ItemToRow( event.GetItem() );
+    bool val = m_layers->GetToggleValue( row, 0 );
 
-    if( m_layers->GetToggleValue( row, 0 ) )
-    {
-        wxVariant layerID;
-        m_layers->GetValue( layerID, row, 2 );
-        m_settings.m_CurrentZone_Layer = ToLAYER_ID( layerID.GetInteger() );
-
-        // Turn all other checkboxes off.
-        for( int ii = 0; ii < m_layers->GetItemCount(); ++ii )
-        {
-            if( ii != row )
-                m_layers->SetToggleValue( false, ii, 0 );
-        }
-    }
+    wxVariant layerID;
+    m_layers->GetValue( layerID, row, 2 );
+    m_settings.m_Layers.set( ToLAYER_ID( layerID.GetInteger() ), val );
 }
 
 

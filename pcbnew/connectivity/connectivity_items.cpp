@@ -161,8 +161,8 @@ int CN_ZONE::AnchorCount() const
     if( !Valid() )
         return 0;
 
-    const auto zone = static_cast<const ZONE_CONTAINER*>( Parent() );
-    const auto& outline = zone->GetFilledPolysList().COutline( m_subpolyIndex );
+    const auto  zone    = static_cast<const ZONE_CONTAINER*>( Parent() );
+    const auto& outline = zone->GetFilledPolysList( m_layer ).COutline( m_subpolyIndex );
 
     return outline.PointCount() ? 1 : 0;
 }
@@ -173,8 +173,8 @@ const VECTOR2I CN_ZONE::GetAnchor( int n ) const
     if( !Valid() )
         return VECTOR2I();
 
-    const auto zone = static_cast<const ZONE_CONTAINER*> ( Parent() );
-    const auto& outline = zone->GetFilledPolysList().COutline( m_subpolyIndex );
+    const auto  zone    = static_cast<const ZONE_CONTAINER*>( Parent() );
+    const auto& outline = zone->GetFilledPolysList( m_layer ).COutline( m_subpolyIndex );
 
     return outline.CPoint( 0 );
 }
@@ -265,22 +265,22 @@ CN_ITEM* CN_LIST::Add( ARC* aArc )
      return item;
  }
 
- const std::vector<CN_ITEM*> CN_LIST::Add( ZONE_CONTAINER* zone )
+ const std::vector<CN_ITEM*> CN_LIST::Add( ZONE_CONTAINER* zone, PCB_LAYER_ID aLayer )
  {
-     const auto& polys = zone->GetFilledPolysList();
+     const auto& polys = zone->GetFilledPolysList( aLayer );
 
      std::vector<CN_ITEM*> rv;
 
      for( int j = 0; j < polys.OutlineCount(); j++ )
      {
-         CN_ZONE* zitem = new CN_ZONE( zone, false, j );
-         const auto& outline = zone->GetFilledPolysList().COutline( j );
+         CN_ZONE* zitem = new CN_ZONE( zone, aLayer, false, j );
+         const auto& outline = zone->GetFilledPolysList( aLayer ).COutline( j );
 
          for( int k = 0; k < outline.PointCount(); k++ )
              zitem->AddAnchor( outline.CPoint( k ) );
 
          m_items.push_back( zitem );
-         zitem->SetLayer( zone->GetLayer() );
+         zitem->SetLayer( aLayer );
          addItemtoTree( zitem );
          rv.push_back( zitem );
          SetDirty();
@@ -360,7 +360,8 @@ bool CN_ANCHOR::IsDangling() const
         {
             ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item->Parent() );
 
-            if( zone->HitTestFilledArea( (wxPoint) Pos() ) )
+            if( zone->HitTestFilledArea( static_cast<PCB_LAYER_ID>( item->Layer() ),
+                                         static_cast<wxPoint>( Pos() ) ) )
                 connected_count++;
         }
         else if( item->Parent()->HitTest( (wxPoint) Pos() ) )
@@ -384,7 +385,8 @@ int CN_ANCHOR::ConnectedItemsCount() const
         {
             ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item->Parent() );
 
-            if( zone->HitTestFilledArea( wxPoint( Pos().x, Pos().y ) ) )
+            if( zone->HitTestFilledArea( static_cast<PCB_LAYER_ID>( item->Layer() ),
+                                         wxPoint( Pos().x, Pos().y ) ) )
                 connected_count++;
         }
         else if( item->Parent()->HitTest( wxPoint( Pos().x, Pos().y ) ) )

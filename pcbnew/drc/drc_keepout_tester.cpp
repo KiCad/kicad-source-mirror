@@ -271,7 +271,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
             slotEnd += pad->GetPosition();
 
             SEG             slotSeg( slotStart, slotEnd );
-            SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &m_zone->GetFilledPolysList() );
+            SHAPE_POLY_SET* outline = m_zone->Outline();
             SEG::ecoord     center2center_sq = outline->SquaredDistance( slotSeg );
 
             if( center2center_sq <= SEG::Square( slotWidth) )

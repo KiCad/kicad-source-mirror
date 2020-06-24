@@ -60,14 +60,22 @@ struct CN_DISJOINT_NET_ENTRY
     VECTOR2I anchorA, anchorB;
 };
 
+/**
+ * A structure used for filling a copper zone on one layer.
+ * Multilayer zones will have one of these for each active layer.
+ */
 struct CN_ZONE_ISOLATED_ISLAND_LIST
 {
-    CN_ZONE_ISOLATED_ISLAND_LIST( ZONE_CONTAINER* aZone ) :
-        m_zone( aZone )
+    CN_ZONE_ISOLATED_ISLAND_LIST( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer ) :
+            m_zone( aZone ),
+            m_layer( aLayer )
     {}
 
-    ZONE_CONTAINER*      m_zone;
-    std::vector<int>     m_islands;
+    ZONE_CONTAINER* m_zone;
+
+    PCB_LAYER_ID m_layer;
+
+    std::vector<int> m_islands;
 };
 
 struct RN_DYNAMIC_LINE

@@ -1981,76 +1981,82 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     }
 
     // Save the PolysList (filled areas)
-    const SHAPE_POLY_SET& fv = aZone->GetFilledPolysList();
-    newLine = 0;
-
-    if( !fv.IsEmpty() )
+    for( PCB_LAYER_ID layer : aZone->GetLayerSet().Seq() )
     {
-        bool new_polygon = true;
-        bool is_closed = false;
+        const SHAPE_POLY_SET& fv = aZone->GetFilledPolysList( layer );
+        newLine                  = 0;
 
-        for( auto it = fv.CIterate(); it; ++it )
+        if( !fv.IsEmpty() )
         {
-            if( new_polygon )
-            {
-                newLine = 0;
-                m_out->Print( aNestLevel+1, "(filled_polygon\n" );
-                m_out->Print( aNestLevel+2, "(pts\n" );
-                new_polygon = false;
-                is_closed = false;
-            }
+            bool new_polygon = true;
+            bool is_closed   = false;
 
-            if( newLine == 0 )
-                m_out->Print( aNestLevel+3, "(xy %s %s)",
-                              FormatInternalUnits( it->x ).c_str(),
-                              FormatInternalUnits( it->y ).c_str() );
-            else
-                m_out->Print( 0, " (xy %s %s)",
-                              FormatInternalUnits( it->x ) .c_str(),
-                              FormatInternalUnits( it->y ).c_str() );
-
-            if( newLine < 4 )
+            for( auto it = fv.CIterate(); it; ++it )
             {
-                newLine += 1;
-            }
-            else
-            {
-                newLine = 0;
-                m_out->Print( 0, "\n" );
-            }
+                if( new_polygon )
+                {
+                    newLine = 0;
+                    m_out->Print( aNestLevel + 1, "(filled_polygon\n" );
+                    m_out->Print( aNestLevel + 2, "(layer %s)\n",
+                            TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
+                    m_out->Print( aNestLevel + 2, "(pts\n" );
+                    new_polygon = false;
+                    is_closed   = false;
+                }
 
-            if( it.IsEndContour() )
-            {
-                is_closed = true;
+                if( newLine == 0 )
+                    m_out->Print( aNestLevel + 3, "(xy %s %s)",
+                            FormatInternalUnits( it->x ).c_str(),
+                            FormatInternalUnits( it->y ).c_str() );
+                else
+                    m_out->Print( 0, " (xy %s %s)", FormatInternalUnits( it->x ).c_str(),
+                            FormatInternalUnits( it->y ).c_str() );
 
-                if( newLine != 0 )
+                if( newLine < 4 )
+                {
+                    newLine += 1;
+                }
+                else
+                {
+                    newLine = 0;
                     m_out->Print( 0, "\n" );
+                }
 
-                m_out->Print( aNestLevel+2, ")\n" );
-                m_out->Print( aNestLevel+1, ")\n" );
-                new_polygon = true;
+                if( it.IsEndContour() )
+                {
+                    is_closed = true;
+
+                    if( newLine != 0 )
+                        m_out->Print( 0, "\n" );
+
+                    m_out->Print( aNestLevel + 2, ")\n" );
+                    m_out->Print( aNestLevel + 1, ")\n" );
+                    new_polygon = true;
+                }
             }
+
+            if( !is_closed ) // Should not happen, but...
+                m_out->Print( aNestLevel + 1, ")\n" );
         }
 
-        if( !is_closed )    // Should not happen, but...
-            m_out->Print( aNestLevel+1, ")\n" );
-    }
+        // Save the filling segments list
+        const auto& segs = aZone->FillSegments( layer );
 
-    // Save the filling segments list
-    const auto& segs = aZone->FillSegments();
-
-    if( segs.size() )
-    {
-        m_out->Print( aNestLevel+1, "(fill_segments\n" );
-
-        for( ZONE_SEGMENT_FILL::const_iterator it = segs.begin();  it != segs.end();  ++it )
+        if( segs.size() )
         {
-            m_out->Print( aNestLevel+2, "(pts (xy %s) (xy %s))\n",
-                          FormatInternalUnits( wxPoint( it->A ) ).c_str(),
-                          FormatInternalUnits( wxPoint( it->B ) ).c_str() );
-        }
+            m_out->Print( aNestLevel + 1, "(fill_segments\n" );
+            m_out->Print( aNestLevel + 2, "(layer %s)\n",
+                          TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
 
-        m_out->Print( aNestLevel+1, ")\n" );
+            for( ZONE_SEGMENT_FILL::const_iterator it = segs.begin(); it != segs.end(); ++it )
+            {
+                m_out->Print( aNestLevel + 2, "(pts (xy %s) (xy %s))\n",
+                        FormatInternalUnits( wxPoint( it->A ) ).c_str(),
+                        FormatInternalUnits( wxPoint( it->B ) ).c_str() );
+            }
+
+            m_out->Print( aNestLevel + 1, ")\n" );
+        }
     }
 
     m_out->Print( aNestLevel, ")\n" );

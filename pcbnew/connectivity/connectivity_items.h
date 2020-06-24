@@ -352,11 +352,12 @@ typedef std::shared_ptr<CN_ITEM> CN_ITEM_PTR;
 class CN_ZONE : public CN_ITEM
 {
 public:
-    CN_ZONE( ZONE_CONTAINER* aParent, bool aCanChangeNet, int aSubpolyIndex ) :
+    CN_ZONE( ZONE_CONTAINER* aParent, PCB_LAYER_ID aLayer, bool aCanChangeNet, int aSubpolyIndex ) :
         CN_ITEM( aParent, aCanChangeNet ),
-        m_subpolyIndex( aSubpolyIndex )
+        m_subpolyIndex( aSubpolyIndex ),
+        m_layer( aLayer )
     {
-        SHAPE_LINE_CHAIN outline = aParent->GetFilledPolysList().COutline( aSubpolyIndex );
+        SHAPE_LINE_CHAIN outline = aParent->GetFilledPolysList( aLayer ).COutline( aSubpolyIndex );
 
         outline.SetClosed( true );
         outline.Simplify();
@@ -396,6 +397,7 @@ private:
     std::vector<VECTOR2I> m_testOutlinePoints;
     std::unique_ptr<POLY_GRID_PARTITION> m_cachedPoly;
     int m_subpolyIndex;
+    PCB_LAYER_ID m_layer;
 };
 
 class CN_LIST
@@ -500,7 +502,7 @@ public:
 
     CN_ITEM* Add( VIA* via );
 
-    const std::vector<CN_ITEM*> Add( ZONE_CONTAINER* zone );
+    const std::vector<CN_ITEM*> Add( ZONE_CONTAINER* zone, PCB_LAYER_ID aLayer );
 };
 
 class CN_CLUSTER

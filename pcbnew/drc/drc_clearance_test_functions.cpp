@@ -574,42 +574,46 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
         for( ZONE_CONTAINER* zone : m_pcb->Zones() )
         {
-            if( zone->GetFilledPolysList().IsEmpty() || zone->GetIsKeepout() )
+            if( !( refLayerSet & zone->GetLayerSet() ).any() || zone->GetIsKeepout() )
                 continue;
 
-            if( !( refLayerSet & zone->GetLayerSet() ).any() )
-                continue;
-
-            if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
-                continue;
-
-            int             minClearance = aRefSeg->GetClearance( zone, &m_clearanceSource );
-            int             widths = refSegWidth / 2;
-            int             center2centerAllowed = minClearance + widths;
-            SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
-
-            SEG::ecoord     center2center_squared = outline->SquaredDistance( testSeg );
-
-            // to avoid false positive, due to rounding issues and approxiamtions
-            // in distance and clearance calculations, use a small threshold for distance
-            // (1 micron)
-            #define THRESHOLD_DIST Millimeter2iu( 0.001 )
-
-            if( center2center_squared + THRESHOLD_DIST < SEG::Square( center2centerAllowed ) )
+            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
             {
-                int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
+                if( zone->GetFilledPolysList( layer ).IsEmpty() )
+                    continue;
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                              m_clearanceSource,
-                              MessageTextFromValue( userUnits(), minClearance, true ),
-                              MessageTextFromValue( userUnits(), actual, true ) );
+                if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
+                    continue;
 
-                drcItem->SetErrorMessage( m_msg );
-                drcItem->SetItems( aRefSeg, zone );
+                int             minClearance = aRefSeg->GetClearance( zone, &m_clearanceSource );
+                int             widths       = refSegWidth / 2;
+                int             center2centerAllowed = minClearance + widths;
+                SHAPE_POLY_SET* outline =
+                        const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList( layer ) );
 
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, zone ) );
-                addMarkerToPcb( aCommit, marker );
+                SEG::ecoord center2center_squared = outline->SquaredDistance( testSeg );
+
+                // to avoid false positive, due to rounding issues and approxiamtions
+                // in distance and clearance calculations, use a small threshold for distance
+                // (1 micron)
+                #define THRESHOLD_DIST Millimeter2iu( 0.001 )
+
+                if( center2center_squared + THRESHOLD_DIST < SEG::Square( center2centerAllowed ) )
+                {
+                    int       actual  = std::max( 0.0, sqrt( center2center_squared ) - widths );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
+
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                            m_clearanceSource,
+                            MessageTextFromValue( userUnits(), minClearance, true ),
+                            MessageTextFromValue( userUnits(), actual, true ) );
+
+                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetItems( aRefSeg, zone );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, zone ) );
+                    addMarkerToPcb( aCommit, marker );
+                }
             }
         }
     }

@@ -444,19 +444,10 @@ void DIALOG_COPPER_ZONE::OnLayerSelection( wxDataViewEvent& event )
 
     int row = m_layers->ItemToRow( event.GetItem() );
 
-    if( m_layers->GetToggleValue( row, 0 ) )
-    {
-        wxVariant layerID;
-        m_layers->GetValue( layerID, row, 2 );
-        m_settings.m_CurrentZone_Layer = ToLAYER_ID( layerID.GetInteger() );
-
-        // Turn all other checkboxes off.
-        for( int ii = 0; ii < m_layers->GetItemCount(); ++ii )
-        {
-            if( ii != row )
-                m_layers->SetToggleValue( false, ii, 0 );
-        }
-    }
+    wxVariant layerID;
+    m_layers->GetValue( layerID, row, 2 );
+    m_settings.m_Layers.set( ToLAYER_ID( layerID.GetInteger() ),
+            m_layers->GetToggleValue( row, 0 ) );
 }
 
 

@@ -1560,25 +1560,21 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         if( zoneInFootprint && !m_editModules && !checkVisibilityOnly )
             return false;
 
-        // Keepout zones can exist on multiple layers!
+        // zones can exist on multiple layers!
         {
-            auto* zone = static_cast<const ZONE_CONTAINER*>( aItem );
+            auto* zone       = static_cast<const ZONE_CONTAINER*>( aItem );
+            auto  zoneLayers = zone->GetLayerSet().Seq();
 
-            if( zone->GetIsKeepout() )
+            for( unsigned int i = 0; i < zoneLayers.size(); i++ )
             {
-                auto zoneLayers = zone->GetLayerSet().Seq();
-
-                for( unsigned int i = 0; i < zoneLayers.size(); i++ )
+                if( board()->IsLayerVisible( zoneLayers[i] ) )
                 {
-                    if( board()->IsLayerVisible( zoneLayers[i] ) )
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-
-                // No active layers selected!
-                return false;
             }
+
+            // No active layers selected!
+            return false;
         }
     }
         break;

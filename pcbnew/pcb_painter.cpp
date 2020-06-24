@@ -1077,7 +1077,9 @@ void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
 
 void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
 {
-    if( !aZone->IsOnLayer( (PCB_LAYER_ID) aLayer ) )
+    PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aLayer );
+
+    if( !aZone->IsOnLayer( layer ) )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aZone, aLayer );
@@ -1119,7 +1121,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
     // Draw the filling
     if( displayMode != PCB_RENDER_SETTINGS::DZ_HIDE_FILLED )
     {
-        const SHAPE_POLY_SET& polySet = aZone->GetFilledPolysList();
+        const SHAPE_POLY_SET& polySet = aZone->GetFilledPolysList( layer );
 
         if( polySet.OutlineCount() == 0 )  // Nothing to draw
             return;
@@ -1143,7 +1145,6 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
 
         m_gal->DrawPolygon( polySet );
     }
-
 }
 
 

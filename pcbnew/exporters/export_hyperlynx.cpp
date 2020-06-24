@@ -447,48 +447,53 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
         }
         else if( ZONE_CONTAINER* zone = dyn_cast<ZONE_CONTAINER*>( item ) )
         {
-            const auto     layerName = m_board->GetLayerName( zone->GetLayer() );
-            SHAPE_POLY_SET filledShape = zone->GetFilledPolysList();
-
-            filledShape.Simplify( SHAPE_POLY_SET::PM_FAST );
-
-            for( int i = 0; i < filledShape.OutlineCount(); i++ )
+            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
             {
-                const auto& outl = filledShape.COutline( i );
+                const auto     layerName   = m_board->GetLayerName( layer );
+                SHAPE_POLY_SET filledShape = zone->GetFilledPolysList( layer );
 
-                auto p0 = outl.CPoint( 0 );
-                m_out->Print( 1, "{POLYGON T=POUR L=\"%s\" ID=%d X=%.10f Y=%.10f\n",
-                        (const char*) layerName.c_str(), m_polyId, iu2hyp( p0.x ), iu2hyp( p0.y ) );
+                filledShape.Simplify( SHAPE_POLY_SET::PM_FAST );
 
-                for( int v = 0; v < outl.PointCount(); v++ )
+                for( int i = 0; i < filledShape.OutlineCount(); i++ )
                 {
-                    m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n", iu2hyp( outl.CPoint( v ).x ),
-                            iu2hyp( outl.CPoint( v ).y ) );
-                }
+                    const auto& outl = filledShape.COutline( i );
 
-                m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n", iu2hyp( p0.x ), iu2hyp( p0.y ) );
-                m_out->Print( 1, "}\n" );
+                    auto p0 = outl.CPoint( 0 );
+                    m_out->Print( 1, "{POLYGON T=POUR L=\"%s\" ID=%d X=%.10f Y=%.10f\n",
+                            (const char*) layerName.c_str(), m_polyId, iu2hyp( p0.x ),
+                            iu2hyp( p0.y ) );
 
-                for( int h = 0; h < filledShape.HoleCount( i ); h++ )
-                {
-                    const auto& holeShape = filledShape.CHole( i, h );
-                    auto        ph0 = holeShape.CPoint( 0 );
-
-                    m_out->Print( 1, "{POLYVOID ID=%d X=%.10f Y=%.10f\n", m_polyId, iu2hyp( ph0.x ),
-                            iu2hyp( ph0.y ) );
-
-                    for( int v = 0; v < holeShape.PointCount(); v++ )
+                    for( int v = 0; v < outl.PointCount(); v++ )
                     {
-                        m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n",
-                                iu2hyp( holeShape.CPoint( v ).x ),
-                                iu2hyp( holeShape.CPoint( v ).y ) );
+                        m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n", iu2hyp( outl.CPoint( v ).x ),
+                                iu2hyp( outl.CPoint( v ).y ) );
                     }
 
-                    m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n", iu2hyp( ph0.x ), iu2hyp( ph0.y ) );
+                    m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n", iu2hyp( p0.x ), iu2hyp( p0.y ) );
                     m_out->Print( 1, "}\n" );
-                }
 
-                m_polyId++;
+                    for( int h = 0; h < filledShape.HoleCount( i ); h++ )
+                    {
+                        const auto& holeShape = filledShape.CHole( i, h );
+                        auto        ph0       = holeShape.CPoint( 0 );
+
+                        m_out->Print( 1, "{POLYVOID ID=%d X=%.10f Y=%.10f\n", m_polyId,
+                                iu2hyp( ph0.x ), iu2hyp( ph0.y ) );
+
+                        for( int v = 0; v < holeShape.PointCount(); v++ )
+                        {
+                            m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n",
+                                    iu2hyp( holeShape.CPoint( v ).x ),
+                                    iu2hyp( holeShape.CPoint( v ).y ) );
+                        }
+
+                        m_out->Print(
+                                2, "(LINE X=%.10f Y=%.10f)\n", iu2hyp( ph0.x ), iu2hyp( ph0.y ) );
+                        m_out->Print( 1, "}\n" );
+                    }
+
+                    m_polyId++;
+                }
             }
         }
     }

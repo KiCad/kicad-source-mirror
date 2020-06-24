@@ -479,53 +479,63 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
     // Plot all zones of the same layer & net together so we don't end up with divots where
     // zones touch each other.
-    std::set<ZONE_CONTAINER*> plotted;
+    std::set<std::pair<PCB_LAYER_ID, ZONE_CONTAINER*>> plotted;
 
     for( ZONE_CONTAINER* zone : aBoard->Zones() )
     {
-        if( !aLayerMask[ zone->GetLayer() ] || plotted.count( zone ) )
-            continue;
-
-        plotted.insert( zone );
-
-        SHAPE_POLY_SET aggregateArea = zone->GetFilledPolysList();
-        bool needFracture = false;  // If 2 or more filled areas are combined, resulting
-                                    // aggregateArea will be simplified and fractured
-                                    // (Long calculation time)
-
-        for( ZONE_CONTAINER* candidate : aBoard->Zones() )
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
-            if( !aLayerMask[ candidate->GetLayer() ] || plotted.count( candidate ) )
+            auto pair = std::make_pair( layer, zone );
+
+            if( !aLayerMask[layer] || plotted.count( pair )  )
                 continue;
 
-            if( candidate->GetNetCode() != zone->GetNetCode() )
-                continue;
+            plotted.insert( pair );
 
-            // Merging zones of the same net can be done only for areas
-            // having compatible settings for drawings:
-            // use or not outline thickness, and if using outline thickness,
-            // having the same thickness
-            // because after merging only one outline thickness is used
-            if( candidate->GetFilledPolysUseThickness() != zone->GetFilledPolysUseThickness() )
-                // Should not happens, because usually the same option is used for filling
-                continue;
+            SHAPE_POLY_SET aggregateArea = zone->GetFilledPolysList( layer );
+            bool needFracture = false; // If 2 or more filled areas are combined, resulting
+                                       // aggregateArea will be simplified and fractured
+                                       // (Long calculation time)
 
-            if( zone->GetFilledPolysUseThickness() &&
-                ( candidate->GetMinThickness() != zone->GetMinThickness() ) )
-                continue;
+            for( ZONE_CONTAINER* candidate : aBoard->Zones() )
+            {
+                if( !candidate->IsOnLayer( layer ) )
+                    continue;
 
-            plotted.insert( candidate );
-            aggregateArea.Append( candidate->GetFilledPolysList() );
-            needFracture = true;
+                auto candidate_pair = std::make_pair( layer, candidate );
+
+                if( plotted.count( candidate_pair ) )
+                    continue;
+
+                if( candidate->GetNetCode() != zone->GetNetCode() )
+                    continue;
+
+                // Merging zones of the same net can be done only for areas
+                // having compatible settings for drawings:
+                // use or not outline thickness, and if using outline thickness,
+                // having the same thickness
+                // because after merging only one outline thickness is used
+                if( candidate->GetFilledPolysUseThickness() != zone->GetFilledPolysUseThickness() )
+                    // Should not happens, because usually the same option is used for filling
+                    continue;
+
+                if( zone->GetFilledPolysUseThickness()
+                        && ( candidate->GetMinThickness() != zone->GetMinThickness() ) )
+                    continue;
+
+                plotted.insert( candidate_pair );
+                aggregateArea.Append( candidate->GetFilledPolysList( layer ) );
+                needFracture = true;
+            }
+
+            if( needFracture )
+            {
+                aggregateArea.Unfracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                aggregateArea.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            }
+
+            itemplotter.PlotFilledAreas( zone, aggregateArea );
         }
-
-        if( needFracture )
-        {
-            aggregateArea.Unfracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-            aggregateArea.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-        }
-
-        itemplotter.PlotFilledAreas( zone, aggregateArea );
     }
     aPlotter->EndBlock( NULL );
 

@@ -58,7 +58,7 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
 
     // Get the current default settings for zones
     ZONE_SETTINGS zoneInfo = frame.GetZoneSettings();
-    zoneInfo.m_CurrentZone_Layer = m_params.m_layer;
+    zoneInfo.m_Layers.reset().set( m_params.m_layer );  // TODO(JE) multilayer defaults?
     zoneInfo.m_NetcodeSelection =
             board.GetHighLightNetCodes().empty() ? -1 : *board.GetHighLightNetCodes().begin();
     zoneInfo.SetIsKeepout( m_params.m_keepout );
@@ -87,7 +87,8 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
             dialogResult = InvokeKeepoutAreaEditor( &frame, &zoneInfo );
         else
         {
-            if( IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) )
+            // TODO(JE) combine these dialogs?
+            if( ( zoneInfo.m_Layers & LSET::AllCuMask() ).any() )
                 dialogResult = InvokeCopperZonesEditor( &frame, &zoneInfo );
             else
                 dialogResult = InvokeNonCopperZonesEditor( &frame, &zoneInfo );

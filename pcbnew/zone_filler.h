@@ -51,9 +51,11 @@ private:
 
     void addKnockout( BOARD_ITEM* aItem, int aGap, bool aIgnoreLineWidth, SHAPE_POLY_SET& aHoles );
 
-    void knockoutThermalReliefs( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill );
+    void knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                 SHAPE_POLY_SET& aFill );
 
-    void buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aHoles );
+    void buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                    SHAPE_POLY_SET& aHoles );
 
     /**
      * Function computeRawFilledArea
@@ -66,7 +68,7 @@ private:
      *  filled copper area polygon (without clearance areas
      * @param aPcb: the current board
      */
-    void computeRawFilledArea( const ZONE_CONTAINER* aZone,
+    void computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                const SHAPE_POLY_SET& aSmoothedOutline,
                                std::set<VECTOR2I>* aPreserveCorners,
                                SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys );
@@ -75,7 +77,8 @@ private:
      * Function buildThermalSpokes
      * Constructs a list of all thermal spokes for the given zone.
      */
-    void buildThermalSpokes( const ZONE_CONTAINER* aZone, std::deque<SHAPE_LINE_CHAIN>& aSpokes );
+    void buildThermalSpokes( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                             std::deque<SHAPE_LINE_CHAIN>& aSpokes );
 
     /**
      * Build the filled solid areas polygons from zone outlines (stored in m_Poly)
@@ -91,7 +94,7 @@ private:
      * by aZone->GetMinThickness() / 2 to be drawn with a outline thickness = aZone->GetMinThickness()
      * aFinalPolys are polygons that will be drawn on screen and plotted
      */
-    bool fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys,
+    bool fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aRawPolys,
                          SHAPE_POLY_SET& aFinalPolys );
 
     /**
@@ -101,7 +104,8 @@ private:
      * @param aRawPolys: A reference to a SHAPE_POLY_SET buffer containing the initial
      * filled areas, and after adding the grid pattern, the modified filled areas with holes
      */
-    void addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys );
+    void addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                 SHAPE_POLY_SET& aRawPolys );
 
     BOARD* m_board;
     SHAPE_POLY_SET m_boardOutline;      // The board outlines, if exists

@@ -181,8 +181,9 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
         m_itemMap[zone] = ITEM_MAP_ENTRY();
 
-        for( auto zitem : m_itemList.Add( zone ) )
-            m_itemMap[zone].Link(zitem);
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            for( auto zitem : m_itemList.Add( zone, layer ) )
+                m_itemMap[zone].Link( zitem );
 
         break;
     }
@@ -518,9 +519,11 @@ void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit )
 }
 
 
-void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std::vector<int>& aIslands )
+void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone,
+                                                      PCB_LAYER_ID aLayer,
+                                                      std::vector<int>& aIslands )
 {
-    if( aZone->GetFilledPolysList().IsEmpty() )
+    if( aZone->GetFilledPolysList( aLayer ).IsEmpty() )
         return;
 
     aIslands.clear();
@@ -536,7 +539,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std
         {
             for( auto z : *cluster )
             {
-                if( z->Parent() == aZone )
+                if( z->Parent() == aZone && z->Layer() == aLayer )
                 {
                     aIslands.push_back( static_cast<CN_ZONE*>(z)->SubpolyIndex() );
                 }
@@ -554,15 +557,23 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLAT
 
     for ( auto& z : aZones )
     {
-        if( !z.m_zone->GetFilledPolysList().IsEmpty() )
-            Add( z.m_zone );
+        for( PCB_LAYER_ID layer : z.m_zone->GetLayerSet().Seq() )
+        {
+            if( !z.m_zone->GetFilledPolysList( layer ).IsEmpty() )
+            {
+                Add( z.m_zone );
+                break;
+            }
+        }
     }
 
     m_connClusters = SearchClusters( CSM_CONNECTIVITY_CHECK );
 
     for ( auto& zone : aZones )
     {
-        if( zone.m_zone->GetFilledPolysList().IsEmpty() )
+        PCB_LAYER_ID layer = zone.m_layer;
+
+        if( zone.m_zone->GetFilledPolysList( layer ).IsEmpty() )
             continue;
 
         for( const auto& cluster : m_connClusters )
@@ -571,10 +582,8 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLAT
             {
                 for( auto z : *cluster )
                 {
-                    if( z->Parent() == zone.m_zone )
-                    {
-                        zone.m_islands.push_back( static_cast<CN_ZONE*>(z)->SubpolyIndex() );
-                    }
+                    if( z->Parent() == zone.m_zone && z->Layer() == layer )
+                        zone.m_islands.push_back( static_cast<CN_ZONE*>( z )->SubpolyIndex() );
                 }
             }
         }
@@ -643,10 +652,15 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
     if( aZoneB == aZoneA  || refParent == testedParent )
         return;
 
+    if( aZoneA->Layer() != aZoneB->Layer() )
+        return;
+
     if( aZoneB->Net() != aZoneA->Net() )
         return; // we only test zones belonging to the same net
 
-    const auto& outline = refParent->GetFilledPolysList().COutline( aZoneA->SubpolyIndex() );
+    PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aZoneA->Layer() );
+
+    const auto& outline = refParent->GetFilledPolysList( layer ).COutline( aZoneA->SubpolyIndex() );
 
     for( int i = 0; i < outline.PointCount(); i++ )
     {
@@ -658,7 +672,8 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
         }
     }
 
-    const auto& outline2 = testedParent->GetFilledPolysList().COutline( aZoneB->SubpolyIndex() );
+    const auto& outline2 =
+            testedParent->GetFilledPolysList( layer ).COutline( aZoneB->SubpolyIndex() );
 
     for( int i = 0; i < outline2.PointCount(); i++ )
     {

@@ -130,10 +130,13 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
         // calculate the hash value for filled areas. it will be used later
         // to know if the current filled areas are up to date
-        zone->BuildHashValue();
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            zone->BuildHashValue( layer );
 
-        // Add the zone to the list of zones to test or refill
-        toFill.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST(zone) );
+            // Add the zone to the list of zones to test or refill
+            toFill.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST( zone, layer ) );
+        }
 
         // Remove existing fill first to prevent drawing invalid polygons
         // on some platforms
@@ -151,13 +154,16 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
         for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
         {
-            ZONE_CONTAINER* zone = toFill[i].m_zone;
-            zone->SetFilledPolysUseThickness( filledPolyWithOutline );
-            SHAPE_POLY_SET rawPolys, finalPolys;
-            fillSingleZone( zone, rawPolys, finalPolys );
+            PCB_LAYER_ID    layer = toFill[i].m_layer;
+            ZONE_CONTAINER* zone  = toFill[i].m_zone;
 
-            zone->SetRawPolysList( rawPolys );
-            zone->SetFilledPolysList( finalPolys );
+            zone->SetFilledPolysUseThickness( filledPolyWithOutline );
+
+            SHAPE_POLY_SET rawPolys, finalPolys;
+            fillSingleZone( zone, layer, rawPolys, finalPolys );
+
+            zone->SetRawPolysList( layer, rawPolys );
+            zone->SetFilledPolysList( layer, finalPolys );
             zone->SetIsFilled( true );
 
             if( m_progressReporter )
@@ -207,14 +213,13 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     for( auto& zone : toFill )
     {
         std::sort( zone.m_islands.begin(), zone.m_islands.end(), std::greater<int>() );
-        SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList();
+        SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList( zone.m_layer );
 
         // Remove solid areas outside the board cutouts and the insulated islands
         // only zones with net code > 0 can have insulated islands by definition
-        if( zone.m_zone->GetNetCode() > 0 )
+        if( zone.m_zone->GetNetCode() > 0 && zone.m_zone->GetRemoveIslands() )
         {
-            // solid areas outside the board cutouts are also removed, because they are usually
-            // insulated islands
+            // solid areas outside the board cutouts are also removed, because they are usually insulated islands
             for( auto idx : zone.m_islands )
             {
                 poly.DeletePolygon( idx );
@@ -231,20 +236,20 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         {
             for( int idx = 0; idx < poly.OutlineCount(); )
             {
-                if( poly.Polygon( idx ).empty() ||
-                    !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
+                if( poly.Polygon( idx ).empty()
+                        || !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
                 {
                     poly.DeletePolygon( idx );
                 }
                 else
-                     idx++;
+                    idx++;
             }
         }
 
-        zone.m_zone->SetFilledPolysList( poly );
+        zone.m_zone->SetFilledPolysList( zone.m_layer, poly );
         zone.m_zone->CalculateFilledArea();
 
-        if( aCheck && zone.m_zone->GetHashValue() != poly.GetHash() )
+        if( aCheck && zone.m_zone->GetHashValue( zone.m_layer ) != poly.GetHash() )
             outOfDate = true;
     }
 
@@ -468,7 +473,8 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, int aGap, bool aIgnoreLineWidt
  * Removes thermal reliefs from the shape for any pads connected to the zone.  Does NOT add
  * in spokes, which must be done later.
  */
-void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill )
+void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                          SHAPE_POLY_SET& aFill )
 {
     SHAPE_POLY_SET holes;
 
@@ -488,7 +494,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, SHAPE_POL
 
             // If the pad isn't on the current layer but has a hole, knock out a thermal relief
             // for the hole.
-            if( !pad->IsOnLayer( aZone->GetLayer() ) )
+            if( !pad->IsOnLayer( aLayer ) )
             {
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
@@ -510,7 +516,8 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, SHAPE_POL
  * Removes clearance from the shape for copper items which share the zone's layer but are
  * not connected to it.
  */
-void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aHoles )
+void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                             SHAPE_POLY_SET& aHoles )
 {
     static DRAWSEGMENT dummyEdge;
     dummyEdge.SetLayer( Edge_Cuts );
@@ -543,7 +550,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
     {
         for( auto pad : module->Pads() )
         {
-            if( !pad->IsOnLayer( aZone->GetLayer() ) )
+            if( !pad->IsOnLayer( aLayer ) )
             {
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
@@ -576,7 +583,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
     //
     for( auto track : m_board->Tracks() )
     {
-        if( !track->IsOnLayer( aZone->GetLayer() ) )
+        if( !track->IsOnLayer( aLayer ) )
             continue;
 
         if( track->GetNetCode() == aZone->GetNetCode()  && ( aZone->GetNetCode() != 0) )
@@ -597,7 +604,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
             [&]( BOARD_ITEM* aItem )
             {
                 // A item on the Edge_Cuts is always seen as on any layer:
-                if( !aItem->IsOnLayer( aZone->GetLayer() ) && !aItem->IsOnLayer( Edge_Cuts ) )
+                if( !aItem->IsOnLayer( aLayer ) && !aItem->IsOnLayer( Edge_Cuts ) )
                     return;
 
                 if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
@@ -627,7 +634,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
     {
 
         // If the zones share no common layers
-        if( !aZone->CommonLayerExists( zone->GetLayerSet() ) )
+        if( !zone->GetLayerSet().test( aLayer ) )
             continue;
 
         if( !zone->GetIsKeepout() && zone->GetPriority() <= aZone->GetPriority() )
@@ -668,7 +675,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
  * 5 - Removes unconnected copper islands, deleting any affected spokes
  * 6 - Adds in the remaining spokes
  */
-void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
+void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                         const SHAPE_POLY_SET& aSmoothedOutline,
                                         std::set<VECTOR2I>* aPreserveCorners,
                                         SHAPE_POLY_SET& aRawPolys,
@@ -709,17 +716,17 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     if( s_DumpZonesWhenFilling )
         dumper->BeginGroup( "clipper-zone" );
 
-    knockoutThermalReliefs( aZone, aRawPolys );
+    knockoutThermalReliefs( aZone, aLayer, aRawPolys );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "solid-areas-minus-thermal-reliefs" );
 
-    buildCopperItemClearances( aZone, clearanceHoles );
+    buildCopperItemClearances( aZone, aLayer, clearanceHoles );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "clearance holes" );
 
-    buildThermalSpokes( aZone, thermalSpokes );
+    buildThermalSpokes( aZone, aLayer, thermalSpokes );
 
     // Create a temporary zone that we can hit-test spoke-ends against.  It's only temporary
     // because the "real" subtract-clearance-holes has to be done after the spokes are added.
@@ -778,7 +785,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
 
     // Now remove the non filled areas due to the hatch pattern
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
-        addHatchFillTypeOnZone( aZone, aRawPolys );
+        addHatchFillTypeOnZone( aZone, aLayer, aRawPolys );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "solid-areas-after-hatching" );
@@ -817,8 +824,8 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
  * The solid areas can be more than one on copper layers, and do not have holes
  * ( holes are linked by overlapping segments to the main outline)
  */
-bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys,
-                                  SHAPE_POLY_SET& aFinalPolys )
+bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                  SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys )
 {
     SHAPE_POLY_SET smoothedPoly;
     std::set<VECTOR2I> colinearCorners;
@@ -834,7 +841,8 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
 
     if( aZone->IsOnCopperLayer() )
     {
-        computeRawFilledArea( aZone, smoothedPoly, &colinearCorners, aRawPolys, aFinalPolys );
+        computeRawFilledArea(
+                aZone, aLayer, smoothedPoly, &colinearCorners, aRawPolys, aFinalPolys );
     }
     else
     {
@@ -852,7 +860,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
 
         // Remove the non filled areas due to the hatch pattern
         if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
-            addHatchFillTypeOnZone( aZone, smoothedPoly );
+            addHatchFillTypeOnZone( aZone, aLayer, smoothedPoly );
 
         // Re-inflate after pruning of areas that don't meet minimum-width criteria
         if( aZone->GetFilledPolysUseThickness() )
@@ -877,7 +885,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
 /**
  * Function buildThermalSpokes
  */
-void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
+void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                       std::deque<SHAPE_LINE_CHAIN>& aSpokesList )
 {
     auto zoneBB = aZone->GetBoundingBox();
@@ -898,7 +906,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
                 continue;
 
             // We currently only connect to pads, not pad holes
-            if( !pad->IsOnLayer( aZone->GetLayer() ) )
+            if( !pad->IsOnLayer( aLayer ) )
                 continue;
 
             int thermalReliefGap = aZone->GetThermalReliefGap( pad );
@@ -995,7 +1003,8 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
 }
 
 
-void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys )
+void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                          SHAPE_POLY_SET& aRawPolys )
 {
     // Build grid:
 
