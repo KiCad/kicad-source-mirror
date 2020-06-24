@@ -69,7 +69,8 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200119  // arcs in tracks
 //#define SEXPR_BOARD_FILE_VERSION    20200512  // page -> paper
 //#define SEXPR_BOARD_FILE_VERSION    20200518  // save hole_to_hole_min
-#define SEXPR_BOARD_FILE_VERSION      20200614  // Add support for fp_rects and gr_rects
+//#define SEXPR_BOARD_FILE_VERSION    20200614  // Add support for fp_rects and gr_rects
+#define SEXPR_BOARD_FILE_VERSION      20200623  // Add name property to zones
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)

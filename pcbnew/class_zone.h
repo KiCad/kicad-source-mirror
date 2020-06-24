@@ -105,6 +105,10 @@ public:
 
     virtual LSET GetLayerSet() const override;
 
+    wxString GetZoneName() const { return m_zoneName; }
+
+    void SetZoneName( const wxString& aName ) { m_zoneName = aName; }
+
     /** Function GetBoundingBox (virtual)
      * @return an EDA_RECT that is the bounding box of the zone outline
      */
@@ -762,6 +766,9 @@ protected:
     SHAPE_POLY_SET*       m_Poly;                ///< Outline of the zone.
     int                   m_cornerSmoothingType;
     unsigned int          m_cornerRadius;
+
+    /// An optional unique name for this zone, used for identifying it in DRC checking
+    wxString              m_zoneName;
 
     LSET                  m_layerSet;
 

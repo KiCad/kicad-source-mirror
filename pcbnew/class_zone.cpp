@@ -639,10 +639,13 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
         // Display priority level
         msg.Printf( wxT( "%d" ), GetPriority() );
-        aList.emplace_back( _( "Priority" ), msg, BLUE  );
+        aList.emplace_back( _( "Priority" ), msg, BLUE );
     }
 
     aList.emplace_back( _( "Layer" ), LayerMaskDescribe( GetBoard(), m_layerSet ), DARKGREEN );
+
+    if( !m_zoneName.empty() )
+        aList.emplace_back( _( "Name" ), m_zoneName, DARKMAGENTA );
 
     switch( m_FillMode )
     {

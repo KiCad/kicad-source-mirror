@@ -4106,9 +4106,17 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
             }
             break;
 
+        case T_name:
+            {
+                NextTok();
+                zone->SetZoneName( FromUTF8() );
+                NeedRIGHT();
+            }
+            break;
+
         default:
             Expecting( "net, layer/layers, tstamp, hatch, priority, connect_pads, min_thickness, "
-                       "fill, polygon, filled_polygon, or fill_segments" );
+                       "fill, polygon, filled_polygon, fill_segments or name" );
         }
     }
 

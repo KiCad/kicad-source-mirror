@@ -1792,6 +1792,9 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aZone->m_Uuid.AsString() ) );
 
+    if( !aZone->GetZoneName().empty() )
+        m_out->Print( 0, " (name %s)", TO_UTF8( aZone->GetZoneName() ) );
+
     // Save the outline aux info
     std::string hatch;
 

@@ -150,6 +150,7 @@ mod_text_width
 mode
 model
 module
+name
 net
 net_class
 net_name
