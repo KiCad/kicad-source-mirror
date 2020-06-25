@@ -1243,8 +1243,19 @@ int PCB_EDITOR_CONTROL::HideSelectionRatsnest( const TOOL_EVENT& aEvent )
 
 void PCB_EDITOR_CONTROL::ratsnestTimer( wxTimerEvent& aEvent )
 {
+    auto connectivity = getModel<BOARD>()->GetConnectivity();
+
     m_ratsnestTimer.Stop();
+
+    /// Check how much time does it take to calculate ratsnest
+    PROF_COUNTER counter;
     calculateSelectionRatsnest();
+    counter.Stop();
+
+    /// If the ratsnest is fast enough, turn the slow ratsnest off
+    if( counter.msecs() <= 25 )
+        m_slowRatsnest = false;
+
     static_cast<PCB_DRAW_PANEL_GAL*>( m_frame->GetGalCanvas() )->RedrawRatsnest();
     m_frame->GetGalCanvas()->Refresh();
 }
