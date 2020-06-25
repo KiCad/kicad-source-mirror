@@ -262,10 +262,11 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.fast_grid_2",
             &aWindow->grid.fast_grid_2, 1 ) );
 
+    // for grid user, use a default value compatible with eeschema and pcbnew (10 mils)
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_x",
-            &aWindow->grid.user_grid_x, "12.5 mil" ) );
+            &aWindow->grid.user_grid_x, "10 mil" ) );
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_y",
-            &aWindow->grid.user_grid_y, "12.5 mil" ) );
+            &aWindow->grid.user_grid_y, "10 mil" ) );
 
     m_params.emplace_back( new PARAM<double>( aJsonPath + ".grid.line_width",
             &aWindow->grid.line_width, 1.0 ) );
