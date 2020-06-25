@@ -139,13 +139,25 @@ public:
     }
 
     /**
-     * Function GetShape
+     * Set the new shape of this pad.
+     */
+    void SetShape( PAD_SHAPE_T aShape )
+    {
+        m_padShape = aShape;
+        m_shapesDirty = true;
+    }
+
+    /**
      * @return the shape of this pad.
      */
-    void SetShape( PAD_SHAPE_T aShape ) { m_padShape = aShape; m_shapesDirty = true; }
     PAD_SHAPE_T GetShape() const { return m_padShape; }
 
-    void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
+    void SetPosition( const wxPoint& aPos ) override
+    {
+        m_Pos = aPos;
+        m_shapesDirty = true;
+    }
+
     const wxPoint GetPosition() const override { return m_Pos; }
 
     /**
@@ -516,6 +528,7 @@ public:
     {
         m_Pos += aMoveVector;
         SetLocalCoord();
+        m_shapesDirty = true;
     }
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
