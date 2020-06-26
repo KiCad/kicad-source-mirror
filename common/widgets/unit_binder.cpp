@@ -44,12 +44,13 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
         m_unitLabel( aUnitLabel ),
         m_eval( aParent->GetUserUnits(), aUseMils )
 {
-    m_units = aParent->GetUserUnits();
-    m_useMils = aUseMils;
+    m_units     = aParent->GetUserUnits();
+    m_useMils   = aUseMils;
+    m_dataType  = EDA_DATA_TYPE::DISTANCE;
     m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_value );
     m_needsEval = false;
-    m_selStart = 0;
-    m_selEnd = 0;
+    m_selStart  = 0;
+    m_selEnd    = 0;
 
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_value );
 
@@ -59,7 +60,7 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
         textEntry->ChangeValue( wxT( "0" ) );
     }
 
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils ) );
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils, m_dataType ) );
 
     m_value->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
     m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
@@ -79,7 +80,14 @@ void UNIT_BINDER::SetUnits( EDA_UNITS aUnits, bool aUseMils )
 {
     m_units = aUnits;
     m_useMils = aUseMils;
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils ) );
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils, m_dataType ) );
+}
+
+
+void UNIT_BINDER::SetDataType( EDA_DATA_TYPE aDataType )
+{
+    m_dataType = aDataType;
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils, m_dataType ) );
 }
 
 
@@ -234,7 +242,7 @@ void UNIT_BINDER::SetValue( wxString aValue )
     if( m_allowEval )
         m_eval.Clear();
 
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils ) );
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils, m_dataType ) );
 }
 
 
@@ -257,7 +265,7 @@ void UNIT_BINDER::ChangeValue( const wxString& aValue )
     if( m_allowEval )
         m_eval.Clear();
 
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils ) );
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils, m_dataType ) );
 }
 
 

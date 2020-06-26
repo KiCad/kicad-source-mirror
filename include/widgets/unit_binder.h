@@ -66,6 +66,12 @@ public:
     virtual void SetUnits( EDA_UNITS aUnits, bool aUseMils = false );
 
     /**
+     * Used to override the datatype of the displayed property (default is DISTANCE)
+     * @param aDataType is the datatype to use for the units text display
+     */
+    void SetDataType( EDA_DATA_TYPE aDataType );
+
+    /**
      * Function SetValue
      * Sets new value (in Internal Units) for the text field, taking care of units conversion.
      * @param aValue is the new value.
@@ -165,6 +171,7 @@ protected:
     ///> Currently used units.
     EDA_UNITS         m_units;
     bool              m_useMils;
+    EDA_DATA_TYPE     m_dataType;
 
     ///> Validation support.
     wxString          m_errorMessage;
