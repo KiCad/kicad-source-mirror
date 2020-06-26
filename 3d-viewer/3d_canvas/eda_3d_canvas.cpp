@@ -28,6 +28,7 @@
  */
 
 #include <GL/glew.h>    // Must be included first
+#include <gl_utils.h>
 #include <wx/tokenzr.h>
 
 #include "../common_ogl/ogl_utils.h"

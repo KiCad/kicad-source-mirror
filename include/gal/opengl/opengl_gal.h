@@ -478,7 +478,6 @@ private:
 
     VECTOR2D getScreenPixelSize() const;
 
-
     /**
      * @brief Basic OpenGL initialization.
      */

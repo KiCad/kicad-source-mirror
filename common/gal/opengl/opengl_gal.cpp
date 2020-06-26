@@ -32,6 +32,8 @@
 #define GL_SILENCE_DEPRECATION 1
 #endif
 
+#include <gl_utils.h>
+
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/utils.h>
 #include <gal/definitions.h>
@@ -2039,6 +2041,8 @@ void OPENGL_GAL::init()
         // for bitmap fonts and use a higher resolution texture?
         throw std::runtime_error( "Requested texture size is not supported" );
     }
+
+    GL_UTILS::SetSwapInterval( -1 );
 
     cachedManager = new VERTEX_MANAGER( true );
     nonCachedManager = new VERTEX_MANAGER( false );
