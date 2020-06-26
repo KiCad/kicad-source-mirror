@@ -572,7 +572,9 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
                 cols.SetString( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
 
             wxString cellTxt = cols.GetNextToken();
-            tbl->SetValue( row, col, cellTxt );
+
+            if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_STRING ) )
+                tbl->SetValue( row, col, cellTxt );
         }
     }
 }
@@ -596,7 +598,10 @@ void GRID_TRICKS::cutcopy( bool doCut )
                     txt += COL_SEP;
 
                 if( doCut )
-                    tbl->SetValue( row, col, wxEmptyString );
+                {
+                    if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_STRING ) )
+                        tbl->SetValue( row, col, wxEmptyString );
+                }
             }
             txt += ROW_SEP;
         }
