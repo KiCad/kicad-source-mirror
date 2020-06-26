@@ -62,6 +62,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
                                              //short hatches or full hatches
 
     m_Layers.reset().set( F_Cu );
+    m_Name = wxEmptyString;
 
     // thickness of the gap in thermal reliefs:
     m_ThermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );
@@ -75,7 +76,8 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_cornerSmoothingType = SMOOTHING_NONE;
     m_cornerRadius = 0;
 
-    m_removeIslands = true;
+    m_removeIslands = ISLAND_REMOVAL_MODE::ALWAYS;
+    m_minIslandArea = 0;
 
     SetIsKeepout( false );
     SetDoNotAllowCopperPour( false );
@@ -88,30 +90,32 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 
 ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
 {
-    m_ZonePriority = aSource.GetPriority();
-    m_FillMode           = aSource.GetFillMode();
-    m_ZoneClearance      = aSource.GetZoneClearance();
-    m_ZoneMinThickness   = aSource.GetMinThickness();
-    m_HatchFillTypeThickness = aSource.GetHatchFillTypeThickness();
-    m_HatchFillTypeGap  = aSource.GetHatchFillTypeGap();
-    m_HatchFillTypeOrientation = aSource.GetHatchFillTypeOrientation();
+    m_ZonePriority                = aSource.GetPriority();
+    m_FillMode                    = aSource.GetFillMode();
+    m_ZoneClearance               = aSource.GetZoneClearance();
+    m_ZoneMinThickness            = aSource.GetMinThickness();
+    m_HatchFillTypeThickness      = aSource.GetHatchFillTypeThickness();
+    m_HatchFillTypeGap            = aSource.GetHatchFillTypeGap();
+    m_HatchFillTypeOrientation    = aSource.GetHatchFillTypeOrientation();
     m_HatchFillTypeSmoothingLevel = aSource.GetHatchFillTypeSmoothingLevel();
     m_HatchFillTypeSmoothingValue = aSource.GetHatchFillTypeSmoothingValue();
-    m_NetcodeSelection   = aSource.GetNetCode();
-    m_Zone_HatchingStyle = aSource.GetHatchStyle();
-    m_ThermalReliefGap = aSource.GetThermalReliefGap();
-    m_ThermalReliefCopperBridge = aSource.GetThermalReliefCopperBridge();
-    m_PadConnection = aSource.GetPadConnection();
-    m_cornerSmoothingType = aSource.GetCornerSmoothingType();
-    m_cornerRadius = aSource.GetCornerRadius();
-    m_isKeepout = aSource.GetIsKeepout();
+    m_NetcodeSelection            = aSource.GetNetCode();
+    m_Name                        = aSource.GetZoneName();
+    m_Zone_HatchingStyle          = aSource.GetHatchStyle();
+    m_ThermalReliefGap            = aSource.GetThermalReliefGap();
+    m_ThermalReliefCopperBridge   = aSource.GetThermalReliefCopperBridge();
+    m_PadConnection               = aSource.GetPadConnection();
+    m_cornerSmoothingType         = aSource.GetCornerSmoothingType();
+    m_cornerRadius                = aSource.GetCornerRadius();
+    m_isKeepout                   = aSource.GetIsKeepout();
     m_keepoutDoNotAllowCopperPour = aSource.GetDoNotAllowCopperPour();
-    m_keepoutDoNotAllowVias = aSource.GetDoNotAllowVias();
-    m_keepoutDoNotAllowTracks = aSource.GetDoNotAllowTracks();
-    m_keepoutDoNotAllowPads = aSource.GetDoNotAllowPads();
+    m_keepoutDoNotAllowVias       = aSource.GetDoNotAllowVias();
+    m_keepoutDoNotAllowTracks     = aSource.GetDoNotAllowTracks();
+    m_keepoutDoNotAllowPads       = aSource.GetDoNotAllowPads();
     m_keepoutDoNotAllowFootprints = aSource.GetDoNotAllowFootprints();
-    m_Zone_45_Only = aSource.GetHV45();
-    m_removeIslands = aSource.GetRemoveIslands();
+    m_Zone_45_Only                = aSource.GetHV45();
+    m_removeIslands               = aSource.GetIslandRemovalMode();
+    m_minIslandArea               = aSource.GetMinIslandArea();
 
     m_Layers = aSource.GetLayerSet();
 
@@ -141,12 +145,14 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.SetDoNotAllowPads( GetDoNotAllowPads() );
     aTarget.SetDoNotAllowFootprints( GetDoNotAllowFootprints() );
     aTarget.SetHV45( m_Zone_45_Only );
-    aTarget.SetRemoveIslands( GetRemoveIslands() );
+    aTarget.SetIslandRemovalMode( GetIslandRemovalMode() );
+    aTarget.SetMinIslandArea( GetMinIslandArea() );
 
     if( aFullExport )
     {
         aTarget.SetPriority( m_ZonePriority );
         aTarget.SetLayerSet( m_Layers );
+        aTarget.SetZoneName( m_Name );
 
         if( !m_isKeepout )
             aTarget.SetNetCode( m_NetcodeSelection );

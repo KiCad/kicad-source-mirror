@@ -3970,10 +3970,26 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                     NeedRIGHT();
                     break;
 
+
+                case T_island_removal_mode:
+                    tmp = parseInt( "island_removal_mode" );
+
+                    if( tmp >= 0 && tmp <= 2 )
+                        zone->SetIslandRemovalMode( static_cast<ISLAND_REMOVAL_MODE>( tmp ) );
+
+                    NeedRIGHT();
+                    break;
+
+                case T_island_area_min:
+                    zone->SetMinIslandArea( parseBoardUnits( T_island_area_min ) );
+                    NeedRIGHT();
+                    break;
+
                 default:
                     Expecting( "mode, arc_segments, thermal_gap, thermal_bridge_width, "
                                "hatch_thickness, hatch_gap, hatch_orientation, "
-                               "hatch_smoothing_level, hatch_smoothing_value, smoothing, or radius" );
+                               "hatch_smoothing_level, hatch_smoothing_value, smoothing, radius"
+                               "island_removal_mode, or island_area_min" );
                 }
             }
             break;
@@ -4086,6 +4102,16 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                     filledLayer = zone->GetLayer();
                 }
 
+                bool island = false;
+
+                if( token == T_island )
+                {
+                    island = true;
+                    NeedRIGHT();
+                    NeedLEFT();
+                    token = NextTok();
+                }
+
                 if( token != T_pts )
                     Expecting( T_pts );
 
@@ -4094,7 +4120,10 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
 
                 SHAPE_POLY_SET& poly = pts.at( filledLayer );
 
-                poly.NewOutline();
+                int idx = poly.NewOutline();
+
+                if( island )
+                    zone->SetIsIsland( filledLayer, idx );
 
                 for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
                 {
@@ -4156,7 +4185,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
 
         default:
             Expecting( "net, layer/layers, tstamp, hatch, priority, connect_pads, min_thickness, "
-                       "fill, polygon, filled_polygon, fill_segments or name" );
+                       "fill, polygon, filled_polygon, fill_segments, or name" );
         }
     }
 

@@ -21,6 +21,7 @@
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
+#include <wx/textctrl.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -46,6 +47,8 @@ class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbConstrainCtrl;
 		wxStaticText* m_staticTextStyle;
 		wxChoice* m_OutlineAppearanceCtrl;
+		wxStaticText* m_staticText3;
+		wxTextCtrl* m_tcName;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;

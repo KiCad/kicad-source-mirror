@@ -65,6 +65,7 @@ private:
     UNIT_BINDER     m_gridStyleRotation;
     UNIT_BINDER     m_gridStyleThickness;
     UNIT_BINDER     m_gridStyleGap;
+    UNIT_BINDER     m_islandThreshold;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -110,11 +111,13 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     m_minWidth( aParent, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits, true ),
     m_antipadClearance( aParent, m_antipadLabel, m_antipadCtrl, m_antipadUnits, true ),
     m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits, true ),
-    m_gridStyleRotation( aParent, m_staticTextGrindOrient, m_tcGridStyleOrientation, m_staticTextRotUnits,
-                         false ),
+    m_gridStyleRotation( aParent, m_staticTextGrindOrient, m_tcGridStyleOrientation,
+                         m_staticTextRotUnits, false ),
     m_gridStyleThickness( aParent, m_staticTextStyleThickness,
                           m_tcGridStyleThickness, m_GridStyleThicknessUnits, false ),
-    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits, false )
+    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits, false ),
+    m_islandThreshold( aParent, m_islandThresholdLabel,
+                       m_tcIslandThreshold, m_islandThresholdUnits, false )
 {
     m_Parent = aParent;
     m_bitmapNoNetWarning->SetBitmap( KiBitmap( dialog_warning_xpm ) );
@@ -129,6 +132,17 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     m_NetSortingByPadCount = true;      // false = alphabetic sort, true = pad count sort
 
     m_sdbSizerOK->SetDefault();
+
+    m_cbRemoveIslands->Bind( wxEVT_CHOICE,
+            [&]( wxCommandEvent& )
+            {
+                // Area mode is index 2
+                bool val = m_cbRemoveIslands->GetSelection() == 2;
+
+                m_tcIslandThreshold->Enable( val );
+                m_islandThresholdLabel->Enable( val );
+                m_islandThresholdUnits->Enable( val );
+            } );
 
     FinishDialogSettings();
 }
@@ -178,6 +192,17 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     // a module or pad overrides the zone to specify a thermal connection.
     m_antipadClearance.SetValue( m_settings.m_ThermalReliefGap );
     m_spokeWidth.SetValue( m_settings.m_ThermalReliefCopperBridge );
+
+    m_islandThreshold.SetDataType( EDA_DATA_TYPE::AREA );
+    m_islandThreshold.SetDoubleValue( static_cast<double>( m_settings.GetMinIslandArea() ) );
+
+    m_cbRemoveIslands->SetSelection( static_cast<int>( m_settings.GetIslandRemovalMode() ) );
+
+    bool val = m_settings.GetIslandRemovalMode() == ISLAND_REMOVAL_MODE::AREA;
+
+    m_tcIslandThreshold->Enable( val );
+    m_islandThresholdLabel->Enable( val );
+    m_islandThresholdUnits->Enable( val );
 
     wxString netNameDoNotShowFilter = wxT( "Net-*" );
     m_NetFiltering = false;
@@ -235,9 +260,13 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     m_spinCtrlSmoothLevel->SetValue( m_settings.m_HatchFillTypeSmoothingLevel );
     m_spinCtrlSmoothValue->SetValue( m_settings.m_HatchFillTypeSmoothingValue );
 
+    m_tcZoneName->SetValue( m_settings.m_Name );
+
     // Enable/Disable some widgets
     wxCommandEvent event;
     OnStyleSelection( event );
+
+    Fit();
 
     return true;
 }
@@ -248,7 +277,16 @@ void DIALOG_COPPER_ZONE::OnUpdateUI( wxUpdateUIEvent& )
     if( m_ListNetNameSelection->GetSelection() < 0 )
         m_ListNetNameSelection->SetSelection( 0 );
 
-    m_bNoNetWarning->Show( m_ListNetNameSelection->GetSelection() == 0 );
+    bool noNetSelected = m_ListNetNameSelection->GetSelection() == 0;
+    bool enableSize    = !noNetSelected && ( m_cbRemoveIslands->GetSelection() == 2 );
+
+    m_bNoNetWarning->Show( noNetSelected );
+
+    // Zones with no net never have islands removed
+    m_cbRemoveIslands->Enable( !noNetSelected );
+    m_islandThresholdLabel->Enable( enableSize );
+    m_islandThresholdUnits->Enable( enableSize );
+    m_tcIslandThreshold->Enable( enableSize );
 
     if( m_cornerSmoothingType != m_cornerSmoothingChoice->GetSelection() )
     {
@@ -390,6 +428,10 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     cfg->m_Zones.thermal_relief_gap          = Iu2Mils( m_settings.m_ThermalReliefGap );
     cfg->m_Zones.thermal_relief_copper_width = Iu2Mils( m_settings.m_ThermalReliefCopperBridge );
 
+    m_settings.SetIslandRemovalMode(
+            static_cast<ISLAND_REMOVAL_MODE>( m_cbRemoveIslands->GetSelection() ) );
+    m_settings.SetMinIslandArea( m_islandThreshold.GetValue() );
+
     // If we use only exportable to others zones parameters, exit here:
     if( aUseExportableSetupOnly )
         return true;
@@ -421,6 +463,8 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     }
 
     m_settings.m_NetcodeSelection = net ? net->GetNet() : 0;
+
+    m_settings.m_Name = m_tcZoneName->GetValue();
 
     return true;
 }

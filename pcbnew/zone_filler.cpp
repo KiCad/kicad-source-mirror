@@ -215,14 +215,26 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         std::sort( zone.m_islands.begin(), zone.m_islands.end(), std::greater<int>() );
         SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList( zone.m_layer );
 
+        long long int       minArea = zone.m_zone->GetMinIslandArea();
+        ISLAND_REMOVAL_MODE mode    = zone.m_zone->GetIslandRemovalMode();
+
         // Remove solid areas outside the board cutouts and the insulated islands
         // only zones with net code > 0 can have insulated islands by definition
-        if( zone.m_zone->GetNetCode() > 0 && zone.m_zone->GetRemoveIslands() )
+        if( zone.m_zone->GetNetCode() > 0 && mode != ISLAND_REMOVAL_MODE::NEVER )
         {
-            // solid areas outside the board cutouts are also removed, because they are usually insulated islands
+            // Area threshold is stored 1-D in internal units
+            if( mode == ISLAND_REMOVAL_MODE::AREA )
+                minArea *= minArea;
+
+            // solid areas outside the board cutouts are also removed, because they are usually
+            // insulated islands
             for( auto idx : zone.m_islands )
             {
-                poly.DeletePolygon( idx );
+                if( mode == ISLAND_REMOVAL_MODE::ALWAYS || poly.Outline( idx ).Area() < minArea
+                        || !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
+                    poly.DeletePolygon( idx );
+                else
+                    zone.m_zone->SetIsIsland( zone.m_layer, idx );
             }
         }
         // Zones with no net can have areas outside the board cutouts.

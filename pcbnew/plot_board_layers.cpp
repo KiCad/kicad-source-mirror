@@ -481,6 +481,8 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // zones touch each other.
     std::set<std::pair<PCB_LAYER_ID, ZONE_CONTAINER*>> plotted;
 
+    NETINFO_ITEM nonet( aBoard );
+
     for( ZONE_CONTAINER* zone : aBoard->Zones() )
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
@@ -493,9 +495,19 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             plotted.insert( pair );
 
             SHAPE_POLY_SET aggregateArea = zone->GetFilledPolysList( layer );
+            SHAPE_POLY_SET islands;
             bool needFracture = false; // If 2 or more filled areas are combined, resulting
                                        // aggregateArea will be simplified and fractured
                                        // (Long calculation time)
+
+            for( int i = 0; i < aggregateArea.OutlineCount(); i++ )
+            {
+                if( zone->IsIsland( layer, i ) )
+                {
+                    islands.AddOutline( aggregateArea.CPolygon( i )[0] );
+                    aggregateArea.DeletePolygon( i );
+                }
+            }
 
             for( ZONE_CONTAINER* candidate : aBoard->Zones() )
             {
@@ -524,7 +536,19 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                     continue;
 
                 plotted.insert( candidate_pair );
-                aggregateArea.Append( candidate->GetFilledPolysList( layer ) );
+
+                SHAPE_POLY_SET candidateArea = candidate->GetFilledPolysList( layer );
+
+                for( int i = 0; i < candidateArea.OutlineCount(); i++ )
+                {
+                    if( candidate->IsIsland( layer, i ) )
+                    {
+                        islands.AddOutline( candidateArea.CPolygon( i )[0] );
+                        candidateArea.DeletePolygon( i );
+                    }
+                }
+
+                aggregateArea.Append( candidateArea );
                 needFracture = true;
             }
 
@@ -535,6 +559,13 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             }
 
             itemplotter.PlotFilledAreas( zone, aggregateArea );
+
+            if( !islands.IsEmpty() )
+            {
+                ZONE_CONTAINER dummy( *zone );
+                dummy.SetNet( &nonet );
+                itemplotter.PlotFilledAreas( &dummy, islands );
+            }
         }
     }
     aPlotter->EndBlock( NULL );

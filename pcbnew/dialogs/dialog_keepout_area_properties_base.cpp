@@ -78,6 +78,21 @@ DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWind
 
 	bSizerRight->Add( bSizerLowerRight, 0, wxEXPAND, 5 );
 
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticText3 = new wxStaticText( this, wxID_ANY, _("Keepout name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3->Wrap( -1 );
+	m_staticText3->SetToolTip( _("A unique name for this zone to identify it for DRC") );
+
+	bSizer6->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_tcName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer6->Add( m_tcName, 1, wxALL, 5 );
+
+
+	bSizerRight->Add( bSizer6, 1, wxEXPAND, 5 );
+
 
 	bUpperSizer->Add( bSizerRight, 0, wxALL|wxEXPAND, 10 );
 

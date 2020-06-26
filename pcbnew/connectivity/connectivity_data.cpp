@@ -180,6 +180,13 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
     {
         int net = c->OriginNet();
 
+        // Don't add intentionally-kept zone islands to the ratsnest
+        if( c->IsOrphaned() && c->Size() == 1 )
+        {
+            if( dynamic_cast<CN_ZONE*>( *c->begin() ) )
+                continue;
+        }
+
         if( m_connAlgo->IsNetDirty( net ) )
         {
             addRatsnestCluster( c );

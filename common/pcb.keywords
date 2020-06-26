@@ -126,6 +126,9 @@ hatch_smoothing_level
 hatch_smoothing_value
 hide
 hole_to_hole_min
+island
+island_removal_mode
+island_area_min
 italic
 justify
 keepout

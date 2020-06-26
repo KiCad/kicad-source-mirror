@@ -49,6 +49,14 @@ enum class ZONE_HATCH_STYLE
     DIAGONAL_EDGE
 };
 
+/// Whether or not to remove isolated islands from a zone
+enum class ISLAND_REMOVAL_MODE
+{
+    ALWAYS,
+    NEVER,
+    AREA
+};
+
 /**
  * ZONE_SETTINGS
  * handles zones parameters.
@@ -83,6 +91,8 @@ public:
 
     int  m_NetcodeSelection;            ///< Net code selection for the current zone
 
+    wxString m_Name;                    ///< Unique name for the current zone (can be blank)
+
     LSET m_Layers;                      ///< Layers that this zone exists on
 
     /// Option to show the zone area (outlines only, short hatches or full hatches
@@ -112,7 +122,8 @@ private:
     bool m_keepoutDoNotAllowPads;
     bool m_keepoutDoNotAllowFootprints;
 
-    bool m_removeIslands;
+    ISLAND_REMOVAL_MODE m_removeIslands;
+    long long int       m_minIslandArea;
 
 public:
     ZONE_SETTINGS();
@@ -181,8 +192,11 @@ public:
     void SetDoNotAllowPads( bool aEnable ) { m_keepoutDoNotAllowPads = aEnable; }
     void SetDoNotAllowFootprints( bool aEnable ) { m_keepoutDoNotAllowFootprints = aEnable; }
 
-    const bool GetRemoveIslands() const { return m_removeIslands; }
-    void SetRemoveIslands( bool aRemove ) { m_removeIslands = aRemove; }
+    const ISLAND_REMOVAL_MODE GetIslandRemovalMode() const { return m_removeIslands; }
+    void SetIslandRemovalMode( ISLAND_REMOVAL_MODE aRemove ) { m_removeIslands = aRemove; }
+
+    long long int GetMinIslandArea() const { return m_minIslandArea; }
+    void SetMinIslandArea( long long int aArea ) { m_minIslandArea = aArea; }
 };
 
 

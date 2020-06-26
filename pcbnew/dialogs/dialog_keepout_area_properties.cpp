@@ -97,6 +97,8 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataToWindow()
 
     m_cbConstrainCtrl->SetValue( m_zonesettings.m_Zone_45_Only );
 
+    m_tcName->SetValue( m_zonesettings.m_Name );
+
     switch( m_zonesettings.m_Zone_HatchingStyle )
     {
     case ZONE_HATCH_STYLE::NO_HATCH:
@@ -186,6 +188,8 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataFromWindow()
 
     m_zonesettings.m_Zone_45_Only = m_cbConstrainCtrl->GetValue();
     m_zonesettings.m_ZonePriority = 0;  // for a keepout, this param is not used.
+
+    m_zonesettings.m_Name = m_tcName->GetValue();
 
     *m_ptr = m_zonesettings;
     return true;

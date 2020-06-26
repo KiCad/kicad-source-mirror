@@ -1793,7 +1793,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aZone->m_Uuid.AsString() ) );
 
     if( !aZone->GetZoneName().empty() )
-        m_out->Print( 0, " (name %s)", TO_UTF8( aZone->GetZoneName() ) );
+        m_out->Print( 0, " (name %s)", m_out->Quotew( aZone->GetZoneName() ).c_str() );
 
     // Save the outline aux info
     std::string hatch;
@@ -1901,6 +1901,13 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                           FormatInternalUnits( aZone->GetCornerRadius() ).c_str() );
     }
 
+    if( aZone->GetIslandRemovalMode() != ISLAND_REMOVAL_MODE::ALWAYS )
+    {
+        m_out->Print( 0, " (island_removal_mode %d) (island_area_min %s)",
+                      static_cast<int>( aZone->GetIslandRemovalMode() ),
+                      FormatInternalUnits( aZone->GetMinIslandArea() ).c_str() );
+    }
+
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
     {
         m_out->Print( 0, "\n" );
@@ -1988,6 +1995,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
         if( !fv.IsEmpty() )
         {
+            int  poly_index  = 0;
             bool new_polygon = true;
             bool is_closed   = false;
 
@@ -1999,9 +2007,14 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                     m_out->Print( aNestLevel + 1, "(filled_polygon\n" );
                     m_out->Print( aNestLevel + 2, "(layer %s)\n",
                             TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
+
+                    if( aZone->IsIsland( layer, poly_index ) )
+                        m_out->Print( aNestLevel + 2, "(island)\n" );
+
                     m_out->Print( aNestLevel + 2, "(pts\n" );
                     new_polygon = false;
                     is_closed   = false;
+                    poly_index++;
                 }
 
                 if( newLine == 0 )

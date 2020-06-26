@@ -582,7 +582,10 @@ public:
     void ClearFilledPolysList()
     {
         for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
+        {
+            m_insulatedIslands[pair.first].clear();
             pair.second.RemoveAllContours();
+        }
     }
 
    /**
@@ -619,6 +622,18 @@ public:
         m_RawPolysList[aLayer] = aPolysList;
     }
 
+    /**
+     * Checks if a given filled polygon is an insulated island
+     * @param aLayer is the layer to test
+     * @param aPolyIdx is an inndex into m_FilledPolysList[aLayer]
+     * @return true if the given polygon is insulated (i.e. has no net connection)
+     */
+    bool IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx );
+
+    void SetIsIsland( PCB_LAYER_ID aLayer, int aPolyIdx )
+    {
+        m_insulatedIslands[aLayer].insert( aPolyIdx );
+    }
 
     /**
      * Function GetSmoothedPoly
@@ -701,8 +716,12 @@ public:
     void SetDoNotAllowPads( bool aEnable ) { m_doNotAllowPads = aEnable; }
     void SetDoNotAllowFootprints( bool aEnable ) { m_doNotAllowFootprints = aEnable; }
 
-    bool GetRemoveIslands() const { return m_removeIslands; }
-    void SetRemoveIslands( bool aRemove ) { m_removeIslands = aRemove; }
+    const ISLAND_REMOVAL_MODE GetIslandRemovalMode() const { return m_islandRemovalMode; }
+    void SetIslandRemovalMode( ISLAND_REMOVAL_MODE aRemove ) {
+        m_islandRemovalMode = aRemove; }
+
+    long long int GetMinIslandArea() const { return m_minIslandArea; }
+    void SetMinIslandArea( long long int aArea ) { m_minIslandArea = aArea; }
 
     /**
      * Hatch related methods
@@ -828,8 +847,13 @@ protected:
     int                   m_ZoneMinThickness;        ///< Minimum thickness value in filled areas.
     bool                  m_FilledPolysUseThickness;    ///< outline of filled polygons have thickness.
 
-    /// True if isolated copper (islands) should be removed after fill (default)
-    bool m_removeIslands;
+    ISLAND_REMOVAL_MODE   m_islandRemovalMode;
+
+    /**
+     * When island removal mode is set to AREA, islands below this area will be removed.
+     * If this value is negative, all islands will be removed.
+     */
+    long long int         m_minIslandArea;
 
     /** True when a zone was filled, false after deleting the filled areas. */
     bool                  m_IsFilled;
@@ -898,7 +922,9 @@ protected:
     ZONE_HATCH_STYLE      m_hatchStyle;     // hatch style, see enum above
     int                   m_hatchPitch;     // for DIAGONAL_EDGE, distance between 2 hatch lines
     std::vector<SEG>      m_HatchLines;     // hatch lines
-    std::vector<int>      m_insulatedIslands;
+
+    /// For each layer, a set of insulated islands that were not removed
+    std::map<PCB_LAYER_ID, std::set<int>> m_insulatedIslands;
 
     bool                  m_hv45;           // constrain edges to horizontal, vertical or 45º
 

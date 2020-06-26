@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -98,6 +98,8 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxStaticText* m_spokeWidthLabel;
 		wxTextCtrl* m_spokeWidthCtrl;
 		wxStaticText* m_spokeWidthUnits;
+		wxStaticText* m_staticText39;
+		wxTextCtrl* m_tcZoneName;
 		wxStaticText* m_staticTextGridFillType;
 		wxChoice* m_GridStyleCtrl;
 		wxStaticText* m_staticTextGrindOrient;
@@ -113,6 +115,11 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_spinCtrlSmoothLevel;
 		wxStaticText* m_staticTextGridSmootingVal;
 		wxSpinCtrlDouble* m_spinCtrlSmoothValue;
+		wxStaticText* m_staticText40;
+		wxChoice* m_cbRemoveIslands;
+		wxStaticText* m_islandThresholdLabel;
+		wxTextCtrl* m_tcIslandThreshold;
+		wxStaticText* m_islandThresholdUnits;
 		wxButton* m_ExportSetupButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

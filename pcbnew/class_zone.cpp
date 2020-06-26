@@ -64,7 +64,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
     SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
     m_Poly = new SHAPE_POLY_SET();              // Outlines
     m_FilledPolysUseThickness = true;           // set the "old" way to build filled polygon areas (before 6.0.x)
-    m_removeIslands           = true;
+    m_islandRemovalMode       = ISLAND_REMOVAL_MODE::ALWAYS;
     aParent->GetZoneSettings().ExportSetting( *this );
 
     m_needRefill = false;   // True only after some edition.
@@ -103,6 +103,7 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
     m_RawPolysList = aOther.m_RawPolysList;
     m_filledPolysHash = aOther.m_filledPolysHash;
     m_FillSegmList = aOther.m_FillSegmList;      // vector <> copy
+    m_insulatedIslands = aOther.m_insulatedIslands;
 
     m_HatchFillTypeThickness = aOther.m_HatchFillTypeThickness;
     m_HatchFillTypeGap = aOther.m_HatchFillTypeGap;
@@ -154,6 +155,7 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_RawPolysList = aZone.m_RawPolysList;
     m_filledPolysHash = aZone.m_filledPolysHash;
     m_FillSegmList = aZone.m_FillSegmList;      // vector <> copy
+    m_insulatedIslands = aZone.m_insulatedIslands;
 
     m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;
     m_doNotAllowVias = aZone.m_doNotAllowVias;
@@ -267,10 +269,11 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
 
         for( PCB_LAYER_ID layer : aLayerSet.Seq() )
         {
-            m_FillSegmList[layer]    = {};
-            m_FilledPolysList[layer] = {};
-            m_RawPolysList[layer]    = {};
-            m_filledPolysHash[layer] = {};
+            m_FillSegmList[layer]     = {};
+            m_FilledPolysList[layer]  = {};
+            m_RawPolysList[layer]     = {};
+            m_filledPolysHash[layer]  = {};
+            m_insulatedIslands[layer] = {};
         }
     }
 
@@ -1140,6 +1143,18 @@ void ZONE_CONTAINER::CacheTriangulation()
 {
     for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
         pair.second.CacheTriangulation();
+}
+
+
+bool ZONE_CONTAINER::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx )
+{
+    if( GetNetCode() < 1 )
+        return true;
+
+    if( !m_insulatedIslands.count( aLayer ) )
+        return false;
+
+    return m_insulatedIslands.at( aLayer ).count( aPolyIdx );
 }
 
 

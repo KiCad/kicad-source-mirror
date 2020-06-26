@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -228,6 +228,15 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_spokeWidthUnits->Wrap( -1 );
 	gbSizerSettings->Add( m_spokeWidthUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
+	m_staticText39 = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Zone name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText39->Wrap( -1 );
+	m_staticText39->SetToolTip( _("A unique name for this zone to identify it for DRC") );
+
+	gbSizerSettings->Add( m_staticText39, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_tcZoneName = new wxTextCtrl( sbSizer5->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerSettings->Add( m_tcZoneName, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+
 
 	gbSizerSettings->AddGrowableCol( 1 );
 
@@ -239,85 +248,107 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* sbSizerZoneStyle;
 	sbSizerZoneStyle = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fill") ), wxVERTICAL );
 
-	wxFlexGridSizer* fgSizerZoneStyle;
-	fgSizerZoneStyle = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizerZoneStyle->AddGrowableCol( 1 );
-	fgSizerZoneStyle->SetFlexibleDirection( wxBOTH );
-	fgSizerZoneStyle->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer3;
+	gbSizer3 = new wxGridBagSizer( 0, 0 );
+	gbSizer3->SetFlexibleDirection( wxBOTH );
+	gbSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextGridFillType = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Fill type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGridFillType->Wrap( -1 );
-	fgSizerZoneStyle->Add( m_staticTextGridFillType, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_staticTextGridFillType, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_GridStyleCtrlChoices[] = { _("Solid shape"), _("Hatch pattern") };
 	int m_GridStyleCtrlNChoices = sizeof( m_GridStyleCtrlChoices ) / sizeof( wxString );
 	m_GridStyleCtrl = new wxChoice( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_GridStyleCtrlNChoices, m_GridStyleCtrlChoices, 0 );
 	m_GridStyleCtrl->SetSelection( 0 );
-	fgSizerZoneStyle->Add( m_GridStyleCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-
-
-	fgSizerZoneStyle->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer3->Add( m_GridStyleCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_staticTextGrindOrient = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGrindOrient->Wrap( -1 );
-	fgSizerZoneStyle->Add( m_staticTextGrindOrient, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_staticTextGrindOrient, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_tcGridStyleOrientation = new wxTextCtrl( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerZoneStyle->Add( m_tcGridStyleOrientation, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	gbSizer3->Add( m_tcGridStyleOrientation, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
 	m_staticTextRotUnits = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotUnits->Wrap( -1 );
-	fgSizerZoneStyle->Add( m_staticTextRotUnits, 0, wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_staticTextRotUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticTextStyleThickness = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Hatch width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStyleThickness->Wrap( -1 );
-	fgSizerZoneStyle->Add( m_staticTextStyleThickness, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_staticTextStyleThickness, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_tcGridStyleThickness = new wxTextCtrl( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerZoneStyle->Add( m_tcGridStyleThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	gbSizer3->Add( m_tcGridStyleThickness, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
 	m_GridStyleThicknessUnits = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_GridStyleThicknessUnits->Wrap( -1 );
-	fgSizerZoneStyle->Add( m_GridStyleThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizer3->Add( m_GridStyleThicknessUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticTextGridGap = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Hatch gap:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGridGap->Wrap( -1 );
-	fgSizerZoneStyle->Add( m_staticTextGridGap, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_staticTextGridGap, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_tcGridStyleGap = new wxTextCtrl( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerZoneStyle->Add( m_tcGridStyleGap, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	gbSizer3->Add( m_tcGridStyleGap, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
 	m_GridStyleGapUnits = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_GridStyleGapUnits->Wrap( -1 );
-	fgSizerZoneStyle->Add( m_GridStyleGapUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizer3->Add( m_GridStyleGapUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticTextGridSmoothingLevel = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Smoothing effort:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGridSmoothingLevel->Wrap( -1 );
 	m_staticTextGridSmoothingLevel->SetToolTip( _("Value of smoothing effort\n0 = no smoothing\n1 = chamfer\n2 = round corners\n3 = round corners (finer shape)") );
 
-	fgSizerZoneStyle->Add( m_staticTextGridSmoothingLevel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_staticTextGridSmoothingLevel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_spinCtrlSmoothLevel = new wxSpinCtrl( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 3, 0 );
-	fgSizerZoneStyle->Add( m_spinCtrlSmoothLevel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-
-
-	fgSizerZoneStyle->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer3->Add( m_spinCtrlSmoothLevel, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_staticTextGridSmootingVal = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Smooth value (0..1):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGridSmootingVal->Wrap( -1 );
 	m_staticTextGridSmootingVal->SetToolTip( _("Ratio between smoothed corners size and the gap between lines\n0 = no smoothing\n1.0 = max radius/chamfer size (half gap value)") );
 
-	fgSizerZoneStyle->Add( m_staticTextGridSmootingVal, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_staticTextGridSmootingVal, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_spinCtrlSmoothValue = new wxSpinCtrlDouble( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.100000, 0.1 );
 	m_spinCtrlSmoothValue->SetDigits( 0 );
-	fgSizerZoneStyle->Add( m_spinCtrlSmoothValue, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	gbSizer3->Add( m_spinCtrlSmoothValue, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+	m_staticText40 = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Remove islands:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText40->Wrap( -1 );
+	m_staticText40->SetToolTip( _("Choose what to do with unconnected copper islands") );
+
+	gbSizer3->Add( m_staticText40, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_cbRemoveIslandsChoices[] = { _("Always"), _("Never"), _("Below area limit") };
+	int m_cbRemoveIslandsNChoices = sizeof( m_cbRemoveIslandsChoices ) / sizeof( wxString );
+	m_cbRemoveIslands = new wxChoice( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbRemoveIslandsNChoices, m_cbRemoveIslandsChoices, 0 );
+	m_cbRemoveIslands->SetSelection( 0 );
+	gbSizer3->Add( m_cbRemoveIslands, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+	m_islandThresholdLabel = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Minimum island size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_islandThresholdLabel->Wrap( -1 );
+	m_islandThresholdLabel->Enable( false );
+	m_islandThresholdLabel->SetToolTip( _("Isolated islands smaller than this will be removed") );
+
+	gbSizer3->Add( m_islandThresholdLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_tcIslandThreshold = new wxTextCtrl( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tcIslandThreshold->Enable( false );
+
+	gbSizer3->Add( m_tcIslandThreshold, wxGBPosition( 7, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+
+	m_islandThresholdUnits = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_islandThresholdUnits->Wrap( -1 );
+	m_islandThresholdUnits->Enable( false );
+
+	gbSizer3->Add( m_islandThresholdUnits, wxGBPosition( 7, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	fgSizerZoneStyle->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer3->AddGrowableCol( 1 );
 
-
-	sbSizerZoneStyle->Add( fgSizerZoneStyle, 1, wxEXPAND, 5 );
+	sbSizerZoneStyle->Add( gbSizer3, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerMiddle->Add( sbSizerZoneStyle, 1, wxEXPAND|wxTOP|wxRIGHT, 10 );
