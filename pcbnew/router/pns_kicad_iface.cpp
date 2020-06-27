@@ -581,8 +581,9 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 {
     LAYER_RANGE layers( 0, MAX_CU_LAYERS - 1 );
 
-    // ignore non-copper pads
-    if( ( aPad->GetLayerSet() & LSET::AllCuMask()).none() )
+    // ignore non-copper pads except for those with holes
+    if( ( aPad->GetLayerSet() & LSET::AllCuMask()).none() &&
+            aPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
         return NULL;
 
     switch( aPad->GetAttribute() )
@@ -590,9 +591,9 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
     case PAD_ATTRIB_STANDARD:
         break;
 
-    case PAD_ATTRIB_SMD:
     case PAD_ATTRIB_HOLE_NOT_PLATED:
     case PAD_ATTRIB_CONN:
+    case PAD_ATTRIB_SMD:
         {
             LSET lmsk = aPad->GetLayerSet();
             bool is_copper = false;
@@ -610,7 +611,8 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
                 }
             }
 
-            if( !is_copper )
+            /// Keep the NPTH pads because we will use the drill as alternate shape
+            if( !is_copper && aPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
                 return NULL;
         }
         break;

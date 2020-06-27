@@ -1197,18 +1197,11 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     if( !padlayers_mask[F_Cu] && !padlayers_mask[B_Cu] )
     {
-        if( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
+        if( ( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
+                && m_dummyPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
         {
             // Note: he message is shown in an HTML window
-            msg = _( "Error: the pad is not on a copper layer and has a hole" );
-
-            if( m_dummyPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
-            {
-                msg += wxT( "<br><br><i>" );
-                msg += _( "For NPTH pad, set pad size value to pad drill value,"
-                          " if you do not want this pad plotted in gerber files" );
-            }
-
+            msg = _( "Error: plated through holes must have a copper pad on at least one layer" );
             error_msgs.Add( msg );
         }
     }
