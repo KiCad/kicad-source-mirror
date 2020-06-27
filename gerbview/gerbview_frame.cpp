@@ -70,14 +70,18 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
                   ID_GERBVIEW_JOB_FILE_LIST_CLEAR, _( "Clear Recent Job Files" ) ),
           m_TextInfo( nullptr )
 {
-    m_gerberLayout = NULL;
+    m_gerberLayout = nullptr;
     m_show_layer_manager_tools = true;
     m_showBorderAndTitleBlock = false;      // true for reference drawings.
-    m_SelLayerBox = NULL;
-    m_DCodeSelector = NULL;
+    m_SelLayerBox = nullptr;
+    m_DCodeSelector = nullptr;
     m_SelComponentBox = nullptr;
     m_SelNetnameBox = nullptr;
     m_SelAperAttributesBox = nullptr;
+    m_cmpText = nullptr;
+    m_netText = nullptr;
+    m_apertText = nullptr;
+    m_dcodeText = nullptr;
     m_displayMode = 0;
     m_AboutTitle = "GerbView";
 

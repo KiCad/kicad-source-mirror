@@ -100,7 +100,6 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
 void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 {
     wxWindowUpdateLocker dummy( this );
-    wxStaticText* text;
 
     if( m_auxiliaryToolBar )
         m_auxiliaryToolBar->ClearToolbar();
@@ -110,66 +109,78 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
                                                  KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Creates box to display and choose components:
+    // (note, when the m_auxiliaryToolBar is recreated, tools are deleted, but controls
+    // are not deleted: they are just no longer managed by the toolbar
     if( !m_SelComponentBox )
-    {
         m_SelComponentBox = new wxChoice( m_auxiliaryToolBar,
                                           ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
-        m_SelComponentBox->SetToolTip( _("Highlight items belonging to this component") );
-        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Cmp: ") );
-        m_auxiliaryToolBar->AddControl( text );
-        m_auxiliaryToolBar->AddControl( m_SelComponentBox );
-        m_auxiliaryToolBar->AddSpacer( 5 );
-    }
+
+    if( !m_cmpText )
+        m_cmpText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Cmp: ") );
+
+    m_SelComponentBox->SetToolTip( _("Highlight items belonging to this component") );
+    m_cmpText->SetLabel( _( "Cmp: ") );     // can change when changing the language
+    m_auxiliaryToolBar->AddControl( m_cmpText );
+    m_auxiliaryToolBar->AddControl( m_SelComponentBox );
+    m_auxiliaryToolBar->AddSpacer( 5 );
 
     // Creates choice box to display net names and highlight selected:
     if( !m_SelNetnameBox )
-    {
         m_SelNetnameBox = new wxChoice( m_auxiliaryToolBar,
                                         ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
-        m_SelNetnameBox->SetToolTip( _("Highlight items belonging to this net") );
-        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Net:" ) );
-        m_auxiliaryToolBar->AddControl( text );
-        m_auxiliaryToolBar->AddControl( m_SelNetnameBox );
-        m_auxiliaryToolBar->AddSpacer( 5 );
-    }
+
+    if( !m_netText )
+        m_netText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Net:" ) );
+
+    m_SelNetnameBox->SetToolTip( _("Highlight items belonging to this net") );
+    m_netText->SetLabel( _( "Net:" ) );     // can change when changing the language
+    m_auxiliaryToolBar->AddControl( m_netText );
+    m_auxiliaryToolBar->AddControl( m_SelNetnameBox );
+    m_auxiliaryToolBar->AddSpacer( 5 );
 
     // Creates choice box to display aperture attributes and highlight selected:
     if( !m_SelAperAttributesBox )
-    {
         m_SelAperAttributesBox = new wxChoice( m_auxiliaryToolBar,
                                                ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
-        m_SelAperAttributesBox->SetToolTip( _("Highlight items with this aperture attribute") );
-        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Attr:" ) );
-        m_auxiliaryToolBar->AddControl( text );
-        m_auxiliaryToolBar->AddControl( m_SelAperAttributesBox );
-        m_auxiliaryToolBar->AddSpacer( 5 );
-    }
+
+    if( !m_apertText )
+        m_apertText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Attr:" ) );
+
+    m_SelAperAttributesBox->SetToolTip( _("Highlight items with this aperture attribute") );
+    m_apertText->SetLabel( _( "Attr:" ) );     // can change when changing the language
+    m_auxiliaryToolBar->AddControl( m_apertText );
+    m_auxiliaryToolBar->AddControl( m_SelAperAttributesBox );
+    m_auxiliaryToolBar->AddSpacer( 5 );
 
     if( !m_DCodeSelector )
-    {
         m_DCodeSelector = new DCODE_SELECTION_BOX( m_auxiliaryToolBar,
                                                    ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
                                                    wxDefaultPosition, wxSize( 150, -1 ) );
-        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "DCode:" ) );
-        m_auxiliaryToolBar->AddControl( text );
-        m_auxiliaryToolBar->AddControl( m_DCodeSelector );
-    }
+
+    if( !m_dcodeText )
+        m_dcodeText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "DCode:" ) );
+
+    m_dcodeText->SetLabel( _( "DCode:" ) );
+    m_auxiliaryToolBar->AddControl( m_dcodeText );
+    m_auxiliaryToolBar->AddControl( m_DCodeSelector );
 
     if( !m_gridSelectBox )
     {
-        m_auxiliaryToolBar->AddScaledSeparator( this );
         m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT,
                                         wxDefaultPosition, wxDefaultSize, 0, nullptr );
-        m_auxiliaryToolBar->AddControl( m_gridSelectBox );
     }
+
+    m_auxiliaryToolBar->AddScaledSeparator( this );
+    m_auxiliaryToolBar->AddControl( m_gridSelectBox );
 
     if( !m_zoomSelectBox )
     {
-        m_auxiliaryToolBar->AddScaledSeparator( this );
         m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT,
                                         wxDefaultPosition, wxDefaultSize, 0, nullptr );
-        m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
     }
+
+    m_auxiliaryToolBar->AddScaledSeparator( this );
+    m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
 
     updateComponentListSelectBox();
     updateNetnameListSelectBox();
@@ -180,19 +191,29 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     // combobox sizes can have changed: apply new best sizes
     auto item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
-    item->SetMinSize( m_SelComponentBox->GetBestSize() );
+
+//    if( item )
+        item->SetMinSize( m_SelComponentBox->GetBestSize() );
 
     item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
-    item->SetMinSize( m_SelNetnameBox->GetBestSize() );
+
+//    if( item )
+        item->SetMinSize( m_SelNetnameBox->GetBestSize() );
 
     item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
-    item->SetMinSize( m_SelAperAttributesBox->GetBestSize() );
+
+//    if( item )
+        item->SetMinSize( m_SelAperAttributesBox->GetBestSize() );
 
     item = m_auxiliaryToolBar->FindTool( ID_ON_GRID_SELECT );
-    item->SetMinSize( m_gridSelectBox->GetBestSize() );
+
+//    if( item )
+        item->SetMinSize( m_gridSelectBox->GetBestSize() );
 
     item = m_auxiliaryToolBar->FindTool( ID_ON_ZOOM_SELECT );
-    item->SetMinSize( m_zoomSelectBox->GetBestSize() );
+
+//    if( item )
+        item->SetMinSize( m_zoomSelectBox->GetBestSize() );
 
     // after adding the buttons to the toolbar, must call Realize()
     m_auxiliaryToolBar->Realize();

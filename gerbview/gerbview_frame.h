@@ -59,6 +59,14 @@ class GERBVIEW_FRAME : public EDA_DRAW_FRAME    // PCB_BASE_FRAME
     wxPoint             m_grid_origin;
     PAGE_INFO           m_paper;            // used only to show paper limits to screen
     GBR_DISPLAY_OPTIONS m_DisplayOptions;
+    wxStaticText*       m_cmpText;          // a message on the auxiliary toolbar,
+                                            // relative to the m_SelComponentBox
+    wxStaticText*       m_netText;          // a message on the auxiliary toolbar,
+                                            // relative to the m_SelNetnameBox
+    wxStaticText*       m_apertText;        // a message on the auxiliary toolbar,
+                                            // relative to the m_SelAperAttributesBox
+    wxStaticText*       m_dcodeText;        // a message on the auxiliary toolbar,
+                                            // relative to the m_DCodeSelector
 
 public:
     const GBR_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_DisplayOptions; }
