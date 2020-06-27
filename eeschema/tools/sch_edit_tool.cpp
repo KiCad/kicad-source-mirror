@@ -1458,6 +1458,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             m_frame->OnModify();
         }
     }
+        break;
 
     case SCH_MARKER_T:        // These items have no properties to edit
     case SCH_NO_CONNECT_T:

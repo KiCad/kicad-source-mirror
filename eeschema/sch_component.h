@@ -374,11 +374,6 @@ public:
      */
     bool ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath, const KIID_PATH& aNewSheetPath );
 
-    /**
-     * Clear the HIGHLIGHTED flag of all items of the component (fields, pins ...)
-     */
-    bool ClearAllHighlightFlags();
-
     const EDA_RECT GetBoundingBox() const override;
 
     /**

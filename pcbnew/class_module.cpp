@@ -26,21 +26,13 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <plotter.h>
-#include <trigo.h>
 #include <confirm.h>
-#include <kicad_string.h>
-#include <pcbnew.h>
 #include <refdes_utils.h>
-#include <macros.h>
-#include <msgpanel.h>
 #include <bitmaps.h>
-#include <unordered_set>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
-#include <convert_basic_shapes_to_polygon.h>
 #include <view/view.h>
 
 MODULE::MODULE( BOARD* parent ) :
@@ -101,13 +93,11 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_Value->SetParent( this );
 
     // Copy auxiliary data: Pads
-    for( auto pad : aModule.Pads() )
-    {
+    for( D_PAD* pad : aModule.Pads() )
         Add( new D_PAD( *pad ) );
-    }
 
     // Copy auxiliary data: Zones
-    for( auto item : aModule.Zones() )
+    for( MODULE_ZONE_CONTAINER* item : aModule.Zones() )
     {
         Add( static_cast<MODULE_ZONE_CONTAINER*>( item->Clone() ) );
 
@@ -119,7 +109,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy auxiliary data: Drawings
-    for( auto item : aModule.GraphicalItems() )
+    for( BOARD_ITEM* item : aModule.GraphicalItems() )
     {
         switch( item->Type() )
         {
@@ -157,17 +147,17 @@ MODULE::~MODULE()
     delete m_Value;
     delete m_initial_comments;
 
-    for( auto p : m_pads )
+    for( D_PAD* p : m_pads )
         delete p;
 
     m_pads.clear();
 
-    for( auto p : m_fp_zones )
+    for( MODULE_ZONE_CONTAINER* p : m_fp_zones )
         delete p;
 
     m_fp_zones.clear();
 
-    for( auto d : m_drawings )
+    for( BOARD_ITEM* d : m_drawings )
         delete d;
 
     m_drawings.clear();
@@ -207,15 +197,13 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     // Copy auxiliary data: Pads
     m_pads.clear();
 
-    for( auto pad : aOther.Pads() )
-    {
+    for( D_PAD* pad : aOther.Pads() )
         Add( new D_PAD( *pad ) );
-    }
 
     // Copy auxiliary data: Zones
     m_fp_zones.clear();
 
-    for( auto item : aOther.Zones() )
+    for( MODULE_ZONE_CONTAINER* item : aOther.Zones() )
     {
         Add( static_cast<MODULE_ZONE_CONTAINER*>( item->Clone() ) );
 
@@ -229,7 +217,7 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     // Copy auxiliary data: Drawings
     m_drawings.clear();
 
-    for( auto item : aOther.GraphicalItems() )
+    for( BOARD_ITEM* item : aOther.GraphicalItems() )
     {
         switch( item->Type() )
         {
@@ -422,16 +410,16 @@ EDA_RECT MODULE::GetFootprintRect() const
     area.SetEnd( m_Pos );
     area.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the area
 
-    for( auto item : m_drawings )
+    for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() == PCB_MODULE_EDGE_T )
             area.Merge( item->GetBoundingBox() );
     }
 
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
         area.Merge( pad->GetBoundingBox() );
 
-    for( auto zone : m_fp_zones )
+    for( MODULE_ZONE_CONTAINER* zone : m_fp_zones )
         area.Merge( zone->GetBoundingBox() );
 
     return area;
@@ -465,7 +453,7 @@ const EDA_RECT MODULE::GetBoundingBox() const
     EDA_RECT area = GetFootprintRect();
 
     // Add in items not collected by GetFootprintRect():
-    for( auto item : m_drawings )
+    for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() != PCB_MODULE_EDGE_T )
             area.Merge( item->GetBoundingBox() );
@@ -483,7 +471,7 @@ const EDA_RECT MODULE::GetBoundingBox( bool aIncludeInvisibleText ) const
     EDA_RECT area = GetFootprintRect();
 
     // Add in items not collected by GetFootprintRect():
-    for( auto item : m_drawings )
+    for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() != PCB_MODULE_EDGE_T )
             area.Merge( item->GetBoundingBox() );
@@ -634,19 +622,19 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
             return false;
 
         // Determine if any elements in the MODULE intersect the rect
-        for( auto pad : m_pads )
+        for( D_PAD* pad : m_pads )
         {
             if( pad->HitTest( arect, false, 0 ) )
                 return true;
         }
 
-        for( auto zone : m_fp_zones )
+        for( MODULE_ZONE_CONTAINER* zone : m_fp_zones )
         {
             if( zone->HitTest( arect, false, 0 ) )
                 return true;
         }
 
-        for( auto item : m_drawings )
+        for( BOARD_ITEM* item : m_drawings )
         {
             if( item->HitTest( arect, false, 0 ) )
                 return true;
@@ -660,7 +648,7 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
 
 D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 {
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
     {
         if( pad->GetName() == aPadName )
             return pad;
@@ -672,7 +660,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 
 D_PAD* MODULE::GetPad( const wxPoint& aPosition, LSET aLayerMask )
 {
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
     {
         // ... and on the correct layer.
         if( !( pad->GetLayerSet() & aLayerMask ).any() )
@@ -690,7 +678,7 @@ D_PAD* MODULE::GetTopLeftPad()
 {
     D_PAD* topLeftPad = GetFirstPad();
 
-    for( auto p : m_pads )
+    for( D_PAD* p : m_pads )
     {
         wxPoint pnt = p->GetPosition(); // GetPosition() returns the center of the pad
 
@@ -712,7 +700,7 @@ unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 
     unsigned cnt = 0;
 
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
     {
         if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
             continue;
@@ -729,7 +717,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
     std::set<wxString> usedNames;
 
     // Create a set of used pad numbers
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
     {
         // Skip pads not on copper layers (used to build complex
         // solder paste shapes for instance)
@@ -877,13 +865,13 @@ void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
 {
     try
     {
-        for( auto pad : m_pads )
+        for( D_PAD* pad : m_pads )
             aFunction( static_cast<BOARD_ITEM*>( pad ) );
 
-        for( auto zone : m_fp_zones )
+        for( MODULE_ZONE_CONTAINER* zone : m_fp_zones )
             aFunction( static_cast<MODULE_ZONE_CONTAINER*>( zone ) );
 
-        for( auto drawing : m_drawings )
+        for( BOARD_ITEM* drawing : m_drawings )
             aFunction( static_cast<BOARD_ITEM*>( drawing ) );
 
         aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
@@ -900,14 +888,12 @@ void MODULE::GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads 
 {
     std::unordered_set<int> layers;
 
-    for( auto item : m_drawings )
-    {
+    for( BOARD_ITEM* item : m_drawings )
         layers.insert( static_cast<int>( item->GetLayer() ) );
-    }
 
     if( aIncludePads )
     {
-        for( auto pad : m_pads )
+        for( D_PAD* pad : m_pads )
         {
             int pad_layers[KIGFX::VIEW::VIEW_MAX_LAYERS], pad_layers_count;
             pad->ViewGetLayers( pad_layers, pad_layers_count );
@@ -920,7 +906,7 @@ void MODULE::GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads 
     aCount = layers.size();
     int i = 0;
 
-    for( auto layer : layers )
+    for( int layer : layers )
         aLayers[i++] = layer;
 }
 
@@ -932,7 +918,6 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 
     switch( m_Layer )
     {
-
     default:
         wxASSERT_MSG( false, "Illegal layer" );    // do you really have modules placed on other layers?
         KI_FALLTHROUGH;
@@ -1052,7 +1037,7 @@ void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
     m_Reference->KeepUpright( orientation, newOrientation );
     m_Value->KeepUpright( orientation, newOrientation );
 
-    for( auto item : m_drawings )
+    for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() == PCB_MODULE_TEXT_T )
             static_cast<TEXTE_MODULE*>( item )->KeepUpright(  orientation, newOrientation  );

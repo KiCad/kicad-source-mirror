@@ -24,22 +24,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_edge_mod.cpp
- * @brief EDGE_MODULE class definition.
- */
-
 #include <fctsys.h>
-#include <trigo.h>
-#include <pcb_screen.h>
-#include <kicad_string.h>
-#include <macros.h>
-#include <pcb_base_frame.h>
-#include <msgpanel.h>
-#include <base_units.h>
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
-#include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <pcb_edit_frame.h>
@@ -202,14 +189,12 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         break;
 
     case S_POLYGON:
-        // polygon corners coordinates are always relative to the
-        // footprint position, orientation 0
+        // polygon corners coordinates are relative to the footprint position, orientation 0
         m_Poly.Mirror( aFlipLeftRight, !aFlipLeftRight );
         break;
     }
 
-    // DRAWSEGMENT items are not usually on copper layers, but
-    // it can happen in microwave apps.
+    // DRAWSEGMENT items are not usually on copper layers, but it can happen in microwave apps.
     // However, currently, only on Front or Back layers.
     // So the copper layers count is not taken in account
     SetLayer( FlipLayer( GetLayer() ) );
@@ -272,13 +257,11 @@ void EDGE_MODULE::Mirror( wxPoint aCentre, bool aMirrorAroundXAxis )
 
 void EDGE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    // We should rotate the relative coordinates, but to avoid duplicate code,
-    // do the base class rotation of draw coordinates, which is acceptable
-    // because in module editor, m_Pos0 = m_Pos
+    // We should rotate the relative coordinates, but to avoid duplicate code do the base class
+    // rotation of draw coordinates, which is acceptable because in module editor, m_Pos0 = m_Pos
     DRAWSEGMENT::Rotate( aRotCentre, aAngle );
 
-    // and now update the relative coordinates, which are
-    // the reference in most transforms.
+    // and now update the relative coordinates, which are the reference in most transforms.
     SetLocalCoord();
 }
 

@@ -25,20 +25,13 @@
  */
 
 #include <fctsys.h>
-#include <macros.h>
 #include <gr_basic.h>
-#include <trigo.h>
-#include <kicad_string.h>
-#include <richio.h>
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
-
 #include <base_units.h>
 #include <class_board.h>
 #include <class_dimension.h>
 #include <class_pcb_text.h>
-#include <math/util.h> // for KiROUND
-#include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 

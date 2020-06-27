@@ -32,19 +32,15 @@
 #include <gr_basic.h>
 #include <base_struct.h>
 #include <gr_text.h>
-#include <kicad_string.h>
-#include <trigo.h>
 #include <pcb_edit_frame.h>
-#include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
-#include "pcb_painter.h"
+#include <pcb_painter.h>
 
 using KIGFX::PCB_RENDER_SETTINGS;
 

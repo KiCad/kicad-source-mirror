@@ -25,18 +25,12 @@
  */
 
 #include <fctsys.h>
-//#include <common.h>
-#include <pcb_screen.h>
 #include <pcb_base_frame.h>
 #include <class_board.h>
 #include <class_track.h>
-#include <pcbnew.h>
 #include <base_units.h>
-#include <msgpanel.h>
 #include <bitmaps.h>
 #include <view/view.h>
-#include <math/util.h>      // for KiROUND
-#include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 

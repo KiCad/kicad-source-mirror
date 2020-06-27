@@ -26,22 +26,11 @@
 #include <bitmaps.h>
 #include <fctsys.h>
 #include <geometry/geometry_utils.h>
-#include <kicad_string.h>
-#include <macros.h>
-#include <msgpanel.h>
 #include <pcb_base_frame.h>
 #include <pcb_screen.h>
-#include <richio.h>
-#include <trigo.h>
-#include <convert_to_biu.h>
 #include <class_board.h>
 #include <class_zone.h>
-#include <pcbnew.h>
-#include <zones.h>
 #include <math_for_graphics.h>
-#include <geometry/polygon_test_point_inside.h>
-#include <math/util.h>      // for KiROUND
-#include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 
