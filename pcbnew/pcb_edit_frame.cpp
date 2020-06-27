@@ -86,6 +86,7 @@
 #include <wx/wupdlock.h>
 #include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
 #include <ratsnest/ratsnest_viewitem.h>
+#include <widgets/panel_selection_filter.h>
 
 #include <widgets/infobar.h>
 
@@ -220,10 +221,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateOptToolbar();
     ReCreateMicrowaveVToolbar();
 
+    m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
+
     // Create the infobar
     m_infoBar = new WX_INFOBAR( this, &m_auimgr );
 
     m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetFlags( wxAUI_MGR_LIVE_RESIZE );
 
     // Horizontal items; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar,
@@ -246,17 +250,25 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_Layers,
                       EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(4)
                       .Caption( _( "Layers Manager" ) ).PaneBorder( false )
-                      .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ) );
+                      .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ).Maximize() );
+    m_auimgr.AddPane( m_selectionFilterPanel,
+                      EDA_PANE().Palette().Name( "SelectionFilter" ).Right().Layer( 4 )
+                      .Caption( _( "Selection Filter" ) ).PaneBorder( false ).Position( 2 )
+                      .MinSize( 160, -1 ).BestSize( m_selectionFilterPanel->GetBestSize() ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
+    m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
 
     m_Layers->ReFillRender();   // Update colors in Render after the config is read
     ReFillLayerWidget();        // this is near end and after ReFillRender()
                                 // because contents establish size
     syncLayerWidgetLayer();
+
+    // The selection filter doesn't need to grow in the vertical direction when docked
+    m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
     // hidding it.
@@ -349,6 +361,9 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
+
+    delete m_selectionFilterPanel;
+    delete m_Layers;
 }
 
 

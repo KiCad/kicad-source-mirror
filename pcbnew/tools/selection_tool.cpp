@@ -120,6 +120,17 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_locked( true ),
         m_priv( std::make_unique<PRIV>() )
 {
+    m_filter.lockedItems = true;
+    m_filter.footprints  = true;
+    m_filter.text        = true;
+    m_filter.tracks      = true;
+    m_filter.vias        = true;
+    m_filter.pads        = true;
+    m_filter.graphics    = true;
+    m_filter.zones       = true;
+    m_filter.keepouts    = true;
+    m_filter.dimensions  = true;
+    m_filter.otherItems  = true;
 }
 
 
@@ -435,6 +446,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     if( aClientFilter )
         aClientFilter( aWhere, collector );
 
+    // Apply the stateful filter
+    filterCollectedItems( collector );
+
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
     {
@@ -592,7 +606,7 @@ bool SELECTION_TOOL::selectMultiple()
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
-                if( !item || !Selectable( item ) )
+                if( !item || !Selectable( item ) || !itemPassesFilter( item ) )
                     continue;
 
                 if( item->HitTest( selectionRect, windowSelection ) )
@@ -1308,6 +1322,99 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
     m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
+}
+
+
+void SELECTION_TOOL::filterCollectedItems( GENERAL_COLLECTOR& aCollector )
+{
+    if( aCollector.GetCount() == 0 )
+        return;
+
+    std::set<BOARD_ITEM*> rejected;
+
+    for( EDA_ITEM* i : aCollector )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
+
+        if( !itemPassesFilter( item ) )
+            rejected.insert( item );
+    }
+
+    for( BOARD_ITEM* item : rejected )
+        aCollector.Remove( item );
+}
+
+
+bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
+{
+    if( aItem->IsLocked() && !m_filter.lockedItems )
+        return false;
+
+    switch( aItem->Type() )
+    {
+    case PCB_MODULE_T:
+        if( !m_filter.footprints )
+            return false;
+
+        break;
+
+    case PCB_PAD_T:
+        if( !m_filter.pads )
+            return false;
+
+        break;
+
+    case PCB_TRACE_T:
+    case PCB_ARC_T:
+        if( !m_filter.tracks )
+            return false;
+
+        break;
+
+    case PCB_VIA_T:
+        if( !m_filter.vias )
+            return false;
+
+        break;
+
+    case PCB_ZONE_AREA_T:
+    {
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( aItem );
+
+        if( ( !m_filter.zones && !zone->GetIsKeepout() )
+            || ( !m_filter.keepouts && zone->GetIsKeepout() ) )
+        {
+            return false;
+        }
+
+        break;
+    }
+    case PCB_LINE_T:
+    case PCB_TARGET_T:
+        if( !m_filter.graphics )
+            return false;
+
+        break;
+
+    case PCB_MODULE_TEXT_T:
+    case PCB_TEXT_T:
+        if( !m_filter.text )
+            return false;
+
+        break;
+
+    case PCB_DIMENSION_T:
+        if( !m_filter.dimensions )
+            return false;
+
+        break;
+
+    default:
+        if( !m_filter.otherItems )
+            return false;
+    }
+
+    return true;
 }
 
 

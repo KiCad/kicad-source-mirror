@@ -1,0 +1,108 @@
+///////////////////////////////////////////////////////////////////////////
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// http://www.wxformbuilder.org/
+//
+// PLEASE DO *NOT* EDIT THIS FILE!
+///////////////////////////////////////////////////////////////////////////
+
+#include "panel_selection_filter_base.h"
+
+///////////////////////////////////////////////////////////////////////////
+
+PANEL_SELECTION_FILTER_BASE::PANEL_SELECTION_FILTER_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+{
+	this->SetFont( wxFont( 9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_cbAllItems = new wxCheckBox( this, wxID_ANY, wxT("All items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbAllItems->SetValue(true);
+	gbSizer1->Add( m_cbAllItems, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxLEFT|wxTOP, 5 );
+
+	m_cbLockedItems = new wxCheckBox( this, wxID_ANY, wxT("Locked items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbLockedItems->SetValue(true);
+	m_cbLockedItems->SetToolTip( wxT("Allow selection of locked items") );
+
+	gbSizer1->Add( m_cbLockedItems, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_cbFootprints = new wxCheckBox( this, wxID_ANY, wxT("Footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbFootprints->SetValue(true);
+	gbSizer1->Add( m_cbFootprints, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
+
+	m_cbText = new wxCheckBox( this, wxID_ANY, wxT("Text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbText->SetValue(true);
+	gbSizer1->Add( m_cbText, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
+
+	m_cbTracks = new wxCheckBox( this, wxID_ANY, wxT("Tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbTracks->SetValue(true);
+	gbSizer1->Add( m_cbTracks, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
+
+	m_cbVias = new wxCheckBox( this, wxID_ANY, wxT("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbVias->SetValue(true);
+	gbSizer1->Add( m_cbVias, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
+
+	m_cbPads = new wxCheckBox( this, wxID_ANY, wxT("Pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbPads->SetValue(true);
+	gbSizer1->Add( m_cbPads, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
+
+	m_cbGraphics = new wxCheckBox( this, wxID_ANY, wxT("Graphics"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbGraphics->SetValue(true);
+	gbSizer1->Add( m_cbGraphics, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
+
+	m_cbZones = new wxCheckBox( this, wxID_ANY, wxT("Zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbZones->SetValue(true);
+	gbSizer1->Add( m_cbZones, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
+
+	m_cbKeepouts = new wxCheckBox( this, wxID_ANY, wxT("Keepouts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbKeepouts->SetValue(true);
+	gbSizer1->Add( m_cbKeepouts, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
+
+	m_cbDimensions = new wxCheckBox( this, wxID_ANY, wxT("Dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbDimensions->SetValue(true);
+	gbSizer1->Add( m_cbDimensions, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+	m_cbOtherItems = new wxCheckBox( this, wxID_ANY, wxT("Other items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbOtherItems->SetValue(true);
+	gbSizer1->Add( m_cbOtherItems, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+
+	this->SetSizer( gbSizer1 );
+	this->Layout();
+
+	// Connect Events
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SELECTION_FILTER_BASE::OnUpdateUI ) );
+	m_cbAllItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbLockedItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbText->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbTracks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbVias->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbPads->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbGraphics->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbZones->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbKeepouts->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbDimensions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbOtherItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+}
+
+PANEL_SELECTION_FILTER_BASE::~PANEL_SELECTION_FILTER_BASE()
+{
+	// Disconnect Events
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SELECTION_FILTER_BASE::OnUpdateUI ) );
+	m_cbAllItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbLockedItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbText->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbTracks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbVias->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbPads->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbGraphics->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbZones->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbKeepouts->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbDimensions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbOtherItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+
+}

@@ -50,6 +50,26 @@ typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR& );
 
 
 /**
+ * Selection filtering that applies all the time (not the "filter selection" dialog that modifies
+ * the current selection)
+ */
+struct SELECTION_FILTER_OPTIONS
+{
+    bool lockedItems;   ///< Allow selecting locked items
+    bool footprints;    ///< Allow selecting entire footprints
+    bool text;          ///< Text (free or attached to a footprint)
+    bool tracks;        ///< Copper tracks
+    bool vias;          ///< Vias (all types>
+    bool pads;          ///< Footprint pads
+    bool graphics;      ///< Graphic lines, shapes, polygons
+    bool zones;         ///< Copper zones
+    bool keepouts;      ///< Keepout zones
+    bool dimensions;    ///< Dimension items
+    bool otherItems;    ///< Anything not fitting one of the above categories
+};
+
+
+/**
  * SELECTION_TOOL
  *
  * Our sample selection tool: currently supports:
@@ -155,6 +175,11 @@ public:
      * rolling back an undo state to make sure there aren't any stale pointers.
      */
     void RebuildSelection();
+
+    SELECTION_FILTER_OPTIONS& GetFilter()
+    {
+        return m_filter;
+    }
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
@@ -269,6 +294,12 @@ private:
     ///> Invoke filter dialog and modify current selection
     int filterSelection( const TOOL_EVENT& aEvent );
 
+    ///> Applies the SELECTION_FILTER_OPTIONS to a collection of items
+    void filterCollectedItems( GENERAL_COLLECTOR& aCollector );
+
+    ///> Returns true if the given item passes the current SELECTION_FILTER_OPTIONS
+    bool itemPassesFilter( BOARD_ITEM* aItem );
+
     /**
      * Function pickSmallestComponent()
      * Allows one to find the smallest (in terms of bounding box area) item from the list.
@@ -332,6 +363,8 @@ private:
 private:
     PCB_BASE_FRAME*  m_frame;     // Pointer to the parent frame
     PCBNEW_SELECTION m_selection; // Current state of selection
+
+    SELECTION_FILTER_OPTIONS m_filter;
 
     bool m_additive;              // Items should be added to selection (instead of replacing)
     bool m_subtractive;           // Items should be removed from selection

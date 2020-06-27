@@ -643,6 +643,7 @@ void PCB_EDIT_FRAME::ToggleLayersManager()
     // show auxiliary Vertical layers and visibility manager toolbar
     m_show_layer_manager_tools = !m_show_layer_manager_tools;
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
+    m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
     m_auimgr.Update();
 }
 
