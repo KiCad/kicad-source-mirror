@@ -25,16 +25,11 @@
 
 #include "drawing_tool.h"
 #include "pcb_actions.h"
-
 #include <pcb_edit_frame.h>
-#include <project.h>
-#include <pcbnew_settings.h>
-#include <id.h>
 #include <confirm.h>
 #include <import_gfx/dialog_import_gfx.h>
 #include <view/view_controls.h>
 #include <view/view.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <geometry/geometry_utils.h>
 #include <board_commit.h>
@@ -42,11 +37,8 @@
 #include <bitmaps.h>
 #include <painter.h>
 #include <status_popup.h>
-#include "grid_helper.h"
-#include "point_editor.h"
 #include <dialogs/dialog_text_properties.h>
 #include <preview_items/arc_assistant.h>
-#include <math/util.h>      // for KiROUND
 
 #include <class_board.h>
 #include <class_edge_mod.h>
@@ -58,6 +50,8 @@
 #include <tools/selection_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
+#include <tools/point_editor.h>
+#include <tools/grid_helper.h>
 #include <ratsnest/ratsnest_data.h>
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
@@ -639,7 +633,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-                PCB_LAYER_ID layer = getDrawingLayer();
+                PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
                 if( layer == Edge_Cuts )        // dimensions are not allowed on EdgeCuts
                     layer = Dwgs_User;
@@ -966,8 +960,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
     POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
     DRAWSEGMENT*& graphic = *aGraphic;
 
-    m_lineWidth = getSegmentWidth( getDrawingLayer() );
-    m_frame->SetActiveLayer( getDrawingLayer() );
+    m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCBNEW_SELECTION preview;
@@ -996,7 +989,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
-        cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), getDrawingLayer() );
+        cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), m_frame->GetActiveLayer() );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
@@ -1072,8 +1065,8 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
-            m_lineWidth = getSegmentWidth( getDrawingLayer() );
-            graphic->SetLayer( getDrawingLayer() );
+            m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
+            graphic->SetLayer( m_frame->GetActiveLayer() );
             graphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
             frame()->SetMsgPanel( graphic );
@@ -1094,14 +1087,14 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
                     aStartingPoint = NULLOPT;
                 }
 
-                m_lineWidth = getSegmentWidth( getDrawingLayer() );
+                m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
 
                 // Init the new item attributes
                 graphic->SetShape( (STROKE_T) aShape );
                 graphic->SetWidth( m_lineWidth );
                 graphic->SetStart( (wxPoint) cursorPos );
                 graphic->SetEnd( (wxPoint) cursorPos );
-                graphic->SetLayer( getDrawingLayer() );
+                graphic->SetLayer( m_frame->GetActiveLayer() );
                 grid.SetSkipPoint( cursorPos );
 
                 if( !isLocalOriginSet )
@@ -1224,7 +1217,7 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bool aImmediateMode )
 {
     DRAWSEGMENT*& graphic = *aGraphic;
-    m_lineWidth = getSegmentWidth( getDrawingLayer() );
+    m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
 
     // Arc geometric construction manager
     KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
@@ -1253,7 +1246,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bo
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        PCB_LAYER_ID layer = getDrawingLayer();
+        PCB_LAYER_ID layer = m_frame->GetActiveLayer();
         graphic->SetLayer( layer );
 
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
@@ -1311,7 +1304,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bo
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
 
-                m_lineWidth = getSegmentWidth( getDrawingLayer() );
+                m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
 
                 // Init the new item attributes
                 // (non-geometric, those are handled by the manager)
@@ -1338,8 +1331,8 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bo
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
-            m_lineWidth = getSegmentWidth( getDrawingLayer() );
-            graphic->SetLayer( getDrawingLayer() );
+            m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
+            graphic->SetLayer( m_frame->GetActiveLayer() );
             graphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
             frame()->SetMsgPanel( graphic );
@@ -1462,9 +1455,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     params.m_mode = zoneMode;
     params.m_sourceZone = sourceZone;
 
-    if( zoneMode == ZONE_MODE::GRAPHIC_POLYGON )
-        params.m_layer = getDrawingLayer();
-    else if( zoneMode == ZONE_MODE::SIMILAR )
+    if( zoneMode == ZONE_MODE::SIMILAR )
         params.m_layer = sourceZone->GetLayer();
     else
         params.m_layer = m_frame->GetActiveLayer();
@@ -1550,9 +1541,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
-            if( zoneMode == ZONE_MODE::GRAPHIC_POLYGON )
-                params.m_layer = getDrawingLayer();
-            else if( zoneMode == ZONE_MODE::ADD || zoneMode == ZONE_MODE::CUTOUT )
+            if( zoneMode != ZONE_MODE::SIMILAR )
                 params.m_layer = frame()->GetActiveLayer();
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -1951,27 +1940,6 @@ int DRAWING_TOOL::getSegmentWidth( PCB_LAYER_ID aLayer ) const
 {
     assert( m_board );
     return m_board->GetDesignSettings().GetLineThickness( aLayer );
-}
-
-
-PCB_LAYER_ID DRAWING_TOOL::getDrawingLayer() const
-{
-    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
-
-    if( ( GetDrawingMode() == MODE::DIMENSION || GetDrawingMode() == MODE::GRAPHIC_POLYGON )
-        && IsCopperLayer( layer ) )
-    {
-        if( layer == F_Cu )
-            layer = F_SilkS;
-        else if( layer == B_Cu )
-            layer = B_SilkS;
-        else
-            layer = Dwgs_User;
-
-        m_frame->SetActiveLayer( layer );
-    }
-
-    return layer;
 }
 
 

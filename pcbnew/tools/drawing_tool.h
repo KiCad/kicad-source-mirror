@@ -224,8 +224,6 @@ private:
     ///> Returns the appropriate width for a segment depending on the settings.
     int getSegmentWidth( PCB_LAYER_ID aLayer ) const;
 
-    PCB_LAYER_ID getDrawingLayer() const;
-
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;

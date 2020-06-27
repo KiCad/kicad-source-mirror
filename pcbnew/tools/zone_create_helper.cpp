@@ -213,12 +213,12 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
 
             graphicPolygonsLayers.reset( Edge_Cuts ).reset( F_CrtYd ).reset( B_CrtYd );
 
-            if( graphicPolygonsLayers.Contains( m_tool.getDrawingLayer() ) )
+            if( graphicPolygonsLayers.Contains( m_params.m_layer ) )
             {
                 auto poly = m_tool.m_editModules ? new EDGE_MODULE( (MODULE *) parent )
                                                  : new DRAWSEGMENT();
                 poly->SetShape ( S_POLYGON );
-                poly->SetLayer( m_tool.getDrawingLayer() );
+                poly->SetLayer( m_params.m_layer );
                 poly->SetPolyShape ( *aZone->Outline() );
                 bCommit.Add( poly );
                 m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, poly );
@@ -232,7 +232,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
                     auto new_seg = m_tool.m_editModules ? new EDGE_MODULE( (MODULE *) parent )
                                                         : new DRAWSEGMENT();
                     new_seg->SetShape( S_SEGMENT );
-                    new_seg->SetLayer( m_tool.getDrawingLayer() );
+                    new_seg->SetLayer( m_params.m_layer );
                     new_seg->SetStart( wxPoint( seg.Get().A.x, seg.Get().A.y ) );
                     new_seg->SetEnd( wxPoint( seg.Get().B.x, seg.Get().B.y ) );
                     bCommit.Add( new_seg );
