@@ -442,7 +442,11 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     if( aCfg->m_Window.zoom_factors.empty() )
     {
-        aCfg->m_Window.zoom_factors = { 0.5,
+        aCfg->m_Window.zoom_factors = { 0.1,
+                                        0.15,
+                                        0.2,
+                                        0.3,
+                                        0.5,
                                         0.7,
                                         1.0,
                                         1.5,
