@@ -463,8 +463,6 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     {
         if( m_selection.GetSize() > 0 )
         {
-            // Don't fire an event now as it will end up redundant if we fire a SelectedEvent
-            // or an UnselectedEvent.
             ClearSelection( true /*quiet mode*/ );
             anySubtracted = true;
         }
@@ -1525,23 +1523,20 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 
 bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
 {
-    // Is high contrast mode enabled?
-    bool highContrast = getView()->GetPainter()->GetSettings()->GetHighContrast();
+    const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
 
-    int layers[KIGFX::VIEW::VIEW_MAX_LAYERS], layers_count;
-
-    // Filter out items that do not belong to active layers
-    std::set<unsigned int> activeLayers = getView()->GetPainter()->GetSettings()->GetActiveLayers();
-
-    aItem->ViewGetLayers( layers, layers_count );
-
-    if( highContrast )
+    if( settings->GetHighContrast() )
     {
+        int                    itemLayers[KIGFX::VIEW::VIEW_MAX_LAYERS], layers_count;
+        std::set<unsigned int> activeLayers = settings->GetActiveLayers();
+
+        aItem->ViewGetLayers( itemLayers, layers_count );
+
         bool onActive = false;          // Is the item on any of active layers?
 
         for( int i = 0; i < layers_count; ++i )
         {
-            if( activeLayers.count( layers[i] ) > 0 ) // Item is on at least one of the active layers
+            if( activeLayers.count( itemLayers[i] ) > 0 ) // Item is on at least one of the active layers
             {
                 onActive = true;
                 break;
@@ -1665,7 +1660,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         // pick up items under an (unlocked) module without also moving the module's sub-parts.
         if( !m_editModules && !checkVisibilityOnly )
         {
-            if( m_multiple && !highContrast )
+            if( m_multiple && !settings->GetHighContrast() )
                 return false;
         }
 

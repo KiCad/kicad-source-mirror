@@ -42,7 +42,7 @@
 #include <view/view_controls.h>
 #include <widgets/net_selector.h>
 #include <tool/tool_manager.h>
-#include <tools/footprint_editor_tools.h>
+#include <tools/pad_tool.h>
 #include <advanced_config.h>    // for pad property feature management
 
 
@@ -106,10 +106,10 @@ void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
         // to set the default pad setup
         if( aPad )
         {
-            FOOTPRINT_EDITOR_TOOLS* fpTools = m_toolManager->GetTool<FOOTPRINT_EDITOR_TOOLS>();
+            PAD_TOOL* padTools = m_toolManager->GetTool<PAD_TOOL>();
 
-            if( fpTools )
-                fpTools->SetLastPadName( aPad->GetName() );
+            if( padTools )
+                padTools->SetLastPadName( aPad->GetName() );
         }
     }
 }

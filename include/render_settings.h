@@ -77,7 +77,7 @@ public:
      * Returns the set of currently active layers.
      * @return The set of currently active layers.
      */
-    const std::set<unsigned int> GetActiveLayers()
+    const std::set<unsigned int> GetActiveLayers() const
     {
         return m_activeLayers;
     }

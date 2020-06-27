@@ -179,7 +179,7 @@ TOOL_ACTION PCB_ACTIONS::runDRC( "pcbnew.DRCTool.runDRC",
 
 // EDIT_TOOL
 //
-TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.EditFpInFpEditor",
+TOOL_ACTION PCB_ACTIONS::editFpInFpEditor( "pcbnew.EditorControl.EditFpInFpEditor",
         AS_GLOBAL,
         MD_CTRL + 'E', LEGACY_HK_NAME( "Edit with Footprint Editor" ),
         _( "Open in Footprint Editor" ),
@@ -333,36 +333,6 @@ TOOL_ACTION PCB_ACTIONS::footprintProperties( "pcbnew.ModuleEditor.footprintProp
         _( "Footprint Properties..." ), "",
         module_options_xpm );
 
-TOOL_ACTION PCB_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
-        AS_GLOBAL, 0, "",
-        _( "Add Pad" ), _( "Add a pad" ),
-        pad_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::createPadFromShapes( "pcbnew.ModuleEditor.createPadFromShapes",
-        AS_CONTEXT, 0, "",
-        _( "Create Pad from Selected Shapes" ),
-        _( "Creates a custom-shaped pads from a set of selected shapes" ),
-        primitives_to_custom_pad_xpm );
-
-TOOL_ACTION PCB_ACTIONS::explodePadToShapes( "pcbnew.ModuleEditor.explodePadToShapes",
-        AS_CONTEXT, 0, "",
-        _( "Explode Pad to Graphic Shapes" ),
-        _( "Converts a custom-shaped pads to a set of graphical shapes" ),
-        custom_pad_to_primitives_xpm );
-
-TOOL_ACTION PCB_ACTIONS::defaultPadProperties( "pcbnew.ModuleEditor.defaultPadProperties",
-        AS_GLOBAL, 0, "",
-        _( "Default Pad Properties..." ), _( "Edit the pad properties used when creating new pads" ),
-        options_pad_xpm );
-
-
-// SHAPE_EDITOR_TOOLS
-//
-TOOL_ACTION PCB_ACTIONS::shapeProperties( "pcbnew.ShapeEditor.shapeProperties",
-        AS_GLOBAL, 0, "",
-        _( "Shape Properties..." ), "",
-        options_pad_xpm );
-
 
 // GLOBAL_EDIT_TOOL
 //
@@ -474,6 +444,30 @@ TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.PadTool.enumeratePads",
         _( "Renumber Pads..." ),
         _( "Renumber pads by clicking on them in the desired order" ),
         pad_enumerate_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::placePad( "pcbnew.PadTool.placePad",
+        AS_GLOBAL, 0, "",
+        _( "Add Pad" ), _( "Add a pad" ),
+        pad_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::explodePad( "pcbnew.PadTool.explodePad",
+        AS_GLOBAL,
+        MD_CTRL + 'E', "",
+        _( "Edit Pad as Graphic Shapes" ),
+        _( "Ungroups a custom-shaped pad for editing as individual graphic shapes" ),
+        custom_pad_to_primitives_xpm );
+
+TOOL_ACTION PCB_ACTIONS::recombinePad( "pcbnew.PadTool.recombinePad",
+        AS_GLOBAL,
+        MD_CTRL + 'E', "",
+        _( "Finish Pad Edit" ),
+        _( "Regroups all touching graphic shapes into the edited pad" ),
+        custom_pad_to_primitives_xpm );
+
+TOOL_ACTION PCB_ACTIONS::defaultPadProperties( "pcbnew.PadTool.defaultPadProperties",
+        AS_GLOBAL, 0, "",
+        _( "Default Pad Properties..." ), _( "Edit the pad properties used when creating new pads" ),
+        options_pad_xpm );
 
 
 // PCB_EDITOR_CONTROL

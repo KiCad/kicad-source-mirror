@@ -319,7 +319,7 @@ public:
     static TOOL_ACTION listNets;
     static TOOL_ACTION runDRC;
 
-    static TOOL_ACTION editFootprintInFpEditor;
+    static TOOL_ACTION editFpInFpEditor;
     static TOOL_ACTION showLayersManager;
     static TOOL_ACTION showMicrowaveToolbar;
     static TOOL_ACTION showPythonConsole;
@@ -350,13 +350,12 @@ public:
 
     static TOOL_ACTION footprintProperties;
     static TOOL_ACTION defaultPadProperties;
-    static TOOL_ACTION shapeProperties;
 
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;
 
-    static TOOL_ACTION createPadFromShapes;
-    static TOOL_ACTION explodePadToShapes;
+    static TOOL_ACTION explodePad;
+    static TOOL_ACTION recombinePad;
 
     /// Tool for quick pad enumeration
     static TOOL_ACTION enumeratePads;

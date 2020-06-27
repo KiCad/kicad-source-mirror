@@ -1243,9 +1243,9 @@ bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance ) const
     if( polySet.Contains( aSeg.A ) )
         return true;
 
-    for( SEGMENT_ITERATOR it = ( (SHAPE_POLY_SET*) this )->IterateSegmentsWithHoles(); it; it++ )
+    for( CONST_SEGMENT_ITERATOR it = CIterateSegmentsWithHoles(); it; it++ )
     {
-        SEG polygonEdge = *it;
+        const SEG polygonEdge = *it;
 
         if( polygonEdge.Intersect( aSeg, true ) )
             return true;
@@ -1359,7 +1359,8 @@ void SHAPE_POLY_SET::Append( const VECTOR2I& aP, int aOutline, int aHole )
 
 
 bool SHAPE_POLY_SET::CollideVertex( const VECTOR2I& aPoint,
-        SHAPE_POLY_SET::VERTEX_INDEX& aClosestVertex, int aClearance )
+                                    SHAPE_POLY_SET::VERTEX_INDEX& aClosestVertex,
+                                    int aClearance ) const
 {
     // Shows whether there was a collision
     bool collision = false;
@@ -1371,7 +1372,7 @@ bool SHAPE_POLY_SET::CollideVertex( const VECTOR2I& aPoint,
     // Convert clearance to double for precission when comparing distances
     clearance = aClearance;
 
-    for( ITERATOR iterator = IterateWithHoles(); iterator; iterator++ )
+    for( CONST_ITERATOR iterator = CIterateWithHoles(); iterator; iterator++ )
     {
         // Get the difference vector between current vertex and aPoint
         delta = *iterator - aPoint;
@@ -1397,16 +1398,15 @@ bool SHAPE_POLY_SET::CollideVertex( const VECTOR2I& aPoint,
 
 
 bool SHAPE_POLY_SET::CollideEdge( const VECTOR2I& aPoint,
-        SHAPE_POLY_SET::VERTEX_INDEX& aClosestVertex, int aClearance )
+                                  SHAPE_POLY_SET::VERTEX_INDEX& aClosestVertex,
+                                  int aClearance ) const
 {
     // Shows whether there was a collision
     bool collision = false;
 
-    SEGMENT_ITERATOR iterator;
-
-    for( iterator = IterateSegmentsWithHoles(); iterator; iterator++ )
+    for( CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles(); iterator; iterator++ )
     {
-        SEG currentSegment = *iterator;
+        const SEG currentSegment = *iterator;
         int distance = currentSegment.Distance( aPoint );
 
         // Check for collisions

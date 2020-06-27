@@ -163,6 +163,14 @@ void D_PAD::AddPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPri
 }
 
 
+void D_PAD::AddPrimitive( DRAWSEGMENT* aPrimitive )
+{
+    m_editPrimitives.emplace_back( aPrimitive );
+
+    m_shapesDirty = true;
+}
+
+
 // clear the basic shapes list and associated data
 void D_PAD::DeletePrimitivesList()
 {
@@ -190,9 +198,7 @@ void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aErro
             converter.GetPoly( poly, lineWidth );
 
             for( unsigned ii = 1; ii < poly.size(); ii++ )
-            {
                 TransformSegmentToPolygon( polyset, poly[ ii - 1 ], poly[ ii ], aError, lineWidth );
-            }
             break;
         }
 
@@ -210,14 +216,14 @@ void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aErro
             break;
         }
 
-        case S_CIRCLE:          //  ring or circle
+        case S_CIRCLE:
         {
-            if( primitive->GetWidth() )    // ring
+            if( lineWidth )    // Ring
             {
                 TransformRingToPolygon( polyset, primitive->GetStart(), primitive->GetRadius(),
                                         aError, lineWidth );
             }
-            else                // Filled circle
+            else               // Filled circle
             {
                 TransformCircleToPolygon( polyset, primitive->GetStart(), primitive->GetRadius(),
                                           aError );
@@ -226,23 +232,39 @@ void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aErro
         }
 
         case S_RECT:
-        case S_POLYGON:         // polygon
+        {
+            wxPoint corners[4];
+
+            corners[0] = primitive->GetStart();
+            corners[1] = wxPoint( primitive->GetEnd().x, primitive->GetStart().y );
+            corners[2] = primitive->GetEnd();
+            corners[3] = wxPoint( primitive->GetStart().x, primitive->GetEnd().y );
+
+            if( lineWidth )    // Rect boundary
+            {
+                TransformSegmentToPolygon( polyset, corners[0], corners[1], aError, lineWidth );
+                TransformSegmentToPolygon( polyset, corners[1], corners[2], aError, lineWidth );
+                TransformSegmentToPolygon( polyset, corners[2], corners[3], aError, lineWidth );
+                TransformSegmentToPolygon( polyset, corners[3], corners[0], aError, lineWidth );
+            }
+            else               // Filled rect
+            {
+                // Insert the polygon:
+                polyset.NewOutline();
+
+                for( const wxPoint& corner : corners )
+                    polyset.Append( corner );
+            }
+        }
+            break;
+
+        case S_POLYGON:
         {
             SHAPE_POLY_SET poly;
             poly.NewOutline();
 
-            if( primitive->GetShape() == S_RECT )
-            {
-                poly.Append( primitive->GetStart() );
-                poly.Append( primitive->GetEnd().x, primitive->GetStart().y );
-                poly.Append( primitive->GetEnd() );
-                poly.Append( primitive->GetStart().x, primitive->GetEnd().y );
-            }
-            else
-            {
-                for( const VECTOR2I& pt : primitive->GetPolyShape().Outline( 0 ).CPoints() )
-                    poly.Append( pt );
-            }
+            for( const VECTOR2I& pt : primitive->GetPolyShape().Outline( 0 ).CPoints() )
+                poly.Append( pt );
 
             if( primitive->GetWidth() > 0 )
             {

@@ -26,13 +26,9 @@
 #include <class_board.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
-#include <collectors.h>
-#include <config_params.h>
 #include <confirm.h>
 #include <dialog_create_array.h>
 #include <dialog_edit_footprint_for_fp_editor.h>
-#include <dialog_move_exact.h>
-#include <fctsys.h>
 #include <footprint_edit_frame.h>
 #include <footprint_tree_pane.h>
 #include <footprint_viewer_frame.h>
@@ -40,28 +36,18 @@
 #include <fp_lib_table.h>
 #include <functional>
 #include <gestfich.h>
-#include <invoke_pcb_dialog.h>
-#include <kiface_i.h>
 #include <kiway.h>
 #include <kiway_express.h>
-#include <macros.h>
-#include <menus_helpers.h>
-#include <pcb_draw_panel_gal.h>
 #include <pcb_layer_box_selector.h>
 #include <pcb_layer_widget.h>
-#include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <pcbnew_settings.h>
 #include <ratsnest/ratsnest_data.h>
-
 #include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <trigo.h>
-#include <view/view.h>
 #include <widgets/lib_tree.h>
-#include <wildcards_and_files_ext.h>
 
 using namespace std::placeholders;
 

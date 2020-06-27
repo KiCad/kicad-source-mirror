@@ -52,10 +52,31 @@ public:
      */
     int EnumeratePads( const TOOL_EVENT& aEvent );
 
+    /**
+     * Function PlacePad()
+     * Places a pad in module editor.
+     */
+    int PlacePad( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function CreatePadFromShapes()
+     *
+     * Creates a custom-shaped pad from a set of selected graphical shapes
+     */
+    int CreatePadFromShapes( const TOOL_EVENT& aEvent );
+
+    /**
+     * Enters/exits WYSIWYG pad shape editing
+     */
+    int EditPad( const TOOL_EVENT& aEvent );
+
+    wxString GetLastPadName() const { return m_lastPadName; }
+    void SetLastPadName( const wxString& aPadName ) { m_lastPadName = aPadName; }
+
+private:
     ///> Bind handlers to corresponding TOOL_ACTIONs
     void setTransitions() override;
 
-private:
     ///> Determine if there are any footprints on the board
     bool haveFootprints();
 
@@ -68,8 +89,15 @@ private:
     ///> Push pad settings from a pad to other pads on board or module
     int pushPadSettings( const TOOL_EVENT& aEvent );
 
-    ///> Flag to indicate there are valid settings stored in the Master Pad object
-    bool m_padCopied;
+    PCB_LAYER_ID explodePad( D_PAD* aPad );
+    void recombinePad( D_PAD* aPad );
+
+private:
+    wxString       m_lastPadName;
+    bool           m_padCopied;    // Indicates there are valid settings in the Master Pad object
+
+    bool           m_wasHighContrast;
+    KIID           m_editPad;
 };
 
 #endif // __PAD_TOOL_H

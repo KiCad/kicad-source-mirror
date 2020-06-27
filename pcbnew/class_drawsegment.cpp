@@ -586,6 +586,26 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     switch( m_Shape )
     {
     case S_CIRCLE:
+    {
+        int radius = GetRadius();
+        int dist   = KiROUND( EuclideanNorm( aPosition - GetCenter() ) );
+
+        if( m_Width == 0 )
+        {
+            // Filled circle hit-test
+            if( dist <= radius + maxdist )
+                return true;
+        }
+
+        if( m_Width > 0 )
+        {
+            // Ring hit-test
+            if( abs( radius - dist ) <= maxdist )
+                return true;
+        }
+    }
+        break;
+
     case S_ARC:
     {
         wxPoint relPos = aPosition - GetCenter();
@@ -594,9 +614,6 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
         if( abs( radius - dist ) <= maxdist )
         {
-            if( m_Shape == S_CIRCLE )
-                return true;
-
             // For arcs, the test point angle must be >= arc angle start
             // and <= arc angle end
             // However angle values > 360 deg are not easy to handle
@@ -649,12 +666,27 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         std::vector<wxPoint> pts;
         GetRectCorners( &pts );
 
-        if( TestSegmentHit( aPosition, pts[0], pts[1], maxdist )
-                || TestSegmentHit( aPosition, pts[1], pts[2], maxdist )
-                || TestSegmentHit( aPosition, pts[2], pts[3], maxdist )
-                || TestSegmentHit( aPosition, pts[3], pts[0], maxdist ) )
+        if( m_Width == 0 )
         {
-            return true;
+            SHAPE_POLY_SET poly;
+            poly.NewOutline();
+
+            for( const wxPoint& pt : pts )
+                poly.Append( pt );
+
+            if( poly.Collide( VECTOR2I( aPosition ), maxdist ) )
+                return true;
+        }
+
+        if( m_Width > 0 )
+        {
+            if( TestSegmentHit( aPosition, pts[0], pts[1], maxdist )
+                    || TestSegmentHit( aPosition, pts[1], pts[2], maxdist )
+                    || TestSegmentHit( aPosition, pts[2], pts[3], maxdist )
+                    || TestSegmentHit( aPosition, pts[3], pts[0], maxdist ) )
+            {
+                return true;
+            }
         }
     }
         break;
@@ -663,10 +695,8 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         {
             if( !IsPolygonFilled() )
             {
-                SHAPE_POLY_SET::VERTEX_INDEX i;
-                auto poly = m_Poly;  //todo: Fix CollideEdge to be const
-                return poly.CollideEdge( VECTOR2I( aPosition ), i,
-                                         std::max( maxdist, Millimeter2iu( 0.25 ) ) );
+                SHAPE_POLY_SET::VERTEX_INDEX dummy;
+                return m_Poly.CollideEdge( VECTOR2I( aPosition ), dummy, maxdist );
             }
             else
                 return m_Poly.Collide( VECTOR2I( aPosition ), maxdist );

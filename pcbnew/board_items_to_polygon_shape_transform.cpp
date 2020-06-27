@@ -367,7 +367,10 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
     switch( m_Shape )
     {
     case S_CIRCLE:
-        TransformRingToPolygon( aCornerBuffer, GetCenter(), GetRadius(), aError, width );
+        if( width == 0 )
+            TransformCircleToPolygon( aCornerBuffer, GetCenter(), GetRadius() + width / 2, aError );
+        else
+            TransformRingToPolygon( aCornerBuffer, GetCenter(), GetRadius(), aError, width );
         break;
 
     case S_RECT:
@@ -375,13 +378,17 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         std::vector<wxPoint> pts;
         GetRectCorners( &pts );
 
-        aCornerBuffer.NewOutline();
-
-        for( const wxPoint& pt : pts )
-            aCornerBuffer.Append( pt );
-
-        if( width != 0 )     // Add thick outlines
+        if( width == 0 )
         {
+            aCornerBuffer.NewOutline();
+
+            for( const wxPoint& pt : pts )
+                aCornerBuffer.Append( pt );
+        }
+
+        if( width > 0 )
+        {
+            // Add in segments
             TransformSegmentToPolygon( aCornerBuffer, pts[0], pts[1], aError, width );
             TransformSegmentToPolygon( aCornerBuffer, pts[1], pts[2], aError, width );
             TransformSegmentToPolygon( aCornerBuffer, pts[2], pts[3], aError, width );
@@ -420,27 +427,15 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                 point += offset;
             }
 
-            // If the polygon is not filled, treat it as a closed set of lines
-            if( !IsPolygonFilled() )
+            if( IsPolygonFilled() || width == 0 )
             {
-                for( size_t ii = 1; ii < poly.size(); ii++ )
-                    TransformOvalToPolygon( aCornerBuffer, poly[ii-1], poly[ii], width, aError );
+                aCornerBuffer.NewOutline();
 
-                TransformOvalToPolygon( aCornerBuffer, poly.back(), poly.front(), width, aError );
-                break;
+                for( wxPoint& point : poly )
+                    aCornerBuffer.Append( point.x, point.y );
             }
 
-            // Generate polygons for the outline + clearance
-            // This code is compatible with a polygon with holes linked to external outline
-            // by overlapping segments.
-
-            // Insert the initial polygon:
-            aCornerBuffer.NewOutline();
-
-            for( wxPoint& point : poly )
-                aCornerBuffer.Append( point.x, point.y );
-
-            if( width != 0 )     // Add thick outlines
+            if( width > 0 )
             {
                 wxPoint pt1( poly[ poly.size() - 1] );
 

@@ -832,6 +832,12 @@ class SHAPE_POLY_SET : public SHAPE
         }
 
         ///> Returns an iterator object, for the aOutline-th outline in the set (with holes)
+        CONST_SEGMENT_ITERATOR CIterateSegmentsWithHoles() const
+        {
+            return CIterateSegments( 0, OutlineCount() - 1, true );
+        }
+
+        ///> Returns an iterator object, for the aOutline-th outline in the set (with holes)
         CONST_SEGMENT_ITERATOR CIterateSegmentsWithHoles( int aOutline ) const
         {
             return CIterateSegments( aOutline, aOutline, true );
@@ -1026,7 +1032,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return bool - true if there is a collision, false in any other case.
          */
         bool CollideVertex( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
-                            int aClearance = 0 );
+                            int aClearance = 0 ) const;
 
         /**
          * Function CollideEdge
@@ -1039,7 +1045,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return bool - true if there is a collision, false in any other case.
          */
         bool CollideEdge( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
-                          int aClearance = 0 );
+                          int aClearance = 0 ) const;
 
         /**
          * Constructs BBoxCaches for Contains(), below.  These caches MUST be built before a

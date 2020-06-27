@@ -176,8 +176,6 @@ private:
     ///> selected items.
     bool updateModificationPoint( PCBNEW_SELECTION& aSelection );
 
-    int EditFpInFpEditor( const TOOL_EVENT& aEvent );
-
     bool invokeInlineRouter( int aDragMode );
     bool isInteractiveDragEnabled() const;
 

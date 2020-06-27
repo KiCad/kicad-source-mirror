@@ -291,7 +291,7 @@ public:
      * Add to the basic shape list
      */
     void AddPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList );
-
+    void AddPrimitive( DRAWSEGMENT* aPrimitive );
 
     /**
      * Function SetOrientation

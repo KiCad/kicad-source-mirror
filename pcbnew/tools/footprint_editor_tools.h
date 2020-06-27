@@ -74,47 +74,15 @@ public:
      */
     int DefaultPadProperties( const TOOL_EVENT& aEvent );
 
-    /**
-     * Function PlacePad()
-     * Places a pad in module editor.
-     */
-    int PlacePad( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function CreateArray
-     *
-     * Creates an array of objects using settings from a dialog
-     */
-    int CreateArray( TOOL_EVENT& aEvent );
-
-    /**
-     * Function CreatePadFromShapes()
-     *
-     * Creates a custom-shaped pad from a set of selected graphical shapes
-     */
-    int CreatePadFromShapes( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function ExplodePadToShapes()
-     *
-     * Breaks apart a complex-shaped part into a set of graphical shapes
-     */
-    int ExplodePadToShapes( const TOOL_EVENT& aEvent );
-
-    wxString GetLastPadName() const { return m_lastPadName; }
-    void SetLastPadName( const wxString& aPadName ) { m_lastPadName = aPadName; }
-
 private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
 private:
-    FOOTPRINT_EDIT_FRAME*       m_frame;
-
-    wxString                    m_lastPadName;
+    FOOTPRINT_EDIT_FRAME*   m_frame;
 
     // A private clipboard for cut/copy/past of an entire footprint
-    std::unique_ptr<MODULE>     m_copiedModule;
+    std::unique_ptr<MODULE> m_copiedModule;
 };
 
 #endif

@@ -86,6 +86,8 @@ public:
     ///> Duplicates a zone onto a layer (prompts for new layer)
     int ZoneDuplicate( const TOOL_EVENT& aEvent );
 
+    int EditFpInFpEditor( const TOOL_EVENT& aEvent );
+
     /**
      * Function PlaceTarget()
      * Allows user to place a layer alignment target.

@@ -278,6 +278,8 @@ public:
 
     void PrintMsg( const wxString& text );
 
+    WX_INFOBAR* GetInfoBar() { return m_infoBar; }
+
     /**
      * Returns the settings object used in SaveSettings(), and is overloaded in
      * KICAD_MANAGER_FRAME

@@ -27,6 +27,7 @@
 #include "pcb_actions.h"
 #include "pcbnew_picker_tool.h"
 #include "selection_tool.h"
+#include "edit_tool.h"
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <class_board.h>
@@ -57,6 +58,7 @@
 #include <view/view_group.h>
 #include <wildcards_and_files_ext.h>
 #include <ws_proxy_undo_item.h>
+#include <footprint_edit_frame.h>
 
 using namespace std::placeholders;
 
@@ -1077,8 +1079,8 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 {
-    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const auto& selection = selTool->GetSelection();
+    SELECTION_TOOL*  selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
 
     // because this pops up the zone editor, it would be confusing to handle multiple zones,
     // so just handle single selections containing exactly one zone
@@ -1121,6 +1123,35 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 
     commit.Add( newZone.release() );
     commit.Push( _( "Duplicate zone" ) );
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
+{
+    SELECTION_TOOL*  selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->RequestSelection( EDIT_TOOL::FootprintFilter );
+
+    if( selection.Empty() )
+        return 0;
+
+    MODULE* mod = selection.FirstOfKind<MODULE>();
+
+    if( !mod )
+        return 0;
+
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    auto editor = (FOOTPRINT_EDIT_FRAME*) editFrame->Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
+
+    editor->Load_Module_From_BOARD( mod );
+
+    editor->Show( true );
+    editor->Raise();        // Iconize( false );
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     return 0;
 }
@@ -1202,6 +1233,8 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::PlaceTarget,            PCB_ACTIONS::placeTarget.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::PlaceModule,            PCB_ACTIONS::placeModule.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::DrillOrigin,            PCB_ACTIONS::drillOrigin.MakeEvent() );
+
+    Go( &PCB_EDITOR_CONTROL::EditFpInFpEditor,       PCB_ACTIONS::editFpInFpEditor.MakeEvent() );
 
     // Other
     Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,     PCB_ACTIONS::toggleLock.MakeEvent() );

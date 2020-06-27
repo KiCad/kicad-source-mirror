@@ -25,14 +25,12 @@
  */
 
 #include <limits>
-#include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
 #include <ws_proxy_view_item.h>
 #include <kiway.h>
-#include <footprint_edit_frame.h>
 #include <array_creator.h>
 #include <pcbnew_settings.h>
 #include <status_popup.h>
@@ -43,7 +41,7 @@
 #include <tools/pcbnew_picker_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/grid_helper.h>
-#include <tools/footprint_editor_tools.h>
+#include <tools/pad_tool.h>
 #include <pad_naming.h>
 #include <view/view_controls.h>
 #include <connectivity/connectivity_data.h>
@@ -210,7 +208,7 @@ bool EDIT_TOOL::Init()
 
     // Footprint actions
     menu.AddSeparator();
-    menu.AddItem( PCB_ACTIONS::editFootprintInFpEditor, singleModuleCondition );
+    menu.AddItem( PCB_ACTIONS::editFpInFpEditor, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::updateFootprint, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::changeFootprint, singleModuleCondition );
 
@@ -1200,10 +1198,10 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             if( increment && item->Type() == PCB_PAD_T
                     && PAD_NAMING::PadCanHaveName( *static_cast<D_PAD*>( dupe_item ) ) )
             {
-                FOOTPRINT_EDITOR_TOOLS* modEdit = m_toolMgr->GetTool<FOOTPRINT_EDITOR_TOOLS>();
-                wxString padName = modEdit->GetLastPadName();
+                PAD_TOOL* padTool = m_toolMgr->GetTool<PAD_TOOL>();
+                wxString padName = padTool->GetLastPadName();
                 padName = editModule->GetNextPadName( padName );
-                modEdit->SetLastPadName( padName );
+                padTool->SetLastPadName( padName );
                 static_cast<D_PAD*>( dupe_item )->SetName( padName );
             }
         }
@@ -1341,34 +1339,6 @@ bool EDIT_TOOL::updateModificationPoint( PCBNEW_SELECTION& aSelection )
 }
 
 
-int EDIT_TOOL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
-{
-    const auto& selection = m_selectionTool->RequestSelection( FootprintFilter );
-
-    if( selection.Empty() )
-        return 0;
-
-    MODULE* mod = selection.FirstOfKind<MODULE>();
-
-    if( !mod )
-        return 0;
-
-    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-
-    auto editor = (FOOTPRINT_EDIT_FRAME*) editFrame->Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
-
-    editor->Load_Module_From_BOARD( mod );
-
-    editor->Show( true );
-    editor->Raise();        // Iconize( false );
-
-    if( selection.IsHover() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    return 0;
-}
-
-
 bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aReferencePoint )
 {
     std::string         tool = "pcbnew.InteractiveEdit.selectReferencePoint";
@@ -1491,8 +1461,6 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::CreateArray,         PCB_ACTIONS::createArray.MakeEvent() );
     Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirror.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackWidth,    PCB_ACTIONS::changeTrackWidth.MakeEvent() );
-
-    Go( &EDIT_TOOL::EditFpInFpEditor,    PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
 
     Go( &EDIT_TOOL::copyToClipboard,     ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::cutToClipboard,      ACTIONS::cut.MakeEvent() );
