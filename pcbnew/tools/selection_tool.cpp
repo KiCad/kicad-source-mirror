@@ -456,6 +456,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         }
     }
 
+    bool anyAdded      = false;
+    bool anySubtracted = false;
+
     if( !m_additive && !m_subtractive && !m_exclusive_or )
     {
         if( m_selection.GetSize() > 0 )
@@ -463,11 +466,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
             // Don't fire an event now as it will end up redundant if we fire a SelectedEvent
             // or an UnselectedEvent.
             ClearSelection( true /*quiet mode*/ );
+            anySubtracted = true;
         }
     }
-
-    bool anyAdded      = false;
-    bool anySubtracted = false;
 
     if( collector.GetCount() > 0 )
     {
