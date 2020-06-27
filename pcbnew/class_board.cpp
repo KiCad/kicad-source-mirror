@@ -1226,8 +1226,8 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 }
 
 
-ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
-    PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer,  int aNetCode )
+ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos, PCB_LAYER_ID aStartLayer,
+                                                PCB_LAYER_ID aEndLayer, int aNetCode )
 {
     if( aEndLayer < 0 )
         aEndLayer = aStartLayer;
@@ -1238,10 +1238,6 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
     for( ZONE_CONTAINER* area : m_ZoneDescriptorList )
     {
         if( area->GetLayer() < aStartLayer || area->GetLayer() > aEndLayer )
-            continue;
-
-        // In locate functions we must skip tagged items with BUSY flag set.
-        if( area->GetState( BUSY ) )
             continue;
 
         if( aNetCode >= 0 && area->GetNetCode() != aNetCode )

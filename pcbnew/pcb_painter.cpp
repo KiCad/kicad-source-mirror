@@ -33,7 +33,6 @@
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
 #include <class_pcb_target.h>
-#include <class_marker_pcb.h>
 
 #include <layers_id_colors_and_visibility.h>
 #include <pcb_painter.h>
@@ -46,7 +45,6 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
-#include <geometry/shape_simple.h>
 
 using namespace KIGFX;
 
@@ -238,14 +236,6 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
         if( item->IsSelected() )
         {
             return m_layerColorsSel[aLayer];
-        }
-
-        if( m_highlightEnabled && m_highlightItems )
-        {
-            if( item->IsHighlighted() )
-                return m_layerColorsHi[aLayer];
-            else
-                return m_layerColorsDark[aLayer];
         }
 
         // Try to obtain the netcode for the item
@@ -762,15 +752,9 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     // Hole color is the background color for plated holes, but only if the pad size is greater than the hole size.
     // ( Don't let pads that *should* be NPTH get lost )
     if( ( aLayer == LAYER_PADS_PLATEDHOLES ) && !aPad->PadShouldBeNPTH() )
-    {
-            color = m_pcbSettings.GetBackgroundColor();
-    }
+        color = m_pcbSettings.GetBackgroundColor();
     else
-    {
         color = m_pcbSettings.GetColor( aPad, aLayer );
-    }
-
-    VECTOR2D size;
 
     if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
     {

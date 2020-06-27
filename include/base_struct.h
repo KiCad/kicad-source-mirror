@@ -130,13 +130,12 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 #define IS_PASTED      (1 << 17)   ///< Modifier on IS_NEW which indicates it came from clipboard
 #define TRACK_LOCKED   (1 << 18)   ///< Pcbnew: track locked: protected from global deletion
 #define TRACK_AR       (1 << 19)   ///< Pcbnew: autorouted track
-#define FLAG1          (1 << 20)   ///< Pcbnew: flag used in local computations
-#define FLAG0          (1 << 21)   ///< Pcbnew: flag used in local computations
+#define OBSOLETE_1     (1 << 20)   ///< Not presently used
+#define OBSOLETE_2     (1 << 21)   ///< Not presently used
 #define BEGIN_ONPAD    (1 << 22)   ///< Pcbnew: flag set for track segment starting on a pad
 #define END_ONPAD      (1 << 23)   ///< Pcbnew: flag set for track segment ending on a pad
-#define BUSY           (1 << 24)   ///< Pcbnew: flag indicating that the structure has
-                                   ///< already been edited, in some functions
-#define HIGHLIGHTED    (1 << 25)   ///< item is drawn in normal colors, when the rest is darkened
+#define OBSOLETE_3     (1 << 24)   ///< Not presently used
+#define OBSOLETE_4     (1 << 25)   ///< Not presently used
 #define BRIGHTENED     (1 << 26)   ///< item is drawn with a bright contour
 
 #define DP_COUPLED     (1 << 27)   ///< item is coupled with another item making a differential pair
@@ -147,9 +146,6 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 
 // WARNING: if you add flags, you'll probably need to adjust the masks in GetEditFlags() and
 // ClearTempFlags().
-
-// NOTE: The HIGHLIGHTED flag is basically deprecated, it was used for cross-probing before eeschema
-// supported real object selection.
 
 #define EDA_ITEM_ALL_FLAGS -1
 
@@ -206,16 +202,13 @@ public:
     inline bool IsWireImage() const { return m_Flags & IS_WIRE_IMAGE; }
     inline bool IsSelected() const { return m_Flags & SELECTED; }
     inline bool IsResized() const { return m_Flags & IS_RESIZED; }
-    inline bool IsHighlighted() const { return m_Flags & HIGHLIGHTED; }
     inline bool IsBrightened() const { return m_Flags & BRIGHTENED; }
 
     inline void SetWireImage() { SetFlags( IS_WIRE_IMAGE ); }
     inline void SetSelected() { SetFlags( SELECTED ); }
-    inline void SetHighlighted() { SetFlags( HIGHLIGHTED ); }
     inline void SetBrightened() { SetFlags( BRIGHTENED ); }
 
     inline void ClearSelected() { ClearFlags( SELECTED ); }
-    inline void ClearHighlighted() { ClearFlags( HIGHLIGHTED ); }
     inline void ClearBrightened() { ClearFlags( BRIGHTENED ); }
 
     void SetModified();
@@ -252,7 +245,7 @@ public:
     void ClearTempFlags()
     {
         ClearFlags( STARTPOINT | ENDPOINT | CANDIDATE | TEMP_SELECTED | IS_LINKED | SKIP_STRUCT |
-                    DO_NOT_DRAW | FLAG0 | FLAG1 | BUSY );
+                    DO_NOT_DRAW );
     }
 
     void ClearEditFlags()

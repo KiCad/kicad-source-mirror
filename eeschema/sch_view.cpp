@@ -225,42 +225,4 @@ void SCH_VIEW::HideWorksheet()
 }
 
 
-void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
-{
-    if( aItem && aItem->Type() == SCH_COMPONENT_T && aPin )
-    {
-        static_cast<SCH_COMPONENT*>( aItem )->HighlightPin( aPin );
-        Update( aItem, REPAINT );
-    }
-    else if( aItem )
-    {
-        aItem->SetFlags( HIGHLIGHTED );
-        Update( aItem, REPAINT );
-    }
-    else
-    {
-        for( auto item : *m_allItems )
-        {
-            // Not all view items can be highlighted, only EDA_ITEMs
-            // So clear flag of only EDA_ITEMs.
-            EDA_ITEM* eitem = dynamic_cast<EDA_ITEM*>( item );
-
-            if( eitem )
-            {
-                if( eitem->IsHighlighted() )
-                {
-                    eitem->ClearFlags( HIGHLIGHTED );
-                    Update( eitem, REPAINT );
-                }
-
-                if( eitem->Type() == SCH_COMPONENT_T )
-                {
-                    // Items inside a component (pins, fields can be highlighted.
-                    static_cast<SCH_COMPONENT*>( eitem )->ClearAllHighlightFlags();
-                }
-            }
-        }
-    }
-}
-
 }; // namespace KIGFX

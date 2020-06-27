@@ -100,8 +100,6 @@ public:
 
     WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet.get(); }
 
-    void HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin = nullptr );
-
 private:
     SCH_BASE_FRAME* m_frame;    // The frame using this view. Can be null. Used mainly
                                 // to know the sheet path name when drawing the page layout

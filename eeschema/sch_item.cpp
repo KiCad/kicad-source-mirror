@@ -82,17 +82,17 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
     if( !doClone )
         const_cast<KIID&>( newItem->m_Uuid ) = KIID();
 
-    newItem->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    newItem->ClearFlags( SELECTED | BRIGHTENED );
 
     if( newItem->Type() == SCH_COMPONENT_T )
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) newItem;
 
         for( SCH_PIN* pin : component->GetSchPins() )
-            pin->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+            pin->ClearFlags( SELECTED | BRIGHTENED );
 
         for( SCH_FIELD& field : component->GetFields() )
-            field.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+            field.ClearFlags( SELECTED | BRIGHTENED );
     }
 
     if( newItem->Type() == SCH_SHEET_T )
@@ -100,10 +100,10 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
         SCH_SHEET* sheet = (SCH_SHEET*) newItem;
 
         for( SCH_FIELD& field : sheet->GetFields() )
-            field.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+            field.ClearFlags( SELECTED | BRIGHTENED );
 
         for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-            pin->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+            pin->ClearFlags( SELECTED | BRIGHTENED );
     }
 
     return newItem;

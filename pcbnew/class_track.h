@@ -238,7 +238,7 @@ public:
     /**
      * Function ShowState
      * converts a set of state bits to a wxString
-     * @param stateBits Is an OR-ed together set of bits like BUSY, EDIT, etc.
+     * @param stateBits Is an OR-ed together set of bits like IN_EDIT, etc.
      */
     static wxString ShowState( int stateBits );
 

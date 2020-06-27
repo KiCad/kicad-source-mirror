@@ -33,7 +33,6 @@ RENDER_SETTINGS::RENDER_SETTINGS() :
     // Set the default initial values
     m_highlightFactor    = 0.5f;
     m_selectFactor       = 0.5f;
-    m_highlightItems     = false;
     m_highlightEnabled   = false;
     m_hiContrastEnabled  = false;
     m_hiContrastFactor   = 0.2f; //TODO: Make this user-configurable

@@ -972,20 +972,11 @@ wxString TRACK::ShowState( int stateBits )
     if( stateBits & IS_DELETED )
         ret << wxT( " | IS_DELETED" );
 
-    if( stateBits & BUSY )
-        ret << wxT( " | BUSY" );
-
     if( stateBits & END_ONPAD )
         ret << wxT( " | END_ONPAD" );
 
     if( stateBits & BEGIN_ONPAD )
         ret << wxT( " | BEGIN_ONPAD" );
-
-    if( stateBits & FLAG0 )
-        ret << wxT( " | FLAG0" );
-
-    if( stateBits & FLAG1 )
-        ret << wxT( " | FLAG1" );
 
     return ret;
 }

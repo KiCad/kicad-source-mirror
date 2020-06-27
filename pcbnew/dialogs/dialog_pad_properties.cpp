@@ -167,7 +167,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     if( aPad )
     {
         *m_dummyPad = *aPad;
-        m_dummyPad->ClearFlags( SELECTED|HIGHLIGHTED|BRIGHTENED );
+        m_dummyPad->ClearFlags( SELECTED|BRIGHTENED );
     }
     else    // We are editing a "master" pad, i.e. a template to create new pads
         *m_dummyPad = *m_padMaster;

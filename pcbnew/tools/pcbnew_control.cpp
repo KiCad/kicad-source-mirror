@@ -733,9 +733,9 @@ static void moveNoFlagToVector( std::deque<T>& aList, std::vector<BOARD_ITEM*>& 
     std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
             [aIsNew]( T aItem )
             {
-                bool doCopy = ( aItem->GetFlags() & FLAG0 ) == 0;
+                bool doCopy = ( aItem->GetFlags() & SKIP_STRUCT ) == 0;
 
-                aItem->ClearFlags( FLAG0 );
+                aItem->ClearFlags( SKIP_STRUCT );
                 aItem->SetFlags( aIsNew ? IS_NEW : 0 );
 
                 return doCopy;
@@ -746,7 +746,8 @@ static void moveNoFlagToVector( std::deque<T>& aList, std::vector<BOARD_ITEM*>& 
 }
 
 
-static void moveNoFlagToVector(  ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
+static void moveNoFlagToVector( ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*>& aTarget,
+                                bool aIsNew )
 {
     if( aList.size() == 0 )
         return;
@@ -762,8 +763,8 @@ static void moveNoFlagToVector(  ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*
 
     for( ; obj ; )
     {
-        if( obj->HasFlag( FLAG0 ) )
-            obj->ClearFlags( FLAG0 );
+        if( obj->HasFlag( SKIP_STRUCT ) )
+            obj->ClearFlags( SKIP_STRUCT );
         else
             aTarget.push_back( obj );
 
@@ -858,16 +859,16 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     // Mark existing items, in order to know what are the new items so we can select only
     // the new items after loading
     for( auto track : brd->Tracks() )
-        track->SetFlags( FLAG0 );
+        track->SetFlags( SKIP_STRUCT );
 
     for( auto module : brd->Modules() )
-        module->SetFlags( FLAG0 );
+        module->SetFlags( SKIP_STRUCT );
 
     for( auto drawing : brd->Drawings() )
-        drawing->SetFlags( FLAG0 );
+        drawing->SetFlags( SKIP_STRUCT );
 
     for( auto zone : brd->Zones() )
-        zone->SetFlags( FLAG0 );
+        zone->SetFlags( SKIP_STRUCT );
 
     // Keep also the count of copper layers, to adjust if necessary
     int initialCopperLayerCount = brd->GetCopperLayerCount();

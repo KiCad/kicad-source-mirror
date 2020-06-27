@@ -821,10 +821,6 @@ DIALOG_FIELDS_EDITOR_GLOBAL::~DIALOG_FIELDS_EDITOR_GLOBAL()
     m_grid->PopEventHandler( true );
 
     // we gave ownership of m_dataModel to the wxGrid...
-
-    // Clear highlighted symbols, if any
-    m_parent->GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
-    m_parent->GetCanvas()->Refresh();
 }
 
 
@@ -1129,10 +1125,6 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
     {
         m_grid->ClearSelection();
         m_grid->SetGridCursor( event.GetRow(), event.GetCol() );
-
-        // Clear highlighted symbols, if any
-        m_parent->GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
-        m_parent->GetCanvas()->Refresh();
 
         m_dataModel->ExpandCollapseRow( event.GetRow() );
         std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( event.GetRow() );

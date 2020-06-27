@@ -104,9 +104,7 @@ void TRACKS_CLEANER::removeBadTrackSegments()
 
     for( TRACK* segment : m_brd->Tracks() )
     {
-        segment->SetState( FLAG0, false );
-
-        for( auto testedPad : connectivity->GetConnectedPads( segment ) )
+        for( D_PAD* testedPad : connectivity->GetConnectedPads( segment ) )
         {
             if( segment->GetNetCode() != testedPad->GetNetCode() )
             {
@@ -120,7 +118,7 @@ void TRACKS_CLEANER::removeBadTrackSegments()
 
         for( TRACK* testedTrack : connectivity->GetConnectedTracks( segment ) )
         {
-            if( segment->GetNetCode() != testedTrack->GetNetCode() && !testedTrack->GetState( FLAG0 ) )
+            if( segment->GetNetCode() != testedTrack->GetNetCode() )
             {
                 CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_SHORT );
                 item->SetItems( segment );

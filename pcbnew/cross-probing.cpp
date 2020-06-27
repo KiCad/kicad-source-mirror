@@ -127,7 +127,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
                 else
                 {
                     pcb->SetHighLightNet( netinfo->GetNet(), true );
-                    renderSettings->SetHighlight( true, netinfo->GetNet(), false, true );
+                    renderSettings->SetHighlight( true, netinfo->GetNet(), true );
                 }
             }
         }

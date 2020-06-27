@@ -674,12 +674,6 @@ public:
 
     void BrightenPin( LIB_PIN* aPin );
 
-    void ClearHighlightedPins();
-
-    bool HasHighlightedPins();
-
-    void HighlightPin( LIB_PIN* aPin );
-
     bool GetIncludeInBom() const { return m_inBom; }
     void SetIncludeInBom( bool aIncludeInBom ) { m_inBom = aIncludeInBom; }
 

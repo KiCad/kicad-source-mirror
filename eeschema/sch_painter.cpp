@@ -1783,7 +1783,7 @@ void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
 
     if( aLayer == LAYER_SELECTION_SHADOWS )
     {
-        if( aBitmap->IsSelected() || aBitmap->IsBrightened() || aBitmap->IsHighlighted() )
+        if( aBitmap->IsSelected() || aBitmap->IsBrightened() )
         {
             COLOR4D color = getRenderColor( aBitmap, LAYER_DRAW_BITMAPS, true );
             m_gal->SetIsStroke( true );

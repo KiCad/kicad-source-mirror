@@ -859,7 +859,6 @@ public:
      * Function HitTestForAnyFilledArea
      * tests if the given wxPoint is within the bounds of a filled area of this zone.
      * the test is made on zones on layer from aStartLayer to aEndLayer
-     * Note: if a zone has its flag BUSY (in .m_State) is set, it is ignored.
      * @param aRefPos A wxPoint to test
      * @param aStartLayer the first layer to test
      * @param aEndLayer the last layer to test

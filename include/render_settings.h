@@ -123,14 +123,12 @@ public:
 
     /**
      * Function SetHighlight
-     * Turns on/off highlighting - it may be done for the active layer, the specified net, or
-     * items with their HIGHLIGHTED flags set.
+     * Turns on/off highlighting - it may be done for the active layer or the specified net(s).
      * @param aEnabled tells if highlighting should be enabled.
      * @param aNetcode is optional and if specified, turns on higlighting only for the net with
      * number given as the parameter.
      */
-    inline void SetHighlight( bool aEnabled, int aNetcode = -1, bool aHighlightItems = false,
-                              bool aMulti = false )
+    inline void SetHighlight( bool aEnabled, int aNetcode = -1, bool aMulti = false )
     {
         m_highlightEnabled = aEnabled;
 
@@ -143,8 +141,6 @@ public:
         }
         else
             m_highlightNetcodes.clear();
-
-        m_highlightItems = aEnabled ? aHighlightItems : false;
     }
 
     /**
@@ -257,24 +253,21 @@ protected:
     COLOR4D m_backgroundColor;                  // The background color
 
     /// Parameters for display modes
-    bool    m_hiContrastEnabled;    // High contrast display mode on/off
-    float   m_hiContrastFactor;     // Factor used for computing high contrast color
+    bool          m_hiContrastEnabled;    // High contrast display mode on/off
+    float         m_hiContrastFactor;     // Factor used for computing high contrast color
 
-    bool    m_highlightEnabled;     // Highlight display mode on/off
+    bool          m_highlightEnabled;     // Highlight display mode on/off
+    std::set<int> m_highlightNetcodes;    // Set of net cods to be highlighted
+    float         m_highlightFactor;      // Factor used for computing highlight color
 
-    std::set<int> m_highlightNetcodes; // Set of net cods to be highlighted
+    float         m_selectFactor;         // Specifies how color of selected items is changed
+    float         m_outlineWidth;         // Line width used when drawing outlines
+    float         m_worksheetLineWidth;   // Line width used when drawing worksheet
 
-    bool    m_highlightItems;       // Highlight items with their HIGHLIGHT flags set
-    float   m_highlightFactor;      // Factor used for computing highlight color
+    int           m_defaultPenWidth;
+    bool          m_showPageLimits;
 
-    float   m_selectFactor;         // Specifies how color of selected items is changed
-    float   m_outlineWidth;         // Line width used when drawing outlines
-    float   m_worksheetLineWidth;   // Line width used when drawing worksheet
-
-    int     m_defaultPenWidth;
-    bool    m_showPageLimits;
-
-    wxDC*   m_printDC;              // This can go away once we have Cairo-based printing.
+    wxDC*         m_printDC;              // This can go away once we have Cairo-based printing.
 };
 
 }

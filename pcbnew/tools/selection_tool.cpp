@@ -819,16 +819,15 @@ int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
         // copy the selection, since we're going to iterate and modify
         std::deque<EDA_ITEM*> selectedItems = m_selection.GetItems();
 
-        // We use the BUSY flag to mark connections
         for( EDA_ITEM* item : selectedItems )
-            item->SetState( BUSY, false );
+            item->ClearTempFlags();
 
         for( EDA_ITEM* item : selectedItems )
         {
             TRACK* trackItem = dynamic_cast<TRACK*>( item );
 
-            // Track items marked BUSY have already been visited
-            if( trackItem && !trackItem->GetState( BUSY ) )
+            // Track items marked SKIP_STRUCT have already been visited
+            if( trackItem && !( trackItem->GetFlags() & SKIP_STRUCT ) )
                 selectConnectedTracks( *trackItem, stopCondition );
         }
 
@@ -884,7 +883,7 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
             break;
         }
 
-        item->SetState( SKIP_STRUCT, false );
+        item->SetFlags( SKIP_STRUCT );
     }
 
     std::vector<wxPoint> activePts;
