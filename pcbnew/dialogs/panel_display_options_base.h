@@ -44,6 +44,9 @@ class PANEL_DISPLAY_OPTIONS_BASE : public wxPanel
 		wxCheckBox* m_OptDisplayPadNoConn;
 		wxRadioBox* m_OptDisplayTracksClearance;
 		wxCheckBox* m_OptDisplayPadClearence;
+		wxCheckBox* m_checkCrossProbeCenter;
+		wxCheckBox* m_checkCrossProbeZoom;
+		wxCheckBox* m_checkCrossProbeAutoHighlight;
 
 	public:
 

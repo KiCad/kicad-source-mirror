@@ -31,6 +31,7 @@
 #include <eda_dde.h>
 #include <connection_graph.h>
 #include <sch_edit_frame.h>
+#include <eeschema_settings.h>
 #include <general.h>
 #include <lib_item.h>
 #include <lib_pin.h>
@@ -99,6 +100,8 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
             break;
     }
 
+    CROSS_PROBING_SETTINGS& crossProbingSettings = m_frame->eeconfig()->m_CrossProbing;
+
     if( component )
     {
         if( *sheetWithComponentFound != m_frame->GetCurrentSheet() )
@@ -112,8 +115,28 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
         delta = component->GetTransform().TransformCoordinate( pos );
         pos   = delta + component->GetPosition();
 
-        m_frame->GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
-        m_frame->CenterScreen( pos, false );
+        if( crossProbingSettings.center_on_items )
+        {
+            m_frame->GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
+            m_frame->CenterScreen( pos, false );
+
+            if( crossProbingSettings.zoom_to_fit )
+            {
+                EDA_RECT bbox = component->GetBoundingBox();
+
+                wxSize   bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+                VECTOR2D screenSize = getView()->GetViewport().GetSize();
+
+                screenSize.x = std::max( 10.0, screenSize.x );
+                screenSize.y = std::max( 10.0, screenSize.y );
+                double ratio = std::max( fabs( bbSize.x / screenSize.x ),
+                                         fabs( bbSize.y / screenSize.y ) );
+
+                // Try not to zoom on every cross-probe; it gets very noisy
+                if( ratio < 0.1 || ratio > 1.0 )
+                    getView()->SetScale( getView()->GetScale() / ratio );
+            }
+        }
     }
 
     /* Print diag */
@@ -167,8 +190,13 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( idcmd == NULL )
         return;
 
+    CROSS_PROBING_SETTINGS& crossProbingSettings = eeconfig()->m_CrossProbing;
+
     if( strcmp( idcmd, "$NET:" ) == 0 )
     {
+        if( !crossProbingSettings.auto_highlight )
+            return;
+
         wxString netName = FROM_UTF8( text );
 
         if( auto sg = Schematic().ConnectionGraph()->FindFirstSubgraphByName( netName ) )

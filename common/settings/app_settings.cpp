@@ -99,6 +99,15 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<wxString>( "appearance.color_theme", &m_ColorTheme, "user" ) );
 
     addParamsForWindow( &m_Window, "window" );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "cross_probing.center_on_items", &m_CrossProbing.center_on_items, true ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "cross_probing.zoom_to_fit", &m_CrossProbing.zoom_to_fit, true ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "cross_probing.auto_highlight", &m_CrossProbing.auto_highlight, true ) );
 }
 
 

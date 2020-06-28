@@ -25,6 +25,16 @@
 #include <settings/json_settings.h>
 
 /**
+ * Cross-probing behavior
+ */
+struct CROSS_PROBING_SETTINGS
+{
+    bool center_on_items; ///< Automatically pan to cross-probed items
+    bool zoom_to_fit;     ///< Zoom to fit items (ignored if center_on_items is off)
+    bool auto_highlight;  ///< Automatically turn on highlight mode in the target frame
+};
+
+/**
  * Common cursor settings, available to every frame
  */
 struct CURSOR_SETTINGS
@@ -128,6 +138,8 @@ public:
     virtual bool MigrateFromLegacy( wxConfigBase* aCfg ) override;
 
 public:
+    CROSS_PROBING_SETTINGS m_CrossProbing;
+
     FIND_REPLACE m_FindReplace;
 
     GRAPHICS m_Graphics;

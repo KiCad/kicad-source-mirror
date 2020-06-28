@@ -60,6 +60,10 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
     m_checkSelFillShapes->SetValue( cfg->m_Selection.fill_shapes );
     m_selWidthCtrl->SetValue( cfg->m_Selection.thickness );
 
+    m_checkCrossProbeCenter->SetValue( cfg->m_CrossProbing.center_on_items );
+    m_checkCrossProbeZoom->SetValue( cfg->m_CrossProbing.zoom_to_fit );
+    m_checkCrossProbeAutoHighlight->SetValue( cfg->m_CrossProbing.auto_highlight );
+
     m_galOptsPanel->TransferDataToWindow();
 
     return true;
@@ -78,6 +82,10 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Selection.draw_selected_children = m_checkSelDrawChildItems->GetValue();
     cfg->m_Selection.fill_shapes = m_checkSelFillShapes->GetValue();
     cfg->m_Selection.thickness = KiROUND( m_selWidthCtrl->GetValue() );
+
+    cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
+    cfg->m_CrossProbing.zoom_to_fit     = m_checkCrossProbeZoom->GetValue();
+    cfg->m_CrossProbing.auto_highlight  = m_checkCrossProbeAutoHighlight->GetValue();
 
     // Update canvas
     m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();

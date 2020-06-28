@@ -74,6 +74,26 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 
 	bRightColumn->Add( sbSizer3, 1, wxEXPAND|wxTOP, 5 );
 
+	wxStaticBoxSizer* sbSizer31;
+	sbSizer31 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Cross-probing") ), wxVERTICAL );
+
+	m_checkCrossProbeCenter = new wxCheckBox( sbSizer31->GetStaticBox(), wxID_ANY, _("Center view on cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeCenter->SetValue(true);
+	sbSizer31->Add( m_checkCrossProbeCenter, 0, wxALL, 5 );
+
+	m_checkCrossProbeZoom = new wxCheckBox( sbSizer31->GetStaticBox(), wxID_ANY, _("Zoom to fit cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeZoom->SetValue(true);
+	sbSizer31->Add( m_checkCrossProbeZoom, 0, wxALL, 5 );
+
+	m_checkCrossProbeAutoHighlight = new wxCheckBox( sbSizer31->GetStaticBox(), wxID_ANY, _("Highlight cross-probed nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeAutoHighlight->SetValue(true);
+	m_checkCrossProbeAutoHighlight->SetToolTip( _("Highlight nets when they are highlighted in the PCB editor") );
+
+	sbSizer31->Add( m_checkCrossProbeAutoHighlight, 0, wxALL, 5 );
+
+
+	bRightColumn->Add( sbSizer31, 1, wxEXPAND|wxTOP, 5 );
+
 
 	bPanelSizer->Add( bRightColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 

@@ -45,6 +45,7 @@
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcbnew.h>
+#include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -74,6 +75,8 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     D_PAD*      pad = NULL;
     BOARD*      pcb = GetBoard();
 
+    CROSS_PROBING_SETTINGS& crossProbingSettings = GetPcbNewSettings()->m_CrossProbing;
+
     KIGFX::VIEW*            view = m_toolManager->GetView();
     KIGFX::RENDER_SETTINGS* renderSettings = view->GetPainter()->GetSettings();
 
@@ -88,6 +91,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$NET:" ) == 0 )
     {
+        if( !crossProbingSettings.auto_highlight )
+            return;
+
         wxString net_name = FROM_UTF8( text );
 
         NETINFO_ITEM* netinfo = pcb->FindNet( net_name );
@@ -103,6 +109,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     }
     if( strcmp( idcmd, "$NETS:" ) == 0 )
     {
+        if( !crossProbingSettings.auto_highlight )
+            return;
+
         wxStringTokenizer netsTok = wxStringTokenizer( FROM_UTF8( text ), "," );
         bool first = true;
 
@@ -235,22 +244,25 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             }
         };
 
-        for( auto zone : pcb->Zones() )
-            merge_area( zone );
+        if( crossProbingSettings.center_on_items )
+        {
+            for( auto zone : pcb->Zones() )
+                merge_area( zone );
 
-        for( auto track : pcb->Tracks() )
-            merge_area( track );
+            for( auto track : pcb->Tracks() )
+                merge_area( track );
 
-        for( auto mod : pcb->Modules() )
-            for ( auto mod_pad : mod->Pads() )
-                merge_area( mod_pad );
+            for( auto mod : pcb->Modules() )
+                for( auto mod_pad : mod->Pads() )
+                    merge_area( mod_pad );
+        }
     }
     else
     {
         renderSettings->SetHighlight( false );
     }
 
-    if( bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
+    if( crossProbingSettings.center_on_items && bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
     {
         auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
         auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
@@ -260,7 +272,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
                                  fabs( bbSize.y / screenSize.y ) );
 
         // Try not to zoom on every cross-probe; it gets very noisy
-        if( ratio < 0.1 || ratio > 1.0 )
+        if( crossProbingSettings.zoom_to_fit && ( ratio < 0.1 || ratio > 1.0 ) )
             view->SetScale( view->GetScale() / ratio );
 
         view->SetCenter( bbox.Centre() );

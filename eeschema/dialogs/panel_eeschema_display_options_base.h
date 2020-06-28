@@ -42,6 +42,9 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public wxPanel
 		wxStaticText* m_selWidthLabel;
 		wxSpinCtrlDouble* m_selWidthCtrl;
 		wxStaticText* m_highlightColorNote;
+		wxCheckBox* m_checkCrossProbeCenter;
+		wxCheckBox* m_checkCrossProbeZoom;
+		wxCheckBox* m_checkCrossProbeAutoHighlight;
 
 	public:
 

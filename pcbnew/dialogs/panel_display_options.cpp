@@ -22,6 +22,7 @@
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <pcb_display_options.h>
+#include <pcbnew_settings.h>
 #include <config_map.h>
 #include <panel_display_options.h>
 #include <pcb_view.h>
@@ -69,6 +70,12 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
         m_OptDisplayPadNumber->SetValue( displ_opts.m_DisplayPadNum );
         m_OptDisplayPadNoConn->SetValue( pcbEdit->IsElementVisible( LAYER_NO_CONNECTS ) );
         m_ShowNetNamesOption->SetSelection( displ_opts.m_DisplayNetNamesMode );
+
+        CROSS_PROBING_SETTINGS& crossProbing = pcbEdit->GetPcbNewSettings()->m_CrossProbing;
+
+        m_checkCrossProbeCenter->SetValue( crossProbing.center_on_items );
+        m_checkCrossProbeZoom->SetValue( crossProbing.zoom_to_fit );
+        m_checkCrossProbeAutoHighlight->SetValue( crossProbing.auto_highlight );
     }
 
     m_galOptsPanel->TransferDataToWindow();
@@ -108,6 +115,12 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
         pcbEdit->SetDisplayOptions( displ_opts );
         settings->LoadDisplayOptions( displ_opts, pcbEdit->ShowPageLimits() );
         pcbEdit->SetElementVisibility( LAYER_RATSNEST, displ_opts.m_ShowGlobalRatsnest );
+
+        CROSS_PROBING_SETTINGS& crossProbing = pcbEdit->GetPcbNewSettings()->m_CrossProbing;
+
+        crossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
+        crossProbing.zoom_to_fit     = m_checkCrossProbeZoom->GetValue();
+        crossProbing.auto_highlight  = m_checkCrossProbeAutoHighlight->GetValue();
     }
 
     view->RecacheAllItems();
