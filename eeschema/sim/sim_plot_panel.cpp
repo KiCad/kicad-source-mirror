@@ -528,7 +528,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
 
     trace->SetData( std::vector<double>( aX, aX + aPoints ), tmp );
 
-    if( aFlags & SPT_AC_PHASE || aFlags & SPT_CURRENT )
+    if( ( aFlags & SPT_AC_PHASE ) || ( aFlags & SPT_CURRENT ) )
         trace->SetScale( m_axis_x, m_axis_y2 );
     else
         trace->SetScale( m_axis_x, m_axis_y1 );
