@@ -119,6 +119,16 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     m_boardOutline.RemoveAllContours();
     m_brdOutlinesValid = m_board->GetBoardPolygonOutlines( m_boardOutline );
 
+    // Update the bounding box shape caches in the pads to prevent multi-threaded rebuilds
+    for( auto module : m_board->Modules() )
+    {
+        for( auto pad : module->Pads() )
+        {
+            if( pad->IsDirty() )
+                pad->BuildEffectiveShapes();
+        }
+    }
+
     for( auto zone : aZones )
     {
         // Keepout zones are not filled
@@ -949,16 +959,14 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone, PCB_LAYER_ID 
             //
             // We use the bounding-box to lay out the spokes, but for this to work the
             // bounding box has to be built at the same rotation as the spokes.
-
+            // We have to use a dummy pad to avoid dirtying the cached shapes
             wxPoint shapePos = pad->ShapePos();
-            wxPoint padPos = pad->GetPosition();
-            double padAngle = pad->GetOrientation();
-            pad->SetOrientation( 0.0 );
-            pad->SetPosition( { 0, 0 } );
-            BOX2I reliefBB = pad->GetBoundingBox();
-            pad->SetPosition( padPos );
-            pad->SetOrientation( padAngle );
+            double  padAngle = pad->GetOrientation();
+            D_PAD   dummy_pad( *pad );
+            dummy_pad.SetOrientation( 0.0 );
+            dummy_pad.SetPosition( { 0, 0 } );
 
+            BOX2I reliefBB = dummy_pad.GetBoundingBox();
             reliefBB.Inflate( thermalReliefGap + epsilon );
 
             // For circle pads, the thermal spoke orientation is 45 deg

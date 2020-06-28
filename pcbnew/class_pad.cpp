@@ -193,7 +193,7 @@ void D_PAD::SetChamferRectRatio( double aChamferScale )
 const std::vector<std::shared_ptr<SHAPE>>& D_PAD::GetEffectiveShapes() const
 {
     if( m_shapesDirty )
-        buildEffectiveShapes();
+        BuildEffectiveShapes();
 
     return m_effectiveShapes;
 }
@@ -202,7 +202,7 @@ const std::vector<std::shared_ptr<SHAPE>>& D_PAD::GetEffectiveShapes() const
 const std::shared_ptr<SHAPE_SEGMENT>& D_PAD::GetEffectiveHoleShape() const
 {
     if( m_shapesDirty )
-        buildEffectiveShapes();
+        BuildEffectiveShapes();
 
     return m_effectiveHoleShape;
 }
@@ -211,13 +211,13 @@ const std::shared_ptr<SHAPE_SEGMENT>& D_PAD::GetEffectiveHoleShape() const
 int D_PAD::GetBoundingRadius() const
 {
     if( m_shapesDirty )
-        buildEffectiveShapes();
+        BuildEffectiveShapes();
 
     return m_effectiveBoundingRadius;
 }
 
 
-void D_PAD::buildEffectiveShapes() const
+void D_PAD::BuildEffectiveShapes() const
 {
     m_effectiveShapes.clear();
     m_effectiveHoleShape = nullptr;

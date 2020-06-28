@@ -317,6 +317,8 @@ public:
     void SetDrillShape( PAD_DRILL_SHAPE_T aShape ) { m_drillShape = aShape; m_shapesDirty = true; }
     PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
 
+    bool IsDirty() const { return m_shapesDirty; }
+
     /**
      * JEY TODO: temporary until Tom is done with DRC stuff....
      */
@@ -575,6 +577,11 @@ public:
      */
     bool PadShouldBeNPTH() const;
 
+    /**
+     * Rebuilds the shape cache for the pad and clears the dirty bit
+     */
+    void BuildEffectiveShapes() const;
+
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
@@ -596,8 +603,6 @@ private:
     int calcBoundingRadius() const;
 
     void addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError ) const;
-
-    void buildEffectiveShapes() const;
 
 private:
     wxString    m_name;             ///< pad name (pin number in schematic)
