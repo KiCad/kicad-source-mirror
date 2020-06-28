@@ -137,93 +137,130 @@ public:
         // Generate list of edit points basing on the item type
         switch( aItem->Type() )
         {
-            case PCB_LINE_T:
-            case PCB_MODULE_EDGE_T:
+        case PCB_LINE_T:
+        case PCB_MODULE_EDGE_T:
+        {
+            const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( aItem );
+
+            switch( segment->GetShape() )
             {
-                const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( aItem );
+            case S_SEGMENT:
+                points->AddPoint( segment->GetStart() );
+                points->AddPoint( segment->GetEnd() );
+                break;
 
-                switch( segment->GetShape() )
-                {
-                case S_SEGMENT:
-                    points->AddPoint( segment->GetStart() );
-                    points->AddPoint( segment->GetEnd() );
-                    break;
+            case S_RECT:
+                points->AddPoint( segment->GetStart() );
+                points->AddPoint( wxPoint( segment->GetEnd().x, segment->GetStart().y ) );
+                points->AddPoint( segment->GetEnd() );
+                points->AddPoint( wxPoint( segment->GetStart().x, segment->GetEnd().y ) );
+                break;
 
-                case S_RECT:
-                    points->AddPoint( segment->GetStart() );
-                    points->AddPoint( wxPoint( segment->GetEnd().x, segment->GetStart().y ) );
-                    points->AddPoint( segment->GetEnd() );
-                    points->AddPoint( wxPoint( segment->GetStart().x, segment->GetEnd().y ) );
-                    break;
+            case S_ARC:
+                points->AddPoint( segment->GetCenter() );
+                points->AddPoint( segment->GetArcStart() );
+                points->AddPoint( segment->GetArcMid() );
+                points->AddPoint( segment->GetArcEnd() );
 
-                case S_ARC:
-                    points->AddPoint( segment->GetCenter() );
-                    points->AddPoint( segment->GetArcStart() );
-                    points->AddPoint( segment->GetArcMid() );
-                    points->AddPoint( segment->GetArcEnd() );
+                // Set constraints
+                // Arc end has to stay at the same radius as the start
+                points->Point( ARC_END ).SetConstraint( new EC_CIRCLE( points->Point( ARC_END ),
+                                                                       points->Point( ARC_CENTER ),
+                                                                       points->Point( ARC_START ) ) );
 
-                    // Set constraints
-                    // Arc end has to stay at the same radius as the start
-                    points->Point( ARC_END ).SetConstraint( new EC_CIRCLE( points->Point( ARC_END ),
-                                                                           points->Point( ARC_CENTER ),
-                                                                           points->Point( ARC_START ) ) );
+                points->Point( ARC_MID ).SetConstraint( new EC_LINE( points->Point( ARC_MID ),
+                                                                     points->Point( ARC_CENTER ) ) );
+                break;
 
-                    points->Point( ARC_MID ).SetConstraint( new EC_LINE( points->Point( ARC_MID ),
-                                                                         points->Point( ARC_CENTER ) ) );
-                    break;
+            case S_CIRCLE:
+                points->AddPoint( segment->GetCenter() );
+                points->AddPoint( segment->GetEnd() );
+                break;
 
-                case S_CIRCLE:
-                    points->AddPoint( segment->GetCenter() );
-                    points->AddPoint( segment->GetEnd() );
-                    break;
+            case S_POLYGON:
+                buildForPolyOutline( points, &segment->GetPolyShape(), aGal );
+                break;
 
-                case S_POLYGON:
-                    buildForPolyOutline( points, &segment->GetPolyShape(), aGal );
-                    break;
+            case S_CURVE:
+                points->AddPoint( segment->GetStart() );
+                points->AddPoint( segment->GetBezControl1() );
+                points->AddPoint( segment->GetBezControl2() );
+                points->AddPoint( segment->GetEnd() );
+                break;
 
-                case S_CURVE:
-                    points->AddPoint( segment->GetStart() );
-                    points->AddPoint( segment->GetBezControl1() );
-                    points->AddPoint( segment->GetBezControl2() );
-                    points->AddPoint( segment->GetEnd() );
-                    break;
-
-                default:        // suppress warnings
-                    break;
-                }
-
+            default:        // suppress warnings
                 break;
             }
 
-            case PCB_MODULE_ZONE_AREA_T:
-            case PCB_ZONE_AREA_T:
+            break;
+        }
+
+        case PCB_PAD_T:
+        {
+            const D_PAD* pad = static_cast<const D_PAD*>( aItem );
+            wxPoint      shapePos = pad->ShapePos();
+            wxPoint      halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
+
+            switch( pad->GetShape() )
             {
-                auto zone = static_cast<const ZONE_CONTAINER*>( aItem );
-                buildForPolyOutline( points, zone->Outline(), aGal );
+            case PAD_SHAPE_CIRCLE:
+                points->AddPoint( shapePos );
+                points->AddPoint( wxPoint( shapePos.x + halfSize.x, shapePos.y ) );
+                break;
+
+            case PAD_SHAPE_OVAL:
+            case PAD_SHAPE_TRAPEZOID:
+            case PAD_SHAPE_RECT:
+            case PAD_SHAPE_ROUNDRECT:
+            case PAD_SHAPE_CHAMFERED_RECT:
+            {
+                if( (int) pad->GetOrientation() % 900 != 0 )
+                    break;
+
+                if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
+                    std::swap( halfSize.x, halfSize.y );
+
+                points->AddPoint( shapePos - halfSize );
+                points->AddPoint( wxPoint( shapePos.x + halfSize.x, shapePos.y - halfSize.y ) );
+                points->AddPoint( shapePos + halfSize );
+                points->AddPoint( wxPoint( shapePos.x - halfSize.x, shapePos.y + halfSize.y ) );
+            }
+                break;
+
+            default:        // suppress warnings
                 break;
             }
+        }
+            break;
 
-            case PCB_DIMENSION_T:
-            {
-                const DIMENSION* dimension = static_cast<const DIMENSION*>( aItem );
+        case PCB_MODULE_ZONE_AREA_T:
+        case PCB_ZONE_AREA_T:
+        {
+            auto zone = static_cast<const ZONE_CONTAINER*>( aItem );
+            buildForPolyOutline( points, zone->Outline(), aGal );
+        }
+            break;
 
-                points->AddPoint( dimension->m_crossBarO );
-                points->AddPoint( dimension->m_crossBarF );
-                points->AddPoint( dimension->m_featureLineGO );
-                points->AddPoint( dimension->m_featureLineDO );
+        case PCB_DIMENSION_T:
+        {
+            const DIMENSION* dimension = static_cast<const DIMENSION*>( aItem );
 
-                // Dimension height setting - edit points should move only along the feature lines
-                points->Point( DIM_CROSSBARO ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARO ),
-                                                                           points->Point( DIM_FEATUREGO ) ) );
-                points->Point( DIM_CROSSBARF ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARF ),
-                                                                           points->Point( DIM_FEATUREDO ) ) );
+            points->AddPoint( dimension->m_crossBarO );
+            points->AddPoint( dimension->m_crossBarF );
+            points->AddPoint( dimension->m_featureLineGO );
+            points->AddPoint( dimension->m_featureLineDO );
 
-                break;
-            }
+            // Dimension height setting - edit points should move only along the feature lines
+            points->Point( DIM_CROSSBARO ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARO ),
+                                                                       points->Point( DIM_FEATUREGO ) ) );
+            points->Point( DIM_CROSSBARF ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARF ),
+                                                                       points->Point( DIM_FEATUREDO ) ) );
+        }
+            break;
 
-            default:
-                points.reset();
-                break;
+        default:
+            points.reset();
+            break;
         }
 
         return points;
@@ -446,6 +483,7 @@ void POINT_EDITOR::updateItem() const
     case PCB_MODULE_EDGE_T:
     {
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
+
         switch( segment->GetShape() )
         {
         case S_SEGMENT:
@@ -581,6 +619,74 @@ void POINT_EDITOR::updateItem() const
 
         break;
     }
+
+    case PCB_PAD_T:
+    {
+        D_PAD* pad = static_cast<D_PAD*>( item );
+
+        switch( pad->GetShape() )
+        {
+        case PAD_SHAPE_CIRCLE:
+        {
+            wxPoint center = (wxPoint) m_editPoints->Point( CIRC_CENTER ).GetPosition();
+            wxPoint end = (wxPoint) m_editPoints->Point( CIRC_END ).GetPosition();
+
+            if( isModified( m_editPoints->Point( CIRC_CENTER ) ) )
+            {
+                wxPoint moveVector = center - pad->ShapePos();
+                pad->SetOffset( pad->GetOffset() + moveVector );
+            }
+            else
+            {
+                int diameter = (int) EuclideanNorm( end - center ) * 2;
+                pad->SetSize( wxSize( diameter, diameter ) );
+            }
+        }
+            break;
+
+        case PAD_SHAPE_OVAL:
+        case PAD_SHAPE_TRAPEZOID:
+        case PAD_SHAPE_RECT:
+        case PAD_SHAPE_ROUNDRECT:
+        case PAD_SHAPE_CHAMFERED_RECT:
+        {
+            wxPoint center = pad->GetPosition();
+            int     dist[4];
+
+            if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
+                    || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
+            {
+                dist[0] = center.x - m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().x;
+                dist[1] = center.y - m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().y;
+                dist[2] = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().x - center.x;
+                dist[3] = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().y - center.y;
+            }
+            else
+            {
+                dist[0] = center.x - m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x;
+                dist[1] = center.y - m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y;
+                dist[2] = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x - center.x;
+                dist[3] = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y - center.y;
+            }
+
+            wxSize padSize( dist[0] + dist[2], dist[1] + dist[3] );
+            wxPoint padOffset( padSize.x / 2 - dist[2], padSize.y / 2 - dist[3] );
+
+            if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
+                std::swap( padSize.x, padSize.y );
+
+            RotatePoint( &padOffset, -pad->GetOrientation() );
+
+            pad->SetSize( padSize );
+            pad->SetOffset( -padOffset );
+        }
+            break;
+
+        default:        // suppress warnings
+            break;
+        }
+    }
+        break;
 
     case PCB_MODULE_ZONE_AREA_T:
     case PCB_ZONE_AREA_T:
@@ -779,6 +885,73 @@ void POINT_EDITOR::updatePoints()
 
         break;
     }
+
+    case PCB_PAD_T:
+    {
+        const D_PAD* pad = static_cast<const D_PAD*>( item );
+        wxPoint      shapePos = pad->ShapePos();
+        wxPoint      halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
+
+        switch( pad->GetShape() )
+        {
+        case PAD_SHAPE_CIRCLE:
+        {
+            // Careful; pad shape is mutable...
+            if( m_editPoints->PointsSize() != 2 )
+            {
+                getView()->Remove( m_editPoints.get() );
+                m_editedPoint = nullptr;
+                m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
+                getView()->Add( m_editPoints.get() );
+            }
+            else
+            {
+                VECTOR2I vec = m_editPoints->Point( CIRC_END ).GetPosition()
+                                        - m_editPoints->Point( CIRC_CENTER ).GetPosition();
+                vec.Resize( halfSize.x );
+
+                m_editPoints->Point( CIRC_CENTER ).SetPosition( shapePos );
+                m_editPoints->Point( CIRC_END ).SetPosition( vec + shapePos );
+            }
+        }
+            break;
+
+        case PAD_SHAPE_OVAL:
+        case PAD_SHAPE_TRAPEZOID:
+        case PAD_SHAPE_RECT:
+        case PAD_SHAPE_ROUNDRECT:
+        case PAD_SHAPE_CHAMFERED_RECT:
+        {
+            // Careful; pad shape and orientation are mutable...
+            int target = ( (int) pad->GetOrientation() % 900 == 0 ) ? 4 : 0;
+
+            if( m_editPoints->PointsSize() != target )
+            {
+                getView()->Remove( m_editPoints.get() );
+                m_editedPoint = nullptr;
+                m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
+                getView()->Add( m_editPoints.get() );
+            }
+            else if( target == 4 )
+            {
+                if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
+                    std::swap( halfSize.x, halfSize.y );
+
+                m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shapePos - halfSize );
+                m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( wxPoint( shapePos.x + halfSize.x,
+                                                                            shapePos.y - halfSize.y ) );
+                m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( shapePos + halfSize );
+                m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( wxPoint( shapePos.x - halfSize.x,
+                                                                           shapePos.y + halfSize.y ) );
+            }
+        }
+            break;
+
+        default:        // suppress warnings
+            break;
+        }
+    }
+        break;
 
     case PCB_MODULE_ZONE_AREA_T:
     case PCB_ZONE_AREA_T:

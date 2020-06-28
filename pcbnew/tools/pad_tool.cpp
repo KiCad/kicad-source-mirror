@@ -581,7 +581,6 @@ PCB_LAYER_ID PAD_TOOL::explodePad( D_PAD* aPad )
             ds->SetLocalCoord();
             ds->Move( aPad->GetPosition() );
             ds->Rotate( aPad->GetPosition(), aPad->GetOrientation() );
-
             ds->SetLayer( layer );
 
             commit.Add( ds );
@@ -656,8 +655,8 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
             aPad->TransformShapeWithClearanceToPolygon( existingOutline, 0, maxError );
 
             aPad->SetAnchorPadShape( PAD_SHAPE_CIRCLE );
-            int r = aPad->GetDrillSize().x + Millimeter2iu( 0.2 );
-            aPad->SetSize( wxSize( r, r ) );
+            wxSize minAnnulus( Millimeter2iu( 0.2 ), Millimeter2iu( 0.2 ) );
+            aPad->SetSize( aPad->GetDrillSize() + minAnnulus );
             aPad->SetOffset( wxPoint( 0, 0 ) );
 
             DRAWSEGMENT* shape = new DRAWSEGMENT;

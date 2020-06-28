@@ -39,6 +39,7 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
+#include <geometry/shape_rect.h>
 #include <pcbnew.h>
 #include <view/view.h>
 #include <class_board.h>
@@ -252,6 +253,15 @@ void D_PAD::BuildEffectiveShapes() const
         break;
 
     case PAD_SHAPE_RECT:
+        if( (int) m_Orient % 900 == 0 )
+        {
+            add( new SHAPE_RECT( shapePos - m_Size / 2, m_Size.x, m_Size.y ) );
+            break;
+        }
+
+        // Not at a cartesian angle; fall through to general case
+        KI_FALLTHROUGH;
+
     case PAD_SHAPE_TRAPEZOID:
     case PAD_SHAPE_ROUNDRECT:
     {
