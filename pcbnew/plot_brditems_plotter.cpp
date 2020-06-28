@@ -715,6 +715,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
 
     m_plotter->SetColor( getColor( aZone->GetLayer() ) );
 
+    m_plotter->StartBlock( nullptr );    // Clean current object attributes
+
     /* Plot all filled areas: filled areas have a filled area and a thick
      * outline (depending on the fill area option we must plot the filled area itself
      * and plot the thick outline itself, if the thickness has meaning (at least is > 1)
@@ -741,10 +743,22 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
             if( cornerList[0] != cornerList[cornerList.size() - 1] )
                 cornerList.push_back( cornerList[0] );
 
-            // Plot the current filled area and its outline
+            // Plot the current filled area (as region for Gerber plotter
+            // to manage attributes) and its outline for thick outline
             if( GetPlotMode() == FILLED )
             {
-                m_plotter->PlotPoly( cornerList, FILLED_SHAPE, outline_thickness, &gbr_metadata );
+                if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                {
+                    if( outline_thickness > 0 )
+                        m_plotter->PlotPoly( cornerList, NO_FILL,
+                                             outline_thickness, &gbr_metadata );
+
+                    static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion(
+                                                        cornerList, &gbr_metadata );
+                }
+                else
+                    m_plotter->PlotPoly( cornerList, FILLED_SHAPE,
+                                         outline_thickness, &gbr_metadata );
             }
             else
             {
@@ -762,6 +776,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
             }
         }
     }
+
+    m_plotter->EndBlock( nullptr );    // Clear object attributes
 }
 
 

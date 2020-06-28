@@ -36,7 +36,7 @@
 #include <math/box2.h>
 #include <gr_text.h>
 #include <page_info.h>
-#include <eda_text.h>       // FILL_T
+#include <base_struct.h>       // FILL_T
 
 class COLOR_SETTINGS;
 class SHAPE_POLY_SET;
