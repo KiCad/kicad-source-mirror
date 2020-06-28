@@ -26,9 +26,9 @@
 #include <macros.h>             // arrayDim definition
 #include <pcb_edit_frame.h>
 #include <class_board.h>
+#include <dialogs/dialog_color_picker.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/layer_box_selector.h>
-#include <wx/colordlg.h>
 #include <wx/rawbmp.h>
 #include <math/util.h>      // for KiROUND
 
@@ -293,8 +293,10 @@ wxColor PANEL_SETUP_BOARD_STACKUP::GetSelectedColor( int aRow ) const
 
     if( idx != GetColorUserDefinedListIdx() ) // a standard color is selected
         return GetColorStandardList()[idx].m_Color;
+    else if( m_UserColors.count( aRow ) )
+        return m_UserColors.at( aRow );
     else
-        return m_UserColors[aRow];
+        return wxNullColour;
 }
 
 
@@ -839,17 +841,12 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreatedInitialStacku
         }
     }
 
-    const FAB_LAYER_COLOR* color_list = GetColorStandardList();
-
     int row = 0;
 
     for( BOARD_STACKUP_ITEM* item : m_stackup.GetList() )
     {
         for( int sub_idx = 0; sub_idx < item->GetSublayersCount(); sub_idx++ )
         {
-            // Reserve room in m_UserColors to store usercolor definition
-            m_UserColors.push_back( color_list[GetColorUserDefinedListIdx()].m_Color );
-
             BOARD_STACKUP_ROW_UI_ITEM ui_row_item = createRowData( row, item, sub_idx );
             m_rowUiItemsList.emplace_back( ui_row_item );
 
@@ -900,7 +897,10 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
     {
         // Skip stackup items useless for the current board
         if( !ui_item.m_isEnabled )
+        {
+            row++;
             continue;
+        }
 
         BOARD_STACKUP_ITEM* item = ui_item.m_Item;
         int sub_item = ui_item.m_SubItem;
@@ -1005,11 +1005,15 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
         {
             const FAB_LAYER_COLOR* color_list = GetColorStandardList();
 
-            wxBitmapComboBox* choice = static_cast<wxBitmapComboBox*>( ui_item.m_ColorCtrl );
+            wxBitmapComboBox* choice = dynamic_cast<wxBitmapComboBox*>( ui_item.m_ColorCtrl );
             int idx = choice->GetSelection();
 
             if( idx == GetColorUserDefinedListIdx() )
-                item->SetColor( m_UserColors[row].GetAsString( wxC2S_HTML_SYNTAX ) );
+            {
+                wxASSERT( m_UserColors.count( row ) );
+                wxColour color = m_UserColors[row];
+                item->SetColor( color.GetAsString( wxC2S_HTML_SYNTAX ) );
+            }
             else
                 item->SetColor( color_list[idx].m_ColorName );
         }
@@ -1218,16 +1222,20 @@ void PANEL_SETUP_BOARD_STACKUP::onColorSelected( wxCommandEvent& event )
     int item_id = event.GetId();
 
     int row = item_id - ID_ITEM_COLOR;
-    wxASSERT( (int)m_UserColors.size() > row );
 
     if( GetColorStandardListCount()-1 == idx )   // Set user color is the last option in list
     {
-        wxColourDialog dlg( this );
+        COLOR4D defaultColor( GetColorStandardList()[GetColorUserDefinedListIdx()].m_Color );
+        COLOR4D currentColor(
+                m_UserColors.count( row ) ? m_UserColors[row] : COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
+
+        DIALOG_COLOR_PICKER dlg( this, currentColor, false, nullptr, defaultColor );
 
         if( dlg.ShowModal() == wxID_OK )
         {
             wxBitmapComboBox* combo = static_cast<wxBitmapComboBox*>( FindWindowById( item_id ) );
-            wxColour color = dlg.GetColourData().GetColour();
+
+            wxColour color    = dlg.GetColor().ToColour();
             m_UserColors[row] = color;
 
             combo->SetString( idx, color.GetAsString( wxC2S_HTML_SYNTAX ) );

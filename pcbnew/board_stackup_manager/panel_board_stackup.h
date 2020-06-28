@@ -109,8 +109,8 @@ public:
     // Called by wxWidgets: transfer current settings stored in m_stackup to the board
     bool TransferDataFromWindow() override;
 
-    std::vector<wxColor> m_UserColors;  // the list of user colors for each grid row
-                                        // other colors are defined colors, and are not stored
+    std::map<int, wxColor> m_UserColors;  // the list of user colors for each grid row
+                                          // other colors are defined colors, and are not stored
 private:
     /** Creates a BOARD_STACKUP_ROW_UI_ITEM relative to the aStackupItem.
      * @return a BOARD_STACKUP_ROW_UI_ITEM filled with corresponding widgets
