@@ -191,29 +191,24 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     // combobox sizes can have changed: apply new best sizes
     auto item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
-
-//    if( item )
-        item->SetMinSize( m_SelComponentBox->GetBestSize() );
+    wxASSERT( item );
+    item->SetMinSize( m_SelComponentBox->GetBestSize() );
 
     item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
-
-//    if( item )
-        item->SetMinSize( m_SelNetnameBox->GetBestSize() );
+    wxASSERT( item );
+    item->SetMinSize( m_SelNetnameBox->GetBestSize() );
 
     item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
-
-//    if( item )
-        item->SetMinSize( m_SelAperAttributesBox->GetBestSize() );
+    wxASSERT( item );
+    item->SetMinSize( m_SelAperAttributesBox->GetBestSize() );
 
     item = m_auxiliaryToolBar->FindTool( ID_ON_GRID_SELECT );
-
-//    if( item )
-        item->SetMinSize( m_gridSelectBox->GetBestSize() );
+    wxASSERT( item );
+    item->SetMinSize( m_gridSelectBox->GetBestSize() );
 
     item = m_auxiliaryToolBar->FindTool( ID_ON_ZOOM_SELECT );
-
-//    if( item )
-        item->SetMinSize( m_zoomSelectBox->GetBestSize() );
+    wxASSERT( item );
+    item->SetMinSize( m_zoomSelectBox->GetBestSize() );
 
     // after adding the buttons to the toolbar, must call Realize()
     m_auxiliaryToolBar->Realize();
