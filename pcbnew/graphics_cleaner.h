@@ -51,7 +51,6 @@ private:
 
     void cleanupSegments();
     void mergeRects();
-    void removeItems( std::set<BOARD_ITEM*>& aItems );
 
 private:
     DRAWINGS&                   m_drawings;

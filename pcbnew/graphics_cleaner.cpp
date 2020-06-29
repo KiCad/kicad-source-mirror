@@ -134,8 +134,6 @@ bool GRAPHICS_CLEANER::areEquivalent( DRAWSEGMENT* aSegment1, DRAWSEGMENT* aSegm
 
 void GRAPHICS_CLEANER::cleanupSegments()
 {
-    std::set<BOARD_ITEM*> toRemove;
-
     // Remove duplicate segments (2 superimposed identical segments):
     for( auto it = m_drawings.begin(); it != m_drawings.end(); it++ )
     {
@@ -150,7 +148,9 @@ void GRAPHICS_CLEANER::cleanupSegments()
             item->SetItems( segment );
             m_itemsList->push_back( item );
 
-            toRemove.insert( segment );
+            if( !m_dryRun )
+                m_commit.Removed( segment );
+
             continue;
         }
 
@@ -168,13 +168,12 @@ void GRAPHICS_CLEANER::cleanupSegments()
                 m_itemsList->push_back( item );
 
                 segment2->SetFlags( IS_DELETED );
-                toRemove.insert( segment2 );
+
+                if( !m_dryRun )
+                    m_commit.Removed( segment2 );
             }
         }
     }
-
-    if( !m_dryRun )
-        removeItems( toRemove );
 }
 
 
@@ -195,14 +194,6 @@ void GRAPHICS_CLEANER::mergeRects()
         wxPoint end;
         DRAWSEGMENT* seg;
     };
-
-    std::set<BOARD_ITEM*> toRemove;
-
-    auto markForRemoval = [&]( SIDE_CANDIDATE* aSide )
-                          {
-                              toRemove.insert( aSide->seg );
-                              aSide->seg->SetFlags( IS_DELETED );
-                          };
 
     std::vector<SIDE_CANDIDATE*> sides;
     std::map<wxPoint, std::vector<SIDE_CANDIDATE*>> ptMap;
@@ -295,10 +286,10 @@ void GRAPHICS_CLEANER::mergeRects()
 
             if( right && bottom )
             {
-                markForRemoval( left );
-                markForRemoval( top );
-                markForRemoval( right );
-                markForRemoval( bottom );
+                left->seg->SetFlags( IS_DELETED );
+                top->seg->SetFlags( IS_DELETED );
+                right->seg->SetFlags( IS_DELETED );
+                bottom->seg->SetFlags( IS_DELETED );
 
                 CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_LINES_TO_RECT );
                 item->SetItems( left->seg, top->seg, right->seg, bottom->seg );
@@ -320,28 +311,16 @@ void GRAPHICS_CLEANER::mergeRects()
                     rect->SetWidth( top->seg->GetWidth() );
 
                     m_commit.Add( rect );
+                    m_commit.Remove( left->seg );
+                    m_commit.Remove( top->seg );
+                    m_commit.Remove( right->seg );
+                    m_commit.Remove( bottom->seg );
                 }
             }
         }
     }
 
-    if( !m_dryRun )
-        removeItems( toRemove );
-
     for( SIDE_CANDIDATE* side : sides )
         delete side;
 }
 
-
-void GRAPHICS_CLEANER::removeItems( std::set<BOARD_ITEM*>& aItems )
-{
-    for( BOARD_ITEM* item : aItems )
-    {
-        if( m_parentModule )
-            m_parentModule->Remove( item );
-        else
-            item->GetParent()->Remove( item );
-
-        m_commit.Removed( item );
-    }
-}
