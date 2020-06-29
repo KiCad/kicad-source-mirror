@@ -540,7 +540,7 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
             RotatePoint( &delta, angle );
 
             TransformOvalToPolygon( aCornerBuffer, padShapePos - delta, padShapePos + delta,
-                                    half_width * 2 + aClearanceValue, aError );
+                                    ( half_width + aClearanceValue ) * 2, aError );
         }
 
         break;
