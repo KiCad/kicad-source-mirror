@@ -201,6 +201,9 @@ public:
             wxPoint      shapePos = pad->ShapePos();
             wxPoint      halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
 
+            if( pad->GetParent() && pad->GetParent()->PadsLocked() )
+                break;
+
             switch( pad->GetShape() )
             {
             case PAD_SHAPE_CIRCLE:
@@ -670,15 +673,28 @@ void POINT_EDITOR::updateItem() const
             }
 
             wxSize padSize( dist[0] + dist[2], dist[1] + dist[3] );
-            wxPoint padOffset( padSize.x / 2 - dist[2], padSize.y / 2 - dist[3] );
 
-            if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
-                std::swap( padSize.x, padSize.y );
+            if( ( pad->GetOffset().x || pad->GetOffset().y )
+                    || ( pad->GetDrillSize().x && pad->GetDrillSize().y ) )
+            {
+                wxPoint deltaOffset( padSize.x / 2 - dist[2], padSize.y / 2 - dist[3] );
 
-            RotatePoint( &padOffset, -pad->GetOrientation() );
+                if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
+                    std::swap( padSize.x, padSize.y );
 
-            pad->SetSize( padSize );
-            pad->SetOffset( -padOffset );
+                RotatePoint( &deltaOffset, -pad->GetOrientation() );
+
+                pad->SetSize( padSize );
+                pad->SetOffset( -deltaOffset );
+            }
+            else
+            {
+                if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
+                    std::swap( padSize.x, padSize.y );
+
+                pad->SetSize( padSize );
+                pad->SetPosition( pad->GetPosition() - pad->GetSize() / 2 );
+            }
         }
             break;
 
@@ -889,6 +905,7 @@ void POINT_EDITOR::updatePoints()
     case PCB_PAD_T:
     {
         const D_PAD* pad = static_cast<const D_PAD*>( item );
+        bool         locked = pad->GetParent() && pad->GetParent()->PadsLocked();
         wxPoint      shapePos = pad->ShapePos();
         wxPoint      halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
 
@@ -896,15 +913,17 @@ void POINT_EDITOR::updatePoints()
         {
         case PAD_SHAPE_CIRCLE:
         {
+            int target = locked ? 0 : 2;
+
             // Careful; pad shape is mutable...
-            if( m_editPoints->PointsSize() != 2 )
+            if( m_editPoints->PointsSize() != target )
             {
                 getView()->Remove( m_editPoints.get() );
                 m_editedPoint = nullptr;
                 m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
                 getView()->Add( m_editPoints.get() );
             }
-            else
+            else if( target == 2 )
             {
                 VECTOR2I vec = m_editPoints->Point( CIRC_END ).GetPosition()
                                         - m_editPoints->Point( CIRC_CENTER ).GetPosition();
@@ -923,7 +942,7 @@ void POINT_EDITOR::updatePoints()
         case PAD_SHAPE_CHAMFERED_RECT:
         {
             // Careful; pad shape and orientation are mutable...
-            int target = ( (int) pad->GetOrientation() % 900 == 0 ) ? 4 : 0;
+            int target = locked || (int) pad->GetOrientation() % 900 > 0 ? 0 : 4;
 
             if( m_editPoints->PointsSize() != target )
             {
