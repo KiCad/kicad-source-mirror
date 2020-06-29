@@ -187,6 +187,8 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits, bool aUs
         return true;
     }
 
+    // TODO: Validate() does not currently support m_dataType being anything other than DISTANCE
+
     if( GetValue() < From_User_Unit( aUnits, aMin, aUseMils ) )
     {
         m_errorMessage = wxString::Format( _( "%s must be at least %s." ),
@@ -219,13 +221,13 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits, bool aUs
 
 void UNIT_BINDER::SetValue( int aValue )
 {
-    SetValue( StringFromValue( m_units, aValue, false, m_useMils ) );
+    SetValue( StringFromValue( m_units, aValue, false, m_useMils, m_dataType ) );
 }
 
 
 void UNIT_BINDER::SetDoubleValue( double aValue )
 {
-    SetValue( StringFromValue( m_units, aValue, false, m_useMils ) );
+    SetValue( StringFromValue( m_units, aValue, false, m_useMils, m_dataType ) );
 }
 
 
@@ -287,7 +289,7 @@ long long int UNIT_BINDER::GetValue()
     else
         return 0;
 
-    return ValueFromString( m_units, value, m_useMils );
+    return ValueFromString( m_units, value, m_useMils, m_dataType );
 }
 
 
@@ -309,7 +311,7 @@ double UNIT_BINDER::GetDoubleValue()
     else
         return 0.0;
 
-    return DoubleValueFromString( m_units, value, m_useMils );
+    return DoubleValueFromString( m_units, value, m_useMils, m_dataType );
 }
 
 

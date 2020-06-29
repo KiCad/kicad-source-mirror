@@ -150,7 +150,7 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aUse
  * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
  */
 wxString StringFromValue( EDA_UNITS aUnit, double aValue, bool aAddUnitSymbol = false,
-                          bool aUseMils = false );
+                          bool aUseMils = false, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
  * Return in internal units the value "val" given in a real unit
@@ -167,8 +167,8 @@ double From_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils = false );
  * @param aUseMils Indicates mils should be used for imperial units (inches).
  * @return A double representing that value in internal units
  */
-double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue,
-                              bool aUseMils = false );
+double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils = false,
+                              EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
  * Function ValueFromString
@@ -179,8 +179,8 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue,
  * @param aUseMils Indicates mils should be used for imperial units (inches).
  * @return The string from Value, according to units (inch, mm ...) for display,
  */
-long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue,
-                               bool aUseMils = false );
+long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils = false,
+                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
  * Function FetchUnitsFromString

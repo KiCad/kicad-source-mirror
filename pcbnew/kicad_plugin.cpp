@@ -1905,7 +1905,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     {
         m_out->Print( 0, " (island_removal_mode %d) (island_area_min %s)",
                       static_cast<int>( aZone->GetIslandRemovalMode() ),
-                      FormatInternalUnits( aZone->GetMinIslandArea() ).c_str() );
+                      FormatInternalUnits( aZone->GetMinIslandArea() / IU_PER_MM ).c_str() );
     }
 
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )

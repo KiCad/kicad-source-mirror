@@ -230,9 +230,25 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
  * otherwise the actual value is rounded when read from dialog and converted
  * in internal units, and therefore modified.
  */
-wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol, bool aUseMils )
+wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol, bool aUseMils,
+                          EDA_DATA_TYPE aType )
 {
-    double  value_to_print = To_User_Unit( aUnits, aValue, aUseMils );
+    double  value_to_print = aValue;
+
+    switch( aType )
+    {
+    case EDA_DATA_TYPE::VOLUME:
+        value_to_print = To_User_Unit( aUnits, value_to_print, aUseMils );
+        KI_FALLTHROUGH;
+
+    case EDA_DATA_TYPE::AREA:
+        value_to_print = To_User_Unit( aUnits, value_to_print, aUseMils );
+        KI_FALLTHROUGH;
+
+    case EDA_DATA_TYPE::DISTANCE:
+        value_to_print = To_User_Unit( aUnits, value_to_print, aUseMils );
+    }
+
 
 #if defined( EESCHEMA )
     wxString    stringValue = wxString::Format( wxT( "%.3f" ), value_to_print );
@@ -327,9 +343,9 @@ double From_User_Unit( EDA_UNITS aUnits, double aValue, bool aUseMils )
 }
 
 
-double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils )
+double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils,
+                              EDA_DATA_TYPE aType )
 {
-    double value;
     double dtmp = 0;
 
     // Acquire the 'right' decimal point separator
@@ -395,9 +411,21 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool
         }
     }
 
-    value = From_User_Unit( aUnits, dtmp, aUseMils );
+    switch( aType )
+    {
+    case EDA_DATA_TYPE::VOLUME:
+        dtmp = From_User_Unit( aUnits, dtmp, aUseMils );
+        KI_FALLTHROUGH;
 
-    return value;
+    case EDA_DATA_TYPE::AREA:
+        dtmp = From_User_Unit( aUnits, dtmp, aUseMils );
+        KI_FALLTHROUGH;
+
+    case EDA_DATA_TYPE::DISTANCE:
+        dtmp = From_User_Unit( aUnits, dtmp, aUseMils );
+    }
+
+    return dtmp;
 }
 
 
@@ -440,9 +468,10 @@ void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits, bool& 
 }
 
 
-long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils )
+long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils,
+                               EDA_DATA_TYPE aType )
 {
-    double value = DoubleValueFromString( aUnits, aTextValue, aUseMils );
+    double value = DoubleValueFromString( aUnits, aTextValue, aUseMils, aType );
     return KiROUND<double, long long int>( value );
 }
 

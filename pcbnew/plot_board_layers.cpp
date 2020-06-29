@@ -500,7 +500,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                                        // aggregateArea will be simplified and fractured
                                        // (Long calculation time)
 
-            for( int i = 0; i < aggregateArea.OutlineCount(); i++ )
+            for( int i = aggregateArea.OutlineCount() - 1; i >= 0; i-- )
             {
                 if( zone->IsIsland( layer, i ) )
                 {
@@ -539,7 +539,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
                 SHAPE_POLY_SET candidateArea = candidate->GetFilledPolysList( layer );
 
-                for( int i = 0; i < candidateArea.OutlineCount(); i++ )
+                for( int i = candidateArea.OutlineCount() - 1; i >= 0; i-- )
                 {
                     if( candidate->IsIsland( layer, i ) )
                     {

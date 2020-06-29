@@ -3981,9 +3981,12 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                     break;
 
                 case T_island_area_min:
-                    zone->SetMinIslandArea( parseBoardUnits( T_island_area_min ) );
+                {
+                    int area = parseBoardUnits( T_island_area_min );
+                    zone->SetMinIslandArea( area * IU_PER_MM );
                     NeedRIGHT();
                     break;
+                }
 
                 default:
                     Expecting( "mode, arc_segments, thermal_gap, thermal_bridge_width, "
