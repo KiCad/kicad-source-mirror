@@ -649,44 +649,33 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
 void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 {
-    double orientation = aPad->GetOrientation();
-
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
     {
-        VECTOR2D position( aPad->ShapePos() );
-
         // Is anything that we can display enabled?
         if( m_pcbSettings.m_netNamesOnPads || m_pcbSettings.m_padNumbers )
         {
             bool displayNetname = ( m_pcbSettings.m_netNamesOnPads && !aPad->GetNetname().empty() );
-            VECTOR2D padsize = VECTOR2D( aPad->GetSize() );
+            EDA_RECT padBBox = aPad->GetBoundingBox();
+            VECTOR2D position = padBBox.Centre();
+            VECTOR2D padsize = VECTOR2D( padBBox.GetSize() );
             double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
             double size = padsize.y;
+
+            m_gal->Save();
+            m_gal->Translate( position );
 
             // Keep the size ratio for the font, but make it smaller
             if( padsize.x < padsize.y )
             {
-                orientation += 900.0;
+                m_gal->Rotate( DECIDEG2RAD( -900.0 ) );
                 size = padsize.x;
                 std::swap( padsize.x, padsize.y );
-            }
-            else if( padsize.x == padsize.y )
-            {
-                // If the text is displayed on a symmetrical pad, do not rotate it
-                orientation = 0.0;
             }
 
             // Font size limits
             if( size > maxSize )
                 size = maxSize;
-
-            m_gal->Save();
-            m_gal->Translate( position );
-
-            // do not display descriptions upside down
-            NORMALIZE_ANGLE_90( orientation );
-            m_gal->Rotate( DECIDEG2RAD( -orientation ) );
 
             // Default font settings
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
@@ -698,11 +687,12 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m_gal->SetIsStroke( true );
             m_gal->SetIsFill( false );
 
-            // Set the text position to the pad shape position (the pad position is not the best place)
+            // We have already translated the GAL to be centered at the center of the pad's
+            // bounding box
             VECTOR2D textpos( 0.0, 0.0 );
 
-            // Divide the space, to display both pad numbers and netnames
-            // and set the Y text position to display 2 lines
+            // Divide the space, to display both pad numbers and netnames and set the Y text
+            // position to display 2 lines
             if( displayNetname && m_pcbSettings.m_padNumbers )
             {
                 size = size / 2.0;
@@ -748,9 +738,9 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     // Pad drawing
     COLOR4D color;
 
-    // Pad holes color is type specific
-    // Hole color is the background color for plated holes, but only if the pad size is greater than the hole size.
-    // ( Don't let pads that *should* be NPTH get lost )
+    // Pad hole color is pad-type-specific: the background color for plated holes and the
+    // pad color for NPTHs.  Note the extra check for "should be" NPTHs to keep mis-marked
+    // holes with no annular ring from getting "lost" in the background.
     if( ( aLayer == LAYER_PADS_PLATEDHOLES ) && !aPad->PadShouldBeNPTH() )
         color = m_pcbSettings.GetBackgroundColor();
     else

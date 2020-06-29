@@ -1091,7 +1091,7 @@ unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
-        int divisor = std::max( m_Size.x, m_Size.y );
+        int divisor = GetBoundingRadius();
 
         // Pad sizes can be zero briefly when someone is typing a number like "0.5"
         // in the pad properties dialog
