@@ -653,30 +653,31 @@ void POINT_EDITOR::updateItem() const
         case PAD_SHAPE_ROUNDRECT:
         case PAD_SHAPE_CHAMFERED_RECT:
         {
-            wxPoint center = pad->GetPosition();
-            int     dist[4];
-
-            if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
-                    || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
-            {
-                dist[0] = center.x - m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().x;
-                dist[1] = center.y - m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().y;
-                dist[2] = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().x - center.x;
-                dist[3] = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().y - center.y;
-            }
-            else
-            {
-                dist[0] = center.x - m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x;
-                dist[1] = center.y - m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y;
-                dist[2] = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x - center.x;
-                dist[3] = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y - center.y;
-            }
-
-            wxSize padSize( dist[0] + dist[2], dist[1] + dist[3] );
-
             if( ( pad->GetOffset().x || pad->GetOffset().y )
                     || ( pad->GetDrillSize().x && pad->GetDrillSize().y ) )
             {
+                // Keep hole pinned at the current location; adjust the pad around the hole
+
+                wxPoint center = pad->GetPosition();
+                int     dist[4];
+
+                if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
+                        || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
+                {
+                    dist[0] = center.x - m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().x;
+                    dist[1] = center.y - m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().y;
+                    dist[2] = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().x - center.x;
+                    dist[3] = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().y - center.y;
+                }
+                else
+                {
+                    dist[0] = center.x - m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x;
+                    dist[1] = center.y - m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y;
+                    dist[2] = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x - center.x;
+                    dist[3] = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y - center.y;
+                }
+
+                wxSize padSize( dist[0] + dist[2], dist[1] + dist[3] );
                 wxPoint deltaOffset( padSize.x / 2 - dist[2], padSize.y / 2 - dist[3] );
 
                 if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
@@ -689,11 +690,33 @@ void POINT_EDITOR::updateItem() const
             }
             else
             {
+                // Keep pad position at the center of the pad shape
+
+                int left, top, right, bottom;
+
+                if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
+                        || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
+                {
+                    left = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().x;
+                    top = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().y;
+                    right = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().x;
+                    bottom = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().y;
+                }
+                else
+                {
+                    left = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x;
+                    top = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y;
+                    right = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x;
+                    bottom = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y;
+                }
+
+                wxSize padSize( abs( right - left ), abs( bottom - top ) );
+
                 if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
                     std::swap( padSize.x, padSize.y );
 
                 pad->SetSize( padSize );
-                pad->SetPosition( pad->GetPosition() - pad->GetSize() / 2 );
+                pad->SetPosition( wxPoint( ( left + right ) / 2, ( top + bottom ) / 2 ) );
             }
         }
             break;
