@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
 *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,16 +25,13 @@
  */
 
 #include "footprint_edit_frame.h"
-
-#include "pcbnew.h"
 #include "pcbnew_id.h"
 #include <menus_helpers.h>
-#include <pgm_base.h>
-#include <advanced_config.h>
 #include <tool/actions.h>
 #include <tool/conditional_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <class_board.h>
 #include <tools/selection_tool.h>
 #include <widgets/wx_menubar.h>
 
@@ -167,6 +164,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     auto sketchGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
         return !GetDisplayOptions().m_DisplayGraphicsFill;
     };
+    auto sketchTextCondition = [ this ] ( const SELECTION& aSel ) {
+        return !GetDisplayOptions().m_DisplayTextFill;
+    };
     auto contrastModeCondition = [ this ] ( const SELECTION& aSel ) {
         return !GetDisplayOptions().m_ContrastModeDisplay;
     };
@@ -207,6 +207,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::padDisplayMode,   sketchPadsCondition );
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::graphicsOutlines, sketchGraphicsCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::textOutlines,     sketchTextCondition );
     viewMenu->AddMenu( drawingModeSubMenu );
 
     // Contrast Mode Submenu
