@@ -286,7 +286,7 @@ void GRAPHICS_CLEANER::mergeRects()
                 }
             }
 
-            if( right && bottom )
+            if( right && bottom && right->end == bottom->end )
             {
                 left->seg->SetFlags( IS_DELETED );
                 top->seg->SetFlags( IS_DELETED );
