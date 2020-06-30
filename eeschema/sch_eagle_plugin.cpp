@@ -2031,7 +2031,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                         linestart + wxPoint( 0, -100 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        linestart + wxPoint( -100, 0 ), '/' );
+                                        linestart + wxPoint( -100, 0 ), true );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, linestart + wxPoint( -100, 0 ) );
@@ -2041,7 +2041,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                              linestart + wxPoint( 0, 100 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        linestart + wxPoint( -100, 0 ), '\\' );
+                                        linestart + wxPoint( -100, 0 ), false );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, linestart + wxPoint( -100, 0 ) );
@@ -2068,7 +2068,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                         linestart + wxPoint( 0, -100 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        linestart + wxPoint( 0, -100 ), '\\' );
+                                        linestart + wxPoint( 0, -100 ), false );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, linestart + wxPoint( 100, 0 ) );
@@ -2079,7 +2079,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                              linestart + wxPoint( 0, 100 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        linestart + wxPoint( 0, 100 ), '/' );
+                                        linestart + wxPoint( 0, 100 ), true );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, linestart + wxPoint( 100, 0 ) );
@@ -2110,7 +2110,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 // |
                                 // ___/|
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        lineend + wxPoint( -100, 0 ), '\\' );
+                                        lineend + wxPoint( -100, 0 ), false );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, lineend + wxPoint( -100, 0 ) );
@@ -2121,7 +2121,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                              lineend + wxPoint( 0, -100 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry =
-                                        new SCH_BUS_WIRE_ENTRY( lineend + wxPoint( -100, 0 ), '/' );
+                                        new SCH_BUS_WIRE_ENTRY( lineend + wxPoint( -100, 0 ), true );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, lineend + wxPoint( -100, 0 ) );
@@ -2147,7 +2147,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                         lineend + wxPoint( 0, -100 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        lineend + wxPoint( 0, -100 ), '\\' );
+                                        lineend + wxPoint( 0, -100 ), false );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, lineend + wxPoint( 100, 0 ) );
@@ -2158,7 +2158,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                              lineend + wxPoint( 0, 100 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry =
-                                        new SCH_BUS_WIRE_ENTRY( lineend + wxPoint( 0, 100 ), '/' );
+                                        new SCH_BUS_WIRE_ENTRY( lineend + wxPoint( 0, 100 ), true );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, lineend + wxPoint( 100, 0 ) );
@@ -2190,7 +2190,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                         linestart + wxPoint( -100, 0 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        linestart + wxPoint( -100, 0 ), '/' );
+                                        linestart + wxPoint( -100, 0 ), true );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, linestart + wxPoint( 0, -100 ) );
@@ -2200,7 +2200,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                              linestart + wxPoint( 100, 0 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        linestart + wxPoint( 0, 100 ), '\\' );
+                                        linestart + wxPoint( 0, 100 ), false );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, linestart + wxPoint( 0, -100 ) );
@@ -2222,7 +2222,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                         linestart + wxPoint( -100, 0 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        linestart + wxPoint( -100, 0 ), '\\' );
+                                        linestart + wxPoint( -100, 0 ), false );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, linestart + wxPoint( 0, 100 ) );
@@ -2232,7 +2232,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                              linestart + wxPoint( 100, 0 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        linestart + wxPoint( 100, 0 ), '/' );
+                                        linestart + wxPoint( 100, 0 ), true );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, linestart + wxPoint( 0, 100 ) );
@@ -2261,7 +2261,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                         lineend + wxPoint( -100, 0 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry =
-                                        new SCH_BUS_WIRE_ENTRY( lineend + wxPoint( -100, 0 ), '/' );
+                                        new SCH_BUS_WIRE_ENTRY( lineend + wxPoint( -100, 0 ), true );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, lineend + wxPoint( 0, -100 ) );
@@ -2271,7 +2271,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                              lineend + wxPoint( 100, 0 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        lineend + wxPoint( 0, -100 ), '\\' );
+                                        lineend + wxPoint( 0, -100 ), false );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, lineend + wxPoint( 0, -100 ) );
@@ -2293,7 +2293,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                         lineend + wxPoint( -100, 0 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        lineend + wxPoint( -100, 0 ), '\\' );
+                                        lineend + wxPoint( -100, 0 ), false );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, lineend + wxPoint( 0, 100 ) );
@@ -2303,7 +2303,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                              lineend + wxPoint( 100, 0 ), busstart, busend, 0 ) )
                             {
                                 SCH_BUS_WIRE_ENTRY* busEntry =
-                                        new SCH_BUS_WIRE_ENTRY( lineend + wxPoint( 0, 100 ), '/' );
+                                        new SCH_BUS_WIRE_ENTRY( lineend + wxPoint( 0, 100 ), true );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
                                 moveLabels( line, lineend + wxPoint( 0, 100 ) );
@@ -2336,7 +2336,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         if( wirevector.y > 0 )
                         {
                             wxPoint             p        = linestart + wxPoint( -100, -100 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, '\\' );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, false );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
                             moveLabels( line, p );
@@ -2354,7 +2354,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         else
                         {
                             wxPoint             p        = linestart + wxPoint( -100, 100 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, '/' );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, true );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
 
@@ -2375,7 +2375,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                     {
                         if( wirevector.y > 0 )
                         {
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( linestart, '/' );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( linestart, true );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
 
@@ -2395,7 +2395,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         else
                         {
                             SCH_BUS_WIRE_ENTRY* busEntry =
-                                    new SCH_BUS_WIRE_ENTRY( linestart, '\\' );
+                                    new SCH_BUS_WIRE_ENTRY( linestart, false );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
                             moveLabels( line, linestart + wxPoint( 100, 100 ) );
@@ -2423,7 +2423,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         if( wirevector.y > 0 )
                         {
                             wxPoint             p        = lineend + wxPoint( 100, 100 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( lineend, '\\' );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( lineend, false );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
 
@@ -2441,7 +2441,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         else
                         {
                             wxPoint             p        = lineend + wxPoint( 100, -100 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( lineend, '/' );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( lineend, true );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
 
@@ -2462,7 +2462,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         if( wirevector.y > 0 )
                         {
                             wxPoint             p        = lineend + wxPoint( -100, 100 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, '/' );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, true );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
                             moveLabels( line, p );
@@ -2479,7 +2479,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         else
                         {
                             wxPoint             p        = lineend + wxPoint( -100, -100 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, '\\' );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, false );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
                             moveLabels( line, p );

@@ -48,7 +48,6 @@
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
-        m_lastBusEntryShape( '/' ),
         m_lastGlobalLabelShape( PINSHEETLABEL_SHAPE::PS_INPUT ),
         m_lastTextOrientation( LABEL_SPIN_STYLE::LEFT ),
         m_lastTextBold( false ),
@@ -462,10 +461,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         previewItem = new SCH_JUNCTION( cursorPos );
         break;
     case SCH_BUS_WIRE_ENTRY_T:
-        previewItem = new SCH_BUS_WIRE_ENTRY( cursorPos, m_lastBusEntryShape );
-        break;
-    case SCH_BUS_BUS_ENTRY_T:
-        previewItem = new SCH_BUS_BUS_ENTRY( cursorPos, m_lastBusEntryShape );
+        previewItem = new SCH_BUS_WIRE_ENTRY( cursorPos );
         break;
     default:
         wxASSERT_MSG( false, "Unknown item type in SCH_DRAWING_TOOLS::SingleClickPlace" );
@@ -542,20 +538,12 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->Category() == TC_COMMAND )
         {
-            if( ( type == SCH_BUS_BUS_ENTRY_T || type == SCH_BUS_WIRE_ENTRY_T )
+            if( ( type == SCH_BUS_WIRE_ENTRY_T )
                     && (   evt->IsAction( &EE_ACTIONS::rotateCW )
                         || evt->IsAction( &EE_ACTIONS::rotateCCW )
                         || evt->IsAction( &EE_ACTIONS::mirrorX )
-                        || evt->IsAction( &EE_ACTIONS::mirrorY )
-                        || evt->IsAction( &EE_ACTIONS::toShapeBackslash )
-                        || evt->IsAction( &EE_ACTIONS::toShapeSlash ) ) )
+                        || evt->IsAction( &EE_ACTIONS::mirrorY ) ) )
             {
-                // Update the shape of the bus entry
-                if( evt->IsAction( &EE_ACTIONS::toShapeSlash ) )
-                    m_lastBusEntryShape = '/';
-                else if( evt->IsAction( &EE_ACTIONS::toShapeBackslash ) )
-                    m_lastBusEntryShape = '\\';
-
                 SCH_BUS_ENTRY_BASE* busItem = static_cast<SCH_BUS_ENTRY_BASE*>( previewItem );
 
                 // The bus entries only rotate in one direction
@@ -566,9 +554,6 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     busItem->MirrorX( busItem->GetPosition().x );
                 else if( evt->IsAction( &EE_ACTIONS::mirrorY ) )
                     busItem->MirrorY( busItem->GetPosition().y );
-                else if( evt->IsAction( &EE_ACTIONS::toShapeBackslash )
-                         || evt->IsAction( &EE_ACTIONS::toShapeSlash ) )
-                    busItem->SetBusEntryShape( m_lastBusEntryShape );
 
                 m_view->ClearPreview();
                 m_view->AddToPreview( previewItem->Clone() );

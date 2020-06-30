@@ -50,7 +50,7 @@ protected:
     STROKE_PARAMS m_stroke;
 
 public:
-    SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos = wxPoint( 0, 0 ), char shape = '\\' );
+    SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos = wxPoint( 0, 0 ), bool aFlipY = false );
 
     bool IsDanglingStart() const { return m_isDanglingStart; }
     bool IsDanglingEnd() const { return m_isDanglingEnd; }
@@ -67,16 +67,6 @@ public:
     bool IsMovableFromAnchorPoint() override { return false; }
 
     wxPoint m_End() const;
-
-    /**
-     * @return the shape of the bus entry, as an ascii code '/' or '\'
-     */
-    char GetBusEntryShape() const;
-
-    /**
-     * @param aShape = the shape of the bus entry, as an ascii code '/' or '\'
-     */
-    void SetBusEntryShape( char aShape );
 
     wxSize GetSize() const { return m_size; }
 
@@ -143,7 +133,7 @@ private:
 class SCH_BUS_WIRE_ENTRY : public SCH_BUS_ENTRY_BASE
 {
 public:
-    SCH_BUS_WIRE_ENTRY( const wxPoint& pos = wxPoint( 0, 0 ), char shape = '\\' );
+    SCH_BUS_WIRE_ENTRY( const wxPoint& pos = wxPoint( 0, 0 ), bool aFlipY = false );
 
     ~SCH_BUS_WIRE_ENTRY() { }
 
@@ -191,7 +181,7 @@ public:
 class SCH_BUS_BUS_ENTRY : public SCH_BUS_ENTRY_BASE
 {
 public:
-    SCH_BUS_BUS_ENTRY( const wxPoint& pos = wxPoint( 0, 0 ), char shape = '\\' );
+    SCH_BUS_BUS_ENTRY( const wxPoint& pos = wxPoint( 0, 0 ), bool aFlipY = false );
 
     ~SCH_BUS_BUS_ENTRY() { }
 

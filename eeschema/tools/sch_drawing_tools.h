@@ -58,8 +58,6 @@ public:
     int DrawSheet( const TOOL_EVENT& aEvent );
     int PlaceImage( const TOOL_EVENT& aEvent );
 
-    void SetLastBusEntryShape( char aShape ) { m_lastBusEntryShape = aShape; }
-
 private:
     /**
      * Gets the next queued text item
@@ -78,8 +76,6 @@ private:
 // History lists for PlaceComponent()
     std::vector<COMPONENT_SELECTION>      m_symbolHistoryList;
     std::vector<COMPONENT_SELECTION>      m_powerHistoryList;
-
-    char                                  m_lastBusEntryShape;
 
     PINSHEETLABEL_SHAPE                   m_lastGlobalLabelShape;
     LABEL_SPIN_STYLE                      m_lastTextOrientation;

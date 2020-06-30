@@ -279,12 +279,6 @@ TOOL_ACTION EE_ACTIONS::placeBusWireEntry( "eeschema.InteractiveDrawing.placeBus
         _( "Add Wire to Bus Entry" ), _( "Add a wire entry to a bus" ),
         add_line2bus_xpm, AF_ACTIVATE, (void*) SCH_BUS_WIRE_ENTRY_T );
 
-TOOL_ACTION EE_ACTIONS::placeBusBusEntry( "eeschema.InteractiveDrawing.placeBusBusEntry",
-        AS_GLOBAL,
-        '/', LEGACY_HK_NAME( "Add Bus Entry" ),
-        _( "Add Bus to Bus Entry" ), _( "Add a bus entry to a bus" ),
-        add_bus2bus_xpm, AF_ACTIVATE, (void*) SCH_BUS_BUS_ENTRY_T );
-
 TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         AS_GLOBAL,
         'L', LEGACY_HK_NAME( "Add Label" ),
@@ -416,16 +410,6 @@ TOOL_ACTION EE_ACTIONS::showDeMorganAlternate( "eeschema.InteractiveEdit.showDeM
         AS_GLOBAL, 0, "",
         _( "DeMorgan Alternate" ), _( "Switch to alternate DeMorgan representation" ),
         morgan2_xpm );
-
-TOOL_ACTION EE_ACTIONS::toShapeSlash( "eeschema.InteractiveEdit.toShapeSlash",
-        AS_GLOBAL, 0, "",
-        _( "Set Bus Entry Shape /" ), _( "Change the bus entry shape to /" ),
-        change_entry_orient_xpm, AF_NONE, (void*) '/' );
-
-TOOL_ACTION EE_ACTIONS::toShapeBackslash( "eeschema.InteractiveEdit.toShapeBackslash",
-        AS_GLOBAL, 0, "",
-        _( "Set Bus Entry Shape \\" ), _( "Change the bus entry shape to \\" ),
-        change_entry_orient_xpm, AF_NONE, (void*) '\\' );
 
 TOOL_ACTION EE_ACTIONS::toLabel( "eeschema.InteractiveEdit.toLabel",
         AS_GLOBAL, 0, "",

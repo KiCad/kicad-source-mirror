@@ -54,8 +54,6 @@ public:
     int UpdateFields( const TOOL_EVENT& aEvent );
     int ConvertDeMorgan( const TOOL_EVENT& aEvent );
 
-    int ChangeShape( const TOOL_EVENT& aEvent );
-
     /**
      * Change a text type to another one.
      *

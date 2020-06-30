@@ -324,8 +324,6 @@ bool SCH_EDIT_TOOL::Init()
 
     drawMenu.AddItem( EE_ACTIONS::editWithLibEdit, singleComponentCondition && E_C::Idle, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::toShapeSlash,        entryCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toShapeBackslash,    entryCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::toLabel,             anyTextTool && E_C::Idle, 200 );
     drawMenu.AddItem( EE_ACTIONS::toHLabel,            anyTextTool && E_C::Idle, 200 );
     drawMenu.AddItem( EE_ACTIONS::toGLabel,            anyTextTool && E_C::Idle, 200 );
@@ -357,8 +355,6 @@ bool SCH_EDIT_TOOL::Init()
 
     selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit, singleComponentCondition && E_C::Idle, 200 );
 
-    selToolMenu.AddItem( EE_ACTIONS::toShapeSlash,     entryCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::toShapeBackslash, entryCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toLabel,          toLabelCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toHLabel,         toHLabelCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toGLabel,         toGLabelCondition, 200 );
@@ -1478,36 +1474,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
-{
-    EE_SELECTION& selection = m_selectionTool->GetSelection();
-    char          shape = aEvent.Parameter<char>();
-
-    for( unsigned int i = 0; i < selection.GetSize(); ++i )
-    {
-        SCH_BUS_ENTRY_BASE* entry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( selection.GetItem( i ) );
-
-        if( entry )
-        {
-            if( entry->GetEditFlags() == 0 )
-                m_frame->SaveCopyInUndoList( entry, UR_CHANGED );
-
-            entry->SetBusEntryShape( shape );
-            m_frame->TestDanglingEnds();
-
-            m_frame->GetScreen()->Update( entry );
-            updateView( entry );
-            m_frame->OnModify( );
-        }
-    }
-
-    SCH_DRAWING_TOOLS* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOLS>();
-    drawingTool->SetLastBusEntryShape( shape );
-
-    return 0;
-}
-
-
 int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 {
     KICAD_T       convertTo = aEvent.Parameter<KICAD_T>();
@@ -1678,8 +1644,6 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganStandard.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::ChangeShape,        EE_ACTIONS::toShapeSlash.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeShape,        EE_ACTIONS::toShapeBackslash.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toHLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toGLabel.MakeEvent() );

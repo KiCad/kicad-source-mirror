@@ -635,13 +635,10 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
                 SCH_BUS_WIRE_ENTRY* entry = m_busUnfold.entry;
 
                 bool offset = ( cursor_delta.x < 0 );
-                char shape = ( offset ? ( ( cursor_delta.y >= 0 ) ? '/' : '\\' )
-                                      : ( ( cursor_delta.y >= 0 ) ? '\\' : '/' ) );
 
                 // Erase and redraw if necessary
-                if( shape != entry->GetBusEntryShape() || offset != m_busUnfold.offset )
+                if( offset != m_busUnfold.offset )
                 {
-                    entry->SetBusEntryShape( shape );
                     wxPoint entry_pos = m_busUnfold.origin;
 
                     if( offset )

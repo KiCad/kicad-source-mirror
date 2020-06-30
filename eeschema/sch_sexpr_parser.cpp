@@ -2483,10 +2483,6 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
             size.SetWidth( parseInternalUnits( "bus entry height" ) );
             size.SetHeight( parseInternalUnits( "bus entry width" ) );
             busEntry->SetSize( size );
-
-            if( size.y < 0 )
-                busEntry->SetBusEntryShape( '/' );
-
             NeedRIGHT();
             break;
         }

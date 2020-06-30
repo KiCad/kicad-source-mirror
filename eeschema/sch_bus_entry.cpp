@@ -42,30 +42,30 @@
 #include <default_values.h>    // For some default values
 
 
-SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, char shape ) :
+SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, bool aFlipY ) :
     SCH_ITEM( NULL, aType )
 {
     m_pos    = pos;
     m_size.x = Mils2iu( DEFAULT_SCH_ENTRY_SIZE );
     m_size.y = Mils2iu( DEFAULT_SCH_ENTRY_SIZE );
 
-    if( shape == '/' )
+    if( aFlipY )
         m_size.y *= -1;
 
     m_isDanglingStart = m_isDanglingEnd = true;
 }
 
 
-SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, char shape ) :
-    SCH_BUS_ENTRY_BASE( SCH_BUS_WIRE_ENTRY_T, pos, shape )
+SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, bool aFlipY ) :
+    SCH_BUS_ENTRY_BASE( SCH_BUS_WIRE_ENTRY_T, pos, aFlipY )
 {
     m_Layer  = LAYER_WIRE;
     m_connected_bus_item = nullptr;
 }
 
 
-SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const wxPoint& pos, char shape ) :
-    SCH_BUS_ENTRY_BASE( SCH_BUS_BUS_ENTRY_T, pos, shape )
+SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const wxPoint& pos, bool aFlipY ) :
+    SCH_BUS_ENTRY_BASE( SCH_BUS_BUS_ENTRY_T, pos, aFlipY )
 {
     m_Layer = LAYER_BUS;
     m_connected_bus_items[0] = nullptr;
@@ -376,32 +376,6 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter )
     aPlotter->SetDash( GetStrokeStyle() );
     aPlotter->MoveTo( m_pos );
     aPlotter->FinishTo( m_End() );
-}
-
-
-void SCH_BUS_ENTRY_BASE::SetBusEntryShape( char aShape )
-{
-    switch( aShape )
-    {
-    case '\\':
-        if( m_size.y < 0 )
-            m_size.y = -m_size.y;
-        break;
-
-    case '/':
-        if( m_size.y > 0 )
-            m_size.y = -m_size.y;
-        break;
-    }
-}
-
-
-char SCH_BUS_ENTRY_BASE::GetBusEntryShape() const
-{
-    if( GetSize().y < 0 )
-        return '/';
-    else
-        return '\\';
 }
 
 
