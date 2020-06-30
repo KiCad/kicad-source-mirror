@@ -36,8 +36,9 @@
 #define FIELD_NAME  -1
 #define FIELD_VALUE -2
 
-#define SHEETNAME_V     100    // We can't use SHEETNAME and SHEETFILENAME because they
-#define SHEETFILENAME_V 101    //   overlap with REFERENCE and VALUE
+#define SHEETNAME_V      100    // We can't use SHEETNAME and SHEETFILENAME because they
+#define SHEETFILENAME_V  101    //   overlap with REFERENCE and VALUE
+#define SHEETUSERFIELD_V 102
 
 /**
  * A text control validator used for validating the text allowed in library and

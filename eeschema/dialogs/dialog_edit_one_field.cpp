@@ -83,15 +83,6 @@ void DIALOG_EDIT_ONE_FIELD::init()
     SCH_BASE_FRAME* parent = GetParent();
     bool libedit = parent->IsType( FRAME_SCH_LIB_EDITOR );
 
-    switch( m_fieldId )
-    {
-    case REFERENCE: m_textLabel->SetLabel( _( "Reference designator:" ) ); break;
-    case VALUE:     m_textLabel->SetLabel( _( "Value:" ) );                break;
-    case FOOTPRINT: m_textLabel->SetLabel( _( "Footprint ID:" ) );         break;
-    case DATASHEET: m_textLabel->SetLabel( _( "Datasheet URL:" ) );        break;
-    default:                                                               break;
-    }
-
     m_TextCtrl->SetValidator( SCH_FIELD_VALIDATOR( libedit, m_fieldId, &m_text ) );
 
     // Disable options for graphic text editing which are not needed for fields.
@@ -282,8 +273,23 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
         DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField ),
         m_field( aField )
 {
-    m_fieldId = aField->GetId();
+    if( aField->GetParent() && aField->GetParent()->Type() == SCH_COMPONENT_T )
+    {
+        m_fieldId = aField->GetId();
+    }
+    else if( aField->GetParent() && aField->GetParent()->Type() == SCH_SHEET_T )
+    {
+        switch( aField->GetId() )
+        {
+        case SHEETNAME:     m_fieldId = SHEETNAME_V;      break;
+        case SHEETFILENAME: m_fieldId = SHEETFILENAME_V;  break;
+        default:            m_fieldId = SHEETUSERFIELD_V; break;
+        }
+    }
+
     m_isPower = false;
+
+    m_textLabel->SetLabel( m_field->GetName() + ":" );
 
     // The library symbol may have been removed so using SCH_COMPONENT::GetPartRef() here
     // could result in a segfault.  If the library symbol is no longer available, the
