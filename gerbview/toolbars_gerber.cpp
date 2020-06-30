@@ -65,8 +65,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( GERBVIEW_ACTIONS::openDrillFile );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),
-                            _( "Print layers" ) );
+    m_mainToolBar->Add( ACTIONS::print );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
