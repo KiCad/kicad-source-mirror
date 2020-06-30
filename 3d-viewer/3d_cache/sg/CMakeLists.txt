@@ -95,8 +95,12 @@ target_compile_definitions( kicad_3dsg PRIVATE -DCOMPILE_SGLIB )
 
 target_link_libraries( kicad_3dsg ${wxWidgets_LIBRARIES} )
 
+# Don't specify the ARCHIVE DESTINATION parameter to prevent
+# the install of the import library on Windows
+# https://cmake.org/pipermail/cmake/2011-November/047746.html
 install( TARGETS
     kicad_3dsg
-    DESTINATION ${KICAD_LIB}
+    RUNTIME DESTINATION ${KICAD_LIB}
+    LIBRARY DESTINATION ${KICAD_LIB}
     COMPONENT binary
     )
