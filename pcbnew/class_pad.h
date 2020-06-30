@@ -159,7 +159,7 @@ public:
         m_shapesDirty = true;
     }
 
-    const wxPoint GetPosition() const override { return m_Pos; }
+    wxPoint GetPosition() const override { return m_Pos; }
 
     /**
      * Function GetAnchorPadShape
