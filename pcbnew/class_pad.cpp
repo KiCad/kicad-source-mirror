@@ -305,7 +305,7 @@ void D_PAD::BuildEffectiveShapes() const
         if( board )
             maxError = board->GetDesignSettings().m_MaxError;
 
-        TransformRoundChamferedRectToPolygon( outline, wxPoint(0,0), GetSize(), m_Orient,
+        TransformRoundChamferedRectToPolygon( outline, shapePos, GetSize(), m_Orient,
                                               GetRoundRectCornerRadius(), GetChamferRectRatio(),
                                               GetChamferPositions(), maxError );
 

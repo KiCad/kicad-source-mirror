@@ -259,10 +259,12 @@ private:
      * @param aRefPad The reference pad to check
      * @param aPad Another pad to check against
      * @param aMinClearance is the minimum allowed distance between the pads
-     * @param aActual [out] it the actual distance (only guaranteed to be set for violations)
-     * @return bool - true if clearance between aRefPad and aPad is >= aMinClearance, else false
+     * @param aActualDist [out] it the actual distance
+     *      (only guaranteed to be set for violations)
+     * @return true if clearance between aRefPad and aPad is >= aMinClearance, else false
      */
-    bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActual );
+    bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad,
+                                 int aMinClearance, int* aActualDist );
 
 
     /**

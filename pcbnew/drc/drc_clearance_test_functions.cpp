@@ -687,7 +687,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 }
 
 
-bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActual )
+bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActualDist )
 {
     int center2center = KiROUND( EuclideanNorm( aPad->ShapePos() - aRefPad->ShapePos() ) );
 
@@ -698,8 +698,10 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance
     // JEY TODO:
     // TOM TODO: MTV only works as a proxy for actual-distance for convex shapes
 
-    VECTOR2I mtv;
-    VECTOR2I maxMtv( 0, 0 );
+    VECTOR2I mtv;               // minimum translation vector calculated by Collide()
+    VECTOR2I maxMtv( 0, 0 );    // is the move distance between 2 shapes calculated
+                                // by Collide to do not have a collision
+    bool shapes_collide = false;
 
     for( const std::shared_ptr<SHAPE>& aShape : aRefPad->GetEffectiveShapes() )
     {
@@ -707,15 +709,20 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance
         {
             if( aShape->Collide( bShape.get(), aMinClearance, mtv ) )
             {
+                shapes_collide = true;
+
                 if( mtv.SquaredEuclideanNorm() > maxMtv.SquaredEuclideanNorm() )
                     maxMtv = mtv;
             }
         }
     }
 
-    if( maxMtv.x > 0 || maxMtv.y > 0 )
+    if( shapes_collide )
     {
-        *aActual = std::max( 0, aMinClearance - maxMtv.EuclideanNorm() );
+        // returns the actual clearance (clearance < aMinClearance) for diags:
+        if( aActualDist )
+            *aActualDist = std::max( 0, aMinClearance - maxMtv.EuclideanNorm() );
+
         return false;
     }
 
