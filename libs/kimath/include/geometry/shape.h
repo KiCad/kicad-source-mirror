@@ -61,6 +61,8 @@ static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
     case SH_COMPOUND:   return "SH_COMPOUND";
     case SH_ARC:        return "SH_ARC";
     }
+
+    return wxEmptyString;  // Just to quiet GCC.
 }
 
 

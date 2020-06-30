@@ -52,6 +52,8 @@ static inline wxString PAD_SHAPE_T_asString( PAD_SHAPE_T a )
     case PAD_SHAPE_CHAMFERED_RECT: return "PAD_SHAPE_CHAMFERED_RECT";
     case PAD_SHAPE_CUSTOM:         return "PAD_SHAPE_CUSTOM";
     }
+
+    return wxEmptyString;  // Just to quiet GCC.
 };
 
 

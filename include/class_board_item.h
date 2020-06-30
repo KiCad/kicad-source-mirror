@@ -72,6 +72,8 @@ static inline wxString STROKE_T_asString( STROKE_T a )
     case S_LAST:    return "S_LAST";    // Synthetic value, but if we come across it we're
                                         // going to want to know.
     }
+
+    return wxEmptyString;  // Just to quiet GCC.
 };
 
 
