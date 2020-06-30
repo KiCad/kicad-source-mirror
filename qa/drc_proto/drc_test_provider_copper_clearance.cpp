@@ -61,7 +61,18 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 {
     auto bds = m_drcEngine->GetDesignSettings();
     m_board = m_drcEngine->GetBoard();
-    m_largestClearance = bds->GetBiggestClearanceValue();
+
+    m_largestClearance = 0;
+
+    for( auto rule : m_drcEngine->QueryRulesById( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE ) )
+    {
+        if( rule->GetConstraint().m_Value.HasMin() )
+            m_largestClearance = std::max( m_largestClearance, rule->GetConstraint().m_Value.Min() );
+    }
+
+    ReportAux( "Worst clearance : %d nm", m_largestClearance );
+
+    //m_largestClearance = 
 
     ReportStage( ("Testing pad copper clerances"), 0, 2 );
     testPadClearances();
@@ -895,5 +906,5 @@ std::set<test::DRC_RULE_ID_T> test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetMatch
 
 namespace detail
 {
-    //static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_COPPER_CLEARANCE> dummy;
+    static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_COPPER_CLEARANCE> dummy;
 }
