@@ -32,13 +32,12 @@ if( BUILD_GITHUB_PLUGIN )
 endif()
 
 
-add_dependencies( pnsrouter pcbcommon pcad2kicadpcb ${GITHUB_PLUGIN_LIBRARIES} )
 
 add_executable( drc_proto
+    drc_rules_proto_keywords.cpp
     drc_proto_test.cpp
     drc_rule.cpp
     drc_rule_parser.cpp
-    drc_rules_proto_keywords.cpp
     drc_test_provider.cpp
     drc_test_provider_clearance_base.cpp
     drc_test_provider_copper_clearance.cpp
@@ -50,6 +49,8 @@ add_executable( drc_proto
     ../../common/base_units.cpp
     ../../3d-viewer/3d_viewer/3d_viewer_settings.cpp
 )
+
+add_dependencies( drc_proto pnsrouter pcbcommon pcad2kicadpcb ${GITHUB_PLUGIN_LIBRARIES} )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(

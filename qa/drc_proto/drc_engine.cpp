@@ -111,7 +111,7 @@ void test::DRC_ENGINE::inferImplicitRules()
 }
 
 
-static const int drc_debug_level = 10;
+static const int drc_debug_level = -10;
 
 void test::drc_dbg( int level, const char* fmt, ... )
 {
@@ -282,4 +282,37 @@ void test::DRC_ENGINE::ReportStage ( const wxString& aStageName, int index, int 
     m_progressReporter->BeginPhase( index ); // fixme: coalesce all stages/test providers 
 }
 
+#if 0
+test::DRC_CONSTRAINT test::DRC_ENGINE::GetWorstGlobalConstraint( test::DRC_RULE_ID_T ruleID )
+{
+    DRC_CONSTRAINT rv;
+
+    rv.m_Value.SetMin( std::numeric_limits<int>::max() );
+    rv.m_Value.SetMax( std::numeric_limits<int>::min() );
+    for( auto rule : QueryRulesById( ruleID ) )
+    {
+        auto mm = rule->GetConstraint().m_Value;
+        if( mm.HasMax() )
+            rv.m_Value.SetMax( std::max( mm.Max(), rv.m_Value.Max() ) );
+        if( mm.HasMin() )
+            rv.m_Value.SetMin( std::min( mm.Min(), rv.m_Value.Min() ) );
+    }
+
+    return rv;
+}
+#endif
+
+std::vector<test::DRC_RULE*> test::DRC_ENGINE::QueryRulesById( test::DRC_RULE_ID_T ruleID )
+{
+    std::vector<test::DRC_RULE*> rv;
+
+    rv.push_back( m_ruleMap[ruleID]->defaultRule );
+
+    for( auto rule : m_ruleMap[ruleID]->sortedRules )
+    {
+        rv.push_back(rule->rule);
+    }
+
+    return rv;
+}
 

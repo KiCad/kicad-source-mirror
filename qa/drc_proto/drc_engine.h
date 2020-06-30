@@ -190,6 +190,8 @@ public:
     DRC_RULE* EvalRulesForItems(
             DRC_RULE_ID_T ruleID,  BOARD_ITEM* a, BOARD_ITEM* b = nullptr );
 
+    std::vector<DRC_RULE*> QueryRulesById( test::DRC_RULE_ID_T ruleID );
+
     EDA_UNITS UserUnits() const
     {
         return EDA_UNITS::MILLIMETRES;

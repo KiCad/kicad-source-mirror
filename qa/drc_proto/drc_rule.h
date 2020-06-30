@@ -62,6 +62,10 @@ public:
     T Max() const { assert( m_hasMax ); return m_max; };
     T Opt() const { assert( m_hasOpt ); return m_opt; };
 
+    bool HasMin() const { return m_hasMin; }
+    bool HasMax() const { return m_hasMax; }
+    bool HasOpt() const { return m_hasOpt; }
+
     void SetMin( T v ) { m_min = v; m_hasMin = true; }
     void SetMax( T v ) { m_max = v; m_hasMax = true; }
     void SetOpt( T v ) { m_opt = v; m_hasOpt = true; }
