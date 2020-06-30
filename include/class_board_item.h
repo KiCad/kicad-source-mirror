@@ -59,6 +59,21 @@ enum STROKE_T
     S_LAST          ///< last value for this list
 };
 
+static inline wxString STROKE_T_asString( STROKE_T a )
+{
+    switch( a )
+    {
+    case S_SEGMENT: return "S_SEGMENT";
+    case S_RECT:    return "S_RECT";
+    case S_ARC:     return "S_ARC";
+    case S_CIRCLE:  return "S_CIRCLE";
+    case S_POLYGON: return "S_POLYGON";
+    case S_CURVE:   return "S_CURVE";
+    case S_LAST:    return "S_LAST";    // Synthetic value, but if we come across it we're
+                                        // going to want to know.
+    }
+};
+
 
 /**
  * BOARD_ITEM

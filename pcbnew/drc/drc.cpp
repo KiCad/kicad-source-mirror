@@ -991,7 +991,8 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
             break;
 
         default:
-            wxFAIL_MSG( "unknown shape type" );
+            wxFAIL_MSG( "DRC::testCopperDrawItem unsupported DRAWSEGMENT shape: "
+                        + STROKE_T_asString( drawItem->GetShape() ) );
             break;
         }
     }

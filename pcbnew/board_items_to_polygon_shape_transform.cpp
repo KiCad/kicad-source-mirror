@@ -468,6 +468,8 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         break;
 
     default:
+        wxFAIL_MSG( "DRAWSEGMENT::TransformShapeWithClearanceToPolygon no implementation for "
+                    + STROKE_T_asString( m_Shape ) );
         break;
     }
 }
@@ -627,6 +629,11 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         aCornerBuffer.Append( outline );
     }
+        break;
+
+    default:
+        wxFAIL_MSG( "D_PAD::TransformShapeWithClearanceToPolygon no implementation for "
+                    + PAD_SHAPE_T_asString( GetShape() ) );
         break;
     }
 }

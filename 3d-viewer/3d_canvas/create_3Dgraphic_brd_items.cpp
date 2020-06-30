@@ -47,6 +47,7 @@
 #include <geometry/shape_segment.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_circle.h>
+#include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
 #include <gr_text.h>
 #include <utility>
@@ -368,6 +369,18 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
             }
                 break;
 
+            case SH_RECT:
+            {
+                SHAPE_RECT* rect = (SHAPE_RECT*) shape.get();
+
+                poly.NewOutline();
+                poly.Append( rect->GetPosition() );
+                poly.Append( rect->GetPosition().x + rect->GetSize().x, rect->GetPosition().y );
+                poly.Append( rect->GetPosition() + rect->GetSize() );
+                poly.Append( rect->GetPosition().x, rect->GetPosition().y + rect->GetSize().y );
+            }
+                break;
+
             case SH_SIMPLE:
                 poly.AddOutline( static_cast<SHAPE_SIMPLE*>( shape.get() )->Vertices() );
                 break;
@@ -377,7 +390,8 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
                 break;
 
             default:
-                wxFAIL_MSG( "BOARD_ADAPTER::createNewPadWithClearance unimplemented shape" );
+                wxFAIL_MSG( "BOARD_ADAPTER::createNewPadWithClearance no implementation for "
+                            + SHAPE_TYPE_asString( shape->Type() ) );
                 break;
             }
         }
@@ -695,6 +709,8 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSe
     break;
 
     default:
+        wxFAIL_MSG( "BOARD_ADAPTER::AddShapeWithClearanceToContainer no implementation for "
+                    + STROKE_T_asString( aDrawSegment->GetShape() ) );
         break;
     }
 }

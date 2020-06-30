@@ -40,6 +40,21 @@ enum PAD_SHAPE_T
                                 // (thick segments, circles, arcs, polygons
 };
 
+static inline wxString PAD_SHAPE_T_asString( PAD_SHAPE_T a )
+{
+    switch( a )
+    {
+    case PAD_SHAPE_CIRCLE:         return "PAD_SHAPE_CIRCLE";
+    case PAD_SHAPE_RECT:           return "PAD_SHAPE_RECT";
+    case PAD_SHAPE_OVAL:           return "PAD_SHAPE_OVAL";
+    case PAD_SHAPE_TRAPEZOID:      return "PAD_SHAPE_TRAPEZOID";
+    case PAD_SHAPE_ROUNDRECT:      return "PAD_SHAPE_ROUNDRECT";
+    case PAD_SHAPE_CHAMFERED_RECT: return "PAD_SHAPE_CHAMFERED_RECT";
+    case PAD_SHAPE_CUSTOM:         return "PAD_SHAPE_CUSTOM";
+    }
+};
+
+
 /**
  * Enum PAD_DRILL_SHAPE_T
  * is the set of pad drill shapes, used with D_PAD::{Set,Get}DrillShape()

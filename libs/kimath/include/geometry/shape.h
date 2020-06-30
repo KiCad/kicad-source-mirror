@@ -25,12 +25,8 @@
 #ifndef __SHAPE_H
 #define __SHAPE_H
 
-#include <assert.h>         // for assert
 #include <sstream>
-#include <stddef.h>         // for NULL
-
 #include <geometry/seg.h>
-
 #include <math/vector2d.h>
 #include <math/box2.h>
 
@@ -51,6 +47,22 @@ enum SHAPE_TYPE
     SH_COMPOUND,        ///> compound shape, consisting of multiple simple shapes
     SH_ARC              ///> circular arc
 };
+
+static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
+{
+    switch( a )
+    {
+    case SH_RECT:       return "SH_RECT";
+    case SH_SEGMENT:    return "SH_SEGMENT";
+    case SH_LINE_CHAIN: return "SH_LINE_CHAIN";
+    case SH_CIRCLE:     return "SH_CIRCLE";
+    case SH_SIMPLE:     return "SH_SIMPLE";
+    case SH_POLY_SET:   return "SH_POLY_SET";
+    case SH_COMPOUND:   return "SH_COMPOUND";
+    case SH_ARC:        return "SH_ARC";
+    }
+}
+
 
 /**
  * SHAPE

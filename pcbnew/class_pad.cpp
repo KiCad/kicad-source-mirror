@@ -314,7 +314,8 @@ void D_PAD::BuildEffectiveShapes() const
         break;
 
     default:
-        wxFAIL_MSG( "D_PAD::buildEffectiveShapes: Unsupported pad shape" );
+        wxFAIL_MSG( "D_PAD::buildEffectiveShapes: Unsupported pad shape: "
+                    + PAD_SHAPE_T_asString( effectiveShape ) );
         break;
     }
 

@@ -938,7 +938,8 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
         break;
 
     default:
-        wxFAIL_MSG( wxT( "Cannot format invalid DRAWSEGMENT type." ) );
+        wxFAIL_MSG( "PCB_IO::format cannot format unknown DRAWSEGMENT shape:"
+                    + STROKE_T_asString( aSegment->GetShape() ) );
         return;
     };
 
@@ -1025,7 +1026,8 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
         break;
 
     default:
-        wxFAIL_MSG( wxT( "Cannot format invalid DRAWSEGMENT type." ) );
+        wxFAIL_MSG( "PCB_IO::format cannot format unknown EDGE_MODULE shape:"
+                    + STROKE_T_asString( aModuleDrawing->GetShape() ) );
         return;
     };
 

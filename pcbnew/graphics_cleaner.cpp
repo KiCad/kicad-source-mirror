@@ -88,7 +88,8 @@ bool GRAPHICS_CLEANER::isNullSegment( DRAWSEGMENT* aSegment )
         return aSegment->GetBezierPoints().empty();
 
     default:
-        wxFAIL_MSG( wxString::Format( "unknown DRAWSEGMENT shape: %d", aSegment->GetShape() ) );
+        wxFAIL_MSG( "GRAPHICS_CLEANER::isNullSegment unsupported DRAWSEGMENT shape: "
+                    + STROKE_T_asString( aSegment->GetShape() ) );
         return false;
     }
 }
@@ -126,7 +127,8 @@ bool GRAPHICS_CLEANER::areEquivalent( DRAWSEGMENT* aSegment1, DRAWSEGMENT* aSegm
                 && aSegment1->GetBezierPoints() == aSegment2->GetBezierPoints();
 
     default:
-        wxFAIL_MSG( wxString::Format( "unknown DRAWSEGMENT shape: %d", aSegment1->GetShape() ) );
+        wxFAIL_MSG( "GRAPHICS_CLEANER::areEquivalent unsupported DRAWSEGMENT shape: "
+                    + STROKE_T_asString( aSegment1->GetShape() ) );
         return false;
     }
 }

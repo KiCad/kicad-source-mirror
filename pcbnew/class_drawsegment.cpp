@@ -219,9 +219,7 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
         break;
 
     default:
-        // un-handled edge transform
-        wxASSERT_MSG( false, wxT( "DRAWSEGMENT::Rotate not implemented for "
-                + ShowShape( m_Shape ) ) );
+        wxFAIL_MSG( "DRAWSEGMENT::Rotate not implemented for " + STROKE_T_asString( m_Shape ) );
         break;
     }
 }
@@ -270,7 +268,13 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         }
         break;
 
+    case S_SEGMENT:
+    case S_RECT:
+    case S_CIRCLE:
+        break;
+
     default:
+        wxFAIL_MSG( "DRAWSEGMENT::Flip not implemented for " + STROKE_T_asString( m_Shape ) );
         break;
     }
 
@@ -318,8 +322,7 @@ const wxPoint DRAWSEGMENT::GetCenter() const
         break;
 
     default:
-        wxASSERT_MSG( false, "DRAWSEGMENT::GetCentre not implemented for shape"
-                + ShowShape( GetShape() ) );
+        wxFAIL_MSG( "DRAWSEGMENT::GetCentre not implemented for " + STROKE_T_asString( m_Shape ) );
         break;
     }
 
@@ -564,6 +567,8 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
         break;
 
     default:
+        wxFAIL_MSG( "DRAWSEGMENT::GetBoundingBox not implemented for "
+                    + STROKE_T_asString( m_Shape ) );
         break;
     }
 
@@ -699,7 +704,8 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         break;
 
     default:
-        wxASSERT_MSG( 0, wxString::Format( "unknown DRAWSEGMENT shape: %d", m_Shape ) );
+        wxFAIL_MSG( "DRAWSEGMENT::HitTest (point) not implemented for "
+                    + STROKE_T_asString( m_Shape ) );
         break;
     }
 
@@ -856,7 +862,8 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 
 
     default:
-        wxASSERT_MSG( 0, wxString::Format( "unknown DRAWSEGMENT shape: %d", m_Shape ) );
+        wxFAIL_MSG( "DRAWSEGMENT::HitTest (rect) not implemented for "
+                    + STROKE_T_asString( m_Shape ) );
         break;
     }
 
