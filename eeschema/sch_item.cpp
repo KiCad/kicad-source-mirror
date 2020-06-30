@@ -166,7 +166,8 @@ void SCH_ITEM::AddConnectionTo( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem )
 }
 
 
-SCH_CONNECTION*  SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet )
+SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet,
+                                                CONNECTION_GRAPH* aGraph )
 {
     if( Connection( aSheet ) )
     {
@@ -178,6 +179,8 @@ SCH_CONNECTION*  SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet )
     auto connection = new SCH_CONNECTION( this );
     connection->SetSheet( aSheet );
     m_connection_map.insert( std::make_pair( aSheet, connection ) );
+    connection->SetGraph( aGraph );
+
     return connection;
 }
 

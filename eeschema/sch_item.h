@@ -38,6 +38,7 @@
 #include <sch_sheet_path.h>
 #include <render_settings.h>
 
+class CONNECTION_GRAPH;
 class SCH_CONNECTION;
 class SCH_SHEET_PATH;
 class SCHEMATIC;
@@ -414,7 +415,7 @@ public:
      *
      * @param aPath is the sheet path to initialize
      */
-    SCH_CONNECTION* InitializeConnection( const SCH_SHEET_PATH& aPath );
+    SCH_CONNECTION* InitializeConnection( const SCH_SHEET_PATH& aPath, CONNECTION_GRAPH* aGraph );
 
     /**
      * Returns true if this item should propagate connection info to aItem

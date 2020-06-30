@@ -305,10 +305,7 @@ void CONNECTION_SUBGRAPH::UpdateItemConnections()
         SCH_CONNECTION* item_conn = item->Connection( m_sheet );
 
         if( !item_conn )
-        {
-            item_conn = item->InitializeConnection( m_sheet );
-            item_conn->SetGraph( m_graph );
-        }
+            item_conn = item->InitializeConnection( m_sheet, m_graph );
 
         if( ( m_driver_connection->IsBus() && item_conn->IsNet() ) ||
             ( m_driver_connection->IsNet() && item_conn->IsBus() ) )
@@ -444,7 +441,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
             {
                 if( !pin->Connection( aSheet ) )
-                    pin->InitializeConnection( aSheet )->SetGraph( this );
+                    pin->InitializeConnection( aSheet, this );
 
                 pin->ConnectedItems( aSheet ).clear();
                 pin->Connection( aSheet )->Reset();
@@ -466,7 +463,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
 
             for( SCH_PIN* pin : component->GetSchPins( &aSheet ) )
             {
-                pin->InitializeConnection( aSheet )->SetGraph( this );
+                pin->InitializeConnection( aSheet, this );
 
                 wxPoint pos = pin->GetPosition();
 
@@ -486,8 +483,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
         else
         {
             m_items.insert( item );
-            auto conn = item->InitializeConnection( aSheet );
-            conn->SetGraph( this );
+            auto conn = item->InitializeConnection( aSheet, this );
 
             // Set bus/net property here so that the propagation code uses it
             switch( item->Type() )
@@ -688,10 +684,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                             auto* conn = aItem->Connection( sheet );
 
                             if( !conn )
-                            {
-                                conn = aItem->InitializeConnection( sheet );
-                                conn->SetGraph( this );
-                            }
+                                conn = aItem->InitializeConnection( sheet, this );
 
                             return ( conn->SubgraphCode() == 0 );
                         };
@@ -936,10 +929,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         SCH_CONNECTION* connection = pin->Connection( sheet );
 
         if( !connection )
-        {
-            connection = pin->InitializeConnection( sheet );
-            connection->SetGraph( this );
-        }
+            connection = pin->InitializeConnection( sheet, this );
 
         // If this pin already has a subgraph, don't need to process
         if( connection->SubgraphCode() > 0 )
