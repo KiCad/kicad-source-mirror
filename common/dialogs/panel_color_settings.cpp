@@ -79,6 +79,15 @@ void PANEL_COLOR_SETTINGS::OnBtnResetClicked( wxCommandEvent& event )
 }
 
 
+void PANEL_COLOR_SETTINGS::OnLeftDownTheme( wxMouseEvent& event )
+{
+    // Lazy rebuild of theme menu to catch any colour theme changes made in other panels
+    wxString sel = m_cbTheme->GetStringSelection();
+    createThemeList( sel );
+
+    event.Skip();
+}
+
 void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 {
     int idx = m_cbTheme->GetSelection();

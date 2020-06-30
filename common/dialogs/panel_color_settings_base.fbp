@@ -188,6 +188,7 @@
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
                                 <event name="OnChoice">OnThemeChanged</event>
+                                <event name="OnLeftDown">OnLeftDownTheme</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">

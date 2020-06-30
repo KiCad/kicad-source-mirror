@@ -48,6 +48,7 @@ protected:
 
     void OnBtnResetClicked( wxCommandEvent& aEvent ) override;
 
+    void OnLeftDownTheme( wxMouseEvent& event ) override;
     void OnThemeChanged( wxCommandEvent& aEvent ) override;
 
     void ShowColorContextMenu( wxMouseEvent& aEvent, int aLayer );

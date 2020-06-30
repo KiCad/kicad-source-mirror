@@ -50,6 +50,7 @@ class PANEL_COLOR_SETTINGS_BASE : public wxPanel
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnThemeChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLeftDownTheme( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnOverrideItemColorsClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBtnResetClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBtnOpenThemeFolderClicked( wxCommandEvent& event ) { event.Skip(); }
