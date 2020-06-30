@@ -169,13 +169,13 @@ void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
     // Note that we can't do this on OSX as it tends to provoke Apple's
     // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
     // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
-    if( m_fieldId == REFERENCE || m_fieldId == VALUE )
+    if( m_fieldId == REFERENCE || m_fieldId == VALUE || m_fieldId == SHEETNAME_V )
         m_TextCtrl->Update();
 #endif
 
     if( m_fieldId == REFERENCE )
         SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextCtrl ) );
-    else if( m_fieldId == VALUE )
+    else if( m_fieldId == VALUE || m_fieldId == SHEETNAME_V )
         m_TextCtrl->SetSelection( -1, -1 );
 
     event.Skip();
