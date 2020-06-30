@@ -541,6 +541,11 @@ int ZONE_CONTAINER::GetLocalClearance( wxString* aSource ) const
 
 bool ZONE_CONTAINER::HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint& aRefPos ) const
 {
+    // Keepouts have no filled area, but it's generally nice to treat their interior as if it were
+    // filled so that people don't have to select keepouts by their outline (which is min-width)
+    if( GetIsKeepout() )
+        return m_Poly->Contains( VECTOR2I( aRefPos.x, aRefPos.y ) );
+
     if( !m_FilledPolysList.count( aLayer ) )
         return false;
 
