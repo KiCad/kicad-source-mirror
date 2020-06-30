@@ -198,13 +198,13 @@ bool ZONE_CONTAINER::UnFill()
 {
     bool change = false;
 
-    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+    for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
     {
         change |= !pair.second.IsEmpty();
         pair.second.RemoveAllContours();
     }
 
-    for( std::pair<PCB_LAYER_ID, ZONE_SEGMENT_FILL> pair : m_FillSegmList )
+    for( std::pair<const PCB_LAYER_ID, ZONE_SEGMENT_FILL>& pair : m_FillSegmList )
     {
         change |= !pair.second.empty();
         pair.second.clear();
@@ -721,10 +721,10 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 
     Hatch();
 
-    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+    for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Move( offset );
 
-    for( std::pair<PCB_LAYER_ID, ZONE_SEGMENT_FILL> pair : m_FillSegmList )
+    for( std::pair<const PCB_LAYER_ID, ZONE_SEGMENT_FILL>& pair : m_FillSegmList )
     {
         for( SEG& seg : pair.second )
         {
@@ -760,10 +760,10 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
     Hatch();
 
     /* rotate filled areas: */
-    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+    for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Rotate( angle, VECTOR2I( centre ) );
 
-    for( std::pair<PCB_LAYER_ID, ZONE_SEGMENT_FILL> pair : m_FillSegmList )
+    for( std::pair<const PCB_LAYER_ID, ZONE_SEGMENT_FILL>& pair : m_FillSegmList )
     {
         for( SEG& seg : pair.second )
         {
@@ -797,10 +797,10 @@ void ZONE_CONTAINER::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
 
     Hatch();
 
-    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+    for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
 
-    for( std::pair<PCB_LAYER_ID, ZONE_SEGMENT_FILL> pair : m_FillSegmList )
+    for( std::pair<const PCB_LAYER_ID, ZONE_SEGMENT_FILL>& pair : m_FillSegmList )
     {
         for( SEG& seg : pair.second )
         {
@@ -1146,7 +1146,7 @@ void ZONE_CONTAINER::SwapData( BOARD_ITEM* aImage )
 
 void ZONE_CONTAINER::CacheTriangulation()
 {
-    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+    for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.CacheTriangulation();
 }
 
@@ -1255,7 +1255,7 @@ double ZONE_CONTAINER::CalculateFilledArea()
 
     // Iterate over each outline polygon in the zone and then iterate over
     // each hole it has to compute the total area.
-    for( std::pair<PCB_LAYER_ID, SHAPE_POLY_SET> pair : m_FilledPolysList )
+    for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
     {
         SHAPE_POLY_SET& poly = pair.second;
 

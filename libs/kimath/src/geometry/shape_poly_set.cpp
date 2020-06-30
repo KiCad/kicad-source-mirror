@@ -1552,6 +1552,8 @@ void SHAPE_POLY_SET::Rotate( double aAngle, const VECTOR2I& aCenter )
         for( SHAPE_LINE_CHAIN& path : poly )
             path.Rotate( aAngle, aCenter );
     }
+
+    CacheTriangulation();
 }
 
 
