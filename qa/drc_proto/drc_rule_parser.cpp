@@ -33,11 +33,10 @@
 
 #include <pcb_expr_evaluator.h>
 
-using namespace DRCRULE_T;
-
+using namespace DRCRULEPROTO_T;
 
 test::DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename )
-        : DRC_RULES_LEXER( aFile, aFilename ),
+        : DRC_RULES_PROTO_LEXER( aFile, aFilename ),
           m_board( aBoard ),
           m_requiredVersion( 0 ),
           m_tooRecent( false )
@@ -61,6 +60,8 @@ void test::DRC_RULES_PARSER::Parse(
             Expecting( T_LEFT );
 
         token = NextTok();
+
+        printf("TOK %d %d\n", token, T_version );
 
         if( !haveVersion && token != T_version )
             Expecting( "version" );

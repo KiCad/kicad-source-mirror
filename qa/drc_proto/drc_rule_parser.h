@@ -28,7 +28,7 @@
 #include <netclass.h>
 #include <layers_id_colors_and_visibility.h>
 #include <drc_proto/drc_rule.h>
-#include <drc_rules_lexer.h>
+#include <drc_rules_proto_lexer.h>
 
 class BOARD_ITEM;
 
@@ -40,7 +40,7 @@ class DRC_RULE;
 
 #define DRC_RULE_FILE_VERSION      20200610
 
-class DRC_RULES_PARSER : public DRC_RULES_LEXER
+class DRC_RULES_PARSER : public DRC_RULES_PROTO_LEXER
 {
 public:
     DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename );
