@@ -63,7 +63,7 @@ void ZOOM_MENU::update()
 
     const std::vector<double>& zoomList = m_parent->config()->m_Window.zoom_factors;
 
-    for( int i = 0; i < zoomList.size(); ++i )
+    for( size_t i = 0; i < zoomList.size(); ++i )
     {
         // Search for a value near the current zoom setting:
         double rel_error = std::fabs( zoomList[i] - zoom ) / zoom;

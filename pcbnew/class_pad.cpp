@@ -253,9 +253,15 @@ void D_PAD::BuildEffectiveShapes() const
         break;
 
     case PAD_SHAPE_RECT:
-        if( (int) m_Orient % 900 == 0 )
+        if( m_Orient == 0 || m_Orient == 1800 )
         {
             add( new SHAPE_RECT( shapePos - m_Size / 2, m_Size.x, m_Size.y ) );
+            break;
+        }
+        else if( m_Orient == 900 || m_Orient == -900 )
+        {
+            wxSize rot_size( m_Size.y, m_Size.x );
+            add( new SHAPE_RECT( shapePos - rot_size / 2, rot_size.x, rot_size.y ) );
             break;
         }
 
