@@ -100,7 +100,9 @@ void ZONE_FILLER::InstallNewProgressReporter( wxWindow* aParent, const wxString&
 
 bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck )
 {
-    std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> toFill;
+    std::vector<std::pair<ZONE_CONTAINER*, PCB_LAYER_ID>> toFill;
+    std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> islandsList;
+
     auto connectivity = m_board->GetConnectivity();
     bool filledPolyWithOutline = not m_board->GetDesignSettings().m_ZoneUseNoOutlineInFill;
 
@@ -112,7 +114,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     if( m_progressReporter )
     {
         m_progressReporter->Report( aCheck ? _( "Checking zone fills..." ) : _( "Building zone fills..." ) );
-        m_progressReporter->SetMaxProgress( toFill.size() );
+        m_progressReporter->SetMaxProgress( aZones.size() );
     }
 
     // The board outlines is used to clip solid areas inside the board (when outlines are valid)
@@ -145,8 +147,10 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             zone->BuildHashValue( layer );
 
             // Add the zone to the list of zones to test or refill
-            toFill.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST( zone, layer ) );
+            toFill.emplace_back( std::make_pair( zone, layer ) );
         }
+
+        islandsList.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST( zone ) );
 
         // Remove existing fill first to prevent drawing invalid polygons
         // on some platforms
@@ -164,13 +168,15 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
         for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
         {
-            PCB_LAYER_ID    layer = toFill[i].m_layer;
-            ZONE_CONTAINER* zone  = toFill[i].m_zone;
+            PCB_LAYER_ID    layer = toFill[i].second;
+            ZONE_CONTAINER* zone  = toFill[i].first;
 
             zone->SetFilledPolysUseThickness( filledPolyWithOutline );
 
             SHAPE_POLY_SET rawPolys, finalPolys;
             fillSingleZone( zone, layer, rawPolys, finalPolys );
+
+            std::unique_lock<std::mutex> zoneLock( zone->GetLock() );
 
             zone->SetRawPolysList( layer, rawPolys );
             zone->SetFilledPolysList( layer, finalPolys );
@@ -215,68 +221,70 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     }
 
     connectivity->SetProgressReporter( m_progressReporter );
-    connectivity->FindIsolatedCopperIslands( toFill );
+    connectivity->FindIsolatedCopperIslands( islandsList );
 
     // Now remove insulated copper islands and islands outside the board edge
     bool outOfDate = false;
 
-    for( auto& zone : toFill )
+    for( auto& zone : islandsList )
     {
-        std::sort( zone.m_islands.begin(), zone.m_islands.end(), std::greater<int>() );
-        SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList( zone.m_layer );
-
-        long long int       minArea = zone.m_zone->GetMinIslandArea();
-        ISLAND_REMOVAL_MODE mode    = zone.m_zone->GetIslandRemovalMode();
-
-        // Remove solid areas outside the board cutouts and the insulated islands
-        // only zones with net code > 0 can have insulated islands by definition
-        if( zone.m_zone->GetNetCode() > 0 )
+        for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
         {
-            // solid areas outside the board cutouts are also removed, because they are usually
-            // insulated islands
-            for( auto idx : zone.m_islands )
-            {
-                #if 0   // for tests only
-                double metricMin = minArea * ( MM_PER_IU * MM_PER_IU );
-                double metricArea = poly.Outline( idx ).Area() * ( MM_PER_IU * MM_PER_IU );
-                std::cout << ( metricArea < metricMin ) << std::endl;
-                #endif
+            if( !zone.m_islands.count( layer ) )
+                continue;
 
-                if( mode == ISLAND_REMOVAL_MODE::ALWAYS
-                        || ( mode == ISLAND_REMOVAL_MODE::AREA
-                                && poly.Outline( idx ).Area() < minArea )
-                        || !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
-                    poly.DeletePolygon( idx );
-                else
-                    zone.m_zone->SetIsIsland( zone.m_layer, idx );
-            }
-        }
-        // Zones with no net can have areas outside the board cutouts.
-        // By definition, Zones with no net have no isolated island
-        // (in fact all filled areas are isolated islands)
-        // but they can have some areas outside the board cutouts.
-        // A filled area outside the board cutouts has all points outside cutouts,
-        // so we only need to check one point for each filled polygon.
-        // Note also non copper zones are already clipped
-        else if( m_brdOutlinesValid && zone.m_zone->IsOnCopperLayer() )
-        {
-            for( int idx = 0; idx < poly.OutlineCount(); )
+            std::vector<int>& islands = zone.m_islands.at( layer );
+
+            std::sort( islands.begin(), islands.end(), std::greater<int>() );
+            SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList( layer );
+
+            long long int       minArea = zone.m_zone->GetMinIslandArea();
+            ISLAND_REMOVAL_MODE mode    = zone.m_zone->GetIslandRemovalMode();
+
+            // Remove solid areas outside the board cutouts and the insulated islands
+            // only zones with net code > 0 can have insulated islands by definition
+            if( zone.m_zone->GetNetCode() > 0 )
             {
-                if( poly.Polygon( idx ).empty()
-                        || !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
+                // solid areas outside the board cutouts are also removed, because they are usually
+                // insulated islands
+                for( auto idx : islands )
                 {
-                    poly.DeletePolygon( idx );
+                    if( mode == ISLAND_REMOVAL_MODE::ALWAYS
+                            || ( mode == ISLAND_REMOVAL_MODE::AREA
+                                    && poly.Outline( idx ).Area() < minArea )
+                            || !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
+                        poly.DeletePolygon( idx );
+                    else
+                        zone.m_zone->SetIsIsland( layer, idx );
                 }
-                else
-                    idx++;
             }
+            // Zones with no net can have areas outside the board cutouts.
+            // By definition, Zones with no net have no isolated island
+            // (in fact all filled areas are isolated islands)
+            // but they can have some areas outside the board cutouts.
+            // A filled area outside the board cutouts has all points outside cutouts,
+            // so we only need to check one point for each filled polygon.
+            // Note also non copper zones are already clipped
+            else if( m_brdOutlinesValid && zone.m_zone->IsOnCopperLayer() )
+            {
+                for( int idx = 0; idx < poly.OutlineCount(); )
+                {
+                    if( poly.Polygon( idx ).empty()
+                            || !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
+                    {
+                        poly.DeletePolygon( idx );
+                    }
+                    else
+                        idx++;
+                }
+            }
+
+            zone.m_zone->SetFilledPolysList( layer, poly );
+            zone.m_zone->CalculateFilledArea();
+
+            if( aCheck && zone.m_zone->GetHashValue( layer ) != poly.GetHash() )
+                outOfDate = true;
         }
-
-        zone.m_zone->SetFilledPolysList( zone.m_layer, poly );
-        zone.m_zone->CalculateFilledArea();
-
-        if( aCheck && zone.m_zone->GetHashValue( zone.m_layer ) != poly.GetHash() )
-            outOfDate = true;
     }
 
     if( aCheck && outOfDate )
@@ -312,9 +320,9 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     {
         size_t num = 0;
 
-        for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
+        for( size_t i = nextItem++; i < islandsList.size(); i = nextItem++ )
         {
-            toFill[i].m_zone->CacheTriangulation();
+            islandsList[i].m_zone->CacheTriangulation();
             num++;
 
             if( m_progressReporter )
@@ -361,7 +369,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     else
     {
         for( auto& i : toFill )
-            connectivity->Update( i.m_zone );
+            connectivity->Update( i.first );
 
         connectivity->RecalculateRatsnest();
     }

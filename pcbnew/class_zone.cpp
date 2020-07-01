@@ -87,6 +87,10 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
     m_Poly = new SHAPE_POLY_SET( *aOther.m_Poly );
 
     m_isKeepout = aOther.m_isKeepout;
+    SetLayerSet( aOther.GetLayerSet() );
+
+    m_zoneName         = aOther.m_zoneName;
+    m_IsFilled         = aOther.m_IsFilled;
     m_CornerSelection  = nullptr; // for corner moving, corner index to (null if no selection)
     m_ZoneClearance    = aOther.m_ZoneClearance;            // clearance value
     m_ZoneMinThickness = aOther.m_ZoneMinThickness;
@@ -99,19 +103,20 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
     SetHatchPitch( aOther.GetHatchPitch() );
     m_HatchLines = aOther.m_HatchLines;     // copy vector <SEG>
 
-    m_FilledPolysList = aOther.m_FilledPolysList;
-    m_RawPolysList = aOther.m_RawPolysList;
-    m_filledPolysHash = aOther.m_filledPolysHash;
-    m_FillSegmList = aOther.m_FillSegmList;      // vector <> copy
-    m_insulatedIslands = aOther.m_insulatedIslands;
+    for( PCB_LAYER_ID layer : aOther.GetLayerSet().Seq() )
+    {
+        m_FilledPolysList[layer]  = aOther.m_FilledPolysList.at( layer );
+        m_RawPolysList[layer]     = aOther.m_RawPolysList.at( layer );
+        m_filledPolysHash[layer]  = aOther.m_filledPolysHash.at( layer );
+        m_FillSegmList[layer]     = aOther.m_FillSegmList.at( layer ); // vector <> copy
+        m_insulatedIslands[layer] = aOther.m_insulatedIslands.at( layer );
+    }
 
     m_HatchFillTypeThickness = aOther.m_HatchFillTypeThickness;
     m_HatchFillTypeGap = aOther.m_HatchFillTypeGap;
     m_HatchFillTypeOrientation = aOther.m_HatchFillTypeOrientation;
     m_HatchFillTypeSmoothingLevel = aOther.m_HatchFillTypeSmoothingLevel;
     m_HatchFillTypeSmoothingValue = aOther.m_HatchFillTypeSmoothingValue;
-
-    SetLayerSet( aOther.GetLayerSet() );
 
     return *this;
 }
@@ -137,6 +142,8 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_isKeepout = aZone.m_isKeepout;
     SetLayerSet( aZone.GetLayerSet() );
 
+    m_zoneName = aZone.m_zoneName;
+
     m_Poly = new SHAPE_POLY_SET( *aZone.m_Poly );
 
     // For corner moving, corner index to drag, or nullptr if no selection
@@ -151,11 +158,15 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_PadConnection = aZone.m_PadConnection;
     m_ThermalReliefGap = aZone.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
-    m_FilledPolysList = aZone.m_FilledPolysList;
-    m_RawPolysList = aZone.m_RawPolysList;
-    m_filledPolysHash = aZone.m_filledPolysHash;
-    m_FillSegmList = aZone.m_FillSegmList;      // vector <> copy
-    m_insulatedIslands = aZone.m_insulatedIslands;
+
+    for( PCB_LAYER_ID layer : aZone.GetLayerSet().Seq() )
+    {
+        m_FilledPolysList[layer]  = aZone.m_FilledPolysList.at( layer );
+        m_RawPolysList[layer]     = aZone.m_RawPolysList.at( layer );
+        m_filledPolysHash[layer]  = aZone.m_filledPolysHash.at( layer );
+        m_FillSegmList[layer]     = aZone.m_FillSegmList.at( layer ); // vector <> copy
+        m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
+    }
 
     m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;
     m_doNotAllowVias = aZone.m_doNotAllowVias;
@@ -266,6 +277,12 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
         SetNeedRefill( true );
 
         UnFill();
+
+        m_FillSegmList.clear();
+        m_FilledPolysList.clear();
+        m_RawPolysList.clear();
+        m_filledPolysHash.clear();
+        m_insulatedIslands.clear();
 
         for( PCB_LAYER_ID layer : aLayerSet.Seq() )
         {

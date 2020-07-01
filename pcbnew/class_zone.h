@@ -30,6 +30,7 @@
 #define CLASS_ZONE_H_
 
 
+#include <mutex>
 #include <vector>
 #include <gr_basic.h>
 #include <class_board_item.h>
@@ -174,6 +175,11 @@ public:
     double GetFilledArea()
     {
         return m_area;
+    }
+
+    std::mutex& GetLock()
+    {
+        return m_lock;
     }
 
     bool IsFilled() const { return m_IsFilled; }
@@ -929,6 +935,9 @@ protected:
     bool                  m_hv45;           // constrain edges to horizontal, vertical or 45º
 
     double                m_area;           // The filled zone area
+
+    /// Lock used for multi-threaded filling on multi-layer zones
+    std::mutex m_lock;
 };
 
 

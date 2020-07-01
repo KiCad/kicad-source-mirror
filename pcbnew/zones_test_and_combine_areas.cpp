@@ -127,7 +127,7 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
             if( curr_area->GetIsKeepout() != area2->GetIsKeepout() )
                 continue;
 
-            if( curr_area->GetLayer() != area2->GetLayer() )
+            if( curr_area->GetLayerSet() != area2->GetLayerSet() )
                 continue;
 
             BOX2I b2 = area2->Outline()->BBox();

@@ -129,7 +129,8 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
             continue;
         }
 
-        if( zone->IsFilled() )
+        // aZone won't be filled if the layer set was modified, but it needs to be updated
+        if( zone->IsFilled() || zone == aZone )
             zones_to_refill.push_back( zone );
     }
 

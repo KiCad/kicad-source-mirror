@@ -62,7 +62,7 @@
 bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
 {
     // compare basic parameters:
-    if( GetLayer() != aZoneToCompare.GetLayer() )
+    if( GetLayerSet() != aZoneToCompare.GetLayerSet() )
         return false;
 
     if( GetNetCode() != aZoneToCompare.GetNetCode() )
@@ -111,6 +111,15 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     if( m_ThermalReliefCopperBridge != aZoneToCompare.m_ThermalReliefCopperBridge )
         return false;
 
+    if( m_zoneName != aZoneToCompare.m_zoneName )
+        return false;
+
+    if( m_islandRemovalMode != aZoneToCompare.m_islandRemovalMode )
+        return false;
+
+    if( m_minIslandArea != aZoneToCompare.m_minIslandArea )
+        return false;
+
 
     // Compare outlines
     wxASSERT( m_Poly );                                      // m_Poly == NULL Should never happen
@@ -149,7 +158,7 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
         if( aNetCode >= 0 && aNetCode != zone->GetNetCode() )
             continue;
 
-        if( aLayer >= 0 && aLayer != zone->GetLayer() )
+        if( aLayer >= 0 && !zone->GetLayerSet().test( aLayer ) )
             continue;
 
         ZONE_CONTAINER* zoneDup = new ZONE_CONTAINER( *zone );
