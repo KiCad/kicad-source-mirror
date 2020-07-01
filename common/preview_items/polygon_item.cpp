@@ -31,7 +31,7 @@
 
 using namespace KIGFX::PREVIEW;
 
-const double POLYGON_ITEM::POLY_LINE_WIDTH = 150000.0;
+const double POLYGON_ITEM::POLY_LINE_WIDTH = 1;
 
 POLYGON_ITEM::POLYGON_ITEM():
         SIMPLE_OVERLAY_ITEM()
@@ -61,7 +61,7 @@ void POLYGON_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
     auto& gal = *aView->GetGAL();
     auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
-    gal.SetLineWidth( POLY_LINE_WIDTH );
+    gal.SetLineWidth( (float) aView->ToWorld( POLY_LINE_WIDTH ) );
     gal.DrawPolyline( m_lockedChain );
 
     // draw the leader line in a different color
