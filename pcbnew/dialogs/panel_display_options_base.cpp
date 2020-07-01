@@ -75,7 +75,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 
 	m_checkCrossProbeCenter = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Center view on cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeCenter->SetValue(true);
-	sbSizer3->Add( m_checkCrossProbeCenter, 0, wxALL, 5 );
+	sbSizer3->Add( m_checkCrossProbeCenter, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkCrossProbeZoom = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Zoom to fit cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeZoom->SetValue(true);
@@ -96,7 +96,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	pcbOptionsSizer->Fit( pcbPage );
 	m_optionsBook->AddPage( pcbPage, _("a page"), false );
 
-	bupperSizer->Add( m_optionsBook, 1, wxEXPAND | wxALL, 5 );
+	bupperSizer->Add( m_optionsBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( bupperSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
