@@ -36,6 +36,7 @@
 #include <plugins/altium/altium_circuit_studio_plugin.h>
 #include <plugins/altium/altium_designer_plugin.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
+#include <plugins/fabmaster/fabmaster_plugin.h>
 #include <wildcards_and_files_ext.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
@@ -192,6 +193,8 @@ static IO_MGR::REGISTER_PLUGIN registerKicadPlugin( IO_MGR::KICAD_SEXP,
                                                     wxT("KiCad"), []() -> PLUGIN* { return new PCB_IO; } );
 static IO_MGR::REGISTER_PLUGIN registerPcadPlugin( IO_MGR::PCAD, wxT("P-Cad"),
                                                    []() -> PLUGIN* { return new PCAD_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerFabmasterPlugin( IO_MGR::FABMASTER, wxT( "Fabmaster" ),
+                                                   []() -> PLUGIN* { return new FABMASTER_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerAltiumDesignerPlugin( IO_MGR::ALTIUM_DESIGNER,
         wxT( "Altium Designer" ), []() -> PLUGIN* { return new ALTIUM_DESIGNER_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitStudioPlugin( IO_MGR::ALTIUM_CIRCUIT_STUDIO,

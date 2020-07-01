@@ -96,7 +96,8 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
         { AltiumDesignerPcbFileWildcard(),      IO_MGR::ALTIUM_DESIGNER },       // Import Altium Designer board files
         { CadstarPcbArchiveFileWildcard(),      IO_MGR::CADSTAR_PCB_ARCHIVE },   // Import Cadstar PCB Archive board files
         { EaglePcbFileWildcard(),               IO_MGR::EAGLE },                 // Import Eagle board files
-        { PCadPcbFileWildcard(),                IO_MGR::PCAD }                   // Import PCAD board files
+        { PCadPcbFileWildcard(),                IO_MGR::PCAD },                  // Import PCAD board files
+        { FabmasterPcbFileWildcard(),           IO_MGR::FABMASTER },             // Import Fabmaster board files
     };
     // clang-format on
 
@@ -469,6 +470,10 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
     else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::CADSTAR_PCB_ARCHIVE ) ) == 0 )
     {
         pluginType = IO_MGR::CADSTAR_PCB_ARCHIVE;
+    }
+    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::FABMASTER ) ) == 0 )
+    {
+        pluginType = IO_MGR::FABMASTER;
     }
     else
     {

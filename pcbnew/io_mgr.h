@@ -55,6 +55,7 @@ public:
         KICAD_SEXP, ///< S-expression Pcbnew file format.
         EAGLE,
         PCAD,
+        FABMASTER,
         ALTIUM_DESIGNER,
         ALTIUM_CIRCUIT_STUDIO,
         ALTIUM_CIRCUIT_MAKER,
