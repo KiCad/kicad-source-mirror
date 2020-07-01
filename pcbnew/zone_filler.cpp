@@ -236,10 +236,11 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             // insulated islands
             for( auto idx : zone.m_islands )
             {
+                #if 0   // for tests only
                 double metricMin = minArea * ( MM_PER_IU * MM_PER_IU );
                 double metricArea = poly.Outline( idx ).Area() * ( MM_PER_IU * MM_PER_IU );
-
                 std::cout << ( metricArea < metricMin ) << std::endl;
+                #endif
 
                 if( mode == ISLAND_REMOVAL_MODE::ALWAYS
                         || ( mode == ISLAND_REMOVAL_MODE::AREA
