@@ -939,7 +939,7 @@ void POINT_EDITOR::updatePoints()
             int target = locked ? 0 : 2;
 
             // Careful; pad shape is mutable...
-            if( m_editPoints->PointsSize() != target )
+            if( int( m_editPoints->PointsSize() ) != target )
             {
                 getView()->Remove( m_editPoints.get() );
                 m_editedPoint = nullptr;
@@ -967,7 +967,7 @@ void POINT_EDITOR::updatePoints()
             // Careful; pad shape and orientation are mutable...
             int target = locked || (int) pad->GetOrientation() % 900 > 0 ? 0 : 4;
 
-            if( m_editPoints->PointsSize() != target )
+            if( int( m_editPoints->PointsSize() ) != target )
             {
                 getView()->Remove( m_editPoints.get() );
                 m_editedPoint = nullptr;
