@@ -334,9 +334,16 @@ void D_PAD::BuildEffectiveShapes() const
         add( poly );
     }
 
-    // Bounding radius
+    // Bounding box and radius
     //
     m_effectiveBoundingRadius = calcBoundingRadius();
+
+    for( const std::shared_ptr<SHAPE>& shape : m_effectiveShapes )
+    {
+        BOX2I r = shape->BBox();
+        m_effectiveBoundingBox.Merge( EDA_RECT( (wxPoint) r.GetOrigin(),
+                                                wxSize( r.GetWidth(), r.GetHeight() ) ) );
+    }
 
     // Hole shape
     //
@@ -357,15 +364,10 @@ void D_PAD::BuildEffectiveShapes() const
 
 const EDA_RECT D_PAD::GetBoundingBox() const
 {
-    EDA_RECT bbox;
+    if( m_shapesDirty )
+        BuildEffectiveShapes();
 
-    for( const std::shared_ptr<SHAPE>& shape : GetEffectiveShapes() )
-    {
-        BOX2I r = shape->BBox();
-        bbox.Merge( EDA_RECT( (wxPoint) r.GetOrigin(), wxSize( r.GetWidth(), r.GetHeight() ) ) );
-    }
-
-    return bbox;
+    return m_effectiveBoundingBox;
 }
 
 
@@ -1098,14 +1100,14 @@ unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
-        int divisor = GetBoundingRadius();
+        int divisor = std::min( GetBoundingBox().GetWidth(), GetBoundingBox().GetHeight() );
 
         // Pad sizes can be zero briefly when someone is typing a number like "0.5"
         // in the pad properties dialog
         if( divisor == 0 )
             return HIDE;
 
-        return ( Millimeter2iu( 10 ) / divisor );
+        return ( Millimeter2iu( 5 ) / divisor );
     }
 
     // Other layers are shown without any conditions

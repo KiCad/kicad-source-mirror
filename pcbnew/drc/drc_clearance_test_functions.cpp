@@ -24,77 +24,16 @@
  */
 
 #include <fctsys.h>
-#include <pcb_edit_frame.h>
 #include <trigo.h>
-#include <pcbnew.h>
 #include <drc/drc.h>
 #include <class_board.h>
-#include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
 #include <class_drawsegment.h>
 #include <class_marker_pcb.h>
 #include <math_for_graphics.h>
 #include <geometry/polygon_test_point_inside.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <board_commit.h>
-#include <math/util.h>      // for KiROUND
 #include <geometry/shape_rect.h>
-#include <macros.h>
-
-
-/**
- * compare 2 convex polygons and return true if distance > aDist (if no error DRC)
- * i.e if for each edge of the first polygon distance from each edge of the other polygon
- * is >= aDist
- */
-bool poly2polyDRC( wxPoint* aTref, int aTrefCount, wxPoint* aTtest, int aTtestCount,
-                   int aAllowedDist, int* actualDist )
-{
-    /* Test if one polygon is contained in the other and thus the polygon overlap.
-     * This case is not covered by the following check if one polygone is
-     * completely contained in the other (because edges don't intersect)!
-     */
-    if( TestPointInsidePolygon( aTref, aTrefCount, aTtest[0] ) )
-    {
-        *actualDist = 0;
-        return false;
-    }
-
-    if( TestPointInsidePolygon( aTtest, aTtestCount, aTref[0] ) )
-    {
-        *actualDist = 0;
-        return false;
-    }
-
-    for( int ii = 0, jj = aTrefCount - 1; ii < aTrefCount; jj = ii, ii++ )
-    {
-        // for all edges in aTref
-        for( int kk = 0, ll = aTtestCount - 1; kk < aTtestCount; ll = kk, kk++ )
-        {
-            // for all edges in aTtest
-            double d;
-            int    intersect = TestForIntersectionOfStraightLineSegments(
-                                        aTref[ii].x, aTref[ii].y, aTref[jj].x, aTref[jj].y,
-                                        aTtest[kk].x, aTtest[kk].y, aTtest[ll].x, aTtest[ll].y,
-                                        nullptr, nullptr, &d );
-
-            if( intersect )
-            {
-                *actualDist = 0;
-                return false;
-            }
-
-            if( d < aAllowedDist )
-            {
-                *actualDist = KiROUND( d );
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
 
 
 /*

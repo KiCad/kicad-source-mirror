@@ -620,6 +620,7 @@ private:
 
     mutable bool                                m_shapesDirty;
     mutable int                                 m_effectiveBoundingRadius;
+    mutable EDA_RECT                            m_effectiveBoundingBox;
     mutable std::vector<std::shared_ptr<SHAPE>> m_effectiveShapes;
     mutable std::shared_ptr<SHAPE_SEGMENT>      m_effectiveHoleShape;
 
