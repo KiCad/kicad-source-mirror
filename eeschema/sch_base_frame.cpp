@@ -132,20 +132,6 @@ const wxSize SCH_BASE_FRAME::GetPageSizeIU() const
 }
 
 
-const wxPoint& SCH_BASE_FRAME::GetAuxOrigin() const
-{
-    wxASSERT( GetScreen() );
-    return GetScreen()->GetAuxOrigin();
-}
-
-
-void SCH_BASE_FRAME::SetAuxOrigin( const wxPoint& aPosition )
-{
-    wxASSERT( GetScreen() );
-    GetScreen()->SetAuxOrigin( aPosition );
-}
-
-
 const TITLE_BLOCK& SCH_BASE_FRAME::GetTitleBlock() const
 {
     wxASSERT( GetScreen() );

@@ -65,9 +65,8 @@ private:
 
 public:
     // Constructor and destructor
-    DIALOG_MOVE_EXACT(PCB_BASE_FRAME *aParent, wxPoint& aTranslate,
-                      double& aRotate, ROTATION_ANCHOR& aAnchor,
-                      const EDA_RECT& aBbox);
+    DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTranslate, double& aRotate,
+                       ROTATION_ANCHOR& aAnchor, const EDA_RECT& aBbox );
     ~DIALOG_MOVE_EXACT() { };
 
 private:

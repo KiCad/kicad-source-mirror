@@ -230,7 +230,7 @@ void DIALOG_POSITION_RELATIVE::OnUseGridOriginClick( wxCommandEvent& event )
 {
     BOARD* board = (BOARD*) m_toolMgr->GetModel();
 
-    m_anchor_position = board->GetGridOrigin();
+    m_anchor_position = board->GetDesignSettings().m_GridOrigin;
     m_referenceInfo->SetLabel( _( "Reference location: grid origin" ) );
 }
 

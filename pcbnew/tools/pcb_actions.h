@@ -408,6 +408,7 @@ public:
     static TOOL_ACTION highlightNetSelection;
     static TOOL_ACTION highlightItem;
     static TOOL_ACTION drillOrigin;
+    static TOOL_ACTION placeFileOrigin;
     static TOOL_ACTION appendBoard;
     static TOOL_ACTION showEeschema;
     static TOOL_ACTION boardStatistics;

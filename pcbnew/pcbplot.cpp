@@ -341,7 +341,7 @@ void AddGerberX2Header( PLOTTER * aPlotter,
     // Please, if absolute Pcbnew coordinates, one day, are set by user, change the way
     // the key is built to ensure file only using the *same* axis have the same key.
     wxString registration_id = "Original";
-    wxPoint auxOrigin = aBoard->GetAuxOrigin();
+    wxPoint auxOrigin = aBoard->GetDesignSettings().m_AuxOrigin;
 
     if( aBoard->GetPlotOptions().GetUseAuxOrigin() && auxOrigin.x && auxOrigin.y )
         registration_id.Printf( "PX%xPY%x", auxOrigin.x, auxOrigin.y );

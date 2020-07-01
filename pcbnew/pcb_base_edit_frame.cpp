@@ -97,7 +97,7 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
     PCB_BASE_FRAME::SetBoard( aBoard );
 
-    GetCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetGridOrigin() ) );
+    GetCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetDesignSettings().m_GridOrigin ) );
 
     // update the tool manager with the new board and its view.
     if( m_toolManager )

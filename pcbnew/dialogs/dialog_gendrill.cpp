@@ -336,7 +336,7 @@ void DIALOG_GENDRILL::UpdateDrillParams()
     m_mapFileType = m_Choice_Drill_Map->GetSelection();
 
     m_UnitDrillIsInch = (m_Choice_Unit->GetSelection() == 0) ? false : true;
-    m_MinimalHeader   = m_Check_Minimal->IsChecked();
+    m_MinimalHeader = m_Check_Minimal->IsChecked();
     m_Mirror = m_Check_Mirror->IsChecked();
     m_Merge_PTH_NPTH = m_Check_Merge_PTH_NPTH->IsChecked();
     m_ZerosFormat = m_Choice_Zeros_Format->GetSelection();
@@ -345,7 +345,7 @@ void DIALOG_GENDRILL::UpdateDrillParams()
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_FileDrillOffset = wxPoint( 0, 0 );
     else
-        m_FileDrillOffset = m_pcbEditFrame->GetAuxOrigin();
+        m_FileDrillOffset = m_board->GetDesignSettings().m_AuxOrigin;
 
     if( m_UnitDrillIsInch )
         m_Precision = precisionListForInches;

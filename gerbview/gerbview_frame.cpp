@@ -958,20 +958,6 @@ void GERBVIEW_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 }
 
 
-const wxPoint& GERBVIEW_FRAME::GetAuxOrigin() const
-{
-    wxASSERT( m_gerberLayout );
-    return m_gerberLayout->GetAuxOrigin();
-}
-
-
-void GERBVIEW_FRAME::SetAuxOrigin( const wxPoint& aPosition )
-{
-    wxASSERT( m_gerberLayout );
-    m_gerberLayout->SetAuxOrigin( aPosition );
-}
-
-
 void GERBVIEW_FRAME::SetGridColor( COLOR4D aColor )
 {
     GetCanvas()->GetGAL()->SetGridColor( aColor );

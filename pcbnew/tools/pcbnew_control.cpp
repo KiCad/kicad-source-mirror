@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -39,22 +39,16 @@
 #include <class_edge_mod.h>
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
-#include <gal/graphics_abstraction_layer.h>
-#include <io_mgr.h>
 #include <kicad_clipboard.h>
-#include <kiway.h>
 #include <origin_viewitem.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
-#include <pcb_screen.h>
 #include <properties.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
-#include <functional>
 #include <footprint_viewer_frame.h>
 #include <footprint_edit_frame.h>
-#include <math/util.h>      // for KiROUND
 
 using namespace std::placeholders;
 
@@ -85,7 +79,7 @@ void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
 
     if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH )
     {
-        m_gridOrigin->SetPosition( board()->GetGridOrigin() );
+        m_gridOrigin->SetPosition( board()->GetDesignSettings().m_GridOrigin );
         m_gridOrigin->SetColor( m_frame->GetGridColor() );
         getView()->Remove( m_gridOrigin.get() );
         getView()->Add( m_gridOrigin.get() );
@@ -368,9 +362,9 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 void PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                       BOARD_ITEM* originViewItem, const VECTOR2D& aPoint )
 {
-    aFrame->SetGridOrigin( wxPoint( aPoint.x, aPoint.y ) );
+    aFrame->GetDesignSettings().m_GridOrigin = (wxPoint) aPoint;
     aView->GetGAL()->SetGridOrigin( aPoint );
-    originViewItem->SetPosition( wxPoint( aPoint.x, aPoint.y ) );
+    originViewItem->SetPosition( (wxPoint) aPoint );
     aView->MarkDirty();
     aFrame->OnModify();
 }

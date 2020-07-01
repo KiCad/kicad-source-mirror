@@ -414,6 +414,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( PCB_ACTIONS::drawZoneKeepout,  SELECTION_CONDITIONS::ShowAlways );
     placeMenu->AddItem( PCB_ACTIONS::placeText,        SELECTION_CONDITIONS::ShowAlways );
     placeMenu->AddItem( PCB_ACTIONS::drawArc,          SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawRectangle,    SELECTION_CONDITIONS::ShowAlways );
     placeMenu->AddItem( PCB_ACTIONS::drawCircle,       SELECTION_CONDITIONS::ShowAlways );
     placeMenu->AddItem( PCB_ACTIONS::drawLine,         SELECTION_CONDITIONS::ShowAlways );
     placeMenu->AddItem( PCB_ACTIONS::drawPolygon,      SELECTION_CONDITIONS::ShowAlways );

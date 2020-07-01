@@ -294,8 +294,8 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
     plot_opts.SetMirror( m_printMirror );
     plot_opts.SetFormat( PLOT_FORMAT::SVG );
 
-    PAGE_INFO   pageInfo = m_board->GetPageSettings();
-    wxPoint     axisorigin = m_board->GetAuxOrigin();
+    PAGE_INFO   savedPageInfo = m_board->GetPageSettings();
+    wxPoint     savedAuxOrigin = m_board->GetDesignSettings().m_AuxOrigin;
 
     if( m_rbSvgPageSizeOpt->GetSelection() == 2 )   // Page is board boundary size
     {
@@ -307,7 +307,7 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
         m_board->SetPageSettings( currpageInfo );
         plot_opts.SetUseAuxOrigin( true );
         wxPoint origin = bbox.GetOrigin();
-        m_board->SetAuxOrigin( origin );
+        m_board->GetDesignSettings().m_AuxOrigin = origin;
     }
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
@@ -332,8 +332,9 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
 
     delete plotter;
 
-    m_board->SetAuxOrigin( axisorigin );        // reset to the values saved earlier
-    m_board->SetPageSettings( pageInfo );
+    // reset to the values saved earlier
+    m_board->GetDesignSettings().m_AuxOrigin = savedAuxOrigin;
+    m_board->SetPageSettings( savedPageInfo );
 
     return true;
 }

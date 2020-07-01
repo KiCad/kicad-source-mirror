@@ -134,9 +134,6 @@ public:
     const PAGE_INFO& GetPageSettings () const override;
     const wxSize GetPageSizeIU() const override;
 
-    const wxPoint& GetAuxOrigin() const override;
-    void SetAuxOrigin( const wxPoint& aPosition ) override;
-
     const wxPoint& GetGridOrigin() const override
     {
         static wxPoint zero;

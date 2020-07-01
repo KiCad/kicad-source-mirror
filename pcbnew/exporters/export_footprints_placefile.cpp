@@ -103,7 +103,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
     int lenValText = 8;
     int lenPkgText = 16;
 
-    m_place_Offset = m_board->GetAuxOrigin();
+    m_place_Offset = m_board->GetDesignSettings().m_AuxOrigin;
 
     // Calculating the number of useful footprints (CMS attribute, not VIRTUAL)
     m_fpCount = 0;

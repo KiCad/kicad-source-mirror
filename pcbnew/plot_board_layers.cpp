@@ -30,8 +30,6 @@
 
 
 #include <fctsys.h>
-#include <common.h>
-#include <plotter.h>
 #include <base_struct.h>
 #include <gr_text.h>
 #include <geometry/geometry_utils.h>
@@ -1027,7 +1025,7 @@ static void initializePlotter( PLOTTER *aPlotter, BOARD * aBoard,
     else
     {
         if( aPlotOpts->GetUseAuxOrigin() )
-            offset = aBoard->GetAuxOrigin();
+            offset = aBoard->GetDesignSettings().m_AuxOrigin;
     }
 
     aPlotter->SetPageSettings( *sheet_info );

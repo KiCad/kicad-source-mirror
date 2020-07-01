@@ -242,31 +242,17 @@ const wxSize PCB_BASE_FRAME::GetPageSizeIU() const
 }
 
 
-const wxPoint& PCB_BASE_FRAME::GetAuxOrigin() const
-{
-    wxASSERT( m_Pcb );
-    return m_Pcb->GetAuxOrigin();
-}
-
-
-void PCB_BASE_FRAME::SetAuxOrigin( const wxPoint& aPoint )
-{
-    wxASSERT( m_Pcb );
-    m_Pcb->SetAuxOrigin( aPoint );
-}
-
-
 const wxPoint& PCB_BASE_FRAME::GetGridOrigin() const
 {
     wxASSERT( m_Pcb );
-    return m_Pcb->GetGridOrigin();
+    return m_Pcb->GetDesignSettings().m_GridOrigin;
 }
 
 
 void PCB_BASE_FRAME::SetGridOrigin( const wxPoint& aPoint )
 {
     wxASSERT( m_Pcb );
-    m_Pcb->SetGridOrigin( aPoint );
+    m_Pcb->GetDesignSettings().m_GridOrigin = aPoint;
 }
 
 

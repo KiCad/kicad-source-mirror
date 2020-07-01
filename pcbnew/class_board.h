@@ -357,20 +357,6 @@ public:
     void SetProject( PROJECT* aProject )   { m_project = aProject; }
 
     /**
-     * Function SetAuxOrigin
-     * sets the origin point used for plotting.
-     */
-    void SetAuxOrigin( const wxPoint& aPoint )      { m_designSettings.m_AuxOrigin = aPoint; }
-    const wxPoint& GetAuxOrigin() const             { return m_designSettings.m_AuxOrigin; }
-
-    /**
-     * Function SetGridOrigin
-     * sets the origin point of the grid.
-     */
-    void SetGridOrigin( const wxPoint& aPoint )     { m_designSettings.m_GridOrigin = aPoint; }
-    const wxPoint& GetGridOrigin() const            { return m_designSettings.m_GridOrigin; }
-
-    /**
      * Function ResetNetHighLight
      * Reset all high light data to the init state
      */

@@ -1090,7 +1090,6 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
     wxPoint         translation;
     double          rotation;
     ROTATION_ANCHOR rotationAnchor = selection.Size() > 1 ? ROTATE_AROUND_SEL_CENTER
@@ -1099,7 +1098,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     // TODO: Implement a visible bounding border at the edge
     auto sel_box = selection.GetBoundingBox();
 
-    DIALOG_MOVE_EXACT dialog( editFrame, translation, rotation, rotationAnchor, sel_box );
+    DIALOG_MOVE_EXACT dialog( frame(), translation, rotation, rotationAnchor, sel_box );
     int ret = dialog.ShowModal();
 
     if( ret == wxID_OK )
@@ -1132,10 +1131,10 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 item->Rotate( selCenter, rotation );
                 break;
             case ROTATE_AROUND_USER_ORIGIN:
-                item->Rotate( (wxPoint) editFrame->GetScreen()->m_LocalOrigin, rotation );
+                item->Rotate( (wxPoint) frame()->GetScreen()->m_LocalOrigin, rotation );
                 break;
             case ROTATE_AROUND_AUX_ORIGIN:
-                item->Rotate( editFrame->GetAuxOrigin(), rotation );
+                item->Rotate( board()->GetDesignSettings().m_AuxOrigin, rotation );
                 break;
             }
 

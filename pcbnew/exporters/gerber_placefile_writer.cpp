@@ -32,7 +32,6 @@
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
 #include <pgm_base.h>
-#include <build_version.h>
 
 #include <class_board.h>
 
@@ -42,7 +41,6 @@
 #include <reporter.h>
 #include <gbr_metadata.h>
 #include <class_module.h>
-#include <pcbplot.h>
 
 
 PLACEFILE_GERBER_WRITER::PLACEFILE_GERBER_WRITER( BOARD* aPcb )
@@ -57,16 +55,15 @@ PLACEFILE_GERBER_WRITER::PLACEFILE_GERBER_WRITER( BOARD* aPcb )
 }
 
 
-int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
-                                              PCB_LAYER_ID aLayer, bool aIncludeBrdEdges
-)
+int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER_ID aLayer,
+                                              bool aIncludeBrdEdges )
 {
     m_layer = aLayer;
 
     PCB_PLOT_PARAMS plotOpts = m_pcb->GetPlotOptions();
 
     if( plotOpts.GetUseAuxOrigin() )
-        m_offset = m_pcb->GetAuxOrigin();
+        m_offset = m_pcb->GetDesignSettings().m_AuxOrigin;
 
     // Collect footprints on the right layer
     std::vector<MODULE*> fp_list;

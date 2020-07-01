@@ -61,42 +61,6 @@ static void FootprintWriteShape( FILE* File, MODULE* module, const wxString& aSh
 
 // layer names for Gencad export
 
-#if 0 // was:
-static const wxString GenCADLayerName[] =
-{
-    wxT( "BOTTOM" ),             wxT( "INNER1" ),          wxT( "INNER2" ),
-    wxT( "INNER3" ),             wxT( "INNER4" ),          wxT( "INNER5" ),
-    wxT( "INNER6" ),             wxT( "INNER7" ),          wxT( "INNER8" ),
-    wxT( "INNER9" ),             wxT( "INNER10" ),         wxT( "INNER11" ),
-    wxT( "INNER12" ),            wxT( "INNER13" ),         wxT( "INNER14" ),
-    wxT( "TOP" ),                wxT( "LAYER17" ),         wxT( "LAYER18" ),
-    wxT( "SOLDERPASTE_BOTTOM" ), wxT( "SOLDERPASTE_TOP" ),
-    wxT( "SILKSCREEN_BOTTOM" ),  wxT( "SILKSCREEN_TOP" ),
-    wxT( "SOLDERMASK_BOTTOM" ),  wxT( "SOLDERMASK_TOP" ),  wxT( "LAYER25" ),
-    wxT( "LAYER26" ),            wxT( "LAYER27" ),         wxT( "LAYER28" ),
-    wxT( "LAYER29" ),            wxT( "LAYER30" ),         wxT( "LAYER31" ),
-    wxT( "LAYER32" )
-};
-
-// flipped layer name for Gencad export (to make CAM350 imports correct)
-static const wxString GenCADLayerNameFlipped[32] =
-{
-    wxT( "TOP" ),             wxT( "INNER14" ),            wxT( "INNER13" ),
-    wxT( "INNER12" ),         wxT( "INNER11" ),            wxT( "INNER10" ),
-    wxT( "INNER9" ),          wxT( "INNER8" ),             wxT( "INNER7" ),
-    wxT( "INNER6" ),          wxT( "INNER5" ),             wxT( "INNER4" ),
-    wxT( "INNER3" ),          wxT( "INNER2" ),             wxT( "INNER1" ),
-    wxT( "BOTTOM" ),          wxT( "LAYER17" ),            wxT( "LAYER18" ),
-    wxT( "SOLDERPASTE_TOP" ), wxT( "SOLDERPASTE_BOTTOM" ),
-    wxT( "SILKSCREEN_TOP" ),  wxT( "SILKSCREEN_BOTTOM" ),
-    wxT( "SOLDERMASK_TOP" ),  wxT( "SOLDERMASK_BOTTOM" ),  wxT( "LAYER25" ),
-    wxT( "LAYER26" ),         wxT( "LAYER27" ),            wxT( "LAYER28" ),
-    wxT( "LAYER29" ),         wxT( "LAYER30" ),            wxT( "LAYER31" ),
-    wxT( "LAYER32" )
-};
-
-#else
-
 static std::string GenCADLayerName( int aCuCount, PCB_LAYER_ID aId )
 {
     if( IsCopperLayer( aId ) )
@@ -212,7 +176,6 @@ static wxString escapeString( const wxString& aString )
     return copy;
 }
 
-#endif
 
 static std::string fmt_mask( LSET aSet )
 {
@@ -312,8 +275,9 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     GetBoard()->ComputeBoundingBox();
 
     // Save the auxiliary origin for the rest of the module
-    GencadOffsetX = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? GetAuxOrigin().x : 0;
-    GencadOffsetY = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? GetAuxOrigin().y : 0;
+    wxPoint auxOrigin = m_Pcb->GetDesignSettings().m_AuxOrigin;
+    GencadOffsetX = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? auxOrigin.x : 0;
+    GencadOffsetY = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? auxOrigin.y : 0;
 
     // No idea on *why* this should be needed... maybe to fix net names?
     Compile_Ratsnest( true );

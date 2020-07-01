@@ -371,6 +371,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
 
     m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( PCB_ACTIONS::drawLine,             ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawRectangle,        ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawCircle,           ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawArc,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawPolygon,          ACTION_TOOLBAR::TOGGLE );
@@ -380,7 +381,8 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( ACTIONS::deleteTool,               ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( PCB_ACTIONS::drillOrigin,          ACTION_TOOLBAR::TOGGLE );
+    // TODO: re-insert when we have a multi-select tool button
+    // m_drawToolBar->Add( PCB_ACTIONS::drillOrigin,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,        ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::measureTool,              ACTION_TOOLBAR::TOGGLE );
 
@@ -747,6 +749,7 @@ void PCB_EDIT_FRAME::SyncToolbars()
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawZone );
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawZoneKeepout );
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawLine );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawRectangle );
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawCircle );
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawArc );
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawPolygon );

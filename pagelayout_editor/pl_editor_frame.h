@@ -129,13 +129,6 @@ public:
         return (PL_EDITOR_SCREEN*) EDA_DRAW_FRAME::GetScreen();
     }
 
-    const wxPoint& GetAuxOrigin() const override
-    {
-        static wxPoint dummy;   // ( 0,0 );
-        return dummy;
-    }
-    void SetAuxOrigin( const wxPoint& aPosition ) override {}
-
     const wxPoint& GetGridOrigin() const override { return m_grid_origin; }
     void SetGridOrigin( const wxPoint& aPoint ) override { m_grid_origin = aPoint; }
 

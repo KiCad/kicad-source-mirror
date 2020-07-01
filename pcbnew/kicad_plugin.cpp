@@ -582,14 +582,15 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %s)\n",
                       Double2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
-                  FormatInternalUnits( aBoard->GetAuxOrigin().x ).c_str(),
-                  FormatInternalUnits( aBoard->GetAuxOrigin().y ).c_str() );
+    if( dsnSettings.m_AuxOrigin != wxPoint( 0, 0 ) )
+        m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
+                      FormatInternalUnits( dsnSettings.m_AuxOrigin.x ).c_str(),
+                      FormatInternalUnits( dsnSettings.m_AuxOrigin.y ).c_str() );
 
-    if( aBoard->GetGridOrigin().x || aBoard->GetGridOrigin().y )
+    if( dsnSettings.m_GridOrigin != wxPoint( 0, 0 ) )
         m_out->Print( aNestLevel+1, "(grid_origin %s %s)\n",
-                      FormatInternalUnits( aBoard->GetGridOrigin().x ).c_str(),
-                      FormatInternalUnits( aBoard->GetGridOrigin().y ).c_str() );
+                      FormatInternalUnits( dsnSettings.m_GridOrigin.x ).c_str(),
+                      FormatInternalUnits( dsnSettings.m_GridOrigin.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(visible_elements %X)\n",
                   dsnSettings.GetVisibleElements() );

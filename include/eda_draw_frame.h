@@ -186,12 +186,6 @@ public:
     void ToggleUserUnits() override;
 
     /**
-     * Return the origin of the axis used for plotting and various exports.
-     */
-    virtual const wxPoint& GetAuxOrigin() const = 0;
-    virtual void SetAuxOrigin( const wxPoint& aPosition ) = 0;
-
-    /**
      * Return the absolute coordinates of the origin of the snap grid.  This is
      * treated as a relative offset, and snapping will occur at multiples of the grid
      * size relative to this point.

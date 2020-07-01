@@ -574,8 +574,8 @@ void ALTIUM_PCB::ParseBoard6Data(
         THROW_IO_ERROR( "Board6 stream is not fully parsed" );
     }
 
-    m_board->SetAuxOrigin( elem.sheetpos );
-    m_board->SetGridOrigin( elem.sheetpos );
+    m_board->GetDesignSettings().m_AuxOrigin = elem.sheetpos;
+    m_board->GetDesignSettings().m_GridOrigin = elem.sheetpos;
 
     // read layercount from stackup, because LAYERSETSCOUNT is not always correct?!
     size_t layercount = 0;
