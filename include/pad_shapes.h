@@ -24,6 +24,8 @@
 #ifndef PAD_SHAPES_H_
 #define PAD_SHAPES_H_
 
+#include <string>
+
 /**
  * Enum PAD_SHAPE_T
  * is the set of pad shapes, used with D_PAD::{Set,Get}Shape()
@@ -40,7 +42,7 @@ enum PAD_SHAPE_T
                                 // (thick segments, circles, arcs, polygons
 };
 
-static inline wxString PAD_SHAPE_T_asString( PAD_SHAPE_T a )
+static inline std::string PAD_SHAPE_T_asString( PAD_SHAPE_T a )
 {
     switch( a )
     {
@@ -53,7 +55,7 @@ static inline wxString PAD_SHAPE_T_asString( PAD_SHAPE_T a )
     case PAD_SHAPE_CUSTOM:         return "PAD_SHAPE_CUSTOM";
     }
 
-    return wxEmptyString;  // Just to quiet GCC.
+    return "";  // Just to quiet GCC.
 };
 
 
