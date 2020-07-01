@@ -722,7 +722,8 @@ int PCBNEW_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 
 // Helper function for PCBNEW_CONTROL::placeBoardItems()
 template<typename T>
-static void moveNoFlagToVector( std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
+static void moveUnflaggedItems( std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget,
+                                bool aIsNew )
 {
     std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
             [aIsNew]( T aItem )
@@ -740,7 +741,7 @@ static void moveNoFlagToVector( std::deque<T>& aList, std::vector<BOARD_ITEM*>& 
 }
 
 
-static void moveNoFlagToVector( ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*>& aTarget,
+static void moveUnflaggedItems( ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*>& aTarget,
                                 bool aIsNew )
 {
     if( aList.size() == 0 )
@@ -785,10 +786,10 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin  )
     bool isNew = board() != aBoard;
     std::vector<BOARD_ITEM*> items;
 
-    moveNoFlagToVector( aBoard->Tracks(), items, isNew );
-    moveNoFlagToVector( aBoard->Modules(), items, isNew );
-    moveNoFlagToVector( aBoard->Drawings(), items, isNew );
-    moveNoFlagToVector( aBoard->Zones(), items, isNew );
+    moveUnflaggedItems( aBoard->Tracks(), items, isNew );
+    moveUnflaggedItems( aBoard->Modules(), items, isNew );
+    moveUnflaggedItems( aBoard->Drawings(), items, isNew );
+    moveUnflaggedItems( aBoard->Zones(), items, isNew );
 
     return placeBoardItems( items, isNew, aAnchorAtOrigin );
 }
