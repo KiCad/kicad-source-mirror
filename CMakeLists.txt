@@ -272,9 +272,6 @@ endif(USE_DISTCC)
 
 if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
-    # Add additional warning flags to avoid signed/unsigned comparison
-    set( CMAKE_CXX_FLAGS "-Wsign-compare" )
-
     # Set 32-bit flag for GCC to prevent excess precision
     if( CMAKE_SIZEOF_VOID_P EQUAL 4 )
         set( CMAKE_CXX_FLAGS "-ffloat-store ${CMAKE_CXX_FLAGS}" )

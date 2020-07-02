@@ -115,4 +115,22 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         message( STATUS "Enabling warning -Wshadow" )
     endif()
 
+
+    # Add additional warning flags to avoid signed/unsigned comparison
+    CHECK_CXX_COMPILER_FLAG( "-Wsign-compare" COMPILER_SUPPORTS_WSIGN )
+
+    if( COMPILER_SUPPORTS_WSIGN )
+        set( WARN_FLAGS_CXX "${WARN_FLAGS_CXX} -Wsign-compare" )
+        message( STATUS "Enabling warning -Wsign-compare" )
+    endif()
+
+    # Warn about missing initializers in construction
+    CHECK_CXX_COMPILER_FLAG( "-Wmissing-field-initializers" COMPILER_SUPPORTS_WMISSING_INIT )
+
+    if( COMPILER_SUPPORTS_WMISSING_INIT )
+        set( WARN_FLAGS_CXX "${WARN_FLAGS_CXX} -Wmissing-field-initializers" )
+        message( STATUS "Enabling warning -Wmissing-field-initializers" )
+    endif()
+
+
 endif()

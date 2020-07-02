@@ -94,7 +94,7 @@ static const wxCmdLineEntryDesc cmdLineDesc[] =
         wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
     { wxCMD_LINE_SWITCH, "h", NULL, "display this message",
         wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
-    { wxCMD_LINE_NONE }
+    { wxCMD_LINE_NONE, nullptr, nullptr, nullptr, wxCMD_LINE_VAL_NONE, 0 }
 };
 
 
