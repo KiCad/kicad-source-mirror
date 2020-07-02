@@ -52,6 +52,12 @@ template <typename T> inline const T& Clamp( const T& lower, const T& value, con
     return value;
 }
 
+// Surpress an annoying warning that the explicit rounding we do is not precise
+#if defined( __GNUC__ ) || defined( __CLANG__ )
+    _Pragma( "GCC diagnostic push" ) \
+    _Pragma( "GCC diagnostic ignored \"-Wimplicit-int-float-conversion\"" )
+#endif
+
 /**
  * Round a floating point number to an integer using "round halfway cases away from zero".
  *
@@ -73,6 +79,10 @@ constexpr ret_type KiROUND( fp_type v )
 
     return ret_type( max_ret( ret ) );
 }
+
+#if defined( __GNUC__ ) || defined( __CLANG__ )
+    _Pragma( "GCC diagnostic pop" )
+#endif
 
 /**
  * Function rescale()

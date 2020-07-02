@@ -52,7 +52,7 @@
 
 static inline long parseInt( const wxString& aValue, double aScalar )
 {
-    double value = LONG_MAX;
+    double value = std::numeric_limits<double>::max();
 
     /*
      * In 2011 gEDA/pcb introduced values with units, like "10mm" or "200mil".
@@ -87,7 +87,7 @@ static inline long parseInt( const wxString& aValue, double aScalar )
     // This conversion reports failure on strings as simple as "1000", still
     // it returns the right result in &value. Thus, ignore the return value.
     aValue.ToCDouble(&value);
-    if( value == LONG_MAX ) // conversion really failed
+    if( value == std::numeric_limits<double>::max() ) // conversion really failed
     {
         THROW_IO_ERROR( wxString::Format( _( "Cannot convert \"%s\" to an integer" ),
                                           aValue.GetData() ) );

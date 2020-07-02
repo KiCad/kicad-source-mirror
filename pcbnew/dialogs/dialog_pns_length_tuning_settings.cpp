@@ -113,7 +113,7 @@ bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::AcceptOptions( )
         return false;
     if( !m_spacing.Validate( 0, std::numeric_limits<int>::max() ) )
         return false;
-    if( !m_targetLength.Validate( 0, std::numeric_limits<long long int>::max() ) )
+    if( !m_targetLength.Validate( 0, static_cast<double>( std::numeric_limits<long long int>::max() ) ) )
         return false;
     if( !m_radius.Validate( 0, 100 ) )
         return false;
