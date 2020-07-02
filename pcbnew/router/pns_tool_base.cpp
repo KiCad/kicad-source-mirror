@@ -120,7 +120,7 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 
 
 ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, bool aIgnorePads,
-								 const std::vector<ITEM*> aAvoidItems)
+								 const std::vector<ITEM*> aAvoidItems )
 {
     int tl = getView()->GetTopLayer();
 
@@ -129,12 +129,12 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
 
     static const int candidateCount = 5;
     ITEM* prioritized[candidateCount];
-    int dist[candidateCount];
+    SEG::ecoord dist[candidateCount];
 
     for( int i = 0; i < candidateCount; i++ )
     {
-        prioritized[i] = 0;
-        dist[i] = std::numeric_limits<int>::max();
+        prioritized[i] = nullptr;
+        dist[i] = VECTOR2I::ECOORD_MAX;
     }
 
     ITEM_SET candidates = m_router->QueryHoverItems( aWhere );
@@ -164,7 +164,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
                 if( item->OfKind( ITEM::SOLID_T ) && aIgnorePads )
                     continue;
 
-                int itemDist = ( item->Shape()->Centre() - aWhere ).SquaredEuclideanNorm();
+                SEG::ecoord itemDist = ( item->Shape()->Centre() - aWhere ).SquaredEuclideanNorm();
 
                 if( !prioritized[2] || itemDist < dist[2] )
                 {

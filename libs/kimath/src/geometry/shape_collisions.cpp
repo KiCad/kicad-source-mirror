@@ -100,7 +100,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
         const SEG side( vts[i], vts[ i + 1] );
 
         VECTOR2I pn = side.NearestPoint( c );
-        int side_dist_sq = ( pn - c ).SquaredEuclideanNorm();
+        ecoord side_dist_sq = ( pn - c ).SquaredEuclideanNorm();
 
         if( ( side_dist_sq == 0 || side_dist_sq < min_dist_sq ) && !aMTV && !aActual )
             return true;
