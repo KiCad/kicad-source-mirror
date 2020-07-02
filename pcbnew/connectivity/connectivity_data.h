@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -181,7 +181,7 @@ public:
 
     const std::vector<D_PAD*> GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem ) const;
 
-    const void GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem, std::set<D_PAD*>* pads ) const;
+    void GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem, std::set<D_PAD*>* pads ) const;
 
     const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, KICAD_T aTypes[] );
 

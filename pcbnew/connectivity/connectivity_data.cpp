@@ -459,7 +459,7 @@ const
 }
 
 
-const void CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem,
+void CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem,
                                                 std::set<D_PAD*>* pads ) const
 {
     for( auto citem : m_connAlgo->ItemEntry( aItem ).GetItems() )
