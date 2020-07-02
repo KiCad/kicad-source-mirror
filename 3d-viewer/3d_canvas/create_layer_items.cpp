@@ -684,7 +684,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         std::vector<std::pair<const ZONE_CONTAINER*, PCB_LAYER_ID>> zones;
 
-        for( size_t i = 0; i < m_board->GetAreaCount(); i++ )
+        for( int i = 0; i < m_board->GetAreaCount(); i++ )
         {
             const ZONE_CONTAINER* zone = m_board->GetArea( i );
 

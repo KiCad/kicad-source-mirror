@@ -892,11 +892,11 @@ public:
 
     /**
      * Function GetAreaCount
-     * @return int - The number of Areas or ZONE_CONTAINER.
+     * @return The number of Areas or ZONE_CONTAINER.
      */
     int GetAreaCount() const
     {
-        return (int) m_ZoneDescriptorList.size();
+        return static_cast<int>( m_ZoneDescriptorList.size() );
     }
 
     /* Functions used in test, merge and cut outlines */
