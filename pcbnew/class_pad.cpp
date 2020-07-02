@@ -327,32 +327,28 @@ void D_PAD::BuildEffectiveShapes() const
 
     if( GetShape() == PAD_SHAPE_CUSTOM )
     {
-        SHAPE_POLY_SET* poly = new SHAPE_POLY_SET();
-        MergePrimitivesAsPolygon( poly );
-        poly->Rotate( -DECIDEG2RAD( m_Orient ) );
-        poly->Move( shapePos );
-        add( poly );
+        for( const std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
+        {
+            for( SHAPE* shape : primitive->MakeEffectiveShapes() )
+            {
+                shape->Rotate( -DECIDEG2RAD( m_Orient ) );
+                shape->Move( shapePos );
+                add( shape );
+            }
+        }
     }
 
     // Bounding box and radius
     //
     m_effectiveBoundingRadius = calcBoundingRadius();
 
-    bool first_shape = true;
+    m_effectiveBoundingBox = EDA_RECT();        // reset to prepare for merging
 
     for( const std::shared_ptr<SHAPE>& shape : m_effectiveShapes )
     {
         BOX2I r = shape->BBox();
-
-        if( first_shape )
-        {
-            m_effectiveBoundingBox.SetOrigin( (wxPoint) r.GetOrigin() );
-            m_effectiveBoundingBox.SetEnd( (wxPoint) r.GetEnd() );
-            first_shape = false;
-        }
-        else
-            m_effectiveBoundingBox.Merge( EDA_RECT( (wxPoint) r.GetOrigin(),
-                                          wxSize( r.GetWidth(), r.GetHeight() ) ) );
+        m_effectiveBoundingBox.Merge( EDA_RECT( (wxPoint) r.GetOrigin(),
+                                                wxSize( r.GetWidth(), r.GetHeight() ) ) );
     }
 
     // Hole shape

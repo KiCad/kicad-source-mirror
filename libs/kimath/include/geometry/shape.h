@@ -118,9 +118,11 @@ public:
      *
      * Checks if the boundary of shape (this) lies closer to the point aP than aClearance,
      * indicating a collision.
+     * @param aActual an optional pointer to an int to store the actual distance in the event
+     *                of a collision.
      * @return true, if there is a collision.
      */
-    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const
+    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const
     {
         return Collide( SEG( aP, aP ), aClearance );
     }
@@ -133,19 +135,23 @@ public:
      * @param aShape shape to check collision against
      * @param aClearance minimum clearance
      * @param aMTV minimum translation vector
+     * @param aActual an optional pointer to an int to store the actual distance in the event
+     *                of a collision.
      * @return true, if there is a collision.
      */
-    virtual bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I& aMTV ) const;
-    virtual bool Collide( const SHAPE* aShape, int aClearance = 0 ) const;
+    virtual bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const;
+    virtual bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr ) const;
 
     /**
      * Function Collide()
      *
      * Checks if the boundary of shape (this) lies closer to the segment aSeg than aClearance,
      * indicating a collision.
+     * @aActual an optional pointer to an int to be updated with the actual distance in the
+     *          case of collision.
      * @return true, if there is a collision.
      */
-    virtual bool Collide( const SEG& aSeg, int aClearance = 0 ) const = 0;
+    virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const = 0;
 
     /**
      * Function BBox()
@@ -169,7 +175,14 @@ public:
         return BBox( 0 ).Centre(); // if nothing better is available....
     }
 
-    virtual void Move ( const VECTOR2I& aVector ) = 0;
+    /**
+     * Function Rotate
+     * @param aCenter is the rotation center
+     * @param aAngle rotation angle in radians
+     */
+    virtual void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) = 0;
+
+    virtual void Move( const VECTOR2I& aVector ) = 0;
 
     virtual bool IsSolid() const = 0;
 
@@ -182,7 +195,7 @@ protected:
     SHAPE_TYPE m_type;
 };
 
-bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance,
-                    bool aNeedMTV, VECTOR2I& aMTV );
+bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual,
+                    VECTOR2I* aMTV );
 
 #endif // __SHAPE_H

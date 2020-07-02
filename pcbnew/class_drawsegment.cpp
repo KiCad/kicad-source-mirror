@@ -34,6 +34,9 @@
 #include <class_module.h>
 #include <class_drawsegment.h>
 #include <base_units.h>
+#include <geometry/shape_simple.h>
+#include <geometry/shape_segment.h>
+#include <geometry/shape_circle.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 
@@ -590,16 +593,13 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         int radius = GetRadius();
         int dist   = KiROUND( EuclideanNorm( aPosition - GetCenter() ) );
 
-        if( m_Width == 0 )
+        if( m_Width == 0 )      // Filled circle hit-test
         {
-            // Filled circle hit-test
             if( dist <= radius + maxdist )
                 return true;
         }
-
-        if( m_Width > 0 )
+        else                    // Ring hit-test
         {
-            // Ring hit-test
             if( abs( radius - dist ) <= maxdist )
                 return true;
         }
@@ -666,7 +666,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         std::vector<wxPoint> pts;
         GetRectCorners( &pts );
 
-        if( m_Width == 0 )
+        if( m_Width == 0 )          // Filled rect hit-test
         {
             SHAPE_POLY_SET poly;
             poly.NewOutline();
@@ -677,8 +677,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
             if( poly.Collide( VECTOR2I( aPosition ), maxdist ) )
                 return true;
         }
-
-        if( m_Width > 0 )
+        else                        // Open rect hit-test
         {
             if( TestSegmentHit( aPosition, pts[0], pts[1], maxdist )
                     || TestSegmentHit( aPosition, pts[1], pts[2], maxdist )
@@ -828,7 +827,7 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         }
         break;
 
-    case S_CURVE:     // not yet handled
+    case S_CURVE:
         if( aContained )
         {
             return arect.Contains( bb );
@@ -1012,6 +1011,112 @@ void DRAWSEGMENT::SetPolyPoints( const std::vector<wxPoint>& aPoints )
 
     for ( const wxPoint& p : aPoints )
         m_Poly.Append( p.x, p.y );
+}
+
+
+std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes()
+{
+    std::vector<SHAPE*> effectiveShapes;
+
+    switch( m_Shape )
+    {
+    case S_ARC:
+    {
+        SHAPE_ARC        arc( GetCenter(), GetArcStart(), (double) GetAngle() / 10.0 );
+        SHAPE_LINE_CHAIN l = arc.ConvertToPolyline();
+
+        for( int i = 0; i < l.SegmentCount(); i++ )
+        {
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ).A,
+                                                             l.Segment( i ).B, m_Width ) );
+        }
+
+        break;
+    }
+
+    case S_SEGMENT:
+        effectiveShapes.emplace_back( new SHAPE_SEGMENT( GetStart(), GetEnd(), m_Width ) );
+        break;
+
+    case S_RECT:
+    {
+        std::vector<wxPoint> pts;
+        GetRectCorners( &pts );
+
+        if( m_Width == 0 )
+        {
+            effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
+        }
+        else
+        {
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[0], pts[1], m_Width ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[1], pts[2], m_Width ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[2], pts[3], m_Width ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[3], pts[0], m_Width ) );
+        }
+    }
+        break;
+
+    case S_CIRCLE:
+    {
+        if( m_Width == 0 )
+        {
+            effectiveShapes.emplace_back( new SHAPE_CIRCLE( GetCenter(), GetRadius() ) );
+        }
+        else
+        {
+            // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
+            SHAPE_ARC        circle( GetCenter(), GetEnd(), 360.0 );
+            SHAPE_LINE_CHAIN l = circle.ConvertToPolyline();
+
+            for( int i = 0; i < l.SegmentCount(); i++ )
+            {
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ).A,
+                                                                 l.Segment( i ).B, m_Width ) );
+            }
+        }
+
+        break;
+    }
+
+    case S_CURVE:
+    {
+        RebuildBezierToSegmentsPointsList( GetWidth() );
+        wxPoint start_pt = GetBezierPoints()[0];
+
+        for( unsigned int jj = 1; jj < GetBezierPoints().size(); jj++ )
+        {
+            wxPoint end_pt = GetBezierPoints()[jj];
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( start_pt, end_pt, m_Width ) );
+            start_pt = end_pt;
+        }
+
+        break;
+    }
+
+    case S_POLYGON:
+    {
+        SHAPE_LINE_CHAIN l = GetPolyShape().Outline( 0 );
+
+        if( IsPolygonFilled() )
+        {
+            effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
+        }
+        else
+        {
+            for( int i = 0; i < l.SegmentCount(); i++ )
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ) ) );
+        }
+    }
+        break;
+
+    default:
+        wxFAIL_MSG( "DRAWSEGMENT::MakeEffectiveShapes unsupported DRAWSEGMENT shape: "
+                    + STROKE_T_asString( m_Shape ) );
+        break;
+    }
+
+    return effectiveShapes;
 }
 
 

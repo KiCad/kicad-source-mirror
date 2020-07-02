@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,13 +32,10 @@
 #include <fctsys.h>
 #include <common.h>
 #include <confirm.h>
-#include <pcbnew.h>
 #include <trigo.h>
-#include <macros.h>
 #include <pcb_base_frame.h>
 #include <base_units.h>
 #include <widgets/wx_grid.h>
-#include <class_board.h>
 #include <class_module.h>
 #include <math/util.h>      // for KiROUND
 
@@ -224,8 +221,11 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
         m_shape( aShape ),
         m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true )
 {
-    for( const VECTOR2I& pt : m_shape->GetPolyShape().Outline( 0 ).CPoints() )
-        m_currPoints.emplace_back( pt );
+    if( !m_shape->GetPolyShape().IsEmpty() )
+    {
+        for( const VECTOR2I& pt : m_shape->GetPolyShape().Outline( 0 ).CPoints() )
+            m_currPoints.emplace_back( pt );
+    }
 
     m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_deleteButton->SetBitmap( KiBitmap( trash_xpm ) );

@@ -85,11 +85,29 @@ void SHAPE_LINE_CHAIN::convertArc( ssize_t aArcIndex )
 }
 
 
-bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
+bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance, int* aActual ) const
 {
-    // fixme: ugly!
-    SEG s( aP, aP );
-    return this->Collide( s, aClearance );
+    SEG::ecoord dist_sq = VECTOR2I::ECOORD_MAX;
+    SEG::ecoord clearance_sq = SEG::Square( aClearance );
+
+    for( int i = 0; i < SegmentCount(); i++ )
+    {
+        const SEG& s = CSegment( i );
+        dist_sq = std::min( dist_sq, s.SquaredDistance( aP ) );
+
+        if( !aActual && dist_sq < clearance_sq )
+            return true;
+    }
+
+    if( dist_sq < clearance_sq )
+    {
+        if( aActual )
+            *aActual = sqrt( dist_sq );
+
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -107,23 +125,26 @@ void SHAPE_LINE_CHAIN::Rotate( double aAngle, const VECTOR2I& aCenter )
 }
 
 
-bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance ) const
+bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 {
-    BOX2I box_a( aSeg.A, aSeg.B - aSeg.A );
-    BOX2I::ecoord_type dist_sq = (BOX2I::ecoord_type) aClearance * aClearance;
+    SEG::ecoord dist_sq = VECTOR2I::ECOORD_MAX;
+    SEG::ecoord clearance_sq = SEG::Square( aClearance );
 
     for( int i = 0; i < SegmentCount(); i++ )
     {
         const SEG& s = CSegment( i );
-        BOX2I box_b( s.A, s.B - s.A );
+        dist_sq = std::min( dist_sq, s.SquaredDistance( aSeg ) );
 
-        BOX2I::ecoord_type d = box_a.SquaredDistance( box_b );
+        if( !aActual && dist_sq < clearance_sq )
+            return true;
+    }
 
-        if( d < dist_sq )
-        {
-            if( s.Collide( aSeg, aClearance ) )
-                return true;
-        }
+    if( dist_sq < clearance_sq )
+    {
+        if( aActual )
+            *aActual = sqrt( dist_sq );
+
+        return true;
     }
 
     return false;
@@ -267,13 +288,19 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
 
 int SHAPE_LINE_CHAIN::Distance( const VECTOR2I& aP, bool aOutlineOnly ) const
 {
-    int d = INT_MAX;
+    return sqrt( SquaredDistance( aP, aOutlineOnly ) );
+}
+
+
+SEG::ecoord SHAPE_LINE_CHAIN::SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly ) const
+{
+    ecoord d = VECTOR2I::ECOORD_MAX;
 
     if( IsClosed() && PointInside( aP ) && !aOutlineOnly )
         return 0;
 
     for( int s = 0; s < SegmentCount(); s++ )
-        d = std::min( d, CSegment( s ).Distance( aP ) );
+        d = std::min( d, CSegment( s ).SquaredDistance( aP ) );
 
     return d;
 }

@@ -826,90 +826,14 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
 
 bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 {
-    std::vector<SHAPE_SEGMENT*> segs;
-
     if( aItem->GetLayer() != Edge_Cuts && !IsCopperLayer( aItem->GetLayer() ) )
         return false;
 
-    switch( aItem->GetShape() )
-    {
-    case S_ARC:
-    {
-        SHAPE_ARC arc( aItem->GetCenter(), aItem->GetArcStart(), aItem->GetAngle() / 10.0 );
-        auto l = arc.ConvertToPolyline();
+    // TODO: where do we handle filled polygons on copper layers?
+    if( aItem->GetShape() == S_POLYGON && aItem->IsPolygonFilled() )
+        return false;
 
-        for( int i = 0; i < l.SegmentCount(); i++ )
-        {
-            SHAPE_SEGMENT* seg = new SHAPE_SEGMENT( l.CSegment( i ), aItem->GetWidth() );
-            segs.push_back( seg );
-        }
-
-        break;
-    }
-
-    case S_SEGMENT:
-        segs.push_back(
-                new SHAPE_SEGMENT( aItem->GetStart(), aItem->GetEnd(), aItem->GetWidth() ) );
-
-        break;
-
-    case S_RECT:
-    {
-        std::vector<wxPoint> pts;
-        aItem->GetRectCorners( &pts );
-
-        segs.push_back( new SHAPE_SEGMENT( pts[0], pts[1], aItem->GetWidth() ) );
-        segs.push_back( new SHAPE_SEGMENT( pts[1], pts[2], aItem->GetWidth() ) );
-        segs.push_back( new SHAPE_SEGMENT( pts[2], pts[3], aItem->GetWidth() ) );
-        segs.push_back( new SHAPE_SEGMENT( pts[3], pts[0], aItem->GetWidth() ) );
-    }
-        break;
-
-    case S_CIRCLE:
-    {
-        // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
-        SHAPE_ARC circle( aItem->GetCenter(), aItem->GetEnd(), 360.0 );
-        auto l = circle.ConvertToPolyline();
-
-        for( int i = 0; i < l.SegmentCount(); i++ )
-            segs.push_back( new SHAPE_SEGMENT( l.CSegment( i ), aItem->GetWidth() ) );
-
-        break;
-    }
-
-    case S_CURVE:
-    {
-        aItem->RebuildBezierToSegmentsPointsList( aItem->GetWidth() );
-        auto pts = aItem->GetBezierPoints();
-
-        for( size_t ii = 1; ii < pts.size(); ii++ )
-        {
-            segs.push_back( new SHAPE_SEGMENT(
-                    VECTOR2I( pts[ii - 1] ), VECTOR2I( pts[ii] ), aItem->GetWidth() ) );
-        }
-        break;
-    }
-
-    case S_POLYGON:
-        if( !aItem->IsPolygonFilled() )
-        {
-            auto poly = aItem->BuildPolyPointsList();
-            for( size_t ii = 1; ii < poly.size(); ii++ )
-            {
-                segs.push_back( new SHAPE_SEGMENT(
-                        VECTOR2I( poly[ii - 1] ), VECTOR2I( poly[ii] ), aItem->GetWidth() ) );
-            }
-
-            segs.push_back( new SHAPE_SEGMENT(
-                    VECTOR2I( poly.back() ), VECTOR2I( poly.front() ), aItem->GetWidth() ) );
-        }
-        break;
-
-    default:
-        break;
-    }
-
-    for( auto seg : segs )
+    for( SHAPE* shape : aItem->MakeEffectiveShapes() )
     {
         std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
 
@@ -920,7 +844,7 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aI
 
         solid->SetNet( -1 );
         solid->SetParent( nullptr );
-        solid->SetShape( seg );
+        solid->SetShape( shape );
         solid->SetRoutable( false );
 
         aWorld->Add( std::move( solid ) );

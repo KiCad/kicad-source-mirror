@@ -63,11 +63,20 @@ public:
         return BOX2I( m_center - rc, rc * 2 );
     }
 
-    bool Collide( const SEG& aSeg, int aClearance = 0 ) const override
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override
     {
-        int rc = aClearance + m_radius;
+        int minDist = aClearance + m_radius;
+        ecoord dist_sq = aSeg.SquaredDistance( m_center );
 
-        return aSeg.Distance( m_center ) < rc;
+        if( dist_sq < (ecoord) minDist * minDist )
+        {
+            if( aActual )
+                *aActual = std::max( 0, (int) sqrt( dist_sq ) - m_radius );
+
+            return true;
+        }
+
+        return false;
     }
 
     void SetRadius( int aRadius )
@@ -93,6 +102,11 @@ public:
     void Move( const VECTOR2I& aVector ) override
     {
         m_center += aVector;
+    }
+
+    void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
+    {
+        // That was easy....
     }
 
     bool IsSolid() const override

@@ -34,57 +34,6 @@ int sgn( T aVal )
 }
 
 
-bool SEG::PointCloserThan( const VECTOR2I& aP, int aDist ) const
-{
-    // See http://geomalgorithms.com/a02-_lines.html for some explanations and ideas.
-    VECTOR2I d = B - A;
-    ecoord dist_sq = (ecoord) aDist * aDist;
-
-    SEG::ecoord l_squared = d.Dot( d );
-    SEG::ecoord t = d.Dot( aP - A );
-
-    if( t <= 0 || !l_squared )
-        return ( aP - A ).SquaredEuclideanNorm() < dist_sq;
-    else if( t >= l_squared )
-        return ( aP - B ).SquaredEuclideanNorm() < dist_sq;
-
-    // JPC: This code is not trivial and is not commented
-    // and does not work for d.x or d.y = -1...1
-    // I am guessing it is here for calculation time optimization.
-    // if someone can understand it, please fix it.
-    // It can be tested with a segment having d.x or d.y value
-    // is -1 or +1 ("this" is a quasi vertical or horizontal segment)
-    int dxdy = std::abs( d.x ) - std::abs( d.y );
-
-    if( ( dxdy >= -1 && dxdy <= 1 )     // quasi 45 deg segment
-        /*|| std::abs( d.x ) <= 1       // quasi horizontal segment
-          || std::abs( d.y ) <= 1       // quasi vertical segment */ )
-    {
-        int ca = -sgn( d.y );
-        int cb = sgn( d.x );
-        int cc = -ca * A.x - cb * A.y;
-
-        ecoord num = (ecoord) ca * aP.x + (ecoord) cb * aP.y + cc;
-        num *= num;
-
-        if( ca && cb )
-            num >>= 1;
-
-        if( num > ( dist_sq + 100 ) )
-            return false;
-
-        else if( num < ( dist_sq - 100 ) )
-            return true;
-    }
-
-    VECTOR2I nearest;
-    nearest.x = A.x + rescale( t, (ecoord) d.x, l_squared );
-    nearest.y = A.y + rescale( t, (ecoord) d.y, l_squared );
-
-    return ( nearest - aP ).SquaredEuclideanNorm() <= dist_sq;
-}
-
-
 SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 {
     // fixme: rather inefficient....
@@ -176,22 +125,33 @@ bool SEG::ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ) cons
 }
 
 
-bool SEG::Collide( const SEG& aSeg, int aClearance ) const
+bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 {
     // check for intersection
     // fixme: move to a method
     if( ccw( A, aSeg.A, aSeg.B ) != ccw( B, aSeg.A, aSeg.B ) &&
             ccw( A, B, aSeg.A ) != ccw( A, B, aSeg.B ) )
+    {
+        if( aActual )
+            *aActual = 0;
+
         return true;
+    }
 
-#define CHK( _seg, _pt ) \
-    if( (_seg).PointCloserThan( _pt, aClearance ) ) return true;
+    ecoord dist_sq = VECTOR2I::ECOORD_MAX;
 
-    CHK( *this, aSeg.A );
-    CHK( *this, aSeg.B );
-    CHK( aSeg, A );
-    CHK( aSeg, B );
-#undef CHK
+    dist_sq = std::min( dist_sq, SquaredDistance( aSeg.A ) );
+    dist_sq = std::min( dist_sq, SquaredDistance( aSeg.B ) );
+    dist_sq = std::min( dist_sq, aSeg.SquaredDistance( A ) );
+    dist_sq = std::min( dist_sq, aSeg.SquaredDistance( B ) );
+
+    if( dist_sq < (ecoord) aClearance * aClearance )
+    {
+        if( aActual )
+            *aActual = sqrt( dist_sq );
+
+        return true;
+    }
 
     return false;
 }
@@ -199,5 +159,5 @@ bool SEG::Collide( const SEG& aSeg, int aClearance ) const
 
 bool SEG::Contains( const VECTOR2I& aP ) const
 {
-    return PointCloserThan( aP, 1 );
+    return SquaredDistance( aP ) < 1;       // 1 * 1 to be pedantic
 }

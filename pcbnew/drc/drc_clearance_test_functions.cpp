@@ -626,7 +626,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 }
 
 
-bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActualDist )
+bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActual )
 {
     int center2center = KiROUND( EuclideanNorm( aPad->ShapePos() - aRefPad->ShapePos() ) );
 
@@ -634,33 +634,24 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance
     if( center2center - aRefPad->GetBoundingRadius() - aPad->GetBoundingRadius() >= aMinClearance )
         return true;
 
-    // JEY TODO:
-    // TOM TODO: MTV only works as a proxy for actual-distance for convex shapes
-
-    VECTOR2I mtv;               // minimum translation vector calculated by Collide()
-    VECTOR2I maxMtv( 0, 0 );    // is the move distance between 2 shapes calculated
-                                // by Collide to do not have a collision
-    bool shapes_collide = false;
+    int actual = INT_MAX;
 
     for( const std::shared_ptr<SHAPE>& aShape : aRefPad->GetEffectiveShapes() )
     {
         for( const std::shared_ptr<SHAPE>& bShape : aPad->GetEffectiveShapes() )
         {
-            if( aShape->Collide( bShape.get(), aMinClearance, mtv ) )
-            {
-                shapes_collide = true;
+            int this_dist;
 
-                if( mtv.SquaredEuclideanNorm() > maxMtv.SquaredEuclideanNorm() )
-                    maxMtv = mtv;
-            }
+            if( aShape->Collide( bShape.get(), aMinClearance, &this_dist ) )
+                actual = std::min( actual, this_dist );
         }
     }
 
-    if( shapes_collide )
+    if( actual < INT_MAX )
     {
         // returns the actual clearance (clearance < aMinClearance) for diags:
-        if( aActualDist )
-            *aActualDist = std::max( 0, aMinClearance - maxMtv.EuclideanNorm() );
+        if( aActual )
+            *aActual = std::max( 0, actual );
 
         return false;
     }
@@ -719,7 +710,7 @@ bool DRC::checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_P
         SHAPE_RECT padShape( padBBox.GetPosition(), padBBox.GetWidth(), padBBox.GetHeight() );
         int        actual;
 
-        if( padShape.DoCollide( refSeg, minClearance + widths, &actual ) )
+        if( padShape.Collide( refSeg, minClearance + widths, &actual ) )
         {
             *aActualDist = std::max( 0, actual - widths );
             return false;

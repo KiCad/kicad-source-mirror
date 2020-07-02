@@ -1224,50 +1224,35 @@ bool SHAPE_POLY_SET::PointOnEdge( const VECTOR2I& aP ) const
 }
 
 
-bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance ) const
+bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 {
+    ecoord dist_sq = SquaredDistance( aSeg );
 
-    SHAPE_POLY_SET polySet = SHAPE_POLY_SET( *this );
-
-    // Inflate the polygon if necessary.
-    if( aClearance > 0 )
+    if( dist_sq < (ecoord) aClearance * aClearance )
     {
-        // fixme: the number of arc segments should not be hardcoded
-        polySet.Inflate( aClearance, 8 );
-    }
+        if( aActual )
+            *aActual = sqrt( dist_sq );
 
-    // We are going to check to see if the segment crosses an external
-    // boundary.  However, if the full segment is inside the polyset, this
-    // will not be true.  So we first test to see if one of the points is
-    // inside.  If true, then we collide
-    if( polySet.Contains( aSeg.A ) )
         return true;
-
-    for( CONST_SEGMENT_ITERATOR it = CIterateSegmentsWithHoles(); it; it++ )
-    {
-        const SEG polygonEdge = *it;
-
-        if( polygonEdge.Intersect( aSeg, true ) )
-            return true;
     }
 
     return false;
 }
 
 
-bool SHAPE_POLY_SET::Collide( const VECTOR2I& aP, int aClearance ) const
+bool SHAPE_POLY_SET::Collide( const VECTOR2I& aP, int aClearance, int* aActual ) const
 {
-    SHAPE_POLY_SET polySet = SHAPE_POLY_SET( *this );
+    ecoord dist_sq = SquaredDistance( aP );
 
-    // Inflate the polygon if necessary.
-    if( aClearance > 0 )
+    if( dist_sq < (ecoord) aClearance * aClearance )
     {
-        // fixme: the number of arc segments should not be hardcoded
-        polySet.Inflate( aClearance, 8 );
+        if( aActual )
+            *aActual = sqrt( dist_sq );
+
+        return true;
     }
 
-    // There is a collision if and only if the point is inside of the polygon.
-    return polySet.Contains( aP );
+    return false;
 }
 
 

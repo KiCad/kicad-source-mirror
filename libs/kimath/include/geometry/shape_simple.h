@@ -159,9 +159,14 @@ public:
     }
 
     /// @copydoc SHAPE::Collide()
-    bool Collide( const SEG& aSeg, int aClearance = 0 ) const override
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override
     {
-        return m_points.Collide( aSeg, aClearance );
+        return m_points.Collide( aSeg, aClearance, aActual );
+    }
+
+    void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
+    {
+        m_points.Rotate( aAngle, aCenter );
     }
 
     void Move( const VECTOR2I& aVector ) override

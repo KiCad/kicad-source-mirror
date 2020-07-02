@@ -34,12 +34,12 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
 {
     int iter = 0;
     VIA mv( *this );
-    VECTOR2I force, totalForce, force2;
+    VECTOR2I force, totalForce;
 
     while( iter < aMaxIterations )
     {
-        NODE::OPT_OBSTACLE obs = aNode->CheckColliding( &mv,
-                aSolidsOnly ? ITEM::SOLID_T : ITEM::ANY_T );
+        NODE::OPT_OBSTACLE obs = aNode->CheckColliding( &mv, aSolidsOnly ? ITEM::SOLID_T
+                                                                         : ITEM::ANY_T );
 
         if( !obs )
             break;
@@ -53,11 +53,10 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
             mv.SetPos( mv.Pos() + l );
         }
 
-        bool col = CollideShapes( obs->m_item->Shape(), mv.Shape(), clearance, true, force2 );
-
-        if( col ) {
-            totalForce += force2;
-            mv.SetPos( mv.Pos() + force2 );
+        if( obs->m_item->Shape()->Collide( mv.Shape(), clearance, &force ) )
+        {
+            totalForce += force;
+            mv.SetPos( mv.Pos() + force );
         }
 
         iter++;

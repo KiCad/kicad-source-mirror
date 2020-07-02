@@ -91,9 +91,7 @@ public:
     }
 
     /// @copydoc SHAPE::Collide()
-    bool Collide( const SEG& aSeg, int aClearance = 0 ) const override;
-
-    bool DoCollide( const SEG& aSeg, int aClearance, int* aActualDist ) const;
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
 
     /**
      * Function GetPosition()
@@ -138,6 +136,16 @@ public:
     void Move( const VECTOR2I& aVector ) override
     {
         m_p0 += aVector;
+    }
+
+    void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
+    {
+        m_p0 -= aCenter;
+        m_p0 = m_p0.Rotate( aAngle );
+        m_p0 += aCenter;
+
+        if( abs( sin( aAngle ) ) == 1 )
+            std::swap( m_h, m_w );
     }
 
     bool IsSolid() const override

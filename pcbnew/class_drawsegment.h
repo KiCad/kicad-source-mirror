@@ -36,8 +36,8 @@
 #include <math/util.h>      // for KiROUND
 #include <math_for_graphics.h>
 #include <trigo.h>
-
 #include <geometry/shape_poly_set.h>
+
 
 class LINE_READER;
 class EDA_DRAW_FRAME;
@@ -236,6 +236,11 @@ public:
     void RebuildBezierToSegmentsPointsList( int aMinSegLen );
 
     void SetPolyPoints( const std::vector<wxPoint>& aPoints );
+
+    /**
+     * Makes a set of SHAPE objects representing the DRAWSEGMENT.  Caller owns the objects.
+     */
+    std::vector<SHAPE*> MakeEffectiveShapes();
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

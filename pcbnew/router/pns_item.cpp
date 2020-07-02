@@ -39,7 +39,7 @@ bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VEC
         return false;
 
     if( aNeedMTV )
-        return Shape()->Collide( aOther->Shape(), aClearance, *aMTV );
+        return Shape()->Collide( aOther->Shape(), aClearance, aMTV );
     else
         return Shape()->Collide( aOther->Shape(), aClearance );
 }

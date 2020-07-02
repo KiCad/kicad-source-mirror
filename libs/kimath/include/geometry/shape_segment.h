@@ -54,14 +54,36 @@ public:
         return BOX2I( m_seg.A, m_seg.B - m_seg.A ).Inflate( aClearance + ( m_width + 1 ) / 2 );
     }
 
-    bool Collide( const SEG& aSeg, int aClearance = 0 ) const override
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override
     {
-        return m_seg.Distance( aSeg ) < ( m_width + 1 ) / 2 + aClearance;
+        int min_dist = ( m_width + 1 ) / 2 + aClearance;
+        ecoord dist_sq = m_seg.SquaredDistance( aSeg );
+
+        if( dist_sq < (ecoord) min_dist * min_dist )
+        {
+            if( aActual )
+                *aActual = std::max( 0, (int) sqrt( dist_sq ) - ( m_width + 1 ) / 2 );
+
+            return true;
+        }
+
+        return false;
     }
 
-    bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const override
+    bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const override
     {
-        return m_seg.Distance( aP ) < ( m_width + 1 ) / 2 + aClearance;
+        int min_dist = ( m_width + 1 ) / 2 + aClearance;
+        ecoord dist_sq = m_seg.SquaredDistance( aP );
+
+        if( dist_sq < (ecoord) min_dist * min_dist )
+        {
+            if( aActual )
+                *aActual = std::max( 0, (int) sqrt( dist_sq ) - ( m_width + 1 ) / 2 );
+
+            return true;
+        }
+
+        return false;
     }
 
     void SetSeg( const SEG& aSeg )
@@ -87,6 +109,18 @@ public:
     bool IsSolid() const override
     {
         return true;
+    }
+
+    void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
+    {
+        m_seg.A -= aCenter;
+        m_seg.B -= aCenter;
+
+        m_seg.A = m_seg.A.Rotate( aAngle );
+        m_seg.B = m_seg.B.Rotate( aAngle );
+
+        m_seg.A += aCenter;
+        m_seg.B += aCenter;
     }
 
     void Move( const VECTOR2I& aVector ) override

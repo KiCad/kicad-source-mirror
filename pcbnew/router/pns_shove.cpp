@@ -814,7 +814,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
  */
 SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 {
-    int clearance = getClearance( aCurrent, aObstacleVia ) ;
+    int clearance = getClearance( aCurrent, aObstacleVia ) + PNS_HULL_MARGIN;
     LINE_PAIR_VEC draggedLines;
     bool lineCollision = false;
     bool viaCollision = false;
@@ -835,9 +835,9 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 #endif
 
         currentLine = (LINE*) aCurrent;
-        lineCollision = CollideShapes( aObstacleVia->Shape(), currentLine->Shape(),
-                                       clearance + currentLine->Width() / 2 + PNS_HULL_MARGIN,
-                                       true, mtvLine );
+        lineCollision = aObstacleVia->Shape()->Collide( currentLine->Shape(),
+                                                        clearance + currentLine->Width() / 2,
+                                                        &mtvLine );
 
         if( currentLine->EndsWithVia() )
         {
@@ -846,8 +846,8 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 
             if( currentNet != obstacleNet && currentNet >= 0 && obstacleNet >= 0 )
             {
-                viaCollision = CollideShapes( currentLine->Via().Shape(), aObstacleVia->Shape(),
-                                              clearance + PNS_HULL_MARGIN, true, mtvVia );
+                viaCollision = currentLine->Via().Shape()->Collide( aObstacleVia->Shape(),
+                                                                    clearance, &mtvVia );
             }
 
             // hole-to-hole is a mechanical constraint (broken drill bits), not an electrical
@@ -875,8 +875,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
     }
     else if( aCurrent->OfKind( ITEM::SOLID_T ) )
     {
-        CollideShapes( aObstacleVia->Shape(), aCurrent->Shape(),
-                       clearance + PNS_HULL_MARGIN, true, mtvSolid );
+        aObstacleVia->Shape()->Collide( aCurrent->Shape(), clearance, &mtvSolid );
         mtv = -mtvSolid;
         rank = aCurrent->Rank() + 10000;
     }

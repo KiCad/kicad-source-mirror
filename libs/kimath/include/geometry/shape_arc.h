@@ -76,8 +76,8 @@ public:
 
     const BOX2I BBox( int aClearance = 0 ) const override;
 
-    bool Collide( const SEG& aSeg, int aClearance = 0 ) const override;
-    bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const override;
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
+    bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const override;
 
     void SetWidth( int aWidth )
     {
@@ -102,7 +102,7 @@ public:
      * @param aCenter is the rotation center
      * @param aAngle rotation angle in radians
      */
-    void Rotate( double aAngle, const VECTOR2I& aCenter );
+    void Rotate( double aAngle, const VECTOR2I& aCenter ) override;
 
     void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aVector = { 0, 0 } );
 

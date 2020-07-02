@@ -386,9 +386,11 @@ public:
      * Checks if point aP lies closer to us than aClearance.
      * @param aP the point to check for collisions with
      * @param aClearance minimum distance that does not qualify as a collision.
+     * @param aActual an optional pointer to an int to store the actual distance in the event
+     *                of a collision.
      * @return true, when a collision has been found
      */
-    bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const override;
+    bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const override;
 
     /**
      * Function Collide()
@@ -396,9 +398,11 @@ public:
      * Checks if segment aSeg lies closer to us than aClearance.
      * @param aSeg the segment to check for collisions with
      * @param aClearance minimum distance that does not qualify as a collision.
+     * @param aActual an optional pointer to an int to store the actual distance in the event
+     *                of a collision.
      * @return true, when a collision has been found
      */
-    bool Collide( const SEG& aSeg, int aClearance = 0 ) const override;
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
 
     /**
      * Function Distance()
@@ -408,6 +412,7 @@ public:
      * @return minimum distance.
      */
     int Distance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
+    SEG::ecoord SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
 
     /**
      * Function Reverse()
@@ -747,7 +752,7 @@ public:
      * @param aCenter is the rotation center
      * @param aAngle rotation angle in radians
      */
-    void Rotate( double aAngle, const VECTOR2I& aCenter = VECTOR2I( 0, 0 ) );
+    void Rotate( double aAngle, const VECTOR2I& aCenter = VECTOR2I( 0, 0 ) ) override;
 
     bool IsSolid() const override
     {

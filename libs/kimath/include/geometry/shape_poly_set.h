@@ -975,7 +975,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @param aCenter is the rotation center
          * @param aAngle rotation angle in radians
          */
-        void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } );
+        void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override;
 
         /// @copydoc SHAPE::IsSolid()
         bool IsSolid() const override
@@ -1003,9 +1003,11 @@ class SHAPE_POLY_SET : public SHAPE
          *                    will be tested.
          * @param  aClearance is the security distance; if the point lies closer to the polygon
          *                    than aClearance distance, then there is a collision.
+         * @param aActual an optional pointer to an int to store the actual distance in the event
+         *                of a collision.
          * @return bool - true if the point aP collides with the polygon; false in any other case.
          */
-        bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const override;
+        bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const override;
 
         /**
          * Function Collide
@@ -1016,10 +1018,12 @@ class SHAPE_POLY_SET : public SHAPE
          *                    will be tested.
          * @param  aClearance is the security distance; if the segment passes closer to the polygon
          *                    than aClearance distance, then there is a collision.
+         * @param aActual an optional pointer to an int to store the actual distance in the event
+         *                of a collision.
          * @return bool - true if the segment aSeg collides with the polygon;
          *                    false in any other case.
          */
-        bool Collide( const SEG& aSeg, int aClearance = 0 ) const override;
+        bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
 
         /**
          * Function CollideVertex

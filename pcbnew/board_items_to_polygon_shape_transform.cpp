@@ -370,7 +370,7 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
     {
     case S_CIRCLE:
         if( width == 0 )
-            TransformCircleToPolygon( aCornerBuffer, GetCenter(), GetRadius() + width / 2, aError );
+            TransformCircleToPolygon( aCornerBuffer, GetCenter(), GetRadius(), aError );
         else
             TransformRingToPolygon( aCornerBuffer, GetCenter(), GetRadius(), aError, width );
         break;

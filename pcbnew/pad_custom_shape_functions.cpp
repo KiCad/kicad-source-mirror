@@ -29,18 +29,12 @@
 
 #include <fctsys.h>
 #include <trigo.h>
-
 #include <pcbnew.h>
-
-#include <bezier_curves.h>
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_drawsegment.h>
-#include <class_edge_mod.h>
 #include <class_pad.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <geometry/convex_hull.h>
-#include <geometry/geometry_utils.h>
 #include <geometry/shape_rect.h>
 
 
@@ -184,107 +178,7 @@ void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aErro
     SHAPE_POLY_SET polyset;
 
     for( const std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
-    {
-        int lineWidth = primitive->GetWidth();
-
-        switch( primitive->GetShape() )
-        {
-        case S_CURVE:
-        {
-            std::vector<wxPoint> ctrlPoints = { primitive->GetStart(), primitive->GetBezControl1(),
-                                                primitive->GetBezControl2(), primitive->GetEnd() };
-            BEZIER_POLY converter( ctrlPoints );
-            std::vector< wxPoint> poly;
-            converter.GetPoly( poly, lineWidth );
-
-            for( unsigned ii = 1; ii < poly.size(); ii++ )
-                TransformSegmentToPolygon( polyset, poly[ ii - 1 ], poly[ ii ], aError, lineWidth );
-            break;
-        }
-
-        case S_SEGMENT:         // usual segment : line with rounded ends
-        {
-            TransformSegmentToPolygon( polyset, primitive->GetStart(), primitive->GetEnd(),
-                                       aError, lineWidth );
-            break;
-        }
-
-        case S_ARC:             // Arc with rounded ends
-        {
-            TransformArcToPolygon( polyset, primitive->GetStart(), primitive->GetEnd(),
-                                   primitive->GetAngle(), aError, lineWidth );
-            break;
-        }
-
-        case S_CIRCLE:
-        {
-            if( lineWidth )    // Ring
-            {
-                TransformRingToPolygon( polyset, primitive->GetStart(), primitive->GetRadius(),
-                                        aError, lineWidth );
-            }
-            else               // Filled circle
-            {
-                TransformCircleToPolygon( polyset, primitive->GetStart(), primitive->GetRadius(),
-                                          aError );
-            }
-            break;
-        }
-
-        case S_RECT:
-        {
-            wxPoint corners[4];
-
-            corners[0] = primitive->GetStart();
-            corners[1] = wxPoint( primitive->GetEnd().x, primitive->GetStart().y );
-            corners[2] = primitive->GetEnd();
-            corners[3] = wxPoint( primitive->GetStart().x, primitive->GetEnd().y );
-
-            if( lineWidth )    // Rect boundary
-            {
-                TransformSegmentToPolygon( polyset, corners[0], corners[1], aError, lineWidth );
-                TransformSegmentToPolygon( polyset, corners[1], corners[2], aError, lineWidth );
-                TransformSegmentToPolygon( polyset, corners[2], corners[3], aError, lineWidth );
-                TransformSegmentToPolygon( polyset, corners[3], corners[0], aError, lineWidth );
-            }
-            else               // Filled rect
-            {
-                // Insert the polygon:
-                polyset.NewOutline();
-
-                for( const wxPoint& corner : corners )
-                    polyset.Append( corner );
-            }
-        }
-            break;
-
-        case S_POLYGON:
-        {
-            SHAPE_POLY_SET poly;
-            poly.NewOutline();
-
-            for( const VECTOR2I& pt : primitive->GetPolyShape().Outline( 0 ).CPoints() )
-                poly.Append( pt );
-
-            if( primitive->GetWidth() > 0 )
-            {
-                int numSegs = std::max( GetArcToSegmentCount( lineWidth / 2, aError, 360.0 ), 6 );
-                poly.Inflate( lineWidth / 2, numSegs );
-            }
-
-            // Insert the polygon:
-            polyset.NewOutline();
-            polyset.Append( poly );
-        }
-            break;
-
-        default:
-            // un-handled primitive
-            wxASSERT_MSG( false, "D_PAD::addPadPrimitivesToPolygon not implemented for "
-                                 + BOARD_ITEM::ShowShape( primitive->GetShape() ) );
-            break;
-        }
-    }
+        primitive->TransformShapeWithClearanceToPolygon( polyset, 0, aError );
 
     polyset.Simplify( SHAPE_POLY_SET::PM_FAST );
 

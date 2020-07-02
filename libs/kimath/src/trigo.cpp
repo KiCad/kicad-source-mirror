@@ -155,7 +155,7 @@ bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, wxPoint aEnd, int
         return std::abs( delta.y ) <= aDist;
 
     SEG segment( aStart, aEnd );
-    return segment.PointCloserThan( aRefPoint, aDist + 1 );
+    return segment.SquaredDistance( aRefPoint ) < SEG::Square( aDist + 1 );
 }
 
 

@@ -193,7 +193,7 @@ public:
         return Intersect( aSeg, false, true );
     }
 
-    bool Collide( const SEG& aSeg, int aClearance ) const;
+    bool Collide( const SEG& aSeg, int aClearance, int* aActual = nullptr ) const;
 
     ecoord SquaredDistance( const SEG& aSeg ) const;
 
@@ -340,8 +340,6 @@ public:
     }
 
     bool Contains( const VECTOR2I& aP ) const;
-
-    bool PointCloserThan( const VECTOR2I& aP, int aDist ) const;
 
     void Reverse()
     {
