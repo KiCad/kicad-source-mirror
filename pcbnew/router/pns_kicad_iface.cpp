@@ -218,7 +218,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::CollideHoles( const PNS::ITEM* aA, const PNS::ITE
 
         ecoord dist_sq = delta.SquaredEuclideanNorm();
 
-        if( dist_sq < min_dist_sq )
+        if( dist_sq == 0 || dist_sq < min_dist_sq )
         {
             if( aNeedMTV )
                 *aMTV = delta.Resize( min_dist - sqrt( dist_sq ) + 3 );  // fixme: apparent rounding error

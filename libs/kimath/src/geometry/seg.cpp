@@ -145,7 +145,7 @@ bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
     dist_sq = std::min( dist_sq, aSeg.SquaredDistance( A ) );
     dist_sq = std::min( dist_sq, aSeg.SquaredDistance( B ) );
 
-    if( dist_sq < (ecoord) aClearance * aClearance )
+    if( dist_sq == 0 || dist_sq < (ecoord) aClearance * aClearance )
     {
         if( aActual )
             *aActual = sqrt( dist_sq );

@@ -68,7 +68,7 @@ public:
         int minDist = aClearance + m_radius;
         ecoord dist_sq = aSeg.SquaredDistance( m_center );
 
-        if( dist_sq < (ecoord) minDist * minDist )
+        if( dist_sq == 0 || dist_sq < (ecoord) minDist * minDist )
         {
             if( aActual )
                 *aActual = std::max( 0, (int) sqrt( dist_sq ) - m_radius );

@@ -98,7 +98,7 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
     dist_sq = std::min( dist_sq, aSeg.SquaredDistance( m_start ) );
     dist_sq = std::min( dist_sq, aSeg.SquaredDistance( m_end ) );
 
-    if( dist_sq < (ecoord) minDist * minDist )
+    if( dist_sq == 0 || dist_sq < (ecoord) minDist * minDist )
     {
         if( aActual )
             *aActual = std::max( 0, (int) sqrt( dist_sq ) - m_width / 2 );

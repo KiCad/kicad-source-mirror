@@ -95,11 +95,11 @@ bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance, int* aActual
         const SEG& s = CSegment( i );
         dist_sq = std::min( dist_sq, s.SquaredDistance( aP ) );
 
-        if( !aActual && dist_sq < clearance_sq )
+        if( ( dist_sq == 0 || dist_sq < clearance_sq ) && !aActual )
             return true;
     }
 
-    if( dist_sq < clearance_sq )
+    if( dist_sq == 0 || dist_sq < clearance_sq )
     {
         if( aActual )
             *aActual = sqrt( dist_sq );
@@ -135,11 +135,11 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual ) 
         const SEG& s = CSegment( i );
         dist_sq = std::min( dist_sq, s.SquaredDistance( aSeg ) );
 
-        if( !aActual && dist_sq < clearance_sq )
+        if( ( dist_sq == 0 || dist_sq < clearance_sq ) && !aActual )
             return true;
     }
 
-    if( dist_sq < clearance_sq )
+    if( dist_sq == 0 || dist_sq < clearance_sq )
     {
         if( aActual )
             *aActual = sqrt( dist_sq );
@@ -644,16 +644,12 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUs
         }
     }
 
-    // If accuracy is 0 then we need to make sure the point isn't actually on the edge.
-    // If accuracy is 1 then we don't really care whether or not the point is *exactly* on the
-    // edge, so we skip edge processing for performance.
-    // If accuracy is > 1, then we use "OnEdge(accuracy-1)" as a proxy for "Inside(accuracy)".
-    if( aAccuracy == 0 )
-        return inside && !PointOnEdge( aPt );
-    else if( aAccuracy == 1 )
+    // If accuracy is <= 1 (nm) then we skip the accuracy test for performance.  Otherwise
+    // we use "OnEdge(accuracy)" as a proxy for "Inside(accuracy)".
+    if( aAccuracy <= 1 )
         return inside;
     else
-        return inside || PointOnEdge( aPt, aAccuracy - 1 );
+        return inside || PointOnEdge( aPt, aAccuracy );
 }
 
 

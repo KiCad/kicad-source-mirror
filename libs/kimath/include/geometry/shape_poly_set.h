@@ -996,9 +996,15 @@ class SHAPE_POLY_SET : public SHAPE
 
         /**
          * Function Collide
-         * Checks whether the point aP collides with the inside of the polygon set; if the point
-         * lies on an edge or on a corner of any of the polygons, there is no collision: the edges
-         * does not belong to the polygon itself.
+         * Checks whether the point aP is either inside or on the edge of the polygon set.
+         *
+         * Note that prior to Jul 2020 we considered the edge to *not* be part of the polygon.
+         * However, most other shapes (rects, circles, segments, etc.) include their edges and
+         * the difference was causing issues when used for DRC.
+         *
+         * (FWIW, SHAPE_LINE_CHAIN was a split personality, with Collide() including its edges
+         * but PointInside() not.  That has also been corrected.)
+         *
          * @param  aP         is the VECTOR2I point whose collision with respect to the poly set
          *                    will be tested.
          * @param  aClearance is the security distance; if the point lies closer to the polygon
@@ -1011,9 +1017,15 @@ class SHAPE_POLY_SET : public SHAPE
 
         /**
          * Function Collide
-         * Checks whether the segment aSeg collides with the inside of the polygon set;  if the
-         * segment touches an edge or a corner of any of the polygons, there is no collision:
-         * the edges do not belong to the polygon itself.
+         * Checks whether the segment aSeg collides with the polygon set (or its edge).
+         *
+         * Note that prior to Jul 2020 we considered the edge to *not* be part of the polygon.
+         * However, most other shapes (rects, circles, segments, etc.) include their edges and
+         * the difference was causing issues when used for DRC.
+         *
+         * (FWIW, SHAPE_LINE_CHAIN was a split personality, with Collide() including its edges
+         * but PointInside() not.  That has also been corrected.)
+         *
          * @param  aSeg       is the SEG segment whose collision with respect to the poly set
          *                    will be tested.
          * @param  aClearance is the security distance; if the segment passes closer to the polygon

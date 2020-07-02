@@ -59,7 +59,7 @@ public:
         int min_dist = ( m_width + 1 ) / 2 + aClearance;
         ecoord dist_sq = m_seg.SquaredDistance( aSeg );
 
-        if( dist_sq < (ecoord) min_dist * min_dist )
+        if( dist_sq == 0 || dist_sq < (ecoord) min_dist * min_dist )
         {
             if( aActual )
                 *aActual = std::max( 0, (int) sqrt( dist_sq ) - ( m_width + 1 ) / 2 );
@@ -75,7 +75,7 @@ public:
         int min_dist = ( m_width + 1 ) / 2 + aClearance;
         ecoord dist_sq = m_seg.SquaredDistance( aP );
 
-        if( dist_sq < (ecoord) min_dist * min_dist )
+        if( dist_sq == 0 || dist_sq < (ecoord) min_dist * min_dist )
         {
             if( aActual )
                 *aActual = std::max( 0, (int) sqrt( dist_sq ) - ( m_width + 1 ) / 2 );

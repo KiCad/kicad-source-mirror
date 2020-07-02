@@ -57,10 +57,10 @@ struct CollisionFixture
         // On a hole edge => inside the polygon
         collidingPoints.emplace_back( 40, 25 );
 
-        // Create points not colliding with the poly set.
+        // On the outline edge => inside the polygon
+        collidingPoints.emplace_back( 0, 10 );
 
-        // On the outline edge => outside the polygon
-        nonCollidingPoints.emplace_back( 0, 10 );
+        // Create points not colliding with the poly set.
 
         // Completely outside of the polygon
         nonCollidingPoints.emplace_back( 200, 200 );
@@ -122,12 +122,20 @@ BOOST_AUTO_TEST_CASE( pointInPolygonSet )
     // Check that the set contains the points that collide with it
     for( const VECTOR2I& point : collidingPoints )
     {
+        std::stringstream ss;
+        ss << "Point {" << point.x << ", " << point.y << " }";
+        BOOST_TEST_INFO( ss.str() );
+
         BOOST_CHECK( common.holeyPolySet.Contains( point ) );
     }
 
     // Check that the set does not contain any point outside of it
     for( const VECTOR2I& point : nonCollidingPoints )
     {
+        std::stringstream ss;
+        ss << "Point {" << point.x << ", " << point.y << " }";
+        BOOST_TEST_INFO( ss.str() );
+
         BOOST_CHECK( !common.holeyPolySet.Contains( point ) );
     }
 }
@@ -142,12 +150,20 @@ BOOST_AUTO_TEST_CASE( Collide )
     // Check that the set collides with the colliding points
     for( const VECTOR2I& point : collidingPoints )
     {
+        std::stringstream ss;
+        ss << "Point {" << point.x << ", " << point.y << " }";
+        BOOST_TEST_INFO( ss.str() );
+
         BOOST_CHECK( common.holeyPolySet.Collide( point, 0 ) );
     }
 
     // Check that the set does not collide with the non colliding points
     for( const VECTOR2I& point : nonCollidingPoints )
     {
+        std::stringstream ss;
+        ss << "Point {" << point.x << ", " << point.y << " }";
+        BOOST_TEST_INFO( ss.str() );
+
         BOOST_CHECK( !common.holeyPolySet.Collide( point, 0 ) );
     }
 

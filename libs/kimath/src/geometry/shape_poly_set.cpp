@@ -1228,7 +1228,7 @@ bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance, int* aActual ) co
 {
     ecoord dist_sq = SquaredDistance( aSeg );
 
-    if( dist_sq < (ecoord) aClearance * aClearance )
+    if( dist_sq == 0 || dist_sq < (ecoord) aClearance * aClearance )
     {
         if( aActual )
             *aActual = sqrt( dist_sq );
@@ -1244,7 +1244,7 @@ bool SHAPE_POLY_SET::Collide( const VECTOR2I& aP, int aClearance, int* aActual )
 {
     ecoord dist_sq = SquaredDistance( aP );
 
-    if( dist_sq < (ecoord) aClearance * aClearance )
+    if( dist_sq == 0 || dist_sq < (ecoord) aClearance * aClearance )
     {
         if( aActual )
             *aActual = sqrt( dist_sq );
