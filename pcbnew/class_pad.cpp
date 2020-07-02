@@ -338,11 +338,21 @@ void D_PAD::BuildEffectiveShapes() const
     //
     m_effectiveBoundingRadius = calcBoundingRadius();
 
+    bool first_shape = true;
+
     for( const std::shared_ptr<SHAPE>& shape : m_effectiveShapes )
     {
         BOX2I r = shape->BBox();
-        m_effectiveBoundingBox.Merge( EDA_RECT( (wxPoint) r.GetOrigin(),
-                                                wxSize( r.GetWidth(), r.GetHeight() ) ) );
+
+        if( first_shape )
+        {
+            m_effectiveBoundingBox.SetOrigin( (wxPoint) r.GetOrigin() );
+            m_effectiveBoundingBox.SetEnd( (wxPoint) r.GetEnd() );
+            first_shape = false;
+        }
+        else
+            m_effectiveBoundingBox.Merge( EDA_RECT( (wxPoint) r.GetOrigin(),
+                                          wxSize( r.GetWidth(), r.GetHeight() ) ) );
     }
 
     // Hole shape
