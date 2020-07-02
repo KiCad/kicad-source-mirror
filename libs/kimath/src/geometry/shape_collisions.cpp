@@ -620,7 +620,9 @@ bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 {
     if( BBox( 0 ).Contains( aSeg.A ) || BBox( 0 ).Contains( aSeg.B ) )
     {
-        *aActual = 0;
+        if( aActual )
+            *aActual = 0;
+
         return true;
     }
 
