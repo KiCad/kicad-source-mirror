@@ -276,18 +276,24 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // it knows what consequences that will have on other KIFACEs running and using
     // this same PROJECT.  It can be very harmful if that calling code is stupid.
 
+    // NOTE: The calling code should never call this in hosted (non-standalone) mode with a
+    // different project than what has been loaded by the manager frame.  This will crash.
+
+    bool differentProject = pro.GetFullPath() != Prj().GetProjectFullName();
+
+    if( differentProject )
+    {
+        GetSettingsManager()->SaveProject();
+        GetSettingsManager()->UnloadProject( &Prj() );
+        GetSettingsManager()->LoadProject( pro.GetFullPath() );
+    }
+
     if( schFileType == SCH_IO_MGR::SCH_LEGACY )
     {
         // Don't reload the symbol libraries if we are just launching Eeschema from KiCad again.
         // They are already saved in the kiface project object.
-        if( pro.GetFullPath() != Prj().GetProjectFullName()
-          || !Prj().GetElem( PROJECT::ELEM_SCH_PART_LIBS ) )
+        if( differentProject || !Prj().GetElem( PROJECT::ELEM_SCH_PART_LIBS ) )
         {
-            GetSettingsManager()->SaveProject();
-            GetSettingsManager()->UnloadProject( &Prj() );
-
-            GetSettingsManager()->LoadProject( pro.GetFullPath() );
-
             // load the libraries here, not in SCH_SCREEN::Draw() which is a context
             // that will not tolerate DisplayError() dialog since we're already in an
             // event handler in there.
@@ -302,10 +308,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // No legacy symbol libraries including the cache are loaded with the new file format.
         Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
     }
-
-    // Make sure the project file name is set (it won't be in standalone mode)
-    if( pro.GetFullPath() != Prj().GetProjectFullName() )
-        GetSettingsManager()->LoadProject( pro.GetFullPath() );
 
     // Load the symbol library table, this will be used forever more.
     Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );

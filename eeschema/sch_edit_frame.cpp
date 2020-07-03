@@ -213,8 +213,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 {
     m_schematic = new SCHEMATIC( nullptr );
 
-    Prj().GetProjectFile().m_TemplateFieldNames = &m_templateFieldNames;
-
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_hasAutoSave = true;
     m_AboutTitle = "Eeschema";
@@ -303,7 +301,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
     GetSettingsManager()->SaveProject();
-    Prj().GetProjectFile().m_TemplateFieldNames = nullptr;
+    Schematic().SetTemplateFieldNames( nullptr );
+    Schematic().Reset();
 
     // Shutdown all running tools
     if( m_toolManager )
@@ -424,6 +423,8 @@ void SCH_EDIT_FRAME::CreateScreens()
 {
     m_schematic->Reset();
     m_schematic->SetProject( &Prj() );
+    m_schematic->SetTemplateFieldNames( &m_templateFieldNames );
+
     m_schematic->SetRoot( new SCH_SHEET( m_schematic ) );
 
     m_defaults = &m_schematic->Settings();

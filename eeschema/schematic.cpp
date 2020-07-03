@@ -85,6 +85,18 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
 }
 
 
+void SCHEMATIC::SetTemplateFieldNames( TEMPLATES* aTemplates )
+{
+    wxASSERT( m_project );
+    PROJECT_FILE& project = m_project->GetProjectFile();
+
+    project.m_TemplateFieldNames = aTemplates;
+
+    if( project.m_SchematicSettings )
+        project.m_SchematicSettings->m_TemplateFieldNames = aTemplates;
+}
+
+
 void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
 {
     wxCHECK_RET( aRootSheet, "Call to SetRoot with null SCH_SHEET!" );

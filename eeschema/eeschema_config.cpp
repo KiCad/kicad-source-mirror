@@ -261,8 +261,6 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
 
     pglayout.SetPageLayout( filename );
 
-    Prj().GetProjectFile().m_TemplateFieldNames = &m_templateFieldNames;
-
     return true;
 }
 
