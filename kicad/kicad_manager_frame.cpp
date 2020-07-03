@@ -348,7 +348,7 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?
 
-    UpdateFileHistory( aProjectFileName.GetFullPath() );
+    UpdateFileHistory( Prj().GetProjectFullName() );
 
     m_leftWin->ReCreateTreePrj();
 
