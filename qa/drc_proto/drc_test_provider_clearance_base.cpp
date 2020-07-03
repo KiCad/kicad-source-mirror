@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+
 #include <common.h>
 #include <class_board.h>
 #include <class_drawsegment.h>
@@ -21,10 +45,13 @@ wxPoint test::DRC_TEST_PROVIDER_CLEARANCE_BASE::getLocation( TRACK* aTrack, ZONE
 {
     SHAPE_POLY_SET* conflictOutline;
 
+    PCB_LAYER_ID l = aTrack->GetLayer();
+
     if( aConflictZone->IsFilled() )
-        conflictOutline = const_cast<SHAPE_POLY_SET*>( &aConflictZone->GetFilledPolysList() );
+        conflictOutline = const_cast<SHAPE_POLY_SET*>( &aConflictZone->GetFilledPolysList( l ) );
     else
         conflictOutline = aConflictZone->Outline();
+
 
     wxPoint pt1 = aTrack->GetPosition();
     wxPoint pt2 = aTrack->GetEnd();
@@ -118,7 +145,7 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE_BASE::checkClearanceSegmToPad( const SEG&
         SHAPE_RECT padShape( padBBox.GetPosition(), padBBox.GetWidth(), padBBox.GetHeight() );
         int        actual;
 
-        if( padShape.DoCollide( refSeg, minClearance + widths, &actual ) )
+        if( padShape.Collide( refSeg, minClearance + widths, &actual ) )
         {
             *aActualDist = std::max( 0, actual - widths );
             return false;
@@ -158,32 +185,31 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE_BASE::checkClearancePadToPad( D_PAD* aRef
     if( center2center - aRefPad->GetBoundingRadius() - aPad->GetBoundingRadius() >= aMinClearance )
         return true;
 
-    // JEY TODO:
-    // TOM TODO: MTV only works as a proxy for actual-distance for convex shapes
-
-    VECTOR2I mtv;
-    VECTOR2I maxMtv( 0, 0 );
+    int actual = INT_MAX;
 
     for( const std::shared_ptr<SHAPE>& aShape : aRefPad->GetEffectiveShapes() )
     {
         for( const std::shared_ptr<SHAPE>& bShape : aPad->GetEffectiveShapes() )
         {
-            if( aShape->Collide( bShape.get(), aMinClearance, mtv ) )
-            {
-                if( mtv.SquaredEuclideanNorm() > maxMtv.SquaredEuclideanNorm() )
-                    maxMtv = mtv;
-            }
+            int this_dist;
+
+            if( aShape->Collide( bShape.get(), aMinClearance, &this_dist ) )
+                actual = std::min( actual, this_dist );
         }
     }
 
-    if( maxMtv.x > 0 || maxMtv.y > 0 )
+    if( actual < INT_MAX )
     {
-        *aActual = std::max( 0, aMinClearance - maxMtv.EuclideanNorm() );
+        // returns the actual clearance (clearance < aMinClearance) for diags:
+        if( aActual )
+            *aActual = std::max( 0, actual );
+
         return false;
     }
 
     return true;
 }
+
 
 
 bool test::DRC_TEST_PROVIDER_CLEARANCE_BASE::poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint aSegEnd,
@@ -222,6 +248,7 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE_BASE::poly2segmentDRC( wxPoint* aTref, in
 }
 
 
+#if 0
 /**
  * compare 2 convex polygons and return true if distance > aDist (if no error DRC)
  * i.e if for each edge of the first polygon distance from each edge of the other polygon
@@ -274,3 +301,4 @@ bool test::DRC_TEST_PROVIDER_CLEARANCE_BASE::poly2polyDRC( wxPoint* aTref, int a
 
     return true;
 }
+#endif

@@ -57,7 +57,7 @@ public:
      * Function GetErrorText
      * returns the string form of a drc error code.
      */
-    ::wxString GetErrorText( int aErrorCode = -1, bool aTranslate = true ) const override { return ""; } // fixme
+    ::wxString GetErrorText( int aErrorCode = -1, bool aTranslate = true ) const { return ""; } // fixme
 
     /**
      * Function ShowHtml

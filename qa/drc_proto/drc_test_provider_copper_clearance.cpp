@@ -551,21 +551,26 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
         for( ZONE_CONTAINER* zone : m_board->Zones() )
         {
-            if( zone->GetFilledPolysList().IsEmpty() || zone->GetIsKeepout() )
+            if( !( refLayerSet & zone->GetLayerSet() ).any() || zone->GetIsKeepout() )
                 continue;
 
-            if( !( refLayerSet & zone->GetLayerSet() ).any() )
-                continue;
+            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            {
+                if( zone->GetFilledPolysList( layer ).IsEmpty() )
+                    continue;
 
-            if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
-                continue;
+                if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
+                    continue;
 
-            auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefSeg, zone );
-            auto minClearance = rule->GetConstraint().GetValue().Min();
+                // fixme: per-layer onLayer() property
 
-            int             widths = refSegWidth / 2;
-            int             center2centerAllowed = minClearance + widths;
-            SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
+                auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefSeg, zone );
+                auto minClearance = rule->GetConstraint().GetValue().Min();
+
+                int widths = refSegWidth / 2;
+                int center2centerAllowed = minClearance + widths;
+                SHAPE_POLY_SET* outline =
+                        const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList( layer ) );
 
             SEG::ecoord     center2center_squared = outline->SquaredDistance( testSeg );
 
@@ -591,6 +596,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
                 ReportWithMarker( drcItem, getLocation( aRefSeg, zone ) );
             }
+        }
         }
     }
 

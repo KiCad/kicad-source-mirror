@@ -1,7 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,8 +57,8 @@ protected:
     bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActual );
     bool poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint aSegEnd,
                       int aDist, int* aActual );
-    bool poly2polyDRC( wxPoint* aTref, int aTrefCount, wxPoint* aTtest, int aTtestCount,
-                   int aAllowedDist, int* actualDist );
+    //bool poly2polyDRC( wxPoint* aTref, int aTrefCount, wxPoint* aTtest, int aTtestCount,
+      //             int aAllowedDist, int* actualDist );
 
     wxPoint getLocation( TRACK* aTrack, const SEG& aConflictSeg );
     wxPoint getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone );
