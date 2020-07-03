@@ -55,7 +55,8 @@ private:
     static ERC_ITEM duplicateSheetName;
     static ERC_ITEM pinNotConnected;
     static ERC_ITEM pinNotDriven;
-    static ERC_ITEM pinTableConflict;
+    static ERC_ITEM pinTableWarning;
+    static ERC_ITEM pinTableError;
     static ERC_ITEM hierLabelMismatch;
     static ERC_ITEM noConnectConnected;
     static ERC_ITEM noConnectDangling;

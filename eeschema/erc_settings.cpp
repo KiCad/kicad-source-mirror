@@ -29,13 +29,68 @@
 const int ercSettingsSchemaVersion = 0;
 
 
+
+#define OK PIN_ERROR::OK
+#define ERR PIN_ERROR::ERROR
+#define WAR PIN_ERROR::WARNING
+
+/**
+ * Default Look up table which gives the ERC error level for a pair of connected pins
+ */
+PIN_ERROR ERC_SETTINGS::m_defaultPinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
+        {
+/*         I,   O,    Bi,   3S,   Pas,  UnS,  PwrI, PwrO, OC,   OE,   NC */
+/* I */  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
+/* O */  { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
+/* Bi*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   WAR,  OK,   WAR,  ERR },
+/* 3S*/  { OK,  WAR,  OK,   OK,   OK,   WAR,  WAR,  ERR,  WAR,  WAR,  ERR },
+/*Pas*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
+/*UnS */ { WAR, WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  ERR },
+/*PwrI*/ { OK,  OK,   OK,   WAR,  OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
+/*PwrO*/ { OK,  ERR,  WAR,  ERR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
+/* OC */ { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
+/* OE */ { OK,  ERR,  WAR,  WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
+/* NC */ { ERR, ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR }
+        };
+
+
+/**
+ * Look up table which gives the minimal drive for a pair of connected pins on
+ * a net.
+ * <p>
+ * The initial state of a net is NOC (Net with No Connection).  It can be updated to
+ * NPI (Pin Isolated), NET_NC (Net with a no connect symbol), NOD (Not Driven) or DRV
+ * (DRIven).  It can be updated to NET_NC with no error only if there is only one pin
+ * in net.  Nets are OK when their final state is NET_NC or DRV.   Nets with the state
+ * NOD have no valid source signal.
+ */
+int ERC_SETTINGS::m_PinMinDrive[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
+        {
+/*         In   Out, Bi,  3S,  Pas, UnS, PwrI,PwrO,OC,  OE,  NC */
+/* In*/  { NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/*Out*/  { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
+/* Bi*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/* 3S*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/*Pas*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/*UnS*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/*PwrI*/ { NOD, DRV, NOD, NOD, NOD, NOD, NOD, DRV, NOD, NOD, NPI },
+/*PwrO*/ { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
+/* OC*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/* OE*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/* NC*/  { NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI }
+        };
+
+
 ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
         NESTED_SETTINGS( "erc", ercSettingsSchemaVersion, aParent, aPath )
 {
+    ResetPinMap();
+
     for( int i = ERCE_FIRST; i <= ERCE_LAST; ++i )
         m_Severities[ i ] = RPT_SEVERITY_ERROR;
 
-    m_Severities[ ERCE_UNSPECIFIED ] = RPT_SEVERITY_UNDEFINED;
+    m_Severities[ERCE_UNSPECIFIED]        = RPT_SEVERITY_UNDEFINED;
+    m_Severities[ERCE_PIN_TO_PIN_WARNING] = RPT_SEVERITY_WARNING;
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "rule_severities",
             [&]() -> nlohmann::json
@@ -74,6 +129,52 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 }
             },
             {} ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "pin_map",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::array();
+
+                for( int i = 0; i < ELECTRICAL_PINTYPES_TOTAL; i++ )
+                {
+                    nlohmann::json inner = nlohmann::json::array();
+
+                    for( int j = 0; j < ELECTRICAL_PINTYPES_TOTAL; j++ )
+                        inner.push_back( static_cast<int>( GetPinMapValue( i, j ) ) );
+
+                    ret.push_back( inner );
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_array() || aJson.size() != ELECTRICAL_PINTYPES_TOTAL )
+                    return;
+
+                for( size_t i = 0; i < ELECTRICAL_PINTYPES_TOTAL; i++ )
+                {
+                    if( i > aJson.size() - 1 )
+                        break;
+
+                    nlohmann::json inner = aJson[i];
+
+                    if( !inner.is_array() || inner.size() != ELECTRICAL_PINTYPES_TOTAL )
+                        return;
+
+                    for( size_t j = 0; j < ELECTRICAL_PINTYPES_TOTAL; j++ )
+                    {
+                        if( inner[j].is_number_integer() )
+                        {
+                            int val = inner[j].get<int>();
+
+                            if( val >= 0 && val <= static_cast<int>( PIN_ERROR::UNCONNECTED ) )
+                                SetPinMapValue( i, j, static_cast<PIN_ERROR>( val ) );
+                        }
+                    }
+                }
+            },
+            {} ) );
 }
 
 
@@ -89,9 +190,6 @@ ERC_SETTINGS::~ERC_SETTINGS()
 
 int ERC_SETTINGS::GetSeverity( int aErrorCode ) const
 {
-    wxCHECK_MSG( m_Severities.count( aErrorCode ), RPT_SEVERITY_IGNORE,
-            "Missing severity from map in ERC_SETTINGS!" );
-
     // Special-case pin-to-pin errors:
     // Ignore-or-not is controlled by ERCE_PIN_TO_PIN_WARNING (for both)
     // Warning-or-error is controlled by which errorCode it is
@@ -114,6 +212,9 @@ int ERC_SETTINGS::GetSeverity( int aErrorCode ) const
             return RPT_SEVERITY_WARNING;
     }
 
+    wxCHECK_MSG( m_Severities.count( aErrorCode ), RPT_SEVERITY_IGNORE,
+            "Missing severity from map in ERC_SETTINGS!" );
+
     return m_Severities.at( aErrorCode );
 }
 
@@ -121,6 +222,12 @@ int ERC_SETTINGS::GetSeverity( int aErrorCode ) const
 void ERC_SETTINGS::SetSeverity( int aErrorCode, int aSeverity )
 {
     m_Severities[ aErrorCode ] = aSeverity;
+}
+
+
+void ERC_SETTINGS::ResetPinMap()
+{
+    memcpy( m_PinMap, m_defaultPinMap, sizeof( m_PinMap ) );
 }
 
 

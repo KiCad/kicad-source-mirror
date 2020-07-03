@@ -32,6 +32,7 @@
 #include <reporter.h>
 #include <confirm.h>
 #include <kiway.h>
+#include <erc.h>
 
 #include <netlist.h>
 #include <netlist_exporter.h>
@@ -158,10 +159,6 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 }
 
 
-//Imported function:
-int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker );
-
-
 bool SCH_EDIT_FRAME::ReadyToNetlist( bool aSilent, bool aSilentAnnotate )
 {
     // Ensure all power symbols have a valid reference
@@ -190,7 +187,9 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( bool aSilent, bool aSilentAnnotate )
     }
 
     // Test duplicate sheet names:
-    if( TestDuplicateSheetNames( &Schematic(), false ) > 0 )
+    ERC_TESTER erc( &Schematic() );
+
+    if( erc.TestDuplicateSheetNames( false ) > 0 )
     {
         if( aSilent || !IsOK( this, _( "Error: duplicate sheet names. Continue?" ) ) )
             return false;

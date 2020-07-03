@@ -831,7 +831,9 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     if( aPosition != CLEAR )
     {
-        if( TestDuplicateSheetNames( &editFrame->Schematic(), false ) > 0 )
+        ERC_TESTER erc( &editFrame->Schematic() );
+
+        if( erc.TestDuplicateSheetNames( false ) > 0 )
         {
             wxMessageBox( _( "Error: duplicate sub-sheet names found in current sheet." ) );
             retVal = false;

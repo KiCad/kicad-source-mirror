@@ -98,72 +98,14 @@ const wxString CommentERC_V[] =
 };
 
 
-/* Look up table which gives the diag for a pair of connected pins
- *  Can be modified by ERC options.
- *  at start up: must be loaded by DefaultDiagErc
- *  Can be modified in dialog ERC
- */
-int PinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
-
-/**
- * Default Look up table which gives the ERC error level for a pair of connected pins
- * Same as DiagErc, but cannot be modified.
- *  Used to init or reset DiagErc
- *  note also, to avoid inconsistancy:
- *    DefaultDiagErc[i][j] = DefaultDiagErc[j][i]
- */
-int DefaultPinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
-{
-/*         I,   O,    Bi,   3S,   Pas,  UnS,  PwrI, PwrO, OC,   OE,   NC */
-/* I */  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
-/* O */  { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
-/* Bi*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   WAR,  OK,   WAR,  ERR },
-/* 3S*/  { OK,  WAR,  OK,   OK,   OK,   WAR,  WAR,  ERR,  WAR,  WAR,  ERR },
-/*Pas*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
-/*UnS */ { WAR, WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  ERR },
-/*PwrI*/ { OK,  OK,   OK,   WAR,  OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
-/*PwrO*/ { OK,  ERR,  WAR,  ERR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
-/* OC */ { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
-/* OE */ { OK,  ERR,  WAR,  WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
-/* NC */ { ERR, ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR }
-};
-
-
-/**
- * Look up table which gives the minimal drive for a pair of connected pins on
- * a net.
- * <p>
- * The initial state of a net is NOC (Net with No Connection).  It can be updated to
- * NPI (Pin Isolated), NET_NC (Net with a no connect symbol), NOD (Not Driven) or DRV
- * (DRIven).  It can be updated to NET_NC with no error only if there is only one pin
- * in net.  Nets are OK when their final state is NET_NC or DRV.   Nets with the state
- * NOD have no valid source signal.
- */
-static int MinimalReq[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
-{
-/*         In   Out, Bi,  3S,  Pas, UnS, PwrI,PwrO,OC,  OE,  NC */
-/* In*/  { NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/*Out*/  { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
-/* Bi*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/* 3S*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/*Pas*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/*UnS*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/*PwrI*/ { NOD, DRV, NOD, NOD, NOD, NOD, NOD, DRV, NOD, NOD, NPI },
-/*PwrO*/ { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
-/* OC*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/* OE*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/* NC*/  { NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI }
-};
-
-
-int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker )
+int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
 {
     SCH_SCREEN* screen;
     int         err_count = 0;
 
-    SCH_SCREENS screenList( aSchematic->Root() );
+    SCH_SCREENS screenList( m_schematic->Root() );
 
-    for( screen = screenList.GetFirst(); screen != NULL; screen = screenList.GetNext() )
+    for( screen = screenList.GetFirst(); screen != nullptr; screen = screenList.GetNext() )
     {
         std::vector<SCH_SHEET*> list;
 
@@ -202,7 +144,7 @@ int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker )
 }
 
 
-void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
+void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
 {
     WS_DRAW_ITEM_LIST wsItems;
 
@@ -212,7 +154,7 @@ void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet 
         wsItems.BuildWorkSheetGraphicList( aWorksheet->GetPageInfo(), aWorksheet->GetTitleBlock() );
     }
 
-    SCH_SCREENS screens( aSchematic->Root() );
+    SCH_SCREENS screens( m_schematic->Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
     {
@@ -297,12 +239,12 @@ void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet 
 }
 
 
-int TestConflictingBusAliases( SCHEMATIC* aSchematic )
+int ERC_TESTER::TestConflictingBusAliases()
 {
     wxString    msg;
     int         err_count = 0;
 
-    SCH_SCREENS screens( aSchematic->Root() );
+    SCH_SCREENS screens( m_schematic->Root() );
     std::vector< std::shared_ptr<BUS_ALIAS> > aliases;
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
@@ -338,12 +280,14 @@ int TestConflictingBusAliases( SCHEMATIC* aSchematic )
 }
 
 
-int TestMultiunitFootprints( const SCH_SHEET_LIST& aSheetList )
+int ERC_TESTER::TestMultiunitFootprints()
 {
+    SCH_SHEET_LIST sheets = m_schematic->GetSheets();
+
     int errors = 0;
     std::map<wxString, LIB_ID> footprints;
     SCH_MULTI_UNIT_REFERENCE_MAP refMap;
-    aSheetList.GetMultiUnitComponents( refMap, true );
+    sheets.GetMultiUnitComponents( refMap, true );
 
     for( auto& component : refMap )
     {
@@ -402,9 +346,10 @@ int TestMultiunitFootprints( const SCH_SHEET_LIST& aSheetList )
 }
 
 
-void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMinConn, int aDiag )
+void ERC_TESTER::diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMinConn,
+                           PIN_ERROR aDiag )
 {
-    if( aDiag == OK || aMinConn < 1 || aNetItemRef->m_Type != NETLIST_ITEM::PIN )
+    if( aDiag == PIN_ERROR::OK || aMinConn < 1 || aNetItemRef->m_Type != NETLIST_ITEM::PIN )
         return;
 
     SCH_PIN* pin = static_cast<SCH_PIN*>( aNetItemRef->m_Comp );
@@ -424,8 +369,8 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMi
 
     if( aNetItemTst && aNetItemTst->m_Type == NETLIST_ITEM::PIN )  /* Error between 2 pins */
     {
-        ERC_ITEM* ercItem = ERC_ITEM::Create( aDiag == ERR ? ERCE_PIN_TO_PIN_ERROR
-                                                       : ERCE_PIN_TO_PIN_WARNING );
+        ERC_ITEM* ercItem = ERC_ITEM::Create( aDiag == PIN_ERROR::ERROR ?
+                                              ERCE_PIN_TO_PIN_ERROR : ERCE_PIN_TO_PIN_WARNING );
         ercItem->SetItems( pin, static_cast<SCH_PIN*>( aNetItemTst->m_Comp ) );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );
@@ -434,12 +379,14 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMi
 }
 
 
-void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned aNetStart,
-                      int* aMinConnexion )
+void ERC_TESTER::TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef,
+                                  unsigned aNetStart, int* aMinConnexion )
 {
+    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+
     unsigned netItemTst = aNetStart;
     ELECTRICAL_PINTYPE jj;
-    int erc = OK;
+    PIN_ERROR erc = PIN_ERROR::OK;
 
     /* Analysis of the table of connections. */
     ELECTRICAL_PINTYPE ref_elect_type = aList->GetItem( aNetItemRef )->m_ElectricalPinType;
@@ -457,11 +404,11 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
         if( netItemTst < aList->size() )
         {
             ELECTRICAL_PINTYPE test_elect_type = aList->GetItem( netItemTst )->m_ElectricalPinType;
-            erc = PinMap[static_cast<int>( ref_elect_type )][static_cast<int>(test_elect_type )];
+            erc = settings.GetPinMapValue( ref_elect_type, test_elect_type );
         }
 
-        if( erc != OK )
-            Diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ), 1, erc );
+        if( erc != PIN_ERROR::OK )
+            diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ), 1, erc );
 
         // We examine only a given net. We stop the search if the net changes
         if( ( netItemTst >= aList->size() ) // End of list
@@ -518,7 +465,10 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
                 }
 
                 if( seterr )
-                    Diagnose( aList->GetItem( aNetItemRef ), NULL, local_minconn, WAR );
+                {
+                    diagnose( aList->GetItem( aNetItemRef ), nullptr, local_minconn,
+                            PIN_ERROR::WARNING );
+                }
 
                 *aMinConnexion = DRV;   // inhibiting other messages of this
                                        // type for the net.
@@ -549,18 +499,17 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
 
         case NETLIST_ITEM::PIN:
             jj            = aList->GetItem( netItemTst )->m_ElectricalPinType;
-            local_minconn = std::max(
-                    MinimalReq[static_cast<int>( ref_elect_type )][static_cast<int>( jj )],
-                    local_minconn );
+            local_minconn = std::max( settings.GetPinMinDrive( ref_elect_type, jj ),
+                                      local_minconn );
 
             if( netItemTst <= aNetItemRef )
                 break;
 
-            if( erc == OK )
+            if( erc == PIN_ERROR::OK )
             {
-                erc = PinMap[static_cast<int>( ref_elect_type )][static_cast<int>( jj )];
+                erc = settings.GetPinMapValue( ref_elect_type, jj );
 
-                if( erc != OK )
+                if( erc != PIN_ERROR::OK )
                 {
                     if( aList->GetConnectionType( netItemTst ) == NET_CONNECTION::UNCONNECTED )
                     {

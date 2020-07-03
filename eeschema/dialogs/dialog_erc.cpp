@@ -196,19 +196,20 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
     SCH_SCREENS screens( sch->Root() );
     ERC_SETTINGS& settings = sch->ErcSettings();
+    ERC_TESTER tester( sch );
 
     // Test duplicate sheet names inside a given sheet.  While one can have multiple references
     // to the same file, each must have a unique name.
     if( settings.IsTestEnabled( ERCE_DUPLICATE_SHEET_NAME ) )
     {
         aReporter.ReportTail( _( "Checking sheet names...\n" ), RPT_SEVERITY_INFO );
-        TestDuplicateSheetNames( sch, true );
+        tester.TestDuplicateSheetNames( true );
     }
 
     if( settings.IsTestEnabled( ERCE_BUS_ALIAS_CONFLICT ) )
     {
         aReporter.ReportTail( _( "Checking bus conflicts...\n" ), RPT_SEVERITY_INFO );
-        TestConflictingBusAliases( sch );
+        tester.TestConflictingBusAliases();
     }
 
     // The connection graph has a whole set of ERC checks it can run
@@ -220,8 +221,8 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
     {
         aReporter.ReportTail( _( "Checking footprints...\n" ), RPT_SEVERITY_INFO );
-        SCH_SHEET_LIST sheets = sch->GetSheets();
-        TestMultiunitFootprints( sheets );
+
+        tester.TestMultiunitFootprints();
     }
 
     std::unique_ptr<NETLIST_OBJECT_LIST> objectsConnectedList( m_parent->BuildNetListBase() );
@@ -304,7 +305,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
             }
 
             // Look for ERC problems between pins:
-            TestOthersItems( objectsConnectedList.get(), itemIdx, nextItemIdx, &MinConn );
+            tester.TestOthersItems( objectsConnectedList.get(), itemIdx, nextItemIdx, &MinConn );
             break;
         }
         default:
@@ -323,7 +324,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     }
 
     if( settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
-        TestTextVars( sch, m_parent->GetCanvas()->GetView()->GetWorksheet() );
+        tester.TestTextVars( m_parent->GetCanvas()->GetView()->GetWorksheet() );
 
     // Display diags:
     m_markerTreeModel->SetProvider( m_markerProvider );

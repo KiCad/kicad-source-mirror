@@ -32,6 +32,7 @@
 
 
 class SCH_EDIT_FRAME;
+class SCHEMATIC;
 
 
 class PANEL_SETUP_PINMAP : public PANEL_SETUP_PINMAP_BASE
@@ -40,6 +41,7 @@ class PANEL_SETUP_PINMAP : public PANEL_SETUP_PINMAP_BASE
 
 private:
     SCH_EDIT_FRAME*   m_parent;
+    SCHEMATIC*        m_schematic;
     wxBitmapButton*   m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
     bool              m_initialized;
     static bool       m_diagErcTableInit; // go to true after DiagErc init
@@ -54,7 +56,7 @@ private:
 
     void ChangeErrorLevel( wxCommandEvent& event );
     void ReBuildMatrixPanel();
-    void setDRCMatrixButtonState( wxBitmapButton *aButton, int aState );
+    void setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_ERROR aState );
 };
 
 

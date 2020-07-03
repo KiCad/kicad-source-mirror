@@ -30,6 +30,8 @@
 #ifndef _ERC_H
 #define _ERC_H
 
+#include <erc_settings.h>
+
 
 class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
@@ -41,110 +43,73 @@ namespace KIGFX
 class WS_PROXY_VIEW_ITEM;
 }
 
-/* For ERC markers: error types (used in diags, and to set the color):
-*/
-enum errortype
-{
-    OK  = 0,
-    WAR,        // Error: severity = warning
-    ERR,        // Error: severity = error
-    UNC         // Error: unconnected pin
-};
 
 extern const wxString CommentERC_H[];
 extern const wxString CommentERC_V[];
 
-/// DRC error codes:
-enum ERCE_T
+
+class ERC_TESTER
 {
-    ERCE_UNSPECIFIED = 0,
-    ERCE_FIRST,
-    ERCE_DUPLICATE_SHEET_NAME = ERCE_FIRST,  // duplicate sheet names within a given sheet
-    ERCE_PIN_NOT_CONNECTED,     // pin not connected and not no connect symbol
-    ERCE_PIN_NOT_DRIVEN,        // pin connected to some others pins but no pin to drive it
-    ERCE_HIERACHICAL_LABEL,     // mismatch between hierarchical labels and pins sheets
-    ERCE_NOCONNECT_CONNECTED,   // a no connect symbol is connected to more than 1 pin
-    ERCE_NOCONNECT_NOT_CONNECTED, // a no connect symbol is not connected to anything
-    ERCE_LABEL_NOT_CONNECTED,   // label not connected to anything
-    ERCE_SIMILAR_LABELS,        // 2 labels are equal fir case insensitive comparisons
-    ERCE_DIFFERENT_UNIT_FP,     // different units of the same component have different footprints assigned
-    ERCE_DIFFERENT_UNIT_NET,    // a shared pin in a multi-unit component is connected to more than one net
-    ERCE_BUS_ALIAS_CONFLICT,    // conflicting bus alias definitions across sheets
-    ERCE_DRIVER_CONFLICT,       // conflicting drivers (labels, etc) on a subgraph
-    ERCE_BUS_ENTRY_CONFLICT,    // a wire connected to a bus doesn't match the bus
-    ERCE_BUS_LABEL_ERROR,       // a label attached to a bus isn't in bus format
-    ERCE_BUS_TO_BUS_CONFLICT,   // a connection between bus objects doesn't share at least one net
-    ERCE_BUS_TO_NET_CONFLICT,   // a bus wire is graphically connected to a net port/pin (or vice versa)
-    ERCE_GLOBLABEL,             // a global label is unique
-    ERCE_UNRESOLVED_VARIABLE,
-    ERCE_LAST = ERCE_UNRESOLVED_VARIABLE,
+public:
 
-    // Errors after this point will not automatically appear in the Severities Panel
+    ERC_TESTER( SCHEMATIC* aSchematic ) :
+            m_schematic( aSchematic )
+    {
+    }
 
-    ERCE_PIN_TO_PIN_WARNING,    // pin connected to an other pin: warning level
-    ERCE_PIN_TO_PIN_ERROR,      // pin connected to an other pin: error level
+    /**
+     * Perform ERC testing for electrical conflicts between \a NetItemRef and other items
+     * (mainly pin) on the same net.
+     * @param aList = a reference to the list of connected objects
+     * @param aNetItemRef = index in list of the current object
+     * @param aNetStart = index in list of net objects of the first item
+     * @param aMinConnexion = a pointer to a variable to store the minimal connection
+     * found( NOD, DRV, NPI, NET_NC)
+     */
+    void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned aNetStart,
+                          int* aMinConnexion );
+
+    /**
+     * inside a given sheet, one cannot have sheets with duplicate names (file
+     * names can be duplicated).
+     * @return the error count
+     * @param aCreateMarker: true = create error markers in schematic,
+     *                       false = calculate error count only
+     */
+    int TestDuplicateSheetNames( bool aCreateMarker );
+
+    /**
+     * Checks for any unresolved text variable references.
+     */
+    void TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
+
+    /**
+     * Checks that there are not conflicting bus alias definitions in the schematic
+     *
+     * (for example, two hierarchical sub-sheets contain different definitions for
+     * the same bus alias)
+     *
+     * @return the error count
+     */
+    int TestConflictingBusAliases();
+
+    /**
+     * Test if all units of each multiunit component have the same footprint assigned.
+     * @return The error count.
+     */
+    int TestMultiunitFootprints();
+
+private:
+    /**
+     * Performs ERC testing and creates an ERC marker to show the ERC problem for aNetItemRef
+     * or between aNetItemRef and aNetItemTst.
+     *  if MinConn < 0: this is an error on labels
+     */
+    void diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst, int MinConnexion,
+                   PIN_ERROR Diag );
+
+    SCHEMATIC* m_schematic;
 };
-
-/* Minimal connection table */
-#define NPI    4  // Net with Pin isolated, this pin has type Not Connected and must be left N.C.
-#define DRV    3  // Net driven by a signal (a pin output for instance)
-#define NET_NC 2  // Net "connected" to a "NoConnect symbol"
-#define NOD    1  // Net not driven ( Such as 2 or more connected inputs )
-#define NOC    0  // initial state of a net: no connection
-
-
-/**
- * Performs ERC testing and creates an ERC marker to show the ERC problem for aNetItemRef
- * or between aNetItemRef and aNetItemTst.
- *  if MinConn < 0: this is an error on labels
- */
-void Diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst, int MinConnexion,
-               int Diag );
-
-/**
- * Perform ERC testing for electrical conflicts between \a NetItemRef and other items
- * (mainly pin) on the same net.
- * @param aList = a reference to the list of connected objects
- * @param aNetItemRef = index in list of the current object
- * @param aNetStart = index in list of net objects of the first item
- * @param aMinConnexion = a pointer to a variable to store the minimal connection
- * found( NOD, DRV, NPI, NET_NC)
- */
-void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned aNetStart,
-                      int* aMinConnexion );
-
-/**
- * Function TestDuplicateSheetNames( )
- * inside a given sheet, one cannot have sheets with duplicate names (file
- * names can be duplicated).
- * @return the error count
- * @param aCreateMarker: true = create error markers in schematic,
- *                       false = calculate error count only
- */
-int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker );
-
-/**
- * Function TestTextVars()
- * Checks for any unresolved text variable references.
- */
-void TestTextVars( SCHEMATIC* aSchematic, KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
-
-/**
- * Checks that there are not conflicting bus alias definitions in the schematic
- *
- * (for example, two hierarchical sub-sheets contain different definitions for
- * the same bus alias)
- *
- * @return the error count
- */
-int TestConflictingBusAliases( SCHEMATIC* aSchematic );
-
-/**
- * Test if all units of each multiunit component have the same footprint assigned.
- * @param aSheetList contains components to be validated.
- * @return The error count.
- */
-int TestMultiunitFootprints( const SCH_SHEET_LIST& aSheetList );
 
 
 #endif  // _ERC_H

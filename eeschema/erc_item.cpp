@@ -49,7 +49,11 @@ ERC_ITEM ERC_ITEM::pinNotDriven( ERCE_PIN_NOT_DRIVEN,
         _( "Pin connected to other pins, but not driven by any pin" ),
         wxT( "pin_not_driven" ) );
 
-ERC_ITEM ERC_ITEM::pinTableConflict( ERCE_PIN_TO_PIN_ERROR,
+ERC_ITEM ERC_ITEM::pinTableWarning( ERCE_PIN_TO_PIN_WARNING,
+        _( "Conflict problem between pins" ),
+        wxT( "pin_to_pin" ) );
+
+ERC_ITEM ERC_ITEM::pinTableError( ERCE_PIN_TO_PIN_ERROR,
         _( "Conflict problem between pins" ),
         wxT( "pin_to_pin" ) );
 
@@ -117,7 +121,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::duplicateSheetName,
                  ERC_ITEM::pinNotConnected,
                  ERC_ITEM::pinNotDriven,
-                 ERC_ITEM::pinTableConflict,
+                 ERC_ITEM::pinTableWarning,
                  ERC_ITEM::hierLabelMismatch,
                  ERC_ITEM::noConnectConnected,
                  ERC_ITEM::noConnectDangling,
@@ -151,8 +155,10 @@ ERC_ITEM* ERC_ITEM::Create( int aErrorCode )
         return new ERC_ITEM( pinNotDriven );
 
     case ERCE_PIN_TO_PIN_WARNING:
+        return new ERC_ITEM( pinTableWarning );
+
     case ERCE_PIN_TO_PIN_ERROR:
-        return new ERC_ITEM( pinTableConflict );
+        return new ERC_ITEM( pinTableError );
 
     case ERCE_HIERACHICAL_LABEL:
         return new ERC_ITEM( hierLabelMismatch );

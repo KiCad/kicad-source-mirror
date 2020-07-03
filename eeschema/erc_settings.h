@@ -21,13 +21,62 @@
 #ifndef _ERC_SETTINGS_H
 #define _ERC_SETTINGS_H
 
-#include <erc.h>
 #include <erc_item.h>
+#include <pin_type.h>
 #include <settings/nested_settings.h>
 #include <widgets/ui_common.h>
 
 
 class SCH_MARKER;
+class SCHEMATIC;
+
+
+/// ERC error codes
+enum ERCE_T
+{
+    ERCE_UNSPECIFIED = 0,
+    ERCE_FIRST,
+    ERCE_DUPLICATE_SHEET_NAME = ERCE_FIRST,  // duplicate sheet names within a given sheet
+    ERCE_PIN_NOT_CONNECTED,     // pin not connected and not no connect symbol
+    ERCE_PIN_NOT_DRIVEN,        // pin connected to some others pins but no pin to drive it
+    ERCE_HIERACHICAL_LABEL,     // mismatch between hierarchical labels and pins sheets
+    ERCE_NOCONNECT_CONNECTED,   // a no connect symbol is connected to more than 1 pin
+    ERCE_NOCONNECT_NOT_CONNECTED, // a no connect symbol is not connected to anything
+    ERCE_LABEL_NOT_CONNECTED,   // label not connected to anything
+    ERCE_SIMILAR_LABELS,        // 2 labels are equal fir case insensitive comparisons
+    ERCE_DIFFERENT_UNIT_FP,     // different units of the same component have different footprints assigned
+    ERCE_DIFFERENT_UNIT_NET,    // a shared pin in a multi-unit component is connected to more than one net
+    ERCE_BUS_ALIAS_CONFLICT,    // conflicting bus alias definitions across sheets
+    ERCE_DRIVER_CONFLICT,       // conflicting drivers (labels, etc) on a subgraph
+    ERCE_BUS_ENTRY_CONFLICT,    // a wire connected to a bus doesn't match the bus
+    ERCE_BUS_LABEL_ERROR,       // a label attached to a bus isn't in bus format
+    ERCE_BUS_TO_BUS_CONFLICT,   // a connection between bus objects doesn't share at least one net
+    ERCE_BUS_TO_NET_CONFLICT,   // a bus wire is graphically connected to a net port/pin (or vice versa)
+    ERCE_GLOBLABEL,             // a global label is unique
+    ERCE_UNRESOLVED_VARIABLE,
+    ERCE_LAST = ERCE_UNRESOLVED_VARIABLE,
+
+    // Errors after this point will not automatically appear in the Severities Panel
+
+    ERCE_PIN_TO_PIN_WARNING,    // pin connected to an other pin: warning level
+    ERCE_PIN_TO_PIN_ERROR,      // pin connected to an other pin: error level
+};
+
+/// The values a pin-to-pin entry in the pin matrix can take on
+enum class PIN_ERROR
+{
+    OK,
+    WARNING,
+    ERROR,
+    UNCONNECTED
+};
+
+/// Types of drive on a net (used for legacy ERC)
+#define NPI    4  // Net with Pin isolated, this pin has type Not Connected and must be left N.C.
+#define DRV    3  // Net driven by a signal (a pin output for instance)
+#define NET_NC 2  // Net "connected" to a "NoConnect symbol"
+#define NOD    1  // Net not driven ( Such as 2 or more connected inputs )
+#define NOC    0  // initial state of a net: no connection
 
 /**
  * Container for ERC settings
@@ -71,7 +120,49 @@ public:
 
     void SetSeverity( int aErrorCode, int aSeverity );
 
+    void ResetPinMap();
+
+    PIN_ERROR GetPinMapValue( int aFirstType, int aSecondType ) const
+    {
+        wxASSERT( aFirstType < ELECTRICAL_PINTYPES_TOTAL
+                  && aSecondType < ELECTRICAL_PINTYPES_TOTAL );
+        return m_PinMap[aFirstType][aSecondType];
+    }
+
+    PIN_ERROR GetPinMapValue( ELECTRICAL_PINTYPE aFirstType, ELECTRICAL_PINTYPE aSecondType ) const
+    {
+        return m_PinMap[static_cast<int>( aFirstType )][static_cast<int>( aSecondType )];
+    }
+
+    void SetPinMapValue( int aFirstType, int aSecondType, PIN_ERROR aValue )
+    {
+        wxASSERT( aFirstType < ELECTRICAL_PINTYPES_TOTAL
+                  && aSecondType < ELECTRICAL_PINTYPES_TOTAL );
+        m_PinMap[aFirstType][aSecondType] = aValue;
+    }
+
+    void SetPinMapValue( ELECTRICAL_PINTYPE aFirstType, ELECTRICAL_PINTYPE aSecondType,
+                         PIN_ERROR aValue )
+    {
+        m_PinMap[static_cast<int>( aFirstType )][static_cast<int>( aSecondType )] = aValue;
+    }
+
+    int GetPinMinDrive( ELECTRICAL_PINTYPE aFirstType, ELECTRICAL_PINTYPE aSecondType ) const
+    {
+        return m_PinMinDrive[static_cast<int>( aFirstType )][static_cast<int>( aSecondType )];
+    }
+
+public:
+
     std::map<int, int> m_Severities;
+
+    PIN_ERROR m_PinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
+
+    static int m_PinMinDrive[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
+
+private:
+
+    static PIN_ERROR m_defaultPinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
 };
 
 /**

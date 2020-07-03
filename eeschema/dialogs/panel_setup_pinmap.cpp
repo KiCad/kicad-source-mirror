@@ -33,6 +33,7 @@
 #include <netlist_object.h>
 #include <lib_pin.h>
 #include <sch_component.h>
+#include <schematic.h>
 #include <connection_graph.h>
 #include <tools/ee_actions.h>
 #include <tool/tool_manager.h>
@@ -41,11 +42,6 @@
 #include <id.h>
 #include <widgets/wx_angle_text.h>
 
-extern int PinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
-extern int DefaultPinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
-
-
-bool PANEL_SETUP_PINMAP::m_diagErcTableInit = false;        // saved only for the current session
 
 // Control identifiers for events
 #define ID_MATRIX_0 1800
@@ -63,7 +59,8 @@ PANEL_SETUP_PINMAP::PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* paren
     m_buttonList(),
     m_initialized( false )
 {
-    m_parent = parent;
+    m_parent    = parent;
+    m_schematic = &parent->Schematic();
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
@@ -74,7 +71,7 @@ PANEL_SETUP_PINMAP::PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* paren
 
 void PANEL_SETUP_PINMAP::OnResetMatrixClick( wxCommandEvent& aEvent )
 {
-    memcpy( PinMap, DefaultPinMap, sizeof( PinMap ) );
+    m_schematic->ErcSettings().ResetPinMap();
     ReBuildMatrixPanel();
 }
 
@@ -85,12 +82,6 @@ void PANEL_SETUP_PINMAP::ReBuildMatrixPanel()
     wxBitmapButton * dummy = new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmap( ercerr_xpm ) );
     wxSize bitmap_size = dummy->GetSize();
     delete dummy;
-
-    if( !m_diagErcTableInit )
-    {
-        memcpy( PinMap, DefaultPinMap, sizeof(DefaultPinMap) );
-        m_diagErcTableInit = true;
-    }
 
     wxPoint pos;
     // Get the current text size using a dummy text.
@@ -140,16 +131,16 @@ void PANEL_SETUP_PINMAP::ReBuildMatrixPanel()
         for( int jj = 0; jj <= ii; jj++ )
         {
             // Add column labels (only once)
-            int diag = PinMap[ii][jj];
-            int x    = pos.x + ( jj * ( bitmap_size.x + 4 ) );
+            PIN_ERROR diag = m_schematic->ErcSettings().GetPinMapValue( ii, jj );
 
-            if( (ii == jj) && !m_initialized )
+            int x = pos.x + ( jj * ( bitmap_size.x + 4 ) );
+
+            if( ( ii == jj ) && !m_initialized )
             {
                 wxPoint txtpos;
-                txtpos.x = x + (bitmap_size.x / 2);
+                txtpos.x = x + ( bitmap_size.x / 2 );
                 txtpos.y = y - text_height;
-                new WX_ANGLE_TEXT( m_matrixPanel, wxID_ANY, CommentERC_V[ii],
-                                   txtpos, 450 );
+                new WX_ANGLE_TEXT( m_matrixPanel, wxID_ANY, CommentERC_V[ii], txtpos, 450 );
             }
 
             int event_id = ID_MATRIX_0 + ii + ( jj * ELECTRICAL_PINTYPES_TOTAL );
@@ -189,24 +180,24 @@ bool PANEL_SETUP_PINMAP::Show( bool show )
 }
 
 
-void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( wxBitmapButton *aButton, int aState )
+void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_ERROR aState )
 {
     BITMAP_DEF bitmap_butt = nullptr;
     wxString tooltip;
 
     switch( aState )
     {
-    case OK:
+    case PIN_ERROR::OK:
         bitmap_butt = erc_green_xpm;
         tooltip = _( "No error or warning" );
         break;
 
-    case WAR:
+    case PIN_ERROR::WARNING:
         bitmap_butt = ercwarn_xpm;
         tooltip = _( "Generate warning" );
         break;
 
-    case ERR:
+    case PIN_ERROR::ERROR:
         bitmap_butt = ercerr_xpm;
         tooltip = _( "Generate error" );
         break;
@@ -231,11 +222,13 @@ void PANEL_SETUP_PINMAP::ChangeErrorLevel( wxCommandEvent& event )
     int y = ii % ELECTRICAL_PINTYPES_TOTAL;
     wxBitmapButton* butt = (wxBitmapButton*) event.GetEventObject();
 
-    int level = ( PinMap[y][x] + 1 ) % 3;
+    int level = static_cast<int>( m_schematic->ErcSettings().GetPinMapValue( y, x ) );
+    level     = ( level + 1 ) % 3;
 
-    setDRCMatrixButtonState( butt, level );
+    setDRCMatrixButtonState( butt, static_cast<PIN_ERROR>( level ) );
 
-    PinMap[y][x] = PinMap[x][y] = level;
+    m_schematic->ErcSettings().SetPinMapValue( y, x, static_cast<PIN_ERROR>( level ) );
+    m_schematic->ErcSettings().SetPinMapValue( x, y, static_cast<PIN_ERROR>( level ) );
 }
 
 
