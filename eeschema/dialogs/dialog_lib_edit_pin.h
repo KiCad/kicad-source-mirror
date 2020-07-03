@@ -47,6 +47,8 @@ class DIALOG_LIB_EDIT_PIN : public DIALOG_LIB_EDIT_PIN_BASE
     UNIT_BINDER     m_nameSize;
     UNIT_BINDER     m_numberSize;
 
+    wxPoint         m_origPos;
+
 public:
     /** Constructor */
     DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin );

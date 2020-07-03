@@ -103,13 +103,15 @@ bool DIALOG_LIB_EDIT_PIN::TransferDataToWindow()
     if( !DIALOG_SHIM::TransferDataToWindow() )
         return false;
 
+    m_origPos = m_pin->GetPosition();
+
     m_choiceOrientation->SetSelection( LIB_PIN::GetOrientationIndex( m_pin->GetOrientation() ) );
     m_choiceStyle->SetSelection( m_pin->GetShape() );
     m_choiceElectricalType->SetSelection( m_pin->GetType() );
     m_textPinName->SetValue( m_pin->GetName() );
     m_nameSize.SetValue( m_pin->GetNameTextSize() );
-    m_posX.SetValue( m_pin->GetPosition().x );
-    m_posY.SetValue( -m_pin->GetPosition().y );
+    m_posX.SetValue( m_origPos.x );
+    m_posY.SetValue( -m_origPos.y );
     m_textPinNumber->SetValue( m_pin->GetNumber() );
     m_numberSize.SetValue( m_pin->GetNumberTextSize() );
     m_pinLength.SetValue( m_pin->GetLength() );
@@ -128,9 +130,13 @@ bool DIALOG_LIB_EDIT_PIN::TransferDataFromWindow()
     if( !DIALOG_SHIM::TransferDataFromWindow() )
         return false;
 
+    wxPoint newPos( m_posX.GetValue(), -m_posY.GetValue() );
+
     const int acceptable_mingrid = 50;
 
-    if( ( m_posX.GetValue() % acceptable_mingrid ) || ( m_posY.GetValue() % acceptable_mingrid ) )
+    // Only show the warning if the position has been changed
+    if( ( m_origPos != newPos )
+        && ( ( m_posX.GetValue() % acceptable_mingrid ) || ( m_posY.GetValue() % acceptable_mingrid ) ) )
     {
         auto msg = wxString::Format( _( "This pin is not on a %d mils grid which will make it\n"
                                         "difficult to connect to in the schematic.\n"
@@ -149,7 +155,7 @@ bool DIALOG_LIB_EDIT_PIN::TransferDataFromWindow()
     m_pin->SetNumberTextSize( m_numberSize.GetValue() );
     m_pin->SetOrientation( LIB_PIN::GetOrientationCode( m_choiceOrientation->GetSelection() ) );
     m_pin->SetLength( m_pinLength.GetValue() );
-    m_pin->SetPinPosition( wxPoint( m_posX.GetValue(), -m_posY.GetValue() ) );
+    m_pin->SetPinPosition( newPos );
     m_pin->SetType( m_choiceElectricalType->GetPinTypeSelection() );
     m_pin->SetShape( m_choiceStyle->GetPinShapeSelection() );
     m_pin->SetConversion( m_checkApplyToAllConversions->GetValue() ? 0 : m_frame->GetConvert() );
