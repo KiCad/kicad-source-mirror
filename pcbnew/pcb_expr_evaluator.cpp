@@ -1,8 +1,31 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+
 #include <cstdio>
 
 #include "class_board.h"
 #include "pcb_expr_evaluator.h"
-
 
 class PCB_EXPR_BUILTIN_FUNCTIONS
 {
@@ -34,9 +57,6 @@ class PCB_EXPR_BUILTIN_FUNCTIONS
 
             if( it == m_funcs.end() )
                 return nullptr;
-
-            //printf("Cfc2\n");
-            //it->second(nullptr, nullptr, nullptr);
 
             return it->second;
         }
@@ -121,13 +141,8 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode )
 LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::createFuncCall( LIBEVAL::COMPILER* aCompiler, const std::string& name )
 {
     auto registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
-
-    //printf("CreateFCall '%s' found %d\n", name.c_str(),  registry.Get(name) != nullptr ? 1 : 0 );
-
     auto f = registry.Get( name );
-    //printf("Cfc3\n");
-    //f(nullptr,nullptr,nullptr);
-            
+
     return f;
 }
 
@@ -164,8 +179,6 @@ LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler,
                 else
                 {
                     (void) 0; // should we do anything here?
-                    //printf("unmatched type for prop '%s'\n", field.c_str() );
-                    //wxString msg;
                     //msg.Printf("Unrecognized type for property '%s'", field.c_str() );
                     //aCompiler->ReportError( (const char*) msg.c_str() );
                 }

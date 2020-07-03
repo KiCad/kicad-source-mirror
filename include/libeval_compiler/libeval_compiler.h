@@ -2,6 +2,7 @@
     This file is part of libeval, a simple math expression evaluator
 
     Copyright (C) 2007 Michael Geselbracht, mgeselbracht3@gmail.com
+    Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
