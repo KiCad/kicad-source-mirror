@@ -48,6 +48,8 @@ public:
     void SetOrigin( const VECTOR2I& aOrigin )
     {
         m_origin = aOrigin;
+        m_originSet = true;
+        setGeometryChanged();
     }
 
     VECTOR2I GetOrigin() const
@@ -69,6 +71,7 @@ public:
         {
             m_end = aEnd;
         }
+        setGeometryChanged();
     }
 
     VECTOR2I GetEnd() const
@@ -81,10 +84,61 @@ public:
         m_angleSnap = aSnap;
     }
 
+    bool GetAngleSnap() const
+    {
+        return m_angleSnap;
+    }
+
+    /**
+     * @return true if the manager is in the initial state
+     */
+    bool IsReset() const
+    {
+        return !m_originSet;
+    }
+
+    /**
+     * Reset the manager to the initial state
+     */
+    void Reset()
+    {
+        m_originSet = false;
+        setGeometryChanged();
+    }
+
+    /**
+     * @return true if the geoemtry has changed, eg such that a client
+     * should redraw
+     */
+    bool HasGeometryChanged() const
+    {
+        return m_changed;
+    }
+
+    /**
+     * Clear the geometry changed flag, call after the client code has
+     * updated everything as needed.
+     */
+    void ClearGeometryChanged()
+    {
+        m_changed = false;
+    }
+
+protected:
+    ///> Mark the geometry as changed for clients to notice
+    void setGeometryChanged()
+    {
+        m_changed = true;
+    }
+
 private:
 
     VECTOR2I m_origin, m_end;
     bool m_angleSnap = false;
+
+    ///> Has the gemotry changed such that a client should redraw?
+    bool m_changed   = false;
+    bool m_originSet = false;
 };
 
 } // PREVIEW

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,26 +21,36 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PREVIEW_ITEMS_ARC_ASSISTANT_H
-#define PREVIEW_ITEMS_ARC_ASSISTANT_H
+#ifndef PREVIEW_ITEMS_TWO_POINT_ASSISTANT_H
+#define PREVIEW_ITEMS_TWO_POINT_ASSISTANT_H
 
 #include <base_struct.h>
-#include <preview_items/arc_geom_manager.h>
+#include <preview_items/two_point_geom_manager.h>
 
 namespace KIGFX
 {
 namespace PREVIEW
 {
+
+    // TODO: required until STROKE_T is either moved into commons or a better approach is found
+    enum class GEOM_SHAPE
+    {
+        SEGMENT = 0,
+        RECT,
+        CIRCLE,
+    };
+
     /**
      * SELECTION_AREA
      *
      * Represents an assistant draw when interactively drawing an
-     * arc on a canvas.
+     * line or circle on a canvas.
      */
-    class ARC_ASSISTANT : public EDA_ITEM
+    class TWO_POINT_ASSISTANT : public EDA_ITEM
     {
     public:
-        ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager, EDA_UNITS aUnits );
+        TWO_POINT_ASSISTANT(
+                const TWO_POINT_GEOMETRY_MANAGER& aManager, EDA_UNITS aUnits, GEOM_SHAPE aShape );
 
         const BOX2I ViewBBox() const override;
 
@@ -57,18 +67,19 @@ namespace PREVIEW
 
         /**
          * Get class name
-         * @return  string "ARC_ASSISTANT"
+         * @return  string "TWO_POINT_ASSISTANT"
          */
         wxString GetClass() const override
         {
-            return "ARC_ASSISTANT";
+            return "TWO_POINT_ASSISTANT";
         }
 
     private:
-        const ARC_GEOM_MANAGER& m_constructMan;
-        EDA_UNITS               m_units;
+        const TWO_POINT_GEOMETRY_MANAGER& m_constructMan;
+        EDA_UNITS                         m_units;
+        GEOM_SHAPE                        m_shape;
     };
 } // namespace PREVIEW
 } // namespace KIGFX
 
-#endif // PREVIEW_ITEMS_ARC_ASSISTANT_H
+#endif // PREVIEW_ITEMS_TWO_POINT_ASSISTANT_H

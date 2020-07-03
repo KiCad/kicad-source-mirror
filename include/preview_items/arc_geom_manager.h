@@ -136,6 +136,7 @@ private:
      * construction parameters
      */
     bool m_angleSnap = false;
+    bool m_directionLocked = false;
 };
 }       // PREVIEW
 }       // KIGFX

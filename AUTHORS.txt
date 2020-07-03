@@ -47,6 +47,7 @@ Seth Hillbrand <hillbrand[at]ucdavis-dot-edu>
 Jeff Young <jeff[at]rokeby-dot-ie>
 Kevin Cozens <kevin[at]ve3syb-dot-ca>
 Ian McInerney <ian.s.mcinerney[at]ieee-dot-org>
+Thomas Pointhuber <thomas.pointhuber[at]gmx-dot-at>
 
 See git repo on GitLab for contributors at
 https://gitlab.com/kicad/code/kicad/-/graphs/master
