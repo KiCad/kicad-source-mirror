@@ -132,6 +132,8 @@ const std::string GerberJobFileExtension( "gbrjob" );
 const std::string HtmlFileExtension( "html" );
 const std::string EquFileExtension( "equ" );
 
+const std::string ArchiveFileExtension( "zip" );
+
 const std::string LegacyPcbFileExtension( "brd" );
 const std::string KiCadPcbFileExtension( "kicad_pcb" );
 const std::string PageLayoutDescrFileExtension( "kicad_wks" );

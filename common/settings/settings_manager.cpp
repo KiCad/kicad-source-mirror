@@ -30,6 +30,7 @@
 #include <gestfich.h>
 #include <macros.h>
 #include <project.h>
+#include <project/project_archiver.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <settings/app_settings.h>
@@ -822,4 +823,219 @@ bool SETTINGS_MANAGER::unloadProjectFile( PROJECT* aProject, bool aSave )
     m_project_files.erase( name );
 
     return true;
+}
+
+
+wxString SETTINGS_MANAGER::GetProjectBackupsPath() const
+{
+    return Prj().GetProjectPath() + Prj().GetProjectName() + PROJECT_BACKUPS_DIR_SUFFIX;
+}
+
+
+wxString SETTINGS_MANAGER::backupDateTimeFormat = wxT( "%Y-%m-%d_%H%M%S" );
+
+
+bool SETTINGS_MANAGER::BackupProject( REPORTER& aReporter ) const
+{
+    wxDateTime timestamp = wxDateTime::Now();
+
+    wxString fileName = wxString::Format( wxT( "%s-%s" ), Prj().GetProjectName(),
+                                          timestamp.Format( backupDateTimeFormat ) );
+
+    wxFileName target;
+    target.SetPath( GetProjectBackupsPath() );
+    target.SetName( fileName );
+    target.SetExt( ArchiveFileExtension );
+
+    wxDir dir( target.GetPath() );
+
+    if( !target.DirExists() && !wxMkdir( target.GetPath() ) )
+    {
+        wxLogTrace( traceSettings, "Could not create project backup path %s", target.GetPath() );
+        return false;
+    }
+
+    if( !target.IsDirWritable() )
+    {
+        wxLogTrace( traceSettings, "Backup directory %s is not writeable", target.GetPath() );
+        return false;
+    }
+
+    wxLogTrace( traceSettings, "Backing up project to %s", target.GetPath() );
+
+    PROJECT_ARCHIVER archiver;
+
+    return archiver.Archive( Prj().GetProjectPath(), target.GetFullPath(), aReporter );
+}
+
+
+class VECTOR_INSERT_TRAVERSER : public wxDirTraverser
+{
+public:
+    VECTOR_INSERT_TRAVERSER( std::vector<wxString>& aVec,
+                             std::function<bool( const wxString& )> aCond ) :
+            m_files( aVec ),
+            m_condition( aCond )
+    {
+    }
+
+    wxDirTraverseResult OnFile( const wxString& aFile ) override
+    {
+        if( m_condition( aFile ) )
+            m_files.emplace_back( aFile );
+
+        return wxDIR_CONTINUE;
+    }
+
+    wxDirTraverseResult OnDir( const wxString& aDirName ) override
+    {
+        return wxDIR_CONTINUE;
+    }
+
+private:
+    std::vector<wxString>& m_files;
+
+    std::function<bool( const wxString& )> m_condition;
+};
+
+
+bool SETTINGS_MANAGER::TriggerBackupIfNeeded( REPORTER& aReporter ) const
+{
+    COMMON_SETTINGS::AUTO_BACKUP settings = GetCommonSettings()->m_Backup;
+
+    if( !settings.enabled )
+        return true;
+
+    wxString prefix = Prj().GetProjectName() + '-';
+
+    auto modTime =
+            [&prefix]( const wxString& aFile )
+            {
+                wxDateTime dt;
+                wxString fn( wxFileName( aFile ).GetName() );
+                fn.Replace( prefix, "" );
+                dt.ParseFormat( fn, backupDateTimeFormat );
+                return dt;
+            };
+
+    // Project not saved yet
+    if( Prj().GetProjectPath().empty() )
+        return true;
+
+    wxString backupPath = GetProjectBackupsPath();
+
+    if( !wxDirExists( backupPath ) )
+    {
+        wxLogTrace( traceSettings, "Backup path %s doesn't exist, creating it", backupPath );
+
+        if( !wxMkdir( backupPath ) )
+        {
+            wxLogTrace( traceSettings, "Could not create backups path!  Skipping backup" );
+            return false;
+        }
+    }
+
+    wxDir dir( backupPath );
+
+    if( !dir.IsOpened() )
+    {
+        wxLogTrace( traceSettings, "Could not open project backups path %s", dir.GetName() );
+        return false;
+    }
+
+    std::vector<wxString> files;
+
+    VECTOR_INSERT_TRAVERSER traverser( files,
+            [&modTime]( const wxString& aFile )
+            {
+                return modTime( aFile ).IsValid();
+            } );
+
+    dir.Traverse( traverser, wxT( "*.zip" ) );
+
+    // Sort newest-first
+    std::sort( files.begin(), files.end(),
+               [&]( const wxString& aFirst, const wxString& aSecond ) -> bool
+               {
+                   wxDateTime first  = modTime( aFirst );
+                   wxDateTime second = modTime( aSecond );
+
+                   return first.GetTicks() > second.GetTicks();
+               } );
+
+    // Do we even need to back up?
+    if( !files.empty() )
+    {
+        wxDateTime lastTime = modTime( files[0] );
+
+        if( lastTime.IsValid() )
+        {
+            wxTimeSpan delta = wxDateTime::Now() - modTime( files[0] );
+
+            if( delta.IsShorterThan( wxTimeSpan::Seconds( settings.min_interval ) ) )
+                return true;
+        }
+    }
+
+    // Now that we know a backup is needed, apply the retention policy
+
+    // Step 1: if we're over the total file limit, remove the oldest
+    if( !files.empty() && settings.limit_total_files > 0 )
+    {
+        while( files.size() > static_cast<size_t>( settings.limit_total_files ) )
+        {
+            wxRemoveFile( files.back() );
+            files.pop_back();
+        }
+    }
+
+    // Step 2: Stay under the total size limit
+    if( settings.limit_total_size > 0 )
+    {
+        wxULongLong totalSize = 0;
+
+        for( const wxString& file : files )
+            totalSize += wxFileName::GetSize( file );
+
+        while( !files.empty() && totalSize > static_cast<wxULongLong>( settings.limit_total_size ) )
+        {
+            totalSize -= wxFileName::GetSize( files.back() );
+            wxRemoveFile( files.back() );
+            files.pop_back();
+        }
+    }
+
+    // Step 3: Stay under the daily limit
+    if( settings.limit_daily_files > 0 && files.size() > 1 )
+    {
+        wxDateTime day = modTime( files[0] );
+        int        num = 1;
+
+        wxASSERT( day.IsValid() );
+
+        std::vector<wxString> filesToDelete;
+
+        for( size_t i = 1; i < files.size(); i++ )
+        {
+            wxDateTime dt = modTime( files[i] );
+
+            if( dt.IsSameDate( day ) )
+            {
+                num++;
+
+                if( num > settings.limit_daily_files )
+                    filesToDelete.emplace_back( files[i] );
+            }
+            else
+            {
+                day = dt;
+                num = 1;
+            }
+        }
+
+        for( const wxString& file : filesToDelete )
+            wxRemoveFile( file );
+    }
+
+    return BackupProject( aReporter );
 }

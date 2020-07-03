@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -65,6 +65,18 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_PreferSelectToDrag;
 		wxCheckBox* m_warpMouseOnMove;
 		wxCheckBox* m_NonImmediateActions;
+		wxCheckBox* m_cbBackupEnabled;
+		wxCheckBox* m_cbBackupAutosave;
+		wxStaticText* m_staticText9;
+		wxSpinCtrl* m_backupLimitTotalFiles;
+		wxStaticText* m_staticText10;
+		wxSpinCtrl* m_backupLimitDailyFiles;
+		wxStaticText* m_staticText11;
+		wxSpinCtrl* m_backupMinInterval;
+		wxStaticText* m_staticText15;
+		wxStaticText* m_staticText16;
+		wxSpinCtrl* m_backupLimitTotalSize;
+		wxStaticText* m_staticText17;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnTextEditorClick( wxCommandEvent& event ) { event.Skip(); }

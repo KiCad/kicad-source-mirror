@@ -125,6 +125,13 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     m_otherPDFViewer->SetValue( !Pgm().UseSystemPdfBrowser() );
     m_PDFViewerPath->SetValue( Pgm().GetPdfBrowserName() );
 
+    m_cbBackupEnabled->SetValue( commonSettings->m_Backup.enabled );
+    m_cbBackupAutosave->SetValue( commonSettings->m_Backup.backup_on_autosave );
+    m_backupLimitTotalFiles->SetValue( commonSettings->m_Backup.limit_total_files );
+    m_backupLimitDailyFiles->SetValue( commonSettings->m_Backup.limit_daily_files );
+    m_backupMinInterval->SetValue( commonSettings->m_Backup.min_interval / 60 );
+    m_backupLimitTotalSize->SetValue( commonSettings->m_Backup.limit_total_size / ( 1024 * 1024 ) );
+
     return true;
 }
 
@@ -152,6 +159,13 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->m_Input.immediate_actions = !m_NonImmediateActions->GetValue();
     commonSettings->m_Input.prefer_select_to_drag = m_PreferSelectToDrag->GetValue();
     commonSettings->m_Input.warp_mouse_on_move = m_warpMouseOnMove->GetValue();
+
+    commonSettings->m_Backup.enabled            = m_cbBackupEnabled->GetValue();
+    commonSettings->m_Backup.backup_on_autosave = m_cbBackupAutosave->GetValue();
+    commonSettings->m_Backup.limit_total_files  = m_backupLimitTotalFiles->GetValue();
+    commonSettings->m_Backup.limit_daily_files  = m_backupLimitDailyFiles->GetValue();
+    commonSettings->m_Backup.min_interval       = m_backupMinInterval->GetValue() * 60;
+    commonSettings->m_Backup.limit_total_size   = m_backupLimitTotalSize->GetValue() * 1024 * 1024;
 
     Pgm().SetEditorName( m_textEditorPath->GetValue() );
 

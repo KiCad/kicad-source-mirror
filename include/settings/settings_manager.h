@@ -28,6 +28,7 @@ class COLOR_SETTINGS;
 class COMMON_SETTINGS;
 class PROJECT;
 class PROJECT_FILE;
+class REPORTER;
 
 
 class SETTINGS_MANAGER
@@ -136,7 +137,7 @@ public:
      * Retrieves the common settings shared by all applications
      * @return a pointer to a loaded COMMON_SETTINGS
      */
-    COMMON_SETTINGS* GetCommonSettings() { return m_common_settings; }
+    COMMON_SETTINGS* GetCommonSettings() const { return m_common_settings; }
 
     /**
      * Returns the path a given settings file should be loaded from / stored to.
@@ -216,6 +217,25 @@ public:
      * @return true if save was successful
      */
     bool SaveProject( const wxString& aFullPath = wxEmptyString );
+
+    /**
+     * @return the full path to where project backups should be stored
+     */
+    wxString GetProjectBackupsPath() const;
+
+    /**
+     * Creates a backup archive of the current project
+     * @param aReporter is used for progress reporting
+     * @return true if everything succeeded
+     */
+    bool BackupProject( REPORTER& aReporter ) const;
+
+    /**
+     * Calls BackupProject if a new backup is needed according to the current backup policy.
+     * @param aReporter is used for progress reporting
+     * @return if everything succeeded
+     */
+    bool TriggerBackupIfNeeded( REPORTER& aReporter ) const;
 
     /**
      * Checks if a given path is probably a valid KiCad configuration directory.
@@ -334,8 +354,7 @@ private:
     /// Loaded project files, mapped according to project full name
     std::map<wxString, PROJECT_FILE*> m_project_files;
 
-    /// A list of project settings objects for each loaded project
-    // std::map<wxString, std::vector<PROJECT_SETTINGS*>> m_project_settings;
+    static wxString backupDateTimeFormat;
 };
 
 #endif

@@ -44,6 +44,7 @@
 #include <schematic.h>
 #include <wildcards_and_files_ext.h>
 #include <project_rescue.h>
+#include <reporter.h>
 #include <eeschema_config.h>
 #include <eeschema_settings.h>
 #include <sch_legacy_plugin.h>
@@ -56,6 +57,7 @@
 #include <tool/actions.h>
 #include <tools/sch_editor_control.h>
 #include <project/project_file.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <netlist.h>
 #include <widgets/infobar.h>
@@ -720,6 +722,11 @@ bool SCH_EDIT_FRAME::SaveProject()
 
     Pgm().GetSettingsManager().SaveProject();
 
+    WX_STRING_REPORTER backupReporter( &msg );
+
+    if( !GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
+        SetStatusText( msg, 0 );
+
     UpdateTitle();
 
     return success;
@@ -765,7 +772,12 @@ bool SCH_EDIT_FRAME::doAutoSave()
     }
 
     if( autoSaveOk )
+    {
         m_autoSaveState = false;
+
+        if( GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )
+            GetSettingsManager()->TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
+    }
 
     return autoSaveOk;
 }

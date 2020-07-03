@@ -59,6 +59,23 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.use_icons_in_menus",
             &m_Appearance.use_icons_in_menus, defaultUseIconsInMenus ) );
 
+    m_params.emplace_back( new PARAM<bool>( "auto_backup.enabled", &m_Backup.enabled, true ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "auto_backup.backup_on_autosave", &m_Backup.backup_on_autosave, false ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "auto_backup.limit_total_files", &m_Backup.limit_total_files, 25 ) );
+
+    m_params.emplace_back( new PARAM<unsigned long long>(
+            "auto_backup.limit_total_size", &m_Backup.limit_total_size, 104857600 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "auto_backup.limit_daily_files", &m_Backup.limit_daily_files, 5 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "auto_backup.min_interval", &m_Backup.min_interval, 300 ) );
+
     m_params.emplace_back( new PARAM<bool>( "environment.show_warning_dialog",
                                          &m_Env.show_warning_dialog, false ) );
 

@@ -298,10 +298,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
-    GetSettingsManager()->SaveProject();
-    Schematic().SetTemplateFieldNames( nullptr );
-    Schematic().Reset();
-
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
@@ -562,6 +558,10 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
     // all sub sheets are deleted, only the main sheet is usable
     GetCurrentSheet().clear();
+
+    GetSettingsManager()->SaveProject();
+    Schematic().SetTemplateFieldNames( nullptr );
+    Schematic().Reset();
 
     Destroy();
 }

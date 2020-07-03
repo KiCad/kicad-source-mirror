@@ -51,6 +51,7 @@
 #include <ratsnest/ratsnest_data.h>
 
 #include <wx/wupdlock.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
@@ -782,6 +783,11 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         return false;
     }
 
+    WX_STRING_REPORTER backupReporter( &upperTxt );
+
+    if( GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
+        upperTxt.clear();
+
     GetBoard()->SetFileName( pcbFileName.GetFullPath() );
     UpdateTitle();
 
@@ -796,7 +802,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     if( autoSaveFileName.FileExists() )
         wxRemoveFile( autoSaveFileName.GetFullPath() );
-
 
     lowerTxt.Printf( _( "Wrote board file: \"%s\"" ), pcbFileName.GetFullPath() );
 
@@ -898,6 +903,10 @@ bool PCB_EDIT_FRAME::doAutoSave()
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );
         UpdateTitle();
         m_autoSaveState = false;
+
+        if( GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )
+            GetSettingsManager()->TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
+
         return true;
     }
 

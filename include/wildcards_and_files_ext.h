@@ -125,6 +125,8 @@ extern const std::string GerberJobFileExtension;
 extern const std::string HtmlFileExtension;
 extern const std::string EquFileExtension;
 
+extern const std::string ArchiveFileExtension;
+
 extern const std::string LegacyPcbFileExtension;
 extern const std::string KiCadPcbFileExtension;
 #define PcbFileExtension    KiCadPcbFileExtension       // symlink choice

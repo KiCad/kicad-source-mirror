@@ -414,6 +414,7 @@ set( COMMON_SRCS
     settings/settings_manager.cpp
 
     project/net_settings.cpp
+    project/project_archiver.cpp
     project/project_file.cpp
     project/project_local_settings.cpp
 

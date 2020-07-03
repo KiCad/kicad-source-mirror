@@ -34,6 +34,18 @@ public:
         bool use_icons_in_menus;
     };
 
+    struct AUTO_BACKUP
+    {
+        bool   enabled;            ///< Automatically back up the project when files are saved
+        bool   backup_on_autosave; ///< Trigger a backup on autosave
+        int    limit_total_files;  ///< Maximum number of backup archives to retain
+        int    limit_daily_files;  ///< Maximum files to keep per day, 0 for unlimited
+        int    min_interval;       ///< Minimum time, in seconds, between subsequent backups
+
+        /// Maximum total size of backups (bytes), 0 for unlimited
+        unsigned long long limit_total_size;
+    };
+
     struct ENVIRONMENT
     {
         bool show_warning_dialog;
@@ -92,6 +104,8 @@ private:
 
 public:
     APPEARANCE m_Appearance;
+
+    AUTO_BACKUP m_Backup;
 
     ENVIRONMENT m_Env;
 

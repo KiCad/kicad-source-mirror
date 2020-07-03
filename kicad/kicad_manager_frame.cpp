@@ -36,6 +36,7 @@
 #include <kiway_player.h>
 #include <launch_ext.h>
 #include <panel_hotkeys_editor.h>
+#include <reporter.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
@@ -335,8 +336,11 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     // Save the project file for the currently loaded project.
     if( m_active_project )
     {
-        Pgm().GetSettingsManager().SaveProject();
-        Pgm().GetSettingsManager().UnloadProject( &Prj() );
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+        mgr.TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
+        mgr.SaveProject();
+        mgr.UnloadProject( &Prj() );
     }
 
     m_active_project = true;
@@ -539,9 +543,6 @@ void KICAD_MANAGER_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
-
-
-
 
 
 void KICAD_MANAGER_FRAME::PrintPrjInfo()

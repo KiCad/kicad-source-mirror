@@ -26,22 +26,15 @@
  * @file kicad/files-io.cpp
  */
 
-
-#include <wx/dir.h>
-#include <wx/fs_zip.h>
-#include <wx/uri.h>
-#include <wx/wfstream.h>
-#include <wx/zipstrm.h>
-
 #include <confirm.h>
 #include <kiway.h>
-#include "pgm_kicad.h"
-#include "wildcards_and_files_ext.h"
+#include <pgm_kicad.h>
+#include <project/project_archiver.h>
+#include <reporter.h>
+#include <settings/settings_manager.h>
+#include <wildcards_and_files_ext.h>
 
 #include "kicad_manager_frame.h"
-
-
-#define ZipFileExtension wxT( "zip" )
 
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
@@ -60,50 +53,11 @@ void KICAD_MANAGER_FRAME::OnClearFileHistory( wxCommandEvent& aEvent )
 }
 
 
-// Unarchive Files code comes from wxWidgets sample/archive/archive.cpp
-static bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputStream, wxFileOffset size )
-{
-    wxChar buf[128 * 1024];
-    int readSize = 128 * 1024;
-    wxFileOffset copiedData = 0;
-
-    for (;;)
-    {
-        if (size != -1 && copiedData + readSize > size)
-            readSize = size - copiedData;
-
-        inputStream.Read( buf, readSize );
-
-        size_t actuallyRead = inputStream.LastRead();
-        outputStream.Write( buf, actuallyRead );
-
-        if( outputStream.LastWrite() != actuallyRead )
-        {
-            wxLogError( "Failed to output data" );
-            //return false;
-        }
-
-        if (size == -1)
-        {
-            if (inputStream.Eof())
-                break;
-        }
-        else
-        {
-            copiedData += actuallyRead;
-            if( copiedData >= size )
-                break;
-        }
-    }
-
-    return true;
-}
-
 void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 {
-    wxFileName fn = GetProjectFileName();
+    wxFileName fn = Prj().GetProjectFullName();
 
-    fn.SetExt( ZipFileExtension );
+    fn.SetExt( ArchiveFileExtension );
 
     wxFileDialog zipfiledlg( this, _( "Unzip Project" ), fn.GetPath(),
                              fn.GetFullName(), ZipFileWildcard(),
@@ -124,105 +78,37 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     msg.Printf( _( "Unzipping project in \"%s\"\n" ), unzipDir );
     PrintMsg( msg );
 
-    wxString archiveFileName = zipfiledlg.GetPath();
-    wxFileInputStream fileInputStream( archiveFileName );
-
-    if (!fileInputStream.IsOk())
-        return;
-
-    const wxArchiveClassFactory* archiveClassFactory =
-        wxArchiveClassFactory::Find( archiveFileName, wxSTREAM_FILEEXT );
-
-    if( archiveClassFactory )
+    if( unzipDir == Prj().GetProjectPath() )
     {
-        wxScopedPtr<wxArchiveInputStream> archiveStream( archiveClassFactory->NewStream(fileInputStream) );
-
-        for (wxArchiveEntry* entry = archiveStream->GetNextEntry(); entry;
-             entry = archiveStream->GetNextEntry())
-        {
-            PrintMsg( wxString::Format( _( "Extract file \"%s\"" ), entry->GetName() ) );
-
-            wxString fullname = unzipDir + entry->GetName();
-
-            // Ensure the target directory exists and created it if not
-            wxString t_path = wxPathOnly( fullname );
-
-            if( !wxDirExists( t_path ) )
-            {
-                // To create t_path, we need to create all subdirs from unzipDir
-                // to t_path.
-                wxFileName pathToCreate;
-                pathToCreate.AssignDir( t_path );
-                pathToCreate.MakeRelativeTo( unzipDir );
-
-                // Create the list of subdirs candidates
-                wxArrayString subDirs;
-                subDirs = pathToCreate.GetDirs();
-                pathToCreate.AssignDir( unzipDir );
-
-                for( size_t ii = 0; ii < subDirs.Count(); ii++ )
-                {
-                    pathToCreate.AppendDir( subDirs[ii] );
-                    wxString currPath = pathToCreate.GetPath();
-
-                    if( !wxDirExists( currPath ) )
-                        wxMkdir( currPath );
-                }
-            }
-
-            wxTempFileOutputStream outputFileStream( fullname );
-
-            if( CopyStreamData( *archiveStream, outputFileStream, entry->GetSize() ) )
-            {
-                outputFileStream.Commit();
-                PrintMsg( _( " OK\n" ) );
-            }
-            else
-                PrintMsg( _( " *ERROR*\n" ) );
-        }
+        if( !Kiway().PlayersClose( false ) )
+            return;
     }
 
-    PrintMsg( wxT( "** end **\n" ) );
+    WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
+
+    PROJECT_ARCHIVER archiver;
+
+    archiver.Unarchive( zipfiledlg.GetPath(), unzipDir, reporter );
 
     if( unzipDir == Prj().GetProjectPath() )
+    {
+        wxString prjPath = Prj().GetProjectFullName();
+
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+        mgr.UnloadProject( &Prj(), false );
+        mgr.LoadProject( prjPath );
+
         RefreshProjectTree();
+    }
 }
 
 
 void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 {
-    // List of file extensions to save.
-    static const wxChar* extensionList[] = {
-        wxT( "*.pro" ),
-        wxT( "*.kicad_pro" ),
-        wxT( "*.kicad_prl" ),
-        wxT( "*.sch" ),                         // Legacy schematic files
-        wxT( "*.kicad_sch" ),                   // Schematic files
-        wxT( "*.lib" ), wxT( "*.dcm" ),         // Legacy schematic library files
-        wxT( "*.kicad_sym" ),                   // schematic library files
-        wxT( "*.cmp" ),
-        wxT( "*.brd" ), wxT( "*.kicad_pcb" ),   // Brd files
-        wxT( "*.mod" ), wxT( "*.kicad_mod" ),   // fp files
-        wxT( "*.gb?" ), wxT( "*.gbrjob" ),      // Gerber files
-        wxT( "*.gko" ), wxT( "*.gm1" ),
-        wxT( "*.gm2" ), wxT( "*.g?" ),
-        wxT( "*.gp1" ), wxT( "*.gp2" ),
-        wxT( "*.gpb" ), wxT( "*.gpt" ),
-        wxT( "*.gt?" ),
-        wxT( "*.pos" ), wxT( "*.drl" ), wxT( "*.nc" ), wxT( "*.xnc" ),  // Fab files
-        wxT( "*.d356" ), wxT( "*.rpt" ),
-        wxT( "*.stp" ), wxT( "*.step" ),        // 3d files
-        wxT( "*.wrl" ),
-        wxT( "*.net" ), wxT( "*.py" ),
-        wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.kicad_wks" ),
-        wxT( "fp-lib-table" ), wxT( "sym-lib-table" )
-    };
-
-    wxString    msg;
     wxFileName  fileName = GetProjectFileName();
-    wxString    oldCwd = wxGetCwd();
 
-    fileName.SetExt( wxT( "zip" ) );
+    fileName.SetExt( ArchiveFileExtension );
 
     wxFileDialog dlg( this, _( "Archive Project Files" ),
                       fileName.GetPath(), fileName.GetFullName(),
@@ -231,7 +117,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFileName zip = dlg.GetPath();
+    wxFileName zipFile = dlg.GetPath();
 
     wxString currdirname = fileName.GetPathWithSep();
     wxDir dir( currdirname );
@@ -239,80 +125,9 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     if( !dir.IsOpened() )   // wxWidgets display a error message on issue.
         return;
 
-    wxSetWorkingDirectory( currdirname );
+    WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
 
-    // Prepare the zip file
-    wxString zipfilename = zip.GetFullPath();
+    PROJECT_ARCHIVER archiver;
 
-    wxFFileOutputStream ostream( zipfilename );
-
-    if( !ostream.IsOk() )   // issue to create the file. Perhaps not writable dir
-    {
-        wxMessageBox( wxString::Format( _( "Unable to create zip archive file \"%s\"" ),
-                                        zipfilename ) );
-        return;
-    }
-
-    wxZipOutputStream zipstream( ostream );
-
-    // Build list of filenames to put in zip archive
-    wxString currFilename;
-
-	wxArrayString files;
-
-    for( unsigned ii = 0; ii < arrayDim( extensionList ); ii++ )
-        wxDir::GetAllFiles( currdirname, &files, extensionList[ii] );
-
-    files.Sort();
-
-    int zipBytesCnt = 0;
-
-    for( unsigned ii = 0; ii < files.GetCount(); ii++ )
-    {
-        wxFileSystem fsfile;
-
-        wxFileName curr_fn( files[ii] );
-        curr_fn.MakeRelativeTo( currdirname );
-        currFilename = curr_fn.GetFullPath();
-
-        msg.Printf( _( "Archive file \"%s\"" ), currFilename );
-        PrintMsg( msg );
-
-        // Read input file and add it to the zip file:
-        wxFSFile* infile = fsfile.OpenFile( currFilename );
-
-        if( infile )
-        {
-            zipstream.PutNextEntry( currFilename, infile->GetModificationTime() );
-            infile->GetStream()->Read( zipstream );
-            zipstream.CloseEntry();
-            int zippedsize = zipstream.GetSize() - zipBytesCnt;
-            zipBytesCnt = zipstream.GetSize();
-            PrintMsg( wxT("  ") );
-            msg.Printf( _( "(%lu bytes, compressed %d bytes)\n" ),
-                        (unsigned long)infile->GetStream()->GetSize(), zippedsize );
-            PrintMsg( msg );
-            delete infile;
-        }
-        else
-            PrintMsg( _( " >>Error\n" ) );
-    }
-
-    zipBytesCnt = ostream.GetSize();
-
-    if( zipstream.Close() )
-    {
-        msg.Printf( _( "\nZip archive \"%s\" created (%d bytes)" ),
-                    zipfilename, zipBytesCnt );
-        PrintMsg( msg );
-        PrintMsg( wxT( "\n** end **\n" ) );
-    }
-    else
-    {
-        msg.Printf( wxT( "Unable to create archive \"%s\", abort\n" ),
-                    zipfilename );
-        PrintMsg( msg );
-    }
-
-    wxSetWorkingDirectory( oldCwd );
+    archiver.Archive( currdirname, zipFile.GetFullPath(), reporter );
 }
