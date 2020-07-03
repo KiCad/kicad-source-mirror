@@ -1347,7 +1347,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         int nested_level = aNestLevel+2;
 
         // Output all basic shapes
-        for( const std::shared_ptr<DRAWSEGMENT> primitive : aPad->GetPrimitives() )
+        for( const std::shared_ptr<DRAWSEGMENT>& primitive : aPad->GetPrimitives() )
         {
             m_out->Print( 0, "\n");
 
