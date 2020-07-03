@@ -352,29 +352,37 @@ void ERC_TESTER::diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItem
     if( aDiag == PIN_ERROR::OK || aMinConn < 1 || aNetItemRef->m_Type != NETLIST_ITEM::PIN )
         return;
 
+    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+
     SCH_PIN* pin = static_cast<SCH_PIN*>( aNetItemRef->m_Comp );
 
     if( aNetItemTst == NULL)
     {
         if( aMinConn == NOD )    /* Nothing driving the net. */
         {
-            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_DRIVEN );
-            ercItem->SetItems( pin );
+            if( settings.GetSeverity( ERCE_PIN_NOT_DRIVEN ) != RPT_SEVERITY_IGNORE )
+            {
+                ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_DRIVEN );
+                ercItem->SetItems( pin );
 
-            SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );
-            aNetItemRef->m_SheetPath.LastScreen()->Append( marker );
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );
+                aNetItemRef->m_SheetPath.LastScreen()->Append( marker );
+            }
             return;
         }
     }
 
     if( aNetItemTst && aNetItemTst->m_Type == NETLIST_ITEM::PIN )  /* Error between 2 pins */
     {
-        ERC_ITEM* ercItem = ERC_ITEM::Create( aDiag == PIN_ERROR::ERROR ?
-                                              ERCE_PIN_TO_PIN_ERROR : ERCE_PIN_TO_PIN_WARNING );
-        ercItem->SetItems( pin, static_cast<SCH_PIN*>( aNetItemTst->m_Comp ) );
+        if( settings.GetSeverity( ERCE_PIN_TO_PIN_WARNING ) != RPT_SEVERITY_IGNORE )
+        {
+            ERC_ITEM* ercItem = ERC_ITEM::Create(
+                    aDiag == PIN_ERROR::ERROR ? ERCE_PIN_TO_PIN_ERROR : ERCE_PIN_TO_PIN_WARNING );
+            ercItem->SetItems( pin, static_cast<SCH_PIN*>( aNetItemTst->m_Comp ) );
 
-        SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );
-        aNetItemRef->m_SheetPath.LastScreen()->Append( marker );
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );
+            aNetItemRef->m_SheetPath.LastScreen()->Append( marker );
+        }
     }
 }
 
@@ -400,15 +408,6 @@ void ERC_TESTER::TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemR
     {
         if( aNetItemRef == netItemTst )
             continue;
-
-        if( netItemTst < aList->size() )
-        {
-            ELECTRICAL_PINTYPE test_elect_type = aList->GetItem( netItemTst )->m_ElectricalPinType;
-            erc = settings.GetPinMapValue( ref_elect_type, test_elect_type );
-        }
-
-        if( erc != PIN_ERROR::OK )
-            diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ), 1, erc );
 
         // We examine only a given net. We stop the search if the net changes
         if( ( netItemTst >= aList->size() ) // End of list
@@ -516,6 +515,8 @@ void ERC_TESTER::TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemR
                         aList->SetConnectionType( netItemTst,
                                                   NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT );
                     }
+
+                    diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ), 1, erc );
                 }
             }
 
