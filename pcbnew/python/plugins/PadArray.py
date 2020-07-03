@@ -212,7 +212,7 @@ class PadGridArray(PadArray):
         @param py: pitch in y-direction
         @param centre: array centre point
         """
-        super(PadGridArray, self).__init__(pad)
+        super().__init__(pad)
 
         self.nx = int(nx)
         self.ny = int(ny)
