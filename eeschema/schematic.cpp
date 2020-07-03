@@ -69,6 +69,17 @@ void SCHEMATIC::Reset()
 
 void SCHEMATIC::SetProject( PROJECT* aPrj )
 {
+    if( m_project )
+    {
+        PROJECT_FILE& project = m_project->GetProjectFile();
+
+        delete project.m_ErcSettings;
+        delete project.m_SchematicSettings;
+
+        project.m_ErcSettings       = nullptr;
+        project.m_SchematicSettings = nullptr;
+    }
+
     m_project = aPrj;
 
     if( m_project )
