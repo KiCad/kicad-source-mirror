@@ -284,8 +284,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( differentProject )
     {
         GetSettingsManager()->SaveProject();
+        Schematic().SetProject( nullptr );
         GetSettingsManager()->UnloadProject( &Prj() );
         GetSettingsManager()->LoadProject( pro.GetFullPath() );
+        CreateScreens();
     }
 
     if( schFileType == SCH_IO_MGR::SCH_LEGACY )
@@ -312,8 +314,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Load the symbol library table, this will be used forever more.
     Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
     Prj().SchSymbolLibTable();
-
-    Schematic().SetProject( &Prj() );
 
     // Load project settings after schematic has been set up with the project link, since this will
     // update some of the needed schematic settings such as drawing defaults
