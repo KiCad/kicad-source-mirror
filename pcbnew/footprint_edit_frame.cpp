@@ -533,6 +533,8 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     // the Layer Manger
     m_auimgr.GetPane( "LayersManager" ).Show( false );
 
+    Pgm().GetSettingsManager().FlushAndRelease( GetSettings() );
+
     Clear_Pcb( false );
 
     // Close the editor

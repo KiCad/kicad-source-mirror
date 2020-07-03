@@ -569,6 +569,59 @@ BOARD_DESIGN_SETTINGS::~BOARD_DESIGN_SETTINGS()
 }
 
 
+BOARD_DESIGN_SETTINGS& BOARD_DESIGN_SETTINGS::operator=( const BOARD_DESIGN_SETTINGS& aOther )
+{
+    // Copy of NESTED_SETTINGS around is not allowed, so let's just update the params.
+    m_TrackWidthList         = aOther.m_TrackWidthList;
+    m_ViasDimensionsList     = aOther.m_ViasDimensionsList;
+    m_DiffPairDimensionsList = aOther.m_DiffPairDimensionsList;
+    m_DRCRuleSelectors       = aOther.m_DRCRuleSelectors;
+    m_DRCRules               = aOther.m_DRCRules;
+    m_MicroViasAllowed       = aOther.m_MicroViasAllowed;
+    m_BlindBuriedViaAllowed  = aOther.m_BlindBuriedViaAllowed;
+    m_CurrentViaType         = aOther.m_CurrentViaType;
+    m_UseConnectedTrackWidth = aOther.m_UseConnectedTrackWidth;
+    m_MinClearance           = aOther.m_MinClearance;
+    m_TrackMinWidth          = aOther.m_TrackMinWidth;
+    m_ViasMinAnnulus         = aOther.m_ViasMinAnnulus;
+    m_ViasMinSize            = aOther.m_ViasMinSize;
+    m_MinThroughDrill        = aOther.m_MinThroughDrill;
+    m_MicroViasMinSize       = aOther.m_MicroViasMinSize;
+    m_MicroViasMinDrill      = aOther.m_MicroViasMinDrill;
+    m_CopperEdgeClearance    = aOther.m_CopperEdgeClearance;
+    m_HoleToHoleMin          = aOther.m_HoleToHoleMin;
+    m_DRCSeverities          = aOther.m_DRCSeverities;
+    m_DrcExclusions          = aOther.m_DrcExclusions;
+    m_ZoneUseNoOutlineInFill = aOther.m_ZoneUseNoOutlineInFill;
+    m_MaxError               = aOther.m_MaxError;
+    m_SolderMaskMargin       = aOther.m_SolderMaskMargin;
+    m_SolderMaskMinWidth     = aOther.m_SolderMaskMinWidth;
+    m_SolderPasteMarginRatio = aOther.m_SolderPasteMarginRatio;
+    m_DefaultFPTextItems     = aOther.m_DefaultFPTextItems;
+    m_DimensionUnits         = aOther.m_DimensionUnits;
+    m_DimensionPrecision     = aOther.m_DimensionPrecision;
+    m_AuxOrigin              = aOther.m_AuxOrigin;
+    m_GridOrigin             = aOther.m_GridOrigin;
+
+    std::copy( std::begin( aOther.m_LineThickness ), std::end( aOther.m_LineThickness ),
+               std::begin( m_LineThickness ) );
+
+    std::copy( std::begin( aOther.m_TextSize ), std::end( aOther.m_TextSize ),
+               std::begin( m_TextSize ) );
+
+    std::copy( std::begin( aOther.m_TextThickness ), std::end( aOther.m_TextThickness ),
+               std::begin( m_TextThickness ) );
+
+    std::copy( std::begin( aOther.m_TextItalic ), std::end( aOther.m_TextItalic ),
+               std::begin( m_TextItalic ) );
+
+    std::copy( std::begin( aOther.m_TextUpright ), std::end( aOther.m_TextUpright ),
+               std::begin( m_TextUpright ) );
+
+    return *this;
+}
+
+
 bool BOARD_DESIGN_SETTINGS::LoadFromFile( const std::string& aDirectory )
 {
     bool ret = NESTED_SETTINGS::LoadFromFile( aDirectory );

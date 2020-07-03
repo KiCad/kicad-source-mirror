@@ -347,6 +347,8 @@ public:
 
     virtual ~BOARD_DESIGN_SETTINGS();
 
+    BOARD_DESIGN_SETTINGS& operator=( const BOARD_DESIGN_SETTINGS& aOther );
+
     bool LoadFromFile( const std::string& aDirectory = "" ) override;
 
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
