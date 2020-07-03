@@ -32,6 +32,7 @@
 
 
 #include <class_board_item.h>
+#include <drc/drc_item.h>
 #include <marker_base.h>
 
 class DRC_ITEM;
