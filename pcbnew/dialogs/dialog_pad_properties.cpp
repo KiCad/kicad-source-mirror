@@ -702,8 +702,8 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
     {
         const std::shared_ptr<DRAWSEGMENT>& primitive = m_primitives[ii];
 
-        for( unsigned jj = 0; jj < 5; ++jj )
-            bs_info[jj].Empty();
+        for( wxString& s : bs_info )
+            s.Empty();
 
         bs_info[4] = _( "width " ) + MessageTextFromValue( m_units, primitive->GetWidth(), true );
 
@@ -749,13 +749,11 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
             break;
         }
 
-        long tmp = m_listCtrlPrimitives->InsertItem(ii, bs_info[0]);
-        m_listCtrlPrimitives->SetItemData(tmp, ii);
+        long tmp = m_listCtrlPrimitives->InsertItem( ii, bs_info[0] );
+        m_listCtrlPrimitives->SetItemData( tmp, ii );
 
         for( int jj = 0, col = 0; jj < 5; ++jj )
-        {
-            m_listCtrlPrimitives->SetItem(tmp, col++, bs_info[jj]);
-        }
+            m_listCtrlPrimitives->SetItem( tmp, col++, bs_info[jj] );
     }
 
     // Now columns are filled, ensure correct width of columns
