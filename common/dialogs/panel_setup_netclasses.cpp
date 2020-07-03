@@ -185,7 +185,10 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
 
     // add all the nets discovered in the netclass membership lists
     for( const std::pair<const wxString, wxString>& ii : netToNetclassMap )
-        addNet( UnescapeString( ii.first ), ii.second );
+    {
+        if( !ii.first.IsEmpty() )
+            addNet( UnescapeString( ii.first ), ii.second );
+    }
 
     return true;
 }

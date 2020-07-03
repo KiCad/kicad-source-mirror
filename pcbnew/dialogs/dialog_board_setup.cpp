@@ -76,11 +76,11 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 
     m_treebook->AddPage( new wxPanel( this ),  _( "Design Rules" ) );
     m_treebook->AddSubPage( m_constraints,  _( "Constraints" ) );
-    m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
     m_treebook->AddSubPage( m_rules, _( "Rules" ) );
     m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
 
     m_treebook->AddPage( new wxPanel( this ), _( "Project" ) );
+    m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
     m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )

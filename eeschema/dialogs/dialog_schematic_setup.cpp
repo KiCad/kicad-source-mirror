@@ -22,6 +22,7 @@
 #include <schematic.h>
 #include <kiface_i.h>
 #include <dialog_sch_import_settings.h>
+#include <dialogs/panel_setup_netclasses.h>
 #include <panel_setup_severities.h>
 #include <panel_setup_formatting.h>
 #include <panel_setup_pinmap.h>
@@ -29,6 +30,7 @@
 #include <erc_item.h>
 #include <panel_text_variables.h>
 #include <project/project_file.h>
+#include <project/net_settings.h>
 #include <settings/settings_manager.h>
 #include "dialog_schematic_setup.h"
 #include "panel_eeschema_template_fieldnames.h"
@@ -50,6 +52,9 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
+    PROJECT_FILE& project = aFrame->Prj().GetProjectFile();
+    m_netclasses = new PANEL_SETUP_NETCLASSES( this, &project.NetSettings().m_NetClasses );
+
     /*
      * WARNING: If you change page names you MUST update calls to ShowSchematicSetupDialog().
      */
@@ -63,6 +68,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_treebook->AddSubPage( m_pinMap, _( "Pin Conflicts Map" ) );
 
     m_treebook->AddPage( new wxPanel( this ), _( "Project" ) );
+    m_treebook->AddSubPage( m_netclasses, _( "Net Classes" ) );
     m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
@@ -96,6 +102,7 @@ void DIALOG_SCHEMATIC_SETUP::OnPageChange( wxBookCtrlEvent& event )
     {
         wxSize pageSize = m_treebook->GetPage( page )->GetSize();
         pageSize.x -= 1;
+        pageSize.y += 2;
 
         m_treebook->GetPage( page )->SetSize( pageSize );
         m_macHack[ page ] = false;

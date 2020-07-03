@@ -124,6 +124,12 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     netclass->SetDiffPairViaGap(
                             get( entry, "diff_pair_via_gap", netclass->GetDiffPairViaGap() ) );
 
+                    if( entry.contains( "nets" ) && entry["nets"].is_array() )
+                    {
+                        for( const auto& net : entry["nets"].items() )
+                            netclass->Add( net.value().get<wxString>() );
+                    }
+
                     if( netclass != defaultClass )
                         m_NetClasses.Add( netclass );
                 }
