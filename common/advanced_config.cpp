@@ -80,6 +80,11 @@ static const wxChar RealtimeConnectivity[] = wxT( "RealtimeConnectivity" );
  */
 static const wxChar CoroutineStackSize[] = wxT( "CoroutineStackSize" );
 
+/**
+ * Show PNS router debug graphics while routing
+ */
+static const wxChar ShowRouterDebugGraphics[] = wxT( "ShowRouterDebugGraphics" );
+
 } // namespace KEYS
 
 
@@ -157,9 +162,10 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
-    m_EnableUsePadProperty = false;
-    m_realTimeConnectivity = true;
-    m_coroutineStackSize = AC_STACK::default_stack;
+    m_EnableUsePadProperty    = false;
+    m_realTimeConnectivity    = true;
+    m_coroutineStackSize      = AC_STACK::default_stack;
+    m_ShowRouterDebugGraphics = false;
 
     loadFromConfigFile();
 }
@@ -202,6 +208,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
                                                &m_coroutineStackSize, AC_STACK::default_stack,
                                                AC_STACK::min_stack, AC_STACK::max_stack ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRouterDebugGraphics,
+                                                &m_ShowRouterDebugGraphics, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

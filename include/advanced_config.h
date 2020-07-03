@@ -83,6 +83,11 @@ public:
      */
     int m_coroutineStackSize;
 
+    /**
+     * Show PNS router debug graphics
+     */
+    bool m_ShowRouterDebugGraphics;
+
 
 private:
     ADVANCED_CFG();
