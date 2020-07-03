@@ -28,6 +28,7 @@
 
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
           EDA_ITEM( nullptr, SCHEMATIC_T ),
+          m_project( nullptr ),
           m_rootSheet( nullptr )
 {
     m_currentSheet    = new SCH_SHEET_PATH();
