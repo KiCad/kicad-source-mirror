@@ -24,7 +24,7 @@
 #ifndef GL_UTILS_H
 #define GL_UTILS_H
 
-#ifndef __WINDOWS__
+#ifndef _WIN32
 #include <GL/glxew.h>
 #endif
 
@@ -42,7 +42,7 @@ public:
     {
         /// This routine is written for Linux only.  The equivalent functions under Windows would
         /// include <wglext.h> and call wglSwapIntervalEXT
-    #ifndef __WINDOWS__
+    #ifndef _WIN32
         Display *dpy = glXGetCurrentDisplay();
         GLXDrawable drawable = glXGetCurrentDrawable();
 

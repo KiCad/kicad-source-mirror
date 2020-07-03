@@ -342,15 +342,15 @@ void D_PAD::BuildEffectiveShapes() const
     //
     m_effectiveBoundingRadius = calcBoundingRadius();
 
-    m_effectiveBoundingBox = EDA_RECT();        // reset to prepare for merging
+    // reset the bbox to uninitialized state to prepare for merging
+    m_effectiveBoundingBox = EDA_RECT();
 
     for( const std::shared_ptr<SHAPE>& shape : m_effectiveShapes )
     {
         BOX2I r = shape->BBox();
         m_effectiveBoundingBox.Merge( EDA_RECT( (wxPoint) r.GetOrigin(),
-                                                wxSize( r.GetWidth(), r.GetHeight() ) ) );
+                                      wxSize( r.GetWidth(), r.GetHeight() ) ) );
     }
-
     // Hole shape
     //
     wxSize  half_size = m_Drill / 2;
