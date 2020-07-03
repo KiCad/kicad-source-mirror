@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2009-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,13 @@
 
 #include <base_units.h>
 #include <bitmaps.h>
-#include <board_design_settings.h>
+#include <netclass.h>
 #include <confirm.h>
 #include <grid_tricks.h>
 #include <panel_setup_netclasses.h>
-#include <pcb_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <widgets/wx_grid.h>
+#include <kicad_string.h>
 
 // Columns of netclasses grid
 enum {
@@ -48,16 +48,11 @@ enum {
 };
 
 
-PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
-                                                PANEL_SETUP_FEATURE_CONSTRAINTS* aConstraintsPanel ) :
-    PANEL_SETUP_NETCLASSES_BASE( aParent->GetTreebook() )
+PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses ) :
+        PANEL_SETUP_NETCLASSES_BASE( aParent->GetTreebook() ),
+        m_Parent( aParent ),
+        m_Netclasses( aNetclasses )
 {
-    m_Parent = aParent;
-    m_Frame = aFrame;
-    m_Pcb = m_Frame->GetBoard();
-    m_BrdSettings = &m_Pcb->GetDesignSettings();
-    m_ConstraintsPanel = aConstraintsPanel;
-
     m_netclassesDirty = true;
 
     // Figure out the smallest the netclass membership pane can ever be so that nothing is cutoff
@@ -152,15 +147,20 @@ static void netclassToGridRow( EDA_UNITS aUnits, wxGrid* aGrid, int aRow, const 
 
 bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
 {
-    NETCLASSES& netclasses = m_BrdSettings->GetNetClasses();
-    NETCLASSPTR netclass   = netclasses.GetDefault();
+    NETCLASSPTR netclass   = m_Netclasses->GetDefault();
+
+    std::map<wxString, wxString> netToNetclassMap;
 
     if( m_netclassGrid->GetNumberRows() )
         m_netclassGrid->DeleteRows( 0, m_netclassGrid->GetNumberRows() );
-    m_netclassGrid->AppendRows( netclasses.GetCount() + 1 ); // + 1 for default netclass
+
+    m_netclassGrid->AppendRows( (int) m_Netclasses->GetCount() + 1 ); // + 1 for default netclass
 
     // enter the Default NETCLASS.
-    netclassToGridRow( m_Frame->GetUserUnits(), m_netclassGrid, 0, netclass );
+    netclassToGridRow( m_Parent->GetUserUnits(), m_netclassGrid, 0, netclass );
+
+    for( const wxString& net : *netclass )
+        netToNetclassMap[ net ] = netclass->GetName();
 
     // make the Default NETCLASS name read-only
     wxGridCellAttr* cellAttr = m_netclassGrid->GetOrCreateCellAttr( 0, GRID_NAME );
@@ -170,26 +170,28 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     // enter other netclasses
     int row = 1;
 
-    for( NETCLASSES::iterator i = netclasses.begin();  i != netclasses.end();  ++i, ++row )
-        netclassToGridRow( m_Frame->GetUserUnits(), m_netclassGrid, row, i->second );
+    for( NETCLASSES::iterator i = m_Netclasses->begin();  i != m_Netclasses->end();  ++i, ++row )
+    {
+        netclass = i->second;
 
-    // ensure that all nets have net classes assigned
-    m_Pcb->BuildListOfNets();
+        netclassToGridRow( m_Parent->GetUserUnits(), m_netclassGrid, row, netclass );
+
+        for( const wxString& net : *netclass )
+            netToNetclassMap[ net ] = i->second->GetName();
+    }
 
     if( m_membershipGrid->GetNumberRows() )
         m_membershipGrid->DeleteRows( 0, m_membershipGrid->GetNumberRows() );
 
-    for( NETINFO_ITEM* net : m_Pcb->GetNetInfo() )
-    {
-        if( net->GetNet() > 0 && net->IsCurrent() )
-            addNet( UnescapeString( net->GetNetname() ), net->GetNetClass()->GetName() );
-    }
+    // add all the nets discovered in the netclass membership lists
+    for( const std::pair<const wxString, wxString>& ii : netToNetclassMap )
+        addNet( UnescapeString( ii.first ), ii.second );
 
     return true;
 }
 
 
-void PANEL_SETUP_NETCLASSES::addNet( wxString netName, const wxString& netclass )
+void PANEL_SETUP_NETCLASSES::addNet( const wxString& netName, const wxString& netclass )
 {
     int i = m_membershipGrid->GetNumberRows();
 
@@ -250,37 +252,29 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     if( !validateData() )
         return false;
 
-    NETCLASSES& netclasses = m_BrdSettings->GetNetClasses();
-
     // Remove all netclasses from board. We'll copy new list after
-    netclasses.Clear();
+    m_Netclasses->Clear();
 
     // Copy the default NetClass:
-    gridRowToNetclass( m_Frame->GetUserUnits(), m_netclassGrid, 0, netclasses.GetDefault());
+    gridRowToNetclass( m_Parent->GetUserUnits(), m_netclassGrid, 0, m_Netclasses->GetDefault() );
 
     // Copy other NetClasses :
     for( int row = 1; row < m_netclassGrid->GetNumberRows();  ++row )
     {
         NETCLASSPTR nc = std::make_shared<NETCLASS>( m_netclassGrid->GetCellValue( row, GRID_NAME ) );
 
-        if( netclasses.Add( nc ) )
-            gridRowToNetclass( m_Frame->GetUserUnits(), m_netclassGrid, row, nc );
+        if( m_Netclasses->Add( nc ) )
+            gridRowToNetclass( m_Parent->GetUserUnits(), m_netclassGrid, row, nc );
     }
 
     // Now read all nets and push them in the corresponding netclass net buffer
     for( int row = 0; row < m_membershipGrid->GetNumberRows(); ++row )
     {
-        NETCLASSPTR nc = netclasses.Find( m_membershipGrid->GetCellValue( row, 1 ) );
+        NETCLASSPTR nc = m_Netclasses->Find( m_membershipGrid->GetCellValue( row, 1 ) );
 
         if( nc )
             nc->Add( m_membershipGrid->GetCellValue( row, 0 ) );
     }
-
-    m_Pcb->SynchronizeNetsAndNetClasses();
-    m_BrdSettings->SetCurrentNetClass( NETCLASS::Default );
-
-    if( m_Frame->GetToolManager() )
-        m_Frame->GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     return true;
 }
@@ -520,25 +514,12 @@ void PANEL_SETUP_NETCLASSES::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-int PANEL_SETUP_NETCLASSES::getNetclassValue( int aRow, int aCol )
-{
-    return ValueFromString( m_Frame->GetUserUnits(), m_netclassGrid->GetCellValue( aRow, aCol ), true );
-}
-
-
 bool PANEL_SETUP_NETCLASSES::validateData()
 {
     if( !m_netclassGrid->CommitPendingChanges() || !m_membershipGrid->CommitPendingChanges() )
         return false;
 
     wxString msg;
-    int minViaAnnulus = m_ConstraintsPanel->m_viaMinAnnulus.GetValue();
-    int minViaDia = m_ConstraintsPanel->m_viaMinSize.GetValue();
-    int minThroughHole = m_ConstraintsPanel->m_throughHoleMin.GetValue();
-    int minUViaDia = m_ConstraintsPanel->m_uviaMinSize.GetValue();
-    int minUViaDrill = m_ConstraintsPanel->m_uviaMinDrill.GetValue();
-    int minTrackWidth = m_ConstraintsPanel->m_trackMinWidth.GetValue();
-    int minClearance = m_ConstraintsPanel->m_minClearance.GetValue();
 
     // Test net class parameters.
     for( int row = 0; row < m_netclassGrid->GetNumberRows(); row++ )
@@ -549,104 +530,17 @@ bool PANEL_SETUP_NETCLASSES::validateData()
 
         if( !validateNetclassName( row, netclassName, false ) )
             return false;
-
-        if( getNetclassValue( row, GRID_CLEARANCE ) < minClearance )
-        {
-            msg.Printf( _( "Clearance less than minimum clearance (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minClearance, true, true ) );
-            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_CLEARANCE );
-            return false;
-        }
-
-        if( getNetclassValue( row, GRID_TRACKSIZE ) < minTrackWidth )
-        {
-            msg.Printf( _( "Track width less than minimum track width (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true, true ) );
-            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_TRACKSIZE );
-            return false;
-        }
-
-        if( getNetclassValue( row, GRID_DIFF_PAIR_WIDTH ) < minTrackWidth )
-        {
-            msg.Printf( _( "Differential pair width less than minimum track width (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true, true ) );
-            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_DIFF_PAIR_WIDTH );
-            return false;
-        }
-
-        // Test vias
-        if( getNetclassValue( row, GRID_VIASIZE ) < minViaDia )
-        {
-            msg.Printf( _( "Via diameter less than minimum via diameter (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaDia, true, true ) );
-            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_VIASIZE );
-            return false;
-        }
-
-        if( getNetclassValue( row, GRID_VIADRILL ) >= getNetclassValue( row, GRID_VIASIZE ) )
-        {
-            msg = _( "Via drill larger than via diameter." );
-            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_VIADRILL );
-            return false;
-        }
-
-        if( ( getNetclassValue( row, GRID_VIASIZE )
-                - getNetclassValue( row, GRID_VIADRILL ) ) / 2 < minViaAnnulus )
-        {
-            msg.Printf( _( "Via diameter and drill leave via annulus less than minimum (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaAnnulus, true, true ) );
-            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_VIASIZE );
-            return false;
-        }
-
-        if( getNetclassValue( row, GRID_VIADRILL ) < minThroughHole )
-        {
-            msg.Printf( _( "Via drill less than minimum via drill (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minThroughHole, true, true ) );
-            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_VIADRILL );
-            return false;
-        }
-
-        // Test Micro vias
-        if( getNetclassValue( row, GRID_uVIASIZE ) < minUViaDia )
-        {
-            msg.Printf( _( "Microvia diameter less than minimum microvia diameter (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minUViaDia, true, true ) );
-            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_uVIASIZE );
-            return false;
-        }
-
-        if( getNetclassValue( row, GRID_uVIADRILL ) >= getNetclassValue( row, GRID_uVIASIZE ) )
-        {
-            msg = _( "Microvia drill larger than microvia diameter." );
-            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_uVIADRILL );
-            return false;
-        }
-
-        if( getNetclassValue( row, GRID_uVIADRILL ) < minUViaDrill )
-        {
-            msg.Printf( _( "Microvia drill less than minimum microvia drill (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minUViaDrill, true, true ) );
-            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_uVIADRILL );
-            return false;
-        }
-
-        // JEY TODO: test microvias agains via min annulus?
     }
 
     return true;
 }
 
 
-void PANEL_SETUP_NETCLASSES::ImportSettingsFrom( BOARD* aBoard )
+void PANEL_SETUP_NETCLASSES::ImportSettingsFrom( NETCLASSES* aNetclasses )
 {
-    // Note: do not change the board, as we need to get the current nets from it for
-    // netclass memberships.  All the netclass definitions and dimension lists are in
-    // the BOARD_DESIGN_SETTINGS.
+    NETCLASSES* savedSettings = m_Netclasses;
 
-    BOARD_DESIGN_SETTINGS* savedSettings = m_BrdSettings;
-
-    m_BrdSettings = &aBoard->GetDesignSettings();
+    m_Netclasses = aNetclasses;
     TransferDataToWindow();
 
     rebuildNetclassDropdowns();
@@ -654,7 +548,7 @@ void PANEL_SETUP_NETCLASSES::ImportSettingsFrom( BOARD* aBoard )
     m_netclassGrid->ForceRefresh();
     m_membershipGrid->ForceRefresh();
 
-    m_BrdSettings = savedSettings;
+    m_Netclasses = savedSettings;
 }
 
 

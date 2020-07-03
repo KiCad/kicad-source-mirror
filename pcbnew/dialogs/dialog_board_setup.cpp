@@ -44,16 +44,16 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Board Setup" ), _( "Import Settings from Another Board..." ) ),
         m_frame( aFrame )
 {
+    BOARD_DESIGN_SETTINGS& bds = aFrame->GetDesignSettings();
+
     m_layers = new PANEL_SETUP_LAYERS( this, aFrame );
     m_textAndGraphics = new PANEL_SETUP_TEXT_AND_GRAPHICS( this, aFrame );
     m_constraints = new PANEL_SETUP_FEATURE_CONSTRAINTS( this, aFrame );
-    m_netclasses = new PANEL_SETUP_NETCLASSES( this, aFrame, m_constraints );
+    m_netclasses = new PANEL_SETUP_NETCLASSES( this, &bds.GetNetClasses() );
     m_rules = new PANEL_SETUP_RULES( this, aFrame );
     m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame, m_constraints );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
     m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, aFrame, m_layers );
-
-    BOARD_DESIGN_SETTINGS& bds = aFrame->GetDesignSettings();
     m_severities = new PANEL_SETUP_SEVERITIES( this, DRC_ITEM::GetItemsWithSeverities(),
                                                bds.m_DRCSeverities );
 
@@ -180,7 +180,7 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     if( importDlg.m_ConstraintsOpt->GetValue() )
         m_constraints->ImportSettingsFrom( otherBoard );
     if( importDlg.m_NetclassesOpt->GetValue() )
-        m_netclasses->ImportSettingsFrom( otherBoard );
+        m_netclasses->ImportSettingsFrom( &otherBoard->GetDesignSettings().GetNetClasses() );
     if( importDlg.m_TracksAndViasOpt->GetValue() )
         m_tracksAndVias->ImportSettingsFrom( otherBoard );
     if( importDlg.m_MaskAndPasteOpt->GetValue() )

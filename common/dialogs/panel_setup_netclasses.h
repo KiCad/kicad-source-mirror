@@ -25,34 +25,23 @@
 #ifndef PANEL_SETUP_NETCLASSES_H
 #define PANEL_SETUP_NETCLASSES_H
 
-#include <class_board.h>
 #include <widgets/unit_binder.h>
 #include <widgets/paged_dialog.h>
-
 #include <panel_setup_netclasses_base.h>
-#include "panel_setup_feature_constraints.h"
 
-class PCB_EDIT_FRAME;
-class BOARD_DESIGN_SETTINGS;
+class NETCLASSES;
 
 
 class PANEL_SETUP_NETCLASSES : public PANEL_SETUP_NETCLASSES_BASE
 {
 private:
-    PAGED_DIALOG*           m_Parent;
-    PCB_EDIT_FRAME*         m_Frame;
-    BOARD*                  m_Pcb;
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+    PAGED_DIALOG*     m_Parent;
+    NETCLASSES*       m_Netclasses;
 
-    // We must validate against the current m_BrdSettings as they may have been
-    // changed but not yet committed.  Fetch them from the constraints panel.
-    PANEL_SETUP_FEATURE_CONSTRAINTS* m_ConstraintsPanel;
+    int*              m_originalColWidths;
+    bool              m_netclassesDirty;    // The netclass drop-down menus need rebuilding
+    wxSize            m_membershipSize;     // The size needed to show the membership list
 
-    int*                    m_originalColWidths;
-    bool                    m_netclassesDirty;      // Indicates the netclass drop-down
-                                                    // menus need rebuilding
-    wxSize                  m_membershipSize;       // The size needed to show the membership
-                                                    // properties
 private:
     void OnAddNetclassClick( wxCommandEvent& event ) override;
     void OnRemoveNetclassClick( wxCommandEvent& event ) override;
@@ -70,9 +59,8 @@ private:
     bool validateData();
 
     void rebuildNetclassDropdowns();
-    int getNetclassValue( int aRow, int aCol );
 
-    void addNet( wxString netName, const wxString& netclass );
+    void addNet( const wxString& netName, const wxString& netclass );
     void doApplyFilters( bool aShowAll );
     void doAssignments( bool aAssignAll );
 
@@ -80,14 +68,13 @@ private:
     void AdjustMembershipGridColumns( int aWidth );
 
 public:
-    PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
-                            PANEL_SETUP_FEATURE_CONSTRAINTS* aConstraintsPanel );
+    PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses );
     ~PANEL_SETUP_NETCLASSES( ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void ImportSettingsFrom( BOARD* aBoard );
+    void ImportSettingsFrom( NETCLASSES* aBoard );
 };
 
 #endif //PANEL_SETUP_NETCLASSES_H

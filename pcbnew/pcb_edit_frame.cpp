@@ -637,6 +637,9 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
 void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const wxString& aErrorMsg,
                                            int aErrorCtrlId, int aErrorLine, int aErrorCol )
 {
+    // Make sure everything's up-to-date
+    GetBoard()->BuildListOfNets();
+
     DIALOG_BOARD_SETUP dlg( this );
 
     if( !aInitialPage.IsEmpty() )
@@ -647,6 +650,8 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const w
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
+        GetBoard()->SynchronizeNetsAndNetClasses();
+        GetBoard()->GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
         SaveProjectSettings();
 
         UpdateUserInterface();
@@ -656,6 +661,8 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const w
             GetCanvas()->GetView()->Update( module );
 
         GetCanvas()->Refresh();
+
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
         //this event causes the routing tool to reload its design rules information
         TOOL_EVENT toolEvent( TC_COMMAND, TA_MODEL_CHANGE, AS_ACTIVE );

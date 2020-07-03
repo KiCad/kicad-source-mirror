@@ -106,8 +106,6 @@ BOARD::BOARD() :
     m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
                                             // zone contour currently in progress
 
-    BuildListOfNets();                      // prepare pad and netlist containers.
-
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         m_Layer[layer].m_name = GetStandardLayerName( ToLAYER_ID( layer ) );
@@ -190,21 +188,18 @@ void BOARD::SetProject( PROJECT* aProject )
         PROJECT_FILE& project = aProject->GetProjectFile();
 
         // Link the design settings object to the project file
-        project.m_BoardSettings  = &GetDesignSettings();
+        project.m_BoardSettings = &GetDesignSettings();
 
         // Set parent, which also will load the values from JSON stored in the project
         project.m_BoardSettings->SetParent( &project );
 
-        // The netclasses pointer will be pointing to the internal netclasses list at this point. If
-        // it has anything other than the default net, this means we loaded some netclasses from a
-        // board saved in legacy format where the netclass info is included.  Move this info to the
-        // netclasses stored in the project.
-
-        NETCLASSES& local = GetDesignSettings().GetNetClasses();
-
+        // The DesignSettings' netclasses pointer will be pointing to its internal netclasses
+        // list at this point. If we loaded anything into it from a legacy board file then we
+        // want to transfer it over to the project netclasses list.
         if( m_LegacyNetclassesLoaded )
-            project.NetSettings().m_NetClasses = local;
+            project.NetSettings().m_NetClasses = GetDesignSettings().GetNetClasses();
 
+        // Now update the DesignSettings' netclass pointer ot point into the project.
         GetDesignSettings().SetNetClasses( &project.NetSettings().m_NetClasses );
     }
 }
