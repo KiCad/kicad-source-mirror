@@ -535,34 +535,164 @@ static VIATYPE getViaTypeFromFlags( int aFlags )
 }
 
 
+static PCB_LAYER_ID getTargetLayerFromEvent( const TOOL_EVENT& aEvent )
+{
+    if( aEvent.IsAction( &PCB_ACTIONS::layerTop ) )
+        return F_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner1 ) )
+        return In1_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner2 ) )
+        return In2_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner3 ) )
+        return In3_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner4 ) )
+        return In4_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner5 ) )
+        return In5_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner6 ) )
+        return In6_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner7 ) )
+        return In7_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner8 ) )
+        return In8_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner9 ) )
+        return In9_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner10 ) )
+        return In10_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner11 ) )
+        return In11_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner12 ) )
+        return In12_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner13 ) )
+        return In13_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner14 ) )
+        return In14_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner15 ) )
+        return In15_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner16 ) )
+        return In16_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner17 ) )
+        return In17_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner18 ) )
+        return In18_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner19 ) )
+        return In19_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner20 ) )
+        return In20_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner21 ) )
+        return In21_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner22 ) )
+        return In22_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner23 ) )
+        return In23_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner24 ) )
+        return In24_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner25 ) )
+        return In25_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner26 ) )
+        return In26_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner27 ) )
+        return In27_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner28 ) )
+        return In28_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner29 ) )
+        return In29_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner30 ) )
+        return In30_Cu;
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerBottom ) )
+        return B_Cu;
+    else
+        return UNDEFINED_LAYER;
+}
+
+
 int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 {
-    const int actViaFlags = aEvent.Parameter<intptr_t>();
+    // First see if this is one of the switch layer commands
+    LSEQ layers       = LSET( board()->GetEnabledLayers() & LSET::AllCuMask() ).Seq();
+    int  currentLayer = m_router->GetCurrentLayer();
 
-    VIATYPE    viaType     = getViaTypeFromFlags( actViaFlags );
-    const bool selectLayer = actViaFlags & VIA_ACTION_FLAGS::SELECT_LAYER;
+    PCB_LAYER_ID targetLayer = UNDEFINED_LAYER;
 
-    BOARD_DESIGN_SETTINGS& bds = board()->GetDesignSettings();
+    if( aEvent.IsAction( &PCB_ACTIONS::layerNext ) )
+    {
+        aEvent.PassEvent();
 
-    const int    layerCount   = bds.GetCopperLayerCount();
-    int          currentLayer = m_router->GetCurrentLayer();
-    PCB_LAYER_ID pairTop = frame()->GetScreen()->m_Route_Layer_TOP;
+        size_t idx = 0;
+
+        for( size_t i = 0; i < layers.size(); i++ )
+        {
+            if( layers[i] == currentLayer )
+            {
+                idx = i;
+                break;
+            }
+        }
+
+        idx         = ( idx + 1 ) % layers.size();
+        targetLayer = layers[idx];
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerPrev ) )
+    {
+        aEvent.PassEvent();
+
+        size_t idx = 0;
+
+        for( size_t i = 0; i < layers.size(); i++ )
+        {
+            if( layers[i] == currentLayer )
+            {
+                idx = i;
+                break;
+            }
+        }
+
+        idx         = ( idx > 0 ) ? ( idx - 1 ) : ( layers.size() - 1 );
+        targetLayer = layers[idx];
+    }
+    else
+    {
+        targetLayer = getTargetLayerFromEvent( aEvent );
+
+        if( targetLayer != UNDEFINED_LAYER )
+        {
+            aEvent.PassEvent();
+
+            if( targetLayer == currentLayer )
+                return 0;
+        }
+    }
+
+    BOARD_DESIGN_SETTINGS& bds        = board()->GetDesignSettings();
+    const int              layerCount = bds.GetCopperLayerCount();
+
+    PCB_LAYER_ID pairTop    = frame()->GetScreen()->m_Route_Layer_TOP;
     PCB_LAYER_ID pairBottom = frame()->GetScreen()->m_Route_Layer_BOTTOM;
 
     PNS::SIZES_SETTINGS sizes = m_router->Sizes();
 
-    // ask the user for a target layer
-    PCB_LAYER_ID targetLayer = UNDEFINED_LAYER;
+    VIATYPE viaType     = VIATYPE::THROUGH;
+    bool    selectLayer = false;
 
-    if( selectLayer )
+    // Otherwise it is one of the router-specific via commands
+    if( targetLayer == UNDEFINED_LAYER )
     {
-        wxPoint dlgPosition = wxGetMousePosition();
+        const int actViaFlags = aEvent.Parameter<intptr_t>();
+        selectLayer           = actViaFlags & VIA_ACTION_FLAGS::SELECT_LAYER;
 
-        targetLayer = frame()->SelectLayer(
-                static_cast<PCB_LAYER_ID>( currentLayer ), LSET::AllNonCuMask(), dlgPosition );
+        viaType = getViaTypeFromFlags( actViaFlags );
 
-        // Reset the cursor to the position where the event occured
-        controls()->SetCursorPosition( aEvent.HasPosition() ? aEvent.Position() : dlgPosition );
+        // ask the user for a target layer
+        if( selectLayer )
+        {
+            wxPoint dlgPosition = wxGetMousePosition();
+
+            targetLayer = frame()->SelectLayer(
+                    static_cast<PCB_LAYER_ID>( currentLayer ), LSET::AllNonCuMask(), dlgPosition );
+
+            // Reset the cursor to the position where the event occured
+            controls()->SetCursorPosition( aEvent.HasPosition() ? aEvent.Position() : dlgPosition );
+        }
     }
 
     // fixme: P&S supports more than one fixed layer pair. Update the dialog?
@@ -1392,6 +1522,41 @@ void ROUTER_TOOL::setTransitions()
     Go( &ROUTER_TOOL::onViaCommand,           ACT_PlaceMicroVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceThroughVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceBlindVia.MakeEvent() );
+
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerTop.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner1.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner2.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner3.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner4.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner5.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner6.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner7.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner8.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner9.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner10.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner11.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner12.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner13.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner14.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner15.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner16.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner17.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner18.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner19.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner20.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner21.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner22.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner23.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner24.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner25.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner26.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner27.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner28.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner29.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner30.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerBottom.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerNext.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerPrev.MakeEvent() );
 
     Go( &ROUTER_TOOL::CustomTrackWidthDialog, ACT_CustomTrackWidth.MakeEvent() );
     Go( &ROUTER_TOOL::onTrackViaSizeChanged,  PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
