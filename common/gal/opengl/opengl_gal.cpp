@@ -207,30 +207,15 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     isContextLocked( false ),
     lockClientCookie( 0 )
 {
-// IsDisplayAttr() handles WX_GL_{MAJOR,MINOR}_VERSION correctly only in 3.0.4
-// starting with 3.1.0 one should use wxGLContext::IsOk() (done by GL_CONTEXT_MANAGER)
-#if wxCHECK_VERSION( 3, 0, 3 ) and !wxCHECK_VERSION( 3, 1, 0 )
-    const int attr[] = { WX_GL_MAJOR_VERSION, 2, WX_GL_MINOR_VERSION, 1, 0 };
-
-    if( !IsDisplaySupported( attr ) )
-        throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
-#endif /* wxCHECK_VERSION( 3, 0, 3 ) */
-
     if( glMainContext == NULL )
     {
         glMainContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
-
-        if( !glMainContext )
-            throw std::runtime_error( "Could not create the main OpenGL context" );
 
         glPrivContext = glMainContext;
     }
     else
     {
         glPrivContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this, glMainContext );
-
-        if( !glPrivContext )
-            throw std::runtime_error( "Could not create a private OpenGL context" );
     }
 
     shader = new SHADER();
@@ -280,9 +265,6 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     // Tesselator initialization
     tesselator = gluNewTess();
     InitTesselatorCallbacks( tesselator );
-
-    if( tesselator == NULL )
-        throw std::runtime_error( "Could not create the tesselator" );
 
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 
@@ -337,6 +319,36 @@ OPENGL_GAL::~OPENGL_GAL()
         GL_CONTEXT_MANAGER::Get().DestroyCtx( glMainContext );
         glMainContext = NULL;
     }
+}
+
+
+wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
+{
+
+    wxFrame* testFrame =
+            new wxFrame( NULL, wxID_ANY, wxT( "" ), wxDefaultPosition, wxSize( 1, 1 ) );
+    KIGFX::OPENGL_GAL* opengl_gal = new KIGFX::OPENGL_GAL( aOptions, testFrame );
+
+    testFrame->Raise();
+    testFrame->Show();
+
+    try
+    {
+        GAL_CONTEXT_LOCKER lock( opengl_gal );
+        opengl_gal->init();
+    }
+    catch( std::runtime_error& err )
+    {
+        //Test failed
+        delete opengl_gal;
+        delete testFrame;
+        return wxString( err.what() );
+    }
+
+    //Test passed
+    delete opengl_gal;
+    delete testFrame;
+    return wxEmptyString;
 }
 
 
@@ -1993,9 +2005,30 @@ unsigned int OPENGL_GAL::getNewGroupNumber()
 
 void OPENGL_GAL::init()
 {
+
     wxASSERT( IsShownOnScreen() );
 
     wxASSERT_MSG( isContextLocked, "This should only be called from within a locked context." );
+
+// IsDisplayAttr() handles WX_GL_{MAJOR,MINOR}_VERSION correctly only in 3.0.4
+// starting with 3.1.0 one should use wxGLContext::IsOk() (done by GL_CONTEXT_MANAGER)
+#if wxCHECK_VERSION( 3, 0, 3 ) and !wxCHECK_VERSION( 3, 1, 0 )
+    const int attr[] = { WX_GL_MAJOR_VERSION, 2, WX_GL_MINOR_VERSION, 1, 0 };
+
+    if( !IsDisplaySupported( attr ) )
+        throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
+#endif /* wxCHECK_VERSION( 3, 0, 3 ) */
+
+    // Check correct initialization from the constructor
+    if( !glMainContext )
+        throw std::runtime_error( "Could not create the main OpenGL context" );
+
+    if( !glPrivContext )
+        throw std::runtime_error( "Could not create a private OpenGL context" );
+
+    if( tesselator == NULL )
+        throw std::runtime_error( "Could not create the tesselator" );
+    // End initialzation checks
 
     GLenum err = glewInit();
 
@@ -2035,7 +2068,7 @@ void OPENGL_GAL::init()
     int maxTextureSize;
     glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize );
 
-    if( maxTextureSize < (int) font_image.width || maxTextureSize < (int)font_image.height )
+    if( maxTextureSize < (int) font_image.width || maxTextureSize < (int) font_image.height )
     {
         // TODO implement software texture scaling
         // for bitmap fonts and use a higher resolution texture?
