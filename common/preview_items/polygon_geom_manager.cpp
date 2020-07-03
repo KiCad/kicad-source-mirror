@@ -154,7 +154,7 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
         const VECTOR2I line_vec( aEndPoint - last_pt );
         // get a restricted 45/H/V line from the last fixed point to the cursor
         auto new_end = last_pt + GetVectorSnapped45( line_vec );
-        OPT_VECTOR2I pt = NULLOPT;
+        OPT_VECTOR2I pt = boost::make_optional( false, VECTOR2I() );
 
         if( m_lockedPoints.SegmentCount() > 1 )
         {
