@@ -23,22 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <algorithm>
-#include <math.h>
-#include <vector>
-
 #include <geometry/geometry_utils.h>
 #include <geometry/seg.h>               // for SEG
 #include <geometry/shape_arc.h>
 #include <geometry/shape_line_chain.h>
-#include <math.h>                       // for cos, sin, M_PI, atan2, ceil
-#include <math/box2.h>                  // for BOX2I
-#include <math/vector2d.h>              // for VECTOR2I, VECTOR2D, VECTOR2
-#include <type_traits>                  // for swap
+#include <trigo.h>
 
 
 SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
-           double aCenterAngle, int aWidth ) :
+                      double aCenterAngle, int aWidth ) :
     SHAPE( SH_ARC ), m_width( aWidth )
 {
     m_start = aArcStartPoint;
@@ -53,7 +46,7 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint
 
 
 SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
-           const VECTOR2I& aArcEnd, int aWidth ) :
+                      const VECTOR2I& aArcEnd, int aWidth ) :
     SHAPE( SH_ARC ), m_start( aArcStart ), m_mid( aArcMid ), m_end( aArcEnd ),
     m_width( aWidth )
 {

@@ -75,9 +75,9 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     // Parameters for round rect only:
-    m_padRoundRectRadiusScale = 0.25;               // from  IPC-7351C standard
+    m_roundedCornerScale = 0.25;               // from  IPC-7351C standard
     // Parameters for chamfered rect only:
-    m_padChamferRectScale = 0.2;                   // Size of chamfer: ratio of smallest of X,Y size
+    m_chamferScale = 0.2;                   // Size of chamfer: ratio of smallest of X,Y size
     m_chamferPositions  = RECT_NO_CHAMFER;          // No chamfered corner
 
     m_ZoneConnection    = ZONE_CONNECTION::INHERITED; // Use parent setting by default
@@ -162,7 +162,7 @@ int D_PAD::calcBoundingRadius() const
 
 int D_PAD::GetRoundRectCornerRadius() const
 {
-    return KiROUND( std::min( m_Size.x, m_Size.y ) * m_padRoundRectRadiusScale );
+    return KiROUND( std::min( m_Size.x, m_Size.y ) * m_roundedCornerScale );
 }
 
 
@@ -177,7 +177,7 @@ void D_PAD::SetRoundRectCornerRadius( double aRadius )
 
 void D_PAD::SetRoundRectRadiusRatio( double aRadiusScale )
 {
-    m_padRoundRectRadiusScale = std::max( 0.0, std::min( aRadiusScale, 0.5 ) );
+    m_roundedCornerScale = std::max( 0.0, std::min( aRadiusScale, 0.5 ) );
 
     m_shapesDirty = true;
 }
@@ -185,7 +185,7 @@ void D_PAD::SetRoundRectRadiusRatio( double aRadiusScale )
 
 void D_PAD::SetChamferRectRatio( double aChamferScale )
 {
-    m_padChamferRectScale = std::max( 0.0, std::min( aChamferScale, 0.5 ) );
+    m_chamferScale = std::max( 0.0, std::min( aChamferScale, 0.5 ) );
 
     m_shapesDirty = true;
 }

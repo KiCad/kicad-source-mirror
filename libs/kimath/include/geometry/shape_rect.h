@@ -138,6 +138,14 @@ public:
         m_p0 += aVector;
     }
 
+    /**
+     * Function Rotate()
+     * This function has limited utility for SHAPE_RECT as non-cartesian rotations will distort
+     * the rectangle.  If you might need to handle non-90º rotations then the SHAPE_RECT should
+     * first be converted to a SHAPE_SIMPLE which can then be free-rotated.
+     * @param aAngle
+     * @param aCenter
+     */
     void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
     {
         m_p0 -= aCenter;

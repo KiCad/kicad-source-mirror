@@ -27,18 +27,10 @@
 #define __SHAPE_LINE_CHAIN
 
 
-#include <algorithm>                    // for max
-#include <sstream>
-#include <vector>
-#include <wx/gdicmn.h>                  // for wxPoint
-
-#include <core/optional.h>
-
 #include <clipper.hpp>
 #include <geometry/seg.h>
 #include <geometry/shape.h>
 #include <geometry/shape_arc.h>
-#include <math/box2.h>                  // for BOX2I
 #include <math/vector2d.h>
 
 
@@ -485,8 +477,7 @@ public:
     /**
      * Function Replace()
      *
-     * Replaces points with indices in range [start_index, end_index] with a single
-     * point aP.
+     * Replaces points with indices in range [start_index, end_index] with a single point aP.
      * @param aStartIndex start of the point range to be replaced (inclusive)
      * @param aEndIndex end of the point range to be replaced (inclusive)
      * @param aP replacement point
@@ -496,8 +487,8 @@ public:
     /**
      * Function Replace()
      *
-     * Replaces points with indices in range [start_index, end_index] with the points from
-     * line chain aLine.
+     * Replaces points with indices in range [start_index, end_index] with the points from line
+     * chain aLine.
      * @param aStartIndex start of the point range to be replaced (inclusive)
      * @param aEndIndex end of the point range to be replaced (inclusive)
      * @param aLine replacement line chain.
@@ -526,8 +517,8 @@ public:
     /**
      * Function Split()
      *
-     * Inserts the point aP belonging to one of the our segments, splitting the adjacent
-     * segment in two.
+     * Inserts the point aP belonging to one of the our segments, splitting the adjacent segment
+     * in two.
      * @param aP the point to be inserted
      * @return index of the newly inserted point (or a negative value if aP does not lie on
      * our line)
@@ -583,8 +574,8 @@ public:
      *
      * Finds all intersection points between our line chain and the segment aSeg.
      * @param aSeg the segment chain to find intersections with
-     * @param aIp reference to a vector to store found intersections. Intersection points
-     * are sorted with increasing distances from point aSeg.a.
+     * @param aIp reference to a vector to store found intersections. Intersection points are
+     * sorted with increasing distances from point aSeg.a.
      * @return number of intersections found
      */
     int Intersect( const SEG& aSeg, INTERSECTIONS& aIp ) const;
@@ -594,8 +585,8 @@ public:
      *
      * Finds all intersection points between our line chain and the line chain aChain.
      * @param aChain the line chain to find intersections with
-     * @param aIp reference to a vector to store found intersections. Intersection points
-     * are sorted with increasing path lengths from the starting point of aChain.
+     * @param aIp reference to a vector to store found intersections. Intersection points are
+     * sorted with increasing path lengths from the starting point of aChain.
      * @return number of intersections found
      */
     int Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp ) const;
@@ -603,10 +594,9 @@ public:
     /**
      * Function PathLength()
      *
-     * Computes the walk path length from the beginning of the line chain and
-     * the point aP belonging to our line.
-     * @return: path length in Euclidean metric or negative if aP does not belong to
-     * the line chain.
+     * Computes the walk path length from the beginning of the line chain and the point aP
+     * belonging to our line.
+     * @return: path length in Euclidean metric or -1 if aP does not belong to the line chain.
      */
     int PathLength( const VECTOR2I& aP ) const;
 
@@ -616,7 +606,7 @@ public:
      * Checks if point aP lies inside a polygon (any type) defined by the line chain.
      * For closed shapes only.
      * @param aPt point to check
-     * @param aUseBBoxCache gives better peformance if the bounding boxe caches have been
+     * @param aUseBBoxCache gives better peformance if the bounding box caches have been
      *                      generated.
      * @return true if the point is inside the shape (edge is not treated as being inside).
      */
@@ -676,7 +666,6 @@ public:
 
     /**
      * Creates a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation
-     *
      */
     ClipperLib::Path convertToClipper( bool aRequiredOrientation ) const;
 
@@ -699,8 +688,8 @@ public:
     /**
      * Function NearestPoint()
      *
-     * Finds a point on the line chain that is closest to the line defined
-     * by the points of segment aSeg, also returns the distance.
+     * Finds a point on the line chain that is closest to the line defined by the points of
+     * segment aSeg, also returns the distance.
      * @param aSeg Segment defining the line.
      * @param dist reference receiving the distance to the nearest point.
      * @return the nearest point.
@@ -794,9 +783,9 @@ private:
     std::vector<VECTOR2I> m_points;
 
     /**
-     * Array of indices that refer to the index of the shape if the point
-     * is part of a larger shape, e.g. arc or spline.
-     * If the value is -1, the point is just a point
+     * Array of indices that refer to the index of the shape if the point is part of a larger
+     * shape, e.g. arc or spline.
+     * If the value is -1, the point is just a point.
      */
     std::vector<ssize_t> m_shapes;
 
@@ -807,8 +796,9 @@ private:
 
     /// Width of the segments (for BBox calculations in RTree)
     /// TODO Adjust usage of SHAPE_LINE_CHAIN to account for where we need a width and where not
-    /// Alternatively, we could split the class into a LINE_CHAIN (no width) and SHAPE_LINE_CHAIN that derives from
-    /// SHAPE as well that does have a width.  Not sure yet on the correct path.
+    /// Alternatively, we could split the class into a LINE_CHAIN (no width) and SHAPE_LINE_CHAIN
+    /// that derives from SHAPE as well that does have a width.  Not sure yet on the correct path.
+    /// TODO Note that we also have SHAPE_SIMPLE which is a closed, filled SHAPE_LINE_CHAIN.
     int m_width;
 
     /// cached bounding box

@@ -195,7 +195,5 @@ protected:
     SHAPE_TYPE m_type;
 };
 
-bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual,
-                    VECTOR2I* aMTV );
 
 #endif // __SHAPE_H

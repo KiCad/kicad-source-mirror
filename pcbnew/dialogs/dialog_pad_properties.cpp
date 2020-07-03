@@ -815,7 +815,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     case CHOICE_SHAPE_CHAMFERED_RECT:
         m_shapePropsBook->SetSelection( 3 );
 
-        // A reasonable default is all corners chamferred.
+        // A reasonable default is all corners chamfered.
         if( !m_cbTopLeft->GetValue() && !m_cbTopRight->GetValue()
                 && !m_cbBottomLeft->GetValue() && !m_cbBottomRight->GetValue() )
         {

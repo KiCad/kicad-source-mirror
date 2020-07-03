@@ -87,7 +87,8 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
     bool inside = c.x >= p0.x && c.x <= ( p0.x + size.x )
                   && c.y >= p0.y && c.y <= ( p0.y + size.y );
 
-    if( inside && !aMTV )
+    // If we're not looking for MTV, short-circuit once we find a hard collision
+    if( !aMTV && inside )
     {
         if( aActual )
             *aActual = 0;
@@ -102,7 +103,8 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
         VECTOR2I pn = side.NearestPoint( c );
         ecoord side_dist_sq = ( pn - c ).SquaredEuclideanNorm();
 
-        if( ( side_dist_sq == 0 || side_dist_sq < min_dist_sq ) && !aMTV && !aActual )
+        // If we're not looking for MTV or actual, short-circuit once we find any collision
+        if( !aMTV && !aActual && ( side_dist_sq == 0 || side_dist_sq < min_dist_sq ) )
             return true;
 
         if( side_dist_sq < nearest_side_dist_sq )
@@ -163,18 +165,18 @@ static VECTOR2I pushoutForce( const SHAPE_CIRCLE& aA, const SEG& aB, int aCleara
 static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN& aB, int aClearance,
                             int* aActual, VECTOR2I* aMTV )
 {
-    bool found = false;
+    bool collided = false;
 
     for( int s = 0; s < aB.SegmentCount(); s++ )
     {
         if( aA.Collide( aB.CSegment( s ), aClearance, aActual ) )
         {
-            found = true;
+            collided = true;
             break;
         }
     }
 
-    if( !found )
+    if( !collided )
         return false;
 
     if( aMTV )
@@ -229,18 +231,21 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_SIMPLE& aB, int 
 static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_SEGMENT& aSeg, int aClearance,
                             int* aActual, VECTOR2I* aMTV )
 {
-    bool col = aA.Collide( aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2, aActual );
+    if( !aA.Collide( aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2, aActual ) )
+        return false;
 
-    if( col && aMTV )
+    if( aMTV )
         *aMTV = -pushoutForce( aA, aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2);
 
-    return col;
+    return true;
 }
 
 
 static inline bool Collide( const SHAPE_LINE_CHAIN& aA, const SHAPE_LINE_CHAIN& aB, int aClearance,
                             int* aActual, VECTOR2I* aMTV )
 {
+    // TODO: why doesn't this handle MTV?
+
     for( int i = 0; i < aB.SegmentCount(); i++ )
     {
         if( aA.Collide( aB.CSegment( i ), aClearance, aActual ) )
@@ -277,13 +282,16 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN& aB, in
         {
             minActual = std::min( minActual, actual );
 
-            if( !aActual )
+            // If we're not looking for MTV or Actual, short-circuit after any collision
+            if( !aActual && !aMTV )
                 return true;
         }
     }
 
     if( aActual )
         *aActual = std::max( 0, minActual );
+
+    // TODO: why doesn't this handle MTV?
 
     return minActual < INT_MAX;
 }
@@ -306,6 +314,8 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_SEGMENT& aSeg, int
         if( aActual )
             *aActual = std::max( 0, actual - aSeg.GetWidth() / 2 );
 
+        // TODO: why doesn't this handle MTV?
+
         return true;
     }
 
@@ -323,6 +333,8 @@ static inline bool Collide( const SHAPE_SEGMENT& aA, const SHAPE_SEGMENT& aB, in
         if( aActual )
             *aActual = std::max( 0, actual - aB.GetWidth() / 2 );
 
+        // TODO: why doesn't this handle MTV?
+
         return true;
     }
 
@@ -339,6 +351,8 @@ static inline bool Collide( const SHAPE_LINE_CHAIN& aA, const SHAPE_SEGMENT& aB,
     {
         if( aActual )
             *aActual = std::max( 0, actual - aB.GetWidth() / 2 );
+
+        // TODO: why doesn't this handle MTV?
 
         return true;
     }
@@ -431,7 +445,7 @@ inline bool CollCaseReversed ( const SHAPE* aA, const SHAPE* aB, int aClearance,
 }
 
 
-bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual, VECTOR2I* aMTV )
+bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual, VECTOR2I* aMTV )
 {
     switch( aA->Type() )
     {
@@ -606,48 +620,13 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActu
 
 bool SHAPE::Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const
 {
-    return CollideShapes( this, aShape, aClearance, nullptr, aMTV );
+    return collideShapes( this, aShape, aClearance, nullptr, aMTV );
 }
 
 
 bool SHAPE::Collide( const SHAPE* aShape, int aClearance, int* aActual ) const
 {
-    return CollideShapes( this, aShape, aClearance, aActual, nullptr );
+    return collideShapes( this, aShape, aClearance, aActual, nullptr );
 }
 
 
-bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
-{
-    if( BBox( 0 ).Contains( aSeg.A ) || BBox( 0 ).Contains( aSeg.B ) )
-    {
-        if( aActual )
-            *aActual = 0;
-
-        return true;
-    }
-
-    VECTOR2I corners[] = { VECTOR2I( m_p0.x, m_p0.y ),
-                           VECTOR2I( m_p0.x, m_p0.y + m_h ),
-                           VECTOR2I( m_p0.x + m_w, m_p0.y + m_h ),
-                           VECTOR2I( m_p0.x + m_w, m_p0.y ),
-                           VECTOR2I( m_p0.x, m_p0.y ) };
-
-    SEG s( corners[0], corners[1] );
-    SEG::ecoord dist_squared = s.SquaredDistance( aSeg );
-
-    for( int i = 1; i < 4; i++ )
-    {
-        s = SEG( corners[i], corners[ i + 1] );
-        dist_squared = std::min( dist_squared, s.SquaredDistance( aSeg ) );
-    }
-
-    if( dist_squared < (ecoord) aClearance * aClearance )
-    {
-        if( aActual )
-            *aActual = sqrt( dist_squared );
-
-        return true;
-    }
-
-    return false;
-}

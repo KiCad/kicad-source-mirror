@@ -366,6 +366,7 @@ void TransformSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, w
     int seg_len        = KiROUND( EuclideanNorm( endp ) );
 
     // Compute the outlines of the segment, and creates a polygon
+
     // add right rounded end:
     for( int ii = 0; ii < 1800; ii += delta )
     {
@@ -448,7 +449,6 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, wxPo
 void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, int aRadius,
                              int aError, int aWidth )
 {
-    // Compute the corners positions and creates the poly
     int inner_radius = aRadius - ( aWidth / 2 );
     int outer_radius = inner_radius + aWidth;
 
