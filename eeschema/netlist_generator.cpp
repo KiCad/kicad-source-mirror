@@ -48,6 +48,9 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
     // Ensure all power symbols have a valid reference
     Schematic().GetSheets().AnnotatePowerSymbols();
 
+    // Ensure the netlist data is up to date:
+    RecalculateConnections( NO_CLEANUP );
+
     if( !ReadyToNetlist( false ) )
         return false;
 

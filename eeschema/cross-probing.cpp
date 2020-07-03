@@ -43,6 +43,7 @@
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <tools/ee_actions.h>
 #include <tools/sch_editor_control.h>
+#include <advanced_config.h>
 
 
 SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
@@ -466,6 +467,11 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         {
             NETLIST_EXPORTER_KICAD exporter( &Schematic() );
             STRING_FORMATTER formatter;
+
+            // TODO remove once real-time connectivity is a given
+            if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
+                // Ensure the netlist data is up to date:
+                RecalculateConnections( NO_CLEANUP );
 
             exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
 
