@@ -49,6 +49,9 @@
 #define strncasecmp strnicmp
 #endif
 
+// Does the compiler support the -Wimplicit-int-float-conversion warning
+#cmakedefine HAVE_WIMPLICIT_FLOAT_CONVERSION
+
 // Use Posix getc_unlocked() instead of getc() when it's available.
 #cmakedefine HAVE_FGETC_NOLOCK
 

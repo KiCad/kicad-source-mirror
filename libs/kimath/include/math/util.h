@@ -26,6 +26,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <config.h>
 #include <cstdint>
 #include <limits>
 #include <typeinfo>
@@ -53,7 +54,7 @@ template <typename T> inline const T& Clamp( const T& lower, const T& value, con
 }
 
 // Surpress an annoying warning that the explicit rounding we do is not precise
-#if defined( __GNUC__ ) || defined( __CLANG__ )
+#ifdef HAVE_WIMPLICIT_FLOAT_CONVERSION
     _Pragma( "GCC diagnostic push" ) \
     _Pragma( "GCC diagnostic ignored \"-Wimplicit-int-float-conversion\"" )
 #endif
@@ -80,7 +81,7 @@ constexpr ret_type KiROUND( fp_type v )
     return ret_type( max_ret( ret ) );
 }
 
-#if defined( __GNUC__ ) || defined( __CLANG__ )
+#ifdef HAVE_WIMPLICIT_FLOAT_CONVERSION
     _Pragma( "GCC diagnostic pop" )
 #endif
 

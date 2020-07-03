@@ -160,4 +160,11 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         message( STATUS "Enabling warning -Wmismatched-tags" )
     endif()
 
+    # See if the compiler will throw warnings on these conversions
+    CHECK_CXX_COMPILER_FLAG( "-Wimplicit-int-float-conversion" COMPILER_SUPPORTS_WIMPLICIT_FLOAT_CONVERSION )
+
+    if( COMPILER_SUPPORTS_WIMPLICIT_FLOAT_CONVERSION )
+        # This one is different, it is used to guard warning removal for this inside the code
+        set( HAVE_WIMPLICIT_FLOAT_CONVERSION true )
+    endif()
 endif()

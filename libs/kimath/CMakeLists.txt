@@ -36,6 +36,7 @@ target_link_libraries( kimath
 )
 
 target_include_directories( kimath PUBLIC
+    ${PROJECT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     $<TARGET_PROPERTY:clipper,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:othermath,INTERFACE_INCLUDE_DIRECTORIES>
