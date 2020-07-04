@@ -27,13 +27,14 @@
  */
 
 #include <fctsys.h>
-#include <kiface_i.h>
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <gerbview_settings.h>
-#include <gerber_file_image.h>
-#include <gerber_file_image_list.h>
+#include <kiface_i.h>
+#include <layers_id_colors_and_visibility.h>
 
 #include <select_layers_to_pcb.h>
 
@@ -203,6 +204,46 @@ void LAYERS_MAP_DIALOG::initDialog()
         flexColumnBoxSizer->Add( text, 1, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
         m_layersList[ii] = text;
+    }
+
+    std::vector<int> gerber2KicadMapping;
+
+    // See how many of the loaded Gerbers have Altium file extensions
+    int numAltiumGerbers = findNumAltiumGerbersLoaded( gerber2KicadMapping );
+
+    if( numAltiumGerbers > 0 )
+    {
+        // See if the user wants to map the Altium Gerbers to known KiCad PCB layers
+        int returnVal = wxMessageBox(
+                _( "Gerbers with known layers: " + wxString::Format( wxT( "%i" ), numAltiumGerbers )
+                        + "\n\nAssign to matching KiCad PCB layers?" ),
+                _( "Automatic Layer Assignment" ), wxOK | wxCANCEL | wxOK_DEFAULT );
+
+        if( returnVal == wxOK )
+        {
+            for( int ii = 0; ii < m_gerberActiveLayersCount; ii++ )
+            {
+                int currLayer = gerber2KicadMapping[ii];
+
+                // Default to "Do Not Export" for unselected or undefined layer
+                if( ( currLayer == UNSELECTED_LAYER ) || ( currLayer == UNDEFINED_LAYER ) )
+                {
+                    m_layersList[ii]->SetLabel( _( "Do not export" ) );
+                    m_layersList[ii]->SetForegroundColour( *wxBLUE );
+
+                    // Set the layer internally to unselected
+                    m_layersLookUpTable[ii] = UNSELECTED_LAYER;
+                }
+                else
+                {
+                    m_layersList[ii]->SetLabel( GetPCBDefaultLayerName( currLayer ) );
+                    m_layersList[ii]->SetForegroundColour( wxColour( 255, 0, 128 ) );
+
+                    // Set the layer internally to the matching KiCad layer
+                    m_layersLookUpTable[ii] = currLayer;
+                }
+            }
+        }
     }
 }
 
@@ -382,4 +423,93 @@ void LAYERS_MAP_DIALOG::OnOkClick( wxCommandEvent& event )
     }
 
     EndModal( wxID_OK );
+}
+
+int LAYERS_MAP_DIALOG::findNumAltiumGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
+{
+    // The next comment preserves initializer formatting below it
+    // clang-format off
+    // This map contains the known Altium file extensions for Gerbers that we care about,
+    // along with their corresponding KiCad layer
+    std::map<wxString, PCB_LAYER_ID> altiumExt{
+        { "GTL", F_Cu },      // Top copper
+        { "G1", In1_Cu },     // Inner layers 1 - 30
+        { "G2", In2_Cu },
+        { "G3", In3_Cu },
+        { "G4", In4_Cu },
+        { "G5", In5_Cu },
+        { "G6", In6_Cu },
+        { "G7", In7_Cu },
+        { "G8", In8_Cu },
+        { "G9", In9_Cu },
+        { "G10", In10_Cu },
+        { "G11", In11_Cu },
+        { "G12", In12_Cu },
+        { "G13", In13_Cu },
+        { "G14", In14_Cu },
+        { "G15", In15_Cu },
+        { "G16", In16_Cu },
+        { "G17", In17_Cu },
+        { "G18", In18_Cu },
+        { "G19", In19_Cu },
+        { "G20", In20_Cu },
+        { "G21", In21_Cu },
+        { "G22", In22_Cu },
+        { "G23", In23_Cu },
+        { "G24", In24_Cu },
+        { "G25", In25_Cu },
+        { "G26", In26_Cu },
+        { "G27", In27_Cu },
+        { "G28", In28_Cu },
+        { "G29", In29_Cu },
+        { "G30", In30_Cu },
+        { "GBL", B_Cu },      // Bottom copper
+        { "GTP", F_Paste },   // Paste top
+        { "GBP", B_Paste },   // Paste bottom
+        { "GTO", F_SilkS },   // Silkscreen top
+        { "GBO", B_SilkS },   // Silkscreen bottom
+        { "GTS", F_Mask },    // Soldermask top
+        { "GBS", B_Mask },    // Soldermask bottom
+        { "GM1", Eco1_User }, // Altium mechanical layer 1
+        { "GM2", Eco2_User }, // Altium mechanical layer 2
+        { "GKO", Edge_Cuts }  // PCB Outline
+    };
+    // clang-format on
+
+    std::map<wxString, PCB_LAYER_ID>::iterator it;
+
+    int numAltiumMatches = 0; // Assume we won't find Altium Gerbers
+
+    GERBER_FILE_IMAGE_LIST* images = m_Parent->GetGerberLayout()->GetImagesList();
+
+    // Loop through all loaded Gerbers looking for any with Altium specific extensions
+    for( int ii = 0; ii < m_gerberActiveLayersCount; ii++ )
+    {
+        // Get file name of Gerber loaded on this layer.
+        wxFileName fn( images->GetGbrImage( ii )->m_FileName );
+
+        // Get uppercase version of file extension
+        wxString FileExt = fn.GetExt();
+        FileExt.MakeUpper();
+
+        // Check for matching Altium Gerber file extension we'll handle
+        it = altiumExt.find( FileExt );
+
+        if( it != altiumExt.end() )
+        {
+            // We got a match, so store the KiCad layer number
+            aGerber2KicadMapping.push_back( it->second );
+            numAltiumMatches++;
+        }
+        else
+        {
+            // If there's no Altium match, then note the layer as unselected
+            aGerber2KicadMapping.push_back( UNSELECTED_LAYER );
+        }
+    }
+
+    // Return number of Altium Gerbers we found.  Each index in the passed vector corresponds to
+    // a loaded Gerber layer, and the entry will contain the index to the matching
+    // KiCad layer for Altium Gerbers, or "UNSELECTED_LAYER" for the rest.
+    return numAltiumMatches;
 }

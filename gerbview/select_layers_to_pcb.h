@@ -63,6 +63,21 @@ private:
     void OnGetSetup( wxCommandEvent& event ) override;
     void OnResetClick( wxCommandEvent& event ) override;
 
+    /**
+     * Finds number of loaded Gerbers using Altium file extensions
+     *
+     * The passed vector<int> will be returned with the same number of elements
+     * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
+     * files.  Any Gerber that maps will have it's entry set to the KiCad PCB layer
+     * number.  Gerbers that aren't using Altium extensions or which don't map to an
+     * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
+     *
+     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber
+     *
+     * @return int - The number of loaded Gerbers that have Altium extensions
+     */
+    int findNumAltiumGerbersLoaded( std::vector<int>& aGerber2KicadMapping );
+
     DECLARE_EVENT_TABLE()
 };
 
