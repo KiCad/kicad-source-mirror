@@ -377,7 +377,7 @@ void ERC_TESTER::diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItem
         if( settings.GetSeverity( ERCE_PIN_TO_PIN_WARNING ) != RPT_SEVERITY_IGNORE )
         {
             ERC_ITEM* ercItem = ERC_ITEM::Create(
-                    aDiag == PIN_ERROR::ERROR ? ERCE_PIN_TO_PIN_ERROR : ERCE_PIN_TO_PIN_WARNING );
+                    aDiag == PIN_ERROR::PP_ERROR ? ERCE_PIN_TO_PIN_ERROR : ERCE_PIN_TO_PIN_WARNING );
             ercItem->SetItems( pin, static_cast<SCH_PIN*>( aNetItemTst->m_Comp ) );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );

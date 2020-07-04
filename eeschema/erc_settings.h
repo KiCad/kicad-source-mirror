@@ -67,7 +67,7 @@ enum class PIN_ERROR
 {
     OK,
     WARNING,
-    ERROR,
+    PP_ERROR,
     UNCONNECTED
 };
 

@@ -197,7 +197,7 @@ void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_E
         tooltip = _( "Generate warning" );
         break;
 
-    case PIN_ERROR::ERROR:
+    case PIN_ERROR::PP_ERROR:
         bitmap_butt = ercerr_xpm;
         tooltip = _( "Generate error" );
         break;

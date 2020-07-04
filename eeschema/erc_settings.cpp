@@ -31,7 +31,7 @@ const int ercSettingsSchemaVersion = 0;
 
 
 #define OK PIN_ERROR::OK
-#define ERR PIN_ERROR::ERROR
+#define ERR PIN_ERROR::PP_ERROR
 #define WAR PIN_ERROR::WARNING
 
 /**
