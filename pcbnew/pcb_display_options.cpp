@@ -59,4 +59,8 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
     m_ViaOpacity   = 1.0;
     m_PadOpacity   = 1.0;
     m_ZoneOpacity  = 1.0;
+
+    m_DisplayOrigin           = PCB_ORIGIN_PAGE;
+    m_DisplayInvertXAxis      = false;
+    m_DisplayInvertYAxis      = false;
 }
