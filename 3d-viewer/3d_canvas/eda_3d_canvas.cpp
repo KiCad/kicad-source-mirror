@@ -274,6 +274,7 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
         }
     }
 
+    GL_UTILS::SetSwapInterval( -1 );
     m_is_opengl_initialized = true;
 
     return true;
