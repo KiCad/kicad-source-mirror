@@ -123,7 +123,7 @@ public:
 public:
     WS_DATA_ITEM( WS_ITEM_TYPE aType );
 
-    virtual ~WS_DATA_ITEM() {}
+    virtual ~WS_DATA_ITEM();
 
     const std::vector<WS_DRAW_ITEM_BASE*>& GetDrawItems() const { return m_drawItems; }
 

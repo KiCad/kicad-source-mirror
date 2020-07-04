@@ -73,6 +73,13 @@ WS_DATA_ITEM::WS_DATA_ITEM( WS_ITEM_TYPE aType )
 }
 
 
+WS_DATA_ITEM::~WS_DATA_ITEM()
+{
+    for( WS_DRAW_ITEM_BASE* item : m_drawItems )
+        delete item;
+}
+
+
 void WS_DATA_ITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
     int pensize = GetPenSizeUi();
