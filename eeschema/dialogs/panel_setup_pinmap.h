@@ -44,18 +44,18 @@ private:
     SCHEMATIC*        m_schematic;
     wxBitmapButton*   m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
     bool              m_initialized;
-    static bool       m_diagErcTableInit; // go to true after DiagErc init
 
 public:
     PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* aParent );
 
     bool Show( bool show ) override;
+    void ImportSettingsFrom( PIN_ERROR aPinMap[][ELECTRICAL_PINTYPES_TOTAL] );
 
 private:
     void OnResetMatrixClick( wxCommandEvent& aEvent ) override;
 
-    void ChangeErrorLevel( wxCommandEvent& event );
-    void ReBuildMatrixPanel();
+    void changeErrorLevel( wxCommandEvent& event );
+    void reBuildMatrixPanel();
     void setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_ERROR aState );
 };
 

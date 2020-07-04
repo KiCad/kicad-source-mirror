@@ -25,14 +25,11 @@
 #include <gestfich.h>
 #include <pgm_base.h>
 #include <sch_edit_frame.h>
-#include <project.h>
 #include <kiface_i.h>
 #include <bitmaps.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <netlist_object.h>
-#include <lib_pin.h>
-#include <sch_component.h>
 #include <schematic.h>
 #include <connection_graph.h>
 #include <tools/ee_actions.h>
@@ -50,7 +47,7 @@
 BEGIN_EVENT_TABLE( PANEL_SETUP_PINMAP, PANEL_SETUP_PINMAP_BASE )
     EVT_COMMAND_RANGE( ID_MATRIX_0,
                        ID_MATRIX_0 + ( ELECTRICAL_PINTYPES_TOTAL * ELECTRICAL_PINTYPES_TOTAL ) - 1,
-                       wxEVT_COMMAND_BUTTON_CLICKED, PANEL_SETUP_PINMAP::ChangeErrorLevel )
+                       wxEVT_COMMAND_BUTTON_CLICKED, PANEL_SETUP_PINMAP::changeErrorLevel )
 END_EVENT_TABLE()
 
 
@@ -65,18 +62,18 @@ PANEL_SETUP_PINMAP::PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* paren
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
 
-    ReBuildMatrixPanel();
+    reBuildMatrixPanel();
 }
 
 
 void PANEL_SETUP_PINMAP::OnResetMatrixClick( wxCommandEvent& aEvent )
 {
     m_schematic->ErcSettings().ResetPinMap();
-    ReBuildMatrixPanel();
+    reBuildMatrixPanel();
 }
 
 
-void PANEL_SETUP_PINMAP::ReBuildMatrixPanel()
+void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 {
     // Try to know the size of bitmap button used in drc matrix
     wxBitmapButton * dummy = new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmap( ercerr_xpm ) );
@@ -214,7 +211,7 @@ void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_E
 }
 
 
-void PANEL_SETUP_PINMAP::ChangeErrorLevel( wxCommandEvent& event )
+void PANEL_SETUP_PINMAP::changeErrorLevel( wxCommandEvent& event )
 {
     int id = event.GetId();
     int ii = id - ID_MATRIX_0;
@@ -229,6 +226,16 @@ void PANEL_SETUP_PINMAP::ChangeErrorLevel( wxCommandEvent& event )
 
     m_schematic->ErcSettings().SetPinMapValue( y, x, static_cast<PIN_ERROR>( level ) );
     m_schematic->ErcSettings().SetPinMapValue( x, y, static_cast<PIN_ERROR>( level ) );
+}
+
+
+void PANEL_SETUP_PINMAP::ImportSettingsFrom( PIN_ERROR aPinMap[][ELECTRICAL_PINTYPES_TOTAL] )
+{
+    for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+    {
+        for( int jj = 0; jj <= ii; jj++ )
+            setDRCMatrixButtonState( m_buttonList[ii][jj], aPinMap[ii][jj] );
+    }
 }
 
 

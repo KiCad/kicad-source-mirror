@@ -26,7 +26,6 @@
 #include <panel_setup_severities.h>
 #include <panel_setup_formatting.h>
 #include <panel_setup_pinmap.h>
-#include <eeschema_config.h>
 #include <erc_item.h>
 #include <panel_text_variables.h>
 #include <project/project_file.h>
@@ -48,7 +47,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
     m_pinToPinError = ERC_ITEM::Create( ERCE_PIN_TO_PIN_WARNING );
     m_severities = new PANEL_SETUP_SEVERITIES( this, ERC_ITEM::GetItemsWithSeverities(),
-            m_frame->Schematic().ErcSettings().m_Severities, m_pinToPinError );
+                                               m_frame->Schematic().ErcSettings().m_Severities,
+                                               m_pinToPinError );
 
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
@@ -150,9 +150,7 @@ void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
         m_fieldNameTemplates->ImportSettingsFrom( file.m_SchematicSettings->m_TemplateFieldNames );
 
     if( importDlg.m_pinMapOpt->GetValue() )
-    {
-        // JEY TODO
-    }
+        m_pinMap->ImportSettingsFrom( file.m_ErcSettings->m_PinMap );
 
     if( importDlg.m_SeveritiesOpt->GetValue() )
         m_severities->ImportSettingsFrom( file.m_ErcSettings->m_Severities );
