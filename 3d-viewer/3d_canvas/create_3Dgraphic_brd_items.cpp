@@ -430,7 +430,7 @@ COBJECT2D *BOARD_ADAPTER::createNewPadDrill( const D_PAD* aPad, int aInflateValu
     }
     else                                // Oblong hole
     {
-        const std::shared_ptr<SHAPE_SEGMENT>& seg = aPad->GetEffectiveHoleShape();
+        const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
         float width = seg->GetWidth() + aInflateValue * 2;
 
         SFVEC2F start3DU(  seg->GetSeg().A.x * m_biuTo3Dunits,

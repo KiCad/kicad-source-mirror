@@ -219,38 +219,6 @@ private:
     void doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aStartIt,
                      TRACKS::iterator aEndIt, bool aTestZones );
 
-    //-----<single tests>----------------------------------------------
-
-    /**
-     * @param aRefPad The reference pad to check
-     * @param aPad Another pad to check against
-     * @param aMinClearance is the minimum allowed distance between the pads
-     * @param aActualDist [out] it the actual distance
-     *      (only guaranteed to be set for violations)
-     * @return true if clearance between aRefPad and aPad is >= aMinClearance, else false
-     */
-    bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad,
-                                 int aMinClearance, int* aActualDist );
-
-
-    /**
-     * Check the distance from a pad to segment.  This function uses several
-     * instance variable not passed in:
-     * @param aPad Is the pad involved in the check
-     * @param aSegmentWidth width of the segment to test
-     * @param aMinDist Is the minimum clearance needed
-     * @param aActualDist [out] Is the actual clearance (only guarantted to be set on violations)
-     *
-     * @return true distance >= dist_min,
-     *         false if distance < dist_min
-     */
-    bool checkClearanceSegmToPad( const SEG& seg, int segWidth, const D_PAD* pad,
-                                  int minClearance, int* aActualDist );
-
-
-
-    //-----</single tests>---------------------------------------------
-
 public:
     /**
      * Load the DRC rules.  Must be called after the netclasses have been read.

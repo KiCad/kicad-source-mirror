@@ -54,6 +54,16 @@ public:
         return BOX2I( m_seg.A, m_seg.B - m_seg.A ).Inflate( aClearance + ( m_width + 1 ) / 2 );
     }
 
+    bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const override
+    {
+        return SHAPE::Collide( aShape, aClearance, aMTV );
+    }
+
+    bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr ) const override
+    {
+        return SHAPE::Collide( aShape, aClearance, aActual );
+    }
+
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override
     {
         int min_dist = ( m_width + 1 ) / 2 + aClearance;

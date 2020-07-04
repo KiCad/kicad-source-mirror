@@ -30,49 +30,10 @@
 #include <class_track.h>
 #include <class_drawsegment.h>
 #include <class_marker_pcb.h>
-#include <math_for_graphics.h>
 #include <geometry/polygon_test_point_inside.h>
-#include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_rect.h>
-
-
-/*
- * compare a trapezoid (can be rectangle) and a segment and return true if distance > aDist
- */
-bool poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint aSegEnd,
-                      int aDist, int* aActual )
-{
-    /* Test if the segment is contained in the polygon.
-     * This case is not covered by the following check if the segment is
-     * completely contained in the polygon (because edges don't intersect)!
-     */
-    if( TestPointInsidePolygon( aTref, aTrefCount, aSegStart ) )
-    {
-        *aActual = 0;
-        return false;
-    }
-
-    for( int ii = 0, jj = aTrefCount-1; ii < aTrefCount; jj = ii, ii++ )
-    {   // for all edges in polygon
-        double d;
-
-        if( TestForIntersectionOfStraightLineSegments( aTref[ii].x, aTref[ii].y, aTref[jj].x,
-                                                       aTref[jj].y, aSegStart.x, aSegStart.y,
-                                                       aSegEnd.x, aSegEnd.y, NULL, NULL, &d ) )
-        {
-            *aActual = 0;
-            return false;
-        }
-
-        if( d < aDist )
-        {
-            *aActual = KiROUND( d );
-            return false;
-        }
-    }
-
-    return true;
-}
+#include <geometry/shape_segment.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 
 void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aStartIt,
@@ -80,12 +41,12 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 {
     BOARD_DESIGN_SETTINGS&     bds = m_pcb->GetDesignSettings();
 
-    SEG          refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
-    PCB_LAYER_ID refLayer = aRefSeg->GetLayer();
-    LSET         refLayerSet = aRefSeg->GetLayerSet();
+    SHAPE_SEGMENT refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd(), aRefSeg->GetWidth() );
+    PCB_LAYER_ID  refLayer = aRefSeg->GetLayer();
+    LSET          refLayerSet = aRefSeg->GetLayerSet();
 
-    EDA_RECT     refSegBB = aRefSeg->GetBoundingBox();
-    int          refSegWidth = aRefSeg->GetWidth();
+    EDA_RECT      refSegBB = aRefSeg->GetBoundingBox();
+    int           refSegWidth = aRefSeg->GetWidth();
 
 
     /******************************************/
@@ -319,18 +280,11 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             if( pad->GetDrillSize().x > 0 )
             {
-                // For hole testing we use a dummy pad which is a copy of the current pad
-                // shrunk down to nothing but its hole.
-                D_PAD dummypad( *pad );
-                dummypad.SetSize( pad->GetDrillSize() );
-                dummypad.SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ?
-                                                           PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
-                // Ensure the hole is on all copper layers
-                const static LSET all_cu = LSET::AllCuMask();
-                dummypad.SetLayerSet( all_cu | dummypad.GetLayerSet() );
+                const SHAPE_SEGMENT* slot = pad->GetEffectiveHoleShape();
+                DRC_RULE*            rule = GetRule( aRefSeg, pad, CLEARANCE_CONSTRAINT );
 
-                int       minClearance;
-                DRC_RULE* rule = GetRule( aRefSeg, &dummypad, CLEARANCE_CONSTRAINT );
+                int minClearance;
+                int actual;
 
                 if( rule )
                 {
@@ -342,27 +296,8 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                     minClearance = aRefSeg->GetClearance( nullptr, &m_clearanceSource );
                 }
 
-                /* Treat an oval hole as a line segment along the hole's major axis,
-                 * shortened by half its minor axis.
-                 * A circular hole is just a degenerate case of an oval hole.
-                 */
-                wxPoint slotStart, slotEnd;
-                int     slotWidth;
-
-                pad->GetOblongGeometry( pad->GetDrillSize(), &slotStart, &slotEnd, &slotWidth );
-                slotStart += pad->GetPosition();
-                slotEnd += pad->GetPosition();
-
-                SEG     slotSeg( slotStart, slotEnd );
-                int     widths = ( slotWidth + refSegWidth ) / 2;
-                int     center2centerAllowed = minClearance + widths + bds.GetDRCEpsilon();
-
-                // Avoid square-roots if possible (for performance)
-                SEG::ecoord center2center_squared = refSeg.SquaredDistance( slotSeg );
-
-                if( center2center_squared < SEG::Square( center2centerAllowed ) )
+                if( slot->Collide( &refSeg, minClearance + bds.GetDRCEpsilon(), &actual ) )
                 {
-                    int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
                     DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -373,7 +308,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( aRefSeg, pad );
 
-                    MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, slotSeg ) );
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
                     addMarkerToPcb( aCommit, marker );
 
                     if( !m_reportAllTrackErrors )
@@ -382,13 +317,10 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             }
 
             int minClearance = aRefSeg->GetClearance( pad, &m_clearanceSource );
-            int clearanceAllowed = minClearance - bds.GetDRCEpsilon();
             int actual;
 
-            if( !checkClearanceSegmToPad( refSeg, refSegWidth, pad, clearanceAllowed, &actual ) )
+            if( pad->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
             {
-                actual = std::max( 0, actual );
-                SEG       padSeg( pad->GetPosition(), pad->GetPosition() );
                 DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -399,7 +331,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( aRefSeg, pad );
 
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, padSeg ) );
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
                 addMarkerToPcb( aCommit, marker );
 
                 if( !m_reportAllTrackErrors )
@@ -451,17 +383,12 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         if( !trackBB.Intersects( refSegBB ) )
             continue;
 
-        int minClearance = aRefSeg->GetClearance( track, &m_clearanceSource );
-        SEG trackSeg( track->GetStart(), track->GetEnd() );
-        int widths = ( refSegWidth + track->GetWidth() ) / 2;
-        int center2centerAllowed = minClearance + widths;
-
-        // Avoid square-roots if possible (for performance)
-        SEG::ecoord  center2center_squared = refSeg.SquaredDistance( trackSeg );
-        OPT_VECTOR2I intersection = refSeg.Intersect( trackSeg );
+        int           minClearance = aRefSeg->GetClearance( track, &m_clearanceSource );
+        int           actual;
+        SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
 
         // Check two tracks crossing first as it reports a DRCE without distances
-        if( intersection )
+        if( OPT_VECTOR2I intersection = refSeg.GetSeg().Intersect( trackSeg.GetSeg() ) )
         {
             DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TRACKS_CROSSING );
             drcItem->SetErrorMessage( m_msg );
@@ -473,9 +400,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             if( !m_reportAllTrackErrors )
                 return;
         }
-        else if( center2center_squared < SEG::Square( center2centerAllowed ) )
+        else if( refSeg.Collide( &trackSeg, minClearance, &actual ) )
         {
-            int       actual  = std::max( 0.0, sqrt( center2center_squared ) - widths );
+            wxPoint   pos = GetLocation( aRefSeg, trackSeg.GetSeg() );
             DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -486,7 +413,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( aRefSeg, track );
 
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, trackSeg ) );
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
             addMarkerToPcb( aCommit, marker );
 
             if( !m_reportAllTrackErrors )
@@ -515,28 +442,25 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
                     continue;
 
-                int             minClearance = aRefSeg->GetClearance( zone, &m_clearanceSource );
-                int             widths       = refSegWidth / 2;
-                int             center2centerAllowed = minClearance + widths;
-                SHAPE_POLY_SET* outline =
-                        const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList( layer ) );
-
-                SEG::ecoord center2center_squared = outline->SquaredDistance( testSeg );
-
                 // to avoid false positive, due to rounding issues and approxiamtions
                 // in distance and clearance calculations, use a small threshold for distance
                 // (1 micron)
                 #define THRESHOLD_DIST Millimeter2iu( 0.001 )
 
-                if( center2center_squared + THRESHOLD_DIST < SEG::Square( center2centerAllowed ) )
+                int minClearance = aRefSeg->GetClearance( zone, &m_clearanceSource );
+                int widths       = refSegWidth / 2;
+                int allowedDist  = minClearance + widths + THRESHOLD_DIST;
+                int actual;
+
+                if( zone->GetFilledPolysList( layer ).Collide( testSeg, allowedDist, &actual ) )
                 {
-                    int       actual  = std::max( 0.0, sqrt( center2center_squared ) - widths );
+                    actual = std::max( 0, actual - widths );
                     DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                            m_clearanceSource,
-                            MessageTextFromValue( userUnits(), minClearance, true ),
-                            MessageTextFromValue( userUnits(), actual, true ) );
+                                  m_clearanceSource,
+                                  MessageTextFromValue( userUnits(), minClearance, true ),
+                                  MessageTextFromValue( userUnits(), actual, true ) );
 
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( aRefSeg, zone );
@@ -614,121 +538,5 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             }
         }
     }
-}
-
-
-bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActual )
-{
-    int center2center = KiROUND( EuclideanNorm( aPad->ShapePos() - aRefPad->ShapePos() ) );
-
-    // Quick test: Clearance is OK if the bounding circles are further away than aMinClearance
-    if( center2center - aRefPad->GetBoundingRadius() - aPad->GetBoundingRadius() >= aMinClearance )
-        return true;
-
-    int actual = INT_MAX;
-
-    for( const std::shared_ptr<SHAPE>& aShape : aRefPad->GetEffectiveShapes() )
-    {
-        for( const std::shared_ptr<SHAPE>& bShape : aPad->GetEffectiveShapes() )
-        {
-            int this_dist;
-
-            if( aShape->Collide( bShape.get(), aMinClearance, &this_dist ) )
-                actual = std::min( actual, this_dist );
-        }
-    }
-
-    if( actual < INT_MAX )
-    {
-        // returns the actual clearance (clearance < aMinClearance) for diags:
-        if( aActual )
-            *aActual = std::max( 0, actual );
-
-        return false;
-    }
-
-    return true;
-}
-
-
-/*
- * Test if distance between a segment and a pad is > minClearance.  Return the actual
- * distance if it is less.
- */
-bool DRC::checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_PAD* pad,
-                                   int minClearance, int* aActualDist )
-{
-    if( ( pad->GetShape() == PAD_SHAPE_CIRCLE || pad->GetShape() == PAD_SHAPE_OVAL ) )
-    {
-        /* Treat an oval pad as a line segment along the hole's major axis,
-         * shortened by half its minor axis.
-         * A circular pad is just a degenerate case of an oval hole.
-         */
-        wxPoint padStart, padEnd;
-        int     padWidth;
-
-        pad->GetOblongGeometry( pad->GetSize(), &padStart, &padEnd, &padWidth );
-        padStart += pad->ShapePos();
-        padEnd += pad->ShapePos();
-
-        SEG padSeg( padStart, padEnd );
-        int widths = ( padWidth + refSegWidth ) / 2;
-        int center2centerAllowed = minClearance + widths;
-
-        // Avoid square-roots if possible (for performance)
-        SEG::ecoord center2center_squared = refSeg.SquaredDistance( padSeg );
-
-        if( center2center_squared < SEG::Square( center2centerAllowed ) )
-        {
-            *aActualDist = std::max( 0.0, sqrt( center2center_squared ) - widths );
-            return false;
-        }
-    }
-    else if( ( pad->GetShape() == PAD_SHAPE_RECT || pad->GetShape() == PAD_SHAPE_ROUNDRECT )
-            && ( (int) pad->GetOrientation() % 900 == 0 ) )
-    {
-        EDA_RECT padBBox = pad->GetBoundingBox();
-        int     widths = refSegWidth / 2;
-
-        // Note a ROUNDRECT pad with a corner radius = r can be treated as a smaller
-        // RECT (size - 2*r) with a clearance increased by r
-        if( pad->GetShape() == PAD_SHAPE_ROUNDRECT )
-        {
-            padBBox.Inflate( - pad->GetRoundRectCornerRadius() );
-            widths += pad->GetRoundRectCornerRadius();
-        }
-
-        SHAPE_RECT padShape( padBBox.GetPosition(), padBBox.GetWidth(), padBBox.GetHeight() );
-        int        actual;
-
-        if( padShape.Collide( refSeg, minClearance + widths, &actual ) )
-        {
-            *aActualDist = std::max( 0, actual - widths );
-            return false;
-        }
-    }
-    else        // Convert the rest to polygons
-    {
-        SHAPE_POLY_SET polyset;
-
-        BOARD* board = pad->GetBoard();
-        int    maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
-
-        pad->TransformShapeWithClearanceToPolygon( polyset, 0, maxError );
-
-        const SHAPE_LINE_CHAIN& refpoly = polyset.COutline( 0 );
-        int                     widths = refSegWidth / 2;
-        int                     actual;
-
-        if( !poly2segmentDRC( (wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
-                              (wxPoint) refSeg.A, (wxPoint) refSeg.B,
-                              minClearance + widths, &actual ) )
-        {
-            *aActualDist = std::max( 0, actual - widths );
-            return false;
-        }
-    }
-
-    return true;
 }
 

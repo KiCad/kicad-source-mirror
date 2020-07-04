@@ -23,11 +23,10 @@
 
 
 #include <drc/drc_keepout_tester.h>
-
+#include <geometry/shape_segment.h>
 #include <class_module.h>
 #include <drc/drc.h>
 #include <drc/drc_item.h>
-
 
 DRC_KEEPOUT_TESTER::DRC_KEEPOUT_TESTER( MARKER_HANDLER aMarkerHandler ) :
         DRC_TEST_PROVIDER( std::move( aMarkerHandler ) ),
@@ -91,11 +90,9 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
             if( !m_zone->IsOnLayer( segm->GetLayer() ) )
                 continue;
 
-            int         widths = segm->GetWidth() / 2;
-            SEG         trackSeg( segm->GetStart(), segm->GetEnd() );
-            SEG::ecoord center2center_squared = m_zone->Outline()->SquaredDistance( trackSeg );
+            SEG trackSeg( segm->GetStart(), segm->GetEnd() );
 
-            if( center2center_squared <= SEG::Square( widths) )
+            if( m_zone->Outline()->Collide( trackSeg, segm->GetWidth() / 2 ) )
             {
                 DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
@@ -111,42 +108,37 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
         }
         else if( segm->Type() == PCB_VIA_T && ( m_keepoutFlags & CHECK_VIAS_MASK ) != 0 )
         {
-            VIA* via      = static_cast<VIA*>( segm );
-            int  sourceId = 0;
+            VIA* via  = static_cast<VIA*>( segm );
+            SEG  seg( via->GetPosition(), via->GetPosition() );
+            int  test = 0;
+            int  clearance = via->GetWidth() / 2;
 
             if( ( m_keepoutFlags & DISALLOW_VIAS ) > 0 )
             {
-                sourceId = DISALLOW_VIAS;
+                test = DISALLOW_VIAS;
             }
             else if( via->GetViaType() == VIATYPE::MICROVIA
                         && ( m_keepoutFlags & DISALLOW_MICRO_VIAS ) > 0 )
             {
-                sourceId = DISALLOW_MICRO_VIAS;
+                test = DISALLOW_MICRO_VIAS;
             }
             else if( via->GetViaType() == VIATYPE::BLIND_BURIED
                         && ( m_keepoutFlags & DISALLOW_BB_VIAS ) > 0 )
             {
-                sourceId = DISALLOW_BB_VIAS;
+                test = DISALLOW_BB_VIAS;
             }
             else if( ( m_keepoutFlags & DISALLOW_HOLES ) > 0 )
             {
-                sourceId = DISALLOW_HOLES;
+                test = DISALLOW_HOLES;
+                clearance = via->GetDrillValue() / 2;
             }
             else
                 continue;
 
-            int     widths = via->GetWidth() / 2;
-            wxPoint viaPos = via->GetPosition();
-
-            if( sourceId == DISALLOW_HOLES )
-                widths = via->GetDrillValue() / 2;
-
-            SEG::ecoord center2center_squared = m_zone->Outline()->SquaredDistance( viaPos );
-
-            if( center2center_squared <= SEG::Square( widths ) )
+            if( m_zone->Outline()->Collide( seg, clearance ) )
             {
                 DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ), m_sources.at( sourceId ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ), m_sources.at( test ) );
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( segm, m_zone );
 
@@ -259,18 +251,9 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
         }
         else if( ( m_keepoutFlags & DISALLOW_HOLES ) > 0 )
         {
-            wxPoint slotStart, slotEnd;
-            int     slotWidth;
+            const SHAPE_SEGMENT* slot = pad->GetEffectiveHoleShape();
 
-            pad->GetOblongGeometry( pad->GetDrillSize(), &slotStart, &slotEnd, &slotWidth );
-            slotStart += pad->GetPosition();
-            slotEnd += pad->GetPosition();
-
-            SEG             slotSeg( slotStart, slotEnd );
-            SHAPE_POLY_SET* outline = m_zone->Outline();
-            SEG::ecoord     center2center_sq = outline->SquaredDistance( slotSeg );
-
-            if( center2center_sq <= SEG::Square( slotWidth) )
+            if( m_zone->Outline()->Collide( slot->GetSeg(), slot->GetWidth() / 2 ) )
             {
                 DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 

@@ -200,12 +200,12 @@ const std::vector<std::shared_ptr<SHAPE>>& D_PAD::GetEffectiveShapes() const
 }
 
 
-const std::shared_ptr<SHAPE_SEGMENT>& D_PAD::GetEffectiveHoleShape() const
+const SHAPE_SEGMENT* D_PAD::GetEffectiveHoleShape() const
 {
     if( m_shapesDirty )
         BuildEffectiveShapes();
 
-    return m_effectiveHoleShape;
+    return m_effectiveHoleShape.get();
 }
 
 
@@ -761,39 +761,6 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 }
 
 
-void D_PAD::GetOblongGeometry( const wxSize& aDrillOrPadSize,
-                               wxPoint* aStartPoint, wxPoint* aEndPoint, int* aWidth ) const
-{
-    // calculates the start point, end point and width
-    // of an equivalent segment which have the same position and width as the pad or hole
-    int delta_cx, delta_cy;
-
-    wxSize  halfsize = aDrillOrPadSize / 2;
-    wxPoint offset;
-
-    if( aDrillOrPadSize.x > aDrillOrPadSize.y )  // horizontal
-    {
-        delta_cx = halfsize.x - halfsize.y;
-        delta_cy = 0;
-        *aWidth   = aDrillOrPadSize.y;
-    }
-    else                                        // vertical
-    {
-        delta_cx = 0;
-        delta_cy = halfsize.y - halfsize.x;
-        *aWidth   = aDrillOrPadSize.x;
-    }
-
-    RotatePoint( &delta_cx, &delta_cy, m_Orient );
-
-    aStartPoint->x = delta_cx + offset.x;
-    aStartPoint->y = delta_cy + offset.y;
-
-    aEndPoint->x = - delta_cx + offset.x;
-    aEndPoint->y = - delta_cy + offset.y;
-}
-
-
 bool D_PAD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     VECTOR2I delta = aPosition - GetPosition();
@@ -843,6 +810,64 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
         return true;
     else
         return !aContained && intersection > 0;
+}
+
+
+bool D_PAD::Collide( const D_PAD* aPad, int aMinClearance, int* aActual )
+{
+    int center2center = KiROUND( EuclideanNorm( aPad->ShapePos() - ShapePos() ) );
+
+    // Quick test: Clearance is OK if the bounding circles are further away than aMinClearance
+    if( center2center - GetBoundingRadius() - aPad->GetBoundingRadius() >= aMinClearance )
+        return false;
+
+    int actual = INT_MAX;
+
+    for( const std::shared_ptr<SHAPE>& aShape : GetEffectiveShapes() )
+    {
+        for( const std::shared_ptr<SHAPE>& bShape : aPad->GetEffectiveShapes() )
+        {
+            int this_dist;
+
+            if( aShape->Collide( bShape.get(), aMinClearance, &this_dist ) )
+                actual = std::min( actual, this_dist );
+        }
+    }
+
+    if( actual < INT_MAX )
+    {
+        // returns the actual clearance (clearance < aMinClearance) for diags:
+        if( aActual )
+            *aActual = std::max( 0, actual );
+
+        return true;
+    }
+
+    return false;
+}
+
+
+bool D_PAD::Collide( const SHAPE_SEGMENT* aSeg, int aMinClearance, int* aActual )
+{
+    int actual = INT_MAX;
+
+    for( const std::shared_ptr<SHAPE>& shape : GetEffectiveShapes() )
+    {
+        int this_dist;
+
+        if( shape->Collide( aSeg, aMinClearance, &this_dist ) )
+            actual = std::min( actual, this_dist );
+    }
+
+    if( actual < INT_MAX )
+    {
+        if( aActual )
+            *aActual = std::max( 0, actual );
+
+        return true;
+    }
+
+    return false;
 }
 
 

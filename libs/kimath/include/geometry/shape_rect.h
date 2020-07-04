@@ -90,6 +90,16 @@ public:
         return VECTOR2I( m_w, m_h ).EuclideanNorm();
     }
 
+    bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const override
+    {
+        return SHAPE::Collide( aShape, aClearance, aMTV );
+    }
+
+    bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr ) const override
+    {
+        return SHAPE::Collide( aShape, aClearance, aActual );
+    }
+
     /// @copydoc SHAPE::Collide()
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
 

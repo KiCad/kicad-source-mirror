@@ -321,12 +321,6 @@ public:
 
     bool IsDirty() const { return m_shapesDirty; }
 
-    /**
-     * JEY TODO: temporary until Tom is done with DRC stuff....
-     */
-    void GetOblongGeometry( const wxSize& aDrillOrPadSize,
-                            wxPoint* aStartPoint, wxPoint* aEndPoint, int* aWidth ) const;
-
     void SetLayerSet( LSET aLayerMask )         { m_layerMask = aLayerMask; }
     LSET GetLayerSet() const override           { return m_layerMask; }
 
@@ -394,7 +388,7 @@ public:
      * Function GetEffectiveHoleShape
      * Returns a list of SHAPE objects representing the pad's hole.
      */
-    const std::shared_ptr<SHAPE_SEGMENT>& GetEffectiveHoleShape() const;
+    const SHAPE_SEGMENT* GetEffectiveHoleShape() const;
 
     /**
      * Function GetBoundingRadius
@@ -512,6 +506,9 @@ public:
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+
+    bool Collide( const SHAPE_SEGMENT* aSeg, int aMinClearance, int* aActual = nullptr );
+    bool Collide( const D_PAD* aPad, int aMinClearance, int* aActual = nullptr );
 
     wxString GetClass() const override
     {

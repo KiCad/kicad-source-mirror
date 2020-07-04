@@ -698,7 +698,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     else
                     {
                         // Note: small drill marks have no significance when applied to slots
-                        const std::shared_ptr<SHAPE_SEGMENT>& seg = pad->GetEffectiveHoleShape();
+                        const SHAPE_SEGMENT* seg = pad->GetEffectiveHoleShape();
                         aPlotter->ThickSegment( (wxPoint) seg->GetSeg().A,
                                                 (wxPoint) seg->GetSeg().B,
                                                 seg->GetWidth(), SKETCH, NULL );

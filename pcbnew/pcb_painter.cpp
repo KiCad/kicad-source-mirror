@@ -765,8 +765,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
     if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
-        const std::shared_ptr<SHAPE_SEGMENT>& seg = aPad->GetEffectiveHoleShape();
-
+        const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
         m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() );
     }
     else

@@ -651,7 +651,7 @@ bool D_PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, 
     if( !drillsize.x || !drillsize.y )
         return false;
 
-    const std::shared_ptr<SHAPE_SEGMENT>& seg = GetEffectiveHoleShape();
+    const SHAPE_SEGMENT* seg = GetEffectiveHoleShape();
 
     TransformSegmentToPolygon( aCornerBuffer, (wxPoint) seg->GetSeg().A, (wxPoint) seg->GetSeg().B,
                                aError, seg->GetWidth() + aInflateValue * 2 );
