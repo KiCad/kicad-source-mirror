@@ -105,6 +105,8 @@ PANEL_EESCHEMA_COLOR_SETTINGS::~PANEL_EESCHEMA_COLOR_SETTINGS()
 {
     delete m_page;
     delete m_titleBlock;
+    delete m_ws;
+    delete m_currentSettings;
 
     for( EDA_ITEM* item : m_previewItems )
         delete item;

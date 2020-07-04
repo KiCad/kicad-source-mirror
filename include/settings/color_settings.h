@@ -64,6 +64,14 @@ public:
 
     virtual ~COLOR_SETTINGS() {}
 
+    /**
+     * Copy ctor provided for temporary manipulation of themes in the theme editor.
+     * This will not copy the JSON_SETTINGS underlying data.
+     */
+    COLOR_SETTINGS( const COLOR_SETTINGS& aOther );
+
+    COLOR_SETTINGS& operator=( const COLOR_SETTINGS &aOther );
+
     bool MigrateFromLegacy( wxConfigBase* aCfg ) override;
 
     bool Migrate() override;

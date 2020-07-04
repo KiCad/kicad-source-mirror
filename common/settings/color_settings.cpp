@@ -211,6 +211,28 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
 }
 
 
+COLOR_SETTINGS::COLOR_SETTINGS( const COLOR_SETTINGS& aOther ) :
+        JSON_SETTINGS( aOther.m_filename, SETTINGS_LOC::COLORS, colorsSchemaVersion )
+{
+    m_displayName           = aOther.m_displayName;
+    m_overrideSchItemColors = aOther.m_overrideSchItemColors;
+    m_colors                = aOther.m_colors;
+    m_defaultColors         = aOther.m_defaultColors;
+}
+
+
+COLOR_SETTINGS& COLOR_SETTINGS::operator=( const COLOR_SETTINGS &aOther )
+{
+    m_filename              = aOther.m_filename;
+    m_displayName           = aOther.m_displayName;
+    m_overrideSchItemColors = aOther.m_overrideSchItemColors;
+    m_colors                = aOther.m_colors;
+    m_defaultColors         = aOther.m_defaultColors;
+
+    return *this;
+}
+
+
 bool COLOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 {
     return false;
