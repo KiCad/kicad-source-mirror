@@ -60,19 +60,19 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
     mgr.ReloadColorSettings();
     createThemeList( app_settings->m_ColorTheme );
 
-    for( int id = F_Cu; id < PCB_LAYER_ID_COUNT; id++ )
-        m_validLayers.push_back( id );
-
-    for( int id = GAL_LAYER_ID_START; id < GAL_LAYER_ID_END; id++ )
+    for( int id = GAL_LAYER_ID_START; id < GAL_LAYER_ID_BITMASK_END; id++ )
     {
         if( id == LAYER_VIAS || id == LAYER_GRID_AXES || id == LAYER_PADS_PLATEDHOLES
-                || id == LAYER_VIAS_HOLES )
+                || id == LAYER_VIAS_HOLES || id == LAYER_DRAW_BITMAPS
+                || id == LAYER_GP_OVERLAY )
         {
             continue;
         }
 
         m_validLayers.push_back( id );
     }
+
+    // NOTE: Main board layers are added by createSwatches()
 
     m_backgroundLayer = LAYER_PCB_BACKGROUND;
 
@@ -116,13 +116,7 @@ bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataToWindow()
 
 void PANEL_PCBNEW_COLOR_SETTINGS::createSwatches()
 {
-    std::vector<int> layers;
-
-    for( GAL_LAYER_ID i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; ++i )
-    {
-        if( m_currentSettings->GetColor( i ) != COLOR4D::UNSPECIFIED )
-            layers.push_back( i );
-    }
+    std::vector<int> layers( m_validLayers );
 
     std::sort( layers.begin(), layers.end(),
                []( int a, int b )
