@@ -340,8 +340,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             Schematic().SetRoot( pi->Load( fullFileName, &Schematic() ) );
 
-            GetCurrentSheet().push_back( &Schematic().Root() );
-
             if( !pi->GetError().IsEmpty() )
             {
                 DisplayErrorMessage( this,
@@ -810,7 +808,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             newfilename.SetName( Prj().GetProjectName() );
             newfilename.SetExt( LegacySchematicFileExtension );
 
-            GetCurrentSheet().push_back( &Schematic().Root() );
             SetScreen( GetCurrentSheet().LastScreen() );
 
             Schematic().Root().SetFileName( newfilename.GetFullPath() );

@@ -436,8 +436,6 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     m_schematic->RootScreen()->SetFileName( wxEmptyString );
 
-    GetCurrentSheet().push_back( &m_schematic->Root() );
-
     if( GetScreen() == NULL )
     {
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
