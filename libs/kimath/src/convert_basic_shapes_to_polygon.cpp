@@ -243,7 +243,35 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
     // These are small radius corners (of which there may be many), so peg the segs-per-circle
     // to no more than 16.
     int numSegs = std::max( GetArcToSegmentCount( aCornerRadius, aError, 360.0 ), 16 );
-    outline.Inflate( aCornerRadius, numSegs );
+
+    // To build the polygonal shape outside the actual shape, we use a bigger
+    // radius to build rounded corners.
+    // However, the size of the shape is too large.
+    // so, we also clamp the polygonal shape with the bounding box
+    // of the initial shape.
+
+    double  correction = GetCircletoPolyCorrectionFactor( numSegs );
+    int radius = aCornerRadius * correction;    // make segments outside the circles
+    outline.Inflate( radius, numSegs );
+
+    if( correction > 1.0 )
+    {
+        // Refinement: clamp the inflated polygonal shape by the rectangular shape
+        // containing the rounded polygon
+        SHAPE_POLY_SET bbox;    // the rectangular shape
+        bbox.NewOutline();
+
+        for( const wxPoint& corner : corners )
+            bbox.Append( corner );
+
+        // Just build the rectangular bbox
+        bbox.Inflate( aCornerRadius, 1, SHAPE_POLY_SET::CORNER_STRATEGY::ALLOW_ACUTE_CORNERS );
+
+        // Now, clamp the shape
+        outline.BooleanIntersection( bbox, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        // Note the final polygon is a simple, convex polygon with no hole
+        // due to the shape of initial polygons
+    }
 
     if( aChamferCorners == RECT_NO_CHAMFER )      // no chamfer
     {

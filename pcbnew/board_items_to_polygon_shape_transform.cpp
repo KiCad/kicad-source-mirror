@@ -576,6 +576,9 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
             double correction = GetCircletoPolyCorrectionFactor( numSegs );
             int    clearance = KiROUND( aClearanceValue * correction );
             outline.Inflate( clearance, numSegs );
+            // TODO: clamp the inflated polygon, because it is slightly too big:
+            // it was inflated by a value slightly too big to keep rounded corners
+            // ouside the pad area.
         }
 
         aCornerBuffer.Append( outline );
