@@ -517,6 +517,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_display_options.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_draw_panel_gal.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/pcb_netlist.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_origin_transforms.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_painter.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_plot_params.cpp
