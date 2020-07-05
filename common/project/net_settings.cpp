@@ -107,22 +107,22 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     else
                         netclass = std::make_shared<NETCLASS>( name );
 
-                    netclass->SetClearance( get( aJson, "clearance", netclass->GetClearance() ) );
+                    netclass->SetClearance( get( entry, "clearance", netclass->GetClearance() ) );
                     netclass->SetTrackWidth(
-                            get( aJson, "track_width", netclass->GetTrackWidth() ) );
+                            get( entry, "track_width", netclass->GetTrackWidth() ) );
                     netclass->SetViaDiameter(
-                            get( aJson, "via_diameter", netclass->GetViaDiameter() ) );
-                    netclass->SetViaDrill( get( aJson, "via_drill", netclass->GetViaDrill() ) );
+                            get( entry, "via_diameter", netclass->GetViaDiameter() ) );
+                    netclass->SetViaDrill( get( entry, "via_drill", netclass->GetViaDrill() ) );
                     netclass->SetuViaDiameter(
-                            get( aJson, "microvia_diameter", netclass->GetuViaDiameter() ) );
+                            get( entry, "microvia_diameter", netclass->GetuViaDiameter() ) );
                     netclass->SetuViaDrill(
-                            get( aJson, "microvia_drill", netclass->GetuViaDrill() ) );
+                            get( entry, "microvia_drill", netclass->GetuViaDrill() ) );
                     netclass->SetDiffPairWidth(
-                            get( aJson, "diff_pair_width", netclass->GetDiffPairWidth() ) );
+                            get( entry, "diff_pair_width", netclass->GetDiffPairWidth() ) );
                     netclass->SetDiffPairGap(
-                            get( aJson, "diff_pair_gap", netclass->GetDiffPairGap() ) );
+                            get( entry, "diff_pair_gap", netclass->GetDiffPairGap() ) );
                     netclass->SetDiffPairViaGap(
-                            get( aJson, "diff_pair_via_gap", netclass->GetDiffPairViaGap() ) );
+                            get( entry, "diff_pair_via_gap", netclass->GetDiffPairViaGap() ) );
 
                     if( netclass != defaultClass )
                         m_NetClasses.Add( netclass );
