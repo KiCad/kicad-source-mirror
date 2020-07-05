@@ -290,33 +290,46 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    return doMoveSelection( aEvent );
+}
+
+
+int EDIT_TOOL::MoveWithReference( const TOOL_EVENT& aEvent )
+{
+    return doMoveSelection( aEvent, true );
+}
+
+
+int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
+{
+    PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    KIGFX::VIEW_CONTROLS* controls  = getViewControls();
     VECTOR2I originalCursorPos = controls->GetCursorPosition();
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-        {
-            EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
-        } );
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
+            } );
 
     if( m_dragging || selection.Empty() )
         return 0;
 
     LSET item_layers = selection.GetSelectionLayers();
-    bool unselect = selection.IsHover(); //N.B. This must be saved before the re-selection below
+    bool unselect    = selection.IsHover(); // N.B. This must be saved before the re-selection below
 
     // Now filter out locked pads.  We cannot do this in the first RequestSelection() as we need
     // the item_layers when a pad is the selection front (ie: will become curr_tiem).
     selection = m_selectionTool->RequestSelection(
-        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-        {
-            EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS );
-        } );
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -332,7 +345,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : selection )
     {
         BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-        MODULE*     module = dynamic_cast<MODULE*>( item );
+        MODULE*     module    = dynamic_cast<MODULE*>( item );
 
         if( boardItem )
             sel_items.push_back( boardItem );
@@ -361,9 +374,10 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion() ||
-            evt->IsAction( &PCB_ACTIONS::drag ) || evt->IsDrag( BUT_LEFT ) ||
-            evt->IsAction( &ACTIONS::refreshPreview ) )
+        if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion()
+                || evt->IsAction( &PCB_ACTIONS::drag ) || evt->IsDrag( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::refreshPreview )
+                || evt->IsAction( &PCB_ACTIONS::moveWithReference ) )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
@@ -400,9 +414,11 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 
                 frame()->UpdateMsgPanel();
             }
-            else if( !m_dragging )    // Prepare to start dragging
+            else if( !m_dragging ) // Prepare to start dragging
             {
-                if ( !evt->IsAction( &PCB_ACTIONS::move ) && isInteractiveDragEnabled() )
+                if( !( evt->IsAction( &PCB_ACTIONS::move )
+                       || evt->IsAction( &PCB_ACTIONS::moveWithReference ) )
+                    && isInteractiveDragEnabled() )
                 {
                     if( invokeInlineRouter( PNS::DM_ANY ) )
                         break;
@@ -437,7 +453,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                 editFrame->UndoRedoBlock( true );
                 m_cursor = controls->GetCursorPosition();
 
-                if ( selection.HasReferencePoint() )
+                if( selection.HasReferencePoint() )
                 {
                     // start moving with the reference point attached to the cursor
                     grid.SetAuxAxes( false );
@@ -463,11 +479,32 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                     for( EDA_ITEM* item : selection )
                         items.push_back( static_cast<BOARD_ITEM*>( item ) );
 
+                    m_cursor = grid.BestDragOrigin( originalCursorPos, items );
+
                     // Set the current cursor position to the first dragged item origin, so the
                     // movement vector could be computed later
-                    m_cursor = grid.BestDragOrigin( originalCursorPos, items );
-                    selection.SetReferencePoint( m_cursor );
-                    grid.SetAuxAxes( true, m_cursor );
+                    if( aPickReference )
+                    {
+                        VECTOR2I ref;
+
+                        if( pickReferencePoint( _( "Select reference point for move..." ),
+                                                "", "", ref ) )
+                        {
+                            selection.SetReferencePoint( ref );
+                            controls->ForceCursorPosition( true, ref );
+                            m_cursor = ref;
+                        }
+                        else
+                        {
+                            // Cancel before move started
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        selection.SetReferencePoint( m_cursor );
+                        grid.SetAuxAxes( true, m_cursor );
+                    }
                 }
 
                 controls->SetCursorPosition( m_cursor, false );
@@ -497,11 +534,11 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &ACTIONS::doDelete ) )
             {
-                break;  // finish -- there is no further processing for removed items
+                break; // finish -- there is no further processing for removed items
             }
             else if( evt->IsAction( &ACTIONS::duplicate ) )
             {
-                break;  // finish -- Duplicate tool will start a new Move with the dup'ed items
+                break; // finish -- Duplicate tool will start a new Move with the dup'ed items
             }
             else if( evt->IsAction( &PCB_ACTIONS::moveExact ) )
             {
@@ -512,13 +549,13 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                     i->Move( -totalMovement );
                 }
 
-                break;  // finish -- we moved exactly, so we are finished
+                break; // finish -- we moved exactly, so we are finished
             }
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
-            break;     // finish
+            break; // finish
         }
 
         else
@@ -540,9 +577,6 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
     // Discard reference point when selection is "dropped" onto the board (ie: not dragging anymore)
     selection.ClearReferencePoint();
 
-    if( unselect )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
     // If canceled, we need to remove the dynamic ratsnest from the screen
     if( restore_state )
     {
@@ -554,15 +588,19 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         m_commit->Push( _( "Drag" ) );
     }
 
+    if( unselect )
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
     editFrame->PopTool( tool );
+
     return 0;
 }
+
 
 int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 {
     const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            {
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector ) {
                 EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
             } );
 
@@ -1338,7 +1376,8 @@ bool EDIT_TOOL::updateModificationPoint( PCBNEW_SELECTION& aSelection )
 }
 
 
-bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aReferencePoint )
+bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
+                                    const wxString& aCanceledMessage, VECTOR2I& aReferencePoint )
 {
     std::string         tool = "pcbnew.InteractiveEdit.selectReferencePoint";
     STATUS_TEXT_POPUP   statusPopup( frame() );
@@ -1346,35 +1385,51 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aReferencePoint )
     OPT<VECTOR2I>       pickedPoint;
     bool                done = false;
 
-    statusPopup.SetText( _( "Select reference point for the copy..." ) );
+    statusPopup.SetText( aTooltip );
 
     picker->SetClickHandler(
-        [&]( const VECTOR2D& aPoint ) -> bool
-        {
-            pickedPoint = aPoint;
-            statusPopup.SetText( _( "Selection copied." ) );
-            statusPopup.Expire( 800 );
-            return false;  // we don't need any more points
-        } );
+            [&]( const VECTOR2D& aPoint ) -> bool
+            {
+                pickedPoint = aPoint;
+
+                if( !aSuccessMessage.empty() )
+                {
+                    statusPopup.SetText( aSuccessMessage );
+                    statusPopup.Expire( 800 );
+                }
+                else
+                {
+                    statusPopup.Hide();
+                }
+
+                return false; // we don't need any more points
+            } );
 
     picker->SetMotionHandler(
-        [&] ( const VECTOR2D& aPos )
-        {
-            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
-        } );
+            [&]( const VECTOR2D& aPos )
+            {
+                statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+            } );
 
     picker->SetCancelHandler(
-        [&]()
-        {
-            statusPopup.SetText( _( "Copy cancelled." ) );
-            statusPopup.Expire( 800 );
-        } );
+            [&]()
+            {
+                if( !aCanceledMessage.empty() )
+                {
+                    statusPopup.SetText( aCanceledMessage );
+                    statusPopup.Expire( 800 );
+                }
+                else
+                {
+                    statusPopup.Hide();
+                }
+            } );
 
     picker->SetFinalizeHandler(
-        [&]( const int& aFinalState )
-        {
-            done = true;
-        } );
+            [&]( const int& aFinalState )
+            {
+                done = true;
+            } );
 
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
     statusPopup.Popup();
@@ -1401,8 +1456,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
     Activate();
 
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            {
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector ) {
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
             } );
 
@@ -1410,7 +1464,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
         return 1;
 
     VECTOR2I refPoint;
-    bool rv = pickCopyReferencePoint( refPoint );
+    bool     rv = pickReferencePoint( _( "Select reference point for the copy..." ),
+            _( "Selection copied." ), _( "Copy cancelled." ), refPoint );
     frame()->SetMsgPanel( board() );
 
     if( !rv )
@@ -1454,8 +1509,9 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Remove,              ACTIONS::doDelete.MakeEvent() );
     Go( &EDIT_TOOL::Remove,              PCB_ACTIONS::deleteFull.MakeEvent() );
     Go( &EDIT_TOOL::Properties,          PCB_ACTIONS::properties.MakeEvent() );
-    Go( &EDIT_TOOL::MoveExact,           PCB_ACTIONS::moveExact.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate,           ACTIONS::duplicate.MakeEvent() );
+    Go( &EDIT_TOOL::MoveExact, PCB_ACTIONS::moveExact.MakeEvent() );
+    Go( &EDIT_TOOL::MoveWithReference, PCB_ACTIONS::moveWithReference.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate, ACTIONS::duplicate.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,           PCB_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &EDIT_TOOL::CreateArray,         PCB_ACTIONS::createArray.MakeEvent() );
     Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirror.MakeEvent() );

@@ -135,6 +135,11 @@ public:
     int MoveExact( const TOOL_EVENT& aEvent );
 
     /**
+     * Moves an item but with a reference point selected first
+     */
+    int MoveWithReference( const TOOL_EVENT& aEvent );
+
+    /**
      * Function CreateArray()
      * Creates an array of the selected items, invoking the array editor dialog to set the options.
      */
@@ -179,7 +184,10 @@ private:
     bool invokeInlineRouter( int aDragMode );
     bool isInteractiveDragEnabled() const;
 
-    bool pickCopyReferencePoint( VECTOR2I& aReferencePoint );
+    int doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference = false );
+
+    bool pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
+                             const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );
 
 private:
     SELECTION_TOOL* m_selectionTool;   // Selection tool used for obtaining selected items

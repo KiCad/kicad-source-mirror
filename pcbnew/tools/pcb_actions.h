@@ -92,6 +92,9 @@ public:
     static TOOL_ACTION move;
     static TOOL_ACTION drag;
 
+    /// move with a reference point
+    static TOOL_ACTION moveWithReference;
+
     /// Rotation of selected objects
     static TOOL_ACTION rotateCw;
     static TOOL_ACTION rotateCcw;

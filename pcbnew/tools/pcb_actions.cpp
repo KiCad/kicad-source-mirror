@@ -199,6 +199,11 @@ TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveMove.move",
         _( "Move" ), _( "Moves the selected item(s)" ),
         move_xpm, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::moveWithReference( "pcbnew.InteractiveMove.moveWithReference",
+        AS_GLOBAL, 0, "", _( "Move with Reference" ),
+        _( "Moves the selected item(s) with a specified starting point" ),
+        move_xpm, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::drag( "pcbnew.InteractiveMove.drag",
         AS_GLOBAL, 0, "", "", "",
         move_xpm, AF_ACTIVATE );
