@@ -343,6 +343,7 @@ set( COMMON_SRCS
     msgpanel.cpp
     netclass.cpp
     observable.cpp
+    origin_transforms.cpp
     prependpath.cpp
     printout.cpp
     project.cpp
