@@ -42,6 +42,7 @@
 #include <pcb_display_options.h>
 #include <pcb_draw_panel_gal.h>
 #include <lib_id.h>
+#include <pcb_origin_transforms.h>
 
 /* Forward declarations of classes. */
 class APP_SETTINGS_BASE;
@@ -76,6 +77,8 @@ protected:
     BOARD*                  m_Pcb;
 
     PCB_DISPLAY_OPTIONS     m_DisplayOptions;
+
+    PCB_ORIGIN_TRANSFORMS   m_OriginTransforms;
 
     PCBNEW_SETTINGS*        m_Settings; // No ownership, just a shortcut
 
@@ -143,6 +146,15 @@ public:
 
     const wxPoint& GetGridOrigin() const override;
     void SetGridOrigin( const wxPoint& aPoint ) override;
+
+    const wxPoint& GetAuxOrigin() const;
+
+    const wxPoint GetUserOrigin() const;
+
+    /**
+     * Return a reference to the default ORIGIN_TRANSFORMS object
+     */
+    ORIGIN_TRANSFORMS& GetOriginTransforms() override;
 
     const TITLE_BLOCK& GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;

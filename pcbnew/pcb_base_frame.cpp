@@ -59,7 +59,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString & aFrameName ) :
     EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-    m_Pcb( nullptr )
+    m_Pcb( nullptr ),
+    m_OriginTransforms( *this )
 {
     m_Settings = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 }
@@ -266,6 +267,43 @@ void PCB_BASE_FRAME::SetGridOrigin( const wxPoint& aPoint )
 {
     wxASSERT( m_Pcb );
     m_Pcb->GetDesignSettings().m_GridOrigin = aPoint;
+}
+
+
+const wxPoint& PCB_BASE_FRAME::GetAuxOrigin() const
+{
+    wxASSERT( m_Pcb );
+    return m_Pcb->GetDesignSettings().m_AuxOrigin;
+}
+
+
+const wxPoint PCB_BASE_FRAME::GetUserOrigin() const
+{
+    auto& displ_opts = GetDisplayOptions();
+    wxPoint origin( 0, 0 );
+
+    switch( displ_opts.m_DisplayOrigin )
+    {
+    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE:
+        // No-op
+        break;
+    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_AUX:
+        origin = GetAuxOrigin();
+        break;
+    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_GRID:
+        origin = GetGridOrigin();
+        break;
+    default:
+        wxASSERT( false );
+        break;
+    }
+
+    return origin;
+}
+
+ORIGIN_TRANSFORMS& PCB_BASE_FRAME::GetOriginTransforms()
+{
+    return m_OriginTransforms;
 }
 
 
@@ -526,9 +564,13 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         SetStatusText( line, 3 );
     }
 
+    // Transform absolute coordinates for user origin preferences
+    double userXpos = m_OriginTransforms.ToDisplayAbsX( static_cast<double>( cursorPos.x ) );
+    double userYpos = m_OriginTransforms.ToDisplayAbsY( static_cast<double>( cursorPos.y ) );
+
     // Display absolute coordinates:
-    double dXpos = To_User_Unit( GetUserUnits(), cursorPos.x );
-    double dYpos = To_User_Unit( GetUserUnits(), cursorPos.y );
+    double dXpos = To_User_Unit( GetUserUnits(), userXpos );
+    double dYpos = To_User_Unit( GetUserUnits(), userYpos );
 
     // The following sadly is an if Eeschema/if Pcbnew
     wxString absformatter;
@@ -561,9 +603,17 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
     if( !GetShowPolarCoords() )  // display relative cartesian coordinates
     {
+        // Calculate relative coordinates
+        double relXpos = cursorPos.x - screen->m_LocalOrigin.x;
+        double relYpos = cursorPos.y - screen->m_LocalOrigin.y;
+
+        // Transform relative coordinates for user origin preferences
+        userXpos = m_OriginTransforms.ToDisplayRelX( relXpos );
+        userYpos = m_OriginTransforms.ToDisplayRelY( relYpos );
+
         // Display relative coordinates:
-        dXpos = To_User_Unit( GetUserUnits(), cursorPos.x - screen->m_LocalOrigin.x );
-        dYpos = To_User_Unit( GetUserUnits(), cursorPos.y - screen->m_LocalOrigin.y );
+        dXpos = To_User_Unit( GetUserUnits(), userXpos );
+        dYpos = To_User_Unit( GetUserUnits(), userYpos );
 
         // We already decided the formatter above
         line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
