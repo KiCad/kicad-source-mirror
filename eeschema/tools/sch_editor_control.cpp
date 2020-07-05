@@ -849,7 +849,12 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
                     comp = dynamic_cast<SCH_COMPONENT*>( item->GetParent() );
 
                 if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
-                    conn = comp->Connection( editFrame->GetCurrentSheet() );
+                {
+                    SCH_PIN_PTRS pins = comp->GetSchPins( &editFrame->GetCurrentSheet() );
+
+                    if( pins.size() == 1 )
+                        conn = pins[0]->Connection( editFrame->GetCurrentSheet() );
+                }
                 else
                     conn = item->Connection( editFrame->GetCurrentSheet() );
             }
