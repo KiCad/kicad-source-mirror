@@ -62,6 +62,11 @@ protected:
         return ProjectLocalSettingsFileExtension;
     }
 
+    wxString getLegacyFileExt() const override
+    {
+        return wxT( "NO_SUCH_FILE_EXTENSION" );
+    }
+
 private:
 
     /// A link to the owning project

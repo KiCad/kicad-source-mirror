@@ -94,6 +94,9 @@ int TREEPROJECTFILES::OnCompareItems( const wxTreeItemId& item1, const wxTreeIte
     TREEPROJECT_ITEM* myitem1 = (TREEPROJECT_ITEM*) GetItemData( item1 );
     TREEPROJECT_ITEM* myitem2 = (TREEPROJECT_ITEM*) GetItemData( item2 );
 
+    if( !myitem1 || !myitem2 )
+        return 0;
+
     if( myitem1->GetType() == TREE_DIRECTORY && myitem2->GetType() != TREE_DIRECTORY )
         return -1;
 

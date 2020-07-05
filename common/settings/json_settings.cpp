@@ -153,7 +153,8 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     }
     else
     {
-        path.Assign( aDirectory, m_filename, getFileExt() );
+        wxString dir( aDirectory.c_str(), wxConvUTF8 );
+        path.Assign( dir, m_filename, getFileExt() );
     }
 
     if( !path.Exists() )
@@ -182,7 +183,7 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     {
         try
         {
-            std::ifstream in( path.GetFullPath().ToStdString() );
+            std::ifstream in( path.GetFullPath().ToUTF8() );
             in >> *this;
 
             // If parse succeeds, check if schema migration is required
@@ -294,7 +295,8 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
     }
     else
     {
-        path.Assign( aDirectory, m_filename, getFileExt() );
+        wxString dir( aDirectory.c_str(), wxConvUTF8 );
+        path.Assign( dir, m_filename, getFileExt() );
     }
 
     if( !m_createIfMissing && !path.FileExists() )
@@ -338,7 +340,7 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
 
     try
     {
-        std::ofstream file( path.GetFullPath().ToStdString() );
+        std::ofstream file( path.GetFullPath().ToUTF8() );
         file << std::setw( 2 ) << *this << std::endl;
     }
     catch( const std::exception& e )

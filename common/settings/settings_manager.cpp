@@ -706,7 +706,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 
     m_projects[fullPath].reset( project.release() );
 
-    std::string fn( path.GetName() );
+    std::string fn( path.GetName().ToUTF8() );
 
     PROJECT_LOCAL_SETTINGS* settings = static_cast<PROJECT_LOCAL_SETTINGS*>(
             RegisterSettings( new PROJECT_LOCAL_SETTINGS( fn ) ) );
@@ -783,7 +783,9 @@ bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
     aProject.setProjectFile( file );
     file->SetProject( &aProject );
 
-    return file->LoadFromFile( std::string( fullFn.GetPath().ToUTF8() ) );
+    std::string path( fullFn.GetPath().ToUTF8() );
+
+    return file->LoadFromFile( path );
 }
 
 
