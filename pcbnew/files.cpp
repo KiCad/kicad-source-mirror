@@ -346,7 +346,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 if( id == ID_COPY_BOARD_AS )
                     return SavePcbCopy( filename );
                 else
-                    return SavePcbFile( filename, false );
+                    return SavePcbFile( filename, false, false );
             }
             return false;
         }
@@ -674,7 +674,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 }
 
 
-bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory )
+bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
+                                  bool aChangeProject )
 {
     // please, keep it simple.  prompting goes elsewhere.
 
@@ -697,7 +698,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory )
     wxFileName projectFile( pcbFileName );
     projectFile.SetExt( ProjectFileExtension );
 
-    if( !projectFile.FileExists() )
+    if( aChangeProject && !projectFile.FileExists() )
     {
         // If this is a new board, project filename won't be set yet
         if( projectFile.GetFullPath() != Prj().GetProjectFullName() )
@@ -886,7 +887,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
 
     wxLogTrace( traceAutoSave, "Creating auto save file <" + autoSaveFileName.GetFullPath() + ">" );
 
-    if( SavePcbFile( autoSaveFileName.GetFullPath(), false ) )
+    if( SavePcbFile( autoSaveFileName.GetFullPath(), false, false ) )
     {
         GetScreen()->SetModify();
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );

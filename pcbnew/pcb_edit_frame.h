@@ -603,9 +603,11 @@ public:
      * @param aFileName The file name to write or wxEmptyString to prompt user for
      *                  file name.
      * @param addToHistory controsl whether or not to add the saved file to the recent file list
+     * @param aChangeProject is true if the project should be changed to the new board filename
      * @return True if file was saved successfully.
      */
-    bool SavePcbFile( const wxString& aFileName, bool addToHistory = true );
+    bool SavePcbFile( const wxString& aFileName, bool addToHistory = true,
+                      bool aChangeProject = true );
 
     /**
      * Function SavePcbCopy
