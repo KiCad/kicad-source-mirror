@@ -471,6 +471,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             sheetList.UpdateSymbolInstances( Schematic().RootScreen()->m_symbolInstances );
         }
 
+        SCH_SHEET_PATH root;
+        root.push_back( &Schematic().Root() );
+        SetCurrentSheet( root );
+
         Schematic().ConnectionGraph()->Reset();
 
         SetScreen( GetCurrentSheet().LastScreen() );

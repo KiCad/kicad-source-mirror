@@ -1093,7 +1093,7 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents() const
 void SCH_EDIT_FRAME::FixupJunctions()
 {
     // Save the current sheet, to retrieve it later
-    auto currSheet = GetCurrentSheet();
+    SCH_SHEET_PATH oldsheetpath = GetCurrentSheet();
 
     bool modified = false;
 
@@ -1134,7 +1134,7 @@ void SCH_EDIT_FRAME::FixupJunctions()
         OnModify();
 
     // Reselect the initial sheet:
-    SetCurrentSheet( currSheet );
+    SetCurrentSheet( oldsheetpath );
     GetCurrentSheet().UpdateAllScreenReferences();
     SetScreen( GetCurrentSheet().LastScreen() );
 }
