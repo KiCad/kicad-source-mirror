@@ -881,23 +881,26 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
             trackMap[ track->GetEnd() ].push_back( track );
         }
             break;
+
         case PCB_VIA_T:
         {
             VIA* via = static_cast<VIA*>( item );
             viaMap[ via->GetStart() ] = via;
         }
             break;
+
         case PCB_PAD_T:
         {
             D_PAD* pad = static_cast<D_PAD*>( item );
             padMap[ pad->GetPosition() ] = pad;
         }
             break;
+
         default:
             break;
         }
 
-        item->SetFlags( SKIP_STRUCT );
+        item->SetState( SKIP_STRUCT, false );
     }
 
     std::vector<wxPoint> activePts;
@@ -909,12 +912,15 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
         activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetStart() );
         activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetEnd() );
         break;
+
     case PCB_VIA_T:
         activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetStart() );
         break;
+
     case PCB_PAD_T:
         activePts.push_back( aStartItem.GetPosition() );
         break;
+
     default:
         break;
     }
