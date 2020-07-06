@@ -63,6 +63,16 @@ public:
         return wxT( "DELETED_SHEET_ITEM" );
     }
 
+    static DELETED_SHEET_ITEM* GetInstance()
+    {
+        static DELETED_SHEET_ITEM* item = nullptr;
+
+        if( !item )
+            item = new DELETED_SHEET_ITEM();
+
+        return item;
+    }
+
     // pure virtuals:
     void SetPosition( const wxPoint& ) override {}
     void Print( RENDER_SETTINGS* aSettings, const wxPoint&  aOffset ) override {}
@@ -75,8 +85,6 @@ public:
     void Show( int , std::ostream&  ) const override {}
 #endif
 };
-
-DELETED_SHEET_ITEM* g_DeletedItem = nullptr;
 
 
 namespace std
@@ -530,10 +538,7 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
     }
 
     // Not found; weak reference has been deleted.
-    if( !g_DeletedItem )
-        g_DeletedItem = new DELETED_SHEET_ITEM();
-
-    return g_DeletedItem;
+    return DELETED_SHEET_ITEM::GetInstance();
 }
 
 

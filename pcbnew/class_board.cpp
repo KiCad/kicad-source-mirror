@@ -76,6 +76,15 @@ public:
         return wxPoint(0, 0);
     }
 
+    static DELETED_BOARD_ITEM* GetInstance()
+    {
+        static DELETED_BOARD_ITEM* item = nullptr;
+
+        if( !item )
+            item = new DELETED_BOARD_ITEM();
+
+        return item;
+    }
 
 #if defined(DEBUG)
     void Show( int , std::ostream&  ) const override {}
@@ -807,10 +816,7 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID )
         return this;
 
     // Not found; weak reference has been deleted.
-    if( !g_DeletedItem )
-        g_DeletedItem = new DELETED_BOARD_ITEM();
-
-    return g_DeletedItem;
+    return DELETED_BOARD_ITEM::GetInstance();
 }
 
 
