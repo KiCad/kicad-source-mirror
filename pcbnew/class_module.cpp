@@ -584,6 +584,9 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
 
     aList.emplace_back( _( "Attributes" ), msg, BROWN );
 
+    msg.Printf( "%.2f", GetOrientationDegrees() );
+    aList.emplace_back( _( "Rotation" ), msg, BROWN );
+
     msg.Printf( _( "Footprint: %s" ),
                 GetChars( m_fpid.Format().c_str() ) );
     msg2.Printf( _( "3D-Shape: %s" ),

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
-  * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+  * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -330,7 +330,7 @@ void D_PAD::BuildEffectiveShapes() const
         for( const std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
         {
             for( SHAPE* shape : primitive->MakeEffectiveShapes() )
-            {
+            {printf("shape %d\n", shape->Type());fflush(0);
                 shape->Rotate( -DECIDEG2RAD( m_Orient ) );
                 shape->Move( shapePos );
                 add( shape );
@@ -720,6 +720,17 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
         msg = MessageTextFromValue( units, m_Size.y, true );
         aList.emplace_back( _( "Height" ), msg, RED );
     }
+
+    double module_orient_degrees = module ? module->GetOrientationDegrees() : 0;
+    double pad_orient_degrees = GetOrientationDegrees() - module_orient_degrees;
+    pad_orient_degrees = NormalizeAngleDegrees( pad_orient_degrees, -180.0, +180.0 );
+
+    if( module_orient_degrees != 0.0 )
+        msg.Printf( wxT( "%.2f(+ %.2f)" ), pad_orient_degrees, module_orient_degrees );
+    else
+        msg.Printf( wxT( "%.1f" ), GetOrientationDegrees() );
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Rotation" ), msg, LIGHTBLUE ) );
 
     if( GetPadToDieLength() )
     {
