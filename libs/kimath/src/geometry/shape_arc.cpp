@@ -279,13 +279,14 @@ void SHAPE_ARC::Rotate( double aAngle, const VECTOR2I& aCenter )
     m_end -= aCenter;
     m_mid -= aCenter;
 
-    m_start.Rotate( aAngle );
-    m_end.Rotate( aAngle );
-    m_mid.Rotate( aAngle );
+    m_start = m_start.Rotate( aAngle );
+    m_end = m_end.Rotate( aAngle );
+    m_mid = m_mid.Rotate( aAngle );
 
     m_start += aCenter;
     m_end += aCenter;
     m_mid += aCenter;
+
     update_bbox();
 }
 

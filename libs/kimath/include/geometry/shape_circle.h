@@ -106,7 +106,9 @@ public:
 
     void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
     {
-        // That was easy....
+        m_center -= aCenter;
+        m_center = m_center.Rotate( aAngle );
+        m_center += aCenter;
     }
 
     bool IsSolid() const override
