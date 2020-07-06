@@ -342,10 +342,14 @@ private:
 
     wxString severityToString( const SEVERITY& aSeverity );
 
+    void initFromOther( const BOARD_DESIGN_SETTINGS& aOther );
+
 public:
     BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
 
     virtual ~BOARD_DESIGN_SETTINGS();
+
+    BOARD_DESIGN_SETTINGS( const BOARD_DESIGN_SETTINGS& aOther);
 
     BOARD_DESIGN_SETTINGS& operator=( const BOARD_DESIGN_SETTINGS& aOther );
 

@@ -569,7 +569,23 @@ BOARD_DESIGN_SETTINGS::~BOARD_DESIGN_SETTINGS()
 }
 
 
+BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( const BOARD_DESIGN_SETTINGS& aOther ) :
+        NESTED_SETTINGS( "board_design_settings", bdsSchemaVersion, aOther.m_parent,
+                         aOther.m_path ),
+        m_Pad_Master( nullptr )
+{
+    initFromOther( aOther );
+}
+
+
 BOARD_DESIGN_SETTINGS& BOARD_DESIGN_SETTINGS::operator=( const BOARD_DESIGN_SETTINGS& aOther )
+{
+    initFromOther( aOther );
+    return *this;
+}
+
+
+void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
 {
     // Copy of NESTED_SETTINGS around is not allowed, so let's just update the params.
     m_TrackWidthList         = aOther.m_TrackWidthList;
@@ -617,8 +633,6 @@ BOARD_DESIGN_SETTINGS& BOARD_DESIGN_SETTINGS::operator=( const BOARD_DESIGN_SETT
 
     std::copy( std::begin( aOther.m_TextUpright ), std::end( aOther.m_TextUpright ),
                std::begin( m_TextUpright ) );
-
-    return *this;
 }
 
 
