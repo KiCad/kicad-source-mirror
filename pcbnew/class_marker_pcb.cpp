@@ -77,6 +77,10 @@ MARKER_PCB* MARKER_PCB::Deserialize( const wxString& data )
                              (int) strtol( props[2].c_str(), nullptr, 10 ) );
 
     DRC_ITEM* drcItem = DRC_ITEM::Create( props[0] );
+
+    if( !drcItem )
+        return nullptr;
+
     drcItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
 
     return new MARKER_PCB( drcItem, markerPos );

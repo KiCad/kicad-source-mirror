@@ -531,8 +531,12 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
     for( const wxString& exclusionData : bds.m_DrcExclusions )
     {
         MARKER_PCB* marker = MARKER_PCB::Deserialize( exclusionData );
-        marker->SetExcluded( true );
-        commit.Add( marker );
+
+        if( marker )
+        {
+            marker->SetExcluded( true );
+            commit.Add( marker );
+        }
     }
 
     bds.m_DrcExclusions.clear();

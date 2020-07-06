@@ -244,7 +244,7 @@ DRC_ITEM* DRC_ITEM::Create( const wxString& aErrorKey )
             return new DRC_ITEM( static_cast<const DRC_ITEM&>( item ) );
     }
 
-    wxFAIL_MSG( "Unknown DRC settings key: " + aErrorKey );
+    // This can happen if a project has old-format exclusions.  Just drop these items.
     return nullptr;
 }
 
