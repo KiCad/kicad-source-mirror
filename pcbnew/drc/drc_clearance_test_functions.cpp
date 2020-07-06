@@ -144,7 +144,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             {
                 DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
 
-                m_msg.Printf( _( "Via annulus too small  (%s %s; actual %s)" ),
+                m_msg.Printf( _( "Via annulus too small (%s %s; actual %s)" ),
                               m_clearanceSource,
                               MessageTextFromValue( userUnits(), minAnnulus, true ),
                               MessageTextFromValue( userUnits(), viaAnnulus, true ) );
@@ -560,7 +560,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         dummyEdge.SetLayer( Edge_Cuts );
 
         if( aRefSeg->GetRuleClearance( &dummyEdge, &minClearance, &m_clearanceSource ) )
+        {
             /* minClearance and m_clearanceSource set in GetRuleClearance() */;
+        }
 
         SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
         int halfWidth = refSegWidth / 2;

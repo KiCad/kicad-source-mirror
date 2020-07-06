@@ -742,9 +742,9 @@ static struct EDA_ITEM_DESC
     EDA_ITEM_DESC()
     {
         ENUM_MAP<KICAD_T>::Instance()
-            .Map( NOT_USED,             _( "<not used>" ) )
-            //.Map( EOT,                  _( "<EOT>" ) )
-            .Map( TYPE_NOT_INIT,        _( "<type not init>" ) )    // == EOT
+            .Map( NOT_USED,             wxT( "<not used>" ) )
+            //.Map( EOT,                  wxT( "<EOT>" ) )
+            .Map( TYPE_NOT_INIT,        wxT( "<type not init>" ) )    // == EOT
             .Map( SCREEN_T,             _( "Screen" ) )
 
             .Map( PCB_MODULE_T,         _( "Footprint" ) )
@@ -799,7 +799,7 @@ static struct EDA_ITEM_DESC
             .Map( GERBER_DRAW_ITEM_T,   _( "Draw Item" ) )
             .Map( GERBER_IMAGE_T,       _( "Image" ) )
 
-            .Map( MAX_STRUCT_TYPE_ID,   _( "<max struct type>" ) );
+            .Map( MAX_STRUCT_TYPE_ID,   wxT( "<max struct type>" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_ITEM );
