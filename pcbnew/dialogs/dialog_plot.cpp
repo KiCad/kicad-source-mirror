@@ -867,6 +867,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         {
             PlotOneBoardLayer( board, plotter, layer, m_plotOpts );
             plotter->EndPlot();
+            delete plotter->RenderSettings();
             delete plotter;
 
             msg.Printf( _( "Plot file \"%s\" created." ), fn.GetFullPath() );
