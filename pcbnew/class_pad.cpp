@@ -1211,7 +1211,7 @@ static struct PAD_DESC
                 .Map( PAD_SHAPE_TRAPEZOID, _( "Trapezoid" ) )
                 .Map( PAD_SHAPE_ROUNDRECT, _( "Rounded Rectangle" ) )
                 .Map( PAD_SHAPE_CHAMFERED_RECT, _( "Chamfered Rectangle" ) )
-                .Map( PAD_SHAPE_CUSTOM, _( "Chamfered Rectangle" ) );
+                .Map( PAD_SHAPE_CUSTOM, _( "Custom" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( D_PAD );

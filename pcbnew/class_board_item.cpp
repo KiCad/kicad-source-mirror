@@ -150,9 +150,12 @@ static struct BOARD_ITEM_DESC
     {
         auto& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
-        for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+        if( layerEnum.Choices().GetCount() == 0 )
         {
-            layerEnum.Map( *seq, LSET::Name( *seq ) );
+            for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+            {
+                layerEnum.Map( *seq, LSET::Name( *seq ) );
+            }
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
