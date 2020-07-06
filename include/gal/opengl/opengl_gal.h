@@ -84,19 +84,19 @@ public:
                 wxEvtHandler* aMouseListener = nullptr, wxEvtHandler* aPaintListener = nullptr,
                 const wxString& aName = wxT( "GLCanvas" ) );
 
-    virtual ~OPENGL_GAL();
+    ~OPENGL_GAL();
 
     /**
      * @brief Checks OpenGL features
-     * @param aOptions 
+     * @param aOptions
      * @return wxEmptyString if OpenGL 2.1 or greater is available, otherwise returns error message
      */
     static wxString CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions );
 
-    virtual bool IsOpenGlEngine() override { return true; }
+    bool IsOpenGlEngine() override { return true; }
 
     /// @copydoc GAL::IsInitialized()
-    virtual bool IsInitialized() const override
+    bool IsInitialized() const override
     {
         // is*Initialized flags, but it is enough for OpenGL to show up
         return IsShownOnScreen() && !GetClientRect().IsEmpty();
@@ -113,139 +113,139 @@ public:
     // ---------------
 
     /// @copydoc GAL::DrawLine()
-    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
+    void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
     /// @copydoc GAL::DrawSegment()
-    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
+    void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                               double aWidth ) override;
 
     /// @copydoc GAL::DrawCircle()
-    virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) override;
+    void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) override;
 
     /// @copydoc GAL::DrawArc()
-    virtual void DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
+    void DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
                           double aStartAngle, double aEndAngle ) override;
 
     /// @copydoc GAL::DrawArcSegment()
-    virtual void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
+    void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
                                  double aStartAngle, double aEndAngle, double aWidth ) override;
 
     /// @copydoc GAL::DrawRectangle()
-    virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
+    void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
     /// @copydoc GAL::DrawPolyline()
-    virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override;
-    virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override;
-    virtual void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) override;
+    void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override;
+    void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override;
+    void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) override;
 
     /// @copydoc GAL::DrawPolygon()
-    virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) override;
-    virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) override;
-    virtual void DrawPolygon( const SHAPE_POLY_SET& aPolySet ) override;
-    virtual void DrawPolygon( const SHAPE_LINE_CHAIN& aPolySet ) override;
+    void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) override;
+    void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) override;
+    void DrawPolygon( const SHAPE_POLY_SET& aPolySet ) override;
+    void DrawPolygon( const SHAPE_LINE_CHAIN& aPolySet ) override;
 
     /// @copydoc GAL::DrawCurve()
-    virtual void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
+    void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
                             const VECTOR2D& controlPointB, const VECTOR2D& endPoint,
                             double aFilterValue = 0.0 ) override;
 
     /// @copydoc GAL::DrawBitmap()
-    virtual void DrawBitmap( const BITMAP_BASE& aBitmap ) override;
+    void DrawBitmap( const BITMAP_BASE& aBitmap ) override;
 
     /// @copydoc GAL::BitmapText()
-    virtual void BitmapText( const wxString& aText, const VECTOR2D& aPosition,
+    void BitmapText( const wxString& aText, const VECTOR2D& aPosition,
                              double aRotationAngle ) override;
 
     /// @copydoc GAL::DrawGrid()
-    virtual void DrawGrid() override;
+    void DrawGrid() override;
 
     // --------------
     // Screen methods
     // --------------
 
     /// @brief Resizes the canvas.
-    virtual void ResizeScreen( int aWidth, int aHeight ) override;
+    void ResizeScreen( int aWidth, int aHeight ) override;
 
     /// @brief Shows/hides the GAL canvas
-    virtual bool Show( bool aShow ) override;
+    bool Show( bool aShow ) override;
 
     /// @copydoc GAL::Flush()
-    virtual void Flush() override;
+    void Flush() override;
 
     /// @copydoc GAL::ClearScreen()
-    virtual void ClearScreen( ) override;
+    void ClearScreen( ) override;
 
     // --------------
     // Transformation
     // --------------
 
     /// @copydoc GAL::Transform()
-    virtual void Transform( const MATRIX3x3D& aTransformation ) override;
+    void Transform( const MATRIX3x3D& aTransformation ) override;
 
     /// @copydoc GAL::Rotate()
-    virtual void Rotate( double aAngle ) override;
+    void Rotate( double aAngle ) override;
 
     /// @copydoc GAL::Translate()
-    virtual void Translate( const VECTOR2D& aTranslation ) override;
+    void Translate( const VECTOR2D& aTranslation ) override;
 
     /// @copydoc GAL::Scale()
-    virtual void Scale( const VECTOR2D& aScale ) override;
+    void Scale( const VECTOR2D& aScale ) override;
 
     /// @copydoc GAL::Save()
-    virtual void Save() override;
+    void Save() override;
 
     /// @copydoc GAL::Restore()
-    virtual void Restore() override;
+    void Restore() override;
 
     // --------------------------------------------
     // Group methods
     // ---------------------------------------------
 
     /// @copydoc GAL::BeginGroup()
-    virtual int BeginGroup() override;
+    int BeginGroup() override;
 
     /// @copydoc GAL::EndGroup()
-    virtual void EndGroup() override;
+    void EndGroup() override;
 
     /// @copydoc GAL::DrawGroup()
-    virtual void DrawGroup( int aGroupNumber ) override;
+    void DrawGroup( int aGroupNumber ) override;
 
     /// @copydoc GAL::ChangeGroupColor()
-    virtual void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor ) override;
+    void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor ) override;
 
     /// @copydoc GAL::ChangeGroupDepth()
-    virtual void ChangeGroupDepth( int aGroupNumber, int aDepth ) override;
+    void ChangeGroupDepth( int aGroupNumber, int aDepth ) override;
 
     /// @copydoc GAL::DeleteGroup()
-    virtual void DeleteGroup( int aGroupNumber ) override;
+    void DeleteGroup( int aGroupNumber ) override;
 
     /// @copydoc GAL::ClearCache()
-    virtual void ClearCache() override;
+    void ClearCache() override;
 
     // --------------------------------------------------------
     // Handling the world <-> screen transformation
     // --------------------------------------------------------
 
     /// @copydoc GAL::SetTarget()
-    virtual void SetTarget( RENDER_TARGET aTarget ) override;
+    void SetTarget( RENDER_TARGET aTarget ) override;
 
     /// @copydoc GAL::GetTarget()
-    virtual RENDER_TARGET GetTarget() const override;
+    RENDER_TARGET GetTarget() const override;
 
     /// @copydoc GAL::ClearTarget()
-    virtual void ClearTarget( RENDER_TARGET aTarget ) override;
+    void ClearTarget( RENDER_TARGET aTarget ) override;
 
     /// @copydoc GAL::SetNegativeDrawMode()
-    virtual void SetNegativeDrawMode( bool aSetting ) override {}
+    void SetNegativeDrawMode( bool aSetting ) override {}
 
-    virtual void ComputeWorldScreenMatrix() override;
+    void ComputeWorldScreenMatrix() override;
 
     // -------
     // Cursor
     // -------
 
     /// @copydoc GAL::DrawCursor()
-    virtual void DrawCursor( const VECTOR2D& aCursorPosition ) override;
+    void DrawCursor( const VECTOR2D& aCursorPosition ) override;
 
     /**
      * @brief Function PostPaint
@@ -271,7 +271,7 @@ public:
         paintListener = aPaintListener;
     }
 
-    virtual void EnableDepthTest( bool aEnabled = false ) override;
+    void EnableDepthTest( bool aEnabled = false ) override;
 
     ///< Parameters passed to the GLU tesselator
     typedef struct
@@ -336,16 +336,16 @@ private:
     void unlockContext( int aClientCookie ) override;
 
     /// @copydoc GAL::BeginUpdate()
-    virtual void beginUpdate() override;
+    void beginUpdate() override;
 
     /// @copydoc GAL::EndUpdate()
-    virtual void endUpdate() override;
+    void endUpdate() override;
 
     /// @copydoc GAL::BeginDrawing()
-    virtual void beginDrawing() override;
+    void beginDrawing() override;
 
     /// @copydoc GAL::EndDrawing()
-    virtual void endDrawing() override;
+    void endDrawing() override;
 
     ///< Update handler for OpenGL settings
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
