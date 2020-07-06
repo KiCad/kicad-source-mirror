@@ -40,6 +40,8 @@
 #include <connection_graph.h>
 #include <widgets/ui_common.h>
 
+#include <advanced_config.h> // for realtime connectivity switch
+
 
 bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 {
