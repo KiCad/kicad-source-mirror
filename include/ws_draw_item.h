@@ -31,6 +31,9 @@
 #include "msgpanel.h"
 #include <geometry/shape_poly_set.h>
 
+#include <algorithm>
+#include <vector>
+
 class WS_DATA_ITEM;
 class TITLE_BLOCK;
 class PAGE_INFO;
