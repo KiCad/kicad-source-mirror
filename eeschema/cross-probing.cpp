@@ -41,10 +41,12 @@
 #include <schematic.h>
 #include <reporter.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 #include <tools/ee_actions.h>
 #include <tools/sch_editor_control.h>
 #include <advanced_config.h>
-
+#include <netclass.h>
 
 SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                                                     bool            aSearchHierarchy,
@@ -450,6 +452,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_SCH_GET_NETLIST:
+    {
         if( payload.find( "quiet-annotate" ) != std::string::npos )
         {
             Schematic().GetSheets().AnnotatePowerSymbols();
@@ -464,19 +467,18 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 return;
         }
 
-        {
-            NETLIST_EXPORTER_KICAD exporter( &Schematic() );
-            STRING_FORMATTER formatter;
+        NETLIST_EXPORTER_KICAD exporter( &Schematic() );
+        STRING_FORMATTER formatter;
 
-            // TODO remove once real-time connectivity is a given
-            if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-                // Ensure the netlist data is up to date:
-                RecalculateConnections( NO_CLEANUP );
+        // TODO remove once real-time connectivity is a given
+        if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
+            // Ensure the netlist data is up to date:
+            RecalculateConnections( NO_CLEANUP );
 
-            exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
+        exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
 
-            payload = formatter.GetString();
-        }
+        payload = formatter.GetString();
+    }
         break;
 
     case MAIL_BACKANNOTATE_FOOTPRINTS:
@@ -498,8 +500,47 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         GetCanvas()->Refresh();
-        break;
     }
+        break;
+
+    case MAIL_SCH_CLEAN_NETCLASSES:
+    {
+        NET_SETTINGS& netSettings = Prj().GetProjectFile().NetSettings();
+
+        netSettings.m_NetClassAssignments.clear();
+
+        // Establish the set of nets which is currently valid
+        for( const wxString& name : Schematic().GetNetClassAssignmentCandidates() )
+            netSettings.m_NetClassAssignments[ name ] = "Default";
+
+        // Copy their netclass assignments, dropping any assignments to non-current nets.
+        for( auto& ii : netSettings.m_NetClasses )
+        {
+            for( const wxString& member : *ii.second )
+            {
+                if( netSettings.m_NetClassAssignments.count( member ) )
+                    netSettings.m_NetClassAssignments[ member ] = ii.first;
+            }
+
+            ii.second->Clear();
+        }
+
+        // Update the membership lists to contain only the current nets.
+        for( const std::pair<const wxString, wxString>& ii : netSettings.m_NetClassAssignments )
+        {
+            if( ii.second == "Default" )
+                continue;
+
+            NETCLASSPTR netclass = netSettings.m_NetClasses.Find( ii.second );
+
+            if( netclass )
+                netclass->Add( ii.first );
+        }
+
+        netSettings.ResolveNetClassAssignments();
+    }
+        break;
+
     case MAIL_IMPORT_FILE:
     {
         // Extract file format type and path (plugin type and path separated with \n)
@@ -528,6 +569,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     case MAIL_SCH_SAVE:
         if( SaveProject() )
             payload = "success";
+
         break;
 
     case MAIL_SCH_UPDATE:

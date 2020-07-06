@@ -35,11 +35,44 @@ public:
 
     virtual ~NET_SETTINGS();
 
+public:
     NETCLASSES m_NetClasses;
 
-private:
-    NETCLASSPTR m_defaultClass;
+    // Runtime map of label to netclass-name for quick lookup.  Includes both composite labels
+    // (buses) and atomic net names (including individual bus members).
+    std::map<wxString, wxString> m_NetClassAssignments;
 
+public:
+    /**
+     * Parses a bus vector (e.g. A[7..0]) into name, begin, and end.
+     * Ensures that begin and end are positive and that end > begin.
+     *
+     * @param aBus is a bus vector label string
+     * @param aName out is the bus name, e.g. "A"
+     * @param aMemberList is a list of member strings, e.g. "A7", "A6", and so on
+     * @return true if aBus was successfully parsed
+     */
+    static bool ParseBusVector( const wxString& aBus, wxString* aName,
+                                std::vector<wxString>* aMemberList );
+
+    /**
+     * Parses a bus group label into the name and a list of components.
+     *
+     * @param aGroup is the input label, e.g. "USB{DP DM}"
+     * @param name is the output group name, e.g. "USB"
+     * @param aMemberList is a list of member strings, e.g. "DP", "DM"
+     * @return true if aGroup was successfully parsed
+     */
+    static bool ParseBusGroup( wxString aGroup, wxString* name,
+                               std::vector<wxString>* aMemberList );
+
+    /**
+     * Explodes the list of netclass assignments to include atomic members of composite labels
+     * (buses).
+     */
+    void ResolveNetClassAssignments();
+
+private:
     // TODO: Add diff pairs, bus information, etc here.
 };
 

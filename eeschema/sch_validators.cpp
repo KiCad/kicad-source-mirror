@@ -28,8 +28,8 @@
  */
 
 #include <wx/combo.h>
-#include <sch_connection.h>
 #include <sch_validators.h>
+#include <project/net_settings.h>
 #include <template_fieldnames.h>
 
 
@@ -252,11 +252,11 @@ bool SCH_NETNAME_VALIDATOR::Validate( wxWindow *aParent )
 
 wxString SCH_NETNAME_VALIDATOR::IsValid( const wxString& str ) const
 {
-    if( SCH_CONNECTION::ParseBusGroup( str, nullptr, nullptr ) )
+    if( NET_SETTINGS::ParseBusGroup( str, nullptr, nullptr ) )
         return wxString();
 
     if( ( str.Contains( '[' ) || str.Contains( ']' ) ) &&
-        !SCH_CONNECTION::ParseBusVector( str, nullptr, nullptr ) )
+        !NET_SETTINGS::ParseBusVector( str, nullptr, nullptr ) )
         return _( "Signal name contains '[' or ']' but is not a valid vector bus name" );
 
     if( str.Contains( '\r' ) || str.Contains( '\n' ) )

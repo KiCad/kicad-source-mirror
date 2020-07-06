@@ -48,23 +48,23 @@ DIALOG_IMPORT_SETTINGS_BASE::DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWi
 	m_LayersOpt = new wxCheckBox( this, wxID_ANY, _("Layers setup"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_LayersOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_TextAndGraphicsOpt = new wxCheckBox( this, wxID_ANY, _("Text && Graphics default properties"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextAndGraphicsOpt = new wxCheckBox( this, wxID_ANY, _("Text and graphics default properties"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_TextAndGraphicsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_ConstraintsOpt = new wxCheckBox( this, wxID_ANY, _("Design Rules"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ConstraintsOpt = new wxCheckBox( this, wxID_ANY, _("Design rules"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_ConstraintsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_NetclassesOpt = new wxCheckBox( this, wxID_ANY, _("Net Classes"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_NetclassesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_TracksAndViasOpt = new wxCheckBox( this, wxID_ANY, _("Predefined Track and Via dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TracksAndViasOpt = new wxCheckBox( this, wxID_ANY, _("Predefined track and via dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_TracksAndViasOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_MaskAndPasteOpt = new wxCheckBox( this, wxID_ANY, _("Solder Mask/Paste defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MaskAndPasteOpt = new wxCheckBox( this, wxID_ANY, _("Solder mask/paste defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_MaskAndPasteOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_SeveritiesOpt = new wxCheckBox( this, wxID_ANY, _("Violation severities"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_SeveritiesOpt, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_NetclassesOpt = new wxCheckBox( this, wxID_ANY, _("Net classes"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_NetclassesOpt, 0, wxALL, 5 );
 
 
 	m_MainSizer->Add( bmiddleSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );

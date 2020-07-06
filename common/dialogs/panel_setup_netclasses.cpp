@@ -48,10 +48,12 @@ enum {
 };
 
 
-PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses ) :
+PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
+                                                const std::vector<wxString>& aCandidateNetNames ) :
         PANEL_SETUP_NETCLASSES_BASE( aParent->GetTreebook() ),
         m_Parent( aParent ),
-        m_Netclasses( aNetclasses )
+        m_netclasses( aNetclasses ),
+        m_candidateNetNames( aCandidateNetNames )
 {
     m_netclassesDirty = true;
 
@@ -147,20 +149,19 @@ static void netclassToGridRow( EDA_UNITS aUnits, wxGrid* aGrid, int aRow, const 
 
 bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
 {
-    NETCLASSPTR netclass   = m_Netclasses->GetDefault();
-
     std::map<wxString, wxString> netToNetclassMap;
+    std::map<wxString, wxString> staleNetMap;
+
+    for( const wxString& candidate : m_candidateNetNames )
+        netToNetclassMap[ candidate ] = "Default";
 
     if( m_netclassGrid->GetNumberRows() )
         m_netclassGrid->DeleteRows( 0, m_netclassGrid->GetNumberRows() );
 
-    m_netclassGrid->AppendRows( (int) m_Netclasses->GetCount() + 1 ); // + 1 for default netclass
+    m_netclassGrid->AppendRows((int) m_netclasses->GetCount() + 1 ); // + 1 for default netclass
 
     // enter the Default NETCLASS.
-    netclassToGridRow( m_Parent->GetUserUnits(), m_netclassGrid, 0, netclass );
-
-    for( const wxString& net : *netclass )
-        netToNetclassMap[ net ] = netclass->GetName();
+    netclassToGridRow( m_Parent->GetUserUnits(), m_netclassGrid, 0, m_netclasses->GetDefault() );
 
     // make the Default NETCLASS name read-only
     wxGridCellAttr* cellAttr = m_netclassGrid->GetOrCreateCellAttr( 0, GRID_NAME );
@@ -170,42 +171,60 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     // enter other netclasses
     int row = 1;
 
-    for( NETCLASSES::iterator i = m_Netclasses->begin();  i != m_Netclasses->end();  ++i, ++row )
+    for( NETCLASSES::iterator i = m_netclasses->begin(); i != m_netclasses->end(); ++i, ++row )
     {
-        netclass = i->second;
+        NETCLASSPTR netclass = i->second;
 
         netclassToGridRow( m_Parent->GetUserUnits(), m_netclassGrid, row, netclass );
 
         for( const wxString& net : *netclass )
-            netToNetclassMap[ net ] = i->second->GetName();
+        {
+            // While we currently only store shortNames as members, legacy versions stored
+            // fully-qualified names so we don't know which kind we're going to find.
+            wxString shortName = net.AfterLast( '/' );
+
+            if( netToNetclassMap.count( shortName ) )
+                netToNetclassMap[ shortName ] = i->second->GetName();
+            else
+                staleNetMap[ shortName ] = i->second->GetName();
+        }
     }
 
     if( m_membershipGrid->GetNumberRows() )
         m_membershipGrid->DeleteRows( 0, m_membershipGrid->GetNumberRows() );
 
-    // add all the nets discovered in the netclass membership lists
+    // add currently-assigned and candidate netnames to membership lists
     for( const std::pair<const wxString, wxString>& ii : netToNetclassMap )
-    {
-        if( !ii.first.IsEmpty() )
-            addNet( UnescapeString( ii.first ), ii.second );
-    }
+        addNet( UnescapeString( ii.first ), ii.second, false );
+
+    for( const std::pair<const wxString, wxString>& ii : staleNetMap )
+        addNet( UnescapeString( ii.first ), ii.second, true );
 
     return true;
 }
 
 
-void PANEL_SETUP_NETCLASSES::addNet( const wxString& netName, const wxString& netclass )
+void PANEL_SETUP_NETCLASSES::addNet( const wxString& netName, const wxString& netclass,
+                                     bool aStale )
 {
     int i = m_membershipGrid->GetNumberRows();
 
     m_membershipGrid->AppendRows( 1 );
 
     m_membershipGrid->SetCellValue( i, 0, netName );
+
+    if( aStale )
+    {
+        wxColour color = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+        m_membershipGrid->SetCellTextColour( i, 0, color );
+    }
+
     m_membershipGrid->SetCellValue( i, 1, netclass );
 }
 
 
-/* Populates drop-downs with the list of net classes
+/*
+ * Populates drop-downs with the list of net classes
  */
 void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
 {
@@ -255,28 +274,33 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     if( !validateData() )
         return false;
 
-    // Remove all netclasses from board. We'll copy new list after
-    m_Netclasses->Clear();
+    m_netclasses->Clear();
 
     // Copy the default NetClass:
-    gridRowToNetclass( m_Parent->GetUserUnits(), m_netclassGrid, 0, m_Netclasses->GetDefault() );
+    gridRowToNetclass( m_Parent->GetUserUnits(), m_netclassGrid, 0, m_netclasses->GetDefault() );
 
     // Copy other NetClasses :
     for( int row = 1; row < m_netclassGrid->GetNumberRows();  ++row )
     {
         NETCLASSPTR nc = std::make_shared<NETCLASS>( m_netclassGrid->GetCellValue( row, GRID_NAME ) );
 
-        if( m_Netclasses->Add( nc ) )
+        if( m_netclasses->Add( nc ) )
             gridRowToNetclass( m_Parent->GetUserUnits(), m_netclassGrid, row, nc );
     }
 
     // Now read all nets and push them in the corresponding netclass net buffer
     for( int row = 0; row < m_membershipGrid->GetNumberRows(); ++row )
     {
-        NETCLASSPTR nc = m_Netclasses->Find( m_membershipGrid->GetCellValue( row, 1 ) );
+        const wxString& netname = m_membershipGrid->GetCellValue( row, 0 );
+        const wxString& classname = m_membershipGrid->GetCellValue( row, 1 );
 
-        if( nc )
-            nc->Add( m_membershipGrid->GetCellValue( row, 0 ) );
+        if( classname != "Default" )
+        {
+            const NETCLASSPTR& nc = m_netclasses->Find( classname );
+
+            if( nc )
+                nc->Add( EscapeString( netname, CTX_NETNAME ) );
+        }
     }
 
     return true;
@@ -541,9 +565,9 @@ bool PANEL_SETUP_NETCLASSES::validateData()
 
 void PANEL_SETUP_NETCLASSES::ImportSettingsFrom( NETCLASSES* aNetclasses )
 {
-    NETCLASSES* savedSettings = m_Netclasses;
+    NETCLASSES* savedSettings = m_netclasses;
 
-    m_Netclasses = aNetclasses;
+    m_netclasses = aNetclasses;
     TransferDataToWindow();
 
     rebuildNetclassDropdowns();
@@ -551,7 +575,7 @@ void PANEL_SETUP_NETCLASSES::ImportSettingsFrom( NETCLASSES* aNetclasses )
     m_netclassGrid->ForceRefresh();
     m_membershipGrid->ForceRefresh();
 
-    m_Netclasses = savedSettings;
+    m_netclasses = savedSettings;
 }
 
 

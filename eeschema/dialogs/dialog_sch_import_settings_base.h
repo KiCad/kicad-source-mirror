@@ -52,10 +52,11 @@ class DIALOG_SCH_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 
 
 	public:
-		wxCheckBox* m_formattingOpt;
-		wxCheckBox* m_fieldNameTemplatesOpt;
-		wxCheckBox* m_pinMapOpt;
+		wxCheckBox* m_FormattingOpt;
+		wxCheckBox* m_FieldNameTemplatesOpt;
+		wxCheckBox* m_PinMapOpt;
 		wxCheckBox* m_SeveritiesOpt;
+		wxCheckBox* m_NetClassesOpt;
 
 		DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_SCH_IMPORT_SETTINGS_BASE();

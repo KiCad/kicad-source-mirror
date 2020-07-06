@@ -197,11 +197,17 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     }
     else if( strcmp( idcmd, "$CLEAR" ) == 0 )
     {
-        renderSettings->SetHighlight( false );
-        view->UpdateAllLayersColor();
+        if( renderSettings->IsHighlightEnabled() )
+        {
+            renderSettings->SetHighlight( false );
+            view->UpdateAllLayersColor();
+        }
 
-        pcb->ResetNetHighLight();
-        SetMsgPanel( pcb );
+        if( pcb->IsHighLightNetON() )
+        {
+            pcb->ResetNetHighLight();
+            SetMsgPanel( pcb );
+        }
 
         GetCanvas()->Refresh();
         return;

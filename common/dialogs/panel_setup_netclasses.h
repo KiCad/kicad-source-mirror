@@ -35,12 +35,13 @@ class NETCLASSES;
 class PANEL_SETUP_NETCLASSES : public PANEL_SETUP_NETCLASSES_BASE
 {
 private:
-    PAGED_DIALOG*     m_Parent;
-    NETCLASSES*       m_Netclasses;
+    PAGED_DIALOG*         m_Parent;
+    NETCLASSES*           m_netclasses;
+    std::vector<wxString> m_candidateNetNames;
 
-    int*              m_originalColWidths;
-    bool              m_netclassesDirty;    // The netclass drop-down menus need rebuilding
-    wxSize            m_membershipSize;     // The size needed to show the membership list
+    int*                  m_originalColWidths;
+    bool                  m_netclassesDirty;    // The netclass drop-down menus need rebuilding
+    wxSize                m_membershipSize;     // The size needed to show the membership list
 
 private:
     void OnAddNetclassClick( wxCommandEvent& event ) override;
@@ -60,7 +61,7 @@ private:
 
     void rebuildNetclassDropdowns();
 
-    void addNet( const wxString& netName, const wxString& netclass );
+    void addNet( const wxString& netName, const wxString& netclass, bool aStale );
     void doApplyFilters( bool aShowAll );
     void doAssignments( bool aAssignAll );
 
@@ -68,7 +69,8 @@ private:
     void AdjustMembershipGridColumns( int aWidth );
 
 public:
-    PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses );
+    PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
+                            const std::vector<wxString>& aCandidateNetNames );
     ~PANEL_SETUP_NETCLASSES( ) override;
 
     bool TransferDataToWindow() override;

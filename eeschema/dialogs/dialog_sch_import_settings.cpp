@@ -82,8 +82,9 @@ bool DIALOG_SCH_IMPORT_SETTINGS::TransferDataFromWindow()
 
 void DIALOG_SCH_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
 {
-    m_formattingOpt->SetValue( true );
-    m_fieldNameTemplatesOpt->SetValue( true );
-    m_pinMapOpt->SetValue( true );
+    m_FormattingOpt->SetValue( true );
+    m_FieldNameTemplatesOpt->SetValue( true );
+    m_PinMapOpt->SetValue( true );
     m_SeveritiesOpt->SetValue( true );
+    m_NetClassesOpt->SetValue( true );
 }

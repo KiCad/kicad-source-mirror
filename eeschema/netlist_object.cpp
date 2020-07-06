@@ -37,10 +37,12 @@
 #include <netlist_object.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <project/net_settings.h>
 
 #if defined(DEBUG)
 
 #include <iostream>
+
 const char* ShowType( NETLIST_ITEM aType )
 {
     const char* ret;
@@ -248,7 +250,7 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
     bool self_set = false;
     std::vector<wxString> bus_contents_vec;
 
-    if( alias || SCH_CONNECTION::ParseBusGroup( m_Label, &group_name, &bus_contents_vec ) )
+    if( alias || NET_SETTINGS::ParseBusGroup( m_Label, &group_name, &bus_contents_vec ) )
     {
         if( alias )
         {
@@ -267,7 +269,7 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
             std::vector<wxString> members;
 
             // Nested bus vector inside a bus group
-            if( SCH_CONNECTION::ParseBusVector( bus_member, &prefix, &members ) )
+            if( NET_SETTINGS::ParseBusVector( bus_member, &prefix, &members ) )
             {
                 long begin, end;
 
@@ -314,7 +316,7 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
             }
         }
     }
-    else if( SCH_CONNECTION::ParseBusVector( m_Label, &group_name, &bus_contents_vec ) )
+    else if( NET_SETTINGS::ParseBusVector( m_Label, &group_name, &bus_contents_vec ) )
     {
         long begin = conn.VectorStart();
         long end = conn.VectorEnd();

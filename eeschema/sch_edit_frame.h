@@ -125,8 +125,6 @@ private:
     SCHEMATIC*              m_schematic;          ///< The currently loaded schematic
     const SCH_CONNECTION*   m_highlightedConn;    ///< The highlighted net or bus, or nullptr
 
-    std::vector<PARAM_CFG*> m_projectFileParams;
-    std::vector<PARAM_CFG*> m_configSettings;
     wxPageSetupDialogData   m_pageSetupData;
     SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
     wxString                m_netListerCommand;   ///< Command line to call a custom net list
@@ -141,11 +139,6 @@ private:
 
     /// Use netcodes (net number) as net names when generating spice net lists.
     bool                    m_spiceAjustPassiveValues;
-
-    /*  these are PROJECT specific, not schematic editor specific
-    wxString                m_userLibraryPath;
-    wxArrayString           m_componentLibFiles;
-    */
 
     static PINSHEETLABEL_SHAPE m_lastSheetPinType;    ///< Last sheet pin type.
 
@@ -731,7 +724,8 @@ public:
      * it can happens when the edited sheet used an existying file, or becomes a new instance
      * of a already existing sheet.
      */
-    bool EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, bool* aClearAnnotationNewItems );
+    bool EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
+                              bool* aClearAnnotationNewItems );
 
     void InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename );
 

@@ -48,7 +48,7 @@
 #include <project.h>
 #include <sch_bus_entry.h>
 #include <sch_component.h>
-#include <sch_connection.h>
+#include <project/net_settings.h>
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
 #include <sch_legacy_plugin.h>
@@ -2608,7 +2608,7 @@ wxString SCH_EAGLE_PLUGIN::fixSymbolName( const wxString& aName )
 
 wxString SCH_EAGLE_PLUGIN::translateEagleBusName( const wxString& aEagleName ) const
 {
-    if( SCH_CONNECTION::ParseBusVector( aEagleName, nullptr, nullptr ) )
+    if( NET_SETTINGS::ParseBusVector( aEagleName, nullptr, nullptr ) )
         return aEagleName;
 
     wxString ret = "{";

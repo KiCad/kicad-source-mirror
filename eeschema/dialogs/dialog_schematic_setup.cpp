@@ -41,19 +41,22 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
         m_frame( aFrame ),
         m_severities( nullptr )
 {
+    PROJECT_FILE& project = aFrame->Prj().GetProjectFile();
+    SCHEMATIC&    schematic = aFrame->Schematic();
+
     m_formatting = new PANEL_SETUP_FORMATTING( m_treebook, aFrame );
     m_fieldNameTemplates = new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( aFrame, m_treebook, false );
     m_pinMap = new PANEL_SETUP_PINMAP( m_treebook, aFrame );
 
     m_pinToPinError = ERC_ITEM::Create( ERCE_PIN_TO_PIN_WARNING );
     m_severities = new PANEL_SETUP_SEVERITIES( this, ERC_ITEM::GetItemsWithSeverities(),
-                                               m_frame->Schematic().ErcSettings().m_Severities,
+                                               schematic.ErcSettings().m_Severities,
                                                m_pinToPinError );
 
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
-    PROJECT_FILE& project = aFrame->Prj().GetProjectFile();
-    m_netclasses = new PANEL_SETUP_NETCLASSES( this, &project.NetSettings().m_NetClasses );
+    m_netclasses = new PANEL_SETUP_NETCLASSES( this, &project.NetSettings().m_NetClasses,
+                                               schematic.GetNetClassAssignmentCandidates() );
 
     /*
      * WARNING: If you change page names you MUST update calls to ShowSchematicSetupDialog().
@@ -143,17 +146,20 @@ void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     file.m_SchematicSettings->m_TemplateFieldNames = &templateMgr;
     file.m_SchematicSettings->LoadFromFile();
 
-    if( importDlg.m_formattingOpt->GetValue() )
+    if( importDlg.m_FormattingOpt->GetValue() )
         m_formatting->ImportSettingsFrom( *file.m_SchematicSettings );
 
-    if( importDlg.m_fieldNameTemplatesOpt->GetValue() )
+    if( importDlg.m_FieldNameTemplatesOpt->GetValue() )
         m_fieldNameTemplates->ImportSettingsFrom( file.m_SchematicSettings->m_TemplateFieldNames );
 
-    if( importDlg.m_pinMapOpt->GetValue() )
+    if( importDlg.m_PinMapOpt->GetValue() )
         m_pinMap->ImportSettingsFrom( file.m_ErcSettings->m_PinMap );
 
     if( importDlg.m_SeveritiesOpt->GetValue() )
         m_severities->ImportSettingsFrom( file.m_ErcSettings->m_Severities );
+
+    if( importDlg.m_NetClassesOpt->GetValue() )
+        m_netclasses->ImportSettingsFrom( &file.m_NetSettings->m_NetClasses );
 
     m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
 }

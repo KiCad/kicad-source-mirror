@@ -276,29 +276,6 @@ public:
     bool IsMemberOfBus( SCH_CONNECTION* aOther ) const;
 
     /**
-     * Parses a bus vector (e.g. A[7..0]) into name, begin, and end.
-     * Ensures that begin and end are positive and that end > begin.
-     *
-     * @param aBus is a bus vector label string
-     * @param aName out is the bus name, e.g. "A"
-     * @param aMemberList is a list of member strings, e.g. "A7", "A6", and so on
-     * @return true if aBus was successfully parsed
-     */
-    static bool ParseBusVector( const wxString& aBus, wxString* aName,
-                                std::vector<wxString>* aMemberList );
-
-    /**
-     * Parses a bus group label into the name and a list of components
-     *
-     * @param aGroup is the input label, e.g. "USB{DP DM}"
-     * @param name is the output group name, e.g. "USB"
-     * @param aMemberList is a list of member strings, e.g. "DP", "DM"
-     * @return true if aGroup was successfully parsed
-     */
-    static bool ParseBusGroup( wxString aGroup, wxString* name,
-                               std::vector<wxString>* aMemberList );
-
-    /**
      * Adds information about the connection object to aList
      */
     void AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const;

@@ -844,6 +844,13 @@ public:
     int SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
 
     /**
+     * Function GetNetClassAssignmentCandidates
+     * Returns a list of name candidates for netclass assignment.  Tokens may appear more
+     * than once if they were harvested from hierarchical nets (ie: /CLK, /sheet1/CLK).
+     */
+    std::vector<wxString> GetNetClassAssignmentCandidates();
+
+    /**
      * Function SynchronizeNetsAndNetClasses
      * copies NETCLASS info to each NET, based on NET membership in a NETCLASS.
      * Must be called after a Design Rules edit, or after reading a netlist (or editing
@@ -851,6 +858,7 @@ public:
      * and add net nets in default netclass (this happens after reading a netlist)
      */
     void SynchronizeNetsAndNetClasses();
+
 
     /***************************************************************************/
 

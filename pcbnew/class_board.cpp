@@ -1277,81 +1277,60 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 }
 
 
+std::vector<wxString> BOARD::GetNetClassAssignmentCandidates()
+{
+    std::vector<wxString> names;
+
+    for( NETINFO_ITEM* net : m_NetInfo )
+    {
+        if( !net->GetShortNetname().IsEmpty() )
+            names.emplace_back( net->GetShortNetname() );
+    }
+
+    return names;
+}
+
+
 void BOARD::SynchronizeNetsAndNetClasses()
 {
-    NETCLASSES& netClasses      = GetDesignSettings().GetNetClasses();
-    NETCLASSPTR defaultNetClass = netClasses.GetDefault();
-
-    // set all NETs to the default NETCLASS, then later override some
-    // as we go through the NETCLASSes.
-
-    for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
-         net != netEnd; ++net )
+    if( m_project )
     {
-        net->SetClass( defaultNetClass );
-    }
+        NET_SETTINGS* netSettings     = m_project->GetProjectFile().m_NetSettings.get();
+        NETCLASSES&   netClasses      = netSettings->m_NetClasses;
+        NETCLASSPTR   defaultNetClass = netClasses.GetDefault();
 
-    // Add netclass name and pointer to nets.  If a net is in more than one netclass,
-    // set the net's name and pointer to only the first netclass.  Subsequent
-    // and therefore bogus netclass memberships will be deleted in logic below this loop.
-    for( NETCLASSES::iterator clazz = netClasses.begin(); clazz != netClasses.end(); ++clazz )
-    {
-        NETCLASSPTR netclass = clazz->second;
-
-        for( NETCLASS::const_iterator member = netclass->begin(); member != netclass->end(); ++member )
+        for( NETINFO_ITEM* net : m_NetInfo )
         {
-            const wxString& netname = *member;
+            const wxString& netname = net->GetNetname();
+            const wxString& shortname = net->GetShortNetname();
 
-            // although this overall function seems to be adequately fast,
-            // FindNet( wxString ) uses now a fast binary search and is fast
-            // event for large net lists
-            NETINFO_ITEM* net = FindNet( netname );
-
-            if( net && net->GetClassName() == NETCLASS::Default )
+            if( netSettings->m_NetClassAssignments.count( netname ) )
             {
-                net->SetClass( netclass );
+                const wxString& classname = netSettings->m_NetClassAssignments[ netname ];
+                net->SetClass( netClasses.Find( classname ) );
+            }
+            else if( netSettings->m_NetClassAssignments.count( shortname ) )
+            {
+                const wxString& classname = netSettings->m_NetClassAssignments[ shortname ];
+                net->SetClass( netClasses.Find( classname ) );
+            }
+            else
+            {
+                net->SetClass( defaultNetClass );
             }
         }
+
+        BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
+
+        // Set initial values for custom track width & via size to match the default netclass settings
+        bds.UseCustomTrackViaSize( false );
+        bds.SetCustomTrackWidth( defaultNetClass->GetTrackWidth() );
+        bds.SetCustomViaSize( defaultNetClass->GetViaDiameter() );
+        bds.SetCustomViaDrill( defaultNetClass->GetViaDrill() );
+        bds.SetCustomDiffPairWidth( defaultNetClass->GetDiffPairWidth() );
+        bds.SetCustomDiffPairGap( defaultNetClass->GetDiffPairGap() );
+        bds.SetCustomDiffPairViaGap( defaultNetClass->GetDiffPairViaGap() );
     }
-
-    // Finally, make sure that every NET is in a NETCLASS, even if that
-    // means the Default NETCLASS.  And make sure that all NETCLASSes do not
-    // contain netnames that do not exist, by deleting all netnames from
-    // every netclass and re-adding them.
-
-    for( NETCLASSES::iterator clazz = netClasses.begin(); clazz != netClasses.end(); ++clazz )
-    {
-        NETCLASSPTR netclass = clazz->second;
-
-        netclass->Clear();
-    }
-
-    defaultNetClass->Clear();
-
-    for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
-         net != netEnd; ++net )
-    {
-        const wxString& classname = net->GetClassName();
-
-        // because of the std:map<> this should be fast, and because of
-        // prior logic, netclass should not be NULL.
-        NETCLASSPTR netclass = netClasses.Find( classname );
-
-        wxASSERT( netclass );
-
-        netclass->Add( net->GetNetname() );
-    }
-
-    BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
-
-    // Set initial values for custom track width & via size to match the default netclass settings
-    bds.UseCustomTrackViaSize( false );
-    bds.SetCustomTrackWidth( defaultNetClass->GetTrackWidth() );
-    bds.SetCustomViaSize( defaultNetClass->GetViaDiameter() );
-    bds.SetCustomViaDrill( defaultNetClass->GetViaDrill() );
-    bds.SetCustomDiffPairWidth( defaultNetClass->GetDiffPairWidth() );
-    bds.SetCustomDiffPairGap( defaultNetClass->GetDiffPairGap() );
-    bds.SetCustomDiffPairViaGap( defaultNetClass->GetDiffPairViaGap() );
 
     InvokeListeners( &BOARD_LISTENER::OnBoardNetSettingsChanged, *this );
 }

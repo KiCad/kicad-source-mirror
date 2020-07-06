@@ -134,9 +134,9 @@ private:
 
         SCH_CONNECTION* connection = bus->Connection( frame->GetCurrentSheet() );
 
-        if( !connection ||  !connection->IsBus() || connection->Members().empty() )
+        if( !connection || !connection->IsBus() || connection->Members().empty() )
         {
-            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "Bus has no connections" ), wxEmptyString );
+            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "Bus has no members" ), wxEmptyString );
             Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
             return;
         }

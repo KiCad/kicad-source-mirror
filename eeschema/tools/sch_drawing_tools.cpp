@@ -521,7 +521,6 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     m_frame->SaveCopyForRepeatItem( newItem );
 
                     m_frame->SchematicCleanUp();
-                    m_frame->TestDanglingEnds();
                     m_frame->OnModify();
                 }
             }

@@ -139,10 +139,17 @@ public:
     ERC_SETTINGS& ErcSettings() const;
 
     /**
-     * Returns a pointer to a bus alias object for the given label,
-     * or null if one doesn't exist
+     * Returns a pointer to a bus alias object for the given label, or null if one
+     * doesn't exist.
      */
     std::shared_ptr<BUS_ALIAS> GetBusAlias( const wxString& aLabel ) const;
+
+    /**
+     * Returns a list of name candidates for netclass assignment.  The list will include both
+     * composite names (buses) and atomic net names.  Names are fetched from available labels,
+     * power pins, etc.
+     */
+    std::vector<wxString> GetNetClassAssignmentCandidates();
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}

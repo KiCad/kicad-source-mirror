@@ -136,25 +136,16 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 }
 
 
-/**
- *  Compute and update the net_codes for PADS et and equipots (.m_NetCode member)
- *  net_codes are >= 1 (net_code = 0 means not connected)
- *  Update the net buffer
- *  m_Pcb->m_NbNodes and m_Pcb->m_NbNets are updated
- * Be aware NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname )
- * when search a net by its net name does a binary search
- * and expects to have a nets list sorted by an alphabetic case sensitive sort
- * So do not change Build_Pads_Full_List() which build a sorted list of pads
- */
 void NETINFO_LIST::buildListOfNets()
 {
     // Restore the initial state of NETINFO_ITEMs
-    for( NETINFO_LIST::iterator net( begin() ), netEnd( end() ); net != netEnd; ++net )
+    for( NETINFO_ITEM* net : *this )
         net->Clear();
 
     m_Parent->SynchronizeNetsAndNetClasses( );
     m_Parent->SetAreasNetCodesFromNetNames();
 }
+
 
 #if defined(DEBUG)
 void NETINFO_LIST::Show() const

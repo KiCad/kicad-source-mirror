@@ -31,8 +31,9 @@
 using namespace std::placeholders;
 
 #include <fctsys.h>
-#include <pgm_base.h>
-#include <confirm.h>
+//#include <pgm_base.h>
+#include <kiway.h>
+//#include <confirm.h>
 #include <pcb_edit_frame.h>
 #include "pcb_netlist.h"
 #include "netlist_reader.h"
@@ -42,7 +43,7 @@ using namespace std::placeholders;
 #include <class_board.h>
 #include <class_module.h>
 #include <ratsnest/ratsnest_data.h>
-#include <pcbnew.h>
+//#include <pcbnew.h>
 #include <io_mgr.h>
 #include "board_netlist_updater.h"
 #include <tool/tool_manager.h>
@@ -92,6 +93,9 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename,
 
 void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand )
 {
+    std::string dummyPayload;
+    Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_CLEAN_NETCLASSES, dummyPayload, this );
+
     BOARD* board = GetBoard();
 
     SetMsgPanel( board );

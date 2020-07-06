@@ -94,31 +94,27 @@ class SCH_SCREEN : public BASE_SCREEN
 {
 private:
 
-    wxString    m_fileName;     ///< File used to load the screen.
+    wxString    m_fileName;          // File used to load the screen.
 
-    int         m_refCount;     ///< Number of sheets referencing this screen.
-                                ///< Delete when it goes to zero.
-
-    /** the list of scheet paths sharing this screen
-     * used in some annotation calculations to update alternate references
-     * Note: a screen having a m_refCount = 1 (only one sheet path using it)
-     * can have many scheet paths sharing this screen, if this sheet is inside
-     * an other sheet having many instances (one sheet path by parent sheet instance).
+    int         m_refCount;          // Number of sheets referencing this screen.
+                                     // Delete when it goes to zero.
+    /**
+     * The list of sheet paths sharing this screen.  Used in some annotation calculations to
+     * update alternate references.
+     *
+     * Note: a screen having a m_refCount = 1 (only one sheet path using it) can have many
+     * sheet paths sharing this screen if it is inside another sheet having many instances.
      */
     std::vector<SCH_SHEET_PATH> m_clientSheetPathList;
 
-    /// The size of the paper to print or plot on
-    PAGE_INFO   m_paper;        // keep with the MVC 'model' if this class gets split
 
+    PAGE_INFO   m_paper;             // The size of the paper to print or plot on
     TITLE_BLOCK m_titles;
-
-    /// Origin of the auxiliary axis, which is used in exports mostly, but not yet in EESCHEMA
-    wxPoint     m_aux_origin;
-
+    wxPoint     m_aux_origin;        // Origin used for drill & place files by PCBNew
     EE_RTREE    m_rtree;
 
-    int m_modification_sync; ///< inequality with PART_LIBS::GetModificationHash()
-                             ///< will trigger ResolveAll().
+    int         m_modification_sync; // inequality with PART_LIBS::GetModificationHash() will
+                                     //   trigger ResolveAll().
 
     /// List of bus aliases stored in this screen
     std::unordered_set< std::shared_ptr< BUS_ALIAS > > m_aliases;

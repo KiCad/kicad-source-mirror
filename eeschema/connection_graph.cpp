@@ -25,10 +25,8 @@
 #include <vector>
 #include <unordered_map>
 #include <profile.h>
-
 #include <common.h>
 #include <erc.h>
-#include <macros.h>
 #include <sch_bus_entry.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>
@@ -39,10 +37,9 @@
 #include <sch_sheet_path.h>
 #include <sch_text.h>
 #include <schematic.h>
-
-#include <advanced_config.h>
 #include <connection_graph.h>
 #include <widgets/ui_common.h>
+
 
 bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 {
@@ -236,8 +233,8 @@ wxString CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem ) const
     {
     case SCH_PIN_T:
     {
-        auto power_object = static_cast<SCH_PIN*>( aItem );
-        name = power_object->GetDefaultNetName( m_sheet );
+        SCH_PIN* pin = static_cast<SCH_PIN*>( aItem );
+        name = pin->GetDefaultNetName( m_sheet );
         break;
     }
 
@@ -246,7 +243,7 @@ wxString CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem ) const
     case SCH_HIER_LABEL_T:
     case SCH_SHEET_PIN_T:
     {
-        name = static_cast<SCH_TEXT*>( aItem )->GetShownText();
+        name = EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText(), CTX_NETNAME );
         break;
     }
 
@@ -812,13 +809,13 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 case SCH_HIER_LABEL_T:
                 {
                     auto text = static_cast<SCH_TEXT*>( driver );
-                    connection->ConfigureFromLabel( text->GetShownText() );
+                    connection->ConfigureFromLabel( EscapeString( text->GetShownText(), CTX_NETNAME ) );
                     break;
                 }
                 case SCH_SHEET_PIN_T:
                 {
                     auto pin = static_cast<SCH_SHEET_PIN*>( driver );
-                    connection->ConfigureFromLabel( pin->GetShownText() );
+                    connection->ConfigureFromLabel( EscapeString( pin->GetShownText(), CTX_NETNAME ) );
                     break;
                 }
                 case SCH_PIN_T:
@@ -1218,7 +1215,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                             auto text = static_cast<SCH_TEXT*>( driver );
 
-                            if( text->GetShownText() == test_name )
+                            if( EscapeString( text->GetShownText(), CTX_NETNAME ) == test_name )
                             {
                                 match = true;
                                 break;
@@ -1836,7 +1833,7 @@ std::shared_ptr<SCH_CONNECTION> CONNECTION_GRAPH::getDefaultConnection( SCH_ITEM
 
         c = std::make_shared<SCH_CONNECTION>( aItem, aSheet );
         c->SetGraph( this );
-        c->ConfigureFromLabel( text->GetShownText() );
+        c->ConfigureFromLabel( EscapeString( text->GetShownText(), CTX_NETNAME ) );
         break;
     }
 
@@ -2097,8 +2094,8 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
         case SCH_SHEET_PIN_T:
         case SCH_HIER_LABEL_T:
         {
-            auto text = static_cast<SCH_TEXT*>( item )->GetShownText();
-            conn.ConfigureFromLabel( text );
+            SCH_TEXT* text = static_cast<SCH_TEXT*>( item );
+            conn.ConfigureFromLabel( EscapeString( text->GetShownText(), CTX_NETNAME ) );
 
             if( conn.IsBus() )
                 bus_item = ( !bus_item ) ? item : bus_item;
@@ -2440,7 +2437,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( !m_schematic->ErcSettings().IsTestEnabled( ERCE_GLOBLABEL ) && is_global )
         return true;
 
-    wxString name = text->GetShownText();
+    wxString name = EscapeString( text->GetShownText(), CTX_NETNAME );
 
     if( is_global )
     {

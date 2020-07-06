@@ -26,7 +26,7 @@
 #define PCBNEW
 #endif
 #include <base_units.h>
-
+#include <kicad_string.h>
 
 const int netSettingsSchemaVersion = 0;
 
@@ -64,15 +64,19 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         { "diff_pair_via_gap",  Iu2Millimeter( netclass->GetDiffPairViaGap() ) }
                         };
 
-                    nlohmann::json nets = nlohmann::json::array();
+                    if( idx > 0 )
+                    {
+                        nlohmann::json membersJson = nlohmann::json::array();
 
-                    for( NETCLASS::const_iterator i = netclass->begin(); i != netclass->end(); ++i )
-                        if( !i->empty() )
-                            nets.push_back( std::string( i->ToUTF8() ) );
+                        for( const auto& ii : *netclass )
+                        {
+                            if( !ii.empty() )
+                                membersJson.push_back( std::string( ii.ToUTF8() ) );
+                        }
 
-                    netJson["nets"] = nets;
-
-                    ret.push_back( netJson );
+                        netJson["nets"] = membersJson;
+                        ret.push_back( netJson );
+                    }
                 }
 
                 return ret;
@@ -83,6 +87,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     return;
 
                 m_NetClasses.Clear();
+                m_NetClassAssignments.clear();
                 NETCLASSPTR netclass;
                 NETCLASSPTR defaultClass = m_NetClasses.GetDefault();
 
@@ -132,8 +137,14 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 
                     if( netclass != defaultClass )
                         m_NetClasses.Add( netclass );
+
+                    for( const wxString& net : *netclass )
+                        m_NetClassAssignments[ net ] = netclass->GetName();
                 }
-            }, {} ) );
+
+                ResolveNetClassAssignments();
+            },
+            {} ) );
 }
 
 
@@ -144,5 +155,261 @@ NET_SETTINGS::~NET_SETTINGS()
     {
         m_parent->ReleaseNestedSettings( this );
         m_parent = nullptr;
+    }
+}
+
+
+static bool isSuperSub( wxChar c )
+{
+    return c == '_' || c == '^';
+};
+
+
+bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
+                                   std::vector<wxString>* aMemberList )
+{
+    auto isDigit = []( wxChar c )
+                   {
+                       static   wxString digits( wxT( "0123456789" ) );
+                       return digits.Contains( c );
+                   };
+
+    size_t   busLen = aBus.length();
+    size_t   i = 0;
+    wxString prefix;
+    wxString suffix;
+    wxString tmp;
+    long     begin = 0;
+    long     end = 0;
+    int      braceNesting = 0;
+
+    prefix.reserve( busLen );
+
+    // Parse prefix
+    //
+    for( ; i < busLen; ++i )
+    {
+        if( aBus[i] == '{' )
+        {
+            if( i > 0 && isSuperSub( aBus[i-1] ) )
+                braceNesting++;
+            else
+                return false;
+        }
+        else if( aBus[i] == '}' )
+        {
+            braceNesting--;
+        }
+
+        if( aBus[i] == ' ' || aBus[i] == ']' )
+            return false;
+
+        if( aBus[i] == '[' )
+            break;
+
+        prefix += aBus[i];
+    }
+
+    // Parse start number
+    //
+    i++;  // '[' character
+
+    if( i >= busLen )
+        return false;
+
+    for( ; i < busLen; ++i )
+    {
+        if( aBus[i] == '.' && i + 1 < busLen && aBus[i+1] == '.' )
+        {
+            tmp.ToLong( &begin );
+            i += 2;
+            break;
+        }
+
+        if( !isDigit( aBus[i] ) )
+            return false;
+
+        tmp += aBus[i];
+    }
+
+    // Parse end number
+    //
+    tmp = wxEmptyString;
+
+    if( i >= busLen )
+        return false;
+
+    for( ; i < busLen; ++i )
+    {
+        if( aBus[i] == ']' )
+        {
+            tmp.ToLong( &end );
+            ++i;
+            break;
+        }
+
+        if( !isDigit( aBus[i] ) )
+            return false;
+
+        tmp += aBus[i];
+    }
+
+    // Parse suffix
+    //
+    for( ; i < busLen; ++i )
+    {
+        if( aBus[i] == '}' )
+        {
+            braceNesting--;
+            suffix += aBus[i];
+        }
+        else if( aBus[i] == '~' )
+        {
+            suffix += aBus[i];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    if( braceNesting != 0 )
+        return false;
+
+    if( begin == end )
+        return false;
+    else if( begin > end )
+        std::swap( begin, end );
+
+    if( aName )
+        *aName = prefix;
+
+    if( aMemberList )
+    {
+        for( long idx = begin; idx <= end; ++idx )
+        {
+            wxString str = prefix;
+            str << idx;
+            str << suffix;
+
+            aMemberList->emplace_back( str );
+        }
+    }
+
+    return true;
+}
+
+
+bool NET_SETTINGS::ParseBusGroup( wxString aGroup, wxString* aName,
+                                  std::vector<wxString>* aMemberList )
+{
+    size_t   groupLen = aGroup.length();
+    size_t   i = 0;
+    wxString prefix;
+    wxString suffix;
+    wxString tmp;
+    int      braceNesting = 0;
+
+    prefix.reserve( groupLen );
+
+    // Parse prefix
+    //
+    for( ; i < groupLen; ++i )
+    {
+        if( aGroup[i] == '{' )
+        {
+            if( i > 0 && isSuperSub( aGroup[i-1] ) )
+                braceNesting++;
+            else
+                break;
+        }
+        else if( aGroup[i] == '}' )
+        {
+            braceNesting--;
+        }
+
+        if( aGroup[i] == ' ' || aGroup[i] == '[' || aGroup[i] == ']' )
+            return false;
+
+        prefix += aGroup[i];
+    }
+
+    if( braceNesting != 0 )
+        return false;
+
+    if( aName )
+        *aName = prefix;
+
+    // Parse members
+    //
+    i++;  // '{' character
+
+    if( i >= groupLen )
+        return false;
+
+    for( ; i < groupLen; ++i )
+    {
+        if( aGroup[i] == '{' )
+        {
+            if( i > 0 && isSuperSub( aGroup[i-1] ) )
+                braceNesting++;
+            else
+                return false;
+        }
+        else if( aGroup[i] == '}' )
+        {
+            if( braceNesting )
+                braceNesting--;
+            else
+            {
+                if( aMemberList )
+                    aMemberList->push_back( tmp );
+
+                return true;
+            }
+        }
+
+        if( aGroup[i] == ' ' )
+        {
+            if( aMemberList )
+                aMemberList->push_back( tmp );
+
+            tmp.Clear();
+            continue;
+        }
+
+        tmp += aGroup[i];
+    }
+
+    return false;
+}
+
+
+void NET_SETTINGS::ResolveNetClassAssignments()
+{
+    std::map<wxString, wxString> existing = m_NetClassAssignments;
+
+    m_NetClassAssignments.clear();
+
+    for( const auto& ii : existing )
+    {
+        m_NetClassAssignments[ ii.first ] = ii.second;
+
+        wxString unescaped = UnescapeString( ii.first );
+        wxString prefix;
+        std::vector<wxString> members;
+
+        if( ParseBusVector( unescaped, &prefix, &members ) )
+        {
+            prefix = wxEmptyString;
+        }
+        else if( ParseBusGroup( unescaped, &prefix, &members ) )
+        {
+            if( !prefix.IsEmpty() )
+                prefix += wxT( "." );
+        }
+
+        for( wxString& member : members )
+            m_NetClassAssignments[ prefix + member ] = ii.second;
     }
 }
