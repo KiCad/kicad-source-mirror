@@ -142,6 +142,10 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     m_board      = m_parent->GetBoard();
 
+    // Configure display origin transforms
+    m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
     m_PadNetSelector->SetBoard( m_board );
     m_PadNetSelector->SetNetInfo( &m_board->GetNetInfo() );
 

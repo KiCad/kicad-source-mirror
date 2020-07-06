@@ -53,6 +53,10 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxP
         m_stdButtonsCancel
     };
 
+    // Configure display origin transforms
+    m_xOffset.SetCoordType( ORIGIN_TRANSFORMS::REL_X_COORD );
+    m_yOffset.SetCoordType( ORIGIN_TRANSFORMS::REL_Y_COORD );
+
     SetInitialFocus( m_xEntry );
 
     // and set up the entries according to the saved options

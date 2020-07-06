@@ -59,6 +59,10 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 {
     wxString title;
 
+    // Configure display origin transforms
+    m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
     m_MultiLineText->SetEOLMode( wxSTC_EOL_LF );
 
     // A hack which causes Scintilla to auto-size the text editor canvas

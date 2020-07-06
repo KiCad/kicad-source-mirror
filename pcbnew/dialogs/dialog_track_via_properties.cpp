@@ -54,6 +54,14 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 {
     wxASSERT( !m_items.Empty() );
 
+    // Configure display origin transforms
+    m_trackStartX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_trackStartY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    m_trackEndX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_trackEndY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    m_viaX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_viaY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
     VIATYPE viaType = VIATYPE::NOT_DEFINED;
 
     m_TrackLayerCtrl->SetLayersHotkeys( false );

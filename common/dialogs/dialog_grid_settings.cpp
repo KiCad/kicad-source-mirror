@@ -39,6 +39,10 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
     m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits, true ),
     m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits, true )
 {
+    // Configure display origin transforms
+    m_gridOriginX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_gridOriginY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
     wxArrayString grids;
     GRID_MENU::BuildChoiceList( &grids, m_parent->config(), GetUserUnits() != EDA_UNITS::INCHES );
     m_currentGridCtrl->Append( grids );

@@ -101,6 +101,16 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_item = dynamic_cast<DRAWSEGMENT*>( aItem );
     m_moduleItem = dynamic_cast<EDGE_MODULE*>( aItem );
 
+    // Configure display origin transforms
+    m_startX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_startY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    m_endX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_endY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    m_bezierCtrl1X.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_bezierCtrl1Y.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    m_bezierCtrl2X.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_bezierCtrl2Y.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
     m_angle.SetUnits( EDA_UNITS::DEGREES );
     m_AngleValidator.SetRange( -360.0, 360.0 );
     m_angleCtrl->SetValidator( m_AngleValidator );
@@ -164,6 +174,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         SetTitle( _( "Circle Properties" ) );
         m_startPointLabel->SetLabel( _( "Center" ) );
         m_endPointLabel->SetLabel( _( "Radius" ) );
+        m_endY.SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
         m_endY.Show( false );
         break;
 
