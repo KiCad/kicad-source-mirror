@@ -286,10 +286,7 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
     SYMBOL_LIB_TABLE_ROW* row = dynamic_cast< SYMBOL_LIB_TABLE_ROW* >( findRow( aNickname ) );
 
     if( !row )
-    {
-        wxFAIL_MSG( "sym-lib-table files contain no library with nickname " + aNickname );
         return nullptr;
-    }
 
     // We've been 'lazy' up until now, but it cannot be deferred any longer,
     // instantiate a PLUGIN of the proper kind if it is not already in this
@@ -334,7 +331,9 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_PART*>& aSymbolList,
 LIB_PART* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxString& aSymbolName )
 {
     SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
-    wxCHECK( row && row->plugin, nullptr );
+
+    if( !row || !row->plugin )
+        return nullptr;
 
     LIB_PART* part = row->plugin->LoadSymbol( row->GetFullURI( true ), aSymbolName,
                                               row->GetProperties() );
