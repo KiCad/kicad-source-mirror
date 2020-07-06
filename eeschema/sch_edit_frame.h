@@ -134,12 +134,6 @@ private:
 
     DIALOG_SCH_FIND*        m_findReplaceDialog;
 
-    wxString                m_plotDirectoryName;
-    wxString                m_netListFormat;
-
-    /// Use netcodes (net number) as net names when generating spice net lists.
-    bool                    m_spiceAjustPassiveValues;
-
     static PINSHEETLABEL_SHAPE m_lastSheetPinType;    ///< Last sheet pin type.
 
 protected:
@@ -174,16 +168,6 @@ public:
      * Allow edit frame to show/hide hidden pins.
      */
     bool GetShowAllPins() const override;
-
-    const wxString& GetNetListFormatName() const { return m_netListFormat; }
-    void SetNetListFormatName( const wxString& aFormat ) { m_netListFormat = aFormat; }
-
-    bool GetSpiceAjustPassiveValues() const { return m_spiceAjustPassiveValues; }
-    void SetSpiceAdjustPassiveValues( bool aEnable ) { m_spiceAjustPassiveValues = aEnable; }
-
-    /// accessor to the destination directory to use when generating plot files.
-    const wxString& GetPlotDirectoryName() const { return m_plotDirectoryName; }
-    void SetPlotDirectoryName( const wxString& aDirName ) { m_plotDirectoryName = aDirName; }
 
     /**
      * Save changes to the project settings to the project (.pro) file.

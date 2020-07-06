@@ -127,7 +127,8 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     m_penWidth.SetValue( m_HPGLPenSize );
 
     // Plot directory
-    wxString path = m_parent->GetPlotDirectoryName();
+    SCHEMATIC_SETTINGS& settings = m_parent->Schematic().Settings();
+    wxString            path     = settings.m_PlotDirectoryName;
 #ifdef __WINDOWS__
     path.Replace( '/', '\\' );
 #endif
@@ -290,10 +291,12 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
     wxString path = m_outputDirectoryName->GetValue();
     path.Replace( '\\', '/' );
 
-    if(  m_parent->GetPlotDirectoryName() != path )
+    SCHEMATIC_SETTINGS& settings = m_parent->Schematic().Settings();
+
+    if( settings.m_PlotDirectoryName != path )
         m_configChanged = true;
 
-    m_parent->SetPlotDirectoryName( path );
+    settings.m_PlotDirectoryName = path;
 }
 
 

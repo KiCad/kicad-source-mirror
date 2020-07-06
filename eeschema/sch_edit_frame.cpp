@@ -219,8 +219,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_findReplaceDialog = nullptr;
 
-    SetSpiceAdjustPassiveValues( false );
-
     // Give an icon
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_eeschema_xpm ) );

@@ -260,7 +260,9 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 {
     m_Parent = parent;
 
-    m_DefaultNetFmtName = m_Parent->GetNetListFormatName();
+    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+
+    m_DefaultNetFmtName = settings.m_NetFormatName;
 
     for( NETLIST_PAGE_DIALOG*& page : m_PanelNetType)
         page = NULL;
@@ -309,10 +311,12 @@ void NETLIST_DIALOG::InstallPageSpice()
     NETLIST_PAGE_DIALOG* page = m_PanelNetType[PANELSPICE] =
                     new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "Spice" ), NET_TYPE_SPICE );
 
+    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+
     page->m_AdjustPassiveValues = new wxCheckBox( page, ID_USE_NETCODE_AS_NETNAME,
                                                   _( "Reformat passive symbol values" ) );
     page->m_AdjustPassiveValues->SetToolTip( _( "Reformat passive symbol values e.g. 1M -> 1Meg" ) );
-    page->m_AdjustPassiveValues->SetValue( m_Parent->GetSpiceAjustPassiveValues() );
+    page->m_AdjustPassiveValues->SetValue( settings.m_SpiceAdjustPassiveValues );
     page->m_LeftBoxSizer->Add( page->m_AdjustPassiveValues, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
 }
 
@@ -390,8 +394,10 @@ void NETLIST_DIALOG::SelectDefaultNetlistType( wxCommandEvent& event )
     if( currPage == NULL )
         return;
 
-    m_DefaultNetFmtName = currPage->GetPageNetFmtName();
-    m_Parent->SetNetListFormatName( m_DefaultNetFmtName );
+    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+
+    m_DefaultNetFmtName      = currPage->GetPageNetFmtName();
+    settings.m_NetFormatName = m_DefaultNetFmtName;
     currPage->m_IsCurrentFormat->SetValue( true );
 }
 
@@ -411,16 +417,18 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
 {
     bool adjust = m_PanelNetType[ PANELSPICE ]->m_AdjustPassiveValues->IsChecked();
 
-    m_Parent->SetSpiceAdjustPassiveValues( adjust );
-    m_Parent->SetNetListFormatName( wxEmptyString );
+    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 
-    for( NETLIST_PAGE_DIALOG*& page : m_PanelNetType)
+    settings.m_SpiceAdjustPassiveValues = adjust;
+    settings.m_NetFormatName            = wxEmptyString;
+
+    for( NETLIST_PAGE_DIALOG*& page : m_PanelNetType )
     {
-        if( page == NULL )
+        if( page == nullptr )
             break;
 
-        if( page->m_IsCurrentFormat->GetValue() == true )
-            m_Parent->SetNetListFormatName( page->GetPageNetFmtName() );
+        if( page->m_IsCurrentFormat->GetValue() )
+            settings.m_NetFormatName = page->GetPageNetFmtName();
     }
 }
 
@@ -711,12 +719,14 @@ int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller )
 {
     NETLIST_DIALOG dlg( aCaller );
 
-    wxString curr_default_netformat = aCaller->GetNetListFormatName();
+    SCHEMATIC_SETTINGS& settings = aCaller->Schematic().Settings();
+
+    wxString curr_default_netformat = settings.m_NetFormatName;
 
     int ret = dlg.ShowModal();
 
     // Update the default netlist and store it in prj config if it was explicitely changed.
-    aCaller->SetNetListFormatName( dlg.m_DefaultNetFmtName );   // can have temporary changed
+    settings.m_NetFormatName = dlg.m_DefaultNetFmtName; // can have temporary changed
 
     if( curr_default_netformat != dlg.m_DefaultNetFmtName )
         aCaller->SaveProjectSettings();
