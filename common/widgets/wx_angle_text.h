@@ -24,7 +24,9 @@
 #ifndef _WX_ANGLE_TEXT_
 #define _WX_ANGLE_TEXT_
 
+#include <eda_rect.h>
 #include <wx/panel.h>
+
 
 
 class WX_ANGLE_TEXT : public wxPanel
@@ -32,6 +34,15 @@ class WX_ANGLE_TEXT : public wxPanel
 public:
     WX_ANGLE_TEXT( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
                    const wxPoint& aPos, double aAngle );
+
+    /**
+     * Get the bounding box that this angled text will take up on a certain window.
+     *
+     * @param aWindow is the wxWindow the text will go on
+     * @param aLabel is the text string
+     * @param aAngle is the angle of the text
+     */
+    static EDA_RECT GetBoundingBox( wxWindow* aWindow, const wxString& aLabel, double aAngle );
 
 protected:
     void OnEraseBackground( wxEraseEvent& WXUNUSED( aEvent ) );

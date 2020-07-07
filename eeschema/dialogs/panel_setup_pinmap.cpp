@@ -83,14 +83,15 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
     wxPoint pos;
     // Get the current text size using a dummy text.
     wxStaticText* text = new wxStaticText( m_matrixPanel, -1, CommentERC_V[0], pos );
-    int           text_width = text->GetRect().GetWidth();
+    EDA_RECT      bbox = WX_ANGLE_TEXT::GetBoundingBox( m_matrixPanel, CommentERC_V[0], 450 );
+
     int           text_height = text->GetRect().GetHeight();
 
     bitmap_size.y = std::max( bitmap_size.y, text_height );
     delete text;
 
     // compute the Y pos interval:
-    pos.y = text_height + ( text_width / 2 );
+    pos.y = bbox.GetHeight();
 
     if( !m_initialized )
     {
@@ -101,7 +102,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         {
             int y = pos.y + (ii * bitmap_size.y);
             text = new wxStaticText( m_matrixPanel, -1, CommentERC_H[ii],
-                                     wxPoint( 5, y + ( bitmap_size.y / 2) - (text_height / 2) ) );
+                                     wxPoint( 5, y + ( bitmap_size.y / 2 ) - ( text_height / 2 ) ) );
             labels.push_back( text );
 
             int x = text->GetRect().GetRight();

@@ -35,8 +35,12 @@ WX_ANGLE_TEXT::WX_ANGLE_TEXT( wxWindow* aParent, wxWindowID aId, const wxString&
     font.SetPointSize( font.GetPointSize() + 2 );   // rotated text looks visually smaller
     SetFont( font );
 
-    wxPoint  pos = GetPosition();
-    wxSize   size = GetTextExtent( m_label );
+    // Measure the size of the text
+    wxClientDC dc( this );
+    dc.SetFont( font );
+
+    wxSize   size = dc.GetTextExtent( m_label );
+    wxPoint  pos  = GetPosition();
     EDA_RECT rect( wxPoint( 0, 0 ), size );
     EDA_RECT bbox = rect.GetBoundingBoxRotated( rect.GetPosition(), m_angle );
 
@@ -66,7 +70,7 @@ void WX_ANGLE_TEXT::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     dc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
     dc.SetTextBackground( wxTransparentColor );
 
-    wxSize   size = GetTextExtent( m_label );
+    wxSize   size = dc.GetTextExtent( m_label );
     EDA_RECT rect( wxPoint( 0, 0 ), size );
     EDA_RECT bbox = rect.GetBoundingBoxRotated( rect.GetPosition(), m_angle );
     wxPoint  pos( 0, -bbox.GetTop() );
@@ -75,3 +79,18 @@ void WX_ANGLE_TEXT::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 }
 
 
+EDA_RECT WX_ANGLE_TEXT::GetBoundingBox( wxWindow* aWindow, const wxString& aLabel, double aAngle )
+{
+    // Create the font used for the text
+    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    font.SetPointSize( font.GetPointSize() + 2 );   // rotated text looks visually smaller
+
+    // Measure the size of the text
+    wxClientDC dc( aWindow );
+    dc.SetFont( font );
+
+    wxSize   size = dc.GetTextExtent( aLabel );
+    EDA_RECT rect( wxPoint( 0, 0 ), size );
+
+    return rect.GetBoundingBoxRotated( rect.GetPosition(), aAngle );
+}
