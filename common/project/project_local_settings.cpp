@@ -29,7 +29,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( const std::string& aFilename ) :
         JSON_SETTINGS( aFilename, SETTINGS_LOC::PROJECT, projectLocalSettingsVersion,
                        /* aCreateIfMissing = */ true, /* aCreateIfDefault = */ false,
                        /* aWriteFile = */ true ),
-        m_project( nullptr )
+        m_project( nullptr ),
+        m_SelectionFilter()
 {
     m_params.emplace_back( new PARAM_LAMBDA<std::string>( "board.visible_layers",
             [&]() -> std::string
@@ -80,6 +81,63 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( const std::string& aFilename ) :
                 }
             },
             {} ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "board.selection_filter",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret;
+
+                ret["lockedItems"] = m_SelectionFilter.lockedItems;
+                ret["footprints"]  = m_SelectionFilter.footprints;
+                ret["text"]        = m_SelectionFilter.text;
+                ret["tracks"]      = m_SelectionFilter.tracks;
+                ret["vias"]        = m_SelectionFilter.vias;
+                ret["pads"]        = m_SelectionFilter.pads;
+                ret["graphics"]    = m_SelectionFilter.graphics;
+                ret["zones"]       = m_SelectionFilter.zones;
+                ret["keepouts"]    = m_SelectionFilter.keepouts;
+                ret["dimensions"]  = m_SelectionFilter.dimensions;
+                ret["otherItems"]  = m_SelectionFilter.otherItems;
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aVal )
+            {
+                if( aVal.empty() || !aVal.is_object() )
+                    return;
+
+                auto setIfPresent =
+                        [&aVal]( const std::string& aKey, bool& aTarget )
+                        {
+                            if( aVal.contains( aKey ) && aVal.at( aKey ).is_boolean() )
+                                aTarget = aVal.at( aKey ).get<bool>();
+                        };
+
+                setIfPresent( "lockedItems", m_SelectionFilter.lockedItems );
+                setIfPresent( "footprints", m_SelectionFilter.footprints );
+                setIfPresent( "text", m_SelectionFilter.text );
+                setIfPresent( "tracks", m_SelectionFilter.tracks );
+                setIfPresent( "vias", m_SelectionFilter.vias );
+                setIfPresent( "pads", m_SelectionFilter.pads );
+                setIfPresent( "graphics", m_SelectionFilter.graphics );
+                setIfPresent( "zones", m_SelectionFilter.zones );
+                setIfPresent( "keepouts", m_SelectionFilter.keepouts );
+                setIfPresent( "dimensions", m_SelectionFilter.dimensions );
+                setIfPresent( "otherItems", m_SelectionFilter.otherItems );
+            },
+            {
+                { "lockedItems", true },
+                { "footprints", true },
+                { "text", true },
+                { "tracks", true },
+                { "vias", true },
+                { "pads", true },
+                { "graphics", true },
+                { "zones", true },
+                { "keepouts", true },
+                { "dimensions", true },
+                { "otherItems", true }
+            } ) );
 }
 
 

@@ -30,6 +30,7 @@
 #include <memory>
 
 #include <math/vector2d.h>
+#include <project/board_local_settings.h>
 #include <tools/pcb_tool_base.h>
 #include <tool/action_menu.h>
 #include <tools/pcbnew_selection.h>
@@ -47,26 +48,6 @@ namespace KIGFX
 
 
 typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR& );
-
-
-/**
- * Selection filtering that applies all the time (not the "filter selection" dialog that modifies
- * the current selection)
- */
-struct SELECTION_FILTER_OPTIONS
-{
-    bool lockedItems;   ///< Allow selecting locked items
-    bool footprints;    ///< Allow selecting entire footprints
-    bool text;          ///< Text (free or attached to a footprint)
-    bool tracks;        ///< Copper tracks
-    bool vias;          ///< Vias (all types>
-    bool pads;          ///< Footprint pads
-    bool graphics;      ///< Graphic lines, shapes, polygons
-    bool zones;         ///< Copper zones
-    bool keepouts;      ///< Keepout zones
-    bool dimensions;    ///< Dimension items
-    bool otherItems;    ///< Anything not fitting one of the above categories
-};
 
 
 /**

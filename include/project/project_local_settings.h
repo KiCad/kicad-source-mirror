@@ -22,6 +22,7 @@
 #define KICAD_PROJECT_LOCAL_SETTINGS_H
 
 #include <layers_id_colors_and_visibility.h>
+#include <project/board_local_settings.h>
 #include <settings/json_settings.h>
 #include <wildcards_and_files_ext.h>
 
@@ -83,6 +84,9 @@ public:
 
     /// The GAL layers (aka items) that are turned on for viewing (@see GAL_LAYER_ID)
     GAL_SET m_VisibleItems;
+
+    /// State of the selection filter widget
+    SELECTION_FILTER_OPTIONS m_SelectionFilter;
 };
 
 #endif

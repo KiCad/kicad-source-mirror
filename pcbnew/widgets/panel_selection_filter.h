@@ -35,6 +35,8 @@ public:
 
     ~PANEL_SELECTION_FILTER() = default;
 
+    void SetCheckboxesFromFilter( SELECTION_FILTER_OPTIONS& aOptions );
+
 protected:
     void OnFilterChanged( wxCommandEvent& aEvent ) override;
 

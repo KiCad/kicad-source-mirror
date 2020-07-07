@@ -37,6 +37,8 @@
 #include <panel_pcbnew_color_settings.h>
 #include <panel_display_options.h>
 #include <panel_pcbnew_action_plugins.h>
+#include <tool/tool_manager.h>
+#include <tools/selection_tool.h>
 #include <fp_lib_table.h>
 #include <ws_data_model.h>
 #include <class_board.h>
@@ -46,7 +48,9 @@
 #include <invoke_pcb_dialog.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/paged_dialog.h>
+#include <widgets/panel_selection_filter.h>
 #include <project/project_file.h>
+#include <project/project_local_settings.h>
 
 
 void PCB_EDIT_FRAME::On3DShapeLibWizard( wxCommandEvent& event )
@@ -91,6 +95,13 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 
     pglayout.SetPageLayout( filename );
 
+    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+
+    SELECTION_FILTER_OPTIONS& filterOpts = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
+
+    filterOpts = localSettings.m_SelectionFilter;
+    m_selectionFilterPanel->SetCheckboxesFromFilter( filterOpts );
+
     return true;
 }
 
@@ -114,6 +125,12 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     project.m_BoardPageLayoutDescrFile = BASE_SCREEN::m_PageLayoutDescrFileName;
 
     RecordDRCExclusions();
+
+    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+
+    SELECTION_FILTER_OPTIONS& filterOpts = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
+
+    localSettings.m_SelectionFilter = filterOpts;
 
     GetSettingsManager()->SaveProject();
 }

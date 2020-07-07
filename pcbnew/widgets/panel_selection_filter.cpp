@@ -33,10 +33,8 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
     m_tool = m_frame->GetToolManager()->GetTool<SELECTION_TOOL>();
     wxASSERT( m_tool );
 
-    m_cbAllItems->SetValue( true );
-
-    wxCommandEvent dummy;
-    OnFilterChanged( dummy );
+    SELECTION_FILTER_OPTIONS& opts = m_tool->GetFilter();
+    SetCheckboxesFromFilter( opts );
 
     m_cbFootprints->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
     m_cbText->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
@@ -48,6 +46,28 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
     m_cbKeepouts->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
     m_cbDimensions->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
     m_cbOtherItems->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
+}
+
+
+void PANEL_SELECTION_FILTER::SetCheckboxesFromFilter( SELECTION_FILTER_OPTIONS& aOptions )
+{
+    Freeze();
+
+    m_cbLockedItems->SetValue( aOptions.lockedItems );
+    m_cbFootprints->SetValue( aOptions.footprints );
+    m_cbText->SetValue( aOptions.text );
+    m_cbTracks->SetValue( aOptions.tracks );
+    m_cbVias->SetValue( aOptions.vias );
+    m_cbPads->SetValue( aOptions.pads );
+    m_cbGraphics->SetValue( aOptions.graphics );
+    m_cbZones->SetValue( aOptions.zones );
+    m_cbKeepouts->SetValue( aOptions.keepouts );
+    m_cbDimensions->SetValue( aOptions.dimensions );
+    m_cbOtherItems->SetValue( aOptions.otherItems );
+
+    m_cbAllItems->SetValue( aOptions.All() );
+
+    Thaw();
 }
 
 
@@ -92,9 +112,7 @@ bool PANEL_SELECTION_FILTER::setFilterFromCheckboxes( SELECTION_FILTER_OPTIONS& 
     aOptions.dimensions  = m_cbDimensions->GetValue();
     aOptions.otherItems  = m_cbOtherItems->GetValue();
 
-    return ( aOptions.lockedItems && aOptions.footprints && aOptions.text && aOptions.tracks
-             && aOptions.vias && aOptions.pads && aOptions.graphics && aOptions.zones
-             && aOptions.keepouts && aOptions.dimensions && aOptions.otherItems );
+    return aOptions.All();
 }
 
 
