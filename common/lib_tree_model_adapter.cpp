@@ -403,8 +403,22 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
     // user's scroll position (which re-attaching or deleting/re-inserting columns does).
     static int walk = 1;
 
-    m_col_part->SetWidth( m_col_part->GetWidth() + walk );
-    m_col_desc->SetWidth( m_col_desc->GetWidth() - walk );
+    int partWidth = m_col_part->GetWidth();
+    int descWidth = m_col_desc->GetWidth();
+
+    // Only use the widths read back if they are non-zero.
+    // GTK returns the displayed width of the column, which is not calculated immediately
+    if( descWidth > 0 )
+    {
+        m_colWidths[PART_COL] = partWidth;
+        m_colWidths[DESC_COL] = descWidth;
+    }
+
+    m_colWidths[PART_COL] += walk;
+    m_colWidths[DESC_COL] -= walk;
+
+    m_col_part->SetWidth( m_colWidths[PART_COL] );
+    m_col_desc->SetWidth( m_colWidths[DESC_COL] );
     walk = -walk;
 }
 
