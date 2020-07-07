@@ -156,6 +156,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_modedit_defaults.cpp
     dialogs/panel_modedit_defaults_base.cpp
     dialogs/panel_pcbnew_color_settings.cpp
+    dialogs/panel_pcbnew_display_origin.cpp
+    dialogs/panel_pcbnew_display_origin_base.cpp
     dialogs/panel_setup_mask_and_paste.cpp
     dialogs/panel_setup_mask_and_paste_base.cpp
     dialogs/panel_setup_feature_constraints.cpp

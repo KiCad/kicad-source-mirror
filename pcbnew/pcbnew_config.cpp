@@ -31,6 +31,7 @@
 #include <panel_pcbnew_color_settings.h>
 #include <panel_display_options.h>
 #include <panel_pcbnew_action_plugins.h>
+#include <panel_pcbnew_display_origin.h>
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>
 #include <ws_data_model.h>
@@ -65,6 +66,7 @@ void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     book->AddSubPage( new PANEL_PCBNEW_ACTION_PLUGINS( this, aParent ), _( "Action Plugins" ) );
 #endif
+    book->AddSubPage( new PANEL_PCBNEW_DISPLAY_ORIGIN( this, aParent ), _( "Origins & Axes" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
