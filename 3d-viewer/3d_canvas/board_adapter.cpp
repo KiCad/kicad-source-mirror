@@ -277,13 +277,9 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 {
     wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::InitSettings" ) );
 
-    // Calculates the board bounding box
-    // First, use only the board outlines
-    EDA_RECT bbbox = m_board->ComputeBoundingBox( true );
-
-    // If no outlines, use the board with items
-    if( ( bbbox.GetWidth() == 0 ) && ( bbbox.GetHeight() == 0 ) )
-        bbbox = m_board->ComputeBoundingBox( false );
+    // Calculates the board bounding box (board outlines + items)
+    // to ensure any item, even outside the board outlines can be seen
+    EDA_RECT bbbox = m_board->ComputeBoundingBox( false );
 
     // Gives a non null size to avoid issues in zoom / scale calculations
     if( ( bbbox.GetWidth() == 0 ) && ( bbbox.GetHeight() == 0 ) )

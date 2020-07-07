@@ -330,7 +330,7 @@ void D_PAD::BuildEffectiveShapes() const
         for( const std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
         {
             for( SHAPE* shape : primitive->MakeEffectiveShapes() )
-            {printf("shape %d\n", shape->Type());fflush(0);
+            {
                 shape->Rotate( -DECIDEG2RAD( m_Orient ) );
                 shape->Move( shapePos );
                 add( shape );
