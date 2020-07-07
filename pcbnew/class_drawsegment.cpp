@@ -38,6 +38,7 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_compound.h>
+#include <origin_transforms.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 
@@ -452,6 +453,7 @@ MODULE* DRAWSEGMENT::GetParentModule() const
 void DRAWSEGMENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     EDA_UNITS units = aFrame->GetUserUnits();
+    ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
     wxString  msg;
 
     msg = _( "Drawing" );
@@ -525,20 +527,23 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     if( m_Shape == S_POLYGON )
     {
         VECTOR2I point0 = GetPolyShape().Outline(0).CPoint(0);
+        VECTOR2I coord0 = originTransforms.ToDisplayAbs( point0 );
         wxString origin = wxString::Format( "@(%s, %s)",
-                                           MessageTextFromValue( units, point0.x ),
-                                           MessageTextFromValue( units, point0.y ) );
+                                           MessageTextFromValue( units, coord0.x ),
+                                           MessageTextFromValue( units, coord0.y ) );
 
         aList.emplace_back( _( "Origin" ), origin, DARKGREEN );
     }
     else
     {
+        wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
         wxString start = wxString::Format( "@(%s, %s)",
-                                           MessageTextFromValue( units, GetStart().x ),
-                                           MessageTextFromValue( units, GetStart().y ) );
+                                           MessageTextFromValue( units, startCoord.x ),
+                                           MessageTextFromValue( units, startCoord.y ) );
+        wxPoint endCoord = originTransforms.ToDisplayAbs( GetEnd() );
         wxString end   = wxString::Format( "@(%s, %s)",
-                                           MessageTextFromValue( units, GetEnd().x ),
-                                           MessageTextFromValue( units, GetEnd().y ) );
+                                           MessageTextFromValue( units, endCoord.x ),
+                                           MessageTextFromValue( units, endCoord.y ) );
 
         aList.emplace_back( start, end, DARKGREEN );
     }
