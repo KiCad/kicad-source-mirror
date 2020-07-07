@@ -881,6 +881,10 @@ public:
     {
         gridSize = aGridSize;
 
+        // Avoid stupid grid size values: a grid size  should be >= 1 in internal units
+        gridSize.x = std::max( 1.0, gridSize.x );
+        gridSize.y = std::max( 1.0, gridSize.y );
+
         gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
                                (long) gridOrigin.y % (long) gridSize.y );
     }
