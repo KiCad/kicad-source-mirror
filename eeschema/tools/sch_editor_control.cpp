@@ -907,6 +907,11 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
 
+    // TODO remove once real-time connectivity is a given
+    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
+        // Ensure the netlist data is up to date:
+        m_frame->RecalculateConnections( NO_CLEANUP );
+
     // Remove selection in favour of highlighting so the whole net is highlighted
     selectionTool->ClearSelection();
     highlightNet( m_toolMgr, cursorPos );
