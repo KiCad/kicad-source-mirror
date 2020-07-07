@@ -32,7 +32,7 @@
 #define  DIALOG_HELPERS_H_
 
 
-#include <../common/dialogs/dialog_list_selector_base.h>
+#include <../common/dialogs/eda_list_dialog_base.h>
 #include <common.h> // EDA_UNITS
 
 void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput );
@@ -59,23 +59,19 @@ public:
      * @param aItemHeaders an optional array containing the column header names for the dialog.
      * @param aItemList = A wxArrayString of the list of elements.
      * @param aRefText = An item name if an item must be preselected.
-     * @param aCallBackFunction = callback function to display comments
-     * @param aCallBackFunctionData = a pointer to pass to @a aCallBackFunction
      */
     EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                      const wxArrayString& aItemHeaders,
                      const std::vector<wxArrayString>& aItemList,
-                     const wxString& aRefText,
-                     void (* aCallBackFunction)( wxString& text, void* data ) = NULL,
-                     void* aCallBackFunctionData = NULL );
+                     const wxString& aRefText );
 
     // ~EDA_LIST_DIALOG() {}
 
-    void     SetListLabel( const wxString& aLabel );
-    void     SetOKLabel( const wxString& aLabel );
+    void SetListLabel( const wxString& aLabel );
+    void SetOKLabel( const wxString& aLabel );
 
-    void     Append( const wxArrayString& aItemStr );
-    void     InsertItems( const std::vector<wxArrayString>& aItemList, int aPosition = 0 );
+    void Append( const wxArrayString& aItemStr );
+    void InsertItems( const std::vector<wxArrayString>& aItemList, int aPosition = 0 );
 
     /**
      * Function GetTextSelection
@@ -87,16 +83,14 @@ public:
     wxString GetTextSelection( int aColumn = 0 );
 
 private:
-    void     onListItemSelected( wxListEvent& event ) override;
-    void     onListItemActivated( wxListEvent& event ) override;
-    void     textChangeInFilterBox(wxCommandEvent& event) override;
+    void onListItemActivated( wxListEvent& event ) override;
+    void textChangeInFilterBox(wxCommandEvent& event) override;
 
-    void    initDialog( const wxArrayString& aItemHeaders,
-                        const wxString& aSelection);
-    void    sortList();
-    void    (* m_cb_func)( wxString& text, void* data );
-    void*   m_cb_data;
-    const   std::vector<wxArrayString>* m_itemsListCp;
+    void initDialog( const wxArrayString& aItemHeaders, const wxString& aSelection);
+    void sortList();
+
+private:
+    const std::vector<wxArrayString>* m_itemsList;
 };
 
 
@@ -117,7 +111,7 @@ private:
 
 public:
     EDA_POSITION_CTRL( wxWindow* parent, const wxString& title, const wxPoint& pos_to_edit,
-            EDA_UNITS user_unit, wxBoxSizer* BoxSizer );
+                       EDA_UNITS user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_POSITION_CTRL();
 
@@ -135,7 +129,7 @@ class EDA_SIZE_CTRL : public EDA_POSITION_CTRL
 {
 public:
     EDA_SIZE_CTRL( wxWindow* parent, const wxString& title, const wxSize& size_to_edit,
-            EDA_UNITS user_unit, wxBoxSizer* BoxSizer );
+                   EDA_UNITS user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_SIZE_CTRL() { }
     wxSize GetValue();

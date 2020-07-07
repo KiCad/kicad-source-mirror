@@ -23,13 +23,11 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <fp_lib_table.h>
 #include <bitmaps.h>
 #include <trace_helpers.h>
-#include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <drc/drc.h>
 #include <pcbnew_settings.h>
@@ -49,10 +47,10 @@
 #include <ws_proxy_view_item.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
-#include <kicad_string.h>
 #include <pcb_draw_panel_gal.h>
 #include <functional>
 #include <project/project_file.h>
+#include <project/net_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -650,6 +648,8 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const w
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
+        Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments();
+
         GetBoard()->SynchronizeNetsAndNetClasses();
         GetBoard()->GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
         SaveProjectSettings();

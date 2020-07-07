@@ -47,6 +47,7 @@ enum {
     GRID_DIFF_PAIR_VIA_GAP
 };
 
+#define NO_NETCLASS_ASSIGNMENT _( "<unassigned>" )
 
 PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
                                                 const std::vector<wxString>& aCandidateNetNames ) :
@@ -153,7 +154,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     std::map<wxString, wxString> staleNetMap;
 
     for( const wxString& candidate : m_candidateNetNames )
-        netToNetclassMap[ candidate ] = "Default";
+        netToNetclassMap[ candidate ] = wxEmptyString;
 
     if( m_netclassGrid->GetNumberRows() )
         m_netclassGrid->DeleteRows( 0, m_netclassGrid->GetNumberRows() );
@@ -232,6 +233,8 @@ void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
 
     wxArrayString netclassNames;
 
+    netclassNames.emplace_back( NO_NETCLASS_ASSIGNMENT );
+
     for( int ii = 0; ii < m_netclassGrid->GetNumberRows(); ii++ )
     {
         wxString netclassName = m_netclassGrid->GetCellValue( ii, GRID_NAME );
@@ -294,7 +297,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
         const wxString& netname = m_membershipGrid->GetCellValue( row, 0 );
         const wxString& classname = m_membershipGrid->GetCellValue( row, 1 );
 
-        if( classname != "Default" )
+        if( classname != NO_NETCLASS_ASSIGNMENT )
         {
             const NETCLASSPTR& nc = m_netclasses->Find( classname );
 

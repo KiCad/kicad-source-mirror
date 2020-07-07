@@ -156,14 +156,23 @@ bool EE_SELECTION_TOOL::Init()
 
 
     static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+    static KICAD_T connectedTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T,
+                                        SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_LABEL_T,
+                                        SCH_SHEET_PIN_T, SCH_PIN_T, EOT };
 
     auto wireSelection =      E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_WIRE_T );
     auto busSelection =       E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_BUS_T );
     auto wireOrBusSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( wireOrBusTypes );
+    auto connectedSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( connectedTypes );
     auto sheetSelection =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
-    auto schEditCondition = [this] ( const SELECTION& aSel ) {
-        return !m_isLibEdit && !m_isLibView;
-    };
+
+    auto schEditCondition =
+            [this] ( const SELECTION& aSel )
+            {
+
+                return !m_isLibEdit && !m_isLibView;
+            };
+
     auto belowRootSheetCondition =
             [&]( const SELECTION& aSel )
             {
@@ -191,10 +200,10 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::drawBus,            schEditCondition && EE_CONDITIONS::Empty, 100 );
 
     menu.AddSeparator( 100 );
-    menu.AddItem( EE_ACTIONS::finishWire, SCH_LINE_WIRE_BUS_TOOL::IsDrawingWire, 100 );
+    menu.AddItem( EE_ACTIONS::finishWire,         SCH_LINE_WIRE_BUS_TOOL::IsDrawingWire, 100 );
 
     menu.AddSeparator( 100 );
-    menu.AddItem( EE_ACTIONS::finishBus, SCH_LINE_WIRE_BUS_TOOL::IsDrawingBus, 100 );
+    menu.AddItem( EE_ACTIONS::finishBus,          SCH_LINE_WIRE_BUS_TOOL::IsDrawingBus, 100 );
 
     menu.AddSeparator( 200 );
     menu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
@@ -205,6 +214,7 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::breakWire,          wireSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::breakBus,           busSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::importSheetPin,     sheetSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::assignNetclass,     connectedSelection && EE_CONDITIONS::Idle, 250 );
 
     menu.AddSeparator( 400 );
     menu.AddItem( EE_ACTIONS::symbolProperties,   havePartCondition && EE_CONDITIONS::Empty, 400 );

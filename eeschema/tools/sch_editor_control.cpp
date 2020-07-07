@@ -36,6 +36,8 @@
 #include <invoke_sch_dialog.h>
 #include <kiway.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 #include <netlist_object.h>
 #include <sch_edit_frame.h>
 #include <sch_sexpr_plugin.h>
@@ -56,9 +58,8 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_editor_control.h>
 #include <ws_proxy_undo_item.h>
-#include <math/util.h>      // for KiROUND
 #include <dialog_update_from_pcb.h>
-
+#include <dialog_helpers.h>
 
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {
@@ -900,6 +901,83 @@ int SCH_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION_TOOL*    selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+
+    // Remove selection in favour of highlighting so the whole net is highlighted
+    selectionTool->ClearSelection();
+    highlightNet( m_toolMgr, cursorPos );
+
+    const SCH_CONNECTION* conn = m_frame->GetHighlightedConnection();
+
+    if( conn )
+    {
+        wxString netName = conn->Name( true );
+
+        if( conn->Name( true ).IsEmpty() )
+        {
+            DisplayError( m_frame, _( "Net must be labelled to assign a netclass." ) );
+            highlightNet( m_toolMgr, CLEAR );
+            return 0;
+        }
+
+        NET_SETTINGS& netSettings = m_frame->Schematic().Prj().GetProjectFile().NetSettings();
+        wxString      netclassName = netSettings.m_NetClassAssignments[ netName ];
+
+        wxArrayString headers;
+        std::vector<wxArrayString> items;
+
+        headers.Add( _( "Netclasses" ) );
+
+        wxArrayString defaultItem;
+        defaultItem.Add( _( "Default" ) );
+        items.emplace_back( defaultItem );
+
+        for( const auto& ii : netSettings.m_NetClasses )
+        {
+            wxArrayString item;
+            item.Add( ii.first );
+            items.emplace_back( item );
+        }
+
+        EDA_LIST_DIALOG dlg( m_frame, _( "Assign Netclass" ), headers, items, netclassName );
+        dlg.SetListLabel( _( "Select netclass:" ) );
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            netclassName = dlg.GetTextSelection();
+
+            // Remove from old netclass membership list
+            if( netSettings.m_NetClassAssignments.count( netName ) )
+            {
+                const wxString oldNetclassName = netSettings.m_NetClassAssignments[ netName ];
+                NETCLASSPTR    oldNetclass = netSettings.m_NetClasses.Find( oldNetclassName );
+
+                if( oldNetclass )
+                    oldNetclass->Remove( netName );
+            }
+
+            // Add to new netclass membership list
+            NETCLASSPTR newNetclass = netSettings.m_NetClasses.Find( netclassName );
+
+            if( newNetclass )
+            {
+                newNetclass->Add( netName );
+            }
+
+            netSettings.m_NetClassAssignments[ netName ] = netclassName;
+            netSettings.ResolveNetClassAssignments();
+        }
+    }
+
+    highlightNet( m_toolMgr, CLEAR );
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 {
     SCH_SCREEN*            screen = m_frame->GetCurrentSheet().LastScreen();
@@ -1675,6 +1753,8 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::UpdateNetHighlighting, EVENTS::SelectedItemsModified );
     Go( &SCH_EDITOR_CONTROL::UpdateNetHighlighting, EE_ACTIONS::updateNetHighlighting.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ClearHighlight,        ACTIONS::cancelInteractive.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::AssignNetclass,        EE_ACTIONS::assignNetclass.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::Undo,                  ACTIONS::undo.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Redo,                  ACTIONS::redo.MakeEvent() );

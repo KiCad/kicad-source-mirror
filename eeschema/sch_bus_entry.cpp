@@ -23,15 +23,8 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <macros.h>
 #include <sch_draw_panel.h>
-#include <trigo.h>
-#include <common.h>
-#include <richio.h>
 #include <bitmaps.h>
-#include <eeschema_config.h>
-#include <general.h>
 #include <schematic.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
@@ -39,7 +32,6 @@
 #include <sch_text.h>
 #include <settings/color_settings.h>
 #include "sch_painter.h"
-#include <default_values.h>    // For some default values
 
 
 SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, bool aFlipY ) :
@@ -398,13 +390,7 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEM
         return;
 
     if( auto conn = Connection( frame->GetCurrentSheet() ) )
-    {
-#if defined(DEBUG)
-        conn->AppendDebugInfoToMsgPanel( aList );
-#else
         conn->AppendInfoToMsgPanel( aList );
-#endif
-    }
 }
 
 

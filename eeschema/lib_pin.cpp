@@ -1491,7 +1491,7 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     auto conn = aComponent->GetConnectionForPin( this, frame->GetCurrentSheet() );
 
     if( conn )
-        conn->AppendDebugInfoToMsgPanel( aList );
+        conn->AppendInfoToMsgPanel( aList );
 
 #endif
 }

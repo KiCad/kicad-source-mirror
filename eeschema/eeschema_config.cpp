@@ -31,14 +31,12 @@
 #include <dialogs/panel_libedit_settings.h>
 #include <eeschema_config.h>
 #include <fctsys.h>
-#include <gestfich.h>
-#include <gr_text.h>
-#include <kiface_i.h>
 #include <lib_edit_frame.h>
 #include <panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
+#include <project/net_settings.h>
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
 #include <sch_painter.h>
@@ -47,13 +45,10 @@
 #include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
 #include <widgets/paged_dialog.h>
-#include <widgets/symbol_tree_pane.h>
 #include <wildcards_and_files_ext.h>
 #include <ws_data_model.h>
-#include <widgets/ui_common.h>
 #include <dialogs/dialog_schematic_setup.h>
 #include "erc.h"
-#include <default_values.h>    // For some default values
 
 
 #define FieldNameTemplatesKey         wxT( "FieldNameTemplates" )
@@ -274,6 +269,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
+        Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments();
         SaveProjectSettings();
 
         GetCanvas()->Refresh();

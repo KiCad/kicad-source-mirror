@@ -40,14 +40,10 @@ static int DEFAULT_COL_WIDTHS[] = { 200, 600 };
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemHeaders,
                                   const std::vector<wxArrayString>& aItemList,
-                                  const wxString& aSelection,
-                                  void( *aCallBackFunction )( wxString&, void* ),
-                                  void* aCallBackFunctionData ) :
+                                  const wxString& aSelection ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
 {
-    m_cb_func     = aCallBackFunction;
-    m_cb_data     = aCallBackFunctionData;
-    m_itemsListCp = &aItemList;
+    m_itemsList = &aItemList;
 
     m_filterBox->SetHint( _( "Filter" ) );
 
@@ -68,35 +64,28 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
 }
 
 
-void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxString& aSelection)
+void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxString& aSelection )
 {
     for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
+    {
         m_listBox->InsertColumn( i, aItemHeaders.Item( i ),
                                  wxLIST_FORMAT_LEFT, DEFAULT_COL_WIDTHS[ i ] );
-
-    InsertItems( *m_itemsListCp, 0 );
-
-    if( m_cb_func == NULL )
-    {
-        m_messages->Show( false );
-        m_staticTextMsg->Show( false );
     }
+
+    InsertItems( *m_itemsList, 0 );
 
     if( !aSelection.IsEmpty() )
     {
-        for( unsigned row = 0; row < m_itemsListCp->size(); ++row )
+        long sel = m_listBox->FindItem( -1, aSelection );
+
+        if( sel != wxNOT_FOUND )
         {
-            if( (*m_itemsListCp)[row][0] == aSelection )
-            {
-                m_listBox->SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+            m_listBox->SetItemState( sel, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 
-                // Set to a small size so EnsureVisible() won't be foiled by later additions.
-                // ListBox will expand to fit later.
-                m_listBox->SetSize( m_listBox->GetSize().GetX(), 100 );
-                m_listBox->EnsureVisible( row );
-
-                break;
-            }
+            // Set to a small size so EnsureVisible() won't be foiled by later additions.
+            // ListBox will expand to fit later.
+            m_listBox->SetSize( m_listBox->GetSize().GetX(), 100 );
+            m_listBox->EnsureVisible( sel );
         }
     }
 }
@@ -124,14 +113,12 @@ void EDA_LIST_DIALOG::textChangeInFilterBox( wxCommandEvent& event )
 
     m_listBox->DeleteAllItems();
 
-    for( unsigned i = 0; i < m_itemsListCp->size(); i++ )
+    for( const wxArrayString& row : *m_itemsList )
     {
-        itemName = (*m_itemsListCp)[i].Item( 0 );
+        itemName = row.Item( 0 );
 
         if( itemName.MakeLower().Matches( filter ) )
-        {
-            Append( (*m_itemsListCp)[i] );
-        }
+            Append( row );
     }
 
     sortList();
@@ -169,9 +156,7 @@ void EDA_LIST_DIALOG::Append( const wxArrayString& itemList )
 
     // Adding the next columns content
     for( unsigned i = 1; i < itemList.size(); i++ )
-    {
         m_listBox->SetItem( itemIndex, i, itemList[i] );
-    }
 }
 
 
@@ -205,18 +190,6 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
     }
 
     sortList();
-}
-
-
-void EDA_LIST_DIALOG::onListItemSelected( wxListEvent& event )
-{
-    if( m_cb_func )
-    {
-        m_messages->Clear();
-        wxString text = GetTextSelection();
-        m_cb_func( text, m_cb_data );
-        m_messages->WriteText( text );
-    }
 }
 
 

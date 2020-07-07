@@ -22,26 +22,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_line.cpp
- * @brief Class SCH_LINE implementation
- */
-
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <macros.h>
-#include <sch_draw_panel.h>
+//#include <gr_basic.h>
+//#include <macros.h>
+//#include <sch_draw_panel.h>
 #include <sch_painter.h>
 #include <plotter.h>
-#include <base_units.h>
-#include <eeschema_config.h>
-#include <general.h>
+//#include <base_units.h>
+//#include <general.h>
 #include <sch_line.h>
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>
 #include <netlist_object.h>
-#include <sch_view.h>
 #include <schematic.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 
 
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
@@ -778,19 +773,21 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
 
-    if( !frame )
-        return;
-
-    if( auto conn = Connection( frame->GetCurrentSheet() ) )
+    if( frame )
     {
-#if defined(DEBUG)
-        conn->AppendDebugInfoToMsgPanel( aList );
+        if( SCH_CONNECTION* conn = Connection( frame->GetCurrentSheet() ) )
+        {
+            conn->AppendInfoToMsgPanel( aList );
 
-        msg.Printf( "%zu", m_connected_items.size() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Connections" ), msg, BROWN ) );
-#else
-        conn->AppendInfoToMsgPanel( aList );
-#endif
+            NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
+            const wxString& netname = conn->Name( true );
+
+            if( netSettings.m_NetClassAssignments.count( netname ) )
+            {
+                const wxString& netclassName = netSettings.m_NetClassAssignments[ netname ];
+                aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName, DARKRED ) );
+            }
+        }
     }
 }
 

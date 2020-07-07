@@ -281,11 +281,6 @@ public:
     void AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const;
 
     /**
-     * Adds extended debug information about the connection object to aList
-     */
-    void AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const;
-
-    /**
      * Test if \a aLabel has a bus notation.
      *
      * @param aLabel A wxString object containing the label to test.

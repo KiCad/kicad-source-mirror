@@ -116,7 +116,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
 
     // Set up toolbar
     m_drawToolBar->Add( ACTIONS::selectionTool,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::highlightNetTool, ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::highlightNetTool,       ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbol,            ACTION_TOOLBAR::TOGGLE );

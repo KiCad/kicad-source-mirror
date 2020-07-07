@@ -169,7 +169,6 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_hotkey_list.cpp
     dialogs/dialog_image_editor.cpp
     dialogs/dialog_image_editor_base.cpp
-    dialogs/dialog_list_selector_base.cpp
     dialogs/dialog_migrate_settings.cpp
     dialogs/dialog_migrate_settings_base.cpp
     dialogs/dialog_page_settings_base.cpp
@@ -177,6 +176,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_print_generic.cpp
     dialogs/dialog_print_generic_base.cpp
     dialogs/dialog_text_entry.cpp
+    dialogs/eda_list_dialog.cpp
+    dialogs/eda_list_dialog_base.cpp
     dialogs/panel_color_settings_base.cpp
     dialogs/panel_color_settings.cpp
     dialogs/panel_common_settings.cpp
@@ -283,7 +284,6 @@ set( COMMON_SRCS
     confirm.cpp
     cursor_store.cpp
     dialog_shim.cpp
-    displlst.cpp
     gr_text.cpp
     dsnlexer.cpp
     eagle_parser.cpp

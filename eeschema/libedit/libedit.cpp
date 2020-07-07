@@ -90,7 +90,7 @@ wxString LIB_EDIT_FRAME::SelectLibraryFromList()
     std::vector< wxString > libNicknames = prj.SchSymbolLibTable()->GetLogicalLibs();
 
     // Conversion from wxArrayString to vector of ArrayString
-    for( const auto& name : libNicknames )
+    for( const wxString& name : libNicknames )
     {
         wxArrayString item;
 

@@ -104,6 +104,8 @@ public:
     ///> Launches a tool to highlight nets.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
+    int AssignNetclass( const TOOL_EVENT& aEvent );
+
     int Undo( const TOOL_EVENT& aEvent );
     int Redo( const TOOL_EVENT& aEvent );
 

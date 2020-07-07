@@ -29,17 +29,12 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <macros.h>
-#include <trigo.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
 #include <msgpanel.h>
 #include <gal/stroke_font.h>
 #include <bitmaps.h>
-#include <math/util.h>      // for KiROUND
-#include <kiway.h>
 #include <sch_text.h>
 #include <schematic.h>
 #include <netlist_object.h>
@@ -48,6 +43,8 @@
 #include <default_values.h>
 #include <wx/debug.h>
 #include <html_messagebox.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 
 using KIGFX::SCH_RENDER_SETTINGS;
 
@@ -716,19 +713,24 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg, RED ) );
 
-#if defined(DEBUG)
-    SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
 
-    if( schframe )
+    if( frame )
     {
-        if( auto conn = Connection( schframe->GetCurrentSheet() ) )
-            conn->AppendDebugInfoToMsgPanel( aList );
+        if( SCH_CONNECTION* conn = Connection( frame->GetCurrentSheet() ) )
+        {
+            conn->AppendInfoToMsgPanel( aList );
+
+            NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
+            const wxString& netname = conn->Name( true );
+
+            if( netSettings.m_NetClassAssignments.count( netname ) )
+            {
+                const wxString& netclassName = netSettings.m_NetClassAssignments[ netname ];
+                aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName, DARKRED ) );
+            }
+        }
     }
-
-    msg.Printf( "%p", this );
-    aList.push_back( MSG_PANEL_ITEM( "Object Address", msg, RED ) );
-
-#endif
 }
 
 #if defined(DEBUG)

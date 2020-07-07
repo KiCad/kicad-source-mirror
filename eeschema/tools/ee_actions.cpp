@@ -396,6 +396,11 @@ TOOL_ACTION EE_ACTIONS::updateFieldsFromLibrary( "eeschema.InteractiveEdit.updat
         _( "Update Fields from Library..." ), _( "Sets symbol fields to original library values" ),
         update_fields_xpm );
 
+TOOL_ACTION EE_ACTIONS::assignNetclass( "eeschema.InteractiveEdit.assignNetclass",
+        AS_GLOBAL, 0, "",
+        _( "Assign Netclass..." ), _( "Assign a netclass to the net of the selected wire" ),
+        list_nets_xpm );
+
 TOOL_ACTION EE_ACTIONS::toggleDeMorgan( "eeschema.InteractiveEdit.toggleDeMorgan",
         AS_GLOBAL, 0, "",
         _( "DeMorgan Conversion" ), _( "Switch between DeMorgan representations" ),

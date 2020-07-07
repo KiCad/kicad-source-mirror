@@ -145,6 +145,7 @@ public:
     static TOOL_ACTION pinTable;
     static TOOL_ACTION updateFieldsFromLibrary;
     static TOOL_ACTION assignFootprints;
+    static TOOL_ACTION assignNetclass;
     static TOOL_ACTION showBusManager;
     static TOOL_ACTION schematicSetup;
 
@@ -157,7 +158,6 @@ public:
     static TOOL_ACTION importFPAssignments;
     static TOOL_ACTION exportNetlist;
     static TOOL_ACTION generateBOM;
-    static TOOL_ACTION runSimulation;
     static TOOL_ACTION addSymbolToSchematic;
 
     // Library management
@@ -176,9 +176,11 @@ public:
     static TOOL_ACTION leaveSheet;
     static TOOL_ACTION navigateHierarchy;
 
-    // Miscellaneous
+    // Global edit tools
     static TOOL_ACTION cleanupSheetPins;
     static TOOL_ACTION editTextAndGraphics;
+
+    // Miscellaneous
     static TOOL_ACTION toggleHiddenPins;
     static TOOL_ACTION toggleHiddenFields;
     static TOOL_ACTION toggleSyncedPinsMode;
@@ -195,6 +197,7 @@ public:
     static TOOL_ACTION exportSymbolAsSVG;
 
     // SPICE
+    static TOOL_ACTION runSimulation;
     static TOOL_ACTION simProbe;
     static TOOL_ACTION simTune;
 

@@ -198,10 +198,13 @@ std::vector<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
                 if( NET_SETTINGS::ParseBusVector( unescaped, nullptr, nullptr ) )
                 {
                     // Allow netclass assignment to an entire vector.
-                    names.emplace_back( unescaped );
+                    names.emplace_back( EscapeString( unescaped, CTX_NETNAME ) );
                 }
                 else if( NET_SETTINGS::ParseBusGroup( unescaped, &busPrefix, &busMembers ) )
                 {
+                    // Allow netclass assignment to an entire group.
+                    names.emplace_back( EscapeString( unescaped, CTX_NETNAME ) );
+
                     // Named bus groups generate a net prefix, unnamed ones don't
                     if( !busPrefix.IsEmpty() )
                         busPrefix += wxT( "." );

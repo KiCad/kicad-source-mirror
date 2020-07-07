@@ -327,9 +327,6 @@ void SCH_CONNECTION::SetSuffix( const wxString& aSuffix )
 
 void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 {
-    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        return;
-
     wxString msg, group_name;
     std::vector<wxString> group_members;
 
@@ -374,18 +371,12 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
             }
         }
     }
-}
 
+#if defined(DEBUG)
+    // These messages are not flagged as translatable, because they are only debug messages
 
-void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
-{
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         return;
-
-    // These messages are not flagged as translatable, because they are only debug messages
-    wxString msg;
-
-    AppendInfoToMsgPanel( aList );
 
     if( IsBus() )
     {
@@ -401,6 +392,7 @@ void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
         msg.Printf( "%s at %p", driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ), driver );
         aList.push_back( MSG_PANEL_ITEM( "Connection Source", msg, RED ) );
     }
+#endif
 }
 
 
