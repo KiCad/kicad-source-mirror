@@ -62,9 +62,9 @@ NUMERIC_EVALUATOR::NUMERIC_EVALUATOR( EDA_UNITS aUnits, bool aUseMils )
             m_defaultUnits = Unit::Inch;
         break;
     case EDA_UNITS::MILLIMETRES:
-        m_defaultUnits = Unit::Metric;
+        m_defaultUnits = Unit::MM;
         break;
-    default:m_defaultUnits = Unit::Metric;
+    default:m_defaultUnits = Unit::MM;
         break;
     }
 }
@@ -239,7 +239,13 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         if( sizeLeft >= 2 && ch == 'm' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ))
         {
             m_token.pos += 2;
-            return Unit::Metric;
+            return Unit::MM;
+        }
+
+        if( sizeLeft >= 2 && ch == 'c' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ))
+        {
+            m_token.pos += 2;
+            return Unit::CM;
         }
 
         if( sizeLeft >= 2 && ch == 'i' && cptr[ 1 ] == 'n' && !isalnum( cptr[ 2 ] ))
@@ -298,13 +304,14 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         // The factor is assigned to the terminal UNIT. The actual
         // conversion is done within a parser action.
         retval.token = UNIT;
-        if( m_defaultUnits == Unit::Metric )
+        if( m_defaultUnits == Unit::MM )
         {
             switch( convertFrom )
             {
             case Unit::Inch    :retval.value.dValue = 25.4;          break;
             case Unit::Mil     :retval.value.dValue = 25.4 / 1000.0; break;
-            case Unit::Metric  :retval.value.dValue = 1.0;           break;
+            case Unit::MM      :retval.value.dValue = 1.0;           break;
+            case Unit::CM      :retval.value.dValue = 10.0;          break;
             case Unit::Invalid :break;
             }
         }
@@ -314,7 +321,8 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             {
             case Unit::Inch    :retval.value.dValue = 1.0;          break;
             case Unit::Mil     :retval.value.dValue = 1.0 / 1000.0; break;
-            case Unit::Metric  :retval.value.dValue = 1.0 / 25.4;   break;
+            case Unit::MM      :retval.value.dValue = 1.0 / 25.4;   break;
+            case Unit::CM      :retval.value.dValue = 1.0 / 2.54;   break;
             case Unit::Invalid :break;
             }
         }
@@ -324,7 +332,8 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             {
             case Unit::Inch    :retval.value.dValue = 1.0 * 1000.0;  break;
             case Unit::Mil     :retval.value.dValue = 1.0;           break;
-            case Unit::Metric  :retval.value.dValue = 1000.0 / 25.4; break;
+            case Unit::MM      :retval.value.dValue = 1000.0 / 25.4; break;
+            case Unit::CM      :retval.value.dValue = 1000.0 / 2.54; break;
             case Unit::Invalid :break;
             }
         }
