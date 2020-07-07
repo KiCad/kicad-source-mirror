@@ -158,10 +158,12 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
 
     switch( GetType() )
     {
-    case TREE_PROJECT:
+    case TREE_LEGACY_PROJECT:
+    case TREE_JSON_PROJECT:
         // Select a new project if this is not the current project:
         if( id != aTreePrjFrame->m_TreeProject->GetRootItem() )
             frame->LoadProject( fullFileName );
+
         break;
 
     case TREE_DIRECTORY:
@@ -170,28 +172,22 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
 
     case TREE_LEGACY_SCHEMATIC:
     case TREE_SEXPR_SCHEMATIC:
-        if( fullFileName == frame->SchFileName() )
-        {
+        // Schematics not part of the project are opened in a separate process.
+        if( fullFileName == frame->SchFileName() || fullFileName == frame->SchLegacyFileName() )
             toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSchematic, true );
-        }
         else
-        {
-            // schematics not part of the project are opened in a separate process.
             toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editOtherSch, true, &fullFileName );
-        }
+
         break;
 
     case TREE_LEGACY_PCB:
     case TREE_SEXPR_PCB:
+        // Boards not part of the project are opened in a separate process.
         if( fullFileName == frame->PcbFileName() || fullFileName == frame->PcbLegacyFileName() )
-        {
             toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editPCB, true );
-        }
         else
-        {
-            // boards not part of the project are opened in a separate process.
             toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editOtherPCB, true, &fullFileName );
-        }
+
         break;
 
     case TREE_GERBER:

@@ -64,6 +64,7 @@
 // Add extensions in a compatible regex format to see others files types
 static const wxChar* s_allowedExtensionsToList[] = {
     wxT( "^.*\\.pro$" ),
+    wxT( "^.*\\.kicad_pro$" ),
     wxT( "^.*\\.pdf$" ),
     wxT( "^.*\\.sch$" ),           // Legacy Eeschema files
     wxT( "^.*\\.kicad_sch$" ),     // S-expr Eeschema files
@@ -264,7 +265,8 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
 {
     switch( type )
     {
-    case TREE_PROJECT:               return ProjectFileExtension;
+    case TREE_LEGACY_PROJECT:        return LegacyProjectFileExtension;
+    case TREE_JSON_PROJECT:          return ProjectFileExtension;
     case TREE_LEGACY_SCHEMATIC:      return LegacySchematicFileExtension;
     case TREE_SEXPR_SCHEMATIC:       return KiCadSchematicFileExtension;
     case TREE_LEGACY_PCB:            return LegacyPcbFileExtension;
@@ -294,8 +296,8 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
         const wxString& aName, wxTreeItemId& aRoot, bool aCanResetFileWatcher, bool aRecurse )
 {
     wxTreeItemId newItemId;
-    TreeFileType    type = TREE_UNKNOWN;
-    wxFileName      fn( aName );
+    TreeFileType type = TREE_UNKNOWN;
+    wxFileName   fn( aName );
 
     // Files/dirs names starting by "." are not visible files under unices.
     // Skip them also under Windows
@@ -374,7 +376,8 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
                             addFile = true;
                             break;
                         }
-                    } else if( fn.GetExt() == "kicad_sch" )
+                    }
+                    else if( fn.GetExt() == "kicad_sch" )
                     {
                         char* start = line;
 
@@ -396,14 +399,14 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
             }
         }
 
-        for( int i = TREE_PROJECT; i < TREE_MAX; i++ )
+        for( int i = TREE_LEGACY_PROJECT; i < TREE_MAX; i++ )
         {
             wxString ext = GetFileExt( (TreeFileType) i );
 
             if( ext == wxT( "" ) )
                 continue;
 
-            reg.Compile( wxString::FromAscii( "^.*\\" ) + ext +
+            reg.Compile( wxString::FromAscii( "^.*\\." ) + ext +
                          wxString::FromAscii( "$" ), wxRE_ICASE );
 
             if( reg.Matches( aName ) )
@@ -414,9 +417,17 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
         }
     }
 
+    wxString   file = wxFileNameFromPath( aName );
+    wxFileName currfile( file );
+    wxFileName project( m_Parent->GetProjectFileName() );
+
+    // Ignore legacy projects with the same name as the current project
+    if( ( type == TREE_LEGACY_PROJECT ) && ( currfile.GetName().CmpNoCase( project.GetName() ) == 0 ) )
+        return newItemId;
+
     // also check to see if it is already there.
-    wxTreeItemIdValue   cookie;
-    wxTreeItemId        kid = m_TreeProject->GetFirstChild( aRoot, cookie );
+    wxTreeItemIdValue cookie;
+    wxTreeItemId      kid = m_TreeProject->GetFirstChild( aRoot, cookie );
 
     while( kid.IsOk() )
     {
@@ -431,8 +442,41 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
         kid = m_TreeProject->GetNextChild( aRoot, cookie );
     }
 
+    // Only show the JSON project files if both legacy and JSON files are present
+    if( ( type == TREE_LEGACY_PROJECT ) || ( type == TREE_JSON_PROJECT ) )
+    {
+        kid = m_TreeProject->GetFirstChild( aRoot, cookie );
+
+        while( kid.IsOk() )
+        {
+            TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
+
+            if( itemData )
+            {
+                wxFileName fname( itemData->GetFileName() );
+
+                if( fname.GetName().CmpNoCase( currfile.GetName() ) == 0 )
+                {
+                    // If the tree item is the legacy project remove it.
+                    if( itemData->GetType() == TREE_LEGACY_PROJECT )
+                    {
+                        m_TreeProject->Delete( kid );
+                        break;
+                    }
+                    // If we are the legacy project and the tree was the JSON project, ignore this file
+                    else if( ( itemData->GetType() == TREE_JSON_PROJECT )
+                             && ( type == TREE_LEGACY_PROJECT ) )
+                    {
+                        return newItemId;
+                    }
+                }
+            }
+
+            kid = m_TreeProject->GetNextChild( aRoot, cookie );
+        }
+    }
+
     // Append the item (only appending the filename not the full path):
-    wxString            file = wxFileNameFromPath( aName );
     newItemId = m_TreeProject->AppendItem( aRoot, file );
     TREEPROJECT_ITEM*   data = new TREEPROJECT_ITEM( type, aName, m_TreeProject );
 
@@ -440,9 +484,6 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
     data->SetState( 0 );
 
     // Mark root files (files which have the same aName as the project)
-    wxFileName  project( m_Parent->GetProjectFileName() );
-    wxFileName  currfile( file );
-
     if( currfile.GetName().CmpNoCase( project.GetName() ) == 0 )
         data->SetRootFile( true );
     else
@@ -456,11 +497,11 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
     // in this case AddFile is recursive, but for the first level only.
     if( TREE_DIRECTORY == type && aRecurse )
     {
-        wxDir   dir( aName );
+        wxDir dir( aName );
 
         if( dir.IsOpened() )    // protected dirs will not open properly.
         {
-            wxString        dir_filename;
+            wxString dir_filename;
 
             data->SetPopulated( true );
 #ifndef __WINDOWS__
@@ -517,7 +558,9 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
     // root tree:
     m_root = m_TreeProject->AddRoot( fn.GetFullName(), TREE_ROOT, TREE_ROOT );
     m_TreeProject->SetItemBold( m_root, true );
-    m_TreeProject->SetItemData( m_root, new TREEPROJECT_ITEM( TREE_PROJECT, fn.GetFullPath(),
+
+    // The main project file is now a JSON file
+    m_TreeProject->SetItemData( m_root, new TREEPROJECT_ITEM( TREE_JSON_PROJECT, fn.GetFullPath(),
                                                               m_TreeProject ) );
 
     // Now adding all current files if available
@@ -593,7 +636,8 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 
         switch( tree_id )
         {
-        case TREE_PROJECT:
+        case TREE_LEGACY_PROJECT:
+        case TREE_JSON_PROJECT:
             can_edit = false;
             can_rename = false;
             can_delete = false;
