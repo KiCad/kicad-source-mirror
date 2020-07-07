@@ -3387,7 +3387,7 @@
                                                     <property name="caption"></property>
                                                     <property name="caption_visible">1</property>
                                                     <property name="center_pane">0</property>
-                                                    <property name="choices">&quot;Solid&quot; &quot;Dashed&quot; &quot;Dotted&quot; &quot;Dash-Dot&quot; &quot;...&quot;</property>
+                                                    <property name="choices">&quot;Solid&quot; &quot;Dashed&quot; &quot;Dotted&quot; &quot;Dash-Dot&quot;</property>
                                                     <property name="close_button">1</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>

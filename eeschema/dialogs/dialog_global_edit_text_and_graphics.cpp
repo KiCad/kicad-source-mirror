@@ -106,6 +106,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         m_parent->RecalculateConnections( NO_CLEANUP );
 
+    m_lineStyle->Append( INDETERMINATE_ACTION );
+
     m_sdbSizerButtonsOK->SetDefault();
 
     FinishDialogSettings();
