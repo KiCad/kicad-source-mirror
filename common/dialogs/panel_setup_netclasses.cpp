@@ -233,7 +233,7 @@ void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
 
     wxArrayString netclassNames;
 
-    netclassNames.emplace_back( wxString( NO_NETCLASS_ASSIGNMENT ) );
+    netclassNames.push_back( NO_NETCLASS_ASSIGNMENT );
 
     for( int ii = 0; ii < m_netclassGrid->GetNumberRows(); ii++ )
     {
