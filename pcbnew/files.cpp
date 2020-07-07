@@ -298,17 +298,17 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 return false;
         }
 
+        SaveProjectSettings();
+
+        GetBoard()->ClearProject();
+
         SETTINGS_MANAGER* mgr = GetSettingsManager();
 
         mgr->SaveProject( mgr->Prj().GetProjectFullName() );
         mgr->UnloadProject( &mgr->Prj() );
 
-        GetBoard()->ClearProject();
-
-        wxFileName fn( wxStandardPaths::Get().GetDocumentsDir(), wxT( "noname" ),
-                       ProjectFileExtension );
-
-        mgr->LoadProject( fn.GetFullPath() );
+        // Don't set name until the user hits save, so project files are not created
+        mgr->LoadProject( "" );
 
         LoadProjectSettings();
 
@@ -330,12 +330,16 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
     case ID_COPY_BOARD_AS:
     case ID_SAVE_BOARD_AS:
         {
+            bool addToHistory = false;
             wxString orig_name;
             wxFileName::SplitPath( GetBoard()->GetFileName(),
                     nullptr, nullptr, &orig_name, nullptr );
 
             if( orig_name.IsEmpty() )
+            {
+                addToHistory = true;
                 orig_name = _( "noname" );
+            }
 
             wxString    pro_dir = wxPathOnly( Prj().GetProjectFullName() );
             wxFileName  fn( pro_dir, orig_name, KiCadPcbFileExtension );
@@ -346,7 +350,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 if( id == ID_COPY_BOARD_AS )
                     return SavePcbCopy( filename );
                 else
-                    return SavePcbFile( filename, false, false );
+                    return SavePcbFile( filename, addToHistory, false );
             }
             return false;
         }
@@ -517,6 +521,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         if( pro.GetFullPath() != mgr->Prj().GetProjectFullName() )
         {
+            SaveProjectSettings();
+
             mgr->SaveProject( mgr->Prj().GetProjectFullName() );
             mgr->UnloadProject( &mgr->Prj() );
 
