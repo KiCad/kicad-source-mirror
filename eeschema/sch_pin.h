@@ -107,6 +107,8 @@ public:
 
     bool IsPowerConnection() const { return m_libPin->IsPowerConnection(); }
 
+    bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
+
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}

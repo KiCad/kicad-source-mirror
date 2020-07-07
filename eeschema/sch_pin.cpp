@@ -141,4 +141,8 @@ bool SCH_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-
+bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
+{
+    // Reciprocal checking is done in CONNECTION_GRAPH anyway
+    return !( m_libPin->GetType() == ELECTRICAL_PINTYPE::PT_NC );
+}

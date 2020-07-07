@@ -326,6 +326,9 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     if( settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
         tester.TestTextVars( m_parent->GetCanvas()->GetView()->GetWorksheet() );
 
+    if( settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
+        tester.TestNoConnectPins();
+
     // Display diags:
     m_markerTreeModel->SetProvider( m_markerProvider );
 

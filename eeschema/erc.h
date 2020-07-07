@@ -99,6 +99,13 @@ public:
      */
     int TestMultiunitFootprints();
 
+    /**
+     * In KiCad 5 and earlier, you could connect stuff up to pins with NC electrical type.
+     * In KiCad 6, this no longer results in those pins joining the net, so we need to warn about it
+     * @return the error count
+     */
+    int TestNoConnectPins();
+
 private:
     /**
      * Performs ERC testing and creates an ERC marker to show the ERC problem for aNetItemRef

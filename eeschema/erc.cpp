@@ -525,6 +525,46 @@ void ERC_TESTER::TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemR
     }
 }
 
+
+int ERC_TESTER::TestNoConnectPins()
+{
+    int err_count = 0;
+
+    for( const SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
+    {
+        std::map<wxPoint, std::vector<SCH_PIN*>> pinMap;
+
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        {
+            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
+
+            for( SCH_PIN* pin : comp->GetSchPins( &sheet ) )
+                pinMap[pin->GetPosition()].emplace_back( pin );
+        }
+
+        for( auto& pair : pinMap )
+        {
+            if( pair.second.size() > 1 )
+            {
+                err_count++;
+
+                ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
+
+                ercItem->SetItems( pair.second[0], pair.second[1],
+                                   pair.second.size() > 2 ? pair.second[2] : nullptr,
+                                   pair.second.size() > 3 ? pair.second[3] : nullptr );
+                ercItem->SetErrorMessage( _( "Pins with \"no connection\" type are connected" ) );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, pair.first );
+                sheet.LastScreen()->Append( marker );
+            }
+        }
+    }
+
+    return err_count;
+}
+
+
 // this code try to detect similar labels, i.e. labels which are identical
 // when they are compared using case insensitive coparisons.
 
