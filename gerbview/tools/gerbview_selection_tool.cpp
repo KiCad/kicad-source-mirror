@@ -57,6 +57,8 @@ private:
     {
         bool addSeparator = false;
 
+        Clear();
+
         const auto& selection = getToolManager()->GetTool<GERBVIEW_SELECTION_TOOL>()->GetSelection();
 
         if( selection.Size() == 1 )
