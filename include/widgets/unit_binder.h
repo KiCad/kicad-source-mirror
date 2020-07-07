@@ -29,6 +29,7 @@
 #include <common.h>
 #include <base_units.h>
 #include <base_struct.h>
+#include <origin_transforms.h>
 #include <libeval/numeric_evaluator.h>
 
 
@@ -153,6 +154,25 @@ public:
      */
     void Show( bool aShow, bool aResize = false );
 
+    /**
+     * Get the origin transforms coordinate type
+     *
+     * @returns the origin transforms coordinate type
+     */
+    ORIGIN_TRANSFORMS::COORD_TYPES_T GetCoordType() const
+    {
+        return m_coordType;
+    }
+
+    /**
+     * Function SetOriginTransform
+     * Sets the current origin transform mode
+     */
+    void SetCoordType( ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType )
+    {
+        m_coordType = aCoordType;
+    }
+
 protected:
 
     void onSetFocus( wxFocusEvent& aEvent );
@@ -184,6 +204,12 @@ protected:
     ///> Selection start and end of the original text
     long              m_selStart;
     long              m_selEnd;
+
+    /// A reference to an ORIGIN_TRANSFORMS object
+    ORIGIN_TRANSFORMS&               m_originTransforms;
+
+    /// Type of coordinate for display origin transforms
+    ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
 };
 
 #endif /* __UNIT_BINDER_H_ */

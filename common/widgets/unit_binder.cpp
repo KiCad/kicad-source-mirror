@@ -42,7 +42,9 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
         m_label( aLabel ),
         m_value( aValue ),
         m_unitLabel( aUnitLabel ),
-        m_eval( aParent->GetUserUnits(), aUseMils )
+        m_eval( aParent->GetUserUnits(), aUseMils ),
+        m_originTransforms( aParent->GetOriginTransforms() ),
+        m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
     m_units     = aParent->GetUserUnits();
     m_useMils   = aUseMils;
@@ -223,13 +225,16 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits, bool aUs
 
 void UNIT_BINDER::SetValue( int aValue )
 {
-    SetValue( StringFromValue( m_units, aValue, false, m_useMils, m_dataType ) );
+    double value = aValue;
+    double displayValue = m_originTransforms.ToDisplay( value, m_coordType );
+    SetValue( StringFromValue( m_units, displayValue, false, m_useMils, m_dataType ) );
 }
 
 
 void UNIT_BINDER::SetDoubleValue( double aValue )
 {
-    SetValue( StringFromValue( m_units, aValue, false, m_useMils, m_dataType ) );
+    double displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
+    SetValue( StringFromValue( m_units, displayValue, false, m_useMils, m_dataType ) );
 }
 
 
@@ -252,7 +257,9 @@ void UNIT_BINDER::SetValue( wxString aValue )
 
 void UNIT_BINDER::ChangeValue( int aValue )
 {
-    ChangeValue( StringFromValue( m_units, aValue, false, m_useMils ) );
+    double value = aValue;
+    double displayValue = m_originTransforms.ToDisplay( value, m_coordType );
+    ChangeValue( StringFromValue( m_units, displayValue, false, m_useMils ) );
 }
 
 
@@ -291,7 +298,8 @@ long long int UNIT_BINDER::GetValue()
     else
         return 0;
 
-    return ValueFromString( m_units, value, m_useMils, m_dataType );
+    long long int displayValue = ValueFromString( m_units, value, m_useMils, m_dataType );
+    return m_originTransforms.FromDisplay( displayValue, m_coordType );
 }
 
 
@@ -313,7 +321,8 @@ double UNIT_BINDER::GetDoubleValue()
     else
         return 0.0;
 
-    return DoubleValueFromString( m_units, value, m_useMils, m_dataType );
+    double displayValue = DoubleValueFromString( m_units, value, m_useMils, m_dataType );
+    return m_originTransforms.FromDisplay( displayValue, m_coordType );
 }
 
 

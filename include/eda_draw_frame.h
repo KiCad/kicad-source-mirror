@@ -32,6 +32,7 @@
 #include <gal/gal_display_options.h>
 #include <gal/color4d.h>
 #include <class_draw_panel_gal.h>
+#include <origin_transforms.h>
 #include <wx/fdrepdlg.h>
 #include "hotkeys_basic.h"
 
@@ -71,6 +72,9 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
 
     ///< GAL display options - this is the frame's interface to setting GAL display options
     KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
+
+    /// Default display origin transforms object
+    ORIGIN_TRANSFORMS           m_OriginTransforms;
 
 protected:
     wxSocketServer*             m_socketServer;
@@ -198,6 +202,13 @@ public:
      * @return The nearst grid position.
      */
     wxPoint GetNearestGridPosition( const wxPoint& aPosition ) const;
+
+    /**
+     * Return a reference to the default ORIGIN_TRANSFORMS object
+     */
+    virtual ORIGIN_TRANSFORMS& GetOriginTransforms()
+    { return m_OriginTransforms; }
+
 
     virtual const TITLE_BLOCK& GetTitleBlock() const = 0;
     virtual void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) = 0;
