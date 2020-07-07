@@ -55,7 +55,8 @@ class EDA_ITEM;
 class COLLECTOR
 {
 protected:
-    std::vector<EDA_ITEM*> m_List;
+    std::vector<EDA_ITEM*> m_List;       // Primary list of most likely items
+    std::vector<EDA_ITEM*> m_BackupList; // Secondary list with items removed by heuristics
 
     const KICAD_T* m_ScanTypes;
     INSPECTOR_FUNC m_inspector;
@@ -143,6 +144,51 @@ public:
             if( m_List[i] == aItem )
             {
                 m_List.erase( m_List.begin() + i);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Test if the collector has heuristic backup items
+     * @return true if Combine() can run to bring secondary items into the list
+     */
+    bool HasAdditionalItems()
+    {
+        return !m_BackupList.empty();
+    }
+
+    /**
+     * Re-combines the backup list into the main list of the collector
+     */
+    void Combine()
+    {
+        std::copy( m_BackupList.begin(), m_BackupList.end(), std::back_inserter( m_List ) );
+        m_BackupList.clear();
+    }
+
+    /**
+     * Moves the item at \a aIndex (first position is 0) to the backup list
+     * @param aIndex The index into the list.
+     */
+    void Transfer( int aIndex )
+    {
+        m_BackupList.push_back( m_List[aIndex] );
+        m_List.erase( m_List.begin() + aIndex );
+    }
+
+    /**
+     * Moves the item aItem (if exists in the collector) to the backup list
+     * @param aItem the item to be moved.
+     */
+    void Transfer( EDA_ITEM* aItem )
+    {
+        for( size_t i = 0; i < m_List.size(); i++ )
+        {
+            if( m_List[i] == aItem )
+            {
+                m_List.erase( m_List.begin() + i );
+                m_BackupList.push_back( aItem );
                 return;
             }
         }

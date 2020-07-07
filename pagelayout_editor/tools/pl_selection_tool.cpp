@@ -280,7 +280,7 @@ void PL_SELECTION_TOOL::guessSelectionCandidates( COLLECTOR& collector, const VE
         EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
 
         if( item->HitTest( (wxPoint) aPos, 0 ) && !other->HitTest( (wxPoint) aPos, 0 ) )
-            collector.Remove( other );
+            collector.Transfer( other );
     }
 }
 
@@ -585,7 +585,9 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
                 current = ( *aCollector )[*id - 1];
             else
                 current = NULL;
-
+        }
+        else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
+        {
             break;
         }
 

@@ -525,7 +525,7 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFil
     // If still more than one item we're going to have to ask the user.
     if( collector.GetCount() > 1 )
     {
-        collector.m_MenuTitle =  _( "Clarify Selection" );
+        collector.m_MenuTitle = wxEmptyString;
         // Must call selectionMenu via RunAction() to avoid event-loop contention
         m_toolMgr->RunAction( EE_ACTIONS::selectionMenu, true, &collector );
 
@@ -603,7 +603,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             EDA_ITEM* item = collector[ i ];
 
             if( !item->HitTest( (wxPoint) aPos, 0 ) )
-                collector.Remove( item );
+                collector.Transfer( item );
         }
     }
 
@@ -614,7 +614,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
 
         if( item->Type() != SCH_SHEET_T && other->Type() == SCH_SHEET_T )
-            collector.Remove( other );
+            collector.Transfer( other );
     }
 
     // Prefer a symbol to a pin or the opposite, when both a symbol and a pin are selected
@@ -631,9 +631,9 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         if( item->Type() == SCH_COMPONENT_T && other->Type() == SCH_PIN_T )
         {
             if( !m_isLibEdit && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
-                collector.Remove( other );
+                collector.Transfer( other );
             else
-                collector.Remove( item );
+                collector.Transfer( item );
         }
     }
 
@@ -644,7 +644,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
 
         if( item->Type() == SCH_FIELD_T && other->Type() == SCH_COMPONENT_T )
-            collector.Remove( other );
+            collector.Transfer( other );
     }
 
     // No need for multiple wires at a single point; if there's a junction select that;
@@ -665,9 +665,9 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         for( int j = collector.GetCount() - 1; j >= 0; --j )
         {
             if( junction && collector[ j ]->Type() != SCH_JUNCTION_T )
-                collector.Remove( j );
+                collector.Transfer( j );
             else if( !junction && j > 0 )
-                collector.Remove( j );
+                collector.Transfer( j );
         }
     }
 }
@@ -1102,106 +1102,127 @@ int EE_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 {
     EDA_ITEM*   current = nullptr;
-    ACTION_MENU menu( true );
     bool        selectAll = false;
+    bool        expandSelection = false;
 
-    int limit = std::min( MAX_SELECT_ITEM_IDS, aCollector->GetCount() );
-
-    for( int i = 0; i < limit; ++i )
+    do
     {
-        wxString text;
-        EDA_ITEM* item = ( *aCollector )[i];
-        text = item->GetSelectMenuText( m_frame->GetUserUnits() );
+        /// The user has requested the full, non-limited list of selection items
+        if( expandSelection )
+            aCollector->Combine();
 
-        wxString menuText = wxString::Format( "&%d. %s\t%d", i + 1, text, i + 1 );
-        menu.Add( menuText, i + 1, item->GetMenuImage() );
-    }
+        expandSelection = false;
 
-    menu.AppendSeparator();
-    menu.Add( _( "Select &All\tA" ), limit + 1, net_highlight_schematic_xpm );
+        int         limit = std::min( 9, aCollector->GetCount() );
+        ACTION_MENU menu( true );
 
-    if( aCollector->m_MenuTitle.Length() )
-        menu.SetTitle( aCollector->m_MenuTitle );
-
-    menu.SetIcon( info_xpm );
-    menu.DisplayTitle( true );
-    SetContextMenu( &menu, CMENU_NOW );
-
-    while( TOOL_EVENT* evt = Wait() )
-    {
-        if( evt->Action() == TA_CHOICE_MENU_UPDATE )
+        for( int i = 0; i < limit; ++i )
         {
-            if( selectAll )
-            {
-                for( int i = 0; i < aCollector->GetCount(); ++i )
-                    unhighlight( ( *aCollector )[i], BRIGHTENED );
-            }
-            else if( current )
-            {
-                unhighlight( current, BRIGHTENED );
-            }
+            wxString  text;
+            EDA_ITEM* item = ( *aCollector )[i];
+            text           = item->GetSelectMenuText( m_frame->GetUserUnits() );
 
-            int id = *evt->GetCommandId();
-
-            // User has pointed an item, so show it in a different way
-            if( id > 0 && id <= limit )
-            {
-                current = ( *aCollector )[id - 1];
-                highlight( current, BRIGHTENED );
-            }
-            else
-            {
-                current = nullptr;
-            }
-
-            // User has pointed on the "Select All" option
-            if( id == limit + 1 )
-            {
-                for( int i = 0; i < aCollector->GetCount(); ++i )
-                    highlight( ( *aCollector )[i], BRIGHTENED );
-                selectAll = true;
-            }
-            else
-            {
-                selectAll = false;
-            }
-        }
-        else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
-        {
-            if( selectAll )
-            {
-                for( int i = 0; i < aCollector->GetCount(); ++i )
-                    unhighlight( ( *aCollector )[i], BRIGHTENED );
-            }
-            else if( current )
-                unhighlight( current, BRIGHTENED );
-
-            OPT<int> id = evt->GetCommandId();
-
-            // User has selected the "Select All" option
-            if( id == limit + 1 )
-            {
-                selectAll = true;
-                current   = nullptr;
-            }
-            // User has selected an item, so this one will be returned
-            else if( id && ( *id > 0 ) && ( *id <= limit ) )
-            {
-                selectAll = false;
-                current = ( *aCollector )[*id - 1];
-            }
-            else
-            {
-                selectAll = false;
-                current = nullptr;
-            }
-
-            break;
+            wxString menuText = wxString::Format( "&%d. %s\t%d", i + 1, text, i + 1 );
+            menu.Add( menuText, i + 1, item->GetMenuImage() );
         }
 
-        getView()->UpdateItems();
-        m_frame->GetCanvas()->Refresh();
-    }
+        menu.AppendSeparator();
+        menu.Add( _( "Select &All\tA" ), limit + 1, net_highlight_schematic_xpm );
+
+        if( !expandSelection && aCollector->HasAdditionalItems() )
+            menu.Add( _( "&Expand Selection\tE" ), limit + 2, nullptr );
+
+        if( aCollector->m_MenuTitle.Length() )
+        {
+            menu.SetTitle( aCollector->m_MenuTitle );
+            menu.SetIcon( info_xpm );
+            menu.DisplayTitle( true );
+        }
+        else
+        {
+            menu.DisplayTitle( false );
+        }
+
+        SetContextMenu( &menu, CMENU_NOW );
+
+        while( TOOL_EVENT* evt = Wait() )
+        {
+            if( evt->Action() == TA_CHOICE_MENU_UPDATE )
+            {
+                if( selectAll )
+                {
+                    for( int i = 0; i < aCollector->GetCount(); ++i )
+                        unhighlight( ( *aCollector )[i], BRIGHTENED );
+                }
+                else if( current )
+                {
+                    unhighlight( current, BRIGHTENED );
+                }
+
+                int id = *evt->GetCommandId();
+
+                // User has pointed an item, so show it in a different way
+                if( id > 0 && id <= limit )
+                {
+                    current = ( *aCollector )[id - 1];
+                    highlight( current, BRIGHTENED );
+                }
+                else
+                {
+                    current = nullptr;
+                }
+
+                // User has pointed on the "Select All" option
+                if( id == limit + 1 )
+                {
+                    for( int i = 0; i < aCollector->GetCount(); ++i )
+                        highlight( ( *aCollector )[i], BRIGHTENED );
+                    selectAll = true;
+                }
+                else
+                {
+                    selectAll = false;
+                }
+            }
+            else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
+            {
+                if( selectAll )
+                {
+                    for( int i = 0; i < aCollector->GetCount(); ++i )
+                        unhighlight( ( *aCollector )[i], BRIGHTENED );
+                }
+                else if( current )
+                    unhighlight( current, BRIGHTENED );
+
+                OPT<int> id = evt->GetCommandId();
+
+                // User has selected the "Select All" option
+                if( id == limit + 1 )
+                {
+                    selectAll = true;
+                    current   = nullptr;
+                }
+                // User has selected an item, so this one will be returned
+                else if( id && ( *id > 0 ) && ( *id <= limit ) )
+                {
+                    selectAll = false;
+                    current   = ( *aCollector )[*id - 1];
+                }
+                else
+                {
+                    selectAll = false;
+                    current   = nullptr;
+                }
+            }
+            else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
+            {
+                break;
+            }
+
+            getView()->UpdateItems();
+            m_frame->GetCanvas()->Refresh();
+        }
+    } while( expandSelection );
 
     if( selectAll )
         return true;

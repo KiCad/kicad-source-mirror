@@ -210,6 +210,9 @@ protected:
     ///> Checks if any of submenus contains a TOOL_ACTION with a specific ID.
     OPT_TOOL_EVENT findToolAction( int aId );
 
+    bool    m_isForcedPosition;
+    wxPoint m_forcedPosition;
+
     bool m_dirty;               // Menu requires update before display
 
     bool m_titleDisplayed;
