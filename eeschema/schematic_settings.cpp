@@ -55,6 +55,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             appSettings ? appSettings->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
     int defaultPinSymbolSize =
             appSettings ? appSettings->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;
+    int defaultJunctionSize =
+            appSettings ? appSettings->m_Drawing.default_junction_size : DEFAULT_JUNCTION_DIAM / 2;
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_line_thickness",
             &m_DefaultLineWidth, Mils2iu( defaultLineThickness ),
@@ -80,7 +82,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             1 / IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_junction_size", &m_JunctionSize,
-            Mils2iu( DEFAULT_BUS_THICKNESS ), Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
+            Mils2iu( defaultJunctionSize ), Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "drawing.field_names",
             [&]() -> nlohmann::json
