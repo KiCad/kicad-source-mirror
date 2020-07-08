@@ -103,6 +103,30 @@ SCH_SHEET_PATH::SCH_SHEET_PATH()
 }
 
 
+SCH_SHEET_PATH::SCH_SHEET_PATH( const SCH_SHEET_PATH& aOther )
+{
+    initFromOther( aOther );
+}
+
+
+SCH_SHEET_PATH& SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& aOther )
+{
+    initFromOther( aOther );
+    return *this;
+}
+
+
+void SCH_SHEET_PATH::initFromOther( const SCH_SHEET_PATH& aOther )
+{
+    m_sheets       = aOther.m_sheets;
+    m_pageNumber   = aOther.m_pageNumber;
+    m_current_hash = aOther.m_current_hash;
+
+    // Note: don't copy m_recursion_test_cache as it is slow and we want SCH_SHEET_PATHS to be
+    // very fast to construct for use in the connectivity algorithm.
+}
+
+
 void SCH_SHEET_PATH::Rehash()
 {
     m_current_hash = 0;

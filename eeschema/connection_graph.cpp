@@ -424,7 +424,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
 }
 
 
-void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
+void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                                                const std::vector<SCH_ITEM*>& aItemList )
 {
     std::unordered_map< wxPoint, std::vector<SCH_ITEM*> > connection_map;
@@ -1807,8 +1807,8 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 }
 
 
-std::shared_ptr<SCH_CONNECTION> CONNECTION_GRAPH::getDefaultConnection( SCH_ITEM* aItem,
-                                                                        SCH_SHEET_PATH aSheet )
+std::shared_ptr<SCH_CONNECTION>
+CONNECTION_GRAPH::getDefaultConnection( SCH_ITEM* aItem, const SCH_SHEET_PATH& aSheet )
 {
     auto c = std::shared_ptr<SCH_CONNECTION>( nullptr );
 

@@ -366,7 +366,7 @@ private:
      * @param aSheet is the path to the sheet of all items in the list
      * @param aItemList is a list of items to consider
      */
-    void updateItemConnectivity( SCH_SHEET_PATH aSheet,
+    void updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                                  const std::vector<SCH_ITEM*>& aItemList );
 
     /**
@@ -425,7 +425,8 @@ private:
      * @param aItem is an item that can generate a connection name
      * @return a connection generated from the item, or nullptr if item is not valid
      */
-    std::shared_ptr<SCH_CONNECTION> getDefaultConnection( SCH_ITEM* aItem, SCH_SHEET_PATH aSheet );
+    std::shared_ptr<SCH_CONNECTION> getDefaultConnection( SCH_ITEM* aItem,
+                                                          const SCH_SHEET_PATH& aSheet );
 
     void recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph, const wxString& aOldName );
 

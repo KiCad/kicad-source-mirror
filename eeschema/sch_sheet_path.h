@@ -132,6 +132,10 @@ protected:
 public:
     SCH_SHEET_PATH();
 
+    SCH_SHEET_PATH( const SCH_SHEET_PATH& aOther );
+
+    SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& aOther );
+
     /// Forwarded method from std::vector
     SCH_SHEET* at( size_t aIndex ) const { return m_sheets.at( aIndex ); }
 
@@ -304,6 +308,9 @@ public:
 
     bool operator<( const SCH_SHEET_PATH& d1 ) const { return m_sheets < d1.m_sheets; }
 
+private:
+
+    void initFromOther( const SCH_SHEET_PATH& aOther );
 };
 
 
