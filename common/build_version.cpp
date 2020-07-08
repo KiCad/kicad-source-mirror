@@ -95,8 +95,8 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
             << " build";
 
     wxPlatformInfo platform;
-    aMsg << "Application: " << aTitle << eol;
-    aMsg << "Version: " << version << eol;
+    aMsg << "Application: " << aTitle << eol << eol;
+    aMsg << "Version: " << version << eol << eol;
     aMsg << "Libraries:" << eol;
 
     aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
@@ -104,16 +104,20 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     if( !aBrief )
         aMsg << indent4 << GetKicadCurlVersion() << eol;
 
+    aMsg << eol;
+
     aMsg << "Platform: " << wxGetOsDescription() << ", "
          << platform.GetArchName() << ", "
          << platform.GetEndiannessName() << ", "
          << platform.GetPortIdName() << eol;
 
+    aMsg << eol;
+
     if( !aBrief )
         aMsg << "Build Info:" << eol;
 
     if( !aBrief )
-        aMsg << indent4 << "Build date: " << GetBuildDate() << eol;
+        aMsg << indent4 << "Date: " << GetBuildDate() << eol;
 
     aMsg << indent4 << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
     aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")";
@@ -143,6 +147,11 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     aMsg << indent4 << "Curl: " << GetCurlLibVersion() << eol;
 
+#ifdef KICAD_SPICE
+#include <ngspice/config.h>
+    aMsg << indent4 << "ngspice: " << PACKAGE_VERSION << eol;
+#endif
+
     aMsg << indent4 << "Compiler: ";
 #if defined(__clang__)
     aMsg << "Clang " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__;
@@ -159,7 +168,7 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 #if defined(__GXX_ABI_VERSION)
     aMsg << " with C++ ABI " << __GXX_ABI_VERSION << eol;
 #else
-    aMsg << " without C++ ABI";
+    aMsg << " without C++ ABI" << eol;
 #endif
 
     aMsg << eol;
