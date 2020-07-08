@@ -74,8 +74,12 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 	gal->SetIsStroke( true );
     gal->SetIsFill( false );
     gal->SetLineWidth( 1.0 );
-    auto rs = static_cast<PCB_RENDER_SETTINGS*>(aView->GetPainter()->GetSettings());
-    auto color = rs->GetColor( NULL, LAYER_RATSNEST );
+    auto rs = static_cast<PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+
+    COLOR4D defaultColor = rs->GetColor( nullptr, LAYER_RATSNEST );
+    COLOR4D color        = defaultColor;
+
+    bool colorByNet = rs->GetNetColorMode() != PCB_RENDER_SETTINGS::NET_COLOR_MODE::OFF;
 
     std::set<int> highlightedNets = rs->GetHighlightNetCodes();
 
@@ -116,6 +120,11 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         if( !net )
             continue;
+
+        if( colorByNet )
+        {
+            // TODO(JE) - RN_NET to net name / netclass name link
+        }
 
         // Draw the "static" ratsnest
         if( highlightedNets.count( i ) )

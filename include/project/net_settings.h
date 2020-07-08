@@ -42,6 +42,14 @@ public:
     // (buses) and atomic net names (including individual bus members).
     std::map<wxString, wxString> m_NetClassAssignments;
 
+    /**
+     * A map of fully-qualified net names to colors used in the board context.
+     * Since these color overrides are for the board, buses are not included here.
+     * Only nets that the user has assigned custom colors to will be in this list.
+     * Nets that no longer exist will be deleted during a netlist read in PcbNew.
+     */
+    std::map<wxString, KIGFX::COLOR4D> m_PcbNetColors;
+
 public:
     /**
      * Parses a bus vector (e.g. A[7..0]) into name, begin, and end.

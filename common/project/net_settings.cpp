@@ -64,6 +64,9 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         { "diff_pair_via_gap",  Iu2Millimeter( netclass->GetDiffPairViaGap() ) }
                         };
 
+                    if( netclass->GetPcbColor() != KIGFX::COLOR4D::UNSPECIFIED )
+                        netJson["pcb_color"] = netclass->GetPcbColor();
+
                     if( idx > 0 )
                     {
                         nlohmann::json membersJson = nlohmann::json::array();
@@ -135,6 +138,9 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                             netclass->Add( net.value().get<wxString>() );
                     }
 
+                    if( entry.contains( "pcb_color" ) && entry["pcb_color"].is_string() )
+                        netclass->SetPcbColor( entry["pcb_color"].get<KIGFX::COLOR4D>() );
+
                     if( netclass != defaultClass )
                         m_NetClasses.Add( netclass );
 
@@ -143,6 +149,34 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 }
 
                 ResolveNetClassAssignments();
+            },
+            {} ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "net_colors",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = {};
+
+                for( const auto& pair : m_PcbNetColors )
+                {
+                    std::string key( pair.first.ToUTF8() );
+                    ret[key] = pair.second;
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_object() )
+                    return;
+
+                m_PcbNetColors.clear();
+
+                for( const auto& pair : aJson.items() )
+                {
+                    wxString key( pair.key().c_str(), wxConvUTF8 );
+                    m_PcbNetColors[key] = pair.value().get<KIGFX::COLOR4D>();
+                }
             },
             {} ) );
 }

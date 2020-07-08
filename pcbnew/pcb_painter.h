@@ -48,6 +48,7 @@ class TEXTE_MODULE;
 class DIMENSION;
 class PCB_TARGET;
 class MARKER_PCB;
+class NET_SETTINGS;
 
 namespace KIGFX
 {
@@ -86,6 +87,13 @@ public:
         DZ_SHOW_OUTLINED
     };
 
+    enum class NET_COLOR_MODE
+    {
+        OFF,        ///< Net (and netclass) colors are not shown
+        RATSNEST,   ///< Net/netclass colors are shown on ratsnest lines only
+        ALL         ///< Net/netclass colors are shown on all net copper
+    };
+
     PCB_RENDER_SETTINGS();
 
     /**
@@ -95,6 +103,12 @@ public:
      * @param aOptions are settings that you want to use for displaying items.
      */
     void LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aShowPageLimits );
+
+    /**
+     * Loads net-specific render settings
+     * @param aSettings is the NET_SETTINGS for the current proejct
+     */
+    void LoadNetSettings( const NET_SETTINGS& aSettings );
 
     virtual void LoadColors( const COLOR_SETTINGS* aSettings ) override;
 
@@ -166,6 +180,13 @@ public:
     bool GetDrawIndividualViaLayers() const { return m_drawIndividualViaLayers; }
     void SetDrawIndividualViaLayers( bool aFlag ) { m_drawIndividualViaLayers = aFlag; }
 
+    NET_COLOR_MODE GetNetColorMode() const { return m_netColorMode; }
+    void SetNetColorMode( NET_COLOR_MODE aMode ) { m_netColorMode = aMode; }
+
+    std::map<wxString, KIGFX::COLOR4D>& GetNetclassColorMap() { return m_netclassColors; }
+
+    std::map<wxString, KIGFX::COLOR4D>& GetNetColorMap() { return m_netColors; }
+
 protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
     bool    m_sketchMode[GAL_LAYER_ID_END];
@@ -210,6 +231,15 @@ protected:
 
     ///> Color used for highlighting selection candidates
     COLOR4D m_selectionCandidateColor;
+
+    ///> How to display nets and netclasses with color overrides
+    NET_COLOR_MODE m_netColorMode;
+
+    ///> Overrides for specific netclass colors
+    std::map<wxString, KIGFX::COLOR4D> m_netclassColors;
+
+    ///> Overrides for specific net colors
+    std::map<wxString, KIGFX::COLOR4D> m_netColors;
 };
 
 

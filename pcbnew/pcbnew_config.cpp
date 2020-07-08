@@ -44,11 +44,13 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <pcbplot.h>
+#include <pcb_painter.h>
 #include <footprint_viewer_frame.h>
 #include <invoke_pcb_dialog.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/panel_selection_filter.h>
+#include <project/net_settings.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 
@@ -94,6 +96,11 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
                                                          Prj().GetProjectPath() );
 
     pglayout.SetPageLayout( filename );
+
+    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
+            GetCanvas()->GetView()->GetPainter()->GetSettings() );
+
+    rs->LoadNetSettings( project.NetSettings() );
 
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 

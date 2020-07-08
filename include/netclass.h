@@ -36,6 +36,7 @@
 #include <set>
 #include <memory>
 #include <richio.h>
+#include <gal/color4d.h>
 
 
 class LINE_READER;
@@ -74,6 +75,8 @@ protected:
     int         m_diffPairWidth;
     int         m_diffPairGap;
     int         m_diffPairViaGap;
+
+    KIGFX::COLOR4D m_PcbColor;          ///< Optional color override for this netclass (PCB context)
 
 public:
 
@@ -192,6 +195,9 @@ public:
 
     int     GetDiffPairViaGap() const       { return m_diffPairViaGap; }
     void    SetDiffPairViaGap( int aSize )  { m_diffPairViaGap = aSize; }
+
+    KIGFX::COLOR4D GetPcbColor() const { return m_PcbColor; }
+    void SetPcbColor( const KIGFX::COLOR4D& aColor ) { m_PcbColor = aColor; }
 
     /**
      * Function SetParams

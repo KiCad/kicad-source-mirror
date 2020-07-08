@@ -37,6 +37,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <pcb_painter.h>
 #include <pcb_display_options.h>
+#include <project/net_settings.h>
 #include <settings/color_settings.h>
 
 #include <convert_basic_shapes_to_polygon.h>
@@ -61,6 +62,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_sketchGraphics = false;
     m_sketchText = false;
     m_selectionCandidateColor = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
+    m_netColorMode = NET_COLOR_MODE::RATSNEST;
 
     // By default everything should be displayed as filled
     for( unsigned int i = 0; i < arrayDim( m_sketchMode ); ++i )
@@ -216,10 +218,25 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
 }
 
 
+void PCB_RENDER_SETTINGS::LoadNetSettings( const NET_SETTINGS& aSettings )
+{
+    m_netColors = aSettings.m_PcbNetColors;
+
+    m_netclassColors.clear();
+
+    for( const auto& pair : aSettings.m_NetClasses )
+    {
+        if( pair.second->GetPcbColor() != COLOR4D::UNSPECIFIED )
+            m_netclassColors[pair.first] = pair.second->GetPcbColor();
+    }
+}
+
+
 const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
     int netCode = -1;
     const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
+    const BOARD_CONNECTED_ITEM* conItem = dynamic_cast<const BOARD_CONNECTED_ITEM*> ( aItem );
 
     if( item )
     {
@@ -234,13 +251,7 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
             aLayer = LAYER_MOD_TEXT_INVISIBLE;
 
         if( item->IsSelected() )
-        {
             return m_layerColorsSel[aLayer];
-        }
-
-        // Try to obtain the netcode for the item
-        if( const BOARD_CONNECTED_ITEM* conItem = dyn_cast<const BOARD_CONNECTED_ITEM*> ( item ) )
-            netCode = conItem->GetNetCode();
 
         if( item->Type() == PCB_MARKER_T )
             return m_layerColors[aLayer];
@@ -269,6 +280,10 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
         }
     }
 
+    // Try to obtain the netcode for the item
+    if( conItem )
+        netCode = conItem->GetNetCode();
+
     // Single net highlight mode
     if( m_highlightEnabled && m_highlightNetcodes.count( netCode ) )
         return m_layerColorsHi[aLayer];
@@ -281,6 +296,15 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
     // and we are drawing a not highlighted track
     if( m_highlightEnabled )
         return m_layerColorsDark[aLayer];
+
+    // Apply net color overrides
+    if( conItem && m_netColorMode == NET_COLOR_MODE::ALL )
+    {
+        if( m_netColors.count( conItem->GetNetname() ) )
+            return m_netColors.at( conItem->GetNetname() );
+        else if( m_netclassColors.count( conItem->GetNetClassName() ) )
+            return m_netclassColors.at( conItem->GetNetClassName() );
+    }
 
     // No special modificators enabled
     return m_layerColors[aLayer];
