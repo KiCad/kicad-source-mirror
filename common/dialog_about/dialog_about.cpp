@@ -193,9 +193,9 @@ void DIALOG_ABOUT::createNotebookPage( wxAuiNotebook* aParent, const wxString& a
 }
 
 
-void DIALOG_ABOUT::createNotebookPageByCategory(wxAuiNotebook* aParent, const wxString& aCaption,
-                                                const wxBitmap& aIcon,
-                                                const CONTRIBUTORS& aContributors)
+void DIALOG_ABOUT::createNotebookPageByCategory( wxAuiNotebook* aParent, const wxString& aCaption,
+                                                 const wxBitmap& aIcon,
+                                                 const CONTRIBUTORS& aContributors)
 {
     wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -249,7 +249,7 @@ void DIALOG_ABOUT::createNotebookPageByCategory(wxAuiNotebook* aParent, const wx
                 if ( sub_contributor->GetCategory() == category )
                 {
                     // First column is empty
-                    fgSizer1->AddSpacer(5);
+                    fgSizer1->AddSpacer( 5 );
 
                     wxControl* ctrl;
 
@@ -257,7 +257,7 @@ void DIALOG_ABOUT::createNotebookPageByCategory(wxAuiNotebook* aParent, const wx
                     if( sub_contributor->GetUrl().IsEmpty() )
                     {
                         ctrl = new wxStaticText( m_scrolledWindow1, wxID_ANY,
-                                                 wxT( "  • " ) + sub_contributor->GetName(),
+                                                 wxT( "      • " ) + sub_contributor->GetName(),
                                                  wxDefaultPosition,
                                                  wxDefaultSize, 0 );
                     }
@@ -268,7 +268,7 @@ void DIALOG_ABOUT::createNotebookPageByCategory(wxAuiNotebook* aParent, const wx
                                                     wxT( "• " ) + sub_contributor->GetName(),
                                                     sub_contributor->GetUrl(),
                                                     wxDefaultPosition,
-                                                    wxDefaultSize, wxHL_ALIGN_LEFT );
+                                                    wxDefaultSize );
                     }
 
                     m_staticText1->Wrap( -1 );
@@ -398,7 +398,7 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxAuiNotebook* aParent, const wxStrin
 }
 
 
-wxStaticText* DIALOG_ABOUT::wxStaticTextMail(wxScrolledWindow* aParent, const wxString& aEmail)
+wxStaticText* DIALOG_ABOUT::wxStaticTextMail( wxScrolledWindow* aParent, const wxString& aEmail )
 {
     wxStaticText* text = new wxStaticText( aParent, wxID_ANY,
                                            wxT( "<" ) + aEmail + wxT( ">" ) );
@@ -407,7 +407,7 @@ wxStaticText* DIALOG_ABOUT::wxStaticTextMail(wxScrolledWindow* aParent, const wx
 }
 
 
-wxStaticBitmap* DIALOG_ABOUT::createStaticBitmap(wxScrolledWindow* aParent, wxBitmap* aIcon)
+wxStaticBitmap* DIALOG_ABOUT::createStaticBitmap( wxScrolledWindow* aParent, wxBitmap* aIcon )
 {
     wxStaticBitmap* bitmap = new wxStaticBitmap( aParent, wxID_ANY, wxNullBitmap,
                                                  wxDefaultPosition, wxDefaultSize, 0 );
