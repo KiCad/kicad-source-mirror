@@ -27,10 +27,12 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
+#include <widgets/infobar.h>
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <base_struct.h>
+#include <reporter.h>
 #include <sch_item.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
@@ -268,7 +270,7 @@ bool SCH_EDIT_TOOL::Init()
     auto wireSelectionCondition =   E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_WIRE_T );
     auto busSelectionCondition =    E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_BUS_T );
     auto singleSheetCondition =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
-
+    auto symbolsOnlyCondition =     E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_COMPONENT_T );
     //
     // Add edit actions to the move tool menu
     //
@@ -347,6 +349,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::refreshSymbolFromLibrary, symbolsOnlyCondition, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu3->SetTool( m_selectionTool );
@@ -1256,6 +1259,80 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::RefreshSymbolFromLibrary( const TOOL_EVENT& aEvent )
+{
+    wxString msg;
+    bool appendToUndo = false;
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+
+    if( selection.Empty() )
+        return 0;
+
+    WX_INFOBAR* infoBar = m_frame->GetInfoBar();
+
+    wxCHECK( infoBar, 0 );
+
+    INFOBAR_REPORTER reporter( infoBar );
+
+    SCH_SCREEN* currentScreen = m_frame->GetScreen();
+
+    wxCHECK( currentScreen, 0 );
+
+    for( auto item : selection )
+    {
+        SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
+
+        wxCHECK( symbol, 0 );
+
+        // This needs to be done before the LIB_ID is changed to prevent stale library symbols in
+        // the schematic file.
+        currentScreen->Remove( symbol );
+
+        if( !symbol->IsNew() )
+        {
+            m_frame->SaveCopyInUndoList( symbol, UR_CHANGED, appendToUndo );
+            appendToUndo = true;
+        }
+
+        LIB_ID id = symbol->GetLibId();
+
+        if( !id.IsValid() )
+        {
+            msg.Printf( _( "'%s' is not a valid library indentifier." ),
+                    id.GetUniStringLibId() );
+            reporter.Report( msg, RPT_SEVERITY_WARNING );
+            continue;
+        }
+
+        LIB_PART* libSymbol = m_frame->Prj().SchSymbolLibTable()->LoadSymbol( id );
+
+        if( !libSymbol )
+        {
+            msg.Printf( _( "Symbol '%s' not found in symbol library '%s'." ),
+                    id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
+            reporter.Report( msg, RPT_SEVERITY_WARNING );
+            continue;
+        }
+
+        symbol->SetLibSymbol( libSymbol->Flatten().release() );
+        currentScreen->Append( symbol );
+        m_selectionTool->SelectHighlightItem( symbol );
+        updateView( symbol );
+    }
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+    if( reporter.HasMessage() )
+        reporter.Finalize();
+
+    m_frame->GetCanvas()->Refresh();
+    m_frame->OnModify();
+
+    return 0;
+}
+
+
 int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::EditableItems );
@@ -1643,7 +1720,8 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::toggleDeMorgan.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganStandard.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
-
+    Go( &SCH_EDIT_TOOL::RefreshSymbolFromLibrary,
+            EE_ACTIONS::refreshSymbolFromLibrary.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toHLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toGLabel.MakeEvent() );

@@ -548,6 +548,12 @@ TOOL_ACTION EE_ACTIONS::remapSymbols( "eeschema.EditorControl.remapSymbols",
         _( "Remap legacy library symbols to symbol library table" ),
         rescue_xpm );
 
+TOOL_ACTION EE_ACTIONS::refreshSymbolFromLibrary( "eeschema.EditorControl.refreshSymbolFromLibrary",
+        AS_GLOBAL, 0, "",
+        _( "Update from Symbol Library" ),
+        _( "Update from the symbol library using the library identifier" ),
+        refresh_xpm );
+
 TOOL_ACTION EE_ACTIONS::showBusManager( "eeschema.EditorControl.showBusManager",
         AS_GLOBAL, 0, "",
         _( "Bus Definitions..." ), _( "Manage bus definitions" ),

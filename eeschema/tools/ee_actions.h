@@ -151,6 +151,7 @@ public:
 
     static TOOL_ACTION rescueSymbols;
     static TOOL_ACTION remapSymbols;
+    static TOOL_ACTION refreshSymbolFromLibrary;
 
     // Suite operations
     static TOOL_ACTION editWithLibEdit;

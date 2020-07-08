@@ -120,6 +120,8 @@ public:
     void BrightenItem( EDA_ITEM* aItem );
     void UnbrightenItem( EDA_ITEM* aItem );
 
+    void SelectHighlightItem( EDA_ITEM* aItem ) { highlight( aItem, SELECTED ); }
+
     ///> Find (but don't select) node under cursor
     EDA_ITEM* GetNode( VECTOR2I aPosition );
 
