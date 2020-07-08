@@ -44,7 +44,7 @@ FILE_HISTORY::FILE_HISTORY( size_t aMaxFiles, int aBaseFileId, int aClearId, wxS
 
 void FILE_HISTORY::Load( const APP_SETTINGS_BASE& aSettings )
 {
-    m_fileHistory.clear();
+    ClearFileHistory();
 
     // file_history stores the most recent file first
     for( auto it = aSettings.m_System.file_history.rbegin();
@@ -55,7 +55,7 @@ void FILE_HISTORY::Load( const APP_SETTINGS_BASE& aSettings )
 
 void FILE_HISTORY::Load( const std::vector<wxString>& aList )
 {
-    m_fileHistory.clear();
+    ClearFileHistory();
 
     for( const auto& file : aList )
         AddFileToHistory( file );
