@@ -895,8 +895,8 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
                 // If saving under existing name fails then do a Save As..., and if that
                 // fails then cancel close action.
                 if( !m_libMgr->IsLibraryReadOnly( libNickname )
-                  && !saveLibrary( libNickname, false ) )
-                    return false;
+                  && saveLibrary( libNickname, false ) )
+                    continue;
 
                 if( !saveLibrary( libNickname, true ) )
                     return false;
