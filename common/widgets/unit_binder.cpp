@@ -188,12 +188,13 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits, bool aUs
     }
 
     // TODO: Validate() does not currently support m_dataType being anything other than DISTANCE
-
+    // Note: aMin and aMax are not always given in internal units
     if( GetValue() < From_User_Unit( aUnits, aMin, aUseMils ) )
     {
+        double val_min_iu = From_User_Unit( aUnits, aMin, aUseMils );
         m_errorMessage = wxString::Format( _( "%s must be at least %s." ),
                                            valueDescriptionFromLabel( m_label ),
-                                           StringFromValue( m_units, aMin, true ) );
+                                           StringFromValue( m_units, val_min_iu, true, m_useMils ) );
 
         textEntry->SelectAll();
         // Don't focus directly; we might be inside a KillFocus event handler
@@ -204,9 +205,10 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits, bool aUs
 
     if( GetValue() > From_User_Unit( aUnits, aMax, aUseMils ) )
     {
+        double val_max_iu = From_User_Unit( aUnits, aMax, aUseMils );
         m_errorMessage = wxString::Format( _( "%s must be less than %s." ),
                                            valueDescriptionFromLabel( m_label ),
-                                           StringFromValue( m_units, aMax, true ) );
+                                           StringFromValue( m_units, val_max_iu, true, m_useMils ) );
 
         textEntry->SelectAll();
         // Don't focus directly; we might be inside a KillFocus event handler
