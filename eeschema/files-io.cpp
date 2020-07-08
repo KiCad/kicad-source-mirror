@@ -590,9 +590,17 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
     if( setProject )
     {
+        GetSettingsManager()->SaveProject();
+        Schematic().SetProject( nullptr );
+        GetSettingsManager()->UnloadProject( &Prj() );
+
+        Schematic().Reset();
+
         wxFileName projectFn( dlg.GetPath() );
         projectFn.SetExt( ProjectFileExtension );
         GetSettingsManager()->LoadProject( projectFn.GetFullPath() );
+
+        Schematic().SetProject( &Prj() );
     }
 
     // For now there is only one import plugin
@@ -785,8 +793,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
         try
         {
-            Schematic().Reset();
-
             SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
             Schematic().SetRoot( pi->Load( aFileName, &Schematic() ) );
 
@@ -813,6 +819,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             Schematic().Root().SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetModify();
+
             SaveProjectSettings();
 
             UpdateFileHistory( aFileName );
