@@ -73,6 +73,9 @@ LIBEDIT_SETTINGS::LIBEDIT_SETTINGS() : APP_SETTINGS_BASE( "libedit", libeditSche
     m_params.emplace_back( new PARAM<wxString>( "edit_component_visible_columns",
             &m_EditComponentVisibleColumns, "0 1 2 3 4 5 6 7" ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "pin_table_visible_columns",
+            &m_PinTableVisibleColumns, "0 1 2 3 4 8 9" ) );
+
     m_params.emplace_back(
             new PARAM<bool>( "use_eeschema_color_settings", &m_UseEeschemaColorSettings, true ) );
 }
@@ -80,11 +83,6 @@ LIBEDIT_SETTINGS::LIBEDIT_SETTINGS() : APP_SETTINGS_BASE( "libedit", libeditSche
 
 bool LIBEDIT_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 {
-    /*
-     * #define PinTableShownColumnsKey    wxT( "PinTableShownColumns" )
-        "0 1 2 3 4 8 9"
-
-     */
     bool ret = APP_SETTINGS_BASE::MigrateFromLegacy( aCfg );
 
     ret &= fromLegacy<int>( aCfg, "DefaultWireWidth",      "defaults.line_width" );
@@ -101,6 +99,8 @@ bool LIBEDIT_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "LibeditShowPinElectricalType", "show_pin_electrical_type" );
 
     ret &= fromLegacyString( aCfg, "LibEditFieldsShownColumns", "edit_component_visible_columns" );
+
+    ret &= fromLegacyString( aCfg, "PinTableShownColumns", "pin_table_visible_columns" );
 
     return ret;
 }
