@@ -32,11 +32,15 @@
 #include <tool/tool_manager.h>
 #include <widgets/wx_grid.h>
 #include <kicad_string.h>
+#include <widgets/grid_color_swatch_helpers.h>
+#include <widgets/grid_icon_text_helpers.h>
 
-// Columns of netclasses grid
+// PCBNEW columns of netclasses grid
 enum {
     GRID_NAME = 0,
-    GRID_CLEARANCE,
+
+    GRID_FIRST_PCBNEW,
+    GRID_CLEARANCE = GRID_FIRST_PCBNEW,
     GRID_TRACKSIZE,
     GRID_VIASIZE,
     GRID_VIADRILL,
@@ -44,18 +48,44 @@ enum {
     GRID_uVIADRILL,
     GRID_DIFF_PAIR_WIDTH,
     GRID_DIFF_PAIR_GAP,
-    GRID_DIFF_PAIR_VIA_GAP
+
+    GRID_FIRST_EESCHEMA,
+    GRID_WIREWIDTH = GRID_FIRST_EESCHEMA,
+    GRID_BUSWIDTH,
+    GRID_SCHEMATIC_COLOR,
+    GRID_LINESTYLE,
+
+    GRID_END
 };
+
+
+// These are conceptually constexpr
+std::vector<BITMAP_DEF> g_lineStyleIcons;
+wxArrayString           g_lineStyleNames;
+
 
 #define NO_NETCLASS_ASSIGNMENT _( "<unassigned>" )
 
 PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
-                                                const std::vector<wxString>& aCandidateNetNames ) :
+                                                const std::vector<wxString>& aCandidateNetNames,
+                                                bool aIsEEschema ) :
         PANEL_SETUP_NETCLASSES_BASE( aParent->GetTreebook() ),
         m_Parent( aParent ),
         m_netclasses( aNetclasses ),
         m_candidateNetNames( aCandidateNetNames )
 {
+    if( g_lineStyleIcons.empty() )
+    {
+        g_lineStyleIcons.push_back( stroke_solid_xpm );
+        g_lineStyleNames.push_back( _( "Solid" ) );
+        g_lineStyleIcons.push_back( stroke_dash_xpm );
+        g_lineStyleNames.push_back( _( "Dashed" ) );
+        g_lineStyleIcons.push_back( stroke_dot_xpm );
+        g_lineStyleNames.push_back( _( "Dotted" ) );
+        g_lineStyleIcons.push_back( stroke_dashdot_xpm );
+        g_lineStyleNames.push_back( _( "Dash-Dot" ) );
+    }
+
     m_netclassesDirty = true;
 
     // Figure out the smallest the netclass membership pane can ever be so that nothing is cutoff
@@ -80,10 +110,42 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
         // We calculate the column min size only from texts sizes, not using the initial col width
         // as this initial width is sometimes strange depending on the language (wxGrid bug?)
         int min_width =  m_netclassGrid->GetVisibleWidth( i, true, true, false );
+
+        if( i == GRID_LINESTYLE )
+            min_best_width *= 1.5;
+
         m_netclassGrid->SetColMinimalWidth( i, min_width );
+
         // We use a "best size" >= min_best_width
         m_originalColWidths[ i ] = std::max( min_width, min_best_width );
         m_netclassGrid->SetColSize( i, m_originalColWidths[ i ] );
+    }
+
+    if( aIsEEschema )
+    {
+        for( int i = GRID_FIRST_PCBNEW; i < GRID_FIRST_EESCHEMA; ++i )
+        {
+            m_netclassGrid->HideCol( i );
+            m_originalColWidths[ i ] = 0;
+        }
+
+        wxGridCellAttr* attr = new wxGridCellAttr;
+        attr->SetRenderer( new GRID_CELL_COLOR_RENDERER() );
+        attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( aParent, m_netclassGrid ) );
+        m_netclassGrid->SetColAttr( GRID_SCHEMATIC_COLOR, attr );
+
+        attr = new wxGridCellAttr;
+        attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( g_lineStyleIcons, g_lineStyleNames ) );
+        attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( g_lineStyleIcons, g_lineStyleNames ) );
+        m_netclassGrid->SetColAttr( GRID_LINESTYLE, attr );
+    }
+    else
+    {
+        for( int i = GRID_FIRST_EESCHEMA; i < GRID_END; ++i )
+        {
+            m_netclassGrid->HideCol( i );
+            m_originalColWidths[ i ] = 0;
+        }
     }
 
     // Be sure the column labels are readable
@@ -144,7 +206,13 @@ static void netclassToGridRow( EDA_UNITS aUnits, wxGrid* aGrid, int aRow, const 
     SET_MILS_CELL( GRID_uVIADRILL, nc->GetuViaDrill() );
     SET_MILS_CELL( GRID_DIFF_PAIR_WIDTH, nc->GetDiffPairWidth() );
     SET_MILS_CELL( GRID_DIFF_PAIR_GAP, nc->GetDiffPairGap() );
-    SET_MILS_CELL( GRID_DIFF_PAIR_VIA_GAP, nc->GetDiffPairViaGap() );
+
+    SET_MILS_CELL( GRID_WIREWIDTH, nc->GetWireWidth() );
+    SET_MILS_CELL( GRID_BUSWIDTH, nc->GetBusWidth() );
+
+    wxString colorAsString = nc->GetSchematicColor().ToWxString( wxC2S_CSS_SYNTAX );
+    aGrid->SetCellValue( aRow, GRID_SCHEMATIC_COLOR, colorAsString );
+    aGrid->SetCellValue( aRow, GRID_LINESTYLE, g_lineStyleNames[ nc->GetLineStyle() ] );
 }
 
 
@@ -268,7 +336,12 @@ static void gridRowToNetclass( EDA_UNITS aUnits, wxGrid* grid, int row, const NE
     nc->SetuViaDrill( MYCELL( GRID_uVIADRILL ) );
     nc->SetDiffPairWidth( MYCELL( GRID_DIFF_PAIR_WIDTH ) );
     nc->SetDiffPairGap( MYCELL( GRID_DIFF_PAIR_GAP ) );
-    // 6.0 TODO: nc->SetDiffPairViaGap( MYCELL( GRID_DIFF_PAIR_VIA_GAP ) );
+
+    nc->SetWireWidth( MYCELL( GRID_WIREWIDTH ) );
+    nc->SetBusWidth( MYCELL( GRID_BUSWIDTH ) );
+
+    nc->SetSchematicColor( wxColour( grid->GetCellValue( row, GRID_SCHEMATIC_COLOR ) ) );
+    nc->SetLineStyle( g_lineStyleNames.Index( grid->GetCellValue( row, GRID_LINESTYLE ) ) );
 }
 
 
@@ -282,7 +355,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     // Copy the default NetClass:
     gridRowToNetclass( m_Parent->GetUserUnits(), m_netclassGrid, 0, m_netclasses->GetDefault() );
 
-    // Copy other NetClasses :
+    // Copy other NetClasses:
     for( int row = 1; row < m_netclassGrid->GetNumberRows();  ++row )
     {
         NETCLASSPTR nc = std::make_shared<NETCLASS>( m_netclassGrid->GetCellValue( row, GRID_NAME ) );

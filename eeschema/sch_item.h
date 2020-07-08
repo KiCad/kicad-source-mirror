@@ -37,6 +37,7 @@
 #include <default_values.h>
 #include <sch_sheet_path.h>
 #include <render_settings.h>
+#include <netclass.h>
 
 class CONNECTION_GRAPH;
 class SCH_CONNECTION;
@@ -425,6 +426,8 @@ public:
     bool IsConnectivityDirty() { return m_connectivity_dirty; }
 
     void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
+
+    NETCLASSPTR NetClass() const;
 
     /**
      * Return whether the fields have been automatically placed.

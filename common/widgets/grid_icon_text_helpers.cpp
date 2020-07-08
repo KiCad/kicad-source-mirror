@@ -38,8 +38,7 @@ GRID_CELL_ICON_TEXT_RENDERER::GRID_CELL_ICON_TEXT_RENDERER( const std::vector<BI
 }
 
 void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
-                                         const wxRect& aRect, int aRow, int aCol,
-                                         bool isSelected )
+                                         const wxRect& aRect, int aRow, int aCol, bool isSelected )
 {
     wxString value  = aGrid.GetCellValue( aRow, aCol );
     wxBitmap bitmap;
@@ -68,6 +67,19 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
     SetTextColoursAndFont( aGrid, aAttr, aDC, isSelected );
     aGrid.DrawTextRectangle( aDC, value, rect, wxALIGN_LEFT, wxALIGN_CENTRE );
 }
+
+wxSize GRID_CELL_ICON_TEXT_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                                                  int row, int col )
+{
+    wxBitmap bitmap = KiBitmap( (BITMAP_DEF) m_icons[ row ] );
+    wxString text = grid.GetCellValue( row, col );
+    wxSize   size = wxGridCellStringRenderer::DoGetBestSize( attr, dc, text );
+
+    size.x += bitmap.GetWidth() + 6;
+
+    return size;
+}
+
 
 //---- Grid helpers: custom wxGridCellRenderer that renders just an icon ----------------
 //

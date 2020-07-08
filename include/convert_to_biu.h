@@ -31,43 +31,26 @@
  * depending on compile time option
  */
 
+constexpr double GERB_IU_PER_MM = 1e5;  // Gerbview IU is 10 nanometers.
+constexpr double PCB_IU_PER_MM  = 1e6;  // Pcbnew IU is 1 nanometer.
+constexpr double PL_IU_PER_MM   = 1e3;  // internal units in micron (should be enough)
+constexpr double SCH_IU_PER_MM  = 1e4;  // Schematic internal units 1=100nm
+
 /// Scaling factor to convert mils to internal units.
-#if defined(PCBNEW) || defined(CVPCB) || defined(GERBVIEW)
- #if defined(GERBVIEW)
-  constexpr double IU_PER_MM = 1e5;     // Gerbview IU is 10 nanometers.
- #else
-  constexpr double IU_PER_MM = 1e6;     // Pcbnew IU is 1 nanometer.
- #endif
+#if defined(PCBNEW) || defined(CVPCB)
+constexpr double IU_PER_MM = PCB_IU_PER_MM;
+#elif defined(GERBVIEW)
+constexpr double IU_PER_MM = GERB_IU_PER_MM;
+#elif defined(PL_EDITOR)
+constexpr double IU_PER_MM = PL_IU_PER_MM;
+#elif defined(EESCHEMA)
+constexpr double IU_PER_MM = SCH_IU_PER_MM;
+#else
+#define UNKNOWN_IU
+#endif
 
-constexpr double IU_PER_MILS = IU_PER_MM * 0.0254;
-
-/// Convert mils to PCBNEW internal units (iu).
-inline int Mils2iu( int mils )
-{
-    double x = mils * IU_PER_MILS;
-    return int( x < 0 ? x - 0.5 : x + 0.5 );
-}
-
-constexpr inline double Iu2Mils( int iu )
-{
-    double mils = iu / IU_PER_MILS;
-
-    return static_cast< int >( mils < 0 ? mils - 0.5 : mils + 0.5 );
-}
-#elif defined (PL_EDITOR)
-constexpr double IU_PER_MM   =   1e3; // internal units in micron (should be enough)
+#ifndef UNKNOWN_IU
 constexpr double IU_PER_MILS = (IU_PER_MM * 0.0254);
-
-/// Convert mils to page layout editor internal units (iu).
-inline int Mils2iu( int mils )
-{
-    double x = mils * IU_PER_MILS;
-    return int( x < 0 ? x - 0.5 : x + 0.5 );
-}
-
-#elif defined (EESCHEMA)            // Eeschema
-constexpr double IU_PER_MM   = 1e4;  // Schematic internal units 1=100nm
-constexpr double IU_PER_MILS = IU_PER_MM * 0.0254;
 
 constexpr inline int Mils2iu( int mils )
 {
@@ -75,6 +58,7 @@ constexpr inline int Mils2iu( int mils )
     return int( x < 0 ? x - 0.5 : x + 0.5 );
 }
 
+#if defined(EESCHEMA)
 constexpr inline int Iu2Mils( int iu )
 {
     double mils = iu / IU_PER_MILS;
@@ -82,12 +66,14 @@ constexpr inline int Iu2Mils( int iu )
     return static_cast< int >( mils < 0 ? mils - 0.5 : mils + 0.5 );
 }
 #else
-// Here, we do not know the value of internal units: do not define
-// conversion functions (They do not have meaning)
-#define UNKNOWN_IU
+constexpr inline double Iu2Mils( int iu )
+{
+    double mils = iu / IU_PER_MILS;
+
+    return static_cast< int >( mils < 0 ? mils - 0.5 : mils + 0.5 );
+}
 #endif
 
-#ifndef UNKNOWN_IU
 // Other definitions used in a few files
 constexpr double MM_PER_IU = ( 1 / IU_PER_MM );
 
@@ -117,6 +103,38 @@ constexpr inline double Iu2Millimeter( int iu )
 constexpr int ARC_LOW_DEF  = Millimeter2iu( 0.02 );
 constexpr int ARC_HIGH_DEF = Millimeter2iu( 0.005 );
 
+#else
+constexpr double PCB_IU_PER_MILS = (PCB_IU_PER_MM * 0.0254);
+constexpr double SCH_IU_PER_MILS = (SCH_IU_PER_MM * 0.0254);
+
+constexpr inline int PcbMils2iu( int mils )
+{
+    double x = mils * PCB_IU_PER_MILS;
+    return int( x < 0 ? x - 0.5 : x + 0.5 );
+}
+constexpr inline int SchMils2iu( int mils )
+{
+    double x = mils * SCH_IU_PER_MILS;
+    return int( x < 0 ? x - 0.5 : x + 0.5 );
+}
+
+constexpr inline int PcbMillimeter2iu( double mm )
+{
+    return (int) ( mm < 0 ? mm * PCB_IU_PER_MM - 0.5 : mm * PCB_IU_PER_MM + 0.5 );
+}
+constexpr inline int SchMillimeter2iu( double mm )
+{
+    return (int) ( mm < 0 ? mm * SCH_IU_PER_MM - 0.5 : mm * SCH_IU_PER_MM + 0.5 );
+}
+
+constexpr inline double PcbIu2Millimeter( int iu )
+{
+    return iu / PCB_IU_PER_MM;
+}
+constexpr inline double SchIu2Millimeter( int iu )
+{
+    return iu / SCH_IU_PER_MM;
+}
 #endif
 
 /*  ZOOM LIMITS

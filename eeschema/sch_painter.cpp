@@ -329,27 +329,7 @@ float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
 {
     wxCHECK( aItem, static_cast<float>( m_schSettings.m_DefaultWireThickness ) );
 
-    float width;
-    const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( aItem );
-
-    if( line && aItem->GetLayer() == LAYER_WIRE )
-    {
-        if( line->GetLineSize() != 0 )
-            width = (float) line->GetLineSize();
-        else
-            width = (float)  m_schSettings.m_DefaultWireThickness;
-    }
-    else if( line && aItem->GetLayer() == LAYER_BUS )
-    {
-        if( line->GetLineSize() != 0 )
-            width = (float) line->GetLineSize();
-        else
-            width = (float)  m_schSettings.m_DefaultBusThickness;
-    }
-    else
-    {
-        width = (float) std::max( aItem->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
-    }
+    float width = (float) std::max( aItem->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();
@@ -1224,14 +1204,15 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
     if( drawingShadows && !aLine->IsSelected() )
         return;
 
-    COLOR4D color = getRenderColor( aLine, aLine->GetLayer(), drawingShadows );
-    float   width = getLineWidth( aLine, drawingShadows );
+    COLOR4D        color = getRenderColor( aLine, aLine->GetLayer(), drawingShadows );
+    float          width = getLineWidth( aLine, drawingShadows );
+    PLOT_DASH_TYPE lineStyle = aLine->GetEffectiveLineStyle();
 
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( width );
 
-    if( aLine->GetLineStyle() <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
+    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
     {
         m_gal->DrawLine( aLine->GetStartPoint(), aLine->GetEndPoint() );
     }
@@ -1246,7 +1227,7 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
         double theta = atan2( end.y - start.y, end.x - start.x );
         double strokes[] = { 1.0, DASH_GAP_LEN( width ), 1.0, DASH_GAP_LEN( width ) };
 
-        switch( aLine->GetLineStyle() )
+        switch( lineStyle )
         {
         default:
         case PLOT_DASH_TYPE::DASH:
@@ -1733,20 +1714,20 @@ void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 
     if( aEntry->IsSelected() )
         line.SetSelected();
+    else if( aEntry->IsBrightened() )
+        line.SetBrightened();
 
     line.SetStartPoint( aEntry->GetPosition() );
     line.SetEndPoint( aEntry->m_End() );
     line.SetStroke( aEntry->GetStroke() );
 
-    if( aEntry->GetStrokeColor() == COLOR4D::UNSPECIFIED )
-    {
-        COLOR4D color = getRenderColor( aEntry, LAYER_WIRE, drawingShadows );
+    COLOR4D color = getRenderColor( aEntry, LAYER_WIRE, drawingShadows );
 
-        if( aEntry->Type() == SCH_BUS_BUS_ENTRY_T )
-            color = getRenderColor( aEntry, LAYER_BUS, drawingShadows );
+    if( aEntry->Type() == SCH_BUS_BUS_ENTRY_T )
+        color = getRenderColor( aEntry, LAYER_BUS, drawingShadows );
 
-        line.SetLineColor( color );
-    }
+    line.SetLineColor( color );
+    line.SetLineStyle( aEntry->GetStrokeStyle() );
 
     draw( &line, aLayer );
 

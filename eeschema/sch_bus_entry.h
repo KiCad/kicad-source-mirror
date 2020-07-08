@@ -78,10 +78,10 @@ public:
     virtual STROKE_PARAMS GetStroke() const override { return m_stroke; }
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
 
-    PLOT_DASH_TYPE GetStrokeStyle() const { return m_stroke.GetType(); }
+    PLOT_DASH_TYPE GetStrokeStyle() const;
     void SetStrokeStyle( PLOT_DASH_TYPE aStyle ) { m_stroke.SetType( aStyle ); }
 
-    COLOR4D GetStrokeColor() const { return m_stroke.GetColor(); }
+    COLOR4D GetStrokeColor() const;
     void SetStrokeColor( const COLOR4D& aColor ) { m_stroke.SetColor( aColor ); }
 
     void SwapData( SCH_ITEM* aItem ) override;

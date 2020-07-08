@@ -20,13 +20,9 @@
 
 #include <project/net_settings.h>
 #include <settings/parameters.h>
-
-// Netclasses were originally only stored in board files.  The IU context is PCBNEW.
-#ifndef PCBNEW
-#define PCBNEW
-#endif
-#include <base_units.h>
+#include <settings/settings_manager.h>
 #include <kicad_string.h>
+#include <convert_to_biu.h>
 
 const int netSettingsSchemaVersion = 0;
 
@@ -51,17 +47,19 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         ++nc;
                     }
 
+                    // Note: we're in common/, but we do happen to know which of these fields
+                    // are used in which units system.
                     nlohmann::json netJson = {
-                        { "name",               netclass->GetName().ToUTF8() },
-                        { "clearance",          Iu2Millimeter( netclass->GetClearance() ) },
-                        { "track_width",        Iu2Millimeter( netclass->GetTrackWidth() ) },
-                        { "via_diameter",       Iu2Millimeter( netclass->GetViaDiameter() ) },
-                        { "via_drill",          Iu2Millimeter( netclass->GetViaDrill() ) },
-                        { "microvia_diameter",  Iu2Millimeter( netclass->GetuViaDiameter() ) },
-                        { "microvia_drill",     Iu2Millimeter( netclass->GetuViaDrill() ) },
-                        { "diff_pair_width",    Iu2Millimeter( netclass->GetDiffPairWidth() ) },
-                        { "diff_pair_gap",      Iu2Millimeter( netclass->GetDiffPairGap() ) },
-                        { "diff_pair_via_gap",  Iu2Millimeter( netclass->GetDiffPairViaGap() ) }
+                        { "name",              netclass->GetName().ToUTF8() },
+                        { "clearance",         PcbIu2Millimeter( netclass->GetClearance() ) },
+                        { "track_width",       PcbIu2Millimeter( netclass->GetTrackWidth() ) },
+                        { "via_diameter",      PcbIu2Millimeter( netclass->GetViaDiameter() ) },
+                        { "via_drill",         PcbIu2Millimeter( netclass->GetViaDrill() ) },
+                        { "microvia_diameter", PcbIu2Millimeter( netclass->GetuViaDiameter() ) },
+                        { "microvia_drill",    PcbIu2Millimeter( netclass->GetuViaDrill() ) },
+                        { "diff_pair_width",   PcbIu2Millimeter( netclass->GetDiffPairWidth() ) },
+                        { "diff_pair_gap",     PcbIu2Millimeter( netclass->GetDiffPairGap() ) },
+                        { "diff_pair_via_gap", PcbIu2Millimeter( netclass->GetDiffPairViaGap() ) }
                         };
 
                     if( netclass->GetPcbColor() != KIGFX::COLOR4D::UNSPECIFIED )
@@ -74,7 +72,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         for( const auto& ii : *netclass )
                         {
                             if( !ii.empty() )
-                                membersJson.push_back( std::string( ii.ToUTF8() ) );
+                                membersJson.push_back( ii );
                         }
 
                         netJson["nets"] = membersJson;
@@ -98,7 +96,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         []( const nlohmann::json& aObj, const std::string& aKey, int aDefault )
                         {
                             if( aObj.contains( aKey ) )
-                                return Millimeter2iu( aObj[aKey].get<double>() );
+                                return PcbMillimeter2iu( aObj[aKey].get<double>() );
                             else
                                 return aDefault;
                         };

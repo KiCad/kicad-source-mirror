@@ -31,6 +31,7 @@
 #include <sch_line.h>
 #include <sch_text.h>
 #include <settings/color_settings.h>
+#include <netclass.h>
 #include "sch_painter.h"
 
 
@@ -122,8 +123,35 @@ const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 }
 
 
+COLOR4D SCH_BUS_ENTRY_BASE::GetStrokeColor() const
+{
+    NETCLASSPTR netclass = NetClass();
+
+    if( netclass && netclass->GetSchematicColor() != COLOR4D::UNSPECIFIED )
+        return netclass->GetSchematicColor();
+
+    return m_stroke.GetColor();
+}
+
+
+PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetStrokeStyle() const
+{
+    NETCLASSPTR netclass = NetClass();
+
+    if( netclass )
+        return (PLOT_DASH_TYPE) netclass->GetLineStyle();
+
+    return m_stroke.GetType();
+}
+
+
 int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
 {
+    NETCLASSPTR netclass = NetClass();
+
+    if( netclass )
+        return netclass->GetWireWidth();
+
     if( m_stroke.GetWidth() == 0 && Schematic() )
         return std::max( Schematic()->Settings().m_DefaultWireThickness, 1 );
 
@@ -133,6 +161,11 @@ int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
 
 int SCH_BUS_BUS_ENTRY::GetPenWidth() const
 {
+    NETCLASSPTR netclass = NetClass();
+
+    if( netclass )
+        return netclass->GetBusWidth();
+
     if( m_stroke.GetWidth() == 0 && Schematic() )
         return std::max( Schematic()->Settings().m_DefaultBusThickness, 1 );
 

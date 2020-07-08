@@ -103,12 +103,16 @@ public:
     void           SetLineStyle( const int aStyleId );
     PLOT_DASH_TYPE GetLineStyle() const;
 
+    /// @return the style that the line should be drawn in
+    /// this might be set on the line or inherited from the line's netclass
+    PLOT_DASH_TYPE GetEffectiveLineStyle() const;
+
     /// @return the style name from the style id
-    /// (mainly to write it in .sch file
+    /// (mainly to write it in .sch file)
     static const char* GetLineStyleName( PLOT_DASH_TYPE aStyle );
 
     /// @return the style id from the style  name
-    /// (mainly to read style from .sch file
+    /// (mainly to read style from .sch file)
     static PLOT_DASH_TYPE GetLineStyleByName( const wxString& aStyleName );
 
     void SetLineColor( const COLOR4D& aColor );

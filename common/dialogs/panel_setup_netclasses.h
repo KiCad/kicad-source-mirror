@@ -70,7 +70,7 @@ private:
 
 public:
     PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
-                            const std::vector<wxString>& aCandidateNetNames );
+                            const std::vector<wxString>& aCandidateNetNames, bool isEEschema );
     ~PANEL_SETUP_NETCLASSES( ) override;
 
     bool TransferDataToWindow() override;

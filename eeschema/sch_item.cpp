@@ -37,6 +37,9 @@
 #include <sch_pin.h>
 #include <schematic.h>
 #include <general.h>
+#include <netclass.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 
 
 /* Constructor and destructor for SCH_ITEM */
@@ -149,6 +152,22 @@ SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH& aSheet ) const
     // Warning: the m_connection_map can be empty.
     if( m_connection_map.size() && m_connection_map.count( aSheet ) )
         return m_connection_map.at( aSheet );
+
+    return nullptr;
+}
+
+
+NETCLASSPTR SCH_ITEM::NetClass() const
+{
+    if( m_connection_map.size() )
+    {
+        NET_SETTINGS&   netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
+        const wxString& netname = m_connection_map.begin()->second->Name( true );
+        const wxString& netclassName = netSettings.m_NetClassAssignments[ netname ];
+
+        if( !netclassName.IsEmpty() )
+            return netSettings.m_NetClasses.Find( netclassName );
+    }
 
     return nullptr;
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,27 +23,17 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* sbSizerUpper;
 	sbSizerUpper = new wxStaticBoxSizer( new wxStaticBox( m_netclassesPane, wxID_ANY, _("Net Classes") ), wxVERTICAL );
 
-	sbSizerUpper->SetMinSize( wxSize( -1,220 ) );
+	sbSizerUpper->SetMinSize( wxSize( -1,200 ) );
 	m_netclassGrid = new WX_GRID( m_netclassesPane, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_DEFAULT|wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 
 	// Grid
-	m_netclassGrid->CreateGrid( 1, 10 );
+	m_netclassGrid->CreateGrid( 1, 13 );
 	m_netclassGrid->EnableEditing( true );
 	m_netclassGrid->EnableGridLines( true );
 	m_netclassGrid->EnableDragGridSize( false );
 	m_netclassGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_netclassGrid->SetColSize( 0, 130 );
-	m_netclassGrid->SetColSize( 1, 96 );
-	m_netclassGrid->SetColSize( 2, 96 );
-	m_netclassGrid->SetColSize( 3, 96 );
-	m_netclassGrid->SetColSize( 4, 96 );
-	m_netclassGrid->SetColSize( 5, 96 );
-	m_netclassGrid->SetColSize( 6, 96 );
-	m_netclassGrid->SetColSize( 7, 60 );
-	m_netclassGrid->SetColSize( 8, 60 );
-	m_netclassGrid->SetColSize( 9, 60 );
 	m_netclassGrid->EnableDragColMove( false );
 	m_netclassGrid->EnableDragColSize( true );
 	m_netclassGrid->SetColLabelSize( 24 );
@@ -56,7 +46,10 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetColLabelValue( 6, _("uVia Drill") );
 	m_netclassGrid->SetColLabelValue( 7, _("DP Width") );
 	m_netclassGrid->SetColLabelValue( 8, _("DP Gap") );
-	m_netclassGrid->SetColLabelValue( 9, _("DP Via Gap") );
+	m_netclassGrid->SetColLabelValue( 9, _("Wire Thickness") );
+	m_netclassGrid->SetColLabelValue( 10, _("Bus Thickness") );
+	m_netclassGrid->SetColLabelValue( 11, _("Color") );
+	m_netclassGrid->SetColLabelValue( 12, _("Line Style") );
 	m_netclassGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -92,7 +85,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassesPane->SetSizer( sbSizerUpper );
 	m_netclassesPane->Layout();
 	sbSizerUpper->Fit( m_netclassesPane );
-	bMargins->Add( m_netclassesPane, 1, wxALL|wxEXPAND, 5 );
+	bMargins->Add( m_netclassesPane, 4, wxALL|wxEXPAND, 5 );
 
 	m_membershipPane = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxStaticBoxSizer* sbMembership;
@@ -233,7 +226,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_membershipPane->SetSizer( sbMembership );
 	m_membershipPane->Layout();
 	sbMembership->Fit( m_membershipPane );
-	bMargins->Add( m_membershipPane, 1, wxALL|wxEXPAND, 5 );
+	bMargins->Add( m_membershipPane, 5, wxALL|wxEXPAND, 5 );
 
 
 	bpanelNetClassesSizer->Add( bMargins, 1, wxEXPAND, 5 );

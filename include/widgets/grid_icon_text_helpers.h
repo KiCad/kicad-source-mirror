@@ -43,6 +43,7 @@ public:
 
     void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
                const wxRect& aRect, int aRow, int aCol, bool isSelected ) override;
+    wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row, int col ) override;
 
 private:
     const std::vector<BITMAP_DEF>& m_icons;

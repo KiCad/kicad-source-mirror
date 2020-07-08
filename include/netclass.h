@@ -1,13 +1,9 @@
-/**
- * @file class_netclass.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
- * Copyright (C) 2009 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,21 +23,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #ifndef CLASS_NETCLASS_H
 #define CLASS_NETCLASS_H
 
 
 #include <macros.h>
-#include <set>
-#include <memory>
-#include <richio.h>
 #include <gal/color4d.h>
 
 
 class LINE_READER;
 class BOARD;
 class BOARD_DESIGN_SETTINGS;
+using KIGFX::COLOR4D;
 
 
 DECL_SET_FOR_SWIG( STRINGSET, wxString )
@@ -76,10 +69,14 @@ protected:
     int         m_diffPairGap;
     int         m_diffPairViaGap;
 
-    KIGFX::COLOR4D m_PcbColor;          ///< Optional color override for this netclass (PCB context)
+    int         m_wireWidth;
+    int         m_busWidth;
+    COLOR4D     m_schematicColor;
+    int         m_lineStyle;
+
+    COLOR4D     m_PcbColor;          ///< Optional color override for this netclass (PCB context)
 
 public:
-
     static const char Default[];        ///< the name of the default NETCLASS
 
     /**
@@ -96,11 +93,7 @@ public:
         return wxT( "NETCLASS" );
     }
 
-    const wxString& GetName() const
-    {
-        return m_Name;
-    }
-
+    const wxString& GetName() const { return m_Name; }
     void SetName( const wxString& aName ) { m_Name = aName; }
 
     /**
@@ -196,17 +189,20 @@ public:
     int     GetDiffPairViaGap() const       { return m_diffPairViaGap; }
     void    SetDiffPairViaGap( int aSize )  { m_diffPairViaGap = aSize; }
 
-    KIGFX::COLOR4D GetPcbColor() const { return m_PcbColor; }
-    void SetPcbColor( const KIGFX::COLOR4D& aColor ) { m_PcbColor = aColor; }
+    COLOR4D GetPcbColor() const             { return m_PcbColor; }
+    void    SetPcbColor( const COLOR4D& aColor ) { m_PcbColor = aColor; }
 
-    /**
-     * Function SetParams
-     * will set all the parameters by copying them from \a defaults.
-     * Parameters are the values like m_ViaSize, etc, but do not include m_Description.
-     * @param aDefaults is another NETCLASS object to copy from.
-     */
-    void SetParams( const NETCLASS& aDefaults );
+    int     GetWireWidth() const            { return m_wireWidth; }
+    void    SetWireWidth( int aWidth )      { m_wireWidth = aWidth; }
 
+    int     GetBusWidth() const             { return m_busWidth; }
+    void    SetBusWidth( int aWidth )       { m_busWidth = aWidth; }
+
+    COLOR4D GetSchematicColor() const       { return m_schematicColor; }
+    void    SetSchematicColor( COLOR4D aColor ) { m_schematicColor = aColor; }
+
+    int     GetLineStyle() const            { return m_lineStyle; }
+    void    SetLineStyle( int aStyle )      { m_lineStyle = aStyle; }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;
@@ -220,18 +216,13 @@ DECL_MAP_FOR_SWIG( NETCLASS_MAP, wxString, NETCLASSPTR )
 
 /**
  * NETCLASSES
- * is a container for NETCLASS instances.  It owns all its NETCLASSes
- * (=> it will delete them at time of destruction).  This container will always have
- * a default NETCLASS with the name given by const NETCLASS::Default.
+ * is a container for NETCLASS instances.  It owns all its NETCLASSes.  This container will
+ * always have a default NETCLASS with the name given by const NETCLASS::Default.
  */
 class NETCLASSES
 {
 private:
-
-    /// all the NETCLASSes except the default one.
-    NETCLASS_MAP    m_NetClasses;
-
-    /// the default NETCLASS
+    NETCLASS_MAP    m_NetClasses;   // All the netclasses EXCEPT the default one
     NETCLASSPTR     m_default;
 
 public:

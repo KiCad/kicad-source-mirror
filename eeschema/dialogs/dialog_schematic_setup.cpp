@@ -56,7 +56,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
     m_netclasses = new PANEL_SETUP_NETCLASSES( this, &project.NetSettings().m_NetClasses,
-                                               schematic.GetNetClassAssignmentCandidates() );
+                                               schematic.GetNetClassAssignmentCandidates(), true );
 
     /*
      * WARNING: If you change page names you MUST update calls to ShowSchematicSetupDialog().

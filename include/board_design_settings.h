@@ -338,10 +338,6 @@ private:
     /// The defualt settings that will be used for new zones
     ZONE_SETTINGS m_defaultZoneSettings;
 
-    SEVERITY severityFromString( const wxString& aSeverity );
-
-    wxString severityToString( const SEVERITY& aSeverity );
-
     void initFromOther( const BOARD_DESIGN_SETTINGS& aOther );
 
 public:

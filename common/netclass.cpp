@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
- * Copyright (C) 2009 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,29 +24,27 @@
  */
 
 #include <fctsys.h>
-#include <kicad_string.h>
-#include <macros.h>
-
 #include <netclass.h>
-
-#ifndef PCBNEW
-#define PCBNEW // needed to define the right value of Millimeter2iu(x)
-#endif
 #include <base_units.h>
 
 // This will get mapped to "kicad_default" in the specctra_export.
 const char NETCLASS::Default[] = "Default";
 
 // Initial values for netclass initialization
-const int DEFAULT_CLEARANCE        = Millimeter2iu( 0.2 ); // track to track and track to pads clearance
-const int DEFAULT_VIA_DIAMETER     = Millimeter2iu( 0.8 );
-const int DEFAULT_VIA_DRILL        = Millimeter2iu( 0.4 );
-const int DEFAULT_UVIA_DIAMETER    = Millimeter2iu( 0.3 );
-const int DEFAULT_UVIA_DRILL       = Millimeter2iu( 0.1 );
-const int DEFAULT_TRACK_WIDTH      = Millimeter2iu( 0.25 );
-const int DEFAULT_DIFF_PAIR_WIDTH  = Millimeter2iu( 0.2 );
-const int DEFAULT_DIFF_PAIR_GAP    = Millimeter2iu( 0.25 );
-const int DEFAULT_DIFF_PAIR_VIAGAP = Millimeter2iu( 0.25 );
+const int DEFAULT_CLEARANCE        = PcbMillimeter2iu( 0.2 ); // track to track and track to pads clearance
+const int DEFAULT_VIA_DIAMETER     = PcbMillimeter2iu( 0.8 );
+const int DEFAULT_VIA_DRILL        = PcbMillimeter2iu( 0.4 );
+const int DEFAULT_UVIA_DIAMETER    = PcbMillimeter2iu( 0.3 );
+const int DEFAULT_UVIA_DRILL       = PcbMillimeter2iu( 0.1 );
+const int DEFAULT_TRACK_WIDTH      = PcbMillimeter2iu( 0.25 );
+const int DEFAULT_DIFF_PAIR_WIDTH  = PcbMillimeter2iu( 0.2 );
+const int DEFAULT_DIFF_PAIR_GAP    = PcbMillimeter2iu( 0.25 );
+const int DEFAULT_DIFF_PAIR_VIAGAP = PcbMillimeter2iu( 0.25 );
+
+const int DEFAULT_WIRE_WIDTH       = SchMils2iu( 6 );
+const int DEFAULT_BUS_WIDTH        = SchMils2iu( 12 );
+
+const int DEFAULT_LINE_STYLE = 0; // solid
 
 
 NETCLASS::NETCLASS( const wxString& aName ) :
@@ -65,21 +63,11 @@ NETCLASS::NETCLASS( const wxString& aName ) :
     SetDiffPairWidth( DEFAULT_DIFF_PAIR_WIDTH );
     SetDiffPairGap( DEFAULT_DIFF_PAIR_GAP );
     SetDiffPairViaGap( DEFAULT_DIFF_PAIR_VIAGAP );
-}
 
-
-void NETCLASS::SetParams( const NETCLASS& aDefaults )
-{
-    SetClearance( aDefaults.GetClearance() );
-    SetTrackWidth( aDefaults.GetTrackWidth() );
-    SetViaDiameter( aDefaults.GetViaDiameter() );
-    SetViaDrill( aDefaults.GetViaDrill() );
-    SetuViaDiameter( aDefaults.GetuViaDiameter() );
-    SetuViaDrill( aDefaults.GetuViaDrill() );
-    SetDiffPairWidth( aDefaults.GetDiffPairWidth() );
-    SetDiffPairGap( aDefaults.GetDiffPairGap() );
-    SetDiffPairViaGap( aDefaults.GetDiffPairViaGap() );
-    SetPcbColor( KIGFX::COLOR4D::UNSPECIFIED );
+    SetWireWidth( DEFAULT_WIRE_WIDTH );
+    SetBusWidth( DEFAULT_BUS_WIDTH );
+    SetSchematicColor( COLOR4D::UNSPECIFIED );
+    SetLineStyle( DEFAULT_LINE_STYLE );
 }
 
 

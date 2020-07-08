@@ -23,13 +23,8 @@
  */
 
 #include <fctsys.h>
-//#include <gr_basic.h>
-//#include <macros.h>
-//#include <sch_draw_panel.h>
 #include <sch_painter.h>
 #include <plotter.h>
-//#include <base_units.h>
-//#include <general.h>
 #include <sch_line.h>
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>
@@ -51,17 +46,9 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
 
     switch( layer )
     {
-    default:
-        m_Layer = LAYER_NOTES;
-        break;
-
-    case LAYER_WIRE:
-        m_Layer = LAYER_WIRE;
-        break;
-
-    case LAYER_BUS:
-        m_Layer = LAYER_BUS;
-        break;
+    default:         m_Layer = LAYER_NOTES; break;
+    case LAYER_WIRE: m_Layer = LAYER_WIRE;  break;
+    case LAYER_BUS:  m_Layer = LAYER_BUS;   break;
     }
 }
 
@@ -221,6 +208,11 @@ void SCH_LINE::SetLineColor( const double r, const double g, const double b, con
 
 COLOR4D SCH_LINE::GetLineColor() const
 {
+    NETCLASSPTR netclass = NetClass();
+
+    if( netclass && netclass->GetSchematicColor() != COLOR4D::UNSPECIFIED )
+        return netclass->GetSchematicColor();
+
     return m_stroke.GetColor();
 }
 
@@ -258,6 +250,17 @@ PLOT_DASH_TYPE SCH_LINE::GetLineStyle() const
 }
 
 
+PLOT_DASH_TYPE SCH_LINE::GetEffectiveLineStyle() const
+{
+    NETCLASSPTR netclass = NetClass();
+
+    if( netclass )
+        return (PLOT_DASH_TYPE) netclass->GetLineStyle();
+
+    return GetLineStyle();
+}
+
+
 void SCH_LINE::SetLineWidth( const int aSize )
 {
     m_stroke.SetWidth( aSize );
@@ -266,6 +269,11 @@ void SCH_LINE::SetLineWidth( const int aSize )
 
 int SCH_LINE::GetPenWidth() const
 {
+    NETCLASSPTR netclass = NetClass();
+
+    if( netclass )
+        return ( m_Layer == LAYER_BUS ) ? netclass->GetBusWidth() : netclass->GetWireWidth();
+
     if( m_stroke.GetWidth() == 0 && Schematic() )
         return std::max( Schematic()->Settings().m_DefaultLineWidth, 1 );
 
@@ -285,7 +293,7 @@ void SCH_LINE::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
         color = aSettings->GetLayerColor( m_Layer );
 
     GRLine( nullptr, DC, start.x, start.y, end.x, end.y, penWidth, color,
-            GetwxPenStyle( GetLineStyle() ) );
+            GetwxPenStyle( GetEffectiveLineStyle() ) );
 }
 
 
@@ -740,7 +748,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter )
         penWidth = m_stroke.GetWidth();
 
     aPlotter->SetCurrentLineWidth( penWidth );
-    aPlotter->SetDash( GetLineStyle() );
+    aPlotter->SetDash( GetEffectiveLineStyle() );
 
     aPlotter->MoveTo( m_start );
     aPlotter->FinishTo( m_end );
@@ -768,7 +776,12 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Type" ), msg, DARKCYAN ) );
-    msg = GetLineStyleName( GetLineStyle() );
+
+    if( GetLineStyle() != GetEffectiveLineStyle() )
+        msg = _( "from netclass" );
+    else
+        msg = GetLineStyleName( GetLineStyle() );
+
     aList.push_back( MSG_PANEL_ITEM( _( "Line Style" ), msg, DARKCYAN ) );
 
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
