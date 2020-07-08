@@ -44,6 +44,15 @@ public:
      */
     static EDA_RECT GetBoundingBox( wxWindow* aWindow, const wxString& aLabel, double aAngle );
 
+    /**
+     * Get the height and width of the unrotated text string that is created for this control.
+     * This will include any modifications done to the font.
+     *
+     * @param aWindow is the wxWindow the text will go on
+     * @param aLabel is the text string
+     */
+    static wxSize GetTextSize( wxWindow* aWindow, const wxString& aLabel );
+
 protected:
     void OnEraseBackground( wxEraseEvent& WXUNUSED( aEvent ) );
     void OnPaint( wxPaintEvent& WXUNUSED( aEvent ) );

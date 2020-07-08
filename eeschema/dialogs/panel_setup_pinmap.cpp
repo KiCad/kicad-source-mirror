@@ -76,22 +76,21 @@ void PANEL_SETUP_PINMAP::OnResetMatrixClick( wxCommandEvent& aEvent )
 void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 {
     // Try to know the size of bitmap button used in drc matrix
-    wxBitmapButton * dummy = new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmap( ercerr_xpm ) );
-    wxSize bitmap_size = dummy->GetSize();
+    wxBitmapButton* dummy    = new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmap( ercerr_xpm ) );
+    wxSize          bmapSize = dummy->GetSize();
     delete dummy;
 
     wxPoint pos;
-    // Get the current text size using a dummy text.
-    wxStaticText* text = new wxStaticText( m_matrixPanel, -1, CommentERC_V[0], pos );
-    EDA_RECT      bbox = WX_ANGLE_TEXT::GetBoundingBox( m_matrixPanel, CommentERC_V[0], 450 );
+    // Get the text size for the angled text
+    EDA_RECT      bbox    = WX_ANGLE_TEXT::GetBoundingBox( m_matrixPanel, CommentERC_V[0], 450 );
+    wxSize        txtSize = WX_ANGLE_TEXT::GetTextSize( m_matrixPanel, CommentERC_V[0] );
 
-    int           text_height = text->GetRect().GetHeight();
-
-    bitmap_size.y = std::max( bitmap_size.y, text_height );
-    delete text;
+    bmapSize.y = std::max( bmapSize.y, txtSize.y );
 
     // compute the Y pos interval:
     pos.y = bbox.GetHeight();
+
+    wxStaticText* text;
 
     if( !m_initialized )
     {
@@ -100,9 +99,9 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         // Print row labels
         for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
         {
-            int y = pos.y + (ii * bitmap_size.y);
+            int y = pos.y + (ii * bmapSize.y);
             text = new wxStaticText( m_matrixPanel, -1, CommentERC_H[ii],
-                                     wxPoint( 5, y + ( bitmap_size.y / 2 ) - ( text_height / 2 ) ) );
+                                     wxPoint( 5, y + ( bmapSize.y / 2 ) - ( txtSize.y / 2 ) ) );
             labels.push_back( text );
 
             int x = text->GetRect().GetRight();
@@ -124,20 +123,20 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
     for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
     {
-        int y = pos.y + (ii * bitmap_size.y);
+        int y = pos.y + (ii * bmapSize.y);
 
         for( int jj = 0; jj <= ii; jj++ )
         {
             // Add column labels (only once)
             PIN_ERROR diag = m_schematic->ErcSettings().GetPinMapValue( ii, jj );
 
-            int x = pos.x + ( jj * ( bitmap_size.x + 4 ) );
+            int x = pos.x + ( jj * ( bmapSize.x + 4 ) );
 
             if( ( ii == jj ) && !m_initialized )
             {
                 wxPoint txtpos;
-                txtpos.x = x + ( bitmap_size.x / 2 );
-                txtpos.y = y - text_height;
+                txtpos.x = x + ( bmapSize.x / 2 );
+                txtpos.y = y - txtSize.y;
                 new WX_ANGLE_TEXT( m_matrixPanel, wxID_ANY, CommentERC_V[ii], txtpos, 450 );
             }
 
