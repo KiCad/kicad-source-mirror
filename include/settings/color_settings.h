@@ -91,6 +91,8 @@ public:
 private:
     bool migrateSchema0to1();
 
+    void initFromOther( const COLOR_SETTINGS& aOther );
+
     wxString m_displayName;
 
     bool     m_overrideSchItemColors;

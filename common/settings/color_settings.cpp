@@ -214,22 +214,33 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
 COLOR_SETTINGS::COLOR_SETTINGS( const COLOR_SETTINGS& aOther ) :
         JSON_SETTINGS( aOther.m_filename, SETTINGS_LOC::COLORS, colorsSchemaVersion )
 {
-    m_displayName           = aOther.m_displayName;
-    m_overrideSchItemColors = aOther.m_overrideSchItemColors;
-    m_colors                = aOther.m_colors;
-    m_defaultColors         = aOther.m_defaultColors;
+    initFromOther( aOther );
 }
 
 
 COLOR_SETTINGS& COLOR_SETTINGS::operator=( const COLOR_SETTINGS &aOther )
 {
-    m_filename              = aOther.m_filename;
+    m_filename = aOther.m_filename;
+
+    initFromOther( aOther );
+
+    return *this;
+}
+
+
+void COLOR_SETTINGS::initFromOther( const COLOR_SETTINGS& aOther )
+{
     m_displayName           = aOther.m_displayName;
     m_overrideSchItemColors = aOther.m_overrideSchItemColors;
     m_colors                = aOther.m_colors;
     m_defaultColors         = aOther.m_defaultColors;
 
-    return *this;
+    // Ensure default colors are present
+    for( PARAM_BASE* param : aOther.m_params )
+    {
+        if( COLOR_MAP_PARAM* cmp = dynamic_cast<COLOR_MAP_PARAM*>( param ) )
+            m_defaultColors[cmp->GetKey()] = cmp->GetDefault();
+    }
 }
 
 
@@ -335,7 +346,7 @@ COLOR4D COLOR_SETTINGS::GetDefaultColor( int aLayer )
             m_defaultColors[aLayer] = COLOR4D::UNSPECIFIED;
     }
 
-    return m_defaultColors.at( aLayer );;
+    return m_defaultColors.at( aLayer );
 }
 
 
