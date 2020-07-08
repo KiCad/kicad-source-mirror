@@ -477,6 +477,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AddItem( ACTIONS::updatePcbFromSchematic,     SELECTION_CONDITIONS::ShowAlways );
     toolsMenu->AddItem( ACTIONS::updateSchematicFromPcb,     SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( PCB_ACTIONS::showEeschema,           SELECTION_CONDITIONS::ShowAlways );
+
+    toolsMenu->AddSeparator();
+    toolsMenu->AddItem( ACTIONS::showFootprintEditor,        SELECTION_CONDITIONS::ShowAlways );
     toolsMenu->AddItem( PCB_ACTIONS::updateFootprints,       SELECTION_CONDITIONS::ShowAlways );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
