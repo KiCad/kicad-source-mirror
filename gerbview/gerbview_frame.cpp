@@ -807,6 +807,7 @@ bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( int aLayerID )
 {
     COLOR4D color = COLOR4D::UNSPECIFIED;
+    COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
 
     switch( aLayerID )
     {
@@ -814,7 +815,7 @@ COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( int aLayerID )
     case LAYER_DCODES:
     case LAYER_GERBVIEW_WORKSHEET:
     case LAYER_GERBVIEW_BACKGROUND:
-        color = Pgm().GetSettingsManager().GetColorSettings()->GetColor( aLayerID );
+        color = settings->GetColor( aLayerID );
         break;
 
     case LAYER_GERBVIEW_GRID:
@@ -844,8 +845,15 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, COLOR4D aColor )
     {
     case LAYER_NEGATIVE_OBJECTS:
     case LAYER_DCODES:
-    case LAYER_GERBVIEW_WORKSHEET:
         settings->SetColor( aLayerID, aColor );
+        break;
+
+    case LAYER_GERBVIEW_WORKSHEET:
+        settings->SetColor( LAYER_GERBVIEW_WORKSHEET, aColor );
+        // LAYER_WORKSHEET color is alsu used to draw the worksheet
+        // FIX ME: why LAYER_WORKSHEET must be set, although LAYER_GERBVIEW_WORKSHEET
+        // is used to initialize the worksheet color layer.
+        settings->SetColor( LAYER_WORKSHEET, aColor );
         break;
 
     case LAYER_GERBVIEW_GRID:
@@ -958,8 +966,15 @@ void GERBVIEW_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 }
 
 
+COLOR4D GERBVIEW_FRAME::GetGridColor()
+{
+    return Pgm().GetSettingsManager().GetColorSettings()->GetColor( LAYER_GRID );
+}
+
+
 void GERBVIEW_FRAME::SetGridColor( COLOR4D aColor )
 {
+    Pgm().GetSettingsManager().GetColorSettings()->SetColor( LAYER_GRID, aColor );
     GetCanvas()->GetGAL()->SetGridColor( aColor );
     m_gridColor = aColor;
 }

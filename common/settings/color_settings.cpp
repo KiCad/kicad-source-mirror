@@ -110,7 +110,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "gerbview.dcodes",             LAYER_DCODES,               COLOR4D( WHITE ) );
     CLR( "gerbview.grid",               LAYER_GERBVIEW_GRID,        COLOR4D( MAGENTA ) );
     CLR( "gerbview.negative_objects",   LAYER_NEGATIVE_OBJECTS,     COLOR4D( DARKGRAY ) );
-    CLR( "gerbview.worksheet",          LAYER_GERBVIEW_WORKSHEET,   COLOR4D( BLUE ) );
+    CLR( "gerbview.worksheet",          LAYER_GERBVIEW_WORKSHEET,   COLOR4D( RED ) );
 
     // TODO(JE) New default scheme for GerbView
     for( int i = 0, id = GERBVIEW_LAYER_ID_START;

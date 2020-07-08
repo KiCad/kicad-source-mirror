@@ -129,6 +129,11 @@ public:
      */
     int SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount );
 
+    /**
+     * @return the color of the grid
+     */
+    COLOR4D GetGridColor() override;
+
     ///> @copydoc EDA_DRAW_FRAME::SetGridColor()
     virtual void SetGridColor( COLOR4D aColor ) override;
 

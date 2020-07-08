@@ -62,6 +62,11 @@ public:
      */
     void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
 
+    /**
+     * @return the current worksheet
+     */
+    KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet.get(); }
+
 protected:
     ///> Sets rendering targets & dependencies for layers.
     void setDefaultLayerDeps();

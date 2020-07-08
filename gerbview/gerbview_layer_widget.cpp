@@ -250,7 +250,6 @@ void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
     // NOTE: Active layer in GerbView is stored as 0-indexed, but layer color is
     //       stored according to the GERBER_DRAW_LAYER() offset.
-
     myframe->SetLayerColor( GERBER_DRAW_LAYER( aLayer ), aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
 
@@ -294,17 +293,16 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
         myframe->GetCanvas()->Refresh();
 }
 
-
+#include "gerbview_draw_panel_gal.h"
 void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
     myframe->SetVisibleElementColor( aId, aColor );
 
     auto view = myframe->GetCanvas()->GetView();
-    auto settings = Pgm().GetSettingsManager().GetColorSettings();
+    COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
 
     view->GetPainter()->GetSettings()->LoadColors( settings );
     view->UpdateLayerColor( aId );
-
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     view->UpdateAllItems( KIGFX::COLOR );
     myframe->GetCanvas()->Refresh();
