@@ -141,6 +141,7 @@ public:
         SetTitle( _( "Special Tools..." ) );
 
         Add( PCB_ACTIONS::moveExact );
+        Add( PCB_ACTIONS::moveWithReference );
         Add( PCB_ACTIONS::positionRelative );
         Add( PCB_ACTIONS::createArray );
     }
