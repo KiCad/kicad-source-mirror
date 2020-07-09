@@ -753,6 +753,13 @@ if( KICAD_SCRIPTING_WXPYTHON )
             " instead found wxPython Phoenix ${WXPYTHON_VERSION}" )
     endif()
 
+    # GTK3 is required on Linux
+    if( UNIX AND NOT APPLE )
+        if( NOT "${WXPYTHON_TOOLKIT}" STREQUAL "gtk3" )
+            message( FATAL_ERROR "GTK3-based wxPython/Phoenix toolkit is required.")
+        endif()
+    endif()
+
     message( STATUS "Found ${WXPYTHON_FLAVOR} "
         "${WXPYTHON_VERSION}/${WXPYTHON_TOOLKIT} "
         "(wxWidgets ${WXPYTHON_WXVERSION})" )
@@ -776,6 +783,9 @@ if( KICAD_SCRIPTING_WXPYTHON )
         message( WARNING "wxWidgets and wxPython must be based on the same toolkit.\n"
             "It will be fixed automatically if you skip the '--toolkit=xxx' "
             "wxWidgets_CONFIG_OPTIONS parameter.")
+    elseif( UNIX AND NOT APPLE )
+        # Force the use of GTK3 on Linux
+        set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} "--toolkit=gtk3" )
     else()
         # Use the same toolkit as wxPython otherwise there will be a symbol conflict
         set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} "--toolkit=${WXPYTHON_TOOLKIT}" )
