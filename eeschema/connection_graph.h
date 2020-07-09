@@ -110,7 +110,7 @@ public:
     std::vector<SCH_ITEM*> GetBusLabels() const;
 
     /// Returns the candidate net name for a driver
-    wxString GetNameForDriver( SCH_ITEM* aItem ) const;
+    const wxString& GetNameForDriver( SCH_ITEM* aItem );
 
     /// Combines another subgraph on the same sheet into this one.
     void Absorb( CONNECTION_SUBGRAPH* aOther );
@@ -206,6 +206,9 @@ public:
 
     // If not null, this indicates the subgraph on a higher level sheet that is linked to this one
     CONNECTION_SUBGRAPH* m_hier_parent;
+
+    /// A cache of escaped netnames from schematic items
+    std::unordered_map<SCH_ITEM*, wxString> m_driver_name_cache;
 };
 
 /// Associates a net code with the final name of a net
@@ -299,7 +302,7 @@ public:
 
 private:
 
-    std::unordered_set<SCH_ITEM*> m_items;
+    std::vector<SCH_ITEM*> m_items;
 
     // The owner of all CONNECTION_SUBGRAPH objects
     std::vector<CONNECTION_SUBGRAPH*> m_subgraphs;
@@ -423,10 +426,11 @@ private:
      * Handles strong drivers (power pins and labels) only
      *
      * @param aItem is an item that can generate a connection name
+     * @param aSubgraph is used to determine the sheet to use and retrieve the cached name
      * @return a connection generated from the item, or nullptr if item is not valid
      */
     std::shared_ptr<SCH_CONNECTION> getDefaultConnection( SCH_ITEM* aItem,
-                                                          const SCH_SHEET_PATH& aSheet );
+                                                          CONNECTION_SUBGRAPH* aSubgraph );
 
     void recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph, const wxString& aOldName );
 
