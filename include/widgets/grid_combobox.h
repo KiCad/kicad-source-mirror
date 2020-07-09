@@ -52,8 +52,11 @@ public:
 protected:
     wxComboBox* Combo() const { return static_cast<wxComboBox*>( m_control ); }
 
-    const wxArrayString&           m_names;
-    wxString                       m_value;
+    void onComboCloseUp( wxCommandEvent& aEvent );
+    void onComboDropDown( wxCommandEvent& aEvent );
+
+    wxArrayString m_names;
+    wxString      m_value;
 
     wxDECLARE_NO_COPY_CLASS( GRID_CELL_COMBOBOX );
 };

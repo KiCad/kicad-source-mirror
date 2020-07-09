@@ -1325,7 +1325,6 @@
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style">wxBORDER_DEFAULT</property>
-                                                    <event name="OnKillFocus">OnMembershipKillFocus</event>
                                                     <event name="OnSize">OnSizeMembershipGrid</event>
                                                 </object>
                                             </object>
