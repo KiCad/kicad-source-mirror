@@ -61,7 +61,6 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
 {
     friend struct CV::IFACE;
 
-    wxString                  m_currentSearchPattern;
     NETLIST                   m_netlist;
     int                       m_filteringOptions;
     ACTION_TOOLBAR*           m_mainToolBar;

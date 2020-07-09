@@ -330,11 +330,6 @@ void CVPCB_MAINFRAME::OnEnterFilteringText( wxCommandEvent& aEvent )
     // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN is set, update the list
     // of available footprints which match the filter
 
-    m_currentSearchPattern = m_tcFilterString->GetValue();
-
-    if(( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN ) == 0 )
-        return;
-
     wxListEvent l_event;
     OnSelectComponent( l_event );
 }
@@ -350,7 +345,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     libraryName = m_libListBox->GetSelectedLibrary();
 
     m_footprintListBox->SetFootprints( *m_FootprintsList, libraryName, component,
-                                       m_currentSearchPattern, m_filteringOptions);
+                                       m_tcFilterString->GetValue(), m_filteringOptions );
 
     if( component && component->GetFPID().IsValid() )
         m_footprintListBox->SetSelectedFootprint( component->GetFPID() );
@@ -541,10 +536,6 @@ void CVPCB_MAINFRAME::SetFootprintFilter( FOOTPRINTS_LISTBOX::FP_FILTER_T aFilte
 {
     int option = aFilter;
 
-    // Extract the current search patten when needed
-    if( option == FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN )
-        m_currentSearchPattern = m_tcFilterString->GetValue();
-
     // Apply the filter accordingly
     switch( aAction )
     {
@@ -589,7 +580,10 @@ void CVPCB_MAINFRAME::DisplayStatus()
             }
         }
 
-        filters += _( "key words" ) + wxString::Format( wxT( " (%s)" ), msg );
+        filters += _( "key words" );
+
+        if( !msg.IsEmpty() )
+            filters += wxString::Format( wxT( " (%s)" ), msg );
     }
 
     if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT ) )
@@ -602,7 +596,10 @@ void CVPCB_MAINFRAME::DisplayStatus()
         if( !filters.IsEmpty() )
             filters += wxT( ", " );
 
-        filters += _( "pin count" ) + wxString::Format( wxT( " (%s)" ), msg );
+        filters += _( "pin count" );
+
+        if( !msg.IsEmpty() )
+            filters += wxString::Format( wxT( " (%s)" ), msg );
     }
 
     if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY ) )
@@ -612,15 +609,20 @@ void CVPCB_MAINFRAME::DisplayStatus()
         if( !filters.IsEmpty() )
             filters += wxT( ", " );
 
-        filters += _( "library" ) + wxString::Format( wxT( " (%s)" ), msg );
+        filters += _( "library" );
+
+        if( !msg.IsEmpty() )
+            filters += wxString::Format( wxT( " (%s)" ), msg );
     }
 
-    if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN ) )
+    wxString textFilter = m_tcFilterString->GetValue();
+
+    if( !textFilter.IsEmpty() )
     {
         if( !filters.IsEmpty() )
             filters += wxT( ", " );
 
-        filters += _( "search text" );
+        filters += _( "search text" ) + wxString::Format( wxT( " (%s)" ), textFilter );
     }
 
     if( filters.IsEmpty() )

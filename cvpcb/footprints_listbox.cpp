@@ -149,7 +149,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     if( aFilterType & FILTERING_BY_LIBRARY )
         filter.FilterByLibrary( aLibName );
 
-    if( aFilterType & FILTERING_BY_TEXT_PATTERN )
+    if( !aFootPrintFilterPattern.IsEmpty() )
         filter.FilterByTextPattern( aFootPrintFilterPattern );
 
     if( GetSelection() >= 0 && GetSelection() < (int)m_footprintList.GetCount() )

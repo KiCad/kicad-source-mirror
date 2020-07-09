@@ -79,12 +79,13 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyLibrary, true );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyTextPattern, true );
 
-    m_tcFilterString = new wxTextCtrl( m_mainToolBar, ID_CVPCB_FILTER_TEXT_EDIT );
+    m_tcFilterString = new wxTextCtrl( m_mainToolBar, ID_CVPCB_FILTER_TEXT_EDIT, wxEmptyString,
+                                       wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+
+    m_tcFilterString->Bind( wxEVT_TEXT_ENTER, &CVPCB_MAINFRAME::OnEnterFilteringText, this );
 
     m_mainToolBar->AddControl( m_tcFilterString );
-
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
@@ -105,7 +106,5 @@ void CVPCB_MAINFRAME::SyncToolbars()
                            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY ) );
     m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyPin,
                            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT ) );
-    m_mainToolBar->Toggle( CVPCB_ACTIONS::FilterFPbyTextPattern,
-                           filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN ) );
     m_mainToolBar->Refresh();
 }

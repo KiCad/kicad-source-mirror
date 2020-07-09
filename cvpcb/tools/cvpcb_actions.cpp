@@ -152,9 +152,3 @@ TOOL_ACTION CVPCB_ACTIONS::FilterFPbyLibrary( "cvpcb.Control.FilterFPbyLibrary",
         module_library_list_xpm, AF_NONE,
         (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY );
 
-TOOL_ACTION CVPCB_ACTIONS::FilterFPbyTextPattern( "cvpcb.Control.FilterFPbyTextPattern",
-        AS_GLOBAL, 0, "",
-        _( "Filter by display name" ),
-        _( "Filter footprint list using plain text matching or regular expressions" ),
-        module_name_filtered_list_xpm, AF_NONE,
-        (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN );

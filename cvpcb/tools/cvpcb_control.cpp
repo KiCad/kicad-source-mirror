@@ -319,5 +319,4 @@ void CVPCB_CONTROL::setTransitions()
     Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::FilterFPbyFPFilters.MakeEvent() );
     Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::FilterFPbyLibrary.MakeEvent() );
     Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::filterFPbyPin.MakeEvent() );
-    Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::FilterFPbyTextPattern.MakeEvent() );
 }
