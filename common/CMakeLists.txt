@@ -7,6 +7,9 @@ endif()
 #add_subdirectory( libeval  )
 #add_subdirectory( libeval_compiler )
 
+if( KICAD_SPICE )
+    set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
+endif()
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
