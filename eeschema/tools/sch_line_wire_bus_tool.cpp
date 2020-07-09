@@ -374,7 +374,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos, '\\' );
+    m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos );
     m_busUnfold.entry->SetParent( m_frame->GetScreen() );
     m_frame->AddToScreen( m_busUnfold.entry );
 
@@ -634,23 +634,25 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
                 wxPoint cursor_delta = cursorPos - m_busUnfold.origin;
                 SCH_BUS_WIRE_ENTRY* entry = m_busUnfold.entry;
 
-                bool offset = ( cursor_delta.x < 0 );
+                bool flipX = ( cursor_delta.x < 0 );
+                bool flipY = ( cursor_delta.y < 0 );
 
                 // Erase and redraw if necessary
-                if( offset != m_busUnfold.offset )
+                if( flipX != m_busUnfold.flipX || flipY != m_busUnfold.flipY )
                 {
-                    wxPoint entry_pos = m_busUnfold.origin;
+                    wxSize size  = entry->GetSize();
+                    int    ySign = flipY ? -1 : 1;
+                    int    xSign = flipX ? -1 : 1;
 
-                    if( offset )
-                        entry_pos -= entry->GetSize();
+                    size.x = std::abs( size.x ) * xSign;
+                    size.y = std::abs( size.y ) * ySign;
+                    entry->SetSize( size );
 
-                    entry->SetPosition( entry_pos );
-                    m_busUnfold.offset = offset;
+                    m_busUnfold.flipY = flipY;
+                    m_busUnfold.flipX = flipX;
 
                     m_frame->RefreshItem( entry );
-
-                    wxPoint wire_start = offset ? entry->GetPosition() : entry->m_End();
-                    m_wires.front()->SetStartPoint( wire_start );
+                    m_wires.front()->SetStartPoint( entry->m_End() );
                 }
 
                 // Update the label "ghost" position

@@ -48,7 +48,8 @@ class EE_SELECTION_TOOL;
 struct BUS_UNFOLDING_T
 {
     bool in_progress;   ///< True if bus unfold operation is running
-    bool offset;        ///< True if the bus entry should be offset from origin
+    bool flipX;         ///< True if the bus entry should be flipped in the x-axis
+    bool flipY;         ///< True if the bus entry should be flipped in the y-axis
     bool label_placed;  ///< True if user has placed the net label
 
     wxPoint origin;     ///< Origin (on the bus) of the unfold
