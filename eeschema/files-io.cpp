@@ -43,6 +43,7 @@
 #include <sch_component.h>
 #include <schematic.h>
 #include <wildcards_and_files_ext.h>
+#include <profile.h>
 #include <project_rescue.h>
 #include <reporter.h>
 #include <eeschema_config.h>
@@ -243,6 +244,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( !AskToSaveChanges() )
         return false;
+
+    PROF_COUNTER openFiles( "OpenProjectFile" );
 
     wxFileName pro = fullFileName;
     pro.SetExt( ProjectFileExtension );
@@ -516,6 +519,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         m_infoBar->AddCloseButton();
         m_infoBar->ShowMessage( "Schematic file is read only.", wxICON_WARNING );
     }
+
+#ifdef PROFILE
+    openFiles.Show();
+#endif
 
     return true;
 }

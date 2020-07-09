@@ -773,6 +773,20 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
 
     GetComponents( symbolInstances, true, true );
 
+    std::map<KIID_PATH, wxString> pathNameCache;
+
+    // Calculating the name of a path is somewhat expensive; on large designs with many components
+    // this can blow up to a serious amount of time when loading the schematic
+    auto getName =
+            [&pathNameCache]( const KIID_PATH& aPath ) -> const wxString&
+            {
+                if( pathNameCache.count( aPath ) )
+                    return pathNameCache.at( aPath );
+
+                pathNameCache[aPath] = aPath.AsString();
+                return pathNameCache[aPath];
+            };
+
     for( size_t i = 0; i < symbolInstances.GetCount(); i++ )
     {
         // The instance paths are stored in the file sans root path so the comparison
@@ -780,9 +794,9 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
         wxString path = symbolInstances[i].GetPath();
 
         auto it = std::find_if( aSymbolInstances.begin(), aSymbolInstances.end(),
-                    [ path ]( const COMPONENT_INSTANCE_REFERENCE& r ) -> bool
+                    [ path, &getName ]( const COMPONENT_INSTANCE_REFERENCE& r ) -> bool
                     {
-                        return path == r.m_Path.AsString();
+                        return path == getName( r.m_Path );
                     }
                 );
 
