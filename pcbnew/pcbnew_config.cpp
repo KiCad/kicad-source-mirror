@@ -100,7 +100,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             GetCanvas()->GetView()->GetPainter()->GetSettings() );
 
-    rs->LoadNetSettings( project.NetSettings() );
+    rs->LoadNetSettings( project.NetSettings(), GetBoard()->GetNetInfo() );
 
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 

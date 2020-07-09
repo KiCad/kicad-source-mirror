@@ -218,9 +218,16 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
 }
 
 
-void PCB_RENDER_SETTINGS::LoadNetSettings( const NET_SETTINGS& aSettings )
+void PCB_RENDER_SETTINGS::LoadNetSettings( const NET_SETTINGS& aSettings,
+                                           const NETINFO_LIST& aList )
 {
-    m_netColors = aSettings.m_PcbNetColors;
+    m_netColors.clear();
+
+    for( const auto& pair : aSettings.m_PcbNetColors )
+    {
+        if( NETINFO_ITEM* net = aList.GetNetItem( pair.first ) )
+            m_netColors[net->GetNet()] = pair.second;
+    }
 
     m_netclassColors.clear();
 
@@ -228,6 +235,14 @@ void PCB_RENDER_SETTINGS::LoadNetSettings( const NET_SETTINGS& aSettings )
     {
         if( pair.second->GetPcbColor() != COLOR4D::UNSPECIFIED )
             m_netclassColors[pair.first] = pair.second->GetPcbColor();
+    }
+
+    m_hiddenNets.clear();
+
+    for( const wxString& hidden : aSettings.m_HiddenNets )
+    {
+        if( NETINFO_ITEM* net = aList.GetNetItem( hidden ) )
+            m_hiddenNets.insert( net->GetNet() );
     }
 }
 
@@ -300,8 +315,8 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
     // Apply net color overrides
     if( conItem && m_netColorMode == NET_COLOR_MODE::ALL )
     {
-        if( m_netColors.count( conItem->GetNetname() ) )
-            return m_netColors.at( conItem->GetNetname() );
+        if( m_netColors.count( conItem->GetNetCode() ) )
+            return m_netColors.at( conItem->GetNetCode() );
         else if( m_netclassColors.count( conItem->GetNetClassName() ) )
             return m_netclassColors.at( conItem->GetNetClassName() );
     }

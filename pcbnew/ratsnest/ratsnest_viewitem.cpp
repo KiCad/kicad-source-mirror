@@ -81,15 +81,19 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     bool colorByNet = rs->GetNetColorMode() != PCB_RENDER_SETTINGS::NET_COLOR_MODE::OFF;
 
-    std::set<int> highlightedNets = rs->GetHighlightNetCodes();
+    std::set<int>        highlightedNets = rs->GetHighlightNetCodes();
+    const std::set<int>& hiddenNets      = rs->GetHiddenNets();
 
     gal->SetStrokeColor( color.Brightened(0.5) );
 
     const bool curved_ratsnest = rs->GetCurvedRatsnestLinesEnabled();
 
     // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
-    for( const auto& l : m_data->GetDynamicRatsnest() )
+    for( const RN_DYNAMIC_LINE& l : m_data->GetDynamicRatsnest() )
     {
+        if( hiddenNets.count( l.netCode ) )
+            continue;
+
         if ( l.a == l.b )
         {
             gal->DrawLine( VECTOR2I( l.a.x - CROSS_SIZE, l.a.y - CROSS_SIZE ),
@@ -116,6 +120,9 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     for( int i = 1 /* skip "No Net" at [0] */; i < m_data->GetNetCount(); ++i )
     {
+        if( hiddenNets.count( i ) )
+            continue;
+
         RN_NET* net = m_data->GetRatsnestForNet( i );
 
         if( !net )

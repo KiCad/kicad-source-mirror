@@ -528,9 +528,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             mgr->LoadProject( pro.GetFullPath() );
         }
-
-        // load project settings before BOARD
-        LoadProjectSettings();
     }
 
     if( is_new )
@@ -647,6 +644,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Rebuild list of nets (full ratsnest rebuild)
     GetBoard()->BuildConnectivity();
     Compile_Ratsnest( true );
+
+    // Load project settings after setting up board; some of them depend on the nets list
+    LoadProjectSettings();
 
     onBoardLoaded();
 

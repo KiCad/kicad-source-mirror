@@ -49,6 +49,7 @@ class DIMENSION;
 class PCB_TARGET;
 class MARKER_PCB;
 class NET_SETTINGS;
+class NETINFO_LIST;
 
 namespace KIGFX
 {
@@ -107,8 +108,9 @@ public:
     /**
      * Loads net-specific render settings
      * @param aSettings is the NET_SETTINGS for the current proejct
+     * @param aList is the list of nets in the board
      */
-    void LoadNetSettings( const NET_SETTINGS& aSettings );
+    void LoadNetSettings( const NET_SETTINGS& aSettings, const NETINFO_LIST& aList );
 
     virtual void LoadColors( const COLOR_SETTINGS* aSettings ) override;
 
@@ -185,7 +187,10 @@ public:
 
     std::map<wxString, KIGFX::COLOR4D>& GetNetclassColorMap() { return m_netclassColors; }
 
-    std::map<wxString, KIGFX::COLOR4D>& GetNetColorMap() { return m_netColors; }
+    std::map<int, KIGFX::COLOR4D>& GetNetColorMap() { return m_netColors; }
+
+    std::set<int>& GetHiddenNets() { return m_hiddenNets; }
+    const std::set<int>& GetHiddenNets() const { return m_hiddenNets; }
 
 protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
@@ -238,8 +243,11 @@ protected:
     ///> Overrides for specific netclass colors
     std::map<wxString, KIGFX::COLOR4D> m_netclassColors;
 
-    ///> Overrides for specific net colors
-    std::map<wxString, KIGFX::COLOR4D> m_netColors;
+    ///> Overrides for specific net colors, stored as netcodes for the ratsnest to access easily
+    std::map<int, KIGFX::COLOR4D> m_netColors;
+
+    ///> Set of net codes that should not have their ratsnest displayed
+    std::set<int> m_hiddenNets;
 };
 
 
