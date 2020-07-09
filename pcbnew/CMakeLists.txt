@@ -227,7 +227,6 @@ set( PCBNEW_DRC_SRCS
     drc/drc_courtyard_tester.cpp
     drc/drc_drilled_hole_tester.cpp
     drc/drc_keepout_tester.cpp
-    drc/drc_netclass_tester.cpp
     drc/drc_textvar_tester.cpp
     drc/drc.cpp
     drc/drc_clearance_test_functions.cpp

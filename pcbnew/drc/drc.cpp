@@ -57,7 +57,6 @@
 #include <drc/drc_courtyard_tester.h>
 #include <drc/drc_drilled_hole_tester.h>
 #include <drc/drc_keepout_tester.h>
-#include <drc/drc_netclass_tester.h>
 #include <drc/drc_textvar_tester.h>
 #include <drc/footprint_tester.h>
 #include <dialogs/panel_setup_rules.h>
@@ -248,35 +247,6 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         }
 
         testOutline( commit );
-    }
-
-    if( aMessages )
-    {
-        aMessages->AppendText( _( "Netclasses...\n" ) );
-        wxSafeYield();
-    }
-
-    DRC_NETCLASS_TESTER netclassTester( [&]( MARKER_PCB* aMarker )
-                                        {
-                                            addMarkerToPcb( commit, aMarker );
-                                        } );
-
-    if( !netclassTester.RunDRC( userUnits(), *m_pcb ) )
-    {
-        // testing the netclasses is a special case because if the netclasses
-        // do not pass the BOARD_DESIGN_SETTINGS checks, then every member of a net
-        // class (a NET) will cause its items such as tracks, vias, and pads
-        // to also fail.  So quit after *all* netclass errors have been reported.
-        if( aMessages )
-            aMessages->AppendText( _( "Netclasses are not valid: Cannot run DRC\n"
-                                      "Please open Board Setup and\ncheck netclass definitions" ) );
-
-        commit.Push( wxEmptyString, false, false );
-
-        // update the m_drcDialog listboxes
-        updatePointers();
-
-        return;
     }
 
     // test pad to pad clearances, nothing to do with tracks, vias or zones.
