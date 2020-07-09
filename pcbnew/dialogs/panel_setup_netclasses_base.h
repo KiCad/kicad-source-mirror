@@ -66,7 +66,6 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		virtual void OnApplyFilters( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAssignAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAssignSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnMembershipKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSizeMembershipGrid( wxSizeEvent& event ) { event.Skip(); }
 
 

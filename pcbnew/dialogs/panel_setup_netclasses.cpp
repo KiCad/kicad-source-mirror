@@ -35,6 +35,7 @@
 #include <grid_tricks.h>
 
 #include <panel_setup_netclasses.h>
+#include <widgets/grid_combobox.h>
 
 
 // Columns of netclasses grid
@@ -216,7 +217,7 @@ void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
     }
 
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new wxGridCellChoiceEditor( netclassNames ) );
+    attr->SetEditor( new GRID_CELL_COMBOBOX( netclassNames ) );
     m_membershipGrid->SetColAttr( 1, attr );
 
     m_assignNetClass->Set( netclassNames );
@@ -407,12 +408,6 @@ void PANEL_SETUP_NETCLASSES::OnSizeNetclassGrid( wxSizeEvent& event )
     AdjustNetclassGridColumns( event.GetSize().GetX() );
 
     event.Skip();
-}
-
-
-void PANEL_SETUP_NETCLASSES::OnMembershipKillFocus( wxFocusEvent& event )
-{
-    m_membershipGrid->CommitPendingChanges();
 }
 
 
