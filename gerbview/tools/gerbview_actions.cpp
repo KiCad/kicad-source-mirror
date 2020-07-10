@@ -57,8 +57,8 @@ OPT<TOOL_EVENT> GERBVIEW_ACTIONS::TranslateLegacyId( int aId )
 //
 TOOL_ACTION GERBVIEW_ACTIONS::openGerber( "gerbview.Control.openGerber",
         AS_GLOBAL, 0, "",
-        _( "Open Gerber File(s)..." ),
-        _( "Open Gerber file(s) on the current layer. Previous data will be deleted" ),
+        _( "Open Gerber Plot File(s)..." ),
+        _( "Open Gerber plot file(s) on the current layer. Previous data will be deleted" ),
         load_gerber_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::openDrillFile( "gerbview.Control.openDrillFile",
@@ -70,7 +70,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::openDrillFile( "gerbview.Control.openDrillFile",
 TOOL_ACTION GERBVIEW_ACTIONS::openJobFile( "gerbview.Control.openJobFile",
         AS_GLOBAL, 0, "",
         _( "Open Gerber Job File..." ),
-        _( "Open a Gerber job file and its associated gerber files" ),
+        _( "Open a Gerber job file and its associated gerber plot files" ),
         gerber_job_file_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::openZipFile( "gerbview.Control.openZipFile",

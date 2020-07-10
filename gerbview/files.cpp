@@ -316,7 +316,17 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
         }
         else
         {
-            if( Read_GERBER_File( filename.GetFullPath() ) )
+            if( filename.GetExt() == GerberJobFileExtension.c_str() )
+            {
+                //We cannot read a gerber job file as a gerber plot file: skip it
+                wxString txt;
+                txt.Printf(
+                    _( "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>" ),
+                    filename.GetFullName() );
+                success = false;
+                reporter.Report( txt, RPT_SEVERITY_ERROR );
+            }
+            else if( Read_GERBER_File( filename.GetFullPath() ) )
             {
                 UpdateFileHistory( m_lastFileName );
 
@@ -539,6 +549,18 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             if( aReporter )
             {
                 msg.Printf( _( "Info: skip file \"%s\" (unknown type)\n" ), entry->GetName() );
+                aReporter->Report( msg, RPT_SEVERITY_WARNING );
+            }
+
+            continue;
+        }
+
+        if( curr_ext == GerberJobFileExtension.c_str() )
+        {
+            //We cannot read a gerber job file as a gerber plot file: skip it
+            if( aReporter )
+            {
+                msg.Printf( _( "Info: skip file \"%s\" (gerber job file)\n" ), entry->GetName() );
                 aReporter->Report( msg, RPT_SEVERITY_WARNING );
             }
 
