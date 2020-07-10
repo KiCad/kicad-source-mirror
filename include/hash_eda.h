@@ -57,30 +57,29 @@ enum HASH_FLAGS
  */
 std::size_t hash_eda( const EDA_ITEM* aItem, int aFlags = HASH_FLAGS::HASH_ALL );
 
+/**
+ * This is a dummy function to take the final case of hash_combine below
+ * @param seed
+ */
+static inline void hash_combine( std::size_t &seed ) {}
 
 /**
  * @brief Combine multiple hashes utilizing previous hash result
- * @tparam T        A hashable type
- * @param __seed    A seed value input and output for the result.
- * @param __val     A hashable object of type T
+ * @tparam T      A hashable type
+ * @param seed    A seed value input and output for the result.
+ * @param val     A hashable object of type T
  */
-template< typename T >
-static inline void hash_combine( std::size_t &__seed, const T &__val )
-{
-    __seed ^= std::hash<T>()( __val ) + 0x9e3779b9 + ( __seed << 6 ) + ( __seed >> 2 );
-}
-
 template< typename T, typename ... Types >
 static inline void hash_combine( std::size_t &seed, const T &val, const Types &... args )
 {
-    hash_combine( seed, val );
+    seed ^= std::hash<T>()( val ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
     hash_combine( seed, args... );
 }
 
 template <typename... Types>
 static inline std::size_t hash_val( const Types &... args )
 {
-    std::size_t seed = 0;
+    std::size_t seed = 0xa82de1c0;
     hash_combine( seed, args... );
     return seed;
 }
