@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,11 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef HASH_EDA_H_
+#define HASH_EDA_H_
 /**
  * @brief Hashing functions for EDA_ITEMs.
  */
 
 #include <cstdlib>
+#include <functional>
 
 class EDA_ITEM;
 
@@ -34,16 +38,16 @@ class EDA_ITEM;
 ///> The properties might be combined using the bitwise 'or' operator.
 enum HASH_FLAGS
 {
-    POSITION    = 0x01,
+    HASH_POS    = 0x01,
 
     ///> use coordinates relative to the parent object
     REL_COORD   = 0x02,
-    ROTATION    = 0x04,
-    LAYER       = 0x08,
-    NET         = 0x10,
-    REFERENCE   = 0x20,
-    VALUE       = 0x40,
-    ALL         = 0xff
+    HASH_ROT    = 0x04,
+    HASH_LAYER  = 0x08,
+    HASH_NET    = 0x10,
+    HASH_REF    = 0x20,
+    HASH_VALUE  = 0x40,
+    HASH_ALL    = 0xff
 };
 
 /**
@@ -51,4 +55,34 @@ enum HASH_FLAGS
  * @param aItem is the item for which the hash will be computed.
  * @return Hash value.
  */
-std::size_t hash_eda( const EDA_ITEM* aItem, int aFlags = HASH_FLAGS::ALL );
+std::size_t hash_eda( const EDA_ITEM* aItem, int aFlags = HASH_FLAGS::HASH_ALL );
+
+
+/**
+ * @brief Combine multiple hashes utilizing previous hash result
+ * @tparam T        A hashable type
+ * @param __seed    A seed value input and output for the result.
+ * @param __val     A hashable object of type T
+ */
+template< typename T >
+static inline void hash_combine( std::size_t &__seed, const T &__val )
+{
+    __seed ^= std::hash<T>()( __val ) + 0x9e3779b9 + ( __seed << 6 ) + ( __seed >> 2 );
+}
+
+template< typename T, typename ... Types >
+static inline void hash_combine( std::size_t &seed, const T &val, const Types &... args )
+{
+    hash_combine( seed, val );
+    hash_combine( seed, args... );
+}
+
+template <typename... Types>
+static inline std::size_t hash_val( const Types &... args )
+{
+    std::size_t seed = 0;
+    hash_combine( seed, args... );
+    return seed;
+}
+
+#endif

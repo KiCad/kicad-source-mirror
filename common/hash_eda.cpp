@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -38,7 +39,7 @@ static inline size_t hash_board_item( const BOARD_ITEM* aItem, int aFlags )
 {
     size_t ret = 0;
 
-    if( aFlags & LAYER )
+    if( aFlags & HASH_LAYER )
         ret = hash<unsigned long long>{}( aItem->GetLayerSet().to_ullong() );
 
     return ret;
@@ -47,7 +48,7 @@ static inline size_t hash_board_item( const BOARD_ITEM* aItem, int aFlags )
 
 size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
 {
-    size_t ret = 0xa82de1c0;
+    size_t ret;
 
     switch( aItem->Type() )
     {
@@ -55,57 +56,50 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
         {
             const MODULE* module = static_cast<const MODULE*>( aItem );
 
-            ret += hash_board_item( module, aFlags );
+            ret    = hash_board_item( module, aFlags );
 
-            if( aFlags & POSITION )
-            {
-                ret += hash<int>{}( module->GetPosition().x );
-                ret += hash<int>{}( module->GetPosition().y );
-            }
+            if( aFlags & HASH_POS )
+                hash_combine( ret, module->GetPosition().x, module->GetPosition().y );
 
-            if( aFlags & ROTATION )
-                ret += hash<double>{}( module->GetOrientation() );
+            if( aFlags & HASH_ROT )
+                hash_combine( ret, module->GetOrientation() );
 
             for( auto i : module->GraphicalItems() )
-                ret += hash_eda( i, aFlags );
+                hash_combine( ret, hash_eda( i, aFlags ) );
 
             for( auto i : module->Pads() )
-                ret += hash_eda( static_cast<EDA_ITEM*>( i ), aFlags );
+                hash_combine( ret, hash_eda( static_cast<EDA_ITEM*>( i ), aFlags ) );
         }
         break;
 
     case PCB_PAD_T:
         {
             const D_PAD* pad = static_cast<const D_PAD*>( aItem );
-            ret += hash_board_item( pad, aFlags );
-            ret += hash<int>{}( pad->GetShape() << 16 );
-            ret += hash<int>{}( pad->GetDrillShape() << 18 );
-            ret += hash<int>{}( pad->GetSize().x << 8 );
-            ret += hash<int>{}( pad->GetSize().y << 9 );
-            ret += hash<int>{}( pad->GetOffset().x << 6 );
-            ret += hash<int>{}( pad->GetOffset().y << 7 );
-            ret += hash<int>{}( pad->GetDelta().x << 4 );
-            ret += hash<int>{}( pad->GetDelta().y << 5 );
 
-            if( aFlags & POSITION )
+            ret = hash<int>{}( pad->GetShape() << 16 );
+            hash_combine( ret, pad->GetDrillShape() << 18 );
+            hash_combine( ret, pad->GetSize().x << 8 );
+            hash_combine( ret, pad->GetSize().y << 9 );
+            hash_combine( ret, pad->GetOffset().x << 6 );
+            hash_combine( ret, pad->GetOffset().y << 7 );
+            hash_combine( ret, pad->GetDelta().x << 4 );
+            hash_combine( ret, pad->GetDelta().y << 5 );
+
+            hash_combine( ret, hash_board_item( pad, aFlags ) );
+
+            if( aFlags & HASH_POS )
             {
                 if( aFlags & REL_COORD )
-                {
-                    ret += hash<int>{}( pad->GetPos0().x );
-                    ret += hash<int>{}( pad->GetPos0().y );
-                }
+                    hash_combine( ret, pad->GetPos0().x, pad->GetPos0().y );
                 else
-                {
-                    ret += hash<int>{}( pad->GetPosition().x );
-                    ret += hash<int>{}( pad->GetPosition().y );
-                }
+                    hash_combine( ret, pad->GetPosition().x, pad->GetPosition().y );
             }
 
-            if( aFlags & ROTATION )
-                ret += hash<double>{}( pad->GetOrientation() );
+            if( aFlags & HASH_ROT )
+                hash_combine( ret, pad->GetOrientation() );
 
-            if( aFlags & NET )
-                ret += hash<int>{}( pad->GetNetCode() << 6 );
+            if( aFlags & HASH_NET )
+                hash_combine( ret, pad->GetNetCode() );
         }
         break;
 
@@ -113,70 +107,64 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
         {
             const TEXTE_MODULE* text = static_cast<const TEXTE_MODULE*>( aItem );
 
-            if( !( aFlags & REFERENCE ) && text->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
+            if( !( aFlags & HASH_REF ) && text->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
                 break;
 
-            if( !( aFlags & VALUE ) && text->GetType() == TEXTE_MODULE::TEXT_is_VALUE )
+            if( !( aFlags & HASH_VALUE ) && text->GetType() == TEXTE_MODULE::TEXT_is_VALUE )
                 break;
 
-            ret += hash_board_item( text, aFlags );
-            ret += hash<string>{}( text->GetText().ToStdString() );
-            ret += hash<bool>{}( text->IsItalic() );
-            ret += hash<bool>{}( text->IsBold() );
-            ret += hash<bool>{}( text->IsMirrored() );
-            ret += hash<int>{}( text->GetTextWidth() );
-            ret += hash<int>{}( text->GetTextHeight() );
-            ret += hash<int>{}( text->GetHorizJustify() );
-            ret += hash<int>{}( text->GetVertJustify() );
+            ret = hash_board_item( text, aFlags );
+            hash_combine( ret, text->GetText().ToStdString() );
+            hash_combine( ret,  text->IsItalic() );
+            hash_combine( ret, text->IsBold() );
+            hash_combine( ret, text->IsMirrored() );
+            hash_combine( ret, text->GetTextWidth() );
+            hash_combine( ret, text->GetTextHeight() );
+            hash_combine( ret, text->GetHorizJustify() );
+            hash_combine( ret, text->GetVertJustify() );
 
-            if( aFlags & POSITION )
+            if( aFlags & HASH_POS )
             {
                 if( aFlags & REL_COORD )
-                {
-                    ret += hash<int>{}( text->GetPos0().x );
-                    ret += hash<int>{}( text->GetPos0().y );
-                }
+                    hash_combine( ret, text->GetPos0().x, text->GetPos0().y );
                 else
-                {
-                    ret += hash<int>{}( text->GetPosition().x );
-                    ret += hash<int>{}( text->GetPosition().y );
-                }
+                    hash_combine( ret, text->GetPosition().x, text->GetPosition().y );
             }
 
-            if( aFlags & ROTATION )
-                ret += hash<double>{}( text->GetTextAngle() );
+            if( aFlags & HASH_ROT )
+                hash_combine( ret, text->GetTextAngle() );
         }
         break;
 
     case PCB_MODULE_EDGE_T:
         {
             const EDGE_MODULE* segment = static_cast<const EDGE_MODULE*>( aItem );
-            ret += hash_board_item( segment, aFlags );
-            ret += hash<int>{}( segment->GetType() );
-            ret += hash<int>{}( segment->GetShape() );
-            ret += hash<int>{}( segment->GetWidth() );
-            ret += hash<int>{}( segment->GetRadius() );
+            ret = hash_board_item( segment, aFlags );
+            hash_combine( ret, segment->GetType() );
+            hash_combine( ret, segment->GetShape() );
+            hash_combine( ret, segment->GetWidth() );
+            hash_combine( ret, segment->GetRadius() );
 
-            if( aFlags & POSITION )
+            if( aFlags & HASH_POS )
             {
                 if( aFlags & REL_COORD )
                 {
-                    ret += hash<int>{}( segment->GetStart0().x );
-                    ret += hash<int>{}( segment->GetStart0().y );
-                    ret += hash<int>{}( segment->GetEnd0().x );
-                    ret += hash<int>{}( segment->GetEnd0().y );
+                    hash_combine( ret, segment->GetStart0().x );
+                    hash_combine( ret, segment->GetStart0().y );
+                    hash_combine( ret, segment->GetEnd0().x );
+                    hash_combine( ret, segment->GetEnd0().y );
                 }
                 else
                 {
-                    ret += hash<int>{}( segment->GetStart().x );
-                    ret += hash<int>{}( segment->GetStart().y );
-                    ret += hash<int>{}( segment->GetEnd().x );
-                    ret += hash<int>{}( segment->GetEnd().y );
+                    hash_combine( ret, segment->GetStart().x );
+                    hash_combine( ret, segment->GetStart().y );
+                    hash_combine( ret, segment->GetEnd().x );
+                    hash_combine( ret, segment->GetEnd().y );
                 }
             }
 
-            if( aFlags & ROTATION )
-                ret += hash<double>{}( segment->GetAngle() );
+            if( aFlags & HASH_ROT )
+                hash_combine( ret, segment->GetAngle() );
         }
         break;
 

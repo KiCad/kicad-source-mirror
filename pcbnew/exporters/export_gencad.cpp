@@ -681,8 +681,8 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 static size_t hashModule( const MODULE* aModule )
 {
     size_t ret = 0x11223344;
-    constexpr int flags = HASH_FLAGS::POSITION | HASH_FLAGS::REL_COORD
-                | HASH_FLAGS::ROTATION | HASH_FLAGS::LAYER;
+    constexpr int flags = HASH_FLAGS::HASH_POS | HASH_FLAGS::REL_COORD
+                | HASH_FLAGS::HASH_ROT | HASH_FLAGS::HASH_LAYER;
 
 
     for( auto i : aModule->GraphicalItems() )
