@@ -31,17 +31,12 @@
 
 #include <wx/filename.h>
 #include <wx/dir.h>
-#include <wx/log.h>
-#include <wx/stdpaths.h>
-#include <wx/string.h>
 
 #include <common.h>
 #include <confirm.h>
-#include <hotkeys_basic.h>
 #include <kiway.h>
 #include <richio.h>
 #include <wildcards_and_files_ext.h>
-#include <systemdirsappend.h>
 #include <kiway_player.h>
 #include <stdexcept>
 #include "pgm_kicad.h"
@@ -114,7 +109,8 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
         }
     }
 
-    wxFileName pcb( sch );
+    wxFileName  pcb( sch );
+    std::string packet;
     pro.SetExt( ProjectFileExtension );
     pcb.SetExt( LegacyPcbFileExtension );       // enforce extension
 
@@ -126,67 +122,29 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     if( sch.FileExists() )
     {
-        KIWAY_PLAYER* schframe = Kiway().Player( FRAME_SCH, false );
+        KIWAY_PLAYER* schframe = Kiway().Player( FRAME_SCH, true );
 
-        if( !schframe )
-        {
-            try     // SCH frame was not available, try to start it
-            {
-                schframe = Kiway().Player( FRAME_SCH, true );
-            }
-            catch( const IO_ERROR& err )
-            {
-                wxMessageBox( _( "Eeschema failed to load:\n" ) + err.What(),
-                        _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
-                return;
-            }
-        }
-
-        std::string packet = StrPrintf( "%d\n%s", SCH_IO_MGR::SCH_EAGLE,
-                                                  TO_UTF8( sch.GetFullPath() ) );
+        packet = StrPrintf( "%d\n%s", SCH_IO_MGR::SCH_EAGLE,  TO_UTF8( sch.GetFullPath() ) );
         schframe->Kiway().ExpressMail( FRAME_SCH, MAIL_IMPORT_FILE, packet, this );
 
-        if( !schframe->IsShown() )      // the frame exists, (created by the dialog field editor)
-                                        // but no project loaded.
-        {
+        if( !schframe->IsShown() )
             schframe->Show( true );
-        }
 
+        // On Windows, Raise() does not bring the window on screen, when iconized
         if( schframe->IsIconized() )
             schframe->Iconize( false );
 
         schframe->Raise();
     }
 
-
     if( pcb.FileExists() )
     {
-        KIWAY_PLAYER* pcbframe = Kiway().Player( FRAME_PCB_EDITOR, false );
+        KIWAY_PLAYER* pcbframe = Kiway().Player( FRAME_PCB_EDITOR, true );
 
-        if( !pcbframe )
-        {
-            try     // PCB frame was not available, try to start it
-            {
-                pcbframe = Kiway().Player( FRAME_PCB_EDITOR, true );
-            }
-            catch( const IO_ERROR& err )
-            {
-                wxMessageBox( _( "Pcbnew failed to load:\n" ) + err.What(), _( "KiCad Error" ),
-                        wxOK | wxICON_ERROR, this );
-                return;
-            }
-        }
-
-        // a pcb frame can be already existing, but not yet used.
-        // this is the case when running the footprint editor, or the footprint viewer first
-        // if the frame is not visible, the board is not yet loaded
         if( !pcbframe->IsVisible() )
-        {
             pcbframe->Show( true );
-        }
 
-        std::string packet = StrPrintf( "%d\n%s", IO_MGR::EAGLE,
-                                                  TO_UTF8( pcb.GetFullPath() ) );
+        packet = StrPrintf( "%d\n%s", IO_MGR::EAGLE, TO_UTF8( pcb.GetFullPath() ) );
         pcbframe->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_IMPORT_FILE, packet, this );
 
         // On Windows, Raise() does not bring the window on screen, when iconized

@@ -764,7 +764,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
     if( pcbframe == NULL )      // happens when the board editor is not active (or closed)
     {
-        DisplayErrorMessage( this, _("No board currently open." ) );
+        DisplayErrorMessage( this, _( "No board currently open." ) );
         return false;
     }
 

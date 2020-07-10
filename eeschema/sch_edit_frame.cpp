@@ -602,10 +602,6 @@ void SCH_EDIT_FRAME::OnModify()
 
 void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 {
-    wxFileName fn = Prj().AbsolutePath( Schematic().GetFileName() );
-
-    fn.SetExt( PcbFileExtension );
-
     if( Kiface().IsSingle() )
     {
         DisplayError( this,  _( "Cannot update the PCB, because the Schematic Editor is opened"
@@ -614,16 +610,19 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
         return;
     }
 
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_EDITOR, true );
+    KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_EDITOR, false );
 
-    // a pcb frame can be already existing, but not yet used.
-    // this is the case when running the footprint editor, or the footprint viewer first
-    // if the frame is not visible, the board is not yet loaded
-    if( !frame->IsVisible() )
+    if( !frame )
     {
+        wxFileName fn = Prj().GetProjectFullName();
+        fn.SetExt( PcbFileExtension );
+
+        frame = Kiway().Player( FRAME_PCB_EDITOR, true );
         frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
-        frame->Show( true );
     }
+
+    if( !frame->IsVisible() )
+        frame->Show( true );
 
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( frame->IsIconized() )
@@ -798,16 +797,16 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
         }
         else
         {
-            KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_EDITOR, true );
+            KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_EDITOR, false );
 
-            // a pcb frame can be already existing, but not yet used.
-            // this is the case when running the footprint editor, or the footprint viewer first
-            // if the frame is not visible, the board is not yet loaded
-             if( !frame->IsVisible() )
+            if( !frame )
             {
+                frame = Kiway().Player( FRAME_PCB_EDITOR, true );
                 frame->OpenProjectFiles( std::vector<wxString>( 1, boardfn.GetFullPath() ) );
-                frame->Show( true );
             }
+
+            if( !frame->IsVisible() )
+                frame->Show( true );
 
             // On Windows, Raise() does not bring the window on screen, when iconized
             if( frame->IsIconized() )

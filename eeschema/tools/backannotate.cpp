@@ -33,7 +33,7 @@
 #include <sch_sheet_path.h>
 #include <schematic.h>
 #include <kiface_i.h>
-
+#include <wildcards_and_files_ext.h>
 
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter,
                               bool aProcessFootprints, bool aProcessValues,
@@ -97,7 +97,17 @@ bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
         return false;
     }
 
-    m_frame->Kiway().Player( FRAME_PCB_EDITOR, true );
+    KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_PCB_EDITOR, false );
+
+    if( !frame )
+    {
+        wxFileName fn( m_frame->Prj().GetProjectFullName() );
+        fn.SetExt( PcbFileExtension );
+
+        frame = m_frame->Kiway().Player( FRAME_PCB_EDITOR, true );
+        frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+    }
+
     m_frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_PCB_GET_NETLIST, aNetlist );
     return true;
 }
@@ -200,6 +210,7 @@ void BACK_ANNOTATE::getChangeList()
                 // If module linked to multi unit symbol, we add all symbol's units to
                 // the change list
                 foundInMultiunit = true;
+
                 for( size_t i = 0; i < refList.GetCount(); ++i )
                 {
                     refList[i].GetComp()->ClearFlags( SKIP_STRUCT );
