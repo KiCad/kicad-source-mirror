@@ -328,23 +328,57 @@ bool HYPERLYNX_EXPORTER::writeBoardInfo()
 
 bool HYPERLYNX_EXPORTER::writeStackupInfo()
 {
+    /* Format:
+     * {STACKUP
+     * (SIGNAL T=thickness [P=plating_thickness] [C=constant] L=layer_name [M=material_name])							[comment]
+     * (DIELECTRIC T=thickness [C=constant] [L=layer_name] [M=material_name]) [comment]
+     * }
+     * name lenght is <= 20 chars
+     */
+
     auto layers = m_board->GetDesignSettings().GetEnabledLayers().CuStack();
+
+    // Get the board physical stackup structure
+    BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
 
     m_out->Print( 0, "{STACKUP\n" );
 
-    for( auto l : layers )
+    wxString layer_name;    // The last copper layer name used in stackup
+
+    for( BOARD_STACKUP_ITEM* item: stackup.GetList() )
     {
-        const auto name = m_board->GetLayerName( l );
-
-        m_out->Print( 1, "(SIGNAL T=0.002284 P=0.000000 C=1.724e-8 L=\"%s\" M=COPPER)\n",
-                (const char*) name.c_str() );
-
-        if( l != B_Cu )
+        if( item->GetType() == BS_ITEM_TYPE_COPPER )
         {
-            m_out->Print( 1, "(DIELECTRIC T=0.007087 C=3.660000 L=\"DE_%s\" M=FR4)\n",
-                    (const char*) name.c_str() );
+            layer_name = m_board->GetLayerName( item->GetBrdLayerId() );
+            int plating_thickness = 0;
+            double resistivity = 1.724e-8;  // Good for copper
+            m_out->Print( 1, "(SIGNAL T=%g P=%g C=%g L=\"%.20s\" M=COPPER)\n",
+                          iu2hyp( item->GetThickness( 0 ) ),
+                          iu2hyp( plating_thickness ),
+                          resistivity,
+                          TO_UTF8( layer_name ) );
+        }
+        else if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+        {
+            if( item->GetSublayersCount() < 2 )
+            {
+                m_out->Print( 1, "(DIELECTRIC T=%g C=%g L=\"DE_%.17s\" M=\"%.20s\")\n",
+                              iu2hyp( item->GetThickness( 0 ) ),
+                              item->GetEpsilonR( 0 ),
+                              TO_UTF8( layer_name ),
+                              TO_UTF8( item->GetMaterial( 0 ) ) );
+            }
+            else for( int idx = 0; idx < item->GetSublayersCount(); idx++ )
+            {
+                m_out->Print( 1, "(DIELECTRIC T=%g C=%g L=\"DE%d_%.16s\" M=\"%.20s\")\n",
+                              iu2hyp( item->GetThickness( idx ) ),
+                              item->GetEpsilonR( idx ),
+                              idx, TO_UTF8( layer_name ),
+                              TO_UTF8( item->GetMaterial( idx ) ) );
+            }
         }
     }
+
     m_out->Print( 0, "}\n\n" );
 
     return true;
