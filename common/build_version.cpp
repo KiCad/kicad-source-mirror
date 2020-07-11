@@ -147,9 +147,15 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     aMsg << indent4 << "Curl: " << GetCurlLibVersion() << eol;
 
-#ifdef KICAD_SPICE
-#include <ngspice/config.h>
+#if defined( KICAD_SPICE )
+#if defined( NGSPICE_BUILD_VERSION )
+    aMsg << indent4 << "ngspice: " << NGSPICE_BUILD_VERSION << eol;
+#elif defined( NGSPICE_HAVE_CONFIG_H )
+    #include <ngspice/config.h>
     aMsg << indent4 << "ngspice: " << PACKAGE_VERSION << eol;
+#else
+    aMsg << indent4 << "ngspice: " << "unknown" << eol;
+#endif
 #endif
 
     aMsg << indent4 << "Compiler: ";

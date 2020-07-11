@@ -80,4 +80,10 @@
 /// Allows scripts install directory to be referenced by the program code.
 #define PYTHON_DEST                     "@PYTHON_DEST@"
 
+/// ngspice version string detected by pkg-config when available.
+#cmakedefine NGSPICE_BUILD_VERSION           "@NGSPICE_BUILD_VERSION@"
+
+/// When pkg-config config is not available for ngspice, use ngspice/config.h for version.
+#cmakedefine NGSPICE_HAVE_CONFIG_H
+
 #endif  // CONFIG_H_
