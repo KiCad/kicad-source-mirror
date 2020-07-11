@@ -455,14 +455,6 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
             0.0f,
             false );
 
-    m_ogl_disp_list_through_holes_inner = generate_holes_display_list(
-            m_boardAdapter.GetThroughHole_Inner().GetList(),
-            m_boardAdapter.GetThroughHole_Inner_poly(),
-            1.0f,
-            0.0f,
-            true );
-
-
     m_ogl_disp_list_through_holes_vias_outer = generate_holes_display_list(
             m_boardAdapter.GetThroughHole_Vias_Outer().GetList(),
             m_boardAdapter.GetThroughHole_Vias_Outer_poly(),

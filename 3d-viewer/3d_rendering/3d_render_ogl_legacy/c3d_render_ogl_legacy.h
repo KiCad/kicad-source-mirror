@@ -81,7 +81,6 @@ private:
     MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers_holes_inner;
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_board;
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_outer;
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_inner;
 
     // User for body render
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_outer_with_npth;

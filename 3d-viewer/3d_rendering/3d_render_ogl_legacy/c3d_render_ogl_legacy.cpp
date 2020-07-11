@@ -62,7 +62,6 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& 
 
     m_ogl_disp_list_through_holes_outer_with_npth = NULL;
     m_ogl_disp_list_through_holes_outer = NULL;
-    m_ogl_disp_list_through_holes_inner = NULL;
     m_ogl_disp_list_through_holes_vias_outer = NULL;
     //m_ogl_disp_list_through_holes_vias_inner = NULL;
     m_ogl_disp_list_via = NULL;
@@ -1061,9 +1060,6 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 
     delete m_ogl_disp_list_through_holes_outer;
     m_ogl_disp_list_through_holes_outer = 0;
-
-    delete m_ogl_disp_list_through_holes_inner;
-    m_ogl_disp_list_through_holes_inner = 0;
 
     delete m_ogl_disp_list_through_holes_vias_outer;
     m_ogl_disp_list_through_holes_vias_outer = 0;
