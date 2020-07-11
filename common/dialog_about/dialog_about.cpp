@@ -197,6 +197,18 @@ void DIALOG_ABOUT::createNotebookPageByCategory( wxAuiNotebook* aParent, const w
                                                  const wxBitmap& aIcon,
                                                  const CONTRIBUTORS& aContributors)
 {
+    // The left justification between wxStaticText and wxHyperlinkCtrl is different so
+    // we must pad to make the alignment look decent.
+    //
+    // @todo Just make all of the contributor lists HTML so the alignment is consistent.
+    wxString padding;
+
+    // Of course the padding is different depending on the platform so we adjust the
+    // padding accordingly.
+#if defined( __WXGTK__ )
+    padding += "      ";
+#endif
+
     wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
 
     wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( aParent, wxID_ANY,
@@ -257,7 +269,7 @@ void DIALOG_ABOUT::createNotebookPageByCategory( wxAuiNotebook* aParent, const w
                     if( sub_contributor->GetUrl().IsEmpty() )
                     {
                         ctrl = new wxStaticText( m_scrolledWindow1, wxID_ANY,
-                                                 wxT( "      • " ) + sub_contributor->GetName(),
+                                                 padding + wxT( "• " ) + sub_contributor->GetName(),
                                                  wxDefaultPosition,
                                                  wxDefaultSize, 0 );
                     }
@@ -268,7 +280,8 @@ void DIALOG_ABOUT::createNotebookPageByCategory( wxAuiNotebook* aParent, const w
                                                     wxT( "• " ) + sub_contributor->GetName(),
                                                     sub_contributor->GetUrl(),
                                                     wxDefaultPosition,
-                                                    wxDefaultSize );
+                                                    wxDefaultSize,
+                                                    wxBORDER_NONE | wxHL_CONTEXTMENU | wxHL_ALIGN_LEFT );
                     }
 
                     m_staticText1->Wrap( -1 );
