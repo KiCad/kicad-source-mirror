@@ -34,6 +34,8 @@
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_button_helpers.h>
 
+#include <algorithm>
+
 enum TEXT_VAR_GRID_COLUMNS
 {
     TV_NAME_COL = 0,

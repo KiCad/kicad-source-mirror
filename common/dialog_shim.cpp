@@ -34,6 +34,8 @@
 #include <wx/evtloop.h>
 #include <wx/grid.h>
 
+#include <algorithm>
+
 /// Toggle a window's "enable" status to disabled, then enabled on destruction.
 class WDO_ENABLE_DISABLE
 {

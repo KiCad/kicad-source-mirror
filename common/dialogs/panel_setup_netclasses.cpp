@@ -36,6 +36,8 @@
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
 
+#include <algorithm>
+
 // PCBNEW columns of netclasses grid
 enum {
     GRID_NAME = 0,

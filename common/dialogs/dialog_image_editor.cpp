@@ -30,6 +30,8 @@
 
 #include <dialog_image_editor.h>
 
+#include <algorithm>
+
 
 DIALOG_IMAGE_EDITOR::DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem )
     : DIALOG_IMAGE_EDITOR_BASE( aParent )

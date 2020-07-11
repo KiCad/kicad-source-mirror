@@ -38,6 +38,8 @@
 #include <geometry/geometry_utils.h>
 #include <math/util.h>      // for KiROUND
 
+#include <algorithm>
+
 static const bool FILLED = true;
 static const bool NOT_FILLED = false;
 

@@ -26,6 +26,8 @@
 #include <widgets/paged_dialog.h>
 #include <wx/stc/stc.h>
 
+#include <algorithm>
+
 // Maps from dialogTitle <-> pageTitle for keeping track of last-selected pages.
 // This is not a simple page index because some dialogs have dynamic page sets.
 std::map<wxString, wxString> g_lastPage;

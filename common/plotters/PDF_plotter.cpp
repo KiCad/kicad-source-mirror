@@ -38,6 +38,8 @@
 #include <wx/mstream.h>
 #include <math/util.h>      // for KiROUND
 
+#include <algorithm>
+
 
 /*
  * Open or create the plot file aFullFilename

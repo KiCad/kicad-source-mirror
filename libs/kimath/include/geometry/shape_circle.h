@@ -29,6 +29,8 @@
 #include <math/box2.h>
 #include <math/vector2d.h>
 
+#include <algorithm>
+
 class SHAPE_CIRCLE : public SHAPE
 {
 public:

@@ -30,6 +30,8 @@
 #include <math/box2.h>
 #include <math/vector2d.h>
 
+#include <algorithm>
+
 class SHAPE_SEGMENT : public SHAPE {
 
 public:
