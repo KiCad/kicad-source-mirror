@@ -237,6 +237,8 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     m_mainToolBar->Toggle( PCB_ACTIONS::footprintProperties, GetBoard()->GetFirstModule() );
     m_mainToolBar->Refresh();
 
+    bool hcm = opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
+
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,              IsGridVisible() );
     m_optionsToolBar->Toggle( ACTIONS::metricUnits,         GetUserUnits() != EDA_UNITS::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits,       GetUserUnits() == EDA_UNITS::INCHES );
@@ -244,7 +246,7 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,      !opts.m_DisplayPadFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::textOutlines,        !opts.m_DisplayTextFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::graphicsOutlines,    !opts.m_DisplayGraphicsFill );
-    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,        opts.m_ContrastModeDisplay );
+    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,        hcm );
     m_optionsToolBar->Toggle( PCB_ACTIONS::toggleFootprintTree, IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 

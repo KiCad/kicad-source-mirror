@@ -300,8 +300,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_TOOLBARH_PCB_SELECT_LAYER:
         SetActiveLayer( ToLAYER_ID( m_selLayerBox->GetLayerSelection() ) );
 
-        if( GetDisplayOptions().m_ContrastModeDisplay )
+        if( GetDisplayOptions().m_ContrastModeDisplay !=
+            HIGH_CONTRAST_MODE::NORMAL )
+        {
             GetCanvas()->Refresh();
+        }
         break;
 
     case ID_MODEDIT_CHECK:

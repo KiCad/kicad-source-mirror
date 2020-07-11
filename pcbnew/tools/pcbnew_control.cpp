@@ -214,10 +214,40 @@ int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
-    Flip( opts.m_ContrastModeDisplay );
+    opts.m_ContrastModeDisplay =
+            ( opts.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::NORMAL ) ?
+            HIGH_CONTRAST_MODE::DIMMED :
+            HIGH_CONTRAST_MODE::NORMAL;
+
     m_frame->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
-    canvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
+
+    return 0;
+}
+
+
+int PCBNEW_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
+{
+    auto opts = displayOptions();
+
+    switch( opts.m_ContrastModeDisplay )
+    {
+    case HIGH_CONTRAST_MODE::NORMAL:
+        opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::DIMMED;
+        break;
+
+    case HIGH_CONTRAST_MODE::DIMMED:
+        opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::HIDDEN;
+        break;
+
+    case HIGH_CONTRAST_MODE::HIDDEN:
+        opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
+        break;
+    }
+
+    m_frame->SetDisplayOptions( opts );
+
+    // TODO: remove once EVT_UPDATE_UI works
+    m_frame->SyncToolbars();
 
     return 0;
 }
@@ -1023,15 +1053,16 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::Quit,                 ACTIONS::quit.MakeEvent() );
 
     // Display modes
-    Go( &PCBNEW_CONTROL::TrackDisplayMode,     PCB_ACTIONS::trackDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ToggleRatsnest,       PCB_ACTIONS::showRatsnest.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ToggleRatsnest,       PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ViaDisplayMode,       PCB_ACTIONS::viaDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayToggle.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastMode,     ACTIONS::highContrastMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::TrackDisplayMode,      PCB_ACTIONS::trackDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ToggleRatsnest,        PCB_ACTIONS::showRatsnest.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ToggleRatsnest,        PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ViaDisplayMode,        PCB_ACTIONS::viaDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayToggle.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastMode,      ACTIONS::highContrastMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastModeCycle, ACTIONS::highContrastModeCycle.MakeEvent() );
 
     // Layer control
     Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerTop.MakeEvent() );
@@ -1092,5 +1123,3 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::ClearedEvent );
     Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::SelectedItemsModified );
 }
-
-

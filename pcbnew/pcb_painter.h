@@ -28,6 +28,7 @@
 #define __CLASS_PCB_PAINTER_H
 
 #include <painter.h>
+#include <pcb_display_options.h>
 
 #include <memory>
 
@@ -88,6 +89,7 @@ public:
         DZ_SHOW_OUTLINED
     };
 
+    ///> Determines how net color overrides should be applied
     enum class NET_COLOR_MODE
     {
         OFF,        ///< Net (and netclass) colors are not shown
@@ -250,6 +252,9 @@ protected:
 
     ///> Set of net codes that should not have their ratsnest displayed
     std::set<int> m_hiddenNets;
+
+    ///> How to display inactive layers
+    HIGH_CONTRAST_MODE m_contrastModeDisplay;
 };
 
 

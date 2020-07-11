@@ -173,7 +173,7 @@ public:
      * (for instance solid or sketch mode)
      */
     const PCB_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_DisplayOptions; }
-    void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions ) { m_DisplayOptions = aOptions; }
+    void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions );
 
     const ZONE_SETTINGS& GetZoneSettings() const;
     void SetZoneSettings( const ZONE_SETTINGS& aSettings );
@@ -368,6 +368,8 @@ public:
     }
 
     int GetSeverity( int aErrorCode ) const override;
+
+    virtual void OnDisplayOptionsChanged() {}
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;

@@ -592,9 +592,12 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
 
     myframe->SetActiveLayer( layer );
 
+    bool hcm = ( myframe->GetDisplayOptions().m_ContrastModeDisplay !=
+                 HIGH_CONTRAST_MODE::NORMAL );
+
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();
-    else if( myframe->GetDisplayOptions().m_ContrastModeDisplay )
+    else if( hcm )
         myframe->GetCanvas()->Refresh();
 
     return true;

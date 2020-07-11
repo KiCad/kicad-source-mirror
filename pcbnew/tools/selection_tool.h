@@ -30,12 +30,12 @@
 #include <memory>
 
 #include <math/vector2d.h>
-#include <project/board_local_settings.h>
-#include <tools/pcb_tool_base.h>
+#include <project/board_project_settings.h>
 #include <tool/action_menu.h>
-#include <tools/pcbnew_selection.h>
-#include <tools/pcb_selection_conditions.h>
 #include <tool/tool_menu.h>
+#include <tools/pcb_selection_conditions.h>
+#include <tools/pcb_tool_base.h>
+#include <tools/pcbnew_selection.h>
 
 class PCB_BASE_FRAME;
 class BOARD_ITEM;

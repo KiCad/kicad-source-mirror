@@ -22,6 +22,7 @@
 #define KICAD_PROJECT_FILE_H
 
 #include <common.h>
+#include <project/board_project_settings.h>
 #include <settings/json_settings.h>
 #include <settings/nested_settings.h>
 
@@ -183,6 +184,9 @@ public:
      * schematics, one netlist partitioned into multiple boards)
      */
      std::shared_ptr<NET_SETTINGS> m_NetSettings;
+
+    /// List of stored layer presets
+    std::vector<LAYER_PRESET> m_LayerPresets;
 };
 
 // Specializations to allow directly reading/writing FILE_INFO_PAIRs from JSON

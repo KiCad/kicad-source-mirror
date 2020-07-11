@@ -60,7 +60,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_TOOLBARH_PCB_SELECT_LAYER:
         SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 
-        if( displ_opts.m_ContrastModeDisplay )
+        if( displ_opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
             GetCanvas()->Refresh();
         break;
 
@@ -118,7 +118,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 
     SetActiveLayer( layer );
 
-    if( displ_opts.m_ContrastModeDisplay )
+    if( displ_opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
         GetCanvas()->Refresh();
 }
 

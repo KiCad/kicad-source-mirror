@@ -234,6 +234,44 @@ inline GAL_LAYER_ID operator+( const GAL_LAYER_ID& a, int b )
     return t;
 }
 
+/// Helper for storing and iterating over GAL_LAYER_IDs
+class GAL_SET : public std::bitset<GAL_LAYER_ID_COUNT>
+{
+public:
+    GAL_SET() : std::bitset<GAL_LAYER_ID_COUNT>()
+    {
+    }
+
+    GAL_SET( const GAL_SET& aOther ) : std::bitset<GAL_LAYER_ID_COUNT>( aOther )
+    {
+    }
+
+    GAL_SET& set()
+    {
+        std::bitset<GAL_LAYER_ID_COUNT>::set();
+        return *this;
+    }
+
+    GAL_SET& set( size_t aPos, bool aVal = true )
+    {
+        std::bitset<GAL_LAYER_ID_COUNT>::set( aPos, aVal );
+        return *this;
+    }
+
+    std::vector<GAL_LAYER_ID> Seq() const
+    {
+        std::vector<GAL_LAYER_ID> ret;
+
+        for( size_t i = 0; i < size(); ++i )
+        {
+            if( test( i ) )
+                ret.push_back( static_cast<GAL_LAYER_ID>( i ) );
+        }
+
+        return ret;
+    }
+};
+
 /// Eeschema drawing layers
 enum SCH_LAYER_ID: int
 {
@@ -404,7 +442,6 @@ public:
     }
 };
 
-typedef std::bitset<GAL_LAYER_ID_COUNT>     GAL_SET;
 
 typedef std::bitset<PCB_LAYER_ID_COUNT>     BASE_SET;
 

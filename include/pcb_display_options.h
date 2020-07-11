@@ -30,6 +30,8 @@
 #ifndef PCB_DISPLAY_OPTIONS_H_
 #define PCB_DISPLAY_OPTIONS_H_
 
+#include <project/board_project_settings.h>
+
 /**
  * PCB_DISPLAY_OPTIONS
  * handles display options like enable/disable some optional drawings.
@@ -79,7 +81,9 @@ public:
                                      * 3 show netnames on tracks and pads
                                      */
 
-    bool m_ContrastModeDisplay;
+    /// How inactive layers are displayed.  @see HIGH_CONTRAST_MODE
+    HIGH_CONTRAST_MODE m_ContrastModeDisplay;
+
     int  m_MaxLinksShowed;              // in track creation: number of hairwires shown
     bool m_ShowModuleRatsnest;          // When moving a footprint: allows displaying a ratsnest
     bool m_ShowGlobalRatsnest;          // If true, show all

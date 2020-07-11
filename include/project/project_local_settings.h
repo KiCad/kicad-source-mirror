@@ -22,7 +22,7 @@
 #define KICAD_PROJECT_LOCAL_SETTINGS_H
 
 #include <layers_id_colors_and_visibility.h>
-#include <project/board_local_settings.h>
+#include <project/board_project_settings.h>
 #include <settings/json_settings.h>
 #include <wildcards_and_files_ext.h>
 
@@ -87,6 +87,12 @@ public:
 
     /// The current (active) board layer for editing
     PCB_LAYER_ID m_ActiveLayer;
+
+    /// The name of a LAYER_PRESET that is currently activated (or blank if none)
+    wxString m_ActiveLayerPreset;
+
+    /// The current contrast mode
+    HIGH_CONTRAST_MODE m_ContrastModeDisplay;
 
     /**
      * A list of netnames that have been manually hidden in the board editor.

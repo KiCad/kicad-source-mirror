@@ -117,6 +117,12 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     filterOpts = localSettings.m_SelectionFilter;
     m_selectionFilterPanel->SetCheckboxesFromFilter( filterOpts );
 
+    PCB_DISPLAY_OPTIONS opts   = GetDisplayOptions();
+    opts.m_ContrastModeDisplay = localSettings.m_ContrastModeDisplay;
+    SetDisplayOptions( opts );
+
+    SetActiveLayer( localSettings.m_ActiveLayer );
+
     return true;
 }
 
@@ -141,6 +147,10 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     project.m_BoardPageLayoutDescrFile = BASE_SCREEN::m_PageLayoutDescrFileName;
 
     RecordDRCExclusions();
+
+    localSettings.m_ActiveLayer = GetActiveLayer();
+
+    localSettings.m_ContrastModeDisplay = GetDisplayOptions().m_ContrastModeDisplay;
 
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             GetCanvas()->GetView()->GetPainter()->GetSettings() );

@@ -198,13 +198,15 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
 
     ITEM* rv = NULL;
 
+    bool highContrast = ( displayOptions().m_ContrastModeDisplay !=
+                          HIGH_CONTRAST_MODE::NORMAL );
+
     for( int i = 0; i < candidateCount; i++ )
     {
         ITEM* item = prioritized[i];
 
-        if( displayOptions().m_ContrastModeDisplay )
-            if( item && !item->Layers().Overlaps( tl ) )
-                item = NULL;
+        if( highContrast && item && !item->Layers().Overlaps( tl ) )
+            item = nullptr;
 
         if( item && ( aLayer < 0 || item->Layers().Overlaps( aLayer ) ) )
         {

@@ -140,9 +140,16 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( const std::string& aFilename ) :
             } ) );
 
     m_params.emplace_back( new PARAM_ENUM<PCB_LAYER_ID>(
-            "active_layer", &m_ActiveLayer, F_Cu, PCBNEW_LAYER_ID_START, F_Fab ) );
+            "board.active_layer", &m_ActiveLayer, F_Cu, PCBNEW_LAYER_ID_START, F_Fab ) );
 
-    m_params.emplace_back( new PARAM_LIST<wxString>( "hidden_nets", &m_HiddenNets, {} ) );
+    m_params.emplace_back( new PARAM<wxString>( "board.active_layer_preset",
+            &m_ActiveLayerPreset, "" ) );
+
+    m_params.emplace_back( new PARAM_ENUM<HIGH_CONTRAST_MODE>( "board.high_contrast_mode",
+            &m_ContrastModeDisplay, HIGH_CONTRAST_MODE::NORMAL, HIGH_CONTRAST_MODE::NORMAL,
+            HIGH_CONTRAST_MODE::HIDDEN ) );
+
+    m_params.emplace_back( new PARAM_LIST<wxString>( "board.hidden_nets", &m_HiddenNets, {} ) );
 }
 
 

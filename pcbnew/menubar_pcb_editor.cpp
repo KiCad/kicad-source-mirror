@@ -318,7 +318,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     };
     auto contrastModeCondition = [ &disp_opt ]( const SELECTION &aSel )
     {
-        return !disp_opt.m_ContrastModeDisplay;
+        return disp_opt.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
     };
     auto sketchGraphicsCondition = [ &disp_opt ]( const SELECTION &aSel )
     {
@@ -386,7 +386,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     contrastModeSubMenu->SetTitle( _( "&Contrast Mode" ) );
     contrastModeSubMenu->SetIcon( contrast_mode_xpm );
 
-    contrastModeSubMenu->AddCheckItem( ACTIONS::highContrastMode,       contrastModeCondition );
+    contrastModeSubMenu->AddCheckItem( ACTIONS::highContrastMode, contrastModeCondition );
     contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaDec, SELECTION_CONDITIONS::ShowAlways );
     contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc, SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddMenu( contrastModeSubMenu );

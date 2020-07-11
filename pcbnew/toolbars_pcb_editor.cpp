@@ -731,13 +731,15 @@ void PCB_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( PCB_ACTIONS::showLayersManager,    LayerManagerShown() );
     m_optionsToolBar->Toggle( PCB_ACTIONS::showMicrowaveToolbar, MicrowaveToolbarShown() );
 
+    bool hcm = opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
+
     m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayEnable,    zoneMode == 0 );
     m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayDisable,   zoneMode == 1 );
     m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayOutlines,  zoneMode == 2 );
     m_optionsToolBar->Toggle( PCB_ACTIONS::trackDisplayMode,     !opts.m_DisplayPcbTrackFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::viaDisplayMode,       !opts.m_DisplayViaFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,       !opts.m_DisplayPadFill );
-    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,         opts.m_ContrastModeDisplay );
+    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,         hcm );
     m_optionsToolBar->Refresh();
 
     TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );

@@ -129,7 +129,8 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions,
                                               bool aShowPageLimits )
 {
-    m_hiContrastEnabled = aOptions.m_ContrastModeDisplay;
+    m_hiContrastEnabled = ( aOptions.m_ContrastModeDisplay !=
+                            HIGH_CONTRAST_MODE::NORMAL );
     m_padNumbers        = aOptions.m_DisplayPadNum;
     m_sketchGraphics    = !aOptions.m_DisplayGraphicsFill;
     m_sketchText        = !aOptions.m_DisplayTextFill;
@@ -214,6 +215,8 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     if( aOptions.m_DisplayPadIsol )
         m_clearance |= CL_PADS;
 
+    m_contrastModeDisplay = aOptions.m_ContrastModeDisplay;
+
     m_showPageLimits = aShowPageLimits;
 }
 
@@ -246,6 +249,15 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
     int netCode = -1;
     const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
     const BOARD_CONNECTED_ITEM* conItem = dynamic_cast<const BOARD_CONNECTED_ITEM*> ( aItem );
+
+    // Make items invisible in "other layers hidden" contrast mode
+    if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN && m_activeLayers.count( aLayer ) == 0 )
+        return COLOR4D::CLEAR;
+
+    // Hide net names in "dimmed" contrast mode
+    if( m_contrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL && IsNetnameLayer( aLayer )
+        && m_activeLayers.count( aLayer ) == 0 )
+        return COLOR4D::CLEAR;
 
     if( item )
     {
@@ -297,8 +309,8 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
     if( m_highlightEnabled && m_highlightNetcodes.count( netCode ) )
         return m_layerColorsHi[aLayer];
 
-    // Return grayish color for non-highlighted layers in the high contrast mode
-    if( m_hiContrastEnabled && m_activeLayers.count( aLayer ) == 0 )
+    // Return grayish color for non-highlighted layers in the dimmed high contrast mode
+    if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED && m_activeLayers.count( aLayer ) == 0 )
         return m_hiContrastColor[aLayer];
 
     // Catch the case when highlight and high-contraste modes are enabled

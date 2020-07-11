@@ -168,7 +168,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
         return !GetDisplayOptions().m_DisplayTextFill;
     };
     auto contrastModeCondition = [ this ] ( const SELECTION& aSel ) {
-        return !GetDisplayOptions().m_ContrastModeDisplay;
+        return ( GetDisplayOptions().m_ContrastModeDisplay !=
+                 HIGH_CONTRAST_MODE::NORMAL );
     };
     auto searchTreeShownCondition = [ this ] ( const SELECTION& aSel ) {
         return IsSearchTreeShown();
@@ -216,8 +217,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     contrastModeSubMenu->SetIcon( contrast_mode_xpm );
 
     contrastModeSubMenu->AddCheckItem( ACTIONS::highContrastMode, contrastModeCondition );
-    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaDec,     SELECTION_CONDITIONS::ShowAlways );
-    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc,     SELECTION_CONDITIONS::ShowAlways );
+    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaDec, SELECTION_CONDITIONS::ShowAlways );
+    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc, SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddMenu( contrastModeSubMenu );
 
     viewMenu->AddSeparator();

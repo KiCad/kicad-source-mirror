@@ -59,7 +59,15 @@ public:
     int ZoneDisplayMode( const TOOL_EVENT& aEvent );
     int TrackDisplayMode( const TOOL_EVENT& aEvent );
     int ViaDisplayMode( const TOOL_EVENT& aEvent );
+
+    // Update the view with the new high-contrast mode from the display settings
     int HighContrastMode( const TOOL_EVENT& aEvent );
+
+    // Rotate through the available high-contrast modes
+    int HighContrastModeCycle( const TOOL_EVENT& aEvent );
+
+    // Layer view presets
+    int ApplyLayerPreset( const TOOL_EVENT& aEvent );
 
     // Layer control
     int LayerSwitch( const TOOL_EVENT& aEvent );

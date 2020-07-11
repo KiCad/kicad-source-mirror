@@ -18,8 +18,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_BOARD_LOCAL_SETTINGS_H
-#define KICAD_BOARD_LOCAL_SETTINGS_H
+#ifndef KICAD_BOARD_PROJECT_SETTINGS_H
+#define KICAD_BOARD_PROJECT_SETTINGS_H
+
+#include <layers_id_colors_and_visibility.h>
+
+/**
+ * This file contains data structures that are saved in the project file or project local settings
+ * file that are specific to PcbNew.  This is done so that these structures are available in common.
+ */
+
 
 /**
  * Selection filtering that applies all the time (not the "filter selection" dialog that modifies
@@ -67,4 +75,50 @@ struct SELECTION_FILTER_OPTIONS
     }
 };
 
-#endif // KICAD_BOARD_LOCAL_SETTINGS_H
+/**
+     * Determines how inactive layers should be displayed
+     */
+enum class HIGH_CONTRAST_MODE
+{
+    NORMAL = 0,     ///> Non-active layers are shown normally (no high-contrast mode)
+    DIMMED,         ///> Non-active layers are dimmed (old high-contrast mode)
+    HIDDEN          ///> Non-active layers are hidden
+};
+
+/**
+ * A saved set of layers that are visible
+ */
+struct LAYER_PRESET
+{
+    wxString     name;          ///< A name for this layer set
+    LSET         layers;        ///< Board layers that are visible
+    GAL_SET      renderLayers;  ///< Render layers (e.g. object types) that are visible
+    PCB_LAYER_ID activeLayer;   ///< Optional layer to set active when this preset is loaded
+
+    LAYER_PRESET( const wxString& aName ) :
+            name( aName ),
+            activeLayer( UNSELECTED_LAYER )
+    {
+    }
+
+    LAYER_PRESET( const wxString& aName, const LSET& aSet ) :
+            name( aName ),
+            layers( aSet ),
+            activeLayer( UNSELECTED_LAYER )
+    {
+    }
+
+    LAYER_PRESET( const wxString& aName, const LSET& aSet, PCB_LAYER_ID aActive ) :
+            name( aName ),
+            layers( aSet ),
+            activeLayer( aActive )
+    {
+    }
+
+    bool LayersMatch( const LAYER_PRESET& aOther )
+    {
+        return aOther.layers == layers && aOther.renderLayers == renderLayers;
+    }
+};
+
+#endif // KICAD_BOARD_PROJECT_SETTINGS_H

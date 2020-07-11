@@ -417,7 +417,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 
     SetActiveLayer( layer );
 
-    if( displ_opts.m_ContrastModeDisplay )
+    if( displ_opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
         GetCanvas()->Refresh();
 }
 
@@ -742,3 +742,17 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     canvas->StartDrawing();
 }
 
+
+void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
+{
+    m_DisplayOptions = aOptions;
+
+    EDA_DRAW_PANEL_GAL* canvas = GetCanvas();
+    KIGFX::PCB_VIEW*    view   = static_cast<KIGFX::PCB_VIEW*>( canvas->GetView() );
+
+    view->UpdateDisplayOptions( aOptions );
+    canvas->SetHighContrastLayer( GetActiveLayer() );
+    OnDisplayOptionsChanged();
+
+    canvas->Refresh();
+}

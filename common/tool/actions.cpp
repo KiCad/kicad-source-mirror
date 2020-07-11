@@ -490,6 +490,10 @@ TOOL_ACTION ACTIONS::highContrastMode( "common.Control.highContrastMode",
         _( "High Contrast Mode" ), _( "Use high contrast display mode" ),
         contrast_mode_xpm );
 
+TOOL_ACTION ACTIONS::highContrastModeCycle( "common.Control.highContrastModeCycle",
+        AS_GLOBAL, 0, "",  _( "High Contrast Mode (3-state)" ),
+        _( "Toggle inactive layers between normal, dimmed, and hidden" ), contrast_mode_xpm );
+
 TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",
         AS_GLOBAL, 0, "",
         _( "Select item(s)" ), "",

@@ -107,6 +107,95 @@ PROJECT_FILE::PROJECT_FILE( const std::string& aFullPath ) :
             }, {} ) );
 
     m_NetSettings = std::make_shared<NET_SETTINGS>( this, "net_settings" );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "board.layer_presets",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::array();
+
+                for( const LAYER_PRESET& preset : m_LayerPresets )
+                {
+                    nlohmann::json js = {
+                                { "name", preset.name },
+                                { "activeLayer", preset.activeLayer }
+                            };
+
+                    nlohmann::json layers = nlohmann::json::array();
+
+                    for( PCB_LAYER_ID layer : preset.layers.Seq() )
+                        layers.push_back( static_cast<int>( layer ) );
+
+                    js["layers"] = layers;
+
+                    nlohmann::json renderLayers = nlohmann::json::array();
+
+                    for( GAL_LAYER_ID layer : preset.renderLayers.Seq() )
+                        renderLayers.push_back( static_cast<int>( layer ) );
+
+                    js["renderLayers"] = renderLayers;
+
+                    ret.push_back( js );
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aVal )
+            {
+                if( aVal.empty() || !aVal.is_array() )
+                    return;
+
+                m_LayerPresets.clear();
+
+                for( const nlohmann::json& preset : aVal )
+                {
+                    if( preset.contains( "name" ) )
+                    {
+                        LAYER_PRESET p( preset.at( "name" ).get<wxString>() );
+
+                        if( preset.contains( "activeLayer" ) &&
+                                preset.at( "activeLayer" ).is_number_integer() )
+                        {
+                            int active = preset.at( "activeLayer" ).get<int>();
+
+                            if( active >= 0 && active < PCB_LAYER_ID_COUNT )
+                                p.activeLayer = static_cast<PCB_LAYER_ID>( active );
+                        }
+
+                        if( preset.contains( "layers" ) && preset.at( "layers" ).is_array() )
+                        {
+                            for( const nlohmann::json& layer : preset.at( "layers" ) )
+                            {
+                                if( layer.is_number_integer() )
+                                {
+                                    int layerNum = layer.get<int>();
+
+                                    if( layerNum >= 0 && layerNum < PCB_LAYER_ID_COUNT )
+                                        p.layers.set( layerNum );
+                                }
+                            }
+                        }
+
+                        if( preset.contains( "renderLayers" )
+                                && preset.at( "renderLayers" ).is_array() )
+                        {
+                            for( const nlohmann::json& layer : preset.at( "renderLayers" ) )
+                            {
+                                if( layer.is_number_integer() )
+                                {
+                                    int layerNum = layer.get<int>();
+
+                                    if( layerNum >= GAL_LAYER_ID_START
+                                            && layerNum < GAL_LAYER_ID_END )
+                                        p.layers.set( layerNum );
+                                }
+                            }
+                        }
+
+                        m_LayerPresets.emplace_back( p );
+                    }
+                }
+            },
+            {} ) );
 }
 
 
