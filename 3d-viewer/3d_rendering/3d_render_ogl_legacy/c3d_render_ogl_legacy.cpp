@@ -731,11 +731,6 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
         CLAYERS_OGL_DISP_LISTS *pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>(ii->second);
         set_layer_material( layer_id );
 
-        if( m_ogl_disp_list_through_holes_outer )
-            m_ogl_disp_list_through_holes_outer->ApplyScalePosition(
-                        pLayerDispList->GetZBot(),
-                        pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
-
         if( (layer_id >= F_Cu) && (layer_id <= B_Cu) )
         {
             if( skipRenderHoles )
@@ -744,6 +739,11 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
             }
             else
             {
+                if( m_ogl_disp_list_through_holes_outer )
+                    m_ogl_disp_list_through_holes_outer->ApplyScalePosition(
+                                pLayerDispList->GetZBot(),
+                                pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+
                 if( m_ogl_disp_lists_layers_holes_outer.find( layer_id ) !=
                     m_ogl_disp_lists_layers_holes_outer.end() )
                 {
@@ -771,6 +771,11 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
         }
         else
         {
+            if( m_ogl_disp_list_through_holes_vias_outer )
+                m_ogl_disp_list_through_holes_vias_outer->ApplyScalePosition(
+                            pLayerDispList->GetZBot(),
+                            pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+
             if( (!skipRenderHoles) &&
                 m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
                 ( ( ( layer_id == B_SilkS ) &&
