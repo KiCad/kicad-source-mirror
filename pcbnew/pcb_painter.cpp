@@ -238,8 +238,6 @@ void PCB_RENDER_SETTINGS::LoadNetSettings( const NET_SETTINGS& aSettings, const 
     }
 
     m_hiddenNets = aHiddenNets;
-
-
 }
 
 

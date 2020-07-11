@@ -84,7 +84,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     std::set<int>        highlightedNets = rs->GetHighlightNetCodes();
     const std::set<int>& hiddenNets      = rs->GetHiddenNets();
 
-    gal->SetStrokeColor( color.Brightened(0.5) );
+    std::map<int, KIGFX::COLOR4D>& netColors = rs->GetNetColorMap();
 
     const bool curved_ratsnest = rs->GetCurvedRatsnestLinesEnabled();
 
@@ -93,6 +93,13 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     {
         if( hiddenNets.count( l.netCode ) )
             continue;
+
+        if( colorByNet && netColors.count( l.netCode ) )
+            color = netColors.at( l.netCode );
+        else
+            color = defaultColor;
+
+        gal->SetStrokeColor( color.Brightened( 0.5 ) );
 
         if ( l.a == l.b )
         {
@@ -128,10 +135,10 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         if( !net )
             continue;
 
-        if( colorByNet )
-        {
-            // TODO(JE) - RN_NET to net name / netclass name link
-        }
+        if( colorByNet && netColors.count( i ) )
+            color = netColors.at( i );
+        else
+            color = defaultColor;
 
         // Draw the "static" ratsnest
         if( highlightedNets.count( i ) )
