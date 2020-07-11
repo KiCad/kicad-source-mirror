@@ -41,6 +41,7 @@
 #include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
+#include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
@@ -124,6 +125,13 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, config(), this );
     m_actions = new KICAD_MANAGER_ACTIONS();
 
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+
+    // Attach the events to the tool dispatcher
+    Bind( wxEVT_TOOL, &TOOL_DISPATCHER::DispatchWxCommand, m_toolDispatcher );
+    Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+    Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new KICAD_MANAGER_CONTROL );
@@ -156,6 +164,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_auimgr.GetPane( m_leftWin ).MinSize( 200, -1 );
 
     SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
+
+    // Do not let the messages window have initial focus
+    m_leftWin->SetFocus();
 
     // Ensure the window is on top
     Raise();
