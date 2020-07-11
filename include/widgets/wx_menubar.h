@@ -53,6 +53,10 @@ public:
         // Don't use the passed in accelerator table, create a new empty one
         wxMenuBar::SetAcceleratorTable( wxAcceleratorTable() );
     }
+
+#ifdef __WXMAC__
+    void SetDoubleBuffered( bool ) { }
+#endif
 };
 
-#endif // COMMON_WIDGETS_WX_BUSY_INDICATOR__H
+#endif // WX_MENUBAR_H_
