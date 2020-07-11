@@ -85,6 +85,15 @@ public:
     /// The GAL layers (aka items) that are turned on for viewing (@see GAL_LAYER_ID)
     GAL_SET m_VisibleItems;
 
+    /// The current (active) board layer for editing
+    PCB_LAYER_ID m_ActiveLayer;
+
+    /**
+     * A list of netnames that have been manually hidden in the board editor.
+     * Currently, hiding nets means hiding the ratsnest for those nets.
+     */
+    std::vector<wxString> m_HiddenNets;
+
     /// State of the selection filter widget
     SELECTION_FILTER_OPTIONS m_SelectionFilter;
 };

@@ -138,6 +138,11 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( const std::string& aFilename ) :
                 { "dimensions", true },
                 { "otherItems", true }
             } ) );
+
+    m_params.emplace_back( new PARAM_ENUM<PCB_LAYER_ID>(
+            "active_layer", &m_ActiveLayer, F_Cu, PCBNEW_LAYER_ID_START, F_Fab ) );
+
+    m_params.emplace_back( new PARAM_LIST<wxString>( "hidden_nets", &m_HiddenNets, {} ) );
 }
 
 

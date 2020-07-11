@@ -604,7 +604,8 @@ TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         add_board_xpm );
 
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
-        AS_GLOBAL );
+        AS_GLOBAL, 0, "", _( "Highlight Net" ), _( "Highlight the selected net" ),
+        net_highlight_xpm );
 
 TOOL_ACTION PCB_ACTIONS::toggleLastNetHighlight( "pcbnew.EditorControl.toggleLastNetHighlight",
         AS_GLOBAL, 0, "",
@@ -628,6 +629,12 @@ TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightN
 
 TOOL_ACTION PCB_ACTIONS::highlightItem( "pcbnew.EditorControl.highlightItem",
         AS_GLOBAL );
+
+TOOL_ACTION PCB_ACTIONS::hideNet( "pcbnew.EditorControl.hideNet", AS_GLOBAL, 0, "",
+        _( "Hide Net" ), _( "Hide the ratsnest for the selected net" ), ratsnest_xpm );
+
+TOOL_ACTION PCB_ACTIONS::showNet( "pcbnew.EditorControl.showNet", AS_GLOBAL, 0, "",
+        _( "Show Net" ), _( "Show the ratsnest for the selected net" ), ratsnest_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
         AS_GLOBAL, 0, "",

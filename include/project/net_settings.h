@@ -50,12 +50,6 @@ public:
      */
     std::map<wxString, KIGFX::COLOR4D> m_PcbNetColors;
 
-    /**
-     * A list of netnames that have been manually hidden in the board editor.
-     * Currently, hiding nets means hiding the ratsnest for those nets.
-     */
-    std::vector<wxString> m_HiddenNets;
-
 public:
     /**
      * Parses a bus vector (e.g. A[7..0]) into name, begin, and end.

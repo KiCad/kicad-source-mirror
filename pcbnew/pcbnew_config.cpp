@@ -84,7 +84,8 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 {
     wxLogDebug( wxT( "Loading project '%s' settings." ), GetChars( Prj().GetProjectFullName() ) );
 
-    PROJECT_FILE& project = Prj().GetProjectFile();
+    PROJECT_FILE&           project       = Prj().GetProjectFile();
+    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 
     BASE_SCREEN::m_PageLayoutDescrFileName = project.m_BoardPageLayoutDescrFile;
 
@@ -100,9 +101,16 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             GetCanvas()->GetView()->GetPainter()->GetSettings() );
 
-    rs->LoadNetSettings( project.NetSettings(), GetBoard()->GetNetInfo() );
+    NETINFO_LIST& nets = GetBoard()->GetNetInfo();
+    std::set<int> hiddenNets;
 
-    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+    for( const wxString& hidden : localSettings.m_HiddenNets )
+    {
+        if( NETINFO_ITEM* net = nets.GetNetItem( hidden ) )
+            hiddenNets.insert( net->GetNet() );
+    }
+
+    rs->LoadNetSettings( project.NetSettings(), nets, hiddenNets );
 
     SELECTION_FILTER_OPTIONS& filterOpts = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
 
@@ -126,18 +134,29 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     if( !IsWritable( fn ) )
         return;
 
-    PROJECT_FILE& project = Prj().GetProjectFile();
+    PROJECT_FILE&           project       = Prj().GetProjectFile();
+    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 
     // TODO: Can this be pulled out of BASE_SCREEN?
     project.m_BoardPageLayoutDescrFile = BASE_SCREEN::m_PageLayoutDescrFileName;
 
     RecordDRCExclusions();
 
-    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
+            GetCanvas()->GetView()->GetPainter()->GetSettings() );
+
+    NETINFO_LIST& nets = GetBoard()->GetNetInfo();
+
+    localSettings.m_HiddenNets.clear();
+
+    for( int netcode : rs->GetHiddenNets() )
+    {
+        if( NETINFO_ITEM* net = nets.GetNetItem( netcode ) )
+            localSettings.m_HiddenNets.emplace_back( net->GetNetname() );
+    }
 
     SELECTION_FILTER_OPTIONS& filterOpts = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
-
-    localSettings.m_SelectionFilter = filterOpts;
+    localSettings.m_SelectionFilter      = filterOpts;
 
     GetSettingsManager()->SaveProject();
 }

@@ -177,8 +177,6 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 }
             },
             {} ) );
-
-    m_params.emplace_back( new PARAM_LIST<wxString>( "hidden_nets", &m_HiddenNets, {} ) );
 }
 
 

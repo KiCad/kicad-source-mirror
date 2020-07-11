@@ -218,8 +218,8 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
 }
 
 
-void PCB_RENDER_SETTINGS::LoadNetSettings( const NET_SETTINGS& aSettings,
-                                           const NETINFO_LIST& aList )
+void PCB_RENDER_SETTINGS::LoadNetSettings( const NET_SETTINGS& aSettings, const NETINFO_LIST& aList,
+                                           const std::set<int>& aHiddenNets )
 {
     m_netColors.clear();
 
@@ -237,13 +237,9 @@ void PCB_RENDER_SETTINGS::LoadNetSettings( const NET_SETTINGS& aSettings,
             m_netclassColors[pair.first] = pair.second->GetPcbColor();
     }
 
-    m_hiddenNets.clear();
+    m_hiddenNets = aHiddenNets;
 
-    for( const wxString& hidden : aSettings.m_HiddenNets )
-    {
-        if( NETINFO_ITEM* net = aList.GetNetItem( hidden ) )
-            m_hiddenNets.insert( net->GetNet() );
-    }
+
 }
 
 

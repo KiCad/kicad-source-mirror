@@ -108,9 +108,11 @@ public:
     /**
      * Loads net-specific render settings
      * @param aSettings is the NET_SETTINGS for the current proejct
-     * @param aList is the list of nets in the board
+     * @param aList is the list of nets on the board
+     * @param aHiddenNets is a list of nets to hide from the ratsnest
      */
-    void LoadNetSettings( const NET_SETTINGS& aSettings, const NETINFO_LIST& aList );
+    void LoadNetSettings( const NET_SETTINGS& aSettings, const NETINFO_LIST& aList,
+                          const std::set<int>& aHiddenNets );
 
     virtual void LoadColors( const COLOR_SETTINGS* aSettings ) override;
 

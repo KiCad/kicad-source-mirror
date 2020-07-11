@@ -21,12 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
+#include <bitmaps.h>
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>
 #include <tools/pcbnew_picker_tool.h>
 #include <tools/edit_tool.h>
-#include <painter.h>
+#include <pcb_painter.h>
 #include <connectivity/connectivity_data.h>
 #include <profile.h>
 #include "pcb_inspection_tool.h"
@@ -43,10 +43,69 @@ PCB_INSPECTION_TOOL::PCB_INSPECTION_TOOL() :
 }
 
 
+class NET_CONTEXT_MENU : public ACTION_MENU
+{
+public:
+    NET_CONTEXT_MENU() : ACTION_MENU( true )
+    {
+        SetIcon( ratsnest_xpm );
+        SetTitle( _( "Net Tools" ) );
+
+        Add( PCB_ACTIONS::showNet );
+        Add( PCB_ACTIONS::hideNet );
+        // Add( PCB_ACTIONS::highlightNet );
+    }
+
+private:
+
+    void update() override
+    {
+        const auto& selection = getToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
+
+        bool haveNetCode = false;
+
+        for( EDA_ITEM* item : selection )
+        {
+            if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+            {
+                if( bci->GetNetCode() > 0 )
+                {
+                    haveNetCode = true;
+                    break;
+                }
+            }
+        }
+
+        Enable( getMenuId( PCB_ACTIONS::showNet ), haveNetCode );
+        Enable( getMenuId( PCB_ACTIONS::hideNet ), haveNetCode );
+        // Enable( getMenuId( PCB_ACTIONS::highlightNet ), haveNetCode );
+    }
+
+    ACTION_MENU* create() const override
+    {
+        return new NET_CONTEXT_MENU();
+    }
+};
+
+
 bool PCB_INSPECTION_TOOL::Init()
 {
+    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+    auto netSubMenu = std::make_shared<NET_CONTEXT_MENU>();
+    netSubMenu->SetTool( this );
+
+    static KICAD_T connectedTypes[] = { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T, PCB_PAD_T,
+                                        PCB_ZONE_AREA_T, EOT };
+
+    CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
+
+    selectionTool->GetToolMenu().AddSubMenu( netSubMenu );
+    menu.AddMenu( netSubMenu.get(), SELECTION_CONDITIONS::OnlyTypes( connectedTypes ) );
+
     m_ratsnestTimer.SetOwner( this );
-    Connect( m_ratsnestTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( PCB_INSPECTION_TOOL::ratsnestTimer ), NULL, this );
+    Connect( m_ratsnestTimer.GetId(), wxEVT_TIMER,
+            wxTimerEventHandler( PCB_INSPECTION_TOOL::ratsnestTimer ), NULL, this );
 
     return true;
 }
@@ -462,6 +521,7 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest()
     connectivity->ComputeDynamicRatsnest( items );
 }
 
+
 int PCB_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
 {
     if( m_listNetsDialog == nullptr )
@@ -482,6 +542,7 @@ int PCB_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 void PCB_INSPECTION_TOOL::onListNetsDialogClosed( wxCommandEvent& event )
 {
     m_listNetsDialogSettings = m_listNetsDialog->Settings();
@@ -495,6 +556,53 @@ void PCB_INSPECTION_TOOL::onListNetsDialogClosed( wxCommandEvent& event )
     m_listNetsDialog->Destroy();
     m_listNetsDialog.release();
 }
+
+
+int PCB_INSPECTION_TOOL::HideNet( const TOOL_EVENT& aEvent )
+{
+    doHideNet( aEvent.Parameter<intptr_t>(), true );
+    return 0;
+}
+
+
+int PCB_INSPECTION_TOOL::ShowNet( const TOOL_EVENT& aEvent )
+{
+    doHideNet( aEvent.Parameter<intptr_t>(), false );
+    return 0;
+}
+
+
+void PCB_INSPECTION_TOOL::doHideNet( int aNetCode, bool aHide )
+{
+    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
+            m_toolMgr->GetView()->GetPainter()->GetSettings() );
+
+    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    SELECTION&      selection     = selectionTool->GetSelection();
+
+    if( aNetCode <= 0 && !selection.Empty() )
+    {
+        for( EDA_ITEM* item : selection )
+        {
+            if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+            {
+                if( bci->GetNetCode() > 0 )
+                    doHideNet( bci->GetNetCode(), aHide );
+            }
+        }
+
+        return;
+    }
+
+    if( aHide )
+        rs->GetHiddenNets().insert( aNetCode );
+    else
+        rs->GetHiddenNets().erase( aNetCode );
+
+    m_frame->GetCanvas()->RedrawRatsnest();
+    m_frame->GetCanvas()->Refresh();
+}
+
 
 void PCB_INSPECTION_TOOL::setTransitions()
 {
@@ -516,4 +624,7 @@ void PCB_INSPECTION_TOOL::setTransitions()
     Go( &PCB_INSPECTION_TOOL::HighlightNetTool,       PCB_ACTIONS::highlightNetTool.MakeEvent() );
     Go( &PCB_INSPECTION_TOOL::ClearHighlight,         ACTIONS::cancelInteractive.MakeEvent() );
     Go( &PCB_INSPECTION_TOOL::HighlightItem,          PCB_ACTIONS::highlightItem.MakeEvent() );
+
+    Go( &PCB_INSPECTION_TOOL::HideNet,                PCB_ACTIONS::hideNet.MakeEvent() );
+    Go( &PCB_INSPECTION_TOOL::ShowNet,                PCB_ACTIONS::showNet.MakeEvent() );
 }

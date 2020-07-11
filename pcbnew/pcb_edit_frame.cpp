@@ -605,6 +605,9 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         wxMessageBox( msg, Pgm().App().GetAppName(), wxOK | wxICON_ERROR, this );
     }
 
+    // Make sure local settings are persisted
+    SaveProjectSettings();
+
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in
     // the Layer Manger

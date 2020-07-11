@@ -220,6 +220,75 @@ private:
 };
 
 /**
+ * Stores an enum as an integer
+ */
+template<typename EnumType>
+class PARAM_ENUM : public PARAM_BASE
+{
+public:
+    PARAM_ENUM( const std::string& aJsonPath, EnumType* aPtr, EnumType aDefault,
+                EnumType aMin, EnumType aMax, bool aReadOnly = false ) :
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_min( aMin ),
+            m_max( aMax ),
+            m_default( aDefault )
+    {
+    }
+
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    {
+        if( m_readOnly )
+            return;
+
+        if( OPT<int> val = aSettings->Get<int>( m_path ) )
+        {
+            if( *val >= static_cast<int>( m_min ) && *val <= static_cast<int>( m_max ) )
+                *m_ptr = static_cast<EnumType>( *val );
+            else if( aResetIfMissing )
+                *m_ptr = m_default;
+
+        }
+        else if( aResetIfMissing )
+            *m_ptr = m_default;
+    }
+
+    void Store( JSON_SETTINGS* aSettings ) const override
+    {
+        aSettings->Set<int>( m_path, static_cast<int>( *m_ptr ) );
+    }
+
+    EnumType GetDefault() const
+    {
+        return m_default;
+    }
+
+    void SetDefault() override
+    {
+        *m_ptr = m_default;
+    }
+
+    bool IsDefault() const override
+    {
+        return *m_ptr == m_default;
+    }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( OPT<int> val = aSettings->Get<int>( m_path ) )
+            return *val == static_cast<int>( *m_ptr );
+
+        return false;
+    }
+
+private:
+    EnumType* m_ptr;
+    EnumType  m_min;
+    EnumType  m_max;
+    EnumType  m_default;
+};
+
+/**
  * Like a normal param, but with custom getter and setter functions
  * @tparam ValueType is the value to store
  */

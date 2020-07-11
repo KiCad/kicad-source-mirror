@@ -82,6 +82,12 @@ public:
 
     int ListNets( const TOOL_EVENT& aEvent );
 
+    ///> Hide the ratsnest for a given net
+    int HideNet( const TOOL_EVENT& aEvent );
+
+    ///> Show the ratsnest for a given net
+    int ShowNet( const TOOL_EVENT& aEvent );
+
 private:
     ///> Event handler to recalculate dynamic ratsnest
     void ratsnestTimer( wxTimerEvent& aEvent );
@@ -90,6 +96,8 @@ private:
     void calculateSelectionRatsnest();
 
     bool highlightNet( const VECTOR2D& aPosition, bool aUseSelection );
+
+    void doHideNet( int aNetCode, bool aHide );
 
     ///> Bind handlers to corresponding TOOL_ACTIONs
     void setTransitions() override;

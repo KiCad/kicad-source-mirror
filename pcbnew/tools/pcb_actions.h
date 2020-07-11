@@ -404,17 +404,21 @@ public:
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION measureTool;
     static TOOL_ACTION updateUnits;
+    static TOOL_ACTION drillOrigin;
+    static TOOL_ACTION placeFileOrigin;
+    static TOOL_ACTION appendBoard;
+    static TOOL_ACTION showEeschema;
+    static TOOL_ACTION boardStatistics;
+
+    // Appearance controls
     static TOOL_ACTION clearHighlight;
     static TOOL_ACTION highlightNet;
     static TOOL_ACTION toggleLastNetHighlight;
     static TOOL_ACTION highlightNetTool;
     static TOOL_ACTION highlightNetSelection;
     static TOOL_ACTION highlightItem;
-    static TOOL_ACTION drillOrigin;
-    static TOOL_ACTION placeFileOrigin;
-    static TOOL_ACTION appendBoard;
-    static TOOL_ACTION showEeschema;
-    static TOOL_ACTION boardStatistics;
+    static TOOL_ACTION hideNet;
+    static TOOL_ACTION showNet;
 
     // Ratsnest
     static TOOL_ACTION localRatsnestTool;
