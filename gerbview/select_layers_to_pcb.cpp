@@ -307,7 +307,7 @@ void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 
 void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
 {
-    auto config = static_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
+    GERBVIEW_SETTINGS* config = static_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
 
     m_exportBoardCopperLayersCount = config->m_BoardLayersCount;
     normalizeBrdLayersCount();
@@ -317,6 +317,10 @@ void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
 
     for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
+        // Ensure the layer mapping in config exists for this layer, and store it
+        if( (size_t)ii >= config->m_GerberToPcbLayerMapping.size() )
+            break;
+
         m_layersLookUpTable[ii] = config->m_GerberToPcbLayerMapping[ ii ];
     }
 
