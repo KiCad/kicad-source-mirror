@@ -49,7 +49,8 @@ enum layer_sel_id {
 class SELECT_LAYER_DIALOG : public DIALOG_SHIM
 {
 private:
-    wxRadioBox*     m_layerRadioBox;
+    int               m_PassedDefaultLayer; // Remember this in case user hits Cancel
+    wxRadioBox*       m_layerRadioBox;
     std::vector <int> m_layerId;
 
 public:
@@ -112,6 +113,9 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, int aDefaultLa
     int ii;
     wxArrayString  layerList;
     int selected = -1;
+
+    // Store the passed default layer in case the user hits Cancel
+    m_PassedDefaultLayer = aDefaultLayer;
 
     // Build the layer list; first build copper layers list
     int layerCount = 0;
@@ -203,7 +207,7 @@ void SELECT_LAYER_DIALOG::OnLayerSelected( wxCommandEvent& event )
 
 void SELECT_LAYER_DIALOG::OnCancelClick( wxCommandEvent& event )
 {
-    EndModal( -1 );
+    EndModal( m_PassedDefaultLayer );
 }
 
 // This function is a duplicate of
@@ -266,7 +270,7 @@ const wxString GetPCBDefaultLayerName( int aLayerId )
     case Eco2_User:         txt = wxT( "Eco2.User" );       break;
     case Edge_Cuts:         txt = wxT( "Edge.Cuts" );       break;
 
-    // Pcbnew konws some oter layers. But any other layer is not suitable for export.
+    // Pcbnew knows some other layers, but any other layer is not suitable for export.
 
     default:    // Sentinel
         txt = wxT( "" ); break;
