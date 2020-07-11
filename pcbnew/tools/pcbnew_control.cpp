@@ -184,13 +184,16 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
     // Apply new display options to the GAL canvas
     if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayEnable ) )
-        opts.m_DisplayZonesMode = 0;
+        opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayDisable ) )
-        opts.m_DisplayZonesMode = 1;
+        opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::HIDE_FILLED;
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayOutlines ) )
-        opts.m_DisplayZonesMode = 2;
+        opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_OUTLINED;
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayToggle ) )
-        opts.m_DisplayZonesMode = ( opts.m_DisplayZonesMode + 1 ) % 3;
+    {
+        int nextMode = ( static_cast<int>( opts.m_ZoneDisplayMode ) + 1 ) % 3;
+        opts.m_ZoneDisplayMode = static_cast<ZONE_DISPLAY_MODE>( nextMode );
+    }
     else
         wxFAIL;
 

@@ -296,9 +296,17 @@ void ZONE_CONTAINER::ViewGetLayers( int aLayers[], int& aCount ) const
     LSEQ layers = m_layerSet.Seq();
 
     for( unsigned int idx = 0; idx < layers.size(); idx++ )
-        aLayers[idx] = layers[idx];
+        aLayers[idx] = LAYER_ZONE_START + layers[idx];
 
     aCount = layers.size();
+}
+
+
+unsigned int ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    constexpr unsigned int HIDE = std::numeric_limits<unsigned int>::max();
+
+    return aView->IsLayerVisible( LAYER_ZONES ) ? 0 : HIDE;
 }
 
 

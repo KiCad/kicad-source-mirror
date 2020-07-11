@@ -339,8 +339,11 @@ set( PCBNEW_CLASS_SRCS
     footprint_preview_panel.cpp
     footprint_tree_pane.cpp
 
+    widgets/appearance_controls.cpp
+    widgets/appearance_controls_base.cpp
     widgets/panel_selection_filter.cpp
     widgets/panel_selection_filter_base.cpp
+
     )
 
 set( PCBNEW_SRCS

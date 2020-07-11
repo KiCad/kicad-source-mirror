@@ -151,14 +151,13 @@ public:
     bool GetHighContrast() const { return m_hiContrastEnabled; }
 
     /**
-     * Function GetColor
      * Returns the color that should be used to draw the specific VIEW_ITEM on the specific layer
      * using currently used render settings.
      * @param aItem is the VIEW_ITEM.
      * @param aLayer is the layer.
      * @return The color.
      */
-    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const = 0;
+    virtual COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const = 0;
 
     float GetWorksheetLineWidth() const { return m_worksheetLineWidth; }
 

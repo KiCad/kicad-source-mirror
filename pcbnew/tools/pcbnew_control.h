@@ -66,9 +66,6 @@ public:
     // Rotate through the available high-contrast modes
     int HighContrastModeCycle( const TOOL_EVENT& aEvent );
 
-    // Layer view presets
-    int ApplyLayerPreset( const TOOL_EVENT& aEvent );
-
     // Layer control
     int LayerSwitch( const TOOL_EVENT& aEvent );
     int LayerNext( const TOOL_EVENT& aEvent );

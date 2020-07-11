@@ -622,9 +622,13 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         }
     }
 
-    // Only draw the via if at least one of the layers it crosses is being displayed
-    if( onVisibleLayer && aView->IsLayerVisible( LAYER_VIAS ) )
+    // Draw through vias unconditionally if the vias control is turned on.
+    // Draw blind/buried/microvias only if at least one of the layers crossed is enabeld.
+    if( aView->IsLayerVisible( LAYER_VIAS ) )
     {
+        if( !onVisibleLayer && m_ViaType != VIATYPE::THROUGH )
+            return HIDE;
+
         switch( m_ViaType )
         {
         case VIATYPE::THROUGH:      return aView->IsLayerVisible( LAYER_VIA_THROUGH )  ? 0 : HIDE;

@@ -868,9 +868,6 @@ bool ROUTER_TOOL::prepareInteractive()
 
     editFrame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
 
-    // Force layer visible
-    editFrame->GetLayerManager()->SetLayerVisible( routingLayer, true );
-
     // for some reason I don't understand, GetNetclass() may return null sometimes...
     if( m_startItem && m_startItem->Net() >= 0 &&
         m_startItem->Parent() && m_startItem->Parent()->GetNetClass() )

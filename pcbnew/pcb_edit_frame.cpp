@@ -86,7 +86,9 @@
 #include <wx/wupdlock.h>
 #include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
 #include <ratsnest/ratsnest_viewitem.h>
+#include <widgets/appearance_controls.h>
 #include <widgets/panel_selection_filter.h>
+
 
 #include <widgets/infobar.h>
 
@@ -196,9 +198,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetBoard( new BOARD() );
 
-    // Create the PCB_LAYER_WIDGET *after* SetBoard():
-    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas() );
-
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( icon_pcbnew_xpm ) );
     SetIcon( icon );
@@ -225,8 +224,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Create the infobar
     m_infoBar = new WX_INFOBAR( this, &m_auimgr );
 
+    m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas() );
+
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetFlags( wxAUI_MGR_LIVE_RESIZE );
+    m_auimgr.SetFlags( wxAUI_MGR_DEFAULT | wxAUI_MGR_LIVE_RESIZE );
 
     // Horizontal items; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar,
@@ -246,10 +247,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       EDA_PANE().VToolbar().Name( "MicrowaveToolbar" ).Right().Layer(2) );
     m_auimgr.AddPane( m_drawToolBar,
                       EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(3) );
-    m_auimgr.AddPane( m_Layers,
-                      EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(4)
-                      .Caption( _( "Layers Manager" ) ).PaneBorder( false )
-                      .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ).Maximize() );
+
+    m_auimgr.AddPane( m_appearancePanel,
+                      EDA_PANE().Name( "LayersManager" ).Right().Layer( 4 )
+                      .Caption( _( "Appearance" ) ).MinSize( 150, -1 )
+                      .BestSize( m_appearancePanel->GetBestSize() ) );
+
     m_auimgr.AddPane( m_selectionFilterPanel,
                       EDA_PANE().Palette().Name( "SelectionFilter" ).Right().Layer( 4 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false ).Position( 2 )
@@ -260,11 +263,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
-
-    m_Layers->ReFillRender();   // Update colors in Render after the config is read
-    ReFillLayerWidget();        // this is near end and after ReFillRender()
-                                // because contents establish size
-    syncLayerWidgetLayer();
 
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
@@ -365,8 +363,11 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
+    if( GetBoard() )
+        GetBoard()->RemoveListener( m_appearancePanel );
+
     delete m_selectionFilterPanel;
-    delete m_Layers;
+    delete m_appearancePanel;
 }
 
 
@@ -469,34 +470,6 @@ void PCB_EDIT_FRAME::setupTools()
 
     // Run the selection tool, it is supposed to be always active
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
-}
-
-
-void PCB_EDIT_FRAME::ReFillLayerWidget()
-{
-    ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
-
-    layerEnum.Choices().Clear();
-    layerEnum.Undefined( UNDEFINED_LAYER );
-
-    for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
-        layerEnum.Map( *seq, GetBoard()->GetLayerName( *seq ) );
-
-    wxWindowUpdateLocker no_update( m_Layers );
-    m_Layers->ReFill();
-
-    wxAuiPaneInfo& lyrs = m_auimgr.GetPane( m_Layers );
-
-    wxSize bestz = m_Layers->GetBestSize();
-
-    lyrs.MinSize( bestz );
-    lyrs.BestSize( bestz );
-    lyrs.FloatingSize( bestz );
-
-    if( lyrs.IsDocked() )
-        m_auimgr.Update();
-    else
-        m_Layers->SetSize( bestz );
 }
 
 
@@ -748,7 +721,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 {
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
 
-    syncLayerWidgetLayer();
+    m_appearancePanel->OnLayerChanged();
 
     m_toolManager->RunAction( PCB_ACTIONS::layerChanged );  // notify other tools
     GetCanvas()->SetFocus();                             // allow capture of hotkeys
@@ -772,14 +745,11 @@ void PCB_EDIT_FRAME::onBoardLoaded()
         m_infoBar->ShowMessage( "Board file is read only.", wxICON_WARNING );
     }
 
-    // Re-create layers manager based on layer info in board
-    ReFillLayerWidget();
     ReCreateLayerBox();
+    m_appearancePanel->OnBoardChanged();
 
     // Sync layer and item visibility
-    syncLayerVisibilities();
-    syncLayerWidgetLayer();
-    SyncRenderStates();
+    GetCanvas()->SyncLayersVisibility( m_Pcb );
 
     SetElementVisibility( LAYER_RATSNEST, GetDisplayOptions().m_ShowGlobalRatsnest );
 
@@ -800,29 +770,15 @@ void PCB_EDIT_FRAME::onBoardLoaded()
 }
 
 
-void PCB_EDIT_FRAME::syncLayerWidgetLayer()
+void PCB_EDIT_FRAME::OnDisplayOptionsChanged()
 {
-    m_Layers->SelectLayer( GetActiveLayer() );
-    m_Layers->OnLayerSelected();
-}
-
-
-void PCB_EDIT_FRAME::SyncRenderStates()
-{
-    m_Layers->ReFillRender();
-}
-
-
-void PCB_EDIT_FRAME::syncLayerVisibilities()
-{
-    m_Layers->SyncLayerVisibilities();
-    GetCanvas()->SyncLayersVisibility( m_Pcb );
+    m_appearancePanel->UpdateDisplayOptions();
 }
 
 
 void PCB_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
 {
-    m_Layers->SyncLayerAlphaIndicators();
+    m_appearancePanel->OnLayerAlphaChanged();
 }
 
 
@@ -841,16 +797,6 @@ void PCB_EDIT_FRAME::SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState
         GetCanvas()->GetView()->SetLayerVisible( aElement , aNewState );
 
     GetBoard()->SetElementVisibility( aElement, aNewState );
-    m_Layers->SetRenderState( aElement, aNewState );
-}
-
-
-void PCB_EDIT_FRAME::SetVisibleAlls()
-{
-    GetBoard()->SetVisibleAlls();
-
-    for( GAL_LAYER_ID ii = GAL_LAYER_ID_START; ii < GAL_LAYER_ID_BITMASK_END; ++ii )
-        m_Layers->SetRenderState( ii, true );
 }
 
 
@@ -859,23 +805,12 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
     // call my base class
     PCB_BASE_EDIT_FRAME::ShowChangedLanguage();
 
-    // update the layer manager
-    m_Layers->Freeze();
-
-    wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_Layers );
-    pane_info.Caption( _( "Visibles" ) );
+    // TODO(JE) APPEARANCE
+    wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_appearancePanel );
+    pane_info.Caption( _( "Appearance" ) );
     m_auimgr.Update();
 
-    m_Layers->SetLayersManagerTabsText();
-    ReFillLayerWidget();
-    // m_Layers->ReFillRender();  // SyncRenderStates() does this
-
-    // upate the layer widget to match board visibility states, both layers and render columns.
-    syncLayerVisibilities();
-    syncLayerWidgetLayer();
-    SyncRenderStates();
-
-    m_Layers->Thaw();
+    m_appearancePanel->OnBoardChanged();
 
     // pcbnew-specific toolbars
     ReCreateMicrowaveVToolbar();
@@ -965,17 +900,16 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
 
     m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
 
-    // Update the layer manager
-    m_Layers->Freeze();
-    ReFillLayerWidget();
-    // m_Layers->ReFillRender();  // SyncRenderStates() does this
+    ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
-    // upate the layer widget to match board visibility states, both layers and render columns.
-    syncLayerVisibilities();
-    syncLayerWidgetLayer();
-    SyncRenderStates();
+    layerEnum.Choices().Clear();
+    layerEnum.Undefined( UNDEFINED_LAYER );
 
-    m_Layers->Thaw();
+    for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+        layerEnum.Map( *seq, GetBoard()->GetLayerName( *seq ) );
+
+    // Stackup and/or color theme may have changed
+    m_appearancePanel->OnBoardChanged();
 }
 
 
@@ -1009,12 +943,6 @@ void PCB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
     // switches currently used canvas (Cairo / OpenGL).
     PCB_BASE_FRAME::SwitchCanvas( aCanvasType );
-
-    // The base class method *does not* reinitialize the layers manager. We must upate the
-    // layer widget to match board visibility states, both layers and render columns.
-    syncLayerVisibilities();
-    syncLayerWidgetLayer();
-    SyncRenderStates();
 }
 
 

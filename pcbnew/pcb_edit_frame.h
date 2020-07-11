@@ -88,6 +88,7 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
     friend struct PCB::IFACE;
     friend class PCB_LAYER_WIDGET;
+    friend class APPEARANCE_CONTROLS;
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     ACTION_TOOLBAR*         m_microWaveToolBar;
@@ -204,25 +205,6 @@ protected:
      * Updates the state of the GUI after a new board is loaded or created
      */
     void onBoardLoaded();
-
-    /**
-     * Function syncLayerWidgetLayer
-     * updates the currently layer "selection" within the PCB_LAYER_WIDGET.
-     * The currently selected layer is defined by the return value of GetActiveLayer().
-     * <p>
-     * This function cannot be inline without including layer_widget.h in
-     * here and we do not want to do that.
-     * </p>
-     */
-    void syncLayerWidgetLayer();
-
-    /**
-     * Function syncLayerVisibilities
-     * updates each "Layer" checkbox in the layer widget according
-     * to each layer's current visibility determined by IsLayerVisible(), and is
-     * helpful immediately after loading a BOARD which may have state information in it.
-     */
-    void syncLayerVisibilities();
 
     /**
      * Function doAutoSave
@@ -486,12 +468,14 @@ public:
      */
     void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
-    PCB_LAYER_WIDGET* GetLayerManager() { return m_Layers; }
+    APPEARANCE_CONTROLS* GetAppearancePanel() { return m_appearancePanel; }
 
     /**
      * Update the UI to reflect changes to the current layer's transparency.
      */
     void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) override;
+
+    void OnDisplayOptionsChanged() override;
 
     /**
      * Function IsElementVisible
@@ -511,26 +495,6 @@ public:
      * @see enum PCB_LAYER_ID
      */
     void SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState );
-
-    /**
-     * Function SetVisibleAlls
-     * Set the status of all visible element categories and layers to VISIBLE
-     */
-    void SetVisibleAlls();
-
-    /**
-     * Function ReFillLayerWidget
-     * changes out all the layers in m_Layers and may be called upon
-     * loading a new BOARD.
-     */
-    void ReFillLayerWidget();
-
-    /**
-     * Updates the "Render" colors and checkboxes in the layer widget according
-     * to current toggle values determined by IsElementVisible(), and is helpful
-     * immediately after loading a BOARD which may have state information in it.
-     */
-    void SyncRenderStates();
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void ActivateGalCanvas() override;

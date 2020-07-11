@@ -704,7 +704,7 @@ void PCB_EDIT_FRAME::SyncToolbars()
 
     auto&                       opts = GetDisplayOptions();
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-    int                         zoneMode = opts.m_DisplayZonesMode;
+    ZONE_DISPLAY_MODE           zoneMode = opts.m_ZoneDisplayMode;
 
     m_mainToolBar->Toggle( ACTIONS::save, IsContentModified() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetUndoCommandCount() > 0 );
@@ -731,15 +731,18 @@ void PCB_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( PCB_ACTIONS::showLayersManager,    LayerManagerShown() );
     m_optionsToolBar->Toggle( PCB_ACTIONS::showMicrowaveToolbar, MicrowaveToolbarShown() );
 
-    bool hcm = opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
+    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayEnable,
+                              zoneMode == ZONE_DISPLAY_MODE::SHOW_FILLED );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayDisable,
+                              zoneMode == ZONE_DISPLAY_MODE::HIDE_FILLED );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayOutlines,
+                              zoneMode == ZONE_DISPLAY_MODE::SHOW_OUTLINED );
 
-    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayEnable,    zoneMode == 0 );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayDisable,   zoneMode == 1 );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayOutlines,  zoneMode == 2 );
     m_optionsToolBar->Toggle( PCB_ACTIONS::trackDisplayMode,     !opts.m_DisplayPcbTrackFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::viaDisplayMode,       !opts.m_DisplayViaFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,       !opts.m_DisplayPadFill );
-    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,         hcm );
+    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,
+                              opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
     m_optionsToolBar->Refresh();
 
     TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );

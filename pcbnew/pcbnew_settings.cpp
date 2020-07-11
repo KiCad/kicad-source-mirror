@@ -165,8 +165,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back(
             new PARAM<bool>( "pcb_display.via_fill", &m_Display.m_DisplayViaFill, true ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "pcb_display.zone_mode", &m_Display.m_DisplayZonesMode, 0, 0, 2 ) );
+    m_params.emplace_back( new PARAM_ENUM<ZONE_DISPLAY_MODE>( "pcb_display.zone_mode",
+            &m_Display.m_ZoneDisplayMode, ZONE_DISPLAY_MODE::SHOW_FILLED,
+            ZONE_DISPLAY_MODE::SHOW_OUTLINED, ZONE_DISPLAY_MODE::SHOW_FILLED ) );
 
     m_params.emplace_back(
             new PARAM<double>( "plot.line_width", &m_PlotLineWidth, 0.1, 0.01, 5.0 ) );

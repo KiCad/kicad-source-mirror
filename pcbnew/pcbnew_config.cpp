@@ -48,6 +48,7 @@
 #include <footprint_viewer_frame.h>
 #include <invoke_pcb_dialog.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/appearance_controls.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/panel_selection_filter.h>
 #include <project/net_settings.h>
@@ -98,11 +99,16 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 
     pglayout.SetPageLayout( filename );
 
+    // Load render settings that aren't stored in PCB_DISPLAY_OPTIONS
+
+    NET_SETTINGS& netSettings = project.NetSettings();
+    NETINFO_LIST& nets        = GetBoard()->GetNetInfo();
+
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             GetCanvas()->GetView()->GetPainter()->GetSettings() );
 
-    NETINFO_LIST& nets = GetBoard()->GetNetInfo();
-    std::set<int> hiddenNets;
+    std::set<int>& hiddenNets = rs->GetHiddenNets();
+    hiddenNets.clear();
 
     for( const wxString& hidden : localSettings.m_HiddenNets )
     {
@@ -110,7 +116,26 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
             hiddenNets.insert( net->GetNet() );
     }
 
-    rs->LoadNetSettings( project.NetSettings(), nets, hiddenNets );
+    std::map<int, KIGFX::COLOR4D>& netColors = rs->GetNetColorMap();
+    netColors.clear();
+
+    for( const auto& pair : netSettings.m_PcbNetColors )
+    {
+        if( NETINFO_ITEM* net = nets.GetNetItem( pair.first ) )
+            netColors[net->GetNet()] = pair.second;
+    }
+
+    std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
+    netclassColors.clear();
+
+    for( const auto& pair : netSettings.m_NetClasses )
+    {
+        if( pair.second->GetPcbColor() != COLOR4D::UNSPECIFIED )
+            netclassColors[pair.first] = pair.second->GetPcbColor();
+    }
+
+    m_appearancePanel->SetUserLayerPresets( project.m_LayerPresets );
+    m_appearancePanel->ApplyLayerPreset( localSettings.m_ActiveLayerPreset );
 
     SELECTION_FILTER_OPTIONS& filterOpts = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
 
@@ -119,6 +144,11 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 
     PCB_DISPLAY_OPTIONS opts   = GetDisplayOptions();
     opts.m_ContrastModeDisplay = localSettings.m_ContrastModeDisplay;
+    opts.m_NetColorMode        = localSettings.m_NetColorMode;
+    opts.m_TrackOpacity        = localSettings.m_TrackOpacity;
+    opts.m_ViaOpacity          = localSettings.m_ViaOpacity;
+    opts.m_PadOpacity          = localSettings.m_PadOpacity;
+    opts.m_ZoneOpacity         = localSettings.m_ZoneOpacity;
     SetDisplayOptions( opts );
 
     SetActiveLayer( localSettings.m_ActiveLayer );
@@ -146,11 +176,26 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     // TODO: Can this be pulled out of BASE_SCREEN?
     project.m_BoardPageLayoutDescrFile = BASE_SCREEN::m_PageLayoutDescrFileName;
 
+    project.m_LayerPresets = m_appearancePanel->GetUserLayerPresets();
+
     RecordDRCExclusions();
 
-    localSettings.m_ActiveLayer = GetActiveLayer();
+    // Save appearance control settings
 
-    localSettings.m_ContrastModeDisplay = GetDisplayOptions().m_ContrastModeDisplay;
+    localSettings.m_ActiveLayer       = GetActiveLayer();
+    localSettings.m_ActiveLayerPreset = m_appearancePanel->GetActiveLayerPreset();
+
+    const PCB_DISPLAY_OPTIONS& displayOpts = GetDisplayOptions();
+
+    localSettings.m_ContrastModeDisplay = displayOpts.m_ContrastModeDisplay;
+    localSettings.m_NetColorMode        = displayOpts.m_NetColorMode;
+    localSettings.m_TrackOpacity        = displayOpts.m_TrackOpacity;
+    localSettings.m_ViaOpacity          = displayOpts.m_ViaOpacity;
+    localSettings.m_PadOpacity          = displayOpts.m_PadOpacity;
+    localSettings.m_ZoneOpacity         = displayOpts.m_ZoneOpacity;
+    localSettings.m_ZoneDisplayMode     = displayOpts.m_ZoneDisplayMode;
+
+    // Save render settings that aren't stored in PCB_DISPLAY_OPTIONS
 
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             GetCanvas()->GetView()->GetPainter()->GetSettings() );
@@ -163,6 +208,25 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     {
         if( NETINFO_ITEM* net = nets.GetNetItem( netcode ) )
             localSettings.m_HiddenNets.emplace_back( net->GetNetname() );
+    }
+
+    NET_SETTINGS& netSettings = project.NetSettings();
+
+    netSettings.m_PcbNetColors.clear();
+
+    for( const auto& pair : rs->GetNetColorMap() )
+    {
+        if( NETINFO_ITEM* net = nets.GetNetItem( pair.first ) )
+            netSettings.m_PcbNetColors[net->GetNetname()] = pair.second;
+    }
+
+    std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
+
+    // NOTE: this assumes netclasses will have already been updated, which I think is the case
+    for( const auto& pair : netSettings.m_NetClasses )
+    {
+        if( netclassColors.count( pair.first ) )
+            pair.second->SetPcbColor( netclassColors.at( pair.first ) );
     }
 
     SELECTION_FILTER_OPTIONS& filterOpts = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();

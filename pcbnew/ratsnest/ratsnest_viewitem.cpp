@@ -76,15 +76,16 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal->SetLineWidth( 1.0 );
     auto rs = static_cast<PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
-    COLOR4D defaultColor = rs->GetColor( nullptr, LAYER_RATSNEST );
-    COLOR4D color        = defaultColor;
-
-    bool colorByNet = rs->GetNetColorMode() != PCB_RENDER_SETTINGS::NET_COLOR_MODE::OFF;
+    COLOR4D    defaultColor = rs->GetColor( nullptr, LAYER_RATSNEST );
+    COLOR4D    color        = defaultColor;
+    const bool colorByNet   = rs->GetNetColorMode() != NET_COLOR_MODE::OFF;
 
     std::set<int>        highlightedNets = rs->GetHighlightNetCodes();
     const std::set<int>& hiddenNets      = rs->GetHiddenNets();
 
-    std::map<int, KIGFX::COLOR4D>& netColors = rs->GetNetColorMap();
+    std::map<int, KIGFX::COLOR4D>&      netColors      = rs->GetNetColorMap();
+    std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
+    const std::map<int, wxString>&      netclassMap    = m_data->GetNetclassMap();
 
     const bool curved_ratsnest = rs->GetCurvedRatsnestLinesEnabled();
 
@@ -96,7 +97,13 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         if( colorByNet && netColors.count( l.netCode ) )
             color = netColors.at( l.netCode );
+        else if( colorByNet && netclassMap.count( l.netCode )
+                 && netclassColors.count( netclassMap.at( l.netCode ) ) )
+            color = netclassColors.at( netclassMap.at( l.netCode ) );
         else
+            color = defaultColor;
+
+        if( color == COLOR4D::UNSPECIFIED )
             color = defaultColor;
 
         gal->SetStrokeColor( color.Brightened( 0.5 ) );
@@ -137,7 +144,13 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         if( colorByNet && netColors.count( i ) )
             color = netColors.at( i );
+        else if( colorByNet && netclassMap.count( i )
+                 && netclassColors.count( netclassMap.at( i ) ) )
+            color = netclassColors.at( netclassMap.at( i ) );
         else
+            color = defaultColor;
+
+        if( color == COLOR4D::UNSPECIFIED )
             color = defaultColor;
 
         // Draw the "static" ratsnest

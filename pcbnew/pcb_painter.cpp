@@ -58,13 +58,18 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_netNamesOnTracks = true;
     m_netNamesOnVias = true;
     m_zoneOutlines = true;
-    m_displayZone = DZ_SHOW_FILLED;
+    m_zoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
     m_clearance = CL_NONE;
     m_sketchGraphics = false;
     m_sketchText = false;
     m_selectionCandidateColor = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
     m_netColorMode = NET_COLOR_MODE::RATSNEST;
     m_contrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
+
+    m_trackOpacity = 1.0;
+    m_viaOpacity   = 1.0;
+    m_padOpacity   = 1.0;
+    m_zoneOpacity  = 1.0;
 
     // By default everything should be displayed as filled
     for( unsigned int i = 0; i < arrayDim( m_sketchMode ); ++i )
@@ -175,20 +180,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     }
 
     // Zone display settings
-    switch( aOptions.m_DisplayZonesMode )
-    {
-    case 0:
-        m_displayZone = DZ_SHOW_FILLED;
-        break;
-
-    case 1:
-        m_displayZone = DZ_HIDE_FILLED;
-        break;
-
-    case 2:
-        m_displayZone = DZ_SHOW_OUTLINED;
-        break;
-    }
+    m_zoneDisplayMode = aOptions.m_ZoneDisplayMode;
 
     // Clearance settings
     switch( aOptions.m_ShowTrackClearanceMode )
@@ -219,38 +211,26 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
 
     m_contrastModeDisplay = aOptions.m_ContrastModeDisplay;
 
+    m_netColorMode = aOptions.m_NetColorMode;
+
+    m_trackOpacity = aOptions.m_TrackOpacity;
+    m_viaOpacity   = aOptions.m_ViaOpacity;
+    m_padOpacity   = aOptions.m_PadOpacity;
+    m_zoneOpacity  = aOptions.m_ZoneOpacity;
+
     m_showPageLimits = aShowPageLimits;
 }
 
 
-void PCB_RENDER_SETTINGS::LoadNetSettings( const NET_SETTINGS& aSettings, const NETINFO_LIST& aList,
-                                           const std::set<int>& aHiddenNets )
-{
-    m_netColors.clear();
-
-    for( const auto& pair : aSettings.m_PcbNetColors )
-    {
-        if( NETINFO_ITEM* net = aList.GetNetItem( pair.first ) )
-            m_netColors[net->GetNet()] = pair.second;
-    }
-
-    m_netclassColors.clear();
-
-    for( const auto& pair : aSettings.m_NetClasses )
-    {
-        if( pair.second->GetPcbColor() != COLOR4D::UNSPECIFIED )
-            m_netclassColors[pair.first] = pair.second->GetPcbColor();
-    }
-
-    m_hiddenNets = aHiddenNets;
-}
-
-
-const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
+COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
     int netCode = -1;
     const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
     const BOARD_CONNECTED_ITEM* conItem = dynamic_cast<const BOARD_CONNECTED_ITEM*> ( aItem );
+
+    // Zones should pull from the copper layer
+    if( item && item->Type() == PCB_ZONE_AREA_T && IsZoneLayer( aLayer ) )
+        aLayer = aLayer - LAYER_ZONE_START;
 
     // Make items invisible in "other layers hidden" contrast mode
     if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN && m_activeLayers.count( aLayer ) == 0 )
@@ -261,76 +241,84 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
         && m_activeLayers.count( aLayer ) == 0 )
         return COLOR4D::CLEAR;
 
+    // Normal path: get the layer base color
+    COLOR4D color = m_layerColors[aLayer];
+
     if( item )
     {
         // Selection disambiguation
         if( item->IsBrightened() )
-        {
             return m_selectionCandidateColor;
-        }
 
         // Don't let pads that *should* be NPTHs get lost
         if( item->Type() == PCB_PAD_T && dyn_cast<const D_PAD*>( item )->PadShouldBeNPTH() )
             aLayer = LAYER_MOD_TEXT_INVISIBLE;
 
         if( item->IsSelected() )
-            return m_layerColorsSel[aLayer];
-
-        if( item->Type() == PCB_MARKER_T )
-            return m_layerColors[aLayer];
-
-        // For vias, some layers depend on other layers in high contrast mode
-        if( m_hiContrastEnabled && item->Type() == PCB_VIA_T &&
-                ( aLayer == LAYER_VIAS_HOLES   ||
-                  aLayer == LAYER_VIA_THROUGH  ||
-                  aLayer == LAYER_VIA_MICROVIA ||
-                  aLayer == LAYER_VIA_BBLIND ) )
-        {
-            const VIA*   via = static_cast<const VIA*>( item );
-            const BOARD* pcb = static_cast<const BOARD*>( item->GetParent() );
-            bool         viaActiveLayer = false;
-
-            for( auto activeLayer : m_activeLayers )
-            {
-                auto lay_id = static_cast<PCB_LAYER_ID>( activeLayer );
-                viaActiveLayer |= via->IsOnLayer( lay_id ) && pcb->IsLayerVisible( lay_id );
-            }
-
-            if( viaActiveLayer )
-                return m_layerColors[aLayer];
-            else
-                return m_hiContrastColor[aLayer];
-        }
+            color = m_layerColorsSel[aLayer];
+    }
+    else
+    {
+        return m_layerColors[aLayer];
     }
 
     // Try to obtain the netcode for the item
     if( conItem )
         netCode = conItem->GetNetCode();
 
-    // Single net highlight mode
-    if( m_highlightEnabled && m_highlightNetcodes.count( netCode ) )
-        return m_layerColorsHi[aLayer];
-
-    // Return grayish color for non-highlighted layers in the dimmed high contrast mode
-    if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED && m_activeLayers.count( aLayer ) == 0 )
-        return m_hiContrastColor[aLayer];
-
-    // Catch the case when highlight and high-contraste modes are enabled
-    // and we are drawing a not highlighted track
-    if( m_highlightEnabled )
-        return m_layerColorsDark[aLayer];
-
     // Apply net color overrides
     if( conItem && m_netColorMode == NET_COLOR_MODE::ALL )
     {
         if( m_netColors.count( conItem->GetNetCode() ) )
-            return m_netColors.at( conItem->GetNetCode() );
+            color = m_netColors.at( conItem->GetNetCode() );
         else if( m_netclassColors.count( conItem->GetNetClassName() ) )
-            return m_netclassColors.at( conItem->GetNetClassName() );
+            color = m_netclassColors.at( conItem->GetNetClassName() );
     }
 
+    // Single net highlight mode
+    if( m_highlightEnabled )
+        color = m_highlightNetcodes.count( netCode ) ? m_layerColorsHi[aLayer]
+                                                     : m_layerColorsDark[aLayer];
+
+    // Return grayish color for non-highlighted layers in the dimmed high contrast mode
+    if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED && m_activeLayers.count( aLayer ) == 0 )
+        color = m_hiContrastColor[aLayer];
+
+    // For vias, some layers depend on other layers in high contrast mode
+    if( m_hiContrastEnabled && item->Type() == PCB_VIA_T &&
+        ( aLayer == LAYER_VIAS_HOLES   ||
+          aLayer == LAYER_VIA_THROUGH  ||
+          aLayer == LAYER_VIA_MICROVIA ||
+          aLayer == LAYER_VIA_BBLIND ) )
+    {
+        const VIA*   via = static_cast<const VIA*>( item );
+        const BOARD* pcb = static_cast<const BOARD*>( item->GetParent() );
+        bool         viaActiveLayer = false;
+
+        for( auto activeLayer : m_activeLayers )
+        {
+            auto lay_id = static_cast<PCB_LAYER_ID>( activeLayer );
+            viaActiveLayer |= via->IsOnLayer( lay_id ) && pcb->IsLayerVisible( lay_id );
+        }
+
+        if( viaActiveLayer )
+            color = m_layerColors[aLayer];
+        else
+            color = m_hiContrastColor[aLayer];
+    }
+
+    // Apply per-type opacity overrides
+    if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+        color.a *= m_trackOpacity;
+    else if( item->Type() == PCB_VIA_T )
+        color.a *= m_viaOpacity;
+    else if( item->Type() == PCB_PAD_T )
+        color.a *= m_padOpacity;
+    else if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
+        color.a *= m_zoneOpacity;
+
     // No special modificators enabled
-    return m_layerColors[aLayer];
+    return color;
 }
 
 
@@ -494,7 +482,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     else if( IsCopperLayer( aLayer ) )
     {
         // Draw a regular track
-        const COLOR4D& color = m_pcbSettings.GetColor( aTrack, aLayer );
+        COLOR4D color = m_pcbSettings.GetColor( aTrack, aLayer );
         bool outline_mode = m_pcbSettings.m_sketchMode[LAYER_TRACKS];
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
@@ -528,7 +516,7 @@ void PCB_PAINTER::draw( const ARC* aArc, int aLayer )
     if( IsCopperLayer( aLayer ) )
     {
         // Draw a regular track
-        const COLOR4D& color = m_pcbSettings.GetColor( aArc, aLayer );
+        COLOR4D color = m_pcbSettings.GetColor( aArc, aLayer );
         bool outline_mode = m_pcbSettings.m_sketchMode[LAYER_TRACKS];
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
@@ -623,7 +611,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         radius = getDrillSize(aVia) / 2.0 ;
 
     bool sketchMode = false;
-    const COLOR4D& color  = m_pcbSettings.GetColor( aVia, aLayer );
+    COLOR4D color = m_pcbSettings.GetColor( aVia, aLayer );
 
     switch( aVia->GetViaType() )
     {
@@ -1179,14 +1167,21 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
 
 void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
 {
-    PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aLayer );
+    /**
+     * aLayer will be the virtual zone layer (LAYER_ZONE_START, ... in GAL_LAYER_ID)
+     * This is used for draw ordering in the GAL.
+     * The color for the zone comes from the associated copper layer ( aLayer - LAYER_ZONE_START )
+     * and the visibility comes from the combination of that copper layer and LAYER_ZONES
+     */
+    wxASSERT( IsZoneLayer( aLayer ) );
+    PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aLayer - LAYER_ZONE_START );
 
     if( !aZone->IsOnLayer( layer ) )
         return;
 
-    const COLOR4D& color = m_pcbSettings.GetColor( aZone, aLayer );
+    COLOR4D color = m_pcbSettings.GetColor( aZone, layer );
     std::deque<VECTOR2D> corners;
-    PCB_RENDER_SETTINGS::DISPLAY_ZONE_MODE displayMode = m_pcbSettings.m_displayZone;
+    ZONE_DISPLAY_MODE displayMode = m_pcbSettings.m_zoneDisplayMode;
 
     // Draw the outline
     const SHAPE_POLY_SET* outline = aZone->Outline();
@@ -1221,7 +1216,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
     }
 
     // Draw the filling
-    if( displayMode != PCB_RENDER_SETTINGS::DZ_HIDE_FILLED )
+    if( displayMode != ZONE_DISPLAY_MODE::HIDE_FILLED )
     {
         const SHAPE_POLY_SET& polySet = aZone->GetFilledPolysList( layer );
 
@@ -1234,12 +1229,12 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
         m_gal->SetFillColor( color );
         m_gal->SetLineWidth( outline_thickness );
 
-        if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_FILLED )
+        if( displayMode == ZONE_DISPLAY_MODE::SHOW_FILLED )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( outline_thickness > 0 );
         }
-        else if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_OUTLINED )
+        else if( displayMode == ZONE_DISPLAY_MODE::SHOW_OUTLINED )
         {
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );

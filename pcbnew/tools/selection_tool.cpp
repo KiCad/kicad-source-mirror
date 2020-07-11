@@ -460,15 +460,17 @@ const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
     GENERAL_COLLECTORS_GUIDE guide( board()->GetVisibleLayers(),
                                     (PCB_LAYER_ID) view()->GetTopLayer(), view() );
 
+    bool padsDisabled = !board()->IsElementVisible( LAYER_PADS );
+
     // account for the globals
     guide.SetIgnoreMTextsMarkedNoShow( ! board()->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) );
     guide.SetIgnoreMTextsOnBack( ! board()->IsElementVisible( LAYER_MOD_TEXT_BK ) );
     guide.SetIgnoreMTextsOnFront( ! board()->IsElementVisible( LAYER_MOD_TEXT_FR ) );
     guide.SetIgnoreModulesOnBack( ! board()->IsElementVisible( LAYER_MOD_BK ) );
     guide.SetIgnoreModulesOnFront( ! board()->IsElementVisible( LAYER_MOD_FR ) );
-    guide.SetIgnorePadsOnBack( ! board()->IsElementVisible( LAYER_PAD_BK ) );
-    guide.SetIgnorePadsOnFront( ! board()->IsElementVisible( LAYER_PAD_FR ) );
-    guide.SetIgnoreThroughHolePads( ! board()->IsElementVisible( LAYER_PADS_TH ) );
+    guide.SetIgnorePadsOnBack( padsDisabled || ! board()->IsElementVisible( LAYER_PAD_BK ) );
+    guide.SetIgnorePadsOnFront( padsDisabled || ! board()->IsElementVisible( LAYER_PAD_FR ) );
+    guide.SetIgnoreThroughHolePads( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_TH ) );
     guide.SetIgnoreModulesVals( ! board()->IsElementVisible( LAYER_MOD_VALUES ) );
     guide.SetIgnoreModulesRefs( ! board()->IsElementVisible( LAYER_MOD_REFERENCES ) );
     guide.SetIgnoreThroughVias( ! board()->IsElementVisible( LAYER_VIA_THROUGH ) );
@@ -488,7 +490,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     GENERAL_COLLECTOR        collector;
     auto&                    displayOpts = m_frame->GetDisplayOptions();
 
-    guide.SetIgnoreZoneFills( displayOpts.m_DisplayZonesMode != 0 );
+    guide.SetIgnoreZoneFills( displayOpts.m_ZoneDisplayMode != ZONE_DISPLAY_MODE::SHOW_FILLED );
 
     if( m_enteredGroup &&
         !m_enteredGroup->GetBoundingBox().Contains( wxPoint( aWhere.x, aWhere.y ) ) )
@@ -1045,12 +1047,22 @@ void SELECTION_TOOL::selectAllItemsOnNet( int aNetCode )
     auto connectivity = board()->GetConnectivity();
 
     for( BOARD_CONNECTED_ITEM* item : connectivity->GetNetItems( aNetCode, types ) )
-        select( item );
+        if( itemPassesFilter( item ) )
+            select( item );
 }
 
 
 int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 {
+    // If we've been passed an argument, just select that netcode
+    int netcode = aEvent.Parameter<intptr_t>();
+
+    if( netcode > 0 )
+    {
+        selectAllItemsOnNet( netcode );
+        return 0;
+    }
+
     if( !selectCursor() )
         return 0;
 

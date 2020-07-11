@@ -43,9 +43,6 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( const wxString& aFilename ) :
             },
             LSET::AllLayersMask().FmtHex() ) );
 
-    static GAL_SET defaultVisible;
-    defaultVisible.set().reset( GAL_LAYER_INDEX( LAYER_MOD_TEXT_INVISIBLE ) );
-
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "board.visible_items",
             [&]() -> nlohmann::json
             {
@@ -61,7 +58,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( const wxString& aFilename ) :
             {
                 if( !aVal.is_array() || aVal.empty() )
                 {
-                    m_VisibleItems = defaultVisible;
+                    m_VisibleItems = GAL_SET::DefaultVisible();
                     return;
                 }
 
@@ -149,7 +146,23 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( const wxString& aFilename ) :
             &m_ContrastModeDisplay, HIGH_CONTRAST_MODE::NORMAL, HIGH_CONTRAST_MODE::NORMAL,
             HIGH_CONTRAST_MODE::HIDDEN ) );
 
+    m_params.emplace_back( new PARAM<double>( "board.opacity.tracks", &m_TrackOpacity, 1.0 ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.vias", &m_ViaOpacity, 1.0 ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.pads", &m_PadOpacity, 1.0 ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.zones", &m_ZoneOpacity, 1.0 ) );
+
     m_params.emplace_back( new PARAM_LIST<wxString>( "board.hidden_nets", &m_HiddenNets, {} ) );
+
+    m_params.emplace_back( new PARAM_ENUM<NET_COLOR_MODE>( "board.net_color_mode",
+                           &m_NetColorMode, NET_COLOR_MODE::RATSNEST, NET_COLOR_MODE::OFF,
+                           NET_COLOR_MODE::ALL ) );
+
+    // TODO: move the rest of PCB_DISPLAY_OPTIONS that are project-specific in here
+#if 0
+    m_params.emplace_back( new PARAM_ENUM<ZONE_DISPLAY_MODE>( "board.zone_display_mode",
+            &m_ZoneDisplayMode, ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_OUTLINED,
+            ZONE_DISPLAY_MODE::SHOW_FILLED ) );
+#endif
 }
 
 

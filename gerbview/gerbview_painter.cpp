@@ -102,7 +102,7 @@ void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS& aO
 }
 
 
-const COLOR4D& GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
+COLOR4D GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
     const EDA_ITEM* item = static_cast<const EDA_ITEM*>( aItem );
     static const COLOR4D transparent = COLOR4D( 0, 0, 0, 0 );

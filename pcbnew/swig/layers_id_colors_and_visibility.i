@@ -33,6 +33,10 @@
  */
 %ignore operator+(const GAL_LAYER_ID&, int);
 
+// Force the GAL_LAYER_ID version to be exposed
+%ignore GAL_SET::set(int, bool);
+%ignore GAL_SET::set(int);
+
 %include layers_id_colors_and_visibility.h
 
 // Extend LSET by 2 methods to add or remove layers from the layer list

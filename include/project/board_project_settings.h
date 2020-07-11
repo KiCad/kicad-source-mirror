@@ -76,13 +76,29 @@ struct SELECTION_FILTER_OPTIONS
 };
 
 /**
-     * Determines how inactive layers should be displayed
-     */
+ * Determines how inactive layers should be displayed
+ */
 enum class HIGH_CONTRAST_MODE
 {
     NORMAL = 0,     ///> Non-active layers are shown normally (no high-contrast mode)
     DIMMED,         ///> Non-active layers are dimmed (old high-contrast mode)
     HIDDEN          ///> Non-active layers are hidden
+};
+
+///> Determines how zones should be displayed
+enum class ZONE_DISPLAY_MODE
+{
+    SHOW_FILLED,    ///< Filled polygons are shown
+    HIDE_FILLED,    ///< Only the zone outline is shown
+    SHOW_OUTLINED   ///< Outlines of filled polygons are shown
+};
+
+///> Determines how net color overrides should be applied
+enum class NET_COLOR_MODE
+{
+    OFF,        ///< Net (and netclass) colors are not shown
+    RATSNEST,   ///< Net/netclass colors are shown on ratsnest lines only
+    ALL         ///< Net/netclass colors are shown on all net copper
 };
 
 /**
@@ -94,25 +110,34 @@ struct LAYER_PRESET
     LSET         layers;        ///< Board layers that are visible
     GAL_SET      renderLayers;  ///< Render layers (e.g. object types) that are visible
     PCB_LAYER_ID activeLayer;   ///< Optional layer to set active when this preset is loaded
+    bool         readOnly;      ///< True if this is a read-only (built-in) preset
 
-    LAYER_PRESET( const wxString& aName ) :
+    LAYER_PRESET( const wxString& aName = wxEmptyString ) :
             name( aName ),
             activeLayer( UNSELECTED_LAYER )
     {
+        layers       = LSET::AllLayersMask();
+        renderLayers = GAL_SET::DefaultVisible();
+        readOnly     = false;
     }
 
-    LAYER_PRESET( const wxString& aName, const LSET& aSet ) :
+    LAYER_PRESET( const wxString& aName, const LSET& aVisibleLayers ) :
             name( aName ),
-            layers( aSet ),
+            layers( aVisibleLayers ),
             activeLayer( UNSELECTED_LAYER )
     {
+        renderLayers = GAL_SET::DefaultVisible();
+        readOnly     = false;
     }
 
-    LAYER_PRESET( const wxString& aName, const LSET& aSet, PCB_LAYER_ID aActive ) :
+    LAYER_PRESET( const wxString& aName, const LSET& aVisibleLayers, const GAL_SET& aVisibleObjects,
+                  PCB_LAYER_ID aActiveLayer ) :
             name( aName ),
-            layers( aSet ),
-            activeLayer( aActive )
+            layers( aVisibleLayers ),
+            renderLayers( aVisibleObjects ),
+            activeLayer( aActiveLayer )
     {
+        readOnly = false;
     }
 
     bool LayersMatch( const LAYER_PRESET& aOther )

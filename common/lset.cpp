@@ -651,6 +651,7 @@ LSET LSET::FrontAssembly()
         F_SilkS,
         F_Mask,
         F_Fab,
+        F_CrtYd
     };
 
     static const LSET saved( front_assembly, arrayDim( front_assembly ) );
@@ -664,6 +665,7 @@ LSET LSET::BackAssembly()
         B_SilkS,
         B_Mask,
         B_Fab,
+        B_CrtYd
     };
 
     static const LSET saved( back_assembly, arrayDim( back_assembly ) );
@@ -854,3 +856,68 @@ PCB_LAYER_ID ToLAYER_ID( int aLayer )
     return PCB_LAYER_ID( aLayer );
 }
 
+
+GAL_SET::GAL_SET( const GAL_LAYER_ID* aArray, unsigned aCount ) : GAL_SET()
+{
+    for( unsigned i = 0; i < aCount; ++i )
+        set( aArray[i] );
+}
+
+
+std::vector<GAL_LAYER_ID> GAL_SET::Seq() const
+{
+    std::vector<GAL_LAYER_ID> ret;
+
+    for( size_t i = 0; i < size(); ++i )
+    {
+        if( test( i ) )
+            ret.push_back( static_cast<GAL_LAYER_ID>( i ) );
+    }
+
+    return ret;
+}
+
+
+GAL_SET GAL_SET::DefaultVisible()
+{
+    static const GAL_LAYER_ID visible[] = {
+        LAYER_VIAS,
+        LAYER_VIA_MICROVIA,
+        LAYER_VIA_BBLIND,
+        LAYER_VIA_THROUGH,
+        LAYER_NON_PLATEDHOLES,
+        LAYER_MOD_TEXT_FR,
+        LAYER_MOD_TEXT_BK,
+        // LAYER_MOD_TEXT_INVISIBLE,    // Invisible text hidden by default
+        LAYER_ANCHOR,
+        LAYER_PAD_FR,
+        LAYER_PAD_BK,
+        LAYER_RATSNEST,
+        LAYER_GRID,
+        LAYER_GRID_AXES,
+        LAYER_NO_CONNECTS,
+        LAYER_MOD_FR,
+        LAYER_MOD_BK,
+        LAYER_MOD_VALUES,
+        LAYER_MOD_REFERENCES,
+        LAYER_TRACKS,
+        LAYER_PADS_TH,
+        LAYER_PADS_PLATEDHOLES,
+        LAYER_VIAS_HOLES,
+        LAYER_DRC_ERROR,
+        LAYER_DRC_WARNING,
+       // LAYER_DRC_EXCLUSION,      // DRC exclusions hidden by default
+        LAYER_WORKSHEET,
+        LAYER_GP_OVERLAY,
+        LAYER_SELECT_OVERLAY,
+        LAYER_PCB_BACKGROUND,
+        LAYER_CURSOR,
+        LAYER_AUX_ITEMS,
+        LAYER_DRAW_BITMAPS,
+        LAYER_PADS,
+        LAYER_ZONES,
+    };
+
+    static const GAL_SET saved( visible, arrayDim( visible ) );
+    return saved;
+}

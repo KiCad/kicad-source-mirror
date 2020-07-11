@@ -214,15 +214,17 @@ void COLOR_SWATCH::GetNewSwatchColor()
     DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, true, nullptr, m_default );
 
     if( dialog.ShowModal() == wxID_OK )
+    {
         newColor = dialog.GetColor();
 
-    if( newColor != COLOR4D::UNSPECIFIED || m_default == COLOR4D::UNSPECIFIED )
-    {
-        m_color = newColor;
+        if( newColor != COLOR4D::UNSPECIFIED || m_default == COLOR4D::UNSPECIFIED )
+        {
+            m_color = newColor;
 
-        wxBitmap bm = MakeBitmap( newColor, m_background, m_size );
-        m_swatch->SetBitmap( bm );
+            wxBitmap bm = MakeBitmap( newColor, m_background, m_size );
+            m_swatch->SetBitmap( bm );
 
-        sendSwatchChangeEvent( *this );
+            sendSwatchChangeEvent( *this );
+        }
     }
 }

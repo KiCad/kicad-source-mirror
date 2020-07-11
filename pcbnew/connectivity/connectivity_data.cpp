@@ -82,6 +82,13 @@ void CONNECTIVITY_DATA::Build( BOARD* aBoard )
 {
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
     m_connAlgo->Build( aBoard );
+
+    m_netclassMap.clear();
+
+    for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
+        if( net->GetNetClass()->GetName() != NETCLASS::Default )
+            m_netclassMap[net->GetNet()] = net->GetNetClass()->GetName();
+
     RecalculateRatsnest();
 }
 

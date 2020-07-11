@@ -25,7 +25,6 @@
 #include <kiface_i.h>
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
-#include <pcb_layer_widget.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <class_board.h>
@@ -35,6 +34,7 @@
 #include <settings/settings_manager.h>
 #include <tools/pcb_actions.h>
 #include <dialogs/dialog_grid_settings.h>
+#include <widgets/appearance_controls.h>
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                           FRAME_T aFrameType, const wxString& aTitle,
@@ -136,8 +136,8 @@ void PCB_BASE_EDIT_FRAME::SetGridVisibility( bool aVisible )
     PCB_BASE_FRAME::SetGridVisibility( aVisible );
 
     // Update the grid checkbox in the layer widget
-    if( m_Layers )
-        m_Layers->SetRenderState( LAYER_GRID, aVisible );
+    if( m_appearancePanel )
+        m_appearancePanel->SetObjectVisible( LAYER_GRID, aVisible );
 
     // TODO (ISM): Remove this by changing toolbars to use the EVT_UPDATE_UI to get the state
     SyncToolbars();

@@ -27,6 +27,7 @@
 
 #include <pcb_base_frame.h>
 
+class APPEARANCE_CONTROLS;
 class BOARD_ITEM_CONTAINER;
 class PCB_LAYER_WIDGET;
 class PANEL_SELECTION_FILTER;
@@ -222,6 +223,9 @@ protected:
 
     /// AUI panel for changing the selection tool filter controls
     PANEL_SELECTION_FILTER* m_selectionFilterPanel;
+
+    /// AUI panel for controlling layer and object visibility and appearance
+    APPEARANCE_CONTROLS* m_appearancePanel;
 };
 
 #endif

@@ -294,15 +294,15 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     };
     auto zonesFilledCondition = [ &disp_opt ]( const SELECTION &aSel )
     {
-        return disp_opt.m_DisplayZonesMode == 0;
+        return disp_opt.m_ZoneDisplayMode == ZONE_DISPLAY_MODE::SHOW_FILLED;
     };
     auto zonesWireframedCondition = [ &disp_opt ]( const SELECTION &aSel )
     {
-        return disp_opt.m_DisplayZonesMode == 1;
+        return disp_opt.m_ZoneDisplayMode == ZONE_DISPLAY_MODE::HIDE_FILLED;
     };
     auto zonesOutlinedCondition = [ &disp_opt ]( const SELECTION &aSel )
     {
-        return disp_opt.m_DisplayZonesMode == 2;
+        return disp_opt.m_ZoneDisplayMode == ZONE_DISPLAY_MODE::SHOW_OUTLINED;
     };
     auto sketchTracksCondition = [ &disp_opt ]( const SELECTION &aSel )
     {

@@ -74,21 +74,33 @@ public:
     /// How trace clearances are displayed.  @see TRACE_CLEARANCE_DISPLAY_MODE_T.
     TRACE_CLEARANCE_DISPLAY_MODE_T  m_ShowTrackClearanceMode;
 
-    int  m_DisplayZonesMode;
+    /// @see ZONE_DISPLAY_MODE - stored in the project
+    ZONE_DISPLAY_MODE m_ZoneDisplayMode;
+
     int  m_DisplayNetNamesMode;     /* 0 do not show netnames,
                                      * 1 show netnames on pads
                                      * 2 show netnames on tracks
                                      * 3 show netnames on tracks and pads
                                      */
 
-    /// How inactive layers are displayed.  @see HIGH_CONTRAST_MODE
+    /// How inactive layers are displayed.  @see HIGH_CONTRAST_MODE - stored in the project
     HIGH_CONTRAST_MODE m_ContrastModeDisplay;
+
+    /// How to use color overrides on specific nets and netclasses
+    NET_COLOR_MODE m_NetColorMode;
 
     int  m_MaxLinksShowed;              // in track creation: number of hairwires shown
     bool m_ShowModuleRatsnest;          // When moving a footprint: allows displaying a ratsnest
     bool m_ShowGlobalRatsnest;          // If true, show all
     bool m_DisplayRatsnestLinesCurved;  // Airwires can be drawn as straight lines (false)
                                         // or curved lines (true)
+
+    // These opacity overrides multiply with any opacity in the base layer color
+
+    double m_TrackOpacity;     ///< Opacity override for all tracks
+    double m_ViaOpacity;       ///< Opacity override for all types of via
+    double m_PadOpacity;       ///< Opacity override for SMD pads and PTHs
+    double m_ZoneOpacity;      ///< Opacity override for filled zone areas
 
 public:
 

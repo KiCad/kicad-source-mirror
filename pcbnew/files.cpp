@@ -506,8 +506,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             return false;
     }
 
-    wxWindowUpdateLocker no_update( m_Layers );     // Avoid flicker when rebuilding m_Layers
-
     // Unlink the old project if needed
     GetBoard()->ClearProject();
 

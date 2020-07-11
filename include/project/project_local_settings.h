@@ -94,6 +94,17 @@ public:
     /// The current contrast mode
     HIGH_CONTRAST_MODE m_ContrastModeDisplay;
 
+    /// The current net color mode
+    NET_COLOR_MODE m_NetColorMode;
+
+    /// How zones are drawn (TODO: not yet used)
+    ZONE_DISPLAY_MODE m_ZoneDisplayMode;
+
+    double m_TrackOpacity;     ///< Opacity override for all tracks
+    double m_ViaOpacity;       ///< Opacity override for all types of via
+    double m_PadOpacity;       ///< Opacity override for SMD pads and PTH
+    double m_ZoneOpacity;      ///< Opacity override for filled zones
+
     /**
      * A list of netnames that have been manually hidden in the board editor.
      * Currently, hiding nets means hiding the ratsnest for those nets.

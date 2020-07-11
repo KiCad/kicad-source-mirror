@@ -102,7 +102,7 @@ void SCH_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 }
 
 
-const COLOR4D& SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
+COLOR4D SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
     return m_layerColors[ aLayer ];
 }

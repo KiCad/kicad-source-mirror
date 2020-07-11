@@ -38,8 +38,8 @@
 #include <wildcards_and_files_ext.h>
 #include <class_marker_pcb.h>
 #include <wx/wupdlock.h>
+#include <widgets/appearance_controls.h>
 #include <widgets/ui_common.h>
-#include <pcb_layer_widget.h>
 
 
 DIALOG_DRC::DIALOG_DRC( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
@@ -273,7 +273,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
         if( ( violationLayers & board->GetVisibleLayers() ) == 0 )
         {
-            m_brdEditor->GetLayerManager()->SetLayerVisible( item->GetLayer(), true );
+            m_brdEditor->GetAppearancePanel()->SetLayerVisible( item->GetLayer(), true );
             m_brdEditor->GetCanvas()->Refresh();
         }
 

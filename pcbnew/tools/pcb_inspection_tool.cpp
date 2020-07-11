@@ -272,18 +272,19 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 
 int PCB_INSPECTION_TOOL::HighlightNet( const TOOL_EVENT& aEvent )
 {
-    int                     netcode = aEvent.Parameter<intptr_t>();
-    KIGFX::RENDER_SETTINGS* settings = m_toolMgr->GetView()->GetPainter()->GetSettings();
+    int                     netcode     = aEvent.Parameter<intptr_t>();
+    KIGFX::RENDER_SETTINGS* settings    = m_toolMgr->GetView()->GetPainter()->GetSettings();
+    const std::set<int>&    highlighted = settings->GetHighlightNetCodes();
 
     if( netcode > 0 )
     {
-        m_lastNetcode = *settings->GetHighlightNetCodes().begin();
+        m_lastNetcode = highlighted.empty() ? -1 : *highlighted.begin();
         settings->SetHighlight( true, netcode );
         m_toolMgr->GetView()->UpdateAllLayersColor();
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::toggleLastNetHighlight ) )
     {
-        int temp = *settings->GetHighlightNetCodes().begin();
+        int temp = highlighted.empty() ? -1 : *highlighted.begin();
         settings->SetHighlight( true, m_lastNetcode );
         m_toolMgr->GetView()->UpdateAllLayersColor();
         m_lastNetcode = temp;

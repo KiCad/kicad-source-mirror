@@ -170,7 +170,7 @@ enum GAL_LAYER_ID: int
 {
     GAL_LAYER_ID_START = NETNAMES_LAYER_ID_END,
 
-    LAYER_VIAS = GAL_LAYER_ID_START,
+    LAYER_VIAS = GAL_LAYER_ID_START, ///< Meta control for all vias opacity/visibility
     LAYER_VIA_MICROVIA,         ///< to draw micro vias
     LAYER_VIA_BBLIND,           ///< to draw blind/buried vias
     LAYER_VIA_THROUGH,          ///< to draw usual through hole vias
@@ -211,6 +211,13 @@ enum GAL_LAYER_ID: int
     LAYER_WORKSHEET_PAGE1,      ///< for pageLayout editor previewing
     LAYER_WORKSHEET_PAGEn,      ///< for pageLayout editor previewing
 
+    LAYER_PADS,                 ///< Meta control for all pads opacity/visibility (color ignored)
+    LAYER_ZONES,                ///< Control for copper zone opacity/visibility (color ignored)
+
+    /// Virtual layers for stacking zones and tracks on a given copper layer
+    LAYER_ZONE_START,
+    LAYER_ZONE_END = LAYER_ZONE_START + PCB_LAYER_ID_COUNT,
+
     /// Add new GAL layers here
 
     GAL_LAYER_ID_END
@@ -219,12 +226,21 @@ enum GAL_LAYER_ID: int
 /// Use this macro to convert a GAL layer to a 0-indexed offset from LAYER_VIAS
 #define GAL_LAYER_INDEX( x ) ( x - GAL_LAYER_ID_START )
 
+/// Macro for getting the zone layer for a given copper layer
+#define ZONE_LAYER_FOR( copperLayer ) ( LAYER_ZONE_START + copperLayer )
+
 constexpr int GAL_LAYER_ID_COUNT = GAL_LAYER_ID_END - GAL_LAYER_ID_START;
 
 inline GAL_LAYER_ID operator++( GAL_LAYER_ID& a )
 {
     a = GAL_LAYER_ID( int( a ) + 1 );
     return a;
+}
+
+inline GAL_LAYER_ID ToGalLayer( int aInteger )
+{
+    wxASSERT( aInteger >= GAL_LAYER_ID_START && aInteger <= GAL_LAYER_ID_END );
+    return static_cast<GAL_LAYER_ID>( aInteger );
 }
 
 /// Used for via types
@@ -235,9 +251,14 @@ inline GAL_LAYER_ID operator+( const GAL_LAYER_ID& a, int b )
     return t;
 }
 
+typedef std::bitset<GAL_LAYER_ID_COUNT> GAL_BASE_SET;
+
 /// Helper for storing and iterating over GAL_LAYER_IDs
-class GAL_SET : public std::bitset<GAL_LAYER_ID_COUNT>
+class GAL_SET : public GAL_BASE_SET
 {
+private:
+    static constexpr int start = static_cast<int>( GAL_LAYER_ID_START );
+
 public:
     GAL_SET() : std::bitset<GAL_LAYER_ID_COUNT>()
     {
@@ -247,30 +268,34 @@ public:
     {
     }
 
+    GAL_SET( const GAL_LAYER_ID* aArray, unsigned aCount );
+
     GAL_SET& set()
     {
-        std::bitset<GAL_LAYER_ID_COUNT>::set();
+        GAL_BASE_SET::set();
         return *this;
     }
 
-    GAL_SET& set( size_t aPos, bool aVal = true )
+    GAL_SET& set( int aPos, bool aVal = true )
     {
-        std::bitset<GAL_LAYER_ID_COUNT>::set( aPos, aVal );
+        GAL_BASE_SET::set( aPos, aVal );
         return *this;
     }
 
-    std::vector<GAL_LAYER_ID> Seq() const
+    GAL_SET& set( GAL_LAYER_ID aPos, bool aVal = true )
     {
-        std::vector<GAL_LAYER_ID> ret;
-
-        for( size_t i = 0; i < size(); ++i )
-        {
-            if( test( i ) )
-                ret.push_back( static_cast<GAL_LAYER_ID>( i ) );
-        }
-
-        return ret;
+        GAL_BASE_SET::set( static_cast<int>( aPos ) - start, aVal );
+        return *this;
     }
+
+    bool Contains( GAL_LAYER_ID aPos )
+    {
+        return test( static_cast<int>( aPos ) - start );
+    }
+
+    std::vector<GAL_LAYER_ID> Seq() const;
+
+    static GAL_SET DefaultVisible();
 };
 
 /// Eeschema drawing layers
@@ -902,6 +927,12 @@ inline bool IsNetnameLayer( LAYER_NUM aLayer )
 {
     return aLayer >= NETNAMES_LAYER_INDEX( F_Cu ) &&
            aLayer < NETNAMES_LAYER_ID_END;
+}
+
+
+inline bool IsZoneLayer( LAYER_NUM aLayer )
+{
+    return aLayer >= LAYER_ZONE_START && aLayer <= LAYER_ZONE_END;
 }
 
 

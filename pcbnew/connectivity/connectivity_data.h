@@ -258,6 +258,11 @@ public:
     void MarkItemNetAsDirty( BOARD_ITEM* aItem );
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
+    const std::map<int, wxString>& GetNetclassMap() const
+    {
+        return m_netclassMap;
+    }
+
 #ifndef SWIG
     const std::vector<CN_EDGE> GetRatsnestForItems( const std::vector<BOARD_ITEM*> aItems );
 
@@ -286,6 +291,9 @@ private:
     bool m_skipRatsnest = false;
 
     std::mutex m_lock;
+
+    /// Map of netcode -> netclass the net is a member of; used for ratsnest painting
+    std::map<int, wxString> m_netclassMap;
 };
 
 #endif

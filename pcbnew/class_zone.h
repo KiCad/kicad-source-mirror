@@ -148,6 +148,8 @@ public:
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
+    unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+
     void SetFillMode( ZONE_FILL_MODE aFillMode ) { m_FillMode = aFillMode; }
     ZONE_FILL_MODE GetFillMode() const { return m_FillMode; }
 

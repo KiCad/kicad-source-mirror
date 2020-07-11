@@ -100,6 +100,8 @@ set( BMAPS_SMALL
     trash
     tree_nosel
     tree_sel
+    visibility
+    visibility_off
     www
     )
 

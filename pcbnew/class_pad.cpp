@@ -1164,6 +1164,10 @@ unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     const int HIDE = std::numeric_limits<unsigned int>::max();
     BOARD* board = GetBoard();
 
+    // Meta control for hiding all pads
+    if( !aView->IsLayerVisible( LAYER_PADS ) )
+        return HIDE;
+
     // Handle Render tab switches
     if( ( GetAttribute() == PAD_ATTRIB_STANDARD || GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
          && !aView->IsLayerVisible( LAYER_PADS_TH ) )

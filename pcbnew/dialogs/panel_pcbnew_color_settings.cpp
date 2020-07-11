@@ -26,10 +26,10 @@
 #include <panel_pcbnew_color_settings.h>
 #include <pcbnew_settings.h>
 #include <pcb_edit_frame.h>
-#include <pcb_layer_widget.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <footprint_preview_panel.h>
+#include <widgets/appearance_controls.h>
 #include <ws_proxy_view_item.h>
 #include <pcb_painter.h>
 #include <class_track.h>
@@ -439,7 +439,7 @@ bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataFromWindow()
     PCBNEW_SETTINGS* app_settings = settingsMgr.GetAppSettings<PCBNEW_SETTINGS>();
     app_settings->m_ColorTheme = m_currentSettings->GetFilename();
 
-    m_frame->GetLayerManager()->SyncLayerColors();
+    m_frame->GetAppearancePanel()->OnColorThemeChanged();
 
     return true;
 }

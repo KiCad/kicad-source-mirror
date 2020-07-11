@@ -142,7 +142,6 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     CLR( "board.ratsnest",                 LAYER_RATSNEST,           COLOR4D( WHITE ) );
     CLR( "board.select_overlay",           LAYER_SELECT_OVERLAY,     COLOR4D( DARKRED ) );
     CLR( "board.through_via",              LAYER_VIA_THROUGH,        COLOR4D( LIGHTGRAY ) );
-    CLR( "board.via",                      LAYER_VIAS,               COLOR4D( BLACK ) );
     CLR( "board.via_blind_buried",         LAYER_VIA_BBLIND,         COLOR4D( BROWN ) );
     CLR( "board.via_hole",                 LAYER_VIAS_HOLES,         COLOR4D( WHITE ) );
     CLR( "board.via_micro",                LAYER_VIA_MICROVIA,       COLOR4D( CYAN ) );

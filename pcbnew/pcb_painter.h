@@ -82,22 +82,6 @@ public:
         CL_EXISTING         = 0x20
     };
 
-    ///> Determines how zones should be displayed
-    enum DISPLAY_ZONE_MODE
-    {
-        DZ_HIDE_FILLED = 0,
-        DZ_SHOW_FILLED,
-        DZ_SHOW_OUTLINED
-    };
-
-    ///> Determines how net color overrides should be applied
-    enum class NET_COLOR_MODE
-    {
-        OFF,        ///< Net (and netclass) colors are not shown
-        RATSNEST,   ///< Net/netclass colors are shown on ratsnest lines only
-        ALL         ///< Net/netclass colors are shown on all net copper
-    };
-
     PCB_RENDER_SETTINGS();
 
     /**
@@ -108,19 +92,10 @@ public:
      */
     void LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aShowPageLimits );
 
-    /**
-     * Loads net-specific render settings
-     * @param aSettings is the NET_SETTINGS for the current proejct
-     * @param aList is the list of nets on the board
-     * @param aHiddenNets is a list of nets to hide from the ratsnest
-     */
-    void LoadNetSettings( const NET_SETTINGS& aSettings, const NETINFO_LIST& aList,
-                          const std::set<int>& aHiddenNets );
-
     virtual void LoadColors( const COLOR_SETTINGS* aSettings ) override;
 
     /// @copydoc RENDER_SETTINGS::GetColor()
-    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
+    virtual COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
     /**
      * Function SetSketchMode
@@ -243,7 +218,7 @@ protected:
     static const double MAX_FONT_SIZE;
 
     ///> Option for different display modes for zones
-    DISPLAY_ZONE_MODE m_displayZone;
+    ZONE_DISPLAY_MODE m_zoneDisplayMode;
 
     ///> Clearance visibility settings
     int m_clearance;
@@ -265,6 +240,12 @@ protected:
 
     ///> How to display inactive layers (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN )
     HIGH_CONTRAST_MODE m_contrastModeDisplay;
+
+    // These opacity overrides multiply with any opacity in the base layer color
+    double m_trackOpacity;     ///< Opacity override for all tracks
+    double m_viaOpacity;       ///< Opacity override for all types of via
+    double m_padOpacity;       ///< Opacity override for SMD pads and PTHs
+    double m_zoneOpacity;      ///< Opacity override for filled zones
 };
 
 

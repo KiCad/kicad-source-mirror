@@ -37,6 +37,7 @@
 
 #include <pcbnew.h>
 #include <footprint_edit_frame.h>
+#include <widgets/appearance_controls.h>
 
 
 bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
@@ -81,7 +82,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
         GetBoard()->SetVisibleLayers( LSET().set() );
         ReCreateLayerBox();
         ReCreateAuxiliaryToolbar();
-        ReFillLayerWidget();
+        m_appearancePanel->OnBoardChanged();
         UpdateTitle();
 
         Zoom_Automatique( false );
