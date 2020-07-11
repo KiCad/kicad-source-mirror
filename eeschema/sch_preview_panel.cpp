@@ -87,8 +87,6 @@ SCH_PREVIEW_PANEL::~SCH_PREVIEW_PANEL()
 
 void SCH_PREVIEW_PANEL::OnShow()
 {
-    m_parent->SetDoubleBuffered( true );
-
     //m_view->RecacheAllItems();
 }
 

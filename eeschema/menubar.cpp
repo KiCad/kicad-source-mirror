@@ -343,6 +343,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( prefsMenu, _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
+    menuBar->SetDoubleBuffered( true );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;

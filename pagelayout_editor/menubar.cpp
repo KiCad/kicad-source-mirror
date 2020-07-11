@@ -189,6 +189,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     menuBar->Append( inspectorMenu, _( "&Inspect" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
+    menuBar->SetDoubleBuffered( true );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;

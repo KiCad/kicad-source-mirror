@@ -266,6 +266,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( preferencesMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
+    menuBar->SetDoubleBuffered( true );
 
     // Associate the menu bar with the frame, if no previous menubar
     SetMenuBar( menuBar );

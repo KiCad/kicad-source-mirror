@@ -103,6 +103,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
+    menuBar->SetDoubleBuffered( true );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;

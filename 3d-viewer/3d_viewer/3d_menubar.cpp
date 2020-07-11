@@ -319,6 +319,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
+    menuBar->SetDoubleBuffered( true );
 
     SetMenuBar( menuBar );
 }

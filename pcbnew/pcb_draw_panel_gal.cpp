@@ -416,7 +416,6 @@ void PCB_DRAW_PANEL_GAL::OnShow()
 
     if( frame )
     {
-        m_parent->SetDoubleBuffered( true );
         SetTopLayer( frame->GetActiveLayer() );
         KIGFX::PAINTER* painter = m_view->GetPainter();
         auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );

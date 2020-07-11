@@ -162,6 +162,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
+    menuBar->SetDoubleBuffered( true );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;
