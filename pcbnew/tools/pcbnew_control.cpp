@@ -258,9 +258,6 @@ int PCBNEW_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 {
     m_frame->SwitchLayer( NULL, aEvent.Parameter<PCB_LAYER_ID>() );
 
-    // Router tool may also consume this
-    aEvent.PassEvent();
-
     return 0;
 }
 
@@ -286,9 +283,6 @@ int PCBNEW_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 
     wxCHECK( IsCopperLayer( layer ), 0 );
     editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
-
-    // Router tool may also consume this
-    aEvent.PassEvent();
 
     return 0;
 }
@@ -317,9 +311,6 @@ int PCBNEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 
     wxCHECK( IsCopperLayer( layer ), 0 );
     editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
-
-    // Router tool may also consume this
-    aEvent.PassEvent();
 
     return 0;
 }

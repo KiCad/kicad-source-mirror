@@ -608,6 +608,9 @@ static PCB_LAYER_ID getTargetLayerFromEvent( const TOOL_EVENT& aEvent )
 
 int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 {
+    if( !IsToolActive() )
+        return 0;
+
     // First see if this is one of the switch layer commands
     LSEQ layers       = LSET( board()->GetEnabledLayers() & LSET::AllCuMask() ).Seq();
     int  currentLayer = m_router->GetCurrentLayer();
@@ -616,8 +619,6 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &PCB_ACTIONS::layerNext ) )
     {
-        aEvent.PassEvent();
-
         size_t idx = 0;
 
         for( size_t i = 0; i < layers.size(); i++ )
@@ -634,8 +635,6 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::layerPrev ) )
     {
-        aEvent.PassEvent();
-
         size_t idx = 0;
 
         for( size_t i = 0; i < layers.size(); i++ )
@@ -656,8 +655,6 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 
         if( targetLayer != UNDEFINED_LAYER )
         {
-            aEvent.PassEvent();
-
             if( targetLayer == currentLayer )
                 return 0;
         }

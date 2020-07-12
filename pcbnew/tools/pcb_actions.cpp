@@ -756,184 +756,184 @@ TOOL_ACTION PCB_ACTIONS::layerTop( "pcbnew.Control.layerTop",
         AS_GLOBAL,
         WXK_PAGEUP, LEGACY_HK_NAME( "Switch to Component (F.Cu) layer" ),
         _( "Switch to Component (F.Cu) layer" ), "",
-        nullptr, AF_NONE, (void*) F_Cu );
+        nullptr, AF_NOTIFY, (void*) F_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner1( "pcbnew.Control.layerInner1",
         AS_GLOBAL,
         WXK_F5, LEGACY_HK_NAME( "Switch to Inner layer 1" ),
         _( "Switch to Inner layer 1" ), "",
-        nullptr, AF_NONE, (void*) In1_Cu );
+        nullptr, AF_NOTIFY, (void*) In1_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner2( "pcbnew.Control.layerInner2",
         AS_GLOBAL,
         WXK_F6, LEGACY_HK_NAME( "Switch to Inner layer 2" ),
         _( "Switch to Inner layer 2" ), "",
-        nullptr, AF_NONE, (void*) In2_Cu );
+        nullptr, AF_NOTIFY, (void*) In2_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner3( "pcbnew.Control.layerInner3",
         AS_GLOBAL,
         WXK_F7, LEGACY_HK_NAME( "Switch to Inner layer 3" ),
         _( "Switch to Inner layer 3" ), "",
-        nullptr, AF_NONE, (void*) In3_Cu );
+        nullptr, AF_NOTIFY, (void*) In3_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner4( "pcbnew.Control.layerInner4",
         AS_GLOBAL,
         WXK_F8, LEGACY_HK_NAME( "Switch to Inner layer 4" ),
         _( "Switch to Inner layer 4" ), "",
-        nullptr, AF_NONE, (void*) In4_Cu );
+        nullptr, AF_NOTIFY, (void*) In4_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner5( "pcbnew.Control.layerInner5",
         AS_GLOBAL,
         MD_SHIFT + WXK_F5, LEGACY_HK_NAME( "Switch to Inner layer 5" ),
         _( "Switch to Inner layer 5" ), "",
-        nullptr, AF_NONE, (void*) In5_Cu );
+        nullptr, AF_NOTIFY, (void*) In5_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner6( "pcbnew.Control.layerInner6",
         AS_GLOBAL,
         MD_SHIFT + WXK_F6, LEGACY_HK_NAME( "Switch to Inner layer 6" ),
         _( "Switch to Inner layer 6" ), "",
-        nullptr, AF_NONE, (void*) In6_Cu );
+        nullptr, AF_NOTIFY, (void*) In6_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner7( "pcbnew.Control.layerInner7",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 7" ), "",
-        nullptr, AF_NONE, (void*) In7_Cu );
+        nullptr, AF_NOTIFY, (void*) In7_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner8( "pcbnew.Control.layerInner8",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 8" ), "",
-        nullptr, AF_NONE, (void*) In8_Cu );
+        nullptr, AF_NOTIFY, (void*) In8_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner9( "pcbnew.Control.layerInner9",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 9" ), "",
-        nullptr, AF_NONE, (void*) In9_Cu );
+        nullptr, AF_NOTIFY, (void*) In9_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner10( "pcbnew.Control.layerInner10",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 10" ), "",
-        nullptr, AF_NONE, (void*) In10_Cu );
+        nullptr, AF_NOTIFY, (void*) In10_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner11( "pcbnew.Control.layerInner11",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 11" ), "",
-        nullptr, AF_NONE, (void*) In11_Cu );
+        nullptr, AF_NOTIFY, (void*) In11_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner12( "pcbnew.Control.layerInner12",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 12" ), "",
-        nullptr, AF_NONE, (void*) In12_Cu );
+        nullptr, AF_NOTIFY, (void*) In12_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner13( "pcbnew.Control.layerInner13",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 13" ), "",
-        nullptr, AF_NONE, (void*) In13_Cu );
+        nullptr, AF_NOTIFY, (void*) In13_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner14( "pcbnew.Control.layerInner14",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 14" ), "",
-        nullptr, AF_NONE, (void*) In14_Cu );
+        nullptr, AF_NOTIFY, (void*) In14_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner15( "pcbnew.Control.layerInner15",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 15" ), "",
-        nullptr, AF_NONE, (void*) In15_Cu );
+        nullptr, AF_NOTIFY, (void*) In15_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner16( "pcbnew.Control.layerInner16",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 16" ), "",
-        nullptr, AF_NONE, (void*) In16_Cu );
+        nullptr, AF_NOTIFY, (void*) In16_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner17( "pcbnew.Control.layerInner17",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 17" ), "",
-        nullptr, AF_NONE, (void*) In17_Cu );
+        nullptr, AF_NOTIFY, (void*) In17_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner18( "pcbnew.Control.layerInner18",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 18" ), "",
-        nullptr, AF_NONE, (void*) In18_Cu );
+        nullptr, AF_NOTIFY, (void*) In18_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner19( "pcbnew.Control.layerInner19",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 19" ), "",
-        nullptr, AF_NONE, (void*) In19_Cu );
+        nullptr, AF_NOTIFY, (void*) In19_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner20( "pcbnew.Control.layerInner20",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 20" ), "",
-        nullptr, AF_NONE, (void*) In20_Cu );
+        nullptr, AF_NOTIFY, (void*) In20_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner21( "pcbnew.Control.layerInner21",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 21" ), "",
-        nullptr, AF_NONE, (void*) In21_Cu );
+        nullptr, AF_NOTIFY, (void*) In21_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner22( "pcbnew.Control.layerInner22",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 22" ), "",
-        nullptr, AF_NONE, (void*) In22_Cu );
+        nullptr, AF_NOTIFY, (void*) In22_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner23( "pcbnew.Control.layerInner23",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 23" ), "",
-        nullptr, AF_NONE, (void*) In23_Cu );
+        nullptr, AF_NOTIFY, (void*) In23_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner24( "pcbnew.Control.layerInner24",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 24" ), "",
-        nullptr, AF_NONE, (void*) In24_Cu );
+        nullptr, AF_NOTIFY, (void*) In24_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner25( "pcbnew.Control.layerInner25",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 25" ), "",
-        nullptr, AF_NONE, (void*) In25_Cu );
+        nullptr, AF_NOTIFY, (void*) In25_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner26( "pcbnew.Control.layerInner26",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 26" ), "",
-        nullptr, AF_NONE, (void*) In26_Cu );
+        nullptr, AF_NOTIFY, (void*) In26_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner27( "pcbnew.Control.layerInner27",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 27" ), "",
-        nullptr, AF_NONE, (void*) In27_Cu );
+        nullptr, AF_NOTIFY, (void*) In27_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner28( "pcbnew.Control.layerInner28",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 28" ), "",
-        nullptr, AF_NONE, (void*) In28_Cu );
+        nullptr, AF_NOTIFY, (void*) In28_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner29( "pcbnew.Control.layerInner29",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 29" ), "",
-        nullptr, AF_NONE, (void*) In29_Cu );
+        nullptr, AF_NOTIFY, (void*) In29_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner30( "pcbnew.Control.layerInner30",
         AS_GLOBAL, 0, "",
         _( "Switch to Inner layer 30" ), "",
-        nullptr, AF_NONE, (void*) In30_Cu );
+        nullptr, AF_NOTIFY, (void*) In30_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerBottom( "pcbnew.Control.layerBottom",
         AS_GLOBAL,
         WXK_PAGEDOWN, LEGACY_HK_NAME( "Switch to Copper (B.Cu) layer" ),
         _( "Switch to Copper (B.Cu) layer" ), "",
-        nullptr, AF_NONE, (void*) B_Cu );
+        nullptr, AF_NOTIFY, (void*) B_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerNext( "pcbnew.Control.layerNext",
         AS_GLOBAL,
         '+', LEGACY_HK_NAME( "Switch to Next Layer" ),
-        _( "Switch to Next Layer" ), "" );
+        _( "Switch to Next Layer" ), "", nullptr, AF_NOTIFY );
 
 TOOL_ACTION PCB_ACTIONS::layerPrev( "pcbnew.Control.layerPrev",
         AS_GLOBAL,
         '-', LEGACY_HK_NAME( "Switch to Previous Layer" ),
-        _( "Switch to Previous Layer" ), "" );
+        _( "Switch to Previous Layer" ), "", nullptr, AF_NOTIFY );
 
 TOOL_ACTION PCB_ACTIONS::layerToggle( "pcbnew.Control.layerToggle",
         AS_GLOBAL,
         'V', LEGACY_HK_NAME( "Add Through Via" ),
-        _( "Add Through Via" ), "" );
+        _( "Add Through Via" ), "", nullptr, AF_NOTIFY );
 
 TOOL_ACTION PCB_ACTIONS::layerAlphaInc( "pcbnew.Control.layerAlphaInc",
         AS_GLOBAL,
