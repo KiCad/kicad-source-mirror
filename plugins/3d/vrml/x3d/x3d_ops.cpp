@@ -263,7 +263,7 @@ bool X3D::ParseSFFloat( const wxString& aSource, float& aResult )
     wxStringTokenizer tokens( aSource );
 
     double x = 0;
-    bool ret = tokens.GetNextToken().ToDouble( &x );
+    bool ret = tokens.GetNextToken().ToCDouble( &x );
 
     aResult = x;
     return ret;
@@ -278,9 +278,9 @@ bool X3D::ParseSFVec3( const wxString& aSource, WRLVEC3F& aResult )
     double y = 0;
     double z = 0;
 
-    bool ret = tokens.GetNextToken().ToDouble( &x )
-               && tokens.GetNextToken().ToDouble( &y )
-               && tokens.GetNextToken().ToDouble( &z );
+    bool ret = tokens.GetNextToken().ToCDouble( &x )
+               && tokens.GetNextToken().ToCDouble( &y )
+               && tokens.GetNextToken().ToCDouble( &z );
 
     aResult.x = x;
     aResult.y = y;
@@ -299,10 +299,10 @@ bool X3D::ParseSFRotation( const wxString& aSource, WRLROTATION& aResult )
     double z = 0;
     double w = 0;
 
-    bool ret = tokens.GetNextToken().ToDouble( &x )
-               && tokens.GetNextToken().ToDouble( &y )
-               && tokens.GetNextToken().ToDouble( &z )
-               && tokens.GetNextToken().ToDouble( &w );
+    bool ret = tokens.GetNextToken().ToCDouble( &x )
+               && tokens.GetNextToken().ToCDouble( &y )
+               && tokens.GetNextToken().ToCDouble( &z )
+               && tokens.GetNextToken().ToCDouble( &w );
 
     aResult.x = x;
     aResult.y = y;

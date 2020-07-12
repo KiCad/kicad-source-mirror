@@ -162,9 +162,9 @@ void ERULES::parse( wxXmlNode* aRules )
                 psElongationOffset = wxAtoi( value );
 
             else if( name == "mvStopFrame" )
-                value.ToDouble( &mvStopFrame );
+                value.ToCDouble( &mvStopFrame );
             else if( name == "mvCreamFrame" )
-                value.ToDouble( &mvCreamFrame );
+                value.ToCDouble( &mvCreamFrame );
             else if( name == "mlMinStopFrame" )
                 mlMinStopFrame = parseEagle( value );
             else if( name == "mlMaxStopFrame" )
@@ -175,7 +175,7 @@ void ERULES::parse( wxXmlNode* aRules )
                 mlMaxCreamFrame = parseEagle( value );
 
             else if( name == "srRoundness" )
-                value.ToDouble( &srRoundness );
+                value.ToCDouble( &srRoundness );
             else if( name == "srMinRoundness" )
                 srMinRoundness = parseEagle( value );
             else if( name == "srMaxRoundness" )
@@ -189,14 +189,14 @@ void ERULES::parse( wxXmlNode* aRules )
                 psFirst = wxAtoi( value );
 
             else if( name == "rvPadTop" )
-                value.ToDouble( &rvPadTop );
+                value.ToCDouble( &rvPadTop );
             else if( name == "rlMinPadTop" )
                 rlMinPadTop = parseEagle( value );
             else if( name == "rlMaxPadTop" )
                 rlMaxPadTop = parseEagle( value );
 
             else if( name == "rvViaOuter" )
-                value.ToDouble( &rvViaOuter );
+                value.ToCDouble( &rvViaOuter );
             else if( name == "rlMinViaOuter" )
                 rlMinViaOuter = parseEagle( value );
             else if( name == "rlMaxViaOuter" )

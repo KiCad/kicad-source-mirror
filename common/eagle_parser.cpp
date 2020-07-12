@@ -144,7 +144,7 @@ double Convert<double>( const wxString& aValue )
 {
     double value;
 
-    if( aValue.ToDouble( &value ) )
+    if( aValue.ToCDouble( &value ) )
         return value;
     else
         throw XML_PARSER_ERROR( "Conversion to double failed. Original value: '" +

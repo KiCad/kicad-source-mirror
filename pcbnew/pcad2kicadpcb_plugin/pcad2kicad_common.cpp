@@ -143,7 +143,7 @@ double StrToDoublePrecisionUnits( const wxString& aStr, char aAxe, const wxStrin
 
         if( u == wxT( 'm' ) )
         {
-            ls.ToDouble( &i );
+            ls.ToCDouble( &i );
 #ifdef PCAD2KICAD_SCALE_SCH_TO_INCH_GRID
             if( aActualConversion == wxT( "SCH" )
                 || aActualConversion == wxT( "SCHLIB" ) )
@@ -153,7 +153,7 @@ double StrToDoublePrecisionUnits( const wxString& aStr, char aAxe, const wxStrin
         }
         else
         {
-            ls.ToDouble( &i );
+            ls.ToCDouble( &i );
             i = Mils2iu( i );
         }
     }
@@ -217,7 +217,7 @@ int StrToInt1Units( const wxString& aStr )
 {
     double num, precision = 10;
 
-    aStr.ToDouble( &num );
+    aStr.ToCDouble( &num );
     return KiROUND( num * precision );
 }
 

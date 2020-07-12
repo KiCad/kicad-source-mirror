@@ -95,7 +95,7 @@ bool X3DCOORDS::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 
             while( plist.HasMoreTokens() )
             {
-                if( plist.GetNextToken().ToDouble( &point ) )
+                if( plist.GetNextToken().ToCDouble( &point ) )
                 {
                     // note: coordinates are multiplied by 2.54 to retain
                     // legacy behavior of 1 X3D unit = 0.1 inch; the SG*

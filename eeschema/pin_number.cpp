@@ -149,8 +149,8 @@ int PinNumbers::Compare( const PinNumber& lhs, const PinNumber& rhs )
 
                 double val1, val2;
 
-                comp1.ToDouble( &val1 );
-                comp2.ToDouble( &val2 );
+                comp1.ToCDouble( &val1 );
+                comp2.ToCDouble( &val2 );
 
                 if( val1 < val2 )
                 {

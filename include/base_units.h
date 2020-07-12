@@ -162,6 +162,8 @@ double From_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils = false );
 /**
  * Function DoubleValueFromString
  * converts \a aTextValue to a double
+ * @warning This utilizes the current locale and will break if decimal formats differ
+ *
  * @param aUnits The units of \a aTextValue.
  * @param aTextValue A reference to a wxString object containing the string to convert.
  * @param aUseMils Indicates mils should be used for imperial units (inches).
@@ -173,6 +175,7 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool
 /**
  * Function ValueFromString
  * converts \a aTextValue in \a aUnits to internal units used by the application.
+ * @warning This utilizes the current locale and will break if decimal formats differ
  *
  * @param aUnits The units of \a aTextValue.
  * @param aTextValue A reference to a wxString object containing the string to convert.
