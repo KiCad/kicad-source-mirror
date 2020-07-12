@@ -63,6 +63,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_sketchText = false;
     m_selectionCandidateColor = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
     m_netColorMode = NET_COLOR_MODE::RATSNEST;
+    m_contrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
     // By default everything should be displayed as filled
     for( unsigned int i = 0; i < arrayDim( m_sketchMode ); ++i )
