@@ -596,6 +596,7 @@ endif()
 
 add_subdirectory( pcad2kicadpcb_plugin )
 add_subdirectory( plugins/altium )
+add_subdirectory( cadstar2kicadpcb_plugin )
 
 set( PCBNEW_IO_LIBRARIES pcad2kicadpcb altium2pcbnew CACHE INTERNAL "")
 
@@ -692,6 +693,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     connectivity
     pcbcommon
     pnsrouter
+    cadstar2kicadpcb
     kiplatform
     common
     gal

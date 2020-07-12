@@ -73,6 +73,7 @@ target_link_libraries( qa_pcbnew
     connectivity
     pcbcommon
     pnsrouter
+    cadstar2kicadpcb
     gal
     common
     gal

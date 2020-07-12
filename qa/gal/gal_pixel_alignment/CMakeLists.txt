@@ -71,6 +71,7 @@ target_link_libraries( test_gal_pixel_alignment
     kimath
     pnsrouter
     pcbcommon
+    cadstar2kicadpcb
     bitmaps
     3d-viewer
     gal

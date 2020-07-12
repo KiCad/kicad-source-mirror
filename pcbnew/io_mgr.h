@@ -60,6 +60,7 @@ public:
         ALTIUM_DESIGNER,
         ALTIUM_CIRCUIT_STUDIO,
         ALTIUM_CIRCUIT_MAKER,
+        CADSTAR_ARCHIVE,
         GEDA_PCB, ///< Geda PCB file formats.
 
     //N.B. This needs to be commented out to ensure compile-type errors
