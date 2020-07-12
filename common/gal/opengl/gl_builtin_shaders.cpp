@@ -388,7 +388,7 @@ void main()
 #endif
 
         // use the derivative for zoom-adaptive filtering
-        float alpha = smoothstep( 0.5 - derivative, 0.5 + derivative, dist );
+        float alpha = smoothstep( 0.5 - derivative, 0.5 + derivative, dist ) * gl_Color.a;
 
         gl_FragColor = vec4( gl_Color.rgb, alpha );
     }
