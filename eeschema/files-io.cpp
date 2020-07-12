@@ -729,10 +729,13 @@ bool SCH_EDIT_FRAME::SaveProject()
 
     Pgm().GetSettingsManager().SaveProject();
 
-    WX_STRING_REPORTER backupReporter( &msg );
+    if( !Kiface().IsSingle() )
+    {
+        WX_STRING_REPORTER backupReporter( &msg );
 
-    if( !GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
-        SetStatusText( msg, 0 );
+        if( !GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
+            SetStatusText( msg, 0 );
+    }
 
     UpdateTitle();
 
@@ -782,8 +785,11 @@ bool SCH_EDIT_FRAME::doAutoSave()
     {
         m_autoSaveState = false;
 
-        if( GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )
+        if( !Kiface().IsSingle() &&
+            GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )
+        {
             GetSettingsManager()->TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
+        }
     }
 
     return autoSaveOk;

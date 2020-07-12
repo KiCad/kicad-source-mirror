@@ -34,6 +34,7 @@
 #include <pgm_base.h>
 #include <msgpanel.h>
 #include <fp_lib_table.h>
+#include <kiface_i.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <trace_helpers.h>
@@ -783,10 +784,13 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         return false;
     }
 
-    WX_STRING_REPORTER backupReporter( &upperTxt );
+    if( !Kiface().IsSingle() )
+    {
+        WX_STRING_REPORTER backupReporter( &upperTxt );
 
-    if( GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
-        upperTxt.clear();
+        if( GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
+            upperTxt.clear();
+    }
 
     GetBoard()->SetFileName( pcbFileName.GetFullPath() );
     UpdateTitle();
@@ -904,8 +908,11 @@ bool PCB_EDIT_FRAME::doAutoSave()
         UpdateTitle();
         m_autoSaveState = false;
 
-        if( GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )
+        if( !Kiface().IsSingle() &&
+            GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )
+        {
             GetSettingsManager()->TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
+        }
 
         return true;
     }
