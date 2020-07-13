@@ -76,8 +76,9 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         }
 
                         netJson["nets"] = membersJson;
-                        ret.push_back( netJson );
                     }
+
+                    ret.push_back( netJson );
                 }
 
                 return ret;
