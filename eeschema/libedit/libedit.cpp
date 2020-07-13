@@ -186,7 +186,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
     // Enable synchronized pin edit mode for symbols with interchangeable units
     m_SyncPinEdit = !GetCurPart()->UnitsLocked();
 
-    GetScreen()->ClearUndoRedoList();
+    ClearUndoRedoList();
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     SetShowDeMorgan( GetCurPart()->Flatten()->HasConversion() );
 

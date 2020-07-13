@@ -163,7 +163,7 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
 
         ZONE_CONTAINER* zoneDup = new ZONE_CONTAINER( *zone );
         zoneDup->SetParent( aPcb );
-        ITEM_PICKER picker( zone, UR_CHANGED );
+        ITEM_PICKER picker( nullptr, zone, UR_CHANGED );
         picker.SetLink( zoneDup );
         aPickList.PushItem( picker );
         copyCount++;

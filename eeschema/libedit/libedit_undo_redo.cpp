@@ -41,34 +41,34 @@ void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoT
     if( !ItemToCopy )
         return;
 
-    LIB_PART*          CopyItem;
+    LIB_PART*          copyItem;
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
 
-    CopyItem = new LIB_PART( * (LIB_PART*) ItemToCopy );
+    copyItem = new LIB_PART( * (LIB_PART*) ItemToCopy );
 
     // Clear current flags (which can be temporary set by a current edit command).
-    CopyItem->ClearTempFlags();
-    CopyItem->ClearEditFlags();
-    CopyItem->SetFlags( UR_TRANSIENT );
+    copyItem->ClearTempFlags();
+    copyItem->ClearEditFlags();
+    copyItem->SetFlags( UR_TRANSIENT );
 
-    ITEM_PICKER wrapper( CopyItem, undoType );
+    ITEM_PICKER wrapper( GetScreen(), copyItem, undoType );
     lastcmd->PushItem( wrapper );
-    GetScreen()->PushCommandToUndoList( lastcmd );
+    PushCommandToUndoList( lastcmd );
 
     // Clear redo list, because after new save there is no redo to do.
-    GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
+    ClearUndoORRedoList( m_RedoList );
 }
 
 
 void LIB_EDIT_FRAME::GetComponentFromRedoList()
 {
-    if( GetScreen()->GetRedoCommandCount() <= 0 )
+    if( GetRedoCommandCount() <= 0 )
         return;
 
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     // Load the last redo entry
-    PICKED_ITEMS_LIST* redoCommand = GetScreen()->PopCommandFromRedoList();
+    PICKED_ITEMS_LIST* redoCommand = PopCommandFromRedoList();
     ITEM_PICKER redoWrapper = redoCommand->PopItem();
     delete redoCommand;
     LIB_PART* part = (LIB_PART*) redoWrapper.GetItem();
@@ -80,9 +80,9 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList()
     PICKED_ITEMS_LIST* undoCommand = new PICKED_ITEMS_LIST();
     LIB_PART* oldPart = m_my_part;
     oldPart->SetFlags( UR_TRANSIENT );
-    ITEM_PICKER undoWrapper( oldPart, undoRedoType );
+    ITEM_PICKER undoWrapper( GetScreen(), oldPart, undoRedoType );
     undoCommand->PushItem( undoWrapper );
-    GetScreen()->PushCommandToUndoList( undoCommand );
+    PushCommandToUndoList( undoCommand );
 
     // Do not delete the previous part by calling SetCurPart( part )
     // which calls delete <previous part>.
@@ -110,13 +110,13 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList()
 
 void LIB_EDIT_FRAME::GetComponentFromUndoList()
 {
-    if( GetScreen()->GetUndoCommandCount() <= 0 )
+    if( GetUndoCommandCount() <= 0 )
         return;
 
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     // Load the last undo entry
-    PICKED_ITEMS_LIST* undoCommand = GetScreen()->PopCommandFromUndoList();
+    PICKED_ITEMS_LIST* undoCommand = PopCommandFromUndoList();
     ITEM_PICKER undoWrapper = undoCommand->PopItem();
     delete undoCommand;
     LIB_PART* part = (LIB_PART*) undoWrapper.GetItem();
@@ -128,9 +128,9 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList()
     PICKED_ITEMS_LIST* redoCommand = new PICKED_ITEMS_LIST();
     LIB_PART* oldPart = m_my_part;
     oldPart->SetFlags( UR_TRANSIENT );
-    ITEM_PICKER redoWrapper( oldPart, undoRedoType );
+    ITEM_PICKER redoWrapper( GetScreen(), oldPart, undoRedoType );
     redoCommand->PushItem( redoWrapper );
-    GetScreen()->PushCommandToRedoList( redoCommand );
+    PushCommandToRedoList( redoCommand );
 
     // Do not delete the previous part by calling SetCurPart( part ),
     // which calls delete <previous part>.
@@ -161,7 +161,7 @@ void LIB_EDIT_FRAME::RollbackPartFromUndo()
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     // Load the last undo entry
-    PICKED_ITEMS_LIST* undoCommand = GetScreen()->PopCommandFromUndoList();
+    PICKED_ITEMS_LIST* undoCommand = PopCommandFromUndoList();
 
     // Check if we were already at the top of the stack
     if( !undoCommand )

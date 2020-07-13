@@ -220,10 +220,7 @@ int FOOTPRINT_EDITOR_TOOLS::ImportFootprint( const TOOL_EVENT& aEvent )
     if( m_frame->GetBoard()->GetFirstModule() )
         m_frame->GetBoard()->GetFirstModule()->ClearFlags();
 
-    // Clear undo and redo lists because we don't have handling to in
-    // FP editor to undo across imports (the module _is_ the board with the stack)
-    // todo: Abstract undo/redo stack to a higher element or keep consistent board item in fpeditor
-    frame()->GetScreen()->ClearUndoRedoList();
+    frame()->ClearUndoRedoList();
 
     m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
     m_frame->OnModify();

@@ -600,9 +600,9 @@ public:
         for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
         {
             SCH_COMPONENT& comp = *m_componentRefs[i].GetComp();
+            SCH_SCREEN*    screen = m_componentRefs[i].GetSheetPath().LastScreen();
 
-            m_frame->SetCurrentSheet( m_componentRefs[i].GetSheetPath() );
-            m_frame->SaveCopyInUndoList( &comp, UR_CHANGED, true );
+            m_frame->SaveCopyInUndoList( screen, &comp, UR_CHANGED, true );
 
             const std::map<wxString, wxString>& fieldStore = m_dataStore[comp.m_Uuid];
 

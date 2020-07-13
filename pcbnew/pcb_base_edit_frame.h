@@ -185,6 +185,26 @@ public:
 
     COLOR_SETTINGS* GetColorSettings() override;
 
+    /* full undo redo management : */
+
+    // use EDA_BASE_FRAME::ClearUndoRedoList()
+    // use EDA_BASE_FRAME::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
+    // use EDA_BASE_FRAME::PushCommandToRedoList( PICKED_ITEMS_LIST* aItem )
+
+    /**
+     * Function ClearUndoORRedoList
+     * free the undo or redo list from List element
+     *  Wrappers are deleted.
+     *  datas pointed by wrappers are deleted if not in use in schematic
+     *  i.e. when they are copy of a schematic item or they are no more in use
+     *  (DELETED)
+     * @param aList = the UNDO_REDO_CONTAINER to clear
+     * @param aItemCount = the count of items to remove. < 0 for all items
+     * items are removed from the beginning of the list.
+     * So this function can be called to remove old commands
+     */
+    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
+
 protected:
     /// User defined rotation angle (in tenths of a degree).
     int m_rotationAngle;

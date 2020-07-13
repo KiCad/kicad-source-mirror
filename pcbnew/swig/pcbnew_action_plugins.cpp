@@ -222,29 +222,28 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     // Append tracks:
     for( auto item : currentPcb->Tracks() )
     {
-        ITEM_PICKER picker( item, UR_CHANGED );
+        ITEM_PICKER picker( nullptr, item, UR_CHANGED );
         itemsList.PushItem( picker );
     }
 
     // Append modules:
     for( auto item : currentPcb->Modules() )
     {
-        ITEM_PICKER picker( item, UR_CHANGED );
+        ITEM_PICKER picker( nullptr, item, UR_CHANGED );
         itemsList.PushItem( picker );
     }
 
     // Append drawings
     for( auto item : currentPcb->Drawings() )
     {
-        ITEM_PICKER picker( item, UR_CHANGED );
+        ITEM_PICKER picker( nullptr, item, UR_CHANGED );
         itemsList.PushItem( picker );
     }
 
     // Append zones outlines
     for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
     {
-        ITEM_PICKER picker( (EDA_ITEM*) currentPcb->GetArea(
-                        ii ), UR_CHANGED );
+        ITEM_PICKER picker( nullptr, (EDA_ITEM*) currentPcb->GetArea( ii ), UR_CHANGED );
         itemsList.PushItem( picker );
     }
 
@@ -270,7 +269,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
     else
     {
-        oldBuffer = GetScreen()->PopCommandFromUndoList();
+        oldBuffer = PopCommandFromUndoList();
         wxASSERT( oldBuffer );
     }
 
@@ -280,15 +279,15 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     // The list of existing items after running the action script
     std::set<BOARD_ITEM*> currItemList;
     // Append tracks:
-    for( auto item : currentPcb->Tracks() )
+    for( TRACK* item : currentPcb->Tracks() )
         currItemList.insert( item );
 
     // Append modules:
-    for( auto item : currentPcb->Modules() )
+    for( MODULE* item : currentPcb->Modules() )
         currItemList.insert( item );
 
     // Append drawings
-    for( auto item : currentPcb->Drawings() )
+    for( BOARD_ITEM* item : currentPcb->Drawings() )
         currItemList.insert( item );
 
     // Append zones outlines
@@ -299,7 +298,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     for( unsigned int i = 0; i < oldBuffer->GetCount(); i++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) oldBuffer->GetPickedItem( i );
-        ITEM_PICKER picker( item, UR_DELETED );
+        ITEM_PICKER picker( nullptr, item, UR_DELETED );
 
         wxASSERT( item );
 
@@ -314,29 +313,29 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     // Find new modules
-    for( auto item : currentPcb->Modules() )
+    for( MODULE* item : currentPcb->Modules() )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {
-            ITEM_PICKER picker( item, UR_NEW );
+            ITEM_PICKER picker( nullptr, item, UR_NEW );
             oldBuffer->PushItem( picker );
         }
     }
 
-    for( auto item : currentPcb->Tracks() )
+    for( TRACK* item : currentPcb->Tracks() )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {
-            ITEM_PICKER picker( item, UR_NEW );
+            ITEM_PICKER picker( nullptr, item, UR_NEW );
             oldBuffer->PushItem( picker );
         }
     }
 
-    for( auto item : currentPcb->Drawings() )
+    for( BOARD_ITEM* item : currentPcb->Drawings() )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {
-            ITEM_PICKER picker( item, UR_NEW );
+            ITEM_PICKER picker( nullptr, item, UR_NEW );
             oldBuffer->PushItem( picker );
         }
     }
@@ -345,8 +344,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     {
         if( !oldBuffer->ContainsItem( (EDA_ITEM*) currentPcb->GetArea( ii ) ) )
         {
-            ITEM_PICKER picker( (EDA_ITEM*) currentPcb->GetArea(
-                            ii ), UR_NEW );
+            ITEM_PICKER picker( nullptr, (EDA_ITEM*) currentPcb->GetArea( ii ), UR_NEW );
             oldBuffer->PushItem( picker );
         }
     }
@@ -354,7 +352,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     if( oldBuffer->GetCount() )
     {
         OnModify();
-        GetScreen()->PushCommandToUndoList( oldBuffer );
+        PushCommandToUndoList( oldBuffer );
     }
     else
     {

@@ -137,10 +137,17 @@ protected:
             wxASSERT( editFrame );
 
             if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
-                editFrame->SaveCopyInUndoList(
-                        static_cast<SCH_ITEM*>( aItem->GetParent() ), UR_CHANGED, aAppend );
+            {
+                editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
+                                               static_cast<SCH_ITEM*>( aItem->GetParent() ),
+                                               UR_CHANGED, aAppend );
+            }
             else
-                editFrame->SaveCopyInUndoList( static_cast<SCH_ITEM*>( aItem ), aType, aAppend );
+            {
+                editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
+                                               static_cast<SCH_ITEM*>( aItem ),
+                                               aType, aAppend );
+            }
         }
 
         if( selected && aItem->HasFlag( TEMP_SELECTED ) )

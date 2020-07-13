@@ -117,7 +117,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_dummyScreen = new SCH_SCREEN();
     SetScreen( m_dummyScreen );
     GetScreen()->m_Center = true;
-    GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
 
@@ -726,7 +725,7 @@ void LIB_EDIT_FRAME::emptyScreen()
     SetCurLib( wxEmptyString );
     SetCurPart( nullptr );
     SetScreen( m_dummyScreen );
-    m_dummyScreen->ClearUndoRedoList();
+    ClearUndoRedoList();
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     Refresh();
 }
@@ -909,3 +908,20 @@ bool LIB_EDIT_FRAME::IsContentModified()
 
     return false;
 }
+
+
+void LIB_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
+{
+    if( aItemCount == 0 )
+        return;
+
+    for( auto& command : aList.m_CommandsList )
+    {
+        command->ClearListAndDeleteItems();
+        delete command;
+    }
+
+    aList.m_CommandsList.clear();
+}
+
+

@@ -84,12 +84,13 @@ bool SCH_EDIT_FRAME::TestDanglingEnds()
 
 bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd )
 {
-    bool retval = false;
+    SCH_SCREEN* screen = GetScreen();
+    bool        retval = false;
 
     if( aStart == aEnd )
         return retval;
 
-    for( auto item : GetScreen()->Items().OfType( SCH_LINE_T ) )
+    for( EDA_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
@@ -117,17 +118,19 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd )
         // Ensure that *line points to the segment containing aEnd
         SCH_LINE* return_line = line;
         BreakSegment( line, aStart, &return_line );
+
         if( IsPointOnSegment( return_line->GetStartPoint(), return_line->GetEndPoint(), aEnd ) )
             line = return_line;
 
         // Step 2: break the remaining segment.  return_line remains line if not broken.
         // Ensure that *line _also_ contains aStart.  This is our overlapping segment
         BreakSegment( line, aEnd, &return_line );
+
         if( IsPointOnSegment( return_line->GetStartPoint(), return_line->GetEndPoint(), aStart ) )
             line = return_line;
 
-        SaveCopyInUndoList( line, UR_DELETED, true );
-        RemoveFromScreen( line );
+        SaveCopyInUndoList( screen, line, UR_DELETED, true );
+        RemoveFromScreen( line, screen );
 
         retval = true;
     }
@@ -148,11 +151,12 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
     if( aScreen == nullptr )
         aScreen = GetScreen();
 
-    auto remove_item = [&itemList, &deletedItems]( SCH_ITEM* aItem ) -> void {
-        aItem->SetFlags( STRUCT_DELETED );
-        itemList.PushItem( ITEM_PICKER( aItem, UR_DELETED ) );
-        deletedItems.push_back( aItem );
-    };
+    auto remove_item = [&itemList, &deletedItems, &aScreen]( SCH_ITEM* aItem ) -> void
+                       {
+                           aItem->SetFlags( STRUCT_DELETED );
+                           itemList.PushItem( ITEM_PICKER( aScreen, aItem, UR_DELETED ) );
+                           deletedItems.push_back( aItem );
+                       };
 
     BreakSegmentsOnJunctions( aScreen );
 
@@ -245,7 +249,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
             {
                 remove_item( firstLine );
                 remove_item( secondLine );
-                itemList.PushItem( ITEM_PICKER( mergedLine, UR_NEW ) );
+                itemList.PushItem( ITEM_PICKER( aScreen, mergedLine, UR_NEW ) );
 
                 AddToScreen( mergedLine, aScreen );
 
@@ -288,8 +292,8 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
     newSegment->SetStartPoint( aPoint );
     AddToScreen( newSegment, aScreen );
 
-    SaveCopyInUndoList( newSegment, UR_NEW, true );
-    SaveCopyInUndoList( aSegment, UR_CHANGED, true );
+    SaveCopyInUndoList( aScreen, newSegment, UR_NEW, true );
+    SaveCopyInUndoList( aScreen, aSegment, UR_CHANGED, true );
 
     RefreshItem( aSegment );
     aSegment->SetEndPoint( aPoint );
@@ -362,11 +366,11 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
     auto remove_item = [ & ]( SCH_ITEM* aItem ) -> void
     {
         aItem->SetFlags( STRUCT_DELETED );
-        undoList.PushItem( ITEM_PICKER( aItem, UR_DELETED ) );
+        undoList.PushItem( ITEM_PICKER( screen, aItem, UR_DELETED ) );
     };
 
     remove_item( aJunction );
-    RemoveFromScreen( aJunction );
+    RemoveFromScreen( aJunction, screen );
 
     /// Note that std::list or similar is required here as we may insert values in the
     /// loop below.  This will invalidate iterators in a std::vector or std::deque
@@ -401,8 +405,8 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
                 {
                     remove_item( firstLine );
                     remove_item( secondLine );
-                    undoList.PushItem( ITEM_PICKER( line, UR_NEW ) );
-                    AddToScreen( line );
+                    undoList.PushItem( ITEM_PICKER( screen, line, UR_NEW ) );
+                    AddToScreen( line, screen );
 
                     if( line->IsSelected() )
                         selectionTool->AddItemToSel( line, true /*quiet mode*/ );
@@ -421,18 +425,19 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
             if( line->IsSelected() )
                 selectionTool->RemoveItemFromSel( line, true /*quiet mode*/ );
 
-            RemoveFromScreen( line );
+            RemoveFromScreen( line, screen );
         }
     }
 }
 
 
-SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPos, bool aUndoAppend, bool aFinal )
+SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCH_SCREEN* aScreen, const wxPoint& aPos,
+                                           bool aUndoAppend, bool aFinal )
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPos );
 
-    AddToScreen( junction );
-    SaveCopyInUndoList( junction, UR_NEW, aUndoAppend );
+    AddToScreen( junction, aScreen );
+    SaveCopyInUndoList( aScreen, junction, UR_NEW, aUndoAppend );
     BreakSegments( aPos );
 
     if( aFinal )

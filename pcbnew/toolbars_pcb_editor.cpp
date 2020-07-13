@@ -707,8 +707,8 @@ void PCB_EDIT_FRAME::SyncToolbars()
     int                         zoneMode = opts.m_DisplayZonesMode;
 
     m_mainToolBar->Toggle( ACTIONS::save, IsContentModified() );
-    m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::undo, GetUndoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo, GetRedoCommandCount() > 0 );
     TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     if( IsWxPythonLoaded() )

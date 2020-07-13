@@ -1,8 +1,3 @@
-/**
- * @file dialog_annotate.cpp
- * @brief Annotation dialog functions.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -30,11 +25,8 @@
 
 #include <fctsys.h>
 #include <sch_edit_frame.h>
-#include <sch_draw_panel.h>
 #include <bitmaps.h>
 #include <confirm.h>
-
-#include <invoke_sch_dialog.h>
 #include <dialog_annotate_base.h>
 #include <eeschema_settings.h>
 #include <kiface_i.h>
@@ -59,7 +51,7 @@ private:
 
     /// Initialises member variables
     void InitValues();
-    void OnClearAnnotationCmpClick( wxCommandEvent& event ) override;
+    void OnClearAnnotationClick( wxCommandEvent& event ) override;
     void OnCloseClick( wxCommandEvent& event ) override;
     void OnClose( wxCloseEvent& event ) override;
     void OnApplyClick( wxCommandEvent& event ) override;
@@ -132,7 +124,7 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
 
 void DIALOG_ANNOTATE::InitValues()
 {
-    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     int option;
 
     // These are always reset to attempt to keep the user out of trouble...
@@ -144,12 +136,8 @@ void DIALOG_ANNOTATE::InitValues()
     switch( option )
     {
     default:
-    case 0:
-        m_rbSortBy_X_Position->SetValue( true );
-        break;
-    case 1:
-        m_rbSortBy_Y_Position->SetValue( true );
-        break;
+    case 0: m_rbSortBy_X_Position->SetValue( true ); break;
+    case 1: m_rbSortBy_Y_Position->SetValue( true ); break;
     }
 
     option = cfg->m_AnnotatePanel.method;
@@ -157,15 +145,9 @@ void DIALOG_ANNOTATE::InitValues()
     switch( option )
     {
     default:
-    case 0:
-        m_rbFirstFree->SetValue( true );
-        break;
-    case 1:
-        m_rbSheetX100->SetValue( true );
-        break;
-    case 2:
-        m_rbSheetX1000->SetValue( true );
-        break;
+    case 0: m_rbFirstFree->SetValue( true );  break;
+    case 1: m_rbSheetX100->SetValue( true );  break;
+    case 2: m_rbSheetX1000->SetValue( true ); break;
     }
 
     m_textNumberAfter->SetValue( wxT( "0" ) );
@@ -194,26 +176,6 @@ void DIALOG_ANNOTATE::OnClose( wxCloseEvent& event )
 
 void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 {
-    wxString    message;
-
-    // Ask for confirmation of destructive actions.
-    if( GetResetItems() )
-    {
-        if( GetLevel() )
-            message += _( "Clear and annotate all of the symbols on the entire schematic?" );
-        else
-            message += _( "Clear and annotate all of the symbols on the current sheet?" );
-
-        message += _( "\n\nThis operation will change the current annotation and cannot be undone." );
-
-        KIDIALOG dlg( this, message, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-        dlg.SetOKLabel( _( "Clear and Annotate" ) );
-        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return;
-    }
-
     m_MessageWindow->Clear();
     REPORTER& reporter = m_MessageWindow->Reporter();
     m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
@@ -222,7 +184,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
                                   (ANNOTATE_OPTION_T) GetAnnotateAlgo(), GetStartNumber(),
                                   GetResetItems() , true, GetLockUnits(), reporter );
 
-    m_MessageWindow->Flush( true );                   // Now update to show all messages
+    m_MessageWindow->Flush( true );             // Now update to show all messages
 
     m_Parent->GetCanvas()->Refresh();
 
@@ -241,25 +203,11 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
+void DIALOG_ANNOTATE::OnClearAnnotationClick( wxCommandEvent& event )
 {
-    wxString    message;
+    bool appendUndo = false;
 
-    if( GetLevel() )
-        message = _( "Clear the existing annotation for the entire schematic?" );
-    else
-        message = _( "Clear the existing annotation for the current sheet?" );
-
-    message += _( "\n\nThis operation will clear the existing annotation and cannot be undone." );
-
-    KIDIALOG dlg( this, message, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-    dlg.SetOKLabel( _( "Clear Annotation" ) );
-    dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    m_Parent->DeleteAnnotation( !GetLevel() );
+    m_Parent->DeleteAnnotation( !GetLevel(), &appendUndo );
     m_btnClear->Enable( false );
 }
 

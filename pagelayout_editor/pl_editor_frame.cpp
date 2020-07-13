@@ -34,7 +34,6 @@
 #include <pl_editor_id.h>
 #include <pl_editor_settings.h>
 #include <pl_draw_panel_gal.h>
-#include <pl_editor_screen.h>
 #include <ws_data_model.h>
 #include <properties_frame.h>
 #include <widgets/paged_dialog.h>
@@ -114,7 +113,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     LoadSettings( config() );
 
     wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU();
-    SetScreen( new PL_EDITOR_SCREEN( pageSizeIU ) );
+    SetScreen( new BASE_SCREEN( pageSizeIU ) );
 
     setupTools();
     ReCreateMenuBar();
@@ -612,11 +611,6 @@ void PL_EDITOR_FRAME::DisplayGridMsg()
 
 void PL_EDITOR_FRAME::UpdateStatusBar()
 {
-    PL_EDITOR_SCREEN* screen = (PL_EDITOR_SCREEN*) GetScreen();
-
-    if( !screen )
-        return;
-
     // Display Zoom level:
     EDA_DRAW_FRAME::UpdateStatusBar();
 
@@ -663,16 +657,10 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
     switch( GetUserUnits() )
     {
-    case EDA_UNITS::INCHES:
-        SetStatusText( _( "inches" ), 6 );
-        break;
-    case EDA_UNITS::MILLIMETRES:
-        SetStatusText( _( "mm" ), 6 );
-        break;
-    case EDA_UNITS::UNSCALED:
-        SetStatusText( wxEmptyString, 6 );
-        break;
-    default:             wxASSERT( false );                 break;
+    case EDA_UNITS::INCHES:      SetStatusText( _( "inches" ), 6 ); break;
+    case EDA_UNITS::MILLIMETRES: SetStatusText( _( "mm" ), 6 );     break;
+    case EDA_UNITS::UNSCALED:    SetStatusText( wxEmptyString, 6 ); break;
+    default:                     wxASSERT( false );                 break;
     }
 
     wxString line;
@@ -689,12 +677,15 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     SetStatusText( line, 2 );
 
     // Display relative coordinates:
-    double dx = cursorPos.x - screen->m_LocalOrigin.x;
-    double dy = cursorPos.y - screen->m_LocalOrigin.y;
-    dXpos = To_User_Unit( GetUserUnits(), dx * Xsign );
-    dYpos = To_User_Unit( GetUserUnits(), dy * Ysign );
-    line.Printf( locformatter, dXpos, dYpos );
-    SetStatusText( line, 3 );
+    if( GetScreen() )
+    {
+        double dx = cursorPos.x - GetScreen()->m_LocalOrigin.x;
+        double dy = cursorPos.y - GetScreen()->m_LocalOrigin.y;
+        dXpos = To_User_Unit( GetUserUnits(), dx * Xsign );
+        dYpos = To_User_Unit( GetUserUnits(), dy * Ysign );
+        line.Printf( locformatter, dXpos, dYpos );
+        SetStatusText( line, 3 );
+    }
 
     DisplayGridMsg();
 
@@ -819,7 +810,7 @@ WS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
 
 void PL_EDITOR_FRAME::OnNewPageLayout()
 {
-    GetScreen()->ClearUndoRedoList();
+    ClearUndoRedoList();
     GetScreen()->ClrModify();
     GetCanvas()->DisplayWorksheet();
 
@@ -842,3 +833,25 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
 }
 
 
+void PL_EDITOR_FRAME::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
+{
+    if( aItemCount == 0 )
+        return;
+
+    unsigned icnt = aList.m_CommandsList.size();
+
+    if( aItemCount > 0 )
+        icnt = aItemCount;
+
+    for( unsigned ii = 0; ii < icnt; ii++ )
+    {
+        if( aList.m_CommandsList.size() == 0 )
+            break;
+
+        PICKED_ITEMS_LIST* curr_cmd = aList.m_CommandsList[0];
+        aList.m_CommandsList.erase( aList.m_CommandsList.begin() );
+
+        curr_cmd->ClearListAndDeleteItems();
+        delete curr_cmd;    // Delete command
+    }
+}

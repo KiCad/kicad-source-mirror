@@ -218,7 +218,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     auto sch_text = dynamic_cast<SCH_TEXT*>( aItem );
     auto lineItem = dynamic_cast<SCH_LINE*>( aItem );
 
-    m_parent->SaveCopyInUndoList( aItem, UR_CHANGED, m_hasChange );
+    m_parent->SaveCopyInUndoList( aSheetPath.LastScreen(), aItem, UR_CHANGED, m_hasChange );
 
     if( eda_text )
     {

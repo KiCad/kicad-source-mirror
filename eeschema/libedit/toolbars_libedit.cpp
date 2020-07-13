@@ -158,10 +158,8 @@ void LIB_EDIT_FRAME::SyncToolbars()
     bool isEditable = m_my_part && m_my_part->IsRoot();
 
     m_mainToolBar->Toggle( ACTIONS::saveAll,  m_libMgr->HasModifications() );
-    m_mainToolBar->Toggle( ACTIONS::undo,
-            GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::redo,
-            GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::undo,     GetUndoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo,     GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
     m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, (bool) m_my_part );
     m_mainToolBar->Toggle( EE_ACTIONS::runERC, isEditable );

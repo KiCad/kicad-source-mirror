@@ -206,7 +206,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     LoadSettings( config() );
 
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
-    GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
 
     // PCB drawings start in the upper left corner.
     GetScreen()->m_Center = false;

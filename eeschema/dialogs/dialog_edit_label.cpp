@@ -395,7 +395,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 
     /* save old text in undo list if not already in edit */
     if( m_CurrentText->GetEditFlags() == 0 )
-        m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
+        m_Parent->SaveCopyInUndoList( m_Parent->GetScreen(), m_CurrentText, UR_CHANGED, false );
 
     m_Parent->GetCanvas()->Refresh();
 

@@ -191,7 +191,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 SCH_COMPONENT* next_comp = nullptr;
 
                 m_view->ClearPreview();
-                m_frame->AddItemToScreenAndUndoList( component );
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), component, false );
 
                 EE_SELECTION new_sel;
                 new_sel.Add( component );
@@ -388,7 +388,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->AddItemToScreenAndUndoList( image );
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), image, false );
                 image = nullptr;
                 m_toolMgr->RunAction( ACTIONS::activatePointEditor );
 
@@ -510,14 +510,14 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             if( !m_frame->GetScreen()->GetItem( cursorPos, 0, type ) )
             {
                 if( type == SCH_JUNCTION_T )
-                    m_frame->AddJunction( cursorPos );
+                    m_frame->AddJunction( m_frame->GetScreen(), cursorPos, false );
                 else
                 {
                     SCH_ITEM* newItem = static_cast<SCH_ITEM*>( previewItem->Clone() );
                     newItem->SetPosition( cursorPos );
                     newItem->SetFlags( IS_NEW );
 
-                    m_frame->AddItemToScreenAndUndoList( newItem );
+                    m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), newItem, false );
                     m_frame->SaveCopyForRepeatItem( newItem );
 
                     m_frame->SchematicCleanUp();
@@ -855,7 +855,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             else
             {
                 item->ClearFlags( IS_MOVED );
-                m_frame->AddItemToScreenAndUndoList( (SCH_ITEM*) item );
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, false );
                 item = getNextNewText();
 
                 if( item )
@@ -1007,7 +1007,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             {
                 sheet->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
-                m_frame->AddItemToScreenAndUndoList( sheet );
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), sheet, false );
                 m_frame->UpdateHierarchyNavigator();
                 m_selectionTool->AddItemToSel( sheet );
             }

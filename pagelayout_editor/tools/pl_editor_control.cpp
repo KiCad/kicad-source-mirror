@@ -85,7 +85,7 @@ int PL_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 
 int PL_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
 {
-    m_frame->SaveCopyInUndoList( true );
+    m_frame->SaveCopyInUndoList();
 
     DIALOG_PAGES_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
     dlg.SetWksFileName( m_frame->GetCurrentFileName() );

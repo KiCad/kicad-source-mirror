@@ -330,24 +330,6 @@ public:
      */
     std::set<SCH_ITEM*> MarkConnections( SCH_LINE* aSegment );
 
-    /* full undo redo management : */
-    // use BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
-    // use BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aItem )
-
-    /**
-     * Free the undo or redo list from \a aList element.
-     *
-     * - Wrappers are deleted.
-     * - data pointed by wrappers are deleted if not in use in schematic
-     *   i.e. when they are copy of a schematic item or they are no more in use (DELETED)
-     *
-     * @param aList = the UNDO_REDO_CONTAINER to clear
-     * @param aItemCount = the count of items to remove. < 0 for all items
-     * items are removed from the beginning of the list.
-     * So this function can be called to remove old commands
-     */
-    virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
-
     /**
      * Clear the state flags of all the items in the screen.
      */
@@ -559,11 +541,6 @@ public:
     SCH_SCREEN* GetNext();
     SCH_SCREEN* GetScreen( unsigned int aIndex ) const;
     SCH_SHEET* GetSheet( unsigned int aIndex ) const;
-
-    /**
-     * Clear the annotation for all components in the hierarchy.
-     */
-    void ClearAnnotation();
 
     /**
      * Clear the annotation for the components inside new sheetpaths

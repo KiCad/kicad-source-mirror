@@ -22,19 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_screen.h
- */
-
 #ifndef PCB_SCREEN_H
 #define PCB_SCREEN_H
 
 
 #include <base_screen.h>
 #include <class_board_item.h>
-
-
-class UNDO_REDO_CONTAINER;
 
 
 /* Handle info to display a board */
@@ -46,35 +39,11 @@ public:
     PCB_LAYER_ID m_Route_Layer_BOTTOM;
 
 public:
-
     /**
      * Constructor
      * @param aPageSizeIU is the size of the initial paper page in internal units.
      */
     PCB_SCREEN( const wxSize& aPageSizeIU );
-
-    ~PCB_SCREEN();
-
-
-    /* full undo redo management : */
-
-    // use BASE_SCREEN::ClearUndoRedoList()
-    // use BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
-    // use BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aItem )
-
-    /**
-     * Function ClearUndoORRedoList
-     * free the undo or redo list from List element
-     *  Wrappers are deleted.
-     *  datas pointed by wrappers are deleted if not in use in schematic
-     *  i.e. when they are copy of a schematic item or they are no more in use
-     *  (DELETED)
-     * @param aList = the UNDO_REDO_CONTAINER to clear
-     * @param aItemCount = the count of items to remove. < 0 for all items
-     * items are removed from the beginning of the list.
-     * So this function can be called to remove old commands
-     */
-    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
 };
 
 #endif  // PCB_SCREEN_H

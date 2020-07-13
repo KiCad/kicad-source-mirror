@@ -100,10 +100,10 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
 {
     PICKED_ITEMS_LIST   undoCmd;
     WS_PROXY_UNDO_ITEM* undoItem = new WS_PROXY_UNDO_ITEM( m_frame );
-    ITEM_PICKER         wrapper( undoItem, UR_PAGESETTINGS );
+    ITEM_PICKER         wrapper( m_frame->GetScreen(), undoItem, UR_PAGESETTINGS );
 
     undoCmd.PushItem( wrapper );
-    m_frame->SaveCopyInUndoList( undoCmd, UR_PAGESETTINGS );
+    m_frame->SaveCopyInUndoList( undoCmd, UR_PAGESETTINGS, false );
 
     DIALOG_PAGES_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
@@ -167,7 +167,7 @@ bool SCH_EDITOR_CONTROL::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand
             m_frame->RecalculateConnections( GLOBAL_CLEANUP );
         }
 
-        m_frame->GetScreen()->ClearUndoORRedoList( m_frame->GetScreen()->m_UndoList, 1 );
+        m_frame->ClearUndoRedoList();
         m_frame->SyncView();
         m_frame->GetCanvas()->Refresh();
         m_frame->OnModify();
@@ -1160,21 +1160,21 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->GetScreen()->GetUndoCommandCount() <= 0 )
+    if( m_frame->GetUndoCommandCount() <= 0 )
         return 0;
 
     // Inform tools that undo command was issued
     m_toolMgr->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     /* Get the old list */
-    PICKED_ITEMS_LIST* List = m_frame->GetScreen()->PopCommandFromUndoList();
+    PICKED_ITEMS_LIST* List = m_frame->PopCommandFromUndoList();
 
     /* Undo the command */
     m_frame->PutDataInPreviousState( List, false );
 
     /* Put the old list in RedoList */
     List->ReversePickersListOrder();
-    m_frame->GetScreen()->PushCommandToRedoList( List );
+    m_frame->PushCommandToRedoList( List );
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     selTool->RebuildSelection();
@@ -1192,21 +1192,21 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->GetScreen()->GetRedoCommandCount() == 0 )
+    if( m_frame->GetRedoCommandCount() == 0 )
         return 0;
 
     // Inform tools that undo command was issued
     m_toolMgr->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     /* Get the old list */
-    PICKED_ITEMS_LIST* List = m_frame->GetScreen()->PopCommandFromRedoList();
+    PICKED_ITEMS_LIST* List = m_frame->PopCommandFromRedoList();
 
     /* Redo the command: */
     m_frame->PutDataInPreviousState( List, true );
 
     /* Put the old list in UndoList */
     List->ReversePickersListOrder();
-    m_frame->GetScreen()->PushCommandToUndoList( List );
+    m_frame->PushCommandToUndoList( List );
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     selTool->RebuildSelection();
@@ -1495,7 +1495,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         }
 
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVED );
-        m_frame->AddItemToScreenAndUndoList( (SCH_ITEM*) item, i > 0 );
+        m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, i > 0 );
 
         // Reset flags for subsequent move operation
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVED );

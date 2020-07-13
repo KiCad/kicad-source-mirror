@@ -254,11 +254,6 @@ void DIALOG_FILTER_SELECTION::ExecuteCommand( wxCommandEvent& event )
 }
 
 
-void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
-{
-}
-
-
 void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I&, GENERAL_COLLECTOR& )
 {
 }

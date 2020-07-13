@@ -152,7 +152,7 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     wxPoint  old_org;
     wxRect   fitRect;
     wxDC*    dc = GetDC();
-    PL_EDITOR_SCREEN* screen = m_parent->GetScreen();
+    BASE_SCREEN* screen = m_parent->GetScreen();
 
     // Save current offsets and clip box.
     tmp_startvisu = screen->m_StartVisu;

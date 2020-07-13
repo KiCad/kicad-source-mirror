@@ -211,7 +211,7 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aComponent, int aUnit )
     STATUS_FLAGS savedFlags = aComponent->GetFlags();
 
     if( !aComponent->GetEditFlags() )    // No command in progress: save in undo list
-        SaveCopyInUndoList( aComponent, UR_CHANGED );
+        SaveCopyInUndoList( GetScreen(), aComponent, UR_CHANGED, false );
 
     /* Update the unit number. */
     aComponent->SetUnitSelection( &GetCurrentSheet(), aUnit );

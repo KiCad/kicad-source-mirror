@@ -139,7 +139,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     m_adapter->SetPreselectNode( newModule->GetFPID(), 0 );
 
-    GetScreen()->ClearUndoRedoList();
+    ClearUndoRedoList();
     GetScreen()->ClrModify();
 
     // Update the save items if needed.
@@ -482,7 +482,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
     }
     else if( aModule->IsMoving() )
     {
-        ITEM_PICKER picker( aModule, UR_CHANGED );
+        ITEM_PICKER picker( nullptr, aModule, UR_CHANGED );
         picker.SetLink( s_ModuleInitialCopy );
         s_PickedList.PushItem( picker );
         s_ModuleInitialCopy = NULL;     // the picker is now owner of s_ModuleInitialCopy.

@@ -415,7 +415,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
     // save old cmp in undo list if not already in edit, or moving ...
     if( m_cmp->GetEditFlags() == 0 )
-        GetParent()->SaveCopyInUndoList( m_cmp, UR_CHANGED );
+        GetParent()->SaveCopyInUndoList( currentScreen, m_cmp, UR_CHANGED, false );
 
     // Save current flags which could be modified by next change settings
     STATUS_FLAGS flags = m_cmp->GetFlags();
@@ -525,19 +525,23 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     // should be kept in sync in multi-unit parts.
     if( m_cmp->GetUnitCount() > 1 )
     {
-        std::vector<SCH_COMPONENT*> otherUnits;
-
-        CollectOtherUnits( GetParent()->GetCurrentSheet(), m_cmp, &otherUnits );
-
-        for( SCH_COMPONENT* otherUnit : otherUnits )
+        for( SCH_SHEET_PATH& sheet : GetParent()->Schematic().GetSheets() )
         {
-            GetParent()->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
-            otherUnit->GetField( VALUE )->SetText( m_fields->at( VALUE ).GetText() );
-            otherUnit->GetField( FOOTPRINT )->SetText( m_fields->at( FOOTPRINT ).GetText() );
-            otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
-            otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
-            otherUnit->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
-            GetParent()->RefreshItem( otherUnit );
+            SCH_SCREEN*                 screen = sheet.LastScreen();
+            std::vector<SCH_COMPONENT*> otherUnits;
+
+            CollectOtherUnits( sheet, m_cmp, &otherUnits );
+
+            for( SCH_COMPONENT* otherUnit : otherUnits )
+            {
+                GetParent()->SaveCopyInUndoList( screen, otherUnit, UR_CHANGED, true /* append */);
+                otherUnit->GetField( VALUE )->SetText( m_fields->at( VALUE ).GetText() );
+                otherUnit->GetField( FOOTPRINT )->SetText( m_fields->at( FOOTPRINT ).GetText() );
+                otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
+                otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
+                otherUnit->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
+                GetParent()->RefreshItem( otherUnit );
+            }
         }
     }
 
@@ -725,9 +729,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent
     copy.SetLibSymbol( libSymbol->Flatten().release() );
 
     // Update the requested fields in the component copy
-    std::list<SCH_COMPONENT*> components;
-    components.push_back( &copy );
-    InvokeDialogUpdateFields( GetParent(), components, false );
+    InvokeDialogUpdateFields( GetParent(), &copy, false );
 
     wxGridTableMessage clear( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_fields->size() );
     m_grid->ProcessTableMessage( clear );

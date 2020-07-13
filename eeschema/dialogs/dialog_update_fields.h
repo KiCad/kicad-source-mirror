@@ -34,17 +34,14 @@ class SCH_COMPONENT;
 class SCH_SCREEN;
 class SCH_EDIT_FRAME;
 
-using std::set;
-using std::list;
-
 /**
  * Dialog to update component fields (i.e. restore them from the original library symbols).
  */
 class DIALOG_UPDATE_FIELDS : public DIALOG_UPDATE_FIELDS_BASE
 {
 public:
-    DIALOG_UPDATE_FIELDS( SCH_EDIT_FRAME* aParent, const list<SCH_COMPONENT*>& aComponents,
-            bool aCreateUndoEntry = true );
+    DIALOG_UPDATE_FIELDS( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent,
+                          bool aCreateUndoEntry );
 
 private:
     bool TransferDataFromWindow() override;
@@ -66,16 +63,14 @@ private:
         checkAll( false );
     }
 
-    ///> Parent frame
     SCH_EDIT_FRAME* m_frame;
 
     ///> Set of field names that should have values updated
-    set<wxString> m_updateFields;
+    std::set<wxString> m_updateFields;
 
     ///> Components to update
-    list<SCH_COMPONENT*> m_components;
+    std::vector< std::pair<SCH_SCREEN*, SCH_COMPONENT*>> m_components;
 
-    ///> Flag indicating whether an undo buffer entry should be created
     bool m_createUndo;
 };
 

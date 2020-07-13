@@ -24,27 +24,25 @@
  */
 
 #include <fctsys.h>
-#include <macros.h>
 #include <ws_data_model.h>
-#include <ws_draw_item.h>
-
 #include <pl_editor_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pl_selection_tool.h>
 #include <ws_proxy_undo_item.h>
 #include <tool/actions.h>
 
-void PL_EDITOR_FRAME::SaveCopyInUndoList( bool aSavePageSettingsAndTitleBlock )
+
+void PL_EDITOR_FRAME::SaveCopyInUndoList()
 {
     PICKED_ITEMS_LIST*  lastcmd = new PICKED_ITEMS_LIST();
     WS_PROXY_UNDO_ITEM* copyItem = new WS_PROXY_UNDO_ITEM( this );
-    ITEM_PICKER         wrapper( copyItem, UR_LIBEDIT );
+    ITEM_PICKER         wrapper( GetScreen(), copyItem, UR_LIBEDIT );
 
     lastcmd->PushItem( wrapper );
-    GetScreen()->PushCommandToUndoList( lastcmd );
+    PushCommandToUndoList( lastcmd );
 
     // Clear redo list, because after new save there is no redo to do.
-    GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
+    ClearUndoORRedoList( m_RedoList );
 }
 
 
@@ -56,17 +54,19 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
 {
     PL_SELECTION_TOOL*  selTool = GetToolManager()->GetTool<PL_SELECTION_TOOL>();
 
-    if ( GetScreen()->GetRedoCommandCount() <= 0 )
+    if ( GetRedoCommandCount() <= 0 )
         return;
 
-    ITEM_PICKER         redoWrapper = GetScreen()->PopCommandFromRedoList()->PopItem();
+    ITEM_PICKER         redoWrapper = PopCommandFromRedoList()->PopItem();
     WS_PROXY_UNDO_ITEM* redoItem = static_cast<WS_PROXY_UNDO_ITEM*>( redoWrapper.GetItem() );
     bool                pageSettingsAndTitleBlock = redoItem->Type() == WS_PROXY_UNDO_ITEM_PLUS_T;
 
     PICKED_ITEMS_LIST*  undoCmd = new PICKED_ITEMS_LIST();
+    WS_PROXY_UNDO_ITEM* undoItem = new WS_PROXY_UNDO_ITEM( pageSettingsAndTitleBlock ? this : nullptr );
+    ITEM_PICKER         undoWrapper( GetScreen(), undoItem );
 
-    undoCmd->PushItem( new WS_PROXY_UNDO_ITEM( pageSettingsAndTitleBlock ? this : nullptr ) );
-    GetScreen()->PushCommandToUndoList( undoCmd );
+    undoCmd->PushItem( undoWrapper );
+    PushCommandToUndoList( undoCmd );
 
     selTool->ClearSelection();
     redoItem->Restore( this, GetCanvas()->GetView() );
@@ -91,17 +91,19 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
 {
     PL_SELECTION_TOOL*  selTool = GetToolManager()->GetTool<PL_SELECTION_TOOL>();
 
-    if ( GetScreen()->GetUndoCommandCount() <= 0 )
+    if ( GetUndoCommandCount() <= 0 )
         return;
 
-    ITEM_PICKER         undoWrapper = GetScreen()->PopCommandFromUndoList()->PopItem();
+    ITEM_PICKER         undoWrapper = PopCommandFromUndoList()->PopItem();
     WS_PROXY_UNDO_ITEM* undoItem = static_cast<WS_PROXY_UNDO_ITEM*>( undoWrapper.GetItem() );
     bool                pageSettingsAndTitleBlock = undoItem->Type() == WS_PROXY_UNDO_ITEM_PLUS_T;
 
     PICKED_ITEMS_LIST*  redoCmd = new PICKED_ITEMS_LIST();
+    WS_PROXY_UNDO_ITEM* redoItem = new WS_PROXY_UNDO_ITEM( pageSettingsAndTitleBlock ? this : nullptr );
+    ITEM_PICKER         redoWrapper( GetScreen(), redoItem );
 
-    redoCmd->PushItem( new WS_PROXY_UNDO_ITEM( pageSettingsAndTitleBlock ? this : nullptr ) );
-    GetScreen()->PushCommandToRedoList( redoCmd );
+    redoCmd->PushItem( redoWrapper );
+    PushCommandToRedoList( redoCmd );
 
     selTool->ClearSelection();
     undoItem->Restore( this, GetCanvas()->GetView() );
@@ -125,10 +127,10 @@ void PL_EDITOR_FRAME::RollbackFromUndo()
 {
     PL_SELECTION_TOOL*  selTool = GetToolManager()->GetTool<PL_SELECTION_TOOL>();
 
-    if ( GetScreen()->GetUndoCommandCount() <= 0 )
+    if ( GetUndoCommandCount() <= 0 )
         return;
 
-    ITEM_PICKER         undoWrapper = GetScreen()->PopCommandFromUndoList()->PopItem();
+    ITEM_PICKER         undoWrapper = PopCommandFromUndoList()->PopItem();
     WS_PROXY_UNDO_ITEM* undoItem = static_cast<WS_PROXY_UNDO_ITEM*>( undoWrapper.GetItem() );
     bool                pageSettingsAndTitleBlock = undoItem->Type() == WS_PROXY_UNDO_ITEM_PLUS_T;
 

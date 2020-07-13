@@ -95,10 +95,10 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
-        return m_my_part && GetScreen() && GetScreen()->GetUndoCommandCount() != 0;
+        return m_my_part && GetUndoCommandCount() != 0;
     };
     auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
-        return m_my_part && GetScreen() && GetScreen()->GetRedoCommandCount() != 0;
+        return m_my_part && GetRedoCommandCount() != 0;
     };
     auto haveSymbolCondition = [ this ] ( const SELECTION& sel ) {
         return m_my_part != nullptr;

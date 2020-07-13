@@ -81,6 +81,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         m_hasAutoSave( false ),
         m_autoSaveState( false ),
         m_autoSaveInterval(-1 ),
+        m_UndoRedoCountMax( DEFAULT_MAX_UNDO_ITEMS ),
         m_userUnits( EDA_UNITS::MILLIMETRES )
 {
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
@@ -156,10 +157,10 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
     delete m_autoSaveTimer;
     delete m_fileHistory;
 
+    ClearUndoRedoList();
+
     if( SupportsShutdownBlockReason() )
-    {
         RemoveShutdownBlockReason();
-    }
 }
 
 
@@ -790,6 +791,55 @@ bool EDA_BASE_FRAME::IsContentModified()
 {
     // This function should be overridden in child classes
     return false;
+}
+
+
+void EDA_BASE_FRAME::ClearUndoRedoList()
+{
+    ClearUndoORRedoList( m_UndoList );
+    ClearUndoORRedoList( m_RedoList );
+}
+
+
+void EDA_BASE_FRAME::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
+{
+    m_UndoList.PushCommand( aNewitem );
+
+    // Delete the extra items, if count max reached
+    if( m_UndoRedoCountMax > 0 )
+    {
+        int extraitems = GetUndoCommandCount() - m_UndoRedoCountMax;
+
+        if( extraitems > 0 )
+            ClearUndoORRedoList( m_UndoList, extraitems );
+    }
+}
+
+
+void EDA_BASE_FRAME::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
+{
+    m_RedoList.PushCommand( aNewitem );
+
+    // Delete the extra items, if count max reached
+    if( m_UndoRedoCountMax > 0 )
+    {
+        int extraitems = GetRedoCommandCount() - m_UndoRedoCountMax;
+
+        if( extraitems > 0 )
+            ClearUndoORRedoList( m_RedoList, extraitems );
+    }
+}
+
+
+PICKED_ITEMS_LIST* EDA_BASE_FRAME::PopCommandFromUndoList( )
+{
+    return m_UndoList.PopCommand();
+}
+
+
+PICKED_ITEMS_LIST* EDA_BASE_FRAME::PopCommandFromRedoList( )
+{
+    return m_RedoList.PopCommand();
 }
 
 

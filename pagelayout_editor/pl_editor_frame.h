@@ -29,7 +29,7 @@
 
 #include <config_params.h>
 #include <eda_draw_frame.h>
-#include <pl_editor_screen.h>
+#include <base_screen.h>
 #include <pl_editor_layout.h>
 #include <pl_draw_panel_gal.h>
 
@@ -123,11 +123,6 @@ public:
     const wxSize GetPageSizeIU() const override;
 
     PL_DRAW_PANEL_GAL* GetCanvas() const override;
-
-    PL_EDITOR_SCREEN* GetScreen() const override
-    {
-        return (PL_EDITOR_SCREEN*) EDA_DRAW_FRAME::GetScreen();
-    }
 
     const wxPoint& GetGridOrigin() const override { return m_grid_origin; }
     void SetGridOrigin( const wxPoint& aPoint ) override { m_grid_origin = aPoint; }
@@ -266,9 +261,8 @@ public:
 
     /**
      * Save a copy of the description (in a S expr string) for Undo/redo commands.
-     * Optionally save the pageInfo and titleBlock as well.
      */
-    void SaveCopyInUndoList( bool aSavePageSettingsAndTitleBlock = false );
+    void SaveCopyInUndoList();
 
     /** Redo the last edit:
      * - Place the current edited layout in undo list
@@ -287,6 +281,11 @@ public:
      * Undo stack after cancelling a command.
      */
     void RollbackFromUndo();
+
+    /**
+     * Function ClearUndoORRedoList
+     */
+    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
 
 protected:
     bool saveCurrentPageLayout();

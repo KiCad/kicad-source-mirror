@@ -481,7 +481,7 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
         }
 
         if( isUndoable )
-            m_frame->SaveCopyInUndoList( m_sheet, UR_CHANGED );
+            m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_sheet, UR_CHANGED, false );
 
         if( renameFile )
         {

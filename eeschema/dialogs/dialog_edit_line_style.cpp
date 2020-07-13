@@ -211,10 +211,10 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
     PICKED_ITEMS_LIST pickedItems;
     STROKE_PARAMS stroke;
 
-    for( auto& strokeItem : m_strokeItems )
-        pickedItems.PushItem( ITEM_PICKER( strokeItem, UR_CHANGED ) );
+    for( SCH_ITEM* strokeItem : m_strokeItems )
+        pickedItems.PushItem( ITEM_PICKER( m_frame->GetScreen(), strokeItem, UR_CHANGED ) );
 
-    m_frame->SaveCopyInUndoList( pickedItems, UR_CHANGED );
+    m_frame->SaveCopyInUndoList( pickedItems, UR_CHANGED, false );
 
     for( auto& strokeItem : m_strokeItems )
     {

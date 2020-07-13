@@ -56,7 +56,7 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
     // To avoid issues with undo/redo lists (dangling pointers)
     // clear the lists
     // todo: use undo/redo feature
-    GetScreen()->ClearUndoRedoList();
+    ClearUndoRedoList();
 
     SPECCTRA_DB     db;
     LOCALE_IO       toggle;

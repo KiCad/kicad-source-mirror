@@ -28,23 +28,41 @@
 
 #include <sch_edit_frame.h>
 #include <sch_component.h>
+#include <schematic.h>
 #include <class_libentry.h>
 #include <algorithm>
 
 
-int InvokeDialogUpdateFields( SCH_EDIT_FRAME* aCaller,
-        const list<SCH_COMPONENT*> aComponents, bool aCreateUndoEntry )
+int InvokeDialogUpdateFields( SCH_EDIT_FRAME* aCaller, SCH_COMPONENT* aSpecificComponent,
+                              bool aCreateUndoEntry )
 {
-    DIALOG_UPDATE_FIELDS dlg( aCaller, aComponents, aCreateUndoEntry );
+    DIALOG_UPDATE_FIELDS dlg( aCaller, aSpecificComponent, aCreateUndoEntry );
     return dlg.ShowQuasiModal();
 }
 
 
 DIALOG_UPDATE_FIELDS::DIALOG_UPDATE_FIELDS( SCH_EDIT_FRAME* aParent,
-        const list<SCH_COMPONENT*>& aComponents, bool aCreateUndoEntry )
-    : DIALOG_UPDATE_FIELDS_BASE( aParent ), m_frame( aParent ),
-    m_components( aComponents ), m_createUndo( aCreateUndoEntry )
+                                            SCH_COMPONENT* aSpecificComponent,
+                                            bool aCreateUndoEntry ) :
+        DIALOG_UPDATE_FIELDS_BASE( aParent ),
+        m_frame( aParent ),
+        m_createUndo( aCreateUndoEntry )
 {
+    if( aSpecificComponent )
+    {
+        m_components.emplace_back( aParent->GetScreen(), aSpecificComponent );
+    }
+    else
+    {
+        for( SCH_SHEET_PATH& path : aParent->Schematic().GetSheets() )
+        {
+            SCH_SCREEN* screen = path.LastScreen();
+
+            for( SCH_ITEM* item : screen->Items().OfType( SCH_COMPONENT_T ) )
+                m_components.emplace_back( screen, static_cast<SCH_COMPONENT*>( item ) );
+        }
+    }
+
     m_sdbSizerOK->SetDefault();
 }
 
@@ -56,7 +74,6 @@ bool DIALOG_UPDATE_FIELDS::TransferDataFromWindow()
 
     if( m_components.empty() )
         return true;        // nothing to process
-
 
     // Create the set of fields to be updated
     m_updateFields.clear();
@@ -73,16 +90,16 @@ bool DIALOG_UPDATE_FIELDS::TransferDataFromWindow()
     {
         PICKED_ITEMS_LIST itemsList;
 
-        for( auto component : m_components )
-            itemsList.PushItem( ITEM_PICKER( component, UR_CHANGED ) );
+        for( std::pair<SCH_SCREEN*, SCH_COMPONENT*>& component : m_components )
+            itemsList.PushItem( ITEM_PICKER( component.first, component.second, UR_CHANGED ) );
 
-        m_frame->SaveCopyInUndoList( itemsList, UR_CHANGED );
+        m_frame->SaveCopyInUndoList( itemsList, UR_CHANGED, true );
     }
 
 
     // Do it!
-    for( auto component : m_components )
-        updateFields( component );
+    for( std::pair<SCH_SCREEN*, SCH_COMPONENT*>& component : m_components )
+        updateFields( component.second );
 
     m_frame->SyncView();
     m_frame->GetCanvas()->Refresh();
@@ -99,9 +116,9 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
 
     // Collect all user field names from library parts of components that are going to be updated
     {
-        for( auto component : m_components )
+        for( std::pair<SCH_SCREEN*, SCH_COMPONENT*>& component : m_components )
         {
-            const std::unique_ptr< LIB_PART >&  part = component->GetPartRef();
+            const std::unique_ptr< LIB_PART >&  part = component.second->GetPartRef();
 
             if( !part )
                 continue;
@@ -123,7 +140,7 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
 
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        m_fieldsBox->Append( m_components.front()->GetField( i )->GetName() );
+        m_fieldsBox->Append( m_components.front().second->GetField( i )->GetName() );
 
         if( i != REFERENCE && i != VALUE )
             m_fieldsBox->Check( i, true );

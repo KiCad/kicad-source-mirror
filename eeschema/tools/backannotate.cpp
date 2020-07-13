@@ -47,7 +47,8 @@ BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter,
         m_ignoreOtherProjects( aIgnoreOtherProjects ),
         m_dryRun( aDryRun ),
         m_frame( aFrame ),
-        m_changesCount( 0 )
+        m_changesCount( 0 ),
+        m_appendUndo( false )
 {
 }
 
@@ -60,6 +61,7 @@ BACK_ANNOTATE::~BACK_ANNOTATE()
 bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
 {
     m_changesCount = 0;
+    m_appendUndo = false;
     wxString msg;
 
     if( !m_processValues && !m_processFootprints && !m_processReferences && !m_processNetNames )
@@ -79,9 +81,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     checkForUnusedSymbols();
     checkSharedSchematicErrors();
 
-    SCH_SHEET_PATH current = m_frame->GetCurrentSheet();
     applyChangelist();
-    m_frame->SetCurrentSheet( current );
 
     return true;
 }
@@ -280,12 +280,6 @@ bool BACK_ANNOTATE::checkReuseViolation( PCB_MODULE_DATA& aFirst, PCB_MODULE_DAT
     return true;
 }
 
-wxString BACK_ANNOTATE::getTextFromField( const SCH_REFERENCE& aRef, const NumFieldType aField )
-{
-    return aRef.GetComp()->GetField( aField )->GetText();
-}
-
-
 void BACK_ANNOTATE::checkSharedSchematicErrors()
 {
     std::sort( m_changelist.begin(), m_changelist.end(),
@@ -334,9 +328,10 @@ void BACK_ANNOTATE::checkSharedSchematicErrors()
             means that this particular component is reused in some other project. */
             if( !m_ignoreOtherProjects && compUsage > usageCount )
             {
+                SCH_COMPONENT*  comp = it->first.GetComp();
                 PCB_MODULE_DATA tmp{ "",
-                                     getTextFromField( it->first, FOOTPRINT ),
-                                     getTextFromField( it->first, VALUE ),
+                                     comp->GetField( FOOTPRINT )->GetText(),
+                                     comp->GetField( VALUE )->GetText(),
                                      {} };
 
                 if( !checkReuseViolation( tmp, *it->second ) )
@@ -360,16 +355,16 @@ void BACK_ANNOTATE::applyChangelist()
 {
     std::set<wxString> handledNetChanges;
     wxString           msg;
-    int                leftUnchanged = 0;
 
     // Apply changes from change list
     for( CHANGELIST_ITEM& item : m_changelist )
     {
         SCH_REFERENCE&   ref = item.first;
         PCB_MODULE_DATA& module = *item.second;
-        wxString         oldFootprint = getTextFromField( ref, FOOTPRINT );
-        wxString         oldValue = getTextFromField( ref, VALUE );
-        int              changesCountBefore = m_changesCount;
+        SCH_COMPONENT*   comp = ref.GetComp();
+        SCH_SCREEN*      screen = ref.GetSheetPath().LastScreen();
+        wxString         oldFootprint = comp->GetField( FOOTPRINT )->GetText();
+        wxString         oldValue = comp->GetField( VALUE )->GetText();
         bool             skip = ( ref.GetComp()->GetFlags() & SKIP_STRUCT ) > 0;
 
         if( m_processReferences && ref.GetRef() != module.m_ref && !skip )
@@ -380,7 +375,11 @@ void BACK_ANNOTATE::applyChangelist()
                         module.m_ref );
 
             if( !m_dryRun )
-                ref.GetComp()->SetRef( &ref.GetSheetPath(), module.m_ref );
+            {
+                m_frame->SaveCopyInUndoList( screen, comp, UR_CHANGED, m_appendUndo );
+                m_appendUndo = true;
+                comp->SetRef( &ref.GetSheetPath(), module.m_ref );
+            }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
@@ -390,11 +389,15 @@ void BACK_ANNOTATE::applyChangelist()
             ++m_changesCount;
             msg.Printf( _( "Change %s footprint from \"%s\" to \"%s\"." ),
                         ref.GetFullRef(),
-                        getTextFromField( ref, FOOTPRINT ),
+                        comp->GetField( FOOTPRINT )->GetText(),
                         module.m_footprint );
 
             if( !m_dryRun )
+            {
+                m_frame->SaveCopyInUndoList( screen, comp, UR_CHANGED, m_appendUndo );
+                m_appendUndo = true;
                 ref.GetComp()->GetField( FOOTPRINT )->SetText( module.m_footprint );
+            }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
@@ -404,11 +407,15 @@ void BACK_ANNOTATE::applyChangelist()
             ++m_changesCount;
             msg.Printf( _( "Change %s value from \"%s\" to \"%s\"." ),
                         ref.GetFullRef(),
-                        getTextFromField( ref, VALUE ),
+                        comp->GetField( VALUE )->GetText(),
                         module.m_value );
 
             if( !m_dryRun )
-                item.first.GetComp()->GetField( VALUE )->SetText( module.m_value );
+            {
+                m_frame->SaveCopyInUndoList( screen, comp, UR_CHANGED, m_appendUndo );
+                m_appendUndo = true;
+                comp->GetField( VALUE )->SetText( module.m_value );
+            }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
@@ -419,7 +426,6 @@ void BACK_ANNOTATE::applyChangelist()
             {
                 const wxString& pinNumber = entry.first;
                 const wxString& shortNetName = entry.second;
-                SCH_COMPONENT*  comp = ref.GetComp();
                 LIB_PIN*        pin = comp->GetPin( pinNumber );
                 SCH_CONNECTION* conn = comp->GetConnectionForPin( pin, ref.GetSheetPath() );
 
@@ -434,11 +440,8 @@ void BACK_ANNOTATE::applyChangelist()
                     processNetNameChange( conn, conn->Name( true ), shortNetName );
             }
         }
-
-        if( changesCountBefore == m_changesCount )
-            ++leftUnchanged;
     }
-    msg.Printf( _( "%d symbols left unchanged" ), leftUnchanged );
+
     m_reporter.ReportHead( msg, RPT_SEVERITY_INFO );
 }
 
@@ -459,7 +462,8 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
                     if( EscapeString( label->GetShownText(), CTX_NETNAME ) == oldName )
                     {
-                        m_frame->SaveCopyInUndoList( label, UR_CHANGED );
+                        m_frame->SaveCopyInUndoList( aScreen, label, UR_CHANGED, m_appendUndo );
+                        m_appendUndo = true;
                         static_cast<SCH_TEXT*>( label )->SetText( newName );
                     }
                 }
@@ -469,21 +473,20 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
     {
     case SCH_LABEL_T:
         ++m_changesCount;
-        msg.Printf( _( "Change \"%s\" labels to \"%s\"." ),
-                    aOldName,
-                    aNewName );
+        msg.Printf( _( "Change \"%s\" labels to \"%s\"." ), aOldName, aNewName );
 
         if( !m_dryRun )
         {
-            m_frame->Schematic().SetCurrentSheet( aConn->Sheet() );
+            SCH_SCREEN* screen = aConn->Sheet().LastScreen();
 
-            for( SCH_ITEM* label : m_frame->GetScreen()->Items().OfType( SCH_LABEL_T ) )
+            for( SCH_ITEM* label : screen->Items().OfType( SCH_LABEL_T ) )
             {
                 SCH_CONNECTION* conn = label->Connection( aConn->Sheet() );
 
                 if( conn && conn->Driver() == driver )
                 {
-                    m_frame->SaveCopyInUndoList( label, UR_CHANGED );
+                    m_frame->SaveCopyInUndoList( screen, label, UR_CHANGED, m_appendUndo );
+                    m_appendUndo = true;
                     static_cast<SCH_TEXT*>( label )->SetText( aNewName );
                 }
             }
@@ -494,19 +497,12 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
     case SCH_GLOBAL_LABEL_T:
         ++m_changesCount;
-        msg.Printf( _( "Change \"%s\" global labels to \"%s\"." ),
-                    aConn->Name( true ),
-                    aNewName );
+        msg.Printf( _( "Change \"%s\" global labels to \"%s\"." ), aOldName, aNewName );
 
         if( !m_dryRun )
         {
-            SCH_SHEET_LIST all_sheets = m_frame->Schematic().GetSheets();
-
-            for( const SCH_SHEET_PATH& sheet : all_sheets )
-            {
-                m_frame->Schematic().SetCurrentSheet( sheet );
-                editMatchingLabels( m_frame->GetScreen(), SCH_GLOBAL_LABEL_T, aOldName, aNewName );
-            }
+            for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
+                editMatchingLabels( sheet.LastScreen(), SCH_GLOBAL_LABEL_T, aOldName, aNewName );
         }
 
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -514,23 +510,22 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
     case SCH_HIER_LABEL_T:
         ++m_changesCount;
-        msg.Printf( _( "Change \"%s\" hierarchical label to \"%s\"." ),
-                    aConn->Name( true ),
-                    aNewName );
+        msg.Printf( _( "Change \"%s\" hierarchical label to \"%s\"." ), aOldName, aNewName );
 
         if( !m_dryRun )
         {
-            m_frame->Schematic().SetCurrentSheet( aConn->Sheet() );
-            editMatchingLabels( m_frame->GetScreen(), SCH_HIER_LABEL_T, aOldName, aNewName );
+            SCH_SCREEN* screen = aConn->Sheet().LastScreen();
+            editMatchingLabels( screen, SCH_HIER_LABEL_T, aOldName, aNewName );
 
-            SCH_SHEET*  sheet = dynamic_cast<SCH_SHEET*>( driver->GetParent() );
-            m_frame->SetScreen( sheet->GetScreen() );
+            SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( driver->GetParent() );
+            screen = sheet->GetScreen();
 
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
             {
                 if( EscapeString( pin->GetShownText(), CTX_NETNAME ) == aOldName )
                 {
-                    m_frame->SaveCopyInUndoList( pin, UR_CHANGED );
+                    m_frame->SaveCopyInUndoList( screen, pin, UR_CHANGED, m_appendUndo );
+                    m_appendUndo = true;
                     static_cast<SCH_TEXT*>( pin )->SetText( aNewName );
                 }
             }
@@ -541,19 +536,18 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
     case SCH_SHEET_PIN_T:
         ++m_changesCount;
-        msg.Printf( _( "Change \"%s\" hierarchical label to \"%s\"." ),
-                    aConn->Name( true ),
-                    aNewName );
+        msg.Printf( _( "Change \"%s\" hierarchical label to \"%s\"." ), aOldName, aNewName );
 
         if( !m_dryRun )
         {
-            m_frame->Schematic().SetCurrentSheet( aConn->Sheet() );
-            m_frame->SaveCopyInUndoList( driver, UR_CHANGED );
+            SCH_SCREEN* screen = aConn->Sheet().LastScreen();
+            m_frame->SaveCopyInUndoList( screen, driver, UR_CHANGED, m_appendUndo );
+            m_appendUndo = true;
             static_cast<SCH_TEXT*>( driver )->SetText( aNewName );
 
             SCH_SHEET* sheet = static_cast<SCH_SHEET_PIN*>( driver )->GetParent();
-            m_frame->SetScreen( sheet->GetScreen() );
-            editMatchingLabels( sheet->GetScreen(), SCH_HIER_LABEL_T, aOldName, aNewName );
+            screen = sheet->GetScreen();
+            editMatchingLabels( screen, SCH_HIER_LABEL_T, aOldName, aNewName );
         }
 
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -584,9 +578,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
         }
 
         ++m_changesCount;
-        msg.Printf( _( "Add label \"%s\" to net \"%s\"." ),
-                    aNewName,
-                    aConn->Name( true ) );
+        msg.Printf( _( "Add label \"%s\" to net \"%s\"." ), aNewName, aOldName );
 
         if( !m_dryRun )
         {
@@ -598,8 +590,9 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
             label->SetLabelSpinStyle( spin );
             label->SetFlags( IS_NEW );
 
-            m_frame->Schematic().SetCurrentSheet( aConn->Sheet() );
-            m_frame->AddItemToScreenAndUndoList( label );
+            SCH_SCREEN* screen = aConn->Sheet().LastScreen();
+            m_frame->AddItemToScreenAndUndoList( screen, label, m_appendUndo );
+            m_appendUndo = true;
         }
 
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -609,6 +602,4 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
     default:
         break;
     }
-
-    m_frame->Schematic().SetCurrentSheet( SCH_SHEET_PATH() );
 }

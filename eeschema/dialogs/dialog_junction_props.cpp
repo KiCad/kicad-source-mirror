@@ -171,10 +171,10 @@ bool DIALOG_JUNCTION_PROPS::TransferDataFromWindow()
 {
     PICKED_ITEMS_LIST pickedItems;
 
-    for( auto& junction : m_junctions )
-        pickedItems.PushItem( ITEM_PICKER( junction, UR_CHANGED ) );
+    for( SCH_JUNCTION* junction : m_junctions )
+        pickedItems.PushItem( ITEM_PICKER( m_frame->GetScreen(), junction, UR_CHANGED ) );
 
-    m_frame->SaveCopyInUndoList( pickedItems, UR_CHANGED );
+    m_frame->SaveCopyInUndoList( pickedItems, UR_CHANGED, false );
 
     for( auto& junction : m_junctions )
     {

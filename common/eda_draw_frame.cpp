@@ -570,9 +570,7 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     aCfg->m_System.units = static_cast<int>( m_userUnits );
     aCfg->m_System.first_run_shown = m_firstRunDialogSetting;
-
-    if( GetScreen() )
-        aCfg->m_System.max_undo_items = GetScreen()->GetMaxUndoItems();
+    aCfg->m_System.max_undo_items = GetMaxUndoItems();
 
     m_galDisplayOptions.WriteConfig( *window );
 

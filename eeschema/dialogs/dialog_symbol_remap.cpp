@@ -99,7 +99,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
         if( viewer )
             viewer->ReCreateListLib();
 
-        parent->GetScreen()->ClearUndoORRedoList( parent->GetScreen()->m_UndoList, 1 );
+        parent->ClearUndoORRedoList( parent->m_UndoList, 1 );
         parent->SyncView();
         parent->GetCanvas()->Refresh();
         parent->OnModify();

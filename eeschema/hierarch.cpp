@@ -245,7 +245,6 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     {
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
         screen->m_Initialized = true;
-        screen->ClearUndoORRedoList( screen->m_UndoList, 1 );
     }
     else
     {

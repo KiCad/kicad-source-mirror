@@ -115,11 +115,8 @@ private:
     std::deque<CHANGELIST_ITEM>  m_changelist;
     SCH_EDIT_FRAME*              m_frame;
 
-    ///> To count number of changes applied to the schematic
-    int m_changesCount;
-
-    ///> Get text from symbol's field ( such as Footprint or Value )
-    wxString getTextFromField( const SCH_REFERENCE& aRef, const NumFieldType aField );
+    int                          m_changesCount;    // Number of user-level changes
+    bool                         m_appendUndo;
 
     /**
      * @brief Check if modules has different data. Check only if corresponding \ref m_boardAdapter

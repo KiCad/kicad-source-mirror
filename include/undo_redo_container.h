@@ -31,6 +31,7 @@
 
 
 class PICKED_ITEMS_LIST;
+class BASE_SCREEN;
 
 
 /**
@@ -90,8 +91,13 @@ private:
                                         * copy of an active item) and m_Link points the active
                                         * item in schematic */
 
+    BASE_SCREEN*   m_screen;           /* For new and deleted items the screen the item should
+                                        * be added to/removed from. */
+
 public:
-    ITEM_PICKER( EDA_ITEM* aItem = NULL, UNDO_REDO_T aUndoRedoStatus = UR_UNSPECIFIED );
+//    ITEM_PICKER( EDA_ITEM* aItem = NULL, UNDO_REDO_T aStatus = UR_UNSPECIFIED );
+    ITEM_PICKER();
+    ITEM_PICKER( BASE_SCREEN* aScreen, EDA_ITEM* aItem, UNDO_REDO_T aStatus = UR_UNSPECIFIED );
 
     EDA_ITEM* GetItem() const { return m_pickedItem; }
 
@@ -114,6 +120,8 @@ public:
     void SetLink( EDA_ITEM* aItem ) { m_link = aItem; }
 
     EDA_ITEM* GetLink() const { return m_link; }
+
+    BASE_SCREEN* GetScreen() const { return m_screen; }
 };
 
 
@@ -125,10 +133,10 @@ public:
 class PICKED_ITEMS_LIST
 {
 public:
-    UNDO_REDO_T m_Status;      /* info about operation to undo/redo for this item. can be
-                                   * UR_UNSPECIFIED */
-    wxPoint m_TransformPoint;     /* used to undo redo command by the same command: usually
-                                   * need to know the rotate point or the move vector */
+    UNDO_REDO_T m_Status;             /* info about operation to undo/redo for this item. can be
+                                       * UR_UNSPECIFIED */
+    wxPoint     m_TransformPoint;     /* used to undo redo command by the same command: usually
+                                       * need to know the rotate point or the move vector */
 
 private:
     std::vector <ITEM_PICKER> m_ItemsList;
@@ -210,6 +218,13 @@ public:
      * @param aIdx Index of the picked item in the picked list
      */
     EDA_ITEM* GetPickedItem( unsigned int aIdx ) const;
+
+    /**
+     * Function GetScreenForItem
+     * @return A pointer to the picked item's sceen
+     * @param aIdx Index of the picked item in the picked list
+     */
+    BASE_SCREEN* GetScreenForItem( unsigned int aIdx ) const;
 
     /**
      * Function GetPickedItemLink

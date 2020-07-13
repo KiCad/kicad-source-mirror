@@ -183,7 +183,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM* aItem, UNDO_REDO_T aCo
                                               const wxPoint& aTransformPoint )
 {
     PICKED_ITEMS_LIST commandToUndo;
-    commandToUndo.PushItem( ITEM_PICKER( aItem, aCommandType ) );
+    commandToUndo.PushItem( ITEM_PICKER( nullptr, aItem, aCommandType ) );
     SaveCopyInUndoList( commandToUndo, aCommandType, aTransformPoint );
 }
 
@@ -246,7 +246,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                 clone->Reference().ClearEditFlags();
                 clone->Value().ClearEditFlags();
 
-                ITEM_PICKER picker( item, UR_CHANGED );
+                ITEM_PICKER picker( nullptr, item, UR_CHANGED );
                 picker.SetLink( clone );
                 commandToUndo->PushItem( picker );
 
@@ -315,10 +315,10 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
     if( commandToUndo->GetCount() )
     {
         /* Save the copy in undo list */
-        GetScreen()->PushCommandToUndoList( commandToUndo );
+        PushCommandToUndoList( commandToUndo );
 
         /* Clear redo list, because after a new command one cannot redo a command */
-        GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
+        ClearUndoORRedoList( m_RedoList );
     }
     else
     {
@@ -334,21 +334,21 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
     if( UndoRedoBlocked() )
         return;
 
-    if( GetScreen()->GetUndoCommandCount() <= 0 )
+    if( GetUndoCommandCount() <= 0 )
         return;
 
     // Inform tools that undo command was issued
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     // Get the old list
-    PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
+    PICKED_ITEMS_LIST* List = PopCommandFromUndoList();
 
     // Undo the command
     PutDataInPreviousState( List, false );
 
     // Put the old list in RedoList
     List->ReversePickersListOrder();
-    GetScreen()->PushCommandToRedoList( List );
+    PushCommandToRedoList( List );
 
     OnModify();
 
@@ -363,21 +363,21 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
     if( UndoRedoBlocked() )
         return;
 
-    if( GetScreen()->GetRedoCommandCount() == 0 )
+    if( GetRedoCommandCount() == 0 )
         return;
 
     // Inform tools that redo command was issued
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     // Get the old list
-    PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
+    PICKED_ITEMS_LIST* List = PopCommandFromRedoList();
 
     // Redo the command
     PutDataInPreviousState( List, true );
 
     // Put the old list in UndoList
     List->ReversePickersListOrder();
-    GetScreen()->PushCommandToUndoList( List );
+    PushCommandToUndoList( List );
 
     OnModify();
 
@@ -585,7 +585,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
 
 
-void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
+void PCB_BASE_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
 {
     if( aItemCount == 0 )
         return;
@@ -611,7 +611,7 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
 
 void PCB_BASE_EDIT_FRAME::RollbackFromUndo()
 {
-    PICKED_ITEMS_LIST* undo = GetScreen()->PopCommandFromUndoList();
+    PICKED_ITEMS_LIST* undo = PopCommandFromUndoList();
     PutDataInPreviousState( undo, false );
 
     undo->ClearListAndDeleteItems();

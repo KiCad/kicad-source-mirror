@@ -810,7 +810,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         case SCH_HIER_LABEL_T:
         case SCH_NO_CONNECT_T:
             newItem->SetParent( m_frame->GetScreen() );
-            m_frame->AddToScreen( newItem );
+            m_frame->AddToScreen( newItem, m_frame->GetScreen() );
             break;
 
         case SCH_SHEET_T:
@@ -828,7 +828,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             nameField.SetText( candidateName );
 
             sheet->SetParent( m_frame->GetCurrentSheet().Last() );
-            m_frame->AddToScreen( sheet );
+            m_frame->AddToScreen( sheet, m_frame->GetScreen() );
 
             copiedSheets = true;
             break;
@@ -839,7 +839,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             SCH_COMPONENT* component = (SCH_COMPONENT*) newItem;
             component->ClearAnnotation( NULL );
             component->SetParent( m_frame->GetScreen() );
-            m_frame->AddToScreen( component );
+            m_frame->AddToScreen( component, m_frame->GetScreen() );
             break;
         }
 
@@ -916,8 +916,8 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     }
 
     newItem->SetFlags( IS_NEW );
-    m_frame->AddToScreen( newItem );
-    m_frame->SaveCopyInUndoList( newItem, UR_NEW );
+    m_frame->AddToScreen( newItem, m_frame->GetScreen() );
+    m_frame->SaveCopyInUndoList( m_frame->GetScreen(), newItem, UR_NEW, false );
 
     m_selectionTool->AddItemToSel( newItem );
 
@@ -1011,7 +1011,9 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                 sheet->RemovePin( pin );
             }
             else
-                m_frame->RemoveFromScreen( sch_item );
+            {
+                m_frame->RemoveFromScreen( sch_item, m_frame->GetScreen() );
+            }
 
             if( sch_item->Type() == SCH_SHEET_T )
                 m_frame->UpdateHierarchyNavigator();
@@ -1121,7 +1123,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 {
     // Save old component in undo list if not already in edit, or moving.
     if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
-        m_frame->SaveCopyInUndoList( (SCH_ITEM*) aField->GetParent(), UR_CHANGED );
+        saveCopyInUndoList( aField, UR_CHANGED );
 
     wxString title = wxString::Format( _( "Edit %s Field" ), aField->GetName() );
 
@@ -1198,7 +1200,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
     SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
 
     if( !component->IsNew() )
-        m_frame->SaveCopyInUndoList( component, UR_CHANGED );
+        saveCopyInUndoList( component, UR_CHANGED );
 
     component->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
 
@@ -1215,12 +1217,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::UpdateFields( const TOOL_EVENT& aEvent )
 {
-    std::list<SCH_COMPONENT*> components;
-
-    for( auto item : m_frame->GetScreen()->Items().OfType( SCH_COMPONENT_T ) )
-        components.push_back( static_cast<SCH_COMPONENT*>( item ) );
-
-    if( InvokeDialogUpdateFields( m_frame, components, true ) == wxID_OK )
+    if( InvokeDialogUpdateFields( m_frame ) == wxID_OK )
         m_frame->GetCanvas()->Refresh();
 
     return 0;
@@ -1245,7 +1242,7 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
         return 0;
 
     if( !component->IsNew() )
-        m_frame->SaveCopyInUndoList( component, UR_CHANGED );
+        saveCopyInUndoList( component, UR_CHANGED );
 
     m_frame->ConvertPart( component );
 
@@ -1290,7 +1287,7 @@ int SCH_EDIT_TOOL::RefreshSymbolFromLibrary( const TOOL_EVENT& aEvent )
 
         if( !symbol->IsNew() )
         {
-            m_frame->SaveCopyInUndoList( symbol, UR_CHANGED, appendToUndo );
+            saveCopyInUndoList( symbol, UR_CHANGED, appendToUndo );
             appendToUndo = true;
         }
 
@@ -1473,7 +1470,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             // save old image in undo list if not already in edit
             if( bitmap->GetEditFlags() == 0 )
-                m_frame->SaveCopyInUndoList( bitmap, UR_CHANGED );
+                saveCopyInUndoList( bitmap, UR_CHANGED );
 
             dlg.TransferToImage( bitmap->GetImage() );
 
@@ -1613,11 +1610,11 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
             if( !text->IsNew() )
             {
-                m_frame->SaveCopyInUndoList( text, UR_DELETED );
-                m_frame->SaveCopyInUndoList( newtext, UR_NEW, true );
+                saveCopyInUndoList( text, UR_DELETED );
+                saveCopyInUndoList( newtext, UR_NEW, true );
 
-                m_frame->RemoveFromScreen( text );
-                m_frame->AddToScreen( newtext );
+                m_frame->RemoveFromScreen( text, m_frame->GetScreen() );
+                m_frame->AddToScreen( newtext, m_frame->GetScreen() );
             }
 
             if( selected )
@@ -1656,7 +1653,7 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     if( m_frame->BreakSegments( cursorPos ) )
     {
         if( m_frame->GetScreen()->IsJunctionNeeded( cursorPos, true ) )
-            m_frame->AddJunction( cursorPos, true, false );
+            m_frame->AddJunction( m_frame->GetScreen(), cursorPos, true, false );
 
         m_frame->TestDanglingEnds();
 
@@ -1685,7 +1682,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
     if( !IsOK( m_frame, _( "Do you wish to delete the unreferenced pins from this sheet?" ) ) )
         return 0;
 
-    m_frame->SaveCopyInUndoList( sheet, UR_CHANGED );
+    saveCopyInUndoList( sheet, UR_CHANGED );
 
     sheet->CleanupSheet();
 

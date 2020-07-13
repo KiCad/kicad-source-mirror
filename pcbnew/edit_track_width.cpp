@@ -104,7 +104,7 @@ int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         if( aItemsListPicker )
         {
             aTrackItem->SetWidth( initial_width );
-            ITEM_PICKER picker( aTrackItem, UR_CHANGED );
+            ITEM_PICKER picker( nullptr, aTrackItem, UR_CHANGED );
             picker.SetLink( aTrackItem->Clone() );
             aItemsListPicker->PushItem( picker );
             aTrackItem->SetWidth( new_width );

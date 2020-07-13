@@ -97,7 +97,10 @@ bool DIALOG_EDIT_SHEET_PIN::TransferDataToWindow()
 bool DIALOG_EDIT_SHEET_PIN::TransferDataFromWindow()
 {
     if( !m_sheetPin->IsNew() )
-        m_frame->SaveCopyInUndoList( (SCH_ITEM*) m_sheetPin->GetParent(), UR_CHANGED );
+    {
+        SCH_SHEET* parentSheet = m_sheetPin->GetParent();
+        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), parentSheet, UR_CHANGED, false );
+    }
 
     m_sheetPin->SetText( EscapeString( m_comboName->GetValue(), CTX_NETNAME ) );
     // Currently, eeschema uses only the text width as text size,

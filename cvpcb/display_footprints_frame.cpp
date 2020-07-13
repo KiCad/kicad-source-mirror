@@ -311,17 +311,6 @@ MAGNETIC_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetMagneticItemsSettings()
 }
 
 
-/**
- * Virtual function needed by the PCB_SCREEN class derived from BASE_SCREEN
- * this is a virtual pure function in BASE_SCREEN
- * do nothing in Cvpcb
- * could be removed later
- */
-void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
-{
-}
-
-
 COLOR4D DISPLAY_FOOTPRINTS_FRAME::GetGridColor()
 {
     return COLOR4D( DARKGRAY );

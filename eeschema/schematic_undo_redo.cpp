@@ -23,26 +23,17 @@
  */
 
 #include <fctsys.h>
-#include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <tool/tool_manager.h>
-#include <general.h>
 #include <sch_bus_entry.h>
-#include <sch_marker.h>
 #include <sch_junction.h>
 #include <sch_line.h>
-#include <sch_no_connect.h>
-#include <sch_component.h>
-#include <sch_sheet.h>
 #include <sch_bitmap.h>
-#include <sch_view.h>
 #include <tools/ee_selection_tool.h>
 #include <ws_proxy_undo_item.h>
 #include <tool/actions.h>
 
 /* Functions to undo and redo edit commands.
- *  commands to undo are stored in CurrentScreen->m_UndoList
- *  commands to redo are stored in CurrentScreen->m_RedoList
  *
  *  m_UndoList and m_RedoList handle a std::vector of PICKED_ITEMS_LIST
  *  Each PICKED_ITEMS_LIST handle a std::vector of pickers (class ITEM_PICKER),
@@ -103,7 +94,8 @@
  * swapped data is data modified by editing, so not all values are swapped
  */
 
-void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
+void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
+                                         SCH_ITEM*      aItem,
                                          UNDO_REDO_T    aCommandType,
                                          bool           aAppend,
                                          const wxPoint& aTransformPoint )
@@ -117,7 +109,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
     aItem->SetConnectivityDirty();
 
     if( aAppend )
-        commandToUndo = GetScreen()->PopCommandFromUndoList();
+        commandToUndo = PopCommandFromUndoList();
 
     if( !commandToUndo )
     {
@@ -125,7 +117,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
         commandToUndo->m_TransformPoint = aTransformPoint;
     }
 
-    ITEM_PICKER itemWrapper( aItem, aCommandType );
+    ITEM_PICKER itemWrapper( aScreen, aItem, aCommandType );
     itemWrapper.SetFlags( aItem->GetFlags() );
 
     switch( aCommandType )
@@ -151,10 +143,10 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
     if( commandToUndo->GetCount() )
     {
         /* Save the copy in undo list */
-        GetScreen()->PushCommandToUndoList( commandToUndo );
+        PushCommandToUndoList( commandToUndo );
 
         /* Clear redo list, because after new save there is no redo to do */
-        GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
+        ClearUndoORRedoList( m_RedoList );
     }
     else
     {
@@ -175,7 +167,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 
     // Can't append a WIRE IMAGE, so fail to a new undo point
     if( aAppend )
-        commandToUndo = GetScreen()->PopCommandFromUndoList();
+        commandToUndo = PopCommandFromUndoList();
 
     if( !commandToUndo )
     {
@@ -247,10 +239,10 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
     if( commandToUndo->GetCount() )
     {
         /* Save the copy in undo list */
-        GetScreen()->PushCommandToUndoList( commandToUndo );
+        PushCommandToUndoList( commandToUndo );
 
         /* Clear redo list, because after new save there is no redo to do */
-        GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
+        ClearUndoORRedoList( m_RedoList );
     }
     else    // Should not occur
     {
@@ -275,13 +267,13 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         if( status == UR_NEW )
         {
             // new items are deleted on undo
-            RemoveFromScreen( eda_item );
+            RemoveFromScreen( eda_item, (SCH_SCREEN*) aList->GetScreenForItem( (unsigned) ii ) );
             aList->SetPickedItemStatus( UR_DELETED, (unsigned) ii );
         }
         else if( status == UR_DELETED )
         {
             // deleted items are re-inserted on undo
-            AddToScreen( eda_item );
+            AddToScreen( eda_item, (SCH_SCREEN*) aList->GetScreenForItem( (unsigned) ii ) );
             aList->SetPickedItemStatus( UR_NEW, (unsigned) ii );
         }
         else if( status == UR_PAGESETTINGS )
@@ -299,7 +291,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
             SCH_ITEM* item = (SCH_ITEM*) eda_item;
             SCH_ITEM* alt_item = (SCH_ITEM*) aList->GetPickedItemLink( (unsigned) ii );
-            RemoveFromScreen( item );
+            RemoveFromScreen( item, (SCH_SCREEN*) aList->GetScreenForItem( (unsigned) ii ) );
 
             switch( status )
             {
@@ -343,7 +335,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 break;
             }
 
-            AddToScreen( item );
+            AddToScreen( item, (SCH_SCREEN*) aList->GetScreenForItem( (unsigned) ii ) );
         }
     }
 
@@ -359,7 +351,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
 void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
 {
-    PICKED_ITEMS_LIST* undo = GetScreen()->PopCommandFromUndoList();
+    PICKED_ITEMS_LIST* undo = PopCommandFromUndoList();
 
     if( undo )
     {
@@ -375,3 +367,20 @@ void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
     SyncView();
     GetCanvas()->Refresh();
 }
+
+
+void SCH_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
+{
+    if( aItemCount == 0 )
+        return;
+
+    for( auto& command : aList.m_CommandsList )
+    {
+        command->ClearListAndDeleteItems();
+        delete command;
+    }
+
+    aList.m_CommandsList.clear();
+}
+
+

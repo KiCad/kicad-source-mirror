@@ -376,7 +376,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 
     m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos );
     m_busUnfold.entry->SetParent( m_frame->GetScreen() );
-    m_frame->AddToScreen( m_busUnfold.entry );
+    m_frame->AddToScreen( m_busUnfold.entry, m_frame->GetScreen() );
 
     m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->m_End(), aNet );
     m_busUnfold.label->SetTextSize( wxSize( cfg.m_DefaultTextSize, cfg.m_DefaultTextSize ) );
@@ -512,13 +512,13 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
             segment = nullptr;
 
             if( m_busUnfold.entry )
-                m_frame->RemoveFromScreen( m_busUnfold.entry );
+                m_frame->RemoveFromScreen( m_busUnfold.entry, screen );
 
             if( m_busUnfold.label && !m_busUnfold.label_placed )
                 m_selectionTool->RemoveItemFromSel( m_busUnfold.label, true );
 
             if( m_busUnfold.label && m_busUnfold.label_placed )
-                m_frame->RemoveFromScreen( m_busUnfold.label );
+                m_frame->RemoveFromScreen( m_busUnfold.label, screen );
 
             delete m_busUnfold.entry;
             delete m_busUnfold.label;
@@ -578,7 +578,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
             {
                 wxASSERT( aType == LAYER_WIRE );
 
-                m_frame->AddToScreen( m_busUnfold.label );
+                m_frame->AddToScreen( m_busUnfold.label, screen );
                 m_selectionTool->RemoveItemFromSel( m_busUnfold.label, true );
                 m_busUnfold.label_placed = true;
             }
@@ -808,6 +808,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     // freed selected items.
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
+    SCH_SCREEN*       screen = m_frame->GetScreen();
     PICKED_ITEMS_LIST itemList;
 
     // Remove segments backtracking over others
@@ -831,15 +832,15 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
             if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), i ) )
                 new_ends.push_back( i );
         }
-        itemList.PushItem( ITEM_PICKER( wire, UR_NEW ) );
+        itemList.PushItem( ITEM_PICKER( screen, wire, UR_NEW ) );
     }
 
     if( m_busUnfold.in_progress && m_busUnfold.label_placed )
     {
         wxASSERT( m_busUnfold.entry && m_busUnfold.label );
 
-        itemList.PushItem( ITEM_PICKER( m_busUnfold.entry, UR_NEW ) );
-        itemList.PushItem( ITEM_PICKER( m_busUnfold.label, UR_NEW ) );
+        itemList.PushItem( ITEM_PICKER( screen, m_busUnfold.entry, UR_NEW ) );
+        itemList.PushItem( ITEM_PICKER( screen, m_busUnfold.label, UR_NEW ) );
         m_busUnfold.label->ClearEditFlags();
     }
 
@@ -851,7 +852,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     for( auto wire : m_wires )
     {
         wire->ClearFlags( IS_NEW | IS_MOVED );
-        m_frame->AddToScreen( wire );
+        m_frame->AddToScreen( wire, screen );
     }
 
     m_wires.clear();
@@ -861,7 +862,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     getViewControls()->CaptureCursor( false );
     getViewControls()->SetAutoPan( false );
 
-    m_frame->SaveCopyInUndoList( itemList, UR_NEW );
+    m_frame->SaveCopyInUndoList( itemList, UR_NEW, false );
 
     // Correct and remove segments that need to be merged.
     m_frame->SchematicCleanUp();
@@ -884,7 +885,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     for( auto i : new_ends )
     {
         if( m_frame->GetScreen()->IsJunctionNeeded( i, true ) )
-            m_frame->AddJunction( i, true, false );
+            m_frame->AddJunction( m_frame->GetScreen(), i, true, false );
     }
 
     if( m_busUnfold.in_progress )
@@ -949,7 +950,7 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
     for( auto point : pts )
     {
         if( m_frame->GetScreen()->IsJunctionNeeded( point, true ) )
-            m_frame->AddJunction( point, true, false );
+            m_frame->AddJunction( m_frame->GetScreen(), point, true, false );
     }
 
     return 0;

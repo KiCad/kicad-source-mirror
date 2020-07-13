@@ -405,22 +405,26 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     aField->SetText( m_text );
     updateText( aField );
 
-    // The value, footprint and datasheet fields should be kept in sync in multi-unit
-    // parts.
+    // The value, footprint and datasheet fields should be kept in sync in multi-unit parts.
     // Of course the component must be annotated to collect other units.
     if( editFrame && parent && parent->Type() == SCH_COMPONENT_T
             && ( fieldType == VALUE || fieldType == FOOTPRINT || fieldType == DATASHEET ) )
     {
         SCH_COMPONENT* thisUnit = static_cast<SCH_COMPONENT*>( parent );
-        std::vector<SCH_COMPONENT*> otherUnits;
 
-        CollectOtherUnits( editFrame->GetCurrentSheet(), thisUnit, &otherUnits );
-
-        for( SCH_COMPONENT* otherUnit : otherUnits )
+        for( SCH_SHEET_PATH& sheet : editFrame->Schematic().GetSheets() )
         {
-            editFrame->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
-            otherUnit->GetField( fieldType )->SetText( m_text );
-            editFrame->RefreshItem( otherUnit );
+            SCH_SCREEN*                 screen = sheet.LastScreen();
+            std::vector<SCH_COMPONENT*> otherUnits;
+
+            CollectOtherUnits( sheet, thisUnit, &otherUnits );
+
+            for( SCH_COMPONENT* otherUnit : otherUnits )
+            {
+                editFrame->SaveCopyInUndoList( screen, otherUnit, UR_CHANGED, true /* append */);
+                otherUnit->GetField( fieldType )->SetText( m_text );
+                editFrame->RefreshItem( otherUnit );
+            }
         }
     }
 

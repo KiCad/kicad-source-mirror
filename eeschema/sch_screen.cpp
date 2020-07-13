@@ -85,7 +85,6 @@ SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
 SCH_SCREEN::~SCH_SCREEN()
 {
     clearLibSymbols();
-    ClearUndoRedoList();
     FreeDrawList();
 }
 
@@ -801,21 +800,6 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 }
 
 
-void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
-{
-    if( aItemCount == 0 )
-        return;
-
-    for( auto& command : aList.m_CommandsList )
-    {
-        command->ClearListAndDeleteItems();
-        delete command;
-    }
-
-    aList.m_CommandsList.clear();
-}
-
-
 void SCH_SCREEN::ClearDrawingState()
 {
     for( auto item : Items() )
@@ -1227,13 +1211,6 @@ void SCH_SCREENS::buildScreenList( SCH_SHEET* aSheet )
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
             buildScreenList( static_cast<SCH_SHEET*>( item ) );
     }
-}
-
-
-void SCH_SCREENS::ClearAnnotation()
-{
-    for( SCH_SCREEN* screen : m_screens )
-        screen->ClearAnnotation( NULL );
 }
 
 

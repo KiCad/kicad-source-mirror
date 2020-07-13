@@ -305,7 +305,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
         {
             if( aUndoList->FindItem( aItem ) < 0 )
             {
-                ITEM_PICKER picker( aItem, UR_CHANGED );
+                ITEM_PICKER picker( nullptr, aItem, UR_CHANGED );
                 picker.SetLink( aItem->Clone() );
                 aUndoList->PushItem( picker );
             }

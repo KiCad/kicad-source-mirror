@@ -48,6 +48,7 @@
 #include <kiway_holder.h>
 #include <tool/tools_holder.h>
 #include <widgets/ui_common.h>
+#include <undo_redo_container.h>
 
 // Option for main frames
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
@@ -84,6 +85,9 @@ enum id_librarytype {
     LIBRARY_TYPE_DOC,
     LIBRARY_TYPE_SYMBOL
 };
+
+#define DEFAULT_MAX_UNDO_ITEMS 0
+#define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
 
 wxDECLARE_EVENT( UNITS_CHANGED, wxCommandEvent );
 
@@ -137,13 +141,23 @@ protected:
 
     SETTINGS_MANAGER* m_settingsManager;
 
-    FILE_HISTORY*   m_fileHistory;              // The frame's recently opened file list
+    FILE_HISTORY*   m_fileHistory;          // The frame's recently opened file list
 
     bool            m_hasAutoSave;
     bool            m_autoSaveState;
     int             m_autoSaveInterval;     // The auto save interval time in seconds.
     wxTimer*        m_autoSaveTimer;
 
+    bool            m_FlagModified;         // Indicates current drawing has been modified.
+    bool            m_FlagSave;             // Indicates automatic file save.
+    int             m_UndoRedoCountMax;     // undo/Redo command Max depth
+
+public:
+    // Undo/redo list of commands
+    UNDO_REDO_CONTAINER m_UndoList;         // Objects list for the undo command (old data)
+    UNDO_REDO_CONTAINER m_RedoList;         // Objects list for the redo command (old data)
+
+protected:
     wxString        m_mruPath;              // Most recently used path.
 
     EDA_UNITS       m_userUnits;
@@ -521,6 +535,85 @@ public:
      * @return the undecorated window size
      */
     wxSize GetWindowSize();
+
+
+    /* general Undo/Redo command control */
+
+    /**
+     * Function ClearUndoORRedoList (virtual).
+     * this function must remove the aItemCount old commands from aList
+     * and delete commands, pickers and picked items if needed
+     * Because picked items must be deleted only if they are not in use, this
+     * is a virtual pure function that must be created for SCH_SCREEN and
+     * PCB_SCREEN
+     * @param aList = the UNDO_REDO_CONTAINER of commands
+     * @param aItemCount = number of old commands to delete. -1 to remove all
+     *                     old commands this will empty the list of commands.
+     *  Commands are deleted from the older to the last.
+     */
+    virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 )
+    { }
+
+    /**
+     * Function ClearUndoRedoList
+     * clear undo and redo list, using ClearUndoORRedoList()
+     * picked items are deleted by ClearUndoORRedoList() according to their
+     * status
+     */
+    virtual void ClearUndoRedoList();
+
+    /**
+     * Function PushCommandToUndoList
+     * add a command to undo in undo list
+     * delete the very old commands when the max count of undo commands is
+     * reached
+     * ( using ClearUndoORRedoList)
+     */
+    virtual void PushCommandToUndoList( PICKED_ITEMS_LIST* aItem );
+
+    /**
+     * Function PushCommandToRedoList
+     * add a command to redo in redo list
+     * delete the very old commands when the max count of redo commands is
+     * reached
+     * ( using ClearUndoORRedoList)
+     */
+    virtual void PushCommandToRedoList( PICKED_ITEMS_LIST* aItem );
+
+    /** PopCommandFromUndoList
+     * return the last command to undo and remove it from list
+     * nothing is deleted.
+     */
+    virtual PICKED_ITEMS_LIST* PopCommandFromUndoList();
+
+    /** PopCommandFromRedoList
+     * return the last command to undo and remove it from list
+     * nothing is deleted.
+     */
+    virtual PICKED_ITEMS_LIST* PopCommandFromRedoList();
+
+    int GetUndoCommandCount() const
+    {
+        return m_UndoList.m_CommandsList.size();
+    }
+
+    int GetRedoCommandCount() const
+    {
+        return m_RedoList.m_CommandsList.size();
+    }
+
+    int GetMaxUndoItems() const { return m_UndoRedoCountMax; }
+
+    void SetMaxUndoItems( int aMax )
+    {
+        if( aMax >= 0 && aMax < ABS_MAX_UNDO_ITEMS )
+            m_UndoRedoCountMax = aMax;
+        else
+        {
+            wxFAIL_MSG( "Maximum undo items not within limits" );
+            m_UndoRedoCountMax = DEFAULT_MAX_UNDO_ITEMS;
+        }
+    }
 };
 
 

@@ -210,10 +210,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetScreen() && GetScreen()->GetUndoCommandCount() > 0;
+        return GetUndoCommandCount() > 0;
     };
     auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetScreen() && GetScreen()->GetRedoCommandCount() > 0;
+        return GetRedoCommandCount() > 0;
     };
     auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
         return ToolStackIsEmpty();

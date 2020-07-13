@@ -424,7 +424,6 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_defaults = &m_schematic->Settings();
 
     SCH_SCREEN* rootScreen = new SCH_SCREEN( m_schematic );
-    rootScreen->SetMaxUndoItems( m_UndoRedoCountMax );
     m_schematic->Root().SetScreen( rootScreen );
     SetScreen( Schematic().RootScreen() );
 
@@ -433,7 +432,6 @@ void SCH_EDIT_FRAME::CreateScreens()
     if( GetScreen() == NULL )
     {
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
-        screen->SetMaxUndoItems( m_UndoRedoCountMax );
         SetScreen( screen );
     }
 }
@@ -891,10 +889,9 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
-void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppend )
+void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
+                                                 bool aUndoAppend )
 {
-    SCH_SCREEN* screen = GetScreen();
-
     wxCHECK_RET( aItem != NULL, wxT( "Cannot add null item to list." ) );
 
     SCH_SHEET*     parentSheet = nullptr;
@@ -926,7 +923,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
         if( aItem->Type() == SCH_SHEET_PIN_T )
         {
             // Sheet pins are owned by their parent sheet.
-            SaveCopyInUndoList( undoItem, UR_CHANGED, aUndoAppend );     // save the parent sheet
+            SaveCopyInUndoList( aScreen, undoItem, UR_CHANGED, aUndoAppend );
 
             parentSheet->AddPin( (SCH_SHEET_PIN*) aItem );
         }
@@ -938,11 +935,11 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
         }
         else
         {
-            if( !screen->CheckIfOnDrawList( aItem ) )  // don't want a loop!
-                AddToScreen( aItem );
+            if( !aScreen->CheckIfOnDrawList( aItem ) )  // don't want a loop!
+                AddToScreen( aItem, aScreen );
 
             SaveCopyForRepeatItem( aItem );
-            SaveCopyInUndoList( undoItem, UR_NEW, aUndoAppend );
+            SaveCopyInUndoList( aScreen, undoItem, UR_NEW, aUndoAppend );
         }
 
         // Update connectivity info for new item
@@ -952,7 +949,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
 
     aItem->ClearFlags( IS_NEW );
 
-    screen->SetModify();
+    aScreen->SetModify();
     RefreshItem( aItem );
 
     if( !aItem->IsMoving() && aItem->IsConnectable() )
@@ -965,8 +962,8 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
             for( auto j = i + 1; j != pts.end(); j++ )
                 TrimWire( *i, *j );
 
-            if( screen->IsJunctionNeeded( *i, true ) )
-                AddJunction( *i, true, false );
+            if( aScreen->IsJunctionNeeded( *i, true ) )
+                AddJunction( aScreen, *i, true, false );
         }
 
         TestDanglingEnds();
@@ -1104,7 +1101,7 @@ void SCH_EDIT_FRAME::FixupJunctions()
         SetCurrentSheet( sheet );
         GetCurrentSheet().UpdateAllScreenReferences();
 
-        auto screen = GetCurrentSheet().LastScreen();
+        SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 
         for( auto aItem : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
@@ -1120,8 +1117,8 @@ void SCH_EDIT_FRAME::FixupJunctions()
             }
         }
 
-        for( auto& pos : junctions )
-            AddJunction( pos, false, false );
+        for( const wxPoint& pos : junctions )
+            AddJunction( screen, pos, false, false );
 
         if( junctions.size() )
             modified = true;

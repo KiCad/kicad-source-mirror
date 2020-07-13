@@ -28,12 +28,34 @@
 #include <undo_redo_container.h>
 
 
+/*
 ITEM_PICKER::ITEM_PICKER( EDA_ITEM* aItem, UNDO_REDO_T aUndoRedoStatus )
 {
     m_undoRedoStatus = aUndoRedoStatus;
     SetItem( aItem );
     m_pickerFlags = 0;
+    m_link = nullptr;
+    m_screen = nullptr;
+}
+*/
+
+ITEM_PICKER::ITEM_PICKER()
+{
+    m_undoRedoStatus = UR_UNSPECIFIED;
+    SetItem( nullptr );
+    m_pickerFlags = 0;
     m_link = NULL;
+    m_screen = nullptr;
+}
+
+
+ITEM_PICKER::ITEM_PICKER( BASE_SCREEN* aScreen, EDA_ITEM* aItem, UNDO_REDO_T aUndoRedoStatus )
+{
+    m_undoRedoStatus = aUndoRedoStatus;
+    SetItem( aItem );
+    m_pickerFlags = 0;
+    m_link = NULL;
+    m_screen = aScreen;
 }
 
 
@@ -139,6 +161,15 @@ EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItem( unsigned int aIdx ) const
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].GetItem();
+
+    return NULL;
+}
+
+
+BASE_SCREEN* PICKED_ITEMS_LIST::GetScreenForItem( unsigned int aIdx ) const
+{
+    if( aIdx < m_ItemsList.size() )
+        return m_ItemsList[aIdx].GetScreen();
 
     return NULL;
 }

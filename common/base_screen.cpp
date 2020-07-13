@@ -36,7 +36,6 @@ wxString BASE_SCREEN::m_PageLayoutDescrFileName;   // the name of the page layou
 BASE_SCREEN::BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType ) :
     EDA_ITEM( aParent, aType )
 {
-    m_UndoRedoCountMax = DEFAULT_MAX_UNDO_ITEMS;
     m_Initialized      = false;
     m_ScreenNumber     = 1;
     m_NumberOfScreens  = 1;      // Hierarchy: Root: ScreenNumber = 1
@@ -67,55 +66,6 @@ void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeIU )
     }
 
     m_LocalOrigin = { 0, 0 };
-}
-
-
-void BASE_SCREEN::ClearUndoRedoList()
-{
-    ClearUndoORRedoList( m_UndoList );
-    ClearUndoORRedoList( m_RedoList );
-}
-
-
-void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
-{
-    m_UndoList.PushCommand( aNewitem );
-
-    // Delete the extra items, if count max reached
-    if( m_UndoRedoCountMax > 0 )
-    {
-        int extraitems = GetUndoCommandCount() - m_UndoRedoCountMax;
-
-        if( extraitems > 0 )
-            ClearUndoORRedoList( m_UndoList, extraitems );
-    }
-}
-
-
-void BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
-{
-    m_RedoList.PushCommand( aNewitem );
-
-    // Delete the extra items, if count max reached
-    if( m_UndoRedoCountMax > 0 )
-    {
-        int extraitems = GetRedoCommandCount() - m_UndoRedoCountMax;
-
-        if( extraitems > 0 )
-            ClearUndoORRedoList( m_RedoList, extraitems );
-    }
-}
-
-
-PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromUndoList( )
-{
-    return m_UndoList.PopCommand();
-}
-
-
-PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromRedoList( )
-{
-    return m_RedoList.PopCommand();
 }
 
 

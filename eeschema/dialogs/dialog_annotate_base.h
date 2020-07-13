@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -69,7 +69,7 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnClearAnnotationCmpClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnClearAnnotationClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCloseClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnApplyClick( wxCommandEvent& event ) { event.Skip(); }
 

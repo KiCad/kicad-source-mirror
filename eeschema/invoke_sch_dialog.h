@@ -86,8 +86,8 @@ int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );
 void InvokeDialogBusManager( SCH_EDIT_FRAME* aCaller );
 
 /// Update symbol fields
-int InvokeDialogUpdateFields( SCH_EDIT_FRAME* aCaller,
-        const std::list<SCH_COMPONENT*> aComponents, bool aCreateUndoEntry );
+int InvokeDialogUpdateFields( SCH_EDIT_FRAME* aCaller, SCH_COMPONENT* aSpecificComponent = nullptr,
+                              bool aCreateUndoEntry = true );
 
 /**
  * Create and shows NETLIST_DIALOG and returns whatever

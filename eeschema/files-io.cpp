@@ -492,7 +492,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
         RecalculateConnections( GLOBAL_CLEANUP );
-        GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
+        ClearUndoRedoList();
         GetScreen()->m_Initialized = true;
     }
 
@@ -872,10 +872,11 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                     }
                 }
             }
+
             // Only perform the dangling end test on root sheet.
             GetScreen()->TestDanglingEnds();
 
-            GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
+            ClearUndoRedoList();
 
             m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
             SetSheetNumberAndCount();

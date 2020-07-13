@@ -249,13 +249,13 @@ public:
      * Add an item to the screen (and view)
      * aScreen is the screen the item is located on, if not the current screen
      */
-    void AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen = nullptr );
+    void AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen );
 
     /**
      * Remove an item from the screen (and view)
      * aScreen is the screen the item is located on, if not the current screen
      */
-    void RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen = nullptr );
+    void RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen );
 
     /**
      * Mark an item for refresh.

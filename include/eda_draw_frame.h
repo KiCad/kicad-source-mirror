@@ -50,8 +50,6 @@ namespace KIGFX
 using KIGFX::COLOR4D;
 using KIGFX::RENDER_SETTINGS;
 
-#define DEFAULT_MAX_UNDO_ITEMS 0
-#define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
 #define LIB_EDIT_FRAME_NAME                 wxT( "LibeditFrame" )
 #define SCH_EDIT_FRAME_NAME                 wxT( "SchematicFrame" )
 #define PL_EDITOR_FRAME_NAME                wxT( "PlEditorFrame" )

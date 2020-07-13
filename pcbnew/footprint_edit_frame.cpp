@@ -174,7 +174,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // In modedit, set the default paper size to A4 for plot/print
     SetPageSettings( PAGE_INFO( PAGE_INFO::A4 ) );
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
-    GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();

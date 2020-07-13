@@ -290,7 +290,7 @@ int PCB_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
 {
     PICKED_ITEMS_LIST   undoCmd;
     WS_PROXY_UNDO_ITEM* undoItem = new WS_PROXY_UNDO_ITEM( m_frame );
-    ITEM_PICKER         wrapper( undoItem, UR_PAGESETTINGS );
+    ITEM_PICKER         wrapper( nullptr, undoItem, UR_PAGESETTINGS );
 
     undoCmd.PushItem( wrapper );
     m_frame->SaveCopyInUndoList( undoCmd, UR_PAGESETTINGS );

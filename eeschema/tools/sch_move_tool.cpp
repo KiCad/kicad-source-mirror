@@ -470,7 +470,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         for( auto it : internalPoints )
         {
             if( m_frame->GetScreen()->IsJunctionNeeded( it.GetPosition(), true ) )
-                m_frame->AddJunction( it.GetPosition(), true, false );
+                m_frame->AddJunction( m_frame->GetScreen(), it.GetPosition(), true, false );
         }
 
         m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );

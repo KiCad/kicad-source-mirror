@@ -36,9 +36,3 @@ PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     m_Route_Layer_TOP    = F_Cu;     // default layers pair for vias (bottom to top)
     m_Route_Layer_BOTTOM = B_Cu;
 }
-
-
-PCB_SCREEN::~PCB_SCREEN()
-{
-    ClearUndoRedoList();
-}

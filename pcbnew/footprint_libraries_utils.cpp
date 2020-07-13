@@ -985,7 +985,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
 
             Update3DView( true );
 
-            GetScreen()->ClearUndoRedoList();
+            ClearUndoRedoList();
             GetScreen()->ClrModify();
 
             updateView();

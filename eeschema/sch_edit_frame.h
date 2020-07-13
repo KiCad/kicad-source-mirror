@@ -259,7 +259,7 @@ public:
      * Add an item to the schematic and adds the changes to the undo/redo container.
      * @param aUndoAppend True if the action should be appended to the current undo record.
      */
-    void AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppend = false );
+    void AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem, bool aUndoAppend );
 
     /**
      * Run the Find or Find & Replace dialog.
@@ -423,7 +423,7 @@ public:
      * @param aCurrentSheetOnly Clear only the annotation for the current sheet if true.
      *                          Otherwise clear the entire schematic annotation.
      */
-    void DeleteAnnotation( bool aCurrentSheetOnly );
+    void DeleteAnnotation( bool aCurrentSheetOnly, bool* appendUndo );
 
     /**
      * Annotate the components in the schematic that are not currently annotated.
@@ -572,7 +572,7 @@ public:
      */
     bool AskToSaveChanges();
 
-    SCH_JUNCTION* AddJunction( const wxPoint& aPos, bool aAppendToUndo = false,
+    SCH_JUNCTION* AddJunction( SCH_SCREEN* aScreen, const wxPoint& aPos, bool aAppendToUndo,
                                bool aFinal = true );
 
     /**
@@ -792,7 +792,7 @@ public:
     /**
      * Create a copy of the current schematic item, and put it in the undo list.
      *
-     *  flag_type_command =
+     *  aTypeCommand =
      *      UR_CHANGED
      *      UR_NEW
      *      UR_DELETED
@@ -804,21 +804,19 @@ public:
      *
      * @note
      * Edit wires and buses is a bit complex.
-     * because when a new wire is added, a lot of modifications in wire list is made
-     * (wire concatenation): modified items, deleted items and new items
-     * so flag_type_command is UR_WIRE_IMAGE: the struct ItemToCopy is a list of
-     * wires saved in Undo List (for Undo or Redo commands, saved wires will be
-     * exchanged with current wire list
+     * When a new wire is added, a lot of modifications are made in the wire list (merging,
+     * junctions, etc.).  We therefore set the aTypeCommand to UR_WIRE_IMAGE and save the whole
+     * schebang.
      *
      * @param aItemToCopy = the schematic item modified by the command to undo
      * @param aTypeCommand = command type (see enum UNDO_REDO_T)
      * @param aAppend = add the item to the previous undo list
-     * @param aTransformPoint = the reference point of the transformation,
-     *                          for commands like move
+     * @param aTransformPoint = the reference point of the transformation for commands like move
      */
-    void SaveCopyInUndoList( SCH_ITEM* aItemToCopy,
+    void SaveCopyInUndoList( SCH_SCREEN* aScreen,
+                             SCH_ITEM* aItemToCopy,
                              UNDO_REDO_T aTypeCommand,
-                             bool aAppend = false,
+                             bool aAppend,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
@@ -827,12 +825,11 @@ public:
      * @param aItemsList = the list of items modified by the command to undo
      * @param aTypeCommand = command type (see enum UNDO_REDO_T)
      * @param aAppend = add the item to the previous undo list
-     * @param aTransformPoint = the reference point of the transformation,
-     *                          for commands like move
+     * @param aTransformPoint = the reference point of the transformation for commands like move
      */
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                              UNDO_REDO_T aTypeCommand,
-                             bool aAppend = false,
+                             bool aAppend,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
@@ -842,6 +839,20 @@ public:
      * @param aRedoCommand  a bool: true for redo, false for undo
      */
     void PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
+
+    /**
+     * Free the undo or redo list from \a aList element.
+     *
+     * - Wrappers are deleted.
+     * - data pointed by wrappers are deleted if not in use in schematic
+     *   i.e. when they are copy of a schematic item or they are no more in use (DELETED)
+     *
+     * @param aList = the UNDO_REDO_CONTAINER to clear
+     * @param aItemCount = the count of items to remove. < 0 for all items
+     * items are removed from the beginning of the list.
+     * So this function can be called to remove old commands
+     */
+    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
 
     /**
      * Clone \a aItem and owns that clone in this container.

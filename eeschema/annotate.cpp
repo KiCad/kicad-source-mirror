@@ -58,18 +58,34 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 }
 
 
-void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
+void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool* aAppendUndo )
 {
+    auto clearAnnotation =
+            [&]( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet )
+            {
+                for( SCH_ITEM* item : aScreen->Items().OfType( SCH_COMPONENT_T ) )
+                {
+                    SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+
+                    SaveCopyInUndoList( aScreen, component, UR_CHANGED, *aAppendUndo );
+                    *aAppendUndo = true;
+                    component->ClearAnnotation( aSheet );
+
+                    // Clear the modified component flag set by component->ClearAnnotation
+                    // because we do not use it here and we should not leave this flag set,
+                    // when an editing is finished:
+                    component->ClearFlags();
+                }
+            };
+
     if( aCurrentSheetOnly )
     {
-        SCH_SCREEN* screen = GetScreen();
-        wxCHECK_RET( screen != NULL, wxT( "Attempt to clear annotation of a NULL screen." ) );
-        screen->ClearAnnotation( &GetCurrentSheet() );
+        clearAnnotation( GetScreen(), &GetCurrentSheet() );
     }
     else
     {
-        SCH_SCREENS ScreenList( Schematic().Root() );
-        ScreenList.ClearAnnotation();
+        for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
+            clearAnnotation( sheet.LastScreen(), nullptr );
     }
 
     // Update the references for the sheet that is currently being displayed.
@@ -91,11 +107,9 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
                                          REPORTER&         aReporter )
 {
     SCH_REFERENCE_LIST references;
-
-    SCH_SCREENS screens( Schematic().Root() );
-
-    // Build the sheet list.
-    SCH_SHEET_LIST sheets = Schematic().GetSheets();
+    SCH_SCREENS        screens( Schematic().Root() );
+    SCH_SHEET_LIST     sheets = Schematic().GetSheets();
+    bool               appendUndo = false;
 
     // Map of locked components
     SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
@@ -132,7 +146,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
     // If it is an annotation for all the components, reset previous annotation.
     if( aResetAnnotation )
-        DeleteAnnotation( !aAnnotateSchematic );
+        DeleteAnnotation( !aAnnotateSchematic, &appendUndo );
 
     // Set sheet number and number of sheets.
     SetSheetNumberAndCount();
@@ -175,21 +189,25 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
     // Recalculate and update reference numbers in schematic
     references.Annotate( useSheetNum, idStep, aStartNumber, lockedComponents );
-    references.UpdateAnnotation();
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
-        SCH_COMPONENT* comp = references[ i ].GetComp();
-        SCH_SHEET_PATH* curr_sheetpath = &references[ i ].GetSheetPath();
-        KIID_PATH curr_full_uuid = curr_sheetpath->Path();
-        curr_full_uuid.push_back( comp->m_Uuid );
+        SCH_REFERENCE&  ref = references[i];
+        SCH_COMPONENT*  comp = ref.GetComp();
+        SCH_SHEET_PATH* sheet = &ref.GetSheetPath();
 
-        wxString prevRef = previousAnnotation[ curr_full_uuid.AsString() ];
+        SaveCopyInUndoList( sheet->LastScreen(), comp, UR_CHANGED, appendUndo );
+        appendUndo = true;
+        ref.Annotate();
 
-        wxString newRef  = comp->GetRef( curr_sheetpath );
+        KIID_PATH full_uuid = sheet->Path();
+        full_uuid.push_back( comp->m_Uuid );
+
+        wxString  prevRef = previousAnnotation[ full_uuid.AsString() ];
+        wxString  newRef  = comp->GetRef( sheet );
 
         if( comp->GetUnitCount() > 1 )
-            newRef << LIB_PART::SubReference( comp->GetUnitSelection( curr_sheetpath ) );
+            newRef << LIB_PART::SubReference( comp->GetUnitSelection( sheet ) );
 
         wxString msg;
 
@@ -202,11 +220,13 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s" ),
                             comp->GetField( VALUE )->GetShownText(),
                             LIB_PART::SubReference( comp->GetUnit(), false ),
-                            prevRef, newRef );
+                            prevRef,
+                            newRef );
             else
                 msg.Printf( _( "Updated %s from %s to %s" ),
                             comp->GetField( VALUE )->GetShownText(),
-                            prevRef, newRef );
+                            prevRef,
+                            newRef );
         }
         else
         {
