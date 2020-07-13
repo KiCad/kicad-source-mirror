@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2013-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -158,7 +158,17 @@ void EDA_DRAW_PANEL_GAL::SetFocus()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
-    // Update scroll position if the canvas is managed by a EDA frame
+    DoRePaint();
+}
+
+
+void EDA_DRAW_PANEL_GAL::DoRePaint()
+{
+    // Repaint the canvas, and fix scrollbar cursors
+    // Usually called by a OnPaint event, but because it does not use a wxPaintDC,
+    // it can be called outside a wxPaintEvent.
+
+    // Update current zoom settings if the canvas is managed by a EDA frame
     // (i.e. not by a preview panel in a dialog)
     if( GetParentEDAFrame() && GetParentEDAFrame()->GetScreen() )
         GetParentEDAFrame()->GetScreen()->m_ScrollCenter = GetView()->GetCenter();
@@ -228,7 +238,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
 #ifdef PROFILE
     totalRealTime.Stop();
-    wxLogTrace( "GAL_PROFILE", "EDA_DRAW_PANEL_GAL::onPaint(): %.1f ms", totalRealTime.msecs() );
+    wxLogTrace( "GAL_PROFILE", "EDA_DRAW_PANEL_GAL::DoRePaint(): %.1f ms", totalRealTime.msecs() );
 #endif /* PROFILE */
 
     m_lastRefresh = wxGetLocalTimeMillis();
@@ -283,8 +293,9 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 
 void EDA_DRAW_PANEL_GAL::ForceRefresh()
 {
-    wxPaintEvent redrawEvent;
-    wxPostEvent( this, redrawEvent );
+    //wxPaintEvent redrawEvent;
+    //wxPostEvent( this, redrawEvent );
+    DoRePaint();
 }
 
 
@@ -503,8 +514,9 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
         }
     }
 
-    wxPaintEvent redrawEvent;
-    wxPostEvent( this, redrawEvent );
+    //wxPaintEvent redrawEvent;
+    //wxPostEvent( this, redrawEvent );
+    DoRePaint();
 }
 
 

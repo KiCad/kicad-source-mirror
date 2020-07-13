@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
+ * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -200,7 +202,15 @@ public:
      */
     void OnEvent( wxEvent& aEvent );
 
+    /**
+     * Repaint the canvas, and fix scrollbar cursors
+     * Usually called by a OnPaint event, but because it do not use a wxPaintDC,
+     * it can be called outside a wxPaintEvent.
+     */
+    void DoRePaint();
+
 protected:
+
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
     void onEnter( wxEvent& aEvent );
