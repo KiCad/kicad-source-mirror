@@ -99,7 +99,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
         if( viewer )
             viewer->ReCreateListLib();
 
-        parent->ClearUndoORRedoList( parent->m_UndoList, 1 );
+        parent->ClearUndoORRedoList( EDA_BASE_FRAME::UNDO_LIST, 1 );
         parent->SyncView();
         parent->GetCanvas()->Refresh();
         parent->OnModify();

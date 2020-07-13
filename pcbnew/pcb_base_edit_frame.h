@@ -198,12 +198,12 @@ public:
      *  datas pointed by wrappers are deleted if not in use in schematic
      *  i.e. when they are copy of a schematic item or they are no more in use
      *  (DELETED)
-     * @param aList = the UNDO_REDO_CONTAINER to clear
+     * @param whichList = the UNDO_REDO_CONTAINER to clear
      * @param aItemCount = the count of items to remove. < 0 for all items
      * items are removed from the beginning of the list.
      * So this function can be called to remove old commands
      */
-    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
+    void ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount = -1 ) override;
 
 protected:
     /// User defined rotation angle (in tenths of a degree).

@@ -796,14 +796,14 @@ bool EDA_BASE_FRAME::IsContentModified()
 
 void EDA_BASE_FRAME::ClearUndoRedoList()
 {
-    ClearUndoORRedoList( m_UndoList );
-    ClearUndoORRedoList( m_RedoList );
+    ClearUndoORRedoList( UNDO_LIST );
+    ClearUndoORRedoList( REDO_LIST );
 }
 
 
 void EDA_BASE_FRAME::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
 {
-    m_UndoList.PushCommand( aNewitem );
+    m_undoList.PushCommand( aNewitem );
 
     // Delete the extra items, if count max reached
     if( m_UndoRedoCountMax > 0 )
@@ -811,14 +811,14 @@ void EDA_BASE_FRAME::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
         int extraitems = GetUndoCommandCount() - m_UndoRedoCountMax;
 
         if( extraitems > 0 )
-            ClearUndoORRedoList( m_UndoList, extraitems );
+            ClearUndoORRedoList( UNDO_LIST, extraitems );
     }
 }
 
 
 void EDA_BASE_FRAME::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
 {
-    m_RedoList.PushCommand( aNewitem );
+    m_redoList.PushCommand( aNewitem );
 
     // Delete the extra items, if count max reached
     if( m_UndoRedoCountMax > 0 )
@@ -826,20 +826,20 @@ void EDA_BASE_FRAME::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
         int extraitems = GetRedoCommandCount() - m_UndoRedoCountMax;
 
         if( extraitems > 0 )
-            ClearUndoORRedoList( m_RedoList, extraitems );
+            ClearUndoORRedoList( REDO_LIST, extraitems );
     }
 }
 
 
 PICKED_ITEMS_LIST* EDA_BASE_FRAME::PopCommandFromUndoList( )
 {
-    return m_UndoList.PopCommand();
+    return m_undoList.PopCommand();
 }
 
 
 PICKED_ITEMS_LIST* EDA_BASE_FRAME::PopCommandFromRedoList( )
 {
-    return m_RedoList.PopCommand();
+    return m_redoList.PopCommand();
 }
 
 

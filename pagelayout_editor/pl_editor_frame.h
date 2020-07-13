@@ -285,7 +285,7 @@ public:
     /**
      * Function ClearUndoORRedoList
      */
-    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
+    void ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount = -1 ) override;
 
 protected:
     bool saveCurrentPageLayout();

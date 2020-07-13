@@ -42,7 +42,7 @@ void PL_EDITOR_FRAME::SaveCopyInUndoList()
     PushCommandToUndoList( lastcmd );
 
     // Clear redo list, because after new save there is no redo to do.
-    ClearUndoORRedoList( m_RedoList );
+    ClearUndoORRedoList( REDO_LIST );
 }
 
 

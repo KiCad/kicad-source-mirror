@@ -910,18 +910,20 @@ bool LIB_EDIT_FRAME::IsContentModified()
 }
 
 
-void LIB_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
+void LIB_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount )
 {
     if( aItemCount == 0 )
         return;
 
-    for( auto& command : aList.m_CommandsList )
+    UNDO_REDO_CONTAINER& list = whichList == UNDO_LIST ? m_undoList : m_redoList;
+
+    for( PICKED_ITEMS_LIST* command : list.m_CommandsList )
     {
         command->ClearListAndDeleteItems();
         delete command;
     }
 
-    aList.m_CommandsList.clear();
+    list.m_CommandsList.clear();
 }
 
 

@@ -56,7 +56,7 @@ void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoT
     PushCommandToUndoList( lastcmd );
 
     // Clear redo list, because after new save there is no redo to do.
-    ClearUndoORRedoList( m_RedoList );
+    ClearUndoORRedoList( REDO_LIST );
 }
 
 

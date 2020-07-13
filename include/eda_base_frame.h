@@ -152,12 +152,9 @@ protected:
     bool            m_FlagSave;             // Indicates automatic file save.
     int             m_UndoRedoCountMax;     // undo/Redo command Max depth
 
-public:
-    // Undo/redo list of commands
-    UNDO_REDO_CONTAINER m_UndoList;         // Objects list for the undo command (old data)
-    UNDO_REDO_CONTAINER m_RedoList;         // Objects list for the redo command (old data)
+    UNDO_REDO_CONTAINER m_undoList;         // Objects list for the undo command (old data)
+    UNDO_REDO_CONTAINER m_redoList;         // Objects list for the redo command (old data)
 
-protected:
     wxString        m_mruPath;              // Most recently used path.
 
     EDA_UNITS       m_userUnits;
@@ -551,7 +548,8 @@ public:
      *                     old commands this will empty the list of commands.
      *  Commands are deleted from the older to the last.
      */
-    virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 )
+    enum UNDO_REDO_LIST { UNDO_LIST, REDO_LIST };
+    virtual void ClearUndoORRedoList( UNDO_REDO_LIST aList, int aItemCount = -1 )
     { }
 
     /**
@@ -592,28 +590,10 @@ public:
      */
     virtual PICKED_ITEMS_LIST* PopCommandFromRedoList();
 
-    int GetUndoCommandCount() const
-    {
-        return m_UndoList.m_CommandsList.size();
-    }
-
-    int GetRedoCommandCount() const
-    {
-        return m_RedoList.m_CommandsList.size();
-    }
+    int GetUndoCommandCount() const { return m_undoList.m_CommandsList.size(); }
+    int GetRedoCommandCount() const { return m_redoList.m_CommandsList.size(); }
 
     int GetMaxUndoItems() const { return m_UndoRedoCountMax; }
-
-    void SetMaxUndoItems( int aMax )
-    {
-        if( aMax >= 0 && aMax < ABS_MAX_UNDO_ITEMS )
-            m_UndoRedoCountMax = aMax;
-        else
-        {
-            wxFAIL_MSG( "Maximum undo items not within limits" );
-            m_UndoRedoCountMax = DEFAULT_MAX_UNDO_ITEMS;
-        }
-    }
 };
 
 

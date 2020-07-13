@@ -146,7 +146,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
         PushCommandToUndoList( commandToUndo );
 
         /* Clear redo list, because after new save there is no redo to do */
-        ClearUndoORRedoList( m_RedoList );
+        ClearUndoORRedoList( REDO_LIST );
     }
     else
     {
@@ -242,7 +242,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         PushCommandToUndoList( commandToUndo );
 
         /* Clear redo list, because after new save there is no redo to do */
-        ClearUndoORRedoList( m_RedoList );
+        ClearUndoORRedoList( REDO_LIST );
     }
     else    // Should not occur
     {
@@ -369,18 +369,20 @@ void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
 }
 
 
-void SCH_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
+void SCH_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount )
 {
     if( aItemCount == 0 )
         return;
 
-    for( auto& command : aList.m_CommandsList )
+    UNDO_REDO_CONTAINER& list = whichList == UNDO_LIST ? m_undoList : m_redoList;
+
+    for( PICKED_ITEMS_LIST* command : list.m_CommandsList )
     {
         command->ClearListAndDeleteItems();
         delete command;
     }
 
-    aList.m_CommandsList.clear();
+    list.m_CommandsList.clear();
 }
 
 
