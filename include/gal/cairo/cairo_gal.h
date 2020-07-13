@@ -390,16 +390,10 @@ public:
     /**
      * Function PostPaint
      * posts an event to m_paint_listener.  A post is used so that the actual drawing
-     * function can use a device context type that is not specific to the wxEVT_PAINT event.
+     * function can use a device context type that is not specific to the wxEVT_PAINT event,
+     * just by changing the PostPaint code.
      */
-    void PostPaint()
-    {
-        if( paintListener )
-        {
-            wxPaintEvent redrawEvent;
-            wxPostEvent( paintListener, redrawEvent );
-        }
-    }
+    void PostPaint( wxPaintEvent& aEvent );
 
     void SetMouseListener( wxEvtHandler* aMouseListener )
     {

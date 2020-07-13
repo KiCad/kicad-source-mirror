@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,9 +135,20 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
 
 private:
 
-    void OnPaint( wxPaintEvent &event );
+    /** Called by a wxPaintEvent event
+     */
+    void OnPaint( wxPaintEvent& aEvent );
+
+    /**
+     * The actual function to repaint the canvas.
+     * It is usually called by OnPaint() but because it does not use a wxPaintDC
+     * it can be called outside a wxPaintEvent
+     */
+    void DoRePaint();
 
     void OnEraseBackground( wxEraseEvent &event );
+
+    void OnRefreshRequest( wxEvent& aEvent );
 
     void OnMouseWheel( wxMouseEvent &event );
 

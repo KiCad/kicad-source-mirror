@@ -326,6 +326,16 @@ OPENGL_GAL::~OPENGL_GAL()
 }
 
 
+void OPENGL_GAL::PostPaint( wxPaintEvent& aEvent )
+{
+    // posts an event to m_paint_listener to ask for redraw the canvas.
+    if( paintListener )
+    {
+        wxPostEvent( paintListener, aEvent );
+    }
+}
+
+
 bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 {
     bool refresh = false;
@@ -1911,9 +1921,9 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
 }
 
 
-void OPENGL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
+void OPENGL_GAL::onPaint( wxPaintEvent& aEvent )
 {
-    PostPaint();
+    PostPaint( aEvent );
 }
 
 

@@ -1297,6 +1297,16 @@ void CAIRO_GAL::endDrawing()
 }
 
 
+void CAIRO_GAL::PostPaint( wxPaintEvent& aEvent )
+{
+    // posts an event to m_paint_listener to ask for redraw the canvas.
+    if( paintListener )
+    {
+        wxPostEvent( paintListener, aEvent );
+    }
+}
+
+
 void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
 {
     CAIRO_GAL_BASE::ResizeScreen( aWidth, aHeight );
@@ -1502,9 +1512,9 @@ void CAIRO_GAL::setCompositor()
 }
 
 
-void CAIRO_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
+void CAIRO_GAL::onPaint( wxPaintEvent& aEvent )
 {
-    PostPaint();
+    PostPaint( aEvent );
 }
 
 
