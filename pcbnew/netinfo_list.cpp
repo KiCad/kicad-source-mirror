@@ -108,6 +108,24 @@ void NETINFO_LIST::RemoveNet( NETINFO_ITEM* aNet )
 }
 
 
+void NETINFO_LIST::RemoveUnusedNets()
+{
+    NETCODES_MAP existingNets = m_netCodes;
+
+    m_netCodes.clear();
+    m_netNames.clear();
+
+    for( std::pair<const int, NETINFO_ITEM*> item : existingNets )
+    {
+        if( item.second->IsCurrent() )
+        {
+            m_netNames.insert( std::make_pair( item.second->GetNetname(), item.second ) );
+            m_netCodes.insert( std::make_pair( item.first, item.second ) );
+        }
+    }
+}
+
+
 void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 {
     // if there is a net with such name then just assign the correct number

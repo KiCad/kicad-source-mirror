@@ -28,9 +28,7 @@
 #include <functional>
 using namespace std::placeholders;
 #include <fctsys.h>
-#include <class_draw_panel_gal.h>
 #include <macros.h>
-#include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_track.h>
@@ -39,8 +37,6 @@ using namespace std::placeholders;
 #include <class_pcb_target.h>
 #include <class_module.h>
 #include <class_dimension.h>
-#include <class_zone.h>
-#include <class_edge_mod.h>
 #include <origin_viewitem.h>
 #include <connectivity/connectivity_data.h>
 #include <pcbnew_settings.h>
@@ -49,7 +45,6 @@ using namespace std::placeholders;
 #include <tools/selection_tool.h>
 #include <tools/pcbnew_control.h>
 #include <tools/pcb_editor_control.h>
-#include <view/view.h>
 #include <ws_proxy_undo_item.h>
 
 /* Functions to undo and redo edit commands.
@@ -483,13 +478,19 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         case UR_NEW:        /* new items are deleted */
             aList->SetPickedItemStatus( UR_DELETED, ii );
             GetModel()->Remove( (BOARD_ITEM*) eda_item );
-            view->Remove( eda_item );
+
+            if( eda_item->Type() != PCB_NETINFO_T )
+                view->Remove( eda_item );
+
             break;
 
         case UR_DELETED:    /* deleted items are put in List, as new items */
             aList->SetPickedItemStatus( UR_NEW, ii );
             GetModel()->Add( (BOARD_ITEM*) eda_item );
-            view->Add( eda_item );
+
+            if( eda_item->Type() != PCB_NETINFO_T )
+                view->Add( eda_item );
+
             break;
 
         case UR_MOVED:

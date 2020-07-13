@@ -827,13 +827,25 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     if( !m_isDryRun )
     {
-        m_commit.Push( _( "Update netlist" ) );
         m_board->GetConnectivity()->Build( m_board );
         testConnectivity( aNetlist );
 
         // Now the connectivity data is rebuilt, we can delete single pads nets
         if( m_deleteSinglePadNets )
             deleteSinglePadNets();
+
+        for( NETINFO_ITEM* net : m_board->GetNetInfo() )
+        {
+            if( !net->IsCurrent() )
+            {
+                msg.Printf( _( "Remove unused net \"%s\"." ), net->GetNetname() );
+                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                m_commit.Removed( net );
+            }
+        }
+
+        m_board->GetNetInfo().RemoveUnusedNets();
+        m_commit.Push( _( "Update netlist" ) );
     }
     else if( m_deleteSinglePadNets && !m_newFootprintsCount )
         // We can delete single net pads in dry run mode only if no new footprints

@@ -164,7 +164,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                         board->Add( boardItem );        // handles connectivity
                 }
 
-                view->Add( boardItem );
+                if( boardItem->Type() != PCB_NETINFO_T )
+                    view->Add( boardItem );
+
                 break;
             }
 
@@ -239,6 +241,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                         board->Remove( module );        // handles connectivity
                 }
                 break;
+
+                // Metadata items
+                case PCB_NETINFO_T:
+                    if( !( changeFlags & CHT_DONE ) )
+                        board->Remove( boardItem );
+                    break;
 
                 default:                        // other types do not need to (or should not) be handled
                     wxASSERT( false );

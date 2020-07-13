@@ -460,6 +460,8 @@ public:
      * Removes a new from the net list.
      */
     void RemoveNet( NETINFO_ITEM* aNet );
+    void RemoveUnusedNets();
+
     /**
      * Function GetPadCount
      * @return the number of pads in board
