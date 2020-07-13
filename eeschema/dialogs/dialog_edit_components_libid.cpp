@@ -330,9 +330,6 @@ private:
     /// returns true if all new lib id are valid
     bool validateLibIds();
 
-    /// Reverts all changes already made
-    void revertChanges();
-
     /** run the lib browser and set the selected LIB_ID for row aRow
      * @param aRow is the row to edit
      * @return false if the command was aborted
@@ -344,15 +341,9 @@ private:
     // called on a right click or a left double click:
 	void onCellBrowseLib( wxGridEvent& event ) override;
 
-    // Apply changes, but do not close the dialog
-	void onApplyButton( wxCommandEvent& event ) override;
-
     // Cancel all changes, and close the dialog
 	void onCancel( wxCommandEvent& event ) override
     {
-        if( m_isModified )
-            revertChanges();
-
         // Just skipping the event doesn't work after the library browser was run
         if( IsQuasiModal() )
             EndQuasiModal( wxID_CANCEL );
@@ -360,17 +351,8 @@ private:
             event.Skip();
     }
 
-    // Undo all changes, and clear the list of new lib_ids
-	void onUndoChangesButton( wxCommandEvent& event ) override;
-
     // Try to find a candidate for non existing symbols
 	void onClickOrphansButton( wxCommandEvent& event ) override;
-
-    // UI event, to enable/disable buttons
-	void updateUIChangesButton( wxUpdateUIEvent& event ) override
-    {
-        m_buttonUndo->Enable( m_isModified );
-    }
 
     // Automatically called when click on OK button
     bool TransferDataFromWindow() override;
@@ -580,28 +562,6 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::validateLibIds()
 }
 
 
-void DIALOG_EDIT_COMPONENTS_LIBID::onApplyButton( wxCommandEvent& event )
-{
-    if( TransferDataFromWindow() )
-        GetParent()->GetCanvas()->Refresh();
-}
-
-
-void DIALOG_EDIT_COMPONENTS_LIBID::onUndoChangesButton( wxCommandEvent& event )
-{
-    revertChanges();
-
-    int row_max = m_grid->GetNumberRows() - 1;
-
-    for( int row = 0; row <= row_max; row++ )
-    {
-        m_grid->SetCellValue( row, COL_NEW_LIBID, wxEmptyString );
-    }
-
-    m_isModified = false;
-}
-
-
 void DIALOG_EDIT_COMPONENTS_LIBID::onCellBrowseLib( wxGridEvent& event )
 {
     int row = event.GetRow();
@@ -621,10 +581,10 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
     unsigned fixesCount = 0;
 
     // Try to find a candidate for non existing symbols in any loaded library
-    for( unsigned ii = 0; ii < m_OrphansRowIndexes.size(); ii++ )
+    for( int orphanRow : m_OrphansRowIndexes )
     {
-        wxString orphanLibid = m_grid->GetCellValue( m_OrphansRowIndexes[ii], COL_CURR_LIBID );
-        int grid_row_idx = m_OrphansRowIndexes[ii]; //row index in m_grid for the current item
+        wxString orphanLibid = m_grid->GetCellValue( orphanRow, COL_CURR_LIBID );
+        int grid_row_idx = orphanRow; //row index in m_grid for the current item
 
         LIB_ID curr_libid;
         curr_libid.Parse( orphanLibid, LIB_ID::ID_SCH, true );
@@ -748,7 +708,6 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
     if( !validateLibIds() )
         return false;
 
-    bool change = false;
     int row_max = m_grid->GetNumberRows() - 1;
 
     for( int row = 0; row <= row_max; row++ )
@@ -777,8 +736,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
             {
                 wxString msg;
 
-                msg.Printf( _( "Error occurred loading symbol %s from library %s."
-                               "\n\n%s" ),
+                msg.Printf( _( "Error occurred loading symbol %s from library %s.\n\n%s" ),
                             id.GetLibItemName().wx_str(),
                             id.GetLibNickname().wx_str(),
                             ioe.What() );
@@ -789,6 +747,10 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
             if( symbol == nullptr )
                 continue;
 
+            GetParent()->SaveCopyInUndoList( cmp.m_Screen, cmp.m_Component, UR_CHANGED,
+                                             m_isModified );
+            m_isModified = true;
+
             cmp.m_Screen->Remove( cmp.m_Component );
             SCH_FIELD* value = cmp.m_Component->GetField( VALUE );
 
@@ -798,73 +760,12 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
 
             cmp.m_Component->SetLibId( id );
             cmp.m_Component->SetLibSymbol( symbol->Flatten().release() );
-            change = true;
             cmp.m_Screen->Append( cmp.m_Component );
             cmp.m_Screen->SetModify();
         }
     }
 
-    if( change )
-    {
-        m_isModified = true;
-    }
-
     return true;
-}
-
-
-void DIALOG_EDIT_COMPONENTS_LIBID::revertChanges()
-{
-    bool change = false;
-    int row_max = m_grid->GetNumberRows() - 1;
-
-    for( int row = 0; row <= row_max; row++ )
-    {
-        for( CMP_CANDIDATE& cmp : m_components )
-        {
-            if( cmp.m_Row != row )
-                continue;
-
-            LIB_ID id;
-            id.Parse( cmp.m_InitialLibId, LIB_ID::ID_SCH, true );
-
-            if( cmp.m_Component->GetLibId() != id )
-            {
-                LIB_PART* symbol = nullptr;
-
-                try
-                {
-                    symbol = Prj().SchSymbolLibTable()->LoadSymbol( id );
-                }
-                catch( const IO_ERROR& ioe )
-                {
-                    // It's probably a bad idea to show a user error dialog here because the
-                    // the reason to use this dialog is when there are a bunch of broken library
-                    // symbol links so just show a debug trace message for development purposes.
-                    wxLogTrace( traceSymbolResolver,
-                                "Error occurred loading symbol %s from library %s."
-                                "\n\n%s",
-                                id.GetLibItemName().wx_str(),
-                                id.GetLibNickname().wx_str(),
-                                ioe.What() );
-                }
-
-                cmp.m_Screen->Remove( cmp.m_Component );
-
-                if( symbol )
-                    cmp.m_Component->SetLibSymbol( symbol->Flatten().release() );
-                else
-                    cmp.m_Component->SetLibSymbol( symbol );
-
-                cmp.m_Component->SetLibId( id );
-                cmp.m_Screen->Append( cmp.m_Component );
-                change = true;
-            }
-        }
-    }
-
-    if( change )
-        GetParent()->GetCanvas()->Refresh();
 }
 
 
