@@ -113,6 +113,8 @@ public:
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
@@ -133,7 +135,7 @@ public:
      * @param aIncludeInvisibles - if false, do not include labels for invisible pins
      *      in the calculation.
      */
-    const EDA_RECT GetBoundingBox( bool aIncludeInvisibles ) const;
+    const EDA_RECT GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly = false ) const;
 
     /**
      * @return The pin end position for a component in the normal orientation.

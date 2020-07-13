@@ -562,6 +562,23 @@ bool LIB_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
+bool LIB_PIN::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
+
+    EDA_RECT sel = aRect;
+
+    if ( aAccuracy )
+        sel.Inflate( aAccuracy );
+
+    if( aContained )
+        return sel.Contains( GetBoundingBox( false, true ) );
+
+    return sel.Intersects( GetBoundingBox( false, true ) );
+}
+
+
 int LIB_PIN::GetPenWidth() const
 {
     return std::max( m_width, 1 );
@@ -1352,6 +1369,7 @@ void LIB_PIN::MirrorHorizontal( const wxPoint& center )
         m_orientation = PIN_RIGHT;
 }
 
+
 void LIB_PIN::MirrorVertical( const wxPoint& center )
 {
     m_position.y -= center.y;
@@ -1363,6 +1381,7 @@ void LIB_PIN::MirrorVertical( const wxPoint& center )
     else if( m_orientation == PIN_DOWN )
         m_orientation = PIN_UP;
 }
+
 
 void LIB_PIN::Rotate( const wxPoint& center, bool aRotateCCW )
 {
@@ -1496,7 +1515,7 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 #endif
 }
 
-const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
+const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly ) const
 {
     EDA_RECT       bbox;
     wxPoint        begin;
@@ -1518,6 +1537,12 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
 
         if( !GetParent()->ShowPinNumbers() )
             showNum = false;
+    }
+
+    if( aPinOnly )
+    {
+        showName = false;
+        showNum = false;
     }
 
     // First, calculate boundary box corners position
