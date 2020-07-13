@@ -92,7 +92,7 @@ int COMMON_CONTROL::ConfigurePaths( const TOOL_EVENT& aEvent )
             // Do nothing here.
             // A error message is displayed after trying to load _pcbnew.kiface.
         }
-}
+    }
     else
     {
         DIALOG_CONFIGURE_PATHS dlg( m_frame, nullptr );
@@ -100,7 +100,6 @@ int COMMON_CONTROL::ConfigurePaths( const TOOL_EVENT& aEvent )
         if( dlg.ShowModal() == wxID_OK )
             m_frame->Kiway().CommonSettingsChanged( true );
     }
-
 
     return 0;
 }

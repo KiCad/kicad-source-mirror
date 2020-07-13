@@ -36,7 +36,7 @@
 #include <wx/stdpaths.h>
 #include <wx/debug.h>
 #include <wx/utils.h>
-
+#include <confirm.h>
 
 KIFACE* KIWAY::m_kiface[KIWAY_FACE_COUNT];
 int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
@@ -360,26 +360,30 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
 
     if( doCreate )
     {
-        FACE_T face_type = KifaceType( aFrameType );
-        wxASSERT( face_type != FACE_T(-1) );
-
-        KIFACE* kiface = KiFACE( face_type );
-        wxASSERT( kiface );
-
-        if( kiface )
+        try
         {
+            FACE_T  face_type = KifaceType( aFrameType );
+            KIFACE* kiface = KiFACE( face_type );
+
             frame = (KIWAY_PLAYER*) kiface->CreateWindow(
-                    aParent,    // Parent window of frame in modal mode, NULL in non modal mode
-                    aFrameType,
-                    this,
-                    m_ctl       // questionable need, these same flags where passed
-                                // to the KIFACE::OnKifaceStart()
-                    );
-            wxASSERT( frame );
+                                            aParent,    // Parent window of frame in modal mode,
+                                                        // NULL in non modal mode
+                                            aFrameType,
+                                            this,
+                                            m_ctl       // questionable need, these same flags
+                                                        // were passed to KIFACE::OnKifaceStart()
+                                            );
 
             m_playerFrameName[aFrameType] = frame->GetName();
-
             return frame;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayErrorMessage( NULL, _( "Error loading editor" ), ioe.What() );
+        }
+        catch( ... )
+        {
+            DisplayErrorMessage( NULL, _( "Error loading editor" ) );
         }
     }
 

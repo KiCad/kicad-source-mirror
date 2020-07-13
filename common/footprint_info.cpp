@@ -116,20 +116,14 @@ static FOOTPRINT_LIST* get_instance_from_id( KIWAY& aKiway, int aId )
     {
         KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
 
-        if( !kiface )
-            return nullptr;
-
         ptr = kiface->IfaceOrAddress( aId );
 
-        if( !ptr )
-            return nullptr;
+        return static_cast<FOOTPRINT_LIST*>( ptr );
     }
     catch( ... )
     {
         return nullptr;
     }
-
-    return static_cast<FOOTPRINT_LIST*>( ptr );
 }
 
 
