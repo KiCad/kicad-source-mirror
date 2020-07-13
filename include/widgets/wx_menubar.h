@@ -54,8 +54,11 @@ public:
         wxMenuBar::SetAcceleratorTable( wxAcceleratorTable() );
     }
 
+/// In version 3.1, wxWidgets makes SetDoubleBuffered() a virtual function
 #ifdef __WXMAC__
+#if !wxCHECK_VERSION( 3, 1, 0 )
     void SetDoubleBuffered( bool ) { }
+#endif
 #endif
 };
 
