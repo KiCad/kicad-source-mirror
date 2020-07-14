@@ -64,5 +64,7 @@ enum id_3dview_frm
 
     ID_DISABLE_RAY_TRACING,
 
+    ID_CUSTOM_EVENT_1,      // A id for a custom event (canvas refresh request)
+
     ID_END_COMMAND_3D = ID_KICAD_3D_VIEWER_END,
 };

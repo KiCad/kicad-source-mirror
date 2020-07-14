@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +61,9 @@ const wxChar * EDA_3D_CANVAS::m_logTrace = wxT( "KI_TRACE_EDA_3D_CANVAS" );
 
 const float EDA_3D_CANVAS::m_delta_move_step_factor = 0.7f;
 
+// A custom event, used to call DoRePaint during an idle time
+wxDEFINE_EVENT( wxEVT_REFRESH_CUSTOM_COMMAND, wxEvent);
+
 
 BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
     EVT_PAINT( EDA_3D_CANVAS::OnPaint )
@@ -79,6 +82,8 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
 
     // other events
     EVT_ERASE_BACKGROUND( EDA_3D_CANVAS::OnEraseBackground )
+    //EVT_REFRESH_CUSTOM_COMMAND( ID_CUSTOM_EVENT_1, EDA_3D_CANVAS::OnRefreshRequest )
+    EVT_CUSTOM(wxEVT_REFRESH_CUSTOM_COMMAND, ID_CUSTOM_EVENT_1, EDA_3D_CANVAS::OnRefreshRequest )
 
     EVT_CLOSE( EDA_3D_CANVAS::OnCloseWindow )
     EVT_SIZE(  EDA_3D_CANVAS::OnResize )
@@ -331,17 +336,22 @@ void EDA_3D_CANVAS::DisplayStatus()
 }
 
 
-void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
+void EDA_3D_CANVAS::OnPaint( wxPaintEvent& aEvent )
 {
     // Please have a look at:
     // https://lists.launchpad.net/kicad-developers/msg25149.html
     // wxPaintDC( this );
-    // event.Skip( false );
+    // aEvent.Skip( false );
+    DoRePaint();
+}
 
+
+void EDA_3D_CANVAS::DoRePaint()
+{
     // SwapBuffer requires the window to be shown before calling
     if( !IsShownOnScreen() )
     {
-        wxLogTrace( m_logTrace, "EDA_3D_CANVAS::OnPaint !IsShown" );
+        wxLogTrace( m_logTrace, "EDA_3D_CANVAS::DoRePaint !IsShown" );
         return;
     }
 
@@ -721,8 +731,13 @@ void EDA_3D_CANVAS::restart_editingTimeOut_Timer()
 
 void EDA_3D_CANVAS::OnTimerTimeout_Redraw( wxTimerEvent &event )
 {
-    wxPaintEvent redrawEvent;
-    wxPostEvent( this, redrawEvent );
+    Request_refresh( true );
+}
+
+
+void EDA_3D_CANVAS::OnRefreshRequest( wxEvent& aEvent )
+{
+   DoRePaint();
 }
 
 
@@ -730,21 +745,12 @@ void EDA_3D_CANVAS::Request_refresh( bool aRedrawImmediately )
 {
     if( aRedrawImmediately )
     {
-        // On some systems, just calling Refresh does not work always
-        // (Issue experienced on Win7 MSYS2)
-        //Refresh();
-        //Update();
-
-        // Using PostEvent will take priority to other events like mouse movements, keys, etc.
-        wxPaintEvent redrawEvent;
+        // Just calling Refresh() does not work always
+        // Using an event to call DoRepaint ensure the repaint code will be executed,
+        // and PostEvent will take priority to other events like mouse movements, keys, etc.
+        // and is executed during the next idle time
+        wxCommandEvent redrawEvent( wxEVT_REFRESH_CUSTOM_COMMAND, ID_CUSTOM_EVENT_1 );
         wxPostEvent( this, redrawEvent );
-
-        // This behaves the same
-        // wxQueueEvent( this,
-                        // From wxWidget documentation: "The heap-allocated and
-                        // non-NULL event to queue, the function takes ownership of it."
-        //               new wxPaintEvent()
-        //               );
     }
     else
     {

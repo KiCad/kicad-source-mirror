@@ -158,10 +158,20 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
     void OnEvent( wxEvent& aEvent );
 
 private:
+    /** Called by a wxPaintEvent event
+     */
+    void OnPaint( wxPaintEvent& aEvent );
 
-    void OnPaint( wxPaintEvent &event );
+    /**
+     * The actual function to repaint the canvas.
+     * It is usually called by OnPaint() but because it does not use a wxPaintDC
+     * it can be called outside a wxPaintEvent
+     */
+    void DoRePaint();
 
     void OnEraseBackground( wxEraseEvent &event );
+
+    void OnRefreshRequest( wxEvent& aEvent );
 
     void OnMouseWheel( wxMouseEvent &event );
 
