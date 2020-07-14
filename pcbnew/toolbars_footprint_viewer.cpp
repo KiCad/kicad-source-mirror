@@ -189,7 +189,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     AddStandardHelpMenu( menuBar );
-    menuBar->SetDoubleBuffered( true );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;

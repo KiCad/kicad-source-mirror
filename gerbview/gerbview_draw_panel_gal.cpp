@@ -100,6 +100,7 @@ void GERBVIEW_DRAW_PANEL_GAL::OnShow()
 
     if( frame )
     {
+        m_parent->SetDoubleBuffered( true );
         SetTopLayer( frame->GetActiveLayer() );
         auto& displ_opts = frame->GetDisplayOptions();
         static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>(

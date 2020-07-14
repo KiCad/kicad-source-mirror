@@ -229,7 +229,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
     menuBar->Append( prefsMenu, _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
-    menuBar->SetDoubleBuffered( true );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;
