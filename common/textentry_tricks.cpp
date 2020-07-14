@@ -26,31 +26,18 @@
 #include <textentry_tricks.h>
 #include <dialog_shim.h>
 
-bool TEXTENTRY_TRICKS::isCtrl( int aChar, const wxKeyEvent& e )
-{
-    return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() &&
-            !e.ShiftDown() && !e.MetaDown();
-}
-
-
-bool TEXTENTRY_TRICKS::isShiftCtrl( int aChar, const wxKeyEvent& e )
-{
-    return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() &&
-            e.ShiftDown() && !e.MetaDown();
-}
-
 
 void TEXTENTRY_TRICKS::OnCharHook( wxTextEntry* aTextEntry, wxKeyEvent& aEvent )
 {
-    if( isCtrl( 'X', aEvent ) )
+    if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'X' )
     {
         aTextEntry->Cut();
     }
-    else if( isCtrl( 'C', aEvent ) )
+    else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'C' )
     {
         aTextEntry->Copy();
     }
-    else if( isCtrl( 'V', aEvent ) )
+    else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'V' )
     {
         aTextEntry->Paste();
     }

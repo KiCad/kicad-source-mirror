@@ -41,9 +41,6 @@ public:
     void DoAutocomplete( const wxString& aPartial, const wxArrayString& aTokens );
 
 protected:
-    bool isCtrl( int aChar, const wxKeyEvent& e );
-    bool isShiftCtrl( int aChar, const wxKeyEvent& e );
-
     void onCharHook( wxKeyEvent& aEvent );
     void onScintillaUpdateUI( wxStyledTextEvent& aEvent );
 

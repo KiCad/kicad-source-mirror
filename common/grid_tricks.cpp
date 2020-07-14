@@ -311,24 +311,24 @@ void GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
 void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
 {
-    if( isCtl( 'A', ev ) )
+    if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'A' )
     {
         m_grid->SelectAll();
         return;
     }
-    else if( isCtl( 'C', ev ) )
+    else if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'C' )
     {
         getSelectedArea();
         cutcopy( false );
         return;
     }
-    else if( isCtl( 'V', ev ) )
+    else if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'V' )
     {
         getSelectedArea();
         paste_clipboard();
         return;
     }
-    else if( isCtl( 'X', ev ) )
+    else if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'X' )
     {
         getSelectedArea();
         cutcopy( true );

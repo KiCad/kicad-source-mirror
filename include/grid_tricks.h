@@ -67,11 +67,6 @@ protected:
     /// Puts the selected area into a sensible rectangle of m_sel_{row,col}_{start,count} above.
     void getSelectedArea();
 
-    static bool isCtl( int aChar, const wxKeyEvent& e )
-    {
-        return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && !e.ShiftDown() && !e.MetaDown();
-    }
-
     void onGridCellLeftClick( wxGridEvent& event );
     void onGridCellLeftDClick( wxGridEvent& event );
     void onGridCellRightClick( wxGridEvent& event );

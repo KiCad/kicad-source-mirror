@@ -485,11 +485,30 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         keyIsEscape = ( ke->GetKeyCode() == WXK_ESCAPE );
 
-        if( dynamic_cast<wxTextEntry*>( focus ) || dynamic_cast<wxStyledTextCtrl*>( focus ) )
+        wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( focus );
+        wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( focus );
+
+        if( textEntry || styledText )
         {
+            bool enabled = true;
+
+            if( textEntry )
+                enabled = textEntry->IsEditable();
+            else if( styledText )
+                enabled = styledText->IsEditable();
+
             // Never process key events for tools when a text entry has focus
-            aEvent.Skip();
-            return;
+            if( enabled )
+            {
+                aEvent.Skip();
+                return;
+            }
+            // Even if not enabled, allow a copy out
+            else if( ke->GetModifiers() == wxMOD_CONTROL && ke->GetKeyCode() == 'C' )
+            {
+                aEvent.Skip();
+                return;
+            }
         }
 
         evt = GetToolEvent( ke, &keyIsSpecial );

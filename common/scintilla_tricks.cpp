@@ -63,20 +63,6 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
 }
 
 
-bool SCINTILLA_TRICKS::isCtrl( int aChar, const wxKeyEvent& e )
-{
-    return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() &&
-            !e.ShiftDown() && !e.MetaDown();
-}
-
-
-bool SCINTILLA_TRICKS::isShiftCtrl( int aChar, const wxKeyEvent& e )
-{
-    return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() &&
-            e.ShiftDown() && !e.MetaDown();
-}
-
-
 void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 {
     if( aEvent.GetKeyCode() == WXK_TAB )
@@ -101,23 +87,24 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
             m_te->Tab();
         }
     }
-    else if( isCtrl( 'Z', aEvent ) )
+    else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'Z' )
     {
         m_te->Undo();
     }
-    else if( isShiftCtrl( 'Z', aEvent ) || isCtrl( 'Y', aEvent ) )
+    else if( ( aEvent.GetModifiers() == wxMOD_SHIFT+wxMOD_CONTROL && aEvent.GetKeyCode() == 'Z' )
+            || ( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'Y' ) )
     {
         m_te->Redo();
     }
-    else if( isCtrl( 'X', aEvent ) )
+    else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'X' )
     {
         m_te->Cut();
     }
-    else if( isCtrl( 'C', aEvent ) )
+    else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'C' )
     {
         m_te->Copy();
     }
-    else if( isCtrl( 'V', aEvent ) )
+    else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'V' )
     {
         m_te->Paste();
     }
