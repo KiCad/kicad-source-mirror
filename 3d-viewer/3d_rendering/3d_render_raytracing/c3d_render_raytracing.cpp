@@ -916,6 +916,8 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_shade( GLubyte* ptrPBO,
         if( aStatusReporter )
             aStatusReporter->Report( _( "Rendering: Post processing shader" ) );
 
+        m_postshader_ssao.SetShadowsEnabled( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
+
         std::atomic<size_t> nextBlock( 0 );
         std::atomic<size_t> threadsFinished( 0 );
 
@@ -945,6 +947,8 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_shade( GLubyte* ptrPBO,
 
         while( threadsFinished < parallelThreadCount )
             std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+
+        m_postshader_ssao.SetShadedBuffer( m_shaderBuffer );
 
         // Set next state
         m_rt_render_state = RT_RENDER_STATE_POST_PROCESS_BLUR_AND_FINISH;
@@ -979,77 +983,16 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
                 {
                     GLubyte *ptr = &ptrPBO[ y * m_realBufferSize.x * 4 ];
 
-                    const SFVEC3F *ptrShaderY0 =
-                            &m_shaderBuffer[ glm::max((int)y - 2, 0) * m_realBufferSize.x ];
-                    const SFVEC3F *ptrShaderY1 =
-                            &m_shaderBuffer[ glm::max((int)y - 1, 0) * m_realBufferSize.x ];
-                    const SFVEC3F *ptrShaderY2 =
-                            &m_shaderBuffer[ y * m_realBufferSize.x ];
-                    const SFVEC3F *ptrShaderY3 =
-                            &m_shaderBuffer[ glm::min((int)y + 1, (int)(m_realBufferSize.y - 1)) *
-                                             m_realBufferSize.x ];
-                    const SFVEC3F *ptrShaderY4 =
-                            &m_shaderBuffer[ glm::min((int)y + 2, (int)(m_realBufferSize.y - 1)) *
-                                             m_realBufferSize.x ];
-
                     for( signed int x = 0; x < (int)m_realBufferSize.x; ++x )
                     {
-        // This #if should be 1, it is here that can be used for debug proposes during development
-        #if 1
-                        int idx = x > 1 ? -2 : 0;
-                        SFVEC3F bluredShadeColor = ptrShaderY0[idx] * 1.0f / 273.0f +
-                                                   ptrShaderY1[idx] * 4.0f / 273.0f +
-                                                   ptrShaderY2[idx] * 7.0f / 273.0f +
-                                                   ptrShaderY3[idx] * 4.0f / 273.0f +
-                                                   ptrShaderY4[idx] * 1.0f / 273.0f;
+                        const SFVEC3F bluredShadeColor = m_postshader_ssao.Blur( SFVEC2I( x, y ) );
 
-                        idx = x > 0 ? -1 : 0;
-                        bluredShadeColor += ptrShaderY0[idx] *  4.0f / 273.0f +
-                                            ptrShaderY1[idx] * 16.0f / 273.0f +
-                                            ptrShaderY2[idx] * 26.0f / 273.0f +
-                                            ptrShaderY3[idx] * 16.0f / 273.0f +
-                                            ptrShaderY4[idx] *  4.0f / 273.0f;
-
-                        bluredShadeColor += (*ptrShaderY0) *  7.0f / 273.0f +
-                                            (*ptrShaderY1) * 26.0f / 273.0f +
-                                            (*ptrShaderY2) * 41.0f / 273.0f +
-                                            (*ptrShaderY3) * 26.0f / 273.0f +
-                                            (*ptrShaderY4) *  7.0f / 273.0f;
-
-                        idx = (x < (int)m_realBufferSize.x - 1) ? 1 : 0;
-                        bluredShadeColor += ptrShaderY0[idx] * 4.0f / 273.0f +
-                                            ptrShaderY1[idx] *16.0f / 273.0f +
-                                            ptrShaderY2[idx] *26.0f / 273.0f +
-                                            ptrShaderY3[idx] *16.0f / 273.0f +
-                                            ptrShaderY4[idx] * 4.0f / 273.0f;
-
-                        idx = (x < (int)m_realBufferSize.x - 2) ? 2 : 0;
-                        bluredShadeColor += ptrShaderY0[idx] * 1.0f / 273.0f +
-                                            ptrShaderY1[idx] * 4.0f / 273.0f +
-                                            ptrShaderY2[idx] * 7.0f / 273.0f +
-                                            ptrShaderY3[idx] * 4.0f / 273.0f +
-                                            ptrShaderY4[idx] * 1.0f / 273.0f;
-
-                        // process next pixel
-                        ++ptrShaderY0;
-                        ++ptrShaderY1;
-                        ++ptrShaderY2;
-                        ++ptrShaderY3;
-                        ++ptrShaderY4;
-
-        #ifdef USE_SRGB_SPACE
+#ifdef USE_SRGB_SPACE
                         const SFVEC3F originColor = convertLinearToSRGB( m_postshader_ssao.GetColorAtNotProtected( SFVEC2I( x,y ) ) );
-        #else
+#else
                         const SFVEC3F originColor = m_postshader_ssao.GetColorAtNotProtected( SFVEC2I( x,y ) );
-        #endif
-
+#endif
                         const SFVEC3F shadedColor = m_postshader_ssao.ApplyShadeColor( SFVEC2I( x,y ), originColor, bluredShadeColor );
-        #else
-                        // Debug code
-                        //const SFVEC3F shadedColor =  SFVEC3F( 1.0f ) -
-                        //                             m_shaderBuffer[ y * m_realBufferSize.x + x];
-                        const SFVEC3F shadedColor =  m_shaderBuffer[ y * m_realBufferSize.x + x ];
-        #endif
 
                         rt_final_color( ptr, shadedColor, false );
 
@@ -1721,7 +1664,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
     SFVEC3F hitPoint = aHitInfo.m_HitPoint;
 
     if( !m_isPreview )
-        hitPoint += aHitInfo.m_HitNormal * m_boardAdapter.GetNonCopperLayerThickness3DU() * 1.2f;
+        hitPoint += aHitInfo.m_HitNormal * m_boardAdapter.GetNonCopperLayerThickness3DU() * 0.6f;
 
     const CMATERIAL *objMaterial = aHitInfo.pHitObject->GetMaterial();
     wxASSERT( objMaterial != NULL );
@@ -1852,7 +1795,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                                                 // The sampled point will be darkshaded by the post
                                                 // processing, so here it compensates to not shadow
                                                 // so much
-                                                glm::min( shadow_att_factor_light + (3.0f / 6.0f), 1.0f )
+                                                glm::mix( 0.75f, 1.0f, shadow_att_factor_light )
                                                 );
             }
         }

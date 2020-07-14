@@ -83,7 +83,8 @@ protected:
 private:
     void destroy_buffers();
 
-    inline unsigned int getIndex( const SFVEC2F &aPos ) const
+public:
+    inline unsigned int GetIndex( const SFVEC2F& aPos ) const
     {
         SFVEC2F clampPos;
 
@@ -97,7 +98,7 @@ private:
         return glm::min( idx, m_size.x * m_size.y );
     }
 
-    inline unsigned int getIndex( const SFVEC2I &aPos ) const
+    inline unsigned int GetIndex( const SFVEC2I& aPos ) const
     {
         SFVEC2I clampPos;
         clampPos.x = glm::clamp( aPos.x, 0, (int)m_size.x - 1 );

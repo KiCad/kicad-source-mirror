@@ -33,7 +33,7 @@
 
 CPOSTSHADER_SSAO::CPOSTSHADER_SSAO( const CCAMERA &aCamera ) : CPOSTSHADER( aCamera )
 {
-
+    m_shadedBuffer = NULL;
 }
 
 // There are differente sources for this shader on the web
@@ -45,24 +45,24 @@ CPOSTSHADER_SSAO::CPOSTSHADER_SSAO( const CCAMERA &aCamera ) : CPOSTSHADER( aCam
 float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos,
                               const SFVEC3F &ddiff,
                               const SFVEC3F &cnorm,
+                              const float aShadowAtSamplePos,
+                              const float aShadowAtCenterPos,
                               int c1,
                               int c2 ) const
 {
-    const float shadowGain = 0.5f;
+    const float shadowGain = 0.60f;
     const float aoGain = 1.0f;
-    const float outGain = 0.80f;
 
-    float return_value = 0.0f;
+    const float shadow_factor_at_sample = ( 1.0f - aShadowAtSamplePos ) * shadowGain;
+    const float shadow_factor_at_center = ( 1.0f - aShadowAtCenterPos ) * shadowGain;
+
+    float return_value = shadow_factor_at_center;
 
     const float rd = glm::length( ddiff );
 
     // This limits the zero of the function (see below)
-    if( rd < 1.0f )
+    if( rd < 2.0f )
     {
-        const SFVEC2I vr = aShaderPos + SFVEC2I( c1, c2 );
-
-        const float shadow_factor_at_sample = ( 1.0f - GetShadowFactorAt( vr ) ) * shadowGain;
-
         if( rd > FLT_EPSILON )
         {
             const SFVEC3F vv = glm::normalize( ddiff );
@@ -72,69 +72,49 @@ float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos,
             // Changing this factor will change how much shadow in relation to the
             // distance of the hit it will be in shadow
 
-            // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIwLjYteCowLjQ1IiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjowLCJlcSI6IiIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0wLjIxNTcyODA1NTg4MzI1ODYiLCIyLjEyNjE0Mzc1MDM0OTM4ODciLCItMC4wOTM1NDA0NzY0MjczNjAzIiwiMS4zNDc2MTE0MDQzMzExOTIyIl0sInNpemUiOls2NDksMzk5XX1d
-            // zero: 1.0
-            const float attDistFactor = 0.6f - rd * 0.6f;
+            // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIwLjgteCowLjYiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjAsImVxIjoiMS8oeCp4KjAuNSsxKSIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0yLjU5Mjk0NTkyNTA5ODA0MSIsIjQuNTUzODc5NjU1NDQ1OTIzIiwiLTEuNzY3MDMwOTAzMjgxNjgxOCIsIjIuNjMxMDE1NjA3ODIyMjk3Il0sInNpemUiOls2NDksMzk5XX1d
+            const float attDistFactor = 1.0f / ( rd * rd * 8.0f + 1.0f );
 
-            // Original:
-            // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoMS0xL3NxcnQoMS8oeCp4KSsxKSkiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC42ODY3NDc3NDcxMDg0MTQyIiwiMy44ODcyMjA2MjQ0Mzk3MzM0IiwiLTAuOTA5NTYyNzcyOTMyNDk2IiwiMS45MDUxODY5OTQxNzQwNTczIl19XQ--
-            // zero: inf
-            //const float attDistFactor = (1.0f - 1.0f / sqrt( 1.0f / ( rd * rd) + 1.0f) );
+            const SFVEC2I vr = aShaderPos + SFVEC2I( c1, c2 );
 
-            //const float attDistFactor = 1.0f;
+            float sampledNormalFactor = glm::max( glm::dot( GetNormalAt( vr ), cnorm ), 0.0f );
 
+            sampledNormalFactor = glm::max( 1.0f - sampledNormalFactor * sampledNormalFactor, 0.0f );
 
-            // Tool for visualize dot product:
-            // http://www.falstad.com/dotproduct/
+            const float shadowAttDistFactor = glm::max( glm::min( rd * 5.0f - 0.25f, 1.0f ), 0.0f );
+
+            float shadowAttFactor = glm::min( sampledNormalFactor + shadowAttDistFactor, 1.0f );
+
+            const float shadowFactor = glm::mix( shadow_factor_at_sample,
+                                                 shadow_factor_at_center,
+                                                 shadowAttFactor );
 
             // This is a dot product threshold factor.
             // it defines after wich angle we consider that the point starts to occlude.
-            // if the value is high, it will distart low angles point
+            // if the value is high, it will discard low angles point
             const float aDotThreshold = 0.15f;
 
-            // This is the normal factor using the normal at the sampled point (of the shader)
-            // agaisnt the vector from the center to the position at sampled point
-            const float sampledNormalFactor = glm::dot( GetNormalAt( vr ), -vv );
-
-            // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIobWF4KHgsMC4zKS0wLjMpLygxLTAuMykiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC42ODY3NDc3NDcxMDg0MTQyIiwiMy44ODcyMjA2MjQ0Mzk3MzM0IiwiLTAuOTA5NTYyNzcyOTMyNDk2IiwiMS45MDUxODY5OTQxNzQwNTczIl19XQ--
-
-            const float sampledNormalFactorWithThreshold = (glm::max( sampledNormalFactor, aDotThreshold ) - aDotThreshold) /
-                                                           (1.0f - aDotThreshold);
-
-
-            // This is the dot product between the center pixel (the one that is being shaded)
+            // This is the dot product between the center pixel normal (the one that is being shaded)
             // and the vector from the center to the sampled point
             const float localNormalFactor = glm::dot( cnorm, vv );
 
             const float localNormalFactorWithThreshold = (glm::max( localNormalFactor, aDotThreshold ) - aDotThreshold) /
                                                          (1.0f - aDotThreshold);
 
+            const float aoFactor = localNormalFactorWithThreshold * aoGain * attDistFactor;
 
-            const float aoFactor = (1.0f - sampledNormalFactorWithThreshold) *
-                                   localNormalFactorWithThreshold *
-                                   aoGain;
-
-            return_value = ( ( aoFactor + shadow_factor_at_sample ) * attDistFactor );
-
-            // Test / Debug code
-            //return_value = glm::max( aaFactor, shadow_factor );
-            //return_value = aaFactor;
-            //return_value = shadow_factor;
-            //return_value = glm::clamp( aaFactor, 0.0f, 1.0f );
-        }
-        else
-        {
-            return_value = shadow_factor_at_sample;
+            return_value = glm::min( aoFactor + shadowFactor, 1.0f );
         }
     }
 
-    return return_value * outGain;
+    return return_value;
 }
 
 
 float CPOSTSHADER_SSAO::giFF( const SFVEC2I &aShaderPos,
                               const SFVEC3F &ddiff,
                               const SFVEC3F &cnorm,
+                              const float aShadow,
                               int c1,
                               int c2 ) const
 {
@@ -146,8 +126,10 @@ float CPOSTSHADER_SSAO::giFF( const SFVEC2I &aShaderPos,
         const float rd = glm::length( ddiff );
         const SFVEC2I vr = aShaderPos + SFVEC2I( c1, c2 );
 
-        return glm::clamp( glm::dot( GetNormalAt( vr ), -vv), 0.0f, 1.0f ) *
-               glm::clamp( glm::dot( cnorm, vv ), 0.0f, 1.0f ) / ( rd * rd + 1.0f );
+        const float attDistFactor = 1.0f / ( rd * rd + 1.0f );
+
+        return ( glm::clamp( glm::dot( GetNormalAt( vr ), -vv), 0.0f, 1.0f ) *
+                 glm::clamp( glm::dot( cnorm, vv ), 0.0f, 1.0f ) * attDistFactor ) * ( 0.03f + aShadow ) * 3.0f;
     }
 
     return 0.0f;
@@ -156,112 +138,113 @@ float CPOSTSHADER_SSAO::giFF( const SFVEC2I &aShaderPos,
 
 SFVEC3F CPOSTSHADER_SSAO::Shade( const SFVEC2I &aShaderPos ) const
 {
-    // Test source code
-    //return SFVEC3F( GetShadowFactorAt( aShaderPos ) );
-    //return GetColorAt( aShaderPos );
-    //return SFVEC3F( 1.0f - GetDepthNormalizedAt( aShaderPos ) );
-    //return SFVEC3F( (1.0f / GetDepthAt( aShaderPos )) * 0.5f );
-    //return SFVEC3F( 1.0f - GetDepthNormalizedAt( aShaderPos ) +
-    //                (1.0f / GetDepthAt( aShaderPos )) * 0.5f );
-
-#if 1
     float cdepth = GetDepthAt( aShaderPos );
 
     if( cdepth > FLT_EPSILON )
     {
-
-        //const float cNormalizedDepth = GetDepthNormalizedAt( aShaderPos );
-        //wxASSERT( cNormalizedDepth <= 1.0f );
-        //wxASSERT( cNormalizedDepth >= 0.0f );
-
-        cdepth = (10.0f / (cdepth + 1.0f) );
+        cdepth = ( 30.0f / ( cdepth * 2.0f + 1.0f ) );
 
         // read current normal,position and color.
         const SFVEC3F n = GetNormalAt( aShaderPos );
         const SFVEC3F p = GetPositionAt( aShaderPos );
-        //const SFVEC3F col = GetColorAt( aShaderPos );
+
+        const float shadowAt0 = GetShadowFactorAt( aShaderPos );
 
         // initialize variables:
         float ao = 0.0f;
         SFVEC3F gi = SFVEC3F(0.0f);
 
-        // This calculated the "window range" of the shader. So it will get
-        // more or less sparsed samples
-        const int incx = 2;
-        const int incy = 2;
-
-        //3 rounds of 8 samples each.
-        for( unsigned int i = 0; i < 3; ++i )
+#define ROUNDS 3
+        for( unsigned int i = 0; i < ROUNDS; ++i )
         {
-            static const int mask[3] = { 0x01, 0x03, 0x03 };
-            const int pw = 0 + (Fast_rand() & mask[i]);
-            const int ph = 0 + (Fast_rand() & mask[i]);
+            static const int limit[ROUNDS] = { 0x01, 0x03, 0x03 };
 
-            const int npw = (int)((pw + incx * i) * cdepth ) + (i + 1);
-            const int nph = (int)((ph + incy * i) * cdepth ) + (i + 1);
+            const int pw = Fast_rand() & limit[i];
+            const int ph = Fast_rand() & limit[i];
 
-            const SFVEC3F ddiff  = GetPositionAt( aShaderPos + SFVEC2I( npw, nph ) ) - p;
-            const SFVEC3F ddiff2 = GetPositionAt( aShaderPos + SFVEC2I( npw,-nph ) ) - p;
-            const SFVEC3F ddiff3 = GetPositionAt( aShaderPos + SFVEC2I(-npw, nph ) ) - p;
-            const SFVEC3F ddiff4 = GetPositionAt( aShaderPos + SFVEC2I(-npw,-nph ) ) - p;
-            const SFVEC3F ddiff5 = GetPositionAt( aShaderPos + SFVEC2I(  pw, nph ) ) - p;
-            const SFVEC3F ddiff6 = GetPositionAt( aShaderPos + SFVEC2I(  pw,-nph ) ) - p;
-            const SFVEC3F ddiff7 = GetPositionAt( aShaderPos + SFVEC2I( npw,  ph ) ) - p;
-            const SFVEC3F ddiff8 = GetPositionAt( aShaderPos + SFVEC2I(-npw,  ph ) ) - p;
+            const int npw = (int) ( ( pw + i ) * cdepth ) + ( i + 1 );
+            const int nph = (int) ( ( ph + i ) * cdepth ) + ( i + 1 );
 
-            ao+=  aoFF( aShaderPos, ddiff , n,  npw, nph );
-            ao+=  aoFF( aShaderPos, ddiff2, n,  npw,-nph );
-            ao+=  aoFF( aShaderPos, ddiff3, n, -npw, nph );
-            ao+=  aoFF( aShaderPos, ddiff4, n, -npw,-nph );
-            ao+=  aoFF( aShaderPos, ddiff5, n,   pw, nph );
-            ao+=  aoFF( aShaderPos, ddiff6, n,   pw,-nph );
-            ao+=  aoFF( aShaderPos, ddiff7, n,  npw,  ph );
-            ao+=  aoFF( aShaderPos, ddiff8, n, -npw,  ph );
+            const SFVEC3F ddiff  = GetPositionAt( aShaderPos + SFVEC2I(  npw,  nph ) ) - p;
+            const SFVEC3F ddiff2 = GetPositionAt( aShaderPos + SFVEC2I(  npw, -nph ) ) - p;
+            const SFVEC3F ddiff3 = GetPositionAt( aShaderPos + SFVEC2I( -npw,  nph ) ) - p;
+            const SFVEC3F ddiff4 = GetPositionAt( aShaderPos + SFVEC2I( -npw, -nph ) ) - p;
+            const SFVEC3F ddiff5 = GetPositionAt( aShaderPos + SFVEC2I(  pw,   nph ) ) - p;
+            const SFVEC3F ddiff6 = GetPositionAt( aShaderPos + SFVEC2I(  pw,  -nph ) ) - p;
+            const SFVEC3F ddiff7 = GetPositionAt( aShaderPos + SFVEC2I( npw,    ph ) ) - p;
+            const SFVEC3F ddiff8 = GetPositionAt( aShaderPos + SFVEC2I(-npw,    ph ) ) - p;
 
-            gi+=  giFF( aShaderPos, ddiff , n, npw,  nph) *
+            const float shadowAt1 = GetShadowFactorAt( aShaderPos + SFVEC2I( +npw,  nph ) );
+            const float shadowAt2 = GetShadowFactorAt( aShaderPos + SFVEC2I( +npw, -nph ) );
+            const float shadowAt3 = GetShadowFactorAt( aShaderPos + SFVEC2I( -npw,  nph ) );
+            const float shadowAt4 = GetShadowFactorAt( aShaderPos + SFVEC2I( -npw, -nph ) );
+            const float shadowAt5 = GetShadowFactorAt( aShaderPos + SFVEC2I(  +pw,  nph ) );
+            const float shadowAt6 = GetShadowFactorAt( aShaderPos + SFVEC2I(   pw, -nph ) );
+            const float shadowAt7 = GetShadowFactorAt( aShaderPos + SFVEC2I(  npw,   ph ) );
+            const float shadowAt8 = GetShadowFactorAt( aShaderPos + SFVEC2I( -npw,   ph ) );
+
+            ao += aoFF( aShaderPos, ddiff , n, shadowAt1, shadowAt0,  npw,  nph );
+            ao += aoFF( aShaderPos, ddiff2, n, shadowAt2, shadowAt0,  npw, -nph );
+            ao += aoFF( aShaderPos, ddiff3, n, shadowAt3, shadowAt0, -npw,  nph );
+            ao += aoFF( aShaderPos, ddiff4, n, shadowAt4, shadowAt0, -npw, -nph );
+            ao += aoFF( aShaderPos, ddiff5, n, shadowAt5, shadowAt0,   pw,  nph );
+            ao += aoFF( aShaderPos, ddiff6, n, shadowAt6, shadowAt0,   pw, -nph );
+            ao += aoFF( aShaderPos, ddiff7, n, shadowAt7, shadowAt0,  npw,   ph );
+            ao += aoFF( aShaderPos, ddiff8, n, shadowAt8, shadowAt0, -npw,   ph );
+
+            gi += giFF( aShaderPos, ddiff , n, shadowAt1, npw,  nph) *
                     giColorCurve( GetColorAt( aShaderPos + SFVEC2I(  npw, nph ) ) );
-            gi+=  giFF( aShaderPos, ddiff2, n, npw, -nph) *
+            gi += giFF( aShaderPos, ddiff2, n, shadowAt2, npw, -nph) *
                     giColorCurve( GetColorAt( aShaderPos + SFVEC2I(  npw,-nph ) ) );
-            gi+=  giFF( aShaderPos, ddiff3, n,-npw,  nph) *
+            gi += giFF( aShaderPos, ddiff3, n, shadowAt3, -npw,  nph) *
                     giColorCurve( GetColorAt( aShaderPos + SFVEC2I( -npw, nph ) ) );
-            gi+=  giFF( aShaderPos, ddiff4, n,-npw, -nph) *
+            gi += giFF( aShaderPos, ddiff4, n, shadowAt4, -npw, -nph) *
                     giColorCurve( GetColorAt( aShaderPos + SFVEC2I( -npw,-nph ) ) );
-            gi+=  giFF( aShaderPos, ddiff5, n, pw, nph) *
+            gi += giFF( aShaderPos, ddiff5, n, shadowAt5 , pw, nph) *
                     giColorCurve( GetColorAt( aShaderPos + SFVEC2I(   pw, nph ) ) );
-            gi+=  giFF( aShaderPos, ddiff6, n, pw,-nph) *
+            gi += giFF( aShaderPos, ddiff6, n, shadowAt6,  pw,-nph) *
                     giColorCurve( GetColorAt( aShaderPos + SFVEC2I(   pw,-nph ) ) );
-            gi+=  giFF( aShaderPos, ddiff7, n, npw, ph) *
+            gi += giFF( aShaderPos, ddiff7, n, shadowAt7,  npw, ph) *
                     giColorCurve( GetColorAt( aShaderPos + SFVEC2I(  npw,  ph ) ) );
-            gi+=  giFF( aShaderPos, ddiff8, n,-npw, ph) *
+            gi += giFF( aShaderPos, ddiff8, n, shadowAt8, -npw, ph) *
                     giColorCurve( GetColorAt( aShaderPos + SFVEC2I( -npw,  ph ) ) );
         }
-        ao = (ao / 24.0f) + 0.0f; // Apply a bias for the ambient oclusion
-        gi = (gi * 5.0f / 24.0f); // Apply a bias for the global illumination
 
-        //return SFVEC3F(ao);
-        return SFVEC3F(ao) - gi;
+        // If it received direct light, it shouldn't consider much AO
+        // shadowAt0 1.0 when no shadow
+        const float reduceAOwhenNoShadow = m_isUsingShadows ? ( 1.0f - shadowAt0 * 0.3f ) : 1.0f;
 
-        // Test source code
-        //return SFVEC3F( col );
-        //return SFVEC3F( col - SFVEC3F(ao) + gi * 5.0f );
-        //return SFVEC3F( SFVEC3F(1.0f) - SFVEC3F(ao) + gi * 5.0f );
-        //return SFVEC3F(cdepth);
-        //return SFVEC3F(cNormalizedDepth);
-        //return 1.0f - SFVEC3F(ao);
-        //return SFVEC3F(ao);
+        ao = reduceAOwhenNoShadow * ( ao / ( ROUNDS * 8.0f ) );
+
+        ao = ( 1.0f - 1.0f / ( ao * ao * 5.0f + 1.0f ) ) * 1.2f;
+
+        gi = ( gi / ( ROUNDS * 8.0f ) );
+
+        float giL = glm::min( glm::length( gi ) * 4.0f, 1.0f );
+
+        giL = ( 1.0f - 1.0f / ( giL * 4.0f + 1.0f ) ) * 1.5f;
+
+        return glm::mix( SFVEC3F( ao ), -gi, giL );
     }
     else
         return SFVEC3F(0.0f);
-#endif
 }
 
 
 SFVEC3F CPOSTSHADER_SSAO::ApplyShadeColor( const SFVEC2I &aShaderPos, const SFVEC3F &aInputColor, const SFVEC3F &aShadeColor ) const
 {
-    // This is the final stage of the shader and make the last calculation how to apply the shader
-    const SFVEC3F shadedColor = aInputColor - ( -aShadeColor * (aShadeColor * SFVEC3F(0.1f) - SFVEC3F(1.0f) ) );
+    SFVEC3F outColor;
 
-    return shadedColor;
+    const SFVEC3F subtracted = aInputColor - aShadeColor;
+    const SFVEC3F mixed = glm::mix( aInputColor,
+                                    aInputColor * 0.50f - aShadeColor * 0.05f,
+                                    glm::min( aShadeColor, 1.0f ) );
+
+    outColor.r = ( aShadeColor.r < 0.0f ) ? subtracted.r : mixed.r;
+    outColor.g = ( aShadeColor.g < 0.0f ) ? subtracted.g : mixed.g;
+    outColor.b = ( aShadeColor.b < 0.0f ) ? subtracted.b : mixed.b;
+
+    return outColor;
 }
 
 
@@ -269,17 +252,53 @@ SFVEC3F CPOSTSHADER_SSAO::giColorCurve( const SFVEC3F &aColor ) const
 {
     const SFVEC3F vec1 = SFVEC3F(1.0f);
 
-    // http://fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIxLjAtKDEvKHgqMS4wKzEuMCkpK3gqMC4xIiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuMDYyMTg0NjE1Mzg0NjE1NTA1IiwiMS4xNDI5ODQ2MTUzODQ2MTQ2IiwiLTAuMTI3MDk5OTk5OTk5OTk5NzciLCIxLjEzMjYiXX1d
-    //return vec1 - ( vec1 / (aColor + vec1) ) + aColor * SFVEC3F(0.10f);
-
-    // http://fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIxLjAtKDEuMC8oeCoyLjArMS4wKSkreCowLjEiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC4wNjIxODQ2MTUzODQ2MTU1MDUiLCIxLjE0Mjk4NDYxNTM4NDYxNDYiLCItMC4xMjcwOTk5OTk5OTk5OTk3NyIsIjEuMTMyNiJdfV0-
-    //return vec1 - ( vec1 / (aColor * SFVEC3F(2.0f) + vec1) ) + aColor * SFVEC3F(0.10f);
-
     // This option actually apply a gama since we are using linear color space
     // and the result shader will be applied after convert back to sRGB
 
     // http://fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIxLjAtKDEuMC8oeCo5LjArMS4wKSkreCowLjEiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC4wNjIxODQ2MTUzODQ2MTU1MDUiLCIxLjE0Mjk4NDYxNTM4NDYxNDYiLCItMC4xMjcwOTk5OTk5OTk5OTk3NyIsIjEuMTMyNiJdfV0-
     return vec1 - ( vec1 / (aColor * SFVEC3F(9.0f) + vec1) ) + aColor * SFVEC3F(0.10f);
+}
 
-    // return aColor;
+SFVEC3F CPOSTSHADER_SSAO::Blur( const SFVEC2I& aShaderPos ) const
+{
+    const float dCenter = GetDepthAt( aShaderPos );
+
+    SFVEC3F shadedOut = SFVEC3F( 0.0f );
+
+    float totalWeight = 1.0f;
+
+    for( int y = -3; y < 3; y++ )
+    {
+        for( int x = -3; x < 3; x++ )
+        {
+
+            const unsigned int idx = GetIndex( SFVEC2I( aShaderPos.x + x, aShaderPos.y + y ) );
+
+            const SFVEC3F s = m_shadedBuffer[idx];
+
+            if( !( ( x == 0 ) && ( y == 0 ) ) )
+            {
+
+                const float d = GetDepthAt( SFVEC2I( aShaderPos.x + x, aShaderPos.y + y ) );
+
+                const float depthAtt = ( dCenter - d ) * dCenter
+                                       * 25.0f; // increse the value will get more sharpness effect
+
+                const float depthAttSqr = depthAtt * depthAtt;
+
+                float weight = ( 1.0f / ( depthAttSqr + 1.0f ) ) - 0.02f * depthAttSqr;
+
+                weight = glm::max( weight, 0.0f );
+
+                shadedOut += s * weight;
+                totalWeight += weight;
+            }
+            else
+            {
+                shadedOut += s;
+            }
+        }
+    }
+
+    return shadedOut / totalWeight;
 }

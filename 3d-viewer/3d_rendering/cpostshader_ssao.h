@@ -44,6 +44,18 @@ public:
     SFVEC3F Shade(const SFVEC2I &aShaderPos ) const override;
     SFVEC3F ApplyShadeColor( const SFVEC2I &aShaderPos, const SFVEC3F &aInputColor, const SFVEC3F &aShadeColor ) const override;
 
+    SFVEC3F Blur( const SFVEC2I& aShaderPos ) const;
+
+    void SetShadedBuffer( SFVEC3F* aShadedBuffer )
+    {
+        m_shadedBuffer = aShadedBuffer;
+    }
+
+    void SetShadowsEnabled( bool aIsShadowsEnabled )
+    {
+        m_isUsingShadows = aIsShadowsEnabled;
+    }
+
 private:
     SFVEC3F posFromDepth( const SFVEC2F &coord ) const;
 
@@ -52,12 +64,15 @@ private:
     float aoFF( const SFVEC2I &aShaderPos,
                 const SFVEC3F &ddiff,
                 const SFVEC3F &cnorm,
+                const float aShadowAtSamplePos,
+                const float aShadowAtCenterPos,
                 int c1,
                 int c2 ) const;
 
     float giFF( const SFVEC2I &aShaderPos,
                 const SFVEC3F &ddiff,
                 const SFVEC3F &cnorm,
+                const float aShadow,
                 int c1,
                 int c2 ) const;
 
@@ -69,6 +84,10 @@ private:
      * @return transformated color
      */
     SFVEC3F giColorCurve( const SFVEC3F &aColor ) const;
+
+    SFVEC3F* m_shadedBuffer;
+
+    bool m_isUsingShadows;
 };
 
 

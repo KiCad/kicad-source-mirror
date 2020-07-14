@@ -119,37 +119,37 @@ void CPOSTSHADER::destroy_buffers()
 
 const SFVEC3F &CPOSTSHADER::GetNormalAt( const SFVEC2F &aPos ) const
 {
-    return m_normals[ getIndex( aPos ) ];
+    return m_normals[GetIndex( aPos )];
 }
 
 
 const SFVEC3F &CPOSTSHADER::GetColorAt( const SFVEC2F &aPos ) const
 {
-    return m_color[ getIndex( aPos ) ];
+    return m_color[GetIndex( aPos )];
 }
 
 
 float CPOSTSHADER::GetDepthAt( const SFVEC2F &aPos ) const
 {
-    return m_depth[ getIndex( aPos ) ];
+    return m_depth[GetIndex( aPos )];
 }
 
 
 const SFVEC3F &CPOSTSHADER::GetPositionAt( const SFVEC2F &aPos ) const
 {
-    return m_wc_hitposition[ getIndex( aPos ) ];
+    return m_wc_hitposition[GetIndex( aPos )];
 }
 
 
 const SFVEC3F &CPOSTSHADER::GetNormalAt( const SFVEC2I &aPos ) const
 {
-    return m_normals[ getIndex( aPos ) ];
+    return m_normals[GetIndex( aPos )];
 }
 
 
 const SFVEC3F &CPOSTSHADER::GetColorAt( const SFVEC2I &aPos ) const
 {
-    return m_color[ getIndex( aPos ) ];
+    return m_color[GetIndex( aPos )];
 }
 
 
@@ -161,13 +161,13 @@ const SFVEC3F &CPOSTSHADER::GetColorAtNotProtected( const SFVEC2I &aPos ) const
 
 float CPOSTSHADER::GetDepthAt( const SFVEC2I &aPos ) const
 {
-    return m_depth[ getIndex( aPos ) ];
+    return m_depth[GetIndex( aPos )];
 }
 
 
 float CPOSTSHADER::GetDepthNormalizedAt( const SFVEC2I &aPos ) const
 {
-    const float depth = m_depth[ getIndex( aPos ) ];
+    const float depth = m_depth[GetIndex( aPos )];
 
     if( depth >= m_tmin )
         return (depth - m_tmin) / (m_tmax - m_tmin);
@@ -178,13 +178,13 @@ float CPOSTSHADER::GetDepthNormalizedAt( const SFVEC2I &aPos ) const
 
 const SFVEC3F &CPOSTSHADER::GetPositionAt( const SFVEC2I &aPos ) const
 {
-    return m_wc_hitposition[ getIndex( aPos ) ];
+    return m_wc_hitposition[GetIndex( aPos )];
 }
 
 
 const float &CPOSTSHADER::GetShadowFactorAt( const SFVEC2I &aPos ) const
 {
-    return m_shadow_att_factor[ getIndex( aPos ) ];
+    return m_shadow_att_factor[GetIndex( aPos )];
 }
 
 
