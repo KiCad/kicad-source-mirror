@@ -262,14 +262,16 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
             &aWindow->grid.sizes, {} ) );
 
+    // pcbnew default grid doesn't matter much, but eeschema does, so default to the index
+    // of the 50mil grid in eeschema
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.last_size",
-            &aWindow->grid.last_size_idx, 0 ) );
+            &aWindow->grid.last_size_idx, 1 ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.fast_grid_1",
-            &aWindow->grid.fast_grid_1, 0 ) );
+            &aWindow->grid.fast_grid_1, 1 ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.fast_grid_2",
-            &aWindow->grid.fast_grid_2, 1 ) );
+            &aWindow->grid.fast_grid_2, 2 ) );
 
     // for grid user, use a default value compatible with eeschema and pcbnew (10 mils)
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_x",
