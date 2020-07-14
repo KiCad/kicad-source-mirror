@@ -197,8 +197,6 @@ void SCH_DRAW_PANEL::OnShow()
         if( frame )
             frame->ActivateGalCanvas();
     }
-
-    m_parent->SetDoubleBuffered( true );
 }
 
 
