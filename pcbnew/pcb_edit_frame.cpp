@@ -613,6 +613,9 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( m_show_layer_manager_tools )
         m_auimgr.GetPane( "LayersManager" ).Show( false );
 
+    // Unlink the old project if needed
+    GetBoard()->ClearProject();
+
     // Delete board structs and undo/redo lists, to avoid crash on exit
     // when deleting some structs (mainly in undo/redo lists) too late
     Clear_Pcb( false, true );
