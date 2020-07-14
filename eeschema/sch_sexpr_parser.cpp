@@ -2166,6 +2166,25 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             // the field positions are set.
             field = parseSchField( symbol.get() );
 
+            if( m_requiredVersion <= 20200618 )
+            {
+                // It would appear that at some point we allowed duplicate ids to slip
+                // through when writing files.  We know this happens at least for sheets,
+                // so we add the patch for it here too (even though we don't know for
+                // sure if it's necessary).
+                //
+                // While no longer used, -1 is still a valid id for user fields and will
+                // get written out as the next unused number on save.
+                for( const SCH_FIELD& existing : symbol->GetFields() )
+                {
+                    if( existing.GetId() == field->GetId() )
+                    {
+                        field->SetId( -1 );
+                        break;
+                    }
+                }
+            }
+
             // Set the default symbol reference prefix.
             if( field->GetId() == REFERENCE )
             {
@@ -2351,6 +2370,24 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
                     field->SetId( SHEETNAME );
                 else
                     field->SetId( SHEETFILENAME );
+            }
+
+            if( m_requiredVersion <= 20200618 )
+            {
+                // It would appear the problem persists past 20200310, but this time with
+                // the earlier ids being re-used for later (user) fields.  The easiest (and
+                // most complete) solution is to disallow multiple instances of the same id.
+                //
+                // While no longer used, -1 is still a valid id for user fields and will
+                // get written out as the next unused number on save.
+                for( const SCH_FIELD& existing : fields )
+                {
+                    if( existing.GetId() == field->GetId() )
+                    {
+                        field->SetId( -1 );
+                        break;
+                    }
+                }
             }
 
             fields.emplace_back( *field );

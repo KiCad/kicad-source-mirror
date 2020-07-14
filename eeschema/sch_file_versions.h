@@ -49,4 +49,6 @@
 
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200608  // Add support for bus and junction properties.
 
-#define SEXPR_SCHEMATIC_FILE_VERSION 20200618
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20200618  // Disallow duplicate field ids.
+
+#define SEXPR_SCHEMATIC_FILE_VERSION 20200714
