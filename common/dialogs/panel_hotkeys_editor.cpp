@@ -58,7 +58,7 @@ static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDe
 
 PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow,
                                             bool aReadOnly ) :
-        wxPanel( aWindow, wxID_ANY, wxDefaultPosition, default_dialog_size ),
+        RESETTABLE_PANEL( aWindow, wxID_ANY, wxDefaultPosition, default_dialog_size ),
         m_frame( aFrame ),
         m_readOnly( aReadOnly ),
         m_hotkeyStore()
@@ -102,6 +102,12 @@ void PANEL_HOTKEYS_EDITOR::AddHotKeys( TOOL_MANAGER* aToolMgr )
 }
 
 
+void PANEL_HOTKEYS_EDITOR::ResetPanel()
+{
+    m_hotkeyListCtrl->ResetAllHotkeys( true );
+}
+
+
 void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
 {
     const BUTTON_ROW_PANEL::BTN_DEF_LIST l_btn_defs = {
@@ -111,14 +117,6 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
             _( "Undo all changes made so far in this dialog" ),
             [this]( wxCommandEvent& ){
                 m_hotkeyListCtrl->ResetAllHotkeys( false );
-            }
-        },
-        {
-            wxID_ANY,
-            _( "Restore All to Defaults" ),
-            _( "Set all hotkeys to the built-in KiCad defaults" ),
-            [this]( wxCommandEvent& ){
-                m_hotkeyListCtrl->ResetAllHotkeys( true );
             }
         },
         {

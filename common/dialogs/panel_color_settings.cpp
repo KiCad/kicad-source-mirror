@@ -61,7 +61,7 @@ void PANEL_COLOR_SETTINGS::OnBtnOpenThemeFolderClicked( wxCommandEvent& event )
 }
 
 
-void PANEL_COLOR_SETTINGS::OnBtnResetClicked( wxCommandEvent& event )
+void PANEL_COLOR_SETTINGS::ResetPanel()
 {
     if( !m_currentSettings )
         return;

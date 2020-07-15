@@ -27,6 +27,7 @@
 #include <hotkeys_basic.h>
 #include <hotkey_store.h>
 
+#include <widgets/resettable_panel.h>
 #include <widgets/widget_hotkey_list.h>
 
 #include "wx/panel.h"
@@ -37,12 +38,12 @@ class wxSizer;
 class TOOL_MANAGER;
 
 
-class PANEL_HOTKEYS_EDITOR : public wxPanel
+class PANEL_HOTKEYS_EDITOR : public RESETTABLE_PANEL
 {
 protected:
     EDA_BASE_FRAME*            m_frame;
     bool                       m_readOnly;
-    
+
     std::vector<TOOL_MANAGER*> m_toolManagers;
     HOTKEY_STORE               m_hotkeyStore;
     WIDGET_HOTKEY_LIST*        m_hotkeyListCtrl;
@@ -51,9 +52,16 @@ public:
     PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow, bool aReadOnly );
 
     void AddHotKeys( TOOL_MANAGER* aToolMgr );
-    
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    void ResetPanel() override;
+
+    wxString GetResetTooltip() override
+    {
+        return _( "Reset all hotkeys to the built-in KiCad defaults" );
+    }
 
 private:
 

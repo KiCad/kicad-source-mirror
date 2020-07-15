@@ -18,6 +18,7 @@
  */
 
 #include <confirm.h>
+#include <widgets/resettable_panel.h>
 #include <wx/treebook.h>
 #include <wx/treectrl.h>
 #include <wx/grid.h>
@@ -34,7 +35,7 @@ std::map<wxString, wxString> g_lastPage;
 std::map<wxString, wxString> g_lastParentPage;
 
 
-PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle,
+PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUseReset,
                             const wxString& aAuxiliaryAction ) :
         DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
@@ -55,20 +56,28 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle,
 
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
+    if( aUseReset )
+    {
+        m_resetButton = new wxButton( this, wxID_ANY, _( "Reset to Defaults" ) );
+        buttonsSizer->Add( m_resetButton, 0, wxRIGHT | wxLEFT, 5 );
+    }
+
     if( !aAuxiliaryAction.IsEmpty() )
     {
         m_auxiliaryButton = new wxButton( this, wxID_ANY, aAuxiliaryAction );
         buttonsSizer->Add( m_auxiliaryButton, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
     }
 
+    buttonsSizer->AddStretchSpacer();
+
     auto sdbSizer = new wxStdDialogButtonSizer();
-    auto sdbSizerOK = new wxButton( this, wxID_OK );
+    wxButton* sdbSizerOK = new wxButton( this, wxID_OK );
     sdbSizer->AddButton( sdbSizerOK );
-    auto sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+    wxButton* sdbSizerCancel = new wxButton( this, wxID_CANCEL );
     sdbSizer->AddButton( sdbSizerCancel );
     sdbSizer->Realize();
 
-    buttonsSizer->Add( sdbSizer, 1, wxEXPAND, 5 );
+    buttonsSizer->Add( sdbSizer, 1, 0, 5 );
     mainSizer->Add( buttonsSizer, 0, wxALL|wxEXPAND, 5 );
 
     sdbSizerOK->SetDefault();
@@ -80,6 +89,9 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle,
 
     if( m_auxiliaryButton )
         m_auxiliaryButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PAGED_DIALOG::OnAuxiliaryAction ), nullptr, this );
+
+    if( m_resetButton )
+        m_resetButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PAGED_DIALOG::OnResetButton ), nullptr, this );
 
     m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED, wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), NULL, this );
     Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PAGED_DIALOG::OnUpdateUI ), nullptr, this );
@@ -141,8 +153,10 @@ PAGED_DIALOG::~PAGED_DIALOG()
     if( m_auxiliaryButton )
         m_auxiliaryButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PAGED_DIALOG::OnAuxiliaryAction ), nullptr, this );
 
-    m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED, wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), NULL, this );
+    if( m_resetButton )
+        m_resetButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PAGED_DIALOG::OnResetButton ), nullptr, this );
 
+    m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED, wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), NULL, this );
     Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PAGED_DIALOG::OnUpdateUI ), nullptr, this );
 }
 
@@ -299,11 +313,27 @@ void PAGED_DIALOG::OnUpdateUI( wxUpdateUIEvent& event )
 
 void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
 {
-#ifdef __WXMAC__
-    // Work around an OSX bug where the wxGrid children don't get placed correctly until
-    // the first resize event
     int page = event.GetSelection();
 
+    // Enable the reset button only if the page is resettable
+    if( m_resetButton )
+    {
+        if( auto panel = dynamic_cast<RESETTABLE_PANEL*>( m_treebook->GetPage( page ) ) )
+        {
+            m_resetButton->SetToolTip( panel->GetResetTooltip() );
+            m_resetButton->Enable( true );
+        }
+        else
+        {
+            m_resetButton->SetToolTip( wxString() );
+            m_resetButton->Enable( false );
+        }
+
+    }
+
+    // Work around an OSX bug where the wxGrid children don't get placed correctly until
+    // the first resize event
+#ifdef __WXMAC__
     if( page + 1 <= m_macHack.size() && m_macHack[ page ] )
     {
         wxSize pageSize = m_treebook->GetPage( page )->GetSize();
@@ -314,6 +344,20 @@ void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
         m_macHack[ page ] = false;
     }
 #endif
+
+    Layout();
 }
 
 
+void PAGED_DIALOG::OnResetButton( wxCommandEvent& aEvent )
+{
+    int sel = m_treebook->GetSelection();
+
+    if( sel == wxNOT_FOUND )
+        return;
+
+    RESETTABLE_PANEL* panel = dynamic_cast<RESETTABLE_PANEL*>( m_treebook->GetPage( sel ) );
+
+    if( panel )
+        panel->ResetPanel();
+}

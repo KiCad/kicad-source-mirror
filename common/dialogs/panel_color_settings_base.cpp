@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : RESETTABLE_PANEL( parent, id, pos, size, style, name )
 {
 	m_mainSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -38,11 +38,6 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 
 	bControlSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_btnReset = new wxButton( this, wxID_ANY, _("&Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_btnReset->SetToolTip( _("Reset all colors in this theme to the KiCad defaults") );
-
-	bControlSizer->Add( m_btnReset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_btnOpenFolder = new wxButton( this, wxID_ANY, _("Open Theme Folder"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnOpenFolder->SetToolTip( _("Open the folder containing color themes") );
@@ -92,7 +87,6 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_cbTheme->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnThemeChanged ), NULL, this );
 	m_cbTheme->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_COLOR_SETTINGS_BASE::OnLeftDownTheme ), NULL, this );
 	m_optOverrideColors->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnOverrideItemColorsClicked ), NULL, this );
-	m_btnReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnBtnResetClicked ), NULL, this );
 	m_btnOpenFolder->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnBtnOpenThemeFolderClicked ), NULL, this );
 }
 
@@ -103,7 +97,6 @@ PANEL_COLOR_SETTINGS_BASE::~PANEL_COLOR_SETTINGS_BASE()
 	m_cbTheme->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnThemeChanged ), NULL, this );
 	m_cbTheme->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_COLOR_SETTINGS_BASE::OnLeftDownTheme ), NULL, this );
 	m_optOverrideColors->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnOverrideItemColorsClicked ), NULL, this );
-	m_btnReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnBtnResetClicked ), NULL, this );
 	m_btnOpenFolder->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnBtnOpenThemeFolderClicked ), NULL, this );
 
 }

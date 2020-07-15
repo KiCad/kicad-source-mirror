@@ -44,6 +44,8 @@ public:
 
     ~PANEL_EESCHEMA_COLOR_SETTINGS() override;
 
+    void ResetPanel() override;
+
 protected:
     bool TransferDataFromWindow() override;
 
@@ -52,8 +54,6 @@ protected:
     void OnOverrideItemColorsClicked( wxCommandEvent& aEvent ) override;
 
     void OnSize( wxSizeEvent& aEvent ) override;
-
-    void OnBtnResetClicked( wxCommandEvent& event ) override;
 
     bool validateSave( bool aQuiet = false ) override;
 

@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_SETUP_PINMAP_BASE::PANEL_SETUP_PINMAP_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_SETUP_PINMAP_BASE::PANEL_SETUP_PINMAP_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : RESETTABLE_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
@@ -26,13 +26,7 @@ PANEL_SETUP_PINMAP_BASE::PANEL_SETUP_PINMAP_BASE( wxWindow* parent, wxWindowID i
 	sbSizer3->Add( m_matrixPanel, 1, wxEXPAND | wxALL, 5 );
 
 
-	m_panelMatrixSizer->Add( sbSizer3, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
-
-
-	m_panelMatrixSizer->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
-
-	m_ResetOptButton = new wxButton( this, ID_RESET_MATRIX, _("Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_panelMatrixSizer->Add( m_ResetOptButton, 0, wxRIGHT|wxLEFT, 10 );
+	m_panelMatrixSizer->Add( sbSizer3, 1, wxALL|wxEXPAND, 10 );
 
 
 	bSizer2->Add( m_panelMatrixSizer, 1, wxEXPAND|wxLEFT, 10 );
@@ -41,14 +35,8 @@ PANEL_SETUP_PINMAP_BASE::PANEL_SETUP_PINMAP_BASE( wxWindow* parent, wxWindowID i
 	this->SetSizer( bSizer2 );
 	this->Layout();
 	bSizer2->Fit( this );
-
-	// Connect Events
-	m_ResetOptButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_PINMAP_BASE::OnResetMatrixClick ), NULL, this );
 }
 
 PANEL_SETUP_PINMAP_BASE::~PANEL_SETUP_PINMAP_BASE()
 {
-	// Disconnect Events
-	m_ResetOptButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_PINMAP_BASE::OnResetMatrixClick ), NULL, this );
-
 }

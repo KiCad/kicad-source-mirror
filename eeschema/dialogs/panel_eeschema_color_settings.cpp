@@ -345,9 +345,9 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::onColorChanged()
 }
 
 
-void PANEL_EESCHEMA_COLOR_SETTINGS::OnBtnResetClicked( wxCommandEvent& event )
+void PANEL_EESCHEMA_COLOR_SETTINGS::ResetPanel()
 {
-    PANEL_COLOR_SETTINGS::OnBtnResetClicked( event );
+    PANEL_COLOR_SETTINGS::ResetPanel();
     updatePreview();
 }
 

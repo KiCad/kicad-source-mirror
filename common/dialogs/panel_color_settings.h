@@ -43,10 +43,15 @@ public:
         ID_REVERT
     };
 
+    virtual void ResetPanel() override;
+
+    virtual wxString GetResetTooltip() override
+    {
+        return _( "Reset all colors in this theme to the KiCad defaults" );
+    }
+
 protected:
     void OnBtnOpenThemeFolderClicked( wxCommandEvent& event ) override;
-
-    void OnBtnResetClicked( wxCommandEvent& aEvent ) override;
 
     void OnLeftDownTheme( wxMouseEvent& event ) override;
     void OnThemeChanged( wxCommandEvent& aEvent ) override;

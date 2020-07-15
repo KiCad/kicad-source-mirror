@@ -665,7 +665,7 @@ void EDA_BASE_FRAME::OnKicadAbout( wxCommandEvent& event )
 
 void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 {
-    PAGED_DIALOG dlg( this, _( "Preferences" ) );
+    PAGED_DIALOG dlg( this, _( "Preferences" ), true );
     wxTreebook* book = dlg.GetTreebook();
 
     book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );

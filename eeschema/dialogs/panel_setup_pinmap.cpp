@@ -66,7 +66,7 @@ PANEL_SETUP_PINMAP::PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* paren
 }
 
 
-void PANEL_SETUP_PINMAP::OnResetMatrixClick( wxCommandEvent& aEvent )
+void PANEL_SETUP_PINMAP::ResetPanel()
 {
     m_schematic->ErcSettings().ResetPinMap();
     reBuildMatrixPanel();

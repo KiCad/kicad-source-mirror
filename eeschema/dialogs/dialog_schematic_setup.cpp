@@ -36,7 +36,7 @@
 
 
 DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
-        PAGED_DIALOG( aFrame, _( "Schematic Setup" ),
+        PAGED_DIALOG( aFrame, _( "Schematic Setup" ), true,
                       _( "Import Settings from Another Project..." ) ),
         m_frame( aFrame ),
         m_severities( nullptr )
@@ -96,11 +96,26 @@ DIALOG_SCHEMATIC_SETUP::~DIALOG_SCHEMATIC_SETUP()
 
 void DIALOG_SCHEMATIC_SETUP::OnPageChange( wxBookCtrlEvent& event )
 {
-#ifdef __WXMAC__
-    // Work around an OSX bug where the wxGrid children don't get placed correctly until
-    // the first resize event
     int page = event.GetSelection();
 
+    // Enable the reset button only if the page is resettable
+    if( m_resetButton )
+    {
+        if( auto panel = dynamic_cast<RESETTABLE_PANEL*>( m_treebook->GetPage( page ) ) )
+        {
+            m_resetButton->SetToolTip( panel->GetResetTooltip() );
+            m_resetButton->Enable( true );
+        }
+        else
+        {
+            m_resetButton->SetToolTip( wxString() );
+            m_resetButton->Enable( false );
+        }
+    }
+
+    // Work around an OSX bug where the wxGrid children don't get placed correctly until
+    // the first resize event
+#ifdef __WXMAC__
     if( m_macHack[ page ] )
     {
         wxSize pageSize = m_treebook->GetPage( page )->GetSize();
@@ -111,6 +126,8 @@ void DIALOG_SCHEMATIC_SETUP::OnPageChange( wxBookCtrlEvent& event )
         m_macHack[ page ] = false;
     }
 #endif
+
+    Layout();
 }
 
 

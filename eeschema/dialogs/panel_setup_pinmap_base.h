@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/resettable_panel.h"
 #include <wx/panel.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -18,32 +19,18 @@
 #include <wx/string.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/button.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_PINMAP_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_SETUP_PINMAP_BASE : public wxPanel
+class PANEL_SETUP_PINMAP_BASE : public RESETTABLE_PANEL
 {
 	private:
 
 	protected:
-		enum
-		{
-			ID_RESET_MATRIX = 1000
-		};
-
 		wxPanel* m_matrixPanel;
-		wxButton* m_ResetOptButton;
-
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnResetMatrixClick( wxCommandEvent& event ) { event.Skip(); }
-
 
 	public:
 

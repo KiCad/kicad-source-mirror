@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/resettable_panel.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -32,7 +33,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_COLOR_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_COLOR_SETTINGS_BASE : public wxPanel
+class PANEL_COLOR_SETTINGS_BASE : public RESETTABLE_PANEL
 {
 	private:
 
@@ -40,7 +41,6 @@ class PANEL_COLOR_SETTINGS_BASE : public wxPanel
 		wxBoxSizer* m_mainSizer;
 		wxStaticText* m_staticText9;
 		wxChoice* m_cbTheme;
-		wxButton* m_btnReset;
 		wxButton* m_btnOpenFolder;
 		wxStaticLine* m_staticline2;
 		wxBoxSizer* m_colorsMainSizer;
@@ -52,7 +52,6 @@ class PANEL_COLOR_SETTINGS_BASE : public wxPanel
 		virtual void OnThemeChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeftDownTheme( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnOverrideItemColorsClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnBtnResetClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBtnOpenThemeFolderClicked( wxCommandEvent& event ) { event.Skip(); }
 
 

@@ -51,9 +51,9 @@ public:
     bool Show( bool show ) override;
     void ImportSettingsFrom( PIN_ERROR aPinMap[][ELECTRICAL_PINTYPES_TOTAL] );
 
-private:
-    void OnResetMatrixClick( wxCommandEvent& aEvent ) override;
+    void ResetPanel() override;
 
+private:
     void changeErrorLevel( wxCommandEvent& event );
     void reBuildMatrixPanel();
     void setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_ERROR aState );

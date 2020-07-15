@@ -41,7 +41,7 @@
 #include "panel_setup_rules.h"
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
-        PAGED_DIALOG( aFrame, _( "Board Setup" ), _( "Import Settings from Another Board..." ) ),
+        PAGED_DIALOG( aFrame, _( "Board Setup" ), false, _( "Import Settings from Another Board..." ) ),
         m_frame( aFrame )
 {
     BOARD*                 board = aFrame->GetBoard();
