@@ -4,8 +4,8 @@ if( COMPILER_SUPPORTS_WARNINGS )
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${WARN_FLAGS_C}")
 endif()
 
-#add_subdirectory( libeval  )
-#add_subdirectory( libeval_compiler )
+add_subdirectory( libeval  )
+add_subdirectory( libeval_compiler )
 
 if( KICAD_SPICE )
     set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
@@ -435,8 +435,8 @@ target_include_directories( common PRIVATE
 
 add_dependencies( common libcontext )
 add_dependencies( common version_header )
-#add_dependencies( common libeval_grammar )
-#add_dependencies( common libeval_grammar2 )
+add_dependencies( common libeval_grammar )
+add_dependencies( common libeval_grammar2 )
 
 target_link_libraries( common
     kimath
