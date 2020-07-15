@@ -2052,6 +2052,7 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
     SCH_FIELD* field;
     std::unique_ptr<SCH_COMPONENT> symbol( new SCH_COMPONENT() );
     TRANSFORM transform;
+    std::set<int> fieldIDsRead;
 
     m_fieldId = MANDATORY_FIELDS;
 
@@ -2166,24 +2167,17 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             // the field positions are set.
             field = parseSchField( symbol.get() );
 
-            if( m_requiredVersion <= 20200618 )
-            {
-                // It would appear that at some point we allowed duplicate ids to slip
-                // through when writing files.  We know this happens at least for sheets,
-                // so we add the patch for it here too (even though we don't know for
-                // sure if it's necessary).
-                //
-                // While no longer used, -1 is still a valid id for user fields and will
-                // get written out as the next unused number on save.
-                for( const SCH_FIELD& existing : symbol->GetFields() )
-                {
-                    if( existing.GetId() == field->GetId() )
-                    {
-                        field->SetId( -1 );
-                        break;
-                    }
-                }
-            }
+            // It would appear that at some point we allowed duplicate ids to slip through
+            // when writing files.  The easiest (and most complete) solution is to disallow
+            // multiple instances of the same id (for all files since the source of the error
+            // *might* in fact be hand-edited files).
+            //
+            // While no longer used, -1 is still a valid id for user fields and will
+            // get written out as the next unused number on save.
+            if( fieldIDsRead.count( field->GetId() ) )
+                field->SetId( -1 );
+            else
+                fieldIDsRead.insert( field->GetId() );
 
             // Set the default symbol reference prefix.
             if( field->GetId() == REFERENCE )
@@ -2316,6 +2310,7 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
     SCH_FIELD* field;
     std::vector<SCH_FIELD> fields;
     std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET() );
+    std::set<int> fieldIDsRead;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2372,23 +2367,17 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
                     field->SetId( SHEETFILENAME );
             }
 
-            if( m_requiredVersion <= 20200618 )
-            {
-                // It would appear the problem persists past 20200310, but this time with
-                // the earlier ids being re-used for later (user) fields.  The easiest (and
-                // most complete) solution is to disallow multiple instances of the same id.
-                //
-                // While no longer used, -1 is still a valid id for user fields and will
-                // get written out as the next unused number on save.
-                for( const SCH_FIELD& existing : fields )
-                {
-                    if( existing.GetId() == field->GetId() )
-                    {
-                        field->SetId( -1 );
-                        break;
-                    }
-                }
-            }
+            // It would appear the problem persists past 20200310, but this time with the
+            // earlier ids being re-used for later (user) fields.  The easiest (and most
+            // complete) solution is to disallow multiple instances of the same id (for all
+            // files since the source of the error *might* in fact be hand-edited files).
+            //
+            // While no longer used, -1 is still a valid id for user fields and will
+            // get written out as the next unused number on save.
+            if( fieldIDsRead.count( field->GetId() ) )
+                field->SetId( -1 );
+            else
+                fieldIDsRead.insert( field->GetId() );
 
             fields.emplace_back( *field );
             delete field;
