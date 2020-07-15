@@ -48,6 +48,11 @@
 #include <math/vector2d.h>    // for VECTOR2D
 #include <trigo.h>            // for RotatePoint
 
+#include <geometry/shape.h>
+#include <geometry/shape_segment.h>
+#include <geometry/shape_compound.h>
+
+
 #include <wx/debug.h>         // for wxASSERT
 #include <wx/wx.h>            // for wxPoint, wxString, wxArrayString, wxSize
 
@@ -609,6 +614,20 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
                 GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
                 &aCornerBuffer );
     }
+}
+
+
+std::shared_ptr<SHAPE> EDA_TEXT::GetEffectiveShape( ) const
+{
+    std::shared_ptr<SHAPE_COMPOUND> shape ( new SHAPE_COMPOUND );
+    int penWidth = GetEffectiveTextPenWidth();
+    std::vector<wxPoint> pts;
+    TransformTextShapeToSegmentList( pts );
+
+    for( unsigned jj = 0; jj < pts.size(); jj += 2 )
+        shape->AddShape( new SHAPE_SEGMENT( pts[jj], pts[jj+1], penWidth ) );
+
+    return shape;
 }
 
 

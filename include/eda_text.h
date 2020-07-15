@@ -32,6 +32,7 @@
 #include "kicad_string.h"
 #include "painter.h"
 
+class SHAPE;
 class SHAPE_POLY_SET;
 
 using KIGFX::RENDER_SETTINGS;
@@ -291,6 +292,8 @@ public:
      */
     void TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCornerBuffer,
                                                      int aClearanceValue ) const;
+
+    std::shared_ptr<SHAPE> GetEffectiveShape( ) const;
 
     /**
      * Test if \a aPoint is within the bounds of this object.
