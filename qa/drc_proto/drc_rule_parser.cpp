@@ -28,6 +28,8 @@
 #include <drc_proto/drc_rule.h>
 #include <drc_proto/drc_rule_parser.h>
 #include <drc_proto/drc_rules_lexer.h>
+#include <drc_proto/drc_engine.h> // drc_dbg
+
 
 #include <fctsys.h>
 
@@ -61,8 +63,6 @@ void test::DRC_RULES_PARSER::Parse(
 
         token = NextTok();
 
-        printf("TOK %d %d\n", token, T_version );
-
         if( !haveVersion && token != T_version )
             Expecting( "version" );
 
@@ -81,35 +81,17 @@ void test::DRC_RULES_PARSER::Parse(
             break;
 
         case T_rule:
-            aRules.push_back( parseRULE() );
+        {
+            auto rule = parseRULE();
+            drc_dbg(0, "Parsed rule: '%s' type '%s\n", (const char*) rule->GetName().c_str(), (const char*) rule->GetTestProviderName().c_str() );
+            aRules.push_back( rule );
             break;
+        }
 
         default:
             Expecting( "condition or rule" );
         }
     }
-
-
-#if 0
-    // Hook up the selectors to their rules
-    std::map<wxString, DRC_RULE*> ruleMap;
-
-    for( DRC_RULE* rule : aRules )
-        ruleMap[ rule->m_Name ] = rule;
-
-    for( const std::pair<DRC_RULE_CONDITION*, wxString>& entry : conditionsRules )
-    {
-        if( ruleMap.count( entry.second ) )
-        {
-            entry.first->m_Rule = ruleMap[ entry.second ];
-        }
-        else
-        {
-            wxString errText = wxString::Format( _( "Rule \"%s\" not found." ), entry.second );
-            THROW_PARSE_ERROR( errText, CurSource(), "", 0, 0 );
-        }
-    }
-#endif
 }
 
 

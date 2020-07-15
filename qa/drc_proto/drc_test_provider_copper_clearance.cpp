@@ -9,6 +9,7 @@
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
+#include <geometry/shape_segment.h>
 
 #include <drc_proto/drc_engine.h>
 #include <drc_proto/drc_item.h>
@@ -66,8 +67,12 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     for( auto rule : m_drcEngine->QueryRulesById( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE ) )
     {
+        drc_dbg(1, "process rule %p\n", rule );
         if( rule->GetConstraint().m_Value.HasMin() )
+        {
             m_largestClearance = std::max( m_largestClearance, rule->GetConstraint().m_Value.Min() );
+            drc_dbg(1, "min-copper-clearance %d\n", rule->GetConstraint().m_Value.Min() );
+        }
     }
 
     ReportAux( "Worst clearance : %d nm", m_largestClearance );
@@ -126,88 +131,20 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperTextAndGraphics()
 
 void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
 {
-    EDA_RECT         bbox;
-    std::vector<SEG> itemShape;
-    int              itemWidth;
-    DRAWSEGMENT*     drawItem = dynamic_cast<DRAWSEGMENT*>( aItem );
-    EDA_TEXT*        textItem = dynamic_cast<EDA_TEXT*>( aItem );
+    EDA_RECT            bbox;
+    std::shared_ptr<SHAPE> itemShape;
+    DRAWSEGMENT*        drawItem = dynamic_cast<DRAWSEGMENT*>( aItem );
+    EDA_TEXT*           textItem = dynamic_cast<EDA_TEXT*>( aItem );
 
     if( drawItem )
     {
         bbox = drawItem->GetBoundingBox();
-        itemWidth = drawItem->GetWidth();
-
-        switch( drawItem->GetShape() )
-        {
-        case S_ARC:
-        {
-            SHAPE_ARC arc( drawItem->GetCenter(), drawItem->GetArcStart(),
-                           (double) drawItem->GetAngle() / 10.0 );
-
-            SHAPE_LINE_CHAIN l = arc.ConvertToPolyline();
-
-            for( int i = 0; i < l.SegmentCount(); i++ )
-                itemShape.push_back( l.Segment( i ) );
-
-            break;
-        }
-
-        case S_SEGMENT:
-            itemShape.emplace_back( SEG( drawItem->GetStart(), drawItem->GetEnd() ) );
-            break;
-
-        case S_CIRCLE:
-        {
-            // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
-            SHAPE_ARC circle( drawItem->GetCenter(), drawItem->GetEnd(), 360.0 );
-
-            SHAPE_LINE_CHAIN l = circle.ConvertToPolyline();
-
-            for( int i = 0; i < l.SegmentCount(); i++ )
-                itemShape.push_back( l.Segment( i ) );
-
-            break;
-        }
-
-        case S_CURVE:
-        {
-            drawItem->RebuildBezierToSegmentsPointsList( drawItem->GetWidth() );
-            wxPoint start_pt = drawItem->GetBezierPoints()[0];
-
-            for( unsigned int jj = 1; jj < drawItem->GetBezierPoints().size(); jj++ )
-            {
-                wxPoint end_pt = drawItem->GetBezierPoints()[jj];
-                itemShape.emplace_back( SEG( start_pt, end_pt ) );
-                start_pt = end_pt;
-            }
-
-            break;
-        }
-
-        case S_POLYGON:
-        {
-            SHAPE_LINE_CHAIN l = drawItem->GetPolyShape().Outline( 0 );
-
-            for( int i = 0; i < l.SegmentCount(); i++ )
-                itemShape.push_back( l.Segment( i ) );
-        }
-            break;
-
-        default:
-            wxFAIL_MSG( "unknown shape type" );
-            break;
-        }
+        itemShape = drawItem->GetEffectiveShape();
     }
-    else if( textItem  )
+    else if( textItem )
     {
         bbox = textItem->GetTextBox();
-        itemWidth = textItem->GetEffectiveTextPenWidth();
-
-        std::vector<wxPoint> textShape;
-        textItem->TransformTextShapeToSegmentList( textShape );
-
-        for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
-            itemShape.emplace_back( SEG( textShape[jj], textShape[jj+1] ) );
+        itemShape = textItem->GetEffectiveShape();
     }
     else
     {
@@ -215,10 +152,10 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
         return;
     }
 
-    SHAPE_RECT rect_area( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
+    SHAPE_RECT bboxShape( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
 
-    if( itemShape.empty() )
-        return;
+    //if( itemShape->Empty() )
+      //  return;
 
     // Test tracks and vias
     for( auto track : m_board->Tracks() )
@@ -228,34 +165,24 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
 
         auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aItem, track );
         auto minClearance = rule->GetConstraint().GetValue().Min();
-        int widths = ( track->GetWidth() + itemWidth ) / 2;
-        int center2centerAllowed = minClearance + widths;
+        int     actual = INT_MAX;
+        wxPoint pos;
 
-        SEG trackSeg( track->GetStart(), track->GetEnd() );
+        SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
 
         // Fast test to detect a track segment candidate inside the text bounding box
-        if( !rect_area.Collide( trackSeg, center2centerAllowed ) )
+        if( !bboxShape.Collide( &trackSeg, 0 ) )
             continue;
 
-        OPT<SEG>    minSeg;
-        SEG::ecoord center2center_squared = 0;
+        if( !itemShape->Collide( &trackSeg, minClearance, &actual ) )
+            continue;
 
-        for( const SEG& itemSeg : itemShape )
+        pos = (wxPoint) itemShape->Centre();
+
+        if( actual < INT_MAX )
         {
-            SEG::ecoord thisDist_squared = trackSeg.SquaredDistance( itemSeg );
+            int       errorCode = DRCE_CLEARANCE;
 
-            if( !minSeg || thisDist_squared < center2center_squared )
-            {
-                minSeg = itemSeg;
-                center2center_squared = thisDist_squared;
-            }
-        }
-
-        if( center2center_squared < SEG::Square( center2centerAllowed ) )
-        {
-            int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-            int       errorCode = ( track->Type() == PCB_VIA_T ) ? DRCE_VIA_NEAR_COPPER
-                                                                 : DRCE_TRACK_NEAR_COPPER;
             DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
             wxString msg;
             msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -267,7 +194,6 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
             drcItem->SetItems( track, aItem );
             drcItem->SetViolatingRule( rule );
 
-            wxPoint     pos = getLocation( track, minSeg.get() );
             ReportWithMarker( drcItem, pos );
         }
     }
@@ -285,36 +211,21 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
         auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aItem, pad );
         auto minClearance = rule->GetConstraint().GetValue().Min();
 
-        int widths = itemWidth / 2;
-        int center2centerAllowed = minClearance + widths;
+        int actual = INT_MAX;
+
+        int bb_radius = pad->GetBoundingRadius() + minClearance;
 
         // Fast test to detect a pad candidate inside the text bounding box
         // Finer test (time consumming) is made only for pads near the text.
-        int      bb_radius = pad->GetBoundingRadius() + minClearance;
-        VECTOR2I shape_pos( pad->ShapePos() );
-
-        if( !rect_area.Collide( SEG( shape_pos, shape_pos ), bb_radius ) )
+        if( !bboxShape.Collide( SEG( pad->GetPosition(), pad->GetPosition() ), bb_radius ) )
             continue;
 
-        const std::shared_ptr<SHAPE_POLY_SET>& padOutline = pad->GetEffectivePolygon();
-        OPT<SEG>                               minSeg;
-        SEG::ecoord                            center2center_squared = 0;
+        if( !pad->GetEffectiveShape()->Collide( itemShape.get(), minClearance, &actual ) )
+            continue;
 
-        for( const SEG& itemSeg : itemShape )
+        if( actual < INT_MAX )
         {
-            SEG::ecoord thisCenter2center_squared = padOutline.SquaredDistance( itemSeg );
-
-            if( !minSeg || thisCenter2center_squared < center2center_squared )
-            {
-                minSeg = itemSeg;
-                center2center_squared = thisCenter2center_squared;
-            }
-        }
-
-        if( center2center_squared < SEG::Square( center2centerAllowed ) )
-        {
-            int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_COPPER );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_CLEARANCE );
 
             wxString msg;
 
@@ -366,7 +277,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 {
     BOARD_DESIGN_SETTINGS&     bds = m_board->GetDesignSettings();
 
-    SEG          refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+    SHAPE_SEGMENT refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd(), aRefSeg->GetWidth() );
     PCB_LAYER_ID refLayer = aRefSeg->GetLayer();
     LSET         refLayerSet = aRefSeg->GetLayerSet();
 
@@ -414,11 +325,9 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
             int clearanceAllowed = minClearance - bds.GetDRCEpsilon();
             int actual;
 
-            if( !checkClearanceSegmToPad( refSeg, refSegWidth, pad, clearanceAllowed, &actual ) )
+            if( pad->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
             {
-                actual = std::max( 0, actual );
-                SEG       padSeg( pad->GetPosition(), pad->GetPosition() );
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_PAD );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_CLEARANCE );
 
                 wxString msg;
 
@@ -431,9 +340,9 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
                 drcItem->SetItems( aRefSeg, pad );
                 drcItem->SetViolatingRule( rule );
 
-                ReportWithMarker( drcItem, getLocation( aRefSeg, padSeg ) );
+                ReportWithMarker( drcItem, pad->GetPosition() );
 
-                if( isErrorLimitExceeded( DRCE_TRACK_NEAR_PAD ) )
+                if( isErrorLimitExceeded( DRCE_CLEARANCE ) )
                     return;
             }
         }
@@ -485,16 +394,10 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
         auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefSeg, track );
         auto minClearance = rule->GetConstraint().GetValue().Min();
 
-        SEG trackSeg( track->GetStart(), track->GetEnd() );
-        int widths = ( refSegWidth + track->GetWidth() ) / 2;
-        int center2centerAllowed = minClearance + widths;
-
-        // Avoid square-roots if possible (for performance)
-        SEG::ecoord  center2center_squared = refSeg.SquaredDistance( trackSeg );
-        OPT_VECTOR2I intersection = refSeg.Intersect( trackSeg );
-
-        // Check two tracks crossing first as it reports a DRCE without distances
-        if( intersection )
+        SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
+        int actual;
+        
+        if( OPT_VECTOR2I intersection = refSeg.GetSeg().Intersect( trackSeg.GetSeg() ) )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACKS_CROSSING );
 
@@ -508,18 +411,11 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
             if( isErrorLimitExceeded( DRCE_TRACKS_CROSSING ) )
                 return;
         }
-        else if( center2center_squared < SEG::Square( center2centerAllowed ) )
+        else if( refSeg.Collide( &trackSeg, minClearance, &actual ) )
         {
-            int errorCode = DRCE_TRACK_ENDS;
+            wxPoint   pos = getLocation( aRefSeg, trackSeg.GetSeg() );
+            int errorCode = DRCE_CLEARANCE;
 
-            if( aRefSeg->Type() == PCB_VIA_T && track->Type() == PCB_VIA_T )
-                errorCode = DRCE_VIA_NEAR_VIA;
-            else if( aRefSeg->Type() == PCB_VIA_T || track->Type() == PCB_VIA_T )
-                errorCode = DRCE_VIA_NEAR_TRACK;
-            else if( refSeg.ApproxParallel( trackSeg ) )
-                errorCode = DRCE_TRACK_SEGMENTS_TOO_CLOSE;
-
-            int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
             DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
 
             wxString msg;
@@ -532,7 +428,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
             drcItem->SetItems( aRefSeg, track );
             drcItem->SetViolatingRule( rule );
 
-            ReportWithMarker( drcItem, getLocation( aRefSeg, trackSeg ) );
+            ReportWithMarker( drcItem, pos );
 
             if( isErrorLimitExceeded( errorCode ) )
                 return;
@@ -564,37 +460,34 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
                 auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefSeg, zone );
                 auto minClearance = rule->GetConstraint().GetValue().Min();
+                int widths       = refSegWidth / 2;
 
-                int widths = refSegWidth / 2;
-                int center2centerAllowed = minClearance + widths;
-                SHAPE_POLY_SET* outline =
-                        const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList( layer ) );
+                // to avoid false positive, due to rounding issues and approxiamtions
+                // in distance and clearance calculations, use a small threshold for distance
+                // (1 micron)
+                #define THRESHOLD_DIST Millimeter2iu( 0.001 )
 
-            SEG::ecoord     center2center_squared = outline->SquaredDistance( testSeg );
+                int allowedDist  = minClearance + widths + THRESHOLD_DIST;
+                int actual = INT_MAX;
 
-            // to avoid false positive, due to rounding issues and approxiamtions
-            // in distance and clearance calculations, use a small threshold for distance
-            // (1 micron)
-            #define THRESHOLD_DIST Millimeter2iu( 0.001 )
+                if( zone->GetFilledPolysList( layer ).Collide( testSeg, allowedDist, &actual ) )
+                {
+                    actual = std::max( 0, actual - widths );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_CLEARANCE );
+                    wxString msg;
 
-            if( center2center_squared + THRESHOLD_DIST < SEG::Square( center2centerAllowed ) )
-            {
-                int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
-                wxString msg;
+                    msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                                rule->GetName(),
+                                MessageTextFromValue( userUnits(), minClearance, true ),
+                                MessageTextFromValue( userUnits(), actual, true ) );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                              rule->GetName(),
-                              MessageTextFromValue( userUnits(), minClearance, true ),
-                              MessageTextFromValue( userUnits(), actual, true ) );
+                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetItems( aRefSeg, zone );
+                    drcItem->SetViolatingRule( rule );
 
-                drcItem->SetErrorMessage( msg );
-                drcItem->SetItems( aRefSeg, zone );
-                drcItem->SetViolatingRule( rule );
-
-                ReportWithMarker( drcItem, getLocation( aRefSeg, zone ) );
+                    ReportWithMarker( drcItem, getLocation( aRefSeg, zone ) );
+                }
             }
-        }
         }
     }
 
@@ -656,16 +549,6 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
 
     LSET layerMask = aRefPad->GetLayerSet() & all_cu;
 
-
-    // For hole testing we use a dummy pad which is given the shape of the hole.  Note that
-    // this pad must have a parent because some functions expect a non-null parent to find
-    // the pad's board.
-    MODULE dummymodule( m_drcEngine->GetBoard() );    // Creates a dummy parent
-    D_PAD  dummypad( &dummymodule );
-
-    // Ensure the hole is on all copper layers
-    dummypad.SetLayerSet( all_cu | dummypad.GetLayerSet() );
-
     for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
         D_PAD* pad = *pad_list;
@@ -710,9 +593,9 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
         int  clearanceAllowed = minClearance - m_drcEngine->GetDesignSettings()->GetDRCEpsilon();
         int  actual;
 
-        if( !checkClearancePadToPad( aRefPad, pad, clearanceAllowed, &actual ) )
+        if( aRefPad->Collide( pad, clearanceAllowed, &actual ) )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_CLEARANCE );
             wxString msg;
             msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           /*m_clearanceSource fixme*/ "",
@@ -880,7 +763,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                 }
                 else
                 {
-                    drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
+                    drcItem = new DRC_ITEM( DRCE_CLEARANCE );
                     wxString msg;
 
                     msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),

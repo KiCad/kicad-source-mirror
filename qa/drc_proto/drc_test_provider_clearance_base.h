@@ -52,11 +52,11 @@ protected:
 
     bool doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
 
-    bool checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_PAD* pad,
-                                   int minClearance, int* aActualDist );
-    bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActual );
-    bool poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint aSegEnd,
-                      int aDist, int* aActual );
+    //bool checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_PAD* pad,
+      //                             int minClearance, int* aActualDist );
+    //bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActual );
+    //bool poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint aSegEnd,
+      //                int aDist, int* aActual );
     //bool poly2polyDRC( wxPoint* aTref, int aTrefCount, wxPoint* aTtest, int aTtestCount,
       //             int aAllowedDist, int* actualDist );
 

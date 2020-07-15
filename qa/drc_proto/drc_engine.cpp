@@ -111,7 +111,7 @@ void test::DRC_ENGINE::inferImplicitRules()
 }
 
 
-static const int drc_debug_level = -10;
+static const int drc_debug_level = 2;
 
 void test::drc_dbg( int level, const char* fmt, ... )
 {
@@ -156,6 +156,7 @@ bool test::DRC_ENGINE::CompileRules()
 
                         if( rule->GetPriority() == 0 )
                         {
+                            drc_dbg(1,"DefaultRule for %d = %p\n", id, rule );
                             m_ruleMap[ id ]->defaultRule = rule;
                             continue;
                         }
@@ -306,10 +307,16 @@ std::vector<test::DRC_RULE*> test::DRC_ENGINE::QueryRulesById( test::DRC_RULE_ID
 {
     std::vector<test::DRC_RULE*> rv;
 
-    rv.push_back( m_ruleMap[ruleID]->defaultRule );
+    auto dr = m_ruleMap[ruleID]->defaultRule;
+    assert( dr );
+
+    if ( dr )
+        rv.push_back( dr );
 
     for( auto rule : m_ruleMap[ruleID]->sortedRules )
     {
+        assert( rule );
+        assert( rule->rule );
         rv.push_back(rule->rule);
     }
 
