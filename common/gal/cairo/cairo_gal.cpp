@@ -40,8 +40,6 @@
 
 #include <pixman.h>
 
-#include <id.h>
-
 using namespace KIGFX;
 
 
@@ -1305,13 +1303,12 @@ void CAIRO_GAL::endDrawing()
 }
 
 
-void CAIRO_GAL::PostPaint()
+void CAIRO_GAL::PostPaint( wxPaintEvent& aEvent )
 {
     // posts an event to m_paint_listener to ask for redraw the canvas.
     if( paintListener )
     {
-        wxPaintEvent redrawReqEvent;
-        wxPostEvent( paintListener, redrawReqEvent );
+        wxPostEvent( paintListener, aEvent );
     }
 }
 
@@ -1488,9 +1485,9 @@ void CAIRO_GAL::setCompositor()
 }
 
 
-void CAIRO_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
+void CAIRO_GAL::onPaint( wxPaintEvent& aEvent )
 {
-    PostPaint();
+    PostPaint( aEvent );
 }
 
 

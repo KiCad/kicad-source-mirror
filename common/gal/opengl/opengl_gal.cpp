@@ -352,13 +352,12 @@ wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
 }
 
 
-void OPENGL_GAL::PostPaint()
+void OPENGL_GAL::PostPaint( wxPaintEvent& aEvent )
 {
     // posts an event to m_paint_listener to ask for redraw the canvas.
     if( paintListener )
     {
-        wxPaintEvent redrawReqEvent;
-        wxPostEvent( paintListener, redrawReqEvent );
+        wxPostEvent( paintListener, aEvent );
     }
 }
 
@@ -1954,9 +1953,9 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
 }
 
 
-void OPENGL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
+void OPENGL_GAL::onPaint( wxPaintEvent& aEvent )
 {
-    PostPaint();
+    PostPaint( aEvent );
 }
 
 
