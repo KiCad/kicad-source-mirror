@@ -16,6 +16,7 @@ set( KIMATH_SRCS
     src/geometry/shape_line_chain.cpp
     src/geometry/shape_poly_set.cpp
     src/geometry/shape_rect.cpp
+    src/geometry/shape_compound.cpp
 
     src/math/util.cpp
 )

@@ -447,6 +447,9 @@ inline bool CollCaseReversed ( const SHAPE* aA, const SHAPE* aB, int aClearance,
 
 bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual, VECTOR2I* aMTV )
 {
+    //if( aA->Type() == SH_COMPOUND )
+
+
     switch( aA->Type() )
     {
     case SH_RECT:
