@@ -40,6 +40,8 @@
 
 #include <pixman.h>
 
+#include <id.h>
+
 using namespace KIGFX;
 
 
@@ -1300,6 +1302,17 @@ void CAIRO_GAL::endDrawing()
     clientDC.Blit( 0, 0, screenSize.x, screenSize.y, &mdc, 0, 0, wxCOPY );
 
     deinitSurface();
+}
+
+
+void CAIRO_GAL::PostPaint()
+{
+    // posts an event to m_paint_listener to ask for redraw the canvas.
+    if( paintListener )
+    {
+        wxPaintEvent redrawReqEvent;
+        wxPostEvent( paintListener, redrawReqEvent );
+    }
 }
 
 

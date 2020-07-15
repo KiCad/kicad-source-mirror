@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2019 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2020 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017-2018 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -388,14 +388,7 @@ public:
      * posts an event to m_paint_listener.  A post is used so that the actual drawing
      * function can use a device context type that is not specific to the wxEVT_PAINT event.
      */
-    void PostPaint()
-    {
-        if( paintListener )
-        {
-            wxPaintEvent redrawEvent;
-            wxPostEvent( paintListener, redrawEvent );
-        }
-    }
+    void PostPaint();
 
     void SetMouseListener( wxEvtHandler* aMouseListener )
     {

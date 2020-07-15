@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2018 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2020 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -349,6 +349,17 @@ wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
     delete opengl_gal;
     delete testFrame;
     return wxEmptyString;
+}
+
+
+void OPENGL_GAL::PostPaint()
+{
+    // posts an event to m_paint_listener to ask for redraw the canvas.
+    if( paintListener )
+    {
+        wxPaintEvent redrawReqEvent;
+        wxPostEvent( paintListener, redrawReqEvent );
+    }
 }
 
 
