@@ -41,7 +41,7 @@ class BOARD;
 class BOARD_ITEM_CONTAINER;
 class SHAPE_POLY_SET;
 class PCB_BASE_FRAME;
-
+class SHAPE;
 
 /**
  * Enum STROKE_T
@@ -155,6 +155,8 @@ public:
      * A value of wxPoint(0,0) which can be passed to the Draw() functions.
      */
     static wxPoint ZeroOffset;
+
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_Parent; }
 

@@ -244,7 +244,8 @@ public:
     /**
      * Makes a set of SHAPE objects representing the DRAWSEGMENT.  Caller owns the objects.
      */
-    std::vector<SHAPE*> MakeEffectiveShapes();
+    std::vector<SHAPE*> MakeEffectiveShapes(); // fixme: move to shape_compound
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

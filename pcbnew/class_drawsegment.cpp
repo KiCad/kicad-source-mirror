@@ -37,6 +37,7 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
+#include <geometry/shape_compound.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 
@@ -1117,6 +1118,12 @@ std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes()
     }
 
     return effectiveShapes;
+}
+
+
+std::shared_ptr<SHAPE> DRAWSEGMENT::GetEffectiveShape( PCB_LAYER_ID aLayer )
+{
+    return std::shared_ptr<SHAPE>( new SHAPE_COMPOUND( MakeEffectiveShapes() ) );
 }
 
 

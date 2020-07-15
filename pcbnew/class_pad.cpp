@@ -40,6 +40,7 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_rect.h>
+#include <geometry/shape_compound.h>
 #include <pcbnew.h>
 #include <view/view.h>
 #include <class_board.h>
@@ -75,9 +76,9 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     // Parameters for round rect only:
-    m_roundedCornerScale = 0.25;                    // from  IPC-7351C standard
+    m_roundedCornerScale = 0.25;               // from  IPC-7351C standard
     // Parameters for chamfered rect only:
-    m_chamferScale = 0.2;                           // Size of chamfer: ratio of smallest of X,Y size
+    m_chamferScale = 0.2;                   // Size of chamfer: ratio of smallest of X,Y size
     m_chamferPositions  = RECT_NO_CHAMFER;          // No chamfered corner
 
     m_ZoneConnection    = ZONE_CONNECTION::INHERITED; // Use parent setting by default
@@ -218,6 +219,20 @@ const std::shared_ptr<SHAPE_POLY_SET>& D_PAD::GetEffectivePolygon() const
         BuildEffectiveShapes();
 
     return m_effectivePolygon;
+}
+
+
+std::shared_ptr<SHAPE> D_PAD::GetEffectiveShape( PCB_LAYER_ID aLayer )
+{
+    std::shared_ptr<SHAPE_COMPOUND> shape( new SHAPE_COMPOUND );
+
+    if( m_shapesDirty )
+        BuildEffectiveShapes();
+    
+    for( auto s : m_effectiveShapes )
+        shape->AddShape( s->Clone() ); // fixme: use COMPOUND everywhere
+
+    return shape;
 }
 
 
