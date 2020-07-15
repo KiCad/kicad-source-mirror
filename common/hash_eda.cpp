@@ -48,7 +48,7 @@ static inline size_t hash_board_item( const BOARD_ITEM* aItem, int aFlags )
 
 size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
 {
-    size_t ret;
+    size_t ret = 0;
 
     switch( aItem->Type() )
     {
