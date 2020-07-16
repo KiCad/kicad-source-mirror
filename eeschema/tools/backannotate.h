@@ -79,9 +79,9 @@ public:
 
     using CHANGELIST_ITEM = std::pair<SCH_REFERENCE, std::shared_ptr<PCB_MODULE_DATA>>;
 
-    BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aProcessFootprints,
-                   bool aProcessValues, bool aProcessReferences, bool aProcessNetNames,
-                   bool aIgnoreOtherProjects, bool aDryRun );
+    BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
+                   bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
+                   bool aProcessNetNames, bool aIgnoreOtherProjects, bool aDryRun );
     ~BACK_ANNOTATE();
 
     /**
@@ -90,6 +90,8 @@ public:
      * @return true if success
      */
     bool FetchNetlistFromPCB( std::string& aNetlist );
+
+    void PushNewLinksToPCB();
 
     /**
      * @brief Run back annotation algorithm. If any errors, back annotation doesn't run.
@@ -102,6 +104,7 @@ public:
 private:
     REPORTER&                    m_reporter;
 
+    bool                         m_matchByReference;
     bool                         m_processFootprints;
     bool                         m_processValues;
     bool                         m_processReferences;

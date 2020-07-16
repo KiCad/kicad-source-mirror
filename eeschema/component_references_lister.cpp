@@ -178,6 +178,18 @@ int SCH_REFERENCE_LIST::FindRefByPath( const wxString& aPath ) const
 }
 
 
+int SCH_REFERENCE_LIST::FindRef( const wxString& aRef ) const
+{
+    for( size_t i = 0; i < flatList.size(); ++i )
+    {
+        if( flatList[i].GetRef() == aRef )
+            return i;
+    }
+
+    return -1;
+}
+
+
 void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId )
 {
     aIdList.clear();

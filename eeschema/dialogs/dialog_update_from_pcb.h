@@ -40,6 +40,7 @@ class DIALOG_UPDATE_FROM_PCB : public DIALOG_UPDATE_FROM_PCB_BASE
     struct DIALOG_UPDATE_FROM_PCB_SAVED_STATE
     {
         // Flags to remember last checkboxes state
+        bool MatchByReference;
         bool UpdateReferences;
         bool UpdateFootprints;
         bool UpdateValues;

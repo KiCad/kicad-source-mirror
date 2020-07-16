@@ -42,7 +42,19 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
     m_messagePanel->SetLazyUpdate( true );
     m_messagePanel->GetSizer()->SetSizeHints( this );
 
-    m_cbUpdateReferences->SetValue( s_savedDialogState.UpdateReferences );
+    m_cbRelinkFootprints->SetValue( s_savedDialogState.MatchByReference );
+
+    if( m_cbRelinkFootprints->GetValue() )
+    {
+        m_cbUpdateReferences->SetValue( false );
+        m_cbUpdateReferences->Enable( false );
+    }
+    else
+    {
+        m_cbUpdateReferences->SetValue( s_savedDialogState.UpdateReferences );
+        m_cbUpdateReferences->Enable( true );
+    }
+
     m_cbUpdateFootprints->SetValue( s_savedDialogState.UpdateFootprints );
     m_cbUpdateValues->SetValue( s_savedDialogState.UpdateValues );
     m_cbUpdateNetNames->SetValue( s_savedDialogState.UpdateNetNames );
@@ -64,6 +76,7 @@ void DIALOG_UPDATE_FROM_PCB::updateData()
     m_messagePanel->Clear();
     BACK_ANNOTATE backAnno( this->m_frame,
                             m_messagePanel->Reporter(),
+                            m_cbRelinkFootprints->GetValue(),
                             m_cbUpdateFootprints->GetValue(),
                             m_cbUpdateValues->GetValue(),
                             m_cbUpdateReferences->GetValue(),
@@ -91,12 +104,34 @@ DIALOG_UPDATE_FROM_PCB::~DIALOG_UPDATE_FROM_PCB()
 
 void DIALOG_UPDATE_FROM_PCB::OnOptionChanged( wxCommandEvent& event )
 {
+    if( event.GetEventObject() == m_cbRelinkFootprints )
+    {
+        if( m_cbRelinkFootprints->GetValue() )
+        {
+            m_cbUpdateReferences->SetValue( false );
+            m_cbUpdateReferences->Enable( false );
+        }
+        else
+        {
+            m_cbUpdateReferences->SetValue( s_savedDialogState.UpdateReferences );
+            m_cbUpdateReferences->Enable( true );
+        }
+    }
+
     updateData();
-    s_savedDialogState.UpdateReferences = m_cbUpdateReferences->GetValue();
-    s_savedDialogState.UpdateFootprints = m_cbUpdateFootprints->GetValue();
-    s_savedDialogState.UpdateValues = m_cbUpdateValues->GetValue();
-    s_savedDialogState.UpdateNetNames = m_cbUpdateNetNames->GetValue();
-    s_savedDialogState.IgnoreOtherProjectsErrors = m_cbIgnoreOtherProjects->GetValue();
+
+    if( event.GetEventObject() == m_cbRelinkFootprints )
+        s_savedDialogState.MatchByReference = m_cbRelinkFootprints->GetValue();
+    else if( event.GetEventObject() == m_cbUpdateReferences )
+        s_savedDialogState.UpdateReferences = m_cbUpdateReferences->GetValue();
+    else if( event.GetEventObject() == m_cbUpdateFootprints )
+        s_savedDialogState.UpdateFootprints = m_cbUpdateFootprints->GetValue();
+    else if( event.GetEventObject() == m_cbUpdateValues )
+        s_savedDialogState.UpdateValues = m_cbUpdateValues->GetValue();
+    else if( event.GetEventObject() == m_cbUpdateNetNames )
+        s_savedDialogState.UpdateNetNames = m_cbUpdateNetNames->GetValue();
+    else if( event.GetEventObject() == m_cbIgnoreOtherProjects )
+        s_savedDialogState.IgnoreOtherProjectsErrors = m_cbIgnoreOtherProjects->GetValue();
 }
 
 void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
@@ -105,6 +140,7 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
     m_messagePanel->Clear();
     BACK_ANNOTATE backAnno( m_frame,
                             m_messagePanel->Reporter(),
+                            m_cbRelinkFootprints->GetValue(),
                             m_cbUpdateFootprints->GetValue(),
                             m_cbUpdateValues->GetValue(),
                             m_cbUpdateReferences->GetValue(),
@@ -119,6 +155,10 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
         m_frame->SyncView();
         m_frame->OnModify();
         m_frame->GetCanvas()->Refresh();
+
+        if( m_cbRelinkFootprints->GetValue() )
+            backAnno.PushNewLinksToPCB();
     }
+
     m_messagePanel->Flush( true );
 }

@@ -35,11 +35,12 @@
 #include <kiface_i.h>
 #include <wildcards_and_files_ext.h>
 
-BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter,
+BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                               bool aProcessFootprints, bool aProcessValues,
                               bool aProcessReferences, bool aProcessNetNames,
                               bool aIgnoreOtherProjects, bool aDryRun ) :
         m_reporter( aReporter ),
+        m_matchByReference( aRelinkFootprints ),
         m_processFootprints( aProcessFootprints ),
         m_processValues( aProcessValues ),
         m_processReferences( aProcessReferences ),
@@ -113,6 +114,14 @@ bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
 }
 
 
+void BACK_ANNOTATE::PushNewLinksToPCB()
+{
+    std::string nullPayload;
+
+    m_frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_PCB_UPDATE_LINKS, nullPayload );
+}
+
+
 void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 {
     auto getStr = []( const PTREE& pt ) -> wxString
@@ -142,7 +151,10 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
         try
         {
-            path = getStr( item.second.get_child( "timestamp" ) );
+            if( m_matchByReference )
+                path = ref;
+            else
+                path = getStr( item.second.get_child( "timestamp" ) );
 
             if( path == "" )
             {
@@ -198,15 +210,20 @@ void BACK_ANNOTATE::getChangeList()
     {
         const wxString& pcbPath = module.first;
         auto&           pcbData = module.second;
+        int             refIndex;
         bool            foundInMultiunit = false;
 
-        for( auto& item : m_multiUnitsRefs )
+        for( std::pair<const wxString, SCH_REFERENCE_LIST>& item : m_multiUnitsRefs )
         {
             SCH_REFERENCE_LIST& refList = item.second;
 
-            if( refList.FindRefByPath( pcbPath ) >= 0 )
-            {
+            if( m_matchByReference )
+                refIndex = refList.FindRef( pcbPath );
+            else
+                refIndex = refList.FindRefByPath( pcbPath );
 
+            if( refIndex >= 0 )
+            {
                 // If module linked to multi unit symbol, we add all symbol's units to
                 // the change list
                 foundInMultiunit = true;
@@ -224,7 +241,10 @@ void BACK_ANNOTATE::getChangeList()
         if( foundInMultiunit )
             continue;
 
-        int refIndex = m_refs.FindRefByPath( pcbPath );
+        if( m_matchByReference )
+            refIndex = m_refs.FindRef( pcbPath );
+        else
+            refIndex = m_refs.FindRefByPath( pcbPath );
 
         if( refIndex >= 0 )
         {
@@ -265,6 +285,12 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
         }
 
         ++i;
+    }
+
+    if( m_matchByReference && !m_frame->ReadyToNetlist() )
+    {
+        m_reporter.ReportTail( _( "Cannot relink footprints because schematic is not fully annotated" ),
+                               RPT_SEVERITY_ERROR );
     }
 }
 

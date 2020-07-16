@@ -41,11 +41,13 @@
 #include <kiway_express.h>
 #include <macros.h>
 #include <netlist_reader/pcb_netlist.h>
+#include <netlist_reader/board_netlist_updater.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
+#include <netlist_reader/netlist_reader.h>
 
 /* Execute a remote command send by Eeschema via a socket,
  * port KICAD_PCB_PORT_SERVICE_NUMBER
@@ -416,8 +418,33 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         netlist.Format( "pcb_netlist", &sf, 0, CTL_OMIT_FILTERS );
         payload = sf.GetString();
-        break;
     }
+        break;
+
+    case MAIL_PCB_UPDATE_LINKS:
+        try
+        {
+            NETLIST netlist;
+            FetchNetlistFromSchematic( netlist, NO_ANNOTATION );
+
+            BOARD_NETLIST_UPDATER updater( this, GetBoard() );
+            updater.SetLookupByTimestamp( false );
+            updater.SetDeleteUnusedComponents ( false );
+            updater.SetReplaceFootprints( false );
+            updater.SetDeleteSinglePadNets( false );
+            updater.SetWarnPadNoNetInNetlist( false );
+            updater.UpdateNetlist( netlist );
+
+            bool dummy;
+            OnNetlistChanged( updater, &dummy );
+        }
+        catch( const IO_ERROR& )
+        {
+            assert( false ); // should never happen
+            return;
+        }
+        break;
+
     case MAIL_CROSS_PROBE:
         ExecuteRemoteCommand( payload.c_str() );
         break;
@@ -448,9 +475,8 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         if( importFormat >= 0 )
             importFile( path, importFormat );
-
-        break;
     }
+        break;
 
     // many many others.
     default:

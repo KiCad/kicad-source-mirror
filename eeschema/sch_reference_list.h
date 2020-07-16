@@ -423,6 +423,13 @@ public:
     }
 
     /**
+     * searches the list for a component with a given reference.
+     * @param aPath
+     * @return
+     */
+    int FindRef( const wxString& aPath ) const;
+
+    /**
      * searches the sorted list of components for a another component with the same
      * reference and a given part unit.  Use this method to manage components with
      * multiple parts per package.
@@ -433,7 +440,7 @@ public:
     int FindUnit( size_t aIndex, int aUnit );
 
     /**
-     * @brief Searches unit with designated path
+     * searches the list for a component with the given KIID path
      * @param aPath path to search
      * @return index in aComponentsList if found or -1 if not found
      */

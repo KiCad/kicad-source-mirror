@@ -35,10 +35,11 @@ class DIALOG_UPDATE_FROM_PCB_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxCheckBox* m_cbUpdateReferences;
+		wxCheckBox* m_cbRelinkFootprints;
 		wxCheckBox* m_cbIgnoreOtherProjects;
-		wxCheckBox* m_cbUpdateValues;
+		wxCheckBox* m_cbUpdateReferences;
 		wxCheckBox* m_cbUpdateFootprints;
+		wxCheckBox* m_cbUpdateValues;
 		wxCheckBox* m_cbUpdateNetNames;
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxStdDialogButtonSizer* m_sdbSizer;
