@@ -119,13 +119,28 @@ if( MAKE_LINK_MAPS )
         LINK_FLAGS "-Wl,-cref,-Map=gerbview.map" )
 endif()
 
-# the main gerbview program, in DSO form.
-add_library( gerbview_kiface MODULE
+
+# The objects for the main gerbview program
+add_library( gerbview_kiface_objects OBJECT
     gerbview.cpp
     ${GERBVIEW_SRCS}
     ${DIALOGS_SRCS}
     ${GERBVIEW_EXTRA_SRCS}
     )
+
+# Since we're not using target_link_libraries, we need to explicitly
+# declare the dependency
+add_dependencies( gerbview_kiface_objects common )
+add_dependencies( gerbview_kiface_objects gal )
+
+# CMake <3.9 can't link anything to object libraries,
+# but we only need include directories, as we will link the kiface MODULE
+target_include_directories( gerbview_kiface_objects PRIVATE
+    $<TARGET_PROPERTY:common,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+
+# the main gerbview program, in DSO form.
+add_library( gerbview_kiface MODULE $<TARGET_OBJECTS:gerbview_kiface_objects> )
 set_target_properties( gerbview_kiface PROPERTIES
     OUTPUT_NAME     gerbview
     PREFIX          ${KIFACE_PREFIX}

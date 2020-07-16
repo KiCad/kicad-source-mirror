@@ -32,9 +32,6 @@ include_directories(
     )
 
 set( QA_EESCHEMA_SRCS
-    # stuff from common which is needed...why?
-    ${CMAKE_SOURCE_DIR}/common/observable.cpp
-
     # need the mock Pgm for many functions
     mocks_eeschema.cpp
 
@@ -46,6 +43,10 @@ set( QA_EESCHEMA_SRCS
 
     # Base internal units (1=100nm) testing.
     test_sch_biu.cpp
+
+    # Shared between programs, but dependent on the BIU
+    ${CMAKE_SOURCE_DIR}/qa/common/test_format_units.cpp
+    ${CMAKE_SOURCE_DIR}/qa/common/test_array_options.cpp
 
     test_eagle_plugin.cpp
     test_lib_arc.cpp
@@ -108,5 +109,5 @@ set_source_files_properties( eeschema_test_utils.cpp PROPERTIES
     COMPILE_DEFINITIONS "QA_EESCHEMA_DATA_LOCATION=(\"${CMAKE_CURRENT_SOURCE_DIR}/data\")"
 )
 
-kicad_add_boost_test( qa_eeschema eeschema )
+kicad_add_boost_test( qa_eeschema qa_eeschema )
 

@@ -350,6 +350,7 @@ set( COMMON_SRCS
     systemdirsappend.cpp
     template_fieldnames.cpp
     textentry_tricks.cpp
+    title_block.cpp
     trace_helpers.cpp
     undo_redo_container.cpp
     utf8.cpp

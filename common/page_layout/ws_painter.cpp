@@ -214,52 +214,6 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 }
 
 
-void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-
-{
-    // Don't write the title block information if there is nothing to write.
-    bool isempty = true;
-    for( unsigned idx = 0; idx < m_tbTexts.GetCount(); idx++ )
-    {
-        if( ! m_tbTexts[idx].IsEmpty() )
-        {
-            isempty = false;
-            break;
-        }
-    }
-
-    if( !isempty  )
-    {
-        aFormatter->Print( aNestLevel, "(title_block\n" );
-
-        if( !GetTitle().IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(title %s)\n",
-                               aFormatter->Quotew( GetTitle() ).c_str() );
-
-        if( !GetDate().IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(date %s)\n",
-                               aFormatter->Quotew( GetDate() ).c_str() );
-
-        if( !GetRevision().IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(rev %s)\n",
-                               aFormatter->Quotew( GetRevision() ).c_str() );
-
-        if( !GetCompany().IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(company %s)\n",
-                               aFormatter->Quotew( GetCompany() ).c_str() );
-
-        for( int ii = 0; ii < 9; ii++ )
-        {
-            if( !GetComment(ii).IsEmpty() )
-                aFormatter->Print( aNestLevel+1, "(comment %d %s)\n", ii+1,
-                                  aFormatter->Quotew( GetComment(ii) ).c_str() );
-        }
-
-        aFormatter->Print( aNestLevel, ")\n\n" );
-    }
-}
-
-
 bool KIGFX::WS_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
     auto item = static_cast<const EDA_ITEM*>( aItem );

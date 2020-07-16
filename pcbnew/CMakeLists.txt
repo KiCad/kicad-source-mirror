@@ -308,7 +308,7 @@ set( PCBNEW_CLASS_SRCS
     zones_test_and_combine_areas.cpp
 
     ratsnest/ratsnest.cpp
-    
+
     tools/drawing_tool.cpp
     tools/edit_tool.cpp
     tools/global_edit_tool.cpp

@@ -19,67 +19,44 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-if( BUILD_GITHUB_PLUGIN )
-    set( GITHUB_PLUGIN_LIBRARIES github_plugin )
-endif()
 
-
-set( QA_PCBNEW_SRCS
+set( QA_GERBVIEW_SRCS
     # The main test entry points
     test_module.cpp
 
     # Shared between programs, but dependent on the BIU
     ${CMAKE_SOURCE_DIR}/qa/common/test_format_units.cpp
-    ${CMAKE_SOURCE_DIR}/qa/common/test_array_options.cpp
-
-    # testing utility routines
-    board_test_utils.cpp
-    drc/drc_test_utils.cpp
-
-    # test compilation units (start test_)
-    test_array_pad_name_provider.cpp
-    test_graphics_import_mgr.cpp
-    test_lset.cpp
-    test_pad_naming.cpp
-
-    drc/test_drc_courtyard_invalid.cpp
-    drc/test_drc_courtyard_overlap.cpp
 )
 
-add_executable( qa_pcbnew
-    ${QA_PCBNEW_SRCS}
+add_executable( qa_gerbview
+    ${QA_GERBVIEW_SRCS}
 
+    # In order to enable this, the actual Gerbview kiface build must be updated to match pcbnew's
     # Older CMakes cannot link OBJECT libraries
     # https://cmake.org/pipermail/cmake/2013-November/056263.html
-    $<TARGET_OBJECTS:pcbnew_kiface_objects>
+    $<TARGET_OBJECTS:gerbview_kiface_objects>
 )
 
-# Pcbnew tests, so pretend to be pcbnew (for units, etc)
-target_compile_definitions( qa_pcbnew
-    PRIVATE PCBNEW
+# Gerbview tests, so pretend to be gerbview (for units, etc)
+target_compile_definitions( qa_gerbview
+    PRIVATE GERBVIEW
+)
+
+target_include_directories( qa_gerbview PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
 )
 
 # Anytime we link to the kiface_objects, we have to add a dependency on the last object
 # to ensure that the generated lexer files are finished being used before the qa runs in a
 # multi-threaded build
-add_dependencies( qa_pcbnew pcbnew )
+add_dependencies( qa_gerbview gerbview )
 
-target_link_libraries( qa_pcbnew
-    qa_pcbnew_utils
-    3d-viewer
-    connectivity
+target_link_libraries( qa_gerbview
     pcbcommon
-    pnsrouter
-    pcad2kicadpcb
-    altium2kicadpcb
     gal
     common
     gal
     qa_utils
-    dxflib_qcad
-    tinyspline_lib
-    nanosvg
-    idf3
     unit_test_utils
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
@@ -89,4 +66,4 @@ target_link_libraries( qa_pcbnew
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 
-kicad_add_boost_test( qa_pcbnew qa_pcbnew )
+kicad_add_boost_test( qa_gerbview qa_gerbview )

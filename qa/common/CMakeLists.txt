@@ -28,21 +28,12 @@ set( common_srcs
     # The main test entry points
     test_module.cpp
 
-    # stuff from common due to...units?
-    ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
-    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
-
-    # stuff from common which is needed...why?
-    ${CMAKE_SOURCE_DIR}/common/observable.cpp
-
     wximage_test_utils.cpp
 
     test_array_axis.cpp
-    test_array_options.cpp
     test_bitmap_base.cpp
     test_color4d.cpp
     test_coroutine.cpp
-    test_format_units.cpp
     test_lib_table.cpp
     test_kicad_string.cpp
     test_property.cpp
@@ -66,29 +57,13 @@ set( common_libs
 )
 
 
-# Use code with GERBVIEW defines in place (primarily IU difference)
-add_executable( qa_common_gerbview ${common_srcs} )
-target_link_libraries( qa_common_gerbview ${common_libs} )
-target_compile_definitions( qa_common_gerbview PRIVATE GERBVIEW )
-target_include_directories( qa_common_gerbview PRIVATE
+# Test executable for non-program-specific code
+add_executable( qa_common ${common_srcs} )
+target_link_libraries( qa_common ${common_libs} )
+target_include_directories( qa_common PRIVATE
     $<TARGET_PROPERTY:libcontext,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-# Use code with PCBNEW defines in place
-add_executable( qa_common_pcbnew ${common_srcs} )
-target_link_libraries( qa_common_pcbnew  ${common_libs} )
-target_compile_definitions( qa_common_pcbnew PRIVATE PCBNEW )
-target_include_directories( qa_common_pcbnew PRIVATE
-    $<TARGET_PROPERTY:libcontext,INTERFACE_INCLUDE_DIRECTORIES>
-)
-
-# Use code with EESCHEMA defines in place
-add_executable( qa_common_eeschema ${common_srcs} )
-target_link_libraries( qa_common_eeschema  ${common_libs} )
-target_compile_definitions( qa_common_eeschema PRIVATE EESCHEMA )
-target_include_directories( qa_common_eeschema PRIVATE
-    $<TARGET_PROPERTY:libcontext,INTERFACE_INCLUDE_DIRECTORIES>
-)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}
@@ -97,6 +72,4 @@ include_directories(
     ${INC_AFTER}
 )
 
-kicad_add_boost_test( qa_common_eeschema common_eeschema )
-kicad_add_boost_test( qa_common_pcbnew common_pcbnew )
-kicad_add_boost_test( qa_common_gerbview qa_common_gerbview )
+kicad_add_boost_test( qa_common qa_common )

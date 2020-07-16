@@ -41,4 +41,4 @@ target_include_directories( qa_sexpr PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-kicad_add_boost_test(qa_sexpr sexpr)
+kicad_add_boost_test(qa_sexpr qa_sexpr)

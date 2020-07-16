@@ -1,0 +1,136 @@
+{
+  "board": {
+    "design_settings": {
+      "defaults": {
+        "board_outline_line_width": 0.09999999999999999,
+        "copper_line_width": 0.3,
+        "copper_text_italic": false,
+        "copper_text_size_h": 2.0,
+        "copper_text_size_v": 2.0,
+        "copper_text_thickness": 0.3,
+        "copper_text_upright": false,
+        "courtyard_line_width": 0.05,
+        "dimension_precision": 1,
+        "dimension_units": 0,
+        "other_line_width": 0.09999999999999999,
+        "other_text_italic": false,
+        "other_text_size_h": 1.0,
+        "other_text_size_v": 1.0,
+        "other_text_thickness": 0.15,
+        "other_text_upright": false,
+        "silk_line_width": 0.2,
+        "silk_text_italic": false,
+        "silk_text_size_h": 1.0,
+        "silk_text_size_v": 1.0,
+        "silk_text_thickness": 0.2,
+        "silk_text_upright": false
+      },
+      "diff_pair_dimensions": [
+        {
+          "gap": 0.35,
+          "via_gap": 0.25,
+          "width": 0.4
+        }
+      ],
+      "drc_exclusions": [],
+      "rule_severitieslegacy_courtyards_overlap": true,
+      "rule_severitieslegacy_no_courtyard_defined": false,
+      "rules": {
+        "allow_blind_buried_vias": false,
+        "allow_microvias": false,
+        "min_copper_edge_clearance": 0.01,
+        "min_hole_to_hole": 0.25,
+        "min_microvia_diameter": 0.508,
+        "min_microvia_drill": 0.2032,
+        "min_through_hole_diameter": 0.508,
+        "min_track_width": 0.2032,
+        "min_via_diameter": 0.889,
+        "solder_mask_clearance": 0.254,
+        "solder_mask_min_width": 0.0,
+        "solder_paste_clearance": 0.0,
+        "solder_paste_margin_ratio": -0.0
+      },
+      "track_widths": [
+        0.4
+      ],
+      "via_dimensions": [
+        {
+          "diameter": 1.651,
+          "drill": 0.6
+        }
+      ]
+    },
+    "layer_presets": []
+  },
+  "boards": [],
+  "cvpcb": {
+    "equivalence_files": []
+  },
+  "libraries": {
+    "pinned_footprint_libs": [],
+    "pinned_symbol_libs": []
+  },
+  "meta": {
+    "filename": "complex_hierarchy.kicad_pro",
+    "version": 1
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "clearance": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "Default",
+        "track_width": 0.25,
+        "via_diameter": 0.8,
+        "via_drill": 0.4
+      }
+    ],
+    "meta": {
+      "version": 0
+    },
+    "net_colors": null
+  },
+  "pcbnew": {
+    "last_paths": {
+      "gencad": "",
+      "idf": "",
+      "netlist": "",
+      "specctra_dsn": "",
+      "step": "",
+      "vmrl": ""
+    },
+    "page_layout_descr_file": ""
+  },
+  "schematic": {
+    "drawing": {
+      "default_text_size": 50
+    },
+    "legacy_lib_dir": "",
+    "legacy_lib_list": [],
+    "net_format_name": "Pcbnew",
+    "page_layout_descr_file": "",
+    "plot_directory": "",
+    "spice_adjust_passive_values": false,
+    "subpart_first_id": 65,
+    "subpart_id_separator": 0
+  },
+  "sheets": [
+    [
+      "2af0a8cc-488a-452c-afb6-9304525ae2e2",
+      ""
+    ],
+    [
+      "00000000-0000-0000-0000-00004b3a1333",
+      "ampli_ht_vertical"
+    ],
+    [
+      "00000000-0000-0000-0000-00004b3a13a4",
+      "ampli_ht_horizontal"
+    ]
+  ],
+  "text_variables": {}
+}

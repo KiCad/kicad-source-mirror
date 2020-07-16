@@ -1,0 +1,118 @@
+{
+  "board": {
+    "design_settings": {
+      "diff_pair_dimensions": [],
+      "drc_exclusions": [],
+      "track_widths": [],
+      "via_dimensions": []
+    },
+    "layer_presets": []
+  },
+  "boards": [],
+  "cvpcb": {
+    "equivalence_files": []
+  },
+  "legacy": {
+    "ViaDiameter": "0.889",
+    "ViaDrill": "0.4",
+    "dPairGap": "0.25",
+    "dPairViaGap": "0.25",
+    "dPairWidth": "0.2",
+    "uViaDiameter": "0.508",
+    "uViaDrill": "0.127"
+  },
+  "libraries": {
+    "pinned_footprint_libs": [],
+    "pinned_symbol_libs": []
+  },
+  "meta": {
+    "filename": "video.kicad_pro",
+    "version": 1
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "clearance": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "Default",
+        "track_width": 0.25,
+        "via_diameter": 0.8,
+        "via_drill": 0.4
+      }
+    ],
+    "meta": {
+      "version": 0
+    },
+    "net_colors": null
+  },
+  "pcbnew": {
+    "last_paths": {
+      "gencad": "",
+      "idf": "",
+      "netlist": "",
+      "specctra_dsn": "",
+      "step": "",
+      "vmrl": ""
+    },
+    "page_layout_descr_file": ""
+  },
+  "schematic": {
+    "drawing": {
+      "default_bus_thickness": 12,
+      "default_junction_size": 40,
+      "default_line_thickness": 6,
+      "default_text_size": 50,
+      "default_wire_thickness": 6,
+      "field_names": "(templatefields)",
+      "pin_symbol_size": 25,
+      "text_offset_ratio": 0.3
+    },
+    "legacy_lib_dir": "",
+    "legacy_lib_list": [],
+    "net_format_name": "Pcbnew",
+    "page_layout_descr_file": "",
+    "plot_directory": "",
+    "spice_adjust_passive_values": false,
+    "subpart_first_id": 65,
+    "subpart_id_separator": 0
+  },
+  "sheets": [
+    [
+      "84d4d60f-6656-461e-b8d6-5d42ccee0251",
+      ""
+    ],
+    [
+      "00000000-0000-0000-0000-00004bf03687",
+      "buspci.sch"
+    ],
+    [
+      "00000000-0000-0000-0000-00004bf03683",
+      "graphic"
+    ],
+    [
+      "00000000-0000-0000-0000-00004bf03689",
+      "ESVIDEO-RVB"
+    ],
+    [
+      "00000000-0000-0000-0000-00004bf03681",
+      "pal-ntsc.sch"
+    ],
+    [
+      "00000000-0000-0000-0000-00004bf03685",
+      "RAMS"
+    ],
+    [
+      "00000000-0000-0000-0000-00004bf0367d",
+      "muxdata"
+    ],
+    [
+      "00000000-0000-0000-0000-00004bf0367f",
+      "modul"
+    ]
+  ],
+  "text_variables": {}
+}

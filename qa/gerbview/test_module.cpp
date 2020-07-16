@@ -31,7 +31,7 @@
 
 bool init_unit_test()
 {
-    boost::unit_test::framework::master_test_suite().p_name.value = "Pcbnew module tests";
+    boost::unit_test::framework::master_test_suite().p_name.value = "Gerbview module tests";
     return wxInitialize();
 }
 

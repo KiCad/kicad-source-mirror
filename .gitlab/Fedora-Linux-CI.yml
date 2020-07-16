@@ -93,58 +93,51 @@ qa_python:
   variables:
     TEST: 'qa_python'
 
-qa_common_eeschema:
+qa_common:
   extends:
     - .unit_test
     - .only_code
   variables:
-    TEST: 'common_eeschema'
+    TEST: 'qa_common'
 
-qa_common_pcbnew:
+qa_gerbview:
   extends:
     - .unit_test
     - .only_code
   variables:
-    TEST: 'common_pcbnew'
-
-qa_common_gerbview:
-  extends:
-    - .unit_test
-    - .only_code
-  variables:
-    TEST: 'qa_common_gerbview'
+    TEST: 'qa_gerbview'
 
 qa_pcbnew:
   extends:
     - .unit_test
     - .only_code
   variables:
-    TEST: 'pcbnew'
+    TEST: 'qa_pcbnew'
 
 qa_eeschema:
   extends:
     - .unit_test
     - .only_code
   variables:
-    TEST: 'eeschema'
+    TEST: 'qa_eeschema'
 
 qa_kimath:
   extends:
     - .unit_test
     - .only_code
   variables:
-    TEST: 'kimath'
+    TEST: 'qa_kimath'
 
 qa_sexpr:
   extends:
     - .unit_test
     - .only_code
   variables:
-    TEST: 'sexpr'
+    TEST: 'qa_sexpr'
 
 qa_kicad2step:
   extends:
     - .unit_test
     - .only_code
   variables:
-    TEST: 'kicad2step'
+    TEST: 'qa_kicad2step'
