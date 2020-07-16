@@ -328,7 +328,6 @@ int PL_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                 m_selectionTool->RemoveItemFromSel( item );
 
             getView()->Remove( item );
-            delete item;
         }
 
         delete dataItem;
