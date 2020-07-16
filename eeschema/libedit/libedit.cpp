@@ -595,8 +595,9 @@ void LIB_EDIT_FRAME::CopyPartToClipboard()
     if( !part )
         return;
 
+    std::unique_ptr< LIB_PART> tmp = part->Flatten();
     STRING_FORMATTER formatter;
-    SCH_SEXPR_PLUGIN::FormatPart( part, formatter );
+    SCH_SEXPR_PLUGIN::FormatPart( tmp.get(), formatter );
 
     auto clipboard = wxTheClipboard;
     wxClipboardLocker clipboardLock( clipboard );
