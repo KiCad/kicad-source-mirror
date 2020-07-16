@@ -39,6 +39,7 @@
 #include <symbol_tree_pane.h>
 #include <widgets/lib_tree.h>
 #include <sch_legacy_plugin.h>
+#include <sch_sexpr_plugin.h>
 #include <dialogs/dialog_lib_new_component.h>
 #include <dialog_helpers.h>
 #include <wx/clipbrd.h>
@@ -593,7 +594,7 @@ void LIB_EDIT_FRAME::CopyPartToClipboard()
         return;
 
     STRING_FORMATTER formatter;
-    SCH_LEGACY_PLUGIN::FormatPart( part, formatter );
+    SCH_SEXPR_PLUGIN::FormatPart( part, formatter );
 
     auto clipboard = wxTheClipboard;
     wxClipboardLocker clipboardLock( clipboard );
@@ -636,8 +637,7 @@ void LIB_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
 
         try
         {
-            reader.ReadLine();
-            newPart = SCH_LEGACY_PLUGIN::ParsePart( reader );
+            newPart = SCH_SEXPR_PLUGIN::ParsePart( reader );
         }
         catch( IO_ERROR& e )
         {
