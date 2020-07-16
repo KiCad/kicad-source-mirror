@@ -54,6 +54,8 @@ protected:
 
     ///> Currently used worksheet
     std::unique_ptr<KIGFX::WS_PROXY_VIEW_ITEM> m_worksheet;
+
+    std::unique_ptr<WS_DRAW_ITEM_PAGE> m_pageDrawItem;
 };
 
 

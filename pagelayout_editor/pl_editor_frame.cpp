@@ -300,6 +300,9 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     // do not show the window because we do not want any paint event
     Show( false );
 
+    // clean up the data before the view is destroyed
+    WS_DATA_MODEL::GetTheInstance().ClearList();
+
     // On Linux, m_propertiesPagelayout must be destroyed
     // before deleting the main frame to avoid a crash when closing
     m_propertiesPagelayout->Destroy();

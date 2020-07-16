@@ -87,6 +87,8 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
     selTool->GetSelection().Clear();
     m_view->Clear();
 
+    m_pageDrawItem.reset();
+
     // Obviously, always show the page limit:
     m_edaFrame->SetShowPageLimits( true );
     auto painter = m_view->GetPainter();
@@ -110,8 +112,8 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
     // Not also this item has no peer in WS_DATA_MODEL list.
     const int penWidth = 0;     // This value is to use the default thickness line
     constexpr double markerSize = Millimeter2iu( 5 );
-    WS_DRAW_ITEM_PAGE* pageDrawing = new WS_DRAW_ITEM_PAGE( penWidth, markerSize );
-    m_view->Add( pageDrawing );
+    m_pageDrawItem = std::make_unique<WS_DRAW_ITEM_PAGE>( penWidth, markerSize );
+    m_view->Add( m_pageDrawItem.get() );
 
     selTool->RebuildSelection();
 
@@ -125,9 +127,9 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
                     VECTOR2D( size_x * 1.5, size_y * 1.5) );
     m_view->SetBoundary( boundary );
 
-    pageDrawing->SetPageSize( m_edaFrame->GetPageSizeIU() );
+    m_pageDrawItem->SetPageSize( m_edaFrame->GetPageSizeIU() );
     wxPoint originCoord = static_cast<PL_EDITOR_FRAME*>( m_edaFrame )->ReturnCoordOriginCorner();
-    pageDrawing->SetMarkerPos( originCoord );
+    m_pageDrawItem->SetMarkerPos( originCoord );
 }
 
 
