@@ -141,6 +141,13 @@ MODULE::MODULE( const MODULE& aModule ) :
 }
 
 
+MODULE::MODULE( MODULE&& aModule ) :
+    BOARD_ITEM_CONTAINER( aModule )
+{
+    *this = std::move( aModule );
+}
+
+
 MODULE::~MODULE()
 {
     // Clean up the owned elements
@@ -162,6 +169,98 @@ MODULE::~MODULE()
         delete d;
 
     m_drawings.clear();
+}
+
+
+MODULE& MODULE::operator=( MODULE&& aOther )
+{
+    BOARD_ITEM::operator=( aOther );
+
+    m_Pos           = aOther.m_Pos;
+    m_fpid          = aOther.m_fpid;
+    m_Attributs     = aOther.m_Attributs;
+    m_ModuleStatus  = aOther.m_ModuleStatus;
+    m_Orient        = aOther.m_Orient;
+    m_BoundaryBox   = aOther.m_BoundaryBox;
+    m_CntRot90      = aOther.m_CntRot90;
+    m_CntRot180     = aOther.m_CntRot180;
+    m_LastEditTime  = aOther.m_LastEditTime;
+    m_Link          = aOther.m_Link;
+    m_Path          = aOther.m_Path;
+
+    m_LocalClearance                = aOther.m_LocalClearance;
+    m_LocalSolderMaskMargin         = aOther.m_LocalSolderMaskMargin;
+    m_LocalSolderPasteMargin        = aOther.m_LocalSolderPasteMargin;
+    m_LocalSolderPasteMarginRatio   = aOther.m_LocalSolderPasteMarginRatio;
+    m_ZoneConnection                = aOther.m_ZoneConnection;
+    m_ThermalWidth                  = aOther.m_ThermalWidth;
+    m_ThermalGap                    = aOther.m_ThermalGap;
+
+    // Move reference and value
+    m_Reference = aOther.m_Reference;
+    m_Reference->SetParent( this );
+    m_Value = aOther.m_Value;
+    m_Value->SetParent( this );
+
+
+    // Move the pads
+    m_pads.clear();
+
+    for( D_PAD* pad : aOther.Pads() )
+        Add( pad );
+
+    // Move the zones
+    m_fp_zones.clear();
+
+    for( MODULE_ZONE_CONTAINER* item : aOther.Zones() )
+    {
+        Add( static_cast<MODULE_ZONE_CONTAINER*>( item ) );
+
+        // Ensure the net info is OK and especially uses the net info list
+        // living in the current board
+        // Needed when copying a fp from fp editor that has its own board
+        // Must be NETINFO_LIST::ORPHANED_ITEM for a keepout that has no net.
+        item->SetNetCode( -1 );
+    }
+
+    // Move the drawings
+    m_drawings.clear();
+
+    for( BOARD_ITEM* item : aOther.GraphicalItems() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_MODULE_TEXT_T:
+        case PCB_MODULE_EDGE_T:
+            Add( static_cast<BOARD_ITEM*>( item ) );
+            break;
+
+        default:
+            wxLogMessage( wxT( "MODULE::operator=() internal error: unknown type" ) );
+            break;
+        }
+    }
+
+    // Copy auxiliary data: 3D_Drawings info
+    m_3D_Drawings.clear();
+    m_3D_Drawings = aOther.m_3D_Drawings;
+    m_Doc         = aOther.m_Doc;
+    m_KeyWord     = aOther.m_KeyWord;
+
+    // Ensure auxiliary data is up to date
+    CalculateBoundingBox();
+
+    m_initial_comments = aOther.m_initial_comments;
+
+    // Clear the other item's containers since this is a move
+    aOther.Pads().clear();
+    aOther.Zones().clear();
+    aOther.GraphicalItems().clear();
+    aOther.m_Value            = nullptr;
+    aOther.m_Reference        = nullptr;
+    aOther.m_initial_comments = nullptr;
+
+    return *this;
 }
 
 
@@ -241,6 +340,9 @@ MODULE& MODULE::operator=( const MODULE& aOther )
 
     // Ensure auxiliary data is up to date
     CalculateBoundingBox();
+
+    m_initial_comments = aOther.m_initial_comments ?
+                            new wxArrayString( *aOther.m_initial_comments ) : nullptr;
 
     return *this;
 }

@@ -109,9 +109,13 @@ public:
 
     MODULE( const MODULE& aModule );
 
+    // Move constructor and operator needed due to std containers inside the module
+    MODULE( MODULE&& aModule );
+
     ~MODULE();
 
     MODULE& operator=( const MODULE& aOther );
+    MODULE& operator=( MODULE&& aOther );
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -181,14 +185,20 @@ public:
         return m_drawings;
     }
 
-    const MODULE_ZONE_CONTAINERS& Zones() const
+    const DRAWINGS& GraphicalItems() const
+    {
+        return m_drawings;
+    }
+
+    MODULE_ZONE_CONTAINERS& Zones()
     {
         return m_fp_zones;
     }
 
-    const DRAWINGS& GraphicalItems() const
+
+    const MODULE_ZONE_CONTAINERS& Zones() const
     {
-        return m_drawings;
+        return m_fp_zones;
     }
 
     /**
