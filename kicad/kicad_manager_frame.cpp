@@ -413,7 +413,11 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
             if( !wxFileName::FileExists( srcFileName )
                 || !wxCopyFile( srcFileName, destFileName.GetFullPath() ) )
             {
-                Pgm().GetSettingsManager().SaveProject();
+                wxFile file( destFileName.GetFullPath(), wxFile::write );
+
+                if( file.IsOpened() )
+                    file.Write( wxT( "{\n}\n") );
+                // wxFile dtor will close the file
             }
         }
     }
