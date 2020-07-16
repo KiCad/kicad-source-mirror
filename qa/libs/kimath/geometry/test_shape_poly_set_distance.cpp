@@ -33,6 +33,15 @@
 
 #include <unit_test_utils/geometry.h>
 
+/// Mock up a conversion function
+constexpr static double IU_PER_MM = 1e3;
+
+constexpr static inline int Millimeter2iu( double mm )
+{
+    return (int) ( mm < 0 ? mm * IU_PER_MM - 0.5 : mm * IU_PER_MM + 0.5 );
+}
+
+
 /**
  * Declares the Boost test suite fixture.
  */

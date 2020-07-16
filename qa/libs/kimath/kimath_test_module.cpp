@@ -22,7 +22,7 @@
  */
 
 /**
- * Main file for the Sexpr tests
+ * Main file for the kimath tests
  */
 #define BOOST_TEST_MODULE KiMath
 #include <boost/test/unit_test.hpp>

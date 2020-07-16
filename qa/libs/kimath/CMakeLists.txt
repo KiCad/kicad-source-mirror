@@ -26,18 +26,28 @@ set( KIMATH_SRCS
     kimath_test_module.cpp
 
     test_kimath.cpp
+
+    geometry/test_fillet.cpp
+    geometry/test_segment.cpp
+    geometry/test_shape_arc.cpp
+    geometry/test_shape_poly_set_collision.cpp
+    geometry/test_shape_poly_set_distance.cpp
+    geometry/test_shape_poly_set_iterator.cpp
+    geometry/test_shape_line_chain.cpp
 )
 
 add_executable( qa_kimath ${KIMATH_SRCS} )
 
 target_link_libraries( qa_kimath
+    qa_utils
     kimath
     unit_test_utils
     ${wxWidgets_LIBRARIES}
 )
 
 target_include_directories( qa_kimath PRIVATE
+    ${CMAKE_SOURCE_DIR}/include         # Needed for core/optional.h
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-kicad_add_boost_test( qa_kimath kmath )
+kicad_add_boost_test( qa_kimath qa_kimath )

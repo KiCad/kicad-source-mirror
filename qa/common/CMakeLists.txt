@@ -54,14 +54,6 @@ set( common_srcs
 
     libeval/test_numeric_evaluator.cpp
 
-    geometry/test_fillet.cpp
-    geometry/test_segment.cpp
-    geometry/test_shape_arc.cpp
-    geometry/test_shape_poly_set_collision.cpp
-    geometry/test_shape_poly_set_distance.cpp
-    geometry/test_shape_poly_set_iterator.cpp
-    geometry/test_shape_line_chain.cpp
-
     view/test_zoom_controller.cpp
 )
 
