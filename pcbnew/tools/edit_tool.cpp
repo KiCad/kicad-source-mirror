@@ -174,10 +174,17 @@ bool EDIT_TOOL::Init()
                 return frame()->ToolStackIsEmpty();
             };
 
+    auto notMovingCondition =
+            [ this ] ( const SELECTION& aSelection )
+            {
+                return !frame()->IsCurrentTool( PCB_ACTIONS::move )
+                       && !frame()->IsCurrentTool( PCB_ACTIONS::moveWithReference );
+            };
+
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
 
-    menu.AddItem( PCB_ACTIONS::move, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::move, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::inlineBreakTrack, SELECTION_CONDITIONS::Count( 1 )
                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     menu.AddItem( PCB_ACTIONS::drag45Degree, SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
@@ -212,21 +219,6 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::editFpInFpEditor, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::updateFootprint, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::changeFootprint, singleModuleCondition );
-
-    // Populate the context menu displayed during the edit tool (primarily the measure tool)
-    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
-        return !frame()->ToolStackIsEmpty();
-    };
-
-    auto frame = getEditFrame<PCB_BASE_FRAME>();
-    auto& ctxMenu = m_menu.GetMenu();
-
-    // "Cancel" goes at the top of the context menu when a tool is active
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
-    ctxMenu.AddSeparator( 1 );
-
-    if( frame )
-        frame->AddStandardSubMenus( m_menu );
 
     return true;
 }

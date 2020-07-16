@@ -157,8 +157,18 @@ bool SELECTION_TOOL::Init()
 
     auto& menu = m_menu.GetMenu();
 
+    auto activeToolCondition =
+            [ frame ] ( const SELECTION& aSel )
+            {
+                return !frame->ToolStackIsEmpty();
+            };
+
     menu.AddMenu( selectMenu.get(), SELECTION_CONDITIONS::NotEmpty );
     menu.AddSeparator( 1000 );
+
+    // "Cancel" goes at the top of the context menu when a tool is active
+    menu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
+    menu.AddSeparator( 1 );
 
     if( frame )
         frame->AddStandardSubMenus( m_menu );
