@@ -281,6 +281,7 @@ void LIB_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
 
         newPin->SetUnit( ii );
         aPin->GetParent()->AddDrawItem( newPin );
+        newPin->ClearFlags( IS_NEW );
     }
 }
 
