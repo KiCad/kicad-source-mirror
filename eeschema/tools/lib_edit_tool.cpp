@@ -503,16 +503,9 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     dlg.UpdateField( aField );
 
     if( renamed )
-    {
         parent->SetName( newFieldValue );
-        m_frame->UpdateAfterSymbolProperties( &oldFieldValue );
-    }
-    else
-    {
-        updateView( aField );
-        m_frame->GetCanvas()->Refresh();
-        m_frame->OnModify( );
-    }
+
+    m_frame->UpdateAfterSymbolProperties( &oldFieldValue );
 }
 
 

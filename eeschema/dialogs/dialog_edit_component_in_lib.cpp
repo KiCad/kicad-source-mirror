@@ -341,10 +341,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
 
     m_libEntry->SetFootprintFilters( m_FootprintFilterListBox->GetStrings() );
 
-    if( oldName != newName )
-        m_Parent->UpdateAfterSymbolProperties( &oldName );
-    else
-        m_Parent->RebuildView();
+    m_Parent->UpdateAfterSymbolProperties( &oldName );
 
     // It's possible that the symbol being edited has no pins, in which case there may be no
     // alternate body style objects causing #LIB_PART::HasCoversion() to always return false.

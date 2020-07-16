@@ -526,11 +526,13 @@ void LIB_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
             m_my_part->SetName( *aOldName );
         }
         else
+        {
             m_libMgr->UpdatePartAfterRename( m_my_part, *aOldName, lib );
-    }
+        }
 
-    // Reselect the renamed part
-    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, m_my_part->GetName() ) );
+        // Reselect the renamed part
+        m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, m_my_part->GetName() ) );
+    }
 
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurPart()->Flatten()->HasConversion() );
