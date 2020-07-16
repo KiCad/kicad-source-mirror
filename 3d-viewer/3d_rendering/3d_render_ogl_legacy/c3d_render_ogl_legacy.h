@@ -86,6 +86,7 @@ private:
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_outer_with_npth;
 
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_vias_outer;
+    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_vias_outer_ring;
     //CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_vias_inner; // Not in use
 
     // This is for pads holes of the modules

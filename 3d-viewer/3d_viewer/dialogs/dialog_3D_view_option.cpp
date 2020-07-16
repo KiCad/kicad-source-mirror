@@ -97,6 +97,7 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
     m_bitmapComments->SetBitmap( KiBitmap( editor_xpm ) );
     m_bitmapECO->SetBitmap( KiBitmap( editor_xpm ) );
     m_bitmapSubtractMaskFromSilk->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
+    m_bitmapClipSilkOnViaAnnulus->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
 }
 
 void DIALOG_3D_VIEW_OPTIONS::OnCheckEnableAnimation( wxCommandEvent& event )
@@ -123,6 +124,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     m_checkBoxComments->SetValue( m_settings.GetFlag( FL_COMMENTS ) );
     m_checkBoxECO->SetValue( m_settings.GetFlag( FL_ECO ) );
     m_checkBoxSubtractMaskFromSilk->SetValue( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
+    m_checkBoxClipSilkOnViaAnnulus->SetValue( m_settings.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) );
 
     // OpenGL options
     m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
@@ -164,6 +166,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     m_settings.SetFlag( FL_SHOW_BOARD_BODY, m_checkBoxBoardBody->GetValue() );
     m_settings.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
     m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, m_checkBoxSubtractMaskFromSilk->GetValue() );
+    m_settings.SetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS, m_checkBoxClipSilkOnViaAnnulus->GetValue() );
 
     // Set 3D shapes visibility
     m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, m_checkBox3DshapesTH->GetValue() );

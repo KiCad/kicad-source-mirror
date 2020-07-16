@@ -582,13 +582,22 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
                 // Check if there are any THT that intersects this object
                 // /////////////////////////////////////////////////////////////
-                if( !m_boardAdapter.GetThroughHole_Outer().GetList().empty() )
+
+                // If we're processing a silk screen layer and the flag is set, then
+                // clip the silk screening at the outer edge of the annular ring, rather
+                // than the at the outer edge of the copper plating.
+                const CBVHCONTAINER2D& throughHoleOuter =
+                        ( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
+                                && ( ( layer_id == B_SilkS ) || ( layer_id == F_SilkS ) ) ) ?
+                                m_boardAdapter.GetThroughHole_Outer_Ring() :
+                                m_boardAdapter.GetThroughHole_Outer();
+
+                if( !throughHoleOuter.GetList().empty() )
                 {
                     CONST_LIST_OBJECT2D intersectionList;
 
-                    m_boardAdapter.GetThroughHole_Outer().GetListObjectsIntersects(
-                                object2d_A->GetBBox(),
-                                intersectionList );
+                    throughHoleOuter.GetListObjectsIntersects(
+                            object2d_A->GetBBox(), intersectionList );
 
                     if( !intersectionList.empty() )
                     {

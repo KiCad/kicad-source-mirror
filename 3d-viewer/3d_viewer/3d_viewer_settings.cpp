@@ -112,6 +112,8 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "render.show_zones", &m_Render.show_zones, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.subtract_mask_from_silk",
             &m_Render.subtract_mask_from_silk, false ) );
+    m_params.emplace_back( new PARAM<bool>( "render.clip_silk_on_via_annulus",
+            &m_Render.clip_silk_on_via_annulus, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "camera.animation_enabled",
             &m_Camera.animation_enabled, true ) );

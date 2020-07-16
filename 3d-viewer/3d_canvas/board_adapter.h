@@ -381,6 +381,16 @@ class BOARD_ADAPTER
     }
 
     /**
+     * @brief GetThroughHole_Outer_Ring - Get the ThroughHole container that
+     * include the width of the annular ring.
+     * @return a container with holes.
+     */
+    const CBVHCONTAINER2D& GetThroughHole_Outer_Ring() const noexcept
+    {
+        return m_through_holes_outer_ring;
+    }
+
+    /**
      * @brief GetThroughHole_Outer_poly -
      * @return
      */
@@ -408,6 +418,15 @@ class BOARD_ADAPTER
     }
 
     /**
+     * @brief GetThroughHole_Vias_Outer_Ring -
+     * @return a container with via THT holes only, including annular ring size
+     */
+    const CBVHCONTAINER2D& GetThroughHole_Vias_Outer_Ring() const noexcept
+    {
+        return m_through_holes_vias_outer_ring;
+    }
+
+    /**
      * @brief GetThroughHole_Vias_Inner -
      * @return a container with via THT holes only
      */
@@ -422,6 +441,14 @@ class BOARD_ADAPTER
     const SHAPE_POLY_SET &GetThroughHole_Vias_Outer_poly() const noexcept
     {
         return m_through_outer_holes_vias_poly;
+    }
+
+    /**
+     * @brief GetThroughHole_Vias_Outer_Ring_poly -
+     */
+    const SHAPE_POLY_SET& GetThroughHole_Vias_Outer_Ring_poly() const noexcept
+    {
+        return m_through_outer_ring_holes_vias_poly;
     }
 
     /**
@@ -672,6 +699,9 @@ private:
     /// It contains polygon contours for through holes vias (outer cylinder)
     SHAPE_POLY_SET    m_through_outer_holes_vias_poly;
 
+    /// It contains polygon contours for through holes vias (outer annular ring)
+    SHAPE_POLY_SET    m_through_outer_ring_holes_vias_poly;
+
     /// It contains polygon contours for through holes vias (inner cylinder)
     SHAPE_POLY_SET    m_through_inner_holes_vias_poly;
 
@@ -692,12 +722,20 @@ private:
     CBVHCONTAINER2D   m_through_holes_outer;
 
     /// It contains the list of throughHoles of the board,
+    /// the radius of the hole is inflated with the annular ring size
+    CBVHCONTAINER2D   m_through_holes_outer_ring;
+
+    /// It contains the list of throughHoles of the board,
     /// the radius is the inner hole
     CBVHCONTAINER2D   m_through_holes_inner;
 
     /// It contains the list of throughHoles vias of the board,
     /// the radius of the hole is inflated with the copper tickness
     CBVHCONTAINER2D   m_through_holes_vias_outer;
+
+    /// It contains the list of throughHoles vias of the board,
+    /// the radius of the hole is inflated with the annular ring size
+    CBVHCONTAINER2D   m_through_holes_vias_outer_ring;
 
     /// It contains the list of throughHoles vias of the board,
     /// the radius of the hole

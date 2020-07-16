@@ -62,6 +62,7 @@ public:
         bool show_solderpaste;
         bool show_zones;
         bool subtract_mask_from_silk;
+        bool clip_silk_on_via_annulus;
     };
 
     struct CAMERA_SETTINGS

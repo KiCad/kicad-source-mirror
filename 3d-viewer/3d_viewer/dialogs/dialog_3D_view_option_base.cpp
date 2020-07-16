@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 15 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -60,13 +60,22 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizerRenderOptions->Add( m_checkBoxAreas, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgSizerRenderOptions->Add( 0, 0, 0, wxALIGN_LEFT|wxALIGN_RIGHT, 10 );
+	fgSizerRenderOptions->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
 	m_bitmapSubtractMaskFromSilk = new wxStaticBitmap( sbSizer1->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRenderOptions->Add( m_bitmapSubtractMaskFromSilk, 0, wxALL, 5 );
+	fgSizerRenderOptions->Add( m_bitmapSubtractMaskFromSilk, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_checkBoxSubtractMaskFromSilk = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRenderOptions->Add( m_checkBoxSubtractMaskFromSilk, 0, wxALL, 5 );
+	fgSizerRenderOptions->Add( m_checkBoxSubtractMaskFromSilk, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	fgSizerRenderOptions->Add( 0, 0, 0, wxALIGN_LEFT|wxALIGN_RIGHT, 10 );
+
+	m_bitmapClipSilkOnViaAnnulus = new wxStaticBitmap( sbSizer1->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRenderOptions->Add( m_bitmapClipSilkOnViaAnnulus, 0, wxALL, 5 );
+
+	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Clip silkscreen at via annulus"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRenderOptions->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 0, 2, 0, 0 );

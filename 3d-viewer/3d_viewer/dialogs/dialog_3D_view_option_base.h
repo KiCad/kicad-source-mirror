@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 15 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,6 +54,8 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxAreas;
 		wxStaticBitmap* m_bitmapSubtractMaskFromSilk;
 		wxCheckBox* m_checkBoxSubtractMaskFromSilk;
+		wxStaticBitmap* m_bitmapClipSilkOnViaAnnulus;
+		wxCheckBox* m_checkBoxClipSilkOnViaAnnulus;
 		wxStaticBitmap* m_bitmap3DshapesTH;
 		wxCheckBox* m_checkBox3DshapesTH;
 		wxStaticBitmap* m_bitmap3DshapesSMD;

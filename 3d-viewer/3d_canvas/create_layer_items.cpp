@@ -97,13 +97,16 @@ void BOARD_ADAPTER::destroyLayers()
 
     m_through_holes_inner.Clear();
     m_through_holes_outer.Clear();
+    m_through_holes_outer_ring.Clear();
     m_through_holes_vias_outer.Clear();
+    m_through_holes_vias_outer_ring.Clear();
     m_through_holes_vias_inner.Clear();
     m_through_outer_holes_poly_NPTH.RemoveAllContours();
     m_through_outer_holes_poly.RemoveAllContours();
     //m_through_inner_holes_poly.RemoveAllContours();
 
     m_through_outer_holes_vias_poly.RemoveAllContours();
+    m_through_outer_ring_holes_vias_poly.RemoveAllContours();
     m_through_inner_holes_vias_poly.RemoveAllContours();
 }
 
@@ -260,6 +263,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 const float   holediameter      = via->GetDrillValue() * BiuTo3Dunits();
                 const float   thickness         = GetCopperThickness3DU();
                 const float   hole_inner_radius = ( holediameter / 2.0f );
+                const float   ring_radius       = via->GetWidth() * BiuTo3Dunits() / 2.0f;
 
                 const SFVEC2F via_center(
                         via->GetStart().x * m_biuTo3Dunits, -via->GetStart().y * m_biuTo3Dunits );
@@ -297,11 +301,18 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     m_through_holes_outer.Add( new CFILLEDCIRCLE2D( via_center,
                                                                     hole_inner_radius + thickness,
                                                                     *track ) );
-
                     m_through_holes_vias_outer.Add(
                                 new CFILLEDCIRCLE2D( via_center,
                                                      hole_inner_radius + thickness,
                                                      *track ) );
+
+                    if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+                    {
+                        m_through_holes_outer_ring.Add(
+                                new CFILLEDCIRCLE2D( via_center, ring_radius, *track ) );
+                        m_through_holes_vias_outer_ring.Add(
+                                new CFILLEDCIRCLE2D( via_center, ring_radius, *track ) );
+                    }
 
                     m_through_holes_inner.Add( new CFILLEDCIRCLE2D( via_center,
                                                                     hole_inner_radius,
@@ -388,6 +399,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     const int holediameter = via->GetDrillValue();
                     const int hole_outer_radius = (holediameter / 2)+ GetCopperThicknessBIU();
+                    const int hole_outer_ring_radius = via->GetWidth() / 2.0f;
 
                     // Add through hole contourns
                     // /////////////////////////////////////////////////////////
@@ -399,8 +411,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                     // Add samething for vias only
 
-                    TransformCircleToPolygon( m_through_outer_holes_vias_poly, via->GetStart(),
-                            hole_outer_radius, ARC_HIGH_DEF );
+                    TransformCircleToPolygon( m_through_outer_holes_vias_poly,
+                            via->GetStart(), hole_outer_radius, ARC_HIGH_DEF );
+                    if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+                    {
+                        TransformCircleToPolygon( m_through_outer_ring_holes_vias_poly,
+                                via->GetStart(), hole_outer_ring_radius, ARC_HIGH_DEF );
+                    }
 
                     //TransformCircleToPolygon( m_through_inner_holes_vias_poly,
                     //                          via->GetStart(),
@@ -469,6 +486,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                              pad->GetDrillSize().y ) / 2.0f ) * m_biuTo3Dunits;
 
             m_through_holes_outer.Add( createNewPadDrill( pad, inflate ) );
+            if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+            {
+                m_through_holes_outer_ring.Add( createNewPadDrill( pad, inflate ) );
+            }
             m_through_holes_inner.Add( createNewPadDrill( pad,       0 ) );
         }
     }
@@ -835,6 +856,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     m_through_outer_holes_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
     m_through_outer_holes_poly_NPTH.Simplify( SHAPE_POLY_SET::PM_FAST );
     m_through_outer_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_through_outer_ring_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
     //m_through_inner_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST ); // Not in use
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
@@ -1049,6 +1071,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     m_through_holes_inner.BuildBVH();
     m_through_holes_outer.BuildBVH();
+    m_through_holes_outer_ring.BuildBVH();
 
     if( !m_layers_holes2D.empty() )
     {

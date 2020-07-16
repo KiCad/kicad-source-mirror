@@ -63,6 +63,7 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& 
     m_ogl_disp_list_through_holes_outer_with_npth = NULL;
     m_ogl_disp_list_through_holes_outer = NULL;
     m_ogl_disp_list_through_holes_vias_outer = NULL;
+    m_ogl_disp_list_through_holes_vias_outer_ring = NULL;
     //m_ogl_disp_list_through_holes_vias_inner = NULL;
     m_ogl_disp_list_via = NULL;
     m_ogl_disp_list_pads_holes = NULL;
@@ -771,10 +772,15 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
         }
         else
         {
-            if( m_ogl_disp_list_through_holes_vias_outer )
-                m_ogl_disp_list_through_holes_vias_outer->ApplyScalePosition(
-                            pLayerDispList->GetZBot(),
-                            pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+            CLAYERS_OGL_DISP_LISTS* dispListThoughHolesOuter =
+                    ( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
+                            && ( ( layer_id == B_SilkS ) || ( layer_id == F_SilkS ) ) ) ?
+                            m_ogl_disp_list_through_holes_vias_outer_ring :
+                            m_ogl_disp_list_through_holes_vias_outer;
+
+            if( dispListThoughHolesOuter )
+                dispListThoughHolesOuter->ApplyScalePosition( pLayerDispList->GetZBot(),
+                        pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
 
             if( (!skipRenderHoles) &&
                 m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
@@ -789,13 +795,13 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
 
                 pLayerDispList->DrawAllCameraCulledSubtractLayer(
                             pLayerDispListMask,
-                            m_ogl_disp_list_through_holes_vias_outer,
+                            dispListThoughHolesOuter,
                             drawMiddleSegments );
             }
             else
             {
                 if( (!skipRenderHoles) &&
-                    m_ogl_disp_list_through_holes_vias_outer &&
+                    dispListThoughHolesOuter &&
                     ( ( layer_id == B_SilkS ) || ( layer_id == F_SilkS )
                       // Remove vias on SolderPaste can be added as an option in future
                       // ( layer_id == B_Paste ) || ( layer_id == F_Paste ) )
@@ -803,7 +809,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                 {
                     pLayerDispList->DrawAllCameraCulledSubtractLayer(
                                 NULL,
-                                m_ogl_disp_list_through_holes_vias_outer,
+                                dispListThoughHolesOuter,
                                 drawMiddleSegments );
                 }
                 else
@@ -1068,6 +1074,9 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 
     delete m_ogl_disp_list_through_holes_vias_outer;
     m_ogl_disp_list_through_holes_vias_outer = 0;
+
+    delete m_ogl_disp_list_through_holes_vias_outer_ring;
+    m_ogl_disp_list_through_holes_vias_outer_ring = 0;
 
     delete m_ogl_disp_list_via;
     m_ogl_disp_list_via = 0;

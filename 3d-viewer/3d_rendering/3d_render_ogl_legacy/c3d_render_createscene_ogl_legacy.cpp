@@ -462,6 +462,16 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
             0.0f,
             false );
 
+    if( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+    {
+        m_ogl_disp_list_through_holes_vias_outer_ring = generate_holes_display_list(
+                m_boardAdapter.GetThroughHole_Vias_Outer_Ring().GetList(),
+                m_boardAdapter.GetThroughHole_Vias_Outer_Ring_poly(),
+                1.0f,
+                0.0f,
+                false );
+    }
+
     // Not in use
     //m_ogl_disp_list_through_holes_vias_inner = generate_holes_display_list(
     //      m_boardAdapter.GetThroughHole_Vias_Inner().GetList(),

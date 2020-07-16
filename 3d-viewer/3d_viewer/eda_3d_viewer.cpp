@@ -457,6 +457,7 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( FL_COMMENTS,                        show_comments );
         TRANSFER_SETTING( FL_ECO,                             show_eco );
         TRANSFER_SETTING( FL_SHOW_BOARD_BODY,                 show_board_body );
+        TRANSFER_SETTING( FL_CLIP_SILK_ON_VIA_ANNULUS,        clip_silk_on_via_annulus );
 
         m_boardAdapter.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
         m_boardAdapter.AntiAliasingSet( static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode ) );
@@ -541,20 +542,21 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( raytrace_refractions,         FL_RENDER_RAYTRACING_REFRACTIONS );
         TRANSFER_SETTING( raytrace_shadows,             FL_RENDER_RAYTRACING_SHADOWS );
 
-        TRANSFER_SETTING( realistic,               FL_USE_REALISTIC_MODE );
-        TRANSFER_SETTING( show_adhesive,           FL_ADHESIVE );
-        TRANSFER_SETTING( show_axis,               FL_AXIS );
-        TRANSFER_SETTING( show_board_body,         FL_SHOW_BOARD_BODY );
-        TRANSFER_SETTING( show_comments,           FL_COMMENTS );
-        TRANSFER_SETTING( show_eco,                FL_ECO );
-        TRANSFER_SETTING( show_footprints_insert,  FL_MODULE_ATTRIBUTES_NORMAL_INSERT );
-        TRANSFER_SETTING( show_footprints_normal,  FL_MODULE_ATTRIBUTES_NORMAL );
-        TRANSFER_SETTING( show_footprints_virtual, FL_MODULE_ATTRIBUTES_VIRTUAL );
-        TRANSFER_SETTING( show_silkscreen,         FL_SILKSCREEN );
-        TRANSFER_SETTING( show_soldermask,         FL_SOLDERMASK );
-        TRANSFER_SETTING( show_solderpaste,        FL_SOLDERPASTE );
-        TRANSFER_SETTING( show_zones,              FL_ZONE );
-        TRANSFER_SETTING( subtract_mask_from_silk, FL_SUBTRACT_MASK_FROM_SILK );
+        TRANSFER_SETTING( realistic,                FL_USE_REALISTIC_MODE );
+        TRANSFER_SETTING( show_adhesive,            FL_ADHESIVE );
+        TRANSFER_SETTING( show_axis,                FL_AXIS );
+        TRANSFER_SETTING( show_board_body,          FL_SHOW_BOARD_BODY );
+        TRANSFER_SETTING( clip_silk_on_via_annulus, FL_CLIP_SILK_ON_VIA_ANNULUS );
+        TRANSFER_SETTING( show_comments,            FL_COMMENTS );
+        TRANSFER_SETTING( show_eco,                 FL_ECO );
+        TRANSFER_SETTING( show_footprints_insert,   FL_MODULE_ATTRIBUTES_NORMAL_INSERT );
+        TRANSFER_SETTING( show_footprints_normal,   FL_MODULE_ATTRIBUTES_NORMAL );
+        TRANSFER_SETTING( show_footprints_virtual,  FL_MODULE_ATTRIBUTES_VIRTUAL );
+        TRANSFER_SETTING( show_silkscreen,          FL_SILKSCREEN );
+        TRANSFER_SETTING( show_soldermask,          FL_SOLDERMASK );
+        TRANSFER_SETTING( show_solderpaste,         FL_SOLDERPASTE );
+        TRANSFER_SETTING( show_zones,               FL_ZONE );
+        TRANSFER_SETTING( subtract_mask_from_silk,  FL_SUBTRACT_MASK_FROM_SILK );
 
 #undef TRANSFER_SETTING
     }

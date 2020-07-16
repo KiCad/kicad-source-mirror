@@ -31,7 +31,8 @@
 #define _3D_ENUMS_H_
 
 /// Flags used in rendering options
-enum DISPLAY3D_FLG {
+enum DISPLAY3D_FLG
+{
     FL_AXIS = 0,
     FL_ZONE,
     FL_ADHESIVE,
@@ -49,6 +50,7 @@ enum DISPLAY3D_FLG {
     FL_MOUSEWHEEL_PANNING,
     FL_USE_REALISTIC_MODE,
     FL_SUBTRACT_MASK_FROM_SILK,
+    FL_CLIP_SILK_ON_VIA_ANNULUS,
 
     // OpenGL options
     FL_RENDER_OPENGL_SHOW_MODEL_BBOX,
