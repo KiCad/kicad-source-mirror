@@ -810,6 +810,10 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 
     switch( aSeg->GetShape() )
     {
+    case S_SEGMENT:
+        m_plotter->ThickSegment( start, end, thickness, GetPlotMode(), &gbr_metadata );
+        break;
+
     case S_CIRCLE:
         radius = KiROUND( GetLineLength( end, start ) );
         m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
@@ -863,7 +867,32 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
         }
         break;
 
+    case S_RECT:
+    {
+        std::vector<wxPoint> pts;
+        aSeg->GetRectCorners( &pts );
+
+        if( aSeg->GetWidth() > 0 )
+        {
+            m_plotter->ThickSegment( pts[0], pts[1], thickness, GetPlotMode(), &gbr_metadata );
+            m_plotter->ThickSegment( pts[1], pts[2], thickness, GetPlotMode(), &gbr_metadata );
+            m_plotter->ThickSegment( pts[2], pts[3], thickness, GetPlotMode(), &gbr_metadata );
+            m_plotter->ThickSegment( pts[3], pts[0], thickness, GetPlotMode(), &gbr_metadata );
+        }
+        else
+        {
+            SHAPE_LINE_CHAIN poly;
+
+            for( const wxPoint& pt : pts )
+                poly.Append( pt );
+
+            m_plotter->PlotPoly( poly, FILLED_SHAPE, -1, &gbr_metadata );
+        }
+    }
+        break;
+
     default:
+        wxASSERT_MSG( false, "Unhandled DRAWSEGMENT shape" );
         m_plotter->ThickSegment( start, end, thickness, GetPlotMode(), &gbr_metadata );
     }
 }
