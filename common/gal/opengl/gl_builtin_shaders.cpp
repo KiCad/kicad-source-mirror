@@ -282,7 +282,6 @@ const float SHADER_FILLED_CIRCLE        = 2.0;
 const float SHADER_STROKED_CIRCLE       = 3.0;
 const float SHADER_FONT                 = 4.0;
 const float SHADER_LINE_A               = 5.0;
-const float SHADER_LINE_B               = 6.0;
 
 varying vec4 shaderParams;
 varying vec2 circleCoords;
@@ -302,12 +301,6 @@ void filledCircle( vec2 aCoord )
 
 float pixelSegDistance( vec2 aCoord )
 {
-    if( shaderParams[0] == SHADER_LINE_B )
-    {
-        gl_FragColor = gl_Color;
-        return 0.0;
-    }
-
     float aspect = shaderParams[1];
     float dist;
     vec2 v = vec2( 1.0 - ( aspect - abs( aCoord.s ) ), aCoord.t );
