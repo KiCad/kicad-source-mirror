@@ -354,19 +354,23 @@ float median( vec3 v )
 
 void main()
 {
-    if( shaderParams[0] == SHADER_LINE_A )
+    // VS to FS pipeline does math that means we can't rely on the mode
+    // parameter being bit-exact without rounding it first.
+    float mode = floor( shaderParams[0] + 0.5 );
+
+    if( mode == SHADER_LINE_A )
     {
         drawLine( gl_TexCoord[0].st );
     }
-    else if( shaderParams[0] == SHADER_FILLED_CIRCLE )
+    else if( mode == SHADER_FILLED_CIRCLE )
     {
         filledCircle( circleCoords );
     }
-    else if( shaderParams[0] == SHADER_STROKED_CIRCLE )
+    else if( mode == SHADER_STROKED_CIRCLE )
     {
         strokedCircle( circleCoords, shaderParams[2], shaderParams[3] );
     }
-    else if( shaderParams[0] == SHADER_FONT )
+    else if( mode == SHADER_FONT )
     {
         vec2 tex           = shaderParams.yz;
 
