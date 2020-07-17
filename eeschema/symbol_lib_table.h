@@ -75,6 +75,13 @@ public:
      */
     void SetType( const wxString& aType ) override;
 
+    /**
+     * Attempt to reload the library.
+     * @return true if a reload was required.
+     * @throws IO_ERROR if the reload was unsuccessful.
+     */
+    bool Refresh();
+
 protected:
     SYMBOL_LIB_TABLE_ROW( const SYMBOL_LIB_TABLE_ROW& aRow ) :
         LIB_TABLE_ROW( aRow ),

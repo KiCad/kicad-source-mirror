@@ -66,6 +66,23 @@ void SYMBOL_LIB_TABLE_ROW::SetType( const wxString& aType )
 
     if( SCH_IO_MGR::SCH_FILE_T( -1 ) == type )
         type = SCH_IO_MGR::SCH_LEGACY;
+
+    plugin.release();
+}
+
+
+bool SYMBOL_LIB_TABLE_ROW::Refresh()
+{
+    if( !plugin )
+    {
+        wxArrayString dummyList;
+
+        plugin.set( SCH_IO_MGR::FindPlugin( type ) );
+        plugin->EnumerateSymbolLib( dummyList, GetFullURI( true ), GetProperties() );
+        return true;
+    }
+
+    return false;
 }
 
 

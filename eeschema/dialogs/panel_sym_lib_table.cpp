@@ -397,6 +397,39 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
         }
     }
 
+    for( SYMBOL_LIB_TABLE* table : { global_model(), project_model() } )
+    {
+        for( unsigned int r = 0; r < table->GetCount(); ++r )
+        {
+            SYMBOL_LIB_TABLE_ROW& row = dynamic_cast<SYMBOL_LIB_TABLE_ROW&>( table->At( r ) );
+
+            if( !row.GetIsEnabled() )
+                continue;
+
+            try
+            {
+                if( row.Refresh() )
+                {
+                    if( table == global_model() )
+                        m_parent->m_GlobalTableChanged = true;
+                    else
+                        m_parent->m_ProjectTableChanged = true;
+                }
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxString msg = wxString::Format( _( "Symbol library \"%s\" failed to load.\n %s" ),
+                                                 row.GetNickName(),
+                                                 ioe.What() );
+
+                wxMessageDialog errdlg( this, msg, _( "Error Loading Library" ) );
+                errdlg.ShowModal();
+
+                return false;
+            }
+        }
+    }
+
     return true;
 }
 
@@ -410,12 +443,11 @@ void PANEL_SYM_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
 
 void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
-    wxString wildcards = KiCadSymbolLibFileWildcard();
+    wxString wildcards = AllSymbolLibFilesWildcard()
+                            + "|" + KiCadSymbolLibFileWildcard()
+                            + "|" + LegacySymbolLibFileWildcard();
 
-    wildcards += "|" + LegacySymbolLibFileWildcard();
-
-    wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir,
-                      wxEmptyString, wildcards,
+    wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir, wxEmptyString, wildcards,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     auto result = dlg.ShowModal();
@@ -646,7 +678,7 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
 
         m_globalTable->Clear();
         m_globalTable->rows.transfer( m_globalTable->rows.end(), global_model()->rows.begin(),
-                                 global_model()->rows.end(), global_model()->rows );
+                                      global_model()->rows.end(), global_model()->rows );
         m_globalTable->reindex();
     }
 
@@ -656,7 +688,7 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
 
         m_projectTable->Clear();
         m_projectTable->rows.transfer( m_projectTable->rows.end(), project_model()->rows.begin(),
-                                  project_model()->rows.end(), project_model()->rows );
+                                       project_model()->rows.end(), project_model()->rows );
         m_projectTable->reindex();
     }
 
@@ -847,8 +879,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
     if( libEditor )
     {
         // Check if the currently selected symbol library been removed or disabled.
-        if( !currentLib.empty()
-          && !projectTable->HasLibrary( currentLib, true ) )
+        if( !currentLib.empty() && !projectTable->HasLibrary( currentLib, true ) )
         {
             libEditor->SetCurLib( wxEmptyString );
             libEditor->emptyScreen();

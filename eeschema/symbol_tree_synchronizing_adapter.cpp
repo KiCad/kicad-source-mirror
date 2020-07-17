@@ -95,7 +95,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce,
             it = deleteLibrary( it );
             continue;
         }
-        else if( m_libMgr->GetLibraryHash( name ) != m_libHashes[name] )
+        else if( aForce || m_libMgr->GetLibraryHash( name ) != m_libHashes[name] )
         {
             updateLibrary( *(LIB_TREE_NODE_LIB*) it->get() );
         }
@@ -159,9 +159,10 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
         for( auto nodeIt = aLibNode.m_Children.begin(); nodeIt != aLibNode.m_Children.end(); /**/ )
         {
             auto aliasIt = std::find_if( aliases.begin(), aliases.end(),
-                    [&] ( const LIB_PART* a ) {
-                        return a->GetName() == (*nodeIt)->m_Name;
-                    } );
+                                         [&] ( const LIB_PART* a )
+                                         {
+                                             return a->GetName() == (*nodeIt)->m_Name;
+                                         } );
 
             if( aliasIt != aliases.end() )
             {

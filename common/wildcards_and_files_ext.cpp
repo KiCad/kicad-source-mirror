@@ -91,9 +91,12 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
     wxString files_filter = " (";
 
     // Add extensions to the info message:
-    for( const auto& ext : aExts )
+    for( const std::string& ext : aExts )
     {
-        files_filter << " *." << ext;
+        if( files_filter.length() > 2 )
+            files_filter << "; ";
+
+        files_filter << "*." << ext;
     }
 
     files_filter << ")|*.";
@@ -187,6 +190,12 @@ wxString KiCadSymbolLibFileWildcard()
 wxString LegacySymbolLibFileWildcard()
 {
     return _( "KiCad legacy symbol library files" ) + AddFileExtListToFilter( { "lib" } );
+}
+
+
+wxString AllSymbolLibFilesWildcard()
+{
+    return _( "All KiCad symbol library files" ) + AddFileExtListToFilter( { "kicad_sym", "lib" } );
 }
 
 
