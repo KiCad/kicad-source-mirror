@@ -43,7 +43,8 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
         m_errorCtrl( nullptr ),
         m_errorRow( 0 ),
         m_errorCol( 0 ),
-        m_auxiliaryButton( nullptr )
+        m_auxiliaryButton( nullptr ),
+        m_resetButton( nullptr )
 {
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );
