@@ -892,9 +892,9 @@ void FOOTPRINT_EDIT_FRAME::ActivateGalCanvas()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+    PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     if( aEnvVarsChanged )
         SyncLibraryTree( true );

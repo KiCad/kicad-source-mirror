@@ -141,7 +141,7 @@ private:
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
+    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     /**
      * Function OnActivate

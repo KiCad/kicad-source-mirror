@@ -29,8 +29,10 @@
 #include <dialogs/panel_eeschema_template_fieldnames.h>
 #include <dialogs/panel_libedit_color_settings.h>
 #include <dialogs/panel_libedit_settings.h>
+#include <dialogs/dialog_schematic_setup.h>
 #include <eeschema_config.h>
 #include <fctsys.h>
+#include <kiway.h>
 #include <lib_edit_frame.h>
 #include <panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
@@ -38,7 +40,6 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
-#include <sch_junction.h>
 #include <sch_painter.h>
 #include <schematic.h>
 #include <settings/app_settings.h>
@@ -47,8 +48,6 @@
 #include <widgets/paged_dialog.h>
 #include <wildcards_and_files_ext.h>
 #include <ws_data_model.h>
-#include <dialogs/dialog_schematic_setup.h>
-#include "erc.h"
 
 
 #define FieldNameTemplatesKey         wxT( "FieldNameTemplates" )
@@ -272,6 +271,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments();
         SaveProjectSettings();
 
+        Kiway().CommonSettingsChanged( false, true );
         GetCanvas()->Refresh();
     }
 }

@@ -656,9 +656,9 @@ WINDOW_SETTINGS* LIB_VIEW_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void LIB_VIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void LIB_VIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     if( aEnvVarsChanged )
         ReCreateListLib();

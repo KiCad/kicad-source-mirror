@@ -516,7 +516,7 @@ void KICAD_MANAGER_FRAME::ShowChangedLanguage()
 }
 
 
-void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     int historySize = Pgm().GetCommonSettings()->m_System.file_history_size;
     GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );

@@ -120,7 +120,7 @@ static struct IFACE : public KIFACE_I
             dlg.SetKiway( &dlg, aKiway );
 
             if( dlg.ShowModal() == wxID_OK )
-                aKiway->CommonSettingsChanged( true );
+                aKiway->CommonSettingsChanged( true, false );
 
             // Dialog has completed; nothing to return.
             return nullptr;

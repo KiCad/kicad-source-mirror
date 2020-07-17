@@ -731,9 +731,9 @@ void LIB_EDIT_FRAME::emptyScreen()
 }
 
 
-void LIB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void LIB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     GetCanvas()->GetGAL()->SetAxesColor( m_colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
 

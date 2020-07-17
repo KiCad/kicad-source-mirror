@@ -1031,9 +1031,12 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 }
 
 
-void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+
+    if( aTextVarsChanged )
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 
     RecreateToolbars();
     Layout();

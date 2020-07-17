@@ -113,7 +113,7 @@ protected:
 
     void unitsChangeRefresh() override;
 
-    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
+    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     /**
      * Sets the common key-pair for exiting the application (Ctrl-Q) and ties it

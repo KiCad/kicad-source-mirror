@@ -685,9 +685,9 @@ MAGNETIC_SETTINGS* PCB_BASE_FRAME::GetMagneticItemsSettings()
 }
 
 
-void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     RecreateToolbars();
 
@@ -695,7 +695,7 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
     EDA_3D_VIEWER* viewer = Get3DViewerFrame();
 
     if( viewer )
-        viewer->CommonSettingsChanged( aEnvVarsChanged );
+        viewer->CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 }
 
 

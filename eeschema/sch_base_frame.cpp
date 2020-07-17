@@ -418,9 +418,9 @@ COLOR4D SCH_BASE_FRAME::GetLayerColor( SCH_LAYER_ID aLayer )
 }
 
 
-void SCH_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void SCH_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     m_colorSettings = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );

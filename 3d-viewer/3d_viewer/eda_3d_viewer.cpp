@@ -625,12 +625,12 @@ void EDA_3D_VIEWER::SynchroniseColoursWithBoard()
 }
 
 
-void EDA_3D_VIEWER::CommonSettingsChanged( bool aEnvVarsChanged )
+void EDA_3D_VIEWER::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::CommonSettingsChanged" );
 
     // Regen menu bars, etc
-    EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+    EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     // There is no base class that handles toolbars for this frame
     ReCreateMainToolbar();

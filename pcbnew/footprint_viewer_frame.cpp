@@ -771,9 +771,9 @@ void FOOTPRINT_VIEWER_FRAME::SetAutoZoom( bool aAutoZoom )
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void FOOTPRINT_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    PCB_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+    PCB_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     if( aEnvVarsChanged )
         ReCreateLibraryList();

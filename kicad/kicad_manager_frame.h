@@ -147,7 +147,7 @@ public:
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void ShowChangedLanguage() override;
-    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
+    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     /**
      * Called by sending a event with id = ID_INIT_WATCHED_PATHS

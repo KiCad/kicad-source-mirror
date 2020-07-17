@@ -380,7 +380,7 @@ public:
 
     virtual MAGNETIC_SETTINGS* GetMagneticItemsSettings();
 
-    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
+    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     virtual void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) {}
 

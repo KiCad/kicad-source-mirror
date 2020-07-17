@@ -22,6 +22,7 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
+#include <kiway.h>
 #include <pgm_base.h>
 #include <pcb_edit_frame.h>
 #include <3d_viewer/eda_3d_viewer.h>
@@ -31,7 +32,7 @@
 #include <pcbnew_id.h>
 #include <drc/drc.h>
 #include <pcbnew_settings.h>
-#include <layer_widget.h>
+//#include <layer_widget.h>
 #include <pcb_layer_widget.h>
 #include <footprint_edit_frame.h>
 #include <dialog_plot.h>
@@ -39,8 +40,7 @@
 #include <dialogs/dialog_exchange_footprints.h>
 #include <dialog_board_setup.h>
 #include <convert_to_biu.h>
-#include <view/view_controls.h>
-#include <pcb_painter.h>
+//#include <pcb_painter.h>
 #include <invoke_pcb_dialog.h>
 #include <class_board.h>
 #include <class_module.h>
@@ -662,9 +662,7 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const w
         UpdateUserInterface();
         ReCreateAuxiliaryToolbar();
 
-        for( auto module : GetBoard()->Modules() )
-            GetCanvas()->GetView()->Update( module );
-
+        Kiway().CommonSettingsChanged( false, true );
         GetCanvas()->Refresh();
 
         m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
@@ -1277,11 +1275,14 @@ int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* aModule, bool updateMode
 }
 
 
-void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+    PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     ReCreateMicrowaveVToolbar();
+
+    if( aTextVarsChanged )
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 
     Layout();
     SendSizeEvent();

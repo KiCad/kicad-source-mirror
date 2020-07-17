@@ -325,9 +325,9 @@ void EDA_BASE_FRAME::ShowChangedLanguage()
 }
 
 
-void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    TOOLS_HOLDER::CommonSettingsChanged( aEnvVarsChanged );
+    TOOLS_HOLDER::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
@@ -469,7 +469,7 @@ void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
     m_perspective = aCfg->perspective;
     m_mruPath = aCfg->mru_path;
 
-    TOOLS_HOLDER::CommonSettingsChanged( false );
+    TOOLS_HOLDER::CommonSettingsChanged( false, false );
 }
 
 
@@ -693,7 +693,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
         book->GetPage( i )->Layout();
 
     if( dlg.ShowModal() == wxID_OK )
-        dlg.Kiway().CommonSettingsChanged( false );
+        dlg.Kiway().CommonSettingsChanged( false, false );
 }
 
 

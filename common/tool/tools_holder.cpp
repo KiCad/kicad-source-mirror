@@ -114,7 +114,7 @@ bool TOOLS_HOLDER::IsCurrentTool( const TOOL_ACTION& aAction ) const
 }
 
 
-void TOOLS_HOLDER::CommonSettingsChanged( bool aEnvVarsChanged )
+void TOOLS_HOLDER::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     if( GetToolManager() )
         GetToolManager()->GetActionManager()->UpdateHotKeys( false );

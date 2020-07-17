@@ -473,7 +473,7 @@ void KIWAY::SetLanguage( int aLanguage )
     }
 }
 
-void KIWAY::CommonSettingsChanged( bool aEnvVarsChanged )
+void KIWAY::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
 #if 1
     if( m_ctl & KFCTL_CPP_PROJECT_SUITE )
@@ -484,7 +484,7 @@ void KIWAY::CommonSettingsChanged( bool aEnvVarsChanged )
         EDA_BASE_FRAME* top = static_cast<EDA_BASE_FRAME*>( m_top );
 
         if( top )
-            top->CommonSettingsChanged( aEnvVarsChanged );
+            top->CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
     }
 #endif
 
@@ -493,7 +493,7 @@ void KIWAY::CommonSettingsChanged( bool aEnvVarsChanged )
         KIWAY_PLAYER* frame = GetPlayerFrame( ( FRAME_T )i );
 
         if( frame )
-            frame->CommonSettingsChanged( aEnvVarsChanged );
+            frame->CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
     }
 }
 

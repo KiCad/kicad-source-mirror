@@ -152,7 +152,7 @@ class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
      * This would be private (and only called by the Kiway), but we need to do this manually
      * from the PCB frame because the 3D viewer isn't updated via the #KIWAY.
      */
-    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
+    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
 
     void SynchroniseColoursWithBoard();

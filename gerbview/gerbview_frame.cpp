@@ -1170,9 +1170,9 @@ void GERBVIEW_FRAME::setupTools()
 }
 
 
-void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     RecreateToolbars();
     Layout();

@@ -278,7 +278,7 @@ public:
      */
     virtual void OnModify() {}
 
-    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
+    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     /**
      * Helper to retrieve a layer color from the global color settings

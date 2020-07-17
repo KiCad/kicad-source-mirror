@@ -380,7 +380,7 @@ public:
      * Calls CommonSettingsChanged() on all KIWAY_PLAYERs.
      * Used after changing suite-wide options such as panning, autosave interval, etc.
      */
-    VTBL_ENTRY void CommonSettingsChanged( bool aEnvVarsChanged );
+    VTBL_ENTRY void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged );
 
     KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop = NULL );
 

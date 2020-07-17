@@ -90,14 +90,16 @@ void PCB_VIEW::Remove( KIGFX::VIEW_ITEM* aItem )
 
 void PCB_VIEW::Update( KIGFX::VIEW_ITEM* aItem, int aUpdateFlags )
 {
-    auto item = static_cast<BOARD_ITEM*>( aItem );
+    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aItem );
 
     if( item->Type() == PCB_MODULE_T )
     {
-        auto mod = static_cast<MODULE*>( item );
-        mod->RunOnChildren([this, aUpdateFlags] ( BOARD_ITEM* aModItem ) {
-                VIEW::Update( aModItem, aUpdateFlags );
-            } );
+        MODULE* mod = static_cast<MODULE*>( item );
+
+        mod->RunOnChildren( [this, aUpdateFlags] ( BOARD_ITEM* aModItem )
+                            {
+                                VIEW::Update( aModItem, aUpdateFlags );
+                            } );
     }
 
     VIEW::Update( item, aUpdateFlags );

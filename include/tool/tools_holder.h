@@ -110,7 +110,7 @@ public:
      * Notification event that some of the common (suite-wide) settings have changed.
      * Update hotkeys, preferences, etc.
      */
-    virtual void CommonSettingsChanged( bool aEnvVarsChanged );
+    virtual void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged );
 
     /**
      * Canvas access.
