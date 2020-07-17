@@ -105,16 +105,20 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
 
     auto migrateFromLegacy = [&] ( wxFileName& aPath ) {
         // Backup and restore during migration so that the original can be mutated if convenient
+        bool backed_up = false;
         wxFileName temp;
-        temp.AssignTempFileName( aPath.GetFullPath() );
 
-        bool backed_up = true;
-
-        if( !wxCopyFile( aPath.GetFullPath(), temp.GetFullPath() ) )
+        if( aPath.IsDirWritable() )
         {
-            wxLogTrace( traceSettings, "%s: could not create temp file for migration",
+            temp.AssignTempFileName( aPath.GetFullPath() );
+
+            if( !wxCopyFile( aPath.GetFullPath(), temp.GetFullPath() ) )
+            {
+                wxLogTrace( traceSettings, "%s: could not create temp file for migration",
                         GetFullFilename() );
-            backed_up = false;
+            }
+            else
+                backed_up = true;
         }
 
         wxConfigBase::DontCreateOnDemand();
@@ -304,6 +308,12 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
         wxLogTrace( traceSettings,
                 "File for %s doesn't exist and m_createIfMissing == false; not saving",
                 GetFullFilename() );
+        return false;
+    }
+
+    if( !path.IsFileWritable() )
+    {
+        wxLogTrace( traceSettings, "File for %s is read-only; not saving", GetFullFilename() );
         return false;
     }
 

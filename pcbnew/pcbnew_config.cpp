@@ -137,7 +137,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     if( !fn.IsOk() )
         return;
 
-    if( !IsWritable( fn ) )
+    if( !fn.IsDirWritable() )
         return;
 
     PROJECT_FILE&           project       = Prj().GetProjectFile();
