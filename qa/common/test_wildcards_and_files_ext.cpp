@@ -49,13 +49,13 @@ struct ExtWildcardFilterCase
 const static std::vector<ExtWildcardFilterCase> ext_wildcard_cases = {
     {
             { "png" },
-            " ( *.png)|*.png",
-            " ( *.png)|*.[pP][nN][gG]",
+            " (*.png)|*.png",
+            " (*.png)|*.[pP][nN][gG]",
     },
     {
             { "png", "gif" },
-            " ( *.png *.gif)|*.png;*.gif",
-            " ( *.png *.gif)|*.[pP][nN][gG];*.[gG][iI][fF]",
+            " (*.png; *.gif)|*.png;*.gif",
+            " (*.png; *.gif)|*.[pP][nN][gG];*.[gG][iI][fF]",
     },
 };
 
