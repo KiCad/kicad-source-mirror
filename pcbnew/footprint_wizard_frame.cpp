@@ -120,16 +120,10 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     if( caller )
         SetUserUnits( caller->GetUserUnits() );
 
-    PCB_DISPLAY_OPTIONS disp_opts = GetDisplayOptions();
     // In viewer, the default net clearance is not known (it depends on the actual board).
     // So we do not show the default clearance, by setting it to 0
     // The footprint or pad specific clearance will be shown
     GetBoard()->GetDesignSettings().GetDefault()->SetClearance( 0 );
-
-    disp_opts.m_DisplayPadIsol = true;
-    disp_opts.m_DisplayPadNum = true;
-    SetDisplayOptions( disp_opts );
-
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
     // Create GAL canvas
@@ -142,6 +136,12 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                                             GetGalDisplayOptions(), backend );
     SetCanvas( gal_drawPanel );
+
+    PCB_DISPLAY_OPTIONS disp_opts = GetDisplayOptions();
+
+    disp_opts.m_DisplayPadIsol = true;
+    disp_opts.m_DisplayPadNum  = true;
+    SetDisplayOptions( disp_opts );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
