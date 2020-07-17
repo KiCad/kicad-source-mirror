@@ -1,0 +1,40 @@
+##########################################################################
+# This will allow the job to run whenever code events trigger it.
+##########################################################################
+.only_code:
+  only:
+    - master
+    - branches
+    - merge_requests
+    - pushes
+  except:
+    - schedules
+
+##########################################################################
+# Define a template for all the unit tests, since each one is run in a separate
+# job to make the display nicer.
+##########################################################################
+.unit_test:
+  stage: test
+  when: on_success
+  needs:
+    - job: build_linux
+      artifacts: true
+  # We define this using a before script because GitLab cannot merge variable
+  # definitions across inheritance (so the variables block from this would disappear)
+  before_script:
+    - export BOOST_TEST_LOGGER='JUNIT,all,test_results.${TEST}.xml:HRF,warning'
+    - export CTEST_OUTPUT_ON_FAILURE=1
+  script:
+    - cd build/linux/qa
+    - ctest -R ${TEST}
+  # GitLab supports displaying the results in the GUI through JUNIT artifacts
+  # (https://docs.gitlab.com/ee/ci/junit_test_reports.html)
+  # so we upload the JUNIT results. Note that there is a bug with how paths
+  # are processed in the junit report (https://gitlab.com/gitlab-org/gitlab/issues/23835)
+  # so we can't use a glob and have to list out each hierarchy separately.
+  artifacts:
+    reports:
+      junit:
+        - build/linux/qa/*/*.xml
+        - build/linux/qa/*/*/*.xml

@@ -1,0 +1,65 @@
+# This script is responsible for configuring the coverity file from the cache
+# (e.g. extracting it or updating it if needed)
+.coverity_cache_prep: &coverity_cache_prep |
+  echo "Downloading MD5 hash of current Coverity Scan version to compare against cache"
+  curl --output cov-analysis-linux64.md5 https://scan.coverity.com/download/linux64 \
+       --form project=$COVERITY_SCAN_PROJECT_NAME \
+       --form token=$COVERITY_SCAN_TOKEN \
+       --form md5=1
+  test "$(md5sum cov-analysis-linux64.tgz | awk '{ print $1 }')" = "$(cat cov-analysis-linux64.md5)" || (
+    echo "Downloading new Coverity Scan version"
+    curl --output cov-analysis-linux64.tgz https://scan.coverity.com/download/linux64 \
+         --form project=$COVERITY_SCAN_PROJECT_NAME \
+         --form token=$COVERITY_SCAN_TOKEN
+  )
+  echo "Extracting Coverity Scan"
+  mkdir coverity/
+  tar xzf cov-analysis-linux64.tgz --strip-components=1 -C coverity
+  test -d coverity/bin
+
+# This script is responsible for tar'ing and submitting the results of the build.
+# These results will be saved for 1 day if the build fails.
+.coverity_submit: &coverity_submit |
+  echo "Creating tar file of scan results"
+  tar cfz cov-int.tar.gz cov-int
+  echo "Submitting scan results"
+  curl -v https://scan.coverity.com/builds?project=$COVERITY_SCAN_PROJECT_NAME \
+       --form token=$COVERITY_SCAN_TOKEN \
+       --form email=$GITLAB_USER_EMAIL \
+       --form file=@cov-int.tar.gz \
+       --form version="`git describe --tags`" \
+       --form description="`git describe --tags` / $CI_COMMIT_TITLE / $CI_COMMIT_REF_NAME:$CI_PIPELINE_ID " 2>&1 \
+        | tee curl-response.txt
+  grep -q 'Build successfully submitted' curl-response.txt
+
+
+Coverity:
+  tags:
+    - coverity
+  stage: build
+  only:
+    variables:
+      - $SCHEDULED_JOB_NAME == "coverity"
+  cache:
+    key: coverity
+    paths:
+      - cov-analysis-linux64.tgz
+  before_script:
+    - export COVERITY_SCAN_PROJECT_NAME="kicad"
+  script:
+    - *coverity_cache_prep
+    - cmake
+      -DCMAKE_BUILD_TYPE=Debug
+      -DKICAD_STDLIB_LIGHT_DEBUG=ON
+      -DKICAD_SCRIPTING=ON
+      -DKICAD_SCRIPTING_MODULES=ON
+      -DKICAD_SCRIPTING_PYTHON3=ON
+      -DKICAD_SCRIPTING_WXPYTHON=ON
+      -DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON
+      -DKICAD_SCRIPTING_ACTION_MENU=ON
+      -DBUILD_GITHUB_PLUGIN=ON
+      -DKICAD_USE_OCE=OFF
+      -DKICAD_USE_OCC=ON
+      -DKICAD_SPICE=ON
+    - coverity/bin/cov-build --dir cov-int make -j8
+    - *coverity_submit
