@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.24\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-16 23:17+0800\n"
-"PO-Revision-Date: 2020-07-16 23:17+0800\n"
+"PO-Revision-Date: 2020-07-18 09:50+0800\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: kicad-cn\n"
 "Language: zh_CN\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -18200,10 +18200,10 @@ msgstr "圆角矩形"
 msgid "Chamfered Rectangle"
 msgstr "倒角矩形"
 
-# DIe 芯片
+# Die 裸芯片
 #: pcbnew/class_pad.cpp:1251 pcbnew/class_track.cpp:608
 msgid "Pad To Die Length"
-msgstr "焊盘到芯片长度"
+msgstr "焊盘到裸芯片长度"
 
 #: pcbnew/class_pad.cpp:1253
 msgid "Local Soldermask Margin"
@@ -20609,10 +20609,10 @@ msgstr "导出 GenCAD 设置"
 msgid "Select a GenCAD export filename"
 msgstr "选择 GenCAD 导出文件名"
 
-# Padstack: 焊盘和过孔
+# Padstack  焊盘槽/孔
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:135
 msgid "Flip bottom footprint padstacks"
-msgstr "翻转底层封装焊盘和过孔"
+msgstr "翻转底层封装焊盘槽/孔"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Generate unique pin names"
@@ -21852,10 +21852,10 @@ msgstr "从通孔偏移形状"
 msgid ":"
 msgstr "："
 
-# DIe 芯片
+# Die 裸芯片
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:454
 msgid "Specify pad to die length"
-msgstr "指定焊盘到芯片长度"
+msgstr "指定焊盘到裸芯片长度"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:492
 msgid ""
@@ -22890,10 +22890,10 @@ msgstr "过孔计数"
 msgid "Board Length"
 msgstr "电路板长度"
 
-# DIe 芯片
+# Die 裸芯片
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:59
 msgid "Die Length"
-msgstr "芯片长度"
+msgstr "裸芯片长度"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:832
 msgid "New Net"
@@ -22938,10 +22938,10 @@ msgstr "过孔计数"
 msgid "Board length"
 msgstr "电路板长度"
 
-# DIe 芯片
+# Die 裸芯片
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:970
 msgid "Die length"
-msgstr "芯片长度"
+msgstr "裸芯片长度"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:970
 msgid "Net length"
@@ -24682,10 +24682,10 @@ msgstr "钻孔内径太小"
 msgid "Via hole larger than diameter"
 msgstr "过孔内径大于过孔外径"
 
-# Padstack: 焊盘和过孔
+# Padstack 焊盘槽/孔
 #: pcbnew/drc/drc_item.cpp:103
 msgid "Padstack is not valid"
-msgstr "焊盘和过孔无效"
+msgstr "焊盘槽/孔无效"
 
 #: pcbnew/drc/drc_item.cpp:107 qa/drc_proto/drc_item.cpp:90
 msgid "Micro via size too small"
@@ -27162,10 +27162,10 @@ msgstr "会话文件导入与合并完成。"
 msgid "Session file uses invalid layer id \"%s\""
 msgstr "会话文件使用了错误的层标识 \"%s\""
 
-# Padstack: 焊盘和过孔
+# Padstack 焊盘槽/孔
 #: pcbnew/specctra_import_export/specctra_import.cpp:220
 msgid "Session via padstack has no shapes"
-msgstr "过孔焊盘和过孔的会话没有形状"
+msgstr "过孔的焊盘槽/孔会话没有形状"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:227
 #: pcbnew/specctra_import_export/specctra_import.cpp:245
@@ -27191,10 +27191,11 @@ msgstr "会话文件缺少“库”部分"
 msgid "Reference '%s' not found."
 msgstr "未找到引用 \"%s\"。"
 
+# padstack 焊盘槽/孔
 #: pcbnew/specctra_import_export/specctra_import.cpp:498
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
-msgstr "发现一个导线_过孔索引指向了丢失的焊盘和过孔 \"%s\""
+msgstr "发现一个导线_过孔索引指向了丢失的焊盘槽/孔 \"%s\""
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:77
 msgid "Exception on python action plugin code"
