@@ -201,7 +201,7 @@ double ArcTangente( int dy, int dx )
     }
 
     // Of course dy and dx are treated as double
-    return RAD2DECIDEG( atan2( (double) dy, (double) dx ) );
+    return RAD2DECIDEG( std::atan2( (double) dy, (double) dx ) );
 }
 
 
@@ -367,21 +367,29 @@ const VECTOR2D GetArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const
     double aSlope = yDelta_21 / xDelta_21;
     double bSlope = yDelta_32 / xDelta_32;
 
-    // If the points are colinear, the center is at infinity, so offset
-    // the slope by a minimal amount
-    // Warning: This will induce a small error in the center location
-    if( yDelta_32 * xDelta_21 == yDelta_21 * xDelta_32 )
+    if( ( aSlope == bSlope ) )
     {
-        aSlope += std::numeric_limits<double>::epsilon();
-        bSlope -= std::numeric_limits<double>::epsilon();
+        if( aStart == aEnd )
+        {
+            // This is a special case for a 360° arc.  In this case, the center is halfway between
+            // the midpoint and either end point
+            center.x = ( aStart.x + aMid.x ) / 2.0;
+            center.y = ( aStart.y + aMid.y ) / 2.0 ;
+            return center;
+        }
+        else
+        {
+            // If the points are colinear, the center is at infinity, so offset
+            // the slope by a minimal amount
+            // Warning: This will induce a small error in the center location
+            aSlope += std::numeric_limits<double>::epsilon();
+            bSlope -= std::numeric_limits<double>::epsilon();
+        }
     }
 
+    // Prevent divide by zero error
     if( aSlope == 0.0 )
         aSlope = std::numeric_limits<double>::epsilon();
-
-    if( bSlope == 0.0 )
-        bSlope = -std::numeric_limits<double>::epsilon();
-
 
     center.x = ( aSlope * bSlope * ( aStart.y - aEnd.y ) +
                  bSlope * ( aStart.x + aMid.x ) -
