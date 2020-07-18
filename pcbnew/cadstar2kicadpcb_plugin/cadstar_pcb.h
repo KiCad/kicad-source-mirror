@@ -45,7 +45,8 @@ public:
 
 private:
     BOARD*                               mBoard;
-    std::map<CPA_LAYER_ID, PCB_LAYER_ID> mLayermap;
+    std::map<CPA_ID, PCB_LAYER_ID>       mLayermap; //<Map between Cadstar and KiCad Layers
+    std::map<CPA_PHYSICAL_LAYER, CPA_ID> mCopperLayers;
     void                                 loadBoardStackup( CPA_FILE* aCPAfile );
     PCB_LAYER_ID                         getKiCadCopperLayerID( unsigned int aLayerNum );
 };

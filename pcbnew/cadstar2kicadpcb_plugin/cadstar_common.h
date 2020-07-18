@@ -61,6 +61,20 @@ enum class FILE_TYPE
 
 
 /**
+ * @brief Represents a floating value in E notation
+ */
+struct EVALUE
+{
+    long Base     = 0;
+    long Exponent = 0;
+
+    void   Parse( XNODE* aNode );
+    double GetDouble();
+};
+
+extern void InsertAttributeAtEnd( XNODE* aNode, wxString aValue );
+
+/**
  * @brief Reads a CADSTAR Archive file (S-parameter format)
  * @param aFileName 
  * @param aType 
@@ -72,20 +86,51 @@ enum class FILE_TYPE
 extern XNODE* LoadArchiveFile(
         const wxString& aFileName, FILE_TYPE aType = FILE_TYPE::PCB_ARCHIVE );
 
+
 /**
  * @brief 
  * @param aNode 
  * @param aID 
  * @return returns the value of attribute "attrX" in aNode where 'X' is aID
+ * @throws IO_ERROR if attribute does not exist
  */
 extern wxString GetAttributeID( XNODE* aNode, unsigned int aID );
+
+
+/**
+ * @brief 
+ * @param aNode 
+ * @param aID 
+ * @return returns the value of attribute "attrX" in aNode where 'X' is aID
+ * @throws IO_ERROR if attribute does not exist
+ */
+extern long GetAttributeIDLong( XNODE* aNode, unsigned int aID );
+
 
 /**
  * @brief 
  * @param aNode 
  * @throw IO_ERROR if a child node was found
  */
-extern void CheckNoChildNodes( XNODE* aNode, wxString aLocation );
+extern void CheckNoChildNodes( XNODE* aNode );
+
+
+/**
+ * @brief 
+ * @param aNode 
+ * @throw IO_ERROR if a node adjacent to aNode was found
+ */
+extern void CheckNoNextNodes( XNODE* aNode );
+
+
+/**
+ * @brief
+ * @param aNode with a child node containing an EVALUE
+ * @param aValueToParse 
+ * @throw IO_ERROR if unable to parse or node is not an EVALUE
+*/
+extern void ParseChildEValue( XNODE* aNode, EVALUE& aValueToParse );
+
 
 } // namespace CADSTAR_COMMON
 

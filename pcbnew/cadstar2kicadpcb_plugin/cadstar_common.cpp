@@ -25,6 +25,40 @@
 
 #include <cadstar_common.h>
 
+
+void CADSTAR_COMMON::EVALUE::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "E" ) );
+
+    if( ( !CADSTAR_COMMON::GetAttributeID( aNode, 0 ).ToLong( &Base ) )
+            || ( !CADSTAR_COMMON::GetAttributeID( aNode, 1 ).ToLong( &Exponent ) ) )
+        THROW_PARSING_IO_ERROR( wxT( "Base and Exponent" ),
+                wxString::Format(
+                        "%s->%s", aNode->GetParent()->GetName(), aNode->GetParent()->GetName() ) );
+}
+
+
+double CADSTAR_COMMON::EVALUE::GetDouble()
+{
+    return Base * std::pow( 10.0, Exponent );
+}
+
+
+void CADSTAR_COMMON::InsertAttributeAtEnd( XNODE* aNode, wxString aValue )
+{
+    wxString result, paramName = "attr0";
+    int      i = 0;
+
+    while( aNode->GetAttribute( paramName, &result ) )
+    {
+        paramName = wxT( "attr" );
+        paramName << i++;
+    }
+
+    aNode->AddAttribute( paramName, aValue );
+}
+
+
 XNODE* CADSTAR_COMMON::LoadArchiveFile( const wxString& aFileName, FILE_TYPE aType )
 {
     KEYWORD   emptyKeywords[1] = {};
@@ -80,6 +114,8 @@ XNODE* CADSTAR_COMMON::LoadArchiveFile( const wxString& aFileName, FILE_TYPE aTy
 
             if( iNode )
             {
+                //we will add it as attribute as well as child node
+                InsertAttributeAtEnd( iNode, str );
                 iNode->AddChild( cNode );
             }
             else if( !cadstarFileCheckDone )
@@ -99,16 +135,7 @@ XNODE* CADSTAR_COMMON::LoadArchiveFile( const wxString& aFileName, FILE_TYPE aTy
 
             if( !str.IsEmpty() )
             {
-                wxString result, paramName = "attr0";
-                int      i = 0;
-
-                while( iNode->GetAttribute( paramName, &result ) )
-                {
-                    paramName = wxT( "attr" );
-                    paramName << i++;
-                }
-
-                iNode->AddAttribute( paramName, str );
+                InsertAttributeAtEnd( iNode, str );
             }
         }
         else
@@ -130,6 +157,7 @@ XNODE* CADSTAR_COMMON::LoadArchiveFile( const wxString& aFileName, FILE_TYPE aTy
     }
     else
     {
+        //no data?
         THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt!" ) );
     }
 
@@ -138,15 +166,54 @@ XNODE* CADSTAR_COMMON::LoadArchiveFile( const wxString& aFileName, FILE_TYPE aTy
 
 wxString CADSTAR_COMMON::GetAttributeID( XNODE* aNode, unsigned int aID )
 {
-    wxString attrName = "attr";
+    wxString attrName, retVal;
+    attrName = "attr";
     attrName << aID;
-    return aNode->GetAttribute( attrName, wxEmptyString );
+
+    if( !aNode->GetAttribute( attrName, &retVal ) )
+        THROW_MISSING_PARAMETER_IO_ERROR( std::to_string( aID ), aNode->GetName() );
+
+    return retVal;
 }
 
-void CADSTAR_COMMON::CheckNoChildNodes( XNODE* aNode, wxString aLocation )
+
+long CADSTAR_COMMON::GetAttributeIDLong( XNODE* aNode, unsigned int aID )
+{
+    long retVal;
+
+    if( !CADSTAR_COMMON::GetAttributeID( aNode, aID ).ToLong( &retVal ) )
+        THROW_PARSING_IO_ERROR( std::to_string( aID ), aNode->GetName() );
+
+    return retVal;
+}
+
+
+void CADSTAR_COMMON::CheckNoChildNodes( XNODE* aNode )
 {
     if( aNode->GetChildren() )
     {
-        THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aLocation );
+        THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
+    }
+}
+
+
+void CADSTAR_COMMON::CheckNoNextNodes( XNODE* aNode )
+{
+    if( aNode->GetNext() )
+    {
+        THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetNext()->GetName(), aNode->GetParent()->GetName() );
+    }
+}
+
+
+void CADSTAR_COMMON::ParseChildEValue( XNODE* aNode, CADSTAR_COMMON::EVALUE& aValueToParse )
+{
+    if( aNode->GetChildren()->GetName() == wxT( "E" ) )
+    {
+        aValueToParse.Parse( aNode->GetChildren() );
+    }
+    else
+    {
+        THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
     }
 }

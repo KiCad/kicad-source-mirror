@@ -37,20 +37,19 @@ void CADSTAR_PCB::Load( CPA_FILE* aCPAfile )
 
 void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
 {
-    std::map<CPA_LAYER_ID, CPA_LAYER>&       cpaLayers = aCPAfile->Assignments.Layerdefs.Layers;
-    std::map<CPA_MATERIAL_ID, CPA_MATERIAL>& cpaMaterials =
-            aCPAfile->Assignments.Layerdefs.Materials;
-    std::vector<CPA_LAYER_ID>& cpaLayerStack = aCPAfile->Assignments.Layerdefs.LayerStack;
-    unsigned                   numElectricalAndPowerLayers = 0;
-    BOARD_DESIGN_SETTINGS&     designSettings              = mBoard->GetDesignSettings();
-    BOARD_STACKUP&             stackup                     = designSettings.GetStackupDescriptor();
-    int                        noOfKiCadStackupLayers      = 0;
-    int                        lastElectricalLayerIndex    = 0;
-    int                        dielectricSublayer          = 0;
-    int                        numDielectricLayers         = 0;
-    bool                       prevWasDielectric           = false;
-    BOARD_STACKUP_ITEM*        tempKiCadLayer;
-    std::vector<PCB_LAYER_ID>  layerIDs;
+    std::map<CPA_ID, CPA_LAYER>&    cpaLayers     = aCPAfile->Assignments.Layerdefs.Layers;
+    std::map<CPA_ID, CPA_MATERIAL>& cpaMaterials  = aCPAfile->Assignments.Layerdefs.Materials;
+    std::vector<CPA_ID>&            cpaLayerStack = aCPAfile->Assignments.Layerdefs.LayerStack;
+    unsigned                        numElectricalAndPowerLayers = 0;
+    BOARD_DESIGN_SETTINGS&          designSettings              = mBoard->GetDesignSettings();
+    BOARD_STACKUP&                  stackup                = designSettings.GetStackupDescriptor();
+    int                             noOfKiCadStackupLayers = 0;
+    int                             lastElectricalLayerIndex = 0;
+    int                             dielectricSublayer       = 0;
+    int                             numDielectricLayers      = 0;
+    bool                            prevWasDielectric        = false;
+    BOARD_STACKUP_ITEM*             tempKiCadLayer;
+    std::vector<PCB_LAYER_ID>       layerIDs;
 
     //Remove all layers except required ones
     stackup.RemoveAll();
@@ -207,9 +206,7 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
             //TODO add Resistivity when KiCad supports it
         }
 
-        int unitMultiplier = 10; //assume CPA_FILE uses HUNDREDTH MICRON as its unit
-        //TODO: read units from CPA_FILE header and change unitMultiplier
-        // Also, add unitMultiplier somewhere in CPA_FILE
+        int unitMultiplier = aCPAfile->KiCadUnitMultiplier;
         tempKiCadLayer->SetThickness( curLayer.Thickness * unitMultiplier, dielectricSublayer );
 
         wxASSERT( layerTypeName != wxEmptyString );
@@ -234,6 +231,7 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
                     tempKiCadLayer->GetBrdLayerId(), tempKiCadLayer->GetLayerName() ) );
             //TODO set layer names for other CADSTAR layers when KiCad supports custom
             //layer names on non-copper layers
+            mCopperLayers.insert( std::make_pair( curLayer.PhysicalLayer, curLayer.ID ) );
         }
         //TODO map kicad layer to CADSTAR layer in mLayermap
     }
