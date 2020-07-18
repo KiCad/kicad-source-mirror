@@ -42,7 +42,6 @@ const int bdsSchemaVersion = 0;
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
         NESTED_SETTINGS( "board_design_settings", bdsSchemaVersion, aParent, aPath ),
         m_Pad_Master( NULL )
-
 {
     // We want to leave alone parameters that aren't found in the project JSON as they may be
     // initialized by the board file parser before NESTED_SETTINGS::LoadFromFile is called.
@@ -593,6 +592,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_DiffPairDimensionsList = aOther.m_DiffPairDimensionsList;
     m_DRCRuleSelectors       = aOther.m_DRCRuleSelectors;
     m_DRCRules               = aOther.m_DRCRules;
+    m_matched                = aOther.m_matched;
     m_MicroViasAllowed       = aOther.m_MicroViasAllowed;
     m_BlindBuriedViaAllowed  = aOther.m_BlindBuriedViaAllowed;
     m_CurrentViaType         = aOther.m_CurrentViaType;
@@ -612,12 +612,9 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_MaxError               = aOther.m_MaxError;
     m_SolderMaskMargin       = aOther.m_SolderMaskMargin;
     m_SolderMaskMinWidth     = aOther.m_SolderMaskMinWidth;
+    m_SolderPasteMargin      = aOther.m_SolderPasteMargin;
     m_SolderPasteMarginRatio = aOther.m_SolderPasteMarginRatio;
     m_DefaultFPTextItems     = aOther.m_DefaultFPTextItems;
-    m_DimensionUnits         = aOther.m_DimensionUnits;
-    m_DimensionPrecision     = aOther.m_DimensionPrecision;
-    m_AuxOrigin              = aOther.m_AuxOrigin;
-    m_GridOrigin             = aOther.m_GridOrigin;
 
     std::copy( std::begin( aOther.m_LineThickness ), std::end( aOther.m_LineThickness ),
                std::begin( m_LineThickness ) );
@@ -633,6 +630,34 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
 
     std::copy( std::begin( aOther.m_TextUpright ), std::end( aOther.m_TextUpright ),
                std::begin( m_TextUpright ) );
+
+    m_DimensionUnits         = aOther.m_DimensionUnits;
+    m_DimensionPrecision     = aOther.m_DimensionPrecision;
+    m_AuxOrigin              = aOther.m_AuxOrigin;
+    m_GridOrigin             = aOther.m_GridOrigin;
+    m_HasStackup             = aOther.m_HasStackup;
+
+    m_trackWidthIndex        = aOther.m_trackWidthIndex;
+    m_viaSizeIndex           = aOther.m_viaSizeIndex;
+    m_diffPairIndex          = aOther.m_diffPairIndex;
+    m_useCustomTrackVia      = aOther.m_useCustomTrackVia;
+    m_customTrackWidth       = aOther.m_customTrackWidth;
+    m_customViaSize          = aOther.m_customViaSize;
+    m_useCustomDiffPair      = aOther.m_useCustomDiffPair;
+    m_customDiffPair         = aOther.m_customDiffPair;
+    m_copperLayerCount       = aOther.m_copperLayerCount;
+    m_enabledLayers          = aOther.m_enabledLayers;
+    m_boardThickness         = aOther.m_boardThickness;
+    m_currentNetClassName    = aOther.m_currentNetClassName;
+    m_stackup                = aOther.m_stackup;
+
+    // Only take the pointer from the other if it isn't the default
+    if( aOther.m_netClasses == &aOther.m_internalNetClasses )
+        m_netClasses = &m_internalNetClasses;
+    else
+        m_netClasses = aOther.m_netClasses;
+
+    m_defaultZoneSettings    = aOther.m_defaultZoneSettings;
 }
 
 

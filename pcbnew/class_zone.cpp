@@ -82,41 +82,7 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
 {
     BOARD_CONNECTED_ITEM::operator=( aOther );
 
-    // Replace the outlines for aOther outlines.
-    delete m_Poly;
-    m_Poly = new SHAPE_POLY_SET( *aOther.m_Poly );
-
-    m_isKeepout = aOther.m_isKeepout;
-    SetLayerSet( aOther.GetLayerSet() );
-
-    m_zoneName         = aOther.m_zoneName;
-    m_IsFilled         = aOther.m_IsFilled;
-    m_CornerSelection  = nullptr; // for corner moving, corner index to (null if no selection)
-    m_ZoneClearance    = aOther.m_ZoneClearance;            // clearance value
-    m_ZoneMinThickness = aOther.m_ZoneMinThickness;
-    m_FilledPolysUseThickness = aOther.m_FilledPolysUseThickness;
-    m_FillMode = aOther.m_FillMode;                         // filling mode (segments/polygons)
-    m_PadConnection = aOther.m_PadConnection;
-    m_ThermalReliefGap = aOther.m_ThermalReliefGap;
-    m_ThermalReliefCopperBridge = aOther.m_ThermalReliefCopperBridge;
-    SetHatchStyle( aOther.GetHatchStyle() );
-    SetHatchPitch( aOther.GetHatchPitch() );
-    m_HatchLines = aOther.m_HatchLines;     // copy vector <SEG>
-
-    for( PCB_LAYER_ID layer : aOther.GetLayerSet().Seq() )
-    {
-        m_FilledPolysList[layer]  = aOther.m_FilledPolysList.at( layer );
-        m_RawPolysList[layer]     = aOther.m_RawPolysList.at( layer );
-        m_filledPolysHash[layer]  = aOther.m_filledPolysHash.at( layer );
-        m_FillSegmList[layer]     = aOther.m_FillSegmList.at( layer ); // vector <> copy
-        m_insulatedIslands[layer] = aOther.m_insulatedIslands.at( layer );
-    }
-
-    m_HatchFillTypeThickness = aOther.m_HatchFillTypeThickness;
-    m_HatchFillTypeGap = aOther.m_HatchFillTypeGap;
-    m_HatchFillTypeOrientation = aOther.m_HatchFillTypeOrientation;
-    m_HatchFillTypeSmoothingLevel = aOther.m_HatchFillTypeSmoothingLevel;
-    m_HatchFillTypeSmoothingValue = aOther.m_HatchFillTypeSmoothingValue;
+    initDataFromSrcInCopyCtor( aOther );
 
     return *this;
 }
@@ -139,25 +105,45 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_Flags = aZone.m_Flags;
     m_forceVisible = aZone.m_forceVisible;
 
-    m_isKeepout = aZone.m_isKeepout;
-    SetLayerSet( aZone.GetLayerSet() );
-
-    m_zoneName = aZone.m_zoneName;
-
+    // Replace the outlines for aZone outlines.
+    delete m_Poly;
     m_Poly = new SHAPE_POLY_SET( *aZone.m_Poly );
+
+    m_cornerSmoothingType = aZone.m_cornerSmoothingType;
+    m_cornerRadius = aZone.m_cornerRadius;
+    m_zoneName = aZone.m_zoneName;
+    SetLayerSet( aZone.GetLayerSet() );
+    m_priority = aZone.m_priority;
+    m_isKeepout = aZone.m_isKeepout;
+
+    m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;
+    m_doNotAllowVias       = aZone.m_doNotAllowVias;
+    m_doNotAllowTracks     = aZone.m_doNotAllowTracks;
+    m_doNotAllowPads       = aZone.m_doNotAllowPads;
+    m_doNotAllowFootprints = aZone.m_doNotAllowFootprints;
+
+    m_PadConnection           = aZone.m_PadConnection;
+    m_ZoneClearance           = aZone.m_ZoneClearance;     // clearance value
+    m_ZoneMinThickness        = aZone.m_ZoneMinThickness;
+    m_FilledPolysUseThickness = aZone.m_FilledPolysUseThickness;
+    m_islandRemovalMode       = aZone.m_islandRemovalMode;
+    m_minIslandArea           = aZone.m_minIslandArea;
+
+    m_IsFilled = aZone.m_IsFilled;
+    m_needRefill = aZone.m_needRefill;
+
+    m_ThermalReliefGap = aZone.m_ThermalReliefGap;
+    m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
+
+    m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
+    m_HatchFillTypeThickness = aZone.m_HatchFillTypeThickness;
+    m_HatchFillTypeGap = aZone.m_HatchFillTypeGap;
+    m_HatchFillTypeOrientation = aZone.m_HatchFillTypeOrientation;
+    m_HatchFillTypeSmoothingLevel = aZone.m_HatchFillTypeSmoothingLevel;
+    m_HatchFillTypeSmoothingValue = aZone.m_HatchFillTypeSmoothingValue;
 
     // For corner moving, corner index to drag, or nullptr if no selection
     m_CornerSelection = nullptr;
-    m_IsFilled = aZone.m_IsFilled;
-    m_ZoneClearance = aZone.m_ZoneClearance;     // clearance value
-    m_ZoneMinThickness = aZone.m_ZoneMinThickness;
-    m_FilledPolysUseThickness = aZone.m_FilledPolysUseThickness;
-    m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
-    m_hv45 = aZone.m_hv45;
-    m_priority = aZone.m_priority;
-    m_PadConnection = aZone.m_PadConnection;
-    m_ThermalReliefGap = aZone.m_ThermalReliefGap;
-    m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
 
     for( PCB_LAYER_ID layer : aZone.GetLayerSet().Seq() )
     {
@@ -168,34 +154,17 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
         m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
     }
 
-    m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;
-    m_doNotAllowVias = aZone.m_doNotAllowVias;
-    m_doNotAllowTracks = aZone.m_doNotAllowTracks;
-    m_doNotAllowPads = aZone.m_doNotAllowPads;
-    m_doNotAllowFootprints = aZone.m_doNotAllowFootprints;
-
-    m_cornerSmoothingType = aZone.m_cornerSmoothingType;
-    m_cornerRadius = aZone.m_cornerRadius;
-
     m_hatchStyle = aZone.m_hatchStyle;
     m_hatchPitch = aZone.m_hatchPitch;
     m_HatchLines = aZone.m_HatchLines;
 
-    m_HatchFillTypeThickness = aZone.m_HatchFillTypeThickness;
-    m_HatchFillTypeGap = aZone.m_HatchFillTypeGap;
-    m_HatchFillTypeOrientation = aZone.m_HatchFillTypeOrientation;
-    m_HatchFillTypeSmoothingLevel = aZone.m_HatchFillTypeSmoothingLevel;
-    m_HatchFillTypeSmoothingValue = aZone.m_HatchFillTypeSmoothingValue;
-
     SetLocalFlags( aZone.GetLocalFlags() );
 
-    // Now zone type and layer are set, transfer net info
-    // (has meaning only for copper zones)
     m_netinfo = aZone.m_netinfo;
 
+    m_hv45 = aZone.m_hv45;
     m_area = aZone.m_area;
 
-    SetNeedRefill( aZone.NeedRefill() );
 }
 
 
