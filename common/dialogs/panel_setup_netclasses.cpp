@@ -309,6 +309,7 @@ void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
     for( int ii = 0; ii < m_netclassGrid->GetNumberRows(); ii++ )
     {
         wxString netclassName = m_netclassGrid->GetCellValue( ii, GRID_NAME );
+
         if( !netclassName.IsEmpty() )
             netclassNames.push_back( netclassName );
     }
@@ -421,16 +422,21 @@ void PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging( wxGridEvent& event )
             wxString oldName = m_netclassGrid->GetCellValue( event.GetRow(), GRID_NAME );
             wxString newName = event.GetString();
 
-            for( int row = 0; row < m_membershipGrid->GetNumberRows(); ++row )
+            if( !oldName.IsEmpty() )
             {
-                if( m_membershipGrid->GetCellValue( row, 1 ) == oldName )
-                    m_membershipGrid->SetCellValue( row, 1, newName );
+                for( int row = 0; row < m_membershipGrid->GetNumberRows(); ++row )
+                {
+                    if( m_membershipGrid->GetCellValue( row, 1 ) == oldName )
+                        m_membershipGrid->SetCellValue( row, 1, newName );
+                }
             }
 
             m_netclassesDirty = true;
         }
         else
+        {
             event.Veto();
+        }
     }
 }
 
