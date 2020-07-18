@@ -825,6 +825,8 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
         fn = dlg.GetPath();
 
+        prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
+
         if( fn.GetExt().IsEmpty() )
             fn.SetExt( KiCadSymbolLibFileExtension );
     }
