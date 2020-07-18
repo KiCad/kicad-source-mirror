@@ -32,6 +32,8 @@
 
 #include "config.h"
 
+#include <string>
+#include <vector>
 #include <wx/string.h>
 #include <wx/filename.h>
 
@@ -198,6 +200,7 @@ bool ReplaceIllegalFileNameChars( wxString& aName, int aReplaceChar = 0 );
 extern "C" char* strtok_r( char* str, const char* delim, char** nextp );
 #endif
 
+
 /**
  * A helper for sorting strings from the rear.  Useful for things like 3d model names
  * where they tend to be largely repetitious at the front.
@@ -245,5 +248,39 @@ struct rsort_wxString
         return true;
     }
 };
+
+/**
+ * Splits the input string into a vector of output strings
+ *
+ * @param aStr - Input string with 0 or more delimiters
+ * @param aDelim - The string of delimiter.  Multiple characters here denote alternate delimiters
+ *
+ * @note Multiple delimiters are considered to be separate records with empty strings
+ * @return a vector of strings
+ */
+static inline std::vector<std::string> split( const std::string& aStr, const std::string& aDelim )
+{
+    size_t pos = 0;
+    size_t last_pos = 0;
+    size_t len;
+
+    std::vector<std::string> tokens;
+
+    while( pos < aStr.size() )
+    {
+        pos = aStr.find_first_of( aDelim, last_pos );
+
+        if( pos == std::string::npos )
+            pos = aStr.size();
+
+        len = pos - last_pos;
+
+        tokens.push_back( aStr.substr( last_pos, len ) );
+
+        last_pos = pos + 1;
+    }
+
+    return tokens;
+}
 
 #endif  // KICAD_STRING_H_
