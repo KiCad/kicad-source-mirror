@@ -179,7 +179,7 @@ void COMPILER::Clear()
 {
     //free( current.token );
     m_tokenizer.Clear();
-    
+
 }
 
 
@@ -221,7 +221,7 @@ bool COMPILER::Compile( const std::string& aString, UCODE* aCode )
         tok = getToken();
         libeval_dbg(10, "parse: tok %d\n", tok.token );
         Parse( m_parser, tok.token, tok.value, this );
-        
+
         if( m_errorStatus.pendingError )
         {
             m_errorStatus.stage = ERROR_STATUS::CST_PARSE;
@@ -416,7 +416,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
     else if( m_tokenizer.MatchAhead( "==", []( int c ) -> bool { return c != '='; } ) )
     {
         retval.token = G_EQUAL;
-        m_tokenizer.NextChar( 2 );  
+        m_tokenizer.NextChar( 2 );
     }
     else if( m_tokenizer.MatchAhead( "!=", []( int c ) -> bool { return c != '='; } ) )
     {
@@ -518,8 +518,7 @@ void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
 
     if( tok->op & TR_OP_BINARY_MASK )
     {
-        sprintf( str, "%s", (const char*) formatOpName( tok->op ).c_str() );
-        buf += str;
+        buf += formatOpName( tok->op );
         dumpNode( buf, tok->leaf[0], depth + 1 );
         dumpNode( buf, tok->leaf[1], depth + 1 );
     }
@@ -527,34 +526,30 @@ void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
     switch( tok->op )
     {
     case TR_NUMBER:
-        sprintf( str, "NUMERIC: " );
-        buf += str;
-        sprintf( str, "%s", formatNode( tok ).c_str() );
-        buf += str;
+        buf += "NUMERIC: ";
+        buf += formatNode( tok );
+
         if( tok->leaf[0] )
             dumpNode( buf, tok->leaf[0], depth + 1 );
+
         break;
     case TR_STRING:
-        sprintf( str, "STRING: " );
-        buf += str;
-        sprintf( str, "%s", formatNode( tok ).c_str() );
-        buf += str;
+        buf += "STRING: ";
+        buf +=  formatNode( tok );
         break;
     case TR_IDENTIFIER:
-        sprintf( str, "ID: " );
-        buf += str;
-        sprintf( str, "%s", formatNode( tok ).c_str() );
-        buf += str;
+        buf += "ID: ";
+        buf += formatNode( tok );
         break;
     case TR_STRUCT_REF:
-        sprintf( str, "SREF: " );
-        buf += str;
+        buf += "SREF: ";
         dumpNode( buf, tok->leaf[0], depth + 1 );
         dumpNode( buf, tok->leaf[1], depth + 1 );
         break;
      case TR_OP_FUNC_CALL:
-        sprintf( str, "CALL '%s': ", tok->leaf[0]->value.str );
-        buf += str;
+        buf += "CALL '";
+        buf += tok->leaf[0]->value.str;
+        buf += "': ";
         dumpNode( buf, tok->leaf[1], depth + 1 );
         break;
     case TR_UNIT:
@@ -710,12 +705,12 @@ bool COMPILER::generateUCode( UCODE* aCode )
             visitedNodes.insert( node->leaf[1] );
             continue;
         }
-        
+
         visitedNodes.insert( node );
         if(node->uop)
             aCode->AddOp(node->uop);
         stack.pop_back();
-        
+
     }
 
     libeval_dbg(2,"DUMp: \n%s\n", aCode->Dump().c_str() );
