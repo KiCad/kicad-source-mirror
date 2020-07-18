@@ -29,6 +29,7 @@
 #include <class_board.h>
 #include <dsnlexer.h>
 #include <macros.h>
+#include <vector>
 #include <wx/wx.h>
 #include <wx/xml/xml.h>
 #include <xnode.h>
@@ -72,6 +73,18 @@ struct EVALUE
     double GetDouble();
 };
 
+/**
+ * @brief Represents a point in x,y coordinates
+*/
+struct POINT
+{
+    long X;
+    long Y;
+
+    void Parse( XNODE* aNode );
+};
+
+
 extern void InsertAttributeAtEnd( XNODE* aNode, wxString aValue );
 
 /**
@@ -79,8 +92,8 @@ extern void InsertAttributeAtEnd( XNODE* aNode, wxString aValue );
  * @param aFileName 
  * @param aType 
  * @return XNODE pointing to the top of the tree for further parsing. Each node has the first 
-           element as the node's name and subsequent elements as node attributes ("attr0", 
-           "attr1", "attr2", etc.). Caller is responsible for deleting to avoid memory leaks.
+ *         element as the node's name and subsequent elements as node attributes ("attr0", 
+ *         "attr1", "attr2", etc.). Caller is responsible for deleting to avoid memory leaks.
  * @throws IO_ERROR
  */
 extern XNODE* LoadArchiveFile(
@@ -128,9 +141,23 @@ extern void CheckNoNextNodes( XNODE* aNode );
  * @param aNode with a child node containing an EVALUE
  * @param aValueToParse 
  * @throw IO_ERROR if unable to parse or node is not an EVALUE
-*/
+ */
 extern void ParseChildEValue( XNODE* aNode, EVALUE& aValueToParse );
 
+/**
+ * @brief if no childs are present, it just returns an empty
+ *        vector (without throwing an exception)
+ * @param aNode containing a series of POINT objects
+ * @param aTestAllChildNodes
+ * @param aExpectedNumPoints if -1, this is check is disabled
+ * @return std::vector containing all POINT objects
+ * @throw IO_ERROR if one of the following:
+ *         - Unable to parse a POINT object
+ *         - aTestAllChildNodes is true and one of the child nodes is not a valid POINT object
+ *         - aExpectedNumPoints is non-negative and the number of POINT objects found is different
+ */
+extern std::vector<POINT> ParseAllChildPoints(
+        XNODE* aNode, bool aTestAllChildNodes = true, int aExpectedNumPoints = -1 );
 
 } // namespace CADSTAR_COMMON
 

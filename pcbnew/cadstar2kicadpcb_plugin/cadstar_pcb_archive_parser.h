@@ -30,7 +30,7 @@
 #include <map>
 #include <vector>
 
-const long CPA_UNDEFINED = -1; //<Undefined Parameter
+const long CPA_UNDEFINED = -1; ///< Undefined Parameter
 
 typedef wxString CPA_ID;
 
@@ -43,9 +43,9 @@ typedef wxString CPA_ID;
 struct CPA_FORMAT
 {
     wxString Type;
-    long     SomeInt; //<unsure what this parameter is used for
-    long     Version; //<Archive version number (e.g. 21 => CADSTAR 2018.0 and 2019.0 arhive,
-                      // 20=> CADSTAR 18.0 archive, 19=> CADSTAR 17.0 archive, etc.)
+    long     SomeInt; ///< It is unclear what this parameter is used for
+    long     Version; ///< Archive version number (e.g. 21 => CADSTAR 2018.0 and 2019.0 arhive,
+                      ///< 20=> CADSTAR 18.0 archive, 19=> CADSTAR 17.0 archive, etc.)
     void Parse( XNODE* aNode );
 };
 
@@ -106,10 +106,10 @@ struct CPA_MATERIAL
 {
     CPA_ID                  ID;
     wxString                Name;
-    CPA_MATERIAL_LAYER_TYPE Type; //<Type of layer appropriate for the material being set up
+    CPA_MATERIAL_LAYER_TYPE Type; ///< Type of layer appropriate for the material being set up
     CADSTAR_COMMON::EVALUE  Permittivity;
     CADSTAR_COMMON::EVALUE  LossTangent;
-    CADSTAR_COMMON::EVALUE  Resistivity; //< x10^-8 ohm*metre
+    CADSTAR_COMMON::EVALUE  Resistivity; ///< x10^-8 ohm*metre
 
     void Parse( XNODE* aNode );
 };
@@ -117,16 +117,16 @@ struct CPA_MATERIAL
 
 enum class CPA_LAYER_TYPE
 {
-    UNDEFINED,   //< Only used for error detection
-    ALLLAYER,    //< Inbuilt layer type (cannot be assigned to user layers)
-    ALLELEC,     //< Inbuilt layer type (cannot be assigned to user layers)
-    ALLDOC,      //< Inbuilt layer type (cannot be assigned to user layers)
-    NOLAYER,     //< Inbuilt layer type (cannot be assigned to user layers)
-    ASSCOMPCOPP, //< Inbuilt layer type (cannot be assigned to user layers)
-    JUMPERLAYER, //< Inbuilt layer type (cannot be assigned to user layers)
+    UNDEFINED,   ///< Only used for error detection
+    ALLLAYER,    ///< Inbuilt layer type (cannot be assigned to user layers)
+    ALLELEC,     ///< Inbuilt layer type (cannot be assigned to user layers)
+    ALLDOC,      ///< Inbuilt layer type (cannot be assigned to user layers)
+    NOLAYER,     ///< Inbuilt layer type (cannot be assigned to user layers)
+    ASSCOMPCOPP, ///< Inbuilt layer type (cannot be assigned to user layers)
+    JUMPERLAYER, ///< Inbuilt layer type (cannot be assigned to user layers)
     ELEC,
     POWER,
-    NONELEC, //< This type has subtypes
+    NONELEC, ///< This type has subtypes
     CONSTRUCTION,
     DOC
 };
@@ -145,11 +145,11 @@ enum class CPA_LAYER_SUBTYPE
 
 enum class CPA_ROUTING_BIAS
 {
-    UNBIASED,   //<Keyword "UNBIASED" (default)
-    X,          //<Keyword "X_BIASED"
-    Y,          //<Keyword "Y_BIASED"
-    ANTI_ROUTE, //<Keyword "ANTITRACK"
-    OBSTACLE    //<Keyword "OBSTACLE"
+    UNBIASED,   ///< Keyword "UNBIASED" (default)
+    X,          ///< Keyword "X_BIASED"
+    Y,          ///< Keyword "Y_BIASED"
+    ANTI_ROUTE, ///< Keyword "ANTITRACK"
+    OBSTACLE    ///< Keyword "OBSTACLE"
 };
 
 
@@ -168,12 +168,12 @@ struct CPA_LAYER
     wxString           Name;
     CPA_LAYER_TYPE     Type          = CPA_LAYER_TYPE::UNDEFINED;
     CPA_LAYER_SUBTYPE  SubType       = CPA_LAYER_SUBTYPE::LAYERSUBTYPE_NONE;
-    CPA_PHYSICAL_LAYER PhysicalLayer = CPA_UNDEFINED; //< If CPA_UNDEFINED, no physical layer is
-                                                      //  assigned (e.g. documentation and
-                                                      //  construction layers)
-    CPA_ID           SwapLayerID = wxEmptyString;     //< If empty, no swap layer
+    CPA_PHYSICAL_LAYER PhysicalLayer = CPA_UNDEFINED; ///< If CPA_UNDEFINED, no physical layer is
+                                                      ///< assigned (e.g. documentation and
+                                                      ///< construction layers)
+    CPA_ID           SwapLayerID = wxEmptyString;     ///< If empty, no swap layer
     CPA_ROUTING_BIAS RoutingBias = CPA_ROUTING_BIAS::UNBIASED;
-    long             Thickness   = 0; //< Note: Units of length are defined in file header
+    long             Thickness   = 0; ///< Note: Units of length are defined in file header
     CPA_ID           MaterialId;
     CPA_EMBEDDING    Embedding = CPA_EMBEDDING::NONE;
 
@@ -219,7 +219,7 @@ struct CPA_HATCH
 {
     long Step;
     long LineWidth;
-    long OrientAngle; //< 1/1000 of a Degree
+    long OrientAngle; ///< 1/1000 of a Degree
 
     void Parse( XNODE* aNode );
 };
@@ -242,11 +242,11 @@ const long CPA_FONT_BOLD   = 700;
 struct CPA_FONT
 {
     wxString Name  = wxT( "CADSTAR" );
-    long Modifier1 = CPA_FONT_NORMAL; //< It seems this is related to weight. 400=Normal, 700=Bold.
-    long Modifier2 = 0;               //< It seems this is always 0 regardless of settings
-    bool KerningPairs = false; //< From CADSTAR Help: "Kerning Pairs is for causing the system to
-                               //automatically reduce the spacing between certain pairs of
-                               //characters in order to improve the appearance of the text"
+    long Modifier1 = CPA_FONT_NORMAL; ///< It seems this is related to weight. 400=Normal, 700=Bold.
+    long Modifier2 = 0;               ///< It seems this is always 0 regardless of settings
+    bool KerningPairs = false; ///< From CADSTAR Help: "Kerning Pairs is for causing the system to
+                               ///< automatically reduce the spacing between certain pairs of
+                               ///< characters in order to improve the appearance of the text"
     bool Italic = false;
 
     void Parse( XNODE* aNode );
@@ -259,9 +259,9 @@ struct CPA_TEXTCODE
     wxString Name;
     long     LineWidth;
     long     Height;
-    long     Width; //< Defaults to 0 if using system fonts or, if using CADSTAR font, default to
-                    //equal height (1:1 aspect ratio). Allows for system fonts to be rendered in
-                    //a different aspect ratio.
+    long     Width; ///< Defaults to 0 if using system fonts or, if using CADSTAR font, default to
+                    ///< equal height (1:1 aspect ratio). Allows for system fonts to be rendered in
+                    ///< a different aspect ratio.
     CPA_FONT Font;
 
     void Parse( XNODE* aNode );
@@ -314,12 +314,12 @@ enum class CPA_SHAPE_TYPE
 {
     ANNULUS,
     BULLET,
-    CIRCLE, //<Keyword "ROUND"
+    CIRCLE, ///< Keyword "ROUND"
     DIAMOND,
     FINGER,
     OCTAGON,
     RECTANGLE,
-    ROUNDED_RECT, //<Keyword "ROUNDED"
+    ROUNDED_RECT, ///< Keyword "ROUNDED"
     SQUARE
 };
 
@@ -331,7 +331,7 @@ struct CPA_PAD_SHAPE
     long           LeftLength      = CPA_UNDEFINED;
     long           RightLength     = CPA_UNDEFINED;
     long           InternalFeature = CPA_UNDEFINED;
-    long           OrientAngle     = 0; //< 1/1000 of a Degree
+    long           OrientAngle     = 0; ///< 1/1000 of a Degree
 
     static bool IsShape( XNODE* aNode );
     void        Parse( XNODE* aNode );
@@ -343,7 +343,7 @@ struct CPA_PADREASSIGN
     CPA_ID        LayerID;
     CPA_PAD_SHAPE Shape;
 
-    void Parse( XNODE* aNode ); //TODO Implement
+    void Parse( XNODE* aNode );
 };
 
 
@@ -352,8 +352,8 @@ struct CPA_PADCODE
     CPA_ID        ID;
     wxString      Name;
     CPA_PAD_SHAPE Shape;
-    long          ReliefClearance = CPA_UNDEFINED; //< if undefined inherits from design
-    long          ReliefWidth     = CPA_UNDEFINED; //< if undefined inherits from design
+    long          ReliefClearance = CPA_UNDEFINED; ///< if undefined inherits from design
+    long          ReliefWidth     = CPA_UNDEFINED; ///< if undefined inherits from design
     bool          Plated          = true;
     long          DrillDiameter   = CPA_UNDEFINED;
     long          DrillOversize   = CPA_UNDEFINED;
@@ -382,8 +382,8 @@ struct CPA_VIACODE
     CPA_ID        ID;
     wxString      Name;
     CPA_PAD_SHAPE Shape;
-    long          ReliefClearance = CPA_UNDEFINED; //< if undefined inherits from design
-    long          ReliefWidth     = CPA_UNDEFINED; //< if undefined inherits from design
+    long          ReliefClearance = CPA_UNDEFINED; ///< if undefined inherits from design
+    long          ReliefWidth     = CPA_UNDEFINED; ///< if undefined inherits from design
     long          DrillDiameter   = CPA_UNDEFINED;
     long          DrillOversize   = CPA_UNDEFINED;
 
@@ -417,8 +417,8 @@ enum class CPA_ATTROWNER
     FIGURE,
     NET,
     NETCLASS,
-    PART,            //< Only library Attributes
-    PART_DEFINITION, //< Only library Attributes
+    PART,            ///< Only library Attributes
+    PART_DEFINITION, ///< Only library Attributes
     PIN,
     SYMDEF,
     TEMPLATE,
@@ -428,17 +428,17 @@ enum class CPA_ATTROWNER
 
 enum class CPA_ATTRUSAGE
 {
-    BOTH,            //< From CADSTAR Help: Assigned to both Schematic symbols and PCB components,
-                     //  and displayed on Schematic and PCB designs.
-    COMPONENT,       //< From CADSTAR Help: Assigned to PCB components and displayed on PCB designs
-    PART_DEFINITION, //< From CADSTAR Help: Assigned to Parts library Definitions and displayed
-                     //  by the Library searcher
-    PART_LIBRARY,    //< From CADSTAR Help: Only used by non-Cadstar applicationws
-    SYMBOL,          //< From CADSTAR Help: Assigned to Schematic Symbols and displayed on
-                     //  Schematic Designs
-    UNDEFINED        //< Note: It seems that some attribute have no "ATTRUSAGE" defined. It appears
-                     // that the attributes that fall under this category arethe ones associated
-                     // with the design itself (i.e. not inherited from the library)
+    BOTH,            ///< From CADSTAR Help: Assigned to both Schematic symbols and PCB components,
+                     ///< and displayed on Schematic and PCB designs.
+    COMPONENT,       ///< From CADSTAR Help: Assigned to PCB components and displayed on PCB designs
+    PART_DEFINITION, ///< From CADSTAR Help: Assigned to Parts library Definitions and displayed
+                     ///< by the Library searcher
+    PART_LIBRARY,    ///< From CADSTAR Help: Only used by non-Cadstar applicationws
+    SYMBOL,          ///< From CADSTAR Help: Assigned to Schematic Symbols and displayed on
+                     ///< Schematic Designs
+    UNDEFINED        ///< Note: It seems that some attribute have no "ATTRUSAGE" defined. It appears
+                     ///< that the attributes that fall under this category arethe ones associated
+                     ///< with the design itself (i.e. not inherited from the library)
 };
 
 /**
@@ -451,11 +451,13 @@ struct CPA_ATTRNAME
     wxString      Name;
     CPA_ATTROWNER AttributeOwner = CPA_ATTROWNER::ALL_ITEMS;
     CPA_ATTRUSAGE AttributeUsage = CPA_ATTRUSAGE::UNDEFINED;
-    bool          NoTransfer     = false; //< True="All Design Types", False="Current Design Type"
-            // "All Design Types" Description from CADSTAR Help: "The selected
-            //  attribute name will beavailable when any design is displayed"
-            // "Current Design Type" From CADSTAR Help: This restricts the
-            // availability of the selectedattribute name to the current design.
+    bool          NoTransfer     = false; ///< True="All Design Types", False="Current Design Type"
+                                          ///< "All Design Types" Description from CADSTAR Help:
+                                          ///< "The selected attribute name will beavailable when
+                                          ///< any design is displayed"
+                                          ///< "Current Design Type" From CADSTAR Help: This
+                                          ///< restricts the availability of the selected attribute
+                                          ///< name to the current design.
 
     void Parse( XNODE* aNode );
 };
@@ -482,19 +484,19 @@ struct CPA_NETCLASS
 
 struct CPA_SPCCLASSNAME
 {
-    CPA_ID   ID;
+    CPA_ID   ID; //TODO convert to an enum class containing all valid spacings
     wxString Name;
 
     void Parse( XNODE* aNode );
 };
 
-const CPA_ID CPA_NO_SPACE_CLASS_ID = wxT( "NO_SPACE_CLASS" ); //< Default spacing class
+const CPA_ID CPA_NO_SPACE_CLASS_ID = wxT( "NO_SPACE_CLASS" ); ///< Default spacing class
 
 struct CPA_SPCCLASSSPACE
 {
     CPA_ID SpacingClassID1;
     CPA_ID SpacingClassID2;
-    CPA_ID LayerID; //< Normally LAY0, which corresponds to (All Layers)
+    CPA_ID LayerID; ///< Normally LAY0, which corresponds to (All Layers)
     long   Spacing;
 
     void Parse( XNODE* aNode );
@@ -508,24 +510,122 @@ struct CPA_CODEDEFS
     std::map<CPA_ID, CPA_TEXTCODE>     TextCodes;
     std::map<CPA_ID, CPA_ROUTECODE>    RouteCodes;
     std::map<CPA_ID, CPA_COPPERCODE>   CopperCodes;
-    std::vector<CPA_SPACINGCODE>       SpacingCodes; //<Design Rules. E.g. "A_A" = Comp to Comp
+    std::vector<CPA_SPACINGCODE>       SpacingCodes; ///< Spacing Design Rules
     std::map<CPA_ID, CPA_PADCODE>      PadCodes;
     std::map<CPA_ID, CPA_VIACODE>      ViaCodes;
-    std::map<CPA_ID, CPA_LAYERPAIR>    LayerPairs; //< Default vias to use between pairs of layers
+    std::map<CPA_ID, CPA_LAYERPAIR>    LayerPairs; ///< Default vias to use between pairs of layers
     std::map<CPA_ID, CPA_ATTRNAME>     AttributeNames;
     std::map<CPA_ID, CPA_NETCLASS>     NetClasses;
     std::map<CPA_ID, CPA_SPCCLASSNAME> SpacingClassNames;
     std::vector<CPA_SPCCLASSSPACE>     SpacingClasses;
 
-    void Parse( XNODE* aNode ); //TODO Implement
+    void Parse( XNODE* aNode );
+};
+
+//.................................
+// ASSIGNMENTS -> TECHNOLOGY
+//.................................
+
+enum class CPA_UNITS
+{
+    THOU,
+    INCH,
+    MICROMETRE,
+    MM,
+    CENTIMETER,
+    METER
+};
+
+struct CPA_TECHNOLOGY
+{
+    CPA_UNITS Unit;               ///< Unit to display for linear dimensions
+    long      UnitDisplPrecision; ///< Number of decimal points to display for linear dimensions
+    long      InterlineGap;       ///< For CADSTAR font only, distance between lines of text,
+                                  ///< expressed as a percentage of the text height (accepted
+                                  ///< values are 0-100)
+    long BarlineGap;              ///< For CADSTAR font only, distance between top bar and
+                                  ///< character, expressed as a percentage of the text height
+                                  ///< (accepted values are 0-100)
+    bool AllowBarredText = false; ///< Specifies if barring is allowed in the design
+    long AngularPrecision;        ///< Number of decimal points to display for angular dimensions
+    long MinRouteWidth;           ///< Manufacturing Design Rule. Corresponds to "Thin Route Width"
+    long MinNeckedLength;         ///< Manufacturing Design Rule. Corresponds to
+                                  ///< "Minimum Thinner Track Length"
+    long MinUnneckedLength;       ///< Manufacturing Design Rule. Corresponds to
+                                  ///< "Minimum Thicker Track Length"
+    long MinMitre;                ///< Manufacturing Design Rule. Corresponds to "Minimum Mitre"
+    long MaxMitre;                ///< Manufacturing Design Rule. Corresponds to "Maximum Mitre"
+    long MaxPhysicalLayer;        ///< Should equal number of copper layers. However, it seems this
+                                  ///< can be set to any arbitrarily high number as long as it is
+                                  ///< greater or equal to the number of copper layers. Also the
+                                  ///< last copper layer (bottom) must have this set as its value.
+    long TrackGrid;               ///< Grid for Routes (equal X and Y steps)
+    long ViaGrid;                 ///< Grid for Vias (equal X and Y steps)
+
+    CADSTAR_COMMON::POINT                                   DesignOrigin;
+    std::pair<CADSTAR_COMMON::POINT, CADSTAR_COMMON::POINT> DesignArea;
+    CADSTAR_COMMON::POINT                                   DesignRef; ///< Appears to be 0,0 always
+    CADSTAR_COMMON::POINT                                   DesignLimit;
+
+    bool BackOffJunctions   = false;
+    bool BackOffWidthChange = false;
+
+    void Parse( XNODE* aNode );
+};
+
+//.................................
+// ASSIGNMENTS -> GRIDS
+//.................................
+
+enum class CPA_GRID_TYPE
+{
+    FRACTIONALGRID, ///< Param1 = Unit, Param2 = Divisor. The grid is equal in X and Y dimensions
+                    ///< with a step size equal to Param1/Param2
+    STEPGRID        ///< Param1 = X Step, Param2 = Y Step. A standard x,y grid.
+};
+
+
+struct CPA_GRID
+{
+    CPA_GRID_TYPE Type;
+    wxString      Name;
+    long          Param1; ///< Either Unit or X step, depending on Type (see CPA_GRID_TYPE for
+                          ///< more details)
+    long Param2;          ///< Either Divisor or Y step, depending on Type (see CPA_GRID_TYPE for
+                          ///< more details)
+
+    static bool IsGrid( XNODE* aNode );
+    void        Parse( XNODE* aNode );
+};
+
+
+struct CPA_GRIDS
+{
+    CPA_GRID WorkingGrid;
+    CPA_GRID ScreenGrid;             ///< From CADSTAR Help: "There is one Screen Grid, which is
+                                     ///< visible as dots on the screen. You cannot specify your
+                                     ///< own name for the Screen Grid. The visibility and colour
+                                     ///< of the dots representing the Screen Grid is set up by
+                                     ///< the Highlight category on the Colours dialog.
+                                     ///<
+                                     ///< The type of Screen grid displayed(Lined or Points) is
+                                     ///< set up on the Display dialog within Options(File menu)."
+    std::vector<CPA_GRID> UserGrids; ///< List of predefined grids created by the user
+
+    void Parse( XNODE* aNode );
 };
 
 
 struct CPA_ASSIGNMENTS
 {
-    CPA_LAYERDEFS Layerdefs;
-    CPA_CODEDEFS  Codedefs;
-    //TODO Add technology, grids, etc.
+    CPA_LAYERDEFS  Layerdefs;
+    CPA_CODEDEFS   Codedefs;
+    CPA_TECHNOLOGY Technology;
+    CPA_GRIDS      Grids;
+    bool           NetclassEditAttributeSettings     = false; //< Unclear what this does
+    bool           SpacingclassEditAttributeSettings = false; //< Unclear what this does
+
+    void Parse( XNODE* aNode );
 };
 
 
@@ -556,7 +656,7 @@ public:
     CPA_ASSIGNMENTS Assignments;
     //TODO Add Library, Defaults, Parts, etc..
 
-    int KiCadUnitMultiplier; //<Use this value to convert units in this CPA file to KiCad units
+    int KiCadUnitMultiplier; ///<Use this value to convert units in this CPA file to KiCad units
 };
 
 

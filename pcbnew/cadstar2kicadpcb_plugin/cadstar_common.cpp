@@ -38,6 +38,15 @@ void CADSTAR_COMMON::EVALUE::Parse( XNODE* aNode )
 }
 
 
+void CADSTAR_COMMON::POINT::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "PT" ) );
+
+    X = CADSTAR_COMMON::GetAttributeIDLong( aNode, 0 );
+    Y = CADSTAR_COMMON::GetAttributeIDLong( aNode, 1 );
+}
+
+
 double CADSTAR_COMMON::EVALUE::GetDouble()
 {
     return Base * std::pow( 10.0, Exponent );
@@ -132,11 +141,8 @@ XNODE* CADSTAR_COMMON::LoadArchiveFile( const wxString& aFileName, FILE_TYPE aTy
         else if( iNode )
         {
             str = wxString( lexer.CurText(), *conv );
-
-            if( !str.IsEmpty() )
-            {
-                InsertAttributeAtEnd( iNode, str );
-            }
+            //Insert even if string is empty
+            InsertAttributeAtEnd( iNode, str );
         }
         else
         {
@@ -216,4 +222,32 @@ void CADSTAR_COMMON::ParseChildEValue( XNODE* aNode, CADSTAR_COMMON::EVALUE& aVa
     {
         THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
     }
+}
+
+std::vector<CADSTAR_COMMON::POINT> CADSTAR_COMMON::ParseAllChildPoints(
+        XNODE* aNode, bool aTestAllChildNodes, int aExpectedNumPoints )
+{
+    std::vector<CADSTAR_COMMON::POINT> retVal;
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        if( cNode->GetName() == wxT( "PT" ) )
+        {
+            POINT pt;
+            //TODO try.. catch + throw again with more detailed error information
+            pt.Parse( cNode );
+            retVal.push_back( pt );
+        }
+        else if( aTestAllChildNodes )
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+    }
+
+    if( aExpectedNumPoints >= 0 && retVal.size() != aExpectedNumPoints )
+        THROW_IO_ERROR( wxString::Format(
+                _( "Unexpected number of points in '%s'. Found %d but expected %d." ),
+                aNode->GetName(), retVal.size(), aExpectedNumPoints ) );
+
+    return retVal;
 }

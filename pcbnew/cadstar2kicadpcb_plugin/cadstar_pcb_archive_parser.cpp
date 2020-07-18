@@ -32,48 +32,32 @@ void CPA_FILE::Parse()
     XNODE* fileRootNode =
             CADSTAR_COMMON::LoadArchiveFile( Filename, CADSTAR_COMMON::FILE_TYPE::PCB_ARCHIVE );
 
-    XNODE* tempNode = fileRootNode->GetChildren();
+    XNODE* cNode = fileRootNode->GetChildren();
 
-    for( ; tempNode && ( tempNode->GetName() != wxT( "HEADER" ) ); tempNode = tempNode->GetNext() )
-        ;
-
-    if( !tempNode )
+    if( !cNode )
         THROW_MISSING_NODE_IO_ERROR( wxT( "HEADER" ), wxT( "CADSTARPCB" ) );
 
-    //TODO try.. catch + throw again with more detailed error information
-    Header.Parse( tempNode );
-
-    switch( Header.Resolution )
+    for( ; cNode; cNode = cNode->GetNext() )
     {
-    case CPA_RESOLUTION::HUNDREDTH_MICRON:
-        KiCadUnitMultiplier = 10;
-        break;
-
-    default:
-        wxASSERT_MSG( true, wxT( "Unknown File Resolution" ) );
-        break;
-    }
-
-    for( ; tempNode && ( tempNode->GetName() != wxT( "ASSIGNMENTS" ) );
-            tempNode = tempNode->GetNext() )
-        ;
-
-    if( !tempNode )
-        THROW_MISSING_NODE_IO_ERROR( wxT( "ASSIGNMENTS" ), wxT( "CADSTARPCB" ) );
-
-    tempNode = tempNode->GetChildren();
-
-    if( !tempNode )
-        THROW_MISSING_NODE_IO_ERROR( wxT( "LAYERDEFS" ), wxT( "ASSIGNMENTS" ) );
-
-    for( ; tempNode; tempNode = tempNode->GetNext() )
-    {
-        if( tempNode->GetName() == wxT( "LAYERDEFS" ) )
+        if( cNode->GetName() == wxT( "HEADER" ) )
+        {
             //TODO try.. catch + throw again with more detailed error information
-            Assignments.Layerdefs.Parse( tempNode );
-        else if( tempNode->GetName() == wxT( "CODEDEFS" ) )
-            Assignments.Codedefs.Parse( tempNode );
-        //TODO parse technology, grids,etc
+            Header.Parse( cNode );
+
+            switch( Header.Resolution )
+            {
+            case CPA_RESOLUTION::HUNDREDTH_MICRON:
+                KiCadUnitMultiplier = 10;
+                break;
+
+            default:
+                wxASSERT_MSG( true, wxT( "Unknown File Resolution" ) );
+                break;
+            }
+        }
+        else if( cNode->GetName() == wxT( "ASSIGNMENTS" ) )
+            Assignments.Parse( cNode );
+        //TODO need to parse everything else!
     }
 
 
@@ -85,8 +69,39 @@ void CPA_FILE::Parse()
     }
 
     //delete fileRootNode;
+}
 
-    //TODO need to parse everything else!
+
+void CPA_ASSIGNMENTS::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "ASSIGNMENTS" ) );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    if( !cNode )
+        THROW_MISSING_NODE_IO_ERROR( wxT( "TECHNOLOGY" ), wxT( "ASSIGNMENTS" ) );
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        if( cNode->GetName() == wxT( "LAYERDEFS" ) )
+            //TODO try.. catch + throw again with more detailed error information
+            Layerdefs.Parse( cNode );
+        else if( cNode->GetName() == wxT( "CODEDEFS" ) )
+            //TODO try.. catch + throw again with more detailed error information
+            Codedefs.Parse( cNode );
+        else if( cNode->GetName() == wxT( "TECHNOLOGY" ) )
+            //TODO try.. catch + throw again with more detailed error information
+            Technology.Parse( cNode );
+        else if( cNode->GetName() == wxT( "GRIDS" ) )
+            //TODO try.. catch + throw again with more detailed error information
+            Grids.Parse( cNode );
+        else if( cNode->GetName() == wxT( "NETCLASSEDITATTRIBSETTINGS" ) )
+            NetclassEditAttributeSettings = true;
+        else if( cNode->GetName() == wxT( "SPCCLASSEDITATTRIBSETTINGS" ) )
+            SpacingclassEditAttributeSettings = true;
+        else
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+    }
 }
 
 
@@ -1128,8 +1143,8 @@ void CPA_NETCLASS::Parse( XNODE* aNode )
 
         if( cNodeName == wxT( "ATTR" ) )
         {
-            //TODO try.. catch + throw again with more detailed error information
             CPA_ATTRIBUTE_VALUE attribute_val;
+            //TODO try.. catch + throw again with more detailed error information
             attribute_val.Parse( cNode );
             Attributes.push_back( attribute_val );
         }
@@ -1157,4 +1172,163 @@ void CPA_SPCCLASSSPACE::Parse( XNODE* aNode )
     SpacingClassID2 = CADSTAR_COMMON::GetAttributeID( aNode, 1 );
     LayerID         = CADSTAR_COMMON::GetAttributeID( aNode, 2 );
     Spacing         = CADSTAR_COMMON::GetAttributeIDLong( aNode, 3 );
+}
+
+
+void CPA_TECHNOLOGY::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "TECHNOLOGY" ) );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "UNITS" ) )
+        {
+            wxString unit = CADSTAR_COMMON::GetAttributeID( cNode, 0 );
+
+            if( unit == wxT( "CENTIMETER" ) )
+                Unit = CPA_UNITS::CENTIMETER;
+            else if( unit == wxT( "INCH" ) )
+                Unit = CPA_UNITS::INCH;
+            else if( unit == wxT( "METER" ) )
+                Unit = CPA_UNITS::METER;
+            else if( unit == wxT( "MICROMETRE" ) )
+                Unit = CPA_UNITS::MICROMETRE;
+            else if( unit == wxT( "MM" ) )
+                Unit = CPA_UNITS::MM;
+            else if( unit == wxT( "THOU" ) )
+                Unit = CPA_UNITS::THOU;
+            else
+                THROW_UNKNOWN_PARAMETER_IO_ERROR( unit, wxT( "TECHNOLOGY -> UNITS" ) );
+        }
+        else if( cNodeName == wxT( "UNITSPRECISION" ) )
+            UnitDisplPrecision = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "INTERLINEGAP" ) )
+            InterlineGap = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "BARLINEGAP" ) )
+            BarlineGap = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "ALLOWBARTEXT" ) )
+            AllowBarredText = true;
+        else if( cNodeName == wxT( "ANGULARPRECISION" ) )
+            AngularPrecision = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "MINROUTEWIDTH" ) )
+            MinRouteWidth = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "MINNECKED" ) )
+            MinNeckedLength = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "MINUNNECKED" ) )
+            MinUnneckedLength = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "MINMITER" ) )
+            MinMitre = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "MAXMITER" ) )
+            MaxMitre = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "MAXPHYSLAYER" ) )
+            MaxPhysicalLayer = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "TRACKGRID" ) )
+            TrackGrid = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "VIAGRID" ) )
+            ViaGrid = CADSTAR_COMMON::GetAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "DESIGNORIGIN" ) )
+        {
+            std::vector<CADSTAR_COMMON::POINT> pts =
+                    CADSTAR_COMMON::ParseAllChildPoints( cNode, true, 1 );
+            DesignOrigin = pts[0];
+        }
+        else if( cNodeName == wxT( "DESIGNAREA" ) )
+        {
+            std::vector<CADSTAR_COMMON::POINT> pts =
+                    CADSTAR_COMMON::ParseAllChildPoints( cNode, true, 2 );
+            DesignArea = std::make_pair( pts[0], pts[1] );
+        }
+        else if( cNodeName == wxT( "DESIGNREF" ) )
+        {
+            std::vector<CADSTAR_COMMON::POINT> pts =
+                    CADSTAR_COMMON::ParseAllChildPoints( cNode, true, 1 );
+            DesignRef = pts[0];
+        }
+        else if( cNodeName == wxT( "DESIGNLIMIT" ) )
+        {
+            std::vector<CADSTAR_COMMON::POINT> pts =
+                    CADSTAR_COMMON::ParseAllChildPoints( cNode, true, 1 );
+            DesignLimit = pts[0];
+        }
+        else if( cNodeName == wxT( "BACKOFFJCTS" ) )
+            BackOffJunctions = true;
+        else if( cNodeName == wxT( "BCKOFFWIDCHANGE" ) )
+            BackOffWidthChange = true;
+        else
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "TECHNOLOGY" ) );
+    }
+}
+
+
+bool CPA_GRID::IsGrid( XNODE* aNode )
+{
+    wxString aNodeName = aNode->GetName();
+
+    if( aNodeName == wxT( "FRACTIONALGRID" ) || aNodeName == wxT( "STEPGRID" ) )
+        return true;
+    else
+        return false;
+}
+
+
+void CPA_GRID::Parse( XNODE* aNode )
+{
+    wxASSERT( IsGrid( aNode ) );
+
+    wxString aNodeName = aNode->GetName();
+
+    if( aNodeName == wxT( "FRACTIONALGRID" ) )
+        Type = CPA_GRID_TYPE::FRACTIONALGRID;
+    else if( aNodeName == wxT( "STEPGRID" ) )
+        Type = CPA_GRID_TYPE::STEPGRID;
+    else
+        wxASSERT_MSG( true, wxT( "Unknown Grid Type" ) );
+
+    Name   = CADSTAR_COMMON::GetAttributeID( aNode, 0 );
+    Param1 = CADSTAR_COMMON::GetAttributeIDLong( aNode, 1 );
+    Param2 = CADSTAR_COMMON::GetAttributeIDLong( aNode, 2 );
+}
+
+
+void CPA_GRIDS::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "GRIDS" ) );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "WORKINGGRID" ) )
+        {
+            XNODE* workingGridNode = cNode->GetChildren();
+
+            if( !CPA_GRID::IsGrid( workingGridNode ) )
+                THROW_UNKNOWN_NODE_IO_ERROR(
+                        workingGridNode->GetName(), wxT( "GRIDS -> WORKINGGRID" ) );
+            else
+                WorkingGrid.Parse( workingGridNode );
+        }
+        else if( cNodeName == wxT( "SCREENGRID" ) )
+        {
+            XNODE* screenGridNode = cNode->GetChildren();
+
+            if( !CPA_GRID::IsGrid( screenGridNode ) )
+                THROW_UNKNOWN_NODE_IO_ERROR(
+                        screenGridNode->GetName(), wxT( "GRIDS -> SCREENGRID" ) );
+            else
+                ScreenGrid.Parse( screenGridNode );
+        }
+        else if( CPA_GRID::IsGrid( cNode ) )
+        {
+            CPA_GRID userGrid;
+            userGrid.Parse( cNode );
+            UserGrids.push_back( userGrid );
+        }
+    }
 }
