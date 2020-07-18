@@ -621,19 +621,26 @@ bool PCB_LAYER_WIDGET::OnLayerSelected()
 
 void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
 {
-    BOARD* brd = myframe->GetBoard();
-
-    LSET visibleLayers = brd->GetVisibleLayers();
-
-    if( visibleLayers.test( aLayer ) != isVisible )
+    // In other frames than board editor, the board is a dummy board.
+    // so changing board settings makes sense (and works) only for the board editor frame
+    if( myframe->IsType( FRAME_PCB_EDITOR ) )
     {
-        visibleLayers.set( aLayer, isVisible );
+        BOARD* brd = myframe->GetBoard();
 
-        brd->SetVisibleLayers( visibleLayers );
+        LSET visibleLayers = brd->GetVisibleLayers();
 
+        if( visibleLayers.test( aLayer ) != isVisible )
+        {
+            visibleLayers.set( aLayer, isVisible );
+            brd->SetVisibleLayers( visibleLayers );
+
+            if( myframe->GetCanvas() )
+                myframe->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
+        }
+    }
+    else
         if( myframe->GetCanvas() )
             myframe->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
-    }
 
     if( isFinal )
         myframe->GetCanvas()->Refresh();
