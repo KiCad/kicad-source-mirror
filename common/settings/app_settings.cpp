@@ -33,7 +33,14 @@ const int appSettingsSchemaVersion = 0;
 
 APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion ) :
         JSON_SETTINGS( aFilename, SETTINGS_LOC::USER, aSchemaVersion ),
-        m_Printing(), m_System(), m_Window(), m_appSettingsSchemaVersion( aSchemaVersion )
+        m_CrossProbing(),
+        m_FindReplace(),
+        m_Graphics(),
+        m_LibTree(),
+        m_Printing(),
+        m_System(),
+        m_Window(),
+        m_appSettingsSchemaVersion( aSchemaVersion )
 {
     // Make Coverity happy:
     m_LibTree.column_width = 360;

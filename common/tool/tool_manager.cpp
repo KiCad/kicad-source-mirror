@@ -198,10 +198,11 @@ private:
 
 
 TOOL_MANAGER::TOOL_MANAGER() :
-        m_model( NULL ),
-        m_view( NULL ),
-        m_viewControls( NULL ),
-        m_frame( NULL ),
+        m_model( nullptr ),
+        m_view( nullptr ),
+        m_viewControls( nullptr ),
+        m_frame( nullptr ),
+        m_settings( nullptr ),
         m_warpMouseAfterContextMenu( true ),
         m_menuActive( false ),
         m_menuOwner( -1 ),

@@ -64,6 +64,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_FootprintViewer(),
           m_FootprintWizard(),
           m_Display(),
+          m_TrackDragAction( TRACK_DRAG_ACTION::DRAG ),
           m_Use45DegreeGraphicSegments( false ),
           m_FlipLeftRight( false ),
           m_PolarCoords( false ),

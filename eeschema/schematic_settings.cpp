@@ -41,6 +41,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_TextOffsetRatio( 0.08 ),
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS ),
+        m_SpiceAdjustPassiveValues( false ),
         m_TemplateFieldNames( nullptr )
 {
     EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );

@@ -36,7 +36,12 @@ const int commonSchemaVersion = 1;
 
 COMMON_SETTINGS::COMMON_SETTINGS() :
         JSON_SETTINGS( "kicad_common", SETTINGS_LOC::USER, commonSchemaVersion ),
-        m_Appearance(), m_Env(), m_Input(), m_Graphics(), m_System()
+        m_Appearance(),
+        m_Backup(),
+        m_Env(),
+        m_Input(),
+        m_Graphics(),
+        m_System()
 {
     // This only effect the first time KiCad is run.  The user's setting will be used for all
     // subsequent runs.

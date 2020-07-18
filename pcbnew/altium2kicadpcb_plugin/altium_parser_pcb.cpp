@@ -484,6 +484,7 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
     polygonconnectAirgapwidth = 0;
     polygonconnectReliefconductorwidth = 0;
     polygonconnectReliefentries = 0;
+    polygonconnectStyle = ALTIUM_CONNECT_STYLE::UNKNOWN;
 
     aReader.Skip( 2 );
 

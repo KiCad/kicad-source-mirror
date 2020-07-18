@@ -40,7 +40,8 @@
 
 
 PROJECT::PROJECT() :
-        m_projectFile( nullptr )
+        m_projectFile( nullptr ),
+        m_localSettings( nullptr )
 {
     memset( m_elems, 0, sizeof(m_elems) );
 }

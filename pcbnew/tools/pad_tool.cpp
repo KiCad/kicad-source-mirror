@@ -44,6 +44,7 @@
 PAD_TOOL::PAD_TOOL() :
         PCB_TOOL_BASE( "pcbnew.PadTool" ),
         m_padCopied( false ),
+        m_wasHighContrast( false ),
         m_editPad( niluuid )
 {}
 

@@ -31,9 +31,11 @@
 #include "../3d_fastmath.h"
 
 
-CPOSTSHADER_SSAO::CPOSTSHADER_SSAO( const CCAMERA &aCamera ) : CPOSTSHADER( aCamera )
+CPOSTSHADER_SSAO::CPOSTSHADER_SSAO( const CCAMERA &aCamera ) :
+        CPOSTSHADER( aCamera ),
+        m_shadedBuffer( nullptr ),
+        m_isUsingShadows( false )
 {
-    m_shadedBuffer = NULL;
 }
 
 // There are differente sources for this shader on the web

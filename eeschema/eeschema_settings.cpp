@@ -36,7 +36,22 @@
 const int eeschemaSchemaVersion = 0;
 
 
-EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschemaSchemaVersion )
+EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
+        APP_SETTINGS_BASE( "eeschema", eeschemaSchemaVersion ),
+        m_Appearance(),
+        m_AutoplaceFields(),
+        m_Drawing(),
+        m_Input(),
+        m_PageSettings(),
+        m_AnnotatePanel(),
+        m_BomPanel(),
+        m_FieldEditorPanel(),
+        m_LibViewPanel(),
+        m_NetlistPanel(),
+        m_SymChooserPanel(),
+        m_Selection(),
+        m_Simulator(),
+        m_RescueNeverShow( false )
 {
     m_params.emplace_back( new PARAM<wxString>( "appearance.edit_component_visible_columns",
             &m_Appearance.edit_component_visible_columns, "0 1 2 3 4 5 6 7" ) );
