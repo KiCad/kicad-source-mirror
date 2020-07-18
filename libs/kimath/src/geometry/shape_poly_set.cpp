@@ -448,7 +448,7 @@ int SHAPE_POLY_SET::AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline )
 
     poly.push_back( aHole );
 
-    return poly.size() - 1;
+    return poly.size() - 2;
 }
 
 
