@@ -281,7 +281,7 @@ bool COMPILER::lexString( COMPILER::T_TOKEN& aToken )
     //printf("STR LIT '%s'\n", (const char *)str.c_str() );
 
     aToken.token = G_STRING;
-    strcpy( aToken.value.value.str, str.c_str() );
+    snprintf( aToken.value.value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", str.c_str() );
 
     m_tokenizer.NextChar( str.length() + 1 );
     m_lexerState = LS_DEFAULT;
@@ -381,7 +381,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         // VALUE
         extractNumber();
         retval.token = G_VALUE;
-        strcpy( retval.value.value.str, current.c_str() );
+        snprintf( retval.value.value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", current.c_str() );
     }
     else if( ( convertFrom = resolveUnits() ) >= 0 )
     {
@@ -410,7 +410,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         //printf("id '%s'\n", (const char *) current.c_str() );
         fflush( stdout );
         retval.token = G_IDENTIFIER;
-        strcpy( retval.value.value.str, current.c_str() );
+        snprintf( retval.value.value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", current.c_str() );
         m_tokenizer.NextChar( current.length() );
     }
     else if( m_tokenizer.MatchAhead( "==", []( int c ) -> bool { return c != '='; } ) )

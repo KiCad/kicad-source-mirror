@@ -99,43 +99,44 @@ struct TREE_NODE
 {
     struct value_s
     {
-        char         str[LIBEVAL_MAX_LITERAL_LENGTH];
-        int          type;
+        char str[LIBEVAL_MAX_LITERAL_LENGTH];
+        int  type;
     } value;
-    int          op;
-    TREE_NODE*   leaf[2];
-    UOP* uop;
-    bool valid;
-    bool isTerminal;
+
+    int        op;
+    TREE_NODE* leaf[2];
+    UOP*       uop;
+    bool       valid;
+    bool       isTerminal;
 };
+
 
 static inline TREE_NODE* copyNode( TREE_NODE& t )
 {
-    auto t2           = new TREE_NODE();
-    t2->valid         = t.valid;
-    strcpy(t2->value.str, t.value.str);
-    t2->op      = t.op;
-    t2->value.type      = t.value.type;
-    t2->leaf[0] = t.leaf[0];
-    t2->leaf[1] = t.leaf[1];
+    auto t2        = new TREE_NODE();
+    t2->valid      = t.valid;
+    snprintf( t2->value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", t.value.str );
+    t2->op         = t.op;
+    t2->value.type = t.value.type;
+    t2->leaf[0]    = t.leaf[0];
+    t2->leaf[1]    = t.leaf[1];
     t2->isTerminal = false;
-    t2->uop = nullptr;
+    t2->uop        = nullptr;
     return t2;
 }
 
 
-
-static inline TREE_NODE* newNode( int op, int type, std::string value )
+static inline TREE_NODE* newNode( int op, int type, const std::string& value )
 {
-    auto t2           = new TREE_NODE();
-    t2->valid         = true;
-    strcpy(t2->value.str, value.c_str());
-    t2->op      = op;
-    t2->value.type    = type;
-    t2->leaf[0] = nullptr;
-    t2->leaf[1] = nullptr;
+    auto t2        = new TREE_NODE();
+    t2->valid      = true;
+    snprintf( t2->value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", value.c_str() );
+    t2->op         = op;
+    t2->value.type = type;
+    t2->leaf[0]    = nullptr;
+    t2->leaf[1]    = nullptr;
     t2->isTerminal = false;
-    t2->uop = nullptr;
+    t2->uop        = nullptr;
     return t2;
 }
 
