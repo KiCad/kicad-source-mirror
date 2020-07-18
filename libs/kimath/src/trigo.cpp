@@ -367,7 +367,7 @@ const VECTOR2D GetArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const
     double aSlope = yDelta_21 / xDelta_21;
     double bSlope = yDelta_32 / xDelta_32;
 
-    if( ( aSlope == bSlope ) )
+    if( aSlope == bSlope )
     {
         if( aStart == aEnd )
         {
