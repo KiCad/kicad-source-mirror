@@ -624,6 +624,10 @@ void LEGACY_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "VisibleLayers" ) )
         {
+        // Keep all enabled layers visible.
+        // the old visibility control does not make sense in current Pcbnew version
+        // However, this code works.
+        #if 0
             if( !saw_LayerCount )
                 THROW_IO_ERROR( "Missing '$GENERAL's LayerCount" );
 
@@ -632,6 +636,7 @@ void LEGACY_PLUGIN::loadGENERAL()
             LSET new_mask = leg_mask2new( m_cu_count, visibleLayers );
 
             m_board->SetVisibleLayers( new_mask );
+        #endif
         }
 
         else if( TESTLINE( "Ly" ) )    // Old format for Layer count
@@ -1117,14 +1122,20 @@ void LEGACY_PLUGIN::loadSETUP()
 
         else if( TESTLINE( "VisibleElements" ) )
         {
+        // Keep all elements visible.
+        // the old visibility control does not make sense in current Pcbnew version,
+        // and this code does not work.
+        #if 0
             int visibleElements = hexParse( line + SZ( "VisibleElements" ) );
 
+            // Does not work: each old item should be tested one by one to set
+            // visibility of new item list
             GAL_SET visibles;
-
             for( size_t i = 0; i < visibles.size(); i++ )
                 visibles.set( i, visibleElements & ( 1u << i ) );
 
             m_board->SetVisibleElements( visibles );
+        #endif
         }
 
         else if( TESTLINE( "$EndSETUP" ) )
