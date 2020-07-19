@@ -472,6 +472,73 @@ void BACK_ANNOTATE::applyChangelist()
 }
 
 
+static LABEL_SPIN_STYLE orientLabel( SCH_PIN* aPin )
+{
+    LABEL_SPIN_STYLE spin = LABEL_SPIN_STYLE::RIGHT;
+
+    // Initial orientation from the pin
+    switch( aPin->GetLibPin()->GetOrientation() )
+    {
+    case PIN_UP:    spin = LABEL_SPIN_STYLE::BOTTOM; break;
+    case PIN_DOWN:  spin = LABEL_SPIN_STYLE::UP;     break;
+    case PIN_LEFT:  spin = LABEL_SPIN_STYLE::LEFT;   break;
+    case PIN_RIGHT: spin = LABEL_SPIN_STYLE::RIGHT;  break;
+    }
+
+    // Reorient based on the actual component orientation now
+    struct ORIENT
+    {
+        int flag;
+        int n_rots;
+        int mirror_x;
+        int mirror_y;
+    }
+    orientations[] =
+    {
+        { CMP_ORIENT_0,                  0, 0, 0 },
+        { CMP_ORIENT_90,                 1, 0, 0 },
+        { CMP_ORIENT_180,                2, 0, 0 },
+        { CMP_ORIENT_270,                3, 0, 0 },
+        { CMP_MIRROR_X + CMP_ORIENT_0,   0, 1, 0 },
+        { CMP_MIRROR_X + CMP_ORIENT_90,  1, 1, 0 },
+        { CMP_MIRROR_Y,                  0, 0, 1 },
+        { CMP_MIRROR_X + CMP_ORIENT_270, 3, 1, 0 },
+        { CMP_MIRROR_Y + CMP_ORIENT_0,   0, 0, 1 },
+        { CMP_MIRROR_Y + CMP_ORIENT_90,  1, 0, 1 },
+        { CMP_MIRROR_Y + CMP_ORIENT_180, 2, 0, 1 },
+        { CMP_MIRROR_Y + CMP_ORIENT_270, 3, 0, 1 }
+    };
+
+    ORIENT o = orientations[ 0 ];
+
+    SCH_COMPONENT* comp = aPin->GetParentComponent();
+
+    if( !comp )
+        return spin;
+
+    int compOrient = comp->GetOrientation();
+
+    for( auto& i : orientations )
+    {
+        if( i.flag == compOrient )
+        {
+            o = i;
+            break;
+        }
+    }
+
+    for( int i = 0; i < o.n_rots; i++ )
+        spin = spin.RotateCCW();
+
+    if( o.mirror_x )
+        spin = spin.MirrorX();
+
+    if( o.mirror_y )
+        spin = spin.MirrorY();
+
+    return spin;
+}
+
 void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString& aOldName,
                                           const wxString& aNewName )
 {
@@ -579,12 +646,12 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         break;
 
-    case LIB_PIN_T:
+    case SCH_PIN_T:
     {
-        LIB_PIN*         pin = dynamic_cast<LIB_PIN*>( driver );
-        LABEL_SPIN_STYLE spin = LABEL_SPIN_STYLE::RIGHT;
+        SCH_PIN*         schPin = static_cast<SCH_PIN*>( driver );
+        LABEL_SPIN_STYLE spin   = orientLabel( schPin );
 
-        if( pin->IsPowerConnection() )
+        if( schPin->IsPowerConnection() )
         {
             msg.Printf( _( "Net \"%s\" cannot be changed to \"%s\" because it "
                            "is driven by a power pin." ),
@@ -593,14 +660,6 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
             break;
-        }
-
-        switch( pin->GetOrientation() )
-        {
-        case PIN_UP:    spin = LABEL_SPIN_STYLE::UP;     break;
-        case PIN_DOWN:  spin = LABEL_SPIN_STYLE::BOTTOM; break;
-        case PIN_LEFT:  spin = LABEL_SPIN_STYLE::LEFT;   break;
-        case PIN_RIGHT: spin = LABEL_SPIN_STYLE::RIGHT;  break;
         }
 
         ++m_changesCount;
