@@ -23,74 +23,74 @@
 
 
 #include <cstdio>
-
+#include <boost/algorithm/string/case_conv.hpp>
 #include "class_board.h"
 #include "pcb_expr_evaluator.h"
 
 class PCB_EXPR_BUILTIN_FUNCTIONS
 {
-    public:
+public:
 
-        using FPTR = LIBEVAL::UCODE::FUNC_PTR;
+    using FPTR = LIBEVAL::UCODE::FUNC_PTR;
 
-        PCB_EXPR_BUILTIN_FUNCTIONS();
+    PCB_EXPR_BUILTIN_FUNCTIONS();
 
-        static PCB_EXPR_BUILTIN_FUNCTIONS& Instance() 
+    static PCB_EXPR_BUILTIN_FUNCTIONS& Instance()
+    {
+        static PCB_EXPR_BUILTIN_FUNCTIONS self;
+        return self;
+    }
+
+    std::string tolower( const std::string& str ) const
+    {
+        std::string rv;
+        std::transform( str.begin(), str.end(), rv.begin(), ::tolower );
+        return rv;
+    }
+
+    FPTR Get( const std::string &name ) const
+    {
+        auto it = m_funcs.find( name );
+
+        if( it == m_funcs.end() )
+            return nullptr;
+
+        return it->second;
+    }
+
+private:
+    std::map<std::string, FPTR> m_funcs;
+
+    static void onLayer( LIBEVAL::UCODE* aUcode, LIBEVAL::UCODE::CONTEXT* aCtx, void *self )
+    {
+        LIBEVAL::VALUE*   arg = aCtx->Pop();
+        PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+        PCB_LAYER_ID      layer = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( arg->AsString() );
+        BOARD_ITEM*       item = vref->GetObject( aUcode );
+        LIBEVAL::VALUE*   rv = aCtx->AllocValue();
+
+        rv->Set( item->IsOnLayer( layer ) ? 1.0 : 0.0 );
+        aCtx->Push( rv );
+    }
+
+    static void isPlated( LIBEVAL::UCODE* aUcode, LIBEVAL::UCODE::CONTEXT* aCtx, void *self )
+    {
+        PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+        BOARD_ITEM*       item = vref->GetObject( aUcode );
+        bool              result = false;
+
+        if( item->Type() == PCB_PAD_T )
         {
-            static PCB_EXPR_BUILTIN_FUNCTIONS self;
-            return self;
+            D_PAD* pad = static_cast<D_PAD*>( item );
+            result = pad->GetAttribute() == PAD_ATTRIB_STANDARD;
         }
 
-        std::string tolower( const std::string str ) const
-        {
-            std::string rv;
-              std::transform(str.begin(),
-                 str.end(),
-                 rv.begin(),
-                 ::tolower);
-                return rv;
-        }
-
-        FPTR Get( const std::string &name ) const
-        {
-            auto it = m_funcs.find( name );
-
-            if( it == m_funcs.end() )
-                return nullptr;
-
-            return it->second;
-        }
-
-    private:
-
-        std::map<std::string, FPTR> m_funcs;
-
-        static void onLayer( LIBEVAL::UCODE* aUcode, LIBEVAL::UCODE::CONTEXT* aCtx, void *self )
-        {
-            auto arg = aCtx->Pop();
-            auto vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-            auto conv = ENUM_MAP<PCB_LAYER_ID>::Instance();
-            bool value = vref->GetObject(aUcode)->IsOnLayer( conv.ToEnum( arg->AsString() ) );
-            auto rv =  aCtx->AllocValue();
-            rv->Set( value ? 1.0 : 0.0 );
-            aCtx->Push( rv );
-        }
-
-        static void isPlated( LIBEVAL::UCODE* aUcode, LIBEVAL::UCODE::CONTEXT* aCtx, void *self )
-        {
-            auto vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-            auto item = vref->GetObject(aUcode);
-            bool result = false;
-            if( item->Type() == PCB_PAD_T )
-            {
-                auto pad = static_cast<D_PAD*>( item );
-                result = pad->GetAttribute() == PAD_ATTRIB_STANDARD;
-            }
-            auto rv =  aCtx->AllocValue();
-            rv->Set( result ? 1.0 : 0.0 );
-            aCtx->Push( rv );
-        }
+        LIBEVAL::VALUE* rv =  aCtx->AllocValue();
+        rv->Set( result ? 1.0 : 0.0 );
+        aCtx->Push( rv );
+    }
 };
+
 
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
@@ -98,17 +98,19 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
     m_funcs[ "isplated" ] = isPlated;
 }
 
+
 BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::UCODE* aUcode ) const
 {   
-    auto ucode = static_cast<const PCB_EXPR_UCODE*>( aUcode );
-    auto item  = ucode->GetItem( m_itemIndex );
+    const PCB_EXPR_UCODE* ucode = static_cast<const PCB_EXPR_UCODE*>( aUcode );
+    BOARD_ITEM*           item  = ucode->GetItem( m_itemIndex );
     return item;
 }
 
+
 LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode ) 
 {
-    auto item  = GetObject( aUcode );
-    auto it = m_matchingTypes.find( TYPE_HASH( *item ) );
+    BOARD_ITEM* item  = const_cast<BOARD_ITEM*>( GetObject( aUcode ) );
+    auto        it = m_matchingTypes.find( TYPE_HASH( *item ) );
 
     if( it == m_matchingTypes.end() )
     {
@@ -128,7 +130,9 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode )
             {
                 //printf("item %p Get string '%s'\n", item, (const char*) it->second->Name().c_str() );
                 str = item->Get<wxString>( it->second );
-            } else {
+            }
+            else
+            {
                 const auto& any = item->Get( it->second );
                 any.GetAs<wxString>( &str );
                 //printf("item %p get enum: '%s'\n", item , (const char*) str.c_str() );
@@ -138,26 +142,42 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode )
     }
 }
 
-LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::createFuncCall( LIBEVAL::COMPILER* aCompiler, const std::string& name )
+
+LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::createFuncCall( LIBEVAL::COMPILER* aCompiler,
+                                                         const std::string& name )
 {
-    auto registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
-    auto f = registry.Get( name );
+    PCB_EXPR_BUILTIN_FUNCTIONS& registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
+
+    auto f = registry.Get( boost::to_lower_copy( name ) );
 
     return f;
 }
 
+
 LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler,
-        const std::string& var, const std::string& field )
+                                                const std::string& var, const std::string& field )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    PCB_EXPR_VAR_REF* vref = nullptr;
 
-    auto classes = propMgr.GetAllClasses();
-    auto vref    = new PCB_EXPR_VAR_REF( var == "A" ? 0 : 1 );
+    if( var == "A" )
+    {
+        vref = new PCB_EXPR_VAR_REF( 0 );
+    }
+    else if( var == "B" )
+    {
+        vref = new PCB_EXPR_VAR_REF( 1 );
+    }
+    else
+    {
+        aCompiler->ReportError( "var" );
+        return vref;
+    }
 
     if( field.empty() ) // return reference to base object
         return vref;
 
-    for( auto cls : classes )
+    for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
     {
         if( propMgr.IsOfType( cls.type, TYPE_HASH( BOARD_ITEM ) ) )
         {
@@ -167,10 +187,15 @@ LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler,
             {
                 //printf("Field '%s' class %s ptr %p haschoices %d typeid %s\n", field.c_str(), (const char *) cls.name.c_str(), prop, !!prop->HasChoices(), typeid(*prop).name() );
                 vref->AddAllowedClass( cls.type, prop );
+
                 if( prop->TypeHash() == TYPE_HASH( int ) )
+                {
                     vref->SetType( LIBEVAL::VT_NUMERIC );
+                }
                 else if( prop->TypeHash() == TYPE_HASH( wxString ) )
+                {
                     vref->SetType( LIBEVAL::VT_STRING );
+                }
                 else if ( prop->HasChoices() )
                 {   // it's an enum, we treat it as string
                     vref->SetType( LIBEVAL::VT_STRING );
@@ -185,6 +210,9 @@ LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler,
             }
         }
     }
+
+    if( vref->GetType() == LIBEVAL::VT_UNDEFINED )
+        aCompiler->ReportError( "field" );
 
     return vref;
 }
@@ -204,19 +232,16 @@ public:
         return pcbUnits;
     }
 
-    virtual double Convert( const std::string aString, int unitId ) const override
+    virtual double Convert( const std::string& aString, int unitId ) const override
     {
         double v = atof( aString.c_str() );
+
         switch( unitId )
         {
-        case 0:
-            return Mils2iu( v );
-        case 1:
-            return Millimeter2iu( v );
-        case 2:
-            return Mils2iu( v * 1000.0 );
-        default:
-            return v;
+        case 0:  return Mils2iu( v );
+        case 1:  return Millimeter2iu( v );
+        case 2:  return Mils2iu( v * 1000.0 );
+        default: return v;
         }
     };
 };

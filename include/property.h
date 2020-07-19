@@ -526,6 +526,11 @@ public:
         return *this;
     }
 
+    void SetDefault( T aValue )
+    {
+        m_default = aValue;
+    }
+
     const wxString& ToString( T value ) const
     {
         return m_choices.GetLabel( static_cast<int>( value ) );
@@ -533,7 +538,10 @@ public:
 
     const T ToEnum( const wxString value )
     {
-        return m_reverseMap[value];
+        if( m_reverseMap.count( value ) )
+            return m_reverseMap[ value ];
+        else
+            return m_default;
     }
 
     const wxPGChoices& Choices() const
@@ -542,8 +550,9 @@ public:
     }
 
 private:
-    wxPGChoices m_choices;
+    wxPGChoices                     m_choices;
     std::unordered_map<wxString, T> m_reverseMap;
+    T                               m_default;      // Returned if the string is not recognized
 
     ENUM_MAP<T>()
     {

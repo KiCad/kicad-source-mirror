@@ -77,8 +77,11 @@ public:
     /**
      * Explodes the list of netclass assignments to include atomic members of composite labels
      * (buses).
+     *
+     * @param aRebuildFromScratch indicates the assignments should be rebuilt from the netclass
+     * membership lists before resolving.
      */
-    void ResolveNetClassAssignments();
+    void ResolveNetClassAssignments( bool aRebuildFromScratch = false );
 
 private:
     // TODO: Add diff pairs, bus information, etc here.

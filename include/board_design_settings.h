@@ -219,14 +219,6 @@ public:
     std::vector<VIA_DIMENSION>       m_ViasDimensionsList;
     std::vector<DIFF_PAIR_DIMENSION> m_DiffPairDimensionsList;
 
-    // List of netclasses. There is always the default netclass.
-    //NETCLASSES                       m_NetClasses;
-    std::vector<DRC_SELECTOR*>       m_DRCRuleSelectors;
-    std::vector<DRC_RULE*>           m_DRCRules;
-
-    // Temporary storage for rule matching.
-    std::vector<DRC_SELECTOR*>       m_matched;
-
     bool       m_MicroViasAllowed;          ///< true to allow micro vias
     bool       m_BlindBuriedViaAllowed;     ///< true to allow blind/buried vias
     VIATYPE    m_CurrentViaType;            ///< (VIA_BLIND_BURIED, VIA_THROUGH, VIA_MICROVIA)
@@ -243,10 +235,9 @@ public:
     int        m_CopperEdgeClearance;
     int        m_HoleToHoleMin;             // Min width of peninsula between two drilled holes
 
-    std::map< int, int > m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
-
-    /// Excluded DRC items
-    std::set<wxString> m_DrcExclusions;
+    std::vector<DRC_RULE*> m_DRCRules;
+    std::map< int, int >   m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
+    std::set<wxString>     m_DrcExclusions;
 
     /** Option to handle filled polygons in zones:
      * the "legacy" option is using thick outlines around filled polygons: give the best shape

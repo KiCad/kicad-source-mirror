@@ -418,13 +418,26 @@ bool NET_SETTINGS::ParseBusGroup( wxString aGroup, wxString* aName,
 }
 
 
-void NET_SETTINGS::ResolveNetClassAssignments()
+void NET_SETTINGS::ResolveNetClassAssignments( bool aRebuildFromScratch )
 {
-    std::map<wxString, wxString> existing = m_NetClassAssignments;
+    std::map<wxString, wxString> baseList = m_NetClassAssignments;
+
+    if( aRebuildFromScratch )
+    {
+        for( const std::pair<const wxString, NETCLASSPTR>& netclass : m_NetClasses )
+        {
+            for( const wxString& net : *netclass.second )
+                baseList[ net ] = netclass.second->GetName();
+        }
+    }
+    else
+    {
+        baseList = m_NetClassAssignments;
+    }
 
     m_NetClassAssignments.clear();
 
-    for( const auto& ii : existing )
+    for( const auto& ii : baseList )
     {
         m_NetClassAssignments[ ii.first ] = ii.second;
 

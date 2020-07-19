@@ -590,9 +590,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_TrackWidthList         = aOther.m_TrackWidthList;
     m_ViasDimensionsList     = aOther.m_ViasDimensionsList;
     m_DiffPairDimensionsList = aOther.m_DiffPairDimensionsList;
-    m_DRCRuleSelectors       = aOther.m_DRCRuleSelectors;
     m_DRCRules               = aOther.m_DRCRules;
-    m_matched                = aOther.m_matched;
     m_MicroViasAllowed       = aOther.m_MicroViasAllowed;
     m_BlindBuriedViaAllowed  = aOther.m_BlindBuriedViaAllowed;
     m_CurrentViaType         = aOther.m_CurrentViaType;

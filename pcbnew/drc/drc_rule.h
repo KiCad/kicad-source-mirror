@@ -27,9 +27,11 @@
 #include <core/typeinfo.h>
 #include <netclass.h>
 #include <layers_id_colors_and_visibility.h>
+#include <libeval_compiler/libeval_compiler.h>
 
 
 class BOARD_ITEM;
+class PCB_EXPR_UCODE;
 
 
 #define CLEARANCE_CONSTRAINT (1 << 0)
@@ -48,6 +50,52 @@ class BOARD_ITEM;
 #define DISALLOW_GRAPHICS    (1 << 7)
 #define DISALLOW_HOLES       (1 << 8)
 #define DISALLOW_FOOTPRINTS  (1 << 9)
+
+
+template<class T=int>
+class MINOPTMAX
+{
+public:
+    T Min() const { assert( m_hasMin ); return m_min; };
+    T Max() const { assert( m_hasMax ); return m_max; };
+    T Opt() const { assert( m_hasOpt ); return m_opt; };
+
+    bool HasMin() const { return m_hasMin; }
+    bool HasMax() const { return m_hasMax; }
+    bool HasOpt() const { return m_hasOpt; }
+
+    void SetMin( T v ) { m_min = v; m_hasMin = true; }
+    void SetMax( T v ) { m_max = v; m_hasMax = true; }
+    void SetOpt( T v ) { m_opt = v; m_hasOpt = true; }
+
+private:
+    T m_min;
+    T m_opt;
+    T m_max;
+    bool m_hasMin = false;
+    bool m_hasOpt = false;
+    bool m_hasMax = false;
+};
+
+
+class DRC_RULE_CONDITION
+{
+public:
+    DRC_RULE_CONDITION();
+    ~DRC_RULE_CONDITION();
+
+    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB );
+    bool Compile();
+    LIBEVAL::ERROR_STATUS GetCompilationError();
+
+public:
+    wxString  m_Expression;
+    wxString  m_TargetRuleName;
+
+private:
+    LIBEVAL::ERROR_STATUS m_compileError;
+    PCB_EXPR_UCODE*       m_ucode;
+};
 
 
 class DRC_RULE
@@ -81,31 +129,11 @@ public:
     MINOPTMAX m_TrackConstraint;
     int       m_MinHole;
 
-    wxString  m_Condition;
-};
-
-
-class DRC_SELECTOR
-{
-public:
-    DRC_SELECTOR() :
-            m_Priority( 1 ),
-            m_Rule( nullptr )
-    { }
-
-public:
-    std::vector<NETCLASSPTR>  m_MatchNetclasses;
-    std::vector<KICAD_T>      m_MatchTypes;
-    std::vector<PCB_LAYER_ID> m_MatchLayers;
-    std::vector<wxString>     m_MatchAreas;
-
-    int                       m_Priority;       // 0 indicates automatic priority generation
-    DRC_RULE*                 m_Rule;
+    DRC_RULE_CONDITION m_Condition;
 };
 
 
 DRC_RULE* GetRule( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem, int aConstraint );
-
 
 
 #endif      // DRC_RULE_H

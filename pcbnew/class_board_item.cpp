@@ -1,8 +1,3 @@
-/**
- * @file class_board_item.cpp
- * @brief Class BOARD_ITEM definition and  some basic functions.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -29,7 +24,6 @@
  */
 
 #include <fctsys.h>
-#include <common.h>
 #include <pcbnew.h>
 #include <wx/debug.h>
 
@@ -137,8 +131,9 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
 }
 
 
-void BOARD_ITEM::TransformShapeWithClearanceToPolygon(
-        SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue, int aError, bool ignoreLineWidth ) const
+void BOARD_ITEM::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                       int aClearanceValue, int aError,
+                                                       bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( false, "Called TransformShapeWithClearanceToPolygon() on unsupported BOARD_ITEM." );
 };
@@ -148,14 +143,14 @@ static struct BOARD_ITEM_DESC
 {
     BOARD_ITEM_DESC()
     {
-        auto& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+        ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
         if( layerEnum.Choices().GetCount() == 0 )
         {
+            layerEnum.SetDefault( UNDEFINED_LAYER );
+
             for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
-            {
                 layerEnum.Map( *seq, LSET::Name( *seq ) );
-            }
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();

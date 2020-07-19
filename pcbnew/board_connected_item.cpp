@@ -204,14 +204,14 @@ static struct BOARD_CONNECTED_ITEM_DESC
 {
     BOARD_CONNECTED_ITEM_DESC()
     {
-        auto& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+        ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
         if( layerEnum.Choices().GetCount() == 0 )
         {
+            layerEnum.SetDefault( UNDEFINED_LAYER );
+
             for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
-            {
                 layerEnum.Map( *seq, LSET::Name( *seq ) );
-            }
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();

@@ -44,8 +44,8 @@ const wxString& PROPERTY_MANAGER::ResolveType( TYPE_ID aType ) const
 
 PROPERTY_BASE* PROPERTY_MANAGER::GetProperty( TYPE_ID aType, const wxString& aProperty ) const
 {
-    wxASSERT_MSG( !m_dirty, "Have not called PROPERTY_MANAGER::Rebuild(), "
-            "property list not up-to-date" );
+    if( m_dirty )
+        const_cast<PROPERTY_MANAGER*>( this )->Rebuild();
 
     auto it = m_classes.find( aType );
 
@@ -54,7 +54,7 @@ PROPERTY_BASE* PROPERTY_MANAGER::GetProperty( TYPE_ID aType, const wxString& aPr
 
     const CLASS_DESC& classDesc = it->second;
 
-    for( const auto& property : classDesc.m_allProperties )
+    for( PROPERTY_BASE* property : classDesc.m_allProperties )
     {
         if( !aProperty.CmpNoCase( property->Name() ) )
             return property;
@@ -66,8 +66,8 @@ PROPERTY_BASE* PROPERTY_MANAGER::GetProperty( TYPE_ID aType, const wxString& aPr
 
 const PROPERTY_LIST& PROPERTY_MANAGER::GetProperties( TYPE_ID aType ) const
 {
-    wxASSERT_MSG( !m_dirty, "Have not called PROPERTY_MANAGER::Rebuild(), "
-            "property list not up-to-date" );
+    if( m_dirty )
+        const_cast<PROPERTY_MANAGER*>( this )->Rebuild();
 
     static const PROPERTY_LIST empty;
     auto it = m_classes.find( aType );
@@ -138,7 +138,7 @@ void PROPERTY_MANAGER::InheritsAfter( TYPE_ID aDerived, TYPE_ID aBase )
     m_dirty = true;
 
     wxASSERT_MSG( derived.m_bases.size() == 1 || derived.m_typeCasts.count( aBase ) == 1,
-            "You need to add a TYPE_CAST for classes inheriting from multiple bases" );
+                  "You need to add a TYPE_CAST for classes inheriting from multiple bases" );
 }
 
 
@@ -163,12 +163,8 @@ bool PROPERTY_MANAGER::IsOfType( TYPE_ID aDerived, TYPE_ID aBase ) const
 
 void PROPERTY_MANAGER::Rebuild()
 {
-    wxASSERT_MSG( m_dirty, "Excessive Rebuild() call" );
-
-    for( auto& classEntry : m_classes )
-    {
+    for( std::pair<const TYPE_ID, CLASS_DESC>& classEntry : m_classes )
         classEntry.second.rebuild();
-    }
 
     m_dirty = false;
 }
@@ -195,28 +191,31 @@ void PROPERTY_MANAGER::CLASS_DESC::rebuild()
 }
 
 
-void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult, PROPERTY_SET& aReplaced ) const
+void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
+                                                      PROPERTY_SET& aReplaced ) const
 {
-    for( const auto& replacedEntry : m_replaced )
+    for( const std::pair<size_t, wxString>& replacedEntry : m_replaced )
         aReplaced.emplace( replacedEntry );
 
-    for( auto& propertyData : m_ownProperties )
+    for( const std::pair<const wxString, std::unique_ptr<PROPERTY_BASE>>& prop : m_ownProperties )
     {
-        PROPERTY_BASE* property = propertyData.second.get();
+        PROPERTY_BASE* property = prop.second.get();
 
         // Do not store replaced properties
         if( aReplaced.count( std::make_pair( property->OwnerHash(), property->Name() ) ) == 0 )
             aResult.push_back( property );
     }
 
-    for( const auto& base : m_bases )
+    for( const std::reference_wrapper<CLASS_DESC>& base : m_bases )
         base.get().collectPropsRecur( aResult, aReplaced );
 }
+
 
 std::vector<TYPE_ID> PROPERTY_MANAGER::GetMatchingClasses( PROPERTY_BASE* aProperty )
 {
     std::vector<TYPE_ID> ids;
-    
+
+/*
     for( auto& cls : m_classes )
     {
         CLASS_INFO info;
@@ -224,26 +223,29 @@ std::vector<TYPE_ID> PROPERTY_MANAGER::GetMatchingClasses( PROPERTY_BASE* aPrope
         for( auto prop : cls.second.m_allProperties )
             info.properties.push_back(prop);
 
-        
+
     }
+ */
 
     return ids;
 }
 
+
 PROPERTY_MANAGER::CLASSES_INFO PROPERTY_MANAGER::GetAllClasses()
 {
     CLASSES_INFO rv;
-    for( auto& cls : m_classes )
+
+    for( std::pair<const TYPE_ID, CLASS_DESC>& classEntry : m_classes )
     {
         CLASS_INFO info;
 
-        info.type = cls.first;
-        info.name = m_classNames[cls.first];
+        info.type = classEntry.first;
+        info.name = m_classNames[classEntry.first];
 
-        for( auto prop : cls.second.m_allProperties )
-            info.properties.push_back(prop);
+        for( PROPERTY_BASE* prop : classEntry.second.m_allProperties )
+            info.properties.push_back( prop );
 
-        rv.push_back(info);
+        rv.push_back( info );
     }
 
     return rv;

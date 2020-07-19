@@ -130,7 +130,7 @@ public:
     DRC_RULE_CONDITION();
     ~DRC_RULE_CONDITION();
 
-    bool EvaluateFor( BOARD_ITEM* aItemA, BOARD_ITEM* aItemB );
+    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB );
     bool Compile();
     LIBEVAL::ERROR_STATUS GetCompilationError();
 
@@ -140,7 +140,7 @@ public:
 
 private:
     LIBEVAL::ERROR_STATUS m_compileError;
-    PCB_EXPR_UCODE* m_ucode;
+    PCB_EXPR_UCODE*       m_ucode;
 };
 
 

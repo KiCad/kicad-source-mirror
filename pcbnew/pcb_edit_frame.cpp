@@ -653,7 +653,7 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const w
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
-        Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments();
+        Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments( true );
 
         GetBoard()->SynchronizeNetsAndNetClasses();
         GetBoard()->GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );

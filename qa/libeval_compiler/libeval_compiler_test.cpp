@@ -118,20 +118,20 @@ int main( int argc, char *argv[] )
     trackA.SetWidth( Mils2iu( 10 ));
     trackB.SetWidth( Mils2iu( 20 ));
 
-    printf("TrkA %p netclass '%s'\n", &trackA, (const char*) trackA.GetNetClassName().c_str() );
-    printf("TrkB %p netclass '%s'\n", &trackB, (const char*) trackB.GetNetClassName().c_str() );
+    printf( "TrkA %p netclass '%s'\n", &trackA, (const char*) trackA.GetNetClassName().c_str() );
+    printf( "TrkB %p netclass '%s'\n", &trackB, (const char*) trackB.GetNetClassName().c_str() );
 
-//    testEvalExpr( "A.onlayer(\"F.Cu\") || A.onlayer(\"B.Cu\")", VAL(1.0), false, &trackA, &trackB );
-    testEvalExpr( "A.type == \"Pad\" && B.type == \"Pad\" && (A.onLayer(\"F.Cu\"))",VAL(0.0), false, &trackA, &trackB );
+//    testEvalExpr( "A.onlayer('F.Cu') || A.onlayer('B.Cu')", VAL( 1.0 ), false, &trackA, &trackB );
+    testEvalExpr( "A.type == 'Pad' && B.type == 'Pad' && (A.onLayer('F.Cu'))", VAL( 0.0 ), false, &trackA, &trackB );
         return 0;
-    testEvalExpr( "A.Width > B.Width", VAL(0.0), false, &trackA, &trackB );
-    testEvalExpr( "A.Width + B.Width", VAL(Mils2iu(10) + Mils2iu(20)), false, &trackA, &trackB );
+    testEvalExpr( "A.Width > B.Width", VAL( 0.0 ), false, &trackA, &trackB );
+    testEvalExpr( "A.Width + B.Width", VAL( Mils2iu(10) + Mils2iu(20) ), false, &trackA, &trackB );
 
     testEvalExpr( "A.Netclass", VAL( (const char*) trackA.GetNetClassName().c_str() ), false, &trackA, &trackB );
-    testEvalExpr( "(A.Netclass == \"HV\") && (B.netclass == \"otherClass\") && (B.netclass != \"F.Cu\")", VAL( 1.0 ), false, &trackA, &trackB );
+    testEvalExpr( "(A.Netclass == 'HV') && (B.netclass == 'otherClass') && (B.netclass != 'F.Cu')", VAL( 1.0 ), false, &trackA, &trackB );
     testEvalExpr( "A.Netclass + 1.0", VAL( 1.0 ), false, &trackA, &trackB );
-    testEvalExpr( "A.type == \"Track\" && B.type == \"Track\" && A.layer == \"F.Cu\"", VAL(0.0), false, &trackA, &trackB );
-    testEvalExpr( "(A.type == \"Track\") && (B.type == \"Track\") && (A.layer == \"F.Cu\")", VAL(0.0), false, &trackA, &trackB );
+    testEvalExpr( "A.type == 'Track' && B.type == 'Track' && A.layer == 'F.Cu'", VAL( 0.0 ), false, &trackA, &trackB );
+    testEvalExpr( "(A.type == 'Track') && (B.type == 'Track') && (A.layer == 'F.Cu')", VAL( 0.0 ), false, &trackA, &trackB );
 
     return 0;
 }

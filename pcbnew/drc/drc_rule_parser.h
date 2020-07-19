@@ -43,12 +43,10 @@ public:
     DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource, const wxString& aSourceDescr );
     DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename );
 
-    void Parse( std::vector<DRC_SELECTOR*>& aSelectors, std::vector<DRC_RULE*>& aRules );
+    void Parse( std::vector<DRC_RULE*>& aRules );
 
 private:
     void initLayerMap();
-
-    DRC_SELECTOR* parseDRC_SELECTOR( wxString* aRuleName );
 
     DRC_RULE* parseDRC_RULE();
 

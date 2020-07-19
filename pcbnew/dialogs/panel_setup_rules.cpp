@@ -189,12 +189,11 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 
     try
     {
-        std::vector<DRC_SELECTOR*> dummySelectors;
         std::vector<DRC_RULE*>     dummyRules;
 
         DRC_RULES_PARSER parser( m_frame->GetBoard(), m_textEditor->GetText(), _( "DRC rules" ) );
 
-        parser.Parse( dummySelectors, dummyRules );
+        parser.Parse( dummyRules );
     }
     catch( PARSE_ERROR& pe )
     {
@@ -249,7 +248,7 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
             "<pre>"
             "(rule \"copper keepout\"\r"
             "   (disallow track) (disallow via) (disallow zone)\r"
-            "   (condition \"A.name == no_copper\"))\r"
+            "   (condition \"A.name == 'no_copper'\"))\r"
             "\r"
             "(rule \"BGA neckdown\"\r"
             "   (constraint track_width (min 0.2mm) (opt 0.25mm))\r"
@@ -258,11 +257,11 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
             "\r"
             "(rule HV\r"
             "   (constraint clearance (min 1.5mm))\r"
-            "   (condition \"A.netclass == HV\"))\r"
+            "   (condition \"A.netclass == 'HV'\"))\r"
             "\r"
             "(rule HV_HV\r"
             "   (constraint clearance (min 2.0mm))\r"
-            "   (condition \"A.netclass == HV && B.netclass == HV\"))\r"
+            "   (condition \"A.netclass == 'HV' && B.netclass == 'HV'\"))\r"
             "</pre>";
 
     HTML_MESSAGE_BOX dlg( m_parent, _( "Syntax Help" ) );

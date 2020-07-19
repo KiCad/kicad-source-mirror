@@ -47,23 +47,26 @@ test::DRC_RULE_CONDITION::DRC_RULE_CONDITION()
     m_ucode = nullptr;
 }
 
+
 test::DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 {
-    if( m_ucode )
-        delete m_ucode;
+    delete m_ucode;
 }
 
-bool test::DRC_RULE_CONDITION::EvaluateFor( BOARD_ITEM* aItemA, BOARD_ITEM* aItemB )
+
+bool test::DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB )
 {
-    m_ucode->SetItems( aItemA, aItemB );
+    m_ucode->SetItems( const_cast<BOARD_ITEM*>( aItemA ), const_cast<BOARD_ITEM*>( aItemB ) );
 
 // fixme: handle error conditions
     return m_ucode->Run()->AsDouble() != 0.0;
 }
 
+
 bool test::DRC_RULE_CONDITION::Compile()
 {
     PCB_EXPR_COMPILER compiler;
+
     if (!m_ucode)
         m_ucode = new PCB_EXPR_UCODE;
     
@@ -74,10 +77,11 @@ bool test::DRC_RULE_CONDITION::Compile()
     
     m_compileError = compiler.GetErrorStatus();
 
-    printf("Fail: %s", m_compileError.Format().c_str() );
+    printf( "Fail: %s", m_compileError.Format().c_str() );
 
     return false;
 }
+
 
 LIBEVAL::ERROR_STATUS test::DRC_RULE_CONDITION::GetCompilationError()
 {

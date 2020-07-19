@@ -57,20 +57,18 @@ class COMPILER;
 
 struct ERROR_STATUS
 {
-        bool pendingError;
+    bool pendingError;
 
-        enum STAGE {
-            CST_PARSE = 0,
-            CST_CODEGEN,
-            CST_RUNTIME
-        };
+    enum STAGE
+    {
+        CST_PARSE = 0,
+        CST_CODEGEN,
+        CST_RUNTIME
+    };
 
-        STAGE stage;
-        std::string message;
-        std::string failingObject;
-        int failingPosition;
-
-        std::string Format() const;
+    STAGE    stage;
+    wxString message;             // Note: use wxString for GUI-related strings
+    int      srcPos;
 };
 
 
@@ -108,157 +106,154 @@ struct TREE_NODE
     UOP*       uop;
     bool       valid;
     bool       isTerminal;
+    int        srcPos;
 };
 
 
 static inline TREE_NODE* copyNode( TREE_NODE& t )
 {
-    auto t2        = new TREE_NODE();
-    t2->valid      = t.valid;
+    auto t2          = new TREE_NODE();
+    t2->valid        = t.valid;
     snprintf( t2->value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", t.value.str );
-    t2->op         = t.op;
-    t2->value.type = t.value.type;
-    t2->leaf[0]    = t.leaf[0];
-    t2->leaf[1]    = t.leaf[1];
-    t2->isTerminal = false;
-    t2->uop        = nullptr;
+    t2->op           = t.op;
+    t2->value.type   = t.value.type;
+    t2->leaf[0]      = t.leaf[0];
+    t2->leaf[1]      = t.leaf[1];
+    t2->isTerminal   = false;
+    t2->srcPos = t.srcPos;
+    t2->uop          = nullptr;
     return t2;
 }
 
 
 static inline TREE_NODE* newNode( int op, int type, const std::string& value )
 {
-    auto t2        = new TREE_NODE();
-    t2->valid      = true;
+    auto t2          = new TREE_NODE();
+    t2->valid        = true;
     snprintf( t2->value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", value.c_str() );
-    t2->op         = op;
-    t2->value.type = type;
-    t2->leaf[0]    = nullptr;
-    t2->leaf[1]    = nullptr;
-    t2->isTerminal = false;
-    t2->uop        = nullptr;
+    t2->op           = op;
+    t2->value.type   = type;
+    t2->leaf[0]      = nullptr;
+    t2->leaf[1]      = nullptr;
+    t2->isTerminal   = false;
+    t2->srcPos = -1;
+    t2->uop          = nullptr;
     return t2;
 }
 
 
-class UNIT_RESOLVER {
-    public:
-        UNIT_RESOLVER()
-        {
-        }
+class UNIT_RESOLVER
+{
+public:
+    UNIT_RESOLVER()
+    {
+    }
 
-        virtual ~UNIT_RESOLVER()
-        {
-        }
+    virtual ~UNIT_RESOLVER()
+    {
+    }
 
-        virtual const std::vector<std::string>& GetSupportedUnits() const
-        {
-            static const std::vector<std::string> nullUnits;
+    virtual const std::vector<std::string>& GetSupportedUnits() const
+    {
+        static const std::vector<std::string> nullUnits;
 
-            return nullUnits;
-        }
+        return nullUnits;
+    }
 
-        virtual double Convert( const std::string aString, int unitType ) const
-        {
-            return 0.0;
-        };
+    virtual double Convert( const std::string& aString, int unitType ) const
+    {
+        return 0.0;
+    };
 };
 
-class VALUE {
+
+class VALUE
+{
 public:
     VALUE():
         m_type(VT_UNDEFINED),
         m_valueDbl( 0 )
-        {};
+    {};
 
-    VALUE( const std::string& aStr ) :
+    VALUE( std::string aStr ) :
         m_type( VT_STRING ),
         m_valueDbl( 0 ),
-        m_valueStr( aStr ) 
-        {};
+        m_valueStr( std::move( aStr ) )
+    {};
 
     VALUE( const double aVal ) :
         m_type( VT_NUMERIC ),
         m_valueDbl( aVal )
-         {};
+    {};
 
-      double AsDouble() const
-      {
-          return m_valueDbl;
-      }
+    double AsDouble() const
+    {
+        return m_valueDbl;
+    }
 
-      const std::string& AsString() const
-      {
-          return m_valueStr;
-      }
+    const std::string& AsString() const
+    {
+        return m_valueStr;
+    }
 
-      bool operator==( const VALUE& b ) const
-      {
-          if( m_type != b.m_type )
-            return false;
-          if( m_type == VT_NUMERIC && m_valueDbl != b.m_valueDbl )
-            return false;
-          if( m_type == VT_STRING && m_valueStr != b.m_valueStr )
-            return false;
+    bool operator==( const VALUE& b ) const
+    {
+        if( m_type == VT_NUMERIC && b.m_type == VT_NUMERIC )
+            return m_valueDbl == b.m_valueDbl;
+        else if( m_type == VT_STRING && b.m_type == VT_STRING )
+            return m_valueStr == b.m_valueStr;
 
-        return true;
-      }
+        return false;
+    }
 
-      
+    VAR_TYPE_T GetType() const { return m_type; };
 
-      VAR_TYPE_T GetType() const { return m_type; };
+    void Set( double aValue )
+    {
+        m_type = VT_NUMERIC;
+        m_valueDbl = aValue;
+    }
 
-      void Set( double aValue )
-      {
-          m_type = VT_NUMERIC;
-          m_valueDbl = aValue;
-      }
+    void Set( const std::string& aValue )
+    {
+        m_type = VT_STRING;
+        m_valueStr = aValue;
+    }
 
-      void Set( std::string aValue )
-      {
-          m_type = VT_STRING;
-          m_valueStr = aValue;
-      }
+    void Set( const VALUE &val )
+    {
+        m_type = val.m_type;
+        m_valueDbl = val.m_valueDbl;
 
-      void Set( const VALUE &val )
-      {
-          m_type = val.m_type;
-          m_valueDbl = val.m_valueDbl;
-          if(m_type == VT_STRING)
+        if( m_type == VT_STRING )
             m_valueStr = val.m_valueStr;
-          
-      }
+    }
 
-
-      bool EqualTo( const VALUE* v2 ) const
-      {
-          assert ( m_type == v2->m_type );
-          if(m_type == VT_STRING)
-            return m_valueStr == v2->m_valueStr;
-          else
-            return m_valueDbl == v2->m_valueDbl;
-      }
+    bool EqualTo( const VALUE* v2 ) const
+    {
+        return operator==( *v2 );
+    }
 
 private:
-      VAR_TYPE_T m_type;
-      double m_valueDbl;
-      std::string m_valueStr;
-    };
+    VAR_TYPE_T  m_type;
+    double      m_valueDbl;
+    std::string m_valueStr;
+};
+
 
 class UCODE;
 
 class VAR_REF
-    {
-    public:
-        virtual VAR_TYPE_T GetType( UCODE* aUcode ) = 0;
-        virtual VALUE GetValue( UCODE* aUcode ) = 0;
-    };
+{
+public:
+    virtual VAR_TYPE_T GetType() = 0;
+    virtual VALUE GetValue( UCODE* aUcode ) = 0;
+};
 
 
 class UCODE
 {
 public:
-    
     
     class CONTEXT
     {
@@ -268,7 +263,8 @@ public:
         CONTEXT()
         {
             m_sp = 0;
-            for (int i = 0; i < c_memSize; i++ )
+
+            for( int i = 0; i < c_memSize; i++ )
                 m_memory.push_back( VALUE() );
         }
 
@@ -294,11 +290,12 @@ public:
         {
             return m_sp;
         }
-        private:
-            std::vector<VALUE> m_memory;
-            VALUE* m_stack[128];
-            int    m_sp = 0;
-            int    m_memPos = 0;
+
+    private:
+        std::vector<VALUE> m_memory;
+        VALUE*             m_stack[128];
+        int                m_sp = 0;
+        int                m_memPos = 0;
     };
 
     typedef std::function<void(UCODE*, CONTEXT*, void*)> FUNC_PTR;
@@ -310,7 +307,7 @@ public:
 
     VALUE* Run();
     std::string Dump() const;
-    void RuntimeError( const std::string aErrorMsg );
+    void RuntimeError( const std::string& aErrorMsg );
 
     virtual VAR_REF* createVarRef( COMPILER* aCompiler, const std::string& var, const std::string& field )
     {
@@ -328,21 +325,28 @@ private:
 
 
 class UOP
-    {
-    public:
-        UOP( int op, void* arg ) : m_op( op ), m_arg( arg )
-          {};
-        UOP( int op, UCODE::FUNC_PTR func, void *arg ) : m_op( op ), m_arg(arg), m_func( func )
-          {};
+{
+public:
+    UOP( int op, void* arg ) :
+        m_op( op ),
+        m_arg( arg )
+    {};
 
-        void        Exec( UCODE::CONTEXT* ctx, UCODE *ucode );
-        std::string Format() const;
+    UOP( int op, UCODE::FUNC_PTR func, void *arg ) :
+        m_op( op ),
+        m_arg(arg),
+        m_func( std::move( func ) )
+    {};
 
-    private:
-      int                 m_op;
-      void *m_arg;
-      UCODE::FUNC_PTR m_func;
-    };
+    void Exec( UCODE::CONTEXT* ctx, UCODE *ucode );
+
+    std::string Format() const;
+
+private:
+    int             m_op;
+    void*           m_arg;
+    UCODE::FUNC_PTR m_func;
+};
 
 class TOKENIZER
 {
@@ -363,6 +367,7 @@ public:
     {
         if( m_pos >= m_str.length() )
             return 0;
+
         return m_str[m_pos];
     }
 
@@ -381,13 +386,13 @@ public:
         return m_pos;
     }
 
-
     std::string GetChars( std::function<bool( int )> cond ) const;
-    bool MatchAhead( std::string match, std::function<bool( int )> stopCond ) const;
+
+    bool MatchAhead( const std::string& match, std::function<bool( int )> stopCond ) const;
+
 private:
     std::string m_str;
     size_t      m_pos;
-
 };
 
 
@@ -397,7 +402,8 @@ public:
     COMPILER();
     virtual ~COMPILER();
 
-    /* clear() should be invoked by the client if a new input string is to be processed. It
+    /*
+     * clear() should be invoked by the client if a new input string is to be processed. It
      * will reset the parser. User defined variables are retained.
      */
     void Clear();
@@ -406,17 +412,18 @@ public:
     void parseError( const char* s );
     void parseOk();
 
+    int GetSourcePos() const { return m_sourcePos; }
+
     /* Check if previous invokation of process() was successful */
     inline bool IsValid() const
     {
         return !m_errorStatus.pendingError;
     }
 
-    void         setRoot( LIBEVAL::TREE_NODE root );
-    
+    void setRoot( LIBEVAL::TREE_NODE root );
+
     bool Compile( const std::string& aString, UCODE* aCode );
-    std::string DumpTree();
-    void ReportError( const std::string aErrorMsg );
+    void ReportError( const std::string& aErrorMsg );
     ERROR_STATUS GetErrorStatus();
 
 protected:
@@ -446,9 +453,6 @@ protected:
     bool  lexDefault( T_TOKEN& aToken );
     bool  lexString( T_TOKEN& aToken );
 
-    /* Used by processing loop */
-    void parse( int token, TREE_NODE value );
-
     int resolveUnits();
 
     UOP* makeUop( int op, double value )
@@ -459,40 +463,35 @@ protected:
 
     UOP* makeUop( int op, std::string value )
     {
-        auto uop = new UOP( op, new VALUE( value ) );
+        UOP* uop = new UOP( op, new VALUE( std::move( value ) ) );
         return uop;
     }
 
     UOP* makeUop( int op, VAR_REF* aRef = nullptr )
     {
-        auto uop = new UOP( op, aRef );
+        UOP* uop = new UOP( op, aRef );
         return uop;
     }
 
     UOP* makeUop( int op, UCODE::FUNC_PTR aFunc, void *arg = nullptr )
     {
-        auto uop = new UOP( op, aFunc, arg );
+        UOP* uop = new UOP( op, std::move( aFunc ), arg );
         return uop;
     }
 
-
     /* Token state for input string. */
     
-    void* m_parser; // the current lemon parser state machine
-    TOKENIZER m_tokenizer;
-    char      m_localeDecimalSeparator;
-
-    /* Parse progress. Set by parser actions. */
-    bool m_parseError;
-    bool m_parseFinished;
-    std::string m_parseErrorMessage;
-    std::string m_parseErrorToken;
-    int m_parseErrorPos;
+    void*        m_parser; // the current lemon parser state machine
+    TOKENIZER    m_tokenizer;
+    char         m_localeDecimalSeparator;
 
     std::unique_ptr<UNIT_RESOLVER> m_unitResolver;
-    ERROR_STATUS m_errorStatus;
 
-    TREE_NODE* m_tree;
+    int          m_sourcePos;
+    ERROR_STATUS m_errorStatus;
+    bool         m_parseFinished;
+
+    TREE_NODE*   m_tree;
 };
 
 

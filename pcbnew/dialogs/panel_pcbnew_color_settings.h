@@ -61,8 +61,6 @@ private:
 
     TITLE_BLOCK* m_titleBlock;
 
-    KIGFX::WS_PROXY_VIEW_ITEM* m_ws;
-
     void createSwatches();
 };
 

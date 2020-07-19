@@ -187,7 +187,6 @@ bool DRC::LoadRules()
 
     if( rulesFile.FileExists() )
     {
-        m_ruleSelectors.clear();
         m_rules.clear();
 
         FILE* fp = wxFopen( rulesFilepath, wxT( "rt" ) );
@@ -197,12 +196,11 @@ bool DRC::LoadRules()
             try
             {
                 DRC_RULES_PARSER parser( m_pcb, fp, rulesFilepath );
-                parser.Parse( m_ruleSelectors, m_rules );
+                parser.Parse( m_rules );
             }
             catch( PARSE_ERROR& pe )
             {
                 // Don't leave possibly malformed stuff around for us to trip over
-                m_ruleSelectors.clear();
                 m_rules.clear();
 
                 wxSafeYield( m_editFrame );
@@ -214,10 +212,9 @@ bool DRC::LoadRules()
         }
     }
 
-    std::reverse( std::begin( m_ruleSelectors ), std::end( m_ruleSelectors ) );
+    std::reverse( std::begin( m_rules ), std::end( m_rules ) );
 
     BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
-    bds.m_DRCRuleSelectors = m_ruleSelectors;
     bds.m_DRCRules = m_rules;
 
     return true;

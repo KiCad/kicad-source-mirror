@@ -132,7 +132,6 @@ private:
     bool                       m_drcRun;           // indicates DRC has been run at least once
     bool                       m_footprintsTested; // indicates footprints were tested in last run
 
-    std::vector<DRC_SELECTOR*> m_ruleSelectors;
     std::vector<DRC_RULE*>     m_rules;
 
     // Temp variables for performance during a single DRC run

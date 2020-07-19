@@ -65,10 +65,8 @@ void DRC_RULES_PARSER::initLayerMap()
 }
 
 
-void DRC_RULES_PARSER::Parse( std::vector<DRC_SELECTOR*>& aSelectors,
-                              std::vector<DRC_RULE*>& aRules )
+void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules )
 {
-    std::vector< std::pair<DRC_SELECTOR*, wxString> > selectorRules;
     bool haveVersion = false;
 
     for( T token = NextTok();  token != T_EOF;  token = NextTok() )
@@ -91,15 +89,6 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_SELECTOR*>& aSelectors,
             NeedRIGHT();
             break;
 
-        case T_selector:
-        {
-            wxString ruleName;
-
-            aSelectors.push_back( parseDRC_SELECTOR( &ruleName ) );
-            selectorRules.emplace_back( aSelectors.back(), ruleName );
-        }
-            break;
-
         case T_rule:
             aRules.push_back( parseDRC_RULE() );
             break;
@@ -108,118 +97,6 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_SELECTOR*>& aSelectors,
             Expecting( "selector or rule" );
         }
     }
-
-    // Hook up the selectors to their rules
-    std::map<wxString, DRC_RULE*> ruleMap;
-
-    for( DRC_RULE* rule : aRules )
-        ruleMap[ rule->m_Name ] = rule;
-
-    for( const std::pair<DRC_SELECTOR*, wxString>& entry : selectorRules )
-    {
-        if( ruleMap.count( entry.second ) )
-        {
-            entry.first->m_Rule = ruleMap[ entry.second ];
-        }
-        else
-        {
-            wxString errText = wxString::Format( _( "Rule \"%s\" not found." ), entry.second );
-            THROW_PARSE_ERROR( errText, CurSource(), "", 0, 0 );
-        }
-    }
-}
-
-
-DRC_SELECTOR* DRC_RULES_PARSER::parseDRC_SELECTOR( wxString* aRuleName )
-{
-    NETCLASSES&   netclasses = m_board->GetDesignSettings().GetNetClasses();
-    DRC_SELECTOR* selector = new DRC_SELECTOR();
-    T             token;
-
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
-    {
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        switch( token )
-        {
-        case T_match_netclass:
-        {
-            NeedSYMBOL();
-            NETCLASSPTR netclass = netclasses.Find( FromUTF8() );
-
-            if( netclass )
-            {
-                selector->m_MatchNetclasses.push_back( std::move( netclass ) );
-            }
-            else
-            {
-                // Interesting situation here: if we don't inform the user they may have a typo
-                // and can't figure out why their rules don't work.
-                // If we do tell them then it gets really noisy if they're using a single rule
-                // file for a class of board.
-            }
-
-            NeedRIGHT();
-        }
-            break;
-
-        case T_match_type:
-            switch( NextTok() )
-            {
-            case T_track:      selector->m_MatchTypes.push_back( PCB_TRACE_T );             break;
-            case T_via:        selector->m_MatchTypes.push_back( PCB_LOCATE_STDVIA_T );     break;
-            case T_micro_via:  selector->m_MatchTypes.push_back( PCB_LOCATE_UVIA_T );       break;
-            case T_buried_via: selector->m_MatchTypes.push_back( PCB_LOCATE_BBVIA_T );      break;
-            case T_pad:        selector->m_MatchTypes.push_back( PCB_PAD_T );               break;
-            case T_zone:       selector->m_MatchTypes.push_back( PCB_ZONE_AREA_T );         break;
-            case T_text:       selector->m_MatchTypes.push_back( PCB_LOCATE_TEXT_T );       break;
-            case T_graphic:    selector->m_MatchTypes.push_back( PCB_LOCATE_GRAPHIC_T );    break;
-            case T_hole:       selector->m_MatchTypes.push_back( PCB_LOCATE_HOLE_T );       break;
-            case T_npth:       selector->m_MatchTypes.push_back( PCB_LOCATE_NPTH_T );       break;
-            case T_pth:        selector->m_MatchTypes.push_back( PCB_LOCATE_PTH_T );        break;
-            case T_board_edge: selector->m_MatchTypes.push_back( PCB_LOCATE_BOARD_EDGE_T ); break;
-            default:           Expecting( "track, via, micro_via, buried_via, pad, zone, text, "
-                                          "graphic, hole, npth, pth, or board_edge" );
-            }
-            NeedRIGHT();
-            break;
-
-        case T_match_layer:
-            NeedSYMBOL();
-
-            if( m_layerMap.count( curText ) )
-            {
-                selector->m_MatchLayers.push_back( m_layerMap[ curText ] );
-            }
-            else
-            {
-                wxString errText = wxString::Format( _( "Layer \"%s\" not found." ),
-                                                     wxString( curText ) );
-                THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
-            }
-
-            NeedRIGHT();
-            break;
-
-        case T_match_area:
-            // TODO
-            break;
-
-        case T_rule:
-            NeedSYMBOL();
-            *aRuleName = FromUTF8();
-            NeedRIGHT();
-            break;
-
-        default:
-            Expecting( "match_netclass, match_type, match_layer, match_area, or rule" );
-        }
-    }
-
-    return selector;
 }
 
 
@@ -269,7 +146,15 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
         case T_condition:
             NeedSYMBOL();
-            rule->m_Condition = FromUTF8();
+            rule->m_Condition.m_Expression = FromUTF8();
+
+            if( !rule->m_Condition.Compile() )
+            {
+                LIBEVAL::ERROR_STATUS error = rule->m_Condition.GetCompilationError();
+                THROW_PARSE_ERROR( error.message, CurSource(), CurLine(), CurLineNumber(),
+                                   CurOffset() + error.srcPos );
+            }
+
             NeedRIGHT();
             break;
 

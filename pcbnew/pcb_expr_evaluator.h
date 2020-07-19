@@ -66,6 +66,7 @@ class PCB_EXPR_VAR_REF : public LIBEVAL::VAR_REF
 public:
     PCB_EXPR_VAR_REF( int aItemIndex ) : 
         m_itemIndex( aItemIndex ),
+        m_type( LIBEVAL::VT_UNDEFINED ),
         m_isEnum( false )
     {
         //printf("*** createVarRef %p %d\n", this, aItemIndex );
@@ -84,7 +85,7 @@ public:
         m_matchingTypes[type_hash] = prop;
     }
 
-    virtual LIBEVAL::VAR_TYPE_T GetType( LIBEVAL::UCODE* aUcode ) override
+    virtual LIBEVAL::VAR_TYPE_T GetType() override
     {
         return m_type;
     }
@@ -98,7 +99,7 @@ private:
     std::unordered_map<TYPE_ID, PROPERTY_BASE*> m_matchingTypes;
     int                                         m_itemIndex;
     LIBEVAL::VAR_TYPE_T                         m_type;
-    bool m_isEnum;
+    bool                                        m_isEnum;
 };
 
 
@@ -116,10 +117,7 @@ public:
     ~PCB_EXPR_EVALUATOR();
 
     bool Evaluate( const wxString& aExpr );
-    int  Result() const
-    {
-        return m_result;
-    }
+    int  Result() const { return m_result; }
     wxString GetErrorString();
 
 private:

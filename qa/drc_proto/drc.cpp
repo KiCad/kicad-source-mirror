@@ -186,7 +186,6 @@ bool DRC::LoadRules()
 
     if( rulesFile.FileExists() )
     {
-        m_ruleSelectors.clear();
         m_rules.clear();
 
         FILE* fp = wxFopen( rulesFilepath, wxT( "rt" ) );
@@ -196,12 +195,11 @@ bool DRC::LoadRules()
             try
             {
                 DRC_RULES_PARSER parser( m_pcb, fp, rulesFilepath );
-                parser.Parse( m_ruleSelectors, m_rules );
+                parser.Parse( m_rules );
             }
             catch( PARSE_ERROR& pe )
             {
                 // Don't leave possibly malformed stuff around for us to trip over
-                m_ruleSelectors.clear();
                 m_rules.clear();
 
                 wxSafeYield( m_editFrame );

@@ -354,4 +354,49 @@ protected:
 DECLARE_ENUM_TO_WXANY( PCB_LAYER_ID );
 #endif
 
+
+/**
+ * A singleton item of this class is returned for a weak reference that no longer exists.
+ * Its sole purpose is to flag the item as having been deleted.
+ */
+class DELETED_BOARD_ITEM : public BOARD_ITEM
+{
+public:
+    DELETED_BOARD_ITEM() :
+        BOARD_ITEM( nullptr, NOT_USED )
+    {}
+
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
+    {
+        return _( "(Deleted Item)" );
+    }
+
+    wxString GetClass() const override
+    {
+        return wxT( "DELETED_BOARD_ITEM" );
+    }
+
+    // pure virtuals:
+    void SetPosition( const wxPoint& ) override {}
+
+    wxPoint GetPosition() const override {
+        return wxPoint(0, 0);
+    }
+
+    static DELETED_BOARD_ITEM* GetInstance()
+    {
+        static DELETED_BOARD_ITEM* item = nullptr;
+
+        if( !item )
+            item = new DELETED_BOARD_ITEM();
+
+        return item;
+    }
+
+#if defined(DEBUG)
+    void Show( int , std::ostream&  ) const override {}
+#endif
+};
+
+
 #endif /* BOARD_ITEM_STRUCT_H */

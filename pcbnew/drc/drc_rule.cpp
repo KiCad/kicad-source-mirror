@@ -27,6 +27,8 @@
 #include <board_design_settings.h>
 #include <class_board.h>
 #include <class_board_item.h>
+#include <pcb_expr_evaluator.h>
+
 
 /*
  * Rule tokens:
@@ -52,8 +54,17 @@
  *     hole
  *
  *
- *     (rule "HV" (constraint clearance (min 200)))
- *     (rule "HV_external" (constraint clearance (min 400)))
+ *     (rule "HV"
+ *        (constraint clearance (min 200))
+ *        (condition "A.Netclass == 'HV' || B.Netclass == 'HV'")
+ *     )
+ *
+ *     (rule "HV_external"
+ *        (constraint clearance (min 400))
+ *        (condition "(A.Netclass == 'HV' && (A.onLayer('F.Cu') || A.onLayer('B.Cu'))
+ *                     || (B.Netclass == 'HV' && (B.onLayer('F.Cu') || B.onLayer('B.Cu'))")
+ *     )
+ *
  *     (rule "HV2HV" (constraint clearance (min 200)))
  *     (rule "HV2HV_external" (constraint clearance (min 500)))
  *     (rule "pad2padHV" (constraint clearance (min 500)))
@@ -62,99 +73,83 @@
  *     (rule "neckdown" (constraint clearance (min 15)))
  *
  *     (rule "disallowMicrovias" (disallow micro_via))
+ *
+ *
+    testEvalExpr( "A.type == \"Pad\" && B.type == \"Pad\" && (A.onLayer(\"F.Cu\"))",VAL(0.0), false, &trackA, &trackB );
+        return 0;
+    testEvalExpr( "A.Width > B.Width", VAL(0.0), false, &trackA, &trackB );
+    testEvalExpr( "A.Width + B.Width", VAL(Mils2iu(10) + Mils2iu(20)), false, &trackA, &trackB );
+
+    testEvalExpr( "A.Netclass", VAL( (const char*) trackA.GetNetClassName().c_str() ), false, &trackA, &trackB );
+    testEvalExpr( "(A.Netclass == \"HV\") && (B.netclass == \"otherClass\") && (B.netclass != \"F.Cu\")", VAL( 1.0 ), false, &trackA, &trackB );
+    testEvalExpr( "A.Netclass + 1.0", VAL( 1.0 ), false, &trackA, &trackB );
+    testEvalExpr( "A.type == \"Track\" && B.type == \"Track\" && A.layer == \"F.Cu\"", VAL(0.0), false, &trackA, &trackB );
+    testEvalExpr( "(A.type == \"Track\") && (B.type == \"Track\") && (A.layer == \"F.Cu\")", VAL(0.0), false, &trackA, &trackB );
  */
 
 DRC_RULE* GetRule( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem, int aConstraint )
 {
-    // JEY TODO: the bulk of this will be replaced by Tom's expression evaluator
-
     BOARD* board = aItem->GetBoard();
 
     if( !board )
         return nullptr;
 
-    NETCLASS* aNetclass = nullptr;
-    NETCLASS* bNetclass = nullptr;
-
-    if( aItem->IsConnected() )
-        aNetclass = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetEffectiveNetclass();
-
-    if( bItem && bItem->IsConnected() )
-        bNetclass = static_cast<const BOARD_CONNECTED_ITEM*>( bItem )->GetEffectiveNetclass();
-
-    for( DRC_SELECTOR* candidate : board->GetDesignSettings().m_DRCRuleSelectors )
+    for( DRC_RULE* rule : board->GetDesignSettings().m_DRCRules )
     {
-        if( candidate->m_MatchNetclasses.size() == 2 )
+        if( ( rule->m_ConstraintFlags & aConstraint ) > 0 )
         {
-            if( !bItem )
-                continue;
-
-            NETCLASS* firstNetclass = candidate->m_MatchNetclasses[0].get();
-            NETCLASS* secondNetclass = candidate->m_MatchNetclasses[1].get();
-
-            if( !( aNetclass == firstNetclass && bNetclass == secondNetclass )
-                    && !( aNetclass == secondNetclass && bNetclass == firstNetclass ) )
-            {
-                continue;
-            }
+            if( rule->m_Condition.EvaluateFor( aItem, bItem ) )
+                return rule;
         }
-        else if( candidate->m_MatchNetclasses.size() == 1 )
-        {
-            NETCLASS* matchNetclass = candidate->m_MatchNetclasses[0].get();
-
-            if( matchNetclass != aNetclass && !( bItem && matchNetclass == bNetclass ) )
-                continue;
-        }
-
-        if( candidate->m_MatchTypes.size() == 2 )
-        {
-            if( !bItem )
-                continue;
-
-            KICAD_T firstType[2] = { candidate->m_MatchTypes[0], EOT };
-            KICAD_T secondType[2] = { candidate->m_MatchTypes[1], EOT };
-
-            if( !( aItem->IsType( firstType ) && bItem->IsType( secondType ) )
-                    && !( aItem->IsType( secondType ) && bItem->IsType( firstType ) ) )
-            {
-                continue;
-            }
-        }
-        else if( candidate->m_MatchTypes.size() == 1 )
-        {
-            KICAD_T matchType[2] = { candidate->m_MatchTypes[0], EOT };
-
-            if( !aItem->IsType( matchType ) && !( bItem && bItem->IsType( matchType ) ) )
-                continue;
-        }
-
-        if( candidate->m_MatchLayers.size() )
-        {
-            PCB_LAYER_ID matchLayer = candidate->m_MatchLayers[0];
-
-            if( !aItem->GetLayerSet().test( matchLayer ) )
-                continue;
-        }
-
-        if( candidate->m_MatchAreas.size() )
-        {
-            if( candidate->m_MatchAreas[0] == "$board" )
-            {
-                // matches everything
-            }
-            else
-            {
-                // TODO: area/room matches...
-            }
-        }
-
-        // All tests done; if we're still here then it matches
-
-        if( ( candidate->m_Rule->m_ConstraintFlags & aConstraint ) > 0 )
-            return candidate->m_Rule;
     }
 
     return nullptr;
 }
 
 
+DRC_RULE_CONDITION::DRC_RULE_CONDITION()
+{
+    m_ucode = nullptr;
+}
+
+
+DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
+{
+    delete m_ucode;
+}
+
+
+bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB )
+{
+    BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
+    BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
+
+    m_ucode->SetItems( a, b );
+
+// fixme: handle error conditions
+    return m_ucode->Run()->AsDouble() != 0.0;
+}
+
+
+bool DRC_RULE_CONDITION::Compile()
+{
+    PCB_EXPR_COMPILER compiler;
+
+    if (!m_ucode)
+        m_ucode = new PCB_EXPR_UCODE;
+
+    bool ok = compiler.Compile( (const char*) m_Expression.c_str(), m_ucode );
+
+    if( ok )
+        return true;
+
+    m_compileError = compiler.GetErrorStatus();
+
+    return false;
+}
+
+
+LIBEVAL::ERROR_STATUS DRC_RULE_CONDITION::GetCompilationError()
+{
+    return m_compileError;
+}

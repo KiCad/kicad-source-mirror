@@ -268,7 +268,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
-        Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments();
+        Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments( true );
         SaveProjectSettings();
 
         Kiway().CommonSettingsChanged( false, true );

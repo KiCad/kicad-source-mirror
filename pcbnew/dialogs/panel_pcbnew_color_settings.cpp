@@ -36,8 +36,7 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
         : PANEL_COLOR_SETTINGS( aParent ),
           m_frame( aFrame ),
           m_page( nullptr ),
-          m_titleBlock( nullptr ),
-          m_ws( nullptr )
+          m_titleBlock( nullptr )
 {
      // Currently this only applies to eeschema
     m_optOverrideColors->Hide();
