@@ -209,7 +209,17 @@ bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileNa
         }
     }
 
-    pi->SaveLibrary( aFileName );
+    try
+    {
+        pi->SaveLibrary( aFileName );
+    }
+    catch( ... )
+    {
+        // return false because something happens.
+        // The library is not successfully saved
+        res = false;
+    }
+
     return res;
 }
 
