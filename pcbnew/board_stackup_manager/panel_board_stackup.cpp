@@ -1006,16 +1006,20 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
             const FAB_LAYER_COLOR* color_list = GetColorStandardList();
 
             wxBitmapComboBox* choice = dynamic_cast<wxBitmapComboBox*>( ui_item.m_ColorCtrl );
-            int idx = choice->GetSelection();
 
-            if( idx == GetColorUserDefinedListIdx() )
+            if( choice )
             {
-                wxASSERT( m_UserColors.count( row ) );
-                wxColour color = m_UserColors[row];
-                item->SetColor( color.GetAsString( wxC2S_HTML_SYNTAX ) );
+                int idx = choice->GetSelection();
+
+                if( idx == GetColorUserDefinedListIdx() )
+                {
+                    wxASSERT( m_UserColors.count( row ) );
+                    wxColour color = m_UserColors[row];
+                    item->SetColor( color.GetAsString( wxC2S_HTML_SYNTAX ) );
+                }
+                else
+                    item->SetColor( color_list[idx].m_ColorName );
             }
-            else
-                item->SetColor( color_list[idx].m_ColorName );
         }
 
         row++;
