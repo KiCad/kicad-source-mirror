@@ -161,6 +161,9 @@ COMPILER::COMPILER()
     m_parseFinished          = false;
     m_unitResolver.reset( new UNIT_RESOLVER );
     m_parser = LIBEVAL::ParseAlloc( malloc );
+    m_parseError = false;
+    m_parseErrorPos = 0;
+    m_tree = nullptr;
 }
 
 
@@ -370,7 +373,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
             break;
     }
 
-    libeval_dbg(10, "LEX ch '%c' pos %d\n", ch, m_tokenizer.GetPos() );
+    libeval_dbg(10, "LEX ch '%c' pos %lu\n", ch, (unsigned long)m_tokenizer.GetPos() );
 
     if( ch == 0 )
     {
@@ -602,18 +605,19 @@ bool COMPILER::generateUCode( UCODE* aCode )
     {
         auto node           = stack.back();
 
-        libeval_dbg( 4, "process node %p [op %d] [stack %d]\n", node, node->op, stack.size() );
+        libeval_dbg( 4, "process node %p [op %d] [stack %lu]\n",
+                     node, node->op, (unsigned long)stack.size() );
 
         // process terminal nodes first
         switch( node->op )
         {
         case TR_OP_FUNC_CALL:
             break;
+
         case TR_STRUCT_REF:
         {
             assert( node->leaf[0]->op == TR_IDENTIFIER );
             //assert( node->leaf[1]->op == TR_IDENTIFIER );
-
 
             switch( node->leaf[1]->op )
             {
@@ -658,8 +662,6 @@ bool COMPILER::generateUCode( UCODE* aCode )
                     break;
                 }
             }
-
-
             break;
         }
 
@@ -682,12 +684,14 @@ bool COMPILER::generateUCode( UCODE* aCode )
 
             break;
         }
+
         case TR_STRING:
         {
             node->uop = makeUop( TR_UOP_PUSH_VALUE, node->value.str );
             node->isTerminal = true;
             break;
         }
+
         default:
             node->uop = makeUop( node->op );
             break;

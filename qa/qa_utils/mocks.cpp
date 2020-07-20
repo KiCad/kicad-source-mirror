@@ -192,6 +192,7 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
     m_findPrevious = nullptr;
     m_searchAgain = nullptr;
     m_closeButton = nullptr;
+    m_status = nullptr;
 }
 
 
