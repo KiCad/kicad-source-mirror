@@ -181,6 +181,7 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 
     delete m_actions;
     delete m_toolManager;
+    delete m_toolDispatcher;
 
     m_auimgr.UnInit();
 }
