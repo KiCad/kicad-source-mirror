@@ -249,6 +249,19 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::Validate()
         }
     }
 
+    // Verify that the parent name is set if the symbol is inherited
+    if( m_libEntry->IsAlias() )
+    {
+        wxString parentName = m_inheritanceSelectCombo->GetValue();
+
+        if( parentName.IsEmpty() )
+        {
+            m_delayedErrorMessage = _( "Aliased symbol must have a parent selected" );
+
+            return false;
+        }
+    }
+
     if( m_SelNumberOfUnits->GetValue() < m_libEntry->GetUnitCount() )
     {
         if( !IsOK( this, _( "Delete extra units from symbol?" ) ) )
@@ -310,6 +323,26 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
     }
 
     m_libEntry->SetFields( *m_fields );
+
+    // Update the parent for inherited symbols
+    if( m_libEntry->IsAlias() )
+    {
+        wxString parentName = m_inheritanceSelectCombo->GetValue();
+
+        // The parentName was verified to be non-empty in the Validator
+        wxString libName = m_Parent->GetCurLib();
+
+        // Get the parent from the libManager based on the name set in the inheritance combo box.
+        LIB_PART* newParent = m_Parent->GetLibManager().GetAlias( parentName, libName );
+
+        // Verify that the requested parent exists
+        wxCHECK( newParent, false );
+
+        // Verify that the new parent is not an alias.
+        wxCHECK( !newParent->IsAlias(), false );
+
+        m_libEntry->SetParent( newParent );
+    }
 
     // We need to keep the name and the value the same at the moment!
     m_libEntry->SetName( newName );
