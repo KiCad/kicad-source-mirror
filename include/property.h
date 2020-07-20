@@ -544,7 +544,7 @@ public:
             return m_default;
     }
 
-    const wxPGChoices& Choices() const
+    wxPGChoices& Choices()
     {
         return m_choices;
     }

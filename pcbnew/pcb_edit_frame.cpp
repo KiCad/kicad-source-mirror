@@ -467,6 +467,14 @@ void PCB_EDIT_FRAME::setupTools()
 
 void PCB_EDIT_FRAME::ReFillLayerWidget()
 {
+    ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+
+    layerEnum.Choices().Clear();
+    layerEnum.SetDefault( UNDEFINED_LAYER );
+
+    for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+        layerEnum.Map( *seq, GetBoard()->GetLayerName( *seq ) );
+
     wxWindowUpdateLocker no_update( m_Layers );
     m_Layers->ReFill();
 
