@@ -544,6 +544,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
         return;
 
     wxFileName fn = pro_dir;
+    bool prjReset = false;
 
     if( !fn.IsOk() )
     {
@@ -551,9 +552,21 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
         fn.SetPath( wxStandardPaths::Get().GetDocumentsDir() );
         fn.SetName( NAMELESS_PROJECT );
         fn.SetExt( ProjectFileExtension );
+        prjReset = true;
     }
 
     bool prjOpened = fn.FileExists();
+
+    // We may have opened a legacy project, in which case GetProjectFileName will return the
+    // name of the migrated (new format) file, which may not have been saved to disk yet.
+    if( !prjOpened && !prjReset )
+    {
+        fn.SetExt( LegacyProjectFileExtension );
+        prjOpened = fn.FileExists();
+
+        // Set the ext back so that in the tree view we see the (not-yet-saved) new file
+        fn.SetExt( ProjectFileExtension );
+    }
 
     // root tree:
     m_root = m_TreeProject->AddRoot( fn.GetFullName(), TREE_ROOT, TREE_ROOT );
@@ -631,6 +644,16 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 
     for( TREEPROJECT_ITEM* item_data : tree_data )
     {
+        // Check for empty project
+        if( !item_data )
+        {
+            can_switch_to_project = false;
+            can_edit = false;
+            can_rename = false;
+            can_print = false;
+            continue;
+        }
+
         int      tree_id = item_data->GetType();
         wxString full_file_name = item_data->GetFileName();
 

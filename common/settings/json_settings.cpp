@@ -311,7 +311,8 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
         return false;
     }
 
-    if( !path.IsFileWritable() )
+    if( ( path.FileExists() && !path.IsFileWritable() ) ||
+        ( !path.FileExists() && !path.IsDirWritable() ) )
     {
         wxLogTrace( traceSettings, "File for %s is read-only; not saving", GetFullFilename() );
         return false;
