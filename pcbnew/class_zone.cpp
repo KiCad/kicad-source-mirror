@@ -72,7 +72,9 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
 
 
 ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone )
-        : BOARD_CONNECTED_ITEM( aZone.GetParent(), PCB_ZONE_AREA_T )
+        : BOARD_CONNECTED_ITEM( aZone.GetParent(), PCB_ZONE_AREA_T ),
+        m_Poly( nullptr ),
+        m_CornerSelection( nullptr )
 {
     initDataFromSrcInCopyCtor( aZone );
 }
@@ -143,6 +145,7 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_HatchFillTypeSmoothingValue = aZone.m_HatchFillTypeSmoothingValue;
 
     // For corner moving, corner index to drag, or nullptr if no selection
+    delete m_CornerSelection;
     m_CornerSelection = nullptr;
 
     for( PCB_LAYER_ID layer : aZone.GetLayerSet().Seq() )
