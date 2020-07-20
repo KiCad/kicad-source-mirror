@@ -62,15 +62,15 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
      * WARNING: If you change page names you MUST update calls to ShowSchematicSetupDialog().
      */
 
-    m_treebook->AddPage( new wxPanel( this ), _( "General" ) );
+    m_treebook->AddGroupEntry( _( "General" ) );
     m_treebook->AddSubPage( m_formatting, _( "Formatting" ) );
     m_treebook->AddSubPage( m_fieldNameTemplates, _( "Field Name Templates" ) );
 
-    m_treebook->AddPage( new wxPanel( this ),  _( "Electrical Rules" ) );
+    m_treebook->AddGroupEntry( _( "Electrical Rules" ) );
     m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
     m_treebook->AddSubPage( m_pinMap, _( "Pin Conflicts Map" ) );
 
-    m_treebook->AddPage( new wxPanel( this ), _( "Project" ) );
+    m_treebook->AddGroupEntry( _( "Project" ) );
     m_treebook->AddSubPage( m_netclasses, _( "Net Classes" ) );
     m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
 

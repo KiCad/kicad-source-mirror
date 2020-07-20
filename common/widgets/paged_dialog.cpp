@@ -35,6 +35,48 @@ std::map<wxString, wxString> g_lastPage;
 std::map<wxString, wxString> g_lastParentPage;
 
 
+PAGED_TREEBOOK::PAGED_TREEBOOK( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+        const wxSize& size, long style, const wxString& name )
+        : wxTreebook( parent, id, pos, size, style, name )
+{
+    GetTreeCtrl()->Bind( wxEVT_TREE_SEL_CHANGING, &PAGED_TREEBOOK::OnTreeSelChanging, this );
+}
+
+
+void PAGED_TREEBOOK::OnTreeSelChanging( wxTreeEvent& aEvent )
+{
+    wxTreeItemId pageId = aEvent.GetItem();
+
+    for( size_t i = 0; i < m_groupEntries.size(); ++i )
+    {
+        if( m_groupEntries[i] == pageId )
+        {
+            aEvent.Veto();
+
+            wxTreeItemIdValue cookie;
+            wxTreeItemId      firstSubPage = GetTreeCtrl()->GetFirstChild( pageId, cookie );
+
+            if( firstSubPage.IsOk() )
+            {
+                GetTreeCtrl()->SelectItem( firstSubPage, true );
+            }
+            break;
+        }
+    }
+}
+
+
+bool PAGED_TREEBOOK::AddGroupEntry( const wxString& text, int imageId )
+{
+    bool add = AddPage( new wxPanel(this), text, false, imageId );
+
+    wxTreeItemId newId = m_treeIds.back();
+    m_groupEntries.push_back(newId);
+
+    return add;
+}
+
+
 PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUseReset,
                             const wxString& aAuxiliaryAction ) :
         DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
@@ -49,7 +91,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );
 
-    m_treebook = new wxTreebook( this, wxID_ANY );
+    m_treebook = new PAGED_TREEBOOK( this, wxID_ANY );
     mainSizer->Add( m_treebook, 1, wxEXPAND|wxLEFT|wxTOP, 10 );
 
     auto line = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );

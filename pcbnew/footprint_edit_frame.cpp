@@ -824,9 +824,9 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
 void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
                                                PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
 {
-    wxTreebook* book = aParent->GetTreebook();
+    PAGED_TREEBOOK* book = aParent->GetTreebook();
 
-    book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
+    book->AddGroupEntry( _( "Footprint Editor" ) );
     book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_MODEDIT_COLOR_SETTINGS( this, book ), _( "Colors" ) );
     book->AddSubPage( new PANEL_EDIT_OPTIONS( this, aParent ), _( "Editing Options" ) );

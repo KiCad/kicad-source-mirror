@@ -67,23 +67,23 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
      * WARNING: If you change page names you MUST update calls to ShowBoardSetupDialog().
      */
 
-    m_treebook->AddPage( new wxPanel( this ),  _( "Board Stackup" ) );
+    m_treebook->AddGroupEntry( _( "Board Stackup" ) );
     m_treebook->AddSubPage( m_layers,  _( "Board Editor Layers" ) );
     m_treebook->AddSubPage( m_physicalStackup,  _( "Physical Stackup" ) );
     // Change this value if m_physicalStackup is not the page 2 of m_treebook
     m_physicalStackupPage = 2;  // The page number (from 0) to select the m_physicalStackup panel
 
-    m_treebook->AddPage( new wxPanel( this ),  _( "Defaults" ) );
+    m_treebook->AddGroupEntry( _( "Defaults" ) );
     m_treebook->AddSubPage( m_textAndGraphics,  _( "Text & Graphics" ) );
     m_treebook->AddSubPage( m_tracksAndVias, _( "Tracks & Vias" ) );
     m_treebook->AddSubPage( m_maskAndPaste,  _( "Solder Mask/Paste" ) );
 
-    m_treebook->AddPage( new wxPanel( this ),  _( "Design Rules" ) );
+    m_treebook->AddGroupEntry( _( "Design Rules" ) );
     m_treebook->AddSubPage( m_constraints,  _( "Constraints" ) );
     m_treebook->AddSubPage( m_rules, _( "Rules" ) );
     m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
 
-    m_treebook->AddPage( new wxPanel( this ), _( "Project" ) );
+    m_treebook->AddGroupEntry( _( "Project" ) );
     m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
     m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
 
