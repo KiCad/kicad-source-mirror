@@ -39,6 +39,7 @@
 
 
 // Standard paper sizes nicknames.
+const wxChar PAGE_INFO::A5[] = wxT( "A5" );
 const wxChar PAGE_INFO::A4[] = wxT( "A4" );
 const wxChar PAGE_INFO::A3[] = wxT( "A3" );
 const wxChar PAGE_INFO::A2[] = wxT( "A2" );
@@ -65,6 +66,7 @@ const wxChar PAGE_INFO::Custom[]   = wxT( "User" );
 #define MMsize( x, y )  wxSize( Mm2mils( x ), Mm2mils( y ) )
 
 // All MUST be defined as landscape.
+const PAGE_INFO  PAGE_INFO::pageA5(     MMsize( 210,   148 ),   wxT( "A5" ),    wxPAPER_A5 );
 const PAGE_INFO  PAGE_INFO::pageA4(     MMsize( 297,   210 ),   wxT( "A4" ),    wxPAPER_A4 );
 const PAGE_INFO  PAGE_INFO::pageA3(     MMsize( 420,   297 ),   wxT( "A3" ),    wxPAPER_A3 );
 const PAGE_INFO  PAGE_INFO::pageA2(     MMsize( 594,   420 ),   wxT( "A2" ),    wxPAPER_A2 );
@@ -119,7 +121,9 @@ bool PAGE_INFO::SetType( const wxString& aType, bool aIsPortrait )
     bool rc = true;
 
     // all are landscape initially
-    if( aType == pageA4.GetType() )
+    if( aType == pageA5.GetType() )
+        *this = pageA5;
+    else if( aType == pageA4.GetType() )
         *this = pageA4;
     else if( aType == pageA3.GetType() )
         *this = pageA3;

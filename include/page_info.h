@@ -61,6 +61,7 @@ public:
     // above constructor.
 
     // these were once wxStrings, but it caused static construction sequence problems:
+    static const wxChar A5[];
     static const wxChar A4[];
     static const wxChar A3[];
     static const wxChar A2[];
@@ -84,7 +85,7 @@ public:
      * commonly associated with that type name.
      *
      * @param aStandardPageDescriptionName is a wxString constant giving one of:
-     * "A4" "A3" "A2" "A1" "A0" "A" "B" "C" "D" "E" "GERBER", "USLetter", "USLegal",
+     * "A5" "A4" "A3" "A2" "A1" "A0" "A" "B" "C" "D" "E" "GERBER", "USLetter", "USLegal",
      * "USLedger", or "User".  If "User" then the width and height are custom,
      * and will be set according to <b>previous</b> calls to
      * static PAGE_INFO::SetUserWidthMils() and
@@ -200,6 +201,7 @@ protected:
 private:
 
     // standard pre-defined sizes
+    static const PAGE_INFO pageA5;
     static const PAGE_INFO pageA4;
     static const PAGE_INFO pageA3;
     static const PAGE_INFO pageA2;

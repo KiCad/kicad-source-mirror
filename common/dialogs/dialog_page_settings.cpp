@@ -61,6 +61,7 @@
 #define _HKI( x ) wxT( x )
 static const wxString pageFmts[] =
 {
+    _HKI("A5 148x210mm"),
     _HKI("A4 210x297mm"),
     _HKI("A3 297x420mm"),
     _HKI("A2 420x594mm"),
@@ -559,6 +560,8 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
             success = m_pageInfo.SetType( PAGE_INFO::USLedger );
         else if( paperType.Contains( PAGE_INFO::GERBER ) )
             success = m_pageInfo.SetType( PAGE_INFO::GERBER );
+        else if( paperType.Contains( PAGE_INFO::A5 ) )
+            success = m_pageInfo.SetType( PAGE_INFO::A5 );
         else if( paperType.Contains( PAGE_INFO::A4 ) )
             success = m_pageInfo.SetType( PAGE_INFO::A4 );
         else if( paperType.Contains( PAGE_INFO::A3 ) )
@@ -808,6 +811,7 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 
         static const wxChar* papers[] = {
             // longest common string first, since sequential search below
+            PAGE_INFO::A5,
             PAGE_INFO::A4,
             PAGE_INFO::A3,
             PAGE_INFO::A2,

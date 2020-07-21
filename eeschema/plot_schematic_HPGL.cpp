@@ -40,6 +40,7 @@
 
 enum HPGL_PAGEZ_T {
     PAGE_DEFAULT = 0,
+    HPGL_PAGE_SIZE_A5,
     HPGL_PAGE_SIZE_A4,
     HPGL_PAGE_SIZE_A3,
     HPGL_PAGE_SIZE_A2,
@@ -59,6 +60,7 @@ static const wxChar* plot_sheet_list( int aSize )
     {
     default:
     case PAGE_DEFAULT:      return nullptr;
+    case HPGL_PAGE_SIZE_A5: return wxT( "A5" );
     case HPGL_PAGE_SIZE_A4: return wxT( "A4" );
     case HPGL_PAGE_SIZE_A3: return wxT( "A3" );
     case HPGL_PAGE_SIZE_A2: return wxT( "A2" );

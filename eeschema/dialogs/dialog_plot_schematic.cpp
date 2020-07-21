@@ -216,6 +216,7 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 
         if( fmt == PLOT_FORMAT::HPGL )
         {
+            paperSizes.push_back( _( "A5" ) );
             paperSizes.push_back( _( "A4" ) );
             paperSizes.push_back( _( "A3" ) );
             paperSizes.push_back( _( "A2" ) );
