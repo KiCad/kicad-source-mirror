@@ -27,6 +27,7 @@
 #include "panel_common_settings_base.h"
 
 
+class COMMON_SETTINGS;
 class DIALOG_SHIM;
 
 
@@ -36,9 +37,13 @@ public:
     PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent );
     ~PANEL_COMMON_SETTINGS() override;
 
+    void ResetPanel() override;
+
 protected:
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
+
+    void applySettingsToPanel( COMMON_SETTINGS& aSettings );
 
     void OnScaleSlider( wxScrollEvent& aEvent ) override;
     void OnIconScaleAuto( wxCommandEvent& aEvent ) override;

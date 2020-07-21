@@ -24,6 +24,7 @@
 #include <dialogs/panel_mouse_settings_base.h>
 
 
+class COMMON_SETTINGS;
 class DIALOG_SHIM;
 
 
@@ -42,6 +43,8 @@ public:
 
     ~PANEL_MOUSE_SETTINGS();
 
+    void ResetPanel() override;
+
 protected:
     bool TransferDataFromWindow() override;
 
@@ -52,6 +55,8 @@ protected:
     DIALOG_SHIM*  m_dialog;
 
 private:
+    void applySettingsToPanel( const COMMON_SETTINGS& aSettings );
+
     SCROLL_MOD_SET getScrollModSet();
 
     void updateScrollModButtons();

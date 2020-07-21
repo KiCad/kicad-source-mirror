@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include "widgets/stepped_slider.h"
+#include "widgets/resettable_panel.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -38,7 +39,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_COMMON_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_COMMON_SETTINGS_BASE : public wxPanel
+class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 {
 	private:
 

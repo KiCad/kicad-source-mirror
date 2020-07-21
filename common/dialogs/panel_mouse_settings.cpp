@@ -62,52 +62,9 @@ PANEL_MOUSE_SETTINGS::~PANEL_MOUSE_SETTINGS()
 
 bool PANEL_MOUSE_SETTINGS::TransferDataToWindow()
 {
-    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    const COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
 
-    m_checkZoomCenter->SetValue( cfg->m_Input.center_on_zoom );
-    m_checkAutoPan->SetValue( cfg->m_Input.auto_pan );
-    m_checkZoomAcceleration->SetValue( cfg->m_Input.zoom_acceleration );
-    m_zoomSpeed->SetValue( cfg->m_Input.zoom_speed );
-    m_checkAutoZoomSpeed->SetValue( cfg->m_Input.zoom_speed_auto );
-    m_checkEnablePanH->SetValue( cfg->m_Input.horizontal_pan );
-    m_autoPanSpeed->SetValue( cfg->m_Input.auto_pan_acceleration );
-
-    m_zoomSpeed->Enable( !cfg->m_Input.zoom_speed_auto );
-
-    auto set_mouse_buttons =
-            []( const MOUSE_DRAG_ACTION& aVal, wxChoice* aChoice )
-            {
-                switch( aVal )
-                {
-                case MOUSE_DRAG_ACTION::PAN:
-                    aChoice->SetSelection( 0 );
-                    break;
-
-                case MOUSE_DRAG_ACTION::ZOOM:
-                    aChoice->SetSelection( 1 );
-                    break;
-
-                case MOUSE_DRAG_ACTION::NONE:
-                    aChoice->SetSelection( 2 );
-                    break;
-
-                case MOUSE_DRAG_ACTION::SELECT:
-                default:
-                    break;
-                }
-            };
-
-    set_mouse_buttons(
-            static_cast<MOUSE_DRAG_ACTION>( cfg->m_Input.drag_middle ), m_choiceMiddleButtonDrag );
-
-    set_mouse_buttons(
-            static_cast<MOUSE_DRAG_ACTION>( cfg->m_Input.drag_right ), m_choiceRightButtonDrag );
-
-    m_currentScrollMod.zoom = cfg->m_Input.scroll_modifier_zoom;
-    m_currentScrollMod.panh = cfg->m_Input.scroll_modifier_pan_h;
-    m_currentScrollMod.panv = cfg->m_Input.scroll_modifier_pan_v;
-
-    updateScrollModButtons();
+    applySettingsToPanel( *cfg );
 
     return true;
 }
@@ -171,6 +128,65 @@ bool PANEL_MOUSE_SETTINGS::TransferDataFromWindow()
     cfg->m_Input.drag_right            = drag_right;
 
     return true;
+}
+
+
+void PANEL_MOUSE_SETTINGS::ResetPanel()
+{
+    COMMON_SETTINGS defaultSettings;
+
+    defaultSettings.ResetToDefaults();
+
+    applySettingsToPanel( defaultSettings );
+}
+
+
+void PANEL_MOUSE_SETTINGS::applySettingsToPanel( const COMMON_SETTINGS& aSettings )
+{
+    m_checkZoomCenter->SetValue( aSettings.m_Input.center_on_zoom );
+    m_checkAutoPan->SetValue( aSettings.m_Input.auto_pan );
+    m_checkZoomAcceleration->SetValue( aSettings.m_Input.zoom_acceleration );
+    m_zoomSpeed->SetValue( aSettings.m_Input.zoom_speed );
+    m_checkAutoZoomSpeed->SetValue( aSettings.m_Input.zoom_speed_auto );
+    m_checkEnablePanH->SetValue( aSettings.m_Input.horizontal_pan );
+    m_autoPanSpeed->SetValue( aSettings.m_Input.auto_pan_acceleration );
+
+    m_zoomSpeed->Enable( !aSettings.m_Input.zoom_speed_auto );
+
+    auto set_mouse_buttons =
+            []( const MOUSE_DRAG_ACTION& aVal, wxChoice* aChoice )
+            {
+                switch( aVal )
+                {
+                case MOUSE_DRAG_ACTION::PAN:
+                    aChoice->SetSelection( 0 );
+                    break;
+
+                case MOUSE_DRAG_ACTION::ZOOM:
+                    aChoice->SetSelection( 1 );
+                    break;
+
+                case MOUSE_DRAG_ACTION::NONE:
+                    aChoice->SetSelection( 2 );
+                    break;
+
+                case MOUSE_DRAG_ACTION::SELECT:
+                default:
+                    break;
+                }
+            };
+
+    set_mouse_buttons(
+            static_cast<MOUSE_DRAG_ACTION>( aSettings.m_Input.drag_middle ), m_choiceMiddleButtonDrag );
+
+    set_mouse_buttons(
+            static_cast<MOUSE_DRAG_ACTION>( aSettings.m_Input.drag_right ), m_choiceRightButtonDrag );
+
+    m_currentScrollMod.zoom = aSettings.m_Input.scroll_modifier_zoom;
+    m_currentScrollMod.panh = aSettings.m_Input.scroll_modifier_pan_h;
+    m_currentScrollMod.panv = aSettings.m_Input.scroll_modifier_pan_v;
+
+    updateScrollModButtons();
 }
 
 

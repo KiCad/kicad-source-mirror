@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/resettable_panel.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
 #include <wx/gdicmn.h>
@@ -30,7 +31,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_MOUSE_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_MOUSE_SETTINGS_BASE : public wxPanel
+class PANEL_MOUSE_SETTINGS_BASE : public RESETTABLE_PANEL
 {
 	private:
 

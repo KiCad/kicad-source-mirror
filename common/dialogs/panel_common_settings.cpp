@@ -83,54 +83,13 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
 {
     COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
 
-    int timevalue = commonSettings->m_System.autosave_interval;
-    wxString msg;
-
-    msg << timevalue / 60;
-    m_SaveTime->SetValue( msg );
-
-    m_fileHistorySize->SetValue( commonSettings->m_System.file_history_size );
-
-    m_antialiasing->SetSelection( commonSettings->m_Graphics.opengl_aa_mode );
-    m_antialiasingFallback->SetSelection( commonSettings->m_Graphics.cairo_aa_mode );
-
-    int icon_scale_fourths = commonSettings->m_Appearance.icon_scale;
-
-    if( icon_scale_fourths <= 0 )
-    {
-        m_iconScaleAuto->SetValue( true );
-        m_iconScaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
-    }
-    else
-    {
-        m_iconScaleAuto->SetValue( false );
-        m_iconScaleSlider->SetValue( icon_scale_fourths * 25 );
-    }
-
-    {
-        const DPI_SCALING dpi( commonSettings, this );
-        m_canvasScaleCtrl->SetValue( dpi.GetScaleFactor() );
-        m_canvasScaleAuto->SetValue( dpi.GetCanvasIsAutoScaled() );
-    }
-
-    m_checkBoxIconsInMenus->SetValue( commonSettings->m_Appearance.use_icons_in_menus );
-
-    m_PreferSelectToDrag->SetValue( commonSettings->m_Input.prefer_select_to_drag );
-    m_warpMouseOnMove->SetValue( commonSettings->m_Input.warp_mouse_on_move );
-    m_NonImmediateActions->SetValue( !commonSettings->m_Input.immediate_actions );
+    applySettingsToPanel( *commonSettings );
 
     // TODO(JE) Move these into COMMON_SETTINGS probably
     m_textEditorPath->SetValue( Pgm().GetEditorName( false ) );
     m_defaultPDFViewer->SetValue( Pgm().UseSystemPdfBrowser() );
     m_otherPDFViewer->SetValue( !Pgm().UseSystemPdfBrowser() );
     m_PDFViewerPath->SetValue( Pgm().GetPdfBrowserName() );
-
-    m_cbBackupEnabled->SetValue( commonSettings->m_Backup.enabled );
-    m_cbBackupAutosave->SetValue( commonSettings->m_Backup.backup_on_autosave );
-    m_backupLimitTotalFiles->SetValue( commonSettings->m_Backup.limit_total_files );
-    m_backupLimitDailyFiles->SetValue( commonSettings->m_Backup.limit_daily_files );
-    m_backupMinInterval->SetValue( commonSettings->m_Backup.min_interval / 60 );
-    m_backupLimitTotalSize->SetValue( commonSettings->m_Backup.limit_total_size / ( 1024 * 1024 ) );
 
     return true;
 }
@@ -176,6 +135,69 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     Pgm().GetSettingsManager().Save( commonSettings );
 
     return true;
+}
+
+
+void PANEL_COMMON_SETTINGS::ResetPanel()
+{
+    COMMON_SETTINGS defaultSettings;
+
+    defaultSettings.ResetToDefaults();
+
+    applySettingsToPanel( defaultSettings );
+
+    // TODO(JE) Move these into COMMON_SETTINGS probably
+    m_textEditorPath->SetValue( defaultSettings.m_System.editor_name );
+    m_defaultPDFViewer->SetValue( defaultSettings.m_System.use_system_pdf_viewer );
+    m_otherPDFViewer->SetValue( !defaultSettings.m_System.use_system_pdf_viewer );
+    m_PDFViewerPath->SetValue( defaultSettings.m_System.pdf_viewer_name );
+}
+
+
+void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
+{
+    int timevalue = aSettings.m_System.autosave_interval;
+    wxString msg;
+
+    msg << timevalue / 60;
+    m_SaveTime->SetValue( msg );
+
+    m_fileHistorySize->SetValue( aSettings.m_System.file_history_size );
+
+    m_antialiasing->SetSelection( aSettings.m_Graphics.opengl_aa_mode );
+    m_antialiasingFallback->SetSelection( aSettings.m_Graphics.cairo_aa_mode );
+
+    int icon_scale_fourths = aSettings.m_Appearance.icon_scale;
+
+    if( icon_scale_fourths <= 0 )
+    {
+        m_iconScaleAuto->SetValue( true );
+        m_iconScaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+    }
+    else
+    {
+        m_iconScaleAuto->SetValue( false );
+        m_iconScaleSlider->SetValue( icon_scale_fourths * 25 );
+    }
+
+    {
+        const DPI_SCALING dpi( &aSettings, this );
+        m_canvasScaleCtrl->SetValue( dpi.GetScaleFactor() );
+        m_canvasScaleAuto->SetValue( dpi.GetCanvasIsAutoScaled() );
+    }
+
+    m_checkBoxIconsInMenus->SetValue( aSettings.m_Appearance.use_icons_in_menus );
+
+    m_PreferSelectToDrag->SetValue( aSettings.m_Input.prefer_select_to_drag );
+    m_warpMouseOnMove->SetValue( aSettings.m_Input.warp_mouse_on_move );
+    m_NonImmediateActions->SetValue( !aSettings.m_Input.immediate_actions );
+
+    m_cbBackupEnabled->SetValue( aSettings.m_Backup.enabled );
+    m_cbBackupAutosave->SetValue( aSettings.m_Backup.backup_on_autosave );
+    m_backupLimitTotalFiles->SetValue( aSettings.m_Backup.limit_total_files );
+    m_backupLimitDailyFiles->SetValue( aSettings.m_Backup.limit_daily_files );
+    m_backupMinInterval->SetValue( aSettings.m_Backup.min_interval / 60 );
+    m_backupLimitTotalSize->SetValue( aSettings.m_Backup.limit_total_size / ( 1024 * 1024 ) );
 }
 
 
