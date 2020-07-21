@@ -509,16 +509,8 @@ bool OPTIMIZER::mergeObtuse( LINE* aLine )
             {
                 VECTOR2I ip = *s1.IntersectLines( s2 );
 
-                if( s1.Distance( ip ) <= 1 || s2.Distance( ip ) <= 1 )
-                {
-                    s1opt = SEG( s1.A, ip );
-                    s2opt = SEG( ip, s2.B );
-                }
-                else
-                {
-                    s1opt = SEG( s1.A, ip );
-                    s2opt = SEG( ip, s2.B );
-                }
+                s1opt = SEG( s1.A, ip );
+                s2opt = SEG( ip, s2.B );
 
                 if( DIRECTION_45( s1opt ).IsObtuse( DIRECTION_45( s2opt ) ) )
                 {
