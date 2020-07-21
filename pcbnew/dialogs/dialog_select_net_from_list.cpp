@@ -889,8 +889,8 @@ void DIALOG_SELECT_NET_FROM_LIST::onRenameNet( wxCommandEvent& aEvent )
 
         while( true )
         {
-            if( dlg.ShowModal() != wxID_OK )
-                return;    //Aborted by user
+            if( dlg.ShowModal() != wxID_OK || dlg.GetValue() == unescapedShortName )
+                return;
 
             unescapedShortName = dlg.GetValue();
 
