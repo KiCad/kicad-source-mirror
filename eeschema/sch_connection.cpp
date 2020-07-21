@@ -152,7 +152,8 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
     }
     else if( NET_SETTINGS::ParseBusGroup( unescaped, &prefix, &members ) )
     {
-        m_type = CONNECTION_TYPE::BUS_GROUP;
+        m_type       = CONNECTION_TYPE::BUS_GROUP;
+        m_bus_prefix = prefix;
 
         // Named bus groups generate a net prefix, unnamed ones don't
         if( !prefix.IsEmpty() )
@@ -199,6 +200,7 @@ void SCH_CONNECTION::Reset()
     m_cached_name.Empty();
     m_cached_name_with_path.Empty();
     m_prefix.Empty();
+    m_bus_prefix.Empty();
     m_suffix .Empty();
     m_driver = nullptr;
     m_members.clear();
@@ -222,6 +224,7 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
     m_name = aOther.m_name;
     // Note: m_local_name is not cloned
     m_prefix = aOther.Prefix();
+    m_bus_prefix = aOther.BusPrefix();
     m_suffix = aOther.Suffix();
     m_members = aOther.Members();
     m_net_code = aOther.NetCode();

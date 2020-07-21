@@ -977,13 +977,36 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         // Test subgraphs with weak drivers for net name conflicts and fix them
         unsigned suffix = 1;
 
-        auto create_new_name = [&] ( SCH_CONNECTION* aConn, wxString aName ) -> wxString
-                               {
-                                   wxString new_name = wxString::Format( "%s_%u", aName, suffix );
-                                   aConn->SetSuffix( wxString::Format( "_%u", suffix ) );
-                                   suffix++;
-                                   return new_name;
-                               };
+        auto create_new_name =
+                [&suffix]( SCH_CONNECTION* aConn ) -> wxString
+                {
+                    wxString newName;
+
+                    // For group buses with a prefix, we can add the suffix to the prefix.
+                    // If they don't have a prefix, we force the creation of a prefix so that
+                    // two buses don't get inadvertently shorted together.
+                    if( aConn->Type() == CONNECTION_TYPE::BUS_GROUP )
+                    {
+                        wxString prefix = aConn->BusPrefix();
+
+                        if( prefix.empty() )
+                            prefix = wxT( "BUS" ); // So result will be "BUS_1{...}"
+
+                        wxString oldName = aConn->Name().AfterFirst( '{' );
+
+                        newName = wxString::Format( "%s_%u{%s", prefix, suffix, oldName );
+
+                        aConn->ConfigureFromLabel( newName );
+                    }
+                    else
+                    {
+                        newName = wxString::Format( "%s_%u", aConn->Name(), suffix );
+                        aConn->SetSuffix( wxString::Format( "_%u", suffix ) );
+                    }
+
+                    suffix++;
+                    return newName;
+                };
 
         if( !subgraph->m_strong_driver )
         {
@@ -991,10 +1014,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
             if( vec.size() > 1 )
             {
-                wxString new_name = create_new_name( connection, name );
+                wxString new_name = create_new_name( connection );
 
                 while( m_net_name_to_subgraphs_map.count( new_name ) )
-                    new_name = create_new_name( connection, name );
+                    new_name = create_new_name( connection );
 
                 wxLogTrace( "CONN", "%ld (%s) is weakly driven and not unique. Changing to %s.",
                             subgraph->m_code, name, new_name );

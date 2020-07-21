@@ -178,6 +178,11 @@ public:
         return m_prefix;
     }
 
+    wxString BusPrefix() const
+    {
+        return m_bus_prefix;
+    }
+
     wxString Suffix() const
     {
         return m_suffix;
@@ -325,8 +330,11 @@ private:
      */
     wxString m_local_name;
 
-    ///< Prefix if connection is member of a labeled bus group (or "" if not)
+    /// Prefix if connection is member of a labeled bus group (or "" if not)
     wxString m_prefix;
+
+    /// Optional prefix of a bux group (always empty for nets and vector buses)
+    wxString m_bus_prefix;
 
     wxString m_suffix;      ///< Name suffix (used only for disambiguation)
 
