@@ -116,7 +116,15 @@ static const int drc_debug_level = 2;
 void test::drc_dbg( int level, const char* fmt, ... )
 {
 #ifdef DEBUG
-    if(level < drc_debug_level) // fixme: tom's debugging.
+    long dlevel = drc_debug_level;
+    wxString dlevelstr;
+    if( wxGetEnv( "DRC_DEBUG_LEVEL", &dlevelstr ) )
+    {
+        dlevelstr.ToLong( &dlevel );
+    }
+    
+
+    if(level < dlevel) // fixme: tom's debugging.
     {
         va_list ap;
         va_start( ap, fmt );
