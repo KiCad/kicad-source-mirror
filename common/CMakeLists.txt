@@ -144,6 +144,7 @@ add_custom_target(
     COMMAND ${CMAKE_COMMAND}
         -DKICAD_VERSION_EXTRA=${KICAD_VERSION_EXTRA}
         -DOUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.h
+        -DTEXT_OUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.txt
         -DSRC_PATH=${PROJECT_SOURCE_DIR}
         -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}
         -P ${CMAKE_MODULE_PATH}/WriteVersionHeader.cmake

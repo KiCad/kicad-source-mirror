@@ -73,6 +73,8 @@ if( _wvh_write_version_file )
 
     file( WRITE ${OUTPUT_FILE} ${_wvh_new_version_text} )
 
+    # Write a simple document with only the full version
+    file( WRITE ${TEXT_OUTPUT_FILE} "${KICAD_VERSION_FULL}" )
 endif()
 
 # There should always be a valid version.h file.  Otherwise, the build will fail.
