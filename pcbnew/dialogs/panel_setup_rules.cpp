@@ -70,11 +70,13 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         STRING,
         SEXPR_OPEN,
         SEXPR_TOKEN,
+        STRUCT_REF
     };
 
     std::stack<wxString> sexprs;
     wxString             partial;
     int                  context = NONE;
+    int                  expr_context = NONE;
 
     for( ; i < currentPos; ++i )
     {
@@ -83,20 +85,39 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         if( c == '\\' )
         {
             i++;  // skip escaped char
-            continue;
         }
-
-        if( context == STRING )
+        else if( context == STRING )
         {
             if( c == '"' )
+            {
                 context = NONE;
+            }
             else
-                partial += c;
-
-            continue;
+            {
+                if( expr_context == STRING )
+                {
+                    if( c == '\'' )
+                        expr_context = NONE;
+                    else
+                        partial += c;
+                }
+                else if( c == '\'' )
+                {
+                    partial = wxEmptyString;
+                    expr_context = STRING;
+                }
+                else if( c == '.' )
+                {
+                    partial = wxEmptyString;
+                    expr_context = STRUCT_REF;
+                }
+                else
+                {
+                    partial += c;
+                }
+            }
         }
-
-        if( c == '"' )
+        else if( c == '"' )
         {
             partial = wxEmptyString;
             context = STRING;
@@ -153,20 +174,42 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             tokens = "condition constraint disallow";
         else if( sexprs.top() == "constraint" )
             tokens = "max min opt";
-
-        if( !tokens.IsEmpty() )
-            m_scintillaTricks->DoAutocomplete( partial, wxSplit( tokens, ' ' ) );
     }
     else if( context == SEXPR_TOKEN )
     {
-        if( sexprs.top() == "constraint" )
+        if( sexprs.empty() )
+            /* badly formed grammar */;
+        else if( sexprs.top() == "constraint" )
             tokens = "annulus_width clearance hole track_width";
         else if( sexprs.top() == "disallow" )
             tokens = "buried_via graphic hole micro_via pad text track via zone";
-
-        if( !tokens.IsEmpty() )
-            m_scintillaTricks->DoAutocomplete( partial, wxSplit( tokens, ' ' ) );
     }
+    else if( context == STRING && expr_context == STRUCT_REF )
+    {
+        if( !sexprs.empty() && sexprs.top() == "condition" )
+        {
+            PROPERTY_MANAGER&  propMgr = PROPERTY_MANAGER::Instance();
+            std::set<wxString> propNames;
+
+            for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
+            {
+                const PROPERTY_LIST& props = propMgr.GetProperties( cls.type );
+
+                for( PROPERTY_BASE* prop : props )
+                {
+                    wxString ref( prop->Name() );
+                    ref.Replace( " ", "_" );
+                    propNames.insert( ref );
+                }
+            }
+
+            for( const wxString& propName : propNames )
+                tokens += " " + propName;
+        }
+    }
+
+    if( !tokens.IsEmpty() )
+        m_scintillaTricks->DoAutocomplete( partial, wxSplit( tokens, ' ' ) );
 }
 
 

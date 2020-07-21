@@ -156,16 +156,17 @@ LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::createFuncCall( LIBEVAL::COMPILER* aCom
 
 
 LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler,
-                                                const std::string& var, const std::string& field )
+                                                const std::string& aVar,
+                                                const std::string& aField )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     PCB_EXPR_VAR_REF* vref = nullptr;
 
-    if( var == "A" )
+    if( aVar == "A" )
     {
         vref = new PCB_EXPR_VAR_REF( 0 );
     }
-    else if( var == "B" )
+    else if( aVar == "B" )
     {
         vref = new PCB_EXPR_VAR_REF( 1 );
     }
@@ -175,8 +176,11 @@ LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler,
         return vref;
     }
 
-    if( field.empty() ) // return reference to base object
+    if( aField.empty() ) // return reference to base object
         return vref;
+
+    std::string field( aField );
+    std::replace( field.begin(), field.end(), '_', ' ');
 
     for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
     {

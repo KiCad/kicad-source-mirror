@@ -170,8 +170,10 @@ private:
     size_t nextId = 0;
 
 public:
-    PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = DEFAULT )
-        : m_id( nextId ), m_name( aName ), m_display( aDisplay ),
+    PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = DEFAULT ) :
+        m_id( nextId ),
+        m_name( aName ),
+        m_display( aDisplay ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } )
     {
         ++nextId;
