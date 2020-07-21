@@ -35,6 +35,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
+#include <geometry/shape_compound.h>
 #include <math/vector2d.h>
 
 typedef VECTOR2I::extended_type ecoord;
@@ -445,10 +446,9 @@ inline bool CollCaseReversed ( const SHAPE* aA, const SHAPE* aB, int aClearance,
 }
 
 
-bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual, VECTOR2I* aMTV )
+static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual, VECTOR2I* aMTV )
 {
-    //if( aA->Type() == SH_COMPOUND )
-
+    
 
     switch( aA->Type() )
     {
@@ -620,6 +620,92 @@ bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActu
     return false;
 }
 
+static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual, VECTOR2I* aMTV )
+{
+    int currentActual = std::numeric_limits<int>::max();
+    VECTOR2I currentMTV;
+    bool colliding = false;
+
+    bool exitOnFirstCollision = aActual != nullptr || aMTV != nullptr;
+
+    auto collideCompoundSubshapes = [&] ( const SHAPE* elemA, const SHAPE* elemB, int clearance, int* actual, VECTOR2I* mtv ) -> bool
+    {
+                bool c = collideSingleShapes( elemA, elemB,
+                                                        clearance,
+                                                        actual ? &currentActual : nullptr,
+                                                        mtv ? &currentMTV : nullptr );
+                if(c)
+                {
+                    if (actual)
+                    {
+                        *actual = std::min( *actual, currentActual );
+                    }
+                    if( mtv )
+                    {
+                        if( currentMTV.SquaredEuclideanNorm() > mtv->SquaredEuclideanNorm() )
+                            *mtv = currentMTV;
+                    }
+                }
+
+                return c;
+    };
+
+    if (aA->Type() == SH_COMPOUND && aB->Type() == SH_COMPOUND )
+    {
+        auto cmpA = static_cast<const SHAPE_COMPOUND*>( aA );
+        auto cmpB = static_cast<const SHAPE_COMPOUND*>( aB );
+        for( auto elemA : cmpA->Shapes() )
+        {
+            for( auto elemB : cmpB->Shapes() )
+            {
+                if( collideCompoundSubshapes( elemA, elemB, aClearance, aActual, aMTV ) )
+                {
+                    colliding = true;
+                    if ( exitOnFirstCollision )
+                        return true;
+                }
+            }
+        }
+
+        return colliding;
+    }
+    else if ( aA->Type() == SH_COMPOUND )
+    {
+        auto cmpA = static_cast<const SHAPE_COMPOUND*>( aA );
+        for( auto elemA : cmpA->Shapes() )
+        {
+            if( collideCompoundSubshapes( elemA, aB, aClearance, aActual, aMTV ) )
+            {
+                colliding = true;
+                if ( exitOnFirstCollision )
+                    return true;
+            }
+        }
+
+        return colliding;
+    }
+    else if ( aB->Type() == SH_COMPOUND )
+    {
+        auto cmpB = static_cast<const SHAPE_COMPOUND*>( aB );
+        for( auto elemB : cmpB->Shapes() )
+        {
+            if( collideCompoundSubshapes( aA, elemB, aClearance, aActual, aMTV ) )
+            {
+                colliding = true;
+                if ( exitOnFirstCollision )
+                    return true;
+            }
+        }
+
+        return colliding;
+    }
+    else
+    {
+        return collideSingleShapes( aA, aB, aClearance, aActual, aMTV );
+    }
+    
+
+}
 
 bool SHAPE::Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const
 {
