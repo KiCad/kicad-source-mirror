@@ -24,6 +24,7 @@
 
 #include <cstdio>
 #include <boost/algorithm/string/case_conv.hpp>
+#include <memory>
 #include "class_board.h"
 #include "pcb_expr_evaluator.h"
 
@@ -249,13 +250,14 @@ public:
 
 PCB_EXPR_COMPILER::PCB_EXPR_COMPILER()
 {
-    m_unitResolver.reset( new PCB_UNIT_RESOLVER );
+    m_unitResolver = std::make_unique<PCB_UNIT_RESOLVER>();
 }
 
 
 PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR()
 {
-    m_error = false;
+    m_result = NAN;
+    m_errorStatus.pendingError = false;
 }
 
 PCB_EXPR_EVALUATOR::~PCB_EXPR_EVALUATOR()
@@ -266,10 +268,15 @@ PCB_EXPR_EVALUATOR::~PCB_EXPR_EVALUATOR()
 bool PCB_EXPR_EVALUATOR::Evaluate( const wxString& aExpr )
 {
     PCB_EXPR_UCODE ucode;
-    if( !m_compiler.Compile( (const char*) aExpr.c_str(), &ucode ) )
-        return false;
 
-    auto result = ucode.Run();
+    if( !m_compiler.Compile( (const char*) aExpr.c_str(), &ucode ) )
+    {
+        m_errorStatus = m_compiler.GetErrorStatus();
+        return false;
+    }
+
+// fixme: handle error conditions
+    LIBEVAL::VALUE* result = ucode.Run();
 
     if( result->GetType() == LIBEVAL::VT_NUMERIC )
         m_result = KiROUND( result->AsDouble() );
@@ -277,8 +284,3 @@ bool PCB_EXPR_EVALUATOR::Evaluate( const wxString& aExpr )
     return true;
 }
 
-wxString PCB_EXPR_EVALUATOR::GetErrorString()
-{
-    wxString errMsg;
-    return errMsg;
-}

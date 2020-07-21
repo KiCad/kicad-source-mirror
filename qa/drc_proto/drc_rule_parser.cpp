@@ -156,7 +156,7 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
 {
     DRC_RULE* rule  = new DRC_RULE();
     T         token = NextTok();
-    int val;
+    int       value;
 
     if( !IsSymbol( token ) )
         Expecting( "rule name" );
@@ -181,20 +181,20 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
 
         case T_min:
             NeedSYMBOL();
-            parseValueWithUnits ( FromUTF8(), val );
-            rule->m_Constraint.m_Value.SetMin( val );
+            parseValueWithUnits( FromUTF8(), value );
+            rule->m_Constraint.m_Value.SetMin( value );
             break;
 
         case T_opt:
             NeedSYMBOL();
-            parseValueWithUnits ( FromUTF8(), val );
-            rule->m_Constraint.m_Value.SetOpt( val );
+            parseValueWithUnits( FromUTF8(), value );
+            rule->m_Constraint.m_Value.SetOpt( value );
             break;
         
         case T_max:
             NeedSYMBOL();
-            parseValueWithUnits ( FromUTF8(), val );
-            rule->m_Constraint.m_Value.SetMax( val );
+            parseValueWithUnits( FromUTF8(), value );
+            rule->m_Constraint.m_Value.SetMax( value );
             break;
         
         case T_allow:
@@ -246,12 +246,10 @@ void test::DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aR
 
     if( !ok )
     {
-        auto err = evaluator.GetErrorString();
-        //printf( "eval error: '%s'\n", (const char*) err.c_str() );
-        // fixme: message
-        THROW_PARSE_ERROR( err, "", "", 0, 0 );
+        LIBEVAL::ERROR_STATUS error = evaluator.GetErrorStatus();
+        THROW_PARSE_ERROR( error.message, CurSource(), CurLine(), CurLineNumber(),
+                           CurOffset() + error.srcPos );
     }
 
     aResult = evaluator.Result();
-    //printf("parseValueWithUnits: value %d\n", aResult );
 };

@@ -51,7 +51,7 @@ private:
     DRC_RULE* parseDRC_RULE();
 
     void parseConstraint( DRC_RULE* aRule );
-    int parseValue( DRCRULE_T::T aToken );
+    void parseValueWithUnits( const wxString& aExpr, int& aResult );
 
 private:
     BOARD* m_board;

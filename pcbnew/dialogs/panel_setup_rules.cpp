@@ -262,7 +262,7 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
             "   (condition \"A.netclass == 'HV'\"))\r"
             "\r"
             "(rule HV_HV\r"
-            "   (constraint clearance (min 2.0mm))\r"
+            "   (constraint clearance (min \"1.5mm + 2.0mm\"))\r"
             "   (condition \"A.netclass == 'HV' && B.netclass == 'HV'\"))\r"
             "</pre>";
 

@@ -27,6 +27,7 @@
 #include <drc_rules_lexer.h>
 #include <class_board.h>
 #include <class_board_item.h>
+#include <pcb_expr_evaluator.h>
 
 using namespace DRCRULE_T;
 
@@ -195,7 +196,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         {
         case T_min:
             NextTok();
-            value = parseValue( token );
+            parseValueWithUnits( FromUTF8(), value );
 
             switch( constraintType )
             {
@@ -210,7 +211,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
         case T_max:
             NextTok();
-            value = parseValue( token );
+            parseValueWithUnits( FromUTF8(), value );
 
             switch( constraintType )
             {
@@ -224,7 +225,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
         case T_opt:
             NextTok();
-            value = parseValue( token );
+            parseValueWithUnits( FromUTF8(), value );
 
             switch( constraintType )
             {
@@ -243,7 +244,18 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 }
 
 
-int DRC_RULES_PARSER::parseValue( DRCRULE_T::T aToken )
+void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult )
 {
-    return (int) ValueFromString( EDA_UNITS::MILLIMETRES, CurText(), true );
-}
+    PCB_EXPR_EVALUATOR evaluator;
+
+    bool ok = evaluator.Evaluate( aExpr );
+
+    if( !ok )
+    {
+        LIBEVAL::ERROR_STATUS error = evaluator.GetErrorStatus();
+        THROW_PARSE_ERROR( error.message, CurSource(), CurLine(), CurLineNumber(),
+                           CurOffset() + error.srcPos );
+    }
+
+    aResult = evaluator.Result();
+};

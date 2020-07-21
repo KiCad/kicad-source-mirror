@@ -118,14 +118,16 @@ public:
 
     bool Evaluate( const wxString& aExpr );
     int  Result() const { return m_result; }
-    wxString GetErrorString();
+
+    LIBEVAL::ERROR_STATUS GetErrorStatus() { return m_errorStatus; }
 
 private:
-    bool m_error;
     int  m_result;
 
-    PCB_EXPR_COMPILER m_compiler;
-    PCB_EXPR_UCODE    m_ucode;
+    PCB_EXPR_COMPILER     m_compiler;
+    PCB_EXPR_UCODE        m_ucode;
+
+    LIBEVAL::ERROR_STATUS m_errorStatus;
 };
 
 #endif
