@@ -50,6 +50,7 @@
 #include <wx/stdpaths.h>
 #include <pcb_layer_widget.h>
 #include <ratsnest/ratsnest_data.h>
+#include <kiplatform/app.h>
 
 #include <wx/wupdlock.h>
 #include <settings/common_settings.h>
@@ -460,6 +461,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     wxString fullFileName( aFileSet[0] );
+
+    if( Kiface().IsSingle() )
+    {
+        KIPLATFORM::APP::RegisterApplicationRestart( fullFileName );
+    }
 
     // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
     wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(), wxT( "Path is not absolute!" ) );

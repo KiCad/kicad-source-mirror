@@ -31,6 +31,7 @@
 #include <executable_names.h>
 #include <filehistory.h>
 #include <gestfich.h>
+#include <kiplatform/app.h>
 #include <kiway.h>
 #include <kiway_express.h>
 #include <kiway_player.h>
@@ -378,6 +379,8 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     wxPostEvent( this, cmd );
 
     PrintPrjInfo();
+
+    KIPLATFORM::APP::RegisterApplicationRestart( aProjectFileName.GetFullPath() );
 }
 
 

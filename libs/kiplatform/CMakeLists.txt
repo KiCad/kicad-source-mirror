@@ -2,6 +2,7 @@
 # Add the appropriate source files
 if( APPLE )
     set( PLATFORM_SRCS
+        osx/app.mm
         osx/ui.mm
         )
 
@@ -13,10 +14,12 @@ if( APPLE )
         )
 elseif( WIN32 )
     set( PLATFORM_SRCS
+        msw/app.cpp
         msw/ui.cpp
         )
 elseif( UNIX )
     set( PLATFORM_SRCS
+        gtk/app.cpp
         gtk/ui.cpp
         )
 endif()

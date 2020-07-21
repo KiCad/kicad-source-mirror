@@ -62,6 +62,7 @@
 #include <settings/settings_manager.h>
 #include <netlist.h>
 #include <widgets/infobar.h>
+#include <kiplatform/app.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
@@ -325,6 +326,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     LoadProjectSettings();
 
     SetShutdownBlockReason( _( "Schematic file changes are unsaved" ) );
+    if( Kiface().IsSingle() )
+    {
+        KIPLATFORM::APP::RegisterApplicationRestart( fullFileName );
+    }
 
     if( is_new )
     {
