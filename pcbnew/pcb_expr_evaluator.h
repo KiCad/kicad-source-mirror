@@ -37,7 +37,7 @@ class BOARD_ITEM;
 
 class PCB_EXPR_VAR_REF;
 
-class PCB_EXPR_UCODE : public LIBEVAL::UCODE
+class PCB_EXPR_UCODE final : public LIBEVAL::UCODE
 {
 public:
     virtual LIBEVAL::VAR_REF* createVarRef( LIBEVAL::COMPILER *aCompiler,
