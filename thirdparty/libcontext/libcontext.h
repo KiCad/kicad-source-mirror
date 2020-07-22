@@ -102,6 +102,7 @@ typedef void* fcontext_t;
 extern "C" {
 #endif
 
+void LIBCONTEXT_CALL_CONVENTION release_fcontext( fcontext_t ctx );
 
 intptr_t LIBCONTEXT_CALL_CONVENTION jump_fcontext( fcontext_t* ofc, fcontext_t nfc,
         intptr_t vp, bool preserve_fpu = true );

@@ -92,6 +92,13 @@ private:
         {
         }
 
+        ~CALL_CONTEXT()
+        {
+            if ( m_mainStackContext )
+                libcontext::release_fcontext( *m_mainStackContext );
+        }
+
+
         void SetMainStack( CONTEXT_T* aStack )
         {
             m_mainStackContext = aStack;
@@ -161,6 +168,10 @@ public:
 #ifdef KICAD_USE_VALGRIND
         VALGRIND_STACK_DEREGISTER( valgrind_stack );
 #endif
+        if(m_caller)
+            libcontext::release_fcontext( m_caller );
+        if(m_callee)
+            libcontext::release_fcontext( m_callee );
     }
 
 public:
