@@ -29,6 +29,7 @@ set( KIMATH_SRCS
 
     geometry/test_fillet.cpp
     geometry/test_segment.cpp
+    geometry/test_shape_compound_collision.cpp
     geometry/test_shape_arc.cpp
     geometry/test_shape_poly_set_collision.cpp
     geometry/test_shape_poly_set_distance.cpp
