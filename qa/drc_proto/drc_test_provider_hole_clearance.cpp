@@ -9,6 +9,7 @@
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
+#include <geometry/shape_segment.h>
 
 #include <drc_proto/drc_engine.h>
 #include <drc_proto/drc_item.h>
@@ -200,8 +201,9 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
 
                 drc_dbg(1,"check pad %p rule '%s' cl %d\n", pad, (const char*) rule->GetName().c_str(), minClearance );
 
+                auto refPadShape = aRefPad->GetEffectiveShape();
                 // fixme: pad stacks...
-                if( aRefPad->Collide( pad->GetEffectiveHoleShape(), minClearance, &actual ) )
+                if( refPadShape->Collide( pad->GetEffectiveHoleShape(), minClearance, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_CLEARANCE );
 
@@ -230,7 +232,8 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
 
                 drc_dbg(1,"check pad %p rule '%s' cl %d\n", aRefPad, (const char*) rule->GetName().c_str(), minClearance );
 
-                if( pad->Collide( aRefPad->GetEffectiveHoleShape(), minClearance, &actual ) )
+                auto padShape = pad->GetEffectiveShape();
+                if( padShape->Collide( aRefPad->GetEffectiveHoleShape(), minClearance, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_CLEARANCE );
                     wxString msg;

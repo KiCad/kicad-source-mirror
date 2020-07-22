@@ -23,9 +23,11 @@
 
 
 #include <fctsys.h>
-#include <drc_proto/drc_rule.h>
 #include <class_board.h>
 #include <class_board_item.h>
+
+
+#include <drc_proto/drc_rule.h>
 #include <pcb_expr_evaluator.h>
 
 
@@ -76,6 +78,8 @@ bool test::DRC_RULE_CONDITION::Compile()
         return true;
     
     m_compileError = compiler.GetErrorStatus();
+
+    printf( "Fail: %s (pos: %d)\n", (const char *) m_compileError.message.c_str(), m_compileError.srcPos );
 
     return false;
 }

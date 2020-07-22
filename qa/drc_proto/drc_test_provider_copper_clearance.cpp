@@ -325,7 +325,9 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
             int clearanceAllowed = minClearance - bds.GetDRCEpsilon();
             int actual;
 
-            if( pad->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
+            auto padShape = pad->GetEffectiveShape();
+
+            if( padShape->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_CLEARANCE );
 
@@ -593,7 +595,9 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
         int  clearanceAllowed = minClearance - m_drcEngine->GetDesignSettings()->GetDRCEpsilon();
         int  actual;
 
-        if( aRefPad->Collide( pad, clearanceAllowed, &actual ) )
+        auto refPadShape = aRefPad->GetEffectiveShape();
+
+        if( refPadShape->Collide( pad->GetEffectiveShape().get(), clearanceAllowed, &actual ) )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_CLEARANCE );
             wxString msg;
