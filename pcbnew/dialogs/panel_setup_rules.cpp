@@ -23,6 +23,7 @@
 
 #include <widgets/paged_dialog.h>
 #include <pcb_edit_frame.h>
+#include <pcb_expr_evaluator.h>
 #include <project.h>
 #include <tool/tool_manager.h>
 #include <drc/drc.h>
@@ -30,6 +31,7 @@
 #include <html_messagebox.h>
 #include <scintilla_tricks.h>
 #include <drc/drc_rule_parser.h>
+
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParent->GetTreebook() ),
@@ -46,6 +48,7 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
         m_textEditor->StyleSetFont( i, fixedFont );
 
     m_textEditor->Bind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
+    m_textEditor->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
 }
 
 
@@ -205,6 +208,11 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
             for( const wxString& propName : propNames )
                 tokens += " " + propName;
+
+            PCB_EXPR_BUILTIN_FUNCTIONS& functions = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
+
+            for( const wxString& funcSig : functions.GetSignatures() )
+                tokens += " " + funcSig;
         }
     }
 

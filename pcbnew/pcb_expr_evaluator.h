@@ -41,9 +41,11 @@ class PCB_EXPR_UCODE : public LIBEVAL::UCODE
 {
 public:
     virtual LIBEVAL::VAR_REF* createVarRef( LIBEVAL::COMPILER *aCompiler,
-                                            const std::string& aVar, const std::string& aField ) override;
+                                            const std::string& aVar,
+                                            const std::string& aField ) override;
 
-    virtual FUNC_PTR createFuncCall( LIBEVAL::COMPILER* aCompiler, const std::string& name ) override;
+    virtual FUNC_PTR createFuncCall( LIBEVAL::COMPILER* aCompiler,
+                                     const std::string& name ) override;
 
     void SetItems( BOARD_ITEM* a, BOARD_ITEM* b = nullptr )
     {
@@ -75,23 +77,15 @@ public:
     void SetIsEnum( bool s ) { m_isEnum = s; }
     bool IsEnum() const { return m_isEnum; }
 
-    void SetType( LIBEVAL::VAR_TYPE_T type )
-    {
-        m_type = type;
-    }
+    void SetType( LIBEVAL::VAR_TYPE_T type ) { m_type = type; }
+    LIBEVAL::VAR_TYPE_T GetType() override { return m_type; }
 
     void AddAllowedClass( TYPE_ID type_hash, PROPERTY_BASE* prop )
     {
         m_matchingTypes[type_hash] = prop;
     }
 
-    virtual LIBEVAL::VAR_TYPE_T GetType() override
-    {
-        return m_type;
-    }
-
     virtual LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx, LIBEVAL::UCODE* aUcode ) override;
-
 
     BOARD_ITEM* GetObject( LIBEVAL::UCODE* aUcode ) const;
 
@@ -100,6 +94,36 @@ private:
     int                                         m_itemIndex;
     LIBEVAL::VAR_TYPE_T                         m_type;
     bool                                        m_isEnum;
+};
+
+
+class PCB_EXPR_BUILTIN_FUNCTIONS
+{
+public:
+    using FPTR = LIBEVAL::UCODE::FUNC_PTR;
+
+    PCB_EXPR_BUILTIN_FUNCTIONS();
+
+    static PCB_EXPR_BUILTIN_FUNCTIONS& Instance()
+    {
+        static PCB_EXPR_BUILTIN_FUNCTIONS self;
+        return self;
+    }
+
+    LIBEVAL::UCODE::FUNC_PTR Get( const std::string &name )
+    {
+        return m_funcs[ name  ];
+    }
+
+    const wxArrayString GetSignatures() const
+    {
+        return m_funcSigs;
+    }
+
+private:
+    std::map<std::string, LIBEVAL::UCODE::FUNC_PTR> m_funcs;
+
+    wxArrayString m_funcSigs;
 };
 
 

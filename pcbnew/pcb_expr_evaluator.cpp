@@ -28,91 +28,66 @@
 #include "class_board.h"
 #include "pcb_expr_evaluator.h"
 
-class PCB_EXPR_BUILTIN_FUNCTIONS
+
+
+static void onLayer( LIBEVAL::UCODE* aUcode, LIBEVAL::CONTEXT* aCtx, void *self )
 {
-public:
+    LIBEVAL::VALUE* arg = aCtx->Pop();
+    LIBEVAL::VALUE* result = aCtx->AllocValue();
 
-    using FPTR = LIBEVAL::UCODE::FUNC_PTR;
+    result->Set( 0.0 );
+    aCtx->Push( result );
 
-    PCB_EXPR_BUILTIN_FUNCTIONS();
-
-    static PCB_EXPR_BUILTIN_FUNCTIONS& Instance()
+    if( !arg )
     {
-        static PCB_EXPR_BUILTIN_FUNCTIONS self;
-        return self;
+        aCtx->ReportError( _( "Missing argument to 'onLayer()'" ) );
+        return;
     }
 
-    std::string tolower( const std::string& str ) const
+    wxString     layerName = arg->AsString();
+    PCB_LAYER_ID layer = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( layerName );
+
+    if( layer == UNDEFINED_LAYER )
     {
-        std::string rv;
-        std::transform( str.begin(), str.end(), rv.begin(), ::tolower );
-        return rv;
+        aCtx->ReportError( wxString::Format( _( "Unrecognized layer '%s' " ), layerName ) );
+        return;
     }
 
-    FPTR Get( const std::string &name ) const
-    {
-        auto it = m_funcs.find( name );
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aUcode ) : nullptr;
 
-        if( it == m_funcs.end() )
-            return nullptr;
+    if( item && item->IsOnLayer( layer ) )
+        result->Set( 1.0 );
+}
 
-        return it->second;
-    }
 
-private:
-    std::map<std::string, FPTR> m_funcs;
+static void isPlated( LIBEVAL::UCODE* aUcode, LIBEVAL::CONTEXT* aCtx, void *self )
+{
+    LIBEVAL::VALUE* result = aCtx->AllocValue();
 
-    static void onLayer( LIBEVAL::UCODE* aUcode, LIBEVAL::CONTEXT* aCtx, void *self )
-    {
-        LIBEVAL::VALUE* arg = aCtx->Pop();
-        LIBEVAL::VALUE* result = aCtx->AllocValue();
+    result->Set( 0.0 );
+    aCtx->Push( result );
 
-        result->Set( 0.0 );
-        aCtx->Push( result );
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aUcode ) : nullptr;
+    D_PAD*            pad = dynamic_cast<D_PAD*>( item );
 
-        if( !arg )
-        {
-            aCtx->ReportError( _( "Missing argument to 'onLayer()'" ) );
-            return;
-        }
-
-        wxString     layerName = arg->AsString();
-        PCB_LAYER_ID layer = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( layerName );
-
-        if( layer == UNDEFINED_LAYER )
-        {
-            aCtx->ReportError( wxString::Format( _( "Unrecognized layer '%s' " ), layerName ) );
-            return;
-        }
-
-        PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-        BOARD_ITEM*       item = vref ? vref->GetObject( aUcode ) : nullptr;
-
-        if( item && item->IsOnLayer( layer ) )
-            result->Set( 1.0 );
-    }
-
-    static void isPlated( LIBEVAL::UCODE* aUcode, LIBEVAL::CONTEXT* aCtx, void *self )
-    {
-        LIBEVAL::VALUE* result = aCtx->AllocValue();
-
-        result->Set( 0.0 );
-        aCtx->Push( result );
-
-        PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-        BOARD_ITEM*       item = vref ? vref->GetObject( aUcode ) : nullptr;
-        D_PAD*            pad = dynamic_cast<D_PAD*>( item );
-
-        if( pad && pad->GetAttribute() == PAD_ATTRIB_STANDARD )
-            result->Set( 1.0 );
-    }
-};
+    if( pad && pad->GetAttribute() == PAD_ATTRIB_STANDARD )
+        result->Set( 1.0 );
+}
 
 
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
-    m_funcs[ "onlayer" ] = onLayer;
-    m_funcs[ "isplated" ] = isPlated;
+    auto registerFunc = [&]( const wxString& funcSignature, FPTR funcPtr )
+                        {
+                            wxString funcName = funcSignature.BeforeFirst( '(' );
+                            m_funcs[ std::string( funcName.Lower() ) ] = std::move( funcPtr );
+                            m_funcSigs.Add( funcSignature );
+                        };
+
+    registerFunc( "onLayer('x')", onLayer );
+    registerFunc( "isPlated()", isPlated );
 }
 
 

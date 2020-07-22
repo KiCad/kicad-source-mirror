@@ -24,6 +24,7 @@
 
 #include <fctsys.h>
 #include <scintilla_tricks.h>
+#include <wx/stc/stc.h>
 #include <gal/color4d.h>
 #include <dialog_shim.h>
 
@@ -190,7 +191,10 @@ void SCINTILLA_TRICKS::DoAutocomplete( const wxString& aPartial, const wxArraySt
     {
         // NB: tokens MUST be in alphabetical order because the Scintilla engine is going
         // to do a binary search on them
-        matchedTokens.Sort();
+        matchedTokens.Sort( []( const wxString& first, const wxString& second ) -> int
+                            {
+                                return first.CmpNoCase( second );
+                            });
 
         m_te->AutoCompShow( aPartial.size(), wxJoin( matchedTokens, ' ' ) );
     }
