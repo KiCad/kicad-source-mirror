@@ -101,14 +101,14 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 
 
 BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::UCODE* aUcode ) const
-{   
+{
     const PCB_EXPR_UCODE* ucode = static_cast<const PCB_EXPR_UCODE*>( aUcode );
     BOARD_ITEM*           item  = ucode->GetItem( m_itemIndex );
     return item;
 }
 
 
-LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode ) 
+LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode )
 {
     BOARD_ITEM* item  = const_cast<BOARD_ITEM*>( GetObject( aUcode ) );
     auto        it = m_matchingTypes.find( TYPE_HASH( *item ) );
@@ -187,7 +187,7 @@ LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler,
         if( propMgr.IsOfType( cls.type, TYPE_HASH( BOARD_ITEM ) ) )
         {
             PROPERTY_BASE* prop = propMgr.GetProperty( cls.type, field );
-        
+
             if( prop )
             {
                 //printf("Field '%s' class %s ptr %p haschoices %d typeid %s\n", field.c_str(), (const char *) cls.name.c_str(), prop, !!prop->HasChoices(), typeid(*prop).name() );
@@ -260,7 +260,7 @@ PCB_EXPR_COMPILER::PCB_EXPR_COMPILER()
 
 PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR()
 {
-    m_result = NAN;
+    m_result = 0;
     m_errorStatus.pendingError = false;
 }
 
