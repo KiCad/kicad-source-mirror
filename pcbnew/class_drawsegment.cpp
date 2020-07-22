@@ -297,9 +297,20 @@ void DRAWSEGMENT::RebuildBezierToSegmentsPointsList( int aMinSegLen )
         return;
     }
     // Rebuild the m_BezierPoints vertex list that approximate the Bezier curve
+    m_BezierPoints = buildBezierToSegmentsPointsList( aMinSegLen );
+}
+
+
+const std::vector<wxPoint> DRAWSEGMENT::buildBezierToSegmentsPointsList( int aMinSegLen  ) const
+{
+    std::vector<wxPoint> bezierPoints;
+
+    // Rebuild the m_BezierPoints vertex list that approximate the Bezier curve
     std::vector<wxPoint> ctrlPoints = { m_Start, m_BezierC1, m_BezierC2, m_End };
     BEZIER_POLY converter( ctrlPoints );
-    converter.GetPoly( m_BezierPoints, aMinSegLen );
+    converter.GetPoly( bezierPoints, aMinSegLen );
+
+    return bezierPoints;
 }
 
 
@@ -1015,7 +1026,7 @@ void DRAWSEGMENT::SetPolyPoints( const std::vector<wxPoint>& aPoints )
 }
 
 
-std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes()
+std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes() const
 {
     std::vector<SHAPE*> effectiveShapes;
 
@@ -1082,12 +1093,12 @@ std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes()
 
     case S_CURVE:
     {
-        RebuildBezierToSegmentsPointsList( GetWidth() );
-        wxPoint start_pt = GetBezierPoints()[0];
+        auto bezierPoints = buildBezierToSegmentsPointsList( GetWidth() );
+        wxPoint start_pt = bezierPoints[0];
 
-        for( unsigned int jj = 1; jj < GetBezierPoints().size(); jj++ )
+        for( unsigned int jj = 1; jj < bezierPoints.size(); jj++ )
         {
-            wxPoint end_pt = GetBezierPoints()[jj];
+            wxPoint end_pt = bezierPoints[jj];
             effectiveShapes.emplace_back( new SHAPE_SEGMENT( start_pt, end_pt, m_Width ) );
             start_pt = end_pt;
         }
@@ -1097,7 +1108,7 @@ std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes()
 
     case S_POLYGON:
     {
-        SHAPE_LINE_CHAIN l = GetPolyShape().Outline( 0 );
+        SHAPE_LINE_CHAIN l = GetPolyShape().COutline( 0 );
 
         if( IsPolygonFilled() )
         {
@@ -1121,7 +1132,7 @@ std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes()
 }
 
 
-std::shared_ptr<SHAPE> DRAWSEGMENT::GetEffectiveShape( PCB_LAYER_ID aLayer )
+std::shared_ptr<SHAPE> DRAWSEGMENT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     return std::shared_ptr<SHAPE>( new SHAPE_COMPOUND( MakeEffectiveShapes() ) );
 }

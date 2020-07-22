@@ -64,6 +64,8 @@ protected:
     // Computes the bounding box for an arc
     void computeArcBBox( EDA_RECT& aBBox ) const;
 
+    const std::vector<wxPoint> buildBezierToSegmentsPointsList( int aMinSegLen  ) const;
+
 public:
     DRAWSEGMENT( BOARD_ITEM* aParent = NULL, KICAD_T idtype = PCB_LINE_T );
 
@@ -244,8 +246,8 @@ public:
     /**
      * Makes a set of SHAPE objects representing the DRAWSEGMENT.  Caller owns the objects.
      */
-    std::vector<SHAPE*> MakeEffectiveShapes(); // fixme: move to shape_compound
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) override;
+    std::vector<SHAPE*> MakeEffectiveShapes() const; // fixme: move to shape_compound
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

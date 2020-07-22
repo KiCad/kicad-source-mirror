@@ -842,16 +842,16 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             margin.x = margin.y = 0;
         }
 
-        const std::vector<std::shared_ptr<SHAPE>>& shapes = aPad->GetEffectiveShapes();
+        const std::shared_ptr<SHAPE_COMPOUND> shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
 
-        if( shapes.size() == 1 && shapes[0]->Type() == SH_SEGMENT )
+        if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_SEGMENT )
         {
-            const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shapes[0].get();
+            const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shapes->Shapes()[0];
             m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() + 2 * margin.x );
         }
-        else if( shapes.size() == 1 && shapes[0]->Type() == SH_CIRCLE )
+        else if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_CIRCLE )
         {
-            const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shapes[0].get();
+            const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shapes->Shapes()[0];
             m_gal->DrawCircle( circle->GetCenter(), circle->GetRadius() + margin.x );
         }
         else
@@ -879,16 +879,16 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         m_gal->SetStrokeColor( color );
         int clearance = aPad->GetClearance();
 
-        const std::vector<std::shared_ptr<SHAPE>>& shapes = aPad->GetEffectiveShapes();
+        const std::shared_ptr<SHAPE_COMPOUND> shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
 
-        if( shapes.size() == 1 && shapes[0]->Type() == SH_SEGMENT )
+        if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_SEGMENT )
         {
-            const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shapes[0].get();
+            const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shapes->Shapes()[0];
             m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() + 2 * clearance );
         }
-        else if( shapes.size() == 1 && shapes[0]->Type() == SH_CIRCLE )
+        else if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_CIRCLE )
         {
-            const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shapes[0].get();
+            const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shapes->Shapes()[0];
             m_gal->DrawCircle( circle->GetCenter(), circle->GetRadius() + clearance );
         }
         else

@@ -222,7 +222,7 @@ const std::shared_ptr<SHAPE_POLY_SET>& D_PAD::GetEffectivePolygon() const
 }
 
 
-std::shared_ptr<SHAPE> D_PAD::GetEffectiveShape( PCB_LAYER_ID aLayer )
+std::shared_ptr<SHAPE> D_PAD::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape( new SHAPE_COMPOUND );
 
@@ -865,53 +865,14 @@ bool D_PAD::Collide( const D_PAD* aPad, int aMinClearance, int* aActual )
     if( center2center - GetBoundingRadius() - aPad->GetBoundingRadius() >= aMinClearance )
         return false;
 
-    int actual = INT_MAX;
 
-    for( const std::shared_ptr<SHAPE>& aShape : GetEffectiveShapes() )
-    {
-        for( const std::shared_ptr<SHAPE>& bShape : aPad->GetEffectiveShapes() )
-        {
-            int this_dist;
-
-            if( aShape->Collide( bShape.get(), aMinClearance, &this_dist ) )
-                actual = std::min( actual, this_dist );
-        }
-    }
-
-    if( actual < INT_MAX )
-    {
-        // returns the actual clearance (clearance < aMinClearance) for diags:
-        if( aActual )
-            *aActual = std::max( 0, actual );
-
-        return true;
-    }
-
-    return false;
+    return GetEffectiveShape()->Collide( aPad->GetEffectiveShape().get(), aMinClearance, aActual );
 }
 
 
 bool D_PAD::Collide( const SHAPE_SEGMENT* aSeg, int aMinClearance, int* aActual )
 {
-    int actual = INT_MAX;
-
-    for( const std::shared_ptr<SHAPE>& shape : GetEffectiveShapes() )
-    {
-        int this_dist;
-
-        if( shape->Collide( aSeg, aMinClearance, &this_dist ) )
-            actual = std::min( actual, this_dist );
-    }
-
-    if( actual < INT_MAX )
-    {
-        if( aActual )
-            *aActual = std::max( 0, actual );
-
-        return true;
-    }
-
-    return false;
+    return aSeg->Collide( GetEffectiveShape().get(), aMinClearance, aActual );
 }
 
 

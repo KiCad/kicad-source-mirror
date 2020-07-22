@@ -329,13 +329,14 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
     }
     else
     {
-        for( const std::shared_ptr<SHAPE>& shape : aPad->GetEffectiveShapes() )
+        auto padShapes = std::static_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+        for( const SHAPE* shape : padShapes->Shapes() )
         {
             switch( shape->Type() )
             {
             case SH_SEGMENT:
             {
-                const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shape.get();
+                const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shape;
                 const SFVEC2F        start3DU(  seg->GetSeg().A.x * m_biuTo3Dunits,
                                                -seg->GetSeg().A.y * m_biuTo3Dunits );
                 const SFVEC2F        end3DU  (  seg->GetSeg().B.x * m_biuTo3Dunits,
@@ -360,7 +361,7 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
 
             case SH_CIRCLE:
             {
-                const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shape.get();
+                const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shape;
                 const int           radius = circle->GetRadius() + aClearanceValue.x;
                 const SFVEC2F       center(  circle->GetCenter().x * m_biuTo3Dunits,
                                             -circle->GetCenter().y * m_biuTo3Dunits );
@@ -371,7 +372,7 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
 
             case SH_RECT:
             {
-                SHAPE_RECT* rect = (SHAPE_RECT*) shape.get();
+                SHAPE_RECT* rect = (SHAPE_RECT*) shape;
 
                 poly.NewOutline();
                 poly.Append( rect->GetPosition() );
@@ -382,11 +383,11 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
                 break;
 
             case SH_SIMPLE:
-                poly.AddOutline( static_cast<SHAPE_SIMPLE*>( shape.get() )->Vertices() );
+                poly.AddOutline( static_cast<const SHAPE_SIMPLE*>( shape )->Vertices() );
                 break;
 
             case SH_POLY_SET:
-                poly = *(SHAPE_POLY_SET*) shape.get();
+                poly = *(SHAPE_POLY_SET*) shape;
                 break;
 
             default:

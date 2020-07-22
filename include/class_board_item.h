@@ -156,7 +156,20 @@ public:
      */
     static wxPoint ZeroOffset;
 
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
+    /**
+     * Function GetEffectiveShape
+     * Some pad shapes can be complex (rounded/chamfered rectangle), even without considering
+     * custom shapes.  This routine returns a COMPOUND shape (set of simple shapes which make 
+     * up the pad fod use with routing, collision determiniation, etc).
+     *
+     * Note that this list can contain a SHAPE_SIMPLE (a simple single-outline non-intersecting
+     * polygon), but should never contain a SHAPE_POLY_SET (a complex polygon consisting of
+     * multiple outlines and/or holes).
+     * 
+     * @param aLayer in case of items spanning multiple layers, only the shapes belonging to aLayer
+     *               will be returned. Pass UNDEFINED_LAYER to return shapes for all layers.
+     */
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const;
 
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_Parent; }
 

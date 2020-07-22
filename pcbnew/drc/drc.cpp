@@ -973,15 +973,12 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
         if( !bboxShape.Collide( SEG( pad->GetPosition(), pad->GetPosition() ), bb_radius ) )
             continue;
 
-        for( const std::shared_ptr<SHAPE>& aShape : pad->GetEffectiveShapes() )
+        for( const SHAPE* bShape : itemShapes )
         {
-            for( const SHAPE* bShape : itemShapes )
-            {
-                int this_dist;
+            int this_dist;
 
-                if( aShape->Collide( bShape, minClearance, &this_dist ) )
+            if( pad->GetEffectiveShape()->Collide( bShape, minClearance, &this_dist ) )
                     actual = std::min( actual, this_dist );
-            }
         }
 
         if( actual < INT_MAX )

@@ -634,9 +634,12 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
     solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
     solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
 
-    if( aPad->GetEffectiveShapes().size() == 1 )
+    
+    auto shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+    
+    if( shapes && shapes->Size() == 1 )
     {
-        solid->SetShape( aPad->GetEffectiveShapes()[0]->Clone() );
+        solid->SetShape( shapes->Shapes()[0]->Clone() );
     }
     else
     {

@@ -35,6 +35,7 @@
 #include <class_board_item.h>
 #include <convert_to_biu.h>
 #include <geometry/shape_poly_set.h>
+#include <geometry/shape_compound.h>
 #include <pad_shapes.h>
 #include <pcbnew.h>
 
@@ -381,18 +382,8 @@ public:
     bool TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
                                               int aError = ARC_HIGH_DEF ) const;
 
-    /**
-     * Function GetEffectiveShapes
-     * Some pad shapes can be complex (rounded/chamfered rectangle), even without considering
-     * custom shapes.  This routine returns a list of simple shapes which make up the pad for
-     * use with routing, collision determiniation, etc.
-     *
-     * Note that this list can contain a SHAPE_SIMPLE (a simple single-outline non-intersecting
-     * polygon), but should never contain a SHAPE_POLY_LIST (a complex polygon consisting of
-     * multiple outlines and/or holes).
-     */
-    const std::vector<std::shared_ptr<SHAPE>>& GetEffectiveShapes() const;
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) override;
+    // @copydoc BOARD_ITEM::GetEffectiveShape
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
     const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon() const;
 
