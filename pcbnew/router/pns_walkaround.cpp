@@ -63,27 +63,30 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
 
     SHAPE_LINE_CHAIN path_pre[2], path_walk[2], path_post[2];
 
-    VECTOR2I last = aPath.CPoint( -1 );
-
-    if( ( current_obs->m_hull ).PointInside( last ) || ( current_obs->m_hull ).PointOnEdge( last ) )
+    if( aPath.PointCount() > 1 )
     {
-        m_recursiveBlockageCount++;
+        VECTOR2I last = aPath.CPoint( -1 );
 
-        if( m_recursiveBlockageCount < 3 )
-            aPath.Line().Append( current_obs->m_hull.NearestPoint( last ) );
-        else
+        if( ( current_obs->m_hull ).PointInside( last ) || ( current_obs->m_hull ).PointOnEdge( last ) )
         {
-            aPath = aPath.ClipToNearestObstacle( m_world );
-            return DONE;
+            m_recursiveBlockageCount++;
+
+            if( m_recursiveBlockageCount < 3 )
+                aPath.Line().Append( current_obs->m_hull.NearestPoint( last ) );
+            else
+            {
+                aPath = aPath.ClipToNearestObstacle( m_world );
+                return DONE;
+            }
         }
     }
 
-      aPath.Walkaround( current_obs->m_hull, path_pre[0], path_walk[0],
+    aPath.Walkaround( current_obs->m_hull, path_pre[0], path_walk[0],
                       path_post[0], aWindingDirection );
     aPath.Walkaround( current_obs->m_hull, path_pre[1], path_walk[1],
                       path_post[1], !aWindingDirection );
 
-    if( ! aPath.Walkaround( current_obs->m_hull, path_pre[1], path_walk[1],
+    if( !aPath.Walkaround( current_obs->m_hull, path_pre[1], path_walk[1],
                       path_post[1], !aWindingDirection ) )
         return STUCK;
     auto l =aPath.CLine();
