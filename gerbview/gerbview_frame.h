@@ -116,6 +116,7 @@ public:
     /** Install the dialog box for layer selection
      * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
      * @param aCopperLayerCount = number of copper layers
+     * @param aGerberName = Name of Gerber file to select KiCad layer for
      * @return new layer value (NB_PCB_LAYERS when "(Deselect)" radiobutton selected),
      *                         or -1 if canceled
      *
@@ -127,7 +128,7 @@ public:
      * different radiobutton is clicked on) prior to then clicking on the "Deselect"
      * button provided within the "Layer selection:" dialog box).
      */
-    int SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount );
+    int SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount, wxString aGerberName );
 
     /**
      * @return the color of the grid

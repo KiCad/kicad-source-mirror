@@ -362,7 +362,13 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
     if( jj != UNSELECTED_LAYER && jj != UNDEFINED_LAYER && !IsValidLayer( jj ) )
         jj = B_Cu;  // (Defaults to "Copper" layer.)
 
-    jj = m_Parent->SelectPCBLayer( jj, m_exportBoardCopperLayersCount );
+    // Get file name of Gerber loaded on this layer
+    wxFileName fn( m_Parent->GetGerberLayout()->GetImagesList()->GetGbrImage( ii )->m_FileName );
+    // Surround it with quotes to make it stand out on the dialog title bar
+    wxString layerName = "\"" + fn.GetFullName() + "\"";
+
+    // Display dialog to let user select a layer for the Gerber
+    jj = m_Parent->SelectPCBLayer( jj, m_exportBoardCopperLayersCount, layerName );
 
     if( jj != UNSELECTED_LAYER && jj != UNDEFINED_LAYER && !IsValidLayer( jj ) )
         return;
