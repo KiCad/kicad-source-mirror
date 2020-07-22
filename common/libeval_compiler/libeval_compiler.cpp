@@ -62,6 +62,7 @@ static void libeval_dbg( int level, const char* fmt, ... )
 #endif
 }
 
+
 static const std::string formatOpName( int op )
 {
     static const struct
@@ -127,14 +128,17 @@ std::string UOP::Format() const
     return str;
 }
 
+
 std::string UCODE::Dump() const
 {
     std::string rv;
+
     for( auto op : m_ucode )
     {
         rv += op->Format();
         rv += "\n";
     }
+
     return rv;
 };
 
@@ -151,24 +155,26 @@ std::string TOKENIZER::GetChars( std::function<bool( int )> cond ) const
     std::string rv;
     size_t      p = m_pos;
     //   printf("p %d len %d\n", p, str.length() );
+
     while( p < m_str.length() && cond( m_str[p] ) )
     {
         rv.append( 1, m_str[p] );
         p++;
     }
+
     return rv;
 }
 
 bool TOKENIZER::MatchAhead( const std::string& match, std::function<bool( int )> stopCond ) const
 {
     int remaining = m_str.length() - m_pos;
+
     if( remaining < (int) match.length() )
         return false;
 
     if( m_str.substr( m_pos, match.length() ) == match )
-    {
         return ( remaining == (int) match.length() || stopCond( m_str[m_pos + match.length()] ) );
-    }
+
     return false;
 }
 
@@ -220,7 +226,6 @@ void COMPILER::parseOk()
 bool COMPILER::Compile( const std::string& aString, UCODE* aCode )
 {
     // Feed parser token after token until end of input.
-
 
     newString( aString );
     m_errorStatus.pendingError = false;
@@ -277,6 +282,7 @@ COMPILER::T_TOKEN COMPILER::getToken()
 {
     T_TOKEN rv;
     bool    done = false;
+
     do
     {
         switch( m_lexerState )
@@ -297,7 +303,7 @@ COMPILER::T_TOKEN COMPILER::getToken()
 
 bool COMPILER::lexString( COMPILER::T_TOKEN& aToken )
 {
-    auto str = m_tokenizer.GetChars( []( int c ) -> bool { return c != '\''; } );
+    std::string str = m_tokenizer.GetChars( []( int c ) -> bool { return c != '\''; } );
     //printf("STR LIT '%s'\n", (const char *)str.c_str() );
 
     aToken.token = G_STRING;
@@ -312,7 +318,8 @@ bool COMPILER::lexString( COMPILER::T_TOKEN& aToken )
 int COMPILER::resolveUnits()
 {
     int unitId = 0;
-    for( auto unitName : m_unitResolver->GetSupportedUnits() )
+
+    for( const std::string& unitName : m_unitResolver->GetSupportedUnits() )
     {
         if( m_tokenizer.MatchAhead( unitName, []( int c ) -> bool { return !isalnum( c ); } ) )
         {
@@ -332,7 +339,6 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
 {
     T_TOKEN     retval;
     std::string current;
-    size_t      idx;
     int         convertFrom;
 
     retval.token = G_ENDS;
@@ -355,7 +361,6 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
             [&]()
             {
                 bool haveSeparator = false;
-                idx                = 0;
                 int ch             = m_tokenizer.GetChar();
 
                 do
@@ -378,7 +383,6 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
                     if( isDecimalSeparator( current[i - 1] ) )
                         current[i - 1] = m_localeDecimalSeparator;
                 }
-
 
                 //printf("-> NUM: '%s'\n", (const char *) current.c_str() );
             };
@@ -477,44 +481,23 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         // Single char tokens
         switch( ch )
         {
-        case '+':
-            retval.token = G_PLUS;
-            break;
-        case '!':
-            retval.token = G_BOOL_NOT;
-            break;
-        case '-':
-            retval.token = G_MINUS;
-            break;
-        case '*':
-            retval.token = G_MULT;
-            break;
-        case '/':
-            retval.token = G_DIVIDE;
-            break;
-        case '<':
-            retval.token = G_LESS_THAN;
-            break;
-        case '>':
-            retval.token = G_GREATER_THAN;
-            break;
-        case '(':
-            retval.token = G_PARENL;
-            break;
-        case ')':
-            retval.token = G_PARENR;
-            break;
-        case ';':
-            retval.token = G_SEMCOL;
-            break;
-        case '.':
-            retval.token = G_STRUCT_REF;
-            break;
+        case '+': retval.token = G_PLUS;         break;
+        case '!': retval.token = G_BOOL_NOT;     break;
+        case '-': retval.token = G_MINUS;        break;
+        case '*': retval.token = G_MULT;         break;
+        case '/': retval.token = G_DIVIDE;       break;
+        case '<': retval.token = G_LESS_THAN;    break;
+        case '>': retval.token = G_GREATER_THAN; break;
+        case '(': retval.token = G_PARENL;       break;
+        case ')': retval.token = G_PARENR;       break;
+        case ';': retval.token = G_SEMCOL;       break;
+        case '.': retval.token = G_STRUCT_REF;   break;
+
         default:
             m_errorStatus.stage = ERROR_STATUS::CST_PARSE;
             m_errorStatus.message.Printf( _( "Unrecognized character '%c'" ), (char) ch );
             m_errorStatus.srcPos = m_tokenizer.GetPos();
-            break; /* invalid character */
+            break;
         }
 
         m_tokenizer.NextChar();
@@ -526,19 +509,24 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
 
 const std::string formatNode( TREE_NODE* tok )
 {
-    char str[1024];
     //   printf("fmt tok %p v %p ", tok, tok->value.v );
-    fflush( stdout );
-    sprintf( str, "%s", (const char*) tok->value.str );
+    //   fflush( stdout );
+
+    char str[LIBEVAL_MAX_LITERAL_LENGTH];
+    snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", (const char*) tok->value.str );
     return str;
 }
 
 
 void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
 {
-    char str[1024];
-    sprintf( str, "\n[%p L0:%-20p L1:%-20p] ", tok, tok->leaf[0], tok->leaf[1] ); //[tok %p] ", tok);
+    char str[LIBEVAL_MAX_LITERAL_LENGTH];
+    snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "\n[%p L0:%-20p L1:%-20p] ",
+                                               tok,
+                                               tok->leaf[0],
+                                               tok->leaf[1] );
     buf += str;
+
     for( int i = 0; i < 2 * depth; i++ )
         buf += "  ";
 
@@ -559,25 +547,30 @@ void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
             dumpNode( buf, tok->leaf[0], depth + 1 );
 
         break;
+
     case TR_STRING:
         buf += "STRING: ";
         buf +=  formatNode( tok );
         break;
+
     case TR_IDENTIFIER:
         buf += "ID: ";
         buf += formatNode( tok );
         break;
+
     case TR_STRUCT_REF:
         buf += "SREF: ";
         dumpNode( buf, tok->leaf[0], depth + 1 );
         dumpNode( buf, tok->leaf[1], depth + 1 );
         break;
+
      case TR_OP_FUNC_CALL:
         buf += "CALL '";
         buf += tok->leaf[0]->value.str;
         buf += "': ";
         dumpNode( buf, tok->leaf[1], depth + 1 );
         break;
+
     case TR_UNIT:
         sprintf( str, "UNIT: %d ", tok->value.type );
         buf += str;
@@ -585,11 +578,13 @@ void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
     }
 }
 
+
 void COMPILER::ReportError( const wxString& aErrorMsg )
 {
     m_errorStatus.pendingError = true;
     m_errorStatus.message = aErrorMsg;
 }
+
 
 void COMPILER::setRoot( TREE_NODE root )
 {
@@ -614,10 +609,7 @@ bool COMPILER::generateUCode( UCODE* aCode )
     std::string dump;
 
     dumpNode( dump, m_tree, 0 );
-
     libeval_dbg(3,"Tree dump:\n%s\n\n", dump.c_str() );
-
-
 
     while( !stack.empty() )
     {
@@ -731,7 +723,7 @@ bool COMPILER::generateUCode( UCODE* aCode )
 
         case TR_NUMBER:
         {
-            auto son = node->leaf[0];
+            TREE_NODE* son = node->leaf[0];
 
             double value = atof( node->value.str ); // fixme: locale
 
@@ -776,8 +768,8 @@ bool COMPILER::generateUCode( UCODE* aCode )
 
         visitedNodes.insert( node );
 
-        if(node->uop)
-            aCode->AddOp(node->uop);
+        if( node->uop )
+            aCode->AddOp( node->uop );
 
         stack.pop_back();
     }
@@ -790,7 +782,6 @@ bool COMPILER::generateUCode( UCODE* aCode )
 
 void UOP::Exec( CONTEXT* ctx, UCODE* ucode )
 {
-
     switch( m_op )
     {
     case TR_UOP_PUSH_VAR:
@@ -853,16 +844,10 @@ void UOP::Exec( CONTEXT* ctx, UCODE* ucode )
             result = arg1->EqualTo( arg2 ) ? 0 : 1;
             break;
         case TR_OP_BOOL_AND:
-            result = ( ( arg1->AsDouble() != 0.0 ? true : false )
-                             && ( arg2->AsDouble() != 0.0 ? true : false ) ) ?
-                             1 :
-                             0;
+            result = arg1->AsDouble() != 0.0 && arg2->AsDouble() != 0.0 ? 1 : 0;
             break;
         case TR_OP_BOOL_OR:
-            result = ( ( arg1->AsDouble() != 0.0 ? true : false )
-                             || ( arg2->AsDouble() != 0.0 ? true : false ) ) ?
-                             1 :
-                             0;
+            result = arg1->AsDouble() != 0.0 || arg2->AsDouble() != 0.0 ? 1 : 0;
             break;
         default:
             result = 0.0;
