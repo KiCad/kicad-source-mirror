@@ -69,12 +69,8 @@ class SHAPE_COMPOUND : public SHAPE
 
       int Distance( const SEG& aSeg ) const;
 
-      void Move ( const VECTOR2I& aVector ) override
-      {
-         for( auto& item : m_shapes )
-            item->Move( aVector );
-      }
-
+      void Move ( const VECTOR2I& aVector ) override;
+      
       void AddShape( SHAPE* aShape )
       {
          m_shapes.push_back( aShape );
@@ -86,10 +82,20 @@ class SHAPE_COMPOUND : public SHAPE
       return m_shapes.empty();
    }
 
+   int Size() const
+   {
+      return m_shapes.size();
+   }
+
     void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override;
 
     bool IsSolid() const override;
     
+    SHAPE* UniqueSubshape() const
+    {
+       return m_shapes.size() != 1 ? nullptr : m_shapes[0];
+    }
+
    private:
 
       BOX2I m_cachedBBox;

@@ -72,18 +72,35 @@ SHAPE_COMPOUND* SHAPE_COMPOUND::Clone() const
 
 const BOX2I SHAPE_COMPOUND::BBox( int aClearance ) const
 {
+    BOX2I bb;
 
+    if ( m_shapes.size() < 1 )
+        return bb;
+
+    bb = m_shapes[0]->BBox();
+
+    for( int i = 1; i < m_shapes.size(); i++ )
+        bb.Merge( m_shapes[i]->BBox() );
+
+    return bb;
+}
+
+void SHAPE_COMPOUND::Move ( const VECTOR2I& aVector )
+{
+         for( auto& item : m_shapes )
+            item->Move( aVector );
 }
 
 
 int SHAPE_COMPOUND::Distance( const SEG& aSeg ) const
 {
-
+    assert(false);
 }
 
 
 void SHAPE_COMPOUND::Rotate( double aAngle, const VECTOR2I& aCenter )
 {
+    assert( false );
 }
 
 
