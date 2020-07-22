@@ -448,7 +448,7 @@ inline bool CollCaseReversed ( const SHAPE* aA, const SHAPE* aB, int aClearance,
 
 static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual, VECTOR2I* aMTV )
 {
-    
+
 
     switch( aA->Type() )
     {
@@ -623,27 +623,30 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual, VECTOR2I* aMTV )
 {
     int currentActual = std::numeric_limits<int>::max();
-    VECTOR2I currentMTV;
+    VECTOR2I currentMTV(0, 0);
     bool colliding = false;
 
-    bool exitOnFirstCollision = aActual != nullptr || aMTV != nullptr;
+    bool exitOnFirstCollision = aActual == nullptr && aMTV == nullptr;
 
-    auto collideCompoundSubshapes = [&] ( const SHAPE* elemA, const SHAPE* elemB, int clearance, int* actual, VECTOR2I* mtv ) -> bool
+    auto collideCompoundSubshapes = [&] ( const SHAPE* elemA, const SHAPE* elemB, int clearance ) -> bool
     {
+                int actual;
+                VECTOR2I mtv;
+
                 bool c = collideSingleShapes( elemA, elemB,
                                                         clearance,
-                                                        actual ? &currentActual : nullptr,
-                                                        mtv ? &currentMTV : nullptr );
+                                                        aActual ? &actual : nullptr,
+                                                        aMTV ? &mtv : nullptr );
                 if(c)
                 {
-                    if (actual)
+                    if (aActual)
                     {
-                        *actual = std::min( *actual, currentActual );
+                        currentActual = std::min( actual, currentActual );
                     }
-                    if( mtv )
+                    if( aMTV )
                     {
-                        if( currentMTV.SquaredEuclideanNorm() > mtv->SquaredEuclideanNorm() )
-                            *mtv = currentMTV;
+                        if( mtv.SquaredEuclideanNorm() > currentMTV.SquaredEuclideanNorm() )
+                            currentMTV = mtv;
                     }
                 }
 
@@ -654,57 +657,62 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
     {
         auto cmpA = static_cast<const SHAPE_COMPOUND*>( aA );
         auto cmpB = static_cast<const SHAPE_COMPOUND*>( aB );
+
         for( auto elemA : cmpA->Shapes() )
         {
             for( auto elemB : cmpB->Shapes() )
             {
-                if( collideCompoundSubshapes( elemA, elemB, aClearance, aActual, aMTV ) )
+                if( collideCompoundSubshapes( elemA, elemB, aClearance ) )
                 {
                     colliding = true;
                     if ( exitOnFirstCollision )
-                        return true;
+                        break;
                 }
             }
+            if( colliding && exitOnFirstCollision )
+                break;
         }
-
-        return colliding;
     }
     else if ( aA->Type() == SH_COMPOUND )
     {
         auto cmpA = static_cast<const SHAPE_COMPOUND*>( aA );
         for( auto elemA : cmpA->Shapes() )
         {
-            if( collideCompoundSubshapes( elemA, aB, aClearance, aActual, aMTV ) )
+            if( collideCompoundSubshapes( elemA, aB, aClearance ) )
             {
                 colliding = true;
                 if ( exitOnFirstCollision )
-                    return true;
+                    break;
             }
         }
-
-        return colliding;
     }
     else if ( aB->Type() == SH_COMPOUND )
     {
         auto cmpB = static_cast<const SHAPE_COMPOUND*>( aB );
         for( auto elemB : cmpB->Shapes() )
         {
-            if( collideCompoundSubshapes( aA, elemB, aClearance, aActual, aMTV ) )
+            if( collideCompoundSubshapes( aA, elemB, aClearance ) )
             {
                 colliding = true;
                 if ( exitOnFirstCollision )
-                    return true;
+                    break;
             }
         }
-
-        return colliding;
     }
     else
     {
         return collideSingleShapes( aA, aB, aClearance, aActual, aMTV );
     }
     
+    if( colliding )
+    {
+        if( aActual )
+            *aActual = currentActual;
+        if( aMTV )
+            *aMTV = currentMTV;
+    }
 
+    return colliding;
 }
 
 bool SHAPE::Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const

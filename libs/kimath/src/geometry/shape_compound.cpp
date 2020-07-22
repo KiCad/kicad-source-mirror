@@ -97,7 +97,7 @@ bool SHAPE_COMPOUND::Collide( const SEG& aSeg, int aClearance, int* aActual ) co
 {
     for( auto& item : m_shapes )
     {
-        if( item->Collide( aSeg, aClearance ) )
+        if( item->Collide( aSeg, aClearance, aActual ) )
             return true;
     }
 
