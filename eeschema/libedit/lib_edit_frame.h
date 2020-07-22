@@ -321,13 +321,13 @@ private:
     bool LoadOneLibraryPartAux( LIB_PART* aLibEntry, const wxString& aLibrary, int aUnit,
                                 int aConvert );
 
+public:
     /**
      * Display the documentation of the selected component.
      */
     void DisplayCmpDoc();
 
     // General editing
-public:
     /**
      * Create a copy of the current component, and save it in the undo list.
      *
