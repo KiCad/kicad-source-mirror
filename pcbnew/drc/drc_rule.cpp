@@ -24,7 +24,6 @@
 
 #include <fctsys.h>
 #include <drc/drc_rule.h>
-#include <board_design_settings.h>
 #include <class_board.h>
 #include <class_board_item.h>
 #include <pcb_expr_evaluator.h>
@@ -75,16 +74,6 @@
  *     (rule "disallowMicrovias" (disallow micro_via))
  *
  *
-    testEvalExpr( "A.type == \"Pad\" && B.type == \"Pad\" && (A.onLayer(\"F.Cu\"))",VAL(0.0), false, &trackA, &trackB );
-        return 0;
-    testEvalExpr( "A.Width > B.Width", VAL(0.0), false, &trackA, &trackB );
-    testEvalExpr( "A.Width + B.Width", VAL(Mils2iu(10) + Mils2iu(20)), false, &trackA, &trackB );
-
-    testEvalExpr( "A.Netclass", VAL( (const char*) trackA.GetNetClassName().c_str() ), false, &trackA, &trackB );
-    testEvalExpr( "(A.Netclass == \"HV\") && (B.netclass == \"otherClass\") && (B.netclass != \"F.Cu\")", VAL( 1.0 ), false, &trackA, &trackB );
-    testEvalExpr( "A.Netclass + 1.0", VAL( 1.0 ), false, &trackA, &trackB );
-    testEvalExpr( "A.type == \"Track\" && B.type == \"Track\" && A.layer == \"F.Cu\"", VAL(0.0), false, &trackA, &trackB );
-    testEvalExpr( "(A.type == \"Track\") && (B.type == \"Track\") && (A.layer == \"F.Cu\")", VAL(0.0), false, &trackA, &trackB );
  */
 
 DRC_RULE* GetRule( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem, int aConstraint )
@@ -126,7 +115,6 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
 
     m_ucode->SetItems( a, b );
 
-// fixme: handle error conditions
     return m_ucode->Run()->AsDouble() != 0.0;
 }
 

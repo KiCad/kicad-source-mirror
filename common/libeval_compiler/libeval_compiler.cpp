@@ -138,6 +138,14 @@ std::string UCODE::Dump() const
     return rv;
 };
 
+
+void CONTEXT::ReportError( const wxString& aErrorMsg )
+{
+    m_errorStatus.pendingError = true;
+    m_errorStatus.message = aErrorMsg;
+}
+
+
 std::string TOKENIZER::GetChars( std::function<bool( int )> cond ) const
 {
     std::string rv;
@@ -167,7 +175,6 @@ bool TOKENIZER::MatchAhead( const std::string& match, std::function<bool( int )>
 
 COMPILER::COMPILER()
 {
-    m_errorStatus.pendingError = false;
     m_localeDecimalSeparator = '.';
     m_sourcePos = 0;
     m_parseFinished = false;
@@ -578,12 +585,7 @@ void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
     }
 }
 
-ERROR_STATUS COMPILER::GetErrorStatus()
-{
-    return m_errorStatus;
-}
-
-void COMPILER::ReportError( const std::string& aErrorMsg )
+void COMPILER::ReportError( const wxString& aErrorMsg )
 {
     m_errorStatus.pendingError = true;
     m_errorStatus.message = aErrorMsg;
@@ -694,6 +696,28 @@ bool COMPILER::generateUCode( UCODE* aCode )
                         return false;
                     }
 
+                    // Preflight the function call
+                    CONTEXT ctx;
+                    VALUE*  param = ctx.AllocValue();
+                    param->Set( node->value.str );
+                    ctx.Push( param );
+
+                    try
+                    {
+                        func( aCode, &ctx, vref );
+                    }
+                    catch( ... )
+                    {
+                    }
+
+                    if( ctx.GetErrorStatus().pendingError )
+                    {
+                        m_errorStatus = ctx.GetErrorStatus();
+                        m_errorStatus.stage = ERROR_STATUS::CST_CODEGEN;
+                        m_errorStatus.srcPos = node->leaf[1]->leaf[0]->srcPos + 1;
+                        return false;
+                    }
+
                     visitedNodes.insert( node->leaf[0] );
                     visitedNodes.insert( node->leaf[1]->leaf[0] );
 
@@ -764,7 +788,7 @@ bool COMPILER::generateUCode( UCODE* aCode )
 }
 
 
-void UOP::Exec( UCODE::CONTEXT* ctx, UCODE* ucode )
+void UOP::Exec( CONTEXT* ctx, UCODE* ucode )
 {
 
     switch( m_op )
@@ -772,7 +796,7 @@ void UOP::Exec( UCODE::CONTEXT* ctx, UCODE* ucode )
     case TR_UOP_PUSH_VAR:
     {
         auto value = ctx->AllocValue();
-        value->Set( reinterpret_cast<VAR_REF*>( m_arg )->GetValue( ucode ) );
+        value->Set( reinterpret_cast<VAR_REF*>( m_arg )->GetValue( ctx, ucode ) );
         ctx->Push( value );
     }
         break;
@@ -868,10 +892,5 @@ VALUE* UCODE::Run()
     return ctx.Pop();
 }
 
-
-void UCODE::RuntimeError( const std::string& aErrorMsg )
-{
-
-}
 
 } // namespace LIBEVAL

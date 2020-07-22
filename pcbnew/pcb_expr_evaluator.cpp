@@ -62,33 +62,49 @@ public:
 private:
     std::map<std::string, FPTR> m_funcs;
 
-    static void onLayer( LIBEVAL::UCODE* aUcode, LIBEVAL::UCODE::CONTEXT* aCtx, void *self )
+    static void onLayer( LIBEVAL::UCODE* aUcode, LIBEVAL::CONTEXT* aCtx, void *self )
     {
-        LIBEVAL::VALUE*   arg = aCtx->Pop();
-        PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-        PCB_LAYER_ID      layer = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( arg->AsString() );
-        BOARD_ITEM*       item = vref->GetObject( aUcode );
-        LIBEVAL::VALUE*   rv = aCtx->AllocValue();
+        LIBEVAL::VALUE* arg = aCtx->Pop();
+        LIBEVAL::VALUE* result = aCtx->AllocValue();
 
-        rv->Set( item->IsOnLayer( layer ) ? 1.0 : 0.0 );
-        aCtx->Push( rv );
-    }
+        result->Set( 0.0 );
+        aCtx->Push( result );
 
-    static void isPlated( LIBEVAL::UCODE* aUcode, LIBEVAL::UCODE::CONTEXT* aCtx, void *self )
-    {
-        PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-        BOARD_ITEM*       item = vref->GetObject( aUcode );
-        bool              result = false;
-
-        if( item->Type() == PCB_PAD_T )
+        if( !arg )
         {
-            D_PAD* pad = static_cast<D_PAD*>( item );
-            result = pad->GetAttribute() == PAD_ATTRIB_STANDARD;
+            aCtx->ReportError( _( "Missing argument to 'onLayer()'" ) );
+            return;
         }
 
-        LIBEVAL::VALUE* rv =  aCtx->AllocValue();
-        rv->Set( result ? 1.0 : 0.0 );
-        aCtx->Push( rv );
+        wxString     layerName = arg->AsString();
+        PCB_LAYER_ID layer = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( layerName );
+
+        if( layer == UNDEFINED_LAYER )
+        {
+            aCtx->ReportError( wxString::Format( _( "Unrecognized layer '%s' " ), layerName ) );
+            return;
+        }
+
+        PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+        BOARD_ITEM*       item = vref ? vref->GetObject( aUcode ) : nullptr;
+
+        if( item && item->IsOnLayer( layer ) )
+            result->Set( 1.0 );
+    }
+
+    static void isPlated( LIBEVAL::UCODE* aUcode, LIBEVAL::CONTEXT* aCtx, void *self )
+    {
+        LIBEVAL::VALUE* result = aCtx->AllocValue();
+
+        result->Set( 0.0 );
+        aCtx->Push( result );
+
+        PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+        BOARD_ITEM*       item = vref ? vref->GetObject( aUcode ) : nullptr;
+        D_PAD*            pad = dynamic_cast<D_PAD*>( item );
+
+        if( pad && pad->GetAttribute() == PAD_ATTRIB_STANDARD )
+            result->Set( 1.0 );
     }
 };
 
@@ -108,7 +124,7 @@ BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::UCODE* aUcode ) const
 }
 
 
-LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode )
+LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx, LIBEVAL::UCODE* aUcode )
 {
     BOARD_ITEM* item  = const_cast<BOARD_ITEM*>( GetObject( aUcode ) );
     auto        it = m_matchingTypes.find( TYPE_HASH( *item ) );
@@ -117,7 +133,7 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode )
     {
         wxString msg;
         msg.Printf("property not found for item of type: 0x%x!\n",  TYPE_HASH( *item ) );
-        aUcode->RuntimeError( (const char *) msg.c_str() );
+        aCtx->ReportError( (const char *) msg.c_str() );
         return LIBEVAL::VALUE( 0.0 );
     }
     else
@@ -261,7 +277,6 @@ PCB_EXPR_COMPILER::PCB_EXPR_COMPILER()
 PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR()
 {
     m_result = 0;
-    m_errorStatus.pendingError = false;
 }
 
 PCB_EXPR_EVALUATOR::~PCB_EXPR_EVALUATOR()

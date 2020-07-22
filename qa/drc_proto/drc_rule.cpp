@@ -23,12 +23,9 @@
 
 
 #include <fctsys.h>
-#include <board_design_settings.h>
+#include <drc_proto/drc_rule.h>
 #include <class_board.h>
 #include <class_board_item.h>
-
-
-#include <drc_proto/drc_rule.h>
 #include <pcb_expr_evaluator.h>
 
 
@@ -56,9 +53,11 @@ test::DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 
 bool test::DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB )
 {
-    m_ucode->SetItems( const_cast<BOARD_ITEM*>( aItemA ), const_cast<BOARD_ITEM*>( aItemB ) );
+    BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
+    BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
 
-// fixme: handle error conditions
+    m_ucode->SetItems( a, b );
+
     return m_ucode->Run()->AsDouble() != 0.0;
 }
 
@@ -76,8 +75,6 @@ bool test::DRC_RULE_CONDITION::Compile()
         return true;
     
     m_compileError = compiler.GetErrorStatus();
-
-    printf( "Fail: %s", m_compileError.Format().c_str() );
 
     return false;
 }

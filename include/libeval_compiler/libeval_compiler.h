@@ -57,7 +57,7 @@ class COMPILER;
 
 struct ERROR_STATUS
 {
-    bool pendingError;
+    bool pendingError = false;
 
     enum STAGE
     {
@@ -242,63 +242,69 @@ private:
 
 
 class UCODE;
+class CONTEXT;
+
 
 class VAR_REF
 {
 public:
     virtual VAR_TYPE_T GetType() = 0;
-    virtual VALUE GetValue( UCODE* aUcode ) = 0;
+    virtual VALUE GetValue( CONTEXT* aCtx, UCODE* aUcode ) = 0;
+};
+
+
+class CONTEXT
+{
+public:
+    const int c_memSize = 128;
+
+    CONTEXT()
+    {
+        m_sp = 0;
+
+        for( int i = 0; i < c_memSize; i++ )
+            m_heap.emplace_back( VALUE() );
+    }
+
+    VALUE* AllocValue()
+    {
+        assert( m_memPos < c_memSize );
+        auto rv = &m_heap[ m_memPos++ ];
+        return rv;
+    }
+
+    void   Push( VALUE* v )
+    {
+        m_stack[m_sp++] = v;
+    }
+
+    VALUE* Pop()
+    {
+        m_sp--;
+        return m_stack[m_sp];
+    }
+
+    int SP() const
+    {
+        return m_sp;
+    }
+
+    ERROR_STATUS GetErrorStatus() const { return m_errorStatus; }
+    void ReportError( const wxString& aErrorMsg );
+
+private:
+    std::vector<VALUE> m_heap;
+    VALUE*             m_stack[128];
+    int                m_sp = 0;
+    int                m_memPos = 0;
+    ERROR_STATUS       m_errorStatus;
 };
 
 
 class UCODE
 {
 public:
-    
-    class CONTEXT
-    {
-    public:
-        const int c_memSize = 128;
-
-        CONTEXT()
-        {
-            m_sp = 0;
-
-            for( int i = 0; i < c_memSize; i++ )
-                m_memory.push_back( VALUE() );
-        }
-
-        VALUE* AllocValue()
-        {
-            assert( m_memPos < c_memSize );
-            auto rv = &m_memory[ m_memPos++ ];
-            return rv;
-        }
-
-        void   Push( VALUE* v )
-        {
-            m_stack[m_sp++] = v;
-        }
-
-        VALUE* Pop()
-        {
-            m_sp--;
-            return m_stack[m_sp];
-        }
-
-        int SP() const
-        {
-            return m_sp;
-        }
-
-    private:
-        std::vector<VALUE> m_memory;
-        VALUE*             m_stack[128];
-        int                m_sp = 0;
-        int                m_memPos = 0;
-    };
-
-    typedef std::function<void(UCODE*, CONTEXT*, void*)> FUNC_PTR;
+    typedef std::function<void( UCODE*, CONTEXT*, void* )> FUNC_PTR;
 
     void AddOp( UOP* uop )
     {
@@ -307,9 +313,9 @@ public:
 
     VALUE* Run();
     std::string Dump() const;
-    void RuntimeError( const std::string& aErrorMsg );
 
-    virtual VAR_REF* createVarRef( COMPILER* aCompiler, const std::string& var, const std::string& field )
+    virtual VAR_REF* createVarRef( COMPILER* aCompiler, const std::string& var,
+                                   const std::string& field )
     {
         return nullptr;
     };
@@ -338,7 +344,7 @@ public:
         m_func( std::move( func ) )
     {};
 
-    void Exec( UCODE::CONTEXT* ctx, UCODE *ucode );
+    void Exec( CONTEXT* ctx, UCODE *ucode );
 
     std::string Format() const;
 
@@ -423,8 +429,8 @@ public:
     void setRoot( LIBEVAL::TREE_NODE root );
 
     bool Compile( const std::string& aString, UCODE* aCode );
-    void ReportError( const std::string& aErrorMsg );
-    ERROR_STATUS GetErrorStatus();
+    void ReportError( const wxString& aErrorMsg );
+    ERROR_STATUS GetErrorStatus() const { return m_errorStatus; }
 
 protected:
     enum LEXER_STATE
