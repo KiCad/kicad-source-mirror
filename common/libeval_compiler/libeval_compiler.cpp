@@ -723,17 +723,17 @@ bool COMPILER::generateUCode( UCODE* aCode )
 
         case TR_NUMBER:
         {
+            int        units = 1;
             TREE_NODE* son = node->leaf[0];
-
-            double value = atof( node->value.str ); // fixme: locale
 
             if( son && son->op == TR_UNIT )
             {
                 //printf( "HandleUnit: %s unit %d\n", node->value.str, son->value.type );
-
-                value = m_unitResolver->Convert( node->value.str, son->value.type );
+                units = son->value.type;
                 visitedNodes.insert( son );
             }
+
+            double value = m_unitResolver->Convert( node->value.str, units );
 
             node->uop = makeUop( TR_UOP_PUSH_VALUE, value );
             node->isTerminal = true;
