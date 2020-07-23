@@ -207,10 +207,25 @@ void test::DRC_ENGINE::RunTests( )
 
 
     inferImplicitRules();
-
     CompileRules();
+
     for( auto provider : m_testProviders )
     {
+        bool skipProvider = false;
+
+        for( auto ruleID : provider->GetMatchingRuleIds() )
+        {
+            if( !HasCorrectRulesForId( ruleID ) )
+            {
+                ReportAux( wxString::Format( "DRC provider '%s' has no rules provided. Skipping run.", provider->GetName() ) );
+                skipProvider = true;
+                break;
+            }
+        }
+
+        if( skipProvider )
+            continue;
+
         drc_dbg(0, "Running test provider: '%s'\n", (const char *) provider->GetName().c_str() );
         ReportAux( wxString::Format( "Run DRC provider: '%s'", provider->GetName() ) );
         provider->Run();
@@ -316,10 +331,10 @@ std::vector<test::DRC_RULE*> test::DRC_ENGINE::QueryRulesById( test::DRC_RULE_ID
     std::vector<test::DRC_RULE*> rv;
 
     auto dr = m_ruleMap[ruleID]->defaultRule;
+
     assert( dr );
 
-    if ( dr )
-        rv.push_back( dr );
+    rv.push_back( dr );
 
     for( auto rule : m_ruleMap[ruleID]->sortedRules )
     {
@@ -329,5 +344,11 @@ std::vector<test::DRC_RULE*> test::DRC_ENGINE::QueryRulesById( test::DRC_RULE_ID
     }
 
     return rv;
+}
+
+
+bool test::DRC_ENGINE::HasCorrectRulesForId( test::DRC_RULE_ID_T ruleID )
+{
+    return m_ruleMap[ruleID]->defaultRule != nullptr;
 }
 

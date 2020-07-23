@@ -148,6 +148,8 @@ public:
 
     std::vector<DRC_RULE*> QueryRulesById( test::DRC_RULE_ID_T ruleID );
 
+    bool HasCorrectRulesForId( test::DRC_RULE_ID_T ruleID );
+
     EDA_UNITS UserUnits() const
     {
         return EDA_UNITS::MILLIMETRES;
