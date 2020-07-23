@@ -162,17 +162,17 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, 
 
 wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry )
 {
-    /// ID numbers for tool actions need to have a value higher than ACTION_ID
+    /// ID numbers for tool actions are assigned above ACTION_BASE_UI_ID inside TOOL_EVENT
     const BITMAP_OPAQUE* icon = aAction.GetIcon();
 
-    wxMenuItem* item = new wxMenuItem( this, getMenuId( aAction ), aAction.GetMenuItem(),
+    wxMenuItem* item = new wxMenuItem( this, aAction.GetUIId(), aAction.GetMenuItem(),
                                        aAction.GetDescription(),
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
     if( icon )
         AddBitmapToMenuItem( item, KiBitmap( icon ) );
 
-    m_toolActions[getMenuId( aAction )] = &aAction;
+    m_toolActions[aAction.GetUIId()] = &aAction;
 
     return Append( item );
 }
@@ -436,7 +436,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
         }
 
         // Check if there is a TOOL_ACTION for the given ID
-        if( m_selected >= ACTION_ID )
+        if( m_selected >= TOOL_ACTION::GetBaseUIId() )
             evt = findToolAction( m_selected );
 
         if( !evt )

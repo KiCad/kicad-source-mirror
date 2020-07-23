@@ -76,9 +76,9 @@ private:
             }
         }
 
-        Enable( getMenuId( PCB_ACTIONS::showNet ), haveNetCode );
-        Enable( getMenuId( PCB_ACTIONS::hideNet ), haveNetCode );
-        // Enable( getMenuId( PCB_ACTIONS::highlightNet ), haveNetCode );
+        Enable( PCB_ACTIONS::showNet.GetUIId(), haveNetCode );
+        Enable( PCB_ACTIONS::hideNet.GetUIId(), haveNetCode );
+        // Enable( PCB_ACTIONS::highlightNet.GetUIId(), haveNetCode );
     }
 
     ACTION_MENU* create() const override

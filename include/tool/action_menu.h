@@ -37,8 +37,6 @@
 class TOOL_INTERACTIVE;
 
 /**
- * ACTION_MENU
- *
  * Defines the structure of a menu based on ACTIONs.
  */
 class ACTION_MENU : public wxMenu
@@ -53,28 +51,26 @@ public:
     ACTION_MENU& operator=( const ACTION_MENU& aMenu ) = delete;
 
     /**
-     * Function SetTitle()
      * Sets title for the menu. The title is shown as a text label shown on the top of
      * the menu.
+     *
      * @param aTitle is the new title.
      */
     void SetTitle( const wxString& aTitle ) override;
 
     /**
-     * Function DisplayTitle()
      * Decides whether a title for a pop up menu should be displayed.
      */
     void DisplayTitle( bool aDisplay = true );
 
     /**
-     * Function SetIcon()
      * Assigns an icon for the entry.
+     *
      * @param aIcon is the icon to be assigned. NULL is used to remove icon.
      */
     void SetIcon( const BITMAP_OPAQUE* aIcon );
 
     /**
-     * Function Add()
      * Adds a wxWidgets-style entry to the menu. After highlighting/selecting the entry,
      * a wxWidgets event is generated.
      */
@@ -83,39 +79,36 @@ public:
                      const BITMAP_OPAQUE* aIcon );
 
     /**
-     * Function Add()
      * Adds an entry to the menu, basing on the TOOL_ACTION object. After selecting the entry,
      * a TOOL_EVENT command containing name of the action is sent.
+     *
      * @param aAction is the action to be added to menu entry.
      */
     wxMenuItem* Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry = false );
 
     /**
-     * Function Add()
      * Adds an action menu as a submenu. The difference between this function and
      * wxMenu::AppendSubMenu() is the capability to handle icons.
+     *
      * @param aMenu is the submenu to be added.
      */
     wxMenuItem* Add( ACTION_MENU* aMenu );
 
     /**
-     * Function Clear()
      * Removes all the entries from the menu (as well as its title). It leaves the menu in the
      * initial state.
      */
     void Clear();
 
     /**
-     * Function HasEnabledItems();
-     *
      * Returns true if the menu has any enabled items
      */
     bool HasEnabledItems() const;
 
     /**
-     * Function GetSelected()
      * Returns the position of selected item. If the returned value is negative, that means that
      * menu was dismissed.
+     *
      * @return The position of selected item in the action menu.
      */
     inline int GetSelected() const
@@ -124,21 +117,19 @@ public:
     }
 
     /**
-     * Function UpdateAll()
      * Runs update handlers for the menu and its submenus.
      */
     void UpdateAll();
 
     /**
-     * Function ClearDirty()
      * Clears the dirty flag on the menu and all descendants.
      */
     void ClearDirty();
     void SetDirty();
 
     /**
-     * Function SetTool()
      * Sets a tool that is the creator of the menu.
+     *
      * @param aTool is the tool that created the menu.
      */
     void SetTool( TOOL_INTERACTIVE* aTool );
@@ -157,12 +148,6 @@ protected:
 
     ///> Returns an instance of TOOL_MANAGER class.
     TOOL_MANAGER* getToolManager() const;
-
-    ///> Returns the corresponding wxMenuItem identifier for a TOOL_ACTION object.
-    static inline int getMenuId( const TOOL_ACTION& aAction )
-    {
-        return aAction.GetId() + ACTION_ID;
-    }
 
     /**
      * Update menu state stub. It is called before a menu is shown, in order to update its state.
@@ -229,9 +214,6 @@ protected:
 
     ///> Creator of the menu
     TOOL_INTERACTIVE* m_tool;
-
-    ///> Menu items with ID higher than that are considered TOOL_ACTIONs
-    static const int ACTION_ID = 20000;
 
     ///> Associates tool actions with menu item IDs. Non-owning.
     std::map<int, const TOOL_ACTION*> m_toolActions;

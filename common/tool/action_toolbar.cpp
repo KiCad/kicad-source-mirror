@@ -60,7 +60,7 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry )
 {
     wxWindow* parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
-    int       toolId = aAction.GetId() + ACTION_ID;
+    int       toolId = aAction.GetUIId();
 
     AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), parent ),
              aAction.GetDescription(), aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL );
@@ -73,7 +73,7 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry )
 void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
 {
     wxWindow* parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
-    int       toolId = aAction.GetId() + ACTION_ID;
+    int       toolId = aAction.GetUIId();
 
     AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), parent ),
              aAction.GetName(), wxITEM_NORMAL );
@@ -102,7 +102,7 @@ void ACTION_TOOLBAR::AddScaledSeparator( wxWindow* aWindow )
 
 void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction, CONDITIONAL_MENU* aMenu )
 {
-    int toolId = aAction.GetId() + ACTION_ID;
+    int toolId = aAction.GetUIId();
 
     // If this is replacing an existing menu, delete the existing menu before adding the new one
     const auto it = m_toolMenus.find( toolId );
@@ -134,7 +134,7 @@ void ACTION_TOOLBAR::ClearToolbar()
 
 void ACTION_TOOLBAR::SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmap& aBitmap )
 {
-    int toolId = aAction.GetId() + ACTION_ID;
+    int toolId = aAction.GetUIId();
     wxAuiToolBar::SetToolBitmap( toolId, aBitmap );
 
     // Set the disabled bitmap: we use the disabled bitmap version
@@ -148,7 +148,7 @@ void ACTION_TOOLBAR::SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmap& 
 
 void ACTION_TOOLBAR::Toggle( const TOOL_ACTION& aAction, bool aState )
 {
-    int toolId = aAction.GetId() + ACTION_ID;
+    int toolId = aAction.GetUIId();
 
     if( m_toolKinds[ toolId ] )
         ToggleTool( toolId, aState );
@@ -159,7 +159,7 @@ void ACTION_TOOLBAR::Toggle( const TOOL_ACTION& aAction, bool aState )
 
 void ACTION_TOOLBAR::Toggle( const TOOL_ACTION& aAction, bool aEnabled, bool aChecked )
 {
-    int toolId = aAction.GetId() + ACTION_ID;
+    int toolId = aAction.GetUIId();
 
     EnableTool( toolId, aEnabled );
     ToggleTool( toolId, aEnabled && aChecked );
@@ -173,7 +173,7 @@ void ACTION_TOOLBAR::onToolEvent( wxAuiToolBarEvent& aEvent )
 
     wxEventType type = aEvent.GetEventType();
 
-    if( type == wxEVT_COMMAND_TOOL_CLICKED && aEvent.GetId() >= ACTION_ID )
+    if( type == wxEVT_COMMAND_TOOL_CLICKED && aEvent.GetId() >= TOOL_ACTION::GetBaseUIId() )
     {
         const auto it = m_toolActions.find( aEvent.GetId() );
 

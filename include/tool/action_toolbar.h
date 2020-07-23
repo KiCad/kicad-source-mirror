@@ -49,15 +49,14 @@ public:
     virtual ~ACTION_TOOLBAR();
 
     /**
-     * Function Add()
      * Adds a TOOL_ACTION-based button to the toolbar. After selecting the entry,
      * a TOOL_EVENT command containing name of the action is sent.
      */
     void Add( const TOOL_ACTION& aAction, bool aIsToggleEntry = false );
 
     /**
-     * Function AddButton()
      * Adds a large button such as used in the Kicad Manager Frame's launch bar.
+     *
      * @param aAction
      */
     void AddButton( const TOOL_ACTION& aAction );
@@ -86,7 +85,6 @@ public:
     void ClearToolbar();
 
     /**
-     * Function SetToolBitmap()
      * Updates the bitmap of a particular tool.  Not icon-based because we use it
      * for the custom-drawn layer pair bitmap.
      */
@@ -110,9 +108,6 @@ protected:
     void onToolRightClick( wxAuiToolBarEvent& aEvent );
 
 protected:
-    ///> Tool items with ID higher than that are considered TOOL_ACTIONs
-    static const int ACTION_ID = 10000;
-
     TOOL_MANAGER* m_toolManager;
     std::map<int, bool>               m_toolKinds;
     std::map<int, const TOOL_ACTION*> m_toolActions;

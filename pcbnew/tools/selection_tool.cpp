@@ -87,9 +87,9 @@ private:
         bool connItem = S_C::OnlyTypes( GENERAL_COLLECTOR::Tracks )( selection );
         bool sheetSelEnabled = ( S_C::OnlyType( PCB_MODULE_T ) )( selection );
 
-        Enable( getMenuId( PCB_ACTIONS::selectNet ), connItem );
-        Enable( getMenuId( PCB_ACTIONS::selectConnection ), connItem );
-        Enable( getMenuId( PCB_ACTIONS::selectSameSheet ), sheetSelEnabled );
+        Enable( PCB_ACTIONS::selectNet.GetUIId(),        connItem );
+        Enable( PCB_ACTIONS::selectConnection.GetUIId(), connItem );
+        Enable( PCB_ACTIONS::selectSameSheet.GetUIId(),  sheetSelEnabled );
     }
 
     ACTION_MENU* create() const override

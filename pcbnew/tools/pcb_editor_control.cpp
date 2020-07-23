@@ -105,15 +105,15 @@ private:
                                           SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Zones )
                                         )( selTool->GetSelection() );
 
-        Enable( getMenuId( PCB_ACTIONS::zoneDuplicate ), singleZoneActionsEnabled );
-        Enable( getMenuId( PCB_ACTIONS::drawZoneCutout ), singleZoneActionsEnabled );
-        Enable( getMenuId( PCB_ACTIONS::drawSimilarZone ), singleZoneActionsEnabled );
+        Enable( PCB_ACTIONS::zoneDuplicate.GetUIId(),   singleZoneActionsEnabled );
+        Enable( PCB_ACTIONS::drawZoneCutout.GetUIId(),  singleZoneActionsEnabled );
+        Enable( PCB_ACTIONS::drawSimilarZone.GetUIId(), singleZoneActionsEnabled );
 
         // enable zone actions that ably to a specific set of zones (as opposed to all of them)
         bool nonGlobalActionsEnabled = ( SELECTION_CONDITIONS::MoreThan( 0 ) )( selTool->GetSelection() );
 
-        Enable( getMenuId( PCB_ACTIONS::zoneFill ), nonGlobalActionsEnabled );
-        Enable( getMenuId( PCB_ACTIONS::zoneUnfill ), nonGlobalActionsEnabled );
+        Enable( PCB_ACTIONS::zoneFill.GetUIId(),   nonGlobalActionsEnabled );
+        Enable( PCB_ACTIONS::zoneUnfill.GetUIId(), nonGlobalActionsEnabled );
 
         // lines like this make me really think about a better name for SELECTION_CONDITIONS class
         bool mergeEnabled = ( SELECTION_CONDITIONS::MoreThan( 1 ) &&
@@ -121,7 +121,7 @@ private:
                               PCB_SELECTION_CONDITIONS::SameNet( true ) &&
                               PCB_SELECTION_CONDITIONS::SameLayer() )( selTool->GetSelection() );
 
-        Enable( getMenuId( PCB_ACTIONS::zoneMerge ), mergeEnabled );
+        Enable( PCB_ACTIONS::zoneMerge.GetUIId(), mergeEnabled );
     }
 };
 
@@ -181,12 +181,12 @@ private:
 
         BOARD::GroupLegalOpsField legalOps = board->GroupLegalOps( selection );
 
-        Enable( getMenuId( PCB_ACTIONS::groupCreate ), legalOps.create );
-        Enable( getMenuId( PCB_ACTIONS::groupMerge ), legalOps.merge );
-        Enable( getMenuId( PCB_ACTIONS::groupUngroup ), legalOps.ungroup );
-        Enable( getMenuId( PCB_ACTIONS::groupRemoveItems ), legalOps.removeItems );
-        Enable( getMenuId( PCB_ACTIONS::groupFlatten ), legalOps.flatten );
-        Enable( getMenuId( PCB_ACTIONS::groupEnter ), legalOps.enter );
+        Enable( PCB_ACTIONS::groupCreate.GetUIId(),      legalOps.create );
+        Enable( PCB_ACTIONS::groupMerge.GetUIId(),       legalOps.merge );
+        Enable( PCB_ACTIONS::groupUngroup.GetUIId(),     legalOps.ungroup );
+        Enable( PCB_ACTIONS::groupRemoveItems.GetUIId(), legalOps.removeItems );
+        Enable( PCB_ACTIONS::groupFlatten.GetUIId(),     legalOps.flatten );
+        Enable( PCB_ACTIONS::groupEnter.GetUIId(),       legalOps.enter );
     }
 };
 

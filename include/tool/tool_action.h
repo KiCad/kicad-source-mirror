@@ -34,8 +34,6 @@
 struct BITMAP_OPAQUE;
 
 /**
- * TOOL_ACTION
- *
  * Represents a single user action. For instance:
  * - changing layer to top by pressing PgUp
  * - running the DRC from the menu
@@ -47,9 +45,9 @@ class TOOL_ACTION
 {
 public:
     TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope = AS_CONTEXT,
-                 int aDefaultHotKey = 0, const std::string& aLegacyHotKeyName = "", 
-                 const wxString& aMenuText = wxEmptyString, const wxString& aTooltip = wxEmptyString, 
-                 const BITMAP_OPAQUE* aIcon = nullptr, TOOL_ACTION_FLAGS aFlags = AF_NONE, 
+                 int aDefaultHotKey = 0, const std::string& aLegacyHotKeyName = "",
+                 const wxString& aMenuText = wxEmptyString, const wxString& aTooltip = wxEmptyString,
+                 const BITMAP_OPAQUE* aIcon = nullptr, TOOL_ACTION_FLAGS aFlags = AF_NONE,
                  void* aParam = nullptr );
 
     ~TOOL_ACTION();
@@ -69,29 +67,25 @@ public:
     }
 
     /**
-     * Function GetName()
      * Returns name of the action. It is the same one that is contained in TOOL_EVENT that is
      * sent by activating the TOOL_ACTION.  Convention is "app.tool.actionName".
      *
      * @return Name of the action.
      */
     const std::string& GetName() const { return m_name; }
-    
+
     /**
-     * Function GetDefaultHotKey()
      * Returns the default hotkey (if any) for the action.
      */
     int GetDefaultHotKey() const { return m_defaultHotKey; }
-    
+
     /**
-     * Function GetHotKey()
      * Returns the hotkey keycode which initiates the action.
      */
     int GetHotKey() const { return m_hotKey; }
     void SetHotKey( int aKeycode );
-    
+
     /**
-     * Function GetId()
      * Returns the unique id of the TOOL_ACTION object. It is valid only after registering the
      * TOOL_ACTION by ACTION_MANAGER.
      *
@@ -99,8 +93,20 @@ public:
      */
     int GetId() const { return m_id; }
 
+    /*
+     * Get the unique ID for this action in the user interface system. This is simply
+     * the action ID offset by @c ACTION_BASE_UI_ID.
+     *
+     * @return The unique ID number for use in the user interface system.
+     */
+    int GetUIId() const { return m_id + ACTION_BASE_UI_ID; }
+
+    /*
+     * Get the base value used to offset the user interface IDs for the actions.
+     */
+    static int GetBaseUIId() { return ACTION_BASE_UI_ID; }
+
     /**
-     * Function MakeEvent()
      * Returns the event associated with the action (i.e. the event that will be sent after
      * activating the action).
      */
@@ -156,11 +162,14 @@ protected:
 
     friend class ACTION_MANAGER;
 
+    ///> Base ID to use inside the user interface system to offset the action IDs.
+    static constexpr int ACTION_BASE_UI_ID = 20000;
+
     /// Name of the action (convention is "app.tool.actionName")
     std::string          m_name;
     TOOL_ACTION_SCOPE    m_scope;
 
-    const int            m_defaultHotKey;  // Default hot key  
+    const int            m_defaultHotKey;  // Default hot key
     int                  m_hotKey;         // The curret hotkey (post-user-settings-application)
     const std::string    m_legacyName;     // Name for reading legacy hotkey settings
 
