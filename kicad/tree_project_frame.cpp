@@ -272,6 +272,7 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
     case TREE_LEGACY_PCB:            return LegacyPcbFileExtension;
     case TREE_SEXPR_PCB:             return KiCadPcbFileExtension;
     case TREE_GERBER:                return GerberFileExtensionWildCard;
+    case TREE_GERBER_JOB_FILE:       return GerberJobFileExtension;
     case TREE_HTML:                  return HtmlFileExtension;
     case TREE_PDF:                   return PdfFileExtension;
     case TREE_TXT:                   return TextFileExtension;
@@ -405,6 +406,9 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
 
             if( ext == wxT( "" ) )
                 continue;
+
+            if( i == TREE_GERBER )  // For gerber files, the official ext is gbr
+                ext = "gbr";
 
             reg.Compile( wxString::FromAscii( "^.*\\." ) + ext +
                          wxString::FromAscii( "$" ), wxRE_ICASE );
