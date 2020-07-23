@@ -40,6 +40,12 @@ class PCB_EXPR_VAR_REF;
 class PCB_EXPR_UCODE : public LIBEVAL::UCODE
 {
 public:
+    PCB_EXPR_UCODE()
+    {
+        m_items[0] = nullptr;
+        m_items[1] = nullptr;
+    }
+
     virtual LIBEVAL::VAR_REF* createVarRef( LIBEVAL::COMPILER *aCompiler,
                                             const std::string& aVar,
                                             const std::string& aField ) override;
