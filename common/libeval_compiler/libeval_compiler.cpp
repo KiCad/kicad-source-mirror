@@ -433,13 +433,13 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         m_tokenizer.NextChar();
         return false;
     }
-    else if( isalpha( ch ) )
+    else if( isalpha( ch ) || ch == '_' )
     {
         //printf("ALPHA\n");
-        current = m_tokenizer.GetChars( []( int c ) -> bool { return isalnum( c ); } );
+        current = m_tokenizer.GetChars( []( int c ) -> bool { return isalnum( c ) || c == '_'; } );
         //printf("Len: %d\n", current.length() );
         //printf("id '%s'\n", (const char *) current.c_str() );
-        fflush( stdout );
+        //fflush( stdout );
         retval.token = G_IDENTIFIER;
         snprintf( retval.value.value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", current.c_str() );
         m_tokenizer.NextChar( current.length() );
