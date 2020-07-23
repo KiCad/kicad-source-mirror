@@ -983,6 +983,7 @@ static struct TRACK_VIA_DESC
     TRACK_VIA_DESC()
     {
         ENUM_MAP<VIATYPE>::Instance()
+            .Undefined( VIATYPE::NOT_DEFINED )
             .Map( VIATYPE::THROUGH, _( "Through" ) )
             .Map( VIATYPE::BLIND_BURIED, _( "Blind/Buried" ) )
             .Map( VIATYPE::MICROVIA, _( "Microvia" ) );

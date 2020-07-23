@@ -787,7 +787,7 @@ void UOP::Exec( CONTEXT* ctx, UCODE* ucode )
     case TR_UOP_PUSH_VAR:
     {
         auto value = ctx->AllocValue();
-        value->Set( reinterpret_cast<VAR_REF*>( m_arg )->GetValue( ctx, ucode ) );
+        value->Set( reinterpret_cast<VAR_REF*>( m_arg )->GetValue( ucode ) );
         ctx->Push( value );
     }
         break;

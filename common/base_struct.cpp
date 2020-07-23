@@ -744,9 +744,8 @@ static struct EDA_ITEM_DESC
     EDA_ITEM_DESC()
     {
         ENUM_MAP<KICAD_T>::Instance()
+            .Undefined( TYPE_NOT_INIT )
             .Map( NOT_USED,             wxT( "<not used>" ) )
-            //.Map( EOT,                  wxT( "<EOT>" ) )
-            .Map( TYPE_NOT_INIT,        wxT( "<type not init>" ) )    // == EOT
             .Map( SCREEN_T,             _( "Screen" ) )
 
             .Map( PCB_MODULE_T,         _( "Footprint" ) )
@@ -764,21 +763,21 @@ static struct EDA_ITEM_DESC
             .Map( PCB_ITEM_LIST_T,      _( "Item List" ) )
             .Map( PCB_NETINFO_T,        _( "Net Info" ) )
 
-            .Map( SCH_MARKER_T,             _( "Schematic Marker" ) )
-            .Map( SCH_JUNCTION_T,           _( "Junction" ) )
-            .Map( SCH_NO_CONNECT_T,         _( "No-Connect Flag" ) )
-            .Map( SCH_BUS_WIRE_ENTRY_T,     _( "Wire Entry" ) )
-            .Map( SCH_BUS_BUS_ENTRY_T,      _( "Bus Entry" ) )
-            .Map( SCH_LINE_T,               _( "Graphic Line" ) )
-            .Map( SCH_BITMAP_T,             _( "Bitmap" ) )
-            .Map( SCH_TEXT_T,               _( "Schematic Text" ) )
-            .Map( SCH_LABEL_T,              _( "Net Label" ) )
-            .Map( SCH_GLOBAL_LABEL_T,       _( "Global Label" ) )
-            .Map( SCH_HIER_LABEL_T,         _( "Hierarchical Label" ) )
-            .Map( SCH_FIELD_T,              _( "Schematic Field" ) )
-            .Map( SCH_COMPONENT_T,          _( "Component" ) )
-            .Map( SCH_SHEET_PIN_T,          _( "Sheet Pin" ) )
-            .Map( SCH_SHEET_T,              _( "Sheet" ) )
+            .Map( SCH_MARKER_T,         _( "Schematic Marker" ) )
+            .Map( SCH_JUNCTION_T,       _( "Junction" ) )
+            .Map( SCH_NO_CONNECT_T,     _( "No-Connect Flag" ) )
+            .Map( SCH_BUS_WIRE_ENTRY_T, _( "Wire Entry" ) )
+            .Map( SCH_BUS_BUS_ENTRY_T,  _( "Bus Entry" ) )
+            .Map( SCH_LINE_T,           _( "Graphic Line" ) )
+            .Map( SCH_BITMAP_T,         _( "Bitmap" ) )
+            .Map( SCH_TEXT_T,           _( "Schematic Text" ) )
+            .Map( SCH_LABEL_T,          _( "Net Label" ) )
+            .Map( SCH_GLOBAL_LABEL_T,   _( "Global Label" ) )
+            .Map( SCH_HIER_LABEL_T,     _( "Hierarchical Label" ) )
+            .Map( SCH_FIELD_T,          _( "Schematic Field" ) )
+            .Map( SCH_COMPONENT_T,      _( "Component" ) )
+            .Map( SCH_SHEET_PIN_T,      _( "Sheet Pin" ) )
+            .Map( SCH_SHEET_T,          _( "Sheet" ) )
 
             .Map( SCH_FIELD_LOCATE_REFERENCE_T, _( "Field Locate Reference" ) )
             .Map( SCH_FIELD_LOCATE_VALUE_T,     _( "Field Locate Value" ) )
@@ -799,9 +798,7 @@ static struct EDA_ITEM_DESC
 
             .Map( GERBER_LAYOUT_T,      _( "Gerber Layout" ) )
             .Map( GERBER_DRAW_ITEM_T,   _( "Draw Item" ) )
-            .Map( GERBER_IMAGE_T,       _( "Image" ) )
-
-            .Map( MAX_STRUCT_TYPE_ID,   wxT( "<max struct type>" ) );
+            .Map( GERBER_IMAGE_T,       _( "Image" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_ITEM );

@@ -208,7 +208,7 @@ static struct BOARD_CONNECTED_ITEM_DESC
 
         if( layerEnum.Choices().GetCount() == 0 )
         {
-            layerEnum.SetDefault( UNDEFINED_LAYER );
+            layerEnum.Undefined( UNDEFINED_LAYER );
 
             for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
                 layerEnum.Map( *seq, LSET::Name( *seq ) );

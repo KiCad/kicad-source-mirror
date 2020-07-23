@@ -249,7 +249,7 @@ class VAR_REF
 {
 public:
     virtual VAR_TYPE_T GetType() = 0;
-    virtual VALUE GetValue( CONTEXT* aCtx, UCODE* aUcode ) = 0;
+    virtual VALUE GetValue( UCODE* aUcode ) = 0;
 };
 
 

@@ -99,17 +99,18 @@ BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::UCODE* aUcode ) const
 }
 
 
-LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx, LIBEVAL::UCODE* aUcode )
+LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode )
 {
     BOARD_ITEM* item  = const_cast<BOARD_ITEM*>( GetObject( aUcode ) );
     auto        it = m_matchingTypes.find( TYPE_HASH( *item ) );
 
     if( it == m_matchingTypes.end() )
     {
-        wxString msg;
-        msg.Printf("property not found for item of type: 0x%x!\n",  TYPE_HASH( *item ) );
-        aCtx->ReportError( (const char *) msg.c_str() );
-        return LIBEVAL::VALUE( 0.0 );
+        // Don't force user to type "A.Type == 'via' && A.Via_Type == 'buried'" when the
+        // simplier "A.Via_Type == 'buried'" is perfectly clear.  Instead, return an undefined
+        // value when the property doesn't appear on a particular object.
+
+        return LIBEVAL::VALUE( "UNDEFINED" );
     }
     else
     {
@@ -118,6 +119,7 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx, LIBEVAL::UCOD
         else
         {
             wxString str;
+
             if( !m_isEnum )
             {
                 //printf("item %p Get string '%s'\n", item, (const char*) it->second->Name().c_str() );
@@ -125,10 +127,11 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx, LIBEVAL::UCOD
             }
             else
             {
-                const auto& any = item->Get( it->second );
+                const wxAny& any = item->Get( it->second );
                 any.GetAs<wxString>( &str );
                 //printf("item %p get enum: '%s'\n", item , (const char*) str.c_str() );
             }
+
             return LIBEVAL::VALUE( (const char*) str.c_str() );
         }
     }

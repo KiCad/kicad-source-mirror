@@ -85,7 +85,7 @@ public:
         m_matchingTypes[type_hash] = prop;
     }
 
-    virtual LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx, LIBEVAL::UCODE* aUcode ) override;
+    virtual LIBEVAL::VALUE GetValue( LIBEVAL::UCODE* aUcode ) override;
 
     BOARD_ITEM* GetObject( LIBEVAL::UCODE* aUcode ) const;
 
