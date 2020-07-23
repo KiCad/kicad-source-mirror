@@ -342,7 +342,7 @@ wxString ComponentFileWildcard()
 // Wildcard for reports and fabrication documents
 wxString DrillFileWildcard()
 {
-    return _( "Drill files" ) + AddFileExtListToFilter( { "drl", "nc", "xnc" } );
+    return _( "Drill files" ) + AddFileExtListToFilter( { "drl", "nc", "xnc", "txt" } );
 }
 
 
