@@ -40,18 +40,23 @@ class PCB_EXPR_VAR_REF;
 class PCB_EXPR_UCODE : public LIBEVAL::UCODE
 {
 public:
-    PCB_EXPR_UCODE()
-    {
-        m_items[0] = nullptr;
-        m_items[1] = nullptr;
-    }
-
     virtual LIBEVAL::VAR_REF* createVarRef( LIBEVAL::COMPILER *aCompiler,
                                             const std::string& aVar,
                                             const std::string& aField ) override;
 
     virtual FUNC_PTR createFuncCall( LIBEVAL::COMPILER* aCompiler,
                                      const std::string& name ) override;
+};
+
+
+class PCB_EXPR_CONTEXT : public LIBEVAL::CONTEXT
+{
+public:
+    PCB_EXPR_CONTEXT()
+    {
+        m_items[0] = nullptr;
+        m_items[1] = nullptr;
+    }
 
     void SetItems( BOARD_ITEM* a, BOARD_ITEM* b = nullptr )
     {
@@ -91,9 +96,9 @@ public:
         m_matchingTypes[type_hash] = prop;
     }
 
-    virtual LIBEVAL::VALUE GetValue( LIBEVAL::UCODE* aUcode ) override;
+    virtual LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx ) override;
 
-    BOARD_ITEM* GetObject( LIBEVAL::UCODE* aUcode ) const;
+    BOARD_ITEM* GetObject( LIBEVAL::CONTEXT* aCtx ) const;
 
 private:
     std::unordered_map<TYPE_ID, PROPERTY_BASE*> m_matchingTypes;

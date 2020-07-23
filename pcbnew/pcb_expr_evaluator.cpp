@@ -30,7 +30,7 @@
 
 
 
-static void onLayer( LIBEVAL::UCODE* aUcode, LIBEVAL::CONTEXT* aCtx, void *self )
+static void onLayer( LIBEVAL::CONTEXT* aCtx, void *self )
 {
     LIBEVAL::VALUE* arg = aCtx->Pop();
     LIBEVAL::VALUE* result = aCtx->AllocValue();
@@ -54,14 +54,14 @@ static void onLayer( LIBEVAL::UCODE* aUcode, LIBEVAL::CONTEXT* aCtx, void *self 
     }
 
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-    BOARD_ITEM*       item = vref ? vref->GetObject( aUcode ) : nullptr;
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
 
     if( item && item->IsOnLayer( layer ) )
         result->Set( 1.0 );
 }
 
 
-static void isPlated( LIBEVAL::UCODE* aUcode, LIBEVAL::CONTEXT* aCtx, void *self )
+static void isPlated( LIBEVAL::CONTEXT* aCtx, void *self )
 {
     LIBEVAL::VALUE* result = aCtx->AllocValue();
 
@@ -69,7 +69,7 @@ static void isPlated( LIBEVAL::UCODE* aUcode, LIBEVAL::CONTEXT* aCtx, void *self
     aCtx->Push( result );
 
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-    BOARD_ITEM*       item = vref ? vref->GetObject( aUcode ) : nullptr;
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
     D_PAD*            pad = dynamic_cast<D_PAD*>( item );
 
     if( pad && pad->GetAttribute() == PAD_ATTRIB_STANDARD )
@@ -91,17 +91,17 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 }
 
 
-BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::UCODE* aUcode ) const
+BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::CONTEXT* aCtx ) const
 {
-    const PCB_EXPR_UCODE* ucode = static_cast<const PCB_EXPR_UCODE*>( aUcode );
-    BOARD_ITEM*           item  = ucode->GetItem( m_itemIndex );
+    const PCB_EXPR_CONTEXT* ctx = static_cast<const PCB_EXPR_CONTEXT*>( aCtx );
+    BOARD_ITEM*             item  = ctx->GetItem( m_itemIndex );
     return item;
 }
 
 
-LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::UCODE* aUcode )
+LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
-    BOARD_ITEM* item  = const_cast<BOARD_ITEM*>( GetObject( aUcode ) );
+    BOARD_ITEM* item  = const_cast<BOARD_ITEM*>( GetObject( aCtx ) );
     auto        it = m_matchingTypes.find( TYPE_HASH( *item ) );
 
     if( it == m_matchingTypes.end() )
@@ -264,16 +264,18 @@ PCB_EXPR_EVALUATOR::~PCB_EXPR_EVALUATOR()
 
 bool PCB_EXPR_EVALUATOR::Evaluate( const wxString& aExpr )
 {
-    PCB_EXPR_UCODE ucode;
+    PCB_EXPR_UCODE   ucode;
+    LIBEVAL::CONTEXT preflightContext;
 
-    if( !m_compiler.Compile( (const char*) aExpr.c_str(), &ucode ) )
+    if( !m_compiler.Compile( (const char*) aExpr.c_str(), &ucode, &preflightContext ) )
     {
         m_errorStatus = m_compiler.GetErrorStatus();
         return false;
     }
 
 // fixme: handle error conditions
-    LIBEVAL::VALUE* result = ucode.Run();
+    LIBEVAL::CONTEXT ctx;
+    LIBEVAL::VALUE*  result = ucode.Run( &ctx );
 
     if( result->GetType() == LIBEVAL::VT_NUMERIC )
         m_result = KiROUND( result->AsDouble() );

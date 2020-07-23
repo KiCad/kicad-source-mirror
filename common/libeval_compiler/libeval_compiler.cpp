@@ -223,7 +223,7 @@ void COMPILER::parseOk()
 }
 
 
-bool COMPILER::Compile( const std::string& aString, UCODE* aCode )
+bool COMPILER::Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPreflightContext )
 {
     // Feed parser token after token until end of input.
 
@@ -238,7 +238,7 @@ bool COMPILER::Compile( const std::string& aString, UCODE* aCode )
     if( aString.empty() )
     {
         m_parseFinished = true;
-        return generateUCode( aCode );
+        return generateUCode( aCode, aPreflightContext );
     }
 
     do
@@ -265,7 +265,7 @@ bool COMPILER::Compile( const std::string& aString, UCODE* aCode )
         }
     } while( tok.token );
 
-    return generateUCode( aCode );
+    return generateUCode( aCode, aPreflightContext );
 }
 
 
@@ -592,7 +592,7 @@ void COMPILER::setRoot( TREE_NODE root )
 }
 
 
-bool COMPILER::generateUCode( UCODE* aCode )
+bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 {
     std::vector<TREE_NODE*> stack;
     std::set<TREE_NODE*>    visitedNodes;
@@ -689,22 +689,22 @@ bool COMPILER::generateUCode( UCODE* aCode )
                     }
 
                     // Preflight the function call
-                    CONTEXT ctx;
-                    VALUE*  param = ctx.AllocValue();
+                    VALUE*  param = aPreflightContext->AllocValue();
                     param->Set( node->value.str );
-                    ctx.Push( param );
+                    aPreflightContext->Push( param );
 
                     try
                     {
-                        func( aCode, &ctx, vref );
+                        func( aPreflightContext, vref );
+                        aPreflightContext->Pop();           // return value
                     }
                     catch( ... )
                     {
                     }
 
-                    if( ctx.GetErrorStatus().pendingError )
+                    if( aPreflightContext->GetErrorStatus().pendingError )
                     {
-                        m_errorStatus = ctx.GetErrorStatus();
+                        m_errorStatus = aPreflightContext->GetErrorStatus();
                         m_errorStatus.stage = ERROR_STATUS::CST_CODEGEN;
                         m_errorStatus.srcPos = node->leaf[1]->leaf[0]->srcPos + 1;
                         return false;
@@ -780,14 +780,14 @@ bool COMPILER::generateUCode( UCODE* aCode )
 }
 
 
-void UOP::Exec( CONTEXT* ctx, UCODE* ucode )
+void UOP::Exec( CONTEXT* ctx )
 {
     switch( m_op )
     {
     case TR_UOP_PUSH_VAR:
     {
         auto value = ctx->AllocValue();
-        value->Set( reinterpret_cast<VAR_REF*>( m_arg )->GetValue( ucode ) );
+        value->Set( reinterpret_cast<VAR_REF*>( m_arg )->GetValue( ctx ) );
         ctx->Push( value );
     }
         break;
@@ -798,7 +798,7 @@ void UOP::Exec( CONTEXT* ctx, UCODE* ucode )
 
     case TR_OP_METHOD_CALL:
         //printf("CALL METHOD %s\n" );
-        m_func( ucode, ctx, m_arg );
+        m_func( ctx, m_arg );
         return;
 
     default:
@@ -866,15 +866,13 @@ void UOP::Exec( CONTEXT* ctx, UCODE* ucode )
 }
 
 
-VALUE* UCODE::Run()
+VALUE* UCODE::Run( CONTEXT* ctx )
 {
-    CONTEXT ctx;
-
     for( UOP* op : m_ucode )
-        op->Exec( &ctx, this );
+        op->Exec( ctx );
 
-    assert( ctx.SP() == 1 );
-    return ctx.Pop();
+    assert( ctx->SP() == 1 );
+    return ctx->Pop();
 }
 
 

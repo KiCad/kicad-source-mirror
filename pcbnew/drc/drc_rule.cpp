@@ -89,6 +89,9 @@ DRC_RULE* GetRule( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem, int aConstr
         {
             if( rule->m_Condition.EvaluateFor( aItem, bItem ) )
                 return rule;
+
+            if( bItem && rule->m_Condition.EvaluateFor( bItem, aItem ) )
+                return rule;
         }
     }
 
@@ -113,9 +116,10 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
     BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
 
-    m_ucode->SetItems( a, b );
+    PCB_EXPR_CONTEXT ctx;
+    ctx.SetItems( a, b );
 
-    return m_ucode->Run()->AsDouble() != 0.0;
+    return m_ucode->Run( &ctx )->AsDouble() != 0.0;
 }
 
 
@@ -126,7 +130,9 @@ bool DRC_RULE_CONDITION::Compile()
     if (!m_ucode)
         m_ucode = new PCB_EXPR_UCODE;
 
-    bool ok = compiler.Compile( (const char*) m_Expression.c_str(), m_ucode );
+    PCB_EXPR_CONTEXT preflightContext;
+
+    bool ok = compiler.Compile( (const char*) m_Expression.c_str(), m_ucode, &preflightContext );
 
     if( ok )
         return true;

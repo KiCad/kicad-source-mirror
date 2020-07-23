@@ -249,7 +249,7 @@ class VAR_REF
 {
 public:
     virtual VAR_TYPE_T GetType() = 0;
-    virtual VALUE GetValue( UCODE* aUcode ) = 0;
+    virtual VALUE GetValue( CONTEXT* aCtx ) = 0;
 };
 
 
@@ -304,14 +304,14 @@ private:
 class UCODE
 {
 public:
-    typedef std::function<void( UCODE*, CONTEXT*, void* )> FUNC_PTR;
+    typedef std::function<void( CONTEXT*, void* )> FUNC_PTR;
 
     void AddOp( UOP* uop )
     {
         m_ucode.push_back(uop);
     }
 
-    VALUE* Run();
+    VALUE* Run( CONTEXT* ctx );
     std::string Dump() const;
 
     virtual VAR_REF* createVarRef( COMPILER* aCompiler, const std::string& var,
@@ -344,7 +344,7 @@ public:
         m_func( std::move( func ) )
     {};
 
-    void Exec( CONTEXT* ctx, UCODE *ucode );
+    void Exec( CONTEXT* ctx );
 
     std::string Format() const;
 
@@ -428,7 +428,7 @@ public:
 
     void setRoot( LIBEVAL::TREE_NODE root );
 
-    bool Compile( const std::string& aString, UCODE* aCode );
+    bool Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPreflightContext );
     void ReportError( const wxString& aErrorMsg );
     ERROR_STATUS GetErrorStatus() const { return m_errorStatus; }
 
@@ -441,7 +441,7 @@ protected:
 
     LEXER_STATE m_lexerState;
 
-    bool generateUCode( UCODE* aCode );
+    bool generateUCode( UCODE* aCode, CONTEXT* aPreflightContext );
 
 
     /* Token type used by the tokenizer */
