@@ -556,7 +556,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_staticTextFabProperty = new wxStaticText( m_panelGeneral, wxID_ANY, _("Fabrication Property:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFabProperty->Wrap( -1 );
-	m_staticTextFabProperty->SetToolTip( _("Optional property to specify a special purpose or constraint in fabrication files:\nBGA attribute is for pads in BGA footprints\nFiducial local is a fiducial for the parent footprint\nFiducial global is a fiducial for the whole board\nTest pad is useful to specify test points in Gerber files\nHeatsink pad  specify a thermal pad\nCastellated specify castellated through hole pads on a board edge\nThis property is specified in Gerber X2  files.") );
+	m_staticTextFabProperty->SetToolTip( _("Optional property to specify a special purpose or constraint in fabrication files:\nBGA attribute is for pads in BGA footprints\nFiducial local is a fiducial for the parent footprint\nFiducial global is a fiducial for the whole board\nTest Point pad  is useful to specify test points in Gerber files\nHeatsink pad  specify a thermal pad\nCastellated specify castellated through hole pads on a board edge\nThese properties are specified in Gerber X2  files.") );
 
 	m_middleBoxSizer->Add( m_staticTextFabProperty, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 

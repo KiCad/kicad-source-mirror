@@ -51,8 +51,6 @@
 #include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
 #include <kiface_i.h>
 
-#include <advanced_config.h> // for pad pin function and pad property feature management
-
 using namespace PCB_KEYS_T;
 
 
@@ -1181,7 +1179,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     switch( aPad->GetProperty() )
     {
-    case PAD_PROP_NONE:             break;
+    case PAD_PROP_NONE:             break;  // could be also "none"
     case PAD_PROP_BGA:              property = "pad_prop_bga"; break;
     case PAD_PROP_FIDUCIAL_GLBL:    property = "pad_prop_fiducial_glob"; break;
     case PAD_PROP_FIDUCIAL_LOCAL:   property = "pad_prop_fiducial_loc"; break;
@@ -1230,11 +1228,9 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, ")" );
     }
 
-    if( property && ADVANCED_CFG::GetCfg().m_EnableUsePadProperty )
-    {
-        // Add pad property, if exists.
+    // Add pad property, if exists.
+    if( property )
         m_out->Print( 0, " (property %s)", property );
-    }
 
     formatLayers( aPad->GetLayerSet() );
 

@@ -3370,6 +3370,10 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                     pad->SetProperty( PAD_PROP_HEATSINK );
                     break;
 
+                case T_none:
+                    pad->SetProperty( PAD_PROP_NONE );
+                    break;
+
                 case T_RIGHT:
                     break;
 

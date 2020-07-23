@@ -162,7 +162,6 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
-    m_EnableUsePadProperty    = false;
     m_realTimeConnectivity    = true;
     m_coroutineStackSize      = AC_STACK::default_stack;
     m_ShowRouterDebugGraphics = false;
@@ -198,9 +197,6 @@ void ADVANCED_CFG::loadFromConfigFile()
 void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 {
     std::vector<PARAM_CFG*> configParams;
-
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::UsePadProperty,
-                                                &m_EnableUsePadProperty, false ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity,
                                                 &m_realTimeConnectivity, false ) );

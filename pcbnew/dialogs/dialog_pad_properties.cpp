@@ -142,13 +142,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     m_board      = m_parent->GetBoard();
 
-    // Disable the pad property if not allowed in advanced config
-    if( !ADVANCED_CFG::GetCfg().m_EnableUsePadProperty )
-    {
-        m_staticTextFabProperty->Show( false );
-        m_choiceFabProperty->Show( false );
-    }
-
     m_PadNetSelector->SetBoard( m_board );
     m_PadNetSelector->SetNetInfo( &m_board->GetNetInfo() );
 
