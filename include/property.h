@@ -583,7 +583,7 @@ private:
                                   wxAnyValueType* dstType, wxAnyValueBuffer& dst ) const override\
         {\
             type value = GetValue(src);\
-            ENUM_MAP<type> conv = ENUM_MAP<type>::Instance();\
+            ENUM_MAP<type>& conv = ENUM_MAP<type>::Instance();\
             if( dstType->CheckType<wxString>() )\
             {\
                 wxAnyValueTypeImpl<wxString>::SetValue( conv.ToString( value ), dst );\
