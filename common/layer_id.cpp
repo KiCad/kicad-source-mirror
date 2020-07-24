@@ -188,6 +188,9 @@ wxString LayerName( int aLayer )
     case LAYER_DRC_ERROR:
         return _( "DRC Errors" );
 
+    case LAYER_DRC_EXCLUSION:
+        return _( "DRC Exclusions" );
+
     case LAYER_ANCHOR:
         return _( "Anchors" );
 

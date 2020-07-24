@@ -71,6 +71,7 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
     RR( _( "No-Connects" ),          LAYER_NO_CONNECTS,        BLUE,     _( "Show a marker on pads which have no net connected" ) ),
     RR( _( "DRC Warnings" ),         LAYER_DRC_WARNING,        YELLOW,   _( "DRC violations with a Warning severity" ) ),
     RR( _( "DRC Errors" ),           LAYER_DRC_ERROR,          PURERED,  _( "DRC violations with an Error severity" ) ),
+    RR( _( "DRC Exclusions" ),       LAYER_DRC_EXCLUSION,      WHITE,    _( "DRC violations which have been individually excluded" ) ),
     RR( _( "Anchors" ),              LAYER_ANCHOR,             WHITE,    _( "Show footprint and text origins as a cross" ) ),
     RR( _( "Worksheet" ),            LAYER_WORKSHEET,          DARKRED,  _( "Show worksheet") ),
     RR( _( "Cursor" ),               LAYER_CURSOR,             WHITE,    _( "PCB Cursor" ), true, false ),

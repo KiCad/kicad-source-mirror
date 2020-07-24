@@ -126,6 +126,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "board.cursor",                   LAYER_CURSOR,             COLOR4D( WHITE ) );
     CLR( "board.drc_error",                LAYER_DRC_ERROR,          COLOR4D( PURERED ) );
     CLR( "board.drc_warning",              LAYER_DRC_WARNING,        COLOR4D( PUREYELLOW ) );
+    CLR( "board.drc_exclusion",            LAYER_DRC_EXCLUSION,      COLOR4D( WHITE ) );
     CLR( "board.footprint_text_back",      LAYER_MOD_TEXT_BK,        COLOR4D( BLUE ) );
     CLR( "board.footprint_text_front",     LAYER_MOD_TEXT_FR,        COLOR4D( LIGHTGRAY ) );
     CLR( "board.footprint_text_invisible", LAYER_MOD_TEXT_INVISIBLE, COLOR4D( LIGHTGRAY ) );

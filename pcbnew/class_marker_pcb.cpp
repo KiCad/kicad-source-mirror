@@ -159,6 +159,12 @@ void MARKER_PCB::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
 
+    if( IsExcluded() )
+    {
+        aLayers[0] = LAYER_DRC_EXCLUSION;
+        return;
+    }
+
     BOARD_ITEM_CONTAINER* ancestor = GetParent();
 
     while( ancestor->GetParent() )
@@ -178,7 +184,7 @@ void MARKER_PCB::ViewGetLayers( int aLayers[], int& aCount ) const
 GAL_LAYER_ID MARKER_PCB::GetColorLayer() const
 {
     if( IsExcluded() )
-        return LAYER_AUX_ITEMS;
+        return LAYER_DRC_EXCLUSION;
 
     BOARD_ITEM_CONTAINER* ancestor = GetParent();
 

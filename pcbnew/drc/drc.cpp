@@ -1251,7 +1251,7 @@ wxPoint DRC::GetLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone )
 
     PCB_LAYER_ID l = aTrack->GetLayer();
 
-    if( aConflictZone->IsFilled() )
+    if( aConflictZone->IsFilled() && aConflictZone->HasFilledPolysForLayer( l ) )
         conflictOutline = const_cast<SHAPE_POLY_SET*>( &aConflictZone->GetFilledPolysList( l ) );
     else
         conflictOutline = aConflictZone->Outline();

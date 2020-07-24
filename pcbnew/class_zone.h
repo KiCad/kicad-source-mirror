@@ -594,6 +594,11 @@ public:
         }
     }
 
+    bool HasFilledPolysForLayer( PCB_LAYER_ID aLayer ) const
+    {
+        return m_FilledPolysList.count( aLayer ) > 0;
+    }
+
    /**
      * Function GetFilledPolysList
      * returns a reference to the list of filled polygons.

@@ -113,6 +113,14 @@ DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 
 bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB )
 {
+    // An unconditional rule is always true
+    if( m_Expression.IsEmpty() )
+        return true;
+
+    // A rule which failed to compile is always false
+    if( !m_ucode )
+        return false;
+
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
     BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
 

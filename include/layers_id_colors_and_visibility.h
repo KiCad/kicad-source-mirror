@@ -195,6 +195,7 @@ enum GAL_LAYER_ID: int
     LAYER_VIAS_HOLES,           ///< to draw via holes (pad holes do not use this layer)
     LAYER_DRC_ERROR,            ///< layer for drc markers with SEVERITY_ERROR
     LAYER_DRC_WARNING,          ///< layer for drc markers with SEVERITY_WARNING
+    LAYER_DRC_EXCLUSION,        ///< layer for drc markers which have been individually excluded
     LAYER_WORKSHEET,            ///< worksheet frame
     LAYER_GP_OVERLAY,           ///< general purpose overlay
     LAYER_SELECT_OVERLAY,       ///< currently selected items overlay
