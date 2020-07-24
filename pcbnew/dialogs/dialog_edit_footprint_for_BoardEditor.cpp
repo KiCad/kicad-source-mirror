@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,10 +33,9 @@
 #include <dialog_text_entry.h>
 #include <fctsys.h>
 #include <filename_resolver.h>
-#include <kiface_i.h>
-#include <math/util.h> // for KiROUND
+//#include <kiface_i.h>
+//#include <math/util.h> // for KiROUND
 #include <pcb_edit_frame.h>
-#include <pcbnew.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <validators.h>
@@ -48,8 +47,6 @@
 
 #include <dialog_edit_footprint_for_BoardEditor.h>
 
-
-#define FootprintTextShownColumnsKey   wxT( "FootprintTextShownColumns" )
 
 int DIALOG_FOOTPRINT_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
 
@@ -119,7 +116,9 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_staticTextInfoCopper->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
 
+    m_libraryIDLabel->SetFont( infoFont );
     m_tcLibraryID->SetFont( infoFont );
+    m_stFullUuid->SetFont( infoFont );
     m_tcFullUuid->SetFont( infoFont );
 
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
