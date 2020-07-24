@@ -129,6 +129,13 @@ std::string UOP::Format() const
 }
 
 
+UCODE::~UCODE()
+{
+    for ( auto op : m_ucode )
+        delete op;
+}
+
+
 std::string UCODE::Dump() const
 {
     std::string rv;
@@ -206,6 +213,12 @@ void COMPILER::Clear()
     //free( current.token );
     m_tokenizer.Clear();
 
+    if( m_tree )
+    {
+        freeTree( m_tree );
+    }
+
+    m_tree = nullptr;
 }
 
 
@@ -229,6 +242,12 @@ bool COMPILER::Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPref
 
     newString( aString );
     m_errorStatus.pendingError = false;
+
+    if( m_tree )
+    {
+        freeTree( m_tree );
+    }
+
     m_tree = nullptr;
     m_parseFinished = false;
     T_TOKEN tok;
@@ -591,6 +610,12 @@ void COMPILER::setRoot( TREE_NODE root )
     m_tree = copyNode( root );
 }
 
+void COMPILER::freeTree( LIBEVAL::TREE_NODE *tree )
+{
+    if ( tree->leaf[0] )
+        freeTree( tree->leaf[0] );
+    if ( tree->leaf[1] )
+        freeTree( tree->leaf[1] );
 
 bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 {
@@ -709,6 +734,10 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                         m_errorStatus.srcPos = node->leaf[1]->leaf[0]->srcPos + 1;
                         return false;
                     }
+
+                    /* SREF -> FUNC_CALL -> leaf0/1 */
+                    node->leaf[1]->leaf[0]->leaf[0] = nullptr;
+                    node->leaf[1]->leaf[0]->leaf[1] = nullptr;
 
                     visitedNodes.insert( node->leaf[0] );
                     visitedNodes.insert( node->leaf[1]->leaf[0] );

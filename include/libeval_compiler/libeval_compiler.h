@@ -23,6 +23,7 @@
 
 #include <cstddef>
 #include <functional>
+#include <map>
 #include <string>
 #include <stack>
 
@@ -421,6 +422,7 @@ public:
     }
 
     void setRoot( LIBEVAL::TREE_NODE root );
+    void freeTree( LIBEVAL::TREE_NODE *tree );
 
     bool Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPreflightContext );
     void ReportError( const wxString& aErrorMsg );
