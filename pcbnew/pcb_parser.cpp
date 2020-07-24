@@ -2635,11 +2635,13 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             {
             case TEXTE_MODULE::TEXT_is_REFERENCE:
                 module->Reference() = *text;
+                const_cast<KIID&>( module->Reference().m_Uuid ) = text->m_Uuid;
                 delete text;
                 break;
 
             case TEXTE_MODULE::TEXT_is_VALUE:
                 module->Value() = *text;
+                const_cast<KIID&>( module->Value().m_Uuid ) = text->m_Uuid;
                 delete text;
                 break;
 
@@ -2807,8 +2809,14 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE()
             parseEDA_TEXT( (EDA_TEXT*) text.get() );
             break;
 
+        case T_tstamp:
+            NextTok();
+            const_cast<KIID&>( text->m_Uuid ) = KIID( CurStr() );
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "hide or effects" );
+            Expecting( "layer, hide, effects or tstamp" );
         }
     }
 

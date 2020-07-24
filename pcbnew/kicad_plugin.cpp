@@ -865,6 +865,8 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
 
     m_out->Print( 0, " (width %s)", FormatInternalUnits( aModuleDrawing->GetWidth() ).c_str() );
 
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aModuleDrawing->m_Uuid.AsString() ) );
+
     m_out->Print( 0, ")\n" );
 }
 
@@ -1528,6 +1530,8 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
     m_out->Print( 0, "\n" );
 
     aText->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
+
+    m_out->Print( aNestLevel + 1, "(tstamp %s)\n", TO_UTF8( aText->m_Uuid.AsString() ) );
 
     m_out->Print( aNestLevel, ")\n" );
 }
