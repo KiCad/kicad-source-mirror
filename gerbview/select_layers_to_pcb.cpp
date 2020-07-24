@@ -84,6 +84,7 @@ void LAYERS_MAP_DIALOG::initDialog()
     int           item_ID;
     wxString      msg;
     wxSize        goodSize;
+    GERBVIEW_SETTINGS* config = static_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
 
     for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
@@ -206,6 +207,12 @@ void LAYERS_MAP_DIALOG::initDialog()
         m_layersList[ii] = text;
     }
 
+    // If the user has never stored any Gerber to Kicad layer mapping,
+    // then disable the button to retrieve it
+    if( config->m_GerberToPcbLayerMapping.size() == 0 )
+        m_buttonRetrieve->Enable( false );
+
+
     std::vector<int> gerber2KicadMapping;
 
     // See how many of the loaded Gerbers have Altium file extensions
@@ -303,6 +310,10 @@ void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
     {
         config->m_GerberToPcbLayerMapping.push_back( m_layersLookUpTable[ii] );
     }
+
+    // Enable the "Get Stored Choice" button in case it was disabled in "initDialog()"
+    // due to no previously stored choices.
+    m_buttonRetrieve->Enable( true );
 }
 
 void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
