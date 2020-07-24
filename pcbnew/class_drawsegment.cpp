@@ -1178,6 +1178,27 @@ void DRAWSEGMENT::SwapData( BOARD_ITEM* aImage )
 }
 
 
+bool DRAWSEGMENT::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
+{
+    if( aFirst->Type() != aSecond->Type() )
+        return aFirst->Type() < aSecond->Type();
+
+    if( aFirst->GetLayer() != aSecond->GetLayer() )
+        return aFirst->GetLayer() < aSecond->GetLayer();
+
+    if( aFirst->Type() == PCB_LINE_T )
+    {
+        const DRAWSEGMENT* dwgA = static_cast<const DRAWSEGMENT*>( aFirst );
+        const DRAWSEGMENT* dwgB = static_cast<const DRAWSEGMENT*>( aSecond );
+
+        if( dwgA->GetShape() != dwgB->GetShape() )
+            return dwgA->GetShape() < dwgB->GetShape();
+    }
+
+    return aFirst->m_Uuid < aSecond->m_Uuid;
+}
+
+
 static struct DRAWSEGMENT_DESC
 {
     DRAWSEGMENT_DESC()

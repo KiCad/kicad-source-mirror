@@ -341,6 +341,11 @@ public:
     virtual void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
             int aClearanceValue, int aError = ARC_LOW_DEF, bool ignoreLineWidth = false ) const;
 
+    struct ptr_cmp
+    {
+        bool operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b ) const;
+    };
+
 protected:
     /**
      * Helper function

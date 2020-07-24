@@ -139,6 +139,17 @@ void BOARD_ITEM::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBu
 };
 
 
+bool BOARD_ITEM::ptr_cmp::operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b ) const
+{
+    if( a->Type() != b->Type() )
+        return a->Type() < b->Type();
+
+    if( a->GetLayer() != b->GetLayer() )
+        return a->GetLayer() < b->GetLayer();
+
+    return a->m_Uuid < b->m_Uuid;
+}
+
 static struct BOARD_ITEM_DESC
 {
     BOARD_ITEM_DESC()

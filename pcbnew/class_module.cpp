@@ -1621,6 +1621,36 @@ bool MODULE::HasNonSMDPins() const
 }
 
 
+bool MODULE::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
+{
+    if( aFirst->Type() != aSecond->Type() )
+        return aFirst->Type() < aSecond->Type();
+
+    if( aFirst->GetLayer() != aSecond->GetLayer() )
+        return aFirst->GetLayer() < aSecond->GetLayer();
+
+    if( aFirst->Type() == PCB_MODULE_EDGE_T )
+    {
+        const EDGE_MODULE* dwgA = static_cast<const EDGE_MODULE*>( aFirst );
+        const EDGE_MODULE* dwgB = static_cast<const EDGE_MODULE*>( aSecond );
+
+        if( dwgA->GetShape() != dwgB->GetShape() )
+            return dwgA->GetShape() < dwgB->GetShape();
+    }
+
+    return aFirst->m_Uuid < aSecond->m_Uuid;
+}
+
+
+bool MODULE::cmp_pads::operator()( const D_PAD* aFirst, const D_PAD* aSecond ) const
+{
+    if( aFirst->GetName() != aSecond->GetName() )
+        return StrNumCmp( aFirst->GetName(), aSecond->GetName() ) < 0;
+
+    return aFirst->m_Uuid < aSecond->m_Uuid;
+}
+
+
 static struct MODULE_DESC
 {
     MODULE_DESC()

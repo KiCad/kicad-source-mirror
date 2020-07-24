@@ -939,6 +939,21 @@ double ARC::GetArcAngleEnd() const
 }
 
 
+bool TRACK::cmp_tracks::operator() ( const TRACK* a, const TRACK* b ) const
+{
+    if( a->GetNetCode() != b->GetNetCode() )
+        return a->GetNetCode() < b->GetNetCode();
+
+    if( a->GetLayer() != b->GetLayer() )
+        return a->GetLayer() < b->GetLayer();
+
+    if( a->Type() != b->Type() )
+        return a->Type() < b->Type();
+
+    return a->m_Uuid < b->m_Uuid;
+}
+
+
 #if defined(DEBUG)
 
 wxString TRACK::ShowState( int stateBits )

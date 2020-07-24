@@ -601,34 +601,44 @@ void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const
 
 void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 {
+
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_modules( aBoard->Modules().begin(),
+            aBoard->Modules().end() );
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_drawings( aBoard->Drawings().begin(),
+            aBoard->Drawings().end() );
+    std::set<TRACK*, TRACK::cmp_tracks> sorted_tracks( aBoard->Tracks().begin(),
+            aBoard->Tracks().end() );
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aBoard->Zones().begin(),
+            aBoard->Zones().end() );
+
     formatHeader( aBoard, aNestLevel );
 
     // Save the modules.
-    for( auto module : aBoard->Modules() )
+    for( auto module : sorted_modules )
     {
         Format( module, aNestLevel );
         m_out->Print( 0, "\n" );
     }
 
     // Save the graphical items on the board (not owned by a module)
-    for( auto item : aBoard->Drawings() )
+    for( auto item : sorted_drawings )
         Format( item, aNestLevel );
 
-    if( aBoard->Drawings().size() )
+    if( sorted_drawings.size() )
         m_out->Print( 0, "\n" );
 
     // Do not save MARKER_PCBs, they can be regenerated easily.
 
     // Save the tracks and vias.
-    for( auto track : aBoard->Tracks() )
+    for( auto track : sorted_tracks )
         Format( track, aNestLevel );
 
-    if( aBoard->Tracks().size() )
+    if( sorted_tracks.size() )
         m_out->Print( 0, "\n" );
 
     // Save the polygon (which are the newer technology) zones.
-    for( int i = 0; i < aBoard->GetAreaCount();  ++i )
-        Format( aBoard->GetArea( i ), aNestLevel );
+    for( auto zone : sorted_zones )
+        Format( zone, aNestLevel );
 }
 
 
@@ -983,17 +993,25 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     Format( (BOARD_ITEM*) &aModule->Reference(), aNestLevel+1 );
     Format( (BOARD_ITEM*) &aModule->Value(), aNestLevel+1 );
 
+    std::set<D_PAD*, MODULE::cmp_pads> sorted_pads( aModule->Pads().begin(),
+            aModule->Pads().end() );
+    std::set<BOARD_ITEM*, MODULE::cmp_drawings> sorted_drawings( aModule->GraphicalItems().begin(),
+            aModule->GraphicalItems().end() );
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aModule->Zones().begin(),
+            aModule->Zones().end() );
+
     // Save drawing elements.
-    for( auto gr : aModule->GraphicalItems() )
+
+    for( auto gr : sorted_drawings )
         Format( gr, aNestLevel+1 );
 
     // Save pads.
-    for( auto pad : aModule->Pads() )
-        format( pad, aNestLevel+1 );
+    for( auto pad : sorted_pads )
+        Format( pad, aNestLevel+1 );
 
     // Save zones.
-    for( auto zone : aModule->Zones() )
-        format( zone, aNestLevel + 1 );
+    for( auto zone : sorted_zones )
+        Format( zone, aNestLevel + 1 );
 
     // Save 3D info.
     auto bs3D = aModule->Models().begin();

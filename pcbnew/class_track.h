@@ -237,6 +237,11 @@ public:
         return true;
     }
 
+    struct cmp_tracks
+    {
+        bool operator()( const TRACK* aFirst, const TRACK* aSecond ) const;
+    };
+
 #if defined (DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 

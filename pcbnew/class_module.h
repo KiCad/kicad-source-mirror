@@ -680,6 +680,17 @@ public:
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
+    struct cmp_drawings
+    {
+        bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
+    };
+
+    struct cmp_pads
+    {
+        bool operator()( const D_PAD* aFirst, const D_PAD* aSecond ) const;
+    };
+
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
