@@ -96,6 +96,28 @@ D_PAD::D_PAD( MODULE* parent ) :
 }
 
 
+D_PAD::D_PAD( const D_PAD& aOther ) :
+    BOARD_CONNECTED_ITEM( aOther.GetParent(), PCB_PAD_T )
+{
+    BOARD_CONNECTED_ITEM::operator=( aOther );
+    ImportSettingsFrom( aOther );
+    SetPosition( aOther.GetPosition() );
+    SetPos0( aOther.GetPos0() );
+}
+
+
+D_PAD& D_PAD::operator=( const D_PAD &aOther )
+{
+    BOARD_CONNECTED_ITEM::operator=( aOther );
+
+    ImportSettingsFrom( aOther );
+    SetPosition( aOther.GetPosition() );
+    SetPos0( aOther.GetPos0() );
+
+    return *this;
+}
+
+
 LSET D_PAD::StandardMask()
 {
     static LSET saved = LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask );
@@ -1210,7 +1232,7 @@ void D_PAD::ImportSettingsFrom( const D_PAD& aMasterPad )
     SetThermalGap( aMasterPad.GetThermalGap() );
 
     // Add or remove custom pad shapes:
-    SetPrimitives( aMasterPad.GetPrimitives() );
+    ReplacePrimitives( aMasterPad.GetPrimitives() );
     SetAnchorPadShape( aMasterPad.GetAnchorPadShape() );
 
     m_shapesDirty = true;

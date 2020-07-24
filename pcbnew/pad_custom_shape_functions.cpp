@@ -135,23 +135,24 @@ void D_PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aT
 }
 
 
-void D_PAD::SetPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList )
+void D_PAD::ReplacePrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList )
 {
     // clear old list
-    m_editPrimitives.clear();
+    DeletePrimitivesList();
 
-    // Import to the basic shape list
+    // Import to the given shape list
     if( aPrimitivesList.size() )
-        m_editPrimitives = aPrimitivesList;
+        AppendPrimitives( aPrimitivesList );
 
     m_shapesDirty = true;
 }
 
 
-void D_PAD::AddPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList )
+void D_PAD::AppendPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList )
 {
+    // Add duplicates of aPrimitivesList to the pad primitives list:
     for( const std::shared_ptr<DRAWSEGMENT>& prim : aPrimitivesList )
-        m_editPrimitives.push_back( prim );
+        AddPrimitive( new DRAWSEGMENT( *prim ) );
 
     m_shapesDirty = true;
 }
@@ -169,6 +170,7 @@ void D_PAD::AddPrimitive( DRAWSEGMENT* aPrimitive )
 void D_PAD::DeletePrimitivesList()
 {
     m_editPrimitives.clear();
+
     m_shapesDirty = true;
 }
 

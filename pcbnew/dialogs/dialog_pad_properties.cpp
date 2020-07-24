@@ -1371,7 +1371,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
 
     m_currentPad->SetAnchorPadShape( m_padMaster->GetAnchorPadShape() );
-    m_currentPad->SetPrimitives( m_padMaster->GetPrimitives() );
+    m_currentPad->ReplacePrimitives( m_padMaster->GetPrimitives() );
 
     if( m_isFlipped )
     {
@@ -1474,7 +1474,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
                                 PAD_SHAPE_RECT : PAD_SHAPE_CIRCLE );
 
     if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
-        aPad->SetPrimitives( m_primitives );
+        aPad->ReplacePrimitives( m_primitives );
 
     // Read pad clearances values:
     aPad->SetLocalClearance( m_clearance.GetValue() );
