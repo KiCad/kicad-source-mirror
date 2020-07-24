@@ -1041,25 +1041,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
             if( bs3D->m_Opacity != 1.0 )
                 m_out->Print( aNestLevel+2, "(opacity %0.4f)", bs3D->m_Opacity );
 
-            /* Write 3D model offset in mm
-             * 4.0.x wrote "at" which was actually in inches
-             * 5.0.x onwards, 3D model offset is written using "offset"
-             *
-             * If the offset is all zero, write "at" (fewer file changes)
-             * Otherwise, write "offset"
-             */
-
-            wxString offsetTag = "offset";
-
-            if( bs3D->m_Offset.x == 0 &&
-                bs3D->m_Offset.y == 0 &&
-                bs3D->m_Offset.z == 0 )
-            {
-                offsetTag = "at";
-            }
-
-            m_out->Print( aNestLevel+2, "(%s (xyz %s %s %s))\n",
-                          offsetTag.ToStdString().c_str(),
+            m_out->Print( aNestLevel+2, "(offset (xyz %s %s %s))\n",
                           Double2Str( bs3D->m_Offset.x ).c_str(),
                           Double2Str( bs3D->m_Offset.y ).c_str(),
                           Double2Str( bs3D->m_Offset.z ).c_str() );
