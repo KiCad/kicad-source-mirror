@@ -132,7 +132,7 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
                 //printf("item %p get enum: '%s'\n", item , (const char*) str.c_str() );
             }
 
-            return LIBEVAL::VALUE( (const char*) str.c_str() );
+            return LIBEVAL::VALUE( str );
         }
     }
 }

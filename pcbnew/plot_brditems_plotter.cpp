@@ -239,14 +239,13 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
     case PAD_SHAPE_CHAMFERED_RECT:
     case PAD_SHAPE_CUSTOM:
     {
-        SHAPE_POLY_SET polygons;
-        aPad->TransformShapeWithClearanceToPolygon( polygons, 0 );
+        const std::shared_ptr<SHAPE_POLY_SET>& polygons = aPad->GetEffectivePolygon();
 
-        if( polygons.OutlineCount() == 0 )
-            break;
-
-        m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(), &polygons, aPlotMode,
-                                   &gbr_metadata );
+        if( polygons->OutlineCount() )
+        {
+            m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(), polygons.get(), aPlotMode,
+                                       &gbr_metadata );
+        }
     }
         break;
     }

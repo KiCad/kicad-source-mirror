@@ -168,27 +168,6 @@ bool D_PAD::IsFlipped() const
 }
 
 
-int D_PAD::calcBoundingRadius() const
-{
-    int radius = 0;
-    SHAPE_POLY_SET polygons;
-    TransformShapeWithClearanceToPolygon( polygons, 0 );
-
-    for( int cnt = 0; cnt < polygons.OutlineCount(); ++cnt )
-    {
-        const SHAPE_LINE_CHAIN& poly = polygons.COutline( cnt );
-
-        for( int ii = 0; ii < poly.PointCount(); ++ii )
-        {
-            int dist = KiROUND( ( poly.CPoint( ii ) - m_Pos ).EuclideanNorm() );
-            radius = std::max( radius, dist );
-        }
-    }
-
-    return radius + 1;
-}
-
-
 int D_PAD::GetRoundRectCornerRadius() const
 {
     return KiROUND( std::min( m_Size.x, m_Size.y ) * m_roundedCornerScale );
@@ -226,6 +205,15 @@ const std::vector<std::shared_ptr<SHAPE>>& D_PAD::GetEffectiveShapes() const
         BuildEffectiveShapes();
 
     return m_effectiveShapes;
+}
+
+
+const std::shared_ptr<SHAPE_POLY_SET>& D_PAD::GetEffectivePolygon() const
+{
+    if( m_shapesDirty )
+        BuildEffectiveShapes();
+
+    return m_effectivePolygon;
 }
 
 
@@ -367,9 +355,27 @@ void D_PAD::BuildEffectiveShapes() const
         }
     }
 
+    // Polygon
+    //
+    m_effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
+    TransformShapeWithClearanceToPolygon( *m_effectivePolygon, 0 );
+
     // Bounding box and radius
     //
-    m_effectiveBoundingRadius = calcBoundingRadius();
+    m_effectiveBoundingRadius = 0;
+
+    for( int cnt = 0; cnt < m_effectivePolygon->OutlineCount(); ++cnt )
+    {
+        const SHAPE_LINE_CHAIN& poly = m_effectivePolygon->COutline( cnt );
+
+        for( int ii = 0; ii < poly.PointCount(); ++ii )
+        {
+            int dist = KiROUND( ( poly.CPoint( ii ) - m_Pos ).EuclideanNorm() );
+            m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, dist );
+        }
+    }
+
+    m_effectiveBoundingRadius += 1;
 
     // reset the bbox to uninitialized state to prepare for merging
     m_effectiveBoundingBox = EDA_RECT();
@@ -798,10 +804,7 @@ bool D_PAD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     if( delta.SquaredEuclideanNorm() > SEG::Square( boundingRadius ) )
         return false;
 
-    SHAPE_POLY_SET polySet;
-    TransformShapeWithClearanceToPolygon( polySet, aAccuracy );
-
-    return polySet.Contains( aPosition );
+    return GetEffectivePolygon()->Contains( aPosition, -1, aAccuracy );
 }
 
 
@@ -827,12 +830,9 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     selRect.Append( VECTOR2I( arect.GetRight(), arect.GetBottom() ) );
     selRect.Append( VECTOR2I( arect.GetLeft(), arect.GetBottom() ) );
 
-    SHAPE_POLY_SET padPoly;
-    TransformShapeWithClearanceToPolygon( padPoly, aAccuracy );
+    selRect.BooleanIntersection( *GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
 
-    selRect.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
-
-    double padArea = padPoly.Outline( 0 ).Area();
+    double padArea = GetEffectivePolygon()->Outline( 0 ).Area();
     double intersection = selRect.Outline( 0 ).Area();
 
     if( intersection > ( padArea * 0.99 ) )

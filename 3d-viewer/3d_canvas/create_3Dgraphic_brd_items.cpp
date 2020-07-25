@@ -817,10 +817,8 @@ void BOARD_ADAPTER::buildPadShapeThickOutlineAsSegments( const D_PAD*  aPad,
     }
 
     // For other shapes, add outlines as thick segments in polygon buffer
-    SHAPE_POLY_SET corners;
-    aPad->TransformShapeWithClearanceToPolygon( corners, 0 );
-
-    const SHAPE_LINE_CHAIN& path = corners.COutline( 0 );
+    const std::shared_ptr<SHAPE_POLY_SET>& corners = aPad->GetEffectivePolygon();
+    const SHAPE_LINE_CHAIN&                path = corners->COutline( 0 );
 
     for( int j = 0; j < path.PointCount(); j++ )
     {

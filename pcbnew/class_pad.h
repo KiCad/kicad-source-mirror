@@ -397,6 +397,8 @@ public:
      */
     const std::vector<std::shared_ptr<SHAPE>>& GetEffectiveShapes() const;
 
+    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon() const;
+
     /**
      * Function GetEffectiveHoleShape
      * Returns a list of SHAPE objects representing the pad's hole.
@@ -611,12 +613,6 @@ public:
 
 
 private:
-    /**
-     * Function calcBoundingRadius
-     * returns a calculated radius of a bounding circle for this pad.
-     */
-    int calcBoundingRadius() const;
-
     void addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError ) const;
 
 private:
@@ -639,6 +635,7 @@ private:
     mutable EDA_RECT                            m_effectiveBoundingBox;
     mutable std::vector<std::shared_ptr<SHAPE>> m_effectiveShapes;
     mutable std::shared_ptr<SHAPE_SEGMENT>      m_effectiveHoleShape;
+    mutable std::shared_ptr<SHAPE_POLY_SET>     m_effectivePolygon;
 
     /*
      * How to build the custom shape in zone, to create the clearance area:

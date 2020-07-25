@@ -66,6 +66,12 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
         switch( pad->GetShape() )
         {
+        case PAD_SHAPE_TRAPEZOID:
+            // Because the trap delta is applied as +1/2 at one end and -1/2 at the other,
+            // the midpoint is actually unchanged.  Therefore all the cardinal points are
+            // the same as for a rectangle.
+            KI_FALLTHROUGH;
+
         case PAD_SHAPE_RECT:
         case PAD_SHAPE_CIRCLE:
         case PAD_SHAPE_OVAL:
@@ -89,7 +95,6 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
             return pt1;
 
-        case PAD_SHAPE_TRAPEZOID:
         case PAD_SHAPE_CUSTOM:
         {
             switch( n )
@@ -104,10 +109,9 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
             if( pad->GetOrientation() )
                 RotatePoint( pt1, pad->ShapePos(), pad->GetOrientation() );
 
-            SHAPE_POLY_SET padPolySet;
-            pad->TransformShapeWithClearanceToPolygon( padPolySet, 0, ARC_LOW_DEF );
-            const SHAPE_LINE_CHAIN& padOutline = padPolySet.COutline( 0 );
-            SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+            const std::shared_ptr<SHAPE_POLY_SET>& padPolySet = pad->GetEffectivePolygon();
+            const SHAPE_LINE_CHAIN&                padOutline = padPolySet->COutline( 0 );
+            SHAPE_LINE_CHAIN::INTERSECTIONS        intersections;
 
             padOutline.Intersect( SEG( pt0, pt1 ), intersections );
 

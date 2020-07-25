@@ -634,12 +634,10 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
         // JEY TODO:
         // TOM TODO: move to SHAPE_COMPOUND...
 
-        SHAPE_POLY_SET outline;
-        aPad->TransformShapeWithClearanceToPolygon( outline, 0 );
+        const std::shared_ptr<SHAPE_POLY_SET>& outline = aPad->GetEffectivePolygon();
+        SHAPE_SIMPLE*                          shape = new SHAPE_SIMPLE();
 
-        SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
-
-        for( auto iter = outline.CIterate( 0 ); iter; iter++ )
+        for( auto iter = outline->CIterate( 0 ); iter; iter++ )
             shape->Append( *iter );
 
         solid->SetShape( shape );

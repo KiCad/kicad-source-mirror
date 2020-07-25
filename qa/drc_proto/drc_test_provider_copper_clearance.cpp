@@ -296,11 +296,9 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
         if( !rect_area.Collide( SEG( shape_pos, shape_pos ), bb_radius ) )
             continue;
 
-        SHAPE_POLY_SET padOutline;
-        pad->TransformShapeWithClearanceToPolygon( padOutline, 0 );
-
-        OPT<SEG>    minSeg;
-        SEG::ecoord center2center_squared = 0;
+        const std::shared_ptr<SHAPE_POLY_SET>& padOutline = pad->GetEffectivePolygon();
+        OPT<SEG>                               minSeg;
+        SEG::ecoord                            center2center_squared = 0;
 
         for( const SEG& itemSeg : itemShape )
         {

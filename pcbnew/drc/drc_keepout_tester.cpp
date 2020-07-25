@@ -227,8 +227,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
 
         if( ( m_keepoutFlags & DISALLOW_PADS ) > 0 )
         {
-            SHAPE_POLY_SET outline;
-            pad->TransformShapeWithClearanceToPolygon( outline, 0 );
+            SHAPE_POLY_SET outline = *pad->GetEffectivePolygon();
 
             // Build the common area between pad and the keepout area:
             outline.BooleanIntersection( *m_zone->Outline(), SHAPE_POLY_SET::PM_FAST );

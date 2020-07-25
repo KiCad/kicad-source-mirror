@@ -684,8 +684,8 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
 
 bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
 {
-    const auto parentA = aCandidate->Parent();
-    const auto parentB = m_item->Parent();
+    const BOARD_CONNECTED_ITEM* parentA = aCandidate->Parent();
+    const BOARD_CONNECTED_ITEM* parentB = m_item->Parent();
 
     if( !aCandidate->Valid() || !m_item->Valid() )
         return true;

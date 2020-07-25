@@ -23,8 +23,8 @@
 
 #include <cstddef>
 #include <functional>
-#include <map>
 #include <string>
+#include <stack>
 
 #include <base_units.h>
 
@@ -81,12 +81,12 @@ enum VAR_TYPE_T
 
 enum TOKEN_TYPE_T
 {
-    TR_NUMBER    = 1,
+    TR_NUMBER     = 1,
     TR_IDENTIFIER = 2,
     TR_ASSIGN     = 3,
     TR_STRUCT_REF = 4,
     TR_STRING     = 5,
-    TR_UNIT = 6
+    TR_UNIT       = 6
 };
 
 #define LIBEVAL_MAX_LITERAL_LENGTH 1024
@@ -175,10 +175,10 @@ public:
         m_valueDbl( 0 )
     {};
 
-    VALUE( std::string aStr ) :
+    VALUE( const wxString& aStr ) :
         m_type( VT_STRING ),
         m_valueDbl( 0 ),
-        m_valueStr( std::move( aStr ) )
+        m_valueStr( aStr )
     {};
 
     VALUE( const double aVal ) :
@@ -191,9 +191,14 @@ public:
         return m_valueDbl;
     }
 
-    const std::string& AsString() const
+    const wxString& AsString() const
     {
         return m_valueStr;
+    }
+
+    const char* AsChars() const
+    {
+        return m_valueStr.ToStdString().c_str();
     }
 
     bool operator==( const VALUE& b ) const
@@ -214,7 +219,7 @@ public:
         m_valueDbl = aValue;
     }
 
-    void Set( const std::string& aValue )
+    void Set( const wxString& aValue )
     {
         m_type = VT_STRING;
         m_valueStr = aValue;
@@ -237,7 +242,7 @@ public:
 private:
     VAR_TYPE_T  m_type;
     double      m_valueDbl;
-    std::string m_valueStr;
+    wxString    m_valueStr;
 };
 
 
@@ -256,48 +261,43 @@ public:
 class CONTEXT
 {
 public:
-    const int c_memSize = 128;
-
-    CONTEXT()
+    ~CONTEXT()
     {
-        m_sp = 0;
-
-        for( int i = 0; i < c_memSize; i++ )
-            m_heap.emplace_back( VALUE() );
+        for( VALUE* value : m_ownedValues )
+            delete value;
     }
 
     VALUE* AllocValue()
     {
-        assert( m_memPos < c_memSize );
-        auto rv = &m_heap[ m_memPos++ ];
-        return rv;
+        VALUE* value = new VALUE();
+        m_ownedValues.push_back( value );
+        return value;
     }
 
-    void   Push( VALUE* v )
+    void Push( VALUE* v )
     {
-        m_stack[m_sp++] = v;
+        m_stack.push( v );
     }
 
     VALUE* Pop()
     {
-        m_sp--;
-        return m_stack[m_sp];
+        VALUE* value = m_stack.top();
+        m_stack.pop();
+        return value;
     }
 
     int SP() const
     {
-        return m_sp;
+        return m_stack.size();
     }
 
     ERROR_STATUS GetErrorStatus() const { return m_errorStatus; }
     void ReportError( const wxString& aErrorMsg );
 
 private:
-    std::vector<VALUE> m_heap;
-    VALUE*             m_stack[128];
-    int                m_sp = 0;
-    int                m_memPos = 0;
-    ERROR_STATUS       m_errorStatus;
+    std::vector<VALUE*> m_ownedValues;
+    std::stack<VALUE*>  m_stack;
+    ERROR_STATUS        m_errorStatus;
 };
 
 
@@ -467,9 +467,9 @@ protected:
         return uop;
     }
 
-    UOP* makeUop( int op, std::string value )
+    UOP* makeUop( int op, const wxString& value )
     {
-        UOP* uop = new UOP( op, new VALUE( std::move( value ) ) );
+        UOP* uop = new UOP( op, new VALUE( value ) );
         return uop;
     }
 
