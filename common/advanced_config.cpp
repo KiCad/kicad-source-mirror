@@ -85,6 +85,12 @@ static const wxChar CoroutineStackSize[] = wxT( "CoroutineStackSize" );
  */
 static const wxChar ShowRouterDebugGraphics[] = wxT( "ShowRouterDebugGraphics" );
 
+/**
+ * When set to true, this will wrap polygon point sets at 4 points per line rather
+ * than a single point per line.  Single point per line helps with version control systems
+ */
+static const wxChar CompactFileSave[] = wxT( "CompactSave" );
+
 } // namespace KEYS
 
 
@@ -210,6 +216,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRouterDebugGraphics,
                                                 &m_ShowRouterDebugGraphics, false ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::CompactFileSave,
+                                                &m_CompactSave, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

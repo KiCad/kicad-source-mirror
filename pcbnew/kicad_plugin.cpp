@@ -27,6 +27,8 @@
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
 #include <macros.h>
 #include <wildcards_and_files_ext.h>
+
+#include <advanced_config.h>
 #include <base_units.h>
 #include <trace_helpers.h>
 #include <class_board.h>
@@ -742,11 +744,20 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
             SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
             int pointsCount = outline.PointCount();
 
-            m_out->Print( aNestLevel, "(gr_poly (pts" );
+            m_out->Print( aNestLevel, "(gr_poly (pts\n" );
 
             for( int ii = 0; ii < pointsCount;  ++ii )
             {
-                m_out->Print( 0, " (xy %s)", FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                int nestLevel = 0;
+
+                if( ii && ( !( ii%4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave ) )   // newline every 4 pts
+                {
+                    nestLevel = aNestLevel + 1;
+                    m_out->Print( 0, "\n" );
+                }
+
+                m_out->Print( nestLevel, "%s(xy %s)",
+                              nestLevel ? "" : " ", FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
             }
 
             m_out->Print( 0, ")" );
@@ -828,7 +839,7 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
             {
                 int nestLevel = 0;
 
-                if( ii && !( ii%4 ) )   // newline every 4 pts
+                if( ii && ( !( ii%4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave ) )   // newline every 4 pts
                 {
                     nestLevel = aNestLevel + 1;
                     m_out->Print( 0, "\n" );
@@ -1420,13 +1431,13 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                 for( const VECTOR2I &pt : primitive->GetPolyShape().COutline( 0 ).CPoints() )
                 {
                     if( newLine == 0 )
-                        m_out->Print( nested_level+1, " (xy %s)",
+                        m_out->Print( nested_level+1, "(xy %s)",
                                       FormatInternalUnits( (wxPoint) pt ).c_str() );
                     else
                         m_out->Print( 0, " (xy %s)",
                                       FormatInternalUnits( (wxPoint) pt ).c_str() );
 
-                    if( ++newLine > 4 )
+                    if( ++newLine > 4 || !ADVANCED_CFG::GetCfg().m_CompactSave )
                     {
                         newLine = 0;
                         m_out->Print( 0, "\n" );
@@ -1796,7 +1807,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                               FormatInternalUnits( iterator->x ).c_str(),
                               FormatInternalUnits( iterator->y ).c_str() );
 
-            if( newLine < 4 )
+            if( newLine < 4 && ADVANCED_CFG::GetCfg().m_CompactSave )
             {
                 newLine += 1;
             }
@@ -1867,7 +1878,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                     m_out->Print( 0, " (xy %s %s)", FormatInternalUnits( it->x ).c_str(),
                             FormatInternalUnits( it->y ).c_str() );
 
-                if( newLine < 4 )
+                if( newLine < 4 && ADVANCED_CFG::GetCfg().m_CompactSave )
                 {
                     newLine += 1;
                 }

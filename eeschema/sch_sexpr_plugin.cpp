@@ -31,6 +31,7 @@
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
 
+#include <advanced_config.h>
 #include <build_version.h>
 #include <gal/color4d.h>
 #include <pgm_base.h>
@@ -1860,10 +1861,10 @@ void SCH_SEXPR_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
 
     for( const auto& pt : aPolyLine->GetPolyPoints() )
     {
-        if( newLine == 4 )
+        if( newLine == 4 || !ADVANCED_CFG::GetCfg().m_CompactSave )
         {
             aFormatter.Print( 0, "\n" );
-            aFormatter.Print( aNestLevel + 3, " (xy %s %s)",
+            aFormatter.Print( aNestLevel + 2, "(xy %s %s)",
                               FormatInternalUnits( pt.x ).c_str(),
                               FormatInternalUnits( pt.y ).c_str() );
             newLine = 0;

@@ -88,6 +88,12 @@ public:
      */
     bool m_ShowRouterDebugGraphics;
 
+    /**
+     * Save files in compact display mode
+     * When is is not specified, points are written one per line
+     */
+    bool m_CompactSave;
+
 
 private:
     ADVANCED_CFG();
