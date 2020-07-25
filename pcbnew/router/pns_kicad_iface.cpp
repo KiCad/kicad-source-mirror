@@ -249,9 +249,9 @@ int PNS_PCBNEW_RULE_RESOLVER::localPadClearance( const PNS::ITEM* aItem ) const
 int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) const
 {
     int net_a = aA->Net();
-    int cl_a = ( net_a >= 0 ? m_netClearanceCache[net_a].clearance : m_defaultClearance );
+    int cl_a = Clearance( net_a );
     int net_b = aB->Net();
-    int cl_b = ( net_b >= 0 ? m_netClearanceCache[net_b].clearance : m_defaultClearance );
+    int cl_b = Clearance( net_b );
 
     // Pad clearance is 0 if the ITEM* is not a pad
     int pad_a = localPadClearance( aA );
@@ -271,6 +271,8 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( int aNetCode ) const
 {
     if( aNetCode > 0 && aNetCode < (int) m_netClearanceCache.size() )
         return m_netClearanceCache[aNetCode].clearance;
+    else
+        wxFAIL_MSG( "PNS_PCBNEW_RULE_RESOLVER::Clearance: net not found in clearance cache." );
 
     return m_defaultClearance;
 }
