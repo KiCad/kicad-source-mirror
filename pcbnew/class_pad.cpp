@@ -75,9 +75,9 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     // Parameters for round rect only:
-    m_roundedCornerScale = 0.25;               // from  IPC-7351C standard
+    m_roundedCornerScale = 0.25;                    // from  IPC-7351C standard
     // Parameters for chamfered rect only:
-    m_chamferScale = 0.2;                   // Size of chamfer: ratio of smallest of X,Y size
+    m_chamferScale = 0.2;                           // Size of chamfer: ratio of smallest of X,Y size
     m_chamferPositions  = RECT_NO_CHAMFER;          // No chamfered corner
 
     m_ZoneConnection    = ZONE_CONNECTION::INHERITED; // Use parent setting by default
@@ -100,7 +100,9 @@ D_PAD::D_PAD( const D_PAD& aOther ) :
     BOARD_CONNECTED_ITEM( aOther.GetParent(), PCB_PAD_T )
 {
     BOARD_CONNECTED_ITEM::operator=( aOther );
+
     ImportSettingsFrom( aOther );
+    SetPadToDieLength( aOther.GetPadToDieLength() );
     SetPosition( aOther.GetPosition() );
     SetPos0( aOther.GetPos0() );
 }
@@ -111,6 +113,7 @@ D_PAD& D_PAD::operator=( const D_PAD &aOther )
     BOARD_CONNECTED_ITEM::operator=( aOther );
 
     ImportSettingsFrom( aOther );
+    SetPadToDieLength( aOther.GetPadToDieLength() );
     SetPosition( aOther.GetPosition() );
     SetPos0( aOther.GetPos0() );
 
@@ -1170,6 +1173,13 @@ void D_PAD::ImportSettingsFrom( const D_PAD& aMasterPad )
     SetLayerSet( aMasterPad.GetLayerSet() );
     SetAttribute( aMasterPad.GetAttribute() );
     SetProperty( aMasterPad.GetProperty() );
+
+    // I am not sure the m_LengthPadToDie must be imported, because this is
+    // a parameter really specific to a given pad (JPC).
+    // So this is currently non imported
+    #if 0
+    SetPadToDieLength( aMasterPad.GetPadToDieLength() );
+    #endif
 
     // The pad orientation, for historical reasons is the
     // pad rotation + parent rotation.
