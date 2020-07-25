@@ -801,6 +801,11 @@ bool D_PAD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
+    auto getArea = []( const SHAPE_POLY_SET& aPoly ) -> double
+                   {
+                       return aPoly.OutlineCount() ? aPoly.COutline( 0 ).Area() : 0;
+                   };
+
     EDA_RECT arect = aRect;
     arect.Normalize();
     arect.Inflate( aAccuracy );
@@ -823,8 +828,8 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
 
     selRect.BooleanIntersection( *GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
 
-    double padArea = GetEffectivePolygon()->Outline( 0 ).Area();
-    double intersection = selRect.Outline( 0 ).Area();
+    double padArea = getArea( *GetEffectivePolygon() );
+    double intersection = getArea( selRect );
 
     if( intersection > ( padArea * 0.99 ) )
         return true;
