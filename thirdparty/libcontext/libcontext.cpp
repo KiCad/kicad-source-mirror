@@ -1323,8 +1323,6 @@ void LIBCONTEXT_CALL_CONVENTION release_fcontext( fcontext_t ctx )
 
 #else // defined(LIBCONTEXT_PLATFORM_msvc_x86_64) || defined(LIBCONTEXT_PLATFORM_msvc_i386)
 
-#warning nowindows
-
 #ifdef __cplusplus
 extern "C" {
 #endif
