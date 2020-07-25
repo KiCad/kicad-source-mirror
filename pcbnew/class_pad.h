@@ -277,14 +277,10 @@ public:
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     /**
-     * Flip the basic shapes, in custom pads
+     * Flip (mirror) the primitives left to right or top to bottom, around the anchor position
+     * in custom pads
      */
-    void FlipPrimitives();
-
-    /**
-     * Mirror the primitives about a coordinate
-     */
-    void MirrorXPrimitives( int aX );
+    void FlipPrimitives( bool aFlipLeftRight );
 
     /**
      * Clear the current primitive list and import a basic shape (primitive) list.

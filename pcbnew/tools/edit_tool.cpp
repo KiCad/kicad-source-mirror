@@ -753,15 +753,14 @@ static wxPoint mirrorPointX( const wxPoint& aPoint, const wxPoint& aMirrorPoint 
 
 
 /**
- * Mirror a pad in the vertical axis passing through a point
+ * Mirror a pad in the vertical axis passing through a point (mirror left to right)
  */
 static void mirrorPadX( D_PAD& aPad, const wxPoint& aMirrorPoint )
 {
-    wxPoint tmpPt = mirrorPointX( aPad.GetPosition(), aMirrorPoint );
-
     if( aPad.GetShape() == PAD_SHAPE_CUSTOM )
-        aPad.MirrorXPrimitives( tmpPt.x );
+        aPad.FlipPrimitives( true );  // mirror primitives left to right
 
+    wxPoint tmpPt = mirrorPointX( aPad.GetPosition(), aMirrorPoint );
     aPad.SetPosition( tmpPt );
 
     aPad.SetX0( aPad.GetPosition().x );

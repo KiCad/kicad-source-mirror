@@ -497,26 +497,17 @@ void D_PAD::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     SetLayerSet( FlipLayerMask( m_layerMask ) );
 
     // Flip the basic shapes, in custom pads
-    FlipPrimitives();
+    FlipPrimitives( aFlipLeftRight );
 
     m_shapesDirty = true;
 }
 
 
-// Flip the basic shapes, in custom pads
-void D_PAD::FlipPrimitives()
+// Flip (mirror) the basic shapes (primitives), in custom pads
+void D_PAD::FlipPrimitives( bool aFlipLeftRight )
 {
     for( std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
-        primitive->Flip( wxPoint( 0, 0 ), false );
-
-    m_shapesDirty = true;
-}
-
-
-void D_PAD::MirrorXPrimitives( int aX )
-{
-    for( std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
-        primitive->Flip( wxPoint( aX, 0 ), true );
+        primitive->Flip( wxPoint( 0, 0 ), aFlipLeftRight );
 
     m_shapesDirty = true;
 }

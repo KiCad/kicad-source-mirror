@@ -487,8 +487,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
         // flip pad's layers
         m_dummyPad->SetLayerSet( FlipLayerMask( m_dummyPad->GetLayerSet() ) );
 
-        // flip custom pad shapes
-        m_dummyPad->FlipPrimitives();
+        // flip custom pad shapes (up/down)
+        m_dummyPad->FlipPrimitives( false );
     }
 
     m_primitives = m_dummyPad->GetPrimitives();
@@ -1376,7 +1376,8 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     if( m_isFlipped )
     {
         m_currentPad->SetLayerSet( FlipLayerMask( m_currentPad->GetLayerSet() ) );
-        m_currentPad->FlipPrimitives();
+        // flip custom pad shapes (up/down)
+        m_dummyPad->FlipPrimitives( false );
     }
 
     m_currentPad->SetLayerSet( m_padMaster->GetLayerSet() );
