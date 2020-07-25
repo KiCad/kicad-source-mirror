@@ -105,6 +105,8 @@ D_PAD::D_PAD( const D_PAD& aOther ) :
     SetPadToDieLength( aOther.GetPadToDieLength() );
     SetPosition( aOther.GetPosition() );
     SetPos0( aOther.GetPos0() );
+    SetName( aOther.GetName() );
+    SetPinFunction( aOther.GetPinFunction() );
 }
 
 
@@ -116,6 +118,8 @@ D_PAD& D_PAD::operator=( const D_PAD &aOther )
     SetPadToDieLength( aOther.GetPadToDieLength() );
     SetPosition( aOther.GetPosition() );
     SetPos0( aOther.GetPos0() );
+    SetName( aOther.GetName() );
+    SetPinFunction( aOther.GetPinFunction() );
 
     return *this;
 }
