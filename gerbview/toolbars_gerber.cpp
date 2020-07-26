@@ -249,6 +249,7 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::dcodeDisplay,            ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleDiffMode,          ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::highContrastMode,                 ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::flipGerberView,          ACTION_TOOLBAR::TOGGLE );
 
     // Tools to show/hide toolbars:
     m_optionsToolBar->AddScaledSeparator( this );
@@ -500,5 +501,6 @@ void GERBVIEW_FRAME::SyncToolbars()
                                                   IsElementVisible( LAYER_DCODES ) );
     m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::toggleDiffMode,m_DisplayOptions.m_DiffMode );
     m_optionsToolBar->Toggle( ACTIONS::highContrastMode,       m_DisplayOptions.m_HighContrastMode );
+    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::flipGerberView, m_DisplayOptions.m_FlipGerberView );
     m_optionsToolBar->Refresh();
 }

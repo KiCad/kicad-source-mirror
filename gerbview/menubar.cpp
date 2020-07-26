@@ -182,6 +182,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     auto contrastModeCondition = [ this ] ( const SELECTION& aSel ) {
         return m_DisplayOptions.m_HighContrastMode;
     };
+    auto flipViewCondition = [this]( const SELECTION& aSel ) {
+        return m_DisplayOptions.m_FlipGerberView;
+    };
 
     // Hide layer manager
     viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
@@ -215,6 +218,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     viewMenu->AddCheckItem( GERBVIEW_ACTIONS::negativeObjectDisplay,   showNegativeObjects );
     viewMenu->AddCheckItem( GERBVIEW_ACTIONS::toggleDiffMode,          diffModeCondition );
     viewMenu->AddCheckItem( ACTIONS::highContrastMode,                 contrastModeCondition );
+    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::flipGerberView,          flipViewCondition );
 
     viewMenu->Resolve();
 

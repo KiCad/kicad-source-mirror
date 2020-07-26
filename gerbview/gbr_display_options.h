@@ -46,9 +46,10 @@ public:
     bool    m_DisplayPageLimits;
     bool    m_DisplayNegativeObjects;   ///< Option to draw negative objects in a specific color
     bool    m_IsPrinting;               ///< true when printing a page, false when drawing on screen
-    bool    m_ForceBlackAndWhite;       ///< Option print in blackand white (ont used id draw mode
+    bool    m_ForceBlackAndWhite;       ///< Option print in black and white (not used in draw mode
     bool    m_DiffMode;                 ///< Display layers in diff mode
     bool    m_HighContrastMode;         ///< High contrast mode (dim un-highlighted objects)
+    bool    m_FlipGerberView;           ///< Display as a mirror image
     COLOR4D m_NegativeDrawColor;        ///< The color used to draw negative objects, usually the
                                         ///< background color, but not always, when negative objects
                                         ///< must be visible
@@ -69,6 +70,7 @@ public:
         m_BgDrawColor = COLOR4D::BLACK;
         m_DiffMode = false;
         m_HighContrastMode = false;
+        m_FlipGerberView = false;
     }
 };
 

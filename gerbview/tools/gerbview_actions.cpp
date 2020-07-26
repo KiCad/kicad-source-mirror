@@ -148,6 +148,11 @@ TOOL_ACTION GERBVIEW_ACTIONS::toggleDiffMode( "gerbview.Control.toggleDiffMode",
         _( "Show in Differential Mode" ), _( "Show layers in diff (compare) mode" ),
         gbr_select_mode2_xpm );
 
+TOOL_ACTION GERBVIEW_ACTIONS::flipGerberView( "gerbview.Control.flipGerberView",
+        AS_GLOBAL, 0, "",
+        _( "Flip Gerber View" ), _( "Show as mirror image" ),
+        swap_layer_xpm );
+
 
 // GERBVIEW_SELECTION_TOOL
 //

@@ -28,9 +28,7 @@
 #include "gerbview_selection_tool.h"
 
 
-GERBVIEW_CONTROL::GERBVIEW_CONTROL() :
-    TOOL_INTERACTIVE( "gerbview.Control" ), 
-    m_frame( nullptr )
+GERBVIEW_CONTROL::GERBVIEW_CONTROL() : TOOL_INTERACTIVE( "gerbview.Control" ), m_frame( nullptr )
 {
 }
 
@@ -169,6 +167,14 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
         options.m_DiffMode = !options.m_DiffMode;
         needs_refresh = true;
     }
+    else if( aEvent.IsAction( &GERBVIEW_ACTIONS::flipGerberView ) )
+    {
+        options.m_FlipGerberView = !options.m_FlipGerberView;
+
+        KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+        view->SetMirror( options.m_FlipGerberView, false );
+        needs_refresh = true;
+    }
 
     if( needs_refresh )
         m_frame->UpdateDisplayOptions( options );
@@ -244,6 +250,7 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::dcodeDisplay.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleDiffMode.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::flipGerberView.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::SelectedEvent );
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::UnselectedEvent );
