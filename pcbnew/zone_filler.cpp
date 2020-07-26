@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <future>
 
+#include <advanced_config.h>
 #include <class_board.h>
 #include <class_zone.h>
 #include <class_module.h>
@@ -560,7 +561,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     // than requested clearance due to many approximations in calculations,
     // like arc to segment approx, rounding issues...
     // 2 microns are a good value
-    int extra_margin = Millimeter2iu( 0.002 );
+    int extra_margin = Millimeter2iu( ADVANCED_CFG::GetCfg().m_extraClearance );
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     int                    zone_clearance = aZone->GetLocalClearance();

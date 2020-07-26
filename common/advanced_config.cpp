@@ -60,12 +60,12 @@ namespace AC_STACK
  */
 namespace AC_KEYS
 {
+
 /**
- * In Pcbnew, pads can have a fabrication property
- * Because this feature adds a new keyword in *.kicad_pcb and *.kicad_modfiles,
- * this is an advanced feature until it is fully finalized
+ * When filling zones, we add an extra amount of clearance to each zone to ensure that rounding
+ * errors do not overrun minimum clearance distances.  This is the extra in mm.
  */
-static const wxChar UsePadProperty[] = wxT( "UsePadProperty" );
+static const wxChar ExtraFillMargin[] = wxT( "ExtraFillMargin" );
 
 /**
  * Testing mode for new connectivity algorithm.  Setting this to on will cause all modifications
@@ -200,6 +200,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity,
                                                 &m_realTimeConnectivity, false ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
+                                                  &m_extraClearance, 0.002, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
                                                &m_coroutineStackSize, AC_STACK::default_stack,

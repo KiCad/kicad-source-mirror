@@ -69,6 +69,11 @@ public:
     static const ADVANCED_CFG& GetCfg();
 
     /**
+     * Extra fill clearance for zone fills
+     */
+    double m_extraClearance;
+
+    /**
      * Do real-time connectivity
      */
     bool m_realTimeConnectivity;
