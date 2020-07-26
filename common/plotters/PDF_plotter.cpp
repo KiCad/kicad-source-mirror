@@ -41,6 +41,70 @@
 #include <algorithm>
 
 
+std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
+{
+// returns a string compatible with PDF string convention from a unicode string.
+// if the initial text is only ASCII7, return the text between ( and ) for a good readability
+// if the initial text is no ASCII7, return the text between < and >
+// and encoded using 16 bits hexa (4 digits) by wide char (unicode 16)
+    std::string result;
+
+    // Is aText only ASCII7 ?
+    bool is_ascii7 = true;
+
+    for( size_t ii = 0; ii < aText.Len(); ii++ )
+    {
+        if( aText[ii] >= 0x7F )
+        {
+            is_ascii7 = false;
+            break;
+        }
+    }
+
+    if( is_ascii7 )
+    {
+        result = '(';
+
+        for( unsigned ii = 0; ii < aText.Len(); ii++ )
+        {
+            unsigned int code = aText[ii];
+
+            // These characters must be escaped
+            switch( code )
+            {
+            // se if '(' and ')' must be escaped.
+            case '\\':
+                result += '\\';
+                KI_FALLTHROUGH;
+
+            default:
+                result += code;
+                break;
+            }
+        }
+
+        result += ')';
+    }
+    else
+    {
+        result = "<FEFF";
+
+        for( size_t ii = 0; ii < aText.Len(); ii++ )
+        {
+            unsigned int code = aText[ii];
+            char buffer[16];
+            sprintf( buffer, "%4.4X", code );
+            result += buffer;
+
+        }
+
+        result += '>';
+    }
+
+    return result;
+}
+
+
 /*
  * Open or create the plot file aFullFilename
  * return true if success, false if the file cannot be created/opened
@@ -749,14 +813,14 @@ bool PDF_PLOTTER::EndPlot()
 
     fprintf( outputFile,
              "<<\n"
-             "/Producer (KiCAD PDF)\n"
+             "/Producer (KiCad PDF)\n"
              "/CreationDate (%s)\n"
-             "/Creator (%s)\n"
-             "/Title (%s)\n"
+             "/Creator %s\n"
+             "/Title %s\n"
              "/Trapped False\n",
              date_buf,
-             TO_UTF8( creator ),
-             TO_UTF8( title ) );
+             encodeStringForPlotter( creator ).c_str(),
+             encodeStringForPlotter( title ).c_str() );
 
     fputs( ">>\n", outputFile );
     closePdfObject();
@@ -846,8 +910,8 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
              fontname, heightFactor, render_mode, wideningFactor * 100 );
 
     // The text must be escaped correctly
-    fputsPostscriptString( workFile, aText );
-    fputs( " Tj ET\n", workFile );
+    std:: string txt_pdf = encodeStringForPlotter( aText );
+    fprintf( workFile, "%s Tj ET\n", txt_pdf.c_str() );
 
     // Restore the CTM
     fputs( "Q\n", workFile );

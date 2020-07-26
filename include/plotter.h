@@ -766,7 +766,10 @@ protected:
     void postscriptOverlinePositions( const wxString& aText, int aXSize,
                                       bool aItalic, bool aBold,
                                       std::vector<int> *pos_pairs );
-    void fputsPostscriptString(FILE *fout, const wxString& txt);
+
+    /// convert a wxString unicode string to a char string compatible with the accepted
+    /// string plotter format (convert special chars and non ascii7 chars)
+    virtual std::string encodeStringForPlotter( const wxString& aUnicode );
 
     /// Virtual primitive for emitting the setrgbcolor operator
     virtual void emitSetRGBColor( double r, double g, double b ) = 0;
@@ -917,6 +920,10 @@ public:
 
 
 protected:
+    /// convert a wxString unicode string to a char string compatible with the accepted
+    /// string PDF format (convert special chars and non ascii7 chars)
+    std::string encodeStringForPlotter( const wxString& aUnicode ) override;
+
     virtual void emitSetRGBColor( double r, double g, double b ) override;
     int allocPdfObject();
     int startPdfObject(int handle = -1);

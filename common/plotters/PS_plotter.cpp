@@ -300,16 +300,17 @@ void PSLIKE_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
 }
 
 
-/**
- * Write on a stream a string escaped for postscript/PDF
- */
-void PSLIKE_PLOTTER::fputsPostscriptString(FILE *fout, const wxString& txt)
+std::string PSLIKE_PLOTTER::encodeStringForPlotter( const wxString& aUnicode )
 {
-    putc( '(', fout );
-    for( unsigned i = 0; i < txt.length(); i++ )
+    // Write on a std::string a string escaped for postscript/PDF
+    std::string converted;
+
+    converted += '(';
+
+    for( unsigned i = 0; i < aUnicode.Len(); i++ )
     {
         // Lazyness made me use stdio buffering yet another time...
-        wchar_t ch = txt[i];
+        wchar_t ch = aUnicode[i];
 
         if( ch < 256 )
         {
@@ -322,17 +323,19 @@ void PSLIKE_PLOTTER::fputsPostscriptString(FILE *fout, const wxString& txt)
             case '(':
             case ')':
             case '\\':
-                putc( '\\', fout );
+                converted += '\\';
                 KI_FALLTHROUGH;
 
             default:
-                putc( ch, fout );
+                converted += ch;
                 break;
             }
         }
     }
 
-    putc( ')', fout );
+    converted += ')';
+
+    return converted;
 }
 
 
@@ -871,7 +874,7 @@ bool PS_PLOTTER::StartPlot()
     /* A "newline" character ("\n") is not included in the following string,
        because it is provided by the ctime() function. */
     fprintf( outputFile, "%%%%CreationDate: %s", ctime( &time1970 ) );
-    fprintf( outputFile, "%%%%Title: %s\n", TO_UTF8( filename ) );
+    fprintf( outputFile, "%%%%Title: %s\n", encodeStringForPlotter( title ).c_str() );
     fprintf( outputFile, "%%%%Pages: 1\n" );
     fprintf( outputFile, "%%%%PageOrder: Ascend\n" );
 
@@ -991,9 +994,9 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
     // Draw the hidden postscript text (if requested)
     if( m_textMode == PLOT_TEXT_MODE::PHANTOM )
     {
-        fputsPostscriptString( outputFile, aText );
+        std::string ps_test = encodeStringForPlotter( aText );
         DPOINT pos_dev = userToDeviceCoordinates( aPos );
-        fprintf( outputFile, " %g %g phantomshow\n", pos_dev.x, pos_dev.y );
+        fprintf( outputFile, "%s %g %g phantomshow\n", ps_test.c_str(), pos_dev.x, pos_dev.y );
     }
 
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
