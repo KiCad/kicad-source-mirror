@@ -778,30 +778,37 @@ void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
     wxClientDC dc( GetParent() );
     int h, minw, minw_col0;
 
-    dc.GetTextExtent( COLUMN_NET.display_name + "MM", &w0, &h );
-    dc.GetTextExtent( COLUMN_PAD_COUNT.display_name + "MM", &w2, &h );
-    dc.GetTextExtent( COLUMN_VIA_COUNT.display_name + "MM", &w3, &h );
-    dc.GetTextExtent( COLUMN_BOARD_LENGTH.display_name + "MM", &w4, &h );
-    dc.GetTextExtent( COLUMN_CHIP_LENGTH.display_name + "MM", &w5, &h );
-    dc.GetTextExtent( COLUMN_TOTAL_LENGTH.display_name + "MM", &w6, &h );
-    dc.GetTextExtent( "M00000,000 mmM", &minw, &h );
-    dc.GetTextExtent( "M00000M", &minw_col0, &h );
+    dc.GetTextExtent( COLUMN_NET.display_name, &w0, &h );
+    dc.GetTextExtent( COLUMN_PAD_COUNT.display_name, &w2, &h );
+    dc.GetTextExtent( COLUMN_VIA_COUNT.display_name, &w3, &h );
+    dc.GetTextExtent( COLUMN_BOARD_LENGTH.display_name, &w4, &h );
+    dc.GetTextExtent( COLUMN_CHIP_LENGTH.display_name, &w5, &h );
+    dc.GetTextExtent( COLUMN_TOTAL_LENGTH.display_name, &w6, &h );
+    dc.GetTextExtent( "00000,000 mm", &minw, &h );
+    dc.GetTextExtent( "00000", &minw_col0, &h );
 
     // Considering left and right margins.
     // For wxRenderGeneric it is 5px.
-    m_netsList->GetColumn( 0 )->SetWidth( std::max( w0 + 10, minw_col0 ) );
-    m_netsList->GetColumn( 2 )->SetWidth( w2 + 10 );
-    m_netsList->GetColumn( 3 )->SetWidth( w3 + 10 );
-    m_netsList->GetColumn( 4 )->SetWidth( std::max( w4 + 10, minw ) );
-    m_netsList->GetColumn( 5 )->SetWidth( std::max( w5 + 10, minw ) );
-    m_netsList->GetColumn( 6 )->SetWidth( std::max( w6 + 10, minw ) );
+    w0 = std::max( w0 + 10, minw_col0 );
+    w2 = w2 + 10;
+    w3 = w3 + 10;
+    w4 = std::max( w4 + 10, minw );
+    w5 = std::max( w5 + 10, minw );
+    w6 = std::max( w6 + 10, minw );
+
+    m_netsList->GetColumn( 0 )->SetWidth( w0 );
+    m_netsList->GetColumn( 2 )->SetWidth( w2 );
+    m_netsList->GetColumn( 3 )->SetWidth( w3 );
+    m_netsList->GetColumn( 4 )->SetWidth( w4 );
+    m_netsList->GetColumn( 5 )->SetWidth( w5 );
+    m_netsList->GetColumn( 6 )->SetWidth( w6 );
 
     // At resizing of the list the width of middle column (Net Names) changes only.
-    int width = m_netsList->GetClientSize().x;
+    int width = m_netsList->GetClientSize().x - 24;
     w1 = width - w0 - w2 - w3 - w4 - w5 - w6;
 
     // Column 1 (net names) need a minimal width to display net names
-    dc.GetTextExtent( "MMMMMMMMMMMMMMMMMM", &minw, &h );
+    dc.GetTextExtent( "MMMMMMMMMMMMMMMM", &minw, &h );
     w1 = std::max( w1, minw );
 
     m_netsList->GetColumn( 1 )->SetWidth( w1 );
