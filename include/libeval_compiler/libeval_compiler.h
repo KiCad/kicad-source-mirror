@@ -196,11 +196,6 @@ public:
         return m_valueStr;
     }
 
-    const char* AsChars() const
-    {
-        return m_valueStr.ToStdString().c_str();
-    }
-
     bool operator==( const VALUE& b ) const
     {
         if( m_type == VT_NUMERIC && b.m_type == VT_NUMERIC )

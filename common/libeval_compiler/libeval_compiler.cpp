@@ -108,7 +108,7 @@ std::string UOP::Format() const
         else if( val->GetType() == VT_NUMERIC )
             snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "PUSH NUM [%.10f]", val->AsDouble() );
         else
-            snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "PUSH STR [%s]", val->AsChars() );
+            snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "PUSH STR [%ls]", GetChars( val->AsString() ) );
     }
         break;
 

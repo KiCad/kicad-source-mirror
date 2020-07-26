@@ -45,9 +45,19 @@ bool testEvalExpr( const std::string expr, LIBEVAL::VALUE expectedResult, bool e
     }
 
     if( expectedResult.GetType() == LIBEVAL::VT_NUMERIC )
-        printf("result: %s (got %.10f expected: %.10f)\n", ok ? "OK" : "FAIL", result.AsDouble(), expectedResult.AsDouble() );
+    {
+        printf( "result: %s (got %.10f expected: %.10f)\n",
+                ok ? "OK" : "FAIL",
+                result.AsDouble(),
+                expectedResult.AsDouble() );
+    }
     else
-        printf("result: %s (got '%s' expected: '%s')\n", ok ? "OK" : "FAIL", result.AsChars(), expectedResult.AsChars() );
+    {
+        printf( "result: %s (got '%ls' expected: '%ls')\n",
+                ok ? "OK" : "FAIL",
+                GetChars( result.AsString() ),
+                GetChars( expectedResult.AsString() ) );
+    }
 
     if (!ok )
     {
