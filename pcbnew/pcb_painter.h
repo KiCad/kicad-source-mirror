@@ -179,6 +179,15 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }
 
+    /** Switch the contrast mode setting (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN )
+     * to control how the non active layers are shown
+     */
+    void SetContrastModeDisplay( HIGH_CONTRAST_MODE aMode ) { m_contrastModeDisplay = aMode; }
+
+    /** return the contrast mode setting (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN )
+     */
+    HIGH_CONTRAST_MODE GetContrastModeDisplay() { return m_contrastModeDisplay; }
+
     inline bool GetCurvedRatsnestLinesEnabled() const { return m_curvedRatsnestlines; }
 
     inline bool GetGlobalRatsnestLinesEnabled() const { return m_globalRatsnestlines; }
@@ -253,7 +262,7 @@ protected:
     ///> Set of net codes that should not have their ratsnest displayed
     std::set<int> m_hiddenNets;
 
-    ///> How to display inactive layers
+    ///> How to display inactive layers (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN )
     HIGH_CONTRAST_MODE m_contrastModeDisplay;
 };
 

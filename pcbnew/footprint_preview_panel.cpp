@@ -33,7 +33,7 @@
 #include <io_mgr.h>
 #include <kiway.h>
 #include <math/box2.h>
-#include <painter.h>
+#include <pcb_painter.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
 #include <pgm_base.h>
@@ -319,6 +319,11 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<MODULE> aModule )
     }
 
     aModule->SetParent( m_dummyBoard.get() );
+
+    // Ensure we are not using the high contrast mode to display the selected footprint
+    KIGFX::PAINTER* painter = GetView()->GetPainter();
+    auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
 
     GetView()->Add( aModule.get() );
     GetView()->SetVisible( aModule.get(), true );
