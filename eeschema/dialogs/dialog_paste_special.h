@@ -38,9 +38,6 @@ class DIALOG_PASTE_SPECIAL : public DIALOG_PASTE_SPECIAL_BASE
 public:
     DIALOG_PASTE_SPECIAL( wxWindow* parent, bool* aKeepAnnotations, bool* aDropAnnotations );
 
-    void OnKeepAnnotations( wxCommandEvent& event ) override;
-    void OnDropAnnotations( wxCommandEvent& event ) override;
-
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 

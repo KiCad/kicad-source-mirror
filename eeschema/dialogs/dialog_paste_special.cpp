@@ -25,7 +25,6 @@
 
 
 static bool g_keepAnnotations = true;
-static bool g_dropAnnotations = false;
 
 
 DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* parent, bool* aKeep, bool* aDrop ) :
@@ -41,28 +40,12 @@ DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* parent, bool* aKeep, bool*
 bool DIALOG_PASTE_SPECIAL::TransferDataToWindow()
 {
     m_keepAnnotations->SetValue( g_keepAnnotations );
-    m_dropAnnotations->SetValue( g_dropAnnotations );
     return true;
-}
-
-
-void DIALOG_PASTE_SPECIAL::OnKeepAnnotations( wxCommandEvent& event )
-{
-    if( m_keepAnnotations->GetValue() )
-        m_dropAnnotations->SetValue( false );
-}
-
-
-void DIALOG_PASTE_SPECIAL::OnDropAnnotations( wxCommandEvent& event )
-{
-    if( m_dropAnnotations->GetValue() )
-        m_keepAnnotations->SetValue( false );
 }
 
 
 bool DIALOG_PASTE_SPECIAL::TransferDataFromWindow()
 {
     g_keepAnnotations = *m_keep = m_keepAnnotations->GetValue();
-    g_dropAnnotations = *m_drop = m_dropAnnotations->GetValue();
     return true;
 }

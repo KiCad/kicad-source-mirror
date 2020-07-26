@@ -36,15 +36,12 @@ class DIALOG_PASTE_SPECIAL_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticText7;
 		wxCheckBox* m_keepAnnotations;
-		wxCheckBox* m_dropAnnotations;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnKeepAnnotations( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDropAnnotations( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOKButton( wxCommandEvent& event ) { event.Skip(); }
 
 

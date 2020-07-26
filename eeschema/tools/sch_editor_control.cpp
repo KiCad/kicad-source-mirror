@@ -1333,7 +1333,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     bool forceKeepAnnotations = false;
-    bool forceDropAnnotations = false;
+    bool forceDropAnnotations = true;
     bool dropAnnotations = false;
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )

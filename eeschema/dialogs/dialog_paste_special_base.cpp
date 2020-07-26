@@ -26,9 +26,6 @@ DIALOG_PASTE_SPECIAL_BASE::DIALOG_PASTE_SPECIAL_BASE( wxWindow* parent, wxWindow
 	m_keepAnnotations = new wxCheckBox( this, wxID_ANY, _("Keep existing annotations, even if they are duplicated"), wxDefaultPosition, wxDefaultSize, 0 );
 	optionsSizer->Add( m_keepAnnotations, 0, wxALL, 5 );
 
-	m_dropAnnotations = new wxCheckBox( this, wxID_ANY, _("Clear annotations on pasted items"), wxDefaultPosition, wxDefaultSize, 0 );
-	optionsSizer->Add( m_dropAnnotations, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
 
 	m_mainSizer->Add( optionsSizer, 1, wxALL|wxEXPAND, 10 );
 
@@ -52,16 +49,12 @@ DIALOG_PASTE_SPECIAL_BASE::DIALOG_PASTE_SPECIAL_BASE( wxWindow* parent, wxWindow
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_keepAnnotations->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PASTE_SPECIAL_BASE::OnKeepAnnotations ), NULL, this );
-	m_dropAnnotations->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PASTE_SPECIAL_BASE::OnDropAnnotations ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PASTE_SPECIAL_BASE::onOKButton ), NULL, this );
 }
 
 DIALOG_PASTE_SPECIAL_BASE::~DIALOG_PASTE_SPECIAL_BASE()
 {
 	// Disconnect Events
-	m_keepAnnotations->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PASTE_SPECIAL_BASE::OnKeepAnnotations ), NULL, this );
-	m_dropAnnotations->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PASTE_SPECIAL_BASE::OnDropAnnotations ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PASTE_SPECIAL_BASE::onOKButton ), NULL, this );
 
 }
