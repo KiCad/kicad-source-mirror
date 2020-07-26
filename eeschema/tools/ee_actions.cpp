@@ -113,27 +113,27 @@ TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
 
 TOOL_ACTION EE_ACTIONS::editSymbol( "eeschema.SymbolLibraryControl.editSymbol",
         AS_GLOBAL, 0, "",
-        _( "Edit Symbol" ), _( "Show selected symbol on editor canvas" ),
+        _( "Edit" ), _( "Show selected symbol on editor canvas" ),
         edit_xpm );
 
 TOOL_ACTION EE_ACTIONS::duplicateSymbol( "eeschema.SymbolLibraryControl.duplicateSymbol",
         AS_GLOBAL, 0, "",
-        _( "Duplicate Symbol" ), _( "Make a copy of the selected symbol" ),
+        _( "Duplicate" ), _( "Make a copy of the selected symbol" ),
         duplicate_xpm );
 
 TOOL_ACTION EE_ACTIONS::deleteSymbol( "eeschema.SymbolLibraryControl.deleteSymbol",
         AS_GLOBAL, 0, "",
-        _( "Delete Symbol" ), _( "Remove the selected symbol from its library" ),
+        _( "Delete" ), _( "Remove the selected symbol from its library" ),
         delete_xpm );
 
 TOOL_ACTION EE_ACTIONS::cutSymbol( "eeschema.SymbolLibraryControl.cutSymbol",
         AS_GLOBAL, 0, "",
-        _( "Cut Symbol" ), "",
+        _( "Cut" ), "",
         cut_xpm );
 
 TOOL_ACTION EE_ACTIONS::copySymbol( "eeschema.SymbolLibraryControl.copySymbol",
         AS_GLOBAL, 0, "",
-        _( "Copy Symbol" ), "",
+        _( "Copy" ), "",
         copy_xpm );
 
 TOOL_ACTION EE_ACTIONS::pasteSymbol( "eeschema.SymbolLibraryControl.pasteSymbol",
@@ -148,7 +148,7 @@ TOOL_ACTION EE_ACTIONS::importSymbol( "eeschema.SymbolLibraryControl.importSymbo
 
 TOOL_ACTION EE_ACTIONS::exportSymbol( "eeschema.SymbolLibraryControl.exportSymbol",
         AS_GLOBAL, 0, "",
-        _( "Export Symbol..." ), _( "Export a symbol to a new library file" ),
+        _( "Export..." ), _( "Export a symbol to a new library file" ),
         export_part_xpm );
 
 TOOL_ACTION EE_ACTIONS::addSymbolToSchematic( "eeschema.SymbolLibraryControl.addSymbolToSchematic",

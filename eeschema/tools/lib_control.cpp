@@ -68,14 +68,12 @@ bool LIB_CONTROL::Init()
         ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
         ctxMenu.AddSeparator();
 
-        ctxMenu.AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
-        ctxMenu.AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
         ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition );
         ctxMenu.AddItem( ACTIONS::saveAs,                libSelectedCondition );
         ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( EE_ACTIONS::newSymbol,          SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( EE_ACTIONS::newSymbol,          libSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::editSymbol,         symbolSelectedCondition );
 
         ctxMenu.AddSeparator();
@@ -88,10 +86,10 @@ bool LIB_CONTROL::Init()
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::cutSymbol,          symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::copySymbol,         symbolSelectedCondition );
-        ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,        SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,        libSelectedCondition );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( EE_ACTIONS::importSymbol,       SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( EE_ACTIONS::importSymbol,       libSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::exportSymbol,       symbolSelectedCondition );
     }
 
