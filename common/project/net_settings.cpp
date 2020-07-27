@@ -49,7 +49,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 
                     // Note: we're in common/, but we do happen to know which of these fields
                     // are used in which units system.
-                    nlohmann::json netJson = {
+                    nlohmann::json netclassJson = {
                         { "name",              netclass->GetName().ToUTF8() },
                         { "clearance",         PcbIu2Millimeter( netclass->GetClearance() ) },
                         { "track_width",       PcbIu2Millimeter( netclass->GetTrackWidth() ) },
@@ -59,11 +59,17 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         { "microvia_drill",    PcbIu2Millimeter( netclass->GetuViaDrill() ) },
                         { "diff_pair_width",   PcbIu2Millimeter( netclass->GetDiffPairWidth() ) },
                         { "diff_pair_gap",     PcbIu2Millimeter( netclass->GetDiffPairGap() ) },
-                        { "diff_pair_via_gap", PcbIu2Millimeter( netclass->GetDiffPairViaGap() ) }
+                        { "diff_pair_via_gap", PcbIu2Millimeter( netclass->GetDiffPairViaGap() ) },
+                        { "wire_width",        SchIu2Mils( netclass->GetWireWidth() ) },
+                        { "bus_width",         SchIu2Mils( netclass->GetBusWidth() ) },
+                        { "line_style",        netclass->GetLineStyle() }
                         };
 
                     if( netclass->GetPcbColor() != KIGFX::COLOR4D::UNSPECIFIED )
-                        netJson["pcb_color"] = netclass->GetPcbColor();
+                        netclassJson["pcb_color"] = netclass->GetPcbColor();
+
+                    if( netclass->GetSchematicColor() != KIGFX::COLOR4D::UNSPECIFIED )
+                        netclassJson["schematic_color"] = netclass->GetSchematicColor();
 
                     if( idx > 0 )
                     {
@@ -75,10 +81,10 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                                 membersJson.push_back( ii );
                         }
 
-                        netJson["nets"] = membersJson;
+                        netclassJson["nets"] = membersJson;
                     }
 
-                    ret.push_back( netJson );
+                    ret.push_back( netclassJson );
                 }
 
                 return ret;
@@ -93,11 +99,20 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 NETCLASSPTR netclass;
                 NETCLASSPTR defaultClass = m_NetClasses.GetDefault();
 
-                auto get =
+                auto getInPcbUnits =
                         []( const nlohmann::json& aObj, const std::string& aKey, int aDefault )
                         {
                             if( aObj.contains( aKey ) )
                                 return PcbMillimeter2iu( aObj[aKey].get<double>() );
+                            else
+                                return aDefault;
+                        };
+
+                auto getInSchematicUnits =
+                        []( const nlohmann::json& aObj, const std::string& aKey, int aDefault )
+                        {
+                            if( aObj.contains( aKey ) )
+                                return SchMils2iu( aObj[aKey].get<double>() );
                             else
                                 return aDefault;
                         };
@@ -114,22 +129,31 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     else
                         netclass = std::make_shared<NETCLASS>( name );
 
-                    netclass->SetClearance( get( entry, "clearance", netclass->GetClearance() ) );
-                    netclass->SetTrackWidth(
-                            get( entry, "track_width", netclass->GetTrackWidth() ) );
-                    netclass->SetViaDiameter(
-                            get( entry, "via_diameter", netclass->GetViaDiameter() ) );
-                    netclass->SetViaDrill( get( entry, "via_drill", netclass->GetViaDrill() ) );
-                    netclass->SetuViaDiameter(
-                            get( entry, "microvia_diameter", netclass->GetuViaDiameter() ) );
-                    netclass->SetuViaDrill(
-                            get( entry, "microvia_drill", netclass->GetuViaDrill() ) );
-                    netclass->SetDiffPairWidth(
-                            get( entry, "diff_pair_width", netclass->GetDiffPairWidth() ) );
-                    netclass->SetDiffPairGap(
-                            get( entry, "diff_pair_gap", netclass->GetDiffPairGap() ) );
-                    netclass->SetDiffPairViaGap(
-                            get( entry, "diff_pair_via_gap", netclass->GetDiffPairViaGap() ) );
+                    netclass->SetClearance( getInPcbUnits( entry, "clearance",
+                                                           netclass->GetClearance() ) );
+                    netclass->SetTrackWidth( getInPcbUnits( entry, "track_width",
+                                                            netclass->GetTrackWidth() ) );
+                    netclass->SetViaDiameter( getInPcbUnits( entry, "via_diameter",
+                                                             netclass->GetViaDiameter() ) );
+                    netclass->SetViaDrill( getInPcbUnits( entry, "via_drill",
+                                                          netclass->GetViaDrill() ) );
+                    netclass->SetuViaDiameter( getInPcbUnits( entry, "microvia_diameter",
+                                                              netclass->GetuViaDiameter() ) );
+                    netclass->SetuViaDrill( getInPcbUnits( entry, "microvia_drill",
+                                                           netclass->GetuViaDrill() ) );
+                    netclass->SetDiffPairWidth( getInPcbUnits( entry, "diff_pair_width",
+                                                               netclass->GetDiffPairWidth() ) );
+                    netclass->SetDiffPairGap( getInPcbUnits( entry, "diff_pair_gap",
+                                                             netclass->GetDiffPairGap() ) );
+                    netclass->SetDiffPairViaGap( getInPcbUnits( entry, "diff_pair_via_gap",
+                                                                netclass->GetDiffPairViaGap() ) );
+                    netclass->SetWireWidth( getInSchematicUnits( entry, "wire_width",
+                                                                 netclass->GetWireWidth() ) );
+                    netclass->SetBusWidth( getInSchematicUnits( entry, "bus_width",
+                                                                netclass->GetWireWidth() ) );
+
+                    if( entry.contains( "line_style" ) && entry["line_style"].is_number() )
+                        netclass->SetLineStyle( entry["line_style"].get<int>() );
 
                     if( entry.contains( "nets" ) && entry["nets"].is_array() )
                     {
@@ -139,6 +163,9 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 
                     if( entry.contains( "pcb_color" ) && entry["pcb_color"].is_string() )
                         netclass->SetPcbColor( entry["pcb_color"].get<KIGFX::COLOR4D>() );
+
+                    if( entry.contains( "schematic_color" ) && entry["schematic_color"].is_string() )
+                        netclass->SetSchematicColor( entry["schematic_color"].get<KIGFX::COLOR4D>() );
 
                     if( netclass != defaultClass )
                         m_NetClasses.Add( netclass );

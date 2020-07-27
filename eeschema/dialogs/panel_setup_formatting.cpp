@@ -116,8 +116,6 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_PinSymbolSize = (int) m_pinSymbolSize.GetValue();
     settings.m_JunctionSize = (int) m_junctionSize.GetValue();
 
-    m_frame->SaveProjectSettings();
-
     double dtmp = 0.0;
     wxString msg = m_textOffsetRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );

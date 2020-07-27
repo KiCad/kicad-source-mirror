@@ -107,34 +107,25 @@ constexpr int ARC_HIGH_DEF = Millimeter2iu( 0.005 );
 constexpr double PCB_IU_PER_MILS = (PCB_IU_PER_MM * 0.0254);
 constexpr double SCH_IU_PER_MILS = (SCH_IU_PER_MM * 0.0254);
 
-constexpr inline int PcbMils2iu( int mils )
-{
-    double x = mils * PCB_IU_PER_MILS;
-    return int( x < 0 ? x - 0.5 : x + 0.5 );
-}
 constexpr inline int SchMils2iu( int mils )
 {
     double x = mils * SCH_IU_PER_MILS;
     return int( x < 0 ? x - 0.5 : x + 0.5 );
+}
+constexpr inline double SchIu2Mils( int iu )
+{
+    return iu / SCH_IU_PER_MILS;
 }
 
 constexpr inline int PcbMillimeter2iu( double mm )
 {
     return (int) ( mm < 0 ? mm * PCB_IU_PER_MM - 0.5 : mm * PCB_IU_PER_MM + 0.5 );
 }
-constexpr inline int SchMillimeter2iu( double mm )
-{
-    return (int) ( mm < 0 ? mm * SCH_IU_PER_MM - 0.5 : mm * SCH_IU_PER_MM + 0.5 );
-}
-
 constexpr inline double PcbIu2Millimeter( int iu )
 {
     return iu / PCB_IU_PER_MM;
 }
-constexpr inline double SchIu2Millimeter( int iu )
-{
-    return iu / SCH_IU_PER_MM;
-}
+
 #endif
 
 /*  ZOOM LIMITS
