@@ -100,7 +100,7 @@ public:
     int GetDiameter() const { return m_diameter; }
     void SetDiameter( int aDiameter ) { m_diameter = aDiameter; }
 
-    COLOR4D GetColor() const { return m_color; }
+    COLOR4D GetColor() const;
     void SetColor( const COLOR4D& aColor ) { m_color = aColor; }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;

@@ -99,16 +99,19 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 void SCH_JUNCTION::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC    = aSettings->GetPrintDC();
-    COLOR4D color = ( m_color == COLOR4D::UNSPECIFIED ) ? aSettings->GetLayerColor( GetLayer() ) :
-            m_color ;
-    int diameter =
-            Schematic() ? Schematic()->Settings().m_JunctionSize : Mils2iu( DEFAULT_JUNCTION_DIAM );
+    COLOR4D color = GetColor();
+
+    if( color == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( GetLayer() );
+
+    int diameter = Schematic() ? Schematic()->Settings().m_JunctionSize
+                               : Mils2iu( DEFAULT_JUNCTION_DIAM );
 
     if( m_diameter != 0 )
         diameter = m_diameter;
 
-    GRFilledCircle( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
-                    diameter / 2, 0, color, color );
+    GRFilledCircle( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, diameter / 2, 0,
+                    color, color );
 }
 
 
@@ -170,6 +173,17 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
+COLOR4D SCH_JUNCTION::GetColor() const
+{
+    NETCLASSPTR netclass = NetClass();
+
+    if( netclass && netclass->GetSchematicColor() != COLOR4D::UNSPECIFIED )
+        return netclass->GetSchematicColor();
+
+    return m_color;
+}
+
+
 bool SCH_JUNCTION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();
@@ -204,17 +218,20 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
-    auto* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    auto*   settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    COLOR4D color = GetColor();
 
-    COLOR4D color = ( m_color == COLOR4D::UNSPECIFIED ) ? settings->GetLayerColor( GetLayer() ) :
-            m_color;
-    int diameter =
-            Schematic() ? Schematic()->Settings().m_JunctionSize : Mils2iu( DEFAULT_JUNCTION_DIAM );
+    if( color == COLOR4D::UNSPECIFIED )
+        color = settings->GetLayerColor( GetLayer() );
+
+    aPlotter->SetColor( color );
+
+    int diameter = Schematic() ? Schematic()->Settings().m_JunctionSize
+                               : Mils2iu( DEFAULT_JUNCTION_DIAM );
 
     if( m_diameter != 0 )
         diameter = m_diameter;
 
-    aPlotter->SetColor( color );
     aPlotter->Circle( m_pos, diameter, FILLED_SHAPE );
 }
 

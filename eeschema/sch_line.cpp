@@ -284,13 +284,14 @@ int SCH_LINE::GetPenWidth() const
 void SCH_LINE::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = m_stroke.GetColor();
+    COLOR4D color = GetLineColor();
+
+    if( color == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( GetLayer() );
+
     wxPoint start = m_start;
     wxPoint end = m_end;
     int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
-
-    if( color == COLOR4D::UNSPECIFIED )
-        color = aSettings->GetLayerColor( m_Layer );
 
     GRLine( nullptr, DC, start.x, start.y, end.x, end.y, penWidth, color,
             GetwxPenStyle( GetEffectiveLineStyle() ) );
@@ -727,13 +728,14 @@ bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_LINE::Plot( PLOTTER* aPlotter )
 {
-    auto* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
-    int   penWidth;
+    auto*   settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    int     penWidth;
+    COLOR4D color = GetLineColor();
 
-    if( m_stroke.GetColor() != COLOR4D::UNSPECIFIED )
-        aPlotter->SetColor( m_stroke.GetColor() );
-    else
-        aPlotter->SetColor( settings->GetLayerColor( GetLayer() ) );
+    if( color == COLOR4D::UNSPECIFIED )
+        color = settings->GetLayerColor( GetLayer() );
+
+    aPlotter->SetColor( color );
 
     switch( m_Layer )
     {
