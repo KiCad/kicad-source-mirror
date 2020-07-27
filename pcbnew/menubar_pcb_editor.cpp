@@ -484,6 +484,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->AddItem( PCB_ACTIONS::updateFootprints,       SELECTION_CONDITIONS::ShowAlways );
     toolsMenu->AddItem( PCB_ACTIONS::boardReannotate,        SELECTION_CONDITIONS::ShowAlways );
 
+    toolsMenu->AddSeparator();
+    toolsMenu->AddItem( PCB_ACTIONS::removeUnusedPads,       SELECTION_CONDITIONS::ShowAlways );
+
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     auto pythonConsoleShownCondition = [] ( const SELECTION& aSel ) {
         wxMiniFrame* pythonConsole = (wxMiniFrame *) PCB_EDIT_FRAME::findPythonConsole();

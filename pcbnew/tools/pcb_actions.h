@@ -303,6 +303,7 @@ public:
     static TOOL_ACTION changeFootprint;
     static TOOL_ACTION changeFootprints;
     static TOOL_ACTION swapLayers;
+    static TOOL_ACTION removeUnusedPads;
 
     static TOOL_ACTION importNetlist;
 

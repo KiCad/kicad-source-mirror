@@ -381,6 +381,7 @@ set( BMAPS_MID
     pad_enumerate
     pad_number
     pads_mask_layers
+    pads_remove
     path
     pagelayout_load
     pagelayout_normal_view_mode
@@ -556,6 +557,9 @@ set( BMAPS_BIG
     )
 
 set( BMAPS_OTHER
+    pads_remove_unused
+    pads_remove_unused_keep_bottom
+    pads_reset_unused
     stroke_dash
     stroke_dashdot
     stroke_dot

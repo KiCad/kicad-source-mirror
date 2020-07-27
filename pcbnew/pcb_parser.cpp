@@ -3478,6 +3478,16 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
             }
             break;
 
+        case T_remove_unused_layers:
+            pad->SetRemoveUnconnected( true );
+            NeedRIGHT();
+            break;
+
+        case T_keep_end_layers:
+            pad->SetKeepTopBottom( true );
+            NeedRIGHT();
+            break;
+
         case T_tstamp:
             NextTok();
             const_cast<KIID&>( pad->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
@@ -3765,6 +3775,16 @@ VIA* PCB_PARSER::parseVIA()
                     wxString::Format( _( "Invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                                       GetChars( CurSource() ), CurLineNumber(), CurOffset() )
                     );
+            NeedRIGHT();
+            break;
+
+        case T_remove_unused_layers:
+            via->SetRemoveUnconnected( true );
+            NeedRIGHT();
+            break;
+
+        case T_keep_end_layers:
+            via->SetKeepTopBottom( true );
             NeedRIGHT();
             break;
 

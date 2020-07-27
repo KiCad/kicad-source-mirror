@@ -693,25 +693,38 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( ARC* aArc )
 }
 
 
-std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
+std::vector<std::unique_ptr<PNS::VIA>> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
 {
+    std::vector<std::unique_ptr<PNS::VIA>> retval;
+
     PCB_LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
-    std::unique_ptr<PNS::VIA> via( new PNS::VIA(
-            aVia->GetPosition(),
-            LAYER_RANGE( top, bottom ),
-            aVia->GetWidth(),
-            aVia->GetDrillValue(),
-            aVia->GetNetCode(),
-            aVia->GetViaType() )
-    );
 
-    via->SetParent( aVia );
+    for( int layer = top; layer <= bottom; ++layer )
+    {
+        int width = aVia->GetWidth();
 
-    if( aVia->IsLocked() )
-        via->Mark( PNS::MK_LOCKED );
+        if( !aVia->IsPadOnLayer( layer ) )
+            width = aVia->GetDrillValue();
 
-    return via;
+        std::unique_ptr<PNS::VIA> via( new PNS::VIA(
+                aVia->GetPosition(),
+                LAYER_RANGE( layer ),
+                width,
+                aVia->GetDrillValue(),
+                aVia->GetNetCode(),
+                aVia->GetViaType() )
+        );
+
+        via->SetParent( aVia );
+
+        if( aVia->IsLocked() )
+            via->Mark( PNS::MK_LOCKED );
+
+        retval.push_back( std::move( via ) );
+    }
+
+    return retval;
 }
 
 
@@ -1005,7 +1018,9 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         }
         else if( type == PCB_VIA_T )
         {
-            if( auto via = syncVia( static_cast<VIA*>( t ) ) )
+            auto viavec = syncVia( static_cast<VIA*>( t ) );
+
+            for( auto& via : viavec )
                 aWorld->Add( std::move( via ) );
         }
     }

@@ -37,6 +37,7 @@
 #include <class_pcb_target.h>
 #include <class_track.h>
 #include <connectivity/connectivity_data.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
 #include <widgets/progress_reporter.h>
 #include <geometry/shape_poly_set.h>
@@ -635,7 +636,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     {
         for( D_PAD* pad : module->Pads() )
         {
-            if( !pad->IsOnLayer( aLayer ) )
+            if( !pad->IsPadOnLayer( aLayer ) )
             {
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
@@ -678,7 +679,24 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
         {
             int gap = aZone->GetClearance( aLayer, track ) + extra_margin;
 
-            track->TransformShapeWithClearanceToPolygon( aHoles, gap, m_low_def );
+            if( track->Type() == PCB_VIA_T )
+            {
+                VIA* via = static_cast<VIA*>( track );
+
+                if( !via->IsPadOnLayer( aLayer ) )
+                {
+                    TransformCircleToPolygon( aHoles, via->GetPosition(),
+                            ( via->GetDrillValue() + 1 ) / 2 + gap, m_low_def );
+                }
+                else
+                {
+                    via->TransformShapeWithClearanceToPolygon( aHoles, gap, m_low_def );
+                }
+            }
+            else
+            {
+                track->TransformShapeWithClearanceToPolygon( aHoles, gap, m_low_def );
+            }
         }
     }
 

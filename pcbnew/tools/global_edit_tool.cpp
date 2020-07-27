@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 #include <dialogs/dialog_exchange_footprints.h>
 #include <dialogs/dialog_cleanup_tracks_and_vias.h>
 #include <dialogs/dialog_swap_layers.h>
+#include <dialogs/dialog_unused_pad_layers.h>
 #include <tools/global_edit_tool.h>
 #include <board_commit.h>
 #include <dialogs/dialog_cleanup_graphics.h>
@@ -196,6 +197,22 @@ int GLOBAL_EDIT_TOOL::CleanupGraphics( const TOOL_EVENT& aEvent )
 }
 
 
+int GLOBAL_EDIT_TOOL::RemoveUnusedPads( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
+            } );
+    DIALOG_UNUSED_PAD_LAYERS dlg( editFrame, selection, *m_commit );
+
+    dlg.ShowModal();
+
+    return 0;
+}
+
+
 void GLOBAL_EDIT_TOOL::setTransitions()
 {
     Go( &GLOBAL_EDIT_TOOL::ExchangeFootprints,   PCB_ACTIONS::updateFootprint.MakeEvent() );
@@ -210,6 +227,7 @@ void GLOBAL_EDIT_TOOL::setTransitions()
     Go( &GLOBAL_EDIT_TOOL::GlobalDeletions,      PCB_ACTIONS::globalDeletions.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::CleanupTracksAndVias, PCB_ACTIONS::cleanupTracksAndVias.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::CleanupGraphics,      PCB_ACTIONS::cleanupGraphics.MakeEvent() );
+    Go( &GLOBAL_EDIT_TOOL::RemoveUnusedPads,     PCB_ACTIONS::removeUnusedPads.MakeEvent() );
 }
 
 

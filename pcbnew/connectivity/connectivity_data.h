@@ -173,6 +173,8 @@ public:
      */
     unsigned int GetUnconnectedCount() const;
 
+    bool IsConnectedOnLayer( const BOARD_CONNECTED_ITEM* aItem, int aLayer, std::vector<KICAD_T> aTypes = {} ) const;
+
     unsigned int GetNodeCount( int aNet = -1 ) const;
 
     unsigned int GetPadCount( int aNet = -1 ) const;

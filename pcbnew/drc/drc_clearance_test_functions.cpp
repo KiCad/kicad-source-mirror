@@ -41,6 +41,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 {
     BOARD_DESIGN_SETTINGS&     bds = m_pcb->GetDesignSettings();
 
+
     SHAPE_SEGMENT refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd(), aRefSeg->GetWidth() );
     PCB_LAYER_ID  refLayer = aRefSeg->GetLayer();
     LSET          refLayerSet = aRefSeg->GetLayerSet();
@@ -268,6 +269,16 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             EDA_RECT inflatedBB = refSegBB;
             inflatedBB.Inflate( pad->GetBoundingRadius() + m_largestClearance );
 
+            /// We setup the dummy pad to use in case we need to only draw the hole outline rather
+            /// than the pad itself
+            D_PAD dummypad( pad->GetParent() );
+            dummypad.SetNetCode( pad->GetNetCode() );
+            dummypad.SetSize( pad->GetDrillSize() );
+            dummypad.SetOrientation( pad->GetOrientation() );
+            dummypad.SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL
+                                                                                : PAD_SHAPE_CIRCLE );
+            dummypad.SetPosition( pad->GetPosition() );
+
             if( !inflatedBB.Contains( pad->GetPosition() ) )
                 continue;
 
@@ -317,6 +328,10 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                         return;
                 }
             }
+
+            /// Skip checking pad copper when it has been removed
+            if( !pad->IsPadOnLayer( refLayer ) )
+                continue;
 
             int minClearance = aRefSeg->GetClearance( aRefSeg->GetLayer(), pad,
                                                       &m_clearanceSource );

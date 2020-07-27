@@ -124,8 +124,6 @@ public:
 
     using CLUSTERS = std::vector<CN_CLUSTER_PTR>;
 
-private:
-
     class ITEM_MAP_ENTRY
     {
     public:
@@ -155,6 +153,8 @@ private:
 
         std::list<CN_ITEM*> m_items;
     };
+
+private:
 
     CN_LIST m_itemList;
 

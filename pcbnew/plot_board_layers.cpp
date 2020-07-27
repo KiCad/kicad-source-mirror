@@ -248,6 +248,10 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                     continue;
             }
 
+            /// pads not connected to copper are optionally not drawn
+            if( onCopperLayer && !pad->IsPadOnLayer( aLayerMask ) )
+                continue;
+
             COLOR4D color = COLOR4D::BLACK;
 
             if( pad->GetLayerSet()[B_Cu] )
@@ -415,6 +419,10 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             width_adj = itemplotter.getFineWidthAdj();
 
         int diameter = Via->GetWidth() + 2 * via_margin + width_adj;
+
+        /// Vias not connected to copper are optionally not drawn
+        if( onCopperLayer && !Via->IsPadOnLayer( aLayerMask ) )
+            continue;
 
         // Don't draw a null size item :
         if( diameter <= 0 )

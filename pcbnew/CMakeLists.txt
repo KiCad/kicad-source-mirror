@@ -142,6 +142,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_track_via_properties_base.cpp
     dialogs/dialog_track_via_size.cpp
     dialogs/dialog_track_via_size_base.cpp
+    dialogs/dialog_unused_pad_layers.cpp
+    dialogs/dialog_unused_pad_layers_base.cpp
     dialogs/dialog_update_pcb.cpp
     dialogs/dialog_update_pcb_base.cpp
     dialogs/panel_display_options.cpp

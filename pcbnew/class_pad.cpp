@@ -46,6 +46,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_drawsegment.h>
+#include <connectivity/connectivity_data.h>
 #include <geometry/polygon_test_point_inside.h>
 #include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -94,6 +95,8 @@ D_PAD::D_PAD( MODULE* parent ) :
 
     m_shapesDirty = true;
     m_effectiveBoundingRadius = 0;
+    m_RemoveUnconnectedLayer = false;
+    m_KeepTopBottomLayer = true;
 }
 
 
@@ -170,6 +173,45 @@ bool D_PAD::IsFlipped() const
     if( GetParent() &&  GetParent()->GetLayer() == B_Cu )
         return true;
     return false;
+}
+
+
+bool D_PAD::IsPadOnLayer( LSET aLayers ) const
+{
+    for( auto layer : aLayers.Seq() )
+    {
+        if( IsPadOnLayer( layer ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool D_PAD::IsPadOnLayer( int aLayer ) const
+{
+    BOARD* board = GetBoard();
+
+    if( !board )
+        return false;
+
+    /// We don't remove the copper from non-PTH pads
+    if( GetAttribute() != PAD_ATTRIB_STANDARD )
+        return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
+
+    /// Heatsink pads always get copper
+    if( GetProperty() == PAD_PROP_HEATSINK )
+        return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
+
+    if( !m_RemoveUnconnectedLayer )
+        return true;
+
+    /// Plated through hole pads need copper on the top/bottom layers for proper soldering
+    if( aLayer == F_Cu || aLayer == B_Cu )
+        return true;
+
+    return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ),
+        { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T } );
 }
 
 

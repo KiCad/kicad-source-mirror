@@ -1259,6 +1259,17 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     formatLayers( aPad->GetLayerSet() );
 
+    if( aPad->GetAttribute() == PAD_ATTRIB_STANDARD )
+    {
+        if( aPad->GetRemoveUnconnected() )
+        {
+            m_out->Print( 0, " (remove_unused_layers)" );
+
+            if( aPad->GetKeepTopBottom() )
+                m_out->Print( 0, " (keep_end_layers)" );
+        }
+    }
+
     // Output the radius ratio for rounded and chamfered rect pads
     if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT || aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT)
     {
@@ -1585,6 +1596,14 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         m_out->Print( 0, " (layers %s %s)",
                       m_out->Quotew( m_board->GetLayerName( layer1 ) ).c_str(),
                       m_out->Quotew( m_board->GetLayerName( layer2 ) ).c_str() );
+
+        if( via->GetRemoveUnconnected() )
+        {
+            m_out->Print( 0, " (remove_unused_layers)" );
+
+            if( via->GetKeepTopBottom() )
+                m_out->Print( 0, " (keep_end_layers)" );
+        }
     }
     else if( aTrack->Type() == PCB_ARC_T )
     {

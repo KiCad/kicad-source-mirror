@@ -26,6 +26,7 @@
 
 #include <fctsys.h>
 #include <pcb_base_frame.h>
+#include <connectivity/connectivity_data.h>
 #include <class_board.h>
 #include <class_track.h>
 #include <base_units.h>
@@ -60,6 +61,8 @@ VIA::VIA( BOARD_ITEM* aParent ) :
     SetViaType( VIATYPE::THROUGH );
     m_BottomLayer = B_Cu;
     SetDrillDefault();
+    m_RemoveUnconnectedLayer = false;
+    m_KeepTopBottomLayer = true;
 }
 
 
@@ -163,6 +166,14 @@ void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 
 int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
+    if( !IsPadOnLayer( aLayer ) )
+    {
+        if( aSource )
+            *aSource = _( "removed annulus" );
+
+        return 0;
+    }
+
     const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr, DRC_RULE_ID_ANNULUS, aLayer,
                                                       aSource );
 
@@ -479,6 +490,39 @@ void VIA::SanitizeLayers()
 
     if( m_BottomLayer < m_Layer )
         std::swap( m_BottomLayer, m_Layer );
+}
+
+
+bool VIA::IsPadOnLayer( LSET aLayers ) const
+{
+    for( auto layer : aLayers.Seq() )
+    {
+        if( IsPadOnLayer( layer ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool VIA::IsPadOnLayer( int aLayer ) const
+{
+    BOARD* board = GetBoard();
+
+    if( !board )
+        return false;
+
+    if( !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
+        return false;
+
+    if( !m_RemoveUnconnectedLayer )
+        return true;
+
+    if( m_KeepTopBottomLayer && ( aLayer == m_Layer || aLayer == m_BottomLayer ) )
+        return true;
+
+    return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ),
+        { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T } );
 }
 
 

@@ -337,7 +337,7 @@ public:
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
 private:
-    wxPoint     m_Mid;              ///< Arc mid point, halfway between start and end
+    wxPoint     m_Mid;                      ///< Arc mid point, halfway between start and end
 };
 
 
@@ -442,6 +442,33 @@ public:
     int GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const;
 
     /**
+     * Sets the unconnected removal property.  If true, the copper is removed on zone fill
+     * or when specifically requested when the via is not connected on a layer.
+     */
+    void SetRemoveUnconnected( bool aSet )      { m_RemoveUnconnectedLayer = aSet; }
+    bool GetRemoveUnconnected() const           { return m_RemoveUnconnectedLayer; }
+
+    /**
+     * Sets whether we keep the top and bottom connections even if they are not connected
+     */
+    void SetKeepTopBottom( bool aSet )      { m_KeepTopBottomLayer = aSet; }
+    bool GetKeepTopBottom() const           { return m_KeepTopBottomLayer; }
+
+    /**
+     * Checks to see whether the via should have a pad on the specific layer
+     * @param aLayer Layer to check for connectivity
+     * @return true if connected by pad or track
+     */
+    bool IsPadOnLayer( int aLayer ) const;
+
+    /**
+     * Checks to see if the via is present on any of the layers in the set
+     * @param aLayers set of layers to check the via against
+     * @return true if connected by pad or track on any of the associated layers
+     */
+    bool IsPadOnLayer( LSET aLayers ) const;
+
+    /**
      * Function SetDrill
      * sets the drill value for vias.
      * @param aDrill is the new drill diameter
@@ -483,7 +510,10 @@ private:
 
     VIATYPE m_ViaType; // Type of via
 
-    int m_Drill; // for vias: via drill (- 1 for default value)
+    int     m_Drill; // for vias: via drill (- 1 for default value)
+
+    bool    m_RemoveUnconnectedLayer;   ///< Remove unconnected copper on a via
+    bool    m_KeepTopBottomLayer;       ///< Keep the top and bottom annular rings
 };
 
 

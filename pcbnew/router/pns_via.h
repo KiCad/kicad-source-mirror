@@ -67,13 +67,6 @@ public:
         m_drill = aDrill;
         m_shape = SHAPE_CIRCLE( aPos, aDiameter / 2 );
         m_viaType = aViaType;
-
-        //If we're a through-board via, use all layers regardless of the set passed
-        if( aViaType == VIATYPE::THROUGH )
-        {
-            LAYER_RANGE allLayers( 0, MAX_CU_LAYERS - 1 );
-            SetLayers( allLayers );
-        }
     }
 
 

@@ -326,6 +326,26 @@ void CONNECTIVITY_DATA::PropagateNets()
     m_connAlgo->PropagateNets();
 }
 
+bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, int aLayer,
+                                            std::vector<KICAD_T> aTypes ) const
+{
+    CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY &entry = m_connAlgo->ItemEntry( aItem );
+
+    for( auto citem : entry.GetItems() )
+    {
+        for( auto connected : citem->ConnectedItems() )
+        {
+            if( connected->Valid() && connected->Layers().Overlaps( aLayer )
+                    && ( aTypes.empty()
+                            || std::count( aTypes.begin(), aTypes.end(),
+                                    connected->Parent()->Type() ) > 0 ) )
+                    return true;
+        }
+    }
+
+    return false;
+}
+
 
 unsigned int CONNECTIVITY_DATA::GetUnconnectedCount() const
 {

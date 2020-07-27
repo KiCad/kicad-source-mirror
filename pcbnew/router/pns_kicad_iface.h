@@ -69,7 +69,7 @@ public:
         return m_world;
     };
 
-    BOARD* GetBoard() const 
+    BOARD* GetBoard() const
     {
         return m_board;
     }
@@ -84,7 +84,7 @@ protected:
     std::unique_ptr<PNS::SOLID> syncPad( D_PAD* aPad );
     std::unique_ptr<PNS::SEGMENT> syncTrack( TRACK* aTrack );
     std::unique_ptr<PNS::ARC> syncArc( ARC* aArc );
-    std::unique_ptr<PNS::VIA> syncVia( VIA* aVia );
+    std::vector<std::unique_ptr<PNS::VIA>> syncVia( VIA* aVia );
     bool syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYER_ID aLayer );
     bool syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone );

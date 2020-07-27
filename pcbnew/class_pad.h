@@ -502,12 +502,29 @@ public:
     int GetSubRatsnest() const                  { return m_SubRatsnest; }
     void SetSubRatsnest( int aSubRatsnest )     { m_SubRatsnest = aSubRatsnest; }
 
+    /**
+     * Sets the unconnected removal property.  If true, the copper is removed on zone fill
+     * or when specifically requested when the pad is not connected on a layer.  This requires
+     * that there be a through hole.
+     */
+    void SetRemoveUnconnected( bool aSet )      { m_RemoveUnconnectedLayer = aSet; }
+    bool GetRemoveUnconnected() const           { return m_RemoveUnconnectedLayer; }
+
+    /**
+     * Sets whether we keep the top and bottom connections even if they are not connected
+     */
+    void SetKeepTopBottom( bool aSet )      { m_KeepTopBottomLayer = aSet; }
+    bool GetKeepTopBottom() const           { return m_KeepTopBottomLayer; }
+
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override
     {
         return m_layerMask[aLayer];
     }
+
+    bool IsPadOnLayer( int aLayer ) const;
+    bool IsPadOnLayer( LSET aLayers ) const;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -677,6 +694,9 @@ private:
     double      m_Orient;           // in 1/10 degrees
 
     int         m_LengthPadToDie;   // Length net from pad to die, inside the package
+
+    bool        m_RemoveUnconnectedLayer;  // If true, the pad copper is removed for layers that are not connected
+    bool        m_KeepTopBottomLayer;      // When removing unconnected pads, keep the top and bottom pads
 
     /*
      * Pad clearances, margins, etc. exist in a hiearchy.  If a given level is specified then
