@@ -53,7 +53,7 @@ add_subdirectory( eeschema )
 add_subdirectory( libs )
 add_subdirectory( pcbnew )
 add_subdirectory( utils/kicad2step )
-add_subdirectory( libeval_compiler )
+# add_subdirectory( libeval_compiler )
 add_subdirectory( drc_proto )
 
 # Utility/debugging/profiling programs
