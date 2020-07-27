@@ -809,45 +809,47 @@ void UOP::Exec( CONTEXT* ctx )
     {
         LIBEVAL::VALUE* arg2 = ctx->Pop();
         LIBEVAL::VALUE* arg1 = ctx->Pop();
+        double          arg2Value = arg2 ? arg2->AsDouble() : 0.0;
+        double          arg1Value = arg1 ? arg1->AsDouble() : 0.0;
         double          result;
 
         switch( m_op )
         {
         case TR_OP_ADD:
-            result = arg1->AsDouble() + arg2->AsDouble();
+            result = arg1Value + arg2Value;
             break;
         case TR_OP_SUB:
-            result = arg1->AsDouble() - arg2->AsDouble();
+            result = arg1Value - arg2Value;
             break;
         case TR_OP_MUL:
-            result = arg1->AsDouble() * arg2->AsDouble();
+            result = arg1Value * arg2Value;
             break;
         case TR_OP_DIV:
-            result = arg1->AsDouble() / arg2->AsDouble();
+            result = arg1Value / arg2Value;
             break;
         case TR_OP_LESS_EQUAL:
-            result = arg1->AsDouble() <= arg2->AsDouble() ? 1 : 0;
+            result = arg1Value <= arg2Value ? 1 : 0;
             break;
         case TR_OP_GREATER_EQUAL:
-            result = arg1->AsDouble() >= arg2->AsDouble() ? 1 : 0;
+            result = arg1Value >= arg2Value ? 1 : 0;
             break;
         case TR_OP_LESS:
-            result = arg1->AsDouble() < arg2->AsDouble() ? 1 : 0;
+            result = arg1Value < arg2Value ? 1 : 0;
             break;
         case TR_OP_GREATER:
-            result = arg1->AsDouble() > arg2->AsDouble() ? 1 : 0;
+            result = arg1Value > arg2Value ? 1 : 0;
             break;
         case TR_OP_EQUAL:
-            result = arg1->EqualTo( arg2 ) ? 1 : 0;
+            result = arg1 && arg2 && arg1->EqualTo( arg2 ) ? 1 : 0;
             break;
         case TR_OP_NOT_EQUAL:
-            result = arg1->EqualTo( arg2 ) ? 0 : 1;
+            result = arg1 && arg2 && arg1->EqualTo( arg2 ) ? 0 : 1;
             break;
         case TR_OP_BOOL_AND:
-            result = arg1->AsDouble() != 0.0 && arg2->AsDouble() != 0.0 ? 1 : 0;
+            result = arg1Value != 0.0 && arg2Value != 0.0 ? 1 : 0;
             break;
         case TR_OP_BOOL_OR:
-            result = arg1->AsDouble() != 0.0 || arg2->AsDouble() != 0.0 ? 1 : 0;
+            result = arg1Value != 0.0 || arg2Value != 0.0 ? 1 : 0;
             break;
         default:
             result = 0.0;
