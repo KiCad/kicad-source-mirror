@@ -457,6 +457,8 @@ void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
 
 void SCH_EDIT_FRAME::HardRedraw()
 {
+    RecalculateConnections( LOCAL_CLEANUP );
+
     FocusOnItem( nullptr );
 
     GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
