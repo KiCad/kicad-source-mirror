@@ -91,6 +91,8 @@ public:
 
     int On3DGridSelection( const TOOL_EVENT& aEvent );
 
+    int SetMaterial( const TOOL_EVENT& aEvent );
+
     int ToggleOrtho( const TOOL_EVENT& aEvent );
     int ToggleVisibility( const TOOL_EVENT& aEvent );
 

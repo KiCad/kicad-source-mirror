@@ -206,11 +206,11 @@ void EDA_3D_VIEWER::setupUIConditions()
     RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,
                              ACTION_CONDITIONS().SetCheckCondition( raytracingCondition ) );
 
-    mgr->SetConditions( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,,
+    mgr->SetConditions( EDA_3D_ACTIONS::materialNormal,
                         MaterialCheck( MATERIAL_MODE::NORMAL ) );
-    mgr->SetConditions( ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY,,
+    mgr->SetConditions( EDA_3D_ACTIONS::materialDiffuse,
                         MaterialCheck( MATERIAL_MODE::DIFFUSE_ONLY ) );
-    mgr->SetConditions( ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,,
+    mgr->SetConditions( EDA_3D_ACTIONS::materialCAD,
                         MaterialCheck( MATERIAL_MODE::CAD_MODE ) );
 
     mgr->SetConditions( EDA_3D_ACTIONS::renderShadows,
@@ -368,21 +368,6 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         SynchroniseColoursWithBoard();
         NewDisplay( true );
         break;
-
-    case ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL:
-        m_boardAdapter.MaterialModeSet( MATERIAL_MODE::NORMAL );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY:
-        m_boardAdapter.MaterialModeSet( MATERIAL_MODE::DIFFUSE_ONLY );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE:
-        m_boardAdapter.MaterialModeSet( MATERIAL_MODE::CAD_MODE );
-        NewDisplay( true );
-        return;
 
     case ID_MENU3D_RESET_DEFAULTS:
     {

@@ -123,23 +123,9 @@ void EDA_3D_VIEWER::CreateMenuBar()
     propsSubmenu->SetTitle( _( "Material Properties" ) );
     propsSubmenu->SetIcon( color_materials_xpm );
 
-    propsSubmenu->Add( _( "Use All Properties" ),
-                       _( "Use all material properties from each 3D model file" ),
-                       ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,
-                       nullptr,
-                       ACTION_MENU::CHECK );
-
-    propsSubmenu->Add( _( "Use Diffuse Only" ),
-                       _( "Use only the diffuse color property from model 3D model file" ),
-                       ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY,
-                       nullptr,
-                       ACTION_MENU::CHECK );
-
-    propsSubmenu->Add( _( "CAD Color Style" ),
-                       _( "Use a CAD color style based on the diffuse color of the material" ),
-                       ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,
-                       nullptr,
-                       ACTION_MENU::CHECK );
+    propsSubmenu->Add( EDA_3D_ACTIONS::materialNormal,  ACTION_MENU::CHECK );
+    propsSubmenu->Add( EDA_3D_ACTIONS::materialDiffuse, ACTION_MENU::CHECK );
+    propsSubmenu->Add( EDA_3D_ACTIONS::materialCAD,     ACTION_MENU::CHECK );
 
     optsSubmenu->Add( propsSubmenu );
 

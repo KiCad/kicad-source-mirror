@@ -150,14 +150,14 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
 {
     double rotIncrement = glm::radians( m_rotationIncrement );
 
-    switch( aEvent.Parameter<intptr_t>() )
+    switch( aEvent.Parameter<ROTATION_DIR>() )
     {
-    case ID_ROTATE3D_X_NEG: m_camera->RotateX( -rotIncrement ); break;
-    case ID_ROTATE3D_X_POS: m_camera->RotateX( rotIncrement );  break;
-    case ID_ROTATE3D_Y_NEG: m_camera->RotateY( -rotIncrement ); break;
-    case ID_ROTATE3D_Y_POS: m_camera->RotateY( rotIncrement );  break;
-    case ID_ROTATE3D_Z_NEG: m_camera->RotateZ( -rotIncrement ); break;
-    case ID_ROTATE3D_Z_POS: m_camera->RotateZ( rotIncrement );  break;
+    case ROTATION_DIR::X_NEG: m_camera->RotateX( -rotIncrement ); break;
+    case ROTATION_DIR::X_POS: m_camera->RotateX( rotIncrement );  break;
+    case ROTATION_DIR::Y_NEG: m_camera->RotateY( -rotIncrement ); break;
+    case ROTATION_DIR::Y_POS: m_camera->RotateY( rotIncrement );  break;
+    case ROTATION_DIR::Z_NEG: m_camera->RotateZ( -rotIncrement ); break;
+    case ROTATION_DIR::Z_POS: m_camera->RotateZ( rotIncrement );  break;
     default:                wxFAIL;                             break;
     }
 
@@ -165,6 +165,21 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
         m_canvas->Request_refresh();
     else
         m_canvas->RenderRaytracingRequest();
+
+    return 0;
+}
+
+
+int EDA_3D_CONTROLLER::SetMaterial( const TOOL_EVENT& aEvent )
+{
+    MATERIAL_MODE mode = aEvent.Parameter<MATERIAL_MODE>();
+
+    m_boardAdapter->MaterialModeSet( mode );
+
+    if( EDA_3D_VIEWER* viewer = dynamic_cast<EDA_3D_VIEWER*>( m_toolMgr->GetToolHolder() ) )
+        viewer->NewDisplay( true );
+    else
+        m_canvas->Request_refresh();
 
     return 0;
 }
@@ -320,6 +335,11 @@ void EDA_3D_CONTROLLER::setTransitions()
     Go( &EDA_3D_CONTROLLER::On3DGridSelection,  EDA_3D_ACTIONS::show5mmGrid.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::On3DGridSelection,  EDA_3D_ACTIONS::show2_5mmGrid.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::On3DGridSelection,  EDA_3D_ACTIONS::show1mmGrid.MakeEvent() );
+
+    // Material
+    Go( &EDA_3D_CONTROLLER::SetMaterial,        EDA_3D_ACTIONS::materialNormal.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::SetMaterial,        EDA_3D_ACTIONS::materialDiffuse.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::SetMaterial,        EDA_3D_ACTIONS::materialCAD.MakeEvent() );
 
     // Visibility
     Go( &EDA_3D_CONTROLLER::ToggleOrtho,        EDA_3D_ACTIONS::toggleOrtho.MakeEvent() );

@@ -72,6 +72,18 @@ enum DISPLAY3D_FLG
 };
 
 
+/// Rotation direction for the 3d canvas
+enum class ROTATION_DIR
+{
+    X_NEG,
+    X_POS,
+    Y_NEG,
+    Y_POS,
+    Z_NEG,
+    Z_POS
+};
+
+
 /// Camera types
 enum class CAMERA_TYPE
 {

@@ -72,6 +72,10 @@ public:
     static TOOL_ACTION show2_5mmGrid;
     static TOOL_ACTION show1mmGrid;
 
+    static TOOL_ACTION materialNormal;
+    static TOOL_ACTION materialDiffuse;
+    static TOOL_ACTION materialCAD;
+
     static TOOL_ACTION rotate45axisZ;
     static TOOL_ACTION attributesTHT;
     static TOOL_ACTION attributesSMD;

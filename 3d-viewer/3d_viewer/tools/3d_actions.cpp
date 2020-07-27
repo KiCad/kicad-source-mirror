@@ -46,32 +46,32 @@ TOOL_ACTION EDA_3D_ACTIONS::pivotCenter( "3DViewer.Control.pivotCenter",
 TOOL_ACTION EDA_3D_ACTIONS::rotateXCW( "3DViewer.Control.rotateXclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate X Clockwise" ), _( "Rotate X Clockwise" ),
-        rotate_neg_x_xpm, AF_NONE, (void*) ID_ROTATE3D_X_NEG );
+        rotate_neg_x_xpm, AF_NONE, (void*) ROTATION_DIR::X_NEG );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateXCCW( "3DViewer.Control.rotateXcounterclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate X Counterclockwise" ), _( "Rotate X Counterclockwise" ),
-        rotate_pos_x_xpm, AF_NONE, (void*) ID_ROTATE3D_X_POS );
+        rotate_pos_x_xpm, AF_NONE, (void*) ROTATION_DIR::X_POS );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateYCW( "3DViewer.Control.rotateYclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate Y Clockwise" ), _( "Rotate Y Clockwise" ),
-        rotate_neg_y_xpm, AF_NONE, (void*) ID_ROTATE3D_Y_NEG );
+        rotate_neg_y_xpm, AF_NONE, (void*) ROTATION_DIR::Y_NEG );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateYCCW( "3DViewer.Control.rotateYcounterclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate Y Counterclockwise" ), _( "Rotate Y Counterclockwise" ),
-        rotate_pos_y_xpm, AF_NONE, (void*) ID_ROTATE3D_Y_POS );
+        rotate_pos_y_xpm, AF_NONE, (void*) ROTATION_DIR::Y_POS );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateZCW( "3DViewer.Control.rotateZclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate Z Clockwise" ), _( "Rotate Z Clockwise" ),
-        rotate_neg_z_xpm, AF_NONE, (void*) ID_ROTATE3D_Z_NEG );
+        rotate_neg_z_xpm, AF_NONE, (void*) ROTATION_DIR::Z_NEG );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateZCCW( "3DViewer.Control.rotateZcounterclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate Z Counterclockwise" ), _( "Rotate Z Counterclockwise" ),
-        rotate_pos_z_xpm, AF_NONE, (void*) ID_ROTATE3D_Z_POS );
+        rotate_pos_z_xpm, AF_NONE, (void*) ROTATION_DIR::Z_POS );
 
 TOOL_ACTION EDA_3D_ACTIONS::moveLeft( "3DViewer.Control.moveLeft",
         AS_ACTIVE,
@@ -180,6 +180,24 @@ TOOL_ACTION EDA_3D_ACTIONS::show1mmGrid( "3DViewer.Control.show1mmGrid",
         AS_GLOBAL, 0, "",
         _( "3D Grid 1mm" ), _( "3D Grid 1mm" ),
         nullptr, AF_NONE, (void*) GRID3D_TYPE::GRID_1MM );
+
+TOOL_ACTION EDA_3D_ACTIONS::materialNormal( "3DViewer.Control.materialNormal",
+        AS_ACTIVE,
+        0, "",
+        _( "Use All Properties" ), _( "Use all material properties from each 3D model file" ),
+        nullptr, AF_NONE, (void*) MATERIAL_MODE::NORMAL );
+
+TOOL_ACTION EDA_3D_ACTIONS::materialDiffuse( "3DViewer.Control.materialDiffuse",
+        AS_ACTIVE,
+        0, "",
+        _( "Use Diffuse Only" ), _( "Use only the diffuse color property from model 3D model file" ),
+        nullptr, AF_NONE, (void*) MATERIAL_MODE::DIFFUSE_ONLY );
+
+TOOL_ACTION EDA_3D_ACTIONS::materialCAD( "3DViewer.Control.materialCAD",
+        AS_ACTIVE,
+        0, "",
+        _( "CAD Color Style" ),_( "Use a CAD color style based on the diffuse color of the material" ),
+        nullptr, AF_NONE, (void*) MATERIAL_MODE::CAD_MODE );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotate45axisZ( "3DViewer.Control.rotate45axisZ",
         AS_ACTIVE,
