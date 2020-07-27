@@ -162,7 +162,7 @@ typedef std::vector<CN_ANCHOR_PTR>  CN_ANCHORS;
 
 
 // basic connectivity item
-class CN_ITEM : public INTRUSIVE_LIST<CN_ITEM>
+class CN_ITEM
 {
 public:
     using CONNECTED_ITEMS = std::vector<CN_ITEM*>;

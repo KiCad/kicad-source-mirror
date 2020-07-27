@@ -310,13 +310,14 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     bool withinAnyNet = ( aMode != CSM_PROPAGATE );
 
     std::deque<CN_ITEM*> Q;
-    CN_ITEM* head = nullptr;
+    std::set<CN_ITEM*> item_set;
+
     CLUSTERS clusters;
 
     if( m_itemList.IsDirty() )
         searchConnections();
 
-    auto addToSearchList = [&head, withinAnyNet, aSingleNet, aTypes] ( CN_ITEM *aItem )
+    auto addToSearchList = [&item_set, withinAnyNet, aSingleNet, aTypes] ( CN_ITEM *aItem )
     {
         if( withinAnyNet && aItem->Net() <= 0 )
             return;
@@ -341,27 +342,29 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
         if( !found )
             return;
 
-        aItem->ListClear();
         aItem->SetVisited( false );
 
-        if( !head )
-            head = aItem;
-        else
-            head->ListInsert( aItem );
+        item_set.insert( aItem );
     };
 
     std::for_each( m_itemList.begin(), m_itemList.end(), addToSearchList );
 
-    while( head )
+    while( !item_set.empty() )
     {
         CN_CLUSTER_PTR cluster ( new CN_CLUSTER() );
+        CN_ITEM*       root;
+        auto           it = item_set.begin();
 
-        Q.clear();
-        CN_ITEM* root = head;
+        while( it != item_set.end() && (*it)->Visited() )
+            it = item_set.erase( item_set.begin() );
+
+        if( it == item_set.end() )
+            break;
+
+        root = *it;
         root->SetVisited ( true );
 
-        head = root->ListRemove();
-
+        Q.clear();
         Q.push_back( root );
 
         while( Q.size() )
@@ -380,7 +383,6 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
                 {
                     n->SetVisited( true );
                     Q.push_back( n );
-                    head = n->ListRemove();
                 }
             }
         }
