@@ -74,6 +74,7 @@ struct WINDOW_SETTINGS
     wxString perspective;
     int pos_x;
     int pos_y;
+    unsigned int display;
 
     std::vector<double> zoom_factors;
 

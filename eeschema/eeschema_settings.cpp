@@ -261,6 +261,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "simulator.window.size_y",
             &m_Simulator.window.size_y, 400 ) );
 
+    m_params.emplace_back( new PARAM<unsigned int>( "simulator.window.display",
+            &m_Simulator.window.display, 0 ) );
+
     m_params.emplace_back( new PARAM<bool>( "simulator.window.maximized",
             &m_Simulator.window.maximized, false ) );
 
@@ -314,6 +317,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "lib_view.window.size_y",
             &m_LibViewPanel.window.size_y, 400 ) );
+
+    m_params.emplace_back( new PARAM<unsigned int>( "lib_view.window.display",
+            &m_LibViewPanel.window.display, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "lib_view.window.maximized",
             &m_LibViewPanel.window.maximized, false ) );

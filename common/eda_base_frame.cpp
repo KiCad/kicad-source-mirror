@@ -365,17 +365,9 @@ void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
         wxLogTrace( traceDisplayLocation, "Using minimum size (%d, %d)", m_FrameSize.x, m_FrameSize.y );
     }
 
-    wxPoint upperRight( m_FramePos.x + m_FrameSize.x, m_FramePos.y );
-    wxPoint upperLeft( m_FramePos.x, m_FramePos.y );
-
-    // Check to see if the requested display is still attached to the computer
-    int leftInd  = wxDisplay::GetFromPoint( upperLeft );
-    int rightInd = wxDisplay::GetFromPoint( upperRight );
-
     wxLogTrace( traceDisplayLocation, "Number of displays: %d", wxDisplay::GetCount() );
-    wxLogTrace( traceDisplayLocation, "Previous display indices: %d and %d", leftInd, rightInd );
 
-    if( rightInd == wxNOT_FOUND && leftInd == wxNOT_FOUND )
+    if( aCfg->display >= wxDisplay::GetCount() )
     {
         wxLogTrace( traceDisplayLocation, "Previous display not found" );
 
@@ -398,19 +390,11 @@ void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
     }
     else
     {
-        wxRect clientSize;
+        wxPoint upperRight( m_FramePos.x + m_FrameSize.x, m_FramePos.y );
+        wxPoint upperLeft( m_FramePos.x, m_FramePos.y );
 
-        if( leftInd == wxNOT_FOUND )
-        {
-            // If the top-left point is off-screen, use the display for the top-right point
-            wxDisplay display( rightInd );
-            clientSize = display.GetClientArea();
-        }
-        else
-        {
-            wxDisplay display( leftInd );
-            clientSize = display.GetClientArea();
-        }
+        wxDisplay display( aCfg->display );
+        wxRect clientSize  = display.GetClientArea();
 
 // The percentage size (represented in decimal) of the region around the screen's border where
 // an upper corner is not allowed
@@ -499,6 +483,7 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
     aCfg->size_x    = m_FrameSize.x;
     aCfg->size_y    = m_FrameSize.y;
     aCfg->maximized = IsMaximized();
+    aCfg->display   = wxDisplay::GetFromWindow( this );
 
     wxLogTrace( traceDisplayLocation, "Saving window maximized: %s", IsMaximized() ? "true" : "false" );
     wxLogTrace( traceDisplayLocation, "Saving config position (%d, %d) with size (%d, %d)",
