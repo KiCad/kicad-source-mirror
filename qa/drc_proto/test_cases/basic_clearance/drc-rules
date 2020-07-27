@@ -1,0 +1,6 @@
+(version 20200610)
+
+(condition (expression "A.type == 'Pad' && B.type == 'Pad' && (A.onlayer('B.Cu'))") (rule "pad2pad_clearance_back") )
+
+(rule "pad2pad_clearance_back" (type "clearance") (priority 1) (severity error) (min "1mm") )
+(rule "default" (type "clearance") (priority 0) (severity error) (min "0.2mm") )
