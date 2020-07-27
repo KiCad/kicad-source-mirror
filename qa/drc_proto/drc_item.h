@@ -25,8 +25,6 @@
 #ifndef DRC_ITEM_PROTO_H
 #define DRC_ITEM_PROTO_H
 
-namespace test {
-
 #include <macros.h>
 #include <base_struct.h>
 #include <rc_item.h>
@@ -36,16 +34,38 @@ namespace test {
 
 #include <drc_proto/drc_engine.h>
 
+namespace test {
+
 class DRC_RULE;
 class DRC_TEST_PROVIDER;
-
 
 class DRC_ITEM : public RC_ITEM
 {
 public:
-    DRC_ITEM( int aErrorCode ) {}// fixme
+    /**
+     * Constructs a DRC_ITEM for the given error code
+     * @see DRCE_T
+     */
+    static DRC_ITEM* Create( int aErrorCode );
 
-    DRC_ITEM( const wxString& aErrorText ) {} // fixme
+    /**
+     * Constructs a DRC item from a given error settings key
+     * @param aErrorKey is a settings key for an error code (the untranslated string that is used
+     * to represent a given error code in settings files and for storing ignored DRC items)
+     * @return the created item
+     */
+    static DRC_ITEM* Create( const wxString& aErrorKey );
+
+    static std::vector<std::reference_wrapper<RC_ITEM>> GetItemsWithSeverities()
+    {
+        return allItemTypes;
+    }
+
+    /**
+     * Translates this object into a fragment of HTML suitable for the wxHtmlListBox class.
+     * @return wxString - the html text.
+     */
+    ::wxString FormatHtml( ) const { return ""; } // fixme
 
     void SetViolatingRule ( test::DRC_RULE *aRule ) { m_violatingRule = aRule; }
     test::DRC_RULE* GetViolatingRule() const { return m_violatingRule; }
@@ -53,25 +73,52 @@ public:
     void SetViolatingTest( test::DRC_TEST_PROVIDER *aProvider ) { m_violatingTest = aProvider; }
     test::DRC_TEST_PROVIDER* GetViolatingTest() const { return m_violatingTest; }
 
-    /**
-     * Function GetErrorText
-     * returns the string form of a drc error code.
-     */
-    ::wxString GetErrorText( int aErrorCode = -1, bool aTranslate = true ) const { return ""; } // fixme
+private:
 
-    /**
-     * Function ShowHtml
-     * translates this object into a fragment of HTML suitable for the wxHtmlListBox class.
-     * @return wxString - the html text.
-     */
-    ::wxString FormatHtml( ) const { return ""; } // fixme
+    DRC_ITEM( int aErrorCode = 0, const wxString& aTitle = "", const wxString& aSettingsKey = "" )
+    {
+        m_errorCode   = aErrorCode;
+        m_errorTitle  = aTitle;
+        m_settingsKey = aSettingsKey;
+    }
 
-protected:
+    /// A list of all DRC_ITEM types which are valid error codes
+    static std::vector<std::reference_wrapper<RC_ITEM>> allItemTypes;
 
-    DRC_RULE *m_violatingRule;
-    DRC_TEST_PROVIDER *m_violatingTest;
+    static DRC_ITEM unconnectedItems;
+    static DRC_ITEM itemsNotAllowed;
+    static DRC_ITEM clearance;
+    static DRC_ITEM tracksCrossing;
+    static DRC_ITEM copperEdgeClearance;
+    static DRC_ITEM zonesIntersect;
+    static DRC_ITEM zoneHasEmptyNet;
+    static DRC_ITEM viaDangling;
+    static DRC_ITEM trackDangling;
+    static DRC_ITEM holeClearance;
+    static DRC_ITEM trackWidth;
+    static DRC_ITEM viaTooSmall;
+    static DRC_ITEM viaAnnulus;
+    static DRC_ITEM drillTooSmall;
+    static DRC_ITEM viaHoleLargerThanPad;
+    static DRC_ITEM padstack;
+    static DRC_ITEM microviaTooSmall;
+    static DRC_ITEM microviaDrillTooSmall;
+    static DRC_ITEM keepout;
+    static DRC_ITEM courtyardsOverlap;
+    static DRC_ITEM missingCourtyard;
+    static DRC_ITEM malformedCourtyard;
+    static DRC_ITEM pthInsideCourtyard;
+    static DRC_ITEM npthInsideCourtyard;
+    static DRC_ITEM itemOnDisabledLayer;
+    static DRC_ITEM invalidOutline;
+    static DRC_ITEM duplicateFootprints;
+    static DRC_ITEM missingFootprint;
+    static DRC_ITEM extraFootprint;
+    static DRC_ITEM unresolvedVariable;
 
-    //std::vector<BOARD_ITEM*> m_violatingObjects;
+    DRC_RULE *m_violatingRule = nullptr;
+    DRC_TEST_PROVIDER *m_violatingTest = nullptr;
+
 };
 
 };
