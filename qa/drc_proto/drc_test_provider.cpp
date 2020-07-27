@@ -26,6 +26,13 @@ void test::DRC_TEST_PROVIDER::Report( DRC_ITEM* item )
     m_drcEngine->Report( item, nullptr );
 }
 
+
+void test::DRC_TEST_PROVIDER::ReportWithMarker( DRC_ITEM* item, VECTOR2I aMarkerPos )
+{
+    item->SetViolatingTest( this );
+    m_drcEngine->Report( item, nullptr ); // fixme: create marker
+}
+
 void test::DRC_TEST_PROVIDER::ReportWithMarker( DRC_ITEM* item, wxPoint aMarkerPos )
 {
     item->SetViolatingTest( this );
@@ -55,6 +62,7 @@ void test::DRC_TEST_PROVIDER::ReportAux( const wxString fmt, ... )
 
 bool test::DRC_TEST_PROVIDER::isErrorLimitExceeded( int error_code )
 {
+    // fixme: implement error limit (or timeout)
     return false;
 }
 
@@ -70,4 +78,13 @@ void test::DRC_TEST_PROVIDER::accountCheck( test::DRC_RULE* ruleToTest )
         m_stats[ ruleToTest ] = 0;
     else
         it->second++;
+}
+
+void test::DRC_TEST_PROVIDER::reportRuleStatistics()
+{
+    m_drcEngine->ReportAux("Rule hit statistics: ");
+    for( auto stat : m_stats )
+    {
+        m_drcEngine->ReportAux( wxString::Format( " - rule '%s': %d hits ", stat.first->GetName().c_str(), stat.second ) );
+    }
 }

@@ -99,6 +99,8 @@ public:
     virtual void ReportAux( const wxString fmt, ... );
     virtual void Report( DRC_ITEM* item );
     virtual void ReportWithMarker( DRC_ITEM* item, wxPoint aMarkerPos );
+    virtual void ReportWithMarker( DRC_ITEM* item, VECTOR2I aMarkerPos );
+
     virtual void ReportProgress( double aProgress );
     virtual void ReportStage ( const wxString& aStageName, int index, int total );
 
@@ -106,6 +108,7 @@ public:
 
 protected:
 
+    virtual void reportRuleStatistics();
     virtual void accountCheck( test::DRC_RULE* ruleToTest );
     virtual bool isErrorLimitExceeded( int error_code );
 
