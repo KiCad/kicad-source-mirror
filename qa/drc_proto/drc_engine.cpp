@@ -111,7 +111,7 @@ void test::DRC_ENGINE::inferImplicitRules()
 }
 
 
-static const int drc_debug_level = 2;
+static const int drc_debug_level = 0;
 
 void test::drc_dbg( int level, const char* fmt, ... )
 {
@@ -242,6 +242,8 @@ test::DRC_RULE* test::DRC_ENGINE::EvalRulesForItems( test::DRC_RULE_ID_T ruleID,
     {
         for( auto condition : rcond->conditions )
         {
+            drc_dbg(8, "   -> check condition '%s'\n", (const char*) condition->m_Expression );
+
             bool result = condition->EvaluateFor( a, b );
             if( result )
             {

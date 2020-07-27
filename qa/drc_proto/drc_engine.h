@@ -69,14 +69,13 @@ enum PCB_DRC_CODE
     DRCE_UNCONNECTED_ITEMS = DRCE_FIRST,    ///< items are unconnected
     DRCE_ALLOWED_ITEMS,                     ///< a disallowed item has been used
     DRCE_CLEARANCE,                         ///< items are too close together
-    DRCE_HOLE_CLEARANCE,
     DRCE_TRACKS_CROSSING,                   ///< tracks are crossing
     DRCE_COPPER_EDGE_CLEARANCE,             ///< a copper item is too close to the board edge
     DRCE_ZONES_INTERSECT,                   ///< copper area outlines intersect
     DRCE_ZONE_HAS_EMPTY_NET,                ///< copper area has a net but no pads in nets, which is suspicious
     DRCE_DANGLING_VIA,                      ///< via which isn't connected to anything
     DRCE_DANGLING_TRACK,                    ///< track with at least one end not connected to anything
-    DRCE_DRILLED_HOLES_TOO_CLOSE,           ///< overlapping drilled holes break drill bits
+    DRCE_HOLE_CLEARANCE,           ///< overlapping drilled holes break drill bits
     DRCE_TRACK_WIDTH,                       ///< Track width is too small or too large
     DRCE_TOO_SMALL_VIA,                     ///< Too small via size
     DRCE_VIA_ANNULUS,                       ///< Via size and drill leave annulus too small or too large
@@ -163,6 +162,8 @@ public:
     void ReportAux( const wxString& aStr );
 
 private:
+
+    void freeCompiledRules();
 
     struct RULE_WITH_CONDITIONS
     {

@@ -40,26 +40,24 @@
 #include <drc_proto/drc_test_provider_clearance_base.h>
 
 /*
-    Copper clearance test. Checks all copper items (pads, vias, tracks, drawings, zones) for their electrical clearance.
+    Board edge clearance test. Checks all items for their mechanical clearances against the board edge.
     Errors generated:
-    - DRCE_CLEARANCE
-    - DRCE_TRACKS_CROSSING
-    - DRCE_ZONES_INTERSECT
+    - DRCE_COPPER_EDGE_CLEARANCE
 
-    TODO: improve zone clearance check (super slow)
+    TODO: holes to edge check
 */
 
 namespace test {
 
-class DRC_TEST_PROVIDER_COPPER_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
+class DRC_TEST_PROVIDER_EDGE_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
-    DRC_TEST_PROVIDER_COPPER_CLEARANCE () :
+    DRC_TEST_PROVIDER_EDGE_CLEARANCE () :
         DRC_TEST_PROVIDER_CLEARANCE_BASE()
         {
         }
 
-    virtual ~DRC_TEST_PROVIDER_COPPER_CLEARANCE() 
+    virtual ~DRC_TEST_PROVIDER_EDGE_CLEARANCE() 
     {
     }
 
@@ -72,7 +70,7 @@ public:
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests copper item clearance";
+        return "Tests copper item vs board edge clearance";
     }
 
     virtual std::set<test::DRC_RULE_ID_T> GetMatchingRuleIds() const override;
