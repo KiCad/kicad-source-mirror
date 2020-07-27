@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,33 +31,29 @@
 
 #include <pgm_base.h>
 #include <id.h>
+#include <menus_helpers.h>
 #include <tool/tool_interactive.h>
+#include <tool/action_menu.h>
 #include <tool/conditional_menu.h>
 #include <bitmaps.h>
 
-
+// Contained inside pgm_base.cpp
 extern LANGUAGE_DESCR LanguagesList[];
-
-using namespace std::placeholders;
 
 /**
  * Function AddMenuLanguageList
  * creates a menu list for language choice, and add it as submenu to \a MasterMenu.
  *
- * @param aMasterMenu The main menu.
+ * @param aMasterMenu is the main menu.
+ * @param aControlTool is the tool to associate with the menu
  */
-
-void AddMenuLanguageList( CONDITIONAL_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTool )
+void AddMenuLanguageList( ACTION_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTool )
 {
-    CONDITIONAL_MENU* langsMenu = new CONDITIONAL_MENU( false, aControlTool );
+    ACTION_MENU* langsMenu = new ACTION_MENU( false, aControlTool );
     langsMenu->SetTitle( _( "Set Language" ) );
     langsMenu->SetIcon( language_xpm );
-    aMasterMenu->AddMenu( langsMenu );
-    wxString tooltip;
 
-    auto isCurrentLang = [] ( int aLangIdentifier ) {
-        return Pgm().GetSelectedLanguageIdentifier() == aLangIdentifier;
-    };
+    wxString tooltip;
 
     for( unsigned ii = 0;  LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
     {
@@ -68,8 +64,17 @@ void AddMenuLanguageList( CONDITIONAL_MENU* aMasterMenu, TOOL_INTERACTIVE* aCont
         else
             label = wxGetTranslation( LanguagesList[ii].m_Lang_Label );
 
-        langsMenu->AddCheckItem( LanguagesList[ii].m_KI_Lang_Identifier,    // wxMenuItem wxID
-                                 label, tooltip, LanguagesList[ii].m_Lang_Icon,
-                                 std::bind( isCurrentLang, LanguagesList[ii].m_WX_Lang_Identifier ) );
+        wxMenuItem* item = new wxMenuItem( langsMenu,
+                                           LanguagesList[ii].m_KI_Lang_Identifier,    // wxMenuItem wxID
+                                           label,
+                                           tooltip,
+                                           wxITEM_CHECK );
+
+        AddBitmapToMenuItem( item, KiBitmap( LanguagesList[ii].m_Lang_Icon ) );
+
+        langsMenu->Append( item );
     }
+
+    // This must be done after the items are added
+    aMasterMenu->Add( langsMenu );
 }

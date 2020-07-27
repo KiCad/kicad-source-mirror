@@ -30,9 +30,8 @@
 
 
 CONDITIONAL_MENU::CONDITIONAL_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
-        ACTION_MENU( isContextMenu )
+        ACTION_MENU( isContextMenu, aTool )
 {
-    m_tool = aTool;
 }
 
 
@@ -96,29 +95,6 @@ void CONDITIONAL_MENU::AddMenu( ACTION_MENU* aMenu, const SELECTION_CONDITION& a
 void CONDITIONAL_MENU::AddSeparator( int aOrder )
 {
     addEntry( ENTRY( SELECTION_CONDITIONS::ShowAlways, aOrder ) );
-}
-
-
-void CONDITIONAL_MENU::AddClose( wxString aAppname )
-{
-    AddItem( wxID_CLOSE, _( "Close\tCTRL+W" ), wxString::Format( "Close %s", aAppname ), exit_xpm,
-            SELECTION_CONDITIONS::ShowAlways );
-}
-
-
-void CONDITIONAL_MENU::AddQuitOrClose( KIFACE_I* aKiface, wxString aAppname )
-{
-    if( !aKiface || aKiface->IsSingle() ) // not when under a project mgr
-    {
-        // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via
-        // wxID_EXIT
-        AddItem( wxID_EXIT, _( "Quit" ), wxString::Format( "Quit %s", aAppname ), exit_xpm,
-                SELECTION_CONDITIONS::ShowAlways );
-    }
-    else
-    {
-        AddClose( aAppname );
-    }
 }
 
 

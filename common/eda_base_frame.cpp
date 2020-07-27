@@ -48,6 +48,8 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 
+#include <functional>
+
 wxDEFINE_EVENT( UNITS_CHANGED, wxCommandEvent );
 
 
@@ -290,6 +292,89 @@ void EDA_BASE_FRAME::OnMenuEvent( wxMenuEvent& aEvent )
 }
 
 
+void EDA_BASE_FRAME::RegisterUIUpdateHandler( int aID, const ACTION_CONDITIONS& aConditions )
+{
+    UIUpdateHandler evtFunc = std::bind( &EDA_BASE_FRAME::HandleUpdateUIEvent,
+                                         std::placeholders::_1,
+                                         this,
+                                         aConditions );
+
+    m_uiUpdateMap[aID] = evtFunc;
+
+    Bind( wxEVT_UPDATE_UI, evtFunc, aID );
+}
+
+
+void EDA_BASE_FRAME::UnregisterUIUpdateHandler( int aID )
+{
+    const auto it = m_uiUpdateMap.find( aID );
+
+    if( it == m_uiUpdateMap.end() )
+        return;
+
+    Unbind( wxEVT_UPDATE_UI, it->second, aID );
+}
+
+
+void EDA_BASE_FRAME::HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAME* aFrame,
+                                          ACTION_CONDITIONS aCond )
+{
+    bool       checkRes  = false;
+    bool       enableRes = true;
+    bool       showRes   = true;
+    SELECTION& selection = aFrame->GetCurrentSelection();
+
+    try
+    {
+        checkRes  = aCond.checkCondition( selection );
+        enableRes = aCond.enableCondition( selection );
+        showRes   = aCond.showCondition( selection );
+    }
+    catch( std::exception& )
+    {
+        // Something broke with the conditions, just skip the event.
+        aEvent.Skip();
+        return;
+    }
+
+    aEvent.Enable( enableRes );
+    aEvent.Show( showRes );
+
+    bool canCheck = true;
+
+    // wxMenuItems don't want to be checked unless they actually are checkable, so we have to check to
+    // see if they can be and can't just universally apply a check in this event.
+    if( auto menu = dynamic_cast<wxMenu*>( aEvent.GetEventObject() ) )
+        canCheck = menu->FindItem( aEvent.GetId() )->IsCheckable();
+
+    if( canCheck )
+        aEvent.Check( checkRes );
+}
+
+
+// Contained inside pgm_base.cpp
+extern LANGUAGE_DESCR LanguagesList[];
+
+void EDA_BASE_FRAME::setupUIConditions()
+{
+    // Setup the conditions to check a language menu item
+    auto isCurrentLang =
+        [] ( const SELECTION& aSel, int aLangIdentifier )
+        {
+            return Pgm().GetSelectedLanguageIdentifier() == aLangIdentifier;
+        };
+
+    for( unsigned ii = 0;  LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
+    {
+        ACTION_CONDITIONS cond;
+        cond.SetCheckCondition( std::bind( isCurrentLang, std::placeholders::_1,
+                                           LanguagesList[ii].m_WX_Lang_Identifier ) );
+
+        RegisterUIUpdateHandler( LanguagesList[ii].m_KI_Lang_Identifier, cond );
+    }
+}
+
+
 void EDA_BASE_FRAME::ReCreateMenuBar()
 {
 }
@@ -298,9 +383,7 @@ void EDA_BASE_FRAME::ReCreateMenuBar()
 void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
 {
     COMMON_CONTROL* commonControl = m_toolManager->GetTool<COMMON_CONTROL>();
-    ACTION_MENU*    helpMenu = new ACTION_MENU( false );
-
-    helpMenu->SetTool( commonControl );
+    ACTION_MENU*    helpMenu = new ACTION_MENU( false, commonControl );
 
     helpMenu->Add( ACTIONS::help );
     helpMenu->Add( ACTIONS::gettingStarted );

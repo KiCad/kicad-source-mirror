@@ -37,8 +37,6 @@
 #include "sch_edit_frame.h"
 #include <widgets/wx_menubar.h>
 
-extern void AddMenuLanguageList( CONDITIONAL_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTool );
-
 
 void SCH_EDIT_FRAME::ReCreateMenuBar()
 {

@@ -98,7 +98,7 @@ public:
 
     void Toggle( const TOOL_ACTION& aAction, bool aEnabled, bool aChecked );
 
-    static const bool TOGGLE = true;
+    static constexpr bool TOGGLE = true;
 
 protected:
     ///> The default tool event handler.

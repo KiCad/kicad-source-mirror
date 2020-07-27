@@ -45,278 +45,197 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     //-- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, tool );
+    ACTION_MENU* fileMenu = new ACTION_MENU( false, tool );
 
-    fileMenu->AddItem( ID_MENU_SCREENCOPY_PNG, _( "Export Current View as PNG..." ), "",
-                       export_xpm,                     SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->Add( _( "Export Current View as PNG..." ),
+                   "",
+                   ID_MENU_SCREENCOPY_PNG,
+                   export_xpm );
 
-    fileMenu->AddItem( ID_MENU_SCREENCOPY_JPEG, _( "Export Current View as JPEG..." ), "",
-                       export_xpm,                     SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->Add( _( "Export Current View as JPEG..." ),
+                   "",
+                   ID_MENU_SCREENCOPY_JPEG,
+                   export_xpm );
 
-    fileMenu->AddSeparator();
+    fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "3D Viewer" ) );
 
-    fileMenu->Resolve();
 
     //-- Edit menu -------------------------------------------------------
     // Avoid to translate hotkey modifiers like Ctrl and Shift.
     // The translated modifiers do not always work
-    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, tool );
+    ACTION_MENU* editMenu = new ACTION_MENU( false, tool );
 
-    editMenu->AddItem( ID_TOOL_SCREENCOPY_TOCLIBBOARD, _( "Copy 3D Image" ), "",
-                       copy_xpm,                       SELECTION_CONDITIONS::ShowAlways );
+    editMenu->Add( _( "Copy 3D Image" ),
+                   "",
+                   ID_TOOL_SCREENCOPY_TOCLIBBOARD,
+                   copy_xpm );
 
-    editMenu->Resolve();
 
     //-- View menu -------------------------------------------------------
     //
-    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, tool );
+    ACTION_MENU* viewMenu = new ACTION_MENU( false, tool );
 
-    viewMenu->AddItem( ACTIONS::zoomIn,                SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOut,               SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,         SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,            SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->Add( ACTIONS::zoomIn );
+    viewMenu->Add( ACTIONS::zoomOut );
+    viewMenu->Add( ACTIONS::zoomFitScreen );
+    viewMenu->Add( ACTIONS::zoomRedraw );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( EDA_3D_ACTIONS::rotateXCW,      SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( EDA_3D_ACTIONS::rotateXCCW,     SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( EDA_3D_ACTIONS::rotateXCW );
+    viewMenu->Add( EDA_3D_ACTIONS::rotateXCCW );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( EDA_3D_ACTIONS::rotateYCW,      SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( EDA_3D_ACTIONS::rotateYCCW,     SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( EDA_3D_ACTIONS::rotateYCW );
+    viewMenu->Add( EDA_3D_ACTIONS::rotateYCCW );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( EDA_3D_ACTIONS::rotateZCW,      SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( EDA_3D_ACTIONS::rotateZCCW,     SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( EDA_3D_ACTIONS::rotateZCW );
+    viewMenu->Add( EDA_3D_ACTIONS::rotateZCCW );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( EDA_3D_ACTIONS::moveLeft,       SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( EDA_3D_ACTIONS::moveRight,      SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( EDA_3D_ACTIONS::moveUp,         SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( EDA_3D_ACTIONS::moveDown,       SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( EDA_3D_ACTIONS::moveLeft );
+    viewMenu->Add( EDA_3D_ACTIONS::moveRight );
+    viewMenu->Add( EDA_3D_ACTIONS::moveUp );
+    viewMenu->Add( EDA_3D_ACTIONS::moveDown );
 
-    viewMenu->Resolve();
 
     //-- Preferences menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, tool );
+    ACTION_MENU* prefsMenu = new ACTION_MENU( false, tool );
 
-    //clang-format off
-    auto raytracingCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.RenderEngineGet() != RENDER_ENGINE::OPENGL_LEGACY;
-    };
+    prefsMenu->Add( _( "Display Options" ), "",
+                    ID_TOOL_SET_VISIBLE_ITEMS,
+                    read_setup_xpm );
 
-    auto NormalModeCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::NORMAL;
-    };
-
-    auto DiffuseModeCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::DIFFUSE_ONLY;
-    };
-
-    auto CADModeCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::CAD_MODE;
-    };
-
-    auto boundingBoxesCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
-    };
-
-    auto renderShadowsCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
-    };
-
-    auto proceduralTexturesCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES );
-    };
-
-    auto showFloorCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR );
-    };
-
-    auto useRefractionsCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS );
-    };
-
-    auto useReflectionsCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS );
-    };
-
-    auto antiAliasingCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING );
-    };
-
-    auto postProcessCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING );
-    };
-
-    auto showAxesCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetFlag( FL_AXIS );
-    };
-    //clang-format on
-
-    prefsMenu->AddItem( ID_TOOL_SET_VISIBLE_ITEMS, _( "Display Options" ), "",
-                        read_setup_xpm,                SELECTION_CONDITIONS::ShowAlways );
-
-    prefsMenu->AddCheckItem( ID_RENDER_CURRENT_VIEW, _( "Raytracing" ), "",
-                             tools_xpm,                raytracingCondition );
+    prefsMenu->Add( _( "Raytracing" ), "",
+                    ID_RENDER_CURRENT_VIEW,
+                    tools_xpm,
+                    ACTION_MENU::CHECK );
 
     // Render options submenu
-    CONDITIONAL_MENU* optsSubmenu = new CONDITIONAL_MENU( false, tool );
+    ACTION_MENU* optsSubmenu = new ACTION_MENU( false, tool );
     optsSubmenu->SetTitle( _( "Render Options" ) );
     optsSubmenu->SetIcon( options_3drender_xpm );
 
     // Material properties submenu
-    CONDITIONAL_MENU* propsSubmenu = new CONDITIONAL_MENU( false, tool );
+    ACTION_MENU* propsSubmenu = new ACTION_MENU( false, tool );
     propsSubmenu->SetTitle( _( "Material Properties" ) );
     propsSubmenu->SetIcon( color_materials_xpm );
 
-    propsSubmenu->AddCheckItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,
-                                _( "Use All Properties" ),
-                                _( "Use all material properties from each 3D model file" ),
-                                nullptr,                       NormalModeCondition );
+    propsSubmenu->Add( _( "Use All Properties" ),
+                       _( "Use all material properties from each 3D model file" ),
+                       ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,
+                       nullptr,
+                       ACTION_MENU::CHECK );
 
-    propsSubmenu->AddCheckItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY,
-                                _( "Use Diffuse Only" ),
-                                _( "Use only the diffuse color property from model 3D model file" ),
-                                nullptr,                       DiffuseModeCondition );
+    propsSubmenu->Add( _( "Use Diffuse Only" ),
+                       _( "Use only the diffuse color property from model 3D model file" ),
+                       ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY,
+                       nullptr,
+                       ACTION_MENU::CHECK );
 
-    propsSubmenu->AddCheckItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,
-                                _( "CAD Color Style" ),
-                                _( "Use a CAD color style based on the diffuse color of the material" ),
-                                nullptr,                       CADModeCondition );
+    propsSubmenu->Add( _( "CAD Color Style" ),
+                       _( "Use a CAD color style based on the diffuse color of the material" ),
+                       ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,
+                       nullptr,
+                       ACTION_MENU::CHECK );
 
-    optsSubmenu->AddMenu( propsSubmenu,                        SELECTION_CONDITIONS::ShowAlways );
+    optsSubmenu->Add( propsSubmenu );
 
-    optsSubmenu->AddCheckItem( EDA_3D_ACTIONS::showBoundingBoxes,   boundingBoxesCondition );
+    optsSubmenu->Add( EDA_3D_ACTIONS::showBoundingBoxes, ACTION_MENU::CHECK );
 
     // Raytracing  submenu
-    CONDITIONAL_MENU* raySubmenu = new CONDITIONAL_MENU( false, tool );
+    ACTION_MENU* raySubmenu = new ACTION_MENU( false, tool );
     raySubmenu->SetTitle( _( "Raytracing Options" ) );
     raySubmenu->SetIcon( tools_xpm );
 
-    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::renderShadows,        renderShadowsCondition );
-    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::proceduralTextures,   proceduralTexturesCondition );
-    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::addFloor,             showFloorCondition );
-    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::showRefractions,      useRefractionsCondition );
-    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::showReflections,      useReflectionsCondition );
-    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::antiAliasing,         antiAliasingCondition );
+    raySubmenu->Add( EDA_3D_ACTIONS::renderShadows,      ACTION_MENU::CHECK );
+    raySubmenu->Add( EDA_3D_ACTIONS::proceduralTextures, ACTION_MENU::CHECK );
+    raySubmenu->Add( EDA_3D_ACTIONS::addFloor,           ACTION_MENU::CHECK );
+    raySubmenu->Add( EDA_3D_ACTIONS::showRefractions,    ACTION_MENU::CHECK );
+    raySubmenu->Add( EDA_3D_ACTIONS::showReflections,    ACTION_MENU::CHECK );
+    raySubmenu->Add( EDA_3D_ACTIONS::antiAliasing,       ACTION_MENU::CHECK );
+    raySubmenu->Add( EDA_3D_ACTIONS::postProcessing,     ACTION_MENU::CHECK );
 
-    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::postProcessing,       postProcessCondition );
+    optsSubmenu->Add( raySubmenu );
+    prefsMenu->Add( optsSubmenu );
 
-    optsSubmenu->AddMenu( raySubmenu,                          SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddMenu( optsSubmenu,                           SELECTION_CONDITIONS::ShowAlways );
-
-    prefsMenu->AddSeparator();
+    prefsMenu->AppendSeparator();
 
     // Color  submenu
-    CONDITIONAL_MENU* colorSubmenu = new CONDITIONAL_MENU( false, tool );
+    ACTION_MENU* colorSubmenu = new ACTION_MENU( false, tool );
     colorSubmenu->SetTitle( _( "Choose Colors" ) );
     colorSubmenu->SetIcon( palette_xpm );
 
-    colorSubmenu->AddItem( ID_MENU3D_BGCOLOR_TOP, _( "Background Top Color..." ), "",
-                           setcolor_3d_bg_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+    colorSubmenu->Add( _( "Background Top Color..." ),
+                       ID_MENU3D_BGCOLOR_TOP,
+                       setcolor_3d_bg_xpm );
 
-    colorSubmenu->AddItem( ID_MENU3D_BGCOLOR_BOTTOM, _( "Background Bottom Color..." ), "",
-                           setcolor_3d_bg_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+    colorSubmenu->Add( _( "Background Bottom Color..." ),
+                       ID_MENU3D_BGCOLOR_BOTTOM,
+                       setcolor_3d_bg_xpm );
 
-    colorSubmenu->AddItem( ID_MENU3D_SILKSCREEN_COLOR, _( "Silkscreen Color..." ), "",
-                           setcolor_silkscreen_xpm,            SELECTION_CONDITIONS::ShowAlways );
+    colorSubmenu->Add( _( "Silkscreen Color..." ),
+                       ID_MENU3D_SILKSCREEN_COLOR,
+                       setcolor_silkscreen_xpm );
 
-    colorSubmenu->AddItem( ID_MENU3D_SOLDERMASK_COLOR, _( "Solder Mask Color..." ), "",
-                           setcolor_soldermask_xpm,            SELECTION_CONDITIONS::ShowAlways );
+    colorSubmenu->Add( _( "Solder Mask Color..." ),
+                       ID_MENU3D_SOLDERMASK_COLOR,
+                       setcolor_soldermask_xpm );
 
-    colorSubmenu->AddItem( ID_MENU3D_SOLDERPASTE_COLOR, _( "Solder Paste Color..." ), "",
-                           setcolor_solderpaste_xpm,           SELECTION_CONDITIONS::ShowAlways );
+    colorSubmenu->Add( _( "Solder Paste Color..." ),
+                       ID_MENU3D_SOLDERPASTE_COLOR,
+                       setcolor_solderpaste_xpm );
 
-    colorSubmenu->AddItem( ID_MENU3D_COPPER_COLOR, _( "Copper/Surface Finish Color..." ), "",
-                           setcolor_copper_xpm,                SELECTION_CONDITIONS::ShowAlways );
+    colorSubmenu->Add( _( "Copper/Surface Finish Color..." ),
+                       ID_MENU3D_COPPER_COLOR,
+                       setcolor_copper_xpm );
 
-    colorSubmenu->AddItem( ID_MENU3D_PCB_BODY_COLOR, _( "Board Body Color..." ), "",
-                           setcolor_board_body_xpm,            SELECTION_CONDITIONS::ShowAlways );
+    colorSubmenu->Add( _( "Board Body Color..." ),
+                       ID_MENU3D_PCB_BODY_COLOR,
+                       setcolor_board_body_xpm );
 
     // Only allow the stackup to be used in the PCB editor, since it isn't editable in the other frames
     if( Parent()->IsType( FRAME_PCB_EDITOR ) )
     {
-        colorSubmenu->AddItem( ID_MENU3D_STACKUP_COLORS, _( "Get colors from physical stackup" ), "",
-                               nullptr, SELECTION_CONDITIONS::ShowAlways );
+        colorSubmenu->Add( _( "Get colors from physical stackup" ),
+                           ID_MENU3D_STACKUP_COLORS,
+                           nullptr );
     }
 
-    prefsMenu->AddMenu( colorSubmenu );
+    prefsMenu->Add( colorSubmenu );
 
-    prefsMenu->AddCheckItem( EDA_3D_ACTIONS::showAxis,         showAxesCondition );
+    prefsMenu->Add( EDA_3D_ACTIONS::showAxis, ACTION_MENU::CHECK );
 
-    // Grid  submenu
-    CONDITIONAL_MENU* gridSubmenu = new CONDITIONAL_MENU( false, tool );
+    // Grid submenu
+    ACTION_MENU* gridSubmenu = new ACTION_MENU( false, tool );
     gridSubmenu->SetTitle( _( "3D Grid" ) );
     gridSubmenu->SetIcon( grid_xpm );
 
-    //clang-format off
-    auto noGridCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GridGet() == GRID3D_TYPE::NONE;
-    };
+    gridSubmenu->Add( EDA_3D_ACTIONS::noGrid,        ACTION_MENU::CHECK);
+    gridSubmenu->Add( EDA_3D_ACTIONS::show10mmGrid,  ACTION_MENU::CHECK);
+    gridSubmenu->Add( EDA_3D_ACTIONS::show5mmGrid,   ACTION_MENU::CHECK);
+    gridSubmenu->Add( EDA_3D_ACTIONS::show2_5mmGrid, ACTION_MENU::CHECK);
+    gridSubmenu->Add( EDA_3D_ACTIONS::show1mmGrid,   ACTION_MENU::CHECK);
 
-    auto grid10mmCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GridGet() == GRID3D_TYPE::GRID_10MM;
-    };
+    prefsMenu->Add( gridSubmenu );
 
-    auto grid5mmCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GridGet() == GRID3D_TYPE::GRID_5MM;
-    };
-
-    auto grid2p5mmCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GridGet() == GRID3D_TYPE::GRID_2P5MM;
-    };
-
-    auto grid_1mmCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GridGet() == GRID3D_TYPE::GRID_1MM;
-    };
-    //clang-format on
-
-    gridSubmenu->AddCheckItem( EDA_3D_ACTIONS::noGrid,         noGridCondition );
-    gridSubmenu->AddCheckItem( EDA_3D_ACTIONS::show10mmGrid,   grid10mmCondition );
-    gridSubmenu->AddCheckItem( EDA_3D_ACTIONS::show5mmGrid,    grid5mmCondition );
-    gridSubmenu->AddCheckItem( EDA_3D_ACTIONS::show2_5mmGrid,  grid2p5mmCondition );
-    gridSubmenu->AddCheckItem( EDA_3D_ACTIONS::show1mmGrid,    grid_1mmCondition );
-
-    prefsMenu->AddMenu( gridSubmenu,                           SELECTION_CONDITIONS::ShowAlways );
-
-    prefsMenu->AddSeparator();
-    prefsMenu->AddItem( ID_MENU3D_RESET_DEFAULTS, _( "Reset to Default Settings" ), "",
-                        tools_xpm,                             SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AppendSeparator();
+    prefsMenu->Add( _( "Reset to Default Settings" ), ID_MENU3D_RESET_DEFAULTS, tools_xpm );
 
 #ifdef __APPLE__    // Note: will get moved to Apple menu by wxWidgets
-    prefsMenu->AddItem( wxID_PREFERENCES,
-                        _( "Preferences...\tCTRL+," ),
-                        _( "Show preferences for all open tools" ),
-                        preference_xpm,                        SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->Add( _( "Preferences...\tCTRL+," ),
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    preference_xpm );
 #endif
-
-    prefsMenu->Resolve();
 
     //-- Menubar -------------------------------------------------------------
     //
-    menuBar->Append( fileMenu, _( "&File" ) );
-    menuBar->Append( editMenu, _( "&Edit" ) );
-    menuBar->Append( viewMenu, _( "&View" ) );
+    menuBar->Append( fileMenu,  _( "&File" ) );
+    menuBar->Append( editMenu,  _( "&Edit" ) );
+    menuBar->Append( viewMenu,  _( "&View" ) );
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
 

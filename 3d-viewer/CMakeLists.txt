@@ -92,6 +92,7 @@ set(3D-VIEWER_SRCS
     3d_viewer/dialogs/dialog_3D_view_option.cpp
     3d_viewer/dialogs/dialog_3D_view_option_base.cpp
     3d_viewer/tools/3d_actions.cpp
+    3d_viewer/tools/3d_conditions.cpp
     3d_viewer/tools/3d_controller.cpp
     3d_viewer/eda_3d_viewer.cpp
     3d_viewer/3d_viewer_settings.cpp

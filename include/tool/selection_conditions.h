@@ -49,10 +49,10 @@ class SELECTION_CONDITIONS
 {
 public:
     /**
-     * Function ShowAlways
      * The default condition function (always returns true).
+     *
      * @param aSelection is the selection to be tested.
-     * @return Always true;
+     * @return Always true.
      */
     static bool ShowAlways( const SELECTION& aSelection )
     {
@@ -60,32 +60,43 @@ public:
     }
 
     /**
-     * Function NotEmpty
+     * Always returns false.
+     *
+     * @param aSelection is the selection to be tested.
+     * @return Always false.
+     */
+    static bool ShowNever( const SELECTION& aSelection )
+    {
+        return false;
+    }
+
+    /**
      * Tests if there are any items selected.
+     *
      * @param aSelection is the selection to be tested.
      * @return True if there is at least one item selected.
      */
     static bool NotEmpty( const SELECTION& aSelection );
 
     /**
-     * Function HasType
      * Creates a functor that tests if among the selected items there is at least one of a given type.
+     *
      * @param aType is the type that is searched.
      * @return Functor testing for presence of items of a given type.
      */
     static SELECTION_CONDITION HasType( KICAD_T aType );
 
     /**
-     * Function OnlyType
      * Creates a functor that tests if the selected items are *only* of given type.
+     *
      * @param aType is the type that is searched.
      * @return Functor testing if selected items are exclusively of one type.
      */
     static SELECTION_CONDITION OnlyType( KICAD_T aType );
 
     /**
-     * Function OnlyTypes
      * Creates a functor that tests if the selected items are *only* of given types.
+     *
      * @param aTypes is an array containing types that are searched. It has to be ended with
      * KICAD_T::EOT as end marker.
      * @return Functor testing if selected items are exclusively of the requested types.
@@ -93,27 +104,27 @@ public:
     static SELECTION_CONDITION OnlyTypes( const KICAD_T aTypes[] );
 
     /**
-     * Function Count
      * Creates a functor that tests if the number of selected items is equal to the value given as
      * parameter.
+     *
      * @param aNumber is the number of expected items.
      * @return Functor testing if the number of selected items is equal aNumber.
      */
     static SELECTION_CONDITION Count( int aNumber );
 
     /**
-     * Function MoreThan
      * Creates a functor that tests if the number of selected items is greater than the value given
      * as parameter.
+     *
      * @param aNumber is the number used for comparison.
      * @return Functor testing if the number of selected items is greater than aNumber.
      */
     static SELECTION_CONDITION MoreThan( int aNumber );
 
     /**
-     * Function LessThan
      * Creates a functor that tests if the number of selected items is smaller than the value given
      * as parameter.
+     *
      * @param aNumber is the number used for comparison.
      * @return Functor testing if the number of selected items is smaller than aNumber.
      */

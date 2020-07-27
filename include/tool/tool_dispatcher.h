@@ -39,8 +39,6 @@ class VIEW;
 }
 
 /**
- * TOOL_DISPATCHER
- *
  * - takes wx events,
  * - fixes all wx quirks (mouse warping, panning, ordering problems, etc)
  * - translates coordinates to world space
@@ -52,8 +50,6 @@ class TOOL_DISPATCHER : public wxEvtHandler
 {
 public:
     /**
-     * Constructor
-     *
      * @param aToolMgr: tool manager instance the events will be sent to
      * @param aActions: ACTIONS subclass instance for ACTIONS::TranslateLegacyId()
      */
@@ -62,29 +58,27 @@ public:
     virtual ~TOOL_DISPATCHER();
 
     /**
-     * Function ResetState()
      * Brings the dispatcher to its initial state.
      */
     virtual void ResetState();
 
     /**
-     * Function DispatchWxEvent()
      * Processes wxEvents (mostly UI events), translates them to TOOL_EVENTs, and makes tools
      * handle those.
+     *
      * @param aEvent is the wxWidgets event to be processed.
      */
     virtual void DispatchWxEvent( wxEvent& aEvent );
 
     /**
-     * Function GetToolEvent()
      * Maps a wxWidgets key event to a TOOL_EVENT.
      */
     OPT<TOOL_EVENT> GetToolEvent( wxKeyEvent* aKeyEvent, bool* aSpecialKeyFlag );
 
     /**
-     * Function DispatchWxCommand()
      * Processes wxCommands (mostly menu related events) and runs appropriate actions (eg. run the
      * specified tool).
+     *
      * @param aEvent is the wxCommandEvent to be processed.
      */
     virtual void DispatchWxCommand( wxCommandEvent& aEvent );

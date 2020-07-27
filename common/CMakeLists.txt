@@ -69,6 +69,7 @@ set( GAL_SRCS
 add_library( gal STATIC ${GAL_SRCS} )
 
 target_link_libraries( gal
+    common          # This is needed until the circular dependency is removed
     kimath
     bitmaps
     ${GLEW_LIBRARIES}

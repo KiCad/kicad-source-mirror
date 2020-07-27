@@ -40,6 +40,7 @@
 #include <wx/laywin.h>
 #include <wx/aui/aui.h>
 #include <wx/docview.h>
+#include <wx/event.h>
 #include <fctsys.h>
 #include <common.h>
 #include <layers_id_colors_and_visibility.h>
@@ -88,6 +89,9 @@ enum id_librarytype {
 
 #define DEFAULT_MAX_UNDO_ITEMS 0
 #define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
+
+/// This is the handler functor for the update UI events
+typedef std::function< void( wxUpdateUIEvent& ) > UIUpdateHandler;
 
 wxDECLARE_EVENT( UNITS_CHANGED, wxCommandEvent );
 
@@ -159,6 +163,9 @@ protected:
 
     EDA_UNITS       m_userUnits;
 
+    // Map containing the UI update handlers registered with wx for each action
+    std::map<int, UIUpdateHandler> m_uiUpdateMap;
+
     ///> Default style flags used for wxAUI toolbars
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
 
@@ -204,6 +211,11 @@ protected:
      * in your derived class or the status bar will not get updated properly.
      */
     virtual void unitsChangeRefresh() { }
+
+    /**
+     * Setup the UI conditions for the various actions and their controls in this frame.
+     */
+    virtual void setupUIConditions();
 
     DECLARE_EVENT_TABLE()
 
@@ -257,6 +269,43 @@ public:
      * events aren't captured by the menus themselves.
      */
     void OnMenuEvent( wxMenuEvent& event );
+
+    virtual void RegisterUIUpdateHandler( const TOOL_ACTION& aAction,
+                                          const ACTION_CONDITIONS& aConditions ) override
+    {
+        RegisterUIUpdateHandler( aAction.GetUIId(), aConditions );
+    }
+
+    /**
+     * Register a UI update handler for the control with ID @c aID
+     *
+     * @param aID is the control ID to register the handler for
+     * @param aConditions are the UI conditions to use for the control states
+     */
+    virtual void RegisterUIUpdateHandler( int aID, const ACTION_CONDITIONS& aConditions );
+
+    virtual void UnregisterUIUpdateHandler( const TOOL_ACTION& aAction ) override
+    {
+        UnregisterUIUpdateHandler( aAction.GetUIId() );
+    }
+
+    /**
+     * Unregister a UI handler for a given ID that was registered using @c RegisterUIUpdateHandler
+     *
+     * @param aID is the control ID to unregister the handler for
+     */
+    virtual void UnregisterUIUpdateHandler( int aID );
+
+    /**
+     * Handles events generated when the UI is trying to figure out the current state of the UI controls
+     * related to TOOL_ACTIONS (e.g. enabled, checked, etc.).
+     *
+     * @param aEvent is the wxUpdateUIEvent to be processed.
+     * @param aFrame is the frame to get the selection from
+     * @param aCond are the UI SELECTION_CONDITIONS used
+     */
+    static void HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAME* aFrame,
+                                     ACTION_CONDITIONS aCond );
 
     virtual void OnMove( wxMoveEvent& aEvent )
     {

@@ -27,6 +27,8 @@
 #include <vector>
 #include <fctsys.h>
 #include <common.h>
+#include <tool/action_manager.h>
+#include <tool/selection.h>
 #include <tool/tool_action.h>
 
 
@@ -48,6 +50,8 @@ protected:
     TOOL_MANAGER*     m_toolManager;
     ACTIONS*          m_actions;
     TOOL_DISPATCHER*  m_toolDispatcher;
+
+    SELECTION         m_dummySelection;       // Empty dummy selection
 
     std::vector<std::string> m_toolStack;   // Stack of user-level "tools".  This is NOT a
                                             // stack of TOOL instances, because somewhat
@@ -72,6 +76,35 @@ public:
      * Return the MVC controller.
      */
     TOOL_MANAGER* GetToolManager() const { return m_toolManager; }
+
+    /**
+     * Register an action's update conditions with the UI layer to allow the UI to appropriately
+     * display the state of its controls.
+     *
+     * @param aAction is the action to register
+     * @param aConditions are the UI conditions to use for the control states
+     */
+    virtual void RegisterUIUpdateHandler( const TOOL_ACTION& aAction,
+                                          const ACTION_CONDITIONS& aConditions )
+    {}
+
+    /**
+     * Unregister a UI handler for an action that was registered using @c RegisterUIUpdateHandler
+     *
+     * @param aAction is the action to unregister the handler for
+     */
+    virtual void UnregisterUIUpdateHandler( const TOOL_ACTION& aAction )
+    {}
+
+    /**
+     * Get the current selection from the canvas area.
+     *
+     * @return the current selection
+     */
+    virtual SELECTION& GetCurrentSelection()
+    {
+        return m_dummySelection;
+    }
 
     /**
      * NB: the definition of "tool" is different at the user level.  The implementation uses

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -27,8 +27,9 @@
 #include <bitmaps.h>
 #include <filehistory.h>
 #include <menus_helpers.h>
-#include <tool/tool_manager.h>
+#include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
+#include <tool/tool_manager.h>
 #include <tools/kicad_manager_control.h>
 #include <tools/kicad_manager_actions.h>
 #include "kicad_manager_frame.h"
@@ -47,8 +48,8 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     //-- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* fileMenu    = new CONDITIONAL_MENU( false, controlTool );
-    FILE_HISTORY&     fileHistory = GetFileHistory();
+    ACTION_MENU*  fileMenu    = new ACTION_MENU( false, controlTool );
+    FILE_HISTORY& fileHistory = GetFileHistory();
 
     fileHistory.SetClearText( _( "Clear Recent Projects" ) );
 
@@ -58,8 +59,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // will automatically refresh the menu.
     if( !openRecentMenu )
     {
-        openRecentMenu = new ACTION_MENU( false );
-        openRecentMenu->SetTool( controlTool );
+        openRecentMenu = new ACTION_MENU( false, controlTool );
         openRecentMenu->SetTitle( _( "Open Recent" ) );
         openRecentMenu->SetIcon( recent_xpm );
 
@@ -67,100 +67,101 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
         fileHistory.AddFilesToMenu();
     }
 
-    fileMenu->AddItem( KICAD_MANAGER_ACTIONS::newProject,      SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( KICAD_MANAGER_ACTIONS::newFromTemplate, SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( KICAD_MANAGER_ACTIONS::openProject,     SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentMenu,
-                       FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
+    fileMenu->Add( KICAD_MANAGER_ACTIONS::newProject );
+    fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
+    fileMenu->Add( KICAD_MANAGER_ACTIONS::openProject );
 
-    fileMenu->AddItem( KICAD_MANAGER_ACTIONS::closeProject,    SELECTION_CONDITIONS::ShowAlways );
+    wxMenuItem* item = fileMenu->Add( openRecentMenu );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::saveAs,                        SELECTION_CONDITIONS::ShowAlways );
+    // Add the file menu condition here since it needs the item ID for the submenu
+    ACTION_CONDITIONS cond;
+    cond.SetEnableCondition( FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
+    RegisterUIUpdateHandler( item->GetId(), cond );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ID_IMPORT_EAGLE_PROJECT,
-                       _( "Import EAGLE Project..." ),
-                       _( "Import EAGLE CAD XML schematic and board" ),
-                       import_project_xpm,                     SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->Add( KICAD_MANAGER_ACTIONS::closeProject );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ID_SAVE_AND_ZIP_FILES,
-                       _( "&Archive Project..." ),
-                       _( "Archive all needed project files into zip archive" ),
-                       zip_xpm,                                SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( ACTIONS::saveAs );
 
-    fileMenu->AddItem( ID_READ_ZIP_ARCHIVE,
-                       _( "&Unarchive Project..." ),
-                       _( "Unarchive project files from zip archive" ),
-                       unzip_xpm,                              SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( _( "Import EAGLE Project..." ),
+                   _( "Import EAGLE CAD XML schematic and board" ),
+                   ID_IMPORT_EAGLE_PROJECT,
+                   import_project_xpm );
 
-    fileMenu->AddSeparator();
+    fileMenu->AppendSeparator();
+    fileMenu->Add( _( "&Archive Project..." ),
+                   _( "Archive all needed project files into zip archive" ),
+                   ID_SAVE_AND_ZIP_FILES,
+                   zip_xpm );
+
+    fileMenu->Add( _( "&Unarchive Project..." ),
+                   _( "Unarchive project files from zip archive" ),
+                   ID_READ_ZIP_ARCHIVE,
+                   unzip_xpm );
+
+    fileMenu->AppendSeparator();
     fileMenu->AddQuitOrClose( nullptr, "KiCad" );
-
-    fileMenu->Resolve();
 
     //-- View menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, controlTool );
+    ACTION_MENU* viewMenu = new ACTION_MENU( false, controlTool );
 
-    viewMenu->AddItem( ACTIONS::zoomRedraw,                    SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->Add( ACTIONS::zoomRedraw );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( KICAD_MANAGER_ACTIONS::openTextEditor,  SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ID_BROWSE_IN_FILE_EXPLORER,
-                       _( "Browse Project Files" ), _( "Open project directory in file browser" ),
-                       directory_browser_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( KICAD_MANAGER_ACTIONS::openTextEditor );
+    viewMenu->Add( _( "Browse Project Files" ),
+                   _( "Open project directory in file browser" ),
+                   ID_BROWSE_IN_FILE_EXPLORER,
+                   directory_browser_xpm );
 
 #ifdef __APPLE__
-    viewMenu->AddSeparator();
+    // Add a separator only on macOS because the OS adds menu items to the view menu after ours
+    viewMenu->AppendSeparator();
 #endif
-
-    viewMenu->Resolve();
 
     //-- Tools menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* toolsMenu = new CONDITIONAL_MENU( false, controlTool );
+    ACTION_MENU* toolsMenu = new ACTION_MENU( false, controlTool );
 
-    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::editSchematic,  SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::editSymbols,    SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::editPCB,        SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::editFootprints, SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->Add( KICAD_MANAGER_ACTIONS::editSchematic );
+    toolsMenu->Add( KICAD_MANAGER_ACTIONS::editSymbols );
+    toolsMenu->Add( KICAD_MANAGER_ACTIONS::editPCB );
+    toolsMenu->Add( KICAD_MANAGER_ACTIONS::editFootprints );
 
-    toolsMenu->AddSeparator();
-    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::viewGerbers,    SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::convertImage,   SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::showCalculator, SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::editWorksheet,  SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( KICAD_MANAGER_ACTIONS::viewGerbers );
+    toolsMenu->Add( KICAD_MANAGER_ACTIONS::convertImage );
+    toolsMenu->Add( KICAD_MANAGER_ACTIONS::showCalculator );
+    toolsMenu->Add( KICAD_MANAGER_ACTIONS::editWorksheet );
 
-    toolsMenu->AddSeparator();
-    toolsMenu->AddItem( ID_EDIT_LOCAL_FILE_IN_TEXT_EDITOR,
-                       _( "Edit Local File..." ), _( "Edit local file in text editor" ),
-                       browse_files_xpm,                       SELECTION_CONDITIONS::ShowAlways );
-
-    toolsMenu->Resolve();
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( _( "Edit Local File..." ),
+                    _( "Edit local file in text editor" ),
+                    ID_EDIT_LOCAL_FILE_IN_TEXT_EDITOR,
+                    browse_files_xpm );
 
     //-- Preferences menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, controlTool );
+    ACTION_MENU* prefsMenu = new ACTION_MENU( false, controlTool );
 
-    prefsMenu->AddItem( ACTIONS::configurePaths,        SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( ACTIONS::showSymbolLibTable,    SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( ACTIONS::showFootprintLibTable, SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( wxID_PREFERENCES,
-                        _( "Preferences...\tCTRL+," ),
-                        _( "Show preferences for all open tools" ),
-                        preference_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->Add( ACTIONS::configurePaths );
+    prefsMenu->Add( ACTIONS::showSymbolLibTable );
+    prefsMenu->Add( ACTIONS::showFootprintLibTable );
+    prefsMenu->Add( _( "Preferences...\tCTRL+," ),
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    preference_xpm );
 
-    prefsMenu->AddSeparator();
+    prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, controlTool );
 
-    prefsMenu->Resolve();
 
     //-- Menubar -------------------------------------------------------------
     //
-    menuBar->Append( fileMenu, _( "&File" ) );
-    menuBar->Append( viewMenu, _( "&View" ) );
+    menuBar->Append( fileMenu,  _( "&File" ) );
+    menuBar->Append( viewMenu,  _( "&View" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
@@ -255,17 +256,4 @@ void KICAD_MANAGER_FRAME::RecreateLauncher()
 
     // Create mlauncher
     m_launcher->Realize();
-
-    // And update the visual tools state:
-    SyncToolbars();
 }
-
-
-void KICAD_MANAGER_FRAME::SyncToolbars()
-{
-    m_launcher->Toggle( KICAD_MANAGER_ACTIONS::editSchematic,  m_active_project );
-    m_launcher->Toggle( KICAD_MANAGER_ACTIONS::editPCB,        m_active_project );
-    m_launcher->Refresh();
-}
-
-

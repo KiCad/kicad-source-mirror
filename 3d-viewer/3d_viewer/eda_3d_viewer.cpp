@@ -34,6 +34,7 @@
 #include "../common_ogl/cogl_att_list.h"
 #include <3d_viewer/tools/3d_actions.h>
 #include <3d_viewer/tools/3d_controller.h>
+#include <3d_viewer/tools/3d_conditions.h>
 #include <bitmaps.h>
 #include <board_stackup_manager/class_board_stackup.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
@@ -44,6 +45,7 @@
 #include <project.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <tool/action_manager.h>
 #include <tool/common_control.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -74,11 +76,6 @@ BEGIN_EVENT_TABLE( EDA_3D_VIEWER, EDA_BASE_FRAME )
     EVT_MENU( wxID_CLOSE, EDA_3D_VIEWER::Exit3DFrame )
     EVT_MENU( ID_RENDER_CURRENT_VIEW, EDA_3D_VIEWER::OnRenderEngineSelection )
     EVT_MENU( ID_DISABLE_RAY_TRACING, EDA_3D_VIEWER::OnDisableRayTracing )
-
-    EVT_UPDATE_UI( ID_RENDER_CURRENT_VIEW, EDA_3D_VIEWER::OnUpdateUIEngine )
-    EVT_UPDATE_UI_RANGE( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,
-                         ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,
-                         EDA_3D_VIEWER::OnUpdateUIMaterial )
 
     EVT_CLOSE( EDA_3D_VIEWER::OnCloseWindow )
 END_EVENT_TABLE()
@@ -132,6 +129,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     m_toolManager->RegisterTool( new EDA_3D_CONTROLLER );
     m_toolManager->InitTools();
 
+    setupUIConditions();
+
     if( EDA_3D_CONTROLLER* ctrlTool = GetToolManager()->GetTool<EDA_3D_CONTROLLER>() )
         ctrlTool->SetRotationIncrement( config->m_Camera.rotation_increment );
 
@@ -184,6 +183,74 @@ EDA_3D_VIEWER::~EDA_3D_VIEWER()
     // m_canvas delete will be called by wxWidget manager
     //delete m_canvas;
     //m_canvas = nullptr;
+}
+
+
+void EDA_3D_VIEWER::setupUIConditions()
+{
+    EDA_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    EDA_3D_CONDITIONS cond( &m_boardAdapter );
+
+// Helper to define check conditions
+#define MaterialCheck( x ) ACTION_CONDITIONS().SetCheckCondition( cond.MaterialMode( x ) )
+#define FlagCheck( x )     ACTION_CONDITIONS().SetCheckCondition( cond.Flag( x ) )
+#define GridSizeCheck( x ) ACTION_CONDITIONS().SetCheckCondition( cond.GridSize( x ) )
+
+    auto raytracingCondition = [this]( const SELECTION& aSel )
+    {
+        return m_boardAdapter.RenderEngineGet() != RENDER_ENGINE::OPENGL_LEGACY;
+    };
+
+    RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,
+                             ACTION_CONDITIONS().SetCheckCondition( raytracingCondition ) );
+
+    mgr->SetConditions( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,,
+                        MaterialCheck( MATERIAL_MODE::NORMAL ) );
+    mgr->SetConditions( ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY,,
+                        MaterialCheck( MATERIAL_MODE::DIFFUSE_ONLY ) );
+    mgr->SetConditions( ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,,
+                        MaterialCheck( MATERIAL_MODE::CAD_MODE ) );
+
+    mgr->SetConditions( EDA_3D_ACTIONS::renderShadows,
+                        FlagCheck( FL_RENDER_RAYTRACING_SHADOWS ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::proceduralTextures,
+                        FlagCheck( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::addFloor,
+                        FlagCheck( FL_RENDER_RAYTRACING_BACKFLOOR ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showRefractions,
+                        FlagCheck( FL_RENDER_RAYTRACING_REFRACTIONS ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showReflections,
+                        FlagCheck( FL_RENDER_RAYTRACING_REFLECTIONS ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::antiAliasing,
+                        FlagCheck( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::postProcessing,
+                        FlagCheck( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showBoundingBoxes,
+                        FlagCheck( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showAxis,
+                        FlagCheck( FL_AXIS ) );
+
+    mgr->SetConditions( EDA_3D_ACTIONS::noGrid,        GridSizeCheck( GRID3D_TYPE::NONE ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show10mmGrid,  GridSizeCheck( GRID3D_TYPE::GRID_10MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show5mmGrid,   GridSizeCheck( GRID3D_TYPE::GRID_5MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show2_5mmGrid, GridSizeCheck( GRID3D_TYPE::GRID_2P5MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show1mmGrid,   GridSizeCheck( GRID3D_TYPE::GRID_1MM ) );
+
+
+    auto orthoCondition =
+        [this] ( const SELECTION& )
+        {
+            return m_currentCamera.GetProjection() == PROJECTION_TYPE::ORTHO;
+        };
+
+    mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho,
+                        ACTION_CONDITIONS().SetCheckCondition( orthoCondition ) );
+
+#undef MaterialCheck
+#undef FlagCheck
+#undef GridSizeCheck
 }
 
 
@@ -913,35 +980,6 @@ bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
     }
 
     return false;
-}
-
-
-void EDA_3D_VIEWER::OnUpdateUIEngine( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( m_boardAdapter.RenderEngineGet() != RENDER_ENGINE::OPENGL_LEGACY );
-}
-
-
-void EDA_3D_VIEWER::OnUpdateUIMaterial( wxUpdateUIEvent& aEvent )
-{
-    // Set the state of toggle menus according to the current display options
-    switch( aEvent.GetId() )
-    {
-    case ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL:
-        aEvent.Check( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::NORMAL );
-        break;
-
-    case ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY:
-        aEvent.Check( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::DIFFUSE_ONLY );
-        break;
-
-    case ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE:
-        aEvent.Check( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::CAD_MODE );
-        break;
-
-    default:
-        wxFAIL_MSG( "Invalid event in EDA_3D_VIEWER::OnUpdateUIMaterial()" );
-    }
 }
 
 

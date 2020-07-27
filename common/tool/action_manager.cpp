@@ -66,6 +66,32 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 }
 
 
+void ACTION_MANAGER::SetConditions( const TOOL_ACTION& aAction, const ACTION_CONDITIONS& aConditions )
+{
+    // Remove any existing handlers with the old conditions to ensure the UI layer doesn't have stale data
+    if( m_toolMgr )
+        m_toolMgr->GetToolHolder()->UnregisterUIUpdateHandler( aAction );
+
+    m_uiConditions[aAction.GetId()] = aConditions;
+
+    // Register a new handler with the new conditions
+    if( m_toolMgr )
+        m_toolMgr->GetToolHolder()->RegisterUIUpdateHandler( aAction, aConditions );
+}
+
+
+const ACTION_CONDITIONS* ACTION_MANAGER::GetCondition( const TOOL_ACTION& aAction ) const
+{
+    const auto it = m_uiConditions.find( aAction.GetUIId() );
+
+    // If the action doesn't have something registered, then return null
+    if( it == m_uiConditions.end() )
+        return nullptr;
+    else
+        return &it->second;
+}
+
+
 int ACTION_MANAGER::MakeActionId( const std::string& aActionName )
 {
     static int currentActionId = 1;

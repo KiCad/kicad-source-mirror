@@ -157,6 +157,9 @@ class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
 
     void SynchroniseColoursWithBoard();
 
+protected:
+    void setupUIConditions() override;
+
 private:
     /// Called when user press the File->Exit
     void Exit3DFrame( wxCommandEvent &event );
@@ -174,12 +177,8 @@ private:
 
     void Install3DViewOptionDialog( wxCommandEvent &event );
 
-    void OnUpdateUIEngine( wxUpdateUIEvent& aEvent );
-    void OnUpdateUIMaterial( wxUpdateUIEvent& aEvent );
-
     void CreateMenuBar();
     void ReCreateMainToolbar();
-    void SyncToolbars() override;
 
     void SaveSettings( APP_SETTINGS_BASE *aCfg ) override;
 

@@ -33,7 +33,6 @@
 class SELECTION_TOOL;
 class TOOL_ACTION;
 class TOOL_INTERACTIVE;
-class KIFACE_I;
 
 
 class CONDITIONAL_MENU : public ACTION_MENU
@@ -99,26 +98,6 @@ public:
      * @param aOrder determines location of the separator, higher numbers are put on the bottom.
      */
     void AddSeparator( int aOrder = ANY_ORDER );
-
-    /**
-     * Function AddClose()
-     *
-     * Add a standard close item to the menu with the accelerator key CTRL-W.
-     * Emits the wxID_CLOSE event.
-     *
-     * @param aAppname is the application name to append to the tooltip
-     */
-    void AddClose( wxString aAppname = "" );
-
-    /**
-     * Functions AddQuitOrClose()
-     *
-     * Adds either a standard Quit or Close item to the menu. If aKiface is NULL or in
-     * single-instance then Quite (wxID_QUIT) is used, otherwise Close (wxID_CLOSE) is used.
-     *
-     * @param aAppname is the application name to append to the tooltip
-     */
-    void AddQuitOrClose( KIFACE_I* aKiface, wxString aAppname = "" );
 
     /**
      * Function Evaluate()

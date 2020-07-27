@@ -163,8 +163,6 @@ public:
      */
     void OnChangeWatchedPaths( wxCommandEvent& aEvent );
 
-    void SyncToolbars() override;
-
     void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
     const wxString GetProjectFileName() const;
@@ -182,7 +180,13 @@ public:
 
     DECLARE_EVENT_TABLE()
 
+protected:
+    virtual void setupUIConditions() override;
+
 private:
+    void setupTools();
+    void setupActions();
+
     APP_SETTINGS_BASE* config() const override;
 
     KICAD_SETTINGS* kicadSettings() const;

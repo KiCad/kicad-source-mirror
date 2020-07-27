@@ -27,6 +27,7 @@
 #include <eda_base_frame.h>
 #include <functional>
 #include <id.h>
+#include <kiface_i.h>
 #include <menus_helpers.h>
 #include <tool/action_menu.h>
 #include <tool/actions.h>
@@ -42,13 +43,13 @@
 using namespace std::placeholders;
 
 
-ACTION_MENU::ACTION_MENU( bool isContextMenu ) :
+ACTION_MENU::ACTION_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
     m_dirty( true ),
     m_titleDisplayed( false ),
     m_isContextMenu( isContextMenu ),
     m_icon( nullptr ),
     m_selected( -1 ),
-    m_tool( nullptr )
+    m_tool( aTool )
 {
     setupEvents();
 }
@@ -147,11 +148,12 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPAQ
 
 
 wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, int aId,
-                              const BITMAP_OPAQUE* aIcon )
+                              const BITMAP_OPAQUE* aIcon, bool aIsCheckmarkEntry )
 {
     wxASSERT_MSG( FindItem( aId ) == nullptr, "Duplicate menu IDs!" );
 
-    wxMenuItem* item = new wxMenuItem( this, aId, aLabel, aTooltip, wxITEM_NORMAL );
+    wxMenuItem* item = new wxMenuItem( this, aId, aLabel, aTooltip,
+                                       aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
     if( aIcon )
         AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
@@ -195,6 +197,33 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
     else
     {
         return AppendSubMenu( menuCopy, menuCopy->m_title );
+    }
+}
+
+
+void ACTION_MENU::AddClose( wxString aAppname )
+{
+    Add( _( "Close\tCTRL+W" ),
+         wxString::Format( "Close %s", aAppname ),
+         wxID_CLOSE,
+         exit_xpm );
+}
+
+
+void ACTION_MENU::AddQuitOrClose( KIFACE_I* aKiface, wxString aAppname )
+{
+    if( !aKiface || aKiface->IsSingle() ) // not when under a project mgr
+    {
+        // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via
+        // wxID_EXIT
+        Add( _( "Quit" ),
+             wxString::Format( "Quit %s", aAppname ),
+             wxID_EXIT,
+             exit_xpm );
+    }
+    else
+    {
+        AddClose( aAppname );
     }
 }
 

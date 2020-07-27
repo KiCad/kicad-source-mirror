@@ -40,6 +40,7 @@
 #include <reporter.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/tool_dispatcher.h>
@@ -121,22 +122,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                                     wxDefaultPosition, wxDefaultSize,
                                     wxTE_MULTILINE | wxTE_READONLY | wxBORDER_NONE );
 
-    // Create the manager
-    m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, config(), this );
-    m_actions = new KICAD_MANAGER_ACTIONS();
-
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
-
-    // Attach the events to the tool dispatcher
-    Bind( wxEVT_TOOL, &TOOL_DISPATCHER::DispatchWxCommand, m_toolDispatcher );
-    Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
-    Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
-
-    // Register tools
-    m_toolManager->RegisterTool( new COMMON_CONTROL );
-    m_toolManager->RegisterTool( new KICAD_MANAGER_CONTROL );
-    m_toolManager->InitTools();
+    setupTools();
+    setupUIConditions();
 
     RecreateBaseHToolbar();
     RecreateLauncher();
@@ -185,6 +172,56 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
     delete m_toolDispatcher;
 
     m_auimgr.UnInit();
+}
+
+
+void KICAD_MANAGER_FRAME::setupTools()
+{
+    // Create the manager
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, config(), this );
+    m_actions = new KICAD_MANAGER_ACTIONS();
+
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+
+    // Attach the events to the tool dispatcher
+    Bind( wxEVT_TOOL, &TOOL_DISPATCHER::DispatchWxCommand, m_toolDispatcher );
+    Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+    Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+
+    // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
+    m_toolManager->RegisterTool( new KICAD_MANAGER_CONTROL );
+    m_toolManager->InitTools();
+}
+
+
+void KICAD_MANAGER_FRAME::setupUIConditions()
+{
+    EDA_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER* manager = m_toolManager->GetActionManager();
+
+    wxASSERT( manager );
+
+    auto activeProject =
+        [this] ( const SELECTION& )
+        {
+            return m_active_project;
+        };
+
+    ACTION_CONDITIONS activeProjectCond;
+    activeProjectCond.SetEnableCondition( activeProject );
+
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::editSchematic,  activeProjectCond );
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::editSymbols,    activeProjectCond );
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::editPCB,        activeProjectCond );
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::editFootprints, activeProjectCond );
+    manager->SetConditions( ACTIONS::saveAs,                       activeProjectCond );
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::closeProject,   activeProjectCond );
+
+    // TODO: Switch this to an action
+    RegisterUIUpdateHandler( ID_SAVE_AND_ZIP_FILES, activeProjectCond );
 }
 
 
@@ -537,8 +574,7 @@ void KICAD_MANAGER_FRAME::ShowChangedLanguage()
 
 void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    int historySize = Pgm().GetCommonSettings()->m_System.file_history_size;
-    GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
+    EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 }
 
 

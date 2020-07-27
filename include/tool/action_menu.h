@@ -34,6 +34,7 @@
 #include <wx/textentry.h>
 #include <tool/tool_action.h>
 
+class KIFACE_I;
 class TOOL_INTERACTIVE;
 
 /**
@@ -43,7 +44,7 @@ class ACTION_MENU : public wxMenu
 {
 public:
     ///> Default constructor
-    ACTION_MENU( bool isContextMenu );
+    ACTION_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool = nullptr );
 
     ~ACTION_MENU() override;
 
@@ -76,7 +77,7 @@ public:
      */
     wxMenuItem* Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aIcon );
     wxMenuItem* Add( const wxString& aLabel, const wxString& aToolTip, int aId,
-                     const BITMAP_OPAQUE* aIcon );
+                     const BITMAP_OPAQUE* aIcon,  bool aIsCheckmarkEntry = false );
 
     /**
      * Adds an entry to the menu, basing on the TOOL_ACTION object. After selecting the entry,
@@ -93,6 +94,22 @@ public:
      * @param aMenu is the submenu to be added.
      */
     wxMenuItem* Add( ACTION_MENU* aMenu );
+
+    /**
+     * Add a standard close item to the menu with the accelerator key CTRL-W.
+     * Emits the wxID_CLOSE event.
+     *
+     * @param aAppname is the application name to append to the tooltip
+     */
+    void AddClose( wxString aAppname = "" );
+
+    /**
+     * Adds either a standard Quit or Close item to the menu. If aKiface is NULL or in
+     * single-instance then Quite (wxID_QUIT) is used, otherwise Close (wxID_CLOSE) is used.
+     *
+     * @param aAppname is the application name to append to the tooltip
+     */
+    void AddQuitOrClose( KIFACE_I* aKiface, wxString aAppname = "" );
 
     /**
      * Removes all the entries from the menu (as well as its title). It leaves the menu in the
@@ -141,6 +158,8 @@ public:
 
     void OnMenuEvent( wxMenuEvent& aEvent );
     void OnIdle( wxIdleEvent& event );
+
+    static constexpr bool CHECK = true;
 
 protected:
     ///> Returns an instance of this class. It has to be overridden in inheriting classes.

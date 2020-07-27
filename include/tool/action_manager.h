@@ -30,9 +30,50 @@
 #include <string>
 #include <set>
 
+#include <tool/selection_conditions.h>
+
 class TOOL_BASE;
 class TOOL_MANAGER;
 class TOOL_ACTION;
+
+/**
+ * Functors that can be used to figure out how the action controls should be displayed in the UI
+ * and if an action should be enabled given the current selection.
+ *
+ * @note @c checkCondition is also used for determing the state of a toggled toolbar item
+ *       (the item is toggled when the condition is true).
+ */
+struct ACTION_CONDITIONS
+{
+    SELECTION_CONDITION checkCondition;     ///< Returns true if the UI control should be checked
+    SELECTION_CONDITION enableCondition;    ///< Returns true if the UI control should be enabled
+    SELECTION_CONDITION showCondition;      ///< Returns true if the UI control should be shown
+
+    ACTION_CONDITIONS()
+    {
+        checkCondition  = SELECTION_CONDITIONS::ShowNever;      // Never check by default
+        enableCondition = SELECTION_CONDITIONS::ShowAlways;     // Always enable by default
+        showCondition   = SELECTION_CONDITIONS::ShowAlways;     // Always show by default
+    }
+
+    ACTION_CONDITIONS& SetCheckCondition( const SELECTION_CONDITION& aCondition )
+    {
+        checkCondition = aCondition;
+        return *this;
+    }
+
+    ACTION_CONDITIONS& SetEnableCondition( const SELECTION_CONDITION& aCondition )
+    {
+        enableCondition = aCondition;
+        return *this;
+    }
+
+    ACTION_CONDITIONS& SetShowCondition( const SELECTION_CONDITION& aCondition )
+    {
+        showCondition = aCondition;
+        return *this;
+    }
+};
 
 /**
  * ACTION_MANAGER
@@ -44,21 +85,19 @@ class ACTION_MANAGER
 {
 public:
     /**
-     * Constructor.
      * @param aToolManager is a tool manager instance that is used to pass events to tools.
      */
     ACTION_MANAGER( TOOL_MANAGER* aToolManager );
 
     /**
-     * Destructor.
      * Unregisters every registered action.
      */
     ~ACTION_MANAGER();
 
     /**
-     * Function RegisterAction()
      * Adds a tool action to the manager and sets it up. After that is is possible to invoke
      * the action using hotkeys or sending a command event with its name.
+     *
      * @param aAction: action to be added. Ownership is not transferred.
      */
     void RegisterAction( TOOL_ACTION* aAction );
@@ -74,36 +113,34 @@ public:
     const std::map<std::string, TOOL_ACTION*>& GetActions();
 
     /**
-     * Function FindAction()
      * Finds an action with a given name (if there is one available).
+     *
      * @param aActionName is the searched action.
      * @return Pointer to a TOOL_ACTION object or NULL if there is no such action.
      */
     TOOL_ACTION* FindAction( const std::string& aActionName ) const;
 
     /**
-     * Function RunHotKey()
      * Runs an action associated with a hotkey (if there is one available).
+     *
      * @param aHotKey is the hotkey to be handled.
      * @return True if there was an action associated with the hotkey, false otherwise.
      */
     bool RunHotKey( int aHotKey ) const;
 
     /**
-     * Function GetHotKey()
      * Returns the hot key associated with a given action or 0 if there is none.
+     *
      * @param aAction is the queried action.
      */
     int GetHotKey( const TOOL_ACTION& aAction ) const;
 
     /**
-     * Function UpdateHotKeys()
      * Optionally reads the hotkey config files and then rebuilds the internal hotkey maps.
      */
     void UpdateHotKeys( bool aFullUpdate );
 
     /**
-     * Function GetActionList()
      * Returns list of TOOL_ACTIONs. TOOL_ACTIONs add themselves to the list upon their
      * creation.
      * @return List of TOOL_ACTIONs.
@@ -114,6 +151,23 @@ public:
 
         return actionList;
     }
+
+    /**
+     * Set the conditions the UI elements for activating a specific tool action should use
+     * for determining the current UI state (e.g. checked, enabled, shown)
+     *
+     * @param aAction is the tool action using these conditions
+     * @param aConditions are the conditions to use for the action
+     */
+    void SetConditions( const TOOL_ACTION& aAction, const ACTION_CONDITIONS& aConditions );
+
+    /**
+     * Get the conditions to use for a specific tool action.
+     *
+     * @param aAction is the tool action
+     * @return the action conditions, returns nullptr if no conditions are registered
+     */
+    const ACTION_CONDITIONS* GetCondition( const TOOL_ACTION& aAction ) const;
 
 private:
     // Resolves a hotkey by applying legacy and current settings over the action's
@@ -133,6 +187,10 @@ private:
 
     ///> Quick action<->hot key lookup
     std::map<int, int> m_hotkeys;
+
+    /// Map the command ID that wx uses for the action to the UI conditions for the
+    /// menu/toolbar items
+    std::map<int, ACTION_CONDITIONS> m_uiConditions;
 };
 
 #endif /* ACTION_MANAGER_H_ */

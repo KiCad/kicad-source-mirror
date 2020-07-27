@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2013-2019 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2013-2020 KiCad Developers, see CHANGELOG.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,8 +27,10 @@
 #include <trace_helpers.h>
 
 #include <tool/tool_manager.h>
+#include <tool/tools_holder.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/actions.h>
+#include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
@@ -338,7 +340,7 @@ OPT<TOOL_EVENT> TOOL_DISPATCHER::GetToolEvent( wxKeyEvent* aKeyEvent, bool* keyI
         return evt;
     }
 
-    wxLogTrace( kicadTraceKeyEvent, "TOOL_DISPATCHER::DispatchWxEvent %s", dump( *aKeyEvent ) );
+    wxLogTrace( kicadTraceKeyEvent, "TOOL_DISPATCHER::GetToolEvent %s", dump( *aKeyEvent ) );
 
     // if the key event must be skipped, skip it here if the event is a wxEVT_CHAR_HOOK
     // and do nothing.
@@ -613,5 +615,3 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
     else
         aEvent.Skip();
 }
-
-
