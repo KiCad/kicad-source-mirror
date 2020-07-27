@@ -830,12 +830,12 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
 {
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    auto editTool = m_toolMgr->GetTool<EDIT_TOOL>();
+    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    EDIT_TOOL*      editTool = m_toolMgr->GetTool<EDIT_TOOL>();
 
     PCBNEW_SELECTION& selection = selectionTool->GetSelection();
 
-    for( auto item : aItems )
+    for( BOARD_ITEM* item : aItems )
     {
         item->SetSelected();
         selection.Add( item );

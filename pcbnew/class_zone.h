@@ -83,6 +83,11 @@ public:
     }
 
     /**
+     * Copy aZone data to me
+     */
+    void InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone );
+
+    /**
      * @return a wxPoint, position of the first point of the outline
      */
     wxPoint GetPosition() const override;
@@ -818,12 +823,6 @@ public:
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
 protected:
-    /** Copy aZone data to me
-     * members are expected non initialize in this.
-     * copyDataFromSrc() is expected to be called *only* from a copy constructor.
-     */
-    void initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone );
-
     SHAPE_POLY_SET*       m_Poly;                ///< Outline of the zone.
     int                   m_cornerSmoothingType;
     unsigned int          m_cornerRadius;

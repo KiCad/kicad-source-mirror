@@ -1466,7 +1466,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
     selection.SetReferencePoint( refPoint );
 
     io.SetBoard( board() );
-    io.SaveSelection( selection );
+    io.SaveSelection( selection, m_editModules );
 
     return 0;
 }

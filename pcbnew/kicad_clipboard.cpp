@@ -27,6 +27,9 @@
 #include <build_version.h>
 #include <class_board.h>
 #include <class_track.h>
+#include <class_drawsegment.h>
+#include <class_pcb_text.h>
+#include <class_text_mod.h>
 #include <common.h>
 #include <netinfo.h>
 #include <pcb_parser.h>
@@ -61,7 +64,7 @@ void CLIPBOARD_IO::SetBoard( BOARD* aBoard )
 }
 
 
-void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
+void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModEdit )
 {
     VECTOR2I refPoint( 0, 0 );
 
@@ -75,26 +78,6 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
     // Prepare net mapping that assures that net codes saved in a file are consecutive integers
     m_mapping->SetBoard( m_board );
 
-    // Differentiate how it is formatted depending on what selection contains
-    bool onlyModuleParts = true;
-    for( const auto i : aSelected )
-    {
-        // check if it not one of the module primitives
-        if( ( i->Type() != PCB_MODULE_EDGE_T ) &&
-                ( i->Type() != PCB_MODULE_TEXT_T ) &&
-                ( i->Type() != PCB_MODULE_ZONE_AREA_T ) &&
-                ( i->Type() != PCB_PAD_T ) )
-        {
-            onlyModuleParts = false;
-            break;
-        }
-    }
-
-    // if there is only parts of a module selected, format it as a new module else
-    // format it as an entire board
-    MODULE partialModule( m_board );
-
-    // only a module selected.
     if( aSelected.Size() == 1 && aSelected.Front()->Type() == PCB_MODULE_T )
     {
         // make the module safe to transfer to other pcbs
@@ -113,10 +96,11 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
 
         Format( static_cast<BOARD_ITEM*>( &newModule ) );
     }
-    // partial module selected.
-    else if( onlyModuleParts )
+    else if( isModEdit )
     {
-        for( const auto item : aSelected )
+        MODULE partialModule( m_board );
+
+        for( const EDA_ITEM* item : aSelected )
         {
             BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( item->Clone() );
 
@@ -142,9 +126,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
         partialModule.MoveAnchorPosition( moveVector );
 
         Format( &partialModule, 0 );
-
     }
-    // lots of stuff selected
     else
     {
         // we will fake being a .kicad_pcb to get the full parser kicking
@@ -152,8 +134,8 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
         LOCALE_IO io;
 
         m_formatter.Print( 0, "(kicad_pcb (version %d) (host pcbnew %s)\n",
-                SEXPR_BOARD_FILE_VERSION, m_formatter.Quotew( GetBuildVersion() ).c_str() );
-
+                           SEXPR_BOARD_FILE_VERSION,
+                           m_formatter.Quotew( GetBuildVersion() ).c_str() );
 
         m_formatter.Print( 0, "\n" );
 
@@ -162,28 +144,72 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
 
         m_formatter.Print( 0, "\n" );
 
-
-        for( const auto i : aSelected )
+        for( EDA_ITEM* i : aSelected )
         {
-            // Dont format stuff that cannot exist standalone!
-            if( ( i->Type() != PCB_MODULE_EDGE_T ) &&
-                ( i->Type() != PCB_MODULE_TEXT_T ) &&
-                ( i->Type() != PCB_MODULE_ZONE_AREA_T ) &&
-                ( i->Type() != PCB_PAD_T ) )
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
+            BOARD_ITEM* copy = nullptr;
+
+            if( item->Type() == PCB_MODULE_EDGE_T )
             {
-                auto item = static_cast<BOARD_ITEM*>( i );
-                std::unique_ptr<BOARD_ITEM> clone( static_cast<BOARD_ITEM*> ( item->Clone() ) );
+                // Convert to PCB_LINE_T
+                copy = (BOARD_ITEM*) reinterpret_cast<DRAWSEGMENT*>( item )->Clone();
+                copy->SetLayer( item->GetLayer() );
+            }
+            else if( item->Type() == PCB_MODULE_TEXT_T )
+            {
+                // Convert to PCB_TEXT_T
+                MODULE*       mod = static_cast<MODULE*>( item->GetParent() );
+                TEXTE_MODULE* mod_text = static_cast<TEXTE_MODULE*>( item );
+                TEXTE_PCB*    pcb_text = new TEXTE_PCB( m_board );
+
+                if( mod_text->GetText() == "${VALUE}" )
+                    pcb_text->SetText( mod->GetValue() );
+                else if( mod_text->GetText() == "${REFERENCE}" )
+                    pcb_text->SetText( mod->GetReference() );
+                else
+                    pcb_text->CopyText( *mod_text );
+
+                pcb_text->SetEffects( *mod_text );
+                pcb_text->SetLayer( mod_text->GetLayer() );
+                copy = pcb_text;
+            }
+            else if( item->Type() == PCB_PAD_T )
+            {
+                // Create a parent to own the copied pad
+                MODULE* mod = new MODULE( m_board );
+                D_PAD*  pad = (D_PAD*) item->Clone();
+
+                mod->SetPosition( pad->GetPosition() );
+                pad->SetPos0( wxPoint() );
+                mod->Add( pad );
+                copy = mod;
+            }
+            else if( item->Type() == PCB_MODULE_ZONE_AREA_T )
+            {
+                // Convert to PCB_ZONE_AREA_T
+                ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+                zone->InitDataFromSrcInCopyCtor( *static_cast<ZONE_CONTAINER*>( item ) );
+                copy = zone;
+            }
+            else
+            {
+                copy = static_cast<BOARD_ITEM*>( item->Clone() );
 
                 // locked means "locked in place"; copied items therefore can't be locked
-                if( MODULE* module = dyn_cast<MODULE*>( clone.get() ) )
+                if( MODULE* module = dyn_cast<MODULE*>( copy ) )
                     module->SetLocked( false );
-                else if( TRACK* track = dyn_cast<TRACK*>( clone.get() ) )
+                else if( TRACK* track = dyn_cast<TRACK*>( copy ) )
                     track->SetLocked( false );
+            }
 
+            if( copy )
+            {
                 // locate the reference point at (0, 0) in the copied items
-                clone->Move( (wxPoint) -refPoint );
+                copy->Move( (wxPoint) -refPoint );
 
-                Format( clone.get(), 1 );
+                Format( copy, 1 );
+
+                delete copy;
             }
         }
         m_formatter.Print( 0, "\n)" );

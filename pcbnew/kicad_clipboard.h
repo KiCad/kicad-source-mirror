@@ -58,7 +58,7 @@ public:
     /* Writes all the settings of the BOARD* set by setBoard() and then adds all
      * the BOARD_ITEM* found in selection formatted by PCB_IO to clipboard as a text
      */
-    void SaveSelection( const PCBNEW_SELECTION& selected );
+    void SaveSelection( const PCBNEW_SELECTION& selected, bool isModEdit );
 
     BOARD_ITEM* Parse();
 

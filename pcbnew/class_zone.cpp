@@ -76,7 +76,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone )
         m_Poly( nullptr ),
         m_CornerSelection( nullptr )
 {
-    initDataFromSrcInCopyCtor( aZone );
+    InitDataFromSrcInCopyCtor( aZone );
 }
 
 
@@ -84,7 +84,7 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
 {
     BOARD_CONNECTED_ITEM::operator=( aOther );
 
-    initDataFromSrcInCopyCtor( aOther );
+    InitDataFromSrcInCopyCtor( aOther );
 
     return *this;
 }
@@ -97,10 +97,10 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
 }
 
 
-void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
+void ZONE_CONTAINER::InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
 {
     // members are expected non initialize in this.
-    // initDataFromSrcInCopyCtor() is expected to be called
+    // InitDataFromSrcInCopyCtor() is expected to be called
     // only from a copy constructor.
 
     // Copy only useful EDA_ITEM flags:
@@ -1310,7 +1310,7 @@ MODULE_ZONE_CONTAINER::MODULE_ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent ) :
 MODULE_ZONE_CONTAINER::MODULE_ZONE_CONTAINER( const MODULE_ZONE_CONTAINER& aZone )
         : ZONE_CONTAINER( aZone.GetParent(), true )
 {
-    initDataFromSrcInCopyCtor( aZone );
+    InitDataFromSrcInCopyCtor( aZone );
 }
 
 
