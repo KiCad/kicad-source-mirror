@@ -748,6 +748,29 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             break;
         }
 
+        case TR_IDENTIFIER:
+        {
+            VAR_REF* vref = aCode->createVarRef( this, node->value.str, "" );
+
+            if( m_errorStatus.pendingError )
+            {
+                m_errorStatus.pendingError = true;
+                m_errorStatus.stage = ERROR_STATUS::CST_CODEGEN;
+
+                if( m_errorStatus.message == "var" )
+                {
+                    m_errorStatus.message.Printf( _( "Unrecognized item '%s'" ),
+                                                  node->value.str );
+                    m_errorStatus.srcPos = node->srcPos - strlen( node->value.str );
+                }
+
+                return false;
+            }
+
+            node->uop = makeUop( TR_UOP_PUSH_VALUE, vref );
+            break;
+        }
+
         default:
             node->uop = makeUop( node->op );
             break;
