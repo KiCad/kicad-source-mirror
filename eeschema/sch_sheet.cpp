@@ -980,7 +980,9 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
         backgroundColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET_BACKGROUND );
 
     aPlotter->SetColor( backgroundColor );
-    aPlotter->Rect( m_pos, m_pos + m_size, FILLED_SHAPE, 1.0 );
+    // Do not fill shape in B&W mode, otherwise texts are unreadable
+    bool fill = aPlotter->GetColorMode();
+    aPlotter->Rect( m_pos, m_pos + m_size, fill ? FILLED_SHAPE : NO_FILL, 1.0 );
 
     aPlotter->SetColor( borderColor );
 
