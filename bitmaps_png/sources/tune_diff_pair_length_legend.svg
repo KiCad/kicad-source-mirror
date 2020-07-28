@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.0 r15299"
-   sodipodi:docname="tune_diff_pair_length_legend;svg.svg"
+   sodipodi:docname="tune_diff_pair_length_legend.svg"
    shape-rendering="crispEdges">
   <defs
      id="defs2">
@@ -307,7 +307,24 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
@@ -409,7 +426,7 @@
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
          id="path1942"
-         d="m 42.834768,256.32979 c 3.516539,-0.0167 7.137185,0.0308 10.653392,-0.0343"
+         d="m 42.71778,256.56377 c 3.516539,-0.0167 7.137185,0.0308 10.653392,-0.0343"
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.35277778;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker1952);marker-end:url(#Arrow2Lend)" />
       <path
          sodipodi:nodetypes="cc"
