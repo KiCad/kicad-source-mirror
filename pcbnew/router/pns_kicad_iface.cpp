@@ -269,12 +269,19 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
 int PNS_PCBNEW_RULE_RESOLVER::Clearance( int aNetCode ) const
 {
-    if( aNetCode > 0 && aNetCode < (int) m_netClearanceCache.size() )
+    if( aNetCode == 0 )
+    {
+        return m_defaultClearance;
+    }
+    else if( aNetCode > 0 && aNetCode < (int) m_netClearanceCache.size() )
+    {
         return m_netClearanceCache[aNetCode].clearance;
+    }
     else
+    {
         wxFAIL_MSG( "PNS_PCBNEW_RULE_RESOLVER::Clearance: net not found in clearance cache." );
-
-    return m_defaultClearance;
+        return m_defaultClearance;
+    }
 }
 
 
