@@ -105,7 +105,17 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
             [&]( wxString* token ) -> bool
             {
                 SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_Parent );
-                return component->ResolveTextVar( token, aDepth + 1 );
+
+                if( component->ResolveTextVar( token, aDepth + 1 ) )
+                    return true;
+
+                SCHEMATIC* schematic = component->Schematic();
+                SCH_SHEET* sheet = schematic ? schematic->CurrentSheet().Last() : nullptr;
+
+                if( sheet && sheet->ResolveTextVar( token, aDepth + 1 ) )
+                    return true;
+
+                return false;
             };
 
     std::function<bool( wxString* )> sheetResolver =

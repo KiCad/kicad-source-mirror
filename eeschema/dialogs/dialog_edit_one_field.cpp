@@ -363,8 +363,16 @@ void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent 
         SCH_SHEET*     sheet = dynamic_cast<SCH_SHEET*>( m_field->GetParent() );
 
         if( comp )
+        {
             comp->GetContextualTextVars( &autocompleteTokens );
-        else if( sheet )
+
+            SCHEMATIC* schematic = comp->Schematic();
+
+            if( schematic && schematic->CurrentSheet().Last() )
+                schematic->CurrentSheet().Last()->GetContextualTextVars( &autocompleteTokens );
+        }
+
+        if( sheet )
             sheet->GetContextualTextVars( &autocompleteTokens );
 
         for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )

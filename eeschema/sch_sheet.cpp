@@ -191,7 +191,10 @@ bool SCH_SHEET::IsRootSheet() const
 void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
 {
     for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
-        aVars->push_back( m_fields[i].GetCanonicalName() );
+        aVars->push_back( m_fields[i].GetCanonicalName().Upper() );
+
+    for( size_t i = SHEET_MANDATORY_FIELDS; i < m_fields.size(); ++i )
+        aVars->push_back( m_fields[i].GetName() );
 
     aVars->push_back( wxT( "#" ) );
     aVars->push_back( wxT( "##" ) );

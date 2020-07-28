@@ -373,6 +373,11 @@ void DIALOG_LABEL_EDITOR::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
         m_CurrentText->GetContextualTextVars( &autocompleteTokens );
 
+        SCHEMATIC* schematic = m_CurrentText->Schematic();
+
+        if( schematic && schematic->CurrentSheet().Last() )
+            schematic->CurrentSheet().Last()->GetContextualTextVars( &autocompleteTokens );
+
         for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
             autocompleteTokens.push_back( entry.first );
     }

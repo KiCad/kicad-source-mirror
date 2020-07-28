@@ -537,6 +537,14 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
                             }
                         }
                     }
+                    else
+                    {
+                        SCHEMATIC* schematic = Schematic();
+                        SCH_SHEET* sheet = schematic ? schematic->CurrentSheet().Last() : nullptr;
+
+                        if( sheet && sheet->ResolveTextVar( token, aDepth + 1 ) )
+                            return true;
+                    }
                 }
 
                 return false;
