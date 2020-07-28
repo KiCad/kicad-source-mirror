@@ -41,5 +41,11 @@
             return self.AddPrimitiveCurve(*args)
         else:
             raise TypeError("Arguments not recognized.")
+
+    # GetCustomShapeAsPolygon() is the old accessor to get custom shapes
+    def GetCustomShapeAsPolygon(self):
+        polygon_set = SHAPE_POLY_SET()
+        self.MergePrimitivesAsPolygon(polygon_set)
+        return polygon_set
     %}
 }
