@@ -40,12 +40,10 @@ class PCB_EXPR_VAR_REF;
 class PCB_EXPR_UCODE final : public LIBEVAL::UCODE
 {
 public:
-    virtual LIBEVAL::VAR_REF* createVarRef( LIBEVAL::COMPILER *aCompiler,
-                                            const std::string& aVar,
-                                            const std::string& aField ) override;
+    virtual LIBEVAL::VAR_REF* createVarRef( LIBEVAL::COMPILER *aCompiler, const char* aVar,
+                                            const char* aField ) override;
 
-    virtual FUNC_PTR createFuncCall( LIBEVAL::COMPILER* aCompiler,
-                                     const std::string& name ) override;
+    virtual FUNC_PTR createFuncCall( LIBEVAL::COMPILER* aCompiler, const char* aName ) override;
 };
 
 

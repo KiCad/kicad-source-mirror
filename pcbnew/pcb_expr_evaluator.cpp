@@ -139,28 +139,28 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 
 
 LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::createFuncCall( LIBEVAL::COMPILER* aCompiler,
-                                                         const std::string& name )
+                                                         const char* aName )
 {
     PCB_EXPR_BUILTIN_FUNCTIONS& registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
 
-    auto f = registry.Get( boost::to_lower_copy( name ) );
+    std::string lowerName( aName );
+    boost::to_lower( lowerName );
 
-    return f;
+    return registry.Get( lowerName );
 }
 
 
-LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler,
-                                                const std::string& aVar,
-                                                const std::string& aField )
+LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler, const char* aVar,
+                                                const char* aField )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     PCB_EXPR_VAR_REF* vref = nullptr;
 
-    if( aVar == "A" )
+    if( *aVar == 'A' )
     {
         vref = new PCB_EXPR_VAR_REF( 0 );
     }
-    else if( aVar == "B" )
+    else if( *aVar == 'B' )
     {
         vref = new PCB_EXPR_VAR_REF( 1 );
     }
@@ -170,11 +170,11 @@ LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler,
         return vref;
     }
 
-    if( aField.empty() ) // return reference to base object
+    if( strlen( aField ) == 0 ) // return reference to base object
         return vref;
 
-    std::string field( aField );
-    std::replace( field.begin(), field.end(), '_', ' ');
+    wxString field = wxString::FromUTF8( aField );
+    field.Replace( "_",  " " );
 
     for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
     {
@@ -267,7 +267,7 @@ bool PCB_EXPR_EVALUATOR::Evaluate( const wxString& aExpr )
     PCB_EXPR_UCODE   ucode;
     LIBEVAL::CONTEXT preflightContext;
 
-    if( !m_compiler.Compile( (const char*) aExpr.c_str(), &ucode, &preflightContext ) )
+    if( !m_compiler.Compile( aExpr.ToUTF8().data(), &ucode, &preflightContext ) )
     {
         m_errorStatus = m_compiler.GetErrorStatus();
         return false;

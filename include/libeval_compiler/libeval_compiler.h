@@ -309,13 +309,12 @@ public:
     VALUE* Run( CONTEXT* ctx );
     std::string Dump() const;
 
-    virtual VAR_REF* createVarRef( COMPILER* aCompiler, const std::string& var,
-                                   const std::string& field )
+    virtual VAR_REF* createVarRef( COMPILER* aCompiler, const char* var, const char* field )
     {
         return nullptr;
     };
 
-    virtual FUNC_PTR createFuncCall( COMPILER* aCompiler, const std::string& name )
+    virtual FUNC_PTR createFuncCall( COMPILER* aCompiler, const char* name )
     {
         return nullptr;
     };

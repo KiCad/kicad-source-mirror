@@ -140,7 +140,7 @@ bool DRC_RULE_CONDITION::Compile()
 
     PCB_EXPR_CONTEXT preflightContext;
 
-    bool ok = compiler.Compile( (const char*) m_Expression.c_str(), m_ucode, &preflightContext );
+    bool ok = compiler.Compile( m_Expression.ToUTF8().data(), m_ucode, &preflightContext );
 
     if( ok )
         return true;

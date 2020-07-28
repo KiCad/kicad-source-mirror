@@ -70,7 +70,7 @@ bool test::DRC_RULE_CONDITION::Compile()
     if (!m_ucode)
         m_ucode = new PCB_EXPR_UCODE;
     
-    bool ok = compiler.Compile( (const char*) m_Expression.c_str(), m_ucode );
+    bool ok = compiler.Compile( m_Expression.ToUTF8().data(), m_ucode );
 
     if( ok )
         return true;
