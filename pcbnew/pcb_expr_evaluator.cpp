@@ -40,7 +40,8 @@ static void onLayer( LIBEVAL::CONTEXT* aCtx, void *self )
 
     if( !arg )
     {
-        aCtx->ReportError( _( "Missing argument to 'onLayer()'" ) );
+        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                             wxT( "onLayer()" ) ) );
         return;
     }
 
@@ -61,7 +62,7 @@ static void onLayer( LIBEVAL::CONTEXT* aCtx, void *self )
 }
 
 
-static void isPlated( LIBEVAL::CONTEXT* aCtx, void *self )
+static void isPlated( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     LIBEVAL::VALUE* result = aCtx->AllocValue();
 
@@ -77,6 +78,53 @@ static void isPlated( LIBEVAL::CONTEXT* aCtx, void *self )
 }
 
 
+static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE* arg = aCtx->Pop();
+    LIBEVAL::VALUE* result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg )
+    {
+        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                             wxT( "insideCourtyard()" ) ) );
+        return;
+    }
+
+    wxString          footprintRef = arg->AsString();
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+
+    if( item )
+    {
+        for( MODULE* footprint : item->GetBoard()->Modules() )
+        {
+            if( footprint->GetReference() == footprintRef )
+            {
+                SHAPE_POLY_SET footprintCourtyard;
+
+                if( footprint->IsFlipped() )
+                    footprintCourtyard = footprint->GetPolyCourtyardBack();
+                else
+                    footprintCourtyard = footprint->GetPolyCourtyardFront();
+
+                SHAPE_POLY_SET testPoly;
+
+                item->TransformShapeWithClearanceToPolygon( testPoly, 0 );
+                testPoly.BooleanIntersection( footprintCourtyard, SHAPE_POLY_SET::PM_FAST );
+
+                if( testPoly.OutlineCount() )
+                    result->Set( 1.0 );
+
+                break;
+            }
+        }
+    }
+}
+
+
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
     auto registerFunc = [&]( const wxString& funcSignature, FPTR funcPtr )
@@ -88,6 +136,7 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 
     registerFunc( "onLayer('x')", onLayer );
     registerFunc( "isPlated()", isPlated );
+    registerFunc( "insideCourtyard('x')", insideCourtyard );
 }
 
 
