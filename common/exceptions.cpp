@@ -26,10 +26,6 @@
 #include <ki_exception.h>
 
 
-#define THROWERS_WHERE  _( "from %s : %s() line:%d" )
-#define PARSE_PROBLEM   _( "%s in \"%s\", line %d, offset %d" )
-
-
 const wxString IO_ERROR::What() const
 {
 #ifdef DEBUG
@@ -53,7 +49,8 @@ const wxString IO_ERROR::Problem() const
 
 
 
-void IO_ERROR::init( const wxString& aProblem, const char* aThrowersFile, const char* aThrowersFunction, int aThrowersLineNumber )
+void IO_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
+                     const char* aThrowersFunction, int aThrowersLineNumber )
 {
     problem = aProblem;
 
@@ -61,18 +58,23 @@ void IO_ERROR::init( const wxString& aProblem, const char* aThrowersFile, const 
     // a short filename will be printed (it is better for user, the full filename has no meaning).
     wxString srcname = aThrowersFile;
 
-    where.Printf( THROWERS_WHERE, srcname.AfterLast( '/' ).GetData(),
-        wxString( aThrowersFunction ).GetData(), aThrowersLineNumber );
+    where.Printf(  _( "from %s : %s() line:%d" ),
+                   srcname.AfterLast( '/' ),
+                   wxString( aThrowersFunction ),
+                   aThrowersLineNumber );
 }
 
 
 void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
-        const char* aThrowersFunction, int aThrowersLineNumber,
-        const wxString& aSource,
-        const char* aInputLine,
-        int aLineNumber, int aByteIndex )
+                        const char* aThrowersFunction, int aThrowersLineNumber,
+                        const wxString& aSource, const char* aInputLine, int aLineNumber,
+                        int aByteIndex )
 {
-    problem.Printf( PARSE_PROBLEM, aProblem.GetData(), aSource.GetData(), aLineNumber, aByteIndex );
+    problem.Printf( _( "%s in \"%s\", line %d, offset %d" ),
+                    aProblem,
+                    aSource,
+                    aLineNumber,
+                    aByteIndex );
 
     inputLine  = aInputLine;
     lineNumber = aLineNumber;
@@ -82,8 +84,10 @@ void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
     // a short filename will be printed (it is better for user, the full filename has no meaning).
     wxString srcname = aThrowersFile;
 
-    where.Printf( THROWERS_WHERE, srcname.AfterLast( '/' ).GetData(),
-        wxString( aThrowersFunction ).GetData(), aThrowersLineNumber );
+    where.Printf(  _( "from %s : %s() line:%d" ),
+                   srcname.AfterLast( '/' ),
+                   wxString( aThrowersFunction ),
+                   aThrowersLineNumber );
 }
 
 
@@ -100,13 +104,12 @@ FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError,
     }
     else
     {
-        problem.Printf( _(
-            "KiCad was unable to open this file, as it was created with\n"
-            "a more recent version than the one you are running.\n"
-            "To open it, you'll need  to upgrade KiCad to a more recent version.\n\n"
-            "Date of KiCad version required (or newer): %s\n\n"
-            "Full error text:\n%s" ),
-                requiredVersion, aParseError.Problem() );
+        problem.Printf( _( "KiCad was unable to open this file, as it was created with a more\n"
+                           "recent version than the one you are running.\n"
+                           "To open it you will need to upgrade KiCad to a more recent version.\n\n"
+                           "Date of KiCad version required (or newer): %s\n\n"
+                           "Full error text:\n%s" ),
+                           requiredVersion, aParseError.Problem() );
     }
 
     lineNumber = aParseError.lineNumber;
