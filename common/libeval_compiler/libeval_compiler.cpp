@@ -617,6 +617,9 @@ void COMPILER::freeTree( LIBEVAL::TREE_NODE *tree )
     if ( tree->leaf[1] )
         freeTree( tree->leaf[1] );
 
+    delete tree;
+}
+
 bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 {
     std::vector<TREE_NODE*> stack;

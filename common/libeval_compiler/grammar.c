@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <assert.h>
 /************ Begin %include sections from the grammar ************************/
-#line 34 "grammar.lemon"
+#line 35 "grammar.lemon"
 
 #include <assert.h>
 #include <libeval_compiler/libeval_compiler.h>
@@ -965,120 +965,120 @@ static YYACTIONTYPE yy_reduce(
 /********** Begin reduce actions **********************************************/
         YYMINORTYPE yylhsminor;
       case 0: /* stmt ::= expr G_ENDS */
-#line 55 "grammar.lemon"
+#line 56 "grammar.lemon"
 { pEval->setRoot(yymsp[-1].minor.yy0); }
 #line 971 "grammar.c"
         break;
       case 1: /* expr ::= G_VALUE */
-#line 58 "grammar.lemon"
+#line 59 "grammar.lemon"
 { yylhsminor.yy0.op = TR_NUMBER; yylhsminor.yy0.value = yymsp[0].minor.yy0.value; yylhsminor.yy0.leaf[0] = yylhsminor.yy0.leaf[1] = NULL; yylhsminor.yy0.valid = true; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 976 "grammar.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 2: /* expr ::= G_VALUE G_UNIT */
-#line 59 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_NUMBER; yylhsminor.yy0.value = yymsp[-1].minor.yy0.value; yylhsminor.yy0.leaf[0] = newNode( TR_UNIT, yymsp[0].minor.yy0.value.type, ""); yylhsminor.yy0.leaf[1] = NULL; yylhsminor.yy0.valid = true; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 60 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_NUMBER; yylhsminor.yy0.value = yymsp[-1].minor.yy0.value; yylhsminor.yy0.leaf[0] = newNode(TR_UNIT, yymsp[0].minor.yy0.value.type, ""); yylhsminor.yy0.leaf[1] = NULL; yylhsminor.yy0.valid = true; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 982 "grammar.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 3: /* expr ::= G_STRING */
-#line 60 "grammar.lemon"
+#line 61 "grammar.lemon"
 { yylhsminor.yy0.op = TR_STRING; yylhsminor.yy0.value = yymsp[0].minor.yy0.value; yylhsminor.yy0.leaf[0] = yylhsminor.yy0.leaf[1] = NULL; yylhsminor.yy0.valid = true; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 988 "grammar.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 4: /* expr ::= G_IDENTIFIER */
-#line 61 "grammar.lemon"
+#line 62 "grammar.lemon"
 { yylhsminor.yy0.op = TR_IDENTIFIER; yylhsminor.yy0.value = yymsp[0].minor.yy0.value; yylhsminor.yy0.leaf[0] = yylhsminor.yy0.leaf[1] = NULL; yylhsminor.yy0.valid = true; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 994 "grammar.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 5: /* expr ::= expr G_LESS_THAN expr */
-#line 62 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_LESS; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 63 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_LESS; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1000 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 6: /* expr ::= expr G_GREATER_THAN expr */
-#line 63 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_GREATER; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 64 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_GREATER; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1006 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 7: /* expr ::= expr G_LESS_EQUAL_THAN expr */
-#line 64 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_LESS_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 65 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_LESS_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1012 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 8: /* expr ::= expr G_GREATER_EQUAL_THAN expr */
-#line 65 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_GREATER_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 66 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_GREATER_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1018 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 9: /* expr ::= expr G_NOT_EQUAL expr */
-#line 66 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_NOT_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 67 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_NOT_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1024 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 10: /* expr ::= expr G_BOOL_AND expr */
-#line 67 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_BOOL_AND; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 68 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_BOOL_AND; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1030 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 11: /* expr ::= expr G_BOOL_OR expr */
-#line 68 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_BOOL_OR; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 69 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_BOOL_OR; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1036 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 12: /* expr ::= expr G_PLUS expr */
-#line 69 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_ADD; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 70 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_ADD; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1042 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 13: /* expr ::= expr G_MINUS expr */
-#line 70 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_SUB; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 71 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_SUB; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1048 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 14: /* expr ::= expr G_MULT expr */
-#line 71 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_MUL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 72 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_MUL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1054 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 15: /* expr ::= expr G_DIVIDE expr */
-#line 72 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_DIV; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 73 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_DIV; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1060 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 16: /* expr ::= expr G_EQUAL expr */
-#line 73 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 74 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_EQUAL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid = yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1066 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 17: /* expr ::= expr G_STRUCT_REF expr */
-#line 75 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_STRUCT_REF; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0);  yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 76 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_STRUCT_REF; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-2].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[0].minor.yy0); yylhsminor.yy0.valid=yymsp[-2].minor.yy0.valid && yymsp[0].minor.yy0.valid; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1072 "grammar.c"
   yymsp[-2].minor.yy0 = yylhsminor.yy0;
         break;
       case 18: /* expr ::= G_PARENL expr G_PARENR */
-#line 77 "grammar.lemon"
+#line 78 "grammar.lemon"
 { yymsp[-2].minor.yy0.op = yymsp[-1].minor.yy0.op; yymsp[-2].minor.yy0.value = yymsp[-1].minor.yy0.value; yymsp[-2].minor.yy0.valid=yymsp[-1].minor.yy0.valid;  yymsp[-2].minor.yy0.leaf[0] = yymsp[-1].minor.yy0.leaf[0]; yymsp[-2].minor.yy0.leaf[1] = yymsp[-1].minor.yy0.leaf[1]; yymsp[-2].minor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1078 "grammar.c"
         break;
       case 19: /* expr ::= G_IDENTIFIER G_PARENL expr G_PARENR */
-#line 78 "grammar.lemon"
-{ yylhsminor.yy0.op = TR_OP_FUNC_CALL;  yylhsminor.yy0.leaf[0] = copyNode(yymsp[-3].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[-1].minor.yy0);  yylhsminor.yy0.valid=1; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
+#line 79 "grammar.lemon"
+{ yylhsminor.yy0.op = TR_OP_FUNC_CALL; yylhsminor.yy0.leaf[0] = copyNode(yymsp[-3].minor.yy0); yylhsminor.yy0.leaf[1] = copyNode(yymsp[-1].minor.yy0); yylhsminor.yy0.valid = true; yylhsminor.yy0.srcPos = pEval->GetSourcePos(); }
 #line 1083 "grammar.c"
   yymsp[-3].minor.yy0 = yylhsminor.yy0;
         break;
@@ -1146,7 +1146,7 @@ static void yy_syntax_error(
   ParseCTX_FETCH
 #define TOKEN yyminor
 /************ Begin %syntax_error code ****************************************/
-#line 39 "grammar.lemon"
+#line 40 "grammar.lemon"
 
   pEval->parseError("Syntax error");
 #line 1153 "grammar.c"
@@ -1175,7 +1175,7 @@ static void yy_accept(
   /* Here code is inserted which will be executed whenever the
   ** parser accepts */
 /*********** Begin %parse_accept code *****************************************/
-#line 43 "grammar.lemon"
+#line 44 "grammar.lemon"
 
   pEval->parseOk();
 #line 1182 "grammar.c"

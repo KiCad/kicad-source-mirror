@@ -300,6 +300,8 @@ private:
 class UCODE
 {
 public:
+    virtual ~UCODE();
+
     typedef std::function<void( CONTEXT*, void* )> FUNC_PTR;
 
     void AddOp( UOP* uop )
