@@ -635,7 +635,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead )
 
     m_shove->SetLogger( Logger() );
     m_shove->SetDebugDecorator( Dbg() );
-    
+
     OPTIMIZER optimizer( m_currentNode );
 
     WALKAROUND walkaround( m_currentNode, Router() );
@@ -1193,7 +1193,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         m_startItem = NULL;
         m_placingVia = false;
         m_chainedPlacement = !pl.EndsWithVia();
-        
+
         m_p_start = m_currentStart;
         m_direction = m_initial_direction;
 
@@ -1208,8 +1208,8 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         {
             m_shove->AddLockedSpringbackNode( m_currentNode );
         }
-    
-        
+
+
         m_postureSolver.Clear();
         m_postureSolver.SetTollerance( m_head.Width() );
         m_postureSolver.AddTrailPoint( m_currentStart );
@@ -1246,7 +1246,7 @@ bool LINE_PLACER::UnfixRoute()
     m_tail.SetLayer( m_currentLayer );
     m_head.RemoveVia( );
     m_tail.RemoveVia( );
-    
+
     if (m_shove)
     {
         m_shove->RewindSpringbackTo( m_currentNode );
@@ -1466,7 +1466,7 @@ FIXED_TAIL::FIXED_TAIL ( int aLineCount )
 
 }
 
-FIXED_TAIL::~FIXED_TAIL() 
+FIXED_TAIL::~FIXED_TAIL()
 {
 
 }
@@ -1488,7 +1488,7 @@ void FIXED_TAIL::AddStage( VECTOR2I aStart, int aLayer, bool placingVias, DIRECT
 
     st.pts.push_back(pt);
     st.commit = aNode;
-    
+
     m_stages.push_back( st );
 }
 
@@ -1497,7 +1497,7 @@ bool FIXED_TAIL::PopStage( FIXED_TAIL::STAGE& aStage )
     if( !m_stages.size() )
         return false;
 
-    
+
     aStage = m_stages.back();
 
     if( m_stages.size() > 1 )
@@ -1512,9 +1512,10 @@ int FIXED_TAIL::StageCount() const
     return m_stages.size();
 }
 
-POSTURE_SOLVER::POSTURE_SOLVER() 
+POSTURE_SOLVER::POSTURE_SOLVER()
 {
     m_forced = false;
+    m_tollerance = 0;
 }
 
 POSTURE_SOLVER::~POSTURE_SOLVER() {}
@@ -1532,7 +1533,7 @@ void POSTURE_SOLVER::AddTrailPoint( const VECTOR2I& aP )
         m_trail.Append(aP);
     } else {
         SEG s_new ( m_trail.CPoint(-1), aP );
-        
+
         for( int i = 0; i < m_trail.SegmentCount() - 1; i++ )
         {
             const auto& s_trail = m_trail.CSegment(i);
@@ -1542,7 +1543,7 @@ void POSTURE_SOLVER::AddTrailPoint( const VECTOR2I& aP )
                 break;
             }
         }
-        
+
         m_trail.Append( aP );
     }
 
@@ -1551,7 +1552,7 @@ void POSTURE_SOLVER::AddTrailPoint( const VECTOR2I& aP )
     auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
     dbg->AddLine(m_trail, 5, 100000 );
-    
+
 }
 
 DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
@@ -1601,12 +1602,12 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
         return m_lastSegDirection;
     else
         return m_initDirection;
-    
+
 }
 
 
 void POSTURE_SOLVER::FlipPosture()
-{  
+{
     m_initDirection = m_initDirection.Right();
     m_forced = true;
 }

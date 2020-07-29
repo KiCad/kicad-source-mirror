@@ -107,6 +107,8 @@ D_PAD::D_PAD( const D_PAD& aOther ) :
     SetPos0( aOther.GetPos0() );
     SetName( aOther.GetName() );
     SetPinFunction( aOther.GetPinFunction() );
+    SetSubRatsnest( aOther.GetSubRatsnest() );
+    m_effectiveBoundingRadius = aOther.m_effectiveBoundingRadius;
 }
 
 
@@ -120,6 +122,8 @@ D_PAD& D_PAD::operator=( const D_PAD &aOther )
     SetPos0( aOther.GetPos0() );
     SetName( aOther.GetName() );
     SetPinFunction( aOther.GetPinFunction() );
+    SetSubRatsnest( aOther.GetSubRatsnest() );
+    m_effectiveBoundingRadius = aOther.m_effectiveBoundingRadius;
 
     return *this;
 }
@@ -1240,6 +1244,8 @@ void D_PAD::ImportSettingsFrom( const D_PAD& aMasterPad )
     SetZoneConnection( aMasterPad.GetEffectiveZoneConnection() );
     SetThermalWidth( aMasterPad.GetThermalWidth() );
     SetThermalGap( aMasterPad.GetThermalGap() );
+
+    SetCustomShapeInZoneOpt( aMasterPad.GetCustomShapeInZoneOpt() );
 
     // Add or remove custom pad shapes:
     ReplacePrimitives( aMasterPad.GetPrimitives() );

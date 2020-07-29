@@ -611,6 +611,11 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
             editMatchingLabels( screen, SCH_HIER_LABEL_T, aOldName, aNewName );
 
             SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( driver->GetParent() );
+            wxASSERT( sheet );
+
+            if( !sheet )
+                break;
+
             screen = sheet->GetScreen();
 
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
