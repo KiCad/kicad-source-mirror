@@ -57,11 +57,10 @@ bool test::DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOAR
 {
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
     BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
-    LIBEVAL::CONTEXT ctx;
-    m_ucode->SetItems( a, b );
-    ctx.Run( m_ucode );
+    PCB_EXPR_CONTEXT ctx;
+    ctx.SetItems( a, b );
 
-    return ctx.GetResult()->AsDouble() != 0.0;
+    return m_ucode->Run( &ctx )->AsDouble() != 0.0;
 }
 
 
