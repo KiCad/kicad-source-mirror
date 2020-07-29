@@ -385,6 +385,8 @@ public:
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
+    const std::vector<std::shared_ptr<SHAPE>>& GetEffectiveShapes() const;
+
     const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon() const;
 
     /**
