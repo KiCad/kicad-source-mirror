@@ -51,7 +51,7 @@ enum class GRAPHIC_PINSHAPE
 
 
 // UI
-wxString    GetText( GRAPHIC_PINSHAPE shape );
-BITMAP_DEF  GetBitmap( GRAPHIC_PINSHAPE shape );
+wxString    PinShapeGetText( GRAPHIC_PINSHAPE shape );
+BITMAP_DEF  PinShapeGetBitmap( GRAPHIC_PINSHAPE shape );
 
 #endif

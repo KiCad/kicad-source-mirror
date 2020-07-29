@@ -55,7 +55,7 @@ const std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct> pinShapes = {
 // clang-format on
 
 
-wxString GetText( GRAPHIC_PINSHAPE aShape )
+wxString PinShapeGetText( GRAPHIC_PINSHAPE aShape )
 {
     auto findIt = pinShapes.find( aShape );
 
@@ -65,7 +65,7 @@ wxString GetText( GRAPHIC_PINSHAPE aShape )
 }
 
 
-BITMAP_DEF GetBitmap( GRAPHIC_PINSHAPE aShape )
+BITMAP_DEF PinShapeGetBitmap( GRAPHIC_PINSHAPE aShape )
 {
     auto findIt = pinShapes.find( aShape );
 

@@ -47,7 +47,7 @@ const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
     { ELECTRICAL_PINTYPE::PT_BIDI,         { _( "Bidirectional" ),     pintype_bidi_xpm } },
     { ELECTRICAL_PINTYPE::PT_TRISTATE,     { _( "Tri-state" ),         pintype_3states_xpm } },
     { ELECTRICAL_PINTYPE::PT_PASSIVE,      { _( "Passive" ),           pintype_passive_xpm } },
-    { ELECTRICAL_PINTYPE::PT_UNSPECIFIED,  { _( "Clock low" ),         pintype_notspecif_xpm } },
+    { ELECTRICAL_PINTYPE::PT_UNSPECIFIED,  { _( "Unspecified" ),       pintype_notspecif_xpm } },
     { ELECTRICAL_PINTYPE::PT_POWER_IN,     { _( "Power input" ),       pintype_powerinput_xpm } },
     { ELECTRICAL_PINTYPE::PT_POWER_OUT,    { _( "Power output" ),      pintype_poweroutput_xpm } },
     { ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR,{ _( "Open collector" ),    pintype_opencoll_xpm } },
@@ -56,7 +56,7 @@ const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
 };
 // clang-format on
 
-wxString GetText( ELECTRICAL_PINTYPE aType )
+wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE aType )
 {
     auto findIt = pinTypes.find( aType );
 
@@ -66,7 +66,7 @@ wxString GetText( ELECTRICAL_PINTYPE aType )
 }
 
 
-BITMAP_DEF GetBitmap( ELECTRICAL_PINTYPE aType )
+BITMAP_DEF ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE aType )
 {
     auto findIt = pinTypes.find( aType );
 

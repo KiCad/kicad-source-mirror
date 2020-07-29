@@ -1445,9 +1445,9 @@ void LIB_PIN::getMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aLis
 
     aList.push_back( MSG_PANEL_ITEM( _( "Name" ), m_name, DARKCYAN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Number" ), text, DARKCYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), GetText( m_type ), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), ElectricalPinTypeGetText( m_type ), RED ) );
 
-    text = GetText( m_shape );
+    text = PinShapeGetText( m_shape );
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), text, BLUE ) );
 
     text = IsVisible() ? _( "Yes" ) : _( "No" );
@@ -1676,7 +1676,7 @@ const BITMAP_DEF* LIB_PIN::GetOrientationSymbols()
 
 BITMAP_DEF LIB_PIN::GetMenuImage() const
 {
-    return GetBitmap( m_type );
+    return ElectricalPinTypeGetBitmap( m_type );
 }
 
 
@@ -1685,7 +1685,7 @@ wxString LIB_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
     return wxString::Format( _( "Pin %s, %s, %s" ),
                              m_number,
                              GetElectricalTypeName(),
-                             GetText( m_shape ));
+                             PinShapeGetText( m_shape ));
 }
 
 

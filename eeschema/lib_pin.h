@@ -259,7 +259,7 @@ public:
      */
     wxString const GetElectricalTypeName() const
     {
-        return GetText( m_type );
+        return ElectricalPinTypeGetText( m_type );
     }
 
     /**

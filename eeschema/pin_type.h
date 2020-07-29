@@ -54,7 +54,7 @@ enum class ELECTRICAL_PINTYPE
 #define ELECTRICAL_PINTYPES_TOTAL ( static_cast<int>( ELECTRICAL_PINTYPE::PT_LAST_OPTION ) + 1 )
 
 // UI
-wxString GetText( ELECTRICAL_PINTYPE );
-BITMAP_DEF GetBitmap( ELECTRICAL_PINTYPE );
+wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE );
+BITMAP_DEF ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE );
 
 #endif

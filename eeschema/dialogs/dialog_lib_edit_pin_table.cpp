@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -396,18 +396,18 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LI
     if( g_typeNames.empty())
     {
         for( unsigned i = 0; i < ELECTRICAL_PINTYPES_TOTAL; ++i )
-            g_typeIcons.push_back( GetBitmap( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
+            g_typeIcons.push_back( ElectricalPinTypeGetBitmap( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
 
         for( unsigned i = 0; i < ELECTRICAL_PINTYPES_TOTAL; ++i )
-            g_typeNames.push_back( GetText( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
+            g_typeNames.push_back( ElectricalPinTypeGetText( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
 
         g_typeNames.push_back( INDETERMINATE_STATE );
 
         for( unsigned i = 0; i < GRAPHIC_PINSHAPES_TOTAL; ++i )
-            g_shapeIcons.push_back( GetBitmap( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
+            g_shapeIcons.push_back( PinShapeGetBitmap( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
 
         for( unsigned i = 0; i < GRAPHIC_PINSHAPES_TOTAL; ++i )
-            g_shapeNames.push_back( GetText( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
+            g_shapeNames.push_back( PinShapeGetText( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
 
         g_shapeNames.push_back( INDETERMINATE_STATE );
 

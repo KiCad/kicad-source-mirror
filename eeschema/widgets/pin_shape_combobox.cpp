@@ -46,8 +46,8 @@ PinShapeComboBox::PinShapeComboBox( wxWindow* parent,
     {
         GRAPHIC_PINSHAPE shape = static_cast<GRAPHIC_PINSHAPE>( ii );
 
-        wxString text = GetText( shape );
-        BITMAP_DEF bitmap = GetBitmap( shape );
+        wxString text = PinShapeGetText( shape );
+        BITMAP_DEF bitmap = PinShapeGetBitmap( shape );
 
         if( bitmap == NULL )
             Append( text );

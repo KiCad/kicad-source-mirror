@@ -46,8 +46,8 @@ PinTypeComboBox::PinTypeComboBox( wxWindow* parent,
     {
         ELECTRICAL_PINTYPE type = static_cast<ELECTRICAL_PINTYPE>( ii );
 
-        wxString text = GetText( type );
-        BITMAP_DEF bitmap = GetBitmap( type );
+        wxString text = ElectricalPinTypeGetText( type );
+        BITMAP_DEF bitmap = ElectricalPinTypeGetBitmap( type );
 
         if( bitmap == NULL )
             Append( text );
