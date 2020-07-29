@@ -75,7 +75,7 @@ void test::DRC_TEST_PROVIDER::accountCheck( test::DRC_RULE* ruleToTest )
 {
     auto it = m_stats.find( ruleToTest );
     if( it == m_stats.end() )
-        m_stats[ ruleToTest ] = 0;
+        m_stats[ ruleToTest ] = 1;
     else
         it->second++;
 }
