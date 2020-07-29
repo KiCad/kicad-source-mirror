@@ -538,10 +538,10 @@ public:
     {
         static const wxString s_undef = "UNDEFINED";
 
-        int idx = static_cast<int>( value );
+        int idx = m_choices.Index( static_cast<int>( value ) );
 
         if( idx >= 0 && idx < (int) m_choices.GetCount() )
-            return m_choices.GetLabel( static_cast<int>( value ) );
+            return m_choices.GetLabel( static_cast<int>( idx ) );
         else
             return s_undef;
     }
