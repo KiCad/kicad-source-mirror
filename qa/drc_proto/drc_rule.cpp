@@ -71,8 +71,10 @@ bool test::DRC_RULE_CONDITION::Compile()
 
     if (!m_ucode)
         m_ucode = new PCB_EXPR_UCODE;
+
+    LIBEVAL::CONTEXT preflightContext;
     
-    bool ok = compiler.Compile( m_Expression.ToUTF8().data(), m_ucode );
+    bool ok = compiler.Compile( m_Expression.ToUTF8().data(), m_ucode, &preflightContext );
 
     if( ok )
         return true;
