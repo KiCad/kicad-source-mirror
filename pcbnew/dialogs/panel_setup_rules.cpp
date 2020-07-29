@@ -150,8 +150,9 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 m_textEditor->AutoCompCancel();
                 sexprs.push( partial );
 
-                if( sexprs.size()
-                    && ( sexprs.top() == "constraint" || sexprs.top() == "disallow" ) )
+                if( sexprs.size() && ( sexprs.top() == "constraint"
+                                    || sexprs.top() == "disallow"
+                                    || sexprs.top() == "layer" ) )
                 {
                     partial = wxEmptyString;
                     context = SEXPR_TOKEN;
@@ -174,7 +175,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         if( sexprs.empty() )
             tokens = "rule version";
         else if( sexprs.top() == "rule" )
-            tokens = "condition constraint disallow";
+            tokens = "condition constraint disallow layer";
         else if( sexprs.top() == "constraint" )
             tokens = "max min opt";
     }
@@ -186,6 +187,8 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             tokens = "annulus_width clearance hole track_width";
         else if( sexprs.top() == "disallow" )
             tokens = "buried_via graphic hole micro_via pad text track via zone";
+        else if( sexprs.top() == "layer" )
+            tokens = "inner outer \"x\"";
     }
     else if( context == STRING && expr_context == STRUCT_REF )
     {

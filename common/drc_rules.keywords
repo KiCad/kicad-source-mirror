@@ -8,6 +8,8 @@ disallow
 footprint
 graphic
 hole
+inner
+layer
 match_area
 match_layer
 match_netclass
@@ -17,6 +19,7 @@ micro_via
 min
 npth
 opt
+outer
 pad
 pth
 rule

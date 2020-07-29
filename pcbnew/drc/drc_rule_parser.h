@@ -46,19 +46,16 @@ public:
     void Parse( std::vector<DRC_RULE*>& aRules );
 
 private:
-    void initLayerMap();
-
     DRC_RULE* parseDRC_RULE();
 
     void parseConstraint( DRC_RULE* aRule );
     void parseValueWithUnits( const wxString& aExpr, int& aResult );
+    LSET parseLayer();
 
 private:
     BOARD* m_board;
     int    m_requiredVersion;
     bool   m_tooRecent;
-
-    std::unordered_map<std::string, PCB_LAYER_ID> m_layerMap;
 };
 
 #endif      // DRC_RULE_PARSER_H

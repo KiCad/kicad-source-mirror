@@ -39,7 +39,6 @@ DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource,
         m_requiredVersion( 0 ),
         m_tooRecent( false )
 {
-    initLayerMap();
 }
 
 
@@ -49,20 +48,6 @@ DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& 
         m_requiredVersion( 0 ),
         m_tooRecent( false )
 {
-    initLayerMap();
-}
-
-
-void DRC_RULES_PARSER::initLayerMap()
-{
-    for( LAYER_NUM layer = 0;  layer < PCB_LAYER_ID_COUNT;  ++layer )
-    {
-        std::string untranslated = TO_UTF8( wxString( LSET::Name( PCB_LAYER_ID( layer ) ) ) );
-        m_layerMap[ untranslated ] = PCB_LAYER_ID( layer );
-
-        std::string userName = m_board->GetLayerName( PCB_LAYER_ID( layer ) ).ToStdString();
-        m_layerMap[ userName ] = PCB_LAYER_ID( layer );
-    }
 }
 
 
@@ -95,7 +80,7 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules )
             break;
 
         default:
-            Expecting( "selector or rule" );
+            Expecting( "rule" );
         }
     }
 }
@@ -157,6 +142,10 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
             }
 
             NeedRIGHT();
+            break;
+
+        case T_layer:
+            rule->m_LayerCondition = parseLayer();
             break;
 
         default:
@@ -258,4 +247,36 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult 
     }
 
     aResult = evaluator.Result();
-};
+}
+
+
+LSET DRC_RULES_PARSER::parseLayer()
+{
+    LSET retVal;
+    int  tok = NextTok();
+
+    if( tok == T_outer )
+    {
+        retVal = LSET::ExternalCuMask();
+    }
+    else if( tok == T_inner )
+    {
+        retVal = LSET::InternalCuMask();
+    }
+    else
+    {
+        wxString     layerName = FromUTF8();
+        PCB_LAYER_ID layer = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( layerName );
+
+        if( layer == UNDEFINED_LAYER )
+        {
+            wxString msg = wxString::Format( _( "Unrecognized layer '%s' " ), layerName );
+            THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+        }
+
+        retVal.set( layer );
+    }
+
+    NeedRIGHT();
+    return retVal;
+}

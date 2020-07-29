@@ -89,6 +89,7 @@ public:
     LIBEVAL::ERROR_STATUS GetCompilationError();
 
 public:
+    LSET      m_LayerCondition;
     wxString  m_Expression;
     wxString  m_TargetRuleName;
 
@@ -129,6 +130,7 @@ public:
     MINOPTMAX m_TrackConstraint;
     int       m_MinHole;
 
+    LSET               m_LayerCondition;
     DRC_RULE_CONDITION m_Condition;
 };
 
