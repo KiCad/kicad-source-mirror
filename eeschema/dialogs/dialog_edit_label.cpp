@@ -143,117 +143,6 @@ DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
 }
 
 
-wxString DIALOG_LABEL_EDITOR::convertKIIDsToReferences( const wxString& aSource ) const
-{
-    wxString newbuf;
-    size_t   sourceLen = aSource.length();
-
-    for( size_t i = 0; i < sourceLen; ++i )
-    {
-        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
-        {
-            wxString token;
-            bool     isCrossRef = false;
-
-            for( i = i + 2; i < sourceLen; ++i )
-            {
-                if( aSource[i] == '}' )
-                    break;
-
-                if( aSource[i] == ':' )
-                    isCrossRef = true;
-
-                token.append( aSource[i] );
-            }
-
-            if( isCrossRef )
-            {
-                SCH_SHEET_LIST sheetList = m_Parent->Schematic().GetSheets();
-                wxString       remainder;
-                wxString       ref = token.BeforeFirst( ':', &remainder );
-
-                SCH_SHEET_PATH refSheetPath;
-                SCH_ITEM*      refItem = sheetList.GetItem( KIID( ref ), &refSheetPath );
-
-                if( refItem && refItem->Type() == SCH_COMPONENT_T )
-                {
-                    SCH_COMPONENT* refComponent = static_cast<SCH_COMPONENT*>( refItem );
-                    token = refComponent->GetRef( &refSheetPath, true ) + ":" + remainder;
-                }
-            }
-
-            newbuf.append( "${" + token + "}" );
-        }
-        else
-        {
-            newbuf.append( aSource[i] );
-        }
-    }
-
-    return newbuf;
-}
-
-
-wxString DIALOG_LABEL_EDITOR::convertReferencesToKIIDs( const wxString& aSource ) const
-{
-    wxString newbuf;
-    size_t   sourceLen = aSource.length();
-
-    for( size_t i = 0; i < sourceLen; ++i )
-    {
-        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
-        {
-            wxString token;
-            bool     isCrossRef = false;
-
-            for( i = i + 2; i < sourceLen; ++i )
-            {
-                if( aSource[i] == '}' )
-                    break;
-
-                if( aSource[i] == ':' )
-                    isCrossRef = true;
-
-                token.append( aSource[i] );
-            }
-
-            if( isCrossRef )
-            {
-                SCH_SHEET_LIST     sheets = m_Parent->Schematic().GetSheets();
-                wxString           remainder;
-                wxString           ref = token.BeforeFirst( ':', &remainder );
-                SCH_REFERENCE_LIST references;
-
-                sheets.GetComponents( references );
-
-                for( size_t jj = 0; jj < references.GetCount(); jj++ )
-                {
-                    SCH_COMPONENT* refComponent = references[ jj ].GetComp();
-
-                    if( ref == refComponent->GetRef( &references[ jj ].GetSheetPath(), true ) )
-                    {
-                        wxString test( remainder );
-
-                        if( refComponent->ResolveTextVar( &test ) )
-                            token = refComponent->m_Uuid.AsString() + ":" + remainder;
-
-                        break;
-                    }
-                }
-            }
-
-            newbuf.append( "${" + token + "}" );
-        }
-        else
-        {
-            newbuf.append( aSource[i] );
-        }
-    }
-
-    return newbuf;
-}
-
-
 bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
@@ -261,8 +150,10 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
 
     if( m_CurrentText->Type() == SCH_TEXT_T )
     {
+        SCHEMATIC& schematic = m_Parent->Schematic();
+
         // show text variable cross-references in a human-readable format
-        m_valueMultiLine->SetValue( convertKIIDsToReferences( m_CurrentText->GetText() ) );
+        m_valueMultiLine->SetValue( schematic.ConvertKIIDsToRefs( m_CurrentText->GetText() ) );
     }
     else
     {
@@ -407,7 +298,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     if( m_CurrentText->Type() == SCH_TEXT_T )
     {
         // convert any text variable cross-references to their UUIDs
-        text = convertReferencesToKIIDs( m_valueMultiLine->GetValue() );
+        text = m_Parent->Schematic().ConvertRefsToKIIDs( m_valueMultiLine->GetValue() );
     }
     else
     {

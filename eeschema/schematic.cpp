@@ -240,3 +240,147 @@ std::vector<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
 }
 
 
+bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
+{
+    SCH_SHEET_LIST sheetList = GetSheets();
+    wxString       remainder;
+    wxString       ref = token->BeforeFirst( ':', &remainder );
+    SCH_SHEET_PATH dummy;
+    SCH_ITEM*      refItem = sheetList.GetItem( KIID( ref ), &dummy );
+
+    if( refItem && refItem->Type() == SCH_COMPONENT_T )
+    {
+        SCH_COMPONENT* refComponent = static_cast<SCH_COMPONENT*>( refItem );
+
+        if( refComponent->ResolveTextVar( &remainder, aDepth + 1 ) )
+        {
+            *token = remainder;
+            return true;
+        }
+    }
+    else if( refItem && refItem->Type() == SCH_SHEET_T )
+    {
+        SCH_SHEET* refSheet = static_cast<SCH_SHEET*>( refItem );
+
+        if( refSheet->ResolveTextVar( &remainder, aDepth + 1 ) )
+        {
+            *token = remainder;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
+{
+    wxString newbuf;
+    size_t   sourceLen = aSource.length();
+
+    for( size_t i = 0; i < sourceLen; ++i )
+    {
+        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
+        {
+            wxString token;
+            bool     isCrossRef = false;
+
+            for( i = i + 2; i < sourceLen; ++i )
+            {
+                if( aSource[i] == '}' )
+                    break;
+
+                if( aSource[i] == ':' )
+                    isCrossRef = true;
+
+                token.append( aSource[i] );
+            }
+
+            if( isCrossRef )
+            {
+                SCH_SHEET_LIST     sheetList = GetSheets();
+                wxString           remainder;
+                wxString           ref = token.BeforeFirst( ':', &remainder );
+                SCH_REFERENCE_LIST references;
+
+                sheetList.GetComponents( references );
+
+                for( size_t jj = 0; jj < references.GetCount(); jj++ )
+                {
+                    SCH_COMPONENT* refComponent = references[ jj ].GetComp();
+
+                    if( ref == refComponent->GetRef( &references[ jj ].GetSheetPath(), true ) )
+                    {
+                        wxString test( remainder );
+
+                        if( refComponent->ResolveTextVar( &test ) )
+                            token = refComponent->m_Uuid.AsString() + ":" + remainder;
+
+                        break;
+                    }
+                }
+            }
+
+            newbuf.append( "${" + token + "}" );
+        }
+        else
+        {
+            newbuf.append( aSource[i] );
+        }
+    }
+
+    return newbuf;
+}
+
+
+wxString SCHEMATIC::ConvertKIIDsToRefs( const wxString& aSource ) const
+{
+    wxString newbuf;
+    size_t   sourceLen = aSource.length();
+
+    for( size_t i = 0; i < sourceLen; ++i )
+    {
+        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
+        {
+            wxString token;
+            bool     isCrossRef = false;
+
+            for( i = i + 2; i < sourceLen; ++i )
+            {
+                if( aSource[i] == '}' )
+                    break;
+
+                if( aSource[i] == ':' )
+                    isCrossRef = true;
+
+                token.append( aSource[i] );
+            }
+
+            if( isCrossRef )
+            {
+                SCH_SHEET_LIST sheetList = GetSheets();
+                wxString       remainder;
+                wxString       ref = token.BeforeFirst( ':', &remainder );
+
+                SCH_SHEET_PATH refSheetPath;
+                SCH_ITEM*      refItem = sheetList.GetItem( KIID( ref ), &refSheetPath );
+
+                if( refItem && refItem->Type() == SCH_COMPONENT_T )
+                {
+                    SCH_COMPONENT* refComponent = static_cast<SCH_COMPONENT*>( refItem );
+                    token = refComponent->GetRef( &refSheetPath, true ) + ":" + remainder;
+                }
+            }
+
+            newbuf.append( "${" + token + "}" );
+        }
+        else
+        {
+            newbuf.append( aSource[i] );
+        }
+    }
+
+    return newbuf;
+}
+
+

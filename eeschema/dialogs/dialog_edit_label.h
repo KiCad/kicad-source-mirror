@@ -71,10 +71,6 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    wxString convertKIIDsToReferences( const wxString& aSource ) const;
-
-    wxString convertReferencesToKIIDs( const wxString& aSource ) const;
-
     SCH_EDIT_FRAME*       m_Parent;
     SCH_TEXT*             m_CurrentText;
     wxWindow*             m_activeTextCtrl;

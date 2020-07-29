@@ -507,35 +507,8 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
                 {
                     if( token->Contains( ':' ) )
                     {
-                        wxCHECK_MSG( Schematic(), wxEmptyString,
-                                     "No parent SCHEMATIC set for SCH_TEXT!" );
-
-                        SCH_SHEET_LIST sheetList = Schematic()->GetSheets();
-                        wxString       remainder;
-                        wxString       ref = token->BeforeFirst( ':', &remainder );
-                        SCH_SHEET_PATH dummy;
-                        SCH_ITEM*      refItem = sheetList.GetItem( KIID( ref ), &dummy );
-
-                        if( refItem && refItem->Type() == SCH_COMPONENT_T )
-                        {
-                            SCH_COMPONENT* refComponent = static_cast<SCH_COMPONENT*>( refItem );
-
-                            if( refComponent->ResolveTextVar( &remainder, aDepth + 1 ) )
-                            {
-                                *token = remainder;
-                                return true;
-                            }
-                        }
-                        else if( refItem && refItem->Type() == SCH_SHEET_T )
-                        {
-                            SCH_SHEET* refSheet = static_cast<SCH_SHEET*>( refItem );
-
-                            if( refSheet->ResolveTextVar( &remainder, aDepth + 1 ) )
-                            {
-                                *token = remainder;
-                                return true;
-                            }
-                        }
+                        if( Schematic()->ResolveCrossReference( token, aDepth ) )
+                            return true;
                     }
                     else
                     {

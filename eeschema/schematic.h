@@ -151,6 +151,17 @@ public:
      */
     std::vector<wxString> GetNetClassAssignmentCandidates();
 
+    /**
+     * Resolves text vars that refer to other items.
+     * Note that the actual resolve is delegated to the symbol/sheet in question.  This routine
+     * just does the look-up and delegation.
+     */
+    bool ResolveCrossReference( wxString* token, int aDepth ) const;
+
+    wxString ConvertRefsToKIIDs( const wxString& aSource ) const;
+    wxString ConvertKIIDsToRefs( const wxString& aSource ) const;
+
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif

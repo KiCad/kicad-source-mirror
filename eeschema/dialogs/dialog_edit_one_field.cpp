@@ -287,6 +287,9 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
         }
     }
 
+    // show text variable cross-references in a human-readable format
+    m_text = aField->Schematic()->ConvertKIIDsToRefs( aField->GetText() );
+
     m_isPower = false;
 
     m_textLabel->SetLabel( m_field->GetName() + ":" );
@@ -409,6 +412,9 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
 
     if( aField->GetVertJustify() != EDA_TEXT::MapVertJustify( m_verticalJustification - 1 ) )
         positioningModified = true;
+
+    // convert any text variable cross-references to their UUIDs
+    m_text = aField->Schematic()->ConvertRefsToKIIDs( m_text );
 
     aField->SetText( m_text );
     updateText( aField );
