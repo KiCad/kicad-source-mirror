@@ -1583,8 +1583,6 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
     double areaDiag = diag.Area();
     double ratio = abs(areaS) / (fabs(areaDiag) + 1.0);
 
-    printf("posture forced %d initdir %s\n", !!m_forced, m_initDirection.Format().c_str() );
-
     // heuristic to detect that the user dragged back the cursor to the beginning of the trace
     // in this case, we cancel any forced posture
     if( sqrt(refArea) < 4 * m_tollerance )
