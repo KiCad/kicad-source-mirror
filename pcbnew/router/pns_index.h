@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -50,24 +50,33 @@ public:
     typedef SHAPE_INDEX<ITEM*>          ITEM_SHAPE_INDEX;
     typedef std::unordered_set<ITEM*>   ITEM_SET;
 
-    INDEX(){};
+    INDEX();
+    ~INDEX();
 
     /**
+     * Function Add()
+     *
      * Adds item to the spatial index.
      */
     void Add( ITEM* aItem );
 
     /**
+     * Function Remove()
+     *
      * Removes an item from the spatial index.
      */
     void Remove( ITEM* aItem );
 
     /**
+     * Function Add()
+     *
      * Replaces one item with another.
      */
     void Replace( ITEM* aOldItem, ITEM* aNewItem );
 
     /**
+     * Function Query()
+     *
      * Searches items in the index that are in proximity of aItem.
      * For each item, function object aVisitor is called. Only items on
      * overlapping layers are considered.
@@ -82,6 +91,8 @@ public:
     int Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor );
 
     /**
+     * Function Query()
+     *
      * Searches items in the index that are in proximity of aShape.
      * For each item, function object aVisitor is called. Treats all
      * layers as colliding.
@@ -96,6 +107,15 @@ public:
     int Query( const SHAPE* aShape, int aMinDistance, Visitor& aVisitor );
 
     /**
+     * Function Clear()
+     *
+     * Removes all items from the index.
+     */
+    void Clear();
+
+    /**
+     * Function GetItemsForNet()
+     *
      * Returns list of all items in a given net.
      */
     NET_ITEMS_LIST* GetItemsForNet( int aNet );
@@ -111,6 +131,8 @@ public:
     }
 
     /**
+     * Function Size()
+     *
      * Returns number of items stored in the index.
      */
     int Size() const { return m_allItems.size(); }
@@ -119,34 +141,63 @@ public:
     ITEM_SET::iterator end() { return m_allItems.end(); }
 
 private:
+    static const int    MaxSubIndices   = 128;
+    static const int    SI_Multilayer   = 2;
+    static const int    SI_SegDiagonal  = 0;
+    static const int    SI_SegStraight  = 1;
+    static const int    SI_Traces       = 3;
+    static const int    SI_PadsTop      = 0;
+    static const int    SI_PadsBottom   = 1;
 
     template <class Visitor>
-    int querySingle( std::size_t aIndex, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor );
+    int querySingle( int index, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor );
 
-    std::vector<ITEM_SHAPE_INDEX> m_subIndices;
+    ITEM_SHAPE_INDEX* getSubindex( const ITEM* aItem );
+
+    ITEM_SHAPE_INDEX* m_subIndices[MaxSubIndices];
     std::map<int, NET_ITEMS_LIST> m_netMap;
     ITEM_SET m_allItems;
 };
 
 
 template<class Visitor>
-int INDEX::querySingle( std::size_t aIndex, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor )
+int INDEX::querySingle( int index, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor )
 {
-    if( aIndex >= m_subIndices.size() )
+    if( !m_subIndices[index] )
         return 0;
 
-    return m_subIndices[aIndex].Query( aShape, aMinDistance, aVisitor, false );
+    return m_subIndices[index]->Query( aShape, aMinDistance, aVisitor, false );
 }
 
 template<class Visitor>
 int INDEX::Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor )
 {
+    const SHAPE* shape = aItem->Shape();
     int total = 0;
+
+    total += querySingle( SI_Multilayer, shape, aMinDistance, aVisitor );
 
     const LAYER_RANGE& layers = aItem->Layers();
 
-    for( int i = layers.Start(); i <= layers.End(); ++i )
-        total += querySingle( i, aItem->Shape(), aMinDistance, aVisitor );
+    if( layers.IsMultilayer() )
+    {
+        total += querySingle( SI_PadsTop, shape, aMinDistance, aVisitor );
+        total += querySingle( SI_PadsBottom, shape, aMinDistance, aVisitor );
+
+        for( int i = layers.Start(); i <= layers.End(); ++i )
+            total += querySingle( SI_Traces + 2 * i + SI_SegStraight, shape, aMinDistance, aVisitor );
+    }
+    else
+    {
+        int l = layers.Start();
+
+        if( l == B_Cu )
+            total += querySingle( SI_PadsTop, shape, aMinDistance, aVisitor );
+        else if( l == F_Cu )
+            total += querySingle( SI_PadsBottom, shape, aMinDistance, aVisitor );
+
+        total += querySingle(  SI_Traces + 2 * l + SI_SegStraight, shape, aMinDistance, aVisitor );
+    }
 
     return total;
 }
@@ -156,7 +207,7 @@ int INDEX::Query( const SHAPE* aShape, int aMinDistance, Visitor& aVisitor )
 {
     int total = 0;
 
-    for( std::size_t i = 0; i < m_subIndices.size(); ++i )
+    for( int i = 0; i < MaxSubIndices; i++ )
         total += querySingle( i, aShape, aMinDistance, aVisitor );
 
     return total;
