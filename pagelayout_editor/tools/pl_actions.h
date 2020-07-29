@@ -70,6 +70,9 @@ public:
     // Editing
     static TOOL_ACTION move;
 
+    static TOOL_ACTION layoutNormalMode;
+    static TOOL_ACTION layoutEditMode;
+
     // Miscellaneous
     static TOOL_ACTION refreshPreview;
     static TOOL_ACTION toggleBackground;

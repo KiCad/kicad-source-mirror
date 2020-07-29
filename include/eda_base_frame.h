@@ -644,8 +644,8 @@ public:
      */
     virtual PICKED_ITEMS_LIST* PopCommandFromRedoList();
 
-    int GetUndoCommandCount() const { return m_undoList.m_CommandsList.size(); }
-    int GetRedoCommandCount() const { return m_redoList.m_CommandsList.size(); }
+    virtual int GetUndoCommandCount() const { return m_undoList.m_CommandsList.size(); }
+    virtual int GetRedoCommandCount() const { return m_redoList.m_CommandsList.size(); }
 
     int GetMaxUndoItems() const { return m_UndoRedoCountMax; }
 };

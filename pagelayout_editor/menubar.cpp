@@ -27,7 +27,7 @@
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
-#include <tool/conditional_menu.h>
+#include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/selection.h>
 #include <tools/pl_actions.h>
@@ -44,10 +44,6 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();
     WX_MENUBAR* menuBar    = new WX_MENUBAR();
-
-    auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
-        return IsContentModified();
-    };
 
     static ACTION_MENU* openRecentMenu;  // Open Recent submenu, static to remember this menu
     FILE_HISTORY&       recentFiles = GetFileHistory();
@@ -67,126 +63,101 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     //-- File menu -------------------------------------------------------
     //
-    CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* fileMenu = new ACTION_MENU( false, selTool );
 
-    fileMenu->AddItem( ACTIONS::doNew,         SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::open,          SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentMenu,         FILE_HISTORY::FileHistoryNotEmpty( recentFiles ) );
+    fileMenu->Add( ACTIONS::doNew );
+    fileMenu->Add( ACTIONS::open );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::save,          modifiedDocumentCondition );
-    fileMenu->AddItem( ACTIONS::saveAs,        SELECTION_CONDITIONS::ShowAlways );
+    wxMenuItem* item = fileMenu->Add( openRecentMenu );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::print,         SELECTION_CONDITIONS::ShowAlways );
+    // Add the file menu condition here since it needs the item ID for the submenu
+    ACTION_CONDITIONS cond;
+    cond.SetEnableCondition( FILE_HISTORY::FileHistoryNotEmpty( recentFiles ) );
+    RegisterUIUpdateHandler( item->GetId(), cond );
 
-    fileMenu->AddSeparator();
+    fileMenu->AppendSeparator();
+    fileMenu->Add( ACTIONS::save );
+    fileMenu->Add( ACTIONS::saveAs );
+
+    fileMenu->AppendSeparator();
+    fileMenu->Add( ACTIONS::print );
+
+    fileMenu->AppendSeparator();
     fileMenu->AddQuitOrClose( &Kiface(), _( "Page Layout Editor" ) );
-
-    fileMenu->Resolve();
 
     //-- Edit menu -------------------------------------------------------
     //
-    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* editMenu = new ACTION_MENU( false, selTool );
 
-    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetUndoCommandCount() != 0;
-    };
-    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetRedoCommandCount() != 0;
-    };
-    auto idleCondition = [] ( const SELECTION& sel ) {
-        return !sel.Front() || sel.Front()->GetEditFlags() == 0;
-    };
+    editMenu->Add( ACTIONS::undo );
+    editMenu->Add( ACTIONS::redo );
 
-    editMenu->AddItem( ACTIONS::undo,         enableUndoCondition );
-    editMenu->AddItem( ACTIONS::redo,         enableRedoCondition );
-
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::cut,          SELECTION_CONDITIONS::MoreThan( 0 ) );
-    editMenu->AddItem( ACTIONS::copy,         SELECTION_CONDITIONS::MoreThan( 0 ) );
-    editMenu->AddItem( ACTIONS::paste,        idleCondition );
-    editMenu->AddItem( ACTIONS::doDelete,     SELECTION_CONDITIONS::MoreThan( 0 ) );
-
-    editMenu->Resolve();
+    editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::cut );
+    editMenu->Add( ACTIONS::copy );
+    editMenu->Add( ACTIONS::paste );
+    editMenu->Add( ACTIONS::doDelete );
 
     //-- View menu -------------------------------------------------------
     //
-    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
-    auto whiteBackgroundCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetDrawBgColor() == WHITE;
-    };
-    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
-        return IsGridVisible();
-    };
-    auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetGalDisplayOptions().m_fullscreenCursor;
-    };
+    viewMenu->Add( ACTIONS::zoomInCenter );
+    viewMenu->Add( ACTIONS::zoomOutCenter );
+    viewMenu->Add( ACTIONS::zoomFitScreen );
+    viewMenu->Add( ACTIONS::zoomTool );
+    viewMenu->Add( ACTIONS::zoomRedraw );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::zoomInCenter,                SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,               SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,               SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomTool,                    SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,                  SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( PL_ACTIONS::toggleBackground, ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::toggleGrid,          ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::toggleCursorStyle,   ACTION_MENU::CHECK );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( PL_ACTIONS::toggleBackground,    whiteBackgroundCondition );
-    viewMenu->AddCheckItem( ACTIONS::toggleGrid,             gridShownCondition );
-    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,      fullCrosshairCondition );
-
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( PL_ACTIONS::previewSettings,          SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( PL_ACTIONS::previewSettings );
 
 #ifdef __APPLE__
-    viewMenu->AddSeparator();
+    // Add a separator only on macOS because the OS adds menu items to the view menu after ours
+    viewMenu->AppendSeparator();
 #endif
-
-    viewMenu->Resolve();
 
     //-- Place menu -------------------------------------------------------
     //
-    CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* placeMenu = new ACTION_MENU( false, selTool );
 
-    placeMenu->AddItem( PL_ACTIONS::drawLine,                SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PL_ACTIONS::drawRectangle,           SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PL_ACTIONS::placeText,               SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PL_ACTIONS::placeImage,              SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->Add( PL_ACTIONS::drawLine );
+    placeMenu->Add( PL_ACTIONS::drawRectangle );
+    placeMenu->Add( PL_ACTIONS::placeText );
+    placeMenu->Add( PL_ACTIONS::placeImage );
 
-    placeMenu->AddSeparator();
-    placeMenu->AddItem( PL_ACTIONS::appendImportedWorksheet, SELECTION_CONDITIONS::ShowAlways );
-
-    placeMenu->Resolve();
+    placeMenu->AppendSeparator();
+    placeMenu->Add( PL_ACTIONS::appendImportedWorksheet );
 
     //-- Inspector menu -------------------------------------------------------
     //
-    CONDITIONAL_MENU* inspectorMenu = new CONDITIONAL_MENU( false, selTool );
-    inspectorMenu->AddItem( PL_ACTIONS::showInspector,       SELECTION_CONDITIONS::ShowAlways );
+    ACTION_MENU* inspectorMenu = new ACTION_MENU( false, selTool );
+    inspectorMenu->Add( PL_ACTIONS::showInspector );
 
-    inspectorMenu->Resolve();
 
     //-- Preferences menu --------------------------------------------------
     //
-    CONDITIONAL_MENU* preferencesMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* preferencesMenu = new ACTION_MENU( false, selTool );
 
-    preferencesMenu->AddItem( wxID_PREFERENCES,
-                              _( "Preferences...\tCTRL+," ),
-                              _( "Show preferences for all open tools" ),
-                              preference_xpm,                SELECTION_CONDITIONS::ShowAlways );
+    preferencesMenu->Add( _( "Preferences...\tCTRL+," ),
+                          _( "Show preferences for all open tools" ),
+                          wxID_PREFERENCES,
+                          preference_xpm );
 
     // Language submenu
     AddMenuLanguageList( preferencesMenu, selTool );
 
-    preferencesMenu->Resolve();
-
     //-- Menubar -----------------------------------------------------------
     //
-    menuBar->Append( fileMenu, _( "&File" ) );
-    menuBar->Append( editMenu, _( "&Edit" ) );
-    menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( placeMenu, _( "&Place" ) );
-    menuBar->Append( inspectorMenu, _( "&Inspect" ) );
+    menuBar->Append( fileMenu,        _( "&File" ) );
+    menuBar->Append( editMenu,        _( "&Edit" ) );
+    menuBar->Append( viewMenu,        _( "&View" ) );
+    menuBar->Append( placeMenu,       _( "&Place" ) );
+    menuBar->Append( inspectorMenu,   _( "&Inspect" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
 

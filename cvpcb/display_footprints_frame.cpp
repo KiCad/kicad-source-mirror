@@ -43,6 +43,7 @@
 #include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
+#include <tool/editor_conditions.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
@@ -53,6 +54,7 @@
 #include <tools/pcb_viewer_tools.h>       // shared tools with other pcbnew frames
 #include <tools/cvpcb_fpviewer_selection_tool.h>
 #include <widgets/infobar.h>
+#include <wx/debug.h>
 
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
@@ -117,6 +119,8 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     m_toolManager->InitTools();
 
+    setupUIConditions();
+
     // Run the control tool, it is supposed to be always active
     m_toolManager->InvokeTool( "cvpcb.FootprintViewerInteractiveSelection" );
 
@@ -174,6 +178,68 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 
     delete GetScreen();
     SetScreen( NULL );      // Be sure there is no double deletion
+}
+
+
+void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
+{
+    EDA_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+#define Check( x )  ACTION_CONDITIONS().SetCheckCondition( x )
+
+    mgr->SetConditions( ACTIONS::zoomTool,          Check( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,     Check( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::measureTool,       Check( cond.CurrentTool( ACTIONS::measureTool ) ) );
+
+    mgr->SetConditions( ACTIONS::toggleGrid,        Check( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle, Check( cond.FullscreenCursor() ) );
+
+    mgr->SetConditions( ACTIONS::metricUnits,       Check( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::imperialUnits,     Check( cond.Units( EDA_UNITS::INCHES ) ) );
+
+
+    auto autoZoomCond =
+        [this] ( const SELECTION& aSel )
+        {
+            return GetAutoZoom();
+        };
+
+    auto padNumCond =
+        [this] ( const SELECTION& aSel )
+        {
+            return GetDisplayOptions().m_DisplayPadNum;
+        };
+
+    auto padFillCond =
+        [this] ( const SELECTION& aSel )
+        {
+            return !GetDisplayOptions().m_DisplayPadFill;
+        };
+
+    auto textFillCond =
+        [this] ( const SELECTION& aSel )
+        {
+            return !GetDisplayOptions().m_DisplayTextFill;
+        };
+
+    auto graphicsFillCond =
+        [this] ( const SELECTION& aSel )
+        {
+            return !GetDisplayOptions().m_DisplayGraphicsFill;
+        };
+
+    mgr->SetConditions( PCB_ACTIONS::zoomFootprintAutomatically, Check( autoZoomCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,             Check( padNumCond ) );
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,             Check( padFillCond ) );
+    mgr->SetConditions( PCB_ACTIONS::textOutlines,               Check( textFillCond ) );
+    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,           Check( graphicsFillCond ) );
+
+#undef Check
 }
 
 
@@ -456,29 +522,6 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
-{
-    m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
-    m_mainToolBar->Toggle( PCB_ACTIONS::zoomFootprintAutomatically, GetAutoZoom() );
-    m_mainToolBar->Refresh();
-
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,    IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::selectionTool, IsCurrentTool( ACTIONS::selectionTool ) );
-    m_optionsToolBar->Toggle( ACTIONS::measureTool,   IsCurrentTool( ACTIONS::measureTool ) );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits,   GetUserUnits() != EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
-
-    const PCB_DISPLAY_OPTIONS& opts = GetDisplayOptions();
-
-    m_optionsToolBar->Toggle( PCB_ACTIONS::showPadNumbers,     opts.m_DisplayPadNum );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,     !opts.m_DisplayPadFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::textOutlines,       !opts.m_DisplayTextFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::graphicsOutlines,   !opts.m_DisplayGraphicsFill );
-
-    m_optionsToolBar->Refresh();
-}
-
-
 COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings()
 {
     auto* settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
@@ -509,4 +552,10 @@ bool DISPLAY_FOOTPRINTS_FRAME::GetAutoZoom()
     CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
     wxCHECK( cfg, false );
     return cfg->m_FootprintViewerAutoZoom;
+}
+
+
+SELECTION& DISPLAY_FOOTPRINTS_FRAME::GetCurrentSelection()
+{
+    return m_toolManager->GetTool<CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL>()->GetSelection();
 }

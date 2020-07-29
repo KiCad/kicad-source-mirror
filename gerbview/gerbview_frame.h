@@ -43,6 +43,7 @@ class GERBER_DRAW_ITEM;
 class GERBER_FILE_IMAGE;
 class GERBER_FILE_IMAGE_LIST;
 class REPORTER;
+class SELECTION;
 
 
 /**
@@ -152,6 +153,8 @@ protected:
     FILE_HISTORY            m_jobFileHistory;
 
     wxString                m_lastFileName;     // The last filename chosen to be proposed to the user
+
+    void setupUIConditions() override;
 
 public:
     wxChoice* m_SelComponentBox;                // a choice box to display and highlight component graphic items
@@ -565,7 +568,7 @@ public:
      */
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
-    void SyncToolbars() override;
+    SELECTION& GetCurrentSelection() override;
 
     DECLARE_EVENT_TABLE()
 };

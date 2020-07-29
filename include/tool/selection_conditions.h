@@ -42,6 +42,19 @@ SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
 SELECTION_CONDITION operator!( const SELECTION_CONDITION& aCondition );
 
 
+/// Signature for a reference to a function that takes a SELECTION and returns
+/// a boolean. This type is meant to be used to define logical operations between
+/// SELECTION_CONDITION functors and non-functor SELECTION_CONDITION-like functions.
+/// It should not be used in user code.
+typedef bool ( &SELECTION_BOOL )( const SELECTION& );
+
+SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
+                                SELECTION_BOOL aConditionB );
+
+SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
+                                SELECTION_BOOL aConditionB );
+
+
 /**
  * Class that groups generic conditions for selected items.
  */
@@ -77,6 +90,30 @@ public:
      * @return True if there is at least one item selected.
      */
     static bool NotEmpty( const SELECTION& aSelection );
+
+    /**
+     * Tests if there are no items selected.
+     *
+     * @param aSelection is the selection to be tested.
+     * @return True if there are no items selected.
+     */
+    static bool Empty( const SELECTION& aSelection );
+
+    /**
+     * Tests if there no items selected or being edited.
+     *
+     * @param aSelection is the selection to be tested.
+     * @return True if there are no items being edited or no items selected.
+     */
+    static bool Idle( const SELECTION& aSelection );
+
+    /**
+     * Tests if all selected items are not being edited.
+     *
+     * @param aSelection is the selection to be tested.
+     * @return True if no selected items are being edited.
+     */
+    static bool IdleSelection( const SELECTION& aSelection );
 
     /**
      * Creates a functor that tests if among the selected items there is at least one of a given type.
@@ -169,6 +206,20 @@ private:
         return !aCondition( aSelection );
     }
 
+    ///> Helper function used by operator||
+    static bool orBoolFunc( const SELECTION_CONDITION& aConditionA,
+                             SELECTION_BOOL& aConditionB, const SELECTION& aSelection )
+    {
+        return aConditionA( aSelection ) || aConditionB( aSelection );
+    }
+
+    ///> Helper function used by operator&&
+    static bool andBoolFunc( const SELECTION_CONDITION& aConditionA,
+                             SELECTION_BOOL& aConditionB, const SELECTION& aSelection )
+    {
+        return aConditionA( aSelection ) && aConditionB( aSelection );
+    }
+
     friend SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
                                            const SELECTION_CONDITION& aConditionB );
 
@@ -176,6 +227,12 @@ private:
                                            const SELECTION_CONDITION& aConditionB );
 
     friend SELECTION_CONDITION operator!( const SELECTION_CONDITION& aCondition );
+
+    friend SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
+                                           SELECTION_BOOL aConditionB );
+
+    friend SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
+                                           SELECTION_BOOL aConditionB );
 };
 
 #endif /* SELECTION_CONDITIONS_H_ */

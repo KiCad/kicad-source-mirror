@@ -114,8 +114,6 @@ public:
         // currently: do nothing in CvPcb.
     }
 
-    void SyncToolbars() override;
-
     /**
      * Set if the canvas should automatically zoom to the footprint on load.
      *
@@ -130,7 +128,12 @@ public:
      */
     bool GetAutoZoom() override;
 
+    SELECTION& GetCurrentSelection() override;
+
     DECLARE_EVENT_TABLE()
+
+protected:
+    void setupUIConditions() override;
 };
 
 #endif   // DISPLAY_FOOTPRINTS_FRAME_H

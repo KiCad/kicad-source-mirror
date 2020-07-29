@@ -37,6 +37,24 @@ bool SELECTION_CONDITIONS::NotEmpty( const SELECTION& aSelection )
 }
 
 
+bool SELECTION_CONDITIONS::Empty( const SELECTION& aSelection )
+{
+    return aSelection.Empty();
+}
+
+
+bool SELECTION_CONDITIONS::Idle( const SELECTION& aSelection )
+{
+    return ( !aSelection.Front() || aSelection.Front()->GetEditFlags() == 0 );
+}
+
+
+bool SELECTION_CONDITIONS::IdleSelection( const SELECTION& aSelection )
+{
+    return ( aSelection.Front() && aSelection.Front()->GetEditFlags() == 0 );
+}
+
+
 SELECTION_CONDITION SELECTION_CONDITIONS::HasType( KICAD_T aType )
 {
     return std::bind( &SELECTION_CONDITIONS::hasTypeFunc, _1, aType );
@@ -152,4 +170,18 @@ SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
 SELECTION_CONDITION operator!( const SELECTION_CONDITION& aCondition )
 {
     return std::bind( &SELECTION_CONDITIONS::notFunc, aCondition, _1 );
+}
+
+
+SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
+                                SELECTION_BOOL aConditionB )
+{
+    return std::bind( &SELECTION_CONDITIONS::orBoolFunc, aConditionA, std::ref( aConditionB ), _1 );
+}
+
+
+SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
+                                SELECTION_BOOL aConditionB )
+{
+    return std::bind( &SELECTION_CONDITIONS::andBoolFunc, aConditionA, std::ref( aConditionB ), _1 );
 }

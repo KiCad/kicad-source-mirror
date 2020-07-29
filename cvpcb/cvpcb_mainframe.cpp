@@ -32,8 +32,10 @@
 #include <macros.h>
 #include <netlist_reader/netlist_reader.h>
 #include <numeric>
+#include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
+#include <tool/editor_conditions.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <widgets/progress_reporter.h>
@@ -79,6 +81,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     LoadSettings( config() );
 
     setupTools();
+    setupUIConditions();
     ReCreateMenuBar();
     ReCreateHToolbar();
 
@@ -222,6 +225,52 @@ void CVPCB_MAINFRAME::setupTools()
     m_footprintContextMenu->SetTool( tool );
     m_footprintContextMenu->Add( CVPCB_ACTIONS::showFootprintViewer );
 }
+
+
+void CVPCB_MAINFRAME::setupUIConditions()
+{
+    EDA_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+#define Enable( x ) ACTION_CONDITIONS().SetEnableCondition( x )
+#define Check( x )  ACTION_CONDITIONS().SetCheckCondition( x )
+
+    mgr->SetConditions( CVPCB_ACTIONS::saveAssociations, Enable( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::undo,                   Enable( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,                   Enable( cond.RedoAvailable() ) );
+
+    #define filterActive( filter ) ( m_filteringOptions & filter )
+
+    auto compFilter =
+        [this] ( const SELECTION& )
+        {
+            return m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS;
+        };
+
+    auto libFilter =
+        [this] ( const SELECTION& )
+        {
+            return m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY;
+        };
+
+    auto pinFilter =
+        [this] ( const SELECTION& )
+        {
+            return m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT;
+        };
+
+    mgr->SetConditions( CVPCB_ACTIONS::FilterFPbyFPFilters, Check( compFilter ) );
+    mgr->SetConditions( CVPCB_ACTIONS::FilterFPbyLibrary,   Check( libFilter ) );
+    mgr->SetConditions( CVPCB_ACTIONS::filterFPbyPin,       Check( pinFilter ) );
+
+#undef Check
+#undef Enable
+}
+
 
 void CVPCB_MAINFRAME::setupEventHandlers()
 {

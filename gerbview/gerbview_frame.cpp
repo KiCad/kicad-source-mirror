@@ -45,8 +45,10 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/editor_conditions.h>
 #include <tool/zoom_tool.h>
 #include <tools/gerbview_actions.h>
+#include <tools/gerbview_selection.h>
 #include <tools/gerbview_selection_tool.h>
 #include <tools/gerbview_control.h>
 #include <view/view.h>
@@ -124,6 +126,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     LoadSettings( config() );
 
     setupTools();
+    setupUIConditions();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateOptToolbar();
@@ -1170,6 +1173,106 @@ void GERBVIEW_FRAME::setupTools()
 }
 
 
+void GERBVIEW_FRAME::setupUIConditions()
+{
+    EDA_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+#define Enable( x ) ACTION_CONDITIONS().SetEnableCondition( x )
+#define Check( x )  ACTION_CONDITIONS().SetCheckCondition( x )
+
+    mgr->SetConditions( ACTIONS::zoomTool,            Check( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,       Check( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::measureTool,         Check( cond.CurrentTool( ACTIONS::measureTool ) ) );
+
+    mgr->SetConditions( ACTIONS::toggleGrid,          Check( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::togglePolarCoords,   Check( cond.PolarCoordinates() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,   Check( cond.FullscreenCursor() ) );
+
+    mgr->SetConditions( ACTIONS::metricUnits,         Check( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::imperialUnits,       Check( cond.Units( EDA_UNITS::INCHES ) ) );
+
+    mgr->SetConditions( ACTIONS::acceleratedGraphics, Check( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
+    mgr->SetConditions( ACTIONS::standardGraphics,    Check( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
+
+
+    auto flashedDisplayOutlinesCond =
+        [this] ( const SELECTION& )
+        {
+            return !m_DisplayOptions.m_DisplayFlashedItemsFill;
+        };
+
+    auto linesFillCond =
+        [this] ( const SELECTION& )
+        {
+            return !m_DisplayOptions.m_DisplayLinesFill;
+        };
+
+    auto polygonsFilledCond =
+        [this] ( const SELECTION& )
+        {
+            return !m_DisplayOptions.m_DisplayPolygonsFill;
+        };
+
+    auto negativeObjectsCond =
+        [this] ( const SELECTION& )
+        {
+            return IsElementVisible( LAYER_NEGATIVE_OBJECTS );
+        };
+
+    auto dcodeCond =
+        [this] ( const SELECTION& )
+        {
+            return IsElementVisible( LAYER_DCODES );
+        };
+
+    auto diffModeCond =
+        [this] ( const SELECTION& )
+        {
+            return m_DisplayOptions.m_DiffMode;
+        };
+
+    auto highContrastModeCond =
+        [this] ( const SELECTION& )
+        {
+            return m_DisplayOptions.m_HighContrastMode;
+        };
+
+    auto flipGerberCond =
+        [this] ( const SELECTION& )
+        {
+            return m_DisplayOptions.m_FlipGerberView;
+        };
+
+    mgr->SetConditions( GERBVIEW_ACTIONS::flashedDisplayOutlines,  Check( flashedDisplayOutlinesCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::linesDisplayOutlines,    Check( linesFillCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::polygonsDisplayOutlines, Check( polygonsFilledCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::negativeObjectDisplay,   Check( negativeObjectsCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::dcodeDisplay,            Check( dcodeCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::toggleDiffMode,          Check( diffModeCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::flipGerberView,          Check( flipGerberCond ) );
+    mgr->SetConditions( ACTIONS::highContrastMode,                 Check( highContrastModeCond ) );
+
+
+    auto layersManagerShownCondition =
+        [this] ( const SELECTION& aSel )
+        {
+            return m_show_layer_manager_tools;
+        };
+
+    RegisterUIUpdateHandler( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
+                             Check( layersManagerShownCondition ) );
+
+
+#undef Check
+#undef Enable
+}
+
+
 void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
@@ -1179,3 +1282,8 @@ void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     SendSizeEvent();
 }
 
+
+SELECTION& GERBVIEW_FRAME::GetCurrentSelection()
+{
+    return m_toolManager->GetTool<GERBVIEW_SELECTION_TOOL>()->GetSelection();
+}

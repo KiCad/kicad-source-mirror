@@ -43,6 +43,8 @@
 #include <confirm.h>
 #include <tool/selection.h>
 #include <tool/action_toolbar.h>
+#include <tool/editor_conditions.h>
+#include <tool/selection_conditions.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/common_control.h>
@@ -69,13 +71,8 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PL_EDITOR_FRAME::OnFileHistory )
     EVT_MENU( ID_FILE_LIST_CLEAR, PL_EDITOR_FRAME::OnClearFileHistory )
 
-    EVT_TOOL( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
-    EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
     EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner )
     EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::OnSelectPage )
-
-    EVT_UPDATE_UI( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode )
-    EVT_UPDATE_UI( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayEditMode )
 END_EVENT_TABLE()
 
 
@@ -117,6 +114,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetScreen( new BASE_SCREEN( pageSizeIU ) );
 
     setupTools();
+    setupUIConditions();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -242,6 +240,69 @@ void PL_EDITOR_FRAME::setupTools()
 }
 
 
+void PL_EDITOR_FRAME::setupUIConditions()
+{
+    EDA_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+#define Enable( x ) ACTION_CONDITIONS().SetEnableCondition( x )
+#define Check( x )  ACTION_CONDITIONS().SetCheckCondition( x )
+
+    mgr->SetConditions( ACTIONS::save,              Enable( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::undo,              Enable( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,              Enable( cond.RedoAvailable() ) );
+
+    mgr->SetConditions( ACTIONS::toggleGrid,        Check( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle, Check( cond.FullscreenCursor() ) );
+
+    mgr->SetConditions( ACTIONS::cut,               Enable( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( ACTIONS::copy,              Enable( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( ACTIONS::paste,             Enable( SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::doDelete,          Enable( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+
+    mgr->SetConditions( ACTIONS::zoomTool,          Check( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,     Check( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::deleteTool,        Check( cond.CurrentTool( ACTIONS::deleteTool ) ) );
+
+    mgr->SetConditions( PL_ACTIONS::drawLine,       Check( cond.CurrentTool( PL_ACTIONS::drawLine ) ) );
+    mgr->SetConditions( PL_ACTIONS::drawRectangle,  Check( cond.CurrentTool( PL_ACTIONS::drawRectangle ) ) );
+    mgr->SetConditions( PL_ACTIONS::placeText,      Check( cond.CurrentTool( PL_ACTIONS::placeText ) ) );
+    mgr->SetConditions( PL_ACTIONS::placeImage,     Check( cond.CurrentTool( PL_ACTIONS::placeImage ) ) );
+
+    // Not a tool, just a way to activate the action
+    mgr->SetConditions( PL_ACTIONS::appendImportedWorksheet, Check( SELECTION_CONDITIONS::ShowNever ) );
+
+    auto whiteBackgroundCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetDrawBgColor() == WHITE;
+    };
+
+    mgr->SetConditions( PL_ACTIONS::toggleBackground, Check( whiteBackgroundCondition ) );
+
+
+    auto titleBlockNormalMode =
+        [] ( const SELECTION& )
+        {
+            return WS_DATA_MODEL::GetTheInstance().m_EditMode == false;
+        };
+
+    auto titleBlockEditMode =
+        [] ( const SELECTION& )
+        {
+            return WS_DATA_MODEL::GetTheInstance().m_EditMode == true;
+        };
+
+    mgr->SetConditions( PL_ACTIONS::layoutNormalMode, Check( titleBlockNormalMode ) );
+    mgr->SetConditions( PL_ACTIONS::layoutEditMode,   Check( titleBlockEditMode ) );
+
+#undef Check
+#undef Enable
+}
+
+
 bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
     wxString fn = aFileSet[0];
@@ -334,13 +395,6 @@ void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
 }
 
 
-void PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode( wxCommandEvent& event )
-{
-    WS_DATA_MODEL::GetTheInstance().m_EditMode = (event.GetId() == ID_SHOW_PL_EDITOR_MODE);
-    HardRedraw();
-}
-
-
 void PL_EDITOR_FRAME::ToPrinter( bool doPreview )
 {
     // static print data and page setup data, to remember settings during the session
@@ -383,18 +437,6 @@ void PL_EDITOR_FRAME::ToPrinter( bool doPreview )
         InvokeDialogPrintPreview( this, s_PrintData );
     else
         InvokeDialogPrint( this, s_PrintData, s_pageSetupData );
-}
-
-
-void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event )
-{
-    event.Check( WS_DATA_MODEL::GetTheInstance().m_EditMode == false );
-}
-
-
-void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayEditMode( wxUpdateUIEvent& event )
-{
-    event.Check( WS_DATA_MODEL::GetTheInstance().m_EditMode == true );
 }
 
 
@@ -743,6 +785,12 @@ void PL_EDITOR_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
 PL_DRAW_PANEL_GAL* PL_EDITOR_FRAME::GetCanvas() const
 {
     return static_cast<PL_DRAW_PANEL_GAL*>( EDA_DRAW_FRAME::GetCanvas() );
+}
+
+
+SELECTION& PL_EDITOR_FRAME::GetCurrentSelection()
+{
+    return m_toolManager->GetTool<PL_SELECTION_TOOL>()->GetSelection();
 }
 
 

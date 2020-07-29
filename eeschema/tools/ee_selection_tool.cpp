@@ -52,24 +52,6 @@
 #include <view/view_group.h>
 
 
-SELECTION_CONDITION EE_CONDITIONS::Empty = [] (const SELECTION& aSelection )
-{
-    return aSelection.Empty();
-};
-
-
-SELECTION_CONDITION EE_CONDITIONS::Idle = [] (const SELECTION& aSelection )
-{
-    return ( !aSelection.Front() || aSelection.Front()->GetEditFlags() == 0 );
-};
-
-
-SELECTION_CONDITION EE_CONDITIONS::IdleSelection = [] (const SELECTION& aSelection )
-{
-    return ( aSelection.Front() && aSelection.Front()->GetEditFlags() == 0 );
-};
-
-
 SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = [] (const SELECTION& aSel )
 {
     if( aSel.GetSize() == 1 )

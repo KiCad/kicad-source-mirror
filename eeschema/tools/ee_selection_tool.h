@@ -44,10 +44,6 @@ namespace KIGFX
 class EE_CONDITIONS : public SELECTION_CONDITIONS
 {
 public:
-    static SELECTION_CONDITION Empty;
-    static SELECTION_CONDITION Idle;
-    static SELECTION_CONDITION IdleSelection;
-
     static SELECTION_CONDITION SingleSymbol;
     static SELECTION_CONDITION SingleDeMorganSymbol;
     static SELECTION_CONDITION SingleMultiUnitSymbol;

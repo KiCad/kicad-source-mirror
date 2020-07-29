@@ -62,17 +62,8 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
 
     // Display mode switch
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_SHOW_REAL_MODE, wxEmptyString,
-                            KiScaledBitmap( pagelayout_normal_view_mode_xpm, this ),
-                            _( "Show title block in preview mode:\n"
-                               "text placeholders will be replaced with preview data."),
-                            wxITEM_CHECK );
-    m_mainToolBar->AddTool( ID_SHOW_PL_EDITOR_MODE, wxEmptyString,
-                            KiScaledBitmap( pagelayout_special_view_mode_xpm, this ),
-                            _( "Show title block in edit mode:\n"
-                               "text placeholders are shown as ${keyword} tokens."),
-                            wxITEM_CHECK );
-
+    m_mainToolBar->Add( PL_ACTIONS::layoutNormalMode, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( PL_ACTIONS::layoutEditMode,   ACTION_TOOLBAR::TOGGLE );
     m_mainToolBar->AddScaledSeparator( this );
 
     wxString choiceList[5] =
@@ -143,26 +134,4 @@ void PL_EDITOR_FRAME::ReCreateVToolbar()
 
 void PL_EDITOR_FRAME::ReCreateOptToolbar()
 {
-}
-
-
-void PL_EDITOR_FRAME::SyncToolbars()
-{
-#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
-
-    m_mainToolBar->Toggle( ACTIONS::save, IsContentModified() );
-    m_mainToolBar->Toggle( ACTIONS::undo, GetUndoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::redo, GetRedoCommandCount() > 0 );
-    TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );
-    m_mainToolBar->Refresh();
-
-    TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
-    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::drawLine );
-    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::drawRectangle );
-    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::placeText );
-    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::placeImage );
-    TOGGLE_TOOL( m_drawToolBar, ACTIONS::deleteTool );
-
-    m_drawToolBar->Toggle( PL_ACTIONS::appendImportedWorksheet, false );  // Not really a tool
-    m_drawToolBar->Refresh();
 }

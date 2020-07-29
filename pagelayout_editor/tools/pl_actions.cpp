@@ -91,6 +91,20 @@ TOOL_ACTION PL_ACTIONS::previewSettings( "plEditor.EditorControl.PreviewSettings
         _( "Page Preview Settings..." ), _( "Edit preview data for page size and title block" ),
         sheetset_xpm );
 
+TOOL_ACTION PL_ACTIONS::layoutNormalMode( "plEditor.EditorControl.LayoutNormalMode",
+        AS_GLOBAL, 0, "",
+        _( "Show title block in preview mode" ),
+        _( "Show title block in preview mode:\n"
+           "text placeholders will be replaced with preview data." ),
+        pagelayout_normal_view_mode_xpm );
+
+TOOL_ACTION PL_ACTIONS::layoutEditMode( "plEditor.EditorControl.LayoutEditMode",
+        AS_GLOBAL, 0, "",
+        _( "Show title block in edit mode" ),
+        _( "Show title block in edit mode:\n"
+           "text placeholders are shown as ${keyword} tokens." ),
+        pagelayout_special_view_mode_xpm  );
+
 
 // PL_SELECTION_TOOL
 //

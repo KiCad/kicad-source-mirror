@@ -59,6 +59,8 @@ protected:
     /// The last filename chosen to be proposed to the user
     PROPERTIES_FRAME*       m_propertiesPagelayout;
 
+    void setupUIConditions() override;
+
 public:
     PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~PL_EDITOR_FRAME();
@@ -123,6 +125,7 @@ public:
     const wxSize GetPageSizeIU() const override;
 
     PL_DRAW_PANEL_GAL* GetCanvas() const override;
+    SELECTION& GetCurrentSelection() override;
 
     const wxPoint& GetGridOrigin() const override { return m_grid_origin; }
     void SetGridOrigin( const wxPoint& aPoint ) override { m_grid_origin = aPoint; }
@@ -159,8 +162,6 @@ public:
     void    ReCreateOptToolbar() override;
 
     void    ReCreateMenuBar() override;
-
-    void    SyncToolbars() override;
 
     const PL_EDITOR_LAYOUT& GetPageLayout() const { return m_pageLayout; }
     PL_EDITOR_LAYOUT& GetPageLayout() { return m_pageLayout; }
@@ -205,9 +206,6 @@ public:
      * and therefore format symbols are displayed.
      */
     void OnSelectTitleBlockDisplayMode( wxCommandEvent& event );
-
-    void OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event );
-    void OnUpdateTitleBlockDisplayEditMode( wxUpdateUIEvent& event );
 
     /**
      * Function ToPrinter

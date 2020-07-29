@@ -1,0 +1,156 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney at ieee.org>
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#ifndef EDITOR_CONDITIONS_H_
+#define EDITOR_CONDITIONS_H_
+
+#include <class_draw_panel_gal.h>
+#include <common.h>
+#include <functional>
+#include <tool/selection.h>
+#include <tool/selection_conditions.h>
+#include <tool/tool_action.h>
+
+class EDA_BASE_FRAME;
+class EDA_DRAW_FRAME;
+/**
+ * Class that groups generic conditions for editor states.
+ */
+class EDITOR_CONDITIONS : public SELECTION_CONDITIONS
+{
+public:
+    /**
+     * Create an object to define conditions dependent upon a specific frame.
+     *
+     * @param aFrame is the frame to query for the conditions
+     */
+    EDITOR_CONDITIONS( EDA_BASE_FRAME* aFrame ) :
+        m_frame( aFrame )
+    {}
+
+    /**
+     * Creates a functor that tests if the content of the frame is modified.
+     *
+     * @return Functor testing for modified content
+     */
+    SELECTION_CONDITION ContentModified();
+
+    /**
+     * Creates a functor that tests if there are any items in the undo queue
+     *
+     * @return Functor testing if the undo queue has items.
+     */
+    SELECTION_CONDITION UndoAvailable();
+
+    /**
+     * Creates a functor that tests if there are any items in the redo queue
+     *
+     * @return Functor testing if the redo queue has items.
+     */
+    SELECTION_CONDITION RedoAvailable();
+
+    /**
+     * Creates a functor that tests if the frame has the specified units
+     *
+     * @return Functor testing the units of a frame.
+     */
+    SELECTION_CONDITION Units( EDA_UNITS aUnit );
+
+    /**
+     * Creates a functor testing if the specified tool is the current active tool in the frame.
+     *
+     * @return Functor testing the current tool of a frame
+     */
+    SELECTION_CONDITION CurrentTool( const TOOL_ACTION& aTool );
+
+    /**
+     * Creates a functor testing if the grid is visible in a frame.
+     *
+     * @note this requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
+     *
+     * @return Functor testing if the grid is visible
+     */
+    SELECTION_CONDITION GridVisible();
+
+    /**
+     * Creates a functor testing if polar coordinates are current being used.
+     *
+     * @note this requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
+     *
+     * @return Functor testing if the grid is visible
+     */
+    SELECTION_CONDITION PolarCoordinates();
+
+    /**
+     * Creates a functor testing if the cursor is full screen in a frame.
+     *
+     * @note this requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
+     *
+     * @return Functor testing if the cursor is full screen
+     */
+    SELECTION_CONDITION FullscreenCursor();
+
+    /**
+     * Creates a functor testing if the specified canvas is active in the frame.
+     *
+     * @note this requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
+     *
+     * @return Functor testing the canvas type of the frame
+     */
+    SELECTION_CONDITION CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE aType );
+
+private:
+    ///> Helper function used by ContentModified()
+    static bool contentModifiedFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
+
+    ///> Helper function used by UndoAvailable()
+    static bool undoFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
+
+    ///> Helper function used by RedoAvailable()
+    static bool redoFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
+
+    ///> Helper function used by Units()
+    static bool unitsFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame, EDA_UNITS aUnits );
+
+    ///> Helper function used by CurrentTool()
+    static bool toolFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame, const TOOL_ACTION& aTool );
+
+    ///> Helper function used by GridVisible()
+    static bool gridFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
+
+    ///> Helper function used by PolarCoordinates()
+    static bool polarCoordFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
+
+    ///> Helper function used by FullscreenCursor()
+    static bool cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
+
+    ///> Helper function used by CanvasType()
+    static bool canvasTypeFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame,
+                                EDA_DRAW_PANEL_GAL::GAL_TYPE aType );
+
+    ///> The frame to apply the conditions to
+    EDA_BASE_FRAME* m_frame;
+};
+
+#endif /* EDITOR_CONDITIONS_H_ */

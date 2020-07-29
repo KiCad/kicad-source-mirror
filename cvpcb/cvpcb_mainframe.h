@@ -86,6 +86,8 @@ protected:
 
     CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent );
 
+    void setupUIConditions() override;
+
 public:
     ~CVPCB_MAINFRAME();
 
@@ -231,6 +233,16 @@ public:
      */
     void RedoAssociation();
 
+    int GetUndoCommandCount() const override
+    {
+        return m_undoList.size();
+    }
+
+    int GetRedoCommandCount() const override
+    {
+        return m_redoList.size();
+    }
+
     /**
      * Associate a footprint with a specific component in the list.
      *
@@ -362,11 +374,6 @@ public:
     wxString GetSelectedFootprint();
 
     void SetStatusText( const wxString& aText, int aNumber = 0 ) override;
-
-    /**
-     * Syncronize the toolbar state with the current tool state.
-     */
-    void SyncToolbars() override;
 
 private:
     /**

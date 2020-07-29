@@ -44,58 +44,40 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     //-- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, tool );
+    ACTION_MENU*   fileMenu = new ACTION_MENU( false, tool );
 
-    auto enableSaveCondition = [ this ] ( const SELECTION& sel )
-    {
-        return IsContentModified();
-    };
-
-    fileMenu->AddItem( CVPCB_ACTIONS::saveAssociations, enableSaveCondition );
-    fileMenu->AddSeparator();
+    fileMenu->Add( CVPCB_ACTIONS::saveAssociations );
+    fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "Assign Footprints" ) );
 
-    fileMenu->Resolve();
+    //-- Preferences menu -----------------------------------------------
+    //
+    ACTION_MENU* editMenu = new ACTION_MENU( false, tool );
+
+    editMenu->Add( ACTIONS::undo );
+    editMenu->Add( ACTIONS::redo );
+
+    editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::cut );
+    editMenu->Add( ACTIONS::copy );
+    editMenu->Add( ACTIONS::paste );
 
     //-- Preferences menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, tool );
+    ACTION_MENU* prefsMenu = new ACTION_MENU( false, tool );
 
-    auto enableUndoCondition = [ this ] ( const SELECTION& sel )
-    {
-        return m_undoList.size() > 0;
-    };
-    auto enableRedoCondition = [ this ] ( const SELECTION& sel )
-    {
-        return m_redoList.size() > 0;
-    };
+    prefsMenu->Add( ACTIONS::configurePaths );
+    prefsMenu->Add( ACTIONS::showFootprintLibTable );
+    prefsMenu->Add( _( "Preferences...\tCTRL+," ),
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    preference_xpm );
 
-    editMenu->AddItem( ACTIONS::undo,  enableUndoCondition );
-    editMenu->AddItem( ACTIONS::redo,  enableRedoCondition );
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::cut,   SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ACTIONS::copy,  SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ACTIONS::paste, SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AppendSeparator();
+    prefsMenu->Add( CVPCB_ACTIONS::showEquFileTable);
 
-    editMenu->Resolve();
-
-    //-- Preferences menu -----------------------------------------------
-    //
-    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, tool );
-
-    prefsMenu->AddItem( ACTIONS::configurePaths,         SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( ACTIONS::showFootprintLibTable,  SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( wxID_PREFERENCES,
-                        _( "Preferences...\tCTRL+," ),
-                        _( "Show preferences for all open tools" ),
-                        preference_xpm,                  SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddSeparator();
-    prefsMenu->AddItem( CVPCB_ACTIONS::showEquFileTable, SELECTION_CONDITIONS::ShowAlways );
-
-    prefsMenu->AddSeparator();
+    prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, tool );
-
-    prefsMenu->Resolve();
 
     //-- Menubar -------------------------------------------------------------
     //

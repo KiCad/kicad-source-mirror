@@ -474,33 +474,3 @@ void GERBVIEW_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
         m_SelLayerBox->SetSelection( GetActiveLayer() );
 }
 
-
-void GERBVIEW_FRAME::SyncToolbars()
-{
-    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-
-#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
-
-    TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );
-    m_mainToolBar->Refresh();
-
-    TOGGLE_TOOL( m_optionsToolBar, ACTIONS::selectionTool );
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,      !galOpts.m_fullscreenCursor );
-    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::flashedDisplayOutlines,
-                                                  !m_DisplayOptions.m_DisplayFlashedItemsFill );
-    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::linesDisplayOutlines,
-                                                  !m_DisplayOptions.m_DisplayLinesFill );
-    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::polygonsDisplayOutlines,
-                                                  !m_DisplayOptions.m_DisplayPolygonsFill );
-    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::negativeObjectDisplay,
-                                                  IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
-    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::dcodeDisplay,
-                                                  IsElementVisible( LAYER_DCODES ) );
-    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::toggleDiffMode,m_DisplayOptions.m_DiffMode );
-    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,       m_DisplayOptions.m_HighContrastMode );
-    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::flipGerberView, m_DisplayOptions.m_FlipGerberView );
-    m_optionsToolBar->Refresh();
-}

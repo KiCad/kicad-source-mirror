@@ -36,6 +36,7 @@
 #include <properties_frame.h>
 #include <pl_editor_id.h>
 #include <dialog_page_settings.h>
+#include <ws_data_model.h>
 
 bool PL_EDITOR_CONTROL::Init()
 {
@@ -137,6 +138,18 @@ int PL_EDITOR_CONTROL::ShowInspector( const TOOL_EVENT& aEvent )
 }
 
 
+int PL_EDITOR_CONTROL::TitleBlockDisplayMode( const TOOL_EVENT& aEvent )
+{
+    if( aEvent.IsAction( &PL_ACTIONS::layoutEditMode ) )
+        WS_DATA_MODEL::GetTheInstance().m_EditMode = true;
+    else
+        WS_DATA_MODEL::GetTheInstance().m_EditMode = false;
+
+    m_frame->HardRedraw();
+    return 0;
+}
+
+
 int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     PL_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PL_SELECTION_TOOL>();
@@ -183,6 +196,8 @@ void PL_EDITOR_CONTROL::setTransitions()
     Go( &PL_EDITOR_CONTROL::PageSetup,             PL_ACTIONS::previewSettings.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::ToggleBackgroundColor, PL_ACTIONS::toggleBackground.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::ShowInspector,         PL_ACTIONS::showInspector.MakeEvent() );
+    Go( &PL_EDITOR_CONTROL::TitleBlockDisplayMode, PL_ACTIONS::layoutEditMode.MakeEvent() );
+    Go( &PL_EDITOR_CONTROL::TitleBlockDisplayMode, PL_ACTIONS::layoutNormalMode.MakeEvent() );
 
     Go( &PL_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::SelectedEvent );
     Go( &PL_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::UnselectedEvent );

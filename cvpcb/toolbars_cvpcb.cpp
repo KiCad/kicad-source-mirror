@@ -74,9 +74,9 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
 #endif
     m_mainToolBar->AddControl( text );
 
-    m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyFPFilters, true );
-    m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyPin, true );
-    m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyLibrary, true );
+    m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyFPFilters, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyPin,       ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyLibrary,   ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddScaledSeparator( this );
 
@@ -89,22 +89,4 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
-}
-
-
-void CVPCB_MAINFRAME::SyncToolbars()
-{
-#define filterActive( filter ) ( m_filteringOptions & filter )
-
-    m_mainToolBar->Toggle( CVPCB_ACTIONS::saveAssociations, IsContentModified() );
-    m_mainToolBar->Toggle( ACTIONS::undo,                   m_undoList.size() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::redo,                   m_redoList.size() > 0 );
-
-    m_mainToolBar->Toggle( CVPCB_ACTIONS::FilterFPbyFPFilters,
-                           filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS ) );
-    m_mainToolBar->Toggle( CVPCB_ACTIONS::FilterFPbyLibrary,
-                           filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY ) );
-    m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyPin,
-                           filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT ) );
-    m_mainToolBar->Refresh();
 }

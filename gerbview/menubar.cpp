@@ -28,8 +28,8 @@
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
+#include <tool/action_menu.h>
 #include <tool/actions.h>
-#include <tool/conditional_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/gerbview_actions.h>
 #include <tools/gerbview_selection_tool.h>
@@ -46,14 +46,15 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     //-- File menu -------------------------------------------------------
     //
-    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU*   fileMenu = new ACTION_MENU( false, selTool );
     static ACTION_MENU* openRecentGbrMenu;
     static ACTION_MENU* openRecentDrlMenu;
     static ACTION_MENU* openRecentJobMenu;
     static ACTION_MENU* openRecentZipMenu;
 
     FILE_HISTORY& recentGbrFiles = GetFileHistory();
-    recentGbrFiles.SetClearText( _( "Clear Recent Gerber Files" ) );
+
+#define FileHistoryCond( x ) ACTION_CONDITIONS().SetEnableCondition( FILE_HISTORY::FileHistoryNotEmpty( x ) )
 
 
     // Create the gerber file menu if it does not exist. Adding a file to/from the history
@@ -66,8 +67,14 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         openRecentGbrMenu->SetIcon( recent_xpm );
 
         recentGbrFiles.UseMenu( openRecentGbrMenu );
+        recentGbrFiles.SetClearText( _( "Clear Recent Gerber Files" ) );
         recentGbrFiles.AddFilesToMenu();
     }
+
+    fileMenu->Add( GERBVIEW_ACTIONS::openGerber );
+    wxMenuItem* gbrItem = fileMenu->Add( openRecentGbrMenu );
+    RegisterUIUpdateHandler( gbrItem->GetId(), FileHistoryCond( recentGbrFiles) );
+
 
     // Create the drill file menu if it does not exist. Adding a file to/from the history
     // will automatically refresh the menu.
@@ -79,8 +86,14 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         openRecentDrlMenu->SetIcon( recent_xpm );
 
         m_drillFileHistory.UseMenu( openRecentDrlMenu );
+        m_drillFileHistory.SetClearText( _( "Clear Recent Drill Files" ) );
         m_drillFileHistory.AddFilesToMenu();
     }
+
+    fileMenu->Add( GERBVIEW_ACTIONS::openGerber );
+    wxMenuItem* drillItem = fileMenu->Add( openRecentDrlMenu );
+    RegisterUIUpdateHandler( drillItem->GetId(), FileHistoryCond( m_drillFileHistory ) );
+
 
     // Create the job file menu if it does not exist. Adding a file to/from the history
     // will automatically refresh the menu.
@@ -92,8 +105,14 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         openRecentJobMenu->SetIcon( recent_xpm );
 
         m_jobFileHistory.UseMenu( openRecentJobMenu );
+        m_jobFileHistory.SetClearText( _( "Clear Recent Job Files" ) );
         m_jobFileHistory.AddFilesToMenu();
     }
+
+    fileMenu->Add( GERBVIEW_ACTIONS::openGerber );
+    wxMenuItem* jobItem = fileMenu->Add( openRecentJobMenu );
+    RegisterUIUpdateHandler( jobItem->GetId(), FileHistoryCond( m_jobFileHistory ) );
+
 
     // Create the zip file menu if it does not exist. Adding a file to/from the history
     // will automatically refresh the menu.
@@ -105,169 +124,131 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         openRecentZipMenu->SetIcon( recent_xpm );
 
         m_zipFileHistory.UseMenu( openRecentZipMenu );
+        m_zipFileHistory.SetClearText( _( "Clear Recent Zip Files" ) );
         m_zipFileHistory.AddFilesToMenu();
     }
 
-    fileMenu->AddItem( GERBVIEW_ACTIONS::openGerber,    SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentGbrMenu, FILE_HISTORY::FileHistoryNotEmpty( recentGbrFiles ) );
+    fileMenu->Add( GERBVIEW_ACTIONS::openGerber );
+    wxMenuItem* zipItem = fileMenu->Add( openRecentZipMenu );
+    RegisterUIUpdateHandler( zipItem->GetId(), FileHistoryCond( m_zipFileHistory ) );
 
-    fileMenu->AddItem( GERBVIEW_ACTIONS::openDrillFile, SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentDrlMenu, FILE_HISTORY::FileHistoryNotEmpty( m_drillFileHistory ) );
+#undef FileHistoryCond
 
-    fileMenu->AddItem( GERBVIEW_ACTIONS::openJobFile,   SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentJobMenu, FILE_HISTORY::FileHistoryNotEmpty( m_jobFileHistory ) );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( _( "Clear &All Layers" ),
+                   _( "Clear all layers. All data will be deleted" ),
+                   ID_GERBVIEW_ERASE_ALL,
+                   delete_gerber_xpm );
 
-    fileMenu->AddItem( GERBVIEW_ACTIONS::openZipFile,   SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentZipMenu, FILE_HISTORY::FileHistoryNotEmpty( m_zipFileHistory ) );
+    fileMenu->Add( _( "Reload All Layers" ),
+                   _( "Reload all layers. All data will be reloaded" ),
+                   ID_GERBVIEW_RELOAD_ALL,
+                   reload2_xpm );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ID_GERBVIEW_ERASE_ALL,  _( "Clear &All Layers" ),
-                       _( "Clear all layers. All data will be deleted" ),
-                       delete_gerber_xpm,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( _( "Export to Pcbnew..." ),
+                   _( "Export data in Pcbnew format" ),
+                   ID_GERBVIEW_EXPORT_TO_PCBNEW,
+                   export_xpm );
 
-    fileMenu->AddItem( ID_GERBVIEW_RELOAD_ALL, _( "Reload All Layers" ),
-                       _( "Reload all layers. All data will be reloaded" ),
-                       reload2_xpm,                SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( ACTIONS::print );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ID_GERBVIEW_EXPORT_TO_PCBNEW, _( "Export to Pcbnew..." ),
-                       _( "Export data in Pcbnew format" ),
-                       export_xpm,                SELECTION_CONDITIONS::ShowAlways );
-
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::print,            SELECTION_CONDITIONS::ShowAlways );
-
-    fileMenu->AddSeparator();
+    fileMenu->AppendSeparator();
     fileMenu->AddQuitOrClose( &Kiface(), _( "GerbView" ) );
 
-    fileMenu->Resolve();
 
     //-- View menu -------------------------------------------------------
     //
-    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
-
-    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
-        return IsGridVisible();
-    };
-    auto polarCoordsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetShowPolarCoords();
-    };
-    auto layersManagerShownCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_show_layer_manager_tools;
-    };
-    auto imperialUnitsCondition = [this]( const SELECTION& aSel ) {
-        return GetUserUnits() == EDA_UNITS::INCHES;
-    };
-    auto metricUnitsCondition = [this]( const SELECTION& aSel ) {
-        return GetUserUnits() == EDA_UNITS::MILLIMETRES;
-    };
-    auto sketchFlashedCondition = [ this ] ( const SELECTION& aSel ) {
-        return !m_DisplayOptions.m_DisplayFlashedItemsFill;
-    };
-    auto sketchLinesCondition = [ this ] ( const SELECTION& aSel ) {
-        return !m_DisplayOptions.m_DisplayLinesFill;
-    };
-    auto sketchPolygonsCondition = [ this ] ( const SELECTION& aSel ) {
-        return !m_DisplayOptions.m_DisplayPolygonsFill;
-    };
-    auto showDcodes = [ this ] ( const SELECTION& aSel ) {
-        return IsElementVisible( LAYER_DCODES );
-    };
-    auto showNegativeObjects = [ this ] ( const SELECTION& aSel ) {
-        return IsElementVisible( LAYER_NEGATIVE_OBJECTS );
-    };
-    auto diffModeCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_DisplayOptions.m_DiffMode;
-    };
-    auto contrastModeCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_DisplayOptions.m_HighContrastMode;
-    };
-    auto flipViewCondition = [this]( const SELECTION& aSel ) {
-        return m_DisplayOptions.m_FlipGerberView;
-    };
+    ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
     // Hide layer manager
-    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                            _( "Show &Layers Manager" ), _( "Show or hide the layer manager" ),
-                            layers_manager_xpm, layersManagerShownCondition );
+    viewMenu->Add( _( "Show &Layers Manager" ),
+                   _( "Show or hide the layer manager" ),
+                   ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
+                   layers_manager_xpm );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::zoomInCenter,                 SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,                SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,                SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomTool,                     SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,                   SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::zoomInCenter );
+    viewMenu->Add( ACTIONS::zoomOutCenter );
+    viewMenu->Add( ACTIONS::zoomFitScreen );
+    viewMenu->Add( ACTIONS::zoomTool );
+    viewMenu->Add( ACTIONS::zoomRedraw );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( ACTIONS::toggleGrid,              gridShownCondition );
-    viewMenu->AddCheckItem( ACTIONS::togglePolarCoords,       polarCoordsCondition );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::toggleGrid,                       ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::togglePolarCoords,                ACTION_MENU::CHECK );
+
+#ifdef __APPLE__
+    // Add a separator only on macOS because the OS adds menu items to the view menu after ours
+    viewMenu->AppendSeparator();
+#endif
 
     // Units submenu
-    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
+
     unitsSubMenu->SetTitle( _( "&Units" ) );
     unitsSubMenu->SetIcon( unit_mm_xpm );
-    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,       imperialUnitsCondition );
-    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,         metricUnitsCondition );
-    viewMenu->AddMenu( unitsSubMenu );
+    unitsSubMenu->Add( ACTIONS::imperialUnits,                ACTION_MENU::CHECK );
+    unitsSubMenu->Add( ACTIONS::metricUnits,                  ACTION_MENU::CHECK );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::flashedDisplayOutlines,  sketchFlashedCondition );
-    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::linesDisplayOutlines,    sketchLinesCondition );
-    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::polygonsDisplayOutlines, sketchPolygonsCondition );
-    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::dcodeDisplay,            showDcodes );
-    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::negativeObjectDisplay,   showNegativeObjects );
-    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::toggleDiffMode,          diffModeCondition );
-    viewMenu->AddCheckItem( ACTIONS::highContrastMode,                 contrastModeCondition );
-    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::flipGerberView,          flipViewCondition );
+    viewMenu->Add( unitsSubMenu );
 
-    viewMenu->Resolve();
+    viewMenu->AppendSeparator();
+    viewMenu->Add( GERBVIEW_ACTIONS::flashedDisplayOutlines,  ACTION_MENU::CHECK );
+    viewMenu->Add( GERBVIEW_ACTIONS::linesDisplayOutlines,    ACTION_MENU::CHECK );
+    viewMenu->Add( GERBVIEW_ACTIONS::polygonsDisplayOutlines, ACTION_MENU::CHECK );
+    viewMenu->Add( GERBVIEW_ACTIONS::dcodeDisplay,            ACTION_MENU::CHECK );
+    viewMenu->Add( GERBVIEW_ACTIONS::negativeObjectDisplay,   ACTION_MENU::CHECK );
+    viewMenu->Add( GERBVIEW_ACTIONS::toggleDiffMode,          ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::highContrastMode,                 ACTION_MENU::CHECK );
+    viewMenu->Add( GERBVIEW_ACTIONS::flipGerberView,          ACTION_MENU::CHECK );
+
 
     //-- Tools menu -------------------------------------------------------
     //
     ACTION_MENU* toolsMenu = new ACTION_MENU( false );
 
-    toolsMenu->Add( _( "&List DCodes..." ), _( "List D-codes defined in Gerber files" ),
-                    ID_GERBVIEW_SHOW_LIST_DCODES, show_dcodenumber_xpm );
+    toolsMenu->Add( _( "&List DCodes..." ),
+                    _( "List D-codes defined in Gerber files" ),
+                    ID_GERBVIEW_SHOW_LIST_DCODES,
+                    show_dcodenumber_xpm );
 
-    toolsMenu->Add( _( "&Show Source..." ), _( "Show source file for the current layer" ),
-                    ID_GERBVIEW_SHOW_SOURCE, tools_xpm );
+    toolsMenu->Add( _( "&Show Source..." ),
+                    _( "Show source file for the current layer" ),
+                    ID_GERBVIEW_SHOW_SOURCE,
+                    tools_xpm );
 
     toolsMenu->Add( ACTIONS::measureTool );
 
     toolsMenu->AppendSeparator();
-    toolsMenu->Add( _( "Clear Current Layer..." ), _( "Clear the selected graphic layer" ),
-                    ID_GERBVIEW_ERASE_CURR_LAYER, delete_sheet_xpm );
+    toolsMenu->Add( _( "Clear Current Layer..." ),
+                    _( "Clear the selected graphic layer" ),
+                    ID_GERBVIEW_ERASE_CURR_LAYER,
+                    delete_sheet_xpm );
 
     //-- Preferences menu -----------------------------------------------
     //
-    auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-    };
-    auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-    };
+    ACTION_MENU* preferencesMenu = new ACTION_MENU( false, selTool );
 
-    CONDITIONAL_MENU* preferencesMenu = new CONDITIONAL_MENU( false, selTool );
+    preferencesMenu->Add( _( "Preferences...\tCTRL+," ),
+                          _( "Show preferences for all open tools" ),
+                          wxID_PREFERENCES,
+                          preference_xpm );
 
-    preferencesMenu->AddItem( wxID_PREFERENCES,
-                              _( "Preferences...\tCTRL+," ),
-                              _( "Show preferences for all open tools" ),
-                              preference_xpm,                    SELECTION_CONDITIONS::ShowAlways );
-
-    preferencesMenu->AddSeparator();
+    preferencesMenu->AppendSeparator();
     AddMenuLanguageList( preferencesMenu, selTool );
 
-    preferencesMenu->AddSeparator();
-    preferencesMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
-    preferencesMenu->AddCheckItem( ACTIONS::standardGraphics,    standardGraphicsCondition );
+    preferencesMenu->AppendSeparator();
+    preferencesMenu->Add( ACTIONS::acceleratedGraphics, ACTION_MENU::CHECK );
+    preferencesMenu->Add( ACTIONS::standardGraphics,    ACTION_MENU::CHECK );
 
-    preferencesMenu->Resolve();
 
     //-- Menubar -------------------------------------------------------------
     //
-    menuBar->Append( fileMenu, _( "&File" ) );
-    menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( toolsMenu, _( "&Tools" ) );
+    menuBar->Append( fileMenu,        _( "&File" ) );
+    menuBar->Append( viewMenu,        _( "&View" ) );
+    menuBar->Append( toolsMenu,       _( "&Tools" ) );
     menuBar->Append( preferencesMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
 
