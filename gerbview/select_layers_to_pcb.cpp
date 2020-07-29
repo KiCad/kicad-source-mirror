@@ -26,6 +26,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <X2_gerber_attributes.h>
 #include <fctsys.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
@@ -215,14 +216,14 @@ void LAYERS_MAP_DIALOG::initDialog()
 
     std::vector<int> gerber2KicadMapping;
 
-    // See how many of the loaded Gerbers have Altium file extensions
-    int numAltiumGerbers = findNumAltiumGerbersLoaded( gerber2KicadMapping );
+    // See how many of the loaded Gerbers can be mapped to KiCad layers automatically
+    int numMappedGerbers = findKnownGerbersLoaded( gerber2KicadMapping );
 
-    if( numAltiumGerbers > 0 )
+    if( numMappedGerbers > 0 )
     {
         // See if the user wants to map the Altium Gerbers to known KiCad PCB layers
         int returnVal = wxMessageBox(
-                _( "Gerbers with known layers: " + wxString::Format( wxT( "%i" ), numAltiumGerbers )
+                _( "Gerbers with known layers: " + wxString::Format( wxT( "%i" ), numMappedGerbers )
                         + "\n\nAssign to matching KiCad PCB layers?" ),
                 _( "Automatic Layer Assignment" ), wxOK | wxCANCEL | wxOK_DEFAULT );
 
@@ -446,6 +447,29 @@ void LAYERS_MAP_DIALOG::OnOkClick( wxCommandEvent& event )
     EndModal( wxID_OK );
 }
 
+
+int LAYERS_MAP_DIALOG::findKnownGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
+{
+    int numKnownGerbers = 0;
+
+    // We can automatically map Gerbers using different techniques.  The first thing we
+    // try is to see if any of the loaded Gerbers were created by or use the
+    // Altium/Protel file extensions
+    numKnownGerbers += findNumAltiumGerbersLoaded( aGerber2KicadMapping );
+
+    // Next we check if any of the loaded Gerbers are X2 Gerbers and if they contain
+
+    // layer information in "File Functions". For info about X2 Gerbers see
+    // http://www.ucamco.com/files/downloads/file/81/the_gerber_file_format_specification.pdf
+    numKnownGerbers += findNumX2GerbersLoaded( aGerber2KicadMapping );
+
+    // Finally, check if any of the loaded Gerbers use the KiCad naming conventions
+    numKnownGerbers += findNumKiCadGerbersLoaded( aGerber2KicadMapping );
+
+    return numKnownGerbers;
+}
+
+
 int LAYERS_MAP_DIALOG::findNumAltiumGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
 {
     // The next comment preserves initializer formatting below it
@@ -503,29 +527,46 @@ int LAYERS_MAP_DIALOG::findNumAltiumGerbersLoaded( std::vector<int>& aGerber2Kic
 
     GERBER_FILE_IMAGE_LIST* images = m_Parent->GetGerberLayout()->GetImagesList();
 
+    // If the passed vector isn't empty but is too small to hold the loaded
+    // Gerbers, then bail because something isn't right.
+
+    if( ( aGerber2KicadMapping.size() != 0 )
+            && ( aGerber2KicadMapping.size() != (size_t) m_gerberActiveLayersCount ) )
+        return numAltiumMatches;
+
+    // If the passed vector is empty, set it to the same number of elements as there
+    // are loaded Gerbers, and set each to "UNSELECTED_LAYER"
+
+    if( aGerber2KicadMapping.size() == 0 )
+        aGerber2KicadMapping.assign( m_gerberActiveLayersCount, UNSELECTED_LAYER );
+
     // Loop through all loaded Gerbers looking for any with Altium specific extensions
     for( int ii = 0; ii < m_gerberActiveLayersCount; ii++ )
     {
-        // Get file name of Gerber loaded on this layer.
-        wxFileName fn( images->GetGbrImage( ii )->m_FileName );
-
-        // Get uppercase version of file extension
-        wxString FileExt = fn.GetExt();
-        FileExt.MakeUpper();
-
-        // Check for matching Altium Gerber file extension we'll handle
-        it = altiumExt.find( FileExt );
-
-        if( it != altiumExt.end() )
+        if( images->GetGbrImage( ii ) )
         {
-            // We got a match, so store the KiCad layer number
-            aGerber2KicadMapping.push_back( it->second );
-            numAltiumMatches++;
-        }
-        else
-        {
-            // If there's no Altium match, then note the layer as unselected
-            aGerber2KicadMapping.push_back( UNSELECTED_LAYER );
+            // Get file name of Gerber loaded on this layer.
+            wxFileName fn( images->GetGbrImage( ii )->m_FileName );
+
+            // Get uppercase version of file extension
+            wxString FileExt = fn.GetExt();
+            FileExt.MakeUpper();
+
+            // Check for matching Altium Gerber file extension we'll handle
+            it = altiumExt.find( FileExt );
+
+            if( it != altiumExt.end() )
+            {
+                // We got a match, so store the KiCad layer number.  We verify it's set to
+                // "UNSELECTED_LAYER" in case the passed vector already had entries
+                // matched to other known Gerber files.   This will preserve them.
+
+                if( aGerber2KicadMapping[ii] == UNSELECTED_LAYER )
+                {
+                    aGerber2KicadMapping[ii] = it->second;
+                    numAltiumMatches++;
+                }
+            }
         }
     }
 
@@ -533,4 +574,253 @@ int LAYERS_MAP_DIALOG::findNumAltiumGerbersLoaded( std::vector<int>& aGerber2Kic
     // a loaded Gerber layer, and the entry will contain the index to the matching
     // KiCad layer for Altium Gerbers, or "UNSELECTED_LAYER" for the rest.
     return numAltiumMatches;
+}
+
+int LAYERS_MAP_DIALOG::findNumKiCadGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
+{
+    // The next comment preserves initializer formatting below it
+    // clang-format off
+    // This map contains the known KiCad suffixes used for Gerbers that we care about,
+    // along with their corresponding KiCad layer
+    std::map<wxString, PCB_LAYER_ID> kicadLayers
+    {
+        { "-F_Cu",      F_Cu },
+        { "-In1_Cu",    In1_Cu },
+        { "-In2_Cu",    In2_Cu },
+        { "-In3_Cu",    In3_Cu },
+        { "-In4_Cu",    In4_Cu },
+        { "-In5_Cu",    In5_Cu },
+        { "-In6_Cu",    In6_Cu },
+        { "-In7_Cu",    In7_Cu },
+        { "-In8_Cu",    In8_Cu },
+        { "-In9_Cu",    In9_Cu },
+        { "-In10_Cu",   In10_Cu },
+        { "-In11_Cu",   In11_Cu },
+        { "-In12_Cu",   In12_Cu },
+        { "-In13_Cu",   In13_Cu },
+        { "-In14_Cu",   In14_Cu },
+        { "-In15_Cu",   In15_Cu },
+        { "-In16_Cu",   In16_Cu },
+        { "-In17_Cu",   In17_Cu },
+        { "-In18_Cu",   In18_Cu },
+        { "-In19_Cu",   In19_Cu },
+        { "-In20_Cu",   In20_Cu },
+        { "-In21_Cu",   In21_Cu },
+        { "-In22_Cu",   In22_Cu },
+        { "-In23_Cu",   In23_Cu },
+        { "-In24_Cu",   In24_Cu },
+        { "-In25_Cu",   In25_Cu },
+        { "-In26_Cu",   In26_Cu },
+        { "-In27_Cu",   In27_Cu },
+        { "-In28_Cu",   In28_Cu },
+        { "-In29_Cu",   In29_Cu },
+        { "-In30_Cu",   In30_Cu },
+        { "-B_Cu",      B_Cu },
+        { "-B_Adhes",   B_Adhes },
+        { "-F_Adhes",   F_Adhes },
+        { "-B_Paste",   B_Paste },
+        { "-F_Paste",   F_Paste },
+        { "-B_SilkS",   B_SilkS },
+        { "-F_SilkS",   F_SilkS },
+        { "-B_Mask",    B_Mask },
+        { "-F_Mask",    F_Mask },
+        { "-Dwgs_User", Dwgs_User },
+        { "-Cmts_User", Cmts_User },
+        { "-Eco1_User", Eco1_User },
+        { "-Eco2_User", Eco2_User },
+        { "-Edge_Cuts", Edge_Cuts }
+    };
+    // clang-format on
+
+    std::map<wxString, PCB_LAYER_ID>::iterator it;
+
+    int numKicadMatches = 0; // Assume we won't find KiCad Gerbers
+
+    GERBER_FILE_IMAGE_LIST* images = m_Parent->GetGerberLayout()->GetImagesList();
+
+    // If the passed vector isn't empty but is too small to hold the loaded
+    // Gerbers, then bail because something isn't right.
+
+    if( ( aGerber2KicadMapping.size() != 0 )
+            && ( aGerber2KicadMapping.size() < (size_t) m_gerberActiveLayersCount ) )
+        return numKicadMatches;
+
+    // If the passed vector is empty, set it to the same number of elements as there
+    // are loaded Gerbers, and set each to "UNSELECTED_LAYER"
+
+    if( aGerber2KicadMapping.size() == 0 )
+        aGerber2KicadMapping.assign( m_gerberActiveLayersCount, UNSELECTED_LAYER );
+
+    // Loop through all loaded Gerbers looking for any with KiCad specific layer names
+    for( int ii = 0; ii < m_gerberActiveLayersCount; ii++ )
+    {
+        if( images->GetGbrImage( ii ) )
+        {
+            // Get file name of Gerber loaded on this layer.
+            wxFileName fn( images->GetGbrImage( ii )->m_FileName );
+
+            wxString layerName = fn.GetName();
+
+            // To create Gerber file names, KiCad appends a suffix consisting of a "-" and the
+            // name of the layer to the project name.  We need to isolate the suffix if present
+            // and see if it's a known KiCad layer name.  Start by looking for the last "-" in
+            // the file name.
+            int dashPos = layerName.Find( '-', true );
+
+            // If one was found, isolate the suffix from the "-" to the end of the file name
+            wxString suffix;
+
+            if( dashPos != wxNOT_FOUND )
+                suffix = layerName.Right( layerName.length() - dashPos );
+
+            // Check if the string we've isolated matches any known KiCad layer names
+            it = kicadLayers.find( suffix );
+
+            if( it != kicadLayers.end() )
+            {
+                // We got a match, so store the KiCad layer number.  We verify it's set to
+                // "UNSELECTED_LAYER" in case the passed vector already had entries
+                // matched to other known Gerber files.  This will preserve them.
+
+                if( aGerber2KicadMapping[ii] == UNSELECTED_LAYER )
+                {
+                    aGerber2KicadMapping[ii] = it->second;
+                    numKicadMatches++;
+                }
+            }
+        }
+    }
+
+    // Return number of KiCad Gerbers we found.  Each index in the passed vector corresponds to
+    // a loaded Gerber layer, and the entry will contain the index to the matching
+    // KiCad layer for KiCad Gerbers, or "UNSELECTED_LAYER" for the rest.
+    return numKicadMatches;
+}
+
+int LAYERS_MAP_DIALOG::findNumX2GerbersLoaded( std::vector<int>& aGerber2KicadMapping )
+{
+    // The next comment preserves initializer formatting below it
+    // clang-format off
+    // This map contains the known KiCad X2 "File Function" values used for Gerbers that we
+    // care about, along with their corresponding KiCad layer
+    std::map<wxString, PCB_LAYER_ID> kicadLayers
+    {
+        { "Top",   F_Cu },
+        { "L2",    In1_Cu },
+        { "L2",    In1_Cu },
+        { "L2",    In2_Cu },
+        { "L3",    In3_Cu },
+        { "L4",    In4_Cu },
+        { "L5",    In5_Cu },
+        { "L6",    In6_Cu },
+        { "L7",    In7_Cu },
+        { "L8",    In8_Cu },
+        { "L9",    In9_Cu },
+        { "L10",   In10_Cu },
+        { "L11",   In11_Cu },
+        { "L12",   In12_Cu },
+        { "L13",   In13_Cu },
+        { "L14",   In14_Cu },
+        { "L15",   In15_Cu },
+        { "L16",   In16_Cu },
+        { "L17",   In17_Cu },
+        { "L18",   In18_Cu },
+        { "L19",   In19_Cu },
+        { "L20",   In20_Cu },
+        { "L21",   In21_Cu },
+        { "L22",   In22_Cu },
+        { "L23",   In23_Cu },
+        { "L24",   In24_Cu },
+        { "L25",   In25_Cu },
+        { "L26",   In26_Cu },
+        { "L27",   In27_Cu },
+        { "L28",   In28_Cu },
+        { "L29",   In29_Cu },
+        { "L30",   In30_Cu },
+        { "Bot",         B_Cu },
+        { "BotGlue",     B_Adhes },
+        { "TopGlue",     F_Adhes },
+        { "BotPaste",    B_Paste },
+        { "TopPaste",    F_Paste },
+        { "BotLegend",   B_SilkS },
+        { "TopLegend",   F_SilkS },
+        { "BotSoldermask",      B_Mask },
+        { "TopSoldermask",      F_Mask },
+        { "FabricationDrawing", Dwgs_User },
+        { "OtherDrawing",       Cmts_User },
+        { "TopAssemblyDrawing", Eco1_User },
+        { "BotAssemblyDrawing", Eco2_User },
+        { "PProfile",           Edge_Cuts }, // Plated PCB outline
+        { "NPProfile",          Edge_Cuts }  // Non-plated PCB outline
+    };
+    // clang-format on
+
+    std::map<wxString, PCB_LAYER_ID>::iterator it;
+
+    int numKicadMatches = 0; // Assume we won't find KiCad Gerbers
+
+    wxString mapThis;
+
+    GERBER_FILE_IMAGE_LIST* images = m_Parent->GetGerberLayout()->GetImagesList();
+
+    // If the passed vector isn't empty but is too small to hold the loaded
+    // Gerbers, then bail because something isn't right.
+
+    if( ( aGerber2KicadMapping.size() != 0 )
+            && ( aGerber2KicadMapping.size() < (size_t) m_gerberActiveLayersCount ) )
+        return numKicadMatches;
+
+    // If the passed vector is empty, set it to the same number of elements as there
+    // are loaded Gerbers, and set each to "UNSELECTED_LAYER"
+
+    if( aGerber2KicadMapping.size() == 0 )
+        aGerber2KicadMapping.assign( m_gerberActiveLayersCount, UNSELECTED_LAYER );
+
+    // Loop through all loaded Gerbers looking for any with X2 File Functions
+    for( int ii = 0; ii < m_gerberActiveLayersCount; ii++ )
+    {
+        if( images->GetGbrImage( ii ) )
+        {
+            X2_ATTRIBUTE_FILEFUNCTION* x2 = images->GetGbrImage( ii )->m_FileFunction;
+
+            mapThis = "";
+
+            if( images->GetGbrImage( ii )->m_IsX2_file )
+            {
+                if( x2->IsCopper() )
+                {
+                    // This is a copper layer, so figure out which one
+                    mapThis = x2->GetBrdLayerSide(); // Returns "Top", "Bot" or "Inr"
+
+                    // To map inner layers properly, we need the layer number
+                    if( mapThis.IsSameAs( wxT( "Inr" ), false ) )
+                        mapThis = x2->GetBrdLayerId(); // Returns "L2", "L5", etc
+                }
+                else
+                {
+                    // Create strings like "TopSolderMask" or "BotPaste" for non-copper layers
+                    mapThis << x2->GetBrdLayerId() << x2->GetFileType();
+                }
+
+
+                // Check if the string we've isolated matches any known X2 layer names
+                it = kicadLayers.find( mapThis );
+
+                if( it != kicadLayers.end() )
+                {
+                    // We got a match, so store the KiCad layer number.  We verify it's set to
+                    // "UNSELECTED_LAYER" in case the passed vector already had entries
+                    // matched to other known Gerber files.   This will preserve them.
+
+                    if( aGerber2KicadMapping[ii] == UNSELECTED_LAYER )
+                    {
+                        aGerber2KicadMapping[ii] = it->second;
+                        numKicadMatches++;
+                    }
+                }
+            }
+        }
+    }
+
+    return numKicadMatches;
 }

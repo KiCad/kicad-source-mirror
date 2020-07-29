@@ -64,6 +64,21 @@ private:
     void OnResetClick( wxCommandEvent& event ) override;
 
     /**
+     * Finds number of loaded Gerbers where the matching KiCad layer can be identified
+     *
+     * The passed vector<int> will be returned with the same number of elements
+     * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
+     * files.  Any Gerber that maps will have it's entry set to the KiCad PCB layer
+     * number.  Gerbers that can be identified or which don't map to an
+     * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
+     *
+     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber
+     *
+     * @return int - The number of loaded Gerbers that have Altium extensions
+     */
+    int findKnownGerbersLoaded( std::vector<int>& aGerber2KicadMapping );
+
+    /**
      * Finds number of loaded Gerbers using Altium file extensions
      *
      * The passed vector<int> will be returned with the same number of elements
@@ -77,6 +92,37 @@ private:
      * @return int - The number of loaded Gerbers that have Altium extensions
      */
     int findNumAltiumGerbersLoaded( std::vector<int>& aGerber2KicadMapping );
+
+    /**
+     * Finds number of loaded Gerbers using KiCad naming convention
+     *
+     * The passed vector<int> will be returned with the same number of elements
+     * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
+     * files.  Any Gerber that maps will have it's entry set to the KiCad PCB layer
+     * number.  Gerbers that aren't using KiCad naming or which don't map to an
+     * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
+     *
+     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber
+     *
+     * @return int - The number of loaded Gerbers using KiCad naming conventions
+     */
+    int findNumKiCadGerbersLoaded( std::vector<int>& aGerber2KicadMapping );
+
+    /**
+     * Finds number of loaded Gerbers using X2 File Functions to define layers
+     *
+     * The passed vector<int> will be returned with the same number of elements
+     * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
+     * files.  Any Gerber that maps will have it's entry set to the KiCad PCB layer
+     * number.  Gerbers that aren't using X2 File functions or which don't map to an
+     * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
+     *
+     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber
+     *
+     * @return int - The number of loaded Gerbers with X2 File Functions
+     */
+    int findNumX2GerbersLoaded( std::vector<int>& aGerber2KicadMapping );
+
 
     DECLARE_EVENT_TABLE()
 };
