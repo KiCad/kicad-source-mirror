@@ -1071,7 +1071,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 
     m_out->Print( 0, "\n" );
 
-    m_out->Print( aNestLevel + 1, "(fill (color %d %d %d %0.4f))",
+    m_out->Print( aNestLevel + 1, "(fill (color %d %d %d %0.4f))\n",
                   KiROUND( aSheet->GetBackgroundColor().r * 255.0 ),
                   KiROUND( aSheet->GetBackgroundColor().g * 255.0 ),
                   KiROUND( aSheet->GetBackgroundColor().b * 255.0 ),
