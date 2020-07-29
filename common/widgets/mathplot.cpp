@@ -696,9 +696,20 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
         }
         else
         {
-            wxCoord x0, y0;
-            bool first = true;
+            int count = 0;
+            int x0=0;               // X position of merged current vertical line
+            int ymin0=0;            // y min coord of merged current vertical line
+            int ymax0=0;            // y max coord of merged current vertical line
+            int dupx0 = 0;          // count of currently merged vertical lines
+            wxPoint line_start;     // starting point of the current line to draw
 
+            // Note: we do not use dc.DrawLines(), because at least on Windows
+            // dc.DrawLine() is faster, and dc.DrawLines() can hang for a lot
+            // (> 10000 points) (can happens when a lot of points is calculated)
+            // To avoid long draw time (and perhaps hanging) one plot only not redundant lines.
+            // To avoid artifacts when skipping points to the same x coordinate, for each
+            // group of points at a give, x coordinate we also draw a vertical line at this coord,
+            // from the ymin to the ymax vertical coordinates of skipped points
             while( GetNextXY( x, y ) )
             {
                 double px = m_scaleX->TransformToPlot( x );
@@ -707,29 +718,34 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
                 wxCoord x1 = w.x2p( px );
                 wxCoord y1 = w.y2p( py );
 
-                if( first )
+                // Plot only points on the drawing area, to speed up the drawing time
+                if( x1 >= startPx && x1 <= endPx )
                 {
-                    first = false;
-                    x0 = x1;
-                    y0 = y1;
-                    continue;
+                    if( !count || line_start.x != x1 )
+                    {
+                        if( dupx0 > 1 ) // Vertical points are merged,
+                                        // draw the pending vertical line
+                            dc.DrawLine( x0, ymin0, x0, ymax0 );
+
+                        x0 = x1;
+                        ymin0 = ymax0 = y1;
+                        dupx0 = 0;
+
+                        if( count )
+                            dc.DrawLine( line_start, wxPoint( x1, y1 ) );
+
+                        line_start.x = x1;
+                        line_start.y = y1;
+                        count++;
+                    }
+                    else
+                    {
+                        // "Merge" points on a vertical line at x0:
+                        ymin0 = std::min( ymin0, y1 );
+                        ymax0 = std::max( ymax0, y1 );
+                        dupx0++;
+                    }
                 }
-
-//                This gives disastrous results with very high-frequency plots where the
-//                X coordinate may not increment until several waves later
-//
-//                if( x0 == x1 )      // continue until a new X coordinate is reached
-//                    continue;
-
-                bool outDown = ( y0 > maxYpx ) && ( y1 > maxYpx );
-                bool outUp = ( y0 < minYpx ) && ( y1 < minYpx );
-                bool outLeft = ( x1 < startPx ) && ( x0 < startPx );
-                bool outRight = ( x1 > endPx ) && ( x0 > endPx );
-                if( !( outUp || outDown || outLeft || outRight ) )
-                    dc.DrawLine( x0, y0, x1, y1 );
-
-                x0 = x1;
-                y0 = y1;
             }
         }
 
