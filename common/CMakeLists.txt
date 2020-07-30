@@ -194,6 +194,7 @@ set( COMMON_DLG_SRCS
     dialogs/panel_setup_severities.cpp
     dialogs/panel_text_variables.cpp
     dialogs/panel_text_variables_base.cpp
+    dialogs/wx_html_report_box.cpp
     dialogs/wx_html_report_panel.cpp
     dialogs/wx_html_report_panel_base.cpp
     )

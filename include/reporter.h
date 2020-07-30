@@ -202,6 +202,7 @@ public:
     bool HasMessage() const override;
 };
 
+
 /**
  * NULL_REPORTER
  *
