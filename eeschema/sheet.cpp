@@ -176,33 +176,9 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     {
         // Give the user the option to choose relative path if possible.
         if( tmp.MakeRelativeTo( Prj().GetProjectPath() ) )
-        {
-            wxMessageDialog msgDlg2(
-                    this,
-                    "Do you want to use a relative path to the loaded "
-                    "schematic?", "Select Path Type",
-                    wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_QUESTION | wxCENTER );
-            msgDlg2.SetYesNoLabels( wxMessageDialog::ButtonLabel( "Use Relative Path" ),
-                                    wxMessageDialog::ButtonLabel( "Use Absolute Path" ) );
-            int rsp = msgDlg2.ShowModal();
-
-            if( rsp == wxID_CANCEL )
-            {
-                return false;
-            }
-            else if( rsp == wxID_NO )
-            {
-                topLevelSheetPath = fileName.GetPathWithSep();
-            }
-            else
-            {
-                topLevelSheetPath = tmp.GetPathWithSep();
-            }
-        }
-        else
-        {
             topLevelSheetPath = tmp.GetPathWithSep();
-        }
+        else
+            topLevelSheetPath = fileName.GetPathWithSep();
 
         if( wxFileName::GetPathSeparator() == '\\' )
             topLevelSheetPath.Replace( "\\", "/" );
@@ -413,11 +389,13 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         // symbol library table.
         if( !newLibNames.IsEmpty() && !table.IsEmpty() )
         {
-            for( const auto& libName : newLibNames )
+            for( const wxString& libName : newLibNames )
             {
                 if( !table.HasLibrary( libName )
                   || Prj().SchSymbolLibTable()->HasLibrary( libName ) )
+                {
                     continue;
+                }
 
                 // Don't expand environment variable because KIPRJMOD will not be correct
                 // for a different project.
@@ -441,8 +419,10 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 // symbol library table.
                 const SYMBOL_LIB_TABLE_ROW* row = table.FindRow( libName );
 
-                auto newRow = new SYMBOL_LIB_TABLE_ROW( libName, uri, row->GetType(),
-                                                        row->GetOptions(), row->GetDescr() );
+                SYMBOL_LIB_TABLE_ROW* newRow = new SYMBOL_LIB_TABLE_ROW( libName, uri,
+                                                                         row->GetType(),
+                                                                         row->GetOptions(),
+                                                                         row->GetDescr() );
 
                 Prj().SchSymbolLibTable()->InsertRow( newRow );
                 libTableChanged = true;
@@ -455,15 +435,19 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     // Set all sheets loaded into the correct sheet file paths.
 
-    for( auto aItem : currentScreen->Items().OfType( SCH_SHEET_T ) )
+    for( SCH_ITEM* aItem : currentScreen->Items().OfType( SCH_SHEET_T ) )
     {
-        auto sheet = static_cast<SCH_SHEET*>( aItem );
-        sheet->SetFileName( topLevelSheetPath + sheet->GetFileName() );
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
+
+        if( wxFileName( sheet->GetFileName() ).IsRelative( wxPATH_UNIX ) )
+            sheet->SetFileName( topLevelSheetPath + sheet->GetFileName() );
     }
 
     if( libTableChanged )
+    {
         Prj().SchSymbolLibTable()->Save( Prj().GetProjectPath() +
                                          SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+    }
 
     // It is finally safe to add or append the imported schematic.
     if( aSheet->GetScreen() == nullptr )
