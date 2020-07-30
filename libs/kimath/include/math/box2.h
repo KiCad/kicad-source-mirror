@@ -29,6 +29,7 @@
 
 #include <math/vector2d.h>
 #include <limits>
+#include <algorithm>
 
 // Needed for the OPT definition
 #include <core/optional.h>
