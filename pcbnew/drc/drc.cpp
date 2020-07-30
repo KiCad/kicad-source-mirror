@@ -60,7 +60,7 @@
 #include <drc/drc_textvar_tester.h>
 #include <drc/footprint_tester.h>
 #include <dialogs/panel_setup_rules.h>
-
+#include <reporter.h>
 
 DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -196,7 +196,7 @@ bool DRC::LoadRules()
             try
             {
                 DRC_RULES_PARSER parser( m_pcb, fp, rulesFilepath );
-                parser.Parse( m_rules );
+                parser.Parse( m_rules, &NULL_REPORTER::GetInstance() );
             }
             catch( PARSE_ERROR& pe )
             {

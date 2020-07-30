@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "wx_html_report_box.h"
+
 #include "panel_setup_rules_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -64,7 +66,21 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	m_textEditor->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
 	m_textEditor->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 	m_textEditor->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-	m_topMargin->Add( m_textEditor, 1, wxEXPAND | wxALL, 5 );
+	m_topMargin->Add( m_textEditor, 3, wxEXPAND | wxALL, 5 );
+
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_compileButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
+	bSizer5->Add( m_compileButton, 0, wxALL, 3 );
+
+	m_errorsReport = new WX_HTML_REPORT_BOX( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	m_errorsReport->SetMinSize( wxSize( 400,60 ) );
+
+	bSizer5->Add( m_errorsReport, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_topMargin->Add( bSizer5, 1, wxEXPAND, 5 );
 
 
 	m_leftMargin->Add( m_topMargin, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -79,11 +95,15 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 
 	// Connect Events
 	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_SETUP_RULES_BASE::OnSyntaxHelp ), NULL, this );
+	m_compileButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_RULES_BASE::OnCompile ), NULL, this );
+	m_errorsReport->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( PANEL_SETUP_RULES_BASE::OnErrorLinkClicked ), NULL, this );
 }
 
 PANEL_SETUP_RULES_BASE::~PANEL_SETUP_RULES_BASE()
 {
 	// Disconnect Events
 	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_SETUP_RULES_BASE::OnSyntaxHelp ), NULL, this );
+	m_compileButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_RULES_BASE::OnCompile ), NULL, this );
+	m_errorsReport->Disconnect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( PANEL_SETUP_RULES_BASE::OnErrorLinkClicked ), NULL, this );
 
 }

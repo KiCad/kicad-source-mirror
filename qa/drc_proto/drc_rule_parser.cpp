@@ -22,6 +22,7 @@
  */
 
 
+#include <fctsys.h>
 #include <class_board.h>
 #include <class_board_item.h>
 
@@ -29,11 +30,8 @@
 #include <drc_proto/drc_rule_parser.h>
 #include <drc_proto/drc_rules_lexer.h>
 #include <drc_proto/drc_engine.h> // drc_dbg
-
-
-#include <fctsys.h>
-
 #include <pcb_expr_evaluator.h>
+#include <reporter.h>
 
 using namespace DRCRULEPROTO_T;
 
@@ -43,37 +41,94 @@ test::DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxSt
           m_requiredVersion( 0 ),
           m_tooRecent( false )
 {
-    for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+}
+
+
+void test::DRC_RULES_PARSER::reportError( const wxString& aMessage )
+{
+    wxString rest;
+    wxString first = aMessage.BeforeFirst( '|', &rest );
+    wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+                                     CurLineNumber(),
+                                     CurOffset(),
+                                     first,
+                                     rest );
+
+    m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+}
+
+
+void test::DRC_RULES_PARSER::parseUnknown()
+{
+    int depth = 1;
+
+    for( T token = NextTok();  token != T_EOF;  token = NextTok() )
     {
-        std::string untranslated = TO_UTF8( wxString( LSET::Name( PCB_LAYER_ID( layer ) ) ) );
-        m_layerMap[untranslated] = PCB_LAYER_ID( layer );
+        if( token == T_LEFT )
+            depth++;
+
+        if( token == T_RIGHT )
+        {
+            if( --depth == 0 )
+                break;
+        }
     }
 }
 
 
-void test::DRC_RULES_PARSER::Parse(
-        std::vector<test::DRC_RULE_CONDITION*>& aConditions, std::vector<test::DRC_RULE*>& aRules )
+void test::DRC_RULES_PARSER::Parse( std::vector<test::DRC_RULE_CONDITION*>& aConditions,
+                                    std::vector<test::DRC_RULE*>& aRules,
+                                    REPORTER* aReporter )
 {
-    bool haveVersion = false;
+    bool     haveVersion = false;
+    wxString msg;
+
+    m_reporter = aReporter;
 
     for( T token = NextTok(); token != T_EOF; token = NextTok() )
     {
         if( token != T_LEFT )
-            Expecting( T_LEFT );
+            reportError( _( "Missing '('." ) );
 
         token = NextTok();
 
         if( !haveVersion && token != T_version )
-            Expecting( "version" );
+        {
+            reportError( _( "Missing version statement." ) );
+            haveVersion = true;     // don't keep on reporting it
+        }
 
         switch( token )
         {
         case T_version:
-            NeedNUMBER( "version" );
-            m_requiredVersion = (int) strtol( CurText(), NULL, 10 );
-            m_tooRecent       = ( m_requiredVersion > DRC_RULE_FILE_VERSION );
-            haveVersion       = true;
-            NeedRIGHT();
+            haveVersion = true;
+            token = NextTok();
+
+            if( (int) token == DSN_RIGHT )
+            {
+                reportError( _( "Missing version number." ) );
+                break;
+            }
+
+            if( (int) token == DSN_NUMBER )
+            {
+                m_requiredVersion = (int)strtol( CurText(), NULL, 10 );
+                m_tooRecent = ( m_requiredVersion > DRC_RULE_FILE_VERSION );
+                token = NextTok();
+            }
+            else
+            {
+                msg.Printf( _( "Unrecognized item '%s'.| Expected version number" ), FromUTF8() );
+                reportError( msg );
+            }
+
+            if( (int) token != DSN_RIGHT )
+            {
+                msg.Printf( _( "Unrecognized item '%s'." ), FromUTF8() );
+                reportError( msg );
+                parseUnknown();
+            }
+
             break;
 
         case T_condition:
@@ -89,7 +144,10 @@ void test::DRC_RULES_PARSER::Parse(
         }
 
         default:
-            Expecting( "condition or rule" );
+            msg.Printf( _( "Unrecognized item '%s'.| Expected 'rule', 'condition' or 'version'." ),
+                        FromUTF8() );
+            reportError( msg );
+            parseUnknown();
         }
     }
 }
@@ -108,6 +166,8 @@ test::DRC_RULE_CONDITION* test::DRC_RULES_PARSER::parseCONDITION()
         token = NextTok();
 
         //printf( "Do token xxx %d '%s'\n", token, (const char*) FromUTF8().c_str() );
+
+        // TODO: Needs updating to report errors through REPORTER
 
         switch( token )
         {
@@ -139,16 +199,17 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
     DRC_RULE* rule  = new DRC_RULE();
     T         token = NextTok();
     int       value;
+    wxString  msg;
 
     if( !IsSymbol( token ) )
-        Expecting( "rule name" );
+        reportError( _( "Missing rule name." ) );
 
     rule->m_Name = FromUTF8();
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
-            Expecting( T_LEFT );
+            reportError( _( "Missing '('." ) );
 
         token = NextTok();
 
@@ -157,26 +218,70 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
         switch( token )
         {
         case T_type:
+            // TODO: I assume this won't be in the final impl and so doesn't need converting
+            //       to new error reporting framework?
             NeedSYMBOL();
             rule->m_TestProviderName = FromUTF8();
             break;
 
         case T_min:
-            NeedSYMBOL();
+            token = NextTok();
+
+            if( (int) token == DSN_RIGHT )
+            {
+                reportError( _( "Missing min value." ) );
+                break;
+            }
+
             parseValueWithUnits( FromUTF8(), value );
             rule->m_Constraint.m_Value.SetMin( value );
+
+            if( (int) NextTok() != DSN_RIGHT )
+            {
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+                parseUnknown();
+            }
+
             break;
 
         case T_opt:
-            NeedSYMBOL();
+            token = NextTok();
+
+            if( (int) token == DSN_RIGHT )
+            {
+                reportError( _( "Missing opt value." ) );
+                break;
+            }
+
             parseValueWithUnits( FromUTF8(), value );
             rule->m_Constraint.m_Value.SetOpt( value );
+
+            if( (int) NextTok() != DSN_RIGHT )
+            {
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+                parseUnknown();
+            }
+
             break;
         
         case T_max:
-            NeedSYMBOL();
+            token = NextTok();
+
+            if( (int) token == DSN_RIGHT )
+            {
+                reportError( _( "Missing max value." ) );
+                break;
+            }
+
             parseValueWithUnits( FromUTF8(), value );
             rule->m_Constraint.m_Value.SetMax( value );
+
+            if( (int) NextTok() != DSN_RIGHT )
+            {
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+                parseUnknown();
+            }
+
             break;
         
         case T_allow:
@@ -209,7 +314,12 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
 
 
         default:
-            Expecting( "type, min, opt, max, allow, enable, priority or severity" );
+            // TODO: reconcile
+            //Expecting( "type, min, opt, max, allow, enable, priority or severity" );
+            msg.Printf( _( "Unrecognized item '%s'.| Expected 'min', 'max' or 'opt'." ),
+                        FromUTF8() );
+            reportError( msg );
+            parseUnknown();
             break;
         }
 
@@ -222,16 +332,47 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
 
 void test::DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult )
 {
-    PCB_EXPR_EVALUATOR evaluator;
+    PCB_EXPR_EVALUATOR evaluator( m_reporter, CurLineNumber(), CurOffset() );
 
-    bool ok = evaluator.Evaluate( aExpr );
-
-    if( !ok )
-    {
-        LIBEVAL::ERROR_STATUS error = evaluator.GetErrorStatus();
-        THROW_PARSE_ERROR( error.message, CurSource(), CurLine(), CurLineNumber(),
-                           CurOffset() + error.srcPos );
-    }
-
+    evaluator.Evaluate( aExpr );
     aResult = evaluator.Result();
 };
+
+
+LSET test::DRC_RULES_PARSER::parseLayer()
+{
+    LSET retVal;
+    int  token = NextTok();
+
+    if( (int) token == DSN_RIGHT )
+    {
+        reportError( _( "Missing layer name or type." ) );
+        return LSET::AllCuMask();
+    }
+    else if( token == T_outer )
+    {
+        retVal = LSET::ExternalCuMask();
+    }
+    else if( token == T_inner )
+    {
+        retVal = LSET::InternalCuMask();
+    }
+    else
+    {
+        wxString     layerName = FromUTF8();
+        PCB_LAYER_ID layer = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( layerName );
+
+        if( layer == UNDEFINED_LAYER )
+            reportError( wxString::Format( _( "Unrecognized layer '%s' " ), layerName ) );
+
+        retVal.set( layer );
+    }
+
+    if( (int) NextTok() != DSN_RIGHT )
+    {
+        reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+        parseUnknown();
+    }
+
+    return retVal;
+}

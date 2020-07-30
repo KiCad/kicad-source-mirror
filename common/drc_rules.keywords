@@ -10,10 +10,6 @@ graphic
 hole
 inner
 layer
-match_area
-match_layer
-match_netclass
-match_type
 max
 micro_via
 min

@@ -26,6 +26,7 @@
 #include <stdarg.h>
 #endif
 
+#include <reporter.h>
 #include <libeval_compiler/libeval_compiler.h>
 
 /* The (generated) lemon parser is written in C.
@@ -150,13 +151,6 @@ std::string UCODE::Dump() const
 };
 
 
-void CONTEXT::ReportError( const wxString& aErrorMsg )
-{
-    m_errorStatus.pendingError = true;
-    m_errorStatus.message = aErrorMsg;
-}
-
-
 std::string TOKENIZER::GetChars( std::function<bool( int )> cond ) const
 {
     std::string rv;
@@ -186,7 +180,10 @@ bool TOKENIZER::MatchAhead( const std::string& match, std::function<bool( int )>
 }
 
 
-COMPILER::COMPILER()
+COMPILER::COMPILER( REPORTER* aReporter, int aSourceLine, int aSourceOffset ) :
+        m_reporter( aReporter ),
+        m_originLine( aSourceLine ),
+        m_originOffset( aSourceOffset )
 {
     m_localeDecimalSeparator = '.';
     m_sourcePos = 0;
@@ -224,9 +221,7 @@ void COMPILER::Clear()
 
 void COMPILER::parseError( const char* s )
 {
-    libeval_dbg(0, "PARSE ERROR: %s\n", s );
-    m_errorStatus.pendingError = true;
-    m_errorStatus.message = s;
+    reportError( s );
 }
 
 
@@ -241,7 +236,6 @@ bool COMPILER::Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPref
     // Feed parser token after token until end of input.
 
     newString( aString );
-    m_errorStatus.pendingError = false;
 
     if( m_tree )
     {
@@ -267,14 +261,6 @@ bool COMPILER::Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPref
         tok = getToken();
         libeval_dbg(10, "parse: tok %d\n", tok.token );
         Parse( m_parser, tok.token, tok.value, this );
-
-        if( m_errorStatus.pendingError )
-        {
-            m_errorStatus.stage = ERROR_STATUS::CST_PARSE;
-            m_errorStatus.message.Printf( _( "Unrecognized token '%s'" ), tok.value.value.str );
-            m_errorStatus.srcPos = m_tokenizer.GetPos();
-            return false;
-        }
 
         if( m_parseFinished || tok.token == G_ENDS )
         {
@@ -359,6 +345,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
     T_TOKEN     retval;
     std::string current;
     int         convertFrom;
+    wxString    msg;
 
     retval.token = G_ENDS;
 
@@ -495,8 +482,6 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
     }
     else
     {
-        //printf( "WTF: '%c'\n", ch );
-
         // Single char tokens
         switch( ch )
         {
@@ -513,9 +498,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         case '.': retval.token = G_STRUCT_REF;   break;
 
         default:
-            m_errorStatus.stage = ERROR_STATUS::CST_PARSE;
-            m_errorStatus.message.Printf( _( "Unrecognized character '%c'" ), (char) ch );
-            m_errorStatus.srcPos = m_tokenizer.GetPos();
+            reportError( wxString::Format( _( "Unrecognized character '%c'" ), (char) ch ) );
             break;
         }
 
@@ -525,6 +508,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
     aToken = retval;
     return true;
 }
+
 
 const std::string formatNode( TREE_NODE* tok )
 {
@@ -598,10 +582,20 @@ void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
 }
 
 
-void COMPILER::ReportError( const wxString& aErrorMsg )
+void COMPILER::reportError( const wxString& aErrorMsg, int aPos )
 {
-    m_errorStatus.pendingError = true;
-    m_errorStatus.message = aErrorMsg;
+    if( aPos == -1 )
+        aPos = m_sourcePos;
+
+    wxString rest;
+    wxString first = aErrorMsg.BeforeFirst( '|', &rest );
+    wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+                                     m_originLine,
+                                     m_originOffset + aPos,
+                                     first,
+                                     rest );
+
+    m_reporter->Report( msg, RPT_SEVERITY_ERROR );
 }
 
 
@@ -624,6 +618,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 {
     std::vector<TREE_NODE*> stack;
     std::set<TREE_NODE*>    visitedNodes;
+    wxString                msg;
 
     auto visited = [&]( TREE_NODE* node ) -> bool
                    {
@@ -663,26 +658,19 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                 {
                     char*    itemName = node->leaf[0]->value.str;
                     char*    propName = node->leaf[1]->value.str;
-                    VAR_REF* vref = aCode->createVarRef( this, itemName, propName );
+                    VAR_REF* vref = aCode->CreateVarRef( itemName, propName );
 
-                    if( m_errorStatus.pendingError )
+                    if( !vref )
                     {
-                        m_errorStatus.pendingError = true;
-                        m_errorStatus.stage = ERROR_STATUS::CST_CODEGEN;
+                        msg.Printf( _( "Unrecognized item '%s'" ), itemName );
+                        reportError( msg, node->leaf[0]->srcPos - (int) strlen( itemName ) );
+                        return false;
+                    }
 
-                        if( m_errorStatus.message == "var" )
-                        {
-                            m_errorStatus.message.Printf( _( "Unrecognized item '%s'" ),
-                                                          itemName );
-                            m_errorStatus.srcPos = node->leaf[0]->srcPos - strlen( itemName );
-                        }
-                        else
-                        {
-                            m_errorStatus.message.Printf( _( "Unrecognized property '%s'" ),
-                                                          propName );
-                            m_errorStatus.srcPos = node->leaf[1]->srcPos - strlen( propName );
-                        }
-
+                    if( vref->GetType() == VT_PARSE_ERROR )
+                    {
+                        msg.Printf( _( "Unrecognized property '%s'" ), propName );
+                        reportError( msg, node->leaf[1]->srcPos - (int) strlen( propName ) );
                         return false;
                     }
 
@@ -693,26 +681,22 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                 case TR_OP_FUNC_CALL:
                 {
                     char*    itemName = node->leaf[0]->value.str;
-                    VAR_REF* vref = aCode->createVarRef( this, itemName, "" );
+                    VAR_REF* vref = aCode->CreateVarRef( itemName, "" );
 
-                    if( m_errorStatus.pendingError )
+                    if( !vref )
                     {
-                        m_errorStatus.stage = ERROR_STATUS::CST_CODEGEN;
-                        m_errorStatus.message.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        m_errorStatus.srcPos = node->leaf[0]->srcPos - strlen( itemName );
+                        msg.Printf( _( "Unrecognized item '%s'" ), itemName );
+                        reportError( msg, node->leaf[0]->srcPos - (int) strlen( itemName ) );
                         return false;
                     }
 
                     char* functionName = node->leaf[1]->leaf[0]->value.str;
-                    auto  func = aCode->createFuncCall( this, functionName );
+                    auto  func = aCode->CreateFuncCall( functionName );
 
                     if( !func )
                     {
-                        m_errorStatus.pendingError = true;
-                        m_errorStatus.stage = ERROR_STATUS::CST_CODEGEN;
-                        m_errorStatus.message.Printf( _( "Unrecognized function '%s'" ),
-                                                      functionName );
-                        m_errorStatus.srcPos = node->leaf[1]->leaf[0]->srcPos + 1;
+                        msg.Printf( _( "Unrecognized function '%s'" ), functionName );
+                        reportError( msg, node->leaf[1]->leaf[0]->srcPos + 1 );
                         return false;
                     }
 
@@ -730,17 +714,17 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     {
                     }
 
-                    if( aPreflightContext->GetErrorStatus().pendingError )
-                    {
-                        m_errorStatus = aPreflightContext->GetErrorStatus();
-                        m_errorStatus.stage = ERROR_STATUS::CST_CODEGEN;
-                        m_errorStatus.srcPos = node->leaf[1]->leaf[0]->srcPos + 1;
-                        return false;
-                    }
-
                     /* SREF -> FUNC_CALL -> leaf0/1 */
                     node->leaf[1]->leaf[0]->leaf[0] = nullptr;
                     node->leaf[1]->leaf[0]->leaf[1] = nullptr;
+
+                    if( !aPreflightContext->GetError().IsEmpty() )
+                    {
+                        reportError( aPreflightContext->GetError(),
+                                     node->leaf[1]->leaf[1]->srcPos
+                                            - (int) strlen( node->value.str ) - 1 );
+                        return false;
+                    }
 
                     visitedNodes.insert( node->leaf[0] );
                     visitedNodes.insert( node->leaf[1]->leaf[0] );
@@ -782,20 +766,12 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
         case TR_IDENTIFIER:
         {
-            VAR_REF* vref = aCode->createVarRef( this, node->value.str, "" );
+            VAR_REF* vref = aCode->CreateVarRef( node->value.str, "" );
 
-            if( m_errorStatus.pendingError )
+            if( !vref )
             {
-                m_errorStatus.pendingError = true;
-                m_errorStatus.stage = ERROR_STATUS::CST_CODEGEN;
-
-                if( m_errorStatus.message == "var" )
-                {
-                    m_errorStatus.message.Printf( _( "Unrecognized item '%s'" ),
-                                                  node->value.str );
-                    m_errorStatus.srcPos = node->srcPos - strlen( node->value.str );
-                }
-
+                msg.Printf( _( "Unrecognized item '%s'" ), node->value.str );
+                reportError( msg, node->leaf[0]->srcPos - (int) strlen( node->value.str  ) );
                 return false;
             }
 

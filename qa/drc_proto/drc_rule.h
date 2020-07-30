@@ -125,6 +125,7 @@ public:
     DRC_CONSTRAINT m_Constraint;
 };
 
+
 class DRC_RULE_CONDITION
 {
 public:
@@ -132,15 +133,14 @@ public:
     ~DRC_RULE_CONDITION();
 
     bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB );
-    bool Compile();
-    LIBEVAL::ERROR_STATUS GetCompilationError();
+    bool Compile( REPORTER* aReporter, int aSourceLine = 0, int aSourceOffset = 0 );
 
 public:
+    LSET      m_LayerCondition;
     wxString  m_Expression;
     wxString  m_TargetRuleName;
 
 private:
-    LIBEVAL::ERROR_STATUS m_compileError;
     PCB_EXPR_UCODE*       m_ucode;
 };
 

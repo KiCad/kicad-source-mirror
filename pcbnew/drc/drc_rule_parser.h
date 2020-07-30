@@ -43,7 +43,7 @@ public:
     DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource, const wxString& aSourceDescr );
     DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename );
 
-    void Parse( std::vector<DRC_RULE*>& aRules );
+    void Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporter );
 
 private:
     DRC_RULE* parseDRC_RULE();
@@ -51,11 +51,15 @@ private:
     void parseConstraint( DRC_RULE* aRule );
     void parseValueWithUnits( const wxString& aExpr, int& aResult );
     LSET parseLayer();
+    void parseUnknown();
+
+    void reportError( const wxString& aMessage );
 
 private:
-    BOARD* m_board;
-    int    m_requiredVersion;
-    bool   m_tooRecent;
+    BOARD*    m_board;
+    int       m_requiredVersion;
+    bool      m_tooRecent;
+    REPORTER* m_reporter;
 };
 
 #endif      // DRC_RULE_PARSER_H

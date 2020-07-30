@@ -45,7 +45,8 @@ class DRC_RULES_PARSER : public DRC_RULES_PROTO_LEXER
 public:
     DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename );
 
-    void Parse( std::vector<DRC_RULE_CONDITION*>& aConditions, std::vector<DRC_RULE*>& aRules );
+    void Parse( std::vector<DRC_RULE_CONDITION*>& aConditions, std::vector<DRC_RULE*>& aRules,
+                REPORTER* aReporter );
 
 private:
     DRC_RULE_CONDITION* parseCONDITION();
@@ -63,16 +64,20 @@ private:
         return parseInt();
     }
 
-//    void parseConstraint( DRC_RULE* aRule );
+    LSET parseLayer();
+    void parseUnknown();
+
+    void reportError( const wxString& aMessage );
+
+    //    void parseConstraint( DRC_RULE* aRule );
     //int parseValue( DRCRULE_T::T aToken );
 
 private:
 
-    BOARD* m_board;
-    int    m_requiredVersion;
-    bool   m_tooRecent;
-
-    std::unordered_map<std::string, PCB_LAYER_ID> m_layerMap;
+    BOARD*    m_board;
+    int       m_requiredVersion;
+    bool      m_tooRecent;
+    REPORTER* m_reporter;
 };
 
 };

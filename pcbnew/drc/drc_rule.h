@@ -85,8 +85,7 @@ public:
     ~DRC_RULE_CONDITION();
 
     bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB );
-    bool Compile();
-    LIBEVAL::ERROR_STATUS GetCompilationError();
+    bool Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset );
 
 public:
     LSET      m_LayerCondition;
@@ -94,7 +93,6 @@ public:
     wxString  m_TargetRuleName;
 
 private:
-    LIBEVAL::ERROR_STATUS m_compileError;
     PCB_EXPR_UCODE*       m_ucode;
 };
 

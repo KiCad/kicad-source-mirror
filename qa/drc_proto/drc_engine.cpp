@@ -78,7 +78,7 @@ bool test::DRC_ENGINE::LoadRules( wxFileName aPath )
             try
             {
                 DRC_RULES_PARSER parser( m_board, fp, aPath.GetFullPath() );
-                parser.Parse( m_ruleConditions, m_rules );
+                parser.Parse( m_ruleConditions, m_rules, &NULL_REPORTER::GetInstance() );
             }
             catch( PARSE_ERROR& pe )
             {
@@ -88,7 +88,7 @@ bool test::DRC_ENGINE::LoadRules( wxFileName aPath )
 
                 //wxSafeYield( m_editFrame );
                 //m_editFrame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
-                  //                                 pe.lineNumber, pe.byteIndex );
+                //                                   pe.lineNumber, pe.byteIndex );
 
                 throw;
 
@@ -175,7 +175,7 @@ bool test::DRC_ENGINE::CompileRules()
                            {
                                 rcons->conditions.push_back( condition );
                                 
-                                bool compileOk = condition->Compile();
+                                bool compileOk = condition->Compile( &NULL_REPORTER::GetInstance() );
 
                                 ReportAux( wxString::Format( "       |- condition: '%s' compile: %s", condition->m_TargetRuleName, compileOk ? "OK" : "ERROR") );
 

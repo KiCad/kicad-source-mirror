@@ -43,10 +43,9 @@ public:
     PCB_EXPR_UCODE() {};
     virtual ~PCB_EXPR_UCODE() {};
 
-    virtual LIBEVAL::VAR_REF* createVarRef( LIBEVAL::COMPILER *aCompiler, const char* aVar,
-                                            const char* aField ) override;
+    virtual LIBEVAL::VAR_REF* CreateVarRef( const char* aVar, const char* aField ) override;
 
-    virtual FUNC_PTR createFuncCall( LIBEVAL::COMPILER* aCompiler, const char* aName ) override;
+    virtual FUNC_PTR CreateFuncCall( const char* aName ) override;
 };
 
 
@@ -83,7 +82,7 @@ public:
         m_type( LIBEVAL::VT_UNDEFINED ),
         m_isEnum( false )
     {
-        //printf("*** createVarRef %p %d\n", this, aItemIndex );
+        //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
     }
 
     void SetIsEnum( bool s ) { m_isEnum = s; }
@@ -142,28 +141,24 @@ private:
 class PCB_EXPR_COMPILER : public LIBEVAL::COMPILER
 {
 public:
-    PCB_EXPR_COMPILER();
+    PCB_EXPR_COMPILER( REPORTER* aReporter, int aSourceLine, int aSourcePos );
 };
 
 
 class PCB_EXPR_EVALUATOR
 {
 public:
-    PCB_EXPR_EVALUATOR();
+    PCB_EXPR_EVALUATOR( REPORTER* aReporter, int aSourceLine, int aSourceOffset );
     ~PCB_EXPR_EVALUATOR();
 
     bool Evaluate( const wxString& aExpr );
     int  Result() const { return m_result; }
-
-    LIBEVAL::ERROR_STATUS GetErrorStatus() { return m_errorStatus; }
 
 private:
     int  m_result;
 
     PCB_EXPR_COMPILER     m_compiler;
     PCB_EXPR_UCODE        m_ucode;
-
-    LIBEVAL::ERROR_STATUS m_errorStatus;
 };
 
 #endif

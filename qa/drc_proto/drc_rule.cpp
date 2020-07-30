@@ -64,9 +64,9 @@ bool test::DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOAR
 }
 
 
-bool test::DRC_RULE_CONDITION::Compile()
+bool test::DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset )
 {
-    PCB_EXPR_COMPILER compiler;
+    PCB_EXPR_COMPILER compiler( aReporter, aSourceLine, aSourceOffset );
 
     if (!m_ucode)
         m_ucode = new PCB_EXPR_UCODE;
@@ -74,19 +74,7 @@ bool test::DRC_RULE_CONDITION::Compile()
     LIBEVAL::CONTEXT preflightContext;
     
     bool ok = compiler.Compile( m_Expression.ToUTF8().data(), m_ucode, &preflightContext );
-
-    if( ok )
-        return true;
-    
-    m_compileError = compiler.GetErrorStatus();
-
-    printf( "Fail: %s (pos: %d)\n", (const char *) m_compileError.message.c_str(), m_compileError.srcPos );
-
-    return false;
+    return ok;
 }
 
 
-LIBEVAL::ERROR_STATUS test::DRC_RULE_CONDITION::GetCompilationError()
-{
-    return m_compileError;
-}

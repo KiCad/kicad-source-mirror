@@ -1,11 +1,16 @@
+clearance
 condition
+constraint
+inner
+layer
 max
 min
+name
 opt
+outer
 allow
 rule
 version
-name
 priority
 expression
 enable

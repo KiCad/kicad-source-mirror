@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <bitmaps.h>
 #include <widgets/paged_dialog.h>
 #include <pcb_edit_frame.h>
 #include <pcb_expr_evaluator.h>
@@ -28,6 +29,7 @@
 #include <tool/tool_manager.h>
 #include <drc/drc.h>
 #include <panel_setup_rules.h>
+#include <wx_html_report_box.h>
 #include <html_messagebox.h>
 #include <scintilla_tricks.h>
 #include <drc/drc_rule_parser.h>
@@ -46,6 +48,8 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
 
     for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
         m_textEditor->StyleSetFont( i, fixedFont );
+
+    m_compileButton->SetBitmap( KiBitmap( reload_xpm ) );
 
     m_textEditor->Bind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
     m_textEditor->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
@@ -224,6 +228,49 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 }
 
 
+void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
+{
+    m_errorsReport->Clear();
+
+    try
+    {
+        std::vector<DRC_RULE*> dummyRules;
+
+        DRC_RULES_PARSER parser( m_frame->GetBoard(), m_textEditor->GetText(), _( "DRC rules" ) );
+
+        parser.Parse( dummyRules, m_errorsReport );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        m_Parent->SetError( pe.What(), this, m_textEditor, pe.lineNumber, pe.byteIndex );
+    }
+
+    m_errorsReport->Flush();
+}
+
+
+void PANEL_SETUP_RULES::OnErrorLinkClicked( wxHtmlLinkEvent& event )
+{
+    wxString      link = event.GetLinkInfo().GetHref();
+    wxArrayString parts;
+    int           line = 0, offset = 0;
+
+    wxStringSplit( link, parts, ':' );
+
+    if( parts.size() > 1 )
+    {
+        line = (int) strtol( parts[0], nullptr, 10 );
+        offset = (int) strtol( parts[1], nullptr, 10 );
+    }
+
+    int pos = m_textEditor->PositionFromLine( line - 1 ) + ( offset - 1 );
+
+    m_textEditor->GotoPos( pos );
+
+    m_textEditor->SetFocus();
+}
+
+
 bool PANEL_SETUP_RULES::TransferDataToWindow()
 {
     wxString   rulesFilepath = m_frame->Prj().AbsolutePath( "drc-rules" );
@@ -249,7 +296,7 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 
         DRC_RULES_PARSER parser( m_frame->GetBoard(), m_textEditor->GetText(), _( "DRC rules" ) );
 
-        parser.Parse( dummyRules );
+        parser.Parse( dummyRules, m_errorsReport );
     }
     catch( PARSE_ERROR& pe )
     {

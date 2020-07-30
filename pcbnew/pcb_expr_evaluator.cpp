@@ -25,9 +25,9 @@
 #include <cstdio>
 #include <boost/algorithm/string/case_conv.hpp>
 #include <memory>
-#include "class_board.h"
-#include "pcb_expr_evaluator.h"
-
+#include <reporter.h>
+#include <class_board.h>
+#include <pcb_expr_evaluator.h>
 
 
 static void onLayer( LIBEVAL::CONTEXT* aCtx, void *self )
@@ -187,8 +187,7 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 }
 
 
-LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::createFuncCall( LIBEVAL::COMPILER* aCompiler,
-                                                         const char* aName )
+LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::CreateFuncCall( const char* aName )
 {
     PCB_EXPR_BUILTIN_FUNCTIONS& registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
 
@@ -199,8 +198,7 @@ LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::createFuncCall( LIBEVAL::COMPILER* aCom
 }
 
 
-LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler, const char* aVar,
-                                                const char* aField )
+LIBEVAL::VAR_REF* PCB_EXPR_UCODE::CreateVarRef( const char* aVar, const char* aField )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     PCB_EXPR_VAR_REF* vref = nullptr;
@@ -215,7 +213,6 @@ LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler, co
     }
     else
     {
-        aCompiler->ReportError( "var" );
         return vref;
     }
 
@@ -251,16 +248,14 @@ LIBEVAL::VAR_REF* PCB_EXPR_UCODE::createVarRef( LIBEVAL::COMPILER *aCompiler, co
                 }
                 else
                 {
-                    (void) 0; // should we do anything here?
-                    //msg.Printf("Unrecognized type for property '%s'", field.c_str() );
-                    //aCompiler->ReportError( (const char*) msg.c_str() );
+                    wxFAIL_MSG( "PCB_EXPR_UCODE::createVarRef: Unknown property type." );
                 }
             }
         }
     }
 
     if( vref->GetType() == LIBEVAL::VT_UNDEFINED )
-        aCompiler->ReportError( "field" );
+        vref->SetType( LIBEVAL::VT_PARSE_ERROR );
 
     return vref;
 }
@@ -295,13 +290,15 @@ public:
 };
 
 
-PCB_EXPR_COMPILER::PCB_EXPR_COMPILER()
+PCB_EXPR_COMPILER::PCB_EXPR_COMPILER( REPORTER* aReporter, int aSourceLine, int aSourcePos ) :
+        COMPILER( aReporter, aSourceLine, aSourcePos )
 {
     m_unitResolver = std::make_unique<PCB_UNIT_RESOLVER>();
 }
 
 
-PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR()
+PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR( REPORTER* aReporter, int aSourceLine, int aSourceOffset ) :
+        m_compiler( aReporter, aSourceLine, aSourceOffset )
 {
     m_result = 0;
 }
@@ -316,15 +313,10 @@ bool PCB_EXPR_EVALUATOR::Evaluate( const wxString& aExpr )
     PCB_EXPR_UCODE   ucode;
     LIBEVAL::CONTEXT preflightContext;
 
-    if( !m_compiler.Compile( aExpr.ToUTF8().data(), &ucode, &preflightContext ) )
-    {
-        m_errorStatus = m_compiler.GetErrorStatus();
-        return false;
-    }
+    m_compiler.Compile( aExpr.ToUTF8().data(), &ucode, &preflightContext );
 
-// fixme: handle error conditions
-    LIBEVAL::CONTEXT ctx;
-    LIBEVAL::VALUE*  result = ucode.Run( &ctx );
+    LIBEVAL::CONTEXT evaluationContext;
+    LIBEVAL::VALUE*  result = ucode.Run( &evaluationContext );
 
     if( result->GetType() == LIBEVAL::VT_NUMERIC )
         m_result = KiROUND( result->AsDouble() );

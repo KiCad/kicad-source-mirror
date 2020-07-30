@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_HTML_REPORT_BOX;
+
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -19,6 +21,12 @@
 #include <wx/hyperlink.h>
 #include <wx/sizer.h>
 #include <wx/stc/stc.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/html/htmlwin.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -38,9 +46,13 @@ class PANEL_SETUP_RULES_BASE : public wxPanel
 		wxStaticText* m_title;
 		wxHyperlinkCtrl* m_syntaxHelp;
 		wxStyledTextCtrl* m_textEditor;
+		wxBitmapButton* m_compileButton;
+		WX_HTML_REPORT_BOX* m_errorsReport;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSyntaxHelp( wxHyperlinkEvent& event ) { event.Skip(); }
+		virtual void OnCompile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnErrorLinkClicked( wxHtmlLinkEvent& event ) { event.Skip(); }
 
 
 	public:

@@ -77,7 +77,8 @@ enum VAR_TYPE_T
 {
     VT_STRING = 1,
     VT_NUMERIC,
-    VT_UNDEFINED
+    VT_UNDEFINED,
+    VT_PARSE_ERROR
 };
 
 enum TOKEN_TYPE_T
@@ -287,13 +288,13 @@ public:
         return m_stack.size();
     }
 
-    ERROR_STATUS GetErrorStatus() const { return m_errorStatus; }
-    void ReportError( const wxString& aErrorMsg );
+    void ReportError( const wxString& aErrorMsg ) { m_errorMessage = aErrorMsg; }
+    const wxString& GetError() const { return m_errorMessage; }
 
 private:
     std::vector<VALUE*> m_ownedValues;
     std::stack<VALUE*>  m_stack;
-    ERROR_STATUS        m_errorStatus;
+    wxString            m_errorMessage;
 };
 
 
@@ -312,12 +313,12 @@ public:
     VALUE* Run( CONTEXT* ctx );
     std::string Dump() const;
 
-    virtual VAR_REF* createVarRef( COMPILER* aCompiler, const char* var, const char* field )
+    virtual VAR_REF* CreateVarRef( const char* var, const char* field )
     {
         return nullptr;
     };
 
-    virtual FUNC_PTR createFuncCall( COMPILER* aCompiler, const char* name )
+    virtual FUNC_PTR CreateFuncCall( const char* name )
     {
         return nullptr;
     };
@@ -402,7 +403,7 @@ private:
 class COMPILER
 {
 public:
-    COMPILER();
+    COMPILER( REPORTER* aReporter, int aSourceLine, int aSourceOffset );
     virtual ~COMPILER();
 
     /*
@@ -417,18 +418,10 @@ public:
 
     int GetSourcePos() const { return m_sourcePos; }
 
-    /* Check if previous invokation of process() was successful */
-    inline bool IsValid() const
-    {
-        return !m_errorStatus.pendingError;
-    }
-
     void setRoot( LIBEVAL::TREE_NODE root );
     void freeTree( LIBEVAL::TREE_NODE *tree );
 
     bool Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPreflightContext );
-    void ReportError( const wxString& aErrorMsg );
-    ERROR_STATUS GetErrorStatus() const { return m_errorStatus; }
 
 protected:
     enum LEXER_STATE
@@ -441,6 +434,7 @@ protected:
 
     bool generateUCode( UCODE* aCode, CONTEXT* aPreflightContext );
 
+    void reportError( const wxString& aErrorMsg, int aPos = -1 );
 
     /* Token type used by the tokenizer */
     struct T_TOKEN
@@ -483,8 +477,8 @@ protected:
         return uop;
     }
 
+protected:
     /* Token state for input string. */
-    
     void*        m_parser; // the current lemon parser state machine
     TOKENIZER    m_tokenizer;
     char         m_localeDecimalSeparator;
@@ -492,8 +486,11 @@ protected:
     std::unique_ptr<UNIT_RESOLVER> m_unitResolver;
 
     int          m_sourcePos;
-    ERROR_STATUS m_errorStatus;
     bool         m_parseFinished;
+
+    REPORTER*    m_reporter;
+    int          m_originLine;      // Location in the file of the start of the expression
+    int          m_originOffset;
 
     TREE_NODE*   m_tree;
 };
