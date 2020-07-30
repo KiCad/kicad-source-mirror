@@ -61,6 +61,11 @@ public:
     void SetSwatchColor( KIGFX::COLOR4D aColor, bool sendEvent );
 
     /**
+     * Sets the color that will be chosen with the "Reset to Default" button in the chooser
+     */
+    void SetDefaultColor( KIGFX::COLOR4D aColor );
+
+    /**
      * Set the swatch background color.
      */
     void SetSwatchBackground( KIGFX::COLOR4D aBackground );

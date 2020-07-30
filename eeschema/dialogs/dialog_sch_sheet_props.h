@@ -71,6 +71,7 @@ private:
     void OnGridCellChanging( wxGridEvent& event );
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnInitDlg( wxInitDialogEvent& event ) override;
+    void OnRemoveColors( wxCommandEvent& event ) override;
 
     void AdjustGridColumns( int aWidth );
 };

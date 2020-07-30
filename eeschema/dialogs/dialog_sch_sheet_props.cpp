@@ -789,3 +789,15 @@ void DIALOG_SCH_SHEET_PROPS::OnInitDlg( wxInitDialogEvent& event )
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }
+
+
+void DIALOG_SCH_SHEET_PROPS::OnRemoveColors( wxCommandEvent& event )
+{
+    COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
+
+    m_borderSwatch->SetDefaultColor( colorSettings->GetColor( LAYER_SHEET ) );
+    m_backgroundSwatch->SetDefaultColor( colorSettings->GetColor( LAYER_SHEET_BACKGROUND ) );
+
+    m_borderSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+    m_backgroundSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+}

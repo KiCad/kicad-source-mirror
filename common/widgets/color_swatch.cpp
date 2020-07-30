@@ -172,11 +172,18 @@ void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool sendEvent )
 {
     m_color = aColor;
 
-    wxBitmap bm = MakeBitmap( m_color, m_background, m_size );
+    wxBitmap bm = MakeBitmap( m_color == COLOR4D::UNSPECIFIED ? m_default : m_color,
+                              m_background, m_size );
     m_swatch->SetBitmap( bm );
 
     if( sendEvent )
         sendSwatchChangeEvent( *this );
+}
+
+
+void COLOR_SWATCH::SetDefaultColor( COLOR4D aColor )
+{
+    m_default = aColor;
 }
 
 
