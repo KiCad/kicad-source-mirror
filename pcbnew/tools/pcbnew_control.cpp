@@ -837,6 +837,14 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
 
     for( BOARD_ITEM* item : aItems )
     {
+        if( aIsNew )
+        {
+            const_cast<KIID&>( item->m_Uuid ) = KIID();
+
+            if( item->Type() == PCB_MODULE_T )
+                static_cast<MODULE*>( item )->SetPath( KIID_PATH() );
+        }
+
         item->SetSelected();
         selection.Add( item );
 
