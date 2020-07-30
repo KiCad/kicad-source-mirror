@@ -20,36 +20,38 @@
 
 /**
  * @file cadstar_pcb.cpp
- * @brief Converts a CPA_FILE object into a KiCad BOARD object
+ * @brief Converts a CADSTAR_PCB_ARCHIVE_PARSER object into a KiCad BOARD object
  */
 
 #include <board_stackup_manager/stackup_predefined_prms.h> //KEY_COPPER, KEY_CORE, KEY_PREPREG
 #include <cadstar_pcb.h>
 
 
-void CADSTAR_PCB::Load( CPA_FILE* aCPAfile )
+void CADSTAR_PCB::Load( BOARD* aBoard )
 {
-    loadBoardStackup( aCPAfile );
+    mBoard = aBoard;
+    Parse();
+    loadBoardStackup();
 
     //TODO: process all other items
 }
 
 
-void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
+void CADSTAR_PCB::loadBoardStackup()
 {
-    std::map<CPA_ID, CPA_LAYER>&    cpaLayers     = aCPAfile->Assignments.Layerdefs.Layers;
-    std::map<CPA_ID, CPA_MATERIAL>& cpaMaterials  = aCPAfile->Assignments.Layerdefs.Materials;
-    std::vector<CPA_ID>&            cpaLayerStack = aCPAfile->Assignments.Layerdefs.LayerStack;
-    unsigned                        numElectricalAndPowerLayers = 0;
-    BOARD_DESIGN_SETTINGS&          designSettings              = mBoard->GetDesignSettings();
-    BOARD_STACKUP&                  stackup                = designSettings.GetStackupDescriptor();
-    int                             noOfKiCadStackupLayers = 0;
-    int                             lastElectricalLayerIndex = 0;
-    int                             dielectricSublayer       = 0;
-    int                             numDielectricLayers      = 0;
-    bool                            prevWasDielectric        = false;
-    BOARD_STACKUP_ITEM*             tempKiCadLayer;
-    std::vector<PCB_LAYER_ID>       layerIDs;
+    std::map<LAYER_ID, LAYER>&       cpaLayers              = Assignments.Layerdefs.Layers;
+    std::map<MATERIAL_ID, MATERIAL>& cpaMaterials           = Assignments.Layerdefs.Materials;
+    std::vector<LAYER_ID>&           cpaLayerStack          = Assignments.Layerdefs.LayerStack;
+    unsigned                         numElecAndPowerLayers  = 0;
+    BOARD_DESIGN_SETTINGS&           designSettings         = mBoard->GetDesignSettings();
+    BOARD_STACKUP&                   stackup                = designSettings.GetStackupDescriptor();
+    int                              noOfKiCadStackupLayers = 0;
+    int                              lastElectricalLayerIndex = 0;
+    int                              dielectricSublayer       = 0;
+    int                              numDielectricLayers      = 0;
+    bool                             prevWasDielectric        = false;
+    BOARD_STACKUP_ITEM*              tempKiCadLayer;
+    std::vector<PCB_LAYER_ID>        layerIDs;
 
     //Remove all layers except required ones
     stackup.RemoveAll();
@@ -61,7 +63,7 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
 
     for( auto it = cpaLayerStack.begin(); it != cpaLayerStack.end(); ++it )
     {
-        CPA_LAYER               curLayer       = cpaLayers[*it];
+        LAYER                   curLayer       = cpaLayers[*it];
         BOARD_STACKUP_ITEM_TYPE kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_UNDEFINED;
         LAYER_T                 copperType     = LAYER_T::LT_UNDEFINED;
         PCB_LAYER_ID            kicadLayerID   = PCB_LAYER_ID::UNDEFINED_LAYER;
@@ -70,7 +72,7 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
         if( cpaLayers.count( *it ) == 0 )
             wxASSERT_MSG( true, wxT( "Unable to find layer index" ) );
 
-        if( prevWasDielectric && ( curLayer.Type != CPA_LAYER_TYPE::CONSTRUCTION ) )
+        if( prevWasDielectric && ( curLayer.Type != LAYER_TYPE::CONSTRUCTION ) )
         {
             stackup.Add( tempKiCadLayer ); //only add dielectric layers here after all are done
             dielectricSublayer = 0;
@@ -80,34 +82,34 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
 
         switch( curLayer.Type )
         {
-        case CPA_LAYER_TYPE::ALLDOC:
-        case CPA_LAYER_TYPE::ALLELEC:
-        case CPA_LAYER_TYPE::ALLLAYER:
-        case CPA_LAYER_TYPE::ASSCOMPCOPP:
-        case CPA_LAYER_TYPE::NOLAYER:
+        case LAYER_TYPE::ALLDOC:
+        case LAYER_TYPE::ALLELEC:
+        case LAYER_TYPE::ALLLAYER:
+        case LAYER_TYPE::ASSCOMPCOPP:
+        case LAYER_TYPE::NOLAYER:
             //Shouldn't be here if CPA file is correctly parsed and not corrupt
             THROW_IO_ERROR( wxString::Format(
                     _( "Unexpected layer '%s' in layer stack." ), curLayer.Name ) );
             continue;
-        case CPA_LAYER_TYPE::JUMPERLAYER:
+        case LAYER_TYPE::JUMPERLAYER:
             copperType     = LAYER_T::LT_JUMPER;
-            kicadLayerID   = getKiCadCopperLayerID( numElectricalAndPowerLayers++ );
+            kicadLayerID   = getKiCadCopperLayerID( numElecAndPowerLayers++ );
             kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER;
             layerTypeName  = KEY_COPPER;
             break;
-        case CPA_LAYER_TYPE::ELEC:
+        case LAYER_TYPE::ELEC:
             copperType     = LAYER_T::LT_SIGNAL;
-            kicadLayerID   = getKiCadCopperLayerID( numElectricalAndPowerLayers++ );
+            kicadLayerID   = getKiCadCopperLayerID( numElecAndPowerLayers++ );
             kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER;
             layerTypeName  = KEY_COPPER;
             break;
-        case CPA_LAYER_TYPE::POWER:
+        case LAYER_TYPE::POWER:
             copperType     = LAYER_T::LT_POWER;
-            kicadLayerID   = getKiCadCopperLayerID( numElectricalAndPowerLayers++ );
+            kicadLayerID   = getKiCadCopperLayerID( numElecAndPowerLayers++ );
             kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER;
             layerTypeName  = KEY_COPPER;
             break;
-        case CPA_LAYER_TYPE::CONSTRUCTION:
+        case LAYER_TYPE::CONSTRUCTION:
             kicadLayerID      = PCB_LAYER_ID::UNDEFINED_LAYER;
             kicadLayerType    = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_DIELECTRIC;
             prevWasDielectric = true;
@@ -117,20 +119,20 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
             //check electrical layers above and below to decide if current layer is prepreg
             // or core
             break;
-        case CPA_LAYER_TYPE::DOC:
+        case LAYER_TYPE::DOC:
             //TODO find out a suitable KiCad Layer alternative for this CADSTAR type
             continue; //ignore
-        case CPA_LAYER_TYPE::NONELEC:
+        case LAYER_TYPE::NONELEC:
             switch( curLayer.SubType )
             {
-            case CPA_LAYER_SUBTYPE::LAYERSUBTYPE_ASSEMBLY:
-            case CPA_LAYER_SUBTYPE::LAYERSUBTYPE_NONE:
-            case CPA_LAYER_SUBTYPE::LAYERSUBTYPE_PLACEMENT:
+            case LAYER_SUBTYPE::LAYERSUBTYPE_ASSEMBLY:
+            case LAYER_SUBTYPE::LAYERSUBTYPE_NONE:
+            case LAYER_SUBTYPE::LAYERSUBTYPE_PLACEMENT:
                 //TODO find out a suitable KiCad Layer alternative for these CADSTAR types
                 continue; //ignore these layer types for now
-            case CPA_LAYER_SUBTYPE::LAYERSUBTYPE_PASTE:
+            case LAYER_SUBTYPE::LAYERSUBTYPE_PASTE:
                 kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERPASTE;
-                if( numElectricalAndPowerLayers > 0 )
+                if( numElecAndPowerLayers > 0 )
                 {
                     kicadLayerID  = PCB_LAYER_ID::F_Paste;
                     layerTypeName = _HKI( "Top Solder Paste" );
@@ -141,9 +143,9 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
                     layerTypeName = _HKI( "Bottom Solder Paste" );
                 }
                 break;
-            case CPA_LAYER_SUBTYPE::LAYERSUBTYPE_SILKSCREEN:
+            case LAYER_SUBTYPE::LAYERSUBTYPE_SILKSCREEN:
                 kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SILKSCREEN;
-                if( numElectricalAndPowerLayers > 0 )
+                if( numElecAndPowerLayers > 0 )
                 {
                     kicadLayerID  = PCB_LAYER_ID::F_SilkS;
                     layerTypeName = _HKI( "Top Silk Screen" );
@@ -154,9 +156,9 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
                     layerTypeName = _HKI( "Bottom Silk Screen" );
                 }
                 break;
-            case CPA_LAYER_SUBTYPE::LAYERSUBTYPE_SOLDERRESIST:
+            case LAYER_SUBTYPE::LAYERSUBTYPE_SOLDERRESIST:
                 kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERMASK;
-                if( numElectricalAndPowerLayers > 0 )
+                if( numElecAndPowerLayers > 0 )
                 {
                     kicadLayerID  = PCB_LAYER_ID::F_Mask;
                     layerTypeName = _HKI( "Top Solder Mask" );
@@ -195,7 +197,7 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
                 tempKiCadLayer->AddDielectricPrms( dielectricSublayer );
         }
 
-        if( !curLayer.MaterialId.IsEmpty() )
+        if( curLayer.MaterialId != UNDEFINED_MATERIAL_ID )
         {
             tempKiCadLayer->SetMaterial(
                     cpaMaterials[curLayer.MaterialId].Name, dielectricSublayer );
@@ -206,8 +208,8 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
             //TODO add Resistivity when KiCad supports it
         }
 
-        int unitMultiplier = aCPAfile->KiCadUnitMultiplier;
-        tempKiCadLayer->SetThickness( curLayer.Thickness * unitMultiplier, dielectricSublayer );
+        tempKiCadLayer->SetThickness(
+                curLayer.Thickness * KiCadUnitMultiplier, dielectricSublayer );
 
         wxASSERT( layerTypeName != wxEmptyString );
         tempKiCadLayer->SetTypeName( layerTypeName );
@@ -250,7 +252,7 @@ void CADSTAR_PCB::loadBoardStackup( CPA_FILE* aCPAfile )
     mBoard->SetEnabledLayers( LSET( &layerIDs[0], layerIDs.size() ) );
     mBoard->SetVisibleLayers( LSET( &layerIDs[0], layerIDs.size() ) );
 
-    mBoard->SetCopperLayerCount( numElectricalAndPowerLayers );
+    mBoard->SetCopperLayerCount( numElecAndPowerLayers );
 }
 
 

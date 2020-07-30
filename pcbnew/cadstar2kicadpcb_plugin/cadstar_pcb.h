@@ -20,7 +20,7 @@
 
 /**
  * @file cadstar_pcb.h
- * @brief Converts a CPA_FILE object into a KiCad BOARD object
+ * @brief Converts a CADSTAR_PCB_ARCHIVE_PARSER object into a KiCad BOARD object
  */
 
 #ifndef CADSTAR_PCB_H_
@@ -30,25 +30,25 @@
 
 class BOARD;
 
-class CADSTAR_PCB
+class CADSTAR_PCB : public CADSTAR_PCB_ARCHIVE_PARSER
 {
 public:
-    explicit CADSTAR_PCB( BOARD* aBoard ) : mBoard( aBoard )
+    explicit CADSTAR_PCB( wxString aFilename ) : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
     {
     }
 
     /**
-     * @brief Loads a CADSTAR PCB Archive into the KiCad BOARD
-     * @param aCPAfile 
+     * @brief Loads a CADSTAR PCB Archive file into the KiCad BOARD object given
+     * @param aBoard 
      */
-    void Load( CPA_FILE* aCPAfile );
+    void Load( BOARD* aBoard );
 
 private:
-    BOARD*                               mBoard;
-    std::map<CPA_ID, PCB_LAYER_ID>       mLayermap; //<Map between Cadstar and KiCad Layers
-    std::map<CPA_PHYSICAL_LAYER, CPA_ID> mCopperLayers;
-    void                                 loadBoardStackup( CPA_FILE* aCPAfile );
-    PCB_LAYER_ID                         getKiCadCopperLayerID( unsigned int aLayerNum );
+    BOARD*                             mBoard;
+    std::map<LAYER_ID, PCB_LAYER_ID>   mLayermap; //<Map between Cadstar and KiCad Layers
+    std::map<PHYSICAL_LAYER, LAYER_ID> mCopperLayers;
+    void                               loadBoardStackup();
+    PCB_LAYER_ID                       getKiCadCopperLayerID( unsigned int aLayerNum );
 };
 
 

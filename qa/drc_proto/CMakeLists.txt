@@ -103,6 +103,7 @@ target_link_libraries( drc_proto
     pcbcommon
     bitmaps
     gal
+    cadstar2kicadpcb
     common
     pcbcommon
     ${PCBNEW_IO_LIBRARIES}

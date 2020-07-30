@@ -26,621 +26,47 @@
 #ifndef CADSTAR_PCB_ARCHIVE_PARSER_H_
 #define CADSTAR_PCB_ARCHIVE_PARSER_H_
 
-#include <cadstar_common.h>
+#include <boost/serialization/strong_typedef.hpp>
+#include <cadstar_archive_common.h>
 #include <map>
 #include <vector>
 
-const long CPA_UNDEFINED = -1; ///< Undefined Parameter
-
-typedef wxString CPA_ID;
-
 
 //=================================
-// HEADER
+// MACRO DEFINITIONS
 //=================================
-
-
-struct CPA_FORMAT
-{
-    wxString Type;
-    long     SomeInt; ///< It is unclear what this parameter is used for
-    long     Version; ///< Archive version number (e.g. 21 => CADSTAR 2018.0 and 2019.0 arhive,
-                      ///< 20=> CADSTAR 18.0 archive, 19=> CADSTAR 17.0 archive, etc.)
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_TIMESTAMP
-{
-    long Year;
-    long Month;
-    long Day;
-    long Hour;
-    long Minute;
-    long Second;
-
-    void Parse( XNODE* aNode );
-};
-
-//Note: there are possibly several other resolutions, but HUNDREDTH MICRON is only one known
-enum class CPA_RESOLUTION
-{
-    HUNDREDTH_MICRON
-};
-
-
-struct CPA_HEADER
-{
-    CPA_FORMAT     Format;
-    wxString       JobFile;
-    wxString       JobTitle;
-    wxString       Generator;
-    CPA_RESOLUTION Resolution;
-    CPA_TIMESTAMP  Timestamp;
-
-    void Parse( XNODE* aNode );
-};
-
-
-//=================================
-// ASSIGNMENTS
-//=================================
-
-//.................................
-// ASSIGNMENTS -> LAYERDEFS
-//.................................
-
+#define UNDEFINED_LAYER_ID ( LAYER_ID ) wxEmptyString
+#define UNDEFINED_MATERIAL_ID ( MATERIAL_ID ) wxEmptyString
+#define UNDEFINED_PHYSICAL_LAYER ( PHYSICAL_LAYER ) - 1
 
 /**
- * @brief subset of CPA_LAYER_TYPE - for materials only
-*/
-enum class CPA_MATERIAL_LAYER_TYPE
-{
-    CONSTRUCTION,
-    ELECTRICAL,
-    NON_ELECTRICAL
-};
-
-
-struct CPA_MATERIAL
-{
-    CPA_ID                  ID;
-    wxString                Name;
-    CPA_MATERIAL_LAYER_TYPE Type; ///< Type of layer appropriate for the material being set up
-    CADSTAR_COMMON::EVALUE  Permittivity;
-    CADSTAR_COMMON::EVALUE  LossTangent;
-    CADSTAR_COMMON::EVALUE  Resistivity; ///< x10^-8 ohm*metre
-
-    void Parse( XNODE* aNode );
-};
-
-
-enum class CPA_LAYER_TYPE
-{
-    UNDEFINED,   ///< Only used for error detection
-    ALLLAYER,    ///< Inbuilt layer type (cannot be assigned to user layers)
-    ALLELEC,     ///< Inbuilt layer type (cannot be assigned to user layers)
-    ALLDOC,      ///< Inbuilt layer type (cannot be assigned to user layers)
-    NOLAYER,     ///< Inbuilt layer type (cannot be assigned to user layers)
-    ASSCOMPCOPP, ///< Inbuilt layer type (cannot be assigned to user layers)
-    JUMPERLAYER, ///< Inbuilt layer type (cannot be assigned to user layers)
-    ELEC,
-    POWER,
-    NONELEC, ///< This type has subtypes
-    CONSTRUCTION,
-    DOC
-};
-
-
-enum class CPA_LAYER_SUBTYPE
-{
-    LAYERSUBTYPE_NONE,
-    LAYERSUBTYPE_SILKSCREEN,
-    LAYERSUBTYPE_PLACEMENT,
-    LAYERSUBTYPE_ASSEMBLY,
-    LAYERSUBTYPE_SOLDERRESIST,
-    LAYERSUBTYPE_PASTE
-};
-
-
-enum class CPA_ROUTING_BIAS
-{
-    UNBIASED,   ///< Keyword "UNBIASED" (default)
-    X,          ///< Keyword "X_BIASED"
-    Y,          ///< Keyword "Y_BIASED"
-    ANTI_ROUTE, ///< Keyword "ANTITRACK"
-    OBSTACLE    ///< Keyword "OBSTACLE"
-};
-
-
-enum class CPA_EMBEDDING
-{
-    NONE,
-    ABOVE,
-    BELOW
-};
-
-typedef long CPA_PHYSICAL_LAYER;
-
-struct CPA_LAYER
-{
-    CPA_ID             ID;
-    wxString           Name;
-    CPA_LAYER_TYPE     Type          = CPA_LAYER_TYPE::UNDEFINED;
-    CPA_LAYER_SUBTYPE  SubType       = CPA_LAYER_SUBTYPE::LAYERSUBTYPE_NONE;
-    CPA_PHYSICAL_LAYER PhysicalLayer = CPA_UNDEFINED; ///< If CPA_UNDEFINED, no physical layer is
-                                                      ///< assigned (e.g. documentation and
-                                                      ///< construction layers)
-    CPA_ID           SwapLayerID = wxEmptyString;     ///< If empty, no swap layer
-    CPA_ROUTING_BIAS RoutingBias = CPA_ROUTING_BIAS::UNBIASED;
-    long             Thickness   = 0; ///< Note: Units of length are defined in file header
-    CPA_ID           MaterialId;
-    CPA_EMBEDDING    Embedding = CPA_EMBEDDING::NONE;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_LAYERDEFS
-{
-    std::map<CPA_ID, CPA_MATERIAL> Materials;
-    std::map<CPA_ID, CPA_LAYER>    Layers;
-    std::vector<CPA_ID>            LayerStack;
-
-    void Parse( XNODE* aNode );
-};
-
-
-//.................................
-// ASSIGNMENTS -> CODEDEFS
-//.................................
-
-enum class CPA_LINESTYLE
-{
-    SOLID,
-    DASH,
-    DASHDOT,
-    DASHDOTDOT,
-    DOT
-};
-
-struct CPA_LINECODE
-{
-    CPA_ID        ID;
-    wxString      Name;
-    long          Width;
-    CPA_LINESTYLE Style;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_HATCH
-{
-    long Step;
-    long LineWidth;
-    long OrientAngle; ///< 1/1000 of a Degree
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_HATCHCODE
-{
-    CPA_ID                 ID;
-    wxString               Name;
-    std::vector<CPA_HATCH> Hatches;
-
-    void Parse( XNODE* aNode );
-};
-
-
-const long CPA_FONT_NORMAL = 400;
-const long CPA_FONT_BOLD   = 700;
-
-
-struct CPA_FONT
-{
-    wxString Name  = wxT( "CADSTAR" );
-    long Modifier1 = CPA_FONT_NORMAL; ///< It seems this is related to weight. 400=Normal, 700=Bold.
-    long Modifier2 = 0;               ///< It seems this is always 0 regardless of settings
-    bool KerningPairs = false; ///< From CADSTAR Help: "Kerning Pairs is for causing the system to
-                               ///< automatically reduce the spacing between certain pairs of
-                               ///< characters in order to improve the appearance of the text"
-    bool Italic = false;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_TEXTCODE
-{
-    CPA_ID   ID;
-    wxString Name;
-    long     LineWidth;
-    long     Height;
-    long     Width; ///< Defaults to 0 if using system fonts or, if using CADSTAR font, default to
-                    ///< equal height (1:1 aspect ratio). Allows for system fonts to be rendered in
-                    ///< a different aspect ratio.
-    CPA_FONT Font;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_ROUTECODE
-{
-    CPA_ID   ID;
-    wxString Name;
-    long     OptimalWidth;
-    long     MinWidth;
-    long     MaxWidth;
-    long     NeckedWidth;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_COPREASSIGN
-{
-    CPA_ID LayerID;
-    long   CopperWidth;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_COPPERCODE
-{
-    CPA_ID                       ID;
-    wxString                     Name;
-    long                         CopperWidth;
-    std::vector<CPA_COPREASSIGN> Reassigns;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_SPACINGCODE
-{
-    wxString Code;
-    long     Spacing;
-
-    void Parse( XNODE* aNode );
-};
-
-
-enum class CPA_SHAPE_TYPE
-{
-    ANNULUS,
-    BULLET,
-    CIRCLE, ///< Keyword "ROUND"
-    DIAMOND,
-    FINGER,
-    OCTAGON,
-    RECTANGLE,
-    ROUNDED_RECT, ///< Keyword "ROUNDED"
-    SQUARE
-};
-
-
-struct CPA_PAD_SHAPE
-{
-    CPA_SHAPE_TYPE ShapeType;
-    long           Size            = CPA_UNDEFINED;
-    long           LeftLength      = CPA_UNDEFINED;
-    long           RightLength     = CPA_UNDEFINED;
-    long           InternalFeature = CPA_UNDEFINED;
-    long           OrientAngle     = 0; ///< 1/1000 of a Degree
-
-    static bool IsShape( XNODE* aNode );
-    void        Parse( XNODE* aNode );
-};
-
-
-struct CPA_PADREASSIGN
-{
-    CPA_ID        LayerID;
-    CPA_PAD_SHAPE Shape;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_PADCODE
-{
-    CPA_ID        ID;
-    wxString      Name;
-    CPA_PAD_SHAPE Shape;
-    long          ReliefClearance = CPA_UNDEFINED; ///< if undefined inherits from design
-    long          ReliefWidth     = CPA_UNDEFINED; ///< if undefined inherits from design
-    bool          Plated          = true;
-    long          DrillDiameter   = CPA_UNDEFINED;
-    long          DrillOversize   = CPA_UNDEFINED;
-    long          SlotLength      = CPA_UNDEFINED;
-    long          SlotOrientation = CPA_UNDEFINED;
-    long          DrillXoffset    = CPA_UNDEFINED;
-    long          DrillYoffset    = CPA_UNDEFINED;
-
-    std::vector<CPA_PADREASSIGN> Reassigns;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_VIAREASSIGN
-{
-    CPA_ID        LayerID;
-    CPA_PAD_SHAPE Shape;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_VIACODE
-{
-    CPA_ID        ID;
-    wxString      Name;
-    CPA_PAD_SHAPE Shape;
-    long          ReliefClearance = CPA_UNDEFINED; ///< if undefined inherits from design
-    long          ReliefWidth     = CPA_UNDEFINED; ///< if undefined inherits from design
-    long          DrillDiameter   = CPA_UNDEFINED;
-    long          DrillOversize   = CPA_UNDEFINED;
-
-    std::vector<CPA_VIAREASSIGN> Reassigns;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_LAYERPAIR
-{
-    CPA_ID             ID;
-    wxString           Name;
-    CPA_PHYSICAL_LAYER PhysicalLayerStart;
-    CPA_PHYSICAL_LAYER PhysicalLayerEnd;
-    CPA_ID             ViacodeID;
-
-    void Parse( XNODE* aNode );
-};
-
-
-enum class CPA_ATTROWNER
-{
-    ALL_ITEMS,
-    AREA,
-    BOARD,
-    COMPONENT,
-    CONNECTION,
-    COPPER,
-    DOCSYMBOL,
-    FIGURE,
-    NET,
-    NETCLASS,
-    PART,            ///< Only library Attributes
-    PART_DEFINITION, ///< Only library Attributes
-    PIN,
-    SYMDEF,
-    TEMPLATE,
-    TESTPOINT
-};
-
-
-enum class CPA_ATTRUSAGE
-{
-    BOTH,            ///< From CADSTAR Help: Assigned to both Schematic symbols and PCB components,
-                     ///< and displayed on Schematic and PCB designs.
-    COMPONENT,       ///< From CADSTAR Help: Assigned to PCB components and displayed on PCB designs
-    PART_DEFINITION, ///< From CADSTAR Help: Assigned to Parts library Definitions and displayed
-                     ///< by the Library searcher
-    PART_LIBRARY,    ///< From CADSTAR Help: Only used by non-Cadstar applicationws
-    SYMBOL,          ///< From CADSTAR Help: Assigned to Schematic Symbols and displayed on
-                     ///< Schematic Designs
-    UNDEFINED        ///< Note: It seems that some attribute have no "ATTRUSAGE" defined. It appears
-                     ///< that the attributes that fall under this category arethe ones associated
-                     ///< with the design itself (i.e. not inherited from the library)
-};
-
-/**
- * @brief NOTE from CADSTAR help: To convert a Part Definition Attribute into a hyperlink, prefix
- * the attribute name with "Link "
+ * Default spacing class for all nets
  */
-struct CPA_ATTRNAME
-{
-    CPA_ID        ID;
-    wxString      Name;
-    CPA_ATTROWNER AttributeOwner = CPA_ATTROWNER::ALL_ITEMS;
-    CPA_ATTRUSAGE AttributeUsage = CPA_ATTRUSAGE::UNDEFINED;
-    bool          NoTransfer     = false; ///< True="All Design Types", False="Current Design Type"
-                                          ///< "All Design Types" Description from CADSTAR Help:
-                                          ///< "The selected attribute name will beavailable when
-                                          ///< any design is displayed"
-                                          ///< "Current Design Type" From CADSTAR Help: This
-                                          ///< restricts the availability of the selected attribute
-                                          ///< name to the current design.
+#define NO_SPACE_CLASS_ID ( SPACING_CLASS_ID ) wxT( "NO_SPACE_CLASS" )
 
-    void Parse( XNODE* aNode );
-};
+/**
+ * Component Name Attribute ID - typically used for placement of designators on silk screen.
+ */
+#define COMPONENT_NAME_ATTRID ( ATTRIBUTE_ID ) wxT( "__COMPONENT_NAME__" )
 
+/**
+ * Component Name 2 Attribute ID - typically used for indicating the placement of designators in
+ * placement drawings.
+ */
+#define COMPONENT_NAME_2_ATTRID ( ATTRIBUTE_ID ) wxT( "__COMPONENT_NAME_2__" )
+#define PART_NAME_ATTRID ( ATTRIBUTE_ID ) wxT( "__PART_NAME__" )
 
-struct CPA_ATTRIBUTE_VALUE
-{
-    CPA_ID   AttributeID;
-    wxString Value;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_NETCLASS
-{
-    CPA_ID                           ID;
-    wxString                         Name;
-    std::vector<CPA_ATTRIBUTE_VALUE> Attributes;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_SPCCLASSNAME
-{
-    CPA_ID   ID; //TODO convert to an enum class containing all valid spacings
-    wxString Name;
-
-    void Parse( XNODE* aNode );
-};
-
-const CPA_ID CPA_NO_SPACE_CLASS_ID = wxT( "NO_SPACE_CLASS" ); ///< Default spacing class
-
-struct CPA_SPCCLASSSPACE
-{
-    CPA_ID SpacingClassID1;
-    CPA_ID SpacingClassID2;
-    CPA_ID LayerID; ///< Normally LAY0, which corresponds to (All Layers)
-    long   Spacing;
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_CODEDEFS
-{
-    std::map<CPA_ID, CPA_LINECODE>     LineCodes;
-    std::map<CPA_ID, CPA_HATCHCODE>    HatchCodes;
-    std::map<CPA_ID, CPA_TEXTCODE>     TextCodes;
-    std::map<CPA_ID, CPA_ROUTECODE>    RouteCodes;
-    std::map<CPA_ID, CPA_COPPERCODE>   CopperCodes;
-    std::vector<CPA_SPACINGCODE>       SpacingCodes; ///< Spacing Design Rules
-    std::map<CPA_ID, CPA_PADCODE>      PadCodes;
-    std::map<CPA_ID, CPA_VIACODE>      ViaCodes;
-    std::map<CPA_ID, CPA_LAYERPAIR>    LayerPairs; ///< Default vias to use between pairs of layers
-    std::map<CPA_ID, CPA_ATTRNAME>     AttributeNames;
-    std::map<CPA_ID, CPA_NETCLASS>     NetClasses;
-    std::map<CPA_ID, CPA_SPCCLASSNAME> SpacingClassNames;
-    std::vector<CPA_SPCCLASSSPACE>     SpacingClasses;
-
-    void Parse( XNODE* aNode );
-};
-
-//.................................
-// ASSIGNMENTS -> TECHNOLOGY
-//.................................
-
-enum class CPA_UNITS
-{
-    THOU,
-    INCH,
-    MICROMETRE,
-    MM,
-    CENTIMETER,
-    METER
-};
-
-struct CPA_TECHNOLOGY
-{
-    CPA_UNITS Unit;               ///< Unit to display for linear dimensions
-    long      UnitDisplPrecision; ///< Number of decimal points to display for linear dimensions
-    long      InterlineGap;       ///< For CADSTAR font only, distance between lines of text,
-                                  ///< expressed as a percentage of the text height (accepted
-                                  ///< values are 0-100)
-    long BarlineGap;              ///< For CADSTAR font only, distance between top bar and
-                                  ///< character, expressed as a percentage of the text height
-                                  ///< (accepted values are 0-100)
-    bool AllowBarredText = false; ///< Specifies if barring is allowed in the design
-    long AngularPrecision;        ///< Number of decimal points to display for angular dimensions
-    long MinRouteWidth;           ///< Manufacturing Design Rule. Corresponds to "Thin Route Width"
-    long MinNeckedLength;         ///< Manufacturing Design Rule. Corresponds to
-                                  ///< "Minimum Thinner Track Length"
-    long MinUnneckedLength;       ///< Manufacturing Design Rule. Corresponds to
-                                  ///< "Minimum Thicker Track Length"
-    long MinMitre;                ///< Manufacturing Design Rule. Corresponds to "Minimum Mitre"
-    long MaxMitre;                ///< Manufacturing Design Rule. Corresponds to "Maximum Mitre"
-    long MaxPhysicalLayer;        ///< Should equal number of copper layers. However, it seems this
-                                  ///< can be set to any arbitrarily high number as long as it is
-                                  ///< greater or equal to the number of copper layers. Also the
-                                  ///< last copper layer (bottom) must have this set as its value.
-    long TrackGrid;               ///< Grid for Routes (equal X and Y steps)
-    long ViaGrid;                 ///< Grid for Vias (equal X and Y steps)
-
-    CADSTAR_COMMON::POINT                                   DesignOrigin;
-    std::pair<CADSTAR_COMMON::POINT, CADSTAR_COMMON::POINT> DesignArea;
-    CADSTAR_COMMON::POINT                                   DesignRef; ///< Appears to be 0,0 always
-    CADSTAR_COMMON::POINT                                   DesignLimit;
-
-    bool BackOffJunctions   = false;
-    bool BackOffWidthChange = false;
-
-    void Parse( XNODE* aNode );
-};
-
-//.................................
-// ASSIGNMENTS -> GRIDS
-//.................................
-
-enum class CPA_GRID_TYPE
-{
-    FRACTIONALGRID, ///< Param1 = Unit, Param2 = Divisor. The grid is equal in X and Y dimensions
-                    ///< with a step size equal to Param1/Param2
-    STEPGRID        ///< Param1 = X Step, Param2 = Y Step. A standard x,y grid.
-};
-
-
-struct CPA_GRID
-{
-    CPA_GRID_TYPE Type;
-    wxString      Name;
-    long          Param1; ///< Either Unit or X step, depending on Type (see CPA_GRID_TYPE for
-                          ///< more details)
-    long Param2;          ///< Either Divisor or Y step, depending on Type (see CPA_GRID_TYPE for
-                          ///< more details)
-
-    static bool IsGrid( XNODE* aNode );
-    void        Parse( XNODE* aNode );
-};
-
-
-struct CPA_GRIDS
-{
-    CPA_GRID WorkingGrid;
-    CPA_GRID ScreenGrid;             ///< From CADSTAR Help: "There is one Screen Grid, which is
-                                     ///< visible as dots on the screen. You cannot specify your
-                                     ///< own name for the Screen Grid. The visibility and colour
-                                     ///< of the dots representing the Screen Grid is set up by
-                                     ///< the Highlight category on the Colours dialog.
-                                     ///<
-                                     ///< The type of Screen grid displayed(Lined or Points) is
-                                     ///< set up on the Display dialog within Options(File menu)."
-    std::vector<CPA_GRID> UserGrids; ///< List of predefined grids created by the user
-
-    void Parse( XNODE* aNode );
-};
-
-
-struct CPA_ASSIGNMENTS
-{
-    CPA_LAYERDEFS  Layerdefs;
-    CPA_CODEDEFS   Codedefs;
-    CPA_TECHNOLOGY Technology;
-    CPA_GRIDS      Grids;
-    bool           NetclassEditAttributeSettings     = false; //< Unclear what this does
-    bool           SpacingclassEditAttributeSettings = false; //< Unclear what this does
-
-    void Parse( XNODE* aNode );
-};
-
-
-//=================================
-// CPA_FILE
-//=================================
 
 /**
  * @brief Represents a CADSTAR PCB Archive (CPA) file
  */
-class CPA_FILE
+class CADSTAR_PCB_ARCHIVE_PARSER : public CADSTAR_ARCHIVE_COMMON
 {
 public:
-    explicit CPA_FILE( wxString aFilename ) : Filename( aFilename )
+    explicit CADSTAR_PCB_ARCHIVE_PARSER( wxString aFilename )
+            : Filename( aFilename ), CADSTAR_ARCHIVE_COMMON()
     {
+        KiCadUnitMultiplier = 10; // assume hundredth micron
     }
 
     /**
@@ -650,14 +76,1152 @@ public:
      */
     void Parse();
 
+    typedef wxString MATERIAL_ID;
+    typedef wxString LAYER_ID;
+    typedef long     PHYSICAL_LAYER;
+    typedef wxString LINECODE_ID;
+    typedef wxString HATCHCODE_ID;
+    typedef wxString TEXTCODE_ID;
+    typedef wxString ROUTECODE_ID;
+    typedef wxString COPPERCODE_ID;
+    typedef wxString PADCODE_ID;
+    typedef wxString VIACODE_ID;
+    typedef wxString LAYERPAIR_ID;
+    typedef wxString ATTRIBUTE_ID;
+    typedef wxString NETCLASS_ID;
+    typedef wxString SPACING_CLASS_ID;
+    typedef wxString FIGURE_ID;
+    typedef wxString COMP_AREA_ID;
+    typedef long     PAD_ID;
+    typedef wxString TEXT_ID;
+    typedef wxString DIMENSION_ID;
+    typedef wxString SYMDEF_ID;
+
+
+    //=================================
+    // HEADER
+    //=================================
+
+
+    struct FORMAT
+    {
+        wxString Type;
+        long     SomeInt; ///< It is unclear what this parameter is used for
+        long     Version; ///< Archive version number (e.g. 21 => CADSTAR 2018.0 and 2019.0 arhive,
+                          ///< 20=> CADSTAR 18.0 archive, 19=> CADSTAR 17.0 archive, etc.)
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct TIMESTAMP
+    {
+        long Year;
+        long Month;
+        long Day;
+        long Hour;
+        long Minute;
+        long Second;
+
+        void Parse( XNODE* aNode );
+    };
+
+    //Note: there are possibly several other resolutions, but HUNDREDTH MICRON is only one known
+    enum class RESOLUTION
+    {
+        HUNDREDTH_MICRON
+    };
+
+
+    struct HEADER
+    {
+        FORMAT     Format;
+        wxString   JobFile;
+        wxString   JobTitle;
+        wxString   Generator;
+        RESOLUTION Resolution;
+        TIMESTAMP  Timestamp;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    //=================================
+    // ASSIGNMENTS
+    //=================================
+
+    //.................................
+    // ASSIGNMENTS -> LAYERDEFS
+    //.................................
+
+
+    /**
+     * @brief Type of layer appropriate for the material being set up
+     */
+    enum class MATERIAL_LAYER_TYPE
+    {
+        CONSTRUCTION,
+        ELECTRICAL, ///< Either @see LAYER_TYPE::ELEC or @see LAYER_TYPE::POWER
+        NON_ELECTRICAL
+    };
+
+
+    struct MATERIAL
+    {
+        MATERIAL_ID         ID;
+        wxString            Name;
+        MATERIAL_LAYER_TYPE Type;
+        EVALUE              Permittivity;
+        EVALUE              LossTangent;
+        EVALUE              Resistivity; ///< x10^-8 ohm*metre
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    enum class LAYER_TYPE
+    {
+        UNDEFINED,   ///< Only used for error detection
+        ALLLAYER,    ///< Inbuilt layer type (cannot be assigned to user layers)
+        ALLELEC,     ///< Inbuilt layer type (cannot be assigned to user layers)
+        ALLDOC,      ///< Inbuilt layer type (cannot be assigned to user layers)
+        NOLAYER,     ///< Inbuilt layer type (cannot be assigned to user layers)
+        ASSCOMPCOPP, ///< Inbuilt layer type (cannot be assigned to user layers)
+        JUMPERLAYER, ///< Inbuilt layer type (cannot be assigned to user layers)
+        ELEC,
+        POWER,
+        NONELEC, ///< This type has subtypes
+        CONSTRUCTION,
+        DOC
+    };
+
+
+    enum class LAYER_SUBTYPE
+    {
+        LAYERSUBTYPE_NONE,
+        LAYERSUBTYPE_SILKSCREEN,
+        LAYERSUBTYPE_PLACEMENT,
+        LAYERSUBTYPE_ASSEMBLY,
+        LAYERSUBTYPE_SOLDERRESIST,
+        LAYERSUBTYPE_PASTE
+    };
+
+
+    enum class ROUTING_BIAS
+    {
+        UNBIASED,   ///< Keyword "UNBIASED" (default)
+        X,          ///< Keyword "X_BIASED"
+        Y,          ///< Keyword "Y_BIASED"
+        ANTI_ROUTE, ///< Keyword "ANTITRACK"
+        OBSTACLE    ///< Keyword "OBSTACLE"
+    };
+
+
+    enum class EMBEDDING
+    {
+        NONE,
+        ABOVE,
+        BELOW
+    };
+
+    struct LAYER
+    {
+        LAYER_ID       ID;
+        wxString       Name;
+        LAYER_TYPE     Type    = LAYER_TYPE::UNDEFINED;
+        LAYER_SUBTYPE  SubType = LAYER_SUBTYPE::LAYERSUBTYPE_NONE;
+        PHYSICAL_LAYER PhysicalLayer =
+                UNDEFINED_PHYSICAL_LAYER;              ///< If UNDEFINED, no physical layer is
+                                                       ///< assigned (e.g. documentation and
+                                                       ///< construction layers)
+        LAYER_ID     SwapLayerID = UNDEFINED_LAYER_ID; ///< If UNDEFINED_LAYER_ID, no swap layer
+        ROUTING_BIAS RoutingBias = ROUTING_BIAS::UNBIASED;
+        long         Thickness   = 0; ///< Note: Units of length are defined in file header
+        MATERIAL_ID  MaterialId;
+        EMBEDDING    Embedding = EMBEDDING::NONE;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct LAYERDEFS
+    {
+        std::map<MATERIAL_ID, MATERIAL> Materials;
+        std::map<LAYER_ID, LAYER>       Layers;
+        std::vector<LAYER_ID>           LayerStack;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    //.................................
+    // ASSIGNMENTS -> CODEDEFS
+    //.................................
+
+    enum class LINESTYLE
+    {
+        SOLID,
+        DASH,
+        DASHDOT,
+        DASHDOTDOT,
+        DOT
+    };
+
+    struct LINECODE
+    {
+        LINECODE_ID ID;
+        wxString    Name;
+        long        Width;
+        LINESTYLE   Style;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct HATCH
+    {
+        long Step;
+        long LineWidth;
+        long OrientAngle; ///< 1/1000 of a Degree
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct HATCHCODE
+    {
+        HATCHCODE_ID       ID;
+        wxString           Name;
+        std::vector<HATCH> Hatches;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    static const long FONT_NORMAL = 400;
+    static const long FONT_BOLD   = 700;
+
+
+    struct FONT
+    {
+        wxString Name  = wxT( "CADSTAR" );
+        long Modifier1 = FONT_NORMAL; ///< It seems this is related to weight. 400=Normal, 700=Bold.
+        long Modifier2 = 0;           ///< It seems this is always 0 regardless of settings
+        bool KerningPairs =
+                false; ///< From CADSTAR Help: "Kerning Pairs is for causing the system to
+                       ///< automatically reduce the spacing between certain pairs of
+                       ///< characters in order to improve the appearance of the text"
+        bool Italic = false;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct TEXTCODE
+    {
+        TEXTCODE_ID ID;
+        wxString    Name;
+        long        LineWidth;
+        long        Height;
+        long Width; ///< Defaults to 0 if using system fonts or, if using CADSTAR font, default to
+                    ///< equal height (1:1 aspect ratio). Allows for system fonts to be rendered in
+                    ///< a different aspect ratio.
+        FONT Font;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct ROUTECODE
+    {
+        //TODO: Generalise this so it can also be used with CSA files
+        // (CSA files use "SROUTEWIDTH" subnode, instead of attribute)
+
+        ROUTECODE_ID ID;
+        wxString     Name;
+        long         OptimalWidth;
+        long         MinWidth;
+        long         MaxWidth;
+        long         NeckedWidth;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct COPREASSIGN
+    {
+        LAYER_ID LayerID;
+        long     CopperWidth;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct COPPERCODE
+    {
+        COPPERCODE_ID            ID;
+        wxString                 Name;
+        long                     CopperWidth;
+        std::vector<COPREASSIGN> Reassigns;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct SPACINGCODE
+    {
+        wxString Code; //TODO convert to an enum class containing all valid spacings
+        long     Spacing;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    enum class PAD_SHAPE_TYPE
+    {
+        ANNULUS,
+        BULLET,
+        CIRCLE, ///< Keyword "ROUND"
+        DIAMOND,
+        FINGER,
+        OCTAGON,
+        RECTANGLE,
+        ROUNDED_RECT, ///< Keyword "ROUNDED"
+        SQUARE
+    };
+
+
+    struct PAD_SHAPE
+    {
+        PAD_SHAPE_TYPE ShapeType;
+        long           Size            = UNDEFINED_VALUE;
+        long           LeftLength      = UNDEFINED_VALUE;
+        long           RightLength     = UNDEFINED_VALUE;
+        long           InternalFeature = UNDEFINED_VALUE;
+        long           OrientAngle     = 0; ///< 1/1000 of a Degree
+
+        static bool IsPadShape( XNODE* aNode );
+        void        Parse( XNODE* aNode );
+    };
+
+
+    struct PADREASSIGN
+    {
+        LAYER_ID  LayerID;
+        PAD_SHAPE Shape;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct PADCODE
+    {
+        PADCODE_ID ID;
+        wxString   Name;
+        PAD_SHAPE  Shape;
+        long       ReliefClearance = UNDEFINED_VALUE; ///< if undefined inherits from design
+        long       ReliefWidth     = UNDEFINED_VALUE; ///< if undefined inherits from design
+        bool       Plated          = true;
+        long       DrillDiameter   = UNDEFINED_VALUE;
+        long       DrillOversize   = UNDEFINED_VALUE;
+        long       SlotLength      = UNDEFINED_VALUE;
+        long       SlotOrientation = UNDEFINED_VALUE;
+        long       DrillXoffset    = UNDEFINED_VALUE;
+        long       DrillYoffset    = UNDEFINED_VALUE;
+
+        std::map<LAYER_ID, PAD_SHAPE> Reassigns;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct VIAREASSIGN
+    {
+        LAYER_ID  LayerID;
+        PAD_SHAPE Shape;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct VIACODE
+    {
+        VIACODE_ID ID;
+        wxString   Name;
+        PAD_SHAPE  Shape;
+        long       ReliefClearance = UNDEFINED_VALUE; ///< if undefined inherits from design
+        long       ReliefWidth     = UNDEFINED_VALUE; ///< if undefined inherits from design
+        long       DrillDiameter   = UNDEFINED_VALUE;
+        long       DrillOversize   = UNDEFINED_VALUE;
+
+        std::map<LAYER_ID, PAD_SHAPE> Reassigns;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct LAYERPAIR
+    {
+        LAYERPAIR_ID   ID;
+        wxString       Name;
+        PHYSICAL_LAYER PhysicalLayerStart;
+        PHYSICAL_LAYER PhysicalLayerEnd;
+        VIACODE_ID     ViacodeID;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    enum class ATTROWNER
+    {
+        ALL_ITEMS,
+        AREA,
+        BOARD,
+        COMPONENT,
+        CONNECTION,
+        COPPER,
+        DOCSYMBOL,
+        FIGURE,
+        NET,
+        NETCLASS,
+        PART,            ///< Only library Attributes
+        PART_DEFINITION, ///< Only library Attributes
+        PIN,
+        SYMDEF,
+        TEMPLATE,
+        TESTPOINT
+    };
+
+
+    enum class ATTRUSAGE
+    {
+        BOTH,      ///< From CADSTAR Help: Assigned to both Schematic symbols and PCB components,
+                   ///< and displayed on Schematic and PCB designs.
+        COMPONENT, ///< From CADSTAR Help: Assigned to PCB components and displayed on PCB designs
+        PART_DEFINITION, ///< From CADSTAR Help: Assigned to Parts library Definitions and displayed
+                         ///< by the Library searcher
+        PART_LIBRARY,    ///< From CADSTAR Help: Only used by non-Cadstar applications
+        SYMBOL,          ///< From CADSTAR Help: Assigned to Schematic Symbols and displayed on
+                         ///< Schematic Designs
+        UNDEFINED ///< Note: It seems that some attribute have no "ATTRUSAGE" defined. It appears
+                  ///< that the attributes that fall under this category arethe ones associated
+                  ///< with the design itself (i.e. not inherited from the library)
+    };
+
+    /**
+     * @brief NOTE from CADSTAR help: To convert a Part Definition Attribute into a hyperlink, prefix
+     * the attribute name with "Link "
+     */
+    struct ATTRNAME
+    {
+        ATTRIBUTE_ID ID;
+        wxString     Name;
+        ATTROWNER    AttributeOwner = ATTROWNER::ALL_ITEMS;
+        ATTRUSAGE    AttributeUsage = ATTRUSAGE::UNDEFINED;
+        bool         NoTransfer = false; ///< True="All Design Types", False="Current Design Type"
+                                         ///< "All Design Types" Description from CADSTAR Help:
+                                         ///< "The selected attribute name will beavailable when
+                                         ///< any design is displayed"
+                                         ///< "Current Design Type" From CADSTAR Help: This
+                                         ///< restricts the availability of the selected attribute
+                                         ///< name to the current design.
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct ATTRIBUTE_VALUE
+    {
+        ATTRIBUTE_ID AttributeID;
+        wxString     Value;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct NETCLASS
+    {
+        NETCLASS_ID                  ID;
+        wxString                     Name;
+        std::vector<ATTRIBUTE_VALUE> Attributes;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct SPCCLASSNAME
+    {
+        SPACING_CLASS_ID ID;
+        wxString         Name;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct SPCCLASSSPACE
+    {
+        SPACING_CLASS_ID SpacingClassID1;
+        SPACING_CLASS_ID SpacingClassID2;
+        LAYER_ID         LayerID; ///< Normally LAY0, which corresponds to (All Layers)
+        long             Spacing;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct CODEDEFS
+    {
+        std::map<LINECODE_ID, LINECODE>     LineCodes;
+        std::map<HATCHCODE_ID, HATCHCODE>   HatchCodes;
+        std::map<TEXTCODE_ID, TEXTCODE>     TextCodes;
+        std::map<ROUTECODE_ID, ROUTECODE>   RouteCodes;
+        std::map<COPPERCODE_ID, COPPERCODE> CopperCodes;
+        std::vector<SPACINGCODE>            SpacingCodes; ///< Spacing Design Rules
+        std::map<PADCODE_ID, PADCODE>       PadCodes;
+        std::map<VIACODE_ID, VIACODE>       ViaCodes;
+        std::map<LAYERPAIR_ID, LAYERPAIR>
+                LayerPairs; ///< Default vias to use between pairs of layers
+
+        std::map<ATTRIBUTE_ID, ATTRNAME>         AttributeNames;
+        std::map<NETCLASS_ID, NETCLASS>          NetClasses;
+        std::map<SPACING_CLASS_ID, SPCCLASSNAME> SpacingClassNames;
+        std::vector<SPCCLASSSPACE>               SpacingClasses;
+
+        void Parse( XNODE* aNode );
+    };
+
+    //.................................
+    // ASSIGNMENTS -> TECHNOLOGY
+    //.................................
+
+    enum class UNITS
+    {
+        THOU,
+        INCH,
+        MICROMETRE,
+        MM,
+        CENTIMETER,
+        METER
+    };
+
+    static UNITS ParseUnits( XNODE* aNode );
+
+    struct TECHNOLOGY_SECTION
+    {
+        UNITS Units;                  ///< Units to display for linear dimensions
+        long  UnitDisplPrecision;     ///< Number of decimal points to display for linear dimensions
+        long  InterlineGap;           ///< For CADSTAR font only, distance between lines of text,
+                                      ///< expressed as a percentage of the text height (accepted
+                                      ///< values are 0-100)
+        long BarlineGap;              ///< For CADSTAR font only, distance between top bar and
+                                      ///< character, expressed as a percentage of the text height
+                                      ///< (accepted values are 0-100)
+        bool AllowBarredText = false; ///< Specifies if barring is allowed in the design
+        long AngularPrecision;  ///< Number of decimal points to display for angular dimensions
+        long MinRouteWidth;     ///< Manufacturing Design Rule. Corresponds to "Thin Route Width"
+        long MinNeckedLength;   ///< Manufacturing Design Rule. Corresponds to
+                                ///< "Minimum Thinner Track Length"
+        long MinUnneckedLength; ///< Manufacturing Design Rule. Corresponds to
+                                ///< "Minimum Thicker Track Length"
+        long MinMitre;          ///< Manufacturing Design Rule. Corresponds to "Minimum Mitre"
+        long MaxMitre;          ///< Manufacturing Design Rule. Corresponds to "Maximum Mitre"
+        long MaxPhysicalLayer;  ///< Should equal number of copper layers. However, it seems this
+                                ///< can be set to any arbitrarily high number as long as it is
+                                ///< greater or equal to the number of copper layers. Also the
+                                ///< last copper layer (bottom) must have this set as its value.
+        long TrackGrid;         ///< Grid for Routes (equal X and Y steps)
+        long ViaGrid;           ///< Grid for Vias (equal X and Y steps)
+
+        POINT                   DesignOrigin;
+        std::pair<POINT, POINT> DesignArea;
+        POINT                   DesignRef; ///< Appears to be 0,0 always
+        POINT                   DesignLimit;
+
+        bool BackOffJunctions   = false;
+        bool BackOffWidthChange = false;
+
+        void Parse( XNODE* aNode );
+    };
+
+    //.................................
+    // ASSIGNMENTS -> GRIDS
+    //.................................
+
+    enum class GRID_TYPE
+    {
+        FRACTIONALGRID, ///< Param1 = Units, Param2 = Divisor. The grid is equal in X and Y
+                        ///< dimensions with a step size equal to Param1/Param2
+        STEPGRID        ///< Param1 = X Step, Param2 = Y Step. A standard x,y grid.
+    };
+
+
+    struct GRID
+    {
+        GRID_TYPE Type;
+        wxString  Name;
+        long      Param1; ///< Either Units or X step, depending on Type (see GRID_TYPE for
+                          ///< more details)
+        long Param2;      ///< Either Divisor or Y step, depending on Type (see GRID_TYPE for
+                          ///< more details)
+
+        static bool IsGrid( XNODE* aNode );
+        void        Parse( XNODE* aNode );
+    };
+
+
+    struct GRIDS
+    {
+        GRID WorkingGrid;
+        GRID ScreenGrid;             ///< From CADSTAR Help: "There is one Screen Grid, which is
+                                     ///< visible as dots on the screen. You cannot specify your
+                                     ///< own name for the Screen Grid. The visibility and colour
+                                     ///< of the dots representing the Screen Grid is set up by
+                                     ///< the Highlight category on the Colours dialog.
+                                     ///<
+                                     ///< The type of Screen grid displayed(Lined or Points) is
+                                     ///< set up on the Display dialog within Options(File menu)."
+        std::vector<GRID> UserGrids; ///< List of predefined grids created by the user
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct ASSIGNMENTS
+    {
+        LAYERDEFS          Layerdefs;
+        CODEDEFS           Codedefs;
+        TECHNOLOGY_SECTION Technology;
+        GRIDS              Grids;
+        bool               NetclassEditAttributeSettings     = false; //< Unclear what this does
+        bool               SpacingclassEditAttributeSettings = false; //< Unclear what this does
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    /**
+     * @brief Corresponds to "Display when" Item property. From CADSTAR
+     *        Help: "This parameter enables you to make the visibility of
+     *        a component outline/area (or an area of component copper, or
+     *        a string of component text) dependent on the current mirror
+     *        status of the component.
+     *        
+     *        For example, you may require a string of component text to
+     *        be displayed only when the component is mirrored."
+    */
+    enum class SWAP_RULE
+    {
+        NO_SWAP,        ///< Display when Unmirrored
+        USE_SWAP_LAYER, ///< Display when Mirrored
+        BOTH            ///< Always display (Mirrored and Unmirrored)
+    };
+
+    static SWAP_RULE ParseSwapRule( XNODE* aNode );
+
+
+    struct FIGURE
+    {
+        FIGURE_ID   ID;
+        LINECODE_ID LineCodeID;
+        LAYER_ID    LayerID;
+        SHAPE       Shape; //< Uses the component's coordinate frame if within a component
+                           //< definition, otherwise uses the design's coordinate frame.
+        SWAP_RULE SwapRule = SWAP_RULE::BOTH;
+
+        void Parse( XNODE* aNode );
+    };
+
+    /**
+     * @brief A shape of copper in the component footprint. For KiCad import, this could
+     * be converted to a custom shaped pad (as long as AssociatedPadIDs is not empty)
+     */
+    struct COMPONENT_COPPER
+    {
+        COPPERCODE_ID       CopperCodeID;
+        LAYER_ID            LayerID;
+        SHAPE               Shape; //< Uses the component's coordinate frame.
+        SWAP_RULE           SwapRule = SWAP_RULE::BOTH;
+        std::vector<PAD_ID> AssociatedPadIDs;
+
+        void Parse( XNODE* aNode );
+    };
+
+    /**
+     * @brief From CADSTAR Help: "Area is for creating areas within which, and nowhere else, certain
+     * operations are carried out (e.g. Placement.); and for creating 'keep out' areas, within which
+     * no operations are carried out and where no items are placed by operations such as Placement 
+     * and Routing."
+     */
+    struct COMPONENT_AREA
+    {
+        COMP_AREA_ID ID;
+        LINECODE_ID  LineCodeID;
+        LAYER_ID     LayerID;
+        SHAPE        Shape; //< Uses the component's coordinate frame.
+        SWAP_RULE    SwapRule = SWAP_RULE::BOTH;
+
+        bool NoTracks = false; ///< From CADSTAR Help: "Check this button to specify that any area
+                               ///< created by the Rectangle, Circle and Polygon icons can be used
+                               ///< by the Auto Router and Route Editor options as the area within
+                               ///< which no routes are placed during automatic routing."
+        bool NoVias = false;   ///< From CADSTAR Help: "Check this button to specify that any area
+                               ///< created by the Rectangle, Circle and Polygon icons can be used
+                               ///< by the Auto Router and Route Editor options as the area within
+                               ///< which no vias are placed during automatic routing."
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    /**
+     * @brief From CADSTAR Help: "This parameter indicates the physical layers on which the selected 
+     * pad is placed. Note: When you change the Side parameter in PCB Design, the Side assigned to the
+     * pad in the library is not overwritten."
+     */
+    enum class PAD_SIDE
+    {
+        MINIMUM,     ///< PHYSICAL_LAYER_ID 1 (i.e. front / top side). Normally used for surface
+                     ///< mount devices.
+        MAXIMUM,     ///< The highest PHYSICAL_LAYER_ID currently defined (i.e. back / bottom
+                     ///< side). Normally used for surface mount devices.
+        THROUGH_HOLE ///< All physical layers currently defined
+    };
+
+
+    /**
+     * @brief From CADSTAR help: "For specifying the directions in which routes can enter or exit the
+     * pad. There are eight pre-defined directions to choose from, North, South, East, West, 
+     * North-East, North-West, South-East and South-West, plus "Free Angle" which allows routes to exit
+     * in any direction.
+     *
+     * If none of the direction boxes are checked, the system uses the default which is all directions 
+     * (as shown above) for all pad shapes, except the long (drawn) Routes exit from the short sides of 
+     * long pads - in other words in line with the long axis.
+     *
+     * Note: These Exit Directions are applied to the PCB component. If the PCB component is rotated 
+     * when it is used on a PCB Design, the Exit Directions will rotate with it."
+     *
+     * The main thing to note is that the exit angle is not relative to the pad (even if the pad is
+     * at an angle): it is relative to the component as a whole. This is confusing, considering this
+     * property belongs to the pad...
+     */
+    struct PAD_EXITS
+    {
+        bool FreeAngle = false;
+        bool North     = false;
+        bool NorthEast = false;
+        bool East      = false;
+        bool SouthEast = false;
+        bool South     = false;
+        bool SouthWest = false;
+        bool West      = false;
+        bool NorthWest = false;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct PAD
+    {
+        PAD_ID     ID;
+        POINT      Position; ///< Pad position within the component's coordinate frame.
+        PADCODE_ID PadCodeID;
+        PAD_SIDE   Side; ///< See PAD_SIDE
+        long       OrientAngle = 0;
+        PAD_EXITS  Exits; ///< See PAD_EXITS
+
+        wxString Identifier;   ///< This is an identifier that is displayed to the user.
+                               ///< Internally, the pad is identified by sequential Pad ID
+                               ///< (see ID). From CADSTAR Help: "This is how the pin is
+                               ///< identified, and is used when creating a part and for reload
+                               ///< and replace. It  replaces the CADSTAR 13.0 pad sequence
+                               ///< number but is much less restrictive i.e. It need not be 1, 2,
+                               ///< 3 etc. and can contain alpha and / or numeric characters."
+        bool FirstPad = false; ///< From CADSTAR Help: "Only one pad can have this property; if an
+                               ///< existing pad in the design already has this property it will be
+                               ///< removed from the existing pad when this new pad is added. The
+                               ///< property is used by the 'First Pad' highlight when in a PCB
+                               ///< design."
+        bool PCBonlyPad =
+                false; ///< From CADSTAR Help: "The PCB Only Pad property can be used to stop
+                       ///< ECO Update, Back Annotation, and Design Comparison incorrectly
+                       ///< acting on mechanical pads / components that only appear in the
+                       ///< PCB design."
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    /**
+     * @brief From CADSTAR Help: "Text Alignment enables you to define the position of an alignment
+     * origin for all text items in CADSTAR. The alignment origin is a point on or within the text
+     * boundary and defines how the text is displayed.
+     *
+     * For example, with an alignment of bottom-right the origin will be positioned at the bottom
+     * right of the text boundary. This makes it easier to right-align several text items 
+     * regardless of the length of text displayed.
+     *
+     * Text Alignment applies to all CADSTAR text. [...]
+     *
+     * Note: Unaligned text operates in the way CADSTAR text always has. In most cases this behaves
+     * as Bottom Left alignment, but there are a few exceptions, e.g. pin names. Also unaligned
+     * multiline text has an origin Bottom Left of the first line."
+     * 
+     * See also JUSTIFICATION
+     */
+    enum class ALIGNMENT
+    {
+        NO_ALIGNMENT, ///< NO_ALIGNMENT has different meaning depending on the object type
+        TOPLEFT,
+        TOPCENTER,
+        TOPRIGHT,
+        CENTERLEFT,
+        CENTERCENTER,
+        CENTERRIGHT,
+        BOTTOMLEFT,
+        BOTTOMCENTER,
+        BOTTOMRIGHT
+    };
+
+    static ALIGNMENT ParseAlignment( XNODE* aNode );
+
+    /**
+     * @brief From CADSTAR Help: "Multi Line Text can also be justified as Left, Centre or Right. 
+     * This does not affect the text alignment. Note: Justification of single line text has no 
+     * affect."
+     *
+     * This only affects multiline text
+     *
+     * See also ALIGNMENT
+     */
+    enum class JUSTIFICATION
+    {
+        LEFT,
+        CENTER,
+        RIGHT
+    };
+
+    static JUSTIFICATION ParseJustification( XNODE* aNode );
+
+
+    /**
+     * @brief Corresponds to CADSTAR "origin". This is used for setting a location of an attribute
+     * e.g. Designator (called Component Name in CADSTAR), Part Name (name of component in the
+     * libary), etc. The atom identifier is "TEXTLOC"
+     */
+    struct TEXT_LOCATION
+    {
+        ATTRIBUTE_ID  AttributeID;
+        TEXTCODE_ID   TextCodeID;
+        LAYER_ID      LayerID;
+        POINT         Position;
+        long          OrientAngle = 0;
+        bool          Mirror      = false;
+        JUSTIFICATION Justification =
+                JUSTIFICATION::LEFT; ///< Note: Justification has no effect on single lines of text
+        ALIGNMENT Alignment = ALIGNMENT::
+                BOTTOMLEFT; ///< The default alignment for TEXT_LOCATION (when "NO_ALIGNMENT" is
+                            ///< selected) is Bottom left, matching CADSTAR's default behaviour
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct TEXT
+    {
+        TEXT_ID       ID;
+        wxString      Text; //TODO: Need to lex/parse to identify design fields and hyperlinks
+        TEXTCODE_ID   TextCodeID;
+        LAYER_ID      LayerID;
+        POINT         Position;
+        long          OrientAngle = 0;
+        bool          Mirror      = false;
+        SWAP_RULE     SwapRule    = SWAP_RULE::BOTH;
+        JUSTIFICATION Justification =
+                JUSTIFICATION::LEFT; ///< Note: Justification has no effect on single lines of text
+        ALIGNMENT Alignment = ALIGNMENT::
+                NO_ALIGNMENT; ///< In CADSTAR The default alignment for a TEXT object (when
+                              ///< "(No Alignment()" is selected) Bottom Left of the *first line*.
+                              ///< Note that this is different from BOTTOM_LEFT (which is bottom
+                              ///< left of the whole text block)
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    enum class ANGUNITS
+    {
+        DEGREES,
+        RADIANS
+    };
+
+    static ANGUNITS ParseAngunits( XNODE* aNode );
+
+    /**
+     * @brief Linear, leader (radius/diameter) or angular dimension
+    */
+    struct DIMENSION
+    {
+        enum class TYPE
+        {
+            LINEARDIM, ///< Linear Dimension
+            LEADERDIM, ///< Typically used for Radius/Diameter Dimension
+            ANGLEDIM   ///< Angular Dimension
+        };
+
+        enum class SUBTYPE
+        {
+            ORTHOGONAL, ///< An orthogonal dimension (either x or y measurement)
+                        ///< token=DIMENSION_ORTHOGONAL
+            DIRECT,     ///< A linear dimension parallel to measurement with perpendicular
+                        ///< extension lines token=DIMENSION_DIRECT
+            ANGLED,     ///< A linear dimension parallel to measurement but with orthogonal
+                        ///< extension lines (i.e. x or y axis, angled with respect to measurement)
+                        ///< token=DIMENSION_ANGLED
+            DIAMETER,   ///< token=DIMENSION_DIAMETER
+            RADIUS,     ///< token=DIMENSION_RADIUS
+            ANGULAR     ///< token=DIMENSION_ANGULAR
+        };
+
+        struct ARROW //"DIMARROW"
+        {
+            enum class STYLE
+            {
+                OPEN,         ///< The arrow head is made up of two angled lines either side of
+                              ///< main line. "DIMENSION_ARROWOPEN"
+                CLOSED,       ///< The arrow head is made up of two angled lines either side of
+                              ///< main line plus two other lines perpendicular to the main line
+                              ///< finishing at the end of each of the two angled lines, with the
+                              ///< main line still reaching tip of the arrow.
+                              ///< "DIMENSION_ARROWCLOSED"
+                CLEAR,        ///< Same as closed but the main line finishes at the start of the
+                              ///< perpendicular lines."DIMENSION_ARROWCLEAR"
+                CLOSED_FILLED ///< The same as CLOSED or CLEAR arrows, but with a solid fill
+                              ///< "DIMENSION_ARROWCLOSEDFILLED"
+            };
+
+            STYLE ArrowStyle;  ///< Subnode="ARROWSTYLE"
+            long  UpperAngle;  ///< token="ARROWANGLEA"
+            long  LowerAngle;  ///< token="ARROWANGLEB"
+            long  ArrowLength; ///< The length of the angled lines that make up the arrow head
+
+            void Parse( XNODE* aNode );
+        };
+
+        /**
+         * @brief Contains formatting specific for a CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION object.
+         * Note that none of the parameters has any effect on the position of the dimension text - 
+         * it is more of an "intention" of where it should be placed. The user can manually
+         * drag the location of the dimension text. Therefore, the actual position of the dimension
+         * text is as defined in the `Text` object within CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION.
+         *
+         * However, TEXTFORMAT does specifify `TextGap` (i.e. how far to pull back the dimension
+         * line from the dimension text which does get used when the dimension text is placed
+         * on top of the dimension line, if the dimension line is STYLE::INTERNAL).
+         *
+         * Note: the token is "DIMTEXT" in the CADSTAR format, but this has been renamed to
+         * TEXTFORMAT in the cadstar2kicadplugin for ease of understanding. 
+         */
+        struct TEXTFORMAT
+        {
+            enum class STYLE ///< Token "TXTSTYLE"
+            {
+                INSIDE, ///< Embedded with the line (the Gap parameter specifies the gap between
+                        ///< the text and the end of the line) DIMENSION_INTERNAL
+                OUTSIDE ///< Above the line (the Offset parameter specifies how far above the line
+                        ///< the text is) DIMENSION_EXTERNAL
+            };
+
+            STYLE Style;
+            long  TextGap;    ///< Specifies the gap between the text and the end of the line
+            long  TextOffset; ///< Specifies how far above the line the text is (doesn't have
+                              ///< an effect on actual position!)
+
+            void Parse( XNODE* aNode );
+        };
+
+
+        struct EXTENSION_LINE ///< Token "EXTLINE"
+        {
+            LINECODE_ID LineCodeID;
+
+            POINT Start;
+            POINT End;
+            long  Overshoot;             ///< Overshoot of the extension line past the arrow line
+            long  Offset;                ///< Offset from the measurement point
+            bool  SuppressFirst = false; ///< If true, excludes the first extension line (only
+                                         ///< shows extension line at end)
+
+            void Parse( XNODE* aNode );
+        };
+
+
+        struct LINE ///< Token can be either "LEADERLINE", "LINEARLINE" or "ANGULARLINE"
+        {
+            enum class TYPE
+            {
+                LINEARLINE, ///< Only for dimensions of type LINEARDIM
+                LEADERLINE, ///< Only for dimensions of type LEADERRDIM. If STYLE = INTERNAL, the
+                            ///< result is the same as a LINEARLINE, i.e. all Leader Line-specific
+                            ///< elements are ignored.
+                ANGULARLINE ///< Only for dimensions of type ANGULARDIM
+            };
+
+            enum class STYLE //DIMLINETYPE
+            {
+                INTERNAL, ///< The lines are placed inside the measurement
+                          ///< token=DIMENSION_INTERNAL
+                EXTERNAL  ///< The lines are placed outside the measurement
+                          ///< (typically used when limited space) token=DIMENSION_EXTERNAL
+            };
+
+            TYPE        Type;
+            LINECODE_ID LineCodeID; ///< param0
+            STYLE       Style;      ///< Subnode="DIMLINETYPE"
+
+            POINT Start;  ///< [point1]
+            POINT End;    ///< [point2]
+            POINT Centre; ///< Only for TYPE=ANGULARLINE [point3]
+
+            long LeaderAngle = UNDEFINED_VALUE; ///< Only for TYPE=LEADERLINE subnode "LEADERANG"
+            long LeaderLineLength = UNDEFINED_VALUE; ///< Only for TYPE=LEADERLINE Length of the
+                                                     ///< angled part of the leader line [param5]
+            long LeaderLineExtensionLength = UNDEFINED_VALUE; ///< Only for TYPE=LEADERLINE Length
+                                                              ///< of the horizontal part of the
+                                                              ///< leader line [param6]
+
+            static bool IsLine( XNODE* aNode );
+            void        Parse( XNODE* aNode );
+        };
+
+
+        TYPE         Type;
+        DIMENSION_ID ID;             ///< Some ID (doesn't seem to be used) subnode="DIMREF"
+        LAYER_ID     LayerID;        ///< ID on which to draw this [param1]
+        SUBTYPE      Subtype;        ///< [param2]
+        long         Precision;      ///< Number of decimal points to display in the measurement
+                                     ///< [param3]
+        UNITS          LinearUnits;  ///<
+        ANGUNITS       AngularUnits; ///< Only Applicable to TYPE=ANGLEDIM
+        ARROW          Arrow;
+        TEXTFORMAT     TextParams;
+        EXTENSION_LINE ExtensionLineParams; ///< Not applicable to TYPE=LEADERDIM
+        LINE           Line;
+        TEXT           Text;
+
+        static bool IsDimension( XNODE* aNode );
+        void        Parse( XNODE* aNode );
+    };
+
+    /**
+     * @brief A symbol definition can represent a number of different objects in CADSTAR.
+     * SYMDEF_TYPE is used in cadstar2kicadplugin to simplify identification of each type.
+     */
+    enum class SYMDEF_TYPE
+    {
+        COMPONENT, ///< Standard PCB Component definition
+        JUMPER,    ///< From CADSTAR Help: "Jumpers are components used primarily for the purpose
+                   ///< of routing. A jumper's two pins are connected with a wire, joining together
+                   ///< the nets on either side. Typically, a jumper is used to bridge across other
+                   ///< routes where a routing problem is particularly difficult or to make a small
+                   ///< modification to a design when most of the routing has been finalised.
+                   ///<
+                   ///< In CADSTAR, components are designated as jumpers in the component footprint.
+                   ///< If the footprint has two pins and the first eight letters of the reference
+                   ///< name spell "JUMPERNF" then the component will be treated as a jumper.
+                   ///<
+                   ///< From CADSTAR 8.0 archive format onwards, jumpers are saved as jumpers. For
+                   ///< older archive formats and for most other export formats and post
+                   ///< processing, jumpers are treated just as components. When CADSTAR saves a PCB
+                   ///< design in an old archive format, the implied connection between the
+                   ///< jumper's pins is added as an actual connection. When an old archive or
+                   ///< binary PCB design is opened in the latest CADSTAR, any component footprint
+                   ///< with two pins and whose first eight letters spell "JUMPERNF" will be
+                   ///< treated as a jumper footprint automatically. If there is an actual
+                   ///< connection between the pins, it will be removed and one implied from then
+                   ///< on. If there isn't an actual connection, the nets connected to the pins
+                   ///< will be merged. If a merge is needed and if each net has a user-supplied
+                   ///< name (not $...), you will be asked to choose which name to use."
+        STARPOINT, ///< From CADSTAR Help: "Starpoints are special symbols/components that can be
+                   ///< used to electrically connect different nets together, whilst avoiding any
+                   ///< of the standard design rule error codes that would normally occur.
+                   ///<
+                   ///< If the first eleven letters of the reference name spell "STARPOINTNF" then
+                   ///< the component will be treated as a starpoint.
+                   ///<
+                   ///< For a starpoint component to be valid:
+                   ///< - There must be at least two pads
+                   ///< - All pads must have the same position
+                   ///< - All pads must have the same orientation
+                   ///< - All pads must be on the same side
+                   ///< - All pad codes must be the same
+                   ///< - All pads must have the same exit direction
+                   ///< - All pads must have the same PCB Only Pad setting
+                   ///<
+                   ///< If a starpoint component is not valid you will get an error message when
+                   ///< trying to add it to the PCB component library."
+        TESTPOINT  ///< From CADSTAR Help: "A testpoint is an area of copper connected to a net. It
+                   ///< allows a test probe to investigate the electrical properties of that net.
+                   ///< The Testpoint Symbols provided in the CADSTAR libraries are the Alternates
+                   ///< for a pre-defined symbol called TESTPOINT."
+                   ///<
+                   ///< If the ReferenceName equals "TESTPOINT", then the component is treated
+                   ///< as such. Note that the library manager does not permit adding a component
+                   ///< with the name "TESTPOINT" if it has more than one pad defined.
+    };
+
+
+    struct SYMDEF
+    {
+        SYMDEF_ID   ID;
+        SYMDEF_TYPE Type = SYMDEF_TYPE::COMPONENT;
+        wxString    ReferenceName; ///< This is the name which identifies the symbol in the library
+                                   ///< Multiple components may exist with the same ReferenceName.
+        wxString Alternate;        ///< This is in addition to ReferenceName. It allows defining
+                                   ///< different versions, views etc. of the same basic symbol.
+        POINT Origin;              ///< Origin of the component (this is used as the reference point
+                                   ///< when placing the component in the design)
+        bool Stub = false;         ///< When the CADSTAR Archive file is exported without the
+                                   ///< component library, if components on the board are still
+                                   ///< exported, the Reference and Alternate names will still be
+                                   ///< exported but the content is replaced with a "STUB" atom,
+                                   ///< requiring access to the original library for component
+                                   ///< definition.
+        long SymHeight;            ///< The Height of the component (3D height in z direction)
+        long Version;              ///< Version is a sequential integer number to identify
+                                   ///< discrepancies between the library and the design.
+
+        std::map<FIGURE_ID, FIGURE>            Figures;
+        std::vector<COMPONENT_COPPER>          ComponentCoppers;
+        std::map<COMP_AREA_ID, COMPONENT_AREA> ComponentAreas;
+        std::map<TEXT_ID, TEXT>                Texts;
+        std::map<PAD_ID, PAD>                  Pads;
+        std::map<ATTRIBUTE_ID, TEXT_LOCATION>  TextLocations; ///< This contains location of
+                                                              ///< any attributes, including
+                                                              ///< designator position
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
+        std::map<DIMENSION_ID, DIMENSION>       Dimensions; ///< inside "DIMENSIONS" subnode
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct LIBRARY
+    {
+        std::map<SYMDEF_ID, SYMDEF> ComponentDefinitions;
+
+        void Parse( XNODE* aNode );
+    };
+
     wxString Filename;
 
-    CPA_HEADER      Header;
-    CPA_ASSIGNMENTS Assignments;
+    HEADER      Header;
+    ASSIGNMENTS Assignments;
+    LIBRARY     Library;
+
     //TODO Add Library, Defaults, Parts, etc..
 
     int KiCadUnitMultiplier; ///<Use this value to convert units in this CPA file to KiCad units
-};
 
+}; //CADSTAR_PCB_ARCHIVE_PARSER
 
 #endif // CADSTAR_PCB_ARCHIVE_PARSER_H_

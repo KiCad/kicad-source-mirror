@@ -24,9 +24,7 @@
  *        based on S-expressions.
  */
 
-#include <cadstar_common.h>
 #include <cadstar_pcb.h>
-#include <cadstar_pcb_archive_parser.h>
 #include <cadstar_pcb_archive_plugin.h>
 #include <class_board.h>
 
@@ -61,10 +59,8 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load(
     m_props = aProperties;
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
 
-    CADSTAR_PCB tempPCB( m_board );
-    CPA_FILE    theFile( aFileName );
-    theFile.Parse();
-    tempPCB.Load( &theFile );
+    CADSTAR_PCB tempPCB( aFileName );
+    tempPCB.Load( m_board );
 
     return m_board;
 }

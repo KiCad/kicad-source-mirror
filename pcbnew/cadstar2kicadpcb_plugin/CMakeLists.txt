@@ -5,7 +5,7 @@ include_directories( . )
 set( CADSTAR2PCBNEW_SRCS
     cadstar_pcb_archive_plugin.cpp
     cadstar_pcb_archive_parser.cpp
-    cadstar_common.cpp
+    cadstar_archive_common.cpp
     cadstar_pcb.cpp
     )
 
