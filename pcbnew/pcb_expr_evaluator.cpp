@@ -80,8 +80,9 @@ static void isPlated( LIBEVAL::CONTEXT* aCtx, void* self )
 
 static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    LIBEVAL::VALUE* arg = aCtx->Pop();
-    LIBEVAL::VALUE* result = aCtx->AllocValue();
+    PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+    LIBEVAL::VALUE*   arg = aCtx->Pop();
+    LIBEVAL::VALUE*   result = aCtx->AllocValue();
 
     result->Set( 0.0 );
     aCtx->Push( result );
@@ -93,34 +94,49 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
     }
 
-    wxString          footprintRef = arg->AsString();
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+    MODULE*           footprint = nullptr;
 
-    if( item )
+    if( !item )
+        return;
+
+    if( arg->AsString() == "A" )
     {
-        for( MODULE* footprint : item->GetBoard()->Modules() )
+        footprint = dynamic_cast<MODULE*>( context->GetItem( 0 ) );
+    }
+    else if( arg->AsString() == "B" )
+    {
+        footprint = dynamic_cast<MODULE*>( context->GetItem( 1 ) );
+    }
+    else
+    {
+        for( MODULE* candidate : item->GetBoard()->Modules() )
         {
-            if( footprint->GetReference() == footprintRef )
+            if( candidate->GetReference().Matches( arg->AsString() ) )
             {
-                SHAPE_POLY_SET footprintCourtyard;
-
-                if( footprint->IsFlipped() )
-                    footprintCourtyard = footprint->GetPolyCourtyardBack();
-                else
-                    footprintCourtyard = footprint->GetPolyCourtyardFront();
-
-                SHAPE_POLY_SET testPoly;
-
-                item->TransformShapeWithClearanceToPolygon( testPoly, 0 );
-                testPoly.BooleanIntersection( footprintCourtyard, SHAPE_POLY_SET::PM_FAST );
-
-                if( testPoly.OutlineCount() )
-                    result->Set( 1.0 );
-
+                footprint = candidate;
                 break;
             }
         }
+    }
+
+    if( footprint )
+    {
+        SHAPE_POLY_SET footprintCourtyard;
+
+        if( footprint->IsFlipped() )
+            footprintCourtyard = footprint->GetPolyCourtyardBack();
+        else
+            footprintCourtyard = footprint->GetPolyCourtyardFront();
+
+        SHAPE_POLY_SET testPoly;
+
+        item->TransformShapeWithClearanceToPolygon( testPoly, 0 );
+        testPoly.BooleanIntersection( footprintCourtyard, SHAPE_POLY_SET::PM_FAST );
+
+        if( testPoly.OutlineCount() )
+            result->Set( 1.0 );
     }
 }
 
