@@ -86,6 +86,7 @@ private:
     static std::vector<std::reference_wrapper<RC_ITEM>> allItemTypes;
 
     static DRC_ITEM unconnectedItems;
+    static DRC_ITEM shortingItems;
     static DRC_ITEM itemsNotAllowed;
     static DRC_ITEM clearance;
     static DRC_ITEM tracksCrossing;

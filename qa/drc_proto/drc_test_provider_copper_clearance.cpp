@@ -603,12 +603,20 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
         if( pad->GetParent() == aRefPad->GetParent() )
         {
             // and have the same pad number ( equivalent pads  )
-
-            // one can argue that this 2nd test is not necessary, that any
-            // two pads from a single module are acceptable.  This 2nd test
-            // should eventually be a configuration option.
             if( pad->PadNameEqual( aRefPad ) )
+            {
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+                wxString msg;
+                msg.Printf( drcItem->GetErrorText() + _( " (nets %s and %s)" ),
+                            pad->GetNetCode(), aRefPad->GetNetCode() );
+
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( pad, aRefPad );
+                drcItem->SetViolatingRule( nullptr ); // fixme: is this correct?
+
+                ReportWithMarker( drcItem, aRefPad->GetPosition() );
                 continue;
+            }
         }
 
         // if either pad has no drill and is only on technical layers, not a clearance violation

@@ -1192,12 +1192,20 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
         if( pad->GetParent() == aRefPad->GetParent() )
         {
             // and have the same pad number ( equivalent pads  )
-
-            // one can argue that this 2nd test is not necessary, that any
-            // two pads from a single module are acceptable.  This 2nd test
-            // should eventually be a configuration option.
             if( pad->PadNameEqual( aRefPad ) )
+            {
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+
+                m_msg.Printf( drcItem->GetErrorText() + _( " (nets %s and %s)" ),
+                              pad->GetNetname(), aRefPad->GetNetname() );
+
+                drcItem->SetErrorMessage( m_msg );
+                drcItem->SetItems( pad, aRefPad );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
+                addMarkerToPcb( aCommit, marker );
                 continue;
+            }
         }
 
         // if either pad has no drill and is only on technical layers, not a clearance violation

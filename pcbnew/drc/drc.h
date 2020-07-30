@@ -40,6 +40,7 @@
 enum PCB_DRC_CODE {
     DRCE_FIRST = 1,
     DRCE_UNCONNECTED_ITEMS = DRCE_FIRST,    ///< items are unconnected
+    DRCE_SHORTING_ITEMS,                    ///< items short two nets but are not a net tie
     DRCE_ALLOWED_ITEMS,                     ///< a disallowed item has been used
     DRCE_CLEARANCE,                         ///< items are too close together
     DRCE_TRACKS_CROSSING,                   ///< tracks are crossing

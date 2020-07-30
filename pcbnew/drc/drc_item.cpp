@@ -43,6 +43,10 @@ DRC_ITEM DRC_ITEM::unconnectedItems( DRCE_UNCONNECTED_ITEMS,
         _( "Unconnected items" ),
         wxT( "unconnected_items" ) );
 
+DRC_ITEM DRC_ITEM::shortingItems( DRCE_SHORTING_ITEMS,
+        _( "Items shorting two nets" ),
+        wxT( "shorting_items" ) );
+
 DRC_ITEM DRC_ITEM::itemsNotAllowed( DRCE_ALLOWED_ITEMS,
         _( "Items not allowed" ),
         wxT( "items_not_allowed" ) );
@@ -162,6 +166,7 @@ DRC_ITEM DRC_ITEM::unresolvedVariable( DRCE_UNRESOLVED_VARIABLE,
 
 std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::unconnectedItems,
+            DRC_ITEM::shortingItems,
             DRC_ITEM::itemsNotAllowed,
             DRC_ITEM::clearance,
             DRC_ITEM::tracksCrossing,
@@ -199,6 +204,7 @@ DRC_ITEM* DRC_ITEM::Create( int aErrorCode )
     switch( aErrorCode )
     {
     case DRCE_UNCONNECTED_ITEMS:        return new DRC_ITEM( unconnectedItems );
+    case DRCE_SHORTING_ITEMS:           return new DRC_ITEM( shortingItems );
     case DRCE_ALLOWED_ITEMS:            return new DRC_ITEM( itemsNotAllowed );
     case DRCE_CLEARANCE:                return new DRC_ITEM( clearance );
     case DRCE_TRACKS_CROSSING:          return new DRC_ITEM( tracksCrossing );
