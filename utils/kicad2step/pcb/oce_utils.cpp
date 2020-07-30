@@ -898,7 +898,12 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 
     if( success )
     {
-        wxRenameFile( tmpfname, fn.GetFullName(), true );
+        if( !wxRenameFile( tmpfname, fn.GetFullName(), true ) )
+        {
+            ReportMessage( wxString::Format( "Cannot rename temporary file '%s' to '%s'\n",
+                           tmpfname, fn.GetFullName() ) );
+            success = false;
+        }
     }
 
     wxSetWorkingDirectory( currCWD );

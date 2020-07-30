@@ -52,6 +52,8 @@ SHAPE_COMPOUND::SHAPE_COMPOUND( const SHAPE_COMPOUND& aOther )
 {
     for ( auto shape : aOther.Shapes() )
         m_shapes.push_back( shape->Clone() );
+
+    m_dirty = true;
 }
 
 
@@ -95,6 +97,7 @@ void SHAPE_COMPOUND::Move ( const VECTOR2I& aVector )
 int SHAPE_COMPOUND::Distance( const SEG& aSeg ) const
 {
     assert(false);
+    return 0;   // Make compiler happy
 }
 
 
