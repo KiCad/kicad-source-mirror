@@ -213,11 +213,28 @@ private:
      * @param aStartIt the iterator to the first track to test
      * @param aEndIt the marker for the iterator end
      * @param aTestZones true if should do copper zones test. This can be very time consumming
+     * @param aLayer sets the layer to test against
      * @return bool - true if no problems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
     void doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aStartIt,
-                     TRACKS::iterator aEndIt, bool aTestZones );
+                     TRACKS::iterator aEndIt, bool aTestZones, PCB_LAYER_ID aLayer );
+
+    /**
+     * Test a single via for DRC errors
+     *
+     * @param aCommit The board commit to add DRC errors
+     * @param aRefVia The via to test against design settings
+     */
+    void doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia );
+
+    /**
+     * Test a single track segment for DRC errors
+     *
+     * @param aCommit The board commit to add DRC errors
+     * @param aRefSeg The track to test against design settings
+     */
+    void doSingleTrackDRC( BOARD_COMMIT& aCommit, TRACK* aRefSeg );
 
 public:
     /**

@@ -35,20 +35,178 @@
 #include <geometry/shape_segment.h>
 #include <convert_basic_shapes_to_polygon.h>
 
-
-void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aStartIt,
-                      TRACKS::iterator aEndIt, bool aTestZones )
+void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
 {
-    BOARD_DESIGN_SETTINGS&     bds = m_pcb->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS&  bds = m_pcb->GetDesignSettings();
+
+    // test if the via size is smaller than minimum
+    if( aRefVia->GetViaType() == VIATYPE::MICROVIA )
+    {
+        if( aRefVia->GetWidth() < bds.m_MicroViasMinSize )
+        {
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_MICROVIA );
+
+            m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
+                          MessageTextFromValue( userUnits(), bds.m_MicroViasMinSize, true ),
+                          MessageTextFromValue( userUnits(), aRefVia->GetWidth(), true ) );
+
+            drcItem->SetErrorMessage( m_msg );
+            drcItem->SetItems( aRefVia );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefVia->GetPosition() );
+            addMarkerToPcb( aCommit, marker );
+        }
+    }
+    else
+    {
+        if( aRefVia->GetWidth() < bds.m_ViasMinSize )
+        {
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_VIA );
+
+            m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
+                          MessageTextFromValue( userUnits(), bds.m_ViasMinSize, true ),
+                          MessageTextFromValue( userUnits(), aRefVia->GetWidth(), true ) );
+
+            drcItem->SetErrorMessage( m_msg );
+            drcItem->SetItems( aRefVia );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefVia->GetPosition() );
+            addMarkerToPcb( aCommit, marker );
+        }
+    }
+
+    // test if via's hole is bigger than its diameter
+    // This test is necessary since the via hole size and width can be modified
+    // and a default via hole can be bigger than some vias sizes
+    if( aRefVia->GetDrillValue() > aRefVia->GetWidth() )
+    {
+        DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_VIA_HOLE_BIGGER );
+
+        m_msg.Printf( drcItem->GetErrorText() + _( " (diameter %s; drill %s)" ),
+                      MessageTextFromValue( userUnits(), aRefVia->GetWidth(), true ),
+                      MessageTextFromValue( userUnits(), aRefVia->GetDrillValue(), true ) );
+
+        drcItem->SetErrorMessage( m_msg );
+        drcItem->SetItems( aRefVia );
+
+        MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefVia->GetPosition() );
+        addMarkerToPcb( aCommit, marker );
+    }
+
+    // test if the type of via is allowed due to design rules
+    if( aRefVia->GetViaType() == VIATYPE::MICROVIA && !bds.m_MicroViasAllowed )
+    {
+        DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
+
+        m_msg.Printf( _( "Microvia not allowed (board design rule constraints)" ) );
+        drcItem->SetErrorMessage( m_msg );
+        drcItem->SetItems( aRefVia );
+
+        MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefVia->GetPosition() );
+        addMarkerToPcb( aCommit, marker );
+    }
+
+    // test if the type of via is allowed due to design rules
+    if( aRefVia->GetViaType() == VIATYPE::BLIND_BURIED && !bds.m_BlindBuriedViaAllowed )
+    {
+        DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
+
+        m_msg.Printf( _( "Blind/buried via not allowed (board design rule constraints)" ) );
+        drcItem->SetErrorMessage( m_msg );
+        drcItem->SetItems( aRefVia );
+
+        MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefVia->GetPosition() );
+        addMarkerToPcb( aCommit, marker );
+    }
+
+    // For microvias: test if they are blind vias and only between 2 layers
+    // because they are used for very small drill size and are drill by laser
+    // and **only one layer** can be drilled
+    if( aRefVia->GetViaType() == VIATYPE::MICROVIA )
+    {
+        PCB_LAYER_ID layer1, layer2;
+        bool         err = true;
+
+        aRefVia->LayerPair( &layer1, &layer2 );
+
+        if( layer1 > layer2 )
+            std::swap( layer1, layer2 );
+
+        if( layer2 == B_Cu && layer1 == bds.GetCopperLayerCount() - 2 )
+            err = false;
+        else if( layer1 == F_Cu  &&  layer2 == In1_Cu  )
+            err = false;
+
+        if( err )
+        {
+            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_PADSTACK );
+
+            m_msg.Printf( _( "Microvia through too many layers (%s and %s not adjacent)" ),
+                          m_pcb->GetLayerName( layer1 ),
+                          m_pcb->GetLayerName( layer2 ) );
+
+            drcItem->SetErrorMessage( m_msg );
+            drcItem->SetItems( aRefVia );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefVia->GetPosition() );
+            addMarkerToPcb( aCommit, marker );
+        }
+    }
+}
 
 
+void DRC::doSingleTrackDRC( BOARD_COMMIT& aCommit, TRACK* aRefSeg )
+{
     SHAPE_SEGMENT refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd(), aRefSeg->GetWidth() );
-    PCB_LAYER_ID  refLayer = aRefSeg->GetLayer();
-    LSET          refLayerSet = aRefSeg->GetLayerSet();
-
     EDA_RECT      refSegBB = aRefSeg->GetBoundingBox();
     int           refSegWidth = aRefSeg->GetWidth();
 
+    int minWidth, maxWidth;
+    aRefSeg->GetWidthConstraints( &minWidth, &maxWidth, &m_clearanceSource );
+
+    int errorCode = 0;
+    int constraintWidth;
+
+    if( refSegWidth < minWidth )
+    {
+        errorCode = DRCE_TRACK_WIDTH;
+        constraintWidth = minWidth;
+    }
+    else if( refSegWidth > maxWidth )
+    {
+        errorCode = DRCE_TRACK_WIDTH;
+        constraintWidth = maxWidth;
+    }
+
+    if( errorCode )
+    {
+        wxPoint refsegMiddle = ( aRefSeg->GetStart() + aRefSeg->GetEnd() ) / 2;
+
+        DRC_ITEM* drcItem = DRC_ITEM::Create( errorCode );
+
+        m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                      m_clearanceSource,
+                      MessageTextFromValue( userUnits(), constraintWidth, true ),
+                      MessageTextFromValue( userUnits(), refSegWidth, true ) );
+
+        drcItem->SetErrorMessage( m_msg );
+        drcItem->SetItems( aRefSeg );
+
+        MARKER_PCB* marker = new MARKER_PCB( drcItem, refsegMiddle );
+        addMarkerToPcb( aCommit, marker );
+    }
+}
+
+
+void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aStartIt,
+                      TRACKS::iterator aEndIt, bool aTestZones, PCB_LAYER_ID aLayer )
+{
+    BOARD_DESIGN_SETTINGS&  bds = m_pcb->GetDesignSettings();
+    SHAPE_SEGMENT           refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd(), aRefSeg->GetWidth() );
+
+    EDA_RECT    refSegBB = aRefSeg->GetBoundingBox();
+    SEG         testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+    int         halfWidth = ( aRefSeg->GetWidth() + 1 ) / 2;
 
     /******************************************/
     /* Phase 0 : via DRC tests :              */
@@ -56,9 +214,16 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
     if( aRefSeg->Type() == PCB_VIA_T )
     {
-        VIA *refvia = static_cast<VIA*>( aRefSeg );
+        VIA* refvia = static_cast<VIA*>( aRefSeg );
         int viaAnnulus = ( refvia->GetWidth() - refvia->GetDrill() ) / 2;
-        int minAnnulus = refvia->GetMinAnnulus( refvia->GetLayer(), &m_clearanceSource );
+        int minAnnulus = refvia->GetMinAnnulus( aLayer, &m_clearanceSource );
+
+        if( !refvia->IsPadOnLayer( aLayer ) )
+        {
+            halfWidth = ( refvia->GetDrillValue() + 1 ) / 2;
+            refSegBB = EDA_RECT( refvia->GetStart(),
+                    wxSize( refvia->GetDrillValue(), refvia->GetDrillValue() ) );
+        }
 
         // test if the via size is smaller than minimum
         if( refvia->GetViaType() == VIATYPE::MICROVIA )
@@ -71,21 +236,6 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                               m_clearanceSource,
                               MessageTextFromValue( userUnits(), minAnnulus, true ),
                               MessageTextFromValue( userUnits(), viaAnnulus, true ) );
-
-                drcItem->SetErrorMessage( m_msg );
-                drcItem->SetItems( refvia );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-                addMarkerToPcb( aCommit, marker );
-            }
-
-            if( refvia->GetWidth() < bds.m_MicroViasMinSize )
-            {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_MICROVIA );
-
-                m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                              MessageTextFromValue( userUnits(), bds.m_MicroViasMinSize, true ),
-                              MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
 
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( refvia );
@@ -117,140 +267,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
                 addMarkerToPcb( aCommit, marker );
             }
-
-            if( refvia->GetWidth() < bds.m_ViasMinSize )
-            {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_VIA );
-
-                m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                              MessageTextFromValue( userUnits(), bds.m_ViasMinSize, true ),
-                              MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
-
-                drcItem->SetErrorMessage( m_msg );
-                drcItem->SetItems( refvia );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-                addMarkerToPcb( aCommit, marker );
-            }
-        }
-
-        // test if via's hole is bigger than its diameter
-        // This test is necessary since the via hole size and width can be modified
-        // and a default via hole can be bigger than some vias sizes
-        if( refvia->GetDrillValue() > refvia->GetWidth() )
-        {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_VIA_HOLE_BIGGER );
-
-            m_msg.Printf( drcItem->GetErrorText() + _( " (diameter %s; drill %s)" ),
-                          MessageTextFromValue( userUnits(), refvia->GetWidth(), true ),
-                          MessageTextFromValue( userUnits(), refvia->GetDrillValue(), true ) );
-
-            drcItem->SetErrorMessage( m_msg );
-            drcItem->SetItems( refvia );
-
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-            addMarkerToPcb( aCommit, marker );
-        }
-
-        // test if the type of via is allowed due to design rules
-        if( refvia->GetViaType() == VIATYPE::MICROVIA && !bds.m_MicroViasAllowed )
-        {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
-
-            m_msg.Printf( _( "Microvia not allowed (board design rule constraints)" ) );
-            drcItem->SetErrorMessage( m_msg );
-            drcItem->SetItems( refvia );
-
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-            addMarkerToPcb( aCommit, marker );
-        }
-
-        // test if the type of via is allowed due to design rules
-        if( refvia->GetViaType() == VIATYPE::BLIND_BURIED && !bds.m_BlindBuriedViaAllowed )
-        {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
-
-            m_msg.Printf( _( "Blind/buried via not allowed (board design rule constraints)" ) );
-            drcItem->SetErrorMessage( m_msg );
-            drcItem->SetItems( refvia );
-
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-            addMarkerToPcb( aCommit, marker );
-        }
-
-        // For microvias: test if they are blind vias and only between 2 layers
-        // because they are used for very small drill size and are drill by laser
-        // and **only one layer** can be drilled
-        if( refvia->GetViaType() == VIATYPE::MICROVIA )
-        {
-            PCB_LAYER_ID layer1, layer2;
-            bool         err = true;
-
-            refvia->LayerPair( &layer1, &layer2 );
-
-            if( layer1 > layer2 )
-                std::swap( layer1, layer2 );
-
-            if( layer2 == B_Cu && layer1 == bds.GetCopperLayerCount() - 2 )
-                err = false;
-            else if( layer1 == F_Cu  &&  layer2 == In1_Cu  )
-                err = false;
-
-            if( err )
-            {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_PADSTACK );
-
-                m_msg.Printf( _( "Microvia through too many layers (%s and %s not adjacent)" ),
-                              m_pcb->GetLayerName( layer1 ),
-                              m_pcb->GetLayerName( layer2 ) );
-
-                drcItem->SetErrorMessage( m_msg );
-                drcItem->SetItems( refvia );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-                addMarkerToPcb( aCommit, marker );
-            }
         }
 
     }
-    else    // This is a track segment
-    {
-        int minWidth, maxWidth;
-        aRefSeg->GetWidthConstraints( &minWidth, &maxWidth, &m_clearanceSource );
-
-        int errorCode = 0;
-        int constraintWidth;
-
-        if( refSegWidth < minWidth )
-        {
-            errorCode = DRCE_TRACK_WIDTH;
-            constraintWidth = minWidth;
-        }
-        else if( refSegWidth > maxWidth )
-        {
-            errorCode = DRCE_TRACK_WIDTH;
-            constraintWidth = maxWidth;
-        }
-
-        if( errorCode )
-        {
-            wxPoint refsegMiddle = ( aRefSeg->GetStart() + aRefSeg->GetEnd() ) / 2;
-
-            DRC_ITEM* drcItem = DRC_ITEM::Create( errorCode );
-
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                          m_clearanceSource,
-                          MessageTextFromValue( userUnits(), constraintWidth, true ),
-                          MessageTextFromValue( userUnits(), refSegWidth, true ) );
-
-            drcItem->SetErrorMessage( m_msg );
-            drcItem->SetItems( aRefSeg );
-
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, refsegMiddle );
-            addMarkerToPcb( aCommit, marker );
-        }
-    }
-
 
     /******************************************/
     /* Phase 1 : test DRC track to pads :     */
@@ -269,20 +288,10 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             EDA_RECT inflatedBB = refSegBB;
             inflatedBB.Inflate( pad->GetBoundingRadius() + m_largestClearance );
 
-            /// We setup the dummy pad to use in case we need to only draw the hole outline rather
-            /// than the pad itself
-            D_PAD dummypad( pad->GetParent() );
-            dummypad.SetNetCode( pad->GetNetCode() );
-            dummypad.SetSize( pad->GetDrillSize() );
-            dummypad.SetOrientation( pad->GetOrientation() );
-            dummypad.SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL
-                                                                                : PAD_SHAPE_CIRCLE );
-            dummypad.SetPosition( pad->GetPosition() );
-
             if( !inflatedBB.Contains( pad->GetPosition() ) )
                 continue;
 
-            if( !( pad->GetLayerSet() & refLayerSet ).any() )
+            if( !( pad->IsOnLayer( aLayer ) ) )
                 continue;
 
             // No need to check pads with the same net as the refSeg.
@@ -293,7 +302,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             {
                 const SHAPE_SEGMENT*  slot = pad->GetEffectiveHoleShape();
                 const DRC_CONSTRAINT* constraint = GetConstraint( aRefSeg, pad,
-                                                                  DRC_RULE_ID_CLEARANCE, refLayer,
+                                                                  DRC_RULE_ID_CLEARANCE, aLayer,
                                                                   &m_clearanceSource );
                 int minClearance;
                 int actual;
@@ -305,7 +314,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 }
                 else
                 {
-                    minClearance = aRefSeg->GetClearance( refLayer, nullptr,
+                    minClearance = aRefSeg->GetClearance( aLayer, nullptr,
                                                           &m_clearanceSource );
                 }
 
@@ -330,7 +339,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             }
 
             /// Skip checking pad copper when it has been removed
-            if( !pad->IsPadOnLayer( refLayer ) )
+            if( !pad->IsPadOnLayer( aLayer ) )
                 continue;
 
             int minClearance = aRefSeg->GetClearance( aRefSeg->GetLayer(), pad,
@@ -371,27 +380,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         if( aRefSeg->GetNetCode() == track->GetNetCode() )
             continue;
 
-        // No problem if tracks are on different layers:
-        // Note that while the general case of GetLayerSet intersection always works,
-        // the others are much faster.
-        bool sameLayers;
-
-        if( aRefSeg->Type() == PCB_VIA_T )
-        {
-            if( track->Type() == PCB_VIA_T )
-                sameLayers = ( refLayerSet & track->GetLayerSet() ).any();
-            else
-                sameLayers = refLayerSet.test( track->GetLayer() );
-        }
-        else
-        {
-            if( track->Type() == PCB_VIA_T )
-                sameLayers = track->GetLayerSet().test( refLayer );
-            else
-                sameLayers = track->GetLayer() == refLayer;
-        }
-
-        if( !sameLayers )
+        if( !track->GetLayerSet().test( aLayer ) )
             continue;
 
         // Preflight based on worst-case inflated bounding boxes:
@@ -405,6 +394,15 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                                                             &m_clearanceSource );
         int           actual;
         SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
+
+        /// Check to see if the via has a pad on this layer
+        if( track->Type() == PCB_VIA_T )
+        {
+            VIA* via = static_cast<VIA*>( track );
+
+            if( !via->IsPadOnLayer( aLayer ) )
+                trackSeg.SetWidth( via->GetDrillValue() );
+        }
 
         // Check two tracks crossing first as it reports a DRCE without distances
         if( OPT_VECTOR2I intersection = refSeg.GetSeg().Intersect( trackSeg.GetSeg() ) )
@@ -446,50 +444,43 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     // Can be *very* time consumming.
     if( aTestZones )
     {
-        SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
 
         for( ZONE_CONTAINER* zone : m_pcb->Zones() )
         {
-            if( zone->GetIsKeepout() )
+            if( !zone->GetLayerSet().test( aLayer ) || zone->GetIsKeepout() )
                 continue;
 
             if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
                 continue;
 
-            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            if( zone->GetFilledPolysList( aLayer ).IsEmpty() )
+                continue;
+
+            // to avoid false positive, due to rounding issues and approxiamtions
+            // in distance and clearance calculations, use a small threshold for distance
+            // (1 micron)
+            #define THRESHOLD_DIST Millimeter2iu( 0.001 )
+
+
+            int minClearance = aRefSeg->GetClearance( aLayer, zone, &m_clearanceSource );
+            int allowedDist  = minClearance + halfWidth + THRESHOLD_DIST;
+            int actual;
+
+            if( zone->GetFilledPolysList( aLayer ).Collide( testSeg, allowedDist, &actual ) )
             {
-                if( !refLayerSet.test( layer ) )
-                    continue;
+                actual = std::max( 0, actual - halfWidth );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-                if( zone->GetFilledPolysList( layer ).IsEmpty() )
-                    continue;
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              m_clearanceSource,
+                              MessageTextFromValue( userUnits(), minClearance, true ),
+                              MessageTextFromValue( userUnits(), actual, true ) );
 
-                // to avoid false positive, due to rounding issues and approxiamtions
-                // in distance and clearance calculations, use a small threshold for distance
-                // (1 micron)
-                #define THRESHOLD_DIST Millimeter2iu( 0.001 )
+                drcItem->SetErrorMessage( m_msg );
+                drcItem->SetItems( aRefSeg, zone );
 
-                int minClearance = aRefSeg->GetClearance( layer, zone, &m_clearanceSource );
-                int widths       = refSegWidth / 2;
-                int allowedDist  = minClearance + widths + THRESHOLD_DIST;
-                int actual;
-
-                if( zone->GetFilledPolysList( layer ).Collide( testSeg, allowedDist, &actual ) )
-                {
-                    actual = std::max( 0, actual - widths );
-                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
-
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                                  m_clearanceSource,
-                                  MessageTextFromValue( userUnits(), minClearance, true ),
-                                  MessageTextFromValue( userUnits(), actual, true ) );
-
-                    drcItem->SetErrorMessage( m_msg );
-                    drcItem->SetItems( aRefSeg, zone );
-
-                    MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, zone ) );
-                    addMarkerToPcb( aCommit, marker );
-                }
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, zone ) );
+                addMarkerToPcb( aCommit, marker );
             }
         }
     }
@@ -508,8 +499,6 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         aRefSeg->GetRuleClearance( &dummyEdge, aRefSeg->GetLayer(), &minClearance,
                                    &m_clearanceSource );
 
-        SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
-        int halfWidth = refSegWidth / 2;
         int center2centerAllowed = minClearance + halfWidth;
 
         for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )

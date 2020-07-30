@@ -592,7 +592,15 @@ void DRC::testTracks( BOARD_COMMIT& aCommit, wxWindow *aActiveWindow, bool aShow
         }
 
         // Test new segment against tracks and pads, optionally against copper zones
-        doTrackDrc( aCommit, *seg_it, seg_it + 1, m_pcb->Tracks().end(), m_testTracksAgainstZones );
+        LSEQ layer_seq = ( *seg_it )->GetLayerSet().Seq();
+
+        if( ( *seg_it )->Type() == PCB_VIA_T )
+            doSingleViaDRC( aCommit, static_cast<VIA*>( *seg_it ) );
+        else
+            doSingleTrackDRC( aCommit, *seg_it );
+
+        for( PCB_LAYER_ID layer : layer_seq )
+            doTrackDrc( aCommit, *seg_it, seg_it + 1, m_pcb->Tracks().end(), m_testTracksAgainstZones, layer );
 
         // Test for dangling items
         int code = (*seg_it)->Type() == PCB_VIA_T ? DRCE_DANGLING_VIA : DRCE_DANGLING_TRACK;
