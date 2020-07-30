@@ -97,7 +97,7 @@ public:
     wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }
 
-    int GetDiameter() const { return m_diameter; }
+    int GetDiameter() const;
     void SetDiameter( int aDiameter ) { m_diameter = aDiameter; }
 
     COLOR4D GetColor() const;

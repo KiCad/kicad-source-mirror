@@ -184,6 +184,22 @@ COLOR4D SCH_JUNCTION::GetColor() const
 }
 
 
+int SCH_JUNCTION::GetDiameter() const
+{
+    int diameter = m_diameter;
+
+    if( diameter == 0 )
+        diameter = Schematic()->Settings().m_JunctionSize;
+
+    NETCLASSPTR netclass = NetClass();
+
+    if( netclass )
+        diameter = std::max( diameter, KiROUND( netclass->GetWireWidth() * 1.7 ) );
+
+    return std::max( diameter, 1 );
+}
+
+
 bool SCH_JUNCTION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();

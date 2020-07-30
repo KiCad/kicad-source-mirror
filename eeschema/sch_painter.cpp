@@ -1179,10 +1179,7 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 
     COLOR4D color = getRenderColor( aJct, aJct->GetLayer(), drawingShadows );
 
-    int junctionSize = m_schSettings.m_JunctionSize / 2.0;
-
-    if( aJct->GetDiameter() != 0 )
-        junctionSize = aJct->GetDiameter() / 2;
+    int junctionSize = aJct->GetDiameter() / 2;
 
     m_gal->SetIsStroke( drawingShadows );
     m_gal->SetLineWidth( getLineWidth( aJct, drawingShadows ) );
