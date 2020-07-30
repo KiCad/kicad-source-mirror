@@ -613,7 +613,8 @@ void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoin
 void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                               double aWidth )
 {
-    if( aStartPoint == aEndPoint )  // 0 length segments are just a circle.
+    // segments less than the radius are just a circle.
+    if( ( aStartPoint - aEndPoint ).EuclideanNorm() < aWidth / 2.0 )
     {
         DrawCircle( aStartPoint, aWidth/2 );
         return;
