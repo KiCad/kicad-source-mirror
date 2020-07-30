@@ -615,6 +615,7 @@ include_directories( SYSTEM ${PIXMAN_INCLUDE_DIR} )
 find_package( Boost 1.59.0 REQUIRED )
 include_directories( SYSTEM ${Boost_INCLUDE_DIR} )
 
+
 # Include MinGW resource compiler.
 include( MinGWResourceCompiler )
 

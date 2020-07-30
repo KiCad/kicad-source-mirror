@@ -33,8 +33,8 @@ namespace numEval
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #endif
 
-#include "grammar.c"
-#include "grammar.h"
+#include <libeval/grammar.c>
+#include <libeval/grammar.h>
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop

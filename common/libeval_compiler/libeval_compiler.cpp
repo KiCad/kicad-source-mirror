@@ -23,7 +23,7 @@
 #include <vector>
 
 #ifdef DEBUG
-#include <stdarg.h>
+#include <cstdarg>
 #endif
 
 #include <reporter.h>
@@ -42,8 +42,8 @@ namespace LIBEVAL
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #endif
 
-#include "grammar.c"
-#include "grammar.h"
+#include <libeval_compiler/grammar.c>
+#include <libeval_compiler/grammar.h>
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop

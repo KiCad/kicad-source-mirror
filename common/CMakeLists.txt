@@ -4,9 +4,6 @@ if( COMPILER_SUPPORTS_WARNINGS )
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${WARN_FLAGS_C}")
 endif()
 
-add_subdirectory( libeval  )
-add_subdirectory( libeval_compiler )
-
 if( KICAD_SPICE )
     set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
 endif()
@@ -421,9 +418,6 @@ set( COMMON_SRCS
     project/project_archiver.cpp
     project/project_file.cpp
     project/project_local_settings.cpp
-
-    libeval/numeric_evaluator.cpp
-    libeval_compiler/libeval_compiler.cpp
     )
 
 add_library( common STATIC
@@ -437,13 +431,6 @@ target_include_directories( common PRIVATE
 
 add_dependencies( common libcontext )
 add_dependencies( common version_header )
-
-find_program(LEMON lemon)
-
-if( LEMON )
-    add_dependencies( common libeval_grammar )
-    add_dependencies( common libeval_grammar2 )
-endif()
 
 target_link_libraries( common
     kimath
@@ -550,6 +537,23 @@ target_link_libraries( pcbcommon PUBLIC
 )
 
 add_dependencies( pcbcommon delaunator )
+
+# The lemon grammar for the numeric evaluator
+generate_lemon_grammar(
+    common
+    libeval
+    libeval/numeric_evaluator.cpp
+    libeval/grammar.lemon
+    )
+
+# The lemon grammar for the expression compiler
+generate_lemon_grammar(
+    common
+    libeval_compiler
+    libeval_compiler/libeval_compiler.cpp
+    libeval_compiler/grammar.lemon
+    )
+
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
 make_lexer(

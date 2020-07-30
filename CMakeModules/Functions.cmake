@@ -1,7 +1,7 @@
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
 #  Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
-#  Copyright (C) 2010 Kicad Developers, see AUTHORS.txt for contributors.
+#  Copyright (C) 2010-2020 Kicad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -51,6 +51,55 @@ function( make_lexer outputTarget inputFile outHeaderFile outCppFile enum )
 
     target_sources( ${outputTarget} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/${outCppFile} )
     target_include_directories( ${outputTarget} PUBLIC ${CMAKE_CURRENT_BINARY_DIR} )
+endfunction()
+
+
+# Function generate_lemon_grammar
+#
+# This is a function to create a custom command to generate a parser grammar using lemon.
+#
+# Arguments:
+#  - TGT is the target to add the consuming file to
+#  - GRAMMAR_DIR is the path relative to CMAKE_CURRENT_BINARY_DIR for the directory where the files will be generated into
+#  - CONSUMING_FILE is the file relative to CMAKE_CURRENT_SOURCE_DIR that will include the grammar.c/h file
+#  - GRAMMAR_FILE is the file relative to CMAKE_CURRENT_SOURCE_DIR of the grammar file to use.
+function( generate_lemon_grammar TGT GRAMMAR_DIR CONSUMING_FILE GRAMMAR_FILE )
+    # Get the name without extension
+    get_filename_component( GRAMMAR_BASE ${GRAMMAR_FILE} NAME_WE )
+
+    file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_DIR} )
+
+    set( LEMON_EXE $<TARGET_FILE:lemon>)
+
+    get_property( LEMON_TEMPLATE
+        TARGET lemon
+        PROPERTY lemon_template
+        )
+
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_DIR}/${GRAMMAR_BASE}.c
+               ${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_DIR}/${GRAMMAR_BASE}.h
+        COMMAND ${CMAKE_COMMAND}
+            -DLEMON_EXE=${LEMON_EXE}
+            -DLEMON_TEMPLATE=${LEMON_TEMPLATE}
+            -DGRAMMAR_FILE=${CMAKE_CURRENT_SOURCE_DIR}/${GRAMMAR_FILE}
+            -DGRAMMAR_DIR=${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_DIR}
+            -P ${CMAKE_MODULE_PATH}/LemonParserGenerator.cmake
+        COMMENT "Running Lemon on ${GRAMMAR_FILE} to generate ${GRAMMAR_DIR}/${GRAMMAR_BASE}.c"
+        DEPENDS lemon
+                ${CMAKE_CURRENT_SOURCE_DIR}/${GRAMMAR_FILE}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_DIR}
+    )
+
+    # Mark the consuming file with a direct dependency on the generated grammar so that
+    # it isn't compiled until the grammar is generated
+    set_source_files_properties(
+        ${CMAKE_CURRENT_SOURCE_DIR}/${CONSUMING_FILE}
+        PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_DIR}/${GRAMMAR_BASE}.c
+    )
+
+    target_sources( ${TGT} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${CONSUMING_FILE} )
+    target_include_directories( ${TGT} PUBLIC ${CMAKE_CURRENT_BINARY_DIR} )
 endfunction()
 
 
