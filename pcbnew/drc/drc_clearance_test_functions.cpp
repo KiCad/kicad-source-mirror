@@ -136,6 +136,8 @@ void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
             err = false;
         else if( layer1 == F_Cu  &&  layer2 == In1_Cu  )
             err = false;
+        else if ( layer1 == layer2 - 1 )
+            err = false;
 
         if( err )
         {
