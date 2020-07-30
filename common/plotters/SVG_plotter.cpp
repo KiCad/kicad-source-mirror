@@ -796,10 +796,15 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
     }
 
     fprintf( outputFile,
-             "<text x=\"%g\" y=\"%g\"\n"
+             "<text x=\"%g\" y=\"%g\"\n", text_pos_dev.x, text_pos_dev.y );
+
+    /// If the text is mirrored, we should also mirror the hidden text to match
+    if( aSize.x < 0 )
+        fprintf( outputFile, "transform=\"scale(-1 1) translate(%f 0)\"\n", -2 * text_pos_dev.x );
+
+    fprintf( outputFile,
              "textLength=\"%g\" font-size=\"%g\" lengthAdjust=\"spacingAndGlyphs\"\n"
              "text-anchor=\"%s\" opacity=\"0\">%s</text>\n",
-             text_pos_dev.x, text_pos_dev.y,
              sz_dev.x, sz_dev.y,
              hjust, TO_UTF8( XmlEsc( aText ) ) );
 
