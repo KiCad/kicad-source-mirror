@@ -435,8 +435,13 @@ target_include_directories( common PRIVATE
 
 add_dependencies( common libcontext )
 add_dependencies( common version_header )
-add_dependencies( common libeval_grammar )
-add_dependencies( common libeval_grammar2 )
+
+find_program(LEMON lemon)
+
+if( LEMON )
+    add_dependencies( common libeval_grammar )
+    add_dependencies( common libeval_grammar2 )
+endif()
 
 target_link_libraries( common
     kimath
