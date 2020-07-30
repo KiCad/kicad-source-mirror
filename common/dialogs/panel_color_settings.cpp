@@ -160,9 +160,6 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
             {
                 pair.second->SetSwatchBackground( background );
                 pair.second->SetSwatchColor( m_currentSettings->GetColor( pair.first ), false );
-
-                if( pair.first == LAYER_SHEET || pair.first == LAYER_SHEET_BACKGROUND )
-                    pair.second->Show( selected->GetOverrideSchItemColors() );
             }
         }
     }
