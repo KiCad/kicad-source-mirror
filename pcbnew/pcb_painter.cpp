@@ -812,7 +812,11 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
         const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
-        m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() );
+
+        if( seg->GetSeg().A == seg->GetSeg().B )    // Circular hole
+            m_gal->DrawCircle( seg->GetSeg().A, seg->GetWidth()/2 );
+        else
+            m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() );
     }
     else
     {
@@ -879,7 +883,8 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         m_gal->SetStrokeColor( color );
         int clearance = aPad->GetClearance();
 
-        const std::shared_ptr<SHAPE_COMPOUND> shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+        const std::shared_ptr<SHAPE_COMPOUND> shapes =
+                    std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
 
         if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_SEGMENT )
         {

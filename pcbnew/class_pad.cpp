@@ -228,7 +228,7 @@ std::shared_ptr<SHAPE> D_PAD::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 
     if( m_shapesDirty )
         BuildEffectiveShapes();
-    
+
     for( auto s : m_effectiveShapes )
         shape->AddShape( s->Clone() ); // fixme: use COMPOUND everywhere
 
@@ -277,15 +277,16 @@ void D_PAD::BuildEffectiveShapes() const
         break;
 
     case PAD_SHAPE_OVAL:
-    {
-        wxSize  half_size = m_Size / 2;
-        int     half_width = std::min( half_size.x, half_size.y );
-        wxPoint half_len( half_size.x - half_width, half_size.y - half_width );
-
-        RotatePoint( &half_len, m_Orient );
-
-        add( new SHAPE_SEGMENT( shapePos - half_len, shapePos + half_len, half_width * 2 ) );
-    }
+        if( m_Size.x == m_Size.y ) // the oval pad is in fact a circle
+            add( new SHAPE_CIRCLE( shapePos, m_Size.x / 2 ) );
+        else
+        {
+            wxSize  half_size = m_Size / 2;
+            int     half_width = std::min( half_size.x, half_size.y );
+            wxPoint half_len( half_size.x - half_width, half_size.y - half_width );
+            RotatePoint( &half_len, m_Orient );
+            add( new SHAPE_SEGMENT( shapePos - half_len, shapePos + half_len, half_width * 2 ) );
+        }
         break;
 
     case PAD_SHAPE_RECT:
