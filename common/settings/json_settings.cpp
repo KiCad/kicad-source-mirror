@@ -188,8 +188,8 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     {
         try
         {
-            std::ifstream in( path.GetFullPath().ToUTF8() );
-            in >> *this;
+            FILE* fp = wxFopen( path.GetFullPath(), wxT( "rt" ) );
+            *static_cast<nlohmann::json*>( this ) = nlohmann::json::parse( fp );
 
             // If parse succeeds, check if schema migration is required
             int filever = -1;
@@ -352,12 +352,12 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
 
     try
     {
-        std::ofstream file( path.GetFullPath().ToUTF8() );
-        file << std::setw( 2 ) << *this << std::endl;
-    }
-    catch( const std::exception& e )
-    {
-        wxLogTrace( traceSettings, "Warning: could not save %s: %s", GetFullFilename(), e.what() );
+        wxFile   file( path.GetFullPath(), wxFile::write );
+
+        if( !file.IsOpened() || !file.Write( wxString( dump( 0 ).c_str(), wxConvUTF8 ) ) )
+        {
+            wxLogTrace( traceSettings, "Warning: could not save %s", GetFullFilename() );
+        }
     }
     catch( ... )
     {
