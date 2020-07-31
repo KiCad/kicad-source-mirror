@@ -86,7 +86,7 @@ private:
      * @param aSeg1 is the reference
      * @param aSeg2 is the candidate, and after merging, the removed segment
      */
-    void mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 );
+    bool mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 );
 
     /**
      * @return true if a track end position is a node, i.e. a end connected

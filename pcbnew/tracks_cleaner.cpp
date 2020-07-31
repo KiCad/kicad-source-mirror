@@ -383,53 +383,60 @@ void TRACKS_CLEANER::cleanupSegments()
     if( !m_dryRun )
         removeItems( toRemove );
 
-    // Keep a duplicate deque to all deleting in the primary
-    std::deque<TRACK*> temp_segments( m_brd->Tracks() );
+    bool merged = false;
 
-    // merge collinear segments:
-    for( TRACK* segment : temp_segments )
+    do
     {
-        if( segment->Type() != PCB_TRACE_T )    // one can merge only track collinear segments, not vias.
-            continue;
+        m_brd->BuildConnectivity();
 
-        if( segment->HasFlag( IS_DELETED ) )  // already taken in account
-            continue;
+        // Keep a duplicate deque to all deleting in the primary
+        std::deque<TRACK*> temp_segments( m_brd->Tracks() );
 
-        auto connectivity = m_brd->GetConnectivity();
-
-        auto& entry = connectivity->GetConnectivityAlgo()->ItemEntry( segment );
-
-        for( CN_ITEM* citem : entry.GetItems() )
+        // merge collinear segments:
+        for( TRACK* segment : temp_segments )
         {
-            for( CN_ITEM* connected : citem->ConnectedItems() )
+            if( segment->Type() != PCB_TRACE_T )    // one can merge only track collinear segments, not vias.
+                continue;
+
+            if( segment->HasFlag( IS_DELETED ) )  // already taken in account
+                continue;
+
+            auto connectivity = m_brd->GetConnectivity();
+
+            auto& entry = connectivity->GetConnectivityAlgo()->ItemEntry( segment );
+
+            for( CN_ITEM* citem : entry.GetItems() )
             {
-                if( !connected->Valid() )
-                    continue;
-
-                BOARD_CONNECTED_ITEM* candidateItem = connected->Parent();
-
-                if( candidateItem->Type() == PCB_TRACE_T && !candidateItem->HasFlag( IS_DELETED ) )
+                for( CN_ITEM* connected : citem->ConnectedItems() )
                 {
-                    TRACK* candidateSegment = static_cast<TRACK*>( candidateItem );
-
-                    // Do not merge segments having different widths: it is a frequent case
-                    // to draw a track between 2 pads:
-                    if( candidateSegment->GetWidth() != segment->GetWidth() )
+                    if( !connected->Valid() )
                         continue;
 
-                    if( segment->ApproxCollinear( *candidateSegment ) )
-                        mergeCollinearSegments( segment, candidateSegment );
+                    BOARD_CONNECTED_ITEM* candidateItem = connected->Parent();
+
+                    if( candidateItem->Type() == PCB_TRACE_T && !candidateItem->HasFlag( IS_DELETED ) )
+                    {
+                        TRACK* candidateSegment = static_cast<TRACK*>( candidateItem );
+
+                        // Do not merge segments having different widths: it is a frequent case
+                        // to draw a track between 2 pads:
+                        if( candidateSegment->GetWidth() != segment->GetWidth() )
+                            continue;
+
+                        if( segment->ApproxCollinear( *candidateSegment ) )
+                            merged = mergeCollinearSegments( segment, candidateSegment );
+                    }
                 }
             }
         }
-    }
+    } while( merged );
 }
 
 
-void TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
+bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
 {
     if( aSeg1->IsLocked() || aSeg2->IsLocked() )
-        return;
+        return false;
 
     auto connectivity = m_brd->GetConnectivity();
 
@@ -463,13 +470,13 @@ void TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
     if( aSeg1->GetStart() != dummy_seg.GetStart() && aSeg1->GetStart() != dummy_seg.GetEnd() )
     {
         if( testTrackEndpointIsNode( aSeg1, true ) )
-            return;
+            return false;
     }
 
     if( aSeg1->GetEnd() != dummy_seg.GetStart() && aSeg1->GetEnd() != dummy_seg.GetEnd() )
     {
         if( testTrackEndpointIsNode( aSeg1, false ) )
-            return;
+            return false;
     }
 
     CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_MERGE_TRACKS );
@@ -496,6 +503,8 @@ void TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
         m_brd->Remove( aSeg2 );
         m_commit.Removed( aSeg2 );
     }
+
+    return true;
 }
 
 
