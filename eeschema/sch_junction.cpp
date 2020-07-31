@@ -189,7 +189,13 @@ int SCH_JUNCTION::GetDiameter() const
     int diameter = m_diameter;
 
     if( diameter == 0 )
-        diameter = Schematic()->Settings().m_JunctionSize;
+    {
+        // Careful; preview items don't have schematics...
+        if( Schematic() )
+            diameter = Schematic()->Settings().m_JunctionSize;
+        else
+            diameter = DEFAULT_JUNCTION_DIAM * IU_PER_MILS;
+    }
 
     NETCLASSPTR netclass = NetClass();
 
