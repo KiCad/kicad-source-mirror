@@ -33,7 +33,7 @@
  * Fixture for the Collision test suite. It contains an instance of the common data and two
  * vectors containing colliding and non-colliding points.
  */
-struct CollisionFixture
+struct ShapeCompoundCollisionFixture
 {
     // Structure to store the common data.
     struct KI_TEST::CommonTestData common;
@@ -48,7 +48,7 @@ struct CollisionFixture
     /**
     * Constructor
     */
-    CollisionFixture()
+    ShapeCompoundCollisionFixture()
     {
         shapesA.push_back( new SHAPE_CIRCLE( VECTOR2I( 0, 0 ), 100 ) );
         shapesA.push_back( new SHAPE_CIRCLE( VECTOR2I( 80, 0 ), 100 ) );
@@ -64,7 +64,7 @@ struct CollisionFixture
         compoundC = new SHAPE_COMPOUND( shapesC );
     }
 
-    ~CollisionFixture()
+    ~ShapeCompoundCollisionFixture()
     {
     }
 };
@@ -72,7 +72,7 @@ struct CollisionFixture
 /**
  * Declares the CollisionFixture as the boost test suite fixture.
  */
-BOOST_FIXTURE_TEST_SUITE( SCompoundCollision, CollisionFixture )
+BOOST_FIXTURE_TEST_SUITE( SCompoundCollision, ShapeCompoundCollisionFixture )
 
 /**
  * This test checks basic behaviour of PointOnEdge, testing if points on corners, outline edges
