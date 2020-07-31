@@ -15,17 +15,19 @@ default:
 # https://gitlab.com/gitlab-org/gitlab/issues/12850
 test_formatting:
   stage: test
+  needs: []
   only:
     - merge_requests
   allow_failure: true
   before_script:
     # We must manually add the KiCad remote to ensure it is named sensibly
     - git remote add product https://gitlab.com/kicad/code/kicad.git
+    - git remote add source ${CI_MERGE_REQUEST_SOURCE_PROJECT_URL}.git
     - git fetch -n product
-    - git fetch -n origin
+    - git fetch -n source
     # Get the SHAs of the commits
     - "TARGET_HEAD_SHA=$(git rev-parse product/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME})"
-    - "SOURCE_HEAD_SHA=$(git rev-parse origin/${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME})"
+    - "SOURCE_HEAD_SHA=$(git rev-parse source/${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME})"
     - "MERGE_BASE_SHA=$(git merge-base ${TARGET_HEAD_SHA} ${SOURCE_HEAD_SHA})"
   script:
     - echo "Testing formatting from commit ${MERGE_BASE_SHA}"
