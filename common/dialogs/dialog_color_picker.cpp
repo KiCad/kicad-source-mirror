@@ -560,7 +560,7 @@ void DIALOG_COLOR_PICKER::SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransp
         m_sliderBrightness->SetValue(normalizeToInt( m_val ) );
 
     if( aChanged != HEX_CHANGED )
-        m_colorValue->SetValue( m_newColor4D.ToWxString( wxC2S_CSS_SYNTAX ) );
+        m_colorValue->ChangeValue( m_newColor4D.ToWxString( wxC2S_CSS_SYNTAX ) );
 }
 
 
