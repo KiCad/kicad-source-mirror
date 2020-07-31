@@ -1866,7 +1866,7 @@ void BOARD::MapNets( const BOARD* aDestBoard )
         NETINFO_ITEM* netInfo = aDestBoard->FindNet( item->GetNetname() );
 
         if( netInfo )
-            item->SetNetCode( netInfo->GetNet() );
+            item->SetNet( netInfo );
         else
             item->SetNetCode( 0 );
     }
