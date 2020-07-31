@@ -80,7 +80,8 @@ public:
         AppSettings* ret = nullptr;
 
         auto it = std::find_if( m_settings.begin(), m_settings.end(),
-                                []( const std::unique_ptr<JSON_SETTINGS>& aSettings ) {
+                                []( const std::unique_ptr<JSON_SETTINGS>& aSettings )
+                                {
                                     return dynamic_cast<AppSettings*>( aSettings.get() );
                                 } );
 
@@ -105,12 +106,13 @@ public:
     {
         std::vector<COLOR_SETTINGS*> ret;
 
-        for( const auto& el : m_color_settings )
-            ret.push_back( el.second );
+        for( const std::pair<const wxString, COLOR_SETTINGS*>& entry : m_color_settings )
+            ret.push_back( entry.second );
 
-        std::sort( ret.begin(), ret.end(), []( COLOR_SETTINGS* a, COLOR_SETTINGS* b ) {
-            return a->GetName() < b->GetName();
-        } );
+        std::sort( ret.begin(), ret.end(), []( COLOR_SETTINGS* a, COLOR_SETTINGS* b )
+                                           {
+                                               return a->GetName() < b->GetName();
+                                           } );
 
         return ret;
     }

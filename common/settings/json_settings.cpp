@@ -158,7 +158,8 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     else
     {
         wxString dir( aDirectory.c_str(), wxConvUTF8 );
-        path.Assign( dir, m_filename, getFileExt() );
+        wxString name( m_filename.c_str(), wxConvUTF8 );
+        path.Assign( dir, name, getFileExt() );
     }
 
     if( !path.Exists() )
