@@ -53,21 +53,6 @@ else()
 endif()
 
 
-if( false )
-    # setup bundle
-    set( CVPCB_RESOURCES cvpcb.icns cvpcb_doc.icns )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/cvpcb.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/cvpcb_doc.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set( MACOSX_BUNDLE_ICON_FILE cvpcb.icns )
-    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-pcb.kicad )
-    set( MACOSX_BUNDLE_NAME cvpcb )
-endif()
-
-
 # the main cvpcb program, in DSO form.
 add_library( cvpcb_kiface MODULE
     cvpcb.cpp
