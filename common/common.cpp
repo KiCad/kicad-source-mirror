@@ -482,7 +482,7 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
             size_t m = n + 1;
             wxUniChar str_m = str[m];
 
-            while( m < strlen && ( wxIsalnum( str_m ) || str_m == wxT( '_' ) ) )
+            while( m < strlen && ( wxIsalnum( str_m ) || str_m == wxT( '_' ) || str_m == wxT( ':' ) ) )
                 str_m = str[++m];
 
             wxString strVarName( str.c_str() + n + 1, m - n - 1 );

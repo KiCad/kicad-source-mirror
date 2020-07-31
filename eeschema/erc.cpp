@@ -148,6 +148,12 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
 {
     WS_DRAW_ITEM_LIST wsItems;
 
+    auto unresolved = [this]( wxString str )
+    {
+        str = ExpandEnvVarSubstitutions( str, &m_schematic->Prj() );
+        return str.Matches( wxT( "*${*}*" ) );
+    };
+
     if( aWorksheet )
     {
         wsItems.SetMilsToIUfactor( IU_PER_MILS );
@@ -166,7 +172,7 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
 
                 for( SCH_FIELD& field : component->GetFields() )
                 {
-                    if( field.GetShownText().Matches( wxT( "*${*}*" ) ) )
+                    if( unresolved( field.GetShownText() ) )
                     {
                         wxPoint pos = field.GetPosition() - component->GetPosition();
                         pos = component->GetTransform().TransformCoordinate( pos );
@@ -186,7 +192,7 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
 
                 for( SCH_FIELD& field : sheet->GetFields() )
                 {
-                    if( field.GetShownText().Matches( wxT( "*${*}*" ) ) )
+                    if( unresolved( field.GetShownText() ) )
                     {
                         ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );
