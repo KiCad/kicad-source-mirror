@@ -613,8 +613,12 @@ void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoin
 void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                               double aWidth )
 {
-    // segments less than the radius are just a circle.
-    if( ( aStartPoint - aEndPoint ).EuclideanNorm() < aWidth / 2.0 )
+    VECTOR2D startEndVector = aEndPoint - aStartPoint;
+    double lineLength = startEndVector.EuclideanNorm();
+
+    // segments having a length <= 1 are just a circle.
+    // Moreover trying to draw them as a segment does not work fine.
+    if( lineLength <= 1 )
     {
         DrawCircle( aStartPoint, aWidth/2 );
         return;
@@ -629,10 +633,8 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
     }
     else
     {
-        auto startEndVector = aEndPoint - aStartPoint;
         auto lineAngle      = startEndVector.Angle();
         // Outlined tracks
-        double lineLength = startEndVector.EuclideanNorm();
 
         SetLineWidth( 1.0 );
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
