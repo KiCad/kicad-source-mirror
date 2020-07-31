@@ -174,6 +174,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_vias",
             &m_Cleanup.cleanup_vias, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "cleanup.delete_dangling_vias",
+            &m_Cleanup.delete_dangling_vias, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "cleanup.merge_segments",
             &m_Cleanup.merge_segments, true ) );
 

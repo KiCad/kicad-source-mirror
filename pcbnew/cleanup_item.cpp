@@ -30,6 +30,7 @@
 CLEANUP_ITEM::CLEANUP_ITEM( int aErrorCode )
 {
     m_errorCode = aErrorCode;
+    m_errorTitle = GetErrorText( aErrorCode );
 }
 
 

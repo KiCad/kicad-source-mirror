@@ -42,6 +42,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
     m_deleteUnconnectedOpt->SetValue( cfg->m_Cleanup.cleanup_unconnected );
     m_cleanShortCircuitOpt->SetValue( cfg->m_Cleanup.cleanup_short_circuits );
     m_deleteTracksInPadsOpt->SetValue( cfg->m_Cleanup.cleanup_tracks_in_pad );
+    m_deleteDanglingViasOpt->SetValue( cfg->m_Cleanup.delete_dangling_vias );
 
     m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
@@ -53,8 +54,9 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
     m_sdbSizerOK->SetLabel( _( "Update PCB" ) );
 
     m_sdbSizerOK->SetDefault();
-    GetSizer()->SetSizeHints(this);
-    Centre();
+    m_sdbSizer->SetSizeHints( this );
+
+    FinishDialogSettings();
 }
 
 
@@ -67,6 +69,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
     cfg->m_Cleanup.cleanup_unconnected    = m_deleteUnconnectedOpt->GetValue();
     cfg->m_Cleanup.cleanup_short_circuits = m_cleanShortCircuitOpt->GetValue();
     cfg->m_Cleanup.cleanup_tracks_in_pad  = m_deleteTracksInPadsOpt->GetValue();
+    cfg->m_Cleanup.delete_dangling_vias   = m_deleteDanglingViasOpt->GetValue();
 
     for( CLEANUP_ITEM* item : m_items )
         delete item;
@@ -124,7 +127,8 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
                                              m_cleanViasOpt->GetValue(),
                                              m_mergeSegmOpt->GetValue(),
                                              m_deleteUnconnectedOpt->GetValue(),
-                                             m_deleteTracksInPadsOpt->GetValue() );
+                                             m_deleteTracksInPadsOpt->GetValue(),
+                                             m_deleteDanglingViasOpt->GetValue() );
 
     if( aDryRun )
     {

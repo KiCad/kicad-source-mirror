@@ -52,8 +52,10 @@ TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit ) :
  */
 void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<CLEANUP_ITEM*>* aItemsList,
                                    bool aRemoveMisConnected, bool aCleanVias, bool aMergeSegments,
-                                   bool aDeleteUnconnected, bool aDeleteTracksinPad )
+                                   bool aDeleteUnconnected, bool aDeleteTracksinPad, bool aDeleteDanglingVias )
 {
+    bool has_deleted = false;
+
     m_dryRun = aDryRun;
     m_itemsList = aItemsList;
 
@@ -80,15 +82,14 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<CLEANUP_ITEM*>* aIt
 
     // Delete dangling tracks
     if( aDeleteUnconnected )
-    {
-        if( deleteDanglingTracks() )
-        {
-            // Removed tracks can leave aligned segments
-            // (when a T was formed by tracks and the "vertical" segment is removed)
-            if( aMergeSegments )
-                cleanupSegments();
-        }
-    }
+        has_deleted = deleteDanglingTracks( false );
+
+    // Delete dangling vias
+    if( aDeleteDanglingVias )
+        has_deleted |= deleteDanglingTracks( true );
+
+    if( has_deleted && aMergeSegments )
+        cleanupSegments();
 
     // Clear the flag used to mark some segments:
     for( TRACK* segment : m_brd->Tracks() )
@@ -234,7 +235,7 @@ bool TRACKS_CLEANER::testTrackEndpointIsNode( TRACK* aTrack, bool aTstStart )
 }
 
 
-bool TRACKS_CLEANER::deleteDanglingTracks()
+bool TRACKS_CLEANER::deleteDanglingTracks( bool aVia )
 {
     bool item_erased = false;
     bool modified = false;
@@ -253,13 +254,20 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
             bool    flag_erase = false; // Start without a good reason to erase it
             wxPoint pos;
 
+            if( aVia && track->Type() != PCB_VIA_T )
+                continue;
+            else if( !aVia && track->Type() == PCB_VIA_T )
+                continue;
+
             // Tst if a track (or a via) endpoint is not connected to another track or to a zone.
             if( m_brd->GetConnectivity()->TestTrackEndpointDangling( track, &pos ) )
                 flag_erase = true;
 
             if( flag_erase )
             {
-                int errorCode = track->IsTrack() ? CLEANUP_DANGLING_TRACK : CLEANUP_DANGLING_VIA;
+                int errorCode =
+                        ( track->Type() != PCB_VIA_T ) ?
+                                CLEANUP_DANGLING_TRACK : CLEANUP_DANGLING_VIA;
                 CLEANUP_ITEM* item = new CLEANUP_ITEM( errorCode );
                 item->SetItems( track );
                 m_itemsList->push_back( item );

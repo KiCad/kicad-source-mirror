@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,6 +36,7 @@ class DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 	protected:
 		wxCheckBox* m_cleanShortCircuitOpt;
 		wxCheckBox* m_cleanViasOpt;
+		wxCheckBox* m_deleteDanglingViasOpt;
 		wxCheckBox* m_mergeSegmOpt;
 		wxCheckBox* m_deleteUnconnectedOpt;
 		wxCheckBox* m_deleteTracksInPadsOpt;

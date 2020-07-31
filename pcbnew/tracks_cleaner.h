@@ -45,10 +45,11 @@ public:
      * @param aMergeSegments = true to merge collinear segmenst and remove 0 len segm
      * @param aDeleteUnconnected = true to remove dangling tracks
      * @param aDeleteTracksinPad = true to remove tracks fully inside pads
+     * @param aDeleteDanglingVias = true to remove a via that is only connected to a single layer
      */
     void CleanupBoard( bool aDryRun, std::vector<CLEANUP_ITEM*>* aItemsList, bool aCleanVias,
                        bool aRemoveMisConnected, bool aMergeSegments, bool aDeleteUnconnected,
-                       bool aDeleteTracksinPad );
+                       bool aDeleteTracksinPad, bool aDeleteDanglingVias );
 
 private:
     /*
@@ -61,7 +62,12 @@ private:
      */
     void cleanupVias();
 
-    bool deleteDanglingTracks();
+    /**
+     * Removes tracks or vias only connected on one end
+     * @param aVia if true, clean vias, if false clean tracks
+     * @return true if any items were deleted
+     */
+    bool deleteDanglingTracks( bool aVia );
 
     void deleteTracksInPads();
 
