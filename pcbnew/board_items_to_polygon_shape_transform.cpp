@@ -519,9 +519,9 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     // This minimal value is mainly for very small pads, like SM0402.
     // Most of time pads are using the segment count given by aError value.
     const int pad_min_seg_per_circle_count = 16;
-    double  angle = m_Orient;
-    int     dx = m_Size.x / 2;
-    int     dy = m_Size.y / 2;
+    double  angle = m_orient;
+    int     dx = m_size.x / 2;
+    int     dy = m_size.y / 2;
 
     wxPoint padShapePos = ShapePos();         // Note: for pad having a shape offset,
                                               // the pad position is NOT the shape position
@@ -550,8 +550,8 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_TRAPEZOID:
     case PAD_SHAPE_RECT:
     {
-        int  ddx = GetShape() == PAD_SHAPE_TRAPEZOID ? m_DeltaSize.x / 2 : 0;
-        int  ddy = GetShape() == PAD_SHAPE_TRAPEZOID ? m_DeltaSize.y / 2 : 0;
+        int  ddx = GetShape() == PAD_SHAPE_TRAPEZOID ? m_deltaSize.x / 2 : 0;
+        int  ddy = GetShape() == PAD_SHAPE_TRAPEZOID ? m_deltaSize.y / 2 : 0;
 
         wxPoint corners[4];
         corners[0] = wxPoint( -dx - ddy,  dy + ddx );
@@ -593,7 +593,7 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                    pad_min_seg_per_circle_count );
         double correction = GetCircletoPolyCorrectionFactor( numSegs );
         int    clearance = KiROUND( aClearanceValue * correction );
-        wxSize shapesize( m_Size );
+        wxSize shapesize( m_size );
 
         radius = KiROUND( radius * correction );
         shapesize.x += clearance * 2;
@@ -613,8 +613,8 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     {
         SHAPE_POLY_SET outline;
         MergePrimitivesAsPolygon( &outline );
-        outline.Rotate( -DECIDEG2RAD( m_Orient ) );
-        outline.Move( VECTOR2I( m_Pos ) );
+        outline.Rotate( -DECIDEG2RAD( m_orient ) );
+        outline.Move( VECTOR2I( m_pos ) );
 
         // TODO: do we need the Simplify() & Fracture() if we're not inflating?
         outline.Simplify( SHAPE_POLY_SET::PM_FAST );

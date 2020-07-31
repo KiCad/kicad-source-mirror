@@ -94,13 +94,13 @@ public:
 
         for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
         {
-            if( m_Drill.x > 0 && m_Drill.y > 0 )
+            if( m_drill.x > 0 && m_drill.y > 0 )
             {
                 if( *p == PCB_LOCATE_HOLE_T )
                     return true;
-                else if( *p == PCB_LOCATE_PTH_T && m_Attribute != PAD_ATTRIB_HOLE_NOT_PLATED )
+                else if( *p == PCB_LOCATE_PTH_T && m_attribute != PAD_ATTRIB_HOLE_NOT_PLATED )
                     return true;
-                else if( *p == PCB_LOCATE_NPTH_T && m_Attribute == PAD_ATTRIB_HOLE_NOT_PLATED )
+                else if( *p == PCB_LOCATE_NPTH_T && m_attribute == PAD_ATTRIB_HOLE_NOT_PLATED )
                     return true;
             }
         }
@@ -158,11 +158,11 @@ public:
 
     void SetPosition( const wxPoint& aPos ) override
     {
-        m_Pos = aPos;
+        m_pos = aPos;
         m_shapesDirty = true;
     }
 
-    wxPoint GetPosition() const override { return m_Pos; }
+    wxPoint GetPosition() const override { return m_pos; }
 
     /**
      * Function GetAnchorPadShape
@@ -211,26 +211,26 @@ public:
         return ( GetLayerSet() & LSET::AllCuMask() ) != 0;
     }
 
-    void SetY( int y )                          { m_Pos.y = y; m_shapesDirty = true; }
-    void SetX( int x )                          { m_Pos.x = x; m_shapesDirty = true; }
+    void SetY( int y )                          { m_pos.y = y; m_shapesDirty = true; }
+    void SetX( int x )                          { m_pos.x = x; m_shapesDirty = true; }
 
-    void SetPos0( const wxPoint& aPos )         { m_Pos0 = aPos; }
-    const wxPoint& GetPos0() const              { return m_Pos0; }
+    void SetPos0( const wxPoint& aPos )         { m_pos0 = aPos; }
+    const wxPoint& GetPos0() const              { return m_pos0; }
 
-    void SetY0( int y )                         { m_Pos0.y = y; }
-    void SetX0( int x )                         { m_Pos0.x = x; }
+    void SetY0( int y )                         { m_pos0.y = y; }
+    void SetX0( int x )                         { m_pos0.x = x; }
 
-    void SetSize( const wxSize& aSize )         { m_Size = aSize; m_shapesDirty = true; }
-    const wxSize& GetSize() const               { return m_Size; }
+    void SetSize( const wxSize& aSize )         { m_size = aSize; m_shapesDirty = true; }
+    const wxSize& GetSize() const               { return m_size; }
 
-    void SetDelta( const wxSize& aSize )        { m_DeltaSize = aSize; m_shapesDirty = true; }
-    const wxSize& GetDelta() const              { return m_DeltaSize; }
+    void SetDelta( const wxSize& aSize )        { m_deltaSize = aSize; m_shapesDirty = true; }
+    const wxSize& GetDelta() const              { return m_deltaSize; }
 
-    void SetDrillSize( const wxSize& aSize )    { m_Drill = aSize; m_shapesDirty = true; }
-    const wxSize& GetDrillSize() const          { return m_Drill; }
+    void SetDrillSize( const wxSize& aSize )    { m_drill = aSize; m_shapesDirty = true; }
+    const wxSize& GetDrillSize() const          { return m_drill; }
 
-    void SetOffset( const wxPoint& aOffset )    { m_Offset = aOffset; m_shapesDirty = true; }
-    const wxPoint& GetOffset() const            { return m_Offset; }
+    void SetOffset( const wxPoint& aOffset )    { m_offset = aOffset; m_shapesDirty = true; }
+    const wxPoint& GetOffset() const            { return m_offset; }
 
     /**
      * Has meaning only for custom shape pads.
@@ -322,9 +322,9 @@ public:
      * Function GetOrientation
      * returns the rotation angle of the pad in tenths of degrees, but soon degrees.
      */
-    double GetOrientation() const { return m_Orient; }
-    double GetOrientationDegrees() const   { return m_Orient/10.0; }
-    double GetOrientationRadians() const   { return m_Orient*M_PI/1800; }
+    double GetOrientation() const { return m_orient; }
+    double GetOrientationDegrees() const   { return m_orient/10.0; }
+    double GetOrientationRadians() const   { return m_orient*M_PI/1800; }
 
     void SetDrillShape( PAD_DRILL_SHAPE_T aShape ) { m_drillShape = aShape; m_shapesDirty = true; }
     PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
@@ -335,29 +335,29 @@ public:
     LSET GetLayerSet() const override           { return m_layerMask; }
 
     void SetAttribute( PAD_ATTR_T aAttribute );
-    PAD_ATTR_T GetAttribute() const             { return m_Attribute; }
+    PAD_ATTR_T GetAttribute() const             { return m_attribute; }
 
     void SetProperty( PAD_PROP_T aProperty );
-    PAD_PROP_T GetProperty() const              { return m_Property; }
+    PAD_PROP_T GetProperty() const              { return m_property; }
 
     // We don't currently have an attribute for APERTURE, and adding one will change the file
     // format, so for now just infer a copper-less pad to be an APERTURE pad.
     bool IsAperturePad() const                  { return ( m_layerMask & LSET::AllCuMask() ).none(); }
 
-    void SetPadToDieLength( int aLength )       { m_LengthPadToDie = aLength; }
-    int GetPadToDieLength() const               { return m_LengthPadToDie; }
+    void SetPadToDieLength( int aLength )       { m_lengthPadToDie = aLength; }
+    int GetPadToDieLength() const               { return m_lengthPadToDie; }
 
-    int GetLocalSolderMaskMargin() const        { return m_LocalSolderMaskMargin; }
-    void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
+    int GetLocalSolderMaskMargin() const        { return m_localSolderMaskMargin; }
+    void SetLocalSolderMaskMargin( int aMargin ) { m_localSolderMaskMargin = aMargin; }
 
     int GetLocalClearance( wxString* aSource = nullptr ) const override;
-    void SetLocalClearance( int aClearance )    { m_LocalClearance = aClearance; }
+    void SetLocalClearance( int aClearance )    { m_localClearance = aClearance; }
 
-    int GetLocalSolderPasteMargin() const       { return m_LocalSolderPasteMargin; }
-    void SetLocalSolderPasteMargin( int aMargin ) { m_LocalSolderPasteMargin = aMargin; }
+    int GetLocalSolderPasteMargin() const       { return m_localSolderPasteMargin; }
+    void SetLocalSolderPasteMargin( int aMargin ) { m_localSolderPasteMargin = aMargin; }
 
-    double GetLocalSolderPasteMarginRatio() const { return m_LocalSolderPasteMarginRatio; }
-    void SetLocalSolderPasteMarginRatio( double aRatio ) { m_LocalSolderPasteMarginRatio = aRatio; }
+    double GetLocalSolderPasteMarginRatio() const { return m_localSolderPasteMarginRatio; }
+    void SetLocalSolderPasteMarginRatio( double aRatio ) { m_localSolderPasteMarginRatio = aRatio; }
 
     /**
      * Function TransformShapeWithClearanceToPolygon
@@ -441,8 +441,8 @@ public:
     */
     wxSize GetSolderPasteMargin() const;
 
-    void SetZoneConnection( ZONE_CONNECTION aType ) { m_ZoneConnection = aType; }
-    ZONE_CONNECTION GetZoneConnection() const { return m_ZoneConnection; }
+    void SetZoneConnection( ZONE_CONNECTION aType ) { m_zoneConnection = aType; }
+    ZONE_CONNECTION GetZoneConnection() const { return m_zoneConnection; }
 
     /**
      * Return the zone connection in effect (either locally overridden or overridden in the
@@ -455,10 +455,10 @@ public:
      * override similar settings in the parent footprint and zone.
      * @param aWidth
      */
-    void SetThermalWidth( int aWidth ) { m_ThermalWidth = aWidth; }
+    void SetThermalWidth( int aWidth ) { m_thermalWidth = aWidth; }
     int GetThermalWidth() const;
 
-    void SetThermalGap( int aGap ) { m_ThermalGap = aGap; }
+    void SetThermalGap( int aGap ) { m_thermalGap = aGap; }
     int GetThermalGap() const;
 
     /**
@@ -499,22 +499,22 @@ public:
      * Function GetSubRatsnest
      * @return int - the netcode
      */
-    int GetSubRatsnest() const                  { return m_SubRatsnest; }
-    void SetSubRatsnest( int aSubRatsnest )     { m_SubRatsnest = aSubRatsnest; }
+    int GetSubRatsnest() const                  { return m_subRatsnest; }
+    void SetSubRatsnest( int aSubRatsnest )     { m_subRatsnest = aSubRatsnest; }
 
     /**
      * Sets the unconnected removal property.  If true, the copper is removed on zone fill
      * or when specifically requested when the pad is not connected on a layer.  This requires
      * that there be a through hole.
      */
-    void SetRemoveUnconnected( bool aSet )      { m_RemoveUnconnectedLayer = aSet; }
-    bool GetRemoveUnconnected() const           { return m_RemoveUnconnectedLayer; }
+    void SetRemoveUnconnected( bool aSet )      { m_removeUnconnectedLayer = aSet; }
+    bool GetRemoveUnconnected() const           { return m_removeUnconnectedLayer; }
 
     /**
      * Sets whether we keep the top and bottom connections even if they are not connected
      */
-    void SetKeepTopBottom( bool aSet )      { m_KeepTopBottomLayer = aSet; }
-    bool GetKeepTopBottom() const           { return m_KeepTopBottomLayer; }
+    void SetKeepTopBottom( bool aSet )      { m_keepTopBottomLayer = aSet; }
+    bool GetKeepTopBottom() const           { return m_keepTopBottomLayer; }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -559,7 +559,7 @@ public:
 
     void Move( const wxPoint& aMoveVector ) override
     {
-        m_Pos += aMoveVector;
+        m_pos += aMoveVector;
         SetLocalCoord();
         m_shapesDirty = true;
     }
@@ -626,7 +626,7 @@ private:
     wxString      m_name;               // Pad name (pin number in schematic)
     wxString      m_pinFunction;        // Pin function in schematic
 
-    wxPoint       m_Pos;                // Pad Position on board
+    wxPoint       m_pos;                // Pad Position on board
 
     PAD_SHAPE_T   m_padShape;           // Shape: PAD_SHAPE_CIRCLE, PAD_SHAPE_RECT,
                                         //   PAD_SHAPE_OVAL, PAD_SHAPE_TRAPEZOID,
@@ -651,11 +651,11 @@ private:
      */
     CUST_PAD_SHAPE_IN_ZONE  m_customShapeClearanceArea;
 
-    int               m_SubRatsnest;        // Variable used to handle subnet (block) number in
+    int               m_subRatsnest;        // Variable used to handle subnet (block) number in
                                             //   ratsnest computations
 
-    wxSize            m_Drill;              // Drill diameter (x == y) or slot dimensions (x != y)
-    wxSize            m_Size;               // X and Y size (relative to orient 0)
+    wxSize            m_drill;              // Drill diameter (x == y) or slot dimensions (x != y)
+    wxSize            m_size;               // X and Y size (relative to orient 0)
 
     PAD_DRILL_SHAPE_T m_drillShape;         // PAD_DRILL_SHAPE_CIRCLE, PAD_DRILL_SHAPE_OBLONG
 
@@ -675,28 +675,28 @@ private:
      * of the pad shape (ie: the copper area around the hole).
      * ShapePos() returns the board shape position according to the offset and the pad rotation.
      */
-    wxPoint     m_Offset;
+    wxPoint     m_offset;
 
     LSET        m_layerMask;        // Bitwise layer: 1 = copper layer, 15 = cmp,
                                     // 2..14 = internal layers, 16..31 = technical layers
 
-    wxSize      m_DeltaSize;        // Delta for PAD_SHAPE_TRAPEZOID; half the delta squeezes
+    wxSize      m_deltaSize;        // Delta for PAD_SHAPE_TRAPEZOID; half the delta squeezes
                                     //   one end and half expands the other.  It is only valid
                                     //   to have a single axis be non-0.
 
-    wxPoint     m_Pos0;             // Initial Pad position (i.e. pad position relative to the
+    wxPoint     m_pos0;             // Initial Pad position (i.e. pad position relative to the
                                     //   module anchor, orientation 0)
 
-    PAD_ATTR_T  m_Attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB_SMD, PAD_ATTRIB_CONN,
+    PAD_ATTR_T  m_attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB_SMD, PAD_ATTRIB_CONN,
                                     //   PAD_ATTRIB_HOLE_NOT_PLATED
-    PAD_PROP_T  m_Property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
+    PAD_PROP_T  m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
 
-    double      m_Orient;           // in 1/10 degrees
+    double      m_orient;           // in 1/10 degrees
 
-    int         m_LengthPadToDie;   // Length net from pad to die, inside the package
+    int         m_lengthPadToDie;   // Length net from pad to die, inside the package
 
-    bool        m_RemoveUnconnectedLayer;  // If true, the pad copper is removed for layers that are not connected
-    bool        m_KeepTopBottomLayer;      // When removing unconnected pads, keep the top and bottom pads
+    bool        m_removeUnconnectedLayer;  // If true, the pad copper is removed for layers that are not connected
+    bool        m_keepTopBottomLayer;      // When removing unconnected pads, keep the top and bottom pads
 
     /*
      * Pad clearances, margins, etc. exist in a hiearchy.  If a given level is specified then
@@ -708,15 +708,15 @@ private:
      *
      * These are the LEVEL 1 settings for a pad.
      */
-    int         m_LocalClearance;
-    int         m_LocalSolderMaskMargin;        // Local solder mask margin
-    int         m_LocalSolderPasteMargin;       // Local solder paste margin absolute value
-    double      m_LocalSolderPasteMarginRatio;  // Local solder mask margin ratio of pad size
+    int         m_localClearance;
+    int         m_localSolderMaskMargin;        // Local solder mask margin
+    int         m_localSolderPasteMargin;       // Local solder paste margin absolute value
+    double      m_localSolderPasteMarginRatio;  // Local solder mask margin ratio of pad size
                                                 // The final margin is the sum of these 2 values
 
-    ZONE_CONNECTION m_ZoneConnection;           // No connection, thermal relief, etc.
-    int         m_ThermalWidth;                 // Thermal spoke width.
-    int         m_ThermalGap;
+    ZONE_CONNECTION m_zoneConnection;           // No connection, thermal relief, etc.
+    int         m_thermalWidth;                 // Thermal spoke width.
+    int         m_thermalGap;
 };
 
 #endif  // PAD_H_
