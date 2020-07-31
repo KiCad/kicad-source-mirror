@@ -72,6 +72,8 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_compileButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
+	m_compileButton->SetToolTip( _("Check rule syntax") );
+
 	bSizer5->Add( m_compileButton, 0, wxALL, 3 );
 
 	m_errorsReport = new WX_HTML_REPORT_BOX( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );

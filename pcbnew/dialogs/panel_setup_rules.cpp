@@ -49,7 +49,7 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
     for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
         m_textEditor->StyleSetFont( i, fixedFont );
 
-    m_compileButton->SetBitmap( KiBitmap( reload_xpm ) );
+    m_compileButton->SetBitmap( KiBitmap( drc_xpm ) );
 
     m_textEditor->Bind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
     m_textEditor->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
