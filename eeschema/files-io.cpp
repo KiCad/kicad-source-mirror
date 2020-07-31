@@ -716,6 +716,13 @@ bool SCH_EDIT_FRAME::SaveProject()
             screen->SetFileName( tmpFn.GetFullPath() );
         }
 
+        std::vector<SCH_SHEET_PATH>& sheets = screen->GetClientSheetPaths();
+
+        if( sheets.size() == 1 )
+            screen->m_ScreenNumber = sheets[0].GetPageNumber();
+        else
+            screen->m_ScreenNumber = 0;   // multiple uses; no way to store the real sheet #
+
         success &= SaveEEFile( screens.GetSheet( i ) );
     }
 
