@@ -616,7 +616,9 @@ bool PGM_BASE::SetLanguage( bool first_time )
             }
         }
 
-        GetCommonSettings()->m_System.language = languageSel;
+        COMMON_SETTINGS* cfg = GetCommonSettings();
+        cfg->m_System.language = languageSel;
+        cfg->SaveToFile( GetSettingsManager().GetPathForSettingsFile( cfg ) );
     }
 
     // Test if floating point notation is working (bug encountered in cross compilation)
