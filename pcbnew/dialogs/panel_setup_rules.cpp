@@ -253,14 +253,14 @@ void PANEL_SETUP_RULES::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {
     wxString      link = event.GetLinkInfo().GetHref();
     wxArrayString parts;
-    int           line = 0, offset = 0;
+    long          line = 0, offset = 0;
 
     wxStringSplit( link, parts, ':' );
 
     if( parts.size() > 1 )
     {
-        line = (int) strtol( parts[0], nullptr, 10 );
-        offset = (int) strtol( parts[1], nullptr, 10 );
+        parts[0].ToLong( &line );
+        parts[1].ToLong( &offset );
     }
 
     int pos = m_textEditor->PositionFromLine( line - 1 ) + ( offset - 1 );

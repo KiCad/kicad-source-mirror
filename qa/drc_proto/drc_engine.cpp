@@ -242,12 +242,15 @@ test::DRC_RULE* test::DRC_ENGINE::EvalRulesForItems( test::DRC_RULE_ID_T ruleID,
     {
         for( auto condition : rcond->conditions )
         {
-            drc_dbg(8, "   -> check condition '%s'\n", (const char*) condition->m_Expression );
+            drc_dbg( 8, "   -> check condition '%s'\n",
+                    (const char*) condition->m_Expression.c_str() );
 
             bool result = condition->EvaluateFor( a, b );
             if( result )
             {
-                drc_dbg(8, "   -> rule '%s' matches, triggered by condition '%s'\n", (const char*) rcond->rule->m_Name.c_str(), (const char*) condition->m_Expression );
+                drc_dbg( 8, "   -> rule '%s' matches, triggered by condition '%s'\n",
+                        (const char*) rcond->rule->m_Name.c_str(),
+                        (const char*) condition->m_Expression.c_str() );
                 return rcond->rule;
             }
         }
