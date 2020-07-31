@@ -33,8 +33,6 @@
 #include <dialog_text_entry.h>
 #include <fctsys.h>
 #include <filename_resolver.h>
-//#include <kiface_i.h>
-//#include <math/util.h> // for KiROUND
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
@@ -118,8 +116,6 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
 
     m_libraryIDLabel->SetFont( infoFont );
     m_tcLibraryID->SetFont( infoFont );
-    m_stFullUuid->SetFont( infoFont );
-    m_tcFullUuid->SetFont( infoFont );
 
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_staticTextInfoValNeg->SetFont( infoFont );
@@ -244,9 +240,9 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     m_texts->push_back( m_footprint->Reference() );
     m_texts->push_back( m_footprint->Value() );
 
-    for( auto item : m_footprint->GraphicalItems() )
+    for( BOARD_ITEM* item : m_footprint->GraphicalItems() )
     {
-        auto textModule = dyn_cast<TEXTE_MODULE*>( item );
+        TEXTE_MODULE* textModule = dyn_cast<TEXTE_MODULE*>( item );
 
         if( textModule )
             m_texts->push_back( *textModule );
@@ -334,28 +330,13 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     switch( m_footprint->GetZoneConnection() )
     {
     default:
-    case ZONE_CONNECTION::INHERITED:
-        m_ZoneConnectionChoice->SetSelection( 0 );
-        break;
-    case ZONE_CONNECTION::FULL:
-        m_ZoneConnectionChoice->SetSelection( 1 );
-        break;
-    case ZONE_CONNECTION::THERMAL:
-        m_ZoneConnectionChoice->SetSelection( 2 );
-        break;
-    case ZONE_CONNECTION::NONE:
-        m_ZoneConnectionChoice->SetSelection( 3 );
-        break;
+    case ZONE_CONNECTION::INHERITED: m_ZoneConnectionChoice->SetSelection( 0 ); break;
+    case ZONE_CONNECTION::FULL:      m_ZoneConnectionChoice->SetSelection( 1 ); break;
+    case ZONE_CONNECTION::THERMAL:   m_ZoneConnectionChoice->SetSelection( 2 ); break;
+    case ZONE_CONNECTION::NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
     }
 
     // 3D Settings
-
-    wxString default_path;
-    wxGetEnv( KISYS3DMOD, &default_path );
-#ifdef __WINDOWS__
-    default_path.Replace( wxT( "/" ), wxT( "\\" ) );
-#endif
-
     m_shapes3D_list.clear();
     m_modelsGrid->DeleteRows( 0, m_modelsGrid->GetNumberRows() );
 
@@ -381,9 +362,6 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
 
     // Show the footprint's FPID.
     m_tcLibraryID->SetValue( m_footprint->GetFPID().Format() );
-
-    // Show the footprint's full unique Kicad ID.
-    m_tcFullUuid->SetValue( m_footprint->GetPath().AsString() );
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {

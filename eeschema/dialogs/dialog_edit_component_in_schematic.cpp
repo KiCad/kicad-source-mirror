@@ -28,19 +28,14 @@
 #include <confirm.h>
 #include <kiface_i.h>
 #include <menus_helpers.h>
-#include <pgm_base.h>
-
 #include <widgets/wx_grid.h>
 #include <settings/settings_manager.h>
 #include <ee_collectors.h>
 #include <class_library.h>
-#include <eeschema_settings.h>
 #include <fields_grid_table.h>
 #include <invoke_sch_dialog.h>
-#include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
-#include <symbol_lib_table.h>
 #include <schematic.h>
 
 #ifdef KICAD_SPICE
@@ -96,13 +91,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     m_bpDelete->SetBitmap( KiBitmap( trash_xpm ) );
     m_bpMoveUp->SetBitmap( KiBitmap( small_up_xpm ) );
     m_bpMoveDown->SetBitmap( KiBitmap( small_down_xpm ) );
-
-    // Set font sizes
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_timeStampLabel->SetFont( infoFont );
-    m_textCtrlTimeStamp->SetFont( infoFont );
-    m_textCtrlTimeStamp->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
@@ -216,9 +204,6 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
         m_rbMirror->SetSelection( 2 );
     else
         m_rbMirror->SetSelection( 0 );
-
-    // Set the component's unique ID time stamp.
-    m_textCtrlTimeStamp->SetValue( m_cmp->m_Uuid.AsString() );
 
     // Set the component's library name.
     m_libraryNameTextCtrl->SetValue( m_cmp->GetLibId().Format() );

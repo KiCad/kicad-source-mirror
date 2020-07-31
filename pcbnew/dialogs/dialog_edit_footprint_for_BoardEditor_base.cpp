@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -505,21 +505,11 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 
 	fgSizerSymbolRef->Add( m_tcLibraryID, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
-	m_stFullUuid = new wxStaticText( this, wxID_ANY, _("Full unique ID:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stFullUuid->Wrap( -1 );
-	fgSizerSymbolRef->Add( m_stFullUuid, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
-	m_tcFullUuid = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
-	m_tcFullUuid->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	m_tcFullUuid->SetToolTip( _("The link to the associated schematic symbol, comprising the Unique IDs of the parent sheet(s) and the symbol.") );
-
-	fgSizerSymbolRef->Add( m_tcFullUuid, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
-
 
 	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
-	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bSizerButtons->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );
@@ -528,7 +518,10 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsCancel );
 	m_sdbSizerStdButtons->Realize();
 
-	m_GeneralBoxSizer->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALL, 5 );
+	bSizerButtons->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALL, 5 );
+
+
+	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
 	this->SetSizer( m_GeneralBoxSizer );
