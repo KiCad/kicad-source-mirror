@@ -465,7 +465,7 @@ public:
         m_IgnoreTracks              = false;
         m_IgnoreZoneFills           = true;
 
-        m_OnePixelInIU              = aView->ToWorld( one, false ).x;
+        m_OnePixelInIU              = abs( aView->ToWorld( one, false ).x );
     }
 
     /**
