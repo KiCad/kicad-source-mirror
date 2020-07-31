@@ -554,10 +554,10 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         int  ddy = GetShape() == PAD_SHAPE_TRAPEZOID ? m_DeltaSize.y / 2 : 0;
 
         wxPoint corners[4];
-        corners[0] = wxPoint( -dx + ddy,  dy + ddx );
-        corners[1] = wxPoint(  dx - ddy,  dy - ddx );
-        corners[2] = wxPoint(  dx + ddy, -dy + ddx );
-        corners[3] = wxPoint( -dx - ddy, -dy - ddx );
+        corners[0] = wxPoint( -dx - ddy,  dy + ddx );
+        corners[1] = wxPoint(  dx + ddy,  dy - ddx );
+        corners[2] = wxPoint(  dx - ddy, -dy + ddx );
+        corners[3] = wxPoint( -dx + ddy, -dy - ddx );
 
         SHAPE_POLY_SET outline;
         outline.NewOutline();

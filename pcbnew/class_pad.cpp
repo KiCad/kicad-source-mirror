@@ -319,10 +319,10 @@ void D_PAD::BuildEffectiveShapes() const
 
         SHAPE_LINE_CHAIN corners;
 
-        corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
-        corners.Append(  half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
-        corners.Append(  half_size.x + trap_delta.y,  half_size.y - trap_delta.x );
         corners.Append( -half_size.x - trap_delta.y,  half_size.y + trap_delta.x );
+        corners.Append(  half_size.x + trap_delta.y,  half_size.y - trap_delta.x );
+        corners.Append(  half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
+        corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
 
         corners.Rotate( -DECIDEG2RAD( m_Orient ) );
         corners.Move( shapePos );
