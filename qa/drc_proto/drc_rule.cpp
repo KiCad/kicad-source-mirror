@@ -31,7 +31,11 @@
 #include <pcb_expr_evaluator.h>
 
 
-test::DRC_RULE::DRC_RULE()
+test::DRC_RULE::DRC_RULE() :
+    m_Unary( false ),
+    m_Enabled( false ),
+    m_Conditional( false ),
+    m_Priority( 0 )
 {
 
 }
@@ -72,7 +76,7 @@ bool test::DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, in
         m_ucode = new PCB_EXPR_UCODE;
 
     LIBEVAL::CONTEXT preflightContext;
-    
+
     bool ok = compiler.Compile( m_Expression.ToUTF8().data(), m_ucode, &preflightContext );
     return ok;
 }

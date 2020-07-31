@@ -55,7 +55,8 @@ namespace test
 class DRC_TEST_PROVIDER_HOLE_SIZE : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_HOLE_SIZE()
+    DRC_TEST_PROVIDER_HOLE_SIZE() :
+        m_board( nullptr )
     {
     }
 

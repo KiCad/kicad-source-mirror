@@ -181,6 +181,7 @@ bool TOKENIZER::MatchAhead( const std::string& match, std::function<bool( int )>
 
 
 COMPILER::COMPILER( REPORTER* aReporter, int aSourceLine, int aSourceOffset ) :
+        m_lexerState( COMPILER::LS_DEFAULT ),
         m_reporter( aReporter ),
         m_originLine( aSourceLine ),
         m_originOffset( aSourceOffset )

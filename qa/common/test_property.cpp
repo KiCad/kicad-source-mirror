@@ -44,7 +44,7 @@ public:
     const wxPoint& getPoint4() const { return m_p; }
 
 protected:
-    int m_a;
+    int m_a = 0;
     wxPoint m_p;
 };
 
@@ -58,7 +58,7 @@ public:
     int getC() const { return m_c; }
 
 private:
-    int m_c;
+    int m_c = 0;
 };
 
 class C : public INSPECTABLE
@@ -70,8 +70,8 @@ public:
     int getNew() const { return m_m; }
     void setNew( int m ) { m_m = m; }
 
-    int m_m;
-    bool m_bool;
+    int m_m     = 0;
+    bool m_bool = false;
 };
 
 enum enum_glob { TEST1 = 0, TEST2 = 1, TEST3 = 4 };
@@ -96,8 +96,8 @@ public:
 
     enum_glob m_enum_glob;
     enum_class m_enum_class;
-    int m_aa;
-    int m_cond;
+    int m_aa   = 0;
+    int m_cond = 0;
 };
 
 class E : public D
@@ -206,8 +206,9 @@ ENUM_TO_WXANY( D::enum_class );
 
 struct PropertiesFixture
 {
-    PropertiesFixture()
-        : propMgr( PROPERTY_MANAGER::Instance() )
+    PropertiesFixture() :
+        ptr( nullptr ),
+        propMgr( PROPERTY_MANAGER::Instance() )
     {
     }
 

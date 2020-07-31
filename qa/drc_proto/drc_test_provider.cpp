@@ -2,7 +2,9 @@
 #include <drc_proto/drc_item.h>
 #include <drc_proto/drc_test_provider.h>
 
-test::DRC_TEST_PROVIDER::DRC_TEST_PROVIDER () 
+test::DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
+    m_drcEngine( nullptr ),
+    m_enable( false )
 {
 
 }

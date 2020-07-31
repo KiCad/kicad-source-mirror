@@ -49,7 +49,7 @@ private:
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 
     void OnSyntaxHelp( wxHyperlinkEvent& aEvent ) override;
-    void OnCompile( wxCommandEvent& event );
+    void OnCompile( wxCommandEvent& event ) override;
     void OnErrorLinkClicked( wxHtmlLinkEvent& event ) override;
 
     bool TransferDataToWindow() override;

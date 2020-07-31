@@ -53,19 +53,21 @@ class DRC_TEST_PROVIDER_HOLE_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
     DRC_TEST_PROVIDER_HOLE_CLEARANCE () :
-        DRC_TEST_PROVIDER_CLEARANCE_BASE()
+        DRC_TEST_PROVIDER_CLEARANCE_BASE(),
+        m_board( nullptr ),
+        m_largestRadius( 0 )
         {
         }
 
-    virtual ~DRC_TEST_PROVIDER_HOLE_CLEARANCE() 
+    virtual ~DRC_TEST_PROVIDER_HOLE_CLEARANCE()
     {
     }
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override 
+    virtual const wxString GetName() const override
     {
-        return "hole_clearance"; 
+        return "hole_clearance";
     };
 
     virtual const wxString GetDescription() const override
@@ -148,7 +150,7 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::buildHoleList()
 
             if( holeSize == 0 )
                 continue;
-            
+
             // fixme: support for non-round (i.e. slotted) holes
             if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
                 addHole( pad->GetPosition(), pad->GetDrillSize().x / 2, pad );
@@ -221,7 +223,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
         if( pad == aRefPad )
             continue;
 
-        
+
 
   //      drc_dbg(10," chk against -> %p\n", pad);
 
@@ -231,7 +233,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
             break;
 
 //        drc_dbg(10," chk2 against -> %p ds %d %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
-        
+
         drc_dbg(1," chk1 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
 
         // No problem if pads which are on copper layers are on different copper layers,
@@ -304,7 +306,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
                 int actual;
 
                 accountCheck( rule );
-                
+
                 drc_dbg(1,"check pad %p rule '%s' cl %d\n", aRefPad, (const char*) rule->GetName().c_str(), minClearance );
 
                 auto padShape = pad->GetEffectiveShape();
@@ -386,7 +388,7 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 
             DRC_RULE* rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_HOLE_CLEARANCE, refHole.m_owner, checkHole.m_owner );
             int minClearance = rule->GetConstraint().GetValue().Min();
-    
+
             accountCheck( rule );
 
             if( actual < minClearance )
