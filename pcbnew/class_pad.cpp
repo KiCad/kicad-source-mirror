@@ -510,6 +510,32 @@ void D_PAD::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
     SetOrientation( -GetOrientation() );
 
+    auto mirrorBitFlags = []( int& aBitfield, int a, int b )
+                          {
+                              bool temp = aBitfield & a;
+
+                              if( aBitfield & b )
+                                  aBitfield |= a;
+                              else
+                                  aBitfield &= ~a;
+
+                              if( temp )
+                                  aBitfield |= b;
+                              else
+                                  aBitfield &= ~b;
+                          };
+
+    if( aFlipLeftRight )
+    {
+        mirrorBitFlags( m_chamferPositions, RECT_CHAMFER_TOP_LEFT, RECT_CHAMFER_TOP_RIGHT );
+        mirrorBitFlags( m_chamferPositions, RECT_CHAMFER_BOTTOM_LEFT, RECT_CHAMFER_BOTTOM_RIGHT );
+    }
+    else
+    {
+        mirrorBitFlags( m_chamferPositions, RECT_CHAMFER_TOP_LEFT, RECT_CHAMFER_BOTTOM_LEFT );
+        mirrorBitFlags( m_chamferPositions, RECT_CHAMFER_TOP_RIGHT, RECT_CHAMFER_BOTTOM_RIGHT );
+    }
+
     // flip pads layers
     // PADS items are currently on all copper layers, or
     // currently, only on Front or Back layers.
