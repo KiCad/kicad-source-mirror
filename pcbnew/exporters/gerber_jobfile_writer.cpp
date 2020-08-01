@@ -192,7 +192,7 @@ bool GERBER_JOBFILE_WRITER::WriteJSONJobFile( const wxString& aFullFilename )
 
     LOCALE_IO dummy;
 
-    m_json = json( {} );
+    m_json = nlohmann::ordered_json( {} );
 
     // output the job file header
     addJSONHeader();
@@ -234,8 +234,8 @@ double GERBER_JOBFILE_WRITER::mapValue( double aUiValue )
 
 void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
 {
-    m_json["GeneralSpecs"] = json( {} );
-    m_json["GeneralSpecs"]["ProjectId"] = json( {} );
+    m_json["GeneralSpecs"] = nlohmann::ordered_json( {} );
+    m_json["GeneralSpecs"]["ProjectId"] = nlohmann::ordered_json( {} );
 
     // Creates the ProjectId. Format is (from Gerber file format doc):
     // ProjectId,<project id>,<project GUID>,<revision id>*%
@@ -334,7 +334,7 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
 void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
 {
     // Add the Files Attributes section in JSON format to m_JSONbuffer
-    m_json["FilesAttributes"] = json::array();
+    m_json["FilesAttributes"] = nlohmann::ordered_json::array();
 
     for( unsigned ii = 0; ii < m_params.m_GerberFileList.GetCount(); ii++ )
     {
@@ -343,7 +343,8 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
         wxString     gbr_layer_id;
         bool         skip_file = false; // true to skip files which should not be in job file
         const char*  polarity = "Positive";
-        json         file_json;
+
+        nlohmann::ordered_json file_json;
 
         if( layer <= B_Cu )
         {
@@ -534,7 +535,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
 
     if( hasInnerLayers )
     {
-        m_json["DesignRules"] += json( {
+        m_json["DesignRules"] += nlohmann::ordered_json( {
             { "Layers", "Inner" },
             { "PadToPad", mapValue( minPadClearanceInner ) },
             { "PadToTrack", mapValue( minPadClearanceInner ) },
@@ -556,7 +557,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
 void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
 {
     // Add the Material Stackup section in JSON format to m_JSONbuffer
-    m_json["MaterialStackup"] = json::array();
+    m_json["MaterialStackup"] = nlohmann::ordered_json::array();
 
     // Build the candidates list:
     LSET          maskLayer;
@@ -586,7 +587,8 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
             double      thickness = mapValue( item->GetThickness( sub_idx ) );
             wxString    layer_type;
             std::string layer_name; // for comment
-            json        layer_json;
+
+            nlohmann::ordered_json layer_json;
 
             switch( item->GetType() )
             {

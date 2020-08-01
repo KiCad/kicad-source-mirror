@@ -30,9 +30,7 @@
 #ifndef GERBER_JOBFILE_WRITER_H
 #define GERBER_JOBFILE_WRITER_H
 
-#include <kicad_json.h>
-
-using json = kicad::json;
+#include <nlohmann/json_fwd.hpp>
 
 
 // A helper enum to handle sides of some layers (silk, mask)
@@ -164,11 +162,11 @@ private:
     double mapValue( double aUiValue );
 
 private:
-    BOARD* m_pcb;               // The board
-    REPORTER* m_reporter;       // a reporter for messages (can be null)
-    JOBFILE_PARAMS m_params;    // the list of various prms and data to write in a job file
-    double m_conversionUnits;   // scaling factor to convert brd units to gerber units (mm)
-    json m_json;                // json document built by this class
+    BOARD* m_pcb;                  // The board
+    REPORTER* m_reporter;          // a reporter for messages (can be null)
+    JOBFILE_PARAMS m_params;       // the list of various prms and data to write in a job file
+    double m_conversionUnits;      // scaling factor to convert brd units to gerber units (mm)
+    nlohmann::ordered_json m_json; // json document built by this class
 };
 
 #endif  //  #ifndef GERBER_JOBFILE_WRITER_H

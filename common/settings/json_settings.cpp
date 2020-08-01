@@ -194,7 +194,9 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
         try
         {
             FILE* fp = wxFopen( path.GetFullPath(), wxT( "rt" ) );
-            *static_cast<nlohmann::json*>( this ) = nlohmann::json::parse( fp );
+            *static_cast<nlohmann::json*>( this ) = nlohmann::json::parse( fp, nullptr,
+                    /* allow_exceptions = */ true,
+                    /* ignore_comments  = */ true );
 
             // If parse succeeds, check if schema migration is required
             int filever = -1;
