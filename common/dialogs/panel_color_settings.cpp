@@ -198,8 +198,17 @@ void PANEL_COLOR_SETTINGS::createSwatch( int aLayer, const wxString& aName )
 {
     wxStaticText* label = new wxStaticText( m_colorsListWindow, wxID_ANY, aName );
 
+    // The previously selected theme can be deleted and cannot be selected.
+    // so select the default theme (first theme of the list)
+    if( m_cbTheme->GetSelection() < 0 )
+    {
+        m_cbTheme->SetSelection( 0 );
+        onNewThemeSelected();
+    }
+
     void*           clientData = m_cbTheme->GetClientData( m_cbTheme->GetSelection() );
     COLOR_SETTINGS* selected = static_cast<COLOR_SETTINGS*>( clientData );
+
     int             id = FIRST_BUTTON_ID + aLayer;
     COLOR4D         defaultColor    = selected->GetDefaultColor( aLayer );
     COLOR4D         color           = m_currentSettings->GetColor( aLayer );
