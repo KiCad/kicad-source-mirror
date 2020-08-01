@@ -320,11 +320,15 @@ VIEW::VIEW( bool aIsDynamic ) :
         AddLayer( i );
 
     sortLayers();
+
+    m_preview.reset( new KIGFX::VIEW_GROUP() );
+    Add( m_preview.get() );
 }
 
 
 VIEW::~VIEW()
 {
+    Remove( m_preview.get() );
 }
 
 
@@ -1539,7 +1543,7 @@ void VIEW::Update( VIEW_ITEM* aItem )
 
 void VIEW::Update( VIEW_ITEM* aItem, int aUpdateFlags )
 {
-    auto viewData = aItem->viewPrivData();
+    VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
 
     if( !viewData )
         return;
@@ -1547,7 +1551,6 @@ void VIEW::Update( VIEW_ITEM* aItem, int aUpdateFlags )
     assert( aUpdateFlags != NONE );
 
     viewData->m_requiredUpdate |= aUpdateFlags;
-
 }
 
 
@@ -1557,6 +1560,38 @@ std::shared_ptr<VIEW_OVERLAY> VIEW::MakeOverlay()
 
     Add( overlay.get() );
     return overlay;
+}
+
+
+void VIEW::ClearPreview()
+{
+   m_preview->Clear();
+
+   for( EDA_ITEM* item : m_ownedItems )
+       delete item;
+
+   m_ownedItems.clear();
+   Update( m_preview.get() );
+}
+
+
+void VIEW::AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership )
+{
+   Hide( aItem, false );
+   m_preview->Add( aItem );
+
+   if( aTakeOwnership )
+       m_ownedItems.push_back( aItem );
+
+   SetVisible( m_preview.get(), true );
+   Hide( m_preview.get(), false );
+   Update( m_preview.get() );
+}
+
+
+void VIEW::ShowPreview( bool aShow )
+{
+   SetVisible( m_preview.get(), aShow );
 }
 
 

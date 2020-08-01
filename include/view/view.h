@@ -679,6 +679,11 @@ public:
 
     std::shared_ptr<VIEW_OVERLAY> MakeOverlay();
 
+    void ClearPreview();
+    void AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership = true );
+
+    void ShowPreview( bool aShow = true );
+
     /**
      * Returns a new VIEW object that shares the same set of VIEW_ITEMs and LAYERs.
      * GAL, PAINTER and other properties are left uninitialized.
@@ -727,6 +732,8 @@ protected:
     struct changeItemsDepth;
     struct extentsVisitor;
 
+    std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;
+    std::vector<EDA_ITEM *>            m_ownedItems;
 
     ///* Redraws contents within rect aRect
     void redrawRect( const BOX2I& aRect );

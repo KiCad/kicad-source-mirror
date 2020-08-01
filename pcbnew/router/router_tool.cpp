@@ -20,27 +20,20 @@
  */
 
 #include <wx/numdlg.h>
-#include <core/optional.h>
 #include <functional>
 using namespace std::placeholders;
-#include "class_board.h"
-#include "class_module.h"
-#include "class_pad.h"
-
+#include <class_board.h>
+#include <class_board_item.h>
+#include <class_module.h>
+#include <class_pad.h>
 #include <pcb_edit_frame.h>
-#include <id.h>
-#include <macros.h>
 #include <pcbnew_id.h>
-#include <view/view_controls.h>
 #include <pcb_layer_widget.h>
-#include <pcb_painter.h>
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
 #include <dialogs/dialog_track_via_size.h>
-#include <base_units.h>
 #include <confirm.h>
 #include <bitmaps.h>
-#include <collectors.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/grid_menu.h>
@@ -1379,13 +1372,15 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     PNS::ITEM* startItem = nullptr;
     PNS::ITEM_SET itemsToDrag;
+    const MODULE* module = nullptr;
 
     if( item->Type() == PCB_MODULE_T )
     {
-        const auto mod = static_cast<const MODULE*>(item);
-        for ( const auto p : mod->Pads() )
+        module = static_cast<const MODULE*>(item);
+
+        for( const D_PAD* pad : module->Pads() )
         {
-            auto solid = m_router->GetWorld()->FindItemByParent( p );
+            PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
 
             if( solid )
                 itemsToDrag.Add( solid );
@@ -1441,6 +1436,35 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         {
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
+
+            if( module )
+            {
+                VECTOR2I offset = m_endSnapPoint - p;
+                BOARD_ITEM* previewItem;
+
+                view()->ClearPreview();
+
+                for( BOARD_ITEM* drawing : module->GraphicalItems() )
+                {
+                    previewItem = static_cast<BOARD_ITEM*>( drawing->Clone() );
+                    previewItem->Move( offset );
+                    view()->Add( previewItem );
+                    view()->AddToPreview( previewItem );
+                    view()->Hide( drawing, true );
+                }
+
+                previewItem = static_cast<BOARD_ITEM*>( module->Reference().Clone() );
+                previewItem->Move( offset );
+                view()->Add( previewItem );
+                view()->AddToPreview( previewItem );
+                view()->Hide( &module->Reference() );
+
+                previewItem = static_cast<BOARD_ITEM*>( module->Value().Clone() );
+                previewItem->Move( offset );
+                view()->Add( previewItem );
+                view()->AddToPreview( previewItem );
+                view()->Hide( &module->Value() );
+            }
         }
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
@@ -1448,6 +1472,18 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             m_router->FixRoute( m_endSnapPoint, m_endItem );
             break;
         }
+    }
+
+    if( module )
+    {
+        for( BOARD_ITEM* drawing : module->GraphicalItems() )
+            view()->Hide( drawing, false );
+
+        view()->Hide( &module->Reference(), false );
+        view()->Hide( &module->Value(), false );
+
+        view()->ClearPreview();
+        view()->ShowPreview( false );
     }
 
     if( m_router->RoutingInProgress() )

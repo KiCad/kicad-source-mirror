@@ -32,14 +32,9 @@
 #include <view/wx_view_controls.h>
 #include <ws_proxy_view_item.h>
 #include <layers_id_colors_and_visibility.h>
-#include <class_libentry.h>
-#include <sch_sheet.h>
 #include <sch_screen.h>
-#include <sch_component.h>
 #include <schematic.h>
-#include <lib_pin.h>
-#include <preview_items/selection_area.h>
-#include <sch_edit_frame.h>
+#include <sch_base_frame.h>
 
 #include "sch_view.h"
 
@@ -60,9 +55,6 @@ SCH_VIEW::SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame ) :
     double max_size = Mils2iu( MAX_PAGE_SIZE_MILS ) * 3.0;
     m_boundary.SetOrigin( -max_size/4, -max_size/4 );
     m_boundary.SetSize( max_size, max_size );
-
-    m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA() );
-    m_preview.reset( new KIGFX::VIEW_GROUP() );
 }
 
 
@@ -112,12 +104,7 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
 
     ResizeSheetWorkingArea( aScreen );
 
-    m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA() );
-    m_preview.reset( new KIGFX::VIEW_GROUP() );
-
     Add( m_worksheet.get() );
-    Add( m_selectionArea.get() );
-    Add( m_preview.get() );
 }
 
 
@@ -172,43 +159,6 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
 
         Add( &item );
     }
-
-    m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA() );
-    m_preview.reset( new KIGFX::VIEW_GROUP() );
-    Add( m_selectionArea.get() );
-    Add( m_preview.get() );
-}
-
-
-void SCH_VIEW::ClearPreview()
-{
-    m_preview->Clear();
-
-    for( auto item : m_ownedItems )
-        delete item;
-
-    m_ownedItems.clear();
-    Update( m_preview.get() );
-}
-
-
-void SCH_VIEW::AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership )
-{
-    Hide( aItem, false );
-    m_preview->Add( aItem );
-
-    if( aTakeOwnership )
-        m_ownedItems.push_back( aItem );
-
-    SetVisible( m_preview.get(), true );
-    Hide( m_preview.get(), false );
-    Update( m_preview.get() );
-}
-
-
-void SCH_VIEW::ShowPreview( bool aShow )
-{
-    SetVisible( m_preview.get(), aShow );
 }
 
 
