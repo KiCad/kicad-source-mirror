@@ -22,6 +22,7 @@
 #include <fstream>
 #include <iomanip>
 #include <utility>
+#include <sstream>
 
 #include <common.h>
 #include <gal/color4d.h>
