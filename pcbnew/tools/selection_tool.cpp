@@ -356,45 +356,48 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
 
     if( aClientFilter )
     {
-        GENERAL_COLLECTOR collector;
+        enum DISPOSITION { BEFORE = 1, AFTER, BOTH };
 
-        for( auto item : m_selection )
+        std::map<EDA_ITEM*, DISPOSITION> itemDispositions;
+        GENERAL_COLLECTOR                collector;
+
+        for( EDA_ITEM* item : m_selection )
+        {
             collector.Append( item );
+            itemDispositions[ item ] = BEFORE;
+        }
 
         aClientFilter( VECTOR2I(), collector );
 
-        /*
-         * The first step is to find the items that may have been added by the client filter
-         * This can happen if the locked pads select the module instead
-         */
-        std::vector<EDA_ITEM*> new_items;
-        std::set_difference( collector.begin(), collector.end(),
-                             m_selection.begin(), m_selection.end(),
-                             std::back_inserter( new_items ) );
-
-        /**
-         * The second step is to find the items that were removed by the client filter
-         */
-        std::vector<EDA_ITEM*> diff;
-        std::set_difference( m_selection.begin(), m_selection.end(),
-                             collector.begin(), collector.end(),
-                             std::back_inserter( diff ) );
-
-        if( aFiltered )
+        for( EDA_ITEM* item : collector )
         {
-            for( auto item : diff )
-                aFiltered->push_back( static_cast<BOARD_ITEM*>( item ) );
+            if( itemDispositions.count( item ) )
+                itemDispositions[ item ] = BOTH;
+            else
+                itemDispositions[ item ] = AFTER;
         }
 
-        /**
-         * Once we find the adjustments to m_selection that are required by the client filter, we
-         * apply them both
-         */
-        for( auto item : diff )
-            unhighlight( static_cast<BOARD_ITEM*>( item ), SELECTED, &m_selection );
+        for( std::pair<EDA_ITEM* const, DISPOSITION> itemDisposition : itemDispositions )
+        {
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( itemDisposition.first );
+            DISPOSITION disposition = itemDisposition.second;
 
-        for( auto item : new_items )
-            highlight( static_cast<BOARD_ITEM*>( item ), SELECTED, &m_selection );
+            if( disposition == BEFORE )
+            {
+                if( aFiltered )
+                    aFiltered->push_back( item );
+
+                unhighlight( item, SELECTED, &m_selection );
+            }
+            else if( disposition == AFTER )
+            {
+                highlight( item, SELECTED, &m_selection );
+            }
+            else if( disposition == BOTH )
+            {
+                // nothing to do
+            }
+        }
 
         m_frame->GetCanvas()->ForceRefresh();
     }
