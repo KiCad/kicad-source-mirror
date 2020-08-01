@@ -158,8 +158,7 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     else
     {
         wxString dir( aDirectory.c_str(), wxConvUTF8 );
-        wxString name( m_filename.c_str(), wxConvUTF8 );
-        path.Assign( dir, name, getFileExt() );
+        path.Assign( dir, m_filename, getFileExt() );
     }
 
     if( !path.Exists() )
@@ -349,21 +348,27 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
     wxLogTrace( traceSettings, "Saving %s", GetFullFilename() );
 
     LOCALE_IO dummy;
+    bool success = true;
 
     try
     {
         wxFile   file( path.GetFullPath(), wxFile::write );
 
-        if( !file.IsOpened() || !file.Write( wxString( dump( 0 ).c_str(), wxConvUTF8 ) ) )
+        std::stringstream buffer;
+        buffer << std::setw( 2 ) << *this << std::endl;
+
+        if( !file.IsOpened() || !file.Write( buffer.str().c_str(), buffer.str().size() ) )
         {
             wxLogTrace( traceSettings, "Warning: could not save %s", GetFullFilename() );
+            success = false;
         }
     }
     catch( ... )
     {
+        success = false;
     }
 
-    return true;
+    return success;
 }
 
 
