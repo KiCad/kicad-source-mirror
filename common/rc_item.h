@@ -291,6 +291,8 @@ private:
     RC_ITEMS_PROVIDER*         m_rcItemsProvider;   // I own this, but not its contents
 
     std::vector<RC_TREE_NODE*> m_tree;              // I own this
+    mutable const RC_ITEM*     m_lastQueried;       // Used as a massive hack to restore the
+                                                    // widget's scroll position.
 };
 
 

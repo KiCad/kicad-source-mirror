@@ -142,11 +142,17 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
 {
     wxWindowUpdateLocker updateLock( m_view );
 
-    // Even with the updateLock, wxWidgets sometimes ties its knickers in
-    // a knot when trying to run a wxdataview_selection_changed_callback()
-    // on a row that has been deleted.
+    RC_ITEM* selectedRcItem = nullptr;
+
     if( m_view )
+    {
+        RC_TREE_NODE* selectedNode = ToNode( m_view->GetSelection() );
+        selectedRcItem = selectedNode ? selectedNode->m_RcItem : nullptr;
+
+        // Even with the updateLock, wxWidgets sometimes ties its knickers in a knot trying
+        // to run a wxdataview_selection_changed_callback() on a row that has been deleted.
         m_view->UnselectAll();
+    }
 
     if( aProvider != m_rcItemsProvider )
     {
@@ -200,6 +206,21 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
     m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, width );
 
     ExpandAll();
+
+    // Most annoyingly wxWidgets won't tell us the scroll position (and no, all the usual
+    // routines don't work), so we can only restore the scroll position based on a selection.
+    if( selectedRcItem )
+    {
+        for( RC_TREE_NODE* candidate : m_tree )
+        {
+            if( candidate->m_RcItem == selectedRcItem )
+            {
+                m_view->Select( ToItem( candidate ) );
+                m_view->EnsureVisible( ToItem( candidate ) );
+                break;
+            }
+        }
+    }
 }
 
 
