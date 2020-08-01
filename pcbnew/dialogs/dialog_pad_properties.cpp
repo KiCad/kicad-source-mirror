@@ -621,7 +621,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     enablePrimitivePage( PAD_SHAPE_CUSTOM == m_dummyPad->GetShape() );
 
     // Type of pad selection
-    bool aperture = m_dummyPad->GetAttribute() == PAD_ATTRIB_CONN && m_dummyPad->IsAperturePad();
+    bool aperture = m_dummyPad->GetAttribute() == PAD_ATTRIB_SMD && m_dummyPad->IsAperturePad();
 
     if( aperture )
     {
