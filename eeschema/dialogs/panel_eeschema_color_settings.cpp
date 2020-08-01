@@ -227,7 +227,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     m_titleBlock = new TITLE_BLOCK;
 
     m_page->SetHeightMils( 5000 );
-    m_page->SetWidthMils( 5500 );
+    m_page->SetWidthMils( 6000 );
 
     m_ws = new KIGFX::WS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr, m_titleBlock );
     m_ws->SetColorLayer( LAYER_SCHEMATIC_WORKSHEET );
@@ -286,12 +286,12 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     t1->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::LEFT );
     addItem( t1 );
 
-    auto t2 = new SCH_LABEL( wxPoint( Mils2iu( 1975 ), Mils2iu( 1500 ) ), wxT( "GLOBAL0" ) );
+    auto t2 = new SCH_LABEL( wxPoint( Mils2iu( 1975 ), Mils2iu( 1500 ) ), wxT( "LABEL_{0}" ) );
     t2->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
     t2->SetIsDangling( false );
     addItem( t2 );
 
-    auto t3 = new SCH_LABEL( wxPoint( Mils2iu( 1975 ), Mils2iu( 2600 ) ), wxT( "GLOBAL1" ) );
+    auto t3 = new SCH_LABEL( wxPoint( Mils2iu( 1975 ), Mils2iu( 2600 ) ), wxT( "LABEL_{1}" ) );
     t3->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
     t3->SetIsDangling( false );
     addItem( t3 );
@@ -313,15 +313,28 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     t2->SetSelected();
 
     {
-        auto part = new LIB_PART( wxEmptyString );
+        LIB_PART* part = new LIB_PART( wxEmptyString );
         wxPoint p( 2625, -1600 );
+
+        LIB_FIELD& ref = part->GetReferenceField();
+
+        ref.SetText( wxT( "U1" ) );
+        ref.SetPosition( wxPoint( Mils2iu( p.x + 30 ), Mils2iu( p.y + 260 ) ) );
+        ref.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+        LIB_FIELD& value = part->GetValueField();
+
+        value.SetText( wxT( "OPA604" ) );
+        value.SetPosition( wxPoint( Mils2iu( p.x + 30 ), Mils2iu( p.y + 180 ) ) );
+        value.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
 
         part->SetShowPinNames( true );
         part->SetShowPinNumbers( true );
+        part->SetPinNameOffset( 0 );
 
         addItem( part );
 
-        auto comp_body = new LIB_POLYLINE( part );
+        LIB_POLYLINE* comp_body = new LIB_POLYLINE( part );
 
         comp_body->SetUnit( 0 );
         comp_body->SetConvert( 0 );
@@ -333,6 +346,39 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         comp_body->AddPoint( wxPoint( Mils2iu( p.x - 200 ), Mils2iu( p.y + 200 ) ) );
 
         addItem( comp_body );
+
+        LIB_PIN* pin = new LIB_PIN( part );
+
+        pin->SetPosition( wxPoint( Mils2iu( p.x - 200 ), Mils2iu( p.y + 100 ) ) );
+        pin->SetLength( Mils2iu( 100 ) );
+        pin->SetOrientation( PIN_LEFT );
+        pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
+        pin->SetNumber( wxT( "1" ) );
+        pin->SetName( wxT( "-" ) );
+
+        part->AddDrawItem( pin );
+
+        pin = new LIB_PIN( part );
+
+        pin->SetPosition( wxPoint( Mils2iu( p.x - 200 ), Mils2iu( p.y - 100 ) ) );
+        pin->SetLength( Mils2iu( 100 ) );
+        pin->SetOrientation( PIN_LEFT );
+        pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
+        pin->SetNumber( wxT( "2" ) );
+        pin->SetName( wxT( "+" ) );
+
+        part->AddDrawItem( pin );
+
+        pin = new LIB_PIN( part );
+
+        pin->SetPosition( wxPoint( Mils2iu( p.x + 200 ), Mils2iu( p.y ) ) );
+        pin->SetLength( Mils2iu( 100 ) );
+        pin->SetOrientation( PIN_RIGHT );
+        pin->SetType( ELECTRICAL_PINTYPE::PT_OUTPUT );
+        pin->SetNumber( wxT( "3" ) );
+        pin->SetName( wxT( "OUT" ) );
+
+        part->AddDrawItem( pin );
     }
 
     zoomFitPreview();
@@ -377,7 +423,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::zoomFitPreview()
     double scale = view->GetScale() / std::max( fabs( psize.x / screenSize.x ),
                                                 fabs( psize.y / screenSize.y ) );
 
-    view->SetScale( scale / 1.02 );
+    view->SetScale( scale * 1.1 );
     view->SetCenter( m_ws->ViewBBox().Centre() );
     m_preview->ForceRefresh();
 }

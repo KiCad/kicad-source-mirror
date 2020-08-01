@@ -68,7 +68,7 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
 
     m_gal->SetGridColor( m_painter->GetSettings()->GetLayerColor( LAYER_SCHEMATIC_GRID ) );
     m_gal->SetCursorEnabled( false );
-    m_gal->SetGridSize( VECTOR2D( Mils2iu( 50.0 ), Mils2iu( 50.0 ) ) );
+    m_gal->SetGridSize( VECTOR2D( Mils2iu( 100.0 ), Mils2iu( 100.0 ) ) );
 
     m_viewControls->SetSnapping( true );
 
