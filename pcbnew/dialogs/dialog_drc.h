@@ -89,7 +89,7 @@ private:
 
     void OnChangingNotebookPage( wxNotebookEvent& aEvent ) override;
 
-    void deleteAllMarkers();
+    void deleteAllMarkers( bool aIncludeExclusions );
     void refreshBoardEditor();
 
     BOARD_DESIGN_SETTINGS& bds() { return m_currentBoard->GetDesignSettings(); }

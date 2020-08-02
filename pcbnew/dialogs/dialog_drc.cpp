@@ -188,7 +188,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     m_tester->m_testFootprints         = m_cbTestFootprints->GetValue();
 
     m_brdEditor->RecordDRCExclusions();
-    deleteAllMarkers();
+    deleteAllMarkers( true );
 
     wxBeginBusyCursor();
     wxWindowDisabler disabler;
@@ -508,13 +508,12 @@ void DIALOG_DRC::refreshBoardEditor()
 }
 
 
-void DIALOG_DRC::deleteAllMarkers()
+void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
 {
     // Clear current selection list to avoid selection of deleted items
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_markerTreeModel->DeleteAllItems();
-    m_unconnectedTreeModel->DeleteAllItems();
+    m_markerTreeModel->DeleteItems( false, true, aIncludeExclusions, true );
 }
 
 
@@ -594,7 +593,33 @@ void DIALOG_DRC::OnDeleteOneClick( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
 {
-    deleteAllMarkers();
+    bool includeExclusions = false;
+    int  numExcluded = 0;
+
+    if( m_markersProvider )
+        numExcluded += m_markersProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+
+    if( m_unconnectedItemsProvider )
+        numExcluded += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+
+    if( m_footprintWarningsProvider )
+        numExcluded += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+
+    if( numExcluded > 0 )
+    {
+        wxMessageDialog dlg( this, _( "Delete exclusions too?" ), _( "Delete All Markers" ),
+                             wxYES_NO | wxCANCEL | wxCENTER | wxICON_QUESTION );
+        dlg.SetYesNoLabels( _( "Errors and Warnings Only" ) , _( "Errors, Warnings and Exclusions" ) );
+
+        int ret = dlg.ShowModal();
+
+        if( ret == wxID_CANCEL )
+            return;
+        else if( ret == wxID_NO )
+            includeExclusions = true;
+    }
+
+    deleteAllMarkers( includeExclusions );
 
     refreshBoardEditor();
     updateDisplayedCounts();

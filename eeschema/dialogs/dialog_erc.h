@@ -67,7 +67,7 @@ private:
 
     bool writeReport( const wxString& aFullFileName );
 
-    void deleteAllMarkers();
+    void deleteAllMarkers( bool aIncludeExclusions );
 
     void syncCheckboxes();
     void updateDisplayedCounts();

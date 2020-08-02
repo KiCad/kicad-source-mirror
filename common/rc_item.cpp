@@ -387,18 +387,30 @@ void RC_TREE_MODEL::ValueChanged( RC_TREE_NODE* aNode )
 
 void RC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
 {
-    RC_TREE_NODE*  tree_node = ToNode( m_view->GetCurrentItem() );
-    const RC_ITEM* drc_item = tree_node ? tree_node->m_RcItem : nullptr;
+    DeleteItems( true, false, false, aDeep );
+}
 
-    if( !drc_item )
+
+void RC_TREE_MODEL::DeleteItems( bool aCurrent, bool aWarningsAndErrors, bool aExclusions,
+                                 bool aDeep )
+{
+    RC_TREE_NODE*  current_node = ToNode( m_view->GetCurrentItem() );
+    const RC_ITEM* current_item = current_node ? current_node->m_RcItem : nullptr;
+
+    if( !current_item && !aWarningsAndErrors && !aExclusions )
     {
         wxBell();
         return;
     }
 
-    for( int i = 0; i < m_rcItemsProvider->GetCount(); ++i )
+    for( int i = m_rcItemsProvider->GetCount() - 1; i >= 0; --i )
     {
-        if( m_rcItemsProvider->GetItem( i ) == drc_item )
+        RC_ITEM*     rcItem = m_rcItemsProvider->GetItem( i );
+        MARKER_BASE* marker = rcItem->GetParent();
+
+        if( ( aCurrent && rcItem == current_item )
+            || ( aWarningsAndErrors && marker && !marker->IsExcluded() )
+            || ( aExclusions && marker && marker->IsExcluded() ) )
         {
             wxDataViewItem      markerItem = ToItem( m_tree[i] );
             wxDataViewItemArray childItems;
@@ -418,20 +430,10 @@ void RC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
             ItemDeleted( parentItem, markerItem );
 
             m_rcItemsProvider->DeleteItem( i, aDeep );
-            break;
+
+            if( !aWarningsAndErrors && !aExclusions )
+                break;
         }
-    }
-}
-
-
-void RC_TREE_MODEL::DeleteAllItems()
-{
-    if( m_rcItemsProvider )
-    {
-        m_rcItemsProvider->DeleteAllItems();
-
-        m_tree.clear();
-        Cleared();
     }
 }
 

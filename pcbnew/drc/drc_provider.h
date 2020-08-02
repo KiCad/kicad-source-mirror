@@ -159,12 +159,6 @@ public:
         if( aDeep )
             m_board->Delete( marker );
     }
-
-    void DeleteAllItems() override
-    {
-        m_board->DeleteMARKERs();
-        m_filteredMarkers.clear();
-    }
 };
 
 
@@ -251,19 +245,6 @@ public:
                 }
             }
         }
-    }
-
-    void DeleteAllItems() override
-    {
-        if( m_sourceVector )
-        {
-            for( DRC_ITEM* item : *m_sourceVector )
-                delete item;
-
-            m_sourceVector->clear();
-        }
-
-        m_filteredVector.clear();   // no ownership of DRC_ITEM pointers
     }
 };
 

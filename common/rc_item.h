@@ -59,12 +59,6 @@ public:
      */
     virtual void DeleteItem( int aIndex, bool aDeep ) = 0;
 
-    /**
-     * Function DeleteAllItems
-     * removes and deletes all the items in the list.
-     */
-    virtual void DeleteAllItems() = 0;
-
     virtual ~RC_ITEMS_PROVIDER() { }
 };
 
@@ -278,7 +272,7 @@ public:
     void ValueChanged( RC_TREE_NODE* aNode );
 
     void DeleteCurrentItem( bool aDeep );
-    void DeleteAllItems();
+    void DeleteItems( bool aCurrent, bool aWarningsAndErrors, bool aExclusions, bool aDeep );
 
 private:
     void rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities );
@@ -291,8 +285,6 @@ private:
     RC_ITEMS_PROVIDER*         m_rcItemsProvider;   // I own this, but not its contents
 
     std::vector<RC_TREE_NODE*> m_tree;              // I own this
-    mutable const RC_ITEM*     m_lastQueried;       // Used as a massive hack to restore the
-                                                    // widget's scroll position.
 };
 
 

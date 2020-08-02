@@ -106,17 +106,6 @@ public:
             m_sourceVector->erase( m_sourceVector->begin() + aIndex );
         }
     }
-
-    void DeleteAllItems() override
-    {
-        if( m_sourceVector )
-        {
-            for( CLEANUP_ITEM* item : *m_sourceVector )
-                delete item;
-
-            m_sourceVector->clear();
-        }
-    }
 };
 
 

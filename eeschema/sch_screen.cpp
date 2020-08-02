@@ -1311,7 +1311,8 @@ void SCH_SCREENS::DeleteMarker( SCH_MARKER* aMarker )
 }
 
 
-void SCH_SCREENS::DeleteMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType, int aErrorCode )
+void SCH_SCREENS::DeleteMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType, int aErrorCode,
+                                 bool aIncludeExclusions )
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
     {
@@ -1322,8 +1323,9 @@ void SCH_SCREENS::DeleteMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType, int a
             SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
             RC_ITEM*    rcItem = marker->GetRCItem();
 
-            if( marker->GetMarkerType() == aMarkerType &&
-                    ( aErrorCode == ERCE_UNSPECIFIED || rcItem->GetErrorCode() == aErrorCode ) )
+            if( marker->GetMarkerType() == aMarkerType
+                    && ( aErrorCode == ERCE_UNSPECIFIED || rcItem->GetErrorCode() == aErrorCode )
+                    && ( !marker->IsExcluded() || aIncludeExclusions ) )
             {
                 markers.push_back( item );
             }
@@ -1335,9 +1337,10 @@ void SCH_SCREENS::DeleteMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType, int a
 }
 
 
-void SCH_SCREENS::DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType )
+void SCH_SCREENS::DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType,
+                                    bool aIncludeExclusions )
 {
-    DeleteMarkers( aMarkerType, ERCE_UNSPECIFIED );
+    DeleteMarkers( aMarkerType, ERCE_UNSPECIFIED, aIncludeExclusions );
 }
 
 

@@ -120,7 +120,27 @@ void DIALOG_ERC::updateDisplayedCounts()
  */
 void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 {
-    deleteAllMarkers();
+    bool includeExclusions = false;
+    int  numExcluded = 0;
+
+    if( m_markerProvider )
+        numExcluded += m_markerProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+
+    if( numExcluded > 0 )
+    {
+        wxMessageDialog dlg( this, _( "Delete exclusions too?" ), _( "Delete All Markers" ),
+                             wxYES_NO | wxCANCEL | wxCENTER | wxICON_QUESTION );
+        dlg.SetYesNoLabels( _( "Errors and Warnings Only" ) , _( "Errors, Warnings and Exclusions" ) );
+
+        int ret = dlg.ShowModal();
+
+        if( ret == wxID_CANCEL )
+            return;
+        else if( ret == wxID_NO )
+            includeExclusions = true;
+    }
+
+    deleteAllMarkers( includeExclusions );
 
     updateDisplayedCounts();
     m_parent->GetCanvas()->Refresh();
@@ -159,7 +179,7 @@ void DIALOG_ERC::syncCheckboxes()
 void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 {
     wxBusyCursor busy;
-    deleteAllMarkers();
+    deleteAllMarkers( true );
 
     m_MessagesList->Clear();
     wxSafeYield();      // m_MarkersList must be redraw
@@ -557,12 +577,12 @@ void DIALOG_ERC::OnSeverity( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_ERC::deleteAllMarkers()
+void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
 {
     // Clear current selection list to avoid selection of deleted items
     m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_markerTreeModel->DeleteAllItems();
+    m_markerTreeModel->DeleteItems( false, true, aIncludeExclusions, true );
 }
 
 
