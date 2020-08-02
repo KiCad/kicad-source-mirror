@@ -41,7 +41,7 @@ NESTED_SETTINGS::~NESTED_SETTINGS()
 }
 
 
-bool NESTED_SETTINGS::LoadFromFile( const std::string& aDirectory )
+bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
 {
     clear();
     bool success = false;
@@ -75,7 +75,7 @@ bool NESTED_SETTINGS::LoadFromFile( const std::string& aDirectory )
 }
 
 
-bool NESTED_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
+bool NESTED_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     if( !m_parent )
         return false;

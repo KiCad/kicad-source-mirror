@@ -340,7 +340,7 @@ public:
 
     BOARD_DESIGN_SETTINGS& operator=( const BOARD_DESIGN_SETTINGS& aOther );
 
-    bool LoadFromFile( const std::string& aDirectory = "" ) override;
+    bool LoadFromFile( const wxString& aDirectory = "" ) override;
 
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
 

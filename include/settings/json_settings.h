@@ -45,21 +45,21 @@ enum class SETTINGS_LOC {
 class JSON_SETTINGS : public nlohmann::json
 {
 public:
-    JSON_SETTINGS( const std::string& aFilename, SETTINGS_LOC aLocation, int aSchemaVersion ) :
+    JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation, int aSchemaVersion ) :
             JSON_SETTINGS( aFilename, aLocation, aSchemaVersion, true, true, true ) {}
 
-    JSON_SETTINGS( const std::string& aFilename, SETTINGS_LOC aLocation, int aSchemaVersion,
+    JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation, int aSchemaVersion,
                    bool aCreateIfMissing, bool aCreateIfDefault, bool aWriteFile );
 
     virtual ~JSON_SETTINGS();
 
-    std::string GetFilename() const { return m_filename; }
+    wxString GetFilename() const { return m_filename; }
 
     wxString GetFullFilename() const;
 
     SETTINGS_LOC GetLocation() const { return m_location; }
 
-    void SetLegacyFilename( const std::string& aFilename ) { m_legacy_filename = aFilename; }
+    void SetLegacyFilename( const wxString& aFilename ) { m_legacy_filename = aFilename; }
 
     /**
      * Updates the parameters of this object based on the current JSON document contents
@@ -78,14 +78,14 @@ public:
      * @param aDirectory is the path to the file
      * @return true if the file was found on disk and loaded or migrated
      */
-    virtual bool LoadFromFile( const std::string& aDirectory = "" );
+    virtual bool LoadFromFile( const wxString& aDirectory = "" );
 
     /**
      * Calls Store() and then writes the contents of the JSON document to a file
      * @param aDirectory is the directory to save to, including trailing separator
 c     * @return true if the file was saved
      */
-    virtual bool SaveToFile( const std::string& aDirectory = "", bool aForce = false );
+    virtual bool SaveToFile( const wxString& aDirectory = "", bool aForce = false );
 
     /**
      * Resets all parameters to default values.  Does NOT write to file or update underlying JSON.
@@ -224,11 +224,11 @@ protected:
         return wxEmptyString;
     }
 
-    /// The filename (not including path) of this settings file
-    std::string m_filename;
+    /// The filename (not including path) of this settings file (inicode)
+    wxString m_filename;
 
     /// The filename of the wxConfig legacy file (if different from m_filename)
-    std::string m_legacy_filename;
+    wxString m_legacy_filename;
 
     /// The location of this settings file (@see SETTINGS_LOC)
     SETTINGS_LOC m_location;

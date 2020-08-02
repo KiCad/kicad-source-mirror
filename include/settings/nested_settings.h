@@ -40,14 +40,14 @@ public:
      * Loads the JSON document from the parent and then calls Load()
      * @param aDirectory
      */
-    bool LoadFromFile( const std::string& aDirectory = "" ) override;
+    bool LoadFromFile( const wxString& aDirectory = "" ) override;
 
     /**
      * Calls Store() and then saves the JSON document contents into the parent JSON_SETTINGS
      * @param aDirectory is ignored
      * @return true if the document contents were updated
      */
-    bool SaveToFile( const std::string& aDirectory = "", bool aForce = false ) override;
+    bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
     void SetParent( JSON_SETTINGS* aParent );
 

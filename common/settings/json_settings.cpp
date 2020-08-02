@@ -36,7 +36,7 @@
 extern const char* traceSettings;
 
 
-JSON_SETTINGS::JSON_SETTINGS( const std::string& aFilename, SETTINGS_LOC aLocation,
+JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
                               int aSchemaVersion, bool aCreateIfMissing, bool aCreateIfDefault,
                               bool aWriteFile ) :
         nlohmann::json(),
@@ -69,7 +69,7 @@ JSON_SETTINGS::~JSON_SETTINGS()
 
 wxString JSON_SETTINGS::GetFullFilename() const
 {
-    return wxString( m_filename.c_str(), wxConvUTF8 ) + "." + getFileExt();
+    return wxString( m_filename + "." + getFileExt() );
 }
 
 
@@ -92,7 +92,7 @@ void JSON_SETTINGS::Load()
 }
 
 
-bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
+bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
 {
     // First, load all params to default values
     clear();
@@ -158,13 +158,8 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     }
     else
     {
-        wxString dir( aDirectory.c_str(), wxConvUTF8 );
-#ifdef __WINDOWS__
+        wxString dir( aDirectory );
         path.Assign( dir, m_filename, getFileExt() );
-#else
-        wxString name( m_filename.c_str(), wxConvUTF8 );
-        path.Assign( dir, name, getFileExt() );
-#endif
     }
 
     if( !path.Exists() )
@@ -249,7 +244,7 @@ bool JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     for( auto settings : m_nested_settings )
         settings->LoadFromFile();
 
-    wxLogTrace( traceSettings, "Loaded %s with schema %d", GetFullFilename(), m_schemaVersion );
+    wxLogTrace( traceSettings, "Loaded <%s> with schema %d", GetFullFilename(), m_schemaVersion );
 
     // If we migrated, clean up the legacy file (with no extension)
     if( legacy_migrated || migrated )
@@ -289,13 +284,13 @@ void JSON_SETTINGS::ResetToDefaults()
 }
 
 
-bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
+bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     if( !m_writeFile )
         return false;
 
     // Default PROJECT won't have a filename set
-    if( m_filename.empty() )
+    if( m_filename.IsEmpty() )
         return false;
 
     wxFileName path;
@@ -307,7 +302,7 @@ bool JSON_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
     }
     else
     {
-        wxString dir( aDirectory.c_str(), wxConvUTF8 );
+        wxString dir( aDirectory );
         path.Assign( dir, m_filename, getFileExt() );
     }
 

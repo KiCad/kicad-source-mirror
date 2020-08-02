@@ -66,13 +66,13 @@ public:
      * Constructs the project file for a project
      * @param aFullPath is the full disk path to the project
      */
-    PROJECT_FILE( const std::string& aFullPath );
+    PROJECT_FILE( const wxString& aFullPath );
 
     virtual ~PROJECT_FILE() = default;
 
     virtual bool MigrateFromLegacy( wxConfigBase* aCfg ) override;
 
-    bool SaveToFile( const std::string& aDirectory = "", bool aForce = false ) override;
+    bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
     void SetProject( PROJECT* aProject )
     {

@@ -31,7 +31,7 @@ extern const char* traceSettings;
 const int colorsSchemaVersion = 1;
 
 
-COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
+COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
         JSON_SETTINGS( std::move( aFilename ), SETTINGS_LOC::COLORS, colorsSchemaVersion ),
         m_overrideSchItemColors( false )
 {

@@ -60,7 +60,7 @@ public:
      */
     std::vector<COLOR4D> m_Palette;
 
-    explicit COLOR_SETTINGS( std::string aFilename = "user" );
+    explicit COLOR_SETTINGS( wxString aFilename = "user" );
 
     virtual ~COLOR_SETTINGS() {}
 

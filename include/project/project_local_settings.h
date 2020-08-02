@@ -43,13 +43,13 @@ class PROJECT;
 class PROJECT_LOCAL_SETTINGS : public JSON_SETTINGS
 {
 public:
-    PROJECT_LOCAL_SETTINGS( const std::string& aFilename );
+    PROJECT_LOCAL_SETTINGS( const wxString& aFilename );
 
     virtual ~PROJECT_LOCAL_SETTINGS() {}
 
     bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
-    bool SaveToFile( const std::string& aDirectory = "", bool aForce = false ) override;
+    bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
     void SetProject( PROJECT* aProject )
     {

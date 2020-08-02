@@ -25,7 +25,7 @@
 const int projectLocalSettingsVersion = 1;
 
 
-PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( const std::string& aFilename ) :
+PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( const wxString& aFilename ) :
         JSON_SETTINGS( aFilename, SETTINGS_LOC::PROJECT, projectLocalSettingsVersion,
                        /* aCreateIfMissing = */ true, /* aCreateIfDefault = */ false,
                        /* aWriteFile = */ true ),
@@ -164,7 +164,7 @@ bool PROJECT_LOCAL_SETTINGS::MigrateFromLegacy( wxConfigBase* aLegacyConfig )
 }
 
 
-bool PROJECT_LOCAL_SETTINGS::SaveToFile( const std::string& aDirectory, bool aForce )
+bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     wxASSERT( m_project );
 

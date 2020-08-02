@@ -86,7 +86,7 @@ JSON_SETTINGS* SETTINGS_MANAGER::RegisterSettings( JSON_SETTINGS* aSettings, boo
 
     ptr->SetManager( this );
 
-    wxLogTrace( traceSettings, "Registered new settings object %s", ptr->GetFullFilename() );
+    wxLogTrace( traceSettings, "Registered new settings object <%s>", ptr->GetFullFilename() );
 
     if( aLoadNow )
         ptr->LoadFromFile( GetPathForSettingsFile( ptr.get() ) );
@@ -249,9 +249,10 @@ void SETTINGS_MANAGER::registerColorSettings( const wxString& aFilename )
 {
     if( m_color_settings.count( aFilename ) )
         return;
-
+//wxMessageBox( aFilename, "registerColorSettings1" );
+//wxMessageBox( aFilename.ToStdString().c_str(), "registerColorSettings2" );
     m_color_settings[aFilename] = static_cast<COLOR_SETTINGS*>(
-            RegisterSettings( new COLOR_SETTINGS( aFilename.ToStdString() ) ) );
+            RegisterSettings( new COLOR_SETTINGS( aFilename ) ) );
 }
 
 
@@ -317,7 +318,7 @@ void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::
             aNamespace );
 
     nlohmann::json backup = aSettings->at( ptr );
-    std::string path = GetColorSettingsPath();
+    wxString path = GetColorSettingsPath();
 
     aSettings->LoadFromFile( path );
 
@@ -328,7 +329,7 @@ void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::
 }
 
 
-std::string SETTINGS_MANAGER::GetPathForSettingsFile( JSON_SETTINGS* aSettings )
+wxString SETTINGS_MANAGER::GetPathForSettingsFile( JSON_SETTINGS* aSettings )
 {
     wxASSERT( aSettings );
 
@@ -338,7 +339,7 @@ std::string SETTINGS_MANAGER::GetPathForSettingsFile( JSON_SETTINGS* aSettings )
         return GetUserSettingsPath();
 
     case SETTINGS_LOC::PROJECT:
-        return std::string( Prj().GetProjectPath().ToUTF8() );
+        return std::string( Prj().GetProjectPath() );
 
     case SETTINGS_LOC::COLORS:
         return GetColorSettingsPath();
@@ -545,20 +546,20 @@ bool SETTINGS_MANAGER::IsSettingsPathValid( const wxString& aPath )
 }
 
 
-std::string SETTINGS_MANAGER::GetColorSettingsPath()
+wxString SETTINGS_MANAGER::GetColorSettingsPath()
 {
     wxFileName path;
 
     path.AssignDir( GetUserSettingsPath() );
     path.AppendDir( "colors" );
 
-    return path.GetPath().ToStdString();
+    return path.GetPath();
 }
 
 
-std::string SETTINGS_MANAGER::GetUserSettingsPath()
+wxString SETTINGS_MANAGER::GetUserSettingsPath()
 {
-    static std::string user_settings_path;
+    static wxString user_settings_path;
 
     if( user_settings_path.empty() )
         user_settings_path = calculateUserSettingsPath();
@@ -567,7 +568,7 @@ std::string SETTINGS_MANAGER::GetUserSettingsPath()
 }
 
 
-std::string SETTINGS_MANAGER::calculateUserSettingsPath( bool aIncludeVer, bool aUseEnv )
+wxString SETTINGS_MANAGER::calculateUserSettingsPath( bool aIncludeVer, bool aUseEnv )
 {
     wxFileName cfgpath;
 
@@ -707,7 +708,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 
     m_projects[fullPath].reset( project.release() );
 
-    std::string fn( path.GetName().ToUTF8() );
+    wxString fn( path.GetName() );
 
     PROJECT_LOCAL_SETTINGS* settings = static_cast<PROJECT_LOCAL_SETTINGS*>(
             RegisterSettings( new PROJECT_LOCAL_SETTINGS( fn ) ) );
@@ -762,7 +763,7 @@ bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath )
         return false;
 
     PROJECT_FILE* project     = m_project_files.at( path );
-    std::string   projectPath = GetPathForSettingsFile( project );
+    wxString   projectPath = GetPathForSettingsFile( project );
 
     project->SaveToFile( projectPath );
     Prj().GetLocalSettings().SaveToFile( projectPath );
@@ -774,7 +775,7 @@ bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath )
 bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
 {
     wxFileName fullFn( aProject.GetProjectFullName() );
-    std::string fn( fullFn.GetName().ToUTF8() );
+    wxString fn( fullFn.GetName() );
 
     PROJECT_FILE* file =
             static_cast<PROJECT_FILE*>( RegisterSettings( new PROJECT_FILE( fn ), false ) );
@@ -784,7 +785,7 @@ bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
     aProject.setProjectFile( file );
     file->SetProject( &aProject );
 
-    std::string path( fullFn.GetPath().ToUTF8() );
+    wxString path( fullFn.GetPath() );
 
     return file->LoadFromFile( path );
 }
@@ -810,7 +811,7 @@ bool SETTINGS_MANAGER::unloadProjectFile( PROJECT* aProject, bool aSave )
 
     if( it != m_settings.end() )
     {
-        std::string projectPath = GetPathForSettingsFile( it->get() );
+        wxString projectPath = GetPathForSettingsFile( it->get() );
 
         FlushAndRelease( &aProject->GetLocalSettings(), aSave );
 

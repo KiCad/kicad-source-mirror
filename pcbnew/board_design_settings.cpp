@@ -659,7 +659,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
 }
 
 
-bool BOARD_DESIGN_SETTINGS::LoadFromFile( const std::string& aDirectory )
+bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
 {
     bool ret = NESTED_SETTINGS::LoadFromFile( aDirectory );
 

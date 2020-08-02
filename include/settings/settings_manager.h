@@ -146,7 +146,7 @@ public:
      * @param aSettings is the settings object
      * @return a path based on aSettings->m_location
      */
-    std::string GetPathForSettingsFile( JSON_SETTINGS* aSettings );
+    wxString GetPathForSettingsFile( JSON_SETTINGS* aSettings );
 
     /**
      * Handles the initialization of the user settings directory and migration from previous
@@ -253,7 +253,7 @@ public:
      * Returns the path where color scheme files are stored
      * (normally ./colors/ under the user settings path)
      */
-    static std::string GetColorSettingsPath();
+    static wxString GetColorSettingsPath();
 
     /**
      * Return the user configuration path used to store KiCad's configuration files.
@@ -264,7 +264,7 @@ public:
      *
      * @return A string containing the config path for Kicad
      */
-    static std::string GetUserSettingsPath();
+    static wxString GetUserSettingsPath();
 
     /**
      * Parses the current KiCad build version and extracts the major and minor revision to use
@@ -290,7 +290,7 @@ private:
      * @param aUseEnv will prefer the base path found in the KICAD_CONFIG_DIR if found (default)
      * @return A string containing the config path for Kicad
      */
-    static std::string calculateUserSettingsPath( bool aIncludeVer = true, bool aUseEnv = true );
+    static wxString calculateUserSettingsPath( bool aIncludeVer = true, bool aUseEnv = true );
 
     /**
      * Compares two settings versions, like "5.99" and "6.0"

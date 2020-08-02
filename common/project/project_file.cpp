@@ -34,7 +34,7 @@ extern const char* traceSettings;
 const int projectFileSchemaVersion = 1;
 
 
-PROJECT_FILE::PROJECT_FILE( const std::string& aFullPath ) :
+PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
         JSON_SETTINGS( aFullPath, SETTINGS_LOC::PROJECT, projectFileSchemaVersion ),
         m_sheets(),
         m_boards(),
@@ -630,7 +630,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 }
 
 
-bool PROJECT_FILE::SaveToFile( const std::string& aDirectory, bool aForce )
+bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     wxASSERT( m_project );
 
