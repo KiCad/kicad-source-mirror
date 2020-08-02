@@ -26,7 +26,7 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <base_units.h>
+//#include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <dialogs/panel_pl_editor_color_settings.h>
@@ -57,6 +57,7 @@
 #include <invoke_pl_editor_dialog.h>
 #include <tools/pl_editor_control.h>
 #include <widgets/infobar.h>
+#include <settings/settings_manager.h>
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( PL_EDITOR_FRAME::OnCloseWindow )
@@ -547,6 +548,21 @@ const TITLE_BLOCK& PL_EDITOR_FRAME::GetTitleBlock() const
 void PL_EDITOR_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 {
     m_pageLayout.SetTitleBlock( aTitleBlock );
+}
+
+
+void PL_EDITOR_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+{
+    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+
+    SETTINGS_MANAGER&   settingsManager = Pgm().GetSettingsManager();
+    PL_EDITOR_SETTINGS* cfg = settingsManager.GetAppSettings<PL_EDITOR_SETTINGS>();
+    COLOR_SETTINGS*     colors = settingsManager.GetColorSettings( cfg->m_ColorTheme );
+
+    GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( colors );
+
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
+    GetCanvas()->Refresh();
 }
 
 

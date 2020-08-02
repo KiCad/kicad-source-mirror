@@ -64,6 +64,7 @@ void WS_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 
     m_backgroundColor = aSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
     m_pageBorderColor = aSettings->GetColor( LAYER_SCHEMATIC_GRID );
+    m_normalColor = aSettings->GetColor( LAYER_SCHEMATIC_WORKSHEET );
 }
 
 

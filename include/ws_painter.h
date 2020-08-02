@@ -44,7 +44,7 @@ namespace KIGFX
  * WS_RENDER_SETTINGS
  * Stores page-layout-specific render settings.
  */
-class WS_RENDER_SETTINGS : public RENDER_SETTINGS
+class   WS_RENDER_SETTINGS : public RENDER_SETTINGS
 {
 public:
     friend class WS_PAINTER;
