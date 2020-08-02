@@ -1447,7 +1447,12 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 for( BOARD_ITEM* drawing : module->GraphicalItems() )
                 {
                     previewItem = static_cast<BOARD_ITEM*>( drawing->Clone() );
-                    previewItem->Move( offset );
+
+                    if( drawing->Type() == PCB_MODULE_EDGE_T && module->IsFlipped() )
+                        previewItem->Move( -offset );
+                    else
+                        previewItem->Move( offset );
+
                     view()->Add( previewItem );
                     view()->AddToPreview( previewItem );
                     view()->Hide( drawing, true );
