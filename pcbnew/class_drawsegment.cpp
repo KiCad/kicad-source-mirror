@@ -1193,6 +1193,11 @@ void DRAWSEGMENT::SwapData( BOARD_ITEM* aImage )
     std::swap( m_BezierC2, image->m_BezierC2 );
     std::swap( m_BezierPoints, image->m_BezierPoints );
     std::swap( m_Poly, image->m_Poly );
+    std::swap( m_Layer, image->m_Layer );
+    std::swap( m_Flags, image->m_Flags );
+    std::swap( m_Status, image->m_Status );
+    std::swap( m_Parent, image->m_Parent );
+    std::swap( m_forceVisible, image->m_forceVisible );
 }
 
 
