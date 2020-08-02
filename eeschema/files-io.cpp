@@ -686,6 +686,8 @@ bool SCH_EDIT_FRAME::SaveProject()
             return false;
     }
 
+    screens.BuildClientSheetPathList();
+
     for( size_t i = 0; i < screens.GetCount(); i++ )
     {
         screen = screens.GetScreen( i );
