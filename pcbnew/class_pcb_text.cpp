@@ -163,31 +163,59 @@ void TEXTE_PCB::Rotate( const wxPoint& aRotCentre, double aAngle )
 
 void TEXTE_PCB::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    if( aFlipLeftRight )
-        SetTextX( aCentre.x - ( GetTextPos().x - aCentre.x ) );
-    else
-        SetTextY( aCentre.y - ( GetTextPos().y - aCentre.y ) );
+    double angle = GetTextAngle();
+    bool   vertical = KiROUND( angle ) % 1800 == 900;
 
-    int copperLayerCount = GetBoard()->GetCopperLayerCount();
-
-    SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
-    SetMirrored( !IsMirrored() );
-
-    double text_angle = GetTextAngle();
-    if( text_angle < 1800 )
-        text_angle = 1800 - text_angle;
-    else
-        text_angle = 3600 - text_angle + 1800;
-    SetTextAngle( text_angle );
-
-    // adjust justified text for mirroring
-    if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT || GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+    if( KiROUND( angle ) != 0 )
     {
-        if( ( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT ) == IsMirrored() )
-            SetTextX( GetTextPos().x - GetTextBox().GetWidth() );
-        else
-            SetTextX( GetTextPos().x + GetTextBox().GetWidth() );
+        Rotate( aCentre, -angle );
+
+        if( vertical )
+            aFlipLeftRight = !aFlipLeftRight;
     }
+
+    // Flip the bounding box
+    EDA_RECT box = GetTextBox();
+    int      left = box.GetLeft();
+    int      right = box.GetRight();
+    int      top = box.GetTop();
+    int      bottom = box.GetBottom();
+
+    if( aFlipLeftRight )
+    {
+        MIRROR( left, aCentre.x );
+        MIRROR( right, aCentre.x );
+        std::swap( left, right );
+    }
+    else
+    {
+        MIRROR( top, aCentre.y );
+        MIRROR( bottom, aCentre.y );
+        std::swap( top, bottom );
+    }
+
+    // Now put the text back in it (these look backwards but remember that out text will
+    // be mirrored when all is said and done)
+    switch( GetHorizJustify() )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:   SetTextX( right );                break;
+    case GR_TEXT_HJUSTIFY_CENTER: SetTextX( ( left + right ) / 2 ); break;
+    case GR_TEXT_HJUSTIFY_RIGHT:  SetTextX( left );                 break;
+    }
+
+    switch( GetVertJustify() )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:    SetTextY( bottom );               break;
+    case GR_TEXT_VJUSTIFY_CENTER: SetTextY( ( top + bottom ) / 2 ); break;
+    case GR_TEXT_VJUSTIFY_BOTTOM: SetTextY( top );                  break;
+    }
+
+    // And restore orientation
+    if( KiROUND( angle ) != 0 )
+        Rotate( aCentre, angle );
+
+    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
+    SetMirrored( !IsMirrored() );
 }
 
 

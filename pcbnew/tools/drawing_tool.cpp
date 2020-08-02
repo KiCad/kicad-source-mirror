@@ -859,8 +859,8 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             {
                 bool leftRight = m_frame->Settings().m_FlipLeftRight;
 
-                for( auto item : preview )
-                    static_cast<BOARD_ITEM*>( item )->Flip( (wxPoint) cursorPos, leftRight);
+                for( EDA_ITEM* item : preview )
+                    static_cast<BOARD_ITEM*>( item )->Flip( (wxPoint) cursorPos, leftRight );
 
                 m_view->Update( &preview );
             }
@@ -872,7 +872,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) )
         {
             // Place the imported drawings
-            for( auto item : preview )
+            for( EDA_ITEM* item : preview )
                 commit.Add( item );
 
             commit.Push( _( "Place a DXF_SVG drawing" ) );
