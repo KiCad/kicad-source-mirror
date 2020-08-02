@@ -1188,11 +1188,12 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
         if( pad->GetNetCode() && ( aRefPad->GetNetCode() == pad->GetNetCode() ) )
             continue;
 
-        // if pads are from the same footprint
-        if( pad->GetParent() == aRefPad->GetParent() )
+        // If pads are equivalent (ie: from the same footprint with the same pad number)...
+        if( pad->GetParent() == aRefPad->GetParent() && pad->PadNameEqual( aRefPad ) )
         {
-            // and have the same pad number ( equivalent pads  )
-            if( pad->PadNameEqual( aRefPad ) )
+            // ...and have nets, then they must be the same net
+            if( pad->GetNetCode() && aRefPad->GetNetCode()
+                    && pad->GetNetCode() != aRefPad->GetNetCode() )
             {
                 DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
 
