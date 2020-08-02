@@ -6763,6 +6763,7 @@ class lexer : public lexer_base<BasicJsonType>
                                 }
                             }
                         }
+                            break;      // quiet CLang compiler
 
                         default:
                             break;
