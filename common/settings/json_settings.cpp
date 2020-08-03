@@ -141,9 +141,21 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
         if( backed_up )
         {
             cfg.reset();
-            wxCopyFile( temp.GetFullPath(), aPath.GetFullPath() );
-            wxRemoveFile( temp.GetFullPath() );
-        }
+
+            if( !wxCopyFile( temp.GetFullPath(), aPath.GetFullPath() ) )
+            {
+                wxLogTrace( traceSettings,
+                            "migrate; copy temp file %s to %s failed",
+                            temp.GetFullPath(), aPath.GetFullPath() );
+            }
+
+            if( !wxRemoveFile( temp.GetFullPath() ) )
+            {
+                wxLogTrace( traceSettings,
+                            "migrate; failed to remove temp file %s",
+                            temp.GetFullPath() );
+            }
+         }
 
         // Either way, we want to clean up the old file afterwards
         legacy_migrated = true;
