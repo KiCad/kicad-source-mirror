@@ -1449,7 +1449,6 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
                     {
                         wxArrayString pads = wxSplit( wxString( connect.pad ), ' ' );
 
-                        pin->SetPartNumber( aGateNumber );
                         pin->SetUnit( aGateNumber );
                         pin->SetName( escapeName( pin->GetName() ) );
 
@@ -1479,7 +1478,6 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
             }
             else
             {
-                pin->SetPartNumber( aGateNumber );
                 pin->SetUnit( aGateNumber );
                 pin->SetNumber( wxString::Format( "%i", pincount ) );
                 aPart->AddDrawItem( pin.release() );

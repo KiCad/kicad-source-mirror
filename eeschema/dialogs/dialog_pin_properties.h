@@ -29,13 +29,13 @@
 #include <pin_shape_combobox.h>
 #include <pin_type_combobox.h>
 
-#include <dialog_lib_edit_pin_base.h>
+#include <dialog_pin_properties_base.h>
 #include <widgets/unit_binder.h>
 #include <lib_pin.h>
 #include <lib_edit_frame.h>
 
 /** Implementing DIALOG_LIB_EDIT_PIN_BASE */
-class DIALOG_LIB_EDIT_PIN : public DIALOG_LIB_EDIT_PIN_BASE
+class DIALOG_PIN_PROPERTIES : public DIALOG_PIN_PROPERTIES_BASE
 {
     LIB_EDIT_FRAME* m_frame;
     LIB_PIN*        m_pin;
@@ -51,8 +51,8 @@ class DIALOG_LIB_EDIT_PIN : public DIALOG_LIB_EDIT_PIN_BASE
 
 public:
     /** Constructor */
-    DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin );
-    ~DIALOG_LIB_EDIT_PIN() override;
+    DIALOG_PIN_PROPERTIES( LIB_EDIT_FRAME* parent, LIB_PIN* aPin );
+    ~DIALOG_PIN_PROPERTIES() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

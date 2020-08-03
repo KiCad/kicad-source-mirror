@@ -3457,10 +3457,13 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
     if( tokens.CountTokens() < 11 )
         SCH_PARSE_ERROR( "invalid pin definition", aReader, line );
 
-    pin->m_name = tokens.GetNextToken();
-    pos += pin->m_name.size() + 1;
-    pin->m_number = tokens.GetNextToken();
-    pos += pin->m_number.size() + 1;
+    tmp = tokens.GetNextToken();
+    pin->SetName( tmp );
+    pos += tmp.size() + 1;
+
+    tmp = tokens.GetNextToken();
+    pin->SetNumber( tmp );
+    pos += tmp.size() + 1;
 
     long num;
     wxPoint position;
@@ -3482,7 +3485,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
     pos += tmp.size() + 1;
     position.y = Mils2Iu( (int) num );
-    pin->m_position = position;
+    pin->SetPosition( position );
 
     tmp = tokens.GetNextToken();
 
@@ -3491,7 +3494,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->m_length = Mils2Iu( (int) num );
+    pin->SetLength( Mils2Iu( (int) num ) );
 
 
     tmp = tokens.GetNextToken();
@@ -3501,7 +3504,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->m_orientation = tmp[0];
+    pin->SetOrientation( tmp[0] );
 
     tmp = tokens.GetNextToken();
 
@@ -3510,7 +3513,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->m_numTextSize = Mils2Iu( (int) num );
+    pin->SetNumberTextSize( Mils2Iu( (int) num ) );
 
     tmp = tokens.GetNextToken();
 
@@ -3519,7 +3522,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->m_nameTextSize = Mils2Iu( (int) num );
+    pin->SetNameTextSize( Mils2Iu( (int) num ) );
 
     tmp = tokens.GetNextToken();
 
@@ -3528,7 +3531,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->m_Unit = (int) num;
+    pin->SetUnit( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -3537,7 +3540,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->m_Convert = (int) num;
+    pin->SetConvert( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -3552,39 +3555,17 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
     switch( type )
     {
-    case 'I':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_INPUT;
-        break;
-    case 'O':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_OUTPUT;
-        break;
-    case 'B':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_BIDI;
-        break;
-    case 'T':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_TRISTATE;
-        break;
-    case 'P':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_PASSIVE;
-        break;
-    case 'U':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
-        break;
-    case 'W':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_POWER_IN;
-        break;
-    case 'w':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_POWER_OUT;
-        break;
-    case 'C':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
-        break;
-    case 'E':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_OPENEMITTER;
-        break;
-    case 'N':
-        pin->m_type = ELECTRICAL_PINTYPE::PT_NC;
-        break;
+    case 'I': pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );         break;
+    case 'O': pin->SetType( ELECTRICAL_PINTYPE::PT_OUTPUT );        break;
+    case 'B': pin->SetType( ELECTRICAL_PINTYPE::PT_BIDI );          break;
+    case 'T': pin->SetType( ELECTRICAL_PINTYPE::PT_TRISTATE );      break;
+    case 'P': pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );       break;
+    case 'U': pin->SetType( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );   break;
+    case 'W': pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );      break;
+    case 'w': pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_OUT );     break;
+    case 'C': pin->SetType( ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR ); break;
+    case 'E': pin->SetType( ELECTRICAL_PINTYPE::PT_OPENEMITTER );   break;
+    case 'N': pin->SetType( ELECTRICAL_PINTYPE::PT_NC );            break;
     default:
         THROW_PARSE_ERROR( "unknown pin type", aReader.GetSource(), aReader.Line(),
                 aReader.LineNumber(), pos );
@@ -3612,13 +3593,13 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
             switch( tmp[--j].GetValue() )
             {
             case '~': break;
-            case 'N': pin->m_attributes |= PIN_INVISIBLE; break;
-            case 'I': flags |= INVERTED;     break;
-            case 'C': flags |= CLOCK;        break;
-            case 'L': flags |= LOWLEVEL_IN;  break;
-            case 'V': flags |= LOWLEVEL_OUT; break;
-            case 'F': flags |= FALLING_EDGE; break;
-            case 'X': flags |= NONLOGIC;     break;
+            case 'N': pin->SetVisible( false ); break;
+            case 'I': flags |= INVERTED;        break;
+            case 'C': flags |= CLOCK;           break;
+            case 'L': flags |= LOWLEVEL_IN;     break;
+            case 'V': flags |= LOWLEVEL_OUT;    break;
+            case 'F': flags |= FALLING_EDGE;    break;
+            case 'X': flags |= NONLOGIC;        break;
             default: THROW_PARSE_ERROR( "invalid pin attribut", aReader.GetSource(),
                                         aReader.Line(), aReader.LineNumber(), pos );
             }
@@ -3628,33 +3609,15 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
         switch( flags )
         {
-        case 0:
-            pin->m_shape = GRAPHIC_PINSHAPE::LINE;
-            break;
-        case INVERTED:
-            pin->m_shape = GRAPHIC_PINSHAPE::INVERTED;
-            break;
-        case CLOCK:
-            pin->m_shape = GRAPHIC_PINSHAPE::CLOCK;
-            break;
-        case INVERTED | CLOCK:
-            pin->m_shape = GRAPHIC_PINSHAPE::INVERTED_CLOCK;
-            break;
-        case LOWLEVEL_IN:
-            pin->m_shape = GRAPHIC_PINSHAPE::INPUT_LOW;
-            break;
-        case LOWLEVEL_IN | CLOCK:
-            pin->m_shape = GRAPHIC_PINSHAPE::CLOCK_LOW;
-            break;
-        case LOWLEVEL_OUT:
-            pin->m_shape = GRAPHIC_PINSHAPE::OUTPUT_LOW;
-            break;
-        case FALLING_EDGE:
-            pin->m_shape = GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK;
-            break;
-        case NONLOGIC:
-            pin->m_shape = GRAPHIC_PINSHAPE::NONLOGIC;
-            break;
+        case 0:                   pin->SetShape( GRAPHIC_PINSHAPE::LINE );               break;
+        case INVERTED:            pin->SetShape( GRAPHIC_PINSHAPE::INVERTED );           break;
+        case CLOCK:               pin->SetShape( GRAPHIC_PINSHAPE::CLOCK );              break;
+        case INVERTED | CLOCK:    pin->SetShape( GRAPHIC_PINSHAPE::INVERTED_CLOCK );     break;
+        case LOWLEVEL_IN:         pin->SetShape( GRAPHIC_PINSHAPE::INPUT_LOW );          break;
+        case LOWLEVEL_IN | CLOCK: pin->SetShape( GRAPHIC_PINSHAPE::CLOCK_LOW );          break;
+        case LOWLEVEL_OUT:        pin->SetShape( GRAPHIC_PINSHAPE::OUTPUT_LOW );         break;
+        case FALLING_EDGE:        pin->SetShape( GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK ); break;
+        case NONLOGIC:            pin->SetShape( GRAPHIC_PINSHAPE::NONLOGIC );           break;
         default:
             SCH_PARSE_ERROR( "pin attributes do not define a valid pin shape", aReader, line );
         }

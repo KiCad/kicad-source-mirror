@@ -64,8 +64,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_junction_props_base.cpp
     dialogs/dialog_lib_edit_draw_item.cpp
     dialogs/dialog_lib_edit_draw_item_base.cpp
-    dialogs/dialog_lib_edit_pin.cpp
-    dialogs/dialog_lib_edit_pin_base.cpp
     dialogs/dialog_lib_edit_pin_table.cpp
     dialogs/dialog_lib_edit_pin_table_base.cpp
     dialogs/dialog_lib_edit_text.cpp
@@ -78,6 +76,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_netlist_base.cpp
     dialogs/dialog_paste_special.cpp
     dialogs/dialog_paste_special_base.cpp
+    dialogs/dialog_pin_properties.cpp
+    dialogs/dialog_pin_properties_base.cpp
     dialogs/dialog_plot_schematic.cpp
     dialogs/dialog_plot_schematic_base.cpp
     dialogs/dialog_print_using_printer.cpp

@@ -178,41 +178,51 @@ public:
             case COL_NUMBER:
                 pin->SetNumber( aValue );
                 break;
+
             case COL_NAME:
                 pin->SetName( aValue );
                 break;
+
             case COL_TYPE:
                 if( g_typeNames.Index( aValue ) != wxNOT_FOUND )
-                    pin->SetType( (ELECTRICAL_PINTYPE) g_typeNames.Index( aValue ), false );
+                    pin->SetType( (ELECTRICAL_PINTYPE) g_typeNames.Index( aValue ) );
 
                 break;
+
             case COL_SHAPE:
                 if( g_shapeNames.Index( aValue ) != wxNOT_FOUND )
                     pin->SetShape( (GRAPHIC_PINSHAPE) g_shapeNames.Index( aValue ) );
 
                 break;
+
             case COL_ORIENTATION:
                 if( g_orientationNames.Index( aValue ) != wxNOT_FOUND )
                     pin->SetOrientation( LIB_PIN::GetOrientationCode(
-                                              g_orientationNames.Index( aValue ) ), false );
+                                              g_orientationNames.Index( aValue ) ) );
                 break;
+
             case COL_NUMBER_SIZE:
                 pin->SetNumberTextSize( ValueFromString( m_userUnits, aValue, true ) );
                 break;
+
             case COL_NAME_SIZE:
                 pin->SetNameTextSize( ValueFromString( m_userUnits, aValue, true ) );
                 break;
+
             case COL_LENGTH:
                 pin->SetLength( ValueFromString( m_userUnits, aValue ) );
                 break;
+
             case COL_POSX:
-                pin->SetPinPosition( wxPoint( ValueFromString( m_userUnits, aValue ),
-                                              pin->GetPosition().y ) );
+                pin->SetPosition( wxPoint( ValueFromString( m_userUnits, aValue ),
+                                           pin->GetPosition().y ) );
                 break;
+
             case COL_POSY:
-                pin->SetPinPosition( wxPoint( pin->GetPosition().x,
-                                              ValueFromString( m_userUnits, aValue ) ) );
+                pin->SetPosition( wxPoint( pin->GetPosition().x,
+                                           ValueFromString( m_userUnits, aValue ) ) );
                 break;
+
             default:
                 wxFAIL;
                 break;

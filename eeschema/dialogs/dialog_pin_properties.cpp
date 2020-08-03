@@ -29,12 +29,12 @@
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <lib_pin.h>
-#include <dialog_lib_edit_pin.h>
+#include <dialog_pin_properties.h>
 #include <confirm.h>
 #include <widgets/tab_traversal.h>
 
-DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin ) :
-    DIALOG_LIB_EDIT_PIN_BASE( parent ),
+DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( LIB_EDIT_FRAME* parent, LIB_PIN* aPin ) :
+    DIALOG_PIN_PROPERTIES_BASE( parent ),
     m_frame( parent ),
     m_pin( aPin ),
     m_posX( parent, m_posXLabel, m_posXCtrl, m_posXUnits, true ),
@@ -45,11 +45,6 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
 {
     // Creates a dummy pin to show on a panel, inside this dialog:
     m_dummyPin = new LIB_PIN( *m_pin );
-
-    // m_dummyPin changes do not propagate to other pins of the current lib component,
-    // so set parent to null and clear flags
-    m_dummyPin->SetParent( nullptr );
-    m_dummyPin->ClearFlags();
 
     COLOR4D bgColor = parent->GetRenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
     m_panelShowPin->SetBackgroundColour( bgColor.ToColour() );
@@ -92,13 +87,13 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
 }
 
 
-DIALOG_LIB_EDIT_PIN::~DIALOG_LIB_EDIT_PIN()
+DIALOG_PIN_PROPERTIES::~DIALOG_PIN_PROPERTIES()
 {
     delete m_dummyPin;
 }
 
 
-bool DIALOG_LIB_EDIT_PIN::TransferDataToWindow()
+bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
 {
     if( !DIALOG_SHIM::TransferDataToWindow() )
         return false;
@@ -125,7 +120,7 @@ bool DIALOG_LIB_EDIT_PIN::TransferDataToWindow()
 }
 
 
-bool DIALOG_LIB_EDIT_PIN::TransferDataFromWindow()
+bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
 {
     if( !DIALOG_SHIM::TransferDataFromWindow() )
         return false;
@@ -146,20 +141,17 @@ bool DIALOG_LIB_EDIT_PIN::TransferDataFromWindow()
             return false;
     }
 
-    if( m_pin->GetEditFlags() == 0 )
-        m_frame->SaveCopyInUndoList( m_pin->GetParent() );
-
     m_pin->SetName( m_textPinName->GetValue() );
     m_pin->SetNumber( m_textPinNumber->GetValue() );
     m_pin->SetNameTextSize( m_nameSize.GetValue() );
     m_pin->SetNumberTextSize( m_numberSize.GetValue() );
     m_pin->SetOrientation( LIB_PIN::GetOrientationCode( m_choiceOrientation->GetSelection() ) );
     m_pin->SetLength( m_pinLength.GetValue() );
-    m_pin->SetPinPosition( newPos );
+    m_pin->SetPosition( newPos );
     m_pin->SetType( m_choiceElectricalType->GetPinTypeSelection() );
     m_pin->SetShape( m_choiceStyle->GetPinShapeSelection() );
-    m_pin->SetConversion( m_checkApplyToAllConversions->GetValue() ? 0 : m_frame->GetConvert() );
-    m_pin->SetPartNumber( m_checkApplyToAllParts->GetValue() ? 0 : m_frame->GetUnit() );
+    m_pin->SetConvert( m_checkApplyToAllConversions->GetValue() ? 0 : m_frame->GetConvert() );
+    m_pin->SetUnit( m_checkApplyToAllParts->GetValue() ? 0 : m_frame->GetUnit() );
     m_pin->SetVisible( m_checkShow->GetValue() );
 
     return true;
@@ -169,7 +161,7 @@ bool DIALOG_LIB_EDIT_PIN::TransferDataFromWindow()
 /*
  * Draw (on m_panelShowPin) the pin according to current settings in dialog
  */
-void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
+void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 {
     wxPaintDC dc( m_panelShowPin );
     wxSize    dc_size = dc.GetSize();
@@ -179,7 +171,6 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     // In fact m_dummyPin should not have a parent, but draw functions need a parent
     // to know some options, about pin texts
     LIB_EDIT_FRAME* libframe = (LIB_EDIT_FRAME*) GetParent();
-    m_dummyPin->SetParent( libframe->GetCurPart() );
 
     // Calculate a suitable scale to fit the available draw area
     EDA_RECT bBox = m_dummyPin->GetBoundingBox( true );
@@ -200,13 +191,11 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
 
     m_dummyPin->Print( renderSettings, -bBox.Centre(), (void*) &opts, DefaultTransform );
 
-    m_dummyPin->SetParent( nullptr );
-
     event.Skip();
 }
 
 
-void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
+void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
 {
     if( !IsShown() )   // do nothing at init time
         return;

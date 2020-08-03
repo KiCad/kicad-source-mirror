@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,9 +34,9 @@ class wxBitmapComboBox;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_LIB_EDIT_PIN_BASE
+/// Class DIALOG_PIN_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_LIB_EDIT_PIN_BASE : public DIALOG_SHIM
+class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -82,8 +82,8 @@ class DIALOG_LIB_EDIT_PIN_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_LIB_EDIT_PIN_BASE();
+		DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_PIN_PROPERTIES_BASE();
 
 };
 

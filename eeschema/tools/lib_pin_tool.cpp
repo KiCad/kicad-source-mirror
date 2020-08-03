@@ -27,7 +27,7 @@
 #include <lib_edit_frame.h>
 #include <confirm.h>
 #include <ee_actions.h>
-#include <dialogs/dialog_lib_edit_pin.h>
+#include <dialogs/dialog_pin_properties.h>
 #include <settings/settings_manager.h>
 #include <libedit/libedit_settings.h>
 #include <pgm_base.h>
@@ -108,13 +108,62 @@ bool LIB_PIN_TOOL::Init()
 
 bool LIB_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
 {
-    aPin->EnableEditMode( true, !m_frame->SynchronizePins() );
+    DIALOG_PIN_PROPERTIES dlg( m_frame, aPin );
 
-    DIALOG_LIB_EDIT_PIN dlg( m_frame, aPin );
+    if( aPin->GetEditFlags() == 0 )
+        m_frame->SaveCopyInUndoList( aPin->GetParent() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
     {
+        if( aPin->GetEditFlags() == 0 )
+            m_frame->PopCommandFromUndoList();
+
         return false;
+    }
+
+    aPin->SetModified();
+
+    if( !aPin->IsNew() && m_frame->SynchronizePins() && aPin->GetParent() )
+    {
+        LIB_PINS pinList;
+        aPin->GetParent()->GetPins( pinList );
+
+        for( LIB_PIN* other : pinList )
+        {
+            if( other == aPin )
+                continue;
+
+            if( other->GetPosition() == aPin->GetPosition()
+                && other->GetOrientation() == aPin->GetOrientation() )
+            {
+                if( aPin->GetConvert() == 0 )
+                {
+                    if( !aPin->GetUnit() || other->GetUnit() == aPin->GetUnit() )
+                        aPin->GetParent()->RemoveDrawItem( other );
+                }
+                else if( other->GetConvert() == aPin->GetConvert() )
+                {
+                    other->SetPosition( aPin->GetPosition() );
+                    other->SetLength( aPin->GetLength() );
+                    other->SetShape( aPin->GetShape() );
+                }
+
+                if( aPin->GetUnit() == 0 )
+                {
+                    if( !aPin->GetConvert() || other->GetConvert() == aPin->GetConvert() )
+                        aPin->GetParent()->RemoveDrawItem( other );
+                }
+
+                other->SetOrientation( aPin->GetOrientation() );
+                other->SetType( aPin->GetType() );
+                other->SetVisible( aPin->IsVisible() );
+                other->SetName( aPin->GetName() );
+                other->SetNameTextSize( aPin->GetNameTextSize() );
+                other->SetNumberTextSize( aPin->GetNumberTextSize() );
+
+                other->SetModified();
+            }
+        }
     }
 
     m_frame->RefreshItem( aPin );
@@ -123,8 +172,6 @@ bool LIB_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
     MSG_PANEL_ITEMS items;
     aPin->GetMsgPanelInfo( m_frame, items );
     m_frame->SetMsgPanel( items );
-
-    aPin->EnableEditMode( false );
 
     // Save the pin properties to use for the next new pin.
     g_LastPinNameSize = aPin->GetNameTextSize();
@@ -299,18 +346,22 @@ int LIB_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 
     for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
     {
-        if( pin->GetConvert() && pin->GetConvert() != m_frame->GetConvert() )
-            continue;
-
         if( pin == sourcePin )
             continue;
 
         if( aEvent.IsAction( &EE_ACTIONS::pushPinLength ) )
-            pin->SetLength( sourcePin->GetLength() );
+        {
+            if( !pin->GetConvert() || pin->GetConvert() == m_frame->GetConvert() )
+                pin->SetLength( sourcePin->GetLength() );
+        }
         else if( aEvent.IsAction( &EE_ACTIONS::pushPinNameSize ) )
+        {
             pin->SetNameTextSize( sourcePin->GetNameTextSize() );
+        }
         else if( aEvent.IsAction( &EE_ACTIONS::pushPinNumSize ) )
+        {
             pin->SetNumberTextSize( sourcePin->GetNumberTextSize() );
+        }
     }
 
     m_frame->RebuildView();

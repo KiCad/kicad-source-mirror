@@ -1289,7 +1289,7 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
                     EDA_TEXT text;
 
                     parseEDA_TEXT( &text );
-                    pin->SetNumberTextSize( text.GetTextHeight(), false );
+                    pin->SetNumberTextSize( text.GetTextHeight() );
                     NeedRIGHT();
                 }
                 else

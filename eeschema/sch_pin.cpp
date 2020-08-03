@@ -55,9 +55,26 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
 }
 
 
-bool SCH_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxDat )
 {
-    return m_libPin->Matches( aSearchData, aAuxData );
+    if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_PINS ) )
+        return false;
+
+    return EDA_ITEM::Matches( GetName(), aSearchData )
+                || EDA_ITEM::Matches( GetNumber(), aSearchData );
+}
+
+
+bool SCH_PIN::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
+{
+    bool isReplaced = false;
+
+    /* TODO: waiting on a way to override pins in the schematic...
+    isReplaced |= EDA_ITEM::Replace( aSearchData, m_name );
+    isReplaced |= EDA_ITEM::Replace( aSearchData, m_number );
+     */
+
+    return isReplaced;
 }
 
 
