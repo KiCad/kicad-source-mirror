@@ -47,13 +47,14 @@ int main( int argc, char *argv[] )
 
     drcEngine.SetLogReporter( &msgReporter );
 
-    try 
+    try
     {
         drcEngine.LoadRules( wxString( argv[2] ) );
     }
     catch( PARSE_ERROR& err )
     {
         printf("Can't load DRC rules: %s\n", (const char*) err.What().c_str() );
+        return -1;
     }
 
     drcEngine.RunTests();

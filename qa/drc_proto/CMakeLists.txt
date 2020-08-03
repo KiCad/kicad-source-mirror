@@ -42,6 +42,7 @@ add_executable( drc_proto
     drc_test_provider_clearance_base.cpp
     drc_test_provider_copper_clearance.cpp
     drc_test_provider_hole_clearance.cpp
+    drc_test_provider_edge_clearance.cpp
     drc_test_provider_hole_size.cpp
     drc_engine.cpp
     drc_item.cpp

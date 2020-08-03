@@ -154,6 +154,7 @@ bool test::DRC_ENGINE::CompileRules()
 
             for( auto rule : m_rules )
             {   
+                drc_dbg(10, "Scan provider %s rule %s", (const char*) rule->GetTestProviderName().c_str(), (const char *)provider->GetName().c_str( ) );
                 if( rule->GetTestProviderName() == provider->GetName() )
                 {
                    ReportAux( wxString::Format( "   |- Rule: '%s' ", rule->m_Name.c_str() ) );

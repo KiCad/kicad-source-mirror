@@ -4,7 +4,7 @@
 (condition (expression "A.type == 'Pad' && A.netname == 'Net2'") (rule "big_pad_hole_clearance") )
 
 (rule "small_pad_hole_clearance" (type "hole_clearance") (priority 1) (severity error) (min "0.1mm") )
-(rule "big_pad_hole_clearance" (type "hole_clearance") (priority 1) (severity error) (min "5mm") )
+(rule "big_pad_hole_clearance" (type "hole_clearance") (priority 1) (severity error) (min "5mm" ) )
 (rule "default" (type "hole_clearance") (priority 0) (severity error) (min "0.5mm") )
 
 
