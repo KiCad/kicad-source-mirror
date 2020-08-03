@@ -37,7 +37,7 @@
 //=================================
 #define UNDEFINED_LAYER_ID ( LAYER_ID ) wxEmptyString
 #define UNDEFINED_MATERIAL_ID ( MATERIAL_ID ) wxEmptyString
-#define UNDEFINED_PHYSICAL_LAYER ( PHYSICAL_LAYER ) - 1
+#define UNDEFINED_PHYSICAL_LAYER ( PHYSICAL_LAYER_ID ) - 1
 
 /**
  * Default spacing class for all nets
@@ -78,7 +78,7 @@ public:
 
     typedef wxString MATERIAL_ID;
     typedef wxString LAYER_ID;
-    typedef long     PHYSICAL_LAYER;
+    typedef long     PHYSICAL_LAYER_ID;
     typedef wxString LINECODE_ID;
     typedef wxString HATCHCODE_ID;
     typedef wxString TEXTCODE_ID;
@@ -92,10 +92,15 @@ public:
     typedef wxString SPACING_CLASS_ID;
     typedef wxString FIGURE_ID;
     typedef wxString COMP_AREA_ID;
-    typedef long     PAD_ID;
+    typedef long     PAD_ID; ///< Pad identifier (pin) in the PCB
     typedef wxString TEXT_ID;
     typedef wxString DIMENSION_ID;
     typedef wxString SYMDEF_ID;
+    typedef wxString PART_ID;
+    typedef wxString GATE_ID;
+    typedef long     TERMINAL_ID;            ///< Terminal is the pin identifier in the schematic
+    typedef long     PART_DEFINITION_PIN_ID; ///< Pin identifier in the part definition
+    typedef long     PART_PIN_ID;            ///< Pin identifier in the part
 
 
     //=================================
@@ -229,7 +234,7 @@ public:
         wxString       Name;
         LAYER_TYPE     Type    = LAYER_TYPE::UNDEFINED;
         LAYER_SUBTYPE  SubType = LAYER_SUBTYPE::LAYERSUBTYPE_NONE;
-        PHYSICAL_LAYER PhysicalLayer =
+        PHYSICAL_LAYER_ID PhysicalLayer =
                 UNDEFINED_PHYSICAL_LAYER;              ///< If UNDEFINED, no physical layer is
                                                        ///< assigned (e.g. documentation and
                                                        ///< construction layers)
@@ -463,8 +468,8 @@ public:
     {
         LAYERPAIR_ID   ID;
         wxString       Name;
-        PHYSICAL_LAYER PhysicalLayerStart;
-        PHYSICAL_LAYER PhysicalLayerEnd;
+        PHYSICAL_LAYER_ID PhysicalLayerStart;
+        PHYSICAL_LAYER_ID PhysicalLayerEnd;
         VIACODE_ID     ViacodeID;
 
         void Parse( XNODE* aNode );
@@ -514,7 +519,10 @@ public:
     struct ATTRNAME
     {
         ATTRIBUTE_ID ID;
-        wxString     Name;
+        wxString     Name; ///< Parenthesis aren't permitted in user attributes in CADSTAR. Any
+                           ///< Attributes in Parenthesis indicate an internal CADSTAR attribute
+                           ///< Examples: "(PartDescription)" "(PartDefinitionNameStem)",etc.
+         ///TODO: create a list of all CADSTAR internal attribute names.
         ATTROWNER    AttributeOwner = ATTROWNER::ALL_ITEMS;
         ATTRUSAGE    AttributeUsage = ATTRUSAGE::UNDEFINED;
         bool         NoTransfer = false; ///< True="All Design Types", False="Current Design Type"
@@ -533,6 +541,7 @@ public:
     {
         ATTRIBUTE_ID AttributeID;
         wxString     Value;
+        bool         ReadOnly = false;
 
         void Parse( XNODE* aNode );
     };
@@ -836,6 +845,7 @@ public:
                                ///< and replace. It  replaces the CADSTAR 13.0 pad sequence
                                ///< number but is much less restrictive i.e. It need not be 1, 2,
                                ///< 3 etc. and can contain alpha and / or numeric characters."
+
         bool FirstPad = false; ///< From CADSTAR Help: "Only one pad can have this property; if an
                                ///< existing pad in the design already has this property it will be
                                ///< removed from the existing pad when this new pad is added. The
@@ -887,7 +897,7 @@ public:
     /**
      * @brief From CADSTAR Help: "Multi Line Text can also be justified as Left, Centre or Right. 
      * This does not affect the text alignment. Note: Justification of single line text has no 
-     * affect."
+     * effect."
      *
      * This only affects multiline text
      *
@@ -1212,11 +1222,189 @@ public:
         void Parse( XNODE* aNode );
     };
 
+    struct PART
+    {
+        enum class PIN_TYPE
+        {
+            UNCOMMITTED,        ///< Uncomitted pin (default)
+            INPUT,              ///< Input pin
+            OUTPUT_OR,          ///< Output pin OR tieable
+            OUTPUT_NOT_OR,      ///< Output pin not OR tieable
+            OUTPUT_NOT_NORM_OR, ///< Output pin not normally OR tieable
+            POWER,              ///< Power pin
+            GROUND,             ///< Ground pin
+            TRISTATE_BIDIR,     ///< Tristate bi-directional driver pin
+            TRISTATE_INPUT,     ///< Tristate input pin
+            TRISTATE_DRIVER     ///< Tristate output pin
+        };
+
+        static PIN_TYPE GetPinType( XNODE* aNode );
+
+        struct DEFINITION ///< "PARTDEFINITION" node name
+        {
+            struct GATE ///< "GATEDEFINITION" node name
+            {
+                GATE_ID  ID;        ///< Usually "A", "B", "C", etc.
+                wxString Name;      ///< Symbol name in the symbol library
+                wxString Alternate; ///< Symbol alternate name in the symbol library
+                long     PinCount;  ///< Number of pins (terminals) in the symbol
+
+                void Parse( XNODE* aNode );
+            };
+                        
+
+            struct PIN ///< "PARTDEFINITIONPIN" node name
+            {
+                /**
+                 * @brief Positioning of pin names can be in one of four quadrants
+                */
+                enum class POSITION
+                {
+                    TOP_RIGHT    = 0, ///< Default
+                    TOP_LEFT     = 1,
+                    BOTTOM_LEFT  = 2,
+                    BOTTOM_RIGHT = 3
+                };
+
+                PART_DEFINITION_PIN_ID ID;
+                wxString Name = wxEmptyString;            ///< Can be empty. If empty the pin name
+                                                          ///< displayed wil be Identifier
+                                                          ///< (subnode="PINNAME")
+                wxString Label  = wxEmptyString;          ///< Can be empty (subnode="PINLABEL")
+                wxString Signal = wxEmptyString;          ///< Usually for Power/Ground pins,
+                                                          ///< (subnode="PINSIGNAL")
+                GATE_ID     TerminalGate;                 ///< (subnode="PINTERM", param0)
+                TERMINAL_ID TerminalPin;                  ///< (subnode="PINTERM", param1)
+                PIN_TYPE    Type = PIN_TYPE::UNCOMMITTED; ///< subnode="PINTYPE"
+                long        Load = UNDEFINED_VALUE;       ///< The electrical current expected on
+                                                          ///< the pin (It is unclear what the units
+                                                          ///< are, but only accepted values are
+                                                          ///< integers) subnode ="PINLOAD"
+                POSITION Position =
+                        POSITION::TOP_RIGHT; ///< The pin names will use these positions when
+                                             ///< the symbol is added to a schematic design
+                                             ///< subnode="PINPOSITION"
+
+                wxString Identifier =
+                        wxEmptyString; ///< This should match a pad identifier in the component
+                                       ///< footprint subnode="PINIDENTIFIER". It is assumed that
+                                       ///< this could be empty in earlier versions of CADSTAR
+
+                void Parse( XNODE* aNode );
+            };
+
+            struct PIN_EQUIVALENCE ///< "PINEQUIVALENCE" Node name (represents "Equivalence")
+            {
+                std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< All the pins in this vector are
+                                                            ///< equivalent and can be swapped with
+                                                            ///< each other
+                
+                void Parse( XNODE* aNode ); 
+            }; 
+
+            
+            struct SWAP_GATE ///< "SWAPGATE" Node name (represents an "Element")
+            {
+                std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< The pins in this vector 
+                                                            ///< describe a "gate"
+
+                void Parse( XNODE* aNode );
+            };
+
+            struct SWAP_GROUP
+            {
+                wxString GateName = wxEmptyString; ///< Optional. If not empty, should match the Name
+                                                   ///< attribute of one of the gates defined in the
+                                                   ///< part definition
+
+                bool External = false; ///< Determines if this swap group is external (and internal)
+                                       ///< or internal only. External Gate swapping allows Gates on
+                                       ///< different components with the same Part Definition to
+                                       ///< swap with one another.
+                                       ///< 
+                                       ///< The external swapping groups must be at the root level
+                                       ///< (i.e. they cannot be contained by other swapping groups)
+
+                std::vector<SWAP_GATE> SwapGates; ///< Each of the elements in this vector can be
+                                                  ///< swapped with each other - i.e. *all* of the
+                                                  ///< pins in each swap gate can be swapped with
+                                                  ///< *all* in another swap gate defined in this
+                                                  ///< vector
+
+                void Parse( XNODE* aNode );
+            };
+
+            wxString Name;         ///< This name can be different to the PART name
+            bool     HidePinNames; ///< Specifies whether to display the pin names/indentifier in
+                                   ///< the schematic symbol or not. E.g. it is useful to display
+                                   ///< pin name information for integrated circuits but less so
+                                   ///< for resistors and capacitors. (subnode HIDEPINNAMES)
+
+            long MaxPinCount =
+                    UNDEFINED_VALUE; ///< Optional parameter which is used for specifying the number
+                                     ///< of electrical pins on the PCB component symbol to be
+                                     ///< used in the  part definition (this should not include
+                                     ///< mechanical pins for fixing etc.). This value must be less
+                                     ///< than or equal to than the number of pins on the PCB
+                                     ///< Component symbol.
+
+            std::map<GATE_ID, GATE>                 GateSymbols;
+            std::map<PART_DEFINITION_PIN_ID, PIN>   Pins;
+            std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< Some attributes are
+                                                                     ///< defined within the part
+                                                                     ///< definition, whilst others
+                                                                     ///< are defined in the part
+            std::vector<PIN_EQUIVALENCE> PinEquivalences;
+            std::vector<SWAP_GROUP>      SwapGroups;
+
+            void Parse( XNODE* aNode );
+        };
+
+        
+        struct PART_PIN ///< "PARTPIN" node name 
+        {
+            PART_PIN_ID ID;
+            wxString    Name = wxEmptyString;
+            PIN_TYPE    Type = PIN_TYPE::UNCOMMITTED;
+            wxString    Identifier = wxEmptyString;
+
+            void        Parse( XNODE* aNode );
+        };
+
+
+        PART_ID                         ID;
+        wxString                        Name;
+        long                            Version;
+        DEFINITION                      Definition;
+        std::map<PART_PIN_ID, PART_PIN> PartPins; ///< It is unclear why there are two "Pin"
+                                                 ///< structures in CPA files... PART_PIN seems to
+                                                 ///< be a reduced version of PART::DEFINITION::PIN
+                                                 ///< Therefore, PART_PIN is only included for
+                                                 ///< completeness of the parser, but won't be used
+
+
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< Some attributes are defined
+                                                                 ///< within the part definition,
+                                                                 ///< whilst others are defined in
+                                                                 ///< the part itself
+
+        void Parse( XNODE* aNode );
+    };
+
+    struct PARTS
+    {
+        std::map<PART_ID, PART> PartDefinitions;
+
+        void Parse( XNODE* aNode );
+    };
+
+
     wxString Filename;
 
     HEADER      Header;
     ASSIGNMENTS Assignments;
     LIBRARY     Library;
+    PARTS       Parts;
 
     //TODO Add Library, Defaults, Parts, etc..
 

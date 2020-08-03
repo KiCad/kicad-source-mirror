@@ -46,7 +46,7 @@ public:
 private:
     BOARD*                             mBoard;
     std::map<LAYER_ID, PCB_LAYER_ID>   mLayermap; //<Map between Cadstar and KiCad Layers
-    std::map<PHYSICAL_LAYER, LAYER_ID> mCopperLayers;
+    std::map<PHYSICAL_LAYER_ID, LAYER_ID> mCopperLayers;
     void                               loadBoardStackup();
     PCB_LAYER_ID                       getKiCadCopperLayerID( unsigned int aLayerNum );
 };

@@ -58,6 +58,12 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
             Assignments.Parse( cNode );
         else if( cNode->GetName() == wxT( "LIBRARY" ) )
             Library.Parse( cNode );
+        else if( cNode->GetName() == wxT( "DEFAULTS" ) )
+        {
+            //No useful design information here (no need to parse)
+        }
+        else if( cNode->GetName() == wxT( "PARTS" ) )
+            Parts.Parse( cNode );
         //TODO need to parse everything else!
     }
 
@@ -1183,6 +1189,16 @@ void CADSTAR_PCB_ARCHIVE_PARSER::ATTRIBUTE_VALUE::Parse( XNODE* aNode )
 
     AttributeID = GetXmlAttributeIDString( aNode, 0 );
     Value       = GetXmlAttributeIDString( aNode, 1 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        if( cNode->GetName() == wxT( "READONLY" ) )
+            ReadOnly = true;
+        else
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+    }
 }
 
 
@@ -1603,7 +1619,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD::Parse( XNODE* aNode )
     wxString location = wxString::Format( "PAD %d", ID );
 
     if( !cNode )
-        THROW_MISSING_NODE_IO_ERROR( wxT( "PADIDENTIFIER" ), location );
+        THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), location );
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
@@ -2175,6 +2191,293 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LIBRARY::Parse( XNODE* aNode )
             //TODO try.. catch + throw again with more detailed error information
             symdef.Parse( cNode );
             ComponentDefinitions.insert( std::make_pair( symdef.ID, symdef ) );
+        }
+        else
+        {
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PARSER::PART::DEFINITION::GATE::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "GATEDEFINITION" ) );
+
+    ID        = GetXmlAttributeIDString( aNode, 0 );
+    Name      = GetXmlAttributeIDString( aNode, 1 );
+    Alternate = GetXmlAttributeIDString( aNode, 2 );
+    PinCount  = GetXmlAttributeIDLong( aNode, 3 );
+
+    CheckNoChildNodes( aNode );
+}
+
+CADSTAR_PCB_ARCHIVE_PARSER::PART::PIN_TYPE CADSTAR_PCB_ARCHIVE_PARSER::PART::GetPinType(
+        XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "PINTYPE" ) );
+
+    wxString pinTypeStr = GetXmlAttributeIDString( aNode, 0 );
+
+    std::map<wxString, PIN_TYPE> pinTypeMap = {
+        { wxT( "INPUT" ), PIN_TYPE::INPUT },                 ////////////////////////////////
+        { wxT( "OUTPUT_OR" ), PIN_TYPE::OUTPUT_OR },         ////////////////////////////////
+        { wxT( "OUTPUT_NOT_OR" ), PIN_TYPE::OUTPUT_NOT_OR }, ////////////////////////////////
+        { wxT( "OUTPUT_NOT_NORM_OR" ), PIN_TYPE::OUTPUT_NOT_NORM_OR }, //////////////////////
+        { wxT( "POWER" ), PIN_TYPE::POWER },   //////////////////////////////////////////////
+        { wxT( "GROUND" ), PIN_TYPE::GROUND }, //////////////////////////////////////////////
+        { wxT( "TRISTATE_BIDIR" ), PIN_TYPE::TRISTATE_BIDIR },  /////////////////////////////
+        { wxT( "TRISTATE_INPUT" ), PIN_TYPE::TRISTATE_INPUT },  /////////////////////////////
+        { wxT( "TRISTATE_DRIVER" ), PIN_TYPE::TRISTATE_DRIVER } /////////////////////////////
+    };
+
+    if( pinTypeMap.find( pinTypeStr ) == pinTypeMap.end() )
+        THROW_UNKNOWN_PARAMETER_IO_ERROR( pinTypeStr, aNode->GetName() );
+
+    return pinTypeMap[pinTypeStr];
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PARSER::PART::DEFINITION::PIN::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "PARTDEFINITIONPIN" ) );
+
+    ID = GetXmlAttributeIDLong( aNode, 0 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "PINNAME" ) )
+            Name = GetXmlAttributeIDString( cNode, 0 );
+        else if( cNodeName == wxT( "PINLABEL" ) )
+            Label = GetXmlAttributeIDString( cNode, 0 );
+        else if( cNodeName == wxT( "PINSIGNAL" ) )
+            Signal = GetXmlAttributeIDString( cNode, 0 );
+        else if( cNodeName == wxT( "PINTERM" ) )
+        {
+            TerminalGate = GetXmlAttributeIDString( cNode, 0 );
+            TerminalPin  = GetXmlAttributeIDLong( cNode, 1 );
+        }
+        else if( cNodeName == wxT( "PINTYPE" ) )
+            Type = GetPinType( cNode );
+        else if( cNodeName == wxT( "PINLOAD" ) )
+            Load = GetXmlAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "PINPOSITION" ) )
+            Position = (POSITION) GetXmlAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "PINIDENTIFIER" ) )
+            Identifier = GetXmlAttributeIDString( cNode, 0 );
+        else
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PARSER::PART::PART_PIN::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "PARTPIN" ) );
+
+    ID = GetXmlAttributeIDLong( aNode, 0 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "PINNAME" ) )
+            Name = GetXmlAttributeIDString( cNode, 0 );
+        else if( cNodeName == wxT( "PINTYPE" ) )
+            Type = GetPinType( cNode );
+        else if( cNodeName == wxT( "PINIDENTIFIER" ) )
+            Identifier = GetXmlAttributeIDString( cNode, 0 );
+        else
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+    }
+}
+
+void CADSTAR_PCB_ARCHIVE_PARSER::PART::DEFINITION::PIN_EQUIVALENCE::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "PINEQUIVALENCE" ) );
+
+    wxXmlAttribute* xmlAttribute = aNode->GetAttributes();
+
+    for( ; xmlAttribute; xmlAttribute = xmlAttribute->GetNext() )
+    {
+        long pinId;
+
+        if( !xmlAttribute->GetValue().ToLong( &pinId ) )
+            THROW_UNKNOWN_PARAMETER_IO_ERROR( xmlAttribute->GetValue(), aNode->GetName() );
+
+        PinIDs.push_back( (PART_DEFINITION_PIN_ID) pinId );
+    }
+
+    CheckNoChildNodes( aNode );
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PARSER::PART::DEFINITION::SWAP_GATE::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "SWAPGATE" ) );
+
+    wxXmlAttribute* xmlAttribute = aNode->GetAttributes();
+
+    for( ; xmlAttribute; xmlAttribute = xmlAttribute->GetNext() )
+    {
+        long pinId;
+
+        if( !xmlAttribute->GetValue().ToLong( &pinId ) )
+            THROW_UNKNOWN_PARAMETER_IO_ERROR( xmlAttribute->GetValue(), aNode->GetName() );
+
+        PinIDs.push_back( (PART_DEFINITION_PIN_ID) pinId );
+    }
+
+    CheckNoChildNodes( aNode );
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PARSER::PART::DEFINITION::SWAP_GROUP::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "SWAPGROUP" ) );
+
+    GateName = GetXmlAttributeIDString( aNode, 0 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "EXTERNAL" ) )
+            External = true;
+        else if( cNodeName == wxT( "SWAPGATE" ) )
+        {
+            SWAP_GATE swapGate;
+            //TODO try.. catch + throw again with more detailed error information
+            swapGate.Parse( cNode );
+            SwapGates.push_back( swapGate );
+        }
+        else
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PARSER::PART::DEFINITION::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "PARTDEFINITION" ) );
+
+    Name = GetXmlAttributeIDString( aNode, 0 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "HIDEPINNAMES" ) )
+            HidePinNames = true;
+        else if( cNodeName == wxT( "MAXPIN" ) )
+            MaxPinCount = GetXmlAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "GATEDEFINITION" ) )
+        {
+            GATE gate;
+            //TODO try.. catch + throw again with more detailed error information
+            gate.Parse( cNode );
+            GateSymbols.insert( std::make_pair(gate.ID, gate) );
+        }
+        else if( cNodeName == wxT( "PARTDEFINITIONPIN" ) )
+        {
+            PIN pin;
+            //TODO try.. catch + throw again with more detailed error information
+            pin.Parse( cNode );
+            Pins.insert( std::make_pair( pin.ID, pin ) );
+        }
+        else if( cNodeName == wxT( "ATTR" ) )
+        {
+            ATTRIBUTE_VALUE attr;
+            //TODO try.. catch + throw again with more detailed error information
+            attr.Parse( cNode );
+            AttributeValues.insert( std::make_pair( attr.AttributeID, attr ) );
+        }
+        else if( cNodeName == wxT( "PINEQUIVALENCE" ) )
+        {
+            PIN_EQUIVALENCE pinEq;
+            //TODO try.. catch + throw again with more detailed error information
+            pinEq.Parse( cNode );
+            PinEquivalences.push_back( pinEq );
+        }
+        else if( cNodeName == wxT( "SWAPGROUP" ) )
+        {
+            SWAP_GROUP swapGroup;
+            //TODO try.. catch + throw again with more detailed error information
+            swapGroup.Parse( cNode );
+            SwapGroups.push_back( swapGroup );
+        }
+        else
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PARSER::PART::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "PART" ) );
+
+    ID   = GetXmlAttributeIDString( aNode, 0 );
+    Name = GetXmlAttributeIDString( aNode, 1 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "VERSION" ) )
+            Version = GetXmlAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "PARTDEFINITION" ) )
+        {
+            //TODO try.. catch + throw again with more detailed error information
+            Definition.Parse( cNode );
+        }
+        else if( cNodeName == wxT( "PARTPIN" ) )
+        {
+            PART_PIN pin;
+            //TODO try.. catch + throw again with more detailed error information
+            pin.Parse( cNode );
+            PartPins.insert( std::make_pair( pin.ID, pin ) );
+        }
+        else if( cNodeName == wxT( "ATTR" ) )
+        {
+            ATTRIBUTE_VALUE attr;
+            //TODO try.. catch + throw again with more detailed error information
+            attr.Parse( cNode );
+            AttributeValues.insert( std::make_pair( attr.AttributeID, attr ) );
+        }
+        else
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PARSER::PARTS::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "PARTS" ) );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "PART" ) )
+        {
+            PART part;
+            //TODO try.. catch + throw again with more detailed error information
+            part.Parse( cNode );
+            PartDefinitions.insert( std::make_pair( part.ID, part ) );
         }
         else
         {
