@@ -138,7 +138,7 @@ void test::DRC_RULES_PARSER::Parse( std::vector<test::DRC_RULE_CONDITION*>& aCon
         case T_rule:
         {
             auto rule = parseRULE();
-            drc_dbg(0, "Parsed rule: '%s' type '%s\n", (const char*) rule->GetName().c_str(), (const char*) rule->GetTestProviderName().c_str() );
+            drc_dbg(0, "Parsed rule: '%s' type '%s'\n", (const char*) rule->GetName().c_str(), (const char*) rule->GetTestProviderName().c_str() );
             aRules.push_back( rule );
             break;
         }
@@ -204,7 +204,12 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
     if( !IsSymbol( token ) )
         reportError( _( "Missing rule name." ) );
 
+    rule->m_Priority = 0;
+    rule->m_Enabled = true;
+    
     rule->m_Name = FromUTF8();
+
+    printf("parseRule '%s'\n", (const char *) rule->m_Name.c_str() );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -222,6 +227,7 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
             //       to new error reporting framework?
             NeedSYMBOL();
             rule->m_TestProviderName = FromUTF8();
+            NeedRIGHT();
             break;
 
         case T_min:
@@ -286,10 +292,12 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
         
         case T_allow:
             rule->m_Constraint.m_Allow = parseInt("allowed");
+            NeedRIGHT();
             break;
 
         case T_enable:
             rule->m_Enabled = parseInt("enabled");
+            NeedRIGHT();
             break;
 
         case T_severity:
@@ -303,12 +311,14 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
                     Expecting( "error, warning or ignore" );
                     break;
             }
+            NeedRIGHT();
 
 
             break;
 
         case T_priority:
             rule->m_Priority = parseInt("priotity");
+            NeedRIGHT();
             break;
 
 
@@ -323,7 +333,7 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
             break;
         }
 
-        NeedRIGHT();
+        
     }
 
     return rule;
