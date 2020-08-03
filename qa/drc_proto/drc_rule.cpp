@@ -32,9 +32,10 @@
 
 test::DRC_RULE::DRC_RULE() :
     m_Unary( false ),
-    m_Enabled( false ),
+    m_Enabled( true ),
     m_Conditional( false ),
-    m_Priority( 0 )
+    m_Priority( 0 ),
+    m_Severity( DRC_RULE_SEVERITY_T::DRC_SEVERITY_ERROR )
 {
 }
 
