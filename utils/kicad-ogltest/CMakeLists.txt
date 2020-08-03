@@ -44,7 +44,7 @@ if( APPLE )
         include( BundleUtilities )
         fixup_bundle( ${OSX_BUNDLE_BUILD_BIN_DIR}/kicad-ogltest
             \"\"
-            \" ${KICAD_BUNDLE_LIBS}\"
+            \"${KICAD_BUNDLE_LIBS}\"
             )
         " COMPONENT Runtime
         )
