@@ -772,7 +772,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             if( !vref )
             {
                 msg.Printf( _( "Unrecognized item '%s'" ), node->value.str );
-                reportError( msg, node->leaf[0]->srcPos - (int) strlen( node->value.str  ) );
+                reportError( msg, node->srcPos - (int) strlen( node->value.str  ) );
                 return false;
             }
 
