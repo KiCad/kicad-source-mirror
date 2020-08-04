@@ -64,9 +64,15 @@ DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCu
     // Build the defined colors panel:
     initDefinedColors( aUserColors );
 
-    // If there is no default color, don't give the option to reset to default
+    /**
+     * There are two types of color settings: theme colors and local overrides.
+     * Theme colors have a default value, and the Reset to Default button reverts to it.
+     * Local override colors have a default of UNSPECIFIED, which means "use the theme color".
+     * The underlying action is the same, but we change the label here because the action from
+     * the point of view of the user is slightly different.
+     */
     if( aDefaultColor == KIGFX::COLOR4D::UNSPECIFIED )
-        m_resetToDefault->Hide();
+        m_resetToDefault->SetLabel( _( "Clear Color" ) );
 
     m_sdbSizerOK->SetDefault();
 }
@@ -851,5 +857,9 @@ void DIALOG_COLOR_PICKER::OnResetButton( wxCommandEvent& aEvent )
     m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
     SetEditVals( ALL_CHANGED, false );
 
-    drawAll();
+    // When the default is UNSPECIFIED, this is the Clear Color button, which should accept
+    if( m_defaultColor == KIGFX::COLOR4D::UNSPECIFIED )
+        AcceptAndClose();
+    else
+        drawAll();
 }

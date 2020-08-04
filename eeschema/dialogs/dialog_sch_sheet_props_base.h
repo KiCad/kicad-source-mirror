@@ -56,7 +56,6 @@ class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
 		COLOR_SWATCH* m_borderSwatch;
 		wxStaticText* m_backgroundColorLabel;
 		COLOR_SWATCH* m_backgroundSwatch;
-		wxButton* m_btnResetColors;
 		wxStaticText* m_hiearchicalPathLabel;
 		wxTextCtrl* m_heirarchyPath;
 		wxStaticText* m_timestampLabel;
@@ -74,7 +73,6 @@ class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
 		virtual void OnMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemoveColors( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

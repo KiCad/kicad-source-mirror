@@ -412,6 +412,9 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::ResetPanel()
 
 void PANEL_EESCHEMA_COLOR_SETTINGS::updatePreview()
 {
+    if( !m_preview )
+        return;
+
     KIGFX::VIEW* view = m_preview->GetView();
     auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
     settings->LoadColors( m_currentSettings );

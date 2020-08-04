@@ -133,7 +133,7 @@ void DIALOG_EDIT_LINE_STYLE::onColorButtonClicked( wxCommandEvent& event )
     if( dialog.ShowModal() == wxID_OK )
         newColor = dialog.GetColor();
 
-    if( newColor == COLOR4D::UNSPECIFIED || m_selectedColor == newColor )
+    if( m_selectedColor == newColor )
         return;
 
     setColor( newColor );

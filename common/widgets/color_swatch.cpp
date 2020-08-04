@@ -56,6 +56,12 @@ wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize a
     iconDC.SetBrush( brush );
     iconDC.DrawRectangle( 0, 0, aSize.x, aSize.y );
 
+    if( aColor == COLOR4D::UNSPECIFIED )
+    {
+        aColor = aBackground.Inverted();
+        brush.SetStyle( wxBRUSHSTYLE_BDIAGONAL_HATCH );
+    }
+
     brush.SetColour( aColor.ToColour() );
     iconDC.SetBrush( brush );
     iconDC.DrawRectangle( 0, 0, aSize.x, aSize.y );
@@ -210,7 +216,7 @@ void COLOR_SWATCH::GetNewSwatchColor()
     if( dialog.ShowModal() == wxID_OK )
         newColor = dialog.GetColor();
 
-    if( newColor != COLOR4D::UNSPECIFIED )
+    if( newColor != COLOR4D::UNSPECIFIED || m_default == COLOR4D::UNSPECIFIED )
     {
         m_color = newColor;
 

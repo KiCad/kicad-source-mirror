@@ -151,14 +151,6 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	sbSizer2->Add( m_backgroundSwatch, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_btnResetColors = new wxButton( sbSizer2->GetStaticBox(), wxID_ANY, _("Remove Colors"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_btnResetColors->SetToolTip( _("Remove the specified colors for this sheet (the current color theme will be used instead)") );
-
-	sbSizer2->Add( m_btnResetColors, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-
 	bSizer5->Add( sbSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
@@ -226,7 +218,6 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveDown ), NULL, this );
 	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnDeleteField ), NULL, this );
-	m_btnResetColors->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnRemoveColors ), NULL, this );
 }
 
 DIALOG_SCH_SHEET_PROPS_BASE::~DIALOG_SCH_SHEET_PROPS_BASE()
@@ -239,6 +230,5 @@ DIALOG_SCH_SHEET_PROPS_BASE::~DIALOG_SCH_SHEET_PROPS_BASE()
 	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveDown ), NULL, this );
 	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnDeleteField ), NULL, this );
-	m_btnResetColors->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnRemoveColors ), NULL, this );
 
 }

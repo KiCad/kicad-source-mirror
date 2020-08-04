@@ -151,15 +151,11 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
     m_borderWidth.SetValue( m_sheet->GetBorderWidth() );
 
     // set up color swatches
-    COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
-    KIGFX::COLOR4D  borderColor = m_sheet->GetBorderColor();
-    KIGFX::COLOR4D  backgroundColor = m_sheet->GetBackgroundColor();
+    KIGFX::COLOR4D borderColor     = m_sheet->GetBorderColor();
+    KIGFX::COLOR4D backgroundColor = m_sheet->GetBackgroundColor();
 
-    if( borderColor == COLOR4D::UNSPECIFIED )
-        borderColor = colorSettings->GetColor( LAYER_SHEET );
-
-    if( backgroundColor == COLOR4D::UNSPECIFIED )
-        backgroundColor = colorSettings->GetColor( LAYER_SHEET_BACKGROUND );
+    m_borderSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_backgroundSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     m_borderSwatch->SetSwatchColor( borderColor, false );
     m_backgroundSwatch->SetSwatchColor( backgroundColor, false );
@@ -788,16 +784,4 @@ void DIALOG_SCH_SHEET_PROPS::OnInitDlg( wxInitDialogEvent& event )
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
-}
-
-
-void DIALOG_SCH_SHEET_PROPS::OnRemoveColors( wxCommandEvent& event )
-{
-    COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
-
-    m_borderSwatch->SetDefaultColor( colorSettings->GetColor( LAYER_SHEET ) );
-    m_backgroundSwatch->SetDefaultColor( colorSettings->GetColor( LAYER_SHEET_BACKGROUND ) );
-
-    m_borderSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
-    m_backgroundSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
 }
