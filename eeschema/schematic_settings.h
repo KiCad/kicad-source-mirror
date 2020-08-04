@@ -56,7 +56,8 @@ public:
 
     wxString m_NetFormatName;
 
-    bool m_SpiceAdjustPassiveValues;
+    bool     m_SpiceAdjustPassiveValues;
+    wxString m_SpiceCommandString;      // A command string to run external spice
 
     /// @see PROJECT_FILE::m_TemplateFieldNames
     TEMPLATES* m_TemplateFieldNames;

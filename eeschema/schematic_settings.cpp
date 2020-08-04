@@ -136,6 +136,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_params.emplace_back(
             new PARAM<bool>( "spice_adjust_passive_values", &m_SpiceAdjustPassiveValues, false ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "spice_external_command",
+                                                &m_SpiceCommandString, "spice \"%I\"" ) );
+
     // TODO(JE) should we keep these LIB_PART:: things around?
     m_params.emplace_back( new PARAM<int>(
             "subpart_id_separator", LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );

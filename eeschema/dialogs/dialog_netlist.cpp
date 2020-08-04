@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013-2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,6 +149,11 @@ private:
     void OnDelGenerator( wxCommandEvent& event ) override;
 
     /**
+     * Run the external spice simulator command
+     */
+    void OnRunExternSpiceCommand( wxCommandEvent& event );
+
+    /**
      * Function WriteCurrentNetlistSetup
      * Write the current netlist options setup in the configuration
      */
@@ -200,12 +205,14 @@ enum id_netlist {
     ID_CREATE_NETLIST = ID_END_EESCHEMA_ID_LIST + 1,
     ID_CURRENT_FORMAT_IS_DEFAULT,
     ID_ADD_SUBCIRCUIT_PREFIX,
-    ID_USE_NETCODE_AS_NETNAME
+    ID_USE_NETCODE_AS_NETNAME,
+    ID_RUN_SIMULATOR
 };
 
 
 BEGIN_EVENT_TABLE( NETLIST_DIALOG, NETLIST_DIALOG_BASE )
     EVT_CHECKBOX( ID_CURRENT_FORMAT_IS_DEFAULT, NETLIST_DIALOG::SelectDefaultNetlistType )
+    EVT_BUTTON( ID_RUN_SIMULATOR, NETLIST_DIALOG::OnRunExternSpiceCommand )
 END_EVENT_TABLE()
 
 
@@ -306,6 +313,39 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 }
 
 
+void NETLIST_DIALOG::OnRunExternSpiceCommand( wxCommandEvent& event )
+{
+    // Run the external spice simulator command
+    NetlistUpdateOpt();
+
+    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+    wxString simulatorCommand = settings.m_SpiceCommandString;
+
+    unsigned netlist_opt = 0;
+
+    // Calculate the netlist filename and options
+    wxFileName fn = m_Parent->Schematic().GetFileName();
+    fn.SetExt( wxT( "cir" ) );
+
+    if( settings.m_SpiceAdjustPassiveValues )
+        netlist_opt |= NET_ADJUST_PASSIVE_VALS;
+
+    // Build the command line
+    wxString commandLine = simulatorCommand;
+    commandLine.Replace( "%I", fn.GetFullPath(), true );
+
+    if( m_Parent->ReadyToNetlist( false, false ) )
+        m_Parent->WriteNetListFile( NET_TYPE_SPICE, fn.GetFullPath(), netlist_opt, nullptr );
+    else
+    {
+        wxMessageBox( _( "Schematic netlist not available" ) );
+        return;
+    }
+
+     wxExecute( commandLine, wxEXEC_ASYNC );
+}
+
+
 void NETLIST_DIALOG::InstallPageSpice()
 {
     NETLIST_PAGE_DIALOG* page = m_PanelNetType[PANELSPICE] =
@@ -318,6 +358,25 @@ void NETLIST_DIALOG::InstallPageSpice()
     page->m_AdjustPassiveValues->SetToolTip( _( "Reformat passive symbol values e.g. 1M -> 1Meg" ) );
     page->m_AdjustPassiveValues->SetValue( settings.m_SpiceAdjustPassiveValues );
     page->m_LeftBoxSizer->Add( page->m_AdjustPassiveValues, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
+
+    wxString simulatorCommand = settings.m_SpiceCommandString;
+    wxStaticText* spice_label = new wxStaticText( page, -1, _( "External simulator command:" ) );
+    spice_label->SetToolTip( _( "Enter the command line to run spice\n"
+                                "Usually <path to spice binary> %I\n"
+                                "%I will be replaced by the actual spice netlist name") );
+    page->m_LowBoxSizer->Add( spice_label, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+
+    page->m_CommandStringCtrl = new wxTextCtrl( page, -1, simulatorCommand,
+                                                wxDefaultPosition, wxDefaultSize );
+
+    page->m_CommandStringCtrl->SetInsertionPoint( 1 );
+    page->m_LowBoxSizer->Add( page->m_CommandStringCtrl, 0,
+                              wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+
+    // Add button to run spice command
+    wxButton* button = new wxButton( page, ID_RUN_SIMULATOR,
+                                     _( "Create Netlist and Run Simulator Command" ) );
+    page->m_LowBoxSizer->Add( button, 0, wxGROW | wxBOTTOM | wxLEFT | wxRIGHT, 5 );
 }
 
 
@@ -416,10 +475,12 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
 void NETLIST_DIALOG::NetlistUpdateOpt()
 {
     bool adjust = m_PanelNetType[ PANELSPICE ]->m_AdjustPassiveValues->IsChecked();
+    wxString spice_cmd_string = m_PanelNetType[ PANELSPICE ]->m_CommandStringCtrl->GetValue();
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 
     settings.m_SpiceAdjustPassiveValues = adjust;
+    settings.m_SpiceCommandString       = spice_cmd_string;
     settings.m_NetFormatName            = wxEmptyString;
 
     for( NETLIST_PAGE_DIALOG*& page : m_PanelNetType )
@@ -697,13 +758,13 @@ void NETLIST_DIALOG_ADD_GENERATOR::OnBrowseGenerators( wxCommandEvent& event )
     wxString ext = fn.GetExt();
 
     if( ext == wxT("xsl" ) )
-        cmdLine.Printf(wxT("xsltproc -o \"%%O\" \"%s\" \"%%I\""), GetChars(FullFileName) );
+        cmdLine.Printf(wxT("xsltproc -o \"%%O\" \"%s\" \"%%I\""), FullFileName );
     else if( ext == wxT("exe" ) || ext.IsEmpty() )
-        cmdLine.Printf(wxT("\"%s\" > \"%%O\" < \"%%I\""), GetChars(FullFileName) );
+        cmdLine.Printf(wxT("\"%s\" > \"%%O\" < \"%%I\""), FullFileName );
     else if( ext == wxT("py" ) || ext.IsEmpty() )
-        cmdLine.Printf(wxT("python \"%s\" \"%%I\" \"%%O\""), GetChars(FullFileName) );
+        cmdLine.Printf(wxT("python \"%s\" \"%%I\" \"%%O\""), FullFileName );
     else
-        cmdLine.Printf(wxT("\"%s\""), GetChars(FullFileName) );
+        cmdLine.Printf(wxT("\"%s\""), FullFileName );
 
     m_textCtrlCommand->SetValue( cmdLine );
 
