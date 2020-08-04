@@ -82,15 +82,9 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             else
                 converted += c;
         }
-        else if( aContext == CTX_DELIMITED_STR )
+        else if( aContext == CTX_LINE )
         {
-            if( c == '{' )
-                converted += "{brace}";
-            else if( c == ' ' )
-                converted += "{space}";
-            else if( c == '\t' )
-                converted += "{tab}";
-            else if( c == '\n' || c == '\r' )
+            if( c == '\n' || c == '\r' )
                 converted += "{return}";
             else
                 converted += c;
