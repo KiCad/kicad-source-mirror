@@ -154,6 +154,11 @@ private:
     void OnRunExternSpiceCommand( wxCommandEvent& event );
 
     /**
+     * Enable (if the command line is not empty or disable the button to run spice command
+     */
+    void OnRunSpiceButtUI( wxUpdateUIEvent& event );
+
+    /**
      * Function WriteCurrentNetlistSetup
      * Write the current netlist options setup in the configuration
      */
@@ -213,6 +218,7 @@ enum id_netlist {
 BEGIN_EVENT_TABLE( NETLIST_DIALOG, NETLIST_DIALOG_BASE )
     EVT_CHECKBOX( ID_CURRENT_FORMAT_IS_DEFAULT, NETLIST_DIALOG::SelectDefaultNetlistType )
     EVT_BUTTON( ID_RUN_SIMULATOR, NETLIST_DIALOG::OnRunExternSpiceCommand )
+    EVT_UPDATE_UI( ID_RUN_SIMULATOR, NETLIST_DIALOG::OnRunSpiceButtUI )
 END_EVENT_TABLE()
 
 
@@ -343,6 +349,13 @@ void NETLIST_DIALOG::OnRunExternSpiceCommand( wxCommandEvent& event )
     }
 
      wxExecute( commandLine, wxEXEC_ASYNC );
+}
+
+
+void NETLIST_DIALOG::OnRunSpiceButtUI( wxUpdateUIEvent& aEvent )
+{
+    bool disable = m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->IsEmpty();
+    aEvent.Enable( !disable );
 }
 
 
