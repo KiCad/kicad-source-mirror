@@ -607,15 +607,16 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
 
     if( numExcluded > 0 )
     {
-        wxMessageDialog dlg( this, _( "Delete exclusions too?" ), _( "Delete All Markers" ),
-                             wxYES_NO | wxCANCEL | wxCENTER | wxICON_QUESTION );
-        dlg.SetYesNoLabels( _( "Errors and Warnings Only" ) , _( "Errors, Warnings and Exclusions" ) );
+        wxRichMessageDialog dlg( this, _( "Do you wish to delete excluded markers as well?" ),
+                                 _( "Delete All Markers" ),
+                                 wxOK | wxCANCEL | wxCENTER | wxICON_QUESTION );
+        dlg.ShowCheckBox( _( "Delete exclusions" ) );
 
         int ret = dlg.ShowModal();
 
         if( ret == wxID_CANCEL )
             return;
-        else if( ret == wxID_NO )
+        else if( dlg.IsCheckBoxChecked() )
             includeExclusions = true;
     }
 

@@ -379,7 +379,7 @@ void RC_TREE_MODEL::ValueChanged( RC_TREE_NODE* aNode )
     {
         wxDataViewModel::ValueChanged( ToItem( aNode ), 0 );
 
-        for( auto & child : aNode->m_Children )
+        for( RC_TREE_NODE* child : aNode->m_Children )
             wxDataViewModel::ValueChanged( ToItem( child ), 0 );
     }
 }
@@ -387,7 +387,7 @@ void RC_TREE_MODEL::ValueChanged( RC_TREE_NODE* aNode )
 
 void RC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
 {
-    DeleteItems( true, false, aDeep );
+    DeleteItems( true, true, aDeep );
 }
 
 
@@ -434,9 +434,6 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         // Only deep delete the current item here; others will be done through the
         // DeleteAllItems() call below, which is more efficient.
         m_rcItemsProvider->DeleteItem( i, aDeep && aCurrentOnly );
-
-        if( aCurrentOnly )
-            break;
     }
 
     if( !aCurrentOnly )
