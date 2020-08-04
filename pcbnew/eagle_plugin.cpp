@@ -114,6 +114,60 @@ static wxString makeKey( const wxString& aFirst, const wxString& aSecond )
     return key;
 }
 
+/// interpret special characters in Eagle text and converts them to KiCAD notation
+static wxString interpret_text( const wxString& aText )
+{
+    wxString text;
+    bool sectionOpen = false;
+    for ( wxString::size_type i = 0; i < aText.size(); i++ ) {
+        // Interpret escaped characters
+        if ( aText[ i ] == '\\' ) {
+            if ( i + 1 != aText.size() )
+                text.Append( aText[ i + 1 ] );
+            i++;
+            continue;
+        }
+
+        // Escape ~ for KiCAD
+        if( aText[i] == '~' )
+        {
+            text.Append( '~' );
+            text.Append( '~' );
+            continue;
+        }
+
+        if ( aText[ i ] == '!' ) {
+            if ( sectionOpen ) {
+                text.Append( '~' );
+                sectionOpen = false;
+                continue;
+            }
+
+            static wxString escapeChars( " )]}'\"" );
+
+            if( i + 1 != aText.size() && escapeChars.Find( aText[i + 1] ) == wxNOT_FOUND )
+            {
+                sectionOpen = true;
+                text.Append( '~' );
+            }
+            else
+            {
+                text.Append( aText[ i ] );
+            }
+            continue;
+        }
+
+        if( aText[i] == ',' && sectionOpen )
+        {
+            text.Append( '~' );
+            sectionOpen = false;
+        }
+
+        text.Append( aText[ i ] );
+    }
+    return text;
+}
+
 
 static void setKeepoutSettingsToZone( ZONE_CONTAINER* aZone, LAYER_NUM aLayer )
 {
@@ -575,7 +629,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
                 pcbtxt->SetLayer( layer );
-                pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
+                wxString kicadText = interpret_text( t.text );
+                pcbtxt->SetText( FROM_UTF8( kicadText.c_str() ) );
                 pcbtxt->SetTextPos( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
 
                 double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
