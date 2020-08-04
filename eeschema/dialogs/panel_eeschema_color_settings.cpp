@@ -225,6 +225,8 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
     m_page       = new PAGE_INFO( PAGE_INFO::Custom );
     m_titleBlock = new TITLE_BLOCK;
+    m_titleBlock->SetTitle( _( "Color Preview" ) );
+    m_titleBlock->SetDate( wxDateTime::Now().FormatDate() );
 
     m_page->SetHeightMils( 5000 );
     m_page->SetWidthMils( 6000 );
@@ -380,6 +382,16 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         part->AddDrawItem( pin );
     }
+
+    auto s = new SCH_SHEET( nullptr, wxPoint( Mils2iu( 4000 ), Mils2iu( 1300 ) ) );
+    s->SetSize( wxSize( Mils2iu( 800 ), Mils2iu( 1300 ) ) );
+    s->GetFields().at( SHEETNAME ).SetText( wxT( "SHEET" ) );
+    s->GetFields().at( SHEETFILENAME ).SetText( _( "/path/to/sheet" ) );
+    s->AutoplaceFields( nullptr, false );
+    addItem( s );
+
+    auto sp = new SCH_SHEET_PIN( s, wxPoint( Mils2iu( 4500 ), Mils2iu( 1500 ) ), wxT( "SHEET PIN" ) );
+    addItem( sp );
 
     zoomFitPreview();
 }
