@@ -159,8 +159,8 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     }
 
     std::atomic<size_t> nextItem( 0 );
-    size_t              parallelThreadCount =
-            std::min<size_t>( std::thread::hardware_concurrency(), aZones.size() );
+    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+                                                   aZones.size() );
     std::vector<std::future<size_t>> returns( parallelThreadCount );
 
     auto fill_lambda = [&] ( PROGRESS_REPORTER* aReporter ) -> size_t
@@ -184,7 +184,12 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             zone->SetIsFilled( true );
 
             if( m_progressReporter )
+            {
                 m_progressReporter->AdvanceProgress();
+
+                if( m_progressReporter->IsCancelled() )
+                    break;
+            }
 
             num++;
         }
@@ -206,7 +211,12 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             do
             {
                 if( m_progressReporter )
+                {
                     m_progressReporter->KeepRefreshing();
+
+                    if( m_progressReporter->IsCancelled() )
+                        break;
+                }
 
                 status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
             } while( status != std::future_status::ready );
@@ -219,10 +229,28 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         m_progressReporter->AdvancePhase();
         m_progressReporter->Report( _( "Removing insulated copper islands..." ) );
         m_progressReporter->KeepRefreshing();
+
+        if( m_progressReporter->IsCancelled() )
+        {
+            if( m_commit )
+                m_commit->Revert();
+
+            connectivity->SetProgressReporter( nullptr );
+            return false;
+        }
     }
 
     connectivity->SetProgressReporter( m_progressReporter );
     connectivity->FindIsolatedCopperIslands( islandsList );
+
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+    {
+        if( m_commit )
+            m_commit->Revert();
+
+        connectivity->SetProgressReporter( nullptr );
+        return false;
+    }
 
     // Now remove insulated copper islands and islands outside the board edge
     bool outOfDate = false;
@@ -285,6 +313,15 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
             if( aCheck && zone.m_zone->GetHashValue( layer ) != poly.GetHash() )
                 outOfDate = true;
+
+            if( m_progressReporter && m_progressReporter->IsCancelled() )
+            {
+                if( m_commit )
+                    m_commit->Revert();
+
+                connectivity->SetProgressReporter( nullptr );
+                return false;
+            }
         }
     }
 
@@ -314,7 +351,6 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
 
-
     nextItem = 0;
 
     auto tri_lambda = [&] ( PROGRESS_REPORTER* aReporter ) -> size_t
@@ -327,7 +363,12 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             num++;
 
             if( m_progressReporter )
+            {
                 m_progressReporter->AdvanceProgress();
+
+                if( m_progressReporter->IsCancelled() )
+                    break;
+            }
         }
 
         return num;
@@ -347,7 +388,12 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             do
             {
                 if( m_progressReporter )
+                {
                     m_progressReporter->KeepRefreshing();
+
+                    if( m_progressReporter->IsCancelled() )
+                        break;
+                }
 
                 status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
             } while( status != std::future_status::ready );
@@ -359,6 +405,15 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         m_progressReporter->AdvancePhase();
         m_progressReporter->Report( _( "Committing changes..." ) );
         m_progressReporter->KeepRefreshing();
+
+        if( m_progressReporter->IsCancelled() )
+        {
+            if( m_commit )
+                m_commit->Revert();
+
+            connectivity->SetProgressReporter( nullptr );
+            return false;
+        }
     }
 
     connectivity->SetProgressReporter( nullptr );
@@ -751,17 +806,29 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
     if( s_DumpZonesWhenFilling )
         dumper->BeginGroup( "clipper-zone" );
 
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return;
+
     knockoutThermalReliefs( aZone, aLayer, aRawPolys );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "solid-areas-minus-thermal-reliefs" );
+
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return;
 
     buildCopperItemClearances( aZone, aLayer, clearanceHoles );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "clearance holes" );
 
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return;
+
     buildThermalSpokes( aZone, aLayer, thermalSpokes );
+
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return;
 
     // Create a temporary zone that we can hit-test spoke-ends against.  It's only temporary
     // because the "real" subtract-clearance-holes has to be done after the spokes are added.
@@ -776,9 +843,13 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
         testAreas.Inflate( half_min_width - epsilon, numSegs, intermediatecornerStrategy );
     }
 
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return;
+
     // Spoke-end-testing is hugely expensive so we generate cached bounding-boxes to speed
     // things up a bit.
     testAreas.BuildBBoxCaches();
+    int interval = 0;
 
     for( const SHAPE_LINE_CHAIN& spoke : thermalSpokes )
     {
@@ -789,6 +860,14 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
         {
             aRawPolys.AddOutline( spoke );
             continue;
+        }
+
+        if( interval++ > 400 )
+        {
+            if( m_progressReporter && m_progressReporter->IsCancelled() )
+                return;
+
+            interval = 0;
         }
 
         // Hit-test against other spokes
@@ -802,6 +881,9 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
         }
     }
 
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return;
+
     // Ensure previous changes (adding thermal stubs) do not add
     // filled areas outside the zone boundary
     aRawPolys.BooleanIntersection( aSmoothedOutline, SHAPE_POLY_SET::PM_FAST );
@@ -809,6 +891,9 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "solid-areas-with-thermal-spokes" );
+
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return;
 
     aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
     // Prune features that don't meet minimum-width criteria
@@ -818,12 +903,18 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "solid-areas-before-hatching" );
 
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return;
+
     // Now remove the non filled areas due to the hatch pattern
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
         addHatchFillTypeOnZone( aZone, aLayer, aRawPolys );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "solid-areas-after-hatching" );
+
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return;
 
     // Re-inflate after pruning of areas that don't meet minimum-width criteria
     if( aZone->GetFilledPolysUseThickness() )
@@ -874,10 +965,13 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
     if ( !aZone->BuildSmoothedPoly( smoothedPoly, &colinearCorners ) )
         return false;
 
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return false;
+
     if( aZone->IsOnCopperLayer() )
     {
-        computeRawFilledArea(
-                aZone, aLayer, smoothedPoly, &colinearCorners, aRawPolys, aFinalPolys );
+        computeRawFilledArea( aZone, aLayer, smoothedPoly, &colinearCorners, aRawPolys,
+                              aFinalPolys );
     }
     else
     {

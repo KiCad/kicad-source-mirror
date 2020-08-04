@@ -30,7 +30,8 @@ PROGRESS_REPORTER::PROGRESS_REPORTER( int aNumPhases ) :
     m_phase( 0 ),
     m_numPhases( aNumPhases ),
     m_progress( 0 ),
-    m_maxProgress( 1 )
+    m_maxProgress( 1 ),
+    m_cancelled( false )
 {
 }
 
@@ -90,7 +91,10 @@ bool PROGRESS_REPORTER::KeepRefreshing( bool aWait )
         while( m_progress < m_maxProgress && m_maxProgress > 0 )
         {
             if( !updateUI() )
+            {
+                m_cancelled.store( true );
                 return false;
+            }
 
             wxMilliSleep( 20 );
         }
@@ -98,7 +102,13 @@ bool PROGRESS_REPORTER::KeepRefreshing( bool aWait )
     }
     else
     {
-        return updateUI();
+        if( !updateUI() )
+        {
+            m_cancelled.store( true );
+            return false;
+        }
+
+        return true;
     }
 }
 

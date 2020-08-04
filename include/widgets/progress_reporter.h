@@ -92,6 +92,7 @@ class PROGRESS_REPORTER
          */
         virtual void SetTitle( const wxString& aTitle ) {}
 
+        bool IsCancelled() const { return m_cancelled.load(); }
 
     protected:
 
@@ -105,6 +106,7 @@ class PROGRESS_REPORTER
         std::atomic_int    m_numPhases;
         std::atomic_int    m_progress;
         std::atomic_int    m_maxProgress;
+        std::atomic_bool   m_cancelled;
 };
 
 
