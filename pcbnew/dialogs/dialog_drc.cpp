@@ -513,7 +513,7 @@ void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
     // Clear current selection list to avoid selection of deleted items
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_markerTreeModel->DeleteItems( false, true, aIncludeExclusions );
+    m_markerTreeModel->DeleteItems( false, aIncludeExclusions, true );
 }
 
 
@@ -593,7 +593,8 @@ void DIALOG_DRC::OnDeleteOneClick( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
 {
-    bool includeExclusions = false;
+    static bool s_includeExclusions = false;
+
     int  numExcluded = 0;
 
     if( m_markersProvider )
@@ -610,17 +611,17 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
         wxRichMessageDialog dlg( this, _( "Do you wish to delete excluded markers as well?" ),
                                  _( "Delete All Markers" ),
                                  wxOK | wxCANCEL | wxCENTER | wxICON_QUESTION );
-        dlg.ShowCheckBox( _( "Delete exclusions" ) );
+        dlg.ShowCheckBox( _( "Delete exclusions" ), s_includeExclusions );
 
         int ret = dlg.ShowModal();
 
         if( ret == wxID_CANCEL )
             return;
-        else if( dlg.IsCheckBoxChecked() )
-            includeExclusions = true;
+        else
+            s_includeExclusions = dlg.IsCheckBoxChecked();
     }
 
-    deleteAllMarkers( includeExclusions );
+    deleteAllMarkers( s_includeExclusions );
 
     refreshBoardEditor();
     updateDisplayedCounts();
