@@ -62,9 +62,10 @@ void PCB_VIEW::Add( KIGFX::VIEW_ITEM* aItem, int aDrawPriority )
     if( item->Type() == PCB_MODULE_T )
     {
         auto mod = static_cast<MODULE*>( item );
-        mod->RunOnChildren([this] ( BOARD_ITEM* aModItem ) {
-                VIEW::Add( aModItem );
-            } );
+        mod->RunOnChildren( [this] ( BOARD_ITEM* aModItem )
+                            {
+                                VIEW::Add( aModItem );
+                            } );
     }
 
     VIEW::Add( item, aDrawPriority );
