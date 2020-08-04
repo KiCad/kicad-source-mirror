@@ -38,26 +38,21 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
           m_page( nullptr ),
           m_titleBlock( nullptr )
 {
-     // Currently this only applies to eeschema
-    m_optOverrideColors->Hide();
-
     m_colorNamespace = "board";
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
+    mgr.ReloadColorSettings();
+
     PCBNEW_SETTINGS* app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
     COLOR_SETTINGS*  current      = mgr.GetColorSettings( app_settings->m_ColorTheme );
 
-    // Store the current settings before reloading below
-    current->Store();
-    mgr.SaveColorSettings( current, "board" );
+    createThemeList( app_settings->m_ColorTheme );
 
-    m_optOverrideColors->SetValue( current->GetOverrideSchItemColors() );
+    // Currently this only applies to eeschema
+    m_optOverrideColors->Hide();
 
     m_currentSettings = new COLOR_SETTINGS( *current );
-
-    mgr.ReloadColorSettings();
-    createThemeList( app_settings->m_ColorTheme );
 
     for( int id = GAL_LAYER_ID_START; id < GAL_LAYER_ID_BITMASK_END; id++ )
     {
@@ -91,8 +86,6 @@ PANEL_PCBNEW_COLOR_SETTINGS::~PANEL_PCBNEW_COLOR_SETTINGS()
 
 bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    m_currentSettings->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
-
     if( !saveCurrentTheme( true ) )
         return false;
 
@@ -116,9 +109,7 @@ bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataToWindow()
 
 void PANEL_PCBNEW_COLOR_SETTINGS::createSwatches()
 {
-    std::vector<int> layers( m_validLayers );
-
-    std::sort( layers.begin(), layers.end(),
+    std::sort( m_validLayers.begin(), m_validLayers.end(),
                []( int a, int b )
                {
                    return LayerName( a ) < LayerName( b );
@@ -126,11 +117,11 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createSwatches()
 
     // Don't sort board layers by name
     for( int i = PCBNEW_LAYER_ID_START; i < PCB_LAYER_ID_COUNT; ++i )
-        layers.insert( layers.begin() + i, i );
+        m_validLayers.insert( m_validLayers.begin() + i, i );
 
     BOARD* board = m_frame->GetBoard();
 
-    for( int layer : layers )
+    for( int layer : m_validLayers )
     {
         wxString name = LayerName( layer );
 
