@@ -705,6 +705,19 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             EDA_RECT padBBox = aPad->GetBoundingBox();
             VECTOR2D position = padBBox.Centre();
             VECTOR2D padsize = VECTOR2D( padBBox.GetSize() );
+
+            if( aPad->GetShape() != PAD_SHAPE_CUSTOM )
+            {
+                // Don't allow a 45º rotation to bloat a pad's bounding box unnecessarily
+                double limit = std::min( aPad->GetSize().x, aPad->GetSize().y ) * 1.1;
+
+                if( padsize.x > limit && padsize.y > limit )
+                {
+                    padsize.x = limit;
+                    padsize.y = limit;
+                }
+            }
+
             double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
             double size = padsize.y;
 
