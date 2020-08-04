@@ -59,6 +59,8 @@ public:
      */
     virtual void DeleteItem( int aIndex, bool aDeep ) = 0;
 
+    virtual void DeleteAllItems( bool aIncludeExclusions, bool aDeep ) = 0;
+
     virtual ~RC_ITEMS_PROVIDER() { }
 };
 
@@ -272,7 +274,12 @@ public:
     void ValueChanged( RC_TREE_NODE* aNode );
 
     void DeleteCurrentItem( bool aDeep );
-    void DeleteItems( bool aCurrent, bool aWarningsAndErrors, bool aExclusions, bool aDeep );
+
+    /**
+     * Deletes the current item or all items.  If all, \a aIncludeExclusions determines
+     * whether or not exclusions are also deleted.
+     */
+    void DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, bool aDeep );
 
 private:
     void rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities );

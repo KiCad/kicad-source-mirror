@@ -387,17 +387,16 @@ void RC_TREE_MODEL::ValueChanged( RC_TREE_NODE* aNode )
 
 void RC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
 {
-    DeleteItems( true, false, false, aDeep );
+    DeleteItems( true, false, aDeep );
 }
 
 
-void RC_TREE_MODEL::DeleteItems( bool aCurrent, bool aWarningsAndErrors, bool aExclusions,
-                                 bool aDeep )
+void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, bool aDeep )
 {
     RC_TREE_NODE*  current_node = ToNode( m_view->GetCurrentItem() );
     const RC_ITEM* current_item = current_node ? current_node->m_RcItem : nullptr;
 
-    if( !current_item && !aWarningsAndErrors && !aExclusions )
+    if( aCurrentOnly && !current_item )
     {
         wxBell();
         return;
@@ -407,33 +406,42 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrent, bool aWarningsAndErrors, bool aE
     {
         RC_ITEM*     rcItem = m_rcItemsProvider->GetItem( i );
         MARKER_BASE* marker = rcItem->GetParent();
+        bool         excluded = marker ? marker->IsExcluded() : false;
 
-        if( ( aCurrent && rcItem == current_item )
-            || ( aWarningsAndErrors && marker && !marker->IsExcluded() )
-            || ( aExclusions && marker && marker->IsExcluded() ) )
+        if( aCurrentOnly && rcItem != current_item )
+            continue;
+
+        if( excluded && !aIncludeExclusions )
+            continue;
+
+        wxDataViewItem      markerItem = ToItem( m_tree[i] );
+        wxDataViewItemArray childItems;
+        wxDataViewItem      parentItem = ToItem( m_tree[i]->m_Parent );
+
+        for( RC_TREE_NODE* child : m_tree[i]->m_Children )
         {
-            wxDataViewItem      markerItem = ToItem( m_tree[i] );
-            wxDataViewItemArray childItems;
-            wxDataViewItem      parentItem = ToItem( m_tree[i]->m_Parent );
-
-            for( RC_TREE_NODE* child : m_tree[i]->m_Children )
-            {
-                childItems.push_back( ToItem( child ) );
-                delete child;
-            }
-
-            m_tree[i]->m_Children.clear();
-            ItemsDeleted( markerItem, childItems );
-
-            delete m_tree[i];
-            m_tree.erase( m_tree.begin() + i );
-            ItemDeleted( parentItem, markerItem );
-
-            m_rcItemsProvider->DeleteItem( i, aDeep );
-
-            if( !aWarningsAndErrors && !aExclusions )
-                break;
+            childItems.push_back( ToItem( child ) );
+            delete child;
         }
+
+        m_tree[i]->m_Children.clear();
+        ItemsDeleted( markerItem, childItems );
+
+        delete m_tree[i];
+        m_tree.erase( m_tree.begin() + i );
+        ItemDeleted( parentItem, markerItem );
+
+        // Only deep delete the current item here; others will be done through the
+        // DeleteAllItems() call below, which is more efficient.
+        m_rcItemsProvider->DeleteItem( i, aDeep && aCurrentOnly );
+
+        if( aCurrentOnly )
+            break;
+    }
+
+    if( !aCurrentOnly )
+    {
+        m_rcItemsProvider->DeleteAllItems( aIncludeExclusions, aDeep );
     }
 }
 

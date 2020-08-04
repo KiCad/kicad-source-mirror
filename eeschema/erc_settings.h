@@ -190,6 +190,8 @@ public:
     ERC_ITEM* GetItem( int aIndex ) override;
 
     void DeleteItem( int aIndex, bool aDeep ) override;
+
+    void DeleteAllItems( bool aIncludeExclusions, bool aDeep ) override;
 };
 
 

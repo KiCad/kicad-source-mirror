@@ -367,6 +367,8 @@ public:
      */
     void DeleteMARKERs();
 
+    void DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions );
+
     /**
      * Function DeleteZONEOutlines
      * deletes ALL zone outlines from the board.

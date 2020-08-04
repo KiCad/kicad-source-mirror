@@ -513,7 +513,7 @@ void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
     // Clear current selection list to avoid selection of deleted items
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_markerTreeModel->DeleteItems( false, true, aIncludeExclusions, true );
+    m_markerTreeModel->DeleteItems( false, true, aIncludeExclusions );
 }
 
 

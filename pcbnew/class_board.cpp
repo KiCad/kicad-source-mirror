@@ -715,6 +715,28 @@ void BOARD::DeleteMARKERs()
 }
 
 
+void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
+{
+    // Deleting lots of items from a vector can be very slow.  Copy remaining items instead.
+    MARKERS remaining;
+
+    for( MARKER_PCB* marker : m_markers )
+    {
+        if( ( marker->IsExcluded() && aExclusions )
+                || ( !marker->IsExcluded() && aWarningsAndErrors ) )
+        {
+            delete marker;
+        }
+        else
+        {
+            remaining.push_back( marker );
+        }
+    }
+
+    m_markers = remaining;
+}
+
+
 void BOARD::DeleteZONEOutlines()
 {
     // the vector does not know how to delete the ZONE Outlines, it holds pointers

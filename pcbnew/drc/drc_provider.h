@@ -159,6 +159,14 @@ public:
         if( aDeep )
             m_board->Delete( marker );
     }
+
+    void DeleteAllItems( bool aIncludeExclusions, bool aDeep ) override
+    {
+        // Filtered list was already handled through DeleteItem() by the tree control
+
+        if( aDeep )
+            m_board->DeleteMARKERs( true, aIncludeExclusions );
+    }
 };
 
 
@@ -245,6 +253,19 @@ public:
                 }
             }
         }
+    }
+
+    void DeleteAllItems( bool aIncludeExclusions, bool aDeep ) override
+    {
+        if( aDeep )
+        {
+            for( DRC_ITEM* item : *m_sourceVector )
+                delete item;
+
+            m_sourceVector->clear();
+        }
+
+        m_filteredVector.clear();   // no ownership of DRC_ITEM pointers
     }
 };
 

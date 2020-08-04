@@ -106,6 +106,17 @@ public:
             m_sourceVector->erase( m_sourceVector->begin() + aIndex );
         }
     }
+
+    void DeleteAllItems( bool aIncludeExclusions, bool aDeep ) override
+    {
+        if( aDeep )
+        {
+            for( CLEANUP_ITEM* item : *m_sourceVector )
+                delete item;
+
+            m_sourceVector->clear();
+        }
+    }
 };
 
 
