@@ -119,11 +119,15 @@ static wxString interpret_text( const wxString& aText )
 {
     wxString text;
     bool sectionOpen = false;
-    for ( wxString::size_type i = 0; i < aText.size(); i++ ) {
+
+    for ( wxString::size_type i = 0; i < aText.size(); i++ )
+    {
         // Interpret escaped characters
-        if ( aText[ i ] == '\\' ) {
+        if ( aText[ i ] == '\\' )
+        {
             if ( i + 1 != aText.size() )
                 text.Append( aText[ i + 1 ] );
+
             i++;
             continue;
         }
@@ -136,8 +140,10 @@ static wxString interpret_text( const wxString& aText )
             continue;
         }
 
-        if ( aText[ i ] == '!' ) {
-            if ( sectionOpen ) {
+        if ( aText[ i ] == '!' )
+        {
+            if ( sectionOpen )
+            {
                 text.Append( '~' );
                 sectionOpen = false;
                 continue;
@@ -165,6 +171,7 @@ static wxString interpret_text( const wxString& aText )
 
         text.Append( aText[ i ] );
     }
+
     return text;
 }
 
@@ -948,9 +955,7 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
         // add the templating MODULE to the MODULE template factory "m_templates"
         std::pair<MODULE_ITER, bool> r = m_templates.insert( {key, m} );
 
-        if( !r.second
-            // && !( m_props && m_props->Value( "ignore_duplicates" ) )
-            )
+        if( !r.second /* && !( m_props && m_props->Value( "ignore_duplicates" ) ) */ )
         {
             wxString lib = aLibName ? *aLibName : m_lib_path;
             const wxString& pkg = pack_ref;
@@ -1242,8 +1247,9 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     EPOLYGON p( aPolyNode );
     PCB_LAYER_ID layer = kicad_layer( p.layer );
     ZONE_CONTAINER* zone = nullptr;
-    bool keepout          = ( p.layer == EAGLE_LAYER::TRESTRICT || p.layer == EAGLE_LAYER::BRESTRICT
-                     || p.layer == EAGLE_LAYER::VRESTRICT );
+    bool keepout = ( p.layer == EAGLE_LAYER::TRESTRICT
+                  || p.layer == EAGLE_LAYER::BRESTRICT
+                  || p.layer == EAGLE_LAYER::VRESTRICT );
 
     if( !IsCopperLayer( layer ) && !keepout )
         return nullptr;
@@ -1971,15 +1977,15 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
 
             for( double a = end_angle + angle; fabs( a - end_angle ) > fabs( delta ); a -= delta )
             {
-                pts.push_back(
-                        wxPoint( KiROUND( radius * cos( a ) ),
-                                 KiROUND( radius * sin( a ) ) ) + center );
+                pts.push_back( wxPoint( KiROUND( radius * cos( a ) ),
+                                        KiROUND( radius * sin( a ) ) ) + center );
             }
         }
     }
 
-    if( p.layer == EAGLE_LAYER::TRESTRICT || p.layer == EAGLE_LAYER::BRESTRICT
-            || p.layer == EAGLE_LAYER::VRESTRICT )
+    if( p.layer == EAGLE_LAYER::TRESTRICT
+     || p.layer == EAGLE_LAYER::BRESTRICT
+     || p.layer == EAGLE_LAYER::VRESTRICT )
     {
         MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
         aModule->Add( zone, ADD_MODE::APPEND );
@@ -1990,8 +1996,8 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
         outline.SetClosed( true );
         zone->Outline()->AddOutline( outline );
 
-        zone->SetHatch(
-                ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+        zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(),
+                        true );
     }
     else
     {
@@ -2007,20 +2013,21 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
         dwg->SetStart0( *pts.begin() );
         dwg->SetEnd0( pts.back() );
         dwg->SetDrawCoord();
-        dwg->GetPolyShape().Inflate(
-                p.width.ToPcbUnits() / 2, 32, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
+        dwg->GetPolyShape().Inflate( p.width.ToPcbUnits() / 2, 32,
+                                     SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
     }
 }
 
 void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 {
-    ECIRCLE         e( aTree );
+    ECIRCLE e( aTree );
 
     int width  = e.width.ToPcbUnits();
     int radius = e.radius.ToPcbUnits();
 
-    if( e.layer == EAGLE_LAYER::TRESTRICT || e.layer == EAGLE_LAYER::BRESTRICT
-            || e.layer == EAGLE_LAYER::VRESTRICT )
+    if( e.layer == EAGLE_LAYER::TRESTRICT
+     || e.layer == EAGLE_LAYER::BRESTRICT
+     || e.layer == EAGLE_LAYER::VRESTRICT )
     {
         MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
         aModule->Add( zone, ADD_MODE::APPEND );
@@ -2049,8 +2056,8 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
             }
         }
 
-        zone->SetHatch(
-                ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+        zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(),
+                        true );
     }
     else
     {
@@ -2299,7 +2306,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         // If we are curving, we need at least 2 segments otherwise
                         // delta_angle == angle
                         int segments = std::max( 2, GetArcToSegmentCount( KiROUND( radius ),
-                                ARC_HIGH_DEF, *w.curve ) - 1 );
+                                                                          ARC_HIGH_DEF,
+                                                                          *w.curve ) - 1 );
                         delta_angle = angle / segments;
                     }
 
