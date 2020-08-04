@@ -249,6 +249,13 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
     if( !theRouter )
         return false;
 
+    // don't allow switch from moving to dragging
+    if( m_dragging )
+    {
+        wxBell();
+        return false;
+    }
+
 	// make sure we don't accidentally invoke inline routing mode while the router is already active!
     if( theRouter->IsToolActive() )
         return false;

@@ -1483,6 +1483,27 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             m_router->FixRoute( m_endSnapPoint, m_endItem );
             break;
         }
+        else if( evt->Category() == TC_COMMAND )
+        {
+            // disallow many editing commands
+            if( evt->IsAction( &PCB_ACTIONS::rotateCw )
+                || evt->IsAction( &PCB_ACTIONS::rotateCcw )
+                || evt->IsAction( &PCB_ACTIONS::flip )
+                || evt->IsAction( &PCB_ACTIONS::mirror )
+                || evt->IsAction( &ACTIONS::cut )
+                || evt->IsAction( &ACTIONS::copy )
+                || evt->IsAction( &ACTIONS::paste )
+                || evt->IsAction( &ACTIONS::pasteSpecial )
+                || evt->IsAction( &ACTIONS::duplicate )
+                || evt->IsAction( &PCB_ACTIONS::duplicateIncrement )
+                || evt->IsAction( &PCB_ACTIONS::move )
+                || evt->IsAction( &PCB_ACTIONS::moveWithReference )
+                || evt->IsAction( &PCB_ACTIONS::moveExact ) )
+            {
+                wxBell();
+            }
+        }
+
     }
 
     if( module )

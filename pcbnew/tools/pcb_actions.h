@@ -114,9 +114,6 @@ public:
     /// Activation of the exact move tool
     static TOOL_ACTION moveExact;
 
-    /// Activation of the duplication tool
-    static TOOL_ACTION duplicate;
-
     /// Activation of the duplication tool with incrementing (e.g. pad number)
     static TOOL_ACTION duplicateIncrement;
 
