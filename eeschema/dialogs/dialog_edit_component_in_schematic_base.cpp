@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -210,7 +210,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Edit Spice Model..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBottom->Add( m_spiceFieldsButton, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+	bSizerBottom->Add( m_spiceFieldsButton, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 10 );
 
 
 	bSizerBottom->Add( 10, 0, 1, wxEXPAND, 5 );
