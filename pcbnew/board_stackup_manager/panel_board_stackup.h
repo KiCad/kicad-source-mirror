@@ -211,10 +211,11 @@ private:
      */
     void disconnectEvents();
 
-    BOARD_STACKUP   m_stackup;
+private:
+    BOARD_STACKUP       m_stackup;
     PANEL_SETUP_LAYERS* m_panelLayers;      // The associated PANEL_SETUP_LAYERS, to know
                                             // enabled layers and copper layer names
-    LSET            m_enabledLayers;        // the current enabled layers in this panel
+    LSET                m_enabledLayers;    // the current enabled layers in this panel
                                             // restricted to allowed layers in stackup.
                                             // when do not match the enabled layers
                                             // in PANEL_SETUP_LAYERS the stackup is not up to date
@@ -226,9 +227,11 @@ private:
     DIELECTRIC_SUBSTRATE_LIST m_silkscreenMatList;
     // List of items in m_fgGridSizer
     std::vector<BOARD_STACKUP_ROW_UI_ITEM> m_rowUiItemsList;
+
+    PAGED_DIALOG*   m_parentDialog;
     BOARD*          m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;
-    EDA_UNITS                              m_units;
+    EDA_UNITS       m_units;
     PCB_EDIT_FRAME* m_frame;
     wxSize          m_numericTextCtrlSize;  // Best size to enter values with units in wxTextCtrl
     wxSize          m_numericFieldsSize;    // Best size to enter double values in wxTextCtrl

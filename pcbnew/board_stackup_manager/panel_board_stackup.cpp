@@ -70,6 +70,7 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
         m_solderMaskMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_SOLDERMASK ),
         m_silkscreenMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_SILKSCREEN )
 {
+    m_parentDialog = aParent;
     m_frame = aFrame;
     m_panelLayers = aPanelLayers;
     m_board = m_frame->GetBoard();
@@ -878,7 +879,8 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 
     if( m_enabledLayers != layersList )
     {
-        wxMessageBox( _( "Stackup not up to date. Verify it" ) );
+        m_parentDialog->SetError( _( "Stackup layers don't match board layers" ), this,
+                                  m_thicknessCtrl );
         return false;
     }
 
