@@ -180,7 +180,7 @@ void PANEL_COLOR_SETTINGS::createThemeList( const wxString& aCurrent )
     {
         int pos = m_cbTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
 
-        if( settings->GetFilename() == aCurrent )
+        if( settings->GetName() == aCurrent )
             m_cbTheme->SetSelection( pos );
 
         m_cbTheme->GetTextExtent( settings->GetName(), &width, &height );
