@@ -1066,8 +1066,7 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
             // Save the modified root symbol.
             try
             {
-                aPlugin->SaveSymbol( m_libName, new LIB_PART( *part ),
-                                     aBuffer ? &properties : nullptr );
+                aPlugin->SaveSymbol( m_libName, parentSymbol, aBuffer ? &properties : nullptr );
             }
             catch( const IO_ERROR& ioe )
             {
