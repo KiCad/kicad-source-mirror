@@ -272,9 +272,17 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
 
 bool EDIT_TOOL::isInteractiveDragEnabled() const
 {
-    auto theRouter = static_cast<ROUTER_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
+    ROUTER_TOOL* router = m_toolMgr->GetTool<ROUTER_TOOL>();
 
-    return theRouter ? theRouter->Router()->Settings().InlineDragEnabled() : false;
+    return router && router->Router()->Settings().InlineDragEnabled();
+}
+
+
+bool EDIT_TOOL::isRouterActive() const
+{
+    ROUTER_TOOL* router = m_toolMgr->GetTool<ROUTER_TOOL>();
+
+    return router && router->IsToolActive();
 }
 
 
@@ -293,12 +301,24 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 {
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
     return doMoveSelection( aEvent );
 }
 
 
 int EDIT_TOOL::MoveWithReference( const TOOL_EVENT& aEvent )
 {
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
     return doMoveSelection( aEvent, true );
 }
 
@@ -701,6 +721,12 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     auto& selection = m_selectionTool->RequestSelection(
@@ -786,6 +812,12 @@ static void mirrorPadX( D_PAD& aPad, const wxPoint& aMirrorPoint )
 
 int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             {
@@ -877,6 +909,12 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 {
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             {
@@ -928,6 +966,12 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
     ROUTER_TOOL* routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
 
     // Do not delete items while actively routing.
@@ -1117,6 +1161,12 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 {
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             {
@@ -1196,6 +1246,12 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
     bool increment = aEvent.IsAction( &PCB_ACTIONS::duplicateIncrement );
 
     // Be sure that there is at least one item that we can modify
@@ -1310,6 +1366,12 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 {
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             {

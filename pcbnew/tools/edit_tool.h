@@ -183,6 +183,7 @@ private:
 
     bool invokeInlineRouter( int aDragMode );
     bool isInteractiveDragEnabled() const;
+    bool isRouterActive() const;
 
     int doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference = false );
 
