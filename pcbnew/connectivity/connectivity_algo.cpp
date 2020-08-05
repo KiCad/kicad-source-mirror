@@ -617,6 +617,14 @@ void CN_CONNECTIVITY_ALGO::MarkNetAsDirty( int aNet )
 }
 
 
+// Via contact with zones (especially if they're hatched) is a bit of a special case.  Anchor
+// contact (the center of the hole) doesn't really tell the whole story, but we don't want to
+// go to cardinal points like we do with pads because we don't use thermals for vias.
+//
+// Instead we use an accuracy which is set to slightly less than the via width (less because
+// single-point contact isn't electrically sufficient.
+constexpr static double VIA_CONTACT_MINIMUM = 0.04;
+
 void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
 {
     if( aZone->Net() != aItem->Net() && !aItem->CanChangeNet() )
@@ -625,11 +633,18 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
     if( !aZone->BBox().Intersects( aItem->BBox() ) )
         return;
 
-    auto zoneItem = static_cast<CN_ZONE*> ( aZone );
+    CN_ZONE* zoneItem = static_cast<CN_ZONE*> ( aZone );
+    int      accuracy = 0;
+
+    if( aItem->Valid() && aItem->Parent()->Type() == PCB_VIA_T )
+    {
+        int viaRadius = static_cast<VIA*>( aItem->Parent() )->GetWidth() / 2;
+        accuracy = KiROUND( viaRadius * ( 1.0 - VIA_CONTACT_MINIMUM ) );
+    }
 
     for( int i = 0; i < aItem->AnchorCount(); ++i )
     {
-        if( zoneItem->ContainsPoint( aItem->GetAnchor( i ) ) )
+        if( zoneItem->ContainsPoint( aItem->GetAnchor( i ), accuracy ) )
         {
             zoneItem->Connect( aItem );
             aItem->Connect( zoneItem );
@@ -661,7 +676,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
 
     for( int i = 0; i < outline.PointCount(); i++ )
     {
-        if( aZoneB->ContainsPoint( outline.CPoint( i ) ) )
+        if( aZoneB->ContainsPoint( outline.CPoint( i ), 0 ) )
         {
             aZoneA->Connect( aZoneB );
             aZoneB->Connect( aZoneA );
@@ -674,7 +689,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
 
     for( int i = 0; i < outline2.PointCount(); i++ )
     {
-        if( aZoneA->ContainsPoint( outline2.CPoint( i ) ) )
+        if( aZoneA->ContainsPoint( outline2.CPoint( i ), 0 ) )
         {
             aZoneA->Connect( aZoneB );
             aZoneB->Connect( aZoneA );
