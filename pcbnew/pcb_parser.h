@@ -78,6 +78,7 @@ class PCB_PARSER : public PCB_LEXER
     std::vector<int>    m_netCodes;         ///< net codes mapping for boards being loaded
     bool                m_tooRecent;        ///< true if version parses as later than supported
     int                 m_requiredVersion;  ///< set to the KiCad format version this board requires
+    bool                m_resetKIIDs;       ///< reading into an existing board; reset UUIDs
 
     bool                m_showLegacyZoneWarning;
 
@@ -319,7 +320,8 @@ public:
 
     PCB_PARSER( LINE_READER* aReader = NULL ) :
         PCB_LEXER( aReader ),
-        m_board( 0 )
+        m_board( 0 ),
+        m_resetKIIDs( false )
     {
         init();
     }
@@ -343,6 +345,7 @@ public:
     {
         init();
         m_board = aBoard;
+        m_resetKIIDs = true;
     }
 
     BOARD_ITEM* Parse();

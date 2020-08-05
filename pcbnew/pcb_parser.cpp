@@ -2165,7 +2165,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( segment->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( segment->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             break;
 
         case T_status:
@@ -2245,7 +2245,7 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( text->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( text->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -2297,7 +2297,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( dimension->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( dimension->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -2516,7 +2516,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( module->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( module->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -2811,7 +2811,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( text->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( text->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -3001,7 +3001,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( segment->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( segment->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             break;
 
         case T_status:
@@ -3465,7 +3465,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( pad->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( pad->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -3604,7 +3604,7 @@ ARC* PCB_PARSER::parseARC()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( arc->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( arc->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             break;
 
         case T_status:
@@ -3671,7 +3671,7 @@ TRACK* PCB_PARSER::parseTRACK()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( track->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( track->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             break;
 
         case T_status:
@@ -3755,7 +3755,7 @@ VIA* PCB_PARSER::parseVIA()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( via->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( via->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -3844,7 +3844,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( zone->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( zone->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -4374,7 +4374,7 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( target->m_Uuid ) = KIID( CurStr() );
+            const_cast<KIID&>( target->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
             NeedRIGHT();
             break;
 
