@@ -114,7 +114,8 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
     if( m_progressReporter )
     {
-        m_progressReporter->Report( aCheck ? _( "Checking zone fills..." ) : _( "Building zone fills..." ) );
+        m_progressReporter->Report( aCheck ? _( "Checking zone fills..." )
+                                           : _( "Building zone fills..." ) );
         m_progressReporter->SetMaxProgress( aZones.size() );
     }
 
@@ -132,7 +133,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         }
     }
 
-    for( auto zone : aZones )
+    for( ZONE_CONTAINER* zone : aZones )
     {
         // Keepout zones are not filled
         if( zone->GetIsKeepout() )
@@ -158,44 +159,55 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         zone->UnFill();
     }
 
+    auto cleanupAfterCancel =
+            [&]()
+            {
+                if( m_commit )
+                    m_commit->Revert();
+
+                for( ZONE_CONTAINER* zone : aZones )
+                    zone->UnFill();
+            };
+
     std::atomic<size_t> nextItem( 0 );
     size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
                                                    aZones.size() );
     std::vector<std::future<size_t>> returns( parallelThreadCount );
 
-    auto fill_lambda = [&] ( PROGRESS_REPORTER* aReporter ) -> size_t
-    {
-        size_t num = 0;
-
-        for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
-        {
-            PCB_LAYER_ID    layer = toFill[i].second;
-            ZONE_CONTAINER* zone  = toFill[i].first;
-
-            zone->SetFilledPolysUseThickness( filledPolyWithOutline );
-
-            SHAPE_POLY_SET rawPolys, finalPolys;
-            fillSingleZone( zone, layer, rawPolys, finalPolys );
-
-            std::unique_lock<std::mutex> zoneLock( zone->GetLock() );
-
-            zone->SetRawPolysList( layer, rawPolys );
-            zone->SetFilledPolysList( layer, finalPolys );
-            zone->SetIsFilled( true );
-
-            if( m_progressReporter )
+    auto fill_lambda =
+            [&]( PROGRESS_REPORTER* aReporter ) -> size_t
             {
-                m_progressReporter->AdvanceProgress();
+                size_t num = 0;
 
-                if( m_progressReporter->IsCancelled() )
-                    break;
-            }
+                for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
+                {
+                    PCB_LAYER_ID    layer = toFill[i].second;
+                    ZONE_CONTAINER* zone  = toFill[i].first;
 
-            num++;
-        }
+                    zone->SetFilledPolysUseThickness( filledPolyWithOutline );
 
-        return num;
-    };
+                    SHAPE_POLY_SET rawPolys, finalPolys;
+                    fillSingleZone( zone, layer, rawPolys, finalPolys );
+
+                    std::unique_lock<std::mutex> zoneLock( zone->GetLock() );
+
+                    zone->SetRawPolysList( layer, rawPolys );
+                    zone->SetFilledPolysList( layer, finalPolys );
+                    zone->SetIsFilled( true );
+
+                    if( m_progressReporter )
+                    {
+                        m_progressReporter->AdvanceProgress();
+
+                        if( m_progressReporter->IsCancelled() )
+                            break;
+                    }
+
+                    num++;
+                }
+
+                return num;
+            };
 
     if( parallelThreadCount <= 1 )
         fill_lambda( m_progressReporter );
@@ -211,12 +223,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             do
             {
                 if( m_progressReporter )
-                {
                     m_progressReporter->KeepRefreshing();
-
-                    if( m_progressReporter->IsCancelled() )
-                        break;
-                }
 
                 status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
             } while( status != std::future_status::ready );
@@ -226,29 +233,24 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     // Now update the connectivity to check for copper islands
     if( m_progressReporter )
     {
+        if( m_progressReporter->IsCancelled() )
+        {
+            cleanupAfterCancel();
+            return false;
+        }
+
         m_progressReporter->AdvancePhase();
         m_progressReporter->Report( _( "Removing insulated copper islands..." ) );
         m_progressReporter->KeepRefreshing();
-
-        if( m_progressReporter->IsCancelled() )
-        {
-            if( m_commit )
-                m_commit->Revert();
-
-            connectivity->SetProgressReporter( nullptr );
-            return false;
-        }
     }
 
     connectivity->SetProgressReporter( m_progressReporter );
     connectivity->FindIsolatedCopperIslands( islandsList );
+    connectivity->SetProgressReporter( nullptr );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
     {
-        if( m_commit )
-            m_commit->Revert();
-
-        connectivity->SetProgressReporter( nullptr );
+        cleanupAfterCancel();
         return false;
     }
 
@@ -316,10 +318,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
             if( m_progressReporter && m_progressReporter->IsCancelled() )
             {
-                if( m_commit )
-                    m_commit->Revert();
-
-                connectivity->SetProgressReporter( nullptr );
+                cleanupAfterCancel();
                 return false;
             }
         }
@@ -336,10 +335,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
         if( dlg.ShowModal() == wxID_CANCEL )
         {
-            if( m_commit )
-                m_commit->Revert();
-
-            connectivity->SetProgressReporter( nullptr );
+            cleanupAfterCancel();
             return false;
         }
     }
@@ -353,26 +349,27 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
     nextItem = 0;
 
-    auto tri_lambda = [&] ( PROGRESS_REPORTER* aReporter ) -> size_t
-    {
-        size_t num = 0;
-
-        for( size_t i = nextItem++; i < islandsList.size(); i = nextItem++ )
-        {
-            islandsList[i].m_zone->CacheTriangulation();
-            num++;
-
-            if( m_progressReporter )
+    auto tri_lambda =
+            [&]( PROGRESS_REPORTER* aReporter ) -> size_t
             {
-                m_progressReporter->AdvanceProgress();
+                size_t num = 0;
 
-                if( m_progressReporter->IsCancelled() )
-                    break;
-            }
-        }
+                for( size_t i = nextItem++; i < islandsList.size(); i = nextItem++ )
+                {
+                    islandsList[i].m_zone->CacheTriangulation();
+                    num++;
 
-        return num;
-    };
+                    if( m_progressReporter )
+                    {
+                        m_progressReporter->AdvanceProgress();
+
+                        if( m_progressReporter->IsCancelled() )
+                            break;
+                    }
+                }
+
+                return num;
+            };
 
     if( parallelThreadCount <= 1 )
         tri_lambda( m_progressReporter );
@@ -402,18 +399,15 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
     if( m_progressReporter )
     {
+        if( m_progressReporter->IsCancelled() )
+        {
+            cleanupAfterCancel();
+            return false;
+        }
+
         m_progressReporter->AdvancePhase();
         m_progressReporter->Report( _( "Committing changes..." ) );
         m_progressReporter->KeepRefreshing();
-
-        if( m_progressReporter->IsCancelled() )
-        {
-            if( m_commit )
-                m_commit->Revert();
-
-            connectivity->SetProgressReporter( nullptr );
-            return false;
-        }
     }
 
     connectivity->SetProgressReporter( nullptr );
