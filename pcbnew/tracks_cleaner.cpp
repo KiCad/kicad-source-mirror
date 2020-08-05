@@ -322,6 +322,9 @@ void TRACKS_CLEANER::deleteTracksInPads()
 
     for( TRACK* track : m_brd->Tracks() )
     {
+        if( track->Type() == PCB_VIA_T )
+            continue;
+
         // Mark track if connected to pads
         for( D_PAD* pad : connectivity->GetConnectedPads( track ) )
         {
