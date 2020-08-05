@@ -182,6 +182,7 @@ private:
     void onAddDielectricLayer( wxCommandEvent& event ) override;
     void onRemoveDielectricLayer( wxCommandEvent& event ) override;
     void onRemoveDielUI( wxUpdateUIEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     /** Update the icons color (swatches in first grid column)
      * @param aRow is the row (index in m_rowUiItemsList) that manages the icon to update.
@@ -244,6 +245,9 @@ private:
     // when building the BOARD_STACKUP_ITEM list editor and connected to command events
     // Used to disconnect event handlers
     std::vector<wxControl*> m_controlItemsList;
+
+    bool            m_stackupMismatch;      // flags an error when the stackup was not updated
+                                            // to match changes made to the enabled layers
 };
 
 #endif      // #ifndef PANEL_SETUP_BOARD_STACKUP_H

@@ -40,6 +40,7 @@
 #include <wx/dataobj.h>
 #include "dialog_dielectric_list_manager.h"
 #include <wx/wupdlock.h>
+#include <wx/richmsgdlg.h>
 
 // Some wx widget ID to know what widget has fired a event:
 #define ID_INCREMENT 256    // space between 2 ID type. Bigger than the layer count max
@@ -78,6 +79,7 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     m_units = aFrame->GetUserUnits();
 
     m_enabledLayers = m_board->GetEnabledLayers() & BOARD_STACKUP::StackupAllowedBrdLayers();
+    m_stackupMismatch = false;
 
     // Calculates a good size for color swatches (icons) in this dialog
     wxClientDC dc( this );
@@ -872,15 +874,22 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreatedInitialStacku
 // Transfer current UI settings to m_stackup but not to the board
 bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 {
-    // First, verify the list of layers currently in stackup:
-    // if it does not mach the list of layers set in PANEL_SETUP_LAYERS
-    // prompt the user to update the stackup
+    // First, verify the list of layers currently in stackup: if it doesn't match the list
+    // of layers set in PANEL_SETUP_LAYERS prompt the user to update the stackup
     LSET layersList = m_panelLayers->GetUILayerMask() & BOARD_STACKUP::StackupAllowedBrdLayers();
 
     if( m_enabledLayers != layersList )
     {
-        m_parentDialog->SetError( _( "Stackup layers don't match board layers" ), this,
-                                  m_thicknessCtrl );
+        for( size_t i = 0; i < m_parentDialog->GetTreebook()->GetPageCount(); ++i )
+        {
+            if( m_parentDialog->GetTreebook()->GetPage( i ) == this )
+            {
+                m_parentDialog->GetTreebook()->SetSelection( i );
+                break;
+            }
+        }
+
+        m_stackupMismatch = true;
         return false;
     }
 
@@ -1395,28 +1404,15 @@ wxColor PANEL_SETUP_BOARD_STACKUP::getColorIconItem( int aRow )
 
     switch( st_item->GetType() )
     {
-    case BS_ITEM_TYPE_COPPER:
-        color = copperColor;
-        break;
+    case BS_ITEM_TYPE_COPPER:      color = copperColor;              break;
+    case BS_ITEM_TYPE_DIELECTRIC:  color = dielectricColor;          break;
+    case BS_ITEM_TYPE_SOLDERMASK:  color = GetSelectedColor( aRow ); break;
+    case BS_ITEM_TYPE_SILKSCREEN:  color = GetSelectedColor( aRow ); break;
+    case BS_ITEM_TYPE_SOLDERPASTE: color = pasteColor;               break;
 
-    case BS_ITEM_TYPE_DIELECTRIC:
-        color = dielectricColor;
-        break;
-
-    case BS_ITEM_TYPE_SOLDERMASK:
-        color = GetSelectedColor( aRow );
-        break;
-
-    case BS_ITEM_TYPE_SILKSCREEN:
-        color = GetSelectedColor( aRow );
-        break;
-
-    case BS_ITEM_TYPE_SOLDERPASTE:
-        color = pasteColor;
-        break;
-
-    case BS_ITEM_TYPE_UNDEFINED:    // Should not happen
-        wxASSERT( 0 );
+    default:
+    case BS_ITEM_TYPE_UNDEFINED:
+        wxFAIL_MSG( "PANEL_SETUP_BOARD_STACKUP::getColorIconItem: unrecognized item type" );
         break;
     }
 
@@ -1446,7 +1442,8 @@ void PANEL_SETUP_BOARD_STACKUP::updateIconColor( int aRow )
 }
 
 
-wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createBmComboBox( BOARD_STACKUP_ITEM* aStackupItem, int aRow )
+wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createBmComboBox( BOARD_STACKUP_ITEM* aStackupItem,
+                                                               int aRow )
 {
     wxBitmapComboBox* combo = new wxBitmapComboBox( m_scGridWin, ID_ITEM_COLOR+aRow,
                                                     wxEmptyString, wxDefaultPosition,
@@ -1524,3 +1521,32 @@ void drawBitmap( wxBitmap& aBitmap, wxColor aColor )
         p.OffsetY(data, 1);
     }
 }
+
+
+void PANEL_SETUP_BOARD_STACKUP::OnUpdateUI( wxUpdateUIEvent& event )
+{
+    // Handle an error.  This is delayed to OnUpdateUI so that we can change the focus
+    // even when the original validation was triggered from a killFocus event, and so
+    // that the corresponding notebook page can be shown in the background when triggered
+    // from an OK.
+    if( m_stackupMismatch )
+    {
+        m_stackupMismatch = false;
+
+        wxRichMessageDialog dlg( this,
+                                 _( "Physical stackup has not been updated to match layer count." ),
+                                 _( "Update Physical Stackup" ),
+                                 wxOK | wxCENTER | wxICON_WARNING );
+        dlg.ShowCheckBox( _( "Update dielectric thickness from board thickness" ), true );
+
+        dlg.ShowModal();
+
+        if( dlg.IsCheckBoxChecked() )
+        {
+            wxCommandEvent dummy;
+            onCalculateDielectricThickness( dummy );
+        }
+    }
+}
+
+

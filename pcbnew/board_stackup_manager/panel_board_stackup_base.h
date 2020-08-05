@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -73,6 +73,7 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxButton* m_buttonExport;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateThicknessValue( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onCalculateDielectricThickness( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAddDielectricLayer( wxCommandEvent& event ) { event.Skip(); }
