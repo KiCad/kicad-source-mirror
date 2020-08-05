@@ -624,39 +624,22 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 
     std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
 
-    bool can_switch_to_project = true;
-    bool can_create_new_directory = true;
-    bool can_open_this_directory = true;
-    bool can_edit = true;
-    bool can_rename = true;
-    bool can_delete = true;
-    bool can_print = true;
+    bool can_switch_to_project = false;
+    bool can_create_new_directory = false;
+    bool can_open_this_directory = false;
+    bool can_edit = false;
+    bool can_rename = false;
+    bool can_delete = false;
+    bool can_print = false;
 
     if( tree_data.size() == 0 )
         return;
-
-    if( tree_data.size() != 1 )
-    {
-        can_switch_to_project = false;
-        can_create_new_directory = false;
-        can_rename = false;
-        can_print = false;
-    }
-
-    if( curr_item == m_TreeProject->GetRootItem() )
-        can_switch_to_project = false;
 
     for( TREEPROJECT_ITEM* item_data : tree_data )
     {
         // Check for empty project
         if( !item_data )
-        {
-            can_switch_to_project = false;
-            can_edit = false;
-            can_rename = false;
-            can_print = false;
             continue;
-        }
 
         int      tree_id = item_data->GetType();
         wxString full_file_name = item_data->GetFileName();
@@ -665,27 +648,23 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
         {
         case TREE_LEGACY_PROJECT:
         case TREE_JSON_PROJECT:
-            can_edit = false;
-            can_rename = false;
-            can_delete = false;
-            can_print = false;
+            can_switch_to_project = curr_item != m_TreeProject->GetRootItem();
+            can_delete = curr_item != m_TreeProject->GetRootItem();
+            can_create_new_directory = curr_item == m_TreeProject->GetRootItem();
+            can_open_this_directory = curr_item == m_TreeProject->GetRootItem();
             break;
 
         case TREE_DIRECTORY:
-            can_switch_to_project = false;
-            can_edit = false;
-            can_rename = false;
-            can_print = false;
+            can_delete = true;
+            can_create_new_directory = curr_item == m_TreeProject->GetRootItem();
+            can_open_this_directory = curr_item == m_TreeProject->GetRootItem();
             break;
 
         default:
-            can_switch_to_project = false;
-            can_create_new_directory = false;
-            can_open_this_directory = false;
-
-            if( !CanPrintFile( full_file_name ) )
-                can_print = false;
-
+            can_edit = true;
+            can_rename = true;
+            can_delete = true;
+            can_print = CanPrintFile( full_file_name );
             break;
         }
     }
