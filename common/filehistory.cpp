@@ -49,7 +49,9 @@ void FILE_HISTORY::Load( const APP_SETTINGS_BASE& aSettings )
     // file_history stores the most recent file first
     for( auto it = aSettings.m_System.file_history.rbegin();
          it != aSettings.m_System.file_history.rend(); ++it )
+    {
         AddFileToHistory( *it );
+    }
 }
 
 
@@ -66,8 +68,8 @@ void FILE_HISTORY::Save( APP_SETTINGS_BASE& aSettings )
 {
     aSettings.m_System.file_history.clear();
 
-    for( const auto& file : m_fileHistory )
-        aSettings.m_System.file_history.emplace_back( file.ToStdString() );
+    for( const wxString& filename : m_fileHistory )
+        aSettings.m_System.file_history.emplace_back( filename );
 }
 
 
