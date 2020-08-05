@@ -29,6 +29,7 @@
 #include <grid_tricks.h>
 #include <widgets/wx_grid.h>
 
+#define GRID_CELL_MARGIN 4
 
 PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( PCB_EDIT_FRAME* aFrame,
                                                           PAGED_DIALOG* aWindow ) :
@@ -193,8 +194,11 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 
     for( int col = 0; col < m_grid->GetNumberCols(); col++ )
     {
+        const wxString& heading = m_grid->GetColLabelValue( col );
+        int             headingWidth = GetTextExtent( heading ).x + 2 * GRID_CELL_MARGIN;
+
         // Set the minimal width to the column label size.
-        m_grid->SetColMinimalWidth( col, m_grid->GetVisibleWidth( col, true, false, false ) );
+        m_grid->SetColMinimalWidth( col, headingWidth );
         // Set the width to see the full contents
         m_grid->SetColSize( col, m_grid->GetVisibleWidth( col, true, true, false ) );
     }
