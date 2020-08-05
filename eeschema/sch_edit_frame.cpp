@@ -1037,8 +1037,8 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    if( aTextVarsChanged )
-        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetCanvas()->Refresh();
 
     RecreateToolbars();
     Layout();
