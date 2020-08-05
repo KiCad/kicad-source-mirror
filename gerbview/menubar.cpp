@@ -54,7 +54,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     FILE_HISTORY& recentGbrFiles = GetFileHistory();
 
-#define FileHistoryCond( x ) ACTION_CONDITIONS().SetEnableCondition( FILE_HISTORY::FileHistoryNotEmpty( x ) )
+#define FileHistoryCond( x ) ACTION_CONDITIONS().Enable( FILE_HISTORY::FileHistoryNotEmpty( x ) )
 
 
     // Create the gerber file menu if it does not exist. Adding a file to/from the history

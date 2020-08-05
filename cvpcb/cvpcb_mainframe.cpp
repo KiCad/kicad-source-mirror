@@ -236,12 +236,12 @@ void CVPCB_MAINFRAME::setupUIConditions()
 
     wxASSERT( mgr );
 
-#define Enable( x ) ACTION_CONDITIONS().SetEnableCondition( x )
-#define Check( x )  ACTION_CONDITIONS().SetCheckCondition( x )
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( CVPCB_ACTIONS::saveAssociations, Enable( cond.ContentModified() ) );
-    mgr->SetConditions( ACTIONS::undo,                   Enable( cond.UndoAvailable() ) );
-    mgr->SetConditions( ACTIONS::redo,                   Enable( cond.RedoAvailable() ) );
+    mgr->SetConditions( CVPCB_ACTIONS::saveAssociations, ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::undo,                   ENABLE( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,                   ENABLE( cond.RedoAvailable() ) );
 
     #define filterActive( filter ) ( m_filteringOptions & filter )
 
@@ -263,12 +263,12 @@ void CVPCB_MAINFRAME::setupUIConditions()
             return m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT;
         };
 
-    mgr->SetConditions( CVPCB_ACTIONS::FilterFPbyFPFilters, Check( compFilter ) );
-    mgr->SetConditions( CVPCB_ACTIONS::FilterFPbyLibrary,   Check( libFilter ) );
-    mgr->SetConditions( CVPCB_ACTIONS::filterFPbyPin,       Check( pinFilter ) );
+    mgr->SetConditions( CVPCB_ACTIONS::FilterFPbyFPFilters, CHECK( compFilter ) );
+    mgr->SetConditions( CVPCB_ACTIONS::FilterFPbyLibrary,   CHECK( libFilter ) );
+    mgr->SetConditions( CVPCB_ACTIONS::filterFPbyPin,       CHECK( pinFilter ) );
 
-#undef Check
-#undef Enable
+#undef CHECK
+#undef ENABLE
 }
 
 

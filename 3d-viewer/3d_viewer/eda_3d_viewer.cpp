@@ -194,9 +194,9 @@ void EDA_3D_VIEWER::setupUIConditions()
     EDA_3D_CONDITIONS cond( &m_boardAdapter );
 
 // Helper to define check conditions
-#define MaterialCheck( x ) ACTION_CONDITIONS().SetCheckCondition( cond.MaterialMode( x ) )
-#define FlagCheck( x )     ACTION_CONDITIONS().SetCheckCondition( cond.Flag( x ) )
-#define GridSizeCheck( x ) ACTION_CONDITIONS().SetCheckCondition( cond.GridSize( x ) )
+#define MaterialCheck( x ) ACTION_CONDITIONS().Check( cond.MaterialMode( x ) )
+#define FlagCheck( x )     ACTION_CONDITIONS().Check( cond.Flag( x ) )
+#define GridSizeCheck( x ) ACTION_CONDITIONS().Check( cond.GridSize( x ) )
 
     auto raytracingCondition = [this]( const SELECTION& aSel )
     {
@@ -204,7 +204,7 @@ void EDA_3D_VIEWER::setupUIConditions()
     };
 
     RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,
-                             ACTION_CONDITIONS().SetCheckCondition( raytracingCondition ) );
+                             ACTION_CONDITIONS().Check( raytracingCondition ) );
 
     mgr->SetConditions( EDA_3D_ACTIONS::materialNormal,
                         MaterialCheck( MATERIAL_MODE::NORMAL ) );
@@ -245,8 +245,7 @@ void EDA_3D_VIEWER::setupUIConditions()
             return m_currentCamera.GetProjection() == PROJECTION_TYPE::ORTHO;
         };
 
-    mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho,
-                        ACTION_CONDITIONS().SetCheckCondition( orthoCondition ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho, ACTION_CONDITIONS().Check( orthoCondition ) );
 
 #undef MaterialCheck
 #undef FlagCheck

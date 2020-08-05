@@ -75,7 +75,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     // Add the file menu condition here since it needs the item ID for the submenu
     ACTION_CONDITIONS cond;
-    cond.SetEnableCondition( FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
+    cond.Enable( FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
     RegisterUIUpdateHandler( item->GetId(), cond );
 
     fileMenu->Add( KICAD_MANAGER_ACTIONS::closeProject );

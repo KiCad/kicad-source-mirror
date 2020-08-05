@@ -190,17 +190,17 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
 
     wxASSERT( mgr );
 
-#define Check( x )  ACTION_CONDITIONS().SetCheckCondition( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::zoomTool,          Check( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,     Check( cond.CurrentTool( ACTIONS::selectionTool ) ) );
-    mgr->SetConditions( ACTIONS::measureTool,       Check( cond.CurrentTool( ACTIONS::measureTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,          CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,     CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::measureTool,       CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
 
-    mgr->SetConditions( ACTIONS::toggleGrid,        Check( cond.GridVisible() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle, Check( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
 
-    mgr->SetConditions( ACTIONS::metricUnits,       Check( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
-    mgr->SetConditions( ACTIONS::imperialUnits,     Check( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::metricUnits,       CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::imperialUnits,     CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
 
 
     auto autoZoomCond =
@@ -233,13 +233,13 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
             return !GetDisplayOptions().m_DisplayGraphicsFill;
         };
 
-    mgr->SetConditions( PCB_ACTIONS::zoomFootprintAutomatically, Check( autoZoomCond ) );
-    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,             Check( padNumCond ) );
-    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,             Check( padFillCond ) );
-    mgr->SetConditions( PCB_ACTIONS::textOutlines,               Check( textFillCond ) );
-    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,           Check( graphicsFillCond ) );
+    mgr->SetConditions( PCB_ACTIONS::zoomFootprintAutomatically, CHECK( autoZoomCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,             CHECK( padNumCond ) );
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,             CHECK( padFillCond ) );
+    mgr->SetConditions( PCB_ACTIONS::textOutlines,               CHECK( textFillCond ) );
+    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,           CHECK( graphicsFillCond ) );
 
-#undef Check
+#undef CHECK
 }
 
 

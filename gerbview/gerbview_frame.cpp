@@ -1182,22 +1182,22 @@ void GERBVIEW_FRAME::setupUIConditions()
 
     wxASSERT( mgr );
 
-#define Enable( x ) ACTION_CONDITIONS().SetEnableCondition( x )
-#define Check( x )  ACTION_CONDITIONS().SetCheckCondition( x )
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::zoomTool,            Check( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,       Check( cond.CurrentTool( ACTIONS::selectionTool ) ) );
-    mgr->SetConditions( ACTIONS::measureTool,         Check( cond.CurrentTool( ACTIONS::measureTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::measureTool,         CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
 
-    mgr->SetConditions( ACTIONS::toggleGrid,          Check( cond.GridVisible() ) );
-    mgr->SetConditions( ACTIONS::togglePolarCoords,   Check( cond.PolarCoordinates() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle,   Check( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::togglePolarCoords,   CHECK( cond.PolarCoordinates() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
 
-    mgr->SetConditions( ACTIONS::metricUnits,         Check( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
-    mgr->SetConditions( ACTIONS::imperialUnits,       Check( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::metricUnits,         CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::imperialUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
 
-    mgr->SetConditions( ACTIONS::acceleratedGraphics, Check( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
-    mgr->SetConditions( ACTIONS::standardGraphics,    Check( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
+    mgr->SetConditions( ACTIONS::acceleratedGraphics, CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
+    mgr->SetConditions( ACTIONS::standardGraphics,    CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
 
 
     auto flashedDisplayOutlinesCond =
@@ -1248,14 +1248,14 @@ void GERBVIEW_FRAME::setupUIConditions()
             return m_DisplayOptions.m_FlipGerberView;
         };
 
-    mgr->SetConditions( GERBVIEW_ACTIONS::flashedDisplayOutlines,  Check( flashedDisplayOutlinesCond ) );
-    mgr->SetConditions( GERBVIEW_ACTIONS::linesDisplayOutlines,    Check( linesFillCond ) );
-    mgr->SetConditions( GERBVIEW_ACTIONS::polygonsDisplayOutlines, Check( polygonsFilledCond ) );
-    mgr->SetConditions( GERBVIEW_ACTIONS::negativeObjectDisplay,   Check( negativeObjectsCond ) );
-    mgr->SetConditions( GERBVIEW_ACTIONS::dcodeDisplay,            Check( dcodeCond ) );
-    mgr->SetConditions( GERBVIEW_ACTIONS::toggleDiffMode,          Check( diffModeCond ) );
-    mgr->SetConditions( GERBVIEW_ACTIONS::flipGerberView,          Check( flipGerberCond ) );
-    mgr->SetConditions( ACTIONS::highContrastMode,                 Check( highContrastModeCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::flashedDisplayOutlines,  CHECK( flashedDisplayOutlinesCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::linesDisplayOutlines,    CHECK( linesFillCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::polygonsDisplayOutlines, CHECK( polygonsFilledCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::negativeObjectDisplay,   CHECK( negativeObjectsCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::dcodeDisplay,            CHECK( dcodeCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::toggleDiffMode,          CHECK( diffModeCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::flipGerberView,          CHECK( flipGerberCond ) );
+    mgr->SetConditions( ACTIONS::highContrastMode,                 CHECK( highContrastModeCond ) );
 
 
     auto layersManagerShownCondition =
@@ -1265,11 +1265,11 @@ void GERBVIEW_FRAME::setupUIConditions()
         };
 
     RegisterUIUpdateHandler( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                             Check( layersManagerShownCondition ) );
+                             CHECK( layersManagerShownCondition ) );
 
 
-#undef Check
-#undef Enable
+#undef CHECK
+#undef ENABLE
 }
 
 

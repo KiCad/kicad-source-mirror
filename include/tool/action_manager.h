@@ -56,19 +56,19 @@ struct ACTION_CONDITIONS
         showCondition   = SELECTION_CONDITIONS::ShowAlways;     // Always show by default
     }
 
-    ACTION_CONDITIONS& SetCheckCondition( const SELECTION_CONDITION& aCondition )
+    ACTION_CONDITIONS& Check( const SELECTION_CONDITION& aCondition )
     {
         checkCondition = aCondition;
         return *this;
     }
 
-    ACTION_CONDITIONS& SetEnableCondition( const SELECTION_CONDITION& aCondition )
+    ACTION_CONDITIONS& Enable( const SELECTION_CONDITION& aCondition )
     {
         enableCondition = aCondition;
         return *this;
     }
 
-    ACTION_CONDITIONS& SetShowCondition( const SELECTION_CONDITION& aCondition )
+    ACTION_CONDITIONS& Show( const SELECTION_CONDITION& aCondition )
     {
         showCondition = aCondition;
         return *this;

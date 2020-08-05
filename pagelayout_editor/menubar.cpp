@@ -72,7 +72,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     // Add the file menu condition here since it needs the item ID for the submenu
     ACTION_CONDITIONS cond;
-    cond.SetEnableCondition( FILE_HISTORY::FileHistoryNotEmpty( recentFiles ) );
+    cond.Enable( FILE_HISTORY::FileHistoryNotEmpty( recentFiles ) );
     RegisterUIUpdateHandler( item->GetId(), cond );
 
     fileMenu->AppendSeparator();

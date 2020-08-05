@@ -367,8 +367,8 @@ void EDA_BASE_FRAME::setupUIConditions()
     for( unsigned ii = 0;  LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
     {
         ACTION_CONDITIONS cond;
-        cond.SetCheckCondition( std::bind( isCurrentLang, std::placeholders::_1,
-                                           LanguagesList[ii].m_WX_Lang_Identifier ) );
+        cond.Check( std::bind( isCurrentLang, std::placeholders::_1,
+                               LanguagesList[ii].m_WX_Lang_Identifier ) );
 
         RegisterUIUpdateHandler( LanguagesList[ii].m_KI_Lang_Identifier, cond );
     }

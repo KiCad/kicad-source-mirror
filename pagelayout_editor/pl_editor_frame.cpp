@@ -249,32 +249,32 @@ void PL_EDITOR_FRAME::setupUIConditions()
 
     wxASSERT( mgr );
 
-#define Enable( x ) ACTION_CONDITIONS().SetEnableCondition( x )
-#define Check( x )  ACTION_CONDITIONS().SetCheckCondition( x )
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::save,              Enable( cond.ContentModified() ) );
-    mgr->SetConditions( ACTIONS::undo,              Enable( cond.UndoAvailable() ) );
-    mgr->SetConditions( ACTIONS::redo,              Enable( cond.RedoAvailable() ) );
+    mgr->SetConditions( ACTIONS::save,              ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::undo,              ENABLE( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,              ENABLE( cond.RedoAvailable() ) );
 
-    mgr->SetConditions( ACTIONS::toggleGrid,        Check( cond.GridVisible() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle, Check( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
 
-    mgr->SetConditions( ACTIONS::cut,               Enable( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
-    mgr->SetConditions( ACTIONS::copy,              Enable( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
-    mgr->SetConditions( ACTIONS::paste,             Enable( SELECTION_CONDITIONS::Idle ) );
-    mgr->SetConditions( ACTIONS::doDelete,          Enable( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( ACTIONS::cut,               ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( ACTIONS::copy,              ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( ACTIONS::paste,             ENABLE( SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::doDelete,          ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
 
-    mgr->SetConditions( ACTIONS::zoomTool,          Check( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,     Check( cond.CurrentTool( ACTIONS::selectionTool ) ) );
-    mgr->SetConditions( ACTIONS::deleteTool,        Check( cond.CurrentTool( ACTIONS::deleteTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,          CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,     CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::deleteTool,        CHECK( cond.CurrentTool( ACTIONS::deleteTool ) ) );
 
-    mgr->SetConditions( PL_ACTIONS::drawLine,       Check( cond.CurrentTool( PL_ACTIONS::drawLine ) ) );
-    mgr->SetConditions( PL_ACTIONS::drawRectangle,  Check( cond.CurrentTool( PL_ACTIONS::drawRectangle ) ) );
-    mgr->SetConditions( PL_ACTIONS::placeText,      Check( cond.CurrentTool( PL_ACTIONS::placeText ) ) );
-    mgr->SetConditions( PL_ACTIONS::placeImage,     Check( cond.CurrentTool( PL_ACTIONS::placeImage ) ) );
+    mgr->SetConditions( PL_ACTIONS::drawLine,       CHECK( cond.CurrentTool( PL_ACTIONS::drawLine ) ) );
+    mgr->SetConditions( PL_ACTIONS::drawRectangle,  CHECK( cond.CurrentTool( PL_ACTIONS::drawRectangle ) ) );
+    mgr->SetConditions( PL_ACTIONS::placeText,      CHECK( cond.CurrentTool( PL_ACTIONS::placeText ) ) );
+    mgr->SetConditions( PL_ACTIONS::placeImage,     CHECK( cond.CurrentTool( PL_ACTIONS::placeImage ) ) );
 
     // Not a tool, just a way to activate the action
-    mgr->SetConditions( PL_ACTIONS::appendImportedWorksheet, Check( SELECTION_CONDITIONS::ShowNever ) );
+    mgr->SetConditions( PL_ACTIONS::appendImportedWorksheet, CHECK( SELECTION_CONDITIONS::ShowNever ) );
 
     auto whiteBackgroundCondition = [ this ] ( const SELECTION& aSel ) {
         return GetDrawBgColor() == WHITE;
@@ -295,11 +295,11 @@ void PL_EDITOR_FRAME::setupUIConditions()
             return WS_DATA_MODEL::GetTheInstance().m_EditMode == true;
         };
 
-    mgr->SetConditions( PL_ACTIONS::layoutNormalMode, Check( titleBlockNormalMode ) );
-    mgr->SetConditions( PL_ACTIONS::layoutEditMode,   Check( titleBlockEditMode ) );
+    mgr->SetConditions( PL_ACTIONS::layoutNormalMode, CHECK( titleBlockNormalMode ) );
+    mgr->SetConditions( PL_ACTIONS::layoutEditMode,   CHECK( titleBlockEditMode ) );
 
-#undef Check
-#undef Enable
+#undef CHECK
+#undef ENABLE
 }
 
 

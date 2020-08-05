@@ -211,7 +211,7 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
         };
 
     ACTION_CONDITIONS activeProjectCond;
-    activeProjectCond.SetEnableCondition( activeProject );
+    activeProjectCond.Enable( activeProject );
 
     manager->SetConditions( KICAD_MANAGER_ACTIONS::editSchematic,  activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::editSymbols,    activeProjectCond );
