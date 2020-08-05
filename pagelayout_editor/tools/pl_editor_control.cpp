@@ -119,18 +119,6 @@ int PL_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 }
 
 
-int PL_EDITOR_CONTROL::ToggleBackgroundColor( const TOOL_EVENT& aEvent )
-{
-    m_frame->SetDrawBgColor( m_frame->GetDrawBgColor() == WHITE ? BLACK : WHITE );
-    getView()->GetPainter()->GetSettings()->SetBackgroundColor( m_frame->GetDrawBgColor() );
-
-    m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
-    m_frame->GetCanvas()->Refresh();
-
-    return 0;
-}
-
-
 int PL_EDITOR_CONTROL::ShowInspector( const TOOL_EVENT& aEvent )
 {
     m_frame->ShowDesignInspector();
@@ -194,7 +182,6 @@ void PL_EDITOR_CONTROL::setTransitions()
     Go( &PL_EDITOR_CONTROL::Plot,                  ACTIONS::plot.MakeEvent() );
 
     Go( &PL_EDITOR_CONTROL::PageSetup,             PL_ACTIONS::previewSettings.MakeEvent() );
-    Go( &PL_EDITOR_CONTROL::ToggleBackgroundColor, PL_ACTIONS::toggleBackground.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::ShowInspector,         PL_ACTIONS::showInspector.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::TitleBlockDisplayMode, PL_ACTIONS::layoutEditMode.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::TitleBlockDisplayMode, PL_ACTIONS::layoutNormalMode.MakeEvent() );

@@ -276,13 +276,6 @@ void PL_EDITOR_FRAME::setupUIConditions()
     // Not a tool, just a way to activate the action
     mgr->SetConditions( PL_ACTIONS::appendImportedWorksheet, CHECK( SELECTION_CONDITIONS::ShowNever ) );
 
-    auto whiteBackgroundCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetDrawBgColor() == WHITE;
-    };
-
-    mgr->SetConditions( PL_ACTIONS::toggleBackground, Check( whiteBackgroundCondition ) );
-
-
     auto titleBlockNormalMode =
         [] ( const SELECTION& )
         {

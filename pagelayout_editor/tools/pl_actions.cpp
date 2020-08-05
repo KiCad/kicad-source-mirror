@@ -76,11 +76,6 @@ TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveEdit.appen
 
 // PL_EDITOR_CONTROL
 //
-TOOL_ACTION PL_ACTIONS::toggleBackground( "plEditor.EditorControl.ToggleBackground",
-        AS_GLOBAL, 0, "",
-        _( "Background White" ), _( "Switch between white and black background" ),
-        palette_xpm );
-
 TOOL_ACTION PL_ACTIONS::showInspector( "plEditor.EditorControl.ShowInspector",
         AS_GLOBAL, 0, "",
         _( "Show Design Inspector" ), _( "Show the list of items in page layout" ),

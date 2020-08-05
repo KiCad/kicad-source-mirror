@@ -75,7 +75,6 @@ public:
 
     // Miscellaneous
     static TOOL_ACTION refreshPreview;
-    static TOOL_ACTION toggleBackground;
     static TOOL_ACTION showInspector;
     static TOOL_ACTION previewSettings;
 

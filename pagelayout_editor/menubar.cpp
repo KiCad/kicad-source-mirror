@@ -109,7 +109,6 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomRedraw );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( PL_ACTIONS::toggleBackground, ACTION_MENU::CHECK );
     viewMenu->Add( ACTIONS::toggleGrid,          ACTION_MENU::CHECK );
     viewMenu->Add( ACTIONS::toggleCursorStyle,   ACTION_MENU::CHECK );
 
