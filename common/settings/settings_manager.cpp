@@ -339,7 +339,7 @@ wxString SETTINGS_MANAGER::GetPathForSettingsFile( JSON_SETTINGS* aSettings )
         return GetUserSettingsPath();
 
     case SETTINGS_LOC::PROJECT:
-        return std::string( Prj().GetProjectPath() );
+        return Prj().GetProjectPath();
 
     case SETTINGS_LOC::COLORS:
         return GetColorSettingsPath();
