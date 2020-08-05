@@ -574,7 +574,12 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
             wxString cellTxt = cols.GetNextToken();
 
             if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_STRING ) )
+            {
                 tbl->SetValue( row, col, cellTxt );
+
+                wxGridEvent evt( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, row, col );
+                m_grid->GetEventHandler()->ProcessEvent( evt );
+            }
         }
     }
 }
