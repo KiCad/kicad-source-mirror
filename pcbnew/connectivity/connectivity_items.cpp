@@ -340,6 +340,8 @@ bool CN_ANCHOR::Valid() const
 
 bool CN_ANCHOR::IsDangling() const
 {
+    int accuracy = 0;
+
     if( !m_cluster )
         return true;
 
@@ -355,6 +357,9 @@ bool CN_ANCHOR::IsDangling() const
     if( m_item->AnchorCount() == 1 )
         return connected_count < minimal_count;
 
+    if( Parent()->Type() == PCB_TRACE_T || Parent()->Type() == PCB_ARC_T )
+        accuracy = ( static_cast<const TRACK*>( Parent() )->GetWidth() + 1 )/ 2;
+
     // Items with multiple anchors have usually items connected to each anchor.
     // We want only the item count of this anchor point
     connected_count = 0;
@@ -365,10 +370,10 @@ bool CN_ANCHOR::IsDangling() const
             ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item->Parent() );
 
             if( zone->HitTestFilledArea( static_cast<PCB_LAYER_ID>( item->Layer() ),
-                                         static_cast<wxPoint>( Pos() ) ) )
+                                         wxPoint( Pos() ), accuracy ) )
                 connected_count++;
         }
-        else if( item->Parent()->HitTest( (wxPoint) Pos() ) )
+        else if( item->Parent()->HitTest( wxPoint( Pos() ), accuracy ) )
             connected_count++;
     }
 

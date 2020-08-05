@@ -252,7 +252,6 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aVia )
         for( TRACK* track : temp_tracks )
         {
             bool    flag_erase = false; // Start without a good reason to erase it
-            wxPoint pos;
 
             if( aVia && track->Type() != PCB_VIA_T )
                 continue;
@@ -260,7 +259,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aVia )
                 continue;
 
             // Tst if a track (or a via) endpoint is not connected to another track or to a zone.
-            if( m_brd->GetConnectivity()->TestTrackEndpointDangling( track, &pos ) )
+            if( m_brd->GetConnectivity()->TestTrackEndpointDangling( track ) )
                 flag_erase = true;
 
             if( flag_erase )

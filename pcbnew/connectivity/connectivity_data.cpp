@@ -560,7 +560,9 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( TRACK* aTrack, wxPoint* aPos 
     {
         if( anchor->IsDangling() )
         {
-            *aPos = (wxPoint) anchor->Pos();
+            if( aPos )
+                *aPos = static_cast<wxPoint>( anchor->Pos() );
+
             return true;
         }
     }

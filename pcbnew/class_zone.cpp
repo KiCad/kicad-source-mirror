@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -528,17 +528,19 @@ int ZONE_CONTAINER::GetLocalClearance( wxString* aSource ) const
 }
 
 
-bool ZONE_CONTAINER::HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint& aRefPos ) const
+bool ZONE_CONTAINER::HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint &aRefPos,
+                                        int aAccuracy ) const
 {
     // Keepouts have no filled area, but it's generally nice to treat their interior as if it were
     // filled so that people don't have to select keepouts by their outline (which is min-width)
     if( GetIsKeepout() )
-        return m_Poly->Contains( VECTOR2I( aRefPos.x, aRefPos.y ) );
+        return m_Poly->Contains( VECTOR2I( aRefPos.x, aRefPos.y ), -1, aAccuracy );
 
     if( !m_FilledPolysList.count( aLayer ) )
         return false;
 
-    return m_FilledPolysList.at( aLayer ).Contains( VECTOR2I( aRefPos.x, aRefPos.y ) );
+    return m_FilledPolysList.at( aLayer ).Contains( VECTOR2I( aRefPos.x, aRefPos.y ), -1,
+            aAccuracy );
 }
 
 

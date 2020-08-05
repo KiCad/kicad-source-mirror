@@ -187,7 +187,7 @@ public:
 
     void GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges ) const;
 
-    bool TestTrackEndpointDangling( TRACK* aTrack, wxPoint* aPos );
+    bool TestTrackEndpointDangling( TRACK* aTrack, wxPoint* aPos = nullptr );
 
     /**
      * Function ClearDynamicRatsnest()

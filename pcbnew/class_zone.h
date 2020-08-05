@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,9 +291,10 @@ public:
      * tests if the given wxPoint is within the bounds of a filled area of this zone.
      * @param aLayer is the layer to test on
      * @param aRefPos A wxPoint to test
+     * @param aAccuracy Expand the distance by which the areas are expanded for the hittest
      * @return bool - true if a hit, else false
      */
-    bool HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint& aRefPos ) const;
+    bool HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint &aRefPos, int aAccuracy = 0 ) const;
 
     /**
      * Tests if the given point is contained within a cutout of the zone.
