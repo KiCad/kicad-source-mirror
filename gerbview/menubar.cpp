@@ -54,20 +54,23 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     // Open Gerber file(s)
     AddMenuItem( fileMenu, wxID_FILE,
-                 _( "Open &Gerber File(s)..." ),
-                 _( "Open Gerber file(s) on the current layer. Previous data will be deleted" ),
+                 _( "Open &Gerber Plot File(s)..." ),
+                 _( "Open Gerber plot file(s) on the current layer."
+                    " Previous data will be deleted" ),
                  KiBitmap( load_gerber_xpm ) );
 
     // Open Excellon drill file(s)
     AddMenuItem( fileMenu, ID_GERBVIEW_LOAD_DRILL_FILE,
                  _( "Open &Excellon Drill File(s)..." ),
-                 _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ),
+                 _( "Open Excellon drill file(s) on the current layer."
+                    " Previous data will be deleted" ),
                  KiBitmap( gerbview_drill_file_xpm ) );
 
     // Open Gerber job files
     AddMenuItem( fileMenu, ID_GERBVIEW_LOAD_JOB_FILE,
                  _( "Open Gerber &Job File..." ),
-                 _( "Open a Gerber job file, and it's associated gerber files depending on the job" ),
+                 _( "Open a Gerber job file, and it's associated gerber plot"
+                    " files depending on the job" ),
                  KiBitmap( gerber_job_file_xpm ) );
 
     // Open Zip archive files
