@@ -351,11 +351,27 @@ std::string g_previewBoard =
         "  )"
         ")";
 
+std::set<int> g_excludedLayers =
+        {
+            LAYER_VIAS,
+            LAYER_GRID_AXES,
+            LAYER_MOD_FR,
+            LAYER_MOD_BK,
+            LAYER_MOD_VALUES,
+            LAYER_MOD_REFERENCES,
+            LAYER_TRACKS,
+            LAYER_PADS_PLATEDHOLES,
+            LAYER_VIAS_HOLES,
+            LAYER_GP_OVERLAY,
+            LAYER_DRAW_BITMAPS
+        };
+
 
 PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame,
                                                           wxWindow* aParent )
         : PANEL_COLOR_SETTINGS( aParent ),
           m_frame( aFrame ),
+          m_preview( nullptr ),
           m_page( nullptr ),
           m_titleBlock( nullptr )
 {
@@ -377,12 +393,8 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
 
     for( int id = GAL_LAYER_ID_START; id < GAL_LAYER_ID_BITMASK_END; id++ )
     {
-        if( id == LAYER_VIAS || id == LAYER_GRID_AXES || id == LAYER_PADS_PLATEDHOLES
-                || id == LAYER_VIAS_HOLES || id == LAYER_DRAW_BITMAPS
-                || id == LAYER_GP_OVERLAY )
-        {
+        if( g_excludedLayers.count( id ) )
             continue;
-        }
 
         m_validLayers.push_back( id );
     }
@@ -449,7 +461,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createSwatches()
                } );
 
     // Don't sort board layers by name
-    for( int i = PCBNEW_LAYER_ID_START; i < PCB_LAYER_ID_COUNT; ++i )
+    for( int i = PCBNEW_LAYER_ID_START; i <= F_Fab; ++i )
         m_validLayers.insert( m_validLayers.begin() + i, i );
 
     BOARD* board = m_frame->GetBoard();
@@ -503,8 +515,9 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
     m_preview->UpdateColors();
     m_preview->DisplayBoard( m_preview->GetBoard() );
 
-    auto worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr, m_titleBlock );
-    worksheet->SetColorLayer( LAYER_SCHEMATIC_WORKSHEET );
+    auto worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr,
+                                                    m_titleBlock );
+    worksheet->SetColorLayer( LAYER_WORKSHEET );
     m_preview->SetWorksheet( worksheet );
 
     zoomFitPreview();
