@@ -330,11 +330,19 @@ void TRACKS_CLEANER::deleteTracksInPads()
         {
             if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
             {
-                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_TRACK_IN_PAD );
-                item->SetItems( track );
-                m_itemsList->push_back( item );
+                SHAPE_POLY_SET poly;
+                track->TransformShapeWithClearanceToPolygon( poly, 0 );
 
-                toRemove.insert( track );
+                poly.BooleanSubtract( *pad->GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
+
+                if( poly.IsEmpty() )
+                {
+                    CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_TRACK_IN_PAD );
+                    item->SetItems( track );
+                    m_itemsList->push_back( item );
+
+                    toRemove.insert( track );
+                }
             }
         }
     }
