@@ -622,49 +622,78 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
     // Ensure item is selected (Under Windows right click does not select the item)
     m_TreeProject->SelectItem( curr_item );
 
-    std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
+    std::vector<TREEPROJECT_ITEM*> selection = GetSelectedData();
 
-    bool can_switch_to_project = false;
-    bool can_create_new_directory = false;
-    bool can_open_this_directory = false;
-    bool can_edit = false;
-    bool can_rename = false;
-    bool can_delete = false;
-    bool can_print = false;
+    bool can_switch_to_project = true;
+    bool can_create_new_directory = true;
+    bool can_open_this_directory = true;
+    bool can_edit = true;
+    bool can_rename = true;
+    bool can_delete = true;
+    bool can_print = true;
 
-    if( tree_data.size() == 0 )
+    if( selection.size() == 0 )
         return;
 
-    for( TREEPROJECT_ITEM* item_data : tree_data )
+    // Remove things that don't make sense for multiple selections
+    if( selection.size() != 1 )
+    {
+        can_switch_to_project = false;
+        can_create_new_directory = false;
+        can_open_this_directory = false;
+        can_rename = false;
+        can_print = false;
+    }
+
+    for( TREEPROJECT_ITEM* item : selection )
     {
         // Check for empty project
-        if( !item_data )
+        if( !item )
+        {
+            can_switch_to_project = false;
+            can_edit = false;
+            can_rename = false;
+            can_print = false;
             continue;
+        }
 
-        int      tree_id = item_data->GetType();
-        wxString full_file_name = item_data->GetFileName();
+        int      tree_id = item->GetType();
+        wxString full_file_name = item->GetFileName();
 
         switch( tree_id )
         {
         case TREE_LEGACY_PROJECT:
         case TREE_JSON_PROJECT:
-            can_switch_to_project = curr_item != m_TreeProject->GetRootItem();
-            can_delete = curr_item != m_TreeProject->GetRootItem();
-            can_create_new_directory = curr_item == m_TreeProject->GetRootItem();
-            can_open_this_directory = curr_item == m_TreeProject->GetRootItem();
+            can_rename = false;
+            can_print = false;
+
+            if( curr_item == m_TreeProject->GetRootItem() )
+            {
+                can_switch_to_project = false;
+                can_delete = false;
+            }
+            else
+            {
+                can_create_new_directory = false;
+                can_open_this_directory = false;
+            }
             break;
 
         case TREE_DIRECTORY:
-            can_delete = true;
-            can_create_new_directory = curr_item == m_TreeProject->GetRootItem();
-            can_open_this_directory = curr_item == m_TreeProject->GetRootItem();
+            can_switch_to_project = false;
+            can_edit = false;
+            can_rename = false;
+            can_print = false;
             break;
 
         default:
-            can_edit = true;
-            can_rename = true;
-            can_delete = true;
-            can_print = CanPrintFile( full_file_name );
+            can_switch_to_project = false;
+            can_create_new_directory = false;
+            can_open_this_directory = false;
+
+            if( !CanPrintFile( full_file_name ) )
+                can_print = false;
+
             break;
         }
     }
@@ -690,7 +719,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 
     if( can_open_this_directory )
     {
-        if( tree_data.size() == 1 )
+        if( selection.size() == 1 )
         {
 #ifdef __APPLE__
             text = _( "Reveal in Finder" );
@@ -717,7 +746,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 
     if( can_edit )
     {
-        if( tree_data.size() == 1 )
+        if( selection.size() == 1 )
             help_text = _( "Open the file in a Text Editor" );
         else
             help_text = _( "Open files in a Text Editor" );
@@ -728,7 +757,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 
     if( can_rename )
     {
-        if( tree_data.size() == 1 )
+        if( selection.size() == 1 )
         {
             text = _( "Rename File..." );
             help_text = _( "Rename file" );
@@ -744,7 +773,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 
     if( can_delete )
     {
-        if( tree_data.size() == 1 )
+        if( selection.size() == 1 )
             help_text = _( "Delete the file and its content" );
         else
             help_text = _( "Delete the files and their contents" );
