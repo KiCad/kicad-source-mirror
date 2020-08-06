@@ -242,7 +242,7 @@ void PL_EDITOR_FRAME::setupTools()
 
 void PL_EDITOR_FRAME::setupUIConditions()
 {
-    EDA_BASE_FRAME::setupUIConditions();
+    EDA_DRAW_FRAME::setupUIConditions();
 
     ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
     EDITOR_CONDITIONS cond( this );
@@ -259,10 +259,10 @@ void PL_EDITOR_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
 
-    mgr->SetConditions( ACTIONS::cut,               ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
-    mgr->SetConditions( ACTIONS::copy,              ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( ACTIONS::cut,               ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::copy,              ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::paste,             ENABLE( SELECTION_CONDITIONS::Idle ) );
-    mgr->SetConditions( ACTIONS::doDelete,          ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( ACTIONS::doDelete,          ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,          CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,     CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );

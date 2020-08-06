@@ -25,7 +25,7 @@
 
 #include <menus_helpers.h>
 #include <pgm_base.h>
-#include <tool/conditional_menu.h>
+#include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
@@ -42,38 +42,22 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar*  oldMenuBar = GetMenuBar();
     WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
-    auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
-        LIB_ID libId = getTargetLibId();
-        const wxString& libName = libId.GetLibNickname();
-        const wxString& partName = libId.GetLibItemName();
-        bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
-
-        if( partName.IsEmpty() )
-            return ( !readOnly && m_libMgr->IsLibraryModified( libName ) );
-        else
-            return ( !readOnly && m_libMgr->IsPartModified( partName, libName ) );
-    };
-
-    auto saveAllEnableCondition = [this] ( const SELECTION& sel ) {
-        return m_libMgr->HasModifications();
-    };
-
     //-- File menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* fileMenu = new ACTION_MENU( false, selTool );
 
-    fileMenu->AddItem( ACTIONS::newLibrary,          EE_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::addLibrary,          EE_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( EE_ACTIONS::newSymbol,        EE_CONDITIONS::ShowAlways );
+    fileMenu->Add( ACTIONS::newLibrary );
+    fileMenu->Add( ACTIONS::addLibrary );
+    fileMenu->Add( EE_ACTIONS::newSymbol );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::save,                modifiedDocumentCondition );
-    fileMenu->AddItem( ACTIONS::saveCopyAs,          EE_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::saveAll,             saveAllEnableCondition );
-    fileMenu->AddItem( ACTIONS::revert,              modifiedDocumentCondition );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( ACTIONS::save );
+    fileMenu->Add( ACTIONS::saveCopyAs );
+    fileMenu->Add( ACTIONS::saveAll );
+    fileMenu->Add( ACTIONS::revert );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( EE_ACTIONS::importSymbol,     EE_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( EE_ACTIONS::importSymbol );
 
     // Export submenu
     ACTION_MENU* submenuExport = new ACTION_MENU( false );
@@ -83,151 +67,109 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->Add( EE_ACTIONS::exportSymbol );
     submenuExport->Add( EE_ACTIONS::exportSymbolView );
     submenuExport->Add( EE_ACTIONS::exportSymbolAsSVG );
-    fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
+    fileMenu->Add( submenuExport );
 
-    fileMenu->AddSeparator();
+    fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "Library Editor" ) );
 
-    fileMenu->Resolve();
 
     //-- Edit menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* editMenu = new ACTION_MENU( false, selTool );
 
-    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
-        return m_my_part && GetUndoCommandCount() != 0;
-    };
-    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
-        return m_my_part && GetRedoCommandCount() != 0;
-    };
-    auto haveSymbolCondition = [ this ] ( const SELECTION& sel ) {
-        return m_my_part != nullptr;
-    };
-    auto isRootSymbolCondition = [ this ] ( const SELECTION& sel ) {
-        return m_my_part != nullptr && m_my_part->IsRoot();
-    };
+    editMenu->Add( ACTIONS::undo );
+    editMenu->Add( ACTIONS::redo );
 
-    editMenu->AddItem( ACTIONS::undo,                enableUndoCondition );
-    editMenu->AddItem( ACTIONS::redo,                enableRedoCondition );
+    editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::cut );
+    editMenu->Add( ACTIONS::copy );
+    editMenu->Add( ACTIONS::paste );
+    editMenu->Add( ACTIONS::doDelete );
+    editMenu->Add( ACTIONS::duplicate );
 
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::cut,                 EE_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::copy,                EE_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle );
-    editMenu->AddItem( ACTIONS::doDelete,            EE_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::duplicate,           EE_CONDITIONS::NotEmpty );
+    editMenu->AppendSeparator();
+    editMenu->Add( EE_ACTIONS::symbolProperties );
+    editMenu->Add( EE_ACTIONS::pinTable );
 
-    editMenu->AddSeparator();
-    editMenu->AddItem( EE_ACTIONS::symbolProperties, haveSymbolCondition );
-    editMenu->AddItem( EE_ACTIONS::pinTable,         isRootSymbolCondition );
-
-    editMenu->Resolve();
 
     //-- View menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
-    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
-        return IsGridVisible();
-    };
-    auto imperialUnitsCondition = [this]( const SELECTION& aSel ) {
-        return GetUserUnits() == EDA_UNITS::INCHES;
-    };
-    auto metricUnitsCondition = [this]( const SELECTION& aSel ) {
-        return GetUserUnits() == EDA_UNITS::MILLIMETRES;
-    };
-    auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetGalDisplayOptions().m_fullscreenCursor;
-    };
-    auto compTreeShownCondition = [ this ] ( const SELECTION& aSel ) {
-        return IsSearchTreeShown();
-    };
+    viewMenu->Add( ACTIONS::showSymbolBrowser );
 
-    viewMenu->AddItem( ACTIONS::showSymbolBrowser,         EE_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::zoomInCenter );
+    viewMenu->Add( ACTIONS::zoomOutCenter );
+    viewMenu->Add( ACTIONS::zoomFitScreen );
+    viewMenu->Add( ACTIONS::zoomTool );
+    viewMenu->Add( ACTIONS::zoomRedraw );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::zoomInCenter,              EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,             EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,             EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomTool,                  EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,                EE_CONDITIONS::ShowAlways );
-
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( ACTIONS::toggleGrid,           gridShownCondition );
-    viewMenu->AddItem( ACTIONS::gridProperties,            EE_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::toggleGrid,           ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::gridProperties );
 
     // Units submenu
-    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
     unitsSubMenu->SetIcon( unit_mm_xpm );
-    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,    imperialUnitsCondition );
-    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,      metricUnitsCondition );
-    viewMenu->AddMenu( unitsSubMenu );
+    unitsSubMenu->Add( ACTIONS::imperialUnits,    ACTION_MENU::CHECK );
+    unitsSubMenu->Add( ACTIONS::metricUnits,      ACTION_MENU::CHECK );
+    viewMenu->Add( unitsSubMenu );
 
-    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,    fullCrosshairCondition );
+    viewMenu->Add( ACTIONS::toggleCursorStyle,    ACTION_MENU::CHECK );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( EE_ACTIONS::showComponentTree, compTreeShownCondition );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( EE_ACTIONS::showComponentTree, ACTION_MENU::CHECK );
 
-    viewMenu->Resolve();
 
     //-- Place menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* placeMenu = new ACTION_MENU( false, selTool );
 
-    placeMenu->AddItem( EE_ACTIONS::placeSymbolPin,        isRootSymbolCondition );
-    placeMenu->AddItem( EE_ACTIONS::placeSymbolText,       isRootSymbolCondition );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolRectangle,   isRootSymbolCondition );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolCircle,      isRootSymbolCondition );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolArc,         isRootSymbolCondition );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolLines,       isRootSymbolCondition );
+    placeMenu->Add( EE_ACTIONS::placeSymbolPin );
+    placeMenu->Add( EE_ACTIONS::placeSymbolText );
+    placeMenu->Add( EE_ACTIONS::drawSymbolRectangle );
+    placeMenu->Add( EE_ACTIONS::drawSymbolCircle );
+    placeMenu->Add( EE_ACTIONS::drawSymbolArc );
+    placeMenu->Add( EE_ACTIONS::drawSymbolLines );
 
-    placeMenu->Resolve();
 
     //-- Inspect menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* inspectMenu = new ACTION_MENU( false, selTool );
 
-    inspectMenu->AddItem( EE_ACTIONS::showDatasheet,       haveSymbolCondition );
-    inspectMenu->AddItem( EE_ACTIONS::runERC,              isRootSymbolCondition );
+    inspectMenu->Add( EE_ACTIONS::showDatasheet );
+    inspectMenu->Add( EE_ACTIONS::runERC );
 
-    inspectMenu->Resolve();
 
     //-- Preferences menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* prefsMenu = new ACTION_MENU( false, selTool );
 
-    auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-    };
-    auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-    };
+    prefsMenu->Add( ACTIONS::configurePaths );
+    prefsMenu->Add( ACTIONS::showSymbolLibTable );
+    prefsMenu->Add( _( "Preferences...\tCTRL+," ),
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    preference_xpm );
 
-    prefsMenu->AddItem( ACTIONS::configurePaths,           EE_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( ACTIONS::showSymbolLibTable,       EE_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( wxID_PREFERENCES,
-                        _( "Preferences...\tCTRL+," ),
-                        _( "Show preferences for all open tools" ),
-                        preference_xpm,                    EE_CONDITIONS::ShowAlways );
-
-    prefsMenu->AddSeparator();
+    prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, selTool );
 
-    prefsMenu->AddSeparator();
-    prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
-    prefsMenu->AddCheckItem( ACTIONS::standardGraphics, standardGraphicsCondition );
+    prefsMenu->AppendSeparator();
+    prefsMenu->Add( ACTIONS::acceleratedGraphics, ACTION_MENU::CHECK );
+    prefsMenu->Add( ACTIONS::standardGraphics,    ACTION_MENU::CHECK );
 
-    prefsMenu->Resolve();
 
     //-- Menubar -------------------------------------------------------------
     //
-    menuBar->Append( fileMenu, _( "&File" ) );
-    menuBar->Append( editMenu, _( "&Edit" ) );
-    menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( placeMenu, _( "&Place" ) );
+    menuBar->Append( fileMenu,    _( "&File" ) );
+    menuBar->Append( editMenu,    _( "&Edit" ) );
+    menuBar->Append( viewMenu,    _( "&View" ) );
+    menuBar->Append( placeMenu,   _( "&Place" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
-    menuBar->Append( prefsMenu, _( "P&references" ) );
+    menuBar->Append( prefsMenu,   _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );

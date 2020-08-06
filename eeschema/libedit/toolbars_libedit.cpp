@@ -108,7 +108,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::runERC );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard,  ACTION_TOOLBAR::TOGGLE );
     m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddScaledSeparator( this );
@@ -147,57 +147,4 @@ void LIB_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( EE_ACTIONS::showComponentTree,   ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->Realize();
-}
-
-
-void LIB_EDIT_FRAME::SyncToolbars()
-{
-    KIGFX::SCH_RENDER_SETTINGS* settings = GetRenderSettings();
-    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-
-    bool isEditable = m_my_part && m_my_part->IsRoot();
-
-    m_mainToolBar->Toggle( ACTIONS::saveAll,  m_libMgr->HasModifications() );
-    m_mainToolBar->Toggle( ACTIONS::undo,     GetUndoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::redo,     GetRedoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
-    m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, (bool) m_my_part );
-    m_mainToolBar->Toggle( EE_ACTIONS::runERC, isEditable );
-    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard,
-                           GetShowDeMorgan(),
-                           m_convert == LIB_ITEM::LIB_CONVERT::BASE );
-    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganAlternate,
-                           GetShowDeMorgan(),
-                           m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN );
-    m_mainToolBar->Toggle( EE_ACTIONS::pinTable, isEditable );
-    m_mainToolBar->Toggle( EE_ACTIONS::toggleSyncedPinsMode,
-                           m_my_part && m_my_part->IsMulti() && !m_my_part->UnitsLocked(),
-                           m_SyncPinEdit );
-    m_mainToolBar->Refresh();
-
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits,
-            GetUserUnits() != EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,
-            GetUserUnits() == EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,      galOpts.m_fullscreenCursor );
-    m_optionsToolBar->Toggle( EE_ACTIONS::showElectricalTypes, settings->m_ShowPinsElectricalType );
-    m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree,   IsSearchTreeShown() );
-    m_optionsToolBar->Refresh();
-
-#define TOGGLE_TOOL( toolbar, enable, tool ) toolbar->Toggle( tool, enable, IsCurrentTool( tool ) )
-
-    TOGGLE_TOOL( m_drawToolBar, isEditable, ACTIONS::selectionTool );
-    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::placeSymbolPin );
-    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::placeSymbolText );
-    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::drawSymbolRectangle );
-    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::drawSymbolCircle );
-    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::drawSymbolArc );
-    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::drawSymbolLines );
-    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::placeSymbolAnchor );
-    TOGGLE_TOOL( m_drawToolBar, isEditable, ACTIONS::deleteTool );
-    m_drawToolBar->EnableTool( ID_LIBEDIT_IMPORT_BODY_BUTT, isEditable );
-    m_drawToolBar->EnableTool( ID_LIBEDIT_EXPORT_BODY_BUTT, isEditable );
-
-    m_drawToolBar->Refresh();
 }

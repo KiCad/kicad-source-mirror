@@ -55,10 +55,13 @@
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
 #include <symbol_lib_table.h>
+#include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/editor_conditions.h>
 #include <tool/picker_tool.h>
+#include <tool/selection.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
@@ -234,6 +237,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     LoadProjectSettings();
 
     setupTools();
+    setupUIConditions();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -342,6 +346,98 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RunAction( EE_ACTIONS::selectionActivate );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
+}
+
+
+void SCH_EDIT_FRAME::setupUIConditions()
+{
+    SCH_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
+
+    mgr->SetConditions( ACTIONS::save,                ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::undo,                ENABLE( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,                ENABLE( cond.RedoAvailable() ) );
+
+    mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::metricUnits,         CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::imperialUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::acceleratedGraphics, CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
+    mgr->SetConditions( ACTIONS::standardGraphics,    CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
+
+    mgr->SetConditions( ACTIONS::cut,                 ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::copy,                ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::paste,               ENABLE( SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::pasteSpecial,        ENABLE( SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::doDelete,            ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::duplicate,           ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+
+    mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+
+    auto showHiddenPinsCond =
+        [this] ( const SELECTION& )
+        {
+            return GetShowAllPins();
+        };
+
+    auto forceHVCond =
+        [this] ( const SELECTION& )
+        {
+            return eeconfig()->m_Drawing.hv_lines_only;
+        };
+
+    auto remapSymbolsCondition =
+        [&]( const SELECTION& aSel )
+        {
+            SCH_SCREENS schematic( Schematic().Root() );
+
+            // The remapping can only be performed on legacy projects.
+            return schematic.HasNoFullyDefinedLibIds();
+        };
+
+    auto belowRootSheetCondition =
+        [this]( const SELECTION& aSel )
+        {
+            return GetCurrentSheet().Last() != &Schematic().Root();
+        };
+
+    mgr->SetConditions( EE_ACTIONS::leaveSheet,         ENABLE( belowRootSheetCondition ) );
+    mgr->SetConditions( EE_ACTIONS::remapSymbols,       ENABLE( remapSymbolsCondition ) );
+    mgr->SetConditions( EE_ACTIONS::toggleHiddenPins,   CHECK( showHiddenPinsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleForceHV,      CHECK( forceHVCond ) );
+
+
+#define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
+
+    CURRENT_TOOL( ACTIONS::deleteTool );
+    CURRENT_TOOL( EE_ACTIONS::highlightNetTool );
+    CURRENT_TOOL( EE_ACTIONS::placeSymbol );
+    CURRENT_TOOL( EE_ACTIONS::placePower );
+    CURRENT_TOOL( EE_ACTIONS::drawWire );
+    CURRENT_TOOL( EE_ACTIONS::drawBus );
+    CURRENT_TOOL( EE_ACTIONS::placeBusWireEntry );
+    CURRENT_TOOL( EE_ACTIONS::placeNoConnect );
+    CURRENT_TOOL( EE_ACTIONS::placeJunction );
+    CURRENT_TOOL( EE_ACTIONS::placeLabel );
+    CURRENT_TOOL( EE_ACTIONS::placeGlobalLabel );
+    CURRENT_TOOL( EE_ACTIONS::placeHierLabel );
+    CURRENT_TOOL( EE_ACTIONS::drawSheet );
+    CURRENT_TOOL( EE_ACTIONS::importSheetPin );
+    CURRENT_TOOL( EE_ACTIONS::drawLines );
+    CURRENT_TOOL( EE_ACTIONS::placeSchematicText );
+    CURRENT_TOOL( EE_ACTIONS::placeImage );
+
+#undef CURRENT_TOOL
+#undef CHECK
+#undef ENABLE
 }
 
 
@@ -1240,4 +1336,10 @@ void SCH_EDIT_FRAME::ConvertTimeStampUuids()
 wxString SCH_EDIT_FRAME::GetCurrentFileName() const
 {
     return Schematic().GetFileName();
+}
+
+
+SELECTION& SCH_EDIT_FRAME::GetCurrentSelection()
+{
+    return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
 }

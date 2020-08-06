@@ -145,6 +145,8 @@ public:
 
     LIB_MANAGER& GetLibManager();
 
+    SELECTION& GetCurrentSelection() override;
+
     void ReCreateMenuBar() override;
 
     // See comments for m_SyncPinEdit.
@@ -255,6 +257,9 @@ public:
     void SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
 
     void ClearMsgPanel() override { DisplayCmpDoc(); }
+
+protected:
+    void setupUIConditions() override;
 
 private:
     // Sets up the tool framework
@@ -420,8 +425,6 @@ public:
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     void ShowChangedLanguage() override;
-
-    void SyncToolbars() override;
 
     void SetScreen( BASE_SCREEN* aScreen ) override;
 

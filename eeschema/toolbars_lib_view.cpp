@@ -27,8 +27,8 @@
 #include "lib_view_frame.h"
 #include "sch_painter.h"
 #include <symbol_lib_table.h>
+#include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
-#include <tool/conditional_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/lib_control.h>
@@ -63,7 +63,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard,  ACTION_TOOLBAR::TOGGLE );
     m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddScaledSeparator( this );
@@ -101,37 +101,27 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
 
     //-- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, libControl );
+    ACTION_MENU* fileMenu = new ACTION_MENU( false, libControl );
 
     fileMenu->AddClose( _( "Footprint Viewer" ) );
-
-    fileMenu->Resolve();
 
 
     //-- View menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, libControl );
+    ACTION_MENU* viewMenu = new ACTION_MENU( false, libControl );
 
-    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
-        return IsGridVisible();
-    };
-    auto electricalTypesShownCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetRenderSettings()->m_ShowPinsElectricalType;
-    };
+    viewMenu->Add( ACTIONS::zoomInCenter );
+    viewMenu->Add( ACTIONS::zoomOutCenter );
+    viewMenu->Add( ACTIONS::zoomFitScreen );
+    viewMenu->Add( ACTIONS::zoomRedraw );
 
-    viewMenu->AddItem( ACTIONS::zoomInCenter,             EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,            EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,            EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,               EE_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::toggleGrid,             ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::gridProperties );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( ACTIONS::toggleGrid,          gridShownCondition );
-    viewMenu->AddItem( ACTIONS::gridProperties,           EE_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( EE_ACTIONS::showElectricalTypes, ACTION_MENU::CHECK );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( EE_ACTIONS::showElectricalTypes, electricalTypesShownCondition );
-
-    viewMenu->Resolve();
 
     //-- Menubar -------------------------------------------------------------
     //
@@ -141,18 +131,4 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
 
     SetMenuBar( menuBar );
     delete oldMenuBar;
-}
-
-
-void LIB_VIEW_FRAME::SyncToolbars()
-{
-    LIB_PART* symbol = GetSelectedSymbol();
-
-    m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet,
-                           symbol && !symbol->GetDatasheetField().GetText().IsEmpty() );
-    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard, symbol && symbol->HasConversion(),
-                           m_convert == LIB_FIELD::LIB_CONVERT::BASE );
-    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganAlternate, symbol && symbol->HasConversion(),
-                           m_convert == LIB_FIELD::LIB_CONVERT::DEMORGAN );
-    m_mainToolBar->Refresh();
 }

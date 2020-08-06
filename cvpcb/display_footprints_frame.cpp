@@ -183,7 +183,7 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 
 void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
 {
-    EDA_BASE_FRAME::setupUIConditions();
+    PCB_BASE_FRAME::setupUIConditions();
 
     ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
     EDITOR_CONDITIONS cond( this );

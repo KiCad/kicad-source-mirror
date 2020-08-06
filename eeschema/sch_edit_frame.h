@@ -160,6 +160,8 @@ public:
 
     SCH_SCREEN* GetScreen() const override;
 
+    SELECTION& GetCurrentSelection() override;
+
     SCHEMATIC& Schematic() const;
 
     void OnCloseWindow( wxCloseEvent& Event );
@@ -214,6 +216,8 @@ public:
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
     void ReCreateMenuBar() override;
+
+    void setupUIConditions() override;
 
     /**
      * Get if the current schematic has been modified but not saved.
@@ -942,8 +946,6 @@ public:
     void UpdateNetHighlightStatus();
 
     void ShowChangedLanguage() override;
-
-    void SyncToolbars() override;
 
     void SetScreen( BASE_SCREEN* aScreen ) override;
 

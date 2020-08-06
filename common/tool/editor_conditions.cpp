@@ -94,7 +94,7 @@ SELECTION_CONDITION EDITOR_CONDITIONS::FullscreenCursor()
 
     wxASSERT( drwFrame );
 
-    return std::bind( &EDITOR_CONDITIONS::gridFunc, _1, drwFrame );
+    return std::bind( &EDITOR_CONDITIONS::cursorFunc, _1, drwFrame );
 }
 
 

@@ -29,6 +29,7 @@
 
 #include <sch_base_frame.h>
 #include <sch_screen.h>
+#include <tool/selection.h>
 
 class wxListBox;
 class SCHLIB_FILTER;
@@ -144,7 +145,10 @@ public:
 
     const BOX2I GetDocumentExtents() const override;
 
-    void SyncToolbars() override;
+    SELECTION& GetCurrentSelection() override;
+
+protected:
+    void setupUIConditions() override;
 
 private:
     // Sets up the tool framework

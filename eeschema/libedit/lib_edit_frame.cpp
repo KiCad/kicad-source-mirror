@@ -42,10 +42,13 @@
 #include <sch_view.h>
 #include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
+#include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/editor_conditions.h>
 #include <tool/picker_tool.h>
+#include <tool/selection.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
@@ -123,6 +126,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetRenderSettings()->LoadColors( GetColorSettings() );
 
     setupTools();
+    setupUIConditions();
 
     m_libMgr = new LIB_MANAGER( *this );
     SyncLibraries( true );
@@ -271,6 +275,158 @@ void LIB_EDIT_FRAME::setupTools()
     m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
+}
+
+
+void LIB_EDIT_FRAME::setupUIConditions()
+{
+    SCH_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
+
+    auto haveSymbolCond =
+        [this] ( const SELECTION& )
+        {
+            return m_my_part;
+        };
+
+    auto libMgrModifiedCond =
+        [this] ( const SELECTION& )
+        {
+            return m_libMgr->HasModifications();
+        };
+
+    auto modifiedDocumentCondition =
+        [this] ( const SELECTION& sel )
+        {
+            LIB_ID libId = getTargetLibId();
+            const wxString& libName  = libId.GetLibNickname();
+            const wxString& partName = libId.GetLibItemName();
+
+            bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
+
+            if( partName.IsEmpty() )
+                return ( !readOnly && m_libMgr->IsLibraryModified( libName ) );
+            else
+                return ( !readOnly && m_libMgr->IsPartModified( partName, libName ) );
+        };
+
+    mgr->SetConditions( ACTIONS::saveAll,             ENABLE( libMgrModifiedCond ) );
+    mgr->SetConditions( ACTIONS::save,                ENABLE( haveSymbolCond && modifiedDocumentCondition ) );
+    mgr->SetConditions( ACTIONS::undo,                ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,                ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
+    mgr->SetConditions( ACTIONS::revert,              ENABLE( haveSymbolCond && modifiedDocumentCondition ) );
+
+    mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::metricUnits,         CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::imperialUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::acceleratedGraphics, CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
+    mgr->SetConditions( ACTIONS::standardGraphics,    CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
+
+    mgr->SetConditions( ACTIONS::cut,                 ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::copy,                ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::paste,               ENABLE( haveSymbolCond && SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::doDelete,            ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::duplicate,           ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+
+    mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+
+    auto pinTypeCond =
+        [this] ( const SELECTION& )
+        {
+            return GetRenderSettings()->m_ShowPinsElectricalType;
+        };
+
+    auto showCompTreeCond =
+        [this] ( const SELECTION& )
+        {
+            return IsSearchTreeShown();
+        };
+
+    mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( pinTypeCond ) );
+    mgr->SetConditions( EE_ACTIONS::showComponentTree,   CHECK( showCompTreeCond ) );
+
+    auto isEditableCond =
+        [this] ( const SELECTION& )
+        {
+            // Only root symbols are editable
+            return m_my_part && m_my_part->IsRoot();
+        };
+
+    auto demorganCond =
+        [this] ( const SELECTION& )
+        {
+            return GetShowDeMorgan();
+        };
+
+    auto demorganStandardCond =
+        [this] ( const SELECTION& )
+        {
+            return m_convert == LIB_ITEM::LIB_CONVERT::BASE;
+        };
+
+    auto demorganAlternateCond =
+        [this] ( const SELECTION& )
+        {
+            return m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN;
+        };
+
+    auto multiUnitModeCond =
+        [this] ( const SELECTION& )
+        {
+            return m_my_part && m_my_part->IsMulti() && !m_my_part->UnitsLocked();
+        };
+
+    auto syncedPinsModeCond =
+        [this] ( const SELECTION& )
+        {
+            return m_SyncPinEdit;
+        };
+
+    auto haveDatasheetCond =
+        [this] ( const SELECTION& )
+        {
+            return m_my_part && !m_my_part->GetDatasheetField().GetText().IsEmpty();
+        };
+
+    mgr->SetConditions( EE_ACTIONS::showDatasheet,    ENABLE( haveDatasheetCond ) );
+    mgr->SetConditions( EE_ACTIONS::symbolProperties, ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( EE_ACTIONS::runERC,           ENABLE( isEditableCond) );
+    mgr->SetConditions( EE_ACTIONS::pinTable,         ENABLE( isEditableCond) );
+
+    mgr->SetConditions( EE_ACTIONS::showDeMorganStandard,
+                        ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
+    mgr->SetConditions( EE_ACTIONS::showDeMorganAlternate,
+                        ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganAlternateCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleSyncedPinsMode,
+                        ACTION_CONDITIONS().Enable( multiUnitModeCond ).Check( syncedPinsModeCond ) );
+
+// Only enable a tool if the part is edtable
+#define EDIT_TOOL( tool ) ACTION_CONDITIONS().Enable( isEditableCond ).Check( cond.CurrentTool( tool ) )
+
+    mgr->SetConditions( ACTIONS::deleteTool,             EDIT_TOOL( ACTIONS::deleteTool ) );
+    mgr->SetConditions( EE_ACTIONS::placeSymbolPin,      EDIT_TOOL( EE_ACTIONS::placeSymbolPin ) );
+    mgr->SetConditions( EE_ACTIONS::placeSymbolText,     EDIT_TOOL( EE_ACTIONS::placeSymbolText ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolRectangle, EDIT_TOOL( EE_ACTIONS::drawSymbolRectangle ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolCircle,    EDIT_TOOL( EE_ACTIONS::drawSymbolCircle ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolArc,       EDIT_TOOL( EE_ACTIONS::drawSymbolArc ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolLines,     EDIT_TOOL( EE_ACTIONS::drawSymbolLines ) );
+    mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,   EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
+
+    RegisterUIUpdateHandler( ID_LIBEDIT_IMPORT_BODY_BUTT, ENABLE( isEditableCond ) );
+    RegisterUIUpdateHandler( ID_LIBEDIT_EXPORT_BODY_BUTT, ENABLE( isEditableCond ) );
+
+#undef CHECK
+#undef ENABLE
+#undef EDIT_TOOL
 }
 
 
@@ -944,3 +1100,7 @@ void LIB_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCou
 }
 
 
+SELECTION& LIB_EDIT_FRAME::GetCurrentSelection()
+{
+    return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+}

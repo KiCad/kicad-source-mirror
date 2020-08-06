@@ -29,7 +29,7 @@
 #include <menus_helpers.h>
 #include <pgm_base.h>
 #include <schematic.h>
-#include <tool/conditional_menu.h>
+#include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_actions.h>
@@ -46,14 +46,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar*  oldMenuBar = GetMenuBar();
     WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
-    auto modifiedDocumentCondition = [&]( const SELECTION& sel )
-                                     {
-                                         return Schematic().GetSheets().IsModified();
-                                     };
-
     //-- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU*   fileMenu = new ACTION_MENU( false, selTool );
     static ACTION_MENU* openRecentMenu;
 
     if( Kiface().IsSingle() )   // When not under a project mgr
@@ -73,22 +68,29 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
             fileHistory.AddFilesToMenu( openRecentMenu );
         }
 
-        fileMenu->AddItem( ACTIONS::doNew,         EE_CONDITIONS::ShowAlways );
-        fileMenu->AddItem( ACTIONS::open,          EE_CONDITIONS::ShowAlways );
-        fileMenu->AddMenu( openRecentMenu,         FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
-        fileMenu->AddSeparator();
+        fileMenu->Add( ACTIONS::doNew );
+        fileMenu->Add( ACTIONS::open );
+
+        wxMenuItem* item = fileMenu->Add( openRecentMenu );
+
+        // Add the file menu condition here since it needs the item ID for the submenu
+        ACTION_CONDITIONS cond;
+        cond.Enable( FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
+        RegisterUIUpdateHandler( item->GetId(), cond );
+        fileMenu->AppendSeparator();
     }
 
-    fileMenu->AddItem( ACTIONS::save,              modifiedDocumentCondition );
-    fileMenu->AddItem( ACTIONS::saveAs,            EE_CONDITIONS::ShowAlways );
+    fileMenu->Add( ACTIONS::save );
+    fileMenu->Add( ACTIONS::saveAs );
 
-    fileMenu->AddSeparator();
+    fileMenu->AppendSeparator();
 
-    fileMenu->AddItem( ID_APPEND_PROJECT, _( "Append Schematic Sheet Content..." ),
-                       _( "Append schematic sheet content from another project to the current sheet" ),
-                       add_document_xpm,           EE_CONDITIONS::ShowAlways );
+    fileMenu->Add( _( "Append Schematic Sheet Content..." ),
+                   _( "Append schematic sheet content from another project to the current sheet" ),
+                   ID_APPEND_PROJECT,
+                   add_document_xpm );
 
-    fileMenu->AddSeparator();
+    fileMenu->AppendSeparator();
 
     // Import submenu
     ACTION_MENU* submenuImport = new ACTION_MENU( false );
@@ -97,10 +99,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetIcon( import_xpm );
     submenuImport->Add( _( "Import Non KiCad Schematic..." ),
                         _( "Replace current schematic sheet with one imported from another application" ),
-                        ID_IMPORT_NON_KICAD_SCH, import_document_xpm );
+                        ID_IMPORT_NON_KICAD_SCH,
+                        import_document_xpm );
 
     submenuImport->Add( EE_ACTIONS::importFPAssignments );
-    fileMenu->AddMenu( submenuImport,              EE_CONDITIONS::ShowAlways );
+    fileMenu->Add( submenuImport );
 
 
     // Export submenu
@@ -110,238 +113,172 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetIcon( export_xpm );
     submenuExport->Add( EE_ACTIONS::drawSheetOnClipboard );
     submenuExport->Add( EE_ACTIONS::exportNetlist );
-    fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
+    fileMenu->Add( submenuExport );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( EE_ACTIONS::schematicSetup, EE_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( EE_ACTIONS::schematicSetup );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::pageSettings,      EE_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::print,             EE_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::plot,              EE_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( ACTIONS::pageSettings );
+    fileMenu->Add( ACTIONS::print );
+    fileMenu->Add( ACTIONS::plot );
 
-    fileMenu->AddSeparator();
+    fileMenu->AppendSeparator();
     fileMenu->AddQuitOrClose( &Kiface(), _( "Eeschema" ) );
 
-    fileMenu->Resolve();
 
     //-- Edit menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* editMenu = new ACTION_MENU( false, selTool );
 
-    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetUndoCommandCount() > 0;
-    };
-    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetRedoCommandCount() > 0;
-    };
+    editMenu->Add( ACTIONS::undo );
+    editMenu->Add( ACTIONS::redo );
 
-    editMenu->AddItem( ACTIONS::undo,                       enableUndoCondition );
-    editMenu->AddItem( ACTIONS::redo,                       enableRedoCondition );
+    editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::cut );
+    editMenu->Add( ACTIONS::copy );
+    editMenu->Add( ACTIONS::paste );
+    editMenu->Add( ACTIONS::pasteSpecial );
+    editMenu->Add( ACTIONS::doDelete );
+    editMenu->Add( ACTIONS::duplicate );
 
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::cut,                        EE_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::copy,                       EE_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::paste,                      EE_CONDITIONS::Idle );
-    editMenu->AddItem( ACTIONS::pasteSpecial,               EE_CONDITIONS::Idle );
-    editMenu->AddItem( ACTIONS::doDelete,                   EE_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::duplicate,                  EE_CONDITIONS::NotEmpty );
+    editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::find );
+    editMenu->Add( ACTIONS::findAndReplace );
 
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::find,                       EE_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ACTIONS::findAndReplace,             EE_CONDITIONS::ShowAlways );
+    editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::deleteTool );
+    editMenu->Add( EE_ACTIONS::editTextAndGraphics );
+    editMenu->Add( EE_ACTIONS::updateFieldsFromLibrary );
+    editMenu->Add( EE_ACTIONS::changeSymbols );
+    editMenu->Add( EE_ACTIONS::updateSymbols );
 
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::deleteTool,                 EE_CONDITIONS::ShowAlways );
-    editMenu->AddItem( EE_ACTIONS::editTextAndGraphics,     EE_CONDITIONS::ShowAlways );
-    editMenu->AddItem( EE_ACTIONS::updateFieldsFromLibrary, EE_CONDITIONS::ShowAlways );
-    editMenu->AddItem( EE_ACTIONS::changeSymbols,           EE_CONDITIONS::ShowAlways );
-    editMenu->AddItem( EE_ACTIONS::updateSymbols,           EE_CONDITIONS::ShowAlways );
-
-    editMenu->Resolve();
 
     //-- View menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
-    auto belowRootSheetCondition =
-            [this]( const SELECTION& aSel )
-            {
-                return GetCurrentSheet().Last() != &Schematic().Root();
-            };
+    viewMenu->Add( ACTIONS::showSymbolBrowser );
+    viewMenu->Add( EE_ACTIONS::navigateHierarchy );
+    viewMenu->Add( EE_ACTIONS::leaveSheet );
 
-    auto gridShownCondition =
-            [this]( const SELECTION& aSel )
-            {
-                return IsGridVisible();
-            };
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::zoomInCenter );
+    viewMenu->Add( ACTIONS::zoomOutCenter );
+    viewMenu->Add( ACTIONS::zoomFitScreen );
+    viewMenu->Add( ACTIONS::zoomTool );
+    viewMenu->Add( ACTIONS::zoomRedraw );
 
-    auto imperialUnitsCondition =
-            [this]( const SELECTION& aSel )
-            {
-                return GetUserUnits() == EDA_UNITS::INCHES;
-            };
-
-    auto metricUnitsCondition =
-            [this]( const SELECTION& aSel )
-            {
-                return GetUserUnits() == EDA_UNITS::MILLIMETRES;
-            };
-
-    auto fullCrosshairCondition =
-            [this]( const SELECTION& aSel )
-            {
-                return GetGalDisplayOptions().m_fullscreenCursor;
-            };
-    auto hiddenPinsCondition =
-            [this]( const SELECTION& aSel )
-            {
-                return GetShowAllPins();
-            };
-
-    viewMenu->AddItem( ACTIONS::showSymbolBrowser,        EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( EE_ACTIONS::navigateHierarchy,     EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( EE_ACTIONS::leaveSheet,            belowRootSheetCondition );
-
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::zoomInCenter,             EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,            EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,            EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomTool,                 EE_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,               EE_CONDITIONS::ShowAlways );
-
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( ACTIONS::toggleGrid,          gridShownCondition );
-    viewMenu->AddItem( ACTIONS::gridProperties,           EE_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::toggleGrid,          ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::gridProperties );
 
     // Units submenu
-    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
     unitsSubMenu->SetIcon( unit_mm_xpm );
-    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,   imperialUnitsCondition );
-    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,     metricUnitsCondition );
-    viewMenu->AddMenu( unitsSubMenu );
+    unitsSubMenu->Add( ACTIONS::imperialUnits,   ACTION_MENU::CHECK );
+    unitsSubMenu->Add( ACTIONS::metricUnits,     ACTION_MENU::CHECK );
+    viewMenu->Add( unitsSubMenu );
 
-    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,   fullCrosshairCondition );
+    viewMenu->Add( ACTIONS::toggleCursorStyle,   ACTION_MENU::CHECK );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( EE_ACTIONS::toggleHiddenPins, hiddenPinsCondition );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( EE_ACTIONS::toggleHiddenPins, ACTION_MENU::CHECK );
 
 #ifdef __APPLE__
-    viewMenu->AddSeparator();
+    viewMenu->AppendSeparator();
 #endif
-
-    viewMenu->Resolve();
 
     //-- Place menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* placeMenu = new ACTION_MENU( false, selTool );
 
-    placeMenu->AddItem( EE_ACTIONS::placeSymbol,            EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placePower,             EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::drawWire,               EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::drawBus,                EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placeBusWireEntry,      EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placeNoConnect,         EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placeJunction,          EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placeLabel,             EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placeGlobalLabel,       EE_CONDITIONS::ShowAlways );
+    placeMenu->Add( EE_ACTIONS::placeSymbol );
+    placeMenu->Add( EE_ACTIONS::placePower );
+    placeMenu->Add( EE_ACTIONS::drawWire );
+    placeMenu->Add( EE_ACTIONS::drawBus );
+    placeMenu->Add( EE_ACTIONS::placeBusWireEntry );
+    placeMenu->Add( EE_ACTIONS::placeNoConnect );
+    placeMenu->Add( EE_ACTIONS::placeJunction );
+    placeMenu->Add( EE_ACTIONS::placeLabel );
+    placeMenu->Add( EE_ACTIONS::placeGlobalLabel );
 
-    placeMenu->AddSeparator();
-    placeMenu->AddItem( EE_ACTIONS::placeHierLabel, EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::drawSheet,              EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::importSheetPin,         EE_CONDITIONS::ShowAlways );
+    placeMenu->AppendSeparator();
+    placeMenu->Add( EE_ACTIONS::placeHierLabel );
+    placeMenu->Add( EE_ACTIONS::drawSheet );
+    placeMenu->Add( EE_ACTIONS::importSheetPin );
 
-    placeMenu->AddSeparator();
-    placeMenu->AddItem( EE_ACTIONS::drawLines,              EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placeSchematicText,     EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placeImage,             EE_CONDITIONS::ShowAlways );
+    placeMenu->AppendSeparator();
+    placeMenu->Add( EE_ACTIONS::drawLines );
+    placeMenu->Add( EE_ACTIONS::placeSchematicText );
+    placeMenu->Add( EE_ACTIONS::placeImage );
 
-    placeMenu->Resolve();
 
     //-- Inspect menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* inspectMenu = new ACTION_MENU( false, selTool );
 
-    inspectMenu->AddItem( EE_ACTIONS::runERC,               EE_CONDITIONS::ShowAlways );
+    inspectMenu->Add( EE_ACTIONS::runERC );
 #ifdef KICAD_SPICE
-    inspectMenu->AddItem( EE_ACTIONS::runSimulation,        EE_CONDITIONS::ShowAlways );
+    inspectMenu->Add( EE_ACTIONS::runSimulation );
 #endif
 
-    inspectMenu->Resolve();
 
     //-- Tools menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* toolsMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* toolsMenu = new ACTION_MENU( false, selTool );
 
-    auto remapSymbolsCondition =
-            [&]( const SELECTION& aSel )
-            {
-                SCH_SCREENS schematic( Schematic().Root() );
+    toolsMenu->Add( ACTIONS::updatePcbFromSchematic );
+    toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
+    toolsMenu->Add( EE_ACTIONS::showPcbNew );
 
-                // The remapping can only be performed on legacy projects.
-                return schematic.HasNoFullyDefinedLibIds();
-            };
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( ACTIONS::showSymbolEditor );
+    toolsMenu->Add( EE_ACTIONS::rescueSymbols );
+    toolsMenu->Add( EE_ACTIONS::remapSymbols );
 
-    toolsMenu->AddItem( ACTIONS::updatePcbFromSchematic,    EE_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( ACTIONS::updateSchematicFromPcb,    EE_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( EE_ACTIONS::showPcbNew,             EE_CONDITIONS::ShowAlways );
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( EE_ACTIONS::editSymbolFields );
+    toolsMenu->Add( EE_ACTIONS::editSymbolLibraryLinks );
 
-    toolsMenu->AddSeparator();
-    toolsMenu->AddItem( ACTIONS::showSymbolEditor,          EE_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( EE_ACTIONS::rescueSymbols,          EE_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( EE_ACTIONS::remapSymbols,           remapSymbolsCondition );
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( EE_ACTIONS::annotate );
+    toolsMenu->Add( EE_ACTIONS::showBusManager );
 
-    toolsMenu->AddSeparator();
-    toolsMenu->AddItem( EE_ACTIONS::editSymbolFields,       EE_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( EE_ACTIONS::editSymbolLibraryLinks, EE_CONDITIONS::ShowAlways );
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( EE_ACTIONS::assignFootprints );
+    toolsMenu->Add( EE_ACTIONS::generateBOM );
 
-    toolsMenu->AddSeparator();
-    toolsMenu->AddItem( EE_ACTIONS::annotate,               EE_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( EE_ACTIONS::showBusManager,         EE_CONDITIONS::ShowAlways );
-
-    toolsMenu->AddSeparator();
-    toolsMenu->AddItem( EE_ACTIONS::assignFootprints,       EE_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( EE_ACTIONS::generateBOM,            EE_CONDITIONS::ShowAlways );
-
-    toolsMenu->Resolve();
 
     //-- Preferences menu -----------------------------------------------
     //
-    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* prefsMenu = new ACTION_MENU( false, selTool );
 
-    auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-    };
-    auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-    };
+    prefsMenu->Add( ACTIONS::configurePaths );
+    prefsMenu->Add( ACTIONS::showSymbolLibTable );
+    prefsMenu->Add( _( "Preferences...\tCTRL+," ),
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    preference_xpm );
 
-    prefsMenu->AddItem( ACTIONS::configurePaths,           EE_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( ACTIONS::showSymbolLibTable,       EE_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( wxID_PREFERENCES,
-                        _( "Preferences...\tCTRL+," ),
-                        _( "Show preferences for all open tools" ),
-                        preference_xpm,                    EE_CONDITIONS::ShowAlways );
-
-    prefsMenu->AddSeparator();
+    prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, selTool );
 
-    prefsMenu->AddSeparator();
-    prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
-    prefsMenu->AddCheckItem( ACTIONS::standardGraphics,    standardGraphicsCondition );
+    prefsMenu->AppendSeparator();
+    prefsMenu->Add( ACTIONS::acceleratedGraphics, ACTION_MENU::CHECK );
+    prefsMenu->Add( ACTIONS::standardGraphics,    ACTION_MENU::CHECK );
 
-    prefsMenu->Resolve();
 
     //-- Menubar -------------------------------------------------------------
     //
-    menuBar->Append( fileMenu, _( "&File" ) );
-    menuBar->Append( editMenu, _( "&Edit" ) );
-    menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( placeMenu, _( "&Place" ) );
+    menuBar->Append( fileMenu,    _( "&File" ) );
+    menuBar->Append( editMenu,    _( "&Edit" ) );
+    menuBar->Append( viewMenu,    _( "&View" ) );
+    menuBar->Append( placeMenu,   _( "&Place" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
-    menuBar->Append( toolsMenu, _( "&Tools" ) );
-    menuBar->Append( prefsMenu, _( "P&references" ) );
+    menuBar->Append( toolsMenu,   _( "&Tools" ) );
+    menuBar->Append( prefsMenu,   _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );

@@ -1175,7 +1175,7 @@ void GERBVIEW_FRAME::setupTools()
 
 void GERBVIEW_FRAME::setupUIConditions()
 {
-    EDA_BASE_FRAME::setupUIConditions();
+    EDA_DRAW_FRAME::setupUIConditions();
 
     ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
     EDITOR_CONDITIONS cond( this );

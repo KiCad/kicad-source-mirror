@@ -42,11 +42,13 @@
 #include <symbol_tree_model_adapter.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
-#include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
-#include <tool/tool_dispatcher.h>
-#include <tool/common_tools.h>
 #include <tool/common_control.h>
+#include <tool/common_tools.h>
+#include <tool/editor_conditions.h>
+#include <tool/selection.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
 #include <tools/lib_control.h>
@@ -140,6 +142,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     GetRenderSettings()->SetDefaultPenWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS );
 
     setupTools();
+    setupUIConditions();
 
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -241,6 +244,67 @@ void LIB_VIEW_FRAME::setupTools()
     m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
+}
+
+
+void LIB_VIEW_FRAME::setupUIConditions()
+{
+    SCH_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
+
+    mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
+
+    auto electricalTypesShownCondition =
+        [this] ( const SELECTION& aSel )
+        {
+            return GetRenderSettings()->m_ShowPinsElectricalType;
+        };
+
+    auto demorganCond =
+        [this] ( const SELECTION& )
+        {
+            LIB_PART* symbol = GetSelectedSymbol();
+
+            return symbol && symbol->HasConversion();
+        };
+
+    auto demorganStandardCond =
+        [] ( const SELECTION& )
+        {
+            return m_convert == LIB_ITEM::LIB_CONVERT::BASE;
+        };
+
+    auto demorganAlternateCond =
+        [] ( const SELECTION& )
+        {
+            return m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN;
+        };
+
+    auto haveDatasheetCond =
+        [this] ( const SELECTION& )
+        {
+            LIB_PART* symbol = GetSelectedSymbol();
+
+            return symbol && !symbol->GetDatasheetField().GetText().IsEmpty();
+        };
+
+    mgr->SetConditions( EE_ACTIONS::showDatasheet,       ENABLE( haveDatasheetCond ) );
+    mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( electricalTypesShownCondition ) );
+
+    mgr->SetConditions( EE_ACTIONS::showDeMorganStandard,
+                        ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
+    mgr->SetConditions( EE_ACTIONS::showDeMorganAlternate,
+                        ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganAlternateCond ) );
+
+#undef CHECK
+#undef ENABLE
 }
 
 
@@ -836,3 +900,8 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
     }
 }
 
+
+SELECTION& LIB_VIEW_FRAME::GetCurrentSelection()
+{
+    return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+}
