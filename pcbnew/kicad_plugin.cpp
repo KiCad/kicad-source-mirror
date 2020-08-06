@@ -579,6 +579,9 @@ void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
 {
     for( NETINFO_ITEM* net : *m_mapping )
     {
+        if( net == nullptr )    // Skip not actually existing nets (orphan nets)
+            continue;
+
         m_out->Print( aNestLevel, "(net %d %s)\n",
                                   m_mapping->Translate( net->GetNet() ),
                                   m_out->Quotew( net->GetNetname() ).c_str() );
