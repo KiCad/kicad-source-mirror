@@ -49,7 +49,7 @@ void INDEX::Remove( ITEM* aItem )
     if( m_subIndices.size() <= static_cast<size_t>( range.End() ) )
         return;
 
-    for( int i = range.Start(); i < range.End(); ++i )
+    for( int i = range.Start(); i <= range.End(); ++i )
         m_subIndices[i].Remove( aItem );
 
     m_allItems.erase( aItem );
