@@ -331,6 +331,15 @@ public:
         return prevTok;
     }
 
+    /**
+     * Function GetCurStrAsToken
+     * Used to support "loose" matches (quoted tokens)
+     */
+    int GetCurStrAsToken()
+    {
+        return findToken( curText );
+    }
+
     //-----</overload return values to tokens>-----------------------------
 
 

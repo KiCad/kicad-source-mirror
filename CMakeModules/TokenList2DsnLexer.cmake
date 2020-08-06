@@ -346,6 +346,15 @@ public:
     {
         return (${enum}::T) DSNLEXER::PrevTok();
     }
+
+    /**
+     * Function GetCurStrAsToken
+     * Used to support 'loose' matches (quoted tokens)
+     */
+    ${enum}::T GetCurStrAsToken()
+    {
+        return (${enum}::T) DSNLEXER::GetCurStrAsToken();
+    }
 };
 
 // example usage
