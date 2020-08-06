@@ -28,6 +28,7 @@
 class COLOR_SETTINGS;
 class PAGE_INFO;
 class PCB_EDIT_FRAME;
+class FOOTPRINT_PREVIEW_PANEL;
 class TITLE_BLOCK;
 
 namespace KIGFX
@@ -42,10 +43,16 @@ public:
 
     ~PANEL_PCBNEW_COLOR_SETTINGS() override;
 
+    void ResetPanel() override;
+
 protected:
     bool TransferDataFromWindow() override;
 
     bool TransferDataToWindow() override;
+
+    void OnSize( wxSizeEvent& aEvent ) override;
+    void onNewThemeSelected() override;
+    void onColorChanged() override;
 
     enum COLOR_CONTEXT_ID
     {
@@ -55,13 +62,18 @@ protected:
     };
 
 private:
-    PCB_EDIT_FRAME* m_frame;
+    PCB_EDIT_FRAME*          m_frame;
 
-    PAGE_INFO* m_page;
+    FOOTPRINT_PREVIEW_PANEL* m_preview;
+    PAGE_INFO*               m_page;
+    TITLE_BLOCK*             m_titleBlock;
 
-    TITLE_BLOCK* m_titleBlock;
-
+private:
+    void createPreviewItems();
     void createSwatches();
+
+    void updatePreview();
+    void zoomFitPreview();
 };
 
 

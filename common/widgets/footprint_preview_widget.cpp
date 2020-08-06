@@ -108,12 +108,13 @@ void FOOTPRINT_PREVIEW_WIDGET::OnStatusChange( FOOTPRINT_STATUS aStatus )
 }
 
 
-FOOTPRINT_PREVIEW_PANEL_BASE* FOOTPRINT_PREVIEW_PANEL_BASE::Create(
-        wxWindow* aParent, KIWAY& aKiway )
+FOOTPRINT_PREVIEW_PANEL_BASE* FOOTPRINT_PREVIEW_PANEL_BASE::Create( wxWindow* aParent,
+                                                                    KIWAY& aKiway )
 {
     FOOTPRINT_PREVIEW_PANEL_BASE* panel = nullptr;
 
-    try {
+    try
+    {
         KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
 
         auto window = kiface->CreateWindow( aParent, FRAME_FOOTPRINT_PREVIEW, &aKiway );
@@ -122,8 +123,10 @@ FOOTPRINT_PREVIEW_PANEL_BASE* FOOTPRINT_PREVIEW_PANEL_BASE::Create(
 
         if( window && !panel )
             delete window;
-    } catch( ... )
-    {}
+    }
+    catch( ... )
+    {
+    }
 
     return panel;
 }

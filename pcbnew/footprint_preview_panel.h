@@ -65,6 +65,7 @@ public:
     virtual void SetStatusHandler( FOOTPRINT_STATUS_HANDLER aHandler ) override;
 
     virtual wxWindow* GetWindow() override;
+    BOARD* GetBoard() { return m_dummyBoard.get(); }
 
     static FOOTPRINT_PREVIEW_PANEL* New( KIWAY* aKiway, wxWindow* aParent );
 
@@ -85,7 +86,8 @@ private:
      * @param aGalType the displayed GAL type
      */
     FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
-            std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts, GAL_TYPE aGalType );
+                             std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
+                             GAL_TYPE aGalType );
 
 
     virtual CACHE_ENTRY CacheAndReturn( const LIB_ID& aFPID );
@@ -94,6 +96,7 @@ private:
 
     void renderFootprint( std::shared_ptr<MODULE> aModule );
 
+private:
     FP_LOADER_THREAD*                m_loader;
     std::shared_ptr<FP_THREAD_IFACE> m_iface;
     FOOTPRINT_STATUS_HANDLER         m_handler;

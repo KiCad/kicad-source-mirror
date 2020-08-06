@@ -131,6 +131,8 @@ public:
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
                  const PROPERTIES* aProperties = NULL ) override;
 
+    BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties );
+
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts, const PROPERTIES* aProperties = NULL ) override;
 

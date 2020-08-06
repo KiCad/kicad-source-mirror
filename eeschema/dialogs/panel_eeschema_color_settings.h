@@ -52,37 +52,28 @@ protected:
     bool TransferDataToWindow() override;
 
     void OnOverrideItemColorsClicked( wxCommandEvent& aEvent ) override;
-
     void OnSize( wxSizeEvent& aEvent ) override;
+    void onNewThemeSelected() override;
+    void onColorChanged() override;
 
     bool validateSave( bool aQuiet = false ) override;
 
     bool saveCurrentTheme( bool aValidate ) override;
 
-    void onNewThemeSelected() override;
+private:
+    SCH_BASE_FRAME*            m_frame;
 
-    void onColorChanged() override;
+    SCH_PREVIEW_PANEL*         m_preview;
+    PAGE_INFO*                 m_page;
+    TITLE_BLOCK*               m_titleBlock;
+    KIGFX::WS_PROXY_VIEW_ITEM* m_ws;
+    std::vector<EDA_ITEM*>     m_previewItems;
 
 private:
-    SCH_BASE_FRAME* m_frame;
-
-    SCH_PREVIEW_PANEL* m_preview;
-
-    PAGE_INFO* m_page;
-
-    TITLE_BLOCK* m_titleBlock;
-
-    KIGFX::WS_PROXY_VIEW_ITEM* m_ws;
-
-    std::vector<EDA_ITEM*> m_previewItems;
-
     void createPreviewItems();
-
     void createSwatches();
 
-
     void updatePreview();
-
     void zoomFitPreview();
 };
 

@@ -245,16 +245,16 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
                    };
 
     std::vector<std::pair<SCH_LAYER_ID, std::pair<wxPoint, wxPoint>>> lines = {
-                { LAYER_WIRE, { { 1950, 1500 }, { 2325, 1500 } } },
-                { LAYER_WIRE, { { 1950, 2600 }, { 2350, 2600 } } },
-                { LAYER_WIRE, { { 2150, 1700 }, { 2325, 1700 } } },
-                { LAYER_WIRE, { { 2150, 2000 }, { 2150, 1700 } } },
-                { LAYER_WIRE, { { 2925, 1600 }, { 3075, 1600 } } },
-                { LAYER_WIRE, { { 3075, 1600 }, { 3075, 2000 } } },
-                { LAYER_WIRE, { { 3075, 1600 }, { 3250, 1600 } } },
-                { LAYER_WIRE, { { 3075, 2000 }, { 2150, 2000 } } },
-                { LAYER_BUS, { { 1750, 1400 }, { 1850, 1400 } } },
-                { LAYER_BUS, { { 1850, 2500 }, { 1850, 1400 } } },
+                { LAYER_WIRE,  { { 1950, 1500 }, { 2325, 1500 } } },
+                { LAYER_WIRE,  { { 1950, 2600 }, { 2350, 2600 } } },
+                { LAYER_WIRE,  { { 2150, 1700 }, { 2325, 1700 } } },
+                { LAYER_WIRE,  { { 2150, 2000 }, { 2150, 1700 } } },
+                { LAYER_WIRE,  { { 2925, 1600 }, { 3075, 1600 } } },
+                { LAYER_WIRE,  { { 3075, 1600 }, { 3075, 2000 } } },
+                { LAYER_WIRE,  { { 3075, 1600 }, { 3250, 1600 } } },
+                { LAYER_WIRE,  { { 3075, 2000 }, { 2150, 2000 } } },
+                { LAYER_BUS,   { { 1750, 1400 }, { 1850, 1400 } } },
+                { LAYER_BUS,   { { 1850, 2500 }, { 1850, 1400 } } },
                 { LAYER_NOTES, { { 2350, 2125 }, { 2350, 2300 } } },
                 { LAYER_NOTES, { { 2350, 2125 }, { 2950, 2125 } } },
                 { LAYER_NOTES, { { 2950, 2125 }, { 2950, 2300 } } },
@@ -265,10 +265,10 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     {
         SCH_LINE* wire = new SCH_LINE;
         wire->SetLayer( line.first );
-        wire->SetStartPoint(
-                wxPoint( Mils2iu( line.second.first.x ), Mils2iu( line.second.first.y ) ) );
-        wire->SetEndPoint(
-                wxPoint( Mils2iu( line.second.second.x ), Mils2iu( line.second.second.y ) ) );
+        wire->SetStartPoint( wxPoint( Mils2iu( line.second.first.x ),
+                                      Mils2iu( line.second.first.y ) ) );
+        wire->SetEndPoint( wxPoint( Mils2iu( line.second.second.x ),
+                                    Mils2iu( line.second.second.y ) ) );
         addItem( wire );
     }
 

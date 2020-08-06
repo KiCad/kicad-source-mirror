@@ -1935,11 +1935,23 @@ PCB_IO::~PCB_IO()
 
 BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties )
 {
-    FILE_LINE_READER    reader( aFileName );
+    FILE_LINE_READER reader( aFileName );
 
+    BOARD* board = DoLoad( reader, aAppendToMe, aProperties );
+
+    // Give the filename to the board if it's new
+    if( !aAppendToMe )
+        board->SetFileName( aFileName );
+
+    return board;
+}
+
+
+BOARD* PCB_IO::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties )
+{
     init( aProperties );
 
-    m_parser->SetLineReader( &reader );
+    m_parser->SetLineReader( &aReader );
     m_parser->SetBoard( aAppendToMe );
 
     BOARD* board;
@@ -1968,10 +1980,6 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
                 m_parser->CurSource(), m_parser->CurLine(),
                 m_parser->CurLineNumber(), m_parser->CurOffset() );
     }
-
-    // Give the filename to the board if it's new
-    if( !aAppendToMe )
-        board->SetFileName( aFileName );
 
     return board;
 }
