@@ -417,7 +417,7 @@ void EDA_DRAW_FRAME::OnMove( wxMoveEvent& aEvent )
     double oldFactor = m_galDisplayOptions.m_scaleFactor;
     m_galDisplayOptions.UpdateScaleFactor();
 
-    if( oldFactor != m_galDisplayOptions.m_scaleFactor )
+    if( oldFactor != m_galDisplayOptions.m_scaleFactor && m_canvas )
     {
         wxSize clientSize = GetClientSize();
         GetCanvas()->GetGAL()->ResizeScreen( clientSize.x, clientSize.y );
