@@ -23,7 +23,6 @@
 
 
 #include <cstdio>
-#include <boost/algorithm/string/case_conv.hpp>
 #include <memory>
 #include <reporter.h>
 #include <class_board.h>
@@ -207,10 +206,7 @@ LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::CreateFuncCall( const char* aName )
 {
     PCB_EXPR_BUILTIN_FUNCTIONS& registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
 
-    std::string lowerName( aName );
-    boost::to_lower( lowerName );
-
-    return registry.Get( lowerName );
+    return registry.Get( wxString::FromUTF8( aName ).Lower() );
 }
 
 

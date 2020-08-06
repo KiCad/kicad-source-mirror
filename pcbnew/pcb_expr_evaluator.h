@@ -121,7 +121,7 @@ public:
         return self;
     }
 
-    LIBEVAL::UCODE::FUNC_PTR Get( const std::string &name )
+    LIBEVAL::UCODE::FUNC_PTR Get( const wxString &name )
     {
         return m_funcs[ name  ];
     }
@@ -132,7 +132,7 @@ public:
     }
 
 private:
-    std::map<std::string, LIBEVAL::UCODE::FUNC_PTR> m_funcs;
+    std::map<wxString, LIBEVAL::UCODE::FUNC_PTR> m_funcs;
 
     wxArrayString m_funcSigs;
 };

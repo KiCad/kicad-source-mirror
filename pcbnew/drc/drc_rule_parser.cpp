@@ -151,6 +151,9 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
         }
     }
 
+    if( !m_reporter->HasMessage() )
+        m_reporter->Report( _( "No errors found." ), RPT_SEVERITY_INFO );
+
     m_reporter = nullptr;
 }
 
@@ -183,6 +186,10 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
                 reportError( _( "Missing disallowed type.|  Expected 'track', 'via', 'micro_via', "
                                 "'blind_via', 'pad', 'zone', 'text', 'graphic' or 'hole'." ) );
                 break;
+            }
+            else if( (int) token == DSN_STRING )
+            {
+                token = GetCurStrAsToken();
             }
 
             switch( token )

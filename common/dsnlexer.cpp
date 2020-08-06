@@ -230,42 +230,15 @@ LINE_READER* DSNLEXER::PopReader()
 }
 
 
-#if 0
-static int compare( const void* a1, const void* a2 )
-{
-    const KEYWORD* k1 = (const KEYWORD*) a1;
-    const KEYWORD* k2 = (const KEYWORD*) a2;
-
-    int ret = strcmp( k1->name, k2->name );
-    return ret;
-}
-
-int DSNLEXER::findToken( const std::string& tok )
-{
-    KEYWORD search;
-
-    search.name = tok.c_str();
-
-    const KEYWORD* findings = (const KEYWORD*) bsearch( &search,
-                                   keywords, keywordCount,
-                                   sizeof(KEYWORD), compare );
-    if( findings )
-        return findings->token;
-    else
-        return DSN_SYMBOL;      // not a keyword, some arbitrary symbol.
-}
-
-#else
-
 inline int DSNLEXER::findToken( const std::string& tok )
 {
     KEYWORD_MAP::const_iterator it = keyword_hash.find( tok.c_str() );
+
     if( it != keyword_hash.end() )
         return it->second;
 
     return DSN_SYMBOL;      // not a keyword, some arbitrary symbol.
 }
-#endif
 
 
 const char* DSNLEXER::Syntax( int aTok )

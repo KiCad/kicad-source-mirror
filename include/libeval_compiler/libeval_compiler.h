@@ -56,23 +56,6 @@ namespace LIBEVAL
 
 class COMPILER;
 
-struct ERROR_STATUS
-{
-    bool pendingError = false;
-
-    enum STAGE
-    {
-        CST_PARSE = 0,
-        CST_CODEGEN,
-        CST_RUNTIME
-    };
-
-    STAGE    stage;
-    wxString message;             // Note: use wxString for GUI-related strings
-    int      srcPos;
-};
-
-
 enum VAR_TYPE_T
 {
     VT_STRING = 1,

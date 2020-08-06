@@ -491,6 +491,15 @@ public:
     }
 
     /**
+     * Function GetCurStrAsToken
+     * Used to support "loose" matches (quoted tokens)
+     */
+    int GetCurStrAsToken()
+    {
+        return findToken( curText );
+    }
+
+    /**
      * Function FromUTF8
      * returns the current token text as a wxString, assuming that the input
      * byte stream is UTF8 encoded.
