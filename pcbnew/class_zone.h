@@ -723,7 +723,7 @@ public:
      *           flag.
      * @return a bitset of DISALLOW_* flags.
      */
-    int GetKeepouts( std::map<int, wxString>* aSources = nullptr ) const;
+    int GetKeepouts( PCB_LAYER_ID aLayer, std::map<int, wxString>* aSources = nullptr ) const;
 
     void SetIsKeepout( bool aEnable ) { m_isKeepout = aEnable; }
     void SetDoNotAllowCopperPour( bool aEnable ) { m_doNotAllowCopperPour = aEnable; }

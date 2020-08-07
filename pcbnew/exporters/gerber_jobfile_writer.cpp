@@ -468,13 +468,17 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
 
     for( MODULE* module : m_pcb->Modules() )
     {
-        for( auto& pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
-            if( ( pad->GetLayerSet() & LSET::InternalCuMask() ).any() )
-                minPadClearanceInner = std::min( minPadClearanceInner, pad->GetClearance() );
+            for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
+            {
+                int padClearance = pad->GetClearance( layer );
 
-            if( ( pad->GetLayerSet() & LSET::ExternalCuMask() ).any() )
-                minPadClearanceOuter = std::min( minPadClearanceOuter, pad->GetClearance() );
+                if( layer == B_Cu || layer == F_Cu )
+                    minPadClearanceOuter = std::min( minPadClearanceOuter, padClearance );
+                else
+                    minPadClearanceInner = std::min( minPadClearanceInner, padClearance );
+            }
         }
     }
 
@@ -519,12 +523,15 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
         if( zone->GetIsKeepout() || !zone->IsOnCopperLayer() )
             continue;
 
-        int zclerance = zone->GetClearance();
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            int zclerance = zone->GetClearance( layer );
 
-        if( zone->GetLayer() == B_Cu || zone->GetLayer() == F_Cu )
-            minclearanceOuter = std::min( minclearanceOuter, zclerance );
-        else
-            minclearanceInner = std::min( minclearanceInner, zclerance );
+            if( layer == B_Cu || layer == F_Cu )
+                minclearanceOuter = std::min( minclearanceOuter, zclerance );
+            else
+                minclearanceInner = std::min( minclearanceInner, zclerance );
+        }
     }
 
     if( minclearanceOuter != INT_MAX )

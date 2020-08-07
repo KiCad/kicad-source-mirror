@@ -502,10 +502,7 @@ void DRC::testPadClearances( BOARD_COMMIT& aCommit )
             static DRAWSEGMENT dummyEdge;
             dummyEdge.SetLayer( Edge_Cuts );
 
-            if( pad->GetRuleClearance( &dummyEdge, &minClearance, &m_clearanceSource ) )
-            {
-                /* minClearance and m_clearanceSource set in GetRuleClearance() */;
-            }
+            pad->GetRuleClearance( &dummyEdge, pad->GetLayer(), &minClearance, &m_clearanceSource );
 
             for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )
             {
@@ -723,7 +720,8 @@ void DRC::testZones( BOARD_COMMIT& aCommit )
             // Get clearance used in zone to zone test.  The policy used to
             // obtain that value is now part of the zone object itself by way of
             // ZONE_CONTAINER::GetClearance().
-            int zone2zoneClearance = zoneRef->GetClearance( zoneToTest, &m_clearanceSource );
+            int zone2zoneClearance = zoneRef->GetClearance( zoneRef->GetLayer(), zoneToTest,
+                                                            &m_clearanceSource );
 
             // Keepout areas have no clearance, so set zone2zoneClearance to 1
             // ( zone2zoneClearance = 0  can create problems in test functions)
@@ -907,12 +905,12 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
     SHAPE_RECT bboxShape( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
 
     // Test tracks and vias
-    for( auto track : m_pcb->Tracks() )
+    for( TRACK* track : m_pcb->Tracks() )
     {
         if( !track->IsOnLayer( aItem->GetLayer() ) )
             continue;
 
-        int     minClearance = track->GetClearance( aItem, &m_clearanceSource );
+        int     minClearance = track->GetClearance( track->GetLayer(), aItem, &m_clearanceSource );
         int     actual = INT_MAX;
         wxPoint pos;
 
@@ -954,7 +952,7 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
     }
 
     // Test pads
-    for( auto pad : m_pcb->GetPads() )
+    for( D_PAD* pad : m_pcb->GetPads() )
     {
         if( !pad->IsOnLayer( aItem->GetLayer() ) )
             continue;
@@ -963,7 +961,7 @@ void DRC::testCopperDrawItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
         if( drawItem && pad->GetParent() == drawItem->GetParent() )
             continue;
 
-        int minClearance = pad->GetClearance( aItem, &m_clearanceSource );
+        int minClearance = pad->GetClearance( aItem->GetLayer(), aItem, &m_clearanceSource );
         int actual = INT_MAX;
 
         // Fast test to detect a pad candidate inside the text bounding box
@@ -1136,7 +1134,8 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
 
             if( pad->GetDrillSize().x )
             {
-                int minClearance = aRefPad->GetClearance( nullptr, &m_clearanceSource );
+                int minClearance = aRefPad->GetClearance( aRefPad->GetLayer(), nullptr,
+                                                          &m_clearanceSource );
                 int actual;
 
                 if( aRefPad->Collide( pad->GetEffectiveHoleShape(), minClearance, &actual ) )
@@ -1159,7 +1158,8 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
 
             if( aRefPad->GetDrillSize().x )
             {
-                int minClearance = pad->GetClearance( nullptr, &m_clearanceSource );
+                int minClearance = pad->GetClearance( pad->GetLayer(), nullptr,
+                                                      &m_clearanceSource );
                 int actual;
 
                 if( pad->Collide( aRefPad->GetEffectiveHoleShape(), minClearance, &actual ) )
@@ -1216,25 +1216,28 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
             continue;
         }
 
-        int  minClearance = aRefPad->GetClearance( pad, &m_clearanceSource );
-        int  clearanceAllowed = minClearance - m_pcb->GetDesignSettings().GetDRCEpsilon();
-        int  actual;
-
-        if( aRefPad->Collide( pad, clearanceAllowed, &actual ) )
+        for( PCB_LAYER_ID layer : aRefPad->GetLayerSet().Seq() )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+            int  minClearance = aRefPad->GetClearance( layer, pad, &m_clearanceSource );
+            int  clearanceAllowed = minClearance - m_pcb->GetDesignSettings().GetDRCEpsilon();
+            int  actual;
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                          m_clearanceSource,
-                          MessageTextFromValue( userUnits(), minClearance, true ),
-                          MessageTextFromValue( userUnits(), actual, true ) );
+            if( aRefPad->Collide( pad, clearanceAllowed, &actual ) )
+            {
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-            drcItem->SetErrorMessage( m_msg );
-            drcItem->SetItems( aRefPad, pad );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              m_clearanceSource,
+                              MessageTextFromValue( userUnits(), minClearance, true ),
+                              MessageTextFromValue( userUnits(), actual, true ) );
 
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
-            addMarkerToPcb( aCommit, marker );
-            return false;
+                drcItem->SetErrorMessage( m_msg );
+                drcItem->SetItems( aRefPad, pad );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
+                addMarkerToPcb( aCommit, marker );
+                return false;
+            }
         }
     }
 

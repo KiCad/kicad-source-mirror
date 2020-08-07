@@ -34,7 +34,6 @@ class BOARD_ITEM;
 namespace LIBEVAL
 {
 class UCODE;
-class ERROR_STATUS;
 };
 
 class PCB_EXPR_UCODE;
@@ -42,14 +41,20 @@ class PCB_EXPR_UCODE;
 namespace test
 {
 
-enum class DRC_RULE_ID_T {
+enum class DRC_RULE_ID_T
+{
+    DRC_RULE_ID_UNKNOWN = -1,
     DRC_RULE_ID_CLEARANCE = 0,
     DRC_RULE_ID_HOLE_CLEARANCE,
     DRC_RULE_ID_EDGE_CLEARANCE,
-    DRC_RULE_ID_HOLE_SIZE
+    DRC_RULE_ID_HOLE_SIZE,
+    DRC_RULE_ID_ANNULUS,
+    DRC_RULE_ID_TRACK,
+    DRC_RULE_ID_DISALLOW
 };
 
-enum class DRC_RULE_SEVERITY_T {
+enum class DRC_RULE_SEVERITY_T
+{
     DRC_SEVERITY_IGNORE = 0,
     DRC_SEVERITY_WARNING,
     DRC_SEVERITY_ERROR
@@ -80,16 +85,47 @@ private:
     bool m_hasMax = false;
 };
 
+
 class DRC_CONSTRAINT
 {
-    public:
+public:
+    DRC_CONSTRAINT() :
+        m_Type( DRC_RULE_ID_T::DRC_RULE_ID_UNKNOWN ),
+        m_DisallowFlags( 0 ),
+        m_LayerCondition( LSET::AllLayersMask() )
+    {
+    }
+
     const MINOPTMAX<int>& GetValue() const { return m_Value; }
     bool Allowed() const { return m_Allow; }
 
-    public:
-        MINOPTMAX<int> m_Value;
-        bool      m_Allow;
+public:
+    DRC_RULE_ID_T  m_Type;
+    MINOPTMAX<int> m_Value;
+    int            m_DisallowFlags;
+    LSET           m_LayerCondition;
+
+    bool      m_Allow;
 };
+
+
+class DRC_RULE_CONDITION
+   {
+   public:
+       DRC_RULE_CONDITION();
+       ~DRC_RULE_CONDITION();
+
+       bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, PCB_LAYER_ID aLayer );
+       bool Compile( REPORTER* aReporter, int aSourceLine = 0, int aSourceOffset = 0 );
+
+   public:
+       wxString  m_Expression;
+       wxString  m_TargetRuleName;
+
+   private:
+       PCB_EXPR_UCODE*       m_ucode;
+   };
+
 
 class DRC_RULE
 {
@@ -115,37 +151,23 @@ public:
 public:
     bool m_Unary;
 
-    wxString m_Name;
-    wxString m_TestProviderName;
+    wxString                    m_Name;
+    LSET                        m_LayerCondition;
+    wxString                    m_TestProviderName;
+    DRC_RULE_CONDITION          m_Condition;
+    std::vector<DRC_CONSTRAINT> m_Constraints;
+
     DRC_RULE_SEVERITY_T m_Severity;
     bool m_Enabled;
     bool m_Conditional;
     int  m_Priority; // 0 indicates automatic priority generation
 
-    DRC_CONSTRAINT m_Constraint;
+    DRC_CONSTRAINT m_Constraint;    // FIXME: move to m_Constraints
 };
 
 
-class DRC_RULE_CONDITION
-{
-public:
-    DRC_RULE_CONDITION();
-    ~DRC_RULE_CONDITION();
-
-    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB );
-    bool Compile( REPORTER* aReporter, int aSourceLine = 0, int aSourceOffset = 0 );
-
-public:
-    LSET      m_LayerCondition;
-    wxString  m_Expression;
-    wxString  m_TargetRuleName;
-
-private:
-    PCB_EXPR_UCODE*       m_ucode;
-};
-
-
-//DRC_RULE* GetRule( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem, int aConstraint );
+//const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem,
+//                                     int aConstraint, PCB_LAYER_ID aLayer, wxString* aRuleName );
 
 }; // namespace test
 

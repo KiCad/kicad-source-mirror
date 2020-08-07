@@ -360,9 +360,9 @@ void AR_AUTOPLACER::buildFpAreas( MODULE* aFootprint, int aFpClearance )
     addFpBody( fpBBox.GetOrigin(), fpBBox.GetEnd(), layerMask );
 
     // Trace pads + clearance areas.
-    for( auto pad : aFootprint->Pads() )
+    for( D_PAD* pad : aFootprint->Pads() )
     {
-        int margin = (m_matrix.m_GridRouting / 2) + pad->GetClearance();
+        int margin = (m_matrix.m_GridRouting / 2) + pad->GetClearance( pad->GetLayer() );
         addPad( pad, margin );
     }
 }
@@ -414,9 +414,9 @@ void AR_AUTOPLACER::genModuleOnRoutingMatrix( MODULE* Module )
                           CELL_IS_MODULE, AR_MATRIX::WRITE_OR_CELL );
 
     // Trace pads + clearance areas.
-    for( auto pad : Module->Pads() )
+    for( D_PAD* pad : Module->Pads() )
     {
-        int margin = (m_matrix.m_GridRouting / 2) + pad->GetClearance();
+        int margin = (m_matrix.m_GridRouting / 2) + pad->GetClearance( pad->GetLayer() );
         m_matrix.PlacePad( pad, CELL_IS_MODULE, margin, AR_MATRIX::WRITE_OR_CELL );
     }
 

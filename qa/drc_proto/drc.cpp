@@ -536,8 +536,7 @@ void DRC::testPadClearances( BOARD_COMMIT& aCommit )
             static DRAWSEGMENT dummyEdge;
             dummyEdge.SetLayer( Edge_Cuts );
 
-            if( pad->GetRuleClearance( &dummyEdge, &minClearance, &m_clearanceSource ) )
-                /* minClearance and m_clearanceSource set in GetRuleClearance() */;
+            pad->GetRuleClearance( &dummyEdge, pad->GetLayer(), &minClearance, &m_clearanceSource );
 
             for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )
             {

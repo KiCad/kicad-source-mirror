@@ -336,7 +336,7 @@ int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad ) const
 }
 
 
-int ZONE_CONTAINER::GetKeepouts( std::map<int, wxString>* aSources ) const
+int ZONE_CONTAINER::GetKeepouts( PCB_LAYER_ID aLayer, std::map<int, wxString>* aSources ) const
 {
     wxString source;
     int      keepouts = 0;
@@ -370,41 +370,42 @@ int ZONE_CONTAINER::GetKeepouts( std::map<int, wxString>* aSources ) const
             setFlag( DISALLOW_ZONES );
     }
 
-    DRC_RULE* rule = GetRule( this, nullptr, DISALLOW_CONSTRAINT );
+    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr, DRC_RULE_ID_DISALLOW, aLayer,
+                                                      &source );
 
-    if( rule )
+    if( constraint )
     {
         if( aSources )
-            source = wxString::Format( _( "'%s' rule" ), rule->m_Name );
+            source = wxString::Format( _( "'%s' rule" ), source );
 
-        if( ( rule->m_DisallowFlags & DISALLOW_VIAS ) > 0 )
+        if( ( constraint->m_DisallowFlags & DISALLOW_VIAS ) > 0 )
             setFlag( DISALLOW_VIAS );
 
-        if( ( rule->m_DisallowFlags & DISALLOW_MICRO_VIAS ) > 0 )
+        if( ( constraint->m_DisallowFlags & DISALLOW_MICRO_VIAS ) > 0 )
             setFlag( DISALLOW_MICRO_VIAS );
 
-        if( ( rule->m_DisallowFlags & DISALLOW_BB_VIAS ) > 0 )
+        if( ( constraint->m_DisallowFlags & DISALLOW_BB_VIAS ) > 0 )
             setFlag( DISALLOW_BB_VIAS );
 
-        if( ( rule->m_DisallowFlags & DISALLOW_TRACKS ) > 0 )
+        if( ( constraint->m_DisallowFlags & DISALLOW_TRACKS ) > 0 )
             setFlag( DISALLOW_TRACKS );
 
-        if( ( rule->m_DisallowFlags & DISALLOW_PADS ) > 0 )
+        if( ( constraint->m_DisallowFlags & DISALLOW_PADS ) > 0 )
             setFlag( DISALLOW_PADS );
 
-        if( ( rule->m_DisallowFlags & DISALLOW_ZONES ) > 0 )
+        if( ( constraint->m_DisallowFlags & DISALLOW_ZONES ) > 0 )
             setFlag( DISALLOW_ZONES );
 
-        if( ( rule->m_DisallowFlags & DISALLOW_TEXTS ) > 0 )
+        if( ( constraint->m_DisallowFlags & DISALLOW_TEXTS ) > 0 )
             setFlag( DISALLOW_TEXTS );
 
-        if( ( rule->m_DisallowFlags & DISALLOW_GRAPHICS ) > 0 )
+        if( ( constraint->m_DisallowFlags & DISALLOW_GRAPHICS ) > 0 )
             setFlag( DISALLOW_GRAPHICS );
 
-        if( ( rule->m_DisallowFlags & DISALLOW_HOLES ) > 0 )
+        if( ( constraint->m_DisallowFlags & DISALLOW_HOLES ) > 0 )
             setFlag( DISALLOW_HOLES );
 
-        if( ( rule->m_DisallowFlags & DISALLOW_FOOTPRINTS ) > 0 )
+        if( ( constraint->m_DisallowFlags & DISALLOW_FOOTPRINTS ) > 0 )
             setFlag( DISALLOW_FOOTPRINTS );
     }
 
@@ -678,7 +679,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     aList.emplace_back( _( "Filled Area" ), msg, BLUE );
 
     wxString source;
-    int      clearance = GetClearance( nullptr, &source );
+    int      clearance = GetClearance( GetLayer(), nullptr, &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
     msg2.Printf( _( "(from %s)" ), source );
@@ -1374,6 +1375,8 @@ static struct ZONE_CONTAINER_DESC
                     //&ZONE_CONTAINER::SetIsFilled, &ZONE_CONTAINER::IsFilled ) );
         propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Min Thickness" ),
                     &ZONE_CONTAINER::SetMinThickness, &ZONE_CONTAINER::GetMinThickness, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, wxString>( _( "Name" ),
+                    &ZONE_CONTAINER::SetZoneName, &ZONE_CONTAINER::GetZoneName ) );
         // TODO pad connection, thermal relief gap, thermal relief copper bridge
     }
 } _ZONE_CONTAINER_DESC;

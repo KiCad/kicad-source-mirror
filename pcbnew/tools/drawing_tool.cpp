@@ -1750,9 +1750,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 if( !(item->GetLayerSet() & lset ).any() )
                     continue;
 
-                if( auto track = dyn_cast<TRACK*>( item ) )
+                if( TRACK* track = dyn_cast<TRACK*>( item ) )
                 {
-                    int max_clearance = std::max( clearance, track->GetClearance() );
+                    int max_clearance = std::max( clearance,
+                                                  track->GetClearance( track->GetLayer() ) );
 
                     if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
                             ( track->GetWidth() + aVia->GetWidth() ) / 2  + max_clearance ) )
@@ -1761,11 +1762,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                             return true;
 
                         net = track->GetNetCode();
-                        clearance = track->GetClearance();
+                        clearance = track->GetClearance( track->GetLayer() );
                     }
                 }
 
-                if( auto via = dyn_cast<VIA*>( item ) )
+                if( VIA* via = dyn_cast<VIA*>( item ) )
                 {
                     int dist = KiROUND( GetLineLength( position, via->GetPosition() ) );
 
@@ -1773,27 +1774,30 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                         return true;
                 }
 
-                if( auto mod = dyn_cast<MODULE*>( item ) )
+                if( MODULE* mod = dyn_cast<MODULE*>( item ) )
                 {
                     for( D_PAD* pad : mod->Pads() )
                     {
-                        int max_clearance = std::max( clearance, pad->GetClearance() );
-
-                        if( pad->HitTest( aVia->GetBoundingBox(), false, max_clearance ) )
+                        for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
                         {
-                            if( net && pad->GetNetCode() != net )
-                                return true;
+                            int max_clearance = std::max( clearance, pad->GetClearance( layer ) );
 
-                            net = pad->GetNetCode();
-                            clearance = pad->GetClearance();
-                        }
+                            if( pad->HitTest( aVia->GetBoundingBox(), false, max_clearance ) )
+                            {
+                                if( net && pad->GetNetCode() != net )
+                                    return true;
 
-                        if( pad->GetDrillSize().x && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
-                        {
-                            int dist = KiROUND( GetLineLength( position, pad->GetPosition() ) );
+                                net = pad->GetNetCode();
+                                clearance = pad->GetClearance( layer );
+                            }
 
-                            if( dist < drillRadius + pad->GetDrillSize().x / 2 + holeToHoleMin )
-                                return true;
+                            if( pad->GetDrillSize().x && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+                            {
+                                int dist = KiROUND( GetLineLength( position, pad->GetPosition() ) );
+
+                                if( dist < drillRadius + pad->GetDrillSize().x / 2 + holeToHoleMin )
+                                    return true;
+                            }
                         }
                     }
                 }

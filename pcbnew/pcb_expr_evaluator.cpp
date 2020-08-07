@@ -140,6 +140,63 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+    LIBEVAL::VALUE*   arg = aCtx->Pop();
+    LIBEVAL::VALUE*   result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg )
+    {
+        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                             wxT( "insideArea()" ) ) );
+        return;
+    }
+
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+    ZONE_CONTAINER*   zone = nullptr;
+
+    if( !item )
+        return;
+
+    if( arg->AsString() == "A" )
+    {
+        zone = dynamic_cast<ZONE_CONTAINER*>( context->GetItem( 0 ) );
+    }
+    else if( arg->AsString() == "B" )
+    {
+        zone = dynamic_cast<ZONE_CONTAINER*>( context->GetItem( 1 ) );
+    }
+    else
+    {
+        for( ZONE_CONTAINER* candidate : item->GetBoard()->Zones() )
+        {
+            if( candidate->GetZoneName().Matches( arg->AsString() ) )
+            {
+                zone = candidate;
+                break;
+            }
+        }
+    }
+
+    if( zone )
+    {
+        SHAPE_POLY_SET zonePoly = zone->GetFilledPolysList( context->GetLayer() );
+        SHAPE_POLY_SET testPoly;
+
+        item->TransformShapeWithClearanceToPolygon( testPoly, 0 );
+        testPoly.BooleanIntersection( zonePoly, SHAPE_POLY_SET::PM_FAST );
+
+        if( testPoly.OutlineCount() )
+            result->Set( 1.0 );
+    }
+}
+
+
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
     auto registerFunc = [&]( const wxString& funcSignature, FPTR funcPtr )
@@ -152,6 +209,7 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
     registerFunc( "onLayer('x')", onLayer );
     registerFunc( "isPlated()", isPlated );
     registerFunc( "insideCourtyard('x')", insideCourtyard );
+    registerFunc( "insideArea('x')", insideArea );
 }
 
 

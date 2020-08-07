@@ -23,13 +23,15 @@
 
 
 #include <fctsys.h>
-#include <drc/drc_rule.h>
 #include <class_board.h>
 #include <class_board_item.h>
+
+#include <drc/drc_rule.h>
 #include <pcb_expr_evaluator.h>
 
 
-DRC_RULE* GetRule( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem, int aConstraint )
+const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem,
+                                     int aConstraint, PCB_LAYER_ID aLayer, wxString* aRuleName )
 {
     BOARD* board = aItem->GetBoard();
 
@@ -38,17 +40,47 @@ DRC_RULE* GetRule( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem, int aConstr
 
     for( DRC_RULE* rule : board->GetDesignSettings().m_DRCRules )
     {
-        if( ( rule->m_ConstraintFlags & aConstraint ) > 0 )
-        {
-            if( rule->m_Condition.EvaluateFor( aItem, bItem ) )
-                return rule;
+        if( !rule->m_LayerCondition.test( aLayer ) )
+            continue;
 
-            if( bItem && rule->m_Condition.EvaluateFor( bItem, aItem ) )
-                return rule;
+        for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
+        {
+            if( constraint.m_Type != aConstraint )
+                continue;
+
+            if( !rule->m_LayerCondition.test( aLayer ) )
+                continue;
+
+            if( rule->m_Condition.EvaluateFor( aItem, bItem, aLayer ) )
+            {
+                if( aRuleName )
+                    *aRuleName = rule->m_Name;
+
+                return &constraint;
+            }
+
+            if( bItem && rule->m_Condition.EvaluateFor( bItem, aItem, aLayer ) )
+            {
+                if( aRuleName )
+                    *aRuleName = rule->m_Name;
+
+                return &constraint;
+            }
         }
     }
 
     return nullptr;
+}
+
+
+DRC_RULE::DRC_RULE() :
+    m_LayerCondition( LSET::AllLayersMask() )
+{
+}
+
+
+DRC_RULE::~DRC_RULE()
+{
 }
 
 
@@ -64,7 +96,8 @@ DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 }
 
 
-bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB )
+bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB,
+                                      PCB_LAYER_ID aLayer )
 {
     // An unconditional rule is always true
     if( m_Expression.IsEmpty() )
@@ -77,7 +110,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
     BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
 
-    PCB_EXPR_CONTEXT ctx;
+    PCB_EXPR_CONTEXT ctx( aLayer );
     ctx.SetItems( a, b );
 
     return m_ucode->Run( &ctx )->AsDouble() != 0.0;
@@ -91,14 +124,10 @@ bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSou
     if (!m_ucode)
         m_ucode = new PCB_EXPR_UCODE;
 
-    PCB_EXPR_CONTEXT preflightContext;
+    PCB_EXPR_CONTEXT preflightContext( F_Cu );
 
     bool ok = compiler.Compile( m_Expression.ToUTF8().data(), m_ucode, &preflightContext );
-
-    if( ok )
-        return true;
-
-    return false;
+    return ok;
 }
 
 

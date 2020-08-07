@@ -26,7 +26,6 @@
 #include <class_board.h>
 #include <class_board_item.h>
 
-
 #include <drc_proto/drc_rule.h>
 #include <pcb_expr_evaluator.h>
 
@@ -37,13 +36,13 @@ test::DRC_RULE::DRC_RULE() :
     m_Conditional( false ),
     m_Priority( 0 )
 {
-
 }
+
 
 test::DRC_RULE::~DRC_RULE()
 {
-
 }
+
 
 test::DRC_RULE_CONDITION::DRC_RULE_CONDITION()
 {
@@ -57,11 +56,20 @@ test::DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 }
 
 
-bool test::DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB )
+bool test::DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB,
+                                            PCB_LAYER_ID aLayer )
 {
+    // An unconditional rule is always true
+    if( m_Expression.IsEmpty() )
+        return true;
+
+    // A rule which failed to compile is always false
+    if( !m_ucode )
+        return false;
+
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
     BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
-    PCB_EXPR_CONTEXT ctx;
+    PCB_EXPR_CONTEXT ctx( aLayer );
     ctx.SetItems( a, b );
 
     return m_ucode->Run( &ctx )->AsDouble() != 0.0;
@@ -75,7 +83,7 @@ bool test::DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, in
     if (!m_ucode)
         m_ucode = new PCB_EXPR_UCODE;
 
-    LIBEVAL::CONTEXT preflightContext;
+    PCB_EXPR_CONTEXT preflightContext( F_Cu );
 
     bool ok = compiler.Compile( m_Expression.ToUTF8().data(), m_ucode, &preflightContext );
     return ok;

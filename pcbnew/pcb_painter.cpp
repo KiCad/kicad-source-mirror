@@ -508,7 +508,8 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
             m_gal->SetStrokeColor( color );
-            m_gal->DrawSegment( start, end, width + aTrack->GetClearance() * 2 );
+            m_gal->DrawSegment( start, end,
+                                width + aTrack->GetClearance( ToLAYER_ID( aLayer ) ) * 2 );
         }
     }
 }
@@ -547,7 +548,7 @@ void PCB_PAINTER::draw( const ARC* aArc, int aLayer )
             m_gal->SetStrokeColor( color );
 
             m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle,
-                    width + aArc->GetClearance() * 2 );
+                                   width + aArc->GetClearance( ToLAYER_ID( aLayer ) ) * 2 );
         }
     }
 }
@@ -688,7 +689,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
-        m_gal->DrawCircle( center, radius + aVia->GetClearance() );
+        m_gal->DrawCircle( center, radius + aVia->GetClearance( aVia->GetLayer() ) );
     }
 }
 
@@ -894,7 +895,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );
         m_gal->SetStrokeColor( color );
-        int clearance = aPad->GetClearance();
+        int clearance = aPad->GetClearance( aPad->GetLayer() );
 
         const std::shared_ptr<SHAPE_COMPOUND> shapes =
                     std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );

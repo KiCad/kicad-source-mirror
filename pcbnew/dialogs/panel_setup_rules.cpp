@@ -179,20 +179,37 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         if( sexprs.empty() )
             tokens = "rule version";
         else if( sexprs.top() == "rule" )
-            tokens = "condition constraint disallow layer";
+            tokens = "condition constraint layer";
         else if( sexprs.top() == "constraint" )
             tokens = "max min opt";
     }
     else if( context == SEXPR_TOKEN )
     {
         if( sexprs.empty() )
-            /* badly formed grammar */;
+        {
+            /* badly formed grammar */
+        }
         else if( sexprs.top() == "constraint" )
-            tokens = "annulus_width clearance hole track_width";
-        else if( sexprs.top() == "disallow" )
+        {
+            tokens = "annulus_width clearance disallow hole track_width";
+        }
+        else if( sexprs.top() == "disallow"
+              || sexprs.top() == "buried_via"
+              || sexprs.top() == "graphic"
+              || sexprs.top() == "hole"
+              || sexprs.top() == "micro_via"
+              || sexprs.top() == "pad"
+              || sexprs.top() == "text"
+              || sexprs.top() == "track"
+              || sexprs.top() == "via"
+              || sexprs.top() == "zone" )
+        {
             tokens = "buried_via graphic hole micro_via pad text track via zone";
+        }
         else if( sexprs.top() == "layer" )
+        {
             tokens = "inner outer \"x\"";
+        }
     }
     else if( context == STRING && expr_context == STRUCT_REF )
     {
@@ -327,9 +344,14 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
     msg << _( "Rule Clauses" );
     msg <<  "</b>"
             "<pre>"
-            "(disallow &lt;item_type>)\r"
             "(constraint &lt;constraint_type> ...)\r"
             "(condition \"&lt;expression>\")\r"
+            "\r</pre>"
+            "<b>";
+    msg << _( "Constraint Types" );
+    msg <<  "</b>"
+            "<pre>"
+            "clearance    annulus_width   track_width     hole     dissallow\r"
             "\r</pre>"
             "<b>";
     msg << _( "Item Types" );
@@ -340,17 +362,11 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
             "hole          buried_via        graphic\r"
             "\r</pre>"
             "<b>";
-    msg << _( "Constraint Types" );
-    msg <<  "</b>"
-            "<pre>"
-            "clearance    annulus_width   track_width     hole\r"
-            "\r</pre>"
-            "<b>";
     msg << _( "Examples" );
     msg <<  "</b>"
             "<pre>"
             "(rule \"copper keepout\"\r"
-            "   (disallow track) (disallow via) (disallow zone)\r"
+            "   (constraint disallow track via zone)\r"
             "   (condition \"A.name == 'no_copper'\"))\r"
             "\r"
             "(rule \"BGA neckdown\"\r"

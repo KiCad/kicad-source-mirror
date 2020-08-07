@@ -84,21 +84,28 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
     bool                   success = true;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    int holeSize = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
+    // drilled holes go all the way through, so which layer we use shouldn't matter
+    PCB_LAYER_ID layer = F_Cu;
+    int          holeSize = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
 
     if( holeSize == 0 )
         return true;
 
     if( !bds.Ignore( DRCE_TOO_SMALL_DRILL ) )
     {
-        int       minHole = bds.m_MinThroughDrill;
-        wxString  minHoleSource = _( "board minimum" );
-        DRC_RULE* rule = GetRule( aPad, nullptr, HOLE_CONSTRAINT );
+        int                   minHole;
+        const DRC_CONSTRAINT* constraint = GetConstraint( aPad, nullptr, DRC_RULE_ID_HOLE_SIZE,
+                                                          layer, &m_source );
 
-        if( rule )
+        if( constraint )
         {
-            minHole = rule->m_MinHole;
-            minHoleSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
+            minHole = constraint->m_Value.Min();
+            m_source = wxString::Format( _( "'%s' rule" ), m_source );
+        }
+        else
+        {
+            minHole = bds.m_MinThroughDrill;
+            m_source = _( "board minimum" );
         }
 
         if( holeSize < minHole )
@@ -106,7 +113,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
             DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                          minHoleSource,
+                          m_source,
                           MessageTextFromValue( m_units, minHole, true ),
                           MessageTextFromValue( m_units, holeSize, true ) );
 
@@ -132,16 +139,24 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
     bool                   success = true;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
+    // drilled holes go all the way through, so which layer we use shouldn't matter
+    PCB_LAYER_ID layer = F_Cu;
+
     if( !bds.Ignore( DRCE_TOO_SMALL_DRILL ) )
     {
-        int       minHole = bds.m_MinThroughDrill;
-        wxString  minHoleSource = _( "board minimum" );
-        DRC_RULE* rule = GetRule( via, nullptr, HOLE_CONSTRAINT );
+        int                   minHole;
+        const DRC_CONSTRAINT* constraint = GetConstraint( via, nullptr, DRC_RULE_ID_HOLE_SIZE,
+                                                          layer, &m_source );
 
-        if( rule )
+        if( constraint )
         {
-            minHole = rule->m_MinHole;
-            minHoleSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
+            minHole = constraint->m_Value.Min();
+            m_source = wxString::Format( _( "'%s' rule" ), m_source );
+        }
+        else
+        {
+            minHole = bds.m_MinThroughDrill;
+            m_source = _( "board minimum" );
         }
 
         if( via->GetDrillValue() < minHole )
@@ -149,7 +164,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
             DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                          minHoleSource,
+                          m_source,
                           MessageTextFromValue( m_units, minHole, true ),
                           MessageTextFromValue( m_units, via->GetDrillValue(), true ) );
 
@@ -175,16 +190,25 @@ bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
     bool                   success = true;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
+    // while microvia holes don't necessarily go all the way through, they can't be different
+    // sizes on different layers so we should still be safe enough using a fixed layer.
+    PCB_LAYER_ID layer = F_Cu;
+
     if( !bds.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL ) )
     {
-        int       minHole = bds.m_MicroViasMinDrill;
-        wxString  minHoleSource = _( "board minimum" );
-        DRC_RULE* rule = GetRule( via, nullptr, HOLE_CONSTRAINT );
+        int                   minHole;
+        const DRC_CONSTRAINT* constraint = GetConstraint( via, nullptr, DRC_RULE_ID_HOLE_SIZE,
+                                                          layer, &m_source );
 
-        if( rule )
+        if( constraint )
         {
-            minHole = rule->m_MinHole;
-            minHoleSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
+            minHole = constraint->m_Value.Min();
+            m_source = wxString::Format( _( "'%s' rule" ), m_source );
+        }
+        else
+        {
+            minHole = bds.m_MicroViasMinDrill;
+            m_source = _( "board minimum" );
         }
 
         if(  via->GetDrillValue() < minHole )
@@ -192,7 +216,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
             DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_MICROVIA_DRILL );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
-                          minHoleSource,
+                          m_source,
                           MessageTextFromValue( m_units, minHole, true ),
                           MessageTextFromValue( m_units, via->GetDrillValue(), true ) );
 

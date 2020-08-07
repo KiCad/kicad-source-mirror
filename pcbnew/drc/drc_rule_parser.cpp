@@ -178,49 +178,6 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
         switch( token )
         {
-        case T_disallow:
-            token = NextTok();
-
-            if( (int) token == DSN_RIGHT )
-            {
-                reportError( _( "Missing disallowed type.|  Expected 'track', 'via', 'micro_via', "
-                                "'blind_via', 'pad', 'zone', 'text', 'graphic' or 'hole'." ) );
-                break;
-            }
-            else if( (int) token == DSN_STRING )
-            {
-                token = GetCurStrAsToken();
-            }
-
-            switch( token )
-            {
-            case T_track:      rule->m_DisallowFlags |= DISALLOW_TRACKS;     break;
-            case T_via:        rule->m_DisallowFlags |= DISALLOW_VIAS;       break;
-            case T_micro_via:  rule->m_DisallowFlags |= DISALLOW_MICRO_VIAS; break;
-            case T_buried_via: rule->m_DisallowFlags |= DISALLOW_BB_VIAS;    break;
-            case T_pad:        rule->m_DisallowFlags |= DISALLOW_PADS;       break;
-            case T_zone:       rule->m_DisallowFlags |= DISALLOW_ZONES;      break;
-            case T_text:       rule->m_DisallowFlags |= DISALLOW_TEXTS;      break;
-            case T_graphic:    rule->m_DisallowFlags |= DISALLOW_GRAPHICS;   break;
-            case T_hole:       rule->m_DisallowFlags |= DISALLOW_HOLES;      break;
-            case T_footprint:  rule->m_DisallowFlags |= DISALLOW_FOOTPRINTS; break;
-            default:
-                msg.Printf( _( "Unrecognized item '%s'.|  Expected 'track', 'via', 'micro_via', "
-                               "'blind_via', 'pad', 'zone', 'text', 'graphic' or 'hole'." ),
-                            FromUTF8() );
-                reportError( msg );
-            }
-
-            rule->m_ConstraintFlags = DISALLOW_CONSTRAINT;
-
-            if( (int) NextTok() != DSN_RIGHT )
-            {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
-                parseUnknown();
-            }
-
-            break;
-
         case T_constraint:
             parseConstraint( rule );
             break;
@@ -273,34 +230,65 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
 void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 {
-    T        token;
-    int      constraintType = 0;
-    int      value;
-    wxString msg;
+    aRule->m_Constraints.emplace_back( DRC_CONSTRAINT() );
 
-    token = NextTok();
+    DRC_CONSTRAINT& constraint = aRule->m_Constraints.back();
+    int             value;
+    wxString        msg;
+
+    T token = NextTok();
 
     if( (int) token == DSN_RIGHT )
     {
         reportError( _( "Missing constraint type.|  Expected 'clearance', 'track_width', "
-                        "'annulus_width' or 'hole'." ) );
+                        "'annulus_width', 'hole' or 'disallow'." ) );
         return;
     }
 
     switch( token )
     {
-    case T_clearance:     constraintType = CLEARANCE_CONSTRAINT; break;
-    case T_track_width:   constraintType = TRACK_CONSTRAINT;     break;
-    case T_annulus_width: constraintType = ANNULUS_CONSTRAINT;   break;
-    case T_hole:          constraintType = HOLE_CONSTRAINT;      break;
+    case T_clearance:     constraint.m_Type = DRC_RULE_ID_CLEARANCE; break;
+    case T_track_width:   constraint.m_Type = DRC_RULE_ID_TRACK;     break;
+    case T_annulus_width: constraint.m_Type = DRC_RULE_ID_ANNULUS;   break;
+    case T_hole:          constraint.m_Type = DRC_RULE_ID_HOLE_SIZE; break;
+    case T_disallow:      constraint.m_Type = DRC_RULE_ID_DISALLOW;  break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected 'clearance', 'track_width', "
-                       "'annulus_width' or 'hole'." ),
+                       "'annulus_width', 'hole' or 'disallow'." ),
                     FromUTF8() );
         reportError( msg );
     }
 
-    aRule->m_ConstraintFlags |= constraintType;
+    if( constraint.m_Type == DRC_RULE_ID_DISALLOW )
+    {
+        for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+        {
+            if( (int) token == DSN_STRING )
+                token = GetCurStrAsToken();
+
+            switch( token )
+            {
+            case T_track:      constraint.m_DisallowFlags |= DISALLOW_TRACKS;     break;
+            case T_via:        constraint.m_DisallowFlags |= DISALLOW_VIAS;       break;
+            case T_micro_via:  constraint.m_DisallowFlags |= DISALLOW_MICRO_VIAS; break;
+            case T_buried_via: constraint.m_DisallowFlags |= DISALLOW_BB_VIAS;    break;
+            case T_pad:        constraint.m_DisallowFlags |= DISALLOW_PADS;       break;
+            case T_zone:       constraint.m_DisallowFlags |= DISALLOW_ZONES;      break;
+            case T_text:       constraint.m_DisallowFlags |= DISALLOW_TEXTS;      break;
+            case T_graphic:    constraint.m_DisallowFlags |= DISALLOW_GRAPHICS;   break;
+            case T_hole:       constraint.m_DisallowFlags |= DISALLOW_HOLES;      break;
+            case T_footprint:  constraint.m_DisallowFlags |= DISALLOW_FOOTPRINTS; break;
+            default:
+                msg.Printf( _( "Unrecognized item '%s'.|  Expected 'track', 'via', 'micro_via', "
+                               "'blind_via', 'pad', 'zone', 'text', 'graphic' or 'hole'." ),
+                            FromUTF8() );
+                reportError( msg );
+                parseUnknown();
+            }
+        }
+
+        return;
+    }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -321,14 +309,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             }
 
             parseValueWithUnits( FromUTF8(), value );
-
-            switch( constraintType )
-            {
-            case CLEARANCE_CONSTRAINT: aRule->m_Clearance.Min = value;       break;
-            case TRACK_CONSTRAINT:     aRule->m_TrackConstraint.Min = value; break;
-            case ANNULUS_CONSTRAINT:   aRule->m_MinAnnulusWidth = value;     break;
-            case HOLE_CONSTRAINT:      aRule->m_MinHole = value;             break;
-            }
+            constraint.m_Value.SetMin( value );
 
             if( (int) NextTok() != DSN_RIGHT )
             {
@@ -348,12 +329,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             }
 
             parseValueWithUnits( FromUTF8(), value );
-
-            switch( constraintType )
-            {
-            case CLEARANCE_CONSTRAINT: aRule->m_Clearance.Max = value;       break;
-            case TRACK_CONSTRAINT:     aRule->m_TrackConstraint.Max = value; break;
-            }
+            constraint.m_Value.SetMax( value );
 
             if( (int) NextTok() != DSN_RIGHT )
             {
@@ -373,12 +349,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             }
 
             parseValueWithUnits( FromUTF8(), value );
-
-            switch( constraintType )
-            {
-            case CLEARANCE_CONSTRAINT: aRule->m_Clearance.Opt = value;       break;
-            case TRACK_CONSTRAINT:     aRule->m_TrackConstraint.Opt = value; break;
-            }
+            constraint.m_Value.SetOpt( value );
 
             if( (int) NextTok() != DSN_RIGHT )
             {

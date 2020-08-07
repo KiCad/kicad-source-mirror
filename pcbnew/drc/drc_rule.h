@@ -25,20 +25,14 @@
 #define DRC_RULE_H
 
 #include <core/typeinfo.h>
-#include <netclass.h>
 #include <layers_id_colors_and_visibility.h>
+#include <netclass.h>
 #include <libeval_compiler/libeval_compiler.h>
 
 
 class BOARD_ITEM;
 class PCB_EXPR_UCODE;
 
-
-#define CLEARANCE_CONSTRAINT (1 << 0)
-#define ANNULUS_CONSTRAINT   (1 << 1)
-#define TRACK_CONSTRAINT     (1 << 2)
-#define HOLE_CONSTRAINT      (1 << 3)
-#define DISALLOW_CONSTRAINT  (1 << 4)
 
 #define DISALLOW_VIAS        (1 << 0)
 #define DISALLOW_MICRO_VIAS  (1 << 1)
@@ -50,6 +44,17 @@ class PCB_EXPR_UCODE;
 #define DISALLOW_GRAPHICS    (1 << 7)
 #define DISALLOW_HOLES       (1 << 8)
 #define DISALLOW_FOOTPRINTS  (1 << 9)
+
+
+enum DRC_RULE_ID_T
+{
+    DRC_RULE_ID_UNKNOWN = -1,
+    DRC_RULE_ID_CLEARANCE = 0,
+    DRC_RULE_ID_HOLE_SIZE,
+    DRC_RULE_ID_ANNULUS,
+    DRC_RULE_ID_TRACK,
+    DRC_RULE_ID_DISALLOW
+};
 
 
 template<class T=int>
@@ -78,19 +83,36 @@ private:
 };
 
 
+class DRC_CONSTRAINT
+{
+public:
+    DRC_CONSTRAINT() :
+        m_Type( DRC_RULE_ID_UNKNOWN ),
+        m_DisallowFlags( 0 ),
+        m_LayerCondition( LSET::AllLayersMask() )
+    {}
+
+    const MINOPTMAX<int>& GetValue() const { return m_Value; }
+
+public:
+    DRC_RULE_ID_T  m_Type;
+    MINOPTMAX<int> m_Value;
+    int            m_DisallowFlags;
+    LSET           m_LayerCondition;
+};
+
+
 class DRC_RULE_CONDITION
 {
 public:
     DRC_RULE_CONDITION();
     ~DRC_RULE_CONDITION();
 
-    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB );
+    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, PCB_LAYER_ID aLayer );
     bool Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset );
 
 public:
-    LSET      m_LayerCondition;
     wxString  m_Expression;
-    wxString  m_TargetRuleName;
 
 private:
     PCB_EXPR_UCODE*       m_ucode;
@@ -100,40 +122,20 @@ private:
 class DRC_RULE
 {
 public:
-    DRC_RULE() :
-            m_ConstraintFlags( 0 ),
-            m_DisallowFlags( 0 ),
-            m_Clearance( { 0, 0, INT_MAX / 2 } ),
-            m_MinAnnulusWidth( 0 ),
-            m_TrackConstraint( { 0, 0, INT_MAX / 2 } ),
-            m_MinHole( 0 )
-    { }
-
-    struct MINOPTMAX
-    {
-        int Min;
-        int Opt;
-        int Max;
-    };
+    DRC_RULE();
+    virtual ~DRC_RULE();
 
 public:
-    wxString  m_Name;
-    int       m_ConstraintFlags;
-    int       m_DisallowFlags;
-
-    // A 0 value means the property is not modified by this rule.
-    // A positive value is a minimum.
-    MINOPTMAX m_Clearance;
-    int       m_MinAnnulusWidth;
-    MINOPTMAX m_TrackConstraint;
-    int       m_MinHole;
-
-    LSET               m_LayerCondition;
-    DRC_RULE_CONDITION m_Condition;
+    wxString                    m_Name;
+    LSET                        m_LayerCondition;
+    wxString                    m_TestProviderName;
+    DRC_RULE_CONDITION          m_Condition;
+    std::vector<DRC_CONSTRAINT> m_Constraints;
 };
 
 
-DRC_RULE* GetRule( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem, int aConstraint );
+const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem,
+                                     int aConstraint, PCB_LAYER_ID aLayer, wxString* aRuleName );
 
 
 #endif      // DRC_RULE_H

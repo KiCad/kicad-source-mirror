@@ -133,15 +133,16 @@ void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
     // Not currently implemented
 
     // LEVEL 2: Rules
-    DRC_RULE* rule = GetRule( this, nullptr, TRACK_CONSTRAINT );
+    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr, DRC_RULE_ID_TRACK, m_Layer,
+                                                      aSource );
 
-    if( rule )
+    if( constraint )
     {
-        *aMin = rule->m_TrackConstraint.Min;
-        *aMax = rule->m_TrackConstraint.Max;
+        *aMin = constraint->m_Value.Min();
+        *aMax = constraint->m_Value.Max();
 
         if( aSource )
-            *aSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
+            *aSource = wxString::Format( _( "'%s' rule" ), *aSource );
 
         return;
     }
@@ -160,16 +161,17 @@ void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 }
 
 
-int VIA::GetMinAnnulus( wxString* aSource ) const
+int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
-    DRC_RULE* rule = GetRule( this, nullptr, ANNULUS_CONSTRAINT );
+    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr, DRC_RULE_ID_ANNULUS, aLayer,
+                                                      aSource );
 
-    if( rule )
+    if( constraint )
     {
         if( aSource )
-            *aSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
+            *aSource = wxString::Format( _( "'%s' rule" ), *aSource );
 
-        return rule->m_MinAnnulusWidth;
+        return constraint->m_Value.Min();
     }
     else
     {
@@ -493,7 +495,7 @@ unsigned int TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 const BOX2I TRACK::ViewBBox() const
 {
     BOX2I bbox = GetBoundingBox();
-    bbox.Inflate( 2 * GetClearance() );
+    bbox.Inflate( 2 * GetClearance( GetLayer() ) );
     return bbox;
 }
 
@@ -612,7 +614,7 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
         }
     }
 
-    int clearance = GetClearance( nullptr, &source );
+    int clearance = GetClearance( GetLayer(), nullptr, &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
     msg2.Printf( _( "(from %s)" ), source );
@@ -685,13 +687,13 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     aList.emplace_back( _( "Drill" ), msg, RED );
 
-    int clearance = GetClearance( nullptr, &source );
+    int clearance = GetClearance( GetLayer(), nullptr, &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
     msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 
-    int minAnnulus = GetMinAnnulus( &source );
+    int minAnnulus = GetMinAnnulus( GetLayer(), &source );
 
     msg.Printf( _( "Min Annulus: %s" ), MessageTextFromValue( units, minAnnulus, true ) );
     msg2.Printf( _( "(from %s)" ), source );

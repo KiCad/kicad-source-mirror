@@ -51,7 +51,8 @@ bool DRC_KEEPOUT_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
     // Test keepout areas for vias, tracks and pads inside keepout areas
     for( ZONE_CONTAINER* area : areasToInspect )
     {
-        m_keepoutFlags = area->GetKeepouts( &m_sources );
+        // JEY TODO: our existing keepout strategy needs a work-over for rules....
+        m_keepoutFlags = area->GetKeepouts( F_Cu, &m_sources );
 
         if( m_keepoutFlags > 0 )
         {

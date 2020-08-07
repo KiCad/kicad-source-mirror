@@ -52,7 +52,8 @@ public:
 class PCB_EXPR_CONTEXT : public LIBEVAL::CONTEXT
 {
 public:
-    PCB_EXPR_CONTEXT()
+    PCB_EXPR_CONTEXT( PCB_LAYER_ID aLayer ) :
+            m_layer( aLayer )
     {
         m_items[0] = nullptr;
         m_items[1] = nullptr;
@@ -69,8 +70,14 @@ public:
         return m_items[index];
     }
 
+    PCB_LAYER_ID GetLayer() const
+    {
+        return m_layer;
+    }
+
 private:
-    BOARD_ITEM* m_items[2];
+    BOARD_ITEM*  m_items[2];
+    PCB_LAYER_ID m_layer;
 };
 
 

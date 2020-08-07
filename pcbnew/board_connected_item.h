@@ -161,20 +161,24 @@ public:
      * returned clearance is the greater of this object's NETCLASS clearance and
      * aItem's NETCLASS clearance.  If \a aItem is NULL, then this objects clearance
      * is returned.
+     * @param aLayer the layer in question
      * @param aItem is an optional BOARD_ITEM
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    virtual int GetClearance( BOARD_ITEM* aItem = nullptr, wxString* aSource = nullptr ) const;
+    virtual int GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem = nullptr,
+                              wxString* aSource = nullptr ) const;
 
     /**
      * Function GetRuleClearance
      * returns any rule-based clearance.
+     * @param aLayer the current layer under test
      * @param aClearance [out] the clearance value in internal units
      * @param aSource [out] reports the source as a user-readable string
      * @return true if a rule was fired
      */
-    virtual bool GetRuleClearance( BOARD_ITEM* aItem, int* aClearance, wxString* aSource ) const;
+    virtual bool GetRuleClearance( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int* aClearance,
+                                   wxString* aSource ) const;
 
     /**
      * Function GetLocalClearanceOverrides

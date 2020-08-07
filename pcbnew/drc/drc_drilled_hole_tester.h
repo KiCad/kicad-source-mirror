@@ -62,7 +62,8 @@ private:
     std::vector<DRILLED_HOLE> m_holes;
     int                       m_largestRadius;
 
-    wxString                  m_msg;    // Construct only once for performance
+    wxString                  m_source;    // Construct only once for performance
+    wxString                  m_msg;       // Construct only once for performance
 };
 
 #endif // DRC_DRILLED_HOLE_TESTER__H

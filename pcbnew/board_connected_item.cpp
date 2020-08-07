@@ -92,7 +92,8 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
  * LEVEL 2: Rules
  * LEVEL 3: Accumulated local settings, netclass settings, & board design settings
  */
-int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
+int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
+                                        wxString* aSource ) const
 {
     BOARD*                board = GetBoard();
     int                   clearance = 0;
@@ -122,7 +123,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) c
 
     // LEVEL 2: Rules
     //
-    if( GetRuleClearance( aItem, &clearance, aSource ) )
+    if( GetRuleClearance( aItem, aLayer, &clearance, aSource ) )
         return clearance;
 
     // LEVEL 3: Accumulated local settings, netclass settings, & board design settings
@@ -163,17 +164,18 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) c
 }
 
 
-bool BOARD_CONNECTED_ITEM::GetRuleClearance( BOARD_ITEM* aItem, int* aClearance,
-                                             wxString* aSource ) const
+bool BOARD_CONNECTED_ITEM::GetRuleClearance( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer,
+                                             int* aClearance, wxString* aSource ) const
 {
-    DRC_RULE* rule = GetRule( this, aItem, CLEARANCE_CONSTRAINT );
+    const DRC_CONSTRAINT* constraint = GetConstraint( this, aItem, DRC_RULE_ID_CLEARANCE, aLayer,
+                                                      aSource );
 
-    if( rule )
+    if( constraint )
     {
         if( aSource )
-            *aSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
+            *aSource = wxString::Format( _( "'%s' rule" ), *aSource );
 
-        *aClearance = rule->m_Clearance.Min;
+        *aClearance = constraint->m_Value.Min();
         return true;
     }
 

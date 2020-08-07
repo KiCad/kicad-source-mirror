@@ -57,7 +57,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     {
         VIA *refvia = static_cast<VIA*>( aRefSeg );
         int viaAnnulus = ( refvia->GetWidth() - refvia->GetDrill() ) / 2;
-        int minAnnulus = refvia->GetMinAnnulus( &m_clearanceSource );
+        int minAnnulus = refvia->GetMinAnnulus( refvia->GetLayer(), &m_clearanceSource );
 
         // test if the via size is smaller than minimum
         if( refvia->GetViaType() == VIATYPE::MICROVIA )
@@ -280,20 +280,22 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             if( pad->GetDrillSize().x > 0 )
             {
-                const SHAPE_SEGMENT* slot = pad->GetEffectiveHoleShape();
-                DRC_RULE*            rule = GetRule( aRefSeg, pad, CLEARANCE_CONSTRAINT );
-
+                const SHAPE_SEGMENT*  slot = pad->GetEffectiveHoleShape();
+                const DRC_CONSTRAINT* constraint = GetConstraint( aRefSeg, pad,
+                                                                  DRC_RULE_ID_CLEARANCE, refLayer,
+                                                                  &m_clearanceSource );
                 int minClearance;
                 int actual;
 
-                if( rule )
+                if( constraint )
                 {
-                    m_clearanceSource = wxString::Format( _( "'%s' rule" ), rule->m_Name );
-                    minClearance = rule->m_Clearance.Min;
+                    m_clearanceSource = wxString::Format( _( "'%s' rule" ), m_clearanceSource );
+                    minClearance = constraint->m_Value.Min();
                 }
                 else
                 {
-                    minClearance = aRefSeg->GetClearance( nullptr, &m_clearanceSource );
+                    minClearance = aRefSeg->GetClearance( refLayer, nullptr,
+                                                          &m_clearanceSource );
                 }
 
                 if( slot->Collide( &refSeg, minClearance + bds.GetDRCEpsilon(), &actual ) )
@@ -316,7 +318,8 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 }
             }
 
-            int minClearance = aRefSeg->GetClearance( pad, &m_clearanceSource );
+            int minClearance = aRefSeg->GetClearance( aRefSeg->GetLayer(), pad,
+                                                      &m_clearanceSource );
             int actual;
 
             if( pad->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
@@ -383,7 +386,8 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         if( !trackBB.Intersects( refSegBB ) )
             continue;
 
-        int           minClearance = aRefSeg->GetClearance( track, &m_clearanceSource );
+        int           minClearance = aRefSeg->GetClearance( aRefSeg->GetLayer(), track,
+                                                            &m_clearanceSource );
         int           actual;
         SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
 
@@ -447,7 +451,8 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 // (1 micron)
                 #define THRESHOLD_DIST Millimeter2iu( 0.001 )
 
-                int minClearance = aRefSeg->GetClearance( zone, &m_clearanceSource );
+                int minClearance = aRefSeg->GetClearance( aRefSeg->GetLayer(), zone,
+                                                          &m_clearanceSource );
                 int widths       = refSegWidth / 2;
                 int allowedDist  = minClearance + widths + THRESHOLD_DIST;
                 int actual;
@@ -483,10 +488,8 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         static DRAWSEGMENT dummyEdge;
         dummyEdge.SetLayer( Edge_Cuts );
 
-        if( aRefSeg->GetRuleClearance( &dummyEdge, &minClearance, &m_clearanceSource ) )
-        {
-            /* minClearance and m_clearanceSource set in GetRuleClearance() */;
-        }
+        aRefSeg->GetRuleClearance( &dummyEdge, aRefSeg->GetLayer(), &minClearance,
+                                   &m_clearanceSource );
 
         SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
         int halfWidth = refSegWidth / 2;

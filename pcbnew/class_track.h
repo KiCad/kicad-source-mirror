@@ -442,7 +442,7 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
-    int GetMinAnnulus( wxString* aSource ) const;
+    int GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const;
 
     /**
      * Function SetDrill

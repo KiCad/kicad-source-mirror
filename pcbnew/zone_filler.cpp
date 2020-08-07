@@ -656,7 +656,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                     if( pad->GetNetCode() > 0 && pad->GetNetCode() == aZone->GetNetCode() )
                         gap = std::max( zone_clearance, aZone->GetThermalReliefGap( pad ) );
                     else
-                        gap = aZone->GetClearance( pad );
+                        gap = aZone->GetClearance( aLayer, pad );
 
                     addKnockout( pad, gap, aHoles );
                 }
@@ -676,7 +676,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
         if( track->GetBoundingBox().Intersects( zone_boundingbox ) )
         {
-            int gap = aZone->GetClearance( track ) + extra_margin;
+            int gap = aZone->GetClearance( aLayer, track ) + extra_margin;
 
             track->TransformShapeWithClearanceToPolygon( aHoles, gap, m_low_def );
         }
@@ -695,7 +695,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                 if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
                     bool ignoreLineWidth = aItem->IsOnLayer( Edge_Cuts );
-                    int  gap = aZone->GetClearance( aItem );
+                    int  gap = aZone->GetClearance( aLayer, aItem );
 
                     addKnockout( aItem, gap, ignoreLineWidth, aHoles );
                 }
@@ -739,7 +739,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
             int  gap = 0;
 
             if( !zone->GetIsKeepout() && aZone->GetNetCode() != zone->GetNetCode() )
-                gap = aZone->GetClearance( zone );
+                gap = aZone->GetClearance( aLayer, zone );
 
             zone->TransformOutlinesShapeWithClearanceToPolygon( aHoles, gap );
         }
