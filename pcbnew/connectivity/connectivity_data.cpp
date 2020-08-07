@@ -206,7 +206,8 @@ void CONNECTIVITY_DATA::BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aIte
         }
         else
         {
-            citems.push_back( static_cast<BOARD_CONNECTED_ITEM*>(item) );
+            if( auto citem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+                citems.push_back( citem );
         }
     }
 
