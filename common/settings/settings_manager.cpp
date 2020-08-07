@@ -249,8 +249,7 @@ void SETTINGS_MANAGER::registerColorSettings( const wxString& aFilename )
 {
     if( m_color_settings.count( aFilename ) )
         return;
-//wxMessageBox( aFilename, "registerColorSettings1" );
-//wxMessageBox( aFilename.ToStdString().c_str(), "registerColorSettings2" );
+
     m_color_settings[aFilename] = static_cast<COLOR_SETTINGS*>(
             RegisterSettings( new COLOR_SETTINGS( aFilename ) ) );
 }
@@ -605,7 +604,7 @@ wxString SETTINGS_MANAGER::calculateUserSettingsPath( bool aIncludeVer, bool aUs
     if( aIncludeVer )
         cfgpath.AppendDir( GetSettingsVersion() );
 
-    return cfgpath.GetPath().ToStdString();
+    return cfgpath.GetPath();
 }
 
 
