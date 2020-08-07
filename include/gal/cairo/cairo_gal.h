@@ -292,7 +292,6 @@ protected:
     unsigned int                groupCounter;       ///< Counter used for generating keys for groups
     GROUP*                      currentGroup;       ///< Currently used group
 
-    double lineWidth;
     double linePixelWidth;
     double lineWidthInPixels;
     bool lineWidthIsOdd;
