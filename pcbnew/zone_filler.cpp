@@ -46,6 +46,7 @@
 #include <confirm.h>
 #include <convert_to_biu.h>
 #include <math/util.h>      // for KiROUND
+#include <libs/kimath/include/convert_basic_shapes_to_polygon.h>
 
 #include "zone_filler.h"
 
@@ -630,9 +631,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
     // Add non-connected pad clearances
     //
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
             if( !pad->IsOnLayer( aLayer ) )
             {
@@ -665,7 +666,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
     // Add non-connected track clearances
     //
-    for( auto track : m_board->Tracks() )
+    for( TRACK* track : m_board->Tracks() )
     {
         if( !track->IsOnLayer( aLayer ) )
             continue;
@@ -700,16 +701,16 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                 }
             };
 
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
         doGraphicItem( &module->Reference() );
         doGraphicItem( &module->Value() );
 
-        for( auto item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : module->GraphicalItems() )
             doGraphicItem( item );
     }
 
-    for( auto item : m_board->Drawings() )
+    for( BOARD_ITEM* item : m_board->Drawings() )
         doGraphicItem( item );
 
     // Add zones outlines having an higher priority and keepout
@@ -1135,28 +1136,26 @@ void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER
     // (Gbr file unit = 1 or 10 nm) due to some truncation in coordinates or calculations
     // This margin also avoid problems due to rounding coordinates in next calculations
     // that can create incorrect polygons
-    int thickness = std::max( aZone->GetHatchFillTypeThickness(),
-                              aZone->GetMinThickness()+Millimeter2iu( 0.001 ) );
+    int thickness = std::max( aZone->GetHatchThickness(),
+                              aZone->GetMinThickness() + Millimeter2iu( 0.001 ) );
 
     int linethickness = thickness - aZone->GetMinThickness();
-    int gridsize = thickness + aZone->GetHatchFillTypeGap();
-    double orientation = aZone->GetHatchFillTypeOrientation();
+    int gridsize = thickness + aZone->GetHatchGap();
+    double orientation = aZone->GetHatchOrientation();
 
     SHAPE_POLY_SET filledPolys = aRawPolys;
     // Use a area that contains the rotated bbox by orientation,
     // and after rotate the result by -orientation.
     if( orientation != 0.0 )
-    {
         filledPolys.Rotate( M_PI/180.0 * orientation, VECTOR2I( 0,0 ) );
-    }
 
     BOX2I bbox = filledPolys.BBox( 0 );
 
     // Build hole shape
-    // the hole size is aZone->GetHatchFillTypeGap(), but because the outline thickness
+    // the hole size is aZone->GetHatchGap(), but because the outline thickness
     // is aZone->GetMinThickness(), the hole shape size must be larger
     SHAPE_LINE_CHAIN hole_base;
-    int hole_size = aZone->GetHatchFillTypeGap() + aZone->GetMinThickness();
+    int hole_size = aZone->GetHatchGap() + aZone->GetMinThickness();
     VECTOR2I corner( 0, 0 );;
     hole_base.Append( corner );
     corner.x += hole_size;
@@ -1169,39 +1168,42 @@ void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER
 
     // Calculate minimal area of a grid hole.
     // All holes smaller than a threshold will be removed
-    double minimal_hole_area = hole_base.Area() / 2;
+    double minimal_hole_area = hole_base.Area() * aZone->GetHatchHoleMinArea();
 
     // Now convert this hole to a smoothed shape:
-    if( aZone->GetHatchFillTypeSmoothingLevel()  > 0 )
+    if( aZone->GetHatchSmoothingLevel() > 0 )
     {
         // the actual size of chamfer, or rounded corner radius is the half size
-        // of the HatchFillTypeGap scaled by aZone->GetHatchFillTypeSmoothingValue()
-        // aZone->GetHatchFillTypeSmoothingValue() = 1.0 is the max value for the chamfer or the
+        // of the HatchFillTypeGap scaled by aZone->GetHatchSmoothingValue()
+        // aZone->GetHatchSmoothingValue() = 1.0 is the max value for the chamfer or the
         // radius of corner (radius = half size of the hole)
-        int smooth_value = KiROUND( aZone->GetHatchFillTypeGap()
-                                    * aZone->GetHatchFillTypeSmoothingValue() / 2 );
+        int smooth_value = KiROUND( aZone->GetHatchGap()
+                                    * aZone->GetHatchSmoothingValue() / 2 );
 
         // Minimal optimization:
         // make smoothing only for reasonnable smooth values, to avoid a lot of useless segments
         // and if the smooth value is small, use chamfer even if fillet is requested
         #define SMOOTH_MIN_VAL_MM 0.02
         #define SMOOTH_SMALL_VAL_MM 0.04
+
         if( smooth_value > Millimeter2iu( SMOOTH_MIN_VAL_MM ) )
         {
             SHAPE_POLY_SET smooth_hole;
             smooth_hole.AddOutline( hole_base );
-            int smooth_level = aZone->GetHatchFillTypeSmoothingLevel();
+            int smooth_level = aZone->GetHatchSmoothingLevel();
 
             if( smooth_value < Millimeter2iu( SMOOTH_SMALL_VAL_MM ) && smooth_level > 1 )
                 smooth_level = 1;
+
             // Use a larger smooth_value to compensate the outline tickness
             // (chamfer is not visible is smooth value < outline thickess)
-            smooth_value += aZone->GetMinThickness()/2;
+            smooth_value += aZone->GetMinThickness() / 2;
 
             // smooth_value cannot be bigger than the half size oh the hole:
-            smooth_value = std::min( smooth_value, aZone->GetHatchFillTypeGap()/2 );
+            smooth_value = std::min( smooth_value, aZone->GetHatchGap() / 2 );
+
             // the error to approximate a circle by segments when smoothing corners by a arc
-            int error_max = std::max( Millimeter2iu( 0.01), smooth_value/20 );
+            int error_max = std::max( Millimeter2iu( 0.01 ), smooth_value / 20 );
 
             switch( smooth_level )
             {
@@ -1212,8 +1214,9 @@ void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER
                 break;
 
             default:
-                if( aZone->GetHatchFillTypeSmoothingLevel() > 2 )
+                if( aZone->GetHatchSmoothingLevel() > 2 )
                     error_max /= 2;    // Force better smoothing
+
                 hole_base = smooth_hole.Fillet( smooth_value, error_max ).Outline( 0 );
                 break;
 
@@ -1249,14 +1252,77 @@ void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER
 
     holes.Move( bbox.GetPosition() );
 
-    // Clamp holes to the area of filled zones with a outline thickness
-    // > aZone->GetMinThickness() to be sure the thermal pads can be built
-    int outline_margin = std::max( (aZone->GetMinThickness()*10)/9, linethickness/2 );
-    filledPolys.Deflate( outline_margin, 16 );
+    // We must buffer holes by at least aZone->GetMinThickness() to guarantee that thermal
+    // reliefs can be built (and to give the zone a solid outline).  However, it looks more
+    // visually consistent if the buffer width is the same as the hatch width.
+    int outline_margin = KiROUND( aZone->GetMinThickness() * 1.1 );
+
+    if( aZone->GetHatchBorderAlgorithm() )
+        outline_margin = std::max( outline_margin, aZone->GetHatchThickness() );
+
+    if( outline_margin > linethickness / 2 )
+        filledPolys.Deflate( outline_margin - linethickness / 2, 16 );
+
     holes.BooleanIntersection( filledPolys, SHAPE_POLY_SET::PM_FAST );
 
     if( orientation != 0.0 )
         holes.Rotate( -M_PI/180.0 * orientation, VECTOR2I( 0,0 ) );
+
+    if( aZone->GetNetCode() != 0 )
+    {
+        // Vias and pads connected to the zone must not be allowed to become isolated inside
+        // one of the holes.  Effectively this means their copper outline needs to be expanded
+        // to be at least as wide as the gap so that it is guaranteed to touch at least one
+        // edge.
+        EDA_RECT       zone_boundingbox = aZone->GetBoundingBox();
+        SHAPE_POLY_SET aprons;
+        int            min_apron_radius = ( aZone->GetHatchGap() * 10 ) / 19;
+
+        for( TRACK* track : m_board->Tracks() )
+        {
+            if( track->Type() == PCB_VIA_T )
+            {
+                VIA* via = static_cast<VIA*>( track );
+
+                if( via->GetNetCode() == aZone->GetNetCode()
+                    && via->IsOnLayer( aLayer )
+                    && via->GetBoundingBox().Intersects( zone_boundingbox ) )
+                {
+                    int r = std::max( min_apron_radius,
+                                      via->GetDrillValue() / 2 + outline_margin );
+
+                    TransformCircleToPolygon( aprons, via->GetPosition(), r, ARC_HIGH_DEF );
+                }
+            }
+        }
+
+        for( MODULE* module : m_board->Modules() )
+        {
+            for( D_PAD* pad : module->Pads() )
+            {
+                if( pad->GetNetCode() == aZone->GetNetCode()
+                    && pad->IsOnLayer( aLayer )
+                    && pad->GetBoundingBox().Intersects( zone_boundingbox ) )
+                {
+                    // What we want is to bulk up the pad shape so that the narrowest bit of
+                    // copper between the hole and the apron edge is at least outline_margin
+                    // wide (and that the apron itself meets min_apron_radius.  But that would
+                    // take a lot of code and math, and the following approximation is close
+                    // enough.
+                    int pad_width = std::min( pad->GetSize().x, pad->GetSize().y );
+                    int slot_width = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
+                    int min_annulus = ( pad_width - slot_width ) / 2;
+                    int clearance = std::max( min_apron_radius - pad_width / 2,
+                                              outline_margin - min_annulus );
+
+                    clearance = std::max( 0, clearance - linethickness / 2 );
+                    pad->TransformShapeWithClearanceToPolygon( aprons, clearance, ARC_HIGH_DEF );
+                }
+            }
+        }
+
+        holes.BooleanSubtract( aprons, SHAPE_POLY_SET::PM_FAST );
+    }
 
     // Now filter truncated holes to avoid small holes in pattern
     // It happens for holes near the zone outline

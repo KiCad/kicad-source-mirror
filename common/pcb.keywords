@@ -124,6 +124,8 @@ hatch_gap
 hatch_orientation
 hatch_smoothing_level
 hatch_smoothing_value
+hatch_border_algorithm
+hatch_min_hole_area
 hide
 hole_to_hole_min
 island

@@ -155,17 +155,11 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     m_cornerRadius.SetValue( m_settings.GetCornerRadius() );
     m_PriorityLevelCtrl->SetValue( m_settings.m_ZonePriority );
 
-    switch( m_settings.m_Zone_HatchingStyle )
+    switch( m_settings.m_ZoneBorderDisplayStyle )
     {
-    case ZONE_HATCH_STYLE::NO_HATCH:
-        m_OutlineAppearanceCtrl->SetSelection( 0 );
-        break;
-    case ZONE_HATCH_STYLE::DIAGONAL_EDGE:
-        m_OutlineAppearanceCtrl->SetSelection( 1 );
-        break;
-    case ZONE_HATCH_STYLE::DIAGONAL_FULL:
-        m_OutlineAppearanceCtrl->SetSelection( 2 );
-        break;
+    case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:      m_OutlineDisplayCtrl->SetSelection( 0 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE: m_OutlineDisplayCtrl->SetSelection( 1 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL: m_OutlineDisplayCtrl->SetSelection( 2 ); break;
     }
 
     m_clearance.SetValue( m_settings.m_ZoneClearance );
@@ -174,18 +168,10 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     switch( m_settings.GetPadConnection() )
     {
     default:
-    case ZONE_CONNECTION::THERMAL:
-        m_PadInZoneOpt->SetSelection( 1 );
-        break;
-    case ZONE_CONNECTION::THT_THERMAL:
-        m_PadInZoneOpt->SetSelection( 2 );
-        break;
-    case ZONE_CONNECTION::NONE:
-        m_PadInZoneOpt->SetSelection( 3 );
-        break;
-    case ZONE_CONNECTION::FULL:
-        m_PadInZoneOpt->SetSelection( 0 );
-        break;
+    case ZONE_CONNECTION::THERMAL:     m_PadInZoneOpt->SetSelection( 1 ); break;
+    case ZONE_CONNECTION::THT_THERMAL: m_PadInZoneOpt->SetSelection( 2 ); break;
+    case ZONE_CONNECTION::NONE:        m_PadInZoneOpt->SetSelection( 3 ); break;
+    case ZONE_CONNECTION::FULL:        m_PadInZoneOpt->SetSelection( 0 ); break;
     }
 
     // Do not enable/disable antipad clearance and spoke width.  They might be needed if
@@ -235,7 +221,7 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     }
 
     m_gridStyleRotation.SetUnits( EDA_UNITS::DEGREES );
-    m_gridStyleRotation.SetValue( m_settings.m_HatchFillTypeOrientation*10 ); // IU is decidegree
+    m_gridStyleRotation.SetValue( m_settings.m_HatchOrientation * 10 ); // IU is decidegree
 
     // Gives a reasonable value to grid style parameters, if currently there are no defined
     // parameters for grid pattern thickness and gap (if the value is 0)
@@ -243,22 +229,22 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     // or 1mm
     // the grid pattern gap default value is (arbitrary) m_ZoneMinThickness * 6
     // or 1.5 mm
-    int bestvalue = m_settings.m_HatchFillTypeThickness;
+    int bestvalue = m_settings.m_HatchThickness;
 
-    if( bestvalue <= 0 )     // No defined value for m_HatchFillTypeThickness
+    if( bestvalue <= 0 )     // No defined value for m_HatchThickness
         bestvalue = std::max( m_settings.m_ZoneMinThickness * 4, Millimeter2iu( 1.0 ) );
 
     m_gridStyleThickness.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
 
-    bestvalue = m_settings.m_HatchFillTypeGap;
+    bestvalue = m_settings.m_HatchGap;
 
-    if( bestvalue <= 0 )     // No defined value for m_HatchFillTypeGap
+    if( bestvalue <= 0 )     // No defined value for m_HatchGap
         bestvalue = std::max( m_settings.m_ZoneMinThickness * 6, Millimeter2iu( 1.5 ) );
 
     m_gridStyleGap.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
 
-    m_spinCtrlSmoothLevel->SetValue( m_settings.m_HatchFillTypeSmoothingLevel );
-    m_spinCtrlSmoothValue->SetValue( m_settings.m_HatchFillTypeSmoothingValue );
+    m_spinCtrlSmoothLevel->SetValue( m_settings.m_HatchSmoothingLevel );
+    m_spinCtrlSmoothValue->SetValue( m_settings.m_HatchSmoothingValue );
 
     m_tcZoneName->SetValue( m_settings.m_Name );
 
@@ -322,11 +308,11 @@ bool DIALOG_COPPER_ZONE::TransferDataFromWindow()
     if( !AcceptOptions() )
         return false;
 
-    m_settings.m_HatchFillTypeOrientation = m_gridStyleRotation.GetValue()/10.0; // value is returned in deci-degree
-    m_settings.m_HatchFillTypeThickness = m_gridStyleThickness.GetValue();
-    m_settings.m_HatchFillTypeGap = m_gridStyleGap.GetValue();
-    m_settings.m_HatchFillTypeSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
-    m_settings.m_HatchFillTypeSmoothingValue = m_spinCtrlSmoothValue->GetValue();
+    m_settings.m_HatchOrientation = m_gridStyleRotation.GetValue() / 10.0; // value is returned in deci-degree
+    m_settings.m_HatchThickness = m_gridStyleThickness.GetValue();
+    m_settings.m_HatchGap = m_gridStyleGap.GetValue();
+    m_settings.m_HatchSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
+    m_settings.m_HatchSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 
     *m_ptr = m_settings;
     return true;
@@ -382,22 +368,16 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
         break;
     }
 
-    switch( m_OutlineAppearanceCtrl->GetSelection() )
+    switch( m_OutlineDisplayCtrl->GetSelection() )
     {
-    case 0:
-        m_settings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::NO_HATCH;
-        break;
-    case 1:
-        m_settings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
-        break;
-    case 2:
-        m_settings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_FULL;
-        break;
+    case 0: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;      break;
+    case 1: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; break;
+    case 2: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
     }
 
     auto cfg = m_Parent->GetPcbNewSettings();
 
-    cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_Zone_HatchingStyle );
+    cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_ZoneBorderDisplayStyle );
     cfg->m_Zones.net_filter = m_DoNotShowNetNameFilter->GetValue().ToStdString();
 
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,8 +23,9 @@
 #include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
-#include <wx/statline.h>
+#include <wx/statbox.h>
 #include <wx/spinctrl.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -42,12 +43,15 @@ class DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE : public DIALOG_SHIM
 		wxDataViewListCtrl* m_layers;
 		wxCheckBox* m_ConstrainOpt;
 		wxStaticText* m_staticTextStyle;
-		wxChoice* m_OutlineAppearanceCtrl;
+		wxChoice* m_OutlineDisplayCtrl;
 		wxStaticText* m_MinWidthLabel;
 		wxTextCtrl* m_MinWidthCtrl;
 		wxStaticText* m_MinWidthUnits;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_staticTextGridStyle;
+		wxStaticText* m_staticTextSmoothing;
+		wxChoice* m_cornerSmoothingChoice;
+		wxStaticText* m_cornerRadiusLabel;
+		wxTextCtrl* m_cornerRadiusCtrl;
+		wxStaticText* m_cornerRadiusUnits;
 		wxStaticText* m_staticTextGridFillType;
 		wxChoice* m_GridStyleCtrl;
 		wxStaticText* m_staticTextGrindOrient;
@@ -63,13 +67,6 @@ class DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_spinCtrlSmoothLevel;
 		wxStaticText* m_staticTextGridSmootingVal;
 		wxSpinCtrlDouble* m_spinCtrlSmoothValue;
-		wxStaticLine* m_staticline3;
-		wxStaticText* m_staticTextOutlineSmooth;
-		wxStaticText* m_staticTextSmoothing;
-		wxChoice* m_cornerSmoothingChoice;
-		wxStaticText* m_cornerRadiusLabel;
-		wxTextCtrl* m_cornerRadiusCtrl;
-		wxStaticText* m_cornerRadiusUnits;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;

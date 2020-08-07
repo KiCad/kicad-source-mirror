@@ -1337,25 +1337,24 @@ void ALTIUM_PCB::ParsePolygons6Data(
             elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::UNKNOWN )
         {
             zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
-            zone->SetHatchFillTypeThickness( elem.trackwidth );
+            zone->SetHatchThickness( elem.trackwidth );
 
             if( elem.hatchstyle == ALTIUM_POLYGON_HATCHSTYLE::NONE )
             {
                 // use a small hack to get us only an outline (hopefully)
                 const EDA_RECT& bbox = zone->GetBoundingBox();
-                zone->SetHatchFillTypeGap( std::max( bbox.GetHeight(), bbox.GetWidth() ) );
+                zone->SetHatchGap( std::max( bbox.GetHeight(), bbox.GetWidth() ) );
             }
             else
             {
-                zone->SetHatchFillTypeGap( elem.gridsize - elem.trackwidth );
+                zone->SetHatchGap( elem.gridsize - elem.trackwidth );
             }
 
-            zone->SetHatchFillTypeOrientation(
-                    elem.hatchstyle == ALTIUM_POLYGON_HATCHSTYLE::DEGREE_45 ? 45 : 0 );
+            zone->SetHatchOrientation( elem.hatchstyle == ALTIUM_POLYGON_HATCHSTYLE::DEGREE_45 ? 45 : 0 );
         }
 
-        zone->SetHatch(
-                ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                     ZONE_CONTAINER::GetDefaultHatchPitch(), true );
     }
 
     if( reader.GetRemainingBytes() != 0 )
@@ -1457,8 +1456,8 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
                 zone->AppendCorner( vertice.position, -1 );
             }
 
-            zone->SetHatch(
-                    ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+            zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                         ZONE_CONTAINER::GetDefaultHatchPitch(), true );
         }
         else if( elem.kind == ALTIUM_REGION_KIND::COPPER )
         {
@@ -1621,11 +1620,10 @@ void ALTIUM_PCB::ParseArcs6Data(
             zone->SetDoNotAllowCopperPour( true );
 
             ds.TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, false );
-            zone->Outline()->Simplify(
-                    SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); // the outline is not a single polygon!
+            zone->Outline()->Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); // the outline is not a single polygon!
 
-            zone->SetHatch(
-                    ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+            zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                         ZONE_CONTAINER::GetDefaultHatchPitch(), true );
             continue;
         }
 
@@ -2177,8 +2175,8 @@ void ALTIUM_PCB::ParseTracks6Data(
 
             ds.TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, false );
 
-            zone->SetHatch(
-                    ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+            zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                         ZONE_CONTAINER::GetDefaultHatchPitch(), true );
             continue;
         }
 
@@ -2446,8 +2444,8 @@ void ALTIUM_PCB::ParseFills6Data(
                 zone->Rotate( center, elem.rotation * 10 );
             }
 
-            zone->SetHatch(
-                    ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+            zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                         ZONE_CONTAINER::GetDefaultHatchPitch(), true );
         }
         else
         {

@@ -43,15 +43,17 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
     m_CornerSelection = nullptr;                // no corner is selected
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = ZONE_FILL_MODE::POLYGONS;
-    m_hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
-    m_hatchPitch = GetDefaultHatchPitch();
+    m_borderStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
+    m_borderHatchPitch = GetDefaultHatchPitch();
     m_hv45 = false;
-    m_HatchFillTypeThickness = 0;
-    m_HatchFillTypeGap = 0;
-    m_HatchFillTypeOrientation = 0.0;
-    m_HatchFillTypeSmoothingLevel = 0;          // Grid pattern smoothing type. 0 = no smoothing
-    m_HatchFillTypeSmoothingValue = 0.1;        // Grid pattern chamfer value relative to the gap value
-                                                // used only if m_HatchFillTypeSmoothingLevel > 0
+    m_hatchThickness = 0;
+    m_hatchGap = 0;
+    m_hatchOrientation = 0.0;
+    m_hatchSmoothingLevel = 0;          // Grid pattern smoothing type. 0 = no smoothing
+    m_hatchSmoothingValue = 0.1;        // Grid pattern chamfer value relative to the gap value
+                                        // used only if m_hatchSmoothingLevel > 0
+    m_hatchHoleMinArea = 0.3;           // Min size before holes are dropped (ratio of hole size)
+    m_hatchBorderAlgorithm = 1;         // 0 = use zone min thickness; 1 = use hatch width
     m_priority = 0;
     m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
     SetIsKeepout( aInModule ? true : false );   // Zones living in modules have the keepout option.
@@ -138,11 +140,13 @@ void ZONE_CONTAINER::InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
 
     m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
-    m_HatchFillTypeThickness = aZone.m_HatchFillTypeThickness;
-    m_HatchFillTypeGap = aZone.m_HatchFillTypeGap;
-    m_HatchFillTypeOrientation = aZone.m_HatchFillTypeOrientation;
-    m_HatchFillTypeSmoothingLevel = aZone.m_HatchFillTypeSmoothingLevel;
-    m_HatchFillTypeSmoothingValue = aZone.m_HatchFillTypeSmoothingValue;
+    m_hatchThickness = aZone.m_hatchThickness;
+    m_hatchGap = aZone.m_hatchGap;
+    m_hatchOrientation = aZone.m_hatchOrientation;
+    m_hatchSmoothingLevel = aZone.m_hatchSmoothingLevel;
+    m_hatchSmoothingValue = aZone.m_hatchSmoothingValue;
+    m_hatchBorderAlgorithm = aZone.m_hatchBorderAlgorithm;
+    m_hatchHoleMinArea = aZone.m_hatchHoleMinArea;
 
     // For corner moving, corner index to drag, or nullptr if no selection
     delete m_CornerSelection;
@@ -157,9 +161,9 @@ void ZONE_CONTAINER::InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
         m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
     }
 
-    m_hatchStyle = aZone.m_hatchStyle;
-    m_hatchPitch = aZone.m_hatchPitch;
-    m_HatchLines = aZone.m_HatchLines;
+    m_borderStyle = aZone.m_borderStyle;
+    m_borderHatchPitch = aZone.m_borderHatchPitch;
+    m_borderHatchLines = aZone.m_borderHatchLines;
 
     SetLocalFlags( aZone.GetLocalFlags() );
 
@@ -682,8 +686,8 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
     // Useful for statistics, especially when zones are complex the number of hatches
     // and filled polygons can explain the display and DRC calculation time:
-    msg.Printf( wxT( "%d" ), (int) m_HatchLines.size() );
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Hatch Lines" ), msg, BLUE ) );
+    msg.Printf( wxT( "%d" ), (int) m_borderHatchLines.size() );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "HatchBorder Lines" ), msg, BLUE ) );
 
     PCB_LAYER_ID layer = m_Layer;
 
@@ -710,7 +714,7 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
     /* move outlines */
     m_Poly->Move( offset );
 
-    Hatch();
+    HatchBorder();
 
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Move( offset );
@@ -734,7 +738,7 @@ void ZONE_CONTAINER::MoveEdge( const wxPoint& offset, int aEdge )
     {
         m_Poly->SetVertex( aEdge, m_Poly->CVertex( aEdge ) + VECTOR2I( offset ) );
         m_Poly->SetVertex( next_corner, m_Poly->CVertex( next_corner ) + VECTOR2I( offset ) );
-        Hatch();
+        HatchBorder();
 
         SetNeedRefill( true );
     }
@@ -748,7 +752,7 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
     angle = -DECIDEG2RAD( angle );
 
     m_Poly->Rotate( angle, VECTOR2I( centre ) );
-    Hatch();
+    HatchBorder();
 
     /* rotate filled areas: */
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
@@ -786,7 +790,7 @@ void ZONE_CONTAINER::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
     // ZONE_CONTAINERs mirror about the x-axis (why?!?)
     m_Poly->Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
 
-    Hatch();
+    HatchBorder();
 
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
@@ -916,48 +920,53 @@ wxString ZONE_CONTAINER::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-int ZONE_CONTAINER::GetHatchPitch() const
+int ZONE_CONTAINER::GetBorderHatchPitch() const
 {
-    return m_hatchPitch;
+    return m_borderHatchPitch;
 }
 
 
-void ZONE_CONTAINER::SetHatch( ZONE_HATCH_STYLE aHatchStyle, int aHatchPitch, bool aRebuildHatch )
+void ZONE_CONTAINER::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aHatchStyle, int aHatchPitch,
+                                            bool aRebuildHatch )
 {
     SetHatchPitch( aHatchPitch );
-    m_hatchStyle = aHatchStyle;
+    m_borderStyle = aHatchStyle;
 
     if( aRebuildHatch )
-        Hatch();
+        HatchBorder();
 }
 
 
 void ZONE_CONTAINER::SetHatchPitch( int aPitch )
 {
-    m_hatchPitch = aPitch;
+    m_borderHatchPitch = aPitch;
 }
 
 
-void ZONE_CONTAINER::UnHatch()
+void ZONE_CONTAINER::UnHatchBorder()
 {
-    m_HatchLines.clear();
+    m_borderHatchLines.clear();
 }
 
 
 // Creates hatch lines inside the outline of the complex polygon
-// sort function used in ::Hatch to sort points by descending wxPoint.x values
+// sort function used in ::HatchBorder to sort points by descending wxPoint.x values
 bool sortEndsByDescendingX( const VECTOR2I& ref, const VECTOR2I& tst )
 {
     return tst.x < ref.x;
 }
 
 
-void ZONE_CONTAINER::Hatch()
+void ZONE_CONTAINER::HatchBorder()
 {
-    UnHatch();
+    UnHatchBorder();
 
-    if( m_hatchStyle == ZONE_HATCH_STYLE::NO_HATCH || m_hatchPitch == 0 || m_Poly->IsEmpty() )
+    if( m_borderStyle == ZONE_BORDER_DISPLAY_STYLE::NO_HATCH
+            || m_borderHatchPitch == 0
+            || m_Poly->IsEmpty() )
+    {
         return;
+    }
 
     // define range for hatch lines
     int min_x = m_Poly->CVertex( 0 ).x;
@@ -983,13 +992,13 @@ void ZONE_CONTAINER::Hatch()
     // Calculate spacing between 2 hatch lines
     int spacing;
 
-    if( m_hatchStyle == ZONE_HATCH_STYLE::DIAGONAL_EDGE )
-        spacing = m_hatchPitch;
+    if( m_borderStyle == ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE )
+        spacing = m_borderHatchPitch;
     else
-        spacing = m_hatchPitch * 2;
+        spacing = m_borderHatchPitch * 2;
 
     // set the "length" of hatch lines (the length on horizontal axis)
-    int  hatch_line_len = m_hatchPitch;
+    int  hatch_line_len = m_borderHatchPitch;
 
     // To have a better look, give a slope depending on the layer
     LAYER_NUM layer = GetLayer();
@@ -1086,10 +1095,10 @@ void ZONE_CONTAINER::Hatch()
             // Push only one line for diagonal hatch,
             // or for small lines < twice the line length
             // else push 2 small lines
-            if( m_hatchStyle == ZONE_HATCH_STYLE::DIAGONAL_FULL
-                    || std::abs( dx ) < 2 * hatch_line_len )
+            if( m_borderStyle == ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL
+                || std::abs( dx ) < 2 * hatch_line_len )
             {
-                m_HatchLines.emplace_back( SEG( pointbuffer[ip], pointbuffer[ip + 1] ) );
+                m_borderHatchLines.emplace_back( SEG( pointbuffer[ip], pointbuffer[ ip + 1] ) );
             }
             else
             {
@@ -1106,9 +1115,9 @@ void ZONE_CONTAINER::Hatch()
                 int y1 = KiROUND( pointbuffer[ip].y + dx * slope );
                 int y2 = KiROUND( pointbuffer[ip + 1].y - dx * slope );
 
-                m_HatchLines.emplace_back( SEG( pointbuffer[ip].x, pointbuffer[ip].y, x1, y1 ) );
+                m_borderHatchLines.emplace_back( SEG( pointbuffer[ip].x, pointbuffer[ip].y, x1, y1 ) );
 
-                m_HatchLines.emplace_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y, x2, y2 ) );
+                m_borderHatchLines.emplace_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y, x2, y2 ) );
             }
         }
     }

@@ -1013,7 +1013,7 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aO
     aMergedZones.push_back( aOriginZones[0] );
 
     aOriginZones[0]->SetLocalFlags( 1 );
-    aOriginZones[0]->Hatch();
+    aOriginZones[0]->HatchBorder();
     aOriginZones[0]->CacheTriangulation();
 
     return true;

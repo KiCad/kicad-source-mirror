@@ -1639,19 +1639,13 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     switch( aZone->GetHatchStyle() )
     {
     default:
-    case ZONE_HATCH_STYLE::NO_HATCH:
-        hatch = "none";
-        break;
-    case ZONE_HATCH_STYLE::DIAGONAL_EDGE:
-        hatch = "edge";
-        break;
-    case ZONE_HATCH_STYLE::DIAGONAL_FULL:
-        hatch = "full";
-        break;
+    case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:      hatch = "none"; break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE: hatch = "edge"; break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL: hatch = "full"; break;
     }
 
     m_out->Print( 0, " (hatch %s %s)\n", hatch.c_str(),
-                  FormatInternalUnits( aZone->GetHatchPitch() ).c_str() );
+                  FormatInternalUnits( aZone->GetBorderHatchPitch() ).c_str() );
 
     if( aZone->GetPriority() > 0 )
         m_out->Print( aNestLevel+1, "(priority %d)\n", aZone->GetPriority() );
@@ -1750,17 +1744,22 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     {
         m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel+2, "(hatch_thickness %s) (hatch_gap %s) (hatch_orientation %s)",
-                         FormatInternalUnits( aZone->GetHatchFillTypeThickness() ).c_str(),
-                         FormatInternalUnits( aZone->GetHatchFillTypeGap() ).c_str(),
-                         Double2Str( aZone->GetHatchFillTypeOrientation() ).c_str() );
+                      FormatInternalUnits( aZone->GetHatchThickness() ).c_str(),
+                      FormatInternalUnits( aZone->GetHatchGap() ).c_str(),
+                      Double2Str( aZone->GetHatchOrientation() ).c_str() );
 
-        if( aZone->GetHatchFillTypeSmoothingLevel() > 0 )
+        if( aZone->GetHatchSmoothingLevel() > 0 )
         {
             m_out->Print( 0, "\n" );
             m_out->Print( aNestLevel+2, "(hatch_smoothing_level %d) (hatch_smoothing_value %s)",
-                             aZone->GetHatchFillTypeSmoothingLevel(),
-                             Double2Str( aZone->GetHatchFillTypeSmoothingValue() ).c_str() );
+                          aZone->GetHatchSmoothingLevel(),
+                          Double2Str( aZone->GetHatchSmoothingValue() ).c_str() );
         }
+
+        m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel+2, "(hatch_border_algorithm %s) (hatch_min_hole_area %s)",
+                      aZone->GetHatchBorderAlgorithm() ? "hatch_thickness" : "min_thickness",
+                      Double2Str( aZone->GetHatchHoleMinArea() ).c_str() );
     }
 
     m_out->Print( 0, ")\n" );

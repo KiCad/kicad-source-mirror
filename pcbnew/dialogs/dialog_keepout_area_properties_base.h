@@ -46,7 +46,7 @@ class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbFootprintsCtrl;
 		wxCheckBox* m_cbConstrainCtrl;
 		wxStaticText* m_staticTextStyle;
-		wxChoice* m_OutlineAppearanceCtrl;
+		wxChoice* m_OutlineDisplayCtrl;
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_tcName;
 		wxStaticLine* m_staticline1;

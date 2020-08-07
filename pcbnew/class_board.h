@@ -950,7 +950,7 @@ public:
      * @return a reference to the new area
      */
     ZONE_CONTAINER* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
-            wxPoint aStartPointPosition, ZONE_HATCH_STYLE aHatch );
+                             wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch );
 
     /**
      * Add a copper area to net, inserting after m_ZoneDescriptorList[aAreaIdx]
@@ -963,7 +963,7 @@ public:
      * @return pointer to the new area
      */
     ZONE_CONTAINER* InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLayer, int aCornerX,
-            int aCornerY, ZONE_HATCH_STYLE aHatch );
+                                int aCornerY, ZONE_BORDER_DISPLAY_STYLE aHatch );
 
     /**
      * Function NormalizeAreaPolygon

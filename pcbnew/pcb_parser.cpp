@@ -3779,7 +3779,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as ZONE_CONTAINER." ) );
 
-    ZONE_HATCH_STYLE hatchStyle = ZONE_HATCH_STYLE::NO_HATCH;
+    ZONE_BORDER_DISPLAY_STYLE hatchStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
 
     int     hatchPitch = ZONE_CONTAINER::GetDefaultHatchPitch();
     wxPoint pt;
@@ -3857,14 +3857,9 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
             switch( token )
             {
             default:
-            case T_none:
-                hatchStyle = ZONE_HATCH_STYLE::NO_HATCH;
-                break;
-            case T_edge:
-                hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
-                break;
-            case T_full:
-                hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_FULL;
+            case T_none: hatchStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;      break;
+            case T_edge: hatchStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; break;
+            case T_full: hatchStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
             }
 
             hatchPitch = parseBoardUnits( "hatch pitch" );
@@ -3966,27 +3961,42 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                     break;
 
                 case T_hatch_thickness:
-                    zone->SetHatchFillTypeThickness( parseBoardUnits( T_hatch_thickness ) );
+                    zone->SetHatchThickness( parseBoardUnits( T_hatch_thickness ) );
                     NeedRIGHT();
                     break;
 
                 case T_hatch_gap:
-                    zone->SetHatchFillTypeGap( parseBoardUnits( T_hatch_gap ) );
+                    zone->SetHatchGap( parseBoardUnits( T_hatch_gap ) );
                     NeedRIGHT();
                     break;
 
                 case T_hatch_orientation:
-                    zone->SetHatchFillTypeOrientation( parseDouble( T_hatch_orientation ) );
+                    zone->SetHatchOrientation( parseDouble( T_hatch_orientation ) );
                     NeedRIGHT();
                     break;
 
                 case T_hatch_smoothing_level:
-                    zone->SetHatchFillTypeSmoothingLevel( parseDouble( T_hatch_smoothing_level ) );
+                    zone->SetHatchSmoothingLevel( parseDouble( T_hatch_smoothing_level ) );
                     NeedRIGHT();
                     break;
 
                 case T_hatch_smoothing_value:
-                    zone->SetHatchFillTypeSmoothingValue( parseDouble( T_hatch_smoothing_value ) );
+                    zone->SetHatchSmoothingValue( parseDouble( T_hatch_smoothing_value ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_hatch_border_algorithm:
+                    token = NextTok();
+
+                    if( token != T_hatch_thickness && token != T_min_thickness )
+                        Expecting( "hatch_thickness or min_thickness" );
+
+                    zone->SetHatchBorderAlgorithm( token == T_hatch_thickness ? 1 : 0 );
+                    NeedRIGHT();
+                    break;
+
+                case T_hatch_min_hole_area:
+                    zone->SetHatchHoleMinArea( parseDouble( T_hatch_min_hole_area ) );
                     NeedRIGHT();
                     break;
 
@@ -4056,7 +4066,8 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                 default:
                     Expecting( "mode, arc_segments, thermal_gap, thermal_bridge_width, "
                                "hatch_thickness, hatch_gap, hatch_orientation, "
-                               "hatch_smoothing_level, hatch_smoothing_value, smoothing, radius"
+                               "hatch_smoothing_level, hatch_smoothing_value, "
+                               "hatch_border_algorithm, hatch_min_hole_area, smoothing, radius, "
                                "island_removal_mode, or island_area_min" );
                 }
             }
@@ -4266,7 +4277,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
         }
 
         // Set hatch here, after outlines corners are read
-        zone->SetHatch( hatchStyle, hatchPitch, true );
+        zone->SetBorderDisplayStyle( hatchStyle, hatchPitch, true );
     }
 
     if( addedFilledPolygons )

@@ -73,11 +73,13 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_bNoNetWarning;
 		wxStaticBitmap* m_bitmapNoNetWarning;
 		wxStaticText* m_staticText18;
+		wxStaticText* m_zoneNameLabel;
+		wxTextCtrl* m_tcZoneName;
 		wxCheckBox* m_constrainOutline;
 		wxStaticText* m_staticTextPriorityLevel;
 		wxSpinCtrl* m_PriorityLevelCtrl;
 		wxStaticText* m_staticTextStyle;
-		wxChoice* m_OutlineAppearanceCtrl;
+		wxChoice* m_OutlineDisplayCtrl;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTextSmoothing;
 		wxChoice* m_cornerSmoothingChoice;
@@ -90,6 +92,9 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxStaticText* m_minWidthLabel;
 		wxTextCtrl* m_minWidthCtrl;
 		wxStaticText* m_minWidthUnits;
+		wxStaticLine* m_staticline2;
+		wxStaticLine* m_staticline3;
+		wxStaticLine* m_staticline4;
 		wxStaticText* m_connectionLabel;
 		wxChoice* m_PadInZoneOpt;
 		wxStaticText* m_antipadLabel;
@@ -98,8 +103,6 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxStaticText* m_spokeWidthLabel;
 		wxTextCtrl* m_spokeWidthCtrl;
 		wxStaticText* m_spokeWidthUnits;
-		wxStaticText* m_staticText39;
-		wxTextCtrl* m_tcZoneName;
 		wxStaticText* m_staticTextGridFillType;
 		wxChoice* m_GridStyleCtrl;
 		wxStaticText* m_staticTextGrindOrient;

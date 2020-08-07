@@ -69,11 +69,11 @@ DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWind
 	m_staticTextStyle->Wrap( -1 );
 	bSizerLowerRight->Add( m_staticTextStyle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched"), _("Fully hatched") };
-	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
-	m_OutlineAppearanceCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 0 );
-	m_OutlineAppearanceCtrl->SetSelection( 0 );
-	bSizerLowerRight->Add( m_OutlineAppearanceCtrl, 0, wxALL, 5 );
+	wxString m_OutlineDisplayCtrlChoices[] = { _("Line"), _("Hatched"), _("Fully hatched") };
+	int m_OutlineDisplayCtrlNChoices = sizeof( m_OutlineDisplayCtrlChoices ) / sizeof( wxString );
+	m_OutlineDisplayCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_OutlineDisplayCtrlNChoices, m_OutlineDisplayCtrlChoices, 0 );
+	m_OutlineDisplayCtrl->SetSelection( 0 );
+	bSizerLowerRight->Add( m_OutlineDisplayCtrl, 0, wxALL, 5 );
 
 
 	bSizerRight->Add( bSizerLowerRight, 0, wxEXPAND, 5 );

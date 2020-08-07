@@ -2438,7 +2438,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 {
     unique_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
 
-    ZONE_HATCH_STYLE outline_hatch = ZONE_HATCH_STYLE::NO_HATCH;
+    ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
     bool    endContour = false;
     int     holeIndex = -1;     // -1 is the main outline; holeIndex >= 0 = hole index
     char    buf[1024];
@@ -2508,9 +2508,9 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             switch( *hopt ) // upper case required
             {
-            case 'N': outline_hatch = ZONE_HATCH_STYLE::NO_HATCH;      break;
-            case 'E': outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_EDGE; break;
-            case 'F': outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_FULL; break;
+            case 'N': outline_hatch = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;      break;
+            case 'E': outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; break;
+            case 'F': outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
             default:
                 m_error.Printf( _( "Bad ZAux for CZONE_CONTAINER \"%s\"" ),
                                 zc->GetNetname().GetData() );
@@ -2712,10 +2712,10 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                     zc->SetNetCode( NETINFO_LIST::UNCONNECTED );
                 }
 
-                // Hatch here, after outlines corners are read
+                // HatchBorder here, after outlines corners are read
                 // Set hatch here, after outlines corners are read
-                zc->SetHatch( outline_hatch, ZONE_CONTAINER::GetDefaultHatchPitch(),
-                              true );
+                zc->SetBorderDisplayStyle( outline_hatch, ZONE_CONTAINER::GetDefaultHatchPitch(),
+                                           true );
 
                 m_board->Add( zc.release() );
             }

@@ -120,31 +120,23 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
     m_minWidth.SetValue( m_settings.m_ZoneMinThickness );
     m_ConstrainOpt->SetValue( m_settings.m_Zone_45_Only );
 
-    switch( m_settings.m_Zone_HatchingStyle )
+    switch( m_settings.m_ZoneBorderDisplayStyle )
     {
-    case ZONE_HATCH_STYLE::NO_HATCH:
-        m_OutlineAppearanceCtrl->SetSelection( 0 );
-        break;
-    case ZONE_HATCH_STYLE::DIAGONAL_EDGE:
-        m_OutlineAppearanceCtrl->SetSelection( 1 );
-        break;
-    case ZONE_HATCH_STYLE::DIAGONAL_FULL:
-        m_OutlineAppearanceCtrl->SetSelection( 2 );
-        break;
+    case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:      m_OutlineDisplayCtrl->SetSelection( 0 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE: m_OutlineDisplayCtrl->SetSelection( 1 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL: m_OutlineDisplayCtrl->SetSelection( 2 ); break;
     }
 
-    SetInitialFocus( m_OutlineAppearanceCtrl );
+    SetInitialFocus( m_OutlineDisplayCtrl );
 
     switch( m_settings.m_FillMode )
     {
-    case ZONE_FILL_MODE::HATCH_PATTERN:
-        m_GridStyleCtrl->SetSelection( 1 ); break;
-    default:
-        m_GridStyleCtrl->SetSelection( 0 ); break;
+    case ZONE_FILL_MODE::HATCH_PATTERN: m_GridStyleCtrl->SetSelection( 1 ); break;
+    default:                            m_GridStyleCtrl->SetSelection( 0 ); break;
     }
 
     m_gridStyleRotation.SetUnits( EDA_UNITS::DEGREES );
-    m_gridStyleRotation.SetValue( m_settings.m_HatchFillTypeOrientation*10 ); // IU is decidegree
+    m_gridStyleRotation.SetValue( m_settings.m_HatchOrientation * 10 ); // IU is decidegree
 
     // Gives a reasonable value to grid style parameters, if currently there are no defined
     // parameters for grid pattern thickness and gap (if the value is 0)
@@ -152,22 +144,22 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
     // or 1mm
     // the grid pattern gap default value is (arbitrary) m_ZoneMinThickness * 6
     // or 1.5 mm
-    int bestvalue = m_settings.m_HatchFillTypeThickness;
+    int bestvalue = m_settings.m_HatchThickness;
 
-    if( bestvalue <= 0 )     // No defined value for m_HatchFillTypeThickness
+    if( bestvalue <= 0 )     // No defined value for m_hatchThickness
         bestvalue = std::max( m_settings.m_ZoneMinThickness * 4, Millimeter2iu( 1.0 ) );
 
     m_gridStyleThickness.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
 
-    bestvalue = m_settings.m_HatchFillTypeGap;
+    bestvalue = m_settings.m_HatchGap;
 
-    if( bestvalue <= 0 )     // No defined value for m_HatchFillTypeGap
+    if( bestvalue <= 0 )     // No defined value for m_hatchGap
         bestvalue = std::max( m_settings.m_ZoneMinThickness * 6, Millimeter2iu( 1.5 ) );
 
     m_gridStyleGap.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
 
-    m_spinCtrlSmoothLevel->SetValue( m_settings.m_HatchFillTypeSmoothingLevel );
-    m_spinCtrlSmoothValue->SetValue( m_settings.m_HatchFillTypeSmoothingValue );
+    m_spinCtrlSmoothLevel->SetValue( m_settings.m_HatchSmoothingLevel );
+    m_spinCtrlSmoothValue->SetValue( m_settings.m_HatchSmoothingValue );
 
     // Enable/Disable some widgets
     wxCommandEvent event;
@@ -214,17 +206,11 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
 
     m_settings.m_ZoneMinThickness = m_minWidth.GetValue();
 
-    switch( m_OutlineAppearanceCtrl->GetSelection() )
+    switch( m_OutlineDisplayCtrl->GetSelection() )
     {
-    case 0:
-        m_settings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::NO_HATCH;
-        break;
-    case 1:
-        m_settings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
-        break;
-    case 2:
-        m_settings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_FULL;
-        break;
+    case 0: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;      break;
+    case 1: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; break;
+    case 2: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
     }
 
     if( m_GridStyleCtrl->GetSelection() > 0 )
@@ -245,14 +231,14 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     }
 
 
-    m_settings.m_HatchFillTypeOrientation = m_gridStyleRotation.GetValue()/10.0; // value is returned in deci-degree
-    m_settings.m_HatchFillTypeThickness = m_gridStyleThickness.GetValue();
-    m_settings.m_HatchFillTypeGap = m_gridStyleGap.GetValue();
-    m_settings.m_HatchFillTypeSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
-    m_settings.m_HatchFillTypeSmoothingValue = m_spinCtrlSmoothValue->GetValue();
+    m_settings.m_HatchOrientation = m_gridStyleRotation.GetValue() / 10.0; // value is returned in deci-degree
+    m_settings.m_HatchThickness = m_gridStyleThickness.GetValue();
+    m_settings.m_HatchGap = m_gridStyleGap.GetValue();
+    m_settings.m_HatchSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
+    m_settings.m_HatchSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 
     auto cfg = m_parent->GetPcbNewSettings();
-    cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_Zone_HatchingStyle );
+    cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_ZoneBorderDisplayStyle );
 
     m_settings.m_Zone_45_Only = m_ConstrainOpt->GetValue();
 

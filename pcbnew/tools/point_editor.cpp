@@ -743,7 +743,7 @@ void POINT_EDITOR::updateItem() const
         }
 
         validatePolygon( outline );
-        zone->Hatch();
+        zone->HatchBorder();
         break;
     }
 
@@ -1298,7 +1298,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
         // We re-hatch the filled zones but not polygons
         if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
-            static_cast<ZONE_CONTAINER*>( item )->Hatch();
+            static_cast<ZONE_CONTAINER*>( item )->HatchBorder();
 
 
         commit.Push( _( "Add a zone corner" ) );
@@ -1414,7 +1414,7 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
         // Refresh zone hatching
         if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
-            static_cast<ZONE_CONTAINER*>( item )->Hatch();
+            static_cast<ZONE_CONTAINER*>( item )->HatchBorder();
 
         updatePoints();
     }

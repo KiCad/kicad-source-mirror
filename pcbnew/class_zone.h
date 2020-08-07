@@ -212,20 +212,26 @@ public:
         m_ZoneMinThickness = aMinThickness;
     }
 
-    int GetHatchFillTypeThickness() const { return m_HatchFillTypeThickness; }
-    void SetHatchFillTypeThickness( int aThickness ) { m_HatchFillTypeThickness = aThickness; }
+    int GetHatchThickness() const { return m_hatchThickness; }
+    void SetHatchThickness( int aThickness ) { m_hatchThickness = aThickness; }
 
-    int GetHatchFillTypeGap() const { return m_HatchFillTypeGap; }
-    void SetHatchFillTypeGap( int aStep ) { m_HatchFillTypeGap = aStep; }
+    int GetHatchGap() const { return m_hatchGap; }
+    void SetHatchGap( int aStep ) { m_hatchGap = aStep; }
 
-    double GetHatchFillTypeOrientation() const { return m_HatchFillTypeOrientation; }
-    void SetHatchFillTypeOrientation( double aStep ) { m_HatchFillTypeOrientation = aStep; }
+    double GetHatchOrientation() const { return m_hatchOrientation; }
+    void SetHatchOrientation( double aStep ) { m_hatchOrientation = aStep; }
 
-    int GetHatchFillTypeSmoothingLevel() const { return m_HatchFillTypeSmoothingLevel; }
-    void SetHatchFillTypeSmoothingLevel( int aLevel ) { m_HatchFillTypeSmoothingLevel = aLevel; }
+    int GetHatchSmoothingLevel() const { return m_hatchSmoothingLevel; }
+    void SetHatchSmoothingLevel( int aLevel ) { m_hatchSmoothingLevel = aLevel; }
 
-    double GetHatchFillTypeSmoothingValue() const { return m_HatchFillTypeSmoothingValue; }
-    void SetHatchFillTypeSmoothingValue( double aValue ) { m_HatchFillTypeSmoothingValue = aValue; }
+    double GetHatchSmoothingValue() const { return m_hatchSmoothingValue; }
+    void SetHatchSmoothingValue( double aValue ) { m_hatchSmoothingValue = aValue; }
+
+    double GetHatchHoleMinArea() const { return m_hatchHoleMinArea; }
+    void SetHatchHoleMinArea( double aPct ) { m_hatchHoleMinArea = aPct; }
+
+    int GetHatchBorderAlgorithm() const { return m_hatchBorderAlgorithm; }
+    void SetHatchBorderAlgorithm( int aAlgo ) { m_hatchBorderAlgorithm = aAlgo; }
 
     int GetSelectedCorner() const
     {
@@ -568,15 +574,8 @@ public:
      */
     bool AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowDuplication = false );
 
-    ZONE_HATCH_STYLE GetHatchStyle() const
-    {
-        return m_hatchStyle;
-    }
-
-    void SetHatchStyle( ZONE_HATCH_STYLE aStyle )
-    {
-        m_hatchStyle = aStyle;
-    }
+    ZONE_BORDER_DISPLAY_STYLE GetHatchStyle() const { return m_borderStyle; }
+    void SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE aStyle ) { m_borderStyle = aStyle; }
 
     /**
      * Function IsSame
@@ -741,14 +740,14 @@ public:
     void SetMinIslandArea( long long int aArea ) { m_minIslandArea = aArea; }
 
     /**
-     * Hatch related methods
+     * HatchBorder related methods
      */
 
     /**
-     * Function GetHatchPitch
+     * Function GetBorderHatchPitch
      * @return int - the zone hatch pitch in iu.
      */
-    int GetHatchPitch() const;
+    int GetBorderHatchPitch() const;
 
     /**
      * Function GetDefaultHatchPitchMils
@@ -757,7 +756,7 @@ public:
     static int GetDefaultHatchPitch();
 
     /**
-     * Function SetHatch
+     * Function SetBorderDisplayStyle
      * sets all hatch parameters for the zone.
      * @param  aHatchStyle   is the style of the hatch, specified as one of HATCH_STYLE possible
      *                       values.
@@ -765,7 +764,7 @@ public:
      * @param  aRebuildHatch is a flag to indicate whether to re-hatch after having set the
      *                       previous parameters.
      */
-    void SetHatch( ZONE_HATCH_STYLE aHatchStyle, int aHatchPitch, bool aRebuildHatch );
+    void SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aHatchStyle, int aHatchPitch, bool aRebuildHatch );
 
     /**
      * Function SetHatchPitch
@@ -775,19 +774,19 @@ public:
     void SetHatchPitch( int aPitch );
 
     /**
-     * Function UnHatch
+     * Function UnHatchBorder
      * clears the zone's hatch.
      */
-    void   UnHatch();
+    void   UnHatchBorder();
 
     /**
-     * Function Hatch
+     * Function HatchBorder
      * computes the hatch lines depending on the hatch parameters and stores it in the zone's
-     * attribute m_HatchLines.
+     * attribute m_borderHatchLines.
      */
-    void   Hatch();
+    void   HatchBorder();
 
-    const std::vector<SEG>& GetHatchLines() const { return m_HatchLines; }
+    const std::vector<SEG>& GetHatchLines() const { return m_borderHatchLines; }
 
     bool   GetHV45() const { return m_hv45; }
     void   SetHV45( bool aConstrain ) { m_hv45 = aConstrain; }
@@ -886,24 +885,18 @@ protected:
      * ZONE_FILL_MODE::POLYGONS => use solid polygons
      * ZONE_FILL_MODE::HATCH_PATTERN => use a grid pattern as shape
      */
-    ZONE_FILL_MODE        m_FillMode;
-
-    /// Grid style shape: thickness of lines (if 0 -> solid shape)
-    int m_HatchFillTypeThickness;
-
-    /// Grid style shape: dist between center of lines (grid size) (0 -> solid shape)
-    int m_HatchFillTypeGap;
-
-    /// Grid style shape: orientation in degrees of the grid lines
-    double m_HatchFillTypeOrientation;
-
-    /// Grid pattern smoothing type, similar to corner smoothing type
-    ///< 0 = no smoothing, 1 = fillet, >= 2 = arc
-    int  m_HatchFillTypeSmoothingLevel;
-
-    /// Grid pattern smoothing value for smoothing shape size calculations
-    /// this is the ratio between the gap and the chamfer size
-    double m_HatchFillTypeSmoothingValue;
+    ZONE_FILL_MODE   m_FillMode;
+    int              m_hatchThickness;          // thickness of lines (if 0 -> solid shape)
+    int              m_hatchGap;                // gap between lines (0 -> solid shape
+    double           m_hatchOrientation;        // orientation in degrees of grid lines
+    int              m_hatchSmoothingLevel;     // 0 = no smoothing
+                                                // 1 = fillet
+                                                // 2 = arc low def
+                                                // 3 = arc high def
+    double           m_hatchSmoothingValue;     // hole chamfer/fillet size (ratio of hole size)
+    double           m_hatchHoleMinArea;        // min size before holes are dropped (ratio)
+    int              m_hatchBorderAlgorithm;    // 0 = use min zone thickness
+                                                // 1 = use hatch thickness
 
     /// The index of the corner being moved or nullptr if no corner is selected.
     SHAPE_POLY_SET::VERTEX_INDEX* m_CornerSelection;
@@ -930,9 +923,9 @@ protected:
     /// A hash value used in zone filling calculations to see if the filled areas are up to date
     std::map<PCB_LAYER_ID, MD5_HASH>       m_filledPolysHash;
 
-    ZONE_HATCH_STYLE      m_hatchStyle;     // hatch style, see enum above
-    int                   m_hatchPitch;     // for DIAGONAL_EDGE, distance between 2 hatch lines
-    std::vector<SEG>      m_HatchLines;     // hatch lines
+    ZONE_BORDER_DISPLAY_STYLE m_borderStyle;       // border display style, see enum above
+    int                       m_borderHatchPitch;  // for DIAGONAL_EDGE, distance between 2 lines
+    std::vector<SEG>          m_borderHatchLines;  // hatch lines
 
     /// For each layer, a set of insulated islands that were not removed
     std::map<PCB_LAYER_ID, std::set<int>> m_insulatedIslands;

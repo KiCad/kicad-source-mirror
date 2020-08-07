@@ -72,7 +72,8 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200614  // Add support for fp_rects and gr_rects
 //#define SEXPR_BOARD_FILE_VERSION    20200625  // Multilayer zones, zone names, island controls
 //#define SEXPR_BOARD_FILE_VERSION    20200628  // remove visibility settings
-#define SEXPR_BOARD_FILE_VERSION      20200724  // Add KIID to module components
+//#define SEXPR_BOARD_FILE_VERSION    20200724  // Add KIID to module components
+#define SEXPR_BOARD_FILE_VERSION    20200807  // Add zone hatch advanced settings
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)

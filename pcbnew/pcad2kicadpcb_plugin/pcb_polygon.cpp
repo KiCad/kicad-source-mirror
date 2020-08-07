@@ -202,7 +202,8 @@ void PCB_POLYGON::AddToBoard()
 
         zone->SetPriority( m_priority );
 
-        zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                     zone->GetDefaultHatchPitch(), true );
 
         if ( m_objType == wxT( 'K' ) )
         {

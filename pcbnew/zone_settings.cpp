@@ -50,16 +50,17 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_ZoneClearance = Mils2iu( ZONE_CLEARANCE_MIL );
     // Min thickness value in filled areas (this is the minimum width of copper to fill solid areas) :
     m_ZoneMinThickness = Mils2iu( ZONE_THICKNESS_MIL );
-    m_HatchFillTypeThickness =
-            0;              // good value of grid line thickness if m_FillMode = ZFM_GRID_PATTERN
-    m_HatchFillTypeGap = 0; // good value  of grid line gap if m_FillMode = ZFM_GRID_PATTERN
-    m_HatchFillTypeOrientation = 0.0;    // Grid style: orientation of grid lines in degrees
-    m_HatchFillTypeSmoothingLevel = 0;   // Grid pattern smoothing type. 0 = no smoothing
-    m_HatchFillTypeSmoothingValue = 0.1; // Grid pattern chamfer value relative to the gap value
-    m_NetcodeSelection = 0;              // Net code selection for the current zone
-    m_Zone_HatchingStyle =
-            ZONE_HATCH_STYLE::DIAGONAL_EDGE; // Option to show the zone area (outlines only,
-                                             //short hatches or full hatches
+    m_HatchThickness = 0;        // good value of grid line thickness if m_FillMode = ZFM_GRID_PATTERN
+    m_HatchGap = 0;              // good value  of grid line gap if m_FillMode = ZFM_GRID_PATTERN
+    m_HatchOrientation = 0.0;    // Grid style: orientation of grid lines in degrees
+    m_HatchSmoothingLevel = 0;   // Grid pattern smoothing type. 0 = no smoothing
+    m_HatchSmoothingValue = 0.1; // Grid pattern chamfer value relative to the gap value
+    m_HatchHoleMinArea = 0.3;    // Min size before holes are dropped (ratio of hole size)
+    m_HatchBorderAlgorithm = 1;  // 0 = use zone min thickness; 1 = use hatch width
+    m_NetcodeSelection = 0;      // Net code selection for the current zone
+    m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; // Option to show the zone
+                                                                         // outlines only, short
+                                                                         // hatches or full hatches
 
     m_Layers.reset().set( F_Cu );
     m_Name = wxEmptyString;
@@ -94,14 +95,16 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_FillMode                    = aSource.GetFillMode();
     m_ZoneClearance               = aSource.GetZoneClearance();
     m_ZoneMinThickness            = aSource.GetMinThickness();
-    m_HatchFillTypeThickness      = aSource.GetHatchFillTypeThickness();
-    m_HatchFillTypeGap            = aSource.GetHatchFillTypeGap();
-    m_HatchFillTypeOrientation    = aSource.GetHatchFillTypeOrientation();
-    m_HatchFillTypeSmoothingLevel = aSource.GetHatchFillTypeSmoothingLevel();
-    m_HatchFillTypeSmoothingValue = aSource.GetHatchFillTypeSmoothingValue();
+    m_HatchThickness              = aSource.GetHatchThickness();
+    m_HatchGap                    = aSource.GetHatchGap();
+    m_HatchOrientation            = aSource.GetHatchOrientation();
+    m_HatchSmoothingLevel         = aSource.GetHatchSmoothingLevel();
+    m_HatchSmoothingValue         = aSource.GetHatchSmoothingValue();
+    m_HatchBorderAlgorithm        = aSource.GetHatchBorderAlgorithm();
+    m_HatchHoleMinArea            = aSource.GetHatchHoleMinArea();
     m_NetcodeSelection            = aSource.GetNetCode();
     m_Name                        = aSource.GetZoneName();
-    m_Zone_HatchingStyle          = aSource.GetHatchStyle();
+    m_ZoneBorderDisplayStyle          = aSource.GetHatchStyle();
     m_ThermalReliefGap            = aSource.GetThermalReliefGap();
     m_ThermalReliefCopperBridge   = aSource.GetThermalReliefCopperBridge();
     m_PadConnection               = aSource.GetPadConnection();
@@ -128,11 +131,13 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.SetFillMode( m_FillMode );
     aTarget.SetZoneClearance( m_ZoneClearance );
     aTarget.SetMinThickness( m_ZoneMinThickness );
-    aTarget.SetHatchFillTypeThickness( m_HatchFillTypeThickness );
-    aTarget.SetHatchFillTypeGap( m_HatchFillTypeGap );
-    aTarget.SetHatchFillTypeOrientation( m_HatchFillTypeOrientation );
-    aTarget.SetHatchFillTypeSmoothingLevel( m_HatchFillTypeSmoothingLevel );
-    aTarget.SetHatchFillTypeSmoothingValue( m_HatchFillTypeSmoothingValue );
+    aTarget.SetHatchThickness( m_HatchThickness );
+    aTarget.SetHatchGap( m_HatchGap );
+    aTarget.SetHatchOrientation( m_HatchOrientation );
+    aTarget.SetHatchSmoothingLevel( m_HatchSmoothingLevel );
+    aTarget.SetHatchSmoothingValue( m_HatchSmoothingValue );
+    aTarget.SetHatchBorderAlgorithm( m_HatchBorderAlgorithm );
+    aTarget.SetHatchHoleMinArea( m_HatchHoleMinArea );
     aTarget.SetThermalReliefGap( m_ThermalReliefGap );
     aTarget.SetThermalReliefCopperBridge( m_ThermalReliefCopperBridge );
     aTarget.SetPadConnection( m_PadConnection );
@@ -158,9 +163,10 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
             aTarget.SetNetCode( m_NetcodeSelection );
     }
 
-    // call SetHatch last, because hatch lines will be rebuilt,
+    // call SetBorderDisplayStyle last, because hatch lines will be rebuilt,
     // using new parameters values
-    aTarget.SetHatch( m_Zone_HatchingStyle, aTarget.GetDefaultHatchPitch(), true );
+    aTarget.SetBorderDisplayStyle( m_ZoneBorderDisplayStyle, aTarget.GetDefaultHatchPitch(),
+                                   true );
 }
 
 

@@ -324,7 +324,7 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
     RemoveArea( aDeletedList, area_to_combine );
 
     area_ref->SetLocalFlags( 1 );
-    area_ref->Hatch();
+    area_ref->HatchBorder();
 
     return true;
 }

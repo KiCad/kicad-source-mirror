@@ -99,20 +99,14 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataToWindow()
 
     m_tcName->SetValue( m_zonesettings.m_Name );
 
-    switch( m_zonesettings.m_Zone_HatchingStyle )
+    switch( m_zonesettings.m_ZoneBorderDisplayStyle )
     {
-    case ZONE_HATCH_STYLE::NO_HATCH:
-        m_OutlineAppearanceCtrl->SetSelection( 0 );
-        break;
-    case ZONE_HATCH_STYLE::DIAGONAL_EDGE:
-        m_OutlineAppearanceCtrl->SetSelection( 1 );
-        break;
-    case ZONE_HATCH_STYLE::DIAGONAL_FULL:
-        m_OutlineAppearanceCtrl->SetSelection( 2 );
-        break;
+    case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:      m_OutlineDisplayCtrl->SetSelection( 0 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE: m_OutlineDisplayCtrl->SetSelection( 1 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL: m_OutlineDisplayCtrl->SetSelection( 2 ); break;
     }
 
-    SetInitialFocus( m_OutlineAppearanceCtrl );
+    SetInitialFocus( m_OutlineDisplayCtrl );
 
     return true;
 }
@@ -170,21 +164,15 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
-    switch( m_OutlineAppearanceCtrl->GetSelection() )
+    switch( m_OutlineDisplayCtrl->GetSelection() )
     {
-    case 0:
-        m_zonesettings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::NO_HATCH;
-        break;
-    case 1:
-        m_zonesettings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
-        break;
-    case 2:
-        m_zonesettings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_FULL;
-        break;
+    case 0: m_zonesettings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;      break;
+    case 1: m_zonesettings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; break;
+    case 2: m_zonesettings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
     }
 
     auto cfg = m_parent->GetPcbNewSettings();
-    cfg->m_Zones.hatching_style = static_cast<int>( m_zonesettings.m_Zone_HatchingStyle );
+    cfg->m_Zones.hatching_style = static_cast<int>( m_zonesettings.m_ZoneBorderDisplayStyle );
 
     m_zonesettings.m_Zone_45_Only = m_cbConstrainCtrl->GetValue();
     m_zonesettings.m_ZonePriority = 0;  // for a keepout, this param is not used.

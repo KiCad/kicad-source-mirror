@@ -1104,7 +1104,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                         filler.Fill( toFill );
 
                         // Update the display
-                        zone->Hatch();
+                        zone->HatchBorder();
                         canvas()->Refresh();
 
                         // Restore the selection on the original zone

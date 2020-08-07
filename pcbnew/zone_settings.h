@@ -42,8 +42,8 @@ enum class ZONE_FILL_MODE
 };
 
 
-/// Zone hatch styles
-enum class ZONE_HATCH_STYLE
+/// Zone border styles
+enum class ZONE_BORDER_DISPLAY_STYLE
 {
     NO_HATCH,
     DIAGONAL_FULL,
@@ -76,19 +76,19 @@ public:
         SMOOTHING_LAST              // sentinel
     };
 
-    ZONE_FILL_MODE  m_FillMode;
-
     int  m_ZonePriority;                ///< Priority (0 ... N) of the zone
 
-    int  m_ZoneClearance;               ///< Minimal clearance value
-    int  m_ZoneMinThickness;            ///< Min thickness value in filled areas
-    int  m_HatchFillTypeThickness;      ///< Grid style shape: thickness of lines (if 0 -> solid shape)
-    int  m_HatchFillTypeGap;            ///< Grid style shape: clearance between lines (0 -> solid shape)
-    double m_HatchFillTypeOrientation;  ///< Grid style shape: orientation of grid lines in degrees
-    int  m_HatchFillTypeSmoothingLevel; ///< Grid pattern smoothing type, similar to corner smoothing type
-                                        ///< 0 = no smoothing, 1 = fillet, >= 2 = arc
-    double m_HatchFillTypeSmoothingValue; ///< Grid pattern chamfer distance/fillet value
-                                        ///< this is the ratio between the gap and the chamfer size
+    ZONE_FILL_MODE m_FillMode;
+    int            m_ZoneClearance;         // Minimal clearance value
+    int            m_ZoneMinThickness;      // Min thickness value in filled areas
+    int            m_HatchThickness;        // HatchBorder thickness of lines (if 0 -> solid shape)
+    int            m_HatchGap;              // HatchBorder clearance between lines (0 -> solid shape)
+    double         m_HatchOrientation;      // HatchBorder orientation of grid lines in degrees
+    int            m_HatchSmoothingLevel;   // HatchBorder smoothing type, similar to corner smoothing type
+                                            // 0 = no smoothing, 1 = fillet, >= 2 = arc
+    double         m_HatchSmoothingValue;   // HatchBorder chamfer/fillet size as a ratio of hole size
+    double         m_HatchHoleMinArea;      // min size before holes are dropped (ratio)
+    int            m_HatchBorderAlgorithm;  // 0 = use min zone thickness
 
     int  m_NetcodeSelection;            ///< Net code selection for the current zone
 
@@ -97,7 +97,7 @@ public:
     LSET m_Layers;                      ///< Layers that this zone exists on
 
     /// Option to show the zone area (outlines only, short hatches or full hatches
-    ZONE_HATCH_STYLE m_Zone_HatchingStyle;
+    ZONE_BORDER_DISPLAY_STYLE m_ZoneBorderDisplayStyle;
 
     long m_ThermalReliefGap;            ///< thickness of the gap in thermal reliefs
     long m_ThermalReliefCopperBridge;   ///< thickness of the copper bridge in thermal reliefs

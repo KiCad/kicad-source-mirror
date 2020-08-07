@@ -769,8 +769,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     }
                 }
 
-                zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE,
-                        ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                             ZONE_CONTAINER::GetDefaultHatchPitch(), true );
             }
             else
             {
@@ -815,7 +815,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 zone->SetLayer( layer );
                 zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
-                ZONE_HATCH_STYLE outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
+                ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
 
                 const int outlineIdx = -1;      // this is the id of the copper zone main outline
                 zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
@@ -824,11 +824,11 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
                 if( r.rot )
-                {
                     zone->Rotate( zone->GetPosition(), r.rot->degrees * 10 );
-                }
+
                 // this is not my fault:
-                zone->SetHatch( outline_hatch, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                zone->SetBorderDisplayStyle( outline_hatch, ZONE_CONTAINER::GetDefaultHatchPitch(),
+                                             true );
             }
 
             m_xpath->pop();
@@ -1338,16 +1338,16 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
         zone->SetDoNotAllowPads( false );
         zone->SetDoNotAllowFootprints( false );
         zone->SetDoNotAllowCopperPour( true );
-        zone->SetHatchStyle( ZONE_HATCH_STYLE::NO_HATCH );
+        zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
     }
     else if( p.pour == EPOLYGON::HATCH )
     {
         int spacing = p.spacing ? p.spacing->ToPcbUnits() : 50 * IU_PER_MILS;
 
         zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
-        zone->SetHatchFillTypeThickness( p.width.ToPcbUnits() );
-        zone->SetHatchFillTypeGap( spacing - p.width.ToPcbUnits() );
-        zone->SetHatchFillTypeOrientation( 0 );
+        zone->SetHatchThickness( p.width.ToPcbUnits() );
+        zone->SetHatchGap( spacing - p.width.ToPcbUnits() );
+        zone->SetHatchOrientation( 0 );
     }
 
     // We divide the thickness by half because we are tracing _inside_ the zone outline
@@ -1885,8 +1885,8 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
             zone->Rotate( center, r.rot->degrees * 10 );
         }
 
-        zone->SetHatch(
-                ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                     ZONE_CONTAINER::GetDefaultHatchPitch(), true );
     }
     else
     {
@@ -1996,8 +1996,8 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
         outline.SetClosed( true );
         zone->Outline()->AddOutline( outline );
 
-        zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(),
-                        true );
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                     ZONE_CONTAINER::GetDefaultHatchPitch(), true );
     }
     else
     {
@@ -2056,8 +2056,8 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
             }
         }
 
-        zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(),
-                        true );
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                     ZONE_CONTAINER::GetDefaultHatchPitch(), true );
     }
     else
     {

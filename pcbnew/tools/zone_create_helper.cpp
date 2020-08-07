@@ -160,7 +160,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
         auto newZone = new ZONE_CONTAINER( aZone );
         newZone->SetOutline( newZoneOutline );
         newZone->SetLocalFlags( 1 );
-        newZone->Hatch();
+        newZone->HatchBorder();
         newZones.push_back( newZone );
         commit.Add( newZone );
     }
@@ -192,7 +192,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
         {
             BOARD_COMMIT bCommit( &m_tool );
 
-            aZone->Hatch();
+            aZone->HatchBorder();
 
             if( !m_params.m_keepout )
             {
