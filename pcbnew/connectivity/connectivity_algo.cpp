@@ -655,13 +655,10 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
 
 void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
 {
-    const auto refParent = static_cast<const ZONE_CONTAINER*>( aZoneA->Parent() );
-    const auto testedParent = static_cast<const ZONE_CONTAINER*>( aZoneB->Parent() );
+    const auto parentA = static_cast<const ZONE_CONTAINER*>( aZoneA->Parent() );
+    const auto parentB = static_cast<const ZONE_CONTAINER*>( aZoneB->Parent() );
 
-    if( testedParent->Type () != PCB_ZONE_AREA_T )
-        return;
-
-    if( aZoneB == aZoneA  || refParent == testedParent )
+    if( aZoneB == aZoneA  || parentA == parentB )
         return;
 
     if( aZoneA->Layer() != aZoneB->Layer() )
@@ -670,13 +667,28 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
     if( aZoneB->Net() != aZoneA->Net() )
         return; // we only test zones belonging to the same net
 
+    const BOX2I& boxA = aZoneA->BBox();
+    const BOX2I& boxB = aZoneB->BBox();
+
+    int radiusA = 0;
+    int radiusB = 0;
+
+    if( parentA->GetFilledPolysUseThickness() )
+        radiusA = ( parentA->GetMinThickness() + 1 ) / 2;
+
+    if( parentB->GetFilledPolysUseThickness() )
+        radiusB = ( parentB->GetMinThickness() + 1 ) / 2;
+
     PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aZoneA->Layer() );
 
-    const auto& outline = refParent->GetFilledPolysList( layer ).COutline( aZoneA->SubpolyIndex() );
+    const auto& outline = parentA->GetFilledPolysList( layer ).COutline( aZoneA->SubpolyIndex() );
 
     for( int i = 0; i < outline.PointCount(); i++ )
     {
-        if( aZoneB->ContainsPoint( outline.CPoint( i ), 0 ) )
+        if( !boxB.Contains( outline.CPoint( i ) ) )
+            continue;
+
+        if( aZoneB->ContainsPoint( outline.CPoint( i ), radiusA ) )
         {
             aZoneA->Connect( aZoneB );
             aZoneB->Connect( aZoneA );
@@ -685,11 +697,14 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
     }
 
     const auto& outline2 =
-            testedParent->GetFilledPolysList( layer ).COutline( aZoneB->SubpolyIndex() );
+            parentB->GetFilledPolysList( layer ).COutline( aZoneB->SubpolyIndex() );
 
     for( int i = 0; i < outline2.PointCount(); i++ )
     {
-        if( aZoneA->ContainsPoint( outline2.CPoint( i ), 0 ) )
+        if( !boxA.Contains( outline2.CPoint( i ) ) )
+            continue;
+
+        if( aZoneA->ContainsPoint( outline2.CPoint( i ), radiusB ) )
         {
             aZoneA->Connect( aZoneB );
             aZoneB->Connect( aZoneA );

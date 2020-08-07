@@ -375,11 +375,15 @@ public:
         return ContainsPoint( anchor->Pos(), 0 );
     }
 
-    bool ContainsPoint( const VECTOR2I p, int aAccuracy ) const
+    bool ContainsPoint( const VECTOR2I p, int aAccuracy = 0 ) const
     {
         auto zone = static_cast<ZONE_CONTAINER*> ( Parent() );
-        int clearance = zone->GetFilledPolysUseThickness() ? zone->GetMinThickness() / 2 : 0;
-        return m_cachedPoly->ContainsPoint( p, clearance + aAccuracy );
+        int clearance = ( aAccuracy + 1 ) / 2;
+
+        if( zone->GetFilledPolysUseThickness() )
+            clearance += ( zone->GetMinThickness() + 1 ) / 2;
+
+        return m_cachedPoly->ContainsPoint( p, clearance );
     }
 
     const BOX2I& BBox()
