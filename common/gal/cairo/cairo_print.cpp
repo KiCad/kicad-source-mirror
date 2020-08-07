@@ -135,14 +135,6 @@ CAIRO_PRINT_GAL::CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
 }
 
 
-void CAIRO_PRINT_GAL::SetLineWidth( float aLineWidth )
-{
-    storePath();
-    lineWidth = aLineWidth;
-    cairo_set_line_width( currentContext, aLineWidth );
-}
-
-
 void CAIRO_PRINT_GAL::ComputeWorldScreenMatrix()
 {
     worldScale = screenDPI * worldUnitLength * zoomFactor;
