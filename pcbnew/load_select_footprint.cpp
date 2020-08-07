@@ -384,7 +384,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
 bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 {
     const wxString&    curLibPath = aLibraryPath;
-    wxString    dstLibPath = CreateNewLibrary();
+    wxString    dstLibPath = CreateNewLibrary( wxEmptyString, aLibraryPath );
 
     if( !dstLibPath )
         return false;             // user aborted in CreateNewLibrary()

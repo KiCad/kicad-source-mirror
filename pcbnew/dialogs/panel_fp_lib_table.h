@@ -77,7 +77,7 @@ private:
 
     FP_LIB_TABLE_GRID* project_model() const
     {
-        return (FP_LIB_TABLE_GRID*) m_project_grid->GetTable();
+        return m_project_grid ? (FP_LIB_TABLE_GRID*) m_project_grid->GetTable() : nullptr;
     }
 
     FP_LIB_TABLE_GRID* cur_model() const

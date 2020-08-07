@@ -110,6 +110,14 @@ public:
     VTBL_ENTRY const wxString GetProjectName() const;
 
     /**
+     * Checks if this project is a null project (i.e. the default project object created when
+     * no real project is open).  The null project still presents all the same project interface,
+     * but is not backed by any files, so saving it makes no sense.
+     * @return true if this is a bull project
+     */
+    VTBL_ENTRY bool IsNullProject() const;
+
+    /**
      * Return the name of the sheet identified by the given UUID.
      */
     VTBL_ENTRY const wxString GetSheetName( const KIID& aSheetID );

@@ -656,6 +656,23 @@ void LIB_EDIT_FRAME::RegenerateLibraryTree()
 
 SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::selectSymLibTable( bool aOptional )
 {
+    // If no project is loaded, always work with the global table
+    if( Prj().IsNullProject() )
+    {
+        SYMBOL_LIB_TABLE* ret = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
+
+        if( aOptional )
+        {
+            wxMessageDialog dlg( this, _( "Add the library to the global library table?" ),
+                                 _( "Add To Global Library Table" ), wxYES_NO );
+
+            if( dlg.ShowModal() != wxID_OK )
+                ret = nullptr;
+        }
+
+        return ret;
+    }
+
     wxArrayString libTableNames;
     libTableNames.Add( _( "Global" ) );
     libTableNames.Add( _( "Project" ) );

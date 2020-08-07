@@ -132,6 +132,12 @@ const wxString PROJECT::GetProjectName() const
 }
 
 
+bool PROJECT::IsNullProject() const
+{
+    return m_project_name.GetName().IsEmpty();
+}
+
+
 const wxString PROJECT::SymbolLibTableName() const
 {
     return libTableName( "sym-lib-table" );

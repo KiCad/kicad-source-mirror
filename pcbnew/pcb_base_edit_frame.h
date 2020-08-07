@@ -44,17 +44,18 @@ public:
     virtual ~PCB_BASE_EDIT_FRAME();
 
     /**
-     * Function CreateNewLibrary
      * If a library name is given, creates a new footprint library in the project folder
      * with the given name. If no library name is given it prompts user for a library path,
      * then creates a new footprint library at that location.
      * If library exists, user is warned about that, and is given a chance
      * to abort the new creation, and in that case existing library is first deleted.
+     * @param aProposedName is the inital path and filename shown in the file chooser dialog
      *
      * @return wxString - the newly created library path if library was successfully
      *   created, else wxEmptyString because user aborted or error.
      */
-    wxString CreateNewLibrary(const wxString& aLibName = wxEmptyString);
+    wxString CreateNewLibrary( const wxString& aLibName = wxEmptyString,
+                               const wxString& aProposedName = wxEmptyString );
 
     /**
      * Function AddLibrary

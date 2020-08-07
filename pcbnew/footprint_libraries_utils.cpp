@@ -375,13 +375,14 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
 }
 
 
-wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
+wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary( const wxString& aLibName,
+                                                const wxString& aProposedName )
 {
     // Kicad cannot write legacy format libraries, only .pretty new format
     // because the legacy format cannot handle current features.
     // The footprint library is actually a directory
 
-    wxString initialPath = wxPathOnly( Prj().GetProjectFullName() );
+    wxString initialPath = aProposedName.IsEmpty() ? Prj().GetProjectPath() : aProposedName;
     wxFileName fn;
     bool       doAdd = false;
 
@@ -490,18 +491,32 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
 
     bool          saveInGlobalTable = false;
     bool          saveInProjectTable = false;
-    wxArrayString libTableNames;
 
-    libTableNames.Add( _( "Global" ) );
-    libTableNames.Add( _( "Project" ) );
-
-    switch( SelectSingleOption( this, _( "Select Library Table" ),
-                                _( "Choose the Library Table to add the library to:" ),
-                                libTableNames ) )
+    if( Prj().IsNullProject() )
     {
-    case 0:  saveInGlobalTable = true;  break;
-    case 1:  saveInProjectTable = true; break;
-    default: return false;
+        saveInGlobalTable = true;
+    }
+    else
+    {
+        wxArrayString libTableNames;
+
+        libTableNames.Add( _( "Global" ) );
+        libTableNames.Add( _( "Project" ) );
+
+        switch( SelectSingleOption( this, _( "Select Library Table" ),
+                _( "Choose the Library Table to add the library to:" ), libTableNames ) )
+        {
+        case 0:
+            saveInGlobalTable = true;
+            break;
+
+        case 1:
+            saveInProjectTable = true;
+            break;
+
+        default:
+            return false;
+        }
     }
 
     wxString type = IO_MGR::ShowType( IO_MGR::GuessPluginTypeFromLibPath( libPath ) );

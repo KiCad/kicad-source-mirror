@@ -262,9 +262,7 @@ void KICAD_MANAGER_FRAME::RecreateLauncher()
 void KICAD_MANAGER_FRAME::SyncToolbars()
 {
     m_launcher->Toggle( KICAD_MANAGER_ACTIONS::editSchematic,  m_active_project );
-    m_launcher->Toggle( KICAD_MANAGER_ACTIONS::editSymbols,    m_active_project );
     m_launcher->Toggle( KICAD_MANAGER_ACTIONS::editPCB,        m_active_project );
-    m_launcher->Toggle( KICAD_MANAGER_ACTIONS::editFootprints, m_active_project );
     m_launcher->Refresh();
 }
 

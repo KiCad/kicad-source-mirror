@@ -886,7 +886,9 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
     }
     else
     {
-        wxFileDialog dlg( this, prompt, Prj().GetProjectPath(), aFilename.GetFullName() ,
+        wxString dir = Prj().IsNullProject() ? aFilename.GetFullPath() : Prj().GetProjectPath();
+
+        wxFileDialog dlg( this, prompt, dir, aFilename.GetFullName(),
                           wildcard, doOpen ? wxFD_OPEN | wxFD_FILE_MUST_EXIST
                                            : wxFD_SAVE | wxFD_CHANGE_DIR | wxFD_OVERWRITE_PROMPT );
 

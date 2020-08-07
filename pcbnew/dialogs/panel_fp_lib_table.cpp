@@ -368,25 +368,11 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 {
     // For user info, shows the table filenames:
     m_GblTableFilename->SetLabel( aGlobalTblPath );
-    m_PrjTableFilename->SetLabel( aProjectTblPath );
 
-    m_global_grid->SetTable(  new FP_LIB_TABLE_GRID( *aGlobal ),  true );
-    m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *aProject ), true );
-
-    // Give a bit more room for wxChoice editors
-    m_global_grid->SetDefaultRowSize( m_global_grid->GetDefaultRowSize() + 4 );
-    m_project_grid->SetDefaultRowSize( m_project_grid->GetDefaultRowSize() + 4 );
+    m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *aGlobal ), true );
 
     // add Cut, Copy, and Paste to wxGrids
-    m_global_grid->PushEventHandler( new FP_GRID_TRICKS( m_parent, m_global_grid ) );
-    m_project_grid->PushEventHandler( new FP_GRID_TRICKS( m_parent, m_project_grid ) );
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
-
-    m_global_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
-    m_project_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-    m_global_grid->AutoSizeColumns( false );
-    m_project_grid->AutoSizeColumns( false );
 
     wxArrayString choices;
 
@@ -402,33 +388,64 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     choices.Add( IO_MGR::ShowType( IO_MGR::PCAD ) );
     */
 
+    auto setupGrid =
+            [&]( WX_GRID* aGrid )
+            {
+                // Give a bit more room for wxChoice editors
+                aGrid->SetDefaultRowSize( aGrid->GetDefaultRowSize() + 4 );
+
+                // add Cut, Copy, and Paste to wxGrids
+                aGrid->PushEventHandler( new FP_GRID_TRICKS( m_parent, aGrid ) );
+
+                aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+                aGrid->AutoSizeColumns( false );
+
+                wxGridCellAttr* attr;
+
+                attr = new wxGridCellAttr;
+                attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &m_lastBrowseDir,
+                                                            wxEmptyString ) );
+                aGrid->SetColAttr( COL_URI, attr );
+
+                attr = new wxGridCellAttr;
+                attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
+                aGrid->SetColAttr( COL_TYPE, attr );
+
+                attr = new wxGridCellAttr;
+                attr->SetRenderer( new wxGridCellBoolRenderer() );
+                attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+                aGrid->SetColAttr( COL_ENABLED, attr );
+
+                // all but COL_OPTIONS, which is edited with Option Editor anyways.
+                aGrid->AutoSizeColumn( COL_NICKNAME, false );
+                aGrid->AutoSizeColumn( COL_TYPE, false );
+                aGrid->AutoSizeColumn( COL_URI, false );
+                aGrid->AutoSizeColumn( COL_DESCR, false );
+
+                // would set this to width of title, if it was easily known.
+                aGrid->SetColSize( COL_OPTIONS, 80 );
+
+                // Gives a selection to each grid, mainly for delete button. wxGrid's wake up with
+                // a currentCell which is sometimes not highlighted.
+                if( aGrid->GetNumberRows() > 0 )
+                    aGrid->SelectRow( 0 );
+            };
+
+    setupGrid( m_global_grid );
+
     populateEnvironReadOnlyTable();
 
-    for( wxGrid* g : { m_global_grid, m_project_grid } )
+    if( aProject )
     {
-        wxGridCellAttr* attr;
-
-        attr = new wxGridCellAttr;
-        attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &m_lastBrowseDir, wxEmptyString ) );
-        g->SetColAttr( COL_URI, attr );
-
-        attr = new wxGridCellAttr;
-        attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
-        g->SetColAttr( COL_TYPE, attr );
-
-        attr = new wxGridCellAttr;
-        attr->SetRenderer( new wxGridCellBoolRenderer() );
-        attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-        g->SetColAttr( COL_ENABLED, attr );
-
-        // all but COL_OPTIONS, which is edited with Option Editor anyways.
-        g->AutoSizeColumn( COL_NICKNAME, false );
-        g->AutoSizeColumn( COL_TYPE, false );
-        g->AutoSizeColumn( COL_URI, false );
-        g->AutoSizeColumn( COL_DESCR, false );
-
-        // would set this to width of title, if it was easily known.
-        g->SetColSize( COL_OPTIONS, 80 );
+        m_PrjTableFilename->SetLabel( aProjectTblPath );
+        m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *aProject ), true );
+        setupGrid( m_project_grid );
+    }
+    else
+    {
+        m_pageNdx = 0;
+        m_auinotebook->DeletePage( 1 );
+        m_project_grid = nullptr;
     }
 
     m_path_subs_grid->SetColLabelValue( 0, _( "Name" ) );
@@ -456,14 +473,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     m_browseButton->SetWidthPadding( 4 );
     m_browseButton->SetMinSize( buttonSize );
-
-    // Gives a selection to each grid, mainly for delete button. wxGrid's wake up with
-    // a currentCell which is sometimes not highlighted.
-    if( m_global_grid->GetNumberRows() > 0 )
-        m_global_grid->SelectRow( 0 );
-
-    if( m_project_grid->GetNumberRows() > 0 )
-        m_project_grid->SelectRow( 0 );
 
     // Populate the browse library options
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
@@ -493,7 +502,10 @@ PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
     // Delete the GRID_TRICKS.
     // Any additional event handlers should be popped before the window is deleted.
     m_global_grid->PopEventHandler( true );
-    m_project_grid->PopEventHandler( true );
+
+    if( m_project_grid )
+        m_project_grid->PopEventHandler( true );
+
     m_path_subs_grid->PopEventHandler( true );
 }
 
@@ -502,6 +514,9 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
 {
     for( FP_LIB_TABLE_GRID* model : { global_model(), project_model() } )
     {
+        if( !model )
+            continue;
+
         for( int r = 0; r < model->GetNumberRows(); )
         {
             wxString nick = model->GetValue( r, COL_NICKNAME ).Trim( false ).Trim();
@@ -546,6 +561,9 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
     // check for duplicate nickNames, separately in each table.
     for( FP_LIB_TABLE_GRID* model : { global_model(), project_model() } )
     {
+        if( !model )
+            continue;
+
         for( int r1 = 0; r1 < model->GetNumberRows() - 1; ++r1 )
         {
             wxString nick1 = model->GetValue( r1, COL_NICKNAME );
@@ -909,7 +927,7 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
             m_global->reindex();
         }
 
-        if( *project_model() != *m_project )
+        if( project_model() && *project_model() != *m_project )
         {
             m_parent->m_ProjectTableChanged = true;
 
@@ -940,6 +958,9 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
 
     for( FP_LIB_TABLE_GRID* tbl : { global_model(), project_model() } )
     {
+        if( !tbl )
+            continue;
+
         for( int row = 0; row < tbl->GetNumberRows(); ++row )
         {
             wxString uri = tbl->GetValue( row, COL_URI );
@@ -1010,6 +1031,9 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
     DIALOG_EDIT_LIBRARY_TABLES dlg( aCaller, _( "Footprint Libraries" ) );
     dlg.SetKiway( &dlg, aKiway );
 
+    if( aKiway->Prj().IsNullProject() )
+        projectTable = nullptr;
+
     dlg.InstallPanel( new PANEL_FP_LIB_TABLE( &dlg, globalTable, globalTablePath,
                                               projectTable, projectTablePath,
                                               aKiway->Prj().GetProjectPath() ) );
@@ -1030,7 +1054,7 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
         }
     }
 
-    if( dlg.m_ProjectTableChanged )
+    if( projectTable && dlg.m_ProjectTableChanged )
     {
         try
         {
