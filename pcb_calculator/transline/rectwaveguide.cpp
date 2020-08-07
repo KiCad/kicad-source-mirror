@@ -31,6 +31,8 @@
 RECTWAVEGUIDE::RECTWAVEGUIDE() : TRANSLINE()
 {
     m_Name = "RectWaveGuide";
+    fc10 = 1.0;                 // Cutoff frequency for TE10 mode
+
     Init();
 }
 

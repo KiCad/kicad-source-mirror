@@ -151,6 +151,7 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 #if defined( NGSPICE_BUILD_VERSION )
     aMsg << indent4 << "ngspice: " << NGSPICE_BUILD_VERSION << eol;
 #elif defined( NGSPICE_HAVE_CONFIG_H )
+    #undef HAVE_STRNCASECMP     /* is redefined in ngspice/config.h */
     #include <ngspice/config.h>
     aMsg << indent4 << "ngspice: " << PACKAGE_VERSION << eol;
 #else

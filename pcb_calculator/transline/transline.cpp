@@ -71,6 +71,7 @@ TRANSLINE::TRANSLINE()
 {
     m_parameters[MURC_PRM] = 1.0;
     m_Name                 = nullptr;
+    ang_l                  = 0.0;       // Electrical length in angle
     Init();
 }
 
@@ -135,7 +136,7 @@ double TRANSLINE::getProperty( enum PRMS_ID aPrmId )
 }
 
 /** @function getProperties
- *  
+ *
  *  Get all properties from the UI. Computes some extra ones.
  **/
 void TRANSLINE::getProperties( void )
@@ -151,7 +152,7 @@ void TRANSLINE::getProperties( void )
     m_parameters[SKIN_DEPTH_PRM]  = skin_depth();
 }
 /** @function checkProperties
- *  
+ *
  *  Checks the input parameters (ie: negative length).
  *  Does not check for incompatibility between values as this depends on the line shape.
  **/
@@ -219,7 +220,7 @@ void TRANSLINE::synthesize()
 /**
  * @function skin_depth
  * calculate skin depth
- * 
+ *
  * \f$ \frac{1}{\sqrt{ \pi \cdot f \cdot \mu \cdot \sigma }} \f$
  */
 #include <cstdio>
@@ -318,14 +319,14 @@ double TRANSLINE::ellipk( double k )
 
 /**
  * @function minimizeZ0Error1D
- * 
- * Tries to find a parameter that minimizes the error ( on Z0 ). 
+ *
+ * Tries to find a parameter that minimizes the error ( on Z0 ).
  * This function only works with a single parameter.
  * Calls @ref calcAnalyze several times until the error is acceptable.
  * While the error is unnacceptable, changes slightly the parameter.
- * 
+ *
  * This function does not change Z0 / Angl_L.
- * 
+ *
  * @param avar Parameter to synthesize
  * @return 'true' if error < MAX_ERROR, else 'false'
  */
@@ -407,13 +408,13 @@ bool TRANSLINE::minimizeZ0Error1D( double* aVar )
 }
 /**
  * @function setErrorLevel
- * 
+ *
  * set an error / warning level for a given parameter.
- * 
+ *
  * @see TRANSLINE_OK
  * @see TRANSLINE_WARNING
  * @see TRANSLINE_ERROR
- * 
+ *
  * @param aP parameter
  * @param aErrorLevel Error level
  */
