@@ -435,15 +435,18 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
         for( ZONE_CONTAINER* zone : m_pcb->Zones() )
         {
-            if( !( refLayerSet & zone->GetLayerSet() ).any() || zone->GetIsKeepout() )
+            if( zone->GetIsKeepout() )
+                continue;
+
+            if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
                 continue;
 
             for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
             {
-                if( zone->GetFilledPolysList( layer ).IsEmpty() )
+                if( !refLayerSet.test( layer ) )
                     continue;
 
-                if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
+                if( zone->GetFilledPolysList( layer ).IsEmpty() )
                     continue;
 
                 // to avoid false positive, due to rounding issues and approxiamtions
@@ -451,8 +454,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 // (1 micron)
                 #define THRESHOLD_DIST Millimeter2iu( 0.001 )
 
-                int minClearance = aRefSeg->GetClearance( aRefSeg->GetLayer(), zone,
-                                                          &m_clearanceSource );
+                int minClearance = aRefSeg->GetClearance( layer, zone, &m_clearanceSource );
                 int widths       = refSegWidth / 2;
                 int allowedDist  = minClearance + widths + THRESHOLD_DIST;
                 int actual;
