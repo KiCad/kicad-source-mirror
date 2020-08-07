@@ -41,7 +41,8 @@ WS_PROXY_VIEW_ITEM::WS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO
         m_sheetNumber( 1 ),
         m_sheetCount( 1 ),
         m_project( aProject ),
-        m_colorLayer( LAYER_WORKSHEET )
+        m_colorLayer( LAYER_WORKSHEET ),
+        m_pageBorderColorLayer( LAYER_GRID )
 {
 }
 
@@ -110,7 +111,7 @@ void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
     ws_settings->SetNormalColor( settings->GetLayerColor( m_colorLayer ) );
     ws_settings->SetSelectedColor( settings->GetLayerColor( LAYER_SELECT_OVERLAY ) );
     ws_settings->SetBrightenedColor( settings->GetLayerColor( LAYER_BRIGHTENED ) );
-    ws_settings->SetPageBorderColor( settings->GetLayerColor( LAYER_SCHEMATIC_GRID ) );
+    ws_settings->SetPageBorderColor( settings->GetLayerColor( m_pageBorderColorLayer ) );
 
     // Draw all the components that make the page layout
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )

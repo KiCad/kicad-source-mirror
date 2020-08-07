@@ -96,6 +96,7 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
     m_worksheet->SetSheetCount( aScreen->m_NumberOfScreens );
     m_worksheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );
     m_worksheet->SetColorLayer( LAYER_SCHEMATIC_WORKSHEET );
+    m_worksheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_GRID );
 
     if( m_frame && m_frame->IsType( FRAME_SCH ) )
         m_worksheet->SetSheetName( TO_UTF8( m_frame->GetScreenDesc() ) );

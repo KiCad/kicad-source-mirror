@@ -80,6 +80,15 @@ public:
         m_colorLayer = aLayerId;
     }
 
+    /**
+     * Overrides the layer used to pick the color of the page border (normally LAYER_GRID)
+     * @param aLayerId is the layer to use
+     */
+    void SetPageBorderColorLayer( int aLayerId )
+    {
+        m_pageBorderColorLayer = aLayerId;
+    }
+
     const PAGE_INFO& GetPageInfo() { return *m_pageInfo; }
     const TITLE_BLOCK& GetTitleBlock() { return *m_titleBlock; }
 
@@ -124,6 +133,9 @@ protected:
 
     /// Layer that is used for worksheet color (LAYER_WORKSHEET is always used for visibility)
     int                m_colorLayer;
+
+    /// Layer that is used for page border color
+    int                m_pageBorderColorLayer;
 };
 }
 
