@@ -46,36 +46,36 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
     case PCB_MODULE_T:
         for( auto pad : static_cast<MODULE*>( aItem ) -> Pads() )
         {
-            m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( pad ) ].MarkItemsAsInvalid();
-            m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( pad ) );
+            m_itemMap[pad].MarkItemsAsInvalid();
+            m_itemMap.erase( pad );
         }
 
         m_itemList.SetDirty( true );
         break;
 
     case PCB_PAD_T:
-        m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
-        m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+        m_itemMap[aItem].MarkItemsAsInvalid();
+        m_itemMap.erase( aItem );
         m_itemList.SetDirty( true );
         break;
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
-        m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
-        m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+        m_itemMap[aItem].MarkItemsAsInvalid();
+        m_itemMap.erase( aItem );
         m_itemList.SetDirty( true );
         break;
 
     case PCB_VIA_T:
-        m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
-        m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+        m_itemMap[aItem].MarkItemsAsInvalid();
+        m_itemMap.erase( aItem );
         m_itemList.SetDirty( true );
         break;
 
     case PCB_ZONE_AREA_T:
     {
-        m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
-        m_itemMap.erase ( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+        m_itemMap[aItem].MarkItemsAsInvalid();
+        m_itemMap.erase ( aItem );
         m_itemList.SetDirty( true );
         break;
     }

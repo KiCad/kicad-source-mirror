@@ -183,10 +183,8 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 
         for( auto item : selection )
         {
-            if( BOARD_CONNECTED_ITEM::ClassOf( item ) )
+            if( auto ci = dyn_cast<BOARD_CONNECTED_ITEM*>( item ) )
             {
-                auto ci = static_cast<BOARD_CONNECTED_ITEM*>( item );
-
                 int item_net = ci->GetNetCode();
 
                 if( net < 0 )
@@ -502,7 +500,10 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest()
 
     for( EDA_ITEM* item : selection )
     {
-        BOARD_CONNECTED_ITEM* boardItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+        BOARD_CONNECTED_ITEM* boardItem = dyn_cast<BOARD_CONNECTED_ITEM*>( item );
+
+        if( !boardItem )
+            continue;
 
         if( boardItem->Type() == PCB_MODULE_T )
         {
