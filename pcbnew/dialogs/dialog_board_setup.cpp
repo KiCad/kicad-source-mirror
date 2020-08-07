@@ -151,6 +151,10 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
         return;
     }
 
+    // Flag so user can stop work if it will result in deleted inner copper layers
+    // and still clean up this function properly.
+    bool okToProceed = true;
+
     PROJECT* otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
 
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
@@ -160,6 +164,14 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     try
     {
         otherBoard = pi->Load( boardFn.GetFullPath(), nullptr, nullptr );
+
+        if( importDlg.m_LayersOpt->GetValue() )
+        {
+            BOARD* loadedBoard = m_frame->GetBoard();
+
+            // Check if "Import Settings" board  has more layers than the current board.
+            okToProceed = m_layers->compareCopperLayerCount( loadedBoard, otherBoard );
+        }
     }
     catch( const IO_ERROR& ioe )
     {
@@ -175,37 +187,48 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
         return;
     }
 
-    otherBoard->SetProject( otherPrj );
 
-    if( importDlg.m_LayersOpt->GetValue() )
-        m_layers->ImportSettingsFrom( otherBoard );
-    if( importDlg.m_TextAndGraphicsOpt->GetValue() )
-        m_textAndGraphics->ImportSettingsFrom( otherBoard );
-    if( importDlg.m_ConstraintsOpt->GetValue() )
-        m_constraints->ImportSettingsFrom( otherBoard );
-    if( importDlg.m_NetclassesOpt->GetValue() )
-        m_netclasses->ImportSettingsFrom( &otherBoard->GetDesignSettings().GetNetClasses() );
-    if( importDlg.m_TracksAndViasOpt->GetValue() )
-        m_tracksAndVias->ImportSettingsFrom( otherBoard );
-    if( importDlg.m_MaskAndPasteOpt->GetValue() )
-        m_maskAndPaste->ImportSettingsFrom( otherBoard );
+    if( okToProceed )
+    {
+        otherBoard->SetProject( otherPrj );
 
-    // If layers options are imported, import also the stackup
-    // layers options and stackup are linked, so they cannot be imported
-    // separately, and stackup can be imported only after layers options
-    //
-    // Note also currently only the list of enabled layers can be imported, because
-    // we import settings from a .pro project file, not the settings inside
-    // a board, and info only living in the board is not imported.
-    // TODO: Add import of physical settings now that we are actually loading the board here
-    if( importDlg.m_LayersOpt->GetValue() )
-        m_physicalStackup->ImportSettingsFrom( otherBoard );
+        if( importDlg.m_LayersOpt->GetValue() )
+            m_layers->ImportSettingsFrom( otherBoard );
 
-    if( importDlg.m_SeveritiesOpt->GetValue() )
-        m_severities->ImportSettingsFrom( otherBoard->GetDesignSettings().m_DRCSeverities );
+        if( importDlg.m_TextAndGraphicsOpt->GetValue() )
+            m_textAndGraphics->ImportSettingsFrom( otherBoard );
 
-    otherBoard->ClearProject();
+        if( importDlg.m_ConstraintsOpt->GetValue() )
+            m_constraints->ImportSettingsFrom( otherBoard );
 
+        if( importDlg.m_NetclassesOpt->GetValue() )
+            m_netclasses->ImportSettingsFrom( &otherBoard->GetDesignSettings().GetNetClasses() );
+
+        if( importDlg.m_TracksAndViasOpt->GetValue() )
+            m_tracksAndVias->ImportSettingsFrom( otherBoard );
+
+        if( importDlg.m_MaskAndPasteOpt->GetValue() )
+            m_maskAndPaste->ImportSettingsFrom( otherBoard );
+
+        // If layers options are imported, import also the stackup
+        // layers options and stackup are linked, so they cannot be imported
+        // separately, and stackup can be imported only after layers options
+        //
+        // Note also currently only the list of enabled layers can be imported, because
+        // we import settings from a .pro project file, not the settings inside
+        // a board, and info only living in the board is not imported.
+        // TODO: Add import of physical settings now that we are actually loading the board here
+
+        if( importDlg.m_LayersOpt->GetValue() )
+            m_physicalStackup->ImportSettingsFrom( otherBoard );
+
+        if( importDlg.m_SeveritiesOpt->GetValue() )
+            m_severities->ImportSettingsFrom( otherBoard->GetDesignSettings().m_DRCSeverities );
+
+        otherBoard->ClearProject();
+    }
+
+    // Clean up and free memory before leaving
     m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
 
     delete otherBoard;

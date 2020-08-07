@@ -43,7 +43,7 @@
 
 static LSEQ dlg_layers()
 {
-    // layers that are put out into the dialog UI, coordinate with wxformbuilder and
+    // Layers that are put out into the dialog UI, coordinate with wxformbuilder and
     // getCTLs( LAYER_NUM aLayerNumber )
     static const PCB_LAYER_ID layers[] = {
         F_CrtYd,
@@ -260,7 +260,7 @@ void PANEL_SETUP_LAYERS::showCopperChoice( int copperCount )
 
     for( int lyrCnt = 2; lyrCnt <= MAX_CU_LAYERS; lyrCnt += 2 )
     {
-        // note this will change a one layer board to 2:
+        // Note: This will change a 1 layer board to 2
         if( copperCount <= lyrCnt )
         {
             int idx = lyrCnt/2 - 1;
@@ -296,7 +296,7 @@ void PANEL_SETUP_LAYERS::showBoardLayerNames()
 
 void PANEL_SETUP_LAYERS::showSelectedLayerCheckBoxes( LSET enabledLayers )
 {
-    // the check boxes
+    // The check boxes
     for( LSEQ seq = dlg_layers();  seq;  ++seq )
     {
         PCB_LAYER_ID layer = *seq;
@@ -307,7 +307,7 @@ void PANEL_SETUP_LAYERS::showSelectedLayerCheckBoxes( LSET enabledLayers )
 
 void PANEL_SETUP_LAYERS::showPresets( LSET enabledLayers )
 {
-    int presetsNdx = 0;     // the "Custom" setting, matches nothing
+    int presetsNdx = 0; // The "Custom" setting, matches nothing
 
     for( unsigned i=1; i<arrayDim( presets );  ++i )
     {
@@ -420,7 +420,7 @@ void PANEL_SETUP_LAYERS::DenyChangeCheckBox( wxCommandEvent& event )
         if( source == copper )
         {
             wxString controlLabel = m_staticTextCopperLayers->GetLabel();
-            // knock the ':' off the end
+            // Knock the ':' off the end
             controlLabel = controlLabel.substr( 0, controlLabel.size() - 1 );
 
             msg.Printf( _( "Use the \"%s\" control to change the number of copper layers." ),
@@ -488,7 +488,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
     // Check for removed layers with items which will get deleted from the board.
     LSEQ removedLayers = getRemovedLayersWithItems();
 
-    // Check for non copper layers in use in footprints, and therefore not removable.
+    // Check for non-copper layers in use in footprints, and therefore not removable.
     LSEQ notremovableLayers = getNonRemovableLayers();
 
     if( !notremovableLayers.empty() )
@@ -522,7 +522,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
             collector.SetLayerId( layer_id );
             collector.Collect( m_pcb, GENERAL_COLLECTOR::BoardLevelItems );
 
-            // Bye-bye items on on removed layer.
+            // Bye-bye items on removed layer.
             if( collector.GetCount() != 0 )
             {
                 hasRemovedBoardItems = true;
@@ -562,8 +562,8 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         }
     }
 
-    // If some board items are deleted: rebuild the connectivity,
-    // because it is likely some tracks and vias where removed
+    // If some board items are deleted: Rebuild the connectivity,
+    // because it is likely some tracks and vias were removed
     if( hasRemovedBoardItems )
     {
         // Rebuild list of nets (full ratsnest rebuild)
@@ -577,8 +577,8 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
 int PANEL_SETUP_LAYERS::getLayerTypeIndex( LAYER_NUM aLayer )
 {
-    wxChoice*  ctl =  getChoice( aLayer );
-    int ret = ctl->GetCurrentSelection();   // indices must have same sequence as LAYER_T
+    wxChoice* ctl = getChoice( aLayer );
+    int ret = ctl->GetCurrentSelection(); // Indices must have same sequence as LAYER_T
     return ret;
 }
 
@@ -616,6 +616,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
         PCB_LAYER_ID layer = *seq;
 
         // we _can_ rely on m_enabledLayers being current here:
+
         if( !m_enabledLayers[layer] )
             continue;
 
@@ -623,13 +624,13 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
 
         ctl = (wxTextCtrl*) getName( layer );
 
-        // check name for legality.
-        // 1) cannot be blank.
-        // 2) cannot have blanks.
-        // 3) cannot have " chars
-        // 4) cannot be 'signal'
-        // 5) must be unique.
-        // 6) cannot have illegal chars in filenames ( some filenames are built from layer names )
+        // Check name for legality:
+        // 1) Cannot be blank.
+        // 2) Cannot have blanks.
+        // 3) Cannot have " chars
+        // 4) Cannot be 'signal'
+        // 5) Must be unique.
+        // 6) Cannot have illegal chars in filenames ( some filenames are built from layer names )
         //    like : % $ \ " / :
         wxString badchars = wxFileName::GetForbiddenChars( wxPATH_DOS );
         badchars.Append( '%' );
@@ -676,7 +677,7 @@ LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
     LSET newLayers = GetUILayerMask();
     LSET curLayers = m_pcb->GetEnabledLayers();
 
-    if( newLayers == curLayers )    // return a empty list if no change
+    if( newLayers == curLayers ) // Return an empty list if no change
         return removedLayers;
 
     PCB_LAYER_COLLECTOR collector;
@@ -700,12 +701,12 @@ LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
 
 LSEQ PANEL_SETUP_LAYERS::getNonRemovableLayers()
 {
-     //Build the list of non copper layers in use in footprints.
+    // Build the list of non-copper layers in use in footprints.
     LSEQ inUseLayers;
     LSET newLayers = GetUILayerMask();
     LSET curLayers = m_pcb->GetEnabledLayers();
 
-    if( newLayers == curLayers )    // return a empty list if no change
+    if( newLayers == curLayers ) // Return an empty list if no change
         return inUseLayers;
 
     PCB_LAYER_COLLECTOR collector;
@@ -713,7 +714,7 @@ LSEQ PANEL_SETUP_LAYERS::getNonRemovableLayers()
 
     for( auto layer_id : curLayers.Seq() )
     {
-        if( IsCopperLayer( layer_id ) ) // Copper layers are not taken in account here
+        if( IsCopperLayer( layer_id ) ) // Copper layers are not taken into account here
             continue;
 
         if( std::find( newLayerSeq.begin(), newLayerSeq.end(), layer_id ) == newLayerSeq.end() )
@@ -738,4 +739,34 @@ void PANEL_SETUP_LAYERS::ImportSettingsFrom( BOARD* aBoard )
     TransferDataToWindow();
 
     m_pcb = savedBoard;
+}
+
+
+bool PANEL_SETUP_LAYERS::compareCopperLayerCount( BOARD* aWorkingBoard, BOARD* aImportedBoard )
+{
+    /*  This function warns users if they are going to delete inner copper layers because
+        they're importing settings from a board with less copper layers than the board
+        already loaded. We want to return "true" as default on the assumption no layer will
+        actually be deleted. */
+    bool okToDeleteCopperLayers = true;
+
+    // Get the number of copper layers in the loaded board and the "import settings" board
+    int currNumLayers = aWorkingBoard->GetCopperLayerCount();
+    int newNumLayers  = aImportedBoard->GetCopperLayerCount();
+
+    if( newNumLayers < currNumLayers )
+    {
+        wxMessageDialog dlg( this,
+                wxString::Format(
+                        wxT( "Imported settings have fewer copper layers than current board (%i instead of %i)."
+                             "\n\nContinue and delete extra inner copper layers from current board?" ),
+                        newNumLayers, currNumLayers ),
+                _( "Inner Layers To Be Deleted" ),
+                wxICON_WARNING | wxSTAY_ON_TOP | wxYES | wxNO | wxNO_DEFAULT );
+
+        if( wxID_NO == dlg.ShowModal() )
+            okToDeleteCopperLayers = false;
+    }
+
+    return okToDeleteCopperLayers;
 }

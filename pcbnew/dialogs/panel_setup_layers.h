@@ -59,8 +59,22 @@ public:
 
     void ImportSettingsFrom( BOARD* aBoard );
 
+    /**
+     * Check and warn if inner copper layers will be deleted
+     *
+     * This function warns users if they are going to delete inner copper layers because
+     * they're importing settings from a board with less copper layers than the board
+     * already loaded.
+     * @param aWorkingBoard = Currently loaded PCB
+     * @param aImportedBoard = PCB imported to get settings from
+     *
+     * @return bool - Approval to delete inner copper if needed
+     */
+    bool compareCopperLayerCount( BOARD* aWorkingBoard, BOARD* aImportedBoard );
+
     ///> @return the selected layer mask within the UI checkboxes
     LSET GetUILayerMask();
+
     ///> @return the layer name within the UI wxTextCtrl
     wxString GetLayerName( LAYER_NUM layer );
 

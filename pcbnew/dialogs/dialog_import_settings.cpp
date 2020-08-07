@@ -37,12 +37,67 @@ DIALOG_IMPORT_SETTINGS::DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAM
         DIALOG_IMPORT_SETTINGS_BASE( aParent ),
         m_frame( aFrame )
 {
+    wxSize sizeNeeded;
+
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
+    // Button created in wxFormBuilder is an "OK" button. Change label here
     m_sdbSizer1OK->SetLabel( _( "Import Settings" ) );
+
+    // Disable "Import Settings" button until user selects at least one import option
+    m_sdbSizer1OK->Enable( false );
+
+    // Make sure "Select All" button is big enough to hold "Deselect All"
+    m_selectAllButton->SetLabel( _( "Deselect All" ) ); // Change the text temporarily
+    sizeNeeded = m_selectAllButton->GetBestSize();      // Get control to tell us the width required
+    m_selectAllButton->SetLabel( _( "Select All" ) );   // Restore "Select All" as default text
+    sizeNeeded.y = m_selectAllButton->GetSize().y;      // Keep the height unchanged
+    m_selectAllButton->SetMinSize( sizeNeeded );        // Set control to the required size
+
     m_buttonsSizer->Layout();
 
     m_sdbSizer1OK->SetDefault();
+
+    m_showSelectAllOnBtn = true; // Store state to toggle message/usage of "Select All" button
+}
+
+
+void DIALOG_IMPORT_SETTINGS::OnCheckboxClicked( wxCommandEvent& event )
+{
+    bool importButtonEnabled = UpdateImportSettingsButton();
+
+    // If clicking this checkbox clears the last of the import selection checkboxes,
+    // then make sure the "Select All" button is actually going to select all.
+
+    if( !importButtonEnabled )
+    {
+        m_showSelectAllOnBtn = true;
+        UpdateSelectAllButton();
+    }
+}
+
+
+bool DIALOG_IMPORT_SETTINGS::UpdateImportSettingsButton()
+{
+    // Enable "Import Settings" button if at least one import option is selected
+    bool buttonEnableState = ( m_LayersOpt->IsChecked() || m_MaskAndPasteOpt->IsChecked()
+                               || m_ConstraintsOpt->IsChecked() || m_NetclassesOpt->IsChecked()
+                               || m_SeveritiesOpt->IsChecked() || m_TextAndGraphicsOpt->IsChecked()
+                               || m_TracksAndViasOpt->IsChecked() );
+
+    m_sdbSizer1OK->Enable( buttonEnableState );
+
+    return buttonEnableState;
+}
+
+
+void DIALOG_IMPORT_SETTINGS::UpdateSelectAllButton()
+{
+    // Update message on button
+    if( m_showSelectAllOnBtn )
+        m_selectAllButton->SetLabel( _( "Select All" ) );
+    else
+        m_selectAllButton->SetLabel( _( "Deselect All" ) );
 }
 
 
@@ -82,11 +137,19 @@ bool DIALOG_IMPORT_SETTINGS::TransferDataFromWindow()
 
 void DIALOG_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
 {
-    m_LayersOpt->SetValue( true );
-    m_TextAndGraphicsOpt->SetValue( true );
-    m_ConstraintsOpt->SetValue( true );
-    m_NetclassesOpt->SetValue( true );
-    m_TracksAndViasOpt->SetValue( true );
-    m_MaskAndPasteOpt->SetValue( true );
-    m_SeveritiesOpt->SetValue( true );
+    // Select or deselect all options based on internal flag
+    m_LayersOpt->SetValue( m_showSelectAllOnBtn );
+    m_TextAndGraphicsOpt->SetValue( m_showSelectAllOnBtn );
+    m_ConstraintsOpt->SetValue( m_showSelectAllOnBtn );
+    m_NetclassesOpt->SetValue( m_showSelectAllOnBtn );
+    m_TracksAndViasOpt->SetValue( m_showSelectAllOnBtn );
+    m_MaskAndPasteOpt->SetValue( m_showSelectAllOnBtn );
+    m_SeveritiesOpt->SetValue( m_showSelectAllOnBtn );
+
+    // Ensure "Import Settings" button state is enabled as appropriate
+    UpdateImportSettingsButton();
+
+    // Toggle whether button selects or deselects all.
+    m_showSelectAllOnBtn = !m_showSelectAllOnBtn;
+    UpdateSelectAllButton();
 }

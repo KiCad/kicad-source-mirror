@@ -34,17 +34,41 @@ class PCB_EDIT_FRAME;
 class DIALOG_IMPORT_SETTINGS : public DIALOG_IMPORT_SETTINGS_BASE
 {
 protected:
-    PCB_EDIT_FRAME*  m_frame;
-    static wxString  m_filePath;
+    PCB_EDIT_FRAME* m_frame;
+    static wxString m_filePath;
+
+private:
+
+    /**
+     * Stores state used to toggle button between "Select All" and "Deselect All"
+    */
+    bool m_showSelectAllOnBtn;
 
 public:
     DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAME* aFrame );
 
     void OnBrowseClicked( wxCommandEvent& event ) override;
     void OnSelectAll( wxCommandEvent& event ) override;
+    void OnCheckboxClicked( wxCommandEvent& event ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    /**
+     * Enables/Disables "Import Settings" button
+     *
+     * This dialog defaults to all import selections cleared, and the "Import
+     * Settings" button disabled.  The user must check at least one of the import
+     * selection checkboxes for the "Import Settings" button to be enabled.
+     *
+     * @return bool - "Import Settings" button enable state
+     */
+    bool UpdateImportSettingsButton();
+
+    /**
+     * Update "Select All" button label as appropriate
+     */
+    void UpdateSelectAllButton();
 
     wxString GetFilePath() { return m_filePath; }
 };
