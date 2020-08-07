@@ -230,7 +230,7 @@ LINE_READER* DSNLEXER::PopReader()
 }
 
 
-inline int DSNLEXER::findToken( const std::string& tok )
+int DSNLEXER::findToken( const std::string& tok )
 {
     KEYWORD_MAP::const_iterator it = keyword_hash.find( tok.c_str() );
 
