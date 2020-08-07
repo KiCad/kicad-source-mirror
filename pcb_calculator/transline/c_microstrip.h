@@ -25,42 +25,42 @@
 #ifndef _C_MICROSTRIP_H_
 #define _C_MICROSTRIP_H_
 
+#include <microstrip.h>
+#include <transline.h>
+
 class C_MICROSTRIP : public TRANSLINE
 {
-public: C_MICROSTRIP();
+public:
+    C_MICROSTRIP();
     ~C_MICROSTRIP();
 
 private:
-    double h;                   // height of substrate
-    double ht;                  // height to the top of box
-    double t;                   // thickness of top metal
-    double rough;               // Roughness of top metal
-    double w;                   // width of lines
-    double w_t_e;               // even-mode thickness-corrected line width
-    double w_t_o;               // odd-mode thickness-corrected line width
-    double l;                   // length of lines
-    double s;                   // spacing of lines
-    double Z0_e_0;              // static even-mode impedance
-    double Z0_o_0;              // static odd-mode impedance
-    double Z0e;                 // even-mode impedance
-    double Z0o;                 // odd-mode impedance
-    double c_e;                 // even-mode capacitance
-    double c_o;                 // odd-mode capacitance
-    double ang_l_e;             // even-mode electrical length in angle
-    double ang_l_o;             // odd-mode electrical length in angle
-    double er_eff_e;            // even-mode effective dielectric constant
-    double er_eff_o;            // odd-mode effective dielectric constant
-    double er_eff_e_0;          // static even-mode effective dielectric constant
-    double er_eff_o_0;          // static odd-mode effective dielectric constant
-    double w_eff;               // Effective width of line
-    double atten_dielectric_e;  // even-mode dielectric losses (dB)
-    double atten_cond_e;        // even-mode conductors losses (dB)
-    double atten_dielectric_o;  // odd-mode dielectric losses (dB)
-    double atten_cond_o;        // odd-mode conductors losses (dB)
-
-public:
-    void   analyze() override;
-    void   synthesize() override;
+    double h;                  // height of substrate
+    double ht;                 // height to the top of box
+    double t;                  // thickness of top metal
+    double rough;              // Roughness of top metal
+    double w;                  // width of lines
+    double w_t_e;              // even-mode thickness-corrected line width
+    double w_t_o;              // odd-mode thickness-corrected line width
+    double l;                  // length of lines
+    double s;                  // spacing of lines
+    double Z0_e_0;             // static even-mode impedance
+    double Z0_o_0;             // static odd-mode impedance
+    double Z0e;                // even-mode impedance
+    double Z0o;                // odd-mode impedance
+    double c_e;                // even-mode capacitance
+    double c_o;                // odd-mode capacitance
+    double ang_l_e;            // even-mode electrical length in angle
+    double ang_l_o;            // odd-mode electrical length in angle
+    double er_eff_e;           // even-mode effective dielectric constant
+    double er_eff_o;           // odd-mode effective dielectric constant
+    double er_eff_e_0;         // static even-mode effective dielectric constant
+    double er_eff_o_0;         // static odd-mode effective dielectric constant
+    double w_eff;              // Effective width of line
+    double atten_dielectric_e; // even-mode dielectric losses (dB)
+    double atten_cond_e;       // even-mode conductors losses (dB)
+    double atten_dielectric_o; // odd-mode dielectric losses (dB)
+    double atten_cond_o;       // odd-mode conductors losses (dB)
 
 private:
     double delta_u_thickness_single( double, double );
@@ -82,12 +82,11 @@ private:
     void   syn_err_fun( double*, double*, double, double, double, double, double );
     void   synth_width();
     void   Z0_dispersion();
-    void   calc();
-    void   get_c_microstrip_sub();
-    void   get_c_microstrip_comp();
-    void   get_c_microstrip_elec();
-    void   get_c_microstrip_phys();
-    void   show_results();
+    void   calcAnalyze() override;
+    void   calcSynthesize() override;
+    void   showAnalyze() override;
+    void   showSynthesize() override;
+    void   show_results() override;
     void   syn_fun( double*, double*, double, double, double, double );
 
 
@@ -95,4 +94,4 @@ private:
     MICROSTRIP* aux_ms;
 };
 
-#endif      // _C_MICROSTRIP_H_
+#endif // _C_MICROSTRIP_H_

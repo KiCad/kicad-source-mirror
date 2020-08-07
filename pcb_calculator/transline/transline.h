@@ -24,63 +24,109 @@
 #ifndef __TRANSLINE_H
 #define __TRANSLINE_H
 
+#include <gal/color4d.h>
+#include <wx/wx.h>
+
+#define TRANSLINE_OK 0
+#define TRANSLINE_WARNING 1
+#define TRANSLINE_ERROR 2
+
 // IDs for lines parameters used in calculation:
 // (Used to retrieve these parameters from UI.
 // DUMMY_PRM is used to skip a param line in dialogs. It is not really a parameter
 enum PRMS_ID
 {
-    UNKNOWN_ID = 0,
-    EPSILONR_PRM,
-    TAND_PRM,
-    RHO_PRM,
-    H_PRM,
-    TWISTEDPAIR_TWIST_PRM,
+    UNKNOWN_ID = -1,
+    EPSILONR_PRM,          // dielectric constant
+    TAND_PRM,              // Dielectric Loss Tangent
+    RHO_PRM,               // Conductivity of conductor
+    H_PRM,                 // height of substrate
+    TWISTEDPAIR_TWIST_PRM, // Twists per length
     H_T_PRM,
-    STRIPLINE_A_PRM,
-    T_PRM,
+    STRIPLINE_A_PRM, // Stripline : distance from line to top metal
+    T_PRM,           // thickness of top metal
     ROUGH_PRM,
-    MUR_PRM,
+    MUR_PRM, // magnetic permeability of substrate
     TWISTEDPAIR_EPSILONR_ENV_PRM,
-    MURC_PRM,
-    FREQUENCY_PRM,
-    Z0_PRM,
+    MURC_PRM,      // magnetic permeability of conductor
+    FREQUENCY_PRM, // Frequency of operation
+    Z0_PRM,        // characteristic impedance
     Z0_E_PRM,
     Z0_O_PRM,
-    ANG_L_PRM,
+    ANG_L_PRM, // Electrical length in angle
     PHYS_WIDTH_PRM,
-    PHYS_DIAM_IN_PRM,
-    PHYS_S_PRM,
-    PHYS_DIAM_OUT_PRM,
-    PHYS_LEN_PRM,
+    PHYS_DIAM_IN_PRM,  // Inner diameter of cable
+    PHYS_S_PRM,        // width of gap between line and ground
+    PHYS_DIAM_OUT_PRM, // Outer diameter of cable
+    PHYS_LEN_PRM,      // Length of cable
     DUMMY_PRM
+};
+
+
+// IDs for lines parameters used in calculation that are not given by the UI
+enum EXTRA_PRMS_ID
+{
+    EXTRA_PRMS_START = DUMMY_PRM - 1,
+    SIGMA_PRM,            // Conductivity of the metal
+    SKIN_DEPTH_PRM,       // Skin depth
+    LOSS_DIELECTRIC_PRM,  // Loss in dielectric (dB)
+    LOSS_CONDUCTOR_PRM,   // Loss in conductors (dB)
+    CUTOFF_FREQUENCY_PRM, // Cutoff frequency for higher order modes
+    EPSILON_EFF_PRM,      // Effective dielectric constant
+    EXTRA_PRMS_COUNT,
 };
 
 class TRANSLINE
 {
-public: TRANSLINE();
+public:
+    TRANSLINE();
     virtual ~TRANSLINE();
 
-    const char *m_Name;
-    void   setProperty( enum PRMS_ID aPrmId, double aValue);
-    double getProperty( enum PRMS_ID aPrmId );
-    void   setResult( int, double, const char* );
-    void   setResult( int, const char* );
-    bool   isSelected( enum PRMS_ID aPrmId );
+    const char* m_Name;
+    void        setProperty( enum PRMS_ID aPrmId, double aValue );
+    double      getProperty( enum PRMS_ID aPrmId );
 
-    virtual void synthesize() { };
-    virtual void analyze() { };
+
+    void getProperties( void );
+    void checkProperties( void );
+    void setResult( int, double, const char* );
+    void setResult( int, const char* );
+    bool isSelected( enum PRMS_ID aPrmId );
+
+    void         Init();
+    virtual void synthesize();
+    virtual void calc(){};
+    /** @brief Computation for analysis
+     */
+    virtual void calcAnalyze(){};
+    /** @brief Computation for synthesis
+     **/
+    virtual void calcSynthesize(){};
+    /** @brief Shows synthesis results and checks for errors / warnings.
+     **/
+    virtual void showAnalyze(){};
+    /** @brief Shows analysis results and checks for errors / warnings.
+     **/
+    virtual void showSynthesize(){};
+    /** @brief Shows results
+     **/
+    virtual void   show_results(){};
+    void           analyze();
+    KIGFX::COLOR4D errCol  = KIGFX::COLOR4D( 1, 0.63, 0.63, 1 );
+    KIGFX::COLOR4D warnCol = KIGFX::COLOR4D( 1, 1, 0.57, 1 );
+    KIGFX::COLOR4D okCol   = KIGFX::COLOR4D( 1, 1, 1, 1 );
 
 protected:
-    double m_freq;      // Frequency of operation
-    double er;          /* dielectric constant */
-    double m_tand;      // Dielectric Loss Tangent
-    double m_sigma;     // Conductivity of the metal
-    double m_murC;      // magnetic permeability of conductor
-    double m_skindepth; // Skin depth
+    double m_parameters[EXTRA_PRMS_COUNT];
+    double len;    // length of line
+    double er_eff; // effective dielectric constant
+    double ang_l;  // Electrical length in angle
 
+    bool   minimizeZ0Error1D( double* );
     double skin_depth();
     void   ellipke( double, double&, double& );
     double ellipk( double );
+    void   setErrorLevel( PRMS_ID, char );
 };
 
 #endif /* __TRANSLINE_H */

@@ -27,159 +27,181 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <units.h>
-#include <transline.h>
 #include <twistedpair.h>
+#include <units.h>
 
 TWISTEDPAIR::TWISTEDPAIR() : TRANSLINE()
 {
     m_Name = "TwistedPair";
-
-    // Initialize these variables mainly to avoid warnings from a static analyzer
-    din = 0.0;                 // Inner diameter of conductor
-    dout = 0.0;                // Outer diameter of insulator
-    twists = 0.0;              // Twists per length
-    er_env = 0.0;              // dielectric constant of environment*/
-    len = 0.0;                 // Length of cable
-    Z0 = 0.0;                   // characteristic impedance
-    ang_l = 0.0;                // Electrical length in angle
-    atten_dielectric = 0.0;     // Loss in dielectric (dB)
-    atten_cond = 0.0;           // Loss in conductors (dB)
-    er_eff = 1.0;               // Effective dielectric constant
+    Init();
 }
 
 
-// -------------------------------------------------------------------
-void TWISTEDPAIR::getProperties()
+/**
+ *  \f$ \theta = \arctan\left( T \cdot \pi \cdot D_{out} \right) \f$
+ * 
+ * Where :
+ * - \f$ \theta \f$ : pitch angle 
+ * - \f$ T \f$ : Number of twists per unit length
+ * - \f$ D_{out} \f$ : Wire diameter with insulation
+ * 
+ *  \f$ e_{eff} = e_{env} \cdot \left( 0.25 + 0.0007 \cdot \theta^2 \right)\cdot\left(e_r-e_{env}\right) \f$
+ * 
+ * Where :
+ * - \f$ e_{env} \f$ : relative dielectric constant of air ( or some other surronding material ),
+ * - \f$ e_r \f$ : relative dielectric constant of the film insulation,
+ * - \f$ e_{eff} \f$ : effective relative dielectric constant 
+ * 
+ * \f$ Z_0 = \frac{Z_\mathrm{VACCUM}}{\pi \cdot \sqrt{e_{eff}}}\cosh^{-1}\left(\frac{D_{out}}{D_{in}}\right) \f$
+ * 
+ * - \f$ Z_0 \f$ : line impedance
+ * - \f$ Z_\mathrm{VACCUM} \f$ : vaccum impedance
+ * - \f$ D_{in} \f$ : Wire diameter without insulation
+ * 
+ * Reference for above equations :
+ * 
+ * [1] : P. Lefferson, ``Twisted Magnet Wire Transmission Line,''
+ * IEEE Transactions on Parts, Hybrids, and Packaging, vol. PHP-7, no. 4, pp. 148-154, Dec. 1971.
+ * 
+ * The following URL can be used as reference : http://qucs.sourceforge.net/tech/node93.html
+ **/
+void TWISTEDPAIR::calcAnalyze()
 {
-    m_freq = getProperty( FREQUENCY_PRM );
-    din  = getProperty( PHYS_DIAM_IN_PRM );
-    dout = getProperty( PHYS_DIAM_OUT_PRM );
-    len  = getProperty( PHYS_LEN_PRM );
 
-    er     = getProperty( EPSILONR_PRM );
-    m_murC   = getProperty( MURC_PRM );
-    m_tand   = getProperty( TAND_PRM );
-    m_sigma = 1.0 / getProperty( RHO_PRM );
-    twists = getProperty( TWISTEDPAIR_TWIST_PRM );
-    er_env = getProperty( TWISTEDPAIR_EPSILONR_ENV_PRM );
-    Z0     = getProperty( Z0_PRM );
-    ang_l  = getProperty( ANG_L_PRM );
-}
+    double tw = atan( m_parameters[TWISTEDPAIR_TWIST_PRM] * M_PI
+                      * m_parameters[PHYS_DIAM_OUT_PRM] ); // pitch angle
+    m_parameters[EPSILON_EFF_PRM] =
+            m_parameters[TWISTEDPAIR_EPSILONR_ENV_PRM]
+            + ( 0.25 + 0.0007 * tw * tw )
+                      * ( m_parameters[EPSILONR_PRM] - m_parameters[TWISTEDPAIR_EPSILONR_ENV_PRM] );
 
+    m_parameters[Z0_PRM] =
+            ZF0 / M_PI / sqrt( m_parameters[EPSILON_EFF_PRM] )
+            * acosh( m_parameters[PHYS_DIAM_OUT_PRM] / m_parameters[PHYS_DIAM_IN_PRM] );
 
-// -------------------------------------------------------------------
-void TWISTEDPAIR::calc()
-{
-    m_skindepth = skin_depth();
+    m_parameters[LOSS_CONDUCTOR_PRM] =
+            10.0 / log( 10.0 ) * m_parameters[PHYS_LEN_PRM] / m_parameters[SKIN_DEPTH_PRM]
+            / m_parameters[SIGMA_PRM] / M_PI / m_parameters[Z0_PRM]
+            / ( m_parameters[PHYS_DIAM_IN_PRM] - m_parameters[SKIN_DEPTH_PRM] );
 
-    double tw = atan( twists * M_PI * dout ); // pitch angle
-    er_eff = er_env + (0.25 + 0.0007 * tw * tw) * (er - er_env);
+    m_parameters[LOSS_DIELECTRIC_PRM] = 20.0 / log( 10.0 ) * m_parameters[PHYS_LEN_PRM] * M_PI / C0
+                                        * m_parameters[FREQUENCY_PRM]
+                                        * sqrt( m_parameters[EPSILON_EFF_PRM] )
+                                        * m_parameters[TAND_PRM];
 
-    Z0 = ZF0 / M_PI / sqrt( er_eff ) * acosh( dout / din );
-
-    atten_cond = 10.0 / log( 10.0 ) * len / m_skindepth / m_sigma / M_PI / Z0 / (din - m_skindepth);
-
-    atten_dielectric = 20.0 / log( 10.0 ) * len * M_PI / C0* m_freq * sqrt( er_eff ) * m_tand;
-
-    ang_l = 2.0* M_PI* len* sqrt( er_eff ) * m_freq / C0; // in radians
+    m_parameters[ANG_L_PRM] = 2.0 * M_PI * m_parameters[PHYS_LEN_PRM]
+                              * sqrt( m_parameters[EPSILON_EFF_PRM] ) * m_parameters[FREQUENCY_PRM]
+                              / C0; // in radians
 }
 
 
 // -------------------------------------------------------------------
 void TWISTEDPAIR::show_results()
 {
-    setProperty( Z0_PRM, Z0 );
-    setProperty( ANG_L_PRM, ang_l );
-
-    setResult( 0, er_eff, "" );
-    setResult( 1, atten_cond, "dB" );
-    setResult( 2, atten_dielectric, "dB" );
-
-    setResult( 3, m_skindepth / UNIT_MICRON, "µm" );
+    setResult( 0, m_parameters[EPSILON_EFF_PRM], "" );
+    setResult( 1, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
+    setResult( 2, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
+    setResult( 3, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
 }
 
-
-// -------------------------------------------------------------------
-void TWISTEDPAIR::analyze()
+void TWISTEDPAIR::showAnalyze()
 {
-    getProperties();
-    calc();
-    show_results();
+    setProperty( Z0_PRM, m_parameters[Z0_PRM] );
+    setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
+
+    // Check for errors
+    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
+    {
+        setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
+    }
+
+    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
+    {
+        setErrorLevel( ANG_L_PRM, TRANSLINE_ERROR );
+    }
+
+    // Find warnings to display - physical parameters
+    if( !std::isfinite( m_parameters[PHYS_DIAM_IN_PRM] ) || m_parameters[PHYS_DIAM_IN_PRM] <= 0.0 )
+    {
+        setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
+    }
+
+    if( !std::isfinite( m_parameters[PHYS_DIAM_OUT_PRM] )
+            || m_parameters[PHYS_DIAM_OUT_PRM] <= 0.0 )
+    {
+        setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_WARNING );
+    }
+
+    if( m_parameters[PHYS_DIAM_IN_PRM] > m_parameters[PHYS_DIAM_OUT_PRM] )
+    {
+        setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
+        setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_WARNING );
+    }
+
+    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0.0 )
+    {
+        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_WARNING );
+    }
+}
+
+void TWISTEDPAIR::showSynthesize()
+{
+    if( isSelected( PHYS_DIAM_IN_PRM ) )
+        setProperty( PHYS_DIAM_IN_PRM, m_parameters[PHYS_DIAM_IN_PRM] );
+    else if( isSelected( PHYS_DIAM_OUT_PRM ) )
+        setProperty( PHYS_DIAM_OUT_PRM, m_parameters[PHYS_DIAM_OUT_PRM] );
+    setProperty( PHYS_LEN_PRM, m_parameters[PHYS_LEN_PRM] );
+
+    // Check for errors
+    if( !std::isfinite( m_parameters[PHYS_DIAM_IN_PRM] ) || m_parameters[PHYS_DIAM_IN_PRM] <= 0.0 )
+    {
+        if( isSelected( PHYS_DIAM_IN_PRM ) )
+            setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_ERROR );
+        else
+            setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
+    }
+
+    if( !std::isfinite( m_parameters[PHYS_DIAM_OUT_PRM] )
+            || m_parameters[PHYS_DIAM_OUT_PRM] <= 0.0 )
+    {
+        if( isSelected( PHYS_DIAM_OUT_PRM ) )
+            setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_ERROR );
+        else
+            setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_WARNING );
+    }
+
+    if( m_parameters[PHYS_DIAM_IN_PRM] > m_parameters[PHYS_DIAM_OUT_PRM] )
+    {
+        if( isSelected( PHYS_DIAM_IN_PRM ) )
+            setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_ERROR );
+        else if( isSelected( PHYS_DIAM_OUT_PRM ) )
+            setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_ERROR );
+    }
+
+    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0.0 )
+    {
+        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_ERROR );
+    }
+    // Check for warnings
+    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
+    {
+        setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
+    }
+
+    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
+    {
+        setErrorLevel( ANG_L_PRM, TRANSLINE_WARNING );
+    }
 }
 
 
 #define MAX_ERROR 0.000001
 
 // -------------------------------------------------------------------
-void TWISTEDPAIR::synthesize()
+void TWISTEDPAIR::calcSynthesize()
 {
-    double Z0_dest, Z0_current, Z0_result, increment, slope, error;
-    int    iteration;
-
-    getProperties();
-
-    /* required value of Z0 */
-    Z0_dest = Z0;
-
-    /* Newton's method */
-    iteration = 0;
-
-    /* compute parameters */
-    calc();
-    Z0_current = Z0;
-
-    error = fabs( Z0_dest - Z0_current );
-
-    while( error > MAX_ERROR )
-    {
-        iteration++;
-        if( isSelected( PHYS_DIAM_IN_PRM ) )
-        {
-            increment = din / 100.0;
-            din += increment;
-        }
-        else
-        {
-            increment = dout / 100.0;
-            dout += increment;
-        }
-        /* compute parameters */
-        calc();
-        Z0_result = Z0;
-        /* f(w(n)) = Z0 - Z0(w(n)) */
-        /* f'(w(n)) = -f'(Z0(w(n))) */
-        /* f'(Z0(w(n))) = (Z0(w(n)) - Z0(w(n+delw))/delw */
-        /* w(n+1) = w(n) - f(w(n))/f'(w(n)) */
-        slope = (Z0_result - Z0_current) / increment;
-        slope = (Z0_dest - Z0_current) / slope - increment;
-        if( isSelected( PHYS_DIAM_IN_PRM ) )
-            din += slope;
-        else
-            dout += slope;
-        if( din <= 0.0 )
-            din = increment;
-        if( dout <= 0.0 )
-            dout = increment;
-        /* find new error */
-        /* compute parameters */
-        calc();
-        Z0_current = Z0;
-        error = fabs( Z0_dest - Z0_current );
-        if( iteration > 100 )
-            break;
-    }
-
-    setProperty( PHYS_DIAM_IN_PRM, din );
-    setProperty( PHYS_DIAM_OUT_PRM, dout );
-    /* calculate physical length */
-    ang_l = getProperty( ANG_L_PRM );
-    len   = C0 / m_freq / sqrt( er_eff ) * ang_l / 2.0 / M_PI; /* in m */
-    setProperty( PHYS_LEN_PRM, len );
-
-    /* compute parameters */
-    calc();
-
-    /* print results in the subwindow */
-    show_results();
+    if( isSelected( PHYS_DIAM_IN_PRM ) )
+        minimizeZ0Error1D( &( m_parameters[PHYS_DIAM_IN_PRM] ) );
+    else
+        minimizeZ0Error1D( &( m_parameters[PHYS_DIAM_OUT_PRM] ) );
 }

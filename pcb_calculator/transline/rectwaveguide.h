@@ -25,28 +25,32 @@
 #ifndef __RECTWAVEGUIDE_H
 #define __RECTWAVEGUIDE_H
 
+#include <transline.h>
+
+#define PHYS_A_PRM PHYS_WIDTH_PRM
+#define PHYS_B_PRM PHYS_S_PRM
+
 class RECTWAVEGUIDE : public TRANSLINE
 {
-public: RECTWAVEGUIDE();
+public:
+    RECTWAVEGUIDE();
+
 
 private:
-    double mur;                 // magnetic permeability of substrate
-    double a;                   // width of waveguide
-    double b;                   // height of waveguide
-    double l;                   // length of waveguide
-    double Z0;                  // characteristic impedance
-    double Z0EH;                // characteristic impedance of field quantities*/
-    double ang_l;               // Electrical length in angle
-    double er_eff;              // Effective dielectric constant
-    double mur_eff;             // Effective mag. permeability
-    double atten_dielectric;    // Loss in dielectric (dB)
-    double atten_cond;          // Loss in conductors (dB)
-    double fc10;                // Cutoff frequency for TE10 mode
+    double mur;              // magnetic permeability of substrate
+    double a;                // width of waveguide
+    double b;                // height of waveguide
+    double l;                // length of waveguide
+    double Z0;               // characteristic impedance
+    double Z0EH;             // characteristic impedance of field quantities*/
+    double ang_l;            // Electrical length in angle
+    double er_eff;           // Effective dielectric constant
+    double mur_eff;          // Effective mag. permeability
+    double atten_dielectric; // Loss in dielectric (dB)
+    double atten_cond;       // Loss in conductors (dB)
+    double fc10;             // Cutoff frequency for TE10 mode
 
 public:
-    void   analyze() override;
-    void   synthesize() override;
-
 private:
     double kval_square();
     double kc_square( int, int );
@@ -58,7 +62,11 @@ private:
     void   get_rectwaveguide_comp();
     void   get_rectwaveguide_phys();
     void   get_rectwaveguide_elec();
-    void   show_results();
+    void   show_results() override;
+    void   calcAnalyze() override;
+    void   calcSynthesize() override;
+    void   showAnalyze() override;
+    void   showSynthesize() override;
 };
 
-#endif      // __RECTWAVEGUIDE_H
+#endif // __RECTWAVEGUIDE_H

@@ -24,30 +24,19 @@
 #ifndef __TWISTEDPAIR_H
 #define __TWISTEDPAIR_H
 
+#include <transline.h>
+
 class TWISTEDPAIR : public TRANSLINE
 {
-public: TWISTEDPAIR();
-
-private:
-    double din;                 // Inner diameter of conductor
-    double dout;                // Outer diameter of insulator
-    double twists;              // Twists per length
-    double er_env;              // dielectric constant of environment*/
-    double len;                 // Length of cable
-    double Z0;                  // characteristic impedance
-    double ang_l;               // Electrical length in angle
-    double er_eff;              // Effective dielectric constant
-    double atten_dielectric;    // Loss in dielectric (dB)
-    double atten_cond;          // Loss in conductors (dB)
-
 public:
-    void analyze() override;
-    void synthesize() override;
+    TWISTEDPAIR();
 
 private:
-    void calc();
-    void show_results();
-    void getProperties();
+    void calcAnalyze() override;
+    void calcSynthesize() override;
+    void showAnalyze() override;
+    void showSynthesize() override;
+    void show_results() override;
 };
 
 #endif

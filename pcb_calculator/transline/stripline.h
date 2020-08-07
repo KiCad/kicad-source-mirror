@@ -24,31 +24,21 @@
 #ifndef __STRIPLINE_H
 #define __STRIPLINE_H
 
+
+#include <transline.h>
+
 class STRIPLINE : public TRANSLINE
 {
-public: STRIPLINE();
-
-private:
-    double h;                   // height of substrate
-    double a;                   // distance of strip to top metal
-    double t;                   // thickness of top metal
-    double w;                   // width of line
-    double len;                 // length of line
-    double Z0;                  // characteristic impedance
-    double ang_l;               // electrical length in angle
-    double er_eff;              // effective dielectric constant
-    double atten_dielectric;    // loss in dielectric (dB)
-    double atten_cond;          // loss in conductors (dB)
-
 public:
-    void   analyze() override;
-    void   synthesize() override;
+    STRIPLINE();
 
 private:
+    void   calcAnalyze() override;
+    void   calcSynthesize() override;
+    void   showSynthesize() override;
+    void   showAnalyze() override;
     double lineImpedance( double, double& );
-    void   calc();
-    void   show_results();
-    void   getProperties();
+    void   show_results() override;
 };
 
 #endif

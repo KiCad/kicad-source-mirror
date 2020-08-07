@@ -25,35 +25,21 @@
 #ifndef __COAX_H
 #define __COAX_H
 
+#include <transline.h>
+
 class COAX : public TRANSLINE
 {
-public: COAX();
-
-private:
-    double mur;                 // magnetic permeability of substrate
-    double din;                 // Inner diameter of cable
-    double dout;                // Outer diameter of cable
-    double l;                   // Length of cable
-    double Z0;                  // characteristic impedance
-    double ang_l;               // Electrical length in angle
-    double atten_dielectric;    // Loss in dielectric (dB)
-    double atten_cond;          // Loss in conductors (dB)
-    double fc;                  // Cutoff frequency for higher order modes
-
 public:
-    void   analyze() override;
-    void   synthesize() override;
+    COAX();
 
 private:
-    void   get_coax_sub();
-    void   get_coax_comp();
-    void   get_coax_phys();
-    void   get_coax_elec();
-    void   fixdin();
-    void   fixdout();
+    void   calcAnalyze() override;
+    void   calcSynthesize() override;
+    void   showAnalyze() override;
+    void   showSynthesize() override;
     double alphad_coax();
     double alphac_coax();
-    void   show_results();
+    void   show_results() override;
 };
 
-#endif      // __COAX_H
+#endif // __COAX_H

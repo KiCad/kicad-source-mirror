@@ -25,27 +25,13 @@
 #include <cstdio>
 #include <cstring>
 
-#include <units.h>
-#include <transline.h>
 #include <rectwaveguide.h>
+#include <units.h>
 
 RECTWAVEGUIDE::RECTWAVEGUIDE() : TRANSLINE()
 {
     m_Name = "RectWaveGuide";
-
-    // Initialize these here variables mainly to avoid warnings from a static analyzer
-    mur = 0.0;                  // magnetic permeability of substrate
-    a = 0.0;                    // width of waveguide
-    b = 0.0;                    // height of waveguide
-    l = 0.0;                    // length of waveguide
-    Z0 = 0.0;                   // characteristic impedance
-    Z0EH = 0.0;                 // characteristic impedance of field quantities*/
-    ang_l = 0.0;                // Electrical length in angle
-    er_eff = 0.0;               // Effective dielectric constant
-    mur_eff = 0.0;              // Effective mag. permeability
-    atten_dielectric = 0.0;     // Loss in dielectric (dB)
-    atten_cond = 0.0;           // Loss in conductors (dB)
-    fc10 = 0.0;                 // Cutoff frequency for TE10 mode
+    Init();
 }
 
 
@@ -56,7 +42,8 @@ double RECTWAVEGUIDE::kval_square()
 {
     double kval;
 
-    kval = 2.0* M_PI * m_freq * sqrt( mur * er ) / C0;
+    kval = 2.0 * M_PI * m_parameters[FREQUENCY_PRM]
+           * sqrt( m_parameters[MUR_PRM] * m_parameters[EPSILONR_PRM] ) / C0;
 
     return kval * kval;
 }
@@ -68,7 +55,8 @@ double RECTWAVEGUIDE::kval_square()
  */
 double RECTWAVEGUIDE::kc_square( int m, int n )
 {
-    return pow( (m * M_PI / a), 2.0 ) + pow( (n * M_PI / b), 2.0 );
+    return pow( ( m * M_PI / m_parameters[PHYS_A_PRM] ), 2.0 )
+           + pow( ( n * M_PI / m_parameters[PHYS_B_PRM] ), 2.0 );
 }
 
 
@@ -78,7 +66,8 @@ double RECTWAVEGUIDE::kc_square( int m, int n )
  */
 double RECTWAVEGUIDE::fc( int m, int n )
 {
-    return sqrt( kc_square( m, n ) / mur / er ) * C0 / 2.0 / M_PI;
+    return sqrt( kc_square( m, n ) / m_parameters[MUR_PRM] / m_parameters[EPSILONR_PRM] ) * C0 / 2.0
+           / M_PI;
 }
 
 
@@ -88,13 +77,18 @@ double RECTWAVEGUIDE::fc( int m, int n )
  */
 double RECTWAVEGUIDE::alphac()
 {
-    double Rs, f_c;
-    double ac;
-    short  m, n, mmax, nmax;
+    double  Rs, f_c;
+    double  ac;
+    short   m, n, mmax, nmax;
+    double* a     = &m_parameters[PHYS_A_PRM];
+    double* b     = &m_parameters[PHYS_B_PRM];
+    double* f     = &m_parameters[FREQUENCY_PRM];
+    double* murc  = &m_parameters[MURC_PRM];
+    double* sigma = &m_parameters[SIGMA_PRM];
 
-    Rs   = sqrt( M_PI * m_freq * m_murC * MU0 / m_sigma );
+    Rs   = sqrt( M_PI * *f * *murc * MU0 / *sigma );
     ac   = 0.0;
-    mmax = (int) floor( m_freq / fc( 1, 0 ) );
+    mmax = (int) floor( *f / fc( 1, 0 ) );
     nmax = mmax;
 
     /* below from Ramo, Whinnery & Van Duzer */
@@ -105,24 +99,24 @@ double RECTWAVEGUIDE::alphac()
         for( m = 1; m <= mmax; m++ )
         {
             f_c = fc( m, n );
-            if( m_freq > f_c )
+            if( *f > f_c )
             {
                 switch( n )
                 {
                 case 0:
-                    ac += ( Rs / ( b * ZF0 * sqrt( 1.0 - pow( (f_c / m_freq), 2.0 ) ) ) ) *
-                          ( 1.0 + ( (2 * b / a) * pow( (f_c / m_freq), 2.0 ) ) );
+                    ac += ( Rs / ( *b * ZF0 * sqrt( 1.0 - pow( ( f_c / *f ), 2.0 ) ) ) )
+                          * ( 1.0 + ( ( 2 * *b / *a ) * pow( ( f_c / *f ), 2.0 ) ) );
                     break;
 
                 default:
-                    ac += ( (2. * Rs) / ( b * ZF0 * sqrt( 1.0 - pow( (f_c / m_freq), 2.0 ) ) ) ) *
-                          ( ( ( 1. + (b / a) ) * pow( (f_c / m_freq), 2.0 ) ) +
-                           ( ( 1. -
-                              pow( (f_c / m_freq),
-                                  2.0 ) ) *
-                            ( ( (b / a) * ( ( (b / a) * pow( m, 2. ) ) + pow( n, 2. ) ) ) /
-                    ( pow( (b * m / a),
-                          2.0 ) + pow( n, 2.0 ) ) ) ) );
+                    ac += ( ( 2. * Rs ) / ( *b * ZF0 * sqrt( 1.0 - pow( ( f_c / *f ), 2.0 ) ) ) )
+                          * ( ( ( 1. + ( *b / *a ) ) * pow( ( f_c / *f ), 2.0 ) )
+                                  + ( ( 1. - pow( ( f_c / *f ), 2.0 ) )
+                                          * ( ( ( *b / *a )
+                                                      * ( ( ( *b / *a ) * pow( m, 2. ) )
+                                                              + pow( n, 2. ) ) )
+                                                  / ( pow( ( *b * m / *a ), 2.0 )
+                                                          + pow( n, 2.0 ) ) ) ) );
                     break;
                 }
             }
@@ -132,14 +126,14 @@ double RECTWAVEGUIDE::alphac()
     /* TM(m,n) modes */
     for( n = 1; n <= nmax; n++ )
     {
-        for( m = 1; m<= mmax; m++ )
+        for( m = 1; m <= mmax; m++ )
         {
             f_c = fc( m, n );
-            if( m_freq > f_c )
+            if( *f > f_c )
             {
-                ac += ( (2. * Rs) / ( b * ZF0 * sqrt( 1.0 - pow( (f_c / m_freq), 2.0 ) ) ) ) *
-                      ( ( ( pow( m, 2.0 ) * pow( (b / a), 3.0 ) ) + pow( n, 2. ) ) /
-                       ( ( pow( (m * b / a), 2. ) ) + pow( n, 2.0 ) ) );
+                ac += ( ( 2. * Rs ) / ( *b * ZF0 * sqrt( 1.0 - pow( ( f_c / *f ), 2.0 ) ) ) )
+                      * ( ( ( pow( m, 2.0 ) * pow( ( *b / *a ), 3.0 ) ) + pow( n, 2. ) )
+                              / ( ( pow( ( m * *b / *a ), 2. ) ) + pow( n, 2.0 ) ) );
             }
         }
     }
@@ -173,7 +167,7 @@ double RECTWAVEGUIDE::alphad()
     k_square = kval_square();
     beta     = sqrt( k_square - kc_square( 1, 0 ) );
 
-    ad = (k_square * m_tand) / (2.0 * beta);
+    ad = ( k_square * m_parameters[TAND_PRM] ) / ( 2.0 * beta );
     ad = ad * 20.0 * log10( exp( 1. ) ); /* convert from Np/m to db/m */
     return ad;
 }
@@ -186,11 +180,11 @@ double RECTWAVEGUIDE::alphad()
  */
 void RECTWAVEGUIDE::get_rectwaveguide_sub()
 {
-    er    = getProperty( EPSILONR_PRM );
-    mur   = getProperty( MUR_PRM );
-    m_murC  = getProperty( MURC_PRM );
-    m_sigma = 1.0 / getProperty( RHO_PRM );
-    m_tand  = getProperty( TAND_PRM );
+    m_parameters[EPSILONR_PRM] = getProperty( EPSILONR_PRM );
+    m_parameters[MUR_PRM]      = getProperty( MUR_PRM );
+    m_parameters[MURC_PRM]     = getProperty( MURC_PRM );
+    m_parameters[SIGMA_PRM]    = 1.0 / getProperty( RHO_PRM );
+    m_parameters[TAND_PRM]     = getProperty( TAND_PRM );
 }
 
 
@@ -201,7 +195,7 @@ void RECTWAVEGUIDE::get_rectwaveguide_sub()
  */
 void RECTWAVEGUIDE::get_rectwaveguide_comp()
 {
-    m_freq = getProperty( FREQUENCY_PRM );
+    m_parameters[FREQUENCY_PRM] = getProperty( FREQUENCY_PRM );
 }
 
 
@@ -212,8 +206,8 @@ void RECTWAVEGUIDE::get_rectwaveguide_comp()
  */
 void RECTWAVEGUIDE::get_rectwaveguide_elec()
 {
-    Z0    = getProperty( Z0_PRM );
-    ang_l = getProperty( ANG_L_PRM );
+    m_parameters[Z0_PRM]    = getProperty( Z0_PRM );
+    m_parameters[ANG_L_PRM] = getProperty( ANG_L_PRM );
 }
 
 
@@ -224,28 +218,19 @@ void RECTWAVEGUIDE::get_rectwaveguide_elec()
  */
 void RECTWAVEGUIDE::get_rectwaveguide_phys()
 {
-    a = getProperty( PHYS_WIDTH_PRM );
-    b = getProperty( PHYS_S_PRM );
-    l = getProperty( PHYS_LEN_PRM );
+    m_parameters[PHYS_A_PRM]   = getProperty( PHYS_A_PRM );
+    m_parameters[PHYS_B_PRM]   = getProperty( PHYS_B_PRM );
+    m_parameters[PHYS_LEN_PRM] = getProperty( PHYS_LEN_PRM );
 }
 
 
 /*
  * analyze - analysis function
  */
-void RECTWAVEGUIDE::analyze()
+void RECTWAVEGUIDE::calcAnalyze()
 {
     double lambda_g;
     double k_square;
-
-    /* Get and assign substrate parameters */
-    get_rectwaveguide_sub();
-
-    /* Get and assign component parameters */
-    get_rectwaveguide_comp();
-
-    /* Get and assign physical parameters */
-    get_rectwaveguide_phys();
 
     k_square = kval_square();
 
@@ -254,92 +239,124 @@ void RECTWAVEGUIDE::analyze()
         /* propagating modes */
 
         // Z0 definition using fictive voltages and currents
-        Z0 = 2.0* ZF0* sqrt( mur / er ) * (b / a) / sqrt( 1.0 - pow( (fc( 1, 0 ) / m_freq), 2.0 ) );
+        m_parameters[Z0_PRM] =
+                2.0 * ZF0 * sqrt( m_parameters[MUR_PRM] / m_parameters[EPSILONR_PRM] )
+                * ( m_parameters[PHYS_B_PRM] / m_parameters[PHYS_A_PRM] )
+                / sqrt( 1.0 - pow( ( fc( 1, 0 ) / m_parameters[FREQUENCY_PRM] ), 2.0 ) );
 
         /* calculate electrical angle */
-        lambda_g   = 2.0 * M_PI / sqrt( k_square - kc_square( 1, 0 ) );
-        ang_l      = 2.0 * M_PI * l / lambda_g; /* in radians */
-        atten_cond = alphac() * l;
-        atten_dielectric = alphad() * l;
-        er_eff = ( 1.0 - pow( fc( 1, 0 ) / m_freq, 2.0 ) );
+        lambda_g = 2.0 * M_PI / sqrt( k_square - kc_square( 1, 0 ) );
+        m_parameters[ANG_L_PRM] =
+                2.0 * M_PI * m_parameters[PHYS_LEN_PRM] / lambda_g; /* in radians */
+        m_parameters[LOSS_CONDUCTOR_PRM]  = alphac() * m_parameters[PHYS_LEN_PRM];
+        m_parameters[LOSS_DIELECTRIC_PRM] = alphad() * m_parameters[PHYS_LEN_PRM];
+        m_parameters[EPSILON_EFF_PRM] =
+                ( 1.0 - pow( fc( 1, 0 ) / m_parameters[FREQUENCY_PRM], 2.0 ) );
     }
     else
     {
         /* evanascent modes */
-        Z0     = 0;
-        ang_l  = 0;
-        er_eff = 0;
-        atten_dielectric = 0.0;
-        atten_cond = alphac_cutoff() * l;
+        m_parameters[Z0_PRM]              = 0;
+        m_parameters[ANG_L_PRM]           = 0;
+        m_parameters[EPSILON_EFF_PRM]     = 0;
+        m_parameters[LOSS_DIELECTRIC_PRM] = 0.0;
+        m_parameters[LOSS_CONDUCTOR_PRM]  = alphac_cutoff() * m_parameters[PHYS_LEN_PRM];
     }
-
-    setProperty( Z0_PRM, Z0 );
-    setProperty( ANG_L_PRM, ang_l );
-
-    show_results();
 }
-
 
 /*
  * synthesize - synthesis function
  */
-void RECTWAVEGUIDE::synthesize()
+void RECTWAVEGUIDE::calcSynthesize()
 {
     double lambda_g, k_square, beta;
 
-    /* Get and assign substrate parameters */
-    get_rectwaveguide_sub();
-
-    /* Get and assign component parameters */
-    get_rectwaveguide_comp();
-
-    /* Get and assign electrical parameters */
-    get_rectwaveguide_elec();
-
-    /* Get and assign physical parameters */
-    get_rectwaveguide_phys();
-
-
-    if( isSelected( PHYS_S_PRM ) )
+    if( isSelected( PHYS_B_PRM ) )
     {
         /* solve for b */
-        b = Z0 * a * sqrt( 1.0 - pow( fc( 1, 0 ) / m_freq, 2.0 ) ) / ( 2.0 * ZF0 * sqrt( mur / er ) );
-        setProperty( PHYS_S_PRM, b );
+        m_parameters[PHYS_B_PRM] =
+                m_parameters[Z0_PRM] * m_parameters[PHYS_A_PRM]
+                * sqrt( 1.0 - pow( fc( 1, 0 ) / m_parameters[FREQUENCY_PRM], 2.0 ) )
+                / ( 2.0 * ZF0 * sqrt( m_parameters[MUR_PRM] / m_parameters[EPSILONR_PRM] ) );
     }
-    else if( isSelected( PHYS_WIDTH_PRM ) )
+    else if( isSelected( PHYS_A_PRM ) )
     {
         /* solve for a */
-        a = sqrt( pow( 2.0 * ZF0 * b / Z0, 2.0 ) + pow( C0 / (2.0 * m_freq), 2.0 ) );
-        setProperty( PHYS_WIDTH_PRM, a );
+        m_parameters[PHYS_A_PRM] =
+                sqrt( pow( 2.0 * ZF0 * m_parameters[PHYS_B_PRM] / m_parameters[Z0_PRM], 2.0 )
+                        + pow( C0 / ( 2.0 * m_parameters[FREQUENCY_PRM] ), 2.0 ) );
     }
 
-    k_square = kval_square();
-    beta     = sqrt( k_square - kc_square( 1, 0 ) );
-    lambda_g = 2.0 * M_PI / beta;
-    l = (ang_l * lambda_g) / (2.0 * M_PI); /* in m */
-
-    setProperty( PHYS_LEN_PRM, l );
+    k_square                   = kval_square();
+    beta                       = sqrt( k_square - kc_square( 1, 0 ) );
+    lambda_g                   = 2.0 * M_PI / beta;
+    m_parameters[PHYS_LEN_PRM] = ( m_parameters[ANG_L_PRM] * lambda_g ) / ( 2.0 * M_PI ); /* in m */
 
     if( kc_square( 1, 0 ) <= k_square )
     {
         /*propagating modes */
-        beta = sqrt( k_square - kc_square( 1, 0 ) );
-        lambda_g   = 2.0 * M_PI / beta;
-        atten_cond = alphac() * l;
-        atten_dielectric = alphad() * l;
-        er_eff = ( 1.0 - pow( (fc( 1, 0 ) / m_freq), 2.0 ) );
+        beta                              = sqrt( k_square - kc_square( 1, 0 ) );
+        lambda_g                          = 2.0 * M_PI / beta;
+        m_parameters[LOSS_CONDUCTOR_PRM]  = alphac() * m_parameters[PHYS_LEN_PRM];
+        m_parameters[LOSS_DIELECTRIC_PRM] = alphad() * m_parameters[PHYS_LEN_PRM];
+        m_parameters[EPSILON_EFF_PRM] =
+                ( 1.0 - pow( ( fc( 1, 0 ) / m_parameters[FREQUENCY_PRM] ), 2.0 ) );
     }
     else
     {
         /*evanascent modes */
-        Z0     = 0;
-        ang_l  = 0;
-        er_eff = 0;
-        atten_dielectric = 0.0;
-        atten_cond = alphac_cutoff() * l;
+        m_parameters[Z0_PRM]              = 0;
+        m_parameters[ANG_L_PRM]           = 0;
+        m_parameters[EPSILON_EFF_PRM]     = 0;
+        m_parameters[LOSS_DIELECTRIC_PRM] = 0.0;
+        m_parameters[LOSS_CONDUCTOR_PRM]  = alphac_cutoff() * m_parameters[PHYS_LEN_PRM];
     }
+}
 
-    show_results();
+void RECTWAVEGUIDE::showSynthesize()
+{
+    if( isSelected( PHYS_A_PRM ) )
+        setProperty( PHYS_A_PRM, m_parameters[PHYS_A_PRM] );
+
+    if( isSelected( PHYS_B_PRM ) )
+        setProperty( PHYS_B_PRM, m_parameters[PHYS_B_PRM] );
+
+    setProperty( PHYS_LEN_PRM, m_parameters[PHYS_LEN_PRM] );
+
+    // Check for errors
+    if( !std::isfinite( m_parameters[PHYS_A_PRM] ) || m_parameters[PHYS_A_PRM] <= 0 )
+        setErrorLevel( PHYS_A_PRM, TRANSLINE_ERROR );
+
+    if( !std::isfinite( m_parameters[PHYS_B_PRM] ) || m_parameters[PHYS_B_PRM] <= 00 )
+        setErrorLevel( PHYS_B_PRM, TRANSLINE_ERROR );
+
+    // Check for warnings
+    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
+        setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
+
+    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
+        setErrorLevel( ANG_L_PRM, TRANSLINE_WARNING );
+}
+
+
+void RECTWAVEGUIDE::showAnalyze()
+{
+    setProperty( Z0_PRM, m_parameters[Z0_PRM] );
+    setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
+
+    // Check for errors
+    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
+        setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
+
+    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
+        setErrorLevel( ANG_L_PRM, TRANSLINE_ERROR );
+
+    // Check for warnings
+    if( !std::isfinite( m_parameters[PHYS_A_PRM] ) || m_parameters[PHYS_A_PRM] <= 0 )
+        setErrorLevel( PHYS_A_PRM, TRANSLINE_WARNING );
+
+    if( !std::isfinite( m_parameters[PHYS_B_PRM] ) || m_parameters[PHYS_B_PRM] <= 00 )
+        setErrorLevel( PHYS_B_PRM, TRANSLINE_WARNING );
 }
 
 
@@ -353,12 +370,12 @@ void RECTWAVEGUIDE::show_results()
     Z0EH = ZF0 * sqrt( kval_square() / ( kval_square() - kc_square( 1, 0 ) ) );
     setResult( 0, Z0EH, "Ohm" );
 
-    setResult( 1, er_eff, "" );
-    setResult( 2, atten_cond, "dB" );
-    setResult( 3, atten_dielectric, "dB" );
+    setResult( 1, m_parameters[EPSILON_EFF_PRM], "" );
+    setResult( 2, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
+    setResult( 3, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
 
     // show possible TE modes (H modes)
-    if( m_freq < fc( 1, 0 ) )
+    if( m_parameters[FREQUENCY_PRM] < fc( 1, 0 ) )
         strcpy( text, "none" );
     else
     {
@@ -367,12 +384,12 @@ void RECTWAVEGUIDE::show_results()
         {
             for( n = 0; n <= max; n++ )
             {
-                if( (m == 0) && (n == 0) )
+                if( ( m == 0 ) && ( n == 0 ) )
                     continue;
-                if( m_freq >= ( fc( m, n ) ) )
+                if( m_parameters[FREQUENCY_PRM] >= ( fc( m, n ) ) )
                 {
                     sprintf( txt, "H(%d,%d) ", m, n );
-                    if( (strlen( text ) + strlen( txt ) + 5) < MAXSTRLEN )
+                    if( ( strlen( text ) + strlen( txt ) + 5 ) < MAXSTRLEN )
                         strcat( text, txt );
                     else
                     {
@@ -386,19 +403,19 @@ void RECTWAVEGUIDE::show_results()
     setResult( 4, text );
 
     // show possible TM modes (E modes)
-    if( m_freq < fc( 1, 1 ) )
+    if( m_parameters[FREQUENCY_PRM] < fc( 1, 1 ) )
         strcpy( text, "none" );
     else
     {
         strcpy( text, "" );
-        for( m = 1; m<= max; m++ )
+        for( m = 1; m <= max; m++ )
         {
-            for( n = 1; n<= max; n++ )
+            for( n = 1; n <= max; n++ )
             {
-                if( m_freq >= fc( m, n ) )
+                if( m_parameters[FREQUENCY_PRM] >= fc( m, n ) )
                 {
                     sprintf( txt, "E(%d,%d) ", m, n );
-                    if( (strlen( text ) + strlen( txt ) + 5) < MAXSTRLEN )
+                    if( ( strlen( text ) + strlen( txt ) + 5 ) < MAXSTRLEN )
                         strcat( text, txt );
                     else
                     {

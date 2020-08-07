@@ -27,86 +27,26 @@
  * coax.c - Puts up window for microstrip and
  * performs the associated calculations
  */
-
-
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 
-#include <units.h>
-#include <transline.h>
 #include <coax.h>
+#include <units.h>
 
 COAX::COAX() : TRANSLINE()
 {
     m_Name = "Coax";
-
-    // Initialize these variables mainly to avoid warnings from a static analyzer
-    mur = 0.0;              // magnetic permeability of substrate
-    din = 0.0;              // Inner diameter of cable
-    dout = 0.0;             // Outer diameter of cable
-    l = 0.0;                // Length of cable
-    Z0 = 0.0;               // characteristic impedance
-    ang_l = 0.0;            // Electrical length in angle
-    atten_dielectric = 0.0; // Loss in dielectric (dB)
-    atten_cond = 0.0;       // Loss in conductors (dB)
-    fc = 0.0;               // Cutoff frequency for higher order modes
+    Init();
 }
-
-
-/*
- * get_coax_sub() - get and assign coax substrate parameters into coax
- * structure
- */
-void COAX::get_coax_sub()
-{
-    er    = getProperty( EPSILONR_PRM );
-    mur   = getProperty( MUR_PRM );
-    m_murC  = getProperty( MURC_PRM );
-    m_tand  = getProperty( TAND_PRM );
-    m_sigma = 1.0 / getProperty( RHO_PRM );
-}
-
-
-/*
- * get_coax_comp() - get and assign coax component parameters into
- * coax structure
- */
-void COAX::get_coax_comp()
-{
-    m_freq = getProperty( FREQUENCY_PRM );
-}
-
-
-/*
- * get_coax_elec() - get and assign coax electrical parameters into
- * coax structure
- */
-void COAX::get_coax_elec()
-{
-    Z0    = getProperty( Z0_PRM );
-    ang_l = getProperty( ANG_L_PRM );
-}
-
-
-/*
- * get_coax_phys() - get and assign coax physical parameters into coax
- * structure
- */
-void COAX::get_coax_phys()
-{
-    din  = getProperty( PHYS_DIAM_IN_PRM );
-    dout = getProperty( PHYS_DIAM_OUT_PRM );
-    l    = getProperty( PHYS_LEN_PRM );
-}
-
 
 double COAX::alphad_coax()
 {
     double ad;
 
-    ad = (M_PI / C0) * m_freq * sqrt( er ) * m_tand;
+    ad = ( M_PI / C0 ) * m_parameters[FREQUENCY_PRM] * sqrt( m_parameters[EPSILONR_PRM] )
+         * m_parameters[TAND_PRM];
     ad = ad * 20.0 / log( 10.0 );
     return ad;
 }
@@ -116,133 +56,224 @@ double COAX::alphac_coax()
 {
     double ac, Rs;
 
-    Rs = sqrt( M_PI * m_freq * m_murC * MU0 / m_sigma );
-    ac = sqrt( er ) * ( ( (1 / din) + (1 / dout) ) / log( dout / din ) ) * (Rs / ZF0);
+    Rs = sqrt( M_PI * m_parameters[FREQUENCY_PRM] * m_parameters[MURC_PRM] * MU0
+               / m_parameters[SIGMA_PRM] );
+    ac = sqrt( m_parameters[EPSILONR_PRM] )
+         * ( ( ( 1 / m_parameters[PHYS_DIAM_IN_PRM] ) + ( 1 / m_parameters[PHYS_DIAM_OUT_PRM] ) )
+                 / log( m_parameters[PHYS_DIAM_OUT_PRM] / m_parameters[PHYS_DIAM_IN_PRM] ) )
+         * ( Rs / ZF0 );
     ac = ac * 20.0 / log( 10.0 );
     return ac;
 }
 
 
-/*
- * analyze() - analysis function
- */
-void COAX::analyze()
+/** 
+ *  \f$ Z_0 = \frac{Z_{0_{\mathrm{vaccum}}}}{\sqrt{\epsilon_r}}\log_{10}\left( \frac{D_{\mathrm{out}}}{D_{\mathrm{in}}}\right) \f$
+ * 
+ *  \f$ \lambda_g = \frac{c}{f \cdot \sqrt{ \epsilon_r \cdot \mu_r}} \f$
+ * 
+ *  \f$ L_{[\mathrm{rad}]} = \frac{ 2\pi\cdot L_{[\mathrm{m}]}}{\lambda_g} \f$
+ * */
+void COAX::calcAnalyze()
 {
     double lambda_g;
 
-    /* Get and assign substrate parameters */
-    get_coax_sub();
 
-    /* Get and assign component parameters */
-    get_coax_comp();
+    m_parameters[Z0_PRM] =
+            ( ZF0 / 2 / M_PI / sqrt( m_parameters[EPSILONR_PRM] ) )
+            * log( m_parameters[PHYS_DIAM_OUT_PRM] / m_parameters[PHYS_DIAM_IN_PRM] );
 
-    /* Get and assign physical parameters */
-    get_coax_phys();
-
-    if( din != 0.0 )
-    {
-        Z0 = ( ZF0 / 2 / M_PI / sqrt( er ) ) * log( dout / din );
-    }
-
-    lambda_g = ( C0 / (m_freq) ) / sqrt( er * mur );
+    lambda_g = ( C0 / ( m_parameters[FREQUENCY_PRM] ) )
+               / sqrt( m_parameters[EPSILONR_PRM] * m_parameters[MUR_PRM] );
     /* calculate electrical angle */
-    ang_l = (2.0 * M_PI * l) / lambda_g; /* in radians */
-
-    setProperty( Z0_PRM, Z0 );
-    setProperty( ANG_L_PRM, ang_l );
-
-    show_results();
+    m_parameters[ANG_L_PRM] =
+            ( 2.0 * M_PI * m_parameters[PHYS_LEN_PRM] ) / lambda_g; /* in radians */
 }
 
 
-/*
- * synthesize() - synthesis function
- */
-void COAX::synthesize()
+/** 
+ *  \f$ D_{\mathrm{in}} = D_{\mathrm{out}}  \cdot e^{-\frac{Z_0*\sqrt{\epsilon_r}}{2\pi \cdot  Z_{0_{\mathrm{vaccum}}}}} \f$
+ * 
+ *  \f$ D_{\mathrm{out}} = D_{\mathrm{in}}  \cdot e^{ \frac{Z_0*\sqrt{\epsilon_r}}{2\pi \cdot  Z_{0_{\mathrm{vaccum}}}}} \f$
+ * 
+ *  \f$ \lambda_g = \frac{c}{f \cdot \sqrt{ \epsilon_r \cdot \mu_r}} \f$
+ * 
+ *  \f$ L_{[\mathrm{m}]} = \frac{ \lambda_g cdot L_{[\mathrm{m}]}}{2\pi} \f$
+ * */
+void COAX::calcSynthesize()
 {
     double lambda_g;
-
-    /* Get and assign substrate parameters */
-    get_coax_sub();
-
-    /* Get and assign component parameters */
-    get_coax_comp();
-
-    /* Get and assign electrical parameters */
-    get_coax_elec();
-
-    /* Get and assign physical parameters */
-    get_coax_phys();
 
     if( isSelected( PHYS_DIAM_IN_PRM ) )
     {
         /* solve for din */
-        din = dout / exp( Z0 * sqrt( er ) / ZF0 * 2 * M_PI );
-        setProperty( PHYS_DIAM_IN_PRM, din );
+        m_parameters[PHYS_DIAM_IN_PRM] =
+                m_parameters[PHYS_DIAM_OUT_PRM]
+                / exp( m_parameters[Z0_PRM] * sqrt( m_parameters[EPSILONR_PRM] ) / ZF0 * 2 * M_PI );
     }
     else if( isSelected( PHYS_DIAM_OUT_PRM ) )
     {
         /* solve for dout */
-        dout = din * exp( Z0 * sqrt( er ) / ZF0 * 2 * M_PI );
-        setProperty( PHYS_DIAM_OUT_PRM, dout );
+        m_parameters[PHYS_DIAM_OUT_PRM] =
+                m_parameters[PHYS_DIAM_IN_PRM]
+                * exp( m_parameters[Z0_PRM] * sqrt( m_parameters[EPSILONR_PRM] ) / ZF0 * 2 * M_PI );
     }
 
-    lambda_g = ( C0 / (m_freq) ) / sqrt( er * mur );
+    lambda_g = ( C0 / ( m_parameters[FREQUENCY_PRM] ) )
+               / sqrt( m_parameters[EPSILONR_PRM] * m_parameters[MUR_PRM] );
     /* calculate physical length */
-    l = (lambda_g * ang_l) / (2.0 * M_PI); /* in m */
-    setProperty( PHYS_LEN_PRM, l );
-
-    show_results();
+    m_parameters[PHYS_LEN_PRM] = ( lambda_g * m_parameters[ANG_L_PRM] ) / ( 2.0 * M_PI ); /* in m */
 }
 
 
+void COAX::showAnalyze()
+{
+    setProperty( Z0_PRM, m_parameters[Z0_PRM] );
+    setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
+
+    // Check for errors
+    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
+    {
+        setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
+    }
+
+    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
+    {
+        setErrorLevel( ANG_L_PRM, TRANSLINE_ERROR );
+    }
+
+    // Find warnings to display - physical parameters
+    if( !std::isfinite( m_parameters[PHYS_DIAM_IN_PRM] ) || m_parameters[PHYS_DIAM_IN_PRM] <= 0.0 )
+    {
+        setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
+    }
+
+    if( !std::isfinite( m_parameters[PHYS_DIAM_OUT_PRM] )
+            || m_parameters[PHYS_DIAM_OUT_PRM] <= 0.0 )
+    {
+        setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_WARNING );
+    }
+
+    if( m_parameters[PHYS_DIAM_IN_PRM] > m_parameters[PHYS_DIAM_OUT_PRM] )
+    {
+        setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
+        setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_WARNING );
+    }
+
+    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0.0 )
+    {
+        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_WARNING );
+    }
+}
+
+void COAX::showSynthesize()
+{
+    if( isSelected( PHYS_DIAM_IN_PRM ) )
+        setProperty( PHYS_DIAM_IN_PRM, m_parameters[PHYS_DIAM_IN_PRM] );
+    else if( isSelected( PHYS_DIAM_OUT_PRM ) )
+        setProperty( PHYS_DIAM_OUT_PRM, m_parameters[PHYS_DIAM_OUT_PRM] );
+    setProperty( PHYS_LEN_PRM, m_parameters[PHYS_LEN_PRM] );
+
+    // Check for errors
+    if( !std::isfinite( m_parameters[PHYS_DIAM_IN_PRM] ) || m_parameters[PHYS_DIAM_IN_PRM] <= 0.0 )
+    {
+        if( isSelected( PHYS_DIAM_IN_PRM ) )
+            setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_ERROR );
+        else
+            setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
+    }
+
+    if( !std::isfinite( m_parameters[PHYS_DIAM_OUT_PRM] )
+            || m_parameters[PHYS_DIAM_OUT_PRM] <= 0.0 )
+    {
+        if( isSelected( PHYS_DIAM_OUT_PRM ) )
+            setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_ERROR );
+        else
+            setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_WARNING );
+    }
+
+    if( m_parameters[PHYS_DIAM_IN_PRM] > m_parameters[PHYS_DIAM_OUT_PRM] )
+    {
+        if( isSelected( PHYS_DIAM_IN_PRM ) )
+            setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_ERROR );
+        else if( isSelected( PHYS_DIAM_OUT_PRM ) )
+            setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_ERROR );
+    }
+
+    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0.0 )
+    {
+        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_ERROR );
+    }
+    // Check for warnings
+    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
+    {
+        setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
+    }
+
+    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
+    {
+        setErrorLevel( ANG_L_PRM, TRANSLINE_WARNING );
+    }
+}
 /*
  * show_results() - show results
  */
 void COAX::show_results()
 {
     int  m, n;
-    char   text[256], txt[256];
+    char text[256], txt[256];
 
-    atten_dielectric = alphad_coax() * l;
-    atten_cond = alphac_coax() * l;
+    m_parameters[LOSS_DIELECTRIC_PRM] = alphad_coax() * m_parameters[PHYS_LEN_PRM];
+    m_parameters[LOSS_CONDUCTOR_PRM]  = alphac_coax() * m_parameters[PHYS_LEN_PRM];
 
-    setResult( 0, er, "" );
-    setResult( 1, atten_cond, "dB" );
-    setResult( 2, atten_dielectric, "dB" );
+    setResult( 0, m_parameters[EPSILONR_PRM], "" );
+    setResult( 1, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
+    setResult( 2, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
 
-    n  = 1;
-    fc = C0 / (M_PI * (dout + din) / (double) n);
-    if( fc > m_freq )
+    n = 1;
+    m_parameters[CUTOFF_FREQUENCY_PRM] =
+            C0
+            / ( M_PI * ( m_parameters[PHYS_DIAM_OUT_PRM] + m_parameters[MUR_PRM] ) / (double) n );
+    if( m_parameters[CUTOFF_FREQUENCY_PRM] > m_parameters[FREQUENCY_PRM] )
         strcpy( text, "none" );
     else
     {
         strcpy( text, "H(1,1) " );
-        m  = 2;
-        fc = C0 / ( 2 * (dout - din) / (double) (m - 1) );
-        while( (fc <= m_freq) && ( m < 10 ) )
+        m = 2;
+        m_parameters[CUTOFF_FREQUENCY_PRM] =
+                C0
+                / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] )
+                        / (double) ( m - 1 ) );
+        while( ( m_parameters[CUTOFF_FREQUENCY_PRM] <= m_parameters[FREQUENCY_PRM] ) && ( m < 10 ) )
         {
             sprintf( txt, "H(n,%d) ", m );
             strcat( text, txt );
             m++;
-            fc = C0 / ( 2 * (dout - din) / (double) (m - 1) );
+            m_parameters[CUTOFF_FREQUENCY_PRM] =
+                    C0
+                    / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] )
+                            / (double) ( m - 1 ) );
         }
     }
     setResult( 3, text );
 
-    m  = 1;
-    fc = C0 / (2 * (dout - din) / (double) m);
-    if( fc > m_freq )
+    m = 1;
+    m_parameters[CUTOFF_FREQUENCY_PRM] =
+            C0 / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] ) / (double) m );
+    if( m_parameters[CUTOFF_FREQUENCY_PRM] > m_parameters[FREQUENCY_PRM] )
         strcpy( text, "none" );
     else
     {
         strcpy( text, "" );
-        while( (fc <= m_freq) && ( m < 10 ) )
+        while( ( m_parameters[CUTOFF_FREQUENCY_PRM] <= m_parameters[FREQUENCY_PRM] ) && ( m < 10 ) )
         {
             sprintf( txt, "E(n,%d) ", m );
             strcat( text, txt );
             m++;
-            fc = C0 / (2 * (dout - din) / (double) m);
+            m_parameters[CUTOFF_FREQUENCY_PRM] =
+                    C0
+                    / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] )
+                            / (double) m );
         }
     }
     setResult( 4, text );

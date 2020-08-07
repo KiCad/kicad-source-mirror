@@ -27,44 +27,13 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <units.h>
-#include <transline.h>
 #include <stripline.h>
+#include <units.h>
 
 STRIPLINE::STRIPLINE() : TRANSLINE()
 {
     m_Name = "StripLine";
-
-    // Initialize these variables mainly to avoid warnings from a static analyzer
-    h = 0.0;                    // height of substrate
-    a = 0.0;                    // distance of strip to top metal
-    t = 0.0;                    // thickness of top metal
-    w = 0.0;                    // width of line
-    len = 0.0;                  // length of line
-    Z0 = 0.0;                   // characteristic impedance
-    ang_l = 0.0;                // Electrical length in angle
-    er_eff = 0.0;               // effective dielectric constant
-    atten_dielectric = 0.0;     // Loss in dielectric (dB)
-    atten_cond = 0.0;           // Loss in conductors (dB)
-}
-
-
-// -------------------------------------------------------------------
-void STRIPLINE::getProperties()
-{
-    m_freq = getProperty( FREQUENCY_PRM );
-    w   = getProperty( PHYS_WIDTH_PRM );
-    len = getProperty( PHYS_LEN_PRM );
-    h   = getProperty( H_PRM);
-    a   = getProperty( STRIPLINE_A_PRM );
-    t   = getProperty( T_PRM );
-
-    er    = getProperty( EPSILONR_PRM );
-    m_murC  = getProperty( MURC_PRM );
-    m_tand  = getProperty( TAND_PRM );
-    m_sigma = 1.0 / getProperty( RHO_PRM );
-    Z0    = getProperty( Z0_PRM );
-    ang_l = getProperty( ANG_L_PRM );
+    Init();
 }
 
 
@@ -73,33 +42,37 @@ void STRIPLINE::getProperties()
 double STRIPLINE::lineImpedance( double height, double& ac )
 {
     double ZL;
-    double hmt = height - t;
+    double hmt = height - m_parameters[T_PRM];
 
-    ac = sqrt( m_freq / m_sigma / 17.2 );
-    if( w / hmt >= 0.35 )
+    ac = sqrt( m_parameters[FREQUENCY_PRM] / m_parameters[SIGMA_PRM] / 17.2 );
+    if( m_parameters[PHYS_WIDTH_PRM] / hmt >= 0.35 )
     {
-        ZL = w +
-             ( 2.0 * height *
-        log( (2.0 * height - t) / hmt ) - t * log( height * height / hmt / hmt - 1.0 ) ) / M_PI;
-        ZL = ZF0 * hmt / sqrt( er ) / 4.0 / ZL;
+        ZL = m_parameters[PHYS_WIDTH_PRM]
+             + ( 2.0 * height * log( ( 2.0 * height - m_parameters[T_PRM] ) / hmt )
+                       - m_parameters[T_PRM] * log( height * height / hmt / hmt - 1.0 ) )
+                       / M_PI;
+        ZL = ZF0 * hmt / sqrt( m_parameters[EPSILONR_PRM] ) / 4.0 / ZL;
 
-        ac *= 2.02e-6 * er * ZL / hmt;
-        ac *= 1.0 + 2.0 * w / hmt + (height + t) / hmt / M_PI* log( 2.0 * height / t - 1.0 );
+        ac *= 2.02e-6 * m_parameters[EPSILONR_PRM] * ZL / hmt;
+        ac *= 1.0 + 2.0 * m_parameters[PHYS_WIDTH_PRM] / hmt
+              + ( height + m_parameters[T_PRM] ) / hmt / M_PI
+                        * log( 2.0 * height / m_parameters[T_PRM] - 1.0 );
     }
     else
     {
-        double tdw = t / w;
-        if( t / w > 1.0 )
-            tdw = w / t;
+        double tdw = m_parameters[T_PRM] / m_parameters[PHYS_WIDTH_PRM];
+        if( m_parameters[T_PRM] / m_parameters[PHYS_WIDTH_PRM] > 1.0 )
+            tdw = m_parameters[PHYS_WIDTH_PRM] / m_parameters[T_PRM];
         double de = 1.0 + tdw / M_PI * ( 1.0 + log( 4.0 * M_PI / tdw ) ) + 0.236 * pow( tdw, 1.65 );
-        if( t / w > 1.0 )
-            de *= t / 2.0;
+        if( m_parameters[T_PRM] / m_parameters[PHYS_WIDTH_PRM] > 1.0 )
+            de *= m_parameters[T_PRM] / 2.0;
         else
-            de *= w / 2.0;
-        ZL = ZF0 / 2.0 / M_PI / sqrt( er ) * log( 4.0 * height / M_PI / de );
+            de *= m_parameters[PHYS_WIDTH_PRM] / 2.0;
+        ZL = ZF0 / 2.0 / M_PI / sqrt( m_parameters[EPSILONR_PRM] )
+             * log( 4.0 * height / M_PI / de );
 
         ac *= 0.01141 / ZL / de;
-        ac *= de / height + 0.5 + tdw / 2.0 / M_PI + 0.5 / M_PI* log( 4.0 * M_PI / tdw )
+        ac *= de / height + 0.5 + tdw / 2.0 / M_PI + 0.5 / M_PI * log( 4.0 * M_PI / tdw )
               + 0.1947 * pow( tdw, 0.65 ) - 0.0767 * pow( tdw, 1.65 );
     }
 
@@ -108,103 +81,110 @@ double STRIPLINE::lineImpedance( double height, double& ac )
 
 
 // -------------------------------------------------------------------
-void STRIPLINE::calc()
+void STRIPLINE::calcAnalyze()
 {
-    m_skindepth = skin_depth();
+    m_parameters[SKIN_DEPTH_PRM] = skin_depth();
 
-    er_eff = er; // no dispersion
+    m_parameters[EPSILON_EFF_PRM] = m_parameters[EPSILONR_PRM]; // no dispersion
 
     double ac1, ac2;
-    Z0 = 2.0 /
-         ( 1.0 / lineImpedance( 2.0 * a + t, ac1 ) + 1.0 / lineImpedance( 2.0 * (h - a) - t, ac2 ) );
+    double t             = m_parameters[T_PRM];
+    double a             = m_parameters[STRIPLINE_A_PRM];
+    double h             = m_parameters[H_PRM];
+    m_parameters[Z0_PRM] = 2.0
+                           / ( 1.0 / lineImpedance( 2.0 * a + t, ac1 )
+                                   + 1.0 / lineImpedance( 2.0 * ( h - a ) - t, ac2 ) );
+    m_parameters[LOSS_CONDUCTOR_PRM]  = m_parameters[PHYS_LEN_PRM] * 0.5 * ( ac1 + ac2 );
+    m_parameters[LOSS_DIELECTRIC_PRM] = 20.0 / log( 10.0 ) * m_parameters[PHYS_LEN_PRM]
+                                        * ( M_PI / C0 ) * m_parameters[FREQUENCY_PRM]
+                                        * sqrt( m_parameters[EPSILONR_PRM] )
+                                        * m_parameters[TAND_PRM];
 
-    atten_cond = len * 0.5 * (ac1 + ac2);
-    atten_dielectric = 20.0 / log( 10.0 ) * len * (M_PI / C0) * m_freq * sqrt( er ) * m_tand;
-
-    ang_l = 2.0* M_PI* len* sqrt( er ) * m_freq / C0; // in radians
+    m_parameters[ANG_L_PRM] = 2.0 * M_PI * m_parameters[PHYS_LEN_PRM]
+                              * sqrt( m_parameters[EPSILONR_PRM] ) * m_parameters[FREQUENCY_PRM]
+                              / C0; // in radians
 }
 
 
+void STRIPLINE::showAnalyze()
+{
+    setProperty( Z0_PRM, m_parameters[Z0_PRM] );
+    setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
+
+    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
+    {
+        setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
+    }
+    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
+    {
+        setErrorLevel( ANG_L_PRM, TRANSLINE_ERROR );
+    }
+
+    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0 )
+    {
+        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_WARNING );
+    }
+    if( !std::isfinite( m_parameters[PHYS_WIDTH_PRM] ) || m_parameters[PHYS_WIDTH_PRM] < 0 )
+    {
+        setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_WARNING );
+    }
+
+    if( m_parameters[STRIPLINE_A_PRM] + m_parameters[T_PRM] >= m_parameters[H_PRM] )
+    {
+        setErrorLevel( STRIPLINE_A_PRM, TRANSLINE_WARNING );
+        setErrorLevel( T_PRM, TRANSLINE_WARNING );
+        setErrorLevel( H_PRM, TRANSLINE_WARNING );
+        setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
+    }
+}
+
+void STRIPLINE::showSynthesize()
+{
+    setProperty( PHYS_LEN_PRM, m_parameters[PHYS_LEN_PRM] );
+    setProperty( PHYS_WIDTH_PRM, m_parameters[PHYS_WIDTH_PRM] );
+
+    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0 )
+    {
+        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_ERROR );
+    }
+    if( !std::isfinite( m_parameters[PHYS_WIDTH_PRM] ) || m_parameters[PHYS_WIDTH_PRM] < 0 )
+    {
+        setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_ERROR );
+    }
+
+    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
+    {
+        setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
+    }
+    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
+    {
+        setErrorLevel( ANG_L_PRM, TRANSLINE_WARNING );
+    }
+
+    if( m_parameters[STRIPLINE_A_PRM] + m_parameters[T_PRM] >= m_parameters[H_PRM] )
+    {
+        setErrorLevel( STRIPLINE_A_PRM, TRANSLINE_WARNING );
+        setErrorLevel( T_PRM, TRANSLINE_WARNING );
+        setErrorLevel( H_PRM, TRANSLINE_WARNING );
+        setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_ERROR );
+    }
+}
 // -------------------------------------------------------------------
 void STRIPLINE::show_results()
 {
-    setProperty( Z0_PRM, Z0 );
-    setProperty( ANG_L_PRM, ang_l );
 
-    setResult( 0, er_eff, "" );
-    setResult( 1, atten_cond, "dB" );
-    setResult( 2, atten_dielectric, "dB" );
+    setResult( 0, m_parameters[EPSILON_EFF_PRM], "" );
+    setResult( 1, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
+    setResult( 2, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
 
-    setResult( 3, m_skindepth / UNIT_MICRON, "µm" );
-}
-
-
-// -------------------------------------------------------------------
-void STRIPLINE::analyze()
-{
-    getProperties();
-    calc();
-    show_results();
+    setResult( 3, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
 }
 
 
 #define MAX_ERROR 0.000001
 
 // -------------------------------------------------------------------
-void STRIPLINE::synthesize()
+void STRIPLINE::calcSynthesize()
 {
-    double Z0_dest, Z0_current, Z0_result, increment, slope, error;
-    int    iteration;
-
-    getProperties();
-
-    /* required value of Z0 */
-    Z0_dest = Z0;
-
-    /* Newton's method */
-    iteration = 0;
-
-    /* compute parameters */
-    calc();
-    Z0_current = Z0;
-
-    error = fabs( Z0_dest - Z0_current );
-
-    while( error > MAX_ERROR )
-    {
-        iteration++;
-        increment = w / 100.0;
-        w += increment;
-        /* compute parameters */
-        calc();
-        Z0_result = Z0;
-        /* f(w(n)) = Z0 - Z0(w(n)) */
-        /* f'(w(n)) = -f'(Z0(w(n))) */
-        /* f'(Z0(w(n))) = (Z0(w(n)) - Z0(w(n+delw))/delw */
-        /* w(n+1) = w(n) - f(w(n))/f'(w(n)) */
-        slope = (Z0_result - Z0_current) / increment;
-        slope = (Z0_dest - Z0_current) / slope - increment;
-        w    += slope;
-        if( w <= 0.0 )
-            w = increment;
-        /* find new error */
-        /* compute parameters */
-        calc();
-        Z0_current = Z0;
-        error = fabs( Z0_dest - Z0_current );
-        if( iteration > 100 )
-            break;
-    }
-
-    setProperty( PHYS_WIDTH_PRM, w );
-    /* calculate physical length */
-    ang_l = getProperty( ANG_L_PRM );
-    len   = C0 / m_freq / sqrt( er_eff ) * ang_l / 2.0 / M_PI; /* in m */
-    setProperty( PHYS_LEN_PRM, len );
-
-    /* compute parameters */
-    calc();
-
-    /* print results in the subwindow */
-    show_results();
+    minimizeZ0Error1D( &( m_parameters[PHYS_WIDTH_PRM] ) );
 }

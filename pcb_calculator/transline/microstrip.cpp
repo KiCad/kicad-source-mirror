@@ -34,32 +34,15 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <units.h>
-#include <transline.h>
 #include <microstrip.h>
+#include <transline.h>
+
+#include <units.h>
 
 MICROSTRIP::MICROSTRIP() : TRANSLINE()
 {
     m_Name = "MicroStrip";
-
-    // Initialize these variables mainly to avoid warnings from a static analyzer
-    h = 0.0;                    // height of substrate
-    ht = 0.0;                   // height to the top of box
-    t = 0.0;                    // thickness of top metal
-    rough = 0.0;                // Roughness of top metal
-    mur = 0.0;                  // magnetic permeability of substrate
-    w = 0.0;                    // width of line
-    l = 0.0;                    // length of line
-    Z0_0 = 0.0;                 // static characteristic impedance
-    Z0 = 0.0;                   // characteristic impedance
-    ang_l = 0.0;                // Electrical length in angle
-    er_eff_0 = 0.0;             // Static effective dielectric constant
-    er_eff = 0.0;               // Effective dielectric constant
-    mur_eff = 0.0;              // Effective mag. permeability
-    w_eff = 0.0;                // Effective width of line
-    atten_dielectric = 0.0;     // Loss in dielectric (dB)
-    atten_cond = 0.0;           // Loss in conductors (dB)
-    Z0_h_1 = 0.0;               // homogeneous stripline impedance
+    Init();
 }
 
 
@@ -71,8 +54,8 @@ double MICROSTRIP::Z0_homogeneous( double u )
 {
     double freq, Z0_value;
 
-    freq  = 6.0 + (2.0 * M_PI - 6.0) * exp( -pow( 30.666 / u, 0.7528 ) );
-    Z0_value = ( ZF0 / (2.0 * M_PI) ) * log( freq / u + sqrt( 1.0 + 4.0 / (u * u) ) );
+    freq     = 6.0 + ( 2.0 * M_PI - 6.0 ) * exp( -pow( 30.666 / u, 0.7528 ) );
+    Z0_value = ( ZF0 / ( 2.0 * M_PI ) ) * log( freq / u + sqrt( 1.0 + 4.0 / ( u * u ) ) );
     return Z0_value;
 }
 
@@ -88,7 +71,7 @@ double MICROSTRIP::delta_Z0_cover( double u, double h2h )
 
     h2hp1 = 1.0 + h2h;
     P     = 270.0 * ( 1.0 - tanh( 1.192 + 0.706 * sqrt( h2hp1 ) - 1.389 / h2hp1 ) );
-    Q     = 1.0109 - atanh( (0.012 * u + 0.177 * u * u - 0.027 * u * u * u) / (h2hp1 * h2hp1) );
+    Q     = 1.0109 - atanh( ( 0.012 * u + 0.177 * u * u - 0.027 * u * u * u ) / ( h2hp1 * h2hp1 ) );
     return P * Q;
 }
 
@@ -105,9 +88,8 @@ double MICROSTRIP::filling_factor( double u, double e_r )
     u2 = u * u;
     u3 = u2 * u;
     u4 = u3 * u;
-    a  = 1.0 +
-         log( (u4 + u2 / 2704) / (u4 + 0.432) ) / 49.0 + log( 1.0 + u3 / 5929.741 ) / 18.7;
-    b     = 0.564 * pow( (e_r - 0.9) / (e_r + 3.0), 0.053 );
+    a = 1.0 + log( ( u4 + u2 / 2704 ) / ( u4 + 0.432 ) ) / 49.0 + log( 1.0 + u3 / 5929.741 ) / 18.7;
+    b = 0.564 * pow( ( e_r - 0.9 ) / ( e_r + 3.0 ), 0.053 );
     q_inf = pow( 1.0 + 10.0 / u, -a * b );
     return q_inf;
 }
@@ -132,7 +114,7 @@ double MICROSTRIP::delta_q_thickness( double u, double t_h )
 {
     double q_t;
 
-    q_t = (2.0 * log( 2.0 ) / M_PI) * ( t_h / sqrt( u ) );
+    q_t = ( 2.0 * log( 2.0 ) / M_PI ) * ( t_h / sqrt( u ) );
     return q_t;
 }
 
@@ -145,7 +127,7 @@ double MICROSTRIP::e_r_effective( double e_r, double q )
 {
     double e_r_eff;
 
-    e_r_eff = 0.5 * (e_r + 1.0) + 0.5 * q * (e_r - 1.0);
+    e_r_eff = 0.5 * ( e_r + 1.0 ) + 0.5 * q * ( e_r - 1.0 );
     return e_r_eff;
 }
 
@@ -160,8 +142,8 @@ double MICROSTRIP::delta_u_thickness( double u, double t_h, double e_r )
     if( t_h > 0.0 )
     {
         /* correction for thickness for a homogeneous microstrip */
-        delta_u = (t_h / M_PI) * log( 1.0 + (4.0 * M_E) * pow( tanh( sqrt(
-                                                                        6.517 * u ) ), 2.0 ) / t_h );
+        delta_u = ( t_h / M_PI )
+                  * log( 1.0 + ( 4.0 * M_E ) * pow( tanh( sqrt( 6.517 * u ) ), 2.0 ) / t_h );
         /* correction for strip on a substrate with relative permettivity e_r */
         delta_u = 0.5 * delta_u * ( 1.0 + 1.0 / cosh( sqrt( e_r - 1.0 ) ) );
     }
@@ -182,11 +164,11 @@ void MICROSTRIP::microstrip_Z0()
     double Z0_h_r;
     double delta_u_1, delta_u_r, q_inf, q_c, q_t, e_r_eff, e_r_eff_t, q;
 
-    e_r = er;
-    h2  = ht;
-    h2h = h2 / h;
-    u   = w / h;
-    t_h = t / h;
+    e_r = m_parameters[EPSILONR_PRM];
+    h2  = m_parameters[H_T_PRM];
+    h2h = h2 / m_parameters[H_PRM];
+    u   = m_parameters[PHYS_WIDTH_PRM] / m_parameters[H_PRM];
+    t_h = m_parameters[T_PRM] / m_parameters[H_PRM];
 
     /* compute normalized width correction for e_r = 1.0 */
     delta_u_1 = delta_u_thickness( u, t_h, 1.0 );
@@ -205,7 +187,7 @@ void MICROSTRIP::microstrip_Z0()
     /* thickness effect */
     q_t = delta_q_thickness( u, t_h );
     /* resultant filling factor */
-    q = (q_inf - q_t) * q_c;
+    q = ( q_inf - q_t ) * q_c;
 
     /* e_r corrected for thickness and non homogeneous material */
     e_r_eff_t = e_r_effective( e_r, q );
@@ -215,11 +197,11 @@ void MICROSTRIP::microstrip_Z0()
 
     /* characteristic impedance, corrected for thickness, cover */
     /*   and non homogeneous material */
-    Z0 = Z0_h_r / sqrt( e_r_eff_t );
+    m_parameters[Z0_PRM] = Z0_h_r / sqrt( e_r_eff_t );
 
-    w_eff    = u * h;
+    w_eff    = u * m_parameters[H_PRM];
     er_eff_0 = e_r_eff;
-    Z0_0     = Z0;
+    Z0_0     = m_parameters[Z0_PRM];
 }
 
 
@@ -231,13 +213,13 @@ double MICROSTRIP::e_r_dispersion( double u, double e_r, double f_n )
 {
     double P_1, P_2, P_3, P_4, P;
 
-    P_1 = 0.27488 + u * ( 0.6315 + 0.525 / pow( 1.0 + 0.0157 * f_n, 20.0 ) ) - 0.065683 * exp(
-        -8.7513 * u );
+    P_1 = 0.27488 + u * ( 0.6315 + 0.525 / pow( 1.0 + 0.0157 * f_n, 20.0 ) )
+          - 0.065683 * exp( -8.7513 * u );
     P_2 = 0.33622 * ( 1.0 - exp( -0.03442 * e_r ) );
     P_3 = 0.0363 * exp( -4.6 * u ) * ( 1.0 - exp( -pow( f_n / 38.7, 4.97 ) ) );
     P_4 = 1.0 + 2.751 * ( 1.0 - exp( -pow( e_r / 15.916, 8.0 ) ) );
 
-    P = P_1 * P_2 * pow( (P_3 * P_4 + 0.1844) * f_n, 1.5763 );
+    P = P_1 * P_2 * pow( ( P_3 * P_4 + 0.1844 ) * f_n, 1.5763 );
 
     return P;
 }
@@ -247,14 +229,11 @@ double MICROSTRIP::e_r_dispersion( double u, double e_r, double f_n )
  * Z0_dispersion() - computes the dispersion correction factor for the
  * characteristic impedance
  */
-double MICROSTRIP::Z0_dispersion( double u,
-                                  double e_r,
-                                  double e_r_eff_0,
-                                  double e_r_eff_f,
-                                  double f_n )
+double MICROSTRIP::Z0_dispersion(
+        double u, double e_r, double e_r_eff_0, double e_r_eff_f, double f_n )
 {
     double R_1, R_2, R_3, R_4, R_5, R_6, R_7, R_8, R_9, R_10, R_11, R_12, R_13, R_14, R_15, R_16,
-           R_17, D, tmpf;
+            R_17, D, tmpf;
 
     R_1 = 0.03891 * pow( e_r, 1.4 );
     R_2 = 0.267 * pow( u, 7.0 );
@@ -263,22 +242,23 @@ double MICROSTRIP::Z0_dispersion( double u,
     R_5 = pow( f_n / 28.843, 12.0 );
     R_6 = 22.2 * pow( u, 1.92 );
     R_7 = 1.206 - 0.3144 * exp( -R_1 ) * ( 1.0 - exp( -R_2 ) );
-    R_8 = 1.0 + 1.275 *
-          ( 1.0 - exp( -0.004625 * R_3 * pow( e_r, 1.674 ) * pow( f_n / 18.365, 2.745 ) ) );
+    R_8 = 1.0
+          + 1.275
+                    * ( 1.0
+                            - exp( -0.004625 * R_3 * pow( e_r, 1.674 )
+                                    * pow( f_n / 18.365, 2.745 ) ) );
     tmpf = pow( e_r - 1.0, 6.0 );
-    R_9  = 5.086 * R_4 *
-           ( R_5 /
-            (0.3838 + 0.386 *
-     R_4) ) * ( exp( -R_6 ) / (1.0 + 1.2992 * R_5) ) * ( tmpf / (1.0 + 10.0 * tmpf) );
+    R_9  = 5.086 * R_4 * ( R_5 / ( 0.3838 + 0.386 * R_4 ) )
+          * ( exp( -R_6 ) / ( 1.0 + 1.2992 * R_5 ) ) * ( tmpf / ( 1.0 + 10.0 * tmpf ) );
     R_10 = 0.00044 * pow( e_r, 2.136 ) + 0.0184;
     tmpf = pow( f_n / 19.47, 6.0 );
-    R_11 = tmpf / (1.0 + 0.0962 * tmpf);
-    R_12 = 1.0 / (1.0 + 0.00245 * u * u);
+    R_11 = tmpf / ( 1.0 + 0.0962 * tmpf );
+    R_12 = 1.0 / ( 1.0 + 0.00245 * u * u );
     R_13 = 0.9408 * pow( e_r_eff_f, R_8 ) - 0.9603;
-    R_14 = (0.9408 - R_9) * pow( e_r_eff_0, R_8 ) - 0.9603;
-    R_15 = 0.707* R_10* pow( f_n / 12.3, 1.097 );
+    R_14 = ( 0.9408 - R_9 ) * pow( e_r_eff_0, R_8 ) - 0.9603;
+    R_15 = 0.707 * R_10 * pow( f_n / 12.3, 1.097 );
     R_16 = 1.0 + 0.0503 * e_r * e_r * R_11 * ( 1.0 - exp( -pow( u / 15.0, 6.0 ) ) );
-    R_17 = R_7 * ( 1.0 - 1.1241 * (R_12 / R_16) * exp( -0.026 * pow( f_n, 1.15656 ) - R_15 ) );
+    R_17 = R_7 * ( 1.0 - 1.1241 * ( R_12 / R_16 ) * exp( -0.026 * pow( f_n, 1.15656 ) - R_15 ) );
 
     D = pow( R_13 / R_14, R_17 );
 
@@ -295,22 +275,22 @@ void MICROSTRIP::dispersion()
     double e_r, e_r_eff_0;
     double u, f_n, P, e_r_eff_f, D, Z0_f;
 
-    e_r = er;
+    e_r       = m_parameters[EPSILONR_PRM];
     e_r_eff_0 = er_eff_0;
-    u = w / h;
+    u         = m_parameters[PHYS_WIDTH_PRM] / m_parameters[H_PRM];
 
     /* normalized frequency [GHz * mm] */
-    f_n = m_freq * h / 1e06;
+    f_n = m_parameters[FREQUENCY_PRM] * m_parameters[H_PRM] / 1e06;
 
     P = e_r_dispersion( u, e_r, f_n );
     /* effective dielectric constant corrected for dispersion */
-    e_r_eff_f = e_r - (e_r - e_r_eff_0) / (1.0 + P);
+    e_r_eff_f = e_r - ( e_r - e_r_eff_0 ) / ( 1.0 + P );
 
     D    = Z0_dispersion( u, e_r, e_r_eff_0, e_r_eff_f, f_n );
     Z0_f = Z0_0 * D;
 
-    er_eff = e_r_eff_f;
-    Z0     = Z0_f;
+    er_eff               = e_r_eff_f;
+    m_parameters[Z0_PRM] = Z0_f;
 }
 
 
@@ -324,20 +304,24 @@ double MICROSTRIP::conductor_losses()
     double K, R_s, Q_c, alpha_c;
 
     e_r_eff_0 = er_eff_0;
-    delta     = m_skindepth;
+    delta     = m_parameters[SKIN_DEPTH_PRM];
 
-    if( m_freq > 0.0 )
+    if( m_parameters[FREQUENCY_PRM] > 0.0 )
     {
         /* current distribution factor */
         K = exp( -1.2 * pow( Z0_h_1 / ZF0, 0.7 ) );
         /* skin resistance */
-        R_s = 1.0 / (m_sigma * delta);
+        R_s = 1.0 / ( m_parameters[SIGMA_PRM] * delta );
 
         /* correction for surface roughness */
-        R_s *= 1.0 + ( (2.0 / M_PI) * atan( 1.40 * pow( (rough / delta), 2.0 ) ) );
+        R_s *= 1.0
+               + ( ( 2.0 / M_PI )
+                       * atan( 1.40 * pow( ( m_parameters[ROUGH_PRM] / delta ), 2.0 ) ) );
         /* strip inductive quality factor */
-        Q_c     = (M_PI * Z0_h_1 * w * m_freq) / (R_s * C0 * K);
-        alpha_c = ( 20.0 * M_PI / log( 10.0 ) ) * m_freq * sqrt( e_r_eff_0 ) / (C0 * Q_c);
+        Q_c = ( M_PI * Z0_h_1 * m_parameters[PHYS_WIDTH_PRM] * m_parameters[FREQUENCY_PRM] )
+              / ( R_s * C0 * K );
+        alpha_c = ( 20.0 * M_PI / log( 10.0 ) ) * m_parameters[FREQUENCY_PRM] * sqrt( e_r_eff_0 )
+                  / ( C0 * Q_c );
     }
     else
     {
@@ -357,13 +341,12 @@ double MICROSTRIP::dielectric_losses()
     double e_r, e_r_eff_0;
     double alpha_d;
 
-    e_r = er;
+    e_r       = m_parameters[EPSILONR_PRM];
     e_r_eff_0 = er_eff_0;
 
-    alpha_d =
-        ( 20.0 * M_PI /
-         log( 10.0 ) ) *
-        (m_freq / C0) * ( e_r / sqrt( e_r_eff_0 ) ) * ( (e_r_eff_0 - 1.0) / (e_r - 1.0) ) * m_tand;
+    alpha_d = ( 20.0 * M_PI / log( 10.0 ) ) * ( m_parameters[FREQUENCY_PRM] / C0 )
+              * ( e_r / sqrt( e_r_eff_0 ) ) * ( ( e_r_eff_0 - 1.0 ) / ( e_r - 1.0 ) )
+              * m_parameters[TAND_PRM];
 
     return alpha_d;
 }
@@ -374,10 +357,10 @@ double MICROSTRIP::dielectric_losses()
  */
 void MICROSTRIP::attenuation()
 {
-    m_skindepth = skin_depth();
+    m_parameters[SKIN_DEPTH_PRM] = skin_depth();
 
-    atten_cond = conductor_losses() * l;
-    atten_dielectric = dielectric_losses() * l;
+    atten_cond       = conductor_losses() * m_parameters[PHYS_LEN_PRM];
+    atten_dielectric = dielectric_losses() * m_parameters[PHYS_LEN_PRM];
 }
 
 
@@ -386,7 +369,11 @@ void MICROSTRIP::attenuation()
  */
 void MICROSTRIP::mur_eff_ms()
 {
-    mur_eff = (2.0 * mur) / ( (1.0 + mur) + ( (1.0 - mur) * pow( ( 1.0 + (10.0 * h / w) ), -0.5 ) ) );
+    double* mur = &m_parameters[MUR_PRM];
+    double* h   = &m_parameters[H_PRM];
+    double* w   = &m_parameters[PHYS_WIDTH_PRM];
+    mur_eff     = ( 2.0 * *mur )
+              / ( ( 1.0 + *mur ) + ( ( 1.0 - *mur ) * pow( ( 1.0 + ( 10.0 * *h / *w ) ), -0.5 ) ) );
 }
 
 
@@ -396,24 +383,25 @@ double MICROSTRIP::synth_width()
     double e_r, a, b;
     double w_h, width;
 
-    e_r = er;
+    e_r = m_parameters[EPSILONR_PRM];
 
-    a = ( (Z0 / ZF0 / 2 /
-           M_PI) * sqrt( (e_r + 1) / 2. ) ) + ( (e_r - 1) / (e_r + 1) * ( 0.23 + (0.11 / e_r) ) );
-    b = ZF0 / 2 * M_PI / ( Z0 * sqrt( e_r ) );
+    a = ( ( m_parameters[Z0_PRM] / ZF0 / 2 / M_PI ) * sqrt( ( e_r + 1 ) / 2. ) )
+        + ( ( e_r - 1 ) / ( e_r + 1 ) * ( 0.23 + ( 0.11 / e_r ) ) );
+    b = ZF0 / 2 * M_PI / ( m_parameters[Z0_PRM] * sqrt( e_r ) );
 
     if( a > 1.52 )
     {
-        w_h = 8 * exp( a ) / (exp( 2. * a ) - 2);
+        w_h = 8 * exp( a ) / ( exp( 2. * a ) - 2 );
     }
     else
     {
-        w_h = (2. / M_PI) * ( b - 1. -
-             log( (2 * b) - 1. ) + ( (e_r - 1) / (2 * e_r) ) * (log( b - 1. ) + 0.39 - 0.61 / e_r) );
+        w_h = ( 2. / M_PI )
+              * ( b - 1. - log( ( 2 * b ) - 1. )
+                      + ( ( e_r - 1 ) / ( 2 * e_r ) ) * ( log( b - 1. ) + 0.39 - 0.61 / e_r ) );
     }
 
-    if( h > 0.0 )
-        width = w_h * h;
+    if( m_parameters[H_PRM] > 0.0 )
+        width = w_h * m_parameters[H_PRM];
     else
         width = 0;
 
@@ -434,13 +422,13 @@ void MICROSTRIP::line_angle()
     /* velocity */
     v = C0 / sqrt( e_r_eff * mur_eff );
     /* wavelength */
-    lambda_g = v / m_freq;
+    lambda_g = v / m_parameters[FREQUENCY_PRM];
     /* electrical angles */
-    ang_l = 2.0 * M_PI * l / lambda_g;  /* in radians */
+    m_parameters[ANG_L_PRM] = 2.0 * M_PI * m_parameters[PHYS_LEN_PRM] / lambda_g; /* in radians */
 }
 
 
-void MICROSTRIP::calc()
+void MICROSTRIP::calcAnalyze()
 {
     /* effective permeability */
     mur_eff_ms();
@@ -455,167 +443,78 @@ void MICROSTRIP::calc()
 }
 
 
-/*
- * get_microstrip_sub () - get and assign microstrip substrate
- * parameters into microstrip structure
- */
-void MICROSTRIP::get_microstrip_sub()
-{
-    er    = getProperty( EPSILONR_PRM );
-    mur   = getProperty( MUR_PRM );
-    h     = getProperty( H_PRM );
-    ht    = getProperty( H_T_PRM );
-    t     = getProperty( T_PRM );
-    m_sigma = 1.0 / getProperty( RHO_PRM );
-    m_murC  = getProperty( MURC_PRM );
-    m_tand  = getProperty( TAND_PRM );
-    rough = getProperty( ROUGH_PRM );
-}
-
-
-/*
- * get_microstrip_comp() - get and assign microstrip component
- * parameters into microstrip structure
- */
-void MICROSTRIP::get_microstrip_comp()
-{
-    m_freq = getProperty( FREQUENCY_PRM );
-}
-
-
-/*
- * get_microstrip_elec() - get and assign microstrip electrical
- * parameters into microstrip structure
- */
-void MICROSTRIP::get_microstrip_elec()
-{
-    Z0    = getProperty( Z0_PRM );
-    ang_l = getProperty( ANG_L_PRM );
-}
-
-
-/*
- * get_microstrip_phys() - get and assign microstrip physical
- * parameters into microstrip structure
- */
-void MICROSTRIP::get_microstrip_phys()
-{
-    w = getProperty( PHYS_WIDTH_PRM );
-    l = getProperty( PHYS_LEN_PRM );
-}
-
-
 void MICROSTRIP::show_results()
 {
-    setProperty( Z0_PRM, Z0 );
-    setProperty( ANG_L_PRM, ang_l );
+    setProperty( Z0_PRM, m_parameters[Z0_PRM] );
+    setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
 
     setResult( 0, er_eff, "" );
     setResult( 1, atten_cond, "dB" );
     setResult( 2, atten_dielectric, "dB" );
 
-    setResult( 3, m_skindepth/UNIT_MICRON, "µm" );
+    setResult( 3, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
 }
 
 
-/*
- * analysis function
- */
-void MICROSTRIP::analyze()
+void MICROSTRIP::showSynthesize()
 {
-    /* Get and assign substrate parameters */
-    get_microstrip_sub();
+    setProperty( PHYS_WIDTH_PRM, m_parameters[PHYS_WIDTH_PRM] );
+    setProperty( PHYS_LEN_PRM, m_parameters[PHYS_LEN_PRM] );
 
-    /* Get and assign component parameters */
-    get_microstrip_comp();
+    // Check for errors
+    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || ( m_parameters[PHYS_LEN_PRM] < 0 ) )
+        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_ERROR );
 
-    /* Get and assign physical parameters */
-    get_microstrip_phys();
+    if( !std::isfinite( m_parameters[PHYS_WIDTH_PRM] ) || ( m_parameters[PHYS_WIDTH_PRM] <= 0 ) )
+        setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_ERROR );
 
-    /* compute microstrip parameters */
-    calc();
+    // Check for warnings
 
-    /* print results in the subwindow */
-    show_results();
+    if( !std::isfinite( m_parameters[Z0_PRM] ) || ( m_parameters[Z0_PRM] < 0 ) )
+        setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
+
+    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || ( m_parameters[ANG_L_PRM] < 0 ) )
+        setErrorLevel( ANG_L_PRM, TRANSLINE_WARNING );
 }
 
+void MICROSTRIP::showAnalyze()
+{
+    setProperty( Z0_PRM, m_parameters[Z0_PRM] );
+    setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
 
-#define MAX_ERROR 0.000001
+    // Check for errors
+    if( !std::isfinite( m_parameters[Z0_PRM] ) || ( m_parameters[Z0_PRM] < 0 ) )
+        setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
+
+    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || ( m_parameters[ANG_L_PRM] < 0 ) )
+        setErrorLevel( ANG_L_PRM, TRANSLINE_ERROR );
+
+    // Check for warnings
+    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || ( m_parameters[PHYS_LEN_PRM] < 0 ) )
+        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_WARNING );
+
+    if( !std::isfinite( m_parameters[PHYS_WIDTH_PRM] ) || ( m_parameters[PHYS_WIDTH_PRM] <= 0 ) )
+        setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_WARNING );
+}
 
 /*
  * synthesis function
  */
-void MICROSTRIP::synthesize()
+void MICROSTRIP::calcSynthesize()
 {
-    double Z0_dest, Z0_current, Z0_result, increment, slope, error;
-    int    iteration;
-
-    /* Get and assign substrate parameters */
-    get_microstrip_sub();
-
-    /* Get and assign component parameters */
-    get_microstrip_comp();
-
-    /* Get and assign electrical parameters */
-    get_microstrip_elec();
-
-    /* Get and assign physical parameters */
-    /* at present it is required only for getting strips length */
-    get_microstrip_phys();
-
-
+    double angl_dest, z0_dest;
+    z0_dest   = m_parameters[Z0_PRM];
+    angl_dest = m_parameters[ANG_L_PRM];
     /* calculate width and use for initial value in Newton's method */
-    w = synth_width();
-
-    /* required value of Z0 */
-    Z0_dest = Z0;
-
-    /* Newton's method */
-    iteration = 0;
-
-    /* compute microstrip parameters */
-    calc();
-    Z0_current = Z0;
-
-    error = fabs( Z0_dest - Z0_current );
-
-    while( error > MAX_ERROR )
-    {
-        iteration++;
-        increment = (w / 100.0);
-        w += increment;
-        /* compute microstrip parameters */
-        calc();
-        Z0_result = Z0;
-        /* f(w(n)) = Z0 - Z0(w(n)) */
-        /* f'(w(n)) = -f'(Z0(w(n))) */
-        /* f'(Z0(w(n))) = (Z0(w(n)) - Z0(w(n+delw))/delw */
-        /* w(n+1) = w(n) - f(w(n))/f'(w(n)) */
-        slope = (Z0_result - Z0_current) / increment;
-        /* printf("%g\n",slope); */
-        w += (Z0_dest - Z0_current) / slope - increment;
-        /*      printf("ms->w = %g\n", ms->w); */
-        /* find new error */
-        /* compute microstrip parameters */
-        calc();
-        Z0_current = Z0;
-        error = fabs( Z0_dest - Z0_current );
-
-        /*      printf("Iteration = %d\n",iteration);
-         *   printf("w = %g\t Z0 = %g\n",ms->w, Z0_current); */
-        if( iteration > 100 )
-            break;
-    }
-
-    setProperty( PHYS_WIDTH_PRM, w );
-    /* calculate physical length */
-    ang_l = getProperty( ANG_L_PRM );
-    l = C0 / m_freq / sqrt( er_eff * mur_eff ) * ang_l / 2.0 / M_PI; /* in m */
-    setProperty( PHYS_LEN_PRM, l );
-
-    /* compute microstrip parameters */
-    calc();
-
-    /* print results in the subwindow */
-    show_results();
+    m_parameters[PHYS_WIDTH_PRM] = synth_width();
+    minimizeZ0Error1D( &( m_parameters[PHYS_WIDTH_PRM] ) );
+    m_parameters[Z0_PRM]       = z0_dest;
+    m_parameters[ANG_L_PRM]    = angl_dest;
+    m_parameters[PHYS_LEN_PRM] = C0 / m_parameters[FREQUENCY_PRM] / sqrt( er_eff * mur_eff )
+                                 * m_parameters[ANG_L_PRM] / 2.0 / M_PI; /* in m */
+    calcAnalyze();
+    m_parameters[Z0_PRM]       = z0_dest;
+    m_parameters[ANG_L_PRM]    = angl_dest;
+    m_parameters[PHYS_LEN_PRM] = C0 / m_parameters[FREQUENCY_PRM] / sqrt( er_eff * mur_eff )
+                                 * m_parameters[ANG_L_PRM] / 2.0 / M_PI; /* in m */
 }

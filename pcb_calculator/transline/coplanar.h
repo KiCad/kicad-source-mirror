@@ -25,39 +25,31 @@
 #ifndef __COPLANAR_H
 #define __COPLANAR_H
 
+#include <transline.h>
+
 class COPLANAR : public TRANSLINE
 {
-public: COPLANAR();
-
-private:
-    double h;                   // height of substrate
-    double t;                   // thickness of top metal
-    double w;                   // width of line
-    double s;                   // width of gap between line and ground
-    double len;                 // length of line
-    double Z0;                  // characteristic impedance
-    double er_eff;              // effective dielectric constant
-    double ang_l;               // Electrical length in angle
-    double atten_dielectric;    // Loss in dielectric (dB)
-    double atten_cond;          // Loss in conductors (dB)
+public:
+    COPLANAR();
 
 public:
-    void analyze() override;
-    void synthesize() override;
+    void calcSynthesize() override;
 
 protected:
     bool backMetal;
 
 private:
-    void calc();
-    void show_results();
-    void getProperties();
+    void calcAnalyze() override;
+    void showSynthesize() override;
+    void showAnalyze() override;
+    void show_results() override;
 };
 
 
 class GROUNDEDCOPLANAR : public COPLANAR
 {
-public: GROUNDEDCOPLANAR();
+public:
+    GROUNDEDCOPLANAR();
 };
 
-#endif      // __COPLANAR_H
+#endif // __COPLANAR_H

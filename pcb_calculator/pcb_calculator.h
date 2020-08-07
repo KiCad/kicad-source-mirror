@@ -21,15 +21,15 @@
  * @file pcb_calculator.h
  */
 
-#ifndef  PCB_CALCULATOR_H
-#define  PCB_CALCULATOR_H
+#ifndef PCB_CALCULATOR_H
+#define PCB_CALCULATOR_H
 
 #include <pcb_calculator_frame_base.h>
 
-#include <transline.h>          // Included for SUBST_PRMS_ID definition.
-#include <transline_ident.h>
 #include <attenuator_classes.h>
 #include <class_regulator_data.h>
+#include <transline.h> // Included for SUBST_PRMS_ID definition.
+#include <transline_ident.h>
 
 extern const wxString PcbCalcDataFileExt;
 
@@ -42,29 +42,28 @@ public:
     REGULATOR_LIST m_RegulatorList;      // the list of known regulator
 
 private:
-    bool m_RegulatorListChanged;        // set to true when m_RegulatorList
-                                        // was modified, and the corresponging file
-                                        // must be rewritten
+    bool m_RegulatorListChanged; // set to true when m_RegulatorList
+                                 // was modified, and the corresponging file
+                                 // must be rewritten
 
-    enum                                // Which dimension is controlling the track
-    {                                   // width / current calculations:
-        TW_MASTER_CURRENT,              // the maximum current,
-        TW_MASTER_EXT_WIDTH,            // the external trace width,
-        TW_MASTER_INT_WIDTH             // or the internal trace width?
+    enum                     // Which dimension is controlling the track
+    {                        // width / current calculations:
+        TW_MASTER_CURRENT,   // the maximum current,
+        TW_MASTER_EXT_WIDTH, // the external trace width,
+        TW_MASTER_INT_WIDTH  // or the internal trace width?
     } m_TWMode;
 
-    bool m_TWNested;                    // Used to stop events caused by setting the answers.
+    bool m_TWNested; // Used to stop events caused by setting the answers.
 
     enum TRANSLINE_TYPE_ID m_currTransLineType;
-    TRANSLINE * m_currTransLine;        // a pointer to the active transline
+    TRANSLINE*             m_currTransLine; // a pointer to the active transline
     // List of translines: ordered like in dialog menu list
-    std::vector <TRANSLINE_IDENT *> m_transline_list;
+    std::vector<TRANSLINE_IDENT*> m_transline_list;
 
-    ATTENUATOR * m_currAttenuator;
+    ATTENUATOR* m_currAttenuator;
     // List ofattenuators: ordered like in dialog menu list
-    std::vector <ATTENUATOR *> m_attenuator_list;
-    wxString m_lastSelectedRegulatorName;   // last regulator name selected
-
+    std::vector<ATTENUATOR*> m_attenuator_list;
+    wxString                 m_lastSelectedRegulatorName; // last regulator name selected
 
 
 public:
@@ -72,7 +71,6 @@ public:
     ~PCB_CALCULATOR_FRAME();
 
 private:
-
     // Event handlers
     void OnClosePcbCalc( wxCloseEvent& event ) override;
 
@@ -99,7 +97,7 @@ private:
      * force the standard extension of the file (.pcbcalc)
      * @param aFilename = the full filename, with or without extension
      */
-    void SetDataFilename( const wxString & aFilename);
+    void SetDataFilename( const wxString& aFilename );
 
     // Trace width / maximum current capability calculations.
 
@@ -154,23 +152,23 @@ private:
      * Function TWCalculateWidth
      * Calculate track width required based on given current and temperature rise.
      */
-    double TWCalculateWidth( double aCurrent, double aThickness, double aDeltaT_C,
-                    bool aUseInternalLayer );
+    double TWCalculateWidth(
+            double aCurrent, double aThickness, double aDeltaT_C, bool aUseInternalLayer );
 
     /**
      * Function TWCalculateCurrent
      * Calculate maximum current based on given width and temperature rise.
      */
-    double TWCalculateCurrent( double aWidth, double aThickness, double aDeltaT_C,
-                    bool aUseInternalLayer );
+    double TWCalculateCurrent(
+            double aWidth, double aThickness, double aDeltaT_C, bool aUseInternalLayer );
 
     /**
      * Function TWDisplayValues
      * Displays the results of a calculation (including resulting values such
      * as the resistance and power loss).
      */
-    void TWDisplayValues( double aCurrent, double aExtWidth, double aIntWidth,
-                    double aExtThickness, double aIntThickness );
+    void TWDisplayValues( double aCurrent, double aExtWidth, double aIntWidth, double aExtThickness,
+            double aIntThickness );
 
     /**
      * Function TWUpdateModeDisplay
@@ -226,8 +224,8 @@ private:
      * Displays the results of the calculation.
      */
     void VSDisplayValues( double aViaResistance, double aVoltageDrop, double aPowerLoss,
-                    double aEstimatedAmpacity, double aThermalResistance, double aCapacitance,
-                    double aTimeDegradation, double aInductance, double aReactance );
+            double aEstimatedAmpacity, double aThermalResistance, double aCapacitance,
+            double aTimeDegradation, double aInductance, double aReactance );
 
     // Electrical spacing panel:
     void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) override;
@@ -358,8 +356,14 @@ public:
      * @param aLineNumber = the line (0 to 5) wher to display the text
      * @param aText = the text to display
      */
-    void SetResult( int aLineNumber, const wxString & aText );
+    void SetResult( int aLineNumber, const wxString& aText );
 
+    /** Function SetPrgmBgColor
+     *  Set the background color of a parameter
+     *  @param aPrmId = param id to set
+     *  @param aCol = new color
+     */
+    void SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* aCol );
     /**
      * Function GetPrmValue
      * Returns a param value.
@@ -373,17 +377,20 @@ public:
      * @return true if the param aPrmId is selected
      * Has meaning only for params that have a radio button
      */
-    bool   IsPrmSelected( enum PRMS_ID aPrmId );
+    bool IsPrmSelected( enum PRMS_ID aPrmId );
 
     // Board classes panel:
     void OnBoardClassesUnitsSelection( wxCommandEvent& event ) override;
     void BoardClassesUpdateData( double aUnitScale );
 
     // Calculator doesn't host a tool framework
-    wxWindow* GetToolCanvas() const override { return nullptr; }
+    wxWindow* GetToolCanvas() const override
+    {
+        return nullptr;
+    }
 };
 
 
 extern const wxString DataFileNameExt;
 
-#endif  // PCB_CALCULATOR_H
+#endif // PCB_CALCULATOR_H

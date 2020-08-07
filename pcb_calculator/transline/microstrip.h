@@ -25,36 +25,35 @@
 #ifndef __MICROSTRIP_H
 #define __MICROSTRIP_H
 
+#include <transline.h>
+
 class MICROSTRIP : public TRANSLINE
 {
-public: MICROSTRIP();
+public:
+    MICROSTRIP();
 
     friend class C_MICROSTRIP;
 
 private:
-    double h;                   // height of substrate
-    double ht;                  // height to the top of box
-    double t;                   // thickness of top metal
-    double rough;               // Roughness of top metal
-    double mur;                 // magnetic permeability of substrate
-    double w;                   // width of line
-    double l;                   // length of line
-    double Z0_0;                // static characteristic impedance
-    double Z0;                  // characteristic impedance
-    double ang_l;               // Electrical length in angle
-    double er_eff_0;            // Static effective dielectric constant
-    double er_eff;              // Effective dielectric constant
-    double mur_eff;             // Effective mag. permeability
-    double w_eff;               // Effective width of line
-    double atten_dielectric;    // Loss in dielectric (dB)
-    double atten_cond;          // Loss in conductors (dB)
+    double h;                // height of substrate
+    double ht;               // height to the top of box
+    double t;                // thickness of top metal
+    double rough;            // Roughness of top metal
+    double mur;              // magnetic permeability of substrate
+    double w;                // width of line
+    double l;                // length of line
+    double Z0_0;             // static characteristic impedance
+    double Z0;               // characteristic impedance
+    double ang_l;            // Electrical length in angle
+    double er_eff_0;         // Static effective dielectric constant
+    double er_eff;           // Effective dielectric constant
+    double mur_eff;          // Effective mag. permeability
+    double w_eff;            // Effective width of line
+    double atten_dielectric; // Loss in dielectric (dB)
+    double atten_cond;       // Loss in conductors (dB)
 
     // private params
-    double Z0_h_1;      // homogeneous stripline impedance
-
-public:
-    void   analyze() override;
-    void   synthesize() override;
+    double Z0_h_1; // homogeneous stripline impedance
 
 private:
     double er_eff_freq();
@@ -81,12 +80,11 @@ private:
     void   attenuation();
     void   mur_eff_ms();
     void   line_angle();
-    void   calc();
-    void   get_microstrip_sub();
-    void   get_microstrip_comp();
-    void   get_microstrip_elec();
-    void   get_microstrip_phys();
-    void   show_results();
+    void   show_results() override;
+    void   showSynthesize() override;
+    void   showAnalyze() override;
+    void   calcAnalyze() override;
+    void   calcSynthesize() override;
 };
 
-#endif      // __MICROSTRIP_H
+#endif // __MICROSTRIP_H

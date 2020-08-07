@@ -17,8 +17,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <wx/wx.h>
 #include <wx/filename.h>
+#include <wx/settings.h>
+#include <wx/wx.h>
 
 #include <pcb_calculator_frame_base.h>
 
@@ -316,7 +317,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
         }
         wxASSERT ( data );
         data->name->SetToolTip( prm->m_ToolTip );
-        data->name->SetLabel( prm->m_Label );
+        data->name->SetLabel( prm->m_Label != "" ? prm->m_Label + ':' : "" );
         prm->m_ValueCtrl = data->value;
         if( prm->m_Id != DUMMY_PRM )
         {
@@ -436,6 +437,25 @@ void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
     // The new size must be taken in account
     m_panelTransline->GetSizer()->Layout();
     m_panelTransline->Refresh();
+    // Delete previous warnings / errors
+    wxColour background = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+
+    m_Value_EpsilonR->SetBackgroundColour( background );
+    m_Value_TanD->SetBackgroundColour( background );
+    m_Value_Rho->SetBackgroundColour( background );
+    m_Substrate_prm4_Value->SetBackgroundColour( background );
+    m_Substrate_prm5_Value->SetBackgroundColour( background );
+    m_Substrate_prm6_Value->SetBackgroundColour( background );
+    m_Substrate_prm7_Value->SetBackgroundColour( background );
+    m_Substrate_prm8_Value->SetBackgroundColour( background );
+    m_Substrate_prm9_Value->SetBackgroundColour( background );
+    m_Value_Frequency_Ctrl->SetBackgroundColour( background );
+    m_Phys_prm1_Value->SetBackgroundColour( background );
+    m_Phys_prm2_Value->SetBackgroundColour( background );
+    m_Phys_prm3_Value->SetBackgroundColour( background );
+    m_elec_prm1_label->SetBackgroundColour( background );
+    m_elec_prm2_label->SetBackgroundColour( background );
+    m_elec_prm3_label->SetBackgroundColour( background );
 }
 
 
