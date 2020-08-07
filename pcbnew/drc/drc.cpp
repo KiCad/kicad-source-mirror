@@ -1205,8 +1205,9 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
                 addMarkerToPcb( aCommit, marker );
-                continue;
             }
+
+            continue;
         }
 
         // if either pad has no drill and is only on technical layers, not a clearance violation
