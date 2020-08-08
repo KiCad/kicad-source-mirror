@@ -954,6 +954,15 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(tags %s)\n",
                       m_out->Quotew( aModule->GetKeywords() ).c_str() );
 
+    const std::map<wxString, wxString>& props = aModule->GetProperties();
+
+    for( const std::pair<const wxString, wxString>& prop : props )
+    {
+        m_out->Print( aNestLevel+1, "(property %s %s)\n",
+                      m_out->Quotew( prop.first ).c_str(),
+                      m_out->Quotew( prop.second ).c_str() );
+    }
+
     if( !( m_ctl & CTL_OMIT_PATH ) && !aModule->GetPath().empty() )
         m_out->Print( aNestLevel+1, "(path %s)\n",
                       m_out->Quotew( aModule->GetPath().AsString() ).c_str() );

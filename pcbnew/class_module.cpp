@@ -373,6 +373,11 @@ bool MODULE::ResolveTextVar( wxString* token, int aDepth ) const
         *token = GetLayerName();
         return true;
     }
+    else if( m_properties.count( *token ) )
+    {
+        *token = m_properties.at( *token );
+        return true;
+    }
 
     return false;
 }

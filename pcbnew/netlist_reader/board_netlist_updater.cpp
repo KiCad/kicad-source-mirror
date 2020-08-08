@@ -285,12 +285,25 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
                     aPcbComponent->GetReference(),
                     aPcbComponent->GetPath().AsString(),
                     aNewComponent->GetPath().AsString() );
-        m_reporter->Report( msg, RPT_SEVERITY_INFO );
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
         if( !m_isDryRun )
         {
             changed = true;
             aPcbComponent->SetPath( aNewComponent->GetPath() );
+        }
+    }
+
+    if( aPcbComponent->GetProperties() != aNewComponent->GetProperties() )
+    {
+        msg.Printf( _( "Update %s properties." ),
+                    aPcbComponent->GetReference() );
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+
+        if( !m_isDryRun )
+        {
+            changed = true;
+            aPcbComponent->SetProperties( aNewComponent->GetProperties() );
         }
     }
 

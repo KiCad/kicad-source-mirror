@@ -488,6 +488,9 @@ public:
     TEXTE_MODULE& Value() const { return *m_Value; }
     TEXTE_MODULE& Reference() const { return *m_Reference; }
 
+    const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
+    void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
+
     /**
      * Function FindPadByName
      * returns a D_PAD* with a matching name.  Note that names may not be
@@ -696,10 +699,9 @@ public:
 #endif
 
 private:
-    DRAWINGS        m_drawings;         // BOARD_ITEMs for drawings on the board, owned by pointer.
-    PADS            m_pads;             // D_PAD items, owned by pointer
+    DRAWINGS               m_drawings;  // BOARD_ITEMs for drawings on the board, owned by pointer.
+    PADS                   m_pads;      // D_PAD items, owned by pointer
     MODULE_ZONE_CONTAINERS m_fp_zones;  // MODULE_ZONE_CONTAINER items, owned by pointer
-    std::list<MODULE_3D_SETTINGS> m_3D_Drawings;  // Linked list of 3D models.
 
     double         m_Orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
     wxPoint        m_Pos;               // Position of module on the board in internal units.
@@ -727,13 +729,13 @@ private:
     int            m_CntRot90;          // Horizontal automatic placement cost ( 0..10 ).
     int            m_CntRot180;         // Vertical automatic placement cost ( 0..10 ).
 
-    wxArrayString* m_initial_comments;  ///< leading s-expression comments in the module,
-                                        ///< lazily allocated only if needed for speed
+    std::list<MODULE_3D_SETTINGS> m_3D_Drawings;  // Linked list of 3D models.
+    std::map<wxString, wxString>  m_properties;
+    wxArrayString*                m_initial_comments;  // s-expression comments in the module,
+                                                       // lazily allocated only if needed for speed
 
-    /// Used in DRC to test the courtyard area (a polygon which can be not basic
-    /// Note also a footprint can have courtyards on both board sides
-    SHAPE_POLY_SET m_poly_courtyard_front;
-    SHAPE_POLY_SET m_poly_courtyard_back;
+    SHAPE_POLY_SET m_poly_courtyard_front;  // Note that a module can have both front and back
+    SHAPE_POLY_SET m_poly_courtyard_back;   // courtyards populated.
 };
 
 #endif     // MODULE_H_

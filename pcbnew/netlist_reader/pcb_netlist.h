@@ -105,6 +105,9 @@ class COMPONENT
     /// The #MODULE loaded for #m_fpid.
     std::unique_ptr< MODULE > m_footprint;
 
+    /// Component-specific properties found in the netlist.
+    std::map<wxString, wxString> m_properties;
+
     static COMPONENT_NET    m_emptyNet;
 
 public:
@@ -142,8 +145,13 @@ public:
     const wxString& GetLibrary() const { return m_library; }
 
     const wxString& GetReference() const { return m_reference; }
-
     const wxString& GetValue() const { return m_value; }
+
+    void SetProperties( std::map<wxString, wxString>& aProps )
+    {
+        m_properties = std::move( aProps );
+    }
+    const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
 
     void SetFPID( const LIB_ID& aFPID ) { m_fpid = aFPID;  }
     const LIB_ID& GetFPID() const { return m_fpid; }

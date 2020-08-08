@@ -205,9 +205,9 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
     // Output is xml, so there is no reason to remove spaces from the field values.
     // And XML element names need not be translated to various languages.
 
-    for( unsigned i = 0; i < sheetList.size(); i++ )
+    for( unsigned ii = 0; ii < sheetList.size(); ii++ )
     {
-        SCH_SHEET_PATH sheet = sheetList[i];
+        SCH_SHEET_PATH sheet = sheetList[ii];
 
         auto cmp =
                 [sheet]( SCH_COMPONENT* a, SCH_COMPONENT* b )
@@ -218,10 +218,10 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
 
         std::set<SCH_COMPONENT*, decltype( cmp )> ordered_components( cmp );
 
-        for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : sheetList[ii].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            auto comp = static_cast<SCH_COMPONENT*>( item );
-            auto test = ordered_components.insert( comp );
+            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
+            auto           test = ordered_components.insert( comp );
 
             if( !test.second )
             {
@@ -233,7 +233,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
             }
         }
 
-        for( auto item : ordered_components )
+        for( EDA_ITEM* item : ordered_components )
         {
             SCH_COMPONENT* comp = findNextComponent( item, &sheet );
 
@@ -242,17 +242,16 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
                || ( ( aCtl & GNL_OPT_KICAD ) && !comp->GetIncludeOnBoard() ) )
                 continue;
 
-            XNODE* xcomp;  // current component being constructed
-
             // Output the component's elements in order of expected access frequency.
             // This may not always look best, but it will allow faster execution
             // under XSL processing systems which do sequential searching within
             // an element.
 
+            XNODE* xcomp;  // current component being constructed
             xcomps->AddChild( xcomp = node( "comp" ) );
-            xcomp->AddAttribute( "ref", comp->GetRef( &sheet ) );
 
-            addComponentFields( xcomp, comp, &sheetList[i] );
+            xcomp->AddAttribute( "ref", comp->GetRef( &sheet ) );
+            addComponentFields( xcomp, comp, &sheetList[ii] );
 
             XNODE*  xlibsource;
             xcomp->AddChild( xlibsource = node( "libsource" ) );
@@ -268,9 +267,20 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
 
             xlibsource->AddAttribute( "description", comp->GetDescription() );
 
-            XNODE* xsheetpath;
+            std::vector<SCH_FIELD>& fields = comp->GetFields();
 
+            for( size_t jj = MANDATORY_FIELDS; jj < fields.size(); ++jj )
+            {
+                XNODE* xproperty;
+                xcomp->AddChild( xproperty = node( "property" ) );
+
+                xproperty->AddAttribute( "name", fields[jj].GetName() );
+                xproperty->AddAttribute( "value", fields[jj].GetText() );
+            }
+
+            XNODE* xsheetpath;
             xcomp->AddChild( xsheetpath = node( "sheetpath" ) );
+
             xsheetpath->AddAttribute( "names", sheet.PathHumanReadable() );
             xsheetpath->AddAttribute( "tstamps", sheet.PathAsString() );
             xcomp->AddChild( node( "tstamp", comp->m_Uuid.AsString() ) );

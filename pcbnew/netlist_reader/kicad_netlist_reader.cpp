@@ -282,11 +282,12 @@ void KICAD_NETLIST_PARSER::parseComponent()
 {
    /* Parses a section like
      * (comp (ref P1)
-     * (value DB25FEMALE)
-     * (footprint DB25FC)
-     * (libsource (lib conn) (part DB25))
-     * (sheetpath (names /) (tstamps /))
-     * (tstamp 68183921-93a5-49ac-91b0-49d05a0e1647))
+     *   (value DB25FEMALE)
+     *   (footprint DB25FC)
+     *   (libsource (lib conn) (part DB25))
+     *   (property (name PINCOUNT) (value 25))
+     *   (sheetpath (names /) (tstamps /))
+     *   (tstamp 68183921-93a5-49ac-91b0-49d05a0e1647))
      *
      * other fields (unused) are skipped
      * A component need a reference, value, footprint name and a full time stamp
@@ -300,6 +301,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     wxString    name;
     KIID_PATH   path;
     KIID        uuid;
+    std::map<wxString, wxString> properties;
 
     // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok()) != T_RIGHT )
@@ -329,7 +331,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
 
         case T_libsource:
             // Read libsource
-            while( (token = NextTok()) != T_RIGHT )
+            while( ( token = NextTok() ) != T_RIGHT )
             {
                 if( token == T_LEFT )
                     token = NextTok();
@@ -356,6 +358,39 @@ void KICAD_NETLIST_PARSER::parseComponent()
                     Expecting( "part, lib or description" );
                 }
             }
+            break;
+
+        case T_property:
+        {
+            wxString propName;
+            wxString propValue;
+
+            while( (token = NextTok() ) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                if( token == T_name )
+                {
+                    NeedSYMBOLorNUMBER();
+                    propName = FROM_UTF8( CurText() );
+                    NeedRIGHT();
+                }
+                else if( token == T_value )
+                {
+                    NeedSYMBOLorNUMBER();
+                    propValue = FROM_UTF8( CurText() );
+                    NeedRIGHT();
+                }
+                else
+                {
+                    Expecting( "name or value" );
+                }
+            }
+
+            if( !propName.IsEmpty() )
+                properties[ propName ] = propValue;
+        }
             break;
 
         case T_sheetpath:
@@ -397,6 +432,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     COMPONENT* component = new COMPONENT( fpid, ref, value, path );
     component->SetName( name );
     component->SetLibrary( library );
+    component->SetProperties( properties );
     m_netlist->AddComponent( component );
 }
 

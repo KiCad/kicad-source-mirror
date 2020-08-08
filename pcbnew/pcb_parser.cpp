@@ -2454,6 +2454,8 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
     std::unique_ptr<MODULE> module( new MODULE( m_board ) );
 
+    std::map<wxString, wxString> properties;
+
     module->SetInitialComments( aInitialComments );
 
     token = NextTok();
@@ -2547,6 +2549,14 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         case T_tags:
             NeedSYMBOLorNUMBER(); // some symbols can be 0508, so a number is also a symbol here
             module->SetKeywords( FromUTF8() );
+            NeedRIGHT();
+            break;
+
+        case T_property:
+            NeedSYMBOL();
+            name = FromUTF8();
+            NeedSYMBOL();
+            properties[ name ] = FromUTF8();
             NeedRIGHT();
             break;
 
@@ -2717,6 +2727,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
     }
 
     module->SetFPID( fpid );
+    module->SetProperties( properties );
     module->CalculateBoundingBox();
 
     return module.release();

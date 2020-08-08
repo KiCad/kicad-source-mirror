@@ -48,6 +48,7 @@ void COMPONENT::SetModule( MODULE* aModule )
     aModule->SetValue( m_value );
     aModule->SetFPID( m_fpid );
     aModule->SetPath( m_path );
+    aModule->SetProperties( m_properties );
 }
 
 
@@ -56,10 +57,10 @@ COMPONENT_NET COMPONENT::m_emptyNet;
 
 const COMPONENT_NET& COMPONENT::GetNet( const wxString& aPinName ) const
 {
-    for( unsigned i = 0;  i < m_nets.size();  i++ )
+    for( const COMPONENT_NET& net : m_nets )
     {
-        if( m_nets[i].GetPinName() == aPinName )
-            return m_nets[i];
+        if( net.GetPinName() == aPinName )
+            return net;
     }
 
     return m_emptyNet;

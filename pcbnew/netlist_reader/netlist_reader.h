@@ -309,11 +309,12 @@ private:
      * Function parseComponent
      * parse a component description:
      * (comp (ref P1)
-     * (value DB25FEMELLE)
-     * (footprint DB25FC)
-     * (libsource (lib conn) (part DB25))
-     * (sheetpath (names /) (tstamps /))
-     * (tstamp 3256759C))
+     *   (value DB25FEMELLE)
+     *   (footprint DB25FC)
+     *   (libsource (lib conn) (part DB25))
+     *   (property (name PINCOUNT) (value 25))
+     *   (sheetpath (names /) (tstamps /))
+     *   (tstamp 3256759C))
      */
     void parseComponent();
 
@@ -321,9 +322,9 @@ private:
      * Function parseNet
      * Parses a section like
      * (net (code 20) (name /PC-A0)
-     *  (node (ref BUS1) (pin 62))
-     *  (node (ref U3) (pin 3))
-     *  (node (ref U9) (pin M6)))
+     *   (node (ref BUS1) (pin 62))
+     *   (node (ref U3) (pin 3))
+     *   (node (ref U9) (pin M6)))
      *
      * and set the corresponding pads netnames
      */
