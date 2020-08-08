@@ -43,8 +43,6 @@
 #include <drc/drc.h>
 #include <math_for_graphics.h>
 
-#define STRAIGHT 0      // To be remove after math_for_graphics code cleanup
-
 
 bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
                                    ZONE_CONTAINER* modified_area )
@@ -53,30 +51,11 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
     bool modified = NormalizeAreaPolygon( aModifiedZonesList, modified_area );
 
     // now see if we need to clip against other areas
-    /*
-    LAYER_NUM layer = modified_area->GetLayer();
-    */
-
-    bool bCheckAllAreas = TestAreaIntersections( modified_area );
-
-    if( bCheckAllAreas )
+    if( TestAreaIntersections( modified_area ) )
     {
         modified = true;
         CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNetCode(), true );
     }
-
-    /*
-
-    FIXME : do we really need this?
-
-    if( !IsCopperLayer( layer ) )       // Refill non copper zones on this layer
-    {
-        for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
-            if( m_ZoneDescriptorList[ia]->GetLayer() == layer )
-                m_ZoneDescriptorList[ia]->BuildFilledSolidAreasPolygons( this );
-    }
-
-    */
 
     // Test for bad areas: all zones must have more than 2 corners:
     // Note: should not happen, but just in case.

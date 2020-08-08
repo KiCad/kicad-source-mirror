@@ -76,8 +76,6 @@ enum class VIATYPE : int
 
 #define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
 
-#define MIN_VIA_DRAW_SIZE          4       /// Minimum size in pixel for full drawing
-
 // Used for tracks and vias for algorithmic safety, not to enforce constraints
 #define GEOMETRY_MIN_SIZE ( int )( 0.001 * IU_PER_MM )
 
@@ -337,8 +335,6 @@ public:
     EDA_ITEM* Clone() const override;
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
-
-protected:
 
 private:
     wxPoint     m_Mid;              ///< Arc mid point, halfway between start and end
