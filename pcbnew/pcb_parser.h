@@ -345,7 +345,9 @@ public:
     {
         init();
         m_board = aBoard;
-        m_resetKIIDs = true;
+
+        if( aBoard != nullptr )
+            m_resetKIIDs = true;
     }
 
     BOARD_ITEM* Parse();
