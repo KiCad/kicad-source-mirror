@@ -139,9 +139,9 @@ bool PGM_KICAD::OnPgmInit()
     {
         projToLoad = App().argv[1];
     }
-    else if( frame->GetFileHistory().GetCount() )
+    else if( frame->GetOpenProjects().size() ) // Check that there was a file open.
     {
-        wxString last_pro = frame->GetFileHistory().GetHistoryFile( 0 );
+        wxString last_pro = frame->PopOpenProjects();
 
         if( !wxFileExists( last_pro ) )
         {

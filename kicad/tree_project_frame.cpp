@@ -1240,6 +1240,12 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
 }
 
 
+void TREE_PROJECT_FRAME::EmptyTreePrj()
+{
+    m_TreeProject->DeleteAllItems();
+}
+
+
 void KICAD_MANAGER_FRAME::OnChangeWatchedPaths( wxCommandEvent& aEvent )
 {
     m_leftWin->FileWatcherReset();

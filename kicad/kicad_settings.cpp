@@ -29,6 +29,8 @@ const int kicadSchemaVersion = 0;
 KICAD_SETTINGS::KICAD_SETTINGS() : APP_SETTINGS_BASE( "kicad", kicadSchemaVersion )
 {
     m_params.emplace_back( new PARAM<int>( "appearance.left_frame_width", &m_LeftWinWidth, 200 ) );
+    m_params.emplace_back(
+            new PARAM_LIST<wxString>( "system.open_projects", &m_System.open_projects, {} ) );
 }
 
 

@@ -220,9 +220,53 @@ void KICAD_MANAGER_FRAME::SetProjectFileName( const wxString& aFullProjectProFil
 }
 
 
+std::vector<wxString> KICAD_MANAGER_FRAME::GetOpenProjects()
+{
+    KICAD_SETTINGS* conf = dynamic_cast<KICAD_SETTINGS*>( config() );
+
+    if( conf == NULL )
+    {
+        // Build an empty vector to return
+        std::vector<wxString> dummy;
+        return dummy;
+    }
+
+    return conf->m_System.open_projects;
+}
+
+
+wxString KICAD_MANAGER_FRAME::PopOpenProjects()
+{
+    KICAD_SETTINGS* conf = dynamic_cast<KICAD_SETTINGS*>( config() );
+
+    if( conf == NULL )
+    {
+        return wxString( "" );
+    }
+
+    std::vector<wxString>* vector = &( conf->m_System.open_projects );
+
+    if( vector->size() > 0 )
+    {
+        wxString value = vector->front();
+        vector->erase( vector->begin() );
+        return value;
+    }
+    else
+    {
+        return wxString( "" );
+    }
+}
+
+
 const wxString KICAD_MANAGER_FRAME::GetProjectFileName() const
 {
-    return  Prj().GetProjectFullName();
+    if( m_active_project )
+        return Prj().GetProjectFullName();
+    else
+    {
+        return wxString( "" );
+    }
 }
 
 
@@ -334,6 +378,51 @@ void KICAD_MANAGER_FRAME::OnExit( wxCommandEvent& event )
 }
 
 
+bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
+{
+
+    if( !Kiway().PlayersClose( false ) )
+        return false;
+
+    // Save the project file for the currently loaded project.
+    if( m_active_project )
+    {
+        // Remove the project from the list of active projects
+        std::vector<wxString>::iterator ptr;
+        std::vector<wxString>*          prjList;
+
+        prjList = &( config()->m_System.open_projects );
+
+        for( ptr = prjList->begin(); ptr < prjList->end(); ptr++ )
+        {
+            if( *ptr == Prj().GetProjectFullName() )
+            {
+                prjList->erase( ptr );
+                break;
+            }
+        }
+
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+        mgr.TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
+
+        if( aSave )
+        {
+            mgr.SaveProject();
+        }
+
+        m_active_project = false;
+        mgr.UnloadProject( &Prj() );
+    }
+
+    ClearMsg();
+
+    m_leftWin->EmptyTreePrj();
+
+    return true;
+}
+
+
 void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 {
     // The project file should be valid by the time we get here or something has gone wrong.
@@ -343,24 +432,16 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     // Any open KIFACE's must be closed if they are not part of the new project.
     // (We never want a KIWAY_PLAYER open on a KIWAY that isn't in the same project.)
     // User is prompted here to close those KIWAY_PLAYERs:
-    if( !Kiway().PlayersClose( false ) )
-        return;
-
-    // Save the project file for the currently loaded project.
-    if( m_active_project )
-    {
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
-        mgr.TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
-        mgr.SaveProject();
-        mgr.UnloadProject( &Prj() );
-    }
+    CloseProject( true );
 
     m_active_project = true;
-    ClearMsg();
 
     Pgm().GetSettingsManager().LoadProject( aProjectFileName.GetFullPath() );
     SetProjectFileName( Prj().GetProjectFullName() );
+
+    std::vector<wxString>::iterator ptr;
+    ptr = config()->m_System.open_projects.begin();
+    config()->m_System.open_projects.insert( ptr, Prj().GetProjectFullName() );
 
     if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?
@@ -571,4 +652,7 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
     PrintMsg( msg );
 }
 
-
+bool KICAD_MANAGER_FRAME::IsProjectActive()
+{
+    return m_active_project;
+}

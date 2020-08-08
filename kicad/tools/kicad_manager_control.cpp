@@ -313,6 +313,12 @@ int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+int KICAD_MANAGER_CONTROL::CloseProject( const TOOL_EVENT& aEvent )
+{
+    m_frame->CloseProject( true );
+    return 0;
+}
+
 
 class SAVE_AS_TRAVERSER : public wxDirTraverser
 {
@@ -706,7 +712,7 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 
     if( aEvent.Parameter<wxString*>() )
         params = *aEvent.Parameter<wxString*>();
-    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::viewGerbers ) )
+    else if( ( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::viewGerbers ) ) && m_frame->IsProjectActive() )
         params = m_frame->Prj().GetProjectPath();
 
     if( !params.empty() )
@@ -743,6 +749,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::NewProject,    KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::NewFromTemplate, KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::OpenProject,   KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::CloseProject,   KICAD_MANAGER_ACTIONS::closeProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::SaveProjectAs, ACTIONS::saveAs.MakeEvent() );
 
     Go( &KICAD_MANAGER_CONTROL::Refresh,       ACTIONS::zoomRedraw.MakeEvent() );

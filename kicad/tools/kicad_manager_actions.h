@@ -41,6 +41,7 @@ public:
     static TOOL_ACTION newProject;
     static TOOL_ACTION newFromTemplate;
     static TOOL_ACTION openProject;
+    static TOOL_ACTION closeProject;
 
     static TOOL_ACTION editSchematic;
     static TOOL_ACTION editSymbols;

@@ -100,6 +100,12 @@ public:
     void RecreateBaseHToolbar();
     void RecreateLauncher();
 
+    std::vector<wxString> GetOpenProjects();
+    /**
+     * Get element at index 0, and remove it.
+     */
+    wxString PopOpenProjects();
+
     wxString GetCurrentFileName() const override
     {
         return GetProjectFileName();
@@ -140,6 +146,11 @@ public:
      * @param aProjectFileName is the absolute path of the project file name.
      */
     void CreateNewProject( const wxFileName& aProjectFileName );
+
+    /**
+     * Closes the project, and saves it if aSave is true;
+     */
+    bool CloseProject( bool aSave );
     void LoadProject( const wxFileName& aProjectFileName );
 
 
@@ -163,6 +174,7 @@ public:
     void SetProjectFileName( const wxString& aFullProjectProFileName );
     const wxString GetProjectFileName() const;
 
+    bool IsProjectActive();
     // read only accessors
     const wxString SchFileName();
     const wxString SchLegacyFileName();

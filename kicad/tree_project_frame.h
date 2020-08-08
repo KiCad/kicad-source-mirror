@@ -74,6 +74,11 @@ public:
      */
     void FileWatcherReset();
 
+    /**
+     * Delete all @ref m_TreeProject entries
+     */
+    void EmptyTreePrj();
+
 protected:
     static wxString GetFileExt( TreeFileType type );
 

@@ -53,6 +53,12 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::openProject( "kicad.Control.openProject",
         _( "Open Project..." ), _( "Open an existing project" ),
         directory_xpm );
 
+TOOL_ACTION KICAD_MANAGER_ACTIONS::closeProject( "kicad.Control.closeProject",
+        AS_GLOBAL,
+        0, LEGACY_HK_NAME( "Close Project" ),
+        _( "Close Project" ), _( "Close the current project" ),
+        directory_xpm );
+
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( "kicad.Control.editSchematic",
         AS_GLOBAL,
         MD_CTRL + 'E', LEGACY_HK_NAME( "Run Eeschema" ),
