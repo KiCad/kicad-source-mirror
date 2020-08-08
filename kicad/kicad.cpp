@@ -138,10 +138,10 @@ bool PGM_KICAD::OnPgmInit()
     wxString projToLoad;
 
     if( App().argc > 1 )
-    {
         projToLoad = App().argv[1];
-    }
-    else if( settings->m_OpenProjects.size() ) // Check that there was a file open.
+
+    // If no file was given as an argument, check that there was a file open.
+    if( projToLoad.IsEmpty() && settings->m_OpenProjects.size() )
     {
         wxString last_pro = settings->m_OpenProjects.front();
         settings->m_OpenProjects.erase( settings->m_OpenProjects.begin() );
