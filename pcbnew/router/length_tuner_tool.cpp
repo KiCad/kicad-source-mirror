@@ -163,7 +163,7 @@ void LENGTH_TUNER_TOOL::performTuning()
 
     placer->UpdateSettings( m_savedMeanderSettings );
 
-    VECTOR2I end( m_startSnapPoint );
+    VECTOR2I end = getViewControls()->GetMousePosition();
 
     // Create an instance of PNS_TUNE_STATUS_POPUP.
     // DO NOT create it on the stack: otherwise on Windows, wxWidgets 3.1.3
