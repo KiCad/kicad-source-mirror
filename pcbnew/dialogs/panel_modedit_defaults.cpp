@@ -362,6 +362,8 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataFromWindow()
         m_brdSettings.m_DefaultFPTextItems.emplace_back( text, visible, layer );
     }
 
+    m_frame->GetDesignSettings() = m_brdSettings;
+
     if( FOOTPRINT_EDITOR_SETTINGS* cfg = m_frame->GetSettings() )
         cfg->m_DesignSettings = m_brdSettings;
 
