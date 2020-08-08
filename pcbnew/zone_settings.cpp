@@ -195,6 +195,9 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     LSET layers = aShowCopper ? LSET::AllCuMask( board->GetCopperLayerCount() )
                               : LSET::AllNonCuMask();
 
+    if( aFpEditorMode )
+        layers.set( In1_Cu );   // a proxy for "all inner layers"
+
     wxDataViewColumn* checkColumn = aList->AppendToggleColumn( wxEmptyString );
     wxDataViewColumn* layerColumn = aList->AppendIconTextColumn( wxEmptyString );
     wxDataViewColumn* layerIDColumn = aList->AppendTextColumn( wxEmptyString );
@@ -206,6 +209,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     {
         PCB_LAYER_ID layerID = *layer;
         wxString layerName = board->GetLayerName( layerID );
+
         if( aFpEditorMode && layerID == In1_Cu )
             layerName = _( "Inner layers" );
 

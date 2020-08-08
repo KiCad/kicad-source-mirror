@@ -1705,29 +1705,17 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     case PCB_ZONE_AREA_T:
     case PCB_MODULE_ZONE_AREA_T:
     {
+        const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( aItem );
+
         // Check to see if this keepout is part of a footprint
         // If it is, and we are not editing the footprint, it should not be selectable
-        const bool zoneInFootprint =
-                aItem->GetParent() != nullptr && aItem->GetParent()->Type() == PCB_MODULE_T;
+        bool zoneInFootprint = zone->GetParent() && zone->GetParent()->Type() == PCB_MODULE_T;
+
         if( zoneInFootprint && !m_editModules && !checkVisibilityOnly )
             return false;
 
         // zones can exist on multiple layers!
-        {
-            auto* zone       = static_cast<const ZONE_CONTAINER*>( aItem );
-            auto  zoneLayers = zone->GetLayerSet().Seq();
-
-            for( unsigned int i = 0; i < zoneLayers.size(); i++ )
-            {
-                if( board()->IsLayerVisible( zoneLayers[i] ) )
-                {
-                    return true;
-                }
-            }
-
-            // No active layers selected!
-            return false;
-        }
+        return ( zone->GetLayerSet() & board()->GetVisibleLayers() ).any();
     }
         break;
 
