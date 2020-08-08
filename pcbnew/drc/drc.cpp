@@ -1257,13 +1257,14 @@ const int UI_EPSILON = Mils2iu( 5 );
 
 wxPoint DRC::GetLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone )
 {
-    SHAPE_POLY_SET* conflictOutline;
+    SHAPE_POLY_SET* conflictOutline = nullptr;
 
     PCB_LAYER_ID l = aTrack->GetLayer();
 
     if( aConflictZone->IsFilled() && aConflictZone->HasFilledPolysForLayer( l ) )
         conflictOutline = const_cast<SHAPE_POLY_SET*>( &aConflictZone->GetFilledPolysList( l ) );
-    else
+
+    if( !conflictOutline || conflictOutline->IsEmpty() )
         conflictOutline = aConflictZone->Outline();
 
     wxPoint pt1 = aTrack->GetPosition();
