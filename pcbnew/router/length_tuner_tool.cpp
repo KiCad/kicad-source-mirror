@@ -180,7 +180,7 @@ void LENGTH_TUNER_TOOL::performTuning()
 
     placer->UpdateSettings( m_savedMeanderSettings );
 
-    VECTOR2I end( m_startSnapPoint );
+    VECTOR2I end = getViewControls()->GetMousePosition();
 
     // Create an instance of PNS_TUNE_STATUS_POPUP.
     PNS_TUNE_STATUS_POPUP statusPopup( frame() );
