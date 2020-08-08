@@ -231,11 +231,13 @@ public:
 
     /**
      * Function Clear
-     * destroys any contained NETCLASS instances except the Default one.
+     * destroys any contained NETCLASS instances except the Default one, and clears any
+     * members from the Default one.
      */
     void Clear()
     {
         m_NetClasses.clear();
+        m_default->Clear();
     }
 
     typedef NETCLASS_MAP::iterator iterator;

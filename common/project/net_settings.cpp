@@ -447,7 +447,7 @@ bool NET_SETTINGS::ParseBusGroup( wxString aGroup, wxString* aName,
 
 void NET_SETTINGS::ResolveNetClassAssignments( bool aRebuildFromScratch )
 {
-    std::map<wxString, wxString> baseList = m_NetClassAssignments;
+    std::map<wxString, wxString> baseList;
 
     if( aRebuildFromScratch )
     {
