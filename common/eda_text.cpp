@@ -617,7 +617,7 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
 }
 
 
-std::shared_ptr<SHAPE> EDA_TEXT::GetEffectiveShape( ) const
+std::shared_ptr<SHAPE> EDA_TEXT::GetEffectiveTextShape( ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape ( new SHAPE_COMPOUND );
     int penWidth = GetEffectiveTextPenWidth();
