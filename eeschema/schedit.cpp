@@ -1057,7 +1057,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
 
     case SCH_SHEET_T:
         {
-        bool doClearAnnotation;
+        bool doClearAnnotation = false;
         bool doRefresh = false;
         // Keep trace of existing sheet paths. EditSheet() can modify this list
         SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
