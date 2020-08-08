@@ -36,7 +36,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <wildcards_and_files_ext.h>
-#include <rc_item.h>
+#include <class_marker_pcb.h>
 #include <wx/wupdlock.h>
 #include <widgets/ui_common.h>
 #include <pcb_layer_widget.h>
@@ -332,15 +332,24 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     switch( GetPopupMenuSelectionFromUser( menu ) )
     {
     case 1:
-        node->m_RcItem->GetParent()->SetExcluded( false );
+    {
+        MARKER_PCB* marker = dynamic_cast<MARKER_PCB*>( node->m_RcItem->GetParent() );
+
+        marker->SetExcluded( false );
+        m_brdEditor->GetCanvas()->GetView()->Update( marker );
 
         // Update view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
         modified = true;
+    }
         break;
 
     case 2:
-        node->m_RcItem->GetParent()->SetExcluded( true );
+    {
+        MARKER_PCB* marker = dynamic_cast<MARKER_PCB*>( node->m_RcItem->GetParent() );
+
+        marker->SetExcluded( true );
+        m_brdEditor->GetCanvas()->GetView()->Update( marker );
 
         // Update view
         if( m_severities & RPT_SEVERITY_EXCLUSION )
@@ -349,10 +358,17 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
 
         modified = true;
+    }
         break;
 
     case 3:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
+
+        for( MARKER_PCB* marker : m_brdEditor->GetBoard()->Markers() )
+        {
+            if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
+                m_brdEditor->GetCanvas()->GetView()->Update( marker );
+        }
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
@@ -361,6 +377,12 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     case 4:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_WARNING;
+
+        for( MARKER_PCB* marker : m_brdEditor->GetBoard()->Markers() )
+        {
+            if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
+                m_brdEditor->GetCanvas()->GetView()->Update( marker );
+        }
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
@@ -372,13 +394,12 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
 
         std::vector<MARKER_PCB*>& markers = m_brdEditor->GetBoard()->Markers();
-        KIGFX::VIEW*              view = m_parentFrame->GetToolManager()->GetView();
 
         for( unsigned i = 0; i < markers.size(); )
         {
             if( markers[i]->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
             {
-                view->Remove( markers.at( i ) );
+                m_brdEditor->GetCanvas()->GetView()->Remove( markers.at( i ) );
                 markers.erase( markers.begin() + i );
             }
             else
@@ -399,6 +420,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     if( modified )
     {
         updateDisplayedCounts();
+        refreshBoardEditor();
         m_brdEditor->OnModify();
         m_brdEditor->SyncToolbars();
     }
