@@ -120,6 +120,8 @@ void SCH_DRAW_PANEL::DisplaySheet( const SCH_SCREEN *aScreen )
 
     if( aScreen )
         GetView()->DisplaySheet( const_cast<SCH_SCREEN*>( aScreen ) );
+    else
+        GetView()->Cleanup();
 }
 
 

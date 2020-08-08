@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <kiface_i.h>
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <pcb_layer_widget.h>
@@ -58,6 +59,10 @@ PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
         wxTextFile footprintInfoCache( Prj().GetProjectPath() + "fp-info-cache" );
         GFootprintList.WriteCacheToFile( &footprintInfoCache );
     }
+
+    // Close the project if we are standalone, so it gets cleaned up properly
+    if( Kiface().IsSingle() )
+        GetSettingsManager()->UnloadProject( &Prj() );
 
     GetCanvas()->GetView()->Clear();
 }

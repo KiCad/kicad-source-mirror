@@ -307,6 +307,10 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     SetScreen( NULL );
 
     delete m_schematic;
+
+    // Close the project if we are standalone, so it gets cleaned up properly
+    if( Kiface().IsSingle() )
+        GetSettingsManager()->UnloadProject( &Prj() );
 }
 
 
@@ -558,6 +562,9 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
     // all sub sheets are deleted, only the main sheet is usable
     GetCurrentSheet().clear();
+
+    // Clear view before destroying schematic as repaints depend on schematic being valid
+    SetScreen( nullptr );
 
     GetSettingsManager()->SaveProject();
     Schematic().SetTemplateFieldNames( nullptr );

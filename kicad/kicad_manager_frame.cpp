@@ -328,6 +328,9 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     {
         Event.SetCanVeto( true );
 
+        // Ensure the project is closed before destruction.
+        CloseProject( true );
+
         m_leftWin->Show( false );
 
         Destroy();

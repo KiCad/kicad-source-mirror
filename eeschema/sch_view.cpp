@@ -62,6 +62,13 @@ SCH_VIEW::~SCH_VIEW()
 {
 }
 
+void SCH_VIEW::Cleanup()
+{
+    Clear();
+    m_worksheet.reset();
+    m_preview.reset();
+}
+
 
 void SCH_VIEW::SetScale( double aScale, VECTOR2D aAnchor )
 {

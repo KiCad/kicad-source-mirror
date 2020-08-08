@@ -77,6 +77,8 @@ public:
     SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame );
     ~SCH_VIEW();
 
+    void Cleanup();
+
     void DisplaySheet( SCH_SHEET* aSheet );
     void DisplaySheet( SCH_SCREEN* aScreen );
     void DisplayComponent( LIB_PART* aPart );
