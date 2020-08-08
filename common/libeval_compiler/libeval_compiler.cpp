@@ -26,7 +26,6 @@
 #include <cstdarg>
 #endif
 
-#include <reporter.h>
 #include <libeval_compiler/libeval_compiler.h>
 
 /* The (generated) lemon parser is written in C.
@@ -49,27 +48,56 @@ namespace LIBEVAL
 #pragma GCC diagnostic pop
 #endif
 
-static void libeval_dbg( int level, const char* fmt, ... )
+
+#define libeval_dbg(level, fmt, ...) \
+    wxLogTrace( "libeval_compiler", fmt, __VA_ARGS__ )
+
+TREE_NODE* copyNode( TREE_NODE& t )
 {
-#ifdef DEBUG
-    if(level < -10) // fixme: tom's debugging.
+    auto t2          = new TREE_NODE();
+    t2->valid        = t.valid;
+    
+    if( t.value.wstr )
     {
-        va_list ap;
-        va_start( ap, fmt );
-        fprintf( stderr, "libeval: " );
-        vfprintf( stderr, fmt, ap );
-        va_end( ap );
+        t2->value.wstr = new wxString(*t.value.wstr);
     }
-#endif
+    else
+    {
+        t2->value.wstr = nullptr;
+    }
+    t2->value.type   = t.value.type;
+    t2->op           = t.op;
+    t2->leaf[0]      = t.leaf[0];
+    t2->leaf[1]      = t.leaf[1];
+    t2->isTerminal   = false;
+    t2->srcPos = t.srcPos;
+    t2->uop          = nullptr;
+    return t2;
 }
 
 
-static const std::string formatOpName( int op )
+TREE_NODE* newNode( int op, int type, const wxString& value )
+{
+    auto t2          = new TREE_NODE();
+    t2->valid        = true;
+    t2->value.wstr   = new wxString( value );
+    t2->op           = op;
+    t2->value.type   = type;
+    t2->leaf[0]      = nullptr;
+    t2->leaf[1]      = nullptr;
+    t2->isTerminal   = false;
+    t2->srcPos = -1;
+    t2->uop          = nullptr;
+    return t2;
+}
+
+
+static const wxString formatOpName( int op )
 {
     static const struct
     {
         int         op;
-        std::string mnemonic;
+        wxString mnemonic;
     }
     simpleOps[] =
     {
@@ -90,14 +118,14 @@ static const std::string formatOpName( int op )
 }
 
 
-std::string UOP::Format() const
+wxString UOP::Format() const
 {
-    char str[LIBEVAL_MAX_LITERAL_LENGTH];
+    wxString str;
 
     switch( m_op )
     {
     case TR_UOP_PUSH_VAR:
-        snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "PUSH VAR [%p]", m_arg );
+        str = wxString::Format( "PUSH VAR [%p]", m_arg );
         break;
 
     case TR_UOP_PUSH_VALUE:
@@ -105,24 +133,24 @@ std::string UOP::Format() const
         VALUE* val = reinterpret_cast<VALUE*>( m_arg );
 
         if( !val )
-            snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "PUSH nullptr" );
+            str = wxString::Format( "PUSH nullptr" );
         else if( val->GetType() == VT_NUMERIC )
-            snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "PUSH NUM [%.10f]", val->AsDouble() );
+            str = wxString::Format( "PUSH NUM [%.10f]", val->AsDouble() );
         else
-            snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "PUSH STR [%ls]", GetChars( val->AsString() ) );
+            str = wxString::Format( "PUSH STR [%ls]", GetChars( val->AsString() ) );
     }
         break;
 
     case TR_OP_METHOD_CALL:
-        snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "MCALL" );
+        str = wxString::Format( "MCALL" );
         break;
 
     case TR_OP_FUNC_CALL:
-        snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "FCALL" );
+        str = wxString::Format( "FCALL" );
         break;
 
     default:
-        snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "%s %d", formatOpName( m_op ).c_str(), m_op );
+        str = wxString::Format( "%s %d", formatOpName( m_op ).c_str(), m_op );
         break;
     }
 
@@ -137,9 +165,9 @@ UCODE::~UCODE()
 }
 
 
-std::string UCODE::Dump() const
+wxString UCODE::Dump() const
 {
-    std::string rv;
+    wxString rv;
 
     for( auto op : m_ucode )
     {
@@ -151,9 +179,9 @@ std::string UCODE::Dump() const
 };
 
 
-std::string TOKENIZER::GetChars( std::function<bool( int )> cond ) const
+wxString TOKENIZER::GetChars( std::function<bool( wxUniChar )> cond ) const
 {
-    std::string rv;
+    wxString rv;
     size_t      p = m_pos;
     //   printf("p %d len %d\n", p, str.length() );
 
@@ -166,9 +194,9 @@ std::string TOKENIZER::GetChars( std::function<bool( int )> cond ) const
     return rv;
 }
 
-bool TOKENIZER::MatchAhead( const std::string& match, std::function<bool( int )> stopCond ) const
+bool TOKENIZER::MatchAhead( const wxString& match, std::function<bool( wxUniChar )> stopCond ) const
 {
-    int remaining = m_str.length() - m_pos;
+    int remaining = m_str.Length() - m_pos;
 
     if( remaining < (int) match.length() )
         return false;
@@ -180,11 +208,8 @@ bool TOKENIZER::MatchAhead( const std::string& match, std::function<bool( int )>
 }
 
 
-COMPILER::COMPILER( REPORTER* aReporter, int aSourceLine, int aSourceOffset ) :
-        m_lexerState( COMPILER::LS_DEFAULT ),
-        m_reporter( aReporter ),
-        m_originLine( aSourceLine ),
-        m_originOffset( aSourceOffset )
+COMPILER::COMPILER() :
+    m_lexerState( COMPILER::LS_DEFAULT )
 {
     m_localeDecimalSeparator = '.';
     m_sourcePos = 0;
@@ -192,6 +217,7 @@ COMPILER::COMPILER( REPORTER* aReporter, int aSourceLine, int aSourceOffset ) :
     m_unitResolver = std::make_unique<UNIT_RESOLVER>();
     m_parser = LIBEVAL::ParseAlloc( malloc );
     m_tree = nullptr;
+    m_errorStatus.pendingError = false;
 }
 
 
@@ -222,7 +248,7 @@ void COMPILER::Clear()
 
 void COMPILER::parseError( const char* s )
 {
-    reportError( s );
+    reportError( CST_PARSE, s );
 }
 
 
@@ -232,7 +258,7 @@ void COMPILER::parseOk()
 }
 
 
-bool COMPILER::Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPreflightContext )
+bool COMPILER::Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflightContext )
 {
     // Feed parser token after token until end of input.
 
@@ -263,6 +289,9 @@ bool COMPILER::Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPref
         libeval_dbg(10, "parse: tok %d\n", tok.token );
         Parse( m_parser, tok.token, tok.value, this );
 
+        if ( m_errorStatus.pendingError )
+            return false;
+
         if( m_parseFinished || tok.token == G_ENDS )
         {
             // Reset parser by passing zero as token ID, value is ignored.
@@ -275,7 +304,7 @@ bool COMPILER::Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPref
 }
 
 
-void COMPILER::newString( const std::string& aString )
+void COMPILER::newString( const wxString& aString )
 {
     Clear();
 
@@ -309,11 +338,11 @@ COMPILER::T_TOKEN COMPILER::getToken()
 
 bool COMPILER::lexString( COMPILER::T_TOKEN& aToken )
 {
-    std::string str = m_tokenizer.GetChars( []( int c ) -> bool { return c != '\''; } );
+    wxString str = m_tokenizer.GetChars( []( int c ) -> bool { return c != '\''; } );
     //printf("STR LIT '%s'\n", (const char *)str.c_str() );
 
     aToken.token = G_STRING;
-    snprintf( aToken.value.value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", str.c_str() );
+    aToken.value.value.wstr = new wxString( str );
 
     m_tokenizer.NextChar( str.length() + 1 );
     m_lexerState = LS_DEFAULT;
@@ -325,7 +354,7 @@ int COMPILER::resolveUnits()
 {
     int unitId = 0;
 
-    for( const std::string& unitName : m_unitResolver->GetSupportedUnits() )
+    for( const wxString& unitName : m_unitResolver->GetSupportedUnits() )
     {
         if( m_tokenizer.MatchAhead( unitName, []( int c ) -> bool { return !isalnum( c ); } ) )
         {
@@ -344,7 +373,7 @@ int COMPILER::resolveUnits()
 bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
 {
     T_TOKEN     retval;
-    std::string current;
+    wxString current;
     int         convertFrom;
     wxString    msg;
 
@@ -358,7 +387,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
     }
 
     auto isDecimalSeparator =
-            [&]( char ch ) -> bool
+            [&]( wxUniChar ch ) -> bool
             {
                 return ( ch == m_localeDecimalSeparator || ch == '.' || ch == ',' );
             };
@@ -368,7 +397,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
             [&]()
             {
                 bool haveSeparator = false;
-                int ch             = m_tokenizer.GetChar();
+                wxUniChar ch             = m_tokenizer.GetChar();
 
                 do
                 {
@@ -419,7 +448,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         // VALUE
         extractNumber();
         retval.token = G_VALUE;
-        snprintf( retval.value.value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", current.c_str() );
+        retval.value.value.wstr = new wxString( current );
     }
     else if( ( convertFrom = resolveUnits() ) >= 0 )
     {
@@ -448,7 +477,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         //printf("id '%s'\n", (const char *) current.c_str() );
         //fflush( stdout );
         retval.token = G_IDENTIFIER;
-        snprintf( retval.value.value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", current.c_str() );
+        retval.value.value.wstr = new wxString( current );
         m_tokenizer.NextChar( current.length() );
     }
     else if( m_tokenizer.MatchAhead( "==", []( int c ) -> bool { return c != '='; } ) )
@@ -499,7 +528,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         case '.': retval.token = G_STRUCT_REF;   break;
 
         default:
-            reportError( wxString::Format( _( "Unrecognized character '%c'" ), (char) ch ) );
+            reportError( CST_PARSE, wxString::Format( _( "Unrecognized character '%c'" ), (char) ch ) );
             break;
         }
 
@@ -511,24 +540,17 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
 }
 
 
-const std::string formatNode( TREE_NODE* tok )
+const wxString formatNode( TREE_NODE* tok )
 {
-    //   printf("fmt tok %p v %p ", tok, tok->value.v );
-    //   fflush( stdout );
-
-    char str[LIBEVAL_MAX_LITERAL_LENGTH];
-    snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", (const char*) tok->value.str );
-    return str;
+    return *(tok->value.wstr);
 }
 
 
-void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
+void dumpNode( wxString& buf, TREE_NODE* tok, int depth = 0 )
 {
-    char str[LIBEVAL_MAX_LITERAL_LENGTH];
-    snprintf( str, LIBEVAL_MAX_LITERAL_LENGTH, "\n[%p L0:%-20p L1:%-20p] ",
-                                               tok,
-                                               tok->leaf[0],
-                                               tok->leaf[1] );
+    wxString str;
+
+    str.Printf( "\n[%p L0:%-20p L1:%-20p] ", tok, tok->leaf[0], tok->leaf[1] );
     buf += str;
 
     for( int i = 0; i < 2 * depth; i++ )
@@ -570,24 +592,39 @@ void dumpNode( std::string& buf, TREE_NODE* tok, int depth = 0 )
 
      case TR_OP_FUNC_CALL:
         buf += "CALL '";
-        buf += tok->leaf[0]->value.str;
+        buf += *tok->leaf[0]->value.wstr;
         buf += "': ";
         dumpNode( buf, tok->leaf[1], depth + 1 );
         break;
 
     case TR_UNIT:
-        sprintf( str, "UNIT: %d ", tok->value.type );
+        str.Printf( "UNIT: %d ", tok->value.type );
         buf += str;
         break;
     }
 }
 
 
-void COMPILER::reportError( const wxString& aErrorMsg, int aPos )
+void CONTEXT::ReportError( const wxString& aErrorMsg )
+{
+    m_errorStatus.pendingError = true;
+    m_errorStatus.message = aErrorMsg;
+    m_errorStatus.srcPos = -1;
+    m_errorStatus.stage = CST_RUNTIME;
+
+    if( m_errorCallback )
+        m_errorCallback( m_errorStatus );
+}
+
+
+void COMPILER::reportError( COMPILATION_STAGE stage, const wxString& aErrorMsg, int aPos )
 {
     if( aPos == -1 )
         aPos = m_sourcePos;
 
+// fixme: no HTML or anything UI-related here.
+
+#if 0
     wxString rest;
     wxString first = aErrorMsg.BeforeFirst( '|', &rest );
     wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
@@ -595,8 +632,15 @@ void COMPILER::reportError( const wxString& aErrorMsg, int aPos )
                                      m_originOffset + aPos,
                                      first,
                                      rest );
+#endif
 
-    m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+    m_errorStatus.pendingError = true;
+    m_errorStatus.stage = stage;
+    m_errorStatus.message = aErrorMsg;
+    m_errorStatus.srcPos = aPos;
+
+    if( m_errorCallback )
+        m_errorCallback( m_errorStatus );
 }
 
 
@@ -635,10 +679,10 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
     stack.push_back( m_tree );
 
-    std::string dump;
+    wxString dump;
 
     dumpNode( dump, m_tree, 0 );
-    libeval_dbg(3,"Tree dump:\n%s\n\n", dump.c_str() );
+    libeval_dbg(3,"Tree dump:\n%s\n\n", (const char*) dump.c_str() );
 
     while( !stack.empty() )
     {
@@ -662,21 +706,21 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             {
                 case TR_IDENTIFIER:
                 {
-                    char*    itemName = node->leaf[0]->value.str;
-                    char*    propName = node->leaf[1]->value.str;
+                    wxString itemName = *node->leaf[0]->value.wstr;
+                    wxString propName = *node->leaf[1]->value.wstr;
                     VAR_REF* vref = aCode->CreateVarRef( itemName, propName );
 
                     if( !vref )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        reportError( msg, node->leaf[0]->srcPos - (int) strlen( itemName ) );
+                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) strlen( itemName ) );
                         return false;
                     }
 
                     if( vref->GetType() == VT_PARSE_ERROR )
                     {
                         msg.Printf( _( "Unrecognized property '%s'" ), propName );
-                        reportError( msg, node->leaf[1]->srcPos - (int) strlen( propName ) );
+                        reportError( CST_CODEGEN, msg, node->leaf[1]->srcPos - (int) strlen( propName ) );
                         return false;
                     }
 
@@ -686,29 +730,38 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                 }
                 case TR_OP_FUNC_CALL:
                 {
-                    char*    itemName = node->leaf[0]->value.str;
+                    wxString    itemName = *node->leaf[0]->value.wstr;
                     VAR_REF* vref = aCode->CreateVarRef( itemName, "" );
 
                     if( !vref )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        reportError( msg, node->leaf[0]->srcPos - (int) strlen( itemName ) );
+                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) strlen( itemName ) );
                         return false;
                     }
 
-                    char* functionName = node->leaf[1]->leaf[0]->value.str;
+                    wxString functionName = *node->leaf[1]->leaf[0]->value.wstr;
                     auto  func = aCode->CreateFuncCall( functionName );
+
+                    libeval_dbg(10, "emit func call: %s\n", (const char*) functionName.c_str() );
 
                     if( !func )
                     {
                         msg.Printf( _( "Unrecognized function '%s'" ), functionName );
-                        reportError( msg, node->leaf[1]->leaf[0]->srcPos + 1 );
+                        reportError( CST_CODEGEN, msg, node->leaf[1]->leaf[0]->srcPos + 1 );
                         return false;
                     }
 
                     // Preflight the function call
+                    // fixme - this won't really work because of dynamic typing...
+
+                    #if 0
+                    wxString paramStr;
+                    if( node->value.wstr )
+                        paramStr = *node->value.wstr;
+
                     VALUE*  param = aPreflightContext->AllocValue();
-                    param->Set( node->value.str );
+                    param->Set( paramStr );
                     aPreflightContext->Push( param );
 
                     try
@@ -719,18 +772,21 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     catch( ... )
                     {
                     }
+                    #endif
 
                     /* SREF -> FUNC_CALL -> leaf0/1 */
                     node->leaf[1]->leaf[0]->leaf[0] = nullptr;
                     node->leaf[1]->leaf[0]->leaf[1] = nullptr;
 
-                    if( !aPreflightContext->GetError().IsEmpty() )
+                    #if 0
+                    if( aPreflightContext->IsErrorPending() )
                     {
-                        reportError( aPreflightContext->GetError(),
+                        reportError( CST_CODEGEN, aPreflightContext->GetError().message,
                                      node->leaf[1]->leaf[1]->srcPos
-                                            - (int) strlen( node->value.str ) - 1 );
+                                            - (int) paramStr.length() - 1 );
                         return false;
                     }
+                    #endif
 
                     visitedNodes.insert( node->leaf[0] );
                     visitedNodes.insert( node->leaf[1]->leaf[0] );
@@ -745,17 +801,20 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
         case TR_NUMBER:
         {
-            int        units = 1;
             TREE_NODE* son = node->leaf[0];
+            double value;
 
             if( son && son->op == TR_UNIT )
             {
                 //printf( "HandleUnit: %s unit %d\n", node->value.str, son->value.type );
-                units = son->value.type;
+                int units = son->value.type;
+                value =  m_unitResolver->Convert( *node->value.wstr, units );
                 visitedNodes.insert( son );
             }
-
-            double value = m_unitResolver->Convert( node->value.str, units );
+            else
+            {
+                value = wxAtof( *node->value.wstr );
+            }
 
             node->uop = makeUop( TR_UOP_PUSH_VALUE, value );
             node->isTerminal = true;
@@ -765,19 +824,19 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
         case TR_STRING:
         {
-            node->uop = makeUop( TR_UOP_PUSH_VALUE, node->value.str );
+            node->uop = makeUop( TR_UOP_PUSH_VALUE, *node->value.wstr );
             node->isTerminal = true;
             break;
         }
 
         case TR_IDENTIFIER:
         {
-            VAR_REF* vref = aCode->CreateVarRef( node->value.str, "" );
+            VAR_REF* vref = aCode->CreateVarRef( *node->value.wstr, "" );
 
             if( !vref )
             {
-                msg.Printf( _( "Unrecognized item '%s'" ), node->value.str );
-                reportError( msg, node->srcPos - (int) strlen( node->value.str  ) );
+                msg.Printf( _( "Unrecognized item '%s'" ), *node->value.wstr );
+                reportError( CST_CODEGEN, msg, node->srcPos - (int) strlen( *node->value.wstr  ) );
                 return false;
             }
 
@@ -811,7 +870,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
         stack.pop_back();
     }
 
-    libeval_dbg(2,"DUMp: \n%s\n", aCode->Dump().c_str() );
+    libeval_dbg(2,"dump: \n%s\n", aCode->Dump().c_str() );
 
     return true;
 }

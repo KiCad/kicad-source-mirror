@@ -56,6 +56,24 @@ namespace LIBEVAL
 
 class COMPILER;
 
+enum COMPILATION_STAGE
+{
+    CST_PARSE = 0,
+    CST_CODEGEN,
+    CST_RUNTIME
+};
+
+struct ERROR_STATUS
+{
+    bool pendingError = false;
+
+    
+    COMPILATION_STAGE    stage;
+    wxString message;             // Note: use wxString for GUI-related strings
+    int      srcPos;
+};
+
+
 enum VAR_TYPE_T
 {
     VT_STRING = 1,
@@ -82,7 +100,8 @@ struct TREE_NODE
 {
     struct value_s
     {
-        char str[LIBEVAL_MAX_LITERAL_LENGTH];
+        wxString *wstr;
+        //char str[LIBEVAL_MAX_LITERAL_LENGTH];
         int  type;
     } value;
 
@@ -94,38 +113,8 @@ struct TREE_NODE
     int        srcPos;
 };
 
-
-static inline TREE_NODE* copyNode( TREE_NODE& t )
-{
-    auto t2          = new TREE_NODE();
-    t2->valid        = t.valid;
-    snprintf( t2->value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", t.value.str );
-    t2->op           = t.op;
-    t2->value.type   = t.value.type;
-    t2->leaf[0]      = t.leaf[0];
-    t2->leaf[1]      = t.leaf[1];
-    t2->isTerminal   = false;
-    t2->srcPos = t.srcPos;
-    t2->uop          = nullptr;
-    return t2;
-}
-
-
-static inline TREE_NODE* newNode( int op, int type, const std::string& value )
-{
-    auto t2          = new TREE_NODE();
-    t2->valid        = true;
-    snprintf( t2->value.str, LIBEVAL_MAX_LITERAL_LENGTH, "%s", value.c_str() );
-    t2->op           = op;
-    t2->value.type   = type;
-    t2->leaf[0]      = nullptr;
-    t2->leaf[1]      = nullptr;
-    t2->isTerminal   = false;
-    t2->srcPos = -1;
-    t2->uop          = nullptr;
-    return t2;
-}
-
+TREE_NODE* copyNode( TREE_NODE& t );
+TREE_NODE* newNode( int op, int type, const wxString& value );
 
 class UNIT_RESOLVER
 {
@@ -138,14 +127,14 @@ public:
     {
     }
 
-    virtual const std::vector<std::string>& GetSupportedUnits() const
+    virtual const std::vector<wxString>& GetSupportedUnits() const
     {
-        static const std::vector<std::string> nullUnits;
+        static const std::vector<wxString> nullUnits;
 
         return nullUnits;
     }
 
-    virtual double Convert( const std::string& aString, int unitType ) const
+    virtual double Convert( const wxString& aString, int unitType ) const
     {
         return 0.0;
     };
@@ -269,15 +258,18 @@ public:
     int SP() const
     {
         return m_stack.size();
-    }
+    };
 
-    void ReportError( const wxString& aErrorMsg ) { m_errorMessage = aErrorMsg; }
-    const wxString& GetError() const { return m_errorMessage; }
+    void SetErrorCallback( std::function<void(const ERROR_STATUS&)> aCallback );
+    void ReportError( const wxString& aErrorMsg );
+    bool IsErrorPending() const { return m_errorStatus.pendingError; }
+    const ERROR_STATUS& GetError() const { return m_errorStatus; }
 
 private:
     std::vector<VALUE*> m_ownedValues;
     std::stack<VALUE*>  m_stack;
-    wxString            m_errorMessage;
+    ERROR_STATUS        m_errorStatus;
+    std::function<void(const ERROR_STATUS&)> m_errorCallback;
 };
 
 
@@ -294,14 +286,14 @@ public:
     }
 
     VALUE* Run( CONTEXT* ctx );
-    std::string Dump() const;
+    wxString Dump() const;
 
-    virtual VAR_REF* CreateVarRef( const char* var, const char* field )
+    virtual VAR_REF* CreateVarRef( const wxString& var, const wxString& field )
     {
         return nullptr;
     };
 
-    virtual FUNC_PTR CreateFuncCall( const char* name )
+    virtual FUNC_PTR CreateFuncCall( const wxString& name )
     {
         return nullptr;
     };
@@ -327,7 +319,7 @@ public:
 
     void Exec( CONTEXT* ctx );
 
-    std::string Format() const;
+    wxString Format() const;
 
 private:
     int             m_op;
@@ -338,7 +330,7 @@ private:
 class TOKENIZER
 {
 public:
-    void Restart( const std::string& aStr )
+    void Restart( const wxString& aStr )
     {
         m_str = aStr;
         m_pos = 0;
@@ -373,12 +365,12 @@ public:
         return m_pos;
     }
 
-    std::string GetChars( std::function<bool( int )> cond ) const;
+    wxString GetChars( std::function<bool( wxUniChar )> cond ) const;
 
-    bool MatchAhead( const std::string& match, std::function<bool( int )> stopCond ) const;
+    bool MatchAhead( const wxString& match, std::function<bool( wxUniChar )> stopCond ) const;
 
 private:
-    std::string m_str;
+    wxString m_str;
     size_t      m_pos;
 };
 
@@ -386,7 +378,7 @@ private:
 class COMPILER
 {
 public:
-    COMPILER( REPORTER* aReporter, int aSourceLine, int aSourceOffset );
+    COMPILER();
     virtual ~COMPILER();
 
     /*
@@ -404,7 +396,11 @@ public:
     void setRoot( LIBEVAL::TREE_NODE root );
     void freeTree( LIBEVAL::TREE_NODE *tree );
 
-    bool Compile( const std::string& aString, UCODE* aCode, CONTEXT* aPreflightContext );
+    bool Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflightContext );
+    
+    void SetErrorCallback( std::function<void(const ERROR_STATUS&)> aCallback );
+    bool IsErrorPending() const { return m_errorStatus.pendingError; }
+    const ERROR_STATUS& GetError() const { return m_errorStatus; }
 
 protected:
     enum LEXER_STATE
@@ -417,7 +413,7 @@ protected:
 
     bool generateUCode( UCODE* aCode, CONTEXT* aPreflightContext );
 
-    void reportError( const wxString& aErrorMsg, int aPos = -1 );
+    void reportError( COMPILATION_STAGE stage, const wxString& aErrorMsg, int aPos = -1 );
 
     /* Token type used by the tokenizer */
     struct T_TOKEN
@@ -427,7 +423,7 @@ protected:
     };
 
     /* Begin processing of a new input string */
-    void newString( const std::string& aString );
+    void newString( const wxString& aString );
 
     /* Tokenizer: Next token/value taken from input string. */
     T_TOKEN getToken();
@@ -471,11 +467,9 @@ protected:
     int          m_sourcePos;
     bool         m_parseFinished;
 
-    REPORTER*    m_reporter;
-    int          m_originLine;      // Location in the file of the start of the expression
-    int          m_originOffset;
-
     TREE_NODE*   m_tree;
+    ERROR_STATUS m_errorStatus;
+    std::function<void(const ERROR_STATUS&)> m_errorCallback;
 };
 
 

@@ -54,26 +54,26 @@ in ::= in stmt.
 /* A statement can be empty, an expr or an expr followed by ';' */
 stmt ::= G_ENDS.
 stmt ::= expr(A) G_ENDS.                          { pEval->setRoot(A); }
-//stmt ::= expr G_SEMCOL.                           { pEval->setRoot(NULL); }
+//stmt ::= expr G_SEMCOL.                         { pEval->setRoot(NULL); }
 
 expr(A) ::= G_VALUE(B).                           { A.op = TR_NUMBER; A.value = B.value; A.leaf[0] = A.leaf[1] = NULL; A.valid = true; A.srcPos = pEval->GetSourcePos(); }
 expr(A) ::= G_VALUE(B) G_UNIT(C).                 { A.op = TR_NUMBER; A.value = B.value; A.leaf[0] = newNode(TR_UNIT, C.value.type, ""); A.leaf[1] = NULL; A.valid = true; A.srcPos = pEval->GetSourcePos(); }
 expr(A) ::= G_STRING(B).                          { A.op = TR_STRING; A.value = B.value; A.leaf[0] = A.leaf[1] = NULL; A.valid = true; A.srcPos = pEval->GetSourcePos(); }
 expr(A) ::= G_IDENTIFIER(B).                      { A.op = TR_IDENTIFIER; A.value = B.value; A.leaf[0] = A.leaf[1] = NULL; A.valid = true; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_LESS_THAN expr(C).          { A.op = TR_OP_LESS; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_GREATER_THAN expr(C).       { A.op = TR_OP_GREATER; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_LESS_EQUAL_THAN expr(C).    { A.op = TR_OP_LESS_EQUAL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_GREATER_EQUAL_THAN expr(C). { A.op = TR_OP_GREATER_EQUAL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_NOT_EQUAL expr(C).          { A.op = TR_OP_NOT_EQUAL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_BOOL_AND expr(C).           { A.op = TR_OP_BOOL_AND; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_BOOL_OR expr(C).            { A.op = TR_OP_BOOL_OR; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_PLUS expr(C).               { A.op = TR_OP_ADD; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_MINUS expr(C).              { A.op = TR_OP_SUB; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_MULT expr(C).               { A.op = TR_OP_MUL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_DIVIDE expr(C).             { A.op = TR_OP_DIV; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= expr(B) G_EQUAL expr(C).              { A.op = TR_OP_EQUAL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_LESS_THAN expr(C).          { A.op = TR_OP_LESS; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_GREATER_THAN expr(C).       { A.op = TR_OP_GREATER; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_LESS_EQUAL_THAN expr(C).    { A.op = TR_OP_LESS_EQUAL; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_GREATER_EQUAL_THAN expr(C). { A.op = TR_OP_GREATER_EQUAL; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_NOT_EQUAL expr(C).          { A.op = TR_OP_NOT_EQUAL; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_BOOL_AND expr(C).           { A.op = TR_OP_BOOL_AND; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_BOOL_OR expr(C).            { A.op = TR_OP_BOOL_OR; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_PLUS expr(C).               { A.op = TR_OP_ADD; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_MINUS expr(C).              { A.op = TR_OP_SUB; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_MULT expr(C).               { A.op = TR_OP_MUL; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_DIVIDE expr(C).             { A.op = TR_OP_DIV; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_EQUAL expr(C).              { A.op = TR_OP_EQUAL; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid = B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
 
-expr(A) ::= expr(B) G_STRUCT_REF expr(C).         { A.op = TR_STRUCT_REF; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid=B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= expr(B) G_STRUCT_REF expr(C).         { A.op = TR_STRUCT_REF; A.value.wstr = NULL; A.leaf[0] = copyNode(B); A.leaf[1] = copyNode(C); A.valid=B.valid && C.valid; A.srcPos = pEval->GetSourcePos(); }
 
 expr(A) ::= G_PARENL expr(B) G_PARENR.            { A.op = B.op; A.value = B.value; A.valid=B.valid;  A.leaf[0] = B.leaf[0]; A.leaf[1] = B.leaf[1]; A.srcPos = pEval->GetSourcePos(); }
-expr(A) ::= G_IDENTIFIER(F) G_PARENL expr(B) G_PARENR.    { A.op = TR_OP_FUNC_CALL; A.leaf[0] = copyNode(F); A.leaf[1] = copyNode(B); A.valid = true; A.srcPos = pEval->GetSourcePos(); }
+expr(A) ::= G_IDENTIFIER(F) G_PARENL expr(B) G_PARENR.    { A.op = TR_OP_FUNC_CALL; A.value.wstr = NULL; A.leaf[0] = copyNode(F); A.leaf[1] = copyNode(B); A.valid = true; A.srcPos = pEval->GetSourcePos(); }
