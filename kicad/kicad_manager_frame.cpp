@@ -176,9 +176,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
 KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 {
-    KICAD_SETTINGS* settings = kicadSettings();
-    settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
-
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
@@ -327,6 +324,10 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     if( Kiway().PlayersClose( false ) )
     {
         Event.SetCanVeto( true );
+
+        // Save the list of open projects before closing the project
+        KICAD_SETTINGS* settings = kicadSettings();
+        settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
 
         // Ensure the project is closed before destruction.
         CloseProject( true );
