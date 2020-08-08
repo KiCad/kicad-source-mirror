@@ -245,6 +245,12 @@ void TEXTE_PCB::SwapData( BOARD_ITEM* aImage )
 }
 
 
+std::shared_ptr<SHAPE> TEXTE_PCB::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+{
+    return GetEffectiveTextShape();
+}
+
+
 static struct TEXTE_PCB_DESC
 {
     TEXTE_PCB_DESC()

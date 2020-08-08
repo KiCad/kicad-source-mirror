@@ -167,6 +167,10 @@ public:
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
                                                int aClearanceValue, int aError = ARC_HIGH_DEF,
                                                bool ignoreLineWidth = false ) const override;
+
+    // @copydoc BOARD_ITEM::GetEffectiveShape
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+
     /**
      * Function IsPointOnEnds
      * returns STARTPOINT if point if near (dist = min_dist) start point, ENDPOINT if

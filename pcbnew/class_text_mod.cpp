@@ -453,6 +453,12 @@ wxString TEXTE_MODULE::GetShownText( int aDepth ) const
 }
 
 
+std::shared_ptr<SHAPE> TEXTE_MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+{
+    return GetEffectiveTextShape();
+}
+
+
 static struct TEXTE_MODULE_DESC
 {
     TEXTE_MODULE_DESC()

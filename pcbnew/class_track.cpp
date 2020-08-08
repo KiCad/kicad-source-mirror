@@ -35,6 +35,9 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 
+#include <geometry/shape_segment.h>
+#include <geometry/shape_circle.h>
+#include <geometry/shape_arc.h>
 
 TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
@@ -1022,6 +1025,33 @@ bool TRACK::cmp_tracks::operator() ( const TRACK* a, const TRACK* b ) const
 
     return a->m_Uuid < b->m_Uuid;
 }
+
+
+std::shared_ptr<SHAPE> TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+{
+    std::shared_ptr<SHAPE_SEGMENT> shape( new SHAPE_SEGMENT( m_Start, m_End, m_Width ) );
+
+    return shape;
+}
+
+
+std::shared_ptr<SHAPE> VIA::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+{
+    // fixme: pad stack support (depending on aLayer )
+    std::shared_ptr<SHAPE_CIRCLE> shape( new SHAPE_CIRCLE( m_Start, m_Width / 2 ) );
+
+    return shape;
+}
+
+
+std::shared_ptr<SHAPE> ARC::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+{
+    std::shared_ptr<SHAPE_ARC> shape( new SHAPE_ARC( GetStart(), GetMid(), GetEnd(),
+                GetWidth() ) );
+
+    return shape;
+}
+
 
 
 #if defined(DEBUG)

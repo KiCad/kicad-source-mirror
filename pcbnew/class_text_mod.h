@@ -41,7 +41,7 @@ class EDA_RECT;
 class MODULE;
 class MSG_PANEL_ITEM;
 class PCB_BASE_FRAME;
-
+class SHAPE;
 
 #define UMBILICAL_COLOR   LIGHTBLUE
 
@@ -207,6 +207,9 @@ public:
     {
         return TextHitTest( aRect, aContained, aAccuracy );
     }
+
+    // @copydoc BOARD_ITEM::GetEffectiveShape
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
     wxString GetClass() const override
     {

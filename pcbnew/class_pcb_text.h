@@ -127,6 +127,9 @@ public:
     void TransformShapeWithClearanceToPolygonSet(
             SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue, int aError = ARC_HIGH_DEF ) const;
 
+    // @copydoc BOARD_ITEM::GetEffectiveShape
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
