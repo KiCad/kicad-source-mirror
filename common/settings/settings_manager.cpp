@@ -751,6 +751,17 @@ PROJECT* SETTINGS_MANAGER::GetProject( const wxString& aFullPath ) const
 }
 
 
+std::vector<wxString> SETTINGS_MANAGER::GetOpenProjects() const
+{
+    std::vector<wxString> ret;
+
+    for( const std::pair<const wxString, std::unique_ptr<PROJECT>>& pair : m_projects )
+        ret.emplace_back( pair.first );
+
+    return ret;
+}
+
+
 bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath )
 {
     wxString path = aFullPath;

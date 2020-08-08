@@ -176,6 +176,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
 KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 {
+    KICAD_SETTINGS* settings = kicadSettings();
+    settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
+
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
@@ -202,6 +205,14 @@ APP_SETTINGS_BASE* KICAD_MANAGER_FRAME::config() const
 }
 
 
+KICAD_SETTINGS* KICAD_MANAGER_FRAME::kicadSettings() const
+{
+    KICAD_SETTINGS* ret = dynamic_cast<KICAD_SETTINGS*>( config() );
+    wxASSERT( ret );
+    return ret;
+}
+
+
 void KICAD_MANAGER_FRAME::SetProjectFileName( const wxString& aFullProjectProFileName )
 {
     // ensure file name is absolute:
@@ -220,53 +231,9 @@ void KICAD_MANAGER_FRAME::SetProjectFileName( const wxString& aFullProjectProFil
 }
 
 
-std::vector<wxString> KICAD_MANAGER_FRAME::GetOpenProjects()
-{
-    KICAD_SETTINGS* conf = dynamic_cast<KICAD_SETTINGS*>( config() );
-
-    if( conf == NULL )
-    {
-        // Build an empty vector to return
-        std::vector<wxString> dummy;
-        return dummy;
-    }
-
-    return conf->m_System.open_projects;
-}
-
-
-wxString KICAD_MANAGER_FRAME::PopOpenProjects()
-{
-    KICAD_SETTINGS* conf = dynamic_cast<KICAD_SETTINGS*>( config() );
-
-    if( conf == NULL )
-    {
-        return wxString( "" );
-    }
-
-    std::vector<wxString>* vector = &( conf->m_System.open_projects );
-
-    if( vector->size() > 0 )
-    {
-        wxString value = vector->front();
-        vector->erase( vector->begin() );
-        return value;
-    }
-    else
-    {
-        return wxString( "" );
-    }
-}
-
-
 const wxString KICAD_MANAGER_FRAME::GetProjectFileName() const
 {
-    if( m_active_project )
-        return Prj().GetProjectFullName();
-    else
-    {
-        return wxString( "" );
-    }
+    return m_active_project ? Prj().GetProjectFullName() : wxString( wxEmptyString );
 }
 
 
@@ -387,21 +354,6 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
     // Save the project file for the currently loaded project.
     if( m_active_project )
     {
-        // Remove the project from the list of active projects
-        std::vector<wxString>::iterator ptr;
-        std::vector<wxString>*          prjList;
-
-        prjList = &( config()->m_System.open_projects );
-
-        for( ptr = prjList->begin(); ptr < prjList->end(); ptr++ )
-        {
-            if( *ptr == Prj().GetProjectFullName() )
-            {
-                prjList->erase( ptr );
-                break;
-            }
-        }
-
         SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
         mgr.TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
@@ -438,10 +390,6 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 
     Pgm().GetSettingsManager().LoadProject( aProjectFileName.GetFullPath() );
     SetProjectFileName( Prj().GetProjectFullName() );
-
-    std::vector<wxString>::iterator ptr;
-    ptr = config()->m_System.open_projects.begin();
-    config()->m_System.open_projects.insert( ptr, Prj().GetProjectFullName() );
 
     if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?

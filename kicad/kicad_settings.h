@@ -36,6 +36,8 @@ public:
 
     int m_LeftWinWidth;
 
+    std::vector<wxString> m_OpenProjects;
+
 protected:
 
     virtual std::string getLegacyFrameName() const override { return "KicadFrame"; }

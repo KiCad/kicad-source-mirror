@@ -133,15 +133,18 @@ bool PGM_KICAD::OnPgmInit()
 
     Kiway.SetTop( frame );
 
+    KICAD_SETTINGS* settings = static_cast<KICAD_SETTINGS*>( PgmSettings() );
+
     wxString projToLoad;
 
     if( App().argc > 1 )
     {
         projToLoad = App().argv[1];
     }
-    else if( frame->GetOpenProjects().size() ) // Check that there was a file open.
+    else if( settings->m_OpenProjects.size() ) // Check that there was a file open.
     {
-        wxString last_pro = frame->PopOpenProjects();
+        wxString last_pro = settings->m_OpenProjects.front();
+        settings->m_OpenProjects.erase( settings->m_OpenProjects.begin() );
 
         if( !wxFileExists( last_pro ) )
         {
@@ -159,6 +162,7 @@ bool PGM_KICAD::OnPgmInit()
     if( !projToLoad.empty() )
     {
         wxFileName fn( projToLoad );
+
         if( fn.Exists() )
         {
             fn.MakeAbsolute();

@@ -128,8 +128,6 @@ public:
     {
         bool                  first_run_shown;
         int                   max_undo_items;
-        std::vector<wxString> open_projects; // using a vector if in the future
-                                             // we want to open multiple projects at once.
         std::vector<wxString> file_history;
         int                   units;
     };

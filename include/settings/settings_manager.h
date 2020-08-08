@@ -214,6 +214,11 @@ public:
     PROJECT* GetProject( const wxString& aFullPath ) const;
 
     /**
+     * @return a list of open projects
+     */
+    std::vector<wxString> GetOpenProjects() const;
+
+    /**
      * Saves a loaded project.
      * @param aFullPath is the project name to save.  If empty, will save the first loaded project.
      * @return true if save was successful

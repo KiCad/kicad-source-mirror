@@ -100,12 +100,6 @@ public:
     void RecreateBaseHToolbar();
     void RecreateLauncher();
 
-    std::vector<wxString> GetOpenProjects();
-    /**
-     * Get element at index 0, and remove it.
-     */
-    wxString PopOpenProjects();
-
     wxString GetCurrentFileName() const override
     {
         return GetProjectFileName();
@@ -189,6 +183,8 @@ public:
 
 private:
     APP_SETTINGS_BASE* config() const override;
+
+    KICAD_SETTINGS* kicadSettings() const;
 
     const SEARCH_STACK& sys_search() override;
 
