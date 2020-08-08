@@ -139,10 +139,9 @@ bool PGM_KICAD::OnPgmInit()
     wxString projToLoad;
 
     if( App().argc > 1 )
-    {
         projToLoad = App().argv[1];
-    }
-    else if( GetFileHistory().GetCount() )
+
+    if( projToLoad.IsEmpty() && GetFileHistory().GetCount() )
     {
         wxString last_pro = GetFileHistory().GetHistoryFile( 0 );
 
