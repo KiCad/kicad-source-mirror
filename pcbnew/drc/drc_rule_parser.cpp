@@ -145,7 +145,8 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
             break;
 
         default:
-            msg.Printf( _( "Unrecognized item '%s'.| Expected 'rule' or 'version'." ), FromUTF8() );
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                        FromUTF8(), "'rule', 'version'" );
             reportError( msg );
             parseUnknown();
         }
@@ -216,9 +217,9 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
             break;
 
         default:
-            msg.Printf( _( "Unrecognized item '%s'.| Expected 'constraint', 'condition' or "
-                           "'disallow'." ),
-                        FromUTF8() );
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                           FromUTF8(),
+                           "'constraint', 'condition', 'disallow'" );
             reportError( msg );
             parseUnknown();
         }
@@ -240,8 +241,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
     if( (int) token == DSN_RIGHT )
     {
-        reportError( _( "Missing constraint type.|  Expected 'clearance', 'track_width', "
-                        "'annulus_width', 'hole' or 'disallow'." ) );
+        msg.Printf( _( "Missing constraint type.|  Expected %s." ),
+                        "'clearance', 'track_width', 'annulus_width', 'hole', 'disallow'" );
+        reportError( msg );
         return;
     }
 
@@ -253,9 +255,10 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_hole:          constraint.m_Type = DRC_RULE_ID_HOLE_SIZE; break;
     case T_disallow:      constraint.m_Type = DRC_RULE_ID_DISALLOW;  break;
     default:
-        msg.Printf( _( "Unrecognized item '%s'.| Expected 'clearance', 'track_width', "
-                       "'annulus_width', 'hole' or 'disallow'." ),
-                    FromUTF8() );
+        msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                    FromUTF8(),
+                    "'clearance', 'track_width', 'annulus_width', 'hole', 'disallow'."
+                   );
         reportError( msg );
     }
 
@@ -279,9 +282,11 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             case T_hole:       constraint.m_DisallowFlags |= DISALLOW_HOLES;      break;
             case T_footprint:  constraint.m_DisallowFlags |= DISALLOW_FOOTPRINTS; break;
             default:
-                msg.Printf( _( "Unrecognized item '%s'.|  Expected 'track', 'via', 'micro_via', "
-                               "'blind_via', 'pad', 'zone', 'text', 'graphic' or 'hole'." ),
-                            FromUTF8() );
+                msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                            FromUTF8(),
+                            "'track', 'via', 'micro_via', "
+                            "'blind_via', 'pad', 'zone', 'text', 'graphic', 'hole'."
+                            );
                 reportError( msg );
                 parseUnknown();
             }
@@ -360,8 +365,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             break;
 
         default:
-            msg.Printf( _( "Unrecognized item '%s'.| Expected 'min', 'max' or 'opt'." ),
-                        FromUTF8() );
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                        FromUTF8(), "'min', 'max', 'opt'" );
             reportError( msg );
             parseUnknown();
         }

@@ -5,7 +5,7 @@
  * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Brian Piccioni <brian@documenteddesigns.com>
  *
- * This program is free software; you can redistribute it and/or 
+ * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
@@ -87,7 +87,7 @@ wxString AnnotateString[] = {
 
 
 wxString ActionMessage[] = {
-    _( "" ),        //UpdateRefDes
+    "",             //UpdateRefDes
     _( "Empty" ),   //EmptyRefDes
     _( "Invalid" ), //InvalidRefDes
     _( "Excluded" ) //Exclude
@@ -144,7 +144,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 
     for( wxRadioButton* button : AnnotateWhat )
         button->SetValue( false );
-    
+
     m_AnnotationChoice = ( m_SortCode >= (int) AnnotateWhat.size() ) ?
                                  AnnotationChoice::AnnotateAll :
                                  m_AnnotationChoice;
@@ -171,7 +171,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
         wxString fullname = fn.GetFullPath();
         m_MessageWindow->SetFileName( fullname );
     }
-    
+
     m_MessageWindow->SetPrintInfo( false ); //Suppress the "Info: " prefix
 }
 
@@ -369,7 +369,7 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
     {
         if( sortbuttons->GetValue() )
             break;
-        
+
         m_SortCode++;
     }
 
@@ -405,7 +405,7 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
         else
             i++;
     }
-    
+
     m_AnnotationChoice = ( i >= (int) AnnotateWhat.size() ) ? AnnotationChoice::AnnotateAll : i;
 
     m_MessageWindow->SetLazyUpdate( true );
