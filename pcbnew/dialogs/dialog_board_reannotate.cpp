@@ -314,7 +314,7 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
 
     if( !m_AnnotateFront->GetValue() )
     {
-        bool frontPlusOne = ( 0 == atoi( m_BackRefDesStart->GetValue() ) )
+        bool frontPlusOne = ( 0 == wxAtoi( m_BackRefDesStart->GetValue() ) )
                             && !m_AnnotateBack->GetValue();
 
         aMessage += wxString::Format( _( "\nBack components will start at %s." ),
@@ -783,10 +783,10 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
 
     m_RefDesTypes.clear();
     m_ChangeArray.clear();
-    backstartrefdes = atoi( m_BackRefDesStart->GetValue() );
+    backstartrefdes = wxAtoi( m_BackRefDesStart->GetValue() );
 
     if( !m_FrontModules.empty() )
-        BuildChangeArray( m_FrontModules, atoi( m_FrontRefDesStart->GetValue() ),
+        BuildChangeArray( m_FrontModules, wxAtoi( m_FrontRefDesStart->GetValue() ),
                           m_FrontPrefix->GetValue(), m_RemoveFrontPrefix->GetValue(), aBadRefDes );
 
     if( !m_BackModules.empty() )
