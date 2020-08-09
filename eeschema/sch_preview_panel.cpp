@@ -57,6 +57,9 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
     m_view->SetScaleLimits( 20000.0, 0.002 );
     m_view->SetMirror( false, false );
 
+    ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
+    EnableScrolling( false, false );
+
     setDefaultLayerOrder();
     setDefaultLayerDeps();
 
