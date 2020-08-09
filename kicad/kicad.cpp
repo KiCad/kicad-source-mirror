@@ -146,11 +146,7 @@ bool PGM_KICAD::OnPgmInit()
         wxString last_pro = settings->m_OpenProjects.front();
         settings->m_OpenProjects.erase( settings->m_OpenProjects.begin() );
 
-        if( !wxFileExists( last_pro ) )
-        {
-            frame->GetFileHistory().RemoveFileFromHistory( 0 );
-        }
-        else
+        if( wxFileExists( last_pro ) )
         {
             // Try to open the last opened project,
             // if a project name is not given when starting Kicad
