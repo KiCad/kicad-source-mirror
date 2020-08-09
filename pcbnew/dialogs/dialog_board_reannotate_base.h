@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 21 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,10 +13,9 @@
 class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
-#include <wx/sizer.h>
-#include <wx/gdicmn.h>
 #include <wx/string.h>
 #include <wx/radiobut.h>
+#include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
@@ -24,6 +23,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
+#include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/stattext.h>
@@ -31,6 +31,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/valgen.h>
+#include <wx/gbsizer.h>
 #include <wx/notebook.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -80,15 +81,15 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_FrontRefDesStart;
 		wxStaticText* m_BottomRefDesStartText;
 		wxTextCtrl* m_BackRefDesStart;
+		wxCheckBox* m_RemoveFrontPrefix;
+		wxCheckBox* m_RemoveBackPrefix;
 		wxStaticText* m_FrontPrefixText;
 		wxTextCtrl* m_FrontPrefix;
 		wxStaticText* m_BackPrefixText;
 		wxTextCtrl* m_BackPrefix;
-		wxCheckBox* m_RemoveFrontPrefix;
-		wxCheckBox* m_RemoveBackPrefix;
+		wxCheckBox* m_ExcludeLocked;
 		wxStaticText* m_ExcludeListText;
 		wxTextCtrl* m_ExcludeList;
-		wxCheckBox* m_ExcludeLocked;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
