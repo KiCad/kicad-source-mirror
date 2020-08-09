@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -111,7 +111,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_Choice_Unit->SetSelection( 0 );
 	bLeftSizer->Add( m_Choice_Unit, 0, wxALL|wxEXPAND, 5 );
 
-	wxString m_Choice_Zeros_FormatChoices[] = { _("Decimal format (recommanded)"), _("Suppress leading zeros"), _("Suppress trailing zeros"), _("Keep zeros") };
+	wxString m_Choice_Zeros_FormatChoices[] = { _("Decimal format (recommended)"), _("Suppress leading zeros"), _("Suppress trailing zeros"), _("Keep zeros") };
 	int m_Choice_Zeros_FormatNChoices = sizeof( m_Choice_Zeros_FormatChoices ) / sizeof( wxString );
 	m_Choice_Zeros_Format = new wxRadioBox( this, wxID_ANY, _("Zeros Format"), wxDefaultPosition, wxDefaultSize, m_Choice_Zeros_FormatNChoices, m_Choice_Zeros_FormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_Choice_Zeros_Format->SetSelection( 0 );
