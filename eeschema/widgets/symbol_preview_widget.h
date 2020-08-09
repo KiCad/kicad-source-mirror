@@ -73,7 +73,9 @@ private:
     EDA_DRAW_PANEL_GAL*        m_preview;
 
     wxStaticText*              m_status;
+    wxPanel*                   m_statusPanel;
     wxSizer*                   m_statusSizer;
+    wxSizer*                   m_outerSizer;
 
     /** a local copy of the LIB_ALIAS or the LIB_PART to display on the canvas
      */
