@@ -742,6 +742,12 @@ PROJECT& SETTINGS_MANAGER::Prj() const
 }
 
 
+bool SETTINGS_MANAGER::IsProjectOpen() const
+{
+    return !m_projects.empty();
+}
+
+
 PROJECT* SETTINGS_MANAGER::GetProject( const wxString& aFullPath ) const
 {
     if( m_projects.count( aFullPath ) )

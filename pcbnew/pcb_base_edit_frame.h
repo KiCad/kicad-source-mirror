@@ -43,6 +43,8 @@ public:
 
     virtual ~PCB_BASE_EDIT_FRAME();
 
+    void OnCloseWindow( wxCloseEvent& aEvent ) override;
+
     /**
      * If a library name is given, creates a new footprint library in the project folder
      * with the given name. If no library name is given it prompts user for a library path,

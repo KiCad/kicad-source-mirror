@@ -52,19 +52,26 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     }
 }
 
+
 PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
 {
-    if( wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
+    GetCanvas()->GetView()->Clear();
+}
+
+
+void PCB_BASE_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
+{
+    SETTINGS_MANAGER* mgr = GetSettingsManager();
+
+    if( mgr->IsProjectOpen() && wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
     {
         wxTextFile footprintInfoCache( Prj().GetProjectPath() + "fp-info-cache" );
         GFootprintList.WriteCacheToFile( &footprintInfoCache );
     }
 
     // Close the project if we are standalone, so it gets cleaned up properly
-    if( Kiface().IsSingle() )
-        GetSettingsManager()->UnloadProject( &Prj() );
-
-    GetCanvas()->GetView()->Clear();
+    if( mgr->IsProjectOpen() && Kiface().IsSingle() )
+        mgr->UnloadProject( &Prj() );
 }
 
 

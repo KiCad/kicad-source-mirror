@@ -201,6 +201,13 @@ public:
     bool UnloadProject( PROJECT* aProject, bool aSave = true );
 
     /**
+     * Helper for checking if we have a project open
+     * TODO: This should be deprecated along with Prj() once we support multiple projects fully
+     * @return true if a call to Prj() will succeed
+     */
+    bool IsProjectOpen() const;
+
+    /**
      * A helper while we are not MDI-capable -- return the one and only project
      * @return the loaded project
      */

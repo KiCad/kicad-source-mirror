@@ -633,6 +633,8 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     // want any paint event
     Show( false );
 
+    PCB_BASE_EDIT_FRAME::OnCloseWindow( aEvent );
+
     // Close frame:
     aEvent.Skip();
 }
