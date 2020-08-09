@@ -65,6 +65,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
 
 #define CLR( x, y, z ) m_params.emplace_back( new COLOR_MAP_PARAM( x, y, z, &m_colors ) )
 
+    CLR( "schematic.aux_items",         LAYER_SCHEMATIC_AUX_ITEMS,  COLOR4D( BLACK ) );
     CLR( "schematic.background",        LAYER_SCHEMATIC_BACKGROUND, COLOR4D( WHITE ) );
     CLR( "schematic.brightened",        LAYER_BRIGHTENED,           COLOR4D( PUREMAGENTA ) );
     CLR( "schematic.bus",               LAYER_BUS,                  COLOR4D( BLUE ) );

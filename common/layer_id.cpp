@@ -105,6 +105,9 @@ wxString LayerName( int aLayer )
     case LAYER_ERC_ERR:
         return _( "ERC error" );
 
+    case LAYER_SCHEMATIC_AUX_ITEMS:
+        return _( "Helper items" );
+
     case LAYER_SCHEMATIC_GRID:
         return _( "Grid" );
 

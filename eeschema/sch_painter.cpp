@@ -96,6 +96,8 @@ void SCH_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 
     m_backgroundColor = aSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
+    m_layerColors[LAYER_AUX_ITEMS] = m_layerColors[LAYER_SCHEMATIC_AUX_ITEMS];
+
     m_OverrideItemColors = aSettings->GetOverrideSchItemColors();
 }
 
