@@ -25,6 +25,7 @@
 #include <functional>
 #include <memory>
 using namespace std::placeholders;
+#include <advanced_config.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -541,28 +542,251 @@ void POINT_EDITOR::updateItem() const
             }
             else
             {
+                const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition();
+                VECTOR2I        oldCenter = segment->GetCenter();
+                double newAngle;
+                bool   clockwise;
+
                 if( mid != segment->GetArcMid() )
                 {
+                    // This allows the user to go on the sides of the arc
+                    mid = cursorPos;
+                    // Find the new center
                     center = GetArcCenter( start, mid, end );
+
                     segment->SetCenter( wxPoint( center.x, center.y ) );
                     m_editPoints->Point( ARC_CENTER ).SetPosition( center );
+
+                    // Check if the new arc is CW or CCW
+                    VECTOR2D startLine = start - center;
+                    VECTOR2D endLine   = end - center;
+                    newAngle           = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+                    VECTOR2D v1, v2;
+                    v1           = start - mid;
+                    v2           = end - mid;
+                    double theta = RAD2DECIDEG( v1.Angle() );
+                    RotatePoint( &( v1.x ), &( v1.y ), theta );
+                    RotatePoint( &( v2.x ), &( v2.y ), theta );
+                    clockwise = ( ( v1.Angle() - v2.Angle() ) > 0 );
+
+                    // Normalize the angle
+                    if( clockwise && newAngle < 0.0 )
+                        newAngle += 3600.0;
+                    else if( !clockwise && newAngle > 0.0 )
+                        newAngle -= 3600.0;
+
+                    // Accuracy test
+                    // First, get the angle
+                    VECTOR2I endTest = start;
+                    RotatePoint( &( endTest.x ), &( endTest.y ), center.x, center.y, -newAngle );
+                    double distance  = ( endTest - end ).SquaredEuclideanNorm();
+
+                    if( distance > ADVANCED_CFG::GetCfg().m_drawArcAccuracy )
+                    {
+                        // Cancel Everything
+                        // If the accuracy is low, we can't draw precisely the arc.
+                        // It may happen when the radius is *high*
+                        segment->SetCenter( wxPoint( oldCenter.x, oldCenter.y ) );
+                    }
+                    else
+                    {
+                        segment->SetAngle( newAngle );
+                        segment->SetArcEnd( wxPoint( end.x, end.y ) );
+                    }
+
+                    // Now, update the edit point position
+                    // Express the point in a cercle-centered coordinate system.
+                    mid = cursorPos - center;
+
+                    double sqRadius = ( end - center ).SquaredEuclideanNorm();
+
+                    // Special case, because the tangent would lead to +/- infinity
+                    if( mid.x == 0 )
+                    {
+                        mid.y = mid.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
+                    }
+                    else
+                    {
+                        double tan = mid.y / static_cast<double>( mid.x );
+                        double tmp = mid.x;
+                        // Circle : x^2 + y^2 = R ^ 2
+                        // In this coordinate system, the angular position of the cursor is (r, theta)
+                        // The line coming from the center of the circle is y = start.y / start.x * x
+                        // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
+                        tmp = sqrt( sqRadius
+                                    / ( ( 1.0
+                                            + mid.y / static_cast<double>( mid.x ) * mid.y
+                                                      / static_cast<double>( mid.x ) ) ) );
+                        // Move to the correct quadrant
+                        tmp   = mid.x > 0 ? tmp : -tmp;
+                        mid.y = mid.y / static_cast<double>( mid.x ) * tmp;
+                        mid.x = tmp;
+                    }
+                    // Go back to the main coordinate system
+                    mid = mid + center;
+
+                    m_editPoints->Point( ARC_MID ).SetPosition( mid );
                 }
+                else if( ( start != segment->GetArcStart() ) || ( end != segment->GetArcEnd() ) )
+                {
 
-                segment->SetArcStart( wxPoint( start.x, start.y ) );
+                    VECTOR2D startLine = start - center;
+                    VECTOR2D endLine   = end - center;
+                    newAngle           = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
 
-                VECTOR2D startLine = start - center;
-                VECTOR2D endLine = end - center;
-                double newAngle = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+                    VECTOR2I *p1, *p2, *p3;
 
-                // Adjust the new angle to (counter)clockwise setting
-                bool clockwise = ( segment->GetAngle() > 0 );
+                    // p1 does not move, p2 does.
+                    bool movingStart;
+                    bool arcValid = true;
 
-                if( clockwise && newAngle < 0.0 )
-                    newAngle += 3600.0;
-                else if( !clockwise && newAngle > 0.0 )
-                    newAngle -= 3600.0;
+                    if( start != segment->GetArcStart() )
+                    {
+                        start       = cursorPos;
+                        p1          = &end;
+                        p2          = &start;
+                        p3          = &mid;
+                        movingStart = true;
+                    }
+                    else
+                    {
+                        end         = cursorPos;
+                        p1          = &start;
+                        p2          = &end;
+                        p3          = &mid;
+                        movingStart = false;
+                    }
 
-                segment->SetAngle( newAngle );
+                    VECTOR2D v1, v2, v3, v4;
+
+                    // Move the coordinate system
+                    v1 = *p1 - center;
+                    v2 = *p2 - center;
+                    v3 = *p3 - center;
+
+                    VECTOR2D u1, u2, u3;
+
+                    u1 = v1 / v1.EuclideanNorm();
+                    u2 = v3 - ( u1.x * v3.x + u1.y * v3.y ) * u1;
+                    u2 = u2 / u2.EuclideanNorm();
+
+                    // [ u1, u3 ] is a base centered on the circle with:
+                    //  u1 : unit vector toward the point that does not move
+                    //  u2 : unit vector toward the mid point.
+
+                    // Get vectors v1, and v2 in that coordinate system.
+
+                    double det  = u1.x * u2.y - u2.x * u1.y;
+                    double tmpx = v1.x * u2.y - v1.y * u2.x;
+                    double tmpy = -v1.x * u1.y + v1.y * u1.x;
+                    v1.x        = tmpx;
+                    v1.y        = tmpy;
+                    v1          = v1 / det;
+
+                    tmpx = v2.x * u2.y - v2.y * u2.x;
+                    tmpy = -v2.x * u1.y + v2.y * u1.x;
+                    v2.x = tmpx;
+                    v2.y = tmpy;
+                    v2   = v2 / det;
+
+                    double R               = v1.EuclideanNorm();
+                    bool   transformCircle = false;
+                    bool   invertY         = ( v2.y < 0 );
+
+                    /*                    p2
+                     *                     X***  
+                     *                         **  <---- This is the arc
+                     *            y ^            **
+                     *              |      R       *
+                     *              | <-----------> * 
+                     *       x------x------>--------x p1 
+                     *     C' <----> C      x
+                     *         delta
+                     * 
+                     * p1 does not move, and the tangent at p1 remains the same. 
+                     *  => The new center, C', will be on the C-p1 axis.
+                     * p2 moves
+                     * 
+                     * The radius of the new circle is delta + R
+                     * 
+                     * || C' p2 || = || C' P1 || 
+                     * is the same as :
+                     * ( delta + p2.x ) ^ 2 + p2.y ^ 2 = ( R + delta ) ^ 2
+                     * 
+                     * delta = ( R^2  - p2.x ^ 2 - p2.y ^2 ) / ( 2 * p2.x - 2 * R )
+                     * 
+                     * We can use this equation for any point p2 with p2.x < R 
+                     */
+
+                    if( v2.x == R )
+                    {
+                        // Straight line, do nothing
+                    }
+                    else
+                    {
+                        if( v2.x > R )
+                        {
+                            // If we need to invert the curvature.
+                            // We modify the input so we can use the same equation
+                            transformCircle = true;
+                            v2.x            = 2 * R - v2.x;
+                        }
+                        // We can keep the tangent constraint.
+                        double delta = ( R * R - v2.x * v2.x - v2.y * v2.y ) / ( 2 * v2.x - 2 * R );
+
+                        // This is just to limit the radius, so nothing overflows later when drawing.
+                        if( abs( v2.y / ( R - v2.x ) )
+                                > ADVANCED_CFG::GetCfg().m_drawArcCenterStartEndMaxAngle )
+                        {
+                            arcValid = false;
+                        }
+                        // v4 is the new center
+                        v4 = ( !transformCircle ) ? VECTOR2D( -delta, 0 ) :
+                                                    VECTOR2D( 2 * R + delta, 0 );
+
+                        clockwise = segment->GetAngle() > 0;
+
+                        if( transformCircle )
+                            clockwise = !clockwise;
+
+                        tmpx = v4.x * u1.x + v4.y * u2.x;
+                        tmpy = v4.x * u1.y + v4.y * u2.y;
+                        v4.x = tmpx;
+                        v4.y = tmpy;
+
+                        center = v4 + center;
+
+                        startLine = start - center;
+                        endLine   = end - center;
+                        newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+
+                        if( clockwise && newAngle < 0.0 )
+                            newAngle += 3600.0;
+                        else if( !clockwise && newAngle > 0.0 )
+                            newAngle -= 3600.0;
+
+                        if( arcValid )
+                        {
+                            segment->SetAngle( newAngle );
+                            segment->SetCenter( wxPoint( center.x, center.y ) );
+
+                            if( movingStart )
+                            {
+                                segment->SetArcStart( wxPoint( start.x, start.y ) );
+                                // Set angle computes the end point, so re-force it now.
+                                segment->SetArcEnd( wxPoint( end.x, end.y ) );
+                                m_editPoints->Point( ARC_START ).SetPosition( start );
+                            }
+                            else
+                            {
+                                segment->SetArcEnd( wxPoint( end.x, end.y ) );
+                                m_editPoints->Point( ARC_END ).SetPosition( end );
+                            }
+
+                            m_editPoints->Point( ARC_CENTER ).SetPosition( center );
+                        }
+                    }
+                }
             }
         }
             break;

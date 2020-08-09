@@ -91,6 +91,23 @@ static const wxChar ShowRouterDebugGraphics[] = wxT( "ShowRouterDebugGraphics" )
  */
 static const wxChar CompactFileSave[] = wxT( "CompactSave" );
 
+/**
+ * For drawsegments - arcs.
+ * Distance from an arc end point and the estimated end point,
+ * when rotating from the start point to the end point.
+ * 0 will not allow any approximate result, and the arc will not show.
+ * Squared value for performances, in system unit.
+ */
+static const wxChar DrawArcAccuracy[] = wxT( "DrawArcAccuracy" );
+
+/**
+ * For drawsegments - arcs.
+ * When drawing an arc, the angle ( center - start ) - ( start - end ),
+ * can be limited to avoid extremely high radii.
+ * The value is the tan( angle )
+ */
+static const wxChar DrawArcCenterStartEndMaxAngle[] = wxT( "DrawArcCenterStartEndMaxAngle" );
+
 } // namespace KEYS
 
 
@@ -168,9 +185,11 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
-    m_realTimeConnectivity    = true;
-    m_coroutineStackSize      = AC_STACK::default_stack;
-    m_ShowRouterDebugGraphics = false;
+    m_realTimeConnectivity          = true;
+    m_coroutineStackSize            = AC_STACK::default_stack;
+    m_ShowRouterDebugGraphics       = false;
+    m_drawArcAccuracy               = 10.0;
+    m_drawArcCenterStartEndMaxAngle = 50.0;
 
     loadFromConfigFile();
 }
@@ -219,6 +238,12 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::CompactFileSave,
                                                 &m_CompactSave, false ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE(
+            true, AC_KEYS::DrawArcAccuracy, &m_drawArcAccuracy, 10.0, 0.0, 100000.0 ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcCenterStartEndMaxAngle,
+            &m_drawArcCenterStartEndMaxAngle, 50.0, 0.0, 100000.0 ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

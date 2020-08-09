@@ -115,6 +115,10 @@ void DRAWSEGMENT::Move( const wxPoint& aMoveVector )
         m_Poly.Move( VECTOR2I( aMoveVector ) );
         break;
 
+    case S_ARC:
+        m_ThirdPoint += aMoveVector;
+        break;
+
     case S_CURVE:
         m_BezierC1 += aMoveVector;
         m_BezierC2 += aMoveVector;
@@ -352,11 +356,7 @@ wxPoint DRAWSEGMENT::GetArcEnd() const
     switch( m_Shape )
     {
     case S_ARC:
-        // rotate the starting point of the arc, given by m_End, through the
-        // angle m_Angle to get the ending point of the arc.
-        // m_Start is the arc centre
-        endPoint  = m_End;         // m_End = start point of arc
-        RotatePoint( &endPoint, m_Start, -m_Angle );
+        endPoint = m_ThirdPoint;
         break;
 
     default:
@@ -403,11 +403,29 @@ double DRAWSEGMENT::GetArcAngleStart() const
     return angleStart;
 }
 
+double DRAWSEGMENT::GetArcAngleEnd() const
+{
+    // due to the Y axis orient atan2 needs - y value
+    double angleStart = ArcTangente( GetArcEnd().y - GetCenter().y,
+                                     GetArcEnd().x - GetCenter().x );
+
+    // Normalize it to 0 ... 360 deg, to avoid discontinuity for angles near 180 deg
+    // because 180 deg and -180 are very near angles when ampping betewwen -180 ... 180 deg.
+    // and this is not easy to handle in calculations
+    NORMALIZE_ANGLE_POS( angleStart );
+
+    return angleStart;
+}
+
 
 void DRAWSEGMENT::SetAngle( double aAngle )
 {
+    // Mark as depreciated.
+    // m_Angle does not define the arc anymore
     // m_Angle must be >= -360 and <= +360 degrees
     m_Angle = NormalizeAngle360Max( aAngle );
+    m_ThirdPoint = m_End;
+    RotatePoint( &m_ThirdPoint, m_Start, -m_Angle );
 }
 
 

@@ -69,6 +69,20 @@ public:
     static const ADVANCED_CFG& GetCfg();
 
     /**
+     * For drawsegments - arcs.
+     * Distance from an arc end point and the estimated end point,
+     * when rotating from the start point to the end point.
+     */
+    double m_drawArcAccuracy;
+
+    /**
+     * For drawsegments - arcs.
+     * When drawing an arc, the angle ( center - start ) - ( start - end ) 
+     * can be limited to avoid extremely high radii.
+     */
+    double m_drawArcCenterStartEndMaxAngle;
+
+    /**
      * Extra fill clearance for zone fills
      */
     double m_extraClearance;

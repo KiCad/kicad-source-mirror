@@ -51,6 +51,7 @@ protected:
     int         m_Width;        ///< thickness of lines ...
     wxPoint     m_Start;        ///< Line start point or Circle and Arc center
     wxPoint     m_End;          ///< Line end point or circle and arc start point
+    wxPoint     m_ThirdPoint;   ///< Used only for Arcs: arc end point
 
     STROKE_T    m_Shape;        ///< Shape: line, Circle, Arc
     int         m_Type;         ///< Used in complex associations ( Dimensions.. )
@@ -148,6 +149,17 @@ public:
     void SetEndY( int y )                   { m_End.y = y; }
     void SetEndX( int x )                   { m_End.x = x; }
 
+    /**
+     * Function GetThirdPoint
+     * returns the third point point of the graphic
+     */
+    const wxPoint& GetThirdPoint() const           { return m_ThirdPoint; }
+    int GetThirdPointY()                           { return m_ThirdPoint.y; }
+    int GetThirdPointX()                           { return m_ThirdPoint.x; }
+    void SetThirdPoint( const wxPoint& aPoint )    { m_ThirdPoint = aPoint; }
+    void SetThirdPointY( int y )                   { m_ThirdPoint.y = y; }
+    void SetThirdPointX( int x )                   { m_ThirdPoint.x = x; }
+
     // Some attributes are read only, since they are "calculated" from
     // m_Start, m_End, and m_Angle.
     // No Set...() function for these attributes.
@@ -163,6 +175,12 @@ public:
      * @return the angle of the starting point of this arc, between 0 and 3600 in 0.1 deg
      */
     double GetArcAngleStart() const;
+
+    /**
+     * function GetArcAngleEnd()
+     * @return the angle of the ending point of this arc, between 0 and 3600 in 0.1 deg
+     */
+    double GetArcAngleEnd() const;
 
     /**
      * Function GetRadius
@@ -183,6 +201,13 @@ public:
      */
     void SetArcStart( const wxPoint& aArcStartPoint )
     { m_End = aArcStartPoint; }
+
+    /**
+     * Initialize the start arc point. can be used for circles
+     * to initialize one point of the cicumference
+     */
+    void SetArcEnd( const wxPoint& aArcEndPoint )
+    { m_ThirdPoint = aArcEndPoint; }
 
     /** For arcs and circles:
      */

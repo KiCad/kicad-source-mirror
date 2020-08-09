@@ -1258,6 +1258,9 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
     aArc.SetArcStart( { vec.x, vec.y } );
 
     aArc.SetAngle( RAD2DECIDEG( -aMgr.GetSubtended() ) );
+
+    vec = aMgr.GetEndRadiusEnd();
+    aArc.SetArcEnd( { vec.x, vec.y } );
 }
 
 
