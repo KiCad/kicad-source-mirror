@@ -1059,7 +1059,7 @@ bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
 }
 
 
-bool PCB_EDIT_FRAME::TestStandalone( void )
+bool PCB_EDIT_FRAME::TestStandalone()
 {
     if( Kiface().IsSingle() )
         return false;
@@ -1071,7 +1071,7 @@ bool PCB_EDIT_FRAME::TestStandalone( void )
     if( !frame->IsShown() )
     {
         wxFileName fn( Prj().GetProjectPath(), Prj().GetProjectName(),
-                KiCadSchematicFileExtension );
+                       KiCadSchematicFileExtension );
 
         // Maybe the file hasn't been converted to the new s-expression file format so
         // see if the legacy schematic file is still in play.
@@ -1093,7 +1093,9 @@ bool PCB_EDIT_FRAME::TestStandalone( void )
         frame->Show( true );
 
         // bring ourselves back to the front
+        Raise();
     }
+
     return true;            //Success!
 }
 

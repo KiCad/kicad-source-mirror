@@ -857,21 +857,18 @@ public:
     bool FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode );
 
     /**
-     * Function ReannotateSchematic
+     * Sends a command to Eeschema to re-annotate the schematic
      * @param aNetlist a NETLIST filled in by the caller.
      *        aMessage is the error message from eeSchem
      *        if aCommit is false it just test, if true it updates the schematic
      * @return false if failed due to standalone mode, true if a reply.
-      */
-
-    /// Sends a Netlist packet to eeSchema.
-    /// @return true if success
+     */
     bool ReannotateSchematic( std::string& aNetlist );
 
-
-    /// Test if standalone mode.
-    /// @ return false if not in standalone.
-    /// @return true if in standalone, opens eeSchema, and opens the schematic for this project
+    /**
+     * Test if standalone mode.
+     * @return true if in standalone, opens eeSchema, and opens the schematic for this project
+     */
     bool TestStandalone( void );
 
     /**

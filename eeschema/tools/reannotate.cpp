@@ -39,8 +39,7 @@ WX_STRING_REPORTER_FILTERED::~WX_STRING_REPORTER_FILTERED()
 }
 
 
-REPORTER& WX_STRING_REPORTER_FILTERED::Report( const wxString &aText,
-        SEVERITY aSeverity )
+REPORTER& WX_STRING_REPORTER_FILTERED::Report( const wxString &aText, SEVERITY aSeverity )
 {
     if ( aSeverity < m_MinSeverity )
         return *this;
@@ -71,7 +70,7 @@ void ReannotateFromPCBNew( SCH_EDIT_FRAME* aFrame, std::string& aNetlist )
                             false,       //aIgnoreOtherProjects
                             false );     //aDryRun
 
-    if ( !backAnno.BackAnnotateSymbols( aNetlist ) )
+    if( !backAnno.BackAnnotateSymbols( aNetlist ) )
     {
         aNetlist = _( "Errors reported by Eeschema:\n" )
                         + reporter.m_string.ToStdString();     //Assume the worst

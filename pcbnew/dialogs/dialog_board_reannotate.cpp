@@ -95,7 +95,8 @@ wxString ActionMessage[] = {
 
 
 DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
-        : DIALOG_BOARD_REANNOTATE_BASE( aParentFrame ), m_modules( aParentFrame->GetBoard()->Modules() )
+        : DIALOG_BOARD_REANNOTATE_BASE( aParentFrame ),
+        m_modules( aParentFrame->GetBoard()->Modules() )
 {
     m_Config = Kiface().KifaceSettings();
     InitValues();
@@ -120,9 +121,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     m_Settings = aParentFrame->config();
     wxArrayString gridslist;
     GRID_MENU::BuildChoiceList( &gridslist, m_Settings,
-            aParentFrame->GetUserUnits() != EDA_UNITS::INCHES );
-
-
+                                aParentFrame->GetUserUnits() != EDA_UNITS::INCHES );
 
     if( -1 == m_GridIndex ) //If no default loaded
         m_GridIndex = m_Settings->m_Window.grid.last_size_idx;        //Get the current grid size
@@ -148,7 +147,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     
     m_AnnotationChoice = ( m_SortCode >= (int) AnnotateWhat.size() ) ?
                                  AnnotationChoice::AnnotateAll :
-                                     m_AnnotationChoice;
+                                 m_AnnotationChoice;
 
     AnnotateWhat[m_AnnotationChoice]->SetValue( true );
 
@@ -267,15 +266,13 @@ void DIALOG_BOARD_REANNOTATE::FilterBackPrefix( wxCommandEvent& event )
 }
 
 
-//
-///  Warn the user about the settings and try to reannotate the board
 void DIALOG_BOARD_REANNOTATE::OnApplyClick( wxCommandEvent& event )
 {
     wxString warning;
 
     if( m_frame->GetBoard()->IsEmpty() )
     {
-        ShowReport( _( "No Board to reannotate!" ), RPT_SEVERITY_ERROR );
+        ShowReport( _( "No PCB to reannotate!" ), RPT_SEVERITY_ERROR );
         return;
     }
 
@@ -301,32 +298,35 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
 {
     wxString tmp;
 
-    aMessage.Printf( "\n%s components will be reannotated. ",
+    aMessage.Printf( _( "\n%s components will be reannotated. " ),
                     _( AnnotateString[m_AnnotationChoice] ) );
 
     if( !m_ExcludeList->GetValue().empty() )
-        aMessage += wxString::Format(
-                ( "\nAny reference types %s will not be annotated." ), m_ExcludeList->GetValue() );
+        aMessage += wxString::Format( _( "\nAny reference types %s will not be annotated." ),
+                                      m_ExcludeList->GetValue() );
 
     if( m_ExcludeLocked->GetValue() )
         aMessage += wxString::Format( _( "\nLocked footprints will not be annotated" ) );
 
     if( !m_AnnotateBack->GetValue() )
-        aMessage += wxString::Format(
-                _( "\nFront components will start at %s" ), m_FrontRefDesStart->GetValue() );
+        aMessage += wxString::Format( _( "\nFront components will start at %s" ),
+                                      m_FrontRefDesStart->GetValue() );
 
     if( !m_AnnotateFront->GetValue() )
+    {
+        bool frontPlusOne = ( 0 == atoi( m_BackRefDesStart->GetValue() ) )
+                            && !m_AnnotateBack->GetValue();
+
         aMessage += wxString::Format( _( "\nBack components will start at %s." ),
-                ( ( ( 0 == atoi( m_BackRefDesStart->GetValue() ) )
-                          && !m_AnnotateBack->GetValue() ) ?
-                                _( "the last front component + 1" ).c_str() :
-                                m_BackRefDesStart->GetValue().c_str() ) );
+                                      frontPlusOne ? _( "the last front component + 1" ) :
+                                      m_BackRefDesStart->GetValue() );
+    }
 
     if( !m_FrontPrefix->GetValue().empty() )
     {
         if( m_RemoveFrontPrefix->GetValue() )
             aMessage += wxString::Format(
-                    _( "\nFront components starting with %s  will have the prefix removed." ),
+                    _( "\nFront components starting with %s will have the prefix removed." ),
                     m_FrontPrefix->GetValue() );
         else
             aMessage +=
@@ -338,30 +338,30 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
     {
         if( m_RemoveBackPrefix->GetValue() )
             aMessage += wxString::Format(
-                    _( "\nBack components starting with %s  will have the prefix removed." ),
+                    _( "\nBack components starting with %s will have the prefix removed." ),
                     m_BackPrefix->GetValue() );
         else
             aMessage +=
                     wxString::Format( _( "\nBack components will have %s inserted as a prefix." ),
-                            m_BackPrefix->GetValue() );
+                                      m_BackPrefix->GetValue() );
     }
 
     aMessage += wxString::Format(
-            _( "\nPrior to sorting on %s, the coordinates of which will be rounded to a %s, %s grid. " ),
+            _( "\nPrior to sorting by %s, the coordinates of which will be rounded to a %s, %s grid. " ),
             ( m_SortOnModules->GetValue() ? _( "footprints" ) : _( "references" ) ),
-            MessageTextFromValue( m_Units, m_SortGridx, false ).c_str(),
-            MessageTextFromValue( m_Units, m_SortGridy, false ).c_str() );
+            MessageTextFromValue( m_Units, m_SortGridx, false ),
+            MessageTextFromValue( m_Units, m_SortGridy, false ) );
 
-    aMessage += wxString::Format( _( "\nThe schematic will %sbe updated." ),
-                                    ( m_UpdateSchematic->GetValue() ? "" : _( "not " ) ) );
+    if( m_UpdateSchematic->GetValue() )
+        aMessage += _( "\nThe schematic will be updated." );
+    else
+        aMessage += _( "\nThe schematic will not be updated." );
 
     ShowReport( aMessage, RPT_SEVERITY_INFO );
 }
 
 
-//
-///  Copies the dialog settings to the private variables
-void DIALOG_BOARD_REANNOTATE::GetParameters( void )
+void DIALOG_BOARD_REANNOTATE::GetParameters()
 {
     m_SortCode = 0; //Convert radio button to sort direction code
 
@@ -384,16 +384,20 @@ void DIALOG_BOARD_REANNOTATE::GetParameters( void )
 
     if( m_GridIndex >= ( int ) m_Settings->m_Window.grid.sizes.size() )
     {
-        m_SortGridx = DoubleValueFromString( EDA_UNITS::INCHES, m_Settings->m_Window.grid.user_grid_x, true );
-        m_SortGridy = DoubleValueFromString( EDA_UNITS::INCHES, m_Settings->m_Window.grid.user_grid_y, true );
+        m_SortGridx = DoubleValueFromString( EDA_UNITS::INCHES,
+                                             m_Settings->m_Window.grid.user_grid_x, true );
+        m_SortGridy = DoubleValueFromString( EDA_UNITS::INCHES,
+                                             m_Settings->m_Window.grid.user_grid_y, true );
     }
     else
     {
-        m_SortGridx = DoubleValueFromString( EDA_UNITS::INCHES, m_Settings->m_Window.grid.sizes[ m_GridIndex ], true );
+        m_SortGridx = DoubleValueFromString( EDA_UNITS::INCHES,
+                                             m_Settings->m_Window.grid.sizes[ m_GridIndex ], true );
         m_SortGridy = m_SortGridx;
     }
 
     int i = 0;
+
     for( wxRadioButton* button : AnnotateWhat )
     {
         if( button->GetValue() )
@@ -474,7 +478,7 @@ static bool ModuleCompare( const RefDesInfo& aA, const RefDesInfo& aB )
 wxString DIALOG_BOARD_REANNOTATE::CoordTowxString( int aX, int aY )
 {
     return wxString::Format( "%s, %s", MessageTextFromValue( m_Units, aX, false ),
-            MessageTextFromValue( m_Units, aY, false ) );
+                             MessageTextFromValue( m_Units, aY, false ) );
 }
 
 
@@ -482,13 +486,12 @@ wxString DIALOG_BOARD_REANNOTATE::CoordTowxString( int aX, int aY )
 /// Break report into strings separated by \n and sent to the reporter
 void DIALOG_BOARD_REANNOTATE::ShowReport( wxString aMessage, SEVERITY aSeverity )
 {
-
     size_t pos = 0, prev = 0;
 
     do
     {
         pos = aMessage.ToStdString().find( '\n', prev );
-        m_MessageWindow->Report( ( aMessage.ToStdString().substr( prev, pos - prev ) ), aSeverity );
+        m_MessageWindow->Report( aMessage.ToStdString().substr( prev, pos - prev ), aSeverity );
         prev = pos + 1;
     } while( std::string::npos != pos );
 
@@ -497,7 +500,7 @@ void DIALOG_BOARD_REANNOTATE::ShowReport( wxString aMessage, SEVERITY aSeverity 
 
 //
 /// Create an audit trail of the changes
-void DIALOG_BOARD_REANNOTATE::LogChangePlan( void )
+void DIALOG_BOARD_REANNOTATE::LogChangePlan()
 {
     int      i = 1;
     wxString message;
@@ -563,7 +566,7 @@ void DIALOG_BOARD_REANNOTATE::LogModules( wxString& aMessage, std::vector<RefDes
 //
 /// Actually reannotate the board
 /// @return false if fail, true if success
-bool DIALOG_BOARD_REANNOTATE::ReannotateBoard( void )
+bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 {
     std::string             payload;
     std::vector<RefDesInfo> BadRefDes;
@@ -574,8 +577,9 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard( void )
 
     if( !BuildModuleList( BadRefDes ) )
     {
-        ShowReport( "Selected options resulted in errors! Change them and try again.", RPT_SEVERITY_ERROR );
-        return ( false );
+        ShowReport( "Selected options resulted in errors! Change them and try again.",
+                    RPT_SEVERITY_ERROR );
+        return false;
     }
 
     if( !BadRefDes.empty() )
@@ -592,7 +596,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard( void )
             badrefdes += "at X, Y " + CoordTowxString( mod.x, mod.y ) + _( " on PCB " );
         }
 
-        ShowReport( ( message + badrefdes + "\n" ), RPT_SEVERITY_WARNING );
+        ShowReport( message + badrefdes + "\n", RPT_SEVERITY_WARNING );
         message += _( "Yes will attempt reannotate. Proceed?" );
 
         if( !IsOK( m_frame, message ) )
@@ -608,31 +612,31 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard( void )
         { // Create a netlist
             newref = GetNewRefDes( mod );
 
-            if( NULL == newref )
-                return ( false ); //Not found in changelist
+            if( nullptr == newref )
+                return false; //Not found in changelist
 
-            netlist.AddComponent( //add to the netlist
-                    new COMPONENT(
-                            mod->GetFPID(), newref->NewRefDes, mod->GetValue(), mod->GetPath() ) );
+            //add to the netlist
+            netlist.AddComponent( new COMPONENT( mod->GetFPID(), newref->NewRefDes,
+                                                 mod->GetValue(), mod->GetPath() ) );
         }
 
         netlist.Format( "pcb_netlist", &stringformatter, 0,
-                CTL_OMIT_FILTERS | CTL_OMIT_NETS | CTL_OMIT_FILTERS );
+                        CTL_OMIT_FILTERS | CTL_OMIT_NETS | CTL_OMIT_FILTERS );
 
         payload = stringformatter.GetString(); //create netlist
 
-        bool attemptreannotate =
-                m_frame->ReannotateSchematic( payload ); //Send netlist to eeSchema
+        //Send netlist to eeSchema
+        bool attemptreannotate =  m_frame->ReannotateSchematic( payload );
 
         if( !attemptreannotate )
         { //Didn't get a valid reply
             ShowReport( _( "\nReannotate failed!\n" ), RPT_SEVERITY_WARNING );
-            return ( false );
+            return false;
         }
 
     } //If updating schematic
 
-    bool reannotateok = payload.size( ) == 0; //( 0 == payload.find( REANNOTATE_OK ) );
+    bool reannotateok = payload.size( ) == 0;
 
     ShowReport( payload, reannotateok ? RPT_SEVERITY_ACTION : RPT_SEVERITY_ERROR );
     BOARD_COMMIT commit( m_frame );
@@ -644,8 +648,8 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard( void )
         { // Create a netlist
             newref = GetNewRefDes( mod );
 
-            if( NULL == newref )
-                return ( false );
+            if( nullptr == newref )
+                return false;
 
             commit.Modify( mod );                           //Make a copy for undo
             mod->SetReference( newref->NewRefDes );         //Update the PCB reference
@@ -654,7 +658,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard( void )
     }
 
     commit.Push( "Geographic reannotation" );
-    return ( reannotateok );
+    return reannotateok;
 }
 
 
@@ -721,7 +725,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
                                                      mod->Reference().GetPosition().y;
         thismodule.roundedx     = RoundToGrid( thismodule.x, m_SortGridx ); //Round to sort
         thismodule.roundedy     = RoundToGrid( thismodule.y, m_SortGridy );
-        thismodule.Front        = mod->GetLayer() == F_Cu ? true : false;
+        thismodule.Front        = mod->GetLayer() == F_Cu;
         thismodule.Action       = UpdateRefDes; //Usually good
 
         if( thismodule.RefDesString.IsEmpty() )
@@ -734,8 +738,8 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
                 thismodule.Action = InvalidRefDes; //do not change ref des such as 12 or +1, or L
         }
 
-        thismodule.RefDesType =
-                thismodule.RefDesString.substr( 0, firstnum ); //Get the type (R, C, etc)
+        //Get the type (R, C, etc)
+        thismodule.RefDesType = thismodule.RefDesString.substr( 0, firstnum );
 
         for( wxString excluded : m_ExcludeArray )
         {
@@ -783,20 +787,19 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
 
     if( !m_FrontModules.empty() )
         BuildChangeArray( m_FrontModules, atoi( m_FrontRefDesStart->GetValue() ),
-                m_FrontPrefix->GetValue(), m_RemoveFrontPrefix->GetValue(),
-                aBadRefDes ); //Create the ChangeArray for front
+                          m_FrontPrefix->GetValue(), m_RemoveFrontPrefix->GetValue(), aBadRefDes );
 
     if( !m_BackModules.empty() )
         BuildChangeArray( m_BackModules, backstartrefdes, m_BackPrefix->GetValue(),
-                m_RemoveBackPrefix->GetValue(), aBadRefDes ); //and for the back
+                          m_RemoveBackPrefix->GetValue(), aBadRefDes );
 
     if( !m_ChangeArray.empty() )
-        sort( m_ChangeArray.begin(), m_ChangeArray.end(),
-                ChangeArrayCompare ); //Sort the front modules
+        sort( m_ChangeArray.begin(), m_ChangeArray.end(), ChangeArrayCompare );
 
     LogChangePlan();
 
     changearraysize = m_ChangeArray.size();
+
     for( size_t i = 0; i < changearraysize; i++ ) //Scan through for duplicates if update or skip
     {
         if( ( m_ChangeArray[i].Action != EmptyRefDes )
@@ -806,7 +809,8 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
             {
                 if( m_ChangeArray[i].NewRefDes == m_ChangeArray[j].NewRefDes )
                 {
-                    ShowReport( "Duplicate instances of " + m_ChangeArray[j].NewRefDes, RPT_SEVERITY_ERROR );
+                    ShowReport( "Duplicate instances of " + m_ChangeArray[j].NewRefDes,
+                                RPT_SEVERITY_ERROR );
 
                     if( errorcount++ > MAXERROR )
                     {
@@ -822,14 +826,15 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
     }
 
     return ( 0 == errorcount );
-} //void BuildModuleList(  )
+}
 
 
 //
 /// Scan through the module arrays and create the from -> to array
 void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aModules,
-        unsigned int aStartRefDes, wxString aPrefix, bool aRemovePrefix,
-        std::vector<RefDesInfo>& aBadRefDes )
+                                                unsigned int aStartRefDes, wxString aPrefix,
+                                                bool aRemovePrefix,
+                                                std::vector<RefDesInfo>& aBadRefDes )
 {
     size_t        i;
     RefDesChange  change;
@@ -844,12 +849,11 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aModule
 
     bool prefixpresent; //Prefix found
 
-    wxString logstring =
-            ( aModules.front().Front ) ? _( "\n\nFront Modules" ) : _( "\n\nBack Modules" );
+    wxString logstring = ( aModules.front().Front ) ? _( "\n\nFront Modules" )
+                                                    : _( "\n\nBack Modules" );
     LogModules( logstring, aModules );
 
     if( 0 != aStartRefDes ) //Initialize the change array if present
-
     	for( i = 0; i < m_RefDesTypes.size(); i++ )
             m_RefDesTypes[i].RefDesCount = aStartRefDes;
 
@@ -883,25 +887,22 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aModule
                 Mod.RefDesType.erase( 0, prefixsize );
 
             for( i = 0; i < m_RefDesTypes.size(); i++ ) //See if it is in the types array
-
                 if( m_RefDesTypes[i].RefDesType == Mod.RefDesType ) //Found it!
                     break;
 
             if( i == m_RefDesTypes.size() )
             { //Wasn't in the types array so add it
-                newtype.RefDesType = Mod.RefDesType;
-                newtype.RefDesCount =
-                        ( aStartRefDes == 0 ? 1 : aStartRefDes ); //Add from start or 1
+                newtype.RefDesType  = Mod.RefDesType;
+                newtype.RefDesCount = ( aStartRefDes == 0 ? 1 : aStartRefDes );
                 m_RefDesTypes.push_back( newtype );
             }
 
-            change.NewRefDes =
-                    m_RefDesTypes[i].RefDesType
-                    + std::to_string( m_RefDesTypes[i].RefDesCount++ ); //This is the new refdes
+            change.NewRefDes = m_RefDesTypes[i].RefDesType
+                               + std::to_string( m_RefDesTypes[i].RefDesCount++ );
         }
         m_ChangeArray.push_back( change ); //Add to the change array
-    }                                      //Loop
-} //void BuildChangeArray( )
+    }
+}
 
 //
 /// @returns the new refdes for this module
@@ -910,10 +911,9 @@ RefDesChange* DIALOG_BOARD_REANNOTATE::GetNewRefDes( MODULE* aMod )
     size_t i;
 
     for( i = 0; i < m_ChangeArray.size(); i++ )
-
         if( aMod->m_Uuid == m_ChangeArray[i].Uuid )
             return ( &m_ChangeArray[i] );
 
     ShowReport( _( "Module not found in changelist " ) + aMod->GetReference(), RPT_SEVERITY_ERROR );
-    return ( NULL ); //Should never happen
+    return nullptr; //Should never happen
 }
