@@ -52,6 +52,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <settings/settings_manager.h>
+#include <swig/python_scripting.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
@@ -1249,16 +1250,16 @@ void PCB_EDIT_FRAME::PythonPluginsShowFolder()
     wxString msg;
 
     // Quote in case there are spaces in the path.
-    msg.Printf( "open \"%s\"", PYTHON_DEST );
+    msg.Printf( "open \"%s\"", PyPluginsPath() );
 
     system( msg.c_str() );
 #else
-    wxString pypath( PYTHON_DEST );
+    wxString pypath( PyPluginsPath() );
 
     // Quote in case there are spaces in the path.
     AddDelimiterString( pypath );
 
-    wxLaunchDefaultApplication( PYTHON_DEST );
+    wxLaunchDefaultApplication( pypath );
 #endif
 #endif
 }
