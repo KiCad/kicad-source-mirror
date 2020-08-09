@@ -417,17 +417,15 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
         return true;
 
     // Get the layer selection for this zone
-    int layer = -1;
+    int layers = 0;
+
     for( int ii = 0; ii < m_layers->GetItemCount(); ++ii )
     {
         if( m_layers->GetToggleValue( (unsigned) ii, 0 ) )
-        {
-            layer = ii;
-            break;
-        }
+            layers++;
     }
 
-    if( layer < 0 )
+    if( layers == 0 )
     {
         DisplayError( this, _( "No layer selected." ) );
         return false;
@@ -468,10 +466,12 @@ void DIALOG_COPPER_ZONE::OnLayerSelection( wxDataViewEvent& event )
 
     int row = m_layers->ItemToRow( event.GetItem() );
 
+    bool checked = m_layers->GetToggleValue( row, 0 );
+
     wxVariant layerID;
     m_layers->GetValue( layerID, row, 2 );
-    m_settings.m_Layers.set( ToLAYER_ID( layerID.GetInteger() ),
-            m_layers->GetToggleValue( row, 0 ) );
+
+    m_settings.m_Layers.set( ToLAYER_ID( layerID.GetInteger() ), checked );
 }
 
 

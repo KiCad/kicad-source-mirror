@@ -51,16 +51,16 @@ ZONE_CREATE_HELPER::~ZONE_CREATE_HELPER()
 
 std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
 {
-    auto& frame = *m_tool.getEditFrame<PCB_BASE_EDIT_FRAME>();
-    auto& board = *m_tool.getModel<BOARD>();
+    PCB_BASE_EDIT_FRAME*  frame = m_tool.getEditFrame<PCB_BASE_EDIT_FRAME>();
+    BOARD*                board = frame->GetBoard();
     BOARD_ITEM_CONTAINER* parent = m_tool.m_frame->GetModel();
     KIGFX::VIEW_CONTROLS* controls = m_tool.GetManager()->GetViewControls();
+    std::set<int>         highlightedNets = board->GetHighLightNetCodes();
 
     // Get the current default settings for zones
-    ZONE_SETTINGS zoneInfo = frame.GetZoneSettings();
+    ZONE_SETTINGS         zoneInfo = frame->GetZoneSettings();
     zoneInfo.m_Layers.reset().set( m_params.m_layer );  // TODO(JE) multilayer defaults?
-    zoneInfo.m_NetcodeSelection =
-            board.GetHighLightNetCodes().empty() ? -1 : *board.GetHighLightNetCodes().begin();
+    zoneInfo.m_NetcodeSelection = highlightedNets.empty() ? -1 : *highlightedNets.begin();
     zoneInfo.SetIsKeepout( m_params.m_keepout );
     zoneInfo.m_Zone_45_Only = ( m_params.m_leaderMode == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
 
@@ -84,14 +84,14 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
         int dialogResult;
 
         if( m_params.m_keepout )
-            dialogResult = InvokeKeepoutAreaEditor( &frame, &zoneInfo );
+            dialogResult = InvokeKeepoutAreaEditor( frame, &zoneInfo );
         else
         {
             // TODO(JE) combine these dialogs?
             if( ( zoneInfo.m_Layers & LSET::AllCuMask() ).any() )
-                dialogResult = InvokeCopperZonesEditor( &frame, &zoneInfo );
+                dialogResult = InvokeCopperZonesEditor( frame, &zoneInfo );
             else
-                dialogResult = InvokeNonCopperZonesEditor( &frame, &zoneInfo );
+                dialogResult = InvokeNonCopperZonesEditor( frame, &zoneInfo );
         }
 
         if( dialogResult == wxID_CANCEL )
@@ -104,9 +104,9 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
     // and a MODULE_ZONE_CONTAINER if created in the footprint editor
     wxASSERT( !m_tool.m_editModules || ( parent->Type() == PCB_MODULE_T ) );
 
-    auto newZone = m_tool.m_editModules ?
-                        std::make_unique<MODULE_ZONE_CONTAINER>( parent ) :
-                        std::make_unique<ZONE_CONTAINER>( parent );
+    std::unique_ptr<ZONE_CONTAINER> newZone = m_tool.m_editModules ?
+                                        std::make_unique<MODULE_ZONE_CONTAINER>( parent ) :
+                                        std::make_unique<ZONE_CONTAINER>( parent );
 
     // Apply the selected settings
     zoneInfo.ExportSetting( *newZone );

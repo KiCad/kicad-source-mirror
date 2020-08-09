@@ -181,11 +181,15 @@ public:
 
     /**
      * Function GetLayerSet
-     * returns a "layer mask", which is a bitmap of all layers on which the
-     * TRACK segment or VIA physically resides.
-     * @return int - a layer mask, see layers_id_colors_visibility.h.
+     * returns a std::bitset of all layers on which the item physically resides.
      */
     virtual LSET GetLayerSet() const { return LSET( m_Layer ); }
+    virtual void SetLayerSet( LSET aLayers )
+    {
+        wxFAIL_MSG( "Attempted to SetLayerSet() on a single-layer object." );
+
+        // Derived classes which support multiple layers must implement this
+    }
 
     /**
      * Function SetLayer
@@ -196,8 +200,6 @@ public:
      */
     virtual void SetLayer( PCB_LAYER_ID aLayer )
     {
-        // trap any invalid layers, then go find the caller and fix it.
-        // wxASSERT( unsigned( aLayer ) < unsigned( NB_PCB_LAYERS ) );
         m_Layer = aLayer;
     }
 

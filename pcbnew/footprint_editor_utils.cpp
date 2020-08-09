@@ -382,31 +382,30 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_MODULE_ZONE_AREA_T:
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( aItem );
-        bool success = false;
-        if( zone )
-        {
-            ZONE_SETTINGS zoneSettings;
-            zoneSettings << *zone;
-            if( zone->GetIsKeepout() )
-            {
-                success = InvokeKeepoutAreaEditor( this, &zoneSettings );
-            }
-            else if( zone->IsOnCopperLayer() )
-            {
-                success = InvokeCopperZonesEditor( this, &zoneSettings );
-            }
-            else
-            {
-                success = InvokeNonCopperZonesEditor( this, &zoneSettings );
-            }
+        bool            success = false;
+        ZONE_SETTINGS   zoneSettings;
 
-            if( success )
-            {
-                BOARD_COMMIT commit( this );
-                commit.Modify( zone );
-                commit.Push( _( "Edit Zone" ) );
-                zoneSettings.ExportSetting( *zone );
-            }
+        zoneSettings << *static_cast<ZONE_CONTAINER*>( aItem );
+
+        if( zone->GetIsKeepout() )
+        {
+            success = InvokeKeepoutAreaEditor( this, &zoneSettings );
+        }
+        else if( zone->IsOnCopperLayer() )
+        {
+            success = InvokeCopperZonesEditor( this, &zoneSettings );
+        }
+        else
+        {
+            success = InvokeNonCopperZonesEditor( this, &zoneSettings );
+        }
+
+        if( success )
+        {
+            BOARD_COMMIT commit( this );
+            commit.Modify( zone );
+            commit.Push( _( "Edit Zone" ) );
+            zoneSettings.ExportSetting( *static_cast<ZONE_CONTAINER*>( aItem ) );
         }
     }
     break;

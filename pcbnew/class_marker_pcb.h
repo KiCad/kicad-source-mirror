@@ -78,8 +78,6 @@ public:
         return HitTestMarker( aPosition, aAccuracy );
     }
 
-    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
-
     GAL_LAYER_ID GetColorLayer() const;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;

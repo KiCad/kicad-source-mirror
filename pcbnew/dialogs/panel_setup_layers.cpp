@@ -517,19 +517,26 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
     {
         PCB_LAYER_COLLECTOR collector;
 
-        for( auto layer_id : removedLayers )
+        for( PCB_LAYER_ID layer_id : removedLayers )
         {
             collector.SetLayerId( layer_id );
             collector.Collect( m_pcb, GENERAL_COLLECTOR::BoardLevelItems );
 
             // Bye-bye items on removed layer.
-            if( collector.GetCount() != 0 )
+            for( int i = 0; i < collector.GetCount(); i++ )
             {
+                BOARD_ITEM* item = collector[i];
+                LSET        layers = item->GetLayerSet();
+
+                layers.reset( layer_id );
                 hasRemovedBoardItems = true;
 
-                for( int i = 0; i < collector.GetCount(); i++ )
+                if( layers.any() )
                 {
-                    BOARD_ITEM* item = collector[i];
+                    item->SetLayerSet( layers );
+                }
+                else
+                {
                     m_pcb->Remove( item );
                     delete item;
                 }
@@ -756,13 +763,15 @@ bool PANEL_SETUP_LAYERS::compareCopperLayerCount( BOARD* aWorkingBoard, BOARD* a
 
     if( newNumLayers < currNumLayers )
     {
-        wxMessageDialog dlg( this,
-                wxString::Format(
-                        wxT( "Imported settings have fewer copper layers than current board (%i instead of %i)."
-                             "\n\nContinue and delete extra inner copper layers from current board?" ),
-                        newNumLayers, currNumLayers ),
-                _( "Inner Layers To Be Deleted" ),
-                wxICON_WARNING | wxSTAY_ON_TOP | wxYES | wxNO | wxNO_DEFAULT );
+        wxString msg = wxString::Format( _( "Imported settings have fewer copper layers than "
+                                            "the current board (%i instead of %i).\n\n"
+                                            "Continue and delete the extra inner copper layers "
+                                            "from the current board?" ),
+                                         newNumLayers,
+                                         currNumLayers );
+
+        wxMessageDialog dlg( this, msg, _( "Inner Layers To Be Deleted" ),
+                             wxICON_WARNING | wxSTAY_ON_TOP | wxYES | wxNO | wxNO_DEFAULT );
 
         if( wxID_NO == dlg.ShowModal() )
             okToDeleteCopperLayers = false;

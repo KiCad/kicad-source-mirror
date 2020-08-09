@@ -331,7 +331,7 @@ public:
 
     bool IsDirty() const { return m_shapesDirty; }
 
-    void SetLayerSet( LSET aLayerMask )         { m_layerMask = aLayerMask; }
+    void SetLayerSet( LSET aLayers ) override   { m_layerMask = aLayers; }
     LSET GetLayerSet() const override           { return m_layerMask; }
 
     void SetAttribute( PAD_ATTR_T aAttribute );

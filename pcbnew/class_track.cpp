@@ -397,6 +397,23 @@ LSET VIA::GetLayerSet() const
 }
 
 
+void VIA::SetLayerSet( LSET aLayerSet )
+{
+    bool first = true;
+
+    for( PCB_LAYER_ID layer : aLayerSet.Seq() )
+    {
+        if( first )
+        {
+            m_Layer = layer;
+            first = false;
+        }
+
+        m_BottomLayer = layer;
+    }
+}
+
+
 void VIA::SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer )
 {
 

@@ -381,6 +381,7 @@ public:
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
     virtual LSET GetLayerSet() const override;
+    virtual void SetLayerSet( LSET aLayers ) override;
 
     /**
      * Function SetLayerPair

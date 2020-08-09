@@ -586,12 +586,7 @@ SEARCH_RESULT PCB_LAYER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     BOARD_ITEM* item = (BOARD_ITEM*) testItem;
 
-    if( item->Type() == PCB_PAD_T )     // multilayer
-    {
-        if( static_cast<D_PAD*>( item )->IsOnLayer( m_layer_id ) )
-            Append( testItem );
-    }
-    else if( item->GetLayer() == m_layer_id )
+    if( item->IsOnLayer( m_layer_id ) )
         Append( testItem );
 
     return SEARCH_RESULT::CONTINUE;

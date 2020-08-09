@@ -185,6 +185,7 @@ const static wxSize LAYER_BITMAP_SIZE( 28, 28 );  // wxCocoa impl unhappy if thi
 const static wxSize LAYER_BITMAP_SIZE( 24, 16 );
 #endif
 
+
 // A helper for setting up a dialog list for specifying zone layers.  Used by all three
 // zone settings dialogs.
 void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame,
@@ -195,8 +196,9 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     LSET layers = aShowCopper ? LSET::AllCuMask( board->GetCopperLayerCount() )
                               : LSET::AllNonCuMask();
 
+    // In the Footprint Editor In1_Cu is used as a proxy for "all inner layers"
     if( aFpEditorMode )
-        layers.set( In1_Cu );   // a proxy for "all inner layers"
+        layers.set( In1_Cu );
 
     wxDataViewColumn* checkColumn = aList->AppendToggleColumn( wxEmptyString );
     wxDataViewColumn* layerColumn = aList->AppendIconTextColumn( wxEmptyString );

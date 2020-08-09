@@ -87,19 +87,6 @@ MARKER_PCB* MARKER_PCB::Deserialize( const wxString& data )
 }
 
 
-/* tests to see if this object is on the given layer.
- * DRC markers are not really on a copper layer, but
- * MARKER_PCB::IsOnCopperLayer return true if aLayer is a cooper layer,
- * because this test is often used to locad a marker
- * param aLayer The layer to test for.
- * return bool - true if on given layer, else false.
- */
-bool MARKER_PCB::IsOnLayer( PCB_LAYER_ID aLayer ) const
-{
-    return IsCopperLayer( aLayer );
-}
-
-
 void MARKER_PCB::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Type" ), _( "Marker" ), DARKCYAN );
