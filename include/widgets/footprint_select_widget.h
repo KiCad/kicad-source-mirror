@@ -59,7 +59,7 @@ public:
      * @param aMaxItems - maximum number of filter items to display, in addition to
      *  Default and Other
      */
-    FOOTPRINT_SELECT_WIDGET( wxWindow* aParent, FOOTPRINT_LIST* aFpList,
+    FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWindow* aParent, FOOTPRINT_LIST* aFpList,
                              bool aUpdate = true, int aMaxItems = 400 );
 
     virtual ~FOOTPRINT_SELECT_WIDGET()
@@ -138,6 +138,7 @@ private:
     FOOTPRINT_LIST*          m_fp_list;
     FOOTPRINT_FILTER         m_fp_filter;
     bool                     m_zero_filter;
+    EDA_DRAW_FRAME*          m_eda_frame;
 
     void FootprintsLoaded();
     void OnComboBox( wxCommandEvent& aEvent );

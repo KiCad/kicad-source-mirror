@@ -18,6 +18,7 @@
  */
 
 #include <dialog_shim.h>
+#include <eda_draw_frame.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <project.h>
@@ -41,15 +42,16 @@ enum
 wxDEFINE_EVENT( EVT_FOOTPRINT_SELECTED, wxCommandEvent );
 
 
-FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent, FOOTPRINT_LIST* aFpList,
-                                                  bool aUpdate, int aMaxItems ) :
-        wxPanel( aParent ),
-        m_kiway( nullptr ),
-        m_update( aUpdate ),
-        m_finished_loading( false ),
-        m_max_items( aMaxItems ),
-        m_last_item( 0 ),
-        m_fp_list( aFpList )
+FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWindow* aParent,
+                                                  FOOTPRINT_LIST* aFpList, bool aUpdate, int aMaxItems ) :
+          wxPanel( aParent ),
+          m_kiway( nullptr ),
+          m_update( aUpdate ),
+          m_finished_loading( false ),
+          m_max_items( aMaxItems ),
+          m_last_item( 0 ),
+          m_fp_list( aFpList ),
+          m_eda_frame( aFrame )
 {
     m_zero_filter = true;
     m_sizer = new wxBoxSizer( wxVERTICAL );
@@ -74,7 +76,8 @@ void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
         auto fp_lib_table = aProject.PcbFootprintLibs( aKiway );
         m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
 
-        WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
+        // We parent to the eda frame so that the taskbar progress indicator displays on it
+        WX_PROGRESS_REPORTER progressReporter( m_eda_frame, _( "Loading Footprint Libraries" ), 2 );
         m_fp_list->ReadFootprintFiles( fp_lib_table, nullptr, &progressReporter );
         FootprintsLoaded();
     }

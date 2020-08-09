@@ -35,7 +35,7 @@
 #include <wx/wx.h>
 #include <wx/uri.h>
 #include <wx/dir.h>
-#include <wx/progdlg.h>
+#include <widgets/app_progress_dialog.h>
 
 #include <pgm_base.h>
 #include <project.h>
@@ -352,8 +352,8 @@ bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadGithubLibsFromList( wxArrayString& 
     // The title is updated for each downloaded library.
     // the state will be updated by downloadOneLib() for each file.
     // for OSX do not enable wPD_APP_MODAL, keep wxPD_AUTO_HIDE
-    wxProgressDialog pdlg( _( "Downloading 3D libraries" ), wxEmptyString,
-                           aUrlList.GetCount(), this,
+    APP_PROGRESS_DIALOG pdlg( _( "Downloading 3D libraries" ), wxEmptyString,
+                              aUrlList.GetCount(), this, true,
 #ifndef __WXMAC__
                            wxPD_APP_MODAL |
 #endif

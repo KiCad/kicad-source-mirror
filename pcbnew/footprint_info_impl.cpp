@@ -124,6 +124,13 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
         return true;
 
     m_progress_reporter = aProgressReporter;
+
+    if( m_progress_reporter )
+    {
+        m_progress_reporter->SetMaxProgress( m_queue_in.size() );
+        m_progress_reporter->Report( _( "Fetching Footprint Libraries" ) );
+    }
+
     m_cancelled = false;
 
     FOOTPRINT_ASYNC_LOADER loader;
@@ -131,11 +138,6 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
     loader.SetList( this );
     loader.Start( aTable, aNickname );
 
-    if( m_progress_reporter )
-    {
-        m_progress_reporter->SetMaxProgress( m_queue_in.size() );
-        m_progress_reporter->Report( _( "Fetching Footprint Libraries" ) );
-    }
 
     while( !m_cancelled && (int)m_count_finished.load() < m_loader->m_total_libs )
     {
@@ -153,8 +155,8 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
     {
         if( m_progress_reporter )
         {
-            m_progress_reporter->AdvancePhase();
             m_progress_reporter->SetMaxProgress( m_queue_out.size() );
+            m_progress_reporter->AdvancePhase();
             m_progress_reporter->Report( _( "Loading Footprints" ) );
         }
 

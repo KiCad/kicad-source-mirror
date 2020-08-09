@@ -42,6 +42,7 @@
 #include <project/project_file.h>
 #include <project_rescue.h>
 #include <properties.h>
+#include <widgets/app_progress_dialog.h>
 
 #include <general.h>
 #include <class_library.h>
@@ -494,11 +495,12 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
     // Post symbol library table, this should be empty.  Only the cache library should get loaded.
     if( !lib_names.empty() )
     {
-        wxProgressDialog lib_dialog( _( "Loading Symbol Libraries" ),
-                                     wxEmptyString,
-                                     lib_names.GetCount(),
-                                     NULL,
-                                     wxPD_APP_MODAL );
+        APP_PROGRESS_DIALOG lib_dialog( _( "Loading Symbol Libraries" ),
+                                        wxEmptyString,
+                                        lib_names.GetCount(),
+                                        NULL,
+                                        false,
+                                        wxPD_APP_MODAL );
 
         if( aShowProgress )
         {

@@ -244,7 +244,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
         if ( fp_list )
         {
             if( m_allow_field_edits )
-                m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, fp_list, true );
+                m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( m_parent, panel, fp_list, true );
 
             m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
         }

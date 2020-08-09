@@ -47,7 +47,6 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <math/util.h>      // for KiROUND
 #include <dialog_drc.h>
-#include <wx/progdlg.h>
 #include <board_commit.h>
 #include <geometry/shape_arc.h>
 #include <drc/drc.h>
@@ -60,6 +59,7 @@
 #include <drc/drc_textvar_tester.h>
 #include <drc/footprint_tester.h>
 #include <dialogs/panel_setup_rules.h>
+#include <widgets/app_progress_dialog.h>
 
 DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -575,7 +575,7 @@ void DRC::testPadClearances( BOARD_COMMIT& aCommit )
 
 void DRC::testTracks( BOARD_COMMIT& aCommit, wxWindow *aActiveWindow, bool aShowProgressBar )
 {
-    wxProgressDialog* progressDialog = NULL;
+    APP_PROGRESS_DIALOG* progressDialog = NULL;
     const int         delta = 500;  // This is the number of tests between 2 calls to the
                                     // progress bar
     int               count = m_pcb->Tracks().size();
@@ -585,9 +585,9 @@ void DRC::testTracks( BOARD_COMMIT& aCommit, wxWindow *aActiveWindow, bool aShow
     {
         // Do not use wxPD_APP_MODAL style here: it is not necessary and create issues
         // on OSX
-        progressDialog = new wxProgressDialog( _( "Track clearances" ), wxEmptyString,
-                                               deltamax, aActiveWindow,
-                                               wxPD_AUTO_HIDE | wxPD_CAN_ABORT | wxPD_ELAPSED_TIME );
+        progressDialog = new APP_PROGRESS_DIALOG( _( "Track clearances" ), wxEmptyString,
+                                                  deltamax, aActiveWindow, false,
+                                                  wxPD_AUTO_HIDE | wxPD_CAN_ABORT | wxPD_ELAPSED_TIME );
         progressDialog->Update( 0, wxEmptyString );
     }
 

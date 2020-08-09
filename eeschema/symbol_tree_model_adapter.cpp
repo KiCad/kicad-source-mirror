@@ -20,7 +20,8 @@
  */
 
 #include <wx/tokenzr.h>
-#include <wx/progdlg.h>
+#include <wx/window.h>
+#include <widgets/app_progress_dialog.h>
 
 #include <eda_pattern_match.h>
 #include <symbol_lib_table.h>
@@ -55,13 +56,13 @@ SYMBOL_TREE_MODEL_ADAPTER::~SYMBOL_TREE_MODEL_ADAPTER()
 void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNicknames,
                                               wxWindow* aParent )
 {
-    wxProgressDialog* prg = nullptr;
+    APP_PROGRESS_DIALOG* prg = nullptr;
     wxLongLong        nextUpdate = wxGetUTCTimeMillis() + (PROGRESS_INTERVAL_MILLIS / 2);
 
     if( m_show_progress )
     {
-        prg = new wxProgressDialog( _( "Loading Symbol Libraries" ), wxEmptyString,
-                                    aNicknames.size(), aParent );
+        prg = new APP_PROGRESS_DIALOG( _( "Loading Symbol Libraries" ), wxEmptyString,
+                                       aNicknames.size(), aParent );
     }
 
     unsigned int ii = 0;
@@ -71,6 +72,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
         if( prg && wxGetUTCTimeMillis() > nextUpdate )
         {
             prg->Update( ii, wxString::Format( _( "Loading library \"%s\"" ), nickname ) );
+
             nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
         }
 

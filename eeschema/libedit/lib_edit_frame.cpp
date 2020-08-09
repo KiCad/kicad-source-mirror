@@ -58,11 +58,11 @@
 #include <tools/lib_edit_tool.h>
 #include <tools/lib_move_tool.h>
 #include <tools/lib_pin_tool.h>
+#include <widgets/app_progress_dialog.h>
 #include <widgets/infobar.h>
 #include <widgets/lib_tree.h>
 #include <widgets/symbol_tree_pane.h>
 #include <wildcards_and_files_ext.h>
-#include <wx/progdlg.h>
 
 
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
@@ -593,8 +593,8 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aShowProgress )
 
     if( aShowProgress )
     {
-        wxProgressDialog progressDlg( _( "Loading Symbol Libraries" ), wxEmptyString,
-                                      m_libMgr->GetAdapter()->GetLibrariesCount(), this );
+        APP_PROGRESS_DIALOG progressDlg( _( "Loading Symbol Libraries" ), wxEmptyString,
+                                         m_libMgr->GetAdapter()->GetLibrariesCount(), this );
 
         m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName )
         {

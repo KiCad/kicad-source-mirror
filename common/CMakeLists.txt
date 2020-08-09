@@ -200,6 +200,7 @@ set( COMMON_DLG_SRCS
     )
 
 set( COMMON_WIDGET_SRCS
+    widgets/app_progress_dialog.cpp
     widgets/button_row_panel.cpp
     widgets/color_swatch.cpp
     widgets/footprint_choice.cpp

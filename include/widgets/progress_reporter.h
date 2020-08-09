@@ -30,6 +30,9 @@
 
 #include <wx/progdlg.h>
 #include <wx/gauge.h>
+#if wxCHECK_VERSION(3, 1, 0)
+#include <wx/appprogress.h>
+#endif
 
 /**
  * A progress reporter for use in multi-threaded environments.  The various advancement
@@ -109,7 +112,10 @@ class PROGRESS_REPORTER
         std::atomic_bool   m_cancelled;
 };
 
-
+/**
+* Multi-thread safe progress reporter dialog, intended for use of tasks that paralleize reporting back of work status
+* See PROGRESS_REPORTER
+*/
 class WX_PROGRESS_REPORTER : public PROGRESS_REPORTER, public wxProgressDialog
 {
 public:
@@ -136,6 +142,9 @@ public:
     }
 
 private:
+#if wxCHECK_VERSION(3, 1, 0)
+    wxAppProgressIndicator m_appProgressIndicator;
+#endif
 
     virtual bool updateUI() override;
 };
