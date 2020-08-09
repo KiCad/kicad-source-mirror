@@ -50,27 +50,46 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_fileHistorySize = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 0 );
 	gbSizer1->Add( m_fileHistorySize, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_Clear3DCacheFilesOlder = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 120, 30 );
+	m_Clear3DCacheFilesOlder->SetToolTip( _("3D cache files older than this are deleted.\nIf set to 0, cache clearing is disabled") );
+
+	bSizer5->Add( m_Clear3DCacheFilesOlder, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_staticTextDays = new wxStaticText( this, wxID_ANY, _("Days"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDays->Wrap( -1 );
+	bSizer5->Add( m_staticTextDays, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+
+	gbSizer1->Add( bSizer5, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+
 	wxStaticText* antialiasingLabel;
 	antialiasingLabel = new wxStaticText( this, wxID_ANY, _("Accelerated graphics:"), wxDefaultPosition, wxDefaultSize, 0 );
 	antialiasingLabel->Wrap( -1 );
-	gbSizer1->Add( antialiasingLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( antialiasingLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_antialiasingChoices[] = { _("No Antialiasing"), _("Subpixel Antialiasing (High Quality)"), _("Subpixel Antialiasing (Ultra Quality)"), _("Supersampling (2x)"), _("Supersampling (4x)") };
 	int m_antialiasingNChoices = sizeof( m_antialiasingChoices ) / sizeof( wxString );
 	m_antialiasing = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_antialiasingNChoices, m_antialiasingChoices, 0 );
 	m_antialiasing->SetSelection( 0 );
-	gbSizer1->Add( m_antialiasing, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_antialiasing, wxGBPosition( 4, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	wxStaticText* antialiasingLabel1;
 	antialiasingLabel1 = new wxStaticText( this, wxID_ANY, _("Fallback graphics:"), wxDefaultPosition, wxDefaultSize, 0 );
 	antialiasingLabel1->Wrap( -1 );
-	gbSizer1->Add( antialiasingLabel1, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( antialiasingLabel1, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_antialiasingFallbackChoices[] = { _("No Antialiasing"), _("Fast Antialiasing"), _("Balanced Antialiasing"), _("High Quality Antialiasing") };
 	int m_antialiasingFallbackNChoices = sizeof( m_antialiasingFallbackChoices ) / sizeof( wxString );
 	m_antialiasingFallback = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_antialiasingFallbackNChoices, m_antialiasingFallbackChoices, 0 );
 	m_antialiasingFallback->SetSelection( 0 );
-	gbSizer1->Add( m_antialiasingFallback, wxGBPosition( 4, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_antialiasingFallback, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_staticTextClear3DCache = new wxStaticText( this, wxID_ANY, _("3D cache file duration:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextClear3DCache->Wrap( -1 );
+	gbSizer1->Add( m_staticTextClear3DCache, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 
 	gbSizer1->AddGrowableCol( 1 );
@@ -265,7 +284,6 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	this->SetSizer( bPanelSizer );
 	this->Layout();
-	bPanelSizer->Fit( this );
 
 	// Connect Events
 	m_textEditorBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COMMON_SETTINGS_BASE::OnTextEditorClick ), NULL, this );

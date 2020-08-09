@@ -89,6 +89,7 @@ public:
         wxString pdf_viewer_name;
         bool use_system_pdf_viewer;
         wxString working_dir;
+        int clear_3d_cache_interval;
     };
 
     COMMON_SETTINGS();

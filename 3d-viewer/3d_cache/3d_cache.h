@@ -183,6 +183,16 @@ public:
      * @return is a pointer to the render data or NULL if not available
      */
     S3DMODEL* GetModel( const wxString& aModelFileName );
+
+    /**
+     * Function Delete up old cache files in cache directory
+     *
+     * Deletes ".3dc" files in the cache directory that are older than
+     * "aNumDaysOld".
+     *
+     * @param aNumDaysOld is age threshold to delete ".3dc" cache files
+     */
+    void CleanCacheDir( int aNumDaysOld );
 };
 
 #endif  // CACHE_3D_H

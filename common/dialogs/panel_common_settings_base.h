@@ -48,8 +48,11 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxSpinCtrl* m_SaveTime;
 		wxStaticText* m_staticTextFileHistorySize;
 		wxSpinCtrl* m_fileHistorySize;
+		wxSpinCtrl* m_Clear3DCacheFilesOlder;
+		wxStaticText* m_staticTextDays;
 		wxChoice* m_antialiasing;
 		wxChoice* m_antialiasingFallback;
+		wxStaticText* m_staticTextClear3DCache;
 		wxTextCtrl* m_textEditorPath;
 		wxBitmapButton* m_textEditorBtn;
 		wxRadioButton* m_defaultPDFViewer;
@@ -90,7 +93,7 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 
 	public:
 
-		PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 838,485 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_COMMON_SETTINGS_BASE();
 
 };

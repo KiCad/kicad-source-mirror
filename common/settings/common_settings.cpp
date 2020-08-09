@@ -172,6 +172,10 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
     m_params.emplace_back( new PARAM<wxString>( "system.working_dir",
             &m_System.working_dir, "" ) );
+
+    m_params.emplace_back( new PARAM<int>( "system.clear_3d_cache_interval",
+            &m_System.clear_3d_cache_interval, 30 ) );
+
 }
 
 

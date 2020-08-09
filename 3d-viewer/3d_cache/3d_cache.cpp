@@ -57,6 +57,7 @@
 #include <filename_resolver.h>
 #include <pgm_base.h>
 #include <project.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 
 
@@ -195,7 +196,17 @@ S3D_CACHE::S3D_CACHE()
 
 S3D_CACHE::~S3D_CACHE()
 {
+    COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
+
     FlushCache();
+
+    // We'll delete ".3dc" cache files older than this many days
+    int clearCacheInterval = commonSettings->m_System.clear_3d_cache_interval;
+
+    // An interval of zero means the user doesn't want to ever clear the cache
+
+    if( clearCacheInterval > 0 )
+        CleanCacheDir( clearCacheInterval );
 
     delete m_FNResolver;
     delete m_Plugins;
@@ -677,6 +688,46 @@ S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName )
     return mp;
 }
 
+void S3D_CACHE::CleanCacheDir( int aNumDaysOld )
+{
+    wxDir         dir;
+    wxString      fileSpec = wxT( "*.3dc" );
+    wxArrayString fileList; // Holds list of ".3dc" files found in cache directory
+    size_t        numFilesFound = 0;
+
+    wxFileName thisFile;
+    wxDateTime lastAccess, thresholdDate;
+    wxDateSpan durationInDays;
+
+    // Calc the threshold date above which we delete cache files
+    durationInDays.SetDays( aNumDaysOld );
+    thresholdDate = wxDateTime::Now() - durationInDays;
+
+    // If the cache directory can be found and opened, then we'll try and clean it up
+    if( dir.Open( m_CacheDir ) )
+    {
+        thisFile.SetPath( m_CacheDir ); // Set the base path to the cache folder
+
+        // Get a list of all the ".3dc" files in the cache directory
+        numFilesFound = dir.GetAllFiles( m_CacheDir, &fileList, fileSpec );
+
+        for( unsigned int i = 0; i < numFilesFound; i++ )
+        {
+            // Completes path to specific file so we can get its "last access" date
+            thisFile.SetFullName( fileList[i] );
+
+            // Only get "last access" time to compare against. Don't need the other 2 timestamps.
+            if( thisFile.GetTimes( &lastAccess, nullptr, nullptr ) )
+            {
+                if( lastAccess.IsEarlierThan( thresholdDate ) )
+                {
+                    // This file is older than the threshold so delete it
+                    wxRemoveFile( thisFile.GetFullPath() );
+                }
+            }
+        }
+    }
+}
 
 S3D_CACHE* PROJECT::Get3DCacheManager( bool aUpdateProjDir )
 {
