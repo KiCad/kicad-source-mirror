@@ -109,7 +109,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	sbGeneral->Add( m_zoneNameLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcZoneName = new wxTextCtrl( sbGeneral->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbGeneral->Add( m_tcZoneName, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbGeneral->Add( m_tcZoneName, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	sbGeneral->Add( 5, 0, 0, wxEXPAND, 5 );
