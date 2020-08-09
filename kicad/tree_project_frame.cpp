@@ -741,7 +741,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
         }
 
         AddMenuItem( &popup_menu, ID_PROJECT_OPEN_DIR, text, help_text,
-                KiBitmap( directory_browser_xpm ) );
+                     KiBitmap( directory_browser_xpm ) );
     }
 
     if( can_edit )

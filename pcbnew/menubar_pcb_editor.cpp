@@ -502,6 +502,15 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuActionPlugins->Add( _( "Refresh Plugins" ),
                                _( "Reload all python plugins and refresh plugin menus" ),
                                ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH, reload_xpm );
+#ifdef __APPLE__
+    submenuActionPlugins->Add( _( "Reveal Plugin Folder in Finder" ),
+                               _( "Reveals the plugins folder in a Finder window" ),
+                               ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER, folder_xpm );
+#else
+    submenuActionPlugins->Add( _( "Open Plugin Directory" ),
+                               _( "Opens the directory in the default system file manager" ),
+                               ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER, folder_xpm );
+#endif
     submenuActionPlugins->AppendSeparator();
 
     toolsMenu->AddSeparator();

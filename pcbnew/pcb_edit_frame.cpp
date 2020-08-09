@@ -145,6 +145,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     EVT_TOOL( ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH, PCB_EDIT_FRAME::OnActionPluginRefresh )
+    EVT_TOOL( ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER, PCB_EDIT_FRAME::OnActionPluginShowFolder )
 #endif
 
     // Tracks and vias sizes general options
@@ -1201,20 +1202,38 @@ void PCB_EDIT_FRAME::RunEeschema()
 
 void PCB_EDIT_FRAME::PythonPluginsReload()
 {
-    // Reload Python plugins if they are newer than
-    // the already loaded, and load new plugins
+    // Reload Python plugins if they are newer than the already loaded, and load new plugins
 #if defined(KICAD_SCRIPTING)
-    //Reload plugin list: reload Python plugins if they are newer than
-    // the already loaded, and load new plugins
+    // Reload plugin list: reload Python plugins if they are newer than the already loaded,
+    // and load new plugins
     PythonPluginsReloadBase();
 
-    #if defined(KICAD_SCRIPTING_ACTION_MENU)
-        // Action plugins can be modified, therefore the plugins menu
-        // must be updated:
-        ReCreateMenuBar();
-        // Recreate top toolbar to add action plugin buttons
-        ReCreateHToolbar();
-    #endif
+#if defined(KICAD_SCRIPTING_ACTION_MENU)
+    // Action plugins can be modified, therefore the plugins menu must be updated:
+    ReCreateMenuBar();
+    // Recreate top toolbar to add action plugin buttons
+    ReCreateHToolbar();
+#endif
+#endif
+}
+
+
+void PCB_EDIT_FRAME::PythonPluginsShowFolder()
+{
+#if defined(KICAD_SCRIPTING)
+#ifdef __WXMAC__
+    wxString msg;
+
+    // Quote in case there are spaces in the path.
+    msg.Printf( "open \"%s\"", PYTHON_DEST );
+
+    system( msg.c_str() );
+#else
+    // Quote in case there are spaces in the path.
+    AddDelimiterString( pypath );
+
+    wxLaunchDefaultApplication( PYTHON_DEST );
+#endif
 #endif
 }
 

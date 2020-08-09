@@ -168,6 +168,16 @@ protected:
     {
        PythonPluginsReload();
     }
+
+    /**
+     * Function OnActionPluginRefresh
+     * Refresh plugin list (reload Python plugins)
+     * @param aEvent sent by wx
+     */
+    void OnActionPluginShowFolder( wxCommandEvent& aEvent)
+    {
+       PythonPluginsShowFolder();
+    }
 #endif
 
     /** Has meaning only if KICAD_SCRIPTING_WXPYTHON option is
@@ -279,11 +289,17 @@ public:
     bool IsContentModified() override;
 
     /**
-     * Reload the Python plugins if they are newer than
-     * the already loaded, and load new plugins if any
-     * Do nothing if KICAD_SCRIPTING is not defined
+     * Reload the Python plugins if they are newer than the already loaded, and load new
+     * plugins if any.
+     * Do nothing if KICAD_SCRIPTING is not defined.
      */
     void PythonPluginsReload();
+
+    /**
+     * Open the plugins folder in the default system file browser.
+     * Do nothing if KICAD_SCRIPTING is not defined.
+     */
+    void PythonPluginsShowFolder();
 
     /**
      * Update the layer manager and other widgets from the board setup
