@@ -1231,6 +1231,8 @@ void PCB_EDIT_FRAME::PythonPluginsShowFolder()
 
     system( msg.c_str() );
 #else
+    wxString pypath( PYTHON_DEST );
+
     // Quote in case there are spaces in the path.
     AddDelimiterString( pypath );
 
