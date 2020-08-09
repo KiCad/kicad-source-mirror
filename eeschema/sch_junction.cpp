@@ -83,8 +83,8 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 {
     EDA_RECT rect;
 
-    int size =
-            Schematic() ? Schematic()->Settings().m_JunctionSize : Mils2iu( DEFAULT_JUNCTION_DIAM );
+    int size = Schematic() ? Schematic()->Settings().m_JunctionSize
+                           : Mils2iu( DEFAULT_JUNCTION_DIAM );
 
     if( m_diameter != 0 )
         size = m_diameter;

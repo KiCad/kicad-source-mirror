@@ -271,13 +271,41 @@ int SCH_LINE::GetPenWidth() const
 {
     NETCLASSPTR netclass = NetClass();
 
-    if( netclass )
-        return ( m_Layer == LAYER_BUS ) ? netclass->GetBusWidth() : netclass->GetWireWidth();
+    switch ( m_Layer )
+    {
+    default:
+        if( m_stroke.GetWidth() > 0 )
+            return m_stroke.GetWidth();
 
-    if( m_stroke.GetWidth() == 0 && Schematic() )
-        return std::max( Schematic()->Settings().m_DefaultLineWidth, 1 );
+        if( Schematic() )
+            return Schematic()->Settings().m_DefaultLineWidth;
 
-    return std::max( m_stroke.GetWidth(), 1 );
+        return DEFAULT_LINE_THICKNESS;
+
+    case LAYER_WIRE:
+        if( netclass )
+            return netclass->GetWireWidth();
+
+        if( m_stroke.GetWidth() > 0 )
+            return m_stroke.GetWidth();
+
+        if( Schematic() )
+            return Schematic()->Settings().m_DefaultWireThickness;
+
+        return DEFAULT_WIRE_THICKNESS;
+
+    case LAYER_BUS:
+        if( netclass )
+            return netclass->GetBusWidth();
+
+        if( m_stroke.GetWidth() > 0 )
+            return m_stroke.GetWidth();
+
+        if( Schematic() )
+            return Schematic()->Settings().m_DefaultBusThickness;
+
+        return DEFAULT_BUS_THICKNESS;
+    }
 }
 
 

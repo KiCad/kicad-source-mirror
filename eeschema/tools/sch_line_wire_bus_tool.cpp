@@ -731,6 +731,8 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos
         break;
     }
 
+    // Give segments a parent so they find the default line/wire/bus widths
+    segment->SetParent( &m_frame->Schematic() );
     segment->SetFlags( IS_NEW | IS_MOVED );
     m_wires.push_back( segment );
 
