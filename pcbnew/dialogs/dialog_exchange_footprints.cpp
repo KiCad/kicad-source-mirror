@@ -523,6 +523,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
 
     // Updating other parameters
     const_cast<KIID&>( aDest->m_Uuid ) = aSrc->m_Uuid;
+    aDest->SetProperties( aSrc->GetProperties() );
     aDest->SetPath( aSrc->GetPath() );
     aDest->CalculateBoundingBox();
 
