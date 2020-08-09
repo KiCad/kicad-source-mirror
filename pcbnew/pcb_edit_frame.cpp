@@ -454,6 +454,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     enableGALSpecificMenus();
 
+    // Ensure the Python interpreter is up to date with its environment variables
+    PythonSyncEnvironmentVariables();
+    PythonSyncProjectName();
+
     // disable Export STEP item if kicad2step does not exist
     wxString strK2S = Pgm().GetExecutablePath();
 
@@ -1138,6 +1142,10 @@ void PCB_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
     DIALOG_CONFIGURE_PATHS dlg( this, Prj().Get3DCacheManager()->GetResolver() );
     dlg.ShowModal();
+
+    // Ensure the Python interpreter is up to date with its environment variables
+    PythonSyncEnvironmentVariables();
+    PythonSyncProjectName();
 }
 
 
@@ -1266,6 +1274,29 @@ void PCB_EDIT_FRAME::PythonPluginsReload()
         // Recreate top toolbar to add action plugin buttons
         ReCreateHToolbar();
     #endif
+#endif
+}
+
+
+void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
+{
+#if defined( KICAD_SCRIPTING )
+    const ENV_VAR_MAP& varMap = Pgm().GetLocalEnvVariables();
+
+    for( ENV_VAR_MAP_CITER it = varMap.begin(); it != varMap.end(); ++it )
+    {
+        pcbnewUpdatePythonEnvVar( it->first, it->second.GetValue() );
+    }
+#endif
+}
+
+
+void PCB_EDIT_FRAME::PythonSyncProjectName()
+{
+#if defined( KICAD_SCRIPTING )
+    wxString evValue;
+    wxGetEnv( PROJECT_VAR_NAME, &evValue );
+    pcbnewUpdatePythonEnvVar( wxString( PROJECT_VAR_NAME ).ToStdString(), evValue );
 #endif
 }
 

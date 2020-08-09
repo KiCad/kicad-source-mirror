@@ -315,6 +315,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                        ProjectFileExtension );
 
         Prj().SetProjectFullName( fn.GetFullPath() );
+        PythonSyncProjectName();
 
         fn.SetExt( PcbFileExtension );
 
@@ -461,6 +462,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // it knows what consequences that will have on other KIFACEs running and using
         // this same PROJECT.  It can be very harmful if that calling code is stupid.
         Prj().SetProjectFullName( pro.GetFullPath() );
+        PythonSyncProjectName();
 
         // load project settings before BOARD
         LoadProjectSettings();

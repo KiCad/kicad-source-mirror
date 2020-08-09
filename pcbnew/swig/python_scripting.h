@@ -78,6 +78,14 @@ void        pcbnewGetScriptsSearchPaths( wxString& aNames );
  */
 void        pcbnewGetWizardsBackTrace( wxString& aNames );
 
+/**
+ * Set an environment variable in the current Python interpreter.
+ *
+ * @param aVar is the variable to set
+ * @param aValue is the value to give it
+ */
+void        pcbnewUpdatePythonEnvVar( const wxString& aVar, const wxString& aValue );
+
 #ifdef KICAD_SCRIPTING_WXPYTHON
 void        RedirectStdio();
 wxWindow*   CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId );

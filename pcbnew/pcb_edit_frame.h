@@ -313,6 +313,18 @@ public:
     void PythonPluginsReload();
 
     /**
+     * Synchronize the environment variables from KiCad's environment into the Python interpreter.
+     * Do nothing if KICAD_SCRIPTING is not defined.
+     */
+    void PythonSyncEnvironmentVariables();
+
+    /**
+     * Synchronize the project name from KiCad's environment into the Python interpreter.
+     * Do nothing if KICAD_SCRIPTING is not defined.
+     */
+    void PythonSyncProjectName();
+
+    /**
      * Update the layer manager and other widgets from the board setup
      * (layer and items visibility, colors ...)
      */

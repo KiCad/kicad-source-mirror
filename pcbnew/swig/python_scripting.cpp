@@ -210,7 +210,8 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     {
         PyLOCK lock;
 
-        snprintf( cmd, sizeof( cmd ), "import sys, traceback\n"
+        // Load os so that we can modify the environment variables through python
+        snprintf( cmd, sizeof( cmd ), "import sys, os, traceback\n"
                   "sys.path.append(\".\")\n"
                   "import pcbnew\n"
                   "pcbnew.LoadPlugins(\"%s\")", aUserScriptingPath );
@@ -315,6 +316,29 @@ void pcbnewFinishPythonScripting()
     PyEval_RestoreThread( g_PythonMainTState );
 #endif
     Py_Finalize();
+}
+
+
+void pcbnewUpdatePythonEnvVar( const wxString& aVar, const wxString& aValue )
+{
+    char cmd[1024];
+
+    // Ensure the interpreter is initalized before we try to interact with it
+    if( !Py_IsInitialized() )
+        return;
+
+    snprintf( cmd, sizeof( cmd ),
+              "# coding=utf-8\n"      // The values could potentially be UTF8
+              "os.environ[\"%s\"]=\"%s\"\n",
+              TO_UTF8( aVar ),
+              TO_UTF8( aValue ) );
+
+    PyLOCK lock;
+
+    int retv = PyRun_SimpleString( cmd );
+
+    if( retv != 0 )
+        wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
 }
 
 
