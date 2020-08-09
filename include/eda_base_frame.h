@@ -496,6 +496,11 @@ public:
      */
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
+    /**
+     * Notification event that the project has changed.
+     */
+    virtual void ProjectChanged() {}
+
     const wxString& GetAboutTitle() const { return m_AboutTitle; }
 
     /**

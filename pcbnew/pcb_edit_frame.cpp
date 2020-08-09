@@ -51,6 +51,7 @@
 #include <functional>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <swig/python_scripting.h>
 #include <tool/tool_manager.h>
@@ -322,6 +323,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     }
 
     InitExitKey();
+
+    // Ensure the Python interpreter is up to date with its environment variables
+    PythonSyncEnvironmentVariables();
+    PythonSyncProjectName();
 
     GetCanvas()->SwitchBackend( m_canvasType );
     ActivateGalCanvas();
@@ -1265,6 +1270,27 @@ void PCB_EDIT_FRAME::PythonPluginsShowFolder()
 }
 
 
+void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
+{
+#if defined( KICAD_SCRIPTING )
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+    for( auto& var : settings->m_Env.vars )
+        pcbnewUpdatePythonEnvVar( var.first, var.second );
+#endif
+}
+
+
+void PCB_EDIT_FRAME::PythonSyncProjectName()
+{
+#if defined( KICAD_SCRIPTING )
+    wxString evValue;
+    wxGetEnv( PROJECT_VAR_NAME, &evValue );
+    pcbnewUpdatePythonEnvVar( wxString( PROJECT_VAR_NAME ).ToStdString(), evValue );
+#endif
+}
+
+
 void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module )
 {
     if( Module == NULL )
@@ -1338,8 +1364,18 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     if( aTextVarsChanged )
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 
+    // Update the environment variables in the Python interpreter
+    if( aEnvVarsChanged )
+        PythonSyncEnvironmentVariables();
+
     Layout();
     SendSizeEvent();
+}
+
+
+void PCB_EDIT_FRAME::ProjectChanged()
+{
+    PythonSyncProjectName();
 }
 
 

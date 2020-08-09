@@ -305,6 +305,18 @@ public:
     void PythonPluginsShowFolder();
 
     /**
+     * Synchronize the environment variables from KiCad's environment into the Python interpreter.
+     * Do nothing if KICAD_SCRIPTING is not defined.
+     */
+    void PythonSyncEnvironmentVariables();
+
+    /**
+     * Synchronize the project name from KiCad's environment into the Python interpreter.
+     * Do nothing if KICAD_SCRIPTING is not defined.
+     */
+    void PythonSyncProjectName();
+
+    /**
      * Update the layer manager and other widgets from the board setup
      * (layer and items visibility, colors ...)
      */
@@ -947,6 +959,8 @@ public:
      * Called after the preferences dialog is run.
      */
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+
+    void ProjectChanged() override;
 
     void SyncToolbars() override;
 

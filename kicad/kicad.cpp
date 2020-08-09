@@ -92,6 +92,7 @@ bool PGM_KICAD::OnPgmInit()
 
     m_bm.InitSettings( new KICAD_SETTINGS );
     GetSettingsManager().RegisterSettings( PgmSettings() );
+    GetSettingsManager().SetKiway( &Kiway );
     m_bm.Init();
 
     // Add search paths to feed the PGM_KICAD::SysSearch() function,

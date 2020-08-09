@@ -26,6 +26,7 @@
 
 class COLOR_SETTINGS;
 class COMMON_SETTINGS;
+class KIWAY;
 class PROJECT;
 class PROJECT_FILE;
 class REPORTER;
@@ -42,6 +43,13 @@ public:
      * @return true if settings load was successful
      */
     bool IsOK() { return m_ok; }
+
+    /**
+     * Associate this setting manager with the given Kiway.
+     *
+     * @param aKiway is the kiway this settings manager should use
+     */
+    void SetKiway( KIWAY* aKiway ) { m_kiway = aKiway; }
 
     /**
      * Takes ownership of the pointer passed in
@@ -349,6 +357,9 @@ private:
 
     /// True if running outside a UI context
     bool m_headless;
+
+    /// The kiway this settings manager interacts with
+    KIWAY* m_kiway;
 
     std::vector<std::unique_ptr<JSON_SETTINGS>> m_settings;
 

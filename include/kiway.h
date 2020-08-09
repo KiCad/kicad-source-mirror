@@ -382,6 +382,12 @@ public:
      */
     VTBL_ENTRY void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged );
 
+    /**
+     * Calls ProjectChanged() on all KIWAY_PLAYERs.
+     * Used after changing the project to ensure all players are updated correctly.
+     */
+    VTBL_ENTRY void ProjectChanged();
+
     KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop = NULL );
 
     /**

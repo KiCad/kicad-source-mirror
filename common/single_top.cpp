@@ -359,6 +359,8 @@ bool PGM_SINGLE_TOP::OnPgmInit()
         }
     }
 
+    // Tell the settings manager about the current Kiway
+    GetSettingsManager().SetKiway( &Kiway );
 
     // Use KIWAY to create a top window, which registers its existence also.
     // "TOP_FRAME" is a macro that is passed on compiler command line from CMake,

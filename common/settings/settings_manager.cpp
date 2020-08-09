@@ -28,6 +28,7 @@
 #include <confirm.h>
 #include <dialogs/dialog_migrate_settings.h>
 #include <gestfich.h>
+#include <kiway.h>
 #include <macros.h>
 #include <project.h>
 #include <project/project_archiver.h>
@@ -53,6 +54,7 @@ const char* traceSettings = "SETTINGS";
 
 SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
         m_headless( aHeadless ),
+        m_kiway( nullptr ),
         m_common_settings( nullptr ),
         m_migration_source()
 {
@@ -715,6 +717,9 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     m_projects[fullPath]->setLocalSettings( settings );
     settings->SetProject( m_projects[fullPath].get() );
 
+    if( m_kiway )
+        m_kiway->ProjectChanged();
+
     return success;
 }
 
@@ -730,6 +735,12 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
     wxLogTrace( traceSettings, "Unload project %s", aProject->GetProjectFullName() );
 
     m_projects.erase( aProject->GetProjectFullName() );
+
+    // Remove the reference in the environment to the previous project
+    wxSetEnv( PROJECT_VAR_NAME, "" );
+
+    if( m_kiway )
+        m_kiway->ProjectChanged();
 
     return true;
 }
