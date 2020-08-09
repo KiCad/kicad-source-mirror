@@ -121,10 +121,10 @@ public:
 
     enum class SHAPE_TYPE
     {
-        OPENSHAPE, //< Unfilled open shape. Cannot have cutouts.
-        OUTLINE,   //< Unfilled closed shape.
-        SOLID,     //< Filled closed shape (solid fill).
-        HATCHED    //< Filled closed shape (hatch fill).
+        OPENSHAPE, ///< Unfilled open shape. Cannot have cutouts.
+        OUTLINE,   ///< Unfilled closed shape.
+        SOLID,     ///< Filled closed shape (solid fill).
+        HATCHED    ///< Filled closed shape (hatch fill).
     };
 
 

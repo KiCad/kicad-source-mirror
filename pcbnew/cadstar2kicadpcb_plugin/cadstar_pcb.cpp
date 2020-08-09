@@ -27,7 +27,7 @@
 #include <cadstar_pcb.h>
 
 
-void CADSTAR_PCB::Load( BOARD* aBoard )
+void CADSTAR_PCB::Load( ::BOARD* aBoard )
 {
     mBoard = aBoard;
     Parse();

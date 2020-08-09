@@ -90,6 +90,7 @@ public:
     typedef wxString ATTRIBUTE_ID;
     typedef wxString NETCLASS_ID;
     typedef wxString SPACING_CLASS_ID;
+    typedef wxString RULESET_ID;
     typedef wxString FIGURE_ID;
     typedef wxString COMP_AREA_ID;
     typedef long     PAD_ID; ///< Pad identifier (pin) in the PCB
@@ -101,7 +102,18 @@ public:
     typedef long     TERMINAL_ID;            ///< Terminal is the pin identifier in the schematic
     typedef long     PART_DEFINITION_PIN_ID; ///< Pin identifier in the part definition
     typedef long     PART_PIN_ID;            ///< Pin identifier in the part
-
+    typedef wxString GROUP_ID;
+    typedef wxString REUSEBLOCK_ID;
+    typedef wxString BOARD_ID;
+    typedef wxString AREA_ID;
+    typedef wxString NET_ID;
+    typedef wxString COMPONENT_ID;
+    typedef wxString DOCUMENTATION_SYMBOL_ID;
+    typedef wxString NETELEMENT_ID;
+    typedef wxString TEMPLATE_ID;
+    typedef long     NETREF_TERMINAL_ID;
+    typedef wxString COPPER_ID;
+    typedef wxString DRILL_TABLE_ID;
 
     //=================================
     // HEADER
@@ -230,10 +242,11 @@ public:
 
     struct LAYER
     {
-        LAYER_ID       ID;
-        wxString       Name;
-        LAYER_TYPE     Type    = LAYER_TYPE::UNDEFINED;
-        LAYER_SUBTYPE  SubType = LAYER_SUBTYPE::LAYERSUBTYPE_NONE;
+        LAYER_ID          ID;
+        wxString          Name;
+        wxString          Description = wxEmptyString;
+        LAYER_TYPE        Type        = LAYER_TYPE::UNDEFINED;
+        LAYER_SUBTYPE     SubType     = LAYER_SUBTYPE::LAYERSUBTYPE_NONE;
         PHYSICAL_LAYER_ID PhysicalLayer =
                 UNDEFINED_PHYSICAL_LAYER;              ///< If UNDEFINED, no physical layer is
                                                        ///< assigned (e.g. documentation and
@@ -371,11 +384,19 @@ public:
         void Parse( XNODE* aNode );
     };
 
-
     struct SPACINGCODE
     {
-        wxString Code; //TODO convert to an enum class containing all valid spacings
-        long     Spacing;
+        struct REASSIGN
+        {
+            LAYER_ID LayerID;
+            long     Spacing;
+
+            void Parse( XNODE* aNode );
+        };
+
+        wxString              Code; //TODO convert to an enum class containing all valid spacings
+        long                  Spacing;
+        std::vector<REASSIGN> Reassigns; ///< Can have different spacings on differnt layers
 
         void Parse( XNODE* aNode );
     };
@@ -466,11 +487,11 @@ public:
 
     struct LAYERPAIR
     {
-        LAYERPAIR_ID   ID;
-        wxString       Name;
+        LAYERPAIR_ID      ID;
+        wxString          Name;
         PHYSICAL_LAYER_ID PhysicalLayerStart;
         PHYSICAL_LAYER_ID PhysicalLayerEnd;
-        VIACODE_ID     ViacodeID;
+        VIACODE_ID        ViacodeID;
 
         void Parse( XNODE* aNode );
     };
@@ -518,30 +539,140 @@ public:
      */
     struct ATTRNAME
     {
+        struct COLUMNORDER
+        {
+            long ID;
+            long Order;
+
+            void Parse( XNODE* aNode );
+        };
+
+
+        struct COLUMNWIDTH
+        {
+            long ID;
+            long Width;
+
+            void Parse( XNODE* aNode );
+        };
+
         ATTRIBUTE_ID ID;
         wxString     Name; ///< Parenthesis aren't permitted in user attributes in CADSTAR. Any
                            ///< Attributes in Parenthesis indicate an internal CADSTAR attribute
                            ///< Examples: "(PartDescription)" "(PartDefinitionNameStem)",etc.
-         ///TODO: create a list of all CADSTAR internal attribute names.
-        ATTROWNER    AttributeOwner = ATTROWNER::ALL_ITEMS;
-        ATTRUSAGE    AttributeUsage = ATTRUSAGE::UNDEFINED;
-        bool         NoTransfer = false; ///< True="All Design Types", False="Current Design Type"
-                                         ///< "All Design Types" Description from CADSTAR Help:
-                                         ///< "The selected attribute name will beavailable when
-                                         ///< any design is displayed"
-                                         ///< "Current Design Type" From CADSTAR Help: This
-                                         ///< restricts the availability of the selected attribute
-                                         ///< name to the current design.
+                           ///TODO: create a list of all CADSTAR internal attribute names.
+        ATTROWNER AttributeOwner = ATTROWNER::ALL_ITEMS;
+        ATTRUSAGE AttributeUsage = ATTRUSAGE::UNDEFINED;
+        bool      NoTransfer     = false; ///< True="All Design Types", False="Current Design Type"
+                                          ///< "All Design Types" Description from CADSTAR Help:
+                                          ///< "The selected attribute name will beavailable when
+                                          ///< any design is displayed"
+                                          ///< "Current Design Type" From CADSTAR Help: This
+                                          ///< restricts the availability of the selected attribute
+                                          ///< name to the current design.
+        std::vector<COLUMNORDER> ColumnOrders;
+        std::vector<COLUMNWIDTH> ColumnWidths;
+        bool                     ColumnInvisible = false;
 
         void Parse( XNODE* aNode );
     };
 
 
+    /**
+     * @brief From CADSTAR Help: "Text Alignment enables you to define the position of an alignment
+     * origin for all text items in CADSTAR. The alignment origin is a point on or within the text
+     * boundary and defines how the text is displayed.
+     *
+     * For example, with an alignment of bottom-right the origin will be positioned at the bottom
+     * right of the text boundary. This makes it easier to right-align several text items 
+     * regardless of the length of text displayed.
+     *
+     * Text Alignment applies to all CADSTAR text. [...]
+     *
+     * Note: Unaligned text operates in the way CADSTAR text always has. In most cases this behaves
+     * as Bottom Left alignment, but there are a few exceptions, e.g. pin names. Also unaligned
+     * multiline text has an origin Bottom Left of the first line."
+     * 
+     * See also JUSTIFICATION
+     */
+    enum class ALIGNMENT
+    {
+        NO_ALIGNMENT, ///< NO_ALIGNMENT has different meaning depending on the object type
+        TOPLEFT,
+        TOPCENTER,
+        TOPRIGHT,
+        CENTERLEFT,
+        CENTERCENTER,
+        CENTERRIGHT,
+        BOTTOMLEFT,
+        BOTTOMCENTER,
+        BOTTOMRIGHT
+    };
+
+    static ALIGNMENT ParseAlignment( XNODE* aNode );
+
+    /**
+     * @brief From CADSTAR Help: "Multi Line Text can also be justified as Left, Centre or Right. 
+     * This does not affect the text alignment. Note: Justification of single line text has no 
+     * effect."
+     *
+     * This only affects multiline text
+     *
+     * See also ALIGNMENT
+     */
+    enum class JUSTIFICATION
+    {
+        LEFT,
+        CENTER,
+        RIGHT
+    };
+
+    static JUSTIFICATION ParseJustification( XNODE* aNode );
+
+    /**
+     * @brief Sets the readibility direction of text. From CADSTAR Help: "Horizontal text will
+     * always be displayed from left to right (i.e. never upside down). Vertical text can be set as
+     * readable from either the left or right edge of the design."
+     *
+     * I.e. Vertical text can either be rotated 90 degrees clockwise or 90 degrees anticlockwise from
+     * horizontal. This does not impact vertical text
+     */
+    enum class READABILITY
+    {
+        BOTTOM_TO_TOP, ///< When text is vertical, show it rotated 90 degrees anticlockwise
+        TOP_TO_BOTTOM  ///< When text is vertical, show it rotated 90 degrees clockwise
+    };
+
+    static READABILITY ParseReadability( XNODE* aNode );
+
+
+    struct ATTRIBUTE_LOCATION
+    {
+        TEXTCODE_ID   TextCodeID;
+        LAYER_ID      LayerID;
+        POINT         Position;
+        long          OrientAngle = 0;
+        bool          Mirror      = false;
+        bool          Fixed       = false;
+        JUSTIFICATION Justification =
+                JUSTIFICATION::LEFT; ///< Note: Justification has no effect on single lines of text
+        ALIGNMENT Alignment = ALIGNMENT::
+                NO_ALIGNMENT; ///< In CADSTAR The default alignment for a TEXT object (when
+                              ///< "(No Alignment()" is selected) Bottom Left of the *first line*.
+                              ///< Note that this is different from BOTTOM_LEFT (which is bottom
+                              ///< left of the whole text block)
+
+        void Parse( XNODE* aNode );
+    };
+
     struct ATTRIBUTE_VALUE
     {
         ATTRIBUTE_ID AttributeID;
         wxString     Value;
-        bool         ReadOnly = false;
+        bool         ReadOnly    = false;
+        bool         HasLocation = false; ///< Flag to know if this ATTRIBUTE_VALUE has a location
+                                          ///< i.e. is displayed
+        ATTRIBUTE_LOCATION AttributeLocation;
 
         void Parse( XNODE* aNode );
     };
@@ -577,6 +708,24 @@ public:
     };
 
 
+    struct RULESET
+    {
+        RULESET_ID   ID;
+        wxString     Name;
+        ROUTECODE_ID AreaRouteCodeID; ///< For assigning a net route code to a rule set. The
+                                      ///< optimal and necked route widths from the net route code
+                                      ///< will be used when routing through an area that has been
+                                      ///< assigned this rule set. ("ROUCODEREF")
+        VIACODE_ID AreaViaCodeID;     ///< For assigning a via code to a rule set. This via code
+                                      ///< will be used when inserting new vias within an area that
+                                      ///< has been assigned this rule set. ("VIACODEREF")
+
+        std::vector<SPACINGCODE> SpacingCodes; ///< Overrides these spacing rules in the specific
+                                               ///< area.
+        void Parse( XNODE* aNode );
+    };
+
+
     struct CODEDEFS
     {
         std::map<LINECODE_ID, LINECODE>     LineCodes;
@@ -585,6 +734,7 @@ public:
         std::map<ROUTECODE_ID, ROUTECODE>   RouteCodes;
         std::map<COPPERCODE_ID, COPPERCODE> CopperCodes;
         std::vector<SPACINGCODE>            SpacingCodes; ///< Spacing Design Rules
+        std::map<RULESET_ID, RULESET>       Rulesets;     ///< Used for area design rules
         std::map<PADCODE_ID, PADCODE>       PadCodes;
         std::map<VIACODE_ID, VIACODE>       ViaCodes;
         std::map<LAYERPAIR_ID, LAYERPAIR>
@@ -726,6 +876,46 @@ public:
 
     static SWAP_RULE ParseSwapRule( XNODE* aNode );
 
+    struct REUSEBLOCK
+    {
+        REUSEBLOCK_ID ID;
+        wxString      Name;
+        wxString FileName; ///< Filename of the reuse block (usually a .pcb). Used for reloading
+        bool     Mirror      = false;
+        long     OrientAngle = 0;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    /**
+     * @brief References an element from a design reuse block
+    */
+    struct REUSEBLOCKREF
+    {
+        REUSEBLOCK_ID ReuseBlockID = wxEmptyString;
+        wxString ItemReference = wxEmptyString; ///< For Components, this references the designator
+                                                ///< in the reuse file.
+                                                ///< For net elements (such as vias, routes, etc.),
+                                                ///< coppers and templates, this parameter is blank.
+
+        bool IsEmpty(); ///< Determines if this is empty (i.e. no design reuse associated)
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct GROUP
+    {
+        GROUP_ID ID;
+        wxString Name;
+        bool     Fixed   = false;
+        GROUP_ID GroupID = wxEmptyString; ///< If not empty, this GROUP
+                                          ///< is part of another GROUP
+        REUSEBLOCKREF ReuseBlockRef;
+
+        void Parse( XNODE* aNode );
+    };
+
 
     struct FIGURE
     {
@@ -734,7 +924,10 @@ public:
         LAYER_ID    LayerID;
         SHAPE       Shape; //< Uses the component's coordinate frame if within a component
                            //< definition, otherwise uses the design's coordinate frame.
-        SWAP_RULE SwapRule = SWAP_RULE::BOTH;
+        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this FIGURE is part of a group
+        REUSEBLOCKREF ReuseBlockRef;
+        SWAP_RULE     SwapRule = SWAP_RULE::BOTH; ///< Only applicable to Figures in Components
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
         void Parse( XNODE* aNode );
     };
@@ -838,13 +1031,13 @@ public:
         long       OrientAngle = 0;
         PAD_EXITS  Exits; ///< See PAD_EXITS
 
-        wxString Identifier;   ///< This is an identifier that is displayed to the user.
-                               ///< Internally, the pad is identified by sequential Pad ID
-                               ///< (see ID). From CADSTAR Help: "This is how the pin is
-                               ///< identified, and is used when creating a part and for reload
-                               ///< and replace. It  replaces the CADSTAR 13.0 pad sequence
-                               ///< number but is much less restrictive i.e. It need not be 1, 2,
-                               ///< 3 etc. and can contain alpha and / or numeric characters."
+        wxString Identifier; ///< This is an identifier that is displayed to the user.
+                             ///< Internally, the pad is identified by sequential Pad ID
+                             ///< (see ID). From CADSTAR Help: "This is how the pin is
+                             ///< identified, and is used when creating a part and for reload
+                             ///< and replace. It  replaces the CADSTAR 13.0 pad sequence
+                             ///< number but is much less restrictive i.e. It need not be 1, 2,
+                             ///< 3 etc. and can contain alpha and / or numeric characters."
 
         bool FirstPad = false; ///< From CADSTAR Help: "Only one pad can have this property; if an
                                ///< existing pad in the design already has this property it will be
@@ -860,59 +1053,6 @@ public:
         void Parse( XNODE* aNode );
     };
 
-
-    /**
-     * @brief From CADSTAR Help: "Text Alignment enables you to define the position of an alignment
-     * origin for all text items in CADSTAR. The alignment origin is a point on or within the text
-     * boundary and defines how the text is displayed.
-     *
-     * For example, with an alignment of bottom-right the origin will be positioned at the bottom
-     * right of the text boundary. This makes it easier to right-align several text items 
-     * regardless of the length of text displayed.
-     *
-     * Text Alignment applies to all CADSTAR text. [...]
-     *
-     * Note: Unaligned text operates in the way CADSTAR text always has. In most cases this behaves
-     * as Bottom Left alignment, but there are a few exceptions, e.g. pin names. Also unaligned
-     * multiline text has an origin Bottom Left of the first line."
-     * 
-     * See also JUSTIFICATION
-     */
-    enum class ALIGNMENT
-    {
-        NO_ALIGNMENT, ///< NO_ALIGNMENT has different meaning depending on the object type
-        TOPLEFT,
-        TOPCENTER,
-        TOPRIGHT,
-        CENTERLEFT,
-        CENTERCENTER,
-        CENTERRIGHT,
-        BOTTOMLEFT,
-        BOTTOMCENTER,
-        BOTTOMRIGHT
-    };
-
-    static ALIGNMENT ParseAlignment( XNODE* aNode );
-
-    /**
-     * @brief From CADSTAR Help: "Multi Line Text can also be justified as Left, Centre or Right. 
-     * This does not affect the text alignment. Note: Justification of single line text has no 
-     * effect."
-     *
-     * This only affects multiline text
-     *
-     * See also ALIGNMENT
-     */
-    enum class JUSTIFICATION
-    {
-        LEFT,
-        CENTER,
-        RIGHT
-    };
-
-    static JUSTIFICATION ParseJustification( XNODE* aNode );
-
-
     /**
      * @brief Corresponds to CADSTAR "origin". This is used for setting a location of an attribute
      * e.g. Designator (called Component Name in CADSTAR), Part Name (name of component in the
@@ -926,6 +1066,7 @@ public:
         POINT         Position;
         long          OrientAngle = 0;
         bool          Mirror      = false;
+        bool          Fixed       = false;
         JUSTIFICATION Justification =
                 JUSTIFICATION::LEFT; ///< Note: Justification has no effect on single lines of text
         ALIGNMENT Alignment = ALIGNMENT::
@@ -945,6 +1086,7 @@ public:
         POINT         Position;
         long          OrientAngle = 0;
         bool          Mirror      = false;
+        bool          Fixed       = false;
         SWAP_RULE     SwapRule    = SWAP_RULE::BOTH;
         JUSTIFICATION Justification =
                 JUSTIFICATION::LEFT; ///< Note: Justification has no effect on single lines of text
@@ -953,6 +1095,8 @@ public:
                               ///< "(No Alignment()" is selected) Bottom Left of the *first line*.
                               ///< Note that this is different from BOTTOM_LEFT (which is bottom
                               ///< left of the whole text block)
+        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this FIGURE is part of a group
+        REUSEBLOCKREF ReuseBlockRef;
 
         void Parse( XNODE* aNode );
     };
@@ -1117,6 +1261,10 @@ public:
         EXTENSION_LINE ExtensionLineParams; ///< Not applicable to TYPE=LEADERDIM
         LINE           Line;
         TEXT           Text;
+        bool           Fixed   = false;
+        GROUP_ID       GroupID = wxEmptyString; ///< If not empty, this DIMENSION
+                                                ///< is part of a group
+        REUSEBLOCKREF ReuseBlockRef;
 
         static bool IsDimension( XNODE* aNode );
         void        Parse( XNODE* aNode );
@@ -1205,11 +1353,12 @@ public:
         std::map<COMP_AREA_ID, COMPONENT_AREA> ComponentAreas;
         std::map<TEXT_ID, TEXT>                Texts;
         std::map<PAD_ID, PAD>                  Pads;
-        std::map<ATTRIBUTE_ID, TEXT_LOCATION>  TextLocations; ///< This contains location of
-                                                              ///< any attributes, including
-                                                              ///< designator position
-        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
-        std::map<DIMENSION_ID, DIMENSION>       Dimensions; ///< inside "DIMENSIONS" subnode
+        std::map<ATTRIBUTE_ID, TEXT_LOCATION>  TextLocations;    ///< This contains location of
+                                                                 ///< any attributes, including
+                                                                 ///< designator position
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< These attributes might also
+                                                                 ///< have a location
+        std::map<DIMENSION_ID, DIMENSION> Dimensions;            ///< inside "DIMENSIONS" subnode
 
         void Parse( XNODE* aNode );
     };
@@ -1251,7 +1400,7 @@ public:
 
                 void Parse( XNODE* aNode );
             };
-                        
+
 
             struct PIN ///< "PARTDEFINITIONPIN" node name
             {
@@ -1270,7 +1419,19 @@ public:
                 wxString Name = wxEmptyString;            ///< Can be empty. If empty the pin name
                                                           ///< displayed wil be Identifier
                                                           ///< (subnode="PINNAME")
-                wxString Label  = wxEmptyString;          ///< Can be empty (subnode="PINLABEL")
+                wxString Label = wxEmptyString;           ///< This Can be empty (subnode=
+                                                          ///< "PINLABEL")
+                                                          ///< From CADSTAR Help: "Pin
+                                                          ///< Labels are an optional replacement
+                                                          ///< for the free text sometimes placed
+                                                          ///< in schematic symbols. Using Pin
+                                                          ///< Labels instead has the advantage of
+                                                          ///< associating each piece of label
+                                                          ///< text with a particular pin. This
+                                                          ///< means that the text remains
+                                                          ///< correctly placed after any Gate and
+                                                          ///< Pin Swaps are Back Annotated to the
+                                                          ///< Schematic design."
                 wxString Signal = wxEmptyString;          ///< Usually for Power/Ground pins,
                                                           ///< (subnode="PINSIGNAL")
                 GATE_ID     TerminalGate;                 ///< (subnode="PINTERM", param0)
@@ -1298,14 +1459,14 @@ public:
                 std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< All the pins in this vector are
                                                             ///< equivalent and can be swapped with
                                                             ///< each other
-                
-                void Parse( XNODE* aNode ); 
-            }; 
 
-            
+                void Parse( XNODE* aNode );
+            };
+
+
             struct SWAP_GATE ///< "SWAPGATE" Node name (represents an "Element")
             {
-                std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< The pins in this vector 
+                std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< The pins in this vector
                                                             ///< describe a "gate"
 
                 void Parse( XNODE* aNode );
@@ -1313,15 +1474,16 @@ public:
 
             struct SWAP_GROUP
             {
-                wxString GateName = wxEmptyString; ///< Optional. If not empty, should match the Name
-                                                   ///< attribute of one of the gates defined in the
-                                                   ///< part definition
+                wxString GateName =
+                        wxEmptyString; ///< Optional. If not empty, should match the Name
+                                       ///< attribute of one of the gates defined in the
+                                       ///< part definition
 
                 bool External = false; ///< Determines if this swap group is external (and internal)
                                        ///< or internal only. External Gate swapping allows Gates on
                                        ///< different components with the same Part Definition to
                                        ///< swap with one another.
-                                       ///< 
+                                       ///<
                                        ///< The external swapping groups must be at the root level
                                        ///< (i.e. they cannot be contained by other swapping groups)
 
@@ -1360,15 +1522,15 @@ public:
             void Parse( XNODE* aNode );
         };
 
-        
-        struct PART_PIN ///< "PARTPIN" node name 
+
+        struct PART_PIN ///< "PARTPIN" node name
         {
             PART_PIN_ID ID;
-            wxString    Name = wxEmptyString;
-            PIN_TYPE    Type = PIN_TYPE::UNCOMMITTED;
+            wxString    Name       = wxEmptyString;
+            PIN_TYPE    Type       = PIN_TYPE::UNCOMMITTED;
             wxString    Identifier = wxEmptyString;
 
-            void        Parse( XNODE* aNode );
+            void Parse( XNODE* aNode );
         };
 
 
@@ -1377,10 +1539,10 @@ public:
         long                            Version;
         DEFINITION                      Definition;
         std::map<PART_PIN_ID, PART_PIN> PartPins; ///< It is unclear why there are two "Pin"
-                                                 ///< structures in CPA files... PART_PIN seems to
-                                                 ///< be a reduced version of PART::DEFINITION::PIN
-                                                 ///< Therefore, PART_PIN is only included for
-                                                 ///< completeness of the parser, but won't be used
+                                                  ///< structures in CPA files... PART_PIN seems to
+                                                  ///< be a reduced version of PART::DEFINITION::PIN
+                                                  ///< Therefore, PART_PIN is only included for
+                                                  ///< completeness of the parser, but won't be used
 
 
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< Some attributes are defined
@@ -1399,14 +1561,432 @@ public:
     };
 
 
+    struct BOARD
+    {
+        BOARD_ID                                ID;
+        LINECODE_ID                             LineCodeID;
+        SHAPE                                   Shape;
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
+        bool                                    Fixed = false;
+
+        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this BOARD is part of a group
+        REUSEBLOCKREF ReuseBlockRef;           ///< Normally BOARD cannot be part of a reuseblock,
+                                               ///< but included for completeness
+
+        void Parse( XNODE* aNode );
+    };
+
+    /**
+     * @brief From CADSTAR Help: "Area is for creating areas within which, and nowhere else, certain
+     * operations are carried out (e.g. Placement.); and for creating 'keep out' areas, within which
+     * no operations are carried out and where no items are placed by operations such as Placement 
+     * and Routing. [...]
+     * More than one function can be assigned to an area."
+     */
+    struct AREA
+    {
+        AREA_ID     ID;
+        LINECODE_ID LineCodeID;
+        wxString    Name;
+        LAYER_ID    LayerID;
+        SHAPE       Shape;
+
+        //TODO find out what token is used for specifying "Rule Set"
+        RULESET_ID RuleSetID = wxEmptyString;
+
+        bool Fixed = false;
+
+        bool Placement = false; ///< From CADSTAR Help: "Auto Placement can place components within
+                                ///< this area."
+        bool Routing = false;   ///< From CADSTAR Help: "Area can be used to place routes during
+                                ///< Automatic Routing."
+        bool Keepout = false;   ///< From CADSTAR Help: "Auto Placement cannot place components
+                                ///< within this area."
+        bool NoTracks = false;  ///< From CADSTAR Help: "Area cannot be used to place routes during
+                                ///< automatic routing."
+        bool NoVias = false;    ///< From CADSTAR Help: "No vias will be placed within this area by
+                                ///< the automatic router."
+
+        long AreaHeight = UNDEFINED_VALUE; ///< From CADSTAR Help: "The Height value specified for
+                                           ///< the PCB component is checked against the Height
+                                           ///< value assigned to the Area in which the component
+                                           ///< is placed. If the component height exceeds the area
+                                           ///< height, an error is output"
+
+        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this AREA is part of a group
+        REUSEBLOCKREF ReuseBlockRef;
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct PIN_ATTRIBUTE
+    {
+        PART_DEFINITION_PIN_ID                  Pin;
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
+
+        void Parse( XNODE* aNode );
+    };
+
+    struct COMPONENT
+    {
+        COMPONENT_ID ID;
+        wxString     Name; ///< Designator e.g. "C1", "R1", etc.
+        PART_ID      PartID;
+        SYMDEF_ID    SymdefID;
+        POINT        Origin; ///< Origin of the component (this is used as the reference point
+                             ///< when placing the component in the design)
+
+        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this component is part of a group
+        REUSEBLOCKREF ReuseBlockRef;
+        long          OrientAngle = 0;
+        bool          TestPoint   = false; ///< Indicates whether this component should be treated
+                                           ///< as a testpoint. See SYMDEF_TYPE::TESTPOINT
+        bool        Mirror      = false;
+        bool        Fixed       = false;
+        READABILITY Readability = READABILITY::BOTTOM_TO_TOP;
+
+        std::map<ATTRIBUTE_ID, TEXT_LOCATION> TextLocations; ///< This contains location of
+                                                             ///< any attributes, including
+                                                             ///< designator position
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>    AttributeValues;
+        std::map<PART_DEFINITION_PIN_ID, wxString> PinLabels; ///< This is inherited from the
+                                                              ///< PARTS library but is allowed
+                                                              ///< to be out of sync.
+                                                              ///< See PART::DEFINITION::PIN::Label
+        std::map<PART_DEFINITION_PIN_ID, PIN_ATTRIBUTE> PinAttributes;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct DOCUMENTATION_SYMBOL
+    {
+        DOCUMENTATION_SYMBOL_ID ID;
+
+        SYMDEF_ID SymdefID; ///< Normally documentation symbols only have TEXT, FIGURE and
+                            ///< TEXT_LOCATION objects which are all drawn on the "(Undefined)"
+                            ///< Layer. When used in the design, the user has to specify which
+                            ///< layer to draw it on.
+        LAYER_ID LayerID;   ///< Move all FIGURE objects in the Symdef to this layer.
+        POINT    Origin;    ///< Origin of the component (this is used as the reference point
+                            ///< when placing the component in the design)
+
+        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this component is part of a group
+        REUSEBLOCKREF ReuseBlockRef;
+        long          OrientAngle = 0;
+        bool          Mirror      = false;
+        bool          Fixed       = false;
+        READABILITY   Readability = READABILITY::BOTTOM_TO_TOP;
+
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
+
+        void Parse( XNODE* aNode );
+    };
+
+    enum class TESTLAND_SIDE
+    {
+        NONE,
+        MAX, ///< The highest PHYSICAL_LAYER_ID currently defined (i.e. back / bottom side).
+        MIN, ///< The lowest PHYSICAL_LAYER_ID currently defined (i.e. front / top side).
+        BOTH
+    };
+
+
+    static TESTLAND_SIDE ParseTestlandSide( XNODE* aNode );
+
+    struct NET
+    {
+        struct PIN ///< "PIN" nodename (represents a PAD in a PCB component)
+        {
+            NETELEMENT_ID ID; ///< First character is "P"
+            COMPONENT_ID  ComponentID;
+            PAD_ID        PadID;
+
+            void Parse( XNODE* aNode );
+        };
+
+        struct VIA ///< "VIA" nodename
+        {
+            NETELEMENT_ID ID; ///< First character is "V"
+            VIACODE_ID    ViaCodeID;
+            LAYERPAIR_ID  LayerPairID;
+            POINT         Location;
+            GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this VIA is part of a group.
+            REUSEBLOCKREF ReuseBlockRef;
+            TESTLAND_SIDE TestlandSide = TESTLAND_SIDE::NONE;
+            bool          Fixed        = false;
+
+            void Parse( XNODE* aNode );
+        };
+
+        struct JUNCTION ///< "JPT" nodename.
+        {
+            NETELEMENT_ID ID; ///< First character is "J"
+            LAYER_ID      LayerID;
+            POINT         Location;
+            GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this JUCTION is part of a
+                                                   ///< group
+            REUSEBLOCKREF ReuseBlockRef;
+            bool          Fixed = false;
+
+            void Parse( XNODE* aNode );
+        };
+
+
+        struct COPPER_TERMINAL ///< "COPTERM" nodename
+        {
+            NETELEMENT_ID      ID; ///< First two character are "CT"
+            COPPER_ID          CopperID;
+            NETREF_TERMINAL_ID CopperTermNum;
+
+            void Parse( XNODE* aNode );
+        };
+
+        struct ROUTE_VERTEX ///< Two sibbling nodes: first node being "ROUTEWIDTH" and next
+                            ///< node being a VERTEX (e.g. PT, CWARC, etc.)
+        {
+            long   RouteWidth;
+            bool   Fixed = false;
+            VERTEX Vertex;
+
+            XNODE* Parse( XNODE* aNode ); ///< Returns a pointer to the last node
+        };
+
+        struct ROUTE ///< "ROUTE" nodename
+        {
+            LAYER_ID                  LayerID = wxEmptyString;
+            POINT                     StartPoint;
+            std::vector<ROUTE_VERTEX> RouteVertices;
+
+            void Parse( XNODE* aNode );
+        };
+
+        struct CONNECTION ///< "CONN" nodename
+        {
+            NETELEMENT_ID StartNode;
+            NETELEMENT_ID EndNode;
+            ROUTECODE_ID  RouteCodeID;
+            ROUTE         Route;
+            bool          Unrouted = false; ///< Instead of a ROUTE, the CONNECTION might have an
+                                            ///< "UNROUTE" token. This appears to indicate that
+                                            ///< the connection is made via a power plane layer
+                                            ///< as opposed to a route (track in KiCad terms)
+            bool     Fixed   = false;
+            bool     Hidden  = false;
+            GROUP_ID GroupID = wxEmptyString; ///< If not empty, this connection is part of a group
+            REUSEBLOCKREF ReuseBlockRef;
+
+            LAYER_ID UnrouteLayerID = wxEmptyString; ///< See Unrouted member variable.
+            std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< It is possible to add
+                                                                     ///< attributes solely to a
+                                                                     ///< particular connection
+
+            void Parse( XNODE* aNode );
+        };
+
+        NET_ID       ID;
+        ROUTECODE_ID RouteCodeID = wxEmptyString;   ///< "NETCODE" subnode
+        long         SignalNum   = UNDEFINED_VALUE; ///< This is undefined if the net has been
+                                                    ///< given a name. "SIGNUM" subnode.
+        wxString Name = wxEmptyString; ///< This is undefined (wxEmptyString) if the net
+                                       ///< is unnamed. "SIGNAME" subnode
+
+        std::map<NETELEMENT_ID, PIN>             Pins;
+        std::map<NETELEMENT_ID, VIA>             Vias;
+        std::map<NETELEMENT_ID, JUNCTION>        Junctions;
+        std::map<NETELEMENT_ID, COPPER_TERMINAL> CopperTerminals;
+        std::vector<CONNECTION>                  Connections;
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>  AttributeValues;
+
+        NETCLASS_ID NetClassID =
+                wxEmptyString; ///< The net might not have a net class, in which case it will be
+                               ///<  wxEmptyString ("NETCLASSREF" subnode)
+        SPACING_CLASS_ID SpacingClassID =
+                wxEmptyString; ///< The net might not have a spacing class, in which case it will
+                               ///< be wxEmptyString ("SPACINGCLASS" subnode)
+
+        void Parse( XNODE* aNode );
+    };
+
+    /**
+     * @brief Templates are CADSTAR's equivalent to a "filled zone". However the difference is that
+     * in CADSTAR the template just specifies the rules for "pouring" copper. Then, if the template
+     * has indeed been "poured", there will be one or more separate COPPER objects linked to the
+     * TEMPLATE via COPPER::PouredTemplateID
+     */
+    struct TEMPLATE
+    {
+        struct POURING
+        {
+            enum class COPPER_FILL_TYPE
+            {
+                UNDEFINED,
+                FILLED,
+                HATCHED ///< This is a user defined HATCHCODE_ID
+            };
+
+            /**
+             * @brief From CADSTAR Help: "With this parameter you can select one of two ways in 
+             * which to generate thermal reliefs."
+             * Note: there doesn't appear to be any noticeable difference between the options.
+             */
+            enum class RELIEF_TYPE
+            {
+                CROSS,  ///< This method applies short copper stubs to form a cross. (default)
+                CUTOUTS ///< This method uses four cutouts in the copper to leave the reliefs
+                        ///< required. Note: The disadvantage of using cutouts is that they
+                        ///< can be slower to generate.
+            };
+
+
+            COPPERCODE_ID CopperCodeID;       ///< From CADSTAR Help: "Copper Code is for
+                                              ///< selecting the width of the line used to
+                                              ///< draw the outline and filling for the copper
+                                              ///< shape. This subsequently controls the pen
+                                              ///< width (or aperture etc ...) used on a
+                                              ///< plotting machine." (param0)
+            COPPERCODE_ID ReliefCopperCodeID; ///< From CADSTAR Help: "Relief Copper Code is for
+                                              ///< selecting the width of line used to draw the
+                                              ///< thermal reliefs for pads connected to the
+                                              ///< power planes (created by Copper Pour) This
+                                              ///< subsequently controls the pen width (or
+                                              ///< aperture etc ...) used on a plotting machine"
+                                              ///< (param1)
+
+            long ClearanceWidth;         ///< (param2)
+            long SliverWidth;            ///< (param3)
+            long AdditionalIsolation;    ///< (param4)
+            long ThermalReliefPadsAngle; ///< Disabled when !ThermalReliefOnPads (param5)
+            long ThermalReliefViasAngle; ///< Disabled when !ThermalReliefOnVias (param6)
+            long MinIsolatedCopper = UNDEFINED_VALUE; ///< Disabled when UNDEFINED_VALUE (param7)
+            long MinDisjointCopper = UNDEFINED_VALUE; ///< Disabled when UNDEFINED_VALUE (param8)
+
+            bool ThermalReliefOnPads  = true;  ///< false when subnode "NOPINRELIEF" is present
+            bool ThermalReliefOnVias  = true;  ///< false when subnode "NOVIARELIEF" is present
+            bool AllowInNoRouting     = false; ///< true when subnode "IGNORETRN" is present
+            bool BoxIsolatedPins      = false; ///< true when subnode "BOXPINS" is present
+            bool AutomaticRepour      = false; ///< true when subnode "REGENERATE" is present
+            bool TargetForAutorouting = false; ///< true when subnode "AUTOROUTETARGET" is present
+
+            RELIEF_TYPE      ReliefType  = RELIEF_TYPE::CROSS; ///< See RELIEF_TYPE
+            COPPER_FILL_TYPE FillType    = COPPER_FILL_TYPE::UNDEFINED;
+            HATCHCODE_ID     HatchCodeID = wxEmptyString; ///< Only for FillType = HATCHED
+
+            void Parse( XNODE* aNode );
+        };
+
+        TEMPLATE_ID   ID;
+        LINECODE_ID   LineCodeID;
+        wxString      Name;
+        NET_ID        NetID;
+        LAYER_ID      LayerID;
+        POURING       Pouring; ///< Copper pour settings (e.g. relief / hatching /etc.)
+        SHAPE         Shape;
+        bool          Fixed   = false;
+        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this TEMPLATE is part of a group
+        REUSEBLOCKREF ReuseBlockRef;
+
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct COPPER
+    {
+        struct NETREF
+        {
+            struct TERMINAL
+            {
+                NETREF_TERMINAL_ID ID;
+                POINT              Location;
+                bool               Fixed = false;
+
+                void Parse( XNODE* aNode );
+            };
+
+            NET_ID                                 NetID = wxEmptyString;
+            std::map<NETREF_TERMINAL_ID, TERMINAL> Terminals;
+            bool                                   Fixed = false;
+
+            void Parse( XNODE* aNode );
+        };
+
+        COPPER_ID     ID;
+        COPPERCODE_ID CopperCodeID;
+        LAYER_ID      LayerID;
+        NETREF        NetRef;
+        SHAPE         Shape;
+        TEMPLATE_ID   PouredTemplateID = wxEmptyString; ///< If not empty, it means this COPPER
+                                                        ///< is part of a poured template.
+        bool          Fixed   = false;
+        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this COPPER is part of a group
+        REUSEBLOCKREF ReuseBlockRef;
+
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    enum class NETSYNCH
+    {
+        UNDEFINED,
+        WARNING,
+        FULL
+    };
+
+
+    struct DRILL_TABLE
+    {
+        DRILL_TABLE_ID ID;
+        LAYER_ID       LayerID;
+        POINT          Position;
+        long           OrientAngle = 0;
+        bool           Mirror      = false;
+        bool           Fixed       = false;
+        READABILITY    Readability = READABILITY::BOTTOM_TO_TOP;
+        GROUP_ID       GroupID     = wxEmptyString; ///< If not empty, this DRILL_TABLE
+                                                    ///< is part of a group
+        REUSEBLOCKREF ReuseBlockRef;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct LAYOUT
+    {
+        NETSYNCH NetSynch = NETSYNCH::UNDEFINED;
+
+        std::map<GROUP_ID, GROUP>           Groups;
+        std::map<REUSEBLOCK_ID, REUSEBLOCK> ReuseBlocks;
+
+        std::map<BOARD_ID, BOARD> Boards; ///< Normally CADSTAR only allows one board but
+                                          ///< implemented this as a map just in case
+        std::map<FIGURE_ID, FIGURE>                             Figures;
+        std::map<AREA_ID, AREA>                                 Areas;
+        std::map<COMPONENT_ID, COMPONENT>                       Components;
+        std::map<DOCUMENTATION_SYMBOL_ID, DOCUMENTATION_SYMBOL> DocumentationSymbols;
+        std::map<NET_ID, NET>                                   Nets; ///< Contains tracks and vias
+        std::map<TEMPLATE_ID, TEMPLATE>                         Templates;
+        std::map<COPPER_ID, COPPER>                             Coppers;
+        std::map<TEXT_ID, TEXT>                                 Texts;
+        std::map<DIMENSION_ID, DIMENSION>                       Dimensions;
+        std::map<DRILL_TABLE_ID, DRILL_TABLE>                   DrillTables;
+
+        void Parse( XNODE* aNode );
+    };
+
+
     wxString Filename;
 
     HEADER      Header;
     ASSIGNMENTS Assignments;
     LIBRARY     Library;
     PARTS       Parts;
-
-    //TODO Add Library, Defaults, Parts, etc..
+    LAYOUT      Layout;
 
     int KiCadUnitMultiplier; ///<Use this value to convert units in this CPA file to KiCad units
 
