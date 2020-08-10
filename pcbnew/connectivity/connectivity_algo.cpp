@@ -617,14 +617,6 @@ void CN_CONNECTIVITY_ALGO::MarkNetAsDirty( int aNet )
 }
 
 
-// Via contact with zones (especially if they're hatched) is a bit of a special case.  Anchor
-// contact (the center of the hole) doesn't really tell the whole story, but we don't want to
-// go to cardinal points like we do with pads because we don't use thermals for vias.
-//
-// Instead we use an accuracy which is set to slightly less than the via width (less because
-// single-point contact isn't electrically sufficient.
-constexpr static double VIA_CONTACT_MINIMUM = 0.04;
-
 void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
 {
     if( aZone->Net() != aItem->Net() && !aItem->CanChangeNet() )
@@ -637,10 +629,7 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
     int      accuracy = 0;
 
     if( aItem->Valid() && aItem->Parent()->Type() == PCB_VIA_T )
-    {
-        int viaRadius = static_cast<VIA*>( aItem->Parent() )->GetWidth() / 2;
-        accuracy = KiROUND( viaRadius * ( 1.0 - VIA_CONTACT_MINIMUM ) );
-    }
+        accuracy = ( static_cast<VIA*>( aItem->Parent() )->GetWidth() + 1 ) / 2;
 
     for( int i = 0; i < aItem->AnchorCount(); ++i )
     {
