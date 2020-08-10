@@ -135,6 +135,22 @@ nt(A) ::= nt(B) G_PLUS nt(C).
     A->leaf[1] = C;
 }
 
+nt(A) ::= G_PLUS nt(B).
+{
+    A = newNode( pEval, B->op, B->value );
+    A->leaf[0] = B->leaf[0];
+    A->leaf[1] = B->leaf[1];
+}
+
+
+nt(A) ::= G_MINUS nt(B).
+{
+    A = newNode( pEval, TR_OP_SUB );
+    A->leaf[0] = newNode( pEval, TR_NUMBER );
+    A->leaf[1] = B;
+}
+
+
 nt(A) ::= nt(B) G_MINUS nt(C).
 {
     A = newNode( pEval, TR_OP_SUB );

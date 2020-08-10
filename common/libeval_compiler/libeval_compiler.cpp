@@ -835,7 +835,11 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             TREE_NODE* son = node->leaf[0];
             double value;
 
-            if( son && son->op == TR_UNIT )
+            if( !node->value.str )
+            {
+                value = 0.0;
+            }
+            else if( son && son->op == TR_UNIT )
             {
                 int units = son->value.idx;
                 value =  m_unitResolver->Convert( *node->value.str, units );

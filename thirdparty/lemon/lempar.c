@@ -114,17 +114,17 @@ typedef union {
 #define ParseCTX_PARAM
 #define ParseCTX_FETCH
 #define ParseCTX_STORE
-#define YYNSTATE             35
-#define YYNRULE              24
+#define YYNSTATE             39
+#define YYNRULE              26
 #define YYNTOKEN             25
-#define YY_MAX_SHIFT         34
-#define YY_MIN_SHIFTREDUCE   43
-#define YY_MAX_SHIFTREDUCE   66
-#define YY_ERROR_ACTION      67
-#define YY_ACCEPT_ACTION     68
-#define YY_NO_ACTION         69
-#define YY_MIN_REDUCE        70
-#define YY_MAX_REDUCE        93
+#define YY_MAX_SHIFT         38
+#define YY_MIN_SHIFTREDUCE   47
+#define YY_MAX_SHIFTREDUCE   72
+#define YY_ERROR_ACTION      73
+#define YY_ACCEPT_ACTION     74
+#define YY_NO_ACTION         75
+#define YY_MIN_REDUCE        76
+#define YY_MAX_REDUCE        101
 /************* End control #defines *******************************************/
 #define YY_NLOOKAHEAD ((int)(sizeof(yy_lookahead)/sizeof(yy_lookahead[0])))
 
@@ -191,22 +191,23 @@ typedef union {
 **  yy_default[]       Default action for each state.
 **
 *********** Begin parsing tables **********************************************/
-#define YY_ACTTAB_COUNT (135)
+#define YY_ACTTAB_COUNT (149)
 static const YYACTIONTYPE yy_action[] = {
- /*     0 */    19,   68,    1,    1,   10,    9,   17,   16,   14,   13,
- /*    10 */    12,    4,   11,   87,    8,    7,    5,    6,    3,    5,
- /*    20 */     6,    3,   10,    9,   61,   16,   14,   13,   12,    4,
- /*    30 */    11,   22,    8,    7,    5,    6,    3,   31,   32,   28,
- /*    40 */    10,    9,   62,   16,   14,   13,   12,    4,   11,   29,
- /*    50 */     8,    7,    5,    6,    3,   19,   43,    9,   92,   16,
- /*    60 */    14,   13,   12,    4,   11,   23,    8,    7,    5,    6,
- /*    70 */     3,   67,   67,   67,   67,   67,   67,   67,    8,    7,
- /*    80 */     5,    6,    3,   16,   14,   13,   12,    4,   11,   33,
- /*    90 */     8,    7,    5,    6,    3,   90,   33,   20,   24,   25,
- /*   100 */    26,    3,   27,   69,   18,   21,   45,   15,   66,   34,
- /*   110 */    46,    2,   33,   69,   69,   66,   34,   46,    2,   69,
- /*   120 */    69,   69,   69,   69,   69,   69,   69,   69,   69,   69,
- /*   130 */    69,   69,   34,   46,    2,
+ /*     0 */    21,   74,    1,    1,   12,   11,   19,   18,   16,   15,
+ /*    10 */    14,    6,   13,   30,   10,    9,    7,    8,    5,    7,
+ /*    20 */     8,    5,   12,   11,   67,   18,   16,   15,   14,    6,
+ /*    30 */    13,   31,   10,    9,    7,    8,    5,   95,   24,   35,
+ /*    40 */    12,   11,   68,   18,   16,   15,   14,    6,   13,   36,
+ /*    50 */    10,    9,    7,    8,    5,   21,   47,   11,  100,   18,
+ /*    60 */    16,   15,   14,    6,   13,   32,   10,    9,    7,    8,
+ /*    70 */     5,   73,   73,   73,   73,   73,   73,   73,   10,    9,
+ /*    80 */     7,    8,    5,   18,   16,   15,   14,    6,   13,    5,
+ /*    90 */    10,    9,    7,    8,    5,   98,   37,   33,   25,   22,
+ /*   100 */    26,   17,   27,   49,   28,   29,   20,   23,   75,    4,
+ /*   110 */     3,   37,   75,   75,   75,   72,   38,   50,    2,   75,
+ /*   120 */    75,   75,   75,   75,    4,    3,   37,   75,   75,   75,
+ /*   130 */    72,   38,   50,    2,   75,   75,   75,   75,   75,    4,
+ /*   140 */     3,   75,   75,   75,   75,   75,   38,   50,    2,
 };
 static const YYCODETYPE yy_lookahead[] = {
  /*     0 */    25,   26,   27,   28,    4,    5,   25,    7,    8,    9,
@@ -217,34 +218,36 @@ static const YYCODETYPE yy_lookahead[] = {
  /*    50 */    14,   15,   16,   17,   18,   25,   20,    5,   28,    7,
  /*    60 */     8,    9,   10,   11,   12,   25,   14,   15,   16,   17,
  /*    70 */    18,    7,    8,    9,   10,   11,   12,   18,   14,   15,
- /*    80 */    16,   17,   18,    7,    8,    9,   10,   11,   12,    1,
+ /*    80 */    16,   17,   18,    7,    8,    9,   10,   11,   12,   18,
  /*    90 */    14,   15,   16,   17,   18,    0,    1,   25,   25,   25,
- /*   100 */    25,   18,   25,   29,   25,   25,   19,   23,   20,   21,
- /*   110 */    22,   23,    1,   29,   29,   20,   21,   22,   23,   29,
- /*   120 */    29,   29,   29,   29,   29,   29,   29,   29,   29,   29,
- /*   130 */    29,   29,   21,   22,   23,   29,   29,   29,
+ /*   100 */    25,   23,   25,   19,   25,   25,   25,   25,   29,   14,
+ /*   110 */    15,    1,   29,   29,   29,   20,   21,   22,   23,   29,
+ /*   120 */    29,   29,   29,   29,   14,   15,    1,   29,   29,   29,
+ /*   130 */    20,   21,   22,   23,   29,   29,   29,   29,   29,   14,
+ /*   140 */    15,   29,   29,   29,   29,   29,   21,   22,   23,   29,
+ /*   150 */    29,   29,
 };
-#define YY_SHIFT_COUNT    (34)
+#define YY_SHIFT_COUNT    (38)
 #define YY_SHIFT_MIN      (0)
-#define YY_SHIFT_MAX      (111)
+#define YY_SHIFT_MAX      (125)
 static const unsigned char yy_shift_ofst[] = {
- /*     0 */    88,   95,  111,  111,  111,  111,  111,  111,  111,  111,
- /*    10 */   111,  111,  111,  111,  111,  111,  111,    0,   18,   36,
- /*    20 */    52,   64,   64,   76,   64,   64,   64,   64,    3,    3,
- /*    30 */    59,   83,   83,   84,   87,
+ /*     0 */   110,   95,  125,  125,  125,  125,  125,  125,  125,  125,
+ /*    10 */   125,  125,  125,  125,  125,  125,  125,  125,  125,    0,
+ /*    20 */    18,   36,   52,   64,   64,   76,   64,   64,   64,   64,
+ /*    30 */     3,    3,    3,    3,   59,   71,   71,   78,   84,
 };
-#define YY_REDUCE_COUNT (16)
+#define YY_REDUCE_COUNT (18)
 #define YY_REDUCE_MIN   (-25)
-#define YY_REDUCE_MAX   (80)
+#define YY_REDUCE_MAX   (82)
 static const signed char yy_reduce_ofst[] = {
  /*     0 */   -25,   30,  -19,  -12,    6,   12,   13,   14,   24,   40,
- /*    10 */    72,   73,   74,   75,   77,   79,   80,
+ /*    10 */    72,   73,   74,   75,   77,   79,   80,   81,   82,
 };
 static const YYACTIONTYPE yy_default[] = {
- /*     0 */    67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
- /*    10 */    67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
- /*    20 */    80,   75,   86,   81,   79,   78,   77,   76,   83,   82,
- /*    30 */    87,   85,   84,   74,   71,
+ /*     0 */    73,   73,   73,   73,   73,   73,   73,   73,   73,   73,
+ /*    10 */    73,   73,   73,   73,   73,   73,   73,   73,   73,   73,
+ /*    20 */    73,   73,   86,   81,   94,   87,   85,   84,   83,   82,
+ /*    30 */    90,   89,   91,   88,   95,   93,   92,   80,   77,
 };
 /********** End of lemon-generated parsing tables *****************************/
 
@@ -400,17 +403,19 @@ static const char *const yyRuleName[] = {
  /*  10 */ "nt ::= nt G_BOOL_AND nt",
  /*  11 */ "nt ::= nt G_BOOL_OR nt",
  /*  12 */ "nt ::= nt G_PLUS nt",
- /*  13 */ "nt ::= nt G_MINUS nt",
- /*  14 */ "nt ::= nt G_MULT nt",
- /*  15 */ "nt ::= nt G_DIVIDE nt",
- /*  16 */ "nt ::= nt G_EQUAL nt",
- /*  17 */ "nt ::= nt G_STRUCT_REF nt",
- /*  18 */ "nt ::= G_PARENL nt G_PARENR",
- /*  19 */ "nt ::= G_IDENTIFIER G_PARENL nt G_PARENR",
- /*  20 */ "main ::= in",
- /*  21 */ "in ::= stmt",
- /*  22 */ "in ::= in stmt",
- /*  23 */ "stmt ::= G_ENDS",
+ /*  13 */ "nt ::= G_PLUS nt",
+ /*  14 */ "nt ::= G_MINUS nt",
+ /*  15 */ "nt ::= nt G_MINUS nt",
+ /*  16 */ "nt ::= nt G_MULT nt",
+ /*  17 */ "nt ::= nt G_DIVIDE nt",
+ /*  18 */ "nt ::= nt G_EQUAL nt",
+ /*  19 */ "nt ::= nt G_STRUCT_REF nt",
+ /*  20 */ "nt ::= G_PARENL nt G_PARENR",
+ /*  21 */ "nt ::= G_IDENTIFIER G_PARENL nt G_PARENR",
+ /*  22 */ "main ::= in",
+ /*  23 */ "in ::= stmt",
+ /*  24 */ "in ::= in stmt",
+ /*  25 */ "stmt ::= G_ENDS",
 };
 #endif /* NDEBUG */
 
@@ -839,17 +844,19 @@ static const YYCODETYPE yyRuleInfoLhs[] = {
     25,  /* (10) nt ::= nt G_BOOL_AND nt */
     25,  /* (11) nt ::= nt G_BOOL_OR nt */
     25,  /* (12) nt ::= nt G_PLUS nt */
-    25,  /* (13) nt ::= nt G_MINUS nt */
-    25,  /* (14) nt ::= nt G_MULT nt */
-    25,  /* (15) nt ::= nt G_DIVIDE nt */
-    25,  /* (16) nt ::= nt G_EQUAL nt */
-    25,  /* (17) nt ::= nt G_STRUCT_REF nt */
-    25,  /* (18) nt ::= G_PARENL nt G_PARENR */
-    25,  /* (19) nt ::= G_IDENTIFIER G_PARENL nt G_PARENR */
-    26,  /* (20) main ::= in */
-    27,  /* (21) in ::= stmt */
-    27,  /* (22) in ::= in stmt */
-    28,  /* (23) stmt ::= G_ENDS */
+    25,  /* (13) nt ::= G_PLUS nt */
+    25,  /* (14) nt ::= G_MINUS nt */
+    25,  /* (15) nt ::= nt G_MINUS nt */
+    25,  /* (16) nt ::= nt G_MULT nt */
+    25,  /* (17) nt ::= nt G_DIVIDE nt */
+    25,  /* (18) nt ::= nt G_EQUAL nt */
+    25,  /* (19) nt ::= nt G_STRUCT_REF nt */
+    25,  /* (20) nt ::= G_PARENL nt G_PARENR */
+    25,  /* (21) nt ::= G_IDENTIFIER G_PARENL nt G_PARENR */
+    26,  /* (22) main ::= in */
+    27,  /* (23) in ::= stmt */
+    27,  /* (24) in ::= in stmt */
+    28,  /* (25) stmt ::= G_ENDS */
 };
 
 /* For rule J, yyRuleInfoNRhs[J] contains the negative of the number
@@ -868,17 +875,19 @@ static const signed char yyRuleInfoNRhs[] = {
    -3,  /* (10) nt ::= nt G_BOOL_AND nt */
    -3,  /* (11) nt ::= nt G_BOOL_OR nt */
    -3,  /* (12) nt ::= nt G_PLUS nt */
-   -3,  /* (13) nt ::= nt G_MINUS nt */
-   -3,  /* (14) nt ::= nt G_MULT nt */
-   -3,  /* (15) nt ::= nt G_DIVIDE nt */
-   -3,  /* (16) nt ::= nt G_EQUAL nt */
-   -3,  /* (17) nt ::= nt G_STRUCT_REF nt */
-   -3,  /* (18) nt ::= G_PARENL nt G_PARENR */
-   -4,  /* (19) nt ::= G_IDENTIFIER G_PARENL nt G_PARENR */
-   -1,  /* (20) main ::= in */
-   -1,  /* (21) in ::= stmt */
-   -2,  /* (22) in ::= in stmt */
-   -1,  /* (23) stmt ::= G_ENDS */
+   -2,  /* (13) nt ::= G_PLUS nt */
+   -2,  /* (14) nt ::= G_MINUS nt */
+   -3,  /* (15) nt ::= nt G_MINUS nt */
+   -3,  /* (16) nt ::= nt G_MULT nt */
+   -3,  /* (17) nt ::= nt G_DIVIDE nt */
+   -3,  /* (18) nt ::= nt G_EQUAL nt */
+   -3,  /* (19) nt ::= nt G_STRUCT_REF nt */
+   -3,  /* (20) nt ::= G_PARENL nt G_PARENR */
+   -4,  /* (21) nt ::= G_IDENTIFIER G_PARENL nt G_PARENR */
+   -1,  /* (22) main ::= in */
+   -1,  /* (23) in ::= stmt */
+   -2,  /* (24) in ::= in stmt */
+   -1,  /* (25) stmt ::= G_ENDS */
 };
 
 static void yy_accept(yyParser*);  /* Forward Declaration */
@@ -968,14 +977,14 @@ static YYACTIONTYPE yy_reduce(
       case 0: /* stmt ::= nt G_ENDS */
 #line 58 "grammar.lemon"
 { pEval->setRoot(yymsp[-1].minor.yy31); }
-#line 972 "grammar.c"
+#line 981 "grammar.c"
         break;
       case 1: /* nt ::= G_VALUE */
 #line 61 "grammar.lemon"
 {
     yylhsminor.yy31 = newNode( pEval, TR_NUMBER, yymsp[0].minor.yy0.value );
 }
-#line 979 "grammar.c"
+#line 988 "grammar.c"
   yymsp[0].minor.yy31 = yylhsminor.yy31;
         break;
       case 2: /* nt ::= G_VALUE G_UNIT */
@@ -984,7 +993,7 @@ static YYACTIONTYPE yy_reduce(
     yylhsminor.yy31 = newNode( pEval, TR_NUMBER, yymsp[-1].minor.yy0.value );
     yylhsminor.yy31->leaf[0] = newNode( pEval, TR_UNIT, yymsp[0].minor.yy0.value );
 }
-#line 988 "grammar.c"
+#line 997 "grammar.c"
   yymsp[-1].minor.yy31 = yylhsminor.yy31;
         break;
       case 3: /* nt ::= G_STRING */
@@ -992,7 +1001,7 @@ static YYACTIONTYPE yy_reduce(
 {
     yylhsminor.yy31 = newNode( pEval, TR_STRING, yymsp[0].minor.yy0.value );
 }
-#line 996 "grammar.c"
+#line 1005 "grammar.c"
   yymsp[0].minor.yy31 = yylhsminor.yy31;
         break;
       case 4: /* nt ::= G_IDENTIFIER */
@@ -1000,7 +1009,7 @@ static YYACTIONTYPE yy_reduce(
 {
     yylhsminor.yy31 = newNode( pEval, TR_IDENTIFIER, yymsp[0].minor.yy0.value );
 }
-#line 1004 "grammar.c"
+#line 1013 "grammar.c"
   yymsp[0].minor.yy31 = yylhsminor.yy31;
         break;
       case 5: /* nt ::= nt G_LESS_THAN nt */
@@ -1010,7 +1019,7 @@ static YYACTIONTYPE yy_reduce(
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1014 "grammar.c"
+#line 1023 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
       case 6: /* nt ::= nt G_GREATER_THAN nt */
@@ -1020,7 +1029,7 @@ static YYACTIONTYPE yy_reduce(
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1024 "grammar.c"
+#line 1033 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
       case 7: /* nt ::= nt G_LESS_EQUAL_THAN nt */
@@ -1030,7 +1039,7 @@ static YYACTIONTYPE yy_reduce(
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1034 "grammar.c"
+#line 1043 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
       case 8: /* nt ::= nt G_GREATER_EQUAL_THAN nt */
@@ -1040,7 +1049,7 @@ static YYACTIONTYPE yy_reduce(
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1044 "grammar.c"
+#line 1053 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
       case 9: /* nt ::= nt G_NOT_EQUAL nt */
@@ -1050,7 +1059,7 @@ static YYACTIONTYPE yy_reduce(
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1054 "grammar.c"
+#line 1063 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
       case 10: /* nt ::= nt G_BOOL_AND nt */
@@ -1060,7 +1069,7 @@ static YYACTIONTYPE yy_reduce(
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1064 "grammar.c"
+#line 1073 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
       case 11: /* nt ::= nt G_BOOL_OR nt */
@@ -1070,7 +1079,7 @@ static YYACTIONTYPE yy_reduce(
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1074 "grammar.c"
+#line 1083 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
       case 12: /* nt ::= nt G_PLUS nt */
@@ -1080,83 +1089,101 @@ static YYACTIONTYPE yy_reduce(
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1084 "grammar.c"
+#line 1093 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
-      case 13: /* nt ::= nt G_MINUS nt */
+      case 13: /* nt ::= G_PLUS nt */
 #line 139 "grammar.lemon"
+{
+    yymsp[-1].minor.yy31 = newNode( pEval, yymsp[0].minor.yy31->op, yymsp[0].minor.yy31->value );
+    yymsp[-1].minor.yy31->leaf[0] = yymsp[0].minor.yy31->leaf[0];
+    yymsp[-1].minor.yy31->leaf[1] = yymsp[0].minor.yy31->leaf[1];
+}
+#line 1103 "grammar.c"
+        break;
+      case 14: /* nt ::= G_MINUS nt */
+#line 147 "grammar.lemon"
+{
+    yymsp[-1].minor.yy31 = newNode( pEval, TR_OP_SUB );
+    yymsp[-1].minor.yy31->leaf[0] = newNode( pEval, TR_NUMBER );
+    yymsp[-1].minor.yy31->leaf[1] = yymsp[0].minor.yy31;
+}
+#line 1112 "grammar.c"
+        break;
+      case 15: /* nt ::= nt G_MINUS nt */
+#line 155 "grammar.lemon"
 {
     yylhsminor.yy31 = newNode( pEval, TR_OP_SUB );
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1094 "grammar.c"
+#line 1121 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
-      case 14: /* nt ::= nt G_MULT nt */
-#line 146 "grammar.lemon"
+      case 16: /* nt ::= nt G_MULT nt */
+#line 162 "grammar.lemon"
 {
     yylhsminor.yy31 = newNode( pEval, TR_OP_MUL );
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1104 "grammar.c"
+#line 1131 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
-      case 15: /* nt ::= nt G_DIVIDE nt */
-#line 153 "grammar.lemon"
+      case 17: /* nt ::= nt G_DIVIDE nt */
+#line 169 "grammar.lemon"
 {
     yylhsminor.yy31 = newNode( pEval, TR_OP_DIV );
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1114 "grammar.c"
+#line 1141 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
-      case 16: /* nt ::= nt G_EQUAL nt */
-#line 160 "grammar.lemon"
+      case 18: /* nt ::= nt G_EQUAL nt */
+#line 176 "grammar.lemon"
 {
     yylhsminor.yy31 = newNode( pEval, TR_OP_EQUAL );
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1124 "grammar.c"
+#line 1151 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
-      case 17: /* nt ::= nt G_STRUCT_REF nt */
-#line 167 "grammar.lemon"
+      case 19: /* nt ::= nt G_STRUCT_REF nt */
+#line 183 "grammar.lemon"
 {
     yylhsminor.yy31 = newNode( pEval, TR_STRUCT_REF );
     yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
     yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
 }
-#line 1134 "grammar.c"
+#line 1161 "grammar.c"
   yymsp[-2].minor.yy31 = yylhsminor.yy31;
         break;
-      case 18: /* nt ::= G_PARENL nt G_PARENR */
-#line 174 "grammar.lemon"
+      case 20: /* nt ::= G_PARENL nt G_PARENR */
+#line 190 "grammar.lemon"
 {
     yymsp[-2].minor.yy31 = newNode( pEval, yymsp[-1].minor.yy31->op, yymsp[-1].minor.yy31->value );
     yymsp[-2].minor.yy31->leaf[0] = yymsp[-1].minor.yy31->leaf[0];
     yymsp[-2].minor.yy31->leaf[1] = yymsp[-1].minor.yy31->leaf[1];
 }
-#line 1144 "grammar.c"
+#line 1171 "grammar.c"
         break;
-      case 19: /* nt ::= G_IDENTIFIER G_PARENL nt G_PARENR */
-#line 181 "grammar.lemon"
+      case 21: /* nt ::= G_IDENTIFIER G_PARENL nt G_PARENR */
+#line 197 "grammar.lemon"
 {
     yylhsminor.yy31 = newNode( pEval, TR_OP_FUNC_CALL );
     yylhsminor.yy31->leaf[0] = newNode( pEval, TR_IDENTIFIER, yymsp[-3].minor.yy0.value);
     yylhsminor.yy31->leaf[1] = yymsp[-1].minor.yy31;
 }
-#line 1153 "grammar.c"
+#line 1180 "grammar.c"
   yymsp[-3].minor.yy31 = yylhsminor.yy31;
         break;
       default:
-      /* (20) main ::= in */ yytestcase(yyruleno==20);
-      /* (21) in ::= stmt (OPTIMIZED OUT) */ assert(yyruleno!=21);
-      /* (22) in ::= in stmt */ yytestcase(yyruleno==22);
-      /* (23) stmt ::= G_ENDS */ yytestcase(yyruleno==23);
+      /* (22) main ::= in */ yytestcase(yyruleno==22);
+      /* (23) in ::= stmt (OPTIMIZED OUT) */ assert(yyruleno!=23);
+      /* (24) in ::= in stmt */ yytestcase(yyruleno==24);
+      /* (25) stmt ::= G_ENDS */ yytestcase(yyruleno==25);
         break;
 /********** End reduce actions ************************************************/
   };
@@ -1219,7 +1246,7 @@ static void yy_syntax_error(
 #line 42 "grammar.lemon"
 
   pEval->parseError("Syntax error");
-#line 1223 "grammar.c"
+#line 1250 "grammar.c"
 /************ End %syntax_error code ******************************************/
   ParseARG_STORE /* Suppress warning about unused %extra_argument variable */
   ParseCTX_STORE
@@ -1248,7 +1275,7 @@ static void yy_accept(
 #line 46 "grammar.lemon"
 
   pEval->parseOk();
-#line 1252 "grammar.c"
+#line 1279 "grammar.c"
 /*********** End %parse_accept code *******************************************/
   ParseARG_STORE /* Suppress warning about unused %extra_argument variable */
   ParseCTX_STORE
