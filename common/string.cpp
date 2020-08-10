@@ -40,6 +40,40 @@
 static const char illegalFileNameChars[] = "\\/:\"<>|";
 
 
+bool ConvertSmartQuotesAndDashes( wxString* aString )
+{
+    bool retVal = false;
+
+    for( wxString::iterator ii = aString->begin(); ii != aString->end(); ++ii )
+    {
+        if( *ii == L'\u0060' || *ii == L'\u00B4' || *ii == L'\u2018' || *ii == L'\u2019' )
+        {
+            *ii = '\'';
+            retVal = true;
+        }
+        if( *ii == L'\u201C' || *ii == L'\u201D' )
+        {
+            *ii = '"';
+            retVal = true;
+        }
+        if( *ii == L'\u2013' || *ii == L'\u2014' )
+        {
+            *ii = '-';
+            retVal = true;
+        }
+    }
+
+    return retVal;
+}
+
+
+/**
+ * These Escape/Unescape routines use HTML-entity-reference-style encoding to handle
+ * characters which are:
+ *   (a) not legal in filenames
+ *   (b) used as control characters in LIB_IDs
+ *   (c) used to delineate hierarchical paths
+ */
 wxString EscapeString( const wxString& aSource )
 {
 #if 1

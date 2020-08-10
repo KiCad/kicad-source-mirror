@@ -37,6 +37,13 @@
 
 
 /**
+ * Converts curly quotes and em/en dashes to straight quotes and dashes.
+ * @param aString
+ * @return true if any characters required conversion.
+ */
+bool ConvertSmartQuotesAndDashes( wxString* aString );
+
+/**
  * These Escape/Unescape routines use HTML-entity-reference-style encoding to handle
  * characters which are:
  *   (a) not legal in filenames
