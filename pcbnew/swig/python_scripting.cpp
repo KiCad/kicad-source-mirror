@@ -319,6 +319,26 @@ void pcbnewFinishPythonScripting()
 }
 
 
+wxString PyEscapeString( const wxString& aSource )
+{
+    wxString converted;
+
+    for( wxUniChar c: aSource )
+    {
+        if( c == '\\' )
+            converted += "\\\\";
+        else if( c == '\'' )
+            converted += "\\\'";
+        else if( c == '\"' )
+            converted += "\\\"";
+        else
+            converted += c;
+    }
+
+    return converted;
+}
+
+
 void pcbnewUpdatePythonEnvVar( const std::string& aVar, const wxString& aValue )
 {
     char cmd[1024];
@@ -327,11 +347,14 @@ void pcbnewUpdatePythonEnvVar( const std::string& aVar, const wxString& aValue )
     if( !Py_IsInitialized() )
         return;
 
+    wxString escapedVar = PyEscapeString( aVar );
+    wxString escapedVal = PyEscapeString( aValue );
+
     snprintf( cmd, sizeof( cmd ),
               "# coding=utf-8\n"      // The values could potentially be UTF8
               "os.environ[\"%s\"]=\"%s\"\n",
-              aVar.c_str(),
-              TO_UTF8( aValue ) );
+              TO_UTF8( escapedVar ),
+              TO_UTF8( escapedVal ) );
 
     PyLOCK lock;
 
@@ -340,7 +363,6 @@ void pcbnewUpdatePythonEnvVar( const std::string& aVar, const wxString& aValue )
     if( retv != 0 )
         wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
 }
-
 
 
 #if defined( KICAD_SCRIPTING_WXPYTHON )
