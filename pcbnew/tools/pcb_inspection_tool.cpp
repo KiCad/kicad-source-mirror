@@ -500,12 +500,7 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest()
 
     for( EDA_ITEM* item : selection )
     {
-        BOARD_CONNECTED_ITEM* boardItem = dyn_cast<BOARD_CONNECTED_ITEM*>( item );
-
-        if( !boardItem )
-            continue;
-
-        if( boardItem->Type() == PCB_MODULE_T )
+        if( item->Type() == PCB_MODULE_T )
         {
             for( auto pad : static_cast<MODULE*>( item )->Pads() )
             {
@@ -513,9 +508,10 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest()
                     items.push_back( pad );
             }
         }
-        else if( boardItem->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
+        else if( BOARD_CONNECTED_ITEM* boardItem = dyn_cast<BOARD_CONNECTED_ITEM*>( item ) )
         {
-            items.push_back( boardItem );
+            if( boardItem->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
+                items.push_back( boardItem );
         }
     }
 
