@@ -203,7 +203,7 @@ PL_SELECTION& PL_SELECTION_TOOL::GetSelection()
 }
 
 
-EDA_ITEM* PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCancelledFlag )
+void PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCancelledFlag )
 {
     int threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
@@ -240,32 +240,38 @@ EDA_ITEM* PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelecti
             if( aSelectionCancelledFlag )
                 *aSelectionCancelledFlag = true;
 
-            return nullptr;
+            return;
         }
     }
 
     if( !m_additive && !m_subtractive && !m_exclusive_or )
         ClearSelection();
 
-    if( collector.GetCount() == 1 )
-    {
-        EDA_ITEM* item = collector[ 0 ];
+    bool anyAdded      = false;
+    bool anySubtracted = false;
 
-        if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
+    if( collector.GetCount() > 0 )
+    {
+        for( int i = 0; i < collector.GetCount(); ++i )
         {
-            unselect( item );
-            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-            return nullptr;
-        }
-        else
-        {
-            select( item );
-            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-            return item;
+            if( m_subtractive || ( m_exclusive_or && collector[i]->IsSelected() ) )
+            {
+                unselect( collector[i] );
+                anySubtracted = true;
+            }
+            else
+            {
+                select( collector[i] );
+                anyAdded = true;
+            }
         }
     }
 
-    return nullptr;
+    if( anyAdded )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    if( anySubtracted )
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 }
 
 
@@ -534,7 +540,9 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
     EDA_ITEM*   current = nullptr;
     ACTION_MENU menu( true );
 
-    int limit = std::min( MAX_SELECT_ITEM_IDS, aCollector->GetCount() );
+    // ID limit is `MAX_SELECT_ITEM_IDS+1` because the last item is "select all"
+    // and the first item has ID of 1.
+    int limit = std::min( MAX_SELECT_ITEM_IDS + 1, aCollector->GetCount() );
 
     for( int i = 0; i < limit; ++i )
     {
@@ -542,9 +550,12 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
         EDA_ITEM* item = ( *aCollector )[i];
         text = item->GetSelectMenuText( m_frame->GetUserUnits() );
 
-        wxString menuText = wxString::Format("&%d. %s", i + 1, text );
+        wxString menuText = wxString::Format( "&%d. %s\t%d", i + 1, text, i + 1 );
         menu.Add( menuText, i + 1, item->GetMenuImage() );
     }
+
+    menu.AppendSeparator();
+    menu.Add( _( "Select &All\tA" ), limit + 1, net_highlight_xpm );
 
     if( aCollector->m_MenuTitle.Length() )
         menu.SetTitle( aCollector->m_MenuTitle );
@@ -553,12 +564,21 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
     menu.DisplayTitle( true );
     SetContextMenu( &menu, CMENU_NOW );
 
+    bool selectAll = false;
+
     while( TOOL_EVENT* evt = Wait() )
     {
         if( evt->Action() == TA_CHOICE_MENU_UPDATE )
         {
-            if( current )
+            if( selectAll )
+            {
+                for( int i = 0; i < aCollector->GetCount(); ++i )
+                    unhighlight( ( *aCollector )[i], BRIGHTENED );
+            }
+            else if( current )
+            {
                 unhighlight( current, BRIGHTENED );
+            }
 
             int id = *evt->GetCommandId();
 
@@ -570,21 +590,51 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
             }
             else
             {
-                current = NULL;
+                current = nullptr;
+            }
+
+            if( id == limit + 1 )
+            {
+                for( int i = 0; i < aCollector->GetCount(); ++i )
+                    highlight( ( *aCollector )[i], BRIGHTENED );
+
+                selectAll = true;
+            }
+            else
+            {
+                selectAll = false;
             }
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
-            if( current )
+            if( selectAll )
+            {
+                for( int i = 0; i < aCollector->GetCount(); ++i )
+                    unhighlight( ( *aCollector )[i], BRIGHTENED );
+            }
+            else if( current )
+            {
                 unhighlight( current, BRIGHTENED );
+            }
 
             OPT<int> id = evt->GetCommandId();
 
             // User has selected an item, so this one will be returned
-            if( id && ( *id > 0 ) )
+            if( id == limit + 1 )
+            {
+                selectAll = true;
+                current   = nullptr;
+            }
+            else if( id && ( *id > 0 ) && ( *id <= limit ) )
+            {
+                selectAll = false;
                 current = ( *aCollector )[*id - 1];
+            }
             else
-                current = NULL;
+            {
+                selectAll = false;
+                current   = nullptr;
+            }
         }
         else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
         {
@@ -595,7 +645,11 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
         m_frame->GetCanvas()->Refresh();
     }
 
-    if( current )
+    if( selectAll )
+    {
+        return true;
+    }
+    else if( current )
     {
         unhighlight( current, BRIGHTENED );
 

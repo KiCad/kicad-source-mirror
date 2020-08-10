@@ -91,7 +91,7 @@ public:
      * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
      * was cancelled (for instance, by clicking outside of the disambiguation menu).
      */
-    EDA_ITEM* SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCancelledFlag = nullptr );
+    void SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCancelledFlag = nullptr );
 
     int AddItemToSel( const TOOL_EVENT& aEvent );
     void AddItemToSel( EDA_ITEM* aItem, bool aQuietMode = false );
