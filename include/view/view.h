@@ -369,22 +369,6 @@ public:
     const VECTOR2I& GetScreenPixelSize() const;
 
     /**
-     * Function AddLayer()
-     * Adds a new layer to the view.
-     * @param aLayer: unique ID of the layer to be added.
-     * @param aDisplayOnly: layer is display-only (example: selection boxes, floating hints/menus).
-     * Objects belonging to this layer are not taken into account by Query() method.
-     */
-    void AddLayer( int aLayer, bool aDisplayOnly = false );
-
-    /**
-     * Function ClearLayer()
-     * Removes all items from a given layer.
-     * @param aLayer: ID of the layer to be cleared
-     */
-    void ClearLayer( int aLayer );
-
-    /**
      * Function Clear()
      * Removes all items from the view.
      */
@@ -717,12 +701,6 @@ protected:
         std::set<int>           requiredLayers;  ///< layers that have to be enabled to show the layer
     };
 
-    // Convenience typedefs
-    typedef std::unordered_map<int, VIEW_LAYER>     LAYER_MAP;
-    typedef LAYER_MAP::iterator                     LAYER_MAP_ITER;
-    typedef std::vector<VIEW_LAYER*>                LAYER_ORDER;
-    typedef std::vector<VIEW_LAYER*>::iterator      LAYER_ORDER_ITER;
-
     // Function objects that need to access VIEW/VIEW_ITEM private/protected members
     struct clearLayerCache;
     struct recacheItem;
@@ -816,13 +794,13 @@ protected:
     bool m_enableOrderModifier;
 
     /// Contains set of possible displayed layers and its properties
-    LAYER_MAP m_layers;
+    std::vector<VIEW_LAYER> m_layers;
+
+    /// Sorted list of pointers to members of m_layers
+    std::vector<VIEW_LAYER*> m_orderedLayers;
 
     /// Flat list of all items
     std::shared_ptr<std::vector<VIEW_ITEM*>> m_allItems;
-
-    /// Sorted list of pointers to members of m_layers
-    LAYER_ORDER m_orderedLayers;
 
     /// Stores set of layers that are displayed on the top
     std::set<unsigned int> m_topLayers;

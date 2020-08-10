@@ -312,12 +312,22 @@ VIEW::VIEW( bool aIsDynamic ) :
     // Redraw everything at the beginning
     MarkDirty();
 
+    m_layers.reserve( VIEW_MAX_LAYERS );
+
     // View uses layers to display EDA_ITEMs (item may be displayed on several layers, for example
     // pad may be shown on pad, pad hole and solder paste layers). There are usual copper layers
     // (eg. F.Cu, B.Cu, internal and so on) and layers for displaying objects such as texts,
     // silkscreen, pads, vias, etc.
-    for( int i = 0; i < VIEW_MAX_LAYERS; i++ )
-        AddLayer( i );
+    for( int ii = 0; ii < VIEW_MAX_LAYERS; ++ii )
+    {
+        m_layers.emplace_back();
+        m_layers[ii].items          = std::make_shared<VIEW_RTREE>();
+        m_layers[ii].id             = ii;
+        m_layers[ii].renderingOrder = ii;
+        m_layers[ii].visible        = true;
+        m_layers[ii].displayOnly    = false;
+        m_layers[ii].target         = TARGET_CACHED;
+    }
 
     sortLayers();
 
@@ -329,21 +339,6 @@ VIEW::VIEW( bool aIsDynamic ) :
 VIEW::~VIEW()
 {
     Remove( m_preview.get() );
-}
-
-
-void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
-{
-    if( m_layers.find( aLayer ) == m_layers.end() )
-    {
-        m_layers[aLayer]                = VIEW_LAYER();
-        m_layers[aLayer].items.reset( new VIEW_RTREE() );
-        m_layers[aLayer].id             = aLayer;
-        m_layers[aLayer].renderingOrder = aLayer;
-        m_layers[aLayer].visible        = true;
-        m_layers[aLayer].displayOnly    = aDisplayOnly;
-        m_layers[aLayer].target         = TARGET_CACHED;
-    }
 }
 
 
@@ -709,25 +704,22 @@ void VIEW::SortLayers( int aLayers[], int& aCount ) const
 
 void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 {
-    LAYER_MAP new_map;
+    std::vector<VIEW_LAYER> new_map;
+    new_map.reserve( m_layers.size() );
 
-    for( const auto& it : m_layers )
+    for( int ii = 0; ii < VIEW_MAX_LAYERS; ++ii )
+        new_map.emplace_back();
+
+    for( const VIEW_LAYER& layer : m_layers )
     {
-        int orig_idx = it.first;
-        VIEW_LAYER layer = it.second;
-        int new_idx;
+        int orig_idx = layer.id;
+        int new_idx = orig_idx;
 
-        try
-        {
+        if( aReorderMap.count( orig_idx ) )
             new_idx = aReorderMap.at( orig_idx );
-        }
-        catch( const std::out_of_range& )
-        {
-            new_idx = orig_idx;
-        }
 
-        layer.id = new_idx;
         new_map[new_idx] = layer;
+        new_map[new_idx].id = new_idx;
     }
 
     m_layers = new_map;
@@ -1118,8 +1110,8 @@ void VIEW::Clear()
     r.SetMaximum();
     m_allItems->clear();
 
-    for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
-        i->second.items->RemoveAll();
+    for( VIEW_LAYER& layer : m_layers )
+        layer.items->RemoveAll();
 
     m_nextDrawPriority = 0;
 
@@ -1209,11 +1201,8 @@ void VIEW::clearGroupCache()
     r.SetMaximum();
     clearLayerCache visitor( this );
 
-    for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
-    {
-        VIEW_LAYER* l = &( ( *i ).second );
-        l->items->Query( r, visitor );
-    }
+    for( VIEW_LAYER& layer : m_layers )
+        layer.items->Query( r, visitor );
 }
 
 
@@ -1268,8 +1257,8 @@ void VIEW::sortLayers()
 
     m_orderedLayers.resize( m_layers.size() );
 
-    for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
-        m_orderedLayers[n++] = &i->second;
+    for( VIEW_LAYER& layer : m_layers )
+        m_orderedLayers[n++] = &layer;
 
     sort( m_orderedLayers.begin(), m_orderedLayers.end(), compareRenderingOrder );
 
@@ -1409,14 +1398,12 @@ void VIEW::RecacheAllItems()
 
     r.SetMaximum();
 
-    for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
+    for( const VIEW_LAYER& l : m_layers )
     {
-        VIEW_LAYER* l = &( ( *i ).second );
-
-        if( IsCached( l->id ) )
+        if( IsCached( l.id ) )
         {
-            recacheItem visitor( this, m_gal, l->id );
-            l->items->Query( r, visitor );
+            recacheItem visitor( this, m_gal, l.id );
+            l.items->Query( r, visitor );
         }
     }
 }

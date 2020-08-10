@@ -412,9 +412,11 @@ LSEQ LSET::Seq() const
 {
     LSEQ    ret;
 
-    for( unsigned i=0;  i<size();  ++i )
+    ret.reserve( size() );
+
+    for( unsigned i = 0; i < size(); ++i )
     {
-        if( test(i) )
+        if( test( i ) )
             ret.push_back( PCB_LAYER_ID( i ) );
     }
 

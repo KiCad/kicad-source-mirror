@@ -604,16 +604,23 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( IsNetnameLayer( aLayer ) )
         return m_Width == 0 ? HIDE : ( Millimeter2iu( 10 ) / m_Width );
 
-    LSET visibleLayers;
+    bool onVisibleLayer = false;
 
-    for( int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
+    PCB_LAYER_ID top;
+    PCB_LAYER_ID bottom;
+    LayerPair( &top, &bottom );
+
+    for( int layer = top; layer <= bottom; ++layer )
     {
-        if( aView->IsLayerVisible( i ) )
-            visibleLayers.set( i );
+        if( aView->IsLayerVisible( layer ) )
+        {
+            onVisibleLayer = true;
+            break;
+        }
     }
 
     // Only draw the via if at least one of the layers it crosses is being displayed
-    if( ( visibleLayers & GetLayerSet() ).any() && aView->IsLayerVisible( LAYER_VIAS ) )
+    if( onVisibleLayer && aView->IsLayerVisible( LAYER_VIAS ) )
     {
         switch( m_ViaType )
         {
