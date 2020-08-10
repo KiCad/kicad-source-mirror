@@ -378,7 +378,7 @@ public:
     bool ContainsPoint( const VECTOR2I p, int aAccuracy = 0 ) const
     {
         auto zone = static_cast<ZONE_CONTAINER*> ( Parent() );
-        int clearance = ( aAccuracy + 1 ) / 2;
+        int clearance = aAccuracy;
 
         if( zone->GetFilledPolysUseThickness() )
             clearance += ( zone->GetMinThickness() + 1 ) / 2;
