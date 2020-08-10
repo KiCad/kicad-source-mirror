@@ -1893,7 +1893,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 if( viaPos != track->GetStart() && viaPos != track->GetEnd() )
                 {
                     aCommit.Modify( track );
+
                     TRACK* newTrack = dynamic_cast<TRACK*>( track->Clone() );
+                    const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
+
                     track->SetEnd( viaPos );
                     newTrack->SetStart( viaPos );
                     aCommit.Add( newTrack );
