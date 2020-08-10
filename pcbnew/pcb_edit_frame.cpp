@@ -53,7 +53,9 @@
 #include <project/net_settings.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
-#include <swig/python_scripting.h>
+#ifdef KICAD_SCRIPTING
+    #include <swig/python_scripting.h>
+#endif
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
