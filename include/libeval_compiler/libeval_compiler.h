@@ -92,18 +92,32 @@ enum TOKEN_TYPE_T
     TR_UNIT       = 6
 };
 
-#define LIBEVAL_MAX_LITERAL_LENGTH 1024
-
 class UOP;
+class UCODE;
+class CONTEXT;
+class VAR_REF;
 
-struct TREE_NODE
+typedef std::function<void( CONTEXT*, void* )> FUNC_CALL_REF;
+
+struct T_TOKEN_VALUE
 {
-    struct value_s
-    {
-        wxString *wstr;
-        //char str[LIBEVAL_MAX_LITERAL_LENGTH];
-        int  type;
-    } value;
+    wxString *str;
+    double num;
+    int idx;
+};
+
+constexpr T_TOKEN_VALUE defaultTokenValue = { nullptr, 0.0, 0 };
+
+struct T_TOKEN
+{
+    int token;
+    T_TOKEN_VALUE value;
+};
+
+class TREE_NODE
+{
+public:
+    T_TOKEN_VALUE value;
 
     int        op;
     TREE_NODE* leaf[2];
@@ -111,10 +125,15 @@ struct TREE_NODE
     bool       valid;
     bool       isTerminal;
     int        srcPos;
+
+    void SetUop( int aOp, double aValue );
+    void SetUop( int aOp, const wxString& aValue );
+    void SetUop( int aOp, std::unique_ptr<VAR_REF> aRef = nullptr );
+    void SetUop( int aOp, FUNC_CALL_REF aFunc, std::unique_ptr<VAR_REF> aRef = nullptr );
 };
 
-TREE_NODE* copyNode( TREE_NODE& t );
-TREE_NODE* newNode( int op, int type, const wxString& value );
+
+TREE_NODE* newNode( LIBEVAL::COMPILER* compiler, int op, const T_TOKEN_VALUE& value = defaultTokenValue);
 
 class UNIT_RESOLVER
 {
@@ -141,7 +160,7 @@ public:
 };
 
 
-class VALUE
+class VALUE 
 {
 public:
     VALUE():
@@ -214,14 +233,12 @@ private:
     wxString    m_valueStr;
 };
 
-
-class UCODE;
-class CONTEXT;
-
-
 class VAR_REF
 {
 public:
+    VAR_REF() {};
+    virtual ~VAR_REF() {};
+
     virtual VAR_TYPE_T GetType() = 0;
     virtual VALUE GetValue( CONTEXT* aCtx ) = 0;
 };
@@ -278,8 +295,6 @@ class UCODE
 public:
     virtual ~UCODE();
 
-    typedef std::function<void( CONTEXT*, void* )> FUNC_PTR;
-
     void AddOp( UOP* uop )
     {
         m_ucode.push_back(uop);
@@ -288,17 +303,18 @@ public:
     VALUE* Run( CONTEXT* ctx );
     wxString Dump() const;
 
-    virtual VAR_REF* CreateVarRef( const wxString& var, const wxString& field )
+    virtual std::unique_ptr<VAR_REF> CreateVarRef( const wxString& var, const wxString& field )
     {
         return nullptr;
     };
 
-    virtual FUNC_PTR CreateFuncCall( const wxString& name )
+    virtual FUNC_CALL_REF CreateFuncCall( const wxString& name )
     {
         return nullptr;
     };
 
-private:
+protected:
+
     std::vector<UOP*> m_ucode;
 };
 
@@ -306,16 +322,28 @@ private:
 class UOP
 {
 public:
-    UOP( int op, void* arg ) :
+    UOP( int op, std::unique_ptr<VALUE> value ) :
         m_op( op ),
-        m_arg( arg )
+        m_ref(nullptr),
+        m_value( std::move( value ) )
     {};
 
-    UOP( int op, UCODE::FUNC_PTR func, void *arg ) :
+    UOP( int op, std::unique_ptr<VAR_REF> vref ) :
         m_op( op ),
-        m_arg(arg),
-        m_func( std::move( func ) )
+        m_ref( std::move( vref ) ),
+        m_value(nullptr)
     {};
+
+    UOP( int op, FUNC_CALL_REF func, std::unique_ptr<VAR_REF> vref = nullptr ) :
+        m_op( op ),
+        m_func( std::move( func ) ),
+        m_ref( std::move( vref ) ),
+        m_value(nullptr)
+    {};
+
+    ~UOP()
+    {
+    }
 
     void Exec( CONTEXT* ctx );
 
@@ -323,8 +351,10 @@ public:
 
 private:
     int             m_op;
-    void*           m_arg;
-    UCODE::FUNC_PTR m_func;
+
+    FUNC_CALL_REF   m_func;
+    std::unique_ptr<VAR_REF> m_ref;
+    std::unique_ptr<VALUE>   m_value;
 };
 
 class TOKENIZER
@@ -393,7 +423,7 @@ public:
 
     int GetSourcePos() const { return m_sourcePos; }
 
-    void setRoot( LIBEVAL::TREE_NODE root );
+    void setRoot( LIBEVAL::TREE_NODE *root );
     void freeTree( LIBEVAL::TREE_NODE *tree );
 
     bool Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflightContext );
@@ -401,6 +431,9 @@ public:
     void SetErrorCallback( std::function<void(const ERROR_STATUS&)> aCallback );
     bool IsErrorPending() const { return m_errorStatus.pendingError; }
     const ERROR_STATUS& GetError() const { return m_errorStatus; }
+
+    void GcItem( TREE_NODE* aItem ) { m_gcItems.push_back( aItem ); }
+    void GcItem( wxString* aItem ) { m_gcStrings.push_back( aItem ); }
 
 protected:
     enum LEXER_STATE
@@ -415,13 +448,6 @@ protected:
 
     void reportError( COMPILATION_STAGE stage, const wxString& aErrorMsg, int aPos = -1 );
 
-    /* Token type used by the tokenizer */
-    struct T_TOKEN
-    {
-        int       token;
-        TREE_NODE value;
-    };
-
     /* Begin processing of a new input string */
     void newString( const wxString& aString );
 
@@ -431,30 +457,6 @@ protected:
     bool  lexString( T_TOKEN& aToken );
 
     int resolveUnits();
-
-    UOP* makeUop( int op, double value )
-    {
-        auto uop = new UOP( op, new VALUE( value ) );
-        return uop;
-    }
-
-    UOP* makeUop( int op, const wxString& value )
-    {
-        UOP* uop = new UOP( op, new VALUE( value ) );
-        return uop;
-    }
-
-    UOP* makeUop( int op, VAR_REF* aRef = nullptr )
-    {
-        UOP* uop = new UOP( op, aRef );
-        return uop;
-    }
-
-    UOP* makeUop( int op, UCODE::FUNC_PTR aFunc, void *arg = nullptr )
-    {
-        UOP* uop = new UOP( op, std::move( aFunc ), arg );
-        return uop;
-    }
 
 protected:
     /* Token state for input string. */
@@ -469,6 +471,8 @@ protected:
 
     TREE_NODE*   m_tree;
     ERROR_STATUS m_errorStatus;
+    std::vector<TREE_NODE*>  m_gcItems;
+    std::vector<wxString*> m_gcStrings;
     std::function<void(const ERROR_STATUS&)> m_errorCallback;
 };
 

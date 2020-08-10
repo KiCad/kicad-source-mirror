@@ -85,6 +85,7 @@ MARKER_BASE::MARKER_BASE( int aScalingFactor, RC_ITEM* aItem, TYPEMARKER aType )
 
 MARKER_BASE::~MARKER_BASE()
 {
+    printf("del rcitem %p\n", m_rcItem );
     delete m_rcItem;
 }
 

@@ -50,44 +50,29 @@ namespace LIBEVAL
 
 
 #define libeval_dbg(level, fmt, ...) \
-    wxLogTrace( "libeval_compiler", fmt, __VA_ARGS__ )
+    wxLogTrace( "libeval_compiler", fmt, __VA_ARGS__ );
 
-TREE_NODE* copyNode( TREE_NODE& t )
+
+TREE_NODE* newNode( LIBEVAL::COMPILER* compiler, int op, const T_TOKEN_VALUE& value )
 {
     auto t2          = new TREE_NODE();
-    t2->valid        = t.valid;
-    
-    if( t.value.wstr )
-    {
-        t2->value.wstr = new wxString(*t.value.wstr);
-    }
-    else
-    {
-        t2->value.wstr = nullptr;
-    }
-    t2->value.type   = t.value.type;
-    t2->op           = t.op;
-    t2->leaf[0]      = t.leaf[0];
-    t2->leaf[1]      = t.leaf[1];
-    t2->isTerminal   = false;
-    t2->srcPos = t.srcPos;
-    t2->uop          = nullptr;
-    return t2;
-}
 
-
-TREE_NODE* newNode( int op, int type, const wxString& value )
-{
-    auto t2          = new TREE_NODE();
     t2->valid        = true;
-    t2->value.wstr   = new wxString( value );
+    t2->value.str    = value.str ? new wxString( *value.str ) : nullptr;
+    t2->value.num    = value.num;
+    t2->value.idx    = value.idx;
     t2->op           = op;
-    t2->value.type   = type;
     t2->leaf[0]      = nullptr;
     t2->leaf[1]      = nullptr;
     t2->isTerminal   = false;
-    t2->srcPos = -1;
+    t2->srcPos       = compiler->GetSourcePos();
     t2->uop          = nullptr;
+
+    if(t2->value.str)
+        compiler->GcItem( t2->value.str );
+
+    compiler->GcItem( t2 );
+
     return t2;
 }
 
@@ -125,19 +110,17 @@ wxString UOP::Format() const
     switch( m_op )
     {
     case TR_UOP_PUSH_VAR:
-        str = wxString::Format( "PUSH VAR [%p]", m_arg );
+        str = wxString::Format( "PUSH VAR [%p]", m_ref.get() );
         break;
 
     case TR_UOP_PUSH_VALUE:
     {
-        VALUE* val = reinterpret_cast<VALUE*>( m_arg );
-
-        if( !val )
+        if( !m_value )
             str = wxString::Format( "PUSH nullptr" );
-        else if( val->GetType() == VT_NUMERIC )
-            str = wxString::Format( "PUSH NUM [%.10f]", val->AsDouble() );
+        else if( m_value->GetType() == VT_NUMERIC )
+            str = wxString::Format( "PUSH NUM [%.10f]", m_value->AsDouble() );
         else
-            str = wxString::Format( "PUSH STR [%ls]", GetChars( val->AsString() ) );
+            str = wxString::Format( "PUSH STR [%ls]", GetChars( m_value->AsString() ) );
     }
         break;
 
@@ -161,7 +144,10 @@ wxString UOP::Format() const
 UCODE::~UCODE()
 {
     for ( auto op : m_ucode )
+    {
+        printf("destroy uop %p\n", op );
         delete op;
+    }
 }
 
 
@@ -243,6 +229,15 @@ void COMPILER::Clear()
     }
 
     m_tree = nullptr;
+
+    for( auto tok : m_gcItems )
+        delete tok;
+    
+    for( auto tok: m_gcStrings )
+        delete tok;
+
+    m_gcItems.clear();
+    m_gcStrings.clear();
 }
 
 
@@ -273,6 +268,8 @@ bool COMPILER::Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflig
     m_parseFinished = false;
     T_TOKEN tok;
 
+    tok.value.str = nullptr;
+
     libeval_dbg(0, "str: '%s' empty: %d\n", aString.c_str(), !!aString.empty() );
 
     if( aString.empty() )
@@ -286,8 +283,12 @@ bool COMPILER::Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflig
         m_sourcePos = m_tokenizer.GetPos();
 
         tok = getToken();
+
+        if( tok.value.str )
+            GcItem( tok.value.str );
+
         libeval_dbg(10, "parse: tok %d\n", tok.token );
-        Parse( m_parser, tok.token, tok.value, this );
+        Parse( m_parser, tok.token, tok, this );
 
         if ( m_errorStatus.pendingError )
             return false;
@@ -295,7 +296,7 @@ bool COMPILER::Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflig
         if( m_parseFinished || tok.token == G_ENDS )
         {
             // Reset parser by passing zero as token ID, value is ignored.
-            Parse( m_parser, 0, tok.value, this );
+            Parse( m_parser, 0, tok, this );
             break;
         }
     } while( tok.token );
@@ -313,9 +314,11 @@ void COMPILER::newString( const wxString& aString )
     m_parseFinished = false;
 }
 
-COMPILER::T_TOKEN COMPILER::getToken()
+T_TOKEN COMPILER::getToken()
 {
     T_TOKEN rv;
+    rv.value.str = nullptr;
+
     bool    done = false;
 
     do
@@ -336,13 +339,13 @@ COMPILER::T_TOKEN COMPILER::getToken()
 }
 
 
-bool COMPILER::lexString( COMPILER::T_TOKEN& aToken )
+bool COMPILER::lexString( T_TOKEN& aToken )
 {
     wxString str = m_tokenizer.GetChars( []( int c ) -> bool { return c != '\''; } );
     //printf("STR LIT '%s'\n", (const char *)str.c_str() );
 
     aToken.token = G_STRING;
-    aToken.value.value.wstr = new wxString( str );
+    aToken.value.str = new wxString( str );
 
     m_tokenizer.NextChar( str.length() + 1 );
     m_lexerState = LS_DEFAULT;
@@ -370,13 +373,14 @@ int COMPILER::resolveUnits()
 }
 
 
-bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
+bool COMPILER::lexDefault( T_TOKEN& aToken )
 {
     T_TOKEN     retval;
     wxString current;
     int         convertFrom;
     wxString    msg;
 
+    retval.value.str = nullptr;
     retval.token = G_ENDS;
 
     //printf( "tokdone %d\n", !!m_tokenizer.Done() );
@@ -448,7 +452,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         // VALUE
         extractNumber();
         retval.token = G_VALUE;
-        retval.value.value.wstr = new wxString( current );
+        retval.value.str = new wxString( current );
     }
     else if( ( convertFrom = resolveUnits() ) >= 0 )
     {
@@ -460,7 +464,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         // The factor is assigned to the terminal UNIT. The actual
         // conversion is done within a parser action.
         retval.token            = G_UNIT;
-        retval.value.value.type = convertFrom;
+        retval.value.idx        = convertFrom;
     }
     else if( ch == '\'' ) // string literal
     {
@@ -477,7 +481,7 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
         //printf("id '%s'\n", (const char *) current.c_str() );
         //fflush( stdout );
         retval.token = G_IDENTIFIER;
-        retval.value.value.wstr = new wxString( current );
+        retval.value.str = new wxString( current );
         m_tokenizer.NextChar( current.length() );
     }
     else if( m_tokenizer.MatchAhead( "==", []( int c ) -> bool { return c != '='; } ) )
@@ -540,9 +544,9 @@ bool COMPILER::lexDefault( COMPILER::T_TOKEN& aToken )
 }
 
 
-const wxString formatNode( TREE_NODE* tok )
+const wxString formatNode( TREE_NODE* node )
 {
-    return *(tok->value.wstr);
+    return *(node->value.str);
 }
 
 
@@ -592,13 +596,13 @@ void dumpNode( wxString& buf, TREE_NODE* tok, int depth = 0 )
 
      case TR_OP_FUNC_CALL:
         buf += "CALL '";
-        buf += *tok->leaf[0]->value.wstr;
+        buf += *tok->leaf[0]->value.str;
         buf += "': ";
         dumpNode( buf, tok->leaf[1], depth + 1 );
         break;
 
     case TR_UNIT:
-        str.Printf( "UNIT: %d ", tok->value.type );
+        str.Printf( "UNIT: %d ", tok->value.idx );
         buf += str;
         break;
     }
@@ -644,20 +648,66 @@ void COMPILER::reportError( COMPILATION_STAGE stage, const wxString& aErrorMsg, 
 }
 
 
-void COMPILER::setRoot( TREE_NODE root )
+void COMPILER::setRoot( TREE_NODE *root )
 {
-    m_tree = copyNode( root );
+    m_tree = root;
 }
 
 void COMPILER::freeTree( LIBEVAL::TREE_NODE *tree )
 {
+    printf("->FreeTre %p\n", tree );
+
     if ( tree->leaf[0] )
         freeTree( tree->leaf[0] );
     if ( tree->leaf[1] )
         freeTree( tree->leaf[1] );
 
-    delete tree;
+    if( tree->uop )
+    {
+        printf("Free uop %p\n", tree->uop );
+        delete tree->uop;
+    }
+
+/*    if( tree->value.str )
+        delete tree->value.str;
+
+    delete tree;*/
 }
+
+void TREE_NODE::SetUop( int aOp, double aValue )
+{
+    if( uop )
+        delete uop;
+
+    std::unique_ptr<VALUE> val( new VALUE( aValue ) );
+    uop = new UOP( aOp, std::move( val ) );
+}
+
+void TREE_NODE::SetUop( int aOp, const wxString& aValue )
+{
+    if( uop )
+        delete uop;
+
+    std::unique_ptr<VALUE> val( new VALUE( aValue ) );
+    uop = new UOP( aOp, std::move( val ) );
+}
+
+void TREE_NODE::SetUop( int aOp, std::unique_ptr<VAR_REF> aRef )
+{
+    if( uop )
+        delete uop;
+
+    uop = new UOP( aOp, std::move( aRef ) );
+}
+
+void TREE_NODE::SetUop( int aOp, FUNC_CALL_REF aFunc, std::unique_ptr<VAR_REF> aRef )
+{
+    if( uop )
+        delete uop;
+
+    uop = new UOP( aOp, std::move( aFunc ), std::move( aRef ) );
+}
+
 
 bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 {
@@ -706,9 +756,9 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             {
                 case TR_IDENTIFIER:
                 {
-                    wxString itemName = *node->leaf[0]->value.wstr;
-                    wxString propName = *node->leaf[1]->value.wstr;
-                    VAR_REF* vref = aCode->CreateVarRef( itemName, propName );
+                    wxString itemName = *node->leaf[0]->value.str;
+                    wxString propName = *node->leaf[1]->value.str;
+                    std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, propName );
 
                     if( !vref )
                     {
@@ -724,14 +774,14 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                         return false;
                     }
 
-                    node->uop = makeUop( TR_UOP_PUSH_VAR, vref );
+                    node->SetUop( TR_UOP_PUSH_VAR, std::move( vref ) );
                     node->isTerminal = true;
                     break;
                 }
                 case TR_OP_FUNC_CALL:
                 {
-                    wxString    itemName = *node->leaf[0]->value.wstr;
-                    VAR_REF* vref = aCode->CreateVarRef( itemName, "" );
+                    wxString    itemName = *node->leaf[0]->value.str;
+                    std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, "" );
 
                     if( !vref )
                     {
@@ -740,7 +790,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                         return false;
                     }
 
-                    wxString functionName = *node->leaf[1]->leaf[0]->value.wstr;
+                    wxString functionName = *node->leaf[1]->leaf[0]->value.str;
                     auto  func = aCode->CreateFuncCall( functionName );
 
                     libeval_dbg(10, "emit func call: %s\n", (const char*) functionName.c_str() );
@@ -775,8 +825,8 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     #endif
 
                     /* SREF -> FUNC_CALL -> leaf0/1 */
-                    node->leaf[1]->leaf[0]->leaf[0] = nullptr;
-                    node->leaf[1]->leaf[0]->leaf[1] = nullptr;
+            //        node->leaf[1]->leaf[0]->leaf[0] = nullptr;
+            //        node->leaf[1]->leaf[0]->leaf[1] = nullptr;
 
                     #if 0
                     if( aPreflightContext->IsErrorPending() )
@@ -791,7 +841,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     visitedNodes.insert( node->leaf[0] );
                     visitedNodes.insert( node->leaf[1]->leaf[0] );
 
-                    node->uop = makeUop( TR_OP_METHOD_CALL, func, vref );
+                    node->SetUop( TR_OP_METHOD_CALL, func, std::move( vref ) );
                     node->isTerminal = false;
                 }
                     break;
@@ -807,16 +857,16 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             if( son && son->op == TR_UNIT )
             {
                 //printf( "HandleUnit: %s unit %d\n", node->value.str, son->value.type );
-                int units = son->value.type;
-                value =  m_unitResolver->Convert( *node->value.wstr, units );
+                int units = son->value.idx;
+                value =  m_unitResolver->Convert( *node->value.str, units );
                 visitedNodes.insert( son );
             }
             else
             {
-                value = wxAtof( *node->value.wstr );
+                value = wxAtof( *node->value.str );
             }
 
-            node->uop = makeUop( TR_UOP_PUSH_VALUE, value );
+            node->SetUop( TR_UOP_PUSH_VALUE, value );
             node->isTerminal = true;
 
             break;
@@ -824,28 +874,28 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
         case TR_STRING:
         {
-            node->uop = makeUop( TR_UOP_PUSH_VALUE, *node->value.wstr );
+            node->SetUop( TR_UOP_PUSH_VALUE, *node->value.str );
             node->isTerminal = true;
             break;
         }
 
         case TR_IDENTIFIER:
         {
-            VAR_REF* vref = aCode->CreateVarRef( *node->value.wstr, "" );
+            std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( *node->value.str, "" );
 
             if( !vref )
             {
-                msg.Printf( _( "Unrecognized item '%s'" ), *node->value.wstr );
-                reportError( CST_CODEGEN, msg, node->srcPos - (int) strlen( *node->value.wstr  ) );
+                msg.Printf( _( "Unrecognized item '%s'" ), *node->value.str );
+                reportError( CST_CODEGEN, msg, node->srcPos - (int) strlen( *node->value.str  ) );
                 return false;
             }
 
-            node->uop = makeUop( TR_UOP_PUSH_VALUE, vref );
+            node->SetUop( TR_UOP_PUSH_VALUE, std::move( vref ) );
             break;
         }
 
         default:
-            node->uop = makeUop( node->op );
+            node->SetUop( node->op );
             break;
         }
 
@@ -865,7 +915,10 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
         visitedNodes.insert( node );
 
         if( node->uop )
+        {
             aCode->AddOp( node->uop );
+            node->uop = nullptr;
+        }
 
         stack.pop_back();
     }
@@ -883,18 +936,18 @@ void UOP::Exec( CONTEXT* ctx )
     case TR_UOP_PUSH_VAR:
     {
         auto value = ctx->AllocValue();
-        value->Set( reinterpret_cast<VAR_REF*>( m_arg )->GetValue( ctx ) );
+        value->Set( m_ref->GetValue( ctx ) );
         ctx->Push( value );
     }
         break;
 
     case TR_UOP_PUSH_VALUE:
-        ctx->Push( reinterpret_cast<VALUE*>( m_arg ) );
+        ctx->Push( m_value.get() );
         return;
 
     case TR_OP_METHOD_CALL:
         //printf("CALL METHOD %s\n" );
-        m_func( ctx, m_arg );
+        m_func( ctx, m_ref.get() );
         return;
 
     default:
