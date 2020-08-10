@@ -39,6 +39,13 @@
 
 
 /**
+ * Converts curly quotes and em/en dashes to straight quotes and dashes.
+ * @param aString
+ * @return true if any characters required conversion.
+ */
+bool ConvertSmartQuotesAndDashes( wxString* aString );
+
+/**
  * Escape/Unescape routines to safely encode reserved-characters in various
  * contexts.
  */

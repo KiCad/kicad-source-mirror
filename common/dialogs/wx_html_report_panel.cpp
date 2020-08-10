@@ -26,6 +26,7 @@
 #include <wildcards_and_files_ext.h>
 #include <gal/color4d.h>
 #include <wx/clipbrd.h>
+#include <kicad_string.h>
 
 WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent, 
                                             wxWindowID id, 
@@ -343,7 +344,10 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
 
     for( const REPORT_LINE& l : m_report )
     {
-        f.Write( generatePlainText( l ) );
+        wxString s = generatePlainText( l );
+
+        ConvertSmartQuotesAndDashes( &s );
+        f.Write( s );
     }
     m_ReportFileName = fn.GetFullPath();
     f.Close();
