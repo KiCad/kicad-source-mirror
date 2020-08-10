@@ -566,6 +566,8 @@ public:
     int GetPlacementCost90() const { return m_CntRot90; }
     void SetPlacementCost90( int aCost )    { m_CntRot90 = aCost; }
 
+    BOARD_ITEM* Duplicate() const override;
+
     /**
      * Function DuplicateItem
      * Duplicate a given item within the module, optionally adding it to the board

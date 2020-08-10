@@ -821,6 +821,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
     // Create the "new" module
     MODULE* newmodule = new MODULE( *module_in_edit );
+    const_cast<KIID&>( newmodule->m_Uuid ) = KIID();
+
     newmodule->SetParent( mainpcb );
     newmodule->SetLink( niluuid );
 

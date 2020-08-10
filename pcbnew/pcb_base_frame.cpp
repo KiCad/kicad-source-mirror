@@ -182,10 +182,10 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 
         if( lastItem->Type() == PCB_MODULE_T )
         {
-            static_cast<MODULE*>( lastItem )->RunOnChildren( [&] ( BOARD_ITEM* child )
-            {
-                child->ClearBrightened();
-            });
+            static_cast<MODULE*>( lastItem )->RunOnChildren( [&]( BOARD_ITEM* child )
+                                                             {
+                                                                 child->ClearBrightened();
+                                                             });
         }
 
         GetCanvas()->GetView()->Update( lastItem );
@@ -199,10 +199,10 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 
         if( aItem->Type() == PCB_MODULE_T )
         {
-            static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* child )
-            {
-                child->SetBrightened();
-            });
+            static_cast<MODULE*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* child )
+                                                          {
+                                                              child->SetBrightened();
+                                                          });
         }
 
         GetCanvas()->GetView()->Update( aItem );

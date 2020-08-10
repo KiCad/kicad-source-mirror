@@ -1364,6 +1364,20 @@ void MODULE::SetOrientation( double newangle )
 }
 
 
+BOARD_ITEM* MODULE::Duplicate() const
+{
+    MODULE* dupe = (MODULE*) Clone();
+    const_cast<KIID&>( dupe->m_Uuid ) = KIID();
+
+    dupe->RunOnChildren( [&]( BOARD_ITEM* child )
+                         {
+                             const_cast<KIID&>( child->m_Uuid ) = KIID();
+                         });
+
+    return static_cast<BOARD_ITEM*>( dupe );
+}
+
+
 BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
 {
     BOARD_ITEM* new_item = NULL;
@@ -1374,6 +1388,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
     case PCB_PAD_T:
     {
         D_PAD* new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
+        const_cast<KIID&>( new_pad->m_Uuid ) = KIID();
 
         if( aAddToModule )
             m_pads.push_back( new_pad );
@@ -1385,6 +1400,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
     case PCB_MODULE_ZONE_AREA_T:
     {
         new_zone = new MODULE_ZONE_CONTAINER( *static_cast<const MODULE_ZONE_CONTAINER*>( aItem ) );
+        const_cast<KIID&>( new_zone->m_Uuid ) = KIID();
 
         if( aAddToModule )
             m_fp_zones.push_back( new_zone );
@@ -1396,6 +1412,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
     case PCB_MODULE_TEXT_T:
     {
         TEXTE_MODULE* new_text = new TEXTE_MODULE( *static_cast<const TEXTE_MODULE*>( aItem ) );
+        const_cast<KIID&>( new_text->m_Uuid ) = KIID();
 
         if( new_text->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
         {
@@ -1419,6 +1436,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
     case PCB_MODULE_EDGE_T:
     {
         EDGE_MODULE* new_edge = new EDGE_MODULE( *static_cast<const EDGE_MODULE*>(aItem) );
+        const_cast<KIID&>( new_edge->m_Uuid ) = KIID();
 
         if( aAddToModule )
             Add( new_edge );

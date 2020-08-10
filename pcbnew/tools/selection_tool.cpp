@@ -1944,21 +1944,22 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* 
     // highlight all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
-        static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* item )
-        {
-            if( aMode == SELECTED )
-                item->SetSelected();
-            else if( aMode == BRIGHTENED )
-            {
-                item->SetBrightened();
+        static_cast<MODULE*>( aItem )->RunOnChildren(
+                [&]( BOARD_ITEM* item )
+                {
+                    if( aMode == SELECTED )
+                        item->SetSelected();
+                    else if( aMode == BRIGHTENED )
+                    {
+                        item->SetBrightened();
 
-                if( aGroup )
-                    aGroup->Add( item );
-            }
+                        if( aGroup )
+                            aGroup->Add( item );
+                    }
 
-            if( aGroup )
-                view()->Hide( item, true );
-        });
+                    if( aGroup )
+                        view()->Hide( item, true );
+                });
     }
 
     view()->Update( aItem );
@@ -1989,23 +1990,24 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION
     // highlight all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
-        static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* item )
-        {
-            if( aMode == SELECTED )
-                item->ClearSelected();
-            else if( aMode == BRIGHTENED )
-                item->ClearBrightened();
+        static_cast<MODULE*>( aItem )->RunOnChildren(
+                [&]( BOARD_ITEM* item )
+                {
+                    if( aMode == SELECTED )
+                        item->ClearSelected();
+                    else if( aMode == BRIGHTENED )
+                        item->ClearBrightened();
 
-            // N.B. if we clear the selection flag for sub-elements, we need to also
-            // remove the element from the selection group (if it exists)
-            if( aGroup )
-            {
-                aGroup->Remove( item );
+                    // N.B. if we clear the selection flag for sub-elements, we need to also
+                    // remove the element from the selection group (if it exists)
+                    if( aGroup )
+                    {
+                        aGroup->Remove( item );
 
-                view()->Hide( item, false );
-                view()->Update( item );
-            }
-        });
+                        view()->Hide( item, false );
+                        view()->Update( item );
+                    }
+                });
     }
 
     view()->Update( aItem );

@@ -144,10 +144,11 @@ void ARRAY_CREATOR::Invoke()
 
                     if( this_item->Type() == PCB_MODULE_T )
                     {
-                        static_cast<MODULE*>( this_item )->RunOnChildren( [&] ( BOARD_ITEM* aItem )
-                        {
-                            aItem->ClearSelected();
-                        });
+                        static_cast<MODULE*>( this_item )->RunOnChildren(
+                                [&]( BOARD_ITEM* aItem )
+                                {
+                                    aItem->ClearSelected();
+                                });
                     }
 
                     commit.Add( new_item );

@@ -452,6 +452,7 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
     pad->SetShape( PAD_SHAPE_CIRCLE );
 
     D_PAD* newpad = new D_PAD( *pad );
+    const_cast<KIID&>( newpad->m_Uuid ) = KIID();
 
     module->Add( newpad );
 

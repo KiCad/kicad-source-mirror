@@ -1047,6 +1047,8 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         // copy constructor to clone the template
         MODULE* m = new MODULE( *mi->second );
+        const_cast<KIID&>( m->m_Uuid ) = KIID();
+
         m_board->Add( m, ADD_MODE::APPEND );
 
         // update the nets within the pads of the clone

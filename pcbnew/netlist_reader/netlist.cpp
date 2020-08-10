@@ -238,6 +238,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
                 continue;            // Module does not exist in any library.
 
             module = new MODULE( *module );
+            const_cast<KIID&>( module->m_Uuid ) = KIID();
         }
 
         if( module )

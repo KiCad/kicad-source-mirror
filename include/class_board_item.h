@@ -207,7 +207,7 @@ public:
      * Function Duplicate
      * creates a copy of a BOARD_ITEM.
      */
-    BOARD_ITEM* Duplicate() const
+    virtual BOARD_ITEM* Duplicate() const
     {
         EDA_ITEM* dupe = Clone();
         const_cast<KIID&>( dupe->m_Uuid ) = KIID();
