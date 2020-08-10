@@ -66,6 +66,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
     constexpr int flags = wxSTC_FIND_REGEXP| wxSTC_FIND_POSIX;
 
+    m_Parent->SetModified();
     m_textEditor->SearchAnchor();
 
     int i = std::max( 0, m_textEditor->SearchPrev( flags, "\( *rule " ) );

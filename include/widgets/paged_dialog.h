@@ -46,6 +46,8 @@ class PAGED_DIALOG : public DIALOG_SHIM
 private:
     wxString    m_title;
 
+    bool        m_dirty;
+
     wxString    m_errorMessage;
     wxWindow*   m_errorCtrl;    // the control associated with m_errorMessage
     int         m_errorRow;     // the row if m_errorCtrl is a grid
@@ -62,6 +64,8 @@ public:
 
     void SetInitialPage( const wxString& aPage, const wxString& aParentPage = wxEmptyString );
 
+    void SetModified() { m_modified = true; }
+
     void SetError( const wxString& aMessage, const wxString& aPageName, int aCtrlId, int aRow = -1,
                    int aCol = -1 );
 
@@ -74,15 +78,17 @@ protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void OnClose( wxCloseEvent& event );
+    void OnCancel( wxCommandEvent& event );
     virtual void OnAuxiliaryAction( wxCommandEvent& event ) { event.Skip(); }
     void OnResetButton( wxCommandEvent& aEvent );
     void OnUpdateUI( wxUpdateUIEvent& event );
     void OnPageChange( wxBookCtrlEvent& event );
-    void OnPageChanging( wxBookCtrlEvent& aEvent );
 
     PAGED_TREEBOOK* m_treebook;
     wxButton*   m_auxiliaryButton;
     wxButton*   m_resetButton;
+    wxButton*   m_cancelButton;
 };
 
 

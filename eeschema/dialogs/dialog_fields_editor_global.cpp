@@ -1187,7 +1187,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnClose( wxCloseEvent& event )
 
     if( m_dataModel->IsEdited() )
     {
-        if( !HandleUnsavedChanges( this, wxEmptyString,
+        if( !HandleUnsavedChanges( this, _( "Save changes?" ),
                                    [&]()->bool { return TransferDataFromWindow(); } ) )
         {
             event.Veto();
