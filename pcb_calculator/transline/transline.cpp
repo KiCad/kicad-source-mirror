@@ -72,6 +72,8 @@ TRANSLINE::TRANSLINE()
     m_parameters[MURC_PRM] = 1.0;
     m_Name                 = nullptr;
     ang_l                  = 0.0;       // Electrical length in angle
+    len                    = 0.0;       // length of line
+    er_eff                 = 1.0;       // effective dielectric constant
     Init();
 }
 

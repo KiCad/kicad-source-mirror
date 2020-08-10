@@ -607,16 +607,13 @@ void POINT_EDITOR::updateItem() const
                     }
                     else
                     {
-                        double tan = mid.y / static_cast<double>( mid.x );
-                        double tmp = mid.x;
                         // Circle : x^2 + y^2 = R ^ 2
                         // In this coordinate system, the angular position of the cursor is (r, theta)
                         // The line coming from the center of the circle is y = start.y / start.x * x
                         // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
-                        tmp = sqrt( sqRadius
-                                    / ( ( 1.0
-                                            + mid.y / static_cast<double>( mid.x ) * mid.y
-                                                      / static_cast<double>( mid.x ) ) ) );
+                        double tmp = sqrt( sqRadius /
+                                           ( ( 1.0 + mid.y / static_cast<double>( mid.x ) * mid.y
+                                                     / static_cast<double>( mid.x ) ) ) );
                         // Move to the correct quadrant
                         tmp   = mid.x > 0 ? tmp : -tmp;
                         mid.y = mid.y / static_cast<double>( mid.x ) * tmp;
@@ -691,31 +688,30 @@ void POINT_EDITOR::updateItem() const
 
                     double R               = v1.EuclideanNorm();
                     bool   transformCircle = false;
-                    bool   invertY         = ( v2.y < 0 );
 
                     /*                    p2
-                     *                     X***  
+                     *                     X***
                      *                         **  <---- This is the arc
                      *            y ^            **
                      *              |      R       *
-                     *              | <-----------> * 
-                     *       x------x------>--------x p1 
+                     *              | <-----------> *
+                     *       x------x------>--------x p1
                      *     C' <----> C      x
                      *         delta
-                     * 
-                     * p1 does not move, and the tangent at p1 remains the same. 
+                     *
+                     * p1 does not move, and the tangent at p1 remains the same.
                      *  => The new center, C', will be on the C-p1 axis.
                      * p2 moves
-                     * 
+                     *
                      * The radius of the new circle is delta + R
-                     * 
-                     * || C' p2 || = || C' P1 || 
+                     *
+                     * || C' p2 || = || C' P1 ||
                      * is the same as :
                      * ( delta + p2.x ) ^ 2 + p2.y ^ 2 = ( R + delta ) ^ 2
-                     * 
+                     *
                      * delta = ( R^2  - p2.x ^ 2 - p2.y ^2 ) / ( 2 * p2.x - 2 * R )
-                     * 
-                     * We can use this equation for any point p2 with p2.x < R 
+                     *
+                     * We can use this equation for any point p2 with p2.x < R
                      */
 
                     if( v2.x == R )

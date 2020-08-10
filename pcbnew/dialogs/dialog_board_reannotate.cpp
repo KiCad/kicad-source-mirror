@@ -674,8 +674,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
 
     int          errorcount = 0;
     unsigned int backstartrefdes;
-
-    size_t firstnum, changearraysize;
+    size_t  firstnum = 0;
 
     m_FrontModules.clear();
     m_BackModules.clear();
@@ -798,7 +797,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
 
     LogChangePlan();
 
-    changearraysize = m_ChangeArray.size();
+    size_t changearraysize = m_ChangeArray.size();
 
     for( size_t i = 0; i < changearraysize; i++ ) //Scan through for duplicates if update or skip
     {
