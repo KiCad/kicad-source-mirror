@@ -226,7 +226,7 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aComponent, int aUnit )
 
         TestDanglingEnds();
 
-        RefreshItem( aComponent );
+        UpdateItem( aComponent );
         OnModify();
     }
 }
@@ -270,6 +270,6 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
     if( aComponent->IsSelected() )
         m_toolManager->RunAction( EE_ACTIONS::addItemToSel, true, aComponent );
 
-    RefreshItem( aComponent );
+    UpdateItem( aComponent );
     OnModify();
 }

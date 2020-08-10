@@ -1705,6 +1705,9 @@ void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     SCH_LINE line;
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
+    if( drawingShadows && !aEntry->IsSelected() )
+        return;
+
     line.SetLayer( aEntry->Type() == SCH_BUS_WIRE_ENTRY_T ? LAYER_WIRE : LAYER_BUS );
 
     if( aEntry->IsSelected() )
@@ -1728,7 +1731,7 @@ void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( drawingShadows ? getShadowWidth() : 1.0 );
+    m_gal->SetLineWidth( drawingShadows ? getShadowWidth() : 1.0F );
 
     if( aEntry->IsDanglingStart() )
         m_gal->DrawCircle( aEntry->GetPosition(),

@@ -260,7 +260,7 @@ public:
     /**
      * Mark an item for refresh.
      */
-    void RefreshItem( EDA_ITEM* aItem, bool isAddOrDelete = false );
+    void UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete = false );
 
     /**
      * Mark selected items for refresh.

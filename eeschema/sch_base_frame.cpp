@@ -315,7 +315,7 @@ void SCH_BASE_FRAME::createCanvas()
 }
 
 
-void SCH_BASE_FRAME::RefreshItem( EDA_ITEM* aItem, bool isAddOrDelete )
+void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete )
 {
     EDA_ITEM* parent = aItem->GetParent();
 
@@ -337,7 +337,11 @@ void SCH_BASE_FRAME::RefreshItem( EDA_ITEM* aItem, bool isAddOrDelete )
             GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
     }
 
-    GetCanvas()->Refresh();
+    // Calling Refresh() here introduces a bi-stable state: when doing operations on a
+    // large number of items if at some point the refresh timer times out and does a
+    // refresh it will take long enough that the next item will also time out, and the
+    // next, and the next, etc.
+    // GetCanvas()->Refresh();
 }
 
 
@@ -384,7 +388,7 @@ void SCH_BASE_FRAME::AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
     if( screen == GetScreen() )
     {
         GetCanvas()->GetView()->Add( aItem );
-        RefreshItem( aItem, true );           // handle any additional parent semantics
+        UpdateItem( aItem, true );           // handle any additional parent semantics
     }
 }
 
@@ -402,7 +406,7 @@ void SCH_BASE_FRAME::RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
     screen->Remove( (SCH_ITEM*) aItem );
 
     if( screen == GetScreen() )
-        RefreshItem( aItem, true );           // handle any additional parent semantics
+        UpdateItem( aItem, true );           // handle any additional parent semantics
 }
 
 

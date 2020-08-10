@@ -166,7 +166,7 @@ bool LIB_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
         }
     }
 
-    m_frame->RefreshItem( aPin );
+    m_frame->UpdateItem( aPin );
     m_frame->OnModify( );
 
     MSG_PANEL_ITEMS items;

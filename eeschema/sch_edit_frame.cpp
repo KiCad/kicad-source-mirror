@@ -959,7 +959,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
     aItem->ClearFlags( IS_NEW );
 
     aScreen->SetModify();
-    RefreshItem( aItem );
+    UpdateItem( aItem );
 
     if( !aItem->IsMoving() && aItem->IsConnectable() )
     {
@@ -978,7 +978,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
         TestDanglingEnds();
 
         for( SCH_ITEM* item : aItem->ConnectedItems( GetCurrentSheet() ) )
-            RefreshItem( item );
+            UpdateItem( item );
     }
 
     aItem->ClearEditFlags();
@@ -1171,7 +1171,7 @@ void SCH_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
     {
         lastItem->ClearBrightened();
 
-        RefreshItem( lastItem );
+        UpdateItem( lastItem );
         lastBrightenedItemID = niluuid;
     }
 
@@ -1179,7 +1179,7 @@ void SCH_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
     {
         aItem->SetBrightened();
 
-        RefreshItem( aItem );
+        UpdateItem( aItem );
         lastBrightenedItemID = aItem->m_Uuid;
 
         FocusOnLocation( aItem->GetFocusPosition() );

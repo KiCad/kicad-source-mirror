@@ -506,7 +506,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
 
         connections = item->IsConnectable();
-        m_frame->RefreshItem( item );
+        m_frame->UpdateItem( item );
     }
     else if( selection.GetSize() > 1 )
     {
@@ -553,7 +553,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             }
 
             connections |= item->IsConnectable();
-            m_frame->RefreshItem( item );
+            m_frame->UpdateItem( item );
         }
     }
 
@@ -690,7 +690,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         }
 
         connections = item->IsConnectable();
-        m_frame->RefreshItem( item );
+        m_frame->UpdateItem( item );
     }
     else if( selection.GetSize() > 1 )
     {
@@ -730,7 +730,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             }
 
             connections |= item->IsConnectable();
-            m_frame->RefreshItem( item );
+            m_frame->UpdateItem( item );
         }
     }
 
@@ -1139,7 +1139,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
         static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-    m_frame->RefreshItem( aField );
+    m_frame->UpdateItem( aField );
     m_frame->OnModify();
 }
 

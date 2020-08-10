@@ -336,7 +336,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
         m_CurrentText->SetTextThickness( 0 );    // Use default pen width
     }
 
-    m_Parent->RefreshItem( m_CurrentText );
+    m_Parent->UpdateItem( m_CurrentText );
     m_Parent->GetCanvas()->Refresh();
     m_Parent->OnModify();
 

@@ -712,7 +712,7 @@ bool SCH_EDIT_FRAME::SaveProject()
 
                 sheetFileName.SetExt( KiCadSchematicFileExtension );
                 sheet->SetFileName( sheetFileName.GetFullPath() );
-                RefreshItem( sheet );
+                UpdateItem( sheet );
             }
 
             screen->SetFileName( tmpFn.GetFullPath() );

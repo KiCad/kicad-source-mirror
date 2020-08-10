@@ -437,7 +437,7 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
             {
                 editFrame->SaveCopyInUndoList( screen, otherUnit, UR_CHANGED, true /* append */);
                 otherUnit->GetField( fieldType )->SetText( m_text );
-                editFrame->RefreshItem( otherUnit );
+                editFrame->UpdateItem( otherUnit );
             }
         }
     }

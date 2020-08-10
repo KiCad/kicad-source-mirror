@@ -174,6 +174,13 @@ public:
 
     COLOR4D GetColor() const { return m_color; }
     void SetColor( const COLOR4D& aColor ) { m_color = aColor; }
+
+    bool operator!=( const STROKE_PARAMS& aOther )
+    {
+        return m_width != aOther.m_width
+                || m_type != aOther.m_type
+                || m_color != aOther.m_color;
+    }
 };
 
 

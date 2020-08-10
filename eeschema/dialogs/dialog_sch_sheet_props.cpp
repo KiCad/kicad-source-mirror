@@ -321,7 +321,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
 
     // Refresh all sheets in case ordering changed.
     for( SCH_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_SHEET_T ) )
-        m_frame->RefreshItem( item );
+        m_frame->UpdateItem( item );
 
     m_frame->OnModify();
 

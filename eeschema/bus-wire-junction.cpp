@@ -179,21 +179,27 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
         ncs.push_back( static_cast<SCH_NO_CONNECT*>( item ) );
     }
 
-    alg::for_all_pairs(
-            junctions.begin(), junctions.end(), [&]( SCH_JUNCTION* aFirst, SCH_JUNCTION* aSecond ) {
+    alg::for_all_pairs( junctions.begin(), junctions.end(),
+            [&]( SCH_JUNCTION* aFirst, SCH_JUNCTION* aSecond )
+            {
                 if( ( aFirst->GetEditFlags() & STRUCT_DELETED )
                         || ( aSecond->GetEditFlags() & STRUCT_DELETED ) )
+                {
                     return;
+                }
 
                 if( aFirst->GetPosition() == aSecond->GetPosition() )
                     remove_item( aSecond );
             } );
 
-    alg::for_all_pairs(
-            ncs.begin(), ncs.end(), [&]( SCH_NO_CONNECT* aFirst, SCH_NO_CONNECT* aSecond ) {
+    alg::for_all_pairs( ncs.begin(), ncs.end(),
+            [&]( SCH_NO_CONNECT* aFirst, SCH_NO_CONNECT* aSecond )
+            {
                 if( ( aFirst->GetEditFlags() & STRUCT_DELETED )
                         || ( aSecond->GetEditFlags() & STRUCT_DELETED ) )
+                {
                     return;
+                }
 
                 if( aFirst->GetPosition() == aSecond->GetPosition() )
                     remove_item( aSecond );
@@ -223,9 +229,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                 continue;
 
             if( !secondLine->IsParallel( firstLine )
-                    || secondLine->GetLineStyle() != firstLine->GetLineStyle()
-                    || secondLine->GetLineColor() != firstLine->GetLineColor()
-                    || secondLine->GetLineSize() != firstLine->GetLineSize()
+                    || secondLine->GetStroke() != firstLine->GetStroke()
                     || secondLine->GetLayer() != firstLine->GetLayer() )
                 continue;
 
@@ -252,6 +256,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                 itemList.PushItem( ITEM_PICKER( aScreen, mergedLine, UR_NEW ) );
 
                 AddToScreen( mergedLine, aScreen );
+                mergedLine->SetLineColor( COLOR4D( PURECYAN ) );
 
                 if( firstLine->IsSelected() )
                     selectionTool->AddItemToSel( mergedLine, true /*quiet mode*/ );
@@ -295,7 +300,7 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
     SaveCopyInUndoList( aScreen, newSegment, UR_NEW, true );
     SaveCopyInUndoList( aScreen, aSegment, UR_CHANGED, true );
 
-    RefreshItem( aSegment );
+    UpdateItem( aSegment );
     aSegment->SetEndPoint( aPoint );
 
     if( aNewSegment )
@@ -385,12 +390,15 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
             lines.push_back( line );
     }
 
-    alg::for_all_pairs(
-            lines.begin(), lines.end(), [&]( SCH_LINE* firstLine, SCH_LINE* secondLine ) {
+    alg::for_all_pairs( lines.begin(), lines.end(),
+            [&]( SCH_LINE* firstLine, SCH_LINE* secondLine )
+            {
                 if( ( firstLine->GetEditFlags() & STRUCT_DELETED )
                         || ( secondLine->GetEditFlags() & STRUCT_DELETED )
                         || !secondLine->IsParallel( firstLine ) )
+                {
                     return;
+                }
 
                 // Remove identical lines
                 if( firstLine->IsEndPoint( secondLine->GetStartPoint() )

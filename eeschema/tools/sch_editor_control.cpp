@@ -486,7 +486,7 @@ int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
     {
         if( item->Replace( *data, &m_frame->GetCurrentSheet() ) )
         {
-            m_frame->RefreshItem( item );
+            m_frame->UpdateItem( item );
             m_frame->OnModify();
         }
 
@@ -513,7 +513,7 @@ int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
         {
             if( item->Replace( *data, schematic.FindSheetForScreen( screen ) ) )
             {
-                m_frame->RefreshItem( item );
+                m_frame->UpdateItem( item );
                 m_frame->OnModify();
             }
 

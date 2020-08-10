@@ -525,14 +525,14 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
                 otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
                 otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
                 otherUnit->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
-                GetParent()->RefreshItem( otherUnit );
+                GetParent()->UpdateItem( otherUnit );
             }
         }
     }
 
     currentScreen->Append( m_cmp );
     GetParent()->TestDanglingEnds();
-    GetParent()->RefreshItem( m_cmp );
+    GetParent()->UpdateItem( m_cmp );
     GetParent()->OnModify();
 
     return true;

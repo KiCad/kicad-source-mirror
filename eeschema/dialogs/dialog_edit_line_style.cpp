@@ -243,7 +243,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
         stroke.SetColor( m_selectedColor );
         strokeItem->SetStroke( stroke );
 
-        m_frame->RefreshItem( strokeItem );
+        m_frame->UpdateItem( strokeItem );
     }
 
     m_frame->GetCanvas()->Refresh();

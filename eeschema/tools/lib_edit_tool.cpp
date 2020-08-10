@@ -138,7 +138,7 @@ int LIB_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     {
         item = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
         item->Rotate( rotPoint, ccw );
-        m_frame->RefreshItem( item );
+        m_frame->UpdateItem( item );
     }
 
     if( item->IsMoving() )
@@ -185,7 +185,7 @@ int LIB_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         else
             item->MirrorHorizontal( mirrorPoint );
 
-        m_frame->RefreshItem( item );
+        m_frame->UpdateItem( item );
     }
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
