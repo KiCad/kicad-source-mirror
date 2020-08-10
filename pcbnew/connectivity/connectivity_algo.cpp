@@ -39,11 +39,6 @@
 
 bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
 {
-    BOARD_CONNECTED_ITEM* citem = dyn_cast<BOARD_CONNECTED_ITEM*>( aItem );
-
-    if( !citem )
-        return false;
-
     markItemNetAsDirty( aItem );
 
     switch( aItem->Type() )
@@ -51,35 +46,35 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
     case PCB_MODULE_T:
         for( auto pad : static_cast<MODULE*>( aItem ) -> Pads() )
         {
-            m_itemMap[pad].MarkItemsAsInvalid();
-            m_itemMap.erase( pad );
+            m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( pad ) ].MarkItemsAsInvalid();
+            m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( pad ) );
         }
 
         m_itemList.SetDirty( true );
         break;
 
     case PCB_PAD_T:
-        m_itemMap[citem].MarkItemsAsInvalid();
-        m_itemMap.erase( citem );
+        m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
+        m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
         m_itemList.SetDirty( true );
         break;
 
     case PCB_TRACE_T:
-        m_itemMap[citem].MarkItemsAsInvalid();
-        m_itemMap.erase( citem );
+        m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
+        m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
         m_itemList.SetDirty( true );
         break;
 
     case PCB_VIA_T:
-        m_itemMap[citem].MarkItemsAsInvalid();
-        m_itemMap.erase( citem );
+        m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
+        m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
         m_itemList.SetDirty( true );
         break;
 
     case PCB_ZONE_AREA_T:
     {
-        m_itemMap[citem].MarkItemsAsInvalid();
-        m_itemMap.erase ( citem );
+        m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
+        m_itemMap.erase ( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
         m_itemList.SetDirty( true );
         break;
     }

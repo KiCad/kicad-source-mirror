@@ -666,11 +666,6 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
 
     for( auto item : aItems )
     {
-        BOARD_CONNECTED_ITEM* conn_item = dyn_cast<BOARD_CONNECTED_ITEM*>( item );
-
-        if( !conn_item )
-            continue;
-
         if( item->Type() == PCB_MODULE_T )
         {
             auto component = static_cast<MODULE*>( item );
@@ -681,8 +676,9 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
                 item_set.insert( pad );
             }
         }
-        else
+        else if( auto conn_item = dyn_cast<BOARD_CONNECTED_ITEM*>( item ) )
         {
+            item_set.insert( conn_item );
             nets.insert( conn_item->GetNetCode() );
         }
     }

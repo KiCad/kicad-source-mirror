@@ -1272,19 +1272,18 @@ void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
 
     for( auto item : selection )
     {
-        auto board_item = static_cast<BOARD_CONNECTED_ITEM*>( item );
-
-        if( board_item->Type() != PCB_MODULE_T && board_item->GetLocalRatsnestVisible() )
-        {
-            items.push_back( board_item );
-        }
-        else if( board_item->Type() == PCB_MODULE_T )
+        if( item->Type() == PCB_MODULE_T )
         {
             for( auto pad : static_cast<MODULE*>( item )->Pads() )
             {
                 if( pad->GetLocalRatsnestVisible() )
                     items.push_back( pad );
             }
+        }
+        else if( BOARD_CONNECTED_ITEM* boardItem = dyn_cast<BOARD_CONNECTED_ITEM*>( item ) )
+        {
+            if( boardItem->GetLocalRatsnestVisible() )
+                items.push_back( boardItem );
         }
     }
 
