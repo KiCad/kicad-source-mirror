@@ -256,7 +256,6 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                 itemList.PushItem( ITEM_PICKER( aScreen, mergedLine, UR_NEW ) );
 
                 AddToScreen( mergedLine, aScreen );
-                mergedLine->SetLineColor( COLOR4D( PURECYAN ) );
 
                 if( firstLine->IsSelected() )
                     selectionTool->AddItemToSel( mergedLine, true /*quiet mode*/ );
