@@ -294,13 +294,14 @@ void NGSPICE::init_dll()
 #endif /* __WINDOWS__ */
 #ifdef __WXMAC__
     wxFileName dllFile( "", NGSPICE_DLL_FILE );
-    const vector<string> dllPaths = {
-        GetOSXKicadUserDataDir() + "/PlugIns/ngspice",
-        GetOSXKicadMachineDataDir() + "/PlugIns/ngspice",
+    const vector<string> dllPaths =
+    {
+        GetOSXKicadUserDataDir().ToStdString() + "/PlugIns/ngspice",
+        GetOSXKicadMachineDataDir().ToStdString() + "/PlugIns/ngspice",
         // when running kicad.app
-        stdPaths.GetPluginsDir() + "/sim",
+        stdPaths.GetPluginsDir().ToStdString() + "/sim",
         // when running eeschema.app
-        wxFileName( stdPaths.GetExecutablePath() ).GetPath() + "/../../../../../Contents/PlugIns/sim"
+        wxFileName( stdPaths.GetExecutablePath() ).GetPath().ToStdString() + "/../../../../../Contents/PlugIns/sim"
     };
 #endif /* __WXMAC__ */
 
@@ -357,8 +358,8 @@ void NGSPICE::init_dll()
     {
         ".",
 #ifdef __WXMAC__
-        stdPaths.GetPluginsDir() + "/sim/ngspice/scripts",
-        wxFileName( stdPaths.GetExecutablePath() ).GetPath() + "/../../../../../Contents/PlugIns/sim/ngspice/scripts"
+        stdPaths.GetPluginsDir().ToStdString() + "/sim/ngspice/scripts",
+        wxFileName( stdPaths.GetExecutablePath() ).GetPath().ToStdString() + "/../../../../../Contents/PlugIns/sim/ngspice/scripts"
 #endif /* __WXMAC__ */
         "../share/kicad",
         "../share",
@@ -422,8 +423,8 @@ string NGSPICE::findCmPath() const
 #ifdef __WXMAC__
         "/Applications/ngspice/lib/ngspice",
         "Contents/Frameworks",
-        wxStandardPaths::Get().GetPluginsDir() + "/sim/ngspice",
-        wxFileName( wxStandardPaths::Get().GetExecutablePath() ).GetPath() + "/../../../../../Contents/PlugIns/sim/ngspice",
+        wxStandardPaths::Get().GetPluginsDir().ToStdString() + "/sim/ngspice",
+        wxFileName( wxStandardPaths::Get().GetExecutablePath() ).GetPath().ToStdString() + "/../../../../../Contents/PlugIns/sim/ngspice",
         "../Plugins/sim/ngspice",
 #endif /* __WXMAC__ */
         "../lib/ngspice",
