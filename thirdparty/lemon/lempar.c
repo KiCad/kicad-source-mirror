@@ -1136,7 +1136,7 @@ static YYACTIONTYPE yy_reduce(
       case 18: /* nt ::= G_PARENL nt G_PARENR */
 #line 174 "grammar.lemon"
 {
-    yymsp[-2].minor.yy31 = newNode( pEval, yymsp[-1].minor.yy31->op );
+    yymsp[-2].minor.yy31 = newNode( pEval, yymsp[-1].minor.yy31->op, yymsp[-1].minor.yy31->value );
     yymsp[-2].minor.yy31->leaf[0] = yymsp[-1].minor.yy31->leaf[0];
     yymsp[-2].minor.yy31->leaf[1] = yymsp[-1].minor.yy31->leaf[1];
 }

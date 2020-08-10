@@ -172,7 +172,7 @@ nt(A) ::= nt(B) G_STRUCT_REF nt(C).
 
 nt(A) ::= G_PARENL nt(B) G_PARENR.
 {
-    A = newNode( pEval, B->op );
+    A = newNode( pEval, B->op, B->value );
     A->leaf[0] = B->leaf[0];
     A->leaf[1] = B->leaf[1];
 }

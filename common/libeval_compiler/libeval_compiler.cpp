@@ -68,6 +68,8 @@ TREE_NODE* newNode( LIBEVAL::COMPILER* compiler, int op, const T_TOKEN_VALUE& va
     t2->srcPos       = compiler->GetSourcePos();
     t2->uop          = nullptr;
 
+    libeval_dbg(10, " ostr %p nstr %p nnode %p op %d", value.str, t2->value.str, t2, t2->op );
+
     if(t2->value.str)
         compiler->GcItem( t2->value.str );
 
@@ -145,7 +147,6 @@ UCODE::~UCODE()
 {
     for ( auto op : m_ucode )
     {
-        printf("destroy uop %p\n", op );
         delete op;
     }
 }
@@ -169,7 +170,6 @@ wxString TOKENIZER::GetChars( std::function<bool( wxUniChar )> cond ) const
 {
     wxString rv;
     size_t      p = m_pos;
-    //   printf("p %d len %d\n", p, str.length() );
 
     while( p < m_str.length() && cond( m_str[p] ) )
     {
@@ -287,7 +287,7 @@ bool COMPILER::Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflig
         if( tok.value.str )
             GcItem( tok.value.str );
 
-        libeval_dbg(10, "parse: tok %d\n", tok.token );
+        libeval_dbg(10, "parse: tok %d valstr %p\n", tok.token, tok.value.str );
         Parse( m_parser, tok.token, tok, this );
 
         if ( m_errorStatus.pendingError )
@@ -332,7 +332,6 @@ T_TOKEN COMPILER::getToken()
             done = lexString( rv );
             break;
         }
-        //printf( "-> lstate %d done %d\n", m_lexerState, !!done );
     } while( !done );
 
     return rv;
@@ -342,8 +341,7 @@ T_TOKEN COMPILER::getToken()
 bool COMPILER::lexString( T_TOKEN& aToken )
 {
     wxString str = m_tokenizer.GetChars( []( int c ) -> bool { return c != '\''; } );
-    //printf("STR LIT '%s'\n", (const char *)str.c_str() );
-
+    
     aToken.token = G_STRING;
     aToken.value.str = new wxString( str );
 
@@ -383,7 +381,6 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
     retval.value.str = nullptr;
     retval.token = G_ENDS;
 
-    //printf( "tokdone %d\n", !!m_tokenizer.Done() );
     if( m_tokenizer.Done() )
     {
         aToken = retval;
@@ -423,8 +420,6 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
                     if( isDecimalSeparator( current[i - 1] ) )
                         current[i - 1] = m_localeDecimalSeparator;
                 }
-
-                //printf("-> NUM: '%s'\n", (const char *) current.c_str() );
             };
 
 
@@ -456,7 +451,6 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
     }
     else if( ( convertFrom = resolveUnits() ) >= 0 )
     {
-        //printf("unit\n");
         // UNIT
         // Units are appended to a VALUE.
         // Determine factor to default unit if unit for value is given.
@@ -468,18 +462,13 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
     }
     else if( ch == '\'' ) // string literal
     {
-        //printf( "MATCH STRING LITERAL\n" );
         m_lexerState = LS_STRING;
         m_tokenizer.NextChar();
         return false;
     }
     else if( isalpha( ch ) || ch == '_' )
     {
-        //printf("ALPHA\n");
         current = m_tokenizer.GetChars( []( int c ) -> bool { return isalnum( c ) || c == '_'; } );
-        //printf("Len: %d\n", current.length() );
-        //printf("id '%s'\n", (const char *) current.c_str() );
-        //fflush( stdout );
         retval.token = G_IDENTIFIER;
         retval.value.str = new wxString( current );
         m_tokenizer.NextChar( current.length() );
@@ -546,7 +535,7 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
 
 const wxString formatNode( TREE_NODE* node )
 {
-    return *(node->value.str);
+    return node->value.str ? *(node->value.str) : "";
 }
 
 
@@ -655,8 +644,6 @@ void COMPILER::setRoot( TREE_NODE *root )
 
 void COMPILER::freeTree( LIBEVAL::TREE_NODE *tree )
 {
-    printf("->FreeTre %p\n", tree );
-
     if ( tree->leaf[0] )
         freeTree( tree->leaf[0] );
     if ( tree->leaf[1] )
@@ -664,14 +651,8 @@ void COMPILER::freeTree( LIBEVAL::TREE_NODE *tree )
 
     if( tree->uop )
     {
-        printf("Free uop %p\n", tree->uop );
         delete tree->uop;
     }
-
-/*    if( tree->value.str )
-        delete tree->value.str;
-
-    delete tree;*/
 }
 
 void TREE_NODE::SetUop( int aOp, double aValue )
@@ -856,7 +837,6 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
             if( son && son->op == TR_UNIT )
             {
-                //printf( "HandleUnit: %s unit %d\n", node->value.str, son->value.type );
                 int units = son->value.idx;
                 value =  m_unitResolver->Convert( *node->value.str, units );
                 visitedNodes.insert( son );
@@ -946,7 +926,6 @@ void UOP::Exec( CONTEXT* ctx )
         return;
 
     case TR_OP_METHOD_CALL:
-        //printf("CALL METHOD %s\n" );
         m_func( ctx, m_ref.get() );
         return;
 
