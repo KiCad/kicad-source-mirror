@@ -23,10 +23,12 @@
 
 
 #include <fctsys.h>
+#include <kicad_string.h>
 #include <scintilla_tricks.h>
 #include <wx/stc/stc.h>
 #include <gal/color4d.h>
 #include <dialog_shim.h>
+#include <wx/clipbrd.h>
 
 SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces ) :
         m_te( aScintilla ),
@@ -66,7 +68,13 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
 
 void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 {
-    if( aEvent.GetKeyCode() == WXK_TAB )
+    wxString c = aEvent.GetUnicodeKey();
+
+    if( ConvertSmartQuotesAndDashes( &c ) )
+    {
+        m_te->AddText( c );
+    }
+    else if( aEvent.GetKeyCode() == WXK_TAB )
     {
         if( aEvent.ControlDown() )
         {
@@ -107,7 +115,25 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     }
     else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'V' )
     {
-        m_te->Paste();
+        if( m_te->GetSelectionEnd() > m_te->GetSelectionStart() )
+            m_te->DeleteBack();
+
+        if( wxTheClipboard->Open() )
+        {
+            if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+            {
+                wxTextDataObject data;
+                wxString         str;
+
+                wxTheClipboard->GetData( data );
+                str = data.GetText();
+
+                ConvertSmartQuotesAndDashes( &str );
+                m_te->AddText( str );
+            }
+
+            wxTheClipboard->Close();
+        }
     }
     else if( aEvent.GetKeyCode() == WXK_BACK )
     {

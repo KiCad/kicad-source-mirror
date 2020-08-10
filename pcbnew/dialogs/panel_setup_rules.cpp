@@ -294,7 +294,18 @@ bool PANEL_SETUP_RULES::TransferDataToWindow()
     wxFileName rulesFile( rulesFilepath );
 
     if( rulesFile.FileExists() )
-        m_textEditor->LoadFile( rulesFile.GetFullPath() );
+    {
+        wxTextFile file( rulesFile.GetFullPath() );
+
+        if( file.Open() )
+        {
+            for ( wxString str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine() )
+            {
+                ConvertSmartQuotesAndDashes( &str );
+                m_textEditor->AddText( str << '\n' );
+            }
+        }
+    }
 
     m_originalText = m_textEditor->GetText();
 
@@ -309,7 +320,7 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 
     try
     {
-        std::vector<DRC_RULE*>     dummyRules;
+        std::vector<DRC_RULE*> dummyRules;
 
         DRC_RULES_PARSER parser( m_frame->GetBoard(), m_textEditor->GetText(), _( "DRC rules" ) );
 
