@@ -41,6 +41,7 @@ set( QA_PCBNEW_SRCS
     test_graphics_import_mgr.cpp
     test_lset.cpp
     test_pad_naming.cpp
+    test_libeval_compiler.cpp
 
     drc/test_drc_courtyard_invalid.cpp
     drc/test_drc_courtyard_overlap.cpp

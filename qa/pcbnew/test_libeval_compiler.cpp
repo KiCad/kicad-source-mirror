@@ -1,0 +1,133 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include <unit_test_utils/unit_test_utils.h>
+
+#include <layers_id_colors_and_visibility.h>
+#include <pcbnew/pcb_expr_evaluator.h>
+
+BOOST_AUTO_TEST_SUITE( Libeval_Compiler )
+
+struct EXPR_TO_TEST
+{
+    wxString       expression;
+    bool           expectError;
+    LIBEVAL::VALUE expectedResult;
+};
+
+using VAL = LIBEVAL::VALUE;
+
+const static std::vector<EXPR_TO_TEST> simpleExpressions = { 
+    { "10mm + 20 mm", false, VAL( 30e6 ) },
+    { "3*(7+8)", false, VAL( 3 * ( 7 + 8 ) ) }, 
+    { "3*7+8", false, VAL( 3 * 7 + 8 ) },
+    { "(3*7)+8", false, VAL( 3 * 7 + 8 ) }, 
+    { "10mm + 20)", true, VAL( 0 ) },
+
+    { "1", false, VAL(1) },
+    { "1.5", false, VAL(1.5) },
+    { "1,5", false, VAL(1.5) },
+    { "1mm", false, VAL(1e6) },
+    // Any White-space is OK
+    { "   1 +     2    ", false, VAL(3) },
+    // Decimals are OK in expressions
+    { "1.5 + 0.2 + 0.1", false, VAL(1.8) },
+    // Negatives are OK
+    { "3 - 10", false, VAL(-7) },
+    // Lots of operands
+    { "1 + 2 + 10 + 1000.05", false, VAL(1013.05) },
+    // Operator precedence
+    { "1 + 2 - 4 * 20 / 2", false, VAL(-37) },
+    // Parens
+    { "(1)", false, VAL(1) },
+    // Parens affect precedence
+    { "-(1 + (2 - 4)) * 20.8 / 2", false, VAL(10.4) },
+    // Unary addition is a sign, not a leading operator
+    { "+2 - 1", false, VAL(1) }
+     };
+
+static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
+        bool expectError = false, BOARD_ITEM* itemA = nullptr, BOARD_ITEM* itemB = nullptr )
+{
+    PCB_EXPR_COMPILER compiler;
+    PCB_EXPR_UCODE    ucode;
+    PCB_EXPR_CONTEXT  context, preflightContext;
+    bool              ok = true;
+
+    context.SetItems( itemA, itemB );
+
+    printf( "Expr: '%s'\n", (const char*) expr );
+
+    bool error = !compiler.Compile( expr, &ucode, &preflightContext );
+
+    BOOST_CHECK_EQUAL( error, expectError );
+
+    if( error != expectError )
+    {
+        printf( "result: FAIL: %s (code pos: %d)\n",
+                (const char*) compiler.GetError().message.c_str(), compiler.GetError().srcPos );
+        return false;
+    }
+
+    if( error )
+        return true;
+
+    LIBEVAL::VALUE result;
+
+    if( ok )
+    {
+        result = *ucode.Run( &context );
+        ok     = ( result == expectedResult );
+    }
+
+
+    if( expectedResult.GetType() == LIBEVAL::VT_NUMERIC )
+    {
+        BOOST_CHECK_EQUAL( result.AsDouble(), expectedResult.AsDouble() );
+        /*printf( "result: %s (got %.10f expected: %.10f)\n",
+                ok ? "OK" : "FAIL",
+                result.AsDouble(),
+                expectedResult.AsDouble() );*/
+    }
+    else
+    {
+        BOOST_CHECK_EQUAL( result.AsString(), expectedResult.AsString() );
+        /*printf( "result: %s (got '%ls' expected: '%ls')\n",
+                ok ? "OK" : "FAIL",
+                GetChars( result.AsString() ),
+                GetChars( expectedResult.AsString() ) );*/
+    }
+
+
+    return ok;
+}
+
+BOOST_AUTO_TEST_CASE( SimpleExpressions )
+{
+    for( const auto& expr : simpleExpressions )
+    {
+        bool ok = testEvalExpr( expr.expression, expr.expectedResult, expr.expectError );
+    }
+}
+
+BOOST_AUTO_TEST_SUITE_END()
