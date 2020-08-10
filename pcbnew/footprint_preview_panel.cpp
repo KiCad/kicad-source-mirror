@@ -291,6 +291,24 @@ FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
 }
 
 
+const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetBackgroundColor()
+{
+    KIGFX::PAINTER* painter = GetView()->GetPainter();
+    auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+
+    return settings->GetBackgroundColor();
+}
+
+
+const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetForegroundColor()
+{
+    KIGFX::PAINTER* painter = GetView()->GetPainter();
+    auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+
+    return settings->GetCursorColor();
+}
+
+
 FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY FOOTPRINT_PREVIEW_PANEL::CacheAndReturn( const LIB_ID& aFPID )
 {
     auto opt_ent = m_iface->GetFromCache( aFPID );

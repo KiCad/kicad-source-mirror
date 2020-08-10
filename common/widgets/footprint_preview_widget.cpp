@@ -28,38 +28,46 @@ FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aK
     wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
              wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL ),
     m_prev_panel( nullptr ),
-    m_status_label( nullptr ),
-    m_sizer( nullptr )
+    m_status( nullptr ),
+    m_statusPanel( nullptr ),
+    m_statusSizer( nullptr ),
+    m_outerSizer( nullptr )
 {
     m_prev_panel = FOOTPRINT_PREVIEW_PANEL_BASE::Create( this, aKiway );
 
     if( !m_prev_panel )
         return;
 
-    SetBackgroundColour( *wxBLACK );
-    SetForegroundColour( *wxWHITE );
+    m_statusPanel = new wxPanel( this );
+    m_status = new wxStaticText( m_statusPanel, wxID_ANY, wxEmptyString );
+    m_statusSizer = new wxBoxSizer( wxVERTICAL );
+    m_statusSizer->Add( 0, 0, 1 );  // add a spacer
+    m_statusSizer->Add( m_status, 0, wxALIGN_CENTER );
+    m_statusSizer->Add( 0, 0, 1 );  // add a spacer
+    m_statusPanel->SetSizer( m_statusSizer );
 
-    m_status_label = new wxStaticText( this, -1, wxEmptyString );
-    m_sizer = new wxBoxSizer( wxVERTICAL );
-    m_sizer->Add( 0, 0, 1 );
-    m_sizer->Add( m_status_label, 0, wxALL | wxALIGN_CENTER, 0 );
-    m_sizer->Add( 0, 0, 1 );
+    // Give the status panel the same color scheme as the canvas so it isn't jarring when switched to
+    m_statusPanel->SetBackgroundColour( m_prev_panel->GetBackgroundColor().ToColour() );
+    m_statusPanel->SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
 
-    auto outer_sizer = new wxBoxSizer( wxVERTICAL );
-    outer_sizer->Add( m_prev_panel->GetWindow(), 1, wxALL | wxEXPAND, 0 );
-    outer_sizer->Add( m_sizer, 1, wxALL | wxALIGN_CENTER, 0 );
+    m_outerSizer = new wxBoxSizer( wxVERTICAL );
+    m_outerSizer->Add( m_prev_panel->GetWindow(), 1, wxALL | wxEXPAND, 0 );
+    m_outerSizer->Add( m_statusPanel, 1, wxALL | wxEXPAND, 0 );
 
-    m_sizer->ShowItems( false );
+    // Hide the status panel to start
+    m_statusPanel->Hide();
+
     m_prev_panel->SetStatusHandler( [this]( FOOTPRINT_STATUS s ){ this->OnStatusChange( s ); } );
 
-    SetSizer( outer_sizer );
+    SetSizer( m_outerSizer );
+    Layout();
 }
 
 
 void FOOTPRINT_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 {
-    m_status_label->SetLabel( aText );
-    m_sizer->ShowItems( true );
+    m_status->SetLabel( aText );
+    m_statusPanel->Show();
     m_prev_panel->GetWindow()->Hide();
     Layout();
 }
@@ -67,9 +75,9 @@ void FOOTPRINT_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 
 void FOOTPRINT_PREVIEW_WIDGET::ClearStatus()
 {
-    m_status_label->SetLabel( wxEmptyString );
+    m_status->SetLabel( wxEmptyString );
+    m_statusPanel->Hide();
     m_prev_panel->GetWindow()->Show();
-    m_sizer->ShowItems( false );
     Layout();
 }
 

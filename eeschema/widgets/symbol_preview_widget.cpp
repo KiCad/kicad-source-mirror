@@ -55,6 +55,8 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
     m_preview = new SCH_PREVIEW_PANEL( aParent, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
                                        m_galDisplayOptions, canvasType );
     m_preview->SetStealsFocus( false );
+    m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
+    m_preview->GetGAL()->SetAxesEnabled( false );
 
     // Do not display the grid: the look is not good for a small canvas area.
     // But mainly, due to some strange bug I (JPC) was unable to fix, the grid creates

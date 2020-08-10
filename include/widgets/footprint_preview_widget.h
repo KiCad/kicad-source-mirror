@@ -25,6 +25,8 @@
 #include <functional>
 #include <import_export.h>
 
+#include <gal/color4d.h>
+
 class FOOTPRINT_LOAD_EVENT;
 class FOOTPRINT_PREVIEW_PANEL_BASE;
 class LIB_ID;
@@ -89,8 +91,12 @@ private:
     void OnStatusChange( FOOTPRINT_STATUS aStatus );
 
     FOOTPRINT_PREVIEW_PANEL_BASE* m_prev_panel;
-    wxStaticText*   m_status_label;
-    wxSizer*        m_sizer;
+
+    wxStaticText* m_status;
+    wxPanel*      m_statusPanel;
+    wxSizer*      m_statusSizer;
+    wxSizer*      m_outerSizer;
+
 };
 
 
@@ -127,6 +133,12 @@ public:
      * Get the underlying wxWindow.
      */
     virtual wxWindow* GetWindow() = 0;
+
+    /**
+     * Get the colors to use in a preview widget to match the preview panel.
+     */
+    virtual const KIGFX::COLOR4D& GetBackgroundColor() = 0;
+    virtual const KIGFX::COLOR4D& GetForegroundColor() = 0;
 
     /**
      * Return a footprint preview panel instance via Kiface. May return null

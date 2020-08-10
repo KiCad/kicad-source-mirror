@@ -29,6 +29,7 @@
 #include <functional>
 
 #include <pcb_draw_panel_gal.h>
+#include <gal/color4d.h>
 #include <gal/gal_display_options.h>
 #include <lib_id.h>
 #include <kiway_player.h>
@@ -63,6 +64,9 @@ public:
     virtual void DisplayFootprint( const LIB_ID& aFPID ) override;
 
     virtual void SetStatusHandler( FOOTPRINT_STATUS_HANDLER aHandler ) override;
+
+    virtual const KIGFX::COLOR4D& GetBackgroundColor() override;
+    virtual const KIGFX::COLOR4D& GetForegroundColor() override;
 
     virtual wxWindow* GetWindow() override;
     BOARD* GetBoard() { return m_dummyBoard.get(); }
