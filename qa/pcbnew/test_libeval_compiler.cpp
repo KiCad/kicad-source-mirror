@@ -26,6 +26,9 @@
 #include <layers_id_colors_and_visibility.h>
 #include <pcbnew/pcb_expr_evaluator.h>
 
+#include <pcbnew/class_board.h>
+#include <pcbnew/class_track.h>
+
 BOOST_AUTO_TEST_SUITE( Libeval_Compiler )
 
 struct EXPR_TO_TEST
@@ -64,7 +67,20 @@ const static std::vector<EXPR_TO_TEST> simpleExpressions = {
     { "-(1 + (2 - 4)) * 20.8 / 2", false, VAL(10.4) },
     // Unary addition is a sign, not a leading operator
     { "+2 - 1", false, VAL(1) }
-     };
+};
+
+
+const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
+    { "A.type == 'Pad' && B.type == 'Pad' && (A.onLayer('F.Cu'))", false, VAL( 0.0 ) },
+    { "A.Width > B.Width", false, VAL( 0.0 ) },
+    { "A.Width + B.Width", false, VAL( Mils2iu(10) + Mils2iu(20) ) },
+    { "A.Netclass", false, VAL( "HV" ) },
+    { "(A.Netclass == 'HV') && (B.netclass == 'otherClass') && (B.netclass != 'F.Cu')", false, VAL( 1.0 ) },
+    { "A.Netclass + 1.0", false, VAL( 1.0 ) },
+    { "A.type == 'Track' && B.type == 'Track' && A.layer == 'F.Cu'", false, VAL( 1.0 ) },
+    { "(A.type == 'Track') && (B.type == 'Track') && (A.layer == 'F.Cu')", false, VAL( 1.0 ) }
+};
+
 
 static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
         bool expectError = false, BOARD_ITEM* itemA = nullptr, BOARD_ITEM* itemB = nullptr )
@@ -127,6 +143,41 @@ BOOST_AUTO_TEST_CASE( SimpleExpressions )
     for( const auto& expr : simpleExpressions )
     {
         bool ok = testEvalExpr( expr.expression, expr.expectedResult, expr.expectError );
+    }
+}
+
+BOOST_AUTO_TEST_CASE( IntrospectedProperties )
+{
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.Rebuild();
+
+    BOARD brd;
+
+    NETINFO_LIST& netInfo = brd.GetNetInfo();
+
+    NETCLASSPTR netclass1( new NETCLASS("HV") );
+    NETCLASSPTR netclass2( new NETCLASS("otherClass" ) );
+
+    auto net1info = new NETINFO_ITEM( &brd, "net1", 1);
+    auto net2info = new NETINFO_ITEM( &brd, "net2", 2);
+
+    net1info->SetClass( netclass1 );
+    net2info->SetClass( netclass2 );
+
+    TRACK trackA(&brd);
+    TRACK trackB(&brd);
+
+    trackA.SetNet( net1info );
+    trackB.SetNet( net2info );
+
+    trackB.SetLayer( F_Cu );
+
+    trackA.SetWidth( Mils2iu( 10 ));
+    trackB.SetWidth( Mils2iu( 20 ));
+
+    for( const auto& expr : introspectionExpressions )
+    {
+        bool ok = testEvalExpr( expr.expression, expr.expectedResult, expr.expectError, &trackA, &trackB );
     }
 }
 
