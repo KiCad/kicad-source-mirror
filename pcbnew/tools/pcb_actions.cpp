@@ -961,16 +961,16 @@ TOOL_ACTION PCB_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
         nullptr, AF_NOTIFY );
 
 //Show board statistics tool
-TOOL_ACTION PCB_ACTIONS::boardStatistics( "pcbnew.InspectionTool.ShowStatisticsDialog", AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Show Board Statistics" ), _( "Show Board Statistics" ),
-        _( "Shows board statistics" ), pcbnew_xpm );
-
-
-//Geographic re-annotation tool
-TOOL_ACTION PCB_ACTIONS::boardReannotate( "pcbnew.ReannotateTool.ShowReannotateDialog", AS_GLOBAL, 0,
-        _( "Reannotate PCB" ), _( "Reannotate PCB" ), _( "Reannotate PCB" ),
+TOOL_ACTION PCB_ACTIONS::boardStatistics( "pcbnew.InspectionTool.ShowStatisticsDialog",
+        AS_GLOBAL, 0, "",
+        _( "Show Board Statistics" ), _( "Shows board statistics" ),
         pcbnew_xpm );
 
+//Geographic re-annotation tool
+TOOL_ACTION PCB_ACTIONS::boardReannotate( "pcbnew.ReannotateTool.ShowReannotateDialog",
+        AS_GLOBAL, 0, "",
+        _( "Geographical Reannotate..." ), _( "Reannotate PCB in geographical order" ),
+        annotate_xpm );
 
 // PLACEMENT_TOOL
 //

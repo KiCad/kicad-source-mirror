@@ -24,10 +24,10 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/icon.h>
 #include <wx/statbmp.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/checkbox.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
+#include <wx/statbox.h>
+#include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/valgen.h>
@@ -65,17 +65,16 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 		wxStaticBitmap* reannotate_up_left_bitmap;
 		wxRadioButton* m_Left_Up;
 		wxStaticBitmap* reannotate_left_up_bitmap;
-		wxCheckBox* m_UpdateSchematic;
+		wxStaticText* m_staticText9;
+		wxChoice* m_locationChoice;
 		wxStaticText* m_SortGridText;
 		wxChoice* m_GridChoice;
-		wxStaticText* m_SortOn;
-		wxRadioButton* m_SortOnModules;
-		wxRadioButton* m_SortOnReference;
 		wxStaticText* AnnotateLabel;
 		wxRadioButton* m_AnnotateAll;
 		wxRadioButton* m_AnnotateFront;
 		wxRadioButton* m_AnnotateBack;
 		wxRadioButton* m_AnnotateSelection;
+		wxCheckBox* m_UpdateSchematic;
 		wxPanel* m_Advanced;
 		wxStaticText* m_FrontRefDesStartText;
 		wxTextCtrl* m_FrontRefDesStart;
@@ -105,7 +104,7 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Annotate PCB Geographically"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 745,760 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Geographical Reannotation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 745,760 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_BOARD_REANNOTATE_BASE();
 
 };

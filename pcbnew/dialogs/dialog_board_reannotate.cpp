@@ -180,31 +180,30 @@ DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
 {
     GetParameters(); //Get the current menu settings
     PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
-    cfg->m_Reannotate.sort_on_modules      = m_SortOnModules->GetValue();
-    cfg->m_Reannotate.remove_front_prefix  = m_RemoveFrontPrefix->GetValue();
-    cfg->m_Reannotate.remove_back_prefix   = m_RemoveBackPrefix->GetValue();
-    cfg->m_Reannotate.update_schematic     = m_UpdateSchematic->GetValue();
-    cfg->m_Reannotate.exclude_locked       = m_ExcludeLocked->GetValue();
+    cfg->m_Reannotate.sort_on_module_location = m_locationChoice->GetSelection() == 0;
+    cfg->m_Reannotate.remove_front_prefix     = m_RemoveFrontPrefix->GetValue();
+    cfg->m_Reannotate.remove_back_prefix      = m_RemoveBackPrefix->GetValue();
+    cfg->m_Reannotate.update_schematic        = m_UpdateSchematic->GetValue();
+    cfg->m_Reannotate.exclude_locked          = m_ExcludeLocked->GetValue();
 
-    cfg->m_Reannotate.grid_index           = m_GridIndex;
-    cfg->m_Reannotate.sort_code            = m_SortCode;
-    cfg->m_Reannotate.annotation_choice    = m_AnnotationChoice;
-    cfg->m_Reannotate.report_severity      = m_Severity;
+    cfg->m_Reannotate.grid_index              = m_GridIndex;
+    cfg->m_Reannotate.sort_code               = m_SortCode;
+    cfg->m_Reannotate.annotation_choice       = m_AnnotationChoice;
+    cfg->m_Reannotate.report_severity         = m_Severity;
 
-    cfg->m_Reannotate.front_refdes_start   = m_FrontRefDesStart->GetValue();
-    cfg->m_Reannotate.back_refdes_start    = m_BackRefDesStart->GetValue();
-    cfg->m_Reannotate.front_prefix         = m_FrontPrefix->GetValue();
-    cfg->m_Reannotate.back_prefix          = m_BackPrefix->GetValue();
-    cfg->m_Reannotate.exclude_list         = m_ExcludeList->GetValue();
-    cfg->m_Reannotate.report_file_name     = m_MessageWindow->GetFileName();
+    cfg->m_Reannotate.front_refdes_start      = m_FrontRefDesStart->GetValue();
+    cfg->m_Reannotate.back_refdes_start       = m_BackRefDesStart->GetValue();
+    cfg->m_Reannotate.front_prefix            = m_FrontPrefix->GetValue();
+    cfg->m_Reannotate.back_prefix             = m_BackPrefix->GetValue();
+    cfg->m_Reannotate.exclude_list            = m_ExcludeList->GetValue();
+    cfg->m_Reannotate.report_file_name        = m_MessageWindow->GetFileName();
 }
 
 ///  Copy saved app settings to the dialog
 void DIALOG_BOARD_REANNOTATE::InitValues( void )
 {
     PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
-    m_SortOnModules->SetValue( cfg->m_Reannotate.sort_on_modules );
-    m_SortOnReference->SetValue( !cfg->m_Reannotate.sort_on_modules );
+    m_locationChoice->SetSelection( cfg->m_Reannotate.sort_on_module_location ? 0 : 1 );
     m_RemoveFrontPrefix->SetValue( cfg->m_Reannotate.remove_front_prefix );
     m_RemoveBackPrefix->SetValue( cfg->m_Reannotate.remove_back_prefix );
     m_UpdateSchematic->SetValue( cfg->m_Reannotate.update_schematic );
@@ -298,59 +297,74 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
 {
     wxString tmp;
 
-    aMessage.Printf( _( "\n%s components will be reannotated. " ),
+    aMessage.Printf( _( "\n%s footprints will be reannotated. " ),
                     _( AnnotateString[m_AnnotationChoice] ) );
 
     if( !m_ExcludeList->GetValue().empty() )
+    {
         aMessage += wxString::Format( _( "\nAny reference types %s will not be annotated." ),
                                       m_ExcludeList->GetValue() );
+    }
 
     if( m_ExcludeLocked->GetValue() )
         aMessage += wxString::Format( _( "\nLocked footprints will not be annotated" ) );
 
     if( !m_AnnotateBack->GetValue() )
-        aMessage += wxString::Format( _( "\nFront components will start at %s" ),
+    {
+        aMessage += wxString::Format( _( "\nFront footprints will start at %s" ),
                                       m_FrontRefDesStart->GetValue() );
+    }
 
     if( !m_AnnotateFront->GetValue() )
     {
         bool frontPlusOne = ( 0 == wxAtoi( m_BackRefDesStart->GetValue() ) )
                             && !m_AnnotateBack->GetValue();
 
-        aMessage += wxString::Format( _( "\nBack components will start at %s." ),
-                                      frontPlusOne ? _( "the last front component + 1" ) :
+        aMessage += wxString::Format( _( "\nBack footprints will start at %s." ),
+                                      frontPlusOne ? _( "the last front footprint + 1" ) :
                                       m_BackRefDesStart->GetValue() );
     }
 
     if( !m_FrontPrefix->GetValue().empty() )
     {
         if( m_RemoveFrontPrefix->GetValue() )
-            aMessage += wxString::Format(
-                    _( "\nFront components starting with %s will have the prefix removed." ),
-                    m_FrontPrefix->GetValue() );
+        {
+            aMessage += wxString::Format( _( "\nFront footprints starting with '%s' will have "
+                                             "the prefix removed." ),
+                                          m_FrontPrefix->GetValue() );
+        }
         else
-            aMessage +=
-                    wxString::Format( _( "\nFront components will have %s inserted as a prefix." ),
-                            m_FrontPrefix->GetValue() );
+        {
+            aMessage += wxString::Format( _( "\nFront footprints will have '%s' inserted as a "
+                                             "prefix." ),
+                                          m_FrontPrefix->GetValue() );
+        }
     }
 
     if( !m_BackPrefix->GetValue().empty() )
     {
         if( m_RemoveBackPrefix->GetValue() )
-            aMessage += wxString::Format(
-                    _( "\nBack components starting with %s will have the prefix removed." ),
-                    m_BackPrefix->GetValue() );
+        {
+            aMessage += wxString::Format( _( "\nBack footprints starting with '%s' will have the "
+                                             "prefix removed." ),
+                                          m_BackPrefix->GetValue() );
+        }
         else
-            aMessage +=
-                    wxString::Format( _( "\nBack components will have %s inserted as a prefix." ),
-                                      m_BackPrefix->GetValue() );
+        {
+            aMessage += wxString::Format( _( "\nBack footprints will have '%s' inserted as a "
+                                             "prefix." ),
+                                          m_BackPrefix->GetValue() );
+        }
     }
 
-    aMessage += wxString::Format(
-            _( "\nPrior to sorting by %s, the coordinates of which will be rounded to a %s, %s grid. " ),
-            ( m_SortOnModules->GetValue() ? _( "footprints" ) : _( "references" ) ),
-            MessageTextFromValue( m_Units, m_SortGridx, false ),
-            MessageTextFromValue( m_Units, m_SortGridy, false ) );
+    bool moduleLocation = m_locationChoice->GetSelection() == 0;
+
+    aMessage += wxString::Format( _( "\nPrior to sorting by %s, the coordinates of which will be "
+                                     "rounded to a %s, %s grid. " ),
+                                  moduleLocation ? _( "footprint location" )
+                                                 : _( "reference designator location" ),
+                                  MessageTextFromValue( m_Units, m_SortGridx, false ),
+                                  MessageTextFromValue( m_Units, m_SortGridy, false ) );
 
     if( m_UpdateSchematic->GetValue() )
         aMessage += _( "\nThe schematic will be updated." );
@@ -545,18 +559,22 @@ void DIALOG_BOARD_REANNOTATE::LogModules( wxString& aMessage, std::vector<RefDes
     else
     {
         int i = 1;
+        bool moduleLocations = m_locationChoice->GetSelection() == 0;
 
-        message += wxString::Format(
-                _( "\n*********** Sort on " )
-                + ( std::string )( m_SortOnModules->GetValue() ? _( "Module" ) : _( "Reference" ) )
-                + _( " Coordinates *******************" ) + _( "\nSort Code " )
-                + std::to_string( m_SortCode ) );
+        message += wxString::Format( _( "\n*********** Sort on %s ***********" ),
+                                     moduleLocations ? _( "Footprint Coordinates" )
+                                                     : _( "Reference Designator Coordinates" ) );
 
-        for( RefDesInfo mod : aModules )
+        message += wxString::Format( _( "\nSort Code %d" ), m_SortCode );
+
+        for( const RefDesInfo& mod : aModules )
         {
             message += wxString::Format( _( "\n%d %s Uuid: [%s], X, Y: %s, Rounded X, Y, %s" ),
-                    i++, mod.RefDesString, mod.Uuid.AsString(), CoordTowxString( mod.x, mod.y ),
-                    CoordTowxString( mod.roundedx, mod.roundedy ) );
+                                         i++,
+                                         mod.RefDesString,
+                                         mod.Uuid.AsString(),
+                                         CoordTowxString( mod.x, mod.y ),
+                                         CoordTowxString( mod.roundedx, mod.roundedy ) );
         }
     }
 
@@ -585,19 +603,21 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
     if( !BadRefDes.empty() )
     {
         message.Printf(
-                _( "\nPCB has %d empty or invalid reference designations "
-                   "\nRecommend you run DRC with Test footprints against schematic checked.\n" ),
+                _( "\nPCB has %d empty or invalid reference designations."
+                   "\nRecommend you run DRC with 'Test footprints against schematic' checked.\n" ),
                 (int) BadRefDes.size() );
 
-        for( RefDesInfo mod : BadRefDes )
+        for( const RefDesInfo& mod : BadRefDes )
         {
-            badrefdes += _( "\nRefdes: \"" ) + mod.RefDesString + _( "\" Module:" )
-                         + mod.FPID.GetLibNickname() + ":" + mod.FPID.GetLibItemName();
-            badrefdes += "at X, Y " + CoordTowxString( mod.x, mod.y ) + _( " on PCB " );
+            badrefdes += wxString::Format( _( "\nRefDes: %s Module: %s:%s at %s on PCB." ),
+                                           mod.RefDesString,
+                                           mod.FPID.GetLibNickname().wx_str(),
+                                           mod.FPID.GetLibItemName().wx_str(),
+                                           CoordTowxString( mod.x, mod.y ) );
         }
 
         ShowReport( message + badrefdes + "\n", RPT_SEVERITY_WARNING );
-        message += _( "Yes will attempt reannotate. Proceed?" );
+        message += _( "Reannotate anyway?" );
 
         if( !IsOK( m_frame, message ) )
             return ( false );
@@ -712,16 +732,17 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
     }
 
     RefDesInfo thismodule;
+    bool       useModuleLocation = m_locationChoice->GetSelection() == 0;
 
     for( MODULE* mod : m_modules )
     {
         thismodule.Uuid         = mod->m_Uuid;
         thismodule.RefDesString = mod->GetReference();
         thismodule.FPID         = mod->GetFPID();
-        thismodule.x            = m_SortOnModules->GetValue() ? mod->GetPosition().x :
-                                                     mod->Reference().GetPosition().x;
-        thismodule.y            = m_SortOnModules->GetValue() ? mod->GetPosition().y :
-                                                     mod->Reference().GetPosition().y;
+        thismodule.x            = useModuleLocation ? mod->GetPosition().x
+                                                    : mod->Reference().GetPosition().x;
+        thismodule.y            = useModuleLocation ? mod->GetPosition().y
+                                                    :  mod->Reference().GetPosition().y;
         thismodule.roundedx     = RoundToGrid( thismodule.x, m_SortGridx ); //Round to sort
         thismodule.roundedy     = RoundToGrid( thismodule.y, m_SortGridy );
         thismodule.Front        = mod->GetLayer() == F_Cu;
