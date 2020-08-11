@@ -25,16 +25,13 @@
 #include <stdio.h>
 #include <assert.h>
 /************ Begin %include sections from the grammar ************************/
-#line 37 "grammar.lemon"
-
-#include <assert.h>
-#include <libeval_compiler/libeval_compiler.h>
-#line 33 "grammar.c"
+%%
 /**************** End of %include directives **********************************/
 /* These constants specify the various numeric values for terminal symbols
 ** in a format understandable to "makeheaders".  This section is blank unless
 ** "lemon" is run with the "-m" command-line option.
 ***************** Begin makeheaders token definitions *************************/
+%%
 /**************** End makeheaders token definitions ***************************/
 
 /* The next sections is a series of control #defines.
@@ -92,39 +89,7 @@
 # define INTERFACE 1
 #endif
 /************* Begin control #defines *****************************************/
-#define YYCODETYPE unsigned char
-#define YYNOCODE 29
-#define YYACTIONTYPE unsigned char
-#define ParseTOKENTYPE  LIBEVAL::T_TOKEN 
-typedef union {
-  int yyinit;
-  ParseTOKENTYPE yy0;
-  LIBEVAL::TREE_NODE* yy31;
-} YYMINORTYPE;
-#ifndef YYSTACKDEPTH
-#define YYSTACKDEPTH 100
-#endif
-#define ParseARG_SDECL  LIBEVAL::COMPILER* pEval ;
-#define ParseARG_PDECL , LIBEVAL::COMPILER* pEval 
-#define ParseARG_PARAM ,pEval 
-#define ParseARG_FETCH  LIBEVAL::COMPILER* pEval =yypParser->pEval ;
-#define ParseARG_STORE yypParser->pEval =pEval ;
-#define ParseCTX_SDECL
-#define ParseCTX_PDECL
-#define ParseCTX_PARAM
-#define ParseCTX_FETCH
-#define ParseCTX_STORE
-#define YYNSTATE             39
-#define YYNRULE              26
-#define YYNTOKEN             25
-#define YY_MAX_SHIFT         38
-#define YY_MIN_SHIFTREDUCE   47
-#define YY_MAX_SHIFTREDUCE   72
-#define YY_ERROR_ACTION      73
-#define YY_ACCEPT_ACTION     74
-#define YY_NO_ACTION         75
-#define YY_MIN_REDUCE        76
-#define YY_MAX_REDUCE        101
+%%
 /************* End control #defines *******************************************/
 #define YY_NLOOKAHEAD ((int)(sizeof(yy_lookahead)/sizeof(yy_lookahead[0])))
 
@@ -191,64 +156,7 @@ typedef union {
 **  yy_default[]       Default action for each state.
 **
 *********** Begin parsing tables **********************************************/
-#define YY_ACTTAB_COUNT (149)
-static const YYACTIONTYPE yy_action[] = {
- /*     0 */    21,   74,    1,    1,   12,   11,   19,   18,   16,   15,
- /*    10 */    14,    6,   13,   30,   10,    9,    7,    8,    5,    7,
- /*    20 */     8,    5,   12,   11,   67,   18,   16,   15,   14,    6,
- /*    30 */    13,   31,   10,    9,    7,    8,    5,   95,   24,   35,
- /*    40 */    12,   11,   68,   18,   16,   15,   14,    6,   13,   36,
- /*    50 */    10,    9,    7,    8,    5,   21,   47,   11,  100,   18,
- /*    60 */    16,   15,   14,    6,   13,   32,   10,    9,    7,    8,
- /*    70 */     5,   73,   73,   73,   73,   73,   73,   73,   10,    9,
- /*    80 */     7,    8,    5,   18,   16,   15,   14,    6,   13,    5,
- /*    90 */    10,    9,    7,    8,    5,   98,   37,   33,   25,   22,
- /*   100 */    26,   17,   27,   49,   28,   29,   20,   23,   75,    4,
- /*   110 */     3,   37,   75,   75,   75,   72,   38,   50,    2,   75,
- /*   120 */    75,   75,   75,   75,    4,    3,   37,   75,   75,   75,
- /*   130 */    72,   38,   50,    2,   75,   75,   75,   75,   75,    4,
- /*   140 */     3,   75,   75,   75,   75,   75,   38,   50,    2,
-};
-static const YYCODETYPE yy_lookahead[] = {
- /*     0 */    25,   26,   27,   28,    4,    5,   25,    7,    8,    9,
- /*    10 */    10,   11,   12,   25,   14,   15,   16,   17,   18,   16,
- /*    20 */    17,   18,    4,    5,   24,    7,    8,    9,   10,   11,
- /*    30 */    12,   25,   14,   15,   16,   17,   18,   25,   25,   25,
- /*    40 */     4,    5,   24,    7,    8,    9,   10,   11,   12,   25,
- /*    50 */    14,   15,   16,   17,   18,   25,   20,    5,   28,    7,
- /*    60 */     8,    9,   10,   11,   12,   25,   14,   15,   16,   17,
- /*    70 */    18,    7,    8,    9,   10,   11,   12,   18,   14,   15,
- /*    80 */    16,   17,   18,    7,    8,    9,   10,   11,   12,   18,
- /*    90 */    14,   15,   16,   17,   18,    0,    1,   25,   25,   25,
- /*   100 */    25,   23,   25,   19,   25,   25,   25,   25,   29,   14,
- /*   110 */    15,    1,   29,   29,   29,   20,   21,   22,   23,   29,
- /*   120 */    29,   29,   29,   29,   14,   15,    1,   29,   29,   29,
- /*   130 */    20,   21,   22,   23,   29,   29,   29,   29,   29,   14,
- /*   140 */    15,   29,   29,   29,   29,   29,   21,   22,   23,   29,
- /*   150 */    29,   29,
-};
-#define YY_SHIFT_COUNT    (38)
-#define YY_SHIFT_MIN      (0)
-#define YY_SHIFT_MAX      (125)
-static const unsigned char yy_shift_ofst[] = {
- /*     0 */   110,   95,  125,  125,  125,  125,  125,  125,  125,  125,
- /*    10 */   125,  125,  125,  125,  125,  125,  125,  125,  125,    0,
- /*    20 */    18,   36,   52,   64,   64,   76,   64,   64,   64,   64,
- /*    30 */     3,    3,    3,    3,   59,   71,   71,   78,   84,
-};
-#define YY_REDUCE_COUNT (18)
-#define YY_REDUCE_MIN   (-25)
-#define YY_REDUCE_MAX   (82)
-static const signed char yy_reduce_ofst[] = {
- /*     0 */   -25,   30,  -19,  -12,    6,   12,   13,   14,   24,   40,
- /*    10 */    72,   73,   74,   75,   77,   79,   80,   81,   82,
-};
-static const YYACTIONTYPE yy_default[] = {
- /*     0 */    73,   73,   73,   73,   73,   73,   73,   73,   73,   73,
- /*    10 */    73,   73,   73,   73,   73,   73,   73,   73,   73,   73,
- /*    20 */    73,   73,   86,   81,   94,   87,   85,   84,   83,   82,
- /*    30 */    90,   89,   91,   88,   95,   93,   92,   80,   77,
-};
+%%
 /********** End of lemon-generated parsing tables *****************************/
 
 /* The next table maps tokens (terminal symbols) into fallback tokens.  
@@ -267,6 +175,7 @@ static const YYACTIONTYPE yy_default[] = {
 */
 #ifdef YYFALLBACK
 static const YYCODETYPE yyFallback[] = {
+%%
 };
 #endif /* YYFALLBACK */
 
@@ -354,35 +263,7 @@ void ParseTrace(FILE *TraceFILE, char *zTracePrompt){
 /* For tracing shifts, the names of all terminals and nonterminals
 ** are required.  The following table supplies these names */
 static const char *const yyTokenName[] = { 
-  /*    0 */ "$",
-  /*    1 */ "G_IDENTIFIER",
-  /*    2 */ "G_ASSIGN",
-  /*    3 */ "G_SEMCOL",
-  /*    4 */ "G_BOOL_AND",
-  /*    5 */ "G_BOOL_OR",
-  /*    6 */ "G_BOOL_XOR",
-  /*    7 */ "G_LESS_THAN",
-  /*    8 */ "G_GREATER_THAN",
-  /*    9 */ "G_LESS_EQUAL_THAN",
-  /*   10 */ "G_GREATER_EQUAL_THAN",
-  /*   11 */ "G_EQUAL",
-  /*   12 */ "G_NOT_EQUAL",
-  /*   13 */ "G_BOOL_NOT",
-  /*   14 */ "G_PLUS",
-  /*   15 */ "G_MINUS",
-  /*   16 */ "G_DIVIDE",
-  /*   17 */ "G_MULT",
-  /*   18 */ "G_STRUCT_REF",
-  /*   19 */ "G_UNIT",
-  /*   20 */ "G_ENDS",
-  /*   21 */ "G_VALUE",
-  /*   22 */ "G_STRING",
-  /*   23 */ "G_PARENL",
-  /*   24 */ "G_PARENR",
-  /*   25 */ "nt",
-  /*   26 */ "main",
-  /*   27 */ "in",
-  /*   28 */ "stmt",
+%%
 };
 #endif /* defined(YYCOVERAGE) || !defined(NDEBUG) */
 
@@ -390,32 +271,7 @@ static const char *const yyTokenName[] = {
 /* For tracing reduce actions, the names of all rules are required.
 */
 static const char *const yyRuleName[] = {
- /*   0 */ "stmt ::= nt G_ENDS",
- /*   1 */ "nt ::= G_VALUE",
- /*   2 */ "nt ::= G_VALUE G_UNIT",
- /*   3 */ "nt ::= G_STRING",
- /*   4 */ "nt ::= G_IDENTIFIER",
- /*   5 */ "nt ::= nt G_LESS_THAN nt",
- /*   6 */ "nt ::= nt G_GREATER_THAN nt",
- /*   7 */ "nt ::= nt G_LESS_EQUAL_THAN nt",
- /*   8 */ "nt ::= nt G_GREATER_EQUAL_THAN nt",
- /*   9 */ "nt ::= nt G_NOT_EQUAL nt",
- /*  10 */ "nt ::= nt G_BOOL_AND nt",
- /*  11 */ "nt ::= nt G_BOOL_OR nt",
- /*  12 */ "nt ::= nt G_PLUS nt",
- /*  13 */ "nt ::= G_PLUS nt",
- /*  14 */ "nt ::= G_MINUS nt",
- /*  15 */ "nt ::= nt G_MINUS nt",
- /*  16 */ "nt ::= nt G_MULT nt",
- /*  17 */ "nt ::= nt G_DIVIDE nt",
- /*  18 */ "nt ::= nt G_EQUAL nt",
- /*  19 */ "nt ::= nt G_STRUCT_REF nt",
- /*  20 */ "nt ::= G_PARENL nt G_PARENR",
- /*  21 */ "nt ::= G_IDENTIFIER G_PARENL nt G_PARENR",
- /*  22 */ "main ::= in",
- /*  23 */ "in ::= stmt",
- /*  24 */ "in ::= in stmt",
- /*  25 */ "stmt ::= G_ENDS",
+%%
 };
 #endif /* NDEBUG */
 
@@ -541,6 +397,7 @@ static void yy_destructor(
     ** inside the C code.
     */
 /********* Begin destructor definitions ***************************************/
+%%
 /********* End destructor definitions *****************************************/
     default:  break;   /* If no destructor action specified: do nothing */
   }
@@ -664,15 +521,18 @@ static YYACTIONTYPE yy_find_shift_action(
   do{
     i = yy_shift_ofst[stateno];
     assert( i>=0 );
-    /* assert( i+YYNTOKEN<=(int)YY_NLOOKAHEAD ); */
+    assert( i<=YY_ACTTAB_COUNT );
+    assert( i+YYNTOKEN<=(int)YY_NLOOKAHEAD );
     assert( iLookAhead!=YYNOCODE );
     assert( iLookAhead < YYNTOKEN );
     i += iLookAhead;
-    if( i>=YY_NLOOKAHEAD || yy_lookahead[i]!=iLookAhead ){
+    assert( i<(int)YY_NLOOKAHEAD );
+    if( yy_lookahead[i]!=iLookAhead ){
 #ifdef YYFALLBACK
       YYCODETYPE iFallback;            /* Fallback token */
-      if( iLookAhead<sizeof(yyFallback)/sizeof(yyFallback[0])
-             && (iFallback = yyFallback[iLookAhead])!=0 ){
+      assert( iLookAhead<sizeof(yyFallback)/sizeof(yyFallback[0]) );
+      iFallback = yyFallback[iLookAhead];
+      if( iFallback!=0 ){
 #ifndef NDEBUG
         if( yyTraceFILE ){
           fprintf(yyTraceFILE, "%sFALLBACK %s => %s\n",
@@ -687,16 +547,8 @@ static YYACTIONTYPE yy_find_shift_action(
 #ifdef YYWILDCARD
       {
         int j = i - iLookAhead + YYWILDCARD;
-        if( 
-#if YY_SHIFT_MIN+YYWILDCARD<0
-          j>=0 &&
-#endif
-#if YY_SHIFT_MAX+YYWILDCARD>=YY_ACTTAB_COUNT
-          j<YY_ACTTAB_COUNT &&
-#endif
-          j<(int)(sizeof(yy_lookahead)/sizeof(yy_lookahead[0])) &&
-          yy_lookahead[j]==YYWILDCARD && iLookAhead>0
-        ){
+        assert( j<(int)(sizeof(yy_lookahead)/sizeof(yy_lookahead[0])) );
+        if( yy_lookahead[j]==YYWILDCARD && iLookAhead>0 ){
 #ifndef NDEBUG
           if( yyTraceFILE ){
             fprintf(yyTraceFILE, "%sWILDCARD %s => %s\n",
@@ -710,6 +562,7 @@ static YYACTIONTYPE yy_find_shift_action(
 #endif /* YYWILDCARD */
       return yy_default[stateno];
     }else{
+      assert( i>=0 && i<sizeof(yy_action)/sizeof(yy_action[0]) );
       return yy_action[i];
     }
   }while(1);
@@ -760,6 +613,7 @@ static void yyStackOverflow(yyParser *yypParser){
    /* Here code is inserted which will execute if the parser
    ** stack every overflows */
 /******** Begin %stack_overflow code ******************************************/
+%%
 /******** End %stack_overflow code ********************************************/
    ParseARG_STORE /* Suppress warning about unused %extra_argument var */
    ParseCTX_STORE
@@ -831,63 +685,13 @@ static void yy_shift(
 /* For rule J, yyRuleInfoLhs[J] contains the symbol on the left-hand side
 ** of that rule */
 static const YYCODETYPE yyRuleInfoLhs[] = {
-    28,  /* (0) stmt ::= nt G_ENDS */
-    25,  /* (1) nt ::= G_VALUE */
-    25,  /* (2) nt ::= G_VALUE G_UNIT */
-    25,  /* (3) nt ::= G_STRING */
-    25,  /* (4) nt ::= G_IDENTIFIER */
-    25,  /* (5) nt ::= nt G_LESS_THAN nt */
-    25,  /* (6) nt ::= nt G_GREATER_THAN nt */
-    25,  /* (7) nt ::= nt G_LESS_EQUAL_THAN nt */
-    25,  /* (8) nt ::= nt G_GREATER_EQUAL_THAN nt */
-    25,  /* (9) nt ::= nt G_NOT_EQUAL nt */
-    25,  /* (10) nt ::= nt G_BOOL_AND nt */
-    25,  /* (11) nt ::= nt G_BOOL_OR nt */
-    25,  /* (12) nt ::= nt G_PLUS nt */
-    25,  /* (13) nt ::= G_PLUS nt */
-    25,  /* (14) nt ::= G_MINUS nt */
-    25,  /* (15) nt ::= nt G_MINUS nt */
-    25,  /* (16) nt ::= nt G_MULT nt */
-    25,  /* (17) nt ::= nt G_DIVIDE nt */
-    25,  /* (18) nt ::= nt G_EQUAL nt */
-    25,  /* (19) nt ::= nt G_STRUCT_REF nt */
-    25,  /* (20) nt ::= G_PARENL nt G_PARENR */
-    25,  /* (21) nt ::= G_IDENTIFIER G_PARENL nt G_PARENR */
-    26,  /* (22) main ::= in */
-    27,  /* (23) in ::= stmt */
-    27,  /* (24) in ::= in stmt */
-    28,  /* (25) stmt ::= G_ENDS */
+%%
 };
 
 /* For rule J, yyRuleInfoNRhs[J] contains the negative of the number
 ** of symbols on the right-hand side of that rule. */
 static const signed char yyRuleInfoNRhs[] = {
-   -2,  /* (0) stmt ::= nt G_ENDS */
-   -1,  /* (1) nt ::= G_VALUE */
-   -2,  /* (2) nt ::= G_VALUE G_UNIT */
-   -1,  /* (3) nt ::= G_STRING */
-   -1,  /* (4) nt ::= G_IDENTIFIER */
-   -3,  /* (5) nt ::= nt G_LESS_THAN nt */
-   -3,  /* (6) nt ::= nt G_GREATER_THAN nt */
-   -3,  /* (7) nt ::= nt G_LESS_EQUAL_THAN nt */
-   -3,  /* (8) nt ::= nt G_GREATER_EQUAL_THAN nt */
-   -3,  /* (9) nt ::= nt G_NOT_EQUAL nt */
-   -3,  /* (10) nt ::= nt G_BOOL_AND nt */
-   -3,  /* (11) nt ::= nt G_BOOL_OR nt */
-   -3,  /* (12) nt ::= nt G_PLUS nt */
-   -2,  /* (13) nt ::= G_PLUS nt */
-   -2,  /* (14) nt ::= G_MINUS nt */
-   -3,  /* (15) nt ::= nt G_MINUS nt */
-   -3,  /* (16) nt ::= nt G_MULT nt */
-   -3,  /* (17) nt ::= nt G_DIVIDE nt */
-   -3,  /* (18) nt ::= nt G_EQUAL nt */
-   -3,  /* (19) nt ::= nt G_STRUCT_REF nt */
-   -3,  /* (20) nt ::= G_PARENL nt G_PARENR */
-   -4,  /* (21) nt ::= G_IDENTIFIER G_PARENL nt G_PARENR */
-   -1,  /* (22) main ::= in */
-   -1,  /* (23) in ::= stmt */
-   -2,  /* (24) in ::= in stmt */
-   -1,  /* (25) stmt ::= G_ENDS */
+%%
 };
 
 static void yy_accept(yyParser*);  /* Forward Declaration */
@@ -921,12 +725,15 @@ static YYACTIONTYPE yy_reduce(
   if( yyTraceFILE && yyruleno<(int)(sizeof(yyRuleName)/sizeof(yyRuleName[0])) ){
     yysize = yyRuleInfoNRhs[yyruleno];
     if( yysize ){
-      fprintf(yyTraceFILE, "%sReduce %d [%s], go to state %d.\n",
+      fprintf(yyTraceFILE, "%sReduce %d [%s]%s, pop back to state %d.\n",
         yyTracePrompt,
-        yyruleno, yyRuleName[yyruleno], yymsp[yysize].stateno);
+        yyruleno, yyRuleName[yyruleno],
+        yyruleno<YYNRULE_WITH_ACTION ? "" : " without external action",
+        yymsp[yysize].stateno);
     }else{
-      fprintf(yyTraceFILE, "%sReduce %d [%s].\n",
-        yyTracePrompt, yyruleno, yyRuleName[yyruleno]);
+      fprintf(yyTraceFILE, "%sReduce %d [%s]%s.\n",
+        yyTracePrompt, yyruleno, yyRuleName[yyruleno],
+        yyruleno<YYNRULE_WITH_ACTION ? "" : " without external action");
     }
   }
 #endif /* NDEBUG */
@@ -973,218 +780,7 @@ static YYACTIONTYPE yy_reduce(
   **     break;
   */
 /********** Begin reduce actions **********************************************/
-        YYMINORTYPE yylhsminor;
-      case 0: /* stmt ::= nt G_ENDS */
-#line 58 "grammar.lemon"
-{ pEval->setRoot(yymsp[-1].minor.yy31); }
-#line 981 "grammar.c"
-        break;
-      case 1: /* nt ::= G_VALUE */
-#line 61 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_NUMBER, yymsp[0].minor.yy0.value );
-}
-#line 988 "grammar.c"
-  yymsp[0].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 2: /* nt ::= G_VALUE G_UNIT */
-#line 66 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_NUMBER, yymsp[-1].minor.yy0.value );
-    yylhsminor.yy31->leaf[0] = newNode( pEval, TR_UNIT, yymsp[0].minor.yy0.value );
-}
-#line 997 "grammar.c"
-  yymsp[-1].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 3: /* nt ::= G_STRING */
-#line 72 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_STRING, yymsp[0].minor.yy0.value );
-}
-#line 1005 "grammar.c"
-  yymsp[0].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 4: /* nt ::= G_IDENTIFIER */
-#line 77 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_IDENTIFIER, yymsp[0].minor.yy0.value );
-}
-#line 1013 "grammar.c"
-  yymsp[0].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 5: /* nt ::= nt G_LESS_THAN nt */
-#line 82 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_LESS );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1023 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 6: /* nt ::= nt G_GREATER_THAN nt */
-#line 89 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_GREATER );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1033 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 7: /* nt ::= nt G_LESS_EQUAL_THAN nt */
-#line 96 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_LESS_EQUAL );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1043 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 8: /* nt ::= nt G_GREATER_EQUAL_THAN nt */
-#line 103 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_GREATER_EQUAL );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1053 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 9: /* nt ::= nt G_NOT_EQUAL nt */
-#line 110 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_NOT_EQUAL );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1063 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 10: /* nt ::= nt G_BOOL_AND nt */
-#line 118 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_BOOL_AND );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1073 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 11: /* nt ::= nt G_BOOL_OR nt */
-#line 125 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_BOOL_OR );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1083 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 12: /* nt ::= nt G_PLUS nt */
-#line 132 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_ADD );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1093 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 13: /* nt ::= G_PLUS nt */
-#line 139 "grammar.lemon"
-{
-    yymsp[-1].minor.yy31 = newNode( pEval, yymsp[0].minor.yy31->op, yymsp[0].minor.yy31->value );
-    yymsp[-1].minor.yy31->leaf[0] = yymsp[0].minor.yy31->leaf[0];
-    yymsp[-1].minor.yy31->leaf[1] = yymsp[0].minor.yy31->leaf[1];
-}
-#line 1103 "grammar.c"
-        break;
-      case 14: /* nt ::= G_MINUS nt */
-#line 147 "grammar.lemon"
-{
-    yymsp[-1].minor.yy31 = newNode( pEval, TR_OP_SUB );
-    yymsp[-1].minor.yy31->leaf[0] = newNode( pEval, TR_NUMBER );
-    yymsp[-1].minor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1112 "grammar.c"
-        break;
-      case 15: /* nt ::= nt G_MINUS nt */
-#line 155 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_SUB );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1121 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 16: /* nt ::= nt G_MULT nt */
-#line 162 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_MUL );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1131 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 17: /* nt ::= nt G_DIVIDE nt */
-#line 169 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_DIV );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1141 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 18: /* nt ::= nt G_EQUAL nt */
-#line 176 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_EQUAL );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1151 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 19: /* nt ::= nt G_STRUCT_REF nt */
-#line 183 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_STRUCT_REF );
-    yylhsminor.yy31->leaf[0] = yymsp[-2].minor.yy31;
-    yylhsminor.yy31->leaf[1] = yymsp[0].minor.yy31;
-}
-#line 1161 "grammar.c"
-  yymsp[-2].minor.yy31 = yylhsminor.yy31;
-        break;
-      case 20: /* nt ::= G_PARENL nt G_PARENR */
-#line 190 "grammar.lemon"
-{
-    yymsp[-2].minor.yy31 = newNode( pEval, yymsp[-1].minor.yy31->op, yymsp[-1].minor.yy31->value );
-    yymsp[-2].minor.yy31->leaf[0] = yymsp[-1].minor.yy31->leaf[0];
-    yymsp[-2].minor.yy31->leaf[1] = yymsp[-1].minor.yy31->leaf[1];
-}
-#line 1171 "grammar.c"
-        break;
-      case 21: /* nt ::= G_IDENTIFIER G_PARENL nt G_PARENR */
-#line 197 "grammar.lemon"
-{
-    yylhsminor.yy31 = newNode( pEval, TR_OP_FUNC_CALL );
-    yylhsminor.yy31->leaf[0] = newNode( pEval, TR_IDENTIFIER, yymsp[-3].minor.yy0.value);
-    yylhsminor.yy31->leaf[1] = yymsp[-1].minor.yy31;
-}
-#line 1180 "grammar.c"
-  yymsp[-3].minor.yy31 = yylhsminor.yy31;
-        break;
-      default:
-      /* (22) main ::= in */ yytestcase(yyruleno==22);
-      /* (23) in ::= stmt (OPTIMIZED OUT) */ assert(yyruleno!=23);
-      /* (24) in ::= in stmt */ yytestcase(yyruleno==24);
-      /* (25) stmt ::= G_ENDS */ yytestcase(yyruleno==25);
-        break;
+%%
 /********** End reduce actions ************************************************/
   };
   assert( yyruleno<sizeof(yyRuleInfoLhs)/sizeof(yyRuleInfoLhs[0]) );
@@ -1225,6 +821,7 @@ static void yy_parse_failed(
   /* Here code is inserted which will be executed whenever the
   ** parser fails */
 /************ Begin %parse_failure code ***************************************/
+%%
 /************ End %parse_failure code *****************************************/
   ParseARG_STORE /* Suppress warning about unused %extra_argument variable */
   ParseCTX_STORE
@@ -1243,10 +840,7 @@ static void yy_syntax_error(
   ParseCTX_FETCH
 #define TOKEN yyminor
 /************ Begin %syntax_error code ****************************************/
-#line 42 "grammar.lemon"
-
-  pEval->parseError("Syntax error");
-#line 1250 "grammar.c"
+%%
 /************ End %syntax_error code ******************************************/
   ParseARG_STORE /* Suppress warning about unused %extra_argument variable */
   ParseCTX_STORE
@@ -1272,10 +866,7 @@ static void yy_accept(
   /* Here code is inserted which will be executed whenever the
   ** parser accepts */
 /*********** Begin %parse_accept code *****************************************/
-#line 46 "grammar.lemon"
-
-  pEval->parseOk();
-#line 1279 "grammar.c"
+%%
 /*********** End %parse_accept code *******************************************/
   ParseARG_STORE /* Suppress warning about unused %extra_argument variable */
   ParseCTX_STORE
@@ -1476,11 +1067,10 @@ void Parse(
 */
 int ParseFallback(int iToken){
 #ifdef YYFALLBACK
-  if( iToken<(int)(sizeof(yyFallback)/sizeof(yyFallback[0])) ){
-    return yyFallback[iToken];
-  }
+  assert( iToken<(int)(sizeof(yyFallback)/sizeof(yyFallback[0])) );
+  return yyFallback[iToken];
 #else
   (void)iToken;
-#endif
   return 0;
+#endif
 }
