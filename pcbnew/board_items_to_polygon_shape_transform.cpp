@@ -121,9 +121,12 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
         SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aMaxError,
         bool aSkipNPTHPadsWihNoCopper ) const
 {
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
     {
         if( aLayer != UNDEFINED_LAYER && !pad->IsOnLayer(aLayer) )
+            continue;
+
+        if( !pad->IsPadOnLayer( aLayer ) && IsCopperLayer( aLayer ) )
             continue;
 
         // NPTH pads are not drawn on layers if the shape size and pos is the same

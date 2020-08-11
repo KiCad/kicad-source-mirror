@@ -460,6 +460,10 @@ void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule
         if( !pad->IsOnLayer( aLayerId ) )
             continue;
 
+        // Skip pad annulus when not connected on this layer (if removing is enabled)
+        if( !pad->IsPadOnLayer( aLayerId ) && IsCopperLayer( aLayerId ) )
+            continue;
+
         // NPTH pads are not drawn on layers if the
         // shape size and pos is the same as their hole:
         if( aSkipNPTHPadsWihNoCopper && (pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED) )

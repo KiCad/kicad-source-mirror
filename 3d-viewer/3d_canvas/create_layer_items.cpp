@@ -220,7 +220,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
 
-        // ADD TRACKS
+        // Add track segments shapes and via annulus shapes
         unsigned int nTracks = trackList.size();
 
         for( unsigned int trackIdx = 0; trackIdx < nTracks; ++trackIdx )
@@ -229,6 +229,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             // NOTE: Vias can be on multiple layers
             if( !track->IsOnLayer( curr_layer_id ) )
+                continue;
+
+            // Skip vias annulus when not connected on this layer (if removing is enabled)
+            const VIA *via = dyn_cast< const VIA*>( track );
+
+            if( via && !via->IsPadOnLayer( curr_layer_id ) && IsCopperLayer( curr_layer_id ) )
                 continue;
 
             // Add object item to layer container
@@ -353,9 +359,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                 if( viatype != VIATYPE::THROUGH )
                 {
-
                     // Add VIA hole contourns
-                    // /////////////////////////////////////////////////////////
 
                     // Add outer holes of VIAs
                     SHAPE_POLY_SET *layerOuterHolesPoly = NULL;
@@ -409,10 +413,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     TransformCircleToPolygon( m_through_inner_holes_poly, via->GetStart(),
                             holediameter / 2, ARC_HIGH_DEF );
 
-                    // Add samething for vias only
+                    // Add same thing for vias only
 
                     TransformCircleToPolygon( m_through_outer_holes_vias_poly,
                             via->GetStart(), hole_outer_radius, ARC_HIGH_DEF );
+
                     if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
                     {
                         TransformCircleToPolygon( m_through_outer_ring_holes_vias_poly,
@@ -433,7 +438,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     start_Time = GetRunningMicroSecs();
 #endif
 
-    // Creates outline contours of the tracks and add it to the poly of the layer
+    // Creates vertical outline contours of the tracks and add it to the poly of the layer
     // /////////////////////////////////////////////////////////////////////////
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
@@ -454,7 +459,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 if( !track->IsOnLayer( curr_layer_id ) )
                     continue;
 
-                // Add the track contour
+                // Skip vias annulus when not connected on this layer (if removing is enabled)
+                const VIA *via = dyn_cast< const VIA*>( track );
+
+                if( via && !via->IsPadOnLayer( curr_layer_id ) && IsCopperLayer( curr_layer_id ) )
+                    continue;
+
+                // Add the track/via contour
                 track->TransformShapeWithClearanceToPolygon( *layerPoly, 0 );
             }
         }
@@ -486,10 +497,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                              pad->GetDrillSize().y ) / 2.0f ) * m_biuTo3Dunits;
 
             m_through_holes_outer.Add( createNewPadDrill( pad, inflate ) );
+
             if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
             {
                 m_through_holes_outer_ring.Add( createNewPadDrill( pad, inflate ) );
             }
+
             m_through_holes_inner.Add( createNewPadDrill( pad,       0 ) );
         }
     }
@@ -565,8 +578,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     start_Time = GetRunningMicroSecs();
 #endif
 
-    // Add modules PADs poly contourns
-    // /////////////////////////////////////////////////////////////////////////
+    // Add modules PADs poly contourns (vertical outlines)
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
@@ -576,23 +588,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             SHAPE_POLY_SET *layerPoly = m_layers_poly[curr_layer_id];
 
-            // ADD PADS
+            // Add pads to polygon list
             for( auto module : m_board->Modules() )
             {
-                // Construct polys
-                // /////////////////////////////////////////////////////////////
-
                 // Note: NPTH pads are not drawn on copper layers when the pad
                 // has same shape as its hole
                 module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id,
                                                                    *layerPoly,
                                                                    0,
                                                                    true );
-
-                // Micro-wave modules may have items on copper layers
-                module->TransformGraphicTextWithClearanceToPolygonSet( curr_layer_id,
-                                                                       *layerPoly,
-                                                                       0 );
 
                 transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );
             }
