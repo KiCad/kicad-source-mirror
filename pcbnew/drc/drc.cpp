@@ -1155,7 +1155,8 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
 
             if( aRefPad->GetDrillSize().x )
             {
-                int minClearance = pad->GetClearance( nullptr, &m_clearanceSource );
+                int minClearance = pad->GetClearance( pad->GetLayer(), nullptr,
+                                                      &m_clearanceSource );
                 int actual;
 
                 if( pad->Collide( aRefPad->GetEffectiveHoleShape(), minClearance, &actual ) )

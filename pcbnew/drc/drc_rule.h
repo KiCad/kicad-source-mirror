@@ -46,7 +46,7 @@ class PCB_EXPR_UCODE;
 #define DISALLOW_FOOTPRINTS  (1 << 9)
 
 
-enum DRC_RULE_ID_T
+enum DRC_CONSTRAINT_TYPE_T
 {
     DRC_RULE_ID_UNKNOWN = -1,
     DRC_RULE_ID_CLEARANCE = 0,
@@ -93,9 +93,10 @@ public:
     {}
 
     const MINOPTMAX<int>& GetValue() const { return m_Value; }
+    MINOPTMAX<int>& Value() { return m_Value; }
 
 public:
-    DRC_RULE_ID_T  m_Type;
+    DRC_CONSTRAINT_TYPE_T  m_Type;
     MINOPTMAX<int> m_Value;
     int            m_DisallowFlags;
     LSET           m_LayerCondition;

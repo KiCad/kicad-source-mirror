@@ -232,7 +232,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         {
             if( viaAnnulus < minAnnulus )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
 
                 m_msg.Printf( _( "Via annulus too small (%s %s; actual %s)" ),
                               m_clearanceSource,
@@ -256,7 +256,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             if( viaAnnulus < minAnnulus )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
 
                 m_msg.Printf( _( "Via annulus too small (%s %s; actual %s)" ),
                               m_clearanceSource,
