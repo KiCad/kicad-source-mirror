@@ -337,7 +337,7 @@ void TRACKS_CLEANER::deleteTracksInPads()
 
                 if( poly.IsEmpty() )
             {
-                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_TRACK_IN_PAD );
+                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_TRACK_IN_PAD ) );
                 item->SetItems( track );
                 m_itemsList->push_back( item );
 
