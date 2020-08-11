@@ -236,22 +236,50 @@ void DIALOG_DRC::SetFootprintsProvider( RC_ITEMS_PROVIDER* aProvider )
 
 void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 {
+    BOARD*        board = m_brdEditor->GetBoard();
+    RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
     const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
-    BOARD_ITEM*   item = m_brdEditor->GetBoard()->GetItem( itemID );
-    LSET          visibleLayers = m_brdEditor->GetBoard()->GetVisibleLayers();
-    WINDOW_THAWER thawer( m_brdEditor );
+    BOARD_ITEM*   item = board->GetItem( itemID );
 
-    if( item && ( item->GetLayerSet() & visibleLayers ) == 0 )
+    if( item )
     {
-        if( IsOK( this, wxString::Format( _( "Item not currently visible.\nShow the '%s' layer?" ),
-                                          item->GetLayerName() ) ) )
+        PCB_LAYER_ID principalLayer = item->GetLayer();
+        RC_ITEM*     rc_item = node->m_RcItem;
+        BOARD_ITEM*  a = board->GetItem( rc_item->GetMainItemID() );
+        BOARD_ITEM*  b = board->GetItem( rc_item->GetAuxItemID() );
+        BOARD_ITEM*  c = board->GetItem( rc_item->GetAuxItem2ID() );
+        BOARD_ITEM*  d = board->GetItem( rc_item->GetAuxItem3ID() );
+
+        LSET violationLayers = a->GetLayerSet();
+
+        if( b )
+            violationLayers &= b->GetLayerSet();
+
+        if( c )
+            violationLayers &= c->GetLayerSet();
+
+        if( d )
+            violationLayers &= d->GetLayerSet();
+
+        if( violationLayers.count() )
+            principalLayer = violationLayers.Seq().front();
+        else
+            violationLayers.set( principalLayer );
+
+        WINDOW_THAWER thawer( m_brdEditor );
+
+        m_brdEditor->FocusOnItem( item );
+        m_brdEditor->GetCanvas()->Refresh();
+
+        if( ( violationLayers & board->GetVisibleLayers() ) == 0 )
         {
             m_brdEditor->GetLayerManager()->SetLayerVisible( item->GetLayer(), true );
+            m_brdEditor->GetCanvas()->Refresh();
         }
-    }
 
-    m_brdEditor->FocusOnItem( item );
-    m_brdEditor->GetCanvas()->Refresh();
+        if( board->GetVisibleLayers().test( principalLayer ) )
+            m_brdEditor->SetActiveLayer( principalLayer );
+    }
 
     aEvent.Skip();
 }

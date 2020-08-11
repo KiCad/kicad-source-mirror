@@ -176,7 +176,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 
     BOARD_ITEM* lastItem = GetBoard()->GetItem( lastBrightenedItemID );
 
-    if( lastItem && lastItem != aItem )
+    if( lastItem && lastItem != aItem && lastItem != DELETED_BOARD_ITEM::GetInstance() )
     {
         lastItem->ClearBrightened();
 
