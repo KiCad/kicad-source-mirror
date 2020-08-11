@@ -131,43 +131,78 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     for( LSEQ layerSeq = m_settings.m_layerSet.Seq(); layerSeq; ++layerSeq )
         aView.SetLayerVisible( PCBNEW_LAYER_ID_START + *layerSeq, true );
 
-    // Enable pad layers corresponding to the selected copper layers
-    if( aLayerSet.test( F_Cu ) )
-        aView.SetLayerVisible( LAYER_PAD_FR, true );
-
-    if( aLayerSet.test( B_Cu ) )
-        aView.SetLayerVisible( LAYER_PAD_BK, true );
-
-    if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
+    if( m_pcbnewSettings.m_asItemCheckboxes )
     {
-        // Enable items on copper layers, but do not draw holes
-        for( GAL_LAYER_ID item : { LAYER_PADS_TH, LAYER_VIAS } )
-        {
-            aView.SetLayerVisible( item, true );
-        }
+        auto setVisibility = [&]( GAL_LAYER_ID aLayer )
+                             {
+                                 if( m_board->IsElementVisible( aLayer ) )
+                                     aView.SetLayerVisible( aLayer );
+                             };
 
-        if( m_pcbnewSettings.m_drillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
+        setVisibility( LAYER_MOD_FR );
+        setVisibility( LAYER_MOD_BK );
+        setVisibility( LAYER_MOD_VALUES );
+        setVisibility( LAYER_MOD_REFERENCES );
+        setVisibility( LAYER_MOD_TEXT_FR );
+        setVisibility( LAYER_MOD_TEXT_BK );
+        setVisibility( LAYER_MOD_TEXT_INVISIBLE );
+        setVisibility( LAYER_PAD_FR );
+        setVisibility( LAYER_PAD_BK );
+        setVisibility( LAYER_PADS_TH );
+
+        setVisibility( LAYER_TRACKS );
+        setVisibility( LAYER_VIA_THROUGH );
+        setVisibility( LAYER_VIA_BBLIND );
+        setVisibility( LAYER_VIA_MICROVIA );
+        setVisibility( LAYER_NON_PLATEDHOLES );
+
+        setVisibility( LAYER_NO_CONNECTS );
+        setVisibility( LAYER_DRC_WARNING );
+        setVisibility( LAYER_DRC_ERROR );
+        setVisibility( LAYER_DRC_EXCLUSION );
+        setVisibility( LAYER_ANCHOR );
+        setVisibility( LAYER_WORKSHEET );
+        setVisibility( LAYER_GRID );
+    }
+    else
+    {
+        // Enable pad layers corresponding to the selected copper layers
+        if( aLayerSet.test( F_Cu ) )
+            aView.SetLayerVisible( LAYER_PAD_FR, true );
+
+        if( aLayerSet.test( B_Cu ) )
+            aView.SetLayerVisible( LAYER_PAD_BK, true );
+
+        if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
         {
-            // Enable hole layers to draw drill marks
-            for( GAL_LAYER_ID holeLayer : { LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
-                                            LAYER_VIAS_HOLES } )
+            // Enable items on copper layers, but do not draw holes
+            for( GAL_LAYER_ID item : { LAYER_PADS_TH, LAYER_VIAS } )
             {
-                aView.SetLayerVisible( holeLayer, true );
-                aView.SetTopLayer( holeLayer, true );
+                aView.SetLayerVisible( item, true );
+            }
+
+            if( m_pcbnewSettings.m_drillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
+            {
+                // Enable hole layers to draw drill marks
+                for( GAL_LAYER_ID holeLayer : { LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
+                                                LAYER_VIAS_HOLES } )
+                {
+                    aView.SetLayerVisible( holeLayer, true );
+                    aView.SetTopLayer( holeLayer, true );
+                }
             }
         }
+
+        // Keep certain items always enabled/disabled and just rely on the layer visibility
+        const int alwaysEnabled[] = {
+            LAYER_MOD_TEXT_FR, LAYER_MOD_TEXT_BK, LAYER_MOD_FR, LAYER_MOD_BK,
+            LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS,
+            LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND, LAYER_VIA_THROUGH
+        };
+
+        for( int item : alwaysEnabled )
+            aView.SetLayerVisible( item, true );
     }
-
-
-    // Keep certain items always enabled/disabled and just rely on the layer visibility
-    const int alwaysEnabled[] = {
-        LAYER_MOD_TEXT_FR, LAYER_MOD_TEXT_BK, LAYER_MOD_FR, LAYER_MOD_BK,
-        LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS,
-        LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND, LAYER_VIA_THROUGH
-    };
-
-    for( int item : alwaysEnabled )
-        aView.SetLayerVisible( item, true );
 }
 
 

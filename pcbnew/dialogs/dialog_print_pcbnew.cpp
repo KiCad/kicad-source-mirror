@@ -96,6 +96,7 @@ private:
     wxCheckBox* m_checkboxMirror;
     wxChoice* m_drillMarksChoice;
     wxRadioBox* m_boxPagination;
+    wxCheckBox* m_checkAsItems;
     wxCheckBox* m_checkBackground;
     wxCheckBox* m_checkUseTheme;
     wxStaticText* m_lblTheme;
@@ -103,16 +104,17 @@ private:
 };
 
 
-DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent, PCBNEW_PRINTOUT_SETTINGS* aSettings ) :
-    DIALOG_PRINT_GENERIC( aParent, aSettings ), m_parent( aParent )
+DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent,
+                                          PCBNEW_PRINTOUT_SETTINGS* aSettings ) :
+    DIALOG_PRINT_GENERIC( aParent, aSettings ),
+    m_parent( aParent )
 {
     m_config = Kiface().KifaceSettings();
 
     createExtraOptions();
     createLeftPanel();
 
-    m_outputMode->Bind(
-            wxEVT_COMMAND_CHOICE_SELECTED, &DIALOG_PRINT_PCBNEW::onColorModeChanged, this );
+    m_outputMode->Bind( wxEVT_COMMAND_CHOICE_SELECTED, &DIALOG_PRINT_PCBNEW::onColorModeChanged, this );
 }
 
 
@@ -196,12 +198,19 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
     int rows = optionsSizer->GetEffectiveRowsCount();
     int cols = optionsSizer->GetEffectiveColsCount();
 
+    m_checkAsItems = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY,
+                                     _( "Print according to Items tab of Layers Manager" ),
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+    optionsSizer->Add( m_checkAsItems, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
+
     m_checkBackground = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY,
-            _( "Print background color" ), wxDefaultPosition, wxDefaultSize, 0 );
+                                        _( "Print background color" ), wxDefaultPosition,
+                                        wxDefaultSize, 0 );
     optionsSizer->Add( m_checkBackground, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
 
     m_checkUseTheme = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY,
-            _( "Use a different color theme for printing" ), wxDefaultPosition, wxDefaultSize, 0 );
+                                      _( "Use a different color theme for printing" ),
+                                      wxDefaultPosition, wxDefaultSize, 0 );
     optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ),
                        wxLEFT | wxRIGHT | wxTOP, 5 );
 
@@ -404,6 +413,8 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
 {
     setLayerSetFromList();
 
+    settings()->m_asItemCheckboxes = m_checkAsItems->GetValue();
+
     settings()->m_drillMarks =
         (PCBNEW_PRINTOUT_SETTINGS::DRILL_MARK_SHAPE_T) m_drillMarksChoice->GetSelection();
 
@@ -418,8 +429,8 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
     settings()->m_background   = cfg->m_Printing.background;
     cfg->m_Printing.use_theme  = m_checkUseTheme->GetValue();
 
-    COLOR_SETTINGS* theme = static_cast<COLOR_SETTINGS*>(
-            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) );
+    int sel = m_colorTheme->GetSelection();
+    COLOR_SETTINGS* theme = static_cast<COLOR_SETTINGS*>( m_colorTheme->GetClientData( sel ) );
 
     if( theme && m_checkUseTheme->IsChecked() )
     {
@@ -429,7 +440,7 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
     else
     {
         // This should always work, but in case it doesn't we fall back on default colors
-        if( auto pcbframe = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_parent ) )
+        if( PCB_BASE_EDIT_FRAME* pcbframe = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_parent ) )
             settings()->m_colorSettings = pcbframe->GetColorSettings();
         else
             settings()->m_colorSettings = m_parent->GetColorSettings();

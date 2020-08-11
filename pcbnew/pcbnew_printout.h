@@ -33,14 +33,15 @@ struct PCBNEW_PRINTOUT_SETTINGS : BOARD_PRINTOUT_SETTINGS
         NO_DRILL_SHAPE,
         SMALL_DRILL_SHAPE,
         FULL_DRILL_SHAPE
-    } m_drillMarks;             ///< Drill marks shape
+    } m_drillMarks;
 
     enum PAGINATION_T {
         LAYER_PER_PAGE,
         ALL_LAYERS
-    } m_pagination;             ///< Pagination
+    } m_pagination;
 
     bool m_noEdgeLayer;         ///< Disable board outline on each page
+    bool m_asItemCheckboxes;    ///< Honor checkboxes in the Items tab of the Layers Manager
 
     void Load( APP_SETTINGS_BASE* aConfig ) override;
     void Save( APP_SETTINGS_BASE* aConfig ) override;
