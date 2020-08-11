@@ -223,14 +223,17 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
 
     for( int row = 0; row < m_EnvVars->GetNumberRows(); ++row )
     {
-        wxString name = m_EnvVars->GetCellValue( row, TV_NAME_COL );
-        wxString path = m_EnvVars->GetCellValue( row, TV_VALUE_COL );
-        wxString external = m_EnvVars->GetCellValue( row, TV_FLAG_COL );
+        wxString     name = m_EnvVars->GetCellValue( row, TV_NAME_COL );
+        wxString     path = m_EnvVars->GetCellValue( row, TV_VALUE_COL );
+        wxString     external = m_EnvVars->GetCellValue( row, TV_FLAG_COL );
+        ENV_VAR_ITEM var( path );
 
         if( external.Length() )
-            continue;
-
-        if( name.IsEmpty() )
+        {
+            // Don't check for consistency on external variables, just use them as-is
+            var.SetDefinedExternally( true );
+        }
+        else if( name.IsEmpty() )
         {
             m_errorGrid = m_EnvVars;
             m_errorRow = row;
@@ -247,7 +250,7 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
             return false;
         }
 
-        envVarMap[ name ] = ENV_VAR_ITEM( path );
+        envVarMap[ name ] = var;
     }
 
     Pgm().SetLocalEnvVariables( envVarMap );
