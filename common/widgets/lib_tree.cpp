@@ -124,8 +124,10 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
     {
         m_query_ctrl->SetHint( _( "Filter" ) );
         m_query_ctrl->SetFocus();
-        m_query_ctrl->SetValue( wxEmptyString );    // SetValue() is required here to kick off
-                                                    // initial sorting and pre-selection.
+        m_query_ctrl->SetValue( wxEmptyString );
+
+        // Force an update of the adapter with the empty text to ensure preselect is done
+        Regenerate( false );
     }
 
     // There may be a part preselected in the model. Make sure it is displayed.
