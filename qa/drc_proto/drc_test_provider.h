@@ -97,9 +97,9 @@ public:
     virtual const wxString GetDescription() const;
 
     virtual void ReportAux( const wxString fmt, ... );
-    virtual void Report( DRC_ITEM* item );
-    virtual void ReportWithMarker( DRC_ITEM* item, wxPoint aMarkerPos );
-    virtual void ReportWithMarker( DRC_ITEM* item, VECTOR2I aMarkerPos );
+    virtual void Report( std::shared_ptr<DRC_ITEM> item );
+    virtual void ReportWithMarker( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos );
+    virtual void ReportWithMarker( std::shared_ptr<DRC_ITEM> item, VECTOR2I aMarkerPos );
 
     virtual void ReportProgress( double aProgress );
     virtual void ReportStage ( const wxString& aStageName, int index, int total );
@@ -107,6 +107,8 @@ public:
     virtual std::set<test::DRC_RULE_ID_T> GetMatchingRuleIds() const = 0;
 
 protected:
+
+    int forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers, std::function<int(BOARD_ITEM*)> aFunc );
 
     virtual void reportRuleStatistics();
     virtual void accountCheck( test::DRC_RULE* ruleToTest );

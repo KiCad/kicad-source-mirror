@@ -342,9 +342,20 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
 
 void test::DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult )
 {
-    PCB_EXPR_EVALUATOR evaluator( m_reporter, CurLineNumber(), CurOffset() );
+    PCB_EXPR_EVALUATOR evaluator;
 
     evaluator.Evaluate( aExpr );
+
+    if( evaluator.IsErrorPending() )
+    {
+        auto err = evaluator.GetError();
+        wxString str;
+        str.Printf( "Error: %s (line %d, offset %d)", err.message, CurLineNumber(), err.srcPos + CurOffset() );
+
+        m_reporter->Report( str, RPT_SEVERITY_ERROR );
+        return;
+    }
+
     aResult = evaluator.Result();
 };
 

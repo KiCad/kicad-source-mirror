@@ -141,7 +141,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
     if( holeSize < minHole )
     {
         wxString  msg;
-        DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
 
         msg.Printf( drcItem->GetErrorText() + _( " (%s; actual %s)" ),
                 MessageTextFromValue( userUnits(), minHole, true ),
@@ -173,7 +173,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via )
         int errorCode = via->GetViaType() == VIATYPE::MICROVIA ? DRCE_TOO_SMALL_MICROVIA_DRILL :
                                                                  DRCE_TOO_SMALL_DRILL;
 
-        DRC_ITEM* drcItem = DRC_ITEM::Create( errorCode );
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
 
         msg.Printf( drcItem->GetErrorText() + _( " (%s; actual %s)" ),
                 MessageTextFromValue( userUnits(), minHole, true ),

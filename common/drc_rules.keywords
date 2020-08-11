@@ -26,3 +26,11 @@ track_width
 version
 via
 zone
+edge_clearance
+hole_clearance
+courtyard_clearance
+silk_to_pad
+silk_to_silk
+match_lengths
+match_skew
+diff_pair

@@ -280,7 +280,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
                 // fixme: pad stacks...
                 if( refPadShape->Collide( pad->GetEffectiveHoleShape(), minClearance, &actual ) )
                 {
-                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
                     wxString msg;
 
@@ -312,7 +312,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
                 auto padShape = pad->GetEffectiveShape();
                 if( padShape->Collide( aRefPad->GetEffectiveHoleShape(), minClearance, &actual ) )
                 {
-                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
                     wxString msg;
 
                     msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -393,7 +393,7 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 
             if( actual < minClearance )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
                 wxString msg;
 
                 msg.Printf( drcItem->GetErrorText() + _( " (clearance %s; actual %s)" ),

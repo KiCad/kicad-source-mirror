@@ -178,7 +178,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
     else if( textItem )
     {
         bbox = textItem->GetTextBox();
-        itemShape = textItem->GetEffectiveShape();
+        itemShape = textItem->GetEffectiveTextShape();
     }
     else
     {
@@ -215,7 +215,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
 
         if( actual < INT_MAX )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+            
 
             wxString msg;
             msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -258,7 +259,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
 
         if( actual < INT_MAX )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
 
             wxString msg;
@@ -363,7 +364,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
             if( padShape->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
                 wxString msg;
 
                 msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -434,7 +435,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
         if( OPT_VECTOR2I intersection = refSeg.GetSeg().Intersect( trackSeg.GetSeg() ) )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TRACKS_CROSSING );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACKS_CROSSING );
 
             // fixme
             drcItem->SetErrorMessage( "FIXME" );
@@ -449,7 +450,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
         else if( refSeg.Collide( &trackSeg, minClearance, &actual ) )
         {
             wxPoint   pos = getLocation( aRefSeg, trackSeg.GetSeg() );
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
 
             wxString msg;
@@ -507,7 +508,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
                 if( zone->GetFilledPolysList( layer ).Collide( testSeg, allowedDist, &actual ) )
                 {
                     actual = std::max( 0, actual - widths );
-                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
                     wxString msg;
 
                     msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -606,7 +607,7 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
             // and have the same pad number ( equivalent pads  )
             if( pad->PadNameEqual( aRefPad ) )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                 wxString msg;
                 msg.Printf( drcItem->GetErrorText() + _( " (nets %s and %s)" ),
                             pad->GetNetCode(), aRefPad->GetNetCode() );
@@ -639,7 +640,7 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
 
         if( refPadShape->Collide( pad->GetEffectiveShape().get(), clearanceAllowed, &actual ) )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
             wxString msg;
             msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           /*m_clearanceSource fixme*/ "",
@@ -726,7 +727,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 
                 if( smoothed_polys[ia2].Contains( currentVertex ) )
                 {
-                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
                     drcItem->SetItems( zoneRef, zoneToTest );
                     drcItem->SetViolatingRule( rule );
 
@@ -742,7 +743,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 
                 if( smoothed_polys[ia].Contains( currentVertex ) )
                 {
-                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
                     drcItem->SetItems( zoneToTest, zoneRef );
                     drcItem->SetViolatingRule( rule );
 
@@ -797,7 +798,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
             for( const std::pair<const wxPoint, int>& conflict : conflictPoints )
             {
                 int       actual = conflict.second;
-                DRC_ITEM* drcItem;
+                std::shared_ptr<DRC_ITEM> drcItem;
 
                 if( actual <= 0 )
                 {

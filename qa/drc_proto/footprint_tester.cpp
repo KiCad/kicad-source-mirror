@@ -25,7 +25,7 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <drc/footprint_tester.h>
 
-void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<DRC_ITEM*>& aDRCList )
+void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<std::shared_ptr<DRC_ITEM> >& aDRCList )
 {
     wxString msg;
 

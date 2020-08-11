@@ -48,8 +48,15 @@ test::DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) 
 
 test::DRC_ENGINE::~DRC_ENGINE()
 {
-    for( DRC_ITEM* item : m_drcItems )
-        delete item;
+}
+
+test::DRC_REPORT::~DRC_REPORT()
+{
+    for( auto item : m_entries )
+    {
+        if ( item.m_marker )
+            delete item.m_marker;
+    }
 }
 
 /*void test::DRC_ENGINE::AddMarker( MARKER_PCB* aMarker )
@@ -111,31 +118,6 @@ void test::DRC_ENGINE::inferImplicitRules()
 }
 
 
-static const int drc_debug_level = 0;
-
-void test::drc_dbg( int level, const char* fmt, ... )
-{
-#ifdef DEBUG
-    long dlevel = drc_debug_level;
-    wxString dlevelstr;
-    if( wxGetEnv( "DRC_DEBUG_LEVEL", &dlevelstr ) )
-    {
-        dlevelstr.ToLong( &dlevel );
-    }
-    
-
-    if(level < dlevel) // fixme: tom's debugging.
-    {
-        va_list ap;
-        va_start( ap, fmt );
-        fprintf( stderr, "drc: " );
-        vfprintf( stderr, fmt, ap );
-        va_end( ap );
-    }
-#endif
-}
-
-
 bool test::DRC_ENGINE::CompileRules()
 {
     ReportAux( wxString::Format( "Compiling Rules (%d rules, %d conditions): ", m_rules.size(), m_ruleConditions.size() ) );
@@ -176,7 +158,7 @@ bool test::DRC_ENGINE::CompileRules()
                            {
                                 rcons->conditions.push_back( condition );
                                 
-                                bool compileOk = condition->Compile( &NULL_REPORTER::GetInstance() );
+                                bool compileOk = condition->Compile();
 
                                 ReportAux( wxString::Format( "       |- condition: '%s' compile: %s", condition->m_TargetRuleName, compileOk ? "OK" : "ERROR") );
 
@@ -198,6 +180,7 @@ void test::DRC_ENGINE::RunTests( )
 {
     //m_largestClearance = m_designSettings->GetBiggestClearanceValue();
 
+    m_drcReport.reset( new test::DRC_REPORT );
     m_testProviders = DRC_TEST_PROVIDER_REGISTRY::Instance().GetTestProviders();
 
     for( auto provider : m_testProviders )
@@ -268,22 +251,25 @@ test::DRC_RULE* test::DRC_ENGINE::EvalRulesForItems( test::DRC_RULE_ID_T ruleID,
 }
 
 
-void test::DRC_ENGINE::Report( DRC_ITEM* aItem, ::MARKER_PCB *aMarker )
+void test::DRC_ENGINE::Report( std::shared_ptr<DRC_ITEM> aItem, ::MARKER_PCB *aMarker )
 {
-    m_drcItems.push_back( aItem );
-    m_markers.push_back( aMarker );
+    m_drcReport->AddItem( aItem, aMarker );
+    
     if( m_reporter )
     {
         m_reporter->Report ( wxString::Format( "Test '%s': violation of rule '%s' : %s (code %d)", 
-         aItem->GetViolatingTest()->GetName(),
-         aItem->GetViolatingRule()->GetName(),
-         aItem->GetErrorMessage(),
-         aItem->GetErrorCode() ), RPT_SEVERITY_ERROR /* fixme */ );
-         if( aMarker )
-         {
-            m_reporter->Report( wxString::Format( "  |- violating position (%d, %d)", aMarker->GetPos().x, aMarker->GetPos().y ),
-            RPT_SEVERITY_ERROR /* fixme */  );
-         }
+        aItem->GetViolatingTest()->GetName(),
+        aItem->GetViolatingRule()->GetName(),
+        aItem->GetErrorMessage(),
+        aItem->GetErrorCode() ), RPT_SEVERITY_ERROR /* fixme */ );
+
+        wxString violatingItemsStr = "Violating items: ";
+
+        if( aMarker )
+        {
+           m_reporter->Report( wxString::Format( "  |- violating position (%d, %d)", aMarker->GetPos().x, aMarker->GetPos().y ),
+           RPT_SEVERITY_ERROR /* fixme */  );
+        }
     }
 }
 
@@ -358,3 +344,28 @@ bool test::DRC_ENGINE::HasCorrectRulesForId( test::DRC_RULE_ID_T ruleID )
     return m_ruleMap[ruleID]->defaultRule != nullptr;
 }
 
+
+bool test::DRC_ENGINE::QueryWorstConstraint( test::DRC_RULE_ID_T aRuleId, test::DRC_CONSTRAINT& aConstraint, test::DRC_CONSTRAINT_QUERY_T aQueryType )
+{
+    if( aQueryType == DRCCQ_LARGEST_MINIMUM )
+    {
+        int worst = 0;
+        for( auto rule : QueryRulesById( test::DRC_RULE_ID_T::DRC_RULE_ID_EDGE_CLEARANCE ) )
+        {
+            if( rule->GetConstraint().m_Value.HasMin() )
+            {
+                int current = rule->GetConstraint().m_Value.Min();
+
+                if( current > worst )
+                {
+                    worst = current;
+                    aConstraint = rule->GetConstraint();
+                }
+            }
+        }
+
+        return worst > 0;
+    }
+
+    return false;
+}

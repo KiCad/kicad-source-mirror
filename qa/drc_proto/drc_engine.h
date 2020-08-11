@@ -53,6 +53,13 @@ class NETLIST;
 class PROGRESS_REPORTER;
 class REPORTER;
 
+//#ifdef DEBUG
+#define drc_dbg(level, fmt, ...) \
+    wxLogTrace( "drc_proto", fmt, __VA_ARGS__ );
+//#else
+//#define drc_dbg(level, fmt, ...)
+//#endif
+
 namespace test
 {
 
@@ -61,6 +68,12 @@ class DRC_ITEM;
 class DRC_RULE;
 class DRC_TEST_PROVIDER;
 class DRC_CONSTRAINT;
+
+enum DRC_CONSTRAINT_QUERY_T
+{
+    DRCCQ_LARGEST_MINIMUM = 0
+    // fixme: more to come I guess...
+};
 
 /// DRC error codes:
 enum PCB_DRC_CODE
@@ -103,6 +116,33 @@ enum PCB_DRC_CODE
     DRCE_LAST = DRCE_UNRESOLVED_VARIABLE
 };
 
+class DRC_REPORT
+{
+public:
+    struct ENTRY
+    {
+        std::shared_ptr<DRC_ITEM> m_item;
+        ::MARKER_PCB* m_marker;
+    };
+
+    typedef std::vector<ENTRY> ENTRIES;
+
+    DRC_REPORT() {};
+    ~DRC_REPORT();
+
+    void AddItem( std::shared_ptr<DRC_ITEM> aItem, ::MARKER_PCB *aMarker = nullptr)
+    {
+        ENTRY ent;
+        ent.m_item = aItem;
+        ent.m_marker = aMarker;
+        m_entries.push_back(ent);
+    }
+
+    const ENTRIES& GetReportEntries() const { return m_entries; };
+
+private:
+    ENTRIES m_entries;
+};
 
 /**
  * Design Rule Checker object that performs all the DRC tests.  The output of
@@ -157,12 +197,18 @@ public:
 
     bool CompileRules();
 
-    void Report( DRC_ITEM* aItem, ::MARKER_PCB *Marker );
+    void Report( std::shared_ptr<DRC_ITEM> aItem, ::MARKER_PCB *Marker );
     void ReportProgress( double aProgress );
     void ReportStage ( const wxString& aStageName, int index, int total );
     void ReportAux( const wxString& aStr );
 
+    std::shared_ptr<DRC_REPORT> GetReport() const { return m_drcReport; }
+
+    bool QueryWorstConstraint( DRC_RULE_ID_T aRuleId, test::DRC_CONSTRAINT& aConstraint, DRC_CONSTRAINT_QUERY_T aQueryType );
+
+
 private:
+
 
     void freeCompiledRules();
 
@@ -187,21 +233,19 @@ private:
 
     BOARD_DESIGN_SETTINGS* m_designSettings;
     BOARD*                 m_board;
-    std::vector<DRC_ITEM*> m_drcItems;
+
+    std::shared_ptr<DRC_REPORT> m_drcReport;
 
     std::vector<DRC_RULE_CONDITION*> m_ruleConditions;
     std::vector<DRC_RULE*>           m_rules;
     std::vector<DRC_TEST_PROVIDER*>  m_testProviders;
     std::unordered_map<EDA_ITEM*, RULE_SET*> m_implicitRules;
-    std::vector<::MARKER_PCB*>       m_markers;
     RULE_MAP m_ruleMap;
     REPORTER* m_reporter;
     PROGRESS_REPORTER* m_progressReporter;
 
     // condition -> rule -> provider
 };
-
-void drc_dbg( int level, const char* fmt, ... );
 
 }; // namespace test
 

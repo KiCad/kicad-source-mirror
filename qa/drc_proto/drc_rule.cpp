@@ -77,9 +77,9 @@ bool test::DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOAR
 }
 
 
-bool test::DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset )
+bool test::DRC_RULE_CONDITION::Compile( )
 {
-    PCB_EXPR_COMPILER compiler( aReporter, aSourceLine, aSourceOffset );
+    PCB_EXPR_COMPILER compiler;
 
     if (!m_ucode)
         m_ucode = new PCB_EXPR_UCODE;

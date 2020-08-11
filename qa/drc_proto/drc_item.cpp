@@ -196,55 +196,58 @@ std::vector<std::reference_wrapper<RC_ITEM>> test::DRC_ITEM::allItemTypes( {
         } );
 
 
-test::DRC_ITEM* test::DRC_ITEM::Create( int aErrorCode )
+std::shared_ptr<test::DRC_ITEM> test::DRC_ITEM::Create( int aErrorCode )
 {
+    DRC_ITEM *item;
+
     switch( aErrorCode )
     {
-    case DRCE_UNCONNECTED_ITEMS:        return new DRC_ITEM( unconnectedItems );
-    case DRCE_SHORTING_ITEMS:           return new DRC_ITEM( shortingItems );
-    case DRCE_ALLOWED_ITEMS:            return new DRC_ITEM( itemsNotAllowed );
-    case DRCE_CLEARANCE:                return new DRC_ITEM( clearance );
-    case DRCE_TRACKS_CROSSING:          return new DRC_ITEM( tracksCrossing );
-    case DRCE_COPPER_EDGE_CLEARANCE:    return new DRC_ITEM( copperEdgeClearance );
-    case DRCE_ZONES_INTERSECT:          return new DRC_ITEM( zonesIntersect );
-    case DRCE_ZONE_HAS_EMPTY_NET:       return new DRC_ITEM( zoneHasEmptyNet );
-    case DRCE_DANGLING_VIA:             return new DRC_ITEM( viaDangling );
-    case DRCE_DANGLING_TRACK:           return new DRC_ITEM( trackDangling );
-    case DRCE_HOLE_CLEARANCE:           return new DRC_ITEM( holeClearance );
-    case DRCE_TRACK_WIDTH:              return new DRC_ITEM( trackWidth );
-    case DRCE_TOO_SMALL_VIA:            return new DRC_ITEM( viaTooSmall );
-    case DRCE_VIA_ANNULUS:              return new DRC_ITEM( viaAnnulus );
-    case DRCE_TOO_SMALL_DRILL:          return new DRC_ITEM( drillTooSmall );
-    case DRCE_VIA_HOLE_BIGGER:          return new DRC_ITEM( viaHoleLargerThanPad );
-    case DRCE_PADSTACK:                 return new DRC_ITEM( padstack );
-    case DRCE_TOO_SMALL_MICROVIA:       return new DRC_ITEM( microviaTooSmall );
-    case DRCE_TOO_SMALL_MICROVIA_DRILL: return new DRC_ITEM( microviaDrillTooSmall );
-    case DRCE_KEEPOUT:                  return new DRC_ITEM( keepout );
-    case DRCE_OVERLAPPING_FOOTPRINTS:   return new DRC_ITEM( courtyardsOverlap );
-    case DRCE_MISSING_COURTYARD:        return new DRC_ITEM( missingCourtyard );
-    case DRCE_MALFORMED_COURTYARD:      return new DRC_ITEM( malformedCourtyard );
-    case DRCE_PTH_IN_COURTYARD:         return new DRC_ITEM( pthInsideCourtyard );
-    case DRCE_NPTH_IN_COURTYARD:        return new DRC_ITEM( npthInsideCourtyard );
-    case DRCE_DISABLED_LAYER_ITEM:      return new DRC_ITEM( itemOnDisabledLayer );
-    case DRCE_INVALID_OUTLINE:          return new DRC_ITEM( invalidOutline );
-    case DRCE_MISSING_FOOTPRINT:        return new DRC_ITEM( duplicateFootprints );
-    case DRCE_DUPLICATE_FOOTPRINT:      return new DRC_ITEM( missingFootprint );
-    case DRCE_EXTRA_FOOTPRINT:          return new DRC_ITEM( extraFootprint );
-    case DRCE_UNRESOLVED_VARIABLE:      return new DRC_ITEM( unresolvedVariable );
+    case DRCE_UNCONNECTED_ITEMS:        item = new DRC_ITEM( unconnectedItems ); break;
+    case DRCE_SHORTING_ITEMS:           item = new DRC_ITEM( shortingItems ); break;
+    case DRCE_ALLOWED_ITEMS:            item = new DRC_ITEM( itemsNotAllowed ); break;
+    case DRCE_CLEARANCE:                item = new DRC_ITEM( clearance ); break;
+    case DRCE_TRACKS_CROSSING:          item = new DRC_ITEM( tracksCrossing ); break;
+    case DRCE_COPPER_EDGE_CLEARANCE:    item = new DRC_ITEM( copperEdgeClearance ); break;
+    case DRCE_ZONES_INTERSECT:          item = new DRC_ITEM( zonesIntersect ); break;
+    case DRCE_ZONE_HAS_EMPTY_NET:       item = new DRC_ITEM( zoneHasEmptyNet ); break;
+    case DRCE_DANGLING_VIA:             item = new DRC_ITEM( viaDangling ); break;
+    case DRCE_DANGLING_TRACK:           item = new DRC_ITEM( trackDangling ); break;
+    case DRCE_HOLE_CLEARANCE:           item = new DRC_ITEM( holeClearance ); break;
+    case DRCE_TRACK_WIDTH:              item = new DRC_ITEM( trackWidth ); break;
+    case DRCE_TOO_SMALL_VIA:            item = new DRC_ITEM( viaTooSmall ); break;
+    case DRCE_VIA_ANNULUS:              item = new DRC_ITEM( viaAnnulus ); break;
+    case DRCE_TOO_SMALL_DRILL:          item = new DRC_ITEM( drillTooSmall ); break;
+    case DRCE_VIA_HOLE_BIGGER:          item = new DRC_ITEM( viaHoleLargerThanPad ); break;
+    case DRCE_PADSTACK:                 item = new DRC_ITEM( padstack ); break;
+    case DRCE_TOO_SMALL_MICROVIA:       item = new DRC_ITEM( microviaTooSmall ); break;
+    case DRCE_TOO_SMALL_MICROVIA_DRILL: item = new DRC_ITEM( microviaDrillTooSmall ); break;
+    case DRCE_KEEPOUT:                  item = new DRC_ITEM( keepout ); break;
+    case DRCE_OVERLAPPING_FOOTPRINTS:   item = new DRC_ITEM( courtyardsOverlap ); break;
+    case DRCE_MISSING_COURTYARD:        item = new DRC_ITEM( missingCourtyard ); break;
+    case DRCE_MALFORMED_COURTYARD:      item = new DRC_ITEM( malformedCourtyard ); break;
+    case DRCE_PTH_IN_COURTYARD:         item = new DRC_ITEM( pthInsideCourtyard ); break;
+    case DRCE_NPTH_IN_COURTYARD:        item = new DRC_ITEM( npthInsideCourtyard ); break;
+    case DRCE_DISABLED_LAYER_ITEM:      item = new DRC_ITEM( itemOnDisabledLayer ); break;
+    case DRCE_INVALID_OUTLINE:          item = new DRC_ITEM( invalidOutline ); break;
+    case DRCE_MISSING_FOOTPRINT:        item = new DRC_ITEM( duplicateFootprints ); break;
+    case DRCE_DUPLICATE_FOOTPRINT:      item = new DRC_ITEM( missingFootprint ); break;
+    case DRCE_EXTRA_FOOTPRINT:          item = new DRC_ITEM( extraFootprint ); break;
+    case DRCE_UNRESOLVED_VARIABLE:      item = new DRC_ITEM( unresolvedVariable ); break;
 
     default:
         wxFAIL_MSG( wxString::Format( "Unknown DRC error code %d", aErrorCode ) );
         return nullptr;
     }
+    return std::shared_ptr<test::DRC_ITEM>( item );
 }
 
 
-test::DRC_ITEM* test::DRC_ITEM::Create( const wxString& aErrorKey )
+std::shared_ptr<test::DRC_ITEM> test::DRC_ITEM::Create( const wxString& aErrorKey )
 {
     for( const RC_ITEM& item : allItemTypes )
     {
         if( aErrorKey == item.GetSettingsKey() )
-            return new DRC_ITEM( static_cast<const DRC_ITEM&>( item ) );
+            return std::shared_ptr<DRC_ITEM>( new DRC_ITEM( static_cast<const DRC_ITEM&>( item ) ) );
     }
 
     // This can happen if a project has old-format exclusions.  Just drop these items.

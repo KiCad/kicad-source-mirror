@@ -44,7 +44,9 @@
     Errors generated:
     - DRCE_COPPER_EDGE_CLEARANCE
 
-    TODO: holes to edge check
+    TODO:
+    - separate holes to edge check
+    - tester only looks for edge crossings. it doesn't check if items are inside/outside the board area.
 */
 
 namespace test {
@@ -70,7 +72,7 @@ public:
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests copper item vs board edge clearance";
+        return "Tests items vs board edge clearance";
     }
 
     virtual std::set<test::DRC_RULE_ID_T> GetMatchingRuleIds() const override;
@@ -83,76 +85,71 @@ private:
 
 bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 {
-    auto bds = m_drcEngine->GetDesignSettings();
     m_board = m_drcEngine->GetBoard();
 
+    DRC_CONSTRAINT worstClearanceConstraint;
     m_largestClearance = 0;
 
-    for( auto rule : m_drcEngine->QueryRulesById( test::DRC_RULE_ID_T::DRC_RULE_ID_EDGE_CLEARANCE ) )
+    if( m_drcEngine->QueryWorstConstraint( test::DRC_RULE_ID_T::DRC_RULE_ID_EDGE_CLEARANCE, worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
-        if( rule->GetConstraint().m_Value.HasMin() )
-        {
-            m_largestClearance = std::max( m_largestClearance, rule->GetConstraint().m_Value.Min() );
-        }
+        m_largestClearance = worstClearanceConstraint.m_Value.Min();
     }
 
     ReportAux( "Worst clearance : %d nm", m_largestClearance );
-
-    //m_largestClearance = 
-
     ReportStage( ("Testing all items <> Board Edge clearance"), 0, 2 );
     
     std::vector<DRAWSEGMENT*> boardOutline;
     std::vector<BOARD_ITEM*> boardItems;
 
-    for( auto item : m_board->Drawings() )
+    auto queryBoardOutlineItems = [&] ( BOARD_ITEM *item ) -> int
     {
-        if( auto dseg = dyn_cast<DRAWSEGMENT*>( item ) )
-        {
-            drc_dbg(10,"L %d\n", dseg->GetLayer() );
-            if( dseg->GetLayer() == Edge_Cuts )
-            {
-                drc_dbg(10, "dseg ec %p\n", dseg);
-                boardOutline.push_back( dseg );
-            }
-        }
-    }
+        boardOutline.push_back( dyn_cast<DRAWSEGMENT*>( item ) );
+    };
 
-    for ( auto trk : m_board->Tracks() )
+    auto queryBoardGeometryItems = [&] ( BOARD_ITEM *item ) -> int
     {
-        boardItems.push_back( trk );
-    }
+        boardItems.push_back( item );
+    };
 
-    for ( auto zone : m_board->Zones() )
-    {
-        boardItems.push_back( zone );
-    }
+    
 
-    for ( auto zone : m_board->Zones() )
-    {
-        boardItems.push_back( zone );
-    }
+    forEachGeometryItem( { PCB_LINE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
+    forEachGeometryItem( {}, LSET::AllTechMask() | LSET::AllCuMask(), queryBoardGeometryItems );
 
-    for ( auto mod : m_board->Modules() )
-    {
-        for ( auto dwg : mod->GraphicalItems() )
-            boardItems.push_back( dwg );
-        for ( auto pad : mod->Pads() )
-            boardItems.push_back( pad );
-    }
 
     drc_dbg(2,"outline: %d items, board: %d items\n", boardOutline.size(), boardItems.size() );
 
     for( auto outlineItem : boardOutline )
     {
+        //printf("RefT %d\n", outlineItem->Type() );
         auto refShape = outlineItem->GetEffectiveShape();
 
         for( auto boardItem : boardItems )
         {
+//            printf("BoardT %d\n", boardItem->Type() );
+            
             auto shape = boardItem->GetEffectiveShape();
 
-            (void) shape;
-            (void) refShape;
+            test::DRC_RULE* rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_EDGE_CLEARANCE, outlineItem, boardItem );
+            int minClearance = rule->GetConstraint().GetValue().Min();
+            int actual;
+
+            if( refShape->Collide( shape.get(), minClearance, &actual ) )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
+                wxString msg;
+
+                msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                            rule->GetName(),
+                            MessageTextFromValue( userUnits(), minClearance, true ),
+                            MessageTextFromValue( userUnits(), actual, true ) );
+
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( outlineItem, boardItem );
+                drcItem->SetViolatingRule( rule );
+
+                ReportWithMarker( drcItem, refShape->Centre() );
+            }
         }
     }
 
