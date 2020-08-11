@@ -120,7 +120,6 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 
     Flip( opts.m_DisplayPcbTrackFill );
     m_frame->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
 
     for( auto track : board()->Tracks() )
     {
@@ -143,7 +142,6 @@ int PCBNEW_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
         // N.B. Do not disable the Ratsnest layer here.  We use it for local ratsnest
         Flip( opts.m_ShowGlobalRatsnest );
         m_frame->SetDisplayOptions( opts );
-        view()->UpdateDisplayOptions( opts );
         getEditFrame<PCB_EDIT_FRAME>()->SetElementVisibility( LAYER_RATSNEST,
                 opts.m_ShowGlobalRatsnest );
 
@@ -152,7 +150,6 @@ int PCBNEW_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
     {
         Flip( opts.m_DisplayRatsnestLinesCurved );
         m_frame->SetDisplayOptions( opts );
-        view()->UpdateDisplayOptions( opts );
     }
 
     canvas()->RedrawRatsnest();
@@ -167,7 +164,6 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
     auto opts = displayOptions();
 
     Flip( opts.m_DisplayViaFill );
-    view()->UpdateDisplayOptions( opts );
     m_frame->SetDisplayOptions( opts );
 
     for( auto track : board()->Tracks() )
@@ -199,7 +195,6 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
         wxFAIL;
 
     m_frame->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
 
     for( int i = 0; i < board()->GetAreaCount(); ++i )
         view()->Update( board()->GetArea( i ), KIGFX::GEOMETRY );
@@ -246,7 +241,7 @@ int PCBNEW_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
 
     m_frame->SetDisplayOptions( opts );
 
-    // TODO: remove once EVT_UPDATE_UI works
+    // TODO(ISM): remove once EVT_UPDATE_UI works
     m_frame->SyncToolbars();
 
     return 0;

@@ -97,7 +97,6 @@ int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
 
     Flip( opts.m_DisplayPadNum );
     frame()->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
 
     for( auto module : board()->Modules() )
     {
@@ -117,7 +116,6 @@ int PCB_VIEWER_TOOLS::PadDisplayMode( const TOOL_EVENT& aEvent )
 
     Flip( opts.m_DisplayPadFill );
     frame()->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
 
     for( auto module : board()->Modules() )
     {
@@ -137,7 +135,6 @@ int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
 
     Flip( opts.m_DisplayGraphicsFill );
     frame()->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
 
     for( MODULE* module : board()->Modules() )
     {
@@ -168,7 +165,6 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
 
     Flip( opts.m_DisplayTextFill );
     frame()->SetDisplayOptions( opts );
-    view()->UpdateDisplayOptions( opts );
 
     for( MODULE* module : board()->Modules() )
     {

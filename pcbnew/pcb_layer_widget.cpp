@@ -696,7 +696,10 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
         {
             PCB_DISPLAY_OPTIONS opt = myframe->GetDisplayOptions();
             opt.m_ShowGlobalRatsnest = isEnabled;
-            myframe->GetCanvas()->GetView()->UpdateDisplayOptions( opt );
+            myframe->SetDisplayOptions( opt );
+
+            // TODO(ISM): Remove once EVT_UPDATE_UI works
+            myframe->SyncToolbars();
         }
     }
     else if( aId != LAYER_GRID )
