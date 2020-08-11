@@ -51,7 +51,7 @@ public:
 class PCB_EXPR_CONTEXT : public LIBEVAL::CONTEXT
 {
 public:
-    PCB_EXPR_CONTEXT( PCB_LAYER_ID aLayer ) :
+    PCB_EXPR_CONTEXT( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) :
             m_layer( aLayer )
     {
         m_items[0] = nullptr;
@@ -119,8 +119,6 @@ private:
 class PCB_EXPR_BUILTIN_FUNCTIONS
 {
 public:
-    using FPTR = LIBEVAL::UCODE::FUNC_PTR;
-
     PCB_EXPR_BUILTIN_FUNCTIONS();
 
     static PCB_EXPR_BUILTIN_FUNCTIONS& Instance()
@@ -129,9 +127,9 @@ public:
         return self;
     }
 
-    LIBEVAL::FUNC_CALL_REF Get( const std::string &name )
+    LIBEVAL::FUNC_CALL_REF Get( const wxString &name )
     {
-        return m_funcs[ name  ];
+        return m_funcs[ name ];
     }
 
     const wxArrayString GetSignatures() const
@@ -140,7 +138,7 @@ public:
     }
 
 private:
-    std::map<std::string,  LIBEVAL::FUNC_CALL_REF> m_funcs;
+    std::map<wxString, LIBEVAL::FUNC_CALL_REF> m_funcs;
 
     wxArrayString m_funcSigs;
 };
@@ -149,7 +147,7 @@ private:
 class PCB_EXPR_COMPILER : public LIBEVAL::COMPILER
 {
 public:
-    PCB_EXPR_COMPILER( REPORTER* aReporter, int aSourceLine, int aSourcePos );
+    PCB_EXPR_COMPILER();
 };
 
 
