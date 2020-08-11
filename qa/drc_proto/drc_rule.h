@@ -42,18 +42,39 @@ class PCB_EXPR_UCODE;
 namespace test
 {
 
-enum class DRC_RULE_ID_T
+class DRC_RULE;
+class DRC_RULE_CONDITION;
+
+enum DRC_CONSTRAINT_TYPE_T
 {
-    DRC_RULE_ID_UNKNOWN = -1,
-    DRC_RULE_ID_CLEARANCE = 0,
-    DRC_RULE_ID_HOLE_CLEARANCE,
-    DRC_RULE_ID_EDGE_CLEARANCE,
-    DRC_RULE_ID_HOLE_SIZE,
-    DRC_RULE_ID_COURTYARD_CLEARANCE,
-    DRC_RULE_ID_SILK_TO_PAD
+    DRC_CONSTRAINT_TYPE_UNKNOWN = -1,
+    DRC_CONSTRAINT_TYPE_CLEARANCE = 0,
+    DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+    DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
+    DRC_CONSTRAINT_TYPE_HOLE_SIZE,
+    DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE,
+    DRC_CONSTRAINT_TYPE_SILK_TO_PAD,
+    DRC_CONSTRAINT_TYPE_SILK_TO_SILK,
+    DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
+    DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH,
+    DRC_CONSTRAINT_TYPE_DISALLOW
 };
 
-enum class DRC_RULE_SEVERITY_T
+enum DRC_DISALLOW_T
+{
+    DRC_DISALLOW_VIAS        = (1 << 0),
+    DRC_DISALLOW_MICRO_VIAS  = (1 << 1),
+    DRC_DISALLOW_BB_VIAS     = (1 << 2),
+    DRC_DISALLOW_TRACKS      = (1 << 3),
+    DRC_DISALLOW_PADS        = (1 << 4),
+    DRC_DISALLOW_ZONES       = (1 << 5),
+    DRC_DISALLOW_TEXTS       = (1 << 6),
+    DRC_DISALLOW_GRAPHICS    = (1 << 7),
+    DRC_DISALLOW_HOLES       = (1 << 8),
+    DRC_DISALLOW_FOOTPRINTS  = (1 << 9)
+};
+
+enum DRC_RULE_SEVERITY_T
 {
     DRC_SEVERITY_IGNORE = 0,
     DRC_SEVERITY_WARNING,
@@ -89,22 +110,31 @@ class DRC_CONSTRAINT
 {
     public:
     DRC_CONSTRAINT() :
-        m_Type( DRC_RULE_ID_T::DRC_RULE_ID_UNKNOWN ),
+        m_Type( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_UNKNOWN ),
         m_DisallowFlags( 0 ),
-        m_LayerCondition( LSET::AllLayersMask() )
+        m_LayerCondition( LSET::AllLayersMask() ),
+        m_parentRule( nullptr ) // fixme
     {
     }
 
     const MINOPTMAX<int>& GetValue() const { return m_Value; }
+    MINOPTMAX<int>& Value() { return m_Value; }
+
+    // fixme: needed?
     bool Allowed() const { return m_Allow; }
+    DRC_RULE* GetParentRule() const { return m_parentRule; }
+
+    DRC_CONSTRAINT_TYPE_T GetType() const { return m_Type; }
 
     public:
-    	DRC_RULE_ID_T  m_Type;
-        MINOPTMAX<int> m_Value;
-    	int            m_DisallowFlags;
+        DRC_CONSTRAINT_TYPE_T  m_Type;
+        int            m_DisallowFlags;
     	LSET           m_LayerCondition;
 
-        bool      m_Allow;
+    private:
+        DRC_RULE *m_parentRule;
+        MINOPTMAX<int> m_Value;
+    	bool      m_Allow;
 };
 
 class DRC_RULE
@@ -124,22 +154,44 @@ public:
     DRC_RULE_SEVERITY_T GetSeverity() const { return m_Severity; }
 
     const wxString GetName() const { return m_Name; }
-    const wxString GetTestProviderName() const { return m_TestProviderName; }
+    
+    std::vector<DRC_CONSTRAINT>& Constraints()
+    {
+        return m_constraints;
+    }
 
-    const DRC_CONSTRAINT& GetConstraint() const { return m_Constraint; }
+    void AddConstraint( const DRC_CONSTRAINT& aConstraint );
+
+    bool IsConditional() const
+    {
+        return m_condition != nullptr;
+    }
+
+    void SetCondition( test::DRC_RULE_CONDITION* aCondition )
+    {
+        m_condition = aCondition;
+    }
+
+    test::DRC_RULE_CONDITION* Condition()
+    {
+         return m_condition;
+    }
+
+    void SetLayerCondition( LSET aLayerCondition )
+    {
+        m_layerCondition = aLayerCondition;
+    }
 
 public:
     bool m_Unary;
 
     wxString m_Name;
-    LSET                        m_LayerCondition;
-    wxString m_TestProviderName;
-    DRC_RULE_CONDITION          m_Condition;
-    std::vector<DRC_CONSTRAINT> m_Constraints;
+    LSET                        m_layerCondition;
+    DRC_RULE_CONDITION*         m_condition; // fixme: consider unique_ptr
+    std::vector<DRC_CONSTRAINT> m_constraints;
 
     DRC_RULE_SEVERITY_T m_Severity;
     bool m_Enabled;
-    bool m_Conditional;
     int  m_Priority; // 0 indicates automatic priority generation
 };
 
@@ -150,16 +202,30 @@ public:
     DRC_RULE_CONDITION();
     ~DRC_RULE_CONDITION();
 
-    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB );
+    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB,
+                                            PCB_LAYER_ID aLayer );
+
     bool Compile( REPORTER* aReporter, int aSourceLine = 0, int aSourceOffset = 0 );
 
-public:
-    LSET      m_LayerCondition;
-    wxString  m_Expression;
-    wxString  m_TargetRuleName;
+    void SetLayerCondition( LSET aLayerCondition )
+    {
+        m_layerCondition = aLayerCondition;
+    }
+
+    void SetExpression( const wxString& aExpression )
+    {
+        m_expression = aExpression;
+    }
+
+    const wxString& GetExpression() const
+    {
+        return m_expression;
+    }
 
 private:
-    PCB_EXPR_UCODE*       m_ucode;
+    LSET                                  m_layerCondition;
+    wxString                              m_expression;
+    std::unique_ptr<PCB_EXPR_UCODE>       m_ucode;
 };
 
 

@@ -178,17 +178,18 @@ public:
     {
         return m_designSettings;
     }
+
     BOARD* GetBoard() const
     {
         return m_board;
     }
 
-    DRC_RULE* EvalRulesForItems(
-            DRC_RULE_ID_T ruleID,  BOARD_ITEM* a, BOARD_ITEM* b = nullptr );
+    const DRC_CONSTRAINT& EvalRulesForItems(
+            DRC_CONSTRAINT_TYPE_T ruleID,  BOARD_ITEM* a, BOARD_ITEM* b = nullptr, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
-    std::vector<DRC_RULE*> QueryRulesById( test::DRC_RULE_ID_T ruleID );
+    std::vector<DRC_CONSTRAINT> QueryConstraintsById( test::DRC_CONSTRAINT_TYPE_T ruleID );
 
-    bool HasCorrectRulesForId( test::DRC_RULE_ID_T ruleID );
+    bool HasCorrectRulesForId( test::DRC_CONSTRAINT_TYPE_T ruleID );
 
     EDA_UNITS UserUnits() const
     {
@@ -204,7 +205,7 @@ public:
 
     std::shared_ptr<DRC_REPORT> GetReport() const { return m_drcReport; }
 
-    bool QueryWorstConstraint( DRC_RULE_ID_T aRuleId, test::DRC_CONSTRAINT& aConstraint, DRC_CONSTRAINT_QUERY_T aQueryType );
+    bool QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aRuleId, test::DRC_CONSTRAINT& aConstraint, DRC_CONSTRAINT_QUERY_T aQueryType );
 
 
 private:
@@ -216,16 +217,16 @@ private:
     {
         std::vector<test::DRC_RULE_CONDITION*> conditions;
         test::DRC_RULE*                        rule;
+        std::vector<test::DRC_CONSTRAINT>      constraints;
     };
 
     struct RULE_SET
     {
         std::vector<RULE_WITH_CONDITIONS*> sortedRules;
-        DRC_RULE* defaultRule;
         DRC_TEST_PROVIDER* provider;
     };
 
-    typedef std::unordered_map<test::DRC_RULE_ID_T, RULE_SET*> RULE_MAP;
+    typedef std::unordered_map<test::DRC_CONSTRAINT_TYPE_T, RULE_SET*> RULE_MAP;
 
 
     void inferImplicitRules();

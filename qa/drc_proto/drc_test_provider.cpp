@@ -75,7 +75,7 @@ EDA_UNITS test::DRC_TEST_PROVIDER::userUnits() const
     return m_drcEngine->UserUnits();
 }
 
-void test::DRC_TEST_PROVIDER::accountCheck( test::DRC_RULE* ruleToTest )
+void test::DRC_TEST_PROVIDER::accountCheck( const test::DRC_RULE* ruleToTest )
 {
     auto it = m_stats.find( ruleToTest );
     if( it == m_stats.end() )
@@ -83,6 +83,12 @@ void test::DRC_TEST_PROVIDER::accountCheck( test::DRC_RULE* ruleToTest )
     else
         it->second++;
 }
+
+void test::DRC_TEST_PROVIDER::accountCheck( const test::DRC_CONSTRAINT& constraintToTest )
+{
+    accountCheck( constraintToTest.GetParentRule() );
+}
+
 
 void test::DRC_TEST_PROVIDER::reportRuleStatistics()
 {

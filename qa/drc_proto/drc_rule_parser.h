@@ -28,7 +28,8 @@
 #include <netclass.h>
 #include <layers_id_colors_and_visibility.h>
 #include <drc_proto/drc_rule.h>
-#include <drc_rules_proto_lexer.h>
+#include <drc_rules_lexer.h>
+
 
 class BOARD_ITEM;
 
@@ -40,40 +41,25 @@ class DRC_RULE;
 
 #define DRC_RULE_FILE_VERSION      20200610
 
-class DRC_RULES_PARSER : public DRC_RULES_PROTO_LEXER
+class DRC_RULES_PARSER : public DRC_RULES_LEXER
 {
 public:
+    DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource, const wxString& aSourceDescr );
     DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename );
 
-    void Parse( std::vector<DRC_RULE_CONDITION*>& aConditions, std::vector<DRC_RULE*>& aRules,
-                REPORTER* aReporter );
+    void Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporter );
 
 private:
-    DRC_RULE_CONDITION* parseCONDITION();
-    DRC_RULE* parseRULE();
+    DRC_RULE* parseDRC_RULE();
+
+    void parseConstraint( DRC_RULE* aRule );
     void parseValueWithUnits( const wxString& aExpr, int& aResult );
-
-    inline int parseInt()
-    {
-        return (int)strtol( CurText(), NULL, 10 );
-    }
-
-    inline int parseInt( const char* aExpected )
-    {
-        NeedNUMBER( aExpected );
-        return parseInt();
-    }
-
     LSET parseLayer();
     void parseUnknown();
 
     void reportError( const wxString& aMessage );
 
-    //    void parseConstraint( DRC_RULE* aRule );
-    //int parseValue( DRCRULE_T::T aToken );
-
 private:
-
     BOARD*    m_board;
     int       m_requiredVersion;
     bool      m_tooRecent;

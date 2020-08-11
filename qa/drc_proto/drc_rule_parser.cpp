@@ -28,18 +28,30 @@
 
 #include <drc_proto/drc_rule.h>
 #include <drc_proto/drc_rule_parser.h>
-#include <drc_proto/drc_rules_lexer.h>
+#include <drc_rules_lexer.h>
 #include <drc_proto/drc_engine.h> // drc_dbg
 #include <pcb_expr_evaluator.h>
 #include <reporter.h>
 
-using namespace DRCRULEPROTO_T;
+using namespace DRCRULE_T;
 
-test::DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename )
-        : DRC_RULES_PROTO_LEXER( aFile, aFilename ),
+test::DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource,
+                                    const wxString& aSourceDescr ) :
+        DRC_RULES_LEXER( aSource.ToStdString(), aSourceDescr ),
           m_board( aBoard ),
           m_requiredVersion( 0 ),
-          m_tooRecent( false )
+        m_tooRecent( false ),
+        m_reporter( nullptr )
+{
+}
+
+
+test::DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename ) :
+        DRC_RULES_LEXER( aFile, aFilename ),
+        m_board( aBoard ),
+        m_requiredVersion( 0 ),
+        m_tooRecent( false ),
+        m_reporter( nullptr )
 {
 }
 
@@ -76,9 +88,7 @@ void test::DRC_RULES_PARSER::parseUnknown()
 }
 
 
-void test::DRC_RULES_PARSER::Parse( std::vector<test::DRC_RULE_CONDITION*>& aConditions,
-                                    std::vector<test::DRC_RULE*>& aRules,
-                                    REPORTER* aReporter )
+void test::DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporter )
 {
     bool     haveVersion = false;
     wxString msg;
@@ -131,85 +141,35 @@ void test::DRC_RULES_PARSER::Parse( std::vector<test::DRC_RULE_CONDITION*>& aCon
 
             break;
 
-        case T_condition:
-            aConditions.push_back( parseCONDITION() );
-            break;
-
         case T_rule:
-        {
-            auto rule = parseRULE();
-            drc_dbg(0, "Parsed rule: '%s' type '%s'\n", (const char*) rule->GetName().c_str(), (const char*) rule->GetTestProviderName().c_str() );
-            aRules.push_back( rule );
+            aRules.push_back( parseDRC_RULE() );
             break;
-        }
 
         default:
-            msg.Printf( _( "Unrecognized item '%s'.| Expected 'rule', 'condition' or 'version'." ),
-                        FromUTF8() );
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                        FromUTF8(), "'rule', 'version'" );
             reportError( msg );
             parseUnknown();
         }
     }
+
+    if( !m_reporter->HasMessage() )
+        m_reporter->Report( _( "No errors found." ), RPT_SEVERITY_INFO );
+
+    m_reporter = nullptr;
 }
 
 
-test::DRC_RULE_CONDITION* test::DRC_RULES_PARSER::parseCONDITION()
+test::DRC_RULE* test::DRC_RULES_PARSER::parseDRC_RULE()
 {
-    test::DRC_RULE_CONDITION* cond = new test::DRC_RULE_CONDITION();
-    T                         token;
-
-    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
-    {
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        //printf( "Do token xxx %d '%s'\n", token, (const char*) FromUTF8().c_str() );
-
-        // TODO: Needs updating to report errors through REPORTER
-
-        switch( token )
-        {
-        case T_expression:
-            NeedSYMBOL();
-            cond->m_Expression = FromUTF8();
-            break;
-
-        case T_rule:
-            NeedSYMBOL();
-            cond->m_TargetRuleName = FromUTF8();
-            break;
-
-        default:
-            Expecting( "rule or expression" );
-            break;
-        }
-        NeedRIGHT();
-    }
-
-    //NeedRIGHT()
-
-    return cond;
-}
-
-
-test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
-{
-    DRC_RULE* rule  = new DRC_RULE();
+    DRC_RULE* rule = new DRC_RULE();
     T         token = NextTok();
-    int       value;
     wxString  msg;
 
     if( !IsSymbol( token ) )
         reportError( _( "Missing rule name." ) );
 
-    rule->m_Priority = 0;
-    rule->m_Enabled = true;
-    
     rule->m_Name = FromUTF8();
-
-    printf("parseRule '%s'\n", (const char *) rule->m_Name.c_str() );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -218,18 +178,139 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
 
         token = NextTok();
 
-        //printf( "Do token xxx %d '%s'\n", token, (const char*) FromUTF8().c_str() );
+        switch( token )
+        {
+        case T_constraint:
+            parseConstraint( rule );
+            break;
+
+        case T_condition:
+            token = NextTok();
+
+            if( (int) token == DSN_RIGHT )
+            {
+                reportError( _( "Missing condition expression." ) );
+                break;
+            }
+
+            if( IsSymbol( token ) )
+            {
+                auto condition = new DRC_RULE_CONDITION;
+
+                condition->SetExpression( FromUTF8() );
+                rule->SetCondition( condition );
+            }
+            else
+            {
+                msg.Printf( _( "Unrecognized item '%s'.| Expected quoted expression." ),
+                            FromUTF8() );
+                reportError( msg );
+            }
+
+            if( (int) NextTok() != DSN_RIGHT )
+            {
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+                parseUnknown();
+            }
+
+            break;
+
+        case T_layer:
+            rule->SetLayerCondition( parseLayer() );
+            break;
+
+        default:
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                           FromUTF8(),
+                           "'constraint', 'condition', 'disallow'" );
+            reportError( msg );
+            parseUnknown();
+        }
+    }
+
+    return rule;
+}
+
+
+void test::DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
+{
+    DRC_CONSTRAINT constraint;
+
+    int       value;
+    wxString  msg;
+
+    T token = NextTok();
+
+    if( (int) token == DSN_RIGHT )
+    {
+        msg.Printf( _( "Missing constraint type.|  Expected %s." ),
+                        "'clearance', 'track_width', 'annulus_width', 'hole', 'disallow'" );
+        reportError( msg );
+        return;
+    }
+    
+    switch( token )
+    {
+    case T_clearance:     constraint.m_Type = test::DRC_CONSTRAINT_TYPE_CLEARANCE; break;
+    case T_hole_clearance:     constraint.m_Type = test::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE; break;
+    case T_edge_clearance:     constraint.m_Type = test::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE; break;
+    case T_hole:     constraint.m_Type = test::DRC_CONSTRAINT_TYPE_HOLE_SIZE; break;
+    case T_courtyard_clearance:     constraint.m_Type = test::DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE; break;
+    case T_silk_to_pad:     constraint.m_Type = test::DRC_CONSTRAINT_TYPE_SILK_TO_PAD; break;
+    case T_silk_to_silk:     constraint.m_Type = test::DRC_CONSTRAINT_TYPE_SILK_TO_SILK; break;
+    case T_track_width:   constraint.m_Type = test::DRC_CONSTRAINT_TYPE_TRACK_WIDTH;      break;
+    case T_annulus_width: constraint.m_Type = test::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH;   break;
+    case T_disallow:      constraint.m_Type = test::DRC_CONSTRAINT_TYPE_DISALLOW;  break;
+    default:
+        msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                    FromUTF8(),
+                    "'clearance', 'track_width', 'annulus_width', 'hole', 'disallow'."
+                   );
+        reportError( msg );
+    }
+
+    if( constraint.m_Type == DRC_CONSTRAINT_TYPE_DISALLOW )
+    {
+        for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+        {
+            if( (int) token == DSN_STRING )
+                token = GetCurStrAsToken();
+
+            switch( token )
+            {
+            case T_track:      constraint.m_DisallowFlags |= DISALLOW_TRACKS;     break;
+            case T_via:        constraint.m_DisallowFlags |= DISALLOW_VIAS;       break;
+            case T_micro_via:  constraint.m_DisallowFlags |= DISALLOW_MICRO_VIAS; break;
+            case T_buried_via: constraint.m_DisallowFlags |= DISALLOW_BB_VIAS;    break;
+            case T_pad:        constraint.m_DisallowFlags |= DISALLOW_PADS;       break;
+            case T_zone:       constraint.m_DisallowFlags |= DISALLOW_ZONES;      break;
+            case T_text:       constraint.m_DisallowFlags |= DISALLOW_TEXTS;      break;
+            case T_graphic:    constraint.m_DisallowFlags |= DISALLOW_GRAPHICS;   break;
+            case T_hole:       constraint.m_DisallowFlags |= DISALLOW_HOLES;      break;
+            case T_footprint:  constraint.m_DisallowFlags |= DISALLOW_FOOTPRINTS; break;
+            default:
+                msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                            FromUTF8(),
+                            "'track', 'via', 'micro_via', "
+                            "'blind_via', 'pad', 'zone', 'text', 'graphic', 'hole'."
+                            );
+                reportError( msg );
+                parseUnknown();
+            }
+        }
+
+        return;
+    }
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            reportError( _( "Missing '('." ) );
+
+        token = NextTok();
 
         switch( token )
         {
-        case T_type:
-            // TODO: I assume this won't be in the final impl and so doesn't need converting
-            //       to new error reporting framework?
-            NeedSYMBOL();
-            rule->m_TestProviderName = FromUTF8();
-            NeedRIGHT();
-            break;
-
         case T_min:
             token = NextTok();
 
@@ -240,7 +321,7 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
             }
 
             parseValueWithUnits( FromUTF8(), value );
-            rule->m_Constraint.m_Value.SetMin( value );
+            constraint.Value().SetMin( value );
 
             if( (int) NextTok() != DSN_RIGHT )
             {
@@ -250,26 +331,6 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
 
             break;
 
-        case T_opt:
-            token = NextTok();
-
-            if( (int) token == DSN_RIGHT )
-            {
-                reportError( _( "Missing opt value." ) );
-                break;
-            }
-
-            parseValueWithUnits( FromUTF8(), value );
-            rule->m_Constraint.m_Value.SetOpt( value );
-
-            if( (int) NextTok() != DSN_RIGHT )
-            {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
-                parseUnknown();
-            }
-
-            break;
-        
         case T_max:
             token = NextTok();
 
@@ -280,7 +341,7 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
             }
 
             parseValueWithUnits( FromUTF8(), value );
-            rule->m_Constraint.m_Value.SetMax( value );
+            constraint.Value().SetMax( value );
 
             if( (int) NextTok() != DSN_RIGHT )
             {
@@ -290,10 +351,27 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
 
             break;
         
-        case T_allow:
-            rule->m_Constraint.m_Allow = parseInt("allowed");
-            NeedRIGHT();
+        case T_opt:
+            token = NextTok();
+
+            if( (int) token == DSN_RIGHT )
+            {
+                reportError( _( "Missing opt value." ) );
+                break;
+            }
+
+            parseValueWithUnits( FromUTF8(), value );
+            constraint.Value().SetOpt( value );
+
+            if( (int) NextTok() != DSN_RIGHT )
+            {
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+                parseUnknown();
+            }
+
             break;
+        
+        /* fixme: bring these back?
 
         case T_enable:
             rule->m_Enabled = parseInt("enabled");
@@ -315,29 +393,16 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseRULE()
 
 
             break;
-
-        case T_priority:
-            rule->m_Priority = parseInt("priotity");
-            NeedRIGHT();
-            break;
-
-
-
+        */
         default:
-            // TODO: reconcile
-            //Expecting( "type, min, opt, max, allow, enable, priority or severity" );
-            msg.Printf( _( "Unrecognized item '%s'.| Expected 'min', 'max' or 'opt'." ),
-                        FromUTF8() );
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                        FromUTF8(), "'min', 'max', 'opt'" );
             reportError( msg );
             parseUnknown();
-            break;
         }
-
-        
     }
-
-    return rule;
 }
+
 
 
 void test::DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult )

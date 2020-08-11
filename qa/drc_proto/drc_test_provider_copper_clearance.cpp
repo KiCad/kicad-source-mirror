@@ -76,7 +76,7 @@ public:
         return "Tests copper item clearance";
     }
 
-    virtual std::set<test::DRC_RULE_ID_T> GetMatchingRuleIds() const override;
+    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
     void testPadClearances();
@@ -96,17 +96,16 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 {
     auto bds = m_drcEngine->GetDesignSettings();
     m_board = m_drcEngine->GetBoard();
+    DRC_CONSTRAINT worstClearanceConstraint;
 
-    m_largestClearance = 0;
-
-    for( auto rule : m_drcEngine->QueryRulesById( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE ) )
+    if( m_drcEngine->QueryWorstConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
-        drc_dbg(1, "process rule %p\n", rule );
-        if( rule->GetConstraint().m_Value.HasMin() )
-        {
-            m_largestClearance = std::max( m_largestClearance, rule->GetConstraint().m_Value.Min() );
-            drc_dbg(1, "min-copper-clearance %d\n", rule->GetConstraint().m_Value.Min() );
-        }
+        m_largestClearance = worstClearanceConstraint.GetValue().Min();
+    }
+    else
+    {
+        ReportAux("No Clearance constraints found...");
+        return false;
     }
 
     ReportAux( "Worst clearance : %d nm", m_largestClearance );
@@ -197,8 +196,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
         if( !track->IsOnLayer( aItem->GetLayer() ) )
             continue;
 
-        auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aItem, track );
-        auto minClearance = rule->GetConstraint().GetValue().Min();
+        auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aItem, track, aItem->GetLayer() );
+        auto minClearance = constraint.GetValue().Min();
         int     actual = INT_MAX;
         wxPoint pos;
 
@@ -220,13 +219,13 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
 
             wxString msg;
             msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                          rule->GetName(),
+                          constraint.GetParentRule()->GetName(),
                           MessageTextFromValue( userUnits(), minClearance, true ),
                           MessageTextFromValue( userUnits(), actual, true ) );
 
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( track, aItem );
-            drcItem->SetViolatingRule( rule );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
 
             ReportWithMarker( drcItem, pos );
         }
@@ -242,8 +241,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
         if( drawItem && pad->GetParent() == drawItem->GetParent() )
             continue;
 
-        auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aItem, pad );
-        auto minClearance = rule->GetConstraint().GetValue().Min();
+        auto constraint  = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aItem, pad );
+        auto minClearance = constraint.GetValue().Min();
 
         int actual = INT_MAX;
 
@@ -265,13 +264,13 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
             wxString msg;
 
             msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                          rule->GetName(),
+                          constraint.GetParentRule()->GetName(),
                           MessageTextFromValue( userUnits(), minClearance, true ),
                           MessageTextFromValue( userUnits(), actual, true ) );
 
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( pad, aItem );
-            drcItem->SetViolatingRule( rule );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
 
             ReportWithMarker( drcItem, pad->GetPosition() );
         }
@@ -355,8 +354,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
             // fixme: hole to hole clearance moved elsewhere
 
-            auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefSeg, pad );
-            auto minClearance = rule->GetConstraint().GetValue().Min();
+            auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefSeg, pad );
+            auto minClearance = constraint.GetValue().Min();
             int clearanceAllowed = minClearance - bds.GetDRCEpsilon();
             int actual;
 
@@ -374,7 +373,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( aRefSeg, pad );
-                drcItem->SetViolatingRule( rule );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 ReportWithMarker( drcItem, pad->GetPosition() );
 
@@ -427,8 +426,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
         if( !trackBB.Intersects( refSegBB ) )
             continue;
 
-        auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefSeg, track );
-        auto minClearance = rule->GetConstraint().GetValue().Min();
+        auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefSeg, track );
+        auto minClearance = constraint.GetValue().Min();
 
         SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
         int actual;
@@ -440,7 +439,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
             // fixme
             drcItem->SetErrorMessage( "FIXME" );
             drcItem->SetItems( aRefSeg, track );
-            drcItem->SetViolatingRule( rule );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
 
             ReportWithMarker( drcItem, (wxPoint) intersection.get() );
 
@@ -461,7 +460,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( aRefSeg, track );
-            drcItem->SetViolatingRule( rule );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
 
             ReportWithMarker( drcItem, pos );
 
@@ -493,8 +492,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
                 // fixme: per-layer onLayer() property
 
-                auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefSeg, zone );
-                auto minClearance = rule->GetConstraint().GetValue().Min();
+                auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefSeg, zone );
+                auto minClearance = constraint.GetValue().Min();
                 int widths       = refSegWidth / 2;
 
                 // to avoid false positive, due to rounding issues and approxiamtions
@@ -512,13 +511,13 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
                     wxString msg;
 
                     msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                                rule->GetName(),
+                                constraint.GetParentRule()->GetName(),
                                 MessageTextFromValue( userUnits(), minClearance, true ),
                                 MessageTextFromValue( userUnits(), actual, true ) );
 
                     drcItem->SetErrorMessage( msg );
                     drcItem->SetItems( aRefSeg, zone );
-                    drcItem->SetViolatingRule( rule );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                     ReportWithMarker( drcItem, getLocation( aRefSeg, zone ) );
                 }
@@ -628,8 +627,8 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
             continue;
         }
 
-        auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, aRefPad, pad );
-        auto minClearance = rule->GetConstraint().GetValue().Min();
+        auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefPad, pad );
+        auto minClearance = constraint.GetValue().Min();
 
         drc_dbg(4, "pad %p vs %p constraint %d\n", aRefPad, pad, minClearance );
 
@@ -649,7 +648,7 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
 
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( aRefPad, pad );
-            drcItem->SetViolatingRule( rule );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
 
             ReportWithMarker( drcItem, aRefPad->GetPosition() );
             return false;
@@ -711,8 +710,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
             // Examine a candidate zone: compare zoneToTest to zoneRef
 
             // Get clearance used in zone to zone test.
-            auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE, zoneRef, zoneToTest );
-            auto zone2zoneClearance = rule->GetConstraint().GetValue().Min();
+            auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, zoneRef, zoneToTest );
+            auto zone2zoneClearance = constraint.GetValue().Min();
 
             // Keepout areas have no clearance, so set zone2zoneClearance to 1
             // ( zone2zoneClearance = 0  can create problems in test functions)
@@ -729,7 +728,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
                     drcItem->SetItems( zoneRef, zoneToTest );
-                    drcItem->SetViolatingRule( rule );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                     ReportWithMarker( drcItem, pt );
                 }
@@ -745,7 +744,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
                     drcItem->SetItems( zoneToTest, zoneRef );
-                    drcItem->SetViolatingRule( rule );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                     ReportWithMarker( drcItem, pt );
                 }
@@ -818,7 +817,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 
                 }
 
-                drcItem->SetViolatingRule( rule );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
                 drcItem->SetItems( zoneRef, zoneToTest );
 
                 ReportWithMarker( drcItem, conflict.first );
@@ -828,9 +827,9 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 }
 
 
-std::set<test::DRC_RULE_ID_T> test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetMatchingRuleIds() const
+std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetMatchingConstraintIds() const
 {
-    return { DRC_RULE_ID_T::DRC_RULE_ID_CLEARANCE };
+    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE };
 }
 
 

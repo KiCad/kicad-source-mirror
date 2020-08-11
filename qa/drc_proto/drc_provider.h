@@ -58,7 +58,7 @@ public:
     virtual const wxString GetName() const;
     virtual const wxString GetDescription() const;
 
-    virtual std::set<test::DRC_RULE_ID_T> GetMatchingRuleIds() const;
+    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const;
 
     /**
      * Pass a given marker to the marker handler

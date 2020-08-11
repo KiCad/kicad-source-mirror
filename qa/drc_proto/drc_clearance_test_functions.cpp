@@ -413,7 +413,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 dummypad.SetLayerSet( all_cu | dummypad.GetLayerSet() );
 
                 int       minClearance;
-                DRC_RULE* rule = GetRule( aRefSeg, &dummypad, DRC_RULE_ID_CLEARANCE );
+                DRC_RULE* rule = GetRule( aRefSeg, &dummypad, DRC_CONSTRAINT_TYPE_CLEARANCE );
 
                 if( rule )
                 {

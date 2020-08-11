@@ -85,7 +85,7 @@ bool test::DRC_ENGINE::LoadRules( wxFileName aPath )
             try
             {
                 DRC_RULES_PARSER parser( m_board, fp, aPath.GetFullPath() );
-                parser.Parse( m_ruleConditions, m_rules, &NULL_REPORTER::GetInstance() );
+                parser.Parse( m_rules, m_reporter );
             }
             catch( PARSE_ERROR& pe )
             {
@@ -126,47 +126,42 @@ bool test::DRC_ENGINE::CompileRules()
     {
         ReportAux( wxString::Format( "- Provider: '%s': ", provider->GetName() ) );
 
-        for ( auto id : provider->GetMatchingRuleIds() )
+        for ( auto id : provider->GetMatchingConstraintIds() )
         {
             if( m_ruleMap.find(id) == m_ruleMap.end() )
                 m_ruleMap[id] = new RULE_SET;
-            
+
             m_ruleMap[ id ]->provider = provider;
-            m_ruleMap[ id ]->defaultRule = nullptr;
 
             for( auto rule : m_rules )
-            {   
-                drc_dbg(10, "Scan provider %s rule %s", (const char*) rule->GetTestProviderName().c_str(), (const char *)provider->GetName().c_str( ) );
-                if( rule->GetTestProviderName() == provider->GetName() )
-                {
-                   ReportAux( wxString::Format( "   |- Rule: '%s' ", rule->m_Name.c_str() ) );
+            {
+                drc_dbg(10, "Scan provider %s rule %s",  provider->GetName() );
 
-                   if( rule->IsEnabled() )
-                   {
+                if( ! rule->IsEnabled() )
+                    continue;
+
+                for( auto& constraint : rule->Constraints() )
+                {
+                    if( constraint.GetType() != id )
+                        continue;
+
+                   ReportAux( wxString::Format( "   |- Rule: '%s' ", rule->m_Name ) );
+
                         auto rcons = new RULE_WITH_CONDITIONS;
 
-                        if( rule->GetPriority() == 0 )
+                        if( rule->IsConditional() )
                         {
-                            drc_dbg(1,"DefaultRule for %d = %p\n", id, rule );
-                            m_ruleMap[ id ]->defaultRule = rule;
-                            continue;
+                            test::DRC_RULE_CONDITION* condition = rule->Condition();
+                            rcons->conditions.push_back( condition );
+
+                            bool compileOk = condition->Compile( nullptr, 0, 0 ); // fixme
+
+                            ReportAux( wxString::Format( "       |- condition: '%s' compile: %s", condition->GetExpression(), compileOk ? "OK" : "ERROR") );
                         }
 
-                       for( auto condition : m_ruleConditions )
-                       {
-                           if( condition->m_TargetRuleName == rule->GetName() )
-                           {
-                                rcons->conditions.push_back( condition );
-                                
-                                bool compileOk = condition->Compile();
+                        rcons->rule = rule;
+                        m_ruleMap[ id ]->sortedRules.push_back( rcons );
 
-                                ReportAux( wxString::Format( "       |- condition: '%s' compile: %s", condition->m_TargetRuleName, compileOk ? "OK" : "ERROR") );
-
-                                rcons->rule = rule;
-                                m_ruleMap[ id ]->sortedRules.push_back( rcons );
-                           }
-                       }
-                   }
                 }
             }
         }
@@ -197,7 +192,7 @@ void test::DRC_ENGINE::RunTests( )
     {
         bool skipProvider = false;
 
-        for( auto ruleID : provider->GetMatchingRuleIds() )
+        for( auto ruleID : provider->GetMatchingConstraintIds() )
         {
             if( !HasCorrectRulesForId( ruleID ) )
             {
@@ -210,44 +205,41 @@ void test::DRC_ENGINE::RunTests( )
         if( skipProvider )
             continue;
 
-        drc_dbg(0, "Running test provider: '%s'\n", (const char *) provider->GetName().c_str() );
+        drc_dbg(0, "Running test provider: '%s'\n", provider->GetName() );
         ReportAux( wxString::Format( "Run DRC provider: '%s'", provider->GetName() ) );
         provider->Run();
     }
 }
 
 
-test::DRC_RULE* test::DRC_ENGINE::EvalRulesForItems( test::DRC_RULE_ID_T ruleID, BOARD_ITEM* a, BOARD_ITEM* b  )
+const test::DRC_CONSTRAINT& test::DRC_ENGINE::EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T aConstraintId, BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer )
 {
     test::DRC_RULE* rv;
-    auto ruleset = m_ruleMap[ ruleID ];
+    auto ruleset = m_ruleMap[ aConstraintId ];
 
     for( auto rcond : ruleset->sortedRules )
     {
         for( auto condition : rcond->conditions )
         {
             drc_dbg( 8, "   -> check condition '%s'\n",
-                    (const char*) condition->m_Expression.c_str() );
+                    condition->GetExpression() );
 
-            bool result = condition->EvaluateFor( a, b, F_Cu ); // FIXME: need the actual layer
+            bool result = condition->EvaluateFor( a, b, aLayer ); // FIXME: need the actual layer
             if( result )
             {
                 drc_dbg( 8, "   -> rule '%s' matches, triggered by condition '%s'\n",
-                        (const char*) rcond->rule->m_Name.c_str(),
-                        (const char*) condition->m_Expression.c_str() );
-                return rcond->rule;
+                        rcond->rule->GetName(),
+                        condition->GetExpression() );
+                for( const DRC_CONSTRAINT& c : rcond->rule->Constraints() )
+                {
+                    if( c.GetType() == aConstraintId )
+                        return c;
+                }
             }
         }
     }
 
-    if( ruleset->defaultRule )
-    {
-        drc_dbg(8, "   -> default rule '%s' matches\n", (const char*) ruleset->defaultRule->m_Name.c_str() );
-        return ruleset->defaultRule;
-    }
-
     assert(false); // should never hapen
-    return nullptr;
 }
 
 
@@ -299,7 +291,7 @@ void test::DRC_ENGINE::ReportStage ( const wxString& aStageName, int index, int 
 }
 
 #if 0
-test::DRC_CONSTRAINT test::DRC_ENGINE::GetWorstGlobalConstraint( test::DRC_RULE_ID_T ruleID )
+test::DRC_CONSTRAINT test::DRC_ENGINE::GetWorstGlobalConstraint( test::DRC_CONSTRAINT_TYPE_T ruleID )
 {
     DRC_CONSTRAINT rv;
 
@@ -318,48 +310,45 @@ test::DRC_CONSTRAINT test::DRC_ENGINE::GetWorstGlobalConstraint( test::DRC_RULE_
 }
 #endif
 
-std::vector<test::DRC_RULE*> test::DRC_ENGINE::QueryRulesById( test::DRC_RULE_ID_T ruleID )
+std::vector<test::DRC_CONSTRAINT> test::DRC_ENGINE::QueryConstraintsById( test::DRC_CONSTRAINT_TYPE_T constraintID )
 {
-    std::vector<test::DRC_RULE*> rv;
+    std::vector<test::DRC_CONSTRAINT> rv;
 
-    auto dr = m_ruleMap[ruleID]->defaultRule;
-
-    assert( dr );
-
-    rv.push_back( dr );
-
-    for( auto rule : m_ruleMap[ruleID]->sortedRules )
+    for( auto rule : m_ruleMap[constraintID]->sortedRules )
     {
         assert( rule );
         assert( rule->rule );
-        rv.push_back(rule->rule);
+
+        for( const DRC_CONSTRAINT& c : rule->constraints )
+            if( c.GetType() == constraintID )
+                rv.push_back( c );
     }
 
     return rv;
 }
 
 
-bool test::DRC_ENGINE::HasCorrectRulesForId( test::DRC_RULE_ID_T ruleID )
+bool test::DRC_ENGINE::HasCorrectRulesForId( test::DRC_CONSTRAINT_TYPE_T ruleID )
 {
-    return m_ruleMap[ruleID]->defaultRule != nullptr;
+    return m_ruleMap[ruleID]->sortedRules.size() != 0;
 }
 
 
-bool test::DRC_ENGINE::QueryWorstConstraint( test::DRC_RULE_ID_T aRuleId, test::DRC_CONSTRAINT& aConstraint, test::DRC_CONSTRAINT_QUERY_T aQueryType )
+bool test::DRC_ENGINE::QueryWorstConstraint( test::DRC_CONSTRAINT_TYPE_T aConstraintId, test::DRC_CONSTRAINT& aConstraint, test::DRC_CONSTRAINT_QUERY_T aQueryType )
 {
     if( aQueryType == DRCCQ_LARGEST_MINIMUM )
     {
         int worst = 0;
-        for( auto rule : QueryRulesById( test::DRC_RULE_ID_T::DRC_RULE_ID_EDGE_CLEARANCE ) )
+        for( const auto constraint : QueryConstraintsById( aConstraintId ) )
         {
-            if( rule->GetConstraint().m_Value.HasMin() )
+            if( constraint.GetValue().HasMin() )
             {
-                int current = rule->GetConstraint().m_Value.Min();
+                int current = constraint.GetValue().Min();
 
                 if( current > worst )
                 {
                     worst = current;
-                    aConstraint = rule->GetConstraint();
+                    aConstraint = constraint;
                 }
             }
         }

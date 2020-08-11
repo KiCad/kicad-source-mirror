@@ -93,7 +93,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
     {
         int       minHole = bds.m_MinThroughDrill;
         wxString  minHoleSource = _( "board minimum" );
-        DRC_RULE* rule = GetRule( aPad, nullptr, DRC_RULE_ID_HOLE_SIZE );
+        DRC_RULE* rule = GetRule( aPad, nullptr, DRC_CONSTRAINT_TYPE_HOLE_SIZE );
 
         if( rule )
         {
@@ -136,7 +136,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
     {
         int       minHole = bds.m_MinThroughDrill;
         wxString  minHoleSource = _( "board minimum" );
-        DRC_RULE* rule = GetRule( via, nullptr, DRC_RULE_ID_HOLE_SIZE );
+        DRC_RULE* rule = GetRule( via, nullptr, DRC_CONSTRAINT_TYPE_HOLE_SIZE );
 
         if( rule )
         {
@@ -179,7 +179,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
     {
         int       minHole = bds.m_MicroViasMinDrill;
         wxString  minHoleSource = _( "board minimum" );
-        DRC_RULE* rule = GetRule( via, nullptr, DRC_RULE_ID_HOLE_SIZE );
+        DRC_RULE* rule = GetRule( via, nullptr, DRC_CONSTRAINT_TYPE_HOLE_SIZE );
 
         if( rule )
         {

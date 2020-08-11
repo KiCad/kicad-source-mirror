@@ -33,9 +33,9 @@
 test::DRC_RULE::DRC_RULE() :
     m_Unary( false ),
     m_Enabled( true ),
-    m_Conditional( false ),
     m_Priority( 0 ),
-    m_Severity( DRC_RULE_SEVERITY_T::DRC_SEVERITY_ERROR )
+    m_Severity( DRC_RULE_SEVERITY_T::DRC_SEVERITY_ERROR ),
+    m_condition( nullptr )
 {
 }
 
@@ -44,6 +44,10 @@ test::DRC_RULE::~DRC_RULE()
 {
 }
 
+void test::DRC_RULE::AddConstraint( const DRC_CONSTRAINT& aConstraint )
+{
+    m_constraints.push_back( aConstraint );
+}
 
 test::DRC_RULE_CONDITION::DRC_RULE_CONDITION()
 {
@@ -53,7 +57,6 @@ test::DRC_RULE_CONDITION::DRC_RULE_CONDITION()
 
 test::DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 {
-    delete m_ucode;
 }
 
 
@@ -61,7 +64,7 @@ bool test::DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOAR
                                             PCB_LAYER_ID aLayer )
 {
     // An unconditional rule is always true
-    if( m_Expression.IsEmpty() )
+    if( m_expression.IsEmpty() )
         return true;
 
     // A rule which failed to compile is always false
@@ -77,16 +80,16 @@ bool test::DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOAR
 }
 
 
-bool test::DRC_RULE_CONDITION::Compile( )
+bool test::DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset )
 {
     PCB_EXPR_COMPILER compiler;
 
     if (!m_ucode)
-        m_ucode = new PCB_EXPR_UCODE;
+        m_ucode.reset( new PCB_EXPR_UCODE );
 
     PCB_EXPR_CONTEXT preflightContext( F_Cu );
 
-    bool ok = compiler.Compile( m_Expression.ToUTF8().data(), m_ucode, &preflightContext );
+    bool ok = compiler.Compile( m_expression, m_ucode.get(), &preflightContext );
     return ok;
 }
 

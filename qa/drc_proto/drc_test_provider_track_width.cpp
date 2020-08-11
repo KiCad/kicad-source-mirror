@@ -75,7 +75,7 @@ public:
         return "Tests sizes of drilled holes (via/pad drills)";
     }
 
-    virtual std::set<test::DRC_RULE_ID_T> GetMatchingRuleIds() const override;
+    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
     bool checkVia( VIA* via );
@@ -132,7 +132,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
     if( holeSize == 0 )
         return true;
 
-    auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_HOLE_SIZE, aPad );
+    auto rule = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE, aPad );
     auto minHole = rule->GetConstraint().GetValue().Min();
 
     accountCheck( rule );
@@ -161,7 +161,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
 
 bool test::DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via )
 {
-    auto rule = m_drcEngine->EvalRulesForItems( test::DRC_RULE_ID_T::DRC_RULE_ID_HOLE_SIZE, via );
+    auto rule = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE, via );
     auto minHole = rule->GetConstraint().GetValue().Min();
 
     accountCheck( rule );
@@ -191,9 +191,9 @@ bool test::DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via )
 }
 
 
-std::set<test::DRC_RULE_ID_T> test::DRC_TEST_PROVIDER_HOLE_SIZE::GetMatchingRuleIds() const
+std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_HOLE_SIZE::GetMatchingConstraintIds() const
 {
-    return { DRC_RULE_ID_T::DRC_RULE_ID_HOLE_SIZE };
+    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE };
 }
 
 
