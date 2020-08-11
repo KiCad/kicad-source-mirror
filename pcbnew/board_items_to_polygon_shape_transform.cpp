@@ -258,10 +258,14 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet( PCB_LAYER_ID aLayer,
     auto board = GetBoard();
     int maxError = ARC_HIGH_DEF;
 
+    // add filled areas outlines, which are drawn with thick lines segments
+    // but only if filled polygons outlines have thickness
+    if( !GetFilledPolysUseThickness() )
+        return;
+
     if( board )
         maxError = board->GetDesignSettings().m_MaxError;
 
-    // add filled areas outlines, which are drawn with thick lines
     for( int i = 0; i < polys.OutlineCount(); i++ )
     {
         const SHAPE_LINE_CHAIN& path = polys.COutline( i );
