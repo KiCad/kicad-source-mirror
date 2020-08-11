@@ -379,7 +379,7 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
             "<pre>"
             "(rule \"copper keepout\"\r"
             "   (constraint disallow track via zone)\r"
-            "   (condition \"A.name == 'no_copper'\"))\r"
+            "   (condition \"A.insideArea('zone_name')\"))\r"
             "\r"
             "(rule \"BGA neckdown\"\r"
             "   (constraint track_width (min 0.2mm) (opt 0.25mm))\r"
