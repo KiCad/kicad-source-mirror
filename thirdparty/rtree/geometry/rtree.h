@@ -15,10 +15,32 @@
 //    * 2004 Templated C++ port by Greg Douglas
 //    * 2013 CERN (www.cern.ch)
 //    * 2020 KiCad Developers - Add std::iterator support for searching
+//    * 2020 KiCad Developers - Add container nearest neighbor based on Hjaltason & Samet
 //
-//LICENSE:
-//
-//    Entirely free for all uses. Enjoy!
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 CERN
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-3.0.html
+ * or you may search the http://www.gnu.org website for the version 3 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #ifndef RTREE_H
 #define RTREE_H
@@ -35,6 +57,8 @@
 #include <array>
 #include <functional>
 #include <iterator>
+#include <queue>
+#include <vector>
 
 #ifdef DEBUG
 #define ASSERT assert    // RTree uses ASSERT( condition )
@@ -202,23 +226,19 @@ public:
     /// Save tree contents to stream
     bool    Save( RTFileStream& a_stream );
 
-    /// Find the nearest neighbor of a specific point.
-    /// It uses the MINDIST method, simplifying the one from "R-Trees: Theory and Applications" by Yannis Manolopoulos et al.
-    /// The bounding rectangle is used to calculate the distance to the DATATYPE.
-    /// \param a_point point to start the search
-    /// \return Returns the DATATYPE located closest to a_point, 0 if the tree is empty.
-    DATATYPE NearestNeighbor( const ELEMTYPE a_point[NUMDIMS] );
-
-    /// Find the nearest neighbor of a specific point.
-    /// It uses the MINDIST method, simplifying the one from "R-Trees: Theory and Applications" by Yannis Manolopoulos et al.
-    /// It receives a callback function to calculate the distance to a DATATYPE object, instead of using the bounding rectangle.
-    /// \param a_point point to start the search
-    /// \param a_squareDistanceCallback function that performs the square distance calculation for the selected DATATYPE.
-    /// \param a_squareDistance Pointer in which the square distance to the nearest neighbour will be returned.
-    /// \return Returns the DATATYPE located closest to a_point, 0 if the tree is empty.
-    DATATYPE NearestNeighbor( const ELEMTYPE a_point[NUMDIMS],
-                              ELEMTYPE a_squareDistanceCallback( const ELEMTYPE a_point[NUMDIMS], DATATYPE a_data ),
-                              ELEMTYPE* a_squareDistance );
+    /**
+     * Gets an ordered vector of the nearest data elements to a specified point
+     * @param aPoint coordinate to measure against
+     * @param aTerminate Callback routine to check when we have gathered sufficient elements
+     * @param aFilter Callback routine to remove specific elements from the query results
+     * @param aSquaredDist Callback routine to measure the distance from the point to the data element
+     * @return vector of matching elements and their distance to the point
+     */
+    std::vector<std::pair<ELEMTYPE, DATATYPE>> NearestNeighbors(
+            const ELEMTYPE aPoint[NUMDIMS],
+            std::function<bool( const std::size_t aNumResults, const ELEMTYPE aMinDist )> aTerminate,
+            std::function<bool( const DATATYPE aElement )> aFilter,
+            std::function<ELEMTYPE( const ELEMTYPE a_point[NUMDIMS], const DATATYPE a_data )> aSquaredDist );
 
 public:
     /// Iterator is not remove safe.
@@ -495,6 +515,12 @@ protected:
         Branch m_branch;
         ELEMTYPE minDist;
         bool isLeaf;
+
+        inline bool operator<(const NNNode &other) const
+        {
+            /// This is reversed on purpose to use std::priority_queue
+            return other.minDist < minDist;
+        }
     };
 
     Node*           AllocNode();
@@ -531,8 +557,7 @@ protected:
     void            FreeListNode( ListNode* a_listNode );
     static bool     Overlap( Rect* a_rectA, Rect* a_rectB );
     void            ReInsert( Node* a_node, ListNode** a_listNode );
-    ELEMTYPE        MinDist( const ELEMTYPE a_point[NUMDIMS], Rect* a_rect );
-    void            InsertNNListSorted( std::vector<NNNode*>* nodeList, NNNode* newNode );
+    ELEMTYPE        MinDist( const ELEMTYPE a_point[NUMDIMS], const Rect& a_rect );
 
     bool Search( Node * a_node, Rect * a_rect, int& a_foundCount,
                  std::function<bool (const DATATYPE&)> a_callback ) const;
@@ -815,57 +840,66 @@ int RTREE_QUAL::Search( const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMD
 
 
 RTREE_TEMPLATE
-DATATYPE RTREE_QUAL::NearestNeighbor( const ELEMTYPE a_point[NUMDIMS] )
+std::vector<std::pair<ELEMTYPE, DATATYPE>> RTREE_QUAL::NearestNeighbors(
+        const ELEMTYPE a_point[NUMDIMS],
+        std::function<bool( const std::size_t aNumResults, const ELEMTYPE aMinDist )> aTerminate,
+        std::function<bool( const DATATYPE aElement )> aFilter,
+        std::function<ELEMTYPE( const ELEMTYPE a_point[NUMDIMS], const DATATYPE a_data )> aSquaredDist )
 {
-    return this->NearestNeighbor( a_point, 0, 0 );
-}
+    std::vector<std::pair<ELEMTYPE, DATATYPE>> result;
+    std::priority_queue<NNNode> search_q;
 
-
-RTREE_TEMPLATE
-DATATYPE RTREE_QUAL::NearestNeighbor( const ELEMTYPE a_point[NUMDIMS],
-                                      ELEMTYPE a_squareDistanceCallback( const ELEMTYPE a_point[NUMDIMS], DATATYPE a_data ),
-                                      ELEMTYPE* a_squareDistance )
-{
-    std::vector<NNNode*> nodeList;
-    Node* node = m_root;
-    NNNode* closestNode = 0;
-    while( !closestNode || !closestNode->isLeaf )
+    for( int i = 0; i < m_root->m_count; ++i )
     {
-        //check every node on this level
-        for( int index = 0; index < node->m_count; ++index )
+        if( m_root->IsLeaf() )
         {
-            NNNode* newNode = new NNNode;
-            newNode->isLeaf = node->IsLeaf();
-            newNode->m_branch = node->m_branch[index];
-            if( newNode->isLeaf && a_squareDistanceCallback )
-                newNode->minDist = a_squareDistanceCallback( a_point, newNode->m_branch.m_data );
-            else
-                newNode->minDist = this->MinDist( a_point, &(node->m_branch[index].m_rect) );
-
-            //TODO: a custom list could be more efficient than a vector
-            this->InsertNNListSorted( &nodeList, newNode );
+            search_q.push( NNNode{ m_root->m_branch[i],
+                               aSquaredDist( a_point, m_root->m_branch[i].m_data ),
+                               m_root->IsLeaf() });
         }
-        if( nodeList.size() == 0 )
+        else
         {
-            return 0;
+            search_q.push( NNNode{ m_root->m_branch[i],
+                               MinDist(a_point, m_root->m_branch[i].m_rect),
+                               m_root->IsLeaf() });
         }
-        closestNode = nodeList.back();
-        node = closestNode->m_branch.m_child;
-        nodeList.pop_back();
-        free(closestNode);
     }
 
-    // free memory used for remaining NNNodes in nodeList
-    for( auto node_it : nodeList )
+    while( !search_q.empty() )
     {
-        NNNode* nnode = node_it;
-        free(nnode);
+        const NNNode curNode = search_q.top();
+
+        if( aTerminate( result.size(), curNode.minDist ) )
+            break;
+
+        search_q.pop();
+
+        if( curNode.isLeaf )
+        {
+            if( aFilter( curNode.m_branch.m_data ) )
+                result.emplace_back( curNode.minDist, curNode.m_branch.m_data );
+        }
+        else
+        {
+            Node* node = curNode.m_branch.m_child;
+
+            for( int i = 0; i < node->m_count; ++i )
+            {
+                NNNode newNode;
+                newNode.isLeaf = node->IsLeaf();
+                newNode.m_branch = node->m_branch[i];
+                if( newNode.isLeaf )
+                    newNode.minDist = aSquaredDist( a_point, newNode.m_branch.m_data );
+                else
+                    newNode.minDist = this->MinDist( a_point, node->m_branch[i].m_rect );
+
+                search_q.push( newNode );
+            }
+        }
     }
 
-    *a_squareDistance = closestNode->minDist;
-    return closestNode->m_branch.m_data;
+    return result;
 }
-
 
 RTREE_TEMPLATE
 int RTREE_QUAL::Count()
@@ -1895,7 +1929,7 @@ void RTREE_QUAL::ReInsert( Node* a_node, ListNode** a_listNode )
 }
 
 
-// Search in an index tree or subtree for all data retangles that overlap the argument rectangle.
+// Search in an index tree or subtree for all data rectangles that overlap the argument rectangle.
 RTREE_TEMPLATE
 bool RTREE_QUAL::Search( Node* a_node, Rect* a_rect, int& a_foundCount,
         std::function<bool (const DATATYPE&)> a_callback ) const
@@ -1939,44 +1973,34 @@ bool RTREE_QUAL::Search( Node* a_node, Rect* a_rect, int& a_foundCount,
 
 
 //calculate the minimum distance between a point and a rectangle as defined by Manolopoulos et al.
-//it uses the square distance to avoid the use of ELEMTYPEREAL values, which are slower.
+// returns Euclidean norm to ensure value fits in ELEMTYPE
 RTREE_TEMPLATE
-ELEMTYPE RTREE_QUAL::MinDist( const ELEMTYPE a_point[NUMDIMS], Rect* a_rect )
+ELEMTYPE RTREE_QUAL::MinDist( const ELEMTYPE a_point[NUMDIMS], const Rect& a_rect )
 {
-    ELEMTYPE *q, *s, *t;
-    q = (ELEMTYPE*) a_point;
-    s = a_rect->m_min;
-    t = a_rect->m_max;
-    int minDist = 0;
+    const ELEMTYPE *q, *s, *t;
+    q = a_point;
+    s = a_rect.m_min;
+    t = a_rect.m_max;
+    double minDist = 0.0;
+
     for( int index = 0; index < NUMDIMS; index++ )
     {
         int r = q[index];
+
         if( q[index] < s[index] )
         {
             r = s[index];
         }
-        else if( q[index] >t[index] )
+        else if( q[index] > t[index] )
         {
             r = t[index];
         }
-        int addend = q[index] - r;
+
+        double addend = q[index] - r;
         minDist += addend * addend;
     }
-    return minDist;
-}
 
-
-//insert a NNNode in a list sorted by its minDist (desc.)
-RTREE_TEMPLATE
-void RTREE_QUAL::InsertNNListSorted( std::vector<NNNode*>* nodeList, NNNode* newNode )
-{
-    auto iter = nodeList->begin();
-    while( iter != nodeList->end() && (*iter)->minDist > newNode->minDist )
-    {
-        ++iter;
-    }
-
-    nodeList->insert(iter, newNode);
+    return std::lround( std::sqrt( minDist ) );
 }
 
 

@@ -115,11 +115,21 @@ bool SHAPE_COMPOUND::IsSolid() const
 
 bool SHAPE_COMPOUND::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 {
+    int dist = std::numeric_limits<int>::max();
+
     for( auto& item : m_shapes )
     {
         if( item->Collide( aSeg, aClearance, aActual ) )
-            return true;
+        {
+            if( !aActual || *aActual == 0 )
+                return true;
+
+            dist = std::min( dist, *aActual );
+        }
     }
 
-    return false;
+    if( aActual )
+        *aActual = dist;
+
+    return dist != std::numeric_limits<int>::max();
 }

@@ -66,6 +66,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/pcbnew/dialogs
     ${CMAKE_SOURCE_DIR}/polygon
     ${CMAKE_SOURCE_DIR}/common/geometry
+    ${CMAKE_SOURCE_DIR}/libs/kimath/include/math
     ${CMAKE_SOURCE_DIR}/qa/common
     ${CMAKE_SOURCE_DIR}/qa
     ${CMAKE_SOURCE_DIR}/qa/qa_utils

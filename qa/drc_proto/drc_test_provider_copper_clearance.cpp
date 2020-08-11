@@ -36,6 +36,7 @@
 
 #include <drc_proto/drc_engine.h>
 #include <drc_proto/drc_item.h>
+#include <drc_proto/drc_rtree.h>
 #include <drc_proto/drc_rule.h>
 #include <drc_proto/drc_test_provider_clearance_base.h>
 
@@ -59,15 +60,15 @@ public:
         {
         }
 
-    virtual ~DRC_TEST_PROVIDER_COPPER_CLEARANCE() 
+    virtual ~DRC_TEST_PROVIDER_COPPER_CLEARANCE()
     {
     }
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override 
+    virtual const wxString GetName() const override
     {
-        return "clearance"; 
+        return "clearance";
     };
 
     virtual const wxString GetDescription() const override
@@ -110,7 +111,7 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     ReportAux( "Worst clearance : %d nm", m_largestClearance );
 
-    //m_largestClearance = 
+    //m_largestClearance =
 
     ReportStage( ("Testing pad copper clerances"), 0, 2 );
     testPadClearances();
@@ -430,7 +431,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
         SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
         int actual;
-        
+
         if( OPT_VECTOR2I intersection = refSeg.GetSeg().Intersect( trackSeg.GetSeg() ) )
         {
             DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TRACKS_CROSSING );
@@ -538,7 +539,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     ReportAux("Testing %d pads...", sortedPads.size() );
 
     for( auto p : sortedPads )
-        
+
     if( sortedPads.empty() )
         return;
 
@@ -815,7 +816,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                                   MessageTextFromValue( userUnits(), conflict.second, true ) );
 
                     drcItem->SetErrorMessage( msg );
-                    
+
                 }
 
                 drcItem->SetViolatingRule( rule );

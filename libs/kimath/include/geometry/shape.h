@@ -124,7 +124,7 @@ public:
      */
     virtual bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const
     {
-        return Collide( SEG( aP, aP ), aClearance );
+        return Collide( SEG( aP, aP ), aClearance, aActual );
     }
 
     /**
