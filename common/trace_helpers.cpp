@@ -48,6 +48,7 @@ const wxChar* const traceZoomScroll = wxT( "KICAD_ZOOM_SCROLL" );
 const wxChar* const traceSymbolResolver = wxT( "KICAD_SYM_RESOLVE" );
 const wxChar* const traceDisplayLocation = wxT( "KICAD_DISPLAY_LOCATION" );
 const wxChar* const traceSchSheetPaths = wxT( "KICAD_SCH_SHEET_PATHS" );
+const wxChar* const traceEnvVars = wxT( "KICAD_ENV_VARS" );
 
 
 wxString dump( const wxArrayString& aArray )

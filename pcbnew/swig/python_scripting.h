@@ -84,7 +84,7 @@ void        pcbnewGetWizardsBackTrace( wxString& aNames );
  * @param aVar is the variable to set
  * @param aValue is the value to give it
  */
-void        pcbnewUpdatePythonEnvVar( const std::string& aVar, const wxString& aValue );
+void        pcbnewUpdatePythonEnvVar( const wxString& aVar, const wxString& aValue );
 
 
 #ifdef KICAD_SCRIPTING_WXPYTHON

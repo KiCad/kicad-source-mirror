@@ -1272,10 +1272,10 @@ void PCB_EDIT_FRAME::PythonPluginsShowFolder()
 void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
 {
 #if defined( KICAD_SCRIPTING )
-    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+    const ENV_VAR_MAP& vars = Pgm().GetLocalEnvVariables();
 
-    for( auto& var : settings->m_Env.vars )
-        pcbnewUpdatePythonEnvVar( var.first, var.second );
+    for( auto& var : vars )
+        pcbnewUpdatePythonEnvVar( var.first, var.second.GetValue() );
 #endif
 }
 

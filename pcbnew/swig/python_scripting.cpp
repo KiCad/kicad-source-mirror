@@ -37,6 +37,7 @@
 #include <common.h>
 #include <gal/color4d.h>
 #include <macros.h>
+#include <trace_helpers.h>
 
 #include <pgm_base.h>
 
@@ -339,13 +340,16 @@ wxString PyEscapeString( const wxString& aSource )
 }
 
 
-void pcbnewUpdatePythonEnvVar( const std::string& aVar, const wxString& aValue )
+void pcbnewUpdatePythonEnvVar( const wxString& aVar, const wxString& aValue )
 {
     char cmd[1024];
 
     // Ensure the interpreter is initalized before we try to interact with it
     if( !Py_IsInitialized() )
         return;
+
+    wxLogTrace( traceEnvVars, "pcbnewUpdatePythonEnvVar: Updating Python variable %s = %s",
+                aVar, aValue );
 
     wxString escapedVar = PyEscapeString( aVar );
     wxString escapedVal = PyEscapeString( aValue );

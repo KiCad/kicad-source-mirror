@@ -174,6 +174,14 @@ extern const wxChar* const traceSymbolResolver;
  */
 extern const wxChar* const traceSchSheetPaths;
 
+/**
+ * Flag to enable debug output of environment variable operations.
+ *
+ * Use "KICAD_ENV_VARS" to enable
+ *
+ */
+extern const wxChar* const traceEnvVars;
+
 ///@}
 
 /**

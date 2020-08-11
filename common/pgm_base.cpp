@@ -60,9 +60,6 @@
 #include <trace_helpers.h>
 
 
-static const wxChar traceEnvVars[]     = wxT( "KIENVVARS" );
-
-
 /**
  * LanguagesList
  * Note: because this list is not created on the fly, wxTranslation
@@ -279,6 +276,7 @@ bool PGM_BASE::InitPgm()
     {
         tmpFileName.AssignDir( envValue );
         envVarItem.SetDefinedExternally( true );
+        wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Found entry %s externally", envVarName );
     }
     else
     {
@@ -286,6 +284,7 @@ bool PGM_BASE::InitPgm()
         envVarItem.SetDefinedExternally( false );
     }
 
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     wxFileName baseSharePath;
@@ -311,6 +310,7 @@ bool PGM_BASE::InitPgm()
     {
         tmpFileName.AssignDir( envValue );
         envVarItem.SetDefinedExternally( true );
+        wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Found entry %s externally", envVarName );
     }
     else
     {
@@ -320,6 +320,7 @@ bool PGM_BASE::InitPgm()
     }
 
     envVarItem.SetValue( tmpFileName.GetPath() );
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KISYS3DMOD
@@ -329,6 +330,7 @@ bool PGM_BASE::InitPgm()
     {
         tmpFileName.AssignDir( envValue );
         envVarItem.SetDefinedExternally( true );
+        wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Found entry %s externally", envVarName );
     }
     else
     {
@@ -337,6 +339,7 @@ bool PGM_BASE::InitPgm()
     }
 
     envVarItem.SetValue( tmpFileName.GetFullPath() );
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KICAD_TEMPLATE_DIR
@@ -346,6 +349,7 @@ bool PGM_BASE::InitPgm()
     {
         tmpFileName.AssignDir( envValue );
         envVarItem.SetDefinedExternally( true );
+        wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Found entry %s externally", envVarName );
     }
     else
     {
@@ -386,6 +390,7 @@ bool PGM_BASE::InitPgm()
     }
 
     envVarItem.SetValue( tmpFileName.GetPath() );
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KICAD_USER_TEMPLATE_DIR
@@ -395,6 +400,7 @@ bool PGM_BASE::InitPgm()
     {
         tmpFileName.AssignDir( envValue );
         envVarItem.SetDefinedExternally( true );
+        wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Found entry %s externally", envVarName );
     }
     else
     {
@@ -406,6 +412,7 @@ bool PGM_BASE::InitPgm()
     }
 
     envVarItem.SetValue( tmpFileName.GetPath() );
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KICAD_SYMBOLS
@@ -415,6 +422,7 @@ bool PGM_BASE::InitPgm()
     {
         tmpFileName.AssignDir( envValue );
         envVarItem.SetDefinedExternally( true );
+        wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Found entry %s externally", envVarName );
     }
     else
     {
@@ -424,6 +432,7 @@ bool PGM_BASE::InitPgm()
     }
 
     envVarItem.SetValue( tmpFileName.GetPath() );
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     GetSettingsManager().Load( GetCommonSettings() );
@@ -503,7 +512,7 @@ void PGM_BASE::loadCommonSettings()
     for( const auto& it : GetCommonSettings()->m_Env.vars )
     {
         wxString key( it.first.c_str(), wxConvUTF8 );
-        wxLogTrace( traceEnvVars, "Enumerating over entry %s = %s.", key, it.second );
+        wxLogTrace( traceEnvVars, "PGM_BASE::loadCommonSettings: Found entry %s = %s", key, it.second );
 
         // Do not store the env var PROJECT_VAR_NAME ("KIPRJMOD") definition if for some reason
         // it is found in config. (It is reserved and defined as project path)
@@ -512,6 +521,8 @@ void PGM_BASE::loadCommonSettings()
 
         if( m_local_env_vars[ key ].GetDefinedExternally() )
             continue;
+
+        wxLogTrace( traceEnvVars, "PGM_BASE::loadCommonSettings: Updating entry %s = %s", key, it.second );
 
         m_local_env_vars[ key ] = ENV_VAR_ITEM( it.second, wxGetEnv( it.first, nullptr ) );
     }
@@ -536,7 +547,8 @@ void PGM_BASE::SaveCommonSettings()
             if( m_local_env_var.second.GetDefinedExternally() )
                 continue;
 
-            wxLogTrace( traceEnvVars, "Saving environment variable config entry %s as %s",
+            wxLogTrace( traceEnvVars,
+                        "PGM_BASE::SaveCommonSettings: Saving environment variable config entry %s as %s",
                         GetChars( m_local_env_var.first ),
                         GetChars( m_local_env_var.second.GetValue() ) );
 
@@ -703,12 +715,14 @@ bool PGM_BASE::SetLocalEnvVariable( const wxString& aName, const wxString& aValu
     // Check to see if the environment variable is already set.
     if( wxGetEnv( aName, &env ) )
     {
-        wxLogTrace( traceEnvVars,  "Environment variable %s already set to %s.",
+        wxLogTrace( traceEnvVars,
+                    "PGM_BASE::SetLocalEnvVariable: Environment variable %s already set to %s",
                     GetChars( aName ), GetChars( env ) );
         return env == aValue;
     }
 
-    wxLogTrace( traceEnvVars, "Setting local environment variable %s to %s.",
+    wxLogTrace( traceEnvVars,
+                "PGM_BASE::SetLocalEnvVariable: Setting local environment variable %s to %s",
                 GetChars( aName ), GetChars( aValue ) );
 
     return wxSetEnv( aName, aValue );
@@ -726,7 +740,8 @@ void PGM_BASE::SetLocalEnvVariables( const ENV_VAR_MAP& aEnvVarMap )
     // is run.
     for( auto& m_local_env_var : m_local_env_vars )
     {
-        wxLogTrace( traceEnvVars, "Setting local environment variable %s to %s.",
+        wxLogTrace( traceEnvVars,
+                    "PGM_BASE::SetLocalEnvVariables: Setting local environment variable %s to %s",
                     GetChars( m_local_env_var.first ),
                     GetChars( m_local_env_var.second.GetValue() ) );
         wxSetEnv( m_local_env_var.first, m_local_env_var.second.GetValue() );
