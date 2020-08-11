@@ -202,73 +202,82 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
 
     m_checkUseTheme = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY,
             _( "Use a different color theme for printing" ), wxDefaultPosition, wxDefaultSize, 0 );
-    optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
+    optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ),
+                       wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_checkUseTheme->Bind(
             wxEVT_COMMAND_CHECKBOX_CLICKED, &DIALOG_PRINT_PCBNEW::onUseThemeChecked, this );
 
-    m_lblTheme = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _( "Color theme:" ),
-            wxDefaultPosition, wxDefaultSize, 0 );
+    m_lblTheme = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _( "Theme:" ),
+                                   wxDefaultPosition, wxDefaultSize, 0 );
     m_lblTheme->Wrap( -1 );
     optionsSizer->Add( m_lblTheme, wxGBPosition( rows, 0 ), wxGBSpan( 1, 1 ),
-            wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+                       wxALIGN_CENTER_VERTICAL | wxLEFT, 25 );
 
     wxArrayString m_colorThemeChoices;
     m_colorTheme = new wxChoice( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition,
-            wxDefaultSize, m_colorThemeChoices, 0 );
+                                 wxDefaultSize, m_colorThemeChoices, 0 );
     m_colorTheme->SetSelection( 0 );
-    optionsSizer->Add( m_colorTheme, wxGBPosition( rows++, 1 ), wxGBSpan( 1, 2 ), wxALL, 5 );
+    optionsSizer->Add( m_colorTheme, wxGBPosition( rows++, 1 ), wxGBSpan( 1, 2 ),
+                       wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5 );
 
     // Drill marks option
     auto drillMarksLabel = new wxStaticText( box, wxID_ANY, _( "Drill marks:" ) );
-    std::vector<wxString> drillMarkChoices =
-            { _( "No drill mark" ), _( "Small mark" ), _( "Real drill" ) };
-    m_drillMarksChoice = new wxChoice( box, wxID_ANY, wxDefaultPosition,
-            wxDefaultSize, drillMarkChoices.size(), drillMarkChoices.data(), 0 );
+    std::vector<wxString> drillMarkChoices = { _( "No drill mark" ),
+                                               _( "Small mark" ),
+                                               _( "Real drill" ) };
+    m_drillMarksChoice = new wxChoice( box, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                       drillMarkChoices.size(), drillMarkChoices.data(), 0 );
     m_drillMarksChoice->SetSelection( 0 );
 
     // Print mirrored
     m_checkboxMirror = new wxCheckBox( box, wxID_ANY, _( "Print mirrored" ) );
 
     // Pagination
-    std::vector<wxString> pagesOption = { _( "One page per layer" ), _( "All layers on single page" ) };
+    std::vector<wxString> pagesOption = { _( "One page per layer" ),
+                                          _( "All layers on single page" ) };
     m_boxPagination = new wxRadioBox( box, wxID_ANY, _( "Pagination" ), wxDefaultPosition,
-            wxDefaultSize, pagesOption.size(), pagesOption.data(), 1, wxRA_SPECIFY_COLS );
+                                      wxDefaultSize, pagesOption.size(), pagesOption.data(), 1,
+                                      wxRA_SPECIFY_COLS );
     m_boxPagination->SetSelection( 0 );
 
     // Sizer layout
+    rows++;
+
     optionsSizer->Add( drillMarksLabel, wxGBPosition( rows, 0 ), wxGBSpan( 1, 1 ),
-            wxBOTTOM | wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
+                       wxBOTTOM | wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
     optionsSizer->Add( m_drillMarksChoice, wxGBPosition( rows, 1 ), wxGBSpan( 1, cols - 1 ),
-            wxBOTTOM | wxRIGHT | wxLEFT, 5 );
+                       wxBOTTOM | wxRIGHT | wxLEFT, 5 );
     optionsSizer->Add( m_checkboxMirror, wxGBPosition( rows + 1, 0 ), wxGBSpan( 1, cols ),
-            wxBOTTOM | wxRIGHT | wxLEFT, 5 );
+                       wxBOTTOM | wxRIGHT | wxLEFT, 5 );
     optionsSizer->Add( m_boxPagination, wxGBPosition( rows + 2, 0 ), wxGBSpan( 1, cols ),
-            wxALL | wxEXPAND, 5 );
+                       wxALL | wxEXPAND, 5 );
 }
 
 
 void DIALOG_PRINT_PCBNEW::createLeftPanel()
 {
-    wxStaticBoxSizer* sbLayersSizer = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _( "Included Layers" ) ), wxVERTICAL );
+    wxStaticBox* box = new wxStaticBox( this, wxID_ANY, _( "Included Layers" ) );
+    wxStaticBoxSizer* sbLayersSizer = new wxStaticBoxSizer( box, wxVERTICAL );
 
     // Copper layer list
-    auto copperLabel = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Copper layers:" ) );
+    auto copperLabel = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY,
+                                         _( "Copper layers:" ) );
     m_listCopperLayers = new wxCheckListBox( sbLayersSizer->GetStaticBox(), wxID_ANY );
 
     wxBoxSizer* sizerLeft = new wxBoxSizer( wxVERTICAL );
-    sizerLeft->Add( copperLabel, 0, wxRIGHT | wxLEFT, 5 );
-    sizerLeft->Add( m_listCopperLayers, 1, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 5 );
+    sizerLeft->Add( copperLabel, 0, wxRIGHT, 5 );
+    sizerLeft->Add( m_listCopperLayers, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
 
 
     // Technical layer list
-    auto technicalLabel = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Technical layers:" ) );
+    auto technicalLabel = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY,
+                                            _( "Technical layers:" ) );
     m_listTechLayers = new wxCheckListBox( sbLayersSizer->GetStaticBox(), wxID_ANY );
 
     wxBoxSizer* sizerRight = new wxBoxSizer( wxVERTICAL );
-    sizerRight->Add( technicalLabel, 0, wxRIGHT | wxLEFT, 5 );
-    sizerRight->Add( m_listTechLayers, 1, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 5 );
+    sizerRight->Add( technicalLabel, 0, wxLEFT, 5 );
+    sizerRight->Add( m_listTechLayers, 1, wxEXPAND | wxBOTTOM | wxLEFT, 5 );
 
 
     // Layer list layout
@@ -287,8 +296,8 @@ void DIALOG_PRINT_PCBNEW::createLeftPanel()
             wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onDeselectAllClick ), NULL, this );
 
     wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
-    buttonSizer->Add( m_buttonSelectAll, 1, wxALL, 5 );
-    buttonSizer->Add( m_buttonDeselectAll, 1, wxALL, 5 );
+    buttonSizer->Add( m_buttonSelectAll, 1, wxRIGHT | wxTOP | wxBOTTOM, 5 );
+    buttonSizer->Add( m_buttonDeselectAll, 1, wxLEFT | wxTOP | wxBOTTOM, 5 );
 
 
     // Exclude Edge.Pcb layer checkbox
@@ -296,11 +305,11 @@ void DIALOG_PRINT_PCBNEW::createLeftPanel()
     m_checkboxNoEdge->SetToolTip( _("Exclude contents of Edges_Pcb layer from all other layers") );
 
     // Static box sizer layout
-    sbLayersSizer->Add( bLayerListsSizer, 1, wxALL | wxEXPAND, 5 );
-    sbLayersSizer->Add( buttonSizer, 0, wxALL | wxEXPAND, 5 );
-    sbLayersSizer->Add( m_checkboxNoEdge, 0, wxALL | wxEXPAND, 5 );
+    sbLayersSizer->Add( bLayerListsSizer, 1, wxRIGHT | wxEXPAND, 5 );
+    sbLayersSizer->Add( buttonSizer, 0, wxRIGHT | wxEXPAND, 5 );
+    sbLayersSizer->Add( m_checkboxNoEdge, 0, wxTOP | wxRIGHT | wxBOTTOM | wxEXPAND, 5 );
 
-    getMainSizer()->Insert( 0, sbLayersSizer, 1, wxEXPAND );
+    getMainSizer()->Insert( 0, sbLayersSizer, 1, wxEXPAND | wxALL, 5 );
 }
 
 
