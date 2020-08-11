@@ -35,6 +35,7 @@
 #include <class_pcb_target.h>
 #include <class_track.h>
 #include <class_zone.h>
+#include <class_marker_pcb.h>
 #include <collectors.h>
 #include <confirm.h>
 #include <cstdint>
@@ -388,6 +389,100 @@ int PCB_EDITOR_CONTROL::GenerateFabFiles( const TOOL_EVENT& aEvent )
         m_frame->RecreateBOMFileFromBoard( dummy );
     else
         wxFAIL_MSG( "GenerateFabFiles(): unexpected request" );
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
+{
+    int      errors = 0;
+    wxString details;
+
+    /*******************************
+     * Repair duplicate IDs
+     */
+
+    std::set<KIID> ids;
+    int            duplicates = 0;
+
+    auto processItem = [&]( EDA_ITEM* aItem )
+                       {
+                           if( ids.count( aItem->m_Uuid ) )
+                           {
+                               duplicates++;
+                               const_cast<KIID&>( aItem->m_Uuid ) = KIID();
+                           }
+
+                           ids.insert( aItem->m_Uuid );
+                       };
+
+    // Module IDs are the most important, so give them the first crack at "owning" a particular
+    // KIID.
+
+    for( MODULE* module : board()->Modules() )
+        processItem( module );
+
+    // After that the principal use is for DRC marker pointers, which are most likely to pads
+    // or tracks.
+
+    for( MODULE* module : board()->Modules() )
+    {
+        for( D_PAD* pad : module->Pads() )
+            processItem( pad );
+    }
+
+    for( TRACK* track : board()->Tracks() )
+        processItem( track );
+
+    // From here out I don't think order matters much.
+
+    for( MODULE* module : board()->Modules() )
+    {
+        processItem( &module->Reference() );
+        processItem( &module->Value() );
+
+        for( BOARD_ITEM* item : module->GraphicalItems() )
+            processItem( item );
+
+        for( ZONE_CONTAINER* zone : module->Zones() )
+            processItem( zone );
+    }
+
+    for( BOARD_ITEM* drawing : board()->Drawings() )
+        processItem( drawing );
+
+    for( ZONE_CONTAINER* zone : board()->GetZoneList() )
+        processItem( zone );
+
+    for( MARKER_PCB* marker : board()->Markers() )
+        processItem( marker );
+
+    if( duplicates )
+    {
+        errors += duplicates;
+        details += wxString::Format( _( "%d duplicate IDs replaced.\n" ), duplicates );
+    }
+
+    /*******************************
+     * Your test here
+     */
+
+    /*******************************
+     * Inform the user
+     */
+
+    if( errors )
+    {
+        m_frame->OnModify();
+
+        wxString msg = wxString::Format( _( "%d potential problems repaired." ), errors );
+        DisplayInfoMessage( m_frame, msg, details );
+    }
+    else
+    {
+        DisplayInfoMessage( m_frame, _( "No board problems found." ) );
+    }
 
     return 0;
 }
@@ -1249,6 +1344,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ToggleMicrowaveToolbar, PCB_ACTIONS::showMicrowaveToolbar.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::TogglePythonConsole,    PCB_ACTIONS::showPythonConsole.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::FlipPcbView,            PCB_ACTIONS::flipBoard.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::RepairBoard,            PCB_ACTIONS::repairBoard.MakeEvent() );
 }
 
 

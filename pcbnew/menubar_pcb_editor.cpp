@@ -486,6 +486,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AddSeparator();
     toolsMenu->AddItem( PCB_ACTIONS::removeUnusedPads,       SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( PCB_ACTIONS::repairBoard,            SELECTION_CONDITIONS::ShowAlways );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     auto pythonConsoleShownCondition = [] ( const SELECTION& aSel ) {

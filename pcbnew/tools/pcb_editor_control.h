@@ -66,6 +66,7 @@ public:
     int GenerateDrillFiles( const TOOL_EVENT& aEvent );
     int GeneratePosFile( const TOOL_EVENT& aEvent );
     int GenerateFabFiles( const TOOL_EVENT& aEvent );
+    int RepairBoard( const TOOL_EVENT& aEvent );
 
     int UpdatePCBFromSchematic( const TOOL_EVENT& aEvent );
     int UpdateSchematicFromPCB( const TOOL_EVENT& aEvent );

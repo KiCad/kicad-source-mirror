@@ -408,6 +408,7 @@ public:
     static TOOL_ACTION showEeschema;
     static TOOL_ACTION boardStatistics;
     static TOOL_ACTION boardReannotate;
+    static TOOL_ACTION repairBoard;
 
     // Appearance controls
     static TOOL_ACTION clearHighlight;

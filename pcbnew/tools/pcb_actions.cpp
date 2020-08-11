@@ -972,6 +972,13 @@ TOOL_ACTION PCB_ACTIONS::boardReannotate( "pcbnew.ReannotateTool.ShowReannotateD
         _( "Geographical Reannotate..." ), _( "Reannotate PCB in geographical order" ),
         annotate_xpm );
 
+TOOL_ACTION PCB_ACTIONS::repairBoard( "pcbnew.Control.repairBoard",
+        AS_GLOBAL, 0, "",
+        _( "Repair Board" ),
+        _( "Run various diagnostics and attempt to repair board" ),
+        rescue_xpm );
+
+
 // PLACEMENT_TOOL
 //
 TOOL_ACTION PCB_ACTIONS::alignTop( "pcbnew.AlignAndDistribute.alignTop",
