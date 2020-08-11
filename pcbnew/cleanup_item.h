@@ -73,11 +73,11 @@ public:
  */
 class VECTOR_CLEANUP_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
 {
-    std::vector<CLEANUP_ITEM*>* m_sourceVector;     // owns its CLEANUP_ITEMs
+    std::vector<std::shared_ptr<CLEANUP_ITEM> >* m_sourceVector;     // owns its CLEANUP_ITEMs
 
 public:
 
-    VECTOR_CLEANUP_ITEMS_PROVIDER( std::vector<CLEANUP_ITEM*>* aList ) :
+    VECTOR_CLEANUP_ITEMS_PROVIDER( std::vector<std::shared_ptr<CLEANUP_ITEM> >* aList ) :
             m_sourceVector( aList )
     {
     }
@@ -91,18 +91,22 @@ public:
         return m_sourceVector->size();
     }
 
-    CLEANUP_ITEM* GetItem( int aIndex ) override
+    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) override
     {
         return m_sourceVector->at( aIndex );
     }
+
+    std::shared_ptr<CLEANUP_ITEM> GetCleanupItem( int aIndex )
+    {
+        return m_sourceVector->at( aIndex );
+    }
+
 
     void DeleteItem( int aIndex, bool aDeep ) override
     {
         if( aDeep )
         {
-            CLEANUP_ITEM* item = m_sourceVector->at( aIndex );
-            delete item;
-
+            auto item = m_sourceVector->at( aIndex );
             m_sourceVector->erase( m_sourceVector->begin() + aIndex );
         }
     }
@@ -111,9 +115,6 @@ public:
     {
         if( aDeep )
         {
-            for( CLEANUP_ITEM* item : *m_sourceVector )
-                delete item;
-
             m_sourceVector->clear();
         }
     }

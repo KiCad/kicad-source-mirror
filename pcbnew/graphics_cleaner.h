@@ -42,7 +42,7 @@ public:
      * @param aMergeRects = merge for segments forming a rectangle into a rect
      * @param aDeleteRedundant = true to delete null graphics and duplicated graphics
      */
-    void CleanupBoard( bool aDryRun, std::vector<CLEANUP_ITEM*>* aItemsList, bool aMergeRects,
+    void CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList, bool aMergeRects,
                        bool aDeleteRedundant );
 
 private:
@@ -57,7 +57,7 @@ private:
     MODULE*                     m_parentModule;  // nullptr if not in ModEdit
     BOARD_COMMIT&               m_commit;
     bool                        m_dryRun;
-    std::vector<CLEANUP_ITEM*>* m_itemsList;
+    std::vector<std::shared_ptr<CLEANUP_ITEM> >* m_itemsList;
 };
 
 

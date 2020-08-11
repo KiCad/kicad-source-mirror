@@ -42,9 +42,10 @@
 #define SCALING_FACTOR  Millimeter2iu( 0.1 )
 
 
-MARKER_PCB::MARKER_PCB( DRC_ITEM* aItem, const wxPoint& aPosition ) :
-        BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
-        MARKER_BASE( SCALING_FACTOR, aItem )
+
+MARKER_PCB::MARKER_PCB( std::shared_ptr<RC_ITEM> aItem, const wxPoint& aPosition ) :
+    BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
+    MARKER_BASE( SCALING_FACTOR, aItem )
 {
     if( m_rcItem )
         m_rcItem->SetParent( this );
@@ -76,8 +77,8 @@ MARKER_PCB* MARKER_PCB::Deserialize( const wxString& data )
     wxPoint       markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
                              (int) strtol( props[2].c_str(), nullptr, 10 ) );
 
-    DRC_ITEM* drcItem = DRC_ITEM::Create( props[0] );
-
+    std::shared_ptr<DRC_ITEM> drcItem =  DRC_ITEM::Create( props[0] );
+    
     if( !drcItem )
         return nullptr;
 

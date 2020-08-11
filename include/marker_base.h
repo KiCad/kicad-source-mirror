@@ -26,6 +26,8 @@
 #ifndef MARKER_BASE_H
 #define MARKER_BASE_H
 
+#include <memory>
+
 #include <rc_item.h>
 #include <gr_basic.h>
 #include <eda_rect.h>
@@ -61,7 +63,7 @@ public:
 protected:
     TYPEMARKER            m_markerType;          // The type of marker (useful to filter markers)
     bool                  m_excluded;            // User has excluded this specific error
-    RC_ITEM*              m_rcItem;
+    std::shared_ptr<RC_ITEM> m_rcItem;
 
     int                   m_scalingFactor;       // Scaling factor to convert corners coordinates
                                                  // to internat units coordinates
@@ -71,8 +73,7 @@ protected:
 
 public:
 
-    MARKER_BASE( int aScalingFactor, RC_ITEM* aItem, TYPEMARKER aType = MARKER_UNSPEC );
-
+    MARKER_BASE( int aScalingFactor, std::shared_ptr<RC_ITEM> aItem, TYPEMARKER aType = MARKER_UNSPEC );
     virtual ~MARKER_BASE();
 
     /** The scaling factor to convert polygonal shape coordinates to internal units
@@ -114,8 +115,9 @@ public:
      * interface may be used.
      * @return const& DRC_ITEM
      */
-    RC_ITEM* GetRCItem() { return m_rcItem; }
-    const RC_ITEM* GetRCItem() const { return m_rcItem; }
+    
+    // fixme: use shared_ptr
+    std::shared_ptr<RC_ITEM> GetRCItem() const { return m_rcItem; }
 
     /**
      * Tests if the given wxPoint is within the bounds of this object.

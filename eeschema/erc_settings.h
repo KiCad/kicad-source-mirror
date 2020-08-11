@@ -187,7 +187,9 @@ public:
 
     int GetCount( int aSeverity = -1 ) override;
 
-    ERC_ITEM* GetItem( int aIndex ) override;
+    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) override;
+
+    std::shared_ptr<ERC_ITEM> GetERCItem( int aIndex );
 
     void DeleteItem( int aIndex, bool aDeep ) override;
 

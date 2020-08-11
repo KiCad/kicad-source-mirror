@@ -144,11 +144,11 @@ public:
         return count;
     }
 
-    DRC_ITEM* GetItem( int aIndex ) override
+    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) override
     {
         MARKER_PCB* marker = m_filteredMarkers[ aIndex ];
 
-        return marker ? static_cast<DRC_ITEM*>( marker->GetRCItem() ) : nullptr;
+        return marker ? marker->GetRCItem() : nullptr;
     }
 
     void DeleteItem( int aIndex, bool aDeep ) override
@@ -179,14 +179,14 @@ public:
 class VECTOR_DRC_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
 {
     PCB_BASE_FRAME*         m_frame;
-    std::vector<DRC_ITEM*>* m_sourceVector;     // owns its DRC_ITEMs
+    std::vector<std::shared_ptr<DRC_ITEM> >* m_sourceVector;     // owns its DRC_ITEMs
 
     int                     m_severities;
-    std::vector<DRC_ITEM*>  m_filteredVector;   // does not own its DRC_ITEMs
+    std::vector<std::shared_ptr<DRC_ITEM> >  m_filteredVector;   // does not own its DRC_ITEMs
 
 public:
 
-    VECTOR_DRC_ITEMS_PROVIDER( PCB_BASE_FRAME* aFrame, std::vector<DRC_ITEM*>* aList ) :
+    VECTOR_DRC_ITEMS_PROVIDER( PCB_BASE_FRAME* aFrame, std::vector<std::shared_ptr<DRC_ITEM> >* aList ) :
             m_frame( aFrame ),
             m_sourceVector( aList ),
             m_severities( 0 )
@@ -203,7 +203,7 @@ public:
 
         if( m_sourceVector )
         {
-            for( DRC_ITEM* item : *m_sourceVector )
+            for( auto item : *m_sourceVector )
             {
                 if( bds.GetSeverity( item->GetErrorCode() ) & aSeverities )
                     m_filteredVector.push_back( item );
@@ -221,7 +221,7 @@ public:
 
         if( m_sourceVector )
         {
-            for( DRC_ITEM* item : *m_sourceVector )
+            for( auto item : *m_sourceVector )
             {
                 if( bds.GetSeverity( item->GetErrorCode() ) == aSeverity )
                     count++;
@@ -231,14 +231,14 @@ public:
         return count;
     }
 
-    DRC_ITEM* GetItem( int aIndex ) override
+    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) override
     {
         return (m_filteredVector)[aIndex];
     }
 
     void DeleteItem( int aIndex, bool aDeep ) override
     {
-        DRC_ITEM* item = m_filteredVector[aIndex];
+        auto item = m_filteredVector[aIndex];
         m_filteredVector.erase( m_filteredVector.begin() + aIndex );
 
         if( aDeep )
@@ -247,7 +247,6 @@ public:
             {
                 if( m_sourceVector->at( i ) == item )
                 {
-                    delete item;
                     m_sourceVector->erase( m_sourceVector->begin() + i );
                     break;
                 }
@@ -259,9 +258,6 @@ public:
     {
         if( aDeep )
         {
-            for( DRC_ITEM* item : *m_sourceVector )
-                delete item;
-
             m_sourceVector->clear();
         }
 
@@ -279,7 +275,7 @@ class RATSNEST_DRC_ITEMS_PROVIDER : public VECTOR_DRC_ITEMS_PROVIDER
     // data-structure so that deleting/excluding things can do a deep delete/exclusion
     // which will be reflected in the ratsnest....
 public:
-    RATSNEST_DRC_ITEMS_PROVIDER( PCB_BASE_FRAME* aFrame, std::vector<DRC_ITEM*>* aList ) :
+    RATSNEST_DRC_ITEMS_PROVIDER( PCB_BASE_FRAME* aFrame, std::vector<std::shared_ptr<DRC_ITEM> >* aList ) :
             VECTOR_DRC_ITEMS_PROVIDER( aFrame, aList )
     { }
 };

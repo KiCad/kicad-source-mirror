@@ -29,6 +29,6 @@
 class BOARD;
 
 
-void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<DRC_ITEM*>& aDRCList );
+void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<std::shared_ptr<DRC_ITEM> >& aDRCList );
 
 #endif  // FOOTPRINT_TESTER_H

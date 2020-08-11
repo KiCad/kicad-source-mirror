@@ -396,7 +396,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
 static bool CollisionMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
                                       const COURTYARD_COLLISION& aCollision )
 {
-    const DRC_ITEM* reporter = static_cast<const DRC_ITEM*>( aMarker.GetRCItem() );
+    auto reporter = std::static_pointer_cast<DRC_ITEM>( aMarker.GetRCItem() );
 
     const MODULE* item_a = dynamic_cast<MODULE*>( aBoard.GetItem( reporter->GetMainItemID() ) );
     const MODULE* item_b = dynamic_cast<MODULE*>( aBoard.GetItem( reporter->GetAuxItemID() ) );

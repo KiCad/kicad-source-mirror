@@ -190,11 +190,11 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
         return;
 
     HTML_MESSAGE_BOX dlg( this, _( "Check footprints" ) );
-    std::vector<DRC_ITEM*> drcItems;
+    std::vector<std::shared_ptr<DRC_ITEM> > drcItems;
 
     TestFootprints( netlist, m_parent->GetBoard(), drcItems );
 
-    for( DRC_ITEM* item : drcItems )
+    for( auto item : drcItems )
         dlg.AddHTML_Text( item->ShowHtml( m_parent ) );
 
     dlg.ShowModal();

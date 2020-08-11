@@ -50,7 +50,7 @@ TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit ) :
  * - vias on pad
  * - null length segments
  */
-void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<CLEANUP_ITEM*>* aItemsList,
+void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
                                    bool aRemoveMisConnected, bool aCleanVias, bool aMergeSegments,
                                    bool aDeleteUnconnected, bool aDeleteTracksinPad, bool aDeleteDanglingVias )
 {
@@ -109,7 +109,7 @@ void TRACKS_CLEANER::removeBadTrackSegments()
         {
             if( segment->GetNetCode() != testedPad->GetNetCode() )
             {
-                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_SHORT );
+                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_SHORT ) );
                 item->SetItems( segment );
                 m_itemsList->push_back( item );
 
@@ -121,7 +121,7 @@ void TRACKS_CLEANER::removeBadTrackSegments()
         {
             if( segment->GetNetCode() != testedTrack->GetNetCode() )
             {
-                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_SHORT );
+                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_SHORT ) );
                 item->SetItems( segment );
                 m_itemsList->push_back( item );
 
@@ -168,7 +168,7 @@ void TRACKS_CLEANER::cleanupVias()
 
             if( ( pad->GetLayerSet() & all_cu ) == all_cu )
             {
-                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_REDUNDANT_VIA );
+                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_REDUNDANT_VIA ) );
                 item->SetItems( via1, pad );
                 m_itemsList->push_back( item );
 
@@ -187,7 +187,7 @@ void TRACKS_CLEANER::cleanupVias()
 
             if( via1->GetViaType() == via2->GetViaType() )
             {
-                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_REDUNDANT_VIA );
+                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_REDUNDANT_VIA ) );
                 item->SetItems( via1, via2 );
                 m_itemsList->push_back( item );
 
@@ -267,7 +267,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aVia )
                 int errorCode =
                         ( track->Type() != PCB_VIA_T ) ?
                                 CLEANUP_DANGLING_TRACK : CLEANUP_DANGLING_VIA;
-                CLEANUP_ITEM* item = new CLEANUP_ITEM( errorCode );
+                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( errorCode ) );
                 item->SetItems( track );
                 m_itemsList->push_back( item );
 
@@ -300,7 +300,7 @@ void TRACKS_CLEANER::deleteNullSegments( TRACKS& aTracks )
     {
         if( segment->IsNull() && segment->Type() == PCB_TRACE_T && !segment->IsLocked() )
         {
-            CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_ZERO_LENGTH_TRACK );
+            std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_ZERO_LENGTH_TRACK ) );
             item->SetItems( segment );
             m_itemsList->push_back( item );
 
@@ -336,12 +336,12 @@ void TRACKS_CLEANER::deleteTracksInPads()
                 poly.BooleanSubtract( *pad->GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
 
                 if( poly.IsEmpty() )
-                {
-                    CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_TRACK_IN_PAD );
-                    item->SetItems( track );
-                    m_itemsList->push_back( item );
+            {
+                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_TRACK_IN_PAD );
+                item->SetItems( track );
+                m_itemsList->push_back( item );
 
-                    toRemove.insert( track );
+                toRemove.insert( track );
                 }
             }
         }
@@ -380,7 +380,7 @@ void TRACKS_CLEANER::cleanupSegments()
                     && track1->GetWidth() == track2->GetWidth()
                     && track1->GetLayer() == track2->GetLayer() )
             {
-                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_DUPLICATE_TRACK );
+                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_DUPLICATE_TRACK ) );
                 item->SetItems( track2 );
                 m_itemsList->push_back( item );
 
@@ -489,7 +489,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
             return false;
     }
 
-    CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_MERGE_TRACKS );
+    std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_MERGE_TRACKS ) );
     item->SetItems( aSeg1, aSeg2 );
     m_itemsList->push_back( item );
 

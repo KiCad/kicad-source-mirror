@@ -36,7 +36,7 @@ public:
      * Constructs a DRC_ITEM for the given error code
      * @see DRCE_T
      */
-    static DRC_ITEM* Create( int aErrorCode );
+    static std::shared_ptr<DRC_ITEM> Create( int aErrorCode );
 
     /**
      * Constructs a DRC item from a given error settings key
@@ -44,7 +44,7 @@ public:
      * to represent a given error code in settings files and for storing ignored DRC items)
      * @return the created item
      */
-    static DRC_ITEM* Create( const wxString& aErrorKey );
+    static std::shared_ptr<DRC_ITEM> Create( const wxString& aErrorKey );
 
     static std::vector<std::reference_wrapper<RC_ITEM>> GetItemsWithSeverities()
     {

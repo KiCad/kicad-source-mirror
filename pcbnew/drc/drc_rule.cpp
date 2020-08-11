@@ -119,7 +119,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
 
 bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset )
 {
-    PCB_EXPR_COMPILER compiler( aReporter, aSourceLine, aSourceOffset );
+    PCB_EXPR_COMPILER compiler;
 
     if (!m_ucode)
         m_ucode = new PCB_EXPR_UCODE;

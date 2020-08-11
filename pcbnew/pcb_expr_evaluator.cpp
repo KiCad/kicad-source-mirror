@@ -199,7 +199,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
-    auto registerFunc = [&]( const wxString& funcSignature, FPTR funcPtr )
+    auto registerFunc = [&]( const wxString& funcSignature,  LIBEVAL::FUNC_CALL_REF funcPtr )
                         {
                             wxString funcName = funcSignature.BeforeFirst( '(' );
                             m_funcs[ std::string( funcName.Lower() ) ] = std::move( funcPtr );
@@ -262,7 +262,7 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 }
 
 
-LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::CreateFuncCall( const char* aName )
+LIBEVAL::FUNC_CALL_REF PCB_EXPR_UCODE::CreateFuncCall( const wxString& aName )
 {
     PCB_EXPR_BUILTIN_FUNCTIONS& registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
 
@@ -270,28 +270,30 @@ LIBEVAL::UCODE::FUNC_PTR PCB_EXPR_UCODE::CreateFuncCall( const char* aName )
 }
 
 
-LIBEVAL::VAR_REF* PCB_EXPR_UCODE::CreateVarRef( const char* aVar, const char* aField )
+std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& aVar, const wxString& aField )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-    PCB_EXPR_VAR_REF* vref = nullptr;
+    std::unique_ptr<PCB_EXPR_VAR_REF> vref;;
 
-    if( *aVar == 'A' )
+    if( aVar == "A" )
     {
-        vref = new PCB_EXPR_VAR_REF( 0 );
+        vref.reset( new PCB_EXPR_VAR_REF( 0 ) );
     }
-    else if( *aVar == 'B' )
+    else if( aVar == "B" )
     {
-        vref = new PCB_EXPR_VAR_REF( 1 );
+        vref.reset( new PCB_EXPR_VAR_REF( 1 ) );
     }
     else
     {
-        return vref;
+        return nullptr;
     }
 
-    if( strlen( aField ) == 0 ) // return reference to base object
-        return vref;
+    if( aField.length() == 0 ) // return reference to base object
+    {
+        return std::move( vref );
+    }
 
-    wxString field = wxString::FromUTF8( aField );
+    wxString field( aField );
     field.Replace( "_",  " " );
 
     for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
@@ -329,7 +331,7 @@ LIBEVAL::VAR_REF* PCB_EXPR_UCODE::CreateVarRef( const char* aVar, const char* aF
     if( vref->GetType() == LIBEVAL::VT_UNDEFINED )
         vref->SetType( LIBEVAL::VT_PARSE_ERROR );
 
-    return vref;
+    return std::move( vref );
 }
 
 
@@ -340,16 +342,16 @@ public:
     {
     }
 
-    virtual const std::vector<std::string>& GetSupportedUnits() const override
+    virtual const std::vector<wxString>& GetSupportedUnits() const override
     {
-        static const std::vector<std::string> pcbUnits = { "mil", "mm", "in" };
+        static const std::vector<wxString> pcbUnits = { "mil", "mm", "in" };
 
         return pcbUnits;
     }
 
-    virtual double Convert( const std::string& aString, int unitId ) const override
+    virtual double Convert( const wxString& aString, int unitId ) const override
     {
-        double v = atof( aString.c_str() );
+        double v = wxAtof( aString );
 
         switch( unitId )
         {
@@ -362,15 +364,13 @@ public:
 };
 
 
-PCB_EXPR_COMPILER::PCB_EXPR_COMPILER( REPORTER* aReporter, int aSourceLine, int aSourcePos ) :
-        COMPILER( aReporter, aSourceLine, aSourcePos )
+PCB_EXPR_COMPILER::PCB_EXPR_COMPILER()
 {
     m_unitResolver = std::make_unique<PCB_UNIT_RESOLVER>();
 }
 
 
-PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR( REPORTER* aReporter, int aSourceLine, int aSourceOffset ) :
-        m_compiler( aReporter, aSourceLine, aSourceOffset )
+PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR()
 {
     m_result = 0;
 }

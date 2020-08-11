@@ -50,9 +50,6 @@ DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent, bool 
 
 DIALOG_CLEANUP_GRAPHICS::~DIALOG_CLEANUP_GRAPHICS()
 {
-    for( CLEANUP_ITEM* item : m_items )
-        delete item;
-
     m_changesTreeModel->DecRef();
 }
 
@@ -96,9 +93,6 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
         // ... and to keep the treeModel from trying to refresh a deleted item
         m_changesTreeModel->SetProvider( nullptr );
     }
-
-    for( CLEANUP_ITEM* item : m_items )
-        delete item;
 
     m_items.clear();
 

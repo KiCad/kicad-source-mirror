@@ -1346,7 +1346,7 @@ void SCH_SCREENS::DeleteMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType, int a
         for( SCH_ITEM* item : screen->Items().OfType( SCH_MARKER_T ) )
         {
             SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
-            RC_ITEM*    rcItem = marker->GetRCItem();
+            std::shared_ptr<RC_ITEM>rcItem = marker->GetRCItem();
 
             if( marker->GetMarkerType() == aMarkerType
                     && ( aErrorCode == ERCE_UNSPECIFIED || rcItem->GetErrorCode() == aErrorCode )

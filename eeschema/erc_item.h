@@ -34,7 +34,7 @@ public:
      * Constructs an ERC_ITEM for the given error code
      * @see ERCE_T
      */
-    static ERC_ITEM* Create( int aErrorCode );
+    static std::shared_ptr<ERC_ITEM> Create( int aErrorCode );
 
     static std::vector<std::reference_wrapper<RC_ITEM>> GetItemsWithSeverities()
     {

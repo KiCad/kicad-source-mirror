@@ -50,7 +50,7 @@ public:
      * Function GetItem
      * retrieves a RC_ITEM by index.
      */
-    virtual RC_ITEM* GetItem( int aIndex ) = 0;
+    virtual std::shared_ptr<RC_ITEM> GetItem( int aIndex ) = 0;
 
     /**
      * Function DeleteItem
@@ -95,7 +95,7 @@ public:
     {
     }
 
-    RC_ITEM( RC_ITEM* aItem )
+    RC_ITEM( std::shared_ptr<RC_ITEM> aItem )
     {
         m_errorCode    = aItem->m_errorCode;
         m_errorMessage = aItem->m_errorMessage;
@@ -185,7 +185,7 @@ class RC_TREE_NODE
 public:
     enum NODE_TYPE { MARKER, MAIN_ITEM, AUX_ITEM, AUX_ITEM2, AUX_ITEM3 };
 
-    RC_TREE_NODE( RC_TREE_NODE* aParent, RC_ITEM* aRcItem, NODE_TYPE aType ) :
+    RC_TREE_NODE( RC_TREE_NODE* aParent, std::shared_ptr<RC_ITEM> aRcItem, NODE_TYPE aType ) :
             m_Type( aType ),
             m_RcItem( aRcItem ),
             m_Parent( aParent )
@@ -198,7 +198,7 @@ public:
     }
 
     NODE_TYPE                  m_Type;
-    RC_ITEM*                   m_RcItem;
+    std::shared_ptr<RC_ITEM>   m_RcItem;
 
     RC_TREE_NODE*              m_Parent;
     std::vector<RC_TREE_NODE*> m_Children;

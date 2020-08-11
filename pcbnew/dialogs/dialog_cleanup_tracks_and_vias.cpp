@@ -71,9 +71,6 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
     cfg->m_Cleanup.cleanup_tracks_in_pad  = m_deleteTracksInPadsOpt->GetValue();
     cfg->m_Cleanup.delete_dangling_vias   = m_deleteDanglingViasOpt->GetValue();
 
-    for( CLEANUP_ITEM* item : m_items )
-        delete item;
-
     m_changesTreeModel->DecRef();
 }
 
@@ -114,9 +111,6 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
         // ... and to keep the treeModel from trying to refresh a deleted item
         m_changesTreeModel->SetProvider( nullptr );
     }
-
-    for( CLEANUP_ITEM* item : m_items )
-        delete item;
 
     m_items.clear();
 

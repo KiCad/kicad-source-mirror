@@ -234,7 +234,7 @@ std::unique_ptr<BOARD> MakeBoard( const std::vector<COURTYARD_INVALID_TEST_MODUL
 static bool InvalidMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
                                     const COURTYARD_INVALID_INFO& aInvalid )
 {
-    const DRC_ITEM* reporter = static_cast<const DRC_ITEM*>( aMarker.GetRCItem() );
+    auto reporter = std::static_pointer_cast<DRC_ITEM>( aMarker.GetRCItem() );
     const MODULE*   item_a = dynamic_cast<MODULE*>( aBoard.GetItem( reporter->GetMainItemID() ) );
 
     // This one is more than just a mis-match!

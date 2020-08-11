@@ -141,73 +141,76 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
 
 
 
-ERC_ITEM* ERC_ITEM::Create( int aErrorCode )
+std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
 {
+    ERC_ITEM *item;
     switch( aErrorCode )
     {
     case ERCE_DUPLICATE_SHEET_NAME:
-        return new ERC_ITEM( duplicateSheetName );
+        item = new ERC_ITEM( duplicateSheetName ); break;
 
     case ERCE_PIN_NOT_CONNECTED:
-        return new ERC_ITEM( pinNotConnected );
+        item = new ERC_ITEM( pinNotConnected ); break;
 
     case ERCE_PIN_NOT_DRIVEN:
-        return new ERC_ITEM( pinNotDriven );
+        item = new ERC_ITEM( pinNotDriven ); break;
 
     case ERCE_PIN_TO_PIN_WARNING:
-        return new ERC_ITEM( pinTableWarning );
+        item = new ERC_ITEM( pinTableWarning ); break;
 
     case ERCE_PIN_TO_PIN_ERROR:
-        return new ERC_ITEM( pinTableError );
+        item = new ERC_ITEM( pinTableError ); break;
 
     case ERCE_HIERACHICAL_LABEL:
-        return new ERC_ITEM( hierLabelMismatch );
+        item = new ERC_ITEM( hierLabelMismatch ); break;
 
     case ERCE_NOCONNECT_CONNECTED:
-        return new ERC_ITEM( noConnectConnected );
+        item = new ERC_ITEM( noConnectConnected ); break;
 
     case ERCE_NOCONNECT_NOT_CONNECTED:
-        return new ERC_ITEM( noConnectDangling );
+        item = new ERC_ITEM( noConnectDangling ); break;
 
     case ERCE_LABEL_NOT_CONNECTED:
-        return new ERC_ITEM( labelDangling );
+        item = new ERC_ITEM( labelDangling ); break;
 
     case ERCE_SIMILAR_LABELS:
-        return new ERC_ITEM( similarLabels );
+        item = new ERC_ITEM( similarLabels ); break;
 
     case ERCE_DIFFERENT_UNIT_FP:
-        return new ERC_ITEM( differentUnitFootprint );
+        item = new ERC_ITEM( differentUnitFootprint ); break;
 
     case ERCE_DIFFERENT_UNIT_NET:
-        return new ERC_ITEM( differentUnitNet );
+        item = new ERC_ITEM( differentUnitNet ); break;
 
     case ERCE_BUS_ALIAS_CONFLICT:
-        return new ERC_ITEM( busDefinitionConflict );
+        item = new ERC_ITEM( busDefinitionConflict ); break;
 
     case ERCE_DRIVER_CONFLICT:
-        return new ERC_ITEM( multipleNetNames );
+        item = new ERC_ITEM( multipleNetNames ); break;
 
     case ERCE_BUS_ENTRY_CONFLICT:
-        return new ERC_ITEM( netNotBusMember );
+        item = new ERC_ITEM( netNotBusMember ); break;
 
     case ERCE_BUS_LABEL_ERROR:
-        return new ERC_ITEM( busLabelSyntax );
+        item = new ERC_ITEM( busLabelSyntax ); break;
 
     case ERCE_BUS_TO_BUS_CONFLICT:
-        return new ERC_ITEM( busToBusConflict );
+        item = new ERC_ITEM( busToBusConflict ); break;
 
     case ERCE_BUS_TO_NET_CONFLICT:
-        return new ERC_ITEM( busToNetConflict );
+        item = new ERC_ITEM( busToNetConflict ); break;
 
     case ERCE_GLOBLABEL:
-        return new ERC_ITEM( globalLabelDangling );
+        item = new ERC_ITEM( globalLabelDangling ); break;
 
     case ERCE_UNRESOLVED_VARIABLE:
-        return new ERC_ITEM( unresolvedVariable );
+        item = new ERC_ITEM( unresolvedVariable ); break;
 
     case ERCE_UNSPECIFIED:
     default:
         wxFAIL_MSG( "Unknown ERC error code" );
         return nullptr;
     }
+    
+    return std::shared_ptr<ERC_ITEM>( item );
 }

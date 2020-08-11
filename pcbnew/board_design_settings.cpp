@@ -677,9 +677,8 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
     auto drcName =
             []( int aCode ) -> std::string
             {
-                DRC_ITEM* item = DRC_ITEM::Create( aCode );
+                std::shared_ptr<DRC_ITEM> item = DRC_ITEM::Create( aCode );
                 wxString name = item->GetSettingsKey();
-                delete item;
                 return std::string( name.ToUTF8() );
             };
 

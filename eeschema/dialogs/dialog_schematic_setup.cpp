@@ -51,7 +51,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_pinToPinError = ERC_ITEM::Create( ERCE_PIN_TO_PIN_WARNING );
     m_severities = new PANEL_SETUP_SEVERITIES( this, ERC_ITEM::GetItemsWithSeverities(),
                                                schematic.ErcSettings().m_Severities,
-                                               m_pinToPinError );
+                                               m_pinToPinError.get() );
 
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
@@ -87,8 +87,6 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
 DIALOG_SCHEMATIC_SETUP::~DIALOG_SCHEMATIC_SETUP()
 {
-    delete m_pinToPinError;
-
 	m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED,
                          wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), NULL, this );
 }

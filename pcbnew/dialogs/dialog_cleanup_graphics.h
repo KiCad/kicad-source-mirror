@@ -36,7 +36,7 @@ class DIALOG_CLEANUP_GRAPHICS: public DIALOG_CLEANUP_GRAPHICS_BASE
 {
     PCB_BASE_FRAME*            m_parentFrame;
     bool                       m_isModEdit;
-    std::vector<CLEANUP_ITEM*> m_items;
+    std::vector<std::shared_ptr<CLEANUP_ITEM> > m_items;
     RC_TREE_MODEL*             m_changesTreeModel;
 
     void doCleanup( bool aDryRun );

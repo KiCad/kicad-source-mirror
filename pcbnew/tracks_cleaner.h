@@ -47,7 +47,7 @@ public:
      * @param aDeleteTracksinPad = true to remove tracks fully inside pads
      * @param aDeleteDanglingVias = true to remove a via that is only connected to a single layer
      */
-    void CleanupBoard( bool aDryRun, std::vector<CLEANUP_ITEM*>* aItemsList, bool aCleanVias,
+    void CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList, bool aCleanVias,
                        bool aRemoveMisConnected, bool aMergeSegments, bool aDeleteUnconnected,
                        bool aDeleteTracksinPad, bool aDeleteDanglingVias );
 
@@ -102,7 +102,7 @@ private:
     BOARD*                      m_brd;
     BOARD_COMMIT&               m_commit;
     bool                        m_dryRun;
-    std::vector<CLEANUP_ITEM*>* m_itemsList;
+    std::vector<std::shared_ptr<CLEANUP_ITEM> >* m_itemsList;
 };
 
 

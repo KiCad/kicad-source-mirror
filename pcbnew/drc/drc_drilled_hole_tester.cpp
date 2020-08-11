@@ -110,7 +110,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
 
         if( holeSize < minHole )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           m_source,
@@ -161,7 +161,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
 
         if( via->GetDrillValue() < minHole )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           m_source,
@@ -211,9 +211,9 @@ bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
             m_source = _( "board minimum" );
         }
 
-        if(  via->GetDrillValue() < minHole )
+        if( via->GetDrillValue() < minHole )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_MICROVIA_DRILL );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_MICROVIA_DRILL );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                           m_source,
@@ -288,7 +288,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkHoles()
 
             if( actual < bds.m_HoleToHoleMin )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                               MessageTextFromValue( m_units, bds.m_HoleToHoleMin, true ),

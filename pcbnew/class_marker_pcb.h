@@ -46,8 +46,7 @@ class MSG_PANEL_ITEM;
 class MARKER_PCB : public BOARD_ITEM, public MARKER_BASE
 {
 public:
-    MARKER_PCB( DRC_ITEM* aItem, const wxPoint& aPosition );
-
+    MARKER_PCB( std::shared_ptr<RC_ITEM> aItem, const wxPoint& aPosition );
     ~MARKER_PCB();
 
     static inline bool ClassOf( const EDA_ITEM* aItem )

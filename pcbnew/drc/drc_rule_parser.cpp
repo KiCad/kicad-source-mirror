@@ -376,7 +376,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
 void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult )
 {
-    PCB_EXPR_EVALUATOR evaluator( m_reporter, CurLineNumber(), CurOffset() );
+    PCB_EXPR_EVALUATOR evaluator;
+    
+    // m_reporter, CurLineNumber(), CurOffset() );
 
     evaluator.Evaluate( aExpr );
     aResult = evaluator.Result();

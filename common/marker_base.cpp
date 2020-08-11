@@ -59,7 +59,7 @@ static const VECTOR2I MarkerShapeCorners[] =
 const unsigned CORNERS_COUNT = arrayDim( MarkerShapeCorners );
 
 
-MARKER_BASE::MARKER_BASE( int aScalingFactor, RC_ITEM* aItem, TYPEMARKER aType ) :
+MARKER_BASE::MARKER_BASE( int aScalingFactor, std::shared_ptr<RC_ITEM> aItem, TYPEMARKER aType ) :
         m_markerType( aType ),
         m_excluded( false ),
         m_rcItem( aItem ),
@@ -85,8 +85,6 @@ MARKER_BASE::MARKER_BASE( int aScalingFactor, RC_ITEM* aItem, TYPEMARKER aType )
 
 MARKER_BASE::~MARKER_BASE()
 {
-    printf("del rcitem %p\n", m_rcItem );
-    delete m_rcItem;
 }
 
 

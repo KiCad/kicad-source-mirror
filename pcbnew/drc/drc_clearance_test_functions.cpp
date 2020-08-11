@@ -44,7 +44,7 @@ void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
     {
         if( aRefVia->GetWidth() < bds.m_MicroViasMinSize )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_MICROVIA );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                           MessageTextFromValue( userUnits(), bds.m_MicroViasMinSize, true ),
@@ -61,7 +61,7 @@ void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
     {
         if( aRefVia->GetWidth() < bds.m_ViasMinSize )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_VIA );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                           MessageTextFromValue( userUnits(), bds.m_ViasMinSize, true ),
@@ -80,7 +80,7 @@ void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
     // and a default via hole can be bigger than some vias sizes
     if( aRefVia->GetDrillValue() > aRefVia->GetWidth() )
     {
-        DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_VIA_HOLE_BIGGER );
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_HOLE_BIGGER );
 
         m_msg.Printf( drcItem->GetErrorText() + _( " (diameter %s; drill %s)" ),
                       MessageTextFromValue( userUnits(), aRefVia->GetWidth(), true ),
@@ -96,7 +96,7 @@ void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
     // test if the type of via is allowed due to design rules
     if( aRefVia->GetViaType() == VIATYPE::MICROVIA && !bds.m_MicroViasAllowed )
     {
-        DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
 
         m_msg.Printf( _( "Microvia not allowed (board design rule constraints)" ) );
         drcItem->SetErrorMessage( m_msg );
@@ -109,7 +109,7 @@ void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
     // test if the type of via is allowed due to design rules
     if( aRefVia->GetViaType() == VIATYPE::BLIND_BURIED && !bds.m_BlindBuriedViaAllowed )
     {
-        DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
 
         m_msg.Printf( _( "Blind/buried via not allowed (board design rule constraints)" ) );
         drcItem->SetErrorMessage( m_msg );
@@ -141,7 +141,7 @@ void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
 
         if( err )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_PADSTACK );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_PADSTACK );
 
             m_msg.Printf( _( "Microvia through too many layers (%s and %s not adjacent)" ),
                           m_pcb->GetLayerName( layer1 ),
@@ -184,7 +184,7 @@ void DRC::doSingleTrackDRC( BOARD_COMMIT& aCommit, TRACK* aRefSeg )
     {
         wxPoint refsegMiddle = ( aRefSeg->GetStart() + aRefSeg->GetEnd() ) / 2;
 
-        DRC_ITEM* drcItem = DRC_ITEM::Create( errorCode );
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
 
         m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                       m_clearanceSource,
@@ -322,7 +322,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
                 if( slot->Collide( &refSeg, minClearance + bds.GetDRCEpsilon(), &actual ) )
                 {
-                    DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   m_clearanceSource,
@@ -350,7 +350,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             if( pad->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                               m_clearanceSource,
@@ -409,7 +409,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         // Check two tracks crossing first as it reports a DRCE without distances
         if( OPT_VECTOR2I intersection = refSeg.GetSeg().Intersect( trackSeg.GetSeg() ) )
         {
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_TRACKS_CROSSING );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACKS_CROSSING );
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( aRefSeg, track );
 
@@ -422,7 +422,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         else if( refSeg.Collide( &trackSeg, minClearance, &actual ) )
         {
             wxPoint   pos = GetLocation( aRefSeg, trackSeg.GetSeg() );
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                           m_clearanceSource,
@@ -471,7 +471,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             if( zone->GetFilledPolysList( aLayer ).Collide( testSeg, allowedDist, &actual ) )
             {
                 actual = std::max( 0, actual - halfWidth );
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                               m_clearanceSource,
@@ -535,7 +535,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 BOARD::IterateForward<BOARD_ITEM*>( m_pcb->Drawings(), inspector, nullptr, types );
 
                 int       actual  = std::max( 0.0, sqrt( center2center_squared ) - halfWidth );
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                               m_clearanceSource,

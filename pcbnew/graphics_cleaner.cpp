@@ -43,7 +43,7 @@ GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, MODULE* aParentModule,
 }
 
 
-void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun, std::vector<CLEANUP_ITEM*>* aItemsList,
+void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
                                      bool aMergeRects, bool aDeleteRedundant )
 {
     m_dryRun = aDryRun;
@@ -146,7 +146,7 @@ void GRAPHICS_CLEANER::cleanupSegments()
 
         if( isNullSegment( segment ) )
         {
-            CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_NULL_GRAPHIC );
+            std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_NULL_GRAPHIC ) );
             item->SetItems( segment );
             m_itemsList->push_back( item );
 
@@ -165,7 +165,7 @@ void GRAPHICS_CLEANER::cleanupSegments()
 
             if( areEquivalent( segment, segment2 ) )
             {
-                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_DUPLICATE_GRAPHIC );
+                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_DUPLICATE_GRAPHIC ) );
                 item->SetItems( segment2 );
                 m_itemsList->push_back( item );
 
@@ -293,7 +293,7 @@ void GRAPHICS_CLEANER::mergeRects()
                 right->seg->SetFlags( IS_DELETED );
                 bottom->seg->SetFlags( IS_DELETED );
 
-                CLEANUP_ITEM* item = new CLEANUP_ITEM( CLEANUP_LINES_TO_RECT );
+                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_LINES_TO_RECT ) );
                 item->SetItems( left->seg, top->seg, right->seg, bottom->seg );
                 m_itemsList->push_back( item );
 

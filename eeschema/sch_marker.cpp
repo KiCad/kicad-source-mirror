@@ -41,7 +41,7 @@
 #define SCALING_FACTOR  Millimeter2iu( 0.15 )
 
 
-SCH_MARKER::SCH_MARKER( ERC_ITEM* aItem, const wxPoint& aPos ) :
+SCH_MARKER::SCH_MARKER( std::shared_ptr<ERC_ITEM> aItem, const wxPoint& aPos ) :
         SCH_ITEM( nullptr, SCH_MARKER_T ),
         MARKER_BASE( SCALING_FACTOR, aItem, MARKER_BASE::MARKER_ERC )
 {

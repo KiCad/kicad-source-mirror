@@ -296,11 +296,17 @@ int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity )
 }
 
 
-ERC_ITEM* SHEETLIST_ERC_ITEMS_PROVIDER::GetItem( int aIndex )
+std::shared_ptr<ERC_ITEM> SHEETLIST_ERC_ITEMS_PROVIDER::GetERCItem( int aIndex )
 {
     SCH_MARKER* marker = m_filteredMarkers[ aIndex ];
 
-    return marker ? static_cast<ERC_ITEM*>( marker->GetRCItem() ) : nullptr;
+    return marker ? std::static_pointer_cast<ERC_ITEM>( marker->GetRCItem() ) : nullptr;
+}
+
+
+std::shared_ptr<RC_ITEM> SHEETLIST_ERC_ITEMS_PROVIDER::GetItem( int aIndex )
+{
+    return GetERCItem( aIndex );
 }
 
 

@@ -43,9 +43,8 @@ public:
     PCB_EXPR_UCODE() {};
     virtual ~PCB_EXPR_UCODE() {};
 
-    virtual LIBEVAL::VAR_REF* CreateVarRef( const char* aVar, const char* aField ) override;
-
-    virtual FUNC_PTR CreateFuncCall( const char* aName ) override;
+    virtual std::unique_ptr<LIBEVAL::VAR_REF> CreateVarRef( const wxString& aVar, const wxString& aField ) override;
+    virtual LIBEVAL::FUNC_CALL_REF CreateFuncCall( const wxString& aName ) override;
 };
 
 
@@ -76,7 +75,7 @@ public:
     }
 
 private:
-    BOARD_ITEM*  m_items[2];
+    BOARD_ITEM* m_items[2];
     PCB_LAYER_ID m_layer;
 };
 
@@ -91,6 +90,8 @@ public:
     {
         //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
     }
+
+    ~PCB_EXPR_VAR_REF() {};
 
     void SetIsEnum( bool s ) { m_isEnum = s; }
     bool IsEnum() const { return m_isEnum; }
@@ -128,7 +129,7 @@ public:
         return self;
     }
 
-    LIBEVAL::UCODE::FUNC_PTR Get( const wxString &name )
+    LIBEVAL::FUNC_CALL_REF Get( const std::string &name )
     {
         return m_funcs[ name  ];
     }
@@ -139,7 +140,7 @@ public:
     }
 
 private:
-    std::map<wxString, LIBEVAL::UCODE::FUNC_PTR> m_funcs;
+    std::map<std::string,  LIBEVAL::FUNC_CALL_REF> m_funcs;
 
     wxArrayString m_funcSigs;
 };
@@ -155,17 +156,20 @@ public:
 class PCB_EXPR_EVALUATOR
 {
 public:
-    PCB_EXPR_EVALUATOR( REPORTER* aReporter, int aSourceLine, int aSourceOffset );
+    PCB_EXPR_EVALUATOR( );
     ~PCB_EXPR_EVALUATOR();
 
     bool Evaluate( const wxString& aExpr );
     int  Result() const { return m_result; }
+    bool IsErrorPending() const { return m_errorStatus.pendingError; }
+    const LIBEVAL::ERROR_STATUS& GetError() const { return m_errorStatus; }
 
 private:
     int  m_result;
 
     PCB_EXPR_COMPILER     m_compiler;
     PCB_EXPR_UCODE        m_ucode;
+    LIBEVAL::ERROR_STATUS m_errorStatus;
 };
 
 #endif

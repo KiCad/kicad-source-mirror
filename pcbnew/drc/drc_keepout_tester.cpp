@@ -95,7 +95,7 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
 
             if( m_zone->Outline()->Collide( trackSeg, segm->GetWidth() / 2 ) )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
                               m_sources.at( DISALLOW_TRACKS ) );
@@ -138,7 +138,7 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
 
             if( m_zone->Outline()->Collide( seg, clearance ) )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ), m_sources.at( test ) );
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( segm, m_zone );
@@ -187,7 +187,7 @@ bool DRC_KEEPOUT_TESTER::checkFootprints()
             if( poly.OutlineCount() )
             {
                 const VECTOR2I& pt = poly.CVertex( 0, 0, -1 );
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
                               m_sources.at( DISALLOW_FOOTPRINTS ) );
@@ -237,7 +237,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
             if( outline.OutlineCount() )
             {
                 const VECTOR2I& pt = outline.CVertex( 0, 0, -1 );
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
                               m_sources.at( DISALLOW_PADS ) );
@@ -255,7 +255,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
 
             if( m_zone->Outline()->Collide( slot->GetSeg(), slot->GetWidth() / 2 ) )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
                               m_sources.at( DISALLOW_HOLES ) );
@@ -307,7 +307,7 @@ bool DRC_KEEPOUT_TESTER::checkDrawings()
         if( poly.OutlineCount() )
         {
             const VECTOR2I& pt = poly.CVertex( 0, 0, -1 );
-            DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ), m_sources.at( sourceId ) );
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( drawing, m_zone );

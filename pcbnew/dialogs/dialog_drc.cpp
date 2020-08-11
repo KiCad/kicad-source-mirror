@@ -306,7 +306,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     if( !node )
         return;
 
-    RC_ITEM*  rcItem = node->m_RcItem;
+    std::shared_ptr<RC_ITEM>  rcItem = node->m_RcItem;
     wxString  listName;
     wxMenu    menu;
     wxString  msg;

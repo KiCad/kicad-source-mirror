@@ -2047,7 +2047,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                ERC_ITEM* ercItem = ERC_ITEM::Create( 0 );
+                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
                                 ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
 
                                 SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
@@ -2085,7 +2085,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                ERC_ITEM* ercItem = ERC_ITEM::Create( 0 );
+                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
                                 ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
 
                                 SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
@@ -2127,7 +2127,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                ERC_ITEM* ercItem = ERC_ITEM::Create( 0 );
+                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
                                 ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
 
                                 SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
@@ -2164,7 +2164,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                ERC_ITEM* ercItem = ERC_ITEM::Create( 0 );
+                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
                                 ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
 
                                 SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
@@ -2206,7 +2206,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                ERC_ITEM* ercItem = ERC_ITEM::Create( 0 );
+                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
                                 ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
 
                                 SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
@@ -2238,7 +2238,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                ERC_ITEM* ercItem = ERC_ITEM::Create( 0 );
+                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
                                 ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
 
                                 SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
@@ -2277,7 +2277,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                ERC_ITEM* ercItem = ERC_ITEM::Create( 0 );
+                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
                                 ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
 
                                 SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
@@ -2309,7 +2309,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                ERC_ITEM* ercItem = ERC_ITEM::Create( 0 );
+                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
                                 ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
 
                                 SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );

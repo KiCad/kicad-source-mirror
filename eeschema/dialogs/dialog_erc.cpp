@@ -315,7 +315,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
                                 pin_to_net_map[pin_name],
                                 item->GetNetName() );
 
-                    ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_DIFFERENT_UNIT_NET );
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DIFFERENT_UNIT_NET );
                     ercItem->SetErrorMessage( msg );
                     ercItem->SetItems( item->m_Comp );
 
@@ -419,7 +419,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
     ERC_SETTINGS& settings = m_parent->Schematic().ErcSettings();
 
-    RC_ITEM*  rcItem = node->m_RcItem;
+    std::shared_ptr<RC_ITEM>  rcItem = node->m_RcItem;
     wxString  listName;
     wxMenu    menu;
     wxString  msg;

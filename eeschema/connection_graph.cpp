@@ -172,7 +172,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                               static_cast<SCH_PIN*>( candidates[0] )->GetTransformedPosition() :
                               candidates[0]->GetPosition();
 
-            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_DRIVER_CONFLICT );
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DRIVER_CONFLICT );
             ercItem->SetItems( candidates[0], second_item );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
@@ -2118,7 +2118,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
 
     if( net_item && bus_item )
     {
-        ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_BUS_TO_NET_CONFLICT );
+        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_TO_NET_CONFLICT );
         ercItem->SetItems( net_item, bus_item );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, net_item->GetPosition() );
@@ -2186,7 +2186,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSu
 
         if( !match )
         {
-            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_BUS_TO_BUS_CONFLICT );
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_TO_BUS_CONFLICT );
             ercItem->SetItems( label, port );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, label->GetPosition() );
@@ -2266,7 +2266,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
     if( conflict )
     {
-        ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_CONFLICT );
+        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_CONFLICT );
         ercItem->SetItems( bus_entry, bus_wire );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, bus_entry->GetPosition() );
@@ -2319,7 +2319,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
         if( pin && has_invalid_items )
         {
-            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
             ercItem->SetItems( pin );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
@@ -2330,7 +2330,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
         if( !has_other_items )
         {
-            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_NOT_CONNECTED );
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_NOT_CONNECTED );
             ercItem->SetItems( aSubgraph->m_no_connect );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, aSubgraph->m_no_connect->GetPosition() );
@@ -2385,7 +2385,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
         if( pin && !has_other_connections && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
         {
-            ERC_ITEM* ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
             ercItem->SetItems( pin );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
@@ -2479,7 +2479,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
     if( !has_other_connections )
     {
-        ERC_ITEM* ercItem = ERC_ITEM::Create( is_global ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED );
+        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( is_global ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED );
         ercItem->SetItems( text );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );

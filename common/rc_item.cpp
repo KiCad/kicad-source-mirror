@@ -94,7 +94,7 @@ KIID RC_TREE_MODEL::ToUUID( wxDataViewItem aItem )
 
     if( node )
     {
-        const RC_ITEM* rc_item = node->m_RcItem;
+        const std::shared_ptr<RC_ITEM> rc_item = node->m_RcItem;
 
         switch( node->m_Type )
         {
@@ -142,7 +142,7 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
 {
     wxWindowUpdateLocker updateLock( m_view );
 
-    RC_ITEM* selectedRcItem = nullptr;
+    std::shared_ptr<RC_ITEM> selectedRcItem = nullptr;
 
     if( m_view )
     {
@@ -170,7 +170,7 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
 
     for( int i = 0; m_rcItemsProvider && i < m_rcItemsProvider->GetCount(); ++i )
     {
-        RC_ITEM* rcItem = m_rcItemsProvider->GetItem( i );
+        std::shared_ptr<RC_ITEM> rcItem = m_rcItemsProvider->GetItem( i );
 
         m_tree.push_back( new RC_TREE_NODE( nullptr, rcItem, RC_TREE_NODE::MARKER ) );
         RC_TREE_NODE* n = m_tree.back();
@@ -279,7 +279,7 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
                               unsigned int            aCol ) const
 {
     const RC_TREE_NODE* node = ToNode( aItem );
-    const RC_ITEM*      rcItem = node->m_RcItem;
+    const std::shared_ptr<RC_ITEM>      rcItem = node->m_RcItem;
 
     switch( node->m_Type )
     {
@@ -394,7 +394,7 @@ void RC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
 void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, bool aDeep )
 {
     RC_TREE_NODE*  current_node = ToNode( m_view->GetCurrentItem() );
-    const RC_ITEM* current_item = current_node ? current_node->m_RcItem : nullptr;
+    const std::shared_ptr<RC_ITEM> current_item = current_node ? current_node->m_RcItem : nullptr;
 
     if( aCurrentOnly && !current_item )
     {
@@ -404,7 +404,7 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
 
     for( int i = m_rcItemsProvider->GetCount() - 1; i >= 0; --i )
     {
-        RC_ITEM*     rcItem = m_rcItemsProvider->GetItem( i );
+        std::shared_ptr<RC_ITEM>     rcItem = m_rcItemsProvider->GetItem( i );
         MARKER_BASE* marker = rcItem->GetParent();
         bool         excluded = marker ? marker->IsExcluded() : false;
 
