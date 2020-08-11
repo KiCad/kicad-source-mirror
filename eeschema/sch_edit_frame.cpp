@@ -501,6 +501,10 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( simFrame && !simFrame->Close() )   // Can close the simulator?
         return;
 
+    // We may have gotten multiple events; don't clean up twice
+    if( !Schematic().IsValid() )
+        return;
+
     SCH_SHEET_LIST sheetlist = Schematic().GetSheets();
 
     if( sheetlist.IsModified() )
