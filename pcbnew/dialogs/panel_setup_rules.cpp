@@ -64,13 +64,24 @@ PANEL_SETUP_RULES::~PANEL_SETUP_RULES( )
 
 void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
-    constexpr int flags = wxSTC_FIND_REGEXP| wxSTC_FIND_POSIX;
-
     m_Parent->SetModified();
     m_textEditor->SearchAnchor();
 
-    int i = std::max( 0, m_textEditor->SearchPrev( flags, "\( *rule " ) );
+    wxString rules = m_textEditor->GetText();
     int currentPos = m_textEditor->GetCurrentPos();
+    int startPos = 0;
+
+    for( int line = m_textEditor->LineFromPosition( currentPos ); line > 0; line-- )
+    {
+        int      lineStart = m_textEditor->PositionFromLine( line );
+        wxString beginning = m_textEditor->GetTextRange( lineStart, lineStart + 10 );
+
+        if( beginning.StartsWith( "(rule " ) )
+        {
+            startPos = lineStart;
+            break;
+        }
+    }
 
     enum
     {
@@ -86,7 +97,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
     int                  context = NONE;
     int                  expr_context = NONE;
 
-    for( ; i < currentPos; ++i )
+    for( int i = startPos; i < currentPos; ++i )
     {
         wxChar c = m_textEditor->GetCharAt( i );
 
