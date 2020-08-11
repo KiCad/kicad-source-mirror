@@ -55,7 +55,7 @@ namespace KIGFX {
 #define EXCLUDE_TRANSIENTS 0x0004
 #define INCLUDE_PADS_AND_MODULES 0x0008
 
-void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags );
+void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags, SELECTION_TOOL* sTool );
 
 /**
  * EDIT_TOOL
@@ -149,13 +149,13 @@ public:
      * Function FootprintFilter()
      * A selection filter which prunes the selection to contain only items of type PCB_MODULE_T
      */
-    static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector );
+    static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool );
 
     /**
      * Function PadFilter()
      * A selection filter which prunes the selection to contain only items of type PCB_PAD_T
      */
-    static void PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector );
+    static void PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
@@ -189,6 +189,7 @@ private:
 
     bool pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                              const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );
+
 
 private:
     SELECTION_TOOL* m_selectionTool;   // Selection tool used for obtaining selected items

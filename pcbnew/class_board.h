@@ -28,6 +28,7 @@
 #include <tuple>
 #include <board_design_settings.h>
 #include <board_item_container.h>
+#include <class_group.h>
 #include <class_module.h>
 #include <class_pad.h>
 #include <common.h> // PAGE_INFO
@@ -37,9 +38,11 @@
 #include <pcb_plot_params.h>
 #include <title_block.h>
 #include <zone_settings.h>
+#include <tools/pcbnew_selection.h>
 
 #include <memory>
 
+class BOARD_COMMIT;
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
 class PICKED_ITEMS_LIST;
@@ -171,7 +174,8 @@ public:
 DECL_VEC_FOR_SWIG( MARKERS, MARKER_PCB* )
 DECL_VEC_FOR_SWIG( ZONE_CONTAINERS, ZONE_CONTAINER* )
 DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
-
+// Dequeue rather than Vector just so we can use moveUnflaggedItems in pcbnew_control.cpp
+DECL_DEQ_FOR_SWIG( GROUPS, GROUP* )
 
 /**
  * BOARD
@@ -197,6 +201,9 @@ private:
     /// TRACKS for traces on the board, owned by pointer.
     TRACKS                  m_tracks;
 
+    /// GROUPS for groups on the board, owned by pointer.
+    GROUPS                  m_groups;
+    
     /// edge zone descriptors, owned by pointer.
     ZONE_CONTAINERS         m_ZoneDescriptorList;
 
@@ -287,6 +294,19 @@ public:
         return m_markers;
     }
 
+    /**
+     * The groups must maintain the folowing invariants. These are checked by 
+     * GroupsSanityCheck():
+     *   - An item may appear in at most one group
+     *   - Each gruop must contain at least one item
+     *   - If a group specifies a name, it must be unique
+     *   - The graph of groups contianing subgroups must be acyclic.
+     */
+    GROUPS& Groups()
+    {
+        return m_groups;
+    }
+
     const std::vector<BOARD_CONNECTED_ITEM*> AllConnectedItems();
 
     /// zone contour currently in progress
@@ -343,6 +363,10 @@ public:
         m_modules.clear();
     }
 
+    /**
+     * @return null if aID is null. Returns an object of Type() == NOT_USED if
+     * the aID is not found.
+     */
     BOARD_ITEM* GetItem( const KIID& aID );
 
     void FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
@@ -1190,6 +1214,56 @@ public:
       * been modified in some way.
       */
     void OnItemChanged( BOARD_ITEM* aItem );
-};
 
+    /*
+     * Consistency check of internal m_groups structure.
+     * @param repair if true, modify groups structure until it passes the sanity check.
+     * @return empty string on success.  Or error description if there's a problem.
+     */
+    wxString GroupsSanityCheck( bool repair = false );
+
+    /*
+     * @param repair if true, make one modification to groups structure that brings it
+     *        closer to passing the sanity check.
+     * @return empty string on success.  Or error description if there's a problem.
+     */
+    wxString GroupsSanityCheckInternal( bool repair );
+
+    /*
+     * Searches for highest level group containing item.
+     * @param scope restricts the search to groups within the group scope.
+     * @return group containing item, if it exists, otherwise, NULL
+     */
+    GROUP* TopLevelGroup( BOARD_ITEM* item, GROUP* scope );
+
+
+    /*
+     * @return The group containing item as a child, or NULL if there is no
+     * such group.
+     */
+    GROUP* ParentGroup( BOARD_ITEM* item );
+
+    /*
+     * Given a selection of items, remove them from their groups and also
+     * recursively remove empty groups that result.
+     */
+    void GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* commit );
+  
+
+    struct GroupLegalOpsField
+    {
+        bool create      : 1;
+        bool merge       : 1;
+        bool ungroup     : 1;
+        bool removeItems : 1;
+        bool flatten     : 1;
+        bool enter       : 1;
+    };
+
+    /*
+     * Check which selection tool group operations are legal given the selection.
+     * @return bit field of legal ops.
+     */
+    GroupLegalOpsField GroupLegalOps( const PCBNEW_SELECTION& selection ) const;
+};
 #endif      // CLASS_BOARD_H_

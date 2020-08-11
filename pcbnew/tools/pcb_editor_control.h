@@ -110,6 +110,24 @@ public:
     ///> Unlocks selected items.
     int UnlockSelected( const TOOL_EVENT& aEvent );
 
+    ///> Groups selected items.
+    int GroupSelected( const TOOL_EVENT& aEvent );
+
+    ///> Merges selected items.
+    int GroupMergeSelected( const TOOL_EVENT& aEvent );
+
+    ///> Ungroups selected items.
+    int UngroupSelected( const TOOL_EVENT& aEvent );
+
+    ///> Remove selection from group.
+    int GroupRemoveItemsSelected( const TOOL_EVENT& aEvent );
+
+    ///> Collaps subgroups to single group.
+    int GroupFlattenSelected( const TOOL_EVENT& aEvent );
+
+    ///> Restrit seletion to only member of the group.
+    int GroupEnterSelected( const TOOL_EVENT& aEvent );
+
     ///> Runs the drill origin tool for setting the origin for drill and pick-and-place files.
     int DrillOrigin( const TOOL_EVENT& aEvent );
 

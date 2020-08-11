@@ -102,6 +102,7 @@ enum KICAD_T
     PCB_ZONE_AREA_T,        ///< class ZONE_CONTAINER, a zone area
     PCB_ITEM_LIST_T,        ///< class BOARD_ITEM_LIST, a list of board items
     PCB_NETINFO_T,          ///< class NETINFO_ITEM, a description of a net
+    PCB_GROUP_T,            ///< class GROUP, a set of BOARD_ITEMs
 
     PCB_LOCATE_STDVIA_T,
     PCB_LOCATE_UVIA_T,

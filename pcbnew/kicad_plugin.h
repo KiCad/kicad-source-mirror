@@ -41,6 +41,7 @@ class DRAWSEGMENT;
 class PCB_TARGET;
 class D_PAD;
 class TEXTE_MODULE;
+class GROUP;
 class TRACK;
 class ZONE_CONTAINER;
 class TEXTE_PCB;
@@ -75,7 +76,8 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200724  // Add KIID to module components
 //#define SEXPR_BOARD_FILE_VERSION    20200807  // Add zone hatch advanced settings
 //#define SEXPR_BOARD_FILE_VERSION    20200808  // Add properties to modules
-#define SEXPR_BOARD_FILE_VERSION      20200809  // Add REMOVE_UNUSED_LAYERS option to vias and THT pads
+//#define SEXPR_BOARD_FILE_VERSION    20200809  // Add REMOVE_UNUSED_LAYERS option to vias and THT pads
+#define SEXPR_BOARD_FILE_VERSION      20200811  // Add groups
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)
@@ -241,6 +243,8 @@ private:
     void format( DIMENSION* aDimension, int aNestLevel = 0 ) const;
 
     void format( EDGE_MODULE* aModuleDrawing, int aNestLevel = 0 ) const;
+
+    void format( GROUP* aGroup, int aNestLevel = 0 ) const;
 
     void format( DRAWSEGMENT* aSegment, int aNestLevel = 0 ) const;
 

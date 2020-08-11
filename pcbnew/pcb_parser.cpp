@@ -38,6 +38,7 @@
 #include <class_dimension.h>
 #include <class_drawsegment.h>
 #include <class_edge_mod.h>
+#include <class_group.h>
 #include <class_pcb_target.h>
 #include <class_module.h>
 #include <netclass.h>
@@ -62,6 +63,8 @@ void PCB_PARSER::init()
     m_requiredVersion = 0;
     m_layerIndices.clear();
     m_layerMasks.clear();
+    m_groupInfos.clear();
+    m_resetKIIDMap.clear();
 
     // Add untranslated default (i.e. English) layernames.
     // Some may be overridden later if parsing a board rather than a footprint.
@@ -609,6 +612,10 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             m_board->Add( parseARC(), ADD_MODE::APPEND );
             break;
 
+        case T_group:
+            parseGROUP();
+            break;
+
         case T_via:
             m_board->Add( parseVIA(), ADD_MODE::APPEND );
             break;
@@ -705,6 +712,81 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             m_board->Delete( item );
 
         m_undefinedLayers.clear();
+    }
+
+    // Now that we've parsed the other Uuids in the file we can resolve
+    // the uuids referrred to in the group declarations we saw.
+    //
+    // First add all group objects so subsequent GetItem() calls for nested
+    // groups work.
+
+    for( size_t idx = 0; idx < m_groupInfos.size(); idx++ )
+    {
+        auto&  aGrp  = m_groupInfos[idx];
+        GROUP* group = new GROUP( m_board );
+        group->SetName( aGrp.name );
+        const_cast<KIID&>( group->m_Uuid ) = aGrp.uuid;
+        m_board->Add( group );
+    }
+
+    wxString error;
+    for( size_t idx = 0; idx < m_groupInfos.size(); idx++ )
+    {
+        auto&  aGrp  = m_groupInfos[idx];
+        BOARD_ITEM* bItem = m_board->GetItem( aGrp.uuid );
+
+        if( bItem == nullptr || bItem->Type() != PCB_GROUP_T )
+        {
+            error = wxString::Format( _( "Group %s not found in board" ),
+                                      aGrp.uuid.AsString() );
+            continue;
+        }
+
+        GROUP* group = static_cast<GROUP*>( bItem );
+
+        for( const auto& aUuid : aGrp.memberUuids )
+        {
+            KIID        tUuid = aUuid;
+            if( m_resetKIIDs )
+            {
+                if( m_resetKIIDMap.find( aUuid.AsString() ) == m_resetKIIDMap.end() )
+                {
+                    if( error == wxEmptyString )
+                        error = wxString::Format( _( "Group %s references missing item %s" ),
+                                                  aGrp.uuid.AsString(), aUuid.AsString() );
+                }
+                else
+                {
+                    tUuid = m_resetKIIDMap[ aUuid.AsString() ];
+                }
+            }
+            BOARD_ITEM* item = m_board->GetItem( tUuid );
+            if( ( item == nullptr ) || ( item->Type() == NOT_USED ) )
+            {
+                if( error == wxEmptyString )
+                    error = wxString::Format( _( "Group %s references missing item %s" ),
+                                              aGrp.uuid.AsString(), tUuid.AsString() );
+            }
+            else
+            {
+                group->AddItem( item );
+            }
+        }
+    }
+
+    wxString sanityResult = m_board->GroupsSanityCheck();
+    if( error != wxEmptyString || sanityResult != wxEmptyString )
+    {
+        wxString errMsg = ( error != wxEmptyString ) ? error : sanityResult;
+        KIDIALOG dlg( nullptr, wxString::Format(
+               _( "Error in group structure in file: %s\n\nAttempt repair?" ), errMsg ),
+               _( "File data error" ), wxOK | wxCANCEL | wxICON_ERROR );
+        dlg.SetOKLabel( _( "Attempt repair" ) );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            THROW_IO_ERROR( _( "File read cancelled" ) );
+
+        m_board->GroupsSanityCheck( true );
     }
 
     return m_board;
@@ -2165,7 +2247,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( segment->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( segment->m_Uuid ) = CurStrToKIID();
             break;
 
         case T_status:
@@ -2245,7 +2327,7 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( text->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( text->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
@@ -2297,7 +2379,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( dimension->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( dimension->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
@@ -2518,7 +2600,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( module->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( module->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
@@ -2822,7 +2904,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( text->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( text->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
@@ -3012,7 +3094,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( segment->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( segment->m_Uuid ) = CurStrToKIID();
             break;
 
         case T_status:
@@ -3490,7 +3572,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( pad->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( pad->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
@@ -3575,6 +3657,66 @@ bool PCB_PARSER::parseD_PAD_option( D_PAD* aPad )
 }
 
 
+// Example of group format:
+//     (group <(name “groupName”)> (id 12345679)
+//         (members id_1 id_2 … id_last )
+//     )
+void PCB_PARSER::parseGROUP()
+{
+    wxCHECK_RET( CurTok() == T_group,
+            wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as GROUP." ) );
+
+    wxPoint pt;
+    T       token;
+
+    m_groupInfos.push_back( GroupInfo() );
+    GroupInfo& groupInfo = m_groupInfos.back();
+
+    token = NextTok();
+
+    if( token != T_LEFT )
+    {
+        // Optional group name present.
+
+        if( !IsSymbol( token ) )
+            Expecting( DSN_SYMBOL );
+
+        groupInfo.name = FromUTF8();
+    }
+
+    NeedLEFT();
+    token = NextTok();
+
+    if( token != T_id )
+    {
+        Expecting( T_id );
+    }
+
+    NextTok();
+    groupInfo.uuid = CurStrToKIID();
+    NeedRIGHT();
+
+    NeedLEFT();
+    token = NextTok();
+
+    if( token != T_members )
+    {
+        Expecting( T_members );
+    }
+
+    while( ( token = NextTok() ) != T_RIGHT )
+    {
+        // This token is the Uuid of the item in the group.
+        // Since groups are serialized at the end of the file, the
+        // Uuid should already have been seen and exist in the board.
+        KIID        uuid( CurStr() );
+        groupInfo.memberUuids.push_back( uuid );
+    }
+
+    NeedRIGHT();
+}
+
+
 ARC* PCB_PARSER::parseARC()
 {
     wxCHECK_MSG( CurTok() == T_arc, NULL,
@@ -3629,7 +3771,7 @@ ARC* PCB_PARSER::parseARC()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( arc->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( arc->m_Uuid ) = CurStrToKIID();
             break;
 
         case T_status:
@@ -3696,7 +3838,7 @@ TRACK* PCB_PARSER::parseTRACK()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( track->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( track->m_Uuid ) = CurStrToKIID();
             break;
 
         case T_status:
@@ -3790,7 +3932,7 @@ VIA* PCB_PARSER::parseVIA()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( via->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( via->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
@@ -3879,7 +4021,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( zone->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( zone->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
@@ -4420,7 +4562,7 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( target->m_Uuid ) = m_resetKIIDs ? KIID() : KIID( CurStr() );
+            const_cast<KIID&>( target->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
@@ -4430,4 +4572,19 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
     }
 
     return target.release();
+}
+
+
+KIID PCB_PARSER::CurStrToKIID() {
+    KIID aid;
+    if( m_resetKIIDs )
+    {
+        aid = KIID();
+        m_resetKIIDMap.insert( std::make_pair( CurStr(), aid ) );
+    }
+    else
+    {
+        aid = KIID( CurStr() );
+    }
+    return aid;
 }

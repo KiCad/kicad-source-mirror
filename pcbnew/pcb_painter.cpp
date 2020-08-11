@@ -25,6 +25,7 @@
 
 #include <class_board.h>
 #include <class_track.h>
+#include <class_group.h>
 #include <class_module.h>
 #include <class_pad.h>
 #include <class_drawsegment.h>
@@ -410,6 +411,10 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
     case PCB_MODULE_T:
         draw( static_cast<const MODULE*>( item ), aLayer );
+        break;
+
+    case PCB_GROUP_T:
+        draw( static_cast<const GROUP*>( item ), aLayer );
         break;
 
     case PCB_ZONE_AREA_T:
@@ -1147,6 +1152,27 @@ void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
         VECTOR2D center = aModule->GetPosition();
         m_gal->DrawLine( center - VECTOR2D( anchorSize, 0 ), center + VECTOR2D( anchorSize, 0 ) );
         m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
+    }
+}
+
+
+void PCB_PAINTER::draw( const GROUP* aGroup, int aLayer )
+{
+    if( aLayer == LAYER_ANCHOR )
+    {
+        const COLOR4D color = m_pcbSettings.GetColor( aGroup, LAYER_ANCHOR );
+
+        EDA_RECT bbox = aGroup->GetBoundingBox();
+        m_gal->SetStrokeColor( color );
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth * 2.0f );
+        wxPoint pos = bbox.GetPosition();
+
+        m_gal->DrawLine( pos, pos + wxPoint( bbox.GetWidth(), 0 ) );
+        m_gal->DrawLine( pos + wxPoint( bbox.GetWidth(), 0 ),
+                         pos + wxPoint( bbox.GetWidth(), bbox.GetHeight() ) );
+        m_gal->DrawLine( pos + wxPoint( bbox.GetWidth(), bbox.GetHeight() ),
+                         pos + wxPoint( 0, bbox.GetHeight() ) );
+        m_gal->DrawLine( pos + wxPoint( 0, bbox.GetHeight() ), pos );
     }
 }
 

@@ -397,6 +397,14 @@ public:
     static TOOL_ACTION lock;
     static TOOL_ACTION unlock;
 
+    // Grouping
+    static TOOL_ACTION groupCreate;
+    static TOOL_ACTION groupMerge;
+    static TOOL_ACTION groupUngroup;
+    static TOOL_ACTION groupRemoveItems;
+    static TOOL_ACTION groupFlatten;
+    static TOOL_ACTION groupEnter;
+
     // Miscellaneous
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION pickerTool;

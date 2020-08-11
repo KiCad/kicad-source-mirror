@@ -93,6 +93,27 @@ const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
 {
     std::vector<VIEW_ITEM*> items;
 
+    std::function<void ( EDA_ITEM* )> addItem;
+    addItem = [&]( EDA_ITEM* item ) {
+                       items.push_back( item );
+
+                       if( item->Type() == PCB_MODULE_T )
+                       {
+                           MODULE* module = static_cast<MODULE*>( item );
+                           module->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { addItem( bitem ); } );
+                       }
+                       else if( item->Type() == PCB_GROUP_T )
+                       {
+                           GROUP* group = static_cast<GROUP*>( item );
+                           group->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { addItem( bitem ); } );
+                       }
+                   };
+
+    for( auto item : m_items )
+    {
+        addItem( item );
+    }
+#if 0
     for( auto item : m_items )
     {
         items.push_back( item );
@@ -102,8 +123,13 @@ const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
             MODULE* module = static_cast<MODULE*>( item );
             module->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { items.push_back( bitem ); } );
         }
+        else if( item->Type() == PCB_GROUP_T )
+        {
+            GROUP* group = static_cast<GROUP*>( item );
+            group->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { items.push_back( bitem ); } );
+        }
     }
-
+#endif
     return items;
 }
 

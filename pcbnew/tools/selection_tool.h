@@ -47,7 +47,7 @@ namespace KIGFX
 }
 
 
-typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR& );
+typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR&, SELECTION_TOOL* );
 
 
 /**
@@ -126,6 +126,14 @@ public:
     void UnbrightenItem( BOARD_ITEM* aItem );
 
     /**
+     * Function select()
+     * Takes necessary action mark an item as selected.
+     *
+     * @param aItem is an item to be selected.
+     */
+    void select( BOARD_ITEM* aItem );
+
+    /**
      * Function selectable()
      * Checks conditions for an item to be selected.
      *
@@ -168,6 +176,17 @@ public:
     ///> Zooms the screen to center and fit the current selection.
     void zoomFitSelection();
 
+    BOARD* GetBoard()
+    {
+        return board();
+    }
+
+    void EnterGroup();
+    void exitGroup();
+    void FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) const;
+
+    GROUP* GetEnteredGroup() { return m_enteredGroup; }
+    
 private:
     /**
      * Function selectPoint()
@@ -290,14 +309,6 @@ private:
     BOARD_ITEM* pickSmallestComponent( GENERAL_COLLECTOR* aCollector );
 
     /**
-     * Function select()
-     * Takes necessary action mark an item as selected.
-     *
-     * @param aItem is an item to be selected.
-     */
-    void select( BOARD_ITEM* aItem );
-
-    /**
      * Function unselect()
      * Takes necessary action mark an item as unselected.
      *
@@ -342,6 +353,12 @@ private:
     const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
 
 private:
+    void highlightInternal( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aGroup,
+        bool isChild);
+
+    void unhighlightInternal( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aGroup,
+        bool isChild);
+
     PCB_BASE_FRAME*  m_frame;     // Pointer to the parent frame
     PCBNEW_SELECTION m_selection; // Current state of selection
 
@@ -353,6 +370,7 @@ private:
     bool m_multiple;              // Multiple selection mode is active
     bool m_skip_heuristics;       // Heuristics are not allowed when choosing item under cursor
     bool m_locked;                // Other tools are not allowed to modify locked items
+    GROUP* m_enteredGroup;        // If non-null, selections are limited to members of this group
 
     /// Private state (opaque pointer/compilation firewall)
     class PRIV;

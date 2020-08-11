@@ -32,6 +32,7 @@
 #include <class_marker_pcb.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
+#include <class_group.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
 
@@ -56,6 +57,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     PCB_PAD_T,                   // in modules
     PCB_MODULE_TEXT_T,           // in modules
     PCB_MODULE_T,                // in m_Modules
+    PCB_GROUP_T,                 // in m_Groups ?
     PCB_ZONE_AREA_T,             // in m_ZoneDescriptorList
     EOT
 };
@@ -71,6 +73,7 @@ const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
     PCB_ARC_T,
     PCB_TRACE_T,
     PCB_MODULE_T,
+    PCB_GROUP_T,
     PCB_ZONE_AREA_T,
     EOT
 };
@@ -88,6 +91,7 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     PCB_PAD_T,
     PCB_MODULE_TEXT_T,
     PCB_MODULE_T,
+    PCB_GROUP_T,
     PCB_ZONE_AREA_T,         // if it is visible on screen, it should be selectable
     EOT
 };
@@ -144,6 +148,7 @@ const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
 
 const KICAD_T GENERAL_COLLECTOR::LockableItems[] = {
     PCB_MODULE_T,
+    PCB_GROUP_T,  // Can a group be locked?
     PCB_TRACE_T,
     PCB_ARC_T,
     PCB_VIA_T,
@@ -163,6 +168,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     BOARD_ITEM*     item        = (BOARD_ITEM*) testItem;
     MODULE*         module      = nullptr;
+    GROUP*          group       = nullptr;
     D_PAD*          pad         = nullptr;
     bool            pad_through = false;
     VIA*            via         = nullptr;
@@ -349,6 +355,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         module = static_cast<MODULE*>( item );
         break;
 
+    case PCB_GROUP_T:
+        group = static_cast<GROUP*>( item );
+        break;
+
     case PCB_MARKER_T:
         marker = static_cast<MARKER_PCB*>( item );
         break;
@@ -390,6 +400,15 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     {
         // Markers are not sensitive to the layer
         if( marker->HitTest( m_RefPos ) )
+            Append( item );
+
+        goto exit;
+    }
+
+    if( group )
+    {
+        // Groups are not sensitive to the layer ... ?
+        if( group->HitTest( m_RefPos ) )
             Append( item );
 
         goto exit;

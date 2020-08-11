@@ -58,7 +58,7 @@ using namespace std::placeholders;
 #include <zone_filler.h>
 
 
-void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags )
+void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags, SELECTION_TOOL* selectionTool )
 {
     // Iterate from the back so we don't have to worry about removals.
     for( int i = aCollector.GetCount() - 1; i >= 0; --i )
@@ -110,6 +110,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags )
             aCollector.Remove( item );
         }
     }
+    selectionTool->FilterCollectorForGroups( aCollector );
 }
 
 
@@ -332,9 +333,9 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+              []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             } );
 
     if( m_dragging || selection.Empty() )
@@ -346,9 +347,9 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     // Now filter out locked pads.  We cannot do this in the first RequestSelection() as we need
     // the item_layers when a pad is the selection front (ie: will become curr_tiem).
     selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS, sTool );
             } );
 
     if( selection.Empty() )
@@ -428,6 +429,9 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                 for( EDA_ITEM* item : sel_items )
                 {
                     // Don't double move footprint pads, fields, etc.
+                    //
+                    // For PCB_GROUP_T, we make sure the selection includes only the top level
+                    // group and not its descendants.
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
                         static_cast<BOARD_ITEM*>( item )->Move( movement );
                 }
@@ -463,10 +467,20 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                     for( EDA_ITEM* item : selection )
                     {
                         // Don't double move footprint pads, fields, etc.
+                        //
+                        // For PCB_GROUP_T, the parent is the board.
                         if( item->GetParent() && item->GetParent()->IsSelected() )
                             continue;
 
                         m_commit->Modify( item );
+
+                        // If moving a group, record position of all the descendants for undo
+                        if( item->Type() == PCB_GROUP_T )
+                        {
+                            static_cast<GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                                                                              m_commit->Modify( bItem );
+                                                                          });
+                        }
                     }
                 }
 
@@ -620,8 +634,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
 int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 {
     const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector ) {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool ) {
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             } );
 
     for( EDA_ITEM* item : selection )
@@ -676,9 +690,9 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME*    editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     const PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             } );
 
     // Tracks & vias are treated in a special way:
@@ -730,9 +744,9 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
             },
             nullptr, ! m_dragging );
 
@@ -750,7 +764,17 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     for( auto item : selection )
     {
         if( !item->IsNew() && !EditingModules() )
+        {
             m_commit->Modify( item );
+
+            // If rotating a group, record position of all the descendants for undo
+            if( item->Type() == PCB_GROUP_T )
+            {
+                static_cast<GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                                                                  m_commit->Modify( bItem );
+                                                              });
+            }
+        }
 
         static_cast<BOARD_ITEM*>( item )->Rotate( refPt, rotateAngle );
     }
@@ -819,9 +843,9 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     }
 
     auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
             },
             nullptr, !m_dragging );
 
@@ -887,6 +911,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         default:
             // it's likely the commit object is wrong if you get here
+            // Unsure if PCB_GROUP_T needs special attention here.
             assert( false );
             break;
         }
@@ -916,9 +941,9 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     }
 
     auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
             },
             nullptr, !m_dragging );
 
@@ -945,6 +970,13 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     {
         if( !item->IsNew() && !EditingModules() )
             m_commit->Modify( item );
+
+        if( item->Type() == PCB_GROUP_T )
+        {
+            static_cast<GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                                                              m_commit->Modify( bItem );
+                                                          });
+        }
 
         static_cast<BOARD_ITEM*>( item )->Flip( modPoint, leftRight );
     }
@@ -994,9 +1026,9 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     else
     {
         selectionCopy = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
             } );
     }
 
@@ -1020,9 +1052,9 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     {
         // Second RequestSelection removes locked items but keeps a copy of their pointers
         selectionCopy = m_selectionTool->RequestSelection(
-                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
                 {
-                    EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED );
+                    EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED, sTool );
                 },
                 &lockedItems );
     }
@@ -1031,11 +1063,14 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
+    PCBNEW_SELECTION removed;
+
     for( EDA_ITEM* item : selectionCopy )
     {
         if( m_editModules )
         {
             m_commit->Remove( item );
+            removed.Add( item );
             continue;
         }
 
@@ -1116,19 +1151,54 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
                 // Remove the entire zone otherwise
                 m_commit->Remove( item );
+                removed.Add( item );
+            }
+            break;
+
+        case PCB_GROUP_T:
+            {
+                m_commit->Remove( item );
+                removed.Add( item );
+
+                static_cast<GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                                                                  m_commit->Remove( bItem );
+                                                              });
             }
             break;
 
         default:
             m_commit->Remove( item );
+            removed.Add( item );
             break;
         }
+    }
+
+    // Figure out status of a group containing items to be removed.  if entered
+    // group is not set in the selection tool, then any groups to be removed are
+    // removed in their entirety and so no empty group could remain.  If entered
+    // group is set, then we could be removing all items of the entered group,
+    // in which case we need to remove the group itself.
+    GROUP* enteredGroup = m_selectionTool->GetEnteredGroup();
+
+    if( enteredGroup != nullptr )
+    {
+        board()->GroupRemoveItems( removed, m_commit.get() );
+
+        if( m_commit->HasRemoveEntry( enteredGroup ) )
+            m_selectionTool->exitGroup();
     }
 
     if( isCut )
         m_commit->Push( _( "Cut" ) );
     else
         m_commit->Push( _( "Delete" ) );
+
+    if( enteredGroup != nullptr )
+    {
+        wxString check = board()->GroupsSanityCheck();
+        wxCHECK_MSG( check == wxEmptyString, 0,
+                     _( "Remove of items in entered group resulted in inconsistent state: " )+ check );
+    }
 
     if( !m_lockedSelected && !lockedItems.empty() )
     {
@@ -1168,10 +1238,10 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     }
 
     const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
                 EditToolSelectionFilter( aCollector,
-                                      EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+                                      EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
             } );
 
     if( selection.Empty() )
@@ -1205,8 +1275,17 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selItem );
 
             if( !item->IsNew() && !EditingModules() )
+            {
                 m_commit->Modify( item );
 
+                if( item->Type() == PCB_GROUP_T )
+                    {
+                        static_cast<GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                                                                          m_commit->Modify( bItem );
+                                                                      });
+                    }
+            }
+            
             item->Move( translation );
 
             switch( rotationAnchor )
@@ -1256,9 +1335,9 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can modify
     const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
             } );
 
     if( selection.Empty() )
@@ -1273,14 +1352,13 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> new_items;
     new_items.reserve( selection.Size() );
 
-    BOARD_ITEM* orig_item = nullptr;
-    BOARD_ITEM* dupe_item = nullptr;
 
     // Each selected item is duplicated and pushed to new_items list
     // Old selection is cleared, and new items are then selected.
     for( EDA_ITEM* item : selection )
     {
-        orig_item = static_cast<BOARD_ITEM*>( item );
+        BOARD_ITEM* dupe_item = nullptr;
+        BOARD_ITEM* orig_item = static_cast<BOARD_ITEM*>( item );
 
         if( m_editModules )
         {
@@ -1288,7 +1366,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             dupe_item = editModule->DuplicateItem( orig_item );
 
             if( increment && item->Type() == PCB_PAD_T
-                    && PAD_NAMING::PadCanHaveName( *static_cast<D_PAD*>( dupe_item ) ) )
+                && PAD_NAMING::PadCanHaveName( *static_cast<D_PAD*>( dupe_item ) ) )
             {
                 PAD_TOOL* padTool = m_toolMgr->GetTool<PAD_TOOL>();
                 wxString padName = padTool->GetLastPadName();
@@ -1319,6 +1397,10 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 dupe_item = orig_item->Duplicate();
                 break;
 
+            case PCB_GROUP_T:
+                dupe_item = static_cast<GROUP*>( orig_item )->DeepDuplicate();
+                break;
+                
             default:
                 // Silently drop other items (such as footprint texts) from duplication
                 break;
@@ -1327,6 +1409,13 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         if( dupe_item )
         {
+            if( dupe_item->Type() == PCB_GROUP_T )
+            {
+                static_cast<GROUP*>( dupe_item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                                                                        m_commit->Add( bItem );
+                                                                    });
+            }
+
             // Clear the selection flag here, otherwise the SELECTION_TOOL
             // will not properly select it later on
             dupe_item->ClearSelected();
@@ -1373,9 +1462,9 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     }
 
     const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
             } );
 
     if( selection.Empty() )
@@ -1390,7 +1479,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 }
 
 
-void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
+void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
 {
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
@@ -1402,7 +1491,7 @@ void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
 }
 
 
-void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
+void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
 {
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
@@ -1517,8 +1606,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
     Activate();
 
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector ) {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool ) {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
             } );
 
     if( selection.Empty() )

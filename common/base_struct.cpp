@@ -762,6 +762,7 @@ static struct EDA_ITEM_DESC
             .Map( PCB_ZONE_AREA_T,      _( "Zone" ) )
             .Map( PCB_ITEM_LIST_T,      _( "Item List" ) )
             .Map( PCB_NETINFO_T,        _( "Net Info" ) )
+            .Map( PCB_GROUP_T,          _( "Group" ) )
 
             .Map( SCH_MARKER_T,         _( "Schematic Marker" ) )
             .Map( SCH_JUNCTION_T,       _( "Junction" ) )

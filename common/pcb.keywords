@@ -111,6 +111,7 @@ fp_text
 full
 general
 grid_origin
+group
 gr_arc
 gr_circle
 gr_curve
@@ -128,6 +129,7 @@ hatch_border_algorithm
 hatch_min_hole_area
 hide
 hole_to_hole_min
+id
 island
 island_removal_mode
 island_area_min
@@ -146,6 +148,7 @@ locked
 loss_tangent
 max_error
 material
+members
 micro
 mid
 min_thickness

@@ -191,23 +191,39 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
                 zone->InitDataFromSrcInCopyCtor( *static_cast<ZONE_CONTAINER*>( item ) );
                 copy = zone;
             }
+            else if( item->Type() == PCB_GROUP_T )
+            {
+                copy = static_cast<GROUP*>( item )->DeepClone();
+            }
             else
             {
                 copy = static_cast<BOARD_ITEM*>( item->Clone() );
-
-                // locked means "locked in place"; copied items therefore can't be locked
-                if( MODULE* module = dyn_cast<MODULE*>( copy ) )
-                    module->SetLocked( false );
-                else if( TRACK* track = dyn_cast<TRACK*>( copy ) )
-                    track->SetLocked( false );
             }
+
+            auto prepItem = [&]( BOARD_ITEM* titem ) {
+                                // locked means "locked in place"; copied items therefore can't be locked
+                                if( MODULE* module = dyn_cast<MODULE*>( titem ) )
+                                    module->SetLocked( false );
+                                else if( TRACK* track = dyn_cast<TRACK*>( titem ) )
+                                    track->SetLocked( false );
+                            };
 
             if( copy )
             {
+                prepItem( copy );
+
                 // locate the reference point at (0, 0) in the copied items
                 copy->Move( (wxPoint) -refPoint );
 
                 Format( copy, 1 );
+
+                if( copy->Type() == PCB_GROUP_T )
+                {
+                    static_cast<GROUP*>( copy )->RunOnDescendants( prepItem );
+                    static_cast<GROUP*>( copy )->RunOnDescendants( [&]( BOARD_ITEM* titem ) {
+                                                                       Format( titem, 1 );
+                                                                   } );
+                }
 
                 delete copy;
             }

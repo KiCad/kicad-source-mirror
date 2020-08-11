@@ -53,6 +53,7 @@ class TEXTE_MODULE;
 class TEXTE_PCB;
 class TRACK;
 class MODULE;
+class GROUP;
 class PCB_TARGET;
 class VIA;
 class ZONE_CONTAINER;
@@ -68,8 +69,9 @@ struct LAYER;
  */
 class PCB_PARSER : public PCB_LEXER
 {
-    typedef std::unordered_map< std::string, PCB_LAYER_ID >   LAYER_ID_MAP;
-    typedef std::unordered_map< std::string, LSET >       LSET_MAP;
+    typedef std::unordered_map< std::string, PCB_LAYER_ID > LAYER_ID_MAP;
+    typedef std::unordered_map< std::string, LSET >         LSET_MAP;
+    typedef std::unordered_map< wxString, KIID >            KIID_MAP;
 
     BOARD*              m_board;
     LAYER_ID_MAP        m_layerIndices;     ///< map layer name to it's index
@@ -79,8 +81,22 @@ class PCB_PARSER : public PCB_LEXER
     bool                m_tooRecent;        ///< true if version parses as later than supported
     int                 m_requiredVersion;  ///< set to the KiCad format version this board requires
     bool                m_resetKIIDs;       ///< reading into an existing board; reset UUIDs
+    KIID_MAP            m_resetKIIDMap;     ///< if resetting UUIDs, record new ones to update groups with
 
     bool                m_showLegacyZoneWarning;
+
+    // Group membership info refers to other Uuids in the file.
+    // We don't want to rely on group declarations being last in the file, so
+    // we store info about the group declarations here during parsing and then resolve
+    // them into BOARD_ITEM* after we've parsed the rest of the file.
+    typedef struct
+    {
+        wxString          name;
+        KIID              uuid;
+        std::vector<KIID> memberUuids;
+    } GroupInfo;
+
+    std::vector<GroupInfo> m_groupInfos;
 
     ///> Converts net code using the mapping table if available,
     ///> otherwise returns unchanged net code if < 0 or if is is out of range
@@ -165,6 +181,7 @@ class PCB_PARSER : public PCB_LEXER
     PCB_TARGET*     parsePCB_TARGET();
     MARKER_PCB*     parseMARKER( BOARD_ITEM_CONTAINER* aParent );
     BOARD*          parseBOARD();
+    void            parseGROUP();
 
     /**
      * Function parseBOARD_unchecked
@@ -315,6 +332,11 @@ class PCB_PARSER : public PCB_LEXER
      * Expects to start on 'version', and eats the closing paren.
      */
     int parseVersion();
+
+    /*
+     * @return if m_resetKIIDs, returns new KIID(), otehrwise returns CurStr() as KIID.
+     */
+    KIID CurStrToKIID();
 
 public:
 

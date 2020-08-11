@@ -201,9 +201,9 @@ int GLOBAL_EDIT_TOOL::RemoveUnusedPads( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             } );
     DIALOG_UNUSED_PAD_LAYERS dlg( editFrame, selection, *m_commit );
 

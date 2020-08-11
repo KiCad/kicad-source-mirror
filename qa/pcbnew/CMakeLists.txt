@@ -44,6 +44,8 @@ set( QA_PCBNEW_SRCS
 
     drc/test_drc_courtyard_invalid.cpp
     drc/test_drc_courtyard_overlap.cpp
+
+    group_saveload.cpp
 )
 
 add_executable( qa_pcbnew

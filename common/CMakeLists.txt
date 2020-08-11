@@ -467,6 +467,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/class_dimension.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_drawsegment.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_edge_mod.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_group.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_marker_pcb.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_module.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netinfo_item.cpp

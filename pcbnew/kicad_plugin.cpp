@@ -40,6 +40,7 @@
 #include <class_drawsegment.h>
 #include <class_pcb_target.h>
 #include <class_edge_mod.h>
+#include <confirm.h>
 #include <zones.h>
 #include <kicad_plugin.h>
 #include <pcb_parser.h>
@@ -355,6 +356,21 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* a
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
+    wxString sanityResult = aBoard->GroupsSanityCheck();
+
+    if( sanityResult != wxEmptyString )
+    {
+        KIDIALOG dlg( nullptr, wxString::Format(
+             _( "Please report this bug.  Error validating group structure: %s"
+                "\n\nSave anyways?" ), sanityResult ),
+                      _( "Internal group data structure corrupt" ),
+                      wxOK | wxCANCEL | wxICON_ERROR );
+        dlg.SetOKLabel( _( "Save Anyway" ) );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
+    }
+
     init( aProperties );
 
     m_board = aBoard;       // after init()
@@ -437,6 +453,10 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
 
     case PCB_MODULE_TEXT_T:
         format( static_cast<TEXTE_MODULE*>( aItem ), aNestLevel );
+        break;
+
+    case PCB_GROUP_T:
+        format( static_cast<GROUP*>( aItem ), aNestLevel );
         break;
 
     case PCB_TRACE_T:
@@ -615,6 +635,8 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
             aBoard->Tracks().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aBoard->Zones().begin(),
             aBoard->Zones().end() );
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_groups( aBoard->Groups().begin(),
+            aBoard->Groups().end() );
 
     formatHeader( aBoard, aNestLevel );
 
@@ -644,6 +666,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     // Save the polygon (which are the newer technology) zones.
     for( auto zone : sorted_zones )
         Format( zone, aNestLevel );
+
+    // Save the groups
+    for( const auto group : sorted_groups )
+        Format( group, aNestLevel );
 }
 
 
@@ -1487,6 +1513,24 @@ void PCB_IO::format( TEXTE_PCB* aText, int aNestLevel ) const
 
     aText->EDA_TEXT::Format( m_out, aNestLevel, m_ctl );
 
+    m_out->Print( aNestLevel, ")\n" );
+}
+
+
+void PCB_IO::format( GROUP* aGroup, int aNestLevel ) const
+{
+    m_out->Print( aNestLevel, "(group %s (id %s)\n", m_out->Quotew( aGroup->GetName() ).c_str(),
+            TO_UTF8( aGroup->m_Uuid.AsString() ) );
+    m_out->Print( aNestLevel + 2, "(members\n" );
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_items( aGroup->GetItems().begin(),
+            aGroup->GetItems().end() );
+
+    for( const auto& item : sorted_items )
+    {
+        m_out->Print( aNestLevel + 4, "%s\n", TO_UTF8( item->m_Uuid.AsString() ) );
+    }
+
+    m_out->Print( 0, " )\n" );
     m_out->Print( aNestLevel, ")\n" );
 }
 

@@ -51,6 +51,11 @@ public:
     COMMIT&      Stage(
                  const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag = UR_UNSPECIFIED ) override;
 
+    /*
+     * @return true iff the commit has an entry to remove aItem.
+     */
+    bool         HasRemoveEntry( EDA_ITEM* aItem );
+
 private:
     TOOL_MANAGER* m_toolMgr;
     bool m_editModules;

@@ -150,6 +150,13 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
             return true;
     }
 
+    // Append groups:
+    for( auto item : aPcb->Groups() )
+    {
+        if( aItem == static_cast<BOARD_ITEM*>( item ) )
+            return true;
+    }
+
     return false;
 }
 
@@ -436,6 +443,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         switch( eda_item->Type() )
         {
         case PCB_MODULE_T:
+        case PCB_GROUP_T:
             deep_reBuild_ratsnest = true;   // Pointers on pads can be invalid
             KI_FALLTHROUGH;
 

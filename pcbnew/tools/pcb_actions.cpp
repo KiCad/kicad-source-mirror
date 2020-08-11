@@ -604,6 +604,36 @@ TOOL_ACTION PCB_ACTIONS::unlock( "pcbnew.EditorControl.unlock",
         _( "Unlock" ), "",
         unlocked_xpm );
 
+TOOL_ACTION PCB_ACTIONS::groupCreate( "pcbnew.EditorControl.groupCreate",
+        AS_GLOBAL, 0, "",
+        _( "Group" ), "",
+        locked_xpm );
+
+TOOL_ACTION PCB_ACTIONS::groupMerge( "pcbnew.EditorControl.groupMerge",
+        AS_GLOBAL, 0, "",
+        _( "Merge" ), "",
+        unlocked_xpm );
+
+TOOL_ACTION PCB_ACTIONS::groupUngroup( "pcbnew.EditorControl.groupUngroup",
+        AS_GLOBAL, 0, "",
+        _( "Ungroup" ), "",
+        unlocked_xpm );
+
+TOOL_ACTION PCB_ACTIONS::groupRemoveItems( "pcbnew.EditorControl.groupRemoveItems",
+        AS_GLOBAL, 0, "",
+        _( "Remove Items" ), "",
+        unlocked_xpm );
+
+TOOL_ACTION PCB_ACTIONS::groupFlatten( "pcbnew.EditorControl.groupFlatten",
+        AS_GLOBAL, 0, "",
+        _( "Flatten" ), "",
+        unlocked_xpm );
+
+TOOL_ACTION PCB_ACTIONS::groupEnter( "pcbnew.EditorControl.groupEnter",
+        AS_GLOBAL, 0, "",
+        _( "Enter" ), "",
+        unlocked_xpm );
+
 TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         AS_GLOBAL, 0, "",
         _( "Append Board..." ), "",

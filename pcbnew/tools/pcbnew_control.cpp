@@ -816,6 +816,13 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin  )
     moveUnflaggedItems( aBoard->Drawings(), items, isNew );
     moveUnflaggedItems( aBoard->Zones(), items, isNew );
 
+    // Subtlety: When selecting a group via the mouse,
+    // SELECTION_TOOL::highlightInternal runs, which does a SetSelected() on all
+    // descendants. In PCBNEW_CONTROL::placeBoardItems, below, we skip that and
+    // mark items non-recursively.  That works because the saving of the
+    // selection created aBoard that has the group and all descendents in it.
+    moveUnflaggedItems( aBoard->Groups(), items, isNew );
+
     return placeBoardItems( items, isNew, aAnchorAtOrigin );
 }
 
@@ -840,15 +847,48 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
                 static_cast<MODULE*>( item )->SetPath( KIID_PATH() );
         }
 
-        item->SetSelected();
-        selection.Add( item );
-
         // Add or just select items for the move/place command
         if( aIsNew )
             editTool->GetCurrentCommit()->Add( item );
         else
             editTool->GetCurrentCommit()->Added( item );
+
+        // Matching the logic of SELECTION_TOOL::select for PCB_GROUP_T, there
+        // is a distinction between which items are SetSelected and which are in
+        // the selection object.  Top-level groups or items not in groups are
+        // added to the selection object (via selection.Add(), below), but all
+        // items have SetSelected called.  This is because much of the selection
+        // management logic (e.g. move) recursively acts on groups in the
+        // selection, so descendents of groups should not be in the selection
+        // object.
+        item->SetSelected();
     }
+
+    // Filter out from selection any items that are in groups that are also in the selection
+    // For PCB_GROUP_T, a selection including the group should not include its descendants.
+    std::unordered_set<GROUP*> groups;
+    for( BOARD_ITEM* item : aItems )
+    {
+        if( item->Type() == PCB_GROUP_T )
+            groups.insert( static_cast<GROUP*>( item ) );
+    }
+    for( BOARD_ITEM* item : aItems )
+    {
+        bool inGroup = false;
+        for( GROUP* grp : groups )
+        {
+            if( grp->GetItems().find( item ) != grp->GetItems().end() )
+            {
+                inGroup = true;
+                break;
+            }
+        }
+        if( !inGroup )
+        {
+            selection.Add( item );
+        }
+    }
+
 
     if( selection.Size() > 0 )
     {
@@ -891,6 +931,9 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 
     for( auto module : brd->Modules() )
         module->SetFlags( SKIP_STRUCT );
+
+    for( auto group : brd->Groups() )
+        group->SetFlags( SKIP_STRUCT );
 
     for( auto drawing : brd->Drawings() )
         drawing->SetFlags( SKIP_STRUCT );

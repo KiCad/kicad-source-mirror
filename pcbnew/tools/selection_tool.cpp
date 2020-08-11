@@ -118,6 +118,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_multiple( false ),
         m_skip_heuristics( false ),
         m_locked( true ),
+        m_enteredGroup( NULL ),
         m_priv( std::make_unique<PRIV>() )
 {
     m_filter.lockedItems = true;
@@ -181,6 +182,9 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_BASE_FRAME>();
     m_locked = true;
+
+    if( m_enteredGroup != NULL )
+        exitGroup();
 
     if( aReason == TOOL_BASE::MODEL_RELOAD )
     {
@@ -266,7 +270,14 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_selection.Empty() )
                 selectPoint( evt->Position() );
 
-            m_toolMgr->RunAction( PCB_ACTIONS::properties, true );
+            if( m_selection.GetSize() == 1 && m_selection[0]->Type() == PCB_GROUP_T )
+            {
+                EnterGroup();
+            }
+            else
+            {
+                m_toolMgr->RunAction( PCB_ACTIONS::properties, true );
+            }
         }
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
@@ -310,6 +321,9 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             m_frame->FocusOnItem( nullptr );
 
+            if( m_enteredGroup != NULL )
+                exitGroup();
+
             ClearSelection();
 
             if( evt->FirstResponder() == this )
@@ -326,6 +340,29 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     }
 
     return 0;
+}
+
+
+void SELECTION_TOOL::EnterGroup()
+{
+    wxCHECK_RET( m_selection.GetSize() == 1 && m_selection[0]->Type() == PCB_GROUP_T,
+                 _( "EnterGroup called when selection is not a single group") );
+    GROUP* aGroup = static_cast<GROUP*>( m_selection[0] );
+
+    if( m_enteredGroup != NULL )
+    {
+        exitGroup();
+    }
+
+    ClearSelection();
+    m_enteredGroup = aGroup;
+    m_enteredGroup->RunOnChildren( [&]( BOARD_ITEM* titem ) { select( titem ); } );
+}
+
+
+void SELECTION_TOOL::exitGroup()
+{
+    m_enteredGroup = NULL;
 }
 
 
@@ -367,7 +404,7 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
             itemDispositions[ item ] = BEFORE;
         }
 
-        aClientFilter( VECTOR2I(), collector );
+        aClientFilter( VECTOR2I(), collector, this );
 
         for( EDA_ITEM* item : collector )
         {
@@ -376,6 +413,11 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
             else
                 itemDispositions[ item ] = AFTER;
         }
+
+        // Unhighlight the BEFORE items before highlighting the AFTER items.
+        // This is so that in the case of groups, if aClientFilter replaces a selection
+        // with the enclosing group, the unhighlight of the element doesn't undo the
+        // recursive highlighting of that elemetn by the group.
 
         for( std::pair<EDA_ITEM* const, DISPOSITION> itemDisposition : itemDispositions )
         {
@@ -389,7 +431,14 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
 
                 unhighlight( item, SELECTED, &m_selection );
             }
-            else if( disposition == AFTER )
+        }
+
+        for( std::pair<EDA_ITEM* const, DISPOSITION> itemDisposition : itemDispositions )
+        {
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( itemDisposition.first );
+            DISPOSITION disposition = itemDisposition.second;
+
+            if( disposition == AFTER )
             {
                 highlight( item, SELECTED, &m_selection );
             }
@@ -441,6 +490,10 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     guide.SetIgnoreZoneFills( displayOpts.m_DisplayZonesMode != 0 );
 
+    if( m_enteredGroup &&
+        !m_enteredGroup->GetBoundingBox().Contains( wxPoint( aWhere.x, aWhere.y ) ) )
+        exitGroup();
+
     collector.Collect( board(),
         m_editModules ? GENERAL_COLLECTOR::ModuleItems : GENERAL_COLLECTOR::AllBoardItems,
         wxPoint( aWhere.x, aWhere.y ), guide );
@@ -457,7 +510,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     // Allow the client to do tool- or action-specific filtering to see if we
     // can get down to a single item
     if( aClientFilter )
-        aClientFilter( aWhere, collector );
+        aClientFilter( aWhere, collector, this );
 
     // Apply the stateful filter
     filterCollectedItems( collector );
@@ -809,7 +862,7 @@ void SELECTION_TOOL::UnbrightenItem( BOARD_ITEM* aItem )
 }
 
 
-void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
+void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
 {
     // Narrow the collection down to a single BOARD_CONNECTED_ITEM for each represented net.
     // All other items types are removed.
@@ -1433,6 +1486,11 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
             return false;
     }
 
+    if( m_enteredGroup != NULL )
+    {
+        return m_enteredGroup->GetItems().find( aItem ) != m_enteredGroup->GetItems().end();
+    }
+
     return true;
 }
 
@@ -1878,6 +1936,20 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         break;
     }
 
+    case PCB_GROUP_T:
+    {
+        GROUP* group = const_cast<GROUP*>( static_cast<const GROUP*>( aItem ) );
+
+        // Similar to logic for module, a group is selectable if any of its
+        // members are. (This recurses)
+        for( auto item : group->GetItems() )
+        {
+            if( Selectable( item, true ) )
+                return true;
+        }
+
+        return false;
+    }
 
     case PCB_MARKER_T:  // Always selectable
         return true;
@@ -1924,9 +1996,22 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
         m_locked = true;
 }
 
-
 void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup )
 {
+    highlightInternal( aItem, aMode, aGroup, false );
+
+    view()->Update( aItem );
+
+    // Many selections are very temporal and updating the display each time just
+    // creates noise.
+    if( aMode == BRIGHTENED )
+        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+}
+
+void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup, bool isChild )
+{
+    wxLogTrace( "GRP", wxString::Format( _( "highlight() of %s %p" ),
+                         aItem->GetSelectMenuText( m_frame->GetUserUnits() ) ), aItem );
     if( aMode == SELECTED )
         aItem->SetSelected();
     else if( aMode == BRIGHTENED )
@@ -1937,30 +2022,28 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* 
         // Hide the original item, so it is shown only on overlay
         view()->Hide( aItem, true );
 
-        aGroup->Add( aItem );
+        if( !isChild || aMode == BRIGHTENED )
+            aGroup->Add( aItem );
     }
 
     // Modules are treated in a special way - when they are highlighted, we have to
     // highlight all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
-        static_cast<MODULE*>( aItem )->RunOnChildren(
-                [&]( BOARD_ITEM* item )
-                {
-                    if( aMode == SELECTED )
-                        item->SetSelected();
-                    else if( aMode == BRIGHTENED )
-                    {
-                        item->SetBrightened();
-
-                        if( aGroup )
-                            aGroup->Add( item );
-                    }
-
-                    if( aGroup )
-                        view()->Hide( item, true );
-                });
+        static_cast<MODULE*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
+                                                          highlightInternal( titem, aMode, aGroup, true ); } );
     }
+    else if( aItem->Type() == PCB_GROUP_T )
+    {
+        static_cast<GROUP*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
+                                                         highlightInternal( titem, aMode, aGroup, true ); } );
+    }
+}
+
+
+void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup )
+{
+    unhighlightInternal( aItem, aMode, aGroup, false );
 
     view()->Update( aItem );
 
@@ -1971,8 +2054,10 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* 
 }
 
 
-void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup )
+void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup, bool isChild )
 {
+    wxLogTrace( "GRP", wxString::Format( _( "unhighlight() of %s %p" ),
+                                  aItem->GetSelectMenuText( m_frame->GetUserUnits() ) ), aItem );
     if( aMode == SELECTED )
         aItem->ClearSelected();
     else if( aMode == BRIGHTENED )
@@ -1984,38 +2069,25 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION
 
         // Restore original item visibility
         view()->Hide( aItem, false );
+
+        // N.B. if we clear the selection flag for sub-elements, we need to also
+        // remove the element from the selection group (if it exists)
+        if( isChild )
+            view()->Update( aItem );
     }
 
     // Modules are treated in a special way - when they are highlighted, we have to
     // highlight all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
-        static_cast<MODULE*>( aItem )->RunOnChildren(
-                [&]( BOARD_ITEM* item )
-                {
-                    if( aMode == SELECTED )
-                        item->ClearSelected();
-                    else if( aMode == BRIGHTENED )
-                        item->ClearBrightened();
-
-                    // N.B. if we clear the selection flag for sub-elements, we need to also
-                    // remove the element from the selection group (if it exists)
-                    if( aGroup )
-                    {
-                        aGroup->Remove( item );
-
-                        view()->Hide( item, false );
-                        view()->Update( item );
-                    }
-                });
+        static_cast<MODULE*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
+                                                          unhighlightInternal( titem, aMode, aGroup, true ); } );
     }
-
-    view()->Update( aItem );
-
-    // Many selections are very temporal and updating the display each time just
-    // creates noise.
-    if( aMode == BRIGHTENED )
-        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+    else if( aItem->Type() == PCB_GROUP_T )
+    {
+        static_cast<GROUP*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
+                                                         unhighlightInternal( titem, aMode, aGroup, true ); } );
+    }
 }
 
 
@@ -2450,6 +2522,43 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         for( BOARD_ITEM* item : rejected )
         {
             aCollector.Transfer( item );
+        }
+    }
+
+    FilterCollectorForGroups( aCollector );
+}
+
+
+void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) const
+{
+    std::unordered_set<BOARD_ITEM*> toAdd;
+
+    // If any element is a member of a group, replace those elements with the top containing group.
+    for( int j = 0; j < aCollector.GetCount(); ++j )
+    {
+        GROUP* aTop = board()->TopLevelGroup( aCollector[j], m_enteredGroup );
+
+        if( aTop != NULL )
+        {
+            if( aTop != aCollector[j] )
+            {
+                toAdd.insert( aTop );
+                aCollector.Remove( aCollector[j] );
+            }
+        }
+        else if( m_enteredGroup != NULL &&
+                 m_enteredGroup->GetItems().find( aCollector[j] ) == m_enteredGroup->GetItems().end() )
+        {
+            // If a group is entered, no selections of objects not in the group.
+            aCollector.Remove( aCollector[j] );
+        }
+    }
+
+    for( BOARD_ITEM* item : toAdd )
+    {
+        if( !aCollector.HasItem( item ) )
+        {
+            aCollector.Append( item );
         }
     }
 }

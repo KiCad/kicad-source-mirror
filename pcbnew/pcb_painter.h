@@ -42,6 +42,7 @@ class VIA;
 class TRACK;
 class D_PAD;
 class DRAWSEGMENT;
+class GROUP;
 class MODULE;
 class ZONE_CONTAINER;
 class TEXTE_PCB;
@@ -303,6 +304,7 @@ protected:
     void draw( const TEXTE_PCB* aText, int aLayer );
     void draw( const TEXTE_MODULE* aText, int aLayer );
     void draw( const MODULE* aModule, int aLayer );
+    void draw( const GROUP* aGroup, int aLayer );
     void draw( const ZONE_CONTAINER* aZone, int aLayer );
     void draw( const DIMENSION* aDimension, int aLayer );
     void draw( const PCB_TARGET* aTarget );
