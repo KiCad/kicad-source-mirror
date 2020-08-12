@@ -126,12 +126,12 @@ bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     for( auto outlineItem : boardOutline )
     {
-        //printf("RefT %d\n", outlineItem->Type() );
+        drc_dbg(12, "RefT %d %p\n", outlineItem->Type(), outlineItem );
         auto refShape = outlineItem->GetEffectiveShape();
 
         for( auto boardItem : boardItems )
         {
-//            printf("BoardT %d\n", boardItem->Type() );
+            drc_dbg(12, "BoardT %d %p\n", boardItem->Type(), boardItem );
             
             auto shape = boardItem->GetEffectiveShape();
 

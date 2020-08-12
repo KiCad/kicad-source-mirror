@@ -37,6 +37,17 @@
 #include <drc_proto/drc_test_provider.h>
 
 
+void drcPrintDebugMessage( int level, wxString msg, const char *function, int line )
+{
+    wxString valueStr;
+    if( wxGetEnv( "DRC_DEBUG", &valueStr ) )
+    {
+        int setLevel = wxAtoi( valueStr );
+        if( level <=  setLevel )
+            fprintf(stderr,"[%-30s:%-5d] %s", function, line, (const char *) msg.c_str() );
+    }
+}
+
 test::DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) : 
     m_board( aBoard ),
     m_designSettings ( aSettings ),
@@ -125,29 +136,32 @@ bool test::DRC_ENGINE::CompileRules()
     for( auto provider : m_testProviders )
     {
         ReportAux( wxString::Format( "- Provider: '%s': ", provider->GetName() ) );
+        drc_dbg(11, "do prov %s", provider->GetName() );
 
         for ( auto id : provider->GetMatchingConstraintIds() )
         {
-            if( m_ruleMap.find(id) == m_ruleMap.end() )
-                m_ruleMap[id] = new RULE_SET;
+            drc_dbg(11, "do id %d", id);
+            if( m_constraintMap.find(id) == m_constraintMap.end() )
+                m_constraintMap[id] = new CONSTRAINT_SET;
 
-            m_ruleMap[ id ]->provider = provider;
+            m_constraintMap[ id ]->provider = provider;
 
             for( auto rule : m_rules )
             {
-                drc_dbg(10, "Scan provider %s rule %s",  provider->GetName() );
+                drc_dbg(11, "Scan provider %s, rule %s",  provider->GetName(), rule->GetName() );
 
                 if( ! rule->IsEnabled() )
                     continue;
 
                 for( auto& constraint : rule->Constraints() )
                 {
+                    drc_dbg(11, "scan constraint id %d\n", constraint.GetType() );
                     if( constraint.GetType() != id )
                         continue;
 
-                   ReportAux( wxString::Format( "   |- Rule: '%s' ", rule->m_Name ) );
+                   ReportAux( wxString::Format( "   |- Rule: '%s' ", rule->GetName() ) );
 
-                        auto rcons = new RULE_WITH_CONDITIONS;
+                        auto rcons = new CONSTRAINT_WITH_CONDITIONS;
 
                         if( rule->IsConditional() )
                         {
@@ -159,8 +173,9 @@ bool test::DRC_ENGINE::CompileRules()
                             ReportAux( wxString::Format( "       |- condition: '%s' compile: %s", condition->GetExpression(), compileOk ? "OK" : "ERROR") );
                         }
 
-                        rcons->rule = rule;
-                        m_ruleMap[ id ]->sortedRules.push_back( rcons );
+                        rcons->constraint = constraint;
+                        rcons->parentRule = rule;
+                        m_constraintMap[ id ]->sortedConstraints.push_back( rcons );
 
                 }
             }
@@ -215,10 +230,17 @@ void test::DRC_ENGINE::RunTests( )
 const test::DRC_CONSTRAINT& test::DRC_ENGINE::EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T aConstraintId, BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer )
 {
     test::DRC_RULE* rv;
-    auto ruleset = m_ruleMap[ aConstraintId ];
+    auto ruleset = m_constraintMap[ aConstraintId ];
 
-    for( auto rcond : ruleset->sortedRules )
+    for( auto rcond : ruleset->sortedConstraints )
     {
+        if( rcond->conditions.size() == 0 )  // uconditional
+        {
+            drc_dbg( 8, "   -> rule '%s' matches (unconditional)\n",
+                        rcond->constraint.GetParentRule()->GetName() 
+                        );
+            return rcond->constraint;
+        }
         for( auto condition : rcond->conditions )
         {
             drc_dbg( 8, "   -> check condition '%s'\n",
@@ -228,13 +250,10 @@ const test::DRC_CONSTRAINT& test::DRC_ENGINE::EvalRulesForItems( test::DRC_CONST
             if( result )
             {
                 drc_dbg( 8, "   -> rule '%s' matches, triggered by condition '%s'\n",
-                        rcond->rule->GetName(),
+                        rcond->constraint.GetParentRule()->GetName(),
                         condition->GetExpression() );
-                for( const DRC_CONSTRAINT& c : rcond->rule->Constraints() )
-                {
-                    if( c.GetType() == aConstraintId )
-                        return c;
-                }
+
+                return rcond->constraint;
             }
         }
     }
@@ -313,24 +332,16 @@ test::DRC_CONSTRAINT test::DRC_ENGINE::GetWorstGlobalConstraint( test::DRC_CONST
 std::vector<test::DRC_CONSTRAINT> test::DRC_ENGINE::QueryConstraintsById( test::DRC_CONSTRAINT_TYPE_T constraintID )
 {
     std::vector<test::DRC_CONSTRAINT> rv;
-
-    for( auto rule : m_ruleMap[constraintID]->sortedRules )
-    {
-        assert( rule );
-        assert( rule->rule );
-
-        for( const DRC_CONSTRAINT& c : rule->constraints )
-            if( c.GetType() == constraintID )
-                rv.push_back( c );
-    }
-
+    for ( auto c : m_constraintMap[constraintID]->sortedConstraints )
+        rv.push_back(c->constraint);
     return rv;
 }
 
 
-bool test::DRC_ENGINE::HasCorrectRulesForId( test::DRC_CONSTRAINT_TYPE_T ruleID )
+bool test::DRC_ENGINE::HasCorrectRulesForId( test::DRC_CONSTRAINT_TYPE_T constraintID )
 {
-    return m_ruleMap[ruleID]->sortedRules.size() != 0;
+    //drc_dbg(10,"hascorrect id %d size %d\n", ruleID,  m_ruleMap[ruleID]->sortedRules.size( ) );
+    return m_constraintMap[constraintID]->sortedConstraints.size() != 0;
 }
 
 

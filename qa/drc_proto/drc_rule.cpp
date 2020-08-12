@@ -44,8 +44,9 @@ test::DRC_RULE::~DRC_RULE()
 {
 }
 
-void test::DRC_RULE::AddConstraint( const DRC_CONSTRAINT& aConstraint )
+void test::DRC_RULE::AddConstraint( DRC_CONSTRAINT& aConstraint )
 {
+    aConstraint.SetParentRule( this );
     m_constraints.push_back( aConstraint );
 }
 

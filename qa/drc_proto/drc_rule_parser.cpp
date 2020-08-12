@@ -401,6 +401,8 @@ void test::DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             parseUnknown();
         }
     }
+
+    aRule->AddConstraint( constraint );
 }
 
 

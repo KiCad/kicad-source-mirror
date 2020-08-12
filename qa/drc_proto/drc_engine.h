@@ -53,12 +53,11 @@ class NETLIST;
 class PROGRESS_REPORTER;
 class REPORTER;
 
-//#ifdef DEBUG
+
+void drcPrintDebugMessage( int level, wxString msg, const char *function, int line );
+
 #define drc_dbg(level, fmt, ...) \
-    wxLogTrace( "drc_proto", fmt, __VA_ARGS__ );
-//#else
-//#define drc_dbg(level, fmt, ...)
-//#endif
+    drcPrintDebugMessage(level, wxString::Format( fmt, __VA_ARGS__ ), __FUNCTION__, __LINE__ );
 
 namespace test
 {
@@ -213,20 +212,20 @@ private:
 
     void freeCompiledRules();
 
-    struct RULE_WITH_CONDITIONS
+    struct CONSTRAINT_WITH_CONDITIONS
     {
         std::vector<test::DRC_RULE_CONDITION*> conditions;
-        test::DRC_RULE*                        rule;
-        std::vector<test::DRC_CONSTRAINT>      constraints;
+        test::DRC_RULE*                        parentRule;
+        test::DRC_CONSTRAINT                   constraint;
     };
 
-    struct RULE_SET
+    struct CONSTRAINT_SET
     {
-        std::vector<RULE_WITH_CONDITIONS*> sortedRules;
+        std::vector<CONSTRAINT_WITH_CONDITIONS*> sortedConstraints;
         DRC_TEST_PROVIDER* provider;
     };
 
-    typedef std::unordered_map<test::DRC_CONSTRAINT_TYPE_T, RULE_SET*> RULE_MAP;
+    typedef std::unordered_map<test::DRC_CONSTRAINT_TYPE_T, CONSTRAINT_SET*> CONSTRAINT_MAP;
 
 
     void inferImplicitRules();
@@ -240,8 +239,8 @@ private:
     std::vector<DRC_RULE_CONDITION*> m_ruleConditions;
     std::vector<DRC_RULE*>           m_rules;
     std::vector<DRC_TEST_PROVIDER*>  m_testProviders;
-    std::unordered_map<EDA_ITEM*, RULE_SET*> m_implicitRules;
-    RULE_MAP m_ruleMap;
+    std::unordered_map<EDA_ITEM*, CONSTRAINT_SET*> m_implicitRules;
+    CONSTRAINT_MAP m_constraintMap;
     REPORTER* m_reporter;
     PROGRESS_REPORTER* m_progressReporter;
 

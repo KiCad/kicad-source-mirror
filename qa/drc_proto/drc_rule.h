@@ -122,6 +122,7 @@ class DRC_CONSTRAINT
 
     // fixme: needed?
     bool Allowed() const { return m_Allow; }
+    void SetParentRule( DRC_RULE *aParentRule ) { m_parentRule = aParentRule; }
     DRC_RULE* GetParentRule() const { return m_parentRule; }
 
     DRC_CONSTRAINT_TYPE_T GetType() const { return m_Type; }
@@ -160,7 +161,7 @@ public:
         return m_constraints;
     }
 
-    void AddConstraint( const DRC_CONSTRAINT& aConstraint );
+    void AddConstraint( DRC_CONSTRAINT& aConstraint );
 
     bool IsConditional() const
     {
