@@ -303,7 +303,7 @@ void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
 }
 
 
-void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
 #ifdef _WINDOWS_
     // For some obscure reason, on Windows, when killing Kicad from the Windows task manager
@@ -321,17 +321,14 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 #endif
 
-    if( Kiway().PlayersClose( false ) )
+    // Save the list of open projects before closing the project
+    KICAD_SETTINGS* settings = kicadSettings();
+    settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
+
+    aEvent.SetCanVeto( true );
+
+    if( CloseProject( true ) )
     {
-        Event.SetCanVeto( true );
-
-        // Save the list of open projects before closing the project
-        KICAD_SETTINGS* settings = kicadSettings();
-        settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
-
-        // Ensure the project is closed before destruction.
-        CloseProject( true );
-
         m_leftWin->Show( false );
 
         Destroy();
