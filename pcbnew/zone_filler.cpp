@@ -569,6 +569,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                                              SHAPE_POLY_SET& aHoles )
 {
     static DRAWSEGMENT dummyEdge;
+    dummyEdge.SetParent( m_board );
     dummyEdge.SetLayer( Edge_Cuts );
 
     // a small extra clearance to be sure actual track clearance is not smaller
@@ -675,10 +676,18 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
                 if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    bool ignoreLineWidth = aItem->IsOnLayer( Edge_Cuts );
+                    PCB_LAYER_ID layer = aLayer;
+                    bool ignoreLineWidth = false;
+
+                    if( aItem->IsOnLayer( Edge_Cuts ) )
+                    {
+                        layer = Edge_Cuts;
+                        ignoreLineWidth = true;
+                    }
+
                     int  gap = aZone->GetClearance( aLayer, aItem );
 
-                    addKnockout( aItem, aLayer, gap, ignoreLineWidth, aHoles );
+                    addKnockout( aItem, layer, gap, ignoreLineWidth, aHoles );
                 }
             };
 
