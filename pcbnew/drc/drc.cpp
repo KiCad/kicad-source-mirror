@@ -501,6 +501,7 @@ void DRC::testPadClearances( BOARD_COMMIT& aCommit )
             m_clearanceSource = _( "board edge" );
 
             static DRAWSEGMENT dummyEdge;
+            dummyEdge.SetParent( m_pcb );
             dummyEdge.SetLayer( Edge_Cuts );
 
             pad->GetRuleClearance( &dummyEdge, pad->GetLayer(), &minClearance, &m_clearanceSource );

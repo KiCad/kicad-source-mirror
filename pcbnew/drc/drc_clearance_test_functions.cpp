@@ -496,6 +496,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         m_clearanceSource = _( "board edge" );
 
         static DRAWSEGMENT dummyEdge;
+        dummyEdge.SetParent( m_pcb );
         dummyEdge.SetLayer( Edge_Cuts );
 
         aRefSeg->GetRuleClearance( &dummyEdge, aRefSeg->GetLayer(), &minClearance,
