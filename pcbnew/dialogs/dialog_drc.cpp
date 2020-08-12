@@ -244,7 +244,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     if( item )
     {
         PCB_LAYER_ID principalLayer = item->GetLayer();
-        RC_ITEM*     rc_item = node->m_RcItem;
+        std::shared_ptr<RC_ITEM>     rc_item = node->m_RcItem;
         BOARD_ITEM*  a = board->GetItem( rc_item->GetMainItemID() );
         BOARD_ITEM*  b = board->GetItem( rc_item->GetAuxItemID() );
         BOARD_ITEM*  c = board->GetItem( rc_item->GetAuxItem2ID() );
