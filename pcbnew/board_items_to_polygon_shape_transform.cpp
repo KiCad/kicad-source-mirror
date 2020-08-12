@@ -251,34 +251,29 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet( PCB_LAYER_ID aLayer,
     if( !m_FilledPolysList.count( aLayer ) || m_FilledPolysList.at( aLayer ).IsEmpty() )
         return;
 
-    const SHAPE_POLY_SET& polys = m_FilledPolysList.at( aLayer );
+    // Just add filled areas if filled polygons outlines have no thickness
+    if( !GetFilledPolysUseThickness() || GetMinThickness() == 0 )
+    {
+        const SHAPE_POLY_SET& polys = m_FilledPolysList.at( aLayer );
+        aCornerBuffer.Append( polys );
+        return;
+    }
 
-    // add filled areas polygons
-    aCornerBuffer.Append( polys );
+    // Filled areas have polygons with outline thickness.
+    // we must create the polygons and add inflated polys
+    SHAPE_POLY_SET polys = m_FilledPolysList.at( aLayer );
+
     auto board = GetBoard();
     int maxError = ARC_HIGH_DEF;
-
-    // add filled areas outlines, which are drawn with thick lines segments
-    // but only if filled polygons outlines have thickness
-    if( !GetFilledPolysUseThickness() )
-        return;
 
     if( board )
         maxError = board->GetDesignSettings().m_MaxError;
 
-    for( int i = 0; i < polys.OutlineCount(); i++ )
-    {
-        const SHAPE_LINE_CHAIN& path = polys.COutline( i );
+    int numSegs = std::max( GetArcToSegmentCount( GetMinThickness(), maxError, 360.0 ), 12 );
 
-        for( int j = 0; j < path.PointCount(); j++ )
-        {
-            const VECTOR2I& a = path.CPoint( j );
-            const VECTOR2I& b = path.CPoint( j + 1 );
-            int             width = GetMinThickness();
+    polys.InflateWithLinkedHoles( GetMinThickness()/2, numSegs, SHAPE_POLY_SET::PM_FAST );
 
-            TransformSegmentToPolygon( aCornerBuffer, (wxPoint) a, (wxPoint) b, maxError, width );
-        }
-    }
+    aCornerBuffer.Append( polys );
 }
 
 
