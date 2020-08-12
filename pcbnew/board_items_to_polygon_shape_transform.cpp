@@ -91,7 +91,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
         ZONE_CONTAINER* zone = GetArea( ii );
 
         if( zone->GetLayerSet().test( aLayer ) )
-            zone->TransformSolidAreasShapesToPolygonSet( aLayer, aOutlines );
+            zone->TransformSolidAreasShapesToPolygon( aLayer, aOutlines );
     }
 
     // convert graphic items on copper layers (texts)
@@ -244,9 +244,9 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
 }
 
 
-void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet( PCB_LAYER_ID aLayer,
-                                                            SHAPE_POLY_SET& aCornerBuffer,
-                                                            int aError ) const
+void ZONE_CONTAINER::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer,
+                                                         SHAPE_POLY_SET& aCornerBuffer,
+                                                         int aError ) const
 {
     if( !m_FilledPolysList.count( aLayer ) || m_FilledPolysList.at( aLayer ).IsEmpty() )
         return;

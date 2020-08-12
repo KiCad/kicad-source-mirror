@@ -70,7 +70,6 @@ private:
      */
     void computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                const SHAPE_POLY_SET& aSmoothedOutline,
-                               std::set<VECTOR2I>* aPreserveCorners,
                                SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys );
 
     /**

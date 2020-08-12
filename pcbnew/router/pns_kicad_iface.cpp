@@ -736,35 +736,29 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
     if( !aZone->GetIsKeepout() || !aZone->GetDoNotAllowTracks() )
         return false;
 
-    // Some intersecting zones, despite being on the same layer with the same net, cannot be
-    // merged due to other parameters such as fillet radius.  The copper pour will end up
-    // effectively merged though, so we want to keep the corners of such intersections sharp.
-    std::set<VECTOR2I> colinearCorners;
-    aZone->GetColinearCorners( m_board, colinearCorners );
-
-    aZone->BuildSmoothedPoly( poly, &colinearCorners );
-    poly.CacheTriangulation();
-
-    if( !poly.IsTriangulationUpToDate() )
-    {
-        KIDIALOG dlg( nullptr, wxString::Format( _( "Malformed keep-out zone at (%d, %d)" ),
-                aZone->GetPosition().x, aZone->GetPosition().y ), KIDIALOG::KD_WARNING );
-        dlg.ShowDetailedText(
-                wxString::Format( _( "%s\nThis zone cannot be handled by the track layout tool.\n"
-                                     "Please verify it is not a self-intersecting polygon." ),
-                        aZone->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) ) );
-        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-        dlg.ShowModal();
-
-        return false;
-    }
-
     LSET layers = aZone->GetLayerSet();
 
     for( int layer = F_Cu; layer <= B_Cu; layer++ )
     {
-        if ( ! layers[layer] )
+        if( ! layers[ layer ] )
             continue;
+
+        aZone->BuildSmoothedPoly( poly, ToLAYER_ID( layer ) );
+        poly.CacheTriangulation();
+
+        if( !poly.IsTriangulationUpToDate() )
+        {
+            KIDIALOG dlg( nullptr, wxString::Format( _( "Malformed keep-out zone at (%d, %d)" ),
+                    aZone->GetPosition().x, aZone->GetPosition().y ), KIDIALOG::KD_WARNING );
+            dlg.ShowDetailedText(
+                    wxString::Format( _( "%s\nThis zone cannot be handled by the track layout tool.\n"
+                                         "Please verify it is not a self-intersecting polygon." ),
+                            aZone->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) ) );
+            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+            dlg.ShowModal();
+
+            return false;
+        }
 
         for( int outline = 0; outline < poly.OutlineCount(); outline++ )
         {

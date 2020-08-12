@@ -318,16 +318,15 @@ public:
         return HitTestCutout( VECTOR2I( aRefPos.x, aRefPos.y ), aOutlineIdx, aHoleIdx );
     }
 
-
     /**
      * Some intersecting zones, despite being on the same layer with the same net, cannot be
      * merged due to other parameters such as fillet radius.  The copper pour will end up
-     * effectively merged though, so we want to keep the corners of such intersections sharp.
+     * effectively merged though, so we need to do some calculations with them in mind.
      */
-    void GetColinearCorners( BOARD* aBoard, std::set<VECTOR2I>& colinearCorners );
+    void GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE_CONTAINER*>* aZones ) const;
 
     /**
-     * Function TransformSolidAreasShapesToPolygonSet
+     * Function TransformSolidAreasShapesToPolygon
      * Convert solid areas full shapes to polygon set
      * (the full shape is the polygon area with a thick outline)
      * Used in 3D view
@@ -336,8 +335,8 @@ public:
      * @param aCornerBuffer = a buffer to store the polygons
      * @param aError = Maximum error allowed between true arc and polygon approx
      */
-    void TransformSolidAreasShapesToPolygonSet( PCB_LAYER_ID aLayer,
-            SHAPE_POLY_SET& aCornerBuffer, int aError = ARC_HIGH_DEF ) const;
+    void TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aCornerBuffer,
+                                             int aError = ARC_HIGH_DEF ) const;
 
     /**
      * Function TransformOutlinesShapeWithClearanceToPolygon
@@ -348,14 +347,9 @@ public:
      * Circles (vias) and arcs (ends of tracks) are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygon
      * @param aMinClearanceValue = the min clearance around outlines
-     * @param aUseNetClearance = true to use a clearance which is the max value between
-     *          aMinClearanceValue and the net clearance
-     *          false to use aMinClearanceValue only
-     * @param aPreserveCorners an optional set of corners which should not be smoothed.
-     * if both aMinClearanceValue = 0 and aUseNetClearance = false: create the zone outline polygon.
      */
     void TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-            int aMinClearanceValue, std::set<VECTOR2I>* aPreserveCorners = nullptr ) const;
+                                                       int aMinClearanceValue ) const;
 
     /**
      * Function TransformShapeWithClearanceToPolygon
@@ -370,8 +364,8 @@ public:
      * for visualization
      */
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-            int aClearanceValue, int aError = ARC_HIGH_DEF,
-            bool ignoreLineWidth = false ) const override;
+                                               int aClearanceValue, int aError = ARC_HIGH_DEF,
+                                               bool ignoreLineWidth = false ) const override;
 
     /**
      * Function HitTestForCorner
@@ -652,12 +646,8 @@ public:
 
     /**
      * Function GetSmoothedPoly
-     * returns a pointer to the corner-smoothed version of m_Poly.
-     * @param aPreserveCorners - set of corners which should /not/ be smoothed
-     * @return SHAPE_POLY_SET* - pointer to the polygon.
      */
-    bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly,
-                            std::set<VECTOR2I>* aPreserveCorners ) const;
+    bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer ) const;
 
     void SetCornerSmoothingType( int aType ) { m_cornerSmoothingType = aType; };
 

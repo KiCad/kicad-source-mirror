@@ -1151,11 +1151,9 @@ class SHAPE_POLY_SET : public SHAPE
          * returns a chamfered version of the aIndex-th polygon.
          * @param aDistance is the chamfering distance.
          * @param aIndex is the index of the polygon to be chamfered.
-         * @param aPreserveCorners an optional set of corners which should not be chamfered.
          * @return POLYGON - A polygon containing the chamfered version of the aIndex-th polygon.
          */
-        POLYGON ChamferPolygon( unsigned int aDistance, int aIndex,
-                                std::set<VECTOR2I>* aPreserveCorners );
+        POLYGON ChamferPolygon( unsigned int aDistance, int aIndex );
 
         /**
          * Function Fillet
@@ -1163,32 +1161,26 @@ class SHAPE_POLY_SET : public SHAPE
          * @param aRadius is the fillet radius.
          * @param aErrorMax is the maximum allowable deviation of the polygon from the circle
          * @param aIndex is the index of the polygon to be filleted
-         * @param aPreserveCorners an optional set of corners which should not be filleted.
          * @return POLYGON - A polygon containing the filleted version of the aIndex-th polygon.
          */
-        POLYGON FilletPolygon( unsigned int aRadius, int aErrorMax, int aIndex,
-                               std::set<VECTOR2I>* aPreserveCorners = nullptr );
+        POLYGON FilletPolygon( unsigned int aRadius, int aErrorMax, int aIndex );
 
         /**
          * Function Chamfer
          * returns a chamfered version of the polygon set.
          * @param aDistance is the chamfering distance.
-         * @param aPreserveCorners an optional set of corners which should not be chamfered.
          * @return SHAPE_POLY_SET - A set containing the chamfered version of this set.
          */
-        SHAPE_POLY_SET Chamfer( int aDistance,
-                                std::set<VECTOR2I>* aPreserveCorners = nullptr );
+        SHAPE_POLY_SET Chamfer( int aDistance );
 
         /**
          * Function Fillet
          * returns a filleted version of the polygon set.
          * @param aRadius is the fillet radius.
          * @param aErrorMax is the maximum allowable deviation of the polygon from the circle
-         * @param aPreserveCorners an optional set of corners which should not be filleted.
          * @return SHAPE_POLY_SET - A set containing the filleted version of this set.
          */
-        SHAPE_POLY_SET Fillet( int aRadius, int aErrorMax,
-                               std::set<VECTOR2I>* aPreserveCorners = nullptr );
+        SHAPE_POLY_SET Fillet( int aRadius, int aErrorMax );
 
         /**
          * Function DistanceToPolygon
@@ -1306,12 +1298,10 @@ class SHAPE_POLY_SET : public SHAPE
          * @param  aIndex    is the index of the polygon that will be chamfered/filleted.
          * @param  aErrorMax is the maximum allowable deviation of the polygon from the circle
          *                   if aMode = FILLETED. If aMode = CHAMFERED, it is unused.
-         * @param aPreserveCorners an optional set of corners which should be skipped.
          * @return POLYGON - the chamfered/filleted version of the polygon.
          */
         POLYGON chamferFilletPolygon( CORNER_MODE aMode, unsigned int aDistance,
-                                      int aIndex, int aErrorMax,
-                                      std::set<VECTOR2I>* aPreserveCorners );
+                                      int aIndex, int aErrorMax );
 
         ///> Returns true if the polygon set has any holes that touch share a vertex.
         bool hasTouchingHoles( const POLYGON& aPoly ) const;

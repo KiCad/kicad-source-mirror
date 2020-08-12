@@ -1164,65 +1164,55 @@ bool ZONE_CONTAINER::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx )
 }
 
 
-/*
- * Some intersecting zones, despite being on the same layer with the same net, cannot be
- * merged due to other parameters such as fillet radius.  The copper pour will end up
- * effectively merged though, so we want to keep the corners of such intersections sharp.
- */
-void ZONE_CONTAINER::GetColinearCorners( BOARD* aBoard, std::set<VECTOR2I>& aCorners )
+void ZONE_CONTAINER::GetInteractingZones( PCB_LAYER_ID aLayer,
+                                          std::vector<ZONE_CONTAINER*>* aZones ) const
 {
     int epsilon = Millimeter2iu( 0.001 );
 
-    // Things get messy when zone of different nets intersect.  To do it right we'd need to
-    // run our colinear test with the final filled regions rather than the outline regions.
-    // However, since there's no order dependance the only way to do that is to iterate
-    // through successive zone fills until the results are no longer changing -- and that's
-    // not going to happen.  So we punt and ignore any "messy" corners.
-    std::set<VECTOR2I> colinearCorners;
-    std::set<VECTOR2I> messyCorners;
-
-    for( ZONE_CONTAINER* candidate : aBoard->Zones() )
+    for( ZONE_CONTAINER* candidate : GetBoard()->Zones() )
     {
         if( candidate == this )
             continue;
 
-        if( candidate->GetLayerSet() != GetLayerSet() )
+        if( !candidate->GetLayerSet().test( aLayer ) )
             continue;
 
-        if( candidate->GetIsKeepout() != GetIsKeepout() )
+        if( candidate->GetIsKeepout() )
+            continue;
+
+        if( candidate->GetNetCode() != GetNetCode() )
             continue;
 
         for( auto iter = m_Poly->CIterate(); iter; iter++ )
         {
             if( candidate->m_Poly->Collide( iter.Get(), epsilon ) )
             {
-                if( candidate->GetNetCode() == GetNetCode() )
-                    colinearCorners.insert( VECTOR2I( iter.Get() ) );
-                else
-                    messyCorners.insert( VECTOR2I( iter.Get() ) );
+                aZones->push_back( candidate );
+                break;
             }
         }
-    }
-
-    for( VECTOR2I corner : colinearCorners )
-    {
-        if( messyCorners.count( corner ) == 0 )
-            aCorners.insert( corner );
     }
 }
 
 
-bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly,
-                                        std::set<VECTOR2I>* aPreserveCorners ) const
+bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer ) const
 {
     if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations do not like it ...
         return false;
+
+    std::vector<ZONE_CONTAINER*> interactingZones;
+    GetInteractingZones( aLayer, &interactingZones );
+
+    aSmoothedPoly = *m_Poly;
+
+    for( ZONE_CONTAINER* zone : interactingZones )
+        aSmoothedPoly.BooleanAdd( *zone->Outline(), SHAPE_POLY_SET::PM_FAST );
 
     // Make a smoothed polygon out of the user-drawn polygon if required
     switch( m_cornerSmoothingType )
     {
     case ZONE_SETTINGS::SMOOTHING_CHAMFER:
-        aSmoothedPoly = m_Poly->Chamfer( m_cornerRadius, aPreserveCorners );
+        aSmoothedPoly = aSmoothedPoly.Chamfer( m_cornerRadius );
         break;
 
     case ZONE_SETTINGS::SMOOTHING_FILLET:
@@ -1233,7 +1223,7 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly,
         if( board )
             maxError = board->GetDesignSettings().m_MaxError;
 
-        aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, maxError, aPreserveCorners );
+        aSmoothedPoly = aSmoothedPoly.Fillet( m_cornerRadius, maxError );
         break;
     }
     default:
@@ -1242,9 +1232,12 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly,
         // We can avoid issues by creating a very small chamfer which remove acute angles,
         // or left it without chamfer and use only CPOLYGONS_LIST::InflateOutline to create
         // clearance areas
-        aSmoothedPoly = m_Poly->Chamfer( Millimeter2iu( 0.0 ), aPreserveCorners );
+        aSmoothedPoly = aSmoothedPoly.Chamfer( Millimeter2iu( 0.0 ) );
         break;
     }
+
+    if( interactingZones.size() )
+        aSmoothedPoly.BooleanIntersection( *m_Poly, SHAPE_POLY_SET::PM_FAST );
 
     return true;
 };
@@ -1283,11 +1276,11 @@ double ZONE_CONTAINER::CalculateFilledArea()
  * @param aPreserveCorners an optional set of corners which should not be chamfered/filleted
  */
 void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-        int aClearance, std::set<VECTOR2I>* aPreserveCorners ) const
+                                                                   int aClearance ) const
 {
     // Creates the zone outline polygon (with holes if any)
     SHAPE_POLY_SET polybuffer;
-    BuildSmoothedPoly( polybuffer, aPreserveCorners );
+    BuildSmoothedPoly( polybuffer, GetLayer() );
 
     // Calculate the polygon with clearance
     // holes are linked to the main outline, so only one polygon is created.

@@ -741,7 +741,6 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
  */
 void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                         const SHAPE_POLY_SET& aSmoothedOutline,
-                                        std::set<VECTOR2I>* aPreserveCorners,
                                         SHAPE_POLY_SET& aRawPolys,
                                         SHAPE_POLY_SET& aFinalPolys )
 {
@@ -928,15 +927,13 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                   SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys )
 {
     SHAPE_POLY_SET smoothedPoly;
-    std::set<VECTOR2I> colinearCorners;
-    aZone->GetColinearCorners( m_board, colinearCorners );
 
     /*
      * convert outlines + holes to outlines without holes (adding extra segments if necessary)
      * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
      * this zone
      */
-    if ( !aZone->BuildSmoothedPoly( smoothedPoly, &colinearCorners ) )
+    if ( !aZone->BuildSmoothedPoly( smoothedPoly, aLayer ) )
         return false;
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
@@ -944,8 +941,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
 
     if( aZone->IsOnCopperLayer() )
     {
-        computeRawFilledArea( aZone, aLayer, smoothedPoly, &colinearCorners, aRawPolys,
-                              aFinalPolys );
+        computeRawFilledArea( aZone, aLayer, smoothedPoly, aRawPolys, aFinalPolys );
     }
     else
     {

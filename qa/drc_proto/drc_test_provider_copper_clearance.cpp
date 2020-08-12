@@ -669,11 +669,9 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
     for( int ii = 0; ii < m_board->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = m_board->GetArea( ii );
-        ZONE_CONTAINER*    zoneRef = m_board->GetArea( ii );
-        std::set<VECTOR2I> colinearCorners;
+        ZONE_CONTAINER* zoneRef = m_board->GetArea( ii );
 
-        zoneRef->GetColinearCorners( m_board, colinearCorners );
-        zoneRef->BuildSmoothedPoly( smoothed_polys[ii], &colinearCorners );
+        zoneRef->BuildSmoothedPoly( smoothed_polys[ii], zoneRef->GetLayer() );
     }
 
     // iterate through all areas

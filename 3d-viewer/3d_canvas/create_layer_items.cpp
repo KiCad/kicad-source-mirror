@@ -774,7 +774,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 auto layerContainer = m_layers_poly.find( layer );
 
                 if( layerContainer != m_layers_poly.end() )
-                    zone->TransformSolidAreasShapesToPolygonSet( layer, *layerContainer->second );
+                    zone->TransformSolidAreasShapesToPolygon( layer, *layerContainer->second );
             }
         }
     }
@@ -1050,7 +1050,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 if( !zone->IsOnLayer( curr_layer_id ) )
                     continue;
 
-                zone->TransformSolidAreasShapesToPolygonSet( curr_layer_id, *layerPoly );
+                zone->TransformSolidAreasShapesToPolygon( curr_layer_id, *layerPoly );
             }
         }
 

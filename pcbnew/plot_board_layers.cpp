@@ -868,18 +868,10 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( zone->GetLayer() != layer )
             continue;
 
-        // Some intersecting zones, despite being on the same layer, cannot be
-        // merged due to other parameters such as fillet radius. The filled areas will end up
-        // effectively merged though, so we want to keep the corners of such intersections sharp.
-        std::set<VECTOR2I> colinearCorners;
-        zone->GetColinearCorners( aBoard, colinearCorners );
-
         // add shapes inflated by aMinThickness/2 in areas
-        zone->TransformOutlinesShapeWithClearanceToPolygon( areas, inflate + zone_margin,
-                                                            &colinearCorners );
+        zone->TransformOutlinesShapeWithClearanceToPolygon( areas, inflate + zone_margin );
         // add shapes with their exact mask layer size in initialPolys
-        zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys, zone_margin,
-                                                            &colinearCorners );
+        zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys, zone_margin );
     }
 
     int maxError = aBoard->GetDesignSettings().m_MaxError;

@@ -684,11 +684,8 @@ void DRC::testZones( BOARD_COMMIT& aCommit )
             }
         }
 
-        ZONE_CONTAINER*    zoneRef = m_pcb->GetArea( ii );
-        std::set<VECTOR2I> colinearCorners;
-        zoneRef->GetColinearCorners( m_pcb, colinearCorners );
-
-        zoneRef->BuildSmoothedPoly( smoothed_polys[ii], &colinearCorners );
+        ZONE_CONTAINER* zoneRef = m_pcb->GetArea( ii );
+        zoneRef->BuildSmoothedPoly( smoothed_polys[ii], zoneRef->GetLayer() );
     }
 
     // iterate through all areas
