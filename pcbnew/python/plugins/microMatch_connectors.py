@@ -42,7 +42,7 @@ class PadStaggeredZGridArray(PA.PadArray):
         @param aCentre      Center position
 
         """
-        super(PadStaggeredZGridArray, self).__init__(aPad)
+        super().__init__(aPad)
 
         self.padCount = int(aPadCount)
         self.lineCount = int(aLineCount)
