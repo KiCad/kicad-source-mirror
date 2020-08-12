@@ -183,7 +183,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
         }
     }
 
-    if( zone )
+    if( zone && zone->GetLayerSet().test( context->GetLayer() ) )
     {
         SHAPE_POLY_SET zonePoly = zone->GetFilledPolysList( context->GetLayer() );
         SHAPE_POLY_SET testPoly;
