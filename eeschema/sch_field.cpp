@@ -388,8 +388,8 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
             wxCHECK_MSG( aAuxData != NULL, false,
                          wxT( "Cannot replace reference designator without valid sheet path." ) );
 
-            wxCHECK_MSG( aSearchData.GetFlags() & FR_REPLACE_REFERENCES, false,
-                         wxT( "Invalid replace symbol reference field call." ) ) ;
+            if( !( aSearchData.GetFlags() & FR_REPLACE_REFERENCES ) )
+                return false;
 
             wxString text = parentComponent->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
