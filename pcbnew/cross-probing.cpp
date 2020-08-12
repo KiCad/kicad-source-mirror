@@ -275,7 +275,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
                                  fabs( bbSize.y / screenSize.y ) );
 
         // Try not to zoom on every cross-probe; it gets very noisy
-        if( crossProbingSettings.zoom_to_fit && ( ratio < 0.1 || ratio > 1.0 ) )
+        if( crossProbingSettings.zoom_to_fit && ( ratio < 0.5 || ratio > 1.0 ) )
             view->SetScale( view->GetScale() / ratio );
 
         view->SetCenter( bbox.Centre() );

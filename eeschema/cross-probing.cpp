@@ -137,7 +137,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                                          fabs( bbSize.y / screenSize.y ) );
 
                 // Try not to zoom on every cross-probe; it gets very noisy
-                if( ratio < 0.1 || ratio > 1.0 )
+                if( ratio < 0.5 || ratio > 1.0 )
                     getView()->SetScale( getView()->GetScale() / ratio );
             }
         }
