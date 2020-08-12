@@ -626,7 +626,12 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                        return visitedNodes.find( node ) != visitedNodes.end();
                    };
 
-    assert( m_tree );
+    if( !m_tree )
+    {
+        // Empty expression returns true
+        aCode->AddOp( makeUop( TR_UOP_PUSH_VALUE, 1.0 ) );
+        return true;
+    }
 
     stack.push_back( m_tree );
 
