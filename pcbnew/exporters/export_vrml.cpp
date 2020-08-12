@@ -51,7 +51,7 @@
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
-
+#include <board_commit.h>
 #include <zone_filler.h>
 
 // minimum width (mm) of a VRML line
@@ -315,10 +315,10 @@ static bool GetLayer( MODEL_VRML& aModel, LAYER_NUM layer, VRML_LAYER** vlayer )
 }
 
 static void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
-    VRML_LAYER* layer, double top_z, double bottom_z );
+                               VRML_LAYER* layer, double top_z, double bottom_z );
 
 static void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
-    VRML_LAYER* layer, double aHeight, bool aTopPlane );
+                               VRML_LAYER* layer, double aHeight, bool aTopPlane );
 
 static void write_triangle_bag( std::ostream& aOut_file, VRML_COLOR& aColor,
                                 VRML_LAYER* aLayer, bool aPlane, bool aTop,
@@ -420,8 +420,8 @@ static void write_triangle_bag( std::ostream& aOut_file, VRML_COLOR& aColor,
 }
 
 
-static void write_layers( MODEL_VRML& aModel, BOARD* aPcb,
-    const char* aFileName, OSTREAM* aOutputFile )
+static void write_layers( MODEL_VRML& aModel, BOARD* aPcb, const char* aFileName,
+                          OSTREAM* aOutputFile )
 {
     // VRML_LAYER board;
     aModel.m_board.Tesselate( &aModel.m_holes );
@@ -452,8 +452,8 @@ static void write_layers( MODEL_VRML& aModel, BOARD* aPcb,
     if( USE_INLINES )
     {
         write_triangle_bag( *aOutputFile, aModel.GetColor( VRML_COLOR_TRACK ),
-                           &aModel.m_top_copper, true, true,
-                           aModel.GetLayerZ( F_Cu ), 0 );
+                            &aModel.m_top_copper, true, true,
+                            aModel.GetLayerZ( F_Cu ), 0 );
     }
     else
     {
@@ -923,7 +923,7 @@ static void export_round_padstack( MODEL_VRML& aModel, BOARD* pcb,
     if( aModel.m_plainPCB )
         return;
 
-    while( 1 )
+    while( true )
     {
         if( layer == B_Cu )
         {
@@ -1016,9 +1016,8 @@ static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
 }
 
 
-static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
+static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb, COMMIT* aCommit )
 {
-
     for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = aPcb->GetArea( ii );
@@ -1030,11 +1029,9 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
             if( !GetLayer( aModel, layer, &vl ) )
                 continue;
 
-            // fixme: this modifies the board where it shouldn't, but I don't have the time
-            // to clean this up - TW
             if( !zone->IsFilled() )
             {
-                ZONE_FILLER filler( aPcb );
+                ZONE_FILLER filler( aPcb, aCommit );
                 zone->SetFillMode( ZONE_FILL_MODE::POLYGONS ); // use filled polygons
                 filler.Fill( { zone } );
             }
@@ -1586,6 +1583,8 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
 {
     BOARD*          pcb = GetBoard();
     bool            ok  = true;
+    BOARD_COMMIT    commit( this );     // We may need to modify the board (for instance to
+                                        // fill zones), so make sure we can revert.
 
     USE_INLINES = aExport3DFiles;
     USE_DEFS = true;
@@ -1630,7 +1629,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
 
         // Export zone fills
         if( !aUsePlainPCB )
-            export_vrml_zones( model3d, pcb);
+            export_vrml_zones( model3d, pcb, &commit );
 
         if( USE_INLINES )
         {
@@ -1699,6 +1698,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
         ok = false;
     }
 
+    commit.Revert();
     return ok;
 }
 

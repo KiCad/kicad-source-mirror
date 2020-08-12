@@ -166,10 +166,15 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
     }
 
     commit.Remove( &aZone );
-    commit.Push( _( "Add a zone cutout" ) );
 
-    ZONE_FILLER filler( board );
-    filler.Fill( newZones );
+    ZONE_FILLER filler( board, &commit );
+    if( !filler.Fill( newZones ) )
+    {
+        commit.Revert();
+        return;
+    }
+
+    commit.Push( _( "Add a zone cutout" ) );
 
     // Select the new zone and set it as the source for the next cutout
     toolMgr->RunAction( PCB_ACTIONS::selectItem, true, newZones[0] );
@@ -193,14 +198,19 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
             BOARD_COMMIT bCommit( &m_tool );
 
             aZone->HatchBorder();
+            bCommit.Add( aZone.get() );
 
             if( !m_params.m_keepout )
             {
-                ZONE_FILLER filler( m_tool.getModel<BOARD>() );
-                filler.Fill( { aZone.get() } );
+                ZONE_FILLER filler( m_tool.getModel<BOARD>(), &bCommit );
+
+                if( !filler.Fill( { aZone.get() } ) )
+                {
+                    bCommit.Revert();
+                    break;
+                }
             }
 
-            bCommit.Add( aZone.get() );
             bCommit.Push( _( "Add a zone" ) );
             m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, aZone.release() );
             break;

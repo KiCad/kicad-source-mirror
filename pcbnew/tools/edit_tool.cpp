@@ -477,9 +477,11 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                         // If moving a group, record position of all the descendants for undo
                         if( item->Type() == PCB_GROUP_T )
                         {
-                            static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
-                                                                              m_commit->Modify( bItem );
-                                                                          });
+                            static_cast<PCB_GROUP*>( item )->RunOnDescendants(
+                                    [&]( BOARD_ITEM* bItem )
+                                    {
+                                        m_commit->Modify( bItem );
+                                    });
                         }
                     }
                 }
@@ -634,7 +636,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
 int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 {
     const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool ) {
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            {
                 EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             } );
 
@@ -649,7 +652,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 
             if( via->GetViaType() == VIATYPE::MICROVIA )
             {
-                auto net = via->GetNet();
+                NETINFO_ITEM* net = via->GetNet();
 
                 new_width = net->GetMicroViaSize();
                 new_drill = net->GetMicroViaDrillSize();
@@ -663,7 +666,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
             via->SetDrill( new_drill );
             via->SetWidth( new_width );
         }
-        else if ( auto track = dyn_cast<TRACK*>( item ) )
+        else if ( TRACK* track = dyn_cast<TRACK*>( item ) )
         {
             m_commit->Modify( item );
 
@@ -770,9 +773,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             // If rotating a group, record position of all the descendants for undo
             if( item->Type() == PCB_GROUP_T )
             {
-                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
-                                                                  m_commit->Modify( bItem );
-                                                              });
+                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                                                   {
+                                                                       m_commit->Modify( bItem );
+                                                                   });
             }
         }
 
@@ -883,29 +887,29 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         {
         case PCB_MODULE_EDGE_T:
         {
-            auto& edge = static_cast<EDGE_MODULE&>( *item );
-            edge.Mirror( mirrorPoint, false );
+            EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
+            edge->Mirror( mirrorPoint, false );
             break;
         }
 
         case PCB_MODULE_ZONE_AREA_T:
         {
-            auto& zone = static_cast<MODULE_ZONE_CONTAINER&>( *item );
-            zone.Mirror( mirrorPoint, false );
+            MODULE_ZONE_CONTAINER* zone = static_cast<MODULE_ZONE_CONTAINER*>( item );
+            zone->Mirror( mirrorPoint, false );
             break;
         }
 
         case PCB_MODULE_TEXT_T:
         {
-            auto& modText = static_cast<TEXTE_MODULE&>( *item );
-            modText.Mirror( mirrorPoint, false );
+            TEXTE_MODULE* modText = static_cast<TEXTE_MODULE*>( item );
+            modText->Mirror( mirrorPoint, false );
             break;
         }
 
         case PCB_PAD_T:
         {
-            auto& pad = static_cast<D_PAD&>( *item );
-            mirrorPadX( pad, mirrorPoint );
+            D_PAD* pad = static_cast<D_PAD*>( item );
+            mirrorPadX( *pad, mirrorPoint );
             break;
         }
 
@@ -973,9 +977,10 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
         if( item->Type() == PCB_GROUP_T )
         {
-            static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
-                                                              m_commit->Modify( bItem );
-                                                          });
+            static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                                               {
+                                                                   m_commit->Modify( bItem );
+                                                               });
         }
 
         static_cast<BOARD_ITEM*>( item )->Flip( modPoint, leftRight );
@@ -1003,12 +1008,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         wxBell();
         return 0;
     }
-
-    ROUTER_TOOL* routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
-
-    // Do not delete items while actively routing.
-    if( routerTool && routerTool->Router() && routerTool->Router()->RoutingInProgress() )
-        return 1;
 
     std::vector<BOARD_ITEM*> lockedItems;
     Activate();
@@ -1078,8 +1077,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         {
         case PCB_MODULE_TEXT_T:
             {
-                auto text = static_cast<TEXTE_MODULE*>( item );
-                auto parent = static_cast<MODULE*>( item->GetParent() );
+                TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+                MODULE*       parent = static_cast<MODULE*>( item->GetParent() );
 
                 if( text->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
                 {
@@ -1092,8 +1091,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
         case PCB_PAD_T:
             {
-                auto pad = static_cast<D_PAD*>( item );
-                auto parent = static_cast<MODULE*>( item->GetParent() );
+                D_PAD*  pad = static_cast<D_PAD*>( item );
+                MODULE* parent = static_cast<MODULE*>( item->GetParent() );
 
                 m_commit->Modify( parent );
                 getView()->Remove( pad );
@@ -1103,8 +1102,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
         case PCB_MODULE_ZONE_AREA_T:
             {
-                auto zone = static_cast<MODULE_ZONE_CONTAINER*>( item );
-                auto parent = static_cast<MODULE*>( item->GetParent() );
+                MODULE_ZONE_CONTAINER* zone = static_cast<MODULE_ZONE_CONTAINER*>( item );
+                MODULE*                parent = static_cast<MODULE*>( item->GetParent() );
 
                 m_commit->Modify( parent );
                 getView()->Remove( zone );
@@ -1119,8 +1118,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 // Only interact with cutouts when deleting and a single item is selected
                 if( !isCut && selectionCopy.GetSize() == 1 )
                 {
-                    VECTOR2I curPos = getViewControls()->GetCursorPosition();
-                    auto     zone   = static_cast<ZONE_CONTAINER*>( item );
+                    VECTOR2I        curPos = getViewControls()->GetCursorPosition();
+                    ZONE_CONTAINER* zone   = static_cast<ZONE_CONTAINER*>( item );
 
                     int outlineIdx, holeIdx;
 
@@ -1134,9 +1133,14 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                         toFill.emplace_back( zone );
 
                         // Fill the modified zone
-                        ZONE_FILLER filler( board() );
+                        ZONE_FILLER  filler( board(), m_commit.get() );
                         filler.InstallNewProgressReporter( frame(), _( "Fill Zone" ), 4 );
-                        filler.Fill( toFill );
+
+                        if( !filler.Fill( toFill ) )
+                        {
+                            m_commit->Revert();
+                            return 1;
+                        }
 
                         // Update the display
                         zone->HatchBorder();
@@ -1160,9 +1164,10 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 m_commit->Remove( item );
                 removed.Add( item );
 
-                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
-                                                                  m_commit->Remove( bItem );
-                                                              });
+                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                                                   {
+                                                                       m_commit->Remove( bItem );
+                                                                   });
             }
             break;
 
@@ -1280,9 +1285,11 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
                 if( item->Type() == PCB_GROUP_T )
                     {
-                        static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
-                                                                          m_commit->Modify( bItem );
-                                                                      });
+                        static_cast<PCB_GROUP*>( item )->RunOnDescendants(
+                                [&]( BOARD_ITEM* bItem )
+                                {
+                                    m_commit->Modify( bItem );
+                                });
                     }
             }
             
@@ -1411,9 +1418,10 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         {
             if( dupe_item->Type() == PCB_GROUP_T )
             {
-                static_cast<PCB_GROUP*>( dupe_item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
-                                                                        m_commit->Add( bItem );
-                                                                    });
+                static_cast<PCB_GROUP*>( dupe_item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                                                        {
+                                                                            m_commit->Add( bItem );
+                                                                        });
             }
 
             // Clear the selection flag here, otherwise the SELECTION_TOOL

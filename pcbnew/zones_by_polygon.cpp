@@ -134,15 +134,21 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
             zones_to_refill.push_back( zone );
     }
 
+    commit.Stage( s_PickedList );
+
     if( zones_to_refill.size() )
     {
-        ZONE_FILLER filler( GetBoard() );
+        ZONE_FILLER filler( GetBoard(), &commit );
         wxString title = wxString::Format( _( "Refill %d Zones" ), (int) zones_to_refill.size() );
         filler.InstallNewProgressReporter( this, title, 4 );
-        filler.Fill( zones_to_refill );
+
+        if( !filler.Fill( zones_to_refill ) )
+        {
+            commit.Revert();
+            return;
+        }
     }
 
-    commit.Stage( s_PickedList );
     commit.Push( _( "Modify zone properties" ) );
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
 

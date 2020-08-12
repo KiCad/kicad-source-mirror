@@ -39,7 +39,7 @@ class SHAPE_LINE_CHAIN;
 class ZONE_FILLER
 {
 public:
-    ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit = nullptr );
+    ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit );
     ~ZONE_FILLER();
 
     void InstallNewProgressReporter( wxWindow* aParent, const wxString& aTitle, int aNumPhases );

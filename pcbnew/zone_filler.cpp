@@ -141,8 +141,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         if( zone->GetIsKeepout() )
             continue;
 
-        if( m_commit )
-            m_commit->Modify( zone );
+        m_commit->Modify( zone );
 
         // calculate the hash value for filled areas. it will be used later
         // to know if the current filled areas are up to date
@@ -160,16 +159,6 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         // on some platforms
         zone->UnFill();
     }
-
-    auto cleanupAfterCancel =
-            [&]()
-            {
-                if( m_commit )
-                    m_commit->Revert();
-
-                for( ZONE_CONTAINER* zone : aZones )
-                    zone->UnFill();
-            };
 
     std::atomic<size_t> nextItem( 0 );
     size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
@@ -236,10 +225,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     if( m_progressReporter )
     {
         if( m_progressReporter->IsCancelled() )
-        {
-            cleanupAfterCancel();
             return false;
-        }
 
         m_progressReporter->AdvancePhase();
         m_progressReporter->Report( _( "Removing insulated copper islands..." ) );
@@ -251,10 +237,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     connectivity->SetProgressReporter( nullptr );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
-    {
-        cleanupAfterCancel();
         return false;
-    }
 
     // Now remove insulated copper islands and islands outside the board edge
     bool outOfDate = false;
@@ -319,10 +302,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
                 outOfDate = true;
 
             if( m_progressReporter && m_progressReporter->IsCancelled() )
-            {
-                cleanupAfterCancel();
                 return false;
-            }
         }
     }
 
@@ -336,10 +316,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         if( dlg.ShowModal() == wxID_CANCEL )
-        {
-            cleanupAfterCancel();
             return false;
-        }
     }
 
     if( m_progressReporter )
@@ -402,10 +379,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     if( m_progressReporter )
     {
         if( m_progressReporter->IsCancelled() )
-        {
-            cleanupAfterCancel();
             return false;
-        }
 
         m_progressReporter->AdvancePhase();
         m_progressReporter->Report( _( "Committing changes..." ) );
@@ -413,19 +387,6 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     }
 
     connectivity->SetProgressReporter( nullptr );
-
-    if( m_commit )
-    {
-        m_commit->Push( _( "Fill Zone(s)" ), false );
-    }
-    else
-    {
-        for( auto& i : toFill )
-            connectivity->Update( i.first );
-
-        connectivity->RecalculateRatsnest();
-    }
-
     return true;
 }
 

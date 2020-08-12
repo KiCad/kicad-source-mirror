@@ -70,9 +70,15 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller )
 
     if( filler.Fill( toFill, true ) )
     {
+        commit.Push( _( "Fill Zone(s)" ), false );
         getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
-        canvas()->Refresh();
     }
+    else
+    {
+        commit.Revert();
+    }
+
+    canvas()->Refresh();
 }
 
 
@@ -96,7 +102,14 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller )
     filler.InstallNewProgressReporter( aCaller, _( "Fill All Zones" ),  4 );
 
     if( filler.Fill( toFill ) )
+    {
+        commit.Push( _( "Fill Zone(s)" ), false );
         getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
+    }
+    else
+    {
+        commit.Revert();
+    }
 
     canvas()->Refresh();
 
@@ -128,7 +141,11 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
 
     ZONE_FILLER filler( board(), &commit );
     filler.InstallNewProgressReporter( frame(), _( "Fill Zone" ), 4 );
-    filler.Fill( toFill );
+
+    if( filler.Fill( toFill ) )
+        commit.Push( _( "Fill Zone(s)" ), false );
+    else
+        commit.Revert();
 
     canvas()->Refresh();
     return 0;
