@@ -312,8 +312,9 @@ public:
      * @param ignoreLineWidth = used for edge cut items where the line width is only
      * for visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue,
-            int aError = ARC_HIGH_DEF, bool ignoreLineWidth = false ) const override;
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
+                                               int aClearanceValue, int aError = ARC_HIGH_DEF,
+                                               bool ignoreLineWidth = false ) const override;
 
     virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

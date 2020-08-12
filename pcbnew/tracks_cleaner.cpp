@@ -331,7 +331,7 @@ void TRACKS_CLEANER::deleteTracksInPads()
             if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
             {
                 SHAPE_POLY_SET poly;
-                track->TransformShapeWithClearanceToPolygon( poly, 0 );
+                track->TransformShapeWithClearanceToPolygon( poly, track->GetLayer(), 0 );
 
                 poly.BooleanSubtract( *pad->GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
 

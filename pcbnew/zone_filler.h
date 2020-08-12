@@ -47,9 +47,10 @@ public:
 
 private:
 
-    void addKnockout( D_PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles );
+    void addKnockout( D_PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles );
 
-    void addKnockout( BOARD_ITEM* aItem, int aGap, bool aIgnoreLineWidth, SHAPE_POLY_SET& aHoles );
+    void addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap, bool aIgnoreLineWidth,
+                      SHAPE_POLY_SET& aHoles );
 
     void knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                  SHAPE_POLY_SET& aFill );

@@ -535,7 +535,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         {
             std::vector<wxPoint> polygonal_shape;
             SHAPE_POLY_SET pad_shape;
-            aPad->MergePrimitivesAsPolygon( &pad_shape );
+            aPad->MergePrimitivesAsPolygon( &pad_shape, UNDEFINED_LAYER );
 
 #ifdef EXPORT_CUSTOM_PADS_CONVEX_HULL
             BuildConvexHull( polygonal_shape, pad_shape );

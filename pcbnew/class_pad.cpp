@@ -246,19 +246,19 @@ void D_PAD::SetChamferRectRatio( double aChamferScale )
 }
 
 
-const std::vector<std::shared_ptr<SHAPE>>& D_PAD::GetEffectiveShapes() const
+const std::vector<std::shared_ptr<SHAPE>>& D_PAD::GetEffectiveShapes( PCB_LAYER_ID aLayer ) const
 {
     if( m_shapesDirty )
-        BuildEffectiveShapes();
+        BuildEffectiveShapes( aLayer );
 
     return m_effectiveShapes;
 }
 
 
-const std::shared_ptr<SHAPE_POLY_SET>& D_PAD::GetEffectivePolygon() const
+const std::shared_ptr<SHAPE_POLY_SET>& D_PAD::GetEffectivePolygon( PCB_LAYER_ID aLayer ) const
 {
     if( m_shapesDirty )
-        BuildEffectiveShapes();
+        BuildEffectiveShapes( aLayer );
 
     return m_effectivePolygon;
 }
@@ -269,9 +269,9 @@ std::shared_ptr<SHAPE> D_PAD::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
     std::shared_ptr<SHAPE_COMPOUND> shape( new SHAPE_COMPOUND );
 
     if( m_shapesDirty )
-        BuildEffectiveShapes();
+        BuildEffectiveShapes( aLayer );
 
-    for( auto s : m_effectiveShapes )
+    for( std::shared_ptr<SHAPE>& s : m_effectiveShapes )
         shape->AddShape( s->Clone() ); // fixme: use COMPOUND everywhere
 
     return shape;
@@ -281,7 +281,7 @@ std::shared_ptr<SHAPE> D_PAD::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 const SHAPE_SEGMENT* D_PAD::GetEffectiveHoleShape() const
 {
     if( m_shapesDirty )
-        BuildEffectiveShapes();
+        BuildEffectiveShapes( UNDEFINED_LAYER );
 
     return m_effectiveHoleShape.get();
 }
@@ -290,13 +290,13 @@ const SHAPE_SEGMENT* D_PAD::GetEffectiveHoleShape() const
 int D_PAD::GetBoundingRadius() const
 {
     if( m_shapesDirty )
-        BuildEffectiveShapes();
+        BuildEffectiveShapes( UNDEFINED_LAYER );
 
     return m_effectiveBoundingRadius;
 }
 
 
-void D_PAD::BuildEffectiveShapes() const
+void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 {
     m_effectiveShapes.clear();
     m_effectiveHoleShape = nullptr;
@@ -420,9 +420,12 @@ void D_PAD::BuildEffectiveShapes() const
     // Polygon
     //
     m_effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
-    TransformShapeWithClearanceToPolygon( *m_effectivePolygon, 0 );
+    TransformShapeWithClearanceToPolygon( *m_effectivePolygon, aLayer, 0 );
 
     // Bounding box and radius
+    //
+    // PADSTACKS TODO: these will both need to cycle through all layers to get the largest
+    // values....
     //
     m_effectiveBoundingRadius = 0;
 
@@ -468,7 +471,7 @@ void D_PAD::BuildEffectiveShapes() const
 const EDA_RECT D_PAD::GetBoundingBox() const
 {
     if( m_shapesDirty )
-        BuildEffectiveShapes();
+        BuildEffectiveShapes( UNDEFINED_LAYER );
 
     return m_effectiveBoundingBox;
 }

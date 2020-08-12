@@ -339,7 +339,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 // so build a similar pad shape, and inflate/deflate the polygonal shape
                 D_PAD dummy( *pad );
                 SHAPE_POLY_SET shape;
-                pad->MergePrimitivesAsPolygon( &shape );
+                pad->MergePrimitivesAsPolygon( &shape, UNDEFINED_LAYER );
                 // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
                 // which can create bad shapes if margin.x is < 0
                 int maxError = aBoard->GetDesignSettings().m_MaxError;
@@ -850,9 +850,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 continue;
 
             // add shapes with their exact mask layer size in initialPolys
-            via->TransformShapeWithClearanceToPolygon( initialPolys, via_clearance );
+            via->TransformShapeWithClearanceToPolygon( initialPolys, layer, via_clearance );
             // add shapes inflated by aMinThickness/2 in areas
-            via->TransformShapeWithClearanceToPolygon( areas, via_margin );
+            via->TransformShapeWithClearanceToPolygon( areas, layer, via_margin );
         }
     }
 

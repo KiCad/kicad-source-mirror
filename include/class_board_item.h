@@ -356,7 +356,10 @@ public:
      * for visualization
      */
     virtual void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-            int aClearanceValue, int aError = ARC_LOW_DEF, bool ignoreLineWidth = false ) const;
+                                                       PCB_LAYER_ID aLayer,
+                                                       int aClearanceValue,
+                                                       int aError = ARC_LOW_DEF,
+                                                       bool ignoreLineWidth = false ) const;
 
     struct ptr_cmp
     {

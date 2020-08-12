@@ -164,8 +164,9 @@ public:
      * @param ignoreLineWidth = used for edge cut items where the line width is only
      * for visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue,
-            int aError = ARC_HIGH_DEF, bool ignoreLineWidth = false ) const override;
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
+                                               int aClearanceValue, int aError = ARC_HIGH_DEF,
+                                               bool ignoreLineWidth = false ) const override;
     /**
      * Function IsPointOnEnds
      * returns STARTPOINT if point if near (dist = min_dist) start point, ENDPOINT if

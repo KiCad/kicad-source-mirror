@@ -902,7 +902,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         else
         {
             SHAPE_POLY_SET polySet;
-            pad->TransformShapeWithClearanceToPolygon( polySet, margin.x );
+            pad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x );
             m_gal->DrawPolygon( polySet );
         }
 
@@ -940,7 +940,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         else
         {
             SHAPE_POLY_SET polySet;
-            pad->TransformShapeWithClearanceToPolygon( polySet, clearance );
+            pad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), clearance );
             m_gal->DrawPolygon( polySet );
         }
     }

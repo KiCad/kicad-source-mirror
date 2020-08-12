@@ -1187,10 +1187,11 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         }
     }
 
+    // PADSTACKS TODO: this will need to check each layer in the pad...
     if( m_dummyPad->GetShape() == PAD_SHAPE_CUSTOM )
     {
         SHAPE_POLY_SET mergedPolygon;
-        m_dummyPad->MergePrimitivesAsPolygon( &mergedPolygon );
+        m_dummyPad->MergePrimitivesAsPolygon( &mergedPolygon, UNDEFINED_LAYER );
 
         if( mergedPolygon.OutlineCount() > 1 )
             error_msgs.Add( _( "Incorrect pad shape: the shape must be equivalent to only one polygon" ) );

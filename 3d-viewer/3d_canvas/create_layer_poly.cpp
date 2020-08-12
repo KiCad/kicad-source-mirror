@@ -71,7 +71,7 @@ void BOARD_ADAPTER::transformGraphicModuleEdgeToPolygonSet( const MODULE *aModul
             EDGE_MODULE* outline = (EDGE_MODULE*) item;
 
             if( outline->GetLayer() == aLayer )
-                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, 0 );
+                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0 );
         }
     }
 }

@@ -607,7 +607,7 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
     auto findNext = [&]( PCB_LAYER_ID aLayer ) -> EDGE_MODULE*
                     {
                         SHAPE_POLY_SET padPoly;
-                        aPad->TransformShapeWithClearanceToPolygon( padPoly, 0 );
+                        aPad->TransformShapeWithClearanceToPolygon( padPoly, aLayer, 0 );
 
                         for( BOARD_ITEM* item : board()->GetFirstModule()->GraphicalItems() )
                         {
@@ -620,7 +620,7 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
                                 continue;
 
                             SHAPE_POLY_SET drawPoly;
-                            draw->TransformShapeWithClearanceToPolygon( drawPoly, 0 );
+                            draw->TransformShapeWithClearanceToPolygon( drawPoly, aLayer, 0 );
                             drawPoly.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
 
                             if( !drawPoly.IsEmpty() )
@@ -657,7 +657,7 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
             // to a polygon primitive
             SHAPE_POLY_SET existingOutline;
             int maxError = board()->GetDesignSettings().m_MaxError;
-            aPad->TransformShapeWithClearanceToPolygon( existingOutline, 0, maxError );
+            aPad->TransformShapeWithClearanceToPolygon( existingOutline, layer, 0, maxError );
 
             aPad->SetAnchorPadShape( PAD_SHAPE_CIRCLE );
             wxSize minAnnulus( Millimeter2iu( 0.2 ), Millimeter2iu( 0.2 ) );

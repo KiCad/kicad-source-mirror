@@ -466,7 +466,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     continue;
 
                 // Add the track/via contour
-                track->TransformShapeWithClearanceToPolygon( *layerPoly, 0 );
+                track->TransformShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0 );
             }
         }
     }
@@ -681,7 +681,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 switch( item->Type() )
                 {
                 case PCB_LINE_T:
-                    ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( *layerPoly, 0 );
+                    ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( *layerPoly,
+                                                                                   cur_layer_id, 0 );
                     break;
 
                 case PCB_TEXT_T:
@@ -960,7 +961,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_LINE_T:
-                ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( *layerPoly, 0 );
+                ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( *layerPoly,
+                                                                               curr_layer_id, 0 );
                 break;
 
             case PCB_TEXT_T:

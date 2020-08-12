@@ -1174,7 +1174,7 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
     {
         SHAPE_POLY_SET polySet;
         std::vector< wxRealPoint > cornerList;
-        aPad->MergePrimitivesAsPolygon( &polySet );
+        aPad->MergePrimitivesAsPolygon( &polySet, UNDEFINED_LAYER );
 
         for( int cnt = 0; cnt < polySet.OutlineCount(); ++cnt )
         {

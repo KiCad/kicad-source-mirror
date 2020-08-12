@@ -81,7 +81,7 @@ void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 
 
 // Based on
-// void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet
+// void TEXTE_PCB::TransformShapeWithClearanceToPolygon
 // board_items_to_polygon_shape_transform.cpp
 void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const TEXTE_PCB* aText,
                                                       CGENERICCONTAINER2D *aDstContainer,
@@ -314,6 +314,7 @@ void BOARD_ADAPTER::createNewTrack( const TRACK* aTrack, CGENERICCONTAINER2D *aD
 
 void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
                                                CGENERICCONTAINER2D *aDstContainer,
+                                               PCB_LAYER_ID aLayer,
                                                wxSize aClearanceValue ) const
 {
     SHAPE_POLY_SET poly;
@@ -325,7 +326,7 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
         // we fake a larger pad and run the general-purpose polygon builder on it.
         D_PAD dummy( *aPad );
         dummy.SetSize( aPad->GetSize() + aClearanceValue + aClearanceValue );
-        dummy.TransformShapeWithClearanceToPolygon( poly, 0 );
+        dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0 );
     }
     else
     {
@@ -508,7 +509,7 @@ void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule
             break;
         }
 
-        createNewPadWithClearance( pad, aDstContainer, margin );
+        createNewPadWithClearance( pad, aDstContainer, aLayerId, margin );
     }
 }
 
@@ -648,7 +649,8 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSe
         {
             SHAPE_POLY_SET polyList;
 
-            aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aClearanceValue );
+            aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aLayerId,
+                                                                aClearanceValue );
 
             polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
 
@@ -701,7 +703,7 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSe
     {
         SHAPE_POLY_SET polyList;
 
-        aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aClearanceValue );
+        aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aLayerId, aClearanceValue );
 
         polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
 

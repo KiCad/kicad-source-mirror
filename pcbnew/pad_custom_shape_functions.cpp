@@ -175,12 +175,13 @@ void D_PAD::DeletePrimitivesList()
 }
 
 
-void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError ) const
+void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
+                                       int aError ) const
 {
     SHAPE_POLY_SET polyset;
 
     for( const std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
-        primitive->TransformShapeWithClearanceToPolygon( polyset, 0, aError );
+        primitive->TransformShapeWithClearanceToPolygon( polyset, aLayer, 0, aError );
 
     polyset.Simplify( SHAPE_POLY_SET::PM_FAST );
 
@@ -192,7 +193,7 @@ void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aErro
     }
 }
 
-void D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon ) const
+void D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer ) const
 {
     auto board = GetBoard();
     int maxError = ARC_HIGH_DEF;
@@ -219,14 +220,14 @@ void D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon ) const
         break;
     }
 
-    addPadPrimitivesToPolygon( aMergedPolygon, maxError );
+    addPadPrimitivesToPolygon( aMergedPolygon, aLayer, maxError );
 }
 
 
 bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
 {
     SHAPE_POLY_SET poly;
-    addPadPrimitivesToPolygon( &poly, ARC_LOW_DEF );
+    addPadPrimitivesToPolygon( &poly, UNDEFINED_LAYER, ARC_LOW_DEF );
 
     if( poly.OutlineCount() > 1 )
         return false;

@@ -73,7 +73,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
         if( !track->IsOnLayer( aLayer ) )
             continue;
 
-        track->TransformShapeWithClearanceToPolygon( aOutlines, 0 );
+        track->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0 );
     }
 
     // convert pads
@@ -103,7 +103,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
         switch( item->Type() )
         {
         case PCB_LINE_T:
-            ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( aOutlines, 0 );
+            ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0 );
             break;
 
         case PCB_TEXT_T:
@@ -173,7 +173,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
             break;
         }
 
-        pad->TransformShapeWithClearanceToPolygon( aCornerBuffer, clearance );
+        pad->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, clearance );
     }
 }
 
@@ -209,7 +209,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
             EDGE_MODULE* outline = (EDGE_MODULE*) item;
 
             if( aLayer != UNDEFINED_LAYER && outline->GetLayer() == aLayer )
-                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, 0, aError );
+                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0, aError );
         }
     }
 
@@ -354,9 +354,13 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCorner
 
 
 void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                        PCB_LAYER_ID aLayer,
                                                         int aClearanceValue, int aError,
                                                         bool ignoreLineWidth ) const
 {
+    if( aLayer != m_Layer )
+        return;
+
     int width = ignoreLineWidth ? 0 : m_Width;
 
     width += 2 * aClearanceValue;
@@ -478,6 +482,7 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 
 
 void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                  PCB_LAYER_ID aLayer,
                                                   int aClearanceValue, int aError,
                                                   bool ignoreLineWidth ) const
 {
@@ -512,6 +517,7 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
 
 void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                  PCB_LAYER_ID aLayer,
                                                   int aClearanceValue, int aError,
                                                   bool ignoreLineWidth ) const
 {
@@ -614,7 +620,7 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_CUSTOM:
     {
         SHAPE_POLY_SET outline;
-        MergePrimitivesAsPolygon( &outline );
+        MergePrimitivesAsPolygon( &outline, aLayer );
         outline.Rotate( -DECIDEG2RAD( m_orient ) );
         outline.Move( VECTOR2I( m_pos ) );
 
@@ -663,19 +669,15 @@ bool D_PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, 
 
 
 void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                           int aClearanceValue, int aError,
-                                                           bool ignoreLineWidth ) const
+                                                           PCB_LAYER_ID aLayer, int aClearance,
+                                                           int aError, bool ignoreLineWidth ) const
 {
-    // Now that zones are multilayer, we cannot implement this without a layer argument.
-    // But, at the time of adding multilayer zones, this is never called for zones anyway
-    // so let's just disable it and fail.
-    wxFAIL_MSG( "TransformShapeWithClearanceToPolygon is not supported for zones" );
+    wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for zones." );
 
-#if 0
     if( !m_FilledPolysList.count( aLayer ) )
         return;
 
     aCornerBuffer = m_FilledPolysList.at( aLayer );
+    aCornerBuffer.Inflate( aClearance, aError );
     aCornerBuffer.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-#endif
 }

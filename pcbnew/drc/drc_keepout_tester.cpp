@@ -298,7 +298,7 @@ bool DRC_KEEPOUT_TESTER::checkDrawings()
             continue;
 
         SHAPE_POLY_SET poly;
-        drawing->TransformShapeWithClearanceToPolygon( poly, 0 );
+        drawing->TransformShapeWithClearanceToPolygon( poly, drawing->GetLayer(), 0 );
 
         // Build the common area between footprint and the keepout area:
         poly.BooleanIntersection( *m_zone->Outline(), SHAPE_POLY_SET::PM_FAST );

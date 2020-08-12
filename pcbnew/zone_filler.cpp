@@ -131,7 +131,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         for( auto pad : module->Pads() )
         {
             if( pad->IsDirty() )
-                pad->BuildEffectiveShapes();
+                pad->BuildEffectiveShapes( UNDEFINED_LAYER );
         }
     }
 
@@ -439,12 +439,12 @@ static void setupDummyPadForHole( const D_PAD* aPad, D_PAD& aDummyPad )
  * Add a knockout for a pad.  The knockout is 'aGap' larger than the pad (which might be
  * either the thermal clearance or the electrical clearance).
  */
-void ZONE_FILLER::addKnockout( D_PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
+void ZONE_FILLER::addKnockout( D_PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles )
 {
     if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
     {
         SHAPE_POLY_SET poly;
-        aPad->TransformShapeWithClearanceToPolygon( poly, aGap, m_high_def );
+        aPad->TransformShapeWithClearanceToPolygon( poly, aLayer, aGap, m_high_def );
 
         // the pad shape in zone can be its convex hull or the shape itself
         if( aPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
@@ -467,9 +467,9 @@ void ZONE_FILLER::addKnockout( D_PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
         // small arcs)
         if( aPad->GetShape() == PAD_SHAPE_CIRCLE || aPad->GetShape() == PAD_SHAPE_OVAL ||
           ( aPad->GetShape() == PAD_SHAPE_ROUNDRECT && aPad->GetRoundRectRadiusRatio() > 0.4 ) )
-            aPad->TransformShapeWithClearanceToPolygon( aHoles, aGap, m_high_def );
+            aPad->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_high_def );
         else
-            aPad->TransformShapeWithClearanceToPolygon( aHoles, aGap, m_low_def );
+            aPad->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_low_def );
     }
 }
 
@@ -478,15 +478,16 @@ void ZONE_FILLER::addKnockout( D_PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
  * Add a knockout for a graphic item.  The knockout is 'aGap' larger than the item (which
  * might be either the electrical clearance or the board edge clearance).
  */
-void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, int aGap, bool aIgnoreLineWidth,
-                               SHAPE_POLY_SET& aHoles )
+void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
+                               bool aIgnoreLineWidth, SHAPE_POLY_SET& aHoles )
 {
     switch( aItem->Type() )
     {
     case PCB_LINE_T:
     {
         DRAWSEGMENT* seg = (DRAWSEGMENT*) aItem;
-        seg->TransformShapeWithClearanceToPolygon( aHoles, aGap, m_high_def, aIgnoreLineWidth );
+        seg->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_high_def,
+                                                   aIgnoreLineWidth );
         break;
     }
     case PCB_TEXT_T:
@@ -498,7 +499,8 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, int aGap, bool aIgnoreLineWidt
     case PCB_MODULE_EDGE_T:
     {
         EDGE_MODULE* edge = (EDGE_MODULE*) aItem;
-        edge->TransformShapeWithClearanceToPolygon( aHoles, aGap, m_high_def, aIgnoreLineWidth );
+        edge->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_high_def,
+                                                    aIgnoreLineWidth );
         break;
     }
     case PCB_MODULE_TEXT_T:
@@ -550,7 +552,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER
                 pad = &dummypad;
             }
 
-            addKnockout( pad, aZone->GetThermalReliefGap( pad ), holes );
+            addKnockout( pad, aLayer, aZone->GetThermalReliefGap( pad ), holes );
         }
     }
 
@@ -620,7 +622,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                     else
                         gap = aZone->GetClearance( aLayer, pad );
 
-                    addKnockout( pad, gap, aHoles );
+                    addKnockout( pad, aLayer, gap, aHoles );
                 }
             }
         }
@@ -651,12 +653,12 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                 }
                 else
                 {
-                    via->TransformShapeWithClearanceToPolygon( aHoles, gap, m_low_def );
+                    via->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_low_def );
                 }
             }
             else
             {
-                track->TransformShapeWithClearanceToPolygon( aHoles, gap, m_low_def );
+                track->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_low_def );
             }
         }
     }
@@ -676,7 +678,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                     bool ignoreLineWidth = aItem->IsOnLayer( Edge_Cuts );
                     int  gap = aZone->GetClearance( aLayer, aItem );
 
-                    addKnockout( aItem, gap, ignoreLineWidth, aHoles );
+                    addKnockout( aItem, aLayer, gap, ignoreLineWidth, aHoles );
                 }
             };
 
@@ -1291,7 +1293,8 @@ void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER
                                               outline_margin - min_annulus );
 
                     clearance = std::max( 0, clearance - linethickness / 2 );
-                    pad->TransformShapeWithClearanceToPolygon( aprons, clearance, ARC_HIGH_DEF );
+                    pad->TransformShapeWithClearanceToPolygon( aprons, aLayer, clearance,
+                                                               ARC_HIGH_DEF );
                 }
             }
         }

@@ -579,6 +579,7 @@ class BOARD_ADAPTER
 
     void createNewPadWithClearance( const D_PAD *aPad,
                                     CGENERICCONTAINER2D *aDstContainer,
+                                    PCB_LAYER_ID aLayer,
                                     wxSize aClearanceValue ) const;
 
     COBJECT2D *createNewPadDrill( const D_PAD* aPad, int aInflateValue );

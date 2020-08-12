@@ -132,6 +132,7 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
 
 
 void BOARD_ITEM::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                       PCB_LAYER_ID aLayer,
                                                        int aClearanceValue, int aError,
                                                        bool ignoreLineWidth ) const
 {

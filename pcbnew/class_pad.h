@@ -260,7 +260,7 @@ public:
      * Merge all basic shapes to a SHAPE_POLY_SET
      * Note: The corners coordinates are relative to the pad position, orientation 0,
      */
-    void MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon ) const;
+    void MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer ) const;
 
     /**
      * clear the basic shapes list
@@ -367,8 +367,8 @@ public:
      * @param aMaxError = maximum error from true when converting arcs
      * @param ignoreLineWidth = used for edge cuts where the line width is only for visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue,
-                                               int aMaxError = ARC_HIGH_DEF,
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
+                                               int aClearanceValue, int aMaxError = ARC_HIGH_DEF,
                                                bool ignoreLineWidth = false ) const override;
 
     /**
@@ -385,9 +385,9 @@ public:
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
-    const std::vector<std::shared_ptr<SHAPE>>& GetEffectiveShapes() const;
+    const std::vector<std::shared_ptr<SHAPE>>& GetEffectiveShapes( PCB_LAYER_ID = UNDEFINED_LAYER ) const;
 
-    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon() const;
+    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon( PCB_LAYER_ID = UNDEFINED_LAYER ) const;
 
     /**
      * Function GetEffectiveHoleShape
@@ -604,7 +604,7 @@ public:
      * Rebuilds the effective shape cache (and bounding box and radius) for the pad and clears
      * the dirty bit.
      */
-    void BuildEffectiveShapes() const;
+    void BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -620,7 +620,8 @@ public:
 
 
 private:
-    void addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError ) const;
+    void addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
+                                    int aError ) const;
 
 private:
     wxString      m_name;               // Pad name (pin number in schematic)
