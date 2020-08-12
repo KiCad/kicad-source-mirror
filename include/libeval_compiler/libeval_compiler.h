@@ -241,7 +241,7 @@ public:
 class CONTEXT
 {
 public:
-    ~CONTEXT()
+    virtual ~CONTEXT()
     {
         for( VALUE* value : m_ownedValues )
             delete value;

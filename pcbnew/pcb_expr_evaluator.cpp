@@ -215,6 +215,8 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 
 BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::CONTEXT* aCtx ) const
 {
+    wxASSERT( dynamic_cast<PCB_EXPR_CONTEXT*>( aCtx ) );
+
     const PCB_EXPR_CONTEXT* ctx = static_cast<const PCB_EXPR_CONTEXT*>( aCtx );
     BOARD_ITEM*             item  = ctx->GetItem( m_itemIndex );
     return item;
@@ -381,11 +383,11 @@ PCB_EXPR_EVALUATOR::~PCB_EXPR_EVALUATOR()
 bool PCB_EXPR_EVALUATOR::Evaluate( const wxString& aExpr )
 {
     PCB_EXPR_UCODE   ucode;
-    LIBEVAL::CONTEXT preflightContext;
+    PCB_EXPR_CONTEXT preflightContext( F_Cu );
 
     m_compiler.Compile( aExpr.ToUTF8().data(), &ucode, &preflightContext );
 
-    LIBEVAL::CONTEXT evaluationContext;
+    PCB_EXPR_CONTEXT evaluationContext( F_Cu );
     LIBEVAL::VALUE*  result = ucode.Run( &evaluationContext );
 
     if( result->GetType() == LIBEVAL::VT_NUMERIC )
