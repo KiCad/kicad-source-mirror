@@ -34,6 +34,7 @@
 
 #include <gl_utils.h>
 
+#include <advanced_config.h>
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/utils.h>
 #include <gal/definitions.h>
@@ -1042,6 +1043,32 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet )
                 DrawPolyline( lc );
             }
         }
+    }
+
+    if( ADVANCED_CFG::GetCfg().m_DrawTriangulationOutlines )
+    {
+        auto oldStrokeColor = strokeColor;
+        double oldLayerDepth = layerDepth;
+
+        SetLayerDepth( layerDepth - 1 );
+        SetStrokeColor( COLOR4D( 0.0, 1.0, 0.2, 1.0 ) );
+
+        for( unsigned int j = 0; j < aPolySet.TriangulatedPolyCount(); ++j )
+        {
+            auto triPoly = aPolySet.TriangulatedPolygon( j );
+
+            for( size_t i = 0; i < triPoly->GetTriangleCount(); i++ )
+            {
+                VECTOR2I a, b, c;
+                triPoly->GetTriangle( i, a, b, c );
+                DrawLine( a, b );
+                DrawLine( b, c );
+                DrawLine( c, a );
+            }
+        }
+
+        SetStrokeColor( oldStrokeColor );
+        SetLayerDepth( oldLayerDepth );
     }
 }
 

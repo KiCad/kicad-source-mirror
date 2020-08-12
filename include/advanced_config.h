@@ -77,10 +77,10 @@ public:
 
     /**
      * For drawsegments - arcs.
-     * When drawing an arc, the angle ( center - start ) - ( start - end ) 
+     * When drawing an arc, the angle ( center - start ) - ( start - end )
      * can be limited to avoid extremely high radii.
      */
-    double m_drawArcCenterStartEndMaxAngle;
+    double m_drawArcCenterMaxAngle;
 
     /**
      * Extra fill clearance for zone fills
@@ -108,6 +108,10 @@ public:
      */
     bool m_CompactSave;
 
+    /**
+     * When true, strokes the triangulations with visible color
+     */
+    bool m_DrawTriangulationOutlines;
 
 private:
     ADVANCED_CFG();

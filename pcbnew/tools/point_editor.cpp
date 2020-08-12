@@ -732,7 +732,7 @@ void POINT_EDITOR::updateItem() const
 
                         // This is just to limit the radius, so nothing overflows later when drawing.
                         if( abs( v2.y / ( R - v2.x ) )
-                                > ADVANCED_CFG::GetCfg().m_drawArcCenterStartEndMaxAngle )
+                                > ADVANCED_CFG::GetCfg().m_drawArcCenterMaxAngle )
                         {
                             arcValid = false;
                         }

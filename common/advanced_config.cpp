@@ -108,6 +108,11 @@ static const wxChar DrawArcAccuracy[] = wxT( "DrawArcAccuracy" );
  */
 static const wxChar DrawArcCenterStartEndMaxAngle[] = wxT( "DrawArcCenterStartEndMaxAngle" );
 
+/**
+ * When true, GAL will stroke the triangulations (only used in OpenGL) with a visible color
+ */
+static const wxChar StrokeTriangulation[] = wxT( "StrokeTriangulation" );
+
 } // namespace KEYS
 
 
@@ -185,11 +190,12 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
-    m_realTimeConnectivity          = true;
-    m_coroutineStackSize            = AC_STACK::default_stack;
-    m_ShowRouterDebugGraphics       = false;
-    m_drawArcAccuracy               = 10.0;
-    m_drawArcCenterStartEndMaxAngle = 50.0;
+    m_realTimeConnectivity      = true;
+    m_coroutineStackSize        = AC_STACK::default_stack;
+    m_ShowRouterDebugGraphics   = false;
+    m_drawArcAccuracy           = 10.0;
+    m_drawArcCenterMaxAngle     = 50.0;
+    m_DrawTriangulationOutlines = false;
 
     loadFromConfigFile();
 }
@@ -239,11 +245,14 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::CompactFileSave,
                                                 &m_CompactSave, false ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE(
-            true, AC_KEYS::DrawArcAccuracy, &m_drawArcAccuracy, 10.0, 0.0, 100000.0 ) );
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcAccuracy,
+                                                  &m_drawArcAccuracy, 10.0, 0.0, 100000.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcCenterStartEndMaxAngle,
-            &m_drawArcCenterStartEndMaxAngle, 50.0, 0.0, 100000.0 ) );
+                                                  &m_drawArcCenterMaxAngle, 50.0, 0.0, 100000.0 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::StrokeTriangulation,
+                                                &m_DrawTriangulationOutlines, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 
