@@ -38,7 +38,7 @@ class circular_pad_array_wizard(FootprintWizardBase.FootprintWizard):
         self.AddParam("Pads", "drill", self.uMM, 0.8)
         self.AddParam("Pads", "angle", self.uDegrees, 0, designator='a')
         self.AddParam("Pads", "rectangle", self.uBool, False)
-
+        self.AddParam("Pads", "pad 1 rectangle", self.uBool, False)
 
         self.AddParam("Pad rotation", "pad rotation", self.uBool, False, designator='r')
         self.AddParam("Pad rotation", "pad angle offset", self.uDegrees, 0, designator='o')
@@ -93,6 +93,10 @@ class circular_pad_array_wizard(FootprintWizardBase.FootprintWizard):
             clockwise=numbering["clockwise"],
             padRotationEnable= padRotation["pad rotation"],
             padRotationOffset = padRotation["pad angle offset"])
+
+        if pads["pad 1 rectangle"]:
+            firstPad = PA.PadMaker(self.module).THPad(pads['diameter'], pads['diameter'], pads['drill'], shape=pcbnew.PAD_SHAPE_RECT)
+            array.SetFirstPadType(firstPad)
 
         array.SetFirstPadInArray(numbering["initial"])
 
