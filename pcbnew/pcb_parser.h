@@ -53,7 +53,7 @@ class TEXTE_MODULE;
 class TEXTE_PCB;
 class TRACK;
 class MODULE;
-class GROUP;
+class PCB_GROUP;
 class PCB_TARGET;
 class VIA;
 class ZONE_CONTAINER;

@@ -38,7 +38,7 @@
 #include <class_dimension.h>
 #include <class_drawsegment.h>
 #include <class_edge_mod.h>
-#include <class_group.h>
+#include <class_pcb_group.h>
 #include <class_pcb_target.h>
 #include <class_module.h>
 #include <netclass.h>
@@ -723,7 +723,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
     for( size_t idx = 0; idx < m_groupInfos.size(); idx++ )
     {
         auto&  aGrp  = m_groupInfos[idx];
-        GROUP* group = new GROUP( m_board );
+        PCB_GROUP* group = new PCB_GROUP( m_board );
         group->SetName( aGrp.name );
         const_cast<KIID&>( group->m_Uuid ) = aGrp.uuid;
         m_board->Add( group );
@@ -742,7 +742,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             continue;
         }
 
-        GROUP* group = static_cast<GROUP*>( bItem );
+        PCB_GROUP* group = static_cast<PCB_GROUP*>( bItem );
 
         for( const auto& aUuid : aGrp.memberUuids )
         {
@@ -3664,7 +3664,7 @@ bool PCB_PARSER::parseD_PAD_option( D_PAD* aPad )
 void PCB_PARSER::parseGROUP()
 {
     wxCHECK_RET( CurTok() == T_group,
-            wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as GROUP." ) );
+            wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_GROUP." ) );
 
     wxPoint pt;
     T       token;

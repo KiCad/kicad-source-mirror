@@ -104,7 +104,7 @@ const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
                        }
                        else if( item->Type() == PCB_GROUP_T )
                        {
-                           GROUP* group = static_cast<GROUP*>( item );
+                           PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
                            group->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { addItem( bitem ); } );
                        }
                    };
@@ -125,7 +125,7 @@ const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
         }
         else if( item->Type() == PCB_GROUP_T )
         {
-            GROUP* group = static_cast<GROUP*>( item );
+            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
             group->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { items.push_back( bitem ); } );
         }
     }

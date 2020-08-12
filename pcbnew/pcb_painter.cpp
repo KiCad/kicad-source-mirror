@@ -25,7 +25,7 @@
 
 #include <class_board.h>
 #include <class_track.h>
-#include <class_group.h>
+#include <class_pcb_group.h>
 #include <class_module.h>
 #include <class_pad.h>
 #include <class_drawsegment.h>
@@ -414,7 +414,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_GROUP_T:
-        draw( static_cast<const GROUP*>( item ), aLayer );
+        draw( static_cast<const PCB_GROUP*>( item ), aLayer );
         break;
 
     case PCB_ZONE_AREA_T:
@@ -1156,7 +1156,7 @@ void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const GROUP* aGroup, int aLayer )
+void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
 {
     if( aLayer == LAYER_ANCHOR )
     {

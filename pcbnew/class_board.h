@@ -28,7 +28,7 @@
 #include <tuple>
 #include <board_design_settings.h>
 #include <board_item_container.h>
-#include <class_group.h>
+#include <class_pcb_group.h>
 #include <class_module.h>
 #include <class_pad.h>
 #include <common.h> // PAGE_INFO
@@ -175,7 +175,7 @@ DECL_VEC_FOR_SWIG( MARKERS, MARKER_PCB* )
 DECL_VEC_FOR_SWIG( ZONE_CONTAINERS, ZONE_CONTAINER* )
 DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
 // Dequeue rather than Vector just so we can use moveUnflaggedItems in pcbnew_control.cpp
-DECL_DEQ_FOR_SWIG( GROUPS, GROUP* )
+DECL_DEQ_FOR_SWIG( GROUPS, PCB_GROUP* )
 
 /**
  * BOARD
@@ -1234,14 +1234,14 @@ public:
      * @param scope restricts the search to groups within the group scope.
      * @return group containing item, if it exists, otherwise, NULL
      */
-    GROUP* TopLevelGroup( BOARD_ITEM* item, GROUP* scope );
+    PCB_GROUP* TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope );
 
 
     /*
      * @return The group containing item as a child, or NULL if there is no
      * such group.
      */
-    GROUP* ParentGroup( BOARD_ITEM* item );
+    PCB_GROUP* ParentGroup( BOARD_ITEM* item );
 
     /*
      * Given a selection of items, remove them from their groups and also

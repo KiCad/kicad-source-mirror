@@ -563,7 +563,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     // this one uses a vector
     case PCB_GROUP_T:
-        m_groups.push_back( (GROUP*) aBoardItem );
+        m_groups.push_back( (PCB_GROUP*) aBoardItem );
         break;
 
     // this one uses a vector
@@ -803,7 +803,7 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID )
         if( marker->m_Uuid == aID )
             return marker;
 
-    for( GROUP* group : m_groups )
+    for( PCB_GROUP* group : m_groups )
         if( group->m_Uuid == aID )
             return group;
 
@@ -843,7 +843,7 @@ void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
     for( MARKER_PCB* marker : m_markers )
         aMap[ marker->m_Uuid ] = marker;
 
-    for( GROUP* group : m_groups )
+    for( PCB_GROUP* group : m_groups )
         aMap[ group->m_Uuid ] = group;
 }
 
@@ -1132,7 +1132,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             break;
 
         case PCB_GROUP_T:
-            result = IterateForward<GROUP*>( m_groups, inspector, testData, p );
+            result = IterateForward<PCB_GROUP*>( m_groups, inspector, testData, p );
             ++p;
             break;
 
@@ -1988,15 +1988,15 @@ void BOARD::HighLightON( bool aValue )
     }
 }
 
-GROUP* BOARD::TopLevelGroup( BOARD_ITEM* item, GROUP* scope  )
+PCB_GROUP* BOARD::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope  )
 {
-    GROUP* candidate = NULL;
+    PCB_GROUP* candidate = NULL;
     bool foundParent;
 
     do
     {
         foundParent = false;
-        for( GROUP* group : m_groups )
+        for( PCB_GROUP* group : m_groups )
         {
             BOARD_ITEM* toFind = ( candidate == NULL ) ? item : candidate;
             if( group->GetItems().find( toFind ) != group->GetItems().end() )
@@ -2022,9 +2022,9 @@ GROUP* BOARD::TopLevelGroup( BOARD_ITEM* item, GROUP* scope  )
 }
 
 
-GROUP* BOARD::ParentGroup( BOARD_ITEM* item )
+PCB_GROUP* BOARD::ParentGroup( BOARD_ITEM* item )
 {
-    for( GROUP* group : m_groups )
+    for( PCB_GROUP* group : m_groups )
     {
         if( group->GetItems().find( item ) != group->GetItems().end() )
             return group;
@@ -2057,7 +2057,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
 
     for( size_t idx = 0; idx < groups.size(); idx++ )
     {
-        GROUP& group    = *( groups[idx] );
+        PCB_GROUP& group    = *( groups[idx] );
         BOARD_ITEM*  testItem = board.GetItem( group.m_Uuid );
 
         if( testItem != groups[idx] )
@@ -2212,7 +2212,7 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCBNEW_SELECTION& selectio
     GroupLegalOpsField legalOps = { false, false, false, false, false, false };
 
     std::unordered_set<const BOARD_ITEM*> allMembers;
-    for( const GROUP* grp : m_groups )
+    for( const PCB_GROUP* grp : m_groups )
     {
         for( const BOARD_ITEM* member : grp->GetItems() )
         {
@@ -2238,21 +2238,21 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCBNEW_SELECTION& selectio
         // Check that no groups are descendant subgroups of another group in the selection
         for( EDA_ITEM* item : selection )
         {
-            const GROUP*                     group = static_cast<const GROUP*>( item );
-            std::unordered_set<const GROUP*> subgroupos;
-            std::queue<const GROUP*>         toCheck;
+            const PCB_GROUP*                     group = static_cast<const PCB_GROUP*>( item );
+            std::unordered_set<const PCB_GROUP*> subgroupos;
+            std::queue<const PCB_GROUP*>         toCheck;
             toCheck.push( group );
 
             while( !toCheck.empty() )
             {
-                const GROUP* candidate = toCheck.front();
+                const PCB_GROUP* candidate = toCheck.front();
                 toCheck.pop();
 
                 for( const BOARD_ITEM* aChild : candidate->GetItems() )
                 {
                     if( aChild->Type() == PCB_GROUP_T )
                     {
-                        const GROUP* childGroup = static_cast<const GROUP*>( aChild );
+                        const PCB_GROUP* childGroup = static_cast<const PCB_GROUP*>( aChild );
                         subgroupos.insert( childGroup );
                         toCheck.push( childGroup );
                     }
@@ -2262,7 +2262,7 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCBNEW_SELECTION& selectio
             for( EDA_ITEM* otherItem : selection )
             {
                 if( otherItem != item
-                    && subgroupos.find( static_cast<GROUP*>( otherItem ) ) != subgroupos.end() )
+                    && subgroupos.find( static_cast<PCB_GROUP*>( otherItem ) ) != subgroupos.end() )
                 {
                     // otherItem is a descendant subgroup of item
                     onlyGroups = false;
@@ -2308,10 +2308,10 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCBNEW_SELECTION& selectio
 void BOARD::GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* commit )
 {
     std::unordered_set<BOARD_ITEM*> emptyGroups;
-    std::unordered_set<GROUP*> emptyGroupParents;
+    std::unordered_set<PCB_GROUP*> emptyGroupParents;
 
     // groups who have had children removed, either items or empty groups.
-    std::unordered_set<GROUP*> itemParents;
+    std::unordered_set<PCB_GROUP*> itemParents;
     std::unordered_set<BOARD_ITEM*> itemsToRemove;
 
     for( EDA_ITEM* item : selection )
@@ -2322,7 +2322,7 @@ void BOARD::GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* c
 
     for( BOARD_ITEM* item : itemsToRemove )
     {
-        GROUP* parentGroup = ParentGroup( item );
+        PCB_GROUP* parentGroup = ParentGroup( item );
         itemParents.insert( parentGroup );
 
         while( parentGroup != nullptr )
@@ -2354,7 +2354,7 @@ void BOARD::GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* c
 
     // Items themselves are removed outside the context of this function
     // First let's check the parents of items that are no empty
-    for( GROUP* grp : itemParents )
+    for( PCB_GROUP* grp : itemParents )
     {
         if( emptyGroups.find( grp ) == emptyGroups.end() )
         {

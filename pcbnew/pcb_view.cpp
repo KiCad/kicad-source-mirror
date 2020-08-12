@@ -31,7 +31,7 @@ using namespace std::placeholders;
 #include <pcb_display_options.h>
 #include <pcb_painter.h>
 
-#include <class_group.h>
+#include <class_pcb_group.h>
 #include <class_module.h>
 
 namespace KIGFX {

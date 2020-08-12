@@ -456,7 +456,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         break;
 
     case PCB_GROUP_T:
-        format( static_cast<GROUP*>( aItem ), aNestLevel );
+        format( static_cast<PCB_GROUP*>( aItem ), aNestLevel );
         break;
 
     case PCB_TRACE_T:
@@ -1517,7 +1517,7 @@ void PCB_IO::format( TEXTE_PCB* aText, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( GROUP* aGroup, int aNestLevel ) const
+void PCB_IO::format( PCB_GROUP* aGroup, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(group %s (id %s)\n", m_out->Quotew( aGroup->GetName() ).c_str(),
             TO_UTF8( aGroup->m_Uuid.AsString() ) );

@@ -50,7 +50,7 @@
 class TEXTE_PCB;
 class DIMENSION;
 class MODULE;
-class GROUP;
+class PCB_GROUP;
 class TEXTE_MODULE;
 class DRAWSEGMENT;
 class MARKER_PCB;
@@ -71,7 +71,7 @@ extern "C" {
 static TEXTE_PCB*        Cast_to_TEXTE_PCB( BOARD_ITEM* );
 static DIMENSION*        Cast_to_DIMENSION( BOARD_ITEM* );
 static MODULE*           Cast_to_MODULE( BOARD_ITEM* );
-static GROUP*            Cast_to_GROUP( BOARD_ITEM* );
+static PCB_GROUP*        Cast_to_PCB_GROUP( BOARD_ITEM* );
 static TEXTE_MODULE*     Cast_to_TEXTE_MODULE( BOARD_ITEM* );
 static DRAWSEGMENT*      Cast_to_DRAWSEGMENT( BOARD_ITEM* );
 static MARKER_PCB*       Cast_to_MARKER_PCB( BOARD_ITEM* );
@@ -92,7 +92,7 @@ static PCB_TARGET*       Cast_to_PCB_TARGET( BOARD_ITEM* );
 static TEXTE_PCB*        Cast_to_TEXTE_PCB( BOARD_ITEM* );
 static DIMENSION*        Cast_to_DIMENSION( BOARD_ITEM* );
 static MODULE*           Cast_to_MODULE( BOARD_ITEM* );
-static GROUP*            Cast_to_GROUP( BOARD_ITEM* );
+static PCB_GROUP*        Cast_to_PCB_GROUP( BOARD_ITEM* );
 static TEXTE_MODULE*     Cast_to_TEXTE_MODULE( BOARD_ITEM* );
 static DRAWSEGMENT*      Cast_to_DRAWSEGMENT( BOARD_ITEM* );
 static MARKER_PCB*       Cast_to_MARKER_PCB( BOARD_ITEM* );
@@ -125,8 +125,8 @@ static PCB_TARGET*       Cast_to_PCB_TARGET( BOARD_ITEM* );
             return Cast_to_EDGE_MODULE(self)
         elif ct=="MODULE":
             return Cast_to_MODULE(self)
-        elif ct=="GROUP":
-            return Cast_to_GROUP(self)
+        elif ct=="PCB_GROUP":
+            return Cast_to_PCB_GROUP(self)
         elif ct=="PAD":
             return Cast_to_D_PAD(self)
         elif ct=="MTEXT":
@@ -170,7 +170,7 @@ static PCB_TARGET*       Cast_to_PCB_TARGET( BOARD_ITEM* );
 static TEXTE_PCB*        Cast_to_TEXTE_PCB( BOARD_ITEM* self )       {  return dynamic_cast<TEXTE_PCB*>(self);       }
 static DIMENSION*        Cast_to_DIMENSION( BOARD_ITEM* self )       {  return dynamic_cast<DIMENSION*>(self);       }
 static MODULE*           Cast_to_MODULE( BOARD_ITEM* self )          {  return dynamic_cast<MODULE*>(self);          }
-static GROUP*            Cast_to_GROUP( BOARD_ITEM* self )           {  return dynamic_cast<GROUP*>(self);           }
+static PCB_GROUP*        Cast_to_PCB_GROUP( BOARD_ITEM* self )           {  return dynamic_cast<PCB_GROUP*>(self);       }
 static TEXTE_MODULE*     Cast_to_TEXTE_MODULE( BOARD_ITEM* self )    {  return dynamic_cast<TEXTE_MODULE*>(self);    }
 static DRAWSEGMENT*      Cast_to_DRAWSEGMENT( BOARD_ITEM* self )     {  return dynamic_cast<DRAWSEGMENT*>(self);     }
 static MARKER_PCB*       Cast_to_MARKER_PCB( BOARD_ITEM* self )      {  return dynamic_cast<MARKER_PCB*>(self);      }

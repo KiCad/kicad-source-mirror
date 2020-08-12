@@ -31,7 +31,7 @@
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <class_board.h>
-#include <class_group.h>
+#include <class_pcb_group.h>
 #include <class_module.h>
 #include <class_pcb_target.h>
 #include <class_track.h>
@@ -1031,7 +1031,7 @@ int PCB_EDITOR_CONTROL::GroupSelected( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
     // why don't we have to update the selection after selectionCursor action?
 
-    GROUP* group = new GROUP( board );
+    PCB_GROUP* group = new PCB_GROUP( board );
 
     for( EDA_ITEM* item : selection )
     {
@@ -1071,7 +1071,7 @@ int PCB_EDITOR_CONTROL::GroupMergeSelected( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
     // why don't we have to update the selection after selectionCursor action?
 
-    GROUP* firstGroup = NULL;
+    PCB_GROUP* firstGroup = NULL;
 
     for( EDA_ITEM* item : selection )
     {
@@ -1079,7 +1079,7 @@ int PCB_EDITOR_CONTROL::GroupMergeSelected( const TOOL_EVENT& aEvent )
 
         if( firstGroup == NULL && board_item->Type() == PCB_GROUP_T )
         {
-            firstGroup = static_cast<GROUP*>( board_item );
+            firstGroup = static_cast<PCB_GROUP*>( board_item );
             break;
         }
     }
@@ -1139,7 +1139,7 @@ int PCB_EDITOR_CONTROL::UngroupSelected( const TOOL_EVENT& aEvent )
 
         commit.Remove( board_item );
 
-        for( BOARD_ITEM* bItem : static_cast<GROUP*>( board_item )->GetItems() )
+        for( BOARD_ITEM* bItem : static_cast<PCB_GROUP*>( board_item )->GetItems() )
         {
             ungroupedItems.insert( bItem );
         }
@@ -1213,22 +1213,22 @@ int PCB_EDITOR_CONTROL::GroupFlattenSelected( const TOOL_EVENT& aEvent )
         BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
         wxCHECK_MSG( board_item->Type() == PCB_GROUP_T, 0,
                      _( "Selection for ungroup should only have groups in it - was checked." ) );
-        std::queue<GROUP*> groupsToFlatten;
-        groupsToFlatten.push( static_cast<GROUP*>( board_item ) );
-        GROUP* topGroup = groupsToFlatten.front();
+        std::queue<PCB_GROUP*> groupsToFlatten;
+        groupsToFlatten.push( static_cast<PCB_GROUP*>( board_item ) );
+        PCB_GROUP* topGroup = groupsToFlatten.front();
         commit.Modify( topGroup );
         std::unordered_set<BOARD_ITEM*> topSubgroupsToRemove;
 
         while( !groupsToFlatten.empty() )
         {
-            GROUP* grp = groupsToFlatten.front();
+            PCB_GROUP* grp = groupsToFlatten.front();
             groupsToFlatten.pop();
 
             for( BOARD_ITEM* grpItem : grp->GetItems() )
             {
                 if( grpItem->Type() == PCB_GROUP_T )
                 {
-                    groupsToFlatten.push( static_cast<GROUP*>( grpItem ) );
+                    groupsToFlatten.push( static_cast<PCB_GROUP*>( grpItem ) );
                     commit.Remove( grpItem );
                     if( grp == topGroup )
                         topSubgroupsToRemove.insert( grpItem );

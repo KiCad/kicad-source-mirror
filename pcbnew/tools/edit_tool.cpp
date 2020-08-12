@@ -477,7 +477,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                         // If moving a group, record position of all the descendants for undo
                         if( item->Type() == PCB_GROUP_T )
                         {
-                            static_cast<GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                            static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
                                                                               m_commit->Modify( bItem );
                                                                           });
                         }
@@ -770,7 +770,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             // If rotating a group, record position of all the descendants for undo
             if( item->Type() == PCB_GROUP_T )
             {
-                static_cast<GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
                                                                   m_commit->Modify( bItem );
                                                               });
             }
@@ -973,7 +973,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
         if( item->Type() == PCB_GROUP_T )
         {
-            static_cast<GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+            static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
                                                               m_commit->Modify( bItem );
                                                           });
         }
@@ -1160,7 +1160,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 m_commit->Remove( item );
                 removed.Add( item );
 
-                static_cast<GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
                                                                   m_commit->Remove( bItem );
                                                               });
             }
@@ -1178,7 +1178,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     // removed in their entirety and so no empty group could remain.  If entered
     // group is set, then we could be removing all items of the entered group,
     // in which case we need to remove the group itself.
-    GROUP* enteredGroup = m_selectionTool->GetEnteredGroup();
+    PCB_GROUP* enteredGroup = m_selectionTool->GetEnteredGroup();
 
     if( enteredGroup != nullptr )
     {
@@ -1280,7 +1280,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
                 if( item->Type() == PCB_GROUP_T )
                     {
-                        static_cast<GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                        static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
                                                                           m_commit->Modify( bItem );
                                                                       });
                     }
@@ -1398,7 +1398,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 break;
 
             case PCB_GROUP_T:
-                dupe_item = static_cast<GROUP*>( orig_item )->DeepDuplicate();
+                dupe_item = static_cast<PCB_GROUP*>( orig_item )->DeepDuplicate();
                 break;
                 
             default:
@@ -1411,7 +1411,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         {
             if( dupe_item->Type() == PCB_GROUP_T )
             {
-                static_cast<GROUP*>( dupe_item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
+                static_cast<PCB_GROUP*>( dupe_item )->RunOnDescendants( [&]( BOARD_ITEM* bItem ) {
                                                                         m_commit->Add( bItem );
                                                                     });
             }

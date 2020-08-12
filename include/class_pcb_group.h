@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_group.h
+ * @file class_pcb_group.h
  * @brief Class to handle a set of BOARD_ITEMs.
  * Group parent is always board, not logical parent group.
  * Group is transparent container - e.g., its position is derived from the position
@@ -32,8 +32,8 @@
  * on sets of items, like committing, updating the view, etc the set is explicit.
  */
 
-#ifndef CLASS_GROUP_H_
-#define CLASS_GROUP_H_
+#ifndef CLASS_PCB_GROUP_H_
+#define CLASS_PCB_GROUP_H_
 
 #include <class_board_item.h>
 #include <common.h>
@@ -47,12 +47,12 @@ class VIEW;
 typedef std::unordered_set<BOARD_ITEM*> ITEM_SET;
 
 /**
- * GROUP is a set of BOARD_ITEMs (i.e., without duplicates)
+ * PCB_GROUP is a set of BOARD_ITEMs (i.e., without duplicates)
  */
-class GROUP : public BOARD_ITEM
+class PCB_GROUP : public BOARD_ITEM
 {
 public:
-    GROUP( BOARD* parent );
+    PCB_GROUP( BOARD* parent );
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -88,7 +88,7 @@ public:
 
     wxString GetClass() const override
     {
-        return wxT( "GROUP" );
+        return wxT( "PCB_GROUP" );
     }
 
 #if defined( DEBUG )
@@ -119,12 +119,12 @@ public:
     /*
      * Clone() this and all descendents
      */
-    GROUP* DeepClone() const;
+    PCB_GROUP* DeepClone() const;
 
     /*
      * Duplicate() this and all descendents
      */
-    GROUP* DeepDuplicate() const;
+    PCB_GROUP* DeepDuplicate() const;
 
     ///> @copydoc BOARD_ITEM::SwapData
     void SwapData( BOARD_ITEM* aImage ) override;
@@ -195,4 +195,4 @@ private:
     wxString m_name;
 };
 
-#endif // CLASS_GROUP_H_
+#endif // CLASS_PCB_GROUP_H_

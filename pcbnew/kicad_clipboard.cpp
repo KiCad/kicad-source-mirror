@@ -193,7 +193,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
             }
             else if( item->Type() == PCB_GROUP_T )
             {
-                copy = static_cast<GROUP*>( item )->DeepClone();
+                copy = static_cast<PCB_GROUP*>( item )->DeepClone();
             }
             else
             {
@@ -219,8 +219,8 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
 
                 if( copy->Type() == PCB_GROUP_T )
                 {
-                    static_cast<GROUP*>( copy )->RunOnDescendants( prepItem );
-                    static_cast<GROUP*>( copy )->RunOnDescendants( [&]( BOARD_ITEM* titem ) {
+                    static_cast<PCB_GROUP*>( copy )->RunOnDescendants( prepItem );
+                    static_cast<PCB_GROUP*>( copy )->RunOnDescendants( [&]( BOARD_ITEM* titem ) {
                                                                        Format( titem, 1 );
                                                                    } );
                 }

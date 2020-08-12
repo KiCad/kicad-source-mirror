@@ -41,7 +41,7 @@ class DRAWSEGMENT;
 class PCB_TARGET;
 class D_PAD;
 class TEXTE_MODULE;
-class GROUP;
+class PCB_GROUP;
 class TRACK;
 class ZONE_CONTAINER;
 class TEXTE_PCB;
@@ -244,7 +244,7 @@ private:
 
     void format( EDGE_MODULE* aModuleDrawing, int aNestLevel = 0 ) const;
 
-    void format( GROUP* aGroup, int aNestLevel = 0 ) const;
+    void format( PCB_GROUP* aGroup, int aNestLevel = 0 ) const;
 
     void format( DRAWSEGMENT* aSegment, int aNestLevel = 0 ) const;
 

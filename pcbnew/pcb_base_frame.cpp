@@ -189,7 +189,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
         }
         else if( lastItem->Type() == PCB_GROUP_T )
         {
-            static_cast<GROUP*>( lastItem )->RunOnChildren( [&] ( BOARD_ITEM* child )
+            static_cast<PCB_GROUP*>( lastItem )->RunOnChildren( [&] ( BOARD_ITEM* child )
             {
                 child->ClearBrightened();
             });
@@ -213,7 +213,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
         }
         else if( aItem->Type() == PCB_GROUP_T )
         {
-            static_cast<GROUP*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* child )
+            static_cast<PCB_GROUP*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* child )
             {
                 child->SetBrightened();
             });

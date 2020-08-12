@@ -32,7 +32,7 @@
 #include <class_marker_pcb.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
-#include <class_group.h>
+#include <class_pcb_group.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
 
@@ -168,7 +168,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     BOARD_ITEM*     item        = (BOARD_ITEM*) testItem;
     MODULE*         module      = nullptr;
-    GROUP*          group       = nullptr;
+    PCB_GROUP*          group       = nullptr;
     D_PAD*          pad         = nullptr;
     bool            pad_through = false;
     VIA*            via         = nullptr;
@@ -356,7 +356,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_GROUP_T:
-        group = static_cast<GROUP*>( item );
+        group = static_cast<PCB_GROUP*>( item );
         break;
 
     case PCB_MARKER_T:

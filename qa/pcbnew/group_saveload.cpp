@@ -66,13 +66,13 @@ enum ItemType
 BOARD* createBoard( const std::vector<std::vector<ItemType>>& spec )
 {
     BOARD*                  aBoard = new BOARD();
-    std::vector<GROUP*>     groups;
+    std::vector<PCB_GROUP*>     groups;
     std::vector<TEXTE_PCB*> textItems;
 
     // Create groups
     for( int idx = 0; idx < 6; idx++ )
     {
-        GROUP* gr = new GROUP( aBoard );
+        PCB_GROUP* gr = new PCB_GROUP( aBoard );
         if( idx >= ( NAME_GROUP3 - GROUP0 ) )
         {
             wxString name = wxString::Format(
@@ -99,7 +99,7 @@ BOARD* createBoard( const std::vector<std::vector<ItemType>>& spec )
     for( int groupIdx = 0; groupIdx < spec.size(); groupIdx++ )
     {
         auto&  groupSpec = spec[groupIdx];
-        GROUP* group     = groups[groupIdx];
+        PCB_GROUP* group     = groups[groupIdx];
         int    count     = 0;
         for( ItemType item : groupSpec )
         {
@@ -123,7 +123,7 @@ BOARD* createBoard( const std::vector<std::vector<ItemType>>& spec )
 }
 
 // Check if two groups are identical by comparing the fields (by Uuid).
-void testGroupEqual( const GROUP& group1, const GROUP& group2 )
+void testGroupEqual( const PCB_GROUP& group1, const PCB_GROUP& group2 )
 {
     BOOST_CHECK_EQUAL( group1.m_Uuid.AsString(), group2.m_Uuid.AsString() );
     BOOST_CHECK_EQUAL( group1.GetName(), group2.GetName() );

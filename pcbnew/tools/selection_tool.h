@@ -185,7 +185,7 @@ public:
     void exitGroup();
     void FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) const;
 
-    GROUP* GetEnteredGroup() { return m_enteredGroup; }
+    PCB_GROUP* GetEnteredGroup() { return m_enteredGroup; }
     
 private:
     /**
@@ -370,7 +370,7 @@ private:
     bool m_multiple;              // Multiple selection mode is active
     bool m_skip_heuristics;       // Heuristics are not allowed when choosing item under cursor
     bool m_locked;                // Other tools are not allowed to modify locked items
-    GROUP* m_enteredGroup;        // If non-null, selections are limited to members of this group
+    PCB_GROUP* m_enteredGroup;        // If non-null, selections are limited to members of this group
 
     /// Private state (opaque pointer/compilation firewall)
     class PRIV;

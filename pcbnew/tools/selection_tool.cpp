@@ -347,7 +347,7 @@ void SELECTION_TOOL::EnterGroup()
 {
     wxCHECK_RET( m_selection.GetSize() == 1 && m_selection[0]->Type() == PCB_GROUP_T,
                  _( "EnterGroup called when selection is not a single group") );
-    GROUP* aGroup = static_cast<GROUP*>( m_selection[0] );
+    PCB_GROUP* aGroup = static_cast<PCB_GROUP*>( m_selection[0] );
 
     if( m_enteredGroup != NULL )
     {
@@ -1938,7 +1938,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
     case PCB_GROUP_T:
     {
-        GROUP* group = const_cast<GROUP*>( static_cast<const GROUP*>( aItem ) );
+        PCB_GROUP* group = const_cast<PCB_GROUP*>( static_cast<const PCB_GROUP*>( aItem ) );
 
         // Similar to logic for module, a group is selectable if any of its
         // members are. (This recurses)
@@ -2035,7 +2035,7 @@ void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_SEL
     }
     else if( aItem->Type() == PCB_GROUP_T )
     {
-        static_cast<GROUP*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
+        static_cast<PCB_GROUP*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
                                                          highlightInternal( titem, aMode, aGroup, true ); } );
     }
 }
@@ -2085,7 +2085,7 @@ void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_S
     }
     else if( aItem->Type() == PCB_GROUP_T )
     {
-        static_cast<GROUP*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
+        static_cast<PCB_GROUP*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
                                                          unhighlightInternal( titem, aMode, aGroup, true ); } );
     }
 }
@@ -2536,7 +2536,7 @@ void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) c
     // If any element is a member of a group, replace those elements with the top containing group.
     for( int j = 0; j < aCollector.GetCount(); ++j )
     {
-        GROUP* aTop = board()->TopLevelGroup( aCollector[j], m_enteredGroup );
+        PCB_GROUP* aTop = board()->TopLevelGroup( aCollector[j], m_enteredGroup );
 
         if( aTop != NULL )
         {

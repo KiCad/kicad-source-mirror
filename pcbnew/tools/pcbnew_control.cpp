@@ -866,16 +866,16 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
 
     // Filter out from selection any items that are in groups that are also in the selection
     // For PCB_GROUP_T, a selection including the group should not include its descendants.
-    std::unordered_set<GROUP*> groups;
+    std::unordered_set<PCB_GROUP*> groups;
     for( BOARD_ITEM* item : aItems )
     {
         if( item->Type() == PCB_GROUP_T )
-            groups.insert( static_cast<GROUP*>( item ) );
+            groups.insert( static_cast<PCB_GROUP*>( item ) );
     }
     for( BOARD_ITEM* item : aItems )
     {
         bool inGroup = false;
-        for( GROUP* grp : groups )
+        for( PCB_GROUP* grp : groups )
         {
             if( grp->GetItems().find( item ) != grp->GetItems().end() )
             {

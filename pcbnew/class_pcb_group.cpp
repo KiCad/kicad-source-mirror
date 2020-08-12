@@ -22,32 +22,32 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <bitmaps.h>
-#include <class_group.h>
+#include <class_pcb_group.h>
 #include <confirm.h>
 #include <msgpanel.h>
 #include <view/view.h>
 
-GROUP::GROUP( BOARD* parent ) : BOARD_ITEM( (BOARD_ITEM*) parent, PCB_GROUP_T )
+PCB_GROUP::PCB_GROUP( BOARD* parent ) : BOARD_ITEM( (BOARD_ITEM*) parent, PCB_GROUP_T )
 {
 }
 
 
-bool GROUP::AddItem( BOARD_ITEM* item )
+bool PCB_GROUP::AddItem( BOARD_ITEM* item )
 {
     return m_items.insert( item ).second;
 }
 
-bool GROUP::RemoveItem( const BOARD_ITEM* item )
+bool PCB_GROUP::RemoveItem( const BOARD_ITEM* item )
 {
     return m_items.erase( const_cast<BOARD_ITEM*>( item ) ) == 1;
 }
 
-wxPoint GROUP::GetPosition() const
+wxPoint PCB_GROUP::GetPosition() const
 {
     return GetBoundingBox().Centre();
 }
 
-void GROUP::SetPosition( const wxPoint& newpos )
+void PCB_GROUP::SetPosition( const wxPoint& newpos )
 {
     wxPoint delta = newpos - GetPosition();
 
@@ -57,24 +57,24 @@ void GROUP::SetPosition( const wxPoint& newpos )
     }
 }
 
-EDA_ITEM* GROUP::Clone() const
+EDA_ITEM* PCB_GROUP::Clone() const
 {
     // Use copy constructor to get the same uuid and other fields
-    GROUP* newGroup = new GROUP( *this );
+    PCB_GROUP* newGroup = new PCB_GROUP( *this );
     return newGroup;
 }
 
-GROUP* GROUP::DeepClone() const
+PCB_GROUP* PCB_GROUP::DeepClone() const
 {
     // Use copy constructor to get the same uuid and other fields
-    GROUP* newGroup = new GROUP( *this );
+    PCB_GROUP* newGroup = new PCB_GROUP( *this );
     newGroup->m_items.clear();
 
     for( auto member : m_items )
     {
         if( member->Type() == PCB_GROUP_T )
         {
-            newGroup->AddItem( static_cast<GROUP*>( member )->DeepClone() );
+            newGroup->AddItem( static_cast<PCB_GROUP*>( member )->DeepClone() );
         }
         else
         {
@@ -86,16 +86,16 @@ GROUP* GROUP::DeepClone() const
 }
 
 
-GROUP* GROUP::DeepDuplicate() const
+PCB_GROUP* PCB_GROUP::DeepDuplicate() const
 {
-    GROUP* newGroup = static_cast<GROUP*>( this->Duplicate() );
+    PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( this->Duplicate() );
     newGroup->m_items.clear();
 
     for( auto member : m_items )
     {
         if( member->Type() == PCB_GROUP_T )
         {
-            newGroup->AddItem( static_cast<GROUP*>( member )->DeepDuplicate() );
+            newGroup->AddItem( static_cast<PCB_GROUP*>( member )->DeepDuplicate() );
         }
         else
         {
@@ -107,32 +107,32 @@ GROUP* GROUP::DeepDuplicate() const
 }
 
 
-void GROUP::SwapData( BOARD_ITEM* aImage )
+void PCB_GROUP::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_GROUP_T );
 
-    std::swap( *( (GROUP*) this ), *( (GROUP*) aImage ) );
+    std::swap( *( (PCB_GROUP*) this ), *( (PCB_GROUP*) aImage ) );
 }
 
 #if 0
-void GROUP::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+void PCB_GROUP::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                   int aClearanceValue, int aError = ARC_LOW_DEF, bool ignoreLineWidth = false ) const
 {
 }
-const BOX2I GROUP::ViewBBox() const
+const BOX2I PCB_GROUP::ViewBBox() const
 {
     return GetBoundingBox();
 }
 
 #endif
 
-bool GROUP::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_GROUP::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
-bool GROUP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_GROUP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT arect = aRect;
     arect.Inflate( aAccuracy );
@@ -158,7 +158,7 @@ bool GROUP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     }
 }
 
-const EDA_RECT GROUP::GetBoundingBox() const
+const EDA_RECT PCB_GROUP::GetBoundingBox() const
 {
     EDA_RECT area;
     bool     isFirst = true;
@@ -180,7 +180,7 @@ const EDA_RECT GROUP::GetBoundingBox() const
     return area;
 }
 
-SEARCH_RESULT GROUP::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+SEARCH_RESULT PCB_GROUP::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     for( const KICAD_T* stype = scanTypes; *stype != EOT; ++stype )
     {
@@ -195,7 +195,7 @@ SEARCH_RESULT GROUP::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
     return SEARCH_RESULT::CONTINUE;
 }
 
-LSET GROUP::GetLayerSet() const
+LSET PCB_GROUP::GetLayerSet() const
 {
     LSET aSet;
 
@@ -206,9 +206,9 @@ LSET GROUP::GetLayerSet() const
     return aSet;
 }
 
-void GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
+void PCB_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    // What layer to put bounding box on?  change in class_group.cpp
+    // What layer to put bounding box on?  change in class_pcb_group.cpp
     std::unordered_set<int> layers = { LAYER_ANCHOR }; // for bounding box
 
     for( BOARD_ITEM* item : m_items )
@@ -227,7 +227,7 @@ void GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
         aLayers[i++] = layer;
 }
 
-unsigned int GROUP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+unsigned int PCB_GROUP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     if( aView->IsLayerVisible( LAYER_ANCHOR ) )
         return 0;
@@ -235,13 +235,13 @@ unsigned int GROUP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     return std::numeric_limits<unsigned int>::max();
 }
 
-void GROUP::Move( const wxPoint& aMoveVector )
+void PCB_GROUP::Move( const wxPoint& aMoveVector )
 {
     wxPoint newpos = GetPosition() + aMoveVector;
     SetPosition( newpos );
 }
 
-void GROUP::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_GROUP::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     for( BOARD_ITEM* item : m_items )
     {
@@ -249,7 +249,7 @@ void GROUP::Rotate( const wxPoint& aRotCentre, double aAngle )
     }
 }
 
-void GROUP::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_GROUP::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     for( BOARD_ITEM* item : m_items )
     {
@@ -257,7 +257,7 @@ void GROUP::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     }
 }
 
-wxString GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     if( m_name.empty() )
     {
@@ -266,19 +266,19 @@ wxString GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
     return wxString::Format( _( "Group \"%s\" with %ld members" ), m_name, m_items.size() );
 }
 
-BITMAP_DEF GROUP::GetMenuImage() const
+BITMAP_DEF PCB_GROUP::GetMenuImage() const
 {
     return module_xpm;
 }
 
-void GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Group" ), m_name.empty() ? _( "Anonymous" ) :
                         wxString::Format( _( "\"%s\"" ), m_name ), DARKCYAN );
     aList.emplace_back( _( "Members" ), wxString::Format( _( "%ld" ), m_items.size() ), BROWN );
 }
 
-void GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction )
+void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction )
 {
     try
     {
@@ -287,11 +287,11 @@ void GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction )
     }
     catch( std::bad_function_call& )
     {
-        DisplayError( NULL, wxT( "Error running GROUP::RunOnChildren" ) );
+        DisplayError( NULL, wxT( "Error running PCB_GROUP::RunOnChildren" ) );
     }
 }
 
-void GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction )
+void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction )
 {
     try
     {
@@ -299,11 +299,11 @@ void GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunctio
         {
             aFunction( item );
             if( item->Type() == PCB_GROUP_T )
-                static_cast<GROUP*>( item )->RunOnDescendants( aFunction );
+                static_cast<PCB_GROUP*>( item )->RunOnDescendants( aFunction );
         }
     }
     catch( std::bad_function_call& )
     {
-        DisplayError( NULL, wxT( "Error running GROUP::RunOnDescendants" ) );
+        DisplayError( NULL, wxT( "Error running PCB_GROUP::RunOnDescendants" ) );
     }
 }
