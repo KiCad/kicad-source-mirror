@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -547,7 +547,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 #endif
 
     // Add modules PADs objects to containers
-    // /////////////////////////////////////////////////////////////////////////
     for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
@@ -595,8 +594,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 // has same shape as its hole
                 module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id,
                                                                    *layerPoly,
-                                                                   0,
-                                                                   true );
+                                                                   0, true );
 
                 transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );
             }
@@ -609,14 +607,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 #endif
 
     // Add graphic item on copper layers to object containers
-    // /////////////////////////////////////////////////////////////////////////
     for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
 
         CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
 
-        // ADD GRAPHIC ITEMS ON COPPER LAYERS (texts)
+        // Add graphic items on copper layers (texts and other graphics)
         for( auto item : m_board->Drawings() )
         {
             if( !item->IsOnLayer( curr_layer_id ) )
@@ -661,8 +658,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     start_Time = GetRunningMicroSecs();
 #endif
 
-    // Add graphic item on copper layers to poly contourns
-    // /////////////////////////////////////////////////////////////////////////
+    // Add graphic item on copper layers to poly contourns (vertical outlines)
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
@@ -672,7 +668,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             SHAPE_POLY_SET *layerPoly = m_layers_poly[cur_layer_id];
 
-            // ADD GRAPHIC ITEMS ON COPPER LAYERS (texts)
+            // Add graphic items on copper layers (texts and other )
             for( BOARD_ITEM* item : m_board->Drawings() )
             {
                 if( !item->IsOnLayer( cur_layer_id ) )
@@ -764,7 +760,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     if( GetFlag( FL_ZONE ) && GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
-        // ADD COPPER ZONES
+        // Add copper zones
         for( ZONE_CONTAINER* zone : m_board->Zones() )
         {
             if( zone == nullptr )
@@ -786,7 +782,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 #endif
 
     // Simplify layer polygons
-    // /////////////////////////////////////////////////////////////////////////
 
     if( aStatusReporter )
         aStatusReporter->Report( _( "Simplifying copper layers polygons" ) );
@@ -899,7 +894,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         };
 
     // User layers are not drawn here, only technical layers
-
     for( LSEQ seq = LSET::AllNonCuMask().Seq( teckLayerList, arrayDim( teckLayerList ) );
          seq;
          ++seq )
@@ -916,7 +910,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         m_layers_poly[curr_layer_id] = layerPoly;
 
         // Add drawing objects
-        // /////////////////////////////////////////////////////////////////////
         for( BOARD_ITEM* item : m_board->Drawings() )
         {
             if( !item->IsOnLayer( curr_layer_id ) )
@@ -952,7 +945,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
 
         // Add drawing contours
-        // /////////////////////////////////////////////////////////////////////
         for( BOARD_ITEM* item : m_board->Drawings() )
         {
             if( !item->IsOnLayer( curr_layer_id ) )
@@ -1002,7 +994,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
 
         // Add modules tech layers - contours
-        // /////////////////////////////////////////////////////////////////////
         for( MODULE* module : m_board->Modules() )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
@@ -1032,7 +1023,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
 
         // Draw non copper zones
-        // /////////////////////////////////////////////////////////////////////
         if( GetFlag( FL_ZONE ) )
         {
             for( int ii = 0; ii < m_board->GetAreaCount(); ++ii )
@@ -1066,8 +1056,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 #endif
 
 
-    // Build BVH for holes and vias
-    // /////////////////////////////////////////////////////////////////////////
+    // Build BVH (Bounding volume hierarchy) for holes and vias
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_startHolesBVHTime = GetRunningMicroSecs();
