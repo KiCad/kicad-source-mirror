@@ -114,6 +114,7 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
 
     BOARD* board = new BOARD;
 
+    board->GetDesignSettings() = GetDesignSettings();
     board->SynchronizeNetsAndNetClasses();
     SetBoard( board );
 
