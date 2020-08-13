@@ -130,29 +130,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateVToolbar()
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::SyncToolbars()
-{
-    m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
-    m_mainToolBar->Toggle( PCB_ACTIONS::zoomFootprintAutomatically, GetAutoZoom() );
-    m_mainToolBar->Refresh();
-
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,    IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::selectionTool, IsCurrentTool( ACTIONS::selectionTool ) );
-    m_optionsToolBar->Toggle( ACTIONS::measureTool,   IsCurrentTool( ACTIONS::measureTool ) );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits,   GetUserUnits() != EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
-
-    const PCB_DISPLAY_OPTIONS& opts = GetDisplayOptions();
-
-    m_optionsToolBar->Toggle( PCB_ACTIONS::showPadNumbers,     opts.m_DisplayPadNum );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,     !opts.m_DisplayPadFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::textOutlines,       !opts.m_DisplayTextFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::graphicsOutlines,   !opts.m_DisplayGraphicsFill );
-
-    m_optionsToolBar->Refresh();
-}
-
-
 void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
 {
     SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
@@ -161,28 +138,27 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
     wxMenuBar*  oldMenuBar = GetMenuBar();
     WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
+
     //----- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* fileMenu = new ACTION_MENU( false, selTool );
 
     fileMenu->AddClose( _( "Footprint Viewer" ) );
 
-    fileMenu->Resolve();
 
     //----- View menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::zoomInCenter,     SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,    SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,    SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,       SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::zoomInCenter );
+    viewMenu->Add( ACTIONS::zoomOutCenter );
+    viewMenu->Add( ACTIONS::zoomFitScreen );
+    viewMenu->Add( ACTIONS::zoomRedraw );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::show3DViewer,     SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::show3DViewer );
 
-    viewMenu->Resolve();
 
     //----- Menubar -------------------------------------------------------------
     //

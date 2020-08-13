@@ -85,6 +85,13 @@ public:
     SELECTION_CONDITION CurrentTool( const TOOL_ACTION& aTool );
 
     /**
+     * Creates a functor testing if there are no tools active in the frame.
+     *
+     * @return Functor testing the frame has no tools running
+     */
+    SELECTION_CONDITION NoActiveTool();
+
+    /**
      * Creates a functor testing if the grid is visible in a frame.
      *
      * @note this requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
@@ -120,7 +127,7 @@ public:
      */
     SELECTION_CONDITION CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE aType );
 
-private:
+protected:
     ///> Helper function used by ContentModified()
     static bool contentModifiedFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
 
@@ -135,6 +142,9 @@ private:
 
     ///> Helper function used by CurrentTool()
     static bool toolFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame, const TOOL_ACTION& aTool );
+
+    ///> Helper function used by NoActiveTool()
+    static bool noToolFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
 
     ///> Helper function used by GridVisible()
     static bool gridFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );

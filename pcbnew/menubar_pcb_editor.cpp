@@ -51,17 +51,12 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar*  oldMenuBar = GetMenuBar();
     WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
-    auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
-        return IsContentModified();
-    };
-
     // Recreate all menus:
 
     //-- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU*   fileMenu = new ACTION_MENU( false, selTool );
     static ACTION_MENU* openRecentMenu;
-    auto& disp_opt = GetDisplayOptions();
 
     if( Kiface().IsSingle() )   // not when under a project mgr
     {
@@ -80,31 +75,36 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
             fileHistory.AddFilesToMenu();
         }
 
-        fileMenu->AddItem( ACTIONS::doNew,           SELECTION_CONDITIONS::ShowAlways );
-        fileMenu->AddItem( ACTIONS::open,            SELECTION_CONDITIONS::ShowAlways );
-        fileMenu->AddMenu( openRecentMenu,           FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
+        fileMenu->Add( ACTIONS::doNew );
+        fileMenu->Add( ACTIONS::open );
 
-        fileMenu->AddItem( PCB_ACTIONS::appendBoard, SELECTION_CONDITIONS::ShowAlways );
+        wxMenuItem* item = fileMenu->Add( openRecentMenu );
 
-        fileMenu->AddSeparator();
+        // Add the file menu condition here since it needs the item ID for the submenu
+        ACTION_CONDITIONS cond;
+        cond.Enable( FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
+        RegisterUIUpdateHandler( item->GetId(), cond );
+
+        fileMenu->Add( PCB_ACTIONS::appendBoard );
+        fileMenu->AppendSeparator();
     }
 
-    fileMenu->AddItem( ACTIONS::save,                modifiedDocumentCondition );
+    fileMenu->Add( ACTIONS::save );
 
     // Save as menu:
     // under a project mgr we do not want to modify the board filename
     // to keep consistency with the project mgr which expects files names same as prj name
     // for main files
     if( Kiface().IsSingle() )
-        fileMenu->AddItem( ACTIONS::saveAs,          SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->Add( ACTIONS::saveAs );
     else
-        fileMenu->AddItem( ACTIONS::saveCopyAs,      SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->Add( ACTIONS::saveCopyAs );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ID_MENU_RECOVER_BOARD_AUTOSAVE,
-                       _( "Resc&ue" ),
-                       _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
-                       rescue_xpm,                   SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( _( "Resc&ue" ),
+                   _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
+                   ID_MENU_RECOVER_BOARD_AUTOSAVE,
+                   rescue_xpm );
 
     // Import submenu
     ACTION_MENU* submenuImport = new ACTION_MENU( false );
@@ -124,8 +124,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                             ID_IMPORT_NON_KICAD_BOARD, import_brd_file_xpm );
     }
 
-    fileMenu->AddSeparator();
-    fileMenu->AddMenu( submenuImport,                SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( submenuImport );
 
     // Export submenu
     ACTION_MENU* submenuExport = new ACTION_MENU( false );
@@ -150,7 +150,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->Add( _( "Hyperlynx..." ), "",
                         ID_GEN_EXPORT_FILE_HYPERLYNX, export_step_xpm );
 
-    fileMenu->AddMenu( submenuExport,                SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->Add( submenuExport );
 
     // Fabrication Outputs submenu
     ACTION_MENU* submenuFabOutputs = new ACTION_MENU( false );
@@ -164,22 +164,15 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuFabOutputs->Add( PCB_ACTIONS::generateReportFile );
     submenuFabOutputs->Add( PCB_ACTIONS::generateD356File );
     submenuFabOutputs->Add( PCB_ACTIONS::generateBOM );
+    fileMenu->Add( submenuFabOutputs );
 
-    fileMenu->AddMenu( submenuFabOutputs,            SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( PCB_ACTIONS::boardSetup );
 
-    auto enableBoardSetupCondition = [ this ] ( const SELECTION& sel ) {
-        if( DRC* tool = m_toolManager->GetTool<DRC>() )
-            return !tool->IsDRCDialogShown();
-
-        return true;
-    };
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( PCB_ACTIONS::boardSetup,      enableBoardSetupCondition );
-
-    fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::pageSettings,        SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::print,               SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::plot,                SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( ACTIONS::pageSettings );
+    fileMenu->Add( ACTIONS::print );
+    fileMenu->Add( ACTIONS::plot );
 
     // Archive submenu
     ACTION_MENU* submenuArchive = new ACTION_MENU( false );
@@ -197,234 +190,144 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                             "(if the library already exists it will be replaced)" ),
                          ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES, library_archive_as_xpm );
 
-    fileMenu->AddSeparator();
-    fileMenu->AddMenu( submenuArchive,               SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( submenuArchive );
 
-    fileMenu->AddSeparator();
+    fileMenu->AppendSeparator();
     fileMenu->AddQuitOrClose( &Kiface(), _( "Pcbnew" ) );
-
-    fileMenu->Resolve();
 
     //-- Edit menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* editMenu = new ACTION_MENU( false, selTool );
 
-    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetUndoCommandCount() > 0;
-    };
-    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetRedoCommandCount() > 0;
-    };
-    auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
-        return ToolStackIsEmpty();
-    };
+    editMenu->Add( ACTIONS::undo );
+    editMenu->Add( ACTIONS::redo );
 
-    editMenu->AddItem( ACTIONS::undo,                       enableUndoCondition );
-    editMenu->AddItem( ACTIONS::redo,                       enableRedoCondition );
+    editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::cut );
+    editMenu->Add( ACTIONS::copy );
+    editMenu->Add( ACTIONS::paste );
+    editMenu->Add( ACTIONS::doDelete );
+    editMenu->Add( ACTIONS::duplicate );
 
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::cut,                        SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::copy,                       SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::paste,                      noActiveToolCondition );
-    editMenu->AddItem( ACTIONS::doDelete,                   SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::duplicate,                  SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::find );
 
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::find,                       SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AppendSeparator();
+    editMenu->Add( PCB_ACTIONS::editTracksAndVias );
+    editMenu->Add( PCB_ACTIONS::editTextAndGraphics );
+    editMenu->Add( PCB_ACTIONS::changeFootprints );
+    editMenu->Add( PCB_ACTIONS::swapLayers );
 
-    editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::editTracksAndVias,      SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::editTextAndGraphics,    SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::changeFootprints,       SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::swapLayers,             SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AppendSeparator();
+    editMenu->Add( PCB_ACTIONS::zoneFillAll );
+    editMenu->Add( PCB_ACTIONS::zoneUnfillAll );
 
-    editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::zoneFillAll,            SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,          SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::deleteTool );
+    editMenu->Add( PCB_ACTIONS::globalDeletions );
+    editMenu->Add( PCB_ACTIONS::cleanupTracksAndVias );
+    editMenu->Add( PCB_ACTIONS::cleanupGraphics );
 
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::deleteTool,                 SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::globalDeletions,        SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::cleanupTracksAndVias,   SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::cleanupGraphics,        SELECTION_CONDITIONS::ShowAlways );
-
-    editMenu->Resolve();
 
     //----- View menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
-    auto layersPaletteShownCondition = [ this ]( const SELECTION &aSel )
-    {
-        return LayerManagerShown();
-    };
-    auto microwaveToolbarShownCondition = [ this ]( const SELECTION &aSel )
-    {
-        return MicrowaveToolbarShown();
-    };
-    auto gridShownCondition = [ this ]( const SELECTION &aSel )
-    {
-        return IsGridVisible();
-    };
-    auto polarCoordsCondition = [ this ]( const SELECTION &aSel )
-    {
-        return GetShowPolarCoords();
-    };
-    auto imperialUnitsCondition = [this]( const SELECTION& aSel ) {
-        return GetUserUnits() == EDA_UNITS::INCHES;
-    };
-    auto metricUnitsCondition = [this]( const SELECTION& aSel ) {
-        return GetUserUnits() == EDA_UNITS::MILLIMETRES;
-    };
-    auto fullCrosshairCondition = [ this ]( const SELECTION &aSel )
-    {
-        return GetGalDisplayOptions().m_fullscreenCursor;
-    };
-    auto ratsnestShownCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return disp_opt.m_ShowGlobalRatsnest;
-    };
-    auto curvedRatsnestCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return disp_opt.m_DisplayRatsnestLinesCurved;
-    };
-    auto boardFlippedCondition = [ this ]( const SELECTION &aSel )
-    {
-        return GetCanvas()->GetView()->IsMirroredX();
-    };
-    auto zonesFilledCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return disp_opt.m_ZoneDisplayMode == ZONE_DISPLAY_MODE::SHOW_FILLED;
-    };
-    auto zonesWireframedCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return disp_opt.m_ZoneDisplayMode == ZONE_DISPLAY_MODE::HIDE_FILLED;
-    };
-    auto zonesOutlinedCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return disp_opt.m_ZoneDisplayMode == ZONE_DISPLAY_MODE::SHOW_OUTLINED;
-    };
-    auto sketchTracksCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return !disp_opt.m_DisplayPcbTrackFill;
-    };
-    auto sketchViasCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return !disp_opt.m_DisplayViaFill;
-    };
-    auto sketchPadsCondition = [ disp_opt ]( const SELECTION &aSel )
-    {
-        return !disp_opt.m_DisplayPadFill;
-    };
-    auto contrastModeCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return disp_opt.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
-    };
-    auto sketchGraphicsCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return !disp_opt.m_DisplayGraphicsFill;
-    };
-    auto sketchTextOutlinesCondition = [ &disp_opt ]( const SELECTION &aSel )
-    {
-        return !disp_opt.m_DisplayTextFill;
-    };
+    viewMenu->Add( PCB_ACTIONS::showLayersManager,    ACTION_MENU::CHECK );
+    viewMenu->Add( PCB_ACTIONS::showMicrowaveToolbar, ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::showFootprintBrowser );
+    viewMenu->Add( ACTIONS::show3DViewer );
 
-    viewMenu->AddCheckItem( PCB_ACTIONS::showLayersManager,    layersPaletteShownCondition );
-    viewMenu->AddCheckItem( PCB_ACTIONS::showMicrowaveToolbar, microwaveToolbarShownCondition );
-    viewMenu->AddItem( ACTIONS::showFootprintBrowser,          SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::show3DViewer,                  SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::zoomInCenter );
+    viewMenu->Add( ACTIONS::zoomOutCenter );
+    viewMenu->Add( ACTIONS::zoomFitScreen );
+    viewMenu->Add( ACTIONS::zoomTool );
+    viewMenu->Add( ACTIONS::zoomRedraw );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::zoomInCenter,                  SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,                 SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,                 SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomTool,                      SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,                    SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( ACTIONS::toggleGrid,               gridShownCondition );
-    viewMenu->AddItem( ACTIONS::gridProperties,                SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddCheckItem( PCB_ACTIONS::togglePolarCoords,    polarCoordsCondition );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::toggleGrid,               ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::gridProperties );
+    viewMenu->Add( PCB_ACTIONS::togglePolarCoords,    ACTION_MENU::CHECK );
 
     // Units submenu
-    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
     unitsSubMenu->SetIcon( unit_mm_xpm );
-    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,        imperialUnitsCondition );
-    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,          metricUnitsCondition );
-    viewMenu->AddMenu( unitsSubMenu );
+    unitsSubMenu->Add( ACTIONS::imperialUnits,        ACTION_MENU::CHECK );
+    unitsSubMenu->Add( ACTIONS::metricUnits,          ACTION_MENU::CHECK );
+    viewMenu->Add( unitsSubMenu );
 
-    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,        fullCrosshairCondition );
+    viewMenu->Add( ACTIONS::toggleCursorStyle,        ACTION_MENU::CHECK );
 
-    viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( PCB_ACTIONS::showRatsnest,         ratsnestShownCondition );
-    viewMenu->AddCheckItem( PCB_ACTIONS::ratsnestLineMode,     curvedRatsnestCondition );
+    viewMenu->AppendSeparator();
+    viewMenu->Add( PCB_ACTIONS::showRatsnest,         ACTION_MENU::CHECK );
+    viewMenu->Add( PCB_ACTIONS::ratsnestLineMode,     ACTION_MENU::CHECK );
 
-    viewMenu->AddSeparator();
+    viewMenu->AppendSeparator();
     // Drawing Mode Submenu
-    CONDITIONAL_MENU* drawingModeSubMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* drawingModeSubMenu = new ACTION_MENU( false, selTool );
     drawingModeSubMenu->SetTitle( _( "&Drawing Mode" ) );
     drawingModeSubMenu->SetIcon( add_zone_xpm );
 
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::zoneDisplayEnable,   zonesFilledCondition );
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::zoneDisplayDisable,  zonesWireframedCondition );
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::zoneDisplayOutlines, zonesOutlinedCondition );
+    drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayEnable,   ACTION_MENU::CHECK );
+    drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayDisable,  ACTION_MENU::CHECK );
+    drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayOutlines, ACTION_MENU::CHECK );
 
-    drawingModeSubMenu->AddSeparator();
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::padDisplayMode,      sketchPadsCondition );
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::viaDisplayMode,      sketchViasCondition );
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::trackDisplayMode,    sketchTracksCondition );
+    drawingModeSubMenu->AppendSeparator();
+    drawingModeSubMenu->Add( PCB_ACTIONS::padDisplayMode,      ACTION_MENU::CHECK );
+    drawingModeSubMenu->Add( PCB_ACTIONS::viaDisplayMode,      ACTION_MENU::CHECK );
+    drawingModeSubMenu->Add( PCB_ACTIONS::trackDisplayMode,    ACTION_MENU::CHECK );
 
-    drawingModeSubMenu->AddSeparator();
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::graphicsOutlines,    sketchGraphicsCondition );
-    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::textOutlines,        sketchTextOutlinesCondition );
+    drawingModeSubMenu->AppendSeparator();
+    drawingModeSubMenu->Add( PCB_ACTIONS::graphicsOutlines,    ACTION_MENU::CHECK );
+    drawingModeSubMenu->Add( PCB_ACTIONS::textOutlines,        ACTION_MENU::CHECK );
 
-    viewMenu->AddMenu( drawingModeSubMenu );
+    viewMenu->Add( drawingModeSubMenu );
 
     // Contrast Mode Submenu
-    CONDITIONAL_MENU* contrastModeSubMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* contrastModeSubMenu = new ACTION_MENU( false, selTool );
     contrastModeSubMenu->SetTitle( _( "&Contrast Mode" ) );
     contrastModeSubMenu->SetIcon( contrast_mode_xpm );
 
-    contrastModeSubMenu->AddCheckItem( ACTIONS::highContrastMode, contrastModeCondition );
-    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaDec, SELECTION_CONDITIONS::ShowAlways );
-    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc, SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddMenu( contrastModeSubMenu );
+    contrastModeSubMenu->Add( ACTIONS::highContrastMode,    ACTION_MENU::CHECK );
+    contrastModeSubMenu->Add( PCB_ACTIONS::layerAlphaDec );
+    contrastModeSubMenu->Add( PCB_ACTIONS::layerAlphaInc );
+    viewMenu->Add( contrastModeSubMenu );
 
-    viewMenu->AddCheckItem( PCB_ACTIONS::flipBoard,                     boardFlippedCondition );
+    viewMenu->Add( PCB_ACTIONS::flipBoard,                  ACTION_MENU::CHECK );
 
 #ifdef __APPLE__
-    viewMenu->AddSeparator();
+    viewMenu->AppendSeparator();
 #endif
-
-    viewMenu->Resolve();
 
     //-- Place Menu ----------------------------------------------------------
     //
-    CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* placeMenu = new ACTION_MENU( false, selTool );
 
-    placeMenu->AddItem( PCB_ACTIONS::placeModule,      SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawVia,          SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawZone,         SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawZoneKeepout,  SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::placeText,        SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawArc,          SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawRectangle,    SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawCircle,       SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawLine,         SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawPolygon,      SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->Add( PCB_ACTIONS::placeModule );
+    placeMenu->Add( PCB_ACTIONS::drawVia );
+    placeMenu->Add( PCB_ACTIONS::drawZone );
+    placeMenu->Add( PCB_ACTIONS::drawZoneKeepout );
+    placeMenu->Add( PCB_ACTIONS::placeText );
+    placeMenu->Add( PCB_ACTIONS::drawArc );
+    placeMenu->Add( PCB_ACTIONS::drawRectangle );
+    placeMenu->Add( PCB_ACTIONS::drawCircle );
+    placeMenu->Add( PCB_ACTIONS::drawLine );
+    placeMenu->Add( PCB_ACTIONS::drawPolygon );
 
-    placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::drawDimension,    SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AppendSeparator();
+    placeMenu->Add( PCB_ACTIONS::drawDimension );
 
-    placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::placeTarget,      SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AppendSeparator();
+    placeMenu->Add( PCB_ACTIONS::placeTarget );
 
-    placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::drillOrigin,      SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( ACTIONS::gridSetOrigin,        SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AppendSeparator();
+    placeMenu->Add( PCB_ACTIONS::drillOrigin );
+    placeMenu->Add( ACTIONS::gridSetOrigin );
 
-    placeMenu->AddSeparator();
+    placeMenu->AppendSeparator();
 
     ACTION_MENU* autoplaceSubmenu = new ACTION_MENU( false );
     autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );
@@ -434,68 +337,60 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceOffboardComponents );
     autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceSelectedComponents );
 
-    placeMenu->AddMenu( autoplaceSubmenu );
+    placeMenu->Add( autoplaceSubmenu );
 
-    placeMenu->Resolve();
 
     //-- Route Menu ----------------------------------------------------------
     //
-    CONDITIONAL_MENU* routeMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* routeMenu = new ACTION_MENU( false, selTool );
 
-    routeMenu->AddItem( PCB_ACTIONS::selectLayerPair,        SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->Add( PCB_ACTIONS::selectLayerPair );
 
-    routeMenu->AddSeparator();
-    routeMenu->AddItem( PCB_ACTIONS::routeSingleTrack,       SELECTION_CONDITIONS::ShowAlways );
-    routeMenu->AddItem( PCB_ACTIONS::routeDiffPair,          SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AppendSeparator();
+    routeMenu->Add( PCB_ACTIONS::routeSingleTrack );
+    routeMenu->Add( PCB_ACTIONS::routeDiffPair );
 
-    routeMenu->AddSeparator();
-    routeMenu->AddItem( PCB_ACTIONS::routerTuneSingleTrace,  SELECTION_CONDITIONS::ShowAlways );
-    routeMenu->AddItem( PCB_ACTIONS::routerTuneDiffPair,     SELECTION_CONDITIONS::ShowAlways );
-    routeMenu->AddItem( PCB_ACTIONS::routerTuneDiffPairSkew, SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AppendSeparator();
+    routeMenu->Add( PCB_ACTIONS::routerTuneSingleTrace );
+    routeMenu->Add( PCB_ACTIONS::routerTuneDiffPair );
+    routeMenu->Add( PCB_ACTIONS::routerTuneDiffPairSkew );
 
-    routeMenu->AddSeparator();
-    routeMenu->AddItem( PCB_ACTIONS::routerSettingsDialog,   SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AppendSeparator();
+    routeMenu->Add( PCB_ACTIONS::routerSettingsDialog );
 
-    routeMenu->Resolve();
 
     //-- Inspect Menu --------------------------------------------------------
     //
-    CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* inspectMenu = new ACTION_MENU( false, selTool );
 
-    inspectMenu->AddItem( PCB_ACTIONS::listNets,             SELECTION_CONDITIONS::ShowAlways );
-    inspectMenu->AddItem( ACTIONS::measureTool,              SELECTION_CONDITIONS::ShowAlways );
-    inspectMenu->AddItem( PCB_ACTIONS::boardStatistics,      SELECTION_CONDITIONS::ShowAlways );
+    inspectMenu->Add( PCB_ACTIONS::listNets );
+    inspectMenu->Add( ACTIONS::measureTool );
+    inspectMenu->Add( PCB_ACTIONS::boardStatistics );
 
-    inspectMenu->AddSeparator();
-    inspectMenu->AddItem( PCB_ACTIONS::runDRC,               SELECTION_CONDITIONS::ShowAlways );
+    inspectMenu->AppendSeparator();
+    inspectMenu->Add( PCB_ACTIONS::runDRC );
 
-    inspectMenu->Resolve();
 
     //-- Tools menu ----------------------------------------------------------
     //
-    CONDITIONAL_MENU* toolsMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* toolsMenu = new ACTION_MENU( false, selTool );
 
-    toolsMenu->AddItem( ACTIONS::updatePcbFromSchematic,     SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( ACTIONS::updateSchematicFromPcb,     SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( PCB_ACTIONS::showEeschema,           SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->Add( ACTIONS::updatePcbFromSchematic );
+    toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
+    toolsMenu->Add( PCB_ACTIONS::showEeschema );
 
-    toolsMenu->AddSeparator();
-    toolsMenu->AddItem( ACTIONS::showFootprintEditor,        SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( PCB_ACTIONS::updateFootprints,       SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( PCB_ACTIONS::boardReannotate,        SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( ACTIONS::showFootprintEditor );
+    toolsMenu->Add( PCB_ACTIONS::updateFootprints );
+    toolsMenu->Add( PCB_ACTIONS::boardReannotate );
 
-    toolsMenu->AddSeparator();
-    toolsMenu->AddItem( PCB_ACTIONS::removeUnusedPads,       SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( PCB_ACTIONS::repairBoard,            SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( PCB_ACTIONS::removeUnusedPads );
+    toolsMenu->Add( PCB_ACTIONS::repairBoard );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
-    auto pythonConsoleShownCondition = [] ( const SELECTION& aSel ) {
-        wxMiniFrame* pythonConsole = (wxMiniFrame *) PCB_EDIT_FRAME::findPythonConsole();
-        return pythonConsole && pythonConsole->IsShown();
-    };
-
-    toolsMenu->AddSeparator();
-    toolsMenu->AddCheckItem( PCB_ACTIONS::showPythonConsole,  pythonConsoleShownCondition );
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( PCB_ACTIONS::showPythonConsole );
 #endif
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
@@ -506,68 +401,62 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     submenuActionPlugins->Add( _( "Refresh Plugins" ),
                                _( "Reload all python plugins and refresh plugin menus" ),
-                               ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH, reload_xpm );
+                               ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH,
+                               reload_xpm );
 #ifdef __APPLE__
     submenuActionPlugins->Add( _( "Reveal Plugin Folder in Finder" ),
                                _( "Reveals the plugins folder in a Finder window" ),
-                               ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER, folder_xpm );
+                               ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER,
+                               folder_xpm );
 #else
     submenuActionPlugins->Add( _( "Open Plugin Directory" ),
                                _( "Opens the directory in the default system file manager" ),
-                               ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER, folder_xpm );
+                               ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER,
+                               folder_xpm );
 #endif
     submenuActionPlugins->AppendSeparator();
 
-    toolsMenu->AddSeparator();
-    toolsMenu->AddMenu( submenuActionPlugins,                 SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( submenuActionPlugins );
 #endif
 
-    toolsMenu->Resolve();
 
     //-- Preferences menu ----------------------------------------------------
     //
-    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, selTool );
+    ACTION_MENU* prefsMenu = new ACTION_MENU( false, selTool );
 
-    auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-    };
-    auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-    };
-
-    prefsMenu->AddItem( ACTIONS::configurePaths,              SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( ACTIONS::showFootprintLibTable,       SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->Add( ACTIONS::configurePaths );
+    prefsMenu->Add( ACTIONS::showFootprintLibTable );
 
 #ifdef BUILD_GITHUB_PLUGIN
-    prefsMenu->AddItem( ID_PCB_3DSHAPELIB_WIZARD,
-                        _( "Add &3D Shapes Libraries Wizard..." ),
-                        _( "Download 3D shape libraries from GitHub" ),
-                        import3d_xpm,                         SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->Add( _( "Add &3D Shapes Libraries Wizard..." ),
+                    _( "Download 3D shape libraries from GitHub" ),
+                    ID_PCB_3DSHAPELIB_WIZARD,
+                    import3d_xpm );
 #endif
-    prefsMenu->AddItem( wxID_PREFERENCES,
-                        _( "Preferences...\tCTRL+," ),
-                        _( "Show preferences for all open tools" ),
-                        preference_xpm,                       SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->Add( _( "Preferences...\tCTRL+," ),
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    preference_xpm );
 
-    prefsMenu->AddSeparator();
+    prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, selTool );
 
-    prefsMenu->AddSeparator();
-    prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
-    prefsMenu->AddCheckItem( ACTIONS::standardGraphics, standardGraphicsCondition );
+    prefsMenu->AppendSeparator();
+    prefsMenu->Add( ACTIONS::acceleratedGraphics, ACTION_MENU::CHECK );
+    prefsMenu->Add( ACTIONS::standardGraphics,    ACTION_MENU::CHECK );
 
-    prefsMenu->Resolve();
 
     //--MenuBar -----------------------------------------------------------
     //
-    menuBar->Append( fileMenu, _( "&File" ) );
-    menuBar->Append( editMenu, _( "&Edit" ) );
-    menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( placeMenu, _( "&Place" ) );
-    menuBar->Append( routeMenu, _( "Ro&ute" ) );
+    menuBar->Append( fileMenu,    _( "&File" ) );
+    menuBar->Append( editMenu,    _( "&Edit" ) );
+    menuBar->Append( viewMenu,    _( "&View" ) );
+    menuBar->Append( placeMenu,   _( "&Place" ) );
+    menuBar->Append( routeMenu,   _( "Ro&ute" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
-    menuBar->Append( toolsMenu, _( "&Tools" ) );
-    menuBar->Append( prefsMenu, _( "P&references" ) );
+    menuBar->Append( toolsMenu,   _( "&Tools" ) );
+    menuBar->Append( prefsMenu,   _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );

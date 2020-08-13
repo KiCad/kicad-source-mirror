@@ -58,7 +58,6 @@
 #include "invoke_pcb_dialog.h"
 #include "dialog_global_fp_lib_table_config.h"
 
-extern bool IsWxPythonLoaded();
 
 namespace PCB {
 

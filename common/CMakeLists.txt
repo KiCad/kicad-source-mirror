@@ -517,6 +517,7 @@ set( PCB_COMMON_SRCS
 
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/grid_helper.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_actions.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_editor_conditions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_viewer_tools.cpp
 
     widgets/net_selector.cpp

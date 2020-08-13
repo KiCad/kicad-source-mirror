@@ -65,6 +65,12 @@ SELECTION_CONDITION EDITOR_CONDITIONS::CurrentTool( const TOOL_ACTION& aTool )
 }
 
 
+SELECTION_CONDITION EDITOR_CONDITIONS::NoActiveTool()
+{
+    return std::bind( &EDITOR_CONDITIONS::noToolFunc, _1, m_frame );
+}
+
+
 SELECTION_CONDITION EDITOR_CONDITIONS::GridVisible()
 {
     // The grid visibility check requires a draw frame
@@ -138,6 +144,12 @@ bool EDITOR_CONDITIONS::toolFunc( const SELECTION& aSelection, EDA_BASE_FRAME* a
                                   const TOOL_ACTION& aTool )
 {
     return aFrame->IsCurrentTool( aTool );
+}
+
+
+bool EDITOR_CONDITIONS::noToolFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame )
+{
+    return aFrame->ToolStackIsEmpty();
 }
 
 

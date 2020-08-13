@@ -46,11 +46,13 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/selection.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <tools/pcb_viewer_tools.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_editor_conditions.h>
 #include <tools/pcbnew_control.h>
 #include <tools/pcbnew_picker_tool.h>
 #include <tools/selection_tool.h>
@@ -212,6 +214,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->InitTools();
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
+    setupUIConditions();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -282,6 +285,52 @@ FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
     GetCanvas()->GetView()->Clear();
     // Be sure any event cannot be fired after frame deletion:
     GetCanvas()->SetEvtHandlerEnabled( false );
+}
+
+
+SELECTION& FOOTPRINT_VIEWER_FRAME::GetCurrentSelection()
+{
+    return m_toolManager->GetTool<SELECTION_TOOL>()->GetSelection();
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::setupUIConditions()
+{
+    PCB_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*       mgr = m_toolManager->GetActionManager();
+    PCB_EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
+
+    mgr->SetConditions( ACTIONS::toggleGrid,             CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,      CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::metricUnits,            CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::imperialUnits,          CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+
+
+    mgr->SetConditions( ACTIONS::zoomTool,               CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::measureTool,            CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,          CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+
+    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,     CHECK( cond.PadNumbersDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,     CHECK( !cond.PadFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::textOutlines,       CHECK( !cond.TextFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,   CHECK( !cond.GraphicsFillDisplay() ) );
+
+    auto autoZoomCond =
+        [this] ( const SELECTION& )
+        {
+            return GetAutoZoom();
+        };
+
+    mgr->SetConditions( PCB_ACTIONS::zoomFootprintAutomatically, CHECK( autoZoomCond ) );
+
+#undef ENABLE
+#undef CHECK
 }
 
 

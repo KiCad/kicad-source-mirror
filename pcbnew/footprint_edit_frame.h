@@ -32,6 +32,7 @@ class EDGE_MODULE;
 class FOOTPRINT_TREE_PANE;
 class LIB_MANAGER;
 class FOOTPRINT_EDITOR_SETTINGS;
+class PCBNEW_SELECTION;
 
 namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
 
@@ -61,6 +62,7 @@ public:
 
     ///> @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
+    SELECTION&            GetCurrentSelection() override;
 
     /**
      * Get if any footprints or libraries have been modified but not saved.
@@ -340,8 +342,6 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
-    void SyncToolbars() override;
-
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -373,6 +373,8 @@ protected:
      * Run the Footprint Properties dialog and handle changes made in it.
      */
     void editFootprintProperties( MODULE* aFootprint );
+
+    void setupUIConditions() override;
 };
 
 #endif      // FOOTPRINT_EDIT_FRAME_H

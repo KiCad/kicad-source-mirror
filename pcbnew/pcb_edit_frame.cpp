@@ -57,6 +57,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/selection.h>
 #include <tool/zoom_tool.h>
 #include <tools/selection_tool.h>
 #include <tools/pcbnew_picker_tool.h>
@@ -67,6 +68,7 @@
 #include <tools/pcbnew_control.h>
 #include <tools/pcb_editor_control.h>
 #include <tools/pcb_inspection_tool.h>
+#include <tools/pcb_editor_conditions.h>
 #include <tools/pcb_viewer_tools.h>
 #include <tools/pcb_reannotate_tool.h>
 #include <tools/placement_tool.h>
@@ -218,6 +220,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateVToolbar();
     ReCreateOptToolbar();
     ReCreateMicrowaveVToolbar();
+
+    // We call this after the toolbars have been created to ensure the layer widget button handler
+    // doesn't cause problems
+    setupUIConditions();
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
 
@@ -443,6 +449,12 @@ bool PCB_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
+SELECTION& PCB_EDIT_FRAME::GetCurrentSelection()
+{
+    return m_toolManager->GetTool<SELECTION_TOOL>()->GetSelection();
+}
+
+
 void PCB_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
@@ -480,6 +492,188 @@ void PCB_EDIT_FRAME::setupTools()
 
     // Run the selection tool, it is supposed to be always active
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+}
+
+
+void PCB_EDIT_FRAME::setupUIConditions()
+{
+    PCB_BASE_EDIT_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*       mgr = m_toolManager->GetActionManager();
+    PCB_EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
+
+    mgr->SetConditions( ACTIONS::save,                     ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::undo,                     ENABLE( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,                     ENABLE( cond.RedoAvailable() ) );
+
+    mgr->SetConditions( ACTIONS::toggleGrid,               CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,        CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::togglePolarCoords,        CHECK( cond.PolarCoordinates() ) );
+    mgr->SetConditions( ACTIONS::metricUnits,              CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::imperialUnits,            CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::acceleratedGraphics,      CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
+    mgr->SetConditions( ACTIONS::standardGraphics,         CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
+
+    mgr->SetConditions( ACTIONS::cut,                      ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::copy,                     ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::paste,                    ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::pasteSpecial,             ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::doDelete,                 ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::duplicate,                ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,       CHECK( !cond.PadFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::viaDisplayMode,       CHECK( !cond.ViaFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::trackDisplayMode,     CHECK( !cond.TrackFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneDisplayEnable,    CHECK( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneDisplayDisable,   CHECK( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::HIDE_FILLED ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneDisplayOutlines,  CHECK( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_OUTLINED ) ) );
+
+
+#if defined( KICAD_SCRIPTING_WXPYTHON )
+    auto pythonConsoleCond =
+        [] ( const SELECTION& )
+        {
+            if( IsWxPythonLoaded() )
+            {
+                wxWindow* console = PCB_EDIT_FRAME::findPythonConsole();
+                return console && console->IsShown();
+            }
+
+            return false;
+        };
+
+    mgr->SetConditions( PCB_ACTIONS::showPythonConsole,  CHECK( pythonConsoleCond ) );
+#endif
+
+
+    auto enableBoardSetupCondition =
+        [this] ( const SELECTION& )
+        {
+            if( DRC* tool = m_toolManager->GetTool<DRC>() )
+                return !tool->IsDRCDialogShown();
+
+            return true;
+        };
+
+    auto boardFlippedCond =
+        [this]( const SELECTION& )
+        {
+            return GetCanvas()->GetView()->IsMirroredX();
+        };
+
+    auto layerManagerCond =
+        [this] ( const SELECTION& )
+        {
+            return LayerManagerShown();
+        };
+
+    auto microwaveToolbarCond =
+        [this] ( const SELECTION& )
+        {
+            return MicrowaveToolbarShown();
+        };
+
+    auto highContrastCond =
+        [this] ( const SELECTION& )
+        {
+            return GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
+        };
+
+    auto globalRatsnestCond =
+        [this] (const SELECTION& )
+        {
+            return GetDisplayOptions().m_ShowGlobalRatsnest;
+        };
+
+    auto curvedRatsnestCond =
+        [this] (const SELECTION& )
+        {
+            return GetDisplayOptions().m_DisplayRatsnestLinesCurved;
+        };
+
+    mgr->SetConditions( ACTIONS::highContrastMode,         CHECK( highContrastCond ) );
+    mgr->SetConditions( PCB_ACTIONS::flipBoard,            CHECK( boardFlippedCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showLayersManager,    CHECK( layerManagerCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showMicrowaveToolbar, CHECK( microwaveToolbarCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showRatsnest,         CHECK( globalRatsnestCond ) );
+    mgr->SetConditions( PCB_ACTIONS::ratsnestLineMode,     CHECK( curvedRatsnestCond ) );
+    mgr->SetConditions( PCB_ACTIONS::boardSetup ,          ENABLE( enableBoardSetupCondition ) );
+
+
+    auto isHighlightMode =
+        [this]( const SELECTION& )
+        {
+            ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
+            return tool->GetRouterMode() == PNS::RM_MarkObstacles;
+        };
+
+    auto isShoveMode =
+        [this]( const SELECTION& )
+        {
+            ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
+            return tool->GetRouterMode() == PNS::RM_Shove;
+        };
+
+    auto isWalkaroundMode =
+        [this]( const SELECTION& )
+        {
+            ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
+            return tool->GetRouterMode() == PNS::RM_Walkaround;
+        };
+
+    mgr->SetConditions( PCB_ACTIONS::routerHighlightMode,  CHECK( isHighlightMode ) );
+    mgr->SetConditions( PCB_ACTIONS::routerShoveMode,      CHECK( isShoveMode ) );
+    mgr->SetConditions( PCB_ACTIONS::routerWalkaroundMode, CHECK( isWalkaroundMode ) );
+
+    // The layer indicator is special, so we register a callback directly that will regenerate the
+    // bitmap instead of using the conditions system
+    auto layerIndicatorUpdate =
+        [this] ( wxUpdateUIEvent& )
+        {
+            PrepareLayerIndicator();
+        };
+
+    Bind( wxEVT_UPDATE_UI, layerIndicatorUpdate, PCB_ACTIONS::selectLayerPair.GetUIId() );
+
+
+#define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
+
+    CURRENT_TOOL( ACTIONS::zoomTool );
+    CURRENT_TOOL( ACTIONS::deleteTool );
+    CURRENT_TOOL( ACTIONS::measureTool );
+    CURRENT_TOOL( ACTIONS::selectionTool );
+    CURRENT_TOOL( PCB_ACTIONS::highlightNetTool );
+    CURRENT_TOOL( PCB_ACTIONS::localRatsnestTool );
+    CURRENT_TOOL( PCB_ACTIONS::placeModule );
+    CURRENT_TOOL( PCB_ACTIONS::routeSingleTrack);
+    CURRENT_TOOL( PCB_ACTIONS::drawVia );
+    CURRENT_TOOL( PCB_ACTIONS::drawZone );
+    CURRENT_TOOL( PCB_ACTIONS::drawZoneKeepout );
+    CURRENT_TOOL( PCB_ACTIONS::drawLine );
+    CURRENT_TOOL( PCB_ACTIONS::drawRectangle );
+    CURRENT_TOOL( PCB_ACTIONS::drawCircle );
+    CURRENT_TOOL( PCB_ACTIONS::drawArc );
+    CURRENT_TOOL( PCB_ACTIONS::drawPolygon );
+    CURRENT_TOOL( PCB_ACTIONS::placeText );
+    CURRENT_TOOL( PCB_ACTIONS::drawDimension );
+    CURRENT_TOOL( PCB_ACTIONS::placeTarget );
+    CURRENT_TOOL( PCB_ACTIONS::drillOrigin );
+    CURRENT_TOOL( PCB_ACTIONS::gridSetOrigin );
+
+    CURRENT_TOOL( PCB_ACTIONS::microwaveCreateLine );
+    CURRENT_TOOL( PCB_ACTIONS::microwaveCreateGap );
+    CURRENT_TOOL( PCB_ACTIONS::microwaveCreateStub );
+    CURRENT_TOOL( PCB_ACTIONS::microwaveCreateStubArc );
+    CURRENT_TOOL( PCB_ACTIONS::microwaveCreateFunctionShape );
+
+#undef CURRENT_TOOL
+#undef ENABLE
+#undef CHECK
 }
 
 
@@ -1373,4 +1567,16 @@ void PCB_EDIT_FRAME::OnExportHyperlynx( wxCommandEvent& event )
 wxString PCB_EDIT_FRAME::GetCurrentFileName() const
 {
     return GetBoard()->GetFileName();
+}
+
+
+bool PCB_EDIT_FRAME::LayerManagerShown()
+{
+    return m_auimgr.GetPane( "LayersManager" ).IsShown();
+}
+
+
+bool PCB_EDIT_FRAME::MicrowaveToolbarShown()
+{
+    return m_auimgr.GetPane( "MicrowaveToolbar" ).IsShown();
 }

@@ -61,9 +61,11 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/selection.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
+#include <tools/pcb_editor_conditions.h>
 #include <tools/pcb_viewer_tools.h>
 #include <tools/position_relative_tool.h>
 #include <widgets/infobar.h>
@@ -173,6 +175,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
+    setupUIConditions();
 
     initLibraryTree();
     m_treePane = new FOOTPRINT_TREE_PANE( this );
@@ -269,6 +272,12 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 bool FOOTPRINT_EDIT_FRAME::IsContentModified()
 {
     return GetScreen() && GetScreen()->IsModify() && GetBoard() && GetBoard()->GetFirstModule();
+}
+
+
+SELECTION& FOOTPRINT_EDIT_FRAME::GetCurrentSelection()
+{
+    return m_toolManager->GetTool<SELECTION_TOOL>()->GetSelection();
 }
 
 
@@ -894,6 +903,104 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->InitTools();
 
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::setupUIConditions()
+{
+    PCB_BASE_EDIT_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*       mgr = m_toolManager->GetActionManager();
+    PCB_EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
+
+    auto haveFootprintCond =
+        [this]( const SELECTION& )
+        {
+            return GetBoard()->GetFirstModule() != nullptr;
+        };
+
+    auto footprintTargettedCond =
+        [this] ( const SELECTION& )
+        {
+            return !GetTargetFPID().GetLibItemName().empty();
+        };
+
+    mgr->SetConditions( ACTIONS::saveAs,                 ENABLE( footprintTargettedCond ) );
+    mgr->SetConditions( ACTIONS::revert,                 ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( PCB_ACTIONS::saveToBoard,        ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( PCB_ACTIONS::saveToLibrary,      ENABLE( cond.ContentModified() ) );
+
+    mgr->SetConditions( ACTIONS::undo,                   ENABLE( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,                   ENABLE( cond.RedoAvailable() ) );
+
+    mgr->SetConditions( ACTIONS::toggleGrid,             CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,      CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::metricUnits,            CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::imperialUnits,          CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::acceleratedGraphics,    CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
+    mgr->SetConditions( ACTIONS::standardGraphics,       CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
+
+    mgr->SetConditions( ACTIONS::cut,                    ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::copy,                   ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::paste,                  ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::pasteSpecial,           ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::doDelete,               ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::duplicate,              ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,     CHECK( !cond.PadFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::textOutlines,       CHECK( !cond.TextFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,   CHECK( !cond.GraphicsFillDisplay() ) );
+
+    mgr->SetConditions( ACTIONS::zoomTool,               CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,          CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+
+
+    auto highContrastCond =
+        [this] ( const SELECTION& )
+        {
+            return GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
+        };
+
+    auto footprintTreeCond =
+        [this] (const SELECTION& )
+        {
+            return IsSearchTreeShown();
+        };
+
+    mgr->SetConditions( ACTIONS::highContrastMode,         CHECK( highContrastCond ) );
+    mgr->SetConditions( PCB_ACTIONS::toggleFootprintTree,  CHECK( footprintTreeCond ) );
+
+    mgr->SetConditions( ACTIONS::print,                    ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( PCB_ACTIONS::exportFootprint,      ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( PCB_ACTIONS::footprintProperties,  ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( PCB_ACTIONS::cleanupGraphics,      ENABLE( haveFootprintCond ) );
+
+
+// Only enable a tool if the part is edtable
+#define CURRENT_EDIT_TOOL( action ) mgr->SetConditions( action, \
+                                    ACTION_CONDITIONS().Enable( haveFootprintCond ).Check( cond.CurrentTool( action ) ) )
+
+    CURRENT_EDIT_TOOL( ACTIONS::deleteTool );
+    CURRENT_EDIT_TOOL( ACTIONS::measureTool );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placePad );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawLine );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRectangle );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawCircle );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawArc );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawPolygon );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawZoneKeepout );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeText );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::setAnchor );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::gridSetOrigin );
+
+#undef CURRENT_EDIT_TOOL
+#undef ENABLE
+#undef CHECK
 }
 
 

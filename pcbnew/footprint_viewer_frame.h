@@ -34,6 +34,7 @@ class wxSashLayoutWindow;
 class wxListBox;
 class FP_LIB_TABLE;
 class BOARD_ITEM;
+class SELECTION;
 
 namespace PCB { struct IFACE; }
 
@@ -49,12 +50,16 @@ protected:
 
     MAGNETIC_SETTINGS m_magneticItems;
 
+    void setupUIConditions() override;
+
 
 public:
     ~FOOTPRINT_VIEWER_FRAME();
 
     ///> @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
+
+    SELECTION& GetCurrentSelection() override;
 
     virtual COLOR4D GetGridColor() override;
 
@@ -124,7 +129,6 @@ private:
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
     void ReCreateMenuBar() override;
-    void SyncToolbars() override;
 
     void OnLibFilter( wxCommandEvent& aEvent );
     void OnFPFilter( wxCommandEvent& aEvent );

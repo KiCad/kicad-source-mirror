@@ -92,6 +92,8 @@ void        RedirectStdio();
 wxWindow*   CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId );
 #endif
 
+bool IsWxPythonLoaded();
+
 #if 0 && defined (KICAD_SCRIPTING_WXPYTHON)
 // This definition of PyLOCK crashed Pcbnew under some conditions (JPC),
 // especially reloading plugins

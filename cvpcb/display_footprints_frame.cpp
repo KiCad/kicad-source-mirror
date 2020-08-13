@@ -43,7 +43,6 @@
 #include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
-#include <tool/editor_conditions.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
@@ -51,6 +50,7 @@
 #include <display_footprints_frame.h>
 #include <tools/cvpcb_actions.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_editor_conditions.h>  // Shared conditions with other pcbnew frames
 #include <tools/pcb_viewer_tools.h>       // shared tools with other pcbnew frames
 #include <tools/cvpcb_fpviewer_selection_tool.h>
 #include <widgets/infobar.h>
@@ -185,8 +185,8 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
 {
     PCB_BASE_FRAME::setupUIConditions();
 
-    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
-    EDITOR_CONDITIONS cond( this );
+    ACTION_MANAGER*       mgr = m_toolManager->GetActionManager();
+    PCB_EDITOR_CONDITIONS cond( this );
 
     wxASSERT( mgr );
 
@@ -209,35 +209,11 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
             return GetAutoZoom();
         };
 
-    auto padNumCond =
-        [this] ( const SELECTION& aSel )
-        {
-            return GetDisplayOptions().m_DisplayPadNum;
-        };
-
-    auto padFillCond =
-        [this] ( const SELECTION& aSel )
-        {
-            return !GetDisplayOptions().m_DisplayPadFill;
-        };
-
-    auto textFillCond =
-        [this] ( const SELECTION& aSel )
-        {
-            return !GetDisplayOptions().m_DisplayTextFill;
-        };
-
-    auto graphicsFillCond =
-        [this] ( const SELECTION& aSel )
-        {
-            return !GetDisplayOptions().m_DisplayGraphicsFill;
-        };
-
     mgr->SetConditions( PCB_ACTIONS::zoomFootprintAutomatically, CHECK( autoZoomCond ) );
-    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,             CHECK( padNumCond ) );
-    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,             CHECK( padFillCond ) );
-    mgr->SetConditions( PCB_ACTIONS::textOutlines,               CHECK( textFillCond ) );
-    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,           CHECK( graphicsFillCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,             CHECK( cond.PadNumbersDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,             CHECK( !cond.PadFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::textOutlines,               CHECK( !cond.TextFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,           CHECK( !cond.GraphicsFillDisplay() ) );
 
 #undef CHECK
 }

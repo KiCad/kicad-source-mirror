@@ -52,6 +52,7 @@ class DRAWSEGMENT;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 class PCB_LAYER_WIDGET;
+class SELECTION;
 class MARKER_PCB;
 class BOARD_ITEM;
 class PCB_LAYER_BOX_SELECTOR;
@@ -122,6 +123,7 @@ protected:
 
     // The Tool Framework initalization
     void setupTools();
+    void setupUIConditions() override;
 
     /**
      * switches currently used canvas (Cairo / OpenGL).
@@ -926,9 +928,9 @@ public:
 
     void ProjectChanged() override;
 
-    void SyncToolbars() override;
-
     wxString GetCurrentFileName() const override;
+
+    SELECTION& GetCurrentSelection() override;
 
     DECLARE_EVENT_TABLE()
 };

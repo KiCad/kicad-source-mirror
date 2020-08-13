@@ -29,7 +29,7 @@
 #include <wx/aui/auibar.h>
 #include <tool/tool_event.h>
 
-class CONDITIONAL_MENU;
+class ACTION_MENU;
 class EDA_BASE_FRAME;
 class TOOL_MANAGER;
 class TOOL_ACTION;
@@ -77,7 +77,7 @@ public:
      * @param aAction is the action to get the menu
      * @param aMenu is the context menu
      */
-    void AddToolContextMenu( const TOOL_ACTION& aAction, CONDITIONAL_MENU* aMenu );
+    void AddToolContextMenu( const TOOL_ACTION& aAction, ACTION_MENU* aMenu );
 
     /**
      * Clear the toolbar and remove all associated menus.
@@ -111,7 +111,7 @@ protected:
     TOOL_MANAGER* m_toolManager;
     std::map<int, bool>               m_toolKinds;
     std::map<int, const TOOL_ACTION*> m_toolActions;
-    std::map<int, CONDITIONAL_MENU*>  m_toolMenus;
+    std::map<int, ACTION_MENU*>       m_toolMenus;
 };
 
 #endif

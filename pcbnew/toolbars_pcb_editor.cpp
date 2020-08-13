@@ -49,7 +49,9 @@
 #include <view/view.h>
 #include <wx/wupdlock.h>
 
-extern bool IsWxPythonLoaded();
+#if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
+#include <python_scripting.h>
+#endif
 
 #define SEL_LAYER_HELP _( \
         "Show active layer selections\nand select layer pair for route and place via" )
@@ -386,39 +388,19 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,        ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::measureTool,              ACTION_TOOLBAR::TOGGLE );
 
-    auto isHighlightMode =
-        [this]( const SELECTION& aSel )
-        {
-            ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
-            return tool->GetRouterMode() == PNS::RM_MarkObstacles;
-        };
+    SELECTION_TOOL* selTool   = m_toolManager->GetTool<SELECTION_TOOL>();
+    ACTION_MENU*    routeMenu = new ACTION_MENU( false, selTool );
+    routeMenu->Add( PCB_ACTIONS::routerHighlightMode,  ACTION_MENU::CHECK );
+    routeMenu->Add( PCB_ACTIONS::routerShoveMode,      ACTION_MENU::CHECK );
+    routeMenu->Add( PCB_ACTIONS::routerWalkaroundMode, ACTION_MENU::CHECK );
 
-    auto isShoveMode =
-        [this]( const SELECTION& aSel )
-        {
-            ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
-            return tool->GetRouterMode() == PNS::RM_Shove;
-        };
-
-    auto isWalkaroundMode =
-        [this]( const SELECTION& aSel )
-        {
-            ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
-            return tool->GetRouterMode() == PNS::RM_Walkaround;
-        };
-
-    SELECTION_TOOL*   selTool   = m_toolManager->GetTool<SELECTION_TOOL>();
-    CONDITIONAL_MENU* routeMenu = new CONDITIONAL_MENU( false, selTool );
-    routeMenu->AddCheckItem( PCB_ACTIONS::routerHighlightMode, isHighlightMode );
-    routeMenu->AddCheckItem( PCB_ACTIONS::routerShoveMode, isShoveMode );
-    routeMenu->AddCheckItem( PCB_ACTIONS::routerWalkaroundMode, isWalkaroundMode );
-    routeMenu->AddSeparator();
-    routeMenu->AddItem( PCB_ACTIONS::routerSettingsDialog, SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AppendSeparator();
+    routeMenu->Add( PCB_ACTIONS::routerSettingsDialog );
     m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, routeMenu );
 
-    CONDITIONAL_MENU* zoneMenu = new CONDITIONAL_MENU( false, selTool );
-    zoneMenu->AddItem( PCB_ACTIONS::zoneFillAll, SELECTION_CONDITIONS::ShowAlways );
-    zoneMenu->AddItem( PCB_ACTIONS::zoneUnfillAll, SELECTION_CONDITIONS::ShowAlways );
+    ACTION_MENU* zoneMenu = new ACTION_MENU( false, selTool );
+    zoneMenu->Add( PCB_ACTIONS::zoneFillAll );
+    zoneMenu->Add( PCB_ACTIONS::zoneUnfillAll );
     m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::drawZone, zoneMenu );
 
     m_drawToolBar->Realize();
@@ -681,96 +663,4 @@ void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 {
     m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
-}
-
-
-bool PCB_EDIT_FRAME::LayerManagerShown()
-{
-    return m_auimgr.GetPane( "LayersManager" ).IsShown();
-}
-
-bool PCB_EDIT_FRAME::MicrowaveToolbarShown()
-{
-    return m_auimgr.GetPane( "MicrowaveToolbar" ).IsShown();
-}
-
-
-void PCB_EDIT_FRAME::SyncToolbars()
-{
-#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
-
-    if( !m_mainToolBar || !m_optionsToolBar || !m_drawToolBar || !m_microWaveToolBar )
-        return;
-
-    auto&                       opts = GetDisplayOptions();
-    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-    ZONE_DISPLAY_MODE           zoneMode = opts.m_ZoneDisplayMode;
-
-    m_mainToolBar->Toggle( ACTIONS::save, IsContentModified() );
-    m_mainToolBar->Toggle( ACTIONS::undo, GetUndoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::redo, GetRedoCommandCount() > 0 );
-    TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );
-#if defined(KICAD_SCRIPTING_WXPYTHON)
-    if( IsWxPythonLoaded() )
-    {
-        wxMiniFrame* console = (wxMiniFrame *) PCB_EDIT_FRAME::findPythonConsole();
-        m_mainToolBar->Toggle( PCB_ACTIONS::showPythonConsole, console && console->IsShown() );
-    }
-#endif
-    m_mainToolBar->Refresh();
-
-    PrepareLayerIndicator();
-
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,               IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,        GetShowPolarCoords() );
-    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,        galOpts.m_fullscreenCursor );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::showRatsnest,         opts.m_ShowGlobalRatsnest );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::ratsnestLineMode,     opts.m_DisplayRatsnestLinesCurved );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::showLayersManager,    LayerManagerShown() );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::showMicrowaveToolbar, MicrowaveToolbarShown() );
-
-    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayEnable,
-                              zoneMode == ZONE_DISPLAY_MODE::SHOW_FILLED );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayDisable,
-                              zoneMode == ZONE_DISPLAY_MODE::HIDE_FILLED );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayOutlines,
-                              zoneMode == ZONE_DISPLAY_MODE::SHOW_OUTLINED );
-
-    m_optionsToolBar->Toggle( PCB_ACTIONS::trackDisplayMode,     !opts.m_DisplayPcbTrackFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::viaDisplayMode,       !opts.m_DisplayViaFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,       !opts.m_DisplayPadFill );
-    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,
-                              opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
-    m_optionsToolBar->Refresh();
-
-    TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::highlightNetTool );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::localRatsnestTool );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placeModule );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::routeSingleTrack );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawVia );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawZone );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawZoneKeepout );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawLine );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawRectangle );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawCircle );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawArc );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawPolygon );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placeText );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawDimension );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placeTarget );
-    TOGGLE_TOOL( m_drawToolBar, ACTIONS::deleteTool );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drillOrigin );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::gridSetOrigin );
-    TOGGLE_TOOL( m_drawToolBar, ACTIONS::measureTool );
-    m_drawToolBar->Refresh();
-
-    TOGGLE_TOOL( m_microWaveToolBar, PCB_ACTIONS::microwaveCreateLine );
-    TOGGLE_TOOL( m_microWaveToolBar, PCB_ACTIONS::microwaveCreateGap );
-    TOGGLE_TOOL( m_microWaveToolBar, PCB_ACTIONS::microwaveCreateStub );
-    TOGGLE_TOOL( m_microWaveToolBar, PCB_ACTIONS::microwaveCreateStubArc );
-    TOGGLE_TOOL( m_microWaveToolBar, PCB_ACTIONS::microwaveCreateFunctionShape );
-    m_microWaveToolBar->Refresh();
 }

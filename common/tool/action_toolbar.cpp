@@ -100,7 +100,7 @@ void ACTION_TOOLBAR::AddScaledSeparator( wxWindow* aWindow )
 }
 
 
-void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction, CONDITIONAL_MENU* aMenu )
+void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction, ACTION_MENU* aMenu )
 {
     int toolId = aAction.GetUIId();
 
@@ -208,10 +208,12 @@ void ACTION_TOOLBAR::onToolRightClick( wxAuiToolBarEvent& aEvent )
         return;
 
     // Update and show the menu
-    CONDITIONAL_MENU* menu = it->second;
-    SELECTION         dummySel;
+    ACTION_MENU* menu = it->second;
+    SELECTION    dummySel;
 
-    menu->Evaluate( dummySel );
+    if( CONDITIONAL_MENU* condMenu = dynamic_cast<CONDITIONAL_MENU*>( menu ) )
+        condMenu->Evaluate( dummySel );
+
     menu->UpdateAll();
     PopupMenu( menu );
 

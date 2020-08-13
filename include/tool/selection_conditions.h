@@ -51,9 +51,14 @@ typedef bool ( &SELECTION_BOOL )( const SELECTION& );
 SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
                                 SELECTION_BOOL aConditionB );
 
+SELECTION_CONDITION operator||( SELECTION_BOOL aConditionA,
+                                const SELECTION_CONDITION& aConditionB );
+
 SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
                                 SELECTION_BOOL aConditionB );
 
+SELECTION_CONDITION operator&&( SELECTION_BOOL aConditionA,
+                                const SELECTION_CONDITION& aConditionB );
 
 /**
  * Class that groups generic conditions for selected items.
