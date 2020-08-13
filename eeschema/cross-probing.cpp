@@ -126,7 +126,8 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
             if( crossProbingSettings.zoom_to_fit )
             {
-                EDA_RECT bbox = component->GetBoundingBox();
+                // Pass "false" to only include visible fields of component in bbox calculations
+                EDA_RECT bbox = component->GetBoundingBox( false );
 
                 wxSize   bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
                 VECTOR2D screenSize = getView()->GetViewport().GetSize();
@@ -583,6 +584,6 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
     }
     default:;
-         
+
     }
 }

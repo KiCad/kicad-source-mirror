@@ -1177,6 +1177,20 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 }
 
 
+const EDA_RECT SCH_COMPONENT::GetBoundingBox( bool aIncludeInvisibleText ) const
+{
+    EDA_RECT bbox = GetBodyBoundingBox();
+
+    for( const SCH_FIELD& field : m_Fields )
+    {
+        if( field.IsVisible() || aIncludeInvisibleText )
+            bbox.Merge( field.GetBoundingBox() );
+    }
+
+    return bbox;
+}
+
+
 void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;

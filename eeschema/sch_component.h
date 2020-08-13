@@ -376,6 +376,8 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
+    const EDA_RECT GetBoundingBox( bool aIncludeInvisibleText ) const;
+
     /**
      * Return a bounding box for the symbol body but not the fields.
      */
