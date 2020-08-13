@@ -83,9 +83,6 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHE
     m_hiearchicalPathLabel->SetFont( infoFont );
     m_heirarchyPath->SetFont( infoFont );
     m_heirarchyPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
-    m_timestampLabel->SetFont( infoFont );
-    m_textCtrlTimeStamp->SetFont( infoFont );
-    m_textCtrlTimeStamp->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
@@ -166,7 +163,6 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
 
     // set up the read-only fields
     m_heirarchyPath->SetValue( m_frame->GetCurrentSheet().PathHumanReadable() );
-    m_textCtrlTimeStamp->SetValue( m_sheet->m_Uuid.AsString() );
 
     Layout();
 

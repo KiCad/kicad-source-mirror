@@ -154,47 +154,34 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	bSizer5->Add( sbSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	m_longForm->Add( bSizer5, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_longForm->Add( bSizer5, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	mainSizer->Add( m_longForm, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 4, 0 );
+	fgSizer1 = new wxFlexGridSizer( 1, 2, 0, 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxHORIZONTAL );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_hiearchicalPathLabel = new wxStaticText( this, wxID_ANY, _("Hierarchical path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hiearchicalPathLabel->Wrap( -1 );
-	fgSizer1->Add( m_hiearchicalPathLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizer1->Add( m_hiearchicalPathLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
 
 	m_heirarchyPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
 	m_heirarchyPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 
-	fgSizer1->Add( m_heirarchyPath, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
-	m_timestampLabel = new wxStaticText( this, wxID_ANY, _("Unique identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_timestampLabel->Wrap( -1 );
-	fgSizer1->Add( m_timestampLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
-	m_textCtrlTimeStamp->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the symbol") );
-
-	fgSizer1->Add( m_textCtrlTimeStamp, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_heirarchyPath, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	bSizerBottom->Add( fgSizer1, 1, wxEXPAND|wxLEFT, 5 );
-
-
-	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP, 5 );
+	bSizerBottom->Add( fgSizer1, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
@@ -203,7 +190,10 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_stdDialogButtonSizer->AddButton( m_stdDialogButtonSizerCancel );
 	m_stdDialogButtonSizer->Realize();
 
-	mainSizer->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL, 5 );
+	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( mainSizer );

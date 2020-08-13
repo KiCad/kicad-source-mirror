@@ -56,11 +56,9 @@ class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
 		COLOR_SWATCH* m_borderSwatch;
 		wxStaticText* m_backgroundColorLabel;
 		COLOR_SWATCH* m_backgroundSwatch;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_hiearchicalPathLabel;
 		wxTextCtrl* m_heirarchyPath;
-		wxStaticText* m_timestampLabel;
-		wxTextCtrl* m_textCtrlTimeStamp;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_stdDialogButtonSizer;
 		wxButton* m_stdDialogButtonSizerOK;
 		wxButton* m_stdDialogButtonSizerCancel;
