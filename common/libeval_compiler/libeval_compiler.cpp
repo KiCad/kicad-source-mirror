@@ -762,13 +762,13 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( !vref )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) strlen( itemName ) );
+                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) itemName.length() );
                     }
 
                     if( vref->GetType() == VT_PARSE_ERROR )
                     {
                         msg.Printf( _( "Unrecognized property '%s'" ), propName );
-                        reportError( CST_CODEGEN, msg, node->leaf[1]->srcPos - (int) strlen( propName ) );
+                        reportError( CST_CODEGEN, msg, node->leaf[1]->srcPos - (int) propName.length() );
                     }
 
                     node->leaf[0]->isVisited = true;
@@ -791,13 +791,13 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( !vref )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) strlen( itemName ) );
+                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) itemName.length() );
                     }
 
                     wxString functionName = *node->leaf[1]->leaf[0]->value.str;
                     auto  func = aCode->CreateFuncCall( functionName );
 
-                    libeval_dbg( 10, "emit func call: %s\n", (const char*) functionName.c_str() );
+                    libeval_dbg( 10, "emit func call: %s\n", functionName );
 
                     if( !func )
                     {
@@ -893,7 +893,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             if( !vref )
             {
                 msg.Printf( _( "Unrecognized item '%s'" ), *node->value.str );
-                reportError( CST_CODEGEN, msg, node->srcPos - (int) strlen( *node->value.str  ) );
+                reportError( CST_CODEGEN, msg, node->srcPos - (int) node->value.str->length() );
             }
 
             node->SetUop( TR_UOP_PUSH_VALUE, std::move( vref ) );
