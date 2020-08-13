@@ -75,7 +75,7 @@ public:
     }
 
 private:
-    BOARD_ITEM* m_items[2];
+    BOARD_ITEM*  m_items[2];
     PCB_LAYER_ID m_layer;
 };
 
@@ -159,6 +159,12 @@ public:
 
     bool Evaluate( const wxString& aExpr );
     int  Result() const { return m_result; }
+
+    void SetErrorCallback( std::function<void( const wxString& aMessage, int aOffset )> aCallback )
+    {
+        m_compiler.SetErrorCallback( aCallback );
+    }
+
     bool IsErrorPending() const { return m_errorStatus.pendingError; }
     const LIBEVAL::ERROR_STATUS& GetError() const { return m_errorStatus; }
 

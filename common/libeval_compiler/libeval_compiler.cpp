@@ -615,25 +615,13 @@ void COMPILER::reportError( COMPILATION_STAGE stage, const wxString& aErrorMsg, 
     if( aPos == -1 )
         aPos = m_sourcePos;
 
-// fixme: no HTML or anything UI-related here.
-
-#if 0
-    wxString rest;
-    wxString first = aErrorMsg.BeforeFirst( '|', &rest );
-    wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
-                                     m_originLine,
-                                     m_originOffset + aPos,
-                                     first,
-                                     rest );
-#endif
-
     m_errorStatus.pendingError = true;
     m_errorStatus.stage = stage;
     m_errorStatus.message = aErrorMsg;
     m_errorStatus.srcPos = aPos;
 
     if( m_errorCallback )
-        m_errorCallback( m_errorStatus );
+        m_errorCallback( aErrorMsg, aPos );
 }
 
 

@@ -376,10 +376,22 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
 void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult )
 {
-    PCB_EXPR_EVALUATOR evaluator;
-    
-    // m_reporter, CurLineNumber(), CurOffset() );
+    auto errorHandler = [&]( const wxString& aMessage, int aOffset )
+    {
+        wxString rest;
+        wxString first = aMessage.BeforeFirst( '|', &rest );
+        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+                                         CurLineNumber(),
+                                         CurOffset() + aOffset,
+                                         first,
+                                         rest );
 
+        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+    };
+
+    PCB_EXPR_EVALUATOR evaluator;
+    evaluator.SetErrorCallback( errorHandler );
+    
     evaluator.Evaluate( aExpr );
     aResult = evaluator.Result();
 }

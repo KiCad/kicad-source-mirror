@@ -25,7 +25,7 @@
 #include <fctsys.h>
 #include <class_board.h>
 #include <class_board_item.h>
-
+#include <reporter.h>
 #include <drc/drc_rule.h>
 #include <pcb_expr_evaluator.h>
 
@@ -119,7 +119,21 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
 
 bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset )
 {
+    auto errorHandler = [&]( const wxString& aMessage, int aOffset )
+    {
+        wxString rest;
+        wxString first = aMessage.BeforeFirst( '|', &rest );
+        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+                                         aSourceLine,
+                                         aSourceOffset + aOffset,
+                                         first,
+                                         rest );
+
+        aReporter->Report( msg, RPT_SEVERITY_ERROR );
+    };
+
     PCB_EXPR_COMPILER compiler;
+    compiler.SetErrorCallback( errorHandler );
 
     if (!m_ucode)
         m_ucode = new PCB_EXPR_UCODE;

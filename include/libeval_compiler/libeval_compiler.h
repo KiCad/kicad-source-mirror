@@ -429,7 +429,11 @@ public:
 
     bool Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflightContext );
 
-    void SetErrorCallback( std::function<void(const ERROR_STATUS&)> aCallback );
+    void SetErrorCallback( std::function<void( const wxString& aMessage, int aOffset )> aCallback )
+    {
+        m_errorCallback = aCallback;
+    }
+
     bool IsErrorPending() const { return m_errorStatus.pendingError; }
     const ERROR_STATUS& GetError() const { return m_errorStatus; }
 
@@ -454,8 +458,8 @@ protected:
 
     /* Tokenizer: Next token/value taken from input string. */
     T_TOKEN getToken();
-    bool  lexDefault( T_TOKEN& aToken );
-    bool  lexString( T_TOKEN& aToken );
+    bool lexDefault( T_TOKEN& aToken );
+    bool lexString( T_TOKEN& aToken );
 
     int resolveUnits();
 
@@ -474,7 +478,7 @@ protected:
     ERROR_STATUS m_errorStatus;
     std::vector<TREE_NODE*>  m_gcItems;
     std::vector<wxString*> m_gcStrings;
-    std::function<void(const ERROR_STATUS&)> m_errorCallback;
+    std::function<void( const wxString& aMessage, int aOffset )> m_errorCallback;
 };
 
 
