@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,7 +50,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerArcToPoly->Add( m_staticline2, 0, wxEXPAND | wxALL, 2 );
 
-	m_stCircleToPolyOpt = new wxStaticText( this, wxID_ANY, _("Arc/circle drawing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stCircleToPolyOpt = new wxStaticText( this, wxID_ANY, _("Arc/circle approximated by segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stCircleToPolyOpt->Wrap( -1 );
 	m_stCircleToPolyOpt->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
@@ -63,7 +63,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
-	fgSizer2->Add( 15, 0, 1, wxEXPAND, 5 );
+	fgSizer2->Add( 15, 0, 0, 0, 5 );
 
 	m_maxErrorTitle = new wxStaticText( this, wxID_ANY, _("Maximum deviation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maxErrorTitle->Wrap( -1 );
@@ -80,6 +80,21 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 
 
 	bSizerArcToPoly->Add( fgSizer2, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bitmapInfo = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_INFORMATION, wxART_OTHER ), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_bitmapInfo, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_stCircleToPolyWarning = new wxStaticText( this, wxID_ANY, _("Value < %s  can be time consumming\nwhen filling zones."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stCircleToPolyWarning->Wrap( -1 );
+	m_stCircleToPolyWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+
+	bSizer8->Add( m_stCircleToPolyWarning, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizerArcToPoly->Add( bSizer8, 1, wxEXPAND, 5 );
 
 
 	sbFeatureRules->Add( bSizerArcToPoly, 0, wxEXPAND|wxTOP, 5 );

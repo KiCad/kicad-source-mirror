@@ -54,6 +54,11 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
 
 bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 {
+    wxString fmt = m_stCircleToPolyWarning->GetLabel();
+    m_stCircleToPolyWarning->SetLabel( wxString::Format( fmt,
+                                       StringFromValue( m_Frame->GetUserUnits(),
+                                       ARC_HIGH_DEF, true, true ) ) );
+
     m_OptAllowBlindBuriedVias->SetValue( m_BrdSettings->m_BlindBuriedViaAllowed );
     m_OptAllowMicroVias->SetValue( m_BrdSettings->m_MicroViasAllowed );
 

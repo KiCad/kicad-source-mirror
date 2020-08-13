@@ -157,7 +157,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DRCSeverities[ DRCE_EXTRA_FOOTPRINT ] = RPT_SEVERITY_WARNING;
 
     m_MaxError = ARC_HIGH_DEF;
-    m_ZoneUseNoOutlineInFill = false;   // Use compatibility mode by default
+    m_ZoneUseNoOutlineInFill = true;            // Use new algo by default ti fill zones
 
     // Global mask margins:
     m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE );
@@ -554,7 +554,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             Millimeter2iu( 0.0001 ), Millimeter2iu( 1.0 ), MM_PER_IU ) );
 
     m_params.emplace_back(
-            new PARAM<bool>( "zones_use_no_outline", &m_ZoneUseNoOutlineInFill, false ) );
+            new PARAM<bool>( "zones_use_no_outline", &m_ZoneUseNoOutlineInFill, true ) );
 }
 
 
