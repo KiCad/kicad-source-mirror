@@ -32,7 +32,7 @@
 #include <pcbnew_id.h>
 #include <drc/drc.h>
 #include <pcbnew_settings.h>
-//#include <layer_widget.h>
+#include <pcb_layer_box_selector.h>
 #include <pcb_layer_widget.h>
 #include <footprint_edit_frame.h>
 #include <dialog_plot.h>
@@ -40,7 +40,6 @@
 #include <dialogs/dialog_exchange_footprints.h>
 #include <dialog_board_setup.h>
 #include <convert_to_biu.h>
-//#include <pcb_painter.h>
 #include <invoke_pcb_dialog.h>
 #include <class_board.h>
 #include <class_module.h>
@@ -958,6 +957,13 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
 
     // Update info shown by the horizontal toolbars
     ReCreateLayerBox();
+
+    LSET activeLayers = GetBoard()->GetEnabledLayers();
+
+    if( !activeLayers.test( GetActiveLayer() ) )
+        SetActiveLayer( activeLayers.Seq().front() );
+
+    m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
 
     // Update the layer manager
     m_Layers->Freeze();
