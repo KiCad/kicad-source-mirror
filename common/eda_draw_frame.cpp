@@ -917,9 +917,6 @@ void EDA_DRAW_FRAME::RecreateToolbars()
 
     if( m_auxiliaryToolBar )    // Additional tools under main toolbar
        ReCreateAuxiliaryToolbar();
-
-    // Update the checked state of tools
-    SyncToolbars();
 }
 
 

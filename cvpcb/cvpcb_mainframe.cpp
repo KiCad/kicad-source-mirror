@@ -167,9 +167,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Start the main processing loop
     m_toolManager->InvokeTool( "cvpcb.Control" );
 
-    // Ensure the toolbars are sync'd properly so the filtering options display correct
-    SyncToolbars();
-
     SetShutdownBlockReason( _( "Symbol to footprint changes are unsaved" ) );
 }
 

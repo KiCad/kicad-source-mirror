@@ -244,9 +244,6 @@ int PCBNEW_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
 
     m_frame->SetDisplayOptions( opts );
 
-    // TODO(ISM): remove once EVT_UPDATE_UI works
-    m_frame->SyncToolbars();
-
     return 0;
 }
 

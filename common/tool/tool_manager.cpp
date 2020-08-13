@@ -1150,10 +1150,5 @@ void TOOL_MANAGER::UpdateUI( const TOOL_EVENT& aEvent )
     EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( GetToolHolder() );
 
     if( frame )
-    {
         frame->UpdateStatusBar();
-
-        if( !aEvent.IsMotion() && !aEvent.IsDrag() )
-            frame->SyncToolbars();
-    }
 }

@@ -204,9 +204,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
 
-    // Update the checked state of tools
-    SyncToolbars();
-
     // Ensure the window is on top
     Raise();
 }
@@ -401,8 +398,6 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
     m_LayersManager->ReFill();
     m_SelLayerBox->Resync();
     ReCreateAuxiliaryToolbar();
-    // Update the checked state of tools
-    SyncToolbars();
 
     wxAuiPaneInfo&  lyrs = m_auimgr.GetPane( m_LayersManager );
     wxSize          bestz = m_LayersManager->GetBestSize();
@@ -1131,9 +1126,6 @@ void GERBVIEW_FRAME::ActivateGalCanvas()
 
     ReCreateOptToolbar();
     ReCreateMenuBar();
-
-    // Update the checked state of tools
-    SyncToolbars();
 }
 
 

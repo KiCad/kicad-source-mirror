@@ -421,8 +421,6 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 
     m_leftWin->ReCreateTreePrj();
 
-    SyncToolbars();
-
     // Rebuild the list of watched paths.
     // however this is possible only when the main loop event handler is running,
     // so we use it to run the rebuild function.

@@ -139,9 +139,6 @@ void PCB_BASE_EDIT_FRAME::SetGridVisibility( bool aVisible )
     // Update the grid checkbox in the layer widget
     if( m_appearancePanel )
         m_appearancePanel->SetObjectVisible( LAYER_GRID, aVisible );
-
-    // TODO (ISM): Remove this by changing toolbars to use the EVT_UPDATE_UI to get the state
-    SyncToolbars();
 }
 
 

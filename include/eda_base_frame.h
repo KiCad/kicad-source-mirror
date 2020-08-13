@@ -529,12 +529,6 @@ public:
     virtual void UpdateStatusBar() { }
 
     /**
-     * Update the toolbars (mostly settings/check buttons/checkboxes) with the current
-     * controller state.
-     */
-    virtual void SyncToolbars() { };
-
-    /**
      * Redraw the menus and what not in current language.
      */
     virtual void ShowChangedLanguage();

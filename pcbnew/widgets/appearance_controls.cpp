@@ -127,9 +127,6 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                 m_frame->SetDisplayOptions( opts );
                 m_frame->GetCanvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
                 m_frame->GetCanvas()->Refresh();
-
-                // TODO: remove once EVT_UPDATE_UI works
-                m_frame->SyncToolbars();
             };
 
     m_rbHighContrastNormal->Bind( wxEVT_RADIOBUTTON,
@@ -937,9 +934,6 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
             PCB_DISPLAY_OPTIONS opt  = m_frame->GetDisplayOptions();
             opt.m_ShowGlobalRatsnest = isVisible;
             m_frame->SetDisplayOptions( opt );
-
-            // TODO(ISM): Remove once EVT_UPDATE_UI works
-            m_frame->SyncToolbars();
         }
 
         break;

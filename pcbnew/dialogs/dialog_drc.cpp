@@ -450,7 +450,6 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         updateDisplayedCounts();
         refreshBoardEditor();
         m_brdEditor->OnModify();
-        m_brdEditor->SyncToolbars();
     }
 }
 
