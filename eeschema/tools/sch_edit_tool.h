@@ -52,6 +52,7 @@ public:
     int EditField( const TOOL_EVENT& aEvent );
     int AutoplaceFields( const TOOL_EVENT& aEvent );
     int UpdateFields( const TOOL_EVENT& aEvent );
+    int ChangeSymbols( const TOOL_EVENT& aEvent );
     int ConvertDeMorgan( const TOOL_EVENT& aEvent );
 
     int RefreshSymbolFromLibrary( const TOOL_EVENT& aEvent );

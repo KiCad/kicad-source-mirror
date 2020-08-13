@@ -157,6 +157,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::deleteTool,                 EE_CONDITIONS::ShowAlways );
     editMenu->AddItem( EE_ACTIONS::editTextAndGraphics,     EE_CONDITIONS::ShowAlways );
     editMenu->AddItem( EE_ACTIONS::updateFieldsFromLibrary, EE_CONDITIONS::ShowAlways );
+    editMenu->AddItem( EE_ACTIONS::changeSymbols,           EE_CONDITIONS::ShowAlways );
+    editMenu->AddItem( EE_ACTIONS::updateSymbols,           EE_CONDITIONS::ShowAlways );
 
     editMenu->Resolve();
 

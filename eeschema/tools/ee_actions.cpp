@@ -396,6 +396,22 @@ TOOL_ACTION EE_ACTIONS::updateFieldsFromLibrary( "eeschema.InteractiveEdit.updat
         _( "Update Fields from Library..." ), _( "Sets symbol fields to original library values" ),
         update_fields_xpm );
 
+TOOL_ACTION EE_ACTIONS::changeSymbols( "eeschema.InteractiveEdit.changeSymbols",
+        AS_GLOBAL, 0, "", _( "Change Library Symbols..." ),
+        _( "Change library symbols in schematic" ), nullptr );
+
+TOOL_ACTION EE_ACTIONS::updateSymbols( "eeschema.InteractiveEdit.updateSymbols",
+        AS_GLOBAL, 0, "", _( "Update Library Symbols..." ),
+        _( "Update library symbols in schematic" ), nullptr );
+
+TOOL_ACTION EE_ACTIONS::changeSymbol( "eeschema.InteractiveEdit.changeSymbol",
+        AS_GLOBAL, 0, "", _( "Change Library Symbol..." ),
+        _( "Change library symbol for selected symbol" ), nullptr );
+
+TOOL_ACTION EE_ACTIONS::updateSymbol( "eeschema.InteractiveEdit.updateSymbol",
+        AS_GLOBAL, 0, "", _( "Update Library Symbol..." ),
+        _( "Update library symbol for selected symbol" ), nullptr );
+
 TOOL_ACTION EE_ACTIONS::assignNetclass( "eeschema.InteractiveEdit.assignNetclass",
         AS_GLOBAL, 0, "",
         _( "Assign Netclass..." ), _( "Assign a netclass to the net of the selected wire" ),

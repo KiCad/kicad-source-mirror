@@ -49,6 +49,7 @@
 #include <status_popup.h>
 #include <wx/gdicmn.h>
 #include <invoke_sch_dialog.h>
+#include <dialogs/dialog_change_symbols.h>
 #include <dialogs/dialog_image_editor.h>
 #include <dialogs/dialog_edit_line_style.h>
 #include <dialogs/dialog_edit_component_in_schematic.h>
@@ -357,6 +358,8 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddMenu( symUnitMenu3.get(), E_C::SingleMultiUnitSymbol, 1 );
 
     selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit, singleComponentCondition && E_C::Idle, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::updateSymbol,     E_C::SingleSymbol, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::toLabel,          toLabelCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toHLabel,         toHLabelCondition, 200 );
@@ -1224,6 +1227,28 @@ int SCH_EDIT_TOOL::UpdateFields( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
+{
+    SCH_COMPONENT* selectedSymbol = nullptr;
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+
+    if( !selection.Empty() )
+        selectedSymbol = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+
+    DIALOG_CHANGE_SYMBOLS::MODE mode = DIALOG_CHANGE_SYMBOLS::MODE::UPDATE;
+
+    if( aEvent.IsAction( &EE_ACTIONS::changeSymbol )
+            || aEvent.IsAction( &EE_ACTIONS::changeSymbols ) )
+        mode = DIALOG_CHANGE_SYMBOLS::MODE::CHANGE;
+
+    DIALOG_CHANGE_SYMBOLS dlg( m_frame, selectedSymbol, mode );
+
+    dlg.ShowModal();
+
+    return 0;
+}
+
+
 int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
@@ -1714,6 +1739,10 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editFootprint.MakeEvent() );
     Go( &SCH_EDIT_TOOL::AutoplaceFields,    EE_ACTIONS::autoplaceFields.MakeEvent() );
     Go( &SCH_EDIT_TOOL::UpdateFields,       EE_ACTIONS::updateFieldsFromLibrary.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::changeSymbols.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::updateSymbols.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::changeSymbol.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::updateSymbol.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::toggleDeMorgan.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganStandard.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
