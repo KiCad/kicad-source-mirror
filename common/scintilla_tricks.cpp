@@ -44,10 +44,11 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
     wxColour highlight = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
    	wxColour highlightText = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
 
-    if( KIGFX::COLOR4D( highlightText ).GetBrightness() > 0.5 )
-        highlight = highlight.ChangeLightness( 80 );
-    else
-        highlight = highlight.ChangeLightness( 120 );
+   	unsigned char r = highlight.Red();
+    unsigned char g = highlight.Green();
+    unsigned char b = highlight.Blue();
+   	wxColour::MakeGrey( &r, &g, &b );
+   	highlight.Set( r, g, b );
 
     m_te->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText );
     m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight );

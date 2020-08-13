@@ -232,7 +232,7 @@ void COMPILER::Clear()
 
     for( auto tok : m_gcItems )
         delete tok;
-    
+
     for( auto tok: m_gcStrings )
         delete tok;
 
@@ -341,7 +341,7 @@ T_TOKEN COMPILER::getToken()
 bool COMPILER::lexString( T_TOKEN& aToken )
 {
     wxString str = m_tokenizer.GetChars( []( int c ) -> bool { return c != '\''; } );
-    
+
     aToken.token = G_STRING;
     aToken.value.str = new wxString( str );
 
@@ -642,10 +642,12 @@ void COMPILER::setRoot( TREE_NODE *root )
     m_tree = root;
 }
 
+
 void COMPILER::freeTree( LIBEVAL::TREE_NODE *tree )
 {
     if ( tree->leaf[0] )
         freeTree( tree->leaf[0] );
+
     if ( tree->leaf[1] )
         freeTree( tree->leaf[1] );
 
@@ -690,16 +692,31 @@ void TREE_NODE::SetUop( int aOp, FUNC_CALL_REF aFunc, std::unique_ptr<VAR_REF> a
 }
 
 
+
+static void prepareTree( LIBEVAL::TREE_NODE *node )
+{
+    node->isVisited = false;
+
+    // fixme: for reasons I don't understand the lemon parser isn't initializing the
+    // leaf node pointers of function name nodes.  -JY
+    if( node->op == TR_OP_FUNC_CALL && node->leaf[0] )
+    {
+        node->leaf[0]->leaf[0] = nullptr;
+        node->leaf[0]->leaf[1] = nullptr;
+    }
+
+    if ( node->leaf[0] )
+        prepareTree( node->leaf[0] );
+
+    if ( node->leaf[1] )
+        prepareTree( node->leaf[1] );
+}
+
+
 bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 {
     std::vector<TREE_NODE*> stack;
-    std::set<TREE_NODE*>    visitedNodes;
     wxString                msg;
-
-    auto visited = [&]( TREE_NODE* node ) -> bool
-                   {
-                       return visitedNodes.find( node ) != visitedNodes.end();
-                   };
 
     if( !m_tree )
     {
@@ -709,12 +726,14 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
         return true;
     }
 
+    prepareTree( m_tree );
+
     stack.push_back( m_tree );
 
     wxString dump;
 
     dumpNode( dump, m_tree, 0 );
-    libeval_dbg(3,"Tree dump:\n%s\n\n", (const char*) dump.c_str() );
+    libeval_dbg( 3, "Tree dump:\n%s\n\n", (const char*) dump.c_str() );
 
     while( !stack.empty() )
     {
@@ -727,10 +746,17 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
         switch( node->op )
         {
         case TR_OP_FUNC_CALL:
+            // Function call's uop was generated inside TR_STRUCT_REF
+            assert( node->uop );
+
+            node->isTerminal = true;
             break;
 
         case TR_STRUCT_REF:
         {
+            // leaf[0]: object
+            // leaf[1]: field (TR_IDENTIFIER) or TR_OP_FUNC_CALL
+
             assert( node->leaf[0]->op == TR_IDENTIFIER );
             //assert( node->leaf[1]->op == TR_IDENTIFIER );
 
@@ -738,6 +764,9 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             {
                 case TR_IDENTIFIER:
                 {
+                    // leaf[0]: object
+                    // leaf[1]: field
+
                     wxString itemName = *node->leaf[0]->value.str;
                     wxString propName = *node->leaf[1]->value.str;
                     std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, propName );
@@ -746,15 +775,16 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
                         reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) strlen( itemName ) );
-                        return false;
                     }
 
                     if( vref->GetType() == VT_PARSE_ERROR )
                     {
                         msg.Printf( _( "Unrecognized property '%s'" ), propName );
                         reportError( CST_CODEGEN, msg, node->leaf[1]->srcPos - (int) strlen( propName ) );
-                        return false;
                     }
+
+                    node->leaf[0]->isVisited = true;
+                    node->leaf[1]->isVisited = true;
 
                     node->SetUop( TR_UOP_PUSH_VAR, std::move( vref ) );
                     node->isTerminal = true;
@@ -762,6 +792,11 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                 }
                 case TR_OP_FUNC_CALL:
                 {
+                    // leaf[0]: object
+                    // leaf[1]: TR_OP_FUNC_CALL
+                    //    leaf[0]: function name
+                    //    leaf[1]: parameter
+
                     wxString    itemName = *node->leaf[0]->value.str;
                     std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, "" );
 
@@ -769,72 +804,72 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
                         reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) strlen( itemName ) );
-                        return false;
                     }
 
                     wxString functionName = *node->leaf[1]->leaf[0]->value.str;
                     auto  func = aCode->CreateFuncCall( functionName );
 
-                    libeval_dbg(10, "emit func call: %s\n", (const char*) functionName.c_str() );
+                    libeval_dbg( 10, "emit func call: %s\n", (const char*) functionName.c_str() );
 
                     if( !func )
                     {
                         msg.Printf( _( "Unrecognized function '%s'" ), functionName );
-                        reportError( CST_CODEGEN, msg, node->leaf[1]->leaf[0]->srcPos + 1 );
-                        return false;
+                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos + 1 );
                     }
 
-                    // Preflight the function call
-                    // fixme - this won't really work because of dynamic typing...
-
-                    #if 0
-                    wxString paramStr;
-                    if( node->value.wstr )
-                        paramStr = *node->value.wstr;
-
-                    VALUE*  param = aPreflightContext->AllocValue();
-                    param->Set( paramStr );
-                    aPreflightContext->Push( param );
-
-                    try
+                    if( func )
                     {
-                        func( aPreflightContext, vref );
-                        aPreflightContext->Pop();           // return value
+                        // Preflight the function call
+                        wxString paramStr;
+
+                        if( node->value.str )
+                            paramStr = *node->value.str;
+
+                        VALUE*  param = aPreflightContext->AllocValue();
+                        param->Set( paramStr );
+                        aPreflightContext->Push( param );
+
+                        try
+                        {
+                            func( aPreflightContext, vref.get() );
+                            aPreflightContext->Pop();           // return value
+                        }
+                        catch( ... )
+                        {
+                        }
+
+                        if( !aPreflightContext->IsErrorPending() )
+                        {
+                            size_t loc = node->leaf[1]->leaf[1]->srcPos - node->value.str->Length();
+                            reportError( CST_CODEGEN, aPreflightContext->GetError().message,
+                                         (int) loc - 1 );
+                        }
                     }
-                    catch( ... )
-                    {
-                    }
-                    #endif
 
-                    /* SREF -> FUNC_CALL -> leaf0/1 */
-            //        node->leaf[1]->leaf[0]->leaf[0] = nullptr;
-            //        node->leaf[1]->leaf[0]->leaf[1] = nullptr;
+                    node->leaf[0]->isVisited = true;
+                    node->leaf[1]->isVisited = true;
+                    node->leaf[1]->leaf[0]->isVisited = true;;
+                    node->leaf[1]->leaf[1]->isVisited = true;
 
-                    #if 0
-                    if( aPreflightContext->IsErrorPending() )
-                    {
-                        reportError( CST_CODEGEN, aPreflightContext->GetError().message,
-                                     node->leaf[1]->leaf[1]->srcPos
-                                            - (int) paramStr.length() - 1 );
-                        return false;
-                    }
-                    #endif
+                    // Our non-terminal-node stacking algorithm can't handle doubly-nested
+                    // structures so we need to pop a level by replacing the TR_STRUCT_REF with
+                    // a TR_OP_FUNC_CALL and its function parameter
+                    stack.pop_back();
+                    stack.push_back( node->leaf[1] );
+                    stack.push_back( node->leaf[1]->leaf[1] );
 
-                    visitedNodes.insert( node->leaf[0] );
-                    visitedNodes.insert( node->leaf[1]->leaf[0] );
-
-                    node->SetUop( TR_OP_METHOD_CALL, func, std::move( vref ) );
+                    node->leaf[1]->SetUop( TR_OP_METHOD_CALL, func, std::move( vref ) );
                     node->isTerminal = false;
-                }
                     break;
                 }
             }
             break;
+        }
 
         case TR_NUMBER:
         {
             TREE_NODE* son = node->leaf[0];
-            double value;
+            double     value;
 
             if( !node->value.str )
             {
@@ -844,7 +879,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             {
                 int units = son->value.idx;
                 value =  m_unitResolver->Convert( *node->value.str, units );
-                visitedNodes.insert( son );
+                son->isVisited = true;
             }
             else
             {
@@ -853,7 +888,6 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
             node->SetUop( TR_UOP_PUSH_VALUE, value );
             node->isTerminal = true;
-
             break;
         }
 
@@ -872,32 +906,38 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             {
                 msg.Printf( _( "Unrecognized item '%s'" ), *node->value.str );
                 reportError( CST_CODEGEN, msg, node->srcPos - (int) strlen( *node->value.str  ) );
-                return false;
             }
 
             node->SetUop( TR_UOP_PUSH_VALUE, std::move( vref ) );
+            node->isTerminal = true;
             break;
         }
 
         default:
             node->SetUop( node->op );
+            node->isTerminal = ( !node->leaf[0] || node->leaf[0]->isVisited )
+                                    && ( !node->leaf[1] || node->leaf[1]->isVisited );
             break;
         }
 
-        if( !node->isTerminal && node->leaf[0] && !visited( node->leaf[0] ) )
+        if( !node->isTerminal )
         {
-            stack.push_back( node->leaf[0] );
-            visitedNodes.insert( node->leaf[0] );
-            continue;
-        }
-        else if( !node->isTerminal && node->leaf[1] && !visited( node->leaf[1] ) )
-        {
-            stack.push_back( node->leaf[1] );
-            visitedNodes.insert( node->leaf[1] );
+            if( node->leaf[0] && !node->leaf[0]->isVisited )
+            {
+                stack.push_back( node->leaf[0] );
+                node->leaf[0]->isVisited = true;;
+                continue;
+            }
+            else if( node->leaf[1] && !node->leaf[1]->isVisited )
+            {
+                stack.push_back( node->leaf[1] );
+                node->leaf[1]->isVisited = true;;
+            }
+
             continue;
         }
 
-        visitedNodes.insert( node );
+        node->isVisited = true;
 
         if( node->uop )
         {

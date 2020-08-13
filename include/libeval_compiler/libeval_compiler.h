@@ -67,7 +67,7 @@ struct ERROR_STATUS
 {
     bool pendingError = false;
 
-    
+
     COMPILATION_STAGE    stage;
     wxString message;             // Note: use wxString for GUI-related strings
     int      srcPos;
@@ -124,6 +124,7 @@ public:
     UOP*       uop;
     bool       valid;
     bool       isTerminal;
+    bool       isVisited;
     int        srcPos;
 
     void SetUop( int aOp, double aValue );
@@ -160,7 +161,7 @@ public:
 };
 
 
-class VALUE 
+class VALUE
 {
 public:
     VALUE():
@@ -427,7 +428,7 @@ public:
     void freeTree( LIBEVAL::TREE_NODE *tree );
 
     bool Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflightContext );
-    
+
     void SetErrorCallback( std::function<void(const ERROR_STATUS&)> aCallback );
     bool IsErrorPending() const { return m_errorStatus.pendingError; }
     const ERROR_STATUS& GetError() const { return m_errorStatus; }
