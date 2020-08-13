@@ -37,6 +37,8 @@
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
+#include <tool/tool_manager.h>
+#include <tool/actions.h>
 
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
@@ -534,6 +536,9 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     GetParent()->TestDanglingEnds();
     GetParent()->UpdateItem( m_cmp );
     GetParent()->OnModify();
+
+    // This must go after OnModify() so that the connectivity graph will have been updated.
+    GetParent()->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
 
     return true;
 }

@@ -230,7 +230,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     std::vector<PARAM_CFG*> configParams;
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity,
-                                                &m_realTimeConnectivity, false ) );
+                                                &m_realTimeConnectivity, true ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
                                                   &m_extraClearance, 0.002, 0.0, 1.0 ) );

@@ -870,11 +870,11 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     else
     {
         editFrame->SetCrossProbeConnection( conn );
-        editFrame->SetStatusText( wxString::Format( _( "Highlighted net: %s" ),
-                                                    UnescapeString( conn->Name() ) ) );
     }
 
     editFrame->SetHighlightedConnection( conn );
+    editFrame->UpdateNetHighlightStatus();
+
     TOOL_EVENT dummy;
     editorControl->UpdateNetHighlighting( dummy );
 

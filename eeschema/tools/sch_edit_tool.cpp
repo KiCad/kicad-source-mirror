@@ -1141,9 +1141,11 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     if( m_frame->eeconfig()->m_AutoplaceFields.enable || aField->GetParent()->Type() == SCH_SHEET_T )
         static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
 
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->UpdateItem( aField );
     m_frame->OnModify();
+
+    // This must go after OnModify() so that the connectivity graph will have been updated.
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 }
 
 

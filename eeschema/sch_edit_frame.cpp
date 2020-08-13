@@ -1085,6 +1085,20 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
 }
 
 
+void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
+{
+    if( const SCH_CONNECTION* conn = GetHighlightedConnection() )
+    {
+        SetStatusText( wxString::Format( _( "Highlighted net: %s" ),
+                                         UnescapeString( conn->Name() ) ) );
+    }
+    else
+    {
+        SetStatusText( wxT( "" ) );
+    }
+}
+
+
 void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
     SCH_BASE_FRAME::SetScreen( aScreen );

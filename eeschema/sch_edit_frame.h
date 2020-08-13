@@ -939,6 +939,8 @@ public:
      */
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
+    void UpdateNetHighlightStatus();
+
     void ShowChangedLanguage() override;
 
     void SyncToolbars() override;

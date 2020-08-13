@@ -310,6 +310,9 @@ int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         m_frame->ClearMsgPanel();
     }
 
+    if( SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+        editFrame->UpdateNetHighlightStatus();
+
     return 0;
 }
 

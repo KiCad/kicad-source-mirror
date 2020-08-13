@@ -64,6 +64,7 @@ public:
 
     LIB_PIN* GetLibPin() const { return m_libPin; }
 
+    void ClearDefaultNetName( const SCH_SHEET_PATH* aPath );
     wxString GetDefaultNetName( const SCH_SHEET_PATH aPath );
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;

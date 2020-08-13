@@ -468,6 +468,12 @@ void BACK_ANNOTATE::applyChangelist()
         }
     }
 
+    if( !m_dryRun )
+    {
+        m_frame->RecalculateConnections( NO_CLEANUP );
+        m_frame->UpdateNetHighlightStatus();
+    }
+
     m_reporter.ReportHead( msg, RPT_SEVERITY_INFO );
 }
 

@@ -483,6 +483,9 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     if( notInArray )
         AddHierarchicalReference( path, ref, m_unit );
 
+    for( std::unique_ptr<SCH_PIN>& pin : m_pins )
+        pin->ClearDefaultNetName( sheet );
+
     SCH_FIELD* rf = GetField( REFERENCE );
 
     // @todo Should we really be checking for what is a "reasonable" position?
@@ -870,6 +873,9 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
         for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
             instance.m_Reference = defRef;
     }
+
+    for( std::unique_ptr<SCH_PIN>& pin : m_pins )
+        pin->ClearDefaultNetName( aSheetPath );
 
     // These 2 changes do not work in complex hierarchy.
     // When a clear annotation is made, the calling function must call a

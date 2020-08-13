@@ -98,6 +98,17 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 }
 
 
+void SCH_PIN::ClearDefaultNetName( const SCH_SHEET_PATH* aPath )
+{
+    std::lock_guard<std::mutex> lock( m_netmap_mutex );
+
+    if( aPath )
+        m_net_name_map.erase( *aPath );
+    else
+        m_net_name_map.clear();
+}
+
+
 wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
 {
     if( m_libPin->IsPowerConnection() )

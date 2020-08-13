@@ -94,6 +94,9 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool* aAppendUndo
     SyncView();
     GetCanvas()->Refresh();
     OnModify();
+
+    // Must go after OnModify() so the connectivity graph has been updated
+    UpdateNetHighlightStatus();
 }
 
 
@@ -255,6 +258,9 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     SyncView();
     GetCanvas()->Refresh();
     OnModify();
+
+    // Must go after OnModify() so the connectivity graph has been updated
+    UpdateNetHighlightStatus();
 }
 
 
