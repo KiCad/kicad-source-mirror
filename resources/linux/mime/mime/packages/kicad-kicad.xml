@@ -5,6 +5,7 @@
 		<comment>KiCad Project</comment>
 		<comment xml:lang="fr">Projet KiCad</comment>
 		<glob pattern="*.pro"/>
+		<glob pattern="*.kicad_pro"/>
 	</mime-type>
 	<mime-type type="application/x-kicad-schematic">
 		<sub-class-of type="text/plain"/>
