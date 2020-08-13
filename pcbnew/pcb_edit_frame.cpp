@@ -436,7 +436,7 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
 bool PCB_EDIT_FRAME::IsContentModified()
 {
-    return GetScreen() && GetScreen()->IsModify() && GetBoard() && !GetBoard()->IsEmpty();
+    return GetScreen() && GetScreen()->IsModify();
 }
 
 
