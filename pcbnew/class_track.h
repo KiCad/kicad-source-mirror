@@ -322,6 +322,9 @@ public:
         return wxT( "ARC" );
     }
 
+    // @copydoc BOARD_ITEM::GetEffectiveShape
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+
     //TODO(snh): Add GetSelectMenuText() and GetMsgPanelInfoBase()
 
     /**
@@ -508,6 +511,9 @@ public:
     bool IsDrillDefault() const { return m_Drill <= 0; }
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
+
+    // @copydoc BOARD_ITEM::GetEffectiveShape
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
 private:
     /// The bottom layer of the via (the top layer is in m_Layer)

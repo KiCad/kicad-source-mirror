@@ -703,8 +703,9 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
     if( !m_tree )
     {
+        std::unique_ptr<VALUE> val( new VALUE( 1.0 ) );
         // Empty expression returns true
-        aCode->AddOp( makeUop( TR_UOP_PUSH_VALUE, 1.0 ) );
+        aCode->AddOp( new UOP( TR_UOP_PUSH_VALUE, std::move(val) ) );
         return true;
     }
 
