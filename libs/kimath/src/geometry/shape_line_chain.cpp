@@ -223,6 +223,20 @@ bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActu
 }
 
 
+SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::DetectArcs()
+{
+    for( int ii = 0; ii < PointCount(); ++ii )
+    {
+        if( ssize_t ind = ArcIndex( ii ) >= 0 )
+        {
+            const SHAPE_ARC& arc = Arc( ind );
+        }
+    }
+
+    return *this;
+}
+
+
 const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Reverse() const
 {
     SHAPE_LINE_CHAIN a( *this );

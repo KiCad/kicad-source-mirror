@@ -610,6 +610,13 @@ public:
     SHAPE_LINE_CHAIN& Simplify( bool aRemoveColinear = true );
 
     /**
+     * Detects arcs in a chain and converts them from segments to true arcs by adding an arc
+     * and the associated references.  The original segment points are not changed.
+     * @return reference to self
+     */
+    SHAPE_LINE_CHAIN& DetectArcs();
+
+    /**
      * Convert an arc to only a point chain by removing the arc and references.
      *
      * @param aArcIndex is an index of the arc to convert to points.
