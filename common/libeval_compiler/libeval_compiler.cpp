@@ -166,7 +166,7 @@ wxString UCODE::Dump() const
 };
 
 
-wxString TOKENIZER::GetChars( std::function<bool( wxUniChar )> cond ) const
+wxString TOKENIZER::GetChars( const std::function<bool( wxUniChar )>& cond ) const
 {
     wxString rv;
     size_t      p = m_pos;
@@ -180,9 +180,10 @@ wxString TOKENIZER::GetChars( std::function<bool( wxUniChar )> cond ) const
     return rv;
 }
 
-bool TOKENIZER::MatchAhead( const wxString& match, std::function<bool( wxUniChar )> stopCond ) const
+bool TOKENIZER::MatchAhead( const wxString& match,
+                            const std::function<bool( wxUniChar )>& stopCond ) const
 {
-    int remaining = m_str.Length() - m_pos;
+    int remaining = (int) m_str.Length() - m_pos;
 
     if( remaining < (int) match.length() )
         return false;
@@ -266,9 +267,7 @@ bool COMPILER::Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflig
 
     m_tree = nullptr;
     m_parseFinished = false;
-    T_TOKEN tok;
-
-    tok.value.str = nullptr;
+    T_TOKEN tok( defaultToken );
 
     libeval_dbg(0, "str: '%s' empty: %d\n", aString.c_str(), !!aString.empty() );
 
@@ -639,46 +638,42 @@ void COMPILER::freeTree( LIBEVAL::TREE_NODE *tree )
     if ( tree->leaf[1] )
         freeTree( tree->leaf[1] );
 
-    if( tree->uop )
-    {
-        delete tree->uop;
-    }
+    delete tree->uop;
 }
+
 
 void TREE_NODE::SetUop( int aOp, double aValue )
 {
-    if( uop )
-        delete uop;
+    delete uop;
 
     std::unique_ptr<VALUE> val( new VALUE( aValue ) );
     uop = new UOP( aOp, std::move( val ) );
 }
+
 
 void TREE_NODE::SetUop( int aOp, const wxString& aValue )
 {
-    if( uop )
-        delete uop;
+    delete uop;
 
     std::unique_ptr<VALUE> val( new VALUE( aValue ) );
     uop = new UOP( aOp, std::move( val ) );
 }
 
+
 void TREE_NODE::SetUop( int aOp, std::unique_ptr<VAR_REF> aRef )
 {
-    if( uop )
-        delete uop;
+    delete uop;
 
     uop = new UOP( aOp, std::move( aRef ) );
 }
 
+
 void TREE_NODE::SetUop( int aOp, FUNC_CALL_REF aFunc, std::unique_ptr<VAR_REF> aRef )
 {
-    if( uop )
-        delete uop;
+    delete uop;
 
     uop = new UOP( aOp, std::move( aFunc ), std::move( aRef ) );
 }
-
 
 
 static void prepareTree( LIBEVAL::TREE_NODE *node )
@@ -828,7 +823,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
                         if( !aPreflightContext->IsErrorPending() )
                         {
-                            size_t loc = node->leaf[1]->leaf[1]->srcPos - node->value.str->Length();
+                            size_t loc = node->leaf[1]->leaf[1]->srcPos - paramStr.Length();
                             reportError( CST_CODEGEN, aPreflightContext->GetError().message,
                                          (int) loc - 1 );
                         }

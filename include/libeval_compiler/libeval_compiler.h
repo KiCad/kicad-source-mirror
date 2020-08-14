@@ -67,10 +67,9 @@ struct ERROR_STATUS
 {
     bool pendingError = false;
 
-
-    COMPILATION_STAGE    stage;
-    wxString message;             // Note: use wxString for GUI-related strings
-    int      srcPos;
+    COMPILATION_STAGE stage;
+    wxString          message;
+    int               srcPos;
 };
 
 
@@ -84,6 +83,7 @@ enum VAR_TYPE_T
 
 enum TOKEN_TYPE_T
 {
+    TR_UNDEFINED  = 0,
     TR_NUMBER     = 1,
     TR_IDENTIFIER = 2,
     TR_ASSIGN     = 3,
@@ -101,18 +101,24 @@ typedef std::function<void( CONTEXT*, void* )> FUNC_CALL_REF;
 
 struct T_TOKEN_VALUE
 {
-    wxString *str;
-    double num;
-    int idx;
+    wxString* str;
+    double    num;
+    int       idx;
 };
 
+// Lemon can't handle c'tors and d'tors, so we provide a poor-man's version.
 constexpr T_TOKEN_VALUE defaultTokenValue = { nullptr, 0.0, 0 };
+
 
 struct T_TOKEN
 {
-    int token;
+    int           token;
     T_TOKEN_VALUE value;
 };
+
+// Lemon can't handle c'tors and d'tors, so we provide a poor-man's version.
+constexpr T_TOKEN defaultToken = { TR_UNDEFINED, defaultTokenValue };
+
 
 class TREE_NODE
 {
@@ -134,7 +140,8 @@ public:
 };
 
 
-TREE_NODE* newNode( LIBEVAL::COMPILER* compiler, int op, const T_TOKEN_VALUE& value = defaultTokenValue);
+TREE_NODE* newNode( LIBEVAL::COMPILER* compiler, int op,
+                    const T_TOKEN_VALUE& value = defaultTokenValue );
 
 class UNIT_RESOLVER
 {
@@ -351,9 +358,9 @@ public:
     wxString Format() const;
 
 private:
-    int             m_op;
+    int                      m_op;
 
-    FUNC_CALL_REF   m_func;
+    FUNC_CALL_REF            m_func;
     std::unique_ptr<VAR_REF> m_ref;
     std::unique_ptr<VALUE>   m_value;
 };
@@ -396,13 +403,14 @@ public:
         return m_pos;
     }
 
-    wxString GetChars( std::function<bool( wxUniChar )> cond ) const;
+    wxString GetChars( const std::function<bool( wxUniChar )>& cond ) const;
 
-    bool MatchAhead( const wxString& match, std::function<bool( wxUniChar )> stopCond ) const;
+    bool MatchAhead( const wxString& match,
+                     const std::function<bool( wxUniChar )>& stopCond ) const;
 
 private:
     wxString m_str;
-    size_t      m_pos;
+    size_t   m_pos = 0;
 };
 
 
@@ -431,7 +439,7 @@ public:
 
     void SetErrorCallback( std::function<void( const wxString& aMessage, int aOffset )> aCallback )
     {
-        m_errorCallback = aCallback;
+        m_errorCallback = std::move( aCallback );
     }
 
     bool IsErrorPending() const { return m_errorStatus.pendingError; }
@@ -473,12 +481,14 @@ protected:
 
     int          m_sourcePos;
     bool         m_parseFinished;
+    ERROR_STATUS m_errorStatus;
+
+    std::function<void( const wxString& aMessage, int aOffset )> m_errorCallback;
 
     TREE_NODE*   m_tree;
-    ERROR_STATUS m_errorStatus;
+
     std::vector<TREE_NODE*>  m_gcItems;
-    std::vector<wxString*> m_gcStrings;
-    std::function<void( const wxString& aMessage, int aOffset )> m_errorCallback;
+    std::vector<wxString*>   m_gcStrings;
 };
 
 
