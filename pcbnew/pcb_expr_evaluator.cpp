@@ -272,7 +272,7 @@ LIBEVAL::FUNC_CALL_REF PCB_EXPR_UCODE::CreateFuncCall( const wxString& aName )
 {
     PCB_EXPR_BUILTIN_FUNCTIONS& registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
 
-    return registry.Get( wxString::FromUTF8( aName ).Lower() );
+    return registry.Get( aName.Lower() );
 }
 
 
