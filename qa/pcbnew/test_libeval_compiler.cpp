@@ -92,7 +92,7 @@ static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
 
     context.SetItems( itemA, itemB );
 
-    printf( "Expr: '%s'\n", (const char*) expr );
+    printf( "Expr: '%s'\n", (const char*) expr.c_str() );
 
     bool error = !compiler.Compile( expr, &ucode, &preflightContext );
 
