@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,29 +20,17 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	wxBoxSizer* bMessages;
 	bMessages = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextInfoValPos = new wxStaticText( this, wxID_ANY, _("Positive clearance means area bigger than the pad (usual for mask clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfoValPos->Wrap( 500 );
-	m_staticTextInfoValPos->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	bMessages->Add( m_staticTextInfoValPos, 0, wxBOTTOM, 5 );
-
-	m_staticTextInfoValNeg = new wxStaticText( this, wxID_ANY, _("Negative clearance means area smaller than the pad (usual for paste clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfoValNeg->Wrap( 500 );
-	m_staticTextInfoValNeg->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	bMessages->Add( m_staticTextInfoValNeg, 0, wxBOTTOM, 12 );
-
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bitmapWarning = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_OTHER ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( m_bitmapWarning, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Note: Set Solder mask minimum bridge width and Solder mask clearance to 0,\nunless your board house asks for a specific value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Use your board house's recommendation for solder mask clearance and minimum bridge width.\nIf none is provided, setting the values to zero is suggested."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth->Wrap( -1 );
 	m_staticTextInfoMaskMinWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
 	bMessages->Add( bSizer4, 1, wxEXPAND, 5 );
@@ -58,11 +46,13 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_MaskMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskMarginLabel->Wrap( -1 );
-	m_MaskMarginLabel->SetToolTip( _("This is the global clearance between pads and the solder mask\nThis value can be superseded by local values for a footprint or a pad.") );
+	m_MaskMarginLabel->SetToolTip( _("Global clearance between pads and the solder mask.\nThis value can be superseded by local values for a footprint or a pad.") );
 
 	fgGridSolderMaskSizer->Add( m_MaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_MaskMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_MaskMarginCtrl->SetToolTip( _("Positive clearance means area bigger than the pad (usual for mask clearance).") );
+
 	fgGridSolderMaskSizer->Add( m_MaskMarginCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_MaskMarginUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -71,11 +61,13 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_MaskMinWidthLabel = new wxStaticText( this, wxID_ANY, _("Solder mask minimum bridge width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskMinWidthLabel->Wrap( -1 );
-	m_MaskMinWidthLabel->SetToolTip( _("Min dist between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting.\nThis parameter is used only to plot solder mask layers.\nLeave it to 0, unless you know what you are doing.") );
+	m_MaskMinWidthLabel->SetToolTip( _("Min. dist between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting.\nThis parameter is only used to plot solder mask layers.\nLeave at 0 unless you know what you are doing.") );
 
 	fgGridSolderMaskSizer->Add( m_MaskMinWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_MaskMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_MaskMinWidthCtrl->SetToolTip( _("Negative clearance means area smaller than the pad (usual for paste clearance).") );
+
 	fgGridSolderMaskSizer->Add( m_MaskMinWidthCtrl, 0, wxEXPAND|wxALL, 5 );
 
 	m_MaskMinWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -93,7 +85,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_PasteMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PasteMarginLabel->Wrap( -1 );
-	m_PasteMarginLabel->SetToolTip( _("This is the global clearance between pads and the solder paste\nThis value can be superseded by local values for a footprint or a pad.\nThe final clearance value is the sum of this value and the clearance value ratio") );
+	m_PasteMarginLabel->SetToolTip( _("Global clearance between pads and the solder paste.\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the clearance value ratio.") );
 
 	fgGridSolderMaskSizer->Add( m_PasteMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -106,7 +98,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_staticTextRatio = new wxStaticText( this, wxID_ANY, _("Solder paste relative clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRatio->Wrap( -1 );
-	m_staticTextRatio->SetToolTip( _("This is the global clearance ratio in per cent between pads and the solder paste\nA value of 10 means the clearance value is 10 per cent of the pad size\nThis value can be superseded by local values for a footprint or a pad.\nThe final clearance value is the sum of this value and the clearance value") );
+	m_staticTextRatio->SetToolTip( _("Global clearance ratio in percent between pads and the solder paste.\nA value of 10 means the clearance value is 10 percent of the pad size.\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the clearance value.") );
 
 	fgGridSolderMaskSizer->Add( m_staticTextRatio, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
@@ -123,17 +115,11 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	bSizer3->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
 
-	m_staticTextInfoCopper = new wxStaticText( this, wxID_ANY, _("Note: solder mask and paste values are used only for pads on copper layers."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfoCopper->Wrap( -1 );
-	m_staticTextInfoCopper->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	bSizer3->Add( m_staticTextInfoCopper, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_staticTextInfoPaste = new wxStaticText( this, wxID_ANY, _("Note: solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoPaste = new wxStaticText( this, wxID_ANY, _("Note: Solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPaste->Wrap( -1 );
 	m_staticTextInfoPaste->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer3->Add( m_staticTextInfoPaste, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer3->Add( m_staticTextInfoPaste, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bMainSizer->Add( bSizer3, 1, wxRIGHT|wxLEFT, 5 );
