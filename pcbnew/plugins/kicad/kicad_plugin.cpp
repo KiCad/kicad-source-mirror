@@ -835,7 +835,7 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
             m_out->Print( aNestLevel, "(gr_poly%s (pts\n",
                           locked.c_str() );
 
-            for( int ii = 0; ii < pointsCount; ++ii )
+            for( int ii = 0; ii < outline.PointCount();  ++ii )
             {
                 int nestLevel = 0;
 
@@ -846,9 +846,29 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
                     m_out->Print( 0, "\n" );
                 }
 
-                m_out->Print( nestLevel, "%s(xy %s)",
-                              nestLevel ? "" : " ",
-                              FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                int ind = outline.ArcIndex( ii );
+
+                if( ind < 0 )
+                {
+                    m_out->Print( nestLevel, "%s(xy %s)",
+                                  nestLevel ? "" : " ", FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                }
+                else
+                {
+                    auto& arc = outline.Arc( ind );
+                    m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s)",
+                            nestLevel ? "" : " ",
+                            FormatInternalUnits( arc.GetP0() ).c_str(),
+                            FormatInternalUnits( arc.GetArcMid() ).c_str(),
+                            FormatInternalUnits( arc.GetP1() ).c_str() );
+
+                    do
+                    {
+                        ++ii;
+                    } while( ii < outline.PointCount() && outline.ArcIndex( ii ) == ind );
+
+                    --ii;
+                }
             }
 
             m_out->Print( 0, ")" );
@@ -937,12 +957,11 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
         {
             const SHAPE_POLY_SET& poly = aFPShape->GetPolyShape();
             const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
-            int pointsCount = outline.PointCount();
 
             m_out->Print( aNestLevel, "(fp_poly%s (pts",
                           locked.c_str() );
 
-            for( int ii = 0; ii < pointsCount; ++ii )
+            for( int ii = 0; ii < outline.PointCount();  ++ii )
             {
                 int nestLevel = 0;
 
@@ -953,9 +972,29 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
                     m_out->Print( 0, "\n" );
                 }
 
-                m_out->Print( nestLevel, "%s(xy %s)",
-                              nestLevel ? "" : " ",
-                              FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                int ind = outline.ArcIndex( ii );
+
+                if( ind < 0 )
+                {
+                    m_out->Print( nestLevel, "%s(xy %s)",
+                                  nestLevel ? "" : " ", FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                }
+                else
+                {
+                    auto& arc = outline.Arc( ind );
+                    m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s))",
+                            nestLevel ? "" : " ",
+                            FormatInternalUnits( arc.GetP0() ).c_str(),
+                            FormatInternalUnits( arc.GetArcMid() ).c_str(),
+                            FormatInternalUnits( arc.GetP1() ).c_str() );
+
+                    do
+                    {
+                        ++ii;
+                    } while( ii < outline.PointCount() && outline.ArcIndex( ii ) == ind );
+
+                    --ii;
+                }
             }
 
             m_out->Print( 0, ")" );
@@ -2019,63 +2058,53 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
 
     m_out->Print( 0, ")\n" );
 
-    int newLine = 0;
-
     if( aZone->GetNumCorners() )
     {
-        bool new_polygon = true;
-        bool is_closed   = false;
+        SHAPE_POLY_SET::POLYGON poly = aZone->Outline()->Polygon(0);
 
-        for( auto iterator = aZone->CIterateWithHoles(); iterator; ++iterator )
+        for( auto& chain : poly )
         {
-            if( new_polygon )
-            {
-                newLine = 0;
-                m_out->Print( aNestLevel + 1, "(polygon\n" );
-                m_out->Print( aNestLevel + 2, "(pts\n" );
-                new_polygon = false;
-                is_closed = false;
-            }
+            m_out->Print( aNestLevel + 1, "(polygon\n" );
+            m_out->Print( aNestLevel + 2, "(pts" );
 
-            if( newLine == 0 )
-                m_out->Print( aNestLevel + 3, "(xy %s %s)",
-                              FormatInternalUnits( iterator->x ).c_str(),
-                              FormatInternalUnits( iterator->y ).c_str() );
-            else
-                m_out->Print( 0, " (xy %s %s)",
-                              FormatInternalUnits( iterator->x ).c_str(),
-                              FormatInternalUnits( iterator->y ).c_str() );
-
-            if( newLine < 4 && ADVANCED_CFG::GetCfg().m_CompactSave )
+            for( int ii = 0; ii < chain.PointCount(); ++ii )
             {
-                newLine += 1;
-            }
-            else
-            {
-                newLine = 0;
-                m_out->Print( 0, "\n" );
-            }
+                int nestLevel = 0;
 
-            if( iterator.IsEndContour() )
-            {
-                is_closed = true;
-
-                if( newLine != 0 )
+                if( !( ii % 4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave )   // newline every 4 pts
+                {
+                    nestLevel = aNestLevel + 3;
                     m_out->Print( 0, "\n" );
+                }
 
-                m_out->Print( aNestLevel + 2, ")\n" );
-                m_out->Print( aNestLevel + 1, ")\n" );
-                new_polygon = true;
+                int ind = chain.ArcIndex( ii );
+
+                if( ind < 0 )
+                {
+                    m_out->Print( nestLevel, "%s(xy %s)",
+                                  nestLevel ? "" : " ", FormatInternalUnits( chain.CPoint( ii ) ).c_str() );
+                }
+                else
+                {
+                    auto& arc = chain.Arc( ind );
+                    m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s))",
+                            nestLevel ? "" : " ",
+                            FormatInternalUnits( arc.GetP0() ).c_str(),
+                            FormatInternalUnits( arc.GetArcMid() ).c_str(),
+                            FormatInternalUnits( arc.GetP1() ).c_str() );
+
+                    do
+                    {
+                        ++ii;
+                    } while( ii < chain.PointCount() && chain.ArcIndex( ii ) == ind );
+
+                    --ii;
+                }
             }
-        }
-
-        if( !is_closed )    // Should not happen, but...
-        {
-            if( newLine != 0 )
-                m_out->Print( 0, "\n" );
 
             m_out->Print( aNestLevel + 2, ")\n" );
             m_out->Print( aNestLevel + 1, ")\n" );
+
         }
     }
 
@@ -2083,65 +2112,57 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
     for( PCB_LAYER_ID layer : aZone->GetLayerSet().Seq() )
     {
         const SHAPE_POLY_SET& fv = aZone->GetFilledPolysList( layer );
-        newLine                  = 0;
 
-        if( !fv.IsEmpty() )
+        for( int ii = 0; ii < fv.OutlineCount(); ++ii )
         {
-            int  poly_index  = 0;
-            bool new_polygon = true;
-            bool is_closed   = false;
+            m_out->Print( aNestLevel + 1, "(filled_polygon\n" );
+            m_out->Print( aNestLevel + 2, "(layer %s)\n",
+                    m_out->Quotew( LSET::Name( layer ) ).c_str() );
 
-            for( auto it = fv.CIterate(); it; ++it )
+            if( aZone->IsIsland( layer, ii ) )
+                m_out->Print( aNestLevel + 2, "(island)\n" );
+
+            m_out->Print( aNestLevel + 2, "(pts" );
+
+            const SHAPE_LINE_CHAIN& chain = fv.COutline( ii );
+
+            for( int jj = 0; jj < chain.PointCount(); ++jj )
             {
-                if( new_polygon )
+                int nestLevel = 0;
+
+                if( !( jj%4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave )   // newline every 4 pts
                 {
-                    newLine = 0;
-                    m_out->Print( aNestLevel + 1, "(filled_polygon\n" );
-                    m_out->Print( aNestLevel + 2, "(layer %s)\n",
-                                  m_out->Quotew( LSET::Name( layer ) ).c_str() );
-
-                    if( aZone->IsIsland( layer, poly_index ) )
-                        m_out->Print( aNestLevel + 2, "(island)\n" );
-
-                    m_out->Print( aNestLevel + 2, "(pts\n" );
-                    new_polygon = false;
-                    is_closed   = false;
-                    poly_index++;
-                }
-
-                if( newLine == 0 )
-                    m_out->Print( aNestLevel + 3, "(xy %s %s)",
-                            FormatInternalUnits( it->x ).c_str(),
-                            FormatInternalUnits( it->y ).c_str() );
-                else
-                    m_out->Print( 0, " (xy %s %s)", FormatInternalUnits( it->x ).c_str(),
-                            FormatInternalUnits( it->y ).c_str() );
-
-                if( newLine < 4 && ADVANCED_CFG::GetCfg().m_CompactSave )
-                {
-                    newLine += 1;
-                }
-                else
-                {
-                    newLine = 0;
+                    nestLevel = aNestLevel + 3;
                     m_out->Print( 0, "\n" );
                 }
 
-                if( it.IsEndContour() )
+                int ind = chain.ArcIndex( jj );
+
+                if( ind < 0 )
                 {
-                    is_closed = true;
+                    m_out->Print( nestLevel, "%s(xy %s)",
+                                  nestLevel ? "" : " ", FormatInternalUnits( chain.CPoint( jj ) ).c_str() );
+                }
+                else
+                {
+                    auto& arc = chain.Arc( ind );
+                    m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s))",
+                            nestLevel ? "" : " ",
+                            FormatInternalUnits( arc.GetP0() ).c_str(),
+                            FormatInternalUnits( arc.GetArcMid() ).c_str(),
+                            FormatInternalUnits( arc.GetP1() ).c_str() );
 
-                    if( newLine != 0 )
-                        m_out->Print( 0, "\n" );
+                    do
+                    {
+                        ++jj;
+                    } while( jj < chain.PointCount() && chain.ArcIndex( jj ) == ind );
 
-                    m_out->Print( aNestLevel + 2, ")\n" );
-                    m_out->Print( aNestLevel + 1, ")\n" );
-                    new_polygon = true;
+                    --jj;
                 }
             }
 
-            if( !is_closed ) // Should not happen, but...
-                m_out->Print( aNestLevel + 1, ")\n" );
+            m_out->Print( aNestLevel+2, ")\n" );
+            m_out->Print( aNestLevel+1, ")\n" );
         }
 
         // Save the filling segments list

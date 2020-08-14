@@ -48,6 +48,43 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV )
     }
 }
 
+SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath ) :
+    SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+    m_closed( true ),
+    m_width( 0 )
+{
+    int started_mid = 0;
+
+    m_points.reserve( aPath.size() );
+    m_shapes.reserve( aPath.size() );
+
+    for( size_t ii = 0; ii < aPath.size() - started_mid; ++ii )
+    {
+        if( ii == 0 && aPath[ii].type == ClipperLib::pttMid )
+        {
+            started_mid = 1;
+            VECTOR2I start( aPath.back().X, aPath.back().Y );
+            VECTOR2I mid( aPath[0].X, aPath[0].Y );
+            VECTOR2I end( aPath[1].X, aPath[1].Y );
+
+            Append( SHAPE_ARC( start, mid, end, 0 ) );
+            ii += 1;
+        }
+        else if( ( aPath[ii].type == ClipperLib::pttStart )
+                && ii < aPath.size() - 2 )
+        {
+            VECTOR2I start( aPath[ii].X, aPath[ii].Y );
+            VECTOR2I mid( aPath[ii + 1].X, aPath[ii + 1].Y );
+            VECTOR2I end( aPath[ii + 2].X, aPath[ii + 2].Y );
+
+            Append( SHAPE_ARC( start, mid, end, 0 ) );
+            ii += 2;
+        }
+        else
+            Append( aPath[ii].X, aPath[ii].Y );
+
+    }
+}
 
 ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation ) const
 {

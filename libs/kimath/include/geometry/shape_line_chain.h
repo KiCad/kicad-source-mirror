@@ -152,17 +152,7 @@ public:
         m_shapes = std::vector<ssize_t>( m_points.size(), 0 );
     }
 
-    SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath ) :
-        SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
-        m_closed( true ),
-        m_width( 0 )
-    {
-        m_points.reserve( aPath.size() );
-        m_shapes = std::vector<ssize_t>( aPath.size(), ssize_t( SHAPE_IS_PT ) );
-
-        for( const auto& point : aPath )
-            m_points.emplace_back( point.X, point.Y );
-    }
+    SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath );
 
     virtual ~SHAPE_LINE_CHAIN()
     {}

@@ -572,6 +572,16 @@ public:
     void Append( const VECTOR2I& aP, int aOutline = -1, int aHole = -1 );
 
     /**
+     * Append a new arc to the contour indexed by \p aOutline and \p aHole (defaults to the
+     * outline of the last polygon).
+     * @param aArc      The arc to be inserted
+     * @param aOutline  Index of the polygon
+     * @param aHole     Index of the hole (-1 for the main outline)
+     * @return the number of points in the arc (including the interpolated points from the arc)
+     */
+    int Append( SHAPE_ARC& aArc, int aOutline = -1, int aHole = -1 );
+
+    /**
      * Adds a vertex in the globally indexed position \a aGlobalIndex.
      *
      * @param aGlobalIndex is the global index of the position in which the new vertex will be

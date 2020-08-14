@@ -235,6 +235,29 @@ int SHAPE_POLY_SET::Append( int x, int y, int aOutline, int aHole, bool aAllowDu
 }
 
 
+int SHAPE_POLY_SET::Append( SHAPE_ARC& aArc, int aOutline, int aHole )
+{
+    assert( m_polys.size() );
+
+    if( aOutline < 0 )
+        aOutline += m_polys.size();
+
+    int idx;
+
+    if( aHole < 0 )
+        idx = 0;
+    else
+        idx = aHole + 1;
+
+    assert( aOutline < (int) m_polys.size() );
+    assert( idx < (int) m_polys[aOutline].size() );
+
+    m_polys[aOutline][idx].Append( aArc );
+
+    return m_polys[aOutline][idx].PointCount();
+}
+
+
 void SHAPE_POLY_SET::InsertVertex( int aGlobalIndex, VECTOR2I aNewVertex )
 {
     VERTEX_INDEX index;
@@ -643,6 +666,7 @@ void SHAPE_POLY_SET::importTree( PolyTree* tree )
         {
             POLYGON paths;
             paths.reserve( n->Childs.size() + 1 );
+
             paths.push_back( n->Contour );
 
             for( unsigned int i = 0; i < n->Childs.size(); i++ )

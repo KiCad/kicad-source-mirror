@@ -41,6 +41,8 @@
 #include <pcb_group.h>
 #include <pcb_target.h>
 #include <footprint.h>
+#include <geometry/shape_line_chain.h>
+
 #include <netclass.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -280,6 +282,89 @@ wxPoint PCB_PARSER::parseXY()
     NeedRIGHT();
 
     return pt;
+}
+
+
+void PCB_PARSER::parseOutlinePoints( SHAPE_LINE_CHAIN& aPoly )
+{
+    if( CurTok() != T_LEFT )
+        NeedLEFT();
+
+    T token = NextTok();
+
+    switch( token )
+    {
+    case T_xy:
+    {
+        int x = parseBoardUnits( "X coordinate" );
+        int y = parseBoardUnits( "Y coordinate" );
+
+        NeedRIGHT();
+
+        aPoly.Append( x, y );
+        break;
+    }
+    case T_arc:
+    {
+        bool has_start = false;
+        bool has_mid   = false;
+        bool has_end   = false;
+
+        VECTOR2I arc_start, arc_mid, arc_end;
+
+        for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+        {
+            if( token != T_LEFT )
+                Expecting( T_LEFT );
+
+            token = NextTok();
+
+            switch( token )
+            {
+            case T_start:
+                arc_start.x = parseBoardUnits( "start x" );
+                arc_start.y = parseBoardUnits( "start y" );
+                has_start = true;
+                break;
+
+            case T_mid:
+                arc_mid.x = parseBoardUnits( "mid x" );
+                arc_mid.y = parseBoardUnits( "mid y" );
+                has_mid = true;
+                break;
+
+            case T_end:
+                arc_end.x = parseBoardUnits( "end x" );
+                arc_end.y = parseBoardUnits( "end y" );
+                has_end = true;
+                break;
+
+            default:
+                Expecting( "start, mid or end" );
+            }
+
+            NeedRIGHT();
+        }
+
+        if( !has_start )
+            Expecting( "start" );
+
+        if( !has_mid )
+            Expecting( "mid" );
+
+        if( !has_end )
+            Expecting( "end" );
+
+        SHAPE_ARC arc( arc_start, arc_mid, arc_end, 0 );
+
+        aPoly.Append( arc );
+        NeedRIGHT();
+
+        break;
+    }
+    default:
+        Expecting( "xy or arc" );
+    }
 }
 
 
@@ -2408,6 +2493,10 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
     {
         shape->SetShape( PCB_SHAPE_TYPE::POLYGON );
         shape->SetWidth( 0 ); // this is the default value. will be (perhaps) modified later
+        shape->SetPolyPoints( {} );
+
+        SHAPE_LINE_CHAIN& outline = shape->GetPolyShape().Outline( 0 );
+
         token = NextTok();
 
         if( token == T_locked )
@@ -2424,12 +2513,10 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         if( token != T_pts )
             Expecting( T_pts );
 
-        std::vector< wxPoint > pts;
-
         while( (token = NextTok() ) != T_RIGHT )
-            pts.push_back( parseXY() );
-
-        shape->SetPolyPoints( pts );
+        {
+            parseOutlinePoints( outline );
+        }
     }
         break;
 
@@ -3665,6 +3752,9 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
     case T_fp_poly:
     {
         shape->SetShape( PCB_SHAPE_TYPE::POLYGON );
+        shape->SetPolyPoints( {} );
+        SHAPE_LINE_CHAIN& outline = shape->GetPolyShape().Outline( 0 );
+
         token = NextTok();
 
         if( token == T_locked )
@@ -3681,12 +3771,8 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
         if( token != T_pts )
             Expecting( T_pts );
 
-        std::vector< wxPoint > pts;
-
         while( (token = NextTok() ) != T_RIGHT )
-            pts.push_back( parseXY() );
-
-        shape->SetPolyPoints( pts );
+            parseOutlinePoints( outline );
     }
         break;
 
@@ -5076,7 +5162,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
         case T_polygon:
             {
-                std::vector< wxPoint > corners;
+                SHAPE_LINE_CHAIN outline;
 
                 NeedLEFT();
                 token = NextTok();
@@ -5085,15 +5171,15 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     Expecting( T_pts );
 
                 for( token = NextTok(); token != T_RIGHT; token = NextTok() )
-                {
-                    corners.push_back( parseXY() );
-                }
+                    parseOutlinePoints( outline );
 
                 NeedRIGHT();
 
+                outline.SetClosed( true );
+
                 // Remark: The first polygon is the main outline.
                 // Others are holes inside the main outline.
-                zone->AddPolygon( corners );
+                zone->AddPolygon( outline );
             }
             break;
 
@@ -5138,14 +5224,13 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 SHAPE_POLY_SET& poly = pts.at( filledLayer );
 
                 int idx = poly.NewOutline();
+                SHAPE_LINE_CHAIN& chain = poly.Outline( idx );
 
                 if( island )
                     zone->SetIsIsland( filledLayer, idx );
 
                 for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
-                {
-                    poly.Append( parseXY() );
-                }
+                    parseOutlinePoints( chain );
 
                 NeedRIGHT();
 
