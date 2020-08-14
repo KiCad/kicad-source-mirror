@@ -263,7 +263,8 @@ CN_ITEM* CN_LIST::Add( ARC* aArc )
 
      m_items.push_back( item );
      item->AddAnchor( via->GetStart() );
-     item->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+
+     item->SetLayers( LAYER_RANGE( via->TopLayer(), via->BottomLayer() ) );
      addItemtoTree( item );
      SetDirty();
      return item;
