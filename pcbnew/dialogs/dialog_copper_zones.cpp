@@ -536,17 +536,17 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
 
     if( m_NetFiltering )
     {
-        wxString doNotShowFilter = m_DoNotShowNetNameFilter->GetValue();
-        wxString ShowFilter = m_ShowNetNameFilter->GetValue();
+        wxString doNotShowFilter = m_DoNotShowNetNameFilter->GetValue().Lower();
+        wxString ShowFilter = m_ShowNetNameFilter->GetValue().Lower();
 
         for( unsigned ii = 0; ii < listNetName.GetCount(); ii++ )
         {
-            if( listNetName[ii].Matches( doNotShowFilter ) )
+            if( listNetName[ii].Lower().Matches( doNotShowFilter ) )
             {
                 listNetName.RemoveAt( ii );
                 ii--;
             }
-            else if( !listNetName[ii].Matches( ShowFilter ) )
+            else if( !listNetName[ii].Lower().Matches( ShowFilter ) )
             {
                 listNetName.RemoveAt( ii );
                 ii--;

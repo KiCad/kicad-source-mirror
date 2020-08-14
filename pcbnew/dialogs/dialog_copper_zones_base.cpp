@@ -410,7 +410,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_COPPER_ZONE_BASE::OnClose ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_COPPER_ZONE_BASE::OnUpdateUI ) );
 	m_layers->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_COPPER_ZONE_BASE::OnLayerSelection ), NULL, this );
+	m_DoNotShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
 	m_DoNotShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
+	m_ShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
 	m_ShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
 	m_buttonRunFilter->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
 	m_showAllNetsOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
@@ -426,7 +428,9 @@ DIALOG_COPPER_ZONE_BASE::~DIALOG_COPPER_ZONE_BASE()
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_COPPER_ZONE_BASE::OnClose ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_COPPER_ZONE_BASE::OnUpdateUI ) );
 	m_layers->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_COPPER_ZONE_BASE::OnLayerSelection ), NULL, this );
+	m_DoNotShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
 	m_DoNotShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
+	m_ShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
 	m_ShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
 	m_buttonRunFilter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
 	m_showAllNetsOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
