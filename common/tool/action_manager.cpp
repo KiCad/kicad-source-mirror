@@ -74,6 +74,10 @@ void ACTION_MANAGER::SetConditions( const TOOL_ACTION& aAction, const ACTION_CON
 
     m_uiConditions[aAction.GetId()] = aConditions;
 
+    wxLogTrace( kicadTraceToolStack,
+                "ACTION_MANAGER::SetConditions: Registering conditions for ID %d - %s",
+                aAction.GetId(), aAction.GetName() );
+
     // Register a new handler with the new conditions
     if( m_toolMgr )
         m_toolMgr->GetToolHolder()->RegisterUIUpdateHandler( aAction, aConditions );
@@ -82,7 +86,7 @@ void ACTION_MANAGER::SetConditions( const TOOL_ACTION& aAction, const ACTION_CON
 
 const ACTION_CONDITIONS* ACTION_MANAGER::GetCondition( const TOOL_ACTION& aAction ) const
 {
-    const auto it = m_uiConditions.find( aAction.GetUIId() );
+    const auto it = m_uiConditions.find( aAction.GetId() );
 
     // If the action doesn't have something registered, then return null
     if( it == m_uiConditions.end() )
@@ -174,25 +178,41 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
         }
     }
 
+    // Get the selection to use to test if the action is enabled
+    SELECTION& sel = m_toolMgr->GetToolHolder()->GetCurrentSelection();
+
     if( context )
     {
+        bool runAction = true;
+
+        if( const ACTION_CONDITIONS* aCond = GetCondition( *context ) )
+            runAction = aCond->enableCondition( sel );
+
         wxLogTrace( kicadTraceToolStack,
-                    "ACTION_MANAGER::RunHotKey Running context action %s for hotkey %s",
+                    "ACTION_MANAGER::RunHotKey %s context action: %s for hotkey %s",
+                    runAction ? "Running" : "Not running",
                     context->GetName(),
                     KeyNameFromKeyCode( aHotKey ) );
 
-        return m_toolMgr->RunAction( *context, true );
+        if( runAction )
+            return m_toolMgr->RunAction( *context, true );
     }
     else if( !global.empty() )
     {
         for( auto act : global )
         {
+            bool runAction = true;
+
+            if( const ACTION_CONDITIONS* aCond = GetCondition( *act ) )
+                runAction = aCond->enableCondition( sel );
+
             wxLogTrace( kicadTraceToolStack,
-                        "ACTION_MANAGER::RunHotKey Running global action: %s for hotkey %s",
+                        "ACTION_MANAGER::RunHotKey %s global action: %s for hotkey %s",
+                        runAction ? "Running" : "Not running",
                         act->GetName(),
                         KeyNameFromKeyCode( aHotKey ) );
 
-            if( m_toolMgr->RunAction( *act, true ) )
+            if( runAction && m_toolMgr->RunAction( *act, true ) )
                 return true;
         }
     }
