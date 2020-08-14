@@ -628,8 +628,10 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
     CN_ZONE* zoneItem = static_cast<CN_ZONE*> ( aZone );
     int      accuracy = 0;
 
-    if( aItem->Valid() && aItem->Parent()->Type() == PCB_VIA_T )
-        accuracy = ( static_cast<VIA*>( aItem->Parent() )->GetWidth() + 1 ) / 2;
+    if( aItem->Parent()->Type() == PCB_VIA_T
+            || aItem->Parent()->Type() == PCB_TRACE_T
+            || aItem->Parent()->Type() == PCB_ARC_T )
+        accuracy = ( static_cast<TRACK*>( aItem->Parent() )->GetWidth() + 1 ) / 2;
 
     for( int i = 0; i < aItem->AnchorCount(); ++i )
     {
@@ -743,11 +745,24 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
         return true;
     }
 
+    int accuracyA = 0;
+    int accuracyB = 0;
+
+    if( parentA->Type() == PCB_VIA_T
+            || parentA->Type() == PCB_TRACE_T
+            || parentA->Type() == PCB_ARC_T)
+        accuracyA = ( static_cast<const TRACK*>( parentA )->GetWidth() + 1 ) / 2;
+
+    if( parentB->Type() == PCB_VIA_T
+            || parentB->Type() == PCB_TRACE_T
+            || parentB->Type() == PCB_ARC_T )
+        accuracyB = ( static_cast<const TRACK*>( parentB )->GetWidth() + 1 ) / 2;
+
     // Items do not necessarily have reciprocity as we only check for anchors
     //  therefore, we check HitTest both directions A->B & B->A
     for( int i = 0; i < aCandidate->AnchorCount(); ++i )
     {
-        if( parentB->HitTest( wxPoint( aCandidate->GetAnchor( i ) ) ) )
+        if( parentB->HitTest( wxPoint( aCandidate->GetAnchor( i ) ), accuracyA ) )
         {
             m_item->Connect( aCandidate );
             aCandidate->Connect( m_item );
@@ -757,7 +772,7 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
 
     for( int i = 0; i < m_item->AnchorCount(); ++i )
     {
-        if( parentA->HitTest( wxPoint( m_item->GetAnchor( i ) ) ) )
+        if( parentA->HitTest( wxPoint( m_item->GetAnchor( i ) ), accuracyB ) )
         {
             m_item->Connect( aCandidate );
             aCandidate->Connect( m_item );
