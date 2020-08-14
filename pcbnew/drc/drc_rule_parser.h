@@ -56,7 +56,6 @@ private:
     void reportError( const wxString& aMessage );
 
 private:
-    BOARD*    m_board;
     int       m_requiredVersion;
     bool      m_tooRecent;
     REPORTER* m_reporter;

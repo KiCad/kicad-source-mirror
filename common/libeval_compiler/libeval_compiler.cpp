@@ -759,8 +759,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
                         reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) itemName.length() );
                     }
-
-                    if( vref->GetType() == VT_PARSE_ERROR )
+                    else if( vref->GetType() == VT_PARSE_ERROR )
                     {
                         msg.Printf( _( "Unrecognized property '%s'" ), propName );
                         reportError( CST_CODEGEN, msg, node->leaf[1]->srcPos - (int) propName.length() );

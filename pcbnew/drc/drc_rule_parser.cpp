@@ -37,7 +37,6 @@ using namespace DRCRULE_T;
 DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource,
                                     const wxString& aSourceDescr ) :
         DRC_RULES_LEXER( aSource.ToStdString(), aSourceDescr ),
-        m_board( aBoard ),
         m_requiredVersion( 0 ),
         m_tooRecent( false ),
         m_reporter( nullptr )
@@ -47,7 +46,6 @@ DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource,
 
 DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename ) :
         DRC_RULES_LEXER( aFile, aFilename ),
-        m_board( aBoard ),
         m_requiredVersion( 0 ),
         m_tooRecent( false ),
         m_reporter( nullptr )
@@ -144,6 +142,10 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
             aRules.push_back( parseDRC_RULE() );
             break;
 
+        case T_EOF:
+            reportError( _( "Incomplete statement." ) );
+            break;
+
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
                         FromUTF8(), "'rule', 'version'" );
@@ -170,7 +172,7 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
     rule->m_Name = FromUTF8();
 
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    for( token = NextTok();  token != T_RIGHT && token != T_EOF;  token = NextTok() )
     {
         if( token != T_LEFT )
             reportError( _( "Missing '('." ) );
@@ -216,6 +218,10 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
             rule->m_LayerCondition = parseLayer();
             break;
 
+        case T_EOF:
+            reportError( _( "Incomplete statement." ) );
+            return rule;
+
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
                            FromUTF8(),
@@ -224,6 +230,9 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
             parseUnknown();
         }
     }
+
+    if( (int) CurTok() != DSN_RIGHT )
+        reportError( _( "Missing ')'." ) );
 
     return rule;
 }
@@ -239,7 +248,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
     T token = NextTok();
 
-    if( (int) token == DSN_RIGHT )
+    if( (int) token == DSN_RIGHT || token == T_EOF )
     {
         msg.Printf( _( "Missing constraint type.|  Expected %s." ),
                         "'clearance', 'track_width', 'annulus_width', 'hole', 'disallow'" );
@@ -281,6 +290,11 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             case T_graphic:    constraint.m_DisallowFlags |= DISALLOW_GRAPHICS;   break;
             case T_hole:       constraint.m_DisallowFlags |= DISALLOW_HOLES;      break;
             case T_footprint:  constraint.m_DisallowFlags |= DISALLOW_FOOTPRINTS; break;
+
+            case T_EOF:
+                reportError( _( "Missing ')'." ) );
+                return;
+
             default:
                 msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
                             FromUTF8(),
@@ -288,14 +302,17 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                             "'blind_via', 'pad', 'zone', 'text', 'graphic', 'hole'."
                             );
                 reportError( msg );
-                parseUnknown();
+                break;
             }
         }
+
+        if( (int) CurTok() != DSN_RIGHT )
+            reportError( _( "Missing ')'." ) );
 
         return;
     }
 
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    for( token = NextTok();  token != T_RIGHT && token != T_EOF;  token = NextTok() )
     {
         if( token != T_LEFT )
             reportError( _( "Missing '('." ) );
@@ -364,6 +381,10 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             break;
 
+        case T_EOF:
+            reportError( _( "Incomplete statement." ) );
+            return;
+
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
                         FromUTF8(), "'min', 'max', 'opt'" );
@@ -371,6 +392,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             parseUnknown();
         }
     }
+
+    if( (int) CurTok() != DSN_RIGHT )
+        reportError( _( "Missing ')'." ) );
 }
 
 
