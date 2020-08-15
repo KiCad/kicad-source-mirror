@@ -1572,6 +1572,7 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 extern bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SET& aPolygons,
         wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation = nullptr );
 
+
 bool MODULE::BuildPolyCourtyard()
 {
     m_poly_courtyard_front.RemoveAllContours();
@@ -1582,7 +1583,7 @@ bool MODULE::BuildPolyCourtyard()
     std::vector< DRAWSEGMENT* > list_front;
     std::vector< DRAWSEGMENT* > list_back;
 
-    for( auto item : GraphicalItems() )
+    for( BOARD_ITEM* item : GraphicalItems() )
     {
         if( item->GetLayer() == B_CrtYd && item->Type() == PCB_MODULE_EDGE_T )
             list_back.push_back( static_cast< DRAWSEGMENT* > ( item ) );
