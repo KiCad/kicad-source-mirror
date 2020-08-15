@@ -1022,9 +1022,6 @@ void POINT_EDITOR::updateItem() const
     }
 
     getView()->Update( item );
-
-    if( frame() )
-        frame()->SetMsgPanel( item );
 }
 
 
