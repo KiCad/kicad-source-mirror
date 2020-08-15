@@ -65,7 +65,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
         m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
         m_showGlobalRatsnest->SetValue( displ_opts.m_ShowGlobalRatsnest );
         m_showSelectedRatsnest->SetValue( displ_opts.m_ShowModuleRatsnest );
-        m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
 
         m_magneticPadChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.pads ) );
         m_magneticTrackChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.tracks ) );
@@ -93,6 +92,8 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 
 bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 {
+    PCB_DISPLAY_OPTIONS displ_opts = m_Frame->GetDisplayOptions();
+
     m_Frame->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
     m_Frame->SetUserUnits(
             m_UnitsSelection->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES );
@@ -101,37 +102,42 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 
     m_Frame->Settings().m_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
 
-    m_Frame->Settings().m_MagneticItems.pads =
-            static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
-    m_Frame->Settings().m_MagneticItems.tracks =
-            static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
-    m_Frame->Settings().m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
-
-    m_Frame->Settings().m_FlipLeftRight = m_FlipLeftRight->GetValue();
-
-    m_Frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
-
     if( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) )
     {
-        PCBNEW_SETTINGS& settings = m_Frame->Settings();
+        PCBNEW_SETTINGS& pcbnewSettings = m_Frame->Settings();
+
+        displ_opts.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
+        displ_opts.m_ShowGlobalRatsnest = m_showGlobalRatsnest->GetValue();
+        displ_opts.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
+
+        m_Frame->Settings().m_MagneticItems.pads =
+                static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
+        m_Frame->Settings().m_MagneticItems.tracks =
+                static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
+        m_Frame->Settings().m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
+
+        m_Frame->Settings().m_FlipLeftRight = m_FlipLeftRight->GetValue();
+        m_Frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
 
         if( m_rbTrackDragMove->GetValue() )
-            settings.m_TrackDragAction = TRACK_DRAG_ACTION::MOVE;
+            pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::MOVE;
         else if( m_rbTrackDrag45->GetValue() )
-            settings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG;
+            pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG;
         else if( m_rbTrackDragFree->GetValue() )
-            settings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG_FREE_ANGLE;
+            pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG_FREE_ANGLE;
+    }
+    else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_Frame ) )
+    {
+        if( m_MagneticPads->GetValue() )
+            m_Frame->GetMagneticItemsSettings()->pads = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+        else
+            m_Frame->GetMagneticItemsSettings()->pads = MAGNETIC_OPTIONS::NO_EFFECT;
     }
 
     // Apply changes to the GAL
-    PCB_DISPLAY_OPTIONS         displ_opts = m_Frame->GetDisplayOptions();
     KIGFX::VIEW*                view = m_Frame->GetCanvas()->GetView();
     KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
-
-    displ_opts.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
-    displ_opts.m_ShowGlobalRatsnest = m_showGlobalRatsnest->GetValue();
-    displ_opts.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
 
     m_Frame->SetDisplayOptions( displ_opts );
     settings->LoadDisplayOptions( displ_opts, m_Frame->ShowPageLimits() );
