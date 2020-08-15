@@ -165,8 +165,11 @@ SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
 
 bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 {
-    auto item2 = static_cast<const EDA_ITEM*>( aItem );
+    auto item2 = dynamic_cast<const EDA_ITEM*>( aItem );
     auto item = const_cast<EDA_ITEM*>( item2 );
+
+    if( !item2 )
+        return false;
 
 #ifdef CONNECTIVITY_DEBUG
 

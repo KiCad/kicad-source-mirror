@@ -217,7 +217,10 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
 bool KIGFX::WS_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
-    auto item = static_cast<const EDA_ITEM*>( aItem );
+    auto item = dynamic_cast<const EDA_ITEM*>( aItem );
+
+    if( !item )
+        return false;
 
     switch( item->Type() )
     {

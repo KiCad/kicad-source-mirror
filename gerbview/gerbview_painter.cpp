@@ -104,7 +104,7 @@ void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS& aO
 
 COLOR4D GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
-    const EDA_ITEM* item = static_cast<const EDA_ITEM*>( aItem );
+    const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
     static const COLOR4D transparent = COLOR4D( 0, 0, 0, 0 );
     const GERBER_DRAW_ITEM* gbrItem = nullptr;
 
@@ -173,7 +173,10 @@ int GERBVIEW_PAINTER::getLineThickness( int aActualThickness ) const
 
 bool GERBVIEW_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
-    const EDA_ITEM* item = static_cast<const EDA_ITEM*>( aItem );
+    const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
+
+    if( !item )
+        return false;
 
     // the "cast" applied in here clarifies which overloaded draw() is called
     switch( item->Type() )
