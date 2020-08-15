@@ -358,9 +358,6 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                                                         int aClearanceValue, int aError,
                                                         bool ignoreLineWidth ) const
 {
-    if( aLayer != m_Layer )
-        return;
-
     int width = ignoreLineWidth ? 0 : m_Width;
 
     width += 2 * aClearanceValue;
