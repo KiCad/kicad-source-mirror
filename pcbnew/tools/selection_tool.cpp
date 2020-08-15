@@ -2606,4 +2606,5 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::selectSameSheet,     PCB_ACTIONS::selectSameSheet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSheetContents, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
     Go( &SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsModified );
+    Go( &SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsMoved );
 }

@@ -204,7 +204,11 @@ public:
     const static TOOL_EVENT UnselectedEvent;
     const static TOOL_EVENT ClearedEvent;
 
+    //< Selected item had a property changed (except movement)
     const static TOOL_EVENT SelectedItemsModified;
+
+    //< Selected items were moved, this can be very high frequency on the canvas, use with care
+    const static TOOL_EVENT SelectedItemsMoved;
 };
 
 #endif // __ACTIONS_H
