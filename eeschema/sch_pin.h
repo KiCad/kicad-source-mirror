@@ -40,7 +40,7 @@ class SCH_PIN : public SCH_ITEM
     bool           m_isDangling;
 
     /// The name that this pin connection will drive onto a net
-    std::mutex                               m_netmap_mutex;
+    std::recursive_mutex                     m_netmap_mutex;
     std::map<const SCH_SHEET_PATH, wxString> m_net_name_map;
 
 public:
