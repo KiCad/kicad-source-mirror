@@ -865,7 +865,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             }
             else
             {
-                value = DoubleValueFromString( EDA_UNITS::MILLIMETRES, *node->value.str );
+                value = DoubleValueFromString( EDA_UNITS::UNSCALED, *node->value.str );
             }
 
             node->SetUop( TR_UOP_PUSH_VALUE, value );
