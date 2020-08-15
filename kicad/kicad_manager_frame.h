@@ -138,8 +138,9 @@ public:
      * If any of these files already exist, they are not overwritten.
      *
      * @param aProjectFileName is the absolute path of the project file name.
+     * @param aCreateStubFiles specifies if an empty PCB and schematic should be created
      */
-    void CreateNewProject( const wxFileName& aProjectFileName );
+    void CreateNewProject( const wxFileName& aProjectFileName, bool aCreateStubFiles = true );
 
     /**
      * Closes the project, and saves it if aSave is true;
@@ -154,6 +155,7 @@ public:
 
     void ShowChangedLanguage() override;
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+    void ProjectChanged() override;
 
     /**
      * Called by sending a event with id = ID_INIT_WATCHED_PATHS
@@ -165,7 +167,6 @@ public:
 
     void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
-    void SetProjectFileName( const wxString& aFullProjectProFileName );
     const wxString GetProjectFileName() const;
 
     bool IsProjectActive();

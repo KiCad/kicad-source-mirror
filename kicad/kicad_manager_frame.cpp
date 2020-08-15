@@ -210,27 +210,9 @@ KICAD_SETTINGS* KICAD_MANAGER_FRAME::kicadSettings() const
 }
 
 
-void KICAD_MANAGER_FRAME::SetProjectFileName( const wxString& aFullProjectProFileName )
-{
-    // ensure file name is absolute:
-    wxFileName fn( aFullProjectProFileName );
-
-    if( !fn.IsAbsolute() )
-        fn.MakeAbsolute();
-
-    SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
-    wxString title = GetTitle() + " " + fn.GetFullPath();
-
-    if( !fn.IsDirWritable() )
-        title += _( " [Read Only]" );
-
-    SetTitle( title );
-}
-
-
 const wxString KICAD_MANAGER_FRAME::GetProjectFileName() const
 {
-    return m_active_project ? Prj().GetProjectFullName() : wxString( wxEmptyString );
+    return Pgm().GetSettingsManager().IsProjectOpen() ? Prj().GetProjectFullName() : wxString( wxEmptyString );
 }
 
 
@@ -394,7 +376,6 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     m_active_project = true;
 
     Pgm().GetSettingsManager().LoadProject( aProjectFileName.GetFullPath() );
-    SetProjectFileName( Prj().GetProjectFullName() );
 
     if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?
@@ -418,13 +399,10 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 }
 
 
-void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
+void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, bool aCreateStubFiles )
 {
     wxCHECK_RET( aProjectFileName.DirExists() && aProjectFileName.IsDirWritable(),
                  "Project folder must exist and be writable to create a new project." );
-
-    // Init project filename.  This clears all elements from the project object.
-    SetProjectFileName( aProjectFileName.GetFullPath() );
 
     // If the project is legacy, convert it
     if( !aProjectFileName.FileExists() )
@@ -460,40 +438,43 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
         }
     }
 
-    // Ensure a "stub" for a schematic root sheet and a board exist.
+    // Create a "stub" for a schematic root sheet and a board if requested.
     // It will avoid messages from the schematic editor or the board editor to create a new file
     // And forces the user to create main files under the right name for the project manager
-    wxFileName fn( aProjectFileName.GetFullPath() );
-    fn.SetExt( KiCadSchematicFileExtension );
-
-    // If a <project>.kicad_sch file does not exist, create a "stub" file ( minimal schematic file )
-    if( !fn.FileExists() )
+    if( aCreateStubFiles )
     {
-        wxFile file( fn.GetFullPath(), wxFile::write );
+        wxFileName fn( aProjectFileName.GetFullPath() );
+        fn.SetExt( KiCadSchematicFileExtension );
 
-        if( file.IsOpened() )
-            file.Write( wxT( "(kicad_sch (version 20200310) (host eeschema \"unknown\")\n"
-                             "(  page \"A4\")\n  (lib_symbols)\n"
-                             "  (symbol_instances)\n)\n" ) );
+        // If a <project>.kicad_sch file does not exist, create a "stub" file ( minimal schematic file )
+        if( !fn.FileExists() )
+        {
+            wxFile file( fn.GetFullPath(), wxFile::write );
+
+            if( file.IsOpened() )
+                file.Write( wxT( "(kicad_sch (version 20200310) (host eeschema \"unknown\")\n"
+                                 "(  page \"A4\")\n  (lib_symbols)\n"
+                                 "  (symbol_instances)\n)\n" ) );
 
 
-        // wxFile dtor will close the file
-    }
+            // wxFile dtor will close the file
+        }
 
-    // If a <project>.kicad_pcb or <project>.brd file does not exist,
-    // create a .kicad_pcb "stub" file
-    fn.SetExt( KiCadPcbFileExtension );
-    wxFileName leg_fn( fn );
-    leg_fn.SetExt( LegacyPcbFileExtension );
+        // If a <project>.kicad_pcb or <project>.brd file does not exist,
+        // create a .kicad_pcb "stub" file
+        fn.SetExt( KiCadPcbFileExtension );
+        wxFileName leg_fn( fn );
+        leg_fn.SetExt( LegacyPcbFileExtension );
 
-    if( !fn.FileExists() && !leg_fn.FileExists() )
-    {
-        wxFile file( fn.GetFullPath(), wxFile::write );
+        if( !fn.FileExists() && !leg_fn.FileExists() )
+        {
+            wxFile file( fn.GetFullPath(), wxFile::write );
 
-        if( file.IsOpened() )
-            file.Write( wxT( "(kicad_pcb (version 4) (host kicad \"dummy file\") )\n" ) );
+            if( file.IsOpened() )
+                file.Write( wxT( "(kicad_pcb (version 4) (host kicad \"dummy file\") )\n" ) );
 
-        // wxFile dtor will close the file
+            // wxFile dtor will close the file
+        }
     }
 
     UpdateFileHistory( aProjectFileName.GetFullPath() );
@@ -558,6 +539,30 @@ void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
 {
     int historySize = Pgm().GetCommonSettings()->m_System.file_history_size;
     GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
+}
+
+
+void KICAD_MANAGER_FRAME::ProjectChanged()
+{
+    wxString title = wxS( "KiCad " ) + GetBuildVersion();
+    wxString file  = GetProjectFileName();
+
+    if( !file.IsEmpty() )
+    {
+        // Ensure file name is absolute
+        wxFileName fn( file );
+
+        if( !fn.IsAbsolute() )
+            fn.MakeAbsolute();
+
+        title += " ";
+        title += fn.GetFullPath();
+
+        if( !fn.IsDirWritable() )
+            title += _( " [Read Only]" );
+    }
+
+    SetTitle( title );
 }
 
 

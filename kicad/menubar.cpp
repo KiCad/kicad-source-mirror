@@ -70,9 +70,10 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( KICAD_MANAGER_ACTIONS::newProject,      SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( KICAD_MANAGER_ACTIONS::newFromTemplate, SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( KICAD_MANAGER_ACTIONS::openProject,     SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( KICAD_MANAGER_ACTIONS::closeProject,    SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddMenu( openRecentMenu,
                        FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
+
+    fileMenu->AddItem( KICAD_MANAGER_ACTIONS::closeProject,    SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ACTIONS::saveAs,                        SELECTION_CONDITIONS::ShowAlways );

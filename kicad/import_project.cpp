@@ -48,11 +48,6 @@
 
 void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 {
-    // Close other windows.
-    if( !Kiway().PlayersClose( false ) )
-        return;
-
-
     wxString title = _( "Import Eagle Project Files" );
     int style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
     wxString default_dir = GetMruPath();
@@ -117,8 +112,10 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
     if( !pro.IsAbsolute() )
         pro.MakeAbsolute();
 
-    SetProjectFileName( pro.GetFullPath() );
-    wxString prj_filename = GetProjectFileName();
+    // Close the project and make the new one
+    CloseProject( true );
+    CreateNewProject( pro.GetFullPath(), false /* Don't create stub files */ );
+    LoadProject( pro );
 
     if( sch.FileExists() )
     {
