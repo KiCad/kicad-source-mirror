@@ -2960,6 +2960,8 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
         if( token != T_angle )
             Expecting( T_angle );
 
+        // Setting angle will set m_ThirdPoint0, so must be done after setting
+        // m_Start0 and m_End0
         segment->SetAngle( parseDouble( "segment angle" ) * 10.0 );
         NeedRIGHT();
         break;

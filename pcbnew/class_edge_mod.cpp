@@ -58,6 +58,7 @@ void EDGE_MODULE::SetLocalCoord()
     {
         m_Start0 = m_Start;
         m_End0 = m_End;
+        m_ThirdPoint0 = m_ThirdPoint;
         m_Bezier0_C1 = m_BezierC1;
         m_Bezier0_C2 = m_BezierC2;
         return;
@@ -65,11 +66,13 @@ void EDGE_MODULE::SetLocalCoord()
 
     m_Start0 = m_Start - module->GetPosition();
     m_End0 = m_End - module->GetPosition();
+    m_ThirdPoint0 = m_ThirdPoint - module->GetPosition();
     m_Bezier0_C1 = m_BezierC1 - module->GetPosition();
     m_Bezier0_C2 = m_BezierC2 - module->GetPosition();
     double angle = module->GetOrientation();
     RotatePoint( &m_Start0.x, &m_Start0.y, -angle );
     RotatePoint( &m_End0.x, &m_End0.y, -angle );
+    RotatePoint( &m_ThirdPoint0.x, &m_ThirdPoint0.y, -angle );
     RotatePoint( &m_Bezier0_C1.x, &m_Bezier0_C1.y, -angle );
     RotatePoint( &m_Bezier0_C2.x, &m_Bezier0_C2.y, -angle );
 }
@@ -79,20 +82,23 @@ void EDGE_MODULE::SetDrawCoord()
 {
     MODULE* module = (MODULE*) m_Parent;
 
-    m_Start = m_Start0;
-    m_End   = m_End0;
-    m_BezierC1 = m_Bezier0_C1;
-    m_BezierC2 = m_Bezier0_C2;
+    m_Start      = m_Start0;
+    m_End        = m_End0;
+    m_ThirdPoint = m_ThirdPoint0;
+    m_BezierC1   = m_Bezier0_C1;
+    m_BezierC2   = m_Bezier0_C2;
 
     if( module )
     {
         RotatePoint( &m_Start.x, &m_Start.y, module->GetOrientation() );
         RotatePoint( &m_End.x, &m_End.y, module->GetOrientation() );
+        RotatePoint( &m_ThirdPoint.x, &m_ThirdPoint.y, module->GetOrientation() );
         RotatePoint( &m_BezierC1.x, &m_BezierC1.y, module->GetOrientation() );
         RotatePoint( &m_BezierC2.x, &m_BezierC2.y, module->GetOrientation() );
 
-        m_Start += module->GetPosition();
-        m_End   += module->GetPosition();
+        m_Start      += module->GetPosition();
+        m_End        += module->GetPosition();
+        m_ThirdPoint += module->GetPosition();
         m_BezierC1   += module->GetPosition();
         m_BezierC2   += module->GetPosition();
     }
@@ -144,6 +150,17 @@ EDA_ITEM* EDGE_MODULE::Clone() const
 }
 
 
+void EDGE_MODULE::SetAngle( double aAngle )
+{
+    // Mark as depreciated.
+    // m_Angle does not define the arc anymore
+    // m_Angle must be >= -360 and <= +360 degrees
+    m_Angle = NormalizeAngle360Max( aAngle );
+    m_ThirdPoint0 = m_End0;
+    RotatePoint( &m_ThirdPoint0, m_Start0, -m_Angle );
+}
+
+
 void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     wxPoint pt( 0, 0 );
@@ -166,10 +183,12 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         {
             MIRROR( m_Start.x, aCentre.x );
             MIRROR( m_End.x, aCentre.x );
+            MIRROR( m_ThirdPoint.y, aCentre.x );
             MIRROR( m_BezierC1.x, aCentre.x );
             MIRROR( m_BezierC2.x, aCentre.x );
             MIRROR( m_Start0.x, pt.x );
             MIRROR( m_End0.x, pt.x );
+            MIRROR( m_ThirdPoint0.x, pt.x );
             MIRROR( m_Bezier0_C1.x, pt.x );
             MIRROR( m_Bezier0_C2.x, pt.x );
         }
@@ -177,10 +196,12 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         {
             MIRROR( m_Start.y, aCentre.y );
             MIRROR( m_End.y, aCentre.y );
+            MIRROR( m_ThirdPoint.y, aCentre.y );
             MIRROR( m_BezierC1.y, aCentre.y );
             MIRROR( m_BezierC2.y, aCentre.y );
             MIRROR( m_Start0.y, pt.y );
             MIRROR( m_End0.y, pt.y );
+            MIRROR( m_ThirdPoint0.y, pt.y );
             MIRROR( m_Bezier0_C1.y, pt.y );
             MIRROR( m_Bezier0_C2.y, pt.y );
         }
@@ -270,10 +291,11 @@ void EDGE_MODULE::Move( const wxPoint& aMoveVector )
 {
     // Move an edge of the footprint.
     // This is a footprint shape modification.
-    m_Start0 += aMoveVector;
-    m_End0   += aMoveVector;
-    m_Bezier0_C1   += aMoveVector;
-    m_Bezier0_C2   += aMoveVector;
+    m_Start0      += aMoveVector;
+    m_End0        += aMoveVector;
+    m_ThirdPoint0 += aMoveVector;
+    m_Bezier0_C1  += aMoveVector;
+    m_Bezier0_C2  += aMoveVector;
 
     switch( GetShape() )
     {

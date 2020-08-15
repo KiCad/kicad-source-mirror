@@ -1678,9 +1678,12 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
             width   = biuParse( data, &data );
             layer   = layerParse( data );
 
-            dwg->SetAngle( angle );
             dwg->m_Start0 = wxPoint( start0_x, start0_y );
             dwg->m_End0   = wxPoint( end0_x, end0_y );
+
+            // Setting angle will set m_ThirdPoint0, so must be done after setting
+            // m_Start0 and m_End0
+            dwg->SetAngle( angle );
         }
         break;
 

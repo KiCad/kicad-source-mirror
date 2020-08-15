@@ -109,7 +109,7 @@ public:
      * sets the angle for arcs, and normalizes it within the range 0 - 360 degrees.
      * @param aAngle is tenths of degrees, but will soon be degrees.
      */
-    void SetAngle( double aAngle );     // encapsulates the transition to degrees
+    virtual void SetAngle( double aAngle );     // encapsulates the transition to degrees
     double GetAngle() const { return m_Angle; }
 
     void SetType( int aType )                       { m_Type = aType; }
@@ -200,14 +200,18 @@ public:
      * to initialize one point of the cicumference
      */
     void SetArcStart( const wxPoint& aArcStartPoint )
-    { m_End = aArcStartPoint; }
+    {
+        m_End = aArcStartPoint;
+    }
 
     /**
-     * Initialize the start arc point. can be used for circles
+     * Initialize the end arc point. can be used for circles
      * to initialize one point of the cicumference
      */
     void SetArcEnd( const wxPoint& aArcEndPoint )
-    { m_ThirdPoint = aArcEndPoint; }
+    {
+        m_ThirdPoint = aArcEndPoint;
+    }
 
     /** For arcs and circles:
      */

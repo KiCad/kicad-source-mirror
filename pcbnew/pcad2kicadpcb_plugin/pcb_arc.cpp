@@ -163,9 +163,12 @@ void PCB_ARC::AddToModule( MODULE* aModule )
         EDGE_MODULE* arc = new EDGE_MODULE( aModule, ( IsCircle() ? S_CIRCLE : S_ARC ) );
         aModule->Add( arc );
 
-        arc->SetAngle( -m_angle );
         arc->m_Start0   = wxPoint( m_positionX, m_positionY );
         arc->m_End0     = wxPoint( m_startX, m_startY );
+
+        // Setting angle will set m_ThirdPoint0, so must be done after setting
+        // m_Start0 and m_End0
+        arc->SetAngle( -m_angle );
 
         arc->SetWidth( m_width );
         arc->SetLayer( m_KiCadLayer );

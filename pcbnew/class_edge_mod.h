@@ -72,6 +72,8 @@ public:
         return false;
     }
 
+    void SetAngle( double aAngle ) override;
+
     /**
      * Move an edge of the footprint.
      * This is a footprint shape modification.
@@ -110,6 +112,9 @@ public:
 
     void SetEnd0( const wxPoint& aPoint )       { m_End0 = aPoint; }
     const wxPoint& GetEnd0() const              { return m_End0; }
+
+    void SetThirdPoint0( const wxPoint& aPoint ){ m_ThirdPoint0 = aPoint; }
+    const wxPoint& GetThirdPoint0() const       { return m_ThirdPoint0; }
 
     void SetBezier0_C1( const wxPoint& aPoint ) { m_Bezier0_C1 = aPoint; }
     const wxPoint& GetBezier0_C1() const        { return m_Bezier0_C1; }
@@ -151,6 +156,7 @@ public:
 
     wxPoint m_Start0;       ///< Start point or center, relative to module origin, orient 0.
     wxPoint m_End0;         ///< End point, relative to module origin, orient 0.
+    wxPoint m_ThirdPoint0;  ///< End point for an arc.
     wxPoint m_Bezier0_C1;   ///< Bezier Control Point 1, relative to module origin, orient 0.
     wxPoint m_Bezier0_C2;   ///< Bezier Control Point 2, relative to module origin, orient 0.
 };

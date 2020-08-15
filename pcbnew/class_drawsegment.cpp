@@ -187,9 +187,10 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
     case S_ARC:
     case S_SEGMENT:
     case S_CIRCLE:
-        // these can all be done by just rotating the start and end points
-        RotatePoint( &m_Start, aRotCentre, aAngle);
-        RotatePoint( &m_End, aRotCentre, aAngle);
+        // these can all be done by just rotating the constituent points
+        RotatePoint( &m_Start, aRotCentre, aAngle );
+        RotatePoint( &m_End, aRotCentre, aAngle );
+        RotatePoint( &m_ThirdPoint, aRotCentre, aAngle );
         break;
 
     case S_RECT:
