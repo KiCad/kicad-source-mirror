@@ -37,25 +37,26 @@ bool PCB_GROUP::AddItem( BOARD_ITEM* item )
     return m_items.insert( item ).second;
 }
 
+
 bool PCB_GROUP::RemoveItem( const BOARD_ITEM* item )
 {
     return m_items.erase( const_cast<BOARD_ITEM*>( item ) ) == 1;
 }
+
 
 wxPoint PCB_GROUP::GetPosition() const
 {
     return GetBoundingBox().Centre();
 }
 
+
 void PCB_GROUP::SetPosition( const wxPoint& newpos )
 {
     wxPoint delta = newpos - GetPosition();
 
-    for( auto member : m_items )
-    {
-        member->SetPosition( member->GetPosition() + delta );
-    }
+    Move( delta );
 }
+
 
 EDA_ITEM* PCB_GROUP::Clone() const
 {
@@ -63,6 +64,7 @@ EDA_ITEM* PCB_GROUP::Clone() const
     PCB_GROUP* newGroup = new PCB_GROUP( *this );
     return newGroup;
 }
+
 
 PCB_GROUP* PCB_GROUP::DeepClone() const
 {
@@ -114,25 +116,13 @@ void PCB_GROUP::SwapData( BOARD_ITEM* aImage )
     std::swap( *( (PCB_GROUP*) this ), *( (PCB_GROUP*) aImage ) );
 }
 
-#if 0
-void PCB_GROUP::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                      PCB_LAYER_ID aLayer, int aClearanceValue,
-                                                      int aError = ARC_LOW_DEF,
-                                                      bool ignoreLineWidth = false ) const
-{
-}
-const BOX2I PCB_GROUP::ViewBBox() const
-{
-    return GetBoundingBox();
-}
-
-#endif
 
 bool PCB_GROUP::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
+
 
 bool PCB_GROUP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
@@ -160,6 +150,7 @@ bool PCB_GROUP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     }
 }
 
+
 const EDA_RECT PCB_GROUP::GetBoundingBox() const
 {
     EDA_RECT area;
@@ -182,6 +173,7 @@ const EDA_RECT PCB_GROUP::GetBoundingBox() const
     return area;
 }
 
+
 SEARCH_RESULT PCB_GROUP::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     for( const KICAD_T* stype = scanTypes; *stype != EOT; ++stype )
@@ -197,6 +189,7 @@ SEARCH_RESULT PCB_GROUP::Visit( INSPECTOR inspector, void* testData, const KICAD
     return SEARCH_RESULT::CONTINUE;
 }
 
+
 LSET PCB_GROUP::GetLayerSet() const
 {
     LSET aSet;
@@ -207,6 +200,7 @@ LSET PCB_GROUP::GetLayerSet() const
     }
     return aSet;
 }
+
 
 void PCB_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
 {
@@ -229,6 +223,7 @@ void PCB_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
         aLayers[i++] = layer;
 }
 
+
 unsigned int PCB_GROUP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     if( aView->IsLayerVisible( LAYER_ANCHOR ) )
@@ -237,11 +232,15 @@ unsigned int PCB_GROUP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     return std::numeric_limits<unsigned int>::max();
 }
 
+
 void PCB_GROUP::Move( const wxPoint& aMoveVector )
 {
-    wxPoint newpos = GetPosition() + aMoveVector;
-    SetPosition( newpos );
+    for( auto member : m_items )
+    {
+        member->Move( aMoveVector );
+    }
 }
+
 
 void PCB_GROUP::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
@@ -251,6 +250,7 @@ void PCB_GROUP::Rotate( const wxPoint& aRotCentre, double aAngle )
     }
 }
 
+
 void PCB_GROUP::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     for( BOARD_ITEM* item : m_items )
@@ -258,6 +258,7 @@ void PCB_GROUP::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         item->Flip( aCentre, aFlipLeftRight );
     }
 }
+
 
 wxString PCB_GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
@@ -268,10 +269,12 @@ wxString PCB_GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
     return wxString::Format( _( "Group \"%s\" with %ld members" ), m_name, m_items.size() );
 }
 
+
 BITMAP_DEF PCB_GROUP::GetMenuImage() const
 {
     return module_xpm;
 }
+
 
 void PCB_GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
@@ -279,6 +282,7 @@ void PCB_GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
                         wxString::Format( _( "\"%s\"" ), m_name ), DARKCYAN );
     aList.emplace_back( _( "Members" ), wxString::Format( _( "%ld" ), m_items.size() ), BROWN );
 }
+
 
 void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction )
 {
@@ -292,6 +296,7 @@ void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFuncti
         DisplayError( NULL, wxT( "Error running PCB_GROUP::RunOnChildren" ) );
     }
 }
+
 
 void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction )
 {

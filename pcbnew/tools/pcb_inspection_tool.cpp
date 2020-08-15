@@ -22,6 +22,7 @@
  */
 
 #include <bitmaps.h>
+#include <class_pcb_group.h>
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>
 #include <tools/pcbnew_picker_tool.h>
@@ -462,9 +463,12 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
     SELECTION& selection = selectionTool->GetSelection();
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
     std::vector<BOARD_ITEM*> items;
+    std::deque<EDA_ITEM*> queued_items( selection.begin(), selection.end() );
 
-    for( EDA_ITEM* item : selection )
+    for( std::size_t i = 0; i < queued_items.size(); ++i )
     {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( queued_items[i] );
+
         if( item->Type() == PCB_MODULE_T )
         {
             for( auto pad : static_cast<MODULE*>( item )->Pads() )
@@ -472,6 +476,12 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
                 if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
                     items.push_back( pad );
             }
+        }
+        else if( item->Type() == PCB_GROUP_T )
+        {
+            PCB_GROUP *group = static_cast<PCB_GROUP*>( item );
+            group->RunOnDescendants( [ &queued_items ]( BOARD_ITEM *aItem )
+            {   queued_items.push_back( aItem );} );
         }
         else if( BOARD_CONNECTED_ITEM* boardItem = dyn_cast<BOARD_CONNECTED_ITEM*>( item ) )
         {
