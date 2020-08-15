@@ -1137,7 +1137,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
                     m_frame->GetScreen()->m_LocalOrigin = cursorPos;
 
                 preview.Add( graphic );
-                frame()->SetMsgPanel( graphic );
+                frame()->SetMsgPanel( board() );
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
 
@@ -1200,11 +1200,6 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
             updateSegmentFromConstructionMgr( twoPointManager, graphic );
             m_view->Update( &preview );
             m_view->Update( &twoPointAsst );
-
-            if( started )
-                frame()->SetMsgPanel( graphic );
-            else
-                frame()->SetMsgPanel( board() );
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
