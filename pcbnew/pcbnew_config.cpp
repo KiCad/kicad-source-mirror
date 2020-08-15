@@ -121,6 +121,9 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 
     for( const auto& pair : netSettings.m_PcbNetColors )
     {
+        if( pair.second == COLOR4D::UNSPECIFIED )
+            continue;
+
         if( NETINFO_ITEM* net = nets.GetNetItem( pair.first ) )
             netColors[net->GetNet()] = pair.second;
     }
@@ -216,6 +219,9 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 
     for( const auto& pair : rs->GetNetColorMap() )
     {
+        if( pair.second == COLOR4D::UNSPECIFIED )
+            continue;
+
         if( NETINFO_ITEM* net = nets.GetNetItem( pair.first ) )
             netSettings.m_PcbNetColors[net->GetNetname()] = pair.second;
     }
@@ -225,7 +231,8 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     // NOTE: this assumes netclasses will have already been updated, which I think is the case
     for( const auto& pair : netSettings.m_NetClasses )
     {
-        if( netclassColors.count( pair.first ) )
+        if( netclassColors.count( pair.first )
+                && netclassColors.at( pair.first ) != COLOR4D::UNSPECIFIED )
             pair.second->SetPcbColor( netclassColors.at( pair.first ) );
     }
 

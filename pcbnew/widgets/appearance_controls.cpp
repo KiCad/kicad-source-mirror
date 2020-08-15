@@ -1201,6 +1201,8 @@ void APPEARANCE_CONTROLS::rebuildNets()
                             if( s->GetSwatchColor() == COLOR4D::UNSPECIFIED )
                                 s->Hide();
 
+                            m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
+
                             m_frame->GetCanvas()->RedrawRatsnest();
                             m_frame->GetCanvas()->Refresh();
                         } );
@@ -1658,6 +1660,9 @@ void APPEARANCE_CONTROLS::onNetContextMenu( wxCommandEvent& aEvent )
                 netColors[m_contextMenuNetCode] = color;
             else
                 netColors.erase( m_contextMenuNetCode );
+
+            m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
+            m_frame->GetCanvas()->Refresh();
         }
 
         break;
@@ -1761,6 +1766,7 @@ void APPEARANCE_CONTROLS::onNetclassColorChanged( wxCommandEvent& aEvent )
     if( swatch->GetSwatchColor() == COLOR4D::UNSPECIFIED )
         swatch->Hide();
 
+    m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
     m_frame->GetCanvas()->RedrawRatsnest();
     m_frame->GetCanvas()->Refresh();
 }
@@ -1788,6 +1794,7 @@ void APPEARANCE_CONTROLS::onNetColorModeChanged( wxCommandEvent& aEvent )
         options.m_NetColorMode = NET_COLOR_MODE::OFF;
 
     m_frame->SetDisplayOptions( options );
+    m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
 }
 
 
@@ -1823,6 +1830,8 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
                     netclassColors[m_contextMenuNetclass] = color;
                 else
                     netclassColors.erase( m_contextMenuNetclass );
+
+                view->UpdateAllLayersColor();
             }
 
             break;

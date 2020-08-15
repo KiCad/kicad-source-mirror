@@ -943,6 +943,27 @@ inline bool IsDCodeLayer( int aLayer )
 }
 
 
+/**
+ * Checks if the given layer is "net copper", meaning it is eligible for net coloring
+ * @param aLayer is the layer to test
+ * @return true if the layer is one that participates in net coloring
+ */
+inline bool IsNetCopperLayer( LAYER_NUM aLayer )
+{
+    static std::set<LAYER_NUM> netCopperLayers =
+            {
+                LAYER_PAD_FR,
+                LAYER_PAD_BK,
+                LAYER_PADS_TH,
+                LAYER_VIA_THROUGH,
+                LAYER_VIA_BBLIND,
+                LAYER_VIA_MICROVIA
+            };
+
+    return IsCopperLayer( aLayer ) || netCopperLayers.count( aLayer );
+}
+
+
 PCB_LAYER_ID ToLAYER_ID( int aLayer );
 
 #endif // LAYERS_ID_AND_VISIBILITY_H_

@@ -267,22 +267,34 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         netCode = conItem->GetNetCode();
 
     // Apply net color overrides
-    if( conItem && m_netColorMode == NET_COLOR_MODE::ALL )
+    if( conItem && m_netColorMode == NET_COLOR_MODE::ALL && IsNetCopperLayer( aLayer ) )
     {
-        if( m_netColors.count( conItem->GetNetCode() ) )
-            color = m_netColors.at( conItem->GetNetCode() );
+        if( m_netColors.count( netCode ) )
+            color = m_netColors.at( netCode );
         else if( m_netclassColors.count( conItem->GetNetClassName() ) )
             color = m_netclassColors.at( conItem->GetNetClassName() );
+
+        if( item->IsSelected() )
+            color.Brighten( m_selectFactor );
+        else if( m_highlightEnabled && m_highlightNetcodes.count( netCode ) )
+            color.Brighten( m_highlightFactor );
+        else if( m_highlightEnabled )
+            color.Darken( 1.0 - m_highlightFactor );
+        else if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED
+                 && m_activeLayers.count( aLayer ) == 0 )
+            color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
     }
+    else
+    {
+        // Single net highlight mode
+        if( m_highlightEnabled )
+            color = m_highlightNetcodes.count( netCode ) ? m_layerColorsHi[aLayer]
+                                                         : m_layerColorsDark[aLayer];
 
-    // Single net highlight mode
-    if( m_highlightEnabled )
-        color = m_highlightNetcodes.count( netCode ) ? m_layerColorsHi[aLayer]
-                                                     : m_layerColorsDark[aLayer];
-
-    // Return grayish color for non-highlighted layers in the dimmed high contrast mode
-    if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED && m_activeLayers.count( aLayer ) == 0 )
-        color = m_hiContrastColor[aLayer];
+        // Return grayish color for non-highlighted layers in the dimmed high contrast mode
+        if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED && m_activeLayers.count( aLayer ) == 0 )
+            color = m_hiContrastColor[aLayer];
+    }
 
     // For vias, some layers depend on other layers in high contrast mode
     if( m_hiContrastEnabled && item->Type() == PCB_VIA_T &&
