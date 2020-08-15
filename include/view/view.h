@@ -663,6 +663,8 @@ public:
 
     std::shared_ptr<VIEW_OVERLAY> MakeOverlay();
 
+    void InitPreview();
+
     void ClearPreview();
     void AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership = true );
 

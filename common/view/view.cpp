@@ -1562,6 +1562,13 @@ void VIEW::ClearPreview()
 }
 
 
+void VIEW::InitPreview()
+{
+   m_preview.reset( new KIGFX::VIEW_GROUP() );
+   Add( m_preview.get() );
+}
+
+
 void VIEW::AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership )
 {
    Hide( aItem, false );

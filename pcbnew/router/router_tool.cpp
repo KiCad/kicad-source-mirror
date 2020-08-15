@@ -1422,6 +1422,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     controls()->SetAutoPan( true );
     frame()->UndoRedoBlock( true );
 
+    view()->ClearPreview();
+    view()->InitPreview();
+
     while( TOOL_EVENT* evt = Wait() )
     {
         frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
@@ -1456,20 +1459,17 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                         previewItem->Move( offset );
                     }
 
-                    view()->Add( previewItem );
                     view()->AddToPreview( previewItem );
                     view()->Hide( drawing, true );
                 }
 
                 previewItem = static_cast<BOARD_ITEM*>( module->Reference().Clone() );
                 previewItem->Move( offset );
-                view()->Add( previewItem );
                 view()->AddToPreview( previewItem );
                 view()->Hide( &module->Reference() );
 
                 previewItem = static_cast<BOARD_ITEM*>( module->Value().Clone() );
                 previewItem->Move( offset );
-                view()->Add( previewItem );
                 view()->AddToPreview( previewItem );
                 view()->Hide( &module->Value() );
             }

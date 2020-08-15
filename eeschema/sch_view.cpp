@@ -112,10 +112,9 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
 
     ResizeSheetWorkingArea( aScreen );
 
-    m_preview.reset( new KIGFX::VIEW_GROUP() );
-
     Add( m_worksheet.get() );
-    Add( m_preview.get() );
+
+    InitPreview();
 }
 
 
@@ -171,8 +170,7 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
         Add( &item );
     }
 
-    m_preview.reset( new KIGFX::VIEW_GROUP() );
-    Add( m_preview.get() );
+    InitPreview();
 }
 
 

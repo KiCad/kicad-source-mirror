@@ -102,6 +102,7 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
         GetCanvas()->GetView()->Clear();
+        GetCanvas()->GetView()->InitPreview();
     }
 
     PCB_BASE_FRAME::SetBoard( aBoard );
