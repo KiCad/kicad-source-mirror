@@ -69,6 +69,7 @@
 #include <widgets/infobar.h>
 #include <widgets/lib_tree.h>
 #include <widgets/paged_dialog.h>
+#include <widgets/panel_selection_filter.h>
 #include <widgets/progress_reporter.h>
 #include <wildcards_and_files_ext.h>
 
@@ -134,11 +135,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), true );
 
-    // LoadSettings() *after* creating m_LayersManager, because LoadSettings() initialize
-    // parameters in m_LayersManager
-    // NOTE: KifaceSettings() will return PCBNEW_SETTINGS if we started from pcbnew
-    LoadSettings( GetSettings() );
-
     // In modedit, the default net clearance is not known (it depends on the actual board).
     // So we do not show the default clearance, by setting it to 0.
     // The footprint or pad specific clearance will be shown.
@@ -186,6 +182,13 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
+    m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
+
+    // LoadSettings() *after* creating m_LayersManager, because LoadSettings() initialize
+    // parameters in m_LayersManager
+    // NOTE: KifaceSettings() will return PCBNEW_SETTINGS if we started from pcbnew
+    LoadSettings( GetSettings() );
+
     m_Layers->ReFill();
     m_Layers->ReFillRender();
 
@@ -197,6 +200,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_infoBar = new WX_INFOBAR( this, &m_auimgr );
 
     m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetFlags( wxAUI_MGR_DEFAULT | wxAUI_MGR_LIVE_RESIZE );
 
     // Horizontal items; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
@@ -214,6 +218,14 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_auimgr.AddPane( m_Layers, EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(3)
                       .Caption( _( "Layers Manager" ) ).PaneBorder( false )
                       .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ) );
+
+    m_auimgr.AddPane( m_selectionFilterPanel,
+                      EDA_PANE().Palette().Name( "SelectionFilter" ).Right().Layer( 3 )
+                      .Caption( _( "Selection Filter" ) ).PaneBorder( false ).Position( 2 )
+                      .MinSize( 160, -1 ).BestSize( m_selectionFilterPanel->GetBestSize() ) );
+
+    // The selection filter doesn't need to grow in the vertical direction when docked
+    m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
@@ -249,6 +261,7 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     // save the footprint in the PROJECT
     retainLastFootprint();
 
+    delete m_selectionFilterPanel;
     delete m_Layers;
 }
 
@@ -432,8 +445,9 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     GetDesignSettings() = cfg->m_DesignSettings;
 
-    m_DisplayOptions = cfg->m_Display;
+    m_DisplayOptions  = cfg->m_Display;
     m_defaultLibWidth = cfg->m_LibWidth;
+    m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
 }
 
 
@@ -444,9 +458,10 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     PCB_BASE_FRAME::SaveSettings( cfg );
 
-    cfg->m_DesignSettings = GetDesignSettings();
-    cfg->m_Display = m_DisplayOptions;
-    cfg->m_LibWidth = m_treePane->GetSize().x;
+    cfg->m_DesignSettings  = GetDesignSettings();
+    cfg->m_Display         = m_DisplayOptions;
+    cfg->m_LibWidth        = m_treePane->GetSize().x;
+    cfg->m_SelectionFilter = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
 }
 
 
@@ -534,6 +549,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     // on some platforms (Windows) that generate useless redraw of items in
     // the Layer Manger
     m_auimgr.GetPane( "LayersManager" ).Show( false );
+    m_auimgr.GetPane( "SelectionFilter" ).Show( false );
 
     Pgm().GetSettingsManager().FlushAndRelease( GetSettings() );
 

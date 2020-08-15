@@ -24,6 +24,7 @@
 #include <board_design_settings.h>
 #include <settings/app_settings.h>
 #include <pcbnew_settings.h>
+#include <project/board_project_settings.h>
 
 
 class FOOTPRINT_EDITOR_SETTINGS : public APP_SETTINGS_BASE
@@ -65,6 +66,8 @@ public:
     wxString m_LastImportExportPath;
 
     wxString m_FootprintTextShownColumns;
+
+    SELECTION_FILTER_OPTIONS m_SelectionFilter;
 
 protected:
 
