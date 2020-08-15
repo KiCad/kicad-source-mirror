@@ -403,32 +403,16 @@ void APPEARANCE_CONTROLS::UpdateDisplayOptions()
 
     switch( options.m_ContrastModeDisplay )
     {
-    case HIGH_CONTRAST_MODE::NORMAL:
-        m_rbHighContrastNormal->SetValue( true );
-        break;
-
-    case HIGH_CONTRAST_MODE::DIMMED:
-        m_rbHighContrastDim->SetValue( true );
-        break;
-
-    case HIGH_CONTRAST_MODE::HIDDEN:
-        m_rbHighContrastOff->SetValue( true );
-        break;
+    case HIGH_CONTRAST_MODE::NORMAL: m_rbHighContrastNormal->SetValue( true ); break;
+    case HIGH_CONTRAST_MODE::DIMMED: m_rbHighContrastDim->SetValue( true );    break;
+    case HIGH_CONTRAST_MODE::HIDDEN: m_rbHighContrastOff->SetValue( true );    break;
     }
 
     switch( options.m_NetColorMode )
     {
-    case NET_COLOR_MODE::ALL:
-        m_rbNetColorAll->SetValue( true );
-        break;
-
-    case NET_COLOR_MODE::RATSNEST:
-        m_rbNetColorRatsnest->SetValue( true );
-        break;
-
-    case NET_COLOR_MODE::OFF:
-        m_rbNetColorOff->SetValue( true );
-        break;
+    case NET_COLOR_MODE::ALL:      m_rbNetColorAll->SetValue( true );      break;
+    case NET_COLOR_MODE::RATSNEST: m_rbNetColorRatsnest->SetValue( true ); break;
+    case NET_COLOR_MODE::OFF:      m_rbNetColorOff->SetValue( true );      break;
     }
 
     wxASSERT( m_objectSettingsMap.count( LAYER_RATSNEST ) );
@@ -543,10 +527,10 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 label->Wrap( -1 );
                 label->SetToolTip( aSetting->tooltip );
 
-                sizer->Add( indicator,   0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 2 );
-                sizer->Add( swatch,      0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
-                sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
-                sizer->Add( label,       1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
+                sizer->Add( indicator,   0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxTOP, 2 );
+                sizer->Add( swatch,      0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxTOP, 2 );
+                sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxTOP, 2 );
+                sizer->Add( label,       1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxTOP, 2 );
 
                 m_layers_outer_sizer->Add( panel, 0, wxEXPAND, 0 );
 
@@ -599,17 +583,9 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
         switch( layer )
         {
-            case F_Cu:
-                dsc = _( "Front copper layer" );
-                break;
-
-            case B_Cu:
-                dsc = _( "Back copper layer" );
-                break;
-
-            default:
-                dsc = _( "Inner copper layer" );
-                break;
+            case F_Cu: dsc = _( "Front copper layer" ); break;
+            case B_Cu: dsc = _( "Back copper layer" );  break;
+            default:   dsc = _( "Inner copper layer" ); break;
         }
 
         m_layerSettings.emplace_back(
@@ -974,6 +950,13 @@ void APPEARANCE_CONTROLS::rebuildObjects()
     COLOR4D         bgColor = theme->GetColor( LAYER_PCB_BACKGROUND );
     GAL_SET         visible = board->GetVisibleElements();
     bool            firstSlider = true;
+    int             sliderAlignment = wxALIGN_CENTER_VERTICAL;
+    int             sliderLableAlignment = wxALIGN_CENTER_VERTICAL;
+
+#ifdef __WXMAC__
+    sliderAlignment = wxALIGN_BOTTOM;
+    sliderLableAlignment = wxALIGN_TOP;
+#endif
 
     m_objectSettings.clear();
     m_objectsSizer->Clear( true );
@@ -984,10 +967,16 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 int layer = aSetting->id;
                 int topMargin = 0;
 
-                if( aSetting->can_control_opacity && firstSlider )
+                if( aSetting->can_control_opacity )
+                {
+                    if( firstSlider )
+                        topMargin = wxTOP;
+
+                    firstSlider = false;
+                }
+                else
                 {
                     topMargin = wxTOP;
-                    firstSlider = false;
                 }
 
                 aSetting->visible = visible.Contains( ToGalLayer( layer ) );
@@ -1002,7 +991,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                                            "right click for menu" ) );
 
                     m_objectsSizer->Add( swatch, wxGBPosition( aRow, 0 ), wxDefaultSpan,
-                            wxALIGN_CENTER_VERTICAL | wxEXPAND | topMargin | wxLEFT | wxRIGHT, 5 );
+                            wxALIGN_CENTER_VERTICAL | wxEXPAND | topMargin | wxLEFT | wxRIGHT, 3 );
                     aSetting->ctl_color = swatch;
 
                     swatch->Bind( COLOR_SWATCH_CHANGED,
@@ -1018,7 +1007,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 btn_visible->SetToolTip( tip );
 
                 m_objectsSizer->Add( btn_visible, wxGBPosition( aRow, 1 ), wxDefaultSpan,
-                        wxALIGN_TOP | topMargin | wxRIGHT, 5 );
+                                     sliderLableAlignment | topMargin | wxLEFT | wxRIGHT, 3 );
                 aSetting->ctl_visibility = btn_visible;
 
                 btn_visible->Bind( TOGGLE_CHANGED,
@@ -1036,7 +1025,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 wxGBSpan labelSpan( 1, aSetting->can_control_opacity ? 1 : 2 );
 
                 m_objectsSizer->Add( label, wxGBPosition( aRow, 2 ), labelSpan,
-                        wxALIGN_TOP | topMargin | wxRIGHT, 5 );
+                                     sliderLableAlignment | topMargin | wxLEFT | wxRIGHT, 3 );
 
                 if( aSetting->can_control_opacity )
                 {
@@ -1053,7 +1042,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                     slider->SetToolTip( tip );
 
                     m_objectsSizer->Add( slider, wxGBPosition( aRow, 3 ), wxDefaultSpan,
-                            wxALIGN_BOTTOM | topMargin | wxRIGHT | wxEXPAND, 5 );
+                                         sliderAlignment | topMargin | wxLEFT | wxRIGHT | wxEXPAND, 3 );
                     aSetting->ctl_opacity = slider;
 
                     auto opacitySliderHandler =

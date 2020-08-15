@@ -90,14 +90,20 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_windowObjects->SetScrollRate( 0, 5 );
 	m_windowObjects->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
+	wxBoxSizer* bSizer161;
+	bSizer161 = new wxBoxSizer( wxVERTICAL );
+
 	m_objectsSizer = new wxGridBagSizer( 0, 0 );
 	m_objectsSizer->SetFlexibleDirection( wxBOTH );
 	m_objectsSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
-	m_windowObjects->SetSizer( m_objectsSizer );
+	bSizer161->Add( m_objectsSizer, 1, wxEXPAND|wxALL, 2 );
+
+
+	m_windowObjects->SetSizer( bSizer161 );
 	m_windowObjects->Layout();
-	m_objectsSizer->Fit( m_windowObjects );
+	bSizer161->Fit( m_windowObjects );
 	m_objectsPanelSizer->Add( m_windowObjects, 1, wxEXPAND, 5 );
 
 
