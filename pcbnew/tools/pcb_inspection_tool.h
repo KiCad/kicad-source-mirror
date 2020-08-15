@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,12 +24,13 @@
 #ifndef __BOARD_STATISTICS_TOOL_H
 #define __BOARD_STATISTICS_TOOL_H
 
-
 #include <dialogs/dialog_board_statistics.h>
 #include <dialogs/dialog_select_net_from_list.h>
 #include <pcb_edit_frame.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_tool_base.h>
+
+class CONNECTIVITY_DATA;
 
 /**
  * PCB_INSPECTION_TOOL
@@ -93,7 +94,7 @@ private:
     void ratsnestTimer( wxTimerEvent& aEvent );
 
     ///> Recalculates dynamic ratsnest for the current selection
-    void calculateSelectionRatsnest();
+    void calculateSelectionRatsnest( const VECTOR2I& aDelta );
 
     bool highlightNet( const VECTOR2D& aPosition, bool aUseSelection );
 
@@ -110,11 +111,11 @@ private:
     bool m_probingSchToPcb;     // Recursion guard when cross-probing to EESchema
     int  m_lastNetcode;         // Used for toggling between last two highlighted nets
 
-    bool m_slowRatsnest;        // Indicates current selection ratsnest will be slow to calculate
-    wxTimer m_ratsnestTimer;    // Timer to initiate lazy ratsnest calculation (ie: when slow)
+    CONNECTIVITY_DATA* m_dynamicData;      // Cached connectivity data from the selection
 
     std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST> m_listNetsDialog;
     DIALOG_SELECT_NET_FROM_LIST::SETTINGS        m_listNetsDialogSettings;
+
 };
 
 #endif //__BOARD_STATISTICS_TOOL_H

@@ -81,6 +81,11 @@ public:
         return m_pos;
     }
 
+    void Move( const VECTOR2I& aPos )
+    {
+        m_pos += aPos;
+    }
+
     const unsigned int Dist( const CN_ANCHOR& aSecond )
     {
         return ( m_pos - aSecond.Pos() ).EuclideanNorm();

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,7 @@ PCB_INSPECTION_TOOL::PCB_INSPECTION_TOOL() :
 {
     m_probingSchToPcb = false;
     m_lastNetcode = -1;
-
-    m_slowRatsnest = false;
+    m_dynamicData = nullptr;
 }
 
 
@@ -102,10 +101,6 @@ bool PCB_INSPECTION_TOOL::Init()
 
     selectionTool->GetToolMenu().AddSubMenu( netSubMenu );
     menu.AddMenu( netSubMenu.get(), SELECTION_CONDITIONS::OnlyTypes( connectedTypes ) );
-
-    m_ratsnestTimer.SetOwner( this );
-    Connect( m_ratsnestTimer.GetId(), wxEVT_TIMER,
-            wxTimerEventHandler( PCB_INSPECTION_TOOL::ratsnestTimer ), NULL, this );
 
     return true;
 }
@@ -429,6 +424,8 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 
 int PCB_INSPECTION_TOOL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 {
+    VECTOR2I* delta = aEvent.Parameter<VECTOR2I*>();
+
     auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     auto& selection = selectionTool->GetSelection();
     auto connectivity = getModel<BOARD>()->GetConnectivity();
@@ -436,62 +433,30 @@ int PCB_INSPECTION_TOOL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
     {
         connectivity->ClearDynamicRatsnest();
-    }
-    else if( m_slowRatsnest )
-    {
-        // Compute ratsnest only when user stops dragging for a moment
-        connectivity->HideDynamicRatsnest();
-        m_ratsnestTimer.Start( 20 );
+        delete m_dynamicData;
+        m_dynamicData = nullptr;
     }
     else
     {
-        // Check how much time doest it take to calculate ratsnest
-        PROF_COUNTER counter;
-        calculateSelectionRatsnest();
-        counter.Stop();
-
-        // If it is too slow, then switch to 'slow ratsnest' mode when
-        // ratsnest is calculated when user stops dragging items for a moment
-        if( counter.msecs() > 25 )
-        {
-            m_slowRatsnest = true;
-            connectivity->HideDynamicRatsnest();
-        }
+        calculateSelectionRatsnest( *delta );
     }
 
+    delete delta;
     return 0;
 }
 
 
 int PCB_INSPECTION_TOOL::HideDynamicRatsnest( const TOOL_EVENT& aEvent )
 {
-    getModel<BOARD>()->GetConnectivity()->HideDynamicRatsnest();
-    m_slowRatsnest = false;
+    getModel<BOARD>()->GetConnectivity()->ClearDynamicRatsnest();
+    delete m_dynamicData;
+    m_dynamicData = nullptr;
+
     return 0;
 }
 
 
-void PCB_INSPECTION_TOOL::ratsnestTimer( wxTimerEvent& aEvent )
-{
-    auto connectivity = getModel<BOARD>()->GetConnectivity();
-
-    m_ratsnestTimer.Stop();
-
-    /// Check how much time does it take to calculate ratsnest
-    PROF_COUNTER counter;
-    calculateSelectionRatsnest();
-    counter.Stop();
-
-    /// If the ratsnest is fast enough, turn the slow ratsnest off
-    if( counter.msecs() <= 25 )
-        m_slowRatsnest = false;
-
-    m_frame->GetCanvas()->RedrawRatsnest();
-    m_frame->GetCanvas()->Refresh();
-}
-
-
-void PCB_INSPECTION_TOOL::calculateSelectionRatsnest()
+void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
 {
     SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     SELECTION& selection = selectionTool->GetSelection();
@@ -515,7 +480,25 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest()
         }
     }
 
-    connectivity->ComputeDynamicRatsnest( items );
+    if( items.empty() || std::none_of( items.begin(), items.end(), []( const BOARD_ITEM* aItem )
+            { return( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_PAD_T ||
+                      aItem->Type() == PCB_ARC_T || aItem->Type() == PCB_ZONE_AREA_T ||
+                      aItem->Type() == PCB_MODULE_T || aItem->Type() == PCB_VIA_T ); } ) )
+    {
+        return;
+    }
+
+    if( !m_dynamicData )
+    {
+        m_dynamicData = new CONNECTIVITY_DATA( items, true );
+        connectivity->BlockRatsnestItems( items );
+    }
+    else
+    {
+        m_dynamicData->Move( aDelta );
+    }
+
+    connectivity->ComputeDynamicRatsnest( items, m_dynamicData );
 }
 
 

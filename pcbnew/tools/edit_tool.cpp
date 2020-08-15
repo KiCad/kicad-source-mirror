@@ -390,6 +390,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     // Main loop: keep receiving events
     do
     {
+        VECTOR2I movement;
         editFrame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
@@ -421,7 +422,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                 controls->ForceCursorPosition( true, m_cursor );
                 selection.SetReferencePoint( m_cursor );
 
-                VECTOR2I movement( m_cursor - prevPos );
+                movement = m_cursor - prevPos;
                 prevPos = m_cursor;
                 totalMovement += movement;
 
@@ -494,7 +495,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                     // start moving with the reference point attached to the cursor
                     grid.SetAuxAxes( false );
 
-                    auto delta = m_cursor - selection.GetReferencePoint();
+                    movement = m_cursor - selection.GetReferencePoint();
 
                     // Drag items to the current cursor position
                     for( EDA_ITEM* item : selection )
@@ -503,7 +504,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                         if( item->GetParent() && item->GetParent()->IsSelected() )
                             continue;
 
-                        static_cast<BOARD_ITEM*>( item )->Move( delta );
+                        static_cast<BOARD_ITEM*>( item )->Move( movement );
                     }
 
                     selection.SetReferencePoint( m_cursor );
@@ -550,7 +551,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
             }
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
+            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false, new VECTOR2I( movement ) );
         }
 
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
@@ -615,14 +616,11 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
 
     // If canceled, we need to remove the dynamic ratsnest from the screen
     if( restore_state )
-    {
-        m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
         m_commit->Revert();
-    }
     else
-    {
         m_commit->Push( _( "Drag" ) );
-    }
+
+    m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
 
     if( unselect )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -1292,7 +1290,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                                 });
                     }
             }
-            
+
             item->Move( translation );
 
             switch( rotationAnchor )
@@ -1407,7 +1405,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_GROUP_T:
                 dupe_item = static_cast<PCB_GROUP*>( orig_item )->DeepDuplicate();
                 break;
-                
+
             default:
                 // Silently drop other items (such as footprint texts) from duplication
                 break;

@@ -95,6 +95,12 @@ void CONNECTIVITY_DATA::Build( const std::vector<BOARD_ITEM*>& aItems )
 }
 
 
+void CONNECTIVITY_DATA::Move( const VECTOR2I& aDelta )
+{
+    m_connAlgo->ForEachAnchor( [&aDelta] ( CN_ANCHOR& anchor ) { anchor.Move( aDelta ); } );
+}
+
+
 void CONNECTIVITY_DATA::updateRatsnest()
 {
     #ifdef PROFILE
@@ -255,24 +261,19 @@ void CONNECTIVITY_DATA::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_
 }
 
 
-void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems )
+void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems,
+                                                const CONNECTIVITY_DATA* aDynamicData )
 {
+    if( !aDynamicData )
+        return;
+
     m_dynamicRatsnest.clear();
 
-    if( std::none_of( aItems.begin(), aItems.end(), []( const BOARD_ITEM* aItem )
-            { return( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_PAD_T ||
-                      aItem->Type() == PCB_ARC_T || aItem->Type() == PCB_ZONE_AREA_T ||
-                      aItem->Type() == PCB_MODULE_T || aItem->Type() == PCB_VIA_T ); } ) )
+    // This gets connections between the stationary board and the
+    // moving selection
+    for( unsigned int nc = 1; nc < aDynamicData->m_nets.size(); nc++ )
     {
-        return ;
-    }
-
-    CONNECTIVITY_DATA connData( aItems, true );
-    BlockRatsnestItems( aItems );
-
-    for( unsigned int nc = 1; nc < connData.m_nets.size(); nc++ )
-    {
-        auto dynNet = connData.m_nets[nc];
+        auto dynNet = aDynamicData->m_nets[nc];
 
         if( dynNet->GetNodeCount() != 0 )
         {
@@ -291,6 +292,7 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
         }
     }
 
+    // This gets the ratsnest for internal connections in the moving set
     const auto& edges = GetRatsnestForItems( aItems );
 
     for( const auto& edge : edges )

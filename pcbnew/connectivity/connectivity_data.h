@@ -126,6 +126,15 @@ public:
     bool Update( BOARD_ITEM* aItem );
 
     /**
+     * Moves the connectivity list anchors.  N.B., this does not move the bounding
+     * boxes for the the RTree, so the use of this function will invalidate the
+     * connectivity data for uses other than the dynamic ratsnest
+     *
+     * @param aDelta vector for movement of the tree
+     */
+    void Move( const VECTOR2I& aDelta );
+
+    /**
      * Function Clear()
      * Erases the connectivity database.
      */
@@ -208,7 +217,8 @@ public:
      * Calculates the temporary dynamic ratsnest (i.e. the ratsnest lines that)
      * for the set of items aItems.
      */
-    void ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems );
+    void ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems,
+                                 const CONNECTIVITY_DATA* aDynamicData );
 
     const std::vector<RN_DYNAMIC_LINE>& GetDynamicRatsnest() const
     {
@@ -257,6 +267,13 @@ public:
 private:
 
     void    updateRatsnest();
+
+    /**
+     * Updates the item positions without modifying the dirtyNet flag.  This is valid only when the
+     * item list contains all elements in the connectivity database
+     * @param aItems List of items with new positions
+     */
+    void    updateItemPositions( const std::vector<BOARD_ITEM*>& aItems );
     void    addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster );
 
     std::shared_ptr<CN_CONNECTIVITY_ALGO> m_connAlgo;

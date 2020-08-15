@@ -167,8 +167,6 @@ private:
 
     void    searchConnections();
 
-    void    update();
-
     void    propagateConnections( BOARD_COMMIT* aCommit = nullptr );
 
     template <class Container, class BItem>
@@ -281,7 +279,6 @@ public:
 
     void MarkNetAsDirty( int aNet );
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
-
 };
 
 /**
