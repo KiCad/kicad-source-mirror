@@ -55,13 +55,6 @@ enum gerbview_ids
     ID_TB_OPTIONS_SHOW_GBR_MODE_0,
     ID_TB_OPTIONS_SHOW_GBR_MODE_1,
     ID_TB_OPTIONS_SHOW_GBR_MODE_2,
-    ID_TB_MEASUREMENT_TOOL,
-
-    // Right click context menu
-    ID_HIGHLIGHT_REMOVE_ALL,
-    ID_HIGHLIGHT_CMP_ITEMS,
-    ID_HIGHLIGHT_NET_ITEMS,
-    ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS,
 
     // IDs for drill file history (ID_FILEnn is already in use)
     ID_GERBVIEW_DRILL_FILE,

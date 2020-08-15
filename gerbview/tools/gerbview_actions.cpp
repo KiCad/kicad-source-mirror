@@ -24,27 +24,6 @@
 #include "gerbview_actions.h"
 
 
-OPT<TOOL_EVENT> GERBVIEW_ACTIONS::TranslateLegacyId( int aId )
-{
-    switch( aId )
-    {
-    case ID_HIGHLIGHT_REMOVE_ALL:
-        return GERBVIEW_ACTIONS::highlightClear.MakeEvent();
-
-    case ID_HIGHLIGHT_CMP_ITEMS:
-        return GERBVIEW_ACTIONS::highlightComponent.MakeEvent();
-
-    case ID_HIGHLIGHT_NET_ITEMS:
-        return GERBVIEW_ACTIONS::highlightNet.MakeEvent();
-
-    case ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS:
-        return GERBVIEW_ACTIONS::highlightAttribute.MakeEvent();
-    }
-
-    return OPT<TOOL_EVENT>();
-}
-
-
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be
 // specialized, but we don't translate on initialization and instead do it in the getters.

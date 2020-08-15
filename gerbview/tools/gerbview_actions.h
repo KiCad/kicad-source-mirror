@@ -84,7 +84,7 @@ public:
     static TOOL_ACTION highlightAttribute;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
 };
 
 #endif  // __GERBVIEW_ACTIONS_H

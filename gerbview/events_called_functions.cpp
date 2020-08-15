@@ -97,12 +97,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, GERBVIEW_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, GERBVIEW_FRAME::OnSelectGrid )
 
-    // Right click context menu
-    EVT_MENU( ID_HIGHLIGHT_CMP_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_HIGHLIGHT_NET_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_HIGHLIGHT_REMOVE_ALL, GERBVIEW_FRAME::Process_Special_Functions )
-
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, GERBVIEW_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnUpdateSelectDCode )
     EVT_UPDATE_UI( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
@@ -117,12 +111,7 @@ END_EVENT_TABLE()
  */
 void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
-    int                      id = event.GetId();
-    GERBVIEW_SELECTION_TOOL* selTool = GetToolManager()->GetTool<GERBVIEW_SELECTION_TOOL>();
-    GERBVIEW_SELECTION&      selection = selTool->GetSelection();
-    GERBER_DRAW_ITEM*        currItem = (GERBER_DRAW_ITEM*) selection.Front();
-
-    switch( id )
+    switch( event.GetId() )
     {
     case ID_GERBVIEW_ERASE_CURR_LAYER:
         Erase_Current_DrawLayer( true );
@@ -131,27 +120,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_GERBVIEW_SHOW_LIST_DCODES:
         Liste_D_Codes();
-        break;
-
-    case ID_HIGHLIGHT_CMP_ITEMS:
-        m_SelComponentBox->SetStringSelection( currItem->GetNetAttributes().m_Cmpref );
-        break;
-
-    case ID_HIGHLIGHT_NET_ITEMS:
-        m_SelNetnameBox->SetStringSelection( UnescapeString( currItem->GetNetAttributes().m_Netname ) );
-        break;
-
-    case ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS:
-        m_SelAperAttributesBox->SetStringSelection( currItem->GetDcodeDescr()->m_AperFunction );
-        break;
-
-    case ID_HIGHLIGHT_REMOVE_ALL:
-        m_SelComponentBox->SetSelection( 0 );
-        m_SelNetnameBox->SetSelection( 0 );
-        m_SelAperAttributesBox->SetSelection( 0 );
-
-        if( GetGbrImage( GetActiveLayer() ) )
-            GetGbrImage( GetActiveLayer() )->m_Selected_Tool = 0;
         break;
 
     default:
