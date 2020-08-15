@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jul 15 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 13 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,6 +29,7 @@
 #include <wx/slider.h>
 #include <wx/panel.h>
 #include <wx/choice.h>
+#include <wx/clrpicker.h>
 #include <wx/notebook.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -100,6 +101,48 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxRaytracing_showReflections;
 		wxCheckBox* m_checkBoxRaytracing_antiAliasing;
 		wxCheckBox* m_checkBoxRaytracing_postProcessing;
+		wxStaticText* m_staticText17;
+		wxColourPickerCtrl* m_colourPickerCameraLight;
+		wxStaticText* m_staticText5;
+		wxColourPickerCtrl* m_colourPickerTopLight;
+		wxStaticText* m_staticText6;
+		wxColourPickerCtrl* m_colourPickerBottomLight;
+		wxStaticText* m_staticText20;
+		wxStaticText* m_staticText18;
+		wxStaticText* m_staticText27;
+		wxStaticText* m_staticText28;
+		wxStaticText* m_staticText21;
+		wxColourPickerCtrl* m_colourPickerLight1;
+		wxSpinCtrl* m_spinCtrlLightElevation1;
+		wxSpinCtrl* m_spinCtrlLightAzimuth1;
+		wxStaticText* m_staticText22;
+		wxColourPickerCtrl* m_colourPickerLight5;
+		wxSpinCtrl* m_spinCtrlLightElevation5;
+		wxSpinCtrl* m_spinCtrlLightAzimuth5;
+		wxStaticText* m_staticText23;
+		wxColourPickerCtrl* m_colourPickerLight2;
+		wxSpinCtrl* m_spinCtrlLightElevation2;
+		wxSpinCtrl* m_spinCtrlLightAzimuth2;
+		wxStaticText* m_staticText24;
+		wxColourPickerCtrl* m_colourPickerLight6;
+		wxSpinCtrl* m_spinCtrlLightElevation6;
+		wxSpinCtrl* m_spinCtrlLightAzimuth6;
+		wxStaticText* m_staticText25;
+		wxColourPickerCtrl* m_colourPickerLight3;
+		wxSpinCtrl* m_spinCtrlLightElevation3;
+		wxSpinCtrl* m_spinCtrlLightAzimuth3;
+		wxStaticText* m_staticText26;
+		wxColourPickerCtrl* m_colourPickerLight7;
+		wxSpinCtrl* m_spinCtrlLightElevation7;
+		wxSpinCtrl* m_spinCtrlLightAzimuth7;
+		wxStaticText* m_staticText171;
+		wxColourPickerCtrl* m_colourPickerLight4;
+		wxSpinCtrl* m_spinCtrlLightElevation4;
+		wxSpinCtrl* m_spinCtrlLightAzimuth4;
+		wxStaticText* m_staticText181;
+		wxColourPickerCtrl* m_colourPickerLight8;
+		wxSpinCtrl* m_spinCtrlLightElevation8;
+		wxSpinCtrl* m_spinCtrlLightAzimuth8;
 		wxStaticLine* m_staticlineH;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

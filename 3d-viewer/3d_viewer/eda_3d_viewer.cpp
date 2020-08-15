@@ -404,12 +404,13 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
     COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
 
-    auto set_color = [] ( const COLOR4D& aColor, SFVEC3D& aTarget )
-    {
-        aTarget.r = aColor.r;
-        aTarget.g = aColor.g;
-        aTarget.b = aColor.b;
-    };
+    auto set_color =
+            [] ( const COLOR4D& aColor, SFVEC3D& aTarget )
+            {
+                aTarget.r = aColor.r;
+                aTarget.g = aColor.g;
+                aTarget.b = aColor.b;
+            };
 
     set_color( colors->GetColor( LAYER_3D_BACKGROUND_BOTTOM ), m_boardAdapter.m_BgColorBot );
     set_color( colors->GetColor( LAYER_3D_BACKGROUND_TOP ),    m_boardAdapter.m_BgColorTop );
@@ -423,6 +424,26 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
     if( cfg )
     {
+        m_boardAdapter.m_raytrace_lightColorCamera = m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorCamera );
+        m_boardAdapter.m_raytrace_lightColorTop = m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorTop );
+        m_boardAdapter.m_raytrace_lightColorBottom = m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorBottom );
+
+        m_boardAdapter.m_raytrace_lightColor.resize( cfg->m_Render.raytrace_lightColor.size() );
+        m_boardAdapter.m_raytrace_lightSphericalCoords.resize( cfg->m_Render.raytrace_lightColor.size() );
+
+        for( size_t i = 0; i < cfg->m_Render.raytrace_lightColor.size(); ++i )
+        {
+            m_boardAdapter.m_raytrace_lightColor[i] = m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColor[i] );
+
+            SFVEC2F sphericalCoord = SFVEC2F( ( cfg->m_Render.raytrace_lightElevation[i] + 90.0f ) / 180.0f,
+                                                cfg->m_Render.raytrace_lightAzimuth[i] / 180.0f );
+
+            sphericalCoord.x = glm::clamp( sphericalCoord.x, 0.0f, 1.0f );
+            sphericalCoord.y = glm::clamp( sphericalCoord.y, 0.0f, 2.0f );
+
+            m_boardAdapter.m_raytrace_lightSphericalCoords[i] = sphericalCoord;
+        }
+
 #define TRANSFER_SETTING( flag, field ) m_boardAdapter.SetFlag( flag, cfg->m_Render.field )
 
         TRANSFER_SETTING( FL_USE_REALISTIC_MODE,      realistic );
@@ -494,10 +515,11 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
     COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
 
-    auto save_color = [colors] ( SFVEC3D& aSource, LAYER_3D_ID aTarget )
-    {
-        colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b, 1.0 ) );
-    };
+    auto save_color =
+            [colors] ( SFVEC3D& aSource, LAYER_3D_ID aTarget )
+            {
+                colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b, 1.0 ) );
+            };
 
     save_color( m_boardAdapter.m_BgColorBot,         LAYER_3D_BACKGROUND_BOTTOM );
     save_color( m_boardAdapter.m_BgColorTop,         LAYER_3D_BACKGROUND_TOP );
@@ -514,6 +536,26 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
     if( cfg )
     {
+
+        auto save_color =
+                [] ( const SFVEC3F& aSource, COLOR4D& aTarget )
+                {
+                    aTarget = COLOR4D( aSource.r, aSource.g, aSource.b, 1.0 );
+                };
+
+        save_color( m_boardAdapter.m_raytrace_lightColorCamera, cfg->m_Render.raytrace_lightColorCamera );
+
+        save_color( m_boardAdapter.m_raytrace_lightColorTop, cfg->m_Render.raytrace_lightColorTop );
+        save_color( m_boardAdapter.m_raytrace_lightColorBottom, cfg->m_Render.raytrace_lightColorBottom );
+
+        for( size_t i = 0; i < cfg->m_Render.raytrace_lightColor.size(); ++i )
+        {
+            save_color( m_boardAdapter.m_raytrace_lightColor[i], cfg->m_Render.raytrace_lightColor[i] );
+
+            cfg->m_Render.raytrace_lightElevation[i] = (int)( m_boardAdapter.m_raytrace_lightSphericalCoords[i].x * 180.0f - 90.0f );
+            cfg->m_Render.raytrace_lightAzimuth[i] = (int)( m_boardAdapter.m_raytrace_lightSphericalCoords[i].y * 180.0f );
+        }
+
 #define TRANSFER_SETTING( field, flag ) cfg->m_Render.field = m_boardAdapter.GetFlag( flag )
 
         cfg->m_Render.engine         = static_cast<int>( m_boardAdapter.RenderEngineGet() );

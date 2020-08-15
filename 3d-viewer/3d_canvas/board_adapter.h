@@ -646,6 +646,14 @@ public:
     SFVEC3D m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
     SFVEC3D m_CopperColor;        ///< in realistic mode: copper color
 
+    // Raytracing light colors
+
+    SFVEC3F m_raytrace_lightColorCamera;
+    SFVEC3F m_raytrace_lightColorTop;
+    SFVEC3F m_raytrace_lightColorBottom;
+
+    std::vector<SFVEC3F> m_raytrace_lightColor;
+    std::vector<SFVEC2F> m_raytrace_lightSphericalCoords;
 
 private:
 

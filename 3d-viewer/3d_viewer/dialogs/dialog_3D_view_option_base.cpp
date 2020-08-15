@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jul 15 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 13 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -100,7 +100,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer3DVisibility->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
-	fgSizer3DVisibility->Add( 0, 0, 1, wxRIGHT|wxLEFT, 10 );
+	fgSizer3DVisibility->Add( 0, 0, 1, wxLEFT|wxRIGHT, 10 );
 
 	m_bitmap3DshapesTH = new wxStaticBitmap( sbSizer3DVis->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3DVisibility->Add( m_bitmap3DshapesTH, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
@@ -391,16 +391,17 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerRaytracing;
 	bSizerRaytracing = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerRaytracingRenderOptions;
 	sbSizerRaytracingRenderOptions = new wxStaticBoxSizer( new wxStaticBox( m_panelRaytracing, wxID_ANY, _("Raytracing Render Options") ), wxVERTICAL );
 
+	sbSizerRaytracingRenderOptions->SetMinSize( wxSize( -1,32 ) );
 	wxFlexGridSizer* fgSizer9;
 	fgSizer9 = new wxFlexGridSizer( 4, 4, 0, 0 );
 	fgSizer9->SetFlexibleDirection( wxBOTH );
-	fgSizer9->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	fgSizer9->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
 
 	fgSizer9->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
@@ -452,13 +453,222 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer9->Add( m_checkBoxRaytracing_postProcessing, 0, wxALL, 5 );
 
 
-	sbSizerRaytracingRenderOptions->Add( fgSizer9, 1, wxALL|wxEXPAND, 5 );
+	sbSizerRaytracingRenderOptions->Add( fgSizer9, 1, wxALL, 5 );
 
 
-	bSizer8->Add( sbSizerRaytracingRenderOptions, 1, wxALL|wxEXPAND, 5 );
+	bSizer12->Add( sbSizerRaytracingRenderOptions, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizerRaytracingLightConfiguration;
+	sbSizerRaytracingLightConfiguration = new wxStaticBoxSizer( new wxStaticBox( m_panelRaytracing, wxID_ANY, _("Lights configuration") ), wxVERTICAL );
+
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
 
 
-	bSizerRaytracing->Add( bSizer8, 1, wxALL|wxEXPAND, 5 );
+	bSizer11->Add( 0, 0, 1, 0, 5 );
+
+	m_staticText17 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Ambient Camera Light"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText17->Wrap( -1 );
+	bSizer11->Add( m_staticText17, 0, wxALL, 5 );
+
+	m_colourPickerCameraLight = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxColour( 51, 51, 51 ), wxDefaultPosition, wxDefaultSize, wxCLRP_DEFAULT_STYLE );
+	bSizer11->Add( m_colourPickerCameraLight, 0, 0, 5 );
+
+
+	bSizer11->Add( 0, 0, 1, 0, 5 );
+
+
+	sbSizerRaytracingLightConfiguration->Add( bSizer11, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer13;
+	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer13->Add( 0, 0, 1, 0, 5 );
+
+	m_staticText5 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Top Light"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	bSizer13->Add( m_staticText5, 0, wxALL, 5 );
+
+	m_colourPickerTopLight = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxColour( 63, 63, 63 ), wxDefaultPosition, wxDefaultSize, wxCLRP_DEFAULT_STYLE );
+	bSizer13->Add( m_colourPickerTopLight, 0, 0, 5 );
+
+
+	bSizer13->Add( 0, 0, 1, 0, 5 );
+
+	m_staticText6 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Bottom Light"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	bSizer13->Add( m_staticText6, 0, wxALL, 5 );
+
+	m_colourPickerBottomLight = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxColour( 63, 63, 63 ), wxDefaultPosition, wxDefaultSize, wxCLRP_DEFAULT_STYLE );
+	bSizer13->Add( m_colourPickerBottomLight, 0, 0, 5 );
+
+
+	bSizer13->Add( 0, 0, 1, 0, 5 );
+
+
+	sbSizerRaytracingLightConfiguration->Add( bSizer13, 1, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizer11;
+	fgSizer11 = new wxFlexGridSizer( 0, 9, 0, 0 );
+	fgSizer11->SetFlexibleDirection( wxBOTH );
+	fgSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	fgSizer11->Add( 0, 0, 1, 0, 5 );
+
+
+	fgSizer11->Add( 0, 0, 1, 0, 5 );
+
+	m_staticText20 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Elevation °"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText20->Wrap( -1 );
+	fgSizer11->Add( m_staticText20, 0, wxALL, 5 );
+
+	m_staticText18 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Azimuth °"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18->Wrap( -1 );
+	fgSizer11->Add( m_staticText18, 0, wxALL, 5 );
+
+
+	fgSizer11->Add( 0, 0, 1, 0, 5 );
+
+
+	fgSizer11->Add( 0, 0, 1, 0, 5 );
+
+
+	fgSizer11->Add( 0, 0, 1, 0, 5 );
+
+	m_staticText27 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Elevation °"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText27->Wrap( -1 );
+	fgSizer11->Add( m_staticText27, 0, wxALL, 5 );
+
+	m_staticText28 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Azimuth °"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText28->Wrap( -1 );
+	fgSizer11->Add( m_staticText28, 0, wxALL, 5 );
+
+	m_staticText21 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21->Wrap( -1 );
+	fgSizer11->Add( m_staticText21, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_colourPickerLight1 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
+	fgSizer11->Add( m_colourPickerLight1, 0, wxALL, 5 );
+
+	m_spinCtrlLightElevation1 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
+	fgSizer11->Add( m_spinCtrlLightElevation1, 0, wxALL, 1 );
+
+	m_spinCtrlLightAzimuth1 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
+	fgSizer11->Add( m_spinCtrlLightAzimuth1, 0, wxALL, 1 );
+
+
+	fgSizer11->Add( 0, 0, 1, wxALL, 5 );
+
+	m_staticText22 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("5"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText22->Wrap( -1 );
+	fgSizer11->Add( m_staticText22, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_colourPickerLight5 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
+	fgSizer11->Add( m_colourPickerLight5, 0, wxALL, 5 );
+
+	m_spinCtrlLightElevation5 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 10, 0 );
+	fgSizer11->Add( m_spinCtrlLightElevation5, 0, wxALL, 1 );
+
+	m_spinCtrlLightAzimuth5 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
+	fgSizer11->Add( m_spinCtrlLightAzimuth5, 0, wxALL, 1 );
+
+	m_staticText23 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText23->Wrap( -1 );
+	fgSizer11->Add( m_staticText23, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_colourPickerLight2 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
+	fgSizer11->Add( m_colourPickerLight2, 0, wxALL, 5 );
+
+	m_spinCtrlLightElevation2 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
+	fgSizer11->Add( m_spinCtrlLightElevation2, 0, wxALL, 1 );
+
+	m_spinCtrlLightAzimuth2 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
+	fgSizer11->Add( m_spinCtrlLightAzimuth2, 0, wxALL, 1 );
+
+
+	fgSizer11->Add( 0, 0, 1, wxALL, 5 );
+
+	m_staticText24 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("6"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText24->Wrap( -1 );
+	fgSizer11->Add( m_staticText24, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_colourPickerLight6 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
+	fgSizer11->Add( m_colourPickerLight6, 0, wxALL, 5 );
+
+	m_spinCtrlLightElevation6 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 10, 0 );
+	fgSizer11->Add( m_spinCtrlLightElevation6, 0, wxALL, 1 );
+
+	m_spinCtrlLightAzimuth6 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
+	fgSizer11->Add( m_spinCtrlLightAzimuth6, 0, wxALL, 1 );
+
+	m_staticText25 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("3"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText25->Wrap( -1 );
+	fgSizer11->Add( m_staticText25, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_colourPickerLight3 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
+	fgSizer11->Add( m_colourPickerLight3, 0, wxALL, 5 );
+
+	m_spinCtrlLightElevation3 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
+	fgSizer11->Add( m_spinCtrlLightElevation3, 0, wxALL, 1 );
+
+	m_spinCtrlLightAzimuth3 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
+	fgSizer11->Add( m_spinCtrlLightAzimuth3, 0, wxALL, 1 );
+
+
+	fgSizer11->Add( 0, 0, 1, wxALL, 5 );
+
+	m_staticText26 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("7"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26->Wrap( -1 );
+	fgSizer11->Add( m_staticText26, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_colourPickerLight7 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
+	fgSizer11->Add( m_colourPickerLight7, 0, wxALL, 5 );
+
+	m_spinCtrlLightElevation7 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 10, 0 );
+	fgSizer11->Add( m_spinCtrlLightElevation7, 0, wxALL, 1 );
+
+	m_spinCtrlLightAzimuth7 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
+	fgSizer11->Add( m_spinCtrlLightAzimuth7, 0, wxALL, 1 );
+
+	m_staticText171 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("4"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText171->Wrap( -1 );
+	fgSizer11->Add( m_staticText171, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_colourPickerLight4 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
+	fgSizer11->Add( m_colourPickerLight4, 0, wxALL, 5 );
+
+	m_spinCtrlLightElevation4 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
+	fgSizer11->Add( m_spinCtrlLightElevation4, 0, wxALL, 1 );
+
+	m_spinCtrlLightAzimuth4 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
+	fgSizer11->Add( m_spinCtrlLightAzimuth4, 0, wxALL, 1 );
+
+
+	fgSizer11->Add( 0, 0, 1, wxALL|wxEXPAND, 5 );
+
+	m_staticText181 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("8"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText181->Wrap( -1 );
+	fgSizer11->Add( m_staticText181, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_colourPickerLight8 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
+	fgSizer11->Add( m_colourPickerLight8, 0, wxALL, 5 );
+
+	m_spinCtrlLightElevation8 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 10, 0 );
+	fgSizer11->Add( m_spinCtrlLightElevation8, 0, wxALL, 1 );
+
+	m_spinCtrlLightAzimuth8 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
+	fgSizer11->Add( m_spinCtrlLightAzimuth8, 0, wxALL, 1 );
+
+
+	sbSizerRaytracingLightConfiguration->Add( fgSizer11, 0, wxALL|wxEXPAND, 5 );
+
+
+	bSizer12->Add( sbSizerRaytracingLightConfiguration, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizerRaytracing->Add( bSizer12, 1, wxALL|wxEXPAND, 5 );
 
 
 	m_panelRaytracing->SetSizer( bSizerRaytracing );

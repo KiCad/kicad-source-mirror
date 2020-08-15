@@ -941,67 +941,44 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     // /////////////////////////////////////////////////////////////////////////
     m_lights.Clear();
 
-    // This will work as the front camera light.
-    const float light_camera_intensity = 0.20f;
-    const float light_top_bottom = 0.25f;
-    const float light_directional_intensity = ( 1.0f - ( light_camera_intensity +
-                                                         light_top_bottom * 0.5f ) ) / 4.0f;
+    auto IsColorZero = [] ( const SFVEC3F& aSource )
+    {
+        return ( ( aSource.r < ( 1.0f / 255.0f ) ) &&
+                 ( aSource.g < ( 1.0f / 255.0f ) ) &&
+                 ( aSource.b < ( 1.0f / 255.0f ) ) );
+    };
 
     m_camera_light = new CDIRECTIONALLIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                                            SFVEC3F( light_camera_intensity ) );
+                                            m_boardAdapter.m_raytrace_lightColorCamera );
     m_camera_light->SetCastShadows( false );
-    m_lights.Add( m_camera_light );
 
-    // Option 1 - using Point Lights
+    if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorCamera ) )
+        m_lights.Add( m_camera_light );
 
-    const SFVEC3F &boarCenter = m_boardAdapter.GetBBox3DU().GetCenter();
+    const SFVEC3F& boardCenter = m_boardAdapter.GetBBox3DU().GetCenter();
 
-    m_lights.Add( new CPOINTLIGHT( SFVEC3F( boarCenter.x, boarCenter.y, +RANGE_SCALE_3D * 2.0f ),
-                                   SFVEC3F( light_top_bottom ) ) );
+    if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorTop ) )
+        m_lights.Add( new CPOINTLIGHT( SFVEC3F( boardCenter.x, boardCenter.y, +RANGE_SCALE_3D * 2.0f ),
+                                       m_boardAdapter.m_raytrace_lightColorTop ) );
 
-    m_lights.Add( new CPOINTLIGHT( SFVEC3F( boarCenter.x, boarCenter.y, -RANGE_SCALE_3D * 2.0f ),
-                                   SFVEC3F( light_top_bottom ) ) );
+    if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorBottom ) )
+        m_lights.Add( new CPOINTLIGHT( SFVEC3F( boardCenter.x, boardCenter.y, -RANGE_SCALE_3D * 2.0f ),
+                                       m_boardAdapter.m_raytrace_lightColorBottom ) );
 
+    wxASSERT( m_boardAdapter.m_raytrace_lightColor.size()
+              == m_boardAdapter.m_raytrace_lightSphericalCoords.size() );
 
-    // http://www.flashandmath.com/mathlets/multicalc/coords/shilmay23fin.html
+    for( size_t i = 0; i < m_boardAdapter.m_raytrace_lightColor.size(); ++i )
+    {
+        if( !IsColorZero( m_boardAdapter.m_raytrace_lightColor[i] ) )
+        {
+            const SFVEC2F sc = m_boardAdapter.m_raytrace_lightSphericalCoords[i];
 
-    // Option 2 - Top/Bottom direction lights
-    /*
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 0.03f,
-                                                               glm::pi<float>() * 0.25f ),
-                                         SFVEC3F( light_top_bottom ) ) );
-
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 0.97f,
-                                                               glm::pi<float>() * 1.25f ),
-                                         SFVEC3F( light_top_bottom ) ) );
-    */
-
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
-                                                               glm::pi<float>() * 1 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
-                                                               glm::pi<float>() * 3 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
-                                                               glm::pi<float>() * 5 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
-                                                               glm::pi<float>() * 7 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-
-
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
-                                                               glm::pi<float>() * 1 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
-                                                               glm::pi<float>() * 3 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
-                                                               glm::pi<float>() * 5 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
-                                                               glm::pi<float>() * 7 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
+            m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * sc.x,
+                                                                       glm::pi<float>() * sc.y ),
+                                                 m_boardAdapter.m_raytrace_lightColor[i] ) );
+        }
+    }
 
 
     // Create an accelerator
@@ -1458,30 +1435,8 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
 
                     CBLINN_PHONG_MATERIAL &blinnMaterial = (*materialVector)[imat];
 
-                    SFVEC3F ambient;
-
-                    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
-                    {
-                        // apply a gain to the (dark) ambient colors
-
-                        // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoKHgrMC4yMCleKDEvMi4wMCkpLTAuMzUiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjAsImVxIjoieCIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0xLjI0OTUwNTMzOTIyMzYyIiwiMS42Nzc4MzQ0MTg1NjcxODQzIiwiLTAuNDM1NTA0NjQyODEwOTMwMjYiLCIxLjM2NTkzNTIwODEzNzI1OCJdLCJzaXplIjpbNjQ5LDM5OV19XQ--
-                        // ambient = glm::max( (glm::pow((material.m_Ambient + 0.20f), SFVEC3F(1.0f / 2.00f)) - SFVEC3F(0.35f)), material.m_Ambient );
-
-                        // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoKHgrMC4yMCleKDEvMS41OCkpLTAuMzUiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjAsImVxIjoieCIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0xLjI0OTUwNTMzOTIyMzYyIiwiMS42Nzc4MzQ0MTg1NjcxODQzIiwiLTAuNDM1NTA0NjQyODEwOTMwMjYiLCIxLjM2NTkzNTIwODEzNzI1OCJdLCJzaXplIjpbNjQ5LDM5OV19XQ--
-                        //ambient = glm::max( (glm::pow((material.m_Ambient + 0.20f), SFVEC3F(1.0f / 1.58f)) - SFVEC3F(0.35f)), material.m_Ambient );
-
-                        // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoKHgrMC4yMCleKDEvMS41NCkpLTAuMzQiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjAsImVxIjoieCIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0yLjcyMTA5NTg0MjA1MDYwNSIsIjEuODUyODcyNTI5NDk3NTIyMyIsIi0xLjQyMTM3NjAxOTkyOTA4MDYiLCIxLjM5MzM3Mzc0NzE3NzQ2MTIiXSwic2l6ZSI6WzY0OSwzOTldfV0-
-                        ambient = ConvertSRGBToLinear(
-                                glm::pow((material.m_Ambient + 0.30f), SFVEC3F(1.0f / 1.54f)) - SFVEC3F(0.34f) );
-                    }
-                    else
-                    {
-                        ambient = ConvertSRGBToLinear( material.m_Ambient );
-                    }
-
-
                     blinnMaterial = CBLINN_PHONG_MATERIAL(
-                                              ambient,
+                                              ConvertSRGBToLinear( material.m_Ambient ),
                                               ConvertSRGBToLinear( material.m_Emissive ),
                                               ConvertSRGBToLinear( material.m_Specular ),
                                               material.m_Shininess * 180.0f,

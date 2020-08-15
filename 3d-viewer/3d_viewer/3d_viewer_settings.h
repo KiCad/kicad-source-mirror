@@ -23,7 +23,7 @@
 
 #include <settings/app_settings.h>
 #include <settings/parameters.h>
-
+#include <plugins/3dapi/xv3d_types.h>
 
 class EDA_3D_VIEWER_SETTINGS : public APP_SETTINGS_BASE
 {
@@ -48,6 +48,14 @@ public:
         bool raytrace_reflections;
         bool raytrace_refractions;
         bool raytrace_shadows;
+
+        KIGFX::COLOR4D raytrace_lightColorCamera;
+        KIGFX::COLOR4D raytrace_lightColorTop;
+        KIGFX::COLOR4D raytrace_lightColorBottom;
+        std::vector<KIGFX::COLOR4D> raytrace_lightColor;
+        std::vector<int> raytrace_lightElevation;   // -90 .. 90
+        std::vector<int> raytrace_lightAzimuth;     // 0 .. 359
+
         bool realistic;
         bool show_adhesive;
         bool show_axis;

@@ -1671,7 +1671,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
     const SFVEC3F diffuseColorObj = aHitInfo.pHitObject->GetDiffuseColor( aHitInfo );
 
-    SFVEC3F outColor = objMaterial->GetEmissiveColor();
+    SFVEC3F outColor = objMaterial->GetEmissiveColor() + objMaterial->GetAmbientColor();
 
     const LIST_LIGHT &lightList = m_lights.GetList();
 
@@ -1771,37 +1771,13 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                 shadow_att_factor_sum += shadow_att_factor_light;
             }
 
-            if( !m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
-            {
-                outColor += objMaterial->Shade( aRay,
-                                                aHitInfo,
-                                                NdotL,
-                                                diffuseColorObj,
-                                                vectorToLight,
-                                                colorOfLight,
-                                                shadow_att_factor_light );
-            }
-            else
-            {
-                // This is a render hack in order to compensate for the lack of
-                // ambient and too much darkness when using post process shader
-                // It will calculate as it was not in shadow
-                outColor += objMaterial->Shade( aRay,
-                                                aHitInfo,
-                                                NdotL,
-                                                diffuseColorObj,
-                                                vectorToLight,
-                                                colorOfLight,
-                                                // The sampled point will be darkshaded by the post
-                                                // processing, so here it compensates to not shadow
-                                                // so much
-                                                glm::mix( 0.75f, 1.0f, shadow_att_factor_light )
-                                                );
-            }
-        }
-        else
-        {
-            outColor += objMaterial->GetAmbientColor();
+            outColor += objMaterial->Shade( aRay,
+                                            aHitInfo,
+                                            NdotL,
+                                            diffuseColorObj,
+                                            vectorToLight,
+                                            colorOfLight,
+                                            shadow_att_factor_light );
         }
 
         // Only use the headlight for preview

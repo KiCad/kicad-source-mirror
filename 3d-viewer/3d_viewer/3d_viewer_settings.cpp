@@ -88,6 +88,52 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "render.raytrace_shadows",
             &m_Render.raytrace_shadows, true ) );
 
+    m_params.emplace_back( new PARAM<COLOR4D>( "render.raytrace_lightColorCamera",
+                                               &m_Render.raytrace_lightColorCamera,
+                                               COLOR4D( 0.2, 0.2, 0.2, 1.0 ) ) );
+
+    m_params.emplace_back( new PARAM<COLOR4D>( "render.raytrace_lightColorTop",
+                                               &m_Render.raytrace_lightColorTop,
+                                               COLOR4D( 0.247, 0.247, 0.247, 1.0 ) ) );
+
+    m_params.emplace_back( new PARAM<COLOR4D>( "render.raytrace_lightColorBottom",
+                                               &m_Render.raytrace_lightColorBottom,
+                                               COLOR4D( 0.247, 0.247, 0.247, 1.0 ) ) );
+
+    std::vector<COLOR4D> default_colors =
+    {
+            COLOR4D( 0.168, 0.168, 0.168, 1.0 ),
+            COLOR4D( 0.168, 0.168, 0.168, 1.0 ),
+            COLOR4D( 0.168, 0.168, 0.168, 1.0 ),
+            COLOR4D( 0.168, 0.168, 0.168, 1.0 ),
+            COLOR4D( 0.168, 0.168, 0.168, 1.0 ),
+            COLOR4D( 0.168, 0.168, 0.168, 1.0 ),
+            COLOR4D( 0.168, 0.168, 0.168, 1.0 ),
+            COLOR4D( 0.168, 0.168, 0.168, 1.0 )
+    };
+
+    m_params.emplace_back( new PARAM_LIST<COLOR4D>( "render.raytrace_lightColor",
+                                                    &m_Render.raytrace_lightColor,
+                                                    default_colors ) );
+
+    std::vector<int> default_elevation =
+    {
+        67,  67,  67,  67, -67, -67, -67, -67,
+    };
+
+    m_params.emplace_back( new PARAM_LIST<int>( "render.raytrace_lightElevation",
+                                                &m_Render.raytrace_lightElevation,
+                                                default_elevation ) );
+
+    std::vector<int> default_azimuth =
+    {
+        45, 135, 225, 315, 45, 135, 225, 315,
+    };
+
+    m_params.emplace_back( new PARAM_LIST<int>( "render.raytrace_lightAzimuth",
+                                                &m_Render.raytrace_lightAzimuth,
+                                                default_azimuth ) );
+
     m_params.emplace_back( new PARAM<bool>( "render.realistic", &m_Render.realistic, true ) );
     m_params.emplace_back(
             new PARAM<bool>( "render.show_adhesive", &m_Render.show_adhesive, true ) );
