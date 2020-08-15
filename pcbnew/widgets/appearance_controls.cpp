@@ -123,9 +123,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
             {
                 PCB_DISPLAY_OPTIONS opts   = m_frame->GetDisplayOptions();
                 opts.m_ContrastModeDisplay = aMode;
-                // TODO(JE) why both?
+
                 m_frame->SetDisplayOptions( opts );
-                m_frame->GetCanvas()->GetView()->UpdateDisplayOptions( opts );
                 m_frame->GetCanvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
                 m_frame->GetCanvas()->Refresh();
 
@@ -1042,7 +1041,8 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 if( aSetting->can_control_opacity )
                 {
                     wxSlider* slider = new wxSlider( m_windowObjects, wxID_ANY, 100, 0, 100,
-                            wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+                                                     wxDefaultPosition, wxDefaultSize,
+                                                     wxSL_HORIZONTAL );
 #ifdef __WXMAC__
                     slider->SetMinSize( wxSize( 80, 22 ) );
 #else
