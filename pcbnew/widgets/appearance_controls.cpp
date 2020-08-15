@@ -1214,7 +1214,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                            KiBitmap( visibility_off_xpm ), visible );
 
                 wxString tip;
-                tip.Printf( _( "Show or hide %s" ), aNet->GetShortNetname() );
+                tip.Printf( _( "Show or hide ratsnest for %s" ), aNet->GetShortNetname() );
                 setting->ctl_visibility->SetToolTip( tip );
 
                 setting->ctl_text = new wxStaticText( setting->ctl_panel, id,
@@ -1311,7 +1311,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                            KiBitmap( visibility_off_xpm ), true );
 
                 wxString tip;
-                tip.Printf( _( "Show or hide %s" ), name );
+                tip.Printf( _( "Show or hide ratsnest for nets in %s" ), name );
                 setting->ctl_visibility->SetToolTip( tip );
 
                 setting->ctl_text = new wxStaticText( setting->ctl_panel, aId, name );
