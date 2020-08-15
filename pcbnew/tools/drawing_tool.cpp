@@ -654,7 +654,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->AdjustDimensionDetails( boardSettings.m_DimensionPrecision );
 
                 preview.Add( dimension );
-                frame()->SetMsgPanel( dimension );
 
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
@@ -724,10 +723,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
             // Show a preview of the item
             m_view->Update( &preview );
-            if( step )
-                frame()->SetMsgPanel( dimension );
-            else
-                frame()->SetMsgPanel( board() );
         }
         else
             evt->SetPassEvent();
