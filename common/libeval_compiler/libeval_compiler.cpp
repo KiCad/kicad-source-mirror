@@ -372,10 +372,10 @@ int COMPILER::resolveUnits()
 
 bool COMPILER::lexDefault( T_TOKEN& aToken )
 {
-    T_TOKEN     retval;
+    T_TOKEN  retval;
     wxString current;
-    int         convertFrom;
-    wxString    msg;
+    int      convertFrom;
+    wxString msg;
 
     retval.value.str = nullptr;
     retval.token = G_ENDS;
@@ -396,8 +396,8 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
     auto extractNumber =
             [&]()
             {
-                bool haveSeparator = false;
-                wxUniChar ch             = m_tokenizer.GetChar();
+                bool      haveSeparator = false;
+                wxUniChar ch = m_tokenizer.GetChar();
 
                 do
                 {
@@ -865,7 +865,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             }
             else
             {
-                value = wxAtof( *node->value.str );
+                value = DoubleValueFromString( EDA_UNITS::MILLIMETRES, *node->value.str );
             }
 
             node->SetUop( TR_UOP_PUSH_VALUE, value );

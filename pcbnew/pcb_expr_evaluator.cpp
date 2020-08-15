@@ -361,9 +361,9 @@ public:
 
         switch( unitId )
         {
-        case 0:  return Mils2iu( v );
-        case 1:  return Millimeter2iu( v );
-        case 2:  return Mils2iu( v * 1000.0 );
+        case 0:  return DoubleValueFromString( EDA_UNITS::INCHES, aString, true );
+        case 1:  return DoubleValueFromString( EDA_UNITS::MILLIMETRES, aString );
+        case 2:  return DoubleValueFromString( EDA_UNITS::INCHES, aString, false );
         default: return v;
         }
     };
