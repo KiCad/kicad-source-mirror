@@ -480,7 +480,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             text->SetPosition( (wxPoint) cursorPos );
             selection().SetReferencePoint( cursorPos );
             m_view->Update( &selection() );
-            frame()->SetMsgPanel( text );
         }
 
         else if( text && evt->IsAction( &PCB_ACTIONS::properties ) )
