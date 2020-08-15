@@ -196,8 +196,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 updateView( item );
             }
 
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-            m_frame->UpdateMsgPanel();
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
         }
         //------------------------------------------------------------------------
         // Handle cancel
