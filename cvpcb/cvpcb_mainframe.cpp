@@ -57,16 +57,17 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
                   wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
 {
-    m_compListBox           = NULL;
-    m_footprintListBox      = NULL;
-    m_libListBox            = NULL;
-    m_mainToolBar           = NULL;
-    m_modified              = false;
-    m_skipComponentSelect   = false;
-    m_filteringOptions      = FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST;
-    m_tcFilterString        = NULL;
-    m_FootprintsList        = FOOTPRINT_LIST::GetInstance( Kiway() );
-    m_initialized           = false;
+    m_compListBox         = NULL;
+    m_footprintListBox    = NULL;
+    m_libListBox          = NULL;
+    m_mainToolBar         = NULL;
+    m_modified            = false;
+    m_skipComponentSelect = false;
+    m_filteringOptions    = FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST;
+    m_tcFilterString      = NULL;
+    m_FootprintsList      = FOOTPRINT_LIST::GetInstance( Kiway() );
+    m_initialized         = false;
+    m_AboutTitle          = "CvPcb";
 
     // Give an icon
     wxIcon icon;
