@@ -77,9 +77,9 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxBoxSizer* m_netclassOuterSizer;
 		wxCollapsiblePane* m_paneNetDisplay;
 		wxStaticText* m_staticText131;
-		wxRadioButton* m_rbNetColorOff;
-		wxRadioButton* m_rbNetColorRatsnest;
 		wxRadioButton* m_rbNetColorAll;
+		wxRadioButton* m_rbNetColorRatsnest;
+		wxRadioButton* m_rbNetColorOff;
 		wxChoice* m_cbLayerPresets;
 		wxBitmapButton* m_btnDeletePreset;
 
@@ -94,7 +94,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 
 	public:
 
-		APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 275,762 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~APPEARANCE_CONTROLS_BASE();
 
 		void m_netsTabSplitterOnIdle( wxIdleEvent& )

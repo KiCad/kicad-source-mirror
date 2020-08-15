@@ -250,11 +250,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( m_appearancePanel,
                       EDA_PANE().Name( "LayersManager" ).Right().Layer( 4 )
-                      .Caption( _( "Appearance" ) ).MinSize( 150, -1 )
-                      .BestSize( m_appearancePanel->GetBestSize() ) );
+                      .Caption( _( "Appearance" ) ).PaneBorder( false )
+                      .MinSize( 160, -1 ).BestSize( m_appearancePanel->GetBestSize() ) );
 
     m_auimgr.AddPane( m_selectionFilterPanel,
-                      EDA_PANE().Palette().Name( "SelectionFilter" ).Right().Layer( 4 )
+                      EDA_PANE().Name( "SelectionFilter" ).Right().Layer( 4 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false ).Position( 2 )
                       .MinSize( 160, -1 ).BestSize( m_selectionFilterPanel->GetBestSize() ) );
 
