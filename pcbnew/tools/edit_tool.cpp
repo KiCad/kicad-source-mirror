@@ -436,8 +436,6 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
                         static_cast<BOARD_ITEM*>( item )->Move( movement );
                 }
-
-                frame()->UpdateMsgPanel();
             }
             else if( !m_dragging ) // Prepare to start dragging
             {
@@ -548,9 +546,11 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
 
                 prevPos = m_cursor;
                 controls->SetAutoPan( true );
+
+                // only post event while we arent dragging
+                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             }
 
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false, new VECTOR2I( movement ) );
         }
 
