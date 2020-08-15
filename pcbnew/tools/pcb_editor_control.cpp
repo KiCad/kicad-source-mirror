@@ -1102,7 +1102,7 @@ int PCB_EDITOR_CONTROL::GroupMergeSelected( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "GroupMerge" ) );
+    commit.Push( "GroupMerge" );
     wxString check = board->GroupsSanityCheck();
     wxCHECK_MSG( check == wxEmptyString, 0, _( "Group merge resulted in inconsistent state: " ) + check );
 
@@ -1145,7 +1145,7 @@ int PCB_EDITOR_CONTROL::UngroupSelected( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "GroupUngroup" ) );
+    commit.Push( "GroupUngroup" );
     wxString check = board->GroupsSanityCheck();
     wxCHECK_MSG( check == wxEmptyString, 0, _( "Group merge resulted in inconsistent state: " ) + check );
 
@@ -1180,7 +1180,7 @@ int PCB_EDITOR_CONTROL::GroupRemoveItemsSelected( const TOOL_EVENT& aEvent )
 
     board->GroupRemoveItems( selection, &commit );
 
-    commit.Push( _( "GroupRemoveItems" ) );
+    commit.Push( "GroupRemoveItems" );
     wxString check = board->GroupsSanityCheck();
     wxCHECK_MSG( check == wxEmptyString, 0, _( "Group removeItems resulted in inconsistent state: " ) + check );
 
@@ -1212,7 +1212,7 @@ int PCB_EDITOR_CONTROL::GroupFlattenSelected( const TOOL_EVENT& aEvent )
     {
         BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
         wxCHECK_MSG( board_item->Type() == PCB_GROUP_T, 0,
-                     _( "Selection for ungroup should only have groups in it - was checked." ) );
+                     "Selection for ungroup should only have groups in it - was checked." );
         std::queue<PCB_GROUP*> groupsToFlatten;
         groupsToFlatten.push( static_cast<PCB_GROUP*>( board_item ) );
         PCB_GROUP* topGroup = groupsToFlatten.front();
@@ -1250,7 +1250,7 @@ int PCB_EDITOR_CONTROL::GroupFlattenSelected( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "GroupFlatten" ) );
+    commit.Push( "GroupFlatten" );
     wxString check = board->GroupsSanityCheck();
     wxCHECK_MSG( check == wxEmptyString, 0, _( "Group flatten resulted in inconsistent state: " ) + check );
 
@@ -1358,7 +1358,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 
             BOARD_COMMIT commit( m_frame );
             commit.Add( target );
-            commit.Push( _( "Place a layer alignment target" ) );
+            commit.Push( "Place a layer alignment target" );
 
             preview.Remove( target );
 
@@ -1475,7 +1475,7 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 
     if( mergeZones( commit, toMerge, merged ) )
     {
-        commit.Push( _( "Merge zones" ) );
+        commit.Push( "Merge zones" );
 
         for( auto item : merged )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, item );

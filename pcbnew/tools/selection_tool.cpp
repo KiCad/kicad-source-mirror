@@ -2010,7 +2010,7 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* 
 
 void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup, bool isChild )
 {
-    wxLogTrace( "GRP", wxString::Format( _( "highlight() of %s %p" ),
+    wxLogTrace( "GRP", wxString::Format( "highlight() of %s %p",
                          aItem->GetSelectMenuText( m_frame->GetUserUnits() ) ), aItem );
     if( aMode == SELECTED )
         aItem->SetSelected();
@@ -2056,7 +2056,7 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION
 
 void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup, bool isChild )
 {
-    wxLogTrace( "GRP", wxString::Format( _( "unhighlight() of %s %p" ),
+    wxLogTrace( "GRP", wxString::Format( "unhighlight() of %s %p",
                                   aItem->GetSelectMenuText( m_frame->GetUserUnits() ) ), aItem );
     if( aMode == SELECTED )
         aItem->ClearSelected();

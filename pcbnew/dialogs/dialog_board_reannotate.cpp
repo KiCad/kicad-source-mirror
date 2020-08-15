@@ -519,10 +519,9 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
     int      i = 1;
     wxString message;
 
-    message.Printf( _( "\n\nThere are %i "
-                       " types of reference designations\n"
+    message.Printf( _( "\n\nThere are %i types of reference designations\n"
                        "**********************************************************\n" ),
-            (int) m_RefDesTypes.size() );
+                    (int) m_RefDesTypes.size() );
 
     for( RefDesTypeStr Type : m_RefDesTypes ) //Show all the types of refdes
         message += Type.RefDesType + ( 0 == ( i++ % 16 ) ? "\n" : " " );
@@ -530,7 +529,7 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
     if( !m_ExcludeArray.empty() )
     {
         message += _( "\nExcluding: " );
-        for( wxString Exclude : m_ExcludeArray ) //Show the refdes we are excluding
+        for( wxString& Exclude : m_ExcludeArray ) //Show the refdes we are excluding
             message += Exclude + " ";
         message += _( " from reannotation\n\n" );
     }
@@ -541,7 +540,7 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
     {
         message += wxString::Format( "%s -> %s  %s %s\n", Change.OldRefDesString, Change.NewRefDes,
                 ActionMessage[Change.Action],
-                ( std::string )( UpdateRefDes != Change.Action ? _( " will be ignored" ) : "" ) );
+                UpdateRefDes != Change.Action ? _( " will be ignored" ) : wxString("") );
     }
 
     ShowReport( message, RPT_SEVERITY_INFO );
