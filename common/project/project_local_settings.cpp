@@ -198,9 +198,7 @@ bool PROJECT_LOCAL_SETTINGS::Migrate()
         ret &= migrateSchema1to2();
 
         if( ret )
-        {
-            ( *this )[PointerFromString( "meta.version" )] = 1;
-        }
+            ( *this )[PointerFromString( "meta.version" )] = 2;
     }
 
     return ret;
