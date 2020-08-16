@@ -174,7 +174,7 @@
                                     <property name="permission">protected</property>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxEXPAND</property>
+                                        <property name="flag">wxEXPAND|wxTOP</property>
                                         <property name="proportion">1</property>
                                         <object class="wxScrolledWindow" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -239,7 +239,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxEXPAND|wxTOP</property>
+                                        <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
                                         <property name="proportion">0</property>
                                         <object class="wxCollapsiblePane" expanded="1">
                                             <property name="BottomDockable">1</property>

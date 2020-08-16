@@ -496,6 +496,11 @@ void APPEARANCE_CONTROLS::rebuildLayers()
     COLOR4D         bgColor    = theme->GetColor( LAYER_PCB_BACKGROUND );
     bool            firstLayer = true;
 
+#ifdef __WXMAC__
+    wxSizerItem* m_windowLayersSizerItem = m_panelLayersSizer->GetItem( m_windowLayers );
+    m_windowLayersSizerItem->SetFlag( m_windowLayersSizerItem->GetFlag() & ~wxTOP );
+#endif
+
     m_layerSettings.clear();
     m_layers_outer_sizer->Clear( true );
 

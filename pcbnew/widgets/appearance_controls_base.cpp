@@ -30,7 +30,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_windowLayers->SetSizer( m_layers_outer_sizer );
 	m_windowLayers->Layout();
 	m_layers_outer_sizer->Fit( m_windowLayers );
-	m_panelLayersSizer->Add( m_windowLayers, 1, wxEXPAND, 5 );
+	m_panelLayersSizer->Add( m_windowLayers, 1, wxEXPAND|wxTOP, 5 );
 
 	m_paneLayerDisplay = new wxCollapsiblePane( m_panelLayers, wxID_ANY, wxT("Layer Display Options"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
 	m_paneLayerDisplay->Collapse( true );
@@ -74,7 +74,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_paneLayerDisplay->GetPane()->SetSizer( bSizer121 );
 	m_paneLayerDisplay->GetPane()->Layout();
 	bSizer121->Fit( m_paneLayerDisplay->GetPane() );
-	m_panelLayersSizer->Add( m_paneLayerDisplay, 0, wxEXPAND|wxTOP, 5 );
+	m_panelLayersSizer->Add( m_paneLayerDisplay, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	m_panelLayers->SetSizer( m_panelLayersSizer );
@@ -253,6 +253,8 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	int m_cbLayerPresetsNChoices = sizeof( m_cbLayerPresetsChoices ) / sizeof( wxString );
 	m_cbLayerPresets = new wxChoice( presetsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbLayerPresetsNChoices, m_cbLayerPresetsChoices, 0 );
 	m_cbLayerPresets->SetSelection( 1 );
+	m_cbLayerPresets->SetToolTip( wxT("Layer presets") );
+
 	presetsSizer->Add( m_cbLayerPresets, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_btnDeletePreset = new wxBitmapButton( presetsSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
