@@ -67,8 +67,6 @@ std::vector<BITMAP_DEF> g_lineStyleIcons;
 wxArrayString           g_lineStyleNames;
 
 
-#define NO_NETCLASS_ASSIGNMENT _( "<unassigned>" )
-
 PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
                                                 const std::vector<wxString>& aCandidateNetNames,
                                                 bool aIsEEschema ) :
@@ -291,7 +289,10 @@ void PANEL_SETUP_NETCLASSES::addNet( const wxString& netName, const wxString& ne
         m_membershipGrid->SetCellTextColour( i, 0, color );
     }
 
-    m_membershipGrid->SetCellValue( i, 1, netclass );
+    if( netclass.IsEmpty() )
+        m_membershipGrid->SetCellValue( i, 1, NETCLASS::Default );
+    else
+        m_membershipGrid->SetCellValue( i, 1, netclass );
 }
 
 
@@ -303,8 +304,6 @@ void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
     m_membershipGrid->CommitPendingChanges( true );
 
     wxArrayString netclassNames;
-
-    netclassNames.push_back( NO_NETCLASS_ASSIGNMENT );
 
     for( int ii = 0; ii < m_netclassGrid->GetNumberRows(); ii++ )
     {
@@ -374,7 +373,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
         const wxString& netname = m_membershipGrid->GetCellValue( row, 0 );
         const wxString& classname = m_membershipGrid->GetCellValue( row, 1 );
 
-        if( classname != NO_NETCLASS_ASSIGNMENT )
+        if( classname != NETCLASS::Default )
         {
             const NETCLASSPTR& nc = m_netclasses->Find( classname );
 
