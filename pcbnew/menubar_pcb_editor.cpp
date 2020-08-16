@@ -382,9 +382,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showFootprintEditor );
     toolsMenu->Add( PCB_ACTIONS::updateFootprints );
-    toolsMenu->Add( PCB_ACTIONS::boardReannotate );
 
     toolsMenu->AppendSeparator();
+    toolsMenu->Add( PCB_ACTIONS::boardReannotate );
     toolsMenu->Add( PCB_ACTIONS::removeUnusedPads );
     toolsMenu->Add( PCB_ACTIONS::repairBoard );
 
