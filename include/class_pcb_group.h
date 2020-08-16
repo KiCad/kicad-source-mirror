@@ -110,7 +110,7 @@ public:
     ///> @copydoc BOARD_ITEM::SetLayer
     void SetLayer( PCB_LAYER_ID aLayer ) override
     {
-        wxFAIL_MSG( _( "groups don't support layer SetLayer" ) );
+        wxFAIL_MSG( "groups don't support layer SetLayer" );
     }
 
     ///> @copydoc EDA_ITEM::Clone
@@ -132,7 +132,7 @@ public:
     ///> @copydoc BOARD_ITEM::IsOnLayer
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override
     {
-        wxFAIL_MSG( _( "groups don't support layer IsOnLayer" ) );
+        wxFAIL_MSG( "groups don't support layer IsOnLayer" );
         return false;
     }
 
@@ -181,7 +181,7 @@ public:
 
     /**
      * Invokes a function on all descendents of the group.
-     * Note that this function should not add or remove items to the group or descendent 
+     * Note that this function should not add or remove items to the group or descendent
      * groups.
      * @param aFunction is the function to be invoked.
      */

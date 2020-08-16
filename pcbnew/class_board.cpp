@@ -2079,7 +2079,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
                 return wxString::Format( _( "Two groups of identical name: %s" ), group.GetName() );
             }
             wxCHECK( groupNames.insert( group.GetName() ).second == true,
-                     _( "Insert failed of new group" ) );
+                     "Insert failed of new group" );
         }
 
         for( const BOARD_ITEM* member : group.GetItems() )
@@ -2119,7 +2119,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
                         item->m_Uuid.AsString() );
             }
             wxCHECK( allMembers.insert( member->m_Uuid.AsString() ).second == true,
-                     _( "Insert failed of new member" ) );
+                     "Insert failed of new member" );
 
             if( item->Type() == PCB_GROUP_T )
             {
@@ -2130,10 +2130,10 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
                 // is not found in the groups list, then the board.GetItem()
                 // check above should have failed.
                 wxCHECK( childIdx >= 0 && childIdx < groups.size(),
-                         wxString::Format( _( "Group %s not found in groups list" ),
+                         wxString::Format( "Group %s not found in groups list",
                                            item->m_Uuid.AsString() ) );
                 wxCHECK( parentGroupIdx[childIdx] == -1,
-                         wxString::Format( _( "Duplicate group despite allMembers check previously: %s" ),
+                         wxString::Format( "Duplicate group despite allMembers check previously: %s",
                                            item->m_Uuid.AsString() ) );
                 parentGroupIdx[childIdx] = idx;
             }
@@ -2167,7 +2167,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
     // Initialize set of groups to check that could participate in a cycle.
     for( size_t idx = 0; idx < groups.size(); idx++ )
     {
-        wxCHECK( toCheckGroups.insert( idx ).second == true, _( "Insert of ints failed" ) );
+        wxCHECK( toCheckGroups.insert( idx ).second == true, "Insert of ints failed" );
     }
 
     while( !toCheckGroups.empty() )
@@ -2180,7 +2180,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
             {
                 if( repair )
                     board.Groups().erase( board.Groups().begin() + currIdx );
-                return _( "Cycle detected in group membership" );
+                return "Cycle detected in group membership";
             }
             else if( knownCycleFreeGroups.find( currIdx ) != knownCycleFreeGroups.end() )
             {
@@ -2188,10 +2188,10 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
                 break;
             }
             wxCHECK( currentChainGroups.insert( currIdx ).second == true,
-                     _( "Insert of new group to check failed" ) );
+                     "Insert of new group to check failed" );
             // We haven't visited currIdx yet, so it must be in toCheckGroups
             wxCHECK( toCheckGroups.erase( currIdx ) == 1,
-                     _( "Erase of idx for group just checked failed" ) );
+                     "Erase of idx for group just checked failed" );
             currIdx = parentGroupIdx[currIdx];
             if( currIdx == -1 )
             {
@@ -2371,7 +2371,7 @@ void BOARD::GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* c
                     removedSomething = true;
                 }
             }
-            wxCHECK_RET( removedSomething, _( "Item to be removed not found in it's parent group" ) );
+            wxCHECK_RET( removedSomething, "Item to be removed not found in it's parent group" );
         }
     }
 
