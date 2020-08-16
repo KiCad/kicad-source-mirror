@@ -31,7 +31,6 @@
 #include <wx/splitter.h>
 #include <wx/notebook.h>
 #include <wx/choice.h>
-#include <wx/statbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -79,16 +78,15 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxRadioButton* m_rbNetColorAll;
 		wxRadioButton* m_rbNetColorRatsnest;
 		wxRadioButton* m_rbNetColorOff;
+		wxStaticText* m_staticText5;
 		wxChoice* m_cbLayerPresets;
-		wxBitmapButton* m_btnDeletePreset;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnNotebookPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
 		virtual void OnFlipBoardChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
-		virtual void OnLayerPresetChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnBtnDeleteLayerPreset( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onLayerPresetChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

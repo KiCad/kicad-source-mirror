@@ -80,7 +80,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_panelLayers->SetSizer( m_panelLayersSizer );
 	m_panelLayers->Layout();
 	m_panelLayersSizer->Fit( m_panelLayers );
-	m_notebook->AddPage( m_panelLayers, wxT("Layers"), false );
+	m_notebook->AddPage( m_panelLayers, wxT("Layers"), true );
 	m_panelObjects = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panelObjects->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
@@ -234,29 +234,33 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_panelNetsAndClasses->SetSizer( bSizer16 );
 	m_panelNetsAndClasses->Layout();
 	bSizer16->Fit( m_panelNetsAndClasses );
-	m_notebook->AddPage( m_panelNetsAndClasses, wxT("Nets"), true );
+	m_notebook->AddPage( m_panelNetsAndClasses, wxT("Nets"), false );
 
 	m_sizerOuter->Add( m_notebook, 1, wxEXPAND, 5 );
 
-	wxStaticBoxSizer* presetsSizer;
-	presetsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Layer Presets") ), wxHORIZONTAL );
+	wxBoxSizer* bSizer18;
+	bSizer18 = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizer171;
+	bSizer171 = new wxBoxSizer( wxVERTICAL );
+
+	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	bSizer171->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 
 	wxString m_cbLayerPresetsChoices[] = { wxT("All Layers"), wxT("(unsaved)") };
 	int m_cbLayerPresetsNChoices = sizeof( m_cbLayerPresetsChoices ) / sizeof( wxString );
-	m_cbLayerPresets = new wxChoice( presetsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbLayerPresetsNChoices, m_cbLayerPresetsChoices, 0 );
+	m_cbLayerPresets = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbLayerPresetsNChoices, m_cbLayerPresetsChoices, 0 );
 	m_cbLayerPresets->SetSelection( 1 );
 	m_cbLayerPresets->SetToolTip( wxT("Layer presets") );
 
-	presetsSizer->Add( m_cbLayerPresets, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-	m_btnDeletePreset = new wxBitmapButton( presetsSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_btnDeletePreset->Enable( false );
-	m_btnDeletePreset->SetToolTip( wxT("Delete this layer preset") );
-
-	presetsSizer->Add( m_btnDeletePreset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer171->Add( m_cbLayerPresets, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 2 );
 
 
-	m_sizerOuter->Add( presetsSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizer18->Add( bSizer171, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	m_sizerOuter->Add( bSizer18, 0, wxEXPAND|wxBOTTOM, 2 );
 
 
 	this->SetSizer( m_sizerOuter );
@@ -268,8 +272,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_paneLayerDisplay->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( APPEARANCE_CONTROLS_BASE::OnLayerDisplayPaneChanged ), NULL, this );
 	m_cbFlipBoard->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::OnFlipBoardChecked ), NULL, this );
 	m_paneNetDisplay->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( APPEARANCE_CONTROLS_BASE::OnNetDisplayPaneChanged ), NULL, this );
-	m_cbLayerPresets->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::OnLayerPresetChanged ), NULL, this );
-	m_btnDeletePreset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::OnBtnDeleteLayerPreset ), NULL, this );
+	m_cbLayerPresets->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::onLayerPresetChanged ), NULL, this );
 }
 
 APPEARANCE_CONTROLS_BASE::~APPEARANCE_CONTROLS_BASE()
@@ -279,7 +282,6 @@ APPEARANCE_CONTROLS_BASE::~APPEARANCE_CONTROLS_BASE()
 	m_paneLayerDisplay->Disconnect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( APPEARANCE_CONTROLS_BASE::OnLayerDisplayPaneChanged ), NULL, this );
 	m_cbFlipBoard->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::OnFlipBoardChecked ), NULL, this );
 	m_paneNetDisplay->Disconnect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( APPEARANCE_CONTROLS_BASE::OnNetDisplayPaneChanged ), NULL, this );
-	m_cbLayerPresets->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::OnLayerPresetChanged ), NULL, this );
-	m_btnDeletePreset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::OnBtnDeleteLayerPreset ), NULL, this );
+	m_cbLayerPresets->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::onLayerPresetChanged ), NULL, this );
 
 }

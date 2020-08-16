@@ -103,7 +103,6 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     m_btnNetInspector->SetBitmapLabel( KiBitmap( list_nets_xpm ) );
     m_btnConfigureNetClasses->SetBitmapLabel( KiBitmap( options_generic_xpm ) );
-    m_btnDeletePreset->SetBitmapLabel( KiBitmap( trash_xpm ) );
 
     m_txtNetFilter->SetHint( _( "Filter nets" ) );
 
@@ -1252,7 +1251,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
                             m_frame->GetToolManager()->RunAction( action, true, net );
                         } );
 
-                wxString netName = aNet->GetShortNetname();
+                const wxString& netName = aNet->GetShortNetname();
 
                 auto menuHandler =
                         [&, netCode, netName]( wxMouseEvent& aEvent )
@@ -1291,7 +1290,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
             };
 
     auto appendNetclass =
-            [&]( int aId, NETCLASSPTR aClass, bool isDefault = false )
+            [&]( int aId, const NETCLASSPTR& aClass, bool isDefault = false )
             {
                 wxString name = aClass->GetName();
 
@@ -1470,8 +1469,6 @@ void APPEARANCE_CONTROLS::syncLayerPresetSelection()
 
     m_currentPreset = static_cast<LAYER_PRESET*>(
             m_cbLayerPresets->GetClientData( m_cbLayerPresets->GetSelection() ) );
-
-    updateDeleteLayerPresetButton();
 }
 
 
@@ -1483,12 +1480,10 @@ void APPEARANCE_CONTROLS::updateLayerPresetSelection( const wxString& aName )
     {
         m_cbLayerPresets->SetSelection( idx );
         m_currentPreset = static_cast<LAYER_PRESET*>( m_cbLayerPresets->GetClientData( idx ) );
-        updateDeleteLayerPresetButton();
     }
     else if( idx < 0 )
     {
         m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 ); // separator
-        updateDeleteLayerPresetButton();
     }
 }
 
@@ -1543,7 +1538,6 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
         index = m_cbLayerPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
         m_cbLayerPresets->SetSelection( index );
-        m_btnDeletePreset->Enable();
 
         return;
     }
@@ -1566,7 +1560,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         }
 
         EDA_LIST_DIALOG dlg( m_frame, _( "Delete Preset" ), headers, items, wxEmptyString );
-        dlg.SetListLabel( _( "Select netclass:" ) );
+        dlg.SetListLabel( _( "Select preset:" ) );
 
         if( dlg.ShowModal() == wxID_OK )
         {
@@ -1579,13 +1573,12 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
             m_currentPreset = nullptr;
         }
 
+        resetSelection();
         return;
     }
 
     LAYER_PRESET* preset = static_cast<LAYER_PRESET*>( m_cbLayerPresets->GetClientData( index ) );
     m_currentPreset      = preset;
-
-    updateDeleteLayerPresetButton();
 
     doApplyLayerPreset( *preset );
 }
@@ -1609,36 +1602,6 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
     m_frame->GetCanvas()->Refresh();
 
     syncColorsAndVisibility();
-}
-
-
-void APPEARANCE_CONTROLS::updateDeleteLayerPresetButton()
-{
-    bool enable = m_currentPreset && !m_currentPreset->readOnly;
-
-    m_btnDeletePreset->Enable( enable );
-    m_btnDeletePreset->SetToolTip( enable ? _( "Delete this layer preset " ) :
-                                            _( "This preset cannot be deleted" ) );
-}
-
-
-void APPEARANCE_CONTROLS::OnBtnDeleteLayerPreset( wxCommandEvent& event )
-{
-    LAYER_PRESET* current = static_cast<LAYER_PRESET*>(
-            m_cbLayerPresets->GetClientData( m_cbLayerPresets->GetSelection() ) );
-
-    // Button should not be enabled if we are not on an active preset
-    wxASSERT( current && current == m_currentPreset );
-
-    if( current->readOnly )
-        return;
-
-    int index = m_cbLayerPresets->GetSelection();
-
-    m_layerPresets.erase( current->name );
-    m_cbLayerPresets->Delete( index );
-    m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 );
-    m_currentPreset = nullptr;
 }
 
 
@@ -1671,24 +1634,11 @@ void APPEARANCE_CONTROLS::onObjectOpacitySlider( int aLayer, float aOpacity )
 
     switch( aLayer )
     {
-    case static_cast<int>( LAYER_TRACKS ):
-        options.m_TrackOpacity = aOpacity;
-        break;
-
-    case static_cast<int>( LAYER_VIAS ):
-        options.m_ViaOpacity = aOpacity;
-        break;
-
-    case static_cast<int>( LAYER_PADS ):
-        options.m_PadOpacity = aOpacity;
-        break;
-
-    case static_cast<int>( LAYER_ZONES ):
-        options.m_ZoneOpacity = aOpacity;
-        break;
-
-    default:
-        return;
+    case static_cast<int>( LAYER_TRACKS ): options.m_TrackOpacity = aOpacity; break;
+    case static_cast<int>( LAYER_VIAS ):   options.m_ViaOpacity = aOpacity;   break;
+    case static_cast<int>( LAYER_PADS ):   options.m_PadOpacity = aOpacity;   break;
+    case static_cast<int>( LAYER_ZONES ):  options.m_ZoneOpacity = aOpacity;  break;
+    default: return;
     }
 
     m_frame->SetDisplayOptions( options );

@@ -149,8 +149,6 @@ protected:
 
     void OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event ) override;
 
-    void OnBtnDeleteLayerPreset( wxCommandEvent& event ) override;
-
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
 
 private:
@@ -251,8 +249,6 @@ private:
 
     void syncLayerPresetSelection();
 
-    void updateDeleteLayerPresetButton();
-
     void onLayerClick( wxMouseEvent& aEvent );
 
     void onLayerVisibilityChanged( PCB_LAYER_ID aLayer, bool isVisible, bool isFinal );
@@ -263,7 +259,7 @@ private:
 
     void updateLayerPresetSelection( const wxString& aName );
 
-    void onLayerPresetChanged( wxCommandEvent& aEvent );
+    void onLayerPresetChanged( wxCommandEvent& aEvent ) override;
 
     void doApplyLayerPreset( const LAYER_PRESET& aPreset );
 
