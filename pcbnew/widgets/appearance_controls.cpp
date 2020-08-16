@@ -1417,6 +1417,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
     NETCLASSPTR defaultClass = board->GetDesignSettings().GetNetClasses().GetDefault();
 
+    m_netclassIdMap[idx] = defaultClass->GetName();
     appendNetclass( idx++, defaultClass, true );
 
     for( const wxString& name : names )

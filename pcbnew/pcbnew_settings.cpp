@@ -85,6 +85,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "aui.show_microwave_tools",
             &m_AuiPanels.show_microwave_tools, false ) );
 
+    m_params.emplace_back(
+            new PARAM<int>( "aui.right_panel_width", &m_AuiPanels.right_panel_width, -1 ) );
+
     m_params.emplace_back( new PARAM<int>( "footprint_chooser.width",
             &m_FootprintChooser.width, -1 ) );
 

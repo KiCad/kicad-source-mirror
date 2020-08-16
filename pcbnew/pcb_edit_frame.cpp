@@ -267,6 +267,16 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
 
+    if( PCBNEW_SETTINGS* settings = dynamic_cast<PCBNEW_SETTINGS*>( config() ) )
+    {
+        if( settings->m_AuiPanels.right_panel_width > 0 )
+        {
+            wxSize size = m_appearancePanel->GetBestSize();
+            size.x      = settings->m_AuiPanels.right_panel_width;
+            m_auimgr.GetPane( "LayersManager" ).BestSize( size );
+        }
+    }
+
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
     // hidding it.
     m_auimgr.Update();
@@ -698,6 +708,7 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_PlotLineWidth                  = Iu2Millimeter( g_DrawDefaultLineThickness );
         cfg->m_AuiPanels.show_microwave_tools = m_show_microwave_tools;
         cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
+        cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_ShowPageLimits                 = m_showPageLimits;
     }
 }
@@ -805,7 +816,6 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
     // call my base class
     PCB_BASE_EDIT_FRAME::ShowChangedLanguage();
 
-    // TODO(JE) APPEARANCE
     wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_appearancePanel );
     pane_info.Caption( _( "Appearance" ) );
     m_auimgr.Update();

@@ -67,6 +67,7 @@ class PCBNEW_SETTINGS : public APP_SETTINGS_BASE
 public:
     struct AUI_PANELS
     {
+        int  right_panel_width;
         bool show_microwave_tools;
         bool show_layer_manager;
     };
