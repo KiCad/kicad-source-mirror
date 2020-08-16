@@ -115,7 +115,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Layers</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -174,7 +174,7 @@
                                     <property name="permission">protected</property>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxEXPAND|wxTOP</property>
+                                        <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
                                         <object class="wxScrolledWindow" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -239,7 +239,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
+                                        <property name="flag">wxEXPAND|wxTOP</property>
                                         <property name="proportion">0</property>
                                         <object class="wxCollapsiblePane" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -821,7 +821,7 @@
                                                 <property name="orient">wxVERTICAL</property>
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
-                                                    <property name="border">2</property>
+                                                    <property name="border">5</property>
                                                     <property name="flag">wxEXPAND|wxALL</property>
                                                     <property name="proportion">1</property>
                                                     <object class="wxGridBagSizer" expanded="0">
@@ -829,7 +829,7 @@
                                                         <property name="flexible_direction">wxBOTH</property>
                                                         <property name="growablecols"></property>
                                                         <property name="growablerows"></property>
-                                                        <property name="hgap">0</property>
+                                                        <property name="hgap">4</property>
                                                         <property name="minimum_size"></property>
                                                         <property name="name">m_objectsSizer</property>
                                                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
@@ -846,7 +846,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Nets</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -1922,7 +1922,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                             <property name="proportion">1</property>
                             <object class="wxChoice" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -1987,7 +1987,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxBitmapButton" expanded="1">
                                 <property name="BottomDockable">1</property>

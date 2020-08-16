@@ -191,7 +191,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
 wxSize APPEARANCE_CONTROLS::GetBestSize() const
 {
-    wxSize size( 240, 480 );
+    wxSize size( 220, 480 );
     // TODO(JE) appropriate logic
     return size;
 }
@@ -492,8 +492,9 @@ void APPEARANCE_CONTROLS::rebuildLayers()
     LSET enabled = board->GetEnabledLayers();
     LSET visible = board->GetVisibleLayers();
 
-    COLOR_SETTINGS* theme   = m_frame->GetColorSettings();
-    COLOR4D         bgColor = theme->GetColor( LAYER_PCB_BACKGROUND );
+    COLOR_SETTINGS* theme      = m_frame->GetColorSettings();
+    COLOR4D         bgColor    = theme->GetColor( LAYER_PCB_BACKGROUND );
+    bool            firstLayer = true;
 
     m_layerSettings.clear();
     m_layers_outer_sizer->Clear( true );
@@ -527,10 +528,17 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 label->Wrap( -1 );
                 label->SetToolTip( aSetting->tooltip );
 
-                sizer->Add( indicator,   0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxTOP, 2 );
-                sizer->Add( swatch,      0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxTOP, 2 );
-                sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxTOP, 2 );
-                sizer->Add( label,       1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxTOP, 2 );
+                int topMargin = firstLayer ? 2 : 1;
+                firstLayer = false;
+
+                sizer->AddSpacer( 1 );
+                sizer->Add( indicator,   0, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
+                sizer->AddSpacer( 5 );
+                sizer->Add( swatch,      0, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
+                sizer->AddSpacer( 6 );
+                sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
+                sizer->AddSpacer( 5 );
+                sizer->Add( label,       1, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
 
                 m_layers_outer_sizer->Add( panel, 0, wxEXPAND, 0 );
 
@@ -991,7 +999,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                                            "right click for menu" ) );
 
                     m_objectsSizer->Add( swatch, wxGBPosition( aRow, 0 ), wxDefaultSpan,
-                            wxALIGN_CENTER_VERTICAL | wxEXPAND | topMargin | wxLEFT | wxRIGHT, 3 );
+                            wxALIGN_CENTER_VERTICAL | wxEXPAND | topMargin | wxLEFT | wxRIGHT, 1 );
                     aSetting->ctl_color = swatch;
 
                     swatch->Bind( COLOR_SWATCH_CHANGED,
@@ -1007,7 +1015,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 btn_visible->SetToolTip( tip );
 
                 m_objectsSizer->Add( btn_visible, wxGBPosition( aRow, 1 ), wxDefaultSpan,
-                                     sliderLableAlignment | topMargin | wxLEFT | wxRIGHT, 3 );
+                                     sliderLableAlignment | topMargin | wxLEFT, 1 );
                 aSetting->ctl_visibility = btn_visible;
 
                 btn_visible->Bind( TOGGLE_CHANGED,
@@ -1025,7 +1033,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 wxGBSpan labelSpan( 1, aSetting->can_control_opacity ? 1 : 2 );
 
                 m_objectsSizer->Add( label, wxGBPosition( aRow, 2 ), labelSpan,
-                                     sliderLableAlignment | topMargin | wxLEFT | wxRIGHT, 3 );
+                                     sliderLableAlignment | topMargin | wxLEFT | wxRIGHT, 1 );
 
                 if( aSetting->can_control_opacity )
                 {
@@ -1042,7 +1050,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                     slider->SetToolTip( tip );
 
                     m_objectsSizer->Add( slider, wxGBPosition( aRow, 3 ), wxDefaultSpan,
-                                         sliderAlignment | topMargin | wxLEFT | wxRIGHT | wxEXPAND, 3 );
+                                         sliderAlignment | topMargin | wxLEFT | wxRIGHT | wxEXPAND, 1 );
                     aSetting->ctl_opacity = slider;
 
                     auto opacitySliderHandler =
