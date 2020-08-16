@@ -2494,16 +2494,7 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         // translate non-copper eagle layer to pcbnew layer
         switch( aEagleLayer )
         {
-        case EAGLE_LAYER::MILLING:
-            wxLogMessage( wxString::Format( _( "Unsupported Eagle layer '%s' (%d), "
-                                               "converted to Dwgs.User layer" ),
-                          eagle_layer_name( aEagleLayer ),
-                          aEagleLayer ) );
-
-            kiLayer = Dwgs_User;
-            break;
-
-            // Eagle says "Dimension" layer, but it's for board perimeter
+        // Eagle says "Dimension" layer, but it's for board perimeter
         case EAGLE_LAYER::DIMENSION:     kiLayer = Edge_Cuts;    break;
 
         case EAGLE_LAYER::TPLACE:        kiLayer = F_SilkS;      break;
@@ -2541,6 +2532,8 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 
         case EAGLE_LAYER::TKEEPOUT:      kiLayer = F_CrtYd;      break;
         case EAGLE_LAYER::BKEEPOUT:      kiLayer = B_CrtYd;      break;
+        
+        case EAGLE_LAYER::MILLING:
         case EAGLE_LAYER::TTEST:
         case EAGLE_LAYER::BTEST:
         case EAGLE_LAYER::HOLES:
