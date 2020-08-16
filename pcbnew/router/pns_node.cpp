@@ -343,7 +343,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
 
         int clearance = GetClearance( obs.m_item, &aLine );
 
-        SHAPE_LINE_CHAIN hull = obs.m_item->Hull( clearance, aItem->Width() );
+        SHAPE_LINE_CHAIN hull = obs.m_item->Hull( clearance, aItem->Width(), aItem->Layer() );
 
         if( aLine.EndsWithVia() )
         {
@@ -553,6 +553,7 @@ void NODE::Add( std::unique_ptr< SOLID > aSolid )
 void NODE::addVia( VIA* aVia )
 {
     linkJoint( aVia->Pos(), aVia->Layers(), aVia->Net(), aVia );
+
     m_index->Add( aVia );
 }
 
@@ -1226,7 +1227,7 @@ void NODE::GetUpdatedItems( ITEM_VECTOR& aRemoved, ITEM_VECTOR& aAdded )
 
     if( m_override.size() )
         aRemoved.reserve( m_override.size() );
-    
+
     if( m_index->Size() )
         aAdded.reserve( m_index->Size() );
 

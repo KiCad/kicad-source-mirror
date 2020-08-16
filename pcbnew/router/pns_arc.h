@@ -92,7 +92,7 @@ public:
         return SHAPE_LINE_CHAIN( m_arc );
     }
 
-    const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness ) const override;
+    const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const override;
 
     virtual VECTOR2I Anchor( int n ) const override
     {

@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -66,6 +66,7 @@ public:
         m_diameter = aDiameter;
         m_drill = aDrill;
         m_shape = SHAPE_CIRCLE( aPos, aDiameter / 2 );
+        m_alternateShape = SHAPE_CIRCLE( m_pos, aDrill / 2 );
         m_viaType = aViaType;
     }
 
@@ -78,6 +79,7 @@ public:
         m_pos = aB.m_pos;
         m_diameter = aB.m_diameter;
         m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
+        m_alternateShape = SHAPE_CIRCLE( m_pos, aB.m_drill / 2 );
         m_marker = aB.m_marker;
         m_rank = aB.m_rank;
         m_drill = aB.m_drill;
@@ -143,9 +145,14 @@ public:
         return &m_shape;
     }
 
+    const SHAPE* AlternateShape() const override
+    {
+        return &m_alternateShape;
+    }
+
     VIA* Clone() const override;
 
-    const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const override;
+    const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0, int aLayer = -1 ) const override;
 
     virtual VECTOR2I Anchor( int n ) const override
     {
@@ -166,6 +173,7 @@ private:
     int          m_drill;
     VECTOR2I     m_pos;
     SHAPE_CIRCLE m_shape;
+    SHAPE_CIRCLE m_alternateShape;
     VIATYPE      m_viaType;
 };
 

@@ -218,6 +218,13 @@ class SHAPE_INDEX
         void Add( T aShape );
 
         /**
+         * Adds a shape with alternate BBox
+         * @param aShape Shape (Item) to add
+         * @param aBbox alternate bounding box.  This should be a subset of the item's bbox
+         */
+        void Add( T aShape, const BOX2I& aBbox );
+
+        /**
          * Function Remove()
          *
          * Removes a SHAPE to the index.
@@ -305,6 +312,15 @@ template <class T>
 SHAPE_INDEX<T>::~SHAPE_INDEX()
 {
     delete this->m_tree;
+}
+
+template <class T>
+void SHAPE_INDEX<T>::Add( T aShape, const BOX2I& aBbox )
+{
+    int min[2] = { aBbox.GetX(), aBbox.GetY() };
+    int max[2] = { aBbox.GetRight(), aBbox.GetBottom() };
+
+    this->m_tree->Insert( min, max, aShape );
 }
 
 template <class T>

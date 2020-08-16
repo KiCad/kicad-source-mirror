@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -110,7 +110,7 @@ public:
      * @param aClearance defines how far from the body of the item the hull should be,
      * @param aWalkaroundThickness is the width of the line that walks around this hull.
      */
-    virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const
+    virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0, int aLayer = -1 ) const
     {
         return SHAPE_LINE_CHAIN();
     }
@@ -214,6 +214,11 @@ public:
     virtual const SHAPE* Shape() const
     {
         return NULL;
+    }
+
+    virtual const SHAPE* AlternateShape() const
+    {
+        return Shape();
     }
 
     virtual void Mark( int aMarker ) { m_marker = aMarker; }

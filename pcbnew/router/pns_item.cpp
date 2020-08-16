@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -22,6 +22,7 @@
 #include "pns_node.h"
 #include "pns_item.h"
 #include "pns_line.h"
+#include "pns_router.h"
 
 typedef VECTOR2I::extended_type ecoord;
 
@@ -30,6 +31,9 @@ namespace PNS {
 bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VECTOR2I* aMTV,
                           const NODE* aParentNode, bool aDifferentNetsOnly ) const
 {
+    const SHAPE* shapeA = Shape();
+    const SHAPE* shapeB = aOther->Shape();
+
     // same nets? no collision!
     if( aDifferentNetsOnly && m_net == aOther->m_net && m_net >= 0 && aOther->m_net >= 0 )
         return false;
@@ -38,10 +42,22 @@ bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VEC
     if( !m_layers.Overlaps( aOther->m_layers ) )
         return false;
 
+    if( !aOther->Layers().IsMultilayer()
+            && !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( this, aOther->Layer() ) )
+    {
+        shapeA = AlternateShape();
+    }
+
+    if( !Layers().IsMultilayer()
+            && !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( aOther, Layer() ) )
+    {
+        shapeB = aOther->AlternateShape();
+    }
+
     if( aNeedMTV )
-        return Shape()->Collide( aOther->Shape(), aClearance, aMTV );
+        return shapeA->Collide( shapeB, aClearance, aMTV );
     else
-        return Shape()->Collide( aOther->Shape(), aClearance );
+        return shapeA->Collide( shapeB, aClearance );
 }
 
 

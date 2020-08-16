@@ -618,6 +618,9 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 
     std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
 
+    if( aPad->GetAttribute() == PAD_ATTRIB_STANDARD )
+        solid->SetAlternateShape( aPad->GetEffectiveHoleShape()->Clone() );
+
     solid->SetLayers( layers );
     solid->SetNet( aPad->GetNetCode() );
     solid->SetParent( aPad );
@@ -634,9 +637,9 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
     solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
     solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
 
-    
+
     auto shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
-    
+
     if( shapes && shapes->Size() == 1 )
     {
         solid->SetShape( shapes->Shapes()[0]->Clone() );
@@ -693,38 +696,28 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( ARC* aArc )
 }
 
 
-std::vector<std::unique_ptr<PNS::VIA>> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
+std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
 {
     std::vector<std::unique_ptr<PNS::VIA>> retval;
 
     PCB_LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
 
-    for( int layer = top; layer <= bottom; ++layer )
-    {
-        int width = aVia->GetWidth();
+    std::unique_ptr<PNS::VIA> via( new PNS::VIA(
+            aVia->GetPosition(),
+            LAYER_RANGE( aVia->TopLayer(), aVia->BottomLayer() ),
+            aVia->GetWidth(),
+            aVia->GetDrillValue(),
+            aVia->GetNetCode(),
+            aVia->GetViaType() )
+    );
 
-        if( !aVia->IsPadOnLayer( layer ) )
-            width = aVia->GetDrillValue();
+    via->SetParent( aVia );
 
-        std::unique_ptr<PNS::VIA> via( new PNS::VIA(
-                aVia->GetPosition(),
-                LAYER_RANGE( layer ),
-                width,
-                aVia->GetDrillValue(),
-                aVia->GetNetCode(),
-                aVia->GetViaType() )
-        );
+    if( aVia->IsLocked() )
+        via->Mark( PNS::MK_LOCKED );
 
-        via->SetParent( aVia );
-
-        if( aVia->IsLocked() )
-            via->Mark( PNS::MK_LOCKED );
-
-        retval.push_back( std::move( via ) );
-    }
-
-    return retval;
+    return std::move( via );
 }
 
 
@@ -893,6 +886,35 @@ bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer )
 }
 
 
+bool PNS_KICAD_IFACE::IsPadOnLayer( const PNS::ITEM* aItem, int aLayer )
+{
+    if( !aItem->Parent() || aLayer < 0)
+        return aItem->Layers().Overlaps( aLayer );
+
+    switch( aItem->Parent()->Type() )
+    {
+    case PCB_VIA_T:
+    {
+        const VIA* via = static_cast<const VIA*>( aItem->Parent() );
+
+        return via->IsPadOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
+    }
+
+    case PCB_PAD_T:
+    {
+        const D_PAD* pad = static_cast<const D_PAD*>( aItem->Parent() );
+
+        return pad->IsPadOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
+    }
+
+    default:
+        break;
+    }
+
+    return aItem->Layers().Overlaps( aLayer );
+}
+
+
 bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem )
 {
     // by default, all items are visible (new ones created by the router have parent == NULL as they have not been
@@ -1012,9 +1034,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         }
         else if( type == PCB_VIA_T )
         {
-            auto viavec = syncVia( static_cast<VIA*>( t ) );
-
-            for( auto& via : viavec )
+            if( auto via = syncVia( static_cast<VIA*>( t ) ) )
                 aWorld->Add( std::move( via ) );
         }
     }

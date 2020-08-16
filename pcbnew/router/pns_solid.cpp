@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -27,26 +27,31 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_simple.h>
 
+#include "pns_router.h"
 #include "pns_solid.h"
 #include "pns_utils.h"
 
 namespace PNS {
 
-const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness ) const
+const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
     int cl = aClearance + ( aWalkaroundThickness + 1 )/ 2;
+    SHAPE* shape = m_shape;
 
-    switch( m_shape->Type() )
+    if( !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( this, aLayer ) )
+        shape = m_alternateShape;
+
+    switch( shape->Type() )
     {
     case SH_RECT:
     {
-        SHAPE_RECT* rect = static_cast<SHAPE_RECT*>( m_shape );
+        SHAPE_RECT* rect = static_cast<SHAPE_RECT*>( shape );
         return OctagonalHull( rect->GetPosition(), rect->GetSize(), cl + 1, 0.2 * cl );
     }
 
     case SH_CIRCLE:
     {
-        SHAPE_CIRCLE* circle = static_cast<SHAPE_CIRCLE*>( m_shape );
+        SHAPE_CIRCLE* circle = static_cast<SHAPE_CIRCLE*>( shape );
         int r = circle->GetRadius();
         return OctagonalHull( circle->GetCenter() - VECTOR2I( r, r ), VECTOR2I( 2 * r, 2 * r ),
                               cl + 1, 0.52 * ( r + cl ) );
@@ -54,13 +59,13 @@ const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness ) c
 
     case SH_SEGMENT:
     {
-        SHAPE_SEGMENT* seg = static_cast<SHAPE_SEGMENT*>( m_shape );
+        SHAPE_SEGMENT* seg = static_cast<SHAPE_SEGMENT*>( shape );
         return SegmentHull( *seg, aClearance, aWalkaroundThickness );
     }
 
     case SH_SIMPLE:
     {
-        SHAPE_SIMPLE* convex = static_cast<SHAPE_SIMPLE*>( m_shape );
+        SHAPE_SIMPLE* convex = static_cast<SHAPE_SIMPLE*>( shape );
 
         return ConvexHull( *convex, cl );
     }

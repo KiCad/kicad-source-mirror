@@ -184,7 +184,7 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
         const SEG& a = line.CSegment(i);
         bool over = false;
 
-        
+
         for( int j = 0; j < aObstacle.SegmentCount(); j++ )
         {
             const SEG& so = aObstacle.CSegment(j);
@@ -211,7 +211,7 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
             for( int j = 0; j < aObstacle.SegmentCount(); j++ )
             {
                 OPT_VECTOR2I p;
-                
+
                 bool cont_a = aObstacle.CSegment(j).Contains( a.A );
                 bool cont_b = aObstacle.CSegment(j).Contains( a.B );
 
@@ -393,7 +393,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
 }
 
 
-const SHAPE_LINE_CHAIN SEGMENT::Hull( int aClearance, int aWalkaroundThickness ) const
+const SHAPE_LINE_CHAIN SEGMENT::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
    return SegmentHull( m_seg, aClearance, aWalkaroundThickness );
 }

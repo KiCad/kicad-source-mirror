@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -71,13 +71,17 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
 }
 
 
-const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness ) const
+const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
     int cl = ( aClearance + aWalkaroundThickness / 2 );
+    int width = m_diameter;
+
+    if( !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( this, aLayer ) )
+        width = m_drill;
 
     return OctagonalHull( m_pos -
-            VECTOR2I( m_diameter / 2, m_diameter / 2 ), VECTOR2I( m_diameter, m_diameter ),
-            cl + 1, ( 2 * cl + m_diameter ) * 0.26 );
+        VECTOR2I( width / 2, width / 2 ), VECTOR2I( width, width ),
+        cl + 1, ( 2 * cl + width ) * 0.26 );
 }
 
 

@@ -119,7 +119,7 @@ bool SHOVE::checkBumpDirection( const LINE& aCurrent, const LINE& aObstacle, con
     SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER checker( aCurrent.CPoint(0) );
     checker.AddPolyline( aObstacle.CLine() );
     checker.AddPolyline( aShoved.CLine().Reverse() );
-    
+
     bool inside = checker.IsInside();
 
     return !inside;
@@ -129,7 +129,7 @@ bool SHOVE::checkBumpDirection( const LINE& aCurrent, const LINE& aObstacle, con
 SHOVE::SHOVE_STATUS SHOVE::walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved )
 {
     int clearance = getClearance( &aCurrent, &aObstacle );
-    const SHAPE_LINE_CHAIN hull = aCurrent.Via().Hull( clearance, aObstacle.Width() );
+    const SHAPE_LINE_CHAIN hull = aCurrent.Via().Hull( clearance, aObstacle.Width(), aCurrent.Layer() );
     SHAPE_LINE_CHAIN path_cw;
     SHAPE_LINE_CHAIN path_ccw;
 
@@ -241,7 +241,7 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
         sprintf(str,"att-%d-shoved", attempt);
         Dbg()->AddLine( l.CLine(), 3, 20000, str );
 #endif
-        
+
         if( ( aCurrent.Marker() & MK_HEAD ) && !colliding )
         {
             JOINT* jtStart = m_currentNode->FindJoint( aCurrent.CPoint( 0 ), &aCurrent );
@@ -302,7 +302,7 @@ SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, L
         int clearance = getClearance( &aCurrent, &aObstacle ) + 1;
 
 #ifdef DEBUG
-        Dbg()->Message( wxString::Format( "shove process-single: cur net %d obs %d cl %d", aCurrent.Net(), aObstacle.Net(), clearance ) ); 
+        Dbg()->Message( wxString::Format( "shove process-single: cur net %d obs %d cl %d", aCurrent.Net(), aObstacle.Net(), clearance ) );
 #endif
 
         HULL_SET hulls;

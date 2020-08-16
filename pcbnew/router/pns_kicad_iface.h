@@ -53,6 +53,7 @@ public:
     void SetBoard( BOARD* aBoard );
     void SyncWorld( PNS::NODE* aWorld ) override;
     bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) override { return true; };
+    bool IsPadOnLayer( const PNS::ITEM* aItem, int aLayer ) override { return true; };
     bool IsItemVisible( const PNS::ITEM* aItem ) override { return true; }
     void HideItem( PNS::ITEM* aItem ) override {}
     void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0, bool aEdit = false ) override {}
@@ -84,7 +85,7 @@ protected:
     std::unique_ptr<PNS::SOLID> syncPad( D_PAD* aPad );
     std::unique_ptr<PNS::SEGMENT> syncTrack( TRACK* aTrack );
     std::unique_ptr<PNS::ARC> syncArc( ARC* aArc );
-    std::vector<std::unique_ptr<PNS::VIA>> syncVia( VIA* aVia );
+    std::unique_ptr<PNS::VIA> syncVia( VIA* aVia );
     bool syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYER_ID aLayer );
     bool syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone );
@@ -105,6 +106,7 @@ public:
     void EraseView() override;
     bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) override;
     bool IsItemVisible( const PNS::ITEM* aItem ) override;
+    bool IsPadOnLayer( const PNS::ITEM* aItem, int aLayer ) override;
     void HideItem( PNS::ITEM* aItem ) override;
     void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0, bool aEdit = false ) override;
     void Commit() override;

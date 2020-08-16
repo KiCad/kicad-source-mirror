@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -20,6 +20,7 @@
  */
 
 #include "pns_index.h"
+#include "pns_router.h"
 
 namespace PNS {
 
@@ -32,7 +33,13 @@ void INDEX::Add( ITEM* aItem )
         m_subIndices.resize( 2 * range.End() + 1 ); // +1 handles the 0 case
 
     for( int i = range.Start(); i <= range.End(); ++i )
-        m_subIndices[i].Add( aItem );
+    {
+        if( ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( aItem, i )
+                && aItem->AlternateShape() )
+            m_subIndices[i].Add( aItem, aItem->AlternateShape()->BBox() );
+        else
+            m_subIndices[i].Add( aItem );
+    }
 
     m_allItems.insert( aItem );
     int net = aItem->Net();
