@@ -999,7 +999,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                                            "right click for menu" ) );
 
                     m_objectsSizer->Add( swatch, wxGBPosition( aRow, 0 ), wxDefaultSpan,
-                            wxALIGN_CENTER_VERTICAL | wxEXPAND | topMargin | wxLEFT | wxRIGHT, 1 );
+                                         wxALIGN_CENTER_VERTICAL | topMargin | wxLEFT | wxRIGHT, 1 );
                     aSetting->ctl_color = swatch;
 
                     swatch->Bind( COLOR_SWATCH_CHANGED,
@@ -1007,8 +1007,9 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 }
 
                 BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( m_windowObjects, layer,
-                        KiBitmap( visibility_xpm ), KiBitmap( visibility_off_xpm ),
-                        aSetting->visible );
+                                                                KiBitmap( visibility_xpm ),
+                                                                KiBitmap( visibility_off_xpm ),
+                                                                aSetting->visible );
 
                 wxString tip;
                 tip.Printf( _( "Show or hide %s" ), aSetting->label.Lower() );
@@ -1050,7 +1051,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                     slider->SetToolTip( tip );
 
                     m_objectsSizer->Add( slider, wxGBPosition( aRow, 3 ), wxDefaultSpan,
-                                         sliderAlignment | topMargin | wxLEFT | wxRIGHT | wxEXPAND, 1 );
+                                         sliderAlignment | topMargin | wxLEFT | wxRIGHT, 1 );
                     aSetting->ctl_opacity = slider;
 
                     auto opacitySliderHandler =
