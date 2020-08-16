@@ -43,11 +43,13 @@ class PROJECT;
 class PROJECT_LOCAL_SETTINGS : public JSON_SETTINGS
 {
 public:
-    PROJECT_LOCAL_SETTINGS( const wxString& aFilename );
+    PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxString& aFilename );
 
     virtual ~PROJECT_LOCAL_SETTINGS() {}
 
     bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
+
+    bool Migrate() override;
 
     bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
@@ -55,6 +57,9 @@ public:
     {
         m_project = aProject;
     }
+
+private:
+    bool migrateSchema1to2();
 
 protected:
 

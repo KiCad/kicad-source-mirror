@@ -1810,6 +1810,10 @@ void PCB_PARSER::parseSetup()
                 for( size_t i = 0; i < sizeof( int ) * CHAR_BIT; i++ )
                     m_board->m_LegacyVisibleItems.set( i, visible & ( 1u << i ) );
 
+                // These didn't exist in legacy files; make sure they are set
+                m_board->m_LegacyVisibleItems.set( LAYER_PADS );
+                m_board->m_LegacyVisibleItems.set( LAYER_ZONES );
+
                 NeedRIGHT();
             }
             break;

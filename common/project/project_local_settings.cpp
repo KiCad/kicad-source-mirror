@@ -22,14 +22,14 @@
 #include <project/project_local_settings.h>
 #include <settings/parameters.h>
 
-const int projectLocalSettingsVersion = 1;
+const int projectLocalSettingsVersion = 2;
 
 
-PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( const wxString& aFilename ) :
+PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxString& aFilename ) :
         JSON_SETTINGS( aFilename, SETTINGS_LOC::PROJECT, projectLocalSettingsVersion,
                        /* aCreateIfMissing = */ true, /* aCreateIfDefault = */ false,
                        /* aWriteFile = */ true ),
-        m_project( nullptr ),
+        m_project( aProject ),
         m_SelectionFilter()
 {
     m_params.emplace_back( new PARAM_LAMBDA<std::string>( "board.visible_layers",
@@ -185,4 +185,49 @@ bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce
             m_project->GetProjectName() + "." + ProjectLocalSettingsFileExtension;
 
     return JSON_SETTINGS::SaveToFile( aDirectory, aForce );
+}
+
+
+bool PROJECT_LOCAL_SETTINGS::Migrate()
+{
+    bool ret = true;
+    int  filever = at( PointerFromString( "meta.version" ) ).get<int>();
+
+    if( filever == 1 )
+    {
+        ret &= migrateSchema1to2();
+
+        if( ret )
+        {
+            ( *this )[PointerFromString( "meta.version" )] = 1;
+        }
+    }
+
+    return ret;
+}
+
+
+bool PROJECT_LOCAL_SETTINGS::migrateSchema1to2()
+{
+    /**
+     * Schema version 1 to 2:
+     * LAYER_PADS and LAYER_ZONES added to visibility controls
+     */
+
+    nlohmann::json::json_pointer ptr( "/board/visible_items"_json_pointer );
+
+    if( contains( ptr ) )
+    {
+        if( ( *this )[ptr].is_array() )
+        {
+            ( *this )[ptr].push_back( LAYER_PADS );
+            ( *this )[ptr].push_back( LAYER_ZONES );
+        }
+        else
+        {
+            at( "board" ).erase( "visible_items" );
+        }
+    }
+    
+    return true;
 }

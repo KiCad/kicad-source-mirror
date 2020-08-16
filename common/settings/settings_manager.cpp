@@ -712,10 +712,9 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     wxString fn( path.GetName() );
 
     PROJECT_LOCAL_SETTINGS* settings = static_cast<PROJECT_LOCAL_SETTINGS*>(
-            RegisterSettings( new PROJECT_LOCAL_SETTINGS( fn ) ) );
+            RegisterSettings( new PROJECT_LOCAL_SETTINGS( m_projects[fullPath].get(), fn ) ) );
 
     m_projects[fullPath]->setLocalSettings( settings );
-    settings->SetProject( m_projects[fullPath].get() );
 
     if( m_kiway )
         m_kiway->ProjectChanged();
