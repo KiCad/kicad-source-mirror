@@ -426,7 +426,20 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 
 int PCB_INSPECTION_TOOL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I* delta = aEvent.Parameter<VECTOR2I*>();
+    VECTOR2I  delta;
+
+    // If we have passed the simple move vector, we can update without recalculation
+    if( aEvent.Parameter<VECTOR2I*>() )
+    {
+        delta = *aEvent.Parameter<VECTOR2I*>();
+        delete aEvent.Parameter<VECTOR2I*>();
+    }
+    else
+    {
+        // We can delete the existing map to force a recalculation
+        delete m_dynamicData;
+        m_dynamicData = nullptr;
+    }
 
     auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     auto& selection = selectionTool->GetSelection();
@@ -440,10 +453,9 @@ int PCB_INSPECTION_TOOL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
     }
     else
     {
-        calculateSelectionRatsnest( *delta );
+        calculateSelectionRatsnest( delta );
     }
 
-    delete delta;
     return 0;
 }
 
