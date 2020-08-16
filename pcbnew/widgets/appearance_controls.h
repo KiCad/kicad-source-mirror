@@ -90,6 +90,7 @@ public:
     };
 
     APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner, bool aFpEditor = false );
+    ~APPEARANCE_CONTROLS();
 
     wxSize GetBestSize() const;
 

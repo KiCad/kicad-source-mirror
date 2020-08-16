@@ -189,6 +189,12 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 }
 
 
+APPEARANCE_CONTROLS::~APPEARANCE_CONTROLS()
+{
+    delete m_iconProvider;
+}
+
+
 wxSize APPEARANCE_CONTROLS::GetBestSize() const
 {
     wxSize size( 220, 480 );
