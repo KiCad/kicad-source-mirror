@@ -229,6 +229,7 @@ void APPEARANCE_CONTROLS::OnNotebookPageChanged( wxNotebookEvent& aEvent )
         m_notebook->ChangeSelection( static_cast<unsigned>( page ) );
 #endif
 
+#ifndef __WXMSW__
     // Because wxWidgets is broken and will send click events to children of the collapsible
     // panes even if they are collapsed without this
     Freeze();
@@ -236,6 +237,7 @@ void APPEARANCE_CONTROLS::OnNotebookPageChanged( wxNotebookEvent& aEvent )
     m_panelNetsAndClasses->Fit();
     m_sizerOuter->Layout();
     Thaw();
+#endif
 }
 
 
