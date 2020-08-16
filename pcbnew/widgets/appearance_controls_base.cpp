@@ -80,7 +80,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_panelLayers->SetSizer( m_panelLayersSizer );
 	m_panelLayers->Layout();
 	m_panelLayersSizer->Fit( m_panelLayers );
-	m_notebook->AddPage( m_panelLayers, wxT("Layers"), true );
+	m_notebook->AddPage( m_panelLayers, wxT("Layers"), false );
 	m_panelObjects = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panelObjects->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
@@ -90,20 +90,12 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_windowObjects->SetScrollRate( 0, 5 );
 	m_windowObjects->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-	wxBoxSizer* bSizer161;
-	bSizer161 = new wxBoxSizer( wxVERTICAL );
-
-	m_objectsSizer = new wxGridBagSizer( 0, 4 );
-	m_objectsSizer->SetFlexibleDirection( wxBOTH );
-	m_objectsSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_objectsSizer = new wxBoxSizer( wxVERTICAL );
 
 
-	bSizer161->Add( m_objectsSizer, 1, wxEXPAND|wxALL, 5 );
-
-
-	m_windowObjects->SetSizer( bSizer161 );
+	m_windowObjects->SetSizer( m_objectsSizer );
 	m_windowObjects->Layout();
-	bSizer161->Fit( m_windowObjects );
+	m_objectsSizer->Fit( m_windowObjects );
 	m_objectsPanelSizer->Add( m_windowObjects, 1, wxEXPAND, 5 );
 
 
@@ -213,7 +205,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer191;
 	bSizer191 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_rbNetColorAll = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("All"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbNetColorAll = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("All"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbNetColorAll->SetToolTip( wxT("Net and netclass colors are shown on all copper items") );
 
 	bSizer191->Add( m_rbNetColorAll, 1, wxRIGHT|wxLEFT, 5 );
@@ -224,7 +216,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	bSizer191->Add( m_rbNetColorRatsnest, 1, wxLEFT, 5 );
 
-	m_rbNetColorOff = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("None"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbNetColorOff = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("None"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbNetColorOff->SetToolTip( wxT("Net and netclass colors are not shown") );
 
 	bSizer191->Add( m_rbNetColorOff, 1, wxLEFT, 5 );
@@ -242,7 +234,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_panelNetsAndClasses->SetSizer( bSizer16 );
 	m_panelNetsAndClasses->Layout();
 	bSizer16->Fit( m_panelNetsAndClasses );
-	m_notebook->AddPage( m_panelNetsAndClasses, wxT("Nets"), false );
+	m_notebook->AddPage( m_panelNetsAndClasses, wxT("Nets"), true );
 
 	m_sizerOuter->Add( m_notebook, 1, wxEXPAND, 5 );
 
@@ -253,6 +245,8 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	int m_cbLayerPresetsNChoices = sizeof( m_cbLayerPresetsChoices ) / sizeof( wxString );
 	m_cbLayerPresets = new wxChoice( presetsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbLayerPresetsNChoices, m_cbLayerPresetsChoices, 0 );
 	m_cbLayerPresets->SetSelection( 1 );
+	m_cbLayerPresets->SetToolTip( wxT("Layer presets") );
+
 	presetsSizer->Add( m_cbLayerPresets, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_btnDeletePreset = new wxBitmapButton( presetsSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );

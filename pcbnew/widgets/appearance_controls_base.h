@@ -25,7 +25,6 @@
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/gbsizer.h>
 #include <wx/textctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
@@ -61,7 +60,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxPanel* m_panelObjects;
 		wxBoxSizer* m_objectsPanelSizer;
 		wxScrolledWindow* m_windowObjects;
-		wxGridBagSizer* m_objectsSizer;
+		wxBoxSizer* m_objectsSizer;
 		wxPanel* m_panelNetsAndClasses;
 		wxSplitterWindow* m_netsTabSplitter;
 		wxPanel* m_panelNets;

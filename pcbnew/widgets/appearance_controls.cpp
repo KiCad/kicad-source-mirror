@@ -532,7 +532,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                         ROW_ICON_PROVIDER::STATE::OFF, layer );
 
                 COLOR_SWATCH* swatch = new COLOR_SWATCH( panel, COLOR4D::UNSPECIFIED, layer,
-                        bgColor, theme->GetColor( layer ), false );
+                                                         bgColor, theme->GetColor( layer ), false );
                 swatch->SetToolTip( _( "Left double click or middle click for color change, "
                                        "right click for menu" ) );
 
@@ -549,13 +549,13 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 firstLayer = false;
 
                 sizer->AddSpacer( 1 );
-                sizer->Add( indicator,   0, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
+                sizer->Add( indicator, 0, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
                 sizer->AddSpacer( 5 );
-                sizer->Add( swatch,      0, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
+                sizer->Add( swatch, 0, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
                 sizer->AddSpacer( 6 );
                 sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
                 sizer->AddSpacer( 5 );
-                sizer->Add( label,       1, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
+                sizer->Add( label, 1, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
 
                 m_layers_outer_sizer->Add( panel, 0, wxEXPAND, 0 );
 
@@ -974,35 +974,18 @@ void APPEARANCE_CONTROLS::rebuildObjects()
     COLOR_SETTINGS* theme   = m_frame->GetColorSettings();
     COLOR4D         bgColor = theme->GetColor( LAYER_PCB_BACKGROUND );
     GAL_SET         visible = board->GetVisibleElements();
-    bool            firstSlider = true;
-    int             sliderAlignment = wxALIGN_CENTER_VERTICAL;
-    int             sliderLableAlignment = wxALIGN_CENTER_VERTICAL;
-
-#ifdef __WXMAC__
-    sliderAlignment = wxALIGN_BOTTOM;
-    sliderLableAlignment = wxALIGN_TOP;
-#endif
+    int             swatchWidth = m_windowObjects->ConvertDialogToPixels( wxSize( 8, 0 ) ).x;
+    int             labelWidth = 0;
 
     m_objectSettings.clear();
     m_objectsSizer->Clear( true );
+    m_objectsSizer->AddSpacer( 5 );
 
     auto appendObject =
-            [&]( int aRow, std::unique_ptr<APPEARANCE_SETTING>& aSetting )
+            [&]( const std::unique_ptr<APPEARANCE_SETTING>& aSetting )
             {
-                int layer = aSetting->id;
-                int topMargin = 0;
-
-                if( aSetting->can_control_opacity )
-                {
-                    if( firstSlider )
-                        topMargin = wxTOP;
-
-                    firstSlider = false;
-                }
-                else
-                {
-                    topMargin = wxTOP;
-                }
+                wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+                int         layer = aSetting->id;
 
                 aSetting->visible = visible.Contains( ToGalLayer( layer ) );
                 COLOR4D color     = theme->GetColor( layer );
@@ -1010,17 +993,20 @@ void APPEARANCE_CONTROLS::rebuildObjects()
 
                 if( color != COLOR4D::UNSPECIFIED )
                 {
-                    COLOR_SWATCH* swatch = new COLOR_SWATCH( m_windowObjects, color, layer, bgColor,
-                                                             defColor, false );
+                    COLOR_SWATCH* swatch = new COLOR_SWATCH( m_windowObjects, color, layer,
+                                                             bgColor, defColor, false );
                     swatch->SetToolTip( _( "Left double click or middle click for color change, "
                                            "right click for menu" ) );
 
-                    m_objectsSizer->Add( swatch, wxGBPosition( aRow, 0 ), wxDefaultSpan,
-                                         wxALIGN_CENTER_VERTICAL | topMargin | wxLEFT | wxRIGHT, 1 );
+                    sizer->Add( swatch, 0,  wxALIGN_CENTER_VERTICAL, 0 );
                     aSetting->ctl_color = swatch;
 
                     swatch->Bind( COLOR_SWATCH_CHANGED,
                                   &APPEARANCE_CONTROLS::OnColorSwatchChanged, this );
+                }
+                else
+                {
+                    sizer->AddSpacer( swatchWidth  );
                 }
 
                 BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( m_windowObjects, layer,
@@ -1032,9 +1018,9 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 tip.Printf( _( "Show or hide %s" ), aSetting->label.Lower() );
                 btn_visible->SetToolTip( tip );
 
-                m_objectsSizer->Add( btn_visible, wxGBPosition( aRow, 1 ), wxDefaultSpan,
-                                     sliderLableAlignment | topMargin | wxLEFT, 1 );
                 aSetting->ctl_visibility = btn_visible;
+
+                sizer->AddSpacer( 5 );
 
                 btn_visible->Bind( TOGGLE_CHANGED,
                         [&]( wxCommandEvent& aEvent )
@@ -1048,13 +1034,19 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 label->Wrap( -1 );
                 label->SetToolTip( aSetting->tooltip );
 
-                wxGBSpan labelSpan( 1, aSetting->can_control_opacity ? 1 : 2 );
-
-                m_objectsSizer->Add( label, wxGBPosition( aRow, 2 ), labelSpan,
-                                     sliderLableAlignment | topMargin | wxLEFT | wxRIGHT, 1 );
-
                 if( aSetting->can_control_opacity )
                 {
+                    label->SetMinSize( wxSize( labelWidth, -1 ) );
+#ifdef __WXMAC__
+                    sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM, 10 );
+                    sizer->AddSpacer( 5 );
+                    sizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM, 10 );
+#else
+                    sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL, 0 );
+                    sizer->AddSpacer( 5 );
+                    sizer->Add( label, 0, wxALIGN_CENTER_VERTICAL, 0 );
+#endif
+
                     wxSlider* slider = new wxSlider( m_windowObjects, wxID_ANY, 100, 0, 100,
                                                      wxDefaultPosition, wxDefaultSize,
                                                      wxSL_HORIZONTAL );
@@ -1067,8 +1059,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                     tip.Printf( _( "Set opacity of %s" ), aSetting->label.Lower() );
                     slider->SetToolTip( tip );
 
-                    m_objectsSizer->Add( slider, wxGBPosition( aRow, 3 ), wxDefaultSpan,
-                                         sliderAlignment | topMargin | wxLEFT | wxRIGHT, 1 );
+                    sizer->Add( slider, 1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5 );
                     aSetting->ctl_opacity = slider;
 
                     auto opacitySliderHandler =
@@ -1082,15 +1073,19 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                     slider->Bind( wxEVT_SCROLL_CHANGED, opacitySliderHandler );
                     slider->Bind( wxEVT_SCROLL_THUMBTRACK, opacitySliderHandler );
                 }
+                else
+                {
+                    sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL, 0 );
+                    sizer->AddSpacer( 5 );
+                    sizer->Add( label, 0, wxALIGN_CENTER_VERTICAL, 0 );
+                }
 
                 aSetting->ctl_text = label;
+                m_objectsSizer->Add( sizer, 0, wxEXPAND | wxLEFT | wxRIGHT, 5 );
+                m_objectsSizer->AddSpacer( 1 );
             };
 
-    m_objectsSizer->SetEmptyCellSize( wxSize( m_pointSize, m_pointSize * 2 / 3 ) );
-
-    int gridRow = 0;
-
-    for( unsigned row = 0; row < arrayDim( s_objectSettings ); ++row )
+    for( const APPEARANCE_SETTING& s_setting : s_objectSettings )
     {
         // TODO(JE)
 #ifdef NOTYET
@@ -1098,28 +1093,36 @@ void APPEARANCE_CONTROLS::rebuildObjects()
             continue;
 #endif
 
-        if( !s_objectSettings[row].spacer )
+        if( !s_setting.spacer )
         {
-            m_objectSettings.emplace_back(
-                    std::make_unique<APPEARANCE_SETTING>( s_objectSettings[row] ) );
+            m_objectSettings.emplace_back( std::make_unique<APPEARANCE_SETTING>( s_setting ) );
 
             std::unique_ptr<APPEARANCE_SETTING>& setting = m_objectSettings.back();
 
             // Because s_render_rows is created static, we must explicitly call
             // wxGetTranslation for texts which are internationalized (tool tips
             // and item names)
-            setting->tooltip = wxGetTranslation( s_objectSettings[row].tooltip );
-            setting->label   = wxGetTranslation( s_objectSettings[row].label );
+            setting->tooltip = wxGetTranslation( s_setting.tooltip );
+            setting->label   = wxGetTranslation( s_setting.label );
 
-            appendObject( gridRow, setting );
+            if( setting->can_control_opacity )
+            {
+                int width = m_windowObjects->GetTextExtent( setting->label ).x;
+                labelWidth = std::max( labelWidth, width );
+            }
 
             m_objectSettingsMap[ToGalLayer( setting->id )] = setting.get();
         }
-
-        gridRow++;
     }
 
-    m_objectsSizer->AddGrowableCol( 3, 1 );
+    for( const std::unique_ptr<APPEARANCE_SETTING>& setting : m_objectSettings )
+    {
+        if( setting->spacer )
+            m_objectsSizer->AddSpacer( m_pointSize );
+        else
+            appendObject( setting );
+    }
+
     m_objectsSizer->Layout();
 }
 
