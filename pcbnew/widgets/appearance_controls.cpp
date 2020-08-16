@@ -33,7 +33,7 @@
 #include <widgets/bitmap_toggle.h>
 #include <widgets/color_swatch.h>
 #include <widgets/indicator_icon.h>
-
+#include <dialog_helpers.h>
 
 /// Template for object appearance settings
 const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSettings[] = {
@@ -1433,11 +1433,12 @@ void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
 {
     m_cbLayerPresets->Clear();
 
-    for( auto& pair : m_layerPresets )
+    for( std::pair<const wxString, LAYER_PRESET>& pair : m_layerPresets )
         m_cbLayerPresets->Append( pair.first, static_cast<void*>( &pair.second ) );
 
     m_cbLayerPresets->Append( wxT( "-----" ) );
-    m_cbLayerPresets->Append( _( "Save new preset" ) );
+    m_cbLayerPresets->Append( _( "Save new preset..." ) );
+    m_cbLayerPresets->Append( _( "Delete preset..." ) );
 
     m_cbLayerPresets->SetSelection( 0 );
 
@@ -1456,7 +1457,7 @@ void APPEARANCE_CONTROLS::syncLayerPresetSelection()
     GAL_SET visibleObjects = board->GetVisibleElements();
 
     auto it = std::find_if( m_layerPresets.begin(), m_layerPresets.end(),
-                            [&]( const auto& aPair )
+                            [&]( const std::pair<const wxString, LAYER_PRESET>& aPair )
                             {
                                 return ( aPair.second.layers == visibleLayers
                                          && aPair.second.renderLayers == visibleObjects );
@@ -1465,7 +1466,7 @@ void APPEARANCE_CONTROLS::syncLayerPresetSelection()
     if( it != m_layerPresets.end() )
         m_cbLayerPresets->SetStringSelection( it->first  );
     else
-        m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 2 ); // separator
+        m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 ); // separator
 
     m_currentPreset = static_cast<LAYER_PRESET*>(
             m_cbLayerPresets->GetClientData( m_cbLayerPresets->GetSelection() ) );
@@ -1486,7 +1487,7 @@ void APPEARANCE_CONTROLS::updateLayerPresetSelection( const wxString& aName )
     }
     else if( idx < 0 )
     {
-        m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 2 ); // separator
+        m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 ); // separator
         updateDeleteLayerPresetButton();
     }
 }
@@ -1505,16 +1506,16 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
                 if( m_currentPreset )
                     m_cbLayerPresets->SetStringSelection( m_currentPreset->name );
                 else
-                    m_cbLayerPresets->SetSelection( count - 2 );
+                    m_cbLayerPresets->SetSelection( count - 3 );
             };
 
-    if( index == count - 2 )
+    if( index == count - 3 )
     {
         // Separator: reject the selection
         resetSelection();
         return;
     }
-    else if( index == count - 1 )
+    else if( index == count - 2 )
     {
         // Save current state to new preset
         wxTextEntryDialog dlg( this, _( "New layer preset name:" ), _( "Save Layer Preset" ) );
@@ -1543,6 +1544,40 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         index = m_cbLayerPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
         m_cbLayerPresets->SetSelection( index );
         m_btnDeletePreset->Enable();
+
+        return;
+    }
+    else if( index == count - 1 )
+    {
+        // Delete a preset
+        wxArrayString headers;
+        std::vector<wxArrayString> items;
+
+        headers.Add( _( "Presets" ) );
+
+        for( std::pair<const wxString, LAYER_PRESET>& pair : m_layerPresets )
+        {
+            if( !pair.second.readOnly )
+            {
+                wxArrayString item;
+                item.Add( pair.first );
+                items.emplace_back( item );
+            }
+        }
+
+        EDA_LIST_DIALOG dlg( m_frame, _( "Delete Preset" ), headers, items, wxEmptyString );
+        dlg.SetListLabel( _( "Select netclass:" ) );
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            wxString presetName = dlg.GetTextSelection();
+
+            m_layerPresets.erase( presetName );
+
+            m_cbLayerPresets->Delete( m_cbLayerPresets->FindString( presetName ) );
+            m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 );
+            m_currentPreset = nullptr;
+        }
 
         return;
     }
@@ -1602,7 +1637,7 @@ void APPEARANCE_CONTROLS::OnBtnDeleteLayerPreset( wxCommandEvent& event )
 
     m_layerPresets.erase( current->name );
     m_cbLayerPresets->Delete( index );
-    m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 2 );
+    m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 );
     m_currentPreset = nullptr;
 }
 

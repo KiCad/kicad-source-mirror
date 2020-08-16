@@ -205,7 +205,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer191;
 	bSizer191 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_rbNetColorAll = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("All"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbNetColorAll = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("All"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbNetColorAll->SetToolTip( wxT("Net and netclass colors are shown on all copper items") );
 
 	bSizer191->Add( m_rbNetColorAll, 1, wxRIGHT|wxLEFT, 5 );
@@ -216,7 +216,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	bSizer191->Add( m_rbNetColorRatsnest, 1, wxLEFT, 5 );
 
-	m_rbNetColorOff = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("None"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbNetColorOff = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("None"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbNetColorOff->SetToolTip( wxT("Net and netclass colors are not shown") );
 
 	bSizer191->Add( m_rbNetColorOff, 1, wxLEFT, 5 );
@@ -247,13 +247,13 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_cbLayerPresets->SetSelection( 1 );
 	m_cbLayerPresets->SetToolTip( wxT("Layer presets") );
 
-	presetsSizer->Add( m_cbLayerPresets, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	presetsSizer->Add( m_cbLayerPresets, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_btnDeletePreset = new wxBitmapButton( presetsSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_btnDeletePreset->Enable( false );
 	m_btnDeletePreset->SetToolTip( wxT("Delete this layer preset") );
 
-	presetsSizer->Add( m_btnDeletePreset, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	presetsSizer->Add( m_btnDeletePreset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	m_sizerOuter->Add( presetsSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
