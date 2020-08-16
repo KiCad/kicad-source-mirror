@@ -74,10 +74,11 @@ public:
     /**
      * @brief Represents a point in x,y coordinates
      */
-    struct POINT
+    struct POINT : wxPoint
     {
-        long X = UNDEFINED_VALUE;
-        long Y = UNDEFINED_VALUE;
+        POINT() : wxPoint( UNDEFINED_VALUE, UNDEFINED_VALUE )
+        {
+        }
 
         void Parse( XNODE* aNode );
     };

@@ -248,6 +248,20 @@ template <class T> inline T NormalizeAngle360Min( T Angle )
     return Angle;
 }
 
+
+/// Normalize angle to be in the 0.0 .. -360.0 range:
+/// angle is in 1/10 degrees
+template <class T>
+inline T NormalizeAngleNeg( T Angle )
+{
+    while( Angle < -3600 )
+        Angle += 3600;
+    while( Angle >= 0 )
+        Angle -= 3600;
+    return Angle;
+}
+
+
 /// Normalize angle to be in the 0.0 .. 360.0 range:
 /// angle is in 1/10 degrees
 template <class T> inline T NormalizeAnglePos( T Angle )

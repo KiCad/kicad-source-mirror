@@ -42,8 +42,8 @@ void CADSTAR_ARCHIVE_COMMON::POINT::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "PT" ) );
 
-    X = GetXmlAttributeIDLong( aNode, 0 );
-    Y = GetXmlAttributeIDLong( aNode, 1 );
+    x = GetXmlAttributeIDLong( aNode, 0 );
+    y = GetXmlAttributeIDLong( aNode, 1 );
 }
 
 
@@ -68,8 +68,8 @@ void CADSTAR_ARCHIVE_COMMON::VERTEX::Parse( XNODE* aNode )
     if( aNodeName == wxT( "PT" ) )
     {
         Type     = VERTEX_TYPE::POINT;
-        Center.X = UNDEFINED_VALUE;
-        Center.Y = UNDEFINED_VALUE;
+        Center.x = UNDEFINED_VALUE;
+        Center.y = UNDEFINED_VALUE;
         End.Parse( aNode );
     }
     else if( aNodeName == wxT( "ACWARC" ) || aNodeName == wxT( "CWARC" ) )
@@ -91,8 +91,8 @@ void CADSTAR_ARCHIVE_COMMON::VERTEX::Parse( XNODE* aNode )
         else
             Type = VERTEX_TYPE::CLOCKWISE_SEMICIRCLE;
 
-        Center.X = UNDEFINED_VALUE;
-        Center.Y = UNDEFINED_VALUE;
+        Center.x = UNDEFINED_VALUE;
+        Center.y = UNDEFINED_VALUE;
 
         std::vector<POINT> pts = ParseAllChildPoints( aNode, true, 1 );
 
