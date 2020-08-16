@@ -1748,28 +1748,50 @@ void APPEARANCE_CONTROLS::onNetclassVisibilityChanged( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
 {
-    BOARD*      board     = m_frame->GetBoard();
-    NETCLASSES& classes   = board->GetDesignSettings().GetNetClasses();
-    NETCLASSPTR netclass  = classes.Find( aClassName );
+    BOARD*        board    = m_frame->GetBoard();
+    NETINFO_LIST& nets     = board->GetNetInfo();
+    NETCLASSES&   classes  = board->GetDesignSettings().GetNetClasses();
+    NETCLASSPTR   netclass = classes.Find( aClassName );
+    TOOL_MANAGER* manager  = m_frame->GetToolManager();
 
     if( !netclass )
         return;
 
-    NETINFO_LIST& nets    = board->GetNetInfo();
-    TOOL_MANAGER* manager = m_frame->GetToolManager();
+    NETCLASS* defaultClass = classes.GetDefaultPtr();
 
-    for( const wxString& member : *netclass )
+    auto updateWidget =
+            [&]( int aCode )
+            {
+                if( m_netSettingsMap.count( aCode ) )
+                {
+                    APPEARANCE_SETTING* setting = m_netSettingsMap.at( aCode );
+                    setting->ctl_visibility->SetValue( aShow );
+                }
+            };
+
+    if( netclass == classes.GetDefault() )
     {
-        int code = nets.GetNetItem( member )->GetNet();
-
-        if( m_netSettingsMap.count( code ) )
-        {
-            APPEARANCE_SETTING* setting = m_netSettingsMap.at( code );
-            setting->ctl_visibility->SetValue( aShow );
-        }
-
         const TOOL_ACTION& action = aShow ? PCB_ACTIONS::showNet : PCB_ACTIONS::hideNet;
-        manager->RunAction( action, true, code );
+
+        for( NETINFO_ITEM* net : nets )
+        {
+            if( net->GetNetClass() == defaultClass )
+            {
+                manager->RunAction( action, true, net->GetNet() );
+                updateWidget( net->GetNet() );
+            }
+        }
+    }
+    else
+    {
+        const TOOL_ACTION& action = aShow ? PCB_ACTIONS::showNet : PCB_ACTIONS::hideNet;
+
+        for( const wxString& member : *netclass )
+        {
+            int code = nets.GetNetItem( member )->GetNet();
+            manager->RunAction( action, true, code );
+            updateWidget( code );
+        }
     }
 }
 
