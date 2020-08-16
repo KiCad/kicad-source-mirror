@@ -206,16 +206,20 @@ wxSize APPEARANCE_CONTROLS::GetBestSize() const
 void APPEARANCE_CONTROLS::OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event )
 {
     // Because wxWidgets is broken and will not properly lay these out automatically
+    Freeze();
     m_panelLayers->Fit();
     m_sizerOuter->Layout();
+    Thaw();
 }
 
 
 void APPEARANCE_CONTROLS::OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event )
 {
     // Because wxWidgets is broken and will not properly lay these out automatically
+    Freeze();
     m_panelNetsAndClasses->Fit();
     m_sizerOuter->Layout();
+    Thaw();
 }
 
 
@@ -231,9 +235,11 @@ void APPEARANCE_CONTROLS::OnNotebookPageChanged( wxNotebookEvent& aEvent )
 
     // Because wxWidgets is broken and will send click events to children of the collapsible
     // panes even if they are collapsed without this
+    Freeze();
     m_panelLayers->Fit();
     m_panelNetsAndClasses->Fit();
     m_sizerOuter->Layout();
+    Thaw();
 }
 
 
