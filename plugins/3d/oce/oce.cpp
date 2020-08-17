@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +30,9 @@
 #include <wx/filename.h>
 #include "plugins/3d/3d_plugin.h"
 #include "plugins/3dapi/ifsg_all.h"
+
+#include <string>
+#include <vector>
 
 SCENEGRAPH* LoadModel( char const* filename );
 
@@ -62,55 +66,23 @@ void GetPluginVersion( unsigned char* Major,
     return;
 }
 
-// number of extensions supported
-#ifdef _WIN32
-#define NEXTS 4
-#else
-#define NEXTS 8
-#endif
-
-// number of filter sets supported
-#define NFILS 2
-
-static char ext0[] = "stp";
-static char ext1[] = "step";
-static char ext2[] = "igs";
-static char ext3[] = "iges";
-
-#ifdef _WIN32
-static char fil0[] = "STEP (*.stp;*.step)|*.stp;*.step";
-static char fil1[] = "IGES (*.igs;*.iges)|*.igs;*.iges";
-#else
-static char ext4[] = "STP";
-static char ext5[] = "STEP";
-static char ext6[] = "IGS";
-static char ext7[] = "IGES";
-static char fil0[] = "STEP (*.stp;*.STP;*.step;*.STEP)|*.stp;*.STP;*.step;*.STEP";
-static char fil1[] = "IGES (*.igs;*.IGS;*.iges;*.IGES)|*.igs;*.IGS;*.iges;*.IGES";
-#endif
-
 static struct FILE_DATA
 {
-    char const* extensions[NEXTS];
-    char const* filters[NFILS];
+    std::vector<std::string> extensions;
+    std::vector<std::string> filters;
 
     FILE_DATA()
     {
-        extensions[0] = ext0;
-        extensions[1] = ext1;
-        extensions[2] = ext2;
-        extensions[3] = ext3;
-        filters[0] = fil0;
-        filters[1] = fil1;
-
-#ifndef _WIN32
-        extensions[4] = ext4;
-        extensions[5] = ext5;
-        extensions[6] = ext6;
-        extensions[7] = ext7;
+#ifdef _WIN32
+        extensions = { "stp","step","stpZ","step.gz","igs","iges" };
+        filters = { "STEP (*.stp;*.step;*.stpZ;*.step.gz)|*.stp;*.step;*.stpZ;*.step.gz",
+                    "IGES (*.igs;*.iges)|*.igs;*.iges" };
+#else
+        extensions = { "stp","STP","stpZ","STPZ","step","STEP","step.gz","STEP.GZ","igs","IGS","iges","IGES" };
+        filters = { "STEP (*.stp;*.STP;*.stpZ;*.STPZ;*.step;*.STEP;*.step.gz;*.STEP.GZ)"
+                        "|*.stp;*.STP;*.stpZ;*.STPZ;*.step;*.STEP;*.step.gz;*.STEP.GZ",
+                    "IGES (*.igs;*.IGS;*.iges;*.IGES)|*.igs;*.IGS;*.iges;*.IGES" };
 #endif
-
-        return;
     }
 
 } file_data;
@@ -118,31 +90,31 @@ static struct FILE_DATA
 
 int GetNExtensions( void )
 {
-    return NEXTS;
+    return file_data.extensions.size();
 }
 
 
 char const* GetModelExtension( int aIndex )
 {
-    if( aIndex < 0 || aIndex >= NEXTS )
+    if( aIndex < 0 || aIndex >= int( file_data.extensions.size() ) )
         return NULL;
 
-    return file_data.extensions[aIndex];
+    return file_data.extensions[aIndex].c_str();
 }
 
 
 int GetNFilters( void )
 {
-    return NFILS;
+    return file_data.filters.size();
 }
 
 
 char const* GetFileFilter( int aIndex )
 {
-    if( aIndex < 0 || aIndex >= NFILS )
+    if( aIndex < 0 || aIndex >= int( file_data.filters.size() ) )
         return NULL;
 
-    return file_data.filters[aIndex];
+    return file_data.filters[aIndex].c_str();
 }
 
 

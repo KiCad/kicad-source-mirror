@@ -1,7 +1,7 @@
 #
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
-#  Copyright (C) 2007-2018 Kicad Developers, see AUTHORS.txt for contributors.
+#  Copyright (C) 2007-2020 Kicad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -594,6 +594,13 @@ endif()
 find_package( GLM 0.9.8 REQUIRED )
 add_definitions( -DGLM_FORCE_CTOR_INIT )
 include_directories( SYSTEM ${GLM_INCLUDE_DIR} )
+
+#
+# Find zlib library, required
+#
+find_package(ZLIB REQUIRED)
+check_find_package_result( ZLIB_FOUND "ZLIB" )
+include_directories( SYSTEM ${ZLIB_INCLUDE_DIRS} )
 
 #
 # Find CURL library, required

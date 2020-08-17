@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,12 +29,12 @@
 #include <cstring>
 #include <map>
 #include <vector>
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <wx/wfstream.h>
 
-#if ( defined( DEBUG_OCE ) && DEBUG_OCE > 3 )
-#include <wx/filename.h>
-#endif
+#include <decompress.hpp>
 
 #include <TDocStd_Document.hxx>
 #include <TopoDS.hxx>
@@ -261,18 +262,23 @@ struct DATA
 enum FormatType
 {
     FMT_NONE = 0,
-    FMT_STEP = 1,
-    FMT_IGES = 2
+    FMT_STEP,
+    FMT_STPZ,
+    FMT_IGES
 };
 
 
 FormatType fileType( const char* aFileName )
 {
-    wxString fname( wxString::FromUTF8Unchecked( aFileName ) );
-    wxFileInputStream ifile( fname );
+    wxFileName fname( wxString::FromUTF8Unchecked( aFileName ) );
+    wxFileInputStream ifile( fname.GetFullPath() );
 
     if( !ifile.IsOk() )
         return FMT_NONE;
+
+    if( fname.GetExt().MakeUpper().EndsWith( "STPZ" ) ||
+            fname.GetExt().MakeUpper().EndsWith( "GZ" ) )
+        return FMT_STPZ;
 
     char iline[82];
     memset( iline, 0, 82 );
@@ -451,6 +457,47 @@ bool readSTEP( Handle(TDocStd_Document)& m_doc, const char* fname )
 }
 
 
+bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
+{
+    wxFileName fname( wxString::FromUTF8Unchecked( aFileName ) );
+    wxFileInputStream ifile( fname.GetFullPath() );
+
+    wxFileName outFile( fname );
+
+    outFile.SetPath( wxStandardPaths::Get().GetTempDir() );
+    outFile.SetExt( "STEP" );
+
+    wxFileOffset size = ifile.GetLength();
+
+    if( size == wxInvalidOffset )
+        return false;
+
+    {
+        wxFileOutputStream ofile( outFile.GetFullPath() );
+
+        if( !ofile.IsOk() )
+            return false;
+
+        char *buffer = new char[size];
+
+        ifile.Read( buffer, size);
+        std::string expanded = gzip::decompress( buffer, size );
+
+        delete buffer;
+
+        ofile.Write( expanded.data(), expanded.size() );
+        ofile.Close();
+    }
+
+    bool retval = readSTEP( m_doc, outFile.GetFullPath() );
+
+    // Cleanup our temporary file
+    wxRemoveFile( outFile.GetFullPath() );
+
+    return retval;
+}
+
+
 SCENEGRAPH* LoadModel( char const* filename )
 {
     DATA data;
@@ -472,6 +519,12 @@ SCENEGRAPH* LoadModel( char const* filename )
             if( !readSTEP( data.m_doc, filename ) )
                 return NULL;
             break;
+
+        case FMT_STPZ:
+            if( !readSTEPZ( data.m_doc, filename ) )
+                return NULL;
+            break;
+
 
         default:
             return NULL;

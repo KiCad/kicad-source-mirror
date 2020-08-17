@@ -65,7 +65,11 @@ add_library( s3d_plugin_vrml MODULE
         x3d/x3d_transform.cpp
         )
 
-target_link_libraries( s3d_plugin_vrml kicad_3dsg ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )
+target_link_libraries( s3d_plugin_vrml kicad_3dsg ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} ${ZLIB_LIBRARIES} )
+
+target_include_directories( s3d_plugin_vrml PRIVATE
+    $<TARGET_PROPERTY:gzip-hpp,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 
 if( APPLE )
     # puts library into the main kicad.app bundle in build tree
