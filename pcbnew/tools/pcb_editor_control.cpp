@@ -94,35 +94,6 @@ protected:
     {
         return new ZONE_CONTEXT_MENU();
     }
-
-private:
-    void update() override
-    {
-        SELECTION_TOOL* selTool = getToolManager()->GetTool<SELECTION_TOOL>();
-
-        // enable zone actions that act on a single zone
-        bool singleZoneActionsEnabled = ( SELECTION_CONDITIONS::Count( 1 ) &&
-                                          SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Zones )
-                                        )( selTool->GetSelection() );
-
-        Enable( PCB_ACTIONS::zoneDuplicate.GetUIId(),   singleZoneActionsEnabled );
-        Enable( PCB_ACTIONS::drawZoneCutout.GetUIId(),  singleZoneActionsEnabled );
-        Enable( PCB_ACTIONS::drawSimilarZone.GetUIId(), singleZoneActionsEnabled );
-
-        // enable zone actions that ably to a specific set of zones (as opposed to all of them)
-        bool nonGlobalActionsEnabled = ( SELECTION_CONDITIONS::MoreThan( 0 ) )( selTool->GetSelection() );
-
-        Enable( PCB_ACTIONS::zoneFill.GetUIId(),   nonGlobalActionsEnabled );
-        Enable( PCB_ACTIONS::zoneUnfill.GetUIId(), nonGlobalActionsEnabled );
-
-        // lines like this make me really think about a better name for SELECTION_CONDITIONS class
-        bool mergeEnabled = ( SELECTION_CONDITIONS::MoreThan( 1 ) &&
-                              /*SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) &&*/
-                              PCB_SELECTION_CONDITIONS::SameNet( true ) &&
-                              PCB_SELECTION_CONDITIONS::SameLayer() )( selTool->GetSelection() );
-
-        Enable( PCB_ACTIONS::zoneMerge.GetUIId(), mergeEnabled );
-    }
 };
 
 

@@ -57,30 +57,6 @@ public:
     }
 
 private:
-
-    void update() override
-    {
-        const auto& selection = getToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
-
-        bool haveNetCode = false;
-
-        for( EDA_ITEM* item : selection )
-        {
-            if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
-            {
-                if( bci->GetNetCode() > 0 )
-                {
-                    haveNetCode = true;
-                    break;
-                }
-            }
-        }
-
-        Enable( PCB_ACTIONS::showNet.GetUIId(), haveNetCode );
-        Enable( PCB_ACTIONS::hideNet.GetUIId(), haveNetCode );
-        // Enable( PCB_ACTIONS::highlightNet.GetUIId(), haveNetCode );
-    }
-
     ACTION_MENU* create() const override
     {
         return new NET_CONTEXT_MENU();

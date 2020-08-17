@@ -630,6 +630,47 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::routerShoveMode,      CHECK( isShoveMode ) );
     mgr->SetConditions( PCB_ACTIONS::routerWalkaroundMode, CHECK( isWalkaroundMode ) );
 
+    auto haveNetCond =
+        [] ( const SELECTION& aSel )
+        {
+            for( EDA_ITEM* item : aSel )
+            {
+                if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+                {
+                    if( bci->GetNetCode() > 0 )
+                        return true;
+                }
+            }
+
+            return false;
+        };
+
+    mgr->SetConditions( PCB_ACTIONS::showNet,      ENABLE( haveNetCond ) );
+    mgr->SetConditions( PCB_ACTIONS::hideNet,      ENABLE( haveNetCond ) );
+    mgr->SetConditions( PCB_ACTIONS::highlightNet, ENABLE( haveNetCond ) );
+
+    mgr->SetConditions( PCB_ACTIONS::selectNet,
+                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
+    mgr->SetConditions( PCB_ACTIONS::selectConnection,
+                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
+    mgr->SetConditions( PCB_ACTIONS::selectSameSheet,
+                        ENABLE( SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T ) ) );
+
+
+    SELECTION_CONDITION singleZoneCond = SELECTION_CONDITIONS::Count( 1 ) &&
+                                         SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Zones );
+
+    SELECTION_CONDITION zoneMergeCond = SELECTION_CONDITIONS::MoreThan( 1 ) &&
+                                        PCB_SELECTION_CONDITIONS::SameNet( true ) &&
+                                        PCB_SELECTION_CONDITIONS::SameLayer();
+
+    mgr->SetConditions( PCB_ACTIONS::zoneDuplicate,   ENABLE( singleZoneCond ) );
+    mgr->SetConditions( PCB_ACTIONS::drawZoneCutout,  ENABLE( singleZoneCond ) );
+    mgr->SetConditions( PCB_ACTIONS::drawSimilarZone, ENABLE( singleZoneCond ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneMerge,       ENABLE( zoneMergeCond ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneFill,        ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneUnfill,      ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+
     // The layer indicator is special, so we register a callback directly that will regenerate the
     // bitmap instead of using the conditions system
     auto layerIndicatorUpdate =
