@@ -21,8 +21,13 @@
 #include "dialog_color_picker.h"
 #include <cmath>
 #include <algorithm>
+#include <kiface_i.h>
+#include <settings/app_settings.h>
+#include <widgets/color_swatch.h>
 
 #define ALPHA_MAX 100   // the max value returned by the alpha (opacity) slider
+
+using KIGFX::COLOR4D;
 
 // Configure the spin controls contained inside the dialog
 void configureSpinCtrl( wxSpinCtrl* aCtrl )
@@ -35,10 +40,11 @@ void configureSpinCtrl( wxSpinCtrl* aCtrl )
 }
 
 
-DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor,
-                                          bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors,
-                                          const KIGFX::COLOR4D& aDefaultColor )
-	: DIALOG_COLOR_PICKER_BASE( aParent )
+DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, COLOR4D& aCurrentColor,
+                                          bool aAllowOpacityControl,
+                                          CUSTOM_COLORS_LIST* aUserColors,
+                                          const COLOR4D& aDefaultColor ) :
+	DIALOG_COLOR_PICKER_BASE( aParent )
 {
     m_allowMouseEvents = false;
     m_allowOpacityCtrl = aAllowOpacityControl;
@@ -58,8 +64,10 @@ DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCu
         m_newColor4D.a = 1.0;
     }
 
-    if( m_ActivePage >= 0 )
-        m_notebook->SetSelection( (unsigned) m_ActivePage );
+    APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
+    wxASSERT( cfg );
+
+    m_notebook->SetSelection( cfg->m_ColorPicker.default_tab );
 
     // Build the defined colors panel:
     initDefinedColors( aUserColors );
@@ -71,87 +79,44 @@ DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCu
      * The underlying action is the same, but we change the label here because the action from
      * the point of view of the user is slightly different.
      */
-    if( aDefaultColor == KIGFX::COLOR4D::UNSPECIFIED )
+    if( aDefaultColor == COLOR4D::UNSPECIFIED )
         m_resetToDefault->SetLabel( _( "Clear Color" ) );
 
     m_sdbSizerOK->SetDefault();
 }
 
-int DIALOG_COLOR_PICKER::m_ActivePage = 0;    // the active notebook page, stored during a session
-
 
 DIALOG_COLOR_PICKER::~DIALOG_COLOR_PICKER()
 {
+    APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
+    wxASSERT( cfg );
+
+    cfg->m_ColorPicker.default_tab = m_notebook->GetSelection();
+
     delete m_bitmapRGB;
     delete m_bitmapHSV;
 
-    m_ActivePage = m_notebook->GetSelection();
-
-    for( auto button : m_buttonsColor )
-        button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
-                            wxCommandEventHandler( DIALOG_COLOR_PICKER::buttColorClick ), NULL, this );
+    for( wxStaticBitmap* swatch : m_colorSwatches )
+    {
+        swatch->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
+                            wxMouseEventHandler( DIALOG_COLOR_PICKER::buttColorClick ),
+                            NULL, this );
+    }
 }
 
 
-void DIALOG_COLOR_PICKER::setIconColor( wxStaticBitmap* aStaticBitmap, KIGFX::COLOR4D& aColor4D )
+void DIALOG_COLOR_PICKER::updatePreview( wxStaticBitmap* aStaticBitmap, COLOR4D& aColor4D )
 {
-    // Draw the icon that shows the aColor4D,
-    // with colors according to the color 4D rgb and alpha
-    // for alpha = 1 (no tranparency, the icon is a full rgb color rect
-    // for alpha = 0 (100% tranparency, the icon is a grid of rgb color
-    // and background color small sub rect
-    wxMemoryDC bitmapDC;
-    wxSize size = aStaticBitmap->GetSize();
-    wxBitmap newBm( size );
-    bitmapDC.SelectObject( newBm );
-    wxPen pen( aColor4D.ToColour() );
-    wxBrush brush( aColor4D.ToColour() );
-
-    // clear background (set bg color to aColor4D )
-    bitmapDC.SetBackground( brush );
-    bitmapDC.Clear();
-
-
-    // Draw the alpha subrect
-    int stepx = size.x/8;
-    int stepy = size.y/8;
-
-    // build the alpha color for icon:
-    // the alpha color is the initial color modified to be
-    // the initial color for transparency = 0 ( alpha = 1 )
-    // and white color for transparency = 1( alpha = 0 )
-    KIGFX::COLOR4D bgcolor( GetBackgroundColour() );
-    KIGFX::COLOR4D alphacolor = aColor4D;
-    alphacolor.r = ( alphacolor.r * aColor4D.a ) + ( bgcolor.r * (1-aColor4D.a) );
-    alphacolor.g = ( alphacolor.g * aColor4D.a ) + ( bgcolor.g * (1-aColor4D.a) );
-    alphacolor.b = ( alphacolor.b * aColor4D.a ) + ( bgcolor.b * (1-aColor4D.a) );
-
-    pen.SetColour( alphacolor.ToColour() );
-    brush.SetColour( alphacolor.ToColour() );
-    bitmapDC.SetPen( pen );
-    bitmapDC.SetBrush( brush );
-
-    for( int ii = 0; ii < size.x/stepx; ii+=2 )
-    {
-        for( int jj = 0; jj < size.y/stepy; jj+= 2 )
-        {
-            wxPoint pos( stepx*ii + stepx/2, stepy*jj + stepy/2 );
-            bitmapDC.DrawRectangle( pos, wxSize( stepx, stepy ) );
-        }
-    }
-
+    wxBitmap newBm = COLOR_SWATCH::MakeBitmap( aColor4D, COLOR4D::WHITE, aStaticBitmap->GetSize(),
+                                               ConvertDialogToPixels( CHECKERBOARD_SIZE_DU ) );
     aStaticBitmap->SetBitmap( newBm );
-
-    // Deselect the Tool Bitmap from DC, in order to delete the MemoryDC
-    // safely without deleting the bitmap
-    bitmapDC.SelectObject( wxNullBitmap );
 }
 
 
 bool DIALOG_COLOR_PICKER::TransferDataToWindow()
 {
     // Draw all bitmaps, with colors according to the color 4D
-    setIconColor( m_OldColorRect, m_previousColor4D );
+    updatePreview( m_OldColorRect, m_previousColor4D );
     SetEditVals( ALL_CHANGED, false );
     drawAll();
 
@@ -175,9 +140,6 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
 {
     #define ID_COLOR_BLACK 2000 // colors_id = ID_COLOR_BLACK a ID_COLOR_BLACK + NBCOLORS-1
 
-    // Size of color swatches
-    const int w = 32, h = 32;
-
     // Colors are built from the colorRefs() table (size NBCOLORS).
     // The look is better when colorRefs() order is displayed in a grid matrix
     // of 6 row and 5 columns, first filling a row, and after the next column.
@@ -188,53 +150,44 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
     int grid_row = 0;
     int table_row_count = 6;
 
+    wxSize swatchSize = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );
+    wxSize checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+
+    auto addSwatch =
+            [&]( int aId, COLOR4D aColor, const wxString& aColorName )
+            {
+                wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, COLOR4D::WHITE, swatchSize,
+                                                            checkerboardSize );
+                wxStaticBitmap* swatch = new wxStaticBitmap( m_panelDefinedColors, aId, bitmap );
+
+                m_fgridColor->Add( swatch, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+                wxStaticText* label = new wxStaticText( m_panelDefinedColors, wxID_ANY, aColorName,
+                                                        wxDefaultPosition, wxDefaultSize, 0 );
+                m_fgridColor->Add( label, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 15 );
+
+                m_colorSwatches.push_back( swatch );
+
+                swatch->Connect( wxEVT_LEFT_DOWN,
+                                 wxMouseEventHandler( DIALOG_COLOR_PICKER::buttColorClick ),
+                                 NULL, this );
+            };
+
     // If no predefined list is given, build the default predefined colors:
     if( aPredefinedColors )
     {
         for( unsigned jj = 0; jj < aPredefinedColors->size() && jj < NBCOLORS; ++jj )
         {
             CUSTOM_COLOR_ITEM* item = & *aPredefinedColors->begin() + jj;
-            int butt_ID = ID_COLOR_BLACK + jj;
-            wxMemoryDC iconDC;
-            wxBitmap   ButtBitmap( w, h );
-            wxBrush    brush;
+            int                butt_ID = ID_COLOR_BLACK + jj;
 
-            iconDC.SelectObject( ButtBitmap );
-
-            KIGFX::COLOR4D buttcolor = item->m_Color;
-
-            iconDC.SetPen( *wxBLACK_PEN );
-            brush.SetColour( buttcolor.ToColour() );
-            brush.SetStyle( wxBRUSHSTYLE_SOLID );
-
-            iconDC.SetBrush( brush );
-            iconDC.SetBackground( *wxGREY_BRUSH );
-            iconDC.Clear();
-            iconDC.DrawRoundedRectangle( 0, 0, w, h, (double) h / 3 );
-
-            wxBitmapButton* bitmapButton = new wxBitmapButton( m_panelDefinedColors, butt_ID, ButtBitmap,
-                                               wxDefaultPosition, wxSize( w+8, h+6 ) );
-            m_fgridColor->Add( bitmapButton, 0,
-                               wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
-                               wxLEFT | wxBOTTOM, 5 );
-
-            wxStaticText* label = new wxStaticText( m_panelDefinedColors, -1,
-                                                    item->m_ColorName,
-                                                    wxDefaultPosition, wxDefaultSize, 0 );
-            m_fgridColor->Add( label, 1,
-                               wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
-                               wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-            m_buttonsColor.push_back( bitmapButton );
-
-            m_Color4DList.push_back( buttcolor );
-
-            bitmapButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                   wxCommandEventHandler( DIALOG_COLOR_PICKER::buttColorClick ), NULL, this );
+            addSwatch( butt_ID, item->m_Color, item->m_ColorName );
+            m_Color4DList.push_back( item->m_Color );
         }
     }
     else
     {
-        m_Color4DList.assign( NBCOLORS, KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
+        m_Color4DList.assign( NBCOLORS, COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
 
         for( int jj = 0; jj < NBCOLORS; ++jj, grid_col++ )
         {
@@ -244,42 +197,12 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
                 grid_row++;
             }
 
-            int ii = grid_row + (grid_col*table_row_count); // The index in colorRefs()
+            int     ii = grid_row + (grid_col*table_row_count); // The index in colorRefs()
+            int     butt_ID = ID_COLOR_BLACK + ii;
+            COLOR4D buttcolor = COLOR4D( colorRefs()[ii].m_Numcolor );
 
-            int butt_ID = ID_COLOR_BLACK + ii;
-            wxMemoryDC iconDC;
-            wxBitmap   ButtBitmap( w, h );
-            wxBrush    brush;
-
-            iconDC.SelectObject( ButtBitmap );
-
-            KIGFX::COLOR4D buttcolor = KIGFX::COLOR4D( colorRefs()[ii].m_Numcolor );
+            addSwatch( butt_ID, buttcolor, wxGetTranslation( colorRefs()[ii].m_ColorName ) );
             m_Color4DList[ butt_ID - ID_COLOR_BLACK ] = buttcolor;
-
-            iconDC.SetPen( *wxBLACK_PEN );
-            brush.SetColour( buttcolor.ToColour() );
-            brush.SetStyle( wxBRUSHSTYLE_SOLID );
-
-            iconDC.SetBrush( brush );
-            iconDC.SetBackground( *wxGREY_BRUSH );
-            iconDC.Clear();
-            iconDC.DrawRoundedRectangle( 0, 0, w, h, (double) h / 3 );
-
-            wxBitmapButton* bitmapButton = new wxBitmapButton( m_panelDefinedColors, butt_ID, ButtBitmap,
-                                               wxDefaultPosition, wxSize( w+8, h+6 ) );
-            m_fgridColor->Add( bitmapButton, 0,
-                               wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
-                               wxLEFT | wxBOTTOM, 5 );
-
-            wxStaticText* label = new wxStaticText( m_panelDefinedColors, -1,
-                                                    wxGetTranslation( colorRefs()[ii].m_ColorName ),
-                                                    wxDefaultPosition, wxDefaultSize, 0 );
-            m_fgridColor->Add( label, 1,
-                               wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
-                               wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-            m_buttonsColor.push_back( bitmapButton );
-            bitmapButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                   wxCommandEventHandler( DIALOG_COLOR_PICKER::buttColorClick ), NULL, this );
         }
     }
 }
@@ -306,7 +229,7 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
     // Reserve room to draw cursors inside the bitmap
     half_size -= m_cursorsSize/2;
 
-    KIGFX::COLOR4D color;
+    COLOR4D color;
 
     // Red blue area in X Z 3d axis
     double inc = 1.0 / half_size;
@@ -391,9 +314,9 @@ void DIALOG_COLOR_PICKER::createHSVBitmap()
     // Reserve room to draw cursors inside the bitmap
     half_size -= m_cursorsSize/2;
 
-    double hue, sat;
-    KIGFX::COLOR4D color;
-    int sq_radius = half_size*half_size;
+    double  hue, sat;
+    COLOR4D color;
+    int     sq_radius = half_size*half_size;
 
     for( int xx = -half_size; xx < half_size; xx++ )
     {
@@ -575,7 +498,7 @@ void DIALOG_COLOR_PICKER::drawAll()
     m_NewColorRect->Freeze();   // Avoid flicker
     m_HsvBitmap->Freeze();
     m_RgbBitmap->Freeze();
-    setIconColor( m_NewColorRect, m_newColor4D );
+    updatePreview( m_NewColorRect, m_newColor4D );
     drawHSVPalette();
     drawRGBPalette();
     m_NewColorRect->Thaw();
@@ -587,10 +510,10 @@ void DIALOG_COLOR_PICKER::drawAll()
 }
 
 
-void DIALOG_COLOR_PICKER::buttColorClick( wxCommandEvent& event )
+void DIALOG_COLOR_PICKER::buttColorClick( wxMouseEvent& event )
 {
     int id = event.GetId();
-    KIGFX::COLOR4D color( m_Color4DList[id - ID_COLOR_BLACK] );//EDA_COLOR_T( id - ID_COLOR_BLACK ) );
+    COLOR4D color( m_Color4DList[id - ID_COLOR_BLACK] );
     m_newColor4D.r = color.r;
     m_newColor4D.g = color.g;
     m_newColor4D.b = color.b;
@@ -775,7 +698,7 @@ void DIALOG_COLOR_PICKER::OnChangeAlpha( wxScrollEvent& event )
     double alpha = (double)event.GetPosition() / ALPHA_MAX;
     m_newColor4D.a = alpha;
     m_NewColorRect->Freeze();   // Avoid flicker
-    setIconColor( m_NewColorRect, m_newColor4D );
+    updatePreview( m_NewColorRect, m_newColor4D );
     m_NewColorRect->Thaw();
     m_NewColorRect->Refresh();
 }
@@ -857,9 +780,5 @@ void DIALOG_COLOR_PICKER::OnResetButton( wxCommandEvent& aEvent )
     m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
     SetEditVals( ALL_CHANGED, false );
 
-    // When the default is UNSPECIFIED, this is the Clear Color button, which should accept
-    if( m_defaultColor == KIGFX::COLOR4D::UNSPECIFIED )
-        AcceptAndClose();
-    else
-        drawAll();
+    drawAll();
 }

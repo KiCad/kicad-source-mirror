@@ -530,7 +530,8 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                         ROW_ICON_PROVIDER::STATE::OFF, layer );
 
                 COLOR_SWATCH* swatch = new COLOR_SWATCH( panel, COLOR4D::UNSPECIFIED, layer,
-                                                         bgColor, theme->GetColor( layer ), false );
+                                                         bgColor, theme->GetColor( layer ),
+                                                         SWATCH_SMALL );
                 swatch->SetToolTip( _( "Left double click or middle click for color change, "
                                        "right click for menu" ) );
 
@@ -989,7 +990,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 if( color != COLOR4D::UNSPECIFIED )
                 {
                     COLOR_SWATCH* swatch = new COLOR_SWATCH( m_windowObjects, color, layer,
-                                                             bgColor, defColor, false );
+                                                             bgColor, defColor, SWATCH_SMALL );
                     swatch->SetToolTip( _( "Left double click or middle click for color change, "
                                            "right click for menu" ) );
 
@@ -1195,12 +1196,9 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                                              COLOR4D::UNSPECIFIED;
 
                 setting->ctl_color = new COLOR_SWATCH( setting->ctl_panel, color, id, bgColor,
-                                                       COLOR4D::UNSPECIFIED, false );
+                                                       COLOR4D::UNSPECIFIED, SWATCH_SMALL );
                 setting->ctl_color->SetToolTip( _( "Left double click or middle click for color "
                                                    "change, right click for menu" ) );
-
-                if( color == COLOR4D::UNSPECIFIED )
-                    setting->ctl_color->Hide();
 
                 setting->ctl_color->Bind( COLOR_SWATCH_CHANGED,
                         [&]( wxCommandEvent& aEvent )
@@ -1210,9 +1208,6 @@ void APPEARANCE_CONTROLS::rebuildNets()
                             net -= wxID_HIGHEST;
 
                             netColors[net] = s->GetSwatchColor();
-
-                            if( s->GetSwatchColor() == COLOR4D::UNSPECIFIED )
-                                s->Hide();
 
                             m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
 
@@ -1234,13 +1229,14 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                                       aNet->GetShortNetname() );
                 setting->ctl_text->Wrap( -1 );
 
-                int flags = wxALIGN_CENTER_VERTICAL | wxRIGHT;
+                sizer->Add( setting->ctl_color, 0, wxALIGN_CENTER_VERTICAL, 5 );
+                sizer->AddSpacer( 7 );
+                sizer->Add( setting->ctl_visibility, 0, wxALIGN_CENTER_VERTICAL, 5 );
+                sizer->AddSpacer( 3 );
+                sizer->Add( setting->ctl_text, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
-                sizer->Add( setting->ctl_color,      0, flags | wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
-                sizer->Add( setting->ctl_visibility, 0, flags, 5 );
-                sizer->Add( setting->ctl_text,       1, flags, 5 );
-
-                m_netsOuterSizer->Add( setting->ctl_panel, 0, wxEXPAND, 0 );
+                m_netsOuterSizer->Add( setting->ctl_panel, 0, wxEXPAND, 5 );
+                m_netsOuterSizer->AddSpacer( 1 );
 
                 setting->ctl_visibility->Bind( TOGGLE_CHANGED,
                         [&]( wxCommandEvent& aEvent )
@@ -1292,7 +1288,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
             };
 
     auto appendNetclass =
-            [&]( int aId, const NETCLASSPTR& aClass, bool isDefault = false )
+            [&]( int aId, const NETCLASSPTR& aClass )
             {
                 wxString name = aClass->GetName();
 
@@ -1307,16 +1303,12 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                                                 COLOR4D::UNSPECIFIED;
 
                 setting->ctl_color = new COLOR_SWATCH( setting->ctl_panel, color, aId, bgColor,
-                                                        COLOR4D::UNSPECIFIED, false );
+                                                        COLOR4D::UNSPECIFIED, SWATCH_SMALL );
                 setting->ctl_color->SetToolTip( _( "Left double click or middle click for color "
-                                                    "change, right click for menu" ) );
+                                                   "change, right click for menu" ) );
 
-                if( !isDefault || color == COLOR4D::UNSPECIFIED )
-                    setting->ctl_color->Hide();
-
-                if( !isDefault )
-                    setting->ctl_color->Bind( COLOR_SWATCH_CHANGED,
-                                              &APPEARANCE_CONTROLS::onNetclassColorChanged, this );
+                setting->ctl_color->Bind( COLOR_SWATCH_CHANGED,
+                                          &APPEARANCE_CONTROLS::onNetclassColorChanged, this );
 
                 setting->ctl_visibility =
                         new BITMAP_TOGGLE( setting->ctl_panel, aId, KiBitmap( visibility_xpm ),
@@ -1329,31 +1321,29 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 setting->ctl_text = new wxStaticText( setting->ctl_panel, aId, name );
                 setting->ctl_text->Wrap( -1 );
 
-                int flags = wxALIGN_CENTER_VERTICAL | wxRIGHT;
+                sizer->Add( setting->ctl_color,      0, wxALIGN_CENTER_VERTICAL, 5 );
+                sizer->AddSpacer( 7 );
+                sizer->Add( setting->ctl_visibility, 0, wxALIGN_CENTER_VERTICAL, 5 );
+                sizer->AddSpacer( 3 );
+                sizer->Add( setting->ctl_text,       1, wxALIGN_CENTER_VERTICAL, 5 );
 
-                sizer->Add( setting->ctl_color,      0, flags | wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
-                sizer->Add( setting->ctl_visibility, 0, flags, 5 );
-                sizer->Add( setting->ctl_text,       1, flags, 5 );
-
-                m_netclassOuterSizer->Add( setting->ctl_panel, 0, wxEXPAND, 0 );
+                m_netclassOuterSizer->Add( setting->ctl_panel, 0, wxEXPAND, 5 );
+                m_netclassOuterSizer->AddSpacer( 1 );
 
                 setting->ctl_visibility->Bind( TOGGLE_CHANGED,
                                                &APPEARANCE_CONTROLS::onNetclassVisibilityChanged,
                                                this );
 
                 auto menuHandler =
-                        [&, name, isDefault]( wxMouseEvent& aEvent )
+                        [&, name]( wxMouseEvent& aEvent )
                         {
                             m_contextMenuNetclass = name;
 
                             wxMenu menu;
 
-                            if( !isDefault )
-                            {
-                                menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
-                                             _( "Set netclass color" ), wxEmptyString,
-                                             wxITEM_NORMAL ) );
-                            }
+                            menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
+                                         _( "Set netclass color" ), wxEmptyString,
+                                         wxITEM_NORMAL ) );
 
                             menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
                                          wxString::Format( _( "Highlight nets in %s" ), name ),
@@ -1378,10 +1368,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
                 setting->ctl_panel->Bind( wxEVT_RIGHT_DOWN, menuHandler );
                 setting->ctl_visibility->Bind( wxEVT_RIGHT_DOWN, menuHandler );
-
-                if( !isDefault )
-                    setting->ctl_color->Bind( wxEVT_RIGHT_DOWN, menuHandler );
-
+                setting->ctl_color->Bind( wxEVT_RIGHT_DOWN, menuHandler );
                 setting->ctl_text->Bind( wxEVT_RIGHT_DOWN, menuHandler );
             };
 
@@ -1416,7 +1403,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
     NETCLASSPTR defaultClass = board->GetDesignSettings().GetNetClasses().GetDefault();
 
     m_netclassIdMap[idx] = defaultClass->GetName();
-    appendNetclass( idx++, defaultClass, true );
+    appendNetclass( idx++, defaultClass );
 
     for( const wxString& name : names )
     {

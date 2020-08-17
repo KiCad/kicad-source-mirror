@@ -28,6 +28,9 @@
 #include <gal/color4d.h>
 #include "dialog_color_picker_base.h"
 
+class COLOR_SWATCH;
+
+
 /** a class to handle a custom color (predefined color) for
  * the color picker dialog
  */
@@ -83,8 +86,6 @@ public:
 
 	KIGFX::COLOR4D GetColor() { return m_newColor4D; };
 
-    static int m_ActivePage;            ///< the active notebook page, stored during a session
-
 private:
     /* When the dialog is created, the mouse cursor can be on the RGB or HSV palette selector
      * Because this dialog is created by clicking double clicking on a widget, the left mouse
@@ -116,7 +117,7 @@ private:
     wxBitmap* m_bitmapRGB;              ///< the basic RGB palette
     wxBitmap* m_bitmapHSV;              ///< the basic HUV palette
 
-    std::vector<wxBitmapButton*> m_buttonsColor;    ///< list of defined colors buttons
+    std::vector<wxStaticBitmap*> m_colorSwatches;    ///< list of defined colors buttons
 
     void SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransparency );
 	void drawAll();
@@ -125,10 +126,9 @@ private:
 	void drawHSVPalette();              ///< draws the HSV color circle
     void createRGBBitmap();             ///< generate the bitmap that shows the RVB color space
     void drawRGBPalette();              ///< draws the RVB color space
-    void drawRGBCursors();
 
     ///> repaint a static bitmap with the aColor4D color
-    void setIconColor( wxStaticBitmap* aStaticBitmap, KIGFX::COLOR4D& aColor4D );
+    void updatePreview( wxStaticBitmap* aStaticBitmap, KIGFX::COLOR4D& aColor4D );
 
     ///< Event handler from wxSlider: brightness (value) control
 	void OnChangeBrightness( wxScrollEvent& event ) override;
@@ -164,7 +164,7 @@ private:
 	bool setHSvaluesFromCursor( wxPoint aMouseCursor );
 
     ///> Event handler for defined color buttons
-    void buttColorClick( wxCommandEvent& event );
+    void buttColorClick( wxMouseEvent& event );
 
     ///> called when creating the dialog
     bool TransferDataToWindow() override;

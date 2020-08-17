@@ -185,6 +185,8 @@ const static wxSize LAYER_BITMAP_SIZE( 28, 28 );  // wxCocoa impl unhappy if thi
 const static wxSize LAYER_BITMAP_SIZE( 24, 16 );
 #endif
 
+const static wxSize CHECKERBOARD_SIZE( 8, 8 );
+
 
 // A helper for setting up a dialog list for specifying zone layers.  Used by all three
 // zone settings dialogs.
@@ -219,7 +221,8 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
         textWidth = std::max( textWidth, GetTextSize( layerName, aList ).x );
 
         COLOR4D layerColor = aFrame->GetColorSettings()->GetColor( layerID );
-        auto bitmap = COLOR_SWATCH::MakeBitmap( layerColor, backgroundColor, LAYER_BITMAP_SIZE );
+        auto bitmap = COLOR_SWATCH::MakeBitmap( layerColor, backgroundColor, LAYER_BITMAP_SIZE,
+                                                CHECKERBOARD_SIZE );
         wxIcon icon;
         icon.CopyFromBitmap( bitmap );
 

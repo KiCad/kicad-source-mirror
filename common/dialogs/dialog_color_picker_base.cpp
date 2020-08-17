@@ -135,7 +135,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_panelDefinedColors = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_SizerDefinedColors = new wxBoxSizer( wxVERTICAL );
 
-	m_fgridColor = new wxFlexGridSizer( 0, 10, 0, 0 );
+	m_fgridColor = new wxFlexGridSizer( 0, 10, 25, 5 );
 	m_fgridColor->AddGrowableCol( 1 );
 	m_fgridColor->AddGrowableCol( 3 );
 	m_fgridColor->AddGrowableCol( 5 );
@@ -145,7 +145,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_fgridColor->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
-	m_SizerDefinedColors->Add( m_fgridColor, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxTOP|wxBOTTOM, 5 );
+	m_SizerDefinedColors->Add( m_fgridColor, 1, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 10 );
 
 
 	m_panelDefinedColors->SetSizer( m_SizerDefinedColors );
@@ -184,15 +184,15 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 
 	m_staticTextOldColor = new wxStaticText( this, wxID_ANY, _("Preview (old/new):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOldColor->Wrap( -1 );
-	bButtonsSizer->Add( m_staticTextOldColor, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bButtonsSizer->Add( m_staticTextOldColor, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_OldColorRect = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	m_OldColorRect->SetMinSize( wxSize( 30,22 ) );
+	m_OldColorRect->SetMinSize( wxSize( 24,24 ) );
 
 	bButtonsSizer->Add( m_OldColorRect, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_NewColorRect = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	m_NewColorRect->SetMinSize( wxSize( 30,22 ) );
+	m_NewColorRect->SetMinSize( wxSize( 24,24 ) );
 
 	bButtonsSizer->Add( m_NewColorRect, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -202,7 +202,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_colorValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorValue->SetMinSize( wxSize( 176,-1 ) );
 
-	bButtonsSizer->Add( m_colorValue, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bButtonsSizer->Add( m_colorValue, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );

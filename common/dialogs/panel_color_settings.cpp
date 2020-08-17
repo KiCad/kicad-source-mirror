@@ -215,7 +215,7 @@ void PANEL_COLOR_SETTINGS::createSwatch( int aLayer, const wxString& aName )
     COLOR4D         backgroundColor = m_currentSettings->GetColor( m_backgroundLayer );
 
     COLOR_SWATCH* swatch = new COLOR_SWATCH( m_colorsListWindow, color, id, backgroundColor,
-                                             defaultColor, true );
+                                             defaultColor, SWATCH_MEDIUM );
     swatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
     m_colorsGridSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT | wxLEFT, 5 );

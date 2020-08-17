@@ -1212,21 +1212,21 @@
                                             <property name="orient">wxVERTICAL</property>
                                             <property name="permission">protected</property>
                                             <object class="sizeritem" expanded="1">
-                                                <property name="border">5</property>
-                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxTOP|wxBOTTOM</property>
-                                                <property name="proportion">0</property>
+                                                <property name="border">10</property>
+                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND</property>
+                                                <property name="proportion">1</property>
                                                 <object class="wxFlexGridSizer" expanded="1">
                                                     <property name="cols">10</property>
                                                     <property name="flexible_direction">wxBOTH</property>
                                                     <property name="growablecols">1,3,5,7,9</property>
                                                     <property name="growablerows"></property>
-                                                    <property name="hgap">0</property>
+                                                    <property name="hgap">5</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">m_fgridColor</property>
                                                     <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                     <property name="permission">protected</property>
                                                     <property name="rows">0</property>
-                                                    <property name="vgap">0</property>
+                                                    <property name="vgap">25</property>
                                                 </object>
                                             </object>
                                         </object>
@@ -1463,7 +1463,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticText" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -1560,7 +1560,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">30,22</property>
+                                <property name="minimum_size">24,24</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_OldColorRect</property>
                                 <property name="pane_border">1</property>
@@ -1618,7 +1618,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">30,22</property>
+                                <property name="minimum_size">24,24</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_NewColorRect</property>
                                 <property name="pane_border">1</property>
@@ -1650,7 +1650,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxTextCtrl" expanded="1">
                                 <property name="BottomDockable">1</property>

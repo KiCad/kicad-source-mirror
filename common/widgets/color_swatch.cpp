@@ -31,9 +31,6 @@ wxDEFINE_EVENT(COLOR_SWATCH_CHANGED, wxCommandEvent);
 using KIGFX::COLOR4D;
 
 
-const static wxSize PALETTE_SWATCH_SIZE_DU( 8, 6 );
-const static wxSize DIALOG_SWATCH_SIZE_DU( 24, 10 );
-
 // See selcolor.cpp:
 extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
 
@@ -43,49 +40,83 @@ extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
  *
  * @param aWindow - window used as context for device-independent size
  */
-wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize aSize )
+wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize aSize,
+                                   wxSize aCheckerboardSize )
 {
     wxBitmap    bitmap( aSize );
     wxBrush     brush;
+    wxPen       pen;
     wxMemoryDC  iconDC;
 
     iconDC.SelectObject( bitmap );
-
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
-    brush.SetColour( aBackground.WithAlpha(1.0).ToColour() );
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, aSize.x, aSize.y );
 
     if( aColor == COLOR4D::UNSPECIFIED )
     {
-        aColor = aBackground.Inverted();
-        brush.SetStyle( wxBRUSHSTYLE_BDIAGONAL_HATCH );
-    }
+        bool rowCycle = true;
 
-    brush.SetColour( aColor.ToColour() );
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, aSize.x, aSize.y );
+        for( int x = 0; x < aSize.x; x += aCheckerboardSize.x )
+        {
+            bool colCycle = rowCycle;
+
+            for( int y = 0; y < aSize.y; y += aCheckerboardSize.y )
+            {
+                COLOR4D color = colCycle ? COLOR4D( LIGHTGRAY ) : COLOR4D( WHITE );
+                brush.SetColour( color.ToColour() );
+                pen.SetColour( color.ToColour() );
+
+                iconDC.SetBrush( brush );
+                iconDC.SetPen( pen );
+                iconDC.DrawRectangle( x, y, x + aCheckerboardSize.x, y + aCheckerboardSize.y );
+
+                colCycle = !colCycle;
+            }
+
+            rowCycle = !rowCycle;
+        }
+    }
+    else
+    {
+        brush.SetColour( aBackground.WithAlpha(1.0).ToColour() );
+        pen.SetColour( aBackground.WithAlpha(1.0).ToColour() );
+
+        iconDC.SetBrush( brush );
+        iconDC.SetPen( pen );
+        iconDC.DrawRectangle( 0, 0, aSize.x, aSize.y );
+
+        brush.SetColour( aColor.ToColour() );
+        pen.SetColour( aColor.ToColour() );
+
+        iconDC.SetBrush( brush );
+        iconDC.SetPen( pen );
+        iconDC.DrawRectangle( 0, 0, aSize.x, aSize.y );
+    }
 
     return bitmap;
 }
 
 
 COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D aBackground,
-                            const COLOR4D aDefault, bool aForDialog ) :
+                            const COLOR4D aDefault, SWATCH_SIZE aSwatchSize ) :
         wxPanel( aParent, aID ),
         m_color( aColor ),
         m_background( aBackground ),
         m_default( aDefault )
 {
-    if( aForDialog )
-        m_size = ConvertDialogToPixels( DIALOG_SWATCH_SIZE_DU );
-    else
-        m_size = ConvertDialogToPixels( PALETTE_SWATCH_SIZE_DU );
+    switch( aSwatchSize )
+    {
+    case SWATCH_MEDIUM: m_size = ConvertDialogToPixels( SWATCH_SIZE_MEDIUM_DU ); break;
+    case SWATCH_SMALL:  m_size = ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );  break;
+    case SWATCH_LARGE:  m_size = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );  break;
+    }
+
+    m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
 
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
-    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, aBackground, m_size );
+    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, aBackground, m_size,
+                                                m_checkerboardSize );
     m_swatch = new wxStaticBitmap( this, aID, bitmap );
 
     sizer->Add( m_swatch, 0, 0 );
@@ -99,17 +130,19 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow *aParent, wxWindowID aID, const wxPoint &aP
         wxPanel( aParent, aID, aPos, aSize, aStyle )
 {
     if( aSize == wxDefaultSize )
-        m_size = ConvertDialogToPixels( DIALOG_SWATCH_SIZE_DU );
+        m_size = ConvertDialogToPixels( SWATCH_SIZE_MEDIUM_DU );
     else
         m_size = aSize;
+
+    m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
 
     SetSize( m_size );
 
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
-    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( KIGFX::COLOR4D::UNSPECIFIED,
-                                                KIGFX::COLOR4D::UNSPECIFIED, m_size );
+    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( COLOR4D::UNSPECIFIED, COLOR4D::UNSPECIFIED,
+                                                m_size, m_checkerboardSize );
     m_swatch = new wxStaticBitmap( this, aID, bitmap );
 
     sizer->Add( m_swatch, 0, 0 );
@@ -178,8 +211,7 @@ void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool sendEvent )
 {
     m_color = aColor;
 
-    wxBitmap bm = MakeBitmap( m_color == COLOR4D::UNSPECIFIED ? m_default : m_color,
-                              m_background, m_size );
+    wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize );
     m_swatch->SetBitmap( bm );
 
     if( sendEvent )
@@ -196,7 +228,7 @@ void COLOR_SWATCH::SetDefaultColor( COLOR4D aColor )
 void COLOR_SWATCH::SetSwatchBackground( COLOR4D aBackground )
 {
     m_background = aBackground;
-    wxBitmap bm = MakeBitmap( m_color, m_background, m_size );
+    wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize );
     m_swatch->SetBitmap( bm );
 }
 
@@ -221,7 +253,7 @@ void COLOR_SWATCH::GetNewSwatchColor()
         {
             m_color = newColor;
 
-            wxBitmap bm = MakeBitmap( newColor, m_background, m_size );
+            wxBitmap bm = MakeBitmap( newColor, m_background, m_size, m_checkerboardSize );
             m_swatch->SetBitmap( bm );
 
             sendSwatchChangeEvent( *this );

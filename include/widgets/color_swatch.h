@@ -31,6 +31,20 @@
 #include <gal/color4d.h>
 
 
+enum SWATCH_SIZE
+{
+    SWATCH_SMALL,
+    SWATCH_MEDIUM,
+    SWATCH_LARGE
+};
+
+
+const static wxSize SWATCH_SIZE_SMALL_DU( 8, 6 );
+const static wxSize SWATCH_SIZE_MEDIUM_DU( 24, 10 );
+const static wxSize SWATCH_SIZE_LARGE_DU( 24, 16 );
+const static wxSize CHECKERBOARD_SIZE_DU( 3, 3 );
+
+
 /**
  * Class representing a simple color swatch, of the kind used to
  * set layer colors
@@ -47,7 +61,7 @@ public:
      * @param aID id to use when sending swatch events
      */
     COLOR_SWATCH( wxWindow* aParent, KIGFX::COLOR4D aColor, int aID, KIGFX::COLOR4D aBackground,
-                  const KIGFX::COLOR4D aDefault, bool aForDialog );
+                  const KIGFX::COLOR4D aDefault, SWATCH_SIZE aSwatchType );
 
     /**
      * constructor for wxFormBuilder
@@ -82,7 +96,8 @@ public:
      */
     void GetNewSwatchColor();
 
-    static wxBitmap MakeBitmap( KIGFX::COLOR4D aColor, KIGFX::COLOR4D aBackground, wxSize aSize );
+    static wxBitmap MakeBitmap( KIGFX::COLOR4D aColor, KIGFX::COLOR4D aBackground, wxSize aSize,
+                                wxSize aCheckerboardSize );
 
 private:
     void setupEvents();
@@ -92,19 +107,14 @@ private:
      */
     void rePostEvent( wxEvent& aEvt );
 
-    ///> The current colour of the swatch
-    KIGFX::COLOR4D m_color;
+    KIGFX::COLOR4D  m_color;
+    KIGFX::COLOR4D  m_background;
+    KIGFX::COLOR4D  m_default;
 
-    ///> The background colour to show the swatch over
-    KIGFX::COLOR4D m_background;
-
-    ///> The default color for the swatch
-    KIGFX::COLOR4D m_default;
-
-    ///> Handle of the actual swatch shown
     wxStaticBitmap* m_swatch;
 
     wxSize          m_size;
+    wxSize          m_checkerboardSize;
 };
 
 

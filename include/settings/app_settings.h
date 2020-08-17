@@ -108,6 +108,11 @@ public:
         int canvas_type;
     };
 
+    struct COLOR_PICKER
+    {
+        int default_tab;
+    };
+
     struct LIB_TREE
     {
         int column_width;
@@ -144,6 +149,8 @@ public:
     FIND_REPLACE m_FindReplace;
 
     GRAPHICS m_Graphics;
+
+    COLOR_PICKER m_ColorPicker;
 
     LIB_TREE m_LibTree;
 
