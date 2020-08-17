@@ -569,7 +569,7 @@ class BOARD_ADAPTER
      *
      * @return false if the outline could not be created
      */
-    bool createBoardPolygon();
+    bool createBoardPolygon( wxString* aErrorMsg );
     void createLayers( REPORTER* aStatusReporter );
     void destroyLayers();
 

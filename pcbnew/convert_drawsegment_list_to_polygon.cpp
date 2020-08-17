@@ -488,9 +488,9 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                 {
                     if( aErrorText )
                     {
-                        msg.Printf( _( "Unable to find segment with an endpoint of (%s, %s)." ),
-                                StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x, true ),
-                                StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y, true ) );
+                        msg.Printf( _( "Unable to find edge with an endpoint of (%s, %s)." ),
+                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x, true ),
+                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y, true ) );
 
                         *aErrorText << msg << "\n";
                     }
@@ -694,7 +694,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                     {
                         if( aErrorText )
                         {
-                            msg.Printf( _( "Unable to find segment with an endpoint of (%s, %s)." ),
+                            msg.Printf( _( "Unable to find edge with an endpoint of (%s, %s)." ),
                                         StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x, true ),
                                         StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y, true ) );
 
@@ -758,8 +758,8 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
  * Any closed outline inside the main outline is a hole
  * All contours should be closed, i.e. valid closed polygon vertices
  */
-bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-        wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation )
+bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, wxString* aErrorText,
+                                unsigned int aTolerance, wxPoint* aErrorLocation )
 {
     PCB_TYPE_COLLECTOR  items;
     bool                success = false;
@@ -782,6 +782,10 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
     {
         success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText, aTolerance,
                                            aErrorLocation );
+    }
+    else
+    {
+        *aErrorText = _( "No edges found on Edge.Cuts layer." );
     }
 
     if( !success || !aOutlines.OutlineCount() )

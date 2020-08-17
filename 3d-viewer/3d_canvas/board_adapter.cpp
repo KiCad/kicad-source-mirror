@@ -426,8 +426,10 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     if( aStatusReporter )
         aStatusReporter->Report( _( "Build board body" ) );
 
-    if( !createBoardPolygon() )
-        aWarningReporter->Report( _( "Board outline is not closed" ), RPT_SEVERITY_WARNING );
+    wxString msg;
+
+    if( !createBoardPolygon( &msg ) )
+        aWarningReporter->Report( _( "Board outline is not closed: " ) + msg, RPT_SEVERITY_WARNING );
     else
         aWarningReporter->Report( wxEmptyString );
 
@@ -454,13 +456,13 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 }
 
 
-bool BOARD_ADAPTER::createBoardPolygon()
+bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 {
     m_board_poly.RemoveAllContours();
 
     wxString errmsg;
 
-    return m_board->GetBoardPolygonOutlines( m_board_poly, &errmsg );
+    return m_board->GetBoardPolygonOutlines( m_board_poly, aErrorMsg );
 }
 
 

@@ -199,6 +199,9 @@ void INFOBAR_REPORTER::Finalize()
         case RPT_SEVERITY_IGNORE:    icon = wxICON_INFORMATION; break;
     }
 
+    if( m_message.EndsWith( "\n" ) )
+        m_message = m_message.Left( m_message.Length() - 1 );
+
     if( HasMessage() )
         m_infoBar->QueueShowMessage( m_message, icon );
     else

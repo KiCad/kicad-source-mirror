@@ -1813,11 +1813,11 @@ extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
                                 wxPoint* aErrorLocation = nullptr );
 
 
-bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText, wxPoint* aErrorLocation )
+bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText,
+                                     wxPoint* aErrorLocation )
 {
-
     bool success = BuildBoardPolygonOutlines( this, aOutlines, aErrorText,
-            GetDesignSettings().m_MaxError, aErrorLocation );
+                                              GetDesignSettings().m_MaxError, aErrorLocation );
 
     // Make polygon strictly simple to avoid issues (especially in 3D viewer)
     aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );

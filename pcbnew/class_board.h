@@ -621,8 +621,8 @@ public:
      *
      * @return true if success, false if a contour is not valid
      */
-    bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
-                                  wxString* aErrorText = nullptr, wxPoint* aErrorLocation = nullptr );
+    bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText = nullptr,
+                                  wxPoint* aErrorLocation = nullptr );
 
     /**
      * Function ConvertBrdLayerToPolygonalContours
