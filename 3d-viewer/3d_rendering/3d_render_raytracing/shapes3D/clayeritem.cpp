@@ -459,7 +459,7 @@ bool CLAYERITEM::IntersectP( const RAY &aRay , float aMaxDistance ) const
                                      (boxHitPointEnd - boxHitPointStart) * tOut;
             const float t = glm::length( hitPoint - aRay.m_Origin );
 
-            if( (t < 1.0f) && ( t > FLT_EPSILON ) )
+            if( (t < aMaxDistance) && ( t > FLT_EPSILON ) )
                 return true;
         }
     }
