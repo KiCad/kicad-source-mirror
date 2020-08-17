@@ -708,8 +708,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DPCBBackground",      LAYER_PCB_BACKGROUND );
     migrateLegacyColor( "Color4DPCBCursor",          LAYER_CURSOR );
     migrateLegacyColor( "Color4DRatsEx",             LAYER_RATSNEST );
-    migrateLegacyColor( "Color4DTxtBackEx",          LAYER_MOD_TEXT_BK );
-    migrateLegacyColor( "Color4DTxtFrontEx",         LAYER_MOD_TEXT_FR );
     migrateLegacyColor( "Color4DTxtInvisEx",         LAYER_MOD_TEXT_INVISIBLE );
     migrateLegacyColor( "Color4DViaBBlindEx",        LAYER_VIA_BBLIND );
     migrateLegacyColor( "Color4DViaMicroEx",         LAYER_VIA_MICROVIA );

@@ -362,8 +362,6 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( f + "Color4DPCBBackground",      LAYER_PCB_BACKGROUND );
     migrateLegacyColor( f + "Color4DPCBCursor",          LAYER_CURSOR );
     migrateLegacyColor( f + "Color4DRatsEx",             LAYER_RATSNEST );
-    migrateLegacyColor( f + "Color4DTxtBackEx",          LAYER_MOD_TEXT_BK );
-    migrateLegacyColor( f + "Color4DTxtFrontEx",         LAYER_MOD_TEXT_FR );
     migrateLegacyColor( f + "Color4DTxtInvisEx",         LAYER_MOD_TEXT_INVISIBLE );
     migrateLegacyColor( f + "Color4DViaBBlindEx",        LAYER_VIA_BBLIND );
     migrateLegacyColor( f + "Color4DViaMicroEx",         LAYER_VIA_MICROVIA );

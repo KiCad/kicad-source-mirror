@@ -112,10 +112,6 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     // LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA
     // are initialized from aSettings
 
-    // These colors are not actually used. Set just in case...
-    m_layerColors[LAYER_MOD_TEXT_FR] = m_layerColors[F_SilkS];
-    m_layerColors[LAYER_MOD_TEXT_BK] = m_layerColors[B_SilkS];
-
     // Netnames for copper layers
     for( LSEQ cu = LSET::AllCuMask().CuStack();  cu;  ++cu )
     {
