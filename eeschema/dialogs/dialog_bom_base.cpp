@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -76,7 +76,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bGeneratorButtons->Add( m_buttonEdit, 0, wxRIGHT, 5 );
 
 
-	bGeneratorButtons->Add( 0, 0, 0, wxRIGHT|wxLEFT, 5 );
+	bGeneratorButtons->Add( 20, 0, 0, 0, 5 );
 
 	m_buttonDelGenerator = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonDelGenerator->SetToolTip( _("Remove the current generator script from list") );

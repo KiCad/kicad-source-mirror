@@ -14,7 +14,6 @@
         <property name="file">dialog_edit_component_in_lib_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">DIALOG_EDIT_COMPONENT_IN_LIBRARY_FBP</property>
@@ -26,7 +25,6 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
-        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -310,7 +308,6 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
-                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -384,7 +381,6 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
-                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -458,7 +454,6 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
-                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -521,12 +516,12 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxEXPAND</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="spacer" expanded="0">
                                                                     <property name="height">0</property>
                                                                     <property name="permission">protected</property>
-                                                                    <property name="width">0</property>
+                                                                    <property name="width">20</property>
                                                                 </object>
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
@@ -542,7 +537,6 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
-                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -2155,7 +2149,6 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
-                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -2201,7 +2194,7 @@
                                                                     <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
                                                                     <property name="show">1</property>
-                                                                    <property name="size">30,30</property>
+                                                                    <property name="size">-1,-1</property>
                                                                     <property name="style"></property>
                                                                     <property name="subclass">; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
@@ -2229,7 +2222,6 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
-                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -2275,7 +2267,7 @@
                                                                     <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
                                                                     <property name="show">1</property>
-                                                                    <property name="size">30,30</property>
+                                                                    <property name="size">-1,-1</property>
                                                                     <property name="style"></property>
                                                                     <property name="subclass">; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
@@ -2292,12 +2284,12 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxEXPAND</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="spacer" expanded="1">
                                                                     <property name="height">0</property>
                                                                     <property name="permission">protected</property>
-                                                                    <property name="width">0</property>
+                                                                    <property name="width">20</property>
                                                                 </object>
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
@@ -2313,7 +2305,6 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
-                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -2359,7 +2350,7 @@
                                                                     <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
                                                                     <property name="show">1</property>
-                                                                    <property name="size">30,30</property>
+                                                                    <property name="size">-1,-1</property>
                                                                     <property name="style"></property>
                                                                     <property name="subclass">; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
@@ -2417,7 +2408,6 @@
                                 <property name="aui_name"></property>
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
-                                <property name="auth_needed">0</property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
                                 <property name="bitmap"></property>

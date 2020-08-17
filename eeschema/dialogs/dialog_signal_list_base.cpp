@@ -19,14 +19,20 @@ DIALOG_SIGNAL_LIST_BASE::DIALOG_SIGNAL_LIST_BASE( wxWindow* parent, wxWindowID i
 	m_signals = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT );
 	m_signals->SetMinSize( wxSize( 450,400 ) );
 
-	bSizer6->Add( m_signals, 1, wxALL|wxEXPAND, 5 );
+	bSizer6->Add( m_signals, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+
+	wxBoxSizer* bSizer2;
+	bSizer2 = new wxBoxSizer( wxVERTICAL );
 
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Add signal by name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	bSizer6->Add( m_staticText1, 0, wxALL, 5 );
+	bSizer2->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_signalEntry = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	bSizer6->Add( m_signalEntry, 0, wxALL|wxEXPAND, 5 );
+	bSizer2->Add( m_signalEntry, 0, wxALL|wxEXPAND, 5 );
+
+
+	bSizer6->Add( bSizer2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

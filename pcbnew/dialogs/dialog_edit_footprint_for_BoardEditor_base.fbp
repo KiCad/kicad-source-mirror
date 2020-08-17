@@ -178,11 +178,11 @@
                                     <property name="name">m_PanelPropertiesBoxSizer</property>
                                     <property name="orient">wxVERTICAL</property>
                                     <property name="permission">none</property>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxStaticBoxSizer" expanded="0">
+                                        <object class="wxStaticBoxSizer" expanded="1">
                                             <property name="id">wxID_ANY</property>
                                             <property name="label"></property>
                                             <property name="minimum_size"></property>
@@ -279,11 +279,11 @@
                                                     <event name="OnSize">OnGridSize</event>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bButtonSize</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -363,12 +363,12 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="0">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                                                        <property name="flag">wxEXPAND</property>
                                                         <property name="proportion">0</property>
                                                         <object class="spacer" expanded="0">
                                                             <property name="height">0</property>
                                                             <property name="permission">protected</property>
-                                                            <property name="width">0</property>
+                                                            <property name="width">20</property>
                                                         </object>
                                                     </object>
                                                     <object class="sizeritem" expanded="0">
@@ -448,11 +448,11 @@
                                             </object>
                                         </object>
                                     </object>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">0</property>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">bSizerProperties</property>
                                             <property name="orient">wxHORIZONTAL</property>
@@ -3519,11 +3519,11 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="notebookpage" expanded="0">
+                        <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">3D Settings</property>
                             <property name="select">0</property>
-                            <object class="wxPanel" expanded="0">
+                            <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -3574,16 +3574,16 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                                <object class="wxBoxSizer" expanded="0">
+                                <object class="wxBoxSizer" expanded="1">
                                     <property name="minimum_size"></property>
                                     <property name="name">bSizerMain3D</property>
                                     <property name="orient">wxVERTICAL</property>
                                     <property name="permission">protected</property>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                         <property name="proportion">4</property>
-                                        <object class="wxStaticBoxSizer" expanded="0">
+                                        <object class="wxStaticBoxSizer" expanded="1">
                                             <property name="id">wxID_ANY</property>
                                             <property name="label"></property>
                                             <property name="minimum_size"></property>
@@ -3681,11 +3681,11 @@
                                                     <event name="OnGridSelectCell">On3DModelSelected</event>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bSizer3DButtons</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -3838,12 +3838,12 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="0">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxEXPAND|wxLEFT</property>
+                                                        <property name="flag">wxEXPAND</property>
                                                         <property name="proportion">0</property>
                                                         <object class="spacer" expanded="0">
                                                             <property name="height">0</property>
                                                             <property name="permission">protected</property>
-                                                            <property name="width">10</property>
+                                                            <property name="width">20</property>
                                                         </object>
                                                     </object>
                                                     <object class="sizeritem" expanded="0">

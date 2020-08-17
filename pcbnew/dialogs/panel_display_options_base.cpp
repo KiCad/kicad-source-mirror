@@ -79,13 +79,13 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 
 	m_checkCrossProbeZoom = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Zoom to fit cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeZoom->SetValue(true);
-	sbSizer3->Add( m_checkCrossProbeZoom, 0, wxALL, 5 );
+	sbSizer3->Add( m_checkCrossProbeZoom, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkCrossProbeAutoHighlight = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Highlight cross-probed nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeAutoHighlight->SetValue(true);
 	m_checkCrossProbeAutoHighlight->SetToolTip( _("Highlight nets when they are highlighted in the schematic editor") );
 
-	sbSizer3->Add( m_checkCrossProbeAutoHighlight, 0, wxALL, 5 );
+	sbSizer3->Add( m_checkCrossProbeAutoHighlight, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	pcbOptionsSizer->Add( sbSizer3, 1, wxEXPAND|wxTOP, 5 );

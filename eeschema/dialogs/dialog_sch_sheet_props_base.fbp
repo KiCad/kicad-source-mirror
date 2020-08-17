@@ -400,17 +400,17 @@
                                         </object>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">10</property>
-                                            <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
+                                            <property name="flag">wxEXPAND</property>
                                             <property name="proportion">0</property>
                                             <object class="spacer" expanded="0">
                                                 <property name="height">0</property>
                                                 <property name="permission">protected</property>
-                                                <property name="width">0</property>
+                                                <property name="width">20</property>
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxBitmapButton" expanded="0">
                                                 <property name="BottomDockable">1</property>

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -69,7 +69,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer3->Add( m_trackWidthsAddButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	bSizer3->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizer3->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_trackWidthsRemoveButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer3->Add( m_trackWidthsRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
@@ -128,7 +128,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer4->Add( m_viaSizesAddButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	bSizer4->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizer4->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_viaSizesRemoveButton = new wxBitmapButton( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer4->Add( m_viaSizesRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
@@ -190,7 +190,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer5->Add( m_diffPairsAddButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	bSizer5->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizer5->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_diffPairsRemoveButton = new wxBitmapButton( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer5->Add( m_diffPairsRemoveButton, 0, wxLEFT|wxRIGHT, 5 );

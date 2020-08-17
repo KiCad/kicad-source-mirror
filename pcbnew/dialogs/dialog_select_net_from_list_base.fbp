@@ -383,7 +383,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxBitmapButton" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -461,7 +461,7 @@
                             <object class="spacer" expanded="1">
                                 <property name="height">0</property>
                                 <property name="permission">protected</property>
-                                <property name="width">15</property>
+                                <property name="width">20</property>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -65,7 +65,7 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	bButtonsSizer->Add( m_moveDownButton, 0, wxRIGHT, 5 );
 
 
-	bButtonsSizer->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_reloadButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bButtonsSizer->Add( m_reloadButton, 0, wxLEFT|wxRIGHT, 5 );
