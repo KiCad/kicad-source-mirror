@@ -226,6 +226,8 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
                 result = result && parseCurve( child, CURVE_ARC );
             else if( symname == "gr_line" )
                 result = result && parseCurve( child, CURVE_LINE );
+            else if( symname == "gr_rect" )
+                result = result && parseRect( child );
             else if( symname == "gr_circle" )
                 result = result && parseCurve( child, CURVE_CIRCLE );
         }
@@ -373,6 +375,45 @@ bool KICADPCB::parseModule( SEXPR::SEXPR* data )
     }
 
     m_modules.push_back( mp );
+    return true;
+}
+
+
+bool KICADPCB::parseRect( SEXPR::SEXPR* data )
+{
+    KICADCURVE* mp = new KICADCURVE();
+
+    if( !mp->Read( data, CURVE_LINE ) )
+    {
+        delete mp;
+        return false;
+    }
+
+    // reject any curves not on the Edge.Cuts layer
+    if( mp->GetLayer() != LAYER_EDGE )
+    {
+        delete mp;
+        return true;
+    }
+
+    KICADCURVE* top( mp );
+    KICADCURVE* right( mp );
+    KICADCURVE* bottom( mp );
+    KICADCURVE* left( mp );
+    delete mp;
+
+    top->m_end.y = top->m_start.y;
+    m_curves.push_back( top );
+
+    right->m_start.x = right->m_end.x;
+    m_curves.push_back( right );
+
+    bottom->m_start.y = bottom->m_end.y;
+    m_curves.push_back( bottom );
+
+    left->m_end.x = left->m_start.x;
+    m_curves.push_back( left );
+
     return true;
 }
 
