@@ -209,6 +209,9 @@ wxString LayerName( int aLayer )
     case LAYER_GRID:
         return _( "Grid" );
 
+    case LAYER_GRID_AXES:
+        return _( "Grid Axes" );
+
     case LAYER_PCB_BACKGROUND:
         return _( "Background" );
 

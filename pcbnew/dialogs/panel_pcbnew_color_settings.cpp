@@ -360,6 +360,8 @@ std::set<int> g_excludedLayers =
             LAYER_MOD_VALUES,
             LAYER_MOD_REFERENCES,
             LAYER_TRACKS,
+            LAYER_MOD_TEXT_FR,
+            LAYER_MOD_TEXT_BK,
             LAYER_PADS_PLATEDHOLES,
             LAYER_VIAS_HOLES,
             LAYER_GP_OVERLAY,

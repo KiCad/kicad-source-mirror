@@ -58,13 +58,16 @@ PANEL_MODEDIT_COLOR_SETTINGS::PANEL_MODEDIT_COLOR_SETTINGS( FOOTPRINT_EDIT_FRAME
     mgr.ReloadColorSettings();
     createThemeList( settings->m_ColorTheme );
 
-    for( int id = F_Cu; id < PCB_LAYER_ID_COUNT; id++ )
-        m_validLayers.push_back( id );
+    m_validLayers.push_back( F_Cu );
+    m_validLayers.push_back( In1_Cu );  // "Internal Layers"
+    m_validLayers.push_back( B_Cu );
 
     for( int id = GAL_LAYER_ID_START; id < GAL_LAYER_ID_END; id++ )
     {
-        if( id == LAYER_VIAS || id == LAYER_GRID_AXES || id == LAYER_PADS_PLATEDHOLES
-                || id == LAYER_VIAS_HOLES )
+        if( id == LAYER_VIAS
+         || id == LAYER_GRID_AXES
+         || id == LAYER_PADS_PLATEDHOLES
+         || id == LAYER_VIAS_HOLES )
         {
             continue;
         }
@@ -115,33 +118,27 @@ bool PANEL_MODEDIT_COLOR_SETTINGS::TransferDataToWindow()
 
 void PANEL_MODEDIT_COLOR_SETTINGS::createSwatches()
 {
-    std::vector<int> layers;
+    std::vector<GAL_LAYER_ID> galLayers;
 
-    for( GAL_LAYER_ID i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; ++i )
+    // Sort the gal layers by name
+    for( int i : m_validLayers )
     {
-        if( m_currentSettings->GetColor( i ) != COLOR4D::UNSPECIFIED )
-            layers.push_back( i );
+        if( i >= GAL_LAYER_ID_START && m_currentSettings->GetColor( i ) != COLOR4D::UNSPECIFIED )
+            galLayers.push_back( (GAL_LAYER_ID) i );
     }
 
-    std::sort( layers.begin(), layers.end(),
+    std::sort( galLayers.begin(), galLayers.end(),
                []( int a, int b )
                {
                    return LayerName( a ) < LayerName( b );
                } );
 
-    // Don't sort board layers by name
-    for( int i = PCBNEW_LAYER_ID_START; i < PCB_LAYER_ID_COUNT; ++i )
-        layers.insert( layers.begin() + i, i );
-
     BOARD* board = m_frame->GetBoard();
 
-    for( int layer : layers )
-    {
-        wxString name = LayerName( layer );
+    createSwatch( F_Cu, board ? board->GetLayerName( F_Cu ) : LayerName( F_Cu ) );
+    createSwatch( In1_Cu, _( "Internal Layers" ) );
+    createSwatch( B_Cu, board ? board->GetLayerName( B_Cu ) : LayerName( B_Cu ) );
 
-        if( board && layer >= PCBNEW_LAYER_ID_START && layer < PCB_LAYER_ID_COUNT )
-            name = board->GetLayerName( static_cast<PCB_LAYER_ID>( layer ) );
-
-        createSwatch( layer, name );
-    }
+    for( GAL_LAYER_ID layer : galLayers )
+        createSwatch( layer, LayerName( layer ) );
 }
