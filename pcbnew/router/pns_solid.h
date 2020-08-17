@@ -44,19 +44,22 @@ public:
     ~SOLID()
     {
         delete m_shape;
+        delete m_alternateShape;
     }
 
     SOLID( const SOLID& aSolid ) :
         ITEM( aSolid )
     {
-        if( m_shape )
-            delete m_shape;
+        if( aSolid.m_shape )
+            m_shape = aSolid.m_shape->Clone();
+        else
+            m_shape = nullptr;
 
-        if( m_alternateShape )
-            delete m_alternateShape;
+        if( aSolid.m_alternateShape )
+            m_alternateShape = aSolid.m_alternateShape->Clone();
+        else
+            m_alternateShape = nullptr;
 
-        m_shape = aSolid.m_shape->Clone();
-        m_alternateShape = aSolid.m_alternateShape->Clone();
         m_pos = aSolid.m_pos;
         m_padToDie = aSolid.m_padToDie;
     }
@@ -79,17 +82,13 @@ public:
 
     void SetShape( SHAPE* shape )
     {
-        if( m_shape )
-            delete m_shape;
-
+        delete m_shape;
         m_shape = shape;
     }
 
     void SetAlternateShape( SHAPE* shape )
     {
-        if( m_alternateShape )
-            delete m_alternateShape;
-
+        delete m_alternateShape;
         m_alternateShape = shape;
     }
 
