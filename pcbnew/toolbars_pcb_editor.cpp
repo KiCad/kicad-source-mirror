@@ -200,12 +200,12 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
                        wxIMAGE_QUALITY_NEAREST );
 
         LayerPairBitmap = std::make_unique<wxBitmap>( image );
-    }
 
-    if( m_mainToolBar )
-    {
-        m_mainToolBar->SetToolBitmap( PCB_ACTIONS::selectLayerPair, *LayerPairBitmap );
-        m_mainToolBar->Refresh();
+        if( m_mainToolBar )
+        {
+            m_mainToolBar->SetToolBitmap( PCB_ACTIONS::selectLayerPair, *LayerPairBitmap );
+            m_mainToolBar->Refresh();
+        }
     }
 }
 
@@ -662,5 +662,6 @@ void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 {
-    m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
+    if( m_SelLayerBox->GetLayerSelection() != GetActiveLayer() )
+        m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
 }
