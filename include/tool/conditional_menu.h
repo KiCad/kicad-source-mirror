@@ -41,16 +41,15 @@ public:
     ///> Constant to indicate that we do not care about an ENTRY location in the menu.
     static const int ANY_ORDER = -1;
 
-    CONDITIONAL_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool );
+    CONDITIONAL_MENU( TOOL_INTERACTIVE* aTool );
 
     ACTION_MENU* create() const override;
 
     /**
-     * Function AddItem()
-     *
      * Adds a menu entry to run a TOOL_ACTION on selected items.
+     *
      * @param aAction is a menu entry to be added.
-     * @param aCondition is a condition that has to be fulfilled to enable the menu entry.
+     * @param aCondition is a condition that has to be fulfilled to show the menu entry in the menu.
      * @param aOrder determines location of the added item, higher numbers are put on the bottom.
      * You may use ANY_ORDER here if you think it does not matter.
      */
@@ -61,11 +60,13 @@ public:
                   const SELECTION_CONDITION& aCondition, int aOrder = ANY_ORDER );
 
     /**
-     * Function AddCheckItem()
-     *
      * Adds a checked menu entry to run a TOOL_ACTION on selected items.
+     *
+     * The condition for checking the menu entry should be supplied through a ACTION_CONDITION
+     * registered with the ACTION_MANAGER.
+     *
      * @param aAction is a menu entry to be added.
-     * @param aCondition is a condition that has to be fulfilled to check the menu entry.
+     * @param aCondition is a condition that has to be fulfilled to show the menu entry in the menu.
      * @param aOrder determines location of the added item, higher numbers are put on the bottom.
      * You may use ANY_ORDER here if you think it does not matter.
      */
@@ -76,14 +77,13 @@ public:
                        const SELECTION_CONDITION& aCondition, int aOrder = ANY_ORDER );
 
     /**
-     * Function AddMenu()
-     *
      * Adds a submenu to the menu. CONDITIONAL_MENU takes ownership of the added menu, so it will
      * be freed when the CONDITIONAL_MENU object is destroyed.
+     *
      * @param aMenu is the submenu to be added.
      * @param aExpand determines if the added submenu items should be added as individual items
      * or as a submenu.
-     * @param aCondition is a condition that has to be fulfilled to enable the submenu entry.
+     * @param aCondition is a condition that has to be fulfilled to show the submenu entry in the menu.
      * @param aOrder determines location of the added menu, higher numbers are put on the bottom.
      * You may use ANY_ORDER here if you think it does not matter.
      */
@@ -92,23 +92,18 @@ public:
                   int aOrder = ANY_ORDER );
 
     /**
-     * Function AddSeparator()
-     *
      * Adds a separator to the menu.
+     *
      * @param aOrder determines location of the separator, higher numbers are put on the bottom.
      */
     void AddSeparator( int aOrder = ANY_ORDER );
 
     /**
-     * Function Evaluate()
-     *
      * Updates the contents of the menu based on the supplied conditions.
      */
     void Evaluate( SELECTION& aSelection );
 
     /**
-     * Function Resolve()
-     *
      * Updates the initial contents so that wxWidgets doesn't get its knickers tied in a knot
      * over the menu being empty (mainly an issue on GTK, but also on OSX with the preferences
      * and quit menu items).

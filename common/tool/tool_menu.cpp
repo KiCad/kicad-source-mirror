@@ -32,7 +32,7 @@
 
 
 TOOL_MENU::TOOL_MENU( TOOL_INTERACTIVE& aTool ) :
-    m_menu( true, &aTool ),
+    m_menu( &aTool ),
     m_tool( aTool )
 {
 }

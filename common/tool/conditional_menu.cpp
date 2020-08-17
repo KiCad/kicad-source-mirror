@@ -29,15 +29,15 @@
 #include <kiface_i.h>
 
 
-CONDITIONAL_MENU::CONDITIONAL_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
-        ACTION_MENU( isContextMenu, aTool )
+CONDITIONAL_MENU::CONDITIONAL_MENU( TOOL_INTERACTIVE* aTool ) :
+        ACTION_MENU( true, aTool )
 {
 }
 
 
 ACTION_MENU* CONDITIONAL_MENU::create() const
 {
-    CONDITIONAL_MENU* clone = new CONDITIONAL_MENU( m_isContextMenu, m_tool );
+    CONDITIONAL_MENU* clone = new CONDITIONAL_MENU( m_tool );
     clone->m_entries = m_entries;
     return clone;
 }
@@ -137,7 +137,7 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
             continue;
         }
 
-        if( m_isContextMenu && !result )
+        if( !result )
             continue;
 
         switch( entry.Type() )
@@ -153,15 +153,6 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
                 break;
 
             case ENTRY::WXITEM:
-#ifdef __WXMAC__
-                // Instantiate the Preferences item only on the first Resolve(); after that
-                // wxWidgets will have moved it to the Application menu
-                if( entry.wxItem()->GetId() == wxID_PREFERENCES )
-                {
-                    if( &aSelection != &g_resolveDummySelection )
-                        continue;
-                }
-#endif
                 menuItem = new wxMenuItem( this,
                                            entry.wxItem()->GetId(),
                                            entry.wxItem()->GetItemLabel(),
@@ -187,14 +178,6 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
             default:
                 wxASSERT( false );
                 break;
-        }
-
-        if( menuItem )
-        {
-            if( entry.IsCheckmarkEntry() )
-                menuItem->Check( result );
-            else
-                menuItem->Enable( result );
         }
     }
 
