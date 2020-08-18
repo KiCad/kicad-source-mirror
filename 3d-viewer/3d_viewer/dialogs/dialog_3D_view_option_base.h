@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 13 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,8 +30,8 @@
 #include <wx/panel.h>
 #include <wx/choice.h>
 #include <wx/clrpicker.h>
-#include <wx/notebook.h>
 #include <wx/button.h>
+#include <wx/notebook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -94,6 +94,8 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxDisableMoveVias;
 		wxCheckBox* m_checkBoxDisableMoveHoles;
 		wxPanel* m_panelRaytracing;
+		wxNotebook* m_notebook2;
+		wxPanel* m_panel4;
 		wxCheckBox* m_checkBoxRaytracing_renderShadows;
 		wxCheckBox* m_checkBoxRaytracing_proceduralTextures;
 		wxCheckBox* m_checkBoxRaytracing_addFloor;
@@ -101,6 +103,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxRaytracing_showReflections;
 		wxCheckBox* m_checkBoxRaytracing_antiAliasing;
 		wxCheckBox* m_checkBoxRaytracing_postProcessing;
+		wxPanel* m_panel5;
 		wxStaticText* m_staticText17;
 		wxColourPickerCtrl* m_colourPickerCameraLight;
 		wxStaticText* m_staticText5;
@@ -143,6 +146,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxColourPickerCtrl* m_colourPickerLight8;
 		wxSpinCtrl* m_spinCtrlLightElevation8;
 		wxSpinCtrl* m_spinCtrlLightAzimuth8;
+		wxButton* m_buttonLightsResetToDefaults;
 		wxStaticLine* m_staticlineH;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -151,6 +155,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCheckRealisticMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckEnableAnimation( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLightsResetToDefaults( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

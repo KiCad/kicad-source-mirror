@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 13 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -388,6 +388,11 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizerOpenGL->Fit( m_panelOpenGL );
 	m_notebook->AddPage( m_panelOpenGL, _("OpenGL"), false );
 	m_panelRaytracing = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxVERTICAL );
+
+	m_notebook2 = new wxNotebook( m_panelRaytracing, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_panel4 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerRaytracing;
 	bSizerRaytracing = new wxBoxSizer( wxVERTICAL );
 
@@ -395,7 +400,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerRaytracingRenderOptions;
-	sbSizerRaytracingRenderOptions = new wxStaticBoxSizer( new wxStaticBox( m_panelRaytracing, wxID_ANY, _("Raytracing Render Options") ), wxVERTICAL );
+	sbSizerRaytracingRenderOptions = new wxStaticBoxSizer( new wxStaticBox( m_panel4, wxID_ANY, _("Raytracing Render Options") ), wxVERTICAL );
 
 	sbSizerRaytracingRenderOptions->SetMinSize( wxSize( -1,32 ) );
 	wxFlexGridSizer* fgSizer9;
@@ -458,8 +463,20 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	bSizer12->Add( sbSizerRaytracingRenderOptions, 0, wxALL|wxEXPAND, 5 );
 
+
+	bSizerRaytracing->Add( bSizer12, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_panel4->SetSizer( bSizerRaytracing );
+	m_panel4->Layout();
+	bSizerRaytracing->Fit( m_panel4 );
+	m_notebook2->AddPage( m_panel4, _("Render Options"), false );
+	m_panel5 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer17;
+	bSizer17 = new wxBoxSizer( wxVERTICAL );
+
 	wxStaticBoxSizer* sbSizerRaytracingLightConfiguration;
-	sbSizerRaytracingLightConfiguration = new wxStaticBoxSizer( new wxStaticBox( m_panelRaytracing, wxID_ANY, _("Lights configuration") ), wxVERTICAL );
+	sbSizerRaytracingLightConfiguration = new wxStaticBoxSizer( new wxStaticBox( m_panel5, wxID_ANY, _("Lights configuration") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
@@ -568,7 +585,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_colourPickerLight5 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
 	fgSizer11->Add( m_colourPickerLight5, 0, wxALL, 5 );
 
-	m_spinCtrlLightElevation5 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 10, 0 );
+	m_spinCtrlLightElevation5 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation5, 0, wxALL, 1 );
 
 	m_spinCtrlLightAzimuth5 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
@@ -597,7 +614,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_colourPickerLight6 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
 	fgSizer11->Add( m_colourPickerLight6, 0, wxALL, 5 );
 
-	m_spinCtrlLightElevation6 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 10, 0 );
+	m_spinCtrlLightElevation6 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation6, 0, wxALL, 1 );
 
 	m_spinCtrlLightAzimuth6 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
@@ -626,7 +643,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_colourPickerLight7 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
 	fgSizer11->Add( m_colourPickerLight7, 0, wxALL, 5 );
 
-	m_spinCtrlLightElevation7 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 10, 0 );
+	m_spinCtrlLightElevation7 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation7, 0, wxALL, 1 );
 
 	m_spinCtrlLightAzimuth7 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
@@ -655,7 +672,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_colourPickerLight8 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( -1,-1 ), wxCLRP_DEFAULT_STYLE );
 	fgSizer11->Add( m_colourPickerLight8, 0, wxALL, 5 );
 
-	m_spinCtrlLightElevation8 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 10, 0 );
+	m_spinCtrlLightElevation8 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation8, 0, wxALL, 1 );
 
 	m_spinCtrlLightAzimuth8 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
@@ -664,16 +681,33 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	sbSizerRaytracingLightConfiguration->Add( fgSizer11, 0, wxALL|wxEXPAND, 5 );
 
-
-	bSizer12->Add( sbSizerRaytracingLightConfiguration, 1, wxALL|wxEXPAND, 5 );
-
-
-	bSizerRaytracing->Add( bSizer12, 1, wxALL|wxEXPAND, 5 );
+	wxBoxSizer* bSizer19;
+	bSizer19 = new wxBoxSizer( wxHORIZONTAL );
 
 
-	m_panelRaytracing->SetSizer( bSizerRaytracing );
+	bSizer19->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_buttonLightsResetToDefaults = new wxButton( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Reset to defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer19->Add( m_buttonLightsResetToDefaults, 0, wxALL, 5 );
+
+
+	sbSizerRaytracingLightConfiguration->Add( bSizer19, 1, wxEXPAND, 5 );
+
+
+	bSizer17->Add( sbSizerRaytracingLightConfiguration, 0, wxALL|wxEXPAND, 5 );
+
+
+	m_panel5->SetSizer( bSizer17 );
+	m_panel5->Layout();
+	bSizer17->Fit( m_panel5 );
+	m_notebook2->AddPage( m_panel5, _("Lights configuration"), true );
+
+	bSizer14->Add( m_notebook2, 1, wxEXPAND | wxALL, 5 );
+
+
+	m_panelRaytracing->SetSizer( bSizer14 );
 	m_panelRaytracing->Layout();
-	bSizerRaytracing->Fit( m_panelRaytracing );
+	bSizer14->Fit( m_panelRaytracing );
 	m_notebook->AddPage( m_panelRaytracing, _("Raytracing"), false );
 
 	bSizerMain->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
@@ -699,6 +733,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	// Connect Events
 	m_checkBoxRealisticMode->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_3D_VIEW_OPTIONS_BASE::OnCheckRealisticMode ), NULL, this );
 	m_checkBoxEnableAnimation->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_3D_VIEW_OPTIONS_BASE::OnCheckEnableAnimation ), NULL, this );
+	m_buttonLightsResetToDefaults->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_3D_VIEW_OPTIONS_BASE::OnLightsResetToDefaults ), NULL, this );
 }
 
 DIALOG_3D_VIEW_OPTIONS_BASE::~DIALOG_3D_VIEW_OPTIONS_BASE()
@@ -706,5 +741,6 @@ DIALOG_3D_VIEW_OPTIONS_BASE::~DIALOG_3D_VIEW_OPTIONS_BASE()
 	// Disconnect Events
 	m_checkBoxRealisticMode->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_3D_VIEW_OPTIONS_BASE::OnCheckRealisticMode ), NULL, this );
 	m_checkBoxEnableAnimation->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_3D_VIEW_OPTIONS_BASE::OnCheckEnableAnimation ), NULL, this );
+	m_buttonLightsResetToDefaults->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_3D_VIEW_OPTIONS_BASE::OnLightsResetToDefaults ), NULL, this );
 
 }

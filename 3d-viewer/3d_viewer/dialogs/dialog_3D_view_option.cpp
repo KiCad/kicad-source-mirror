@@ -46,12 +46,15 @@ private:
     void initDialog();
 
     void OnCheckEnableAnimation( wxCommandEvent& WXUNUSED( event ) ) override;
+    void OnLightsResetToDefaults( wxCommandEvent& event ) override;
 
     /// Automatically called when clicking on the OK button
     bool TransferDataFromWindow() override;
 
     /// Automatically called after creating the dialog
     bool TransferDataToWindow() override;
+
+    void TransferLightDataToWindow();
 };
 
 
@@ -106,44 +109,36 @@ void DIALOG_3D_VIEW_OPTIONS::OnCheckEnableAnimation( wxCommandEvent& event )
     m_sliderAnimationSpeed->Enable( m_checkBoxEnableAnimation->GetValue() );
 }
 
-bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
+void DIALOG_3D_VIEW_OPTIONS::OnLightsResetToDefaults( wxCommandEvent& event )
 {
-    // Check/uncheck checkboxes
-    m_checkBoxRealisticMode->SetValue( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
-    m_checkBoxBoardBody->SetValue( m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
-    m_checkBoxAreas->SetValue( m_settings.GetFlag( FL_ZONE ) );
+    m_settings.m_raytrace_lightColorCamera = SFVEC3F( 0.2f );
+    m_settings.m_raytrace_lightColorTop = SFVEC3F( 0.247f );
+    m_settings.m_raytrace_lightColorBottom = SFVEC3F( 0.247f );
 
-    m_checkBox3DshapesTH->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
-    m_checkBox3DshapesSMD->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
-    m_checkBox3DshapesVirtual->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
+    const std::vector<int> default_elevation =
+    {
+        67,  67,  67,  67, -67, -67, -67, -67,
+    };
 
-    m_checkBoxSilkscreen->SetValue( m_settings.GetFlag( FL_SILKSCREEN ) );
-    m_checkBoxSolderMask->SetValue( m_settings.GetFlag( FL_SOLDERMASK ) );
-    m_checkBoxSolderpaste->SetValue( m_settings.GetFlag( FL_SOLDERPASTE ) );
-    m_checkBoxAdhesive->SetValue( m_settings.GetFlag( FL_ADHESIVE ) );
-    m_checkBoxComments->SetValue( m_settings.GetFlag( FL_COMMENTS ) );
-    m_checkBoxECO->SetValue( m_settings.GetFlag( FL_ECO ) );
-    m_checkBoxSubtractMaskFromSilk->SetValue( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
-    m_checkBoxClipSilkOnViaAnnulus->SetValue( m_settings.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) );
+    const std::vector<int> default_azimuth =
+    {
+        45, 135, 225, 315, 45, 135, 225, 315,
+    };
 
-    // OpenGL options
-    m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
-    m_checkBoxBoundingBoxes->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
-    m_checkBoxDisableAAMove->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveVias->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveHoles->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE ) );
-    m_choiceAntiAliasing->SetSelection( static_cast<int>( m_settings.AntiAliasingGet() ) );
+    for( size_t i = 0; i < m_settings.m_raytrace_lightSphericalCoords.size(); ++i )
+    {
+        m_settings.m_raytrace_lightColor[i] = SFVEC3F( 0.168f );
 
-    // Raytracing options
-    m_checkBoxRaytracing_renderShadows->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
-    m_checkBoxRaytracing_addFloor->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) );
-    m_checkBoxRaytracing_showRefractions->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) );
-    m_checkBoxRaytracing_showReflections->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
-    m_checkBoxRaytracing_postProcessing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
-    m_checkBoxRaytracing_antiAliasing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
-    m_checkBoxRaytracing_proceduralTextures->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
+        m_settings.m_raytrace_lightSphericalCoords[i].x = ( (float)default_elevation[i] + 90.0f ) / 180.0f;
 
+        m_settings.m_raytrace_lightSphericalCoords[i].y = (float)default_azimuth[i] / 180.0f;
+    }
+
+    TransferLightDataToWindow();
+}
+
+void DIALOG_3D_VIEW_OPTIONS::TransferLightDataToWindow()
+{
     auto Transfer_color = [] ( const SFVEC3F& aSource, wxColourPickerCtrl *aTarget )
     {
         aTarget->SetColour( wxColour( aSource.r * 255,
@@ -182,6 +177,47 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     m_spinCtrlLightAzimuth6->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[5].y * 180.0f ) );
     m_spinCtrlLightAzimuth7->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[6].y * 180.0f ) );
     m_spinCtrlLightAzimuth8->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[7].y * 180.0f ) );
+}
+
+bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
+{
+    // Check/uncheck checkboxes
+    m_checkBoxRealisticMode->SetValue( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
+    m_checkBoxBoardBody->SetValue( m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
+    m_checkBoxAreas->SetValue( m_settings.GetFlag( FL_ZONE ) );
+
+    m_checkBox3DshapesTH->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
+    m_checkBox3DshapesSMD->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
+    m_checkBox3DshapesVirtual->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
+
+    m_checkBoxSilkscreen->SetValue( m_settings.GetFlag( FL_SILKSCREEN ) );
+    m_checkBoxSolderMask->SetValue( m_settings.GetFlag( FL_SOLDERMASK ) );
+    m_checkBoxSolderpaste->SetValue( m_settings.GetFlag( FL_SOLDERPASTE ) );
+    m_checkBoxAdhesive->SetValue( m_settings.GetFlag( FL_ADHESIVE ) );
+    m_checkBoxComments->SetValue( m_settings.GetFlag( FL_COMMENTS ) );
+    m_checkBoxECO->SetValue( m_settings.GetFlag( FL_ECO ) );
+    m_checkBoxSubtractMaskFromSilk->SetValue( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
+    m_checkBoxClipSilkOnViaAnnulus->SetValue( m_settings.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) );
+
+    // OpenGL options
+    m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
+    m_checkBoxBoundingBoxes->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
+    m_checkBoxDisableAAMove->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) );
+    m_checkBoxDisableMoveThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
+    m_checkBoxDisableMoveVias->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE ) );
+    m_checkBoxDisableMoveHoles->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE ) );
+    m_choiceAntiAliasing->SetSelection( static_cast<int>( m_settings.AntiAliasingGet() ) );
+
+    // Raytracing options
+    m_checkBoxRaytracing_renderShadows->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
+    m_checkBoxRaytracing_addFloor->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) );
+    m_checkBoxRaytracing_showRefractions->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) );
+    m_checkBoxRaytracing_showReflections->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
+    m_checkBoxRaytracing_postProcessing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
+    m_checkBoxRaytracing_antiAliasing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
+    m_checkBoxRaytracing_proceduralTextures->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
+
+    TransferLightDataToWindow();
 
     // Camera Options
     m_checkBoxEnableAnimation->SetValue( m_canvas->AnimationEnabledGet() );

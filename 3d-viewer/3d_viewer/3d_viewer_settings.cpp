@@ -116,7 +116,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
                                                     &m_Render.raytrace_lightColor,
                                                     default_colors ) );
 
-    std::vector<int> default_elevation =
+    const std::vector<int> default_elevation =
     {
         67,  67,  67,  67, -67, -67, -67, -67,
     };
@@ -125,7 +125,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
                                                 &m_Render.raytrace_lightElevation,
                                                 default_elevation ) );
 
-    std::vector<int> default_azimuth =
+    const std::vector<int> default_azimuth =
     {
         45, 135, 225, 315, 45, 135, 225, 315,
     };
