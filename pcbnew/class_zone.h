@@ -447,10 +447,10 @@ public:
     /**
      * Function Rotate
      * Move the outlines
-     * @param centre = rot centre
-     * @param angle = in 0.1 degree
+     * @param aCentre = rot centre
+     * @param aAngle = in 0.1 degree
      */
-    void Rotate( const wxPoint& centre, double angle ) override;
+    void Rotate( const wxPoint& aCentre, double aAngle ) override;
 
     /**
      * Function Flip

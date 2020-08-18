@@ -106,25 +106,25 @@ void ZONE_CONTAINER::InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     // only from a copy constructor.
 
     // Copy only useful EDA_ITEM flags:
-    m_Flags = aZone.m_Flags;
-    m_forceVisible = aZone.m_forceVisible;
+    m_Flags                   = aZone.m_Flags;
+    m_forceVisible            = aZone.m_forceVisible;
 
     // Replace the outlines for aZone outlines.
     delete m_Poly;
     m_Poly = new SHAPE_POLY_SET( *aZone.m_Poly );
 
-    m_cornerSmoothingType = aZone.m_cornerSmoothingType;
-    m_cornerRadius = aZone.m_cornerRadius;
-    m_zoneName = aZone.m_zoneName;
+    m_cornerSmoothingType     = aZone.m_cornerSmoothingType;
+    m_cornerRadius            = aZone.m_cornerRadius;
+    m_zoneName                = aZone.m_zoneName;
     SetLayerSet( aZone.GetLayerSet() );
-    m_priority = aZone.m_priority;
-    m_isKeepout = aZone.m_isKeepout;
+    m_priority                = aZone.m_priority;
+    m_isKeepout               = aZone.m_isKeepout;
 
-    m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;
-    m_doNotAllowVias       = aZone.m_doNotAllowVias;
-    m_doNotAllowTracks     = aZone.m_doNotAllowTracks;
-    m_doNotAllowPads       = aZone.m_doNotAllowPads;
-    m_doNotAllowFootprints = aZone.m_doNotAllowFootprints;
+    m_doNotAllowCopperPour    = aZone.m_doNotAllowCopperPour;
+    m_doNotAllowVias          = aZone.m_doNotAllowVias;
+    m_doNotAllowTracks        = aZone.m_doNotAllowTracks;
+    m_doNotAllowPads          = aZone.m_doNotAllowPads;
+    m_doNotAllowFootprints    = aZone.m_doNotAllowFootprints;
 
     m_PadConnection           = aZone.m_PadConnection;
     m_ZoneClearance           = aZone.m_ZoneClearance;     // clearance value
@@ -136,21 +136,21 @@ void ZONE_CONTAINER::InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_IsFilled = aZone.m_IsFilled;
     m_needRefill = aZone.m_needRefill;
 
-    m_ThermalReliefGap = aZone.m_ThermalReliefGap;
+    m_ThermalReliefGap        = aZone.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
 
-    m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
-    m_hatchThickness = aZone.m_hatchThickness;
-    m_hatchGap = aZone.m_hatchGap;
-    m_hatchOrientation = aZone.m_hatchOrientation;
-    m_hatchSmoothingLevel = aZone.m_hatchSmoothingLevel;
-    m_hatchSmoothingValue = aZone.m_hatchSmoothingValue;
-    m_hatchBorderAlgorithm = aZone.m_hatchBorderAlgorithm;
-    m_hatchHoleMinArea = aZone.m_hatchHoleMinArea;
+    m_FillMode                = aZone.m_FillMode;         // solid vs. hatched
+    m_hatchThickness          = aZone.m_hatchThickness;
+    m_hatchGap                = aZone.m_hatchGap;
+    m_hatchOrientation        = aZone.m_hatchOrientation;
+    m_hatchSmoothingLevel     = aZone.m_hatchSmoothingLevel;
+    m_hatchSmoothingValue     = aZone.m_hatchSmoothingValue;
+    m_hatchBorderAlgorithm    = aZone.m_hatchBorderAlgorithm;
+    m_hatchHoleMinArea        = aZone.m_hatchHoleMinArea;
 
     // For corner moving, corner index to drag, or nullptr if no selection
     delete m_CornerSelection;
-    m_CornerSelection = nullptr;
+    m_CornerSelection         = nullptr;
 
     for( PCB_LAYER_ID layer : aZone.GetLayerSet().Seq() )
     {
@@ -161,17 +161,16 @@ void ZONE_CONTAINER::InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
         m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
     }
 
-    m_borderStyle = aZone.m_borderStyle;
-    m_borderHatchPitch = aZone.m_borderHatchPitch;
-    m_borderHatchLines = aZone.m_borderHatchLines;
+    m_borderStyle             = aZone.m_borderStyle;
+    m_borderHatchPitch        = aZone.m_borderHatchPitch;
+    m_borderHatchLines        = aZone.m_borderHatchLines;
 
     SetLocalFlags( aZone.GetLocalFlags() );
 
-    m_netinfo = aZone.m_netinfo;
+    m_netinfo                 = aZone.m_netinfo;
 
-    m_hv45 = aZone.m_hv45;
-    m_area = aZone.m_area;
-
+    m_hv45                    = aZone.m_hv45;
+    m_area                    = aZone.m_area;
 }
 
 
@@ -272,11 +271,8 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
 
     m_layerSet = aLayerSet;
 
-    // Set the single layer parameter.
-    // For zones that can be on many layers, this parameter does not have
-    // really meaning and is a bit arbitrary if more than one layer is set.
-    // But many functions are using it.
-    // So we need to initialize it to a reasonable value.
+    // Set the single layer parameter.  For zones that can be on many layers, this parameter
+    // is arbitrary at best, but some code still uses it.
     // Priority is F_Cu then B_Cu then to the first selected layer
     m_Layer = aLayerSet.Seq()[0];
 
@@ -497,8 +493,7 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
     {
          return arect.Contains( bbox );
     }
-    else    // Test for intersection between aBox and the polygon
-            // For a polygon, using its bounding box has no sense here
+    else
     {
         // Fast test: if aBox is outside the polygon bounding box, rectangles cannot intersect
         if( !arect.Intersects( bbox ) )
@@ -513,15 +508,11 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 
             // Test if the point is within the rect
             if( arect.Contains( ( wxPoint ) vertex ) )
-            {
                 return true;
-            }
 
             // Test if this edge intersects the rect
             if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
-            {
                 return true;
-            }
         }
 
         return false;
@@ -553,7 +544,7 @@ bool ZONE_CONTAINER::HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint &aRef
         return false;
 
     return m_FilledPolysList.at( aLayer ).Contains( VECTOR2I( aRefPos.x, aRefPos.y ), -1,
-            aAccuracy );
+                                                    aAccuracy );
 }
 
 
@@ -594,8 +585,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     else
         msg = _( "Non-copper Zone" );
 
-    // Display Cutout instead of Outline for holes inside a zone
-    // i.e. when num contour !=0
+    // Display Cutout instead of Outline for holes inside a zone (i.e. when num contour !=0).
     // Check whether the selected corner is in a hole; i.e., in any contour but the first one.
     if( m_CornerSelection != nullptr && m_CornerSelection->m_contour > 0 )
         msg << wxT( " " ) << _( "Cutout" );
@@ -754,28 +744,26 @@ void ZONE_CONTAINER::MoveEdge( const wxPoint& offset, int aEdge )
 }
 
 
-void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
+void ZONE_CONTAINER::Rotate( const wxPoint& aCentre, double aAngle )
 {
-    wxPoint pos;
+    aAngle = -DECIDEG2RAD( aAngle );
 
-    angle = -DECIDEG2RAD( angle );
-
-    m_Poly->Rotate( angle, VECTOR2I( centre ) );
+    m_Poly->Rotate( aAngle, VECTOR2I( aCentre ) );
     HatchBorder();
 
     /* rotate filled areas: */
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
-        pair.second.Rotate( angle, VECTOR2I( centre ) );
+        pair.second.Rotate( aAngle, VECTOR2I( aCentre ) );
 
     for( std::pair<const PCB_LAYER_ID, ZONE_SEGMENT_FILL>& pair : m_FillSegmList )
     {
         for( SEG& seg : pair.second )
         {
             wxPoint a( seg.A );
-            RotatePoint( &a, centre, angle );
+            RotatePoint( &a, aCentre, aAngle );
             seg.A = a;
             wxPoint b( seg.B );
-            RotatePoint( &b, centre, angle );
+            RotatePoint( &b, aCentre, aAngle );
             seg.B = a;
         }
     }
@@ -1266,9 +1254,7 @@ double ZONE_CONTAINER::CalculateFilledArea()
             m_area += poly.Outline( i ).Area();
 
             for( int j = 0; j < poly.HoleCount( i ); j++ )
-            {
                 m_area -= poly.Hole( i, j ).Area();
-            }
         }
     }
 
@@ -1276,12 +1262,10 @@ double ZONE_CONTAINER::CalculateFilledArea()
 }
 
 
-/* Function TransformOutlinesShapeWithClearanceToPolygon
- * Convert the zone filled areas polygons to polygons
- * inflated (optional) by max( aClearanceValue, the zone clearance)
- * and copy them in aCornerBuffer
- * @param aClearance       the clearance around outlines
- * @param aPreserveCorners an optional set of corners which should not be chamfered/filleted
+/**
+ * Function TransformOutlinesShapeWithClearanceToPolygon
+ * Convert the filled areas to polygons (optionally inflated by \a aClearance) and copy them
+ * into \a aCornerBuffer.
  */
 void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                                    int aClearance ) const
@@ -1307,6 +1291,7 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SE
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
     aCornerBuffer.Append( polybuffer );
 }
+
 
 //
 /********* MODULE_ZONE_CONTAINER **************/
