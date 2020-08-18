@@ -2197,6 +2197,7 @@ bool SCH_SEXPR_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
 
 LIB_PART* SCH_SEXPR_PLUGIN::ParsePart( LINE_READER& aReader, int aFileVersion )
 {
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
     LIB_PART_MAP map;
     SCH_SEXPR_PARSER parser( &aReader );
 
@@ -2210,6 +2211,7 @@ LIB_PART* SCH_SEXPR_PLUGIN::ParsePart( LINE_READER& aReader, int aFileVersion )
 void SCH_SEXPR_PLUGIN::FormatPart( LIB_PART* part, OUTPUTFORMATTER & formatter )
 {
 
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
     SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( part, formatter );
 }
 
