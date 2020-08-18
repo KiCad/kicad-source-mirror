@@ -88,6 +88,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back(
             new PARAM<int>( "aui.right_panel_width", &m_AuiPanels.right_panel_width, -1 ) );
 
+    m_params.emplace_back( new PARAM<int>(
+            "aui.appearance_panel_tab", &m_AuiPanels.appearance_panel_tab, 0, 0, 2 ) );
+
     m_params.emplace_back( new PARAM<int>( "footprint_chooser.width",
             &m_FootprintChooser.width, -1 ) );
 

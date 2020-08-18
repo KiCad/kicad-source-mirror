@@ -143,6 +143,12 @@ public:
 
     void OnLayerContextMenu( wxCommandEvent& aEvent );
 
+    ///> Returns the index of the current tab (0-2)
+    int GetTabIndex() const;
+
+    ///> Sets the current notebook tab
+    void SetTabIndex( int aTab );
+
 protected:
 
     void OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event ) override;

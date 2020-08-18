@@ -280,7 +280,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             wxSize size = m_appearancePanel->GetBestSize();
             size.x      = settings->m_AuiPanels.right_panel_width;
             m_auimgr.GetPane( "LayersManager" ).BestSize( size );
+            m_appearancePanel->SetSize( size );
         }
+
+        m_appearancePanel->SetTabIndex( settings->m_AuiPanels.appearance_panel_tab );
     }
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
@@ -944,6 +947,7 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.show_microwave_tools = m_show_microwave_tools;
         cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
+        cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
         cfg->m_ShowPageLimits                 = m_showPageLimits;
     }
 }

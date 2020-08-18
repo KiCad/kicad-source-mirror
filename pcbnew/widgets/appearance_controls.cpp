@@ -836,6 +836,21 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
 }
 
 
+int APPEARANCE_CONTROLS::GetTabIndex() const
+{
+    return m_notebook->GetSelection();
+}
+
+
+void APPEARANCE_CONTROLS::SetTabIndex( int aTab )
+{
+    size_t max = m_notebook->GetPageCount();
+
+    if( aTab >= 0 && static_cast<size_t>( aTab ) < max )
+        m_notebook->SetSelection( aTab );
+}
+
+
 void APPEARANCE_CONTROLS::syncColorsAndVisibility()
 {
     BOARD*  board   = m_frame->GetBoard();
