@@ -428,6 +428,8 @@ void APPEARANCE_CONTROLS::UpdateDisplayOptions()
     wxASSERT( m_objectSettingsMap.count( LAYER_RATSNEST ) );
     APPEARANCE_SETTING* ratsnest = m_objectSettingsMap.at( LAYER_RATSNEST );
     ratsnest->ctl_visibility->SetValue( options.m_ShowGlobalRatsnest );
+
+    m_cbFlipBoard->SetValue( m_frame->GetCanvas()->GetView()->IsMirroredX() );
 }
 
 

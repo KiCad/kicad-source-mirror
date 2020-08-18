@@ -1573,6 +1573,7 @@ int PCB_EDITOR_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
     view()->SetMirror( !view()->IsMirroredX(), false );
     view()->RecacheAllItems();
     frame()->Refresh();
+    frame()->OnDisplayOptionsChanged();
     return 0;
 }
 
