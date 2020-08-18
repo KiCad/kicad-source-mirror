@@ -62,6 +62,8 @@ DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent,
 {
     m_sdbSizerApply->SetLabel( _( "Default" ) );
 
+    m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+
     SetInitialFocus( m_lineWidth );
 
     for( auto& typeEntry : lineTypeNames )

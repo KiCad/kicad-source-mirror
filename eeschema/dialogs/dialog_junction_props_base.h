@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class COLOR_SWATCH;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -18,13 +20,10 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/bmpbuttn.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/panel.h>
 #include <wx/statline.h>
+#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,7 +40,8 @@ class DIALOG_JUNCTION_PROPS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlDiameter;
 		wxStaticText* m_staticTextDiameterUnits;
 		wxStaticText* m_staticTextColor;
-		wxBitmapButton* m_buttonColor;
+		wxPanel* m_panel1;
+		COLOR_SWATCH* m_colorSwatch;
 		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -49,7 +49,6 @@ class DIALOG_JUNCTION_PROPS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
-		virtual void onColorButtonClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void resetDefaults( wxCommandEvent& event ) { event.Skip(); }
 
 

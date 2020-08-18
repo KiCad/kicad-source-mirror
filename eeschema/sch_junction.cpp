@@ -175,12 +175,15 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os ) const
 
 COLOR4D SCH_JUNCTION::GetColor() const
 {
+    if( m_color != COLOR4D::UNSPECIFIED )
+        return m_color;
+
     NETCLASSPTR netclass = NetClass();
 
-    if( netclass && netclass->GetSchematicColor() != COLOR4D::UNSPECIFIED )
+    if( netclass )
         return netclass->GetSchematicColor();
 
-    return m_color;
+    return COLOR4D::UNSPECIFIED;
 }
 
 

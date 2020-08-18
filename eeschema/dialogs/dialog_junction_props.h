@@ -39,17 +39,12 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    SCH_EDIT_FRAME*       m_frame;
+    SCH_EDIT_FRAME*           m_frame;
     std::deque<SCH_JUNCTION*> m_junctions;
 
-    UNIT_BINDER     m_diameter;
-    COLOR4D         m_selectedColor;
+    UNIT_BINDER               m_diameter;
 
     void resetDefaults( wxCommandEvent& event ) override;
-    void onColorButtonClicked( wxCommandEvent& aEvent ) override;
-
-    void setColor( const COLOR4D& aColor );
-    void updateColorButton( COLOR4D& aColor );
 };
 
 #endif // __dialog_junction_props__

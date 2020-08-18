@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/color_swatch.h"
 
 #include "dialog_junction_props_base.h"
 
@@ -24,10 +26,10 @@ DIALOG_JUNCTION_PROPS_BASE::DIALOG_JUNCTION_PROPS_BASE( wxWindow* parent, wxWind
 
 	m_staticTextDiameter = new wxStaticText( this, wxID_ANY, _("Diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDiameter->Wrap( -1 );
-	fgSizer2->Add( m_staticTextDiameter, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizer2->Add( m_staticTextDiameter, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_textCtrlDiameter = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_textCtrlDiameter, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxLEFT, 5 );
+	fgSizer2->Add( m_textCtrlDiameter, 0, wxEXPAND, 5 );
 
 	m_staticTextDiameterUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDiameterUnits->Wrap( -1 );
@@ -35,16 +37,26 @@ DIALOG_JUNCTION_PROPS_BASE::DIALOG_JUNCTION_PROPS_BASE( wxWindow* parent, wxWind
 
 	m_staticTextColor = new wxStaticText( this, wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextColor->Wrap( -1 );
-	fgSizer2->Add( m_staticTextColor, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizer2->Add( m_staticTextColor, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_buttonColor = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	fgSizer2->Add( m_buttonColor, 0, wxEXPAND|wxLEFT, 5 );
+	m_panel1 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer21;
+	bSizer21 = new wxBoxSizer( wxVERTICAL );
+
+	m_colorSwatch = new COLOR_SWATCH( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer21->Add( m_colorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	m_panel1->SetSizer( bSizer21 );
+	m_panel1->Layout();
+	bSizer21->Fit( m_panel1 );
+	fgSizer2->Add( m_panel1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	bSizer2->Add( fgSizer2, 1, wxALL|wxEXPAND, 5 );
+	bSizer2->Add( fgSizer2, 1, wxALL|wxEXPAND, 10 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer2->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
@@ -68,14 +80,12 @@ DIALOG_JUNCTION_PROPS_BASE::DIALOG_JUNCTION_PROPS_BASE( wxWindow* parent, wxWind
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_buttonColor->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JUNCTION_PROPS_BASE::onColorButtonClicked ), NULL, this );
 	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JUNCTION_PROPS_BASE::resetDefaults ), NULL, this );
 }
 
 DIALOG_JUNCTION_PROPS_BASE::~DIALOG_JUNCTION_PROPS_BASE()
 {
 	// Disconnect Events
-	m_buttonColor->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JUNCTION_PROPS_BASE::onColorButtonClicked ), NULL, this );
 	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JUNCTION_PROPS_BASE::resetDefaults ), NULL, this );
 
 }
