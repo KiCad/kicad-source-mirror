@@ -1679,6 +1679,16 @@ static struct MODULE_DESC
 {
     MODULE_DESC()
     {
+        ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+
+        if( layerEnum.Choices().GetCount() == 0 )
+        {
+            layerEnum.Undefined( UNDEFINED_LAYER );
+
+            for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+                layerEnum.Map( *seq, LSET::Name( *seq ) );
+        }
+
         wxPGChoices fpLayers;       // footprints might be placed only on F.Cu & B.Cu
         fpLayers.Add( LSET::Name( F_Cu ), F_Cu );
         fpLayers.Add( LSET::Name( B_Cu ), B_Cu );
