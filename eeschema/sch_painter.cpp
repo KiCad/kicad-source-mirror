@@ -330,12 +330,12 @@ float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
 {
     wxCHECK( aItem, static_cast<float>( m_schSettings.m_DefaultWireThickness ) );
 
-    float width = (float) std::max( aItem->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
+    float width = (float) aItem->GetPenWidth();
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();
 
-    return width;
+    return std::max( width, 1.0f );
 }
 
 
