@@ -666,17 +666,18 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_RECT*      aClipBox,
                                     const wxPoint& aOffset,
                                     bool           aFilledShape )
 {
-    std::vector<wxPoint> points;
     SHAPE_LINE_CHAIN& poly = m_Polygon.Outline( 0 );
     int pointCount = poly.PointCount() - 1;
 
+    std::vector<wxPoint> points;
     points.reserve( pointCount );
 
     for( int ii = 0; ii < pointCount; ii++ )
     {
         wxPoint p( poly.Point( ii ).x, poly.Point( ii ).y );
-        points[ii] = p + aOffset;
-        points[ii] = GetABPosition( points[ii] );
+        p = p + aOffset;
+        p = GetABPosition( p );
+        points.push_back( p );
     }
 
     GRClosedPoly( aClipBox, aDC, pointCount, &points[0], aFilledShape, aColor, aColor );

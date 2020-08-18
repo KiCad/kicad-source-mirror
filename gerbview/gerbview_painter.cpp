@@ -360,11 +360,16 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
         // TODO(JE) Refactor this to allow const aItem
         D_CODE* code = aItem->GetDcodeDescr();
+
         if( code && code->m_Shape == APT_RECT )
         {
             if( aItem->m_Polygon.OutlineCount() == 0 )
                 aItem->ConvertSegmentToPolygon();
-            drawPolygon( aItem, aItem->m_Polygon, isFilled );
+
+            // Warning: drawPolygon modify the polygon to draw, so use a copy
+            // of aItem->m_Polygon
+            SHAPE_POLY_SET poly = aItem->m_Polygon;
+            drawPolygon( aItem, poly, isFilled );
         }
         else
         {
