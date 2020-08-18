@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,16 +92,12 @@ static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
 
     context.SetItems( itemA, itemB );
 
-    printf( "Expr: '%s'\n", (const char*) expr.c_str() );
-
     bool error = !compiler.Compile( expr, &ucode, &preflightContext );
 
     BOOST_CHECK_EQUAL( error, expectError );
 
     if( error != expectError )
     {
-        printf( "result: FAIL: %s (code pos: %d)\n",
-                (const char*) compiler.GetError().message.c_str(), compiler.GetError().srcPos );
         return false;
     }
 
@@ -120,18 +116,10 @@ static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
     if( expectedResult.GetType() == LIBEVAL::VT_NUMERIC )
     {
         BOOST_CHECK_EQUAL( result.AsDouble(), expectedResult.AsDouble() );
-        /*printf( "result: %s (got %.10f expected: %.10f)\n",
-                ok ? "OK" : "FAIL",
-                result.AsDouble(),
-                expectedResult.AsDouble() );*/
     }
     else
     {
         BOOST_CHECK_EQUAL( result.AsString(), expectedResult.AsString() );
-        /*printf( "result: %s (got '%ls' expected: '%ls')\n",
-                ok ? "OK" : "FAIL",
-                GetChars( result.AsString() ),
-                GetChars( expectedResult.AsString() ) );*/
     }
 
 

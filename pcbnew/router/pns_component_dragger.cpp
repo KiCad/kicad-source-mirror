@@ -69,9 +69,6 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
                 auto l0 = m_world->AssembleLine( li, &segIndex );
 
-//                printf( "solid %p jt %p fanout %d segs %d\n", solid, jt, jt->LinkCount(),
-///                      l0.SegmentCount() );
-
                 DRAGGED_CONNECTION cn;
 
                 cn.origLine    = l0;
@@ -80,8 +77,6 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
             }
         }
     }
-
-//    printf( "Total: %d conns to drag\n", m_conns.size() );
 
     return true;
 }

@@ -66,18 +66,14 @@ BOOST_AUTO_TEST_CASE( Orientation )
 {
     TRANSFORM t = m_symbol.GetTransform();
 
-    wxLogDebug( "Angle 0: x1 = %d, y1 = %d, x2 = %d, y2 = %d", t.x1, t.y1, t.x2, t.y2 );
     m_symbol.SetOrientation( CMP_ORIENT_90 );
     t = m_symbol.GetTransform();
-    wxLogDebug( "Angle 90: x1 = %d, y1 = %d, x2 = %d, y2 = %d", t.x1, t.y1, t.x2, t.y2 );
     m_symbol.SetTransform( TRANSFORM() );
     m_symbol.SetOrientation( CMP_ORIENT_180 );
     t = m_symbol.GetTransform();
-    wxLogDebug( "Angle 180: x1 = %d, y1 = %d, x2 = %d, y2 = %d", t.x1, t.y1, t.x2, t.y2 );
     m_symbol.SetTransform( TRANSFORM() );
     m_symbol.SetOrientation( CMP_ORIENT_270 );
     t = m_symbol.GetTransform();
-    wxLogDebug( "Angle 270: x1 = %d, y1 = %d, x2 = %d, y2 = %d", t.x1, t.y1, t.x2, t.y2 );
 }
 
 

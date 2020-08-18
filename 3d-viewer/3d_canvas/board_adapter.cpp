@@ -433,26 +433,10 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     else
         aWarningReporter->Report( wxEmptyString );
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_stopCreateBoardPolyTime = GetRunningMicroSecs();
-    unsigned stats_startCreateLayersTime = stats_stopCreateBoardPolyTime;
-#endif
-
     if( aStatusReporter )
         aStatusReporter->Report( _( "Create layers" ) );
 
     createLayers( aStatusReporter );
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_stopCreateLayersTime = GetRunningMicroSecs();
-
-    printf( "BOARD_ADAPTER::InitSettings times\n" );
-    printf( "  CreateBoardPoly:          %.3f ms\n",
-            (float)( stats_stopCreateBoardPolyTime  - stats_startCreateBoardPolyTime  ) / 1e3 );
-    printf( "  CreateLayers and holes:   %.3f ms\n",
-            (float)( stats_stopCreateLayersTime     - stats_startCreateLayersTime     ) / 1e3 );
-    printf( "\n" );
-#endif
 }
 
 

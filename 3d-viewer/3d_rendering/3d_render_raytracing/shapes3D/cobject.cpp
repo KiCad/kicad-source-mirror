@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,11 +63,11 @@ const std::map<OBJECT3D_TYPE, const char*> objectTypeNames
 
 void COBJECT3D_STATS::PrintStats()
 {
-    printf( "OBJ3D Statistics:\n" );
+    wxLogDebug( "OBJ3D Statistics:\n" );
 
     for( auto& objectType : objectTypeNames )
     {
-        printf( "  %20s  %u\n", objectType.second,
+        wxLogDebug( "  %20s  %u\n", objectType.second,
                 m_counter[static_cast<int>( objectType.first )] );
     }
 }

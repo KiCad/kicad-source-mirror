@@ -69,10 +69,8 @@ std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream )
     {
         board.reset( parser.Parse() );
     }
-    catch( const IO_ERROR& parse_error )
+    catch( const IO_ERROR& )
     {
-        std::cerr << parse_error.Problem() << std::endl;
-        std::cerr << parse_error.Where() << std::endl;
     }
 
     return board;

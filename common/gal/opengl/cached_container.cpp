@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -63,10 +65,6 @@ void CACHED_CONTAINER::SetItem( VERTEX_ITEM* aItem )
 
     // Get the previously set offset if the item was stored previously
     m_chunkOffset = itemSize > 0 ? aItem->GetOffset() : -1;
-
-#if CACHED_CONTAINER_TEST > 1
-    wxLogDebug( wxT( "Adding/editing item 0x%08lx (size %d)" ), (long) m_item, itemSize );
-#endif
 }
 
 
@@ -97,7 +95,6 @@ void CACHED_CONTAINER::FinishItem()
     m_chunkOffset = 0;
 
 #if CACHED_CONTAINER_TEST > 1
-    wxLogDebug( wxT( "Finishing item 0x%08lx (size %d)" ), (long) m_item, itemSize );
     test();
 #endif
 }
@@ -156,10 +153,6 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
 
     int offset = aItem->GetOffset();
 
-#if CACHED_CONTAINER_TEST > 1
-    wxLogDebug( wxT( "Removing 0x%08lx (size %d offset %d)" ), (long) aItem, size, offset );
-#endif
-
     // Insert a free memory chunk entry in the place where item was stored
     addFreeChunk( offset, size );
 
@@ -215,10 +208,6 @@ bool CACHED_CONTAINER::reallocate( unsigned int aSize )
 
     unsigned int itemSize = m_item->GetSize();
 
-#if CACHED_CONTAINER_TEST > 2
-    wxLogDebug( wxT( "Resize %p from %d to %d" ), m_item, itemSize, aSize );
-#endif
-
     // Find a free space chunk >= aSize
     FREE_CHUNK_MAP::iterator newChunk = m_freeChunks.lower_bound( aSize );
 
@@ -256,10 +245,6 @@ bool CACHED_CONTAINER::reallocate( unsigned int aSize )
     // Check if the item was previously stored in the container
     if( itemSize > 0 )
     {
-#if CACHED_CONTAINER_TEST > 3
-        wxLogDebug( wxT( "Moving 0x%08x from 0x%08x to 0x%08x" ),
-                    (int) m_item, oldChunkOffset, newChunkOffset );
-#endif
         // The item was reallocated, so we have to copy all the old data to the new place
         memcpy( &m_vertices[newChunkOffset], &m_vertices[m_chunkOffset], itemSize * VERTEX_SIZE );
 
@@ -363,10 +348,6 @@ void CACHED_CONTAINER::mergeFreeChunks()
     // Add the last one
     m_freeChunks.insert( std::make_pair( size, offset ) );
 
-#ifdef __WXDEBUG__
-    totalTime.Stop();
-    wxLogDebug( "Merged free chunks / %.1f ms", totalTime.msecs() );
-#endif /* __WXDEBUG__ */
 #if CACHED_CONTAINER_TEST > 0
     test();
 #endif
@@ -385,42 +366,11 @@ void CACHED_CONTAINER::addFreeChunk( unsigned int aOffset, unsigned int aSize )
 
 void CACHED_CONTAINER::showFreeChunks()
 {
-#ifdef __WXDEBUG__
-    FREE_CHUNK_MAP::iterator it;
-
-    wxLogDebug( wxT( "Free chunks:" ) );
-
-    for( it = m_freeChunks.begin(); it != m_freeChunks.end(); ++it )
-    {
-        unsigned int offset = getChunkOffset( *it );
-        unsigned int size   = getChunkSize( *it );
-        assert( size > 0 );
-
-        wxLogDebug( wxT( "[0x%08x-0x%08x] (size %d)" ),
-                    offset, offset + size - 1, size );
-    }
-#endif /* __WXDEBUG__ */
 }
 
 
 void CACHED_CONTAINER::showUsedChunks()
 {
-#ifdef __WXDEBUG__
-    ITEMS::iterator it;
-
-    wxLogDebug( wxT( "Used chunks:" ) );
-
-    for( it = m_items.begin(); it != m_items.end(); ++it )
-    {
-        VERTEX_ITEM* item   = *it;
-        unsigned int offset = item->GetOffset();
-        unsigned int size   = item->GetSize();
-        assert( size > 0 );
-
-        wxLogDebug( wxT( "[0x%08x-0x%08x] @ 0x%p (size %d)" ),
-                    offset, offset + size - 1, item, size );
-    }
-#endif /* __WXDEBUG__ */
 }
 
 

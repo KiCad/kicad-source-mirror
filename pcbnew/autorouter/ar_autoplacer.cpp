@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -566,7 +566,7 @@ int AR_AUTOPLACER::testModuleOnBoard( MODULE* aModule, bool TstOtherSide, const 
 
     int diag = //testModuleByPolygon( aModule, side, aOffset );
         testRectangle( fpBBox, side );
-//printf("test %p diag %d\n", aModule, diag);fflush(0);
+
     if( diag != AR_FREE_CELL )
         return diag;
 
@@ -731,8 +731,6 @@ double AR_AUTOPLACER::computePlacementRatsnestCost( MODULE *aModule, const wxPoi
         if( !nearest )
             continue;
 
-        //printf("pad %s nearest %s\n", (const char *)aModule->GetReference().c_str(), (const char *)nearest->GetParent()->GetReference().c_str());
-
         start   = VECTOR2I( pad->GetPosition() ) - VECTOR2I(aOffset);
         end     = VECTOR2I( nearest->GetPosition() );
 
@@ -893,8 +891,6 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
 
     memopos = m_curPosition;
 
-    //printf("set grid: %d\n", m_gridSize);
-
     m_matrix.m_GridRouting = m_gridSize; //(int) m_frame->GetScreen()->GetGridSize().x;
 
     // Ensure Board.m_GridRouting has a reasonable value:
@@ -984,8 +980,6 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
         // Try orientations 90, 180, 270 degrees from initial orientation
         rotAllowed = module->GetPlacementCost180();
 
-        //printf("rotAllowed %d\n", rotAllowed);
-
         if( rotAllowed != 0 )
         {
             rotateModule( module, 1800.0, true );
@@ -1063,7 +1057,6 @@ end_of_tst:
 
         if( bestRotation != module->GetOrientation() )
         {
-            //printf("best rotation %d\n",  bestRotation );
             rotateModule( module, bestRotation, false );
         }
 

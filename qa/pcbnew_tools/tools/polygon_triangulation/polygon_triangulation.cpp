@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -99,7 +101,6 @@ void unfracture( SHAPE_POLY_SET::POLYGON* aPoly, SHAPE_POLY_SET::POLYGON* aResul
     {
         edgeList[i].index = i;
         edgeList[i].next = &edgeList[ (i != lc.SegmentCount() - 1) ? i + 1 : 0 ];
-        //printf("n %p\n", edgeList[i].next);
     }
 
     std::unordered_set<EDGE_LIST_ENTRY*> queue;
@@ -120,8 +121,6 @@ void unfracture( SHAPE_POLY_SET::POLYGON* aPoly, SHAPE_POLY_SET::POLYGON* aResul
             int e2 = i;
             if( e1 > e2 )
                 std::swap(e1, e2);
-
-        //    printf("e1 %d e2 %d\n", e1, e2 )    ;
 
             int e1_prev = e1 - 1;
             if (e1_prev < 0)
@@ -150,8 +149,6 @@ void unfracture( SHAPE_POLY_SET::POLYGON* aPoly, SHAPE_POLY_SET::POLYGON* aResul
     {
         if ( edgeList[i].next )
             queue.insert ( &edgeList[i] );
-        //else
-        //printf("Skip %d\n", i);
     }
 
     auto edgeBuf = std::make_unique<EDGE_LIST_ENTRY* []>( lc.SegmentCount() );
@@ -164,8 +161,9 @@ aResult->clear();
         auto e_first = (*queue.begin());
         auto e = e_first;
         int cnt=0;
-        do {
-        //    printf("e %p cnt %d IDX %d\n", e, cnt, e->index);
+
+        do
+        {
             edgeBuf[cnt++] = e;
             e = e->next;
         } while( e != e_first );
@@ -175,13 +173,11 @@ aResult->clear();
         for(int i = 0; i < cnt ;i++)
         {
             auto p = lc.CPoint(edgeBuf[i]->index);
-//                            printf("append %d %d\n", p.x, p.y);
             outl.Append( p );
             queue.erase( edgeBuf[i] );
         }
 
         //        auto p_last = lc.Point( edgeBuf[cnt-1]->index + 1 );
-        //printf("appendl %d %d\n", p_last.x, p_last.y);
         //        outl.Append( p_last );
 
         outl.SetClosed(true);
@@ -247,7 +243,6 @@ int polygon_triangulation_main( int argc, char *argv[] )
                     poly.CacheTriangulation();
 
                     (void) poly;
-                    printf( "zone %zu/%d\n", ( areaId + 1 ), brd->GetAreaCount() );
 #if 0
                 PROF_COUNTER unfrac("unfrac");
                 poly.Unfracture( SHAPE_POLY_SET::PM_FAST );

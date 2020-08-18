@@ -489,9 +489,8 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             SCH_EDITOR_CONTROL* controlTool = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
             controlTool->BackAnnotateFootprints( payload );
         }
-        catch( const IO_ERROR& DBG( ioe ) )
+        catch( const IO_ERROR& )
         {
-            DBG( printf( "%s: ioe:%s\n", __func__, TO_UTF8( ioe.What() ) );)
         }
         break;
 

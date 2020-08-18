@@ -260,7 +260,6 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         if( !wxFileExists( path ) && wxDirExists( path ) )
         {
-            wxLogDebug( wxT( "MRU path: %s." ), GetChars( path ) );
             m_mruPath = path;
             return true;
         }
@@ -455,7 +454,8 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
         break;
 
     default:
-        wxLogDebug( wxT( "GERBVIEW_FRAME::SetElementVisibility(): bad arg %d" ), aLayerID );
+        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::SetElementVisibility(): bad arg %d",
+                                      aLayerID ) );
     }
 
     if( dcodes_changed )
@@ -759,7 +759,7 @@ bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
     case LAYER_GERBVIEW_BACKGROUND: return true;
 
     default:
-        wxLogDebug( wxT( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d" ), aLayerID );
+        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d", aLayerID ) );
     }
 
     return true;
@@ -821,7 +821,8 @@ COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( int aLayerID )
         break;
 
     default:
-        wxLogDebug( wxT( "GERBVIEW_FRAME::GetVisibleElementColor(): bad arg %d" ), aLayerID );
+        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::GetVisibleElementColor(): bad arg %d",
+                                      aLayerID ) );
     }
 
     return color;
@@ -865,7 +866,8 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, COLOR4D aColor )
         break;
 
     default:
-        wxLogDebug( wxT( "GERBVIEW_FRAME::SetVisibleElementColor(): bad arg %d" ), aLayerID );
+        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::SetVisibleElementColor(): bad arg %d",
+                                       aLayerID ) );
     }
 }
 

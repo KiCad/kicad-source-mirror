@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -43,15 +45,15 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
     m_useCopyBuffer = GLEW_ARB_copy_buffer;
 
     wxString vendor( glGetString(GL_VENDOR) );
-    
-    // workaround for intel GPU drivers: disable glCopyBuffer, causes crashes/freezes on certain driver versions
+
+    // workaround for intel GPU drivers: disable glCopyBuffer, causes crashes/freezes on
+    // certain driver versions
     if( vendor.Contains ( "Intel " ) || vendor.Contains ( "etnaviv" ) )
     {
-        wxLogDebug( "Disabling glCopyBuffer(), on %s GPU.\n", vendor );
         m_useCopyBuffer = false;
     }
 
-    
+
     glGenBuffers( 1, &m_glBufferHandle );
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
     glBufferData( GL_ARRAY_BUFFER, m_currentSize * VERTEX_SIZE, NULL, GL_DYNAMIC_DRAW );

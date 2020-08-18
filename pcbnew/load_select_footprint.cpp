@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,11 +271,8 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
     {
         module = loadFootprint( fpid );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
-        wxLogDebug( wxT( "Error loading footprint '%s'.\n\nError: %s" ),
-                    fpid.Format().c_str(),
-                    ioe.What() );
     }
 
     if( module )
@@ -296,10 +293,8 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
     {
         module = loadFootprint( aFootprintId );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
-        wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
-                    aFootprintId.Format().c_str(), GetChars( ioe.What() ) );
     }
 
     return module;
@@ -317,10 +312,8 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
     {
         module = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
-        wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
-                    aFootprintId.Format().c_str(), GetChars( ioe.What() ) );
     }
 
     // If the module is found, clear all net info,

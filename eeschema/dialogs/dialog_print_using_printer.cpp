@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -397,22 +397,6 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
     if( !wxPrintout::OnBeginDocument( startPage, endPage ) )
         return false;
 
-#ifdef DEBUG
-    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
-
-    wxLogDebug( wxT( "Printer name: " ) +
-                m_parent->GetPageSetupData().GetPrintData().GetPrinterName() );
-    wxLogDebug( wxT( "Paper ID: %d" ),
-                m_parent->GetPageSetupData().GetPrintData().GetPaperId() );
-    wxLogDebug( wxT( "Color: %d" ),
-                (int)m_parent->GetPageSetupData().GetPrintData().GetColour() );
-    wxLogDebug( wxT( "Monochrome: %d" ), cfg->m_Printing.monochrome );
-    wxLogDebug( wxT( "Orientation: %d:" ),
-                m_parent->GetPageSetupData().GetPrintData().GetOrientation() );
-    wxLogDebug( wxT( "Quality: %d"),
-                m_parent->GetPageSetupData().GetPrintData().GetQuality() );
-#endif
-
     return true;
 }
 
@@ -445,9 +429,6 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     FitThisSizeToPaper( pageSizeIU );
 
     fitRect = GetLogicalPaperRect();
-
-    wxLogDebug( wxT( "Fit rectangle: x = %d, y = %d, w = %d, h = %d" ),
-                fitRect.x, fitRect.y, fitRect.width, fitRect.height );
 
     // When is the actual paper size does not match the schematic page size, the drawing will
     // not be centered on X or Y axis.  Give a draw offset to center the schematic page on the

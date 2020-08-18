@@ -53,7 +53,6 @@ int main( int argc, char *argv[] )
     }
     catch( PARSE_ERROR& err )
     {
-        printf("Can't load DRC rules: %s\n", (const char*) err.What().c_str() );
         return -1;
     }
 

@@ -103,7 +103,6 @@ int COMBINED_UTILITY::HandleCommandLine( int argc, char** argv ) const
 
     if( !func )
     {
-        std::cerr << "Tool " << arg1 << " not found." << std::endl;
         return RET_CODES::UNKNOWN_TOOL;
     }
 

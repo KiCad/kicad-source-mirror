@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,12 +53,8 @@ public:
 
     int CountTo( int n )
     {
-        printf( "%s: Coroutine says hi. I will count from 1 to %d and yield each value.\n",
-                __FUNCTION__, n );
-
         for( int i = 1; i <= n; i++ )
         {
-            printf( "%s: Yielding %d\n", __FUNCTION__, i );
             m_cofunc->KiYield( i );
         }
 
@@ -68,16 +64,12 @@ public:
     void Run()
     {
         m_cofunc = std::make_unique<MyCoroutine>( this, &CoroutineExample::CountTo );
-        printf( "%s: Calling coroutine that will count from 1 to 5.\n", __FUNCTION__ );
         m_cofunc->Call( m_count );
 
         while( m_cofunc->Running() )
         {
-            printf( "%s: Got value: %d\n", __FUNCTION__, m_cofunc->ReturnValue() );
             m_cofunc->Resume();
         }
-
-        printf( "%s: Done!\n", __FUNCTION__ );
     }
 
     std::unique_ptr<MyCoroutine> m_cofunc;

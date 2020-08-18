@@ -305,35 +305,6 @@ CBVH_PBRT::CBVH_PBRT( const CGENERICCONTAINER &aObjectContainer,
     flattenBVHTree( root, &offset );
 
     wxASSERT( offset == (unsigned int)totalNodes );
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    uint32_t treeBytes = totalNodes * sizeof( LinearBVHNode ) + sizeof( *this ) +
-                         m_primitives.size() * sizeof( m_primitives[0] ) +
-                         m_addresses_pointer_to_mm_free.size() * sizeof( void * );
-
-    printf( "////////////////////////////////////////////////////////////////////////////////\n" );
-    printf( "Creating a CBVH_PBRT from %u objects ", (unsigned int)m_primitives.size() );
-
-    switch( m_splitMethod )
-    {
-    case SPLITMETHOD::MIDDLE:
-        printf( "using SPLITMETHOD::MIDDLE\n" );
-        break;
-    case SPLITMETHOD::EQUALCOUNTS:
-        printf( "using SPLITMETHOD::EQUALCOUNTS\n" );
-        break;
-    case SPLITMETHOD::SAH:
-        printf( "using SPLITMETHOD::SAH\n" );
-        break;
-    case SPLITMETHOD::HLBVH:
-        printf( "using SPLITMETHOD::HLBVH\n" );
-        break;
-    }
-
-    printf( "  BVH created with %d nodes (%.2f MB)\n",
-            totalNodes, float(treeBytes) / (1024.f * 1024.f) );
-    printf( "////////////////////////////////////////////////////////////////////////////////\n\n" );
-#endif
 }
 
 

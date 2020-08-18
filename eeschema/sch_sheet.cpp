@@ -301,9 +301,6 @@ void SCH_SHEET::RemovePin( SCH_SHEET_PIN* aSheetPin )
             return;
         }
     }
-
-    wxLogDebug( wxT( "Fix me: attempt to remove label %s which is not in sheet %s." ),
-                aSheetPin->GetShownText(), m_fields[ SHEETNAME ].GetText() );
 }
 
 
@@ -1017,8 +1014,6 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
 
 SCH_SHEET& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 {
-    wxLogDebug( wxT( "Sheet assignment operator." ) );
-
     wxCHECK_MSG( Type() == aItem.Type(), *this,
                  wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
                  GetClass() );

@@ -537,14 +537,6 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
         }
     }
 
-#if 0 && defined(DEBUG)
-    printf( "m_cu_map:\n" );
-    for( unsigned i=0; i<arrayDim(m_cu_map);  ++i )
-    {
-        printf( "\t[%d]:%d\n", i, m_cu_map[i] );
-    }
-#endif
-
     // Set the layer names and cu count if we're loading a board.
     if( m_board )
     {
@@ -1019,7 +1011,6 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
     {
         if( element->GetName() != "element" )
         {
-            wxLogDebug( "expected: <element> read <%s>. Skip it", element->GetName() );
             // Get next item
             element = element->GetNext();
             continue;
@@ -1115,7 +1106,6 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
             {
                 if( attribute->GetName() != "attribute" )
                 {
-                    wxLogDebug( "expected: <attribute> read <%s>. Skip it", attribute->GetName() );
                     attribute = attribute->GetNext();
                     continue;
                 }
@@ -2431,8 +2421,6 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                 const wxString& pad       = netItem->GetAttribute( "pad" );
                 wxString key = makeKey( reference, pad ) ;
 
-                // D(printf( "adding refname:'%s' pad:'%s' netcode:%d netname:'%s'\n", reference.c_str(), pad.c_str(), netCode, netName.c_str() );)
-
                 m_pads_to_nets[ key ] = ENET( netCode, netName );
 
                 m_xpath->pop();
@@ -2578,9 +2566,6 @@ void EAGLE_PLUGIN::centerBoard()
 
             int desired_x = ( w - bbbox.GetWidth() )  / 2;
             int desired_y = ( h - bbbox.GetHeight() ) / 2;
-
-            DBG(printf( "bbox.width:%d bbox.height:%d w:%d h:%d desired_x:%d desired_y:%d\n",
-                bbbox.GetWidth(), bbbox.GetHeight(), w, h, desired_x, desired_y );)
 
             m_board->Move( wxPoint( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() ) );
         }

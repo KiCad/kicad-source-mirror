@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -196,8 +196,8 @@ void EDA_BASE_FRAME::SetShutdownBlockReason( const wxString& aReason )
 
     if( !ShutdownBlockReasonCreate( GetHandle(), aReason.wc_str() ) )
     {
-        // Nothing bad happens if this fails, at worst it uses a generic application is preventing shutdown message
-        wxLogDebug( wxT( "ShutdownBlockReasonCreate failed to set reason: %s" ), aReason );
+        // Nothing bad happens if this fails, at worst it uses a generic application is
+        // preventing shutdown message
     }
 #endif
 }
@@ -459,8 +459,6 @@ void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
         const unsigned int index = 0;
         wxDisplay display( index );
         wxRect    clientSize = display.GetClientArea();
-
-        wxLogDebug( "Client size (%d, %d)", clientSize.width, clientSize.height );
 
         m_FramePos = wxDefaultPosition;
 

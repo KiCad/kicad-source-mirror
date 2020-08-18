@@ -596,11 +596,4 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
         // of the HTML_MESSAGE_BOX.
         THROW_PARSE_ERROR( wxEmptyString, __func__, TO_UTF8( libs_not_found ), 0, 0 );
     }
-
-#if defined(DEBUG) && 1
-    printf( "%s: lib_names:\n", __func__ );
-
-    for( PART_LIBS::const_iterator it = begin(); it < end(); ++it )
-        printf( " %s\n", TO_UTF8( it->GetName() ) );
-#endif
 }

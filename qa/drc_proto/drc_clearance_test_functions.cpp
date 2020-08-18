@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -910,7 +910,6 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance
             break;
 
         default:
-            wxLogDebug( wxT( "DRC::checkClearancePadToPad: unexpected pad shape %d" ), aPad->GetShape() );
             break;
         }
     }

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2013-2020 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -149,7 +149,6 @@ BOARD* PCB_TEST_FRAME::LoadAndDisplayBoard( const std::string& filename )
         wxString msg = wxString::Format( _( "Error loading board.\n%s" ),
                 ioe.Problem() );
 
-        printf( "%s\n", (const char*) msg.mb_str() );
         return nullptr;
     }
 

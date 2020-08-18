@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2013-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,8 +60,6 @@ inline void scanList( PTREE* aTree, DSNLEXER* aLexer )
 
     const char* key = aLexer->CurText();
 
-    //D(printf( "%s: '%s'\n", __func__, key );)
-
     PTREE* list = &aTree->push_back( PTREE::value_type( key, PTREE() ) )->second;
 
     if( tok != DSN_RIGHT )
@@ -80,8 +78,6 @@ inline void scanList( PTREE* aTree, DSNLEXER* aLexer )
 inline void scanAtom( PTREE* aTree, DSNLEXER* aLexer )
 {
     const char* key = aLexer->CurText();
-
-    //D(printf( "%s: '%s'\n", __func__, key );)
 
     aTree->push_back( PTREE::value_type( key, PTREE() ) );
 }

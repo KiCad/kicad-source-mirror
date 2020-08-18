@@ -168,8 +168,8 @@ void KICAD_NETLIST_PARSER::Parse()
 
     if( plevel != 0 )
     {
-        wxLogDebug( wxT( "KICAD_NETLIST_PARSER::Parse(): bad parenthesis count (count = %d"),
-                    plevel );
+        wxFAIL_MSG( wxString::Format( "KICAD_NETLIST_PARSER::Parse(): bad parenthesis "
+                                      "count (count = %d", plevel ) );
     }
 }
 

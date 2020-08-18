@@ -222,7 +222,6 @@ static inline char* ReadLine( LINE_READER* rdr, const char* caller )
     char* ret = rdr->ReadLine();
 
     const char* line = rdr->Line();
-    printf( "%-6u %s: %s", rdr->LineNumber(), caller, line );
 
 #if 0   // trap
     if( !strcmp( "loadSETUP", caller ) && !strcmp( "$EndSETUP\n", line ) )
@@ -611,7 +610,6 @@ void LEGACY_PLUGIN::loadGENERAL()
             LEG_MASK enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
             LSET new_mask = leg_mask2new( m_cu_count, enabledLayers );
 
-            //DBG( printf( "EnabledLayers: %s\n", new_mask.FmtHex().c_str() );)
             m_board->SetEnabledLayers( new_mask );
 
             // layer visibility equals layer usage, unless overridden later via "VisibleLayers"

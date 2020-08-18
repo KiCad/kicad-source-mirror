@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 #include "../../3d_fastmath.h"
 #include <cstdio>
 #include <wx/debug.h>
+#include <wx/log.h>
 
 #include <cmath>
 
@@ -88,7 +89,8 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
             {
                 m_Classification = RAY_CLASSIFICATION::MMM;
             }
-            else if( m_Dir.z > 0 ){
+            else if( m_Dir.z > 0 )
+            {
                 m_Classification = RAY_CLASSIFICATION::MMP;
             }
             else//( m_Dir.z >= 0 )
@@ -397,6 +399,6 @@ bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter,
 
 void RAY::debug() const
 {
-    printf("O(%f, %f, %f) D(%f, %f, %f)\n", m_Origin.x, m_Origin.y, m_Origin.z,
-                                            m_Dir.x,    m_Dir.y,    m_Dir.z );
+    wxLogDebug( "O(%f, %f, %f) D(%f, %f, %f)\n", m_Origin.x, m_Origin.y, m_Origin.z,
+            m_Dir.x,    m_Dir.y,    m_Dir.z );
 }

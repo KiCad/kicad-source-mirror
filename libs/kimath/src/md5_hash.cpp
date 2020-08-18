@@ -58,7 +58,6 @@ MD5_HASH& MD5_HASH::operator=( const MD5_HASH& aOther )
 
 void MD5_HASH::Init()
 {
-    //printf("%p init\n", this);
     m_valid = false;
     md5_init(&m_ctx);
 }
@@ -75,7 +74,6 @@ void MD5_HASH::Hash ( int value )
 
 void MD5_HASH::Finalize()
 {
-    //printf("%p final\n", this);
     md5_final(&m_ctx, m_hash);
     m_valid = true;
 

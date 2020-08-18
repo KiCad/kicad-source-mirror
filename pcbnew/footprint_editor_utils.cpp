@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -312,7 +312,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        wxLogDebug( wxT( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" ) );
+        wxFAIL_MSG( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" );
         break;
     }
 }
@@ -345,8 +345,8 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aModule )
     BASIC_FOOTPRINT_INFO footprintInfo( aModule );
     wxDataViewItem       treeItem = m_adapter->FindItem( oldFPID );
 
-    if( treeItem.IsOk() )   // Can be not found in tree if the current footprint is imported from file
-                            // therefore not yet in tree.
+    if( treeItem.IsOk() )   // Can be not found in tree if the current footprint is imported
+                            // from file therefore not yet in tree.
     {
         static_cast<LIB_TREE_NODE_LIB_ID*>( treeItem.GetID() )->Update( &footprintInfo );
         m_treePane->GetLibTree()->RefreshLibTree();

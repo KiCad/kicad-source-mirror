@@ -27,11 +27,11 @@ bool testEvalExpr( const std::string expr, LIBEVAL::VALUE expectedResult, bool e
     {
         if ( expectError )
         {
-            printf("result: OK (expected parse error)\n");
             ok = true;
             return ok;
-        } else {
-            printf("result: FAIL: %s\n", compiler.GetErrorStatus().Format().c_str() );
+        }
+        else
+        {
             ok = false;
         }
     }
@@ -44,26 +44,6 @@ bool testEvalExpr( const std::string expr, LIBEVAL::VALUE expectedResult, bool e
         ok = (result == expectedResult);
     }
 
-    if( expectedResult.GetType() == LIBEVAL::VT_NUMERIC )
-    {
-        printf( "result: %s (got %.10f expected: %.10f)\n",
-                ok ? "OK" : "FAIL",
-                result.AsDouble(),
-                expectedResult.AsDouble() );
-    }
-    else
-    {
-        printf( "result: %s (got '%ls' expected: '%ls')\n",
-                ok ? "OK" : "FAIL",
-                GetChars( result.AsString() ),
-                GetChars( expectedResult.AsString() ) );
-    }
-
-    if (!ok )
-    {
-        printf("Offending code dump: \n%s\n", ucode.Dump().c_str() );
-    }
-
     return ok;
 }
 
@@ -73,7 +53,7 @@ bool EvaluatePCBExpression( const std::string& aExpr, int& aResult )
     PCB_EXPR_UCODE ucode;
     if( !compiler.Compile( aExpr, &ucode ) )
         return false;
-    
+
     auto result = ucode.Run();
     return true;
 }
@@ -83,7 +63,7 @@ int main( int argc, char *argv[] )
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     propMgr.Rebuild();
 
-    
+
     using VAL = LIBEVAL::VALUE;
 
 /*    testEvalExpr( "10mm + 20 mm", VAL(30e6) );
@@ -91,7 +71,7 @@ int main( int argc, char *argv[] )
     testEvalExpr( "3*7+8", VAL(3*7+8) );
     testEvalExpr( "(3*7)+8", VAL(3*7+8) );
     testEvalExpr( "10mm + 20)", VAL(0), true );
-  */  
+  */
 
     BOARD brd;
 
@@ -99,26 +79,15 @@ int main( int argc, char *argv[] )
 
     NETCLASSPTR netclass1( new NETCLASS("HV") );
     NETCLASSPTR netclass2( new NETCLASS("otherClass" ) );
-    
-    printf("netcl1 classname '%s'\n", (const char *) netclass1->GetName().c_str() );
-    
 
     auto net1info = new NETINFO_ITEM( &brd, "net1", 1);
     auto net2info = new NETINFO_ITEM( &brd, "net2", 2);
-    
-   
+
     net1info->SetClass( netclass1 );
     net2info->SetClass( netclass2 );
 
-    printf("netX classname '%s'\n", net1info->GetClassName().c_str() );
-
-
-    printf("net1 class %p %p\n", net1info->GetNetClass(), netclass1.get() );
-
     TRACK trackA(&brd);
     TRACK trackB(&brd);
-
-    printf("net1 classname '%s'\n", (const char*) net1info->GetClassName().c_str() );
 
     trackA.SetNet( net1info );
     trackB.SetNet( net2info );
@@ -127,9 +96,6 @@ int main( int argc, char *argv[] )
 
     trackA.SetWidth( Mils2iu( 10 ));
     trackB.SetWidth( Mils2iu( 20 ));
-
-    printf( "TrkA %p netclass '%s'\n", &trackA, (const char*) trackA.GetNetClassName().c_str() );
-    printf( "TrkB %p netclass '%s'\n", &trackB, (const char*) trackB.GetNetClassName().c_str() );
 
 //    testEvalExpr( "A.onlayer('F.Cu') || A.onlayer('B.Cu')", VAL( 1.0 ), false, &trackA, &trackB );
     testEvalExpr( "A.type == 'Pad' && B.type == 'Pad' && (A.onLayer('F.Cu'))", VAL( 0.0 ), false, &trackA, &trackB );

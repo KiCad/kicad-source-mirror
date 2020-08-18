@@ -4,7 +4,7 @@
  * Copyright (C) 2009-2013  Lorenzo Mercantonio
  * Copyright (C) 2014-2017  Cirilo Bernardo
  * Copyright (C) 2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1492,10 +1492,6 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
 
             if( srcModTime != destModTime )
             {
-                wxLogDebug( "Copying 3D model %s to %s.",
-                            GetChars( srcFile.GetFullPath() ),
-                            GetChars( dstFile.GetFullPath() ) );
-
                 wxString fileExt = srcFile.GetExt();
                 fileExt.LowerCase();
 
@@ -1738,29 +1734,11 @@ static void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX color
 
     if( !( *layer ).Get2DTriangles( vertices, idxPlane, top_z, aTopPlane ) )
     {
-#ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] no vertex data";
-            wxLogDebug( "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
         return;
     }
 
     if( ( idxPlane.size() % 3 ) )
     {
-#ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] index lists are not a multiple of 3 (not a triangle list)";
-            wxLogDebug( "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
         throw( std::runtime_error( "[BUG] index lists are not a multiple of 3 (not a triangle list)" ) );
     }
 
@@ -1825,30 +1803,13 @@ static void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX color
     if( !( *layer ).Get3DTriangles( vertices, idxPlane, idxSide, top_z, bottom_z )
             || idxPlane.empty() || idxSide.empty() )
     {
-#ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] no vertex data";
-            wxLogDebug( "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
         return;
     }
 
     if( ( idxPlane.size() % 3 ) || ( idxSide.size() % 3 ) )
     {
-#ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] index lists are not a multiple of 3 (not a triangle list)";
-            wxLogDebug( "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        throw( std::runtime_error( "[BUG] index lists are not a multiple of 3 (not a triangle list)" ) );
+        throw( std::runtime_error( "[BUG] index lists are not a multiple of 3 (not a "
+                                   "triangle list)" ) );
     }
 
     std::vector< SGPOINT > vlist;

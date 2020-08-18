@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -213,8 +213,6 @@ bool GITHUB_GETLIBLIST::repoURL2listURL( const wxString& aRepoURL,
 bool GITHUB_GETLIBLIST::remoteGetJSON( const std::string& aFullURLCommand, wxString* aMsgError )
 {
     KICAD_CURL_EASY kcurl;
-
-    wxLogDebug( wxT( "Attempting to download: " ) + aFullURLCommand );
 
     kcurl.SetURL( aFullURLCommand );
     kcurl.SetUserAgent( "http://kicad-pcb.org" );

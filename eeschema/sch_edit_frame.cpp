@@ -114,9 +114,8 @@ SEARCH_STACK* PROJECT::SchSearchS()
         {
             PART_LIBS::LibNamesAndPaths( this, false, &libDir );
         }
-        catch( const IO_ERROR& DBG( ioe ) )
+        catch( const IO_ERROR& )
         {
-            DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.What() ) );)
         }
 
         if( !!libDir )

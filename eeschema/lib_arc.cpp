@@ -344,13 +344,7 @@ const EDA_RECT LIB_ARC::GetBoundingBox() const
     wxPoint  normEnd   = m_ArcEnd - m_Pos;
 
     if( ( normStart == nullPoint ) || ( normEnd == nullPoint ) || ( m_Radius == 0 ) )
-    {
-        wxLogDebug( wxT("Invalid arc drawing definition, center(%d, %d), start(%d, %d), "
-                        "end(%d, %d), radius %d" ),
-                    m_Pos.x, m_Pos.y, m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
-                    m_ArcEnd.y, m_Radius );
         return rect;
-    }
 
     endPos     = DefaultTransform.TransformCoordinate( m_ArcEnd );
     startPos   = DefaultTransform.TransformCoordinate( m_ArcStart );

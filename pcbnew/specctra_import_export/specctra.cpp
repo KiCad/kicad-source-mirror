@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3564,8 +3564,6 @@ UNIT_RES UNIT_RES::Default( NULL, T_resolution );
 
 int PADSTACK::Compare( PADSTACK* lhs, PADSTACK* rhs )
 {
-    // printf( "PADSTACK::Compare( %p, %p)\n", lhs, rhs );
-
     if( !lhs->hash.size() )
         lhs->hash = lhs->makeHash();
 
@@ -3595,8 +3593,6 @@ int IMAGE::Compare( IMAGE* lhs, IMAGE* rhs )
         rhs->hash = rhs->makeHash();
 
     int result = lhs->hash.compare( rhs->hash );
-
-    // printf("\"%s\"  \"%s\" ret=%d\n", lhs->hash.c_str(), rhs->hash.c_str(), result );
 
     return result;
 }

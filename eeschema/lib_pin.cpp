@@ -1309,7 +1309,6 @@ void LIB_PIN::CalcEdit( const wxPoint& aPosition )
 {
     if( IsMoving() )
     {
-        DBG(printf("MOVEPIN\n");)
         MoveTo( aPosition );
     }
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Ian McInerney <Ian.S.McInerney@ieee.org>
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -86,14 +86,10 @@ int CVPCB_ASSOCIATION_TOOL::CopyAssoc( const TOOL_EVENT& aEvent )
 
     if( wxTheClipboard->Open() )
     {
-        if( !wxTheClipboard->SetData( new wxTextDataObject( fpid.GetUniStringLibId() ) ) )
-            wxLogDebug( "Failed to copy data to clipboard" );
-
+        wxTheClipboard->SetData( new wxTextDataObject( fpid.GetUniStringLibId() ) );
         wxTheClipboard->Flush();
         wxTheClipboard->Close();
     }
-    else
-        wxLogDebug( "Failed to open the clipboard" );
 
     return 0;
 }
@@ -126,7 +122,6 @@ int CVPCB_ASSOCIATION_TOOL::CutAssoc( const TOOL_EVENT& aEvent )
     {
         if( !wxTheClipboard->SetData( new wxTextDataObject( fpid.GetUniStringLibId() ) ) )
         {
-            wxLogDebug( "Failed to cut data to clipboard" );
             wxTheClipboard->Close();
             return 0;
         }
@@ -136,7 +131,6 @@ int CVPCB_ASSOCIATION_TOOL::CutAssoc( const TOOL_EVENT& aEvent )
     }
     else
     {
-        wxLogDebug( "Failed to open the clipboard" );
         return 0;
     }
 
@@ -166,7 +160,6 @@ int CVPCB_ASSOCIATION_TOOL::PasteAssoc( const TOOL_EVENT& aEvent )
     }
     else
     {
-        wxLogDebug( "Failed to open the clipboard" );
         return 0;
     }
 
@@ -183,6 +176,7 @@ int CVPCB_ASSOCIATION_TOOL::PasteAssoc( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 void CVPCB_ASSOCIATION_TOOL::Reset( RESET_REASON aReason )
 {

@@ -74,10 +74,9 @@ void PARAM_CFG_FIELDNAMES::ReadParam( wxConfigBase* aConfig ) const
         {
             m_Pt_param->Parse( &lexer, false );
         }
-        catch( const IO_ERROR& DBG( e ) )
+        catch( const IO_ERROR& )
         {
             // @todo show error msg
-            DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
         }
     }
 }
@@ -391,10 +390,8 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
             {
                 m_templateFieldNames.Parse( &lexer, true );
             }
-            catch( const IO_ERROR& DBG( e ) )
+            catch( const IO_ERROR& )
             {
-                // @todo show error msg
-                DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
             }
         }
     }

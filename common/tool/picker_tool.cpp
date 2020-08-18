@@ -80,9 +80,8 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     (*m_cancelHandler)();
                 }
-                catch( std::exception& e )
+                catch( std::exception& )
                 {
-                    std::cerr << "PICKER_TOOL cancel handler error: " << e.what() << std::endl;
                 }
             }
 
@@ -108,9 +107,8 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     getNext = (*m_clickHandler)( *m_picked );
                 }
-                catch( std::exception& e )
+                catch( std::exception& )
                 {
-                    std::cerr << "PICKER_TOOL click handler error: " << e.what() << std::endl;
                     finalize_state = EXCEPTION_CANCEL;
                     break;
                 }
@@ -133,9 +131,8 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     (*m_motionHandler)( cursorPos );
                 }
-                catch( std::exception& e )
+                catch( std::exception& )
                 {
-                    std::cerr << "PICKER_TOOL motion handler error: " << e.what() << std::endl;
                 }
             }
         }
@@ -160,9 +157,8 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             (*m_finalizeHandler)( finalize_state );
         }
-        catch( std::exception& e )
+        catch( std::exception& )
         {
-            std::cerr << "PICKER_TOOL finalize handler error: " << e.what() << std::endl;
         }
     }
 

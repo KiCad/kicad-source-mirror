@@ -701,21 +701,6 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
         blockY -= blockAdvance.y;
         topToBottom += topToBottom_inc;
     }
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "////////////////////////////////////////////////////////////////////////////////\n" );
-    printf( "Convert_path_polygon_to_polygon_blocks_and_dummy_blocks\n" );
-    printf( "  grid_divisions (%u, %u)\n", grid_divisions.x, grid_divisions.y );
-    printf( "  N Total Blocks %u\n", grid_divisions.x * grid_divisions.y );
-    printf( "  N Empty Blocks %u\n", stats_n_empty_blocks );
-    printf( "  N Dummy Blocks %u\n", stats_n_dummy_blocks );
-    printf( "  N Polyg Blocks %u\n", stats_n_poly_blocks );
-    printf( "  Med N Seg Poly %u\n", stats_sum_size_of_polygons / stats_n_poly_blocks );
-    printf( "  medOfTheSquaresSegmentLength %f\n", medOfTheSquaresSegmentLength );
-    printf( "  minSegmentLength             %f\n", minSegmentLength );
-    printf( "  aDivFactor                   %f\n", aDivFactor );
-    printf( "////////////////////////////////////////////////////////////////////////////////\n" );
-#endif
 }
 
 

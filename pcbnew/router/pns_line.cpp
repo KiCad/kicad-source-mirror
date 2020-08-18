@@ -173,12 +173,6 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
 
     line.Intersect( aObstacle, ips );
 
-
-  /*  for( auto p : ips )
-    {
-            printf("gif %d %d  our %d their %d\n", p.p.x, p.p.y, p.our.Index(), p.their.Index() );
-    }*/
-
     for( int i = 0; i < line.SegmentCount(); i++ )
     {
         const SEG& a = line.CSegment(i);
@@ -190,7 +184,6 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
             const SEG& so = aObstacle.CSegment(j);
             if( so.Contains( a ) )
             {
-             //   printf("discard seg %d\n", i );
                 over = true;
                 break;
             }
@@ -202,9 +195,6 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
 
         bool a_in = aObstacle.PointInside( a.A );// && !aObstacle.PointOnEdge( a.A );
         bool b_in = aObstacle.PointInside( a.B );// && !aObstacle.PointOnEdge( a.B );
-
-//        printf("i %d a %d %d %d %d [%d %d] a_in %d b_in %d\n", i, a.A.x, a.A.y, a.B.x, a.B.y, a.A.x- a.B.x, a.A.y - a.B.y, !!a_in, !!b_in );
-
 
         if( a_in ^ b_in ) // segment crosses hull boundary
         {
@@ -222,17 +212,13 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
                 else
                     p = aObstacle.CSegment(j).Intersect( a );
 
-                //printf("- cont_a %d cont_b %d p %d\n", !!cont_a, !!cont_b, p ? 1 : 0 );
-
-
-                if ( p )
+                if( p )
                 {
                       SHAPE_LINE_CHAIN::INTERSECTION ip;
                       ip.our = a;
                       ip.their = aObstacle.CSegment(j);
                       ip.p = *p;
                       ips.push_back(ip);
-                      //printf("chb %d %d\n", p->x, p->y);
                 }
             }
         }
@@ -261,14 +247,14 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
                     const SEG& os = aObstacle.CSegment(j);
 
                     auto p = os.Intersect(a);
-                    if(p)
+
+                    if( p )
                     {
                         SHAPE_LINE_CHAIN::INTERSECTION ip;
                         ip.our = a;
                         ip.their = aObstacle.CSegment(j);
                         ip.p = *p;
                         ips.push_back(ip);
-                       // printf("gif %d %d\n", p->x, p->y);
                     }
 
                 }

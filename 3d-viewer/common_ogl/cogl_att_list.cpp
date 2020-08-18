@@ -119,7 +119,6 @@ const int *COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode
         }
         else
         {
-            DBG( printf("GetAttributesList: AntiAliasing is not supported.\n") );
             aAntiAliasingMode = ANTIALIASING_MODE::AA_NONE;
         }
     }

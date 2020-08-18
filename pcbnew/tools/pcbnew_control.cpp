@@ -636,7 +636,6 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     if( editModules && ( !board() || !module() ) )
     {
-        wxLogDebug( wxT( "Attempting to paste to empty module editor window\n") );
         return 0;
     }
 

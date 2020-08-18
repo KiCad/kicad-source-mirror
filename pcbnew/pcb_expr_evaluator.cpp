@@ -252,14 +252,11 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 
             if( !m_isEnum )
             {
-                //printf("item %p Get string '%s'\n", item, (const char*) it->second->Name().c_str() );
-                str = item->Get<wxString>( it->second );
             }
             else
             {
                 const wxAny& any = item->Get( it->second );
                 any.GetAs<wxString>( &str );
-                //printf("item %p get enum: '%s'\n", item , (const char*) str.c_str() );
             }
 
             return LIBEVAL::VALUE( str );
@@ -310,7 +307,6 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
 
             if( prop )
             {
-                //printf("Field '%s' class %s ptr %p haschoices %d typeid %s\n", field.c_str(), (const char *) cls.name.c_str(), prop, !!prop->HasChoices(), typeid(*prop).name() );
                 vref->AddAllowedClass( cls.type, prop );
 
                 if( prop->TypeHash() == TYPE_HASH( int ) )

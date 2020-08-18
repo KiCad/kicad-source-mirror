@@ -116,10 +116,6 @@ void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
         auto cfg = Kiface().KifaceSettings();
         cfg->m_LibTree.column_width = m_widget->GetColumn( PART_COL )->GetWidth();
     }
-    else
-    {
-        wxLogDebug( "Error saving column size, tree view doesn't exist" );
-    }
 }
 
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1077,8 +1077,6 @@ void CVPCB_MAINFRAME::ShowChangedLanguage()
 void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     const std::string& payload = mail.GetPayload();
-
-    //DBG(printf( "%s: %s\n", __func__, payload.c_str() );)
 
     switch( mail.Command() )
     {

@@ -99,21 +99,6 @@ void PCB_PARSER::init()
 
         m_layerMasks[ key ] = LSET( PCB_LAYER_ID( In15_Cu - i ) );
     }
-
-#if defined(DEBUG) && 0
-    printf( "m_layerMasks:\n" );
-    for( LSET_MAP::const_iterator it = m_layerMasks.begin();  it != m_layerMasks.end();  ++it )
-    {
-        printf( " [%s] == 0x%s\n",  it->first.c_str(), it->second.FmtHex().c_str() );
-    }
-
-    printf( "m_layerIndices:\n" );
-    for( LAYER_ID_MAP::const_iterator it = m_layerIndices.begin();  it != m_layerIndices.end();  ++it )
-    {
-        printf( " [%s] == %d\n",  it->first.c_str(), it->second );
-    }
-#endif
-
 }
 
 
@@ -863,8 +848,6 @@ void PCB_PARSER::parseGeneralSection()
             break;
 
         default:              // Skip everything but the board thickness.
-            //wxLogDebug( wxT( "Skipping general section token %s " ), GetChars( GetTokenString( token ) ) );
-
             while( ( token = NextTok() ) != T_RIGHT )
             {
                 if( !IsSymbol( token ) && token != T_NUMBER )
@@ -1467,15 +1450,6 @@ T PCB_PARSER::lookUpLayer( const M& aMap )
 
     if( it == aMap.end() )
     {
-#if 0 && defined(DEBUG)
-        // dump the whole darn table, there's something wrong with it.
-        for( it = aMap.begin();  it != aMap.end();  ++it )
-        {
-            wxLogDebug( &aMap == (void*)&m_layerIndices ? wxT( "lm[%s] = %d" ) :
-                        wxT( "lm[%s] = %08X" ), it->first.c_str(), it->second );
-        }
-#endif
-
         m_undefinedLayers.insert( curText );
         return Rescue;
     }

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras
  * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,8 +141,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
                         switch( guess )
                         {
                         case 0:
-                            DBG(printf("%s: guessed OK ref:%s  fpid:%s\n", __func__,
-                                TO_UTF8( component->GetReference() ), component->GetFPID().Format().c_str() );)
                             m_modified = true;
                             break;
 

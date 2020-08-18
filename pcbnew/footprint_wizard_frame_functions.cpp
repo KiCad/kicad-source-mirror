@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Miguel Angel Ajo Pelayo, miguelangel@nbee.es
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,8 +64,9 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        wxLogDebug( wxT( "FOOTPRINT_WIZARD_FRAME::Process_Special_Functions error: id = %d" ),
-                event.GetId() );
+        wxFAIL_MSG( wxString::Format(
+                            "FOOTPRINT_WIZARD_FRAME::Process_Special_Functions error: id = %d",
+                            event.GetId() ) );
         break;
     }
 }
@@ -112,10 +113,6 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
         //  Add the object to board
         GetBoard()->Add( module, ADD_MODE::APPEND );
         module->SetPosition( wxPoint( 0, 0 ) );
-    }
-    else
-    {
-        DBG(printf( "footprintWizard->GetFootprint() returns NULL\n" );)
     }
 
     updateView();

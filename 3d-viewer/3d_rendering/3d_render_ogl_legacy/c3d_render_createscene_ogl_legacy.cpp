@@ -342,24 +342,12 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
     COBJECT2D_STATS::Instance().ResetStats();
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf("InitSettings...\n");
-#endif
-
     unsigned stats_startReloadTime = GetRunningMicroSecs();
 
     m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_endReloadTime = GetRunningMicroSecs();
-#endif
-
     SFVEC3F camera_pos = m_boardAdapter.GetBoardCenter3DU();
     m_camera.SetBoardLookAtPos( camera_pos );
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_start_OpenGL_Load_Time = GetRunningMicroSecs();
-#endif
 
     if( aStatusReporter )
         aStatusReporter->Report( _( "Load OpenGL: board" ) );
@@ -615,34 +603,12 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
                                                                         layer_z_top );
     }// for each layer on map
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_end_OpenGL_Load_Time = GetRunningMicroSecs();
-#endif
-
     // Load 3D models
     // /////////////////////////////////////////////////////////////////////////
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_start_models_Load_Time = GetRunningMicroSecs();
-#endif
-
     if( aStatusReporter )
         aStatusReporter->Report( _( "Loading 3D models" ) );
 
     load_3D_models( aStatusReporter );
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_end_models_Load_Time = GetRunningMicroSecs();
-
-
-    printf( "C3D_RENDER_OGL_LEGACY::reload times:\n" );
-    printf( "  Reload board:             %.3f ms\n",
-            (float)( stats_endReloadTime        - stats_startReloadTime        ) / 1000.0f );
-    printf( "  Loading to openGL:        %.3f ms\n",
-            (float)( stats_end_OpenGL_Load_Time - stats_start_OpenGL_Load_Time ) / 1000.0f );
-    printf( "  Loading 3D models:        %.3f ms\n",
-            (float)( stats_end_models_Load_Time - stats_start_models_Load_Time ) / 1000.0f );
-    COBJECT2D_STATS::Instance().PrintStats();
-#endif
 
     if( aStatusReporter )
     {

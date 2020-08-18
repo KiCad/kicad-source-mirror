@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -169,17 +169,17 @@ bool clipToLoopStart( SHAPE_LINE_CHAIN& l )
         auto tail = l.Slice(pidx + 1, -1);
 
         int pidx2 = tail.Split( ip->p );
-        
+
         auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
         dbg->AddPoint( ip->p, 5 );
-        
+
         l = lead;
         l.Append( tail.Slice( 0, pidx2 ) );
         //l = l.Slice(0, pidx);
         return true;
     }
 
-    
+
 }
 
 
@@ -225,27 +225,19 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         if( s_ccw != STUCK )
             s_ccw = singleStep( path_ccw, false );
 
-        //Dbg()->AddLine( path_cw.CLine(), 2, 10000 );
-
-
-        //printf("iter %d s_cw %d s_ccw %d\n", m_iteration, s_cw, s_ccw );
-        
         auto old = path_cw.CLine();
 
         if( clipToLoopStart( path_cw.Line() ))
         {
-            //printf("ClipCW\n");
-            //Dbg()->AddLine( old, 1, 40000 );
             s_cw = ALMOST_DONE;
         }
 
         if( clipToLoopStart( path_ccw.Line() ))
         {
-            //printf("ClipCCW\n");
             s_ccw = ALMOST_DONE;
         }
 
-        
+
         if( s_cw != IN_PROGRESS )
         {
             result.lineCw = path_cw;

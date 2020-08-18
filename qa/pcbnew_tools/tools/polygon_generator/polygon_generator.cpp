@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,8 +63,6 @@ int polygon_gererator_main( int argc, char* argv[] )
 {
     if( argc < 2 )
     {
-        printf( "A sample tool for dumping board geometry as a set of polygons.\n" );
-        printf( "Usage : %s board_file.kicad_pcb\n\n", argv[0] );
         return KI_TEST::RET_CODES::BAD_CMDLINE;
     }
 
@@ -82,8 +80,6 @@ int polygon_gererator_main( int argc, char* argv[] )
 
     for( unsigned net = 0; net < brd->GetNetCount(); net++ )
     {
-        printf( "net %d\n", net );
-
         for( auto track : brd->Tracks() )
             process( track, net );
 
@@ -95,8 +91,6 @@ int polygon_gererator_main( int argc, char* argv[] )
 
         for( auto zone : brd->Zones() )
             process( zone, net );
-
-        printf( "endnet\n" );
     }
 
     return KI_TEST::RET_CODES::OK;

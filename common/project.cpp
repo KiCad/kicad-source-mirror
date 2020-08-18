@@ -262,12 +262,6 @@ void PROJECT::SetElem( ELEM_T aIndex, _ELEM* aElem )
 
     if( unsigned( aIndex ) < arrayDim( m_elems ) )
     {
-#if defined(DEBUG) && 0
-        if( aIndex == ELEM_SCH_PART_LIBS )
-        {
-            printf( "%s: &m_elems[%i]:%p  aElem:%p\n", __func__, aIndex, &m_elems[aIndex], aElem );
-        }
-#endif
         delete m_elems[aIndex];
         m_elems[aIndex] = aElem;
     }

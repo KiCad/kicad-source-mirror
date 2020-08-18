@@ -527,7 +527,29 @@ means that source files must be copyrighted and not be released into
 the public domain. Each source file has one or more owners.
 
 
-# 6. Header Files # {#header_files}
+# 6. Debugging Output {#debugging_output}
+Debugging output is a common method for validating code. However, it
+should not always active in debug builds. This makes it difficult for
+other developers to see their debugging output and can have a significant
+impact on the performance of debug builds. I you need to use debugging
+output, use [wxLogDebug] instead of `printf` or C++ output stream.  If
+you accidentally leave the debugging output in the source, it will expand
+to nothing on release builds.  All debugging output code should be removed
+from the source tree before pushing changes to the main KiCad repo. Do not
+comment out debugging output. This just adds more cruft to the code base.
+If you need to leave debugging output for, future testing, use tracing
+output (see 6.1).
+
+## 6.1 Using Tracing for Debugging Output {#tracing_output}
+There are occasions when you want to see debugging output to ensure
+existing code performs as expected. In this case, use [wxLogTrace] which
+allows debugging output to be controlled by the `WXTRACE` environment
+variable. When using [wxLogTrace][wxLogTrace], the trace environment
+variable string should be documented by either adding it to the
+`trace_helper.{h/cpp}` source files or locally using the [Doxygen][Doxygen]
+comment `\ingroup trace_env_vars`.
+
+# 7. Header Files # {#header_files}
 Project \*.h source files should:
 
 - contain a license statement
@@ -537,7 +559,7 @@ Project \*.h source files should:
 
 The license statement was described above.
 
-## 6.1 Nested Include #ifndef ## {#nested_include}
+## 7.1 Nested Include #ifndef ## {#nested_include}
 Each header file should include an \#ifndef which is commonly used to
 prevent compiler errors in the case where the header file is seen
 multiple times in the code stream presented to the compiler. Just
@@ -561,7 +583,7 @@ the very bottom of the file. It is important that it wrap any nested
 \#include statements, so that the compiler can skip them if the
 \#ifndef evaluates to false, which will reduce compilation time.
 
-## 6.2 Headers Without Unsatisfied Dependencies ## {#header_depends}
+## 7.2 Headers Without Unsatisfied Dependencies ## {#header_depends}
 Any header file should include other headers that it depends on. (Note:
 KiCad is not at this point now, but this section is a goal of the
 project.)
@@ -598,13 +620,13 @@ is exposed in the header file, merely by including that one header
 file.
 
 
-# 7. When in Doubt... # {#when_in_doubt}
+# 8. When in Doubt... # {#when_in_doubt}
 When editing existing source code files and there are multiple acceptable
 code formatting options or no formatting is defined, follow the existing
 formatting in the file.
 
 
-# 8. I Wrote X Lines of Code Before I Read This Document # {#x_lines}
+# 9. I Wrote X Lines of Code Before I Read This Document # {#x_lines}
 It's OK. We all make mistakes. Fortunately, KiCad provides a
 configuration file for the code beautifier uncrustify. Uncrustify won't
 fix your naming problems but it does a pretty decent job of formatting
@@ -618,7 +640,7 @@ uncrustify [website][uncrustify] for more information.
 [uncrustify]: http://uncrustify.sourceforge.net/
 
 
-# 9. Show Me an Example # {#show_me_an_example}
+# 10. Show Me an Example # {#show_me_an_example}
 Nothing drives the point home like an example. The source file richio.h
 below was taken directly from the KiCad source.
 
@@ -877,7 +899,7 @@ below was taken directly from the KiCad source.
 ~~~~~~~~~~~~~
 
 
-# 10. Resources # {#resources}
+# 11. Resources # {#resources}
 There are plenty of excellent resources on the Internet on C++ coding
 styles and coding do's and don'ts. Here are a few useful ones. In most
 cases, the coding styles do not follow the KiCad coding style but there
@@ -895,3 +917,6 @@ learn something new.
 [kernel]:https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/process/coding-style.rst
 [overloading]:http://www.cs.caltech.edu/courses/cs11/material/cpp/donnie/cpp-ops.html
 [style]:http://en.wikipedia.org/wiki/Programming_style
+[wxLogDebug]:https://docs.wxwidgets.org/3.0/group__group__funcmacro__log.html#ga9c530ae20eb423744f90874d2c97d02b
+[wxLogTrace]:https://docs.wxwidgets.org/3.0/group__group__funcmacro__log.html#gae28a46b220921cd87a6f75f0842294c5
+[Doxygen]:https://www.doxygen.nl/index.html

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -68,9 +68,8 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     (*m_cancelHandler)();
                 }
-                catch( std::exception& e )
+                catch( std::exception& )
                 {
-                    std::cerr << "PCBNEW_PICKER_TOOL cancelHandler error: " << e.what() << std::endl;
                 }
             }
 
@@ -95,9 +94,8 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     getNext = (*m_clickHandler)( *m_picked );
                 }
-                catch( std::exception& e )
+                catch( std::exception& )
                 {
-                    std::cerr << "PCBNEW_PICKER_TOOL clickHandler error: " << e.what() << std::endl;
                     finalize_state = EXCEPTION_CANCEL;
                     break;
                 }
@@ -120,9 +118,8 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     (*m_motionHandler)( cursorPos );
                 }
-                catch( std::exception& e )
+                catch( std::exception& )
                 {
-                    std::cerr << "PCBNEW_PICKER_TOOL motion handler error: " << e.what() << std::endl;
                 }
             }
         }
@@ -148,9 +145,8 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             (*m_finalizeHandler)( finalize_state );
         }
-        catch( std::exception& e )
+        catch( std::exception& )
         {
-            std::cerr << "PCBNEW_PICKER_TOOL finalizeHandler error: " << e.what() << std::endl;
         }
     }
 

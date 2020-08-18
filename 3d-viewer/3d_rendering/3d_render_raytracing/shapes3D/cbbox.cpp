@@ -395,6 +395,6 @@ void CBBOX::ApplyTransformationAA( glm::mat4 aTransformMatrix )
 
 void CBBOX::debug() const
 {
-    printf( "min(%f, %f, %f) - max(%f, %f, %f)\n", m_min.x, m_min.y, m_min.z,
-                                                   m_max.x, m_max.y, m_max.z );
+    wxLogDebug( "min(%f, %f, %f) - max(%f, %f, %f)\n", m_min.x, m_min.y, m_min.z,
+            m_max.x, m_max.y, m_max.z );
 }

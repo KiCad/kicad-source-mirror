@@ -348,7 +348,6 @@ void DIALOG_BOM::installGeneratorsList()
 
         for( const auto& path : pluginPaths )
         {
-            wxLogDebug( wxString::Format( "Searching directory %s for BOM generators", path ) );
             wxDir dir( path );
 
             if( !dir.IsOpened() )
@@ -362,7 +361,7 @@ void DIALOG_BOM::installGeneratorsList()
             {
                 try
                 {
-                    wxLogTrace( BOM_TRACE, wxString::Format( "Checking if %s is a BOM generator", fileName ) );
+                    wxLogTrace( BOM_TRACE,"Checking if %s is a BOM generator", fileName );
 
                     if( BOM_GENERATOR_HANDLER::IsValidGenerator( fileName ) )
                     {

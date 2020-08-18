@@ -7,7 +7,7 @@
  *
  * Copyright (C) 1992-2017 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,9 @@
 #include <am_param.h>
 #include <am_primitive.h>
 #include <macros.h>
+
+#include <wx/debug.h>
+
 
 extern int    ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
@@ -116,7 +119,7 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
                 }
                 else
                 {
-                    wxLogDebug( wxT( "AM_PARAM::GetValue(): NULL param aDcode\n" ) );
+                    wxFAIL_MSG( "AM_PARAM::GetValue(): NULL param aDcode" );
                 }
 
                 ops.push_back( AM_PARAM_EVAL( curr_value ) );
@@ -128,8 +131,10 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
                 break;
 
             default:
-                wxLogDebug( "AM_PARAM::GetValue(): dcode %d prm %d/%d: unexpected type %d",
-                            aDcode ? aDcode->m_Num_Dcode : -1, ii, m_paramStack.size(), item.GetType() );
+                wxFAIL_MSG( wxString::Format( "AM_PARAM::GetValue(): dcode %d prm %d/%d: "
+                                              "unexpected type %d",
+                                               aDcode ? aDcode->m_Num_Dcode : -1, ii,
+                                               m_paramStack.size(), item.GetType() ) );
                 break;
         }
     }
@@ -256,7 +261,7 @@ bool AM_PARAM::ReadParam( char*& aText  )
             break;
 
         default:
-           dvalue = ReadDouble( aText, false );
+            dvalue = ReadDouble( aText, false );
             PushOperator( PUSHVALUE, dvalue );
             found = true;
             break;

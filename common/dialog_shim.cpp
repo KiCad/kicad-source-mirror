@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -269,13 +269,6 @@ void DIALOG_SHIM::ResetSize()
 bool DIALOG_SHIM::Enable( bool enable )
 {
     // so we can do logging of this state change:
-
-#if 0 && defined(DEBUG)
-    const char* type_id = typeid( *this ).name();
-    printf( "DIALOG_SHIM %s: %s\n", type_id, enable ? "enabled" : "disabled" );
-    fflush(0);  //Needed on msys2 to immediately print the message
-#endif
-
     return wxDialog::Enable( enable );
 }
 
@@ -364,15 +357,11 @@ int DIALOG_SHIM::ShowQuasiModal()
     // Get the optimal parent
     wxWindow* parent = GetParentForModalDialog( GetParent(), GetWindowStyle() );
 
-    // Show the optimal parent
-    DBG( if( parent ) printf( "%s: optimal parent: %s\n", __func__, typeid(*parent).name() );)
-
     wxASSERT_MSG( !m_qmodal_parent_disabler,
             wxT( "Caller using ShowQuasiModal() twice on same window?" ) );
 
     // quasi-modal: disable only my "optimal" parent
     m_qmodal_parent_disabler = new WDO_ENABLE_DISABLE( parent );
-
 
     // Apple in its infinite wisdom will raise a disabled window before even passing
     // us the event, so we have no way to stop it.  Instead, we must set an order on

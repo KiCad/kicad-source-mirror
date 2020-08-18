@@ -406,7 +406,6 @@ int PANEL_KICAD2STEP::RunConverter()
         catch( const Standard_Failure& e )
         {
             wxString err = e.GetMessageString();
-            //e.Print( std::cerr );
             wxMessageBox( err, "Export Error" );
 
             ReportMessage( wxString::Format( "\nExport Error: %s\n", err ) );

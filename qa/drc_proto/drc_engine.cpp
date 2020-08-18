@@ -43,23 +43,24 @@ void drcPrintDebugMessage( int level, wxString msg, const char *function, int li
     if( wxGetEnv( "DRC_DEBUG", &valueStr ) )
     {
         int setLevel = wxAtoi( valueStr );
-        if( level <=  setLevel )
-            fprintf(stderr,"[%-30s:%-5d] %s", function, line, (const char *) msg.c_str() );
     }
 }
 
-test::DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) : 
+
+test::DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_board( aBoard ),
     m_designSettings ( aSettings ),
     m_reporter( nullptr ),
     m_progressReporter( nullptr )
-    {
+{
 
-    }
+}
+
 
 test::DRC_ENGINE::~DRC_ENGINE()
 {
 }
+
 
 test::DRC_REPORT::~DRC_REPORT()
 {
@@ -69,6 +70,7 @@ test::DRC_REPORT::~DRC_REPORT()
             delete item.m_marker;
     }
 }
+
 
 /*void test::DRC_ENGINE::AddMarker( MARKER_PCB* aMarker )
 {
@@ -81,9 +83,10 @@ test::DRC_REPORT::~DRC_REPORT()
     m_markers.push_back( aMarker );
 }*/
 
+
 bool test::DRC_ENGINE::LoadRules( wxFileName aPath )
 {
-    
+
     if( aPath.FileExists() )
     {
         m_ruleConditions.clear();
@@ -237,7 +240,7 @@ const test::DRC_CONSTRAINT& test::DRC_ENGINE::EvalRulesForItems( test::DRC_CONST
         if( rcond->conditions.size() == 0 )  // uconditional
         {
             drc_dbg( 8, "   -> rule '%s' matches (unconditional)\n",
-                        rcond->constraint.GetParentRule()->GetName() 
+                        rcond->constraint.GetParentRule()->GetName()
                         );
             return rcond->constraint;
         }
@@ -265,10 +268,10 @@ const test::DRC_CONSTRAINT& test::DRC_ENGINE::EvalRulesForItems( test::DRC_CONST
 void test::DRC_ENGINE::Report( std::shared_ptr<DRC_ITEM> aItem, ::MARKER_PCB *aMarker )
 {
     m_drcReport->AddItem( aItem, aMarker );
-    
+
     if( m_reporter )
     {
-        m_reporter->Report ( wxString::Format( "Test '%s': violation of rule '%s' : %s (code %d)", 
+        m_reporter->Report ( wxString::Format( "Test '%s': violation of rule '%s' : %s (code %d)",
         aItem->GetViolatingTest()->GetName(),
         aItem->GetViolatingRule()->GetName(),
         aItem->GetErrorMessage(),
@@ -301,13 +304,15 @@ void test::DRC_ENGINE::ReportProgress( double aProgress )
     m_progressReporter->SetCurrentProgress( aProgress );
 }
 
+
 void test::DRC_ENGINE::ReportStage ( const wxString& aStageName, int index, int total )
 {
     if( !m_progressReporter )
         return;
 
-    m_progressReporter->BeginPhase( index ); // fixme: coalesce all stages/test providers 
+    m_progressReporter->BeginPhase( index ); // fixme: coalesce all stages/test providers
 }
+
 
 #if 0
 test::DRC_CONSTRAINT test::DRC_ENGINE::GetWorstGlobalConstraint( test::DRC_CONSTRAINT_TYPE_T ruleID )
@@ -328,6 +333,7 @@ test::DRC_CONSTRAINT test::DRC_ENGINE::GetWorstGlobalConstraint( test::DRC_CONST
     return rv;
 }
 #endif
+
 
 std::vector<test::DRC_CONSTRAINT> test::DRC_ENGINE::QueryConstraintsById( test::DRC_CONSTRAINT_TYPE_T constraintID )
 {

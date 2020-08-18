@@ -266,18 +266,9 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     COBJECT2D_STATS::Instance().ResetStats();
     COBJECT3D_STATS::Instance().ResetStats();
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf("InitSettings...\n");
-#endif
-
     unsigned stats_startReloadTime = GetRunningMicroSecs();
 
     m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_endReloadTime = GetRunningMicroSecs();
-    unsigned stats_startConvertTime = GetRunningMicroSecs();
- #endif
 
     SFVEC3F camera_pos = m_boardAdapter.GetBoardCenter3DU();
     m_camera.SetBoardLookAtPos( camera_pos );
@@ -289,10 +280,6 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
     // Create and add the outline board
     // /////////////////////////////////////////////////////////////////////////
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf("Create outline board...\n");
-#endif
 
     delete m_outlineBoard2dObjects;
 
@@ -451,10 +438,6 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
     // Add layers maps (except B_Mask and F_Mask)
     // /////////////////////////////////////////////////////////////////////////
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf("Add layers maps...\n");
-#endif
 
     for( MAP_CONTAINER_2D::const_iterator ii = m_boardAdapter.GetMapLayers().begin();
          ii != m_boardAdapter.GetMapLayers().end();
@@ -983,11 +966,6 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
     // Create an accelerator
     // /////////////////////////////////////////////////////////////////////////
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_startAcceleratorTime = GetRunningMicroSecs();
-#endif
-
     if( m_accelerator )
     {
         delete m_accelerator;
@@ -995,37 +973,6 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     m_accelerator = 0;
 
     m_accelerator = new CBVH_PBRT( m_object_container );
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_endAcceleratorTime = GetRunningMicroSecs();
-#endif
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "C3D_RENDER_RAYTRACING::reload times:\n" );
-    printf( "  Reload board:             %.3f ms\n", (float)( stats_endReloadTime -
-                                                              stats_startReloadTime ) /
-
-                                                     1000.0f );
-    printf( "  Convert to 3D objects:    %.3f ms\n", (float)( stats_endConvertTime -
-                                                              stats_startConvertTime ) /
-                                                     1000.0f );
-    printf( "  Accelerator construction: %.3f ms\n", (float)( stats_endAcceleratorTime -
-                                                              stats_startAcceleratorTime ) /
-                                                     1000.0f );
-    printf( "  Load and add 3D models:   %.3f ms\n", (float)( stats_endLoad3DmodelsTime -
-                                                              stats_startLoad3DmodelsTime ) /
-                                                     1000.0f );
-    printf( "Optimizations\n" );
-
-    printf( "  m_stats_converted_dummy_to_plane: %u\n",
-            m_stats_converted_dummy_to_plane );
-
-    printf( "  m_stats_converted_roundsegment2d_to_roundsegment: %u\n",
-            m_stats_converted_roundsegment2d_to_roundsegment );
-
-    COBJECT2D_STATS::Instance().PrintStats();
-    COBJECT3D_STATS::Instance().PrintStats();
-#endif
 
     if( aStatusReporter )
     {

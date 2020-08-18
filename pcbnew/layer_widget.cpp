@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -576,7 +576,6 @@ wxSize LAYER_WIDGET::GetBestSize() const
         for( int i = 0; i < LYR_COLUMN_COUNT; ++i )
         {
             totWidth += widths[i] + m_LayersFlexGridSizer->GetHGap();
-            // printf("widths[%d]:%d\n", i, widths[i] );
         }
     }
 
@@ -603,7 +602,6 @@ wxSize LAYER_WIDGET::GetBestSize() const
         for( int i = 0; i < RND_COLUMN_COUNT; ++i )
         {
             totWidth += widths[i] + m_RenderFlexGridSizer->GetHGap();
-            // printf("widths[%d]:%d\n", i, widths[i] );
         }
     }
     // account for the parent's frame, this one has void space of 10 PLUS a border:
@@ -868,36 +866,29 @@ class MYFRAME : public wxFrame
 
         void OnLayerColorChange( int aLayer, COLOR4D aColor )
         {
-            printf( "OnLayerColorChange( aLayer:%d, aColor:%d )\n", aLayer, aColor );
-
             /* a test trigger only
             if( aLayer == 2 )
             {
                 ClearLayerRows();
-                printf(" GetLayerRowCount(): %d\n", GetLayerRowCount() );
             }
             */
         }
 
         bool OnLayerSelect( LAYER_NUM aLayer )
         {
-            printf( "OnLayerSelect( aLayer:%d )\n", aLayer );
             return true;
         }
 
         void OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal )
         {
-            printf( "OnLayerVisible( aLayer:%d, isVisible:%d isFinal:%d)\n", aLayer, isVisible, isFinal );
         }
 
         void OnRenderColorChange( int aId, COLOR4D aColor )
         {
-            printf( "OnRenderColorChange( aId:%d, aColor:%d )\n", aId, aColor );
         }
 
         void OnRenderEnable( int aId, bool isEnabled )
         {
-            printf( "OnRenderEnable( aId:%d, isEnabled:%d )\n", aId, isEnabled );
         }
     };
 

@@ -64,11 +64,9 @@ const std::map<OBJECT2D_TYPE, const char*> objectTypeNames
 
 void COBJECT2D_STATS::PrintStats()
 {
-    printf( "OBJ2D Statistics:\n" );
-
     for( auto& objectType : objectTypeNames )
     {
-        printf( "  %20s  %u\n", objectType.second,
+        wxLogDebug( "  %20s  %u\n", objectType.second,
                 m_counter[static_cast<int>( objectType.first )] );
     }
 }

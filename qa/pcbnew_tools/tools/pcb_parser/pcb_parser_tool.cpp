@@ -72,10 +72,8 @@ bool parse( std::istream& aStream, bool aVerbose )
 
         duration = timer.SinceStart<PARSE_DURATION>();
     }
-    catch( const IO_ERROR& parse_error )
+    catch( const IO_ERROR& )
     {
-        std::cerr << parse_error.Problem() << std::endl;
-        std::cerr << parse_error.Where() << std::endl;
     }
 
     if( aVerbose )

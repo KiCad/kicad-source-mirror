@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2020 Kicad Developers, see change_log.txt for contributors.
  *
  * Graphics Abstraction Layer (GAL) for OpenGL
  *
@@ -185,8 +185,6 @@ void SHADER::programInfo( GLuint aProgram )
         GLchar* glInfoLog = new GLchar[glInfoLogLength];
         glGetProgramInfoLog( aProgram, glInfoLogLength, &writtenChars, glInfoLog );
 
-        std::cerr << glInfoLog << std::endl;
-
         delete[] glInfoLog;
     }
 }
@@ -205,8 +203,6 @@ void SHADER::shaderInfo( GLuint aShader )
     {
         GLchar* glInfoLog = new GLchar[glInfoLogLength];
         glGetShaderInfoLog( aShader, glInfoLogLength, &writtenChars, glInfoLog );
-
-        std::cerr << glInfoLog << std::endl;
 
         delete[] glInfoLog;
     }

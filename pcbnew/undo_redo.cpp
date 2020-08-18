@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,7 +307,8 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
 
         default:
         {
-            wxLogDebug( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), command );
+            wxFAIL_MSG( wxString::Format( "SaveCopyInUndoList() error (unknown code %X)",
+                   command ) );
         }
         break;
 
@@ -569,8 +570,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         break;
 
         default:
-            wxLogDebug( wxT( "PutDataInPreviousState() error (unknown code %X)" ),
-                        aList->GetPickedItemStatus( ii ) );
+            wxFAIL_MSG( wxString::Format( "PutDataInPreviousState() error (unknown code %X)",
+                    aList->GetPickedItemStatus( ii ) ) );
             break;
         }
     }

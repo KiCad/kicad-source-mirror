@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,8 +164,6 @@ void KICAD_CURL::Init()
             }
 
             init_locks();
-
-            //wxLogDebug( "Using %s", GetVersion() );
 
             s_initialized = true;
         }

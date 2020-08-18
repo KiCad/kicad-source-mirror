@@ -1019,7 +1019,6 @@ bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VEC
     {
         auto c = new PRESERVE_VERTEX_CONSTRAINT( aWorld, aV );
         opt.AddConstraint( c );
-        //printf("pres-v %d %d\n", aV.x, aV.y );
     }
 
     if ( aEffortLevel & KEEP_TOPOLOGY )
@@ -1372,15 +1371,12 @@ bool tightenSegment( bool dir, NODE *aNode, const LINE& cur,
 
     int step = initial;
     int current = step;
-    //printf("step %d\n", step);
     SHAPE_LINE_CHAIN snew;
 
     while (step > 1)
     {
         LINE l ( cur );
 
-
-        //printf("current %d l %d\n", current, guide.Length() );
         snew.Clear();
         snew.Append( a.A );
         snew.Append( a.B + (a.A - a.B).Resize( current ) );

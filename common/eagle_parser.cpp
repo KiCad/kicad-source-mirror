@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN.
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
@@ -598,7 +598,6 @@ wxSize ETEXT::ConvertSize() const
         }
         else
         {
-            wxLogDebug( "Invalid font name \"%s\"", fontName );
             textsize = wxSize( size.ToSchUnits(), size.ToSchUnits() );
         }
     }

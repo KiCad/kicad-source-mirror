@@ -8,8 +8,6 @@ class MyClass
 public:
     int MyMethod( const string& arg )
     {
-        printf( "MyClass(this = %p)::MyMethod() called with string '%s', length %d\n", this,
-                arg.c_str(), arg.length() );
         return arg.length();
     }
 };
@@ -29,6 +27,5 @@ main()
     retval1 = ptr1( "apples" );
     retval2 = ptr2( "cherries" );
 
-    printf( "Object 1 returned %d, object 2 returned %d\n", retval1, retval2 );
     return 0;
 }

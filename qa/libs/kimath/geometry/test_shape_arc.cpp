@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,20 +87,12 @@ static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps )
     /// All arcs are solid
     BOOST_CHECK_EQUAL( aArc.IsSolid(), true );
 
-    /// Test bouding box
-    #if 0   // Only for debug.
-    printf("abox %d %d %d %d prp %d %d %d %d\n",
-    aArc.BBox().GetX(), aArc.BBox().GetY(), aArc.BBox().GetSize().x, aArc.BBox().GetSize().y,
-    aProps.m_bbox.GetX(),aProps.m_bbox.GetY(),
-    aProps.m_bbox.GetSize().x, aProps.m_bbox.GetSize().y );
-    fflush(0);
-    #endif
-
     BOOST_CHECK_PREDICATE(
             KI_TEST::IsBoxWithinTol<BOX2I>, ( aArc.BBox() )( aProps.m_bbox )( pos_tol ) );
 
     /// Collisions will be checked elsewhere.
 }
+
 
 /**
  * Check an arcs geometry and other class functions
@@ -145,6 +137,7 @@ BOOST_AUTO_TEST_CASE( NullCtor )
     CheckArc( arc, null_props );
 }
 
+
 /**
  * Info to set up an arc by centre, start point and angle
  *
@@ -156,6 +149,7 @@ struct ARC_CENTRE_PT_ANGLE
     VECTOR2I m_start_point;
     double   m_center_angle;
 };
+
 
 struct ARC_CPA_CASE
 {
@@ -171,6 +165,7 @@ struct ARC_CPA_CASE
     /// Expected properties
     ARC_PROPERTIES m_properties;
 };
+
 
 static const std::vector<ARC_CPA_CASE> arc_cases = {
     {
@@ -316,6 +311,7 @@ static const std::vector<ARC_CPA_CASE> arc_cases = {
     },
 };
 
+
 BOOST_AUTO_TEST_CASE( BasicCPAGeom )
 {
     for( const auto& c : arc_cases )
@@ -360,6 +356,7 @@ bool ArePolylineEndPointsNearCircle(
 
     return GEOM_TEST::ArePointsNearCircle( points, aCentre, aRad, aTolEnds );
 }
+
 
 /**
  * Predicate for checking a polyline has all the segment mid points on

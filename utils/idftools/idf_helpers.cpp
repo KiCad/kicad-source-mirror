@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017  Cirilo Bernardo
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,7 +103,6 @@ bool IDF3::GetIDFString( const std::string& aLine, std::string& aIDFString,
         if( idx == len )
         {
             ERROR_IDF << "unterminated quote mark in line:\n";
-            std::cerr << "LINE: " << aLine << "\n";
             aIndex = idx;
             return false;
         }

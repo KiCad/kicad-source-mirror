@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -238,7 +238,7 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
 
 #ifdef DEBUG
         char str[128];
-        sprintf(str,"att-%d-shoved", attempt);
+        sprintf( str, "att-%d-shoved", attempt );
         Dbg()->AddLine( l.CLine(), 3, 20000, str );
 #endif
 
@@ -322,7 +322,7 @@ SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, L
 
 #ifdef DEBUG
         char str[128];
-        sprintf(str,"current-cl-%d", clearance );
+        sprintf( str, "current-cl-%d", clearance );
         Dbg()->AddLine( aCurrent.CLine(), 5, 20000, str );
 #endif
 

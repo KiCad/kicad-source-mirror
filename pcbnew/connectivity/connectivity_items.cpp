@@ -150,12 +150,12 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
 void CN_ITEM::Dump()
 {
-    printf("    valid: %d, connected: \n", !!Valid());
+    wxLogDebug("    valid: %d, connected: \n", !!Valid());
 
     for( auto i : m_connected )
     {
         TRACK* t = static_cast<TRACK*>( i->Parent() );
-        printf( "    - %p %d\n", t, t->Type() );
+        wxLogDebug( "    - %p %d\n", t, t->Type() );
     }
 }
 
@@ -449,8 +449,8 @@ void CN_CLUSTER::Dump()
     {
         wxLogTrace( "CN", " - item : %p bitem : %p type : %d inet %s\n", item, item->Parent(),
                 item->Parent()->Type(), (const char*) item->Parent()->GetNetname().c_str() );
-        printf( "- item : %p bitem : %p type : %d inet %s\n", item, item->Parent(),
-                        item->Parent()->Type(), (const char*) item->Parent()->GetNetname().c_str() );
+        wxLogTrace( "CN", "- item : %p bitem : %p type : %d inet %s\n", item, item->Parent(),
+                item->Parent()->Type(), (const char*) item->Parent()->GetNetname().c_str() );
         item->Dump();
     }
 }

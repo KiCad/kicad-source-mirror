@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014  Cirilo Bernardo
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,14 +138,7 @@ bool DXF2IDF::WriteOutline( FILE* aFile, bool isInch )
 
     if( outline.empty() )
     {
-        std::cerr << "* DXF2IDF::WriteOutline(): no valid outline in file\n";
         return false;
-    }
-
-    if( !lines.empty() )
-    {
-        std::cerr << "* DXF2IDF::WriteOutline(): WARNING: more than 1 outline in file\n";
-        std::cerr << "*                          Only the first outline will be used\n";
     }
 
     char loopDir = '1';
@@ -160,7 +153,6 @@ bool DXF2IDF::WriteOutline( FILE* aFile, bool isInch )
     {
         if( !outline.front()->IsCircle() )
         {
-            std::cerr << "* DXF2IDF::WriteOutline(): bad outline\n";
             return false;
         }
 

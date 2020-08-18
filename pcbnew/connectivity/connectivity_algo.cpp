@@ -2,6 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016-2018 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -198,10 +200,6 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
 void CN_CONNECTIVITY_ALGO::searchConnections()
 {
-#ifdef CONNECTIVITY_DEBUG
-    printf("Search start\n");
-#endif
-
 #ifdef PROFILE
     PROF_COUNTER garbage_collection( "garbage-collection" );
 #endif
@@ -282,11 +280,6 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 #endif
 
     m_itemList.ClearDirtyFlags();
-
-#ifdef CONNECTIVITY_DEBUG
-    printf("Search end\n");
-#endif
-
 }
 
 
@@ -394,16 +387,6 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     std::sort( clusters.begin(), clusters.end(), []( CN_CLUSTER_PTR a, CN_CLUSTER_PTR b ) {
         return a->OriginNet() < b->OriginNet();
     } );
-
-#ifdef CONNECTIVITY_DEBUG
-    printf("Active clusters: %d\n", clusters.size() );
-
-    for( auto cl : clusters )
-    {
-        printf( "Net %d\n", cl->OriginNet() );
-        cl->Dump();
-    }
-#endif
 
     return clusters;
 }

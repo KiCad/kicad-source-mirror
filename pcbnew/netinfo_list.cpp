@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -172,10 +172,10 @@ void NETINFO_LIST::Show() const
     NETNAMES_MAP::const_iterator it, itEnd;
     for( it = m_netNames.begin(), itEnd = m_netNames.end(); it != itEnd; ++it )
     {
-        printf( "[%d]: netcode:%d  netname:<%s>\n",
-                i++,
-                it->second->GetNet(),
-                TO_UTF8( it->second->GetNetname() ) );
+        wxLogDebug( "[%d]: netcode:%d  netname:<%s>\n",
+                    i++,
+                    it->second->GetNet(),
+                    TO_UTF8( it->second->GetNetname() ) );
     }
 }
 #endif

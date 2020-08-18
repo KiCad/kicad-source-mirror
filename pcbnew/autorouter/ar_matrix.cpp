@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -310,9 +310,6 @@ void AR_MATRIX::drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYE
 
     int cx, cy, dx, dy;
 
-
-    //printf("segmQcq %d %d %d %d\n", ux0, uy0, ux1, uy1);
-
     SetCellOperation( op_logic );
 
     // Make coordinate ux1 tj > ux0 to simplify calculations
@@ -380,9 +377,6 @@ void AR_MATRIX::drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYE
     }
 
     RotatePoint( &dx, &dy, angle ); // dx = length, dy = 0
-
-
-    //printf("col_min %d max %d row_min %d max %d\n", col_min, col_max, row_min, row_max);
 
     for( col = col_min; col <= col_max; col++ )
     {
@@ -796,8 +790,6 @@ void AR_MATRIX::TraceSegmentPcb(
     int uy0 = pt_segm->GetStart().y - GetBrdCoordOrigin().y;
     int ux1 = pt_segm->GetEnd().x - GetBrdCoordOrigin().x;
     int uy1 = pt_segm->GetEnd().y - GetBrdCoordOrigin().y;
-
-    //printf("traceSegm %d %d %d %d\n", ux0, uy0, ux1, uy1);
 
     LAYER_NUM layer = UNDEFINED_LAYER;    // Draw on all layers
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2019 CERN
- * Copyright (C) 2013-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -267,9 +267,8 @@ void ACTION_MENU::UpdateAll()
     {
         update();
     }
-    catch( std::exception& e )
+    catch( std::exception& )
     {
-        wxLogDebug( wxString::Format( "ACTION_MENU update handler exception: %s", e.what() ) );
     }
 
     if( m_tool )
@@ -560,9 +559,8 @@ void ACTION_MENU::runOnSubmenus( std::function<void(ACTION_MENU*)> aFunction )
             m->runOnSubmenus( aFunction );
         } );
     }
-    catch( std::exception& e )
+    catch( std::exception& )
     {
-        wxLogDebug( wxString::Format( "ACTION_MENU runOnSubmenus exception: %s", e.what() ) );
     }
 }
 

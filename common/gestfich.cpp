@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,16 +80,6 @@ wxString EDA_FILE_SELECTOR( const wxString& aTitle,
     }
 
     wxSetWorkingDirectory( defaultpath );
-
-#if 0 && defined (DEBUG)
-    printf( "defaultpath=\"%s\" defaultname=\"%s\" Ext=\"%s\" Mask=\"%s\" flag=%d keep_working_directory=%d\n",
-            TO_UTF8( defaultpath ),
-            TO_UTF8( defaultname ),
-            TO_UTF8( aExtension ),
-            TO_UTF8( aWildcard ),
-            aStyle,
-            aKeepWorkingDirectory );
-#endif
 
     fullfilename = wxFileSelector( aTitle, defaultpath, defaultname,
                                    dotted_Ext, aWildcard,

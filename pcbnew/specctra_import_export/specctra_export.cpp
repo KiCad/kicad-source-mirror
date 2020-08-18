@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -767,8 +767,6 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         case S_RECT:
         case S_ARC:
         default:
-            DBG( printf( "makeIMAGE(): unsupported shape %s\n",
-                       TO_UTF8( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) ); )
             continue;
         }
     }

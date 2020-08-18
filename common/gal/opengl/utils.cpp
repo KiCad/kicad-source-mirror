@@ -26,6 +26,8 @@
 
 #include <GL/glew.h>
 #include <stdexcept>
+#include <wx/log.h>     // wxLogDebug
+
 
 int checkGlError( const std::string& aInfo, bool aThrow )
 {
@@ -127,13 +129,13 @@ static void GLAPIENTRY debugMsgCallback( GLenum aSource, GLenum aType, GLuint aI
 {
     switch( aSeverity )
     {
-        case GL_DEBUG_SEVERITY_HIGH:   printf( "OpenGL ERROR: " ); break;
-        case GL_DEBUG_SEVERITY_MEDIUM: printf( "OpenGL WARNING: " ); break;
-        case GL_DEBUG_SEVERITY_LOW:    printf( "OpenGL INFO: " ); break;
+        case GL_DEBUG_SEVERITY_HIGH:   wxLogDebug( "OpenGL ERROR: " ); break;
+        case GL_DEBUG_SEVERITY_MEDIUM: wxLogDebug( "OpenGL WARNING: " ); break;
+        case GL_DEBUG_SEVERITY_LOW:    wxLogDebug( "OpenGL INFO: " ); break;
         case GL_DEBUG_SEVERITY_NOTIFICATION: return;
     }
 
-    printf( "%s\n", aMessage );
+    wxLogDebug( "%s\n", aMessage );
 }
 
 

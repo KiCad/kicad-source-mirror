@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,8 +62,6 @@ LSET::LSET( unsigned aIdCount, int aFirst, ... ) :
         for( unsigned i=0;  i<aIdCount;  ++i )
         {
             PCB_LAYER_ID id = (PCB_LAYER_ID) va_arg( ap, int );
-
-            // printf( "%s: id:%d PCB_LAYER_ID_COUNT:%d\n", __func__, id, PCB_LAYER_ID_COUNT );
 
             assert( unsigned( id ) < PCB_LAYER_ID_COUNT );
 

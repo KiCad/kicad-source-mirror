@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,7 +142,6 @@ void GITHUB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wx
 {
     try
     {
-        //D(printf("%s: this:%p  aLibPath:\"%s\"\n", __func__, this, TO_UTF8(aLibraryPath) );)
         cacheLib( aLibPath, aProperties );
 
         typedef std::set<wxString>      MYSET;
@@ -188,8 +187,6 @@ void GITHUB_PLUGIN::PrefetchLib(
 MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
-    // D(printf("%s: this:%p  aLibraryPath:\"%s\"\n", __func__, this, TO_UTF8(aLibraryPath) );)
-
     // clear or set to valid the variable m_pretty_dir
     cacheLib( aLibraryPath, aProperties );
 
@@ -420,7 +417,6 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
         // operator==( wxString, wxChar* ) does not exist, construct wxString once here.
         const wxString    kicad_mod( "kicad_mod" );
 
-        //D(printf("%s: this:%p  m_lib_path:'%s'  aLibraryPath:'%s'\n", __func__, this, TO_UTF8( m_lib_path), TO_UTF8(aLibraryPath) );)
         m_gh_cache = new GH_CACHE();
 
         // INIT_LOGGER( "/tmp", "test.log" );
@@ -482,7 +478,6 @@ long long GITHUB_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryPath ) con
 bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, std::string* aZipURL )
 {
     // e.g. "https://github.com/liftoff-sr/pretty_footprints"
-    //D(printf("aRepoURL:%s\n", TO_UTF8( aRepoURL ) );)
 
     wxURI   repo( aRepoURL );
 
@@ -564,8 +559,6 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL )
         wxString msg = wxString::Format( _( "Unable to parse URL:\n\"%s\"" ), GetChars( aRepoURL ) );
         THROW_IO_ERROR( msg );
     }
-
-    wxLogDebug( wxT( "Attempting to download: " ) + zip_url );
 
     KICAD_CURL_EASY kcurl;      // this can THROW_IO_ERROR
 

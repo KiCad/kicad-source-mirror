@@ -59,12 +59,6 @@ void SCH_EDITOR_CONTROL::BackAnnotateFootprints( const std::string& aChangedSetO
     {
         Scan( &doc, &lexer );
 
-#if defined(DEBUG) && 0
-        STRING_FORMATTER sf;
-        Format( &sf, 0, 0, doc );
-        printf( "%s: '%s'\n", __func__, sf.GetString().c_str() );
-#endif
-
         CPTREE& back_anno = doc.get_child( "back_annotation" );
         wxString footprint;
 

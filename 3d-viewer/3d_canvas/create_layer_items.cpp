@@ -170,11 +170,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     if( m_stats_nr_vias )
         m_stats_via_med_hole_diameter /= (float)m_stats_nr_vias;
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T01: %.3f ms\n", (float)( GetRunningMicroSecs()  - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
-
     // Prepare copper layers index and containers
     // /////////////////////////////////////////////////////////////////////////
     std::vector< PCB_LAYER_ID > layer_id;
@@ -203,11 +198,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             m_layers_poly[curr_layer_id] = layerPoly;
         }
     }
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T02: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
 
     if( aStatusReporter )
         aStatusReporter->Report( _( "Create tracks and vias" ) );
@@ -241,11 +231,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             createNewTrack( track, layerContainer, 0.0f );
         }
     }
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T03: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
 
     // Create VIAS and THTs objects and add it to holes containers
     // /////////////////////////////////////////////////////////////////////////
@@ -331,11 +316,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
         }
     }
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T04: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
 
     // Create VIAS and THTs objects and add it to holes containers
     // /////////////////////////////////////////////////////////////////////////
@@ -433,11 +413,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T05: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
-
     // Creates vertical outline contours of the tracks and add it to the poly of the layer
     // /////////////////////////////////////////////////////////////////////////
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
@@ -470,11 +445,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
         }
     }
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T06: %.3f ms\n", (float)( GetRunningMicroSecs()  - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
 
     // Add holes of modules
     // /////////////////////////////////////////////////////////////////////////
@@ -509,11 +479,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     if( m_stats_nr_holes )
         m_stats_hole_med_diameter /= (float)m_stats_nr_holes;
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T07: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
-
     // Add contours of the pad holes (pads can be Circle or Segment holes)
     // /////////////////////////////////////////////////////////////////////////
     for( MODULE* module : m_board->Modules() )
@@ -541,11 +506,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T08: %.3f ms\n", (float)( GetRunningMicroSecs()  - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
-
     // Add modules PADs objects to containers
     for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
@@ -572,11 +532,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T09: %.3f ms\n", (float)( GetRunningMicroSecs()  - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
-
     // Add modules PADs poly contourns (vertical outlines)
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
@@ -600,11 +555,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
         }
     }
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T10: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
 
     // Add graphic item on copper layers to object containers
     for( PCB_LAYER_ID curr_layer_id : layer_id )
@@ -653,11 +603,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T11: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
-
     // Add graphic item on copper layers to poly contourns (vertical outlines)
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
@@ -693,11 +638,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
         }
     }
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T12: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
 
     if( GetFlag( FL_ZONE ) )
     {
@@ -752,11 +692,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     }
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "fill zones T13: %.3f ms\n", (float)( GetRunningMicroSecs()  - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
-
     if( GetFlag( FL_ZONE ) && GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
@@ -775,11 +710,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
         }
     }
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T14: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time  ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
 
     // Simplify layer polygons
 
@@ -820,11 +750,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
     }
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T15: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time ) / 1e3 );
-    start_Time = GetRunningMicroSecs();
-#endif
-
     // Simplify holes polygon contours
     // /////////////////////////////////////////////////////////////////////////
     if( aStatusReporter )
@@ -845,11 +770,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T16: %.3f ms\n", (float)( GetRunningMicroSecs() - start_Time ) / 1e3 );
-#endif
     // End Build Copper layers
-
 
     // This will make a union of all added contourns
     m_through_inner_holes_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
@@ -859,17 +780,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     m_through_outer_ring_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
     //m_through_inner_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST ); // Not in use
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_endCopperLayersTime = GetRunningMicroSecs();
-#endif
-
     // Build Tech layers
     // Based on: https://github.com/KiCad/kicad-source-mirror/blob/master/3d-viewer/3d_draw.cpp#L1059
     // /////////////////////////////////////////////////////////////////////////
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_startTechLayersTime = GetRunningMicroSecs();
-#endif
-
     if( aStatusReporter )
         aStatusReporter->Report( _( "Build Tech layers" ) );
 
@@ -1051,16 +964,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     }
     // End Build Tech layers
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_endTechLayersTime = GetRunningMicroSecs();
-#endif
-
-
     // Build BVH (Bounding volume hierarchy) for holes and vias
 
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_startHolesBVHTime = GetRunningMicroSecs();
-#endif
     if( aStatusReporter )
         aStatusReporter->Report( _( "Build BVH for holes and vias" ) );
 
@@ -1081,24 +986,4 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     if( m_layers_container2D[F_Mask] )
         m_layers_container2D[F_Mask]->BuildBVH();
-
-#ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_endHolesBVHTime = GetRunningMicroSecs();
-
-    printf( "BOARD_ADAPTER::createLayers times\n" );
-    printf( "  Copper Layers:          %.3f ms\n",
-            (float)( stats_endCopperLayersTime  - stats_startCopperLayersTime  ) / 1e3 );
-    printf( "  Holes BVH creation:     %.3f ms\n",
-            (float)( stats_endHolesBVHTime      - stats_startHolesBVHTime      ) / 1e3 );
-    printf( "  Tech Layers:            %.3f ms\n",
-            (float)( stats_endTechLayersTime    - stats_startTechLayersTime    ) / 1e3 );
-    printf( "Statistics:\n" );
-    printf( "  m_stats_nr_tracks                   %u\n", m_stats_nr_tracks );
-    printf( "  m_stats_nr_vias                     %u\n", m_stats_nr_vias );
-    printf( "  m_stats_nr_holes                    %u\n", m_stats_nr_holes );
-    printf( "  m_stats_via_med_hole_diameter (3DU) %f\n", m_stats_via_med_hole_diameter );
-    printf( "  m_stats_hole_med_diameter     (3DU) %f\n", m_stats_hole_med_diameter );
-    printf( "  m_calc_seg_min_factor3DU      (3DU) %f\n", m_calc_seg_min_factor3DU );
-    printf( "  m_calc_seg_max_factor3DU      (3DU) %f\n", m_calc_seg_max_factor3DU );
-#endif
 }
