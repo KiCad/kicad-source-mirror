@@ -633,9 +633,12 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             }
             catch( const IO_ERROR& ioe )
             {
-                msg.Printf( _( "I/O error %s resolving library symbol %s" ), ioe.What(),
-                            symbol->GetLibId().Format().wx_str() );
-                aReporter->ReportTail( msg, RPT_SEVERITY_ERROR );
+                if( aReporter )
+                {
+                    msg.Printf( _( "I/O error %s resolving library symbol %s" ), ioe.What(),
+                                symbol->GetLibId().Format().wx_str() );
+                    aReporter->ReportTail( msg, RPT_SEVERITY_ERROR );
+                }
             }
         }
 
