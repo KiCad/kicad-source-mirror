@@ -45,14 +45,9 @@ private:
     SCH_EDIT_FRAME*       m_frame;
     std::deque<SCH_ITEM*> m_strokeItems;
 
-    UNIT_BINDER     m_width;
-    COLOR4D         m_selectedColor;
+    UNIT_BINDER           m_width;
 
     void resetDefaults( wxCommandEvent& event ) override;
-    void onColorButtonClicked( wxCommandEvent& aEvent ) override;
-
-    void setColor( const COLOR4D& aColor );
-    void updateColorButton( COLOR4D& aColor );
 };
 
 #endif // __dialog_edit_line_style__

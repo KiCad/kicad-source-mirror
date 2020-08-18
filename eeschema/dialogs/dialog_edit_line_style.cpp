@@ -29,6 +29,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
+#include <widgets/color_swatch.h>
 
 const int BUTT_COLOR_MINSIZE_X = 32;
 const int BUTT_COLOR_MINSIZE_Y = 20;
@@ -64,9 +65,9 @@ DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent,
     SetInitialFocus( m_lineWidth );
 
     for( auto& typeEntry : lineTypeNames )
-    {
         m_typeCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
-    }
+
+    m_typeCombo->Append( INDETERMINATE_ACTION );
 
     m_sdbSizerOK->SetDefault();
 
@@ -80,10 +81,10 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
     auto first_stroke_item = m_strokeItems.front();
 
     if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
-        [&]( const SCH_ITEM* r )
-        {
-			return r->GetPenWidth() == first_stroke_item->GetPenWidth();
-		} ) )
+            [&]( const SCH_ITEM* r )
+            {
+                return r->GetPenWidth() == first_stroke_item->GetPenWidth();
+            } ) )
     {
         m_width.SetValue( first_stroke_item->GetPenWidth() );
     }
@@ -93,116 +94,48 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
     }
 
     if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
-        [&]( const SCH_ITEM* r )
-        {
-            return r->GetStroke().GetColor() == first_stroke_item->GetStroke().GetColor();
-        } ) )
+            [&]( const SCH_ITEM* r )
+            {
+                return r->GetStroke().GetColor() == first_stroke_item->GetStroke().GetColor();
+            } ) )
     {
-        setColor( first_stroke_item->GetStroke().GetColor() );
+        m_colorSwatch->SetSwatchColor( first_stroke_item->GetStroke().GetColor(), false );
     }
     else
     {
-        setColor( COLOR4D::UNSPECIFIED );
+        m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     }
 
     if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
-        [&]( const SCH_ITEM* r )
-        {
-            return r->GetStroke().GetType() == first_stroke_item->GetStroke().GetType();
-        } ) )
+            [&]( const SCH_ITEM* r )
+            {
+                return r->GetStroke().GetType() == first_stroke_item->GetStroke().GetType();
+            } ) )
     {
         int style = static_cast<int>( first_stroke_item->GetStroke().GetType() );
         wxCHECK_MSG( style < (int)lineTypeNames.size(), false,
-                "Line type for first line is not found in the type lookup map" );
+                     "Line type for first line is not found in the type lookup map" );
         m_typeCombo->SetSelection( style );
     }
     else
     {
-        m_typeCombo->SetSelection( wxNOT_FOUND );
+        m_typeCombo->SetStringSelection( INDETERMINATE_ACTION );
     }
 
     return true;
 }
 
 
-void DIALOG_EDIT_LINE_STYLE::onColorButtonClicked( wxCommandEvent& event )
-{
-    COLOR4D             newColor = COLOR4D::UNSPECIFIED;
-    DIALOG_COLOR_PICKER dialog( this, m_selectedColor, false );
-
-    if( dialog.ShowModal() == wxID_OK )
-        newColor = dialog.GetColor();
-
-    if( m_selectedColor == newColor )
-        return;
-
-    setColor( newColor );
-}
-
-
-void DIALOG_EDIT_LINE_STYLE::updateColorButton( COLOR4D& aColor )
-{
-    wxMemoryDC iconDC;
-
-
-    if( aColor == COLOR4D::UNSPECIFIED )
-    {
-        m_colorButton->SetBitmap( KiBitmap( question_mark_xpm ) );
-    }
-    else
-    {
-        wxBitmap bitmap( std::max( m_colorButton->GetSize().x, BUTT_COLOR_MINSIZE_X ),
-                std::max( m_colorButton->GetSize().y, BUTT_COLOR_MINSIZE_Y ) );
-
-        iconDC.SelectObject( bitmap );
-        iconDC.SetPen( *wxBLACK_PEN );
-
-        wxBrush brush( aColor.ToColour() );
-        iconDC.SetBrush( brush );
-
-        // Paint the full bitmap in aColor:
-        iconDC.SetBackground( brush );
-        iconDC.Clear();
-
-        m_colorButton->SetBitmap( bitmap );
-    }
-
-    m_colorButton->Refresh();
-
-    Refresh( false );
-}
-
-
 void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 {
     m_width.SetValue( 0 );
-    setColor( COLOR4D::UNSPECIFIED );
+    m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
 
-    SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( m_strokeItems.front() );
+    // This isn't quite right: they really want to set each stroke to the stroke set by the
+    // netclass (if any).
+    m_typeCombo->SetSelection( 0 );
 
-    wxCHECK( item, /* void */ );
-
-    auto typeIt = lineTypeNames.find( item->GetStroke().GetType() );
-    wxCHECK_RET( typeIt != lineTypeNames.end(),
-            "Default line type not found line dialogs line type lookup map" );
-
-    m_typeCombo->SetSelection( static_cast<int>( typeIt->first ) );
     Refresh();
-}
-
-
-void DIALOG_EDIT_LINE_STYLE::setColor( const COLOR4D& aColor )
-{
-    m_selectedColor = aColor;
-
-    if( aColor == COLOR4D::UNSPECIFIED )
-    {
-        COLOR4D defaultColor = Pgm().GetSettingsManager().GetColorSettings()->GetColor(
-                m_strokeItems.front()->GetLayer() );
-        updateColorButton( defaultColor );
-    }
-    else
-        updateColorButton( m_selectedColor );
 }
 
 
@@ -225,12 +158,11 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
             strokeItem->SetStroke( stroke );
         }
 
-        if( m_typeCombo->GetSelection() != wxNOT_FOUND )
+        int selection = m_typeCombo->GetSelection();
+
+        if( selection < (int)lineTypeNames.size() )
         {
             stroke = strokeItem->GetStroke();
-            int selection = m_typeCombo->GetSelection();
-            wxCHECK_MSG( selection < (int)lineTypeNames.size(), false,
-                    "Selected line type index exceeds size of line type lookup map" );
 
             auto it = lineTypeNames.begin();
             std::advance( it, selection );
@@ -240,7 +172,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
         }
 
         stroke = strokeItem->GetStroke();
-        stroke.SetColor( m_selectedColor );
+        stroke.SetColor( m_colorSwatch->GetSwatchColor() );
         strokeItem->SetStroke( stroke );
 
         m_frame->UpdateItem( strokeItem );

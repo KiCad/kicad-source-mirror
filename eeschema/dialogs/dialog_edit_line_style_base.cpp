@@ -5,12 +5,13 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/color_swatch.h"
+
 #include "dialog_edit_line_style_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( DIALOG_EDIT_LINE_STYLE_BASE, DIALOG_SHIM )
-	EVT_BUTTON( idColorBtn, DIALOG_EDIT_LINE_STYLE_BASE::_wxFB_onColorButtonClicked )
 	EVT_BUTTON( wxID_APPLY, DIALOG_EDIT_LINE_STYLE_BASE::_wxFB_resetDefaults )
 END_EVENT_TABLE()
 
@@ -29,43 +30,51 @@ DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWi
 
 	m_staticTextWidth = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWidth->Wrap( -1 );
-	fgSizerGeneral->Add( m_staticTextWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	fgSizerGeneral->Add( m_staticTextWidth, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 3 );
 
 	m_lineWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	fgSizerGeneral->Add( m_lineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizerGeneral->Add( m_lineWidth, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 3 );
 
 	m_staticWidthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticWidthUnits->Wrap( -1 );
 	m_staticWidthUnits->SetMinSize( wxSize( 40,-1 ) );
 
-	fgSizerGeneral->Add( m_staticWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	fgSizerGeneral->Add( m_staticWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3 );
 
 	m_staticTextColor = new wxStaticText( this, wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextColor->Wrap( -1 );
-	fgSizerGeneral->Add( m_staticTextColor, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerGeneral->Add( m_staticTextColor, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_colorButton = new wxBitmapButton( this, idColorBtn, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_panel1 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer2;
+	bSizer2 = new wxBoxSizer( wxVERTICAL );
 
-	m_colorButton->SetBitmap( wxNullBitmap );
-	fgSizerGeneral->Add( m_colorButton, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
+	m_colorSwatch = new COLOR_SWATCH( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_colorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	m_panel1->SetSizer( bSizer2 );
+	m_panel1->Layout();
+	bSizer2->Fit( m_panel1 );
+	fgSizerGeneral->Add( m_panel1, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 2 );
 
 
 	fgSizerGeneral->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_staticTextStyle = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStyle->Wrap( -1 );
-	fgSizerGeneral->Add( m_staticTextStyle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerGeneral->Add( m_staticTextStyle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_typeCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
-	m_typeCombo->SetMinSize( wxSize( 140,-1 ) );
+	m_typeCombo->SetMinSize( wxSize( 240,-1 ) );
 
-	fgSizerGeneral->Add( m_typeCombo, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizerGeneral->Add( m_typeCombo, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 3 );
 
 
-	mainSizer->Add( fgSizerGeneral, 1, wxEXPAND|wxALL, 5 );
+	mainSizer->Add( fgSizerGeneral, 1, wxEXPAND|wxALL, 10 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
+	mainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
