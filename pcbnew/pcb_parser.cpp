@@ -836,17 +836,6 @@ void PCB_PARSER::parseGeneralSection()
             NeedRIGHT();
             break;
 
-        case T_nets:
-            m_netCodes.resize( parseInt( "nets number" ) );
-            NeedRIGHT();
-            break;
-
-        case T_no_connects:
-            // ignore
-            parseInt( "no connect count" );
-            NeedRIGHT();
-            break;
-
         default:              // Skip everything but the board thickness.
             while( ( token = NextTok() ) != T_RIGHT )
             {
@@ -2228,6 +2217,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
             const_cast<KIID&>( segment->m_Uuid ) = CurStrToKIID();
             break;
 
+        /// We continue to parse the status field but it is no longer written
         case T_status:
             segment->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
@@ -3077,12 +3067,13 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
             const_cast<KIID&>( segment->m_Uuid ) = CurStrToKIID();
             break;
 
+        /// We continue to parse the status field but it is no longer written
         case T_status:
             segment->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
         default:
-            Expecting( "layer or width" );
+            Expecting( "layer, width or tstamp" );
         }
 
         NeedRIGHT();
@@ -3754,8 +3745,13 @@ ARC* PCB_PARSER::parseARC()
             const_cast<KIID&>( arc->m_Uuid ) = CurStrToKIID();
             break;
 
+        /// We continue to parse the status field but it is no longer written
         case T_status:
             arc->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
+            break;
+
+        case T_locked:
+            arc->SetState( TRACK_LOCKED, 1 );
             break;
 
         default:
@@ -3821,12 +3817,17 @@ TRACK* PCB_PARSER::parseTRACK()
             const_cast<KIID&>( track->m_Uuid ) = CurStrToKIID();
             break;
 
+        /// We continue to parse the status field but it is no longer written
         case T_status:
             track->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
+        case T_locked:
+            track->SetState( TRACK_LOCKED, 1 );
+            break;
+
         default:
-            Expecting( "start, end, width, layer, net, tstamp, or status" );
+            Expecting( "start, end, width, layer, net, tstamp, or locked" );
         }
 
         NeedRIGHT();
@@ -3916,8 +3917,14 @@ VIA* PCB_PARSER::parseVIA()
             NeedRIGHT();
             break;
 
+        /// We continue to parse the status field but it is no longer written
         case T_status:
             via->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
+            NeedRIGHT();
+            break;
+
+        case T_locked:
+            via->SetState( TRACK_LOCKED, 1 );
             NeedRIGHT();
             break;
 

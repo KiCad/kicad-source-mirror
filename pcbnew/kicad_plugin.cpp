@@ -525,14 +525,9 @@ void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel, "(general\n" );
-    // Write Bounding box info
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
                   FormatInternalUnits( dsnSettings.GetBoardThickness() ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(drawings %u)\n", (unsigned)aBoard->Drawings().size() );
-    m_out->Print( aNestLevel + 1, "(tracks %u)\n", (unsigned)aBoard->Tracks().size() );
-    m_out->Print( aNestLevel + 1, "(modules %u)\n", (unsigned)aBoard->Modules().size() );
-    m_out->Print( aNestLevel+1, "(nets %d)\n", m_mapping->GetSize() );
     m_out->Print( aNestLevel, ")\n\n" );
 
     aBoard->GetPageSettings().Format( m_out, aNestLevel, m_ctl );
@@ -818,9 +813,6 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
     m_out->Print( 0, " (width %s)", FormatInternalUnits( aSegment->GetWidth() ).c_str() );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aSegment->m_Uuid.AsString() ) );
-
-    if( aSegment->GetStatus() )
-        m_out->Print( 0, " (status %X)", aSegment->GetStatus() );
 
     m_out->Print( 0, ")\n" );
 }
@@ -1670,12 +1662,12 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         m_out->Print( 0, " (layer %s)", m_out->Quotew( aTrack->GetLayerName() ).c_str() );
     }
 
+    if( aTrack->IsLocked() )
+        m_out->Print( 0, " (locked)" );
+
     m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNetCode() ) );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTrack->m_Uuid.AsString() ) );
-
-    if( aTrack->GetStatus() != 0 )
-        m_out->Print( 0, " (status %X)", aTrack->GetStatus() );
 
     m_out->Print( 0, ")\n" );
 }

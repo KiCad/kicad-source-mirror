@@ -77,7 +77,8 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200807  // Add zone hatch advanced settings
 //#define SEXPR_BOARD_FILE_VERSION    20200808  // Add properties to modules
 //#define SEXPR_BOARD_FILE_VERSION    20200809  // Add REMOVE_UNUSED_LAYERS option to vias and THT pads
-#define SEXPR_BOARD_FILE_VERSION      20200811  // Add groups
+//#define SEXPR_BOARD_FILE_VERSION    20200811  // Add groups
+#define SEXPR_BOARD_FILE_VERSION      20200818  // Remove Status flag bitmap and setup counts
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)
