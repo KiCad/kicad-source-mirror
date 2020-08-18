@@ -283,11 +283,11 @@ int SCH_LINE::GetPenWidth() const
         return DEFAULT_LINE_THICKNESS;
 
     case LAYER_WIRE:
-        if( netclass )
-            return netclass->GetWireWidth();
-
         if( m_stroke.GetWidth() > 0 )
             return m_stroke.GetWidth();
+
+        if( netclass )
+            return netclass->GetWireWidth();
 
         if( Schematic() )
             return Schematic()->Settings().m_DefaultWireThickness;
@@ -295,11 +295,11 @@ int SCH_LINE::GetPenWidth() const
         return DEFAULT_WIRE_THICKNESS;
 
     case LAYER_BUS:
-        if( netclass )
-            return netclass->GetBusWidth();
-
         if( m_stroke.GetWidth() > 0 )
             return m_stroke.GetWidth();
+
+        if( netclass )
+            return netclass->GetBusWidth();
 
         if( Schematic() )
             return Schematic()->Settings().m_DefaultBusThickness;
