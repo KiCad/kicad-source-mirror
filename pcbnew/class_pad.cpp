@@ -209,11 +209,12 @@ bool D_PAD::IsPadOnLayer( int aLayer ) const
         return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
 
     if( !m_removeUnconnectedLayer )
-        return true;
+        return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
 
     /// Plated through hole pads need copper on the top/bottom layers for proper soldering
+    /// Unless the user has removed them in the pad dialog
     if( aLayer == F_Cu || aLayer == B_Cu )
-        return true;
+        return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
 
     return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ),
         { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T } );
