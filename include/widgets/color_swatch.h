@@ -97,7 +97,7 @@ public:
     void GetNewSwatchColor();
 
     static wxBitmap MakeBitmap( KIGFX::COLOR4D aColor, KIGFX::COLOR4D aBackground, wxSize aSize,
-                                wxSize aCheckerboardSize );
+                                wxSize aCheckerboardSize, KIGFX::COLOR4D aCheckerboardBackground );
 
 private:
     void setupEvents();
@@ -115,6 +115,7 @@ private:
 
     wxSize          m_size;
     wxSize          m_checkerboardSize;
+    KIGFX::COLOR4D  m_checkerboardBg;
 };
 
 

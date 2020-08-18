@@ -108,7 +108,8 @@ DIALOG_COLOR_PICKER::~DIALOG_COLOR_PICKER()
 void DIALOG_COLOR_PICKER::updatePreview( wxStaticBitmap* aStaticBitmap, COLOR4D& aColor4D )
 {
     wxBitmap newBm = COLOR_SWATCH::MakeBitmap( aColor4D, COLOR4D::WHITE, aStaticBitmap->GetSize(),
-                                               ConvertDialogToPixels( CHECKERBOARD_SIZE_DU ) );
+                                               ConvertDialogToPixels( CHECKERBOARD_SIZE_DU ),
+                                               aStaticBitmap->GetParent()->GetBackgroundColour() );
     aStaticBitmap->SetBitmap( newBm );
 }
 
@@ -150,15 +151,16 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
     int grid_row = 0;
     int table_row_count = 6;
 
-    wxSize swatchSize = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );
-    wxSize checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+    wxSize  swatchSize = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );
+    wxSize  checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+    COLOR4D checkboardBackground = m_OldColorRect->GetParent()->GetBackgroundColour();
 
     auto addSwatch =
             [&]( int aId, COLOR4D aColor, const wxString& aColorName )
             {
-                wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, COLOR4D::WHITE, swatchSize,
-                                                            checkerboardSize );
-                wxStaticBitmap* swatch = new wxStaticBitmap( m_panelDefinedColors, aId, bitmap );
+                wxBitmap bm = COLOR_SWATCH::MakeBitmap( aColor, COLOR4D::WHITE, swatchSize,
+                                                        checkerboardSize, checkboardBackground );
+                wxStaticBitmap* swatch = new wxStaticBitmap( m_panelDefinedColors, aId, bm );
 
                 m_fgridColor->Add( swatch, 0, wxALIGN_CENTER_VERTICAL, 5 );
 

@@ -41,7 +41,7 @@ extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
  * @param aWindow - window used as context for device-independent size
  */
 wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize aSize,
-                                   wxSize aCheckerboardSize )
+                                   wxSize aCheckerboardSize, COLOR4D aCheckerboardBackground )
 {
     wxBitmap    bitmap( aSize );
     wxBrush     brush;
@@ -53,7 +53,24 @@ wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize a
 
     if( aColor == COLOR4D::UNSPECIFIED )
     {
-        bool rowCycle = true;
+        // Draw a checkerboard
+        COLOR4D white;
+        COLOR4D black;
+        bool    rowCycle;
+
+
+        if( aCheckerboardBackground.GetBrightness() > 0.4 )
+        {
+            white = COLOR4D::WHITE;
+            black = white.Darkened( 0.15 );
+            rowCycle = true;
+        }
+        else
+        {
+            black = COLOR4D::BLACK;
+            white = black.Brightened( 0.15 );
+            rowCycle = false;
+        }
 
         for( int x = 0; x < aSize.x; x += aCheckerboardSize.x )
         {
@@ -61,7 +78,7 @@ wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize a
 
             for( int y = 0; y < aSize.y; y += aCheckerboardSize.y )
             {
-                COLOR4D color = colCycle ? COLOR4D( LIGHTGRAY ) : COLOR4D( WHITE );
+                COLOR4D color = colCycle ? black : white;
                 brush.SetColour( color.ToColour() );
                 pen.SetColour( color.ToColour() );
 
@@ -111,12 +128,13 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D 
     }
 
     m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+    m_checkerboardBg = aParent->GetBackgroundColour();
 
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
     wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, aBackground, m_size,
-                                                m_checkerboardSize );
+                                                m_checkerboardSize, m_checkerboardBg );
     m_swatch = new wxStaticBitmap( this, aID, bitmap );
 
     sizer->Add( m_swatch, 0, 0 );
@@ -135,6 +153,7 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow *aParent, wxWindowID aID, const wxPoint &aP
         m_size = aSize;
 
     m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+    m_checkerboardBg = aParent->GetBackgroundColour();
 
     SetSize( m_size );
 
@@ -142,7 +161,7 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow *aParent, wxWindowID aID, const wxPoint &aP
     SetSizer( sizer );
 
     wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( COLOR4D::UNSPECIFIED, COLOR4D::UNSPECIFIED,
-                                                m_size, m_checkerboardSize );
+                                                m_size, m_checkerboardSize, m_checkerboardBg );
     m_swatch = new wxStaticBitmap( this, aID, bitmap );
 
     sizer->Add( m_swatch, 0, 0 );
@@ -211,7 +230,7 @@ void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool sendEvent )
 {
     m_color = aColor;
 
-    wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize );
+    wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );
     m_swatch->SetBitmap( bm );
 
     if( sendEvent )
@@ -228,7 +247,7 @@ void COLOR_SWATCH::SetDefaultColor( COLOR4D aColor )
 void COLOR_SWATCH::SetSwatchBackground( COLOR4D aBackground )
 {
     m_background = aBackground;
-    wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize );
+    wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );
     m_swatch->SetBitmap( bm );
 }
 
@@ -241,19 +260,18 @@ COLOR4D COLOR_SWATCH::GetSwatchColor() const
 
 void COLOR_SWATCH::GetNewSwatchColor()
 {
-    COLOR4D newColor = COLOR4D::UNSPECIFIED;
-
     DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, true, nullptr, m_default );
 
     if( dialog.ShowModal() == wxID_OK )
     {
-        newColor = dialog.GetColor();
+        COLOR4D newColor = dialog.GetColor();
 
         if( newColor != COLOR4D::UNSPECIFIED || m_default == COLOR4D::UNSPECIFIED )
         {
             m_color = newColor;
 
-            wxBitmap bm = MakeBitmap( newColor, m_background, m_size, m_checkerboardSize );
+            wxBitmap bm = MakeBitmap( newColor, m_background, m_size, m_checkerboardSize,
+                                      m_checkerboardBg );
             m_swatch->SetBitmap( bm );
 
             sendSwatchChangeEvent( *this );

@@ -222,7 +222,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
 
         COLOR4D layerColor = aFrame->GetColorSettings()->GetColor( layerID );
         auto bitmap = COLOR_SWATCH::MakeBitmap( layerColor, backgroundColor, LAYER_BITMAP_SIZE,
-                                                CHECKERBOARD_SIZE );
+                                                CHECKERBOARD_SIZE, aList->GetBackgroundColour() );
         wxIcon icon;
         icon.CopyFromBitmap( bitmap );
 
