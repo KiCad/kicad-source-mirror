@@ -282,28 +282,6 @@ set( BMAPS_MID
     invisible_text
     kicad_icon_small
     label
-    lang_ca
-    lang_bg
-    lang_cs
-    lang_def
-    lang_de
-    lang_en
-    lang_es
-    lang_fr
-    lang_fi
-    lang_gr
-    lang_hu
-    lang_it
-    lang_jp
-    lang_ko
-    lang_nl
-    lang_pl
-    lang_pt
-    lang_ru
-    lang_sk
-    lang_sl
-    lang_lt
-    lang_zh
     language
     layers_manager
     leave_sheet

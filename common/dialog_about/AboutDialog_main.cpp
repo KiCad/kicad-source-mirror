@@ -29,7 +29,6 @@
 #include <wx/utils.h>
 
 /* Used icons:
- *  lang_xx_xpm;      // Icons of various national flags
  *  show_3d_xpm;      // 3D icon
  *  edit_module_xpm;
  *  icon_kicad_xpm;   // Icon of the application
@@ -253,128 +252,103 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddTranslator( new CONTRIBUTOR( "Robert Buj",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Catalan (CA)",
-                                          aInfo.CreateKiBitmap( lang_ca_xpm ) ) );
+                                          "Catalan (CA)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Martin Kratoška" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Czech (CZ)",
-                                          aInfo.CreateKiBitmap( lang_cs_xpm ) ) );
+                                          "Czech (CZ)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Jerry Jacobs",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Dutch (NL)",
-                                          aInfo.CreateKiBitmap( lang_nl_xpm ) ) );
+                                          "Dutch (NL)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Vesa Solonen",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Finnish (FI)",
-                                          aInfo.CreateKiBitmap( lang_fi_xpm ) ) );
+                                          "Finnish (FI)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Jean-Pierre Charras",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "French (FR)",
-                                          aInfo.CreateKiBitmap( lang_fr_xpm ) ) );
+                                          "French (FR)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mateusz Skowroński" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Polish (PL)",
-                                          aInfo.CreateKiBitmap( lang_pl_xpm ) ) );
+                                          "Polish (PL)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Kerusey Karyu",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Polish (PL)",
-                                          aInfo.CreateKiBitmap( lang_pl_xpm ) ) );
+                                          "Polish (PL)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Renie Marquet",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Portuguese (PT)",
-                                          aInfo.CreateKiBitmap( lang_pt_xpm ) ) );
+                                          "Portuguese (PT)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Igor Plyatov",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Russian (RU)",
-                                          aInfo.CreateKiBitmap( lang_ru_xpm ) ) );
+                                          "Russian (RU)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Andrey Fedorushkov",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Russian (RU)",
-                                          aInfo.CreateKiBitmap( lang_ru_xpm ) ) );
+                                          "Russian (RU)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Eldar Khayrullin",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Russian (RU)",
-                                         aInfo.CreateKiBitmap( lang_ru_xpm ) ) );
+                                          "Russian (RU)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Pedro Martin del Valle",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Spanish (ES)",
-                                          aInfo.CreateKiBitmap( lang_es_xpm ) ) );
+                                          "Spanish (ES)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Spanish (ES)",
-                                          aInfo.CreateKiBitmap( lang_es_xpm ) ) );
+                                          "Spanish (ES)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Iñigo Figuero" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Spanish (ES)",
-                                          aInfo.CreateKiBitmap( lang_es_xpm ) ) );
+                                          "Spanish (ES)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Rafael Sokolowski",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "German (DE)",
-                                          aInfo.CreateKiBitmap( lang_de_xpm ) ) );
+                                          "German (DE)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Kenta Yonekura",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Japanese (JA)",
-                                          aInfo.CreateKiBitmap( lang_jp_xpm ) ) );
+                                          "Japanese (JA)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Manolis Stefanis",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Greek (el_GR)",
-                                          aInfo.CreateKiBitmap( lang_gr_xpm ) ) );
+                                          "Greek (el_GR)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Athanasios Vlastos",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Greek (el_GR)",
-                                          aInfo.CreateKiBitmap( lang_gr_xpm ) ) );
+                                          "Greek (el_GR)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Milonas Kostas",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Greek (el_GR)",
-                                          aInfo.CreateKiBitmap( lang_gr_xpm ) ) );
+                                          "Greek (el_GR)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Michail Misirlis",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Greek (el_GR)",
-                                          aInfo.CreateKiBitmap( lang_gr_xpm ) ) );
+                                          "Greek (el_GR)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Massimo Cioce",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Italian (IT)",
-                                          aInfo.CreateKiBitmap( lang_it_xpm ) ) );
+                                          "Italian (IT)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Marco Ciampa",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Italian (IT)",
-                                          aInfo.CreateKiBitmap( lang_it_xpm ) ) );
+                                          "Italian (IT)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Evgeniy Ivanov",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Bulgarian (BG)",
-                                          aInfo.CreateKiBitmap( lang_bg_xpm ) ) );
+                                          "Bulgarian (BG)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Liu Guang",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Simplified Chinese (zh_CN)",
-                                          aInfo.CreateKiBitmap( lang_zh_xpm ) ) );
+                                          "Simplified Chinese (zh_CN)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Taotieren",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Simplified Chinese (zh_CN)",
-                                          aInfo.CreateKiBitmap( lang_zh_xpm ) ) );
+                                          "Simplified Chinese (zh_CN)" ) );
 
     // Maintainer who helper in translations, but not in a specific translation
     #define OTHERS_IN_TRANSLATION _( "Others" )

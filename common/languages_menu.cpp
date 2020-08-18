@@ -70,8 +70,6 @@ void AddMenuLanguageList( ACTION_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTo
                                            tooltip,
                                            wxITEM_CHECK );
 
-        AddBitmapToMenuItem( item, KiBitmap( LanguagesList[ii].m_Lang_Icon ) );
-
         langsMenu->Append( item );
     }
 

@@ -52,7 +52,6 @@ class SETTINGS_MANAGER;
  *   The locale translation is automatic.
  *   The selection of languages is mainly for maintainer's convenience
  *   To add a support to a new translation:
- *   create a new icon (flag of the country) (see Lang_Fr.xpm as an example)
  *   add a new item to s_Languages[].
  */
 struct LANGUAGE_DESCR
@@ -62,9 +61,6 @@ struct LANGUAGE_DESCR
 
     /// KiCad identifier used in menu selection (See id.h)
     int         m_KI_Lang_Identifier;
-
-    /// The menu language icons
-    BITMAP_DEF  m_Lang_Icon;
 
     /// Labels used in menus
     wxString    m_Lang_Label;
