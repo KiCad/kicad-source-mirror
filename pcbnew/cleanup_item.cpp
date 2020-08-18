@@ -44,12 +44,13 @@ wxString CLEANUP_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     switch( aCode )
     {
     // For cleanup tracks and vias:
-    case CLEANUP_SHORT:                 msg = _HKI( "Remove track shorting two nets" );     break;
+    case CLEANUP_SHORTING_TRACK:        msg = _HKI( "Remove track shorting two nets" );     break;
+    case CLEANUP_SHORTING_VIA:          msg = _HKI( "Remove via shorting two nets" );       break;
     case CLEANUP_REDUNDANT_VIA:         msg = _HKI( "Remove redundant via" );               break;
     case CLEANUP_DUPLICATE_TRACK:       msg = _HKI( "Remove duplicate track" );             break;
     case CLEANUP_MERGE_TRACKS:          msg = _HKI( "Merge co-linear tracks" );             break;
-    case CLEANUP_DANGLING_TRACK:        msg = _HKI( "Remove dangling track" );              break;
-    case CLEANUP_DANGLING_VIA:          msg = _HKI( "Remove dangling via" );                break;
+    case CLEANUP_DANGLING_TRACK:        msg = _HKI( "Remove track not connected at both ends" );       break;
+    case CLEANUP_DANGLING_VIA:          msg = _HKI( "Remove via connected on fewer than two layers" ); break;
     case CLEANUP_ZERO_LENGTH_TRACK:     msg = _HKI( "Remove zero-length track" );           break;
     case CLEANUP_TRACK_IN_PAD:          msg = _HKI( "Remove track inside pad" );            break;
 

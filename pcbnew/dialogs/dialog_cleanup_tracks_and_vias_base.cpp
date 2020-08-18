@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,15 +27,15 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( wxWind
 	m_cleanViasOpt = new wxCheckBox( this, wxID_ANY, _("&Delete redundant vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cleanViasOpt->SetToolTip( _("remove vias on through hole pads and superimposed vias") );
 
-	bSizerUpper->Add( m_cleanViasOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizerUpper->Add( m_cleanViasOpt, 0, wxALL, 5 );
 
-	m_deleteDanglingViasOpt = new wxCheckBox( this, wxID_ANY, _("Delete vias connected only on one layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerUpper->Add( m_deleteDanglingViasOpt, 0, wxALL, 5 );
+	m_deleteDanglingViasOpt = new wxCheckBox( this, wxID_ANY, _("Delete vias connected on only one layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerUpper->Add( m_deleteDanglingViasOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_mergeSegmOpt = new wxCheckBox( this, wxID_ANY, _("&Merge co-linear tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mergeSegmOpt->SetToolTip( _("merge aligned track segments, and remove null segments") );
 
-	bSizerUpper->Add( m_mergeSegmOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizerUpper->Add( m_mergeSegmOpt, 0, wxALL, 5 );
 
 	m_deleteUnconnectedOpt = new wxCheckBox( this, wxID_ANY, _("Delete tracks unconnected at one end"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_deleteUnconnectedOpt->SetToolTip( _("delete tracks having at least one dangling end") );

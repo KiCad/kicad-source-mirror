@@ -75,7 +75,7 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLE
         deleteNullSegments( m_brd->Tracks() );
 
     if( aRemoveMisConnected )
-        removeBadTrackSegments();
+        removeShortingTrackSegments();
 
     if( aDeleteTracksinPad )
         deleteTracksInPads();
@@ -97,7 +97,7 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLE
 }
 
 
-void TRACKS_CLEANER::removeBadTrackSegments()
+void TRACKS_CLEANER::removeShortingTrackSegments()
 {
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_brd->GetConnectivity();
 
@@ -109,7 +109,13 @@ void TRACKS_CLEANER::removeBadTrackSegments()
         {
             if( segment->GetNetCode() != testedPad->GetNetCode() )
             {
-                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_SHORT ) );
+                std::shared_ptr<CLEANUP_ITEM> item;
+
+                if( segment->Type() == PCB_VIA_T )
+                    item = std::make_shared<CLEANUP_ITEM>( CLEANUP_SHORTING_VIA );
+                else
+                    item = std::make_shared<CLEANUP_ITEM>( CLEANUP_SHORTING_TRACK );
+
                 item->SetItems( segment );
                 m_itemsList->push_back( item );
 
@@ -121,7 +127,13 @@ void TRACKS_CLEANER::removeBadTrackSegments()
         {
             if( segment->GetNetCode() != testedTrack->GetNetCode() )
             {
-                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_SHORT ) );
+                std::shared_ptr<CLEANUP_ITEM> item;
+
+                if( segment->Type() == PCB_VIA_T )
+                    item = std::make_shared<CLEANUP_ITEM>( CLEANUP_SHORTING_VIA );
+                else
+                    item = std::make_shared<CLEANUP_ITEM>( CLEANUP_SHORTING_TRACK );
+
                 item->SetItems( segment );
                 m_itemsList->push_back( item );
 
@@ -142,8 +154,8 @@ void TRACKS_CLEANER::cleanupVias()
 
     for( TRACK* track : m_brd->Tracks() )
     {
-        if( auto via = dyn_cast<VIA*>( track ) )
-            vias.push_back( via );
+        if( track->Type() == PCB_VIA_T )
+            vias.push_back( static_cast<VIA*>( track ) );
     }
 
     for( auto via1_it = vias.begin(); via1_it != vias.end(); via1_it++ )

@@ -55,7 +55,7 @@ private:
     /*
      * Removes track segments which are connected to more than one net (short circuits).
      */
-    void removeBadTrackSegments();
+    void removeShortingTrackSegments();
 
     /**
      * Removes redundant vias like vias at same location or on pad through.
