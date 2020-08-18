@@ -396,22 +396,22 @@ bool KICADPCB::parseRect( SEXPR::SEXPR* data )
         return true;
     }
 
-    KICADCURVE* top( mp );
-    KICADCURVE* right( mp );
-    KICADCURVE* bottom( mp );
-    KICADCURVE* left( mp );
+    KICADCURVE* top = new KICADCURVE( *mp );
+    KICADCURVE* right = new KICADCURVE( *mp );
+    KICADCURVE* bottom = new KICADCURVE( *mp );
+    KICADCURVE* left = new KICADCURVE( *mp );
     delete mp;
 
-    top->m_end.y = top->m_start.y;
+    top->m_end.y = right->m_start.y;
     m_curves.push_back( top );
 
-    right->m_start.x = right->m_end.x;
+    right->m_start.x = bottom->m_end.x;
     m_curves.push_back( right );
 
-    bottom->m_start.y = bottom->m_end.y;
+    bottom->m_start.y = left->m_end.y;
     m_curves.push_back( bottom );
 
-    left->m_end.x = left->m_start.x;
+    left->m_end.x = top->m_start.x;
     m_curves.push_back( left );
 
     return true;
