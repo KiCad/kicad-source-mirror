@@ -91,6 +91,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                                           bool aFpEditorMode ) :
         APPEARANCE_CONTROLS_BASE( aParent ),
         m_frame( aParent ),
+        m_focusOwner( aFocusOwner ),
         m_board( nullptr ),
         m_currentPreset( nullptr ),
         m_layerContextMenu( nullptr ),
@@ -126,6 +127,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                 m_frame->SetDisplayOptions( opts );
                 m_frame->GetCanvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
                 m_frame->GetCanvas()->Refresh();
+                passOnFocus();
             };
 
     m_rbHighContrastNormal->Bind( wxEVT_RADIOBUTTON,
@@ -962,7 +964,10 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
     }
 
     if( isFinal )
+    {
         m_frame->GetCanvas()->Refresh();
+        passOnFocus();
+    }
 }
 
 
@@ -1215,6 +1220,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
                             m_frame->GetCanvas()->RedrawRatsnest();
                             m_frame->GetCanvas()->Refresh();
+                            passOnFocus();
                         } );
 
                 bool visible = hiddenNets.count( netCode ) == 0;
@@ -1249,6 +1255,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                                                           PCB_ACTIONS::hideNet;
 
                             m_frame->GetToolManager()->RunAction( action, true, net );
+                            passOnFocus();
                         } );
 
                 const wxString& netName = aNet->GetShortNetname();
@@ -1572,6 +1579,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
     m_currentPreset      = preset;
 
     doApplyLayerPreset( *preset );
+    passOnFocus();
 }
 
 
@@ -1616,6 +1624,8 @@ void APPEARANCE_CONTROLS::OnColorSwatchChanged( wxCommandEvent& aEvent )
 
     if( layer == LAYER_PCB_BACKGROUND )
         m_frame->SetDrawBgColor( newColor );
+
+    passOnFocus();
 }
 
 
@@ -1633,6 +1643,7 @@ void APPEARANCE_CONTROLS::onObjectOpacitySlider( int aLayer, float aOpacity )
     }
 
     m_frame->SetDisplayOptions( options );
+    passOnFocus();
 }
 
 
@@ -1711,6 +1722,7 @@ void APPEARANCE_CONTROLS::onNetContextMenu( wxCommandEvent& aEvent )
     m_frame->GetCanvas()->Refresh();
 
     m_contextMenuNetCode = 0;
+    passOnFocus();
 }
 
 
@@ -1719,6 +1731,7 @@ void APPEARANCE_CONTROLS::onNetclassVisibilityChanged( wxCommandEvent& aEvent )
     wxString className = netclassNameFromEvent( aEvent );
     bool     show      = aEvent.GetInt();
     showNetclass( className, show );
+    passOnFocus();
 }
 
 
@@ -1816,6 +1829,7 @@ void APPEARANCE_CONTROLS::onNetColorModeChanged( wxCommandEvent& aEvent )
 
     m_frame->SetDisplayOptions( options );
     m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
+    passOnFocus();
 }
 
 
@@ -1942,4 +1956,10 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
     m_frame->GetCanvas()->Refresh();
 
     m_contextMenuNetclass.clear();
+}
+
+
+void APPEARANCE_CONTROLS::passOnFocus()
+{
+    m_focusOwner->SetFocus();
 }

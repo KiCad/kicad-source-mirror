@@ -154,6 +154,8 @@ protected:
 private:
     PCB_BASE_FRAME* m_frame;
 
+    wxWindow* m_focusOwner;
+
     static const APPEARANCE_SETTING s_objectSettings[];
 
     ROW_ICON_PROVIDER* m_iconProvider;
@@ -278,6 +280,8 @@ private:
     void onNetclassContextMenu( wxCommandEvent& aEvent );
 
     void handleBoardItemsChanged();
+
+    void passOnFocus();
 };
 
 #endif
