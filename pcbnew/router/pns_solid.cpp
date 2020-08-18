@@ -39,7 +39,14 @@ const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, in
     SHAPE* shape = m_shape;
 
     if( !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( this, aLayer ) )
+    {
+        /// The alternate shape is defined for THT pads.  If we don't have an alternate shape
+        /// then the solid shape does not exist on this layer
+        if( !m_alternateShape )
+            return SHAPE_LINE_CHAIN();
+
         shape = m_alternateShape;
+    }
 
     switch( shape->Type() )
     {
