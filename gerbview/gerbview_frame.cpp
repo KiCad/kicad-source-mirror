@@ -354,7 +354,7 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
 
-    SetElementVisibility( LAYER_WORKSHEET, cfg->m_Appearance.show_border_and_titleblock );
+    SetElementVisibility( LAYER_GERBVIEW_WORKSHEET, cfg->m_Appearance.show_border_and_titleblock );
 
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     pageInfo.SetType( cfg->m_Appearance.page_type );
@@ -755,7 +755,7 @@ bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
     case LAYER_DCODES:              return m_DisplayOptions.m_DisplayDCodes;
     case LAYER_NEGATIVE_OBJECTS:    return m_DisplayOptions.m_DisplayNegativeObjects;
     case LAYER_GERBVIEW_GRID:       return IsGridVisible();
-    case LAYER_WORKSHEET:           return m_showBorderAndTitleBlock;
+    case LAYER_GERBVIEW_WORKSHEET:  return m_showBorderAndTitleBlock;
     case LAYER_GERBVIEW_BACKGROUND: return true;
 
     default:
