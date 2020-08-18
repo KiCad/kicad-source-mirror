@@ -252,6 +252,7 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 
             if( !m_isEnum )
             {
+                str = item->Get<wxString>( it->second );
             }
             else
             {
