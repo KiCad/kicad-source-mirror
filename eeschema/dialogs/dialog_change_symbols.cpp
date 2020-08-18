@@ -262,14 +262,16 @@ bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 
     for( auto i : symbolsToProcess )
     {
+        SCH_COMPONENT* symbol = i.first;
+
         if( m_mode == MODE::UPDATE )
         {
-            if( processSymbol( i.first, i.second, m_symbol->GetLibId(), appendToUndo ) )
+            if( processSymbol( symbol, i.second, symbol->GetLibId(), appendToUndo ) )
                 changed = true;
         }
         else
         {
-            if( processSymbol( i.first, i.second, newId, appendToUndo ) )
+            if( processSymbol( symbol, i.second, newId, appendToUndo ) )
                 changed = true;
         }
 
