@@ -292,7 +292,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     else if( track && dragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
                         m_toolMgr->RunAction( PCB_ACTIONS::dragFreeAngle, true );
                     else
-                        m_toolMgr->RunAction( PCB_ACTIONS::drag, true );
+                        m_toolMgr->RunAction( PCB_ACTIONS::move, true );
                 }
                 else
                 {

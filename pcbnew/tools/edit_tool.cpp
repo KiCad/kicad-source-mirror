@@ -396,8 +396,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion()
-                || evt->IsAction( &PCB_ACTIONS::drag ) || evt->IsDrag( BUT_LEFT )
+        if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview )
                 || evt->IsAction( &PCB_ACTIONS::moveWithReference ) )
         {
@@ -1656,7 +1655,6 @@ void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::GetAndPlace,         PCB_ACTIONS::getAndPlace.MakeEvent() );
     Go( &EDIT_TOOL::Move,                PCB_ACTIONS::move.MakeEvent() );
-    Go( &EDIT_TOOL::Move,                PCB_ACTIONS::drag.MakeEvent() );
     Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::drag45Degree.MakeEvent() );
     Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::dragFreeAngle.MakeEvent() );
     Go( &EDIT_TOOL::Rotate,              PCB_ACTIONS::rotateCw.MakeEvent() );
@@ -1665,9 +1663,9 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Remove,              ACTIONS::doDelete.MakeEvent() );
     Go( &EDIT_TOOL::Remove,              PCB_ACTIONS::deleteFull.MakeEvent() );
     Go( &EDIT_TOOL::Properties,          PCB_ACTIONS::properties.MakeEvent() );
-    Go( &EDIT_TOOL::MoveExact, PCB_ACTIONS::moveExact.MakeEvent() );
-    Go( &EDIT_TOOL::MoveWithReference, PCB_ACTIONS::moveWithReference.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate, ACTIONS::duplicate.MakeEvent() );
+    Go( &EDIT_TOOL::MoveExact,           PCB_ACTIONS::moveExact.MakeEvent() );
+    Go( &EDIT_TOOL::MoveWithReference,   PCB_ACTIONS::moveWithReference.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,           ACTIONS::duplicate.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,           PCB_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &EDIT_TOOL::CreateArray,         PCB_ACTIONS::createArray.MakeEvent() );
     Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirror.MakeEvent() );

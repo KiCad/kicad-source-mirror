@@ -204,10 +204,6 @@ TOOL_ACTION PCB_ACTIONS::moveWithReference( "pcbnew.InteractiveMove.moveWithRefe
         _( "Moves the selected item(s) with a specified starting point" ),
         move_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::drag( "pcbnew.InteractiveMove.drag",
-        AS_GLOBAL, 0, "", "", "",
-        move_xpm, AF_ACTIVATE );
-
 TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate Item and Increment" ),
@@ -1242,9 +1238,7 @@ TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPai
         ps_diff_pair_tune_phase_xpm, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW );
 
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
-        AS_CONTEXT, 0, "",
-        _( "Drag Track/Via" ), _( "Drags tracks and vias without breaking connections" ),
-        drag_xpm );
+        AS_CONTEXT );
 
 TOOL_ACTION PCB_ACTIONS::inlineBreakTrack( "pcbnew.InteractiveRouter.InlineBreakTrack",
         AS_GLOBAL, 0, "",
@@ -1270,4 +1264,4 @@ TOOL_ACTION PCB_ACTIONS::dragFreeAngle( "pcbnew.InteractiveRouter.DragFreeAngle"
         'G', LEGACY_HK_NAME( "Drag Item" ),
         _( "Drag (free angle)" ),
         _( "Drags the nearest joint in the track without restricting the track angle." ),
-        move_xpm );
+        drag_xpm );

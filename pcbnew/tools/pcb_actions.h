@@ -90,7 +90,6 @@ public:
 
     /// move or drag an item
     static TOOL_ACTION move;
-    static TOOL_ACTION drag;
 
     /// move with a reference point
     static TOOL_ACTION moveWithReference;
