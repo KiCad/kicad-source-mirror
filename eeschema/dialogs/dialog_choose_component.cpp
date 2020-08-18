@@ -333,7 +333,13 @@ LIB_ID DIALOG_CHOOSE_COMPONENT::GetSelectedLibId( int* aUnit ) const
 void DIALOG_CHOOSE_COMPONENT::OnUseBrowser( wxCommandEvent& aEvent )
 {
     m_external_browser_requested = true;
-    EndQuasiModal( wxID_OK );
+
+    if( IsQuasiModal() )
+        EndQuasiModal( wxID_OK );
+    else if( IsModal() )
+        EndModal( wxID_OK );
+    else
+        wxFAIL_MSG( "Dialog called with neither Modal nor QuasiModal" );
 }
 
 
@@ -353,7 +359,12 @@ void DIALOG_CHOOSE_COMPONENT::OnCloseTimer( wxTimerEvent& aEvent )
     }
     else
     {
-        EndQuasiModal( wxID_OK );
+        if( IsQuasiModal() )
+            EndQuasiModal( wxID_OK );
+        else if( IsModal() )
+            EndModal( wxID_OK );
+        else
+            wxFAIL_MSG( "Dialog called with neither Modal nor QuasiModal" );
     }
 }
 

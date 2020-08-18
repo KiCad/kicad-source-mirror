@@ -154,7 +154,7 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
     DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapterPtr, aConvert,
                                  aAllowFields, aShowFootprints, aUseLibBrowser );
 
-    if( dlg.ShowQuasiModal() == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return COMPONENT_SELECTION();
 
     COMPONENT_SELECTION sel;
