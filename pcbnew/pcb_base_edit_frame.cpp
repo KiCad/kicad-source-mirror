@@ -85,7 +85,7 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
 
     if( !s_switcherShown && wxGetKeyState( WXK_RAW_CONTROL ) && wxGetKeyState( WXK_TAB ) )
     {
-        if( m_appearancePanel )
+        if( m_appearancePanel && this->IsActive() )
         {
             const wxArrayString& mru = m_appearancePanel->GetLayerPresetsMRU();
             EDA_VIEW_SWITCHER    switcher( this, mru );
