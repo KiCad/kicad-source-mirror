@@ -328,12 +328,12 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
 {
     PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     KIGFX::VIEW_CONTROLS* controls  = getViewControls();
-    VECTOR2I originalCursorPos = controls->GetCursorPosition();
+    VECTOR2I              originalCursorPos = controls->GetCursorPosition();
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-              []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             } );
@@ -379,6 +379,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     }
 
     bool        restore_state = false;
+    bool        fromOtherCommand = false;
     VECTOR2I    totalMovement;
     GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
@@ -483,6 +484,9 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                                         m_commit->Modify( bItem );
                                     });
                         }
+
+                        if( item->IsNew() )
+                            fromOtherCommand = true;
                     }
                 }
 
@@ -615,9 +619,25 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
 
     // If canceled, we need to remove the dynamic ratsnest from the screen
     if( restore_state )
+    {
         m_commit->Revert();
+
+        if( fromOtherCommand )
+        {
+            PICKED_ITEMS_LIST* undo = editFrame->PopCommandFromUndoList();
+
+            if( undo )
+            {
+                editFrame->PutDataInPreviousState( undo, false );
+                undo->ClearListAndDeleteItems();
+                delete undo;
+            }
+        }
+    }
     else
+    {
         m_commit->Push( _( "Drag" ) );
+    }
 
     m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
 
