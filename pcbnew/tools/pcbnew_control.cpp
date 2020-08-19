@@ -940,6 +940,9 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     for( auto zone : brd->Zones() )
         zone->SetFlags( SKIP_STRUCT );
 
+    std::map<wxString, wxString> oldProperties = brd->GetProperties();
+    std::map<wxString, wxString> newProperties;
+
     // Keep also the count of copper layers, to adjust if necessary
     int initialCopperLayerCount = brd->GetCopperLayerCount();
     LSET initialEnabledLayers = brd->GetEnabledLayers();
@@ -968,6 +971,13 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 
         return 0;
     }
+
+    newProperties = brd->GetProperties();
+
+    for( const std::pair<const wxString, wxString>& prop : oldProperties )
+        newProperties[ prop.first ] = prop.second;
+
+    brd->SetProperties( newProperties );
 
     // rebuild nets and ratsnest before any use of nets
     brd->BuildListOfNets();
