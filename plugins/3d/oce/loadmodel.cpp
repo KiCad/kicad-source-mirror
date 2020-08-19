@@ -489,7 +489,7 @@ bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
         ofile.Close();
     }
 
-    bool retval = readSTEP( m_doc, outFile.GetFullPath() );
+    bool retval = readSTEP( m_doc, outFile.GetFullPath().mb_str() );
 
     // Cleanup our temporary file
     wxRemoveFile( outFile.GetFullPath() );
