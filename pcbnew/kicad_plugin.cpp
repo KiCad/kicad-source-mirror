@@ -23,11 +23,8 @@
  */
 
 #include <fctsys.h>
-#include <common.h>
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
-#include <macros.h>
 #include <wildcards_and_files_ext.h>
-
 #include <advanced_config.h>
 #include <base_units.h>
 #include <trace_helpers.h>
@@ -45,33 +42,12 @@
 #include <kicad_plugin.h>
 #include <pcb_parser.h>
 #include <pcbnew_settings.h>
-#include <wx/dir.h>
-#include <wx/filename.h>
-#include <wx/wfstream.h>
 #include <boost/ptr_container/ptr_map.hpp>
-#include <memory.h>
-#include <connectivity/connectivity_data.h>
 #include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
 #include <kiface_i.h>
 
 using namespace PCB_KEYS_T;
 
-
-///> Removes empty nets (i.e. with node count equal zero) from net classes
-void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
-{
-    auto connectivity = aBoard.GetConnectivity();
-
-    for( NETCLASS::iterator it = aNetClass.begin(); it != aNetClass.end(); )
-    {
-        NETINFO_ITEM* netinfo = aBoard.FindNet( *it );
-
-        if( netinfo && connectivity->GetNodeCount( netinfo->GetNet() ) <= 0 ) // hopefully there are no nets with negative
-            aNetClass.Remove( it++ );                  // node count, but you never know..
-        else
-            ++it;
-    }
-}
 
 /**
  * FP_CACHE_ITEM
@@ -606,6 +582,19 @@ void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
 }
 
 
+void PCB_IO::formatProperties( BOARD* aBoard, int aNestLevel ) const
+{
+    for( const std::pair<const wxString, wxString>& prop : aBoard->GetProperties() )
+    {
+        m_out->Print( aNestLevel+1, "(property %s %s)\n",
+                      m_out->Quotew( prop.first ).c_str(),
+                      m_out->Quotew( prop.second ).c_str() );
+    }
+
+    m_out->Print( 0, "\n" );
+}
+
+
 void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const
 {
     formatGeneral( aBoard, aNestLevel );
@@ -615,13 +604,16 @@ void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const
     // Setup
     formatSetup( aBoard, aNestLevel );
 
+    // Properties
+    formatProperties( aBoard, aNestLevel );
+
     // Save net codes and names
     formatNetInformation( aBoard, aNestLevel );
 }
 
+
 void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 {
-
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_modules( aBoard->Modules().begin(),
             aBoard->Modules().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_drawings( aBoard->Drawings().begin(),

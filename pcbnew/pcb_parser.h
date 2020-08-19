@@ -238,6 +238,8 @@ class PCB_PARSER : public PCB_LEXER
 
     void parseXY( int* aX, int* aY );
 
+    std::pair<wxString, wxString> parseProperty();
+
     /**
      * Function parseEDA_TEXT
      * parses the common settings for any object derived from #EDA_TEXT.

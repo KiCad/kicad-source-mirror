@@ -24,15 +24,11 @@
  */
 
 #include <fctsys.h>
-#include <gr_text.h>
-#include <kicad_string.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <view/view.h>
-#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
@@ -428,11 +424,18 @@ wxString TEXTE_MODULE::GetShownText( int aDepth ) const
 {
     const MODULE* module = static_cast<MODULE*>( GetParent() );
     wxASSERT( module );
+    const BOARD*  board = module->GetBoard();
 
     std::function<bool( wxString* )> moduleResolver =
             [&]( wxString* token ) -> bool
             {
                 return module && module->ResolveTextVar( token, aDepth );
+            };
+
+    std::function<bool( wxString* )> boardTextResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return board->ResolveTextVar( token, aDepth + 1 );
             };
 
     bool     processTextVars = false;
@@ -446,7 +449,7 @@ wxString TEXTE_MODULE::GetShownText( int aDepth ) const
             project = static_cast<BOARD*>( module->GetParent() )->GetProject();
 
         if( aDepth < 10 )
-            text = ExpandTextVars( text, &moduleResolver, project );
+            text = ExpandTextVars( text, &moduleResolver, project, &boardTextResolver );
     }
 
     return text;

@@ -335,8 +335,8 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         {
             bool addToHistory = false;
             wxString orig_name;
-            wxFileName::SplitPath( GetBoard()->GetFileName(),
-                    nullptr, nullptr, &orig_name, nullptr );
+            wxFileName::SplitPath( GetBoard()->GetFileName(), nullptr, nullptr, &orig_name,
+                                   nullptr );
 
             if( orig_name.IsEmpty() )
             {
@@ -706,9 +706,12 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     // TODO: this will break if we ever go multi-board
     wxFileName projectFile( pcbFileName );
-    projectFile.SetExt( ProjectFileExtension );
+    bool       projectFileExists = false;
 
-    if( aChangeProject && !projectFile.FileExists() )
+    projectFile.SetExt( ProjectFileExtension );
+    projectFileExists = projectFile.FileExists();
+
+    if( aChangeProject && !projectFileExists )
     {
         // If this is a new board, project filename won't be set yet
         if( projectFile.GetFullPath() != Prj().GetProjectFullName() )
@@ -720,10 +723,16 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
             mgr->SaveProject( Prj().GetProjectFullName() );
             mgr->UnloadProject( &Prj() );
 
-            mgr->LoadProject( projectFile.GetFullPath() );
+            // If no project to load then initialize project text vars with board properties
+            if( !mgr->LoadProject( projectFile.GetFullPath() ) )
+                Prj().GetTextVars() = GetBoard()->GetProperties();
+
             GetBoard()->SetProject( &Prj() );
         }
     }
+
+    if( projectFileExists )
+        GetBoard()->SynchronizeProperties();
 
     wxFileName tempFile( aFileName );
     tempFile.SetName( wxT( "." ) + tempFile.GetName() );

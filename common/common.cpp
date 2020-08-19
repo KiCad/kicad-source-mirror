@@ -381,7 +381,8 @@ enum Bracket
 
 wxString ExpandTextVars( const wxString& aSource,
                          const std::function<bool( wxString* )>* aLocalResolver,
-                         const PROJECT* aProject )
+                         const PROJECT* aProject,
+                         const std::function<bool( wxString* )>* aFallbackResolver )
 {
     wxString newbuf;
     size_t   sourceLen = aSource.length();
@@ -410,6 +411,10 @@ wxString ExpandTextVars( const wxString& aSource,
                 newbuf.append( token );
             }
             else if( aProject && aProject->TextVarResolver( &token ) )
+            {
+                newbuf.append( token );
+            }
+            else if( aFallbackResolver && (*aFallbackResolver)( &token ) )
             {
                 newbuf.append( token );
             }

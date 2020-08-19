@@ -249,6 +249,21 @@ void PCB_PARSER::parseXY( int* aX, int* aY )
 }
 
 
+std::pair<wxString, wxString> PCB_PARSER::parseProperty()
+{
+    wxString pName;
+    wxString pValue;
+
+    NeedSYMBOL();
+    pName = FromUTF8();
+    NeedSYMBOL();
+    pValue = FromUTF8();
+    NeedRIGHT();
+
+    return { pName, pValue };
+}
+
+
 void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 {
     wxCHECK_RET( CurTok() == T_effects,
@@ -524,6 +539,7 @@ BOARD* PCB_PARSER::parseBOARD()
 BOARD* PCB_PARSER::parseBOARD_unchecked()
 {
     T token;
+    std::map<wxString, wxString> properties;
 
     parseHeader();
 
@@ -557,6 +573,10 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
         case T_setup:
             parseSetup();
+            break;
+
+        case T_property:
+            properties.insert( parseProperty() );
             break;
 
         case T_net:
@@ -619,6 +639,8 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
         }
     }
+
+    m_board->SetProperties( properties );
 
     if( m_undefinedLayers.size() > 0 )
     {
@@ -2603,11 +2625,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             break;
 
         case T_property:
-            NeedSYMBOL();
-            name = FromUTF8();
-            NeedSYMBOL();
-            properties[ name ] = FromUTF8();
-            NeedRIGHT();
+            properties.insert( parseProperty() );
             break;
 
         case T_path:

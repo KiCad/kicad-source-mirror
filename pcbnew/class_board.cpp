@@ -68,9 +68,6 @@ BOARD::BOARD() :
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
 
-    m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
-                                            // zone contour currently in progress
-
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         m_Layer[layer].m_name = GetStandardLayerName( ToLAYER_ID( layer ) );
@@ -133,9 +130,6 @@ BOARD::~BOARD()
 
     m_drawings.clear();
 
-    delete m_CurrentZoneContour;
-    m_CurrentZoneContour = NULL;
-
     m_groups.clear();
 }
 
@@ -188,6 +182,18 @@ void BOARD::ClearProject()
 
     GetDesignSettings().SetParent( nullptr );
     m_project = nullptr;
+}
+
+
+bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
+{
+    if( m_properties.count( *token ) )
+    {
+        *token = m_properties.at( *token );
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -1297,6 +1303,13 @@ std::vector<wxString> BOARD::GetNetClassAssignmentCandidates()
     }
 
     return names;
+}
+
+
+void BOARD::SynchronizeProperties()
+{
+    if( m_project )
+        SetProperties( m_project->GetTextVars() );
 }
 
 

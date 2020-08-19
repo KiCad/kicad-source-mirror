@@ -25,22 +25,16 @@
 #ifndef CLASS_BOARD_H_
 #define CLASS_BOARD_H_
 
-#include <tuple>
 #include <board_design_settings.h>
 #include <board_item_container.h>
 #include <class_pcb_group.h>
 #include <class_module.h>
-#include <class_pad.h>
 #include <common.h> // PAGE_INFO
-#include <eda_rect.h>
 #include <layers_id_colors_and_visibility.h>
 #include <netinfo.h>
 #include <pcb_plot_params.h>
 #include <title_block.h>
-#include <zone_settings.h>
 #include <tools/pcbnew_selection.h>
-
-#include <memory>
 
 class BOARD_COMMIT;
 class PCB_BASE_FRAME;
@@ -186,25 +180,12 @@ class BOARD : public BOARD_ITEM_CONTAINER
     friend class PCB_EDIT_FRAME;
 
 private:
-    /// the board filename
     wxString                m_fileName;
-
-    /// MARKER_PCBs for clearance problems, owned by pointer.
     MARKERS                 m_markers;
-
-    /// BOARD_ITEMs for drawings on the board, owned by pointer.
     DRAWINGS                m_drawings;
-
-    /// MODULES for components on the board, owned by pointer.
     MODULES                 m_modules;
-
-    /// TRACKS for traces on the board, owned by pointer.
     TRACKS                  m_tracks;
-
-    /// GROUPS for groups on the board, owned by pointer.
     GROUPS                  m_groups;
-    
-    /// edge zone descriptors, owned by pointer.
     ZONE_CONTAINERS         m_ZoneDescriptorList;
 
     LAYER                   m_Layer[PCB_LAYER_ID_COUNT];
@@ -215,7 +196,8 @@ private:
 
     int                     m_fileFormatVersionAtLoad;  // the version loaded from the file
 
-    std::shared_ptr<CONNECTIVITY_DATA>      m_connectivity;
+    std::map<wxString, wxString>        m_properties;
+    std::shared_ptr<CONNECTIVITY_DATA>  m_connectivity;
 
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;               // text in lower right of screen and plots
@@ -261,38 +243,17 @@ public:
 
     const wxString &GetFileName() const { return m_fileName; }
 
-    TRACKS& Tracks()
-    {
-        return m_tracks;
-    }
-    const TRACKS& Tracks() const
-    {
-        return m_tracks;
-    }
+    TRACKS& Tracks() { return m_tracks; }
+    const TRACKS& Tracks() const { return m_tracks; }
 
-    MODULES& Modules()
-    {
-        return m_modules;
-    }
-    const MODULES& Modules() const
-    {
-        return m_modules;
-    }
+    MODULES& Modules() { return m_modules; }
+    const MODULES& Modules() const { return m_modules; }
 
-    DRAWINGS& Drawings()
-    {
-        return m_drawings;
-    }
+    DRAWINGS& Drawings() { return m_drawings; }
 
-    ZONE_CONTAINERS& Zones()
-    {
-        return m_ZoneDescriptorList;
-    }
+    ZONE_CONTAINERS& Zones() { return m_ZoneDescriptorList; }
 
-    MARKERS& Markers()
-    {
-        return m_markers;
-    }
+    MARKERS& Markers() { return m_markers; }
 
     /**
      * The groups must maintain the folowing invariants. These are checked by 
@@ -302,15 +263,14 @@ public:
      *   - If a group specifies a name, it must be unique
      *   - The graph of groups contianing subgroups must be acyclic.
      */
-    GROUPS& Groups()
-    {
-        return m_groups;
-    }
+    GROUPS& Groups() { return m_groups; }
 
     const std::vector<BOARD_CONNECTED_ITEM*> AllConnectedItems();
 
-    /// zone contour currently in progress
-    ZONE_CONTAINER*             m_CurrentZoneContour;
+    const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
+    void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
+
+    bool ResolveTextVar( wxString* token, int aDepth ) const;
 
     /// Visibility settings stored in board prior to 6.0, only used for loading legacy files
     LSET    m_LegacyVisibleLayers;
@@ -885,8 +845,11 @@ public:
      */
     void SynchronizeNetsAndNetClasses();
 
-
-    /***************************************************************************/
+    /**
+     * Function SynchronizeProperties
+     * copies the current project's text variables into the boards property cache.
+     */
+    void SynchronizeProperties();
 
     wxString GetClass() const override
     {

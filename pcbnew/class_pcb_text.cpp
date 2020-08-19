@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,21 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_pcb_text.cpp
- * @brief Class TEXTE_PCB texts on copper or technical layers implementation
- */
-
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <base_struct.h>
-#include <gr_text.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <settings/color_settings.h>
-#include <settings/settings_manager.h>
-
 #include <class_board.h>
 #include <class_pcb_text.h>
 #include <pcb_painter.h>
@@ -92,11 +82,17 @@ wxString TEXTE_PCB::GetShownText( int aDepth ) const
                 return false;
             };
 
+    std::function<bool( wxString* )> boardTextResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return board->ResolveTextVar( token, aDepth + 1 );
+            };
+
     bool     processTextVars = false;
     wxString text = EDA_TEXT::GetShownText( &processTextVars );
 
     if( processTextVars && aDepth < 10 )
-        text = ExpandTextVars( text, &pcbTextResolver, board->GetProject() );
+        text = ExpandTextVars( text, &pcbTextResolver, board->GetProject(), &boardTextResolver );
 
     return text;
 }
