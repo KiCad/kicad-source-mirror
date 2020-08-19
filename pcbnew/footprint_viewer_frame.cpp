@@ -169,6 +169,12 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     fpPanel->SetSizer( fpSizer );
     fpPanel->Fit();
 
+    // Create GAL canvas
+    m_canvasType = LoadCanvasTypeSetting();
+    auto drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                             GetGalDisplayOptions(), m_canvasType );
+    SetCanvas( drawPanel );
+
     SetBoard( new BOARD() );
     // In viewer, the default net clearance is not known (it depends on the actual board).
     // So we do not show the default clearance, by setting it to 0
@@ -186,12 +192,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings( config() );
     GetGalDisplayOptions().m_axesEnabled = true;
-
-    // Create GAL canvas
-    m_canvasType = LoadCanvasTypeSetting();
-    auto drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                             GetGalDisplayOptions(), m_canvasType );
-    SetCanvas( drawPanel );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
