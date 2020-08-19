@@ -280,7 +280,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
                  && m_activeLayers.count( aLayer ) == 0 )
             color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
     }
-    else
+    else if( !item->IsSelected() )
     {
         // Single net highlight mode
         if( m_highlightEnabled )
@@ -288,12 +288,13 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
                                                          : m_layerColorsDark[aLayer];
 
         // Return grayish color for non-highlighted layers in the dimmed high contrast mode
-        if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED && m_activeLayers.count( aLayer ) == 0 )
+        if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED
+                && m_activeLayers.count( aLayer ) == 0 )
             color = m_hiContrastColor[aLayer];
     }
 
     // For vias, some layers depend on other layers in high contrast mode
-    if( m_hiContrastEnabled && item->Type() == PCB_VIA_T &&
+    if( m_hiContrastEnabled && !item->IsSelected() && item->Type() == PCB_VIA_T &&
         ( aLayer == LAYER_VIAS_HOLES   ||
           aLayer == LAYER_VIA_THROUGH  ||
           aLayer == LAYER_VIA_MICROVIA ||
@@ -309,10 +310,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             viaActiveLayer |= via->IsOnLayer( lay_id ) && pcb->IsLayerVisible( lay_id );
         }
 
-        if( viaActiveLayer )
-            color = m_layerColors[aLayer];
-        else
-            color = m_hiContrastColor[aLayer];
+        if( !viaActiveLayer )
+            color.Darken( 1.0 - m_highlightFactor );
     }
 
     // Apply per-type opacity overrides
