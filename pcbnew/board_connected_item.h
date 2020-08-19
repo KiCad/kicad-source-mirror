@@ -121,11 +121,9 @@ public:
      * Function GetNetname
      * @return wxString - the full netname
      */
-    const wxString& GetNetname() const
+    wxString GetNetname() const
     {
-        static const wxString s_emptyString;
-
-        return m_netinfo ? m_netinfo->GetNetname() : s_emptyString;
+        return m_netinfo ? m_netinfo->GetNetname() : wxString();
     }
 
     /**
@@ -152,7 +150,7 @@ public:
      * Function GetShortNetname
      * @return wxString - the short netname
      */
-    const wxString& GetShortNetname() const
+    wxString GetShortNetname() const
     {
         return m_netinfo->GetShortNetname();
     }
