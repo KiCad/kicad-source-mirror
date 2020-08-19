@@ -472,6 +472,99 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 }
 
 
+/**
+ * Update the coordinates of 4 corners of a rectangle, accordint to constraints
+ * and the moved corner
+ * @param aEditedPointIndex is the corner id
+ * @param minWidth is the minimal width constraint
+ * @param minHeight is the minimal height constraint
+ * @param topLeft is the RECT_TOPLEFT to constraint
+ * @param topRight is the RECT_TOPRIGHT to constraint
+ * @param botLeft is the RECT_BOTLEFT to constraint
+ * @param botRight is the RECT_BOTRIGHT to constraint
+ * @param aGridSize is the a constraint: if > 1 new coordinates are on this grid
+ */
+static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
+                             VECTOR2I& topLeft, VECTOR2I& topRight,
+                             VECTOR2I& botLeft, VECTOR2I& botRight,
+                             int aGridSize = 0 )
+{
+    // A macro to keep a coordinate on the grid:
+    #define MOVE_TO_GRID(z) { z.x = ( (z.x +1 ) / aGridSize ) * aGridSize;\
+                              z.y = ( (z.y +1 ) / aGridSize ) * aGridSize; }
+    switch( aEditedPointIndex )
+    {
+    case RECT_TOP_LEFT:
+        // pin edited point within opposite corner
+        topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
+        topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
+
+        if( aGridSize > 1 )     // Keep point on specified grid size
+        {
+            topLeft.x = ( topLeft.x / aGridSize ) * aGridSize;
+            topLeft.y = ( topLeft.y / aGridSize ) * aGridSize;
+        }
+
+        // push edited point edges to adjacent corners
+        topRight.y = topLeft.y;
+        botLeft.x = topLeft.x;
+
+        break;
+
+    case RECT_TOP_RIGHT:
+        // pin edited point within opposite corner
+        topRight.x = std::max( topRight.x, botLeft.x + minWidth );
+        topRight.y = std::min( topRight.y, botLeft.y - minHeight );
+
+        if( aGridSize > 1 )     // Keep point on specified grid size
+        {
+            topRight.x = ( ( topRight.x+1 ) / aGridSize ) * aGridSize;
+            topRight.y = ( topRight.y / aGridSize ) * aGridSize;
+        }
+
+        // push edited point edges to adjacent corners
+        topLeft.y = topRight.y;
+        botRight.x = topRight.x;
+
+        break;
+
+    case RECT_BOT_LEFT:
+        // pin edited point within opposite corner
+        botLeft.x = std::min( botLeft.x, topRight.x - minWidth );
+        botLeft.y = std::max( botLeft.y, topRight.y + minHeight );
+
+        if( aGridSize > 1 )     // Keep point on specified grid size
+        {
+            botLeft.x = ( botLeft.x / aGridSize ) * aGridSize;
+            botLeft.y = ( ( botLeft.y+1 ) / aGridSize ) * aGridSize;
+        }
+
+        // push edited point edges to adjacent corners
+        botRight.y = botLeft.y;
+        topLeft.x = botLeft.x;
+
+        break;
+
+    case RECT_BOT_RIGHT:
+        // pin edited point within opposite corner
+        botRight.x = std::max( botRight.x, topLeft.x + minWidth );
+        botRight.y = std::max( botRight.y, topLeft.y + minHeight );
+
+        if( aGridSize > 1 )     // Keep point on specified grid size
+        {
+            botRight.x = ( ( botRight.x+1 ) / aGridSize ) * aGridSize;
+            botRight.y = ( ( botRight.y+1 ) / aGridSize ) * aGridSize;
+        }
+
+        // push edited point edges to adjacent corners
+        botLeft.y = botRight.y;
+        topRight.x = botRight.x;
+
+        break;
+    }
+}
+
+
 void POINT_EDITOR::updateItem() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
@@ -873,6 +966,14 @@ void POINT_EDITOR::updateItem() const
         case PAD_SHAPE_ROUNDRECT:
         case PAD_SHAPE_CHAMFERED_RECT:
         {
+            VECTOR2I topLeft = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition();
+            VECTOR2I topRight = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition();
+            VECTOR2I botLeft = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition();
+            VECTOR2I botRight = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition();
+
+            pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
+                             topLeft, topRight, botLeft, botRight );
+
             if( ( pad->GetOffset().x || pad->GetOffset().y )
                     || ( pad->GetDrillSize().x && pad->GetDrillSize().y ) )
             {
@@ -884,17 +985,17 @@ void POINT_EDITOR::updateItem() const
                 if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
                         || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
                 {
-                    dist[0] = center.x - m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().x;
-                    dist[1] = center.y - m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().y;
-                    dist[2] = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().x - center.x;
-                    dist[3] = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().y - center.y;
+                    dist[0] = center.x - topLeft.x;
+                    dist[1] = center.y - topLeft.y;
+                    dist[2] = botRight.x - center.x;
+                    dist[3] = botRight.y - center.y;
                 }
                 else
                 {
-                    dist[0] = center.x - m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x;
-                    dist[1] = center.y - m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y;
-                    dist[2] = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x - center.x;
-                    dist[3] = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y - center.y;
+                    dist[0] = center.x - botLeft.x;
+                    dist[1] = center.y - topRight.y;
+                    dist[2] = topRight.x - center.x;
+                    dist[3] = botLeft.y - center.y;
                 }
 
                 wxSize padSize( dist[0] + dist[2], dist[1] + dist[3] );
@@ -917,17 +1018,17 @@ void POINT_EDITOR::updateItem() const
                 if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
                         || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
                 {
-                    left = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().x;
-                    top = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().y;
-                    right = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().x;
-                    bottom = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().y;
+                    left = topLeft.x;
+                    top = topLeft.y;
+                    right = botRight.x;
+                    bottom = botRight.y;
                 }
                 else
                 {
-                    left = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x;
-                    top = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y;
-                    right = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x;
-                    bottom = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y;
+                    left = botLeft.x;
+                    top = topRight.y;
+                    right = topRight.x;
+                    bottom = botLeft.y;
                 }
 
                 wxSize padSize( abs( right - left ), abs( bottom - top ) );

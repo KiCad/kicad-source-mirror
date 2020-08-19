@@ -113,6 +113,17 @@ private:
     ///> Sets the current point being edited. NULL means none.
     void setEditedPoint( EDIT_POINT* aPoint );
 
+    inline int getEditedPointIndex() const
+    {
+        for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
+        {
+            if( m_editedPoint == &m_editPoints->Point( i ) )
+                return i;
+        }
+
+        return wxNOT_FOUND;
+    }
+
     ///> Returns true if aPoint is the currently modified point.
     inline bool isModified( const EDIT_POINT& aPoint ) const
     {
