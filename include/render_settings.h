@@ -228,6 +228,10 @@ public:
         m_outlineWidth = aWidth;
     }
 
+    void SetHighlightFactor( float aFactor ) { m_highlightFactor = aFactor; }
+    void SetSelectFactor( float aFactor ) { m_selectFactor = aFactor; }
+    void SetHighContrastFactor( float aFactor ) { m_hiContrastFactor = aFactor; }
+
     // TODO: these can go away once we have Cairo-based printing
     wxDC* GetPrintDC() { return m_printDC; }
     void SetPrintDC( wxDC* aDC ) { m_printDC = aDC; }
