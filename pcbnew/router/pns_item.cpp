@@ -45,13 +45,23 @@ bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VEC
     if( !aOther->Layers().IsMultilayer()
             && !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( this, aOther->Layer() ) )
     {
-        shapeA = AlternateShape();
+        if( !AlternateShape() )
+                wxLogError
+                ( "Missing expected Alternate shape for %s at %d %d", m_parent->GetClass(),
+                        Anchor( 0 ).x, Anchor( 0 ).y );
+        else
+            shapeA = AlternateShape();
     }
 
     if( !Layers().IsMultilayer()
             && !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( aOther, Layer() ) )
     {
-        shapeB = aOther->AlternateShape();
+        if( !aOther->AlternateShape() )
+                wxLogError
+                ( "Missing expected Alternate shape for %s at %d %d", aOther->Parent()->GetClass(),
+                        aOther->Anchor( 0 ).x, aOther->Anchor( 0 ).y );
+        else
+            shapeB = aOther->AlternateShape();
     }
 
     if( aNeedMTV )

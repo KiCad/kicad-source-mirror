@@ -34,11 +34,22 @@ void INDEX::Add( ITEM* aItem )
 
     for( int i = range.Start(); i <= range.End(); ++i )
     {
-        if( ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( aItem, i )
-                && aItem->AlternateShape() )
-            m_subIndices[i].Add( aItem, aItem->AlternateShape()->BBox() );
+        if( !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( aItem, i ) )
+        {
+            if( aItem->AlternateShape() )
+                m_subIndices[i].Add( aItem, aItem->AlternateShape()->BBox() );
+            else
+            {
+                wxLogError( "Missing expected Alternate shape for %s at %d %d",
+                        aItem->Parent()->GetClass(), aItem->Anchor( 0 ).x, aItem->Anchor( 0 ).y );
+                m_subIndices[i].Add( aItem );
+            }
+
+        }
         else
+        {
             m_subIndices[i].Add( aItem );
+        }
     }
 
     m_allItems.insert( aItem );
