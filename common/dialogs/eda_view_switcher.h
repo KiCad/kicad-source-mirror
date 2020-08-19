@@ -38,6 +38,7 @@ protected:
 
 protected:
     bool m_tabState;
+    bool m_receivingEvents;
 };
 
 #endif    // EDA_VIEW_SWITCHER_H

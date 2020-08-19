@@ -31,7 +31,8 @@
 
 EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aItems ) :
         EDA_VIEW_SWITCHER_BASE( aParent ),
-        m_tabState( true )
+        m_tabState( true ),
+        m_receivingEvents( true )
 {
     m_listBox->InsertItems( aItems, 0 );
     m_listBox->SetSelection( std::min( 1, (int) m_listBox->GetCount() - 1 ) );
@@ -68,18 +69,20 @@ EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aI
 //
 bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
 {
+    if( !m_receivingEvents )
+    {
+        return DIALOG_SHIM::TryBefore( aEvent );
+    }
+
     if( !wxGetKeyState( WXK_RAW_CONTROL ) )
     {
+        m_receivingEvents = false;
         EndModal( wxID_OK );
         return true;
     }
 
-    if( m_tabState )
-    {
-        if( !wxGetKeyState( WXK_TAB ) )
-            m_tabState = false;
-    }
-    else if( wxGetKeyState( WXK_TAB ) )
+    // Check for tab key leading edge
+    if( !m_tabState && wxGetKeyState( WXK_TAB ) )
     {
         m_tabState = true;
 
@@ -101,6 +104,12 @@ bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
         }
 
         return true;
+    }
+
+    // Check for tab key trailing edge
+    if( m_tabState && !wxGetKeyState( WXK_TAB ) )
+    {
+        m_tabState = false;
     }
 
     return DIALOG_SHIM::TryBefore( aEvent );
