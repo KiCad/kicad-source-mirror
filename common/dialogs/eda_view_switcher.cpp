@@ -25,8 +25,13 @@
 #include <eda_view_switcher.h>
 
 
+#ifdef __WXGTK__
+#define LIST_BOX_H_PADDING 20
+#define LIST_BOX_V_PADDING 8
+#else
 #define LIST_BOX_H_PADDING 10
 #define LIST_BOX_V_PADDING 5
+#endif
 
 
 EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aItems ) :
