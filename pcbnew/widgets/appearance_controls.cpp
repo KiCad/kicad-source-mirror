@@ -1653,10 +1653,17 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
 
     // If the preset doesn't have an explicit active layer to restore, we can at least
     // force the active layer to be something in the preset's layer set
+    PCB_LAYER_ID activeLayer = UNSELECTED_LAYER;
+
     if( aPreset.activeLayer != UNSELECTED_LAYER )
-        m_frame->SetActiveLayer( aPreset.activeLayer );
+        activeLayer = aPreset.activeLayer;
     else if( aPreset.layers.any() && !aPreset.layers.test( m_frame->GetActiveLayer() ) )
-        m_frame->SetActiveLayer( *aPreset.layers.Seq().begin() );
+        activeLayer = *aPreset.layers.Seq().begin();
+
+    LSET boardLayers = board->GetLayerSet();
+
+    if( activeLayer != UNSELECTED_LAYER && boardLayers.Contains( activeLayer ) )
+        m_frame->SetActiveLayer( activeLayer );
 
     m_frame->GetCanvas()->SyncLayersVisibility( board );
     m_frame->GetCanvas()->Refresh();
