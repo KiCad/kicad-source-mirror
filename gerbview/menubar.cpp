@@ -90,7 +90,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         m_drillFileHistory.AddFilesToMenu();
     }
 
-    fileMenu->Add( GERBVIEW_ACTIONS::openGerber );
+    fileMenu->Add( GERBVIEW_ACTIONS::openDrillFile );
     wxMenuItem* drillItem = fileMenu->Add( openRecentDrlMenu );
     RegisterUIUpdateHandler( drillItem->GetId(), FileHistoryCond( m_drillFileHistory ) );
 
@@ -109,7 +109,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         m_jobFileHistory.AddFilesToMenu();
     }
 
-    fileMenu->Add( GERBVIEW_ACTIONS::openGerber );
+    fileMenu->Add( GERBVIEW_ACTIONS::openJobFile );
     wxMenuItem* jobItem = fileMenu->Add( openRecentJobMenu );
     RegisterUIUpdateHandler( jobItem->GetId(), FileHistoryCond( m_jobFileHistory ) );
 
@@ -128,7 +128,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         m_zipFileHistory.AddFilesToMenu();
     }
 
-    fileMenu->Add( GERBVIEW_ACTIONS::openGerber );
+    fileMenu->Add( GERBVIEW_ACTIONS::openZipFile );
     wxMenuItem* zipItem = fileMenu->Add( openRecentZipMenu );
     RegisterUIUpdateHandler( zipItem->GetId(), FileHistoryCond( m_zipFileHistory ) );
 
