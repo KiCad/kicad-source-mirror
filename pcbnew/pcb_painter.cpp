@@ -62,7 +62,6 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_clearance = CL_NONE;
     m_sketchGraphics = false;
     m_sketchText = false;
-    m_selectionCandidateColor = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
     m_netColorMode = NET_COLOR_MODE::RATSNEST;
     m_contrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
@@ -244,7 +243,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     {
         // Selection disambiguation
         if( item->IsBrightened() )
-            return m_selectionCandidateColor;
+            return color.Brightened( m_selectFactor ).WithAlpha( 0.8 );
 
         // Don't let pads that *should* be NPTHs get lost
         if( item->Type() == PCB_PAD_T && dyn_cast<const D_PAD*>( item )->PadShouldBeNPTH() )
