@@ -493,6 +493,7 @@ void APPEARANCE_CONTROLS::SetUserLayerPresets( std::vector<LAYER_PRESET>& aPrese
 void APPEARANCE_CONTROLS::loadDefaultLayerPresets()
 {
     m_layerPresets.clear();
+    m_presetMRU.clear();
 
     // Load the read-only defaults
     for( const LAYER_PRESET& preset : { presetAllLayers, presetAllCopper, presetInnerCopper,
