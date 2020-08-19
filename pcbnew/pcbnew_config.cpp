@@ -25,13 +25,7 @@
  */
 
 #include <fctsys.h>
-#include <kiface_i.h>
-#include <confirm.h>
-#include <gestfich.h>
-#include <macros.h>
 #include <pcb_edit_frame.h>
-#include <board_design_settings.h>
-#include <plotter.h>
 #include <panel_hotkeys_editor.h>
 #include <panel_edit_options.h>
 #include <panel_pcbnew_color_settings.h>
@@ -39,15 +33,10 @@
 #include <panel_pcbnew_action_plugins.h>
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>
-#include <fp_lib_table.h>
 #include <ws_data_model.h>
-#include <class_board.h>
-#include <class_module.h>
 #include <pcbplot.h>
 #include <pcb_painter.h>
-#include <footprint_viewer_frame.h>
 #include <invoke_pcb_dialog.h>
-#include <wildcards_and_files_ext.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/panel_selection_filter.h>

@@ -28,30 +28,23 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
-#include <macros.h>
 #include <3d_viewer/eda_3d_viewer.h>
-#include <richio.h>
 #include <pgm_base.h>
 #include <msgpanel.h>
 #include <fp_lib_table.h>
 #include <kiface_i.h>
-#include <kiway.h>
-#include <kiway_player.h>
 #include <trace_helpers.h>
 #include <lockfile.cpp>
 #include <netlist_reader/pcb_netlist.h>
-#include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <io_mgr.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
-#include <drc/drc.h>
 #include <class_board.h>
 #include <wx/stdpaths.h>
-#include <pcb_layer_widget.h>
 #include <ratsnest/ratsnest_data.h>
 #include <kiplatform/app.h>
-
+#include <widgets/appearance_controls.h>
 #include <wx/wupdlock.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
@@ -312,6 +305,8 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
         // Don't set name until the user hits save, so project files are not created
         mgr->LoadProject( "" );
+
+        m_appearancePanel->OnBoardChanged();
 
         LoadProjectSettings();
 
@@ -649,6 +644,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Rebuild list of nets (full ratsnest rebuild)
     GetBoard()->BuildConnectivity();
     Compile_Ratsnest( true );
+
+    m_appearancePanel->OnBoardChanged();
 
     // Load project settings after setting up board; some of them depend on the nets list
     LoadProjectSettings();

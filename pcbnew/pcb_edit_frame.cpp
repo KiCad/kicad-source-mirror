@@ -996,7 +996,6 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     }
 
     ReCreateLayerBox();
-    m_appearancePanel->OnBoardChanged();
 
     // Sync layer and item visibility
     GetCanvas()->SyncLayersVisibility( m_Pcb );
