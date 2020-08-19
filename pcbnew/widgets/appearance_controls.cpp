@@ -1890,6 +1890,24 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
     APPEARANCE_SETTING* setting = m_netclassSettingsMap.count( m_contextMenuNetclass ) ?
                                   m_netclassSettingsMap.at( m_contextMenuNetclass ) : nullptr;
 
+    NETCLASSPTR defaultClass = classes.GetDefault();
+
+    auto runOnNetsOfClass =
+            [&]( NETCLASSPTR aClass, std::function<void( NETINFO_ITEM* )> aFunction )
+            {
+                if( aClass == defaultClass )
+                {
+                    for( NETINFO_ITEM* net : nets )
+                        if( net->GetNetClass() == defaultClass.get() )
+                            aFunction( net );
+                }
+                else
+                {
+                    for( const wxString& netName : *aClass )
+                        aFunction( nets.GetNetItem( netName ) );
+                }
+            };
+
     switch( aEvent.GetId() )
     {
         case ID_SET_NET_COLOR:
@@ -1919,27 +1937,24 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
         {
             if( netclass )
             {
-                bool first = true;
-
-                for( const wxString& member : *netclass )
-                {
-                    if( NETINFO_ITEM* net = nets.GetNetItem( member ) )
-                    {
-                        int code = net->GetNet();
-
-                        if( first )
+                runOnNetsOfClass( netclass,
+                        [&]( NETINFO_ITEM* aItem )
                         {
-                            board->SetHighLightNet( code );
-                            rs->SetHighlight( true, code );
-                            first = false;
-                        }
-                        else
-                        {
-                            board->SetHighLightNet( code, true );
-                            rs->SetHighlight( true, code, true );
-                        }
-                    }
-                }
+                            static bool first = true;
+                            int code = aItem->GetNet();
+
+                            if( first )
+                            {
+                                board->SetHighLightNet( code );
+                                rs->SetHighlight( true, code );
+                                first = false;
+                            }
+                            else
+                            {
+                                board->SetHighLightNet( code, true );
+                                rs->SetHighlight( true, code, true );
+                            }
+                        } );
 
                 view->UpdateAllLayersColor();
                 board->HighLightON();
@@ -1951,14 +1966,13 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
         {
             if( netclass )
             {
-                for( const wxString& member : *netclass )
-                {
-                    if( NETINFO_ITEM* net = nets.GetNetItem( member ) )
-                    {
-                        int code = net->GetNet();
-                        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, true, code );
-                    }
-                }
+                runOnNetsOfClass( netclass,
+                        [&]( NETINFO_ITEM* aItem )
+                        {
+                            int code = aItem->GetNet();
+                            m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, true,
+                                                                  code );
+                        } );
             }
             break;
         }
