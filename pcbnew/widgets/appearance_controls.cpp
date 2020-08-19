@@ -1316,7 +1316,8 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                          wxString::Format( _( "Highlight %s" ), netName ),
                                             wxEmptyString, wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
-                                         wxString::Format( _( "Select %s" ), netName ),
+                                         wxString::Format( _( "Select tracks and vias in %s" ),
+                                                           netName ),
                                          wxEmptyString, wxITEM_NORMAL ) );
 
                             menu.AppendSeparator();
@@ -1401,7 +1402,8 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                          wxString::Format( _( "Highlight nets in %s" ), name ),
                                                          wxEmptyString, wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
-                                         wxString::Format( _( "Select nets in %s" ), name ),
+                                         wxString::Format( _( "Select tracks and vias in %s" ),
+                                                           name ),
                                          wxEmptyString, wxITEM_NORMAL ) );
 
                             menu.AppendSeparator();
