@@ -1907,7 +1907,8 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
     APPEARANCE_SETTING* setting = m_netclassSettingsMap.count( m_contextMenuNetclass ) ?
                                   m_netclassSettingsMap.at( m_contextMenuNetclass ) : nullptr;
 
-    NETCLASSPTR defaultClass = classes.GetDefault();
+    NETCLASSPTR defaultClass     = classes.GetDefault();
+    wxString    defaultClassName = defaultClass->GetName();
 
     auto runOnNetsOfClass =
             [&]( NETCLASSPTR aClass, std::function<void( NETINFO_ITEM* )> aFunction )
@@ -1996,6 +1997,10 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 
         case ID_SHOW_ALL_NETS:
         {
+            showNetclass( defaultClassName );
+            wxASSERT( m_netclassSettingsMap.count( defaultClassName ) );
+            m_netclassSettingsMap.at( defaultClassName )->ctl_visibility->SetValue( true );
+
             for( const auto& pair : classes.NetClasses() )
             {
                 showNetclass( pair.first );
@@ -2009,6 +2014,11 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 
         case ID_HIDE_OTHER_NETS:
         {
+            bool showDefault = m_contextMenuNetclass == defaultClassName;
+            showNetclass( defaultClassName, showDefault );
+            wxASSERT( m_netclassSettingsMap.count( defaultClassName ) );
+            m_netclassSettingsMap.at( defaultClassName )->ctl_visibility->SetValue( showDefault );
+
             for( const auto& pair : classes.NetClasses() )
             {
                 bool show = pair.first == m_contextMenuNetclass;
