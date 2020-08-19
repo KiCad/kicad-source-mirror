@@ -278,6 +278,15 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
                 xproperty->AddAttribute( "value", fields[jj].GetText() );
             }
 
+            for( const SCH_FIELD& sheetField : sheet.Last()->GetFields() )
+            {
+                XNODE* xproperty;
+                xcomp->AddChild( xproperty = node( "property" ) );
+
+                xproperty->AddAttribute( "name", sheetField.GetName() );
+                xproperty->AddAttribute( "value", sheetField.GetText() );
+            }
+
             XNODE* xsheetpath;
             xcomp->AddChild( xsheetpath = node( "sheetpath" ) );
 
