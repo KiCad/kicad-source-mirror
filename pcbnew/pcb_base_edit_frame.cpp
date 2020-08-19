@@ -46,7 +46,8 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
                         m_rotationAngle( 900 ), m_undoRedoBlocked( false ),
         m_Layers( nullptr ),
-        m_selectionFilterPanel( nullptr )
+        m_selectionFilterPanel( nullptr ),
+        m_appearancePanel( nullptr )
 {
     if( !GFootprintList.GetCount() )
     {
@@ -84,20 +85,22 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
 
     if( !s_switcherShown && wxGetKeyState( WXK_RAW_CONTROL ) && wxGetKeyState( WXK_TAB ) )
     {
-        const wxArrayString& mru = m_appearancePanel->GetLayerPresetsMRU();
+        if( m_appearancePanel )
+        {
+            const wxArrayString& mru = m_appearancePanel->GetLayerPresetsMRU();
+            EDA_VIEW_SWITCHER    switcher( this, mru );
 
-        EDA_VIEW_SWITCHER switcher( this, mru );
+            s_switcherShown = true;
+            switcher.ShowModal();
+            s_switcherShown = false;
 
-        s_switcherShown = true;
-        switcher.ShowModal();
-        s_switcherShown = false;
+            int idx = switcher.GetSelection();
 
-        int idx = switcher.GetSelection();
+            if( idx >= 0 && idx < (int) mru.size() )
+                m_appearancePanel->ApplyLayerPreset( mru[idx] );
 
-        if( idx >= 0 && idx < (int) mru.size() )
-            m_appearancePanel->ApplyLayerPreset( mru[idx] );
-
-        return true;
+            return true;
+        }
     }
 
     return PCB_BASE_FRAME::TryBefore( aEvent );
