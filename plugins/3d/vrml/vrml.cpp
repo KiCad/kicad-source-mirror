@@ -187,7 +187,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
             ifile.Read( buffer, size);
             std::string expanded = gzip::decompress( buffer, size );
 
-            delete buffer;
+            delete[] buffer;
 
             ofile.Write( expanded.data(), expanded.size() );
             ofile.Close();

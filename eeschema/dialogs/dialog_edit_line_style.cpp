@@ -31,9 +31,6 @@
 #include <sch_edit_frame.h>
 #include <widgets/color_swatch.h>
 
-const int BUTT_COLOR_MINSIZE_X = 32;
-const int BUTT_COLOR_MINSIZE_Y = 20;
-
 
 struct lineTypeStruct
 {
