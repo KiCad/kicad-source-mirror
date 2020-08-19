@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,6 +36,8 @@
 #include <tools/pcb_actions.h>
 #include <dialogs/dialog_grid_settings.h>
 #include <widgets/appearance_controls.h>
+#include <dialogs/eda_view_switcher.h>
+#include <layer_widget.h>
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                           FRAME_T aFrameType, const wxString& aTitle,
@@ -72,6 +75,32 @@ void PCB_BASE_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     // Close the project if we are standalone, so it gets cleaned up properly
     if( mgr->IsProjectOpen() && Kiface().IsSingle() )
         mgr->UnloadProject( &Prj() );
+}
+
+
+bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
+{
+    static bool s_switcherShown = false;
+
+    if( !s_switcherShown && wxGetKeyState( WXK_RAW_CONTROL ) && wxGetKeyState( WXK_TAB ) )
+    {
+        const wxArrayString& mru = m_appearancePanel->GetLayerPresetsMRU();
+
+        EDA_VIEW_SWITCHER switcher( this, mru );
+
+        s_switcherShown = true;
+        switcher.ShowModal();
+        s_switcherShown = false;
+
+        int idx = switcher.GetSelection();
+
+        if( idx >= 0 && idx < (int) mru.size() )
+            m_appearancePanel->ApplyLayerPreset( mru[idx] );
+
+        return true;
+    }
+
+    return PCB_BASE_FRAME::TryBefore( aEvent );
 }
 
 

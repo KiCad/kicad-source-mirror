@@ -180,6 +180,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_text_entry.cpp
     dialogs/eda_list_dialog.cpp
     dialogs/eda_list_dialog_base.cpp
+    dialogs/eda_view_switcher.cpp
+    dialogs/eda_view_switcher_base.cpp
     dialogs/panel_color_settings_base.cpp
     dialogs/panel_color_settings.cpp
     dialogs/panel_common_settings.cpp

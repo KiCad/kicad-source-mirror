@@ -18,9 +18,9 @@ EDA_VIEW_SWITCHER_BASE::EDA_VIEW_SWITCHER_BASE( wxWindow* parent, wxWindowID id,
 
 	m_staticText2 = new wxStaticText( this, wxID_ANY, _("View Preset Switcher"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	bSizerMain->Add( m_staticText2, 0, wxALL, 5 );
+	bSizerMain->Add( m_staticText2, 0, wxALL|wxEXPAND, 5 );
 
-	m_listBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_listBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0|wxBORDER_NONE );
 	bSizerMain->Add( m_listBox, 1, wxEXPAND, 5 );
 
 

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -43,6 +44,8 @@ public:
                 long aStyle, const wxString& aFrameName );
 
     virtual ~PCB_BASE_EDIT_FRAME();
+
+    bool TryBefore( wxEvent& aEvent ) override;
 
     void OnCloseWindow( wxCloseEvent& aEvent ) override;
 

@@ -482,6 +482,8 @@ void APPEARANCE_CONTROLS::SetUserLayerPresets( std::vector<LAYER_PRESET>& aPrese
             continue;
 
         m_layerPresets[preset.name] = preset;
+
+        m_presetMRU.Add( preset.name );
     }
 
     rebuildLayerPresetsWidget();
@@ -499,6 +501,8 @@ void APPEARANCE_CONTROLS::loadDefaultLayerPresets()
     {
         m_layerPresets[preset.name]          = preset;
         m_layerPresets[preset.name].readOnly = true;
+
+        m_presetMRU.Add( preset.name );
     }
 }
 
@@ -1582,6 +1586,8 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         index = m_cbLayerPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
         m_cbLayerPresets->SetSelection( index );
 
+        m_presetMRU.Insert( name, 0 );
+
         return;
     }
     else if( index == count - 1 )
@@ -1614,6 +1620,8 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
             m_cbLayerPresets->Delete( m_cbLayerPresets->FindString( presetName ) );
             m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 );
             m_currentPreset = nullptr;
+
+            m_presetMRU.Remove( presetName );
         }
 
         resetSelection();
@@ -1624,6 +1632,13 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
     m_currentPreset      = preset;
 
     doApplyLayerPreset( *preset );
+
+    if( !m_currentPreset->name.IsEmpty() )
+    {
+        m_presetMRU.Remove( m_currentPreset->name );
+        m_presetMRU.Insert( m_currentPreset->name, 0 );
+    }
+
     passOnFocus();
 }
 

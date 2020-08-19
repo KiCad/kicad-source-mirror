@@ -220,15 +220,25 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	m_sizerOuter->Add( m_notebook, 1, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer18;
-	bSizer18 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bBottomMargin;
+	bBottomMargin = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizer171;
-	bSizer171 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bPresets;
+	bPresets = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	bSizer171->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+	wxBoxSizer* bPresetsLabels;
+	bPresetsLabels = new wxBoxSizer( wxHORIZONTAL );
+
+	presetsLabel = new wxStaticText( this, wxID_ANY, wxT("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
+	presetsLabel->Wrap( -1 );
+	bPresetsLabels->Add( presetsLabel, 1, wxTOP|wxRIGHT|wxLEFT, 2 );
+
+	presetsHotkey = new wxStaticText( this, wxID_ANY, wxT("(Crtl+Tab)"), wxDefaultPosition, wxDefaultSize, 0 );
+	presetsHotkey->Wrap( -1 );
+	bPresetsLabels->Add( presetsHotkey, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+
+
+	bPresets->Add( bPresetsLabels, 1, wxEXPAND, 5 );
 
 	wxString m_cbLayerPresetsChoices[] = { wxT("All Layers"), wxT("(unsaved)") };
 	int m_cbLayerPresetsNChoices = sizeof( m_cbLayerPresetsChoices ) / sizeof( wxString );
@@ -236,13 +246,13 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_cbLayerPresets->SetSelection( 1 );
 	m_cbLayerPresets->SetToolTip( wxT("Layer presets") );
 
-	bSizer171->Add( m_cbLayerPresets, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 2 );
+	bPresets->Add( m_cbLayerPresets, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 2 );
 
 
-	bSizer18->Add( bSizer171, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bBottomMargin->Add( bPresets, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	m_sizerOuter->Add( bSizer18, 0, wxEXPAND|wxBOTTOM, 2 );
+	m_sizerOuter->Add( bBottomMargin, 0, wxEXPAND|wxBOTTOM, 2 );
 
 
 	this->SetSizer( m_sizerOuter );

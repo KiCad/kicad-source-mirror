@@ -1,9 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,194 +22,86 @@
  */
 
 #include <fctsys.h>
-#include <macros.h>
-#include <eda_draw_frame.h>
-#include <kicad_string.h>
-#include <dialog_helpers.h>
+#include <eda_view_switcher.h>
 
 
-// wxWidgets spends *far* too long calcuating column widths (most of it, believe it or
-// not, in repeatedly creating/destroying a wxDC to do the measurement in).
-// Use default column widths instead.
-static int DEFAULT_COL_WIDTHS[] = { 200, 600 };
+#define LIST_BOX_H_PADDING 10
+#define LIST_BOX_V_PADDING 5
 
 
-
-EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
-                                  const wxArrayString& aItemHeaders,
-                                  const std::vector<wxArrayString>& aItemList,
-                                  const wxString& aSelection ) :
-    EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
+EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aItems ) :
+        EDA_VIEW_SWITCHER_BASE( aParent ),
+        m_tabState( true )
 {
-    m_itemsList = &aItemList;
+    m_listBox->InsertItems( aItems, 0 );
+    m_listBox->SetSelection( std::min( 1, (int) m_listBox->GetCount() - 1 ) );
 
-    m_filterBox->SetHint( _( "Filter" ) );
+    int width = 0;
+    int height = 0;
 
-    initDialog( aItemHeaders, aSelection );
+    for( const wxString& item : aItems )
+    {
+        wxSize extents = m_listBox->GetTextExtent( item );
+        width = std::max( width, extents.x );
+        height += extents.y + LIST_BOX_V_PADDING;
+    }
 
-    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
-    // because so many dialogs share this same class, with different numbers of
-    // columns, different column names, and column widths.
-    m_hash_key = TO_UTF8( aTitle );
-
-    m_sdbSizerOK->SetDefault();
+    m_listBox->SetMinSize( wxSize( width + LIST_BOX_H_PADDING, height ) );
+    SetInitialFocus( m_listBox );
 
     // this line fixes an issue on Linux Ubuntu using Unity (dialog not shown),
     // and works fine on all systems
-    GetSizer()->Fit(  this );
+    GetSizer()->Fit( this );
 
     Centre();
 }
 
 
-void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxString& aSelection )
+// OK, this is *really* annoying, but wxWidgets doesn't give us key-down events while the
+// control key is being held down.  So we can't use OnKeyDown() or OnCharHook() and instead
+// must rely on watching key states in TryBefore().
+//
+// Just checking the state of the tab key is tempting, but then we'll think it's been hit
+// several times when it's actually just a key-down followed by a redraw or idle event.
+//
+// So we have to keep a state machine of the tab key.
+//
+bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
 {
-    for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
+    if( !wxGetKeyState( WXK_RAW_CONTROL ) )
     {
-        m_listBox->InsertColumn( i, aItemHeaders.Item( i ),
-                                 wxLIST_FORMAT_LEFT, DEFAULT_COL_WIDTHS[ i ] );
+        EndModal( wxID_OK );
+        return true;
     }
 
-    InsertItems( *m_itemsList, 0 );
-
-    if( !aSelection.IsEmpty() )
+    if( m_tabState )
     {
-        long sel = m_listBox->FindItem( -1, aSelection );
+        if( !wxGetKeyState( WXK_TAB ) )
+            m_tabState = false;
+    }
+    else if( wxGetKeyState( WXK_TAB ) )
+    {
+        m_tabState = true;
 
-        if( sel != wxNOT_FOUND )
+        int idx = m_listBox->GetSelection();
+
+        if( wxGetKeyState( WXK_SHIFT ) )
         {
-            m_listBox->SetItemState( sel, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-
-            // Set to a small size so EnsureVisible() won't be foiled by later additions.
-            // ListBox will expand to fit later.
-            m_listBox->SetSize( m_listBox->GetSize().GetX(), 100 );
-            m_listBox->EnsureVisible( sel );
-        }
-    }
-}
-
-
-void EDA_LIST_DIALOG::SetListLabel( const wxString& aLabel )
-{
-    m_listLabel->SetLabel( aLabel );
-    m_listBox->SetSingleStyle( wxLC_NO_HEADER, true );
-}
-
-
-void EDA_LIST_DIALOG::SetOKLabel( const wxString& aLabel )
-{
-    m_sdbSizerOK->SetLabel( aLabel );
-}
-
-
-void EDA_LIST_DIALOG::textChangeInFilterBox( wxCommandEvent& event )
-{
-    wxString filter;
-    wxString itemName;
-
-    filter = wxT( "*" ) + m_filterBox->GetLineText( 0 ).MakeLower() + wxT( "*" );
-
-    m_listBox->DeleteAllItems();
-
-    for( const wxArrayString& row : *m_itemsList )
-    {
-        itemName = row.Item( 0 );
-
-        if( itemName.MakeLower().Matches( filter ) )
-            Append( row );
-    }
-
-    sortList();
-}
-
-
-wxString EDA_LIST_DIALOG::GetTextSelection( int aColumn )
-{
-    wxCHECK_MSG( unsigned( aColumn ) < unsigned( m_listBox->GetColumnCount() ), wxEmptyString,
-                 wxT( "Invalid list control column." ) );
-
-    long    item = m_listBox->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
-
-    if( item >= 0 )     // if something is selected.
-    {
-        wxListItem info;
-
-        info.m_mask = wxLIST_MASK_TEXT;
-        info.m_itemId = item;
-        info.m_col = aColumn;
-
-        if( m_listBox->GetItem( info ) )
-            return info.m_text;
-    }
-
-    return wxEmptyString;
-}
-
-
-void EDA_LIST_DIALOG::Append( const wxArrayString& itemList )
-{
-    long itemIndex = m_listBox->InsertItem( m_listBox->GetItemCount(), itemList[0] );
-
-    m_listBox->SetItemPtrData( itemIndex, wxUIntPtr( &itemList[0] ) );
-
-    // Adding the next columns content
-    for( unsigned i = 1; i < itemList.size(); i++ )
-        m_listBox->SetItem( itemIndex, i, itemList[i] );
-}
-
-
-void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList, int position )
-{
-    for( unsigned row = 0; row < itemList.size(); row++ )
-    {
-        wxASSERT( (int) itemList[row].GetCount() == m_listBox->GetColumnCount() );
-
-        for( unsigned col = 0; col < itemList[row].GetCount(); col++ )
-        {
-            wxListItem info;
-            info.m_itemId = row + position;
-            info.m_col = col;
-            info.m_text = itemList[row].Item( col );
-            info.m_width = DEFAULT_COL_WIDTHS[ col ];
-            info.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_WIDTH;
-
-            if( col == 0 )
-            {
-                info.m_data = wxUIntPtr( &itemList[row].Item( col ) );
-                info.m_mask |= wxLIST_MASK_DATA;
-
-                m_listBox->InsertItem( info );
-            }
+            if( --idx <= 0 )
+                m_listBox->SetSelection( (int) m_listBox->GetCount() - 1 );
             else
-            {
-                m_listBox->SetItem( info );
-            }
+                m_listBox->SetSelection( idx );
         }
+        else
+        {
+            if( ++idx >= (int) m_listBox->GetCount() )
+                m_listBox->SetSelection( 0 );
+            else
+                m_listBox->SetSelection( idx );
+        }
+
+        return true;
     }
 
-    sortList();
-}
-
-
-void EDA_LIST_DIALOG::onListItemActivated( wxListEvent& event )
-{
-    EndModal( wxID_OK );
-}
-
-
-/* Sort alphabetically, case insensitive.
- */
-static int wxCALLBACK myCompareFunction( wxIntPtr aItem1, wxIntPtr aItem2,
-                                         wxIntPtr WXUNUSED( aSortData ) )
-{
-    wxString* component1Name = (wxString*) aItem1;
-    wxString* component2Name = (wxString*) aItem2;
-
-    return StrNumCmp( *component1Name, *component2Name, true );
-}
-
-
-void EDA_LIST_DIALOG::sortList()
-{
-    m_listBox->SortItems( myCompareFunction, 0 );
+    return DIALOG_SHIM::TryBefore( aEvent );
 }

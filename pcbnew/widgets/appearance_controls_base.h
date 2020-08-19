@@ -76,7 +76,8 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxRadioButton* m_rbNetColorAll;
 		wxRadioButton* m_rbNetColorRatsnest;
 		wxRadioButton* m_rbNetColorOff;
-		wxStaticText* m_staticText5;
+		wxStaticText* presetsLabel;
+		wxStaticText* presetsHotkey;
 		wxChoice* m_cbLayerPresets;
 
 		// Virtual event handlers, overide them in your derived class

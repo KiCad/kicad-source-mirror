@@ -139,6 +139,11 @@ public:
             return wxEmptyString;
     }
 
+    const wxArrayString& GetLayerPresetsMRU()
+    {
+        return m_presetMRU;
+    }
+
     void OnColorSwatchChanged( wxCommandEvent& aEvent );
 
     void OnLayerContextMenu( wxCommandEvent& aEvent );
@@ -194,6 +199,8 @@ private:
     std::map<wxString, LAYER_PRESET> m_layerPresets;
 
     LAYER_PRESET* m_currentPreset;
+
+    wxArrayString m_presetMRU;
 
     wxMenu* m_layerContextMenu;
 
