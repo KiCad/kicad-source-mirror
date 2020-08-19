@@ -529,6 +529,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::copy,                     ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::paste,                    ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
     mgr->SetConditions( ACTIONS::pasteSpecial,             ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::selectAll,                ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::doDelete,                 ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::duplicate,                ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
 

@@ -112,6 +112,9 @@ public:
     int SelectItem( const TOOL_EVENT& aEvent );
     void AddItemToSel( BOARD_ITEM* aItem, bool aQuietMode = false );
 
+    ///> Select all items on the board
+    int SelectAll( const TOOL_EVENT& aEvent );
+
     ///> Multiple item selection event handler
     int SelectItems( const TOOL_EVENT& aEvent );
 
@@ -186,7 +189,7 @@ public:
     void FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) const;
 
     PCB_GROUP* GetEnteredGroup() { return m_enteredGroup; }
-    
+
 private:
     /**
      * Function selectPoint()

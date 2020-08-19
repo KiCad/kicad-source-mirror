@@ -25,6 +25,7 @@
  */
 
 #include <limits>
+#include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <collectors.h>
@@ -182,6 +183,12 @@ bool EDIT_TOOL::Init()
                        && !frame()->IsCurrentTool( PCB_ACTIONS::moveWithReference );
             };
 
+    auto noItemsCondition =
+            [ this ] ( const SELECTION& aSelections ) -> bool
+            {
+                return frame()->GetBoard() && !frame()->GetBoard()->IsEmpty();
+            };
+
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
 
@@ -214,6 +221,9 @@ bool EDIT_TOOL::Init()
     // Selection tool handles the context menu for some other tools, such as the Picker.
     // Don't add things like Paste when another tool is active.
     menu.AddItem( ACTIONS::paste, noActiveToolCondition );
+
+    menu.AppendSeparator();
+    menu.AddItem( ACTIONS::selectAll, noItemsCondition );
 
     // Footprint actions
     menu.AddSeparator();

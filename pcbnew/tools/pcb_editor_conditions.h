@@ -46,6 +46,13 @@ public:
     {}
 
     /**
+     * Creates a functor that tests if there are items in the board
+     *
+     * @return Functor returning true if the the current board has items
+     */
+    SELECTION_CONDITION HasItems();
+
+    /**
      * Creates a functor that tests if the pad numbers are displayed
      *
      * @return Functor returning true if the pad numbers are displayed
@@ -96,6 +103,9 @@ public:
     SELECTION_CONDITION ZoneDisplayMode( ZONE_DISPLAY_MODE aMode );
 
 protected:
+    ///> Helper function used by HasItems()
+    static bool hasItemsFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );
+
     ///> Helper function used by PadNumbersDisplay()
     static bool padNumberDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );
 

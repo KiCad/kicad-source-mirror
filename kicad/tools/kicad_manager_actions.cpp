@@ -96,8 +96,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::convertImage( "kicad.Control.convertImage",
         bitmap2component_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::showCalculator( "kicad.Control.showCalculator",
-        AS_GLOBAL,
-        MD_CTRL + 'A', LEGACY_HK_NAME( "Run PcbCalculator" ),
+        AS_GLOBAL, 0, LEGACY_HK_NAME( "Run PcbCalculator" ),
         _( "Calculator Tools" ), _( "Run component calculations, track width calculations, etc." ),
         calculator_xpm );
 

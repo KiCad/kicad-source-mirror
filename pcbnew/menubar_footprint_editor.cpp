@@ -115,6 +115,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::duplicate );
 
     editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::selectAll );
+
+    editMenu->AppendSeparator();
     editMenu->Add( PCB_ACTIONS::footprintProperties );
     editMenu->Add( PCB_ACTIONS::defaultPadProperties );
 

@@ -23,6 +23,7 @@
  */
 
 
+#include <class_board.h>
 #include <pcb_base_frame.h>
 #include <tool/selection.h>
 #include <tools/pcb_editor_conditions.h>
@@ -31,6 +32,17 @@
 #include <wx/debug.h>
 
 using namespace std::placeholders;
+
+
+SELECTION_CONDITION PCB_EDITOR_CONDITIONS::HasItems()
+{
+    // Requires a PCB_BASE_FRAME
+    PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
+
+    wxASSERT( drwFrame );
+
+    return std::bind( &PCB_EDITOR_CONDITIONS::padNumberDisplayFunc, _1, drwFrame );
+}
 
 
 SELECTION_CONDITION PCB_EDITOR_CONDITIONS::PadNumbersDisplay()
@@ -107,6 +119,14 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::ZoneDisplayMode( ZONE_DISPLAY_MODE aM
     wxASSERT( drwFrame );
 
     return std::bind( &PCB_EDITOR_CONDITIONS::zoneDisplayModeFunc, _1, drwFrame, aMode );
+}
+
+
+bool PCB_EDITOR_CONDITIONS::hasItemsFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
+{
+    BOARD* board = aFrame->GetBoard();
+
+    return board && !board->IsEmpty();
 }
 
 

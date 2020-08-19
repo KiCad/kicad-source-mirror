@@ -357,6 +357,9 @@ PCBNEW_SELECTION& SELECTION_TOOL::GetSelection()
 }
 
 
+
+
+
 PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
                                                     std::vector<BOARD_ITEM*>* aFiltered,
                                                     bool aConfirmLockedItems )
@@ -784,6 +787,33 @@ int SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
 int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 {
     AddItemToSel( aEvent.Parameter<BOARD_ITEM*>() );
+    return 0;
+}
+
+
+int SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
+{
+    KIGFX::VIEW* view = getView();
+
+    // hold all visible items
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
+
+    // Filter the view items based on the selection box
+    BOX2I selectionBox;
+
+    selectionBox.SetMaximum();
+    view->Query( selectionBox, selectedItems );         // Get the list of selected items
+
+    for( auto& item_pair : selectedItems )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( item_pair.first );
+
+        if( !item || !Selectable( item ) || !itemPassesFilter( item ) )
+            continue;
+
+        select( item );
+    }
+
     return 0;
 }
 
@@ -2607,4 +2637,6 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::selectSheetContents, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
     Go( &SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsModified );
     Go( &SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsMoved );
+
+    Go( &SELECTION_TOOL::SelectAll,           ACTIONS::selectAll.MakeEvent() );
 }
