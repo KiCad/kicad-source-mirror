@@ -9,15 +9,15 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
-#include <wx/sizer.h>
-#include <wx/gdicmn.h>
 #include <wx/scrolwin.h>
+#include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/radiobut.h>
+#include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/collpane.h>
@@ -47,8 +47,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxNotebook* m_notebook;
 		wxPanel* m_panelLayers;
 		wxBoxSizer* m_panelLayersSizer;
-		wxScrolledWindow* m_windowLayers;
-		wxBoxSizer* m_layers_outer_sizer;
+		wxScrolledCanvas* m_windowLayers;
 		wxCollapsiblePane* m_paneLayerDisplay;
 		wxStaticText* m_staticText13;
 		wxRadioButton* m_rbHighContrastNormal;
@@ -58,8 +57,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxCheckBox* m_cbFlipBoard;
 		wxPanel* m_panelObjects;
 		wxBoxSizer* m_objectsPanelSizer;
-		wxScrolledWindow* m_windowObjects;
-		wxBoxSizer* m_objectsSizer;
+		wxScrolledCanvas* m_windowObjects;
 		wxPanel* m_panelNetsAndClasses;
 		wxSplitterWindow* m_netsTabSplitter;
 		wxPanel* m_panelNets;
@@ -82,6 +80,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxChoice* m_cbLayerPresets;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnSetFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnNotebookPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
 		virtual void OnFlipBoardChecked( wxCommandEvent& event ) { event.Skip(); }

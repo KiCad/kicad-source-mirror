@@ -102,6 +102,16 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     int pointSize     = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
     int screenHeight  = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
 
+    m_layersOuterSizer = new wxBoxSizer( wxVERTICAL );
+    m_windowLayers->SetSizer( m_layersOuterSizer );
+    m_windowLayers->SetScrollRate( 0, 5 );
+    m_windowLayers->Bind( wxEVT_SET_FOCUS, &APPEARANCE_CONTROLS::OnSetFocus, this );
+
+    m_objectsOuterSizer = new wxBoxSizer( wxVERTICAL );
+    m_windowObjects->SetSizer( m_objectsOuterSizer );
+    m_windowObjects->SetScrollRate( 0, 5 );
+    m_windowObjects->Bind( wxEVT_SET_FOCUS, &APPEARANCE_CONTROLS::OnSetFocus, this );
+
     m_btnNetInspector->SetBitmapLabel( KiBitmap( list_nets_xpm ) );
     m_btnConfigureNetClasses->SetBitmapLabel( KiBitmap( options_generic_xpm ) );
 
@@ -173,6 +183,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     m_paneLayerDisplay->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
+    m_currentLayer = F_Cu;
+
     loadDefaultLayerPresets();
     rebuildObjects();
     OnBoardChanged();
@@ -240,6 +252,22 @@ void APPEARANCE_CONTROLS::OnNotebookPageChanged( wxNotebookEvent& aEvent )
     m_sizerOuter->Layout();
     Thaw();
 #endif
+
+    Bind( wxEVT_IDLE, &APPEARANCE_CONTROLS::idleFocusHandler, this );
+}
+
+
+void APPEARANCE_CONTROLS::idleFocusHandler( wxIdleEvent& aEvent )
+{
+    passOnFocus();
+    Unbind( wxEVT_IDLE, &APPEARANCE_CONTROLS::idleFocusHandler, this );
+}
+
+
+void APPEARANCE_CONTROLS::OnSetFocus( wxFocusEvent& aEvent )
+{
+    passOnFocus();
+    aEvent.Skip();
 }
 
 
@@ -316,23 +344,19 @@ void APPEARANCE_CONTROLS::OnLayerChanged()
 
     PCB_LAYER_ID current = m_frame->GetActiveLayer();
 
-    for( std::unique_ptr<APPEARANCE_SETTING>& setting : m_layerSettings )
-    {
-        LAYER_NUM layer = setting->id;
+    wxASSERT( m_layerSettingsMap.count( current ) );
+    wxASSERT( m_layerSettingsMap.count( m_currentLayer ) );
 
-        if( setting->ctl_panel )
-        {
-            setting->ctl_panel->SetBackgroundColour( current == layer ?
-                                                     highlightColor : normalColor );
-        }
+    APPEARANCE_SETTING* oldSetting = m_layerSettingsMap.at( m_currentLayer );
+    APPEARANCE_SETTING* newSetting = m_layerSettingsMap.at( current );
 
-        if( setting->ctl_indicator )
-        {
-            setting->ctl_indicator->SetIndicatorState( current == layer ?
-                                                       ROW_ICON_PROVIDER::STATE::ON :
-                                                       ROW_ICON_PROVIDER::STATE::OFF );
-        }
-    }
+    oldSetting->ctl_panel->SetBackgroundColour( normalColor );
+    newSetting->ctl_panel->SetBackgroundColour( highlightColor );
+
+    oldSetting->ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
+    newSetting->ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::ON );
+
+    m_currentLayer = current;
 
 #if defined( __WXMAC__ ) || defined( __WXMSW__ )
     Refresh();
@@ -516,7 +540,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 #endif
 
     m_layerSettings.clear();
-    m_layers_outer_sizer->Clear( true );
+    m_layersOuterSizer->Clear( true );
 
     auto appendLayer =
             [&]( std::unique_ptr<APPEARANCE_SETTING>& aSetting )
@@ -560,7 +584,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 sizer->AddSpacer( 5 );
                 sizer->Add( label, 1, wxALIGN_CENTER_VERTICAL | wxTOP, topMargin );
 
-                m_layers_outer_sizer->Add( panel, 0, wxEXPAND, 0 );
+                m_layersOuterSizer->Add( panel, 0, wxEXPAND, 0 );
 
                 aSetting->ctl_panel      = panel;
                 aSetting->ctl_indicator  = indicator;
@@ -593,6 +617,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                         {
                             wxASSERT( m_layerContextMenu );
                             PopupMenu( m_layerContextMenu );
+                            passOnFocus();
                         };
 
                 panel->Bind( wxEVT_RIGHT_DOWN, rightClickHandler );
@@ -688,7 +713,8 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 #endif
     }
 
-    m_layers_outer_sizer->Layout();
+    m_layersOuterSizer->AddSpacer( 10 );
+    m_windowLayers->Layout();
 }
 
 
@@ -909,6 +935,7 @@ void APPEARANCE_CONTROLS::onLayerClick( wxMouseEvent& aEvent )
 #endif
 
     m_frame->SetActiveLayer( layer );
+    passOnFocus();
 }
 
 
@@ -996,8 +1023,8 @@ void APPEARANCE_CONTROLS::rebuildObjects()
     int             labelWidth = 0;
 
     m_objectSettings.clear();
-    m_objectsSizer->Clear( true );
-    m_objectsSizer->AddSpacer( 5 );
+    m_objectsOuterSizer->Clear( true );
+    m_objectsOuterSizer->AddSpacer( 5 );
 
     auto appendObject =
             [&]( const std::unique_ptr<APPEARANCE_SETTING>& aSetting )
@@ -1090,6 +1117,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
 
                     slider->Bind( wxEVT_SCROLL_CHANGED, opacitySliderHandler );
                     slider->Bind( wxEVT_SCROLL_THUMBTRACK, opacitySliderHandler );
+                    slider->Bind( wxEVT_SET_FOCUS, &APPEARANCE_CONTROLS::OnSetFocus, this );
                 }
                 else
                 {
@@ -1099,8 +1127,8 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 }
 
                 aSetting->ctl_text = label;
-                m_objectsSizer->Add( sizer, 0, wxEXPAND | wxLEFT | wxRIGHT, 5 );
-                m_objectsSizer->AddSpacer( 1 );
+                m_objectsOuterSizer->Add( sizer, 0, wxEXPAND | wxLEFT | wxRIGHT, 5 );
+                m_objectsOuterSizer->AddSpacer( 1 );
             };
 
     for( const APPEARANCE_SETTING& s_setting : s_objectSettings )
@@ -1136,12 +1164,12 @@ void APPEARANCE_CONTROLS::rebuildObjects()
     for( const std::unique_ptr<APPEARANCE_SETTING>& setting : m_objectSettings )
     {
         if( setting->spacer )
-            m_objectsSizer->AddSpacer( m_pointSize );
+            m_objectsOuterSizer->AddSpacer( m_pointSize );
         else
             appendObject( setting );
     }
 
-    m_objectsSizer->Layout();
+    m_objectsOuterSizer->Layout();
 }
 
 

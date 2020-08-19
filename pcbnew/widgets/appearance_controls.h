@@ -157,6 +157,8 @@ protected:
 
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
 
+    void OnSetFocus( wxFocusEvent& aEvent ) override;
+
 private:
     PCB_BASE_FRAME* m_frame;
 
@@ -167,6 +169,8 @@ private:
     ROW_ICON_PROVIDER* m_iconProvider;
 
     BOARD* m_board;
+
+    PCB_LAYER_ID m_currentLayer;
 
     std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_layerSettings;
 
@@ -201,6 +205,9 @@ private:
 
     /// The name of the netclass that was right-clicked
     wxString m_contextMenuNetclass;
+
+    wxBoxSizer* m_layersOuterSizer;
+    wxBoxSizer* m_objectsOuterSizer;
 
     // The built-in layer presets
 
@@ -288,6 +295,8 @@ private:
     void handleBoardItemsChanged();
 
     void passOnFocus();
+
+    void idleFocusHandler( wxIdleEvent& aEvent );
 };
 
 #endif
