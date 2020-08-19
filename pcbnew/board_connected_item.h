@@ -123,7 +123,9 @@ public:
      */
     const wxString& GetNetname() const
     {
-        return m_netinfo->GetNetname();
+        static const wxString s_emptyString;
+
+        return m_netinfo ? m_netinfo->GetNetname() : s_emptyString;
     }
 
     /**
