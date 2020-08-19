@@ -358,7 +358,8 @@ install path. At the command prompt run the the following commands:
               mingw-w64-x86_64-toolchain \
               mingw-w64-x86_64-glm \
               mingw-w64-x86_64-oce \
-              mingw-w64-x86_64-ngspice
+              mingw-w64-x86_64-ngspice \
+              mingw-w64-x86_64-zlib
     cd kicad-source
     mkdir -p build/release
     mkdir build/debug               # Optional for debug build.
@@ -556,3 +557,4 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [liboce]: https://github.com/tpaviot/oce
 [libocc]: https://www.opencascade.com/content/overview
 [libngspice]: https://sourceforge.net/projects/ngspice/
+[ZLib]: http://www.zlib.net/
