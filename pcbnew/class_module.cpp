@@ -128,8 +128,9 @@ MODULE::MODULE( const MODULE& aModule ) :
     // Copy auxiliary data: 3D_Drawings info
     m_3D_Drawings = aModule.m_3D_Drawings;
 
-    m_Doc     = aModule.m_Doc;
-    m_KeyWord = aModule.m_KeyWord;
+    m_Doc         = aModule.m_Doc;
+    m_KeyWord     = aModule.m_KeyWord;
+    m_properties  = aModule.m_properties;
 
     m_arflag = 0;
 
@@ -246,6 +247,7 @@ MODULE& MODULE::operator=( MODULE&& aOther )
     m_3D_Drawings = aOther.m_3D_Drawings;
     m_Doc         = aOther.m_Doc;
     m_KeyWord     = aOther.m_KeyWord;
+    m_properties  = aOther.m_properties;
 
     // Ensure auxiliary data is up to date
     CalculateBoundingBox();
@@ -337,6 +339,7 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     m_3D_Drawings = aOther.m_3D_Drawings;
     m_Doc         = aOther.m_Doc;
     m_KeyWord     = aOther.m_KeyWord;
+    m_properties  = aOther.m_properties;
 
     // Ensure auxiliary data is up to date
     CalculateBoundingBox();
