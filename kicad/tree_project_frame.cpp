@@ -488,10 +488,9 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
     data->SetState( 0 );
 
     // Mark root files (files which have the same aName as the project)
-    if( currfile.GetName().CmpNoCase( project.GetName() ) == 0 )
-        data->SetRootFile( true );
-    else
-        data->SetRootFile( false );
+    wxString fileName = currfile.GetName().Lower();
+    wxString projName = project.GetName().Lower();
+    data->SetRootFile( fileName == projName || fileName.StartsWith( projName + "-" ) );
 
 #ifndef __WINDOWS__
     bool subdir_populated = false;
