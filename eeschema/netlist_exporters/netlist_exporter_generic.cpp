@@ -123,15 +123,15 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
                 // field value)
                 if( !comp2->GetField( VALUE )->IsVoid()
                         && ( unit < minUnit || fields.value.IsEmpty() ) )
-                    fields.value = comp2->GetField( VALUE )->GetText();
+                    fields.value = comp2->GetField( VALUE )->GetShownText();
 
                 if( !comp2->GetField( FOOTPRINT )->IsVoid()
                         && ( unit < minUnit || fields.footprint.IsEmpty() ) )
-                    fields.footprint = comp2->GetField( FOOTPRINT )->GetText();
+                    fields.footprint = comp2->GetField( FOOTPRINT )->GetShownText();
 
                 if( !comp2->GetField( DATASHEET )->IsVoid()
                         && ( unit < minUnit || fields.datasheet.IsEmpty() ) )
-                    fields.datasheet = comp2->GetField( DATASHEET )->GetText();
+                    fields.datasheet = comp2->GetField( DATASHEET )->GetShownText();
 
                 for( int fldNdx = MANDATORY_FIELDS;  fldNdx < comp2->GetFieldCount();  ++fldNdx )
                 {
@@ -140,27 +140,26 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
                     if( f->GetText().size()
                         && ( unit < minUnit || fields.f.count( f->GetName() ) == 0 ) )
                     {
-                        fields.f[ f->GetName() ] = f->GetText();
+                        fields.f[ f->GetName() ] = f->GetShownText();
                     }
                 }
 
                 minUnit = std::min( unit, minUnit );
             }
         }
-
     }
     else
     {
-        fields.value = comp->GetField( VALUE )->GetText();
-        fields.footprint = comp->GetField( FOOTPRINT )->GetText();
-        fields.datasheet = comp->GetField( DATASHEET )->GetText();
+        fields.value = comp->GetField( VALUE )->GetShownText();
+        fields.footprint = comp->GetField( FOOTPRINT )->GetShownText();
+        fields.datasheet = comp->GetField( DATASHEET )->GetShownText();
 
         for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
         {
             SCH_FIELD*  f = comp->GetField( fldNdx );
 
             if( f->GetText().size() )
-                fields.f[ f->GetName() ] = f->GetText();
+                fields.f[ f->GetName() ] = f->GetShownText();
         }
     }
 
@@ -209,12 +208,11 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
     {
         SCH_SHEET_PATH sheet = sheetList[ii];
 
-        auto cmp =
-                [sheet]( SCH_COMPONENT* a, SCH_COMPONENT* b )
-                {
-                    return ( UTIL::RefDesStringCompare( a->GetRef( &sheet ),
-                                                        b->GetRef( &sheet ) ) < 0 );
-                };
+        auto cmp = [sheet]( SCH_COMPONENT* a, SCH_COMPONENT* b )
+                   {
+                       return ( UTIL::RefDesStringCompare( a->GetRef( &sheet ),
+                                                           b->GetRef( &sheet ) ) < 0 );
+                   };
 
         std::set<SCH_COMPONENT*, decltype( cmp )> ordered_components( cmp );
 
@@ -303,12 +301,13 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
 XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
 {
     SCH_SCREEN* screen;
-    XNODE*     xdesign = node( "design" );
-    XNODE*     xtitleBlock;
-    XNODE*     xsheet;
-    XNODE*     xcomment;
-    wxString   sheetTxt;
-    wxFileName sourceFileName;
+    XNODE*      xdesign = node( "design" );
+    XNODE*      xtitleBlock;
+    XNODE*      xsheet;
+    XNODE*      xcomment;
+    XNODE*      xtextvar;
+    wxString    sheetTxt;
+    wxFileName  sourceFileName;
 
     // the root sheet is a special sheet, call it source
     xdesign->AddChild( node( "source", m_schematic->GetFileName() ) );
@@ -318,9 +317,17 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
     // which Eeschema tool
     xdesign->AddChild( node( "tool", wxString( "Eeschema " ) + GetBuildVersion() ) );
 
+    const std::map<wxString, wxString>& properties = m_schematic->Prj().GetTextVars();
+
+    for( const std::pair<const wxString, wxString>& prop : properties )
+    {
+        xdesign->AddChild( xtextvar = node( "textvar", prop.second ) );
+        xtextvar->AddAttribute( "name", prop.first );
+    }
+
     /*
-        Export the sheets information
-    */
+     *  Export the sheets information
+     */
     SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
 
     for( unsigned i = 0;  i < sheetList.size();  i++ )
@@ -394,19 +401,19 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
 
 XNODE* NETLIST_EXPORTER_GENERIC::makeLibraries()
 {
-    XNODE*  xlibs = node( "libraries" );     // auto_ptr
+    XNODE*            xlibs = node( "libraries" );     // auto_ptr
+    SYMBOL_LIB_TABLE* symbolLibTable = m_schematic->Prj().SchSymbolLibTable();
 
     for( std::set<wxString>::iterator it = m_libraries.begin(); it!=m_libraries.end();  ++it )
     {
         wxString    libNickname = *it;
         XNODE*      xlibrary;
 
-        if( m_schematic->Prj().SchSymbolLibTable()->HasLibrary( libNickname ) )
+        if( symbolLibTable->HasLibrary( libNickname ) )
         {
             xlibs->AddChild( xlibrary = node( "library" ) );
             xlibrary->AddAttribute( "logical", libNickname );
-            xlibrary->AddChild( node(
-                    "uri", m_schematic->Prj().SchSymbolLibTable()->GetFullURI( libNickname ) ) );
+            xlibrary->AddChild( node( "uri", symbolLibTable->GetFullURI( libNickname ) ) );
         }
 
         // @todo: add more fun stuff here
@@ -549,45 +556,52 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
         XNODE* xnode;
         std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
 
-        for( auto subgraph : subgraphs )
+        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
-            auto sheet = subgraph->m_sheet;
+            const SCH_SHEET_PATH& sheet = subgraph->m_sheet;
 
-            for( auto item : subgraph->m_items )
+            for( SCH_ITEM* item : subgraph->m_items )
+            {
                 if( item->Type() == SCH_PIN_T )
-                    sorted_items.emplace_back(
-                            std::make_pair( static_cast<SCH_PIN*>( item ), sheet ) );
+                    sorted_items.emplace_back( static_cast<SCH_PIN*>( item ), sheet );
+            }
         }
 
         // Netlist ordering: Net name, then ref des, then pin name
-        std::sort( sorted_items.begin(), sorted_items.end(), [] ( auto a, auto b ) {
-                    auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
-                    auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
+        std::sort( sorted_items.begin(), sorted_items.end(),
+                   []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a,
+                       const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
+                   {
+                       wxString ref_a = a.first->GetParentComponent()->GetRef( &a.second );
+                       wxString ref_b = b.first->GetParentComponent()->GetRef( &b.second );
 
-                    if( ref_a == ref_b )
-                        return a.first->GetNumber() < b.first->GetNumber();
+                       if( ref_a == ref_b )
+                           return a.first->GetNumber() < b.first->GetNumber();
 
-                    return ref_a < ref_b;
-                } );
+                       return ref_a < ref_b;
+                   } );
 
         // Some duplicates can exist, for example on multi-unit parts with duplicated
         // pins across units.  If the user connects the pins on each unit, they will
         // appear on separate subgraphs.  Remove those here:
         sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
-                [] ( auto a, auto b ) {
-                    auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
-                    auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
+                []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a,
+                    const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
+                {
+                    wxString ref_a = a.first->GetParentComponent()->GetRef( &a.second );
+                    wxString ref_b = b.first->GetParentComponent()->GetRef( &b.second );
 
                     return ref_a == ref_b && a.first->GetNumber() == b.first->GetNumber();
-                } ), sorted_items.end() );
+                } ),
+                sorted_items.end() );
 
-        for( const auto& pair : sorted_items )
+        for( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& pair : sorted_items )
         {
             SCH_PIN* pin = pair.first;
             SCH_SHEET_PATH sheet = pair.second;
 
-            auto refText = pin->GetParentComponent()->GetRef( &sheet );
-            const auto& pinText = pin->GetNumber();
+            wxString refText = pin->GetParentComponent()->GetRef( &sheet );
+            wxString pinText = pin->GetNumber();
 
             // Skip power symbols and virtual components
             if( refText[0] == wxChar( '#' ) )
