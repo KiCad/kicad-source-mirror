@@ -256,7 +256,7 @@ public:
     MARKERS& Markers() { return m_markers; }
 
     /**
-     * The groups must maintain the folowing invariants. These are checked by 
+     * The groups must maintain the folowing invariants. These are checked by
      * GroupsSanityCheck():
      *   - An item may appear in at most one group
      *   - Each gruop must contain at least one item
@@ -536,13 +536,8 @@ public:
      */
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const
     {
-        // remove const-ness with cast. TODO(snh): Make GetDesignSettings const
-        // NOTE(JE) If we want this to be const, it's going to have to involve making BOARD and
-        // everything else that relies on BOARD_DESIGN_SETTINGS aware of the PROJECT so that it
-        // can be retrieved from there.  This will also currently require constructing BOARD with
-        // a valid PROJECT passed in to the ctor.
 
-        return const_cast<BOARD_DESIGN_SETTINGS&>( *m_designSettings.get() );
+        return *m_designSettings;
     }
 
     const ZONE_SETTINGS& GetZoneSettings() const override
@@ -1211,7 +1206,7 @@ public:
      * recursively remove empty groups that result.
      */
     void GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* commit );
-  
+
 
     struct GroupLegalOpsField
     {
