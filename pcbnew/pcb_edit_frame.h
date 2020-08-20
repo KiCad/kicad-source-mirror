@@ -243,6 +243,8 @@ protected:
     // protected so that PCB::IFACE::CreateWindow() is the only factory.
     PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
+    void onSize( wxSizeEvent& aEvent );
+
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
     wxChoice* m_SelTrackWidthBox;           // a choice box to display and select current track width

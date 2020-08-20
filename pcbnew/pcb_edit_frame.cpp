@@ -110,7 +110,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_CHOICE( ID_ON_GRID_SELECT, PCB_EDIT_FRAME::OnSelectGrid )
 
     EVT_CLOSE( PCB_EDIT_FRAME::OnCloseWindow )
-    EVT_SIZE( PCB_EDIT_FRAME::OnSize )
 
     EVT_TOOL( ID_MENU_RECOVER_BOARD_AUTOSAVE, PCB_EDIT_FRAME::Files_io )
 
@@ -295,6 +294,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.Update();
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
+
+    // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
+    // to calculate the wrong zoom size.  See PCB_EDIT_FRAME::onSize().
+    Bind( wxEVT_SIZE, &PCB_EDIT_FRAME::onSize, this );
 
     m_canvasType = LoadCanvasTypeSetting();
 
@@ -1623,4 +1626,19 @@ bool PCB_EDIT_FRAME::LayerManagerShown()
 bool PCB_EDIT_FRAME::MicrowaveToolbarShown()
 {
     return m_auimgr.GetPane( "MicrowaveToolbar" ).IsShown();
+}
+
+
+void PCB_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
+{
+    if( IsShown() )
+    {
+        // We only need this until the frame is done resizing and the final client size is
+        // established.
+        Unbind( wxEVT_SIZE, &PCB_EDIT_FRAME::onSize, this );
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+    }
+
+    // Skip() is called in the base class.
+    EDA_DRAW_FRAME::OnSize( aEvent );
 }

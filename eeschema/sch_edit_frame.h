@@ -154,6 +154,8 @@ protected:
      */
     void sendNetlistToCvpcb();
 
+    void onSize( wxSizeEvent& aEvent );
+
 public:
     SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SCH_EDIT_FRAME() override;

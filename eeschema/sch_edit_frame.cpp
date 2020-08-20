@@ -276,6 +276,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
 
+    // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
+    // to calculate the wrong zoom size.  See SCH_EDIT_FRAME::onSize().
+    Bind( wxEVT_SIZE, &SCH_EDIT_FRAME::onSize, this );
+
     if( GetCanvas() )
     {
         GetCanvas()->GetGAL()->SetAxesEnabled( false );
@@ -1341,4 +1345,19 @@ wxString SCH_EDIT_FRAME::GetCurrentFileName() const
 SELECTION& SCH_EDIT_FRAME::GetCurrentSelection()
 {
     return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+}
+
+
+void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
+{
+    if( IsShown() )
+    {
+        // We only need this until the frame is done resizing and the final client size is
+        // established.
+        Unbind( wxEVT_SIZE, &SCH_EDIT_FRAME::onSize, this );
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+    }
+
+    // Skip() is called in the base class.
+    EDA_DRAW_FRAME::OnSize( aEvent );
 }
