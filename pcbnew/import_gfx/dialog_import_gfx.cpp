@@ -100,7 +100,6 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
 
     // Configure the layers list selector
     m_SelLayerBox->SetLayersHotkeys( false );                    // Do not display hotkeys
-    m_SelLayerBox->SetNotAllowedLayerSet( LSET::AllCuMask() );   // Do not use copper layers
     m_SelLayerBox->SetBoardFrame( m_parent );
     m_SelLayerBox->Resync();
 
