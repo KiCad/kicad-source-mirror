@@ -37,6 +37,7 @@
 // Static members of DIALOG_IMPORT_GFX, to remember the user's choices during the session
 wxString DIALOG_IMPORT_GFX::m_filename;
 bool DIALOG_IMPORT_GFX::m_placementInteractive = true;
+bool DIALOG_IMPORT_GFX::m_shouldGroupItems = true;
 LAYER_NUM DIALOG_IMPORT_GFX::m_layer = Dwgs_User;
 double DIALOG_IMPORT_GFX::m_scaleImport = 1.0;     // Do not change the imported items size
 int DIALOG_IMPORT_GFX::m_originUnits = 0;          // millimeter
@@ -95,6 +96,7 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     m_textCtrlFileName->SetValue( m_filename );
     m_rbInteractivePlacement->SetValue( m_placementInteractive );
     m_rbAbsolutePlacement->SetValue( not m_placementInteractive );
+    m_groupItems->SetValue( m_shouldGroupItems );
 
     m_textCtrlImportScale->SetValue( wxString::Format( "%f", m_scaleImport ) );
 

@@ -56,6 +56,14 @@ public:
         return m_placementInteractive;
     }
 
+    /**
+     * @return true if the items should be added into a group when being placed.
+     */
+    bool ShouldGroupItems()
+    {
+        return m_shouldGroupItems;
+    }
+
     bool TransferDataFromWindow() override;
 
 private:
@@ -67,6 +75,7 @@ private:
                                                 // Always in mm
 
     static wxString      m_filename;
+    static bool          m_shouldGroupItems;
     static bool          m_placementInteractive;
     static LAYER_NUM     m_layer;
     double               m_lineWidth;           // always in mm: line width when a line width
@@ -89,6 +98,11 @@ private:
 	void onAbsolutePlacement( wxCommandEvent& event ) override
     {
         m_placementInteractive = false;
+    }
+
+    void onGroupItems( wxCommandEvent& event ) override
+    {
+        m_shouldGroupItems = m_groupItems->GetValue();
     }
 
     void updatePcbImportOffsets_mm();

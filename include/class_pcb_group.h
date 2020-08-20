@@ -35,6 +35,7 @@
 #ifndef CLASS_PCB_GROUP_H_
 #define CLASS_PCB_GROUP_H_
 
+#include <board_commit.h>
 #include <class_board_item.h>
 #include <common.h>
 #include <unordered_set>
@@ -171,6 +172,20 @@ public:
 
     ///> @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
+
+    /**
+     * Add all the immediate children of this group to the board commit. This function does not
+     * enter any subgroups of this group, or add the group itself.
+     *
+     * @param aCommit is the commit to add the children to.
+     */
+    void AddChildrenToCommit( BOARD_COMMIT& aCommit )
+    {
+        RunOnChildren( [&]( BOARD_ITEM* bItem )
+                       {
+                           aCommit.Add( bItem );
+                       } );
+    }
 
     /**
      * Invokes a function on all members of the group.

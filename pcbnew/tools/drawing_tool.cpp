@@ -751,7 +751,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     DIALOG_IMPORT_GFX dlg( m_frame, m_editModules );
     int dlgResult = dlg.ShowModal();
 
-    auto& list = dlg.GetImportedItems();
+    std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();
 
     if( dlgResult != wxID_OK )
         return 0;
@@ -767,7 +767,11 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCBNEW_SELECTION preview;
-    BOARD_COMMIT commit( m_frame );
+    BOARD_COMMIT     commit( m_frame );
+    PCB_GROUP*       grp = nullptr;
+
+    if( dlg.ShouldGroupItems() )
+        grp = new PCB_GROUP( m_frame->GetBoard() );
 
     // Build the undo list & add items to the current view
     for( auto& ptr : list)
@@ -779,7 +783,9 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         else
             wxASSERT( item->Type() == PCB_LINE_T || item->Type() == PCB_TEXT_T );
 
-        if( dlg.IsPlacementInteractive() )
+        if( grp )
+            grp->AddItem( static_cast<BOARD_ITEM*>( item ) );
+        else if( dlg.IsPlacementInteractive() )
             preview.Add( item );
         else
             commit.Add( item );
@@ -789,14 +795,31 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     if( !dlg.IsPlacementInteractive() )
     {
+        if( grp )
+        {
+            grp->AddChildrenToCommit( commit );
+            commit.Add( grp );
+        }
+
         commit.Push( _( "Place a DXF_SVG drawing" ) );
         return 0;
     }
 
+    if( grp )
+        preview.Add( grp );
+
+    std::vector<BOARD_ITEM*> newItems;
+
+    for( EDA_ITEM* item : preview )
+        newItems.push_back( static_cast<BOARD_ITEM*>( item ) );
+
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( preview.Front() );
     m_view->Add( &preview );
 
+    // Clear the current selection then select the drawings so that edit tools work on them
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &newItems );
+
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->ForceCursorPosition( false );
@@ -824,6 +847,18 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+            // If a group is being used, we must delete the items themselves,
+            // since they are only in the group and not in the preview
+            if( grp )
+            {
+                grp->RunOnChildren( [&]( BOARD_ITEM* bItem )
+                                    {
+                                        delete bItem ;
+                                    } );
+            }
+
             preview.FreeItems();
             break;
         }
@@ -836,29 +871,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
             m_view->Update( &preview );
         }
-        else if( evt->Category() == TC_COMMAND )
-        {
-            // TODO it should be handled by EDIT_TOOL, so add items and select?
-            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
-            {
-                const auto rotationPoint = (wxPoint) cursorPos;
-                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *m_frame, *evt );
-
-                for( auto item : preview )
-                    static_cast<BOARD_ITEM*>( item )->Rotate( rotationPoint, rotationAngle );
-
-                m_view->Update( &preview );
-            }
-            else if( evt->IsAction( &PCB_ACTIONS::flip ) )
-            {
-                bool leftRight = m_frame->Settings().m_FlipLeftRight;
-
-                for( EDA_ITEM* item : preview )
-                    static_cast<BOARD_ITEM*>( item )->Flip( (wxPoint) cursorPos, leftRight );
-
-                m_view->Update( &preview );
-            }
-        }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection() );
@@ -867,7 +879,12 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         {
             // Place the imported drawings
             for( EDA_ITEM* item : preview )
+            {
+                if( item->Type() == PCB_GROUP_T )
+                    static_cast<PCB_GROUP*>( item )->AddChildrenToCommit( commit );
+
                 commit.Add( item );
+            }
 
             commit.Push( _( "Place a DXF_SVG drawing" ) );
             break;   // This is a one-shot command, not a tool

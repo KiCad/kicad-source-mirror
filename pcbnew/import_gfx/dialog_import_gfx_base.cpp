@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -107,13 +107,13 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	bSizerPosSettings->Add( m_DxfPcbPositionUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizerUserPos->Add( bSizerPosSettings, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizerUserPos->Add( bSizerPosSettings, 1, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
 
 
 	bSizerOptions->Add( bSizerUserPos, 0, wxEXPAND, 5 );
 
 
-	sbSizer2->Add( bSizerOptions, 1, wxEXPAND|wxLEFT, 20 );
+	sbSizer2->Add( bSizerOptions, 0, wxEXPAND|wxLEFT, 20 );
 
 
 	bSizerMain->Add( sbSizer2, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
@@ -144,7 +144,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	int m_choiceUnitLineWidthNChoices = sizeof( m_choiceUnitLineWidthChoices ) / sizeof( wxString );
 	m_choiceUnitLineWidth = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnitLineWidthNChoices, m_choiceUnitLineWidthChoices, 0 );
 	m_choiceUnitLineWidth->SetSelection( 0 );
-	fgSizerImportSettings->Add( m_choiceUnitLineWidth, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerImportSettings->Add( m_choiceUnitLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticTextBrdlayer = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Graphic layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBrdlayer->Wrap( -1 );
@@ -172,6 +172,20 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	sbSizer1->Add( bSizer7, 1, wxEXPAND, 5 );
 
+	m_staticline1 = new wxStaticLine( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	sbSizer1->Add( m_staticline1, 0, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxVERTICAL );
+
+	m_groupItems = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Group items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_groupItems->SetToolTip( _("Add all imported items into a new group") );
+
+	bSizer8->Add( m_groupItems, 0, wxBOTTOM|wxEXPAND|wxLEFT, 10 );
+
+
+	sbSizer1->Add( bSizer8, 0, wxALL|wxEXPAND, 5 );
+
 
 	bSizerMain->Add( sbSizer1, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
@@ -190,7 +204,6 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 
@@ -202,6 +215,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	m_rbAbsolutePlacement->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_BASE::originOptionOnUpdateUI ), NULL, this );
 	m_DxfPcbPositionUnits->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onUnitPositionSelection ), NULL, this );
 	m_choiceUnitLineWidth->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onUnitWidthSelection ), NULL, this );
+	m_groupItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onGroupItems ), NULL, this );
 }
 
 DIALOG_IMPORT_GFX_BASE::~DIALOG_IMPORT_GFX_BASE()
@@ -214,5 +228,6 @@ DIALOG_IMPORT_GFX_BASE::~DIALOG_IMPORT_GFX_BASE()
 	m_rbAbsolutePlacement->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_BASE::originOptionOnUpdateUI ), NULL, this );
 	m_DxfPcbPositionUnits->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onUnitPositionSelection ), NULL, this );
 	m_choiceUnitLineWidth->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onUnitWidthSelection ), NULL, this );
+	m_groupItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onGroupItems ), NULL, this );
 
 }

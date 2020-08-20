@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,6 +30,8 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/choice.h>
 #include <wx/statbox.h>
 #include <wx/bmpcbox.h>
+#include <wx/statline.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -61,6 +63,8 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;
 		wxStaticText* m_staticTextscale;
 		wxTextCtrl* m_textCtrlImportScale;
+		wxStaticLine* m_staticline1;
+		wxCheckBox* m_groupItems;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -72,11 +76,12 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		virtual void onAbsolutePlacement( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUnitPositionSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUnitWidthSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onGroupItems( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Vector Graphics File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Vector Graphics File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 446,432 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_IMPORT_GFX_BASE();
 
 };
