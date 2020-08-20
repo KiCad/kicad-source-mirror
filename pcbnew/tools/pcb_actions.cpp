@@ -529,7 +529,7 @@ TOOL_ACTION PCB_ACTIONS::generateD356File( "pcbnew.EditorControl.generateD356Fil
 
 TOOL_ACTION PCB_ACTIONS::generateBOM( "pcbnew.EditorControl.generateBOM",
         AS_GLOBAL, 0, "",
-        _( "BOM..." ), _( "Create bill of materials from current schematic" ),
+        _( "BOM..." ), _( "Create bill of materials from board" ),
         bom_xpm );
 
 // Track & via size control

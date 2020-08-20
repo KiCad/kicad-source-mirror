@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,16 +28,11 @@
 #include <fctsys.h>
 #include <confirm.h>
 #include <kicad_string.h>
-#include <gestfich.h>
-#include <pcbnew.h>
 #include <pcb_edit_frame.h>
-#include <macros.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
-
 #include <class_board.h>
 #include <class_module.h>
-
 #include <wx/listimpl.cpp>
 
 /* creates a BOM list rom board
@@ -73,6 +68,7 @@ WX_DECLARE_LIST( cmp, CmpList );
 
 WX_DEFINE_LIST( CmpList )
 
+
 void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 {
     wxFileName fn;
@@ -91,9 +87,8 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
     wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Save Bill of Materials" ), pro_dir,
-                      fn.GetFullName(), CsvFileWildcard(),
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog dlg( this, _( "Save Bill of Materials" ), pro_dir, fn.GetFullName(),
+                      CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -125,7 +120,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     CmpList::iterator iter;
     int               i = 1;
 
-    for( auto module : GetBoard()->Modules() )
+    for( MODULE* module : GetBoard()->Modules() )
     {
         bool valExist = false;
 
@@ -137,7 +132,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
             if( (current->m_Val == module->GetValue()) && (current->m_fpid == module->GetFPID()) )
             {
                 current->m_Ref.Append( wxT( ", " ), 1 );
-                current->m_Ref.Append( module->GetReference() );
+                current->m_Ref.Append( module->Reference().GetShownText() );
                 current->m_CmpCount++;
 
                 valExist = true;
@@ -150,8 +145,8 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         {
             comp = new cmp();
             comp->m_Id  = i++;
-            comp->m_Val = module->GetValue();
-            comp->m_Ref = module->GetReference();
+            comp->m_Val = module->Value().GetShownText();
+            comp->m_Ref = module->Reference().GetShownText();
             comp->m_fpid = module->GetFPID();
             comp->m_CmpCount = 1;
             list.Append( comp );
