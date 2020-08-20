@@ -110,6 +110,7 @@ EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
         m_unit( 0 ),
         m_convert( 0 )
 {
+    m_selection.Clear();
 }
 
 
@@ -559,6 +560,52 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFil
     }
 
     return false;
+}
+
+
+int EE_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
+{
+    m_multiple = true;          // Multiple selection mode is active
+    KIGFX::VIEW* view = getView();
+
+    // hold all visible items
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> sheetPins;
+
+    // Filter the view items based on the selection box
+    BOX2I selectionBox;
+
+    selectionBox.SetMaximum();
+    view->Query( selectionBox, selectedItems );         // Get the list of selected items
+
+    // Sheet pins aren't in the view; add them by hand
+    for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : selectedItems )
+    {
+        SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( pair.first );
+
+        if( sheet )
+        {
+            int layer = pair.second;
+
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                sheetPins.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( pin, layer ) );
+        }
+    }
+
+    selectedItems.insert( selectedItems.end(), sheetPins.begin(), sheetPins.end() );
+
+    for( auto& item_pair : selectedItems )
+    {
+        if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( item_pair.first ) )
+        {
+            if( Selectable( item ) )
+                select( item );
+        }
+    }
+
+    m_multiple = false;
+
+    return 0;
 }
 
 
@@ -1466,6 +1513,8 @@ void EE_SELECTION_TOOL::setTransitions()
     Go( &EE_SELECTION_TOOL::RemoveItemFromSel,   EE_ACTIONS::removeItemFromSel.MakeEvent() );
     Go( &EE_SELECTION_TOOL::RemoveItemsFromSel,  EE_ACTIONS::removeItemsFromSel.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectionMenu,       EE_ACTIONS::selectionMenu.MakeEvent() );
+
+    Go( &EE_SELECTION_TOOL::SelectAll,           EE_ACTIONS::selectAll.MakeEvent() );
 }
 
 

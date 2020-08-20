@@ -361,6 +361,12 @@ void SCH_EDIT_FRAME::setupUIConditions()
 
     wxASSERT( mgr );
 
+    auto hasElements =
+            [ this ] ( const SELECTION& aSel )
+            {
+                return !GetScreen()->Items().empty();
+            };
+
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
@@ -381,6 +387,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::pasteSpecial,        ENABLE( SELECTION_CONDITIONS::Idle ) );
     mgr->SetConditions( ACTIONS::doDelete,            ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::selectAll,           ENABLE( hasElements ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );

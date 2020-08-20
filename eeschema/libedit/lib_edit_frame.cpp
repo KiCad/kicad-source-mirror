@@ -335,6 +335,7 @@ void LIB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::paste,               ENABLE( haveSymbolCond && SELECTION_CONDITIONS::Idle ) );
     mgr->SetConditions( ACTIONS::doDelete,            ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::selectAll,           ENABLE( haveSymbolCond ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );

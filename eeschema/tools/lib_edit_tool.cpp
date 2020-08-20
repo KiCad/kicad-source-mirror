@@ -60,6 +60,12 @@ bool LIB_EDIT_TOOL::Init()
 
     wxASSERT_MSG( drawingTools, "eeschema.SymbolDrawing tool is not available" );
 
+    auto havePartCondition =
+            [&]( const SELECTION& sel )
+            {
+                return m_isLibEdit && static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+            };
+
     // Add edit actions to the move tool menu
     //
     if( moveTool )
@@ -79,6 +85,9 @@ bool LIB_EDIT_TOOL::Init()
         moveMenu.AddItem( ACTIONS::cut,                EE_CONDITIONS::IdleSelection, 300 );
         moveMenu.AddItem( ACTIONS::copy,               EE_CONDITIONS::IdleSelection, 300 );
         moveMenu.AddItem( ACTIONS::duplicate,          EE_CONDITIONS::NotEmpty, 300 );
+
+        moveMenu.AddSeparator( 400 );
+        moveMenu.AddItem( ACTIONS::selectAll,          havePartCondition, 400 );
     }
 
     // Add editing actions to the drawing tool menu
@@ -110,6 +119,9 @@ bool LIB_EDIT_TOOL::Init()
     selToolMenu.AddItem( ACTIONS::copy,                EE_CONDITIONS::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle, 300 );
     selToolMenu.AddItem( ACTIONS::duplicate,           EE_CONDITIONS::NotEmpty, 300 );
+
+    selToolMenu.AddSeparator( 400 );
+    selToolMenu.AddItem( ACTIONS::selectAll,           havePartCondition, 400 );
 
     return true;
 }

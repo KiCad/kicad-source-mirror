@@ -141,6 +141,12 @@ bool SCH_EDIT_TOOL::Init()
 
     wxASSERT_MSG( drawingTools, "eeshema.InteractiveDrawing tool is not available" );
 
+    auto hasElements =
+            [ this ] ( const SELECTION& aSel )
+            {
+                return !m_frame->GetScreen()->Items().empty();
+            };
+
     auto sheetTool =
             [ this ] ( const SELECTION& aSel )
             {
@@ -301,6 +307,9 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( ACTIONS::cut,                E_C::IdleSelection );
         moveMenu.AddItem( ACTIONS::copy,               E_C::IdleSelection );
         moveMenu.AddItem( ACTIONS::duplicate,          duplicateCondition );
+
+        moveMenu.AddSeparator();
+        moveMenu.AddItem( ACTIONS::selectAll,          hasElements );
     }
 
     //
@@ -373,6 +382,10 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( ACTIONS::paste,               E_C::Idle, 300 );
     selToolMenu.AddItem( ACTIONS::pasteSpecial,        E_C::Idle, 300 );
     selToolMenu.AddItem( ACTIONS::duplicate,           duplicateCondition, 300 );
+
+    selToolMenu.AddSeparator( 400 );
+    selToolMenu.AddItem( ACTIONS::selectAll,           hasElements, 400 );
+
 
     return true;
 }

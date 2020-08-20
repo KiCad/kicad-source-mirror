@@ -167,8 +167,7 @@ TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
 TOOL_ACTION ACTIONS::selectAll( "common.Interactive.selectAll",
         AS_GLOBAL,
         MD_CTRL + 'A', "",
-        _( "Select All" ), _( "Paste clipboard into schematic" ),
-        paste_xpm );
+        _( "Select All" ), _( "Paste clipboard into schematic" ) );
 
 TOOL_ACTION ACTIONS::pasteSpecial( "common.Interactive.pasteSpecial",
         AS_GLOBAL, 0, "",

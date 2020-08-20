@@ -143,6 +143,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::duplicate );
 
     editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::selectAll );
+
+    editMenu->AppendSeparator();
     editMenu->Add( ACTIONS::find );
     editMenu->Add( ACTIONS::findAndReplace );
 

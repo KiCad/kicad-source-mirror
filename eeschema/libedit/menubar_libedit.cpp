@@ -88,6 +88,9 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::duplicate );
 
     editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::selectAll );
+
+    editMenu->AppendSeparator();
     editMenu->Add( EE_ACTIONS::symbolProperties );
     editMenu->Add( EE_ACTIONS::pinTable );
 

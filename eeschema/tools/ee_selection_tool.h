@@ -130,6 +130,9 @@ public:
     ///> Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
 
+    ///> Select all visible items in sheet
+    int SelectAll( const TOOL_EVENT& aEvent );
+
     void ClearSelection();
 
     /**
