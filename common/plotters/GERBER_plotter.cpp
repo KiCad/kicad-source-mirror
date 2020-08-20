@@ -170,9 +170,8 @@ bool GERBER_PLOTTER::StartPlot()
 
     finalFile = outputFile;     // the actual gerber file will be created later
 
-    // Create a temporary filename to store gerber file
-    // note tmpfile() does not work under Vista and W7 in user mode
-    m_workFilename = filename + wxT(".tmp");
+    // Create a temp file in system temp to avoid potential network share buffer issues for the final read and save
+    m_workFilename = wxFileName::CreateTempFileName( "" );
     workFile   = wxFopen( m_workFilename, wxT( "wt" ));
     outputFile = workFile;
     wxASSERT( outputFile );
