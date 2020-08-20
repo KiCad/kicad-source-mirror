@@ -556,7 +556,7 @@ int PDF_PLOTTER::startPdfStream(int handle)
              "stream\n", handle + 1 );
 
     // Open a temporary file to accumulate the stream
-    workFilename = filename + wxT(".tmp");
+    workFilename = wxFileName::CreateTempFileName( "" );
     workFile = wxFopen( workFilename, wxT( "w+b" ));
     wxASSERT( workFile );
     return handle;
