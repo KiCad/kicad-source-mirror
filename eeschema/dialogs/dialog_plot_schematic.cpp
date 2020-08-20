@@ -156,17 +156,20 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
     wxFileName fn( Prj().AbsolutePath( m_parent->Schematic().Root().GetFileName() ) );
     wxString defaultPath = fn.GetPathWithSep();
     wxString msg;
-    msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ), GetChars( defaultPath ) );
+    wxFileName relPathTest; // Used to test if we can make the path relative
 
-    wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
-                            wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
+    relPathTest.Assign( dirDialog.GetPath() );
 
-    // relative directory selected
-    if( dialog.ShowModal() == wxID_YES )
+    // Test if making the path relative is possible before asking the user if they want to do it
+    if( relPathTest.MakeRelativeTo( defaultPath ) )
     {
-        if( !dirName.MakeRelativeTo( defaultPath ) )
-            wxMessageBox( _( "Cannot make path relative (target volume different from file "
-                             "volume)!" ), _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
+        msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ), GetChars( defaultPath ) );
+
+        wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
+                                wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
+
+        if( dialog.ShowModal() == wxID_YES )
+            dirName.MakeRelativeTo( defaultPath );
     }
 
     m_outputDirectoryName->SetValue( dirName.GetFullPath() );
