@@ -586,7 +586,7 @@ void PCB_IO::formatProperties( BOARD* aBoard, int aNestLevel ) const
 {
     for( const std::pair<const wxString, wxString>& prop : aBoard->GetProperties() )
     {
-        m_out->Print( aNestLevel+1, "(property %s %s)\n",
+        m_out->Print( aNestLevel, "(property %s %s)\n",
                       m_out->Quotew( prop.first ).c_str(),
                       m_out->Quotew( prop.second ).c_str() );
     }
