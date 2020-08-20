@@ -147,24 +147,20 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
     std::vector<SCH_LINE*>       lines;
     std::vector<SCH_JUNCTION*>   junctions;
     std::vector<SCH_NO_CONNECT*> ncs;
+    bool                         changed = true;
 
     if( aScreen == nullptr )
         aScreen = GetScreen();
 
-    auto remove_item = [&itemList, &deletedItems, &aScreen]( SCH_ITEM* aItem ) -> void
+    auto remove_item = [&]( SCH_ITEM* aItem ) -> void
                        {
+                           changed = true;
                            aItem->SetFlags( STRUCT_DELETED );
                            itemList.PushItem( ITEM_PICKER( aScreen, aItem, UR_DELETED ) );
                            deletedItems.push_back( aItem );
                        };
 
     BreakSegmentsOnJunctions( aScreen );
-
-    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_LINE_T ) )
-    {
-        if( item->GetLayer() == LAYER_WIRE || item->GetLayer() == LAYER_BUS )
-            lines.push_back( static_cast<SCH_LINE*>( item ) );
-    }
 
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
     {
@@ -205,66 +201,78 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                     remove_item( aSecond );
             } );
 
-    for( auto it1 = lines.begin(); it1 != lines.end(); ++it1 )
+
+    while( changed )
     {
-        SCH_LINE* firstLine = *it1;
+        changed = false;
+        lines.clear();
 
-        if( firstLine->GetEditFlags() & STRUCT_DELETED )
-            continue;
-
-        if( firstLine->IsNull() )
+        for( SCH_ITEM* item : aScreen->Items().OfType( SCH_LINE_T ) )
         {
-            remove_item( firstLine );
-            continue;
+            if( item->GetLayer() == LAYER_WIRE || item->GetLayer() == LAYER_BUS )
+                lines.push_back( static_cast<SCH_LINE*>( item ) );
         }
 
-        auto it2 = it1;
-
-        for( ++it2; it2 != lines.end(); ++it2 )
+        for( auto it1 = lines.begin(); it1 != lines.end(); ++it1 )
         {
-            SCH_LINE* secondLine = *it2;
-            bool      needed     = false;
+            SCH_LINE* firstLine = *it1;
 
-            if( secondLine->GetFlags() & STRUCT_DELETED )
+            if( firstLine->GetEditFlags() & STRUCT_DELETED )
                 continue;
 
-            if( !secondLine->IsParallel( firstLine )
-                    || secondLine->GetStroke() != firstLine->GetStroke()
-                    || secondLine->GetLayer() != firstLine->GetLayer() )
-                continue;
-
-            // Remove identical lines
-            if( firstLine->IsEndPoint( secondLine->GetStartPoint() )
-                    && firstLine->IsEndPoint( secondLine->GetEndPoint() ) )
+            if( firstLine->IsNull() )
             {
-                remove_item( secondLine );
+                remove_item( firstLine );
                 continue;
             }
 
-            // If the end points overlap, check if we still need the junction
-            if( secondLine->IsEndPoint( firstLine->GetStartPoint() ) )
-                needed = aScreen->IsJunctionNeeded( firstLine->GetStartPoint() );
-            else if( secondLine->IsEndPoint( firstLine->GetEndPoint() ) )
-                needed = aScreen->IsJunctionNeeded( firstLine->GetEndPoint() );
+            auto it2 = it1;
 
-            SCH_LINE* mergedLine = nullptr;
-
-            if( !needed && ( mergedLine = secondLine->MergeOverlap( firstLine ) ) )
+            for( ++it2; it2 != lines.end(); ++it2 )
             {
-                remove_item( firstLine );
-                remove_item( secondLine );
-                itemList.PushItem( ITEM_PICKER( aScreen, mergedLine, UR_NEW ) );
+                SCH_LINE* secondLine = *it2;
+                bool      needed     = false;
 
-                AddToScreen( mergedLine, aScreen );
+                if( secondLine->GetFlags() & STRUCT_DELETED )
+                    continue;
 
-                if( firstLine->IsSelected() )
-                    selectionTool->AddItemToSel( mergedLine, true /*quiet mode*/ );
+                if( !secondLine->IsParallel( firstLine )
+                        || secondLine->GetStroke() != firstLine->GetStroke()
+                        || secondLine->GetLayer() != firstLine->GetLayer() )
+                    continue;
 
-                break;
+                // Remove identical lines
+                if( firstLine->IsEndPoint( secondLine->GetStartPoint() )
+                        && firstLine->IsEndPoint( secondLine->GetEndPoint() ) )
+                {
+                    remove_item( secondLine );
+                    continue;
+                }
+
+                // If the end points overlap, check if we still need the junction
+                if( secondLine->IsEndPoint( firstLine->GetStartPoint() ) )
+                    needed = aScreen->IsJunctionNeeded( firstLine->GetStartPoint() );
+                else if( secondLine->IsEndPoint( firstLine->GetEndPoint() ) )
+                    needed = aScreen->IsJunctionNeeded( firstLine->GetEndPoint() );
+
+                SCH_LINE* mergedLine = nullptr;
+
+                if( !needed && ( mergedLine = secondLine->MergeOverlap( firstLine ) ) )
+                {
+                    remove_item( firstLine );
+                    remove_item( secondLine );
+                    itemList.PushItem( ITEM_PICKER( aScreen, mergedLine, UR_NEW ) );
+
+                    AddToScreen( mergedLine, aScreen );
+
+                    if( firstLine->IsSelected() )
+                        selectionTool->AddItemToSel( mergedLine, true /*quiet mode*/ );
+
+                    break;
+                }
             }
         }
     }
-
 
     for( auto item : deletedItems )
     {
