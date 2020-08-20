@@ -40,7 +40,7 @@ void configureSpinCtrl( wxSpinCtrl* aCtrl )
 }
 
 
-DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, COLOR4D& aCurrentColor,
+DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, const COLOR4D& aCurrentColor,
                                           bool aAllowOpacityControl,
                                           CUSTOM_COLORS_LIST* aUserColors,
                                           const COLOR4D& aDefaultColor ) :

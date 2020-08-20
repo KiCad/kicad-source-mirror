@@ -25,14 +25,37 @@
 
 #include <settings/color_settings.h>
 #include <dialogs/dialog_color_picker.h>
-#include <dialog_shim.h>
 
 
 //-------- Custom wxGridCellRenderers --------------------------------------------------
 
 
-GRID_CELL_COLOR_RENDERER::GRID_CELL_COLOR_RENDERER()
+GRID_CELL_COLOR_RENDERER::GRID_CELL_COLOR_RENDERER( wxWindow* aParent, SWATCH_SIZE aSize,
+                                                    const KIGFX::COLOR4D& aBackground ) :
+        wxGridCellRenderer(),
+        m_parent( aParent ),
+        m_background( aBackground )
 {
+    switch( aSize )
+    {
+    case SWATCH_MEDIUM: m_size = m_parent->ConvertDialogToPixels( SWATCH_SIZE_MEDIUM_DU ); break;
+    case SWATCH_SMALL:  m_size = m_parent->ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );  break;
+    case SWATCH_LARGE:  m_size = m_parent->ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );  break;
+    case SWATCH_EXPAND: m_size = wxDefaultSize; break;
+    }
+
+    m_checkerboardSize = m_parent->ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+    m_checkerboardBg   = m_parent->GetBackgroundColour();
+}
+
+
+GRID_CELL_COLOR_RENDERER::GRID_CELL_COLOR_RENDERER( const GRID_CELL_COLOR_RENDERER& aOther )
+{
+    m_parent           = aOther.m_parent;
+    m_background       = aOther.m_background;
+    m_size             = aOther.m_size;
+    m_checkerboardSize = aOther.m_checkerboardSize;
+    m_checkerboardBg   = aOther.m_checkerboardBg;
 }
 
 
@@ -43,16 +66,19 @@ GRID_CELL_COLOR_RENDERER::~GRID_CELL_COLOR_RENDERER()
 
 wxGridCellRenderer* GRID_CELL_COLOR_RENDERER::Clone() const
 {
-    return new GRID_CELL_COLOR_RENDERER;
+    return new GRID_CELL_COLOR_RENDERER( *this );
 }
 
 
 wxSize GRID_CELL_COLOR_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                                               int row, int col )
 {
+    if( m_size != wxDefaultSize )
+        return m_size;
+
     wxSize bestSize;
 
-    dc.SetFont(attr.GetFont());
+    dc.SetFont( attr.GetFont() );
     dc.GetTextExtent( "WWW", &bestSize.x, &bestSize.y );
 
     return bestSize;
@@ -68,21 +94,21 @@ void GRID_CELL_COLOR_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
     wxGridCellRenderer::Draw( aGrid, aAttr, aDC, aRect, aRow, aCol, isSelected );
 
     // draw the swatch
-    wxBitmap   bitmap( aRect.GetWidth() + 1, aRect.GetHeight() + 1 );
-    wxMemoryDC bmpDC;
-    wxBrush    brush;
-    wxColour   color;
+    COLOR4D color( aGrid.GetTable()->GetValue( aRow, aCol ) );
+    wxSize size = ( m_size == wxDefaultSize ) ? aRect.GetSize() : m_size;
+    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( color, m_background, size, m_checkerboardSize,
+                                                m_checkerboardBg );
 
-    // Prepare Bitmap
-    bmpDC.SelectObject( bitmap );
+    wxPoint origin = rect.GetTopLeft();
 
-    color.Set( aGrid.GetTable()->GetValue( aRow, aCol ) );
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-    brush.SetColour( color );
-    bmpDC.SetBrush( brush );
-    bmpDC.DrawRectangle( -1, -1, bitmap.GetWidth()+1, bitmap.GetHeight()+1 );
+    if( m_size != wxDefaultSize )
+    {
+        int x = std::max( 0, ( aRect.GetWidth() - m_size.x ) / 2 );
+        int y = std::max( 0, ( aRect.GetHeight() - m_size.y ) / 2 );
+        origin += wxPoint( x, y );
+    }
 
-    aDC.DrawBitmap( bitmap, rect.GetTopLeft(), true );
+    aDC.DrawBitmap( bitmap, origin, true );
 }
 
 
@@ -92,8 +118,8 @@ void GRID_CELL_COLOR_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
 // Note: this implementation is an adaptation of wxGridCellBoolEditor
 
 
-GRID_CELL_COLOR_SELECTOR::GRID_CELL_COLOR_SELECTOR( DIALOG_SHIM* aDialog, wxGrid* aGrid ) :
-        m_dialog( aDialog ),
+GRID_CELL_COLOR_SELECTOR::GRID_CELL_COLOR_SELECTOR( wxWindow* aParent, wxGrid* aGrid ) :
+        m_parent( aParent ),
         m_grid( aGrid ),
         m_value( COLOR4D::UNSPECIFIED )
 {
@@ -102,7 +128,7 @@ GRID_CELL_COLOR_SELECTOR::GRID_CELL_COLOR_SELECTOR( DIALOG_SHIM* aDialog, wxGrid
 
 wxGridCellEditor* GRID_CELL_COLOR_SELECTOR::Clone() const
 {
-    return new GRID_CELL_COLOR_SELECTOR( m_dialog, m_grid );
+    return new GRID_CELL_COLOR_SELECTOR( m_parent, m_grid );
 }
 
 
@@ -126,7 +152,7 @@ void GRID_CELL_COLOR_SELECTOR::BeginEdit( int row, int col, wxGrid* grid )
 {
     m_value.SetFromWxString( grid->GetTable()->GetValue( row, col ) );
 
-    DIALOG_COLOR_PICKER dialog( m_dialog, m_value, false );
+    DIALOG_COLOR_PICKER dialog( m_parent, m_value, false );
 
     if( dialog.ShowModal() == wxID_OK )
         m_value = dialog.GetColor();

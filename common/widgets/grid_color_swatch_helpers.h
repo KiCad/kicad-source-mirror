@@ -27,18 +27,19 @@
 #include <wx/generic/gridctrl.h>
 #include <wx/generic/grideditors.h>
 #include <gal/color4d.h>
+#include <widgets/color_swatch.h>
 
 
 class wxGrid;
-class DIALOG_SHIM;
-
 
 //-------- Custom wxGridCellRenderers --------------------------------------------------
 
 class GRID_CELL_COLOR_RENDERER : public wxGridCellRenderer
 {
 public:
-    GRID_CELL_COLOR_RENDERER();
+    GRID_CELL_COLOR_RENDERER( wxWindow* aParent = nullptr, SWATCH_SIZE aSize = SWATCH_EXPAND,
+                              const KIGFX::COLOR4D& aBackground = KIGFX::COLOR4D::UNSPECIFIED );
+    GRID_CELL_COLOR_RENDERER( const GRID_CELL_COLOR_RENDERER& aOther );
     ~GRID_CELL_COLOR_RENDERER() override;
 
     wxGridCellRenderer* Clone() const override;
@@ -46,6 +47,17 @@ public:
 
     void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, const wxRect& aRect, int aRow,
                int aCol, bool isSelected ) override;
+
+private:
+    wxWindow*       m_parent;
+
+    KIGFX::COLOR4D  m_background;
+
+    wxSize          m_size;
+
+    wxSize          m_checkerboardSize;
+
+    KIGFX::COLOR4D  m_checkerboardBg;
 };
 
 
@@ -56,7 +68,7 @@ public:
 class GRID_CELL_COLOR_SELECTOR : public wxGridCellEditor
 {
 public:
-    GRID_CELL_COLOR_SELECTOR( DIALOG_SHIM* aDialog, wxGrid* aGrid );
+    GRID_CELL_COLOR_SELECTOR( wxWindow* aParent, wxGrid* aGrid );
 
     wxGridCellEditor* Clone() const override;
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
@@ -69,7 +81,7 @@ public:
     void Reset() override;
 
 protected:
-    DIALOG_SHIM*   m_dialog;
+    wxWindow*      m_parent;
     wxGrid*        m_grid;
     KIGFX::COLOR4D m_value;
 

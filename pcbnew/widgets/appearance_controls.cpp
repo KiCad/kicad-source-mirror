@@ -22,6 +22,7 @@
 
 #include <bitmaps.h>
 #include <class_board.h>
+#include <dialog_helpers.h>
 #include <menus_helpers.h>
 #include <pcb_display_options.h>
 #include <pcb_edit_frame.h>
@@ -32,8 +33,244 @@
 #include <tools/pcb_actions.h>
 #include <widgets/bitmap_toggle.h>
 #include <widgets/color_swatch.h>
+#include <widgets/grid_bitmap_toggle.h>
+#include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/indicator_icon.h>
-#include <dialog_helpers.h>
+
+
+wxString NET_GRID_TABLE::GetValue( int aRow, int aCol )
+{
+    wxASSERT( static_cast<size_t>( aRow ) < m_nets.size() );
+
+    switch( aCol )
+    {
+    case COL_COLOR:
+        return m_nets[aRow].color.ToWxString( wxC2S_CSS_SYNTAX );
+
+    case COL_VISIBILITY:
+        return m_nets[aRow].visible ? "1" : "0";
+
+    case COL_LABEL:
+        return m_nets[aRow].name;
+
+    default:
+        return wxEmptyString;
+    }
+}
+
+
+void NET_GRID_TABLE::SetValue( int aRow, int aCol, const wxString& aValue )
+{
+    wxASSERT( static_cast<size_t>( aRow ) < m_nets.size() );
+
+    NET_GRID_ENTRY& net = m_nets[aRow];
+
+    switch( aCol )
+    {
+    case COL_COLOR:
+        net.color.SetFromWxString( aValue );
+        updateNetColor( net );
+        break;
+
+    case COL_VISIBILITY:
+        net.visible = ( aValue != "0" );
+        updateNetVisibility( net );
+        break;
+
+    case COL_LABEL:
+        net.name = aValue;
+        break;
+
+    default:
+        break;
+    }
+}
+
+
+wxString NET_GRID_TABLE::GetTypeName( int aRow, int aCol )
+{
+    switch( aCol )
+    {
+    case COL_COLOR:
+        return wxT( "COLOR4D" );
+
+    case COL_VISIBILITY:
+        return wxGRID_VALUE_BOOL;
+
+    case COL_LABEL:
+    default:
+        return wxGRID_VALUE_STRING;
+    }
+}
+
+
+bool NET_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
+{
+    wxASSERT( static_cast<size_t>( aRow ) < m_nets.size() );
+    wxASSERT( aCol == COL_VISIBILITY );
+
+    return m_nets[aRow].visible;
+}
+
+
+void NET_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
+{
+    wxASSERT( static_cast<size_t>( aRow ) < m_nets.size() );
+    wxASSERT( aCol == COL_VISIBILITY );
+
+    m_nets[aRow].visible = aValue;
+    updateNetVisibility( m_nets[aRow] );
+}
+
+
+void* NET_GRID_TABLE::GetValueAsCustom( int aRow, int aCol, const wxString& aTypeName )
+{
+    wxASSERT( aCol == COL_COLOR );
+    wxASSERT( aTypeName == wxT( "COLOR4D" ) );
+    wxASSERT( static_cast<size_t>( aRow ) < m_nets.size() );
+
+    return ColorToVoid( m_nets[aRow].color );
+}
+
+
+void NET_GRID_TABLE::SetValueAsCustom( int aRow, int aCol, const wxString& aTypeName, void* aValue )
+{
+    wxASSERT( aCol == COL_COLOR );
+    wxASSERT( aTypeName == wxT( "COLOR4D" ) );
+    wxASSERT( static_cast<size_t>( aRow ) < m_nets.size() );
+
+    m_nets[aRow].color = VoidToColor( aValue );
+    updateNetColor( m_nets[aRow] );
+
+    if( GetView() )
+    {
+        wxGridTableMessage msg( this, wxGRIDTABLE_REQUEST_VIEW_GET_VALUES );
+        GetView()->ProcessTableMessage( msg );
+    }
+}
+
+
+NET_GRID_ENTRY& NET_GRID_TABLE::GetEntry( int aRow )
+{
+    wxASSERT( static_cast<size_t>( aRow ) < m_nets.size() );
+    return m_nets[aRow];
+}
+
+
+int NET_GRID_TABLE::GetRowByNetcode( int aCode )
+{
+    auto it = std::find_if( m_nets.begin(), m_nets.end(),
+            [aCode]( const NET_GRID_ENTRY& aEntry )
+            {
+                return aEntry.code == aCode;
+            } );
+
+    if( it == m_nets.end() )
+        return -1;
+
+    return std::distance( m_nets.begin(), it );
+}
+
+
+void NET_GRID_TABLE::Rebuild()
+{
+    BOARD*              board = m_frame->GetBoard();
+    const NETNAMES_MAP& nets  = board->GetNetInfo().NetsByName();
+
+    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
+            m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
+
+    std::set<int>&                 hiddenNets = rs->GetHiddenNets();
+    std::map<int, KIGFX::COLOR4D>& netColors  = rs->GetNetColorMap();
+
+    int deleted = m_nets.size();
+    m_nets.clear();
+
+    if( GetView() )
+    {
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, deleted );
+        GetView()->ProcessTableMessage( msg );
+    }
+
+    for( const std::pair<const wxString, NETINFO_ITEM*>& pair : nets )
+    {
+        int netCode =  pair.second->GetNet();
+
+        if( netCode > 0 )
+        {
+            COLOR4D color = netColors.count( netCode ) ? netColors.at( netCode ) :
+                            COLOR4D::UNSPECIFIED;
+
+            bool visible = hiddenNets.count( netCode ) == 0;
+
+            m_nets.emplace_back( NET_GRID_ENTRY( netCode, pair.first, color, visible ) );
+        }
+    }
+
+    // TODO(JE) move to ::Compare so we can re-sort easily
+    std::sort( m_nets.begin(), m_nets.end(),
+               []( const NET_GRID_ENTRY& a, const NET_GRID_ENTRY& b )
+               {
+                 return a.name < b.name;
+               } );
+
+    if( GetView() )
+    {
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_nets.size() );
+        GetView()->ProcessTableMessage( msg );
+
+        GetView()->AutoSizeColumn( NET_GRID_TABLE::COL_LABEL );
+    }
+}
+
+
+void NET_GRID_TABLE::ShowAllNets()
+{
+    for( NET_GRID_ENTRY& net : m_nets )
+    {
+        net.visible = true;
+        updateNetVisibility( net );
+    }
+
+    if( GetView() )
+        GetView()->ForceRefresh();
+}
+
+
+void NET_GRID_TABLE::HideOtherNets( const NET_GRID_ENTRY& aNet )
+{
+    for( NET_GRID_ENTRY& net : m_nets )
+    {
+        net.visible = ( net.code == aNet.code );
+        updateNetVisibility( net );
+    }
+
+    if( GetView() )
+        GetView()->ForceRefresh();
+}
+
+
+void NET_GRID_TABLE::updateNetVisibility( const NET_GRID_ENTRY& aNet )
+{
+    const TOOL_ACTION& action = aNet.visible ? PCB_ACTIONS::showNet : PCB_ACTIONS::hideNet;
+    m_frame->GetToolManager()->RunAction( action, true, aNet.code );
+}
+
+
+void NET_GRID_TABLE::updateNetColor( const NET_GRID_ENTRY& aNet )
+{
+    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
+            m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
+
+    std::map<int, KIGFX::COLOR4D>& netColors  = rs->GetNetColorMap();
+
+    netColors[aNet.code] = aNet.color;
+
+    m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
+    m_frame->GetCanvas()->RedrawRatsnest();
+    m_frame->GetCanvas()->Refresh();
+}
+
 
 /// Template for object appearance settings
 const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSettings[] = {
@@ -94,8 +331,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
         m_focusOwner( aFocusOwner ),
         m_board( nullptr ),
         m_currentPreset( nullptr ),
-        m_layerContextMenu( nullptr ),
-        m_contextMenuNetCode( 0 )
+        m_layerContextMenu( nullptr )
 {
     int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x;
     m_iconProvider    = new ROW_ICON_PROVIDER( indicatorSize );
@@ -121,9 +357,9 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
         pointSize = pointSize * 8 / 10;
 
     m_pointSize = pointSize;
+    wxFont font = m_notebook->GetFont();
 
 #ifdef __WXMAC__
-    wxFont font = m_notebook->GetFont();
     font.SetPointSize( m_pointSize );
     m_notebook->SetFont( font );
 #endif
@@ -182,6 +418,41 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
             } );
 
     m_paneLayerDisplay->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+
+    m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER( KiBitmap( visibility_xpm ),
+                                                            KiBitmap( visibility_off_xpm ) );
+
+    m_netsGrid->RegisterDataType( wxT( "bool" ), m_toggleGridRenderer, new wxGridCellBoolEditor );
+
+    // TODO(JE) Update background color of swatch renderer when theme changes
+    m_netsGrid->RegisterDataType( wxT( "COLOR4D" ),
+                                  new GRID_CELL_COLOR_RENDERER( m_frame, SWATCH_SMALL ),
+                                  new GRID_CELL_COLOR_SELECTOR( m_frame, m_netsGrid ) );
+
+    m_netsTable = new NET_GRID_TABLE( m_frame );
+    m_netsGrid->SetTable( m_netsTable, true, wxGrid::wxGridSelectRows );
+
+    m_netsGrid->SetSelectionForeground( m_netsGrid->GetDefaultCellTextColour() );
+    m_netsGrid->SetSelectionBackground( m_netsGrid->GetBackgroundColour() );
+
+    const int cellPadding      = 6;
+    const int rowHeightPadding = 4;
+
+    wxSize size = ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );
+    m_netsGrid->SetColSize( NET_GRID_TABLE::COL_COLOR, size.x + cellPadding );
+
+    size = KiBitmap( visibility_xpm ).GetSize();
+    m_netsGrid->SetColSize( NET_GRID_TABLE::COL_VISIBILITY, size.x + cellPadding );
+
+    m_netsGrid->SetDefaultCellFont( font );
+    m_netsGrid->SetDefaultRowSize( font.GetPixelSize().y + rowHeightPadding );
+
+    m_netsGrid->GetGridWindow()->Bind( wxEVT_MOTION,
+                                       &APPEARANCE_CONTROLS::OnNetGridMouseEvent, this );
+
+    // To handle middle click on color swatches
+    m_netsGrid->GetGridWindow()->Bind( wxEVT_MIDDLE_UP,
+                                       &APPEARANCE_CONTROLS::OnNetGridMouseEvent, this );
 
     m_currentLayer = F_Cu;
 
@@ -268,6 +539,143 @@ void APPEARANCE_CONTROLS::OnSetFocus( wxFocusEvent& aEvent )
 {
     passOnFocus();
     aEvent.Skip();
+}
+
+
+void APPEARANCE_CONTROLS::OnSize( wxSizeEvent& aEvent )
+{
+    aEvent.Skip();
+}
+
+
+void APPEARANCE_CONTROLS::OnNetGridClick( wxGridEvent& event )
+{
+    int row = event.GetRow();
+    int col = event.GetCol();
+
+    switch( col )
+    {
+    case NET_GRID_TABLE::COL_VISIBILITY:
+        m_netsTable->SetValueAsBool( row, col, !m_netsTable->GetValueAsBool( row, col ) );
+        m_netsGrid->RefreshRect( m_netsGrid->CellToRect( row, col ) );
+        break;
+
+    default:
+        break;
+    }
+}
+
+
+void APPEARANCE_CONTROLS::OnNetGridDoubleClick( wxGridEvent& event )
+{
+    int row = event.GetRow();
+    int col = event.GetCol();
+
+    switch( col )
+    {
+    case NET_GRID_TABLE::COL_COLOR:
+        m_netsGrid->GetCellEditor( row, col )->BeginEdit( row, col, m_netsGrid );
+        break;
+
+    default:
+        break;
+    }
+}
+
+
+void APPEARANCE_CONTROLS::OnNetGridRightClick( wxGridEvent& event )
+{
+    m_netsGrid->SelectRow( event.GetRow() );
+
+    wxString netName = m_netsGrid->GetCellValue( event.GetRow(), NET_GRID_TABLE::COL_LABEL );
+    wxMenu menu;
+
+    menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
+                                 _( "Set net color" ), wxEmptyString, wxITEM_NORMAL ) );
+    menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
+                                 wxString::Format( _( "Highlight %s" ), netName ),
+                                 wxEmptyString, wxITEM_NORMAL ) );
+    menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
+                                 wxString::Format( _( "Select tracks and vias in %s" ), netName ),
+                                 wxEmptyString, wxITEM_NORMAL ) );
+
+    menu.AppendSeparator();
+
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_NETS,
+                                 _( "Show all nets" ), wxEmptyString, wxITEM_NORMAL ) );
+    menu.Append( new wxMenuItem( &menu, ID_HIDE_OTHER_NETS,
+                                 _( "Hide all other nets" ), wxEmptyString,
+                                 wxITEM_NORMAL ) );
+
+    menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
+               &APPEARANCE_CONTROLS::onNetContextMenu, this );
+
+    PopupMenu( &menu );
+}
+
+
+void APPEARANCE_CONTROLS::OnNetGridMouseEvent( wxMouseEvent& aEvent )
+{
+    wxPoint pos = m_netsGrid->CalcUnscrolledPosition( aEvent.GetPosition() );
+    wxGridCellCoords cell = m_netsGrid->XYToCell( pos );
+
+    if( aEvent.Moving() || aEvent.Entering() )
+    {
+        aEvent.Skip();
+
+        if( !cell )
+        {
+            m_netsGrid->GetGridWindow()->UnsetToolTip();
+            return;
+        }
+
+        if( cell == m_hoveredCell )
+            return;
+
+        m_hoveredCell = cell;
+
+        NET_GRID_ENTRY& net = m_netsTable->GetEntry( cell.GetRow() );
+
+        wxString name = net.name;
+        wxString showOrHide = net.visible ? _( "Click to hide ratsnest for %s" )
+                                          : _( "Click to show ratsnest for %s" );
+        wxString tip;
+
+        if( cell.GetCol() == NET_GRID_TABLE::COL_VISIBILITY )
+            tip.Printf( showOrHide, name );
+        else if( cell.GetCol() == NET_GRID_TABLE::COL_COLOR )
+            tip = _( "Left double click or middle click for color change, "
+                     "right click for menu" );
+
+        m_netsGrid->GetGridWindow()->SetToolTip( tip );
+    }
+    else if( aEvent.Leaving() )
+    {
+        m_netsGrid->UnsetToolTip();
+        aEvent.Skip();
+    }
+    else if( aEvent.Dragging() )
+    {
+        // not allowed
+        CallAfter( [&]()
+                   {
+                       m_netsGrid->ClearSelection();
+                   } );
+    }
+    else if( aEvent.ButtonUp( wxMOUSE_BTN_MIDDLE ) && !!cell )
+    {
+        int row = cell.GetRow();
+        int col = cell.GetCol();
+
+        if(col == NET_GRID_TABLE::COL_COLOR )
+            m_netsGrid->GetCellEditor( row, col )->BeginEdit( row, col, m_netsGrid );
+
+        aEvent.Skip();
+    }
+    else
+    {
+        aEvent.Skip();
+    }
 }
 
 
@@ -1223,127 +1631,9 @@ void APPEARANCE_CONTROLS::rebuildNets()
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
 
-    std::set<int>&                      hiddenNets     = rs->GetHiddenNets();
-    std::map<int, KIGFX::COLOR4D>&      netColors      = rs->GetNetColorMap();
     std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
 
-    m_netsOuterSizer->Clear( true );
     m_netclassOuterSizer->Clear( true );
-
-    auto appendNet =
-            [&]( NETINFO_ITEM* aNet )
-            {
-                int netCode = aNet->GetNet();
-                int id      = netCode + wxID_HIGHEST;
-
-                if( netCode == 0 )
-                    return;
-
-                m_netSettings.emplace_back( std::make_unique<APPEARANCE_SETTING>() );
-                APPEARANCE_SETTING* setting = m_netSettings.back().get();
-                m_netSettingsMap[netCode]   = setting;
-
-                setting->ctl_panel = new wxPanel( m_netsScrolledWindow, id );
-                wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
-                setting->ctl_panel->SetSizer( sizer );
-
-                COLOR4D color = netColors.count( netCode ) ? netColors.at( netCode ) :
-                                                             COLOR4D::UNSPECIFIED;
-
-                setting->ctl_color = new COLOR_SWATCH( setting->ctl_panel, color, id, bgColor,
-                                                       COLOR4D::UNSPECIFIED, SWATCH_SMALL );
-                setting->ctl_color->SetToolTip( _( "Left double click or middle click for color "
-                                                   "change, right click for menu" ) );
-
-                setting->ctl_color->Bind( COLOR_SWATCH_CHANGED,
-                        [&]( wxCommandEvent& aEvent )
-                        {
-                            COLOR_SWATCH* s = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
-                            int net = s->GetId();
-                            net -= wxID_HIGHEST;
-
-                            netColors[net] = s->GetSwatchColor();
-
-                            m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
-
-                            m_frame->GetCanvas()->RedrawRatsnest();
-                            m_frame->GetCanvas()->Refresh();
-                            passOnFocus();
-                        } );
-
-                bool visible = hiddenNets.count( netCode ) == 0;
-
-                setting->ctl_visibility =
-                        new BITMAP_TOGGLE( setting->ctl_panel, id, KiBitmap( visibility_xpm ),
-                                           KiBitmap( visibility_off_xpm ), visible );
-
-                wxString tip;
-                tip.Printf( _( "Show or hide ratsnest for %s" ), aNet->GetShortNetname() );
-                setting->ctl_visibility->SetToolTip( tip );
-
-                setting->ctl_text = new wxStaticText( setting->ctl_panel, id,
-                                                      aNet->GetShortNetname() );
-                setting->ctl_text->Wrap( -1 );
-
-                sizer->Add( setting->ctl_color, 0, wxALIGN_CENTER_VERTICAL, 5 );
-                sizer->AddSpacer( 7 );
-                sizer->Add( setting->ctl_visibility, 0, wxALIGN_CENTER_VERTICAL, 5 );
-                sizer->AddSpacer( 3 );
-                sizer->Add( setting->ctl_text, 1, wxALIGN_CENTER_VERTICAL, 5 );
-
-                m_netsOuterSizer->Add( setting->ctl_panel, 0, wxEXPAND, 5 );
-                m_netsOuterSizer->AddSpacer( 1 );
-
-                setting->ctl_visibility->Bind( TOGGLE_CHANGED,
-                        [&]( wxCommandEvent& aEvent )
-                        {
-                            int net = static_cast<wxWindow*>( aEvent.GetEventObject() )->GetId();
-                            net -= wxID_HIGHEST;
-                            const TOOL_ACTION& action = aEvent.GetInt() ? PCB_ACTIONS::showNet :
-                                                                          PCB_ACTIONS::hideNet;
-
-                            m_frame->GetToolManager()->RunAction( action, true, net );
-                            passOnFocus();
-                        } );
-
-                const wxString& netName = aNet->GetShortNetname();
-
-                auto menuHandler =
-                        [&, netCode, netName]( wxMouseEvent& aEvent )
-                        {
-                            m_contextMenuNetCode = netCode;
-
-                            wxMenu menu;
-
-                            menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
-                                         _( "Set net color" ), wxEmptyString, wxITEM_NORMAL ) );
-                            menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
-                                         wxString::Format( _( "Highlight %s" ), netName ),
-                                            wxEmptyString, wxITEM_NORMAL ) );
-                            menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
-                                         wxString::Format( _( "Select tracks and vias in %s" ),
-                                                           netName ),
-                                         wxEmptyString, wxITEM_NORMAL ) );
-
-                            menu.AppendSeparator();
-
-                            menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_NETS,
-                                         _( "Show all nets" ), wxEmptyString, wxITEM_NORMAL ) );
-                            menu.Append( new wxMenuItem( &menu, ID_HIDE_OTHER_NETS,
-                                         _( "Hide all other nets" ), wxEmptyString,
-                                         wxITEM_NORMAL ) );
-
-                            menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
-                                       &APPEARANCE_CONTROLS::onNetContextMenu, this );
-
-                            PopupMenu( &menu );
-                        };
-
-                setting->ctl_panel->Bind( wxEVT_RIGHT_DOWN, menuHandler );
-                setting->ctl_visibility->Bind( wxEVT_RIGHT_DOWN, menuHandler );
-                setting->ctl_color->Bind( wxEVT_RIGHT_DOWN, menuHandler );
-                setting->ctl_text->Bind( wxEVT_RIGHT_DOWN, menuHandler );
-            };
 
     auto appendNetclass =
             [&]( int aId, const NETCLASSPTR& aClass, bool isDefaultClass = false )
@@ -1441,24 +1731,9 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 setting->ctl_text->Bind( wxEVT_RIGHT_DOWN, menuHandler );
             };
 
-    const NETNAMES_MAP& nets = board->GetNetInfo().NetsByName();
-
-    std::vector<wxString> names;
-
-    for( const auto& pair : nets )
-        names.emplace_back( pair.first );
-
-    std::sort( names.begin(), names.end() );
-
-    m_netSettings.clear();
-    m_netSettingsMap.clear();
-
-    for( const wxString& name : names )
-        appendNet( nets.at( name ) );
-
     const NETCLASS_MAP& classes = board->GetDesignSettings().GetNetClasses().NetClasses();
 
-    names.clear();
+    std::vector<wxString> names;
 
     for( const auto& pair : classes )
         names.emplace_back( pair.first );
@@ -1467,7 +1742,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
     m_netclassIdMap.clear();
 
-    int idx = wxID_HIGHEST + nets.size();
+    int idx = wxID_HIGHEST;
 
     NETCLASSPTR defaultClass = board->GetDesignSettings().GetNetClasses().GetDefault();
 
@@ -1480,7 +1755,9 @@ void APPEARANCE_CONTROLS::rebuildNets()
         appendNetclass( idx++, classes.at( name ) );
     }
 
-    m_netsOuterSizer->Layout();
+    m_netsTable->Rebuild();
+
+    //m_netsOuterSizer->Layout();
     m_netclassOuterSizer->Layout();
     //m_netsTabSplitter->Layout();
 }
@@ -1727,79 +2004,48 @@ void APPEARANCE_CONTROLS::onObjectOpacitySlider( int aLayer, float aOpacity )
 
 void APPEARANCE_CONTROLS::onNetContextMenu( wxCommandEvent& aEvent )
 {
+    wxASSERT( m_netsGrid->GetSelectedRows().size() == 1 );
+
+    int row = m_netsGrid->GetSelectedRows()[0];
+    NET_GRID_ENTRY& net = m_netsTable->GetEntry( row );
+
+    m_netsGrid->ClearSelection();
+
     switch( aEvent.GetId() )
     {
     case ID_SET_NET_COLOR:
     {
-        if( m_netSettingsMap.count( m_contextMenuNetCode ) )
-        {
-            APPEARANCE_SETTING* setting = m_netSettingsMap.at( m_contextMenuNetCode );
-            setting->ctl_color->GetNewSwatchColor();
-
-            COLOR4D color = setting->ctl_color->GetSwatchColor();
-
-            setting->ctl_color->Show( color != COLOR4D::UNSPECIFIED );
-
-            KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
-                    m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
-            std::map<int, KIGFX::COLOR4D>& netColors = rs->GetNetColorMap();
-
-            if( color != COLOR4D::UNSPECIFIED )
-                netColors[m_contextMenuNetCode] = color;
-            else
-                netColors.erase( m_contextMenuNetCode );
-
-            m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
-            m_frame->GetCanvas()->Refresh();
-        }
-
+        wxGridCellEditor* editor = m_netsGrid->GetCellEditor( row, NET_GRID_TABLE::COL_COLOR );
+        editor->BeginEdit( row, NET_GRID_TABLE::COL_COLOR, m_netsGrid );
         break;
     }
 
     case ID_HIGHLIGHT_NET:
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::highlightNet, true,
-                                              m_contextMenuNetCode );
+    {
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::highlightNet, true, net.code );
+        m_frame->GetCanvas()->Refresh();
         break;
+    }
 
     case ID_SELECT_NET:
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, true,
-                                              m_contextMenuNetCode );
+    {
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, true, net.code );
+        m_frame->GetCanvas()->Refresh();
         break;
+    }
 
     case ID_SHOW_ALL_NETS:
-    {
-        for( const std::pair<const int, APPEARANCE_SETTING*>& pair : m_netSettingsMap )
-        {
-            pair.second->ctl_visibility->SetValue( true );
-            m_frame->GetToolManager()->RunAction( PCB_ACTIONS::showNet, true, pair.first );
-        }
-
+        m_netsTable->ShowAllNets();
         break;
-    }
 
     case ID_HIDE_OTHER_NETS:
-    {
-        TOOL_MANAGER* manager = m_frame->GetToolManager();
-
-        for( const std::pair<const int, APPEARANCE_SETTING*>& pair : m_netSettingsMap )
-        {
-            bool show = pair.first == m_contextMenuNetCode;
-            pair.second->ctl_visibility->SetValue( show );
-            manager->RunAction( show ? PCB_ACTIONS::showNet : PCB_ACTIONS::hideNet,
-                                true, pair.first );
-        }
-
+        m_netsTable->HideOtherNets( net );
         break;
-    }
 
     default:
         break;
     }
 
-    m_frame->GetCanvas()->RedrawRatsnest();
-    m_frame->GetCanvas()->Refresh();
-
-    m_contextMenuNetCode = 0;
     passOnFocus();
 }
 
@@ -1826,16 +2072,6 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
 
     NETCLASS* defaultClass = classes.GetDefaultPtr();
 
-    auto updateWidget =
-            [&]( int aCode )
-            {
-                if( m_netSettingsMap.count( aCode ) )
-                {
-                    APPEARANCE_SETTING* setting = m_netSettingsMap.at( aCode );
-                    setting->ctl_visibility->SetValue( aShow );
-                }
-            };
-
     if( netclass == classes.GetDefault() )
     {
         const TOOL_ACTION& action = aShow ? PCB_ACTIONS::showNet : PCB_ACTIONS::hideNet;
@@ -1845,7 +2081,15 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
             if( net->GetNetClass() == defaultClass )
             {
                 manager->RunAction( action, true, net->GetNet() );
-                updateWidget( net->GetNet() );
+
+                int row = m_netsTable->GetRowByNetcode( net->GetNet() );
+
+                if( row >= 0 )
+                {
+                    m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aShow );
+                    m_netsGrid->RefreshRect(
+                            m_netsGrid->CellToRect( row, NET_GRID_TABLE::COL_VISIBILITY ) );
+                }
             }
         }
     }
@@ -1857,8 +2101,17 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
         {
             if( NETINFO_ITEM* net = nets.GetNetItem( member ) )
             {
-                manager->RunAction( action, true, net->GetNet() );
-                updateWidget( net->GetNet() );
+                int code = net->GetNet();
+                manager->RunAction( action, true, code );
+
+                int row = m_netsTable->GetRowByNetcode( code );
+
+                if( row >= 0 )
+                {
+                    m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aShow );
+                    m_netsGrid->RefreshRect(
+                            m_netsGrid->CellToRect( row, NET_GRID_TABLE::COL_VISIBILITY ) );
+                }
             }
         }
     }

@@ -35,8 +35,100 @@ class COLOR_SWATCH;
 class INDICATOR_ICON;
 class PCB_BASE_FRAME;
 class ROW_ICON_PROVIDER;
+class GRID_BITMAP_TOGGLE_RENDERER;
 
 using KIGFX::COLOR4D;
+
+
+struct NET_GRID_ENTRY
+{
+    NET_GRID_ENTRY( int aCode, const wxString& aName, const COLOR4D& aColor, bool aVisible )
+    {
+        code    = aCode;
+        name    = aName;
+        color   = aColor;
+        visible = aVisible;
+    }
+
+    int      code;
+    wxString name;
+    COLOR4D  color;
+    bool     visible;
+};
+
+
+class NET_GRID_TABLE : public wxGridTableBase
+{
+public:
+    enum COLUMNS
+    {
+        COL_COLOR,
+        COL_VISIBILITY,
+        COL_LABEL,
+        COL_SIZE
+    };
+
+    static void* ColorToVoid( COLOR4D& aColor )
+    {
+        return static_cast<void*>( &aColor );
+    }
+
+    static COLOR4D VoidToColor( void* aColor )
+    {
+        return *static_cast<COLOR4D*>( aColor );
+    }
+
+public:
+    NET_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
+            wxGridTableBase(),
+            m_frame( aFrame )
+    {}
+
+    int GetNumberRows() override
+    {
+        return m_nets.size();
+    }
+
+    int GetNumberCols() override
+    {
+        return COL_SIZE;
+    }
+
+    wxString GetValue( int aRow, int aCol ) override;
+
+    void SetValue( int aRow, int aCol, const wxString& aValue ) override;
+
+    wxString GetTypeName( int aRow, int aCol ) override;
+
+    bool GetValueAsBool( int aRow, int aCol ) override;
+
+    void SetValueAsBool( int aRow, int aCol, bool aValue ) override;
+
+    void* GetValueAsCustom( int aRow, int aCol, const wxString& aTypeName ) override;
+
+    void SetValueAsCustom( int aRow, int aCol, const wxString& aTypeName, void* aValue ) override;
+
+    NET_GRID_ENTRY& GetEntry( int aRow );
+
+    int GetRowByNetcode( int aCode );
+
+    void Rebuild();
+
+    void ShowAllNets();
+
+    void HideOtherNets( const NET_GRID_ENTRY& aNet );
+
+private:
+    void updateNetVisibility( const NET_GRID_ENTRY& aNet );
+
+    void updateNetColor( const NET_GRID_ENTRY& aNet );
+
+private:
+    PCB_BASE_FRAME* m_frame;
+
+    std::vector<NET_GRID_ENTRY> m_nets;
+};
+
 
 
 class APPEARANCE_CONTROLS : public APPEARANCE_CONTROLS_BASE, public BOARD_LISTENER
@@ -164,6 +256,16 @@ protected:
 
     void OnSetFocus( wxFocusEvent& aEvent ) override;
 
+    void OnSize( wxSizeEvent& aEvent ) override;
+
+    void OnNetGridClick( wxGridEvent& event ) override;
+
+    void OnNetGridDoubleClick( wxGridEvent& event ) override;
+
+    void OnNetGridRightClick( wxGridEvent& event ) override;
+
+    void OnNetGridMouseEvent( wxMouseEvent& aEvent );
+
 private:
     PCB_BASE_FRAME* m_frame;
 
@@ -175,6 +277,14 @@ private:
 
     BOARD* m_board;
 
+    // Nets grid view
+    NET_GRID_TABLE* m_netsTable;
+
+    GRID_BITMAP_TOGGLE_RENDERER* m_toggleGridRenderer;
+
+    /// Grid cell that is being hovered over, for tooltips
+    wxGridCellCoords m_hoveredCell;
+
     PCB_LAYER_ID m_currentLayer;
 
     std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_layerSettings;
@@ -184,10 +294,6 @@ private:
     std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_objectSettings;
 
     std::map<GAL_LAYER_ID, APPEARANCE_SETTING*> m_objectSettingsMap;
-
-    std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_netSettings;
-
-    std::map<int, APPEARANCE_SETTING*> m_netSettingsMap;
 
     std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_netclassSettings;
 
@@ -206,9 +312,6 @@ private:
 
     /// Stores wxIDs for each netclass for control event mapping
     std::map<int, wxString> m_netclassIdMap;
-
-    /// The net code of the net that was right-clicked
-    int m_contextMenuNetCode;
 
     /// The name of the netclass that was right-clicked
     wxString m_contextMenuNetclass;
@@ -304,6 +407,8 @@ private:
     void passOnFocus();
 
     void idleFocusHandler( wxIdleEvent& aEvent );
+
+    void updateNetsDataViewToolTip( wxMouseEvent& aEvent );
 };
 
 #endif

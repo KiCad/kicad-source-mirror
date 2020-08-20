@@ -1213,7 +1213,7 @@
                                             <property name="permission">protected</property>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">10</property>
-                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND</property>
+                                                <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">1</property>
                                                 <object class="wxFlexGridSizer" expanded="1">
                                                     <property name="cols">10</property>

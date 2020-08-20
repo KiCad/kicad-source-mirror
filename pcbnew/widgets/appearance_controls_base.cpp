@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -120,15 +120,31 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	bSizer192->Add( bSizer17, 0, wxEXPAND, 5 );
 
-	m_netsScrolledWindow = new wxScrolledWindow( m_panelNets, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
-	m_netsScrolledWindow->SetScrollRate( 5, 5 );
-	m_netsOuterSizer = new wxBoxSizer( wxVERTICAL );
+	m_netsGrid = new wxGrid( m_panelNets, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
+	// Grid
+	m_netsGrid->CreateGrid( 5, 3 );
+	m_netsGrid->EnableEditing( false );
+	m_netsGrid->EnableGridLines( false );
+	m_netsGrid->EnableDragGridSize( false );
+	m_netsGrid->SetMargins( 0, 0 );
 
-	m_netsScrolledWindow->SetSizer( m_netsOuterSizer );
-	m_netsScrolledWindow->Layout();
-	m_netsOuterSizer->Fit( m_netsScrolledWindow );
-	bSizer192->Add( m_netsScrolledWindow, 1, wxEXPAND | wxALL, 5 );
+	// Columns
+	m_netsGrid->EnableDragColMove( false );
+	m_netsGrid->EnableDragColSize( false );
+	m_netsGrid->SetColLabelSize( 0 );
+	m_netsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_netsGrid->EnableDragRowSize( false );
+	m_netsGrid->SetRowLabelSize( 0 );
+	m_netsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_netsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizer192->Add( m_netsGrid, 1, wxALL|wxEXPAND, 5 );
 
 
 	m_panelNets->SetSizer( bSizer192 );
@@ -173,7 +189,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	bSizer16->Add( m_netsTabSplitter, 1, wxEXPAND, 5 );
 
 	m_paneNetDisplay = new wxCollapsiblePane( m_panelNetsAndClasses, wxID_ANY, wxT("Net Display Options"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
-	m_paneNetDisplay->Collapse( false );
+	m_paneNetDisplay->Collapse( true );
 
 	wxBoxSizer* bSizerNetDisplay;
 	bSizerNetDisplay = new wxBoxSizer( wxVERTICAL );
@@ -260,6 +276,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	// Connect Events
 	this->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ) );
+	this->Connect( wxEVT_SIZE, wxSizeEventHandler( APPEARANCE_CONTROLS_BASE::OnSize ) );
 	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( APPEARANCE_CONTROLS_BASE::OnNotebookPageChanged ), NULL, this );
 	m_notebook->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelLayers->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
@@ -270,6 +287,10 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_panelNetsAndClasses->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelNets->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_btnNetInspector->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
+	m_netsGrid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( APPEARANCE_CONTROLS_BASE::OnNetGridClick ), NULL, this );
+	m_netsGrid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( APPEARANCE_CONTROLS_BASE::OnNetGridDoubleClick ), NULL, this );
+	m_netsGrid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( APPEARANCE_CONTROLS_BASE::OnNetGridRightClick ), NULL, this );
+	m_netsGrid->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelNetclasses->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_btnConfigureNetClasses->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_paneNetDisplay->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( APPEARANCE_CONTROLS_BASE::OnNetDisplayPaneChanged ), NULL, this );
@@ -281,6 +302,7 @@ APPEARANCE_CONTROLS_BASE::~APPEARANCE_CONTROLS_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ) );
+	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( APPEARANCE_CONTROLS_BASE::OnSize ) );
 	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( APPEARANCE_CONTROLS_BASE::OnNotebookPageChanged ), NULL, this );
 	m_notebook->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelLayers->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
@@ -291,6 +313,10 @@ APPEARANCE_CONTROLS_BASE::~APPEARANCE_CONTROLS_BASE()
 	m_panelNetsAndClasses->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelNets->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_btnNetInspector->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
+	m_netsGrid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( APPEARANCE_CONTROLS_BASE::OnNetGridClick ), NULL, this );
+	m_netsGrid->Disconnect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( APPEARANCE_CONTROLS_BASE::OnNetGridDoubleClick ), NULL, this );
+	m_netsGrid->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( APPEARANCE_CONTROLS_BASE::OnNetGridRightClick ), NULL, this );
+	m_netsGrid->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelNetclasses->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_btnConfigureNetClasses->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_paneNetDisplay->Disconnect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( APPEARANCE_CONTROLS_BASE::OnNetDisplayPaneChanged ), NULL, this );

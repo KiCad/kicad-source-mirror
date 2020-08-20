@@ -79,7 +79,7 @@ public:
      * false to not show this setting (opacity = 1.0 always)
      * @param aUserColors: if not null is a list of defined colors replacing the dialog predefined colors
      */
-	DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor,
+	DIALOG_COLOR_PICKER( wxWindow* aParent, const KIGFX::COLOR4D& aCurrentColor,
                          bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors = nullptr,
                          const KIGFX::COLOR4D& aDefaultColor = KIGFX::COLOR4D::UNSPECIFIED );
 	~DIALOG_COLOR_PICKER();

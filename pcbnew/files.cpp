@@ -643,8 +643,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetBoard()->BuildConnectivity();
     Compile_Ratsnest( true );
 
-    m_appearancePanel->OnBoardChanged();
-
     // Load project settings after setting up board; some of them depend on the nets list
     LoadProjectSettings();
 

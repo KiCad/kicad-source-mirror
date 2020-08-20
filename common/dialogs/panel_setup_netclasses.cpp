@@ -131,7 +131,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
         }
 
         wxGridCellAttr* attr = new wxGridCellAttr;
-        attr->SetRenderer( new GRID_CELL_COLOR_RENDERER() );
+        attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( aParent ) );
         attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( aParent, m_netclassGrid ) );
         m_netclassGrid->SetColAttr( GRID_SCHEMATIC_COLOR, attr );
 

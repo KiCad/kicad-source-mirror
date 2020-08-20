@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,6 +28,7 @@
 #include <wx/textctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
+#include <wx/grid.h>
 #include <wx/splitter.h>
 #include <wx/notebook.h>
 #include <wx/choice.h>
@@ -64,8 +65,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxStaticText* m_staticTextNets;
 		wxTextCtrl* m_txtNetFilter;
 		wxBitmapButton* m_btnNetInspector;
-		wxScrolledWindow* m_netsScrolledWindow;
-		wxBoxSizer* m_netsOuterSizer;
+		wxGrid* m_netsGrid;
 		wxPanel* m_panelNetclasses;
 		wxStaticText* m_staticText14;
 		wxBitmapButton* m_btnConfigureNetClasses;
@@ -82,9 +82,13 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSetFocus( wxFocusEvent& event ) { event.Skip(); }
+		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnNotebookPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
 		virtual void OnFlipBoardChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnNetGridClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnNetGridDoubleClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnNetGridRightClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
 		virtual void onLayerPresetChanged( wxCommandEvent& event ) { event.Skip(); }
 

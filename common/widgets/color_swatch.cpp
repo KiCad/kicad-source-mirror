@@ -120,11 +120,14 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D 
         m_background( aBackground ),
         m_default( aDefault )
 {
+    wxASSERT_MSG( aSwatchSize != SWATCH_EXPAND, "SWATCH_EXPAND not supported in COLOR_SWATCH" );
+
     switch( aSwatchSize )
     {
     case SWATCH_MEDIUM: m_size = ConvertDialogToPixels( SWATCH_SIZE_MEDIUM_DU ); break;
     case SWATCH_SMALL:  m_size = ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );  break;
     case SWATCH_LARGE:  m_size = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );  break;
+    case SWATCH_EXPAND: m_size = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );  break;
     }
 
     m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );

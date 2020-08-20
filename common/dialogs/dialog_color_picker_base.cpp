@@ -143,9 +143,9 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_fgridColor->AddGrowableCol( 9 );
 	m_fgridColor->SetFlexibleDirection( wxBOTH );
 	m_fgridColor->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
 
-
-	m_SizerDefinedColors->Add( m_fgridColor, 1, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 10 );
+	m_SizerDefinedColors->Add( m_fgridColor, 1, wxALL|wxEXPAND, 10 );
 
 
 	m_panelDefinedColors->SetSizer( m_SizerDefinedColors );
