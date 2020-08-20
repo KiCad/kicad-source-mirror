@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,7 +116,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
     std::vector<LIST_MOD> list;
     m_smdFootprintsNotLabeledSMD.clear();
 
-    for( auto footprint : m_board->Modules() )
+    for( MODULE* footprint : m_board->Modules() )
     {
         if( m_side != PCB_BOTH_SIDES )
         {
@@ -151,14 +151,14 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 
         LIST_MOD item;
         item.m_Module    = footprint;
-        item.m_Reference = footprint->GetReference();
-        item.m_Value     = footprint->GetValue();
+        item.m_Reference = footprint->Reference().GetShownText();
+        item.m_Value     = footprint->Value().GetShownText();
         item.m_Layer     = footprint->GetLayer();
         list.push_back( item );
 
-        lenRefText = std::max( lenRefText, int(item.m_Reference.length()) );
-        lenValText = std::max( lenValText, int(item.m_Value.length()) );
-        lenPkgText = std::max( lenPkgText, int(item.m_Module->GetFPID().GetLibItemName().length()) );
+        lenRefText = std::max( lenRefText, (int) item.m_Reference.length() );
+        lenValText = std::max( lenValText, (int) item.m_Value.length() );
+        lenPkgText = std::max( lenPkgText, (int) item.m_Module->GetFPID().GetLibItemName().length() );
     }
 
     if( list.size() > 1 )
@@ -334,13 +334,14 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     for( MODULE* module : sortedModules )
     {
-        sprintf( line, "$MODULE %s\n", EscapedUTF8( module->GetReference() ).c_str() );
+        wxString ref = module->Reference().GetShownText();
+
+        sprintf( line, "$MODULE %s\n", TO_UTF8( ref ) );
         buffer += line;
 
-        sprintf( line, "reference %s\n", EscapedUTF8( module->GetReference() ).c_str() );
-        sprintf( line, "value %s\n", EscapedUTF8( module->GetValue() ).c_str() );
-        sprintf( line, "footprint %s\n",
-                 EscapedUTF8( FROM_UTF8( module->GetFPID().Format().c_str() ) ).c_str() );
+        sprintf( line, "reference %s\n", TO_UTF8( ref ) );
+        sprintf( line, "value %s\n", EscapedUTF8( module->Value().GetShownText() ).c_str() );
+        sprintf( line, "footprint %s\n", module->GetFPID().Format().c_str() );
         buffer += line;
 
         buffer += "attribut";
@@ -421,7 +422,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
             buffer += "$EndPAD\n";
         }
 
-        sprintf( line, "$EndMODULE  %s\n\n", TO_UTF8 ( module->GetReference() ) );
+        sprintf( line, "$EndMODULE  %s\n\n", TO_UTF8( ref ) );
         buffer += line;
     }
 
