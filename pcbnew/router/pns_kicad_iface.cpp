@@ -269,7 +269,11 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
 int PNS_PCBNEW_RULE_RESOLVER::Clearance( int aNetCode ) const
 {
-    if( aNetCode == 0 )
+    if( aNetCode == -1 )
+    {
+        return 0;
+    }
+    else if( aNetCode == 0 )
     {
         return m_defaultClearance;
     }
