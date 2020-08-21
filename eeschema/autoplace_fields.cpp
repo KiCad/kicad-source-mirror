@@ -232,9 +232,9 @@ protected:
     /**
      * Return the side that a pin is on.
      */
-    SIDE get_pin_side( LIB_PIN* aPin )
+    SIDE get_pin_side( SCH_PIN* aPin )
     {
-        int pin_orient = aPin->PinDrawOrient( m_component->GetTransform() );
+        int pin_orient = aPin->GetLibPin()->PinDrawOrient( m_component->GetTransform() );
         switch( pin_orient )
         {
             case PIN_RIGHT: return SIDE_LEFT;
@@ -255,10 +255,7 @@ protected:
     {
         unsigned pin_count = 0;
 
-        std::vector<LIB_PIN*> pins;
-        m_component->GetPins( pins );
-
-        for( LIB_PIN* each_pin : pins )
+        for( SCH_PIN* each_pin : m_component->GetPins() )
         {
             if( !each_pin->IsVisible() && !m_power_symbol )
                 continue;

@@ -32,7 +32,10 @@
 /**
  * Symbol library file version.
  */
-#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200126  // Initial version.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200126  // Initial version.  Add alternate pin
+                                                   // definitions.
+
+#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200820
 
 /**
  * Symbol library file version.
@@ -51,4 +54,6 @@
 
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200618  // Disallow duplicate field ids.
 
-#define SEXPR_SCHEMATIC_FILE_VERSION 20200714
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20200714  // Add alternate pin definitions.
+
+#define SEXPR_SCHEMATIC_FILE_VERSION 20200820

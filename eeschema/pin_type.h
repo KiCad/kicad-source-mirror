@@ -21,14 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pin_type.h
- * @brief Electrical pin type handling
- */
 #ifndef PIN_TYPE_H_
 #define PIN_TYPE_H_
 
-#include <wx/string.h>
+#include <wx/arrstr.h>
 #include <bitmaps.h>
 
 /**
@@ -53,8 +49,43 @@ enum class ELECTRICAL_PINTYPE
 
 #define ELECTRICAL_PINTYPES_TOTAL ( static_cast<int>( ELECTRICAL_PINTYPE::PT_LAST_OPTION ) + 1 )
 
+enum class GRAPHIC_PINSHAPE
+{
+    LINE,
+    INVERTED,
+    CLOCK,
+    INVERTED_CLOCK,
+    INPUT_LOW,
+    CLOCK_LOW,
+    OUTPUT_LOW,
+    FALLING_EDGE_CLOCK,
+    NONLOGIC,
+
+    LAST_OPTION = NONLOGIC ///< this is the sentinel value, must be set to last enum value
+};
+
+#define GRAPHIC_PINSHAPES_TOTAL ( static_cast<int>( GRAPHIC_PINSHAPE::LAST_OPTION ) + 1 )
+
+
 // UI
+
+wxString PinShapeGetText( GRAPHIC_PINSHAPE shape );
+BITMAP_DEF PinShapeGetBitmap( GRAPHIC_PINSHAPE shape );
+
 wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE );
 BITMAP_DEF ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE );
+
+wxString PinOrientationName( unsigned aPinOrientationCode );
+int PinOrientationCode( int index );
+int PinOrientationIndex( int code );
+
+const wxArrayString& PinTypeNames();
+const std::vector<BITMAP_DEF>& PinTypeIcons();
+
+const wxArrayString& PinShapeNames();
+const std::vector<BITMAP_DEF>& PinShapeIcons();
+
+const wxArrayString& PinOrientationNames();
+const std::vector<BITMAP_DEF>& PinOrientationIcons();
 
 #endif

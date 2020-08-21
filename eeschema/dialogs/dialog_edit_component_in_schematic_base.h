@@ -63,6 +63,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxRadioBox* m_rbMirror;
 		wxStaticLine* m_staticline1;
 		wxButton* m_spiceFieldsButton;
+		wxButton* m_pinTableButton;
 		wxStdDialogButtonSizer* m_stdDialogButtonSizer;
 		wxButton* m_stdDialogButtonSizerOK;
 		wxButton* m_stdDialogButtonSizerCancel;
@@ -78,6 +79,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 		virtual void UpdateFieldsFromLibrary( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBrowseLibrary( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEditPinTable( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 
 

@@ -24,20 +24,11 @@
  */
 
 #include <fctsys.h>
-#include <pgm_base.h>
 #include <kiface_i.h>
 #include <kiway_express.h>
-#include <macros.h>
 #include <eda_dde.h>
 #include <connection_graph.h>
-#include <sch_edit_frame.h>
-#include <eeschema_settings.h>
-#include <general.h>
-#include <lib_item.h>
-#include <lib_pin.h>
 #include <sch_component.h>
-#include <sch_sheet.h>
-#include <sch_view.h>
 #include <schematic.h>
 #include <reporter.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
@@ -57,7 +48,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
     SCH_SHEET_PATH* sheetWithComponentFound = NULL;
     SCH_COMPONENT*  component               = NULL;
     wxPoint         pos;
-    LIB_PIN*        pin = nullptr;
+    SCH_PIN*        pin = nullptr;
     SCH_SHEET_LIST  sheetList;
     SCH_ITEM*       foundItem = nullptr;
 
@@ -72,28 +63,28 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
         for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* pSch = static_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT* candidate = static_cast<SCH_COMPONENT*>( item );
 
-            if( aReference.CmpNoCase( pSch->GetRef( &sheet ) ) == 0 )
+            if( aReference.CmpNoCase( candidate->GetRef( &sheet ) ) == 0 )
             {
-                component               = pSch;
+                component = candidate;
                 sheetWithComponentFound = &sheet;
 
                 if( aSearchType == HIGHLIGHT_PIN )
                 {
-                    pos = pSch->GetPosition();  // temporary: will be changed if the pin is found.
-                    pin = pSch->GetPin( aSearchText );
+                    pos = component->GetPosition();  // temporary: will be changed if the pin is found.
+                    pin = component->GetPin( aSearchText );
 
                     if( pin )
                     {
-                        pos += pin->GetPosition();
+                        pos = pin->GetPosition();
                         foundItem = component;
                         break;
                     }
                 }
                 else
                 {
-                    pos = pSch->GetPosition();
+                    pos = component->GetPosition();
                     foundItem = component;
                     break;
                 }
@@ -578,10 +569,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_REANNOTATE:
-    { //Reannotate the schematic as per the netlist.
+        //Reannotate the schematic as per the netlist.
         ReannotateFromPCBNew( this, payload );
         break;
-    }
+
     default:;
 
     }

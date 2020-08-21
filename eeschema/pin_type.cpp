@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,14 +21,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pin_type.cpp
- * @brief Electrical pin type handling
- */
+#include <pin_type.h>
+#include <lib_pin.h>
+#include <base_units.h>
 
-#include "pin_type.h"
 
-#include <macros.h>
+// These are true singletons so it's OK for them to be globals.
+
+static std::vector<BITMAP_DEF> g_typeIcons;
+static wxArrayString           g_typeNames;
+
+static std::vector<BITMAP_DEF> g_shapeIcons;
+static wxArrayString           g_shapeNames;
+
+static std::vector<BITMAP_DEF> g_orientationIcons;
+static wxArrayString           g_orientationNames;
 
 
 struct pinTypeStruct
@@ -56,6 +63,179 @@ const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
 };
 // clang-format on
 
+
+struct pinShapeStruct
+{
+    wxString             name;
+    const BITMAP_OPAQUE* bitmap;
+};
+
+/*
+* Conversion map between PLOT_DASH_TYPE values and style names displayed
+*/
+// clang-format off
+const std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct> pinShapes = {
+    { GRAPHIC_PINSHAPE::LINE,               { _( "Line" ),               pinshape_normal_xpm } },
+    { GRAPHIC_PINSHAPE::INVERTED,           { _( "Inverted" ),           pinshape_invert_xpm } },
+    { GRAPHIC_PINSHAPE::CLOCK,              { _( "Clock" ),              pinshape_clock_normal_xpm } },
+    { GRAPHIC_PINSHAPE::INVERTED_CLOCK,     { _( "Inverted clock" ),     pinshape_clock_invert_xpm } },
+    { GRAPHIC_PINSHAPE::INPUT_LOW,          { _( "Input low" ),          pinshape_active_low_input_xpm } },
+    { GRAPHIC_PINSHAPE::CLOCK_LOW,          { _( "Clock low" ),          pinshape_clock_active_low_xpm } },
+    { GRAPHIC_PINSHAPE::OUTPUT_LOW,         { _( "Output low" ),         pinshape_active_low_output_xpm } },
+    { GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK, { _( "Falling edge clock" ), pinshape_clock_fall_xpm } },
+    { GRAPHIC_PINSHAPE::NONLOGIC,           { _( "NonLogic" ),           pinshape_nonlogic_xpm } },
+};
+// clang-format on
+
+
+static const int pin_orientation_codes[] =
+{
+    PIN_RIGHT,
+    PIN_LEFT,
+    PIN_UP,
+    PIN_DOWN
+};
+
+
+// bitmaps to show pins orientations in dialog editor
+// must have same order than pin_orientation_names
+static const BITMAP_DEF iconsPinsOrientations[] =
+{
+    pinorient_right_xpm,
+    pinorient_left_xpm,
+    pinorient_up_xpm,
+    pinorient_down_xpm,
+};
+
+
+#define PIN_ORIENTATION_CNT arrayDim( pin_orientation_codes )
+
+
+// Helper functions to get the pin orientation name from pin_orientation_codes
+// Note: the strings are *not* static because they are translated and must be built
+// on the fly, to be properly translated
+
+wxString PinOrientationName( unsigned aPinOrientationCode )
+{
+    /* Note: The following name lists are sentence capitalized per the GNOME UI
+     *       standards for list controls.  Please do not change the capitalization
+     *       of these strings unless the GNOME UI standards are changed.
+     */
+    const wxString pin_orientation_names[] =
+    {
+        _( "Right" ),
+        _( "Left" ),
+        _( "Up" ),
+        _( "Down" ),
+        wxT( "???" )
+    };
+
+    if( aPinOrientationCode > PIN_ORIENTATION_CNT )
+        aPinOrientationCode = PIN_ORIENTATION_CNT;
+
+    return pin_orientation_names[ aPinOrientationCode ];
+}
+
+
+int PinOrientationCode( int index )
+{
+    if( index >= 0 && index < (int) PIN_ORIENTATION_CNT )
+        return pin_orientation_codes[ index ];
+
+    return PIN_RIGHT;
+}
+
+
+int PinOrientationIndex( int code )
+{
+    size_t i;
+
+    for( i = 0; i < PIN_ORIENTATION_CNT; i++ )
+    {
+        if( pin_orientation_codes[i] == code )
+            return (int) i;
+    }
+
+    return wxNOT_FOUND;
+}
+
+
+void InitTables()
+{
+    for( unsigned i = 0; i < ELECTRICAL_PINTYPES_TOTAL; ++i )
+    {
+        g_typeIcons.push_back( ElectricalPinTypeGetBitmap( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
+        g_typeNames.push_back( ElectricalPinTypeGetText( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
+    }
+
+    for( unsigned i = 0; i < GRAPHIC_PINSHAPES_TOTAL; ++i )
+    {
+        g_shapeIcons.push_back( PinShapeGetBitmap( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
+        g_shapeNames.push_back( PinShapeGetText( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
+    }
+
+    for( unsigned i = 0; i < PIN_ORIENTATION_CNT; ++i )
+    {
+        g_orientationIcons.push_back( iconsPinsOrientations[ i ] );
+        g_orientationNames.push_back( PinOrientationName( i ) );
+    }
+}
+
+
+const wxArrayString& PinTypeNames()
+{
+    if( g_typeNames.empty())
+        InitTables();
+
+    return g_typeNames;
+}
+
+
+const std::vector<BITMAP_DEF>& PinTypeIcons()
+{
+    if( g_typeIcons.empty())
+        InitTables();
+
+    return g_typeIcons;
+}
+
+
+const wxArrayString& PinShapeNames()
+{
+    if( g_shapeNames.empty())
+        InitTables();
+
+    return g_shapeNames;
+}
+
+
+const std::vector<BITMAP_DEF>& PinShapeIcons()
+{
+    if( g_shapeIcons.empty())
+        InitTables();
+
+    return g_shapeIcons;
+}
+
+
+const wxArrayString& PinOrientationNames()
+{
+    if( g_orientationNames.empty())
+        InitTables();
+
+    return g_orientationNames;
+}
+
+
+const std::vector<BITMAP_DEF>& PinOrientationIcons()
+{
+    if( g_orientationIcons.empty())
+        InitTables();
+
+    return g_orientationIcons;
+}
+
+
 wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE aType )
 {
     auto findIt = pinTypes.find( aType );
@@ -74,3 +254,25 @@ BITMAP_DEF ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE aType )
 
     return findIt->second.bitmap;
 }
+
+
+wxString PinShapeGetText( GRAPHIC_PINSHAPE aShape )
+{
+    auto findIt = pinShapes.find( aShape );
+
+    wxCHECK_MSG( findIt != pinShapes.end(), wxT( "?" ), "Could not find pinshape in lookup map" );
+
+    return findIt->second.name;
+}
+
+
+BITMAP_DEF PinShapeGetBitmap( GRAPHIC_PINSHAPE aShape )
+{
+    auto findIt = pinShapes.find( aShape );
+
+    wxCHECK_MSG( findIt != pinShapes.end(), nullptr, "Could not find pinshape in lookup map" );
+
+    return findIt->second.bitmap;
+}
+
+

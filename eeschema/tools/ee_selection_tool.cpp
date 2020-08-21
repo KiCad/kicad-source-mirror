@@ -1368,18 +1368,12 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
     // represented in the LIB_PART and will inherit the settings of the parent component.)
     if( itemType == SCH_COMPONENT_T )
     {
-        if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+        for( SCH_PIN* pin : static_cast<SCH_COMPONENT*>( aItem )->GetPins() )
         {
-            SCH_PIN_PTRS pins = static_cast<SCH_COMPONENT*>( aItem )->GetSchPins(
-                    &schframe->GetCurrentSheet() );
-
-            for( SCH_PIN* pin : pins )
-            {
-                if( aMode == SELECTED )
-                    pin->SetSelected();
-                else if( aMode == BRIGHTENED )
-                    pin->SetBrightened();
-            }
+            if( aMode == SELECTED )
+                pin->SetSelected();
+            else if( aMode == BRIGHTENED )
+                pin->SetBrightened();
         }
 
         for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
@@ -1432,18 +1426,12 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
     // represented in the LIB_PART.)
     if( itemType == SCH_COMPONENT_T )
     {
-        if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+        for( SCH_PIN* pin : static_cast<SCH_COMPONENT*>( aItem )->GetPins() )
         {
-            SCH_PIN_PTRS pins = static_cast<SCH_COMPONENT*>( aItem )->GetSchPins(
-                    &schframe->GetCurrentSheet() );
-
-            for( SCH_PIN* pin : pins )
-            {
-                if( aMode == SELECTED )
-                    pin->ClearSelected();
-                else if( aMode == BRIGHTENED )
-                    pin->ClearBrightened();
-            }
+            if( aMode == SELECTED )
+                pin->ClearSelected();
+            else if( aMode == BRIGHTENED )
+                pin->ClearBrightened();
         }
 
         for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )

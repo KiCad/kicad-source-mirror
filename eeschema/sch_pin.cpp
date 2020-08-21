@@ -23,6 +23,7 @@
 #include <sch_component.h>
 #include <sch_pin.h>
 #include <sch_sheet_path.h>
+#include <sch_edit_frame.h>
 
 
 SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent ) :
@@ -37,6 +38,7 @@ SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent ) :
 SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
         SCH_ITEM( aPin )
 {
+    m_alt = aPin.m_alt;
     m_libPin = aPin.m_libPin;
     m_position = aPin.m_position;
     m_isDangling = aPin.m_isDangling;
@@ -47,11 +49,51 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
 {
     SCH_ITEM::operator=( aPin );
 
+    m_alt = aPin.m_alt;
     m_libPin = aPin.m_libPin;
     m_position = aPin.m_position;
     m_isDangling = aPin.m_isDangling;
 
     return *this;
+}
+
+
+wxString SCH_PIN::GetName() const
+{
+    if( !m_alt.IsEmpty() )
+        return m_alt;
+
+    return m_libPin->GetName();
+}
+
+
+ELECTRICAL_PINTYPE SCH_PIN::GetType() const
+{
+    if( !m_alt.IsEmpty() )
+        m_libPin->GetAlt( m_alt ).m_Type;
+
+    return m_libPin->GetType();
+}
+
+
+GRAPHIC_PINSHAPE SCH_PIN::GetShape() const
+{
+    if( !m_alt.IsEmpty() )
+        m_libPin->GetAlt( m_alt ).m_Shape;
+
+    return m_libPin->GetShape();
+}
+
+
+int SCH_PIN::GetOrientation() const
+{
+    return m_libPin->GetOrientation();
+}
+
+
+int SCH_PIN::GetLength() const
+{
+    return m_libPin->GetLength();
 }
 
 
@@ -94,7 +136,66 @@ wxString SCH_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
-    m_libPin->GetMsgPanelInfo( aFrame, aList, GetParentComponent() );
+    wxString msg;
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), _( "Pin" ), CYAN ) );
+
+    if( m_libPin->GetUnit() == 0 )
+        msg = _( "All" );
+    else
+        msg.Printf( wxT( "%d" ), m_libPin->GetUnit() );
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Unit" ), msg, BROWN ) );
+
+    if( m_libPin->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
+        msg = _( "no" );
+    else if( m_libPin->GetConvert() == LIB_ITEM::LIB_CONVERT::DEMORGAN )
+        msg = _( "yes" );
+    else
+        msg = wxT( "?" );
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Converted" ), msg, BROWN ) );
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetName(), DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), msg, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), ElectricalPinTypeGetText( GetType() ), RED ) );
+
+    msg = PinShapeGetText( GetShape() );
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg, BLUE ) );
+
+    msg = IsVisible() ? _( "Yes" ) : _( "No" );
+    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), msg, DARKGREEN ) );
+
+    // Display pin length
+    msg = StringFromValue( aFrame->GetUserUnits(), GetLength(), true );
+    aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, MAGENTA ) );
+
+    msg = PinOrientationName( (unsigned) PinOrientationIndex( GetOrientation() ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg, DARKMAGENTA ) );
+
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.x, true );
+    aList.emplace_back( _( "Pos X" ), msg, DARKMAGENTA );
+
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.y, true );
+    aList.emplace_back( _( "Pos Y" ), msg, DARKMAGENTA );
+
+    aList.emplace_back( GetParentComponent()->GetField( REFERENCE )->GetShownText(),
+                        GetParentComponent()->GetField( VALUE )->GetShownText(), DARKCYAN );
+
+#if defined(DEBUG)
+
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+
+    if( !frame )
+        return;
+
+    SCH_CONNECTION* conn = Connection( frame->GetCurrentSheet() );
+
+    if( conn )
+        conn->AppendInfoToMsgPanel( aList );
+
+#endif
+
 }
 
 

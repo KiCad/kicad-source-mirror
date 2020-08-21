@@ -273,7 +273,7 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
                 for( SCH_FIELD& field : cmp->GetFields() )
                     visit( &field );
 
-                for( SCH_PIN* pin : cmp->GetSchPins() )
+                for( SCH_PIN* pin : cmp->GetPins() )
                     visit( pin );
             }
             else if( item->Type() == SCH_SHEET_T )
@@ -341,7 +341,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_ITEM* aAfter,
                         return &field;
                 }
 
-                for( SCH_PIN* pin : cmp->GetSchPins() )
+                for( SCH_PIN* pin : cmp->GetPins() )
                 {
                     if( pin->Matches( *aData, nullptr ) )
                         return pin;
@@ -851,7 +851,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
                 if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
                 {
-                    SCH_PIN_PTRS pins = comp->GetSchPins( &editFrame->GetCurrentSheet() );
+                    std::vector<SCH_PIN*> pins = comp->GetPins();
 
                     if( pins.size() == 1 )
                         conn = pins[0]->Connection( editFrame->GetCurrentSheet() );
@@ -1071,17 +1071,14 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
             redraw |= comp->HasBrightenedPins();
 
             comp->ClearBrightenedPins();
-            std::vector<LIB_PIN*> pins;
-            comp->GetPins( pins );
 
-            for( LIB_PIN* pin : pins )
+            for( SCH_PIN* pin : comp->GetPins() )
             {
-                SCH_CONNECTION* pin_conn =
-                        comp->GetConnectionForPin( pin, m_frame->GetCurrentSheet() );
+                SCH_CONNECTION* pin_conn = pin->Connection( m_frame->GetCurrentSheet() );
 
                 if( pin_conn && pin_conn->Name() == selectedName )
                 {
-                    comp->BrightenPin( pin );
+                    pin->SetBrightened();
                     redraw = true;
                 }
             }

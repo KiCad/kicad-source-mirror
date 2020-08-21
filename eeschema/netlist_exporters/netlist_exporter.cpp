@@ -153,7 +153,7 @@ void NETLIST_EXPORTER::CreatePinList( SCH_COMPONENT* comp, SCH_SHEET_PATH* aShee
 
     else // entry->GetUnitCount() <= 1 means one part per package
     {
-        for( const auto& pin : comp->GetSchPins( aSheetPath ) )
+        for( const auto& pin : comp->GetPins( aSheetPath ) )
         {
             if( auto conn = pin->Connection( *aSheetPath ) )
             {
@@ -234,7 +234,7 @@ void NETLIST_EXPORTER::findAllUnitsOfComponent( SCH_COMPONENT* aComponent,
             if( ref2.CmpNoCase( ref ) != 0 )
                 continue;
 
-            for( const auto& pin : comp2->GetSchPins( aSheetPath ) )
+            for( const auto& pin : comp2->GetPins( aSheetPath ) )
             {
                 if( auto conn = pin->Connection( *aSheetPath ) )
                 {

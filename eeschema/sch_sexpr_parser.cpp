@@ -1071,6 +1071,51 @@ LIB_CIRCLE* SCH_SEXPR_PARSER::parseCircle()
 
 LIB_PIN* SCH_SEXPR_PARSER::parsePin()
 {
+    auto parseType = [&]( T token ) -> ELECTRICAL_PINTYPE
+                     {
+                         switch( token )
+                         {
+                         case T_input:          return ELECTRICAL_PINTYPE::PT_INPUT;
+                         case T_output:         return ELECTRICAL_PINTYPE::PT_OUTPUT;
+                         case T_bidirectional:  return ELECTRICAL_PINTYPE::PT_BIDI;
+                         case T_tri_state:      return ELECTRICAL_PINTYPE::PT_TRISTATE;
+                         case T_passive:        return ELECTRICAL_PINTYPE::PT_PASSIVE;
+                         case T_unspecified:    return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
+                         case T_power_in:       return ELECTRICAL_PINTYPE::PT_POWER_IN;
+                         case T_power_out:      return ELECTRICAL_PINTYPE::PT_POWER_OUT;
+                         case T_open_collector: return ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
+                         case T_open_emitter:   return ELECTRICAL_PINTYPE::PT_OPENEMITTER;
+                         case T_unconnected:    return ELECTRICAL_PINTYPE::PT_NC;
+
+                         default:
+                             Expecting( "input, output, bidirectional, tri_state, passive, "
+                                        "unspecified, power_in, power_out, open_collector, "
+                                        "open_emitter, or unconnected" );
+                             return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
+                         }
+                     };
+
+    auto parseShape = [&]( T token ) -> GRAPHIC_PINSHAPE
+                      {
+                          switch( token )
+                          {
+                          case T_line:            return GRAPHIC_PINSHAPE::LINE;
+                          case T_inverted:        return GRAPHIC_PINSHAPE::INVERTED;
+                          case T_clock:           return GRAPHIC_PINSHAPE::CLOCK;
+                          case T_inverted_clock:  return GRAPHIC_PINSHAPE::INVERTED_CLOCK;
+                          case T_input_low:       return GRAPHIC_PINSHAPE::INPUT_LOW;
+                          case T_clock_low:       return GRAPHIC_PINSHAPE::CLOCK_LOW;
+                          case T_output_low:      return GRAPHIC_PINSHAPE::OUTPUT_LOW;
+                          case T_edge_clock_high: return GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK;
+                          case T_non_logic:       return GRAPHIC_PINSHAPE::NONLOGIC;
+
+                          default:
+                              Expecting( "line, inverted, clock, inverted_clock, input_low, "
+                                         "clock_low, output_low, edge_clock_high, non_logic" );
+                              return GRAPHIC_PINSHAPE::LINE;
+                          }
+                      };
+
     wxCHECK_MSG( CurTok() == T_pin, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a pin token." ) );
 
@@ -1084,103 +1129,11 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
 
     // Pin electrical type.
     token = NextTok();
-
-    switch( token )
-    {
-    case T_input:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
-        break;
-
-    case T_output:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_OUTPUT );
-        break;
-
-    case T_bidirectional:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_BIDI );
-        break;
-
-    case T_tri_state:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_TRISTATE );
-        break;
-
-    case T_passive:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
-        break;
-
-    case T_unspecified:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
-        break;
-
-    case T_power_in:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-        break;
-
-    case T_power_out:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_OUT );
-        break;
-
-    case T_open_collector:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR );
-        break;
-
-    case T_open_emitter:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_OPENEMITTER );
-        break;
-
-    case T_unconnected:
-        pin->SetType( ELECTRICAL_PINTYPE::PT_NC );
-        break;
-
-    default:
-        Expecting( "input, output, bidirectional, tri_state, passive, unspecified, "
-                   "power_in, power_out, open_collector, open_emitter, or unconnected" );
-    }
+    pin->SetType( parseType( token ) );
 
     // Pin shape.
     token = NextTok();
-
-    switch( token )
-    {
-    case T_line:
-        pin->SetShape( GRAPHIC_PINSHAPE::LINE );
-        break;
-
-    case T_inverted:
-        pin->SetShape( GRAPHIC_PINSHAPE::INVERTED );
-        break;
-
-    case T_clock:
-        pin->SetShape( GRAPHIC_PINSHAPE::CLOCK );
-        break;
-
-    case T_inverted_clock:
-        pin->SetShape( GRAPHIC_PINSHAPE::INVERTED_CLOCK );
-        break;
-
-    case T_input_low:
-        pin->SetShape( GRAPHIC_PINSHAPE::INPUT_LOW );
-        break;
-
-    case T_clock_low:
-        pin->SetShape( GRAPHIC_PINSHAPE::CLOCK_LOW );
-        break;
-
-    case T_output_low:
-        pin->SetShape( GRAPHIC_PINSHAPE::OUTPUT_LOW );
-        break;
-
-    case T_edge_clock_high:
-        pin->SetShape( GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK );
-        break;
-
-    case T_non_logic:
-        pin->SetShape( GRAPHIC_PINSHAPE::NONLOGIC );
-        break;
-
-    default:
-        Expecting( "line, inverted, clock, inverted_clock, input_low, clock_low, "
-                   "output_low, edge_clock_high, non_logic" );
-    }
+    pin->SetShape( parseShape( token ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -1300,8 +1253,35 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
 
             break;
 
+        case T_alternate:
+        {
+            LIB_PIN::ALT alt;
+
+            token = NextTok();
+
+            if( !IsSymbol( token ) )
+            {
+                error.Printf( _( "Invalid alternate pin name in\nfile: \"%s\"\nline: %d\noffset: %d" ),
+                              CurSource().c_str(), CurLineNumber(), CurOffset() );
+                THROW_IO_ERROR( error );
+            }
+
+            alt.m_Name = FromUTF8();
+
+            token = NextTok();
+            alt.m_Type = parseType( token );
+
+            token = NextTok();
+            alt.m_Shape = parseShape( token );
+
+            pin->GetAlternates()[ alt.m_Name ] = alt;
+
+            NeedRIGHT();
+        }
+            break;
+
         default:
-            Expecting( "at, name, number, or length" );
+            Expecting( "at, name, number, length, or alternate" );
         }
     }
 
@@ -2215,8 +2195,34 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             break;
         }
 
+        case T_pin:
+        {
+            SCH_PIN* pin = new SCH_PIN( nullptr, symbol.get() );
+
+            NeedSYMBOL();
+            pin->SetNumber( FromUTF8() );
+
+            token = NextTok();
+
+            if( token == T_alternate )
+            {
+                NeedSYMBOL();
+                pin->SetAlt( FromUTF8() );
+                NeedRIGHT();
+            }
+            else
+            {
+                Expecting( "alternate" );
+            }
+
+            symbol->GetPins().push_back( pin );
+
+            NeedRIGHT();
+        }
+            break;
+
         default:
-            Expecting( "lib_id, lib_name, at, mirror, uuid, property, or instances" );
+            Expecting( "lib_id, lib_name, at, mirror, uuid, property, pin, or instances" );
         }
     }
 

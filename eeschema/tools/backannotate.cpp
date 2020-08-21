@@ -452,8 +452,8 @@ void BACK_ANNOTATE::applyChangelist()
             {
                 const wxString& pinNumber = entry.first;
                 const wxString& shortNetName = entry.second;
-                LIB_PIN*        pin = comp->GetPin( pinNumber );
-                SCH_CONNECTION* conn = comp->GetConnectionForPin( pin, ref.GetSheetPath() );
+                SCH_PIN*        pin = comp->GetPin( pinNumber );
+                SCH_CONNECTION* conn = pin->Connection( ref.GetSheetPath() );
 
                 wxString key = shortNetName + ref.GetSheetPath().PathAsString();
 

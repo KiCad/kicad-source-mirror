@@ -72,6 +72,7 @@ private:
     void OnMoveDown( wxCommandEvent& event ) override;
     void OnBrowseLibrary( wxCommandEvent& event ) override;
     void OnEditSpiceModel( wxCommandEvent& event ) override;
+    void OnEditPinTable( wxCommandEvent& event ) override;
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnUpdateUI( wxUpdateUIEvent& event ) override;

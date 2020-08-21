@@ -1286,7 +1286,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->SetLibSymbol( new LIB_PART( *libSymbol ) );
 
     std::vector<LIB_PIN*> pins;
-    component->GetPins( pins );
+    component->GetLibPins( pins );
 
     for( const auto& pin : pins )
         m_connPoints[component->GetPinPhysicalPosition( pin )].emplace( pin );

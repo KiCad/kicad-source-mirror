@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 class PinShapeComboBox;
 class PinTypeComboBox;
+class WX_GRID;
 class wxBitmapComboBox;
 
 #include "dialog_shim.h"
@@ -27,8 +28,14 @@ class wxBitmapComboBox;
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
-#include <wx/statline.h>
+#include <wx/grid.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/collpane.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -69,15 +76,24 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkApplyToAllParts;
 		wxCheckBox* m_checkApplyToAllConversions;
 		wxCheckBox* m_checkShow;
+		wxStaticText* m_staticText16;
 		wxPanel* m_panelShowPin;
+		wxCollapsiblePane* m_alternatesTurndown;
+		WX_GRID* m_alternatesGrid;
+		wxBitmapButton* m_addAlternate;
+		wxBitmapButton* m_deleteAlternate;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnPropertiesChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
+		virtual void OnAddAlternate( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteAlternate( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

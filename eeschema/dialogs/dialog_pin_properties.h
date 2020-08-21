@@ -34,20 +34,43 @@
 #include <lib_pin.h>
 #include <lib_edit_frame.h>
 
+
+enum COL_ORDER
+{
+    COL_NAME,
+    COL_TYPE,
+    COL_SHAPE,
+
+    COL_COUNT       // keep as last
+};
+
+
+class ALT_PIN_DATA_MODEL;
+
+
 /** Implementing DIALOG_LIB_EDIT_PIN_BASE */
 class DIALOG_PIN_PROPERTIES : public DIALOG_PIN_PROPERTIES_BASE
 {
-    LIB_EDIT_FRAME* m_frame;
-    LIB_PIN*        m_pin;
-    LIB_PIN*        m_dummyPin;       // a working copy used to show changes
+    LIB_EDIT_FRAME*     m_frame;
+    LIB_PIN*            m_pin;
+    LIB_PIN*            m_dummyPin;       // a working copy used to show changes
 
-    UNIT_BINDER     m_posX;
-    UNIT_BINDER     m_posY;
-    UNIT_BINDER     m_pinLength;
-    UNIT_BINDER     m_nameSize;
-    UNIT_BINDER     m_numberSize;
+    UNIT_BINDER         m_posX;
+    UNIT_BINDER         m_posY;
+    UNIT_BINDER         m_pinLength;
+    UNIT_BINDER         m_nameSize;
+    UNIT_BINDER         m_numberSize;
 
-    wxPoint         m_origPos;
+    wxPoint             m_origPos;
+
+    ALT_PIN_DATA_MODEL* m_alternatesDataModel;
+
+    int                 m_delayedFocusRow;
+    int                 m_delayedFocusColumn;
+
+    int                 m_originalColWidths[ COL_COUNT ];
+    int                 m_width;
+    bool                m_initialized;
 
 public:
     /** Constructor */
@@ -59,6 +82,13 @@ public:
 
     void OnPaintShowPanel( wxPaintEvent& event ) override;
     void OnPropertiesChange( wxCommandEvent& event ) override;
+    void OnAddAlternate( wxCommandEvent& event ) override;
+    void OnDeleteAlternate( wxCommandEvent& event ) override;
+    void OnSize( wxSizeEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
+
+protected:
+    void adjustGridColumns( int aWidth );
 };
 
 #endif // __dialog_lib_edit_pin__

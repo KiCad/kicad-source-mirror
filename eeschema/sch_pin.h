@@ -36,6 +36,8 @@ class SCH_PIN : public SCH_ITEM
 {
     LIB_PIN*       m_libPin;
 
+    wxString       m_number;
+    wxString       m_alt;
     wxPoint        m_position;
     bool           m_isDangling;
 
@@ -66,6 +68,9 @@ public:
 
     void ClearDefaultNetName( const SCH_SHEET_PATH* aPath );
     wxString GetDefaultNetName( const SCH_SHEET_PATH aPath );
+
+    wxString GetAlt() const { return m_alt; }
+    void SetAlt( const wxString& aAlt ) { m_alt = aAlt; }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList ) override;
@@ -102,11 +107,24 @@ public:
      */
     bool IsVisible() const { return m_libPin->IsVisible(); }
 
-    const wxString& GetName() const { return m_libPin->GetName(); }
+    wxString GetName() const;
 
-    const wxString& GetNumber() const { return m_libPin->GetNumber(); }
+    wxString GetNumber() const
+    {
+        if( m_libPin )
+            return m_libPin->GetNumber();
+        else
+            return m_number;
+    }
+    void SetNumber( const wxString& aNumber ) { m_number = aNumber; }
 
-    ELECTRICAL_PINTYPE GetType() const { return m_libPin->GetType(); }
+    ELECTRICAL_PINTYPE GetType() const;
+
+    GRAPHIC_PINSHAPE GetShape() const;
+
+    int GetOrientation() const;
+
+    int GetLength() const;
 
     bool IsPowerConnection() const { return m_libPin->IsPowerConnection(); }
 

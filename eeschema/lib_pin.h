@@ -31,10 +31,8 @@ class SCH_COMPONENT;
 
 #include <eda_rect.h>
 #include <lib_item.h>
-
-#include "pin_shape.h"
-#include "pin_type.h"
-#include "class_libentry.h"
+#include <pin_type.h>
+#include <class_libentry.h>
 
 /// The offset of the pin name string from the end of the pin in mils.
 #define DEFAULT_PIN_NAME_OFFSET 40
@@ -59,17 +57,27 @@ enum DrawPinOrient {
 
 class LIB_PIN : public LIB_ITEM
 {
+public:
+    struct ALT
+    {
+        wxString            m_Name;
+        GRAPHIC_PINSHAPE    m_Shape;         // Shape drawn around pin
+        ELECTRICAL_PINTYPE  m_Type;          // Electrical type of the pin.
+    };
+
 protected:
-    wxPoint            m_position;          // Position of the pin.
-    int                m_length;            // Length of the pin.
-    int                m_orientation;       // Pin orientation (Up, Down, Left, Right)
-    GRAPHIC_PINSHAPE   m_shape;             // Shape drawn around pin
-    ELECTRICAL_PINTYPE m_type;              // Electrical type of the pin.
-    int                m_attributes;        // Set bit 0 to indicate pin is invisible.
-    wxString           m_name;
-    wxString           m_number;
-    int                m_numTextSize;       // Pin num and Pin name sizes
-    int                m_nameTextSize;
+    wxPoint                 m_position;      // Position of the pin.
+    int                     m_length;        // Length of the pin.
+    int                     m_orientation;   // Pin orientation (Up, Down, Left, Right)
+    GRAPHIC_PINSHAPE        m_shape;         // Shape drawn around pin
+    ELECTRICAL_PINTYPE      m_type;          // Electrical type of the pin.
+    int                     m_attributes;    // Set bit 0 to indicate pin is invisible.
+    wxString                m_name;
+    wxString                m_number;
+    int                     m_numTextSize;   // Pin num and Pin name sizes
+    int                     m_nameTextSize;
+
+    std::map<wxString, ALT> m_alternates;    // Map of alternate name to ALT structure
 
 protected:
     /**
@@ -96,38 +104,6 @@ protected:
                                      int aOrientation );
 
 public:
-    /**
-     * Get a list of pin orientation names.
-     *
-     * @return List of valid pin orientation names.
-     */
-    static wxArrayString GetOrientationNames();
-
-    /**
-     * Get a list of pin orientation bitmaps for menus and dialogs.
-     *
-     * @return  List of valid pin orientation bitmaps symbols in .xpm format
-     */
-    static const BITMAP_DEF* GetOrientationSymbols();
-
-    /**
-     * Get the orientation code by index used to set the pin orientation.
-     *
-     * @param aIndex - The index of the orientation code to look up.
-     * @return Orientation code if index is valid.  Returns right
-     *         orientation on index error.
-     */
-    static int GetOrientationCode( int aIndex );
-
-    /**
-     * Get the index of the orientation code.
-     *
-     * @param aCode - The orientation code to look up.
-     * @return  The index of the orientation code if found.  Otherwise,
-     *          return wxNOT_FOUND.
-     */
-    static int GetOrientationIndex( int aCode );
-
     /**
      * return a string giving the electrical type of a pin.
      * Can be used when a known, not translated name is needed (for instance in net lists)
@@ -204,8 +180,10 @@ public:
     int GetNumberTextSize() const { return m_numTextSize; }
     void SetNumberTextSize( int aSize ) { m_numTextSize = aSize; }
 
-    const EDA_RECT GetBoundingBox( bool aIncludeInvisibles, bool aShowName, bool aShowNum,
-                                   int aNameTextOffset ) const;
+    std::map<wxString, ALT>& GetAlternates() { return m_alternates; }
+
+    ALT GetAlt( const wxString& aAlt ) { return m_alternates[ aAlt ]; }
+
     /**
      * Print a pin, with or without the pin texts
      *
@@ -238,15 +216,6 @@ public:
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
-
-    /**
-     * Display pin info (given by GetMsgPanelInfo) and add some info related to aComponent
-     * (schematic pin position, and sheet path)
-     * @param aList is the message list to fill
-     * @param aComponent is the component which "owns" the pin
-     */
-    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList,
-                          SCH_COMPONENT* aComponent );
 
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
     const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false ); }
@@ -308,14 +277,6 @@ public:
     void CalcEdit( const wxPoint& aPosition ) override;
 
 private:
-    /**
-     * Build the pin basic info to display in message panel.
-     * they are pin info without the actual pin position, which
-     * is not known in schematic without knowing the parent component
-     */
-    void getMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
-
-
     /**
      * @copydoc LIB_ITEM::compare()
      *

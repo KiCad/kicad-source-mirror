@@ -91,7 +91,7 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) newItem;
 
-        for( SCH_PIN* pin : component->GetSchPins() )
+        for( SCH_PIN* pin : component->GetPins() )
             pin->ClearFlags( SELECTED | BRIGHTENED );
 
         for( SCH_FIELD& field : component->GetFields() )

@@ -1408,11 +1408,18 @@ static void orientPart( LIB_PART* part, int orientation )
 
 void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 {
+    int unit = aComp->GetUnitSelection( &m_schematic->CurrentSheet() );
+    int convert = aComp->GetConvert();
+
     // Use dummy part if the actual couldn't be found (or couldn't be locked).
     LIB_PART* originalPart = aComp->GetPartRef() ? aComp->GetPartRef().get() : dummy();
+    LIB_PINS  originalPins;
+    originalPart->GetPins( originalPins, unit, convert );
 
     // Copy the source so we can re-orient and translate it.
     LIB_PART tempPart( *originalPart );
+    LIB_PINS tempPins;
+    tempPart.GetPins( tempPins, unit, convert );
 
     tempPart.SetFlags( aComp->GetFlags() );
 
@@ -1425,17 +1432,17 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     }
 
     // Copy the pin info from the component to the temp pins
-    LIB_PINS tempPins;
-    tempPart.GetPins( tempPins, aComp->GetUnit(), aComp->GetConvert() );
-    const SCH_PIN_PTRS compPins = aComp->GetSchPins();
-
-    for( unsigned i = 0; i < tempPins.size() && i < compPins.size(); ++ i )
+    for( unsigned i = 0; i < tempPins.size(); ++ i )
     {
+        SCH_PIN* compPin = aComp->GetPin( originalPins[ i ] );
         LIB_PIN* tempPin = tempPins[ i ];
-        const SCH_PIN* compPin = compPins[ i ];
 
         tempPin->ClearFlags();
         tempPin->SetFlags( compPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
+
+        tempPin->SetName( compPin->GetName() );
+        tempPin->SetType( compPin->GetType() );
+        tempPin->SetShape( compPin->GetShape() );
 
         if( compPin->IsDangling() )
             tempPin->SetFlags( IS_DANGLING );

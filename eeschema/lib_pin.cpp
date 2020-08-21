@@ -23,62 +23,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_pin.cpp
- */
-
-#include <wx/tokenzr.h>
-
 #include <fctsys.h>
 #include <pgm_base.h>
-#include <gr_basic.h>
-#include <macros.h>
-#include <trigo.h>
 #include <sch_draw_panel.h>
-#include <gr_text.h>
-#include <plotter.h>
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <msgpanel.h>
-#include <math/util.h>      // for KiROUND
-
 #include <general.h>
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <lib_pin.h>
-#include <transform.h>
-#include <sch_component.h>
-#include <sch_edit_frame.h>  // For message panel debug info
-#include <sch_sheet_path.h>
 #include <settings/settings_manager.h>
-#include <settings/color_settings.h>
-#include <trace_helpers.h>
 #include <libedit/libedit_settings.h>
-#include <default_values.h>
 #include "sch_painter.h"
-
-static const int pin_orientation_codes[] =
-{
-    PIN_RIGHT,
-    PIN_LEFT,
-    PIN_UP,
-    PIN_DOWN
-};
-#define PIN_ORIENTATION_CNT arrayDim( pin_orientation_codes )
 
 // small margin in internal units between the pin text and the pin line
 #define PIN_TEXT_MARGIN 4
-
-// bitmaps to show pins orientations in dialog editor
-// must have same order than pin_orientation_names
-static const BITMAP_DEF iconsPinsOrientations[] =
-{
-    pinorient_right_xpm,
-    pinorient_left_xpm,
-    pinorient_up_xpm,
-    pinorient_down_xpm,
-};
-
 
 const wxString LIB_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType )
 {
@@ -104,31 +64,6 @@ const wxString LIB_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType
     return msgPinElectricType[static_cast<int>( aType )];
 }
 
-
-// Helper functions to get the pin orientation name from pin_orientation_codes
-// Note: the strings are *not* static because they are translated and must be built
-// on the fly, to be properly translated
-
-static const wxString getPinOrientationName( unsigned aPinOrientationCode )
-{
-    /* Note: The following name lists are sentence capitalized per the GNOME UI
-     *       standards for list controls.  Please do not change the capitalization
-     *       of these strings unless the GNOME UI standards are changed.
-     */
-    const wxString pin_orientation_names[] =
-    {
-        _( "Right" ),
-        _( "Left" ),
-        _( "Up" ),
-        _( "Down" ),
-        wxT( "???" )
-    };
-
-    if( aPinOrientationCode > PIN_ORIENTATION_CNT )
-        aPinOrientationCode = PIN_ORIENTATION_CNT;
-
-    return pin_orientation_names[ aPinOrientationCode ];
-}
 
 /// Utility for getting the size of the 'internal' pin decorators (as a radius)
 // i.e. the clock symbols (falling clock is actually external but is of
@@ -1040,7 +975,7 @@ void LIB_PIN::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 }
 
 
-void LIB_PIN::getMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString text = m_number.IsEmpty() ? wxT( "?" ) : m_number;
 
@@ -1060,16 +995,9 @@ void LIB_PIN::getMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aLis
     text = StringFromValue( aFrame->GetUserUnits(), m_length, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text, MAGENTA ) );
 
-    text = getPinOrientationName( (unsigned) GetOrientationIndex( m_orientation ) );
+    text = PinOrientationName( (unsigned) PinOrientationIndex( m_orientation ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text, DARKMAGENTA ) );
-}
 
-
-void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
-{
-    getMsgPanelInfoBase( aFrame, aList );
-
-    wxString text;
     wxPoint pinpos = GetPosition();
     pinpos.y = -pinpos.y;   // Display coord are top to bottom
                             // lib items coord are bottom to top
@@ -1081,42 +1009,6 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
 }
 
-
-void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList,
-                               SCH_COMPONENT* aComponent )
-{
-    getMsgPanelInfoBase( aFrame, aList );
-
-    if( !aComponent )
-        return;
-
-    wxString text;
-    wxPoint pinpos = aComponent->GetTransform().TransformCoordinate( GetPosition() )
-                     + aComponent->GetPosition();
-
-    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.x, true );
-    aList.emplace_back( _( "Pos X" ), text, DARKMAGENTA );
-
-    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.y, true );
-    aList.emplace_back( _( "Pos Y" ), text, DARKMAGENTA );
-
-    aList.emplace_back( aComponent->GetField( REFERENCE )->GetShownText(),
-                                     aComponent->GetField( VALUE )->GetShownText(), DARKCYAN );
-
-#if defined(DEBUG)
-
-    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
-
-    if( !frame )
-        return;
-
-    auto conn = aComponent->GetConnectionForPin( this, frame->GetCurrentSheet() );
-
-    if( conn )
-        conn->AppendInfoToMsgPanel( aList );
-
-#endif
-}
 
 const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly ) const
 {
@@ -1234,46 +1126,6 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     bbox.RevertYAxis();
 
     return bbox;
-}
-
-
-wxArrayString LIB_PIN::GetOrientationNames()
-{
-    wxArrayString tmp;
-
-    for( unsigned ii = 0; ii < PIN_ORIENTATION_CNT; ii++ )
-        tmp.Add( getPinOrientationName( ii ) );
-
-    return tmp;
-}
-
-
-int LIB_PIN::GetOrientationCode( int index )
-{
-    if( index >= 0 && index < (int) PIN_ORIENTATION_CNT )
-        return pin_orientation_codes[ index ];
-
-    return PIN_RIGHT;
-}
-
-
-int LIB_PIN::GetOrientationIndex( int code )
-{
-    size_t i;
-
-    for( i = 0; i < PIN_ORIENTATION_CNT; i++ )
-    {
-        if( pin_orientation_codes[i] == code )
-            return (int) i;
-    }
-
-    return wxNOT_FOUND;
-}
-
-
-const BITMAP_DEF* LIB_PIN::GetOrientationSymbols()
-{
-    return iconsPinsOrientations;
 }
 
 

@@ -28,37 +28,21 @@
 #define wxUSE_BASE64 1
 #include <wx/base64.h>
 #include <wx/mstream.h>
-#include <wx/filename.h>
-#include <wx/tokenzr.h>
-
 #include <advanced_config.h>
 #include <build_version.h>
-#include <gal/color4d.h>
 #include <pgm_base.h>
-#include <gr_text.h>
-#include <kiway.h>
-#include <kicad_string.h>
-#include <richio.h>
-#include <core/typeinfo.h>
-#include <plotter.h>               // PLOT_DASH_TYPE
-#include <properties.h>
 #include <trace_helpers.h>
-
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>       // COMPONENT_ORIENTATION_T
 #include <sch_junction.h>
 #include <sch_line.h>
-#include <sch_marker.h>
 #include <sch_no_connect.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
-#include <sch_bitmap.h>
 #include <schematic.h>
-#include <bus_alias.h>
 #include <sch_sexpr_plugin.h>
-#include <template_fieldnames.h>
 #include <sch_screen.h>
 #include <class_libentry.h>
 #include <class_library.h>
@@ -70,17 +54,12 @@
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
 #include <lib_text.h>
-#include <pin_shape.h>
-#include <pin_type.h>
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <sch_file_versions.h>
 #include <schematic_lexer.h>
-#include <sch_reference_list.h>
 #include <sch_sexpr_parser.h>
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
-#include <confirm.h>
 #include <ee_selection.h>
-#include <default_values.h>    // For some default values
 
 
 using namespace TSCHEMATIC_T;
@@ -955,6 +934,16 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
     for( SCH_FIELD& field : aSymbol->GetFields() )
     {
         saveField( &field, aNestLevel + 1 );
+    }
+
+    for( const SCH_PIN* pin : aSymbol->GetPins() )
+    {
+        if( !pin->GetAlt().IsEmpty() )
+        {
+            m_out->Print( aNestLevel + 1, "(pin %s (alternate %s))\n",
+                          m_out->Quotew( pin->GetNumber() ).c_str(),
+                          m_out->Quotew( pin->GetAlt() ).c_str() );
+        }
     }
 
     m_out->Print( aNestLevel, ")\n" );
@@ -1843,6 +1832,15 @@ void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
                       aFormatter.Quotew( aPin->GetNumber() ).c_str(),
                       FormatInternalUnits( aPin->GetNumberTextSize() ).c_str(),
                       FormatInternalUnits( aPin->GetNumberTextSize() ).c_str() );
+
+
+    for( const std::pair<const wxString, LIB_PIN::ALT>& alt : aPin->GetAlternates() )
+    {
+        aFormatter.Print( aNestLevel + 1, "(alternate %s %s %s)\n",
+                          aFormatter.Quotew( alt.second.m_Name ).c_str(),
+                          getPinElectricalTypeToken( alt.second.m_Type ),
+                          getPinShapeToken( alt.second.m_Shape ) );
+    }
 
     aFormatter.Print( aNestLevel, ")\n" );
 }

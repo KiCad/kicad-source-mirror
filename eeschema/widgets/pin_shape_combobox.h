@@ -27,8 +27,7 @@
  */
 
 #include <wx/bmpcbox.h>
-
-#include <pin_shape.h>
+#include <pin_type.h>
 
 class PinShapeComboBox : public wxBitmapComboBox
 {

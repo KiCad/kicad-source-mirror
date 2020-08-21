@@ -468,14 +468,14 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         {
             SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
 
-            // TODO(JE) right now this relies on GetSchPins() returning good SCH_PIN pointers
+            // TODO(JE) right now this relies on GetPins() returning good SCH_PIN pointers
             // that contain good LIB_PIN pointers.  Since these get invalidated whenever the
             // library component is refreshed, the current solution as of ed025972 is to just
             // rebuild the SCH_PIN list when the component is refreshed, and then re-run the
             // connectivity calculations.  This is slow and should be improved before release.
             // See https://gitlab.com/kicad/code/kicad/issues/3784
 
-            for( SCH_PIN* pin : component->GetSchPins( &aSheet ) )
+            for( SCH_PIN* pin : component->GetPins( &aSheet ) )
             {
                 pin->InitializeConnection( aSheet, this );
 

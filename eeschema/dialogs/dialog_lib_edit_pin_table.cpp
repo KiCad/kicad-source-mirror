@@ -25,29 +25,14 @@
 #include "grid_tricks.h"
 #include "lib_pin.h"
 #include "pin_number.h"
-#include <base_units.h>
 #include <bitmaps.h>
 #include <confirm.h>
-#include <kicad_string.h>
-#include <kiface_i.h>
 #include <lib_edit_frame.h>
 #include <libedit_settings.h>
-#include <queue>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/wx_grid.h>
-#include <wx/bmpcbox.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
-
-static std::vector<BITMAP_DEF> g_typeIcons;
-static wxArrayString           g_typeNames;
-
-static std::vector<BITMAP_DEF> g_shapeIcons;
-static wxArrayString           g_shapeNames;
-
-static std::vector<BITMAP_DEF> g_orientationIcons;
-static wxArrayString           g_orientationNames;
-
 
 class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
@@ -117,14 +102,14 @@ public:
                 val = pin->GetName();
                 break;
             case COL_TYPE:
-                val = g_typeNames[static_cast<int>( pin->GetType() )];
+                val = PinTypeNames()[static_cast<int>( pin->GetType() )];
                 break;
             case COL_SHAPE:
-                val = g_shapeNames[static_cast<int>( pin->GetShape() )];
+                val = PinShapeNames()[static_cast<int>( pin->GetShape() )];
                 break;
             case COL_ORIENTATION:
-                if( LIB_PIN::GetOrientationIndex( pin->GetOrientation() ) >= 0 )
-                    val = g_orientationNames[ LIB_PIN::GetOrientationIndex( pin->GetOrientation() ) ];
+                if( PinOrientationIndex( pin->GetOrientation() ) >= 0 )
+                    val = PinOrientationNames()[ PinOrientationIndex( pin->GetOrientation() ) ];
                 break;
             case COL_NUMBER_SIZE:
                 val = StringFromValue( aUserUnits, pin->GetNumberTextSize(), true, true );
@@ -184,21 +169,20 @@ public:
                 break;
 
             case COL_TYPE:
-                if( g_typeNames.Index( aValue ) != wxNOT_FOUND )
-                    pin->SetType( (ELECTRICAL_PINTYPE) g_typeNames.Index( aValue ) );
+                if( PinTypeNames().Index( aValue ) != wxNOT_FOUND )
+                    pin->SetType( (ELECTRICAL_PINTYPE) PinTypeNames().Index( aValue ) );
 
                 break;
 
             case COL_SHAPE:
-                if( g_shapeNames.Index( aValue ) != wxNOT_FOUND )
-                    pin->SetShape( (GRAPHIC_PINSHAPE) g_shapeNames.Index( aValue ) );
+                if( PinShapeNames().Index( aValue ) != wxNOT_FOUND )
+                    pin->SetShape( (GRAPHIC_PINSHAPE) PinShapeNames().Index( aValue ) );
 
                 break;
 
             case COL_ORIENTATION:
-                if( g_orientationNames.Index( aValue ) != wxNOT_FOUND )
-                    pin->SetOrientation( LIB_PIN::GetOrientationCode(
-                                              g_orientationNames.Index( aValue ) ) );
+                if( PinOrientationNames().Index( aValue ) != wxNOT_FOUND )
+                    pin->SetOrientation( PinOrientationCode( PinOrientationNames().Index( aValue ) ) );
                 break;
 
             case COL_NUMBER_SIZE:
@@ -243,8 +227,8 @@ public:
         return -1;
     }
 
-    static bool compare(
-            const LIB_PINS& lhs, const LIB_PINS& rhs, int sortCol, bool ascending, EDA_UNITS units )
+    static bool compare( const LIB_PINS& lhs, const LIB_PINS& rhs, int sortCol, bool ascending,
+                         EDA_UNITS units )
     {
         wxString lhStr = GetValue( lhs, sortCol, units );
         wxString rhStr = GetValue( rhs, sortCol, units );
@@ -262,12 +246,12 @@ public:
         // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
         // to get the opposite sort.  i.e. ~(a<b) != (a>b)
         auto cmp = [ ascending ]( const auto a, const auto b )
-        {
-            if( ascending )
-                return a < b;
-            else
-                return b < a;
-        };
+                   {
+                       if( ascending )
+                           return a < b;
+                       else
+                           return b < a;
+                   };
 
         switch( sortCol )
         {
@@ -403,31 +387,6 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LI
         m_editFrame( parent ),
         m_part( aPart )
 {
-    if( g_typeNames.empty())
-    {
-        for( unsigned i = 0; i < ELECTRICAL_PINTYPES_TOTAL; ++i )
-            g_typeIcons.push_back( ElectricalPinTypeGetBitmap( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
-
-        for( unsigned i = 0; i < ELECTRICAL_PINTYPES_TOTAL; ++i )
-            g_typeNames.push_back( ElectricalPinTypeGetText( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
-
-        g_typeNames.push_back( INDETERMINATE_STATE );
-
-        for( unsigned i = 0; i < GRAPHIC_PINSHAPES_TOTAL; ++i )
-            g_shapeIcons.push_back( PinShapeGetBitmap( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
-
-        for( unsigned i = 0; i < GRAPHIC_PINSHAPES_TOTAL; ++i )
-            g_shapeNames.push_back( PinShapeGetText( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
-
-        g_shapeNames.push_back( INDETERMINATE_STATE );
-
-        for( unsigned i = 0; i < LIB_PIN::GetOrientationNames().size(); ++i )
-            g_orientationIcons.push_back( LIB_PIN::GetOrientationSymbols()[ i ] );
-
-        g_orientationNames = LIB_PIN::GetOrientationNames();
-        g_orientationNames.push_back( INDETERMINATE_STATE );
-    }
-
     m_dataModel = new PIN_TABLE_DATA_MODEL( GetUserUnits() );
 
     // Save original columns widths so we can do proportional sizing.
@@ -450,18 +409,24 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LI
     wxGridCellAttr* attr;
 
     attr = new wxGridCellAttr;
-    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( g_typeIcons, g_typeNames ) );
-    attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( g_typeIcons, g_typeNames ) );
+    wxArrayString typeNames = PinTypeNames();
+    typeNames.push_back( INDETERMINATE_STATE );
+    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinTypeIcons(), typeNames ) );
+    attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( PinTypeIcons(), typeNames ) );
     m_grid->SetColAttr( COL_TYPE, attr );
 
     attr = new wxGridCellAttr;
-    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( g_shapeIcons, g_shapeNames ) );
-    attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( g_shapeIcons, g_shapeNames ) );
+    wxArrayString shapeNames = PinShapeNames();
+    shapeNames.push_back( INDETERMINATE_STATE );
+    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinShapeIcons(), shapeNames ) );
+    attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( PinShapeIcons(), shapeNames ) );
     m_grid->SetColAttr( COL_SHAPE, attr );
 
     attr = new wxGridCellAttr;
-    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( g_orientationIcons, g_orientationNames ) );
-    attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( g_orientationIcons, g_orientationNames ) );
+    wxArrayString orientationNames = PinOrientationNames();
+    orientationNames.push_back( INDETERMINATE_STATE );
+    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinOrientationIcons(), orientationNames ) );
+    attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( PinOrientationIcons(), orientationNames ) );
     m_grid->SetColAttr( COL_ORIENTATION, attr );
 
     /* Right-aligned position values look much better, but only MSW and GTK2+

@@ -544,7 +544,7 @@ int ERC_TESTER::TestNoConnectPins()
         {
             SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
 
-            for( SCH_PIN* pin : comp->GetSchPins( &sheet ) )
+            for( SCH_PIN* pin : comp->GetPins( &sheet ) )
             {
                 if( pin->GetLibPin()->GetType() == ELECTRICAL_PINTYPE::PT_NC )
                     pinMap[pin->GetPosition()].emplace_back( pin );

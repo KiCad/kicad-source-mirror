@@ -23,32 +23,16 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <kicad_string.h>
 #include <sch_edit_frame.h>
-#include <plotter.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-
-#include <general.h>
 #include <lib_rectangle.h>
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <sch_component.h>
-#include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>
 #include <netlist_object.h>
-#include <lib_item.h>
-
-#include <dialogs/dialog_schematic_find.h>
-
-#include <wx/tokenzr.h>
-#include <iostream>
-#include <cctype>
-
-#include <eeschema_id.h>    // for MAX_UNIT_COUNT_PER_PACKAGE definition
-
 #include <trace_helpers.h>
 
 
@@ -279,6 +263,14 @@ wxString SCH_COMPONENT::GetDatasheet() const
 
 void SCH_COMPONENT::UpdatePins()
 {
+    std::map<wxString, wxString> altPinMap;
+
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
+    {
+        if( !pin->GetAlt().IsEmpty() )
+            altPinMap[ pin->GetNumber() ] = pin->GetAlt();
+    }
+
     m_pins.clear();
     m_pinMap.clear();
 
@@ -294,20 +286,17 @@ void SCH_COMPONENT::UpdatePins()
         if( libPin->GetConvert() && m_convert && ( m_convert != libPin->GetConvert() ) )
             continue;
 
-        m_pins.push_back( std::unique_ptr<SCH_PIN>( new SCH_PIN( libPin, this ) ) );
+        m_pins.push_back( std::make_unique<SCH_PIN>( libPin, this ) );
+
+        auto ii = altPinMap.find( libPin->GetNumber() );
+
+        if( ii != altPinMap.end() )
+            m_pins.back()->SetAlt( ii->second );
+
         m_pinMap[ libPin ] = i;
 
         ++i;
     }
-}
-
-
-SCH_CONNECTION* SCH_COMPONENT::GetConnectionForPin( LIB_PIN* aPin, const SCH_SHEET_PATH& aSheet )
-{
-    if( m_pinMap.count( aPin ) )
-        return m_pins[ m_pinMap[aPin] ]->Connection( aSheet );
-
-    return nullptr;
 }
 
 
@@ -702,31 +691,39 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 }
 
 
-LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
+SCH_PIN* SCH_COMPONENT::GetPin( const wxString& aNumber )
 {
-    if( m_part )
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
-        return m_part->GetPin( number, m_unit, m_convert );
+        if( pin->GetNumber() == aNumber )
+            return pin.get();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
-void SCH_COMPONENT::GetPins( std::vector<LIB_PIN*>& aPinsList )
+void SCH_COMPONENT::GetLibPins( std::vector<LIB_PIN*>& aPinsList )
 {
     if( m_part )
         m_part->GetPins( aPinsList, m_unit, m_convert );
 }
 
 
-SCH_PIN_PTRS SCH_COMPONENT::GetSchPins( const SCH_SHEET_PATH* aSheet ) const
+SCH_PIN* SCH_COMPONENT::GetPin( LIB_PIN* aLibPin )
 {
-    SCH_PIN_PTRS ptrs;
+    wxASSERT( m_pinMap.count( aLibPin ) );
+    return m_pins[ m_pinMap.at( aLibPin ) ].get();
+}
+
+
+std::vector<SCH_PIN*> SCH_COMPONENT::GetPins( const SCH_SHEET_PATH* aSheet ) const
+{
+    std::vector<SCH_PIN*> pins;
 
     if( aSheet == nullptr )
     {
-        wxCHECK_MSG( Schematic(), ptrs, "Can't call GetSchPins on a component with no schematic" );
+        wxCHECK_MSG( Schematic(), pins, "Can't call GetPins on a component with no schematic" );
 
         aSheet = &Schematic()->CurrentSheet();
     }
@@ -738,10 +735,10 @@ SCH_PIN_PTRS SCH_COMPONENT::GetSchPins( const SCH_SHEET_PATH* aSheet ) const
         if( unit && p->GetLibPin()->GetUnit() && ( p->GetLibPin()->GetUnit() != unit ) )
             continue;
 
-        ptrs.push_back( p.get() );
+        pins.push_back( p.get() );
     }
 
-    return ptrs;
+    return pins;
 }
 
 
@@ -1764,13 +1761,6 @@ void SCH_COMPONENT::ClearBrightenedPins()
 {
     for( auto& pin : m_pins )
         pin->ClearBrightened();
-}
-
-
-void SCH_COMPONENT::BrightenPin( LIB_PIN* aPin )
-{
-    if( m_pinMap.count( aPin ) )
-        m_pins[ m_pinMap.at( aPin ) ]->SetBrightened();
 }
 
 

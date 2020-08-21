@@ -39,6 +39,7 @@
 #include <schematic.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
+#include <dialog_sch_pin_table.h>
 
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
@@ -298,6 +299,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSpiceModel( wxCommandEvent& event
 
     m_grid->ForceRefresh();
 #endif /* KICAD_SPICE */
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditPinTable( wxCommandEvent& event )
+{
+    DIALOG_SCH_PIN_TABLE dialog( GetParent(), m_cmp );
+
+    dialog.ShowModal();
 }
 
 

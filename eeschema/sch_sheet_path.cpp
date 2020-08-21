@@ -522,7 +522,7 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
                     }
                 }
 
-                for( SCH_PIN* pin : comp->GetSchPins() )
+                for( SCH_PIN* pin : comp->GetPins() )
                 {
                     if( pin->m_Uuid == aID )
                     {
@@ -583,7 +583,7 @@ void SCH_SHEET_LIST::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
                 for( SCH_FIELD& field : comp->GetFields() )
                     aMap[ field.m_Uuid ] = &field;
 
-                for( SCH_PIN* pin : comp->GetSchPins() )
+                for( SCH_PIN* pin : comp->GetPins() )
                     aMap[ pin->m_Uuid ] = pin;
             }
             else if( aItem->Type() == SCH_SHEET_T )

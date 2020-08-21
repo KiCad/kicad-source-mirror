@@ -1243,7 +1243,7 @@ void SCH_EDIT_FRAME::FixupJunctions()
         {
             auto cmp = static_cast<SCH_COMPONENT*>( aItem );
 
-            for( const SCH_PIN* pin : cmp->GetSchPins( &sheet ) )
+            for( const SCH_PIN* pin : cmp->GetPins( &sheet ) )
             {
                 auto pos = pin->GetPosition();
 

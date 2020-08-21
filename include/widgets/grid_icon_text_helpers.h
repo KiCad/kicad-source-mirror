@@ -46,8 +46,8 @@ public:
     wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row, int col ) override;
 
 private:
-    const std::vector<BITMAP_DEF>& m_icons;
-    const wxArrayString&           m_names;
+    std::vector<BITMAP_DEF> m_icons;
+    wxArrayString           m_names;
 };
 
 //---- Grid helpers: custom wxGridCellRenderer that renders just an icon ----------------
@@ -92,9 +92,9 @@ public:
 protected:
     wxBitmapComboBox* Combo() const { return static_cast<wxBitmapComboBox*>( m_control ); }
 
-    const std::vector<BITMAP_DEF>& m_icons;
-    const wxArrayString&           m_names;
-    wxString                       m_value;
+    std::vector<BITMAP_DEF> m_icons;
+    wxArrayString           m_names;
+    wxString                m_value;
 
     wxDECLARE_NO_COPY_CLASS( GRID_CELL_ICON_TEXT_POPUP );
 };

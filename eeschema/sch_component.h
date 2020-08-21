@@ -65,14 +65,6 @@ class SCH_SCREEN;
 class SYMBOL_LIB_TABLE;
 
 
-/// A container for several SCH_PIN items
-typedef std::vector<std::unique_ptr<SCH_PIN>> SCH_PINS;
-
-typedef std::vector<SCH_PIN*> SCH_PIN_PTRS;
-
-/// A map from the library pin pointer to the SCH_PIN's index
-typedef std::unordered_map<LIB_PIN*, unsigned> SCH_PIN_MAP;
-
 /// A container for several SCH_FIELD items
 typedef std::vector<SCH_FIELD>    SCH_FIELDS;
 
@@ -87,15 +79,9 @@ extern std::string toUTFTildaText( const wxString& txt );
  */
 class SCH_COMPONENT : public SCH_ITEM
 {
-public:
-
 private:
-
     wxPoint     m_Pos;
-
-    ///< Name and library where symbol was loaded from, i.e. "74xx:74LS00".
-    LIB_ID      m_lib_id;
-
+    LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
     int         m_unit;         ///< The unit for multiple part per package components.
     int         m_convert;      ///< The alternate body style for components that have more than
                                 ///< one body style defined.  Primarily used for components that
@@ -108,21 +94,19 @@ private:
     /**
      * The name used to look up a symbol in the symbol library embedded in a schematic.
      *
-     * By default this is the same as #LIB_ID::GetLibItemName().  However, schematics
-     * allow for multiple variants of the same library symbol.  Set this member In order
-     * to preserve the link to the original symbol library.  If empty, the return of
-     * #LIB_ID::GetLibItemName() should be used.
+     * By default this is the same as #LIB_ID::GetLibItemName().  However, schematics allow for
+     * multiple variants of the same library symbol.  Set this member in order to preserve the
+     * link to the original symbol library.  If empty, #LIB_ID::GetLibItemName() should be used.
      */
     wxString    m_schLibSymbolName;
 
     TRANSFORM   m_transform;    ///< The rotation/mirror transformation matrix.
     SCH_FIELDS  m_Fields;       ///< Variable length list of fields.
 
-    ///< A flattened copy of a LIB_PART found in the PROJECT's libraries to for this component.
-    std::unique_ptr< LIB_PART > m_part;
-
-    SCH_PINS    m_pins;         ///< a SCH_PIN for every LIB_PIN (across all units)
-    SCH_PIN_MAP m_pinMap;       ///< the component's pins mapped by LIB_PIN*
+    std::unique_ptr< LIB_PART >            m_part;    // a flattened copy of the LIB_PART from
+                                                      // the PROJECT's libraries.
+    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;    // a SCH_PIN for every LIB_PIN (all units)
+    std::unordered_map<LIB_PIN*, unsigned> m_pinMap;  // library pin pointer to SCH_PIN's index
 
     bool        m_isInNetlist;  ///< True if the component should appear in the netlist
     bool        m_inBom;        ///< True to include in bill of materials export.
@@ -256,11 +240,6 @@ public:
      * Updates the cache of SCH_PIN objects for each pin
      */
     void UpdatePins();
-
-    /**
-     * Retrieves the connection for a given pin of the component
-     */
-    SCH_CONNECTION* GetConnectionForPin( LIB_PIN* aPin, const SCH_SHEET_PATH& aSheet );
 
     /**
      * Change the unit number to \a aUnit
@@ -487,14 +466,16 @@ public:
      *
      * @return Pin object if found, otherwise NULL.
      */
-    LIB_PIN* GetPin( const wxString& number );
+    SCH_PIN* GetPin( const wxString& number );
 
     /**
      * Populate a vector with all the pins from the library object.
      *
      * @param aPinsList is the list to populate with all of the pins.
      */
-    void GetPins( std::vector<LIB_PIN*>& aPinsList );
+    void GetLibPins( std::vector<LIB_PIN*>& aPinsList );
+
+    SCH_PIN* GetPin( LIB_PIN* aLibPin );
 
     /**
      * Retrieves a list of the SCH_PINs for the given sheet path.
@@ -502,7 +483,9 @@ public:
      * this list returns the subset of pins that exist on a given sheet.
      * @return a vector of pointers (non-owning) to SCH_PINs
      */
-    SCH_PIN_PTRS GetSchPins( const SCH_SHEET_PATH* aSheet = nullptr ) const;
+    std::vector<SCH_PIN*> GetPins( const SCH_SHEET_PATH* aSheet = nullptr ) const;
+
+    std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() { return m_pins; }
 
     /**
      * Print a component
@@ -668,8 +651,6 @@ public:
     void ClearBrightenedPins();
 
     bool HasBrightenedPins();
-
-    void BrightenPin( LIB_PIN* aPin );
 
     bool GetIncludeInBom() const { return m_inBom; }
     void SetIncludeInBom( bool aIncludeInBom ) { m_inBom = aIncludeInBom; }
