@@ -253,6 +253,7 @@ set( BMAPS_MID
     highlight_remove
     hotkeys
     hole_to_hole_clearance
+    hole_to_copper_clearance
     html
     icon
     icon_cvpcb_small
