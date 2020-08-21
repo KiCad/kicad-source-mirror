@@ -26,6 +26,7 @@
 
 #include <wx/arrstr.h>
 #include <bitmaps.h>
+#include <vector>
 
 /**
  * The component library pin object electrical types used in ERC tests.
