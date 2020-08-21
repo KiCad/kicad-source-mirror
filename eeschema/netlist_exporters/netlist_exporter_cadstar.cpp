@@ -80,7 +80,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
                 continue;
 
             if( !component->GetField( FOOTPRINT )->IsVoid() )
-                footprint = component->GetField( FOOTPRINT )->GetText();
+                footprint = component->GetField( FOOTPRINT )->GetShownText();
             else
                 footprint = "$noname";
 
@@ -88,7 +88,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
             ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
             ret |= fprintf( f, "%s", TO_UTF8( msg ) );
 
-            msg = component->GetField( VALUE )->GetText();
+            msg = component->GetField( VALUE )->GetShownText();
             msg.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
             ret |= fprintf( f, "     \"%s\"", TO_UTF8( footprint ) );
@@ -127,14 +127,15 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
 
         std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
 
-        for( auto subgraph : subgraphs )
+        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
-            auto sheet = subgraph->m_sheet;
+            SCH_SHEET_PATH sheet = subgraph->m_sheet;
 
-            for( auto item : subgraph->m_items )
+            for( SCH_ITEM* item : subgraph->m_items )
+            {
                 if( item->Type() == SCH_PIN_T )
-                    sorted_items.emplace_back(
-                            std::make_pair( static_cast<SCH_PIN*>( item ), sheet ) );
+                    sorted_items.emplace_back( static_cast<SCH_PIN*>( item ), sheet );
+            }
         }
 
         // Netlist ordering: Net name, then ref des, then pin name
@@ -156,8 +157,8 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
         sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
                 []( auto a, auto b )
                 {
-                    auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
-                    auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
+                    wxString ref_a = a.first->GetParentComponent()->GetRef( &a.second );
+                    wxString ref_b = b.first->GetParentComponent()->GetRef( &b.second );
 
                     return ref_a == ref_b && a.first->GetNumber() == b.first->GetNumber();
                 } ),
@@ -165,7 +166,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
 
         print_ter = 0;
 
-        for( const auto& pair : sorted_items )
+        for( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& pair : sorted_items )
         {
             SCH_PIN*       pin   = pair.first;
             SCH_SHEET_PATH sheet = pair.second;

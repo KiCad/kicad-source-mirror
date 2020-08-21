@@ -175,7 +175,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceField( SPICE_FIELD aField,
         SCH_COMPONENT* aComponent, unsigned aCtl )
 {
     SCH_FIELD* field = aComponent->FindField( GetSpiceFieldName( aField ) );
-    return field ? field->GetText() : GetSpiceFieldDefVal( aField, aComponent, aCtl );
+    return field ? field->GetShownText() : GetSpiceFieldDefVal( aField, aComponent, aCtl );
 }
 
 
@@ -186,15 +186,15 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
     {
     case SF_PRIMITIVE:
     {
-        const wxString refName = aComponent->GetField( REFERENCE )->GetText();
+        const wxString refName = aComponent->GetField( REFERENCE )->GetShownText();
         return refName.GetChar( 0 );
         break;
     }
 
     case SF_MODEL:
     {
-        wxChar prim = aComponent->GetField( REFERENCE )->GetText().GetChar( 0 );
-        wxString value = aComponent->GetField( VALUE )->GetText();
+        wxChar prim = aComponent->GetField( REFERENCE )->GetShownText().GetChar( 0 );
+        wxString value = aComponent->GetField( VALUE )->GetShownText();
 
         // Is it a passive component?
         if( aCtl & NET_ADJUST_PASSIVE_VALS && ( prim == 'C' || prim == 'L' || prim == 'R' ) )
@@ -316,8 +316,8 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             // Check to see if component should be removed from Spice netlist
             spiceItem.m_enabled = StringToBool( GetSpiceField( SF_ENABLED, comp, aCtl ) );
 
-            if( fieldLibFile && !fieldLibFile->GetText().IsEmpty() )
-                m_libraries.insert( fieldLibFile->GetText() );
+            if( fieldLibFile && !fieldLibFile->GetShownText().IsEmpty() )
+                m_libraries.insert( fieldLibFile->GetShownText() );
 
             wxArrayString pinNames;
 
@@ -336,7 +336,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             if( fieldSeq )
             {
                 // Get the string containing the sequence of nodes:
-                const wxString& nodeSeqIndexLineStr = fieldSeq->GetText();
+                const wxString& nodeSeqIndexLineStr = fieldSeq->GetShownText();
 
                 // Verify field exists and is not empty:
                 if( !nodeSeqIndexLineStr.IsEmpty() )
@@ -380,7 +380,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
     {
         for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_TEXT_T ) )
         {
-            wxString text = static_cast<SCH_TEXT*>( item )->GetText();
+            wxString text = static_cast<SCH_TEXT*>( item )->GetShownText();
 
             if( text.IsEmpty() )
                 continue;

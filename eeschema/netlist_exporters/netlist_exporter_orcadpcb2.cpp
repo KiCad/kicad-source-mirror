@@ -85,7 +85,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
 
             if( !comp->GetField( FOOTPRINT )->IsVoid() )
             {
-                footprint = comp->GetField( FOOTPRINT )->GetText();
+                footprint = comp->GetField( FOOTPRINT )->GetShownText();
                 footprint.Replace( wxT( " " ), wxT( "_" ) );
             }
             else
@@ -101,7 +101,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
 
             ret |= fprintf( f, "  %s", TO_UTF8( field ) );
 
-            field = comp->GetField( VALUE )->GetText();
+            field = comp->GetField( VALUE )->GetShownText();
             field.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( f, " %s", TO_UTF8( field ) );
 
