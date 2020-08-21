@@ -89,6 +89,16 @@ double DRAWSEGMENT::GetLength() const
         length = GetLineLength( GetStart(), GetEnd() );
         break;
 
+    case S_POLYGON:
+        for( int ii = 0; ii < m_Poly.COutline( 0 ).SegmentCount(); ii++ )
+            length += m_Poly.COutline( 0 ).CSegment( ii ).Length();
+
+        break;
+
+    case S_ARC:
+        length = 2 * M_PI * GetRadius() * ( GetAngle() / 3600.0 );
+        break;
+
     default:
         wxASSERT_MSG( false, "DRAWSEGMENT::GetLength not implemented for shape"
                 + ShowShape( GetShape() ) );
