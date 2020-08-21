@@ -34,9 +34,11 @@ class PCB_EDIT_FRAME;
 
 class DIALOG_CLEANUP_TRACKS_AND_VIAS: public DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE
 {
-    PCB_EDIT_FRAME*            m_parentFrame;
+    PCB_EDIT_FRAME*  m_parentFrame;
+    RC_TREE_MODEL*   m_changesTreeModel;
+    bool             m_firstRun;
+
     std::vector<std::shared_ptr<CLEANUP_ITEM> > m_items;
-    RC_TREE_MODEL*             m_changesTreeModel;
 
     void doCleanup( bool aDryRun );
 

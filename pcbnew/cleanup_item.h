@@ -32,7 +32,8 @@ class PCB_BASE_FRAME;
 
 enum CLEANUP_RC_CODE {
     CLEANUP_FIRST = DRCE_LAST + 1,
-    CLEANUP_SHORTING_TRACK = CLEANUP_FIRST,
+    CLEANUP_CHECKING_ZONE_FILLS = CLEANUP_FIRST,
+    CLEANUP_SHORTING_TRACK,
     CLEANUP_SHORTING_VIA,
     CLEANUP_REDUNDANT_VIA,
     CLEANUP_DUPLICATE_TRACK,
@@ -48,6 +49,9 @@ enum CLEANUP_RC_CODE {
 
 class CLEANUP_ITEM : public RC_ITEM
 {
+private:
+    wxString m_errorMessage;
+
 public:
     CLEANUP_ITEM( int aErrorCode );
 
@@ -56,13 +60,6 @@ public:
      * returns the string form of a drc error code.
      */
     wxString GetErrorText( int aErrorCode = -1, bool aTranslate = true ) const;
-
-    /**
-     * Function ShowHtml
-     * translates this object into a fragment of HTML suitable for the wxHtmlListBox class.
-     * @return wxString - the html text.
-     */
-    wxString ShowHtml( PCB_BASE_FRAME* aFrame ) const;
 };
 
 

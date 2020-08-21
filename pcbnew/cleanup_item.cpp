@@ -44,6 +44,7 @@ wxString CLEANUP_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     switch( aCode )
     {
     // For cleanup tracks and vias:
+    case CLEANUP_CHECKING_ZONE_FILLS:   msg = _HKI( "Checking zone fills..." );             break;
     case CLEANUP_SHORTING_TRACK:        msg = _HKI( "Remove track shorting two nets" );     break;
     case CLEANUP_SHORTING_VIA:          msg = _HKI( "Remove via shorting two nets" );       break;
     case CLEANUP_REDUNDANT_VIA:         msg = _HKI( "Remove redundant via" );               break;

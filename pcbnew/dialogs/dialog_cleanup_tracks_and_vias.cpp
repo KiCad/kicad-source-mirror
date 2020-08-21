@@ -30,10 +30,12 @@
 #include <tracks_cleaner.h>
 #include <drc/drc_item.h>
 #include <drc/drc_provider.h>
+#include <tools/zone_filler_tool.h>
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParentFrame ) :
         DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( aParentFrame ),
-        m_parentFrame( aParentFrame )
+        m_parentFrame( aParentFrame ),
+        m_firstRun( true )
 {
     auto cfg = m_parentFrame->GetPcbNewSettings();
 
@@ -113,6 +115,18 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     }
 
     m_items.clear();
+
+    if( m_firstRun )
+    {
+        m_items.push_back( std::make_shared<CLEANUP_ITEM>( CLEANUP_CHECKING_ZONE_FILLS ) );
+        RC_ITEMS_PROVIDER* provider = new VECTOR_CLEANUP_ITEMS_PROVIDER( &m_items );
+        m_changesTreeModel->SetProvider( provider );
+
+        m_parentFrame->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( this );
+
+        m_changesTreeModel->SetProvider( nullptr );
+        m_items.clear();
+    }
 
     // Old model has to be refreshed, GAL normally does not keep updating it
     m_parentFrame->Compile_Ratsnest( false );
