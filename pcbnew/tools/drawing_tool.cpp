@@ -1170,14 +1170,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
 
                     // If the user clicks on an existing snap point from a drawsegment
                     //  we finish the segment as they are likely closing a path
-                    double graphicLength;
-
-                    if( aShape != S_RECT )
-                        graphicLength = graphic->GetLength(); // Get actual length for non-rects
-                    else
-                        graphicLength = 1.0; // Set to 1.0 so conditional below succeeds for rects
-
-                    if( snapItem && graphicLength > 0.0 )
+                    if( snapItem && (  aShape == S_RECT || graphic->GetLength() > 0.0 ) )
                     {
                         commit.Add( graphic );
                         commit.Push( _( "Draw a line segment" ) );
