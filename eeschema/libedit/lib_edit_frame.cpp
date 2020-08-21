@@ -593,6 +593,18 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
     m_SyncPinEdit = aPart && aPart->IsRoot() && aPart->IsMulti() && !aPart->UnitsLocked();
 
+    /* TODO: enable when we have schematic-symbol editing...
+    if( IsCurrentPartFromSchematic() )
+    {
+        wxString msg;
+        msg.Printf( _( "Editing %s from schematic.  Saving will update the schematic only." ),
+                    partName );
+
+        GetInfoBar()->RemoveAllButtons();
+        GetInfoBar()->ShowMessage( msg, wxICON_INFORMATION );
+    }
+     */
+
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
 }

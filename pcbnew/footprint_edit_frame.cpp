@@ -406,6 +406,16 @@ void FOOTPRINT_EDIT_FRAME::AddModuleToBoard( MODULE* aFootprint )
 
     PCB_BASE_EDIT_FRAME::AddModuleToBoard( aFootprint );
 
+    if( IsCurrentFPFromBoard() )
+    {
+        wxString msg;
+        msg.Printf( _( "Editing %s from board.  Saving will update the board only." ),
+                    aFootprint->GetReference() );
+
+        GetInfoBar()->RemoveAllButtons();
+        GetInfoBar()->ShowMessage( msg, wxICON_INFORMATION );
+    }
+
     UpdateMsgPanel();
 }
 
