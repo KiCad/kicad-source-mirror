@@ -189,7 +189,12 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString c
 void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
 {
     {
+        // DO NOT REMOVE THE FREEZE/THAW. This freeze/thaw is a flag for this model adapter
+        // that tells it when it shouldn't trust any of the data in the model. When set, it will
+        // not return invalid data to the UI, since this invalid data can cause crashes.
+        // This is different than the update locker, which locks the UI aspects only.
         wxWindowUpdateLocker updateLock( m_widget );
+        Freeze();
 
         m_tree.ResetScore();
 
@@ -217,6 +222,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
 
         m_tree.SortNodes();
         Cleared();
+        Thaw();
 
         // This was fixed in wxWidgets 3.0.5 and 3.1.3.
 #if defined( __WXGTK__ ) && ( (wxVERSION_NUMBER < 030005 ) || \
