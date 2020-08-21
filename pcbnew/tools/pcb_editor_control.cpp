@@ -804,6 +804,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
     VECTOR2I cursorPos = controls->GetCursorPosition();
     bool     reselect = false;
+    bool     fromOtherCommand = module != nullptr;
 
     // Prime the pump
     if( module )
@@ -828,6 +829,19 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         {
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
             commit.Revert();
+
+            if( fromOtherCommand )
+            {
+                PICKED_ITEMS_LIST* undo = m_frame->PopCommandFromUndoList();
+
+                if( undo )
+                {
+                    m_frame->PutDataInPreviousState( undo, false );
+                    undo->ClearListAndDeleteItems();
+                    delete undo;
+                }
+            }
+
             module = NULL;
         };
 
