@@ -978,6 +978,7 @@ void OPENGL_GAL::DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain )
 
 void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 {
+    wxCHECK( aPointList.size() > 2, /* void */ );
     auto points = std::unique_ptr<GLdouble[]>( new GLdouble[3 * aPointList.size()] );
     GLdouble* ptr = points.get();
 
@@ -994,6 +995,7 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 
 void OPENGL_GAL::DrawPolygon( const VECTOR2D aPointList[], int aListSize )
 {
+    wxCHECK( aListSize > 2, /* void */ );
     auto points = std::unique_ptr<GLdouble[]>( new GLdouble[3 * aListSize] );
     GLdouble* target = points.get();
     const VECTOR2D* src = aPointList;
@@ -1092,8 +1094,7 @@ void OPENGL_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
 
 void OPENGL_GAL::DrawPolygon( const SHAPE_LINE_CHAIN& aPolygon )
 {
-    if( aPolygon.SegmentCount() == 0 )
-        return;
+    wxCHECK( aPolygon.PointCount() > 2, /* void */ );
 
     const int pointCount = aPolygon.SegmentCount() + 1;
     std::unique_ptr<GLdouble[]> points( new GLdouble[3 * pointCount] );
