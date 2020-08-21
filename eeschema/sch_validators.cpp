@@ -170,6 +170,10 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
 
         msg.Printf( fieldCharError, badChars );
     }
+    else if( m_fieldId == REFERENCE && val.Contains( wxT( "${" ) ) )
+    {
+        msg.Printf( _( "The reference designator cannot contain text variable references" ) );
+    }
 
     if ( !msg.empty() )
     {
