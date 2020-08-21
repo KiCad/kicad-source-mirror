@@ -783,7 +783,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, wxStri
         success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText, aTolerance,
                                            aErrorLocation );
     }
-    else
+    else if( aErrorText )
     {
         *aErrorText = _( "No edges found on Edge.Cuts layer." );
     }
