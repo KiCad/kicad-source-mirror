@@ -205,7 +205,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     CLR( "3d_viewer.copper",            LAYER_3D_COPPER,            COLOR4D( 0.7, 0.61, 0.0, 1.0 ) );
     CLR( "3d_viewer.silkscreen_bottom", LAYER_3D_SILKSCREEN_BOTTOM, COLOR4D( 0.9, 0.9, 0.9, 1.0 ) );
     CLR( "3d_viewer.silkscreen_top",    LAYER_3D_SILKSCREEN_TOP,    COLOR4D( 0.9, 0.9, 0.9, 1.0 ) );
-    CLR( "3d_viewer.soldermask",        LAYER_3D_SOLDERMASK,        COLOR4D( 0.08, 0.2, 0.14, 1.0 ) );
+    CLR( "3d_viewer.soldermask",        LAYER_3D_SOLDERMASK,        COLOR4D( 0.08, 0.2, 0.14, 0.17 ) );
     CLR( "3d_viewer.solderpaste",       LAYER_3D_SOLDERPASTE,       COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
 }
 

@@ -317,21 +317,21 @@ class BOARD_ADAPTER
      * @param aLayerId: the layer to get the color information
      * @return the color in SFVEC3F format
      */
-    SFVEC3F GetLayerColor( PCB_LAYER_ID aLayerId ) const;
+    SFVEC4F GetLayerColor( PCB_LAYER_ID aLayerId ) const;
 
     /**
      * @brief GetItemColor - get the technical color of a layer
      * @param aItemId: the item id to get the color information
      * @return the color in SFVEC3F format
      */
-    SFVEC3F GetItemColor( int aItemId ) const;
+    SFVEC4F GetItemColor( int aItemId ) const;
 
     /**
      * @brief GetColor
      * @param aColor: the color mapped
      * @return the color in SFVEC3F format
      */
-    SFVEC3F GetColor( COLOR4D aColor ) const;
+    SFVEC4F GetColor( COLOR4D aColor ) const;
 
     /**
      * @brief GetLayerTopZpos3DU - Get the top z position
@@ -636,15 +636,15 @@ class BOARD_ADAPTER
                                                  SHAPE_POLY_SET& aCornerBuffer ) const;
 
 public:
-    SFVEC3D m_BgColorBot;         ///< background bottom color
-    SFVEC3D m_BgColorTop;         ///< background top color
-    SFVEC3D m_BoardBodyColor;     ///< in realistic mode: FR4 board color
-    SFVEC3D m_SolderMaskColorBot; ///< in realistic mode: solder mask color ( bot )
-    SFVEC3D m_SolderMaskColorTop; ///< in realistic mode: solder mask color ( top )
-    SFVEC3D m_SolderPasteColor;   ///< in realistic mode: solder paste color
-    SFVEC3D m_SilkScreenColorBot; ///< in realistic mode: SilkScreen color ( bot )
-    SFVEC3D m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
-    SFVEC3D m_CopperColor;        ///< in realistic mode: copper color
+    SFVEC4F m_BgColorBot;         ///< background bottom color
+    SFVEC4F m_BgColorTop;         ///< background top color
+    SFVEC4F m_BoardBodyColor;     ///< in realistic mode: FR4 board color
+    SFVEC4F m_SolderMaskColorBot; ///< in realistic mode: solder mask color ( bot )
+    SFVEC4F m_SolderMaskColorTop; ///< in realistic mode: solder mask color ( top )
+    SFVEC4F m_SolderPasteColor;   ///< in realistic mode: solder paste color
+    SFVEC4F m_SilkScreenColorBot; ///< in realistic mode: SilkScreen color ( bot )
+    SFVEC4F m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
+    SFVEC4F m_CopperColor;        ///< in realistic mode: copper color
 
     // Raytracing light colors
 

@@ -47,6 +47,15 @@ struct CUSTOM_COLOR_ITEM
         m_ColorName = aName;
     }
 
+    CUSTOM_COLOR_ITEM( double red, double green, double blue, double alpha, const wxString& aName )
+    {
+        m_Color.r = red;
+        m_Color.g = green;
+        m_Color.b = blue;
+        m_Color.a = alpha;
+        m_ColorName = aName;
+    }
+
     CUSTOM_COLOR_ITEM( const KIGFX::COLOR4D& aColor, const wxString& aName )
         : m_Color( aColor ), m_ColorName( aName)
     {}

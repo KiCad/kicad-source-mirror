@@ -200,8 +200,7 @@ private:
         SMATERIAL m_Paste;
         SMATERIAL m_SilkSBot;
         SMATERIAL m_SilkSTop;
-        SMATERIAL m_SolderMaskBot;
-        SMATERIAL m_SolderMaskTop;
+        SMATERIAL m_SolderMask;
         SMATERIAL m_EpoxyBoard;
         SMATERIAL m_Copper;
         SMATERIAL m_Plastic;
@@ -209,7 +208,7 @@ private:
     }m_materials;
 
     void set_layer_material( PCB_LAYER_ID aLayerID );
-    SFVEC3F get_layer_color( PCB_LAYER_ID aLayerID );
+    SFVEC4F get_layer_color( PCB_LAYER_ID aLayerID );
 };
 
 #endif // C3D_RENDER_OGL_LEGACY_H_

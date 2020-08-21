@@ -110,15 +110,15 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     SetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE, false );
     SetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE, false );
 
-    m_BgColorBot         = SFVEC3D( 0.4, 0.4, 0.5 );
-    m_BgColorTop         = SFVEC3D( 0.8, 0.8, 0.9 );
-    m_BoardBodyColor     = SFVEC3D( 0.4, 0.4, 0.5 );
-    m_SolderMaskColorTop = SFVEC3D( 0.1, 0.2, 0.1 );
-    m_SolderMaskColorBot = SFVEC3D( 0.1, 0.2, 0.1 );
-    m_SolderPasteColor   = SFVEC3D( 0.4, 0.4, 0.4 );
-    m_SilkScreenColorTop = SFVEC3D( 0.9, 0.9, 0.9 );
-    m_SilkScreenColorBot = SFVEC3D( 0.9, 0.9, 0.9 );
-    m_CopperColor        = SFVEC3D( 0.75, 0.61, 0.23 );
+    m_BgColorBot         = SFVEC4F( 0.4, 0.4, 0.5, 1.0 );
+    m_BgColorTop         = SFVEC4F( 0.8, 0.8, 0.9, 1.0 );
+    m_BoardBodyColor     = SFVEC4F( 0.4, 0.4, 0.5, 1.0 );
+    m_SolderMaskColorTop = SFVEC4F( 0.1, 0.2, 0.1, 0.17 );
+    m_SolderMaskColorBot = SFVEC4F( 0.1, 0.2, 0.1, 0.17 );
+    m_SolderPasteColor   = SFVEC4F( 0.4, 0.4, 0.4, 1.0 );
+    m_SilkScreenColorTop = SFVEC4F( 0.9, 0.9, 0.9, 1.0 );
+    m_SilkScreenColorBot = SFVEC4F( 0.9, 0.9, 0.9, 1.0 );
+    m_CopperColor        = SFVEC4F( 0.75, 0.61, 0.23, 1.0 );
 }
 
 
@@ -464,23 +464,23 @@ float BOARD_ADAPTER::GetModulesZcoord3DIU( bool aIsFlipped ) const
 }
 
 
-SFVEC3F BOARD_ADAPTER::GetLayerColor( PCB_LAYER_ID aLayerId ) const
+SFVEC4F BOARD_ADAPTER::GetLayerColor( PCB_LAYER_ID aLayerId ) const
 {
     wxASSERT( aLayerId < PCB_LAYER_ID_COUNT );
 
     const COLOR4D color = m_colors->GetColor( aLayerId );
 
-    return SFVEC3F( color.r, color.g, color.b );
+    return SFVEC4F( color.r, color.g, color.b, color.a );
 }
 
 
-SFVEC3F BOARD_ADAPTER::GetItemColor( int aItemId ) const
+SFVEC4F BOARD_ADAPTER::GetItemColor( int aItemId ) const
 {
     return GetColor( m_colors->GetColor( aItemId ) );
 }
 
 
-SFVEC3F BOARD_ADAPTER::GetColor( COLOR4D aColor ) const
+SFVEC4F BOARD_ADAPTER::GetColor( COLOR4D aColor ) const
 {
-    return SFVEC3F( aColor.r, aColor.g, aColor.b );
+    return SFVEC4F( aColor.r, aColor.g, aColor.b, aColor.a );
 }

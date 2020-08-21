@@ -456,11 +456,12 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
     COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
 
     auto set_color =
-            [] ( const COLOR4D& aColor, SFVEC3D& aTarget )
+            [] ( const COLOR4D& aColor, SFVEC4F& aTarget )
             {
                 aTarget.r = aColor.r;
                 aTarget.g = aColor.g;
                 aTarget.b = aColor.b;
+                aTarget.a = aColor.a;
             };
 
     set_color( colors->GetColor( LAYER_3D_BACKGROUND_BOTTOM ), m_boardAdapter.m_BgColorBot );
@@ -567,9 +568,9 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
     COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
 
     auto save_color =
-            [colors] ( SFVEC3D& aSource, LAYER_3D_ID aTarget )
+            [colors] ( SFVEC4F& aSource, LAYER_3D_ID aTarget )
             {
-                colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b, 1.0 ) );
+                colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b, aSource.a ) );
             };
 
     save_color( m_boardAdapter.m_BgColorBot,         LAYER_3D_BACKGROUND_BOTTOM );
@@ -703,11 +704,13 @@ void EDA_3D_VIEWER::SynchroniseColoursWithBoard()
                     m_boardAdapter.m_SolderMaskColorTop.r = color.Red() / 255.0;
                     m_boardAdapter.m_SolderMaskColorTop.g = color.Green() / 255.0;
                     m_boardAdapter.m_SolderMaskColorTop.b = color.Blue() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorTop.a = color.Alpha() / 255.0;
                     break;
                 case B_Mask:
                     m_boardAdapter.m_SolderMaskColorBot.r = color.Red() / 255.0;
                     m_boardAdapter.m_SolderMaskColorBot.g = color.Green() / 255.0;
                     m_boardAdapter.m_SolderMaskColorBot.b = color.Blue() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorBot.a = color.Alpha() / 255.0;
                     break;
                 default:
                     break;
@@ -835,13 +838,14 @@ void EDA_3D_VIEWER::RenderEngineChanged()
 }
 
 
-bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC3D &aColor, const wxString& aTitle,
-                                        CUSTOM_COLORS_LIST* aPredefinedColors )
+bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
+                                        CUSTOM_COLORS_LIST* aPredefinedColors,
+                                        bool aAllowOpacityControl )
 {
     KIGFX::COLOR4D newcolor;
-    KIGFX::COLOR4D oldcolor( aColor.r,aColor.g, aColor.b, 1.0 );
+    KIGFX::COLOR4D oldcolor( aColor.r,aColor.g, aColor.b, 1.0 - aColor.a );
 
-    DIALOG_COLOR_PICKER picker( this, oldcolor, false, aPredefinedColors );
+    DIALOG_COLOR_PICKER picker( this, oldcolor, aAllowOpacityControl, aPredefinedColors );
 
     if( picker.ShowModal() != wxID_OK )
         return false;
@@ -854,6 +858,7 @@ bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC3D &aColor, const wxString& aTitle,
     aColor.r = newcolor.r;
     aColor.g = newcolor.g;
     aColor.b = newcolor.b;
+    aColor.a = 1.0 - newcolor.a;
 
     return true;
 }
@@ -881,25 +886,30 @@ bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
 {
     CUSTOM_COLORS_LIST colors;
 
-    colors.push_back( CUSTOM_COLOR_ITEM(  20/255.0,  51/255.0,  36/255.0, "Green" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  91/255.0, 168/255.0,  12/255.0, "Light Green" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  13/255.0, 104/255.0,  11/255.0, "Saturated Green" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 181/255.0,  19/255.0,  21/255.0, "Red" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 239/255.0,  53/255.0,  41/255.0, "Red Light Orange" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 210/255.0,  40/255.0,  14/255.0, "Red 2" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(   2/255.0,  59/255.0, 162/255.0, "Blue" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  54/255.0,  79/255.0, 116/255.0, "Light blue 1" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  61/255.0,  85/255.0, 130/255.0, "Light blue 2" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  21/255.0,  70/255.0,  80/255.0, "Green blue (dark)" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  11/255.0,  11/255.0,  11/255.0, "Black" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 245/255.0, 245/255.0, 245/255.0, "White" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 119/255.0,  31/255.0,  91/255.0, "Purple" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  32/255.0,   2/255.0,  53/255.0, "Purple Dark" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  20/255.0,  51/255.0,  36/255.0, 1.0 - 0.17, "Green" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  91/255.0, 168/255.0,  12/255.0, 1.0 - 0.17, "Light Green" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  13/255.0, 104/255.0,  11/255.0, 1.0 - 0.17, "Saturated Green" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 181/255.0,  19/255.0,  21/255.0, 1.0 - 0.17, "Red" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 239/255.0,  53/255.0,  41/255.0, 1.0 - 0.17, "Red Light Orange" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 210/255.0,  40/255.0,  14/255.0, 1.0 - 0.17, "Red 2" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(   2/255.0,  59/255.0, 162/255.0, 1.0 - 0.17, "Blue" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  54/255.0,  79/255.0, 116/255.0, 1.0 - 0.17, "Light blue 1" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  61/255.0,  85/255.0, 130/255.0, 1.0 - 0.17, "Light blue 2" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  21/255.0,  70/255.0,  80/255.0, 1.0 - 0.17, "Green blue (dark)" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  11/255.0,  11/255.0,  11/255.0, 1.0 - 0.17, "Black" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 245/255.0, 245/255.0, 245/255.0, 1.0 - 0.17, "White" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 119/255.0,  31/255.0,  91/255.0, 1.0 - 0.17, "Purple" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  32/255.0,   2/255.0,  53/255.0, 1.0 - 0.17, "Purple Dark" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_SolderMaskColorTop, _( "Solder Mask Color" ), &colors ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_SolderMaskColorTop, _( "Solder Mask Color" ), &colors, true ) )
     {
         m_boardAdapter.m_SolderMaskColorBot = m_boardAdapter.m_SolderMaskColorTop;
-        NewDisplay( true );
+
+        if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            NewDisplay( true );
+
         return true;
     }
 

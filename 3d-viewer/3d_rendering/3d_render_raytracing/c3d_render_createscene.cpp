@@ -49,6 +49,25 @@
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
 
 /**
+ * @brief TransparencyAlphaControl
+ * Perform an interpolation step to easy control the transparency based on the
+ * gray color value and alpha
+ * @param aGrayColorValue - diffuse gray value
+ * @param aAlpha - control
+ * @return transparency to use in material
+ */
+static float TransparencyAlphaControl( float aGrayColorValue, float aAlpha )
+{
+    const float aaa = aAlpha * aAlpha * aAlpha;
+
+    // 1.00-1.05*(1.0-x)^3
+    float ca = 1.0f - aAlpha;
+    ca = 1.00f - 1.05f * ca * ca * ca;
+
+    return glm::max( glm::min( aGrayColorValue * ca + aaa, 1.0f ), 0.0f );
+}
+
+/**
   * Scale convertion from 3d model units to pcb units
   */
 #define UNITS3D_TO_UNITSPCB (IU_PER_MM)
@@ -112,12 +131,14 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
             0.0f,                       // transparency
             0.0f );
 
-    const float solderMaskTop_gray =
+    // Assume that SolderMaskTop == SolderMaskBot
+    const float solderMask_gray =
             ( m_boardAdapter.m_SolderMaskColorTop.r + m_boardAdapter.m_SolderMaskColorTop.g
               + m_boardAdapter.m_SolderMaskColorTop.b )
             / 3.0f;
 
-    const float solderMaskTop_transparency = solderMaskTop_gray * 0.40f + 0.005f;
+    const float solderMask_transparency = TransparencyAlphaControl( solderMask_gray,
+                                                                    m_boardAdapter.m_SolderMaskColorTop.a );
 
     m_materials.m_SolderMask = CBLINN_PHONG_MATERIAL(
             ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderMaskColorTop ) * 0.10f, // ambient
@@ -126,29 +147,10 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                     ( ( SFVEC3F )( 1.0f )
                             - ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderMaskColorTop ) ),
                     SFVEC3F( 0.0f ),
-                    SFVEC3F( solderMaskTop_gray * 2.0f ) ), // specular
+                    SFVEC3F( solderMask_gray * 2.0f ) ),    // specular
             0.85f * 128.0f,                                 // shiness
-            solderMaskTop_transparency,                     // transparency
+            solderMask_transparency,                        // transparency
             0.16f );                                        // reflection
-
-    const float solderMaskBot_gray =
-            ( m_boardAdapter.m_SolderMaskColorBot.r + m_boardAdapter.m_SolderMaskColorBot.g
-              + m_boardAdapter.m_SolderMaskColorBot.b )
-            / 3.0f;
-
-    const float solderMaskBot_transparency = solderMaskBot_gray * 0.40f + 0.005f;
-
-    m_materials.m_SolderMask = CBLINN_PHONG_MATERIAL(
-            ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderMaskColorBot ) * 0.10f, // ambient
-            SFVEC3F( 0.0f, 0.0f, 0.0f ),                                              // emissive
-            glm::clamp(
-                    ( ( SFVEC3F )( 1.0f )
-                            - ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderMaskColorBot ) ),
-                    SFVEC3F( 0.0f ),
-                    SFVEC3F( solderMaskBot_gray * 2.0f ) ), // specular
-            0.85f * 128.0f,                                 // shiness
-            solderMaskBot_transparency,                     // transparency
-            0.16f );
 
     m_materials.m_SolderMask.SetCastShadows( true );
     m_materials.m_SolderMask.SetNrRefractionsSamples( 1 );

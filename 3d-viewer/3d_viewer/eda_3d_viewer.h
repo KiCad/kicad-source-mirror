@@ -113,8 +113,9 @@ class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
      * @param aPredefinedColors is a reference to a CUSTOM_COLOR_ITEM list which contains
      * a few predefined colors
      */
-    bool Set3DColorFromUser( SFVEC3D &aColor, const wxString& aTitle,
-                             CUSTOM_COLORS_LIST* aPredefinedColors );
+    bool Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
+                             CUSTOM_COLORS_LIST* aPredefinedColors,
+                             bool aAllowOpacityControl = false );
 
     /**
      * Set the solder mask color from a set of colors

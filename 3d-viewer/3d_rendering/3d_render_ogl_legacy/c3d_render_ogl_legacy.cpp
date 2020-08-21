@@ -248,37 +248,8 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
         m_materials.m_SilkSBot.m_Shininess = 0.078125f * 128.0f;
         m_materials.m_SilkSBot.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
-
-        // Solder mask material mixed with solder mask color
-        m_materials.m_SolderMaskTop.m_Ambient = SFVEC3F(
-                m_boardAdapter.m_SolderMaskColorTop.r * 0.3f,
-                m_boardAdapter.m_SolderMaskColorTop.g * 0.3f,
-                m_boardAdapter.m_SolderMaskColorTop.b * 0.3f );
-
-        m_materials.m_SolderMaskTop.m_Specular = SFVEC3F(
-                m_boardAdapter.m_SolderMaskColorTop.r * m_boardAdapter.m_SolderMaskColorTop.r,
-                m_boardAdapter.m_SolderMaskColorTop.g * m_boardAdapter.m_SolderMaskColorTop.g,
-                m_boardAdapter.m_SolderMaskColorTop.b * m_boardAdapter.m_SolderMaskColorTop.b );
-
-        m_materials.m_SolderMaskTop.m_Shininess    = 0.8f * 128.0f;
-        m_materials.m_SolderMaskTop.m_Transparency = 0.17f;
-        m_materials.m_SolderMaskTop.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
-
-        // Solder mask material mixed with solder mask color
-        m_materials.m_SolderMaskBot.m_Ambient = SFVEC3F(
-                m_boardAdapter.m_SolderMaskColorBot.r * 0.3f,
-                m_boardAdapter.m_SolderMaskColorBot.g * 0.3f,
-                m_boardAdapter.m_SolderMaskColorBot.b * 0.3f );
-
-        m_materials.m_SolderMaskBot.m_Specular = SFVEC3F(
-                m_boardAdapter.m_SolderMaskColorBot.r * m_boardAdapter.m_SolderMaskColorBot.r,
-                m_boardAdapter.m_SolderMaskColorBot.g * m_boardAdapter.m_SolderMaskColorBot.g,
-                m_boardAdapter.m_SolderMaskColorBot.b * m_boardAdapter.m_SolderMaskColorBot.b );
-
-        m_materials.m_SolderMaskBot.m_Shininess    = 0.8f * 128.0f;
-        m_materials.m_SolderMaskBot.m_Transparency = 0.17f;
-        m_materials.m_SolderMaskBot.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
-
+        m_materials.m_SolderMask.m_Shininess    = 0.8f * 128.0f;
+        m_materials.m_SolderMask.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Epoxy material
         m_materials.m_EpoxyBoard.m_Ambient   = SFVEC3F( 117.0f / 255.0f,
@@ -325,18 +296,10 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
         m_materials.m_SilkSBot.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Solder mask material
-        m_materials.m_SolderMaskTop.m_Ambient      = matAmbientColor;
-        m_materials.m_SolderMaskTop.m_Specular     = matSpecularColor;
-        m_materials.m_SolderMaskTop.m_Shininess    = matShininess;
-        m_materials.m_SolderMaskTop.m_Transparency = 0.17f;
-        m_materials.m_SolderMaskTop.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
-
-        // Solder mask material
-        m_materials.m_SolderMaskBot.m_Ambient      = matAmbientColor;
-        m_materials.m_SolderMaskBot.m_Specular     = matSpecularColor;
-        m_materials.m_SolderMaskBot.m_Shininess    = matShininess;
-        m_materials.m_SolderMaskBot.m_Transparency = 0.17f;
-        m_materials.m_SolderMaskBot.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
+        m_materials.m_SolderMask.m_Ambient      = matAmbientColor;
+        m_materials.m_SolderMask.m_Specular     = matSpecularColor;
+        m_materials.m_SolderMask.m_Shininess    = matShininess;
+        m_materials.m_SolderMask.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Epoxy material
         m_materials.m_EpoxyBoard.m_Ambient   = matAmbientColor;
@@ -359,14 +322,25 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
 {
     switch( aLayerID )
     {
-        case B_Mask:
-            m_materials.m_SolderMaskBot.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_SolderMaskBot, 1.0f );
-            break;
         case F_Mask:
-            m_materials.m_SolderMaskTop.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_SolderMaskTop, 1.0f );
+        case B_Mask:
+        {
+            const SFVEC4F layerColor = get_layer_color( aLayerID );
+
+            m_materials.m_SolderMask.m_Diffuse = layerColor;
+            m_materials.m_SolderMask.m_Transparency = layerColor.a;
+
+            if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+            {
+                m_materials.m_SolderMask.m_Ambient = m_materials.m_SolderMask.m_Diffuse * 0.3f;
+
+                m_materials.m_SolderMask.m_Specular = m_materials.m_SolderMask.m_Diffuse *
+                                                      m_materials.m_SolderMask.m_Diffuse;
+            }
+
+            OGL_SetMaterial( m_materials.m_SolderMask, 1.0f );
             break;
+        }
 
         case B_Paste:
         case F_Paste:
@@ -421,9 +395,9 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
 }
 
 
-SFVEC3F C3D_RENDER_OGL_LEGACY::get_layer_color( PCB_LAYER_ID aLayerID )
+SFVEC4F C3D_RENDER_OGL_LEGACY::get_layer_color( PCB_LAYER_ID aLayerID )
 {
-    SFVEC3F layerColor = m_boardAdapter.GetLayerColor( aLayerID );
+    SFVEC4F layerColor = m_boardAdapter.GetLayerColor( aLayerID );
 
     if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
     {
