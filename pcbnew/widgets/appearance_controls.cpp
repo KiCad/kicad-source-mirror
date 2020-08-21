@@ -339,7 +339,7 @@ void APPEARANCE_CONTROLS::OnColorThemeChanged()
 
 void APPEARANCE_CONTROLS::OnLayerChanged()
 {
-    static wxColour normalColor    = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+    const wxColour  normalColor    = m_panelLayers->GetBackgroundColour();
     static wxColour highlightColor = wxSystemSettings::GetColour( wxSYS_COLOUR_SCROLLBAR );
 
     PCB_LAYER_ID current = m_frame->GetActiveLayer();
