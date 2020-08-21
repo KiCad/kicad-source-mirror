@@ -84,7 +84,8 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         m_autoSaveState( false ),
         m_autoSaveInterval(-1 ),
         m_UndoRedoCountMax( DEFAULT_MAX_UNDO_ITEMS ),
-        m_userUnits( EDA_UNITS::MILLIMETRES )
+        m_userUnits( EDA_UNITS::MILLIMETRES ),
+        m_shuttingDown( false )
 {
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_mruPath       = wxStandardPaths::Get().GetDocumentsDir();
@@ -656,7 +657,7 @@ void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName, FILE_HISTO
     aFileHistory->AddFileToHistory( FullFileName );
 
     // Update the menubar to update the file history menu
-    if( GetMenuBar() )
+    if( !m_shuttingDown && GetMenuBar() )
     {
         ReCreateMenuBar();
         GetMenuBar()->Refresh();

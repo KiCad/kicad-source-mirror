@@ -629,6 +629,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     //
     // OK, we're really closing now.  No more returns after this.
     //
+    m_shuttingDown = true;
 
     // Shutdown all running tools ( and commit any pending change )
     if( m_toolManager )

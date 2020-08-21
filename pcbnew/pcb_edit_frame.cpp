@@ -813,6 +813,8 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
+    m_shuttingDown = true;
+
     // On Windows 7 / 32 bits, on OpenGL mode only, Pcbnew crashes
     // when closing this frame if a footprint was selected, and the footprint editor called
     // to edit this footprint, and when closing pcbnew if this footprint is still selected

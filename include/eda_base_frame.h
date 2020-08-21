@@ -163,6 +163,8 @@ protected:
 
     EDA_UNITS       m_userUnits;
 
+    bool            m_shuttingDown;
+
     // Map containing the UI update handlers registered with wx for each action
     std::map<int, UIUpdateHandler> m_uiUpdateMap;
 
