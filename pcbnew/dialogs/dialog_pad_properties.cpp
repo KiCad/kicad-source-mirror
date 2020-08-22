@@ -465,9 +465,13 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
         if( footprint )
         {
-            wxString side = footprint->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" );
-            msg1.Printf( _("Footprint %s (%s),"), footprint->GetReference(), footprint->GetValue() );
-            msg2.Printf( _("%s, rotated %.1f deg"), side, footprint->GetOrientation() / 10.0 );
+            msg1.Printf( _("Footprint %s (%s),"),
+                         footprint->Reference().GetShownText(),
+                         footprint->Value().GetShownText() );
+            msg2.Printf( _("%s, rotated %.1f deg"),
+                         footprint->IsFlipped() ? _( "back side (mirrored)" )
+                                                : _( "front side" ),
+                         footprint->GetOrientation() / 10.0 );
         }
 
         m_parentInfoLine1->SetLabel( msg1 );
