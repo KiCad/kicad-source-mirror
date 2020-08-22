@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,7 +61,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxPanel* m_panelNetsAndClasses;
 		wxSplitterWindow* m_netsTabSplitter;
 		wxPanel* m_panelNets;
-		wxStaticText* m_staticText141;
+		wxStaticText* m_staticTextNets;
 		wxTextCtrl* m_txtNetFilter;
 		wxBitmapButton* m_btnNetInspector;
 		wxScrolledWindow* m_netsScrolledWindow;
@@ -72,7 +72,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxScrolledWindow* m_netclassScrolledWindow;
 		wxBoxSizer* m_netclassOuterSizer;
 		wxCollapsiblePane* m_paneNetDisplay;
-		wxStaticText* m_staticText131;
+		wxStaticText* m_staticTextNetDsplayTitle;
 		wxRadioButton* m_rbNetColorAll;
 		wxRadioButton* m_rbNetColorRatsnest;
 		wxRadioButton* m_rbNetColorOff;
@@ -91,7 +91,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 
 	public:
 
-		APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 548,563 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~APPEARANCE_CONTROLS_BASE();
 
 		void m_netsTabSplitterOnIdle( wxIdleEvent& )

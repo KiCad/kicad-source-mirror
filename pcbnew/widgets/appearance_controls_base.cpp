@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -101,21 +101,21 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticText141 = new wxStaticText( m_panelNets, wxID_ANY, wxT("Nets"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText141->Wrap( -1 );
-	m_staticText141->SetFont( wxFont( 9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextNets = new wxStaticText( m_panelNets, wxID_ANY, wxT("Nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNets->Wrap( -1 );
+	m_staticTextNets->SetFont( wxFont( 9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizer17->Add( m_staticText141, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	bSizer17->Add( m_staticTextNets, 1, wxALL, 5 );
 
 	m_txtNetFilter = new wxTextCtrl( m_panelNets, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtNetFilter->Hide();
 
-	bSizer17->Add( m_txtNetFilter, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxTOP, 5 );
+	bSizer17->Add( m_txtNetFilter, 1, wxLEFT|wxTOP, 5 );
 
 	m_btnNetInspector = new wxBitmapButton( m_panelNets, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_btnNetInspector->SetToolTip( wxT("Show the Net Inspector") );
 
-	bSizer17->Add( m_btnNetInspector, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer17->Add( m_btnNetInspector, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	bSizer192->Add( bSizer17, 0, wxEXPAND, 5 );
@@ -135,8 +135,8 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_panelNets->Layout();
 	bSizer192->Fit( m_panelNets );
 	m_panelNetclasses = new wxPanel( m_netsTabSplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer21;
-	bSizer21 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerNetClasses;
+	bSizerNetClasses = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bSizer20;
 	bSizer20 = new wxBoxSizer( wxHORIZONTAL );
@@ -145,7 +145,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_staticText14->Wrap( -1 );
 	m_staticText14->SetFont( wxFont( 9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizer20->Add( m_staticText14, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	bSizer20->Add( m_staticText14, 1, wxALL, 5 );
 
 	m_btnConfigureNetClasses = new wxBitmapButton( m_panelNetclasses, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_btnConfigureNetClasses->SetToolTip( wxT("Configure net classes") );
@@ -153,7 +153,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	bSizer20->Add( m_btnConfigureNetClasses, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizer21->Add( bSizer20, 0, wxEXPAND, 5 );
+	bSizerNetClasses->Add( bSizer20, 0, wxEXPAND, 5 );
 
 	m_netclassScrolledWindow = new wxScrolledWindow( m_panelNetclasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_netclassScrolledWindow->SetScrollRate( 5, 5 );
@@ -163,26 +163,26 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_netclassScrolledWindow->SetSizer( m_netclassOuterSizer );
 	m_netclassScrolledWindow->Layout();
 	m_netclassOuterSizer->Fit( m_netclassScrolledWindow );
-	bSizer21->Add( m_netclassScrolledWindow, 1, wxEXPAND | wxALL, 5 );
+	bSizerNetClasses->Add( m_netclassScrolledWindow, 1, wxEXPAND | wxALL, 5 );
 
 
-	m_panelNetclasses->SetSizer( bSizer21 );
+	m_panelNetclasses->SetSizer( bSizerNetClasses );
 	m_panelNetclasses->Layout();
-	bSizer21->Fit( m_panelNetclasses );
+	bSizerNetClasses->Fit( m_panelNetclasses );
 	m_netsTabSplitter->SplitHorizontally( m_panelNets, m_panelNetclasses, 300 );
 	bSizer16->Add( m_netsTabSplitter, 1, wxEXPAND, 5 );
 
 	m_paneNetDisplay = new wxCollapsiblePane( m_panelNetsAndClasses, wxID_ANY, wxT("Net Display Options"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
-	m_paneNetDisplay->Collapse( true );
+	m_paneNetDisplay->Collapse( false );
 
-	wxBoxSizer* bSizer1211;
-	bSizer1211 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerNetDisplay;
+	bSizerNetDisplay = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText131 = new wxStaticText( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("Net colors:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText131->Wrap( -1 );
-	m_staticText131->SetToolTip( wxT("Choose when to show net and netclass colors") );
+	m_staticTextNetDsplayTitle = new wxStaticText( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("Net colors:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNetDsplayTitle->Wrap( -1 );
+	m_staticTextNetDsplayTitle->SetToolTip( wxT("Choose when to show net and netclass colors") );
 
-	bSizer1211->Add( m_staticText131, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerNetDisplay->Add( m_staticTextNetDsplayTitle, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer191;
 	bSizer191 = new wxBoxSizer( wxHORIZONTAL );
@@ -190,26 +190,26 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_rbNetColorAll = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("All"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbNetColorAll->SetToolTip( wxT("Net and netclass colors are shown on all copper items") );
 
-	bSizer191->Add( m_rbNetColorAll, 1, wxRIGHT|wxLEFT, 5 );
+	bSizer191->Add( m_rbNetColorAll, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_rbNetColorRatsnest = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("Ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbNetColorRatsnest->SetValue( true );
 	m_rbNetColorRatsnest->SetToolTip( wxT("Net and netclass colors are shown on the ratsnest only") );
 
-	bSizer191->Add( m_rbNetColorRatsnest, 1, wxLEFT, 5 );
+	bSizer191->Add( m_rbNetColorRatsnest, 1, wxBOTTOM|wxLEFT, 5 );
 
 	m_rbNetColorOff = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("None"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbNetColorOff->SetToolTip( wxT("Net and netclass colors are not shown") );
 
-	bSizer191->Add( m_rbNetColorOff, 1, wxLEFT, 5 );
+	bSizer191->Add( m_rbNetColorOff, 1, wxBOTTOM|wxLEFT, 5 );
 
 
-	bSizer1211->Add( bSizer191, 0, wxEXPAND, 5 );
+	bSizerNetDisplay->Add( bSizer191, 0, wxEXPAND, 5 );
 
 
-	m_paneNetDisplay->GetPane()->SetSizer( bSizer1211 );
+	m_paneNetDisplay->GetPane()->SetSizer( bSizerNetDisplay );
 	m_paneNetDisplay->GetPane()->Layout();
-	bSizer1211->Fit( m_paneNetDisplay->GetPane() );
+	bSizerNetDisplay->Fit( m_paneNetDisplay->GetPane() );
 	bSizer16->Add( m_paneNetDisplay, 0, wxEXPAND|wxTOP, 5 );
 
 
@@ -246,7 +246,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_cbLayerPresets->SetSelection( 1 );
 	m_cbLayerPresets->SetToolTip( wxT("Layer presets") );
 
-	bPresets->Add( m_cbLayerPresets, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 2 );
+	bPresets->Add( m_cbLayerPresets, 0, wxALL|wxEXPAND, 2 );
 
 
 	bBottomMargin->Add( bPresets, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -257,7 +257,6 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	this->SetSizer( m_sizerOuter );
 	this->Layout();
-	m_sizerOuter->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ) );
