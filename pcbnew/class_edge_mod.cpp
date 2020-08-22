@@ -183,7 +183,7 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         {
             MIRROR( m_Start.x, aCentre.x );
             MIRROR( m_End.x, aCentre.x );
-            MIRROR( m_ThirdPoint.y, aCentre.x );
+            MIRROR( m_ThirdPoint.x, aCentre.x );
             MIRROR( m_BezierC1.x, aCentre.x );
             MIRROR( m_BezierC2.x, aCentre.x );
             MIRROR( m_Start0.x, pt.x );

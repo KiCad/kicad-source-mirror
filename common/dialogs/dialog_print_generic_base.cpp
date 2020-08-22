@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -64,19 +64,19 @@ DIALOG_PRINT_GENERIC_BASE::DIALOG_PRINT_GENERIC_BASE( wxWindow* parent, wxWindow
 	m_scaleFit = new wxRadioButton( bScaleSizer->GetStaticBox(), wxID_ANY, _("Fit to page"), wxDefaultPosition, wxDefaultSize, 0 );
 	bScaleSizer->Add( m_scaleFit, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer10;
-	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerScaleCustom;
+	bSizerScaleCustom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_scaleCustom = new wxRadioButton( bScaleSizer->GetStaticBox(), wxID_ANY, _("Custom:"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer10->Add( m_scaleCustom, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerScaleCustom->Add( m_scaleCustom, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_scaleCustomText = new wxTextCtrl( bScaleSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_scaleCustomText->SetToolTip( _("Set X scale adjust for exact scale plotting") );
 
-	bSizer10->Add( m_scaleCustomText, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerScaleCustom->Add( m_scaleCustomText, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
-	bScaleSizer->Add( bSizer10, 1, wxEXPAND, 5 );
+	bScaleSizer->Add( bSizerScaleCustom, 1, wxEXPAND, 5 );
 
 
 	bOptionsSizer->Add( bScaleSizer, 0, wxALL|wxEXPAND, 5 );
