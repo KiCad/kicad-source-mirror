@@ -57,14 +57,26 @@ void POLYGON_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
     auto& gal = *aView->GetGAL();
     auto rs = aView->GetPainter()->GetSettings();
 
-    gal.SetLineWidth( (float) aView->ToWorld( POLY_LINE_WIDTH ) );
-    gal.DrawPolyline( m_lockedChain );
+    if( m_lockedChain.PointCount() >= 2 )
+    {
+        gal.SetLineWidth( (float) aView->ToWorld( POLY_LINE_WIDTH ) );
+        gal.DrawPolyline( m_lockedChain );
+    }
 
     // draw the leader line in a different color
-    gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
-    gal.DrawPolyline( m_leaderChain );
+    if( m_leaderChain.PointCount() >= 2 )
+    {
+        gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
+        gal.DrawPolyline( m_leaderChain );
+    }
 
-    gal.DrawPolygon( m_polyfill );
+    for( int j = 0; j < m_polyfill.OutlineCount(); ++j )
+    {
+        const SHAPE_LINE_CHAIN& outline = m_polyfill.COutline( j );
+
+        if( outline.PointCount() >= 2 )
+            gal.DrawPolygon( outline );
+    }
 }
 
 

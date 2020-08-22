@@ -1548,8 +1548,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor(
-                evt->IsPrime() ? evt->Position() : m_controls->GetMousePosition(), layers );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( evt->IsPrime() ? evt->Position()
+                                                                 : m_controls->GetMousePosition(),
+                                                  layers );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( ( sourceZone && sourceZone->GetHV45() ) || constrainAngle || evt->Modifier( MD_CTRL ) )
@@ -1557,13 +1558,14 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         else
             polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
 
-        auto cleanup = [&] () {
-            polyGeomMgr.Reset();
-            started = false;
-            grid.ClearSkipPoint();
-            m_controls->SetAutoPan( false );
-            m_controls->CaptureCursor( false );
-        };
+        auto cleanup = [&] ()
+                       {
+                           polyGeomMgr.Reset();
+                           started = false;
+                           grid.ClearSkipPoint();
+                           m_controls->SetAutoPan( false );
+                           m_controls->CaptureCursor( false );
+                       };
 
         if( evt->IsCancelInteractive())
         {
