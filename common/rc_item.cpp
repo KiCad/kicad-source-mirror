@@ -278,8 +278,8 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
                               wxDataViewItem const&   aItem,
                               unsigned int            aCol ) const
 {
-    const RC_TREE_NODE* node = ToNode( aItem );
-    const std::shared_ptr<RC_ITEM>      rcItem = node->m_RcItem;
+    const RC_TREE_NODE*            node = ToNode( aItem );
+    const std::shared_ptr<RC_ITEM> rcItem = node->m_RcItem;
 
     switch( node->m_Type )
     {
