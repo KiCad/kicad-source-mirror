@@ -281,8 +281,10 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( m_selection.Empty() && selectCursor() )
                     m_selection.SetIsHover( true );
 
-                // Check if dragging has started within any of selected items bounding box
-                if( selectionContains( evt->Position() ) )
+                // Check if dragging has started within any of selected items bounding box.
+                // We verify "HasPosition()" first to protect against edge case involving
+                // moving off menus that causes problems (issue #5250)
+                if( evt->HasPosition() && selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
                     TRACK* track = dynamic_cast<TRACK*>( m_selection.GetItem( 0 ) );
