@@ -972,7 +972,7 @@ static void export_vrml_via( MODEL_VRML& aModel, BOARD* aPcb, const VIA* aVia )
 
 static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
 {
-    for( auto track : pcb->Tracks() )
+    for( TRACK* track : pcb->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
         {
@@ -991,26 +991,32 @@ static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
                 // ( to avoid issues with vrml viewers).
                 // The best way is to convert them to a small straight line
                 if( arc_angle_degree < -1.0 || arc_angle_degree > 1.0 )
+                {
                     export_vrml_arc( aModel, track->GetLayer(),
                                      center.x * BOARD_SCALE, center.y * BOARD_SCALE,
                                      arc->GetStart().x * BOARD_SCALE,
                                      arc->GetStart().y * BOARD_SCALE,
                                      arc->GetWidth() * BOARD_SCALE, arc_angle_degree );
+                }
                 else
+                {
                     export_vrml_line( aModel, arc->GetLayer(),
                                       arc->GetStart().x * BOARD_SCALE,
                                       arc->GetStart().y * BOARD_SCALE,
                                       arc->GetEnd().x * BOARD_SCALE,
                                       arc->GetEnd().y * BOARD_SCALE,
                                       arc->GetWidth() * BOARD_SCALE );
+                }
             }
             else
+            {
                 export_vrml_line( aModel, track->GetLayer(),
                                   track->GetStart().x * BOARD_SCALE,
                                   track->GetStart().y * BOARD_SCALE,
                                   track->GetEnd().x * BOARD_SCALE,
                                   track->GetEnd().y * BOARD_SCALE,
                                   track->GetWidth() * BOARD_SCALE );
+            }
         }
     }
 }
@@ -1107,6 +1113,13 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
     case S_POLYGON:
         export_vrml_polygon( aModel, layer, aOutline, aModule->GetOrientationRadians(),
                 aModule->GetPosition() );
+        break;
+
+    case S_RECT:
+        export_vrml_line( aModel, layer, x, y, xf, y, w );
+        export_vrml_line( aModel, layer, xf, y, xf, yf, w );
+        export_vrml_line( aModel, layer, xf, yf, x, yf, w );
+        export_vrml_line( aModel, layer, x, yf, x, y, w );
         break;
 
     default:
@@ -1369,7 +1382,7 @@ static void compose_quat( double q1[4], double q2[4], double qr[4] )
 
 
 static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
-    MODULE* aModule, std::ostream* aOutputFile )
+                                MODULE* aModule, std::ostream* aOutputFile )
 {
     if( !aModel.m_plainPCB )
     {
@@ -1382,27 +1395,26 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
 
         // Export module edges
 
-        for( auto item : aModule->GraphicalItems() )
+        for( BOARD_ITEM* item : aModule->GraphicalItems() )
         {
             switch( item->Type() )
             {
-                case PCB_MODULE_TEXT_T:
-                    export_vrml_text_module( static_cast<TEXTE_MODULE*>( item ) );
-                    break;
+            case PCB_MODULE_TEXT_T:
+                export_vrml_text_module( static_cast<TEXTE_MODULE*>( item ) );
+                break;
 
-                case PCB_MODULE_EDGE_T:
-                    export_vrml_edge_module( aModel, static_cast<EDGE_MODULE*>( item ),
-                                             aModule );
-                    break;
+            case PCB_MODULE_EDGE_T:
+                export_vrml_edge_module( aModel, static_cast<EDGE_MODULE*>( item ), aModule );
+                break;
 
-                default:
-                    break;
+            default:
+                break;
             }
         }
     }
 
     // Export pads
-    for( auto pad : aModule->Pads() )
+    for( D_PAD* pad : aModule->Pads() )
         export_vrml_pad( aModel, aPcb, pad );
 
     bool isFlipped = aModule->GetLayer() == B_Cu;
@@ -1611,10 +1623,10 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
     {
 
         // Preliminary computation: the z value for each layer
-        compute_layer_Zs(model3d, pcb);
+        compute_layer_Zs( model3d, pcb );
 
         // board edges and cutouts
-        export_vrml_board(model3d, pcb);
+        export_vrml_board( model3d, pcb );
 
         // Drawing and text on the board
         if( !aUsePlainPCB )
@@ -1664,7 +1676,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
             output_file << "  children [\n";
 
             // Export footprints
-            for( auto module : pcb->Modules() )
+            for( MODULE* module : pcb->Modules() )
                 export_vrml_module( model3d, pcb, module, &output_file );
 
             // write out the board and all layers
@@ -1678,7 +1690,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
         else
         {
             // Export footprints
-            for( auto module : pcb->Modules() )
+            for( MODULE* module : pcb->Modules() )
                 export_vrml_module( model3d, pcb, module, NULL );
 
             // write out the board and all layers
@@ -1781,8 +1793,6 @@ static void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX color
         else
             shape.AddRefNode( modelColor );
     }
-
-    return;
 }
 
 
