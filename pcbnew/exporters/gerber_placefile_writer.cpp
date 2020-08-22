@@ -133,7 +133,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 
         // Add object attribute: component reference to flash (mainly usefull for users)
         // using quoted UTF8 string
-        wxString ref = ConvertNotAllowedCharsInGerber( footprint->GetReference(),
+        wxString ref = ConvertNotAllowedCharsInGerber( footprint->Reference().GetShownText(),
                                                        allowUtf8, true );
 
         gbr_metadata.SetCmpReference( ref );
@@ -158,7 +158,8 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                                 : GBR_CMP_PNP_METADATA::MOUNT_TYPE_TH;
 
         // Add component value info:
-        pnpAttrib.m_Value = ConvertNotAllowedCharsInGerber( footprint->GetValue(), allowUtf8, true );
+        pnpAttrib.m_Value = ConvertNotAllowedCharsInGerber( footprint->Value().GetShownText(),
+                                                            allowUtf8, true );
 
         // Add component footprint info:
         wxString fp_info = FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
