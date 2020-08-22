@@ -278,11 +278,11 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
         IDF3_BOARD& aIDFBoard )
 {
     // Reference Designator
-    std::string crefdes = TO_UTF8( aModule->GetReference() );
+    std::string crefdes = TO_UTF8( aModule->Reference().GetShownText() );
 
     if( crefdes.empty() || !crefdes.compare( "~" ) )
     {
-        std::string cvalue = TO_UTF8( aModule->GetValue() );
+        std::string cvalue = TO_UTF8( aModule->Value().GetShownText() );
 
         // if both the RefDes and Value are empty or set to '~' the board owns the part,
         // otherwise associated parts of the module must be marked NOREFDES.
@@ -331,7 +331,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
             if( tstr.empty() || !tstr.compare( "0" ) || !tstr.compare( "~" )
                 || ( kplate == IDF3::NPTH )
-                ||( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
+                || ( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
                 pintype = "MTG";
             else
                 pintype = "PIN";
@@ -410,7 +410,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
     while( sM != eM )
     {
-        idfFile.Assign( resolver->ResolvePath( sM->m_Filename )  );
+        idfFile.Assign( resolver->ResolvePath( sM->m_Filename ) );
         idfExt = idfFile.GetExt();
 
         if( idfExt.Cmp( wxT( "idf" ) ) && idfExt.Cmp( wxT( "IDF" ) ) )
@@ -421,7 +421,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
         if( refdes.empty() )
         {
-            refdes = TO_UTF8( aModule->GetReference() );
+            refdes = TO_UTF8( aModule->Reference().GetShownText() );
 
             // NOREFDES cannot be used or else the software gets confused
             // when writing out the placement data due to conflicting
@@ -438,7 +438,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
         if( !outline )
             throw( std::runtime_error( aIDFBoard.GetError() ) );
 
-        double rotz = aModule->GetOrientation()/10.0;
+        double rotz = aModule->GetOrientation() / 10.0;
         double locx = sM->m_Offset.x * 25.4;  // part offsets are in inches
         double locy = sM->m_Offset.y * 25.4;
         double locz = sM->m_Offset.z * 25.4;
@@ -564,8 +564,6 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
         comp->AddOutlineData( data );
         ++sM;
     }
-
-    return;
 }
 
 
@@ -575,7 +573,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
  * files representing the user's PCB design.
  */
 bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
-    bool aUseThou, double aXRef, double aYRef )
+                                  bool aUseThou, double aXRef, double aYRef )
 {
     IDF3_BOARD idfBoard( IDF3::CAD_ELEC );
 
