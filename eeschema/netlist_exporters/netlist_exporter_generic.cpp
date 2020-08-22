@@ -42,7 +42,7 @@ bool NETLIST_EXPORTER_GENERIC::WriteNetlist( const wxString& aOutFileName,
     // output the XML format netlist.
     wxXmlDocument   xdoc;
 
-    xdoc.SetRoot( makeRoot( GNL_ALL ) );
+    xdoc.SetRoot( makeRoot( GNL_ALL | aNetlistOptions ) );
 
     return xdoc.Save( aOutFileName, 2 /* indent bug, today was ignored by wxXml lib */ );
 }
