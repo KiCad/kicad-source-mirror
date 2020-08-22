@@ -1008,6 +1008,8 @@ void PCB_EDIT_FRAME::onBoardLoaded()
 
     SetElementVisibility( LAYER_RATSNEST, GetDisplayOptions().m_ShowGlobalRatsnest );
 
+    m_appearancePanel->OnBoardChanged();
+
     // Update the tracks / vias available sizes list:
     ReCreateAuxiliaryToolbar();
 
