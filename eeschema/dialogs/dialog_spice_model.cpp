@@ -182,6 +182,8 @@ void DIALOG_SPICE_MODEL::Init()
     m_pwlTimeCol = m_pwlValList->AppendColumn( "Time [s]", wxLIST_FORMAT_LEFT, 100 );
     m_pwlValueCol = m_pwlValList->AppendColumn( "Value [V/A]", wxLIST_FORMAT_LEFT, 100 );
 
+    m_libraryContents->SetReadOnly( true );
+
     m_sdbSizerOK->SetDefault();
 
     // Hide pages that aren't fully implemented yet
