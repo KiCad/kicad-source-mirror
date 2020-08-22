@@ -465,7 +465,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
 
             int minClearance = aRefSeg->GetClearance( aLayer, zone, &m_clearanceSource );
-            int allowedDist  = minClearance + halfWidth + THRESHOLD_DIST;
+            int allowedDist  = minClearance + halfWidth - THRESHOLD_DIST;
             int actual;
 
             if( zone->GetFilledPolysList( aLayer ).Collide( testSeg, allowedDist, &actual ) )
