@@ -473,92 +473,101 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
 
 /**
- * Update the coordinates of 4 corners of a rectangle, accordint to constraints
- * and the moved corner
+ * Update the coordinates of 4 corners of a rectangle, according to pad constraints and the
+ * moved corner
  * @param aEditedPointIndex is the corner id
- * @param minWidth is the minimal width constraint
- * @param minHeight is the minimal height constraint
- * @param topLeft is the RECT_TOPLEFT to constraint
- * @param topRight is the RECT_TOPRIGHT to constraint
- * @param botLeft is the RECT_BOTLEFT to constraint
- * @param botRight is the RECT_BOTRIGHT to constraint
- * @param aGridSize is the a constraint: if > 1 new coordinates are on this grid
+ * @param aMinWidth is the minimal width constraint
+ * @param aMinHeight is the minimal height constraint
+ * @param aTopLeft [in/out] is the RECT_TOPLEFT to constraint
+ * @param aTopRight [in/out] is the RECT_TOPRIGHT to constraint
+ * @param aBotLeft [in/out] is the RECT_BOTLEFT to constraint
+ * @param aBotRight [in/out] is the RECT_BOTRIGHT to constraint
+ * @param aHole the location of the pad's hole
+ * @param aHoleSize the pad's hole size (or {0,0} if it has no hole)
  */
-static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
-                             VECTOR2I& topLeft, VECTOR2I& topRight,
-                             VECTOR2I& botLeft, VECTOR2I& botRight,
-                             int aGridSize = 0 )
+static void pinEditedCorner( int aEditedPointIndex, int aMinWidth, int aMinHeight,
+                             VECTOR2I& aTopLeft, VECTOR2I& aTopRight, VECTOR2I& aBotLeft,
+                             VECTOR2I& aBotRight, VECTOR2I aHole, VECTOR2I aHoleSize )
 {
-    // A macro to keep a coordinate on the grid:
-    #define MOVE_TO_GRID(z) { z.x = ( (z.x +1 ) / aGridSize ) * aGridSize;\
-                              z.y = ( (z.y +1 ) / aGridSize ) * aGridSize; }
     switch( aEditedPointIndex )
     {
     case RECT_TOP_LEFT:
-        // pin edited point within opposite corner
-        topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
-        topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
-
-        if( aGridSize > 1 )     // Keep point on specified grid size
+        if( aHoleSize.x )
         {
-            topLeft.x = ( topLeft.x / aGridSize ) * aGridSize;
-            topLeft.y = ( topLeft.y / aGridSize ) * aGridSize;
+            // pin edited point to the top/left of the hole
+            aTopLeft.x = std::min( aTopLeft.x, aHole.x - aHoleSize.x / 2 - aMinWidth );
+            aTopLeft.y = std::min( aTopLeft.y, aHole.y - aHoleSize.y / 2 - aMinHeight );
+        }
+        else
+        {
+            // pin edited point within opposite corner
+            aTopLeft.x = std::min( aTopLeft.x, aBotRight.x - aMinWidth );
+            aTopLeft.y = std::min( aTopLeft.y, aBotRight.y - aMinHeight );
         }
 
         // push edited point edges to adjacent corners
-        topRight.y = topLeft.y;
-        botLeft.x = topLeft.x;
+        aTopRight.y = aTopLeft.y;
+        aBotLeft.x = aTopLeft.x;
 
         break;
 
     case RECT_TOP_RIGHT:
-        // pin edited point within opposite corner
-        topRight.x = std::max( topRight.x, botLeft.x + minWidth );
-        topRight.y = std::min( topRight.y, botLeft.y - minHeight );
-
-        if( aGridSize > 1 )     // Keep point on specified grid size
+        if( aHoleSize.x )
         {
-            topRight.x = ( ( topRight.x+1 ) / aGridSize ) * aGridSize;
-            topRight.y = ( topRight.y / aGridSize ) * aGridSize;
+            // pin edited point to the top/right of the hole
+            aTopRight.x = std::max( aTopRight.x, aHole.x + aHoleSize.x / 2 + aMinWidth );
+            aTopRight.y = std::min( aTopRight.y, aHole.y - aHoleSize.y / 2 - aMinHeight );
+        }
+        else
+        {
+            // pin edited point within opposite corner
+            aTopRight.x = std::max( aTopRight.x, aBotLeft.x + aMinWidth );
+            aTopRight.y = std::min( aTopRight.y, aBotLeft.y - aMinHeight );
         }
 
         // push edited point edges to adjacent corners
-        topLeft.y = topRight.y;
-        botRight.x = topRight.x;
+        aTopLeft.y = aTopRight.y;
+        aBotRight.x = aTopRight.x;
 
         break;
 
     case RECT_BOT_LEFT:
-        // pin edited point within opposite corner
-        botLeft.x = std::min( botLeft.x, topRight.x - minWidth );
-        botLeft.y = std::max( botLeft.y, topRight.y + minHeight );
-
-        if( aGridSize > 1 )     // Keep point on specified grid size
+        if( aHoleSize.x )
         {
-            botLeft.x = ( botLeft.x / aGridSize ) * aGridSize;
-            botLeft.y = ( ( botLeft.y+1 ) / aGridSize ) * aGridSize;
+            // pin edited point to the bottom/left of the hole
+            aBotLeft.x = std::min( aBotLeft.x, aHole.x - aHoleSize.x / 2 - aMinWidth );
+            aBotLeft.y = std::max( aBotLeft.y, aHole.y + aHoleSize.y / 2 + aMinHeight );
+        }
+        else
+        {
+            // pin edited point within opposite corner
+            aBotLeft.x = std::min( aBotLeft.x, aTopRight.x - aMinWidth );
+            aBotLeft.y = std::max( aBotLeft.y, aTopRight.y + aMinHeight );
         }
 
         // push edited point edges to adjacent corners
-        botRight.y = botLeft.y;
-        topLeft.x = botLeft.x;
+        aBotRight.y = aBotLeft.y;
+        aTopLeft.x = aBotLeft.x;
 
         break;
 
     case RECT_BOT_RIGHT:
-        // pin edited point within opposite corner
-        botRight.x = std::max( botRight.x, topLeft.x + minWidth );
-        botRight.y = std::max( botRight.y, topLeft.y + minHeight );
-
-        if( aGridSize > 1 )     // Keep point on specified grid size
+        if( aHoleSize.x )
         {
-            botRight.x = ( ( botRight.x+1 ) / aGridSize ) * aGridSize;
-            botRight.y = ( ( botRight.y+1 ) / aGridSize ) * aGridSize;
+            // pin edited point to the bottom/right of the hole
+            aBotRight.x = std::max( aBotRight.x, aHole.x + aHoleSize.x / 2 + aMinWidth );
+            aBotRight.y = std::max( aBotRight.y, aHole.y + aHoleSize.y / 2 + aMinHeight );
+        }
+        else
+        {
+            // pin edited point within opposite corner
+            aBotRight.x = std::max( aBotRight.x, aTopLeft.x + aMinWidth );
+            aBotRight.y = std::max( aBotRight.y, aTopLeft.y + aMinHeight );
         }
 
         // push edited point edges to adjacent corners
-        botLeft.y = botRight.y;
-        topRight.x = botRight.x;
+        aBotLeft.y = aBotRight.y;
+        aTopRight.x = aBotRight.x;
 
         break;
     }
@@ -971,8 +980,8 @@ void POINT_EDITOR::updateItem() const
             VECTOR2I botLeft = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition();
             VECTOR2I botRight = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition();
 
-            pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
-                             topLeft, topRight, botLeft, botRight );
+            pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ), topLeft, topRight,
+                             botLeft, botRight,pad->GetPosition(), pad->GetDrillSize() );
 
             if( ( pad->GetOffset().x || pad->GetOffset().y )
                     || ( pad->GetDrillSize().x && pad->GetDrillSize().y ) )
