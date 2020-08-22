@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -99,13 +99,13 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	buttonSizer->Add( m_findPrevious, 0, wxALIGN_LEFT|wxALL|wxEXPAND, 5 );
 
 	m_searchAgain = new wxButton( this, wxID_ANY, wxT("Restart Search"), wxDefaultPosition, wxDefaultSize, 0 );
-	buttonSizer->Add( m_searchAgain, 0, wxALIGN_RIGHT|wxALL|wxEXPAND, 5 );
+	buttonSizer->Add( m_searchAgain, 0, wxALL|wxEXPAND, 5 );
 
 	m_closeButton = new wxButton( this, wxID_CANCEL, wxT("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	buttonSizer->Add( m_closeButton, 0, wxALL|wxEXPAND, 5 );
 
 
-	topSizer->Add( buttonSizer, 0, wxALIGN_RIGHT, 5 );
+	topSizer->Add( buttonSizer, 0, 0, 5 );
 
 
 	bSizer10->Add( topSizer, 0, wxEXPAND, 5 );
