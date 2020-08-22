@@ -76,7 +76,7 @@ void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<std::shared_p
     if( !aBoard->GetDesignSettings().Ignore( DRCE_EXTRA_FOOTPRINT ) )
     {
         // Search for component footprints found on board but not in netlist.
-        for( auto module : mods )
+        for( MODULE* module : aBoard->Modules() )
         {
             COMPONENT* component = aNetlist.GetComponentByReference( module->GetReference() );
 
