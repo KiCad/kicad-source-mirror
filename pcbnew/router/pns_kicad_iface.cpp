@@ -622,7 +622,8 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 
     std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
 
-    if( aPad->GetAttribute() == PAD_ATTRIB_STANDARD || PAD_ATTRIB_HOLE_NOT_PLATED )
+    if( aPad->GetAttribute() == PAD_ATTRIB_STANDARD ||
+            aPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
         solid->SetAlternateShape( aPad->GetEffectiveHoleShape()->Clone() );
 
     if( aPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
