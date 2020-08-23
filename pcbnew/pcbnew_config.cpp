@@ -141,7 +141,8 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     opts.m_ZoneOpacity         = localSettings.m_ZoneOpacity;
     SetDisplayOptions( opts );
 
-    SetActiveLayer( localSettings.m_ActiveLayer );
+    if( GetBoard()->GetDesignSettings().IsLayerEnabled( localSettings.m_ActiveLayer ) )
+        SetActiveLayer( localSettings.m_ActiveLayer );
 
     return true;
 }
