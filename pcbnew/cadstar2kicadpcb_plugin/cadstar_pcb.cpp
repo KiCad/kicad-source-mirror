@@ -25,7 +25,7 @@
 
 #include <cadstar_pcb.h>
 
-#include <board_stackup_manager/stackup_predefined_prms.h> //KEY_COPPER, KEY_CORE, KEY_PREPREG
+#include <board_stackup_manager/stackup_predefined_prms.h> // KEY_COPPER, KEY_CORE, KEY_PREPREG
 #include <class_drawsegment.h>                             // DRAWSEGMENT
 #include <limits>                                          // std::numeric_limits
 #include <trigo.h>
@@ -35,9 +35,11 @@ void CADSTAR_PCB::Load( ::BOARD* aBoard )
 {
     mBoard = aBoard;
     Parse();
-
+    
     wxPoint designSize =
             Assignments.Technology.DesignArea.first - Assignments.Technology.DesignArea.second;
+
+    //Note: can't use getKiCadPoint() due wxPoint being int - need long long to make the check
     long long designSizeXkicad   = (long long) designSize.x * KiCadUnitMultiplier;
     long long designSizeYkicad   = (long long) designSize.y * KiCadUnitMultiplier;
     long long maxDesignSizekicad = (long long) std::numeric_limits<int>::max()
@@ -60,6 +62,8 @@ void CADSTAR_PCB::Load( ::BOARD* aBoard )
 
     loadBoardStackup();
     loadBoards();
+    loadFigures();
+    loadAreas();
     //TODO: process all other items
 }
 
@@ -124,87 +128,143 @@ void CADSTAR_PCB::loadBoardStackup()
             kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER;
             layerTypeName  = KEY_COPPER;
             break;
+
         case LAYER_TYPE::ELEC:
             copperType     = LAYER_T::LT_SIGNAL;
             kicadLayerID   = getKiCadCopperLayerID( ++numElecAndPowerLayers );
             kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER;
             layerTypeName  = KEY_COPPER;
             break;
+
         case LAYER_TYPE::POWER:
             copperType     = LAYER_T::LT_POWER;
             kicadLayerID   = getKiCadCopperLayerID( ++numElecAndPowerLayers );
             kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER;
             layerTypeName  = KEY_COPPER;
             break;
+
         case LAYER_TYPE::CONSTRUCTION:
             kicadLayerID      = PCB_LAYER_ID::UNDEFINED_LAYER;
             kicadLayerType    = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_DIELECTRIC;
             prevWasDielectric = true;
             layerTypeName     = KEY_PREPREG;
             //TODO handle KEY_CORE and KEY_PREPREG
-            //will need to look at CADSTAR layer embedding (CPA_LAYER->Embedding)
+            //will need to look at CADSTAR layer embedding (see LAYER->Embedding) to
             //check electrical layers above and below to decide if current layer is prepreg
             // or core
             break;
+
         case LAYER_TYPE::DOC:
-            //TODO find out a suitable KiCad Layer alternative for this CADSTAR type
-            continue; //ignore
+
+            if( numElecAndPowerLayers > 0 )
+                kicadLayerID = PCB_LAYER_ID::Dwgs_User;
+            else
+                kicadLayerID = PCB_LAYER_ID::Cmts_User;
+
+            break;
+
         case LAYER_TYPE::NONELEC:
             switch( curLayer.SubType )
             {
             case LAYER_SUBTYPE::LAYERSUBTYPE_ASSEMBLY:
-            case LAYER_SUBTYPE::LAYERSUBTYPE_NONE:
-            case LAYER_SUBTYPE::LAYERSUBTYPE_PLACEMENT:
-                //TODO find out a suitable KiCad Layer alternative for these CADSTAR types
-                continue; //ignore these layer types for now
-            case LAYER_SUBTYPE::LAYERSUBTYPE_PASTE:
-                kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERPASTE;
+
                 if( numElecAndPowerLayers > 0 )
+                    kicadLayerID = PCB_LAYER_ID::B_Fab;
+                else
+                    kicadLayerID = PCB_LAYER_ID::F_Fab;
+
+                break;
+
+            case LAYER_SUBTYPE::LAYERSUBTYPE_PLACEMENT:
+
+                if( numElecAndPowerLayers > 0 )
+                    kicadLayerID = PCB_LAYER_ID::B_CrtYd;
+                else
+                    kicadLayerID = PCB_LAYER_ID::F_CrtYd;
+
+                break;
+
+            case LAYER_SUBTYPE::LAYERSUBTYPE_NONE:
+
+                if( curLayer.Name.Lower().Contains( "glue" )
+                        || curLayer.Name.Lower().Contains( "adhesive" ) )
                 {
-                    kicadLayerID  = PCB_LAYER_ID::F_Paste;
-                    layerTypeName = _HKI( "Top Solder Paste" );
+                    if( numElecAndPowerLayers > 0 )
+                        kicadLayerID = PCB_LAYER_ID::B_Adhes;
+                    else
+                        kicadLayerID = PCB_LAYER_ID::F_Adhes;
                 }
                 else
+                {
+                    if( numElecAndPowerLayers > 0 )
+                        kicadLayerID = PCB_LAYER_ID::Eco2_User;
+                    else
+                        kicadLayerID = PCB_LAYER_ID::Eco1_User;
+                }
+
+                break;
+
+            case LAYER_SUBTYPE::LAYERSUBTYPE_PASTE:
+                kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERPASTE;
+
+                if( numElecAndPowerLayers > 0 )
                 {
                     kicadLayerID  = PCB_LAYER_ID::B_Paste;
                     layerTypeName = _HKI( "Bottom Solder Paste" );
                 }
+                else
+                {
+                    kicadLayerID  = PCB_LAYER_ID::F_Paste;
+                    layerTypeName = _HKI( "Top Solder Paste" );
+                }
+
                 break;
+
             case LAYER_SUBTYPE::LAYERSUBTYPE_SILKSCREEN:
                 kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SILKSCREEN;
+
                 if( numElecAndPowerLayers > 0 )
-                {
-                    kicadLayerID  = PCB_LAYER_ID::F_SilkS;
-                    layerTypeName = _HKI( "Top Silk Screen" );
-                }
-                else
                 {
                     kicadLayerID  = PCB_LAYER_ID::B_SilkS;
                     layerTypeName = _HKI( "Bottom Silk Screen" );
                 }
+                else
+                {
+                    kicadLayerID  = PCB_LAYER_ID::F_SilkS;
+                    layerTypeName = _HKI( "Top Silk Screen" );
+                }
+
                 break;
+
             case LAYER_SUBTYPE::LAYERSUBTYPE_SOLDERRESIST:
                 kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERMASK;
+
                 if( numElecAndPowerLayers > 0 )
-                {
-                    kicadLayerID  = PCB_LAYER_ID::F_Mask;
-                    layerTypeName = _HKI( "Top Solder Mask" );
-                }
-                else
                 {
                     kicadLayerID  = PCB_LAYER_ID::B_Mask;
                     layerTypeName = _HKI( "Bottom Solder Mask" );
                 }
+                else
+                {
+                    kicadLayerID  = PCB_LAYER_ID::F_Mask;
+                    layerTypeName = _HKI( "Top Solder Mask" );
+                }
+
                 break;
+
             default:
                 wxASSERT_MSG( true, wxT( "Unknown CADSTAR Layer Sub-type" ) );
                 break;
+
             }
             break;
+
         default:
             wxASSERT_MSG( true, wxT( "Unknown CADSTAR Layer Type" ) );
             break;
         }
+
+        mLayermap.insert( std::make_pair( curLayer.ID, kicadLayerID ) );
 
         if( dielectricSublayer == 0 )
             tempKiCadLayer = new BOARD_STACKUP_ITEM( kicadLayerType );
@@ -238,8 +298,8 @@ void CADSTAR_PCB::loadBoardStackup()
         tempKiCadLayer->SetThickness(
                 curLayer.Thickness * KiCadUnitMultiplier, dielectricSublayer );
 
-        wxASSERT( layerTypeName != wxEmptyString );
-        tempKiCadLayer->SetTypeName( layerTypeName );
+        if( layerTypeName != wxEmptyString )
+            tempKiCadLayer->SetTypeName( layerTypeName );
 
         if( !prevWasDielectric )
         {
@@ -262,10 +322,10 @@ void CADSTAR_PCB::loadBoardStackup()
             //layer names on non-copper layers
             mCopperLayers.insert( std::make_pair( curLayer.PhysicalLayer, curLayer.ID ) );
         }
-        //TODO map kicad layer to CADSTAR layer in mLayermap
     }
 
     //change last copper layer to be B_Cu instead of an inner layer
+    LAYER_ID     cadstarlastElecLayer = mCopperLayers.rbegin()->second;
     PCB_LAYER_ID lastElecBrdId =
             stackup.GetStackupLayer( lastElectricalLayerIndex )->GetBrdLayerId();
     std::remove( layerIDs.begin(), layerIDs.end(), lastElecBrdId );
@@ -274,6 +334,7 @@ void CADSTAR_PCB::loadBoardStackup()
     tempKiCadLayer->SetBrdLayerId( PCB_LAYER_ID::B_Cu );
     wxASSERT( mBoard->SetLayerName(
             tempKiCadLayer->GetBrdLayerId(), tempKiCadLayer->GetLayerName() ) );
+    mLayermap.at( cadstarlastElecLayer ) = PCB_LAYER_ID::B_Cu;
 
     //make all layers enabled and visible
     mBoard->SetEnabledLayers( LSET( &layerIDs[0], layerIDs.size() ) );
@@ -288,7 +349,8 @@ void CADSTAR_PCB::loadBoards()
     for( std::pair<BOARD_ID, BOARD> boardPair : Layout.Boards )
     {
         BOARD& board = boardPair.second;
-        drawCadstarShape( board.Shape, PCB_LAYER_ID::Edge_Cuts, board.LineCodeID );
+        drawCadstarShape( board.Shape, PCB_LAYER_ID::Edge_Cuts, board.LineCodeID,
+                wxString::Format( "BOARD %s", board.ID ) );
 
         //TODO process board attributes
         //TODO process addition to a group
@@ -296,8 +358,73 @@ void CADSTAR_PCB::loadBoards()
 }
 
 
+void CADSTAR_PCB::loadFigures()
+{
+    for( std::pair<FIGURE_ID, FIGURE> figPair : Layout.Figures )
+    {
+        FIGURE& fig = figPair.second;
+        drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ), fig.LineCodeID,
+                wxString::Format( "FIGURE %s", fig.ID ) );
+
+        //TODO process attributes
+        //TODO process addition to a group
+        //TODO process "swaprule"
+        //TODO process re-use block
+    }
+}
+
+
+void CADSTAR_PCB::loadAreas()
+{
+    for( std::pair<AREA_ID, AREA> areaPair : Layout.Areas )
+    {
+        AREA& area = areaPair.second;
+
+        if( area.NoVias || area.NoTracks || area.Keepout )
+        {
+            ZONE_CONTAINER* zone =
+                    getZoneFromCadstarShape( area.Shape, getLineThickness( area.LineCodeID ) );
+
+            mBoard->Add( zone, ADD_MODE::APPEND );
+
+            zone->SetLayer( getKiCadLayer( area.LayerID ) );
+            zone->SetIsKeepout( true ); //import all CADSTAR areas as Keepout zones
+            zone->SetDoNotAllowPads( false ); //no CADSTAR equivalent
+            zone->SetZoneName( area.Name );
+
+            zone->SetDoNotAllowFootprints( area.Keepout );
+
+            zone->SetDoNotAllowTracks( area.NoTracks );
+            zone->SetDoNotAllowCopperPour( area.NoTracks );
+
+            zone->SetDoNotAllowVias( area.NoVias );
+
+            if( area.Placement || area.Routing )
+                wxLogWarning( wxString::Format(
+                        _( "The CADSTAR area '%s' is defined as a placement and/or routing area "
+                           "in CADSTAR, in addition to Keepout. Placement or Routing areas are "
+                           "not supported in KiCad. Only the supported elements were imported." ),
+                        area.Name ) );
+        }
+        else
+        {
+            wxLogError( wxString::Format(
+                    _( "The CADSTAR area '%s' does not have a KiCad equivalent. "
+                       "Pure Placement or Routing areas are not supported." ),
+                    area.Name ) );
+        }
+
+        //todo Process area.AreaHeight when KiCad supports 3D design rules
+        //TODO process attributes
+        //TODO process addition to a group
+        //TODO process "swaprule"
+        //TODO process re-use block
+    }
+}
+
+
 void CADSTAR_PCB::drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
-        const LINECODE_ID& aCadstarLinecodeID )
+        const LINECODE_ID& aCadstarLinecodeID, const wxString& aShapeName )
 {
     int lineThickness = getLineThickness( aCadstarLinecodeID );
 
@@ -305,17 +432,29 @@ void CADSTAR_PCB::drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_
     {
     case SHAPE_TYPE::OPENSHAPE:
     case SHAPE_TYPE::OUTLINE:
+        ///TODO update this when Polygons in KiCad can be defined with no fill
         drawCadstarVerticesAsSegments( aCadstarShape.Vertices, aKiCadLayer, lineThickness );
         drawCadstarCutoutsAsSegments( aCadstarShape.Cutouts, aKiCadLayer, lineThickness );
         break;
 
-    case SHAPE_TYPE::SOLID:
-        //TODO
-        break;
-
     case SHAPE_TYPE::HATCHED:
-        //TODO
-        break;
+        ///TODO update this when Polygons in KiCad can be defined with hatch fill
+        wxLogWarning( wxString::Format(
+                _( "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad equivalent. "
+                   "Using solid fill instead." ),
+                aShapeName ) );
+
+    case SHAPE_TYPE::SOLID:
+    {
+        DRAWSEGMENT* ds = new DRAWSEGMENT( mBoard );
+        ds->SetShape( STROKE_T::S_POLYGON );
+        ds->SetPolyShape( getPolySetFromCadstarShape( aCadstarShape ) );
+        ds->SetWidth( lineThickness );
+        ds->SetLayer( aKiCadLayer );
+        mBoard->Add( ds, ADD_MODE::APPEND );
+    }
+    break;
+
     }
 }
 
@@ -333,7 +472,7 @@ void CADSTAR_PCB::drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCuto
 void CADSTAR_PCB::drawCadstarVerticesAsSegments( const std::vector<VERTEX>& aCadstarVertices,
         const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness )
 {
-    std::vector<DRAWSEGMENT*> drawSegments = getDrawSegments( aCadstarVertices );
+    std::vector<DRAWSEGMENT*> drawSegments = getDrawSegmentsFromVertices( aCadstarVertices );
 
     for( DRAWSEGMENT* ds : drawSegments )
     {
@@ -343,7 +482,7 @@ void CADSTAR_PCB::drawCadstarVerticesAsSegments( const std::vector<VERTEX>& aCad
     }
 }
 
-std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegments(
+std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegmentsFromVertices(
         const std::vector<VERTEX>& aCadstarVertices )
 {
     std::vector<DRAWSEGMENT*> drawSegments;
@@ -393,7 +532,8 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegments(
             arcStartAngle = getPolarAngle( startPoint - centerPoint );
             arcEndAngle   = getPolarAngle( endPoint - centerPoint );
             arcAngle      = arcEndAngle - arcStartAngle;
-            //TODO: detect if we are supposed to draw a circle instead (i.e. when two SEMICIRCLE with oppositve state/end points)
+            //TODO: detect if we are supposed to draw a circle instead (i.e. two SEMICIRCLEs
+            // with opposite start/end points and same centre point)
 
             if( cw )
                 ds->SetAngle( NormalizeAnglePos( arcAngle ) );
@@ -407,6 +547,100 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegments(
     }
 
     return drawSegments;
+}
+
+
+ZONE_CONTAINER* CADSTAR_PCB::getZoneFromCadstarShape(
+        const SHAPE& aCadstarShape, const int& aLineThickness )
+{
+    ZONE_CONTAINER* zone = new ZONE_CONTAINER( mBoard );
+
+    if( aCadstarShape.Type == SHAPE_TYPE::HATCHED )
+    {
+        zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
+        zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL );
+    }
+    else
+        zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
+
+    SHAPE_POLY_SET polygon = getPolySetFromCadstarShape( aCadstarShape, aLineThickness );
+
+    zone->AddPolygon( polygon.COutline( 0 ) );
+
+    for( int i = 0; i < polygon.HoleCount(0); i++ )
+    {
+        zone->AddPolygon( polygon.CHole( 0, i ) );        
+    }
+
+    return zone;
+}
+
+
+SHAPE_POLY_SET CADSTAR_PCB::getPolySetFromCadstarShape(
+        const SHAPE& aCadstarShape, const int& aLineThickness )
+{
+    std::vector<DRAWSEGMENT*> outlineSegments =
+            getDrawSegmentsFromVertices( aCadstarShape.Vertices );
+
+    SHAPE_POLY_SET polySet( getLineChainFromDrawsegments( outlineSegments ) );
+
+    //cleanup
+    for( DRAWSEGMENT* ds : outlineSegments )
+    {
+        if( ds )
+            delete ds;
+    }
+
+    for( CUTOUT cutout : aCadstarShape.Cutouts )
+    {
+        std::vector<DRAWSEGMENT*> cutoutSeg = getDrawSegmentsFromVertices( cutout.Vertices );
+
+        polySet.AddHole( getLineChainFromDrawsegments( cutoutSeg ) );
+
+        //cleanup
+        for( DRAWSEGMENT* ds : cutoutSeg )
+        {
+            if( ds )
+                delete ds;
+        }
+    }
+
+    if( aLineThickness > 0 )
+        polySet.Inflate(
+                aLineThickness / 2, 32, SHAPE_POLY_SET::CORNER_STRATEGY::ROUND_ALL_CORNERS );
+
+    return polySet;
+}
+
+
+SHAPE_LINE_CHAIN CADSTAR_PCB::getLineChainFromDrawsegments(
+        const std::vector<DRAWSEGMENT*> aDrawsegments )
+{
+    SHAPE_LINE_CHAIN lineChain;
+
+    for( DRAWSEGMENT* dsP : aDrawsegments )
+    {
+        switch( dsP->GetShape() )
+        {
+        case STROKE_T::S_ARC:
+        {
+            SHAPE_ARC arc( dsP->GetCenter(), dsP->GetArcStart(), (double) dsP->GetAngle() / 10.0 );
+            lineChain.Append( arc );
+        }
+        break;
+        case STROKE_T::S_SEGMENT:
+            lineChain.Append( dsP->GetStartX(), dsP->GetStartY() );
+            lineChain.Append( dsP->GetEndX(), dsP->GetEndY() );
+            break;
+
+        default:
+            wxASSERT_MSG( true, "Drawsegment type is unexpected. Ignored." );
+        }
+    }
+
+    lineChain.SetClosed( true ); //todo check if it is closed
+
+    return lineChain;
 }
 
 
@@ -433,7 +667,7 @@ wxPoint CADSTAR_PCB::getKiCadPoint( wxPoint aCadstarPoint )
 
 double CADSTAR_PCB::getPolarAngle( wxPoint aPoint )
 {
-  
+
     return NormalizeAnglePos( ArcTangente( aPoint.y, aPoint.x ) );
 }
 
@@ -510,12 +744,52 @@ PCB_LAYER_ID CADSTAR_PCB::getKiCadCopperLayerID( unsigned int aLayerNum )
     return PCB_LAYER_ID::UNDEFINED_LAYER;
 }
 
+bool CADSTAR_PCB::isLayerSet( const LAYER_ID& aCadstarLayerID )
+{
+    LAYER& layer = Assignments.Layerdefs.Layers.at( aCadstarLayerID );
+
+    switch( layer.Type )
+    {
+    case LAYER_TYPE::ALLDOC:
+    case LAYER_TYPE::ALLELEC:
+    case LAYER_TYPE::ALLLAYER:
+        return true;
+
+    default:
+        return false;
+    }
+
+    return false;
+}
+
 
 PCB_LAYER_ID CADSTAR_PCB::getKiCadLayer( const LAYER_ID& aCadstarLayerID )
 {
     if( mLayermap.find( aCadstarLayerID ) == mLayermap.end() )
-        return PCB_LAYER_ID::Cmts_User; // TODO need to handle ALLELEC, ALLLAYER, ALLDOC,
+        return PCB_LAYER_ID::UNDEFINED_LAYER; // TODO need to handle ALLELEC, ALLLAYER, ALLDOC,
                                         // etc. For now just put unmapped layers here
     else
         return mLayermap[aCadstarLayerID];
+}
+
+
+LSET CADSTAR_PCB::getKiCadLayerSet( const LAYER_ID& aCadstarLayerID )
+{
+    LAYER& layer = Assignments.Layerdefs.Layers.at( aCadstarLayerID );
+
+    switch( layer.Type )
+    {
+    case LAYER_TYPE::ALLDOC:
+        return LSET( 4, PCB_LAYER_ID::Dwgs_User, PCB_LAYER_ID::Cmts_User, PCB_LAYER_ID::Eco1_User,
+                PCB_LAYER_ID::Eco2_User );
+
+    case LAYER_TYPE::ALLELEC:
+        return LSET::AllCuMask();
+
+    case LAYER_TYPE::ALLLAYER:
+        return LSET::AllLayersMask();
+
+    default:
+        return LSET( getKiCadLayer( aCadstarLayerID ) );
+    }
 }

@@ -48,7 +48,7 @@ public:
 
 private:
     ::BOARD*                              mBoard;
-    std::map<LAYER_ID, PCB_LAYER_ID>      mLayermap; ///<Map between Cadstar and KiCad Layers TODO: convert to a map of LSET to allow multiple layer mappings (e.g. ALLDOC, ALLELEC)
+    std::map<LAYER_ID, PCB_LAYER_ID>      mLayermap; ///<Map between Cadstar and KiCad Layers
     std::map<PHYSICAL_LAYER_ID, LAYER_ID> mCopperLayers;
     wxPoint                               mDesignCenter; ///< Used for calculating the required offset to apply to the Cadstar design so that it fits in KiCad canvas
 
@@ -56,16 +56,18 @@ private:
 
     void loadBoardStackup();
     void loadBoards();
-
+    void loadFigures();
+    void loadAreas();
 
     /**
      * @brief 
      * @param aCadstarShape 
      * @param aCadstarLayerID KiCad layer to draw on
      * @param aCadstarLinecodeID Thickness of line to draw with
+     * @param aShapeName for reporting warnings/errors to the user
      */
     void drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
-            const LINECODE_ID& aCadstarLinecodeID );
+            const LINECODE_ID& aCadstarLinecodeID, const wxString& aShapeName );
 
 
     /**
@@ -88,11 +90,39 @@ private:
             const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness );
 
     /**
-     * @brief Returns a vector of pointers to DRAWSEGMENT objects 
+     * @brief Returns a vector of pointers to DRAWSEGMENT objects. Caller owns the objects.
      * @param aCadstarVertices 
      * @return 
      */
-    std::vector<DRAWSEGMENT *> getDrawSegments( const std::vector<VERTEX>& aCadstarVertices );
+    std::vector<DRAWSEGMENT *> getDrawSegmentsFromVertices( const std::vector<VERTEX>& aCadstarVertices );
+
+
+    /**
+     * @brief 
+     * @param aCadstarShape 
+     * @param aLineThickness Thickness of line to draw with
+     * @return Pointer to ZONE_CONTAINER. Caller owns the object.
+     */
+    ZONE_CONTAINER* getZoneFromCadstarShape(
+            const SHAPE& aCadstarShape, const int& aLineThickness );
+
+
+    /**
+     * @brief Returns a SHAPE_POLY_SET object from a Cadstar SHAPE
+     * @param aCadstarShape
+     * @param aLineThickness Thickness of line is used for expanding the polygon by half.
+     * @return 
+     */
+    SHAPE_POLY_SET getPolySetFromCadstarShape(
+            const SHAPE& aCadstarShape, const int& aLineThickness = -1 );
+
+    /**
+     * @brief Returns a SHAPE_LINE_CHAIN object from a series of DRAWSEGMENT objects
+     * @param aDrawSegments
+     * @return 
+     */
+    SHAPE_LINE_CHAIN getLineChainFromDrawsegments(
+            const std::vector<DRAWSEGMENT*> aDrawSegments );
 
 
     /**
@@ -131,9 +161,26 @@ private:
     /**
      * @brief 
      * @param aCadstarLayerID 
+     * @return true if the layer corresponds to a KiCad LSET or false if the layer maps directly
+    */
+    bool isLayerSet( const LAYER_ID& aCadstarLayerID );
+
+
+    /**
+     * @brief 
+     * @param aCadstarLayerID 
      * @return PCB_LAYER_ID
      */
     PCB_LAYER_ID getKiCadLayer( const LAYER_ID& aCadstarLayerID );
+
+
+    /**
+     * @brief 
+     * @param aCadstarLayerID 
+     * @return LSET
+     */
+    LSET getKiCadLayerSet( const LAYER_ID& aCadstarLayerID );
+
 };
 
 
