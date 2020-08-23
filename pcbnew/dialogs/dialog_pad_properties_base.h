@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,10 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 class WX_GRID;
-class wxListView;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -154,7 +152,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_FlippedWarningSizer;
 		wxStaticBitmap* m_FlippedWarningIcon;
 		wxStaticText* m_staticText86;
-		wxStaticText* m_staticText511;
+		wxStaticText* m_copperLayersLabel;
 		wxChoice* m_rbCopperLayersSel;
 		wxStaticText* m_techLayersLabel;
 		wxCheckBox* m_PadLayerAdhCmp;
@@ -211,9 +209,14 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_buttonDup;
 		wxButton* m_buttonGeometry;
 		wxButton* m_buttonDel;
+		wxStaticLine* m_staticline8;
 		wxStaticText* m_parentInfoLine1;
 		wxStaticText* m_parentInfoLine2;
+		wxNotebook* m_previewNotebook;
+		wxPanel* m_boardViewPanel;
 		wxBoxSizer* m_padPreviewSizer;
+		wxPanel* m_stackupPanel;
+		wxStaticBitmap* m_stackupImage;
 		wxCheckBox* m_cbShowPadOutline;
 		wxStaticLine* m_staticline13;
 		wxStdDialogButtonSizer* m_sdbSizer;
@@ -233,6 +236,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOffsetCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadToDieCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSetCopperLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onPrimitiveDClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnPrimitiveSelection( wxListEvent& event ) { event.Skip(); }

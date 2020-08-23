@@ -113,6 +113,8 @@ D_PAD::D_PAD( const D_PAD& aOther ) :
     SetPinFunction( aOther.GetPinFunction() );
     SetSubRatsnest( aOther.GetSubRatsnest() );
     m_effectiveBoundingRadius = aOther.m_effectiveBoundingRadius;
+    m_removeUnconnectedLayer = aOther.m_removeUnconnectedLayer;
+    m_keepTopBottomLayer = aOther.m_keepTopBottomLayer;
 }
 
 
@@ -128,6 +130,8 @@ D_PAD& D_PAD::operator=( const D_PAD &aOther )
     SetPinFunction( aOther.GetPinFunction() );
     SetSubRatsnest( aOther.GetSubRatsnest() );
     m_effectiveBoundingRadius = aOther.m_effectiveBoundingRadius;
+    m_removeUnconnectedLayer = aOther.m_removeUnconnectedLayer;
+    m_keepTopBottomLayer = aOther.m_keepTopBottomLayer;
 
     return *this;
 }
@@ -1179,14 +1183,14 @@ unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( IsFlipped() && !aView->IsLayerVisible( LAYER_MOD_BK ) )
         return HIDE;
 
-    if( IsFrontLayer( ( PCB_LAYER_ID )aLayer ) && !aView->IsLayerVisible( LAYER_PAD_FR ) )
+    if( IsFrontLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PAD_FR ) )
         return HIDE;
 
-    if( IsBackLayer( ( PCB_LAYER_ID )aLayer ) && !aView->IsLayerVisible( LAYER_PAD_BK ) )
+    if( IsBackLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PAD_BK ) )
         return HIDE;
 
     // Only draw the pad if at least one of the layers it crosses is being displayed
-    if( board && !( board->GetVisibleLayers() & GetLayerSet() ).any() )
+    if( board && !IsPadOnLayer( board->GetVisibleLayers() ) )
         return HIDE;
 
     // Netnames will be shown only if zoom is appropriate

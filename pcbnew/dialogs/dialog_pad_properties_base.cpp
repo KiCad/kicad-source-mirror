@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -86,7 +86,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_LeftBoxSizer->Add( gbSizerCommon, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	m_LeftBoxSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_LeftBoxSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_staticline5 = new wxStaticLine( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_LeftBoxSizer->Add( m_staticline5, 0, wxEXPAND, 5 );
@@ -393,7 +393,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_LeftBoxSizer->Add( gbSizerHole, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	m_LeftBoxSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_LeftBoxSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_staticline7 = new wxStaticLine( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_LeftBoxSizer->Add( m_staticline7, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -472,9 +472,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_LeftBoxSizer->Add( fgSizerPadToDie, 0, wxEXPAND, 5 );
 
 
-	m_LeftBoxSizer->Add( 0, 3, 1, wxEXPAND, 5 );
-
-
 	bGeneralSizer->Add( m_LeftBoxSizer, 0, wxEXPAND|wxALL, 5 );
 
 	m_middleBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -496,21 +493,16 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_LayersSizer->Add( m_FlippedWarningSizer, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
+	m_copperLayersLabel = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_copperLayersLabel->Wrap( -1 );
+	m_copperLayersLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	m_staticText511 = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Copper:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText511->Wrap( -1 );
-	bSizer11->Add( m_staticText511, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxTOP, 4 );
+	m_LayersSizer->Add( m_copperLayersLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 4 );
 
-	wxString m_rbCopperLayersSelChoices[] = { _("Front layer"), _("Back layer"), _("All copper layers"), _("None") };
-	int m_rbCopperLayersSelNChoices = sizeof( m_rbCopperLayersSelChoices ) / sizeof( wxString );
-	m_rbCopperLayersSel = new wxChoice( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_rbCopperLayersSelNChoices, m_rbCopperLayersSelChoices, 0 );
+	wxArrayString m_rbCopperLayersSelChoices;
+	m_rbCopperLayersSel = new wxChoice( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_rbCopperLayersSelChoices, 0 );
 	m_rbCopperLayersSel->SetSelection( 0 );
-	bSizer11->Add( m_rbCopperLayersSel, 1, wxALL|wxEXPAND|wxTOP, 4 );
-
-
-	m_LayersSizer->Add( bSizer11, 0, wxEXPAND, 5 );
+	m_LayersSizer->Add( m_rbCopperLayersSel, 1, wxALL|wxEXPAND|wxTOP, 4 );
 
 	m_techLayersLabel = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Technical layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_techLayersLabel->Wrap( -1 );
@@ -847,6 +839,9 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	bSizerUpper->Add( m_notebook, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
+	m_staticline8 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizerUpper->Add( m_staticline8, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
 	wxBoxSizer* bSizerDisplayPad;
 	bSizerDisplayPad = new wxBoxSizer( wxVERTICAL );
 
@@ -867,25 +862,49 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerDisplayPad->Add( m_parentInfoLine2, 0, wxRIGHT, 3 );
 
 
-	bSizerDisplayPad->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerDisplayPad->Add( 0, 10, 0, wxEXPAND, 5 );
 
+	m_previewNotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_previewNotebook->SetMinSize( wxSize( -1,320 ) );
+
+	m_boardViewPanel = new wxPanel( m_previewNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_padPreviewSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_padPreviewSizer->SetMinSize( wxSize( 280,-1 ) );
 
-	bSizerDisplayPad->Add( m_padPreviewSizer, 12, wxEXPAND, 5 );
+	m_boardViewPanel->SetSizer( m_padPreviewSizer );
+	m_boardViewPanel->Layout();
+	m_padPreviewSizer->Fit( m_boardViewPanel );
+	m_previewNotebook->AddPage( m_boardViewPanel, _("Board View"), false );
+	m_stackupPanel = new wxPanel( m_previewNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer30;
+	bSizer30 = new wxBoxSizer( wxVERTICAL );
+
+
+	bSizer30->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_stackupImage = new wxStaticBitmap( m_stackupPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer30->Add( m_stackupImage, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	bSizer30->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	m_stackupPanel->SetSizer( bSizer30 );
+	m_stackupPanel->Layout();
+	bSizer30->Fit( m_stackupPanel );
+	m_previewNotebook->AddPage( m_stackupPanel, _("Stackup View"), false );
+
+	bSizerDisplayPad->Add( m_previewNotebook, 12, wxEXPAND|wxRIGHT, 5 );
 
 	m_cbShowPadOutline = new wxCheckBox( this, wxID_ANY, _("Show pad in outline mode"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerDisplayPad->Add( m_cbShowPadOutline, 0, wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
-
-	bSizerDisplayPad->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	m_staticline13 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerDisplayPad->Add( m_staticline13, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
+	bSizerDisplayPad->Add( m_staticline13, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );
 
 
-	bSizerUpper->Add( bSizerDisplayPad, 1, wxEXPAND|wxTOP|wxRIGHT, 10 );
+	bSizerUpper->Add( bSizerDisplayPad, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	m_MainSizer->Add( bSizerUpper, 1, wxEXPAND, 5 );
@@ -938,7 +957,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_offsetXCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_offsetYCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_padToDieOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadToDieCheckbox ), NULL, this );
-	m_rbCopperLayersSel->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
+	m_rbCopperLayersSel->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetCopperLayers ), NULL, this );
 	m_PadLayerAdhCmp->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_PadLayerAdhCu->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_PadLayerPateCmp->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
@@ -998,7 +1017,7 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_offsetXCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_offsetYCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_padToDieOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadToDieCheckbox ), NULL, this );
-	m_rbCopperLayersSel->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
+	m_rbCopperLayersSel->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetCopperLayers ), NULL, this );
 	m_PadLayerAdhCmp->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_PadLayerAdhCu->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_PadLayerPateCmp->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );

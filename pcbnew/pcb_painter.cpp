@@ -706,31 +706,14 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
 void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 {
-    const D_PAD* pad = aPad;
-
-    /// We setup the dummy pad to use in case we need to only draw the hole outline rather
-    /// than the pad itself
-    D_PAD dummypad( aPad->GetParent() );
-    dummypad.SetNetCode( aPad->GetNetCode() );
-    dummypad.SetSize( aPad->GetDrillSize() );
-    dummypad.SetOrientation( aPad->GetOrientation() );
-    dummypad.SetShape( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL
-                                                                        : PAD_SHAPE_CIRCLE );
-    dummypad.SetPosition( aPad->GetPosition() );
-
-    /// Pads not connected to copper are optionally not drawn
-    /// We draw instead the hole size to ensure we show the proper clearance
-    if( IsCopperLayer( aLayer ) && !aPad->IsPadOnLayer( aLayer ) )
-        pad = &dummypad;
-
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
     {
         // Is anything that we can display enabled?
         if( m_pcbSettings.m_netNamesOnPads || m_pcbSettings.m_padNumbers )
         {
-            bool displayNetname = ( m_pcbSettings.m_netNamesOnPads && !pad->GetNetname().empty() );
-            EDA_RECT padBBox = pad->GetBoundingBox();
+            bool displayNetname = ( m_pcbSettings.m_netNamesOnPads && !aPad->GetNetname().empty() );
+            EDA_RECT padBBox = aPad->GetBoundingBox();
             VECTOR2D position = padBBox.Centre();
             VECTOR2D padsize = VECTOR2D( padBBox.GetSize() );
 
@@ -788,7 +771,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
             if( displayNetname )
             {
-                wxString netname = UnescapeString( pad->GetShortNetname() );
+                wxString netname = UnescapeString( aPad->GetShortNetname() );
                 // calculate the size of net name text:
                 double tsize = 1.5 * padsize.x / netname.Length();
                 tsize = std::min( tsize, size );
@@ -803,7 +786,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
             if( m_pcbSettings.m_padNumbers )
             {
-                const wxString& padName = pad->GetName();
+                const wxString& padName = aPad->GetName();
                 textpos.y = -textpos.y;
                 double tsize = 1.5 * padsize.x / padName.Length();
                 tsize = std::min( tsize, size );
@@ -828,10 +811,10 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     // Pad hole color is pad-type-specific: the background color for plated holes and the
     // pad color for NPTHs.  Note the extra check for "should be" NPTHs to keep mis-marked
     // holes with no annular ring from getting "lost" in the background.
-    if( ( aLayer == LAYER_PADS_PLATEDHOLES ) && !pad->PadShouldBeNPTH() )
+    if( ( aLayer == LAYER_PADS_PLATEDHOLES ) && !aPad->PadShouldBeNPTH() )
         color = m_pcbSettings.GetBackgroundColor();
     else
-        color = m_pcbSettings.GetColor( pad, aLayer );
+        color = m_pcbSettings.GetColor( aPad, aLayer );
 
     if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
     {
@@ -852,7 +835,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
     if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
-        const SHAPE_SEGMENT* seg = pad->GetEffectiveHoleShape();
+        const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
 
         if( seg->GetSeg().A == seg->GetSeg().B )    // Circular hole
             m_gal->DrawCircle( seg->GetSeg().A, seg->GetWidth()/2 );
@@ -861,19 +844,19 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     }
     else
     {
-        wxSize pad_size = pad->GetSize();
+        wxSize pad_size = aPad->GetSize();
         wxSize margin;
 
         switch( aLayer )
         {
         case F_Mask:
         case B_Mask:
-            margin.x = margin.y = pad->GetSolderMaskMargin();
+            margin.x = margin.y = aPad->GetSolderMaskMargin();
             break;
 
         case F_Paste:
         case B_Paste:
-            margin = pad->GetSolderPasteMargin();
+            margin = aPad->GetSolderPasteMargin();
             break;
 
         default:
@@ -883,11 +866,11 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
         if( margin.x != margin.y )
         {
-            const_cast<D_PAD*>( pad )->SetSize( pad_size + margin + margin );
+            const_cast<D_PAD*>( aPad )->SetSize( pad_size + margin + margin );
             margin.x = margin.y = 0;
         }
 
-        const std::shared_ptr<SHAPE_COMPOUND> shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( pad->GetEffectiveShape() );
+        const std::shared_ptr<SHAPE_COMPOUND> shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
 
         if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_SEGMENT )
         {
@@ -902,12 +885,12 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         else
         {
             SHAPE_POLY_SET polySet;
-            pad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x );
+            aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x );
             m_gal->DrawPolygon( polySet );
         }
 
-        if( pad->GetSize() != pad_size )
-            const_cast<D_PAD*>( pad )->SetSize( pad_size );
+        if( aPad->GetSize() != pad_size )
+            const_cast<D_PAD*>( aPad )->SetSize( pad_size );
     }
 
     // Clearance outlines
@@ -925,7 +908,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         int clearance = aPad->GetClearance( aPad->GetLayer() );
 
         const std::shared_ptr<SHAPE_COMPOUND> shapes =
-                    std::dynamic_pointer_cast<SHAPE_COMPOUND>( pad->GetEffectiveShape() );
+                    std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
 
         if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_SEGMENT )
         {
@@ -940,7 +923,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         else
         {
             SHAPE_POLY_SET polySet;
-            pad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), clearance );
+            aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), clearance );
             m_gal->DrawPolygon( polySet );
         }
     }

@@ -101,7 +101,7 @@ private:
      * updates the CheckBox states in pad layers list,
      * @param layer_mask = pad layer mask (ORed layers bit mask)
      */
-    void setPadLayersList( LSET layer_mask );
+    void setPadLayersList( LSET layer_mask, bool remove_unconnected, bool keep_top_bottom );
 
     /// Copy values from dialog field to aPad's members
     bool transferDataToPad( D_PAD* aPad );
@@ -127,6 +127,8 @@ private:
     void PadOrientEvent( wxCommandEvent& event ) override;
     void PadTypeSelected( wxCommandEvent& event ) override;
 
+    void UpdateLayersDropdown();
+    void OnSetCopperLayers( wxCommandEvent& event ) override;
     void OnSetLayers( wxCommandEvent& event ) override;
 
     // Called when corner setup value is changed for rounded rect pads
