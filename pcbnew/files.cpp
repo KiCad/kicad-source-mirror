@@ -303,15 +303,15 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         mgr->SaveProject( mgr->Prj().GetProjectFullName() );
         mgr->UnloadProject( &mgr->Prj() );
 
-        // Don't set name until the user hits save, so project files are not created
-        mgr->LoadProject( "" );
-
-        LoadProjectSettings();
-
         if( !Clear_Pcb( false ) )
             return false;
 
         onBoardLoaded();
+
+        // Don't set name until the user hits save, so project files are not created
+        mgr->LoadProject( "" );
+
+        LoadProjectSettings();
 
         OnModify();
         return true;
@@ -643,10 +643,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetBoard()->BuildConnectivity();
     Compile_Ratsnest( true );
 
+    onBoardLoaded();
+
     // Load project settings after setting up board; some of them depend on the nets list
     LoadProjectSettings();
-
-    onBoardLoaded();
 
     // Refresh the 3D view, if any
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
