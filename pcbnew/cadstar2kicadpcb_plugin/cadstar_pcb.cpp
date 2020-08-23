@@ -609,6 +609,10 @@ SHAPE_POLY_SET CADSTAR_PCB::getPolySetFromCadstarShape(
         polySet.Inflate(
                 aLineThickness / 2, 32, SHAPE_POLY_SET::CORNER_STRATEGY::ROUND_ALL_CORNERS );
 
+    //Make a new polyset with no holes
+    //TODO: Using strictly simple to be safe, but need to find out if PM_FAST works okay
+    polySet.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE ); 
+
     return polySet;
 }
 
