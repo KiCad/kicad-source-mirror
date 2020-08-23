@@ -47,7 +47,7 @@
 #include <sch_text.h>
 
 #include "altium_parser_sch.h"
-#include <bits/unique_ptr.h>
+#include <memory>
 #include <compoundfilereader.h>
 #include <plugins/altium/altium_parser.h>
 #include <sch_legacy_plugin.h>
