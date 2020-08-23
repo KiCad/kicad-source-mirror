@@ -869,7 +869,7 @@ std::vector<GAL_LAYER_ID> GAL_SET::Seq() const
     for( size_t i = 0; i < size(); ++i )
     {
         if( test( i ) )
-            ret.push_back( static_cast<GAL_LAYER_ID>( i ) );
+            ret.push_back( static_cast<GAL_LAYER_ID>( i + GAL_LAYER_ID_START ) );
     }
 
     return ret;

@@ -163,6 +163,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 
                         if( preset.contains( "layers" ) && preset.at( "layers" ).is_array() )
                         {
+                            p.layers.reset();
+
                             for( const nlohmann::json& layer : preset.at( "layers" ) )
                             {
                                 if( layer.is_number_integer() )
@@ -178,6 +180,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
                         if( preset.contains( "renderLayers" )
                                 && preset.at( "renderLayers" ).is_array() )
                         {
+                            p.renderLayers.reset();
+
                             for( const nlohmann::json& layer : preset.at( "renderLayers" ) )
                             {
                                 if( layer.is_number_integer() )
@@ -186,7 +190,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 
                                     if( layerNum >= GAL_LAYER_ID_START
                                             && layerNum < GAL_LAYER_ID_END )
-                                        p.layers.set( layerNum );
+                                        p.renderLayers.set( static_cast<GAL_LAYER_ID>( layerNum ) );
                                 }
                             }
                         }
