@@ -1346,7 +1346,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
             };
 
     auto appendNetclass =
-            [&]( int aId, const NETCLASSPTR& aClass )
+            [&]( int aId, const NETCLASSPTR& aClass, bool isDefaultClass = false )
             {
                 wxString name = aClass->GetName();
 
@@ -1368,6 +1368,10 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 setting->ctl_color->Bind( COLOR_SWATCH_CHANGED,
                                           &APPEARANCE_CONTROLS::onNetclassColorChanged, this );
 
+                // Default netclass can't have an override color
+                if( isDefaultClass )
+                    setting->ctl_color->Hide();
+
                 setting->ctl_visibility =
                         new BITMAP_TOGGLE( setting->ctl_panel, aId, KiBitmap( visibility_xpm ),
                                            KiBitmap( visibility_off_xpm ), true );
@@ -1379,11 +1383,13 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 setting->ctl_text = new wxStaticText( setting->ctl_panel, aId, name );
                 setting->ctl_text->Wrap( -1 );
 
-                sizer->Add( setting->ctl_color,      0, wxALIGN_CENTER_VERTICAL, 5 );
+                int flags = wxALIGN_CENTER_VERTICAL;
+
+                sizer->Add( setting->ctl_color,      0, flags | wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
                 sizer->AddSpacer( 7 );
-                sizer->Add( setting->ctl_visibility, 0, wxALIGN_CENTER_VERTICAL, 5 );
+                sizer->Add( setting->ctl_visibility, 0, flags,                                  5 );
                 sizer->AddSpacer( 3 );
-                sizer->Add( setting->ctl_text,       1, wxALIGN_CENTER_VERTICAL, 5 );
+                sizer->Add( setting->ctl_text,       1, flags,                                  5 );
 
                 m_netclassOuterSizer->Add( setting->ctl_panel, 0, wxEXPAND, 5 );
                 m_netclassOuterSizer->AddSpacer( 1 );
@@ -1393,15 +1399,18 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                                this );
 
                 auto menuHandler =
-                        [&, name]( wxMouseEvent& aEvent )
+                        [&, name, isDefaultClass]( wxMouseEvent& aEvent )
                         {
                             m_contextMenuNetclass = name;
 
                             wxMenu menu;
 
-                            menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
-                                         _( "Set netclass color" ), wxEmptyString,
-                                         wxITEM_NORMAL ) );
+                            if( !isDefaultClass)
+                            {
+                                menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
+                                             _( "Set netclass color" ), wxEmptyString,
+                                             wxITEM_NORMAL ) );
+                            }
 
                             menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
                                          wxString::Format( _( "Highlight nets in %s" ), name ),
@@ -1414,7 +1423,8 @@ void APPEARANCE_CONTROLS::rebuildNets()
                             menu.AppendSeparator();
 
                             menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_NETS,
-                                         _( "Show all netclasses" ), wxEmptyString, wxITEM_NORMAL ) );
+                                         _( "Show all netclasses" ), wxEmptyString,
+                                         wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_HIDE_OTHER_NETS,
                                          _( "Hide all other netclasses" ), wxEmptyString,
                                          wxITEM_NORMAL ) );
@@ -1462,7 +1472,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
     NETCLASSPTR defaultClass = board->GetDesignSettings().GetNetClasses().GetDefault();
 
     m_netclassIdMap[idx] = defaultClass->GetName();
-    appendNetclass( idx++, defaultClass );
+    appendNetclass( idx++, defaultClass, true );
 
     for( const wxString& name : names )
     {

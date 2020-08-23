@@ -65,14 +65,14 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         { "line_style",        netclass->GetLineStyle() }
                         };
 
-                    if( netclass->GetPcbColor() != KIGFX::COLOR4D::UNSPECIFIED )
-                        netclassJson["pcb_color"] = netclass->GetPcbColor();
-
                     if( netclass->GetSchematicColor() != KIGFX::COLOR4D::UNSPECIFIED )
                         netclassJson["schematic_color"] = netclass->GetSchematicColor();
 
                     if( idx > 0 )
                     {
+                        if( netclass->GetPcbColor() != KIGFX::COLOR4D::UNSPECIFIED )
+                            netclassJson["pcb_color"] = netclass->GetPcbColor();
+
                         nlohmann::json membersJson = nlohmann::json::array();
 
                         for( const auto& ii : *netclass )
