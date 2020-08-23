@@ -982,7 +982,6 @@ add_subdirectory( bitmaps_png )
 add_subdirectory( libs )
 add_subdirectory( common )
 add_subdirectory( 3d-viewer )
-add_subdirectory( cvpcb )
 add_subdirectory( eeschema )
 add_subdirectory( gerbview )
 add_subdirectory( pcbnew )
@@ -990,6 +989,7 @@ add_subdirectory( pagelayout_editor )
 add_subdirectory( bitmap2component )
 add_subdirectory( pcb_calculator )
 add_subdirectory( plugins )             # 3D plugins must be built before kicad
+add_subdirectory( cvpcb )               # must be after pcbnew
 add_subdirectory( kicad )               # should follow pcbnew, eeschema
 add_subdirectory( tools )
 add_subdirectory( utils )
