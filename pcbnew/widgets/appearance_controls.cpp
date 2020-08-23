@@ -1862,11 +1862,12 @@ void APPEARANCE_CONTROLS::onNetclassColorChanged( wxCommandEvent& aEvent )
 
     COLOR_SWATCH* swatch    = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
     wxString      className = netclassNameFromEvent( aEvent );
+    COLOR4D       newColor  = swatch->GetSwatchColor();
 
-    netclassColors[className] = swatch->GetSwatchColor();
-
-    if( swatch->GetSwatchColor() == COLOR4D::UNSPECIFIED )
-        swatch->Hide();
+    if( newColor == COLOR4D::UNSPECIFIED )
+        netclassColors.erase( className );
+    else
+        netclassColors[className] = swatch->GetSwatchColor();
 
     m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
     m_frame->GetCanvas()->RedrawRatsnest();
