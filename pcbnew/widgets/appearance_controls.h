@@ -306,6 +306,9 @@ private:
 
     LAYER_PRESET* m_currentPreset;
 
+    /// The last user (non-read-only) preset selected by the user
+    LAYER_PRESET* m_lastSelectedUserPreset;
+
     wxArrayString m_presetMRU;
 
     wxMenu* m_layerContextMenu;

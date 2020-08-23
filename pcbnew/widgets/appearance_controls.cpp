@@ -333,6 +333,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
         m_focusOwner( aFocusOwner ),
         m_board( nullptr ),
         m_currentPreset( nullptr ),
+        m_lastSelectedUserPreset( nullptr ),
         m_layerContextMenu( nullptr )
 {
     int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x;
@@ -950,6 +951,9 @@ void APPEARANCE_CONTROLS::ApplyLayerPreset( const LAYER_PRESET& aPreset )
         m_currentPreset = &m_layerPresets[aPreset.name];
     else
         m_currentPreset = nullptr;
+
+    m_lastSelectedUserPreset = ( m_currentPreset && !m_currentPreset->readOnly ) ? m_currentPreset
+                                                                                 : nullptr;
 
     updateLayerPresetSelection( aPreset.name );
     doApplyLayerPreset( aPreset );
@@ -1791,7 +1795,7 @@ void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
         m_cbLayerPresets->Append( pair.first, static_cast<void*>( &pair.second ) );
 
     m_cbLayerPresets->Append( wxT( "-----" ) );
-    m_cbLayerPresets->Append( _( "Save new preset..." ) );
+    m_cbLayerPresets->Append( _( "Save preset..." ) );
     m_cbLayerPresets->Append( _( "Delete preset..." ) );
 
     m_cbLayerPresets->SetSelection( 0 );
@@ -1818,7 +1822,7 @@ void APPEARANCE_CONTROLS::syncLayerPresetSelection()
                             } );
 
     if( it != m_layerPresets.end() )
-        m_cbLayerPresets->SetStringSelection( it->first  );
+        m_cbLayerPresets->SetStringSelection( it->first );
     else
         m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 ); // separator
 
@@ -1868,7 +1872,12 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
     else if( index == count - 2 )
     {
         // Save current state to new preset
-        wxTextEntryDialog dlg( this, _( "New layer preset name:" ), _( "Save Layer Preset" ) );
+        wxString name;
+
+        if( m_lastSelectedUserPreset )
+            name = m_lastSelectedUserPreset->name;
+
+        wxTextEntryDialog dlg( this, _( "Layer preset name:" ), _( "Save Layer Preset" ), name );
 
         if( dlg.ShowModal() != wxID_OK )
         {
@@ -1876,22 +1885,21 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
             return;
         }
 
-        wxString name = dlg.GetValue();
+        name = dlg.GetValue();
+        bool exists = m_layerPresets.count( name );
 
-        if( m_layerPresets.count( name ) )
-        {
-            wxMessageBox( _( "Preset already exists!" ) );
-            resetSelection();
-            return;
-        }
-
-        m_layerPresets[name] = LAYER_PRESET( name, board->GetVisibleLayers(),
-                                             board->GetVisibleElements(), UNSELECTED_LAYER );
+        if( !exists )
+            m_layerPresets[name] = LAYER_PRESET( name, board->GetVisibleLayers(),
+                                                 board->GetVisibleElements(), UNSELECTED_LAYER );
 
         LAYER_PRESET* preset = &m_layerPresets[name];
         m_currentPreset      = preset;
 
-        index = m_cbLayerPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
+        if( !exists )
+            index = m_cbLayerPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
+        else
+            index = m_cbLayerPresets->FindString( name );
+
         m_cbLayerPresets->SetSelection( index );
 
         m_presetMRU.Insert( name, 0 );
@@ -1938,6 +1946,8 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
     LAYER_PRESET* preset = static_cast<LAYER_PRESET*>( m_cbLayerPresets->GetClientData( index ) );
     m_currentPreset      = preset;
+
+    m_lastSelectedUserPreset = ( !preset || preset->readOnly ) ? nullptr : preset;
 
     doApplyLayerPreset( *preset );
 
