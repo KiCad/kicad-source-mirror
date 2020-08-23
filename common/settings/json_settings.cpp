@@ -242,8 +242,8 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
         }
         catch( nlohmann::json::parse_error& error )
         {
-            wxLogTrace(
-                    traceSettings, "Parse error reading %s: %s", path.GetFullPath(), error.what() );
+            wxLogTrace( traceSettings, "Json parse error reading %s: %s",
+                        path.GetFullPath(), error.what() );
             wxLogTrace( traceSettings, "Attempting migration in case file is in legacy format" );
             migrateFromLegacy( path );
         }
@@ -263,8 +263,8 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
     {
         if( legacy_migrated && m_deleteLegacyAfterMigration && !wxRemoveFile( path.GetFullPath() ) )
         {
-            wxLogTrace(
-                    traceSettings, "Warning: could not remove legacy file %s", path.GetFullPath() );
+            wxLogTrace( traceSettings, "Warning: could not remove legacy file %s",
+                        path.GetFullPath() );
         }
 
         // And write-out immediately so that we don't lose data if the program later crashes.
@@ -367,10 +367,10 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 
     try
     {
-        wxFile   file( path.GetFullPath(), wxFile::write );
-
         std::stringstream buffer;
         buffer << std::setw( 2 ) << *this << std::endl;
+
+        wxFile   file( path.GetFullPath(), wxFile::write );
 
         if( !file.IsOpened() || !file.Write( buffer.str().c_str(), buffer.str().size() ) )
         {
@@ -378,8 +378,15 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
             success = false;
         }
     }
+    catch( nlohmann::json::exception& error )
+    {
+        wxLogTrace( traceSettings, "Catch error: could not save %s. Json error %s",
+                    GetFullFilename(), error.what() );
+        success = false;
+    }
     catch( ... )
     {
+        wxLogTrace( traceSettings, "Error: could not save %s." );
         success = false;
     }
 

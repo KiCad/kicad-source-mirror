@@ -79,8 +79,6 @@ public:
     {
         bool enbl = m_choiceRegType->GetSelection() == 1;
         m_RegulIadjValue->Enable( enbl );
-        m_RegulIadjTitle->Enable( enbl );
-        m_IadjUnitLabel->Enable( enbl );
     }
 
     /**
@@ -144,8 +142,10 @@ REGULATOR_DATA * DIALOG_EDITOR_DATA::BuildRegulatorFromData()
     double vref = DoubleFromString( m_textCtrlVref->GetValue() );
     double iadj = DoubleFromString( m_RegulIadjValue->GetValue() );
     int type = m_choiceRegType->GetSelection();
+
     if( type != 1 )
         iadj = 0.0;
+
     REGULATOR_DATA * item = new REGULATOR_DATA( m_textCtrlName->GetValue(),
                                                 vref, type, iadj );
     return item;
@@ -178,8 +178,6 @@ void PCB_CALCULATOR_FRAME::RegulatorPageUpdate()
             m_bitmapRegul4pins->Show( true );
             m_bitmapRegul3pins->Show( false );
             m_RegulIadjValue->Enable( false );
-            m_RegulIadjTitle->Enable( false );
-            m_IadjUnitLabel->Enable( false );
             m_RegulFormula->SetLabel( wxT("Vout = Vref * (R1 + R2) / R2") );
             break;
 
@@ -187,8 +185,6 @@ void PCB_CALCULATOR_FRAME::RegulatorPageUpdate()
             m_bitmapRegul4pins->Show( false );
             m_bitmapRegul3pins->Show( true );
             m_RegulIadjValue->Enable( true );
-            m_RegulIadjTitle->Enable( true );
-            m_IadjUnitLabel->Enable( true );
             m_RegulFormula->SetLabel( wxT("Vout = Vref * (R1 + R2) / R1 + Iadj * R2") );
             break;
     }
