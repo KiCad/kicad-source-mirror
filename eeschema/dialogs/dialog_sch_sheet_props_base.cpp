@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -190,7 +190,7 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_stdDialogButtonSizer->AddButton( m_stdDialogButtonSizerCancel );
 	m_stdDialogButtonSizer->Realize();
 
-	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 5 );
