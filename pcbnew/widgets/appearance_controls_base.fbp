@@ -40,10 +40,10 @@
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
-            <property name="minimum_size">200,360</property>
+            <property name="minimum_size">160,360</property>
             <property name="name">APPEARANCE_CONTROLS_BASE</property>
             <property name="pos"></property>
-            <property name="size">548,563</property>
+            <property name="size">-1,-1</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -240,7 +240,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
+                                        <property name="flag">wxBOTTOM|wxTOP|wxEXPAND</property>
                                         <property name="proportion">0</property>
                                         <object class="wxCollapsiblePane" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -309,7 +309,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -380,7 +380,7 @@
                                                         <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxRIGHT|wxLEFT</property>
-                                                            <property name="proportion">1</property>
+                                                            <property name="proportion">0</property>
                                                             <object class="wxRadioButton" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
@@ -444,7 +444,7 @@
                                                         <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxRIGHT|wxLEFT</property>
-                                                            <property name="proportion">1</property>
+                                                            <property name="proportion">0</property>
                                                             <object class="wxRadioButton" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
@@ -508,7 +508,7 @@
                                                         <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxRIGHT|wxLEFT</property>
-                                                            <property name="proportion">1</property>
+                                                            <property name="proportion">0</property>
                                                             <object class="wxRadioButton" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
@@ -1006,11 +1006,11 @@
                                                         <property name="name">bSizer192</property>
                                                         <property name="orient">wxVERTICAL</property>
                                                         <property name="permission">none</property>
-                                                        <object class="sizeritem" expanded="0">
+                                                        <object class="sizeritem" expanded="1">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxEXPAND</property>
                                                             <property name="proportion">0</property>
-                                                            <object class="wxBoxSizer" expanded="0">
+                                                            <object class="wxBoxSizer" expanded="1">
                                                                 <property name="minimum_size"></property>
                                                                 <property name="name">bSizer17</property>
                                                                 <property name="orient">wxHORIZONTAL</property>
@@ -1228,7 +1228,7 @@
                                                                 <property name="aui_name"></property>
                                                                 <property name="aui_position"></property>
                                                                 <property name="aui_row"></property>
-                                                                <property name="autosize_cols">0</property>
+                                                                <property name="autosize_cols">1</property>
                                                                 <property name="autosize_rows">0</property>
                                                                 <property name="best_size"></property>
                                                                 <property name="bg"></property>
@@ -1725,7 +1725,7 @@
                                                         <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
-                                                            <property name="proportion">1</property>
+                                                            <property name="proportion">0</property>
                                                             <object class="wxRadioButton" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
@@ -1789,7 +1789,7 @@
                                                         <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxBOTTOM|wxLEFT</property>
-                                                            <property name="proportion">1</property>
+                                                            <property name="proportion">0</property>
                                                             <object class="wxRadioButton" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
@@ -1853,7 +1853,7 @@
                                                         <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxBOTTOM|wxLEFT</property>
-                                                            <property name="proportion">1</property>
+                                                            <property name="proportion">0</property>
                                                             <object class="wxRadioButton" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
@@ -1926,7 +1926,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">2</property>
-                    <property name="flag">wxEXPAND|wxBOTTOM</property>
+                    <property name="flag">wxBOTTOM|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>

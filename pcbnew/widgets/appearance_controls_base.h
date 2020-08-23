@@ -95,7 +95,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 
 	public:
 
-		APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 548,563 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~APPEARANCE_CONTROLS_BASE();
 
 		void m_netsTabSplitterOnIdle( wxIdleEvent& )

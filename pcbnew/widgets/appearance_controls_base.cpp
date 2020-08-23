@@ -12,7 +12,7 @@
 APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	this->SetFont( wxFont( 10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	this->SetMinSize( wxSize( 200,360 ) );
+	this->SetMinSize( wxSize( 160,360 ) );
 
 	m_sizerOuter = new wxBoxSizer( wxVERTICAL );
 
@@ -31,7 +31,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	m_staticText13 = new wxStaticText( m_paneLayerDisplay->GetPane(), wxID_ANY, wxT("Non-active layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13->Wrap( -1 );
-	bSizer121->Add( m_staticText13, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer121->Add( m_staticText13, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer19;
 	bSizer19 = new wxBoxSizer( wxHORIZONTAL );
@@ -40,17 +40,17 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_rbHighContrastNormal->SetValue( true );
 	m_rbHighContrastNormal->SetToolTip( wxT("Non-active layers will be shown in full color") );
 
-	bSizer19->Add( m_rbHighContrastNormal, 1, wxRIGHT|wxLEFT, 5 );
+	bSizer19->Add( m_rbHighContrastNormal, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_rbHighContrastDim = new wxRadioButton( m_paneLayerDisplay->GetPane(), wxID_ANY, wxT("Dim"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbHighContrastDim->SetToolTip( wxT("Non-active layers will be dimmed") );
 
-	bSizer19->Add( m_rbHighContrastDim, 1, wxRIGHT|wxLEFT, 5 );
+	bSizer19->Add( m_rbHighContrastDim, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_rbHighContrastOff = new wxRadioButton( m_paneLayerDisplay->GetPane(), wxID_ANY, wxT("Hide"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbHighContrastOff->SetToolTip( wxT("Non-active layers will be hidden") );
 
-	bSizer19->Add( m_rbHighContrastOff, 1, wxRIGHT|wxLEFT, 5 );
+	bSizer19->Add( m_rbHighContrastOff, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer121->Add( bSizer19, 0, wxEXPAND, 5 );
@@ -65,7 +65,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_paneLayerDisplay->GetPane()->SetSizer( bSizer121 );
 	m_paneLayerDisplay->GetPane()->Layout();
 	bSizer121->Fit( m_paneLayerDisplay->GetPane() );
-	m_panelLayersSizer->Add( m_paneLayerDisplay, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	m_panelLayersSizer->Add( m_paneLayerDisplay, 0, wxBOTTOM|wxTOP|wxEXPAND, 5 );
 
 
 	m_panelLayers->SetSizer( m_panelLayersSizer );
@@ -130,6 +130,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_netsGrid->SetMargins( 0, 0 );
 
 	// Columns
+	m_netsGrid->AutoSizeColumns();
 	m_netsGrid->EnableDragColMove( false );
 	m_netsGrid->EnableDragColSize( false );
 	m_netsGrid->SetColLabelSize( 0 );
@@ -206,18 +207,18 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_rbNetColorAll = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("All"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbNetColorAll->SetToolTip( wxT("Net and netclass colors are shown on all copper items") );
 
-	bSizer191->Add( m_rbNetColorAll, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer191->Add( m_rbNetColorAll, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_rbNetColorRatsnest = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("Ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbNetColorRatsnest->SetValue( true );
 	m_rbNetColorRatsnest->SetToolTip( wxT("Net and netclass colors are shown on the ratsnest only") );
 
-	bSizer191->Add( m_rbNetColorRatsnest, 1, wxBOTTOM|wxLEFT, 5 );
+	bSizer191->Add( m_rbNetColorRatsnest, 0, wxBOTTOM|wxLEFT, 5 );
 
 	m_rbNetColorOff = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("None"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbNetColorOff->SetToolTip( wxT("Net and netclass colors are not shown") );
 
-	bSizer191->Add( m_rbNetColorOff, 1, wxBOTTOM|wxLEFT, 5 );
+	bSizer191->Add( m_rbNetColorOff, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizerNetDisplay->Add( bSizer191, 0, wxEXPAND, 5 );
@@ -268,11 +269,12 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	bBottomMargin->Add( bPresets, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	m_sizerOuter->Add( bBottomMargin, 0, wxEXPAND|wxBOTTOM, 2 );
+	m_sizerOuter->Add( bBottomMargin, 0, wxBOTTOM|wxEXPAND, 2 );
 
 
 	this->SetSizer( m_sizerOuter );
 	this->Layout();
+	m_sizerOuter->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ) );

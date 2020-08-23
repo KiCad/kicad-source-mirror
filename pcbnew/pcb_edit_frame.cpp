@@ -256,12 +256,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_appearancePanel,
                       EDA_PANE().Name( "LayersManager" ).Right().Layer( 4 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
-                      .MinSize( 160, -1 ).BestSize( m_appearancePanel->GetBestSize() ) );
+                      .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
     m_auimgr.AddPane( m_selectionFilterPanel,
                       EDA_PANE().Name( "SelectionFilter" ).Right().Layer( 4 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false ).Position( 2 )
-                      .MinSize( 160, -1 ).BestSize( m_selectionFilterPanel->GetBestSize() ) );
+                      .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
@@ -272,22 +272,29 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
 
+    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
+    // hidding it.
+    m_auimgr.Update();
+
     if( PCBNEW_SETTINGS* settings = dynamic_cast<PCBNEW_SETTINGS*>( config() ) )
     {
         if( settings->m_AuiPanels.right_panel_width > 0 )
         {
-            wxSize size = m_appearancePanel->GetBestSize();
-            size.x      = settings->m_AuiPanels.right_panel_width;
-            m_auimgr.GetPane( "LayersManager" ).BestSize( size );
-            m_appearancePanel->SetSize( size );
+            wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
+
+            // wxAUI hack: force width by setting MinSize() and then Fixed()
+            // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+            layersManager.MinSize( settings->m_AuiPanels.right_panel_width, -1 );
+            layersManager.Fixed();
+            m_auimgr.Update();
+
+            // now make it resizable again
+            layersManager.Resizable();
+            m_auimgr.Update();
         }
 
         m_appearancePanel->SetTabIndex( settings->m_AuiPanels.appearance_panel_tab );
     }
-
-    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
-    // hidding it.
-    m_auimgr.Update();
 
     // We don't want the infobar displayed right away
     m_auimgr.GetPane( "InfoBar" ).Hide();
