@@ -160,10 +160,14 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
         wsItems.BuildWorkSheetGraphicList( aWorksheet->GetPageInfo(), aWorksheet->GetTitleBlock() );
     }
 
-    SCH_SCREENS screens( m_schematic->Root() );
+    SCH_SHEET_PATH  savedCurrentSheet = m_schematic->CurrentSheet();
+    SCH_SHEET_LIST  sheets = m_schematic->GetSheets();
 
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    for( SCH_SHEET_PATH& sheet : sheets )
     {
+        m_schematic->SetCurrentSheet( sheet );
+        SCH_SCREEN* screen = sheet.LastScreen();
+
         for( SCH_ITEM* item : screen->Items().OfType( SCH_LOCATE_ANY_T ) )
         {
             if( item->Type() == SCH_COMPONENT_T )
@@ -242,6 +246,8 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
             }
         }
     }
+
+    m_schematic->SetCurrentSheet( savedCurrentSheet );
 }
 
 
