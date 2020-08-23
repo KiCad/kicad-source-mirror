@@ -1845,9 +1845,11 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
 
         for( const wxString& member : *netclass )
         {
-            int code = nets.GetNetItem( member )->GetNet();
-            manager->RunAction( action, true, code );
-            updateWidget( code );
+            if( NETINFO_ITEM* net = nets.GetNetItem( member ) )
+            {
+                manager->RunAction( action, true, net->GetNet() );
+                updateWidget( net->GetNet() );
+            }
         }
     }
 }
@@ -1967,6 +1969,9 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
                 runOnNetsOfClass( netclass,
                         [&]( NETINFO_ITEM* aItem )
                         {
+                            if( !aItem )
+                                return;
+
                             static bool first = true;
                             int code = aItem->GetNet();
 
@@ -1996,6 +2001,9 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
                 runOnNetsOfClass( netclass,
                         [&]( NETINFO_ITEM* aItem )
                         {
+                            if( !aItem )
+                                return;
+
                             int code = aItem->GetNet();
                             m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, true,
                                                                   code );
