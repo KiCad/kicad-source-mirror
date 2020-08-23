@@ -33,6 +33,11 @@ include_directories(
     ${INC_AFTER}
     )
 
+set( EESCHEMA_SCH_PLUGINS_ALTIUM
+    sch_plugins/altium/sch_altium_plugin.cpp
+    sch_plugins/altium/altium_parser_sch.cpp
+    )
+
 set( EESCHEMA_DLGS
     dialogs/dialog_annotate.cpp
     dialogs/dialog_annotate_base.cpp
@@ -143,6 +148,7 @@ set ( EESCHEMA_LIBEDIT_SRCS
 
 )
 set( EESCHEMA_SRCS
+    ${EESCHEMA_SCH_PLUGINS_ALTIUM}
     ${EESCHEMA_DLGS}
     ${EESCHEMA_WIDGETS}
     ${EESCHEMA_LIBEDIT_SRCS}

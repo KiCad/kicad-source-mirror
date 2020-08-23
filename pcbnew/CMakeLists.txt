@@ -574,7 +574,9 @@ endif()
 
 
 add_subdirectory( pcad2kicadpcb_plugin )
-add_subdirectory( altium2kicadpcb_plugin )
+add_subdirectory( plugins/altium )
+
+set( PCBNEW_IO_LIBRARIES pcad2kicadpcb altium2pcbnew CACHE INTERNAL "")
 
 if( BUILD_GITHUB_PLUGIN )
     add_subdirectory( github )
@@ -669,8 +671,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     connectivity
     pcbcommon
     pnsrouter
-    pcad2kicadpcb
-    altium2kicadpcb
     kiplatform
     common
     gal
@@ -678,6 +678,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     tinyspline_lib
     idf3
     nanosvg
+    ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

@@ -67,12 +67,11 @@ set_target_properties( cvpcb_kiface PROPERTIES
     )
 target_link_libraries( cvpcb_kiface
     pcbcommon
-    pcad2kicadpcb
-    altium2kicadpcb
     3d-viewer
     gal
     common
     kimath
+    ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )

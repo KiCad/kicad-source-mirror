@@ -269,6 +269,10 @@ set( PLOTTERS_CONTROL_SRCS
     plotters/common_plot_functions.cpp
     )
 
+set( PLUGINS_ALTIUM_SRCS
+    plugins/altium/altium_parser.cpp
+    )
+
 set( COMMON_SRCS
     ${LIB_KICAD_SRCS}
     ${COMMON_ABOUT_DLG_SRCS}
@@ -277,6 +281,7 @@ set( COMMON_SRCS
     ${COMMON_PAGE_LAYOUT_SRCS}
     ${COMMON_PREVIEW_ITEMS_SRCS}
     ${PLOTTERS_CONTROL_SRCS}
+    ${PLUGINS_ALTIUM_SRCS}
     advanced_config.cpp
     array_axis.cpp
     array_options.cpp
@@ -437,6 +442,7 @@ target_include_directories( common PRIVATE
 
 add_dependencies( common libcontext )
 add_dependencies( common version_header )
+add_dependencies( common compoundfilereader )  # used by altium_parser.cpp
 
 target_link_libraries( common
     kimath
@@ -454,6 +460,9 @@ target_include_directories( common PUBLIC
     $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
+target_include_directories( common PUBLIC
+    $<TARGET_PROPERTY:compoundfilereader,INTERFACE_INCLUDE_DIRECTORIES>
+    )  # used by altium_parser.cpp
 
 set( PCB_COMMON_SRCS
     base_screen.cpp

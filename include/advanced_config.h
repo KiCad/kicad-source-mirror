@@ -113,6 +113,12 @@ public:
      */
     bool m_DrawTriangulationOutlines;
 
+    /**
+     * When true, enable Altium Schematic import (*.SchDoc)
+     * the current implementation is highly incomplete
+     */
+    bool m_PluginAltiumSch;
+
 private:
     ADVANCED_CFG();
 

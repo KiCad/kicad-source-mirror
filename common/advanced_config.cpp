@@ -113,6 +113,11 @@ static const wxChar DrawArcCenterStartEndMaxAngle[] = wxT( "DrawArcCenterStartEn
  */
 static const wxChar StrokeTriangulation[] = wxT( "StrokeTriangulation" );
 
+/**
+ * When true, enable Altium Schematic import (*.SchDoc)
+ */
+static const wxChar PluginAltiumSch[] = wxT( "PluginAltiumSch" );
+
 } // namespace KEYS
 
 
@@ -196,6 +201,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_drawArcAccuracy           = 10.0;
     m_drawArcCenterMaxAngle     = 50.0;
     m_DrawTriangulationOutlines = false;
+    m_PluginAltiumSch           = false;
 
     loadFromConfigFile();
 }
@@ -253,6 +259,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::StrokeTriangulation,
                                                 &m_DrawTriangulationOutlines, false ) );
+
+    configParams.push_back(
+            new PARAM_CFG_BOOL( true, AC_KEYS::PluginAltiumSch, &m_PluginAltiumSch, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

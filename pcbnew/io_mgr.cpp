@@ -25,9 +25,6 @@
 #include <wx/filename.h>
 #include <wx/uri.h>
 
-#include <altium2kicadpcb_plugin/altium_circuit_maker_plugin.h>
-#include <altium2kicadpcb_plugin/altium_circuit_studio_plugin.h>
-#include <altium2kicadpcb_plugin/altium_designer_plugin.h>
 #include <config.h>
 #include <eagle_plugin.h>
 #include <gpcb_plugin.h>
@@ -35,6 +32,9 @@
 #include <kicad_plugin.h>
 #include <legacy_plugin.h>
 #include <pcad2kicadpcb_plugin/pcad_plugin.h>
+#include <plugins/altium/altium_circuit_maker_plugin.h>
+#include <plugins/altium/altium_circuit_studio_plugin.h>
+#include <plugins/altium/altium_designer_plugin.h>
 
 #if defined(BUILD_GITHUB_PLUGIN)
  #include <github/github_plugin.h>

@@ -73,8 +73,6 @@ target_link_libraries( qa_pcbnew
     connectivity
     pcbcommon
     pnsrouter
-    pcad2kicadpcb
-    altium2kicadpcb
     gal
     common
     gal
@@ -84,6 +82,7 @@ target_link_libraries( qa_pcbnew
     nanosvg
     idf3
     unit_test_utils
+    ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

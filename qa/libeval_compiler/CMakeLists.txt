@@ -30,7 +30,7 @@ if( BUILD_GITHUB_PLUGIN )
     set( GITHUB_PLUGIN_LIBRARIES github_plugin )
 endif()
 
-add_dependencies( pnsrouter pcbcommon pcad2kicadpcb ${GITHUB_PLUGIN_LIBRARIES} )
+add_dependencies( pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} ${GITHUB_PLUGIN_LIBRARIES} )
 
 add_executable( libeval_compiler_test
     libeval_compiler_test.cpp
@@ -75,10 +75,9 @@ target_link_libraries( libeval_compiler_test
     pcbcommon
     bitmaps
     gal
-    pcad2kicadpcb
-    altium2kicadpcb
     common
     pcbcommon
+    ${PCBNEW_IO_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
     common
     pcbcommon

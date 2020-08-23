@@ -55,6 +55,7 @@ public:
             {
                     SCH_LEGACY, ///< Legacy Eeschema file formats prior to s-expression.
                     SCH_KICAD,  ///< The s-expression version of the schematic file formats.
+                    SCH_ALTIUM,  ///< Altium file format
                     SCH_EAGLE,  ///< Autodesk Eagle file format
                     // Add your schematic type here.
 

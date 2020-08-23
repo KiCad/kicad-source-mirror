@@ -68,8 +68,8 @@ ALTIUM_PARSER::ALTIUM_PARSER(
         const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     m_subrecord_end = nullptr;
-    m_size  = static_cast<size_t>( aEntry->size );
-    m_error = false;
+    m_size          = static_cast<size_t>( aEntry->size );
+    m_error         = false;
     m_content.reset( new char[m_size] );
     m_pos = m_content.get();
 
@@ -155,10 +155,10 @@ int32_t ALTIUM_PARSER::PropertiesReadKicadUnit( const std::map<wxString, wxStrin
     size_t decimal_point = value.find( '.' );
     size_t value_end     = value.find_first_not_of( "+-0123456789." );
 
-    wxString    before_decimal_str   = value.Left( decimal_point );
-    int         before_decimal       = wxAtoi( before_decimal_str );
-    int         after_decimal        = 0;
-    size_t      after_decimal_digits = 0;
+    wxString before_decimal_str   = value.Left( decimal_point );
+    int      before_decimal       = wxAtoi( before_decimal_str );
+    int      after_decimal        = 0;
+    size_t   after_decimal_digits = 0;
     if( decimal_point != wxString::npos )
     {
         if( value_end != wxString::npos )

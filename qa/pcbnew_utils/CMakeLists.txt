@@ -64,7 +64,6 @@ target_link_libraries( qa_pcbnew_utils PUBLIC
 #     connectivity
 #     pcbcommon
 #     pnsrouter
-#     pcad2kicadpcb
 #     common
 #     pcbcommon
 #     gal
@@ -72,6 +71,7 @@ target_link_libraries( qa_pcbnew_utils PUBLIC
 #     lib_dxf
 #     idf3
 #     unit_test_utils
+#     ${PCBNEW_IO_LIBRARIES}
 #     ${wxWidgets_LIBRARIES}
 #     ${GITHUB_PLUGIN_LIBRARIES}
 #     ${GDI_PLUS_LIBRARIES}

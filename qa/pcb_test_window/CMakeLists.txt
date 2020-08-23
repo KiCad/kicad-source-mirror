@@ -31,7 +31,7 @@ if( BUILD_GITHUB_PLUGIN )
     set( GITHUB_PLUGIN_LIBRARIES github_plugin )
 endif()
 
-add_dependencies( pnsrouter pcbcommon pcad2kicadpcb ${GITHUB_PLUGIN_LIBRARIES} )
+add_dependencies( pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} ${GITHUB_PLUGIN_LIBRARIES} )
 
 add_executable(test_window WIN32
   test.cpp
@@ -62,12 +62,12 @@ include_directories(
 )
 
 target_link_libraries( test_window
-    pcad2kicadpcb
     pnsrouter
     pcbcommon
     3d-viewer
     gal
     common
+    ${PCBNEW_IO_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}

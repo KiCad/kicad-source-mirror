@@ -28,6 +28,7 @@
 #include <sch_eagle_plugin.h>
 #include <sch_sexpr_plugin.h>
 
+#include <sch_plugins/altium/sch_altium_plugin.h>
 #include <wildcards_and_files_ext.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
@@ -58,6 +59,8 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
         return new SCH_LEGACY_PLUGIN();
     case SCH_KICAD:
         return new SCH_SEXPR_PLUGIN();
+    case SCH_ALTIUM:
+        return new SCH_ALTIUM_PLUGIN();
     case SCH_EAGLE:
         return new SCH_EAGLE_PLUGIN();
     default:
@@ -95,8 +98,11 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_KICAD:
         return wxString( wxT( "KiCad" ) );
 
+    case SCH_ALTIUM:
+        return wxString( wxT( "Altium" ) );
+
     case SCH_EAGLE:
-	   return wxString( wxT( "EAGLE" ) );
+        return wxString( wxT( "EAGLE" ) );
     }
 }
 
@@ -111,6 +117,8 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
         return SCH_LEGACY;
     else if( aType == wxT( "KiCad" ) )
         return SCH_KICAD;
+    else if( aType == wxT( "Altium" ) )
+        return SCH_ALTIUM;
     else if( aType == wxT( "EAGLE" ) )
         return SCH_EAGLE;
 

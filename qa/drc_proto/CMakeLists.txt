@@ -53,7 +53,7 @@ add_executable( drc_proto
     ../../3d-viewer/3d_viewer/3d_viewer_settings.cpp
 )
 
-add_dependencies( drc_proto pnsrouter pcbcommon pcad2kicadpcb ${GITHUB_PLUGIN_LIBRARIES} )
+add_dependencies( drc_proto pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} ${GITHUB_PLUGIN_LIBRARIES} )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
@@ -95,10 +95,9 @@ target_link_libraries( drc_proto
     pcbcommon
     bitmaps
     gal
-    pcad2kicadpcb
-    altium2kicadpcb
     common
     pcbcommon
+    ${PCBNEW_IO_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
     common
     pcbcommon

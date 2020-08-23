@@ -27,6 +27,7 @@
 
 #include <lib_item.h>
 #include <math/util.h>      // for KiROUND
+#include <trigo.h>          // for GetLineLength
 
 
 class LIB_CIRCLE : public LIB_ITEM

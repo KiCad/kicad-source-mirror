@@ -24,45 +24,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <sch_draw_panel.h>
-#include <confirm.h>
-#include <env_paths.h>
-#include <gestfich.h>
-#include <sch_edit_frame.h>
-#include <pgm_base.h>
-#include <kiface_i.h>
-#include <richio.h>
-#include <trace_helpers.h>
-#include <tool/tool_manager.h>
-#include <id.h>
+#include <advanced_config.h>
 #include <class_library.h>
-#include <lib_edit_frame.h>
-#include <sch_sheet.h>
-#include <sch_sheet_path.h>
-#include <sch_component.h>
-#include <schematic.h>
-#include <wildcards_and_files_ext.h>
+#include <confirm.h>
+#include <connection_graph.h>
+#include <dialog_migrate_buses.h>
+#include <dialog_symbol_remap.h>
+#include <eeschema_settings.h>
+#include <gestfich.h>
+#include <id.h>
+#include <kiface_i.h>
+#include <kiplatform/app.h>
+#include <pgm_base.h>
 #include <profile.h>
+#include <project/project_file.h>
 #include <project_rescue.h>
 #include <reporter.h>
-#include <eeschema_config.h>
-#include <eeschema_settings.h>
-#include <sch_legacy_plugin.h>
+#include <richio.h>
+#include <sch_component.h>
 #include <sch_eagle_plugin.h>
-#include <symbol_lib_table.h>
-#include <dialog_symbol_remap.h>
-#include <dialog_migrate_buses.h>
-#include <ws_data_model.h>
-#include <connection_graph.h>
-#include <tool/actions.h>
-#include <tools/sch_editor_control.h>
-#include <project/project_file.h>
+#include <sch_edit_frame.h>
+#include <sch_legacy_plugin.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
+#include <schematic.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
-#include <netlist.h>
+#include <symbol_lib_table.h>
+#include <tool/actions.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_editor_control.h>
+#include <trace_helpers.h>
 #include <widgets/infobar.h>
-#include <kiplatform/app.h>
+#include <wildcards_and_files_ext.h>
+#include <ws_data_model.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
@@ -596,8 +591,27 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     bool setProject = Prj().GetProjectFullName().IsEmpty();
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Import Schematic" ), path, wxEmptyString,
-                      EagleSchematicFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    // clang-format off
+    std::list<std::pair<const wxString, const SCH_IO_MGR::SCH_FILE_T>> loaders;
+
+    if( ADVANCED_CFG::GetCfg().m_PluginAltiumSch )
+        loaders.emplace_back( AltiumSchematicFileWildcard(), SCH_IO_MGR::SCH_ALTIUM ); // Import Altium schematic files
+
+    loaders.emplace_back( EagleSchematicFileWildcard(),  SCH_IO_MGR::SCH_EAGLE ); // Import Eagle schematic files
+    // clang-format on
+
+    wxString fileFilters;
+
+    for( auto& loader : loaders )
+    {
+        if( !fileFilters.IsEmpty() )
+            fileFilters += wxChar( '|' );
+
+        fileFilters += wxGetTranslation( loader.first );
+    }
+
+    wxFileDialog dlg( this, _( "Import Schematic" ), path, wxEmptyString, fileFilters,
+            wxFD_OPEN | wxFD_FILE_MUST_EXIST ); // TODO
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -617,8 +631,26 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
         Schematic().SetProject( &Prj() );
     }
 
-    // For now there is only one import plugin
-    importFile( dlg.GetPath(), SCH_IO_MGR::SCH_EAGLE );
+    wxFileName fn = dlg.GetPath();
+
+    SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN;
+
+    for( auto& loader : loaders )
+    {
+        if( fn.GetExt().CmpNoCase( SCH_IO_MGR::GetFileExtension( loader.second ) ) == 0 )
+        {
+            pluginType = loader.second;
+            break;
+        }
+    }
+
+    if( pluginType == SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN )
+    {
+        wxLogError( wxString::Format( "unexpected file extension: %s", fn.GetExt() ) );
+        return;
+    }
+
+    importFile( dlg.GetPath(), pluginType );
 }
 
 
@@ -817,6 +849,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
     switch( (SCH_IO_MGR::SCH_FILE_T) aFileType )
     {
+    case SCH_IO_MGR::SCH_ALTIUM:
     case SCH_IO_MGR::SCH_EAGLE:
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
         wxASSERT_MSG( wxFileName( aFileName ).IsAbsolute(),
@@ -832,7 +865,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
         try
         {
-            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
+            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi(
+                    SCH_IO_MGR::FindPlugin( (SCH_IO_MGR::SCH_FILE_T) aFileType ) );
             Schematic().SetRoot( pi->Load( aFileName, &Schematic() ) );
 
             // Eagle sheets do not use a worksheet frame by default, so set it to an empty one

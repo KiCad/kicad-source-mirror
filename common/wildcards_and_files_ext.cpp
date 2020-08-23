@@ -229,6 +229,12 @@ wxString KiCadSchematicFileWildcard()
 }
 
 
+wxString AltiumSchematicFileWildcard()
+{
+    return _( "Altium schematic files" ) + AddFileExtListToFilter( { "SchDoc" } );
+}
+
+
 wxString EagleSchematicFileWildcard()
 {
     return _( "Eagle XML schematic files" ) + AddFileExtListToFilter( { "sch" } );

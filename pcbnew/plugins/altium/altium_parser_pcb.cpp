@@ -27,8 +27,8 @@
 #include <ki_exception.h>
 #include <math/util.h>
 
-#include "altium_parser.h"
 #include "altium_parser_pcb.h"
+#include "plugins/altium/altium_parser.h"
 
 
 ALTIUM_LAYER altium_layer_from_name( const wxString& aName )
@@ -129,7 +129,7 @@ ALTIUM_LAYER altium_layer_from_name( const wxString& aName )
     if( it == hash_map.end() )
     {
         wxLogError( wxString::Format(
-                    "Unknown mapping of the Altium layer '%s'. Please report as issue.", aName ) );
+                "Unknown mapping of the Altium layer '%s'. Please report as issue.", aName ) );
         return ALTIUM_LAYER::UNKNOWN;
     }
     else
@@ -435,7 +435,7 @@ APOLYGON6::APOLYGON6( ALTIUM_PARSER& aReader )
     minprimlength = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "MINPRIMLENGTH", "0mil" );
     useoctagons   = ALTIUM_PARSER::PropertiesReadBool( properties, "USEOCTAGONS", false );
 
-    pourindex     = ALTIUM_PARSER::PropertiesReadInt( properties, "POURINDEX", 0 );
+    pourindex = ALTIUM_PARSER::PropertiesReadInt( properties, "POURINDEX", 0 );
 
     wxString hatchstyleraw = ALTIUM_PARSER::PropertiesReadString( properties, "HATCHSTYLE", "" );
 
@@ -479,12 +479,12 @@ APOLYGON6::APOLYGON6( ALTIUM_PARSER& aReader )
 ARULE6::ARULE6( ALTIUM_PARSER& aReader )
 {
     // Initalize all variables and make Coverity happy
-    clearanceGap = 0;
-    planeclearanceClearance = 0;
-    polygonconnectAirgapwidth = 0;
+    clearanceGap                       = 0;
+    planeclearanceClearance            = 0;
+    polygonconnectAirgapwidth          = 0;
     polygonconnectReliefconductorwidth = 0;
-    polygonconnectReliefentries = 0;
-    polygonconnectStyle = ALTIUM_CONNECT_STYLE::UNKNOWN;
+    polygonconnectReliefentries        = 0;
+    polygonconnectStyle                = ALTIUM_CONNECT_STYLE::UNKNOWN;
 
     aReader.Skip( 2 );
 
@@ -532,7 +532,7 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
     }
     else if( rulekind == "PlaneClearance" )
     {
-        kind                    = ALTIUM_RULE_KIND::PLANE_CLEARANCE;
+        kind = ALTIUM_RULE_KIND::PLANE_CLEARANCE;
         planeclearanceClearance =
                 ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "CLEARANCE", "10mil" );
     }
@@ -581,16 +581,16 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
 
     layer = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
 
-    uint8_t flags1 = aReader.Read<uint8_t>();
-    is_locked      = ( flags1 & 0x04 ) == 0;
+    uint8_t flags1    = aReader.Read<uint8_t>();
+    is_locked         = ( flags1 & 0x04 ) == 0;
     is_polygonoutline = ( flags1 & 0x02 ) != 0;
 
     uint8_t flags2 = aReader.Read<uint8_t>();
     is_keepout     = flags2 == 2;
 
-    net = aReader.Read<uint16_t>();
+    net          = aReader.Read<uint16_t>();
     subpolyindex = aReader.Read<uint16_t>();
-    component = aReader.Read<uint16_t>();
+    component    = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
     center     = aReader.ReadWxPoint();
     radius     = aReader.ReadKicadUnit();
@@ -688,8 +688,8 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     if( subrecord5 < 114 )
         THROW_IO_ERROR( "Pads6 stream subrecord has length < 114, which is unexpected" );
 
-    layer = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
-    tolayer = ALTIUM_LAYER::UNKNOWN;
+    layer     = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
+    tolayer   = ALTIUM_LAYER::UNKNOWN;
     fromlayer = ALTIUM_LAYER::UNKNOWN;
 
     uint8_t flags1  = aReader.Read<uint8_t>();
@@ -747,7 +747,7 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     // Known lengths: 596, 628, 651
     // 596 is the number of bytes read in this code-block
     if( subrecord6 >= 596 )
-    {                              // TODO: detect type from something else than the size?
+    { // TODO: detect type from something else than the size?
         sizeAndShape = std::make_unique<APAD6_SIZE_AND_SHAPE>();
 
         for( wxSize& size : sizeAndShape->inner_size )
@@ -845,16 +845,16 @@ ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
 
     layer = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
 
-    uint8_t flags1 = aReader.Read<uint8_t>();
-    is_locked      = ( flags1 & 0x04 ) == 0;
+    uint8_t flags1    = aReader.Read<uint8_t>();
+    is_locked         = ( flags1 & 0x04 ) == 0;
     is_polygonoutline = ( flags1 & 0x02 ) != 0;
 
     uint8_t flags2 = aReader.Read<uint8_t>();
     is_keepout     = flags2 == 2;
 
-    net = aReader.Read<uint16_t>();
+    net          = aReader.Read<uint16_t>();
     subpolyindex = aReader.Read<uint16_t>();
-    component = aReader.Read<uint16_t>();
+    component    = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
     start = aReader.ReadWxPoint();
     end   = aReader.ReadWxPoint();

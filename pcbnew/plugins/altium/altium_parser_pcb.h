@@ -538,8 +538,8 @@ struct ACOMPONENTBODY6
 struct APAD6_SIZE_AND_SHAPE
 {
     ALTIUM_PAD_HOLE_SHAPE holeshape;
-    uint32_t slotsize;
-    double   slotrotation;
+    uint32_t              slotsize;
+    double                slotrotation;
 
     wxSize               inner_size[29];
     ALTIUM_PAD_SHAPE     inner_shape[29];

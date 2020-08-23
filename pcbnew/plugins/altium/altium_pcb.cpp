@@ -22,8 +22,8 @@
  */
 
 #include "altium_pcb.h"
-#include "altium_parser.h"
 #include "altium_parser_pcb.h"
+#include "plugins/altium/altium_parser.h"
 
 #include <class_board.h>
 #include <class_dimension.h>
@@ -499,9 +499,8 @@ int ALTIUM_PCB::GetNetCode( uint16_t aId ) const
     }
     else if( m_num_nets < aId )
     {
-        THROW_IO_ERROR(
-                wxString::Format( "Netcode with id %d does not exist. Only %d nets are known",
-                        aId, m_num_nets ) );
+        THROW_IO_ERROR( wxString::Format(
+                "Netcode with id %d does not exist. Only %d nets are known", aId, m_num_nets ) );
     }
     else
     {
@@ -653,8 +652,7 @@ void ALTIUM_PCB::ParseBoard6Data(
         {
             if( layer.nextId != 0 )
             {
-                THROW_IO_ERROR(
-                        "Board6 stream, unexpected id while parsing last stackup layer" );
+                THROW_IO_ERROR( "Board6 stream, unexpected id while parsing last stackup layer" );
             }
             // overwrite entry from internal -> bottom
             m_layermap[alayer] = B_Cu;
@@ -930,7 +928,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
          * REFERENCE1POINT pointing the same direction as REFERENCE0POINT -> XY1. This should give us a valid
          * measurement point where we can place the drawsegment.
          */
-        wxPoint direction = aElem.xy1 - referencePoint0;
+        wxPoint direction             = aElem.xy1 - referencePoint0;
         wxPoint directionNormalVector = wxPoint( -direction.y, direction.x );
         SEG     segm1( referencePoint0, referencePoint0 + directionNormalVector );
         SEG     segm2( referencePoint1, referencePoint1 + direction );
@@ -1333,8 +1331,8 @@ void ALTIUM_PCB::ParsePolygons6Data(
             }
         }
 
-        if( elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::SOLID &&
-            elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::UNKNOWN )
+        if( elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::SOLID
+                && elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::UNKNOWN )
         {
             zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
             zone->SetHatchThickness( elem.trackwidth );
@@ -1712,7 +1710,7 @@ void ALTIUM_PCB::ParsePads6Data(
             module = m_components.at( elem.component );
         }
 
-        D_PAD*  pad    = new D_PAD( module );
+        D_PAD* pad = new D_PAD( module );
         module->Add( pad, ADD_MODE::APPEND );
 
         pad->SetName( elem.name );
@@ -1788,8 +1786,8 @@ void ALTIUM_PCB::ParsePads6Data(
                 default:
                 case ALTIUM_PAD_HOLE_SHAPE::UNKNOWN:
                     wxLogError( wxString::Format(
-                           "Pad '%s' of Footprint %s uses a hole of unknown kind %d",
-                            elem.name, module->GetReference(), elem.sizeAndShape->holeshape ) );
+                            "Pad '%s' of Footprint %s uses a hole of unknown kind %d", elem.name,
+                            module->GetReference(), elem.sizeAndShape->holeshape ) );
                     pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
                     pad->SetDrillSize( wxSize( elem.holesize, elem.holesize ) ); // Workaround
                     break;
