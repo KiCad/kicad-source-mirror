@@ -400,6 +400,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
             [&]( wxCommandEvent& aEvent )
             {
                 m_frame->GetToolManager()->RunAction( PCB_ACTIONS::listNets, true );
+                passOnFocus();
             } );
 
     m_btnConfigureNetClasses->Bind( wxEVT_BUTTON,
@@ -408,6 +409,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                 // This panel should only be visible in the PCB_EDIT_FRAME anyway
                 if( PCB_EDIT_FRAME* editframe = dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) )
                     editframe->ShowBoardSetupDialog( _( "Net Classes" ) );
+
+                passOnFocus();
             } );
 
     m_cbFlipBoard->SetValue( m_frame->GetCanvas()->GetView()->IsMirroredX() );
@@ -537,6 +540,16 @@ void APPEARANCE_CONTROLS::idleFocusHandler( wxIdleEvent& aEvent )
 
 void APPEARANCE_CONTROLS::OnSetFocus( wxFocusEvent& aEvent )
 {
+#ifdef __WXMSW__
+    // In wxMSW, buttons won't process events unless they have focus, so we'll let it take the
+    // focus and give it back to the parent in the button event handler.
+    if( wxBitmapButton* btn = dynamic_cast<wxBitmapButton*>( aEvent.GetEventObject() ) )
+    {
+        wxCommandEvent evt( wxEVT_BUTTON );
+        wxPostEvent( btn, evt );
+    }
+#endif
+        
     passOnFocus();
     aEvent.Skip();
 }

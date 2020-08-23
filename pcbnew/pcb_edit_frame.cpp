@@ -918,6 +918,8 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const w
 
         OnModify();
     }
+
+    GetCanvas()->SetFocus();
 }
 
 

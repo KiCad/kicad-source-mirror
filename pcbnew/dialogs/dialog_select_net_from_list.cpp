@@ -185,6 +185,8 @@ DIALOG_SELECT_NET_FROM_LIST::~DIALOG_SELECT_NET_FROM_LIST()
 
     if( m_brd != nullptr )
         m_brd->RemoveListener( this );
+
+    m_frame->GetCanvas()->SetFocus();
 }
 
 
