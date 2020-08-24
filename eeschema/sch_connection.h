@@ -153,7 +153,7 @@ public:
         m_dirty = false;
     }
 
-    const wxString& Name( bool aIgnoreSheet = false ) const;
+    wxString Name( bool aIgnoreSheet = false ) const;
 
     const wxString& RawName() const
     {

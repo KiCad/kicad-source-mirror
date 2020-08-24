@@ -167,6 +167,8 @@ NETCLASSPTR SCH_ITEM::NetClass() const
 
         if( !netclassName.IsEmpty() )
             return netSettings.m_NetClasses.Find( netclassName );
+        else
+            return netSettings.m_NetClasses.GetDefault();
     }
 
     return nullptr;

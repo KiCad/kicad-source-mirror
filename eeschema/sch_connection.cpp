@@ -269,7 +269,7 @@ bool SCH_CONNECTION::IsDriver() const
 }
 
 
-const wxString& SCH_CONNECTION::Name( bool aIgnoreSheet ) const
+wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 {
     wxASSERT( !m_cached_name.IsEmpty() );
     return aIgnoreSheet ? m_cached_name : m_cached_name_with_path;

@@ -208,9 +208,12 @@ void SCH_LINE::SetLineColor( const double r, const double g, const double b, con
 
 COLOR4D SCH_LINE::GetLineColor() const
 {
+    if( m_stroke.GetColor() != COLOR4D::UNSPECIFIED )
+        return m_stroke.GetColor();
+
     NETCLASSPTR netclass = NetClass();
 
-    if( netclass && netclass->GetSchematicColor() != COLOR4D::UNSPECIFIED )
+    if( netclass )
         return netclass->GetSchematicColor();
 
     return m_stroke.GetColor();
@@ -252,6 +255,9 @@ PLOT_DASH_TYPE SCH_LINE::GetLineStyle() const
 
 PLOT_DASH_TYPE SCH_LINE::GetEffectiveLineStyle() const
 {
+    if( m_stroke.GetType() != PLOT_DASH_TYPE::DEFAULT )
+        return m_stroke.GetType();
+
     NETCLASSPTR netclass = NetClass();
 
     if( netclass )
@@ -823,13 +829,13 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
             conn->AppendInfoToMsgPanel( aList );
 
             NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
-            const wxString& netname = conn->Name( true );
+            wxString netname = conn->Name( true );
+            wxString netclassName = netSettings.m_NetClasses.GetDefaultPtr()->GetName();
 
             if( netSettings.m_NetClassAssignments.count( netname ) )
-            {
-                const wxString& netclassName = netSettings.m_NetClassAssignments[ netname ];
-                aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName, DARKRED ) );
-            }
+                netclassName = netSettings.m_NetClassAssignments[ netname ];
+
+            aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName, DARKRED ) );
         }
     }
 }
