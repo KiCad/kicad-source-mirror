@@ -812,7 +812,10 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         wxString msg = _( "Save changes to \"%s\" before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
-            [&]()->bool { return Files_io_from_id( ID_SAVE_BOARD ); } ) )
+                                   [&]() -> bool
+                                   {
+                                       return Files_io_from_id( ID_SAVE_BOARD );
+                                   } ) )
         {
             return false;
         }

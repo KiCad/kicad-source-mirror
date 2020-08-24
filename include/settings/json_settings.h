@@ -190,7 +190,8 @@ c     * @return true if the file was saved
     * @param aTarget is the storage destination
     * @return True if set, false if not
     */
-    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, wxString& aTarget );
+    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
+                              wxString& aTarget );
 
     /**
     * Sets the given bool if the given key/path is present
@@ -214,7 +215,8 @@ c     * @return true if the file was saved
     * @param aTarget is the storage destination
     * @return True if set, false if not
     */
-    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, unsigned int& aTarget );
+    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
+                              unsigned int& aTarget );
 protected:
 
     /**

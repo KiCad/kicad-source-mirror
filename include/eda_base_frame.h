@@ -657,7 +657,11 @@ public:
 
     int GetMaxUndoItems() const { return m_UndoRedoCountMax; }
 
-    bool NonUserClose( bool aForce ) { m_isNonUserClose = true; return Close( aForce ); };
+    bool NonUserClose( bool aForce )
+    {
+        m_isNonUserClose = true;
+        return Close( aForce );
+    }
 };
 
 

@@ -453,6 +453,7 @@ void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 void EDA_BASE_FRAME::LoadWindowState( const wxString& aFileName )
 {
     const PROJECT_FILE_STATE* state = Prj().GetLocalSettings().GetFileState( aFileName );
+
     if( state != nullptr )
     {
         LoadWindowState( state->window );

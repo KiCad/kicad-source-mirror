@@ -648,59 +648,68 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
     PrintMsg( msg );
 }
 
+
 bool KICAD_MANAGER_FRAME::IsProjectActive()
 {
     return m_active_project;
 }
 
+
 void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
 {
     /**
-     * We start loading the saved previously open windows on idle to avoid locking up the GUI earlier in project loading
-     * This gives us the visual effect of a opened KiCad project but with a "busy" progress reporter
+     * We start loading the saved previously open windows on idle to avoid locking up the GUI
+     * earlier in project loading. This gives us the visual effect of a opened KiCad project but
+     * with a "busy" progress reporter
      */
-    if( m_openSavedWindows )
+    if( !m_openSavedWindows )
+        return;
+
+    m_openSavedWindows = false;
+
+    if( Pgm().GetCommonSettings()->m_Session.remember_open_files )
     {
-        m_openSavedWindows = false;
-        if ( Pgm().GetCommonSettings()->m_Session.remember_open_files )
+        int previousOpenCount =
+                std::count_if( Prj().GetLocalSettings().m_files.begin(),
+                               Prj().GetLocalSettings().m_files.end(),
+                               [&]( const PROJECT_FILE_STATE& f )
+                               {
+                                   return !f.fileName.EndsWith( ProjectFileExtension ) && f.open;
+                               } );
+
+        if( previousOpenCount > 0 )
         {
-            int previousOpenCount = std::count_if( Prj().GetLocalSettings().m_files.begin(), 
-                                                   Prj().GetLocalSettings().m_files.end(),
-                                                   [&]( const PROJECT_FILE_STATE& f )
-                                                   {
-                                                       return !f.fileName.EndsWith( ProjectFileExtension ) && f.open;
-                                                   } );
-            if ( previousOpenCount > 0 )
+            APP_PROGRESS_DIALOG progressReporter( _( "Restoring session" ), wxEmptyString,
+                                                  previousOpenCount, this );
+
+            int i = 0;
+
+            for( const PROJECT_FILE_STATE& file : Prj().GetLocalSettings().m_files )
             {
-                APP_PROGRESS_DIALOG progressReporter( _( "Restoring session" ), wxEmptyString, previousOpenCount, this );
-
-                int i = 0;
-                for( const PROJECT_FILE_STATE& file : Prj().GetLocalSettings().m_files )
+                if( file.open )
                 {
-                    if( file.open )
+                    progressReporter.Update( i++,
+                            wxString::Format( _( "Restoring \"%s\"" ), file.fileName ) );
+
+                    wxFileName fn( file.fileName );
+
+                    if( fn.GetExt() == LegacySchematicFileExtension
+                            || fn.GetExt() == KiCadSchematicFileExtension )
                     {
-                        progressReporter.Update(
-                            i++, wxString::Format( _( "Restoring \"%s\"" ), file.fileName ) );
-
-                        wxFileName fn( file.fileName );
-                        if( fn.GetExt() == LegacySchematicFileExtension
-                                || fn.GetExt() == KiCadSchematicFileExtension )
-                        {
-                            GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editSchematic, true );
-                        }
-                        else if( fn.GetExt() == LegacyPcbFileExtension
-                                 || fn.GetExt() == KiCadPcbFileExtension )
-                        {
-                            GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editPCB, true );
-                        }
+                        GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editSchematic, true );
                     }
-
-                    wxYield();
+                    else if( fn.GetExt() == LegacyPcbFileExtension
+                             || fn.GetExt() == KiCadPcbFileExtension )
+                    {
+                        GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editPCB, true );
+                    }
                 }
+
+                wxYield();
             }
         }
-
-        // clear file states regardless if we opened windows or not due to setting
-        Prj().GetLocalSettings().ClearFileState();
     }
+
+    // clear file states regardless if we opened windows or not due to setting
+    Prj().GetLocalSettings().ClearFileState();
 }
