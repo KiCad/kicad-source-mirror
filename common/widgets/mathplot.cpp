@@ -688,8 +688,12 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
             int dupx0 = 0;          // count of currently merged vertical lines
             wxPoint line_start;     // starting point of the current line to draw
 
-            // Note: we do not use dc.DrawLines(), because at least on Windows
-            // dc.DrawLine() is faster, and dc.DrawLines() can hang for a lot
+            // A buffer to store coordinates of lines to draw
+            std::vector<wxPoint>pointList;
+            pointList.reserve( endPx - startPx + 1 );
+
+            // Note: we can use dc.DrawLines() only for a reasonable number or points (<10000),
+            // because at least on Windows dc.DrawLines() can hang for a lot of points.
             // (> 10000 points) (can happens when a lot of points is calculated)
             // To avoid long draw time (and perhaps hanging) one plot only not redundant lines.
             // To avoid artifacts when skipping points to the same x coordinate, for each
@@ -716,8 +720,7 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
                         ymin0 = ymax0 = y1;
                         dupx0 = 0;
 
-                        if( count )
-                            dc.DrawLine( line_start, wxPoint( x1, y1 ) );
+                        pointList.emplace_back( wxPoint( x1, y1 ) );
 
                         line_start.x = x1;
                         line_start.y = y1;
@@ -731,6 +734,30 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
                         dupx0++;
                     }
                 }
+            }
+
+            if( pointList.size() > 1 )
+            {
+                // For a better look (when using dashed lines) and more optimization,
+                // try to merge horizontal segments, in order to plot longer lines
+                // we are merging horizontal segments because this is easy,
+                // and horizontal segments are a frequent cases
+                std::vector<wxPoint> drawPoints;
+                drawPoints.reserve( endPx - startPx + 1 );
+
+                drawPoints.push_back( pointList[0] );   // push the first point in list
+
+                for( size_t ii = 1; ii < pointList.size()-1; ii++ )
+                {
+                    if( pointList[ii-1].y == pointList[ii].y )
+                        continue;
+                    else
+                        drawPoints.push_back( pointList[ii] );
+                }
+
+                drawPoints.push_back( pointList.back() );   // push the last point in list
+
+                dc.DrawLines( drawPoints.size(), &drawPoints[0] );
             }
         }
 
