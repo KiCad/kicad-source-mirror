@@ -2248,8 +2248,6 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 
                 COLOR4D color = setting->ctl_color->GetSwatchColor();
 
-                setting->ctl_color->Show( color != COLOR4D::UNSPECIFIED );
-
                 std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
 
                 if( color != COLOR4D::UNSPECIFIED )
