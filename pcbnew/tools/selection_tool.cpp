@@ -1765,26 +1765,26 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
     if( settings->GetHighContrast() )
     {
-        int                    itemLayers[KIGFX::VIEW::VIEW_MAX_LAYERS], layers_count;
         std::set<unsigned int> activeLayers = settings->GetActiveLayers();
+        bool                   onActiveLayer = false;
 
-        aItem->ViewGetLayers( itemLayers, layers_count );
-
-        bool onActive = false;          // Is the item on any of active layers?
-
-        for( int i = 0; i < layers_count; ++i )
+        for( unsigned int layer : activeLayers )
         {
-            if( activeLayers.count( itemLayers[i] ) > 0 ) // Item is on at least one of the active layers
+            if( aItem->Type() == PCB_PAD_T
+                    && static_cast<const D_PAD*>( aItem )->IsPadOnLayer( layer ) )
             {
-                onActive = true;
+                onActiveLayer = true;
+                break;
+            }
+            else if( aItem->IsOnLayer( ToLAYER_ID( layer ) ) )
+            {
+                onActiveLayer = true;
                 break;
             }
         }
 
-        if( !onActive ) // We do not want to select items that are in the background
-        {
+        if( !onActiveLayer ) // We do not want to select items that are in the background
             return false;
-        }
     }
 
     switch( aItem->Type() )
