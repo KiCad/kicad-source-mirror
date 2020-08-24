@@ -95,7 +95,7 @@ MODULE::MODULE( const MODULE& aModule ) :
 
     // Copy auxiliary data: Pads
     for( D_PAD* pad : aModule.Pads() )
-        Add( new D_PAD( *pad ) );
+        Add( static_cast<D_PAD*>( pad->Clone() ) );
 
     // Copy auxiliary data: Zones
     for( MODULE_ZONE_CONTAINER* item : aModule.Zones() )

@@ -115,6 +115,7 @@ D_PAD::D_PAD( const D_PAD& aOther ) :
     m_effectiveBoundingRadius = aOther.m_effectiveBoundingRadius;
     m_removeUnconnectedLayer = aOther.m_removeUnconnectedLayer;
     m_keepTopBottomLayer = aOther.m_keepTopBottomLayer;
+    const_cast<KIID&>( m_Uuid ) = aOther.m_Uuid;
 }
 
 
