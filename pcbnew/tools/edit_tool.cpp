@@ -381,7 +381,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         if( unselect )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-        editFrame->PopTool( tool );
+        editFrame->ClearToolStack();
 
         return 0;
     }
@@ -1656,7 +1656,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
     VECTOR2I refPoint;
     bool     rv = pickReferencePoint( _( "Select reference point for the copy..." ),
-            _( "Selection copied." ), _( "Copy cancelled." ), refPoint );
+                                      _( "Selection copied." ), _( "Copy cancelled." ), refPoint );
     frame()->SetMsgPanel( board() );
 
     if( !rv )
