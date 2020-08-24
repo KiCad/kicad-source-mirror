@@ -35,6 +35,7 @@
 #include <kicad_string.h>
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
+#include <widgets/grid_text_helpers.h>
 
 #include <algorithm>
 
@@ -68,12 +69,12 @@ wxArrayString           g_lineStyleNames;
 
 
 PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
-                                                const std::vector<wxString>& aCandidateNetNames,
+                                                const std::vector<wxString>& aNetNames,
                                                 bool aIsEEschema ) :
         PANEL_SETUP_NETCLASSES_BASE( aParent->GetTreebook() ),
         m_Parent( aParent ),
         m_netclasses( aNetclasses ),
-        m_candidateNetNames( aCandidateNetNames )
+        m_netNames( aNetNames )
 {
     if( g_lineStyleIcons.empty() )
     {
@@ -166,6 +167,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
     // Set up the net name column of the netclass membership grid to read-only
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetReadOnly( true );
+    attr->SetRenderer( new GRID_CELL_ESCAPED_TEXT_RENDERER );
     m_membershipGrid->SetColAttr( 0, attr );
 
     m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
@@ -222,7 +224,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     std::map<wxString, wxString> netToNetclassMap;
     std::map<wxString, wxString> staleNetMap;
 
-    for( const wxString& candidate : m_candidateNetNames )
+    for( const wxString& candidate : m_netNames )
         netToNetclassMap[ candidate ] = wxEmptyString;
 
     if( m_netclassGrid->GetNumberRows() )
@@ -249,14 +251,10 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
 
         for( const wxString& net : *netclass )
         {
-            // While we currently only store shortNames as members, legacy versions stored
-            // fully-qualified names so we don't know which kind we're going to find.
-            wxString shortName = net.AfterLast( '/' );
-
-            if( netToNetclassMap.count( shortName ) )
-                netToNetclassMap[ shortName ] = i->second->GetName();
+            if( netToNetclassMap.count( net ) )
+                netToNetclassMap[ net ] = i->second->GetName();
             else
-                staleNetMap[ shortName ] = i->second->GetName();
+                staleNetMap[ net ] = i->second->GetName();
         }
     }
 
@@ -265,10 +263,10 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
 
     // add currently-assigned and candidate netnames to membership lists
     for( const std::pair<const wxString, wxString>& ii : netToNetclassMap )
-        addNet( UnescapeString( ii.first ), ii.second, false );
+        addNet( ii.first, ii.second, false );
 
     for( const std::pair<const wxString, wxString>& ii : staleNetMap )
-        addNet( UnescapeString( ii.first ), ii.second, true );
+        addNet( ii.first, ii.second, true );
 
     return true;
 }
@@ -378,7 +376,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
             const NETCLASSPTR& nc = m_netclasses->Find( classname );
 
             if( nc )
-                nc->Add( EscapeString( netname, CTX_NETNAME ) );
+                nc->Add( netname );
         }
     }
 

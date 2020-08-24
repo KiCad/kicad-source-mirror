@@ -1298,8 +1298,8 @@ std::vector<wxString> BOARD::GetNetClassAssignmentCandidates()
 
     for( NETINFO_ITEM* net : m_NetInfo )
     {
-        if( !net->GetShortNetname().IsEmpty() )
-            names.emplace_back( net->GetShortNetname() );
+        if( !net->GetNetname().IsEmpty() )
+            names.emplace_back( net->GetNetname() );
     }
 
     return names;
@@ -1324,16 +1324,10 @@ void BOARD::SynchronizeNetsAndNetClasses()
         for( NETINFO_ITEM* net : m_NetInfo )
         {
             const wxString& netname = net->GetNetname();
-            const wxString& shortname = net->GetShortNetname();
 
             if( netSettings->m_NetClassAssignments.count( netname ) )
             {
                 const wxString& classname = netSettings->m_NetClassAssignments[ netname ];
-                net->SetClass( netClasses.Find( classname ) );
-            }
-            else if( netSettings->m_NetClassAssignments.count( shortname ) )
-            {
-                const wxString& classname = netSettings->m_NetClassAssignments[ shortname ];
                 net->SetClass( netClasses.Find( classname ) );
             }
             else

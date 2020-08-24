@@ -213,6 +213,7 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_combobox.cpp
     widgets/grid_icon_text_helpers.cpp
     widgets/grid_text_button_helpers.cpp
+    widgets/grid_text_helpers.cpp
     widgets/indicator_icon.cpp
     widgets/infobar.cpp
     widgets/layer_box_selector.cpp

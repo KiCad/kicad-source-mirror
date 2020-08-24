@@ -37,7 +37,7 @@ class PANEL_SETUP_NETCLASSES : public PANEL_SETUP_NETCLASSES_BASE
 private:
     PAGED_DIALOG*         m_Parent;
     NETCLASSES*           m_netclasses;
-    std::vector<wxString> m_candidateNetNames;
+    std::vector<wxString> m_netNames;
 
     int*                  m_originalColWidths;
     bool                  m_netclassesDirty;    // The netclass drop-down menus need rebuilding
@@ -69,7 +69,7 @@ private:
 
 public:
     PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
-                            const std::vector<wxString>& aCandidateNetNames, bool isEEschema );
+                            const std::vector<wxString>& aNetNames, bool isEEschema );
     ~PANEL_SETUP_NETCLASSES( ) override;
 
     bool TransferDataToWindow() override;

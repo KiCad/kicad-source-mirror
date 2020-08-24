@@ -168,73 +168,9 @@ std::vector<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
 {
     std::vector<wxString> names;
 
-    SCH_SCREENS allScreens( Root() );
-
-    for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
-    {
-        for( SCH_ITEM* item : screen->Items() )
-        {
-            switch( item->Type() )
-            {
-            case SCH_PIN_T:
-            {
-                SCH_PIN* pin = static_cast<SCH_PIN*>( item );
-
-                if( pin->IsPowerConnection() )
-                    names.emplace_back( pin->GetName() );
-            }
-                break;
-
-            case SCH_LABEL_T:
-            case SCH_GLOBAL_LABEL_T:
-            case SCH_HIER_LABEL_T:
-            case SCH_SHEET_PIN_T:
-            {
-                wxString unescaped = static_cast<SCH_TEXT*>( item )->GetShownText();
-
-                wxString busPrefix;
-                std::vector<wxString> busMembers;
-
-                if( NET_SETTINGS::ParseBusVector( unescaped, nullptr, nullptr ) )
-                {
-                    // Allow netclass assignment to an entire vector.
-                    names.emplace_back( EscapeString( unescaped, CTX_NETNAME ) );
-                }
-                else if( NET_SETTINGS::ParseBusGroup( unescaped, &busPrefix, &busMembers ) )
-                {
-                    // Allow netclass assignment to an entire group.
-                    names.emplace_back( EscapeString( unescaped, CTX_NETNAME ) );
-
-                    // Named bus groups generate a net prefix, unnamed ones don't
-                    if( !busPrefix.IsEmpty() )
-                        busPrefix += wxT( "." );
-
-                    for( const wxString& member : busMembers )
-                    {
-                        // Handle alias inside bus group member list
-                        if( const std::shared_ptr<BUS_ALIAS>& alias = GetBusAlias( member ) )
-                        {
-                            for( const wxString& alias_member : alias->Members() )
-                                names.emplace_back( busPrefix + alias_member );
-                        }
-                        else
-                        {
-                            names.emplace_back( busPrefix + member );
-                        }
-                    }
-                }
-                else
-                {
-                    names.emplace_back( EscapeString( unescaped, CTX_NETNAME ) );
-                }
-            }
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
+    // Key is a NET_NAME_CODE aka std::pair<name, code>
+    for( const NET_MAP::value_type& pair: m_connectionGraph->GetNetMap() )
+        names.emplace_back( pair.first.first );
 
     return names;
 }

@@ -35,6 +35,7 @@
 #include <widgets/color_swatch.h>
 #include <widgets/grid_bitmap_toggle.h>
 #include <widgets/grid_color_swatch_helpers.h>
+#include <widgets/grid_text_helpers.h>
 #include <widgets/indicator_icon.h>
 
 
@@ -437,6 +438,10 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_netsGrid->RegisterDataType( wxT( "COLOR4D" ),
                                   new GRID_CELL_COLOR_RENDERER( m_frame, SWATCH_SMALL ),
                                   new GRID_CELL_COLOR_SELECTOR( m_frame, m_netsGrid ) );
+
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetRenderer( new GRID_CELL_ESCAPED_TEXT_RENDERER );
+    m_netsGrid->SetColAttr( NET_GRID_TABLE::COL_LABEL, attr );
 
     m_netsTable = new NET_GRID_TABLE( m_frame );
     m_netsGrid->SetTable( m_netsTable, true, wxGrid::wxGridSelectRows );
