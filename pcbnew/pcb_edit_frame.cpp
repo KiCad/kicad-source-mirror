@@ -289,6 +289,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             m_auimgr.Update();
 
             // now make it resizable again
+            layersManager.MinSize( 180, -1 );
             layersManager.Resizable();
             m_auimgr.Update();
         }
