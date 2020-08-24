@@ -21,18 +21,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/version.h> 
+#include <wx/version.h>
 #include <widgets/app_progress_dialog.h>
 
 
 APP_PROGRESS_DIALOG::APP_PROGRESS_DIALOG( const wxString& aTitle, const wxString& aMessage,
                                           int aMaximum, wxWindow* aParent,
                                           bool aIndeterminateTaskBarStatus, int aStyle )
-        : wxProgressDialog( aTitle, aMessage, aMaximum, aParent, aStyle ),
+        : wxProgressDialog( aTitle, aMessage, aMaximum, aParent, aStyle )
 #if wxCHECK_VERSION( 3, 1, 0 )
+          ,
           m_appProgressIndicator( aParent, aMaximum ),
-#endif
           m_indeterminateTaskBarStatus( aIndeterminateTaskBarStatus )
+#endif
+
 {
 #if wxCHECK_VERSION( 3, 1, 0 )
     if( m_indeterminateTaskBarStatus )

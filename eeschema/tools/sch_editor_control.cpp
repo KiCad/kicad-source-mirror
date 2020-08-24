@@ -1330,19 +1330,15 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     bool forceKeepAnnotations = false;
-    bool forceDropAnnotations = true;
-    bool dropAnnotations = false;
+    bool dropAnnotations      = true;
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
-        DIALOG_PASTE_SPECIAL dlg( m_frame, &forceKeepAnnotations, &forceDropAnnotations );
+        DIALOG_PASTE_SPECIAL dlg( m_frame, &forceKeepAnnotations );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return 0;
     }
-
-    if( forceDropAnnotations )
-        dropAnnotations = true;
 
     // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
@@ -1481,7 +1477,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 // reference default value and takes the latest displayed value
                 existingScreen->EnsureAlternateReferencesExist();
 
-                if( forceDropAnnotations || dropSheetAnnotations )
+                if( dropSheetAnnotations )
                     existingScreen->ClearAnnotation( &sheetpath );
             }
             else

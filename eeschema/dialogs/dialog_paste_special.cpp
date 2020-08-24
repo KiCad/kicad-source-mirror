@@ -27,10 +27,9 @@
 static bool g_keepAnnotations = true;
 
 
-DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* parent, bool* aKeep, bool* aDrop ) :
+DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* parent, bool* aKeep ) :
     DIALOG_PASTE_SPECIAL_BASE( parent ),
-    m_keep( aKeep ),
-    m_drop( aDrop )
+    m_keep( aKeep )
 {
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();

@@ -39,15 +39,15 @@ public:
                          wxWindow* aParent = NULL, bool aIndeterminateTaskBarStatus = false,
                          int aStyle = wxPD_APP_MODAL | wxPD_AUTO_HIDE );
 
-    virtual bool Update(
-            int aValue, const wxString& aNewMsg = wxEmptyString, bool* aSkip = NULL ) override;
+    virtual bool Update( int aValue, const wxString& aNewMsg = wxEmptyString,
+                         bool* aSkip = NULL ) override;
 
 
 private:
 #if wxCHECK_VERSION( 3, 1, 0 )
     wxAppProgressIndicator m_appProgressIndicator;
-#endif
     bool m_indeterminateTaskBarStatus;
+#endif
 };
 
 #endif

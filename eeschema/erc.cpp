@@ -192,9 +192,9 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
             }
             else if( item->Type() == SCH_SHEET_T )
             {
-                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+                SCH_SHEET* subSheet = static_cast<SCH_SHEET*>( item );
 
-                for( SCH_FIELD& field : sheet->GetFields() )
+                for( SCH_FIELD& field : subSheet->GetFields() )
                 {
                     if( unresolved( field.GetShownText() ) )
                     {

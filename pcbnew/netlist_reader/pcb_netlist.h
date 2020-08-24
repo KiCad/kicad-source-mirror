@@ -198,10 +198,6 @@ class NETLIST
     /// Remove footprints from #BOARD not found in netlist when true.
     bool               m_deleteExtraFootprints;
 
-    /// Do not actually make any changes.  Only report changes to #BOARD from netlist
-    /// when true.
-    bool               m_isDryRun;
-
     /// Find component by time stamp if true or reference designator if false.
     bool               m_findByTimeStamp;
 
@@ -211,7 +207,6 @@ class NETLIST
 public:
     NETLIST() :
         m_deleteExtraFootprints( false ),
-        m_isDryRun( false ),
         m_findByTimeStamp( false ),
         m_replaceFootprints( false )
     {

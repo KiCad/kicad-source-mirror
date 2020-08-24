@@ -36,14 +36,13 @@ class DIALOG_PASTE_SPECIAL : public DIALOG_PASTE_SPECIAL_BASE
 {
 
 public:
-    DIALOG_PASTE_SPECIAL( wxWindow* parent, bool* aKeepAnnotations, bool* aDropAnnotations );
+    DIALOG_PASTE_SPECIAL( wxWindow* parent, bool* aKeepAnnotations );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
     bool* m_keep;
-    bool* m_drop;
 };
 
 #endif // DIALOG_PASTE_SPECIAL_H
