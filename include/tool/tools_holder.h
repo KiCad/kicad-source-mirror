@@ -114,8 +114,6 @@ public:
     virtual void PushTool( const std::string& actionName );
     virtual void PopTool( const std::string& actionName );
 
-    void ClearToolStack();
-
     bool ToolStackIsEmpty() { return m_toolStack.empty(); }
 
     std::string CurrentToolName() const;

@@ -96,13 +96,6 @@ void TOOLS_HOLDER::PopTool( const std::string& actionName )
 }
 
 
-void TOOLS_HOLDER::ClearToolStack()
-{
-    m_toolStack.clear();
-    DisplayToolMsg( ACTIONS::selectionTool.GetLabel() );
-}
-
-
 std::string TOOLS_HOLDER::CurrentToolName() const
 {
     if( m_toolStack.empty() )

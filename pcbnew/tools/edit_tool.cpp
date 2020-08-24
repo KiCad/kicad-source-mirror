@@ -369,7 +369,6 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         return 0;
 
     std::string tool = aEvent.GetCommandStr().get();
-
     editFrame->PushTool( tool );
     Activate();
     controls->ShowCursor( true );
@@ -381,8 +380,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         if( unselect )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-        editFrame->ClearToolStack();
-
+        editFrame->PopTool( tool );
         return 0;
     }
 
@@ -661,7 +659,6 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     editFrame->PopTool( tool );
-
     return 0;
 }
 
@@ -1570,7 +1567,6 @@ bool EDIT_TOOL::updateModificationPoint( PCBNEW_SELECTION& aSelection )
 bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                                     const wxString& aCanceledMessage, VECTOR2I& aReferencePoint )
 {
-    std::string         tool = "pcbnew.InteractiveEdit.selectReferencePoint";
     STATUS_TEXT_POPUP   statusPopup( frame() );
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
     OPT<VECTOR2I>       pickedPoint;
@@ -1625,6 +1621,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
     statusPopup.Popup();
 
+    std::string tool = "";
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     while( !done )
@@ -1642,8 +1639,10 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
 
 int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 {
+    std::string  tool = "pcbnew.InteractiveEdit.selectReferencePoint";
     CLIPBOARD_IO io;
 
+    frame()->PushTool( tool );
     Activate();
 
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
@@ -1651,21 +1650,25 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
             } );
 
-    if( selection.Empty() )
-        return 1;
+    if( !selection.Empty() )
+    {
+        VECTOR2I refPoint;
+        bool     rv = pickReferencePoint( _( "Select reference point for the copy..." ),
+                                          _( "Selection copied." ),
+                                          _( "Copy cancelled." ),
+                                          refPoint );
+        frame()->SetMsgPanel( board() );
 
-    VECTOR2I refPoint;
-    bool     rv = pickReferencePoint( _( "Select reference point for the copy..." ),
-                                      _( "Selection copied." ), _( "Copy cancelled." ), refPoint );
-    frame()->SetMsgPanel( board() );
+        if( rv )
+        {
+            selection.SetReferencePoint( refPoint );
 
-    if( !rv )
-        return 1;
+            io.SetBoard( board() );
+            io.SaveSelection( selection, m_editModules );
+        }
+    }
 
-    selection.SetReferencePoint( refPoint );
-
-    io.SetBoard( board() );
-    io.SaveSelection( selection, m_editModules );
+    frame()->PopTool( tool );
 
     return 0;
 }

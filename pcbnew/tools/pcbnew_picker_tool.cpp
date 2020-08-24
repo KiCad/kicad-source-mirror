@@ -46,7 +46,10 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     int                   finalize_state = WAIT_CANCEL;
 
     std::string tool = *aEvent.Parameter<std::string*>();
-    frame->PushTool( tool );
+
+    if( !tool.empty() )
+        frame->PushTool( tool );
+
     Activate();
     setControls();
 
@@ -152,7 +155,10 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     reset();
     controls->ForceCursorPosition( false );
-    frame->PopTool( tool );
+
+    if( !tool.empty() )
+        frame->PopTool( tool );
+
     return 0;
 }
 
