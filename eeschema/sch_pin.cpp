@@ -70,7 +70,7 @@ wxString SCH_PIN::GetName() const
 ELECTRICAL_PINTYPE SCH_PIN::GetType() const
 {
     if( !m_alt.IsEmpty() )
-        m_libPin->GetAlt( m_alt ).m_Type;
+        return m_libPin->GetAlt( m_alt ).m_Type;
 
     return m_libPin->GetType();
 }
@@ -79,7 +79,7 @@ ELECTRICAL_PINTYPE SCH_PIN::GetType() const
 GRAPHIC_PINSHAPE SCH_PIN::GetShape() const
 {
     if( !m_alt.IsEmpty() )
-        m_libPin->GetAlt( m_alt ).m_Shape;
+        return m_libPin->GetAlt( m_alt ).m_Shape;
 
     return m_libPin->GetShape();
 }
