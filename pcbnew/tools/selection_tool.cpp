@@ -1770,13 +1770,8 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
         for( unsigned int layer : activeLayers )
         {
-            if( aItem->Type() == PCB_PAD_T
-                    && static_cast<const D_PAD*>( aItem )->IsPadOnLayer( layer ) )
-            {
-                onActiveLayer = true;
-                break;
-            }
-            else if( aItem->IsOnLayer( ToLAYER_ID( layer ) ) )
+            // NOTE: Only checking the regular layers (not GAL meta-layers)
+            if( layer < PCB_LAYER_ID_COUNT && aItem->IsOnLayer( ToLAYER_ID( layer ) ) )
             {
                 onActiveLayer = true;
                 break;
