@@ -125,7 +125,6 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     }
 
     m_appearancePanel->SetUserLayerPresets( project.m_LayerPresets );
-    m_appearancePanel->ApplyLayerPreset( localSettings.m_ActiveLayerPreset );
 
     SELECTION_FILTER_OPTIONS& filterOpts = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
 
@@ -140,9 +139,6 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     opts.m_PadOpacity          = localSettings.m_PadOpacity;
     opts.m_ZoneOpacity         = localSettings.m_ZoneOpacity;
     SetDisplayOptions( opts );
-
-    if( GetBoard()->GetDesignSettings().IsLayerEnabled( localSettings.m_ActiveLayer ) )
-        SetActiveLayer( localSettings.m_ActiveLayer );
 
     wxFileName fn( GetCurrentFileName() );
     fn.MakeRelativeTo( Prj().GetProjectPath() );

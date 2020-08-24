@@ -49,6 +49,7 @@
 #include <pcb_draw_panel_gal.h>
 #include <functional>
 #include <project/project_file.h>
+#include <project/project_local_settings.h>
 #include <project/net_settings.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
@@ -1020,6 +1021,14 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     SetElementVisibility( LAYER_RATSNEST, GetDisplayOptions().m_ShowGlobalRatsnest );
 
     m_appearancePanel->OnBoardChanged();
+
+    // Apply saved display state to the appearance panel after it has been set up
+    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+
+    m_appearancePanel->ApplyLayerPreset( localSettings.m_ActiveLayerPreset );
+
+    if( GetBoard()->GetDesignSettings().IsLayerEnabled( localSettings.m_ActiveLayer ) )
+        SetActiveLayer( localSettings.m_ActiveLayer );
 
     // Update the tracks / vias available sizes list:
     ReCreateAuxiliaryToolbar();

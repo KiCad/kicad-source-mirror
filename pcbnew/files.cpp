@@ -643,10 +643,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetBoard()->BuildConnectivity();
     Compile_Ratsnest( true );
 
-    onBoardLoaded();
-
     // Load project settings after setting up board; some of them depend on the nets list
     LoadProjectSettings();
+
+    // Syncs the UI (appearance panel, etc) with the loaded board and project
+    onBoardLoaded();
 
     // Refresh the 3D view, if any
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
