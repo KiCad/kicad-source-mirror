@@ -62,7 +62,6 @@
 #include <settings/settings_manager.h>
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
-    EVT_CLOSE( PL_EDITOR_FRAME::OnCloseWindow )
     EVT_MENU( wxID_CLOSE, PL_EDITOR_FRAME::OnExit )
     EVT_MENU( wxID_EXIT, PL_EDITOR_FRAME::OnExit )
 
@@ -329,29 +328,33 @@ void PL_EDITOR_FRAME::OnExit( wxCommandEvent& aEvent )
 }
 
 
-void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
+bool PL_EDITOR_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
     if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
             && IsContentModified() )
     {
-        aEvent.Veto();
-        return;
+        return false;
     }
 
     if( IsContentModified() )
     {
         wxFileName filename = GetCurrentFileName();
-        wxString msg = _( "Save changes to \"%s\" before closing?" );
+        wxString   msg      = _( "Save changes to \"%s\" before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ),
-                                   [&]()->bool { return saveCurrentPageLayout(); } ) )
+                                   [&]() -> bool { return saveCurrentPageLayout(); } ) )
         {
-            aEvent.Veto();
-            return;
+            return false;
         }
     }
 
+    return true;
+}
+
+
+void PL_EDITOR_FRAME::doCloseWindow()
+{
     // do not show the window because we do not want any paint event
     Show( false );
 

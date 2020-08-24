@@ -47,7 +47,7 @@ public:
     DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~DISPLAY_FOOTPRINTS_FRAME() override;
 
-    void    OnCloseWindow( wxCloseEvent& Event ) override;
+    void    doCloseWindow() override;
 
     void    ReCreateHToolbar() override;
     void    ReCreateVToolbar() override;

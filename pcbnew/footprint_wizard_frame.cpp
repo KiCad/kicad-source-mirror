@@ -58,7 +58,6 @@
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
 
     // Window events
-    EVT_CLOSE( FOOTPRINT_WIZARD_FRAME::OnCloseWindow )
     EVT_SIZE( FOOTPRINT_WIZARD_FRAME::OnSize )
     EVT_ACTIVATE( FOOTPRINT_WIZARD_FRAME::OnActivate )
 
@@ -248,7 +247,7 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
 }
 
 
-void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void FOOTPRINT_WIZARD_FRAME::doCloseWindow()
 {
     SaveSettings( config() );
 

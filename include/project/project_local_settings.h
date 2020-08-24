@@ -25,8 +25,17 @@
 #include <project/board_project_settings.h>
 #include <settings/json_settings.h>
 #include <wildcards_and_files_ext.h>
+#include <settings/app_settings.h>
 
 class PROJECT;
+
+struct PROJECT_FILE_STATE
+{
+    wxString fileName;
+    bool open;
+    struct WINDOW_STATE window;
+};
+
 
 /**
  * The project local settings are things that are attached to a particular project, but also might
@@ -81,6 +90,13 @@ private:
 public:
 
     /**
+     * Project scope
+     */
+
+    /// File based state
+    std::vector<PROJECT_FILE_STATE> m_files;
+
+    /**
      * Board settings
      */
 
@@ -118,6 +134,12 @@ public:
 
     /// State of the selection filter widget
     SELECTION_FILTER_OPTIONS m_SelectionFilter;
+
+    void SaveFileState( const wxString& aFileName, const WINDOW_SETTINGS* aWindowCfg, bool aOpen );
+
+    const PROJECT_FILE_STATE* GetFileState( const wxString& aFileName );
+
+    void ClearFileState();
 };
 
 #endif

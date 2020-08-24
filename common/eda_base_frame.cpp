@@ -36,6 +36,7 @@
 #include <settings/app_settings.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <project/project_local_settings.h>
 #include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <tool/actions.h>
@@ -85,7 +86,8 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         m_autoSaveInterval(-1 ),
         m_UndoRedoCountMax( DEFAULT_MAX_UNDO_ITEMS ),
         m_userUnits( EDA_UNITS::MILLIMETRES ),
-        m_shuttingDown( false )
+        m_isClosing( false ),
+        m_isNonUserClose( false )
 {
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_mruPath       = wxStandardPaths::Get().GetDocumentsDir();
@@ -146,12 +148,30 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
         return;
     }
 
-    APP_SETTINGS_BASE* cfg = config();
 
-    if( cfg )
-        SaveSettings( cfg );    // virtual, wxFrame specific
+    if( event.GetId() == wxEVT_QUERY_END_SESSION 
+        || event.GetId() == wxEVT_END_SESSION )
+    {
+        // End session means the OS is going to terminate us
+        m_isNonUserClose = true;
+    }
 
-    event.Skip();       // we did not "handle" the event, only eavesdropped on it.
+    if( canCloseWindow( event ) )
+    {
+        m_isClosing = true;
+        APP_SETTINGS_BASE* cfg = config();
+
+        if( cfg )
+            SaveSettings( cfg );    // virtual, wxFrame specific
+
+        doCloseWindow();
+
+        Destroy();
+    }
+    else
+    {
+        event.Veto();
+    }
 }
 
 
@@ -430,15 +450,25 @@ void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 }
 
 
-void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
+void EDA_BASE_FRAME::LoadWindowState( const wxString& aFileName )
 {
-    m_FramePos.x  = aCfg->pos_x;
-    m_FramePos.y  = aCfg->pos_y;
-    m_FrameSize.x = aCfg->size_x;
-    m_FrameSize.y = aCfg->size_y;
+    const PROJECT_FILE_STATE* state = Prj().GetLocalSettings().GetFileState( aFileName );
+    if( state != nullptr )
+    {
+        LoadWindowState( state->window );
+    }
+}
+
+
+void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
+{
+    m_FramePos.x  = aState.pos_x;
+    m_FramePos.y  = aState.pos_y;
+    m_FrameSize.x = aState.size_x;
+    m_FrameSize.y = aState.size_y;
 
     wxLogTrace( traceDisplayLocation, "Config position (%d, %d) with size (%d, %d)",
-            m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+        m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Ensure minimum size is set if the stored config was zero-initialized
     if( m_FrameSize.x < s_minsize_x || m_FrameSize.y < s_minsize_y )
@@ -451,7 +481,7 @@ void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
 
     wxLogTrace( traceDisplayLocation, "Number of displays: %d", wxDisplay::GetCount() );
 
-    if( aCfg->display >= wxDisplay::GetCount() )
+    if( aState.display >= wxDisplay::GetCount() )
     {
         wxLogTrace( traceDisplayLocation, "Previous display not found" );
 
@@ -459,7 +489,7 @@ void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
         // Warning wxDisplay has 2 ctor variants. the parameter needs a type:
         const unsigned int index = 0;
         wxDisplay display( index );
-        wxRect    clientSize = display.GetClientArea();
+        wxRect    clientSize = display.GetGeometry();
 
         m_FramePos = wxDefaultPosition;
 
@@ -475,11 +505,11 @@ void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
         wxPoint upperRight( m_FramePos.x + m_FrameSize.x, m_FramePos.y );
         wxPoint upperLeft( m_FramePos.x, m_FramePos.y );
 
-        wxDisplay display( aCfg->display );
-        wxRect clientSize  = display.GetClientArea();
+        wxDisplay display( aState.display );
+        wxRect clientSize = display.GetClientArea();
 
-// The percentage size (represented in decimal) of the region around the screen's border where
-// an upper corner is not allowed
+        // The percentage size (represented in decimal) of the region around the screen's border where
+        // an upper corner is not allowed
 #define SCREEN_BORDER_REGION 0.10
 
         int yLim      = clientSize.y + ( clientSize.height * ( 1.0 - SCREEN_BORDER_REGION ) );
@@ -523,11 +553,17 @@ void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
     m_NormalFramePos  = m_FramePos;
 
     // Maximize if we were maximized before
-    if( aCfg->maximized )
+    if( aState.maximized )
     {
         wxLogTrace( traceDisplayLocation, "Maximizing window" );
         Maximize();
     }
+}
+
+
+void EDA_BASE_FRAME::LoadWindowSettings( const WINDOW_SETTINGS* aCfg )
+{
+    LoadWindowState( aCfg->state );
 
     if( m_hasAutoSave )
         m_autoSaveInterval = Pgm().GetCommonSettings()->m_System.autosave_interval;
@@ -560,12 +596,12 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
         m_FramePos  = GetPosition();
     }
 
-    aCfg->pos_x     = m_FramePos.x;
-    aCfg->pos_y     = m_FramePos.y;
-    aCfg->size_x    = m_FrameSize.x;
-    aCfg->size_y    = m_FrameSize.y;
-    aCfg->maximized = IsMaximized();
-    aCfg->display   = wxDisplay::GetFromWindow( this );
+    aCfg->state.pos_x     = m_FramePos.x;
+    aCfg->state.pos_y     = m_FramePos.y;
+    aCfg->state.size_x    = m_FrameSize.x;
+    aCfg->state.size_y    = m_FrameSize.y;
+    aCfg->state.maximized = IsMaximized();
+    aCfg->state.display   = wxDisplay::GetFromWindow( this );
 
     wxLogTrace( traceDisplayLocation, "Saving window maximized: %s", IsMaximized() ? "true" : "false" );
     wxLogTrace( traceDisplayLocation, "Saving config position (%d, %d) with size (%d, %d)",
@@ -601,6 +637,12 @@ void EDA_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 void EDA_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     SaveWindowSettings( GetWindowSettings( aCfg ) );
+
+    bool fileOpen = m_isClosing && m_isNonUserClose;
+
+    wxFileName rfn( GetCurrentFileName() );
+    rfn.MakeRelativeTo( Prj().GetProjectPath() );
+    Prj().GetLocalSettings().SaveFileState( rfn.GetFullPath(), &aCfg->m_Window, fileOpen );
 
     // Save the recently used files list
     if( m_fileHistory )
@@ -657,7 +699,7 @@ void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName, FILE_HISTO
     aFileHistory->AddFileToHistory( FullFileName );
 
     // Update the menubar to update the file history menu
-    if( !m_shuttingDown && GetMenuBar() )
+    if( !m_isClosing && GetMenuBar() )
     {
         ReCreateMenuBar();
         GetMenuBar()->Refresh();

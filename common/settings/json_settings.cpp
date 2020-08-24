@@ -448,6 +448,66 @@ nlohmann::json::json_pointer JSON_SETTINGS::PointerFromString( std::string aPath
 }
 
 
+bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, 
+                                  wxString& aTarget )
+{
+    nlohmann::json::json_pointer ptr = PointerFromString( aPath );
+
+    if( aObj.contains( ptr ) && aObj.at( ptr ).is_string() )
+    {
+        aTarget = aObj.at( ptr ).get<wxString>();
+        return true;
+    }
+
+    return false;
+}
+
+
+bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, 
+                                  bool& aTarget )
+{
+    nlohmann::json::json_pointer ptr = PointerFromString( aPath );
+
+    if( aObj.contains( ptr ) && aObj.at( ptr ).is_boolean() )
+    {
+        aTarget = aObj.at( ptr ).get<bool>();
+        return true;
+    }
+
+    return false;
+}
+
+
+bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, 
+                                  int& aTarget )
+{
+    nlohmann::json::json_pointer ptr = PointerFromString( aPath );
+
+    if( aObj.contains( ptr ) && aObj.at( ptr ).is_number_integer() )
+    {
+        aTarget = aObj.at( ptr ).get<int>();
+        return true;
+    }
+
+    return false;
+}
+
+
+bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, 
+                                  unsigned int& aTarget )
+{
+    nlohmann::json::json_pointer ptr = PointerFromString( aPath );
+
+    if( aObj.contains( ptr ) && aObj.at( ptr ).is_number_unsigned() )
+    {
+        aTarget = aObj.at( ptr ).get<unsigned int>();
+        return true;
+    }
+
+    return false;
+}
+
+
 template<typename ValueType>
 bool JSON_SETTINGS::fromLegacy( wxConfigBase* aConfig, const std::string& aKey,
                              const std::string& aDest )

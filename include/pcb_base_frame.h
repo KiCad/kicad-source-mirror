@@ -211,7 +211,6 @@ public:
     void FocusOnItem( BOARD_ITEM* aItem );
 
     // General
-    virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void ReCreateOptToolbar() override { }
     virtual void ShowChangedLanguage() override;
     virtual void ReCreateMenuBar() override;

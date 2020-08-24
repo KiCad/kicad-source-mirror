@@ -103,24 +103,17 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 if( aVal.empty() || !aVal.is_object() )
                     return;
 
-                auto setIfPresent =
-                        [&aVal]( const std::string& aKey, bool& aTarget )
-                        {
-                            if( aVal.contains( aKey ) && aVal.at( aKey ).is_boolean() )
-                                aTarget = aVal.at( aKey ).get<bool>();
-                        };
-
-                setIfPresent( "lockedItems", m_SelectionFilter.lockedItems );
-                setIfPresent( "footprints", m_SelectionFilter.footprints );
-                setIfPresent( "text", m_SelectionFilter.text );
-                setIfPresent( "tracks", m_SelectionFilter.tracks );
-                setIfPresent( "vias", m_SelectionFilter.vias );
-                setIfPresent( "pads", m_SelectionFilter.pads );
-                setIfPresent( "graphics", m_SelectionFilter.graphics );
-                setIfPresent( "zones", m_SelectionFilter.zones );
-                setIfPresent( "keepouts", m_SelectionFilter.keepouts );
-                setIfPresent( "dimensions", m_SelectionFilter.dimensions );
-                setIfPresent( "otherItems", m_SelectionFilter.otherItems );
+                SetIfPresent( aVal, "lockedItems", m_SelectionFilter.lockedItems );
+                SetIfPresent( aVal, "footprints", m_SelectionFilter.footprints );
+                SetIfPresent( aVal, "text", m_SelectionFilter.text );
+                SetIfPresent( aVal, "tracks", m_SelectionFilter.tracks );
+                SetIfPresent( aVal, "vias", m_SelectionFilter.vias );
+                SetIfPresent( aVal, "pads", m_SelectionFilter.pads );
+                SetIfPresent( aVal, "graphics", m_SelectionFilter.graphics );
+                SetIfPresent( aVal, "zones", m_SelectionFilter.zones );
+                SetIfPresent( aVal, "keepouts", m_SelectionFilter.keepouts );
+                SetIfPresent( aVal, "dimensions", m_SelectionFilter.dimensions );
+                SetIfPresent( aVal, "otherItems", m_SelectionFilter.otherItems );
             },
             {
                 { "lockedItems", true },
@@ -163,6 +156,65 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
             &m_ZoneDisplayMode, ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_OUTLINED,
             ZONE_DISPLAY_MODE::SHOW_FILLED ) );
 #endif
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "project.files",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::array();
+
+                for( PROJECT_FILE_STATE& fileState : m_files )
+                {
+                    nlohmann::json file;
+                    file["name"] = fileState.fileName;
+                    file["open"] = fileState.open;
+
+                    nlohmann::json window;
+                    window["maximized"] = fileState.window.maximized;
+                    window["size_x"]    = fileState.window.size_x;
+                    window["size_y"]    = fileState.window.size_y;
+                    window["pos_x"]     = fileState.window.pos_x;
+                    window["pos_y"]     = fileState.window.pos_y;
+                    window["display"]   = fileState.window.display;
+
+                    file["window"] = window;
+
+                    ret.push_back( file );
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aVal )
+            {
+                if( !aVal.is_array() || aVal.empty() )
+                {
+                    return;
+                }
+
+                for( const nlohmann::json& file : aVal )
+                {
+                    PROJECT_FILE_STATE fileState;
+                    try
+                    {
+                        SetIfPresent( file, "name", fileState.fileName );
+                        SetIfPresent( file, "open", fileState.open );
+                        SetIfPresent( file, "window.size_x", fileState.window.size_x );
+                        SetIfPresent( file, "window.size_y", fileState.window.size_y );
+                        SetIfPresent( file, "window.pos_x", fileState.window.pos_x );
+                        SetIfPresent( file, "window.pos_y", fileState.window.pos_y );
+                        SetIfPresent( file, "window.maximized", fileState.window.maximized );
+                        SetIfPresent( file, "window.display", fileState.window.display );
+
+                        m_files.push_back( fileState );
+                    }
+                    catch( ... )
+                    {
+                        // Non-integer or out of range entry in the array; ignore
+                    }
+                }
+
+            },
+            {
+            } ) );
 }
 
 
@@ -228,4 +280,51 @@ bool PROJECT_LOCAL_SETTINGS::migrateSchema1to2()
     }
     
     return true;
+}
+
+
+const PROJECT_FILE_STATE* PROJECT_LOCAL_SETTINGS::GetFileState( const wxString& aFileName )
+{
+    auto it = std::find_if( m_files.begin(), m_files.end(), 
+                            [&aFileName]( const PROJECT_FILE_STATE &a )
+                            {
+                                return a.fileName == aFileName;
+                            } );
+
+    if( it != m_files.end() )
+    {
+        return &( *it );
+    }
+
+    return nullptr;
+}
+
+
+void PROJECT_LOCAL_SETTINGS::SaveFileState( const wxString& aFileName, const WINDOW_SETTINGS* aWindowCfg, 
+                                            bool aOpen )
+{
+    auto it = std::find_if( m_files.begin(), m_files.end(),
+                            [&aFileName]( const PROJECT_FILE_STATE& a ) 
+                            { 
+                                return a.fileName == aFileName; 
+                            } );
+
+    if( it == m_files.end() )
+    {
+        PROJECT_FILE_STATE fileState;
+        fileState.fileName = aFileName;
+
+        m_files.push_back( fileState );
+
+        it = m_files.end() - 1;
+    }
+
+    ( *it ).window = aWindowCfg->state;
+    ( *it ).open   = aOpen;
+}
+
+
+void PROJECT_LOCAL_SETTINGS::ClearFileState()
+{
+    m_files.clear();
 }

@@ -45,7 +45,8 @@ KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType
         long aStyle, const wxString& aWdoName ) :
     EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aWdoName, aKiway ),
     m_modal( false ),
-    m_modal_loop( 0 ), m_modal_resultant_parent( 0 )
+    m_modal_loop( 0 ),
+    m_modal_resultant_parent( 0 )
 {
     m_modal_ret_val = 0;
 }

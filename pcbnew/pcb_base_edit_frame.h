@@ -47,7 +47,7 @@ public:
 
     bool TryBefore( wxEvent& aEvent ) override;
 
-    void OnCloseWindow( wxCloseEvent& aEvent ) override;
+    void doCloseWindow() override;
 
     /**
      * If a library name is given, creates a new footprint library in the project folder

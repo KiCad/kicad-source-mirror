@@ -127,6 +127,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->m_Backup.min_interval       = m_backupMinInterval->GetValue() * 60;
     commonSettings->m_Backup.limit_total_size   = m_backupLimitTotalSize->GetValue() * 1024 * 1024;
 
+    commonSettings->m_Session.remember_open_files = m_cbRememberOpenFiles->GetValue();
+
     Pgm().SetEditorName( m_textEditorPath->GetValue() );
 
     Pgm().SetPdfBrowserName( m_PDFViewerPath->GetValue() );
@@ -194,6 +196,8 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
     m_PreferSelectToDrag->SetValue( aSettings.m_Input.prefer_select_to_drag );
     m_warpMouseOnMove->SetValue( aSettings.m_Input.warp_mouse_on_move );
     m_NonImmediateActions->SetValue( !aSettings.m_Input.immediate_actions );
+
+    m_cbRememberOpenFiles->SetValue( aSettings.m_Session.remember_open_files );
 
     m_cbBackupEnabled->SetValue( aSettings.m_Backup.enabled );
     m_cbBackupAutosave->SetValue( aSettings.m_Backup.backup_on_autosave );

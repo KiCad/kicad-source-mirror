@@ -213,7 +213,8 @@ public:
     void UpdateAfterSymbolProperties( wxString* aOldName = nullptr );
     void RebuildSymbolUnitsList();
 
-    void OnCloseWindow( wxCloseEvent& Event );
+    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
+    void doCloseWindow() override;
     void OnExitKiCad( wxCommandEvent& event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;

@@ -191,7 +191,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, EDA_DRAW_FRAME::OnSockRequestServer )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT, EDA_DRAW_FRAME::OnSockRequest )
 
-    EVT_CLOSE( SCH_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( SCH_EDIT_FRAME::OnSize )
 
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, SCH_EDIT_FRAME::OnLoadFile )
@@ -576,40 +575,39 @@ void SCH_EDIT_FRAME::HardRedraw()
 }
 
 
-void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
+bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
     if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && Schematic().GetSheets().IsModified() )
+        && Schematic().GetSheets().IsModified() )
     {
-        aEvent.Veto();
-        return;
+        return false;
     }
 
     if( Kiface().IsSingle() )
     {
         LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
         if( libeditFrame && !libeditFrame->Close() )   // Can close component editor?
-            return;
+            return false;
 
         LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
         if( viewlibFrame && !viewlibFrame->Close() )   // Can close component viewer?
-            return;
+            return false;
 
         viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, false );
 
         if( viewlibFrame && !viewlibFrame->Close() )   // Can close modal component viewer?
-            return;
+            return false;
     }
 
     SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
 
     if( simFrame && !simFrame->Close() )   // Can close the simulator?
-        return;
+        return false;
 
     // We may have gotten multiple events; don't clean up twice
     if( !Schematic().IsValid() )
-        return;
+        return false;
 
     SCH_SHEET_LIST sheetlist = Schematic().GetSheets();
 
@@ -621,15 +619,17 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
                                    [&]()->bool { return SaveProject(); } ) )
         {
-            aEvent.Veto();
-            return;
+            return false;
         }
     }
 
-    //
-    // OK, we're really closing now.  No more returns after this.
-    //
-    m_shuttingDown = true;
+    return true;
+}
+
+
+void SCH_EDIT_FRAME::doCloseWindow()
+{
+    SCH_SHEET_LIST sheetlist = Schematic().GetSheets();
 
     // Shutdown all running tools ( and commit any pending change )
     if( m_toolManager )

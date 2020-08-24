@@ -307,7 +307,6 @@ void CVPCB_MAINFRAME::setupEventHandlers()
             }, wxID_CANCEL );
 
     // Connect the handlers for the close events
-    Bind( wxEVT_CLOSE_WINDOW, &CVPCB_MAINFRAME::OnCloseWindow, this );
     Bind( wxEVT_MENU,
             [this]( wxCommandEvent& )
             {
@@ -336,26 +335,30 @@ void CVPCB_MAINFRAME::setupEventHandlers()
 }
 
 
-void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& aEvent )
+bool CVPCB_MAINFRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     if( m_modified )
     {
         // Shutdown blocks must be determined and vetoed as early as possible
         if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
         {
-            aEvent.Veto();
-            return;
+            return false;
         }
 
         if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified. "
                                             "Save changes?" ),
                                    [&]()->bool { return SaveFootprintAssociation( false ); } ) )
         {
-            aEvent.Veto();
-            return;
+            return false;
         }
     }
 
+    return true;
+}
+
+
+void CVPCB_MAINFRAME::doCloseWindow()
+{
     // Close module display frame
     if( GetFootprintViewerFrame() )
         GetFootprintViewerFrame()->Close( true );
@@ -364,10 +367,6 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
     // clear highlight symbol in schematic:
     SendMessageToEESCHEMA( true );
-
-    // Skip the close event. Looks like needed to have the close event sent to the
-    // root class EDA_BASE_FRAME, and save config
-    aEvent.Skip();
 }
 
 

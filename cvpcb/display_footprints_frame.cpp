@@ -219,7 +219,7 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow( wxCloseEvent& event )
+void DISPLAY_FOOTPRINTS_FRAME::doCloseWindow()
 {
     Destroy();
 }

@@ -144,6 +144,10 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     if( GetBoard()->GetDesignSettings().IsLayerEnabled( localSettings.m_ActiveLayer ) )
         SetActiveLayer( localSettings.m_ActiveLayer );
 
+    wxFileName fn( GetCurrentFileName() );
+    fn.MakeRelativeTo( Prj().GetProjectPath() );
+    LoadWindowState( fn.GetFullPath() );
+
     return true;
 }
 

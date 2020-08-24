@@ -69,7 +69,6 @@ using namespace std::placeholders;
 
 BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     // Window events
-    EVT_CLOSE( FOOTPRINT_VIEWER_FRAME::OnCloseWindow )
     EVT_SIZE( FOOTPRINT_VIEWER_FRAME::OnSize )
     EVT_ACTIVATE( FOOTPRINT_VIEWER_FRAME::OnActivate )
 
@@ -334,7 +333,7 @@ void FOOTPRINT_VIEWER_FRAME::setupUIConditions()
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void FOOTPRINT_VIEWER_FRAME::doCloseWindow()
 {
     // A workaround to avoid flicker, in modal mode when modview frame is destroyed,
     // when the aui toolbar is not docked (i.e. shown in a miniframe)

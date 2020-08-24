@@ -108,11 +108,8 @@ public:
      */
     void OnExit( wxCommandEvent& aEvent );
 
-    /*
-     * Function OnCloseWindow
-     * Event handler for the close event
-     */
-    void OnCloseWindow( wxCloseEvent& aEvent );
+    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
+    void doCloseWindow() override;
 
     // The Tool Framework initalization
     void setupTools();

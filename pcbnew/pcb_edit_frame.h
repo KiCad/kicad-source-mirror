@@ -240,6 +240,9 @@ protected:
      */
     bool fixEagleNets( const std::unordered_map<wxString, wxString>& aRemap );
 
+    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
+    void doCloseWindow() override;
+
     // protected so that PCB::IFACE::CreateWindow() is the only factory.
     PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
@@ -422,7 +425,6 @@ public:
      */
     void ResolveDRCExclusions();
 
-    void OnCloseWindow( wxCloseEvent& Event ) override;
     void Process_Special_Functions( wxCommandEvent& event );
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
 

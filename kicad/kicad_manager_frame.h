@@ -83,7 +83,9 @@ public:
 
     ~KICAD_MANAGER_FRAME();
 
-    void OnCloseWindow( wxCloseEvent& Event );
+    void OnIdle( wxIdleEvent& event );
+
+    void doCloseWindow() override;
     void OnSize( wxSizeEvent& event );
 
     void OnArchiveFiles( wxCommandEvent& event );
@@ -196,6 +198,8 @@ private:
     wxString help_name() override;
 
     void language_change( wxCommandEvent& event );
+
+    bool m_openSavedWindows;
 
 private:
     TREE_PROJECT_FRAME* m_leftWin;

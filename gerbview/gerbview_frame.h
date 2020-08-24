@@ -212,7 +212,7 @@ public:
     GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~GERBVIEW_FRAME();
 
-    void OnCloseWindow( wxCloseEvent& Event );
+    void doCloseWindow() override;
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl ) override;
 

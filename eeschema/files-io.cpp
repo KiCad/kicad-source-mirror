@@ -320,6 +320,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // update some of the needed schematic settings such as drawing defaults
     LoadProjectSettings();
 
+    wxFileName rfn( GetCurrentFileName() );
+    rfn.MakeRelativeTo( Prj().GetProjectPath() );
+    LoadWindowState( rfn.GetFullPath() );
+
     SetShutdownBlockReason( _( "Schematic file changes are unsaved" ) );
     if( Kiface().IsSingle() )
     {

@@ -409,7 +409,7 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
     if( frame == NULL ) // Already closed
         return true;
 
-    if( frame->Close( doForce ) )
+    if( frame->NonUserClose( doForce ) )
         return true;
 
     return false;

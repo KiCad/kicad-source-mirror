@@ -77,7 +77,6 @@
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
-    EVT_CLOSE( FOOTPRINT_EDIT_FRAME::OnCloseWindow )
     EVT_MENU( wxID_CLOSE, FOOTPRINT_EDIT_FRAME::CloseModuleEditor )
     EVT_MENU( wxID_EXIT, FOOTPRINT_EDIT_FRAME::OnExitKiCad )
 
@@ -536,7 +535,7 @@ const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents() const
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
+bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     if( IsContentModified() )
     {
@@ -544,7 +543,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
         {
             aEvent.Veto();
-            return;
+            return false;
         }
 
         wxString footprintName = GetBoard()->GetFirstModule()->GetFPID().GetLibItemName();
@@ -557,10 +556,17 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
                                    } ) )
         {
             aEvent.Veto();
-            return;
+            return false;
         }
     }
 
+    return true;
+}
+
+
+void FOOTPRINT_EDIT_FRAME::doCloseWindow()
+{
+    // No more vetos
     GetCanvas()->SetEventDispatcher( NULL );
     GetCanvas()->StopDrawing();
 
@@ -573,9 +579,6 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     Pgm().GetSettingsManager().FlushAndRelease( GetSettings() );
 
     Clear_Pcb( false );
-
-    // Close the editor
-    aEvent.Skip();
 }
 
 

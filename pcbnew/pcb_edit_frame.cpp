@@ -109,7 +109,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, PCB_EDIT_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, PCB_EDIT_FRAME::OnSelectGrid )
 
-    EVT_CLOSE( PCB_EDIT_FRAME::OnCloseWindow )
+    EVT_SIZE( PCB_EDIT_FRAME::OnSize )
 
     EVT_TOOL( ID_MENU_RECOVER_BOARD_AUTOSAVE, PCB_EDIT_FRAME::Files_io )
 
@@ -789,20 +789,19 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
 }
 
 
-void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
+bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
     if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && IsContentModified() )
+        && IsContentModified() )
     {
-        aEvent.Veto();
-        return;
+        return false;
     }
 
     // First close the DRC dialog.  For some reason, if the board editor frame is destroyed
     // when the DRC dialog currently open, Pcbnew crashes, at least on Windows.
     DIALOG_DRC* open_dlg = static_cast<DIALOG_DRC*>(
-                                        wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME ) );
+        wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME ) );
 
     if( open_dlg )
         open_dlg->Close( true );
@@ -813,15 +812,17 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         wxString msg = _( "Save changes to \"%s\" before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
-                                   [&]()->bool { return Files_io_from_id( ID_SAVE_BOARD ); } ) )
+            [&]()->bool { return Files_io_from_id( ID_SAVE_BOARD ); } ) )
         {
-            aEvent.Veto();
-            return;
+            return false;
         }
     }
 
-    m_shuttingDown = true;
+    return true;
+}
 
+void PCB_EDIT_FRAME::doCloseWindow()
+{
     // On Windows 7 / 32 bits, on OpenGL mode only, Pcbnew crashes
     // when closing this frame if a footprint was selected, and the footprint editor called
     // to edit this footprint, and when closing pcbnew if this footprint is still selected
@@ -873,10 +874,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     // want any paint event
     Show( false );
 
-    PCB_BASE_EDIT_FRAME::OnCloseWindow( aEvent );
-
-    // Close frame:
-    aEvent.Skip();
+    PCB_BASE_EDIT_FRAME::doCloseWindow();
 }
 
 

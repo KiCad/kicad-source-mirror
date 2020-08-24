@@ -181,12 +181,8 @@ public:
      */
     void OnSelectComponent( wxListEvent& event );
 
-    /**
-     * OnCloseWindow
-     *
-     * Called by a close event to close the window
-     */
-    void OnCloseWindow( wxCloseEvent& Event );
+    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
+    void doCloseWindow() override;
 
     /*
      * Functions to rebuild the toolbars and menubars

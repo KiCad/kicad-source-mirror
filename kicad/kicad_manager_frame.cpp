@@ -38,6 +38,7 @@
 #include <launch_ext.h>
 #include <panel_hotkeys_editor.h>
 #include <reporter.h>
+#include <project/project_local_settings.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/action_manager.h>
@@ -48,6 +49,7 @@
 #include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/app_progress_dialog.h>
 
 #ifdef __WXMAC__
 #include <MacTypes.h>
@@ -65,7 +67,7 @@
 BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     // Window events
     EVT_SIZE( KICAD_MANAGER_FRAME::OnSize )
-    EVT_CLOSE( KICAD_MANAGER_FRAME::OnCloseWindow )
+    EVT_IDLE( KICAD_MANAGER_FRAME::OnIdle )
 
     // Menu events
     EVT_MENU( wxID_EXIT, KICAD_MANAGER_FRAME::OnExit )
@@ -322,7 +324,7 @@ void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
 }
 
 
-void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
+void KICAD_MANAGER_FRAME::doCloseWindow()
 {
 #ifdef _WINDOWS_
     // For some obscure reason, on Windows, when killing Kicad from the Windows task manager
@@ -343,8 +345,6 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     // Save the list of open projects before closing the project
     KICAD_SETTINGS* settings = kicadSettings();
     settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
-
-    aEvent.SetCanVeto( true );
 
     if( CloseProject( true ) )
     {
@@ -367,7 +367,6 @@ void KICAD_MANAGER_FRAME::OnExit( wxCommandEvent& event )
 
 bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
 {
-
     if( !Kiway().PlayersClose( false ) )
         return false;
 
@@ -414,6 +413,8 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 
     Pgm().GetSettingsManager().LoadProject( aProjectFileName.GetFullPath() );
 
+    LoadWindowState( aProjectFileName.GetFullName() );
+
     if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?
 
@@ -431,6 +432,7 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     PrintPrjInfo();
 
     KIPLATFORM::APP::RegisterApplicationRestart( aProjectFileName.GetFullPath() );
+    m_openSavedWindows = true;
 }
 
 
@@ -513,6 +515,8 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
     }
 
     UpdateFileHistory( aProjectFileName.GetFullPath() );
+
+    m_openSavedWindows = true;
 }
 
 
@@ -647,4 +651,56 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
 bool KICAD_MANAGER_FRAME::IsProjectActive()
 {
     return m_active_project;
+}
+
+void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
+{
+    /**
+     * We start loading the saved previously open windows on idle to avoid locking up the GUI earlier in project loading
+     * This gives us the visual effect of a opened KiCad project but with a "busy" progress reporter
+     */
+    if( m_openSavedWindows )
+    {
+        m_openSavedWindows = false;
+        if ( Pgm().GetCommonSettings()->m_Session.remember_open_files )
+        {
+            int previousOpenCount = std::count_if( Prj().GetLocalSettings().m_files.begin(), 
+                                                   Prj().GetLocalSettings().m_files.end(),
+                                                   [&]( const PROJECT_FILE_STATE& f )
+                                                   {
+                                                       return !f.fileName.EndsWith( ProjectFileExtension ) && f.open;
+                                                   } );
+            if ( previousOpenCount > 0 )
+            {
+                APP_PROGRESS_DIALOG progressReporter( _( "Restoring session" ), wxEmptyString, previousOpenCount, this );
+
+                int i = 0;
+                for( const PROJECT_FILE_STATE& file : Prj().GetLocalSettings().m_files )
+                {
+                    if( file.open )
+                    {
+                        progressReporter.Update(
+                            i++, wxString::Format( _( "Restoring \"%s\"" ), file.fileName ) );
+
+                        wxFileName fn( file.fileName );
+                        if( fn.GetExt() == LegacySchematicFileExtension
+                                || fn.GetExt() == KiCadSchematicFileExtension )
+                        {
+                            GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editSchematic, true );
+                        }
+                        else if( fn.GetExt() == LegacyPcbFileExtension
+                                 || fn.GetExt() == KiCadPcbFileExtension )
+                        {
+                            GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editPCB, true );
+                        }
+                    }
+
+                    wxYield();
+                }
+            }
+        }
+
+        // clear file states regardless if we opened windows or not due to setting
+        Prj().GetLocalSettings().ClearFileState();
+    }
 }

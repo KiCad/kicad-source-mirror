@@ -63,7 +63,7 @@ PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
 }
 
 
-void PCB_BASE_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
+void PCB_BASE_EDIT_FRAME::doCloseWindow()
 {
     SETTINGS_MANAGER* mgr = GetSettingsManager();
 

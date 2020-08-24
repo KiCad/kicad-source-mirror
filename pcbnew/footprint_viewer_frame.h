@@ -121,7 +121,7 @@ private:
      */
     void UpdateTitle();
 
-    void OnCloseWindow( wxCloseEvent& Event ) override;
+    void doCloseWindow() override;
     void CloseFootprintViewer( wxCommandEvent& event );
     void OnExitKiCad( wxCommandEvent& event );
 

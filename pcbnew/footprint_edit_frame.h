@@ -89,7 +89,8 @@ public:
 
     const BOX2I GetDocumentExtents() const override;
 
-    void OnCloseWindow( wxCloseEvent& Event ) override;
+    bool canCloseWindow( wxCloseEvent& Event ) override;
+    void doCloseWindow() override;
     void CloseModuleEditor( wxCommandEvent& Event );
     void OnExitKiCad( wxCommandEvent& aEvent );
 

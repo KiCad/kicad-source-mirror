@@ -80,6 +80,11 @@ public:
         int opengl_aa_mode;
     };
 
+    struct SESSION
+    {
+        bool remember_open_files;
+    };
+
     struct SYSTEM
     {
         int autosave_interval;
@@ -113,6 +118,8 @@ public:
     INPUT m_Input;
 
     GRAPHICS m_Graphics;
+
+    SESSION m_Session;
 
     SYSTEM m_System;
 

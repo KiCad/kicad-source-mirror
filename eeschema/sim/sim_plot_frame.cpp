@@ -166,7 +166,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     updateNetlistExporter();
 
-    Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( SIM_PLOT_FRAME::onClose ), NULL, this );
     Connect( EVT_SIM_UPDATE, wxCommandEventHandler( SIM_PLOT_FRAME::onSimUpdate ), NULL, this );
     Connect( EVT_SIM_REPORT, wxCommandEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
     Connect( EVT_SIM_STARTED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimStarted ), NULL, this );
@@ -1409,7 +1408,7 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
 }
 
 
-void SIM_PLOT_FRAME::onClose( wxCloseEvent& aEvent )
+void SIM_PLOT_FRAME::doCloseWindow()
 {
     SaveSettings( config() );
 

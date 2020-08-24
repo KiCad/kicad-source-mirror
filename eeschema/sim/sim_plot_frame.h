@@ -328,7 +328,7 @@ private:
     void onTune( wxCommandEvent& event );
     void onShowNetlist( wxCommandEvent& event );
 
-    void onClose( wxCloseEvent& aEvent );
+    void doCloseWindow() override;
 
     void onCursorUpdate( wxCommandEvent& aEvent );
     void onSimUpdate( wxCommandEvent& aEvent );

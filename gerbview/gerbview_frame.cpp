@@ -222,8 +222,10 @@ GERBVIEW_FRAME::~GERBVIEW_FRAME()
 }
 
 
-void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void GERBVIEW_FRAME::doCloseWindow()
 {
+    // No more vetos
+    m_isClosing = true;
     GetCanvas()->StopDrawing();
     GetCanvas()->GetView()->Clear();
 

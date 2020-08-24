@@ -278,6 +278,18 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	rightSizer->Add( sbSizer41, 1, wxALL|wxEXPAND, 5 );
 
+	wxStaticBoxSizer* sbSizer5;
+	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Session") ), wxVERTICAL );
+
+	m_cbRememberOpenFiles = new wxCheckBox( sbSizer5->GetStaticBox(), wxID_ANY, _("Remember open files for next project launch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRememberOpenFiles->SetValue(true);
+	m_cbRememberOpenFiles->SetToolTip( _("If checked, launching a project will also launch tools such as eeschema and pcbnew with previously open files") );
+
+	sbSizer5->Add( m_cbRememberOpenFiles, 0, wxALL, 5 );
+
+
+	rightSizer->Add( sbSizer5, 0, wxALL|wxEXPAND, 5 );
+
 
 	bPanelSizer->Add( rightSizer, 0, wxEXPAND|wxALL, 5 );
 

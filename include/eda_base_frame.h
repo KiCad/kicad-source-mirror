@@ -79,6 +79,7 @@ class SETTINGS_MANAGER;
 class APP_SETTINGS_BASE;
 class WX_INFOBAR;
 struct WINDOW_SETTINGS;
+struct WINDOW_STATE;
 
 enum id_librarytype {
     LIBRARY_TYPE_EESCHEMA,
@@ -163,10 +164,11 @@ protected:
 
     EDA_UNITS       m_userUnits;
 
-    bool            m_shuttingDown;
-
     // Map containing the UI update handlers registered with wx for each action
     std::map<int, UIUpdateHandler> m_uiUpdateMap;
+    bool            m_isClosing;            // Set by the close window event handler after frames are asked if they can close
+                                            // Allows other functions when called to know our state is cleanup
+    bool            m_isNonUserClose;       // Set by NonUserClose() to indicate that the user did not request the current close
 
     ///> Default style flags used for wxAUI toolbars
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
@@ -205,6 +207,9 @@ protected:
      * @return true if the auto save was successful otherwise false.
      */
     virtual bool doAutoSave();
+
+    virtual bool canCloseWindow( wxCloseEvent& aCloseEvent ) { return true; }
+    virtual void doCloseWindow() { }
 
     /**
      * Called when when the units setting has changed to allow for any derived classes
@@ -351,12 +356,14 @@ public:
      */
     virtual void InstallPreferences( PAGED_DIALOG* , PANEL_HOTKEYS_EDITOR* ) { }
 
+
+    void LoadWindowState( const wxString& aFileName );
     /**
      * Loads window settings from the given settings object
      * Normally called by LoadSettings unless the window in question is a child window that
      * stores its settings somewhere other than APP_SETTINGS_BASE::m_Window
      */
-    void LoadWindowSettings( WINDOW_SETTINGS* aCfg );
+    void LoadWindowSettings( const WINDOW_SETTINGS* aCfg );
 
     /**
      * Saves window settings to the given settings object
@@ -388,6 +395,11 @@ public:
      * @param aCfg is this frame's config object
      */
     virtual WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg );
+
+    /**
+    * Load frame state info from a configuration file
+    */
+    virtual void LoadWindowState( const WINDOW_STATE& aState );
 
     /**
      * @return a base name prefix used in Load/Save settings to build the full name of keys
@@ -644,6 +656,8 @@ public:
     virtual int GetRedoCommandCount() const { return m_redoList.m_CommandsList.size(); }
 
     int GetMaxUndoItems() const { return m_UndoRedoCountMax; }
+
+    bool NonUserClose( bool aForce ) { m_isNonUserClose = true; return Close( aForce ); };
 };
 
 

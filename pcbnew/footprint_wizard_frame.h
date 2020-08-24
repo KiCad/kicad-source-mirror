@@ -180,7 +180,7 @@ private:
     void                DisplayWizardInfos();
 
 
-    void                OnCloseWindow( wxCloseEvent& Event ) override;
+    void                doCloseWindow() override;
     void                ReCreateHToolbar() override;
     void                ReCreateVToolbar() override;
     void                ClickOnPageList( wxCommandEvent& event );

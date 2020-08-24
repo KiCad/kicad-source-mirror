@@ -250,22 +250,22 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_PlotPanel.hpgl_origin, false ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.window.pos_x",
-            &m_Simulator.window.pos_x, 0 ) );
+            &m_Simulator.window.state.pos_x, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.window.pos_y",
-            &m_Simulator.window.pos_y, 0 ) );
+            &m_Simulator.window.state.pos_y, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.window.size_x",
-            &m_Simulator.window.size_x, 500 ) );
+            &m_Simulator.window.state.size_x, 500 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.window.size_y",
-            &m_Simulator.window.size_y, 400 ) );
+            &m_Simulator.window.state.size_y, 400 ) );
 
     m_params.emplace_back( new PARAM<unsigned int>( "simulator.window.display",
-            &m_Simulator.window.display, 0 ) );
+            &m_Simulator.window.state.display, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "simulator.window.maximized",
-            &m_Simulator.window.maximized, false ) );
+            &m_Simulator.window.state.maximized, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "simulator.window.perspective",
             &m_Simulator.window.perspective, "" ) );
@@ -307,22 +307,22 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_RescueNeverShow, false ) );
 
     m_params.emplace_back( new PARAM<int>( "lib_view.window.pos_x",
-            &m_LibViewPanel.window.pos_x, 0 ) );
+            &m_LibViewPanel.window.state.pos_x, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "lib_view.window.pos_y",
-            &m_LibViewPanel.window.pos_y, 0 ) );
+            &m_LibViewPanel.window.state.pos_y, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "lib_view.window.size_x",
-            &m_LibViewPanel.window.size_x, 500 ) );
+            &m_LibViewPanel.window.state.size_x, 500 ) );
 
     m_params.emplace_back( new PARAM<int>( "lib_view.window.size_y",
-            &m_LibViewPanel.window.size_y, 400 ) );
+            &m_LibViewPanel.window.state.size_y, 400 ) );
 
     m_params.emplace_back( new PARAM<unsigned int>( "lib_view.window.display",
-            &m_LibViewPanel.window.display, 0 ) );
+            &m_LibViewPanel.window.state.display, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "lib_view.window.maximized",
-            &m_LibViewPanel.window.maximized, false ) );
+            &m_LibViewPanel.window.state.maximized, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "lib_view.window.perspective",
             &m_LibViewPanel.window.perspective, "" ) );

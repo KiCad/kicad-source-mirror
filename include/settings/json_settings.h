@@ -184,6 +184,37 @@ c     * @return true if the file was saved
     */
     static nlohmann::json::json_pointer PointerFromString( std::string aPath );
 
+    /**
+    * Sets the given string if the given key/path is present
+    * @param aObj is the source object
+    * @param aTarget is the storage destination
+    * @return True if set, false if not
+    */
+    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, wxString& aTarget );
+
+    /**
+    * Sets the given bool if the given key/path is present
+    * @param aObj is the source object
+    * @param aTarget is the storage destination
+    * @return True if set, false if not
+    */
+    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, bool& aTarget );
+
+    /**
+    * Sets the given int if the given key/path is present
+    * @param aObj is the source object
+    * @param aTarget is the storage destination
+    * @return True if set, false if not
+    */
+    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, int& aTarget );
+
+    /**
+    * Sets the given unsigned int if the given key/path is present
+    * @param aObj is the source object
+    * @param aTarget is the storage destination
+    * @return True if set, false if not
+    */
+    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, unsigned int& aTarget );
 protected:
 
     /**

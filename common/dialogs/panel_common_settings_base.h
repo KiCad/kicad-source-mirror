@@ -81,6 +81,7 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_staticText16;
 		wxSpinCtrl* m_backupLimitTotalSize;
 		wxStaticText* m_staticText17;
+		wxCheckBox* m_cbRememberOpenFiles;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnTextEditorClick( wxCommandEvent& event ) { event.Skip(); }

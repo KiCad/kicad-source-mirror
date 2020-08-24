@@ -166,8 +166,6 @@ public:
 
     SCHEMATIC& Schematic() const;
 
-    void OnCloseWindow( wxCloseEvent& Event );
-
     /**
      * Allow edit frame to show/hide hidden pins.
      */
@@ -627,6 +625,9 @@ private:
     void OnImportProject( wxCommandEvent& event );
 
     void OnClearFileHistory( wxCommandEvent& aEvent );
+
+    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
+    void doCloseWindow() override;
 
     /**
      * Set the main window title bar text.

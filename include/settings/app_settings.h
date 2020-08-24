@@ -61,21 +61,27 @@ struct GRID_SETTINGS
     int style;
 };
 
+/**
+* Stores the window positioning/state
+*/
+struct WINDOW_STATE
+{
+    bool maximized;
+    int size_x;
+    int size_y;
+    int pos_x;
+    int pos_y;
+    unsigned int display;
+};
 
 /**
  * Stores the common settings that are saved and loaded for each window / frame
  */
 struct WINDOW_SETTINGS
 {
-    bool maximized;
+    WINDOW_STATE state;
     wxString mru_path;
-    int size_x;
-    int size_y;
     wxString perspective;
-    int pos_x;
-    int pos_y;
-    unsigned int display;
-
     std::vector<double> zoom_factors;
 
     CURSOR_SETTINGS cursor;

@@ -262,23 +262,23 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
 void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std::string& aJsonPath )
 {
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".maximized",
-            &aWindow->maximized, false ) );
+            &aWindow->state.maximized, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".mru_path",
             &aWindow->mru_path, "" ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_x", &aWindow->size_x, 0 ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_x", &aWindow->state.size_x, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_y", &aWindow->size_y, 0 ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_y", &aWindow->state.size_y, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".perspective",
             &aWindow->perspective, "" ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_x", &aWindow->pos_x, 0 ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_x", &aWindow->state.pos_x, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_y", &aWindow->pos_y, 0 ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_y", &aWindow->state.pos_y, 0 ) );
 
-    m_params.emplace_back( new PARAM<unsigned int>( aJsonPath + ".display", &aWindow->display, 0 ) );
+    m_params.emplace_back( new PARAM<unsigned int>( aJsonPath + ".display", &aWindow->state.display, 0 ) );
 
     m_params.emplace_back( new PARAM_LIST<double>( aJsonPath + ".zoom_factors",
             &aWindow->zoom_factors, {} ) );

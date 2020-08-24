@@ -71,7 +71,6 @@
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
 
 BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
-    EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( LIB_EDIT_FRAME::OnSize )
 
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectUnit )
@@ -431,20 +430,27 @@ void LIB_EDIT_FRAME::setupUIConditions()
 }
 
 
-void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
+bool LIB_EDIT_FRAME::canCloseWindow(wxCloseEvent& aEvent)
 {
     // Shutdown blocks must be determined and vetoed as early as possible
     if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && IsContentModified() )
+        && IsContentModified() )
     {
-        aEvent.Veto();
-        return;
+        return false;
     }
 
-    if( saveAllLibraries( true ) )
-        Destroy();
-    else
-        aEvent.Veto();
+    if( !saveAllLibraries( true ) )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+void LIB_EDIT_FRAME::doCloseWindow()
+{
+    Destroy();
 }
 
 
