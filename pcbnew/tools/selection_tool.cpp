@@ -463,9 +463,9 @@ const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
     guide.SetIgnoreThroughHolePads( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_TH ) );
     guide.SetIgnoreModulesVals( ! board()->IsElementVisible( LAYER_MOD_VALUES ) );
     guide.SetIgnoreModulesRefs( ! board()->IsElementVisible( LAYER_MOD_REFERENCES ) );
-    guide.SetIgnoreThroughVias( ! board()->IsElementVisible( LAYER_VIA_THROUGH ) );
-    guide.SetIgnoreBlindBuriedVias( ! board()->IsElementVisible( LAYER_VIA_BBLIND ) );
-    guide.SetIgnoreMicroVias( ! board()->IsElementVisible( LAYER_VIA_MICROVIA ) );
+    guide.SetIgnoreThroughVias( ! board()->IsElementVisible( LAYER_VIAS ) );
+    guide.SetIgnoreBlindBuriedVias( ! board()->IsElementVisible( LAYER_VIAS ) );
+    guide.SetIgnoreMicroVias( ! board()->IsElementVisible( LAYER_VIAS ) );
     guide.SetIgnoreTracks( ! board()->IsElementVisible( LAYER_TRACKS ) );
 
     return guide;
@@ -1808,42 +1808,20 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
-        {
-            if( !board()->IsElementVisible( LAYER_TRACKS ) )
-                return false;
-        }
+        if( !board()->IsElementVisible( LAYER_TRACKS ) )
+            return false;
         break;
 
     case PCB_VIA_T:
-        {
-            const VIA* via = static_cast<const VIA*>( aItem );
+    {
+        if( !board()->IsElementVisible( LAYER_VIAS ) )
+            return false;
 
-            // Check if appropriate element layer is visible
-            switch( via->GetViaType() )
-            {
-            case VIATYPE::THROUGH:
-                if( !board()->IsElementVisible( LAYER_VIA_THROUGH ) )
-                    return false;
-                break;
+        const VIA* via = static_cast<const VIA*>( aItem );
 
-            case VIATYPE::BLIND_BURIED:
-                if( !board()->IsElementVisible( LAYER_VIA_BBLIND ) )
-                    return false;
-                break;
-
-            case VIATYPE::MICROVIA:
-                if( !board()->IsElementVisible( LAYER_VIA_MICROVIA ) )
-                    return false;
-                break;
-
-            default:
-                wxFAIL;
-                return false;
-            }
-
-            // For vias it is enough if only one of its layers is visible
-            return ( board()->GetVisibleLayers() & via->GetLayerSet() ).any();
-        }
+        // For vias it is enough if only one of its layers is visible
+        return ( board()->GetVisibleLayers() & via->GetLayerSet() ).any();
+    }
 
     case PCB_MODULE_T:
     {
@@ -1855,19 +1833,19 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
         MODULE* module = const_cast<MODULE*>( static_cast<const MODULE*>( aItem ) );
 
-        for( auto item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : module->GraphicalItems() )
         {
             if( Selectable( item, true ) )
                 return true;
         }
 
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
             if( Selectable( pad, true ) )
                 return true;
         }
 
-        for( auto zone : module->Zones() )
+        for( ZONE_CONTAINER* zone : module->Zones() )
         {
             if( Selectable( zone, true ) )
                 return true;

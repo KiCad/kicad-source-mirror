@@ -152,10 +152,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_PADS_TH );
 
         setVisibility( LAYER_TRACKS );
-        setVisibility( LAYER_VIA_THROUGH );
-        setVisibility( LAYER_VIA_BBLIND );
-        setVisibility( LAYER_VIA_MICROVIA );
-        setVisibility( LAYER_NON_PLATEDHOLES );
+        setVisibility( LAYER_VIAS );
 
         setVisibility( LAYER_NO_CONNECTS );
         setVisibility( LAYER_DRC_WARNING );

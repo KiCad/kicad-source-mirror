@@ -629,13 +629,7 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         if( !onVisibleLayer && m_ViaType != VIATYPE::THROUGH )
             return HIDE;
 
-        switch( m_ViaType )
-        {
-        case VIATYPE::THROUGH:      return aView->IsLayerVisible( LAYER_VIA_THROUGH )  ? 0 : HIDE;
-        case VIATYPE::BLIND_BURIED: return aView->IsLayerVisible( LAYER_VIA_BBLIND )   ? 0 : HIDE;
-        case VIATYPE::MICROVIA:     return aView->IsLayerVisible( LAYER_VIA_MICROVIA ) ? 0 : HIDE;
-        default:                    return 0;
-        }
+        return aView->IsLayerVisible( LAYER_VIAS ) ? 0 : HIDE;
     }
 
     return HIDE;
