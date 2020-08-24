@@ -58,7 +58,8 @@ class TRANSLINE_PRM
 public:
     PRM_TYPE m_Type;            // Type of parameter: substr, physical, elect
     PRMS_ID  m_Id;              // Id of parameter ( link to transline functions )
-    wxString m_Label;           // name for this parameter in dialog
+    std::string m_KeyWord;      // keyword for this parameter in json config file in ASCII7 only
+    wxString m_DlgLabel;        // name for this parameter in dialog (usually translated
     wxString m_ToolTip;         // Tool tip for this parameter in dialog
     double   m_Value;           // Value for this parameter in dialog
     double   m_NormalizedValue; // actual value for this parameter
@@ -67,11 +68,21 @@ public:
     void*    m_UnitCtrl;        // The UNIT_SELECTOR containing the unit in dialog
     int      m_UnitSelection;   // last selection for units
 
-public: TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
-                       const wxString& aLabel = wxEmptyString,
-                       const wxString& aToolTip = wxEmptyString,
-                       double aValue = 0.0,
-                       bool aConvUnit = false );
+public:
+
+    /**
+     * TRANSLINE_PRM ctor.
+     * @param aKeywordCfg is the keyword used in config to identify the parameter
+     * only ASCII7 keyword is valid
+     * @param aDlgLabel is a I18n string used to identify the parameter in dialog.
+     * usually aDlgLabel is same as aKeywordCfg, but translatable
+     */
+    TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
+                   const char* aKeywordCfg = "",
+                   const wxString& aDlgLabel = wxEmptyString,
+                   const wxString& aToolTip = wxEmptyString,
+                   double aValue = 0.0,
+                   bool aConvUnit = false );
 
     double ToUserUnit();
     double FromUserUnit();

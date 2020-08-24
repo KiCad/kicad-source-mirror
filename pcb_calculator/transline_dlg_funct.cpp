@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -317,8 +317,9 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
         }
         wxASSERT ( data );
         data->name->SetToolTip( prm->m_ToolTip );
-        data->name->SetLabel( prm->m_Label != "" ? prm->m_Label + ':' : "" );
+        data->name->SetLabel( prm->m_DlgLabel != "" ? prm->m_DlgLabel + ':' : "" );
         prm->m_ValueCtrl = data->value;
+
         if( prm->m_Id != DUMMY_PRM )
         {
             DOUBLE_TO_CTLR( data->value, prm->m_Value );
@@ -329,8 +330,10 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
             data->value->SetValue( wxEmptyString );
             data->value->Enable( false );
         }
+
         if( prm->m_ConvUnit )
             prm->m_UnitCtrl = data->unit;
+
         if( data->unit )
         {
             data->unit->Show( prm->m_ConvUnit );
