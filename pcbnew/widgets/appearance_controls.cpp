@@ -264,7 +264,10 @@ void NET_GRID_TABLE::updateNetColor( const NET_GRID_ENTRY& aNet )
 
     std::map<int, KIGFX::COLOR4D>& netColors  = rs->GetNetColorMap();
 
-    netColors[aNet.code] = aNet.color;
+    if( aNet.color != COLOR4D::UNSPECIFIED )
+        netColors[aNet.code] = aNet.color;
+    else
+        netColors.erase( aNet.code );
 
     m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
     m_frame->GetCanvas()->RedrawRatsnest();
