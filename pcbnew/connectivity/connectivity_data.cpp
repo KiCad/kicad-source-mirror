@@ -319,7 +319,10 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
 
 void CONNECTIVITY_DATA::ClearDynamicRatsnest()
 {
-    m_connAlgo->ForEachAnchor( [] ( CN_ANCHOR& anchor ) { anchor.SetNoLine( false ); } );
+    m_connAlgo->ForEachAnchor( []( CN_ANCHOR& anchor )
+                               {
+                                   anchor.SetNoLine( false );
+                               } );
     HideDynamicRatsnest();
 }
 

@@ -185,7 +185,7 @@ private:
     bool isInteractiveDragEnabled() const;
     bool isRouterActive() const;
 
-    int doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference = false );
+    int doMoveSelection( TOOL_EVENT aEvent, bool aPickReference = false );
 
     bool pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                              const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );

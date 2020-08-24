@@ -334,7 +334,9 @@ int EDIT_TOOL::MoveWithReference( const TOOL_EVENT& aEvent )
 }
 
 
-int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
+// Note: aEvent MUST NOT be const&; the source will get de-allocated if we go into the picker's
+// event loop.
+int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 {
     PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     KIGFX::VIEW_CONTROLS* controls  = getViewControls();
@@ -351,8 +353,9 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
     if( m_dragging || selection.Empty() )
         return 0;
 
-    LSET item_layers = selection.GetSelectionLayers();
-    bool unselect    = selection.IsHover(); // N.B. This must be saved before the re-selection below
+    LSET     item_layers = selection.GetSelectionLayers();
+    bool     unselect    = selection.IsHover(); // N.B. This must be saved before the re-selection below
+    VECTOR2I pickedReferencePoint;
 
     // Now filter out locked pads.  We cannot do this in the first RequestSelection() as we need
     // the item_layers when a pad is the selection front (ie: will become curr_tiem).
@@ -366,10 +369,22 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
         return 0;
 
     std::string tool = aEvent.GetCommandStr().get();
+
     editFrame->PushTool( tool );
     Activate();
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
+
+    if( aPickReference && !pickReferencePoint( _( "Select reference point for move..." ), "", "",
+                                               pickedReferencePoint ) )
+    {
+        if( unselect )
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+        editFrame->PopTool( tool );
+
+        return 0;
+    }
 
     std::vector<BOARD_ITEM*> sel_items;
 
@@ -449,8 +464,10 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
 
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
             }
-            else if( !m_dragging ) // Prepare to start dragging
+            else if( !m_dragging && !evt->IsAction( &ACTIONS::refreshPreview ) )
             {
+                // Prepare to start dragging
+
                 if( !( evt->IsAction( &PCB_ACTIONS::move )
                        || evt->IsAction( &PCB_ACTIONS::moveWithReference ) )
                     && isInteractiveDragEnabled() )
@@ -488,11 +505,11 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                         // If moving a group, record position of all the descendants for undo
                         if( item->Type() == PCB_GROUP_T )
                         {
-                            static_cast<PCB_GROUP*>( item )->RunOnDescendants(
-                                    [&]( BOARD_ITEM* bItem )
-                                    {
-                                        m_commit->Modify( bItem );
-                                    });
+                            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+                            group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                                     {
+                                                         m_commit->Modify( bItem );
+                                                     });
                         }
 
                         if( item->IsNew() )
@@ -535,20 +552,9 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
                     // movement vector could be computed later
                     if( aPickReference )
                     {
-                        VECTOR2I ref;
-
-                        if( pickReferencePoint( _( "Select reference point for move..." ),
-                                                "", "", ref ) )
-                        {
-                            selection.SetReferencePoint( ref );
-                            controls->ForceCursorPosition( true, ref );
-                            m_cursor = ref;
-                        }
-                        else
-                        {
-                            // Cancel before move started
-                            break;
-                        }
+                        selection.SetReferencePoint( pickedReferencePoint );
+                        controls->ForceCursorPosition( true, pickedReferencePoint );
+                        m_cursor = pickedReferencePoint;
                     }
                     else
                     {

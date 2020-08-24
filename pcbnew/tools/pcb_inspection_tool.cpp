@@ -386,9 +386,9 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
         {
             if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
             {
-                for( auto mod : board->Modules() )
+                for( MODULE* mod : board->Modules() )
                 {
-                    for( auto pad : mod->Pads() )
+                    for( D_PAD* pad : mod->Pads() )
                         pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
                 }
             }
