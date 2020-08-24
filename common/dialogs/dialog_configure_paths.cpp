@@ -587,9 +587,9 @@ void DIALOG_CONFIGURE_PATHS::OnHelp( wxCommandEvent& event )
 
     }
 
-    HTML_MESSAGE_BOX dlg( GetParent(), _( "Environment Variable Help" ) );
-    dlg.SetDialogSizeInDU( 400, 250 );
+    HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( nullptr, _( "Environment Variable Help" ) );
+    dlg->SetDialogSizeInDU( 400, 250 );
 
-    dlg.AddHTML_Text( msg );
-    dlg.ShowModal();
+    dlg->AddHTML_Text( msg );
+    dlg->ShowModeless();
 }

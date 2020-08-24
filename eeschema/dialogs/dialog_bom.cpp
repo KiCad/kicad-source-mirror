@@ -589,13 +589,16 @@ void DIALOG_BOM::OnEditGenerator( wxCommandEvent& event )
 
 void DIALOG_BOM::OnHelp( wxCommandEvent& event )
 {
-    HTML_MESSAGE_BOX help_Dlg( this, _( "Bill of Material Generation Help" ) );
-    help_Dlg.SetDialogSizeInDU( 500, 350 );
+    HTML_MESSAGE_BOX* help_Dlg = new HTML_MESSAGE_BOX( nullptr,
+                                                       _( "Bill of Material Generation Help" ) );
+
+    help_Dlg->SetDialogSizeInDU( 500, 350 );
 
     wxString html_txt;
     ConvertMarkdown2Html( wxGetTranslation( s_bomHelpInfo ), html_txt );
-    help_Dlg.m_htmlWindow->AppendToPage( html_txt );
-    help_Dlg.ShowModal();
+
+    help_Dlg->m_htmlWindow->AppendToPage( html_txt );
+    help_Dlg->ShowModeless();
 }
 
 

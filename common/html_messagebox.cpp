@@ -121,3 +121,11 @@ void HTML_MESSAGE_BOX::AddHTML_Text( const wxString& message )
     m_htmlWindow->AppendToPage( message );
 }
 
+
+void HTML_MESSAGE_BOX::ShowModeless()
+{
+    m_sdbSizer1->Show( false );
+    Layout();
+
+    Show( true );
+}

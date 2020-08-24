@@ -1389,9 +1389,9 @@ void SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
             "   </tr>"
             "</table>" );
 
-    HTML_MESSAGE_BOX dlg( aParentWindow, _( "Syntax Help" ) );
-    dlg.SetDialogSizeInDU( 280, 280 );
+    HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( aParentWindow, _( "Syntax Help" ) );
+    dlg->SetDialogSizeInDU( 280, 280 );
 
-    dlg.AddHTML_Text( msg );
-    dlg.ShowModal();
+    dlg->AddHTML_Text( msg );
+    dlg->ShowModeless();
 }

@@ -406,9 +406,9 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
             "   (condition \"A.netclass == 'HV' && B.netclass == 'HV'\"))\r"
             "</pre>";
 
-    HTML_MESSAGE_BOX dlg( m_parent, _( "Syntax Help" ) );
-    dlg.SetDialogSizeInDU( 320, 320 );
+    HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
+    dlg->SetDialogSizeInDU( 320, 320 );
 
-    dlg.AddHTML_Text( msg );
-    dlg.ShowModal();
+    dlg->AddHTML_Text( msg );
+    dlg->ShowModeless();
 }
