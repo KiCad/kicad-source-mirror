@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2015 jean-pierre.charras
- * Copyright (C) 1992-2015 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #include <UnitSelector.h>
 #include <bitmaps.h>
 #include <geometry/shape_poly_set.h>
+#include <kiface_i.h>
 
 
 // extension of pcb_calculator data filename:
@@ -135,7 +136,7 @@ void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
                 wxString msg;
                 msg.Printf( _("Unable to write file \"%s\"\n"\
                             "Do you want to exit and abandon your change?"),
-                            GetDataFilename().c_str() );
+                            GetDataFilename() );
 
                 int opt = wxMessageBox( msg, _("Write Data File Error"),
                                         wxYES_NO | wxICON_ERROR );
@@ -156,7 +157,7 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( aCfg );
+    PCB_CALCULATOR_SETTINGS* cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( aCfg );
 
     m_currTransLineType = static_cast<TRANSLINE_TYPE_ID>( cfg->m_TransLine.type );
     m_Notebook->ChangeSelection( cfg->m_LastPage );
@@ -200,39 +201,23 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-#if 0
-    aCfg->Write( KEYWORD_TRANSLINE_SELECTION, (long) m_currTransLineType );
-    aCfg->Write( KEYWORD_PAGE_SELECTION, m_Notebook->GetSelection() );
-    aCfg->Write( KEYWORD_COLORCODE_SELECTION, m_rbToleranceSelection->GetSelection() );
-    aCfg->Write( KEYWORD_ATTENUATORS_SELECTION, m_AttenuatorsSelection->GetSelection() );
-    aCfg->Write( KEYWORD_BRDCLASS_SELECTION, m_BoardClassesUnitsSelector->GetSelection() );
+    // Save current parameters values in config.
+    auto cfg = dynamic_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
 
-    aCfg->Write( KEYWORD_REGUL_R1, m_RegulR1Value->GetValue() );
-    aCfg->Write( KEYWORD_REGUL_R2, m_RegulR2Value->GetValue() );
-    aCfg->Write( KEYWORD_REGUL_VREF, m_RegulVrefValue->GetValue() );
-    aCfg->Write( KEYWORD_REGUL_VOUT, m_RegulVoutValue->GetValue() );
-    aCfg->Write( KEYWORD_DATAFILE_FILENAME, GetDataFilename() );
-    aCfg->Write( KEYWORD_REGUL_SELECTED, m_lastSelectedRegulatorName );
-    aCfg->Write( KEYWORD_REGUL_TYPE,
-                     m_choiceRegType->GetSelection() );
-    wxRadioButton * regprms[3] =
-    {   m_rbRegulR1, m_rbRegulR2, m_rbRegulVout
-    };
-    for( int ii = 0; ii < 3; ii++ )
+    if( cfg )
     {
-        if( regprms[ii]->GetValue() )
-        {
-            aCfg->Write( KEYWORD_REGUL_LAST_PARAM, ii );
-            break;
-        }
+        cfg->m_LastPage = m_Notebook->GetSelection();
+        cfg->m_TransLine.type = m_currTransLineType;
+        cfg->m_Attenuators.type = m_AttenuatorsSelection->GetSelection();
+        cfg->m_ColorCodeTolerance = m_rbToleranceSelection->GetSelection();
+        cfg->m_BoardClassUnits = m_BoardClassesUnitsSelector->GetSelection();
+
+        cfg->m_Electrical.spacing_units = m_ElectricalSpacingUnitsSelector->GetSelection();
+        cfg->m_Electrical.spacing_voltage = m_ElectricalSpacingVoltage->GetValue();
+
+        Regulators_WriteConfig( cfg );
     }
 
-
-    aCfg->Write( KEYWORD_ELECTRICAL_SPACING_SELECTION,
-                     m_ElectricalSpacingUnitsSelector->GetSelection() );
-    aCfg->Write( KEYWORD_ELECTRICAL_SPACING_VOLTAGE,
-                     m_ElectricalSpacingVoltage->GetValue() );
-#endif
     TW_WriteConfig();
 
     VS_WriteConfig();

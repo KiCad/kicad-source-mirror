@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,8 @@
 #include <transline_ident.h>
 
 extern const wxString PcbCalcDataFileExt;
+
+class PCB_CALCULATOR_SETTINGS;
 
 /* Class PCB_CALCULATOR_FRAME_BASE
 This is the main frame for this application
@@ -109,7 +111,7 @@ private:
 
     /**
      * Function TW_WriteConfig
-     * Write Track width prameters in config
+     * Write Track width parameters in config
      */
     void TW_WriteConfig();
 
@@ -187,7 +189,7 @@ private:
 
     /**
      * Function VS_WriteConfig
-     * Write Via Size prameters in config
+     * Write Via Size parameters in config
      */
     void VS_WriteConfig();
 
@@ -338,6 +340,12 @@ private:
     void SelectLastSelectedRegulator();
 
     void RegulatorsSolve();
+
+    /**
+     * Write regulators parameters in config
+     * @param aCfg is the config settings
+     */
+    void Regulators_WriteConfig( PCB_CALCULATOR_SETTINGS* aCfg );
 
 public:
     // Read/write params values and results

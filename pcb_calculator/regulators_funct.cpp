@@ -5,7 +5,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre.charras
- * Copyright (C) 1992-2011 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@
 #include <pcb_calculator.h>
 #include <class_regulator_data.h>
 #include <dialog_regulator_data_base.h>
+#include <pcb_calculator_settings.h>
 
 
 extern double DoubleFromString( const wxString& TextValue );
@@ -473,3 +474,31 @@ void PCB_CALCULATOR_FRAME::RegulatorsSolve()
 
 }
 
+
+void PCB_CALCULATOR_FRAME::Regulators_WriteConfig( PCB_CALCULATOR_SETTINGS* aCfg )
+{
+    // Save current parameter values in config.
+    aCfg->m_Regulators.r1 = m_RegulR1Value->GetValue();
+    aCfg->m_Regulators.r2 = m_RegulR2Value->GetValue();
+    aCfg->m_Regulators.vref = m_RegulVrefValue->GetValue();
+    aCfg->m_Regulators.vout = m_RegulVoutValue->GetValue();
+    aCfg->m_Regulators.data_file = GetDataFilename();
+    aCfg->m_Regulators.selected_regulator = m_lastSelectedRegulatorName;
+    aCfg->m_Regulators.type = m_choiceRegType->GetSelection();
+
+    // Store the parameter selection that was recently calculated (R1, R2 or Vout)
+    wxRadioButton * regprms[3] =
+    {
+        m_rbRegulR1, m_rbRegulR2, m_rbRegulVout
+    };
+
+    for( int ii = 0; ii < 3; ii++ )
+    {
+        if( regprms[ii]->GetValue() )
+        {
+            aCfg->m_Regulators.last_param = ii;
+            break;
+        }
+    }
+
+}

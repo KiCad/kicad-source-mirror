@@ -47,6 +47,8 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "last_page", &m_LastPage, 0 ) );
 
+    m_params.emplace_back( new PARAM<int>( "translines.type", &m_TransLine.type, 0 ) );
+
     m_params.emplace_back( new PARAM<int>( "attenuators.type", &m_Attenuators.type, 0 ) );
 
     const std::array<std::string, 4> att_names = { "att_pi", "att_tee",

@@ -453,9 +453,6 @@ void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
     m_Phys_prm1_Value->SetBackgroundColour( background );
     m_Phys_prm2_Value->SetBackgroundColour( background );
     m_Phys_prm3_Value->SetBackgroundColour( background );
-    m_elec_prm1_label->SetBackgroundColour( background );
-    m_elec_prm2_label->SetBackgroundColour( background );
-    m_elec_prm3_label->SetBackgroundColour( background );
 }
 
 
