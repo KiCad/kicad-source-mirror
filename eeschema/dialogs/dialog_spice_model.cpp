@@ -182,8 +182,6 @@ void DIALOG_SPICE_MODEL::Init()
     m_pwlTimeCol = m_pwlValList->AppendColumn( "Time [s]", wxLIST_FORMAT_LEFT, 100 );
     m_pwlValueCol = m_pwlValList->AppendColumn( "Value [V/A]", wxLIST_FORMAT_LEFT, 100 );
 
-    m_libraryContents->SetReadOnly( true );
-
     m_sdbSizerOK->SetDefault();
 
     // Hide pages that aren't fully implemented yet
@@ -815,6 +813,8 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
 
     // Display the library contents
     wxWindowUpdateLocker updateLock( this );
+
+    m_libraryContents->SetReadOnly( false );
     m_libraryContents->Clear();
     wxTextFile file;
     file.Open( filePath.GetFullPath() );
@@ -876,6 +876,7 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
 
     // display the full library content:
     m_libraryContents->AppendText( fullText );
+    m_libraryContents->SetReadOnly( true );
 
     wxArrayString modelsList;
 
