@@ -556,7 +556,6 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER
         }
     }
 
-    holes.Simplify( SHAPE_POLY_SET::PM_FAST );
     aFill.BooleanSubtract( holes, SHAPE_POLY_SET::PM_FAST );
 }
 
@@ -897,7 +896,6 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
     }
     else if( half_min_width - epsilon > epsilon )
     {
-        aRawPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
         aRawPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
     }
 
@@ -905,7 +903,6 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
     // add copper outside the zone boundary or inside the clearance holes
     aRawPolys.BooleanIntersection( aSmoothedOutline, SHAPE_POLY_SET::PM_FAST );
     aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
-    aRawPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     aRawPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
 
