@@ -323,11 +323,13 @@ void SelectReferenceNumber( wxTextEntry* aTextEntry )
 
         while( !num.IsEmpty() && ( !isdigit( num.Last() ) || !isdigit( num.GetChar( 0 ) ) ) )
         {
+            // Trim non-digit from end
             if( !isdigit( num.Last() ) )
                 num.RemoveLast();
 
-            if( !isdigit( num.GetChar ( 0 ) ) )
-                num = num.Right( num.Length() - 1);
+            // Trim non-digit from the start
+            if( !num.IsEmpty() && !isdigit( num.GetChar( 0 ) ) )
+                num = num.Right( num.Length() - 1 );
         }
 
         aTextEntry->SetSelection( ref.Find( num ), ref.Find( num ) + num.Length() );
