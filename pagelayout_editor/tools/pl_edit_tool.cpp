@@ -192,7 +192,10 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             if( m_moveInProgress )
+            {
+                evt->SetPassEvent( false );
                 restore_state = true;
+            }
 
             break;
         }

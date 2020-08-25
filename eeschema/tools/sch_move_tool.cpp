@@ -352,7 +352,10 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsCancelInteractive() )
         {
             if( m_moveInProgress )
+            {
+                evt->SetPassEvent( false );
                 restore_state = true;
+            }
 
             break;
         }

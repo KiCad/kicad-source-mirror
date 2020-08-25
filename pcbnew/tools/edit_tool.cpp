@@ -573,6 +573,9 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
+            if( m_dragging && evt->IsCancelInteractive() )
+                evt->SetPassEvent( false );
+
             restore_state = true; // Canceling the tool means that items have to be restored
             break;                // Finish
         }

@@ -253,7 +253,7 @@ public:
     ///> be passed on to subsequent tools on the stack.  Defaults to true for TC_MESSAGES; false
     ///> for everything else.
     bool PassEvent() const { return m_passEvent; }
-    void SetPassEvent() { m_passEvent = true; }
+    void SetPassEvent( bool aPass = true ) { m_passEvent = aPass; }
 
     ///> Returns if it this event has a valid position (true for mouse events and context-menu
     ///> or hotkey-based command events)
