@@ -65,8 +65,9 @@ void BOARD_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 
 
 BOARD_PRINTOUT::BOARD_PRINTOUT( const BOARD_PRINTOUT_SETTINGS& aParams,
-        const KIGFX::VIEW* aView, const wxString& aTitle ) :
-    wxPrintout( aTitle ), m_settings( aParams )
+                                const KIGFX::VIEW* aView, const wxString& aTitle ) :
+    wxPrintout( aTitle ),
+    m_settings( aParams )
 {
     m_view = aView;
 }

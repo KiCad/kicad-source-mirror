@@ -102,8 +102,10 @@ private:
 };
 
 
-DIALOG_PRINT_GERBVIEW::DIALOG_PRINT_GERBVIEW( GERBVIEW_FRAME* aParent, BOARD_PRINTOUT_SETTINGS* aSettings ) :
-    DIALOG_PRINT_GENERIC( aParent, aSettings ), m_parent( aParent )
+DIALOG_PRINT_GERBVIEW::DIALOG_PRINT_GERBVIEW( GERBVIEW_FRAME* aParent,
+                                              BOARD_PRINTOUT_SETTINGS* aSettings ) :
+    DIALOG_PRINT_GENERIC( aParent, aSettings ),
+    m_parent( aParent )
 {
     m_config = Kiface().KifaceSettings();
 
@@ -307,6 +309,7 @@ int GERBVIEW_CONTROL::Print( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( GERBVIEW_ACTIONS::selectionClear, true );
 
     BOARD_PRINTOUT_SETTINGS settings( m_frame->GetPageSettings() );
+    settings.m_colorSettings = m_frame->GetColorSettings();
     DIALOG_PRINT_GERBVIEW dlg( m_frame, &settings );
     dlg.ForcePrintBorder( false );
     dlg.ShowModal();

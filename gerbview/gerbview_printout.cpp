@@ -23,7 +23,6 @@
  */
 
 #include <fctsys.h>
-#include <pgm_base.h>
 #include <gr_basic.h>
 #include <base_units.h>
 #include <base_screen.h>
@@ -31,14 +30,13 @@
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include "gerbview_printout.h"
-#include <gal/gal_print.h>
 #include <view/view.h>
 #include <gerbview_painter.h>
 #include <math/util.h>      // for KiROUND
 
 
 GERBVIEW_PRINTOUT::GERBVIEW_PRINTOUT( GBR_LAYOUT* aLayout, const BOARD_PRINTOUT_SETTINGS& aParams,
-        const KIGFX::VIEW* aView, const wxString& aTitle ) :
+                                      const KIGFX::VIEW* aView, const wxString& aTitle ) :
     BOARD_PRINTOUT( aParams, aView, aTitle )
 {
     m_layout = aLayout;

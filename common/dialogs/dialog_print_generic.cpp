@@ -28,7 +28,9 @@ static constexpr double MIN_SCALE = 0.01;
 static constexpr double MAX_SCALE = 100.0;
 
 DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SETTINGS* aSettings )
-    : DIALOG_PRINT_GENERIC_BASE( aParent ), m_config( nullptr ), m_settings( aSettings )
+    : DIALOG_PRINT_GENERIC_BASE( aParent ),
+      m_config( nullptr ),
+      m_settings( aSettings )
 {
     // Note: for the validator, min value is 0.0, to allow typing values like 0.5
     // that start by 0
