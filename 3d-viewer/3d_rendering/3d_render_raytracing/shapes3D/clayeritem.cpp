@@ -45,6 +45,8 @@ CLAYERITEM::CLAYERITEM( const COBJECT2D* aObject2D, float aZMin, float aZMax )
     m_bbox.Set( SFVEC3F( bbox2d.Min().x, bbox2d.Min().y, aZMin ),
                 SFVEC3F( bbox2d.Max().x, bbox2d.Max().y, aZMax ) );
     m_bbox.ScaleNextUp();
+    m_bbox.Scale( 1.0001f );
+
     m_centroid = SFVEC3F( aObject2D->GetCentroid().x,
                           aObject2D->GetCentroid().y,
                           (aZMax + aZMin) * 0.5f );
@@ -221,6 +223,11 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
         if( m_object2d->Intersect( raySeg, &tOut, &outNormal ) )
         {
+            if( tOut > 0.99f ) // Workarround for refraction artifacts on board sides
+            {
+                return false;
+            }
+
             // The hitT is a hit value for the segment length 'start' - 'end',
             // so it ranges from 0.0 - 1.0. We now convert it to a 3D hit position
             // and calculate the real hitT of the ray.
@@ -256,8 +263,11 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
     }
     else
     {
-        // Started inside
 
+        // Disabled due to refraction artifacts
+        // this will mostly happen inside the board body
+#if 0
+        // Started inside
         const SFVEC3F boxHitPointStart = aRay.at( tBBoxStart );
         const SFVEC3F boxHitPointEnd = aRay.at( tBBoxEnd );
 
@@ -317,8 +327,8 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                 }
             }
         }
+#endif
     }
-
     return false;
 }
 

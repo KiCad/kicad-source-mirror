@@ -256,8 +256,6 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                                                          97.0f / 255.0f,
                                                          47.0f / 255.0f );
 
-        m_materials.m_EpoxyBoard.m_Diffuse   = m_boardAdapter.m_BoardBodyColor;
-
         m_materials.m_EpoxyBoard.m_Specular  = SFVEC3F( 18.0f / 255.0f,
                                                          3.0f / 255.0f,
                                                         20.0f / 255.0f );
@@ -303,7 +301,6 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
 
         // Epoxy material
         m_materials.m_EpoxyBoard.m_Ambient   = matAmbientColor;
-        m_materials.m_EpoxyBoard.m_Diffuse   = m_boardAdapter.m_BoardBodyColor;
         m_materials.m_EpoxyBoard.m_Specular  = matSpecularColor;
         m_materials.m_EpoxyBoard.m_Shininess = matShininess;
         m_materials.m_EpoxyBoard.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
@@ -500,6 +497,38 @@ void init_lights(void)
 }
 
 
+void C3D_RENDER_OGL_LEGACY::render_board_body( bool aSkipRenderHoles )
+{
+    if( m_ogl_disp_list_board )
+    {
+        m_ogl_disp_list_board->ApplyScalePosition( -m_boardAdapter.GetEpoxyThickness3DU() / 2.0f,
+                                                   m_boardAdapter.GetEpoxyThickness3DU() );
+
+
+        m_materials.m_EpoxyBoard.m_Diffuse   = m_boardAdapter.m_BoardBodyColor;
+        m_materials.m_EpoxyBoard.m_Transparency = m_boardAdapter.m_BoardBodyColor.a;
+
+        OGL_SetMaterial( m_materials.m_EpoxyBoard, 1.0f );
+
+        m_ogl_disp_list_board->SetItIsTransparent( true );
+
+        if( (m_ogl_disp_list_through_holes_outer_with_npth) && (!aSkipRenderHoles) )
+        {
+            m_ogl_disp_list_through_holes_outer_with_npth->ApplyScalePosition(
+                    -m_boardAdapter.GetEpoxyThickness3DU() / 2.0f,
+                    m_boardAdapter.GetEpoxyThickness3DU() );
+
+            m_ogl_disp_list_board->DrawAllCameraCulledSubtractLayer(
+                        m_ogl_disp_list_through_holes_outer_with_npth,
+                        NULL );
+        }
+        else
+        {
+            m_ogl_disp_list_board->DrawAll();
+        }
+    }
+}
+
 bool C3D_RENDER_OGL_LEGACY::Redraw(
         bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter )
 {
@@ -625,37 +654,6 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
     const bool skipRenderVias = aIsMoving &&
                                 m_boardAdapter.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE );
 
-    // Display board body
-    // /////////////////////////////////////////////////////////////////////////
-    if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) )
-    {
-        if( m_ogl_disp_list_board )
-        {
-            m_ogl_disp_list_board->ApplyScalePosition( -m_boardAdapter.GetEpoxyThickness3DU() / 2.0f,
-                                                       m_boardAdapter.GetEpoxyThickness3DU() );
-
-            OGL_SetMaterial( m_materials.m_EpoxyBoard, 1.0f );
-
-            m_ogl_disp_list_board->SetItIsTransparent( false );
-
-            if( (m_ogl_disp_list_through_holes_outer_with_npth) && (!skipRenderHoles) )
-            {
-                m_ogl_disp_list_through_holes_outer_with_npth->ApplyScalePosition(
-                        -m_boardAdapter.GetEpoxyThickness3DU() / 2.0f,
-                        m_boardAdapter.GetEpoxyThickness3DU() );
-
-                m_ogl_disp_list_board->DrawAllCameraCulledSubtractLayer(
-                            m_ogl_disp_list_through_holes_outer_with_npth,
-                            NULL );
-            }
-            else
-            {
-                m_ogl_disp_list_board->DrawAll();
-            }
-        }
-    }
-
-
     if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
     {
         // Draw vias and pad holes with copper material
@@ -683,15 +681,16 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
          ii != m_ogl_disp_lists_layers.end();
          ++ii )
     {
-
         const PCB_LAYER_ID layer_id = (PCB_LAYER_ID)(ii->first);
 
-        // Mask kayers are not processed here because they are a special case
+        // Mask layers are not processed here because they are a special case
         if( (layer_id == B_Mask) || (layer_id == F_Mask) )
             continue;
 
         // Do not show inner layers when it is displaying the board
-        if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) )
+        // and board body is full opaque
+        if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) &&
+            ( m_boardAdapter.m_BoardBodyColor.a < 0.01f ) )
         {
             if( (layer_id > F_Cu) && (layer_id < B_Cu) )
                 continue;
@@ -802,12 +801,17 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
         glPopMatrix();
     }
 
-
     // Render 3D Models (Non-transparent)
     // /////////////////////////////////////////////////////////////////////////
     render_3D_models( false, false );
     render_3D_models( true, false );
 
+    // Display board body
+    // /////////////////////////////////////////////////////////////////////////
+    if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) )
+    {
+        render_board_body( skipRenderHoles );
+    }
 
     // Display transparent mask layers
     // /////////////////////////////////////////////////////////////////////////

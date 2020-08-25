@@ -201,7 +201,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     // Colors for 3D viewer, which are used as defaults unless overridden by the board
     CLR( "3d_viewer.background_bottom", LAYER_3D_BACKGROUND_BOTTOM, COLOR4D( 0.4, 0.4, 0.5, 1.0 ) );
     CLR( "3d_viewer.background_top",    LAYER_3D_BACKGROUND_TOP,    COLOR4D( 0.8, 0.8, 0.9, 1.0 ) );
-    CLR( "3d_viewer.board",             LAYER_3D_BOARD,             COLOR4D( 0.2, 0.17, 0.09, 1.0 ) );
+    CLR( "3d_viewer.board",             LAYER_3D_BOARD,             COLOR4D( 0.2, 0.17, 0.09, 0.1 ) );
     CLR( "3d_viewer.copper",            LAYER_3D_COPPER,            COLOR4D( 0.7, 0.61, 0.0, 1.0 ) );
     CLR( "3d_viewer.silkscreen_bottom", LAYER_3D_SILKSCREEN_BOTTOM, COLOR4D( 0.9, 0.9, 0.9, 1.0 ) );
     CLR( "3d_viewer.silkscreen_top",    LAYER_3D_SILKSCREEN_TOP,    COLOR4D( 0.9, 0.9, 0.9, 1.0 ) );

@@ -150,6 +150,8 @@ private:
                                    bool aDrawMiddleSegments,
                                    bool aSkipRenderHoles );
 
+    void render_board_body( bool aSkipRenderHoles );
+
     void get_layer_z_pos( PCB_LAYER_ID aLayerID,
                           float &aOutZtop,
                           float &aOutZbot ) const;

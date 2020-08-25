@@ -940,18 +940,22 @@ bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
 {
     CUSTOM_COLORS_LIST colors;
 
-    colors.push_back( CUSTOM_COLOR_ITEM(  51/255.0,  43/255.0, 22/255.0, "FR4 natural, dark" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 109/255.0, 116/255.0, 75/255.0, "FR4 natural" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  78/255.0,  14/255.0,  5/255.0, "brown/red" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, "brown 1" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 123/255.0, 54/255.0, "brown 2" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, "brown 3" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  63/255.0, 126/255.0, 71/255.0, "green 1" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 117/255.0, 122/255.0, 90/255.0, "green 2" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  51/255.0,  43/255.0, 22/255.0, 1.0 - 0.1, "FR4 natural, dark" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 109/255.0, 116/255.0, 75/255.0, 1.0 - 0.1, "FR4 natural" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  78/255.0,  14/255.0,  5/255.0, 1.0 - 0.1, "brown/red" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, 1.0 - 0.1, "brown 1" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 123/255.0, 54/255.0, 1.0 - 0.1, "brown 2" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, 1.0 - 0.1, "brown 3" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  63/255.0, 126/255.0, 71/255.0, 1.0 - 0.1, "green 1" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 117/255.0, 122/255.0, 90/255.0, 1.0 - 0.1, "green 2" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_BoardBodyColor, _( "Board Body Color" ), &colors ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_BoardBodyColor, _( "Board Body Color" ), &colors, true ) )
     {
-        NewDisplay( true );
+        if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            NewDisplay( true );
+
         return true;
     }
 

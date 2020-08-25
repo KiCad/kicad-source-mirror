@@ -195,13 +195,6 @@ bool BOARD_ADAPTER::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
 
     default:
         // the layer is an internal copper layer, used the visibility
-        if( GetFlag( FL_SHOW_BOARD_BODY ) && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
-        {
-            // Do not render internal layers if it is overlap with the board
-            // (on OpenGL render)
-            return false;
-        }
-
         return m_board->IsLayerVisible( aLayer );
     }
 

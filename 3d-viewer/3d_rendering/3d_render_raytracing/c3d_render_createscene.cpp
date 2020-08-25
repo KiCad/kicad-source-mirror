@@ -168,7 +168,7 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                                               8.0f / 255.0f,
                                               10.0f / 255.0f ) ), // specular
                 0.1f * 128.0f,                                    // shiness
-                0.10f,                                            // transparency
+                m_boardAdapter.m_BoardBodyColor.a,                // transparency
                 0.0f );                                           // reflection
 
     m_materials.m_EpoxyBoard.SetAbsorvance( 10.0f );
@@ -364,6 +364,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
                                            &m_materials.m_EpoxyBoard,
                                            g_epoxyColor );
         #else
+
                     CLAYERITEM *objPtr = new CLAYERITEM( object2d_A,
                                                          m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ),
                                                          m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ) );
@@ -375,6 +376,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
                 }
                 else
                 {
+
                     CITEMLAYERCSG2D *itemCSG2d = new CITEMLAYERCSG2D(
                                 object2d_A,
                                 object2d_B,
@@ -390,6 +392,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
                     objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
                     objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BoardBodyColor ) );
                     m_object_container.Add( objPtr );
+
                 }
             }
 
@@ -974,7 +977,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     }
     m_accelerator = 0;
 
-    m_accelerator = new CBVH_PBRT( m_object_container );
+    m_accelerator = new CBVH_PBRT( m_object_container, 8, SPLITMETHOD::MIDDLE );
 
     if( aStatusReporter )
     {

@@ -1658,20 +1658,19 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                                          unsigned int aRecursiveLevel,
                                          bool is_testShadow ) const
 {
-    if( aRecursiveLevel > 2 )
-        return SFVEC3F( 0.0f );
-
-    SFVEC3F hitPoint = aHitInfo.m_HitPoint;
-
-    if( !m_isPreview )
-        hitPoint += aHitInfo.m_HitNormal * m_boardAdapter.GetNonCopperLayerThickness3DU() * 0.6f;
-
     const CMATERIAL *objMaterial = aHitInfo.pHitObject->GetMaterial();
     wxASSERT( objMaterial != NULL );
 
-    const SFVEC3F diffuseColorObj = aHitInfo.pHitObject->GetDiffuseColor( aHitInfo );
-
     SFVEC3F outColor = objMaterial->GetEmissiveColor() + objMaterial->GetAmbientColor();
+
+    if( aRecursiveLevel > 5 )
+        return outColor;
+
+    SFVEC3F hitPoint = aHitInfo.m_HitPoint;
+
+    hitPoint += aHitInfo.m_HitNormal * m_boardAdapter.GetNonCopperLayerThickness3DU() * 0.6f;
+
+    const SFVEC3F diffuseColorObj = aHitInfo.pHitObject->GetDiffuseColor( aHitInfo );
 
     const LIST_LIGHT &lightList = m_lights.GetList();
 
@@ -1874,9 +1873,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
             {
                 // This increase the start point by a "fixed" factor so it will work the
                 // same for all distances
-                const SFVEC3F startPoint = aRay.at( NextFloatUp(
-                                                    NextFloatUp(
-                                                    NextFloatUp( aHitInfo.m_tHit ) ) ) );
+                const SFVEC3F startPoint = aRay.at( aHitInfo.m_tHit + m_boardAdapter.GetNonCopperLayerThickness3DU() * 0.25f );
 
                 const unsigned int refractions_number_of_samples = objMaterial->GetNrRefractionsSamples();
 
@@ -1904,36 +1901,39 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                     HITINFO refractedHit;
                     refractedHit.m_tHit = std::numeric_limits<float>::infinity();
 
-                    SFVEC3F refractedColor = objMaterial->GetAmbientColor();
+
+                    SFVEC3F refractedColor = aBgColor;
 
                     if( m_accelerator->Intersect( refractedRay, refractedHit ) )
                     {
                         refractedColor = shadeHit( aBgColor,
                                                    refractedRay,
                                                    refractedHit,
-                                                   true,
+                                                   !aIsInsideObject,
                                                    aRecursiveLevel + 1,
                                                    false );
 
                         const SFVEC3F absorbance = ( SFVEC3F(1.0f) - diffuseColorObj ) *
                                                    (1.0f - objTransparency ) *
                                                    objMaterial->GetAbsorvance() *   // Adjust falloff factor
-                                                   -refractedHit.m_tHit;
+                                                   refractedHit.m_tHit;
 
-                        const SFVEC3F transparency = SFVEC3F( expf( absorbance.r ),
-                                                              expf( absorbance.g ),
-                                                              expf( absorbance.b ) );
+                        const SFVEC3F transparency = 1.0f / ( absorbance + 1.0f );
 
-                        sum_color += refractedColor * transparency * objTransparency;
+                        sum_color += refractedColor * transparency;
                     }
                     else
                     {
-                        sum_color += refractedColor * objTransparency;
+                        sum_color += refractedColor;
                     }
                 }
 
                 outColor = outColor * (1.0f - objTransparency) +
-                           (sum_color / SFVEC3F( (float)refractions_number_of_samples) );
+                           objTransparency * sum_color / SFVEC3F( (float)refractions_number_of_samples);
+            }
+            else
+            {
+                outColor = outColor * (1.0f - objTransparency) + objTransparency * aBgColor;
             }
         }
     }
