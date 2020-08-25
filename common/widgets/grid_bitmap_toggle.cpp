@@ -21,6 +21,8 @@
 #include <widgets/grid_bitmap_toggle.h>
 #include <wx/dc.h>
 
+#include <algorithm>
+
 
 GRID_BITMAP_TOGGLE_RENDERER::GRID_BITMAP_TOGGLE_RENDERER( const wxBitmap& aCheckedBitmap,
                                                           const wxBitmap& aUncheckedBitmap ) :
