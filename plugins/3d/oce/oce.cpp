@@ -74,13 +74,13 @@ static struct FILE_DATA
     FILE_DATA()
     {
 #ifdef _WIN32
-        extensions = { "stp","step","stpZ","step.gz","igs","iges" };
-        filters = { "STEP (*.stp;*.step;*.stpZ;*.step.gz)|*.stp;*.step;*.stpZ;*.step.gz",
+        extensions = { "stp","step","stpz","step.gz","igs","iges" };
+        filters = { "STEP (*.stp;*.step;*.stpz;*.step.gz)|*.stp;*.step;*.stpz;*.step.gz",
                     "IGES (*.igs;*.iges)|*.igs;*.iges" };
 #else
-        extensions = { "stp","STP","stpZ","STPZ","step","STEP","step.gz","STEP.GZ","igs","IGS","iges","IGES" };
-        filters = { "STEP (*.stp;*.STP;*.stpZ;*.STPZ;*.step;*.STEP;*.step.gz;*.STEP.GZ)"
-                        "|*.stp;*.STP;*.stpZ;*.STPZ;*.step;*.STEP;*.step.gz;*.STEP.GZ",
+        extensions = { "stp","STP","stpZ",".stpz","STPZ","step","STEP","step.gz","STEP.GZ","igs","IGS","iges","IGES" };
+        filters = { "STEP (*.stp;*.STP;*.stpZ;*.stpz;*.STPZ;*.step;*.STEP;*.step.gz;*.STEP.GZ)"
+                        "|*.stp;*.STP;*.stpZ;*.stpz;*.STPZ;*.step;*.STEP;*.step.gz;*.STEP.GZ",
                     "IGES (*.igs;*.IGS;*.iges;*.IGES)|*.igs;*.IGS;*.iges;*.IGES" };
 #endif
     }
