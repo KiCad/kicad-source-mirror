@@ -712,9 +712,13 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
                 {
                     if( !count || line_start.x != x1 )
                     {
-                        if( dupx0 > 1 ) // Vertical points are merged,
-                                        // draw the pending vertical line
+                        if( count && dupx0 > 1 && ymin0 != ymax0 )
+                        {
+                            // Vertical points are merged, draw the pending vertical line
+                            // However, if the line is one pixel length, it is not drawn,
+                            // because the main trace show this point
                             dc.DrawLine( x0, ymin0, x0, ymax0 );
+                        }
 
                         x0 = x1;
                         ymin0 = ymax0 = y1;
@@ -728,9 +732,9 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
                     }
                     else
                     {
-                        // "Merge" points on a vertical line at x0:
                         ymin0 = std::min( ymin0, y1 );
                         ymax0 = std::max( ymax0, y1 );
+                        x0 = x1;
                         dupx0++;
                     }
                 }
@@ -749,13 +753,18 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
                 for( size_t ii = 1; ii < pointList.size()-1; ii++ )
                 {
-                    if( pointList[ii-1].y == pointList[ii].y )
+                    // Skip intermediate points between the first point and the last
+                    // point of the segment candidate
+                    if( drawPoints.back().y == pointList[ii].y &&
+                        drawPoints.back().y == pointList[ii+1].y )
                         continue;
                     else
                         drawPoints.push_back( pointList[ii] );
                 }
 
-                drawPoints.push_back( pointList.back() );   // push the last point in list
+                // push the last point to draw in list
+                if( drawPoints.back() != pointList.back() )
+                    drawPoints.push_back( pointList.back() );
 
                 dc.DrawLines( drawPoints.size(), &drawPoints[0] );
             }
