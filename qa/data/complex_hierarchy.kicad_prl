@@ -66,5 +66,8 @@
   "meta": {
     "filename": "complex_hierarchy.kicad_prl",
     "version": 2
+  },
+  "project": {
+    "files": []
   }
 }
