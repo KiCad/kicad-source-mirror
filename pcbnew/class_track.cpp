@@ -883,9 +883,7 @@ bool TRACK::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     arect.Inflate( aAccuracy );
 
     if( aContained )
-        /* Tracks are a special case:
-         * they are considered inside the rect if one end is inside the rect */
-        return arect.Contains( GetStart() ) || arect.Contains( GetEnd() );
+        return arect.Contains( GetStart() ) && arect.Contains( GetEnd() );
     else
         return arect.Intersects( GetStart(), GetEnd() );
 }
