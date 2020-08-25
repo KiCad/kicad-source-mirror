@@ -169,6 +169,8 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
     {
         wxFileInputStream ifile( aFileName );
         tmpfilename = wxFileName( aFileName );
+
+        tmpfilename.SetPath( wxStandardPaths::Get().GetTempDir() );
         tmpfilename.SetExt( "WRL" );
 
         wxFileOffset size = ifile.GetLength();
@@ -200,7 +202,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
     {
         // set the max char limit to 8MB; if a VRML file contains
         // longer lines then perhaps it shouldn't be used
-        modelFile = new FILE_LINE_READER( aFileName, 0, 8388608 );
+        modelFile = new FILE_LINE_READER( filename, 0, 8388608 );
     }
     catch( IO_ERROR & )
     {
