@@ -713,8 +713,6 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         {
             DismissModal( false );
         }
-
-        Close( true );
     }
     else if( GetBoard()->GetFirstModule() )
     {
