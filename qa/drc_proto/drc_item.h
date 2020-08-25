@@ -98,7 +98,7 @@ private:
     static DRC_ITEM holeClearance;
     static DRC_ITEM trackWidth;
     static DRC_ITEM viaTooSmall;
-    static DRC_ITEM viaAnnulus;
+    static DRC_ITEM annulus;
     static DRC_ITEM drillTooSmall;
     static DRC_ITEM viaHoleLargerThanPad;
     static DRC_ITEM padstack;

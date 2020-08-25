@@ -23,6 +23,9 @@
 
 #include <class_board.h>
 #include <class_track.h>
+#include <class_via.h>
+#include <class_pad.h>
+
 #include <common.h>
 
 #include <drc_proto/drc_engine.h>
@@ -32,22 +35,26 @@
 
 
 /*
-    Track width test. As the name says, checks width of the tracks (including segments and arcs)
+    Via/pad annular ring width test. Checks if there's sufficient copper ring around PTH/NPTH holes (vias/pads)
     Errors generated:
-    - DRCE_TRACK_WIDTH
+    - DRCE_ANNULUS
+
+    Todo: 
+    - check pad holes too.
+    - pad stack support (different IAR/OAR values depending on layer)
 */
 
 namespace test
 {
 
-class DRC_TEST_PROVIDER_TRACK_WIDTH : public DRC_TEST_PROVIDER
+class DRC_TEST_PROVIDER_ANNULUS : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_TRACK_WIDTH()
+    DRC_TEST_PROVIDER_ANNULUS()
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_TRACK_WIDTH()
+    virtual ~DRC_TEST_PROVIDER_ANNULUS()
     {
     }
 
@@ -55,12 +62,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "width";
+        return "annulus";
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests track widths";
+        return "Tests pad/via annular rings";
     }
 
     virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
@@ -69,68 +76,62 @@ public:
 }; // namespace test
 
 
-bool test::DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
+bool test::DRC_TEST_PROVIDER_ANNULUS::Run()
 {
     if( !m_drcEngine->HasCorrectRulesForId(
-                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH ) )
+                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH ) )
     {
-        ReportAux( "No track width constraints found. Skipping check." );
+        ReportAux( "No annulus constraints found. Skipping check." );
         return false;
     }
 
-    ReportStage( ( "Testing track widths" ), 0, 2 );
+    ReportStage( ( "Testing via annular rings" ), 0, 2 );
 
-    auto checkTrackWidth = [&]( BOARD_ITEM* item ) -> bool {
-        int      width;
-        VECTOR2I p0;
+    auto checkAnnulus = [&]( BOARD_ITEM* item ) -> bool 
+    {
+        bool fail_min = false, fail_max = false;
+        int v_min, v_max;
+        auto via = dyn_cast<VIA*>( item );
 
-        if( auto arc = dyn_cast<ARC*>( item ) )
-        {
-            width = arc->GetWidth();
-            p0    = arc->GetStart();
-        }
-        else if( auto trk = dyn_cast<TRACK*>( item ) )
-        {
-            width = trk->GetWidth();
-            p0    = ( trk->GetStart() + trk->GetEnd() ) / 2;
-        }
+        // fixme: check minimum IAR/OAR ring for THT pads too
+        if( !via )
+            return true;
 
         test::DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems(
-                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH, item );
+                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, via );
 
-        bool fail_min = false, fail_max = false;
-        int  constraintWidth;
+        int annulus = ( via->GetWidth() - via->GetDrillValue() ) / 2;
 
-        if( constraint.Value().HasMin() && width < constraint.Value().Min() )
+        if( constraint.Value().HasMin() )
         {
-            fail_min        = true;
-            constraintWidth = constraint.Value().Min();
+            v_min = constraint.Value().Min();
+            fail_min = annulus < v_min;
         }
 
-        if( constraint.Value().HasMax() && width > constraint.Value().Max() )
+        if( constraint.Value().HasMax() )
         {
-            fail_max        = true;
-            constraintWidth = constraint.Value().Max();
+            v_max = constraint.Value().Max();
+            fail_max = annulus > v_max;
         }
 
         if( fail_min || fail_max )
         {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_WIDTH );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULUS );
             wxString                  msg;
 
-            msg.Printf( drcItem->GetErrorText() + _( " (%s; width %s, constraint %s %s)" ),
+            msg.Printf( drcItem->GetErrorText() + _( " (%s; actual annulus %s, constraint %s %s)" ),
                     constraint.GetParentRule()->GetName(),
-                    MessageTextFromValue( userUnits(), width, true ),
+                    MessageTextFromValue( userUnits(), annulus, true ),
                     fail_min ? _( "minimum" ) : _( "maximum" ),
-                    MessageTextFromValue( userUnits(), constraintWidth, true ) );
+                    MessageTextFromValue( userUnits(), fail_min ? v_min : v_max, true ) );
 
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( item );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            ReportWithMarker( drcItem, p0 );
+            ReportWithMarker( drcItem, via->GetPosition() );
 
-            if( isErrorLimitExceeded( DRCE_TRACK_WIDTH ) )
+            if( isErrorLimitExceeded( DRCE_ANNULUS ) )
                 return false;
 
         }
@@ -138,7 +139,7 @@ bool test::DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
         return true;
     };
 
-    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T }, LSET::AllCuMask(), checkTrackWidth );
+    forEachGeometryItem( { PCB_VIA_T }, LSET::AllCuMask(), checkAnnulus );
 
     reportRuleStatistics();
 
@@ -147,13 +148,13 @@ bool test::DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 
 
 std::set<test::DRC_CONSTRAINT_TYPE_T>
-test::DRC_TEST_PROVIDER_TRACK_WIDTH::GetMatchingConstraintIds() const
+test::DRC_TEST_PROVIDER_ANNULUS::GetMatchingConstraintIds() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH };
+    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH };
 }
 
 
 namespace detail
 {
-static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_TRACK_WIDTH> dummy;
+static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_ANNULUS> dummy;
 }

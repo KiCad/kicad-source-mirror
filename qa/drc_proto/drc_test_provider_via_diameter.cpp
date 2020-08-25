@@ -32,22 +32,24 @@
 
 
 /*
-    Track width test. As the name says, checks width of the tracks (including segments and arcs)
+    Via diameter test.
+
     Errors generated:
-    - DRCE_TRACK_WIDTH
+    - DRCE_TOO_SMALL_VIA
+    - DRCE_TOO_SMALL_MICROVIA
 */
 
 namespace test
 {
 
-class DRC_TEST_PROVIDER_TRACK_WIDTH : public DRC_TEST_PROVIDER
+class DRC_TEST_PROVIDER_VIA_DIAMETER : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_TRACK_WIDTH()
+    DRC_TEST_PROVIDER_VIA_DIAMETER()
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_TRACK_WIDTH()
+    virtual ~DRC_TEST_PROVIDER_VIA_DIAMETER()
     {
     }
 
@@ -55,12 +57,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "width";
+        return "diameter";
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests track widths";
+        return "Tests via diameters";
     }
 
     virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
@@ -69,68 +71,61 @@ public:
 }; // namespace test
 
 
-bool test::DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
+bool test::DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 {
     if( !m_drcEngine->HasCorrectRulesForId(
-                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH ) )
+                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_VIA_DIAMETER ) )
     {
-        ReportAux( "No track width constraints found. Skipping check." );
+        ReportAux( "No diameter constraints found. Skipping check." );
         return false;
     }
 
-    ReportStage( ( "Testing track widths" ), 0, 2 );
+    ReportStage( ( "Testing via diameters" ), 0, 2 );
 
-    auto checkTrackWidth = [&]( BOARD_ITEM* item ) -> bool {
-        int      width;
-        VECTOR2I p0;
+    auto checkViaDiameter = [&]( BOARD_ITEM* item ) -> bool {
+        auto via = dyn_cast<VIA*>( item );
 
-        if( auto arc = dyn_cast<ARC*>( item ) )
-        {
-            width = arc->GetWidth();
-            p0    = arc->GetStart();
-        }
-        else if( auto trk = dyn_cast<TRACK*>( item ) )
-        {
-            width = trk->GetWidth();
-            p0    = ( trk->GetStart() + trk->GetEnd() ) / 2;
-        }
+        // fixme: move to pad stack check?
+        if( !via )
+            return true;
 
         test::DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems(
-                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH, item );
+                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_VIA_DIAMETER, item );
 
         bool fail_min = false, fail_max = false;
-        int  constraintWidth;
+        int constraintDiameter;
+        int diameter = via->GetWidth();
 
-        if( constraint.Value().HasMin() && width < constraint.Value().Min() )
+        if( constraint.Value().HasMin() && diameter < constraint.Value().Min() )
         {
             fail_min        = true;
-            constraintWidth = constraint.Value().Min();
+           constraintDiameter = constraint.Value().Min();
         }
 
-        if( constraint.Value().HasMax() && width > constraint.Value().Max() )
+        if( constraint.Value().HasMax() && diameter > constraint.Value().Max() )
         {
             fail_max        = true;
-            constraintWidth = constraint.Value().Max();
+           constraintDiameter = constraint.Value().Max();
         }
 
         if( fail_min || fail_max )
         {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_WIDTH );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_DIAMETER );
             wxString                  msg;
 
-            msg.Printf( drcItem->GetErrorText() + _( " (%s; width %s, constraint %s %s)" ),
+            msg.Printf( drcItem->GetErrorText() + _( " (%s; diameter %s, constraint %s %s)" ),
                     constraint.GetParentRule()->GetName(),
-                    MessageTextFromValue( userUnits(), width, true ),
+                    MessageTextFromValue( userUnits(), diameter, true ),
                     fail_min ? _( "minimum" ) : _( "maximum" ),
-                    MessageTextFromValue( userUnits(), constraintWidth, true ) );
+                    MessageTextFromValue( userUnits(), constraintDiameter, true ) );
 
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( item );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            ReportWithMarker( drcItem, p0 );
+            ReportWithMarker( drcItem, via->GetPosition() );
 
-            if( isErrorLimitExceeded( DRCE_TRACK_WIDTH ) )
+            if( isErrorLimitExceeded( DRCE_VIA_DIAMETER ) )
                 return false;
 
         }
@@ -138,7 +133,7 @@ bool test::DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
         return true;
     };
 
-    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T }, LSET::AllCuMask(), checkTrackWidth );
+    forEachGeometryItem( { PCB_VIA_T }, LSET::AllCuMask(), checkViaDiameter );
 
     reportRuleStatistics();
 
@@ -147,13 +142,13 @@ bool test::DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 
 
 std::set<test::DRC_CONSTRAINT_TYPE_T>
-test::DRC_TEST_PROVIDER_TRACK_WIDTH::GetMatchingConstraintIds() const
+test::DRC_TEST_PROVIDER_VIA_DIAMETER::GetMatchingConstraintIds() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH };
+    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_VIA_DIAMETER };
 }
 
 
 namespace detail
 {
-static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_TRACK_WIDTH> dummy;
+static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_VIA_DIAMETER> dummy;
 }

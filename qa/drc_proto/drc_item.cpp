@@ -88,9 +88,9 @@ test::DRC_ITEM test::DRC_ITEM::viaTooSmall( DRCE_TOO_SMALL_VIA,
         _( "Via size too small" ),
         wxT( "via_too_small" ) );
 
-test::DRC_ITEM test::DRC_ITEM::viaAnnulus( DRCE_VIA_ANNULUS,
-        _( "Via annulus" ),
-        wxT( "via_annulus" ) );
+test::DRC_ITEM test::DRC_ITEM::annulus( DRCE_ANNULUS,
+        _( "annulus" ),
+        wxT( "annulus" ) );
 
 test::DRC_ITEM test::DRC_ITEM::drillTooSmall( DRCE_TOO_SMALL_DRILL,
         _( "Drill too small" ),
@@ -175,7 +175,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> test::DRC_ITEM::allItemTypes( {
             DRC_ITEM::holeClearance,
             DRC_ITEM::trackWidth,
             DRC_ITEM::viaTooSmall,
-            DRC_ITEM::viaAnnulus,
+            DRC_ITEM::annulus,
             DRC_ITEM::drillTooSmall,
             DRC_ITEM::viaHoleLargerThanPad,
             DRC_ITEM::padstack,
@@ -215,7 +215,7 @@ std::shared_ptr<test::DRC_ITEM> test::DRC_ITEM::Create( int aErrorCode )
     case DRCE_HOLE_CLEARANCE:           item = new DRC_ITEM( holeClearance ); break;
     case DRCE_TRACK_WIDTH:              item = new DRC_ITEM( trackWidth ); break;
     case DRCE_TOO_SMALL_VIA:            item = new DRC_ITEM( viaTooSmall ); break;
-    case DRCE_VIA_ANNULUS:              item = new DRC_ITEM( viaAnnulus ); break;
+    case DRCE_ANNULUS:                  item = new DRC_ITEM( annulus ); break;
     case DRCE_TOO_SMALL_DRILL:          item = new DRC_ITEM( drillTooSmall ); break;
     case DRCE_VIA_HOLE_BIGGER:          item = new DRC_ITEM( viaHoleLargerThanPad ); break;
     case DRCE_PADSTACK:                 item = new DRC_ITEM( padstack ); break;

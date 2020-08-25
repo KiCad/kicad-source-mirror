@@ -43,6 +43,10 @@ void drcPrintDebugMessage( int level, wxString msg, const char *function, int li
     if( wxGetEnv( "DRC_DEBUG", &valueStr ) )
     {
         int setLevel = wxAtoi( valueStr );
+        if( level <= setLevel )
+        {
+            printf("%-30s:%d | %s\n", function, line, (const char *) msg.c_str() );
+        }
     }
 }
 
@@ -50,6 +54,8 @@ void drcPrintDebugMessage( int level, wxString msg, const char *function, int li
 test::DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_board( aBoard ),
     m_designSettings ( aSettings ),
+    m_worksheet( nullptr ),
+    m_schematicNetlist( nullptr ),
     m_reporter( nullptr ),
     m_progressReporter( nullptr )
 {
@@ -64,11 +70,6 @@ test::DRC_ENGINE::~DRC_ENGINE()
 
 test::DRC_REPORT::~DRC_REPORT()
 {
-    for( auto item : m_entries )
-    {
-        if ( item.m_marker )
-            delete item.m_marker;
-    }
 }
 
 
@@ -139,11 +140,11 @@ bool test::DRC_ENGINE::CompileRules()
     for( auto provider : m_testProviders )
     {
         ReportAux( wxString::Format( "- Provider: '%s': ", provider->GetName() ) );
-        drc_dbg(11, "do prov %s", provider->GetName() );
+        drc_dbg(7, "do prov %s", provider->GetName() );
 
         for ( auto id : provider->GetMatchingConstraintIds() )
         {
-            drc_dbg(11, "do id %d", id);
+            drc_dbg(7, "do id %d", id);
             if( m_constraintMap.find(id) == m_constraintMap.end() )
                 m_constraintMap[id] = new CONSTRAINT_SET;
 
@@ -151,14 +152,14 @@ bool test::DRC_ENGINE::CompileRules()
 
             for( auto rule : m_rules )
             {
-                drc_dbg(11, "Scan provider %s, rule %s",  provider->GetName(), rule->GetName() );
+                drc_dbg(7, "Scan provider %s, rule %s",  provider->GetName(), rule->GetName() );
 
                 if( ! rule->IsEnabled() )
                     continue;
 
                 for( auto& constraint : rule->Constraints() )
                 {
-                    drc_dbg(11, "scan constraint id %d\n", constraint.GetType() );
+                    drc_dbg(7, "scan constraint id %d\n", constraint.GetType() );
                     if( constraint.GetType() != id )
                         continue;
 
@@ -191,8 +192,6 @@ bool test::DRC_ENGINE::CompileRules()
 
 void test::DRC_ENGINE::RunTests( )
 {
-    //m_largestClearance = m_designSettings->GetBiggestClearanceValue();
-
     m_drcReport.reset( new test::DRC_REPORT );
     m_testProviders = DRC_TEST_PROVIDER_REGISTRY::Instance().GetTestProviders();
 
@@ -209,14 +208,18 @@ void test::DRC_ENGINE::RunTests( )
     for( auto provider : m_testProviders )
     {
         bool skipProvider = false;
+        auto matchingConstraints = provider->GetMatchingConstraintIds();
 
-        for( auto ruleID : provider->GetMatchingConstraintIds() )
+        if( matchingConstraints.size() )
         {
-            if( !HasCorrectRulesForId( ruleID ) )
+            for( auto ruleID : matchingConstraints )
             {
-                ReportAux( wxString::Format( "DRC provider '%s' has no rules provided. Skipping run.", provider->GetName() ) );
-                skipProvider = true;
-                break;
+                if( !HasCorrectRulesForId( ruleID ) )
+                {
+                    ReportAux( wxString::Format( "DRC provider '%s' has no rules provided. Skipping run.", provider->GetName() ) );
+                    skipProvider = true;
+                    break;
+                }
             }
         }
 
@@ -271,12 +274,18 @@ void test::DRC_ENGINE::Report( std::shared_ptr<DRC_ITEM> aItem, ::MARKER_PCB *aM
 
     if( m_reporter )
     {
-        m_reporter->Report ( wxString::Format( "Test '%s': violation of rule '%s' : %s (code %d)",
-        aItem->GetViolatingTest()->GetName(),
-        aItem->GetViolatingRule()->GetName(),
-        aItem->GetErrorMessage(),
-        aItem->GetErrorCode() ), RPT_SEVERITY_ERROR /* fixme */ );
+        wxString msg = wxString::Format( "Test '%s': %s (code %d)",
+            aItem->GetViolatingTest()->GetName(),
+            aItem->GetErrorMessage(),
+            aItem->GetErrorCode() );
 
+        auto rule = aItem->GetViolatingRule();
+
+        if( rule )
+            msg += wxString::Format( ", violating rule: '%s'", rule->GetName() );
+        
+        m_reporter->Report ( msg, RPT_SEVERITY_ERROR /* fixme */ );
+        
         wxString violatingItemsStr = "Violating items: ";
 
         if( aMarker )

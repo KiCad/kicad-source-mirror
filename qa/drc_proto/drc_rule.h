@@ -57,7 +57,8 @@ enum DRC_CONSTRAINT_TYPE_T
     DRC_CONSTRAINT_TYPE_SILK_TO_SILK,
     DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
     DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH,
-    DRC_CONSTRAINT_TYPE_DISALLOW
+    DRC_CONSTRAINT_TYPE_DISALLOW,
+    DRC_CONSTRAINT_TYPE_VIA_DIAMETER
 };
 
 enum DRC_DISALLOW_T
@@ -93,7 +94,7 @@ public:
     bool HasMax() const { return m_hasMax; }
     bool HasOpt() const { return m_hasOpt; }
 
-    void SetMin( T v ) { m_min = v; m_hasMin = true; }
+void SetMin( T v ) { m_min = v; m_hasMin = true; }
     void SetMax( T v ) { m_max = v; m_hasMax = true; }
     void SetOpt( T v ) { m_opt = v; m_hasOpt = true; }
 
@@ -126,6 +127,8 @@ class DRC_CONSTRAINT
     DRC_RULE* GetParentRule() const { return m_parentRule; }
 
     DRC_CONSTRAINT_TYPE_T GetType() const { return m_Type; }
+
+    const LSET& GetAllowedLayers() const { return m_LayerCondition; }
 
     public:
         DRC_CONSTRAINT_TYPE_T  m_Type;

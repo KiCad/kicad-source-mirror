@@ -26,7 +26,7 @@
 #define DRC_RTREE_H_
 
 #include <eda_rect.h>
-#include <board_connected_item.h>
+#include <class_board_item.h>
 #include <set>
 #include <vector>
 
@@ -46,7 +46,7 @@ private:
 public:
     DRC_RTREE()
     {
-        for( int layer : LSET::AllCuMask().Seq() )
+        for( int layer : LSET::AllLayersMask().Seq() )
             m_tree[layer] = new drc_rtree();
 
         m_count = 0;
@@ -92,14 +92,14 @@ public:
             }
         }
         else
-        {
-            const EDA_RECT& bbox    = aItem->GetBoundingBox();
-            const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
-            const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+    {
+        const EDA_RECT& bbox    = aItem->GetBoundingBox();
+        const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
+        const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
 
-            for( int layer : aItem->GetLayerSet().Seq() )
+        for( int layer : aItem->GetLayerSet().Seq() )
             {
-                m_tree[layer]->Insert( mmin, mmax, aItem );
+            m_tree[layer]->Insert( mmin, mmax, aItem );
             }
         }
 
@@ -130,8 +130,8 @@ public:
                 const int mmin2[2] = { INT_MIN, INT_MIN };
                 const int mmax2[2] = { INT_MAX, INT_MAX };
 
-                // If we are not successful ( true == not found ), then we expand
-                // the search to the full tree
+            // If we are not successful ( true == not found ), then we expand
+            // the search to the full tree
                 while( !m_tree[int( layer )]->Remove( mmin2, mmax2, aItem ) )
                     ;
 

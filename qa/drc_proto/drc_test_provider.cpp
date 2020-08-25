@@ -99,7 +99,7 @@ void test::DRC_TEST_PROVIDER::reportRuleStatistics()
     }
 }
 
-int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers, std::function<int(BOARD_ITEM*)> aFunc )
+int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers, std::function<bool(BOARD_ITEM*)> aFunc )
 {
     BOARD *brd = m_drcEngine->GetBoard();
     std::bitset<MAX_STRUCT_TYPE_ID> typeMask;
@@ -125,20 +125,23 @@ int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTy
     case PCB_ARC_T:*/
     for ( auto item : brd->Tracks() )
     {
-        if( typeMask[ PCB_TRACE_T ] && item->Type() == PCB_TRACE_T )
+        if( (item->GetLayerSet() & aLayers).any() )
         {
-            aFunc( item );
-            n++;
-        }
-        else if( typeMask[ PCB_VIA_T ] && item->Type() == PCB_VIA_T )
-        {
-            aFunc( item );
-            n++;
-        }
-        else if( typeMask[ PCB_ARC_T ] && item->Type() == PCB_ARC_T )
-        {
-            aFunc( item );
-            n++;
+            if( typeMask[ PCB_TRACE_T ] && item->Type() == PCB_TRACE_T )
+            {
+                aFunc( item );
+                n++;
+            }
+            else if( typeMask[ PCB_VIA_T ] && item->Type() == PCB_VIA_T )
+            {
+                aFunc( item );
+                n++;
+            }
+            else if( typeMask[ PCB_ARC_T ] && item->Type() == PCB_ARC_T )
+            {
+                aFunc( item );
+                n++;
+            }
         }
     }
 
@@ -149,34 +152,50 @@ int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTy
     */
     for( auto item : brd->Drawings() )
     {
-        if( typeMask[ PCB_DIMENSION_T ] && item->Type() == PCB_DIMENSION_T )
+        if( (item->GetLayerSet() & aLayers).any() )
         {
-            aFunc( item );
-            n++;
-        }
-        else if( typeMask[ PCB_LINE_T ] && item->Type() == PCB_LINE_T )
-        {
-            aFunc( item );
-            n++;
-        }
-        else if( typeMask[ PCB_TEXT_T ] && item->Type() == PCB_TEXT_T )
-        {
-            aFunc( item );
-            n++;
-        }
-        else if( typeMask[ PCB_TARGET_T ] && item->Type() == PCB_TARGET_T )
-        {
-            aFunc( item );
-            n++;
+            if( typeMask[ PCB_DIMENSION_T ] && item->Type() == PCB_DIMENSION_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
+            else if( typeMask[ PCB_LINE_T ] && item->Type() == PCB_LINE_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
+            else if( typeMask[ PCB_TEXT_T ] && item->Type() == PCB_TEXT_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
+            else if( typeMask[ PCB_TARGET_T ] && item->Type() == PCB_TARGET_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
         }
     }
 
     for( auto item : brd->Zones() )
     {
-        if( typeMask[ PCB_ZONE_AREA_T ] && item->Type() == PCB_ZONE_AREA_T )
+        if( (item->GetLayerSet() & aLayers).any() )
         {
-            aFunc( item );
-            n++;
+            if( typeMask[ PCB_ZONE_AREA_T ] && item->Type() == PCB_ZONE_AREA_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
         }
     }
 
@@ -184,41 +203,69 @@ int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTy
     {
         if( typeMask[ PCB_MODULE_TEXT_T ] )
         {
-            aFunc( &mod->Reference() );
-            n++;
-            aFunc( &mod->Value() );
-            n++;
+            if( (mod->Reference().GetLayerSet() & aLayers).any() )
+            {
+                if( !aFunc( &mod->Reference() ) )
+                    return n;
+
+                n++;
+            }
+
+            if( (mod->Value().GetLayerSet() & aLayers).any() )
+            {
+                if( !aFunc( &mod->Value() ) )
+                    return n;
+
+                n++;
+            }
         }
 
         for( auto pad : mod->Pads() )
         {
-            if( typeMask[ PCB_PAD_T ] && pad->Type() == PCB_PAD_T )
+            if( (pad->GetLayerSet() & aLayers).any() )
             {
-                aFunc( pad );
-                n++;
+                if( typeMask[ PCB_PAD_T ] && pad->Type() == PCB_PAD_T )
+                {
+                    if( !aFunc( pad ) )
+                        return n;
+
+                    n++;
+                }
             }
         }
 
         for( auto dwg : mod->GraphicalItems() )
         {
-            if( typeMask[ PCB_MODULE_TEXT_T ] && dwg->Type() == PCB_MODULE_TEXT_T )
+            if( (dwg->GetLayerSet() & aLayers).any() )
             {
-                aFunc( dwg );
-                n++;
-            }
-            else if( typeMask[ PCB_MODULE_EDGE_T ] && dwg->Type() == PCB_MODULE_EDGE_T )
-            {
-                aFunc( dwg );
-                n++;
+                if( typeMask[ PCB_MODULE_TEXT_T ] && dwg->Type() == PCB_MODULE_TEXT_T )
+                {
+                    if( !aFunc( dwg ) )
+                        return n;
+
+                    n++;
+                }
+                else if( typeMask[ PCB_MODULE_EDGE_T ] && dwg->Type() == PCB_MODULE_EDGE_T )
+                {
+                    if( !aFunc( dwg ) )
+                        return n;
+
+                    n++;
+                }
             }
         }
 
         for( auto zone : mod->Zones() )
         {
-            if( typeMask[ PCB_MODULE_ZONE_AREA_T ] && zone->Type() == PCB_MODULE_ZONE_AREA_T )
+            if( (zone->GetLayerSet() & aLayers).any() )
             {
-                aFunc( zone );
-                n++;
+                if( typeMask[ PCB_MODULE_ZONE_AREA_T ] && zone->Type() == PCB_MODULE_ZONE_AREA_T )
+                {
+                    if( ! aFunc( zone ) )
+                        return n;
+
+                    n++;
+                }
             }
         }
     }

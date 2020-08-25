@@ -36,6 +36,9 @@
 
 int main( int argc, char *argv[] )
 {
+
+    wxLogTrace("DUPA", "Debug Test!\n");
+
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     propMgr.Rebuild();
 

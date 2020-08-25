@@ -106,9 +106,14 @@ public:
 
     virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const = 0;
 
+    virtual bool IsRuleDriven() const
+    {
+        return m_isRuleDriven;
+    }
+
 protected:
 
-    int forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers, std::function<int(BOARD_ITEM*)> aFunc );
+    int forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers, std::function<bool(BOARD_ITEM*)> aFunc );
 
     virtual void reportRuleStatistics();
     virtual void accountCheck( const test::DRC_RULE* ruleToTest );
@@ -119,6 +124,7 @@ protected:
     DRC_ENGINE *m_drcEngine;
     std::unordered_map<const test::DRC_RULE*, int> m_stats;
     bool m_enable;
+    bool m_isRuleDriven = true;
 };
 
 

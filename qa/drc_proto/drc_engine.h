@@ -53,11 +53,19 @@ class NETLIST;
 class PROGRESS_REPORTER;
 class REPORTER;
 
+namespace KIGFX 
+{
+    class WS_PROXY_VIEW_ITEM;
+};
 
 void drcPrintDebugMessage( int level, wxString msg, const char *function, int line );
 
 #define drc_dbg(level, fmt, ...) \
     drcPrintDebugMessage(level, wxString::Format( fmt, __VA_ARGS__ ), __FUNCTION__, __LINE__ );
+
+
+//#define drc_dbg(level, fmt, ...) \
+  //  wxLogTrace("DUPA", fmt, __VA_ARGS__);
 
 namespace test
 {
@@ -88,10 +96,10 @@ enum PCB_DRC_CODE
     DRCE_ZONE_HAS_EMPTY_NET,                ///< copper area has a net but no pads in nets, which is suspicious
     DRCE_DANGLING_VIA,                      ///< via which isn't connected to anything
     DRCE_DANGLING_TRACK,                    ///< track with at least one end not connected to anything
-    DRCE_HOLE_CLEARANCE,           ///< overlapping drilled holes break drill bits
+    DRCE_HOLE_CLEARANCE,                    ///< overlapping drilled holes break drill bits
     DRCE_TRACK_WIDTH,                       ///< Track width is too small or too large
     DRCE_TOO_SMALL_VIA,                     ///< Too small via size
-    DRCE_VIA_ANNULUS,                       ///< Via size and drill leave annulus too small or too large
+    DRCE_ANNULUS,                       ///< Via size and drill leave annulus too small or too large
     DRCE_TOO_SMALL_DRILL,                   ///< Too small via or pad drill
     DRCE_VIA_HOLE_BIGGER,                   ///< via's hole is bigger than its diameter
     DRCE_PADSTACK,                          ///< something is wrong with a pad or via stackup
@@ -111,6 +119,7 @@ enum PCB_DRC_CODE
     DRCE_EXTRA_FOOTPRINT,                   ///< netlist item not found for footprint
 
     DRCE_UNRESOLVED_VARIABLE,
+    DRCE_VIA_DIAMETER,                      ///< Via diameter checks (min/max)
 
     DRCE_LAST = DRCE_UNRESOLVED_VARIABLE
 };
@@ -158,6 +167,26 @@ public:
     DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS* aSettings );
     ~DRC_ENGINE();
 
+    void SetSchematicNetlist( NETLIST* aNetlist )
+    {
+        m_schematicNetlist = aNetlist;
+    }
+
+    NETLIST* GetSchematicNetlist() const
+    {
+        return m_schematicNetlist;
+    }
+
+    void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
+    {
+        m_worksheet = aWorksheet;
+    }
+
+    KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const
+    {
+        return m_worksheet;
+    }
+
     void SetProgressReporter( PROGRESS_REPORTER* aProgRep )
     {
         m_progressReporter = aProgRep;
@@ -182,6 +211,8 @@ public:
     {
         return m_board;
     }
+
+
 
     const DRC_CONSTRAINT& EvalRulesForItems(
             DRC_CONSTRAINT_TYPE_T ruleID,  BOARD_ITEM* a, BOARD_ITEM* b = nullptr, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
@@ -233,6 +264,8 @@ private:
 
     BOARD_DESIGN_SETTINGS* m_designSettings;
     BOARD*                 m_board;
+    KIGFX::WS_PROXY_VIEW_ITEM* m_worksheet;
+    NETLIST* m_schematicNetlist;
 
     std::shared_ptr<DRC_REPORT> m_drcReport;
 

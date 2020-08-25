@@ -40,39 +40,37 @@
 #include <drc_proto/drc_test_provider_clearance_base.h>
 
 /*
-    Board edge clearance test. Checks all items for their mechanical clearances against the board edge.
+    Silk to pads clearance test. Check all pads against silkscreen (mask opening in the pad vs silkscreen)
     Errors generated:
-    - DRCE_COPPER_EDGE_CLEARANCE
+    - DRCE_SILK_ON_PADS
 
     TODO:
-    - separate holes to edge check
     - tester only looks for edge crossings. it doesn't check if items are inside/outside the board area.
 */
 
 namespace test {
 
-class DRC_TEST_PROVIDER_EDGE_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
+class DRC_TEST_PROVIDER_SILK_TO_PAD : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_EDGE_CLEARANCE () :
-        DRC_TEST_PROVIDER_CLEARANCE_BASE()
-        {
-        }
+    DRC_TEST_PROVIDER_SILK_TO_PAD ()
+    {
+    }
 
-    virtual ~DRC_TEST_PROVIDER_EDGE_CLEARANCE()
+    virtual ~DRC_TEST_PROVIDER_SILK_TO_PAD() 
     {
     }
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
+    virtual const wxString GetName() const override 
     {
-        return "edge_clearance";
+        return "silk_to_pad"; 
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests items vs board edge clearance";
+        return "Tests for silkscreen covering components pads";
     }
 
     virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
@@ -83,93 +81,76 @@ private:
 };
 
 
-bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
+bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
     DRC_CONSTRAINT worstClearanceConstraint;
-    if( m_drcEngine->QueryWorstConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
+    m_largestClearance = 0;
+
+    if( m_drcEngine->QueryWorstConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_SILK_TO_PAD, worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
-        m_largestClearance = worstClearanceConstraint.GetValue().Min();
-    }
-    else
-    {
-        ReportAux("No Clearance constraints found...");
-        return false;
+        m_largestClearance = worstClearanceConstraint.m_Value.Min();
     }
 
     ReportAux( "Worst clearance : %d nm", m_largestClearance );
-    ReportStage( ("Testing all items <> Board Edge clearance"), 0, 2 );
+    ReportStage( ("Testing pads vs silkscreen clearance"), 0, 2 );
+
     
     std::vector<DRAWSEGMENT*> boardOutline;
     std::vector<BOARD_ITEM*> boardItems;
 
-    auto queryBoardOutlineItems = [&] ( BOARD_ITEM *item ) -> bool
+    auto queryBoardOutlineItems = [&] ( BOARD_ITEM *item ) -> int
     {
         boardOutline.push_back( dyn_cast<DRAWSEGMENT*>( item ) );
-        return true;
     };
 
-    auto queryBoardGeometryItems = [&] ( BOARD_ITEM *item ) -> bool
+    auto queryBoardGeometryItems = [&] ( BOARD_ITEM *item ) -> int
     {
         boardItems.push_back( item );
-        return true;
     };
+
+    
 
     forEachGeometryItem( { PCB_LINE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
     forEachGeometryItem( {}, LSET::AllTechMask() | LSET::AllCuMask(), queryBoardGeometryItems );
 
-    wxString val;
-    wxGetEnv( "WXTRACE", &val);
 
     drc_dbg(2,"outline: %d items, board: %d items\n", boardOutline.size(), boardItems.size() );
 
-    bool stop = false;
-
     for( auto outlineItem : boardOutline )
     {
+        //printf("RefT %d\n", outlineItem->Type() );
         auto refShape = outlineItem->GetEffectiveShape();
 
         for( auto boardItem : boardItems )
         {
-            drc_dbg(10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem, outlineItem->GetClass(), outlineItem->GetLayer() );
-            drc_dbg(10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem, boardItem->GetClass(), boardItem->GetLayer() );
-
+//            printf("BoardT %d\n", boardItem->Type() );
+            
             auto shape = boardItem->GetEffectiveShape();
 
-            test::DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, outlineItem, boardItem );
-            int minClearance = constraint.GetValue().Min();
+            test::DRC_RULE* rule = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, outlineItem, boardItem );
+            int minClearance = rule->GetConstraint().GetValue().Min();
             int actual;
 
             if( refShape->Collide( shape.get(), minClearance, &actual ) )
             {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
+                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
                 wxString msg;
 
                 msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                            constraint.GetParentRule()->GetName(),
+                            rule->GetName(),
                             MessageTextFromValue( userUnits(), minClearance, true ),
                             MessageTextFromValue( userUnits(), actual, true ) );
 
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( outlineItem, boardItem );
-                drcItem->SetViolatingRule( constraint.GetParentRule() );
+                drcItem->SetViolatingRule( rule );
 
                 ReportWithMarker( drcItem, refShape->Centre() );
-
-                if( isErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE ) )
-                {
-                    stop = true;
-                    break;
-                }
             }
         }
-
-        if( stop )
-            break;
     }
-
-    reportRuleStatistics();
 
     return true;
 }

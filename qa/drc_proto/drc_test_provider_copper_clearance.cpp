@@ -46,6 +46,7 @@
     - DRCE_CLEARANCE
     - DRCE_TRACKS_CROSSING
     - DRCE_ZONES_INTERSECT
+    - DRCE_SHORTING_ITEMS
 
     TODO: improve zone clearance check (super slow)
 */
@@ -120,6 +121,8 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     testCopperTextAndGraphics();
     ReportStage( ("Testing copper zone clearances"), 1, 2 );
     testZones();
+
+    reportRuleStatistics();
 
     return true;
 }
