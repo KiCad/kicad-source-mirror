@@ -730,7 +730,8 @@ void SCH_PAINTER::drawPinDanglingSymbol( const VECTOR2I& aPos, bool aDrawingShad
 {
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( aDrawingShadows ? getShadowWidth() : 1.0F );
+    m_gal->SetLineWidth( aDrawingShadows ? getShadowWidth()
+                                         : m_schSettings.GetDanglineSymbolThickness() );
 
     m_gal->DrawCircle( aPos, TARGET_PIN_RADIUS );
 }
@@ -1169,7 +1170,8 @@ void SCH_PAINTER::drawDanglingSymbol( const wxPoint& aPos, int aWidth, bool aDra
 
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
-    m_gal->SetLineWidth( aDrawingShadows ? getShadowWidth() : 1.0F );
+    m_gal->SetLineWidth( aDrawingShadows ? getShadowWidth()
+                                         : m_schSettings.GetDanglineSymbolThickness() );
 
     m_gal->DrawRectangle( aPos - radius, aPos + radius );
 }

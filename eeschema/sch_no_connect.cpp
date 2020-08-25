@@ -34,7 +34,7 @@
 #include <common.h>
 #include <plotter.h>
 #include <bitmaps.h>
-
+#include <schematic.h>
 #include <sch_no_connect.h>
 #include <netlist_object.h>
 #include <settings/color_settings.h>
@@ -97,7 +97,7 @@ void SCH_NO_CONNECT::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
 
 int SCH_NO_CONNECT::GetPenWidth() const
 {
-    return 1;
+    return std::max( Schematic()->Settings().m_DefaultLineWidth, 1 );
 }
 
 

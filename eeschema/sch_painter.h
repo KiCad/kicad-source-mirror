@@ -96,6 +96,11 @@ public:
         m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ] = aColor;
     }
 
+    float GetDanglineSymbolThickness()
+    {
+        return (float) m_defaultPenWidth / 3.0F;
+    }
+
     const COLOR4D& GetGridColor() override { return m_layerColors[ LAYER_SCHEMATIC_GRID ]; }
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_SCHEMATIC_CURSOR ]; }
