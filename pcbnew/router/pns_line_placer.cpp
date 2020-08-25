@@ -494,7 +494,7 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
         for( auto& obs : obstacles )
         {
             int cl = m_currentNode->GetClearance( obs.m_item, &newHead );
-            auto hull = obs.m_item->Hull( cl, newHead.Width() );
+            auto hull = obs.m_item->Hull( cl, newHead.Width(), newHead.Layer() );
 
             auto nearest = hull.NearestPoint( aP );
             Dbg()->AddLine( hull, 2, 10000 );

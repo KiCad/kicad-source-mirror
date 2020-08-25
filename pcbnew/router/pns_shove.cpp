@@ -312,7 +312,7 @@ SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, L
         for( int i = 0; i < n_segs; i++ )
         {
             SEGMENT seg( aCurrent, aCurrent.CSegment( i ) );
-            SHAPE_LINE_CHAIN hull = seg.Hull( clearance, w );
+            SHAPE_LINE_CHAIN hull = seg.Hull( clearance, w, aObstacle.Layer() );
 
             hulls.push_back( hull );
         }

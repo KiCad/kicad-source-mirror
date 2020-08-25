@@ -76,7 +76,7 @@ const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int 
     int cl = ( aClearance + aWalkaroundThickness / 2 );
     int width = m_diameter;
 
-    if( !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( this, aLayer ) )
+    if( !ROUTER::GetInstance()->GetInterface()->IsOnLayer( this, aLayer ) )
         width = m_drill;
 
     return OctagonalHull( m_pos -

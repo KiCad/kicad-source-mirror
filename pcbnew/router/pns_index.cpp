@@ -34,7 +34,7 @@ void INDEX::Add( ITEM* aItem )
 
     for( int i = range.Start(); i <= range.End(); ++i )
     {
-        if( !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( aItem, i ) )
+        if( !ROUTER::GetInstance()->GetInterface()->IsOnLayer( aItem, i ) )
         {
             if( aItem->AlternateShape() )
                 m_subIndices[i].Add( aItem, aItem->AlternateShape()->BBox() );

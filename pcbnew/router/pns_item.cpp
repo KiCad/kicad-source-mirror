@@ -43,7 +43,7 @@ bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VEC
         return false;
 
     if( !aOther->Layers().IsMultilayer()
-            && !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( this, aOther->Layer() ) )
+            && !ROUTER::GetInstance()->GetInterface()->IsOnLayer( this, aOther->Layer() ) )
     {
         if( !AlternateShape() )
                 wxLogError
@@ -54,7 +54,7 @@ bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VEC
     }
 
     if( !Layers().IsMultilayer()
-            && !ROUTER::GetInstance()->GetInterface()->IsPadOnLayer( aOther, Layer() ) )
+            && !ROUTER::GetInstance()->GetInterface()->IsOnLayer( aOther, Layer() ) )
     {
         if( !aOther->AlternateShape() )
                 wxLogError

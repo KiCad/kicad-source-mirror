@@ -894,9 +894,13 @@ bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer )
 }
 
 
-bool PNS_KICAD_IFACE::IsPadOnLayer( const PNS::ITEM* aItem, int aLayer )
+bool PNS_KICAD_IFACE::IsOnLayer( const PNS::ITEM* aItem, int aLayer )
 {
-    if( !aItem->Parent() || aLayer < 0)
+    /// Default is all layers
+    if( aLayer < 0 )
+        return true;
+
+    if( !aItem->Parent() )
         return aItem->Layers().Overlaps( aLayer );
 
     switch( aItem->Parent()->Type() )
