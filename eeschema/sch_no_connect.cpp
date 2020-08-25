@@ -97,6 +97,9 @@ void SCH_NO_CONNECT::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
 
 int SCH_NO_CONNECT::GetPenWidth() const
 {
+    if( !Schematic() )
+        return 1;
+
     return std::max( Schematic()->Settings().m_DefaultLineWidth, 1 );
 }
 
