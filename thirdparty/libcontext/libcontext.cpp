@@ -1284,11 +1284,11 @@ fcontext_t LIBCONTEXT_CALL_CONVENTION make_fcontext(void* sp, size_t size, void(
 {
 	if (!threadHasFibers)
 	{
-		ConvertThreadToFiber(nullptr);
+		ConvertThreadToFiberEx(nullptr, FIBER_FLAG_FLOAT_SWITCH);
 		threadHasFibers = 1;
 	}
 
-	fcontext_t ctx = CreateFiber(size, (LPFIBER_START_ROUTINE) fiberEntry, nullptr );
+	fcontext_t ctx = CreateFiberEx(size - 1, size, FIBER_FLAG_FLOAT_SWITCH, (LPFIBER_START_ROUTINE) fiberEntry, nullptr );
 	fiberParams[ctx].entry = fn;
 
 	return ctx;
