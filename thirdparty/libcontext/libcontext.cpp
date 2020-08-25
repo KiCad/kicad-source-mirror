@@ -1297,10 +1297,9 @@ fcontext_t LIBCONTEXT_CALL_CONVENTION make_fcontext(void* sp, size_t size, void(
 intptr_t LIBCONTEXT_CALL_CONVENTION jump_fcontext(fcontext_t* ofc, fcontext_t nfc,
 	intptr_t vp, bool preserve_fpu)
 {
-	auto current = (void*)GetCurrentFiber();
-	fiberParams[current].outValue = vp;
 	*ofc = GetCurrentFiber();
 	fiberParams[nfc].inValue = vp;
+	fiberParams[nfc].outValue = vp;
 	SwitchToFiber(nfc);
 	return fiberParams[*ofc].outValue;
 }
