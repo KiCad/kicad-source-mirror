@@ -581,11 +581,7 @@ void APPEARANCE_CONTROLS::OnNetGridClick( wxGridEvent& event )
     {
     case NET_GRID_TABLE::COL_VISIBILITY:
         m_netsTable->SetValueAsBool( row, col, !m_netsTable->GetValueAsBool( row, col ) );
-#ifdef __WXMSW__
         m_netsGrid->ForceRefresh();
-#else
-        m_netsGrid->RefreshRect( m_netsGrid->CellToRect( row, col ) );
-#endif
         break;
 
     default:
@@ -2123,15 +2119,7 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
                 int row = m_netsTable->GetRowByNetcode( net->GetNet() );
 
                 if( row >= 0 )
-                {
                     m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aShow );
-#ifdef __WXMSW__
-                    m_netsGrid->ForceRefresh();
-#else
-                    m_netsGrid->RefreshRect(
-                            m_netsGrid->CellToRect( row, NET_GRID_TABLE::COL_VISIBILITY ) );
-#endif
-                }
             }
         }
     }
@@ -2149,18 +2137,12 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
                 int row = m_netsTable->GetRowByNetcode( code );
 
                 if( row >= 0 )
-                {
                     m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aShow );
-#ifdef __WXMSW__
-                    m_netsGrid->ForceRefresh();
-#else
-                    m_netsGrid->RefreshRect(
-                            m_netsGrid->CellToRect( row, NET_GRID_TABLE::COL_VISIBILITY ) );
-#endif
-                }
             }
         }
     }
+
+    m_netsGrid->ForceRefresh();
 }
 
 
