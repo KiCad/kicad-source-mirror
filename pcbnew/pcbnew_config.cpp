@@ -227,5 +227,6 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     SELECTION_FILTER_OPTIONS& filterOpts = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
     localSettings.m_SelectionFilter      = filterOpts;
 
-    GetSettingsManager()->SaveProject();
+    if( !Prj().IsNullProject() )
+        GetSettingsManager()->SaveProject();
 }

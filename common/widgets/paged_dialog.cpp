@@ -24,6 +24,7 @@
 #include <wx/grid.h>
 #include <wx/statline.h>
 
+#include <widgets/infobar.h>
 #include <widgets/paged_dialog.h>
 #include <wx/stc/stc.h>
 
@@ -90,6 +91,9 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
 {
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );
+
+    m_infoBar = new WX_INFOBAR( this );
+    mainSizer->Add( m_infoBar, 0, wxEXPAND, 0 );
 
     m_treebook = new PAGED_TREEBOOK( this, wxID_ANY );
     mainSizer->Add( m_treebook, 1, wxEXPAND|wxLEFT|wxTOP, 10 );

@@ -31,6 +31,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <settings/settings_manager.h>
+#include <widgets/infobar.h>
 #include "dialog_schematic_setup.h"
 #include "panel_eeschema_template_fieldnames.h"
 
@@ -80,6 +81,9 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
                          wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), NULL, this );
+
+    if( Prj().IsNullProject() )
+        m_infoBar->ShowMessage( _( "No project is loaded. Changes will not be saved." ) );
 
     FinishDialogSettings();
 }

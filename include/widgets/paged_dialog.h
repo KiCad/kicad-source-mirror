@@ -25,6 +25,9 @@
 #include <wx/treebook.h>
 
 
+class WX_INFOBAR;
+
+
 class PAGED_TREEBOOK : public wxTreebook
 {
 public:
@@ -89,6 +92,7 @@ protected:
     wxButton*   m_auxiliaryButton;
     wxButton*   m_resetButton;
     wxButton*   m_cancelButton;
+    WX_INFOBAR* m_infoBar;
 };
 
 

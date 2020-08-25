@@ -284,10 +284,16 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( differentProject )
     {
-        GetSettingsManager()->SaveProject();
+        if( !Prj().IsNullProject() )
+            GetSettingsManager()->SaveProject();
+
         Schematic().SetProject( nullptr );
         GetSettingsManager()->UnloadProject( &Prj() );
-        GetSettingsManager()->LoadProject( pro.GetFullPath() );
+
+        // Do not load a project if one doesn't exist.  This normally happens if we are
+        // standalone and opening a board that has been moved from its project folder.
+        GetSettingsManager()->LoadProject( pro.Exists() ? pro.GetFullPath() : "" );
+
         CreateScreens();
     }
 
@@ -622,7 +628,9 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
     if( setProject )
     {
-        GetSettingsManager()->SaveProject();
+        if( !Prj().IsNullProject() )
+            GetSettingsManager()->SaveProject();
+
         Schematic().SetProject( nullptr );
         GetSettingsManager()->UnloadProject( &Prj() );
 
@@ -777,7 +785,8 @@ bool SCH_EDIT_FRAME::SaveProject()
         sheets.emplace_back( std::make_pair( sheet->m_Uuid, sheet->GetName() ) );
     }
 
-    Pgm().GetSettingsManager().SaveProject();
+    if( !Prj().IsNullProject() )
+        Pgm().GetSettingsManager().SaveProject();
 
     if( !Kiface().IsSingle() )
     {

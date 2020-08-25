@@ -35,6 +35,7 @@
 #include <project.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
+#include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 
 #include "dialog_board_setup.h"
@@ -94,7 +95,10 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
                          wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ), NULL, this );
 
-	FinishDialogSettings();
+    if( Prj().IsNullProject() )
+        m_infoBar->ShowMessage( _( "No project is loaded. Changes will not be saved." ) );
+
+    FinishDialogSettings();
 }
 
 
