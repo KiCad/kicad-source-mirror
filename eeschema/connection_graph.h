@@ -482,6 +482,16 @@ private:
     bool ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
+     * Checks one subgraph for floating wires
+     *
+     * Will throw an error for any subgraph that consists of just wires with no driver
+     *
+     * @param  aSubgraph      is the subgraph to examine
+     * @return                true for no errors, false for errors
+     */
+    bool ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgraph );
+
+    /**
      * Checks one subgraph for proper connection of labels
      *
      * Labels should be connected to something

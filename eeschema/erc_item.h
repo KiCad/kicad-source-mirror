@@ -72,6 +72,7 @@ private:
     static ERC_ITEM busToBusConflict;
     static ERC_ITEM busToNetConflict;
     static ERC_ITEM unresolvedVariable;
+    static ERC_ITEM wireDangling;
 };
 
 

@@ -53,8 +53,9 @@ enum ERCE_T
     ERCE_BUS_TO_BUS_CONFLICT,   // a connection between bus objects doesn't share at least one net
     ERCE_BUS_TO_NET_CONFLICT,   // a bus wire is graphically connected to a net port/pin (or vice versa)
     ERCE_GLOBLABEL,             // a global label is unique
-    ERCE_UNRESOLVED_VARIABLE,
-    ERCE_LAST = ERCE_UNRESOLVED_VARIABLE,
+    ERCE_UNRESOLVED_VARIABLE,   // a text variable could not be resolved
+    ERCE_WIRE_DANGLING,         // some wires are not connected to anything else
+    ERCE_LAST = ERCE_WIRE_DANGLING,
 
     // Errors after this point will not automatically appear in the Severities Panel
 

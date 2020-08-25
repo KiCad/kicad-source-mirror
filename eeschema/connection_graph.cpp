@@ -2060,6 +2060,10 @@ int CONNECTION_GRAPH::RunERC()
                 && !ercCheckBusToBusConflicts( subgraph ) )
             error_count++;
 
+        if( settings.IsTestEnabled( ERCE_WIRE_DANGLING )
+            && !ercCheckFloatingWires( subgraph ) )
+            error_count++;
+
         // The following checks are always performed since they don't currently
         // have an option exposed to the user
 
@@ -2283,8 +2287,9 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     wxString msg;
-    auto sheet = aSubgraph->m_sheet;
-    auto screen = sheet.LastScreen();
+    const SCH_SHEET_PATH& sheet  = aSubgraph->m_sheet;
+    SCH_SCREEN*           screen = sheet.LastScreen();
+    bool                  ok     = true;
 
     if( aSubgraph->m_no_connect != nullptr )
     {
@@ -2325,7 +2330,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
             screen->Append( marker );
 
-            return false;
+            ok = false;
         }
 
         if( !has_other_items )
@@ -2336,42 +2341,50 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, aSubgraph->m_no_connect->GetPosition() );
             screen->Append( marker );
 
-            return false;
+            ok = false;
         }
     }
     else
     {
         bool has_other_connections = false;
-        SCH_PIN* pin = nullptr;
+        std::vector<SCH_PIN*> pins;
 
         // Any subgraph that lacks a no-connect and contains a pin should also
-        // contain at least one other connectable item.
+        // contain at least one other potential driver
 
-        for( auto item : aSubgraph->m_items )
+        for( SCH_ITEM* item : aSubgraph->m_items )
         {
             switch( item->Type() )
             {
             case SCH_PIN_T:
-                if( !pin )
-                    pin = static_cast<SCH_PIN*>( item );
-                else
+            {
+                if( !pins.empty() )
                     has_other_connections = true;
 
+                pins.emplace_back( static_cast<SCH_PIN*>( item ) );
+
                 break;
+            }
 
             default:
-                if( item->IsConnectable() )
+                if( aSubgraph->GetDriverPriority( item ) != CONNECTION_SUBGRAPH::PRIORITY::NONE )
                     has_other_connections = true;
 
                 break;
             }
         }
 
-        // Check if invisible power pins connect to anything else.
-        // Note this won't catch a component with multiple invisible power pins but these don't
-        // connect to any other net; maybe that should be added as a further optional ERC check?
+        // For many checks, we can just use the first pin
+        SCH_PIN* pin = pins.empty() ? nullptr : pins[0];
 
-        if( pin && !has_other_connections && pin->IsPowerConnection() && !pin->IsVisible() )
+        // Check if invisible power input pins connect to anything else via net name,
+        // but not for power symbols as the ones in the standard library all have invisible pins
+        // and we want to throw unconnected errors for those even if they are connected to other
+        // net items by name, because usually failing to connect them graphically is a mistake
+        if( pin && !has_other_connections
+                && pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
+                && !pin->IsVisible()
+                && !pin->GetLibPin()->GetParent()->IsPower() )
         {
             wxString name = pin->Connection( sheet )->Name();
             wxString local_name = pin->Connection( sheet )->Name( true );
@@ -2383,6 +2396,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             }
         }
 
+        // Only one pin, and it's not a no-connect pin
         if( pin && !has_other_connections && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
@@ -2391,8 +2405,65 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
             screen->Append( marker );
 
-            return false;
+            ok = false;
         }
+
+        // If there are multiple pins in this SG, they might be indirectly connected (by netname)
+        // rather than directly connected (by wires).  We want to flag dangling pins even if they
+        // join nets with another pin, as it's often a mistake
+        if( pins.size() > 1 )
+        {
+            for( SCH_PIN* testPin : pins )
+            {
+                if( testPin->ConnectedItems( sheet ).empty() )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
+                    ercItem->SetItems( testPin );
+
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem,
+                                                         testPin->GetTransformedPosition() );
+                    screen->Append( marker );
+
+                    ok = false;
+                }
+            }
+        }
+    }
+
+    return ok;
+}
+
+
+bool CONNECTION_GRAPH::ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgraph )
+{
+    if( !aSubgraph->m_drivers.empty() )
+        return true;
+
+    std::vector<SCH_LINE*> wires;
+
+    // We've gotten this far, so we know we have no valid driver.  All we need to do is check
+    // for a wire that we can place the error on.
+
+    for( SCH_ITEM* item : aSubgraph->m_items )
+    {
+        if( item->Type() == SCH_LINE_T && item->GetLayer() == LAYER_WIRE )
+            wires.emplace_back( static_cast<SCH_LINE*>( item ) );
+    }
+
+    if( !wires.empty() )
+    {
+        SCH_SCREEN* screen = aSubgraph->m_sheet.LastScreen();
+
+        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_WIRE_DANGLING );
+        ercItem->SetItems( wires[0],
+                           wires.size() > 1 ? wires[1] : nullptr,
+                           wires.size() > 2 ? wires[2] : nullptr,
+                           wires.size() > 3 ? wires[3] : nullptr );
+
+        SCH_MARKER* marker = new SCH_MARKER( ercItem, wires[0]->GetPosition() );
+        screen->Append( marker );
+
+        return false;
     }
 
     return true;

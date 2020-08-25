@@ -117,6 +117,10 @@ ERC_ITEM ERC_ITEM::unresolvedVariable( ERCE_UNRESOLVED_VARIABLE,
         _( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
 
+ERC_ITEM ERC_ITEM::wireDangling( ERCE_WIRE_DANGLING,
+        _( "Wires not connected to anything" ),
+        wxT( "wire_dangling" ) );
+
 std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::duplicateSheetName,
                  ERC_ITEM::pinNotConnected,
@@ -127,6 +131,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::noConnectDangling,
                  ERC_ITEM::labelDangling,
                  ERC_ITEM::globalLabelDangling,
+                 ERC_ITEM::wireDangling,
                  ERC_ITEM::similarLabels,
                  ERC_ITEM::differentUnitFootprint,
                  ERC_ITEM::differentUnitNet,
@@ -165,6 +170,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_BUS_TO_NET_CONFLICT:     return std::make_shared<ERC_ITEM>( busToNetConflict );
     case ERCE_GLOBLABEL:               return std::make_shared<ERC_ITEM>( globalLabelDangling );
     case ERCE_UNRESOLVED_VARIABLE:     return std::make_shared<ERC_ITEM>( unresolvedVariable );
+    case ERCE_WIRE_DANGLING:           return std::make_shared<ERC_ITEM>( wireDangling );
     case ERCE_UNSPECIFIED:
     default:
         wxFAIL_MSG( "Unknown ERC error code" );
