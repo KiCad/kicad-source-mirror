@@ -358,8 +358,7 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* a
 
     m_out = &formatter;     // no ownership
 
-    m_out->Print( 0, "(kicad_pcb (version %d) (host pcbnew %s)\n", SEXPR_BOARD_FILE_VERSION,
-                  formatter.Quotew( GetBuildVersion() ).c_str() );
+    m_out->Print( 0, "(kicad_pcb (version %d) (generator pcbnew)\n", SEXPR_BOARD_FILE_VERSION );
 
     Format( aBoard, 1 );
 

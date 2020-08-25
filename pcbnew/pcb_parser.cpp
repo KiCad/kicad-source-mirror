@@ -814,11 +814,14 @@ void PCB_PARSER::parseHeader()
         m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
         NeedRIGHT();
 
-        // Skip the host name and host build version information.
         NeedLEFT();
         NeedSYMBOL();
         NeedSYMBOL();
-        NeedSYMBOL();
+
+        // Older formats included build data
+        if( m_requiredVersion < BOARD_FILE_HOST_VERSION )
+            NeedSYMBOL();
+
         NeedRIGHT();
     }
     else

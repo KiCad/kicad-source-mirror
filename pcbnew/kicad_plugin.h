@@ -79,7 +79,10 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200809  // Add REMOVE_UNUSED_LAYERS option to vias and THT pads
 //#define SEXPR_BOARD_FILE_VERSION    20200811  // Add groups
 //#define SEXPR_BOARD_FILE_VERSION    20200818  // Remove Status flag bitmap and setup counts
-#define SEXPR_BOARD_FILE_VERSION    20200819  // Add board-level properties
+//#define SEXPR_BOARD_FILE_VERSION    20200819  // Add board-level properties
+#define SEXPR_BOARD_FILE_VERSION    20200825  // Remove host information
+
+#define BOARD_FILE_HOST_VERSION     20200825    ///< Earlier files than this include the host tag
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)
