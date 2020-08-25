@@ -216,11 +216,16 @@ const ADVANCED_CFG& ADVANCED_CFG::GetCfg()
 
 void ADVANCED_CFG::loadFromConfigFile()
 {
-    const auto k_advanced = getAdvancedCfgFilename();
+    const wxFileName k_advanced = getAdvancedCfgFilename();
 
     if( !k_advanced.FileExists() )
     {
         wxLogTrace( AdvancedConfigMask, "File does not exist %s", k_advanced.GetFullPath() );
+
+        // load the defaults
+        wxConfig emptyConfig;
+        loadSettings( emptyConfig );
+
         return;
     }
 
@@ -239,7 +244,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_realTimeConnectivity, true ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
-                                                  &m_extraClearance, 0.002, 0.0, 1.0 ) );
+                                                  &m_extraClearance, 0.001, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
                                                &m_coroutineStackSize, AC_STACK::default_stack,

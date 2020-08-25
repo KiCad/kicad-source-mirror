@@ -1213,7 +1213,7 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER
 
     case ZONE_SETTINGS::SMOOTHING_FILLET:
     {
-        auto board = GetBoard();
+        BOARD* board = GetBoard();
         int maxError = ARC_HIGH_DEF;
 
         if( board )
@@ -1222,13 +1222,8 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER
         aSmoothedPoly = aSmoothedPoly.Fillet( m_cornerRadius, maxError );
         break;
     }
+
     default:
-        // Acute angles between adjacent edges can create issues in calculations,
-        // in inflate/deflate outlines transforms, especially when the angle is very small.
-        // We can avoid issues by creating a very small chamfer which remove acute angles,
-        // or left it without chamfer and use only CPOLYGONS_LIST::InflateOutline to create
-        // clearance areas
-        aSmoothedPoly = aSmoothedPoly.Chamfer( Millimeter2iu( 0.0 ) );
         break;
     }
 
