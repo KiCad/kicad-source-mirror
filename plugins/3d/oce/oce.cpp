@@ -78,7 +78,7 @@ static struct FILE_DATA
         filters = { "STEP (*.stp;*.step;*.stpz;*.step.gz)|*.stp;*.step;*.stpz;*.step.gz",
                     "IGES (*.igs;*.iges)|*.igs;*.iges" };
 #else
-        extensions = { "stp","STP","stpZ",".stpz","STPZ","step","STEP","step.gz","STEP.GZ","igs","IGS","iges","IGES" };
+        extensions = { "stp","STP","stpZ","stpz","STPZ","step","STEP","step.gz","STEP.GZ","igs","IGS","iges","IGES" };
         filters = { "STEP (*.stp;*.STP;*.stpZ;*.stpz;*.STPZ;*.step;*.STEP;*.step.gz;*.STEP.GZ)"
                         "|*.stp;*.STP;*.stpZ;*.stpz;*.STPZ;*.step;*.STEP;*.step.gz;*.STEP.GZ",
                     "IGES (*.igs;*.IGS;*.iges;*.IGES)|*.igs;*.IGS;*.iges;*.IGES" };
