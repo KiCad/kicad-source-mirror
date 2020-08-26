@@ -26,6 +26,8 @@
 #include <bitmaps.h>
 #include <fctsys.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/shape_null.h>
+
 #include <pcb_base_frame.h>
 #include <pcb_screen.h>
 #include <class_board.h>
@@ -1364,6 +1366,23 @@ unsigned int MODULE_ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView )
 
     // Other layers are shown without any conditions
     return 0;
+}
+
+
+std::shared_ptr<SHAPE> ZONE_CONTAINER::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+{
+    std::shared_ptr<SHAPE> shape;
+
+    if( m_FilledPolysList.find( aLayer ) == m_FilledPolysList.end() )
+    {
+        shape.reset( new SHAPE_NULL );
+    }
+    else
+    {
+        shape.reset( m_FilledPolysList.at( aLayer ).Clone() );
+    }
+
+    return shape;
 }
 
 

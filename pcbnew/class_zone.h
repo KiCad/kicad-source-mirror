@@ -289,6 +289,9 @@ public:
 
     void SetOutline( SHAPE_POLY_SET* aOutline ) { m_Poly = aOutline; }
 
+    // @copydoc BOARD_ITEM::GetEffectiveShape
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+
     /**
      * Function HitTest
      * tests if a point is near an outline edge or a corner of this zone.

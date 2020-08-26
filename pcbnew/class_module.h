@@ -45,6 +45,7 @@ class EDA_3D_CANVAS;
 class D_PAD;
 class BOARD;
 class MSG_PANEL_ITEM;
+class SHAPE;
 
 namespace KIGFX {
 class VIEW;
@@ -677,6 +678,8 @@ public:
      *         false only if the polygon cannot be built due to a malformed courtyard shape
      */
     bool BuildPolyCourtyard();
+
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 

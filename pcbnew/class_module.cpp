@@ -35,6 +35,7 @@
 #include <class_edge_mod.h>
 #include <class_module.h>
 #include <view/view.h>
+#include <geometry/shape_null.h>
 
 MODULE::MODULE( BOARD* parent ) :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_MODULE_T ),
@@ -1580,6 +1581,14 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 // see convert_drawsegment_list_to_polygon.cpp:
 extern bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SET& aPolygons,
         wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation = nullptr );
+
+
+std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const   
+{
+    std::shared_ptr<SHAPE> shape ( new SHAPE_NULL );
+
+    return shape;
+}
 
 
 bool MODULE::BuildPolyCourtyard()
