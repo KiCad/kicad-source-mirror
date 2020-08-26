@@ -393,6 +393,8 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
 
     PROF_COUNTER update_items( "updateItemConnectivity" );
 
+    m_sheetList = aSheetList;
+
     for( const SCH_SHEET_PATH& sheet : aSheetList )
     {
         std::vector<SCH_ITEM*> items;
@@ -2075,6 +2077,10 @@ int CONNECTION_GRAPH::RunERC()
             error_count++;
     }
 
+    // Hierarchical sheet checking is done at the schematic level
+    if( settings.IsTestEnabled( ERCE_HIERACHICAL_LABEL ) )
+        error_count += ercCheckHierSheets();
+
     return error_count;
 }
 
@@ -2560,4 +2566,51 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     }
 
     return true;
+}
+
+
+int CONNECTION_GRAPH::ercCheckHierSheets()
+{
+    int errors = 0;
+
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items() )
+        {
+            if( item->Type() != SCH_SHEET_T )
+                continue;
+
+            SCH_SHEET* parentSheet = static_cast<SCH_SHEET*>( item );
+
+            std::map<wxString, SCH_SHEET_PIN*> pins;
+
+            for( SCH_SHEET_PIN* pin : parentSheet->GetPins() )
+                pins[pin->GetText()] = pin;
+
+            for( SCH_ITEM* subItem : parentSheet->GetScreen()->Items() )
+            {
+                if( subItem->Type() == SCH_HIER_LABEL_T )
+                {
+                    SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( subItem );
+                    pins.erase( label->GetText() );
+                }
+            }
+
+            for( const std::pair<const wxString, SCH_SHEET_PIN*>& unmatched : pins )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
+                ercItem->SetItems( unmatched.second );
+                ercItem->SetErrorMessage( wxString::Format(
+                        _( "Sheet port %s has no matching hierarchical label inside the sheet" ),
+                        unmatched.first ) );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
+                sheet.LastScreen()->Append( marker );
+
+                errors++;
+            }
+        }
+    }
+
+    return errors;
 }

@@ -301,7 +301,10 @@ public:
     static bool m_allowRealTime;
 
 private:
+    // All the sheets in the schematic (as long as we don't have partial updates)
+    SCH_SHEET_LIST m_sheetList;
 
+    // All connectable items in the schematic
     std::vector<SCH_ITEM*> m_items;
 
     // The owner of all CONNECTION_SUBGRAPH objects
@@ -501,6 +504,15 @@ private:
      * @return                true for no errors, false for errors
      */
     bool ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph );
+
+    /**
+     * Checks that a hierarchical sheet has at least one matching label inside the sheet for each
+     * port on the parent sheet object
+     *
+     * @param  aSubgraph      is the subgraph to examine
+     * @return                the number of errors found
+     */
+    int ercCheckHierSheets();
 
 };
 

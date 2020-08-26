@@ -54,6 +54,9 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
         int      errorCode = item.GetErrorCode();
         wxString msg       = item.GetErrorText();
 
+        if( m_pinMapSpecialCase && errorCode == m_pinMapSpecialCase->GetErrorCode() )
+            continue;
+
         // When msg is empty, for some reason, the current errorCode is not supported
         // by the RC_ITEM aDummyItem.
         // Skip this errorCode.
