@@ -45,7 +45,8 @@ enum SHAPE_TYPE
     SH_SIMPLE,          ///> simple polygon
     SH_POLY_SET,        ///> set of polygons (with holes, etc.)
     SH_COMPOUND,        ///> compound shape, consisting of multiple simple shapes
-    SH_ARC              ///> circular arc
+    SH_ARC,             ///> circular arc
+    SH_NULL             ///> empty shape (no shape...)
 };
 
 static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
@@ -60,6 +61,7 @@ static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
     case SH_POLY_SET:   return "SH_POLY_SET";
     case SH_COMPOUND:   return "SH_COMPOUND";
     case SH_ARC:        return "SH_ARC";
+    case SH_NULL:       return "SH_NULL";
     }
 
     return wxEmptyString;  // Just to quiet GCC.
@@ -112,6 +114,17 @@ public:
         assert( false );
         return NULL;
     };
+
+    /**
+     * Function IsNull()
+     *
+     * Returns true if the shape is a null shape.
+     * @retval true if null :-)
+     */
+    bool IsNull() const
+    {
+        return m_type == SH_NULL;
+    }
 
     /**
      * Function Collide()
