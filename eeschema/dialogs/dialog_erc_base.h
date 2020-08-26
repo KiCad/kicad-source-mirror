@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,13 +10,16 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_INFOBAR;
+
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/infobar.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/dataview.h>
@@ -41,6 +44,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		WX_INFOBAR* m_infoBar;
 		wxStaticText* m_titleMessages;
 		wxTextCtrl* m_MessagesList;
 		wxStaticText* m_textMarkers;

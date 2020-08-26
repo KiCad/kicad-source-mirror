@@ -46,6 +46,7 @@
 #include <erc.h>
 #include <id.h>
 #include <confirm.h>
+#include <widgets/infobar.h>
 #include <wx/ffile.h>
 #include <erc_item.h>
 #include <eeschema_settings.h>
@@ -79,6 +80,9 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     m_sdbSizer1->Layout();
 
     m_sdbSizer1OK->SetDefault();
+
+    if( m_parent->CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
+        m_infoBar->ShowMessage( _( "Some components are not annotated.  ERC cannot be run." ) );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -209,10 +213,28 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     if( m_parent->CheckAnnotate( aReporter, false ) )
     {
         if( aReporter.HasMessage() )
-            aReporter.ReportTail( _( "Annotation required!" ), RPT_SEVERITY_ERROR );
+            aReporter.ReportTail( _( "Some components are not annotated.  ERC cannot be run." ),
+                                  RPT_SEVERITY_ERROR );
+
+        if( IsOK( m_parent, _( "Some components are not annotated.  Open annotation dialog?" ) ) )
+        {
+            wxCommandEvent dummy;
+            m_parent->OnAnnotate( dummy );
+
+            // We don't actually get notified when the annotation error is resolved, but we can
+            // assume that the user will take corrective action.  If they don't, we can just show
+            // the dialog again.
+            m_infoBar->Hide();
+        }
+        else
+        {
+            m_infoBar->ShowMessage( _( "Some components are not annotated.  ERC cannot be run." ) );
+        }
 
         return;
     }
+
+    m_infoBar->Hide();
 
     SCH_SCREENS screens( sch->Root() );
     ERC_SETTINGS& settings = sch->ErcSettings();
