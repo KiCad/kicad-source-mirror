@@ -50,26 +50,26 @@ class BASE_SCREEN;
 /* Type of undo/redo operations
  * each type must be redo/undone by a specific operation
  */
-enum UNDO_REDO_T {
-    UR_UNSPECIFIED = 0,     // illegal
-    UR_CHANGED,             // params of items have a value changed: undo is made by exchange
-                            // values with a copy of these values
-    UR_NEW,                 // new item, undo by changing in deleted
-    UR_DELETED,             // deleted item, undo by changing in deleted
-    UR_MOVED,               // moved item, undo by move it
-    UR_MIRRORED_X,          // mirrored item, undo by mirror X
-    UR_MIRRORED_Y,          // mirrored item, undo by mirror Y
-    UR_ROTATED,             // Rotated item (counterclockwise), undo by rotating it
-    UR_ROTATED_CLOCKWISE,   // Rotated item (clockwise), undo by rotating it
-    UR_FLIPPED,             // flipped (board items only), undo by flipping it
-    UR_LIBEDIT,             // Specific to the component editor (libedit creates a full copy
-                            // of the current component when changed)
-    UR_LIB_RENAME,          // As UR_LIBEDIT, but old copy should be removed from library
-    UR_EXCHANGE_T,          // Use for changing the schematic text type where swapping
-                            // data structure is insufficient to restore the change.
-    UR_DRILLORIGIN,         // origin changed (like UR_CHANGED, contains the origin and a copy)
-    UR_GRIDORIGIN,          // origin changed (like UR_CHANGED, contains the origin and a copy)
-    UR_PAGESETTINGS         // page settings or title block changes
+enum class UNDO_REDO {
+    UNSPECIFIED = 0,     // illegal
+    CHANGED,             // params of items have a value changed: undo is made by exchange
+                         // values with a copy of these values
+    NEWITEM,             // new item, undo by changing in deleted
+    DELETED,             // deleted item, undo by changing in deleted
+    MOVED,               // moved item, undo by move it
+    MIRRORED_X,          // mirrored item, undo by mirror X
+    MIRRORED_Y,          // mirrored item, undo by mirror Y
+    ROTATED,             // Rotated item (counterclockwise), undo by rotating it
+    ROTATED_CLOCKWISE,   // Rotated item (clockwise), undo by rotating it
+    FLIPPED,             // flipped (board items only), undo by flipping it
+    LIBEDIT,             // Specific to the component editor (libedit creates a full copy
+                         // of the current component when changed)
+    LIB_RENAME,          // As LIBEDIT, but old copy should be removed from library
+    EXCHANGE_T,          // Use for changing the schematic text type where swapping
+                         // data structure is insufficient to restore the change.
+    DRILLORIGIN,         // origin changed (like CHANGED, contains the origin and a copy)
+    GRIDORIGIN,          // origin changed (like CHANGED, contains the origin and a copy)
+    PAGESETTINGS         // page settings or title block changes
 };
 
 
@@ -78,7 +78,7 @@ class ITEM_PICKER
 private:
     STATUS_FLAGS   m_pickerFlags;      /* a copy of m_Flags member. useful in mode/drag
                                         * undo/redo commands */
-    UNDO_REDO_T    m_undoRedoStatus;   /* type of operation to undo/redo for this item */
+    UNDO_REDO    m_undoRedoStatus;   /* type of operation to undo/redo for this item */
     EDA_ITEM*      m_pickedItem;       /* Pointer on the schematic or board item that is concerned
                                         * (picked), or in undo redo commands, the copy of an
                                         * edited item. */
@@ -95,9 +95,9 @@ private:
                                         * be added to/removed from. */
 
 public:
-//    ITEM_PICKER( EDA_ITEM* aItem = NULL, UNDO_REDO_T aStatus = UR_UNSPECIFIED );
+//    ITEM_PICKER( EDA_ITEM* aItem = NULL, UNDO_REDO aStatus = UNSPECIFIED );
     ITEM_PICKER();
-    ITEM_PICKER( BASE_SCREEN* aScreen, EDA_ITEM* aItem, UNDO_REDO_T aStatus = UR_UNSPECIFIED );
+    ITEM_PICKER( BASE_SCREEN* aScreen, EDA_ITEM* aItem, UNDO_REDO aStatus = UNDO_REDO::UNSPECIFIED );
 
     EDA_ITEM* GetItem() const { return m_pickedItem; }
 
@@ -109,9 +109,9 @@ public:
 
     KICAD_T GetItemType() const { return m_pickedItemType; }
 
-    void SetStatus( UNDO_REDO_T aStatus ) { m_undoRedoStatus = aStatus; }
+    void SetStatus( UNDO_REDO aStatus ) { m_undoRedoStatus = aStatus; }
 
-    UNDO_REDO_T GetStatus() const { return m_undoRedoStatus; }
+    UNDO_REDO GetStatus() const { return m_undoRedoStatus; }
 
     void SetFlags( STATUS_FLAGS aFlags ) { m_pickerFlags = aFlags; }
 
@@ -133,8 +133,8 @@ public:
 class PICKED_ITEMS_LIST
 {
 public:
-    UNDO_REDO_T m_Status;             /* info about operation to undo/redo for this item. can be
-                                       * UR_UNSPECIFIED */
+    UNDO_REDO m_Status;             /* info about operation to undo/redo for this item. can be
+                                       * UNSPECIFIED */
     wxPoint     m_TransformPoint;     /* used to undo redo command by the same command: usually
                                        * need to know the rotate point or the move vector */
 
@@ -236,10 +236,10 @@ public:
     /**
      * Function GetPickedItemStatus
      * @return The type of undo/redo operation associated to the picked item,
-     *          or UR_UNSPECIFIED if does not exist
+     *          or UNSPECIFIED if does not exist
      * @param aIdx Index of the picked item in the picked list
      */
-    UNDO_REDO_T GetPickedItemStatus( unsigned int aIdx ) const;
+    UNDO_REDO GetPickedItemStatus( unsigned int aIdx ) const;
 
     /**
      * Function GetPickerFlags
@@ -264,7 +264,7 @@ public:
      * @param aIdx Index of the picker in the picked list
      * @return True if the picker exists or false if does not exist
      */
-    bool SetPickedItem( EDA_ITEM* aItem, UNDO_REDO_T aStatus, unsigned aIdx );
+    bool SetPickedItem( EDA_ITEM* aItem, UNDO_REDO aStatus, unsigned aIdx );
 
     /**
      * Function SetPickedItemLink
@@ -282,7 +282,7 @@ public:
      * @param aIdx Index of the picker in the picked list
      * @return True if the picker exists or false if does not exist
      */
-    bool SetPickedItemStatus( UNDO_REDO_T aStatus, unsigned aIdx );
+    bool SetPickedItemStatus( UNDO_REDO aStatus, unsigned aIdx );
 
     /**
      * Function SetPickerFlags

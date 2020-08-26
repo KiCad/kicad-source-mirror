@@ -144,9 +144,9 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
     STROKE_PARAMS stroke;
 
     for( SCH_ITEM* strokeItem : m_strokeItems )
-        pickedItems.PushItem( ITEM_PICKER( m_frame->GetScreen(), strokeItem, UR_CHANGED ) );
+        pickedItems.PushItem( ITEM_PICKER( m_frame->GetScreen(), strokeItem, UNDO_REDO::CHANGED ) );
 
-    m_frame->SaveCopyInUndoList( pickedItems, UR_CHANGED, false );
+    m_frame->SaveCopyInUndoList( pickedItems, UNDO_REDO::CHANGED, false );
 
     for( auto& strokeItem : m_strokeItems )
     {

@@ -114,7 +114,7 @@ protected:
 
     ///> Similar to m_frame->SaveCopyInUndoList(), but handles items that are owned by their
     ///> parents.
-    void saveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO_T aType, bool aAppend = false )
+    void saveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aType, bool aAppend = false )
     {
         KICAD_T itemType = aItem->Type();
         bool    selected = aItem->IsSelected();
@@ -140,7 +140,7 @@ protected:
             {
                 editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
                                                static_cast<SCH_ITEM*>( aItem->GetParent() ),
-                                               UR_CHANGED, aAppend );
+                                               UNDO_REDO::CHANGED, aAppend );
             }
             else
             {

@@ -602,7 +602,7 @@ public:
             SCH_COMPONENT& comp = *m_componentRefs[i].GetComp();
             SCH_SCREEN*    screen = m_componentRefs[i].GetSheetPath().LastScreen();
 
-            m_frame->SaveCopyInUndoList( screen, &comp, UR_CHANGED, true );
+            m_frame->SaveCopyInUndoList( screen, &comp, UNDO_REDO::CHANGED, true );
 
             const std::map<wxString, wxString>& fieldStore = m_dataStore[comp.m_Uuid];
 

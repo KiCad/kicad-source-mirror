@@ -220,8 +220,8 @@ private:
      * Virtual functions, not used here, but needed by PCB_BASE_FRAME
      * (virtual pure functions )
      */
-    void SaveCopyInUndoList( BOARD_ITEM*, UNDO_REDO_T, const wxPoint& ) override {}
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint& ) override {}
+    void SaveCopyInUndoList( BOARD_ITEM*, UNDO_REDO, const wxPoint& ) override {}
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO, const wxPoint& ) override {}
 
 
     DECLARE_EVENT_TABLE()

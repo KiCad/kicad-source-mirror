@@ -306,7 +306,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
             return false;
         }
 
-        m_Parent->SaveCopyInUndoList( m_libEntry, UR_LIB_RENAME );
+        m_Parent->SaveCopyInUndoList( m_libEntry, UNDO_REDO::LIB_RENAME );
     }
     else
     {

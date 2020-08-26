@@ -342,7 +342,7 @@ int LIB_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
     if( !sourcePin )
         return 0;
 
-    saveCopyInUndoList( part, UR_LIBEDIT );
+    saveCopyInUndoList( part, UNDO_REDO::LIBEDIT );
 
     for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
     {

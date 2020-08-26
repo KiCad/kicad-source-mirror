@@ -243,7 +243,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         if( item->HasFlag( TEMP_SELECTED ) && m_isDragOperation )
                         {
                             // Item was added in getConnectedDragItems
-                            saveCopyInUndoList( (SCH_ITEM*) item, UR_NEW, appendUndo );
+                            saveCopyInUndoList( (SCH_ITEM*) item, UNDO_REDO::NEWITEM, appendUndo );
                             appendUndo = true;
                         }
                         else
@@ -258,7 +258,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        saveCopyInUndoList( (SCH_ITEM*) item, UR_CHANGED, appendUndo );
+                        saveCopyInUndoList( (SCH_ITEM*) item, UNDO_REDO::CHANGED, appendUndo );
                         appendUndo = true;
                     }
 

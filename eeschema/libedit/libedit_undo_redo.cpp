@@ -34,7 +34,7 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
 
-void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoType, bool aAppend )
+void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO undoType, bool aAppend )
 {
     wxASSERT_MSG( !aAppend, "Append not needed/supported for LibEdit" );
 
@@ -74,7 +74,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList()
     LIB_PART* part = (LIB_PART*) redoWrapper.GetItem();
     wxCHECK( part, /* void */ );
     part->ClearFlags( UR_TRANSIENT );
-    UNDO_REDO_T undoRedoType = redoWrapper.GetStatus();
+    UNDO_REDO undoRedoType = redoWrapper.GetStatus();
 
     // Store the current part in the undo buffer
     PICKED_ITEMS_LIST* undoCommand = new PICKED_ITEMS_LIST();
@@ -90,7 +90,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList()
     // Just set the current part to the part which come from the redo list
     m_my_part = part;
 
-    if( undoRedoType == UR_LIB_RENAME )
+    if( undoRedoType == UNDO_REDO::LIB_RENAME )
     {
         wxString lib = GetCurLib();
         m_libMgr->UpdatePartAfterRename( part, oldPart->GetName(), lib );
@@ -122,7 +122,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList()
     LIB_PART* part = (LIB_PART*) undoWrapper.GetItem();
     wxCHECK( part, /* void */ );
     part->ClearFlags( UR_TRANSIENT );
-    UNDO_REDO_T undoRedoType = undoWrapper.GetStatus();
+    UNDO_REDO undoRedoType = undoWrapper.GetStatus();
 
     // Store the current part in the redo buffer
     PICKED_ITEMS_LIST* redoCommand = new PICKED_ITEMS_LIST();
@@ -138,7 +138,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList()
     // Just set the current part to the part which come from the undo list
     m_my_part = part;
 
-    if( undoRedoType == UR_LIB_RENAME )
+    if( undoRedoType == UNDO_REDO::LIB_RENAME )
     {
         wxString lib = GetCurLib();
         m_libMgr->UpdatePartAfterRename( part, oldPart->GetName(), lib );

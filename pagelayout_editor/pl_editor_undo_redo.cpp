@@ -36,7 +36,7 @@ void PL_EDITOR_FRAME::SaveCopyInUndoList()
 {
     PICKED_ITEMS_LIST*  lastcmd = new PICKED_ITEMS_LIST();
     WS_PROXY_UNDO_ITEM* copyItem = new WS_PROXY_UNDO_ITEM( this );
-    ITEM_PICKER         wrapper( GetScreen(), copyItem, UR_LIBEDIT );
+    ITEM_PICKER         wrapper( GetScreen(), copyItem, UNDO_REDO::LIBEDIT );
 
     lastcmd->PushItem( wrapper );
     PushCommandToUndoList( lastcmd );

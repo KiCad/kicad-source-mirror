@@ -834,15 +834,15 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
             if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), i ) )
                 new_ends.push_back( i );
         }
-        itemList.PushItem( ITEM_PICKER( screen, wire, UR_NEW ) );
+        itemList.PushItem( ITEM_PICKER( screen, wire, UNDO_REDO::NEWITEM ) );
     }
 
     if( m_busUnfold.in_progress && m_busUnfold.label_placed )
     {
         wxASSERT( m_busUnfold.entry && m_busUnfold.label );
 
-        itemList.PushItem( ITEM_PICKER( screen, m_busUnfold.entry, UR_NEW ) );
-        itemList.PushItem( ITEM_PICKER( screen, m_busUnfold.label, UR_NEW ) );
+        itemList.PushItem( ITEM_PICKER( screen, m_busUnfold.entry, UNDO_REDO::NEWITEM ) );
+        itemList.PushItem( ITEM_PICKER( screen, m_busUnfold.label, UNDO_REDO::NEWITEM ) );
         m_busUnfold.label->ClearEditFlags();
     }
 
@@ -864,7 +864,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     getViewControls()->CaptureCursor( false );
     getViewControls()->SetAutoPan( false );
 
-    m_frame->SaveCopyInUndoList( itemList, UR_NEW, false );
+    m_frame->SaveCopyInUndoList( itemList, UNDO_REDO::NEWITEM, false );
 
     // Correct and remove segments that need to be merged.
     m_frame->SchematicCleanUp();

@@ -67,7 +67,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool* aAppendUndo
                 {
                     SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
 
-                    SaveCopyInUndoList( aScreen, component, UR_CHANGED, *aAppendUndo );
+                    SaveCopyInUndoList( aScreen, component, UNDO_REDO::CHANGED, *aAppendUndo );
                     *aAppendUndo = true;
                     component->ClearAnnotation( aSheet );
 
@@ -199,7 +199,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         SCH_COMPONENT*  comp = ref.GetComp();
         SCH_SHEET_PATH* sheet = &ref.GetSheetPath();
 
-        SaveCopyInUndoList( sheet->LastScreen(), comp, UR_CHANGED, appendUndo );
+        SaveCopyInUndoList( sheet->LastScreen(), comp, UNDO_REDO::CHANGED, appendUndo );
         appendUndo = true;
         ref.Annotate();
 

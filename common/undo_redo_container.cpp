@@ -29,7 +29,7 @@
 
 
 /*
-ITEM_PICKER::ITEM_PICKER( EDA_ITEM* aItem, UNDO_REDO_T aUndoRedoStatus )
+ITEM_PICKER::ITEM_PICKER( EDA_ITEM* aItem, UNDO_REDO aUndoRedoStatus )
 {
     m_undoRedoStatus = aUndoRedoStatus;
     SetItem( aItem );
@@ -41,7 +41,7 @@ ITEM_PICKER::ITEM_PICKER( EDA_ITEM* aItem, UNDO_REDO_T aUndoRedoStatus )
 
 ITEM_PICKER::ITEM_PICKER()
 {
-    m_undoRedoStatus = UR_UNSPECIFIED;
+    m_undoRedoStatus = UNDO_REDO::UNSPECIFIED;
     SetItem( nullptr );
     m_pickerFlags = 0;
     m_link = NULL;
@@ -49,7 +49,7 @@ ITEM_PICKER::ITEM_PICKER()
 }
 
 
-ITEM_PICKER::ITEM_PICKER( BASE_SCREEN* aScreen, EDA_ITEM* aItem, UNDO_REDO_T aUndoRedoStatus )
+ITEM_PICKER::ITEM_PICKER( BASE_SCREEN* aScreen, EDA_ITEM* aItem, UNDO_REDO aUndoRedoStatus )
 {
     m_undoRedoStatus = aUndoRedoStatus;
     SetItem( aItem );
@@ -61,7 +61,7 @@ ITEM_PICKER::ITEM_PICKER( BASE_SCREEN* aScreen, EDA_ITEM* aItem, UNDO_REDO_T aUn
 
 PICKED_ITEMS_LIST::PICKED_ITEMS_LIST()
 {
-    m_Status = UR_UNSPECIFIED;
+    m_Status = UNDO_REDO::UNSPECIFIED;
 }
 
 PICKED_ITEMS_LIST::~PICKED_ITEMS_LIST()
@@ -121,7 +121,7 @@ void PICKED_ITEMS_LIST::ClearItemsList()
 
 void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
 {
-    // Delete items is they are not flagged UR_NEW, or if this is a block operation
+    // Delete items is they are not flagged NEWITEM, or if this is a block operation
     while( GetCount() > 0 )
     {
         ITEM_PICKER wrapper = PopItem();
@@ -136,7 +136,7 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
         {
             delete wrapper.GetItem();
         }
-        else if( wrapper.GetStatus() == UR_DELETED )
+        else if( wrapper.GetStatus() == UNDO_REDO::DELETED )
         {
             // This should really be replaced with UR_TRANSIENT, but currently many clients
             // (eeschema in particular) abuse this to achieve non-undo-related deletions.
@@ -184,12 +184,12 @@ EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItemLink( unsigned int aIdx ) const
 }
 
 
-UNDO_REDO_T PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx ) const
+UNDO_REDO PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx ) const
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].GetStatus();
 
-    return UR_UNSPECIFIED;
+    return UNDO_REDO::UNSPECIFIED;
 }
 
 
@@ -226,7 +226,7 @@ bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_ITEM* aLink, unsigned aIdx )
 }
 
 
-bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, UNDO_REDO_T aStatus, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, UNDO_REDO aStatus, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
@@ -239,7 +239,7 @@ bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, UNDO_REDO_T aStatus, uns
 }
 
 
-bool PICKED_ITEMS_LIST::SetPickedItemStatus( UNDO_REDO_T aStatus, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetPickedItemStatus( UNDO_REDO aStatus, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {

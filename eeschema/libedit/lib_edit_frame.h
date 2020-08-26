@@ -340,7 +340,7 @@ public:
      * Because a component in library editor does not have a lot of primitives,
      * the full data is duplicated. It is not worth to try to optimize this save function.
      */
-    void SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoType = UR_LIBEDIT,
+    void SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO undoType = UNDO_REDO::LIBEDIT,
                              bool aAppend = false );
 
     void GetComponentFromUndoList();

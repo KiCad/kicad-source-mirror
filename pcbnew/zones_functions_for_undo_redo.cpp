@@ -136,7 +136,7 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
  * Function SaveCopyOfZones
  * creates a copy of zones having a given netcode on a given layer,
  * and fill a pick list with pickers to handle these copies
- * the UndoRedo status is set to UR_CHANGED for all items in list
+ * the UndoRedo status is set to CHANGED for all items in list
  * Later, UpdateCopyOfZonesList will change and update these pickers after a zone editing
  * @param aPickList = the pick list
  * @param aPcb = the Board
@@ -163,7 +163,7 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
 
         ZONE_CONTAINER* zoneDup = new ZONE_CONTAINER( *zone );
         zoneDup->SetParent( aPcb );
-        ITEM_PICKER picker( nullptr, zone, UR_CHANGED );
+        ITEM_PICKER picker( nullptr, zone, UNDO_REDO::CHANGED );
         picker.SetLink( zoneDup );
         aPickList.PushItem( picker );
         copyCount++;
@@ -176,7 +176,7 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
 /**
  * Function UpdateCopyOfZonesList
  * Check a pick list to remove zones identical to their copies and set the type of operation in
- * picker (UR_DELETED, UR_CHANGED).  If an item is deleted, the initial values are retrievered,
+ * picker (DELETED, CHANGED).  If an item is deleted, the initial values are retrievered,
  * because they can have changed during editing.
  * @param aPickList = the main pick list
  * @param aAuxiliaryList = the list of deleted or added (new created) items after calculations
@@ -189,18 +189,18 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
  *  before any change.
  *  >> if the picked zone is not changed, it is removed from list
  *  >> if the picked zone was deleted (i.e. not found in board list), the picker is modified:
- *          its status becomes UR_DELETED
+ *          its status becomes DELETED
  *          the aAuxiliaryList corresponding picker is removed (if not found : set an error)
- *  >> if the picked zone was flagged as UR_NEW, and was after deleted ,
+ *  >> if the picked zone was flagged as NEWITEM, and was after deleted ,
  *  perhaps combined with another zone  (i.e. not found in board list):
  *          the picker is removed
  *          the zone itself if really deleted
  *          the aAuxiliaryList corresponding picker is removed (if not found : set an error)
  * After aPickList is cleaned, the aAuxiliaryList is read
- *  All pickers flagged UR_NEW are moved to aPickList
+ *  All pickers flagged NEWITEM are moved to aPickList
  * (the corresponding zones are zone that were created by the zone normalize and combine process,
  * mainly when adding cutout areas, or creating self intersecting contours)
- *  All pickers flagged UR_DELETED are removed, and the coresponding zones actually deleted
+ *  All pickers flagged DELETED are removed, and the coresponding zones actually deleted
  * (the corresponding zones are new zone that were created by the zone normalize process,
  * when creating self intersecting contours, and after combined with an existing zone.
  * At the end of the update process the aAuxiliaryList must be void,
@@ -214,7 +214,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
 {
     for( unsigned kk = 0; kk < aPickList.GetCount(); kk++ )
     {
-        UNDO_REDO_T  status = aPickList.GetPickedItemStatus( kk );
+        UNDO_REDO status = aPickList.GetPickedItemStatus( kk );
 
         ZONE_CONTAINER* ref = (ZONE_CONTAINER*) aPickList.GetPickedItem( kk );
 
@@ -228,9 +228,9 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                  * it must be in aDeletedList:
                  * search it and restore initial values
                  * or
-                 * if flagged UR_NEW: remove it definitively
+                 * if flagged NEWITEM: remove it definitively
                  */
-                if( status == UR_NEW )
+                if( status == UNDO_REDO::NEWITEM )
                 {
                     delete ref;
                     ref = NULL;
@@ -240,7 +240,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                 else
                 {
                     ZONE_CONTAINER* zcopy = (ZONE_CONTAINER*) aPickList.GetPickedItemLink( kk );
-                    aPickList.SetPickedItemStatus( UR_DELETED, kk );
+                    aPickList.SetPickedItemStatus( UNDO_REDO::DELETED, kk );
 
                     wxASSERT_MSG( zcopy != NULL,
                                   wxT( "UpdateCopyOfZonesList() error: link = NULL" ) );
@@ -277,7 +277,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
 
             if( zone == ref )      // picked zone found
             {
-                if( aPickList.GetPickedItemStatus( kk ) != UR_NEW )
+                if( aPickList.GetPickedItemStatus( kk ) != UNDO_REDO::NEWITEM )
                 {
                     ZONE_CONTAINER* zcopy = (ZONE_CONTAINER*) aPickList.GetPickedItemLink( kk );
 
@@ -297,13 +297,13 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
     // Add new zones in main pick list, and remove pickers from Auxiliary List
     for( unsigned ii = 0; ii < aAuxiliaryList.GetCount(); )
     {
-        if( aAuxiliaryList.GetPickedItemStatus( ii ) == UR_NEW )
+        if( aAuxiliaryList.GetPickedItemStatus( ii ) == UNDO_REDO::NEWITEM )
         {
             ITEM_PICKER picker = aAuxiliaryList.GetItemWrapper( ii );
             aPickList.PushItem( picker );
             aAuxiliaryList.RemovePicker( ii );
         }
-        else if( aAuxiliaryList.GetPickedItemStatus( ii ) == UR_DELETED )
+        else if( aAuxiliaryList.GetPickedItemStatus( ii ) == UNDO_REDO::DELETED )
         {
             delete aAuxiliaryList.GetPickedItemLink( ii );
             aAuxiliaryList.RemovePicker( ii );

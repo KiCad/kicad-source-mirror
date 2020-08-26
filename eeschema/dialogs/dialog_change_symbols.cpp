@@ -334,7 +334,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
     // Removing the symbol needs to be done before the LIB_PART is changed to prevent stale
     // library symbols in the schematic file.
     aScreen->Remove( aSymbol );
-    frame->SaveCopyInUndoList( aScreen, aSymbol, UR_CHANGED, aAppendToUndo );
+    frame->SaveCopyInUndoList( aScreen, aSymbol, UNDO_REDO::CHANGED, aAppendToUndo );
 
     if( aNewId != aSymbol->GetLibId() )
         aSymbol->SetLibId( aNewId );

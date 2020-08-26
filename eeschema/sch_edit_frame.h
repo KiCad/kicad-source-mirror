@@ -800,14 +800,14 @@ public:
      * Create a copy of the current schematic item, and put it in the undo list.
      *
      *  aTypeCommand =
-     *      UR_CHANGED
-     *      UR_NEW
-     *      UR_DELETED
+     *      CHANGED
+     *      NEWITEM
+     *      DELETED
      *      UR_WIRE_IMAGE
-     *      UR_MOVED
+     *      MOVED
      *
      * If it is a delete command, items are put on list with the .Flags member
-     * set to UR_DELETED.
+     * set to DELETED.
      *
      * @note
      * Edit wires and buses is a bit complex.
@@ -816,13 +816,13 @@ public:
      * schebang.
      *
      * @param aItemToCopy = the schematic item modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
+     * @param aTypeCommand = command type (see enum UNDO_REDO)
      * @param aAppend = add the item to the previous undo list
      * @param aTransformPoint = the reference point of the transformation for commands like move
      */
     void SaveCopyInUndoList( SCH_SCREEN* aScreen,
                              SCH_ITEM* aItemToCopy,
-                             UNDO_REDO_T aTypeCommand,
+                             UNDO_REDO aTypeCommand,
                              bool aAppend,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
@@ -830,12 +830,12 @@ public:
      * Create a new entry in undo list of commands.
      *
      * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
+     * @param aTypeCommand = command type (see enum UNDO_REDO)
      * @param aAppend = add the item to the previous undo list
      * @param aTransformPoint = the reference point of the transformation for commands like move
      */
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                             UNDO_REDO_T aTypeCommand,
+                             UNDO_REDO aTypeCommand,
                              bool aAppend,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 

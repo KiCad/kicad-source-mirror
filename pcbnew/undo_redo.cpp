@@ -181,7 +181,7 @@ static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     aItem->SetParent( parent );
 }
 
-void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM* aItem, UNDO_REDO_T aCommandType,
+void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM* aItem, UNDO_REDO aCommandType,
                                               const wxPoint& aTransformPoint )
 {
     PICKED_ITEMS_LIST commandToUndo;
@@ -191,7 +191,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM* aItem, UNDO_REDO_T aCo
 
 
 void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                              UNDO_REDO_T aTypeCommand,
+                                              UNDO_REDO aTypeCommand,
                                               const wxPoint& aTransformPoint )
 {
     static KICAD_T moduleChildren[] = { PCB_MODULE_TEXT_T, PCB_MODULE_EDGE_T, PCB_PAD_T, EOT };
@@ -224,7 +224,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
             for( unsigned j = 0; j < commandToUndo->GetCount(); j++ )
             {
                 if( commandToUndo->GetPickedItem( j ) == item
-                        && commandToUndo->GetPickedItemStatus( j ) == UR_CHANGED )
+                        && commandToUndo->GetPickedItemStatus( j ) == UNDO_REDO::CHANGED )
                 {
                     found = true;
                     break;
@@ -248,7 +248,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                 clone->Reference().ClearEditFlags();
                 clone->Value().ClearEditFlags();
 
-                ITEM_PICKER picker( nullptr, item, UR_CHANGED );
+                ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
                 picker.SetLink( clone );
                 commandToUndo->PushItem( picker );
 
@@ -269,9 +269,9 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
     for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
     {
         EDA_ITEM*   item    = aItemsList.GetPickedItem( ii );
-        UNDO_REDO_T command = commandToUndo->GetPickedItemStatus( ii );
+        UNDO_REDO command = commandToUndo->GetPickedItemStatus( ii );
 
-        if( command == UR_UNSPECIFIED )
+        if( command == UNDO_REDO::UNSPECIFIED )
         {
             command = aTypeCommand;
             commandToUndo->SetPickedItemStatus( command, ii );
@@ -281,9 +281,9 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
 
         switch( command )
         {
-        case UR_CHANGED:
-        case UR_DRILLORIGIN:
-        case UR_GRIDORIGIN:
+        case UNDO_REDO::CHANGED:
+        case UNDO_REDO::DRILLORIGIN:
+        case UNDO_REDO::GRIDORIGIN:
 
             /* If needed, create a copy of item, and put in undo list
              * in the picker, as link
@@ -296,13 +296,13 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
             }
             break;
 
-        case UR_MOVED:
-        case UR_ROTATED:
-        case UR_ROTATED_CLOCKWISE:
-        case UR_FLIPPED:
-        case UR_NEW:
-        case UR_DELETED:
-        case UR_PAGESETTINGS:
+        case UNDO_REDO::MOVED:
+        case UNDO_REDO::ROTATED:
+        case UNDO_REDO::ROTATED_CLOCKWISE:
+        case UNDO_REDO::FLIPPED:
+        case UNDO_REDO::NEWITEM:
+        case UNDO_REDO::DELETED:
+        case UNDO_REDO::PAGESETTINGS:
             break;
 
         default:
@@ -415,12 +415,12 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
          * This test avoids a Pcbnew crash
          * Obviously, this test is not made for deleted items
          */
-        UNDO_REDO_T status = aList->GetPickedItemStatus( ii );
+        UNDO_REDO status = aList->GetPickedItemStatus( ii );
 
-        if( status != UR_DELETED
-                && status != UR_DRILLORIGIN     // origin markers never on board
-                && status != UR_GRIDORIGIN      // origin markers never on board
-                && status != UR_PAGESETTINGS )  // nor are page settings proxy items
+        if( status != UNDO_REDO::DELETED
+                && status != UNDO_REDO::DRILLORIGIN     // origin markers never on board
+                && status != UNDO_REDO::GRIDORIGIN      // origin markers never on board
+                && status != UNDO_REDO::PAGESETTINGS )  // nor are page settings proxy items
         {
             if( !TestForExistingItem( GetBoard(), (BOARD_ITEM*) eda_item ) )
             {
@@ -466,7 +466,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
         switch( aList->GetPickedItemStatus( ii ) )
         {
-        case UR_CHANGED:    /* Exchange old and new data for each item */
+        case UNDO_REDO::CHANGED:    /* Exchange old and new data for each item */
         {
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
@@ -484,8 +484,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         }
         break;
 
-        case UR_NEW:        /* new items are deleted */
-            aList->SetPickedItemStatus( UR_DELETED, ii );
+        case UNDO_REDO::NEWITEM:        /* new items are deleted */
+            aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
             GetModel()->Remove( (BOARD_ITEM*) eda_item );
 
             if( eda_item->Type() != PCB_NETINFO_T )
@@ -493,8 +493,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
             break;
 
-        case UR_DELETED:    /* deleted items are put in List, as new items */
-            aList->SetPickedItemStatus( UR_NEW, ii );
+        case UNDO_REDO::DELETED:    /* deleted items are put in List, as new items */
+            aList->SetPickedItemStatus( UNDO_REDO::NEWITEM, ii );
             GetModel()->Add( (BOARD_ITEM*) eda_item );
 
             if( eda_item->Type() != PCB_NETINFO_T )
@@ -502,7 +502,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
             break;
 
-        case UR_MOVED:
+        case UNDO_REDO::MOVED:
         {
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
@@ -512,7 +512,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         }
             break;
 
-        case UR_ROTATED:
+        case UNDO_REDO::ROTATED:
         {
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             item->Rotate( aList->m_TransformPoint,
@@ -523,7 +523,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         }
             break;
 
-        case UR_ROTATED_CLOCKWISE:
+        case UNDO_REDO::ROTATED_CLOCKWISE:
         {
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             item->Rotate( aList->m_TransformPoint,
@@ -534,7 +534,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         }
             break;
 
-        case UR_FLIPPED:
+        case UNDO_REDO::FLIPPED:
         {
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             item->Flip( aList->m_TransformPoint, m_Settings->m_FlipLeftRight );
@@ -544,22 +544,22 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         }
             break;
 
-        case UR_DRILLORIGIN:
-        case UR_GRIDORIGIN:
+        case UNDO_REDO::DRILLORIGIN:
+        case UNDO_REDO::GRIDORIGIN:
         {
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
             VECTOR2D origin = image->GetPosition();
             image->SetPosition( eda_item->GetPosition() );
 
-            if( aList->GetPickedItemStatus( ii ) == UR_DRILLORIGIN )
+            if( aList->GetPickedItemStatus( ii ) == UNDO_REDO::DRILLORIGIN )
                 PCB_EDITOR_CONTROL::DoSetDrillOrigin( view, this, item, origin );
             else
                 PCBNEW_CONTROL::DoSetGridOrigin( view, this, item, origin );
         }
         break;
 
-        case UR_PAGESETTINGS:
+        case UNDO_REDO::PAGESETTINGS:
         {
             // swap current settings with stored settings
             WS_PROXY_UNDO_ITEM  alt_item( this );

@@ -1043,7 +1043,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
         if( aItem->Type() == SCH_SHEET_PIN_T )
         {
             // Sheet pins are owned by their parent sheet.
-            SaveCopyInUndoList( aScreen, undoItem, UR_CHANGED, aUndoAppend );
+            SaveCopyInUndoList( aScreen, undoItem, UNDO_REDO::CHANGED, aUndoAppend );
 
             parentSheet->AddPin( (SCH_SHEET_PIN*) aItem );
         }
@@ -1059,7 +1059,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
                 AddToScreen( aItem, aScreen );
 
             SaveCopyForRepeatItem( aItem );
-            SaveCopyInUndoList( aScreen, undoItem, UR_NEW, aUndoAppend );
+            SaveCopyInUndoList( aScreen, undoItem, UNDO_REDO::NEWITEM, aUndoAppend );
         }
 
         // Update connectivity info for new item

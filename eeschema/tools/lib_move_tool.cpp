@@ -95,7 +95,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     VECTOR2I    prevPos;
 
     if( !selection.Front()->IsNew() )
-        saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
+        saveCopyInUndoList( m_frame->GetCurPart(), UNDO_REDO::LIBEDIT );
 
     m_cursor = controls->GetCursorPosition();
 

@@ -98,23 +98,23 @@ COMMIT& COMMIT::Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeTyp
 }
 
 
-COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag )
+COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag )
 {
     for( unsigned int i = 0; i < aItems.GetCount(); i++ )
     {
-        UNDO_REDO_T change_type = aItems.GetPickedItemStatus( i );
+        UNDO_REDO change_type = aItems.GetPickedItemStatus( i );
         EDA_ITEM* item = aItems.GetPickedItem( i );
         EDA_ITEM* copy = NULL;
 
-        if( change_type == UR_UNSPECIFIED )
+        if( change_type == UNDO_REDO::UNSPECIFIED )
             change_type = aItems.m_Status;
 
-        if( change_type == UR_UNSPECIFIED )
+        if( change_type == UNDO_REDO::UNSPECIFIED )
             change_type = aModFlag;
 
         if( ( copy = aItems.GetPickedItemLink( i ) ) )
         {
-            assert( change_type == UR_CHANGED );
+            assert( change_type == UNDO_REDO::CHANGED );
 
             // There was already a copy created, so use it
             Modified( item, copy );
@@ -199,27 +199,27 @@ COMMIT::COMMIT_LINE* COMMIT::findEntry( EDA_ITEM* aItem )
 }
 
 
-CHANGE_TYPE COMMIT::convert( UNDO_REDO_T aType ) const
+CHANGE_TYPE COMMIT::convert( UNDO_REDO aType ) const
 {
     switch( aType )
     {
-    case UR_NEW:
+    case UNDO_REDO::NEWITEM:
         return CHT_ADD;
 
-    case UR_DELETED:
+    case UNDO_REDO::DELETED:
         return CHT_REMOVE;
 
     default:
         assert( false );
         // fall through
 
-    case UR_CHANGED:
-    case UR_MOVED:
-    case UR_MIRRORED_X:
-    case UR_MIRRORED_Y:
-    case UR_ROTATED:
-    case UR_ROTATED_CLOCKWISE:
-    case UR_FLIPPED:
+    case UNDO_REDO::CHANGED:
+    case UNDO_REDO::MOVED:
+    case UNDO_REDO::MIRRORED_X:
+    case UNDO_REDO::MIRRORED_Y:
+    case UNDO_REDO::ROTATED:
+    case UNDO_REDO::ROTATED_CLOCKWISE:
+    case UNDO_REDO::FLIPPED:
         return CHT_MODIFY;
     }
 }

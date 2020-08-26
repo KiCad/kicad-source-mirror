@@ -93,7 +93,7 @@ public:
      * currently: do nothing in CvPcb.
      * but but be defined because it is a pure virtual in PCB_BASE_FRAME
      */
-    void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy, UNDO_REDO_T aTypeCommand = UR_UNSPECIFIED,
+    void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy, UNDO_REDO aTypeCommand = UNDO_REDO::UNSPECIFIED,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override
     {
     }
@@ -104,11 +104,11 @@ public:
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
+     * @param aTypeCommand = command type (see enum UNDO_REDO)
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO_T aTypeCommand,
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override
     {
         // currently: do nothing in CvPcb.

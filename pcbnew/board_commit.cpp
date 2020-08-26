@@ -76,7 +76,7 @@ COMMIT& BOARD_COMMIT::Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aCha
     return COMMIT::Stage( container, aChangeType );
 }
 
-COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag )
+COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag )
 {
     return COMMIT::Stage( aItems, aModFlag );
 }
@@ -123,10 +123,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 if( aCreateUndoEntry )
                 {
-                    ITEM_PICKER itemWrapper( nullptr, ent.m_item, UR_CHANGED );
+                    ITEM_PICKER itemWrapper( nullptr, ent.m_item, UNDO_REDO::CHANGED );
                     itemWrapper.SetLink( ent.m_copy );
                     undoList.PushItem( itemWrapper );
-                    frame->SaveCopyInUndoList( undoList, UR_CHANGED );
+                    frame->SaveCopyInUndoList( undoList, UNDO_REDO::CHANGED );
                 }
 
                 savedModules.insert( ent.m_item );
@@ -158,7 +158,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 else
                 {
                     if( aCreateUndoEntry )
-                        undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UR_NEW ) );
+                        undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::NEWITEM ) );
 
                     if( !( changeFlags & CHT_DONE ) )
                         board->Add( boardItem );        // handles connectivity
@@ -173,7 +173,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
             case CHT_REMOVE:
             {
                 if( !m_editModules && aCreateUndoEntry )
-                    undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UR_DELETED ) );
+                    undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::DELETED ) );
 
                 if( boardItem->IsSelected() )
                 {
@@ -261,7 +261,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
             {
                 if( !m_editModules && aCreateUndoEntry )
                 {
-                    ITEM_PICKER itemWrapper( nullptr, boardItem, UR_CHANGED );
+                    ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
                     wxASSERT( ent.m_copy );
                     itemWrapper.SetLink( ent.m_copy );
                     undoList.PushItem( itemWrapper );
@@ -308,7 +308,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 if( aCreateUndoEntry )
                 {
-                    ITEM_PICKER itemWrapper( nullptr, boardItem, UR_CHANGED );
+                    ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
                     wxASSERT( ent.m_copy );
                     itemWrapper.SetLink( ent.m_copy );
                     undoList.PushItem( itemWrapper );
@@ -324,7 +324,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     }
 
     if( !m_editModules && aCreateUndoEntry )
-        frame->SaveCopyInUndoList( undoList, UR_UNSPECIFIED );
+        frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED );
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
 

@@ -868,23 +868,23 @@ void EE_POINT_EDITOR::saveItemsToUndo()
 {
     if( m_isLibEdit )
     {
-        saveCopyInUndoList( m_editPoints->GetParent()->GetParent(), UR_LIBEDIT );
+        saveCopyInUndoList( m_editPoints->GetParent()->GetParent(), UNDO_REDO::LIBEDIT );
     }
     else
     {
-        saveCopyInUndoList( (SCH_ITEM*) m_editPoints->GetParent(), UR_CHANGED );
+        saveCopyInUndoList( (SCH_ITEM*) m_editPoints->GetParent(), UNDO_REDO::CHANGED );
 
         if( m_editPoints->GetParent()->Type() == SCH_LINE_T )
         {
             EDA_ITEM* connection = m_editPoints->Point( LINE_START ).GetConnection();
 
             if( connection )
-                saveCopyInUndoList( (SCH_ITEM*) connection, UR_CHANGED, true );
+                saveCopyInUndoList( (SCH_ITEM*) connection, UNDO_REDO::CHANGED, true );
 
             connection = m_editPoints->Point( LINE_END ).GetConnection();
 
             if( connection )
-                saveCopyInUndoList( (SCH_ITEM*) connection, UR_CHANGED, true );
+                saveCopyInUndoList( (SCH_ITEM*) connection, UNDO_REDO::CHANGED, true );
         }
     }
 }

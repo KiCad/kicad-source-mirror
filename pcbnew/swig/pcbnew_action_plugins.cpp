@@ -217,38 +217,38 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     BOARD*  currentPcb  = GetBoard();
     bool    fromEmpty   = false;
 
-    itemsList.m_Status = UR_CHANGED;
+    itemsList.m_Status = UNDO_REDO::CHANGED;
 
     // Append tracks:
     for( auto item : currentPcb->Tracks() )
     {
-        ITEM_PICKER picker( nullptr, item, UR_CHANGED );
+        ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
     }
 
     // Append modules:
     for( auto item : currentPcb->Modules() )
     {
-        ITEM_PICKER picker( nullptr, item, UR_CHANGED );
+        ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
     }
 
     // Append drawings
     for( auto item : currentPcb->Drawings() )
     {
-        ITEM_PICKER picker( nullptr, item, UR_CHANGED );
+        ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
     }
 
     // Append zones outlines
     for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
     {
-        ITEM_PICKER picker( nullptr, (EDA_ITEM*) currentPcb->GetArea( ii ), UR_CHANGED );
+        ITEM_PICKER picker( nullptr, (EDA_ITEM*) currentPcb->GetArea( ii ), UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
     }
 
     if( itemsList.GetCount() > 0 )
-        SaveCopyInUndoList( itemsList, UR_CHANGED, wxPoint( 0.0, 0.0 ) );
+        SaveCopyInUndoList( itemsList, UNDO_REDO::CHANGED, wxPoint( 0.0, 0.0 ) );
     else
         fromEmpty = true;
 
@@ -265,7 +265,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     if( fromEmpty )
     {
         oldBuffer = new PICKED_ITEMS_LIST();
-        oldBuffer->m_Status = UR_NEW;
+        oldBuffer->m_Status = UNDO_REDO::NEWITEM;
     }
     else
     {
@@ -298,7 +298,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     for( unsigned int i = 0; i < oldBuffer->GetCount(); i++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) oldBuffer->GetPickedItem( i );
-        ITEM_PICKER picker( nullptr, item, UR_DELETED );
+        ITEM_PICKER picker( nullptr, item, UNDO_REDO::DELETED );
 
         wxASSERT( item );
 
@@ -317,7 +317,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {
-            ITEM_PICKER picker( nullptr, item, UR_NEW );
+            ITEM_PICKER picker( nullptr, item, UNDO_REDO::NEWITEM );
             oldBuffer->PushItem( picker );
         }
     }
@@ -326,7 +326,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {
-            ITEM_PICKER picker( nullptr, item, UR_NEW );
+            ITEM_PICKER picker( nullptr, item, UNDO_REDO::NEWITEM );
             oldBuffer->PushItem( picker );
         }
     }
@@ -335,7 +335,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {
-            ITEM_PICKER picker( nullptr, item, UR_NEW );
+            ITEM_PICKER picker( nullptr, item, UNDO_REDO::NEWITEM );
             oldBuffer->PushItem( picker );
         }
     }
@@ -344,7 +344,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     {
         if( !oldBuffer->ContainsItem( (EDA_ITEM*) currentPcb->GetArea( ii ) ) )
         {
-            ITEM_PICKER picker( nullptr, (EDA_ITEM*) currentPcb->GetArea( ii ), UR_NEW );
+            ITEM_PICKER picker( nullptr, (EDA_ITEM*) currentPcb->GetArea( ii ), UNDO_REDO::NEWITEM );
             oldBuffer->PushItem( picker );
         }
     }

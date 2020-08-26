@@ -61,7 +61,7 @@ int SaveCopyOfZones(PICKED_ITEMS_LIST & aPickList, BOARD* aPcb, int aNetCode, LA
 /**
  * Function UpdateCopyOfZonesList
  * check a pick list to remove zones identical to their copies
- * and set the type of operation in picker (UR_DELETED, UR_CHANGED)
+ * and set the type of operation in picker (DELETED, CHANGED)
  * @param aPickList = the main pick list
  * @param aAuxiliaryList = the list of deleted or added (new created) items after calculations
  * @param aPcb = the Board

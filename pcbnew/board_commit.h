@@ -49,7 +49,7 @@ public:
     COMMIT&      Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType ) override;
     COMMIT&      Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType ) override;
     COMMIT&      Stage(
-                 const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag = UR_UNSPECIFIED ) override;
+                 const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED ) override;
 
     /*
      * @return true iff the commit has an entry to remove aItem.

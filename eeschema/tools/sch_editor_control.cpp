@@ -100,10 +100,10 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
 {
     PICKED_ITEMS_LIST   undoCmd;
     WS_PROXY_UNDO_ITEM* undoItem = new WS_PROXY_UNDO_ITEM( m_frame );
-    ITEM_PICKER         wrapper( m_frame->GetScreen(), undoItem, UR_PAGESETTINGS );
+    ITEM_PICKER         wrapper( m_frame->GetScreen(), undoItem, UNDO_REDO::PAGESETTINGS );
 
     undoCmd.PushItem( wrapper );
-    m_frame->SaveCopyInUndoList( undoCmd, UR_PAGESETTINGS, false );
+    m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS, false );
 
     DIALOG_PAGES_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );

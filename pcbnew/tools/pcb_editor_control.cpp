@@ -312,10 +312,10 @@ int PCB_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
 {
     PICKED_ITEMS_LIST   undoCmd;
     WS_PROXY_UNDO_ITEM* undoItem = new WS_PROXY_UNDO_ITEM( m_frame );
-    ITEM_PICKER         wrapper( nullptr, undoItem, UR_PAGESETTINGS );
+    ITEM_PICKER         wrapper( nullptr, undoItem, UNDO_REDO::PAGESETTINGS );
 
     undoCmd.PushItem( wrapper );
-    m_frame->SaveCopyInUndoList( undoCmd, UR_PAGESETTINGS );
+    m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS );
 
     DIALOG_PAGES_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_PCBNEW_MILS,
                                                 MAX_PAGE_SIZE_PCBNEW_MILS ) );
@@ -1571,7 +1571,7 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
     picker->SetClickHandler(
         [this] ( const VECTOR2D& pt ) -> bool
         {
-            m_frame->SaveCopyInUndoList( m_placeOrigin.get(), UR_DRILLORIGIN );
+            m_frame->SaveCopyInUndoList( m_placeOrigin.get(), UNDO_REDO::DRILLORIGIN );
             DoSetDrillOrigin( getView(), m_frame, m_placeOrigin.get(), pt );
             return false;   // drill origin is a one-shot; don't continue with tool
         } );

@@ -99,7 +99,7 @@ bool DIALOG_EDIT_SHEET_PIN::TransferDataFromWindow()
     if( !m_sheetPin->IsNew() )
     {
         SCH_SHEET* parentSheet = m_sheetPin->GetParent();
-        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), parentSheet, UR_CHANGED, false );
+        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), parentSheet, UNDO_REDO::CHANGED, false );
     }
 
     m_sheetPin->SetText( EscapeString( m_comboName->GetValue(), CTX_NETNAME ) );

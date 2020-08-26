@@ -402,7 +402,7 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, comp, UR_CHANGED, m_appendUndo );
+                m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
                 comp->SetRef( &ref.GetSheetPath(), module.m_ref );
             }
@@ -420,7 +420,7 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, comp, UR_CHANGED, m_appendUndo );
+                m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
                 ref.GetComp()->GetField( FOOTPRINT )->SetText( module.m_footprint );
             }
@@ -438,7 +438,7 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, comp, UR_CHANGED, m_appendUndo );
+                m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
                 comp->GetField( VALUE )->SetText( module.m_value );
             }
@@ -561,7 +561,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
                     if( EscapeString( label->GetShownText(), CTX_NETNAME ) == oldName )
                     {
-                        m_frame->SaveCopyInUndoList( aScreen, label, UR_CHANGED, m_appendUndo );
+                        m_frame->SaveCopyInUndoList( aScreen, label, UNDO_REDO::CHANGED, m_appendUndo );
                         m_appendUndo = true;
                         static_cast<SCH_TEXT*>( label )->SetText( newName );
                     }
@@ -584,7 +584,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
                 if( conn && conn->Driver() == driver )
                 {
-                    m_frame->SaveCopyInUndoList( screen, label, UR_CHANGED, m_appendUndo );
+                    m_frame->SaveCopyInUndoList( screen, label, UNDO_REDO::CHANGED, m_appendUndo );
                     m_appendUndo = true;
                     static_cast<SCH_TEXT*>( label )->SetText( aNewName );
                 }
@@ -628,7 +628,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
             {
                 if( EscapeString( pin->GetShownText(), CTX_NETNAME ) == aOldName )
                 {
-                    m_frame->SaveCopyInUndoList( screen, pin, UR_CHANGED, m_appendUndo );
+                    m_frame->SaveCopyInUndoList( screen, pin, UNDO_REDO::CHANGED, m_appendUndo );
                     m_appendUndo = true;
                     static_cast<SCH_TEXT*>( pin )->SetText( aNewName );
                 }
@@ -645,7 +645,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
         if( !m_dryRun )
         {
             SCH_SCREEN* screen = aConn->Sheet().LastScreen();
-            m_frame->SaveCopyInUndoList( screen, driver, UR_CHANGED, m_appendUndo );
+            m_frame->SaveCopyInUndoList( screen, driver, UNDO_REDO::CHANGED, m_appendUndo );
             m_appendUndo = true;
             static_cast<SCH_TEXT*>( driver )->SetText( aNewName );
 

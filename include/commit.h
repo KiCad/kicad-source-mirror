@@ -127,7 +127,7 @@ public:
 
     virtual COMMIT& Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType );
 
-    virtual COMMIT& Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag = UR_UNSPECIFIED );
+    virtual COMMIT& Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED );
 
     ///> Executes the changes.
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
@@ -176,7 +176,7 @@ protected:
 
     virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const = 0;
 
-    CHANGE_TYPE convert( UNDO_REDO_T aType ) const;
+    CHANGE_TYPE convert( UNDO_REDO aType ) const;
 
     std::set<EDA_ITEM*> m_changedItems;
     std::vector<COMMIT_LINE> m_changes;

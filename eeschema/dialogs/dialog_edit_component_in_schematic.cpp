@@ -411,7 +411,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
     // save old cmp in undo list if not already in edit, or moving ...
     if( m_cmp->GetEditFlags() == 0 )
-        GetParent()->SaveCopyInUndoList( currentScreen, m_cmp, UR_CHANGED, false );
+        GetParent()->SaveCopyInUndoList( currentScreen, m_cmp, UNDO_REDO::CHANGED, false );
 
     // Save current flags which could be modified by next change settings
     STATUS_FLAGS flags = m_cmp->GetFlags();
@@ -530,7 +530,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
             for( SCH_COMPONENT* otherUnit : otherUnits )
             {
-                GetParent()->SaveCopyInUndoList( screen, otherUnit, UR_CHANGED, true /* append */);
+                GetParent()->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED, true /* append */);
                 otherUnit->GetField( VALUE )->SetText( m_fields->at( VALUE ).GetText() );
                 otherUnit->GetField( FOOTPRINT )->SetText( m_fields->at( FOOTPRINT ).GetText() );
                 otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );

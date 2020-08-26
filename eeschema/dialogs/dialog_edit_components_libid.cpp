@@ -747,7 +747,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
             if( symbol == nullptr )
                 continue;
 
-            GetParent()->SaveCopyInUndoList( cmp.m_Screen, cmp.m_Component, UR_CHANGED,
+            GetParent()->SaveCopyInUndoList( cmp.m_Screen, cmp.m_Component, UNDO_REDO::CHANGED,
                                              m_isModified );
             m_isModified = true;
 

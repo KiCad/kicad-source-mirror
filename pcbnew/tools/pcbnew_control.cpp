@@ -419,7 +419,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
         picker->SetClickHandler(
             [this] ( const VECTOR2D& pt ) -> bool
             {
-                m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UR_GRIDORIGIN );
+                m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UNDO_REDO::GRIDORIGIN );
                 DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), pt );
                 return false;   // drill origin is a one-shot; don't continue with tool
             } );
@@ -433,7 +433,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 {
-    m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UR_GRIDORIGIN );
+    m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UNDO_REDO::GRIDORIGIN );
     DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), VECTOR2D( 0, 0 ) );
     return 0;
 }

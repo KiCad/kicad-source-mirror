@@ -139,7 +139,7 @@ int LIB_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
 
     if( !item->IsMoving() )
-        saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
+        saveCopyInUndoList( m_frame->GetCurPart(), UNDO_REDO::LIBEDIT );
 
     if( selection.GetSize() == 1 )
         rotPoint = item->GetPosition();
@@ -181,7 +181,7 @@ int LIB_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
 
     if( !item->IsMoving() )
-        saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
+        saveCopyInUndoList( m_frame->GetCurPart(), UNDO_REDO::LIBEDIT );
 
     if( selection.GetSize() == 1 )
         mirrorPoint = item->GetPosition();
@@ -241,7 +241,7 @@ int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     // Don't leave a freed pointer in the selection
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    saveCopyInUndoList( part, UR_LIBEDIT );
+    saveCopyInUndoList( part, UNDO_REDO::LIBEDIT );
 
     std::set<LIB_ITEM *> toDelete;
 
@@ -385,7 +385,7 @@ int LIB_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         // Save copy for undo if not in edit (edit command already handle the save copy)
         if( item->GetEditFlags() == 0 )
-            saveCopyInUndoList( item->GetParent(), UR_LIBEDIT );
+            saveCopyInUndoList( item->GetParent(), UNDO_REDO::LIBEDIT );
 
         switch( item->Type() )
         {
@@ -508,9 +508,9 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     bool     renamed = aField->GetId() == VALUE && newFieldValue != oldFieldValue;
 
     if( renamed )
-        saveCopyInUndoList( parent, UR_LIB_RENAME );
+        saveCopyInUndoList( parent, UNDO_REDO::LIB_RENAME );
     else
-        saveCopyInUndoList( parent, UR_LIBEDIT );
+        saveCopyInUndoList( parent, UNDO_REDO::LIBEDIT );
 
     dlg.UpdateField( aField );
 
@@ -575,7 +575,7 @@ int LIB_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    saveCopyInUndoList( part, UR_LIBEDIT );
+    saveCopyInUndoList( part, UNDO_REDO::LIBEDIT );
 
     DIALOG_LIB_EDIT_PIN_TABLE dlg( m_frame, part );
 
@@ -737,7 +737,7 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         return 0;
 
     if( !selection.Front()->IsMoving() )
-        saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
+        saveCopyInUndoList( m_frame->GetCurPart(), UNDO_REDO::LIBEDIT );
 
     EDA_ITEMS newItems;
 

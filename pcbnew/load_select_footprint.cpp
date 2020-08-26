@@ -471,11 +471,11 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
 
     if( aModule->IsNew() )
     {
-        SaveCopyInUndoList( aModule, UR_NEW );
+        SaveCopyInUndoList( aModule, UNDO_REDO::NEWITEM );
     }
     else if( aModule->IsMoving() )
     {
-        ITEM_PICKER picker( nullptr, aModule, UR_CHANGED );
+        ITEM_PICKER picker( nullptr, aModule, UNDO_REDO::CHANGED );
         picker.SetLink( s_ModuleInitialCopy );
         s_PickedList.PushItem( picker );
         s_ModuleInitialCopy = NULL;     // the picker is now owner of s_ModuleInitialCopy.
@@ -483,7 +483,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
 
     if( s_PickedList.GetCount() )
     {
-        SaveCopyInUndoList( s_PickedList, UR_UNSPECIFIED );
+        SaveCopyInUndoList( s_PickedList, UNDO_REDO::UNSPECIFIED );
 
         // Clear list, but DO NOT delete items, because they are owned by the saved undo
         // list and they therefore in use

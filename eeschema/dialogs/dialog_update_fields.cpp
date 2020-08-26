@@ -91,9 +91,9 @@ bool DIALOG_UPDATE_FIELDS::TransferDataFromWindow()
         PICKED_ITEMS_LIST itemsList;
 
         for( std::pair<SCH_SCREEN*, SCH_COMPONENT*>& component : m_components )
-            itemsList.PushItem( ITEM_PICKER( component.first, component.second, UR_CHANGED ) );
+            itemsList.PushItem( ITEM_PICKER( component.first, component.second, UNDO_REDO::CHANGED ) );
 
-        m_frame->SaveCopyInUndoList( itemsList, UR_CHANGED, true );
+        m_frame->SaveCopyInUndoList( itemsList, UNDO_REDO::CHANGED, true );
     }
 
 

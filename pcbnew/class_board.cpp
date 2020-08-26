@@ -1713,7 +1713,7 @@ ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, 
 
     if( aNewZonesList )
     {
-        ITEM_PICKER picker( nullptr, new_area, UR_NEW );
+        ITEM_PICKER picker( nullptr, new_area, UNDO_REDO::NEWITEM );
         aNewZonesList->PushItem( picker );
     }
 
@@ -1728,7 +1728,7 @@ void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to
 
     if( aDeletedList )
     {
-        ITEM_PICKER picker( nullptr, area_to_remove, UR_DELETED );
+        ITEM_PICKER picker( nullptr, area_to_remove, UNDO_REDO::DELETED );
         aDeletedList->PushItem( picker );
         Remove( area_to_remove );   // remove from zone list, but does not delete it
     }

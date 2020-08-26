@@ -305,7 +305,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
         {
             if( aUndoList->FindItem( aItem ) < 0 )
             {
-                ITEM_PICKER picker( nullptr, aItem, UR_CHANGED );
+                ITEM_PICKER picker( nullptr, aItem, UNDO_REDO::CHANGED );
                 picker.SetLink( aItem->Clone() );
                 aUndoList->PushItem( picker );
             }
@@ -364,7 +364,7 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
 
     if( itemsListPicker.GetCount() > 0 )
     {
-        m_parent->SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
+        m_parent->SaveCopyInUndoList( itemsListPicker, UNDO_REDO::CHANGED );
 
         for( auto segment : m_brd->Tracks() )
             m_parent->GetCanvas()->GetView()->Update( segment );
