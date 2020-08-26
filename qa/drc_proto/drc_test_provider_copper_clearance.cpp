@@ -296,14 +296,12 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
     for( auto seg_it = m_board->Tracks().begin(); seg_it != m_board->Tracks().end(); seg_it++ )
     {
-        if( ii++ > delta )
+        if( (ii % delta) == 0)
         {
-            ii = 0;
-            count++;
-
-            ReportProgress( (double) ii / (double ) count );
+            ReportProgress( (double) ii / (double) m_board->Tracks().size() );
         }
 
+        ii++;
         // Test new segment against tracks and pads, optionally against copper zones
         doTrackDrc( *seg_it, seg_it + 1, m_board->Tracks().end(), false /*fixme: control for copper zones*/ );
     }
@@ -611,8 +609,8 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                 wxString msg;
-                msg.Printf( drcItem->GetErrorText() + _( " (nets %s and %s)" ),
-                            pad->GetNetCode(), aRefPad->GetNetCode() );
+                msg.Printf( drcItem->GetErrorText() + _( " (nets %d and %d)" ),
+                            (int) pad->GetNetCode(), (int) aRefPad->GetNetCode() );
 
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( pad, aRefPad );

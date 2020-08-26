@@ -310,7 +310,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
 
                 accountCheck( constraint.GetParentRule() );
 
-                drc_dbg(1,"check pad %p rule '%s' cl %d\n", constraint.GetParentRule()->GetName(), minClearance );
+                drc_dbg(1,"check pad %p rule '%s' cl %d\n", aRefPad, constraint.GetParentRule()->GetName(), minClearance );
 
                 auto padShape = pad->GetEffectiveShape();
                 if( padShape->Collide( aRefPad->GetEffectiveHoleShape(), minClearance, &actual ) )
