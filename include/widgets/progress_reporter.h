@@ -52,6 +52,11 @@ class PROGRESS_REPORTER
         }
 
         /**
+         * sets the number of phases
+         */
+        void SetNumPhases( int aNumPhases );
+
+        /**
          * initialize the aPhase virtual zone of the dialog progress bar
          */
         void BeginPhase( int aPhase );
@@ -69,7 +74,7 @@ class PROGRESS_REPORTER
         /**
          * Set the progress value to aProgress (0..1)
          */
-        void SetCurrentProgress( double aProgress );
+        virtual void SetCurrentProgress( double aProgress );
 
         /**
          * Fix the value thar gives the 100 precent progress bar length

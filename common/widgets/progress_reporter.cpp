@@ -75,6 +75,12 @@ void PROGRESS_REPORTER::AdvanceProgress()
 }
 
 
+void PROGRESS_REPORTER::SetNumPhases( int aNumPhases )
+{
+    m_numPhases = aNumPhases;
+}
+
+
 int PROGRESS_REPORTER::currentProgress() const
 {
     double current = ( 1.0 / (double) m_numPhases ) *
