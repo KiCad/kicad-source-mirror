@@ -169,7 +169,7 @@ test::DRC_RULE* test::DRC_RULES_PARSER::parseDRC_RULE()
     if( !IsSymbol( token ) )
         reportError( _( "Missing rule name." ) );
 
-    rule->m_Name = FromUTF8();
+    rule->SetName( FromUTF8() );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {

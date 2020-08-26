@@ -110,8 +110,9 @@ private:
 class DRC_CONSTRAINT
 {
     public:
-    DRC_CONSTRAINT() :
-        m_Type( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_UNKNOWN ),
+    DRC_CONSTRAINT( DRC_CONSTRAINT_TYPE_T aType = DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_UNKNOWN 
+    ) :
+        m_Type( aType ),
         m_DisallowFlags( 0 ),
         m_LayerCondition( LSET::AllLayersMask() ),
         m_parentRule( nullptr ) // fixme
@@ -152,12 +153,15 @@ public:
     virtual bool IsEnabled() const { return m_Enabled; }
     
     virtual bool HasSpecificItemSet() const { return false; };
-    virtual void FillSpecificItemSet( std::vector<BOARD_ITEM*> specificItems ) { };
+    virtual void FillSpecificItemSet( std::set<BOARD_ITEM*> specificItems ) { };
 
-    int GetPriority() const { return m_Priority; }
+    void SetPriority( int aPriority ) { m_priority = aPriority; }
+    int GetPriority() const { return m_priority; }
+
     DRC_RULE_SEVERITY_T GetSeverity() const { return m_Severity; }
 
-    const wxString GetName() const { return m_Name; }
+    void SetName( const wxString& aName ) { m_name = aName; }
+    const wxString GetName() const { return m_name; }
     
     std::vector<DRC_CONSTRAINT>& Constraints()
     {
@@ -186,24 +190,28 @@ public:
         m_layerCondition = aLayerCondition;
     }
 
+private:
+    wxString m_name;
+    int  m_priority; // 0 indicates automatic priority generation fixme: use enum
+
 public:
     bool m_Unary;
 
-    wxString m_Name;
     LSET                        m_layerCondition;
     DRC_RULE_CONDITION*         m_condition; // fixme: consider unique_ptr
     std::vector<DRC_CONSTRAINT> m_constraints;
 
     DRC_RULE_SEVERITY_T m_Severity;
     bool m_Enabled;
-    int  m_Priority; // 0 indicates automatic priority generation
+    
 };
 
 
 class DRC_RULE_CONDITION
 {
 public:
-    DRC_RULE_CONDITION();
+    DRC_RULE_CONDITION( const wxString& aExpression = "",
+                        const LSET aLayerCondition = LSET::AllLayersMask() );
     ~DRC_RULE_CONDITION();
 
     bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB,

@@ -27,13 +27,14 @@
 #include <class_board_item.h>
 
 #include <drc_proto/drc_rule.h>
+#include <drc_proto/drc_engine.h>
 #include <pcb_expr_evaluator.h>
 
 
 test::DRC_RULE::DRC_RULE() :
     m_Unary( false ),
     m_Enabled( true ),
-    m_Priority( 0 ),
+    m_priority( 0 ),
     m_Severity( DRC_RULE_SEVERITY_T::DRC_SEVERITY_ERROR ),
     m_condition( nullptr )
 {
@@ -50,9 +51,13 @@ void test::DRC_RULE::AddConstraint( DRC_CONSTRAINT& aConstraint )
     m_constraints.push_back( aConstraint );
 }
 
-test::DRC_RULE_CONDITION::DRC_RULE_CONDITION()
+test::DRC_RULE_CONDITION::DRC_RULE_CONDITION( const wxString& aExpression,
+                        const LSET aLayerCondition ) :
+
+    m_expression( aExpression ),
+    m_layerCondition ( aLayerCondition ),
+    m_ucode ( nullptr )
 {
-    m_ucode = nullptr;
 }
 
 
@@ -91,6 +96,12 @@ bool test::DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, in
     PCB_EXPR_CONTEXT preflightContext( F_Cu );
 
     bool ok = compiler.Compile( m_expression, m_ucode.get(), &preflightContext );
+
+    if(!ok)
+    {
+        drc_dbg(1, "Error: %s", compiler.GetError().message );
+    }
+
     return ok;
 }
 
