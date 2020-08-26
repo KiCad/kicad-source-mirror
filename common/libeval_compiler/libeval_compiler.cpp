@@ -605,7 +605,7 @@ void CONTEXT::ReportError( const wxString& aErrorMsg )
     m_errorStatus.stage = CST_RUNTIME;
 
     if( m_errorCallback )
-        m_errorCallback( m_errorStatus );
+        m_errorCallback( m_errorStatus.message, m_errorStatus.srcPos );
 }
 
 
@@ -779,7 +779,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     //    leaf[0]: function name
                     //    leaf[1]: parameter
 
-                    wxString    itemName = *node->leaf[0]->value.str;
+                    wxString                 itemName = *node->leaf[0]->value.str;
                     std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, "" );
 
                     if( !vref )
@@ -802,14 +802,18 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( func )
                     {
                         // Preflight the function call
-                        wxString paramStr;
+                        wxString paramStr = *node->leaf[1]->leaf[1]->value.str;
+                        VALUE*   param = aPreflightContext->AllocValue();
 
-                        if( node->value.str )
-                            paramStr = *node->value.str;
-
-                        VALUE*  param = aPreflightContext->AllocValue();
                         param->Set( paramStr );
                         aPreflightContext->Push( param );
+
+                        aPreflightContext->SetErrorCallback(
+                                [&]( const wxString& aMessage, int aOffset )
+                                {
+                                    size_t loc = node->leaf[1]->leaf[1]->srcPos- paramStr.Length();
+                                    reportError( CST_CODEGEN, aMessage, (int) loc - 1 );
+                                } );
 
                         try
                         {
@@ -818,13 +822,6 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                         }
                         catch( ... )
                         {
-                        }
-
-                        if( !aPreflightContext->IsErrorPending() )
-                        {
-                            size_t loc = node->leaf[1]->leaf[1]->srcPos - paramStr.Length();
-                            reportError( CST_CODEGEN, aPreflightContext->GetError().message,
-                                         (int) loc - 1 );
                         }
                     }
 

@@ -285,7 +285,11 @@ public:
         return m_stack.size();
     };
 
-    void SetErrorCallback( std::function<void(const ERROR_STATUS&)> aCallback );
+    void SetErrorCallback( std::function<void( const wxString& aMessage, int aOffset )> aCallback )
+    {
+        m_errorCallback = std::move( aCallback );
+    }
+
     void ReportError( const wxString& aErrorMsg );
     bool IsErrorPending() const { return m_errorStatus.pendingError; }
     const ERROR_STATUS& GetError() const { return m_errorStatus; }
@@ -294,7 +298,8 @@ private:
     std::vector<VALUE*> m_ownedValues;
     std::stack<VALUE*>  m_stack;
     ERROR_STATUS        m_errorStatus;
-    std::function<void(const ERROR_STATUS&)> m_errorCallback;
+
+    std::function<void( const wxString& aMessage, int aOffset )> m_errorCallback;
 };
 
 
