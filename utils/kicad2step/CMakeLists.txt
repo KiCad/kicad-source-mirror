@@ -46,7 +46,11 @@ target_link_libraries( kicad2step
     kicad2step_lib
     ${wxWidgets_LIBRARIES}
     ${OCC_LIBRARIES}
-)
+    ${ZLIB_LIBRARIES} )
+
+target_include_directories( kicad2step_lib PRIVATE
+    $<TARGET_PROPERTY:gzip-hpp,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 
 if( APPLE )
     # puts binaries into the *.app bundle while linking

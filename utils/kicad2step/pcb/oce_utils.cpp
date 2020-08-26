@@ -29,6 +29,10 @@
 #include <wx/wx.h>
 #include <wx/filename.h>
 #include <wx/filefn.h>
+#include <wx/stdpaths.h>
+#include <wx/wfstream.h>
+
+#include <decompress.hpp>
 
 #include "oce_utils.h"
 #include "kicadpad.h"
@@ -149,12 +153,14 @@ static void reverseCurve( KICADCURVE& aCurve )
 // supported file types
 enum FormatType
 {
-    FMT_NONE = 0,
-    FMT_STEP = 1,
-    FMT_IGES = 2,
-    FMT_EMN  = 3,
-    FMT_IDF  = 4,
-    FMT_WRL  = 5,  // .wrl files are replaced with MCAD equivalent
+    FMT_NONE,
+    FMT_STEP,
+    FMT_STEPZ,
+    FMT_IGES,
+    FMT_EMN,
+    FMT_IDF,
+    FMT_WRL,
+    FMT_WRZ
 };
 
 
@@ -172,15 +178,22 @@ FormatType fileType( const char* aFileName )
         return FMT_NONE;
     }
 
-    wxString ext = lfile.GetExt();
+    wxString ext = lfile.GetExt().Lower();
 
-    if( ext.Lower() == "wrl" )
+    if( ext == "wrl" )
         return FMT_WRL;
 
-    if( ext == "idf" || ext == "IDF" )
+    if( ext == "wrz" )
+        return FMT_WRZ;
+
+    if( ext == "idf" )
         return FMT_IDF;     // component outline
-    else if( ext == "emn" || ext == "EMN" )
+
+    if( ext == "emn" )
         return FMT_EMN;     // PCB assembly
+
+    if( ext == "stpz" || ext == "gz" )
+        return FMT_STEPZ;
 
     OPEN_ISTREAM( ifile, aFileName );
 
@@ -952,7 +965,51 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_L
             }
             break;
 
+        case FMT_STEPZ:
+        {
+            wxFileInputStream ifile( aFileName );
+            wxFileName outFile( aFileName );
+
+            outFile.SetPath( wxStandardPaths::Get().GetTempDir() );
+            outFile.SetExt( "STEP" );
+
+            wxFileOffset size = ifile.GetLength();
+
+            if( size == wxInvalidOffset )
+            {
+                ReportMessage( wxString::Format( "readSTEP() failed on filename %s\n",
+                                                 aFileName ) );
+                    return false;
+            }
+
+            {
+                wxFileOutputStream ofile( outFile.GetFullPath() );
+
+                if( !ofile.IsOk() )
+                {
+                    ReportMessage( wxString::Format( "readSTEP() failed on filename %s\n",
+                                                     outFile.GetFullPath() ) );
+                    return false;
+                }
+
+                char *buffer = new char[size];
+
+                ifile.Read( buffer, size);
+                std::string expanded = gzip::decompress( buffer, size );
+
+                delete[] buffer;
+
+                ofile.Write( expanded.data(), expanded.size() );
+                ofile.Close();
+            }
+
+            return getModelLabel( outFile.GetFullPath().ToStdString(), aScale, aLabel );
+
+            break;
+        }
+
         case FMT_WRL:
+        case FMT_WRZ:
             /* WRL files are preferred for internal rendering,
              * due to superior material properties, etc.
              * However they are not suitable for MCAD export.
@@ -982,6 +1039,10 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_L
                 alts.Add( "STEP" );
                 alts.Add( "Stp" );
                 alts.Add( "Step" );
+                alts.Add( "stpz" );
+                alts.Add( "stpZ" );
+                alts.Add( "STPZ" );
+                alts.Add( "step.gz" );
 
                 // IGES files
                 alts.Add( "iges" );
