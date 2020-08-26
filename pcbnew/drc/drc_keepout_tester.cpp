@@ -165,6 +165,9 @@ bool DRC_KEEPOUT_TESTER::checkFootprints()
 
     for( MODULE* fp : m_board->Modules() )
     {
+        if( m_zone->GetParent() == fp )
+            continue;
+
         if( !m_zoneBBox.Intersects( fp->GetBoundingBox() ) )
             continue;
 
