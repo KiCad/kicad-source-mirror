@@ -240,6 +240,10 @@ public:
 
 private:
 
+    void addRule( test::DRC_RULE* rule )
+    {
+        m_rules.push_back(rule);
+    }
 
     void freeCompiledRules();
 
@@ -259,8 +263,9 @@ private:
     typedef std::unordered_map<test::DRC_CONSTRAINT_TYPE_T, CONSTRAINT_SET*> CONSTRAINT_MAP;
 
 
-    void inferImplicitRules();
+    void inferLegacyRules();
     void loadTestProviders();
+    test::DRC_RULE* createInferredRule( const wxString& name, std::set<BOARD_ITEM*> items, int priority );
 
     BOARD_DESIGN_SETTINGS* m_designSettings;
     BOARD*                 m_board;

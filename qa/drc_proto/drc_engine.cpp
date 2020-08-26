@@ -123,19 +123,300 @@ bool test::DRC_ENGINE::LoadRules( wxFileName aPath )
 }
 
 
-test::DRC_TEST_PROVIDER *drcCreateClearanceTestProvider( test::DRC_ENGINE *engine );
-
-
-
-void test::DRC_ENGINE::inferImplicitRules()
+test::DRC_RULE* test::DRC_ENGINE::createInferredRule( const wxString& name, std::set<BOARD_ITEM*> items, int priority )
 {
+    DRC_RULE *rule = new DRC_RULE;
+
+    rule->SetName( name );
+    if (! items.empty() )
+        rule->FillSpecificItemSet( items );
+
+    rule->SetPriority( priority );
+
+    addRule( rule );
+
+    return rule;
+}
+
+#if 0
+int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
+                                        wxString* aSource ) const
+{
+    BOARD*                board = GetBoard();
+    int                   clearance = 0;
+    wxString              source;
+    wxString*             localSource = aSource ? &source : nullptr;
+    BOARD_CONNECTED_ITEM* second = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
+
+    // No clearance if "this" is not (yet) linked to a board therefore no available netclass
+    if( !board )
+        return clearance;
+
+    // LEVEL 1: local overrides (pad, footprint, etc.)
+    //
+    if( GetLocalClearanceOverrides() > clearance )
+        clearance = GetLocalClearanceOverrides( localSource );
+
+    if( second && second->GetLocalClearanceOverrides() > clearance )
+        clearance = second->GetLocalClearanceOverrides( localSource );
+
+    if( clearance )
+    {
+        if( aSource )
+            *aSource = *localSource;
+
+        return clearance;
+    }
+
+    // LEVEL 2: Rules
+    //
+    if( GetRuleClearance( aItem, aLayer, &clearance, aSource ) )
+        return clearance;
+
+    // LEVEL 3: Accumulated local settings, netclass settings, & board design settings
+    //
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    NETCLASS*              netclass = GetEffectiveNetclass();
+    NETCLASS*              secondNetclass = second ? second->GetEffectiveNetclass() : nullptr;
+
+    if( bds.m_MinClearance > clearance )
+    {
+        if( aSource )
+            *aSource = _( "board minimum" );
+
+        clearance = bds.m_MinClearance;
+    }
+
+    if( netclass && netclass->GetClearance() > clearance )
+        clearance = netclass->GetClearance( aSource );
+
+    if( secondNetclass && secondNetclass->GetClearance() > clearance )
+        clearance = secondNetclass->GetClearance( aSource );
+
+    if( aItem && aItem->GetLayer() == Edge_Cuts && bds.m_CopperEdgeClearance > clearance )
+    {
+        if( aSource )
+            *aSource = _( "board edge" );
+
+        clearance = bds.m_CopperEdgeClearance;
+    }
+
+    if( GetLocalClearance() > clearance )
+        clearance = GetLocalClearance( aSource );
+
+    if( second && second->GetLocalClearance() > clearance )
+        clearance = second->GetLocalClearance( aSource );
+
+    return clearance;
+}
+#endif
+
+
+void test::DRC_ENGINE::inferLegacyRules()
+{
+    int priorityRangeMin = INT_MIN + 10000;
+    int priorityRangeMax = INT_MAX - 10000;
+
     ReportAux( wxString::Format( "Inferring implicit rules (per-item/class overrides, etc...)" ) );
+
+    // 1) global defaults
+
+    test::DRC_RULE* rule = createInferredRule( "inferred-defaults", {}, priorityRangeMin );
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    DRC_CONSTRAINT clearanceConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE );
+    clearanceConstraint.Value().SetMin( bds.m_MinClearance );
+    rule->AddConstraint( clearanceConstraint );
+
+    DRC_CONSTRAINT widthConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
+    widthConstraint.Value().SetMin( bds.m_TrackMinWidth );
+    rule->AddConstraint( widthConstraint );
+
+    DRC_CONSTRAINT drillConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE );
+    drillConstraint.Value().SetMin( bds.m_MinThroughDrill );
+    rule->AddConstraint( drillConstraint );
+
+    DRC_CONSTRAINT annulusConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH );
+    annulusConstraint.Value().SetMin( bds.m_ViasMinAnnulus );
+    rule->AddConstraint( annulusConstraint );
+    
+    DRC_CONSTRAINT diameterConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
+    diameterConstraint.Value().SetMin( bds.m_ViasMinSize );
+    rule->AddConstraint( diameterConstraint );
+
+    DRC_CONSTRAINT edgeClearanceConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE );
+    edgeClearanceConstraint.Value().SetMin( bds.m_CopperEdgeClearance );
+    rule->AddConstraint( edgeClearanceConstraint );
+
+    DRC_CONSTRAINT holeClearanceConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE );
+    holeClearanceConstraint.Value().SetMin( bds.m_HoleToHoleMin );
+    rule->AddConstraint( holeClearanceConstraint );
+
+    // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
+
+    priorityRangeMin++;
+
+    auto isMicroViaCondition = new DRC_RULE_CONDITION ( "A.type == 'Via' && A.isMicroVia()" );
+    test::DRC_RULE* uViaRule = createInferredRule( "inferred-microvia-defaults", {}, priorityRangeMin  );
+
+    uViaRule->SetCondition( isMicroViaCondition );
+
+    DRC_CONSTRAINT uViaDrillConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE );
+    uViaDrillConstraint.Value().SetMin( bds.m_MicroViasMinDrill );
+    uViaRule->AddConstraint( uViaDrillConstraint );
+
+    DRC_CONSTRAINT uViaDiameterConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
+    uViaDiameterConstraint.Value().SetMin( bds.m_MicroViasMinSize );
+    uViaRule->AddConstraint( uViaDiameterConstraint );
+
+    auto isBlindBuriedViaCondition = new DRC_RULE_CONDITION ( "A.type == 'Via' && A.isBlindBuriedVia()" );
+    test::DRC_RULE* blindBuriedViaRule = createInferredRule( "inferred-blind-buried-via-defaults", {}, priorityRangeMin );
+
+    DRC_CONSTRAINT disallowConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_DISALLOW );
+
+    blindBuriedViaRule->SetCondition ( isBlindBuriedViaCondition );
+
+    if( !bds.m_MicroViasAllowed )
+    {
+        uViaRule->AddConstraint( disallowConstraint );
+    }
+
+    if( !bds.m_BlindBuriedViaAllowed )
+    {
+        blindBuriedViaRule->AddConstraint( disallowConstraint );
+    }
+
+    // 3) per-netclass rules
+
+    struct NETCLASS_ENTRY
+    {
+        wxString name;
+        int clearance;
+        int width;
+    };
+
+    std::vector<NETCLASS_ENTRY> netclassesByClearance, netclassesByWidth;
+
+    for( auto netclass : bds.GetNetClasses() )
+    {
+        auto className = netclass.second->GetName();
+        NETCLASS_ENTRY ent;
+        ent.name = className;
+        ent.clearance = netclass.second->GetClearance();
+        ent.width = netclass.second->GetTrackWidth();
+        netclassesByClearance.push_back( ent );
+        netclassesByWidth.push_back( ent );
+    }
+
+    // create clearance rules
+
+    std::sort( netclassesByClearance.begin(), netclassesByClearance.end(), [] ( const NETCLASS_ENTRY& a, const NETCLASS_ENTRY& b ) -> bool
+    {
+        return a.clearance < b.clearance;
+    } );
+
+    std::sort( netclassesByWidth.begin(), netclassesByWidth.end(), [] ( const NETCLASS_ENTRY& a, const NETCLASS_ENTRY& b ) -> bool
+    {
+        return a.width > b.width;
+    } );
+
+    
+
+    for( int i = 0; i <  netclassesByClearance.size(); i++ )
+    {
+        wxString className = netclassesByClearance[i].name;
+
+        const auto expr = wxString::Format( "A.NetClass == '%s' || B.NetClass == '%s'", className, className );
+
+        auto inNetclassCondition = new DRC_RULE_CONDITION ( expr );
+    
+        test::DRC_RULE* netclassRule = createInferredRule( wxString::Format( "inferred-netclass-clearance-%s", className ),
+            {}, priorityRangeMin + i );
+
+        netclassRule->SetCondition( inNetclassCondition );
+
+        DRC_CONSTRAINT ncClearanceConstraint ( DRC_CONSTRAINT_TYPE_CLEARANCE );
+        ncClearanceConstraint.Value().SetMin( netclassesByClearance[i].clearance );
+        netclassRule->AddConstraint( ncClearanceConstraint );
+
+        className = netclassesByWidth[i].name;
+
+        netclassRule = createInferredRule( wxString::Format( "inferred-netclass-width-%s", className ),
+            {}, priorityRangeMin + i );
+
+        netclassRule->SetCondition( inNetclassCondition );
+
+        DRC_CONSTRAINT ncWidthConstraint ( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
+        ncWidthConstraint.Value().SetMin( netclassesByWidth[i].width );
+        netclassRule->AddConstraint( ncWidthConstraint );
+
+        // TODO: should we import diff pair gaps/widths here?
+    }
+
+
+
+    //clearanceConstraint.SetMin( )
+
+    //rule->AddConstraint( )
+
+}
+
+static wxString formatConstraint( const test::DRC_CONSTRAINT& constraint )
+{
+    struct Formatter
+    {
+        test::DRC_CONSTRAINT_TYPE_T type;
+        wxString              name;
+        std::function<wxString(const test::DRC_CONSTRAINT&)> formatter;
+    };
+
+    auto formatMinMax = []( const test::DRC_CONSTRAINT& c ) -> wxString {
+        wxString str;
+        const auto value = c.GetValue();
+
+        if ( value.HasMin() )
+            str += wxString::Format(" min: %d", value.Min() );
+        if ( value.HasOpt() )
+            str += wxString::Format(" opt: %d", value.Opt() );
+        if ( value.HasMax() )
+            str += wxString::Format(" max: %d", value.Max() );
+
+        return str;
+    };
+
+    std::vector<Formatter> formats = {
+        { test::DRC_CONSTRAINT_TYPE_UNKNOWN, "unknown", nullptr },
+        { test::DRC_CONSTRAINT_TYPE_CLEARANCE, "clearance", formatMinMax },
+        { test::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE, "hole_clearance", formatMinMax },
+        { test::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, "edge_clearance", formatMinMax },
+        { test::DRC_CONSTRAINT_TYPE_HOLE_SIZE, "hole_size", formatMinMax },
+        { test::DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE, "courtyard_clearance", formatMinMax },
+        { test::DRC_CONSTRAINT_TYPE_SILK_TO_PAD, "silk_to_pad", formatMinMax },
+        { test::DRC_CONSTRAINT_TYPE_SILK_TO_SILK, "silk_to_silk", formatMinMax },
+        { test::DRC_CONSTRAINT_TYPE_TRACK_WIDTH, "track_width", formatMinMax },
+        { test::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, "annulus_with", formatMinMax },
+        { test::DRC_CONSTRAINT_TYPE_DISALLOW, "disallow", nullptr }, // fixme
+        { test::DRC_CONSTRAINT_TYPE_VIA_DIAMETER, "via_diameter", formatMinMax }
+    };
+
+    for( auto& fmt : formats)
+    {
+        if( fmt.type == constraint.GetType() )
+        {
+            wxString rv = fmt.name + " ";
+            if( fmt.formatter )
+                rv += fmt.formatter( constraint );
+            return rv;
+        }
+    }
+
+    return "?";
 }
 
 
 bool test::DRC_ENGINE::CompileRules()
 {
-    ReportAux( wxString::Format( "Compiling Rules (%d rules, %d conditions): ", m_rules.size(), m_ruleConditions.size() ) );
+    ReportAux( wxString::Format( "Compiling Rules (%d rules, %d conditions): ", (int)m_rules.size(), (int)m_ruleConditions.size() ) );
 
     for( auto provider : m_testProviders )
     {
@@ -152,10 +433,20 @@ bool test::DRC_ENGINE::CompileRules()
 
             for( auto rule : m_rules )
             {
+                test::DRC_RULE_CONDITION* condition = nullptr;
+                bool compileOk = false;
+                std::vector<test::DRC_CONSTRAINT> matchingConstraints;
                 drc_dbg(7, "Scan provider %s, rule %s",  provider->GetName(), rule->GetName() );
 
                 if( ! rule->IsEnabled() )
                     continue;
+
+
+                if( rule->IsConditional() )
+                {
+                    condition = rule->Condition();
+                    compileOk = condition->Compile( nullptr, 0, 0 ); // fixme
+                }
 
                 for( auto& constraint : rule->Constraints() )
                 {
@@ -163,25 +454,35 @@ bool test::DRC_ENGINE::CompileRules()
                     if( constraint.GetType() != id )
                         continue;
 
-                   ReportAux( wxString::Format( "   |- Rule: '%s' ", rule->GetName() ) );
 
                         auto rcons = new CONSTRAINT_WITH_CONDITIONS;
 
-                        if( rule->IsConditional() )
+                        if( condition )
                         {
-                            test::DRC_RULE_CONDITION* condition = rule->Condition();
                             rcons->conditions.push_back( condition );
-
-                            bool compileOk = condition->Compile( nullptr, 0, 0 ); // fixme
-
-                            ReportAux( wxString::Format( "       |- condition: '%s' compile: %s", condition->GetExpression(), compileOk ? "OK" : "ERROR") );
                         }
+
+                        matchingConstraints.push_back( constraint );
 
                         rcons->constraint = constraint;
                         rcons->parentRule = rule;
                         m_constraintMap[ id ]->sortedConstraints.push_back( rcons );
 
                 }
+
+                if( !matchingConstraints.empty() )
+                {
+                    ReportAux( wxString::Format( "   |- Rule: '%s' ", rule->GetName() ) );
+                    if( condition )
+                        ReportAux( wxString::Format( "       |- condition: '%s' compile: %s", condition->GetExpression(), compileOk ? "OK" : "ERROR") );
+
+                    for (const auto& constraint : matchingConstraints )
+                    {
+                        ReportAux( wxString::Format( "       |- constraint: %s", formatConstraint( constraint ) ) );
+                    }
+
+                }
+        
             }
         }
     }
@@ -202,7 +503,7 @@ void test::DRC_ENGINE::RunTests( )
     }
 
 
-    inferImplicitRules();
+    inferLegacyRules();
     CompileRules();
 
     for( auto provider : m_testProviders )
@@ -319,7 +620,9 @@ void test::DRC_ENGINE::ReportStage ( const wxString& aStageName, int index, int 
     if( !m_progressReporter )
         return;
 
+    m_progressReporter->SetNumPhases( total );
     m_progressReporter->BeginPhase( index ); // fixme: coalesce all stages/test providers
+    m_progressReporter->Report( aStageName );
 }
 
 
