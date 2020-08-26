@@ -26,6 +26,7 @@
 #include <memory>
 #include <reporter.h>
 #include <class_board.h>
+#include <class_track.h>
 #include <pcb_expr_evaluator.h>
 
 
@@ -210,6 +211,43 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+static void isMicroVia( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*   result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    auto via = dyn_cast<VIA*>( item );
+
+    if( via && via->GetViaType() == VIATYPE::MICROVIA )
+    {
+        result->Set ( 1.0 );
+    }
+}
+
+
+static void isBlindBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*   result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    auto via = dyn_cast<VIA*>( item );
+
+    if( via && via->GetViaType() == VIATYPE::BLIND_BURIED )
+    {
+        result->Set ( 1.0 );
+    }
+
+}
+
+
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
     auto registerFunc = [&]( const wxString& funcSignature,  LIBEVAL::FUNC_CALL_REF funcPtr )
@@ -223,6 +261,8 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
     registerFunc( "isPlated()", isPlated );
     registerFunc( "insideCourtyard('x')", insideCourtyard );
     registerFunc( "insideArea('x')", insideArea );
+    registerFunc( "isMicroVia()", isMicroVia );
+    registerFunc( "isBlindBuriedVia()", isBlindBuriedVia );
 }
 
 
