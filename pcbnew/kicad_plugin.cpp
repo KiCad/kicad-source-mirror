@@ -1011,15 +1011,24 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
                       FormatInternalUnits( aModule->GetThermalGap() ).c_str() );
 
     // Attributes
-    if( aModule->GetAttributes() != MOD_DEFAULT )
+    if( aModule->GetAttributes() )
     {
         m_out->Print( aNestLevel+1, "(attr" );
 
-        if( aModule->GetAttributes() & MOD_CMS )
+        if( aModule->GetAttributes() & MOD_SMD )
             m_out->Print( 0, " smd" );
 
-        if( aModule->GetAttributes() & MOD_VIRTUAL )
-            m_out->Print( 0, " virtual" );
+        if( aModule->GetAttributes() & MOD_THROUGH_HOLE )
+            m_out->Print( 0, " through_hole" );
+
+        if( aModule->GetAttributes() & MOD_BOARD_ONLY )
+            m_out->Print( 0, " board_only" );
+
+        if( aModule->GetAttributes() & MOD_EXCLUDE_FROM_POS_FILES )
+            m_out->Print( 0, " excude_from_pos_files" );
+
+        if( aModule->GetAttributes() & MOD_EXCLUDE_FROM_BOM )
+            m_out->Print( 9, " exclude_from_bom" );
 
         m_out->Print( 0, ")\n" );
     }

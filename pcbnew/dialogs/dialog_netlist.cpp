@@ -289,7 +289,6 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
 
     NETLIST netlist;
 
-    netlist.SetDeleteExtraFootprints( m_cbDeleteExtraFootprints->GetValue() );
     netlist.SetFindByTimeStamp( m_matchByUUID );
     netlist.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
 

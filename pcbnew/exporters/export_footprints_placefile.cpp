@@ -70,14 +70,13 @@ enum SELECT_SIDE
     PCB_BOTH_SIDES
 };
 
-PLACE_FILE_EXPORTER::PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM,
-                                          bool aForceSmdItems, bool aTopSide,
-                                          bool aBottomSide, bool aFormatCSV )
+PLACE_FILE_EXPORTER::PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM, bool aExcludeAllTH,
+                                          bool aTopSide, bool aBottomSide, bool aFormatCSV )
 {
-    m_board         = aBoard;
-    m_unitsMM       = aUnitsMM;
-    m_forceSmdItems = aForceSmdItems;
-    m_fpCount       = 0;
+    m_board        = aBoard;
+    m_unitsMM      = aUnitsMM;
+    m_excludeAllTH = aExcludeAllTH;
+    m_fpCount      = 0;
 
     if( aTopSide && aBottomSide )
         m_side = PCB_BOTH_SIDES;
@@ -114,7 +113,6 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 
     // Build and sort the list of footprints alphabetically
     std::vector<LIST_MOD> list;
-    m_smdFootprintsNotLabeledSMD.clear();
 
     for( MODULE* footprint : m_board->Modules() )
     {
@@ -126,26 +124,11 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
                 continue;
         }
 
-        if( footprint->GetAttributes() & MOD_VIRTUAL )
-             continue;
+        if( footprint->GetAttributes() & MOD_EXCLUDE_FROM_POS_FILES )
+            continue;
 
-        if( ( footprint->GetAttributes() & MOD_CMS ) == 0 )
-        {
-            if( m_forceSmdItems )    // true to fix a bunch of mis-labeled footprints:
-            {
-                if( !footprint->HasNonSMDPins() )
-                {
-                    // all footprint's pins are SMD, mark the part for pick and place
-                    // Note: they are not necessary to pick and place,
-                    // but the probability is high
-                    m_smdFootprintsNotLabeledSMD.push_back( footprint );
-                }
-                else
-                    continue;
-            }
-            else
-                continue;
-        }
+        if( m_excludeAllTH && footprint->HasThroughHolePads() )
+            continue;
 
         m_fpCount++;
 
@@ -346,13 +329,13 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
         buffer += "attribut";
 
-        if( module->GetAttributes() & MOD_VIRTUAL )
+        if( ( module->GetAttributes() & ( MOD_THROUGH_HOLE | MOD_SMD ) ) == 0 )
             buffer += " virtual";
 
-        if( module->GetAttributes() & MOD_CMS )
+        if( module->GetAttributes() & MOD_SMD )
             buffer += " smd";
 
-        if(( module->GetAttributes() & ( MOD_VIRTUAL | MOD_CMS) ) == 0 )
+        if( module->GetAttributes() & MOD_THROUGH_HOLE )
             buffer += " none";
 
         buffer += "\n";

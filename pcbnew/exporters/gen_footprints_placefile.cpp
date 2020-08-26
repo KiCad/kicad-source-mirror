@@ -98,9 +98,17 @@ private:
         m_radioBoxFilesCount->Enable( m_rbFormat->GetSelection() != 2 );
     }
 
-	void onUpdateUIforceSMDOpt( wxUpdateUIEvent& event ) override
+	void onUpdateUIExcludeTH( wxUpdateUIEvent& event ) override
     {
-        m_forceSMDOpt->Enable( m_rbFormat->GetSelection() != 2 );
+        if( m_rbFormat->GetSelection() == 2 )
+        {
+            m_excludeTH->SetValue( false );
+            m_excludeTH->Enable( false );
+        }
+        else
+        {
+            m_excludeTH->Enable( true );
+        }
     }
 
 	void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) override
@@ -127,9 +135,9 @@ private:
         return m_radioBoxFilesCount->GetSelection() == 1;
     }
 
-    bool ForceAllSmd()
+    bool ExcludeAllTH()
     {
-        return m_forceSMDOpt->GetValue();
+        return m_excludeTH->GetValue();
     }
 };
 
@@ -317,29 +325,16 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     int top_side = true;
     int bottom_side = true;
 
-    // Test for any footprint candidate in list, and display the list of forced footprints
-    // if ForceAllSmd() is true
+    // Test for any footprint candidate in list.
     {
-        PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), ForceAllSmd(), top_side, bottom_side,
+        PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), ExcludeAllTH(), top_side, bottom_side,
                                       useCSVfmt );
         exporter.GenPositionData();
 
-        if( exporter.GetFootprintCount() == 0)
+        if( exporter.GetFootprintCount() == 0 )
         {
             wxMessageBox( _( "No footprint for automated placement." ) );
             return false;
-        }
-
-        if( ForceAllSmd() )
-        {
-            std::vector<MODULE*>& fp_no_smd_list = exporter.GetSmdFootprintsNotLabeledSMD();
-
-            for( MODULE* item : fp_no_smd_list )
-            {
-                msg.Printf( _( "footprint %s (not set as SMD) forced in list" ),
-                            item->GetReference() );
-                m_reporter->Report( msg, RPT_SEVERITY_INFO );
-            }
         }
     }
 
@@ -384,8 +379,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         fn.SetExt( FootprintPlaceFileExtension );
 
     int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
-                                                         ForceAllSmd(),
-                                                         top_side, bottom_side, useCSVfmt );
+                                                         ExcludeAllTH(), top_side, bottom_side,
+                                                         useCSVfmt );
     if( fpcount < 0 )
     {
         msg.Printf( _( "Unable to create \"%s\"." ), fn.GetFullPath() );
@@ -426,8 +421,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     else
         fn.SetExt( FootprintPlaceFileExtension );
 
-    fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
-                                                    ForceAllSmd(), top_side, bottom_side, useCSVfmt );
+    fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), ExcludeAllTH(),
+                                                     top_side, bottom_side, useCSVfmt );
 
     if( fpcount < 0 )
     {
@@ -547,7 +542,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
         return false;
 
     std::string data;
-    PLACE_FILE_EXPORTER exporter ( GetBoard(), aUnitsMM, false, true, true, false );
+    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, false, true, true, false );
     data = exporter.GenReportData();
 
     fputs( data.c_str(), rptfile );

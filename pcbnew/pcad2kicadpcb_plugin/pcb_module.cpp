@@ -520,8 +520,6 @@ void PCB_MODULE::AddToBoard()
     fpID.Parse( m_compRef, LIB_ID::ID_PCB, true );
     module->SetFPID( fpID );
 
-    module->SetAttributes( MOD_DEFAULT | MOD_CMS );
-
     // reference text
     TEXTE_MODULE* ref_text = &module->Reference();
 

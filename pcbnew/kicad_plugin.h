@@ -80,7 +80,8 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200811  // Add groups
 //#define SEXPR_BOARD_FILE_VERSION    20200818  // Remove Status flag bitmap and setup counts
 //#define SEXPR_BOARD_FILE_VERSION    20200819  // Add board-level properties
-#define SEXPR_BOARD_FILE_VERSION    20200825  // Remove host information
+//#define SEXPR_BOARD_FILE_VERSION    20200825  // Remove host information
+#define SEXPR_BOARD_FILE_VERSION    20200828  // Add new fabrication attributes
 
 #define BOARD_FILE_HOST_VERSION     20200825    ///< Earlier files than this include the host tag
 

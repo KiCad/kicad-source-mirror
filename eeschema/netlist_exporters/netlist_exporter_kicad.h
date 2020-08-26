@@ -39,7 +39,9 @@ class NETLIST_EXPORTER_KICAD : public NETLIST_EXPORTER_GENERIC
 public:
     NETLIST_EXPORTER_KICAD( SCHEMATIC* aSchematic ) :
         NETLIST_EXPORTER_GENERIC( aSchematic )
-    {}
+    {
+        m_resolveTextVars = false;
+    }
 
     /**
      * Write netlist to \a aOutFileName.

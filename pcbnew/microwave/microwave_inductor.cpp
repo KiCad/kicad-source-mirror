@@ -417,7 +417,7 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
     MODULE* module = editFrame.CreateNewModule( msg );
 
     module->SetFPID( LIB_ID( wxEmptyString, wxT( "mw_inductor" ) ) );
-    module->SetAttributes( MOD_VIRTUAL | MOD_CMS );
+    module->SetAttributes( MOD_EXCLUDE_FROM_POS_FILES | MOD_EXCLUDE_FROM_BOM );
     module->ClearFlags();
     module->SetPosition( aInductorPattern.m_End );
 

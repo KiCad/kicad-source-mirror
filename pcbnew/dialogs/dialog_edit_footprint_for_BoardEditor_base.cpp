@@ -247,7 +247,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_buttonUpdate = new wxButton( m_PanelGeneral, wxID_ANY, _("Update Footprint from Library..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonUpdate, 0, wxALL|wxEXPAND, 5 );
+	bButtonsSizer->Add( m_buttonUpdate, 0, wxEXPAND|wxALL, 5 );
 
 	m_buttonExchange = new wxButton( m_PanelGeneral, wxID_ANY, _("Change Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_buttonExchange, 0, wxEXPAND|wxALL, 5 );
@@ -256,10 +256,10 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bButtonsSizer->Add( m_buttonModuleEditor, 0, wxEXPAND|wxALL, 5 );
 
 
-	bButtonsSizer->Add( 0, 15, 1, wxEXPAND, 5 );
+	bButtonsSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_button5 = new wxButton( m_PanelGeneral, wxID_ANY, _("Edit Library Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_button5, 0, wxALL|wxEXPAND, 5 );
+	bButtonsSizer->Add( m_button5, 0, wxEXPAND|wxALL, 5 );
 
 
 	bSizerRight->Add( bButtonsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -267,11 +267,36 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 
 	bSizerRight->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	wxString m_AttributsCtrlChoices[] = { _("Through hole"), _("Surface mount"), _("Virtual") };
-	int m_AttributsCtrlNChoices = sizeof( m_AttributsCtrlChoices ) / sizeof( wxString );
-	m_AttributsCtrl = new wxRadioBox( m_PanelGeneral, wxID_ANY, _("Fabrication Attributes"), wxDefaultPosition, wxDefaultSize, m_AttributsCtrlNChoices, m_AttributsCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_AttributsCtrl->SetSelection( 0 );
-	bSizerRight->Add( m_AttributsCtrl, 0, wxALL|wxEXPAND, 5 );
+	wxStaticBoxSizer* sbFabSizer;
+	sbFabSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Fabrication Attributes") ), wxVERTICAL );
+
+	wxBoxSizer* bPartTypeSizer;
+	bPartTypeSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_componentTypeLabel = new wxStaticText( sbFabSizer->GetStaticBox(), wxID_ANY, _("Component:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_componentTypeLabel->Wrap( -1 );
+	bPartTypeSizer->Add( m_componentTypeLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_componentTypeChoices[] = { _("Through hole"), _("SMD"), _("Other") };
+	int m_componentTypeNChoices = sizeof( m_componentTypeChoices ) / sizeof( wxString );
+	m_componentType = new wxChoice( sbFabSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_componentTypeNChoices, m_componentTypeChoices, 0 );
+	m_componentType->SetSelection( 0 );
+	bPartTypeSizer->Add( m_componentType, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	sbFabSizer->Add( bPartTypeSizer, 1, wxEXPAND, 5 );
+
+	m_boardOnly = new wxCheckBox( sbFabSizer->GetStaticBox(), wxID_ANY, _("Not in schematic"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbFabSizer->Add( m_boardOnly, 0, wxALL, 5 );
+
+	m_excludeFromPosFiles = new wxCheckBox( sbFabSizer->GetStaticBox(), wxID_ANY, _("Exclude from position files"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbFabSizer->Add( m_excludeFromPosFiles, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_excludeFromBOM = new wxCheckBox( sbFabSizer->GetStaticBox(), wxID_ANY, _("Exclude from BOM"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbFabSizer->Add( m_excludeFromBOM, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerRight->Add( sbFabSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	bSizerProperties->Add( bSizerRight, 1, wxEXPAND|wxTOP, 5 );

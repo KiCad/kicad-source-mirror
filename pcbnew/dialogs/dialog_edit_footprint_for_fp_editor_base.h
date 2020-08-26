@@ -31,8 +31,9 @@ class WX_GRID;
 #include <wx/textctrl.h>
 #include <wx/radiobox.h>
 #include <wx/slider.h>
-#include <wx/panel.h>
 #include <wx/choice.h>
+#include <wx/checkbox.h>
+#include <wx/panel.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
@@ -66,7 +67,11 @@ class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_sizerAllow180;
 		wxStaticText* m_allow180Label;
 		wxSlider* m_CostRot180Ctrl;
-		wxRadioBox* m_AttributsCtrl;
+		wxStaticText* m_componentTypeLabel;
+		wxChoice* m_componentType;
+		wxCheckBox* m_boardOnly;
+		wxCheckBox* m_excludeFromPosFiles;
+		wxCheckBox* m_excludeFromBOM;
 		wxPanel* m_PanelClearances;
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_staticTextInfoValPos;

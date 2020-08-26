@@ -35,7 +35,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	bSizerNetlistFilename->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 2 );
 
 
-	bMainSizer->Add( bSizerNetlistFilename, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( bSizerNetlistFilename, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -72,7 +72,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	bUpperSizer->Add( sbSizer1, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
-	bMainSizer->Add( bUpperSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bUpperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
@@ -89,7 +89,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	m_buttonFPTest = new wxButton( this, ID_TEST_NETLIST, _("Test Footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonFPTest->SetToolTip( _("Read the current netlist file and list missing and extra footprints") );
 
-	m_buttonsSizer->Add( m_buttonFPTest, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_buttonsSizer->Add( m_buttonFPTest, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -103,7 +103,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	m_buttonsSizer->Add( m_sdbSizer1, 1, wxEXPAND, 5 );
 
 
-	bMainSizer->Add( m_buttonsSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
+	bMainSizer->Add( m_buttonsSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( bMainSizer );

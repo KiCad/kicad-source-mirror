@@ -40,7 +40,7 @@ MODULE::MODULE( BOARD* parent ) :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_MODULE_T ),
     m_initial_comments( 0 )
 {
-    m_Attributs    = MOD_DEFAULT;
+    m_Attributs    = 0;
     m_Layer        = F_Cu;
     m_Orient       = 0;
     m_ModuleStatus = MODULE_PADS_LOCKED;
@@ -673,26 +673,33 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
                                                            : _( "Front" ), RED );
     }
 
-    msg = wxT( ". ." );
+    auto addToken = []( wxString* aStr, const wxString& aAttr )
+                   {
+                       if( !aStr->IsEmpty() )
+                           *aStr += wxT( ", " );
+
+                       *aStr += aAttr;
+                   };
+
+    wxString status;
+    wxString attrs;
 
     if( IsLocked() )
-        msg[0] = 'L';
+        addToken( &status, _( "locked" ) );
 
     if( m_ModuleStatus & MODULE_is_PLACED )
-        msg[2] = 'P';
+        addToken( &status, _( "autoplaced" ) );
 
-    aList.emplace_back( _( "Status" ), msg, MAGENTA );
+    if( m_Attributs & MOD_BOARD_ONLY )
+        addToken( &attrs, _( "not in schematic" ) );
 
-    // Controls on right side of the dialog
-    switch( m_Attributs & 255 )
-    {
-    case 0:           msg = _( "Normal" );  break;
-    case MOD_CMS:     msg = _( "Insert" );  break;
-    case MOD_VIRTUAL: msg = _( "Virtual" ); break;
-    default:          msg = wxT( "???" );   break;
-    }
+    if( m_Attributs & MOD_EXCLUDE_FROM_POS_FILES )
+        addToken( &attrs, _( "exclude from pos files" ) );
 
-    aList.emplace_back( _( "Attributes" ), msg, BROWN );
+    if( m_Attributs * MOD_EXCLUDE_FROM_BOM )
+        addToken( &attrs, _( "exclude from BOM" ) );
+
+    aList.emplace_back( _( "Status: " ) + status, _( "Attributes: " ) + attrs, BROWN );
 
     msg.Printf( "%.2f", GetOrientationDegrees() );
     aList.emplace_back( _( "Rotation" ), msg, BROWN );
@@ -1634,11 +1641,9 @@ void MODULE::SwapData( BOARD_ITEM* aImage )
 }
 
 
-bool MODULE::HasNonSMDPins() const
+bool MODULE::HasThroughHolePads() const
 {
-    // returns true if the given module has at lesat one non smd pin, such as through hole
-
-    for( auto pad : Pads() )
+    for( D_PAD* pad : Pads() )
     {
         if( pad->GetAttribute() != PAD_ATTRIB_SMD )
             return true;

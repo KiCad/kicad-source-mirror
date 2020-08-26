@@ -111,7 +111,6 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     m_runDragCommand = false;
 
-    m_netlist->SetDeleteExtraFootprints( m_cbDeleteExtraFootprints->GetValue() );
     m_netlist->SetFindByTimeStamp( !m_cbRelinkFootprints->GetValue() );
     m_netlist->SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
 

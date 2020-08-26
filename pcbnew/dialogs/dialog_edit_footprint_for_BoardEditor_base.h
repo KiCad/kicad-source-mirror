@@ -34,6 +34,7 @@ class WX_GRID;
 #include <wx/gbsizer.h>
 #include <wx/radiobox.h>
 #include <wx/slider.h>
+#include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
@@ -83,7 +84,11 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxButton* m_buttonExchange;
 		wxButton* m_buttonModuleEditor;
 		wxButton* m_button5;
-		wxRadioBox* m_AttributsCtrl;
+		wxStaticText* m_componentTypeLabel;
+		wxChoice* m_componentType;
+		wxCheckBox* m_boardOnly;
+		wxCheckBox* m_excludeFromPosFiles;
+		wxCheckBox* m_excludeFromBOM;
 		wxPanel* m_PanelClearances;
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_staticTextInfoValPos;

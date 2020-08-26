@@ -37,7 +37,7 @@
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 );
 
 bool NETLIST_EXPORTER_GENERIC::WriteNetlist( const wxString& aOutFileName,
-        unsigned aNetlistOptions )
+                                             unsigned aNetlistOptions )
 {
     // output the XML format netlist.
     wxXmlDocument   xdoc;
@@ -87,7 +87,7 @@ struct COMP_FIELDS
 
 
 void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* comp,
-        SCH_SHEET_PATH* aSheet )
+                                                   SCH_SHEET_PATH* aSheet )
 {
     COMP_FIELDS fields;
 
@@ -123,15 +123,30 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
                 // field value)
                 if( !comp2->GetField( VALUE )->IsVoid()
                         && ( unit < minUnit || fields.value.IsEmpty() ) )
-                    fields.value = comp2->GetField( VALUE )->GetShownText();
+                {
+                    if( m_resolveTextVars )
+                        fields.value = comp2->GetField( VALUE )->GetShownText();
+                    else
+                        fields.value = comp2->GetField( VALUE )->GetText();
+                }
 
                 if( !comp2->GetField( FOOTPRINT )->IsVoid()
                         && ( unit < minUnit || fields.footprint.IsEmpty() ) )
-                    fields.footprint = comp2->GetField( FOOTPRINT )->GetShownText();
+                {
+                    if( m_resolveTextVars )
+                        fields.footprint = comp2->GetField( FOOTPRINT )->GetShownText();
+                    else
+                        fields.footprint = comp2->GetField( FOOTPRINT )->GetText();
+                }
 
                 if( !comp2->GetField( DATASHEET )->IsVoid()
                         && ( unit < minUnit || fields.datasheet.IsEmpty() ) )
-                    fields.datasheet = comp2->GetField( DATASHEET )->GetShownText();
+                {
+                    if( m_resolveTextVars )
+                        fields.datasheet = comp2->GetField( DATASHEET )->GetShownText();
+                    else
+                        fields.datasheet = comp2->GetField( DATASHEET )->GetText();
+                }
 
                 for( int fldNdx = MANDATORY_FIELDS;  fldNdx < comp2->GetFieldCount();  ++fldNdx )
                 {
@@ -140,7 +155,10 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
                     if( f->GetText().size()
                         && ( unit < minUnit || fields.f.count( f->GetName() ) == 0 ) )
                     {
-                        fields.f[ f->GetName() ] = f->GetShownText();
+                        if( m_resolveTextVars )
+                            fields.f[ f->GetName() ] = f->GetShownText();
+                        else
+                            fields.f[ f->GetName() ] = f->GetText();
                     }
                 }
 
@@ -150,16 +168,32 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
     }
     else
     {
-        fields.value = comp->GetField( VALUE )->GetShownText();
-        fields.footprint = comp->GetField( FOOTPRINT )->GetShownText();
-        fields.datasheet = comp->GetField( DATASHEET )->GetShownText();
+        if( m_resolveTextVars )
+            fields.value = comp->GetField( VALUE )->GetShownText();
+        else
+            fields.value = comp->GetField( VALUE )->GetText();
+
+        if( m_resolveTextVars )
+            fields.footprint = comp->GetField( FOOTPRINT )->GetShownText();
+        else
+            fields.footprint = comp->GetField( FOOTPRINT )->GetText();
+
+        if( m_resolveTextVars )
+            fields.datasheet = comp->GetField( DATASHEET )->GetShownText();
+        else
+            fields.datasheet = comp->GetField( DATASHEET )->GetText();
 
         for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
         {
             SCH_FIELD*  f = comp->GetField( fldNdx );
 
             if( f->GetText().size() )
-                fields.f[ f->GetName() ] = f->GetShownText();
+            {
+                if( m_resolveTextVars )
+                    fields.f[ f->GetName() ] = f->GetShownText();
+                else
+                    fields.f[ f->GetName() ] = f->GetText();
+            }
         }
     }
 
@@ -265,24 +299,34 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
 
             xlibsource->AddAttribute( "description", comp->GetDescription() );
 
+            XNODE* xproperty;
+
             std::vector<SCH_FIELD>& fields = comp->GetFields();
 
             for( size_t jj = MANDATORY_FIELDS; jj < fields.size(); ++jj )
             {
-                XNODE* xproperty;
                 xcomp->AddChild( xproperty = node( "property" ) );
-
                 xproperty->AddAttribute( "name", fields[jj].GetName() );
                 xproperty->AddAttribute( "value", fields[jj].GetText() );
             }
 
             for( const SCH_FIELD& sheetField : sheet.Last()->GetFields() )
             {
-                XNODE* xproperty;
                 xcomp->AddChild( xproperty = node( "property" ) );
-
                 xproperty->AddAttribute( "name", sheetField.GetName() );
                 xproperty->AddAttribute( "value", sheetField.GetText() );
+            }
+
+            if( !comp->GetIncludeInBom() )
+            {
+                xcomp->AddChild( xproperty = node( "property" ) );
+                xproperty->AddAttribute( "name", "exclude_from_bom" );
+            }
+
+            if( !comp->GetIncludeOnBoard() )
+            {
+                xcomp->AddChild( xproperty = node( "property" ) );
+                xproperty->AddAttribute( "name", "exclude_from_board" );
             }
 
             XNODE* xsheetpath;

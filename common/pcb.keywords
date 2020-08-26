@@ -44,6 +44,7 @@ aux_axis_origin
 bevelled
 blind
 blind_buried_vias_allowed
+board_only
 bold
 bottom
 bottom_left
@@ -90,6 +91,8 @@ edge_width
 effects
 end
 epsilon_r
+exclude_from_pos_files
+exclude_from_bom
 fab_layers_line_width
 fab_layers_text_dims
 feature1
@@ -239,6 +242,7 @@ thermal_width
 thermal_gap
 thermal_bridge_width
 thickness
+through_hole
 through_hole_min
 top
 top_left

@@ -1085,17 +1085,6 @@ static void CreateDevicesSection( FILE* aFile, BOARD* aPcb )
         fprintf( aFile, "\nDEVICE \"DEV_%s\"\n", TO_UTF8( escapeString( shapeName ) ) );
         fprintf( aFile, "PART \"%s\"\n", TO_UTF8( escapeString( module->GetValue() ) ) );
         fprintf( aFile, "PACKAGE \"%s\"\n", TO_UTF8( escapeString( module->GetFPID().Format() ) ) );
-
-        // The TYPE attribute is almost freeform
-        const char* ty = "TH";
-
-        if( module->GetAttributes() & MOD_CMS )
-            ty = "SMD";
-
-        if( module->GetAttributes() & MOD_VIRTUAL )
-            ty = "VIRTUAL";
-
-        fprintf( aFile, "TYPE %s\n", ty );
     }
 
     fputs( "$ENDDEVICES\n\n", aFile );
@@ -1170,38 +1159,10 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aS
     /* creates header: */
     fprintf( aFile, "\nSHAPE \"%s\"\n", TO_UTF8( escapeString( aShapeName ) ) );
 
-    if( module->GetAttributes() & MOD_VIRTUAL )
-    {
-        fprintf( aFile, "INSERT SMD\n" );
-    }
+    if( module->GetAttributes() & MOD_THROUGH_HOLE )
+        fprintf( aFile, "INSERT TH\n" );
     else
-    {
-        if( module->GetAttributes() & MOD_CMS )
-        {
-            fprintf( aFile, "INSERT SMD\n" );
-        }
-        else
-        {
-            fprintf( aFile, "INSERT TH\n" );
-        }
-    }
-
-#if 0 /* ATTRIBUTE name and value is unspecified and the original exporter
-       * got the syntax wrong, so CAM350 rejected the whole shape! */
-
-    if( module->m_Attributs != MOD_DEFAULT )
-    {
-        fprintf( aFile, "ATTRIBUTE" );
-
-        if( module->m_Attributs & MOD_CMS )
-            fprintf( aFile, " PAD_SMD" );
-
-        if( module->m_Attributs & MOD_VIRTUAL )
-            fprintf( aFile, " VIRTUAL" );
-
-        fprintf( aFile, "\n" );
-    }
-#endif
+        fprintf( aFile, "INSERT SMD\n" );
 
     // Silk outline; wildly interpreted by various importers:
     // CAM350 read it right but only closed shapes

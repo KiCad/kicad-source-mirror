@@ -1295,15 +1295,16 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
 
         else if( TESTLINE( "At" ) )         // (At)tributes of module
         {
-            int attrs = MOD_DEFAULT;
+            int attrs = 0;
 
             data = line + SZ( "At" );
 
             if( strstr( data, "SMD" ) )
-                attrs |= MOD_CMS;
-
-            if( strstr( data, "VIRTUAL" ) )
-                attrs |= MOD_VIRTUAL;
+                attrs |= MOD_SMD;
+            else if( strstr( data, "VIRTUAL" ) )
+                attrs |= MOD_EXCLUDE_FROM_POS_FILES | MOD_EXCLUDE_FROM_BOM;
+            else
+                attrs |= MOD_THROUGH_HOLE | MOD_EXCLUDE_FROM_POS_FILES;
 
             aModule->SetAttributes( attrs );
         }

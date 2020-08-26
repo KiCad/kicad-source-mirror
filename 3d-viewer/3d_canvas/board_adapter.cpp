@@ -227,17 +227,12 @@ void BOARD_ADAPTER::SetFlag( DISPLAY3D_FLG aFlag, bool aState )
 
 bool BOARD_ADAPTER::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) const
 {
-    if( ( ( aModuleAttributs == MOD_DEFAULT ) &&
-          GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) ) ||
-        ( ( ( aModuleAttributs & MOD_CMS) == MOD_CMS ) &&
-          GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) ) ||
-        ( ( ( aModuleAttributs & MOD_VIRTUAL) == MOD_VIRTUAL ) &&
-          GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) ) )
-    {
-        return true;
-    }
-
-    return false;
+    if( aModuleAttributs & MOD_SMD )
+        return GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT );
+    else if( aModuleAttributs & MOD_THROUGH_HOLE )
+        return GetFlag( FL_MODULE_ATTRIBUTES_NORMAL );
+    else
+        return GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL );
 }
 
 

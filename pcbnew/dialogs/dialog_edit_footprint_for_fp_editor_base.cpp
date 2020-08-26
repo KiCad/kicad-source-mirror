@@ -172,13 +172,38 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	m_sizerAP->Add( m_sizerAllow180, 0, wxEXPAND, 5 );
 
 
-	bSizerProperties->Add( m_sizerAP, 1, wxEXPAND|wxTOP, 5 );
+	bSizerProperties->Add( m_sizerAP, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_AttributsCtrlChoices[] = { _("Through hole"), _("Surface mount"), _("Virtual") };
-	int m_AttributsCtrlNChoices = sizeof( m_AttributsCtrlChoices ) / sizeof( wxString );
-	m_AttributsCtrl = new wxRadioBox( m_PanelGeneral, wxID_ANY, _("Fabrication Attributes"), wxDefaultPosition, wxDefaultSize, m_AttributsCtrlNChoices, m_AttributsCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_AttributsCtrl->SetSelection( 1 );
-	bSizerProperties->Add( m_AttributsCtrl, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
+	wxStaticBoxSizer* sbFabSizer;
+	sbFabSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Fabrication Attributes") ), wxVERTICAL );
+
+	wxBoxSizer* bPartTypeSizer;
+	bPartTypeSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_componentTypeLabel = new wxStaticText( sbFabSizer->GetStaticBox(), wxID_ANY, _("Component:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_componentTypeLabel->Wrap( -1 );
+	bPartTypeSizer->Add( m_componentTypeLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_componentTypeChoices[] = { _("Through hole"), _("SMD"), _("Other") };
+	int m_componentTypeNChoices = sizeof( m_componentTypeChoices ) / sizeof( wxString );
+	m_componentType = new wxChoice( sbFabSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_componentTypeNChoices, m_componentTypeChoices, 0 );
+	m_componentType->SetSelection( 0 );
+	bPartTypeSizer->Add( m_componentType, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	sbFabSizer->Add( bPartTypeSizer, 0, wxEXPAND, 5 );
+
+	m_boardOnly = new wxCheckBox( sbFabSizer->GetStaticBox(), wxID_ANY, _("Not in schematic"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbFabSizer->Add( m_boardOnly, 0, wxALL, 5 );
+
+	m_excludeFromPosFiles = new wxCheckBox( sbFabSizer->GetStaticBox(), wxID_ANY, _("Exclude from position files"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbFabSizer->Add( m_excludeFromPosFiles, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_excludeFromBOM = new wxCheckBox( sbFabSizer->GetStaticBox(), wxID_ANY, _("Exclude from BOM"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbFabSizer->Add( m_excludeFromBOM, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerProperties->Add( sbFabSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	m_PanelPropertiesBoxSizer->Add( bSizerProperties, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );

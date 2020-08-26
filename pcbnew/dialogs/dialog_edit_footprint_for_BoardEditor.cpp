@@ -299,20 +299,16 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     m_CostRot90Ctrl->SetValue( m_footprint->GetPlacementCost90() );
     m_CostRot180Ctrl->SetValue( m_footprint->GetPlacementCost180() );
 
-    m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non SMD footprints\n"
-            "Footprints with this option are not put in the footprint position list file" ) );
-    m_AttributsCtrl->SetItemToolTip( 1, _( "Use this attribute for SMD footprints.\n"
-            "Only footprints with this option are put in the footprint position list file" ) );
-    m_AttributsCtrl->SetItemToolTip( 2, _( "Use this attribute for \"virtual\" footprints drawn "
-            "on board\nsuch as an edge connector (old ISA PC bus for instance)" ) );
+    if( m_footprint->GetAttributes() & MOD_THROUGH_HOLE )
+        m_componentType->SetSelection( 0 );
+    else if( m_footprint->GetAttributes() & MOD_SMD )
+        m_componentType->SetSelection( 1 );
+    else
+        m_componentType->SetSelection( 2 );
 
-    switch( m_footprint->GetAttributes() & 255 )
-    {
-    case MOD_CMS:     m_AttributsCtrl->SetSelection( 1 ); break;
-    case MOD_VIRTUAL: m_AttributsCtrl->SetSelection( 2 ); break;
-    case 0:
-    default:          m_AttributsCtrl->SetSelection( 0 ); break;
-    }
+    m_boardOnly->SetValue( m_footprint->GetAttributes() & MOD_BOARD_ONLY );
+    m_excludeFromPosFiles->SetValue( m_footprint->GetAttributes() & MOD_EXCLUDE_FROM_POS_FILES );
+    m_excludeFromBOM->SetValue( m_footprint->GetAttributes() & MOD_EXCLUDE_FROM_BOM );
 
     // Local Clearances
 
@@ -677,18 +673,10 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
     switch( m_ZoneConnectionChoice->GetSelection() )
     {
     default:
-    case 0:
-        m_footprint->SetZoneConnection( ZONE_CONNECTION::INHERITED );
-        break;
-    case 1:
-        m_footprint->SetZoneConnection( ZONE_CONNECTION::FULL );
-        break;
-    case 2:
-        m_footprint->SetZoneConnection( ZONE_CONNECTION::THERMAL );
-        break;
-    case 3:
-        m_footprint->SetZoneConnection( ZONE_CONNECTION::NONE );
-        break;
+    case 0:  m_footprint->SetZoneConnection( ZONE_CONNECTION::INHERITED ); break;
+    case 1:  m_footprint->SetZoneConnection( ZONE_CONNECTION::FULL );      break;
+    case 2:  m_footprint->SetZoneConnection( ZONE_CONNECTION::THERMAL );   break;
+    case 3:  m_footprint->SetZoneConnection( ZONE_CONNECTION::NONE );      break;
     }
 
     // Set Module Position
@@ -697,13 +685,25 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
     m_footprint->SetLocked( m_AutoPlaceCtrl->GetSelection() == 2 );
     m_footprint->SetPadsLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
-    switch( m_AttributsCtrl->GetSelection() )
+    int attributes = 0;
+
+    switch( m_componentType->GetSelection() )
     {
-    case 0:  m_footprint->SetAttributes( 0 );           break;
-    case 1:  m_footprint->SetAttributes( MOD_CMS );     break;
-    case 2:  m_footprint->SetAttributes( MOD_VIRTUAL ); break;
-    default: wxFAIL;
+    case 0:  attributes |= MOD_THROUGH_HOLE; break;
+    case 1:  attributes |= MOD_SMD;          break;
+    default:                                 break;
     }
+
+    if( m_boardOnly->GetValue() )
+        attributes |= MOD_BOARD_ONLY;
+
+    if( m_excludeFromPosFiles->GetValue() )
+        attributes |= MOD_EXCLUDE_FROM_POS_FILES;
+
+    if( m_excludeFromBOM->GetValue() )
+        attributes |= MOD_EXCLUDE_FROM_BOM;
+
+    m_footprint->SetAttributes( attributes );
 
     m_footprint->SetPlacementCost90( m_CostRot90Ctrl->GetValue() );
     m_footprint->SetPlacementCost180( m_CostRot180Ctrl->GetValue() );

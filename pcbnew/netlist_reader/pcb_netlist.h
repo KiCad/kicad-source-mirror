@@ -193,20 +193,13 @@ typedef boost::ptr_vector< COMPONENT > COMPONENTS;
  */
 class NETLIST
 {
-    COMPONENTS         m_components;           ///< Components found in the netlist.
+    COMPONENTS m_components;          // Components found in the netlist.
 
-    /// Remove footprints from #BOARD not found in netlist when true.
-    bool               m_deleteExtraFootprints;
-
-    /// Find component by time stamp if true or reference designator if false.
-    bool               m_findByTimeStamp;
-
-    /// Replace component footprints when they differ from the netlist if true.
-    bool               m_replaceFootprints;
+    bool       m_findByTimeStamp;     // Associate components by KIID (or refdes if false)
+    bool       m_replaceFootprints;   // Update footprints to match footprints defined in netlist
 
 public:
     NETLIST() :
-        m_deleteExtraFootprints( false ),
         m_findByTimeStamp( false ),
         m_replaceFootprints( false )
     {
@@ -269,23 +262,12 @@ public:
     COMPONENT* GetComponentByPath( const KIID_PATH& aPath );
 
     void SortByFPID();
-
     void SortByReference();
 
-    void SetDeleteExtraFootprints( bool aDeleteExtraFootprints )
-    {
-        m_deleteExtraFootprints = aDeleteExtraFootprints;
-    }
-
     void SetFindByTimeStamp( bool aFindByTimeStamp ) { m_findByTimeStamp = aFindByTimeStamp; }
-
     bool IsFindByTimeStamp() const { return m_findByTimeStamp; }
 
-    void SetReplaceFootprints( bool aReplaceFootprints )
-    {
-        m_replaceFootprints = aReplaceFootprints;
-    }
-
+    void SetReplaceFootprints( bool aReplace ) { m_replaceFootprints = aReplace; }
     bool GetReplaceFootprints() const { return m_replaceFootprints; }
 
     /**

@@ -62,11 +62,15 @@ enum GNL_T
 class NETLIST_EXPORTER_GENERIC : public NETLIST_EXPORTER
 {
 private:
-    std::set< wxString >  m_libraries;    ///< Set of library nicknames.
+    std::set<wxString>  m_libraries;         // Set of library nicknames.
+
+protected:
+    bool                m_resolveTextVars;   // Export textVar references resolved
 
 public:
     NETLIST_EXPORTER_GENERIC( SCHEMATIC* aSchematic ) :
-        NETLIST_EXPORTER( aSchematic )
+        NETLIST_EXPORTER( aSchematic ),
+        m_resolveTextVars( true )
     {}
 
     /**

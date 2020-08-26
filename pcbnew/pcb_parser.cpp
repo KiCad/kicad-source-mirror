@@ -2526,6 +2526,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
     wxPoint  pt;
     T        token;
     LIB_ID   fpid;
+    int      attributes = 0;
 
     std::unique_ptr<MODULE> module( new MODULE( m_board ) );
 
@@ -2689,16 +2690,33 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             {
                 switch( token )
                 {
-                case T_smd:
-                    module->SetAttributes( module->GetAttributes() | MOD_CMS );
+                case T_virtual:     // legacy token prior to version 20200826
+                    attributes |= MOD_EXCLUDE_FROM_POS_FILES | MOD_EXCLUDE_FROM_BOM;
                     break;
 
-                case T_virtual:
-                    module->SetAttributes( module->GetAttributes() | MOD_VIRTUAL );
+                case T_through_hole:
+                    attributes |= MOD_THROUGH_HOLE;
+                    break;
+
+                case T_smd:
+                    attributes |= MOD_SMD;
+                    break;
+
+                case T_board_only:
+                    attributes |= MOD_BOARD_ONLY;
+                    break;
+
+                case T_exclude_from_pos_files:
+                    attributes |= MOD_EXCLUDE_FROM_POS_FILES;
+                    break;
+
+                case T_exclude_from_bom:
+                    attributes |= MOD_EXCLUDE_FROM_BOM;
                     break;
 
                 default:
-                    Expecting( "smd and/or virtual" );
+                    Expecting( "through_hole, smd, virtual, board_only, exclude_from_pos_files "
+                               "or exclude_from_bom" );
                 }
             }
             break;
@@ -2796,6 +2814,16 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
                     "zone, or model" );
         }
     }
+
+    // In legacy files the lack of attributes indicated a through-hole component which was by
+    // default excluded from pos files.  However there was a hack to look for SMD pads and
+    // consider those "mislabelled through-hole components" and therefore include them in place
+    // files.  We probably don't want to get into that game so we'll just include them by
+    // default and let the user change it if required.
+    if( m_requiredVersion < 20200826 && attributes == 0 )
+        attributes |= MOD_THROUGH_HOLE;
+
+    module->SetAttributes( attributes );
 
     module->SetFPID( fpid );
     module->SetProperties( properties );

@@ -70,7 +70,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 
     for( MODULE* footprint : m_pcb->Modules() )
     {
-        if( footprint->GetAttributes() & MOD_VIRTUAL )
+        if( footprint->GetAttributes() & MOD_EXCLUDE_FROM_POS_FILES )
              continue;
 
         if( footprint->GetLayer() == aLayer )
@@ -145,17 +145,12 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         // Add rotation info (rotation is CCW, in degrees):
         pnpAttrib.m_Orientation = mapRotationAngle( footprint->GetOrientationDegrees() );
 
-        // Add component type info (SMD or Through Hole):
-        bool is_smd_mount = footprint->GetAttributes() & MOD_CMS;
+        pnpAttrib.m_MountType = GBR_CMP_PNP_METADATA::MOUNT_TYPE_UNSPECIFIED;
 
-        // Smd footprints can have through holes (thermal vias).
-        // but if a footprint is not set as SMD, it will be set as SMD
-        // if it does not have through hole pads
-        if( !is_smd_mount && !footprint->HasNonSMDPins() )
-            is_smd_mount = true;
-
-        pnpAttrib.m_MountType = is_smd_mount ? GBR_CMP_PNP_METADATA::MOUNT_TYPE_SMD
-                                : GBR_CMP_PNP_METADATA::MOUNT_TYPE_TH;
+        if( footprint->GetAttributes() & MOD_THROUGH_HOLE )
+            pnpAttrib.m_MountType = GBR_CMP_PNP_METADATA::MOUNT_TYPE_TH;
+        else if( footprint->GetAttributes() & MOD_SMD )
+            pnpAttrib.m_MountType = GBR_CMP_PNP_METADATA::MOUNT_TYPE_SMD;
 
         // Add component value info:
         pnpAttrib.m_Value = ConvertNotAllowedCharsInGerber( footprint->Value().GetShownText(),

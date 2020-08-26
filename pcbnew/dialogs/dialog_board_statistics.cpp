@@ -132,9 +132,8 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
 
     // If you need some more types to be shown, simply add them to the
     // corresponding list
-    m_componentsTypes.push_back( componentsType_t( MOD_DEFAULT, _( "THT:" ) ) );
-    m_componentsTypes.push_back( componentsType_t( MOD_CMS, _( "SMD:" ) ) );
-    m_componentsTypes.push_back( componentsType_t( MOD_VIRTUAL, _( "Virtual:" ) ) );
+    m_componentsTypes.push_back( componentsType_t( MOD_THROUGH_HOLE, _( "THT:" ) ) );
+    m_componentsTypes.push_back( componentsType_t( MOD_SMD, _( "SMD:" ) ) );
 
     m_padsTypes.clear();
     m_padsTypes.push_back( padsType_t( PAD_ATTRIB_STANDARD, _( "Through hole:" ) ) );
@@ -177,21 +176,19 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
 
 void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 {
-    auto board = m_parentFrame->GetBoard();
+    BOARD* board = m_parentFrame->GetBoard();
 
     // Get modules and pads count
     for( MODULE* module : board->Modules() )
     {
-        auto& pads = module->Pads();
-
         // Do not proceed modules with no pads if checkbox checked
-        if( m_checkBoxExcludeComponentsNoPins->GetValue() && !pads.size() )
+        if( m_checkBoxExcludeComponentsNoPins->GetValue() && ! module->Pads().size() )
             continue;
 
         // Go through components types list
         for( auto& type : m_componentsTypes )
         {
-            if( module->GetAttributes() == type.attribute )
+            if( ( module->GetAttributes() & type.attribute ) > 0 )
             {
                 if( module->IsFlipped() )
                     type.backSideQty++;
@@ -201,7 +198,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             }
         }
 
-        for( auto& pad : pads )
+        for( D_PAD* pad : module->Pads() )
         {
             // Go through pads types list
             for( auto& type : m_padsTypes )
@@ -254,9 +251,9 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     }
 
     // Get via counts
-    for( auto& track : board->Tracks() )
+    for( TRACK* track : board->Tracks() )
     {
-        if( auto via = dyn_cast<VIA*>( track ) )
+        if( VIA* via = dyn_cast<VIA*>( track ) )
         {
             for( auto& type : m_viasTypes )
             {
@@ -300,7 +297,8 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     // If board has no Edge Cuts lines, board->GetBoardPolygonOutlines will
     // return small rectangle, so we double check that
     bool edgeCutsExists = false;
-    for( auto& drawing : board->Drawings() )
+
+    for( BOARD_ITEM* drawing : board->Drawings() )
     {
         if( drawing->GetLayer() == Edge_Cuts )
         {

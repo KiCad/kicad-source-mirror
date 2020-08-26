@@ -31,33 +31,28 @@
 using namespace std::placeholders;
 
 #include <fctsys.h>
-//#include <pgm_base.h>
 #include <kiway.h>
-//#include <confirm.h>
 #include <pcb_edit_frame.h>
-#include "pcb_netlist.h"
-#include "netlist_reader.h"
+#include <netlist_reader/pcb_netlist.h>
+#include <netlist_reader/netlist_reader.h>
 #include <reporter.h>
 #include <lib_id.h>
 #include <fp_lib_table.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <ratsnest/ratsnest_data.h>
-//#include <pcbnew.h>
 #include <io_mgr.h>
 #include "board_netlist_updater.h"
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
-#include <view/view.h>
+//#include <view/view.h>
 
-extern void SpreadFootprints( std::vector<MODULE*>* aFootprints,
-                              wxPoint aSpreadAreaPosition );
+extern void SpreadFootprints( std::vector<MODULE*>* aFootprints, wxPoint aSpreadAreaPosition );
 
 
-bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename,
-                                          NETLIST& aNetlist,
+bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aNetlist,
                                           REPORTER& aReporter )
 {
     wxString msg;
@@ -135,8 +130,6 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
 }
 
 
-#define ALLOW_PARTIAL_FPID      1
-
 void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
 {
     wxString   msg;
@@ -154,12 +147,8 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
     {
         component = aNetlist.GetComponent( ii );
 
-#if ALLOW_PARTIAL_FPID
         // The FPID is ok as long as there is a footprint portion coming from eeschema.
         if( !component->GetFPID().GetLibItemName().size() )
-#else
-        if( component->GetFPID().empty() )
-#endif
         {
             msg.Printf( _( "No footprint defined for symbol \"%s\".\n" ),
                         component->GetReference() );
@@ -198,13 +187,9 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         {
             module = NULL;
 
-#if ALLOW_PARTIAL_FPID
-            // The LIB_ID is ok as long as there is a footprint portion coming
-            // the library if it's needed.  Nickname can be blank.
+            // The LIB_ID is ok as long as there is a footprint portion coming the library if
+            // it's needed.  Nickname can be blank.
             if( !component->GetFPID().GetLibItemName().size() )
-#else
-            if( !component->GetFPID().IsValid() )
-#endif
             {
                 msg.Printf( _( "%s footprint ID \"%s\" is not valid." ),
                             component->GetReference(),

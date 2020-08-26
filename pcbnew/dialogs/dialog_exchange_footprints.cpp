@@ -51,10 +51,11 @@ int g_matchModeForUpdateSelected   = ID_MATCH_FP_SELECTED;
 int g_matchModeForExchange         = ID_MATCH_FP_REF;
 int g_matchModeForExchangeSelected = ID_MATCH_FP_SELECTED;
 
-bool g_removeExtraTextItems = false;
-bool g_resetTextItemLayers  = false;
-bool g_resetTextItemEffects = false;
-bool g_reset3DModels        = false;
+bool g_removeExtraTextItems  = false;
+bool g_resetTextItemLayers   = false;
+bool g_resetTextItemEffects  = false;
+bool g_resetFabricationAttrs = false;
+bool g_reset3DModels         = false;
 
 
 DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule,
@@ -139,6 +140,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     m_removeExtraBox->SetValue( g_removeExtraTextItems );
     m_resetTextItemLayers->SetValue( g_resetTextItemLayers );
     m_resetTextItemEffects->SetValue( g_resetTextItemEffects );
+    m_resetFabricationAttrs->SetValue( g_resetFabricationAttrs );
     m_reset3DModels->SetValue( g_reset3DModels );
 
     m_MessageWindow->SetLazyUpdate( true );
@@ -163,6 +165,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::~DIALOG_EXCHANGE_FOOTPRINTS()
     g_removeExtraTextItems = m_removeExtraBox->GetValue();
     g_resetTextItemLayers = m_resetTextItemLayers->GetValue();
     g_resetTextItemEffects = m_resetTextItemEffects->GetValue();
+    g_resetFabricationAttrs = m_resetFabricationAttrs->GetValue();
     g_reset3DModels = m_reset3DModels->GetValue();
 }
 
@@ -374,6 +377,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& a
                                m_removeExtraBox->GetValue(),
                                m_resetTextItemLayers->GetValue(),
                                m_resetTextItemEffects->GetValue(),
+                               m_resetFabricationAttrs->GetValue(),
                                m_reset3DModels->GetValue() );
 
     if( aModule == m_currentModule )
@@ -458,7 +462,8 @@ TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
 
 void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT& aCommit,
                                       bool deleteExtraTexts, bool resetTextLayers,
-                                      bool resetTextEffects, bool reset3DModels )
+                                      bool resetTextEffects, bool resetFabricationAttrs,
+                                      bool reset3DModels )
 {
     aDest->SetParent( GetBoard() );
 
@@ -516,6 +521,9 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
                 aDest->Add( new TEXTE_MODULE( *srcItem ) );
         }
     }
+
+    if( !resetFabricationAttrs )
+        aDest->SetAttributes( aSrc->GetAttributes() );
 
     // Copy 3D model settings in accordance with the reset* flag
     if( !reset3DModels )

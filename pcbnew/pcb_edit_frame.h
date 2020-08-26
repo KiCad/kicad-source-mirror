@@ -783,8 +783,8 @@ public:
      * @param aCommit = commit that should store the changes
      */
     void Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT& aCommit,
-                          bool deleteExtraTexts = true,
-                          bool resetTextLayers = true, bool resetTextEffects = true,
+                          bool deleteExtraTexts = true, bool resetTextLayers = true,
+                          bool resetTextEffects = true, bool resetFabricationAttrs = true,
                           bool reset3DModels = true );
 
     // loading modules: see PCB_BASE_FRAME

@@ -307,6 +307,33 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
         }
     }
 
+    if( ( aNewComponent->GetProperties().count( "exclude_from_bom" ) > 0 )
+            != ( ( aPcbComponent->GetAttributes() & MOD_EXCLUDE_FROM_BOM ) > 0 ) )
+    {
+        int attributes = aPcbComponent->GetAttributes();
+
+        if( aNewComponent->GetProperties().count( "exclude_from_bom" ) )
+        {
+            attributes |= MOD_EXCLUDE_FROM_BOM;
+            msg.Printf( _( "Setting %s 'exclude from BOM' fabrication attribute." ),
+                        aPcbComponent->GetReference() );
+        }
+        else
+        {
+            attributes &= ~MOD_EXCLUDE_FROM_BOM;
+            msg.Printf( _( "Removing %s 'exclude from BOM' fabrication attribute." ),
+                        aPcbComponent->GetReference() );
+        }
+
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+
+        if( !m_isDryRun )
+        {
+            changed = true;
+            aPcbComponent->SetAttributes( attributes );
+        }
+    }
+
     if( changed && copy )
         m_commit.Modified( aPcbComponent, copy );
     else
@@ -326,7 +353,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
     bool changed = false;
 
     // At this point, the component footprint is updated.  Now update the nets.
-    for( auto pad : aPcbComponent->Pads() )
+    for( D_PAD* pad : aPcbComponent->Pads() )
     {
         const COMPONENT_NET& net = aNewComponent->GetNet( pad->GetName() );
 
@@ -418,17 +445,17 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                     m_oldToNewNets[ pad->GetNetname() ] = netName;
 
                     msg.Printf( _( "Reconnect %s pin %s from %s to %s."),
-                            aPcbComponent->GetReference(),
-                            pad->GetName(),
-                            UnescapeString( pad->GetNetname() ),
-                            UnescapeString( netName ) );
+                                aPcbComponent->GetReference(),
+                                pad->GetName(),
+                               UnescapeString( pad->GetNetname() ),
+                               UnescapeString( netName ) );
                 }
                 else
                 {
                     msg.Printf( _( "Connect %s pin %s to %s."),
-                            aPcbComponent->GetReference(),
-                            pad->GetName(),
-                            UnescapeString( netName ) );
+                                aPcbComponent->GetReference(),
+                                pad->GetName(),
+                               UnescapeString( netName ) );
                 }
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
@@ -481,7 +508,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
         }
     }
 
-    for( auto via : m_board->Tracks() )
+    for( TRACK* via : m_board->Tracks() )
     {
         if( via->Type() != PCB_VIA_T )
             continue;
@@ -500,7 +527,8 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             if( !updatedNetname.IsEmpty() )
             {
                 msg.Printf( _( "Reconnect via from %s to %s." ),
-                        UnescapeString( via->GetNetname() ), UnescapeString( updatedNetname ) );
+                            UnescapeString( via->GetNetname() ),
+                            UnescapeString( updatedNetname ) );
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
                 if( !m_isDryRun )
@@ -520,7 +548,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             else
             {
                 msg.Printf( _( "Via connected to unknown net (%s)." ),
-                        UnescapeString( via->GetNetname() ) );
+                            UnescapeString( via->GetNetname() ) );
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING );
                 ++m_warningCount;
             }
@@ -598,15 +626,17 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
     wxString msg;
     const COMPONENT* component;
 
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
+        if( ( module->GetAttributes() & MOD_BOARD_ONLY ) > 0 )
+            continue;
 
         if( m_lookupByTimestamp )
             component = aNetlist.GetComponentByPath( module->GetPath() );
         else
             component = aNetlist.GetComponentByReference( module->GetReference() );
 
-        if( component == NULL )
+        if( component == NULL || component->GetProperties().count( "exclude_from_board" ) )
         {
             if( module->IsLocked() )
             {
@@ -641,8 +671,10 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
     std::vector<D_PAD*> padlist = m_board->GetPads();
 
     // Sort pads by netlist name
-    std::sort( padlist.begin(), padlist.end(),
-        [ this ]( D_PAD* a, D_PAD* b ) -> bool { return getNetname( a ) < getNetname( b ); } );
+    std::sort( padlist.begin(), padlist.end(), [ this ]( D_PAD* a, D_PAD* b ) -> bool
+                                               {
+                                                   return getNetname( a ) < getNetname( b );
+                                               } );
 
     for( D_PAD* pad : padlist )
     {
@@ -774,6 +806,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         COMPONENT* component = aNetlist.GetComponent( i );
         int        matchCount = 0;
         MODULE*    tmp;
+
+        if( component->GetProperties().count( "exclude_from_board" ) )
+            continue;
 
         msg.Printf( _( "Processing component \"%s:%s\"." ),
                     component->GetReference(),

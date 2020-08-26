@@ -82,36 +82,19 @@ public:
      */
     int GetFootprintCount() { return m_fpCount; }
 
-    /**
-     * @return the list of  not virtual footprints with MOD_CMS flag not set
-     * but having only smd pads.
-     * This list can be used to force this flag.
-     * it is filled only if forceSmdItems is true
-     */
-    std::vector<MODULE*>& GetSmdFootprintsNotLabeledSMD()
-    {
-        return m_smdFootprintsNotLabeledSMD;
-    }
-
     // Use standard board side name. do not translate them,
     // they are keywords in place file
     static std::string GetFrontSideName() { return std::string( "top" ); }
     static std::string GetBackSideName() { return std::string( "bottom" ); }
 
 private:
-    BOARD* m_board;
-    bool m_unitsMM;         // true for mm, false for inches
-    bool m_forceSmdItems;   // If true, non virtual fp with the flag MOD_CMD not set but
-                            // having only smd pads will be in list
-                            // and will be added in m_smdFootprintsNotLabeledSMD
-    int m_side;             // PCB_BACK_SIDE, PCB_FRONT_SIDE, PCB_BOTH_SIDES
-    bool m_formatCSV;       // true for csv format, false for ascii (utf8) format
-    int m_fpCount;          // Number of footprints in list, for info
-    wxPoint m_place_Offset; // Offset for coordinates in generated data.
-
-    // A list of footprints with MOD_CMS flag not set but having only smd pads.
-    // This list can be used to force this flag.
-    std::vector<MODULE*> m_smdFootprintsNotLabeledSMD;
+    BOARD*  m_board;
+    bool    m_unitsMM;        // true for mm, false for inches
+    bool    m_excludeAllTH;   // Exclude any footprints with through-hole pads
+    int     m_side;           // PCB_BACK_SIDE, PCB_FRONT_SIDE, PCB_BOTH_SIDES
+    bool    m_formatCSV;      // true for csv format, false for ascii (utf8) format
+    int     m_fpCount;        // Number of footprints in list, for info
+    wxPoint m_place_Offset;   // Offset for coordinates in generated data.
 };
 
 #endif      // #ifndef EXPORT_FOOTPRINTS_PLACEFILE_H

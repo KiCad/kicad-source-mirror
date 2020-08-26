@@ -64,37 +64,37 @@ enum INCLUDE_NPTH_T
  */
 enum MODULE_ATTR_T
 {
-    MOD_DEFAULT = 0,    ///< default
-    MOD_CMS     = 1,    ///< Set for modules listed in the automatic insertion list
-                        ///< (usually SMD footprints)
-    MOD_VIRTUAL = 2     ///< Virtual component: when created by copper shapes on
-                        ///<  board (Like edge card connectors, mounting hole...)
+    MOD_THROUGH_HOLE           = 0x0001,
+    MOD_SMD                    = 0x0002,
+    MOD_EXCLUDE_FROM_POS_FILES = 0x0004,
+    MOD_EXCLUDE_FROM_BOM       = 0x0008,
+    MOD_BOARD_ONLY             = 0x0010    // Footprint has no corresponding symbol
 };
 
 class MODULE_3D_SETTINGS
 {
-    public:
-        MODULE_3D_SETTINGS() :
-            // Initialize with sensible values
-            m_Scale { 1, 1, 1 },
-            m_Rotation { 0, 0, 0 },
-            m_Offset { 0, 0, 0 },
-            m_Opacity( 1.0 ),
-            m_Show( true )
-        {
-        }
+public:
+    MODULE_3D_SETTINGS() :
+        // Initialize with sensible values
+        m_Scale { 1, 1, 1 },
+        m_Rotation { 0, 0, 0 },
+        m_Offset { 0, 0, 0 },
+        m_Opacity( 1.0 ),
+        m_Show( true )
+    {
+    }
 
-        struct VECTOR3D
-        {
-            double x, y, z;
-        };
+    struct VECTOR3D
+    {
+        double x, y, z;
+    };
 
-        VECTOR3D m_Scale;       ///< 3D model scaling factor (dimensionless)
-        VECTOR3D m_Rotation;    ///< 3D model rotation (degrees)
-        VECTOR3D m_Offset;      ///< 3D model offset (mm)
-        double   m_Opacity;
-        wxString m_Filename;    ///< The 3D shape filename in 3D library
-        bool     m_Show;        ///< Include module in rendering
+    VECTOR3D m_Scale;       ///< 3D model scaling factor (dimensionless)
+    VECTOR3D m_Rotation;    ///< 3D model rotation (degrees)
+    VECTOR3D m_Offset;      ///< 3D model offset (mm)
+    double   m_Opacity;
+    wxString m_Filename;    ///< The 3D shape filename in 3D library
+    bool     m_Show;        ///< Include module in rendering
 };
 
 DECL_DEQ_FOR_SWIG( PADS, D_PAD* )
@@ -201,12 +201,7 @@ public:
         return m_fp_zones;
     }
 
-    /**
-     * @return true if the given module has any non smd pins, such as through hole
-     * and therefore cannot be placed automatically.
-     * Used in Pick and Place files writers
-     */
-    bool HasNonSMDPins() const;
+    bool HasThroughHolePads() const;
 
     std::list<MODULE_3D_SETTINGS>& Models()             { return m_3D_Drawings; }
     const std::list<MODULE_3D_SETTINGS>& Models() const { return m_3D_Drawings; }
