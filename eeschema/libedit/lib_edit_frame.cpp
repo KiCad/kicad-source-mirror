@@ -1653,23 +1653,18 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aShowProgress )
     {
         wxDataViewItem found;
 
+        m_treePane->GetLibTree()->Unselect();
+        m_treePane->Regenerate();
+
         if( selected.IsValid() )
         {
-            // Check if the previously selected item is still valid,
-            // if not - it has to be unselected to prevent crash
             found = m_libMgr->GetAdapter()->FindItem( selected );
 
             if( !found )
-                m_treePane->GetLibTree()->Unselect();
-        }
-
-        m_treePane->Regenerate();
-
-        // Try to select the parent library, in case the part is not found
-        if( !found && selected.IsValid() )
-        {
-            selected.SetLibItemName( "" );
-            found = m_libMgr->GetAdapter()->FindItem( selected );
+            {
+                selected.SetLibItemName( "" );
+                found = m_libMgr->GetAdapter()->FindItem( selected );
+            }
 
             if( found )
                 m_treePane->GetLibTree()->SelectLibId( selected );
