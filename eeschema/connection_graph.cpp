@@ -2442,7 +2442,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
 bool CONNECTION_GRAPH::ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgraph )
 {
-    if( !aSubgraph->m_drivers.empty() )
+    if( aSubgraph->m_driver )
         return true;
 
     std::vector<SCH_LINE*> wires;
