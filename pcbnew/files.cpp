@@ -308,9 +308,6 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
         onBoardLoaded();
 
-        // Don't set name until the user hits save, so project files are not created
-        mgr->LoadProject( "" );
-
         LoadProjectSettings();
 
         OnModify();
