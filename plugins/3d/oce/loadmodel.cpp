@@ -481,7 +481,17 @@ bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
         char *buffer = new char[size];
 
         ifile.Read( buffer, size);
-        std::string expanded = gzip::decompress( buffer, size );
+        std::string expanded;
+
+        try
+        {
+            expanded = gzip::decompress( buffer, size );
+        }
+        catch(...)
+        {
+            delete[] buffer;
+            return false;
+        }
 
         delete[] buffer;
 
