@@ -757,6 +757,9 @@ void NODE::removeViaIndex( VIA* aVia )
 
 void NODE::removeSolidIndex( SOLID* aSolid )
 {
+    if( !aSolid->IsRoutable() )
+        return;
+
     // fixme: redundant code
     JOINT* jt = FindJoint( aSolid->Pos(), aSolid->Layers().Start(), aSolid->Net() );
     assert( jt );
