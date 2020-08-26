@@ -34,9 +34,6 @@ class SCH_COMPONENT;
 #include <pin_type.h>
 #include <class_libentry.h>
 
-/// The offset of the pin name string from the end of the pin in mils.
-#define DEFAULT_PIN_NAME_OFFSET 40
-
 // Circle diameter drawn at the active end of pins:
 #define TARGET_PIN_RADIUS   Mils2iu( 15 )
 

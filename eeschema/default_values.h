@@ -63,4 +63,7 @@
 ///< The default text size in mils. (can be changed in preference menu)
 #define DEFAULT_TEXT_SIZE 50
 
+///< The offset of the pin name string from the end of the pin in mils.
+#define DEFAULT_PIN_NAME_OFFSET 20
+
 #endif
