@@ -481,10 +481,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
 
 void BOARD_NETLIST_UPDATER::cacheCopperZoneConnections()
 {
-    for( int ii = 0; ii < m_board->GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
     {
-        ZONE_CONTAINER* zone = m_board->GetArea( ii );
-
         if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
             continue;
 
@@ -556,10 +554,8 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
     }
 
     // Test copper zones to detect "dead" nets (nets without any pad):
-    for( int i = 0; i < m_board->GetAreaCount(); i++ )
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
     {
-        ZONE_CONTAINER* zone = m_board->GetArea( i );
-
         if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
             continue;
 

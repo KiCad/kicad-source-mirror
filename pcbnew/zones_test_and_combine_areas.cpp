@@ -31,17 +31,8 @@
  */
 
 #include <fctsys.h>
-#include <common.h>
-#include <confirm.h>
-#include <undo_redo_container.h>
-
 #include <class_board.h>
 #include <class_zone.h>
-#include <class_marker_pcb.h>
-
-#include <pcbnew.h>
-#include <drc/drc.h>
-#include <math_for_graphics.h>
 
 
 bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
@@ -59,13 +50,9 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
 
     // Test for bad areas: all zones must have more than 2 corners:
     // Note: should not happen, but just in case.
-    for( unsigned ii = 0; ii < m_ZoneDescriptorList.size(); )
+    for( ZONE_CONTAINER* zone : m_zones )
     {
-        ZONE_CONTAINER* zone = m_ZoneDescriptorList[ii];
-
-        if( zone->GetNumCorners() >= 3 )
-            ii++;
-        else               // Remove zone because it is incorrect:
+        if( zone->GetNumCorners() < 3 )
             RemoveArea( aModifiedZonesList, zone );
     }
 
@@ -76,15 +63,15 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
 bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
                                   bool aUseLocalFlags )
 {
-    if( m_ZoneDescriptorList.size() <= 1 )
+    if( m_zones.size() <= 1 )
         return false;
 
     bool modified = false;
 
     // Loop through all combinations
-    for( unsigned ia1 = 0; ia1 < m_ZoneDescriptorList.size() - 1; ia1++ )
+    for( unsigned ia1 = 0; ia1 < m_zones.size() - 1; ia1++ )
     {
-        ZONE_CONTAINER* curr_area = m_ZoneDescriptorList[ia1];
+        ZONE_CONTAINER* curr_area = m_zones[ia1];
 
         if( curr_area->GetNetCode() != aNetCode )
             continue;
@@ -93,9 +80,9 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
         BOX2I b1 = curr_area->Outline()->BBox();
         bool  mod_ia1 = false;
 
-        for( unsigned ia2 = m_ZoneDescriptorList.size() - 1; ia2 > ia1; ia2-- )
+        for( unsigned ia2 = m_zones.size() - 1; ia2 > ia1; ia2-- )
         {
-            ZONE_CONTAINER* area2 = m_ZoneDescriptorList[ia2];
+            ZONE_CONTAINER* area2 = m_zones[ia2];
 
             if( area2->GetNetCode() != aNetCode )
                 continue;
@@ -141,10 +128,8 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
 
 bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
 {
-    for( unsigned ia2 = 0; ia2 < m_ZoneDescriptorList.size(); ia2++ )
+    for( ZONE_CONTAINER* area2 : m_zones)
     {
-        ZONE_CONTAINER* area2 = m_ZoneDescriptorList[ia2];
-
         if( area_to_test->GetNetCode() != area2->GetNetCode() )
             continue;
 
@@ -289,7 +274,7 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
     // but we should never have more than 2 polys
     if( mergedOutlines.OutlineCount() > 2 )
     {
-        wxLogMessage(wxT("BOARD::CombineAreas error: more than 2 polys after merging") );
+        wxLogMessage( "BOARD::CombineAreas error: more than 2 polys after merging" );
         return false;
     }
 

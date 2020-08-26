@@ -186,7 +186,7 @@ private:
     MODULES                 m_modules;
     TRACKS                  m_tracks;
     GROUPS                  m_groups;
-    ZONE_CONTAINERS         m_ZoneDescriptorList;
+    ZONE_CONTAINERS         m_zones;
 
     LAYER                   m_Layer[PCB_LAYER_ID_COUNT];
 
@@ -251,7 +251,8 @@ public:
 
     DRAWINGS& Drawings() { return m_drawings; }
 
-    ZONE_CONTAINERS& Zones() { return m_ZoneDescriptorList; }
+    ZONE_CONTAINERS& Zones() { return m_zones; }
+    const ZONE_CONTAINERS& Zones() const { return m_zones; }
 
     MARKERS& Markers() { return m_markers; }
 
@@ -290,8 +291,7 @@ public:
 
     bool IsEmpty() const
     {
-        return m_drawings.empty() && m_modules.empty() && m_tracks.empty() &&
-               m_ZoneDescriptorList.empty();
+        return m_drawings.empty() && m_modules.empty() && m_tracks.empty() && m_zones.empty();
     }
 
     void Move( const wxPoint& aMoveVector ) override;
@@ -353,13 +353,7 @@ public:
 
     void DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions );
 
-    /**
-     * Function DeleteZONEOutlines
-     * deletes ALL zone outlines from the board.
-     */
-    void DeleteZONEOutlines();
-
-    PROJECT* GetProject() const            { return m_project; }
+    PROJECT* GetProject() const { return m_project; }
 
     /**
      * Links a board to a given project.  Should be called immediately after loading board in
@@ -682,12 +676,6 @@ public:
     unsigned GetPadCount();
 
     /**
-     * Function GetPad
-     * @return D_PAD* - at the \a aIndex
-     */
-    D_PAD* GetPad( unsigned aIndex ) const;
-
-    /**
      * Function GetPads
      * returns a reference to a list of all the pads.  The returned list is not
      * sorted and contains pointers to PADS, but those pointers do not convey
@@ -870,7 +858,7 @@ public:
      * @return : error count
      * For non copper areas, netcode is set to 0
      */
-    int SetAreasNetCodesFromNetNames( void );
+    int SetAreasNetCodesFromNetNames();
 
     /**
      * Function GetArea
@@ -880,27 +868,10 @@ public:
      */
     ZONE_CONTAINER* GetArea( int index ) const
     {
-        if( (unsigned) index < m_ZoneDescriptorList.size() )
-            return m_ZoneDescriptorList[index];
+        if( (unsigned) index < m_zones.size() )
+            return m_zones[index];
 
         return NULL;
-    }
-
-    /**
-     * Function GetAreaIndex
-     * returns the Area Index  for the given Zone Container.
-     * @param  aArea :The ZONE_CONTAINER to find.
-     * @return an Area Index in m_ZoneDescriptorList or -1 if non found.
-     */
-    int GetAreaIndex( const ZONE_CONTAINER* aArea ) const
-    {
-        for( int ii = 0; ii < GetAreaCount(); ii++ )    // Search for aArea in list
-        {
-            if( aArea == GetArea( ii ) )                // Found !
-                return ii;
-        }
-
-        return -1;
     }
 
     /**
@@ -915,7 +886,7 @@ public:
      */
     int GetAreaCount() const
     {
-        return static_cast<int>( m_ZoneDescriptorList.size() );
+        return static_cast<int>( m_zones.size() );
     }
 
     /* Functions used in test, merge and cut outlines */
@@ -933,19 +904,6 @@ public:
      */
     ZONE_CONTAINER* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
                              wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch );
-
-    /**
-     * Add a copper area to net, inserting after m_ZoneDescriptorList[aAreaIdx]
-     * @param aNetcode is the netcode of the new copper zone
-     * @param aAreaIdx is the netcode of the new copper zone
-     * @param aLayer is the copper layer id of the new copper zone
-     * @param aCornerX,aCornerY is the coordinate of the first corner
-     * (a zone cannot have a empty outline)
-     * @param aHatch is the hatch option
-     * @return pointer to the new area
-     */
-    ZONE_CONTAINER* InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLayer, int aCornerX,
-                                int aCornerY, ZONE_BORDER_DISPLAY_STYLE aHatch );
 
     /**
      * Function NormalizeAreaPolygon
@@ -1004,7 +962,6 @@ public:
     /**
      * Function TestAreaIntersection
      * Test for intersection of 2 copper areas
-     * area_to_test must be after area_ref in m_ZoneDescriptorList
      * @param area_ref = area reference
      * @param area_to_test = area to compare for intersection calculations
      * @return : false if no intersection, true if intersection

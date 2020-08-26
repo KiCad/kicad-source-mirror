@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,22 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  pcbnew_action_plugins.cpp
- * @brief Class PCBNEW_PYTHON_ACTION_PLUGINS
- */
-
 #include "pcbnew_action_plugins.h"
-#include <board_commit.h>
 #include <class_board.h>
-#include <class_drawsegment.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <cstdio>
-#include <macros.h>
 #include <menus_helpers.h>
-#include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include <python_scripting.h>
 #include <tool/action_menu.h>
@@ -220,30 +210,30 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     itemsList.m_Status = UNDO_REDO::CHANGED;
 
     // Append tracks:
-    for( auto item : currentPcb->Tracks() )
+    for( TRACK* item : currentPcb->Tracks() )
     {
         ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
     }
 
     // Append modules:
-    for( auto item : currentPcb->Modules() )
+    for( MODULE* item : currentPcb->Modules() )
     {
         ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
     }
 
     // Append drawings
-    for( auto item : currentPcb->Drawings() )
+    for( BOARD_ITEM* item : currentPcb->Drawings() )
     {
         ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
     }
 
     // Append zones outlines
-    for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* zone : currentPcb->Zones() )
     {
-        ITEM_PICKER picker( nullptr, (EDA_ITEM*) currentPcb->GetArea( ii ), UNDO_REDO::CHANGED );
+        ITEM_PICKER picker( nullptr, zone, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
     }
 
@@ -278,6 +268,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
 
     // The list of existing items after running the action script
     std::set<BOARD_ITEM*> currItemList;
+
     // Append tracks:
     for( TRACK* item : currentPcb->Tracks() )
         currItemList.insert( item );
@@ -291,8 +282,8 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         currItemList.insert( item );
 
     // Append zones outlines
-    for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
-        currItemList.insert( currentPcb->GetArea( ii ) );
+    for( ZONE_CONTAINER* zone : currentPcb->Zones() )
+        currItemList.insert( zone );
 
     // Found deleted modules
     for( unsigned int i = 0; i < oldBuffer->GetCount(); i++ )
@@ -340,11 +331,11 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         }
     }
 
-    for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* zone : currentPcb->Zones() )
     {
-        if( !oldBuffer->ContainsItem( (EDA_ITEM*) currentPcb->GetArea( ii ) ) )
+        if( !oldBuffer->ContainsItem( zone ) )
         {
-            ITEM_PICKER picker( nullptr, (EDA_ITEM*) currentPcb->GetArea( ii ), UNDO_REDO::NEWITEM );
+            ITEM_PICKER picker( nullptr, zone, UNDO_REDO::NEWITEM );
             oldBuffer->PushItem( picker );
         }
     }
@@ -387,13 +378,12 @@ void PCB_EDIT_FRAME::buildActionPluginMenus( ACTION_MENU* actionMenu )
 void PCB_EDIT_FRAME::AddActionPluginTools()
 {
     bool need_separator = true;
-    const auto& orderedPlugins = GetOrderedActionPlugins();
+    const std::vector<ACTION_PLUGIN*>& orderedPlugins = GetOrderedActionPlugins();
 
-    for( const auto& ap : orderedPlugins )
+    for( ACTION_PLUGIN* ap : orderedPlugins )
     {
         if( GetActionPluginButtonVisible( ap->GetPluginPath(), ap->GetShowToolbarButton() ) )
         {
-
             if( need_separator )
             {
                 m_mainToolBar->AddScaledSeparator( this );

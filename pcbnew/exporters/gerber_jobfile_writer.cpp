@@ -516,10 +516,8 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     minclearanceOuter = INT_MAX;
     minclearanceInner = INT_MAX;
 
-    for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* zone : m_pcb->Zones() )
     {
-        ZONE_CONTAINER* zone = m_pcb->GetArea( ii );
-
         if( zone->GetIsKeepout() || !zone->IsOnCopperLayer() )
             continue;
 

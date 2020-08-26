@@ -563,10 +563,8 @@ const std::vector<BOARD_ITEM*> HYPERLYNX_EXPORTER::collectNetObjects( int netcod
             rv.push_back( item );
     }
 
-    for( int i = 0; i < m_board->GetAreaCount(); i++ )
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
     {
-        ZONE_CONTAINER* zone = m_board->GetArea( i );
-
         if( check( zone ) )
             rv.push_back( zone );
     }

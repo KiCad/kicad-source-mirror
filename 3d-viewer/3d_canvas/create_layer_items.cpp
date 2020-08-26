@@ -646,10 +646,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         std::vector<std::pair<const ZONE_CONTAINER*, PCB_LAYER_ID>> zones;
 
-        for( int i = 0; i < m_board->GetAreaCount(); i++ )
+        for( ZONE_CONTAINER* zone : m_board->Zones() )
         {
-            const ZONE_CONTAINER* zone = m_board->GetArea( i );
-
             for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                 zones.emplace_back( std::make_pair( zone, layer ) );
         }
@@ -938,24 +936,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // Draw non copper zones
         if( GetFlag( FL_ZONE ) )
         {
-            for( int ii = 0; ii < m_board->GetAreaCount(); ++ii )
+            for( ZONE_CONTAINER* zone : m_board->Zones() )
             {
-                ZONE_CONTAINER* zone = m_board->GetArea( ii );
-
-                if( !zone->IsOnLayer( curr_layer_id ) )
-                    continue;
-
-                AddSolidAreasShapesToContainer( zone, layerContainer, curr_layer_id );
+                if( zone->IsOnLayer( curr_layer_id ) )
+                    AddSolidAreasShapesToContainer( zone, layerContainer, curr_layer_id );
             }
 
-            for( int ii = 0; ii < m_board->GetAreaCount(); ++ii )
+            for( ZONE_CONTAINER* zone : m_board->Zones() )
             {
-                ZONE_CONTAINER* zone = m_board->GetArea( ii );
-
-                if( !zone->IsOnLayer( curr_layer_id ) )
-                    continue;
-
-                zone->TransformSolidAreasShapesToPolygon( curr_layer_id, *layerPoly );
+                if( zone->IsOnLayer( curr_layer_id ) )
+                    zone->TransformSolidAreasShapesToPolygon( curr_layer_id, *layerPoly );
             }
         }
 

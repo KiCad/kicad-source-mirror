@@ -24,11 +24,8 @@
  */
 
 #include <fctsys.h>
-#include <pcbnew.h>
-
 #include <class_board.h>
 #include <class_board_item.h>
-
 #include <connectivity/connectivity_data.h>
 
 using namespace std::placeholders;
@@ -50,11 +47,6 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
     // set the m_netinfo to the dummy NETINFO_LIST::ORPHANED
 
     BOARD* board = GetBoard();
-    //auto connectivity = board ? board->GetConnectivity() : nullptr;
-    //bool addRatsnest = false;
-
-    //if( connectivity )
-        //addRatsnest = connectivity->Remove( this );
 
     if( ( aNetCode >= 0 ) && board )
         m_netinfo = board->FindNet( aNetCode );
@@ -63,10 +55,6 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 
     if( !aNoAssert )
         wxASSERT( m_netinfo );
-
-    // Add only if it was previously added to the ratsnest
-    //if( addRatsnest )
-    //    connectivity->Add( this );
 
     return ( m_netinfo != NULL );
 }

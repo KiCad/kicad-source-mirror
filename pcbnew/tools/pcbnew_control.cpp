@@ -199,8 +199,8 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
     m_frame->SetDisplayOptions( opts );
 
-    for( int i = 0; i < board()->GetAreaCount(); ++i )
-        view()->Update( board()->GetArea( i ), KIGFX::GEOMETRY );
+    for( ZONE_CONTAINER* zone : board()->Zones() )
+        view()->Update( zone, KIGFX::GEOMETRY );
 
     canvas()->Refresh();
 

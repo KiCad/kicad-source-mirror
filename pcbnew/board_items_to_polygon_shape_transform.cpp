@@ -86,10 +86,8 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
     }
 
     // convert copper zones
-    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* zone : Zones() )
     {
-        ZONE_CONTAINER* zone = GetArea( ii );
-
         if( zone->GetLayerSet().test( aLayer ) )
             zone->TransformSolidAreasShapesToPolygon( aLayer, aOutlines );
     }

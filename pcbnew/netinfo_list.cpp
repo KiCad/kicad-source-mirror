@@ -22,10 +22,10 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <common.h>
-#include <macros.h>
-#include <pcbnew.h>
+//#include <gr_basic.h>
+//#include <common.h>
+//#include <macros.h>
+//#include <pcbnew.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_pad.h>
@@ -170,6 +170,7 @@ void NETINFO_LIST::Show() const
 {
     int i = 0;
     NETNAMES_MAP::const_iterator it, itEnd;
+
     for( it = m_netNames.begin(), itEnd = m_netNames.end(); it != itEnd; ++it )
     {
         wxLogDebug( "[%d]: netcode:%d  netname:<%s>\n",
@@ -183,7 +184,8 @@ void NETINFO_LIST::Show() const
 
 int NETINFO_LIST::getFreeNetCode()
 {
-    do {
+    do
+    {
         if( m_newNetCode < 0 )
             m_newNetCode = 0;
     } while( m_netCodes.count( ++m_newNetCode ) != 0 );
@@ -213,20 +215,18 @@ void NETINFO_MAPPING::Update()
     nets.insert( 0 );
 
     // Zones
-    for( int i = 0; i < m_board->GetAreaCount(); ++i )
-        nets.insert( m_board->GetArea( i )->GetNetCode() );
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
+        nets.insert( zone->GetNetCode() );
 
     // Tracks
-    for( auto track : m_board->Tracks() )
+    for( TRACK* track : m_board->Tracks() )
         nets.insert( track->GetNetCode() );
 
     // Modules/pads
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
-        for( auto pad : module->Pads() )
-        {
+        for( D_PAD* pad : module->Pads() )
             nets.insert( pad->GetNetCode() );
-        }
     }
 
     // Prepare the new mapping
@@ -235,8 +235,9 @@ void NETINFO_MAPPING::Update()
     // Now the nets variable stores all the used net codes (not only for pads) and we are ready to
     // assign new consecutive net numbers
     int newNetCode = 0;
-    for( std::set<int>::const_iterator it = nets.begin(), itEnd = nets.end(); it != itEnd; ++it )
-        m_netMapping[*it] = newNetCode++;
+
+    for( auto net : nets )
+        m_netMapping[net] = newNetCode++;
 }
 
 

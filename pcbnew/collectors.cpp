@@ -47,18 +47,18 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     // all items in m_Drawings for instance should be contiguous.
     //  *** all items in a same list (shown here) must be contiguous ****
     PCB_MARKER_T,                // in m_markers
-    PCB_TEXT_T,                  // in m_Drawings
-    PCB_LINE_T,                  // in m_Drawings
-    PCB_DIMENSION_T,             // in m_Drawings
-    PCB_TARGET_T,                // in m_Drawings
-    PCB_VIA_T,                   // in m_Tracks
-    PCB_TRACE_T,                 // in m_Tracks
-    PCB_ARC_T,                   // in m_Tracks
+    PCB_TEXT_T,                  // in m_drawings
+    PCB_LINE_T,                  // in m_drawings
+    PCB_DIMENSION_T,             // in m_drawings
+    PCB_TARGET_T,                // in m_drawings
+    PCB_VIA_T,                   // in m_tracks
+    PCB_TRACE_T,                 // in m_tracks
+    PCB_ARC_T,                   // in m_tracks
     PCB_PAD_T,                   // in modules
     PCB_MODULE_TEXT_T,           // in modules
-    PCB_MODULE_T,                // in m_Modules
-    PCB_GROUP_T,                 // in m_Groups ?
-    PCB_ZONE_AREA_T,             // in m_ZoneDescriptorList
+    PCB_MODULE_T,                // in m_modules
+    PCB_GROUP_T,                 // in m_groups
+    PCB_ZONE_AREA_T,             // in m_zones
     EOT
 };
 

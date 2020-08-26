@@ -98,11 +98,8 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
     wxBusyCursor dummy;
 
     // Undraw old zone outlines
-    for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
-    {
-        ZONE_CONTAINER* edge_zone = GetBoard()->GetArea( ii );
-        GetCanvas()->GetView()->Update( edge_zone );
-    }
+    for( ZONE_CONTAINER* zone : GetBoard()->Zones() )
+        GetCanvas()->GetView()->Update( zone );
 
     zoneInfo.ExportSetting( *aZone );
 

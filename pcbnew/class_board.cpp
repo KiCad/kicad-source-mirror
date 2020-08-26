@@ -102,30 +102,25 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
-    while( m_ZoneDescriptorList.size() )
-    {
-        ZONE_CONTAINER* area_to_remove = m_ZoneDescriptorList[0];
-        Delete( area_to_remove );
-    }
-
     // Clean up the owned elements
     DeleteMARKERs();
-    DeleteZONEOutlines();
 
-    // Delete the modules
-    for( auto m : m_modules )
+    for( ZONE_CONTAINER* zone : m_zones )
+        delete zone;
+
+    m_zones.clear();
+
+    for( MODULE* m : m_modules )
         delete m;
 
     m_modules.clear();
 
-    // Delete the tracks
-    for( auto t : m_tracks )
+    for( TRACK* t : m_tracks )
         delete t;
 
     m_tracks.clear();
 
-    // Delete the drawings
-    for (auto d : m_drawings )
+    for ( BOARD_ITEM* d : m_drawings )
         delete d;
 
     m_drawings.clear();
@@ -246,19 +241,19 @@ TRACKS BOARD::TracksInNet( int aNetCode )
 {
     TRACKS ret;
 
-    INSPECTOR_FUNC inspector = [aNetCode,&ret] ( EDA_ITEM* item, void* testData )
-    {
-        TRACK*  t = (TRACK*) item;
+    INSPECTOR_FUNC inspector = [aNetCode, &ret]( EDA_ITEM* item, void* testData )
+                               {
+                                   TRACK*  t = (TRACK*) item;
 
-        if( t->GetNetCode() == aNetCode )
-            ret.push_back( t );
+                                   if( t->GetNetCode() == aNetCode )
+                                       ret.push_back( t );
 
-        return SEARCH_RESULT::CONTINUE;
-    };
+                                   return SEARCH_RESULT::CONTINUE;
+                               };
 
     // visit this BOARD's TRACKs and VIAs with above TRACK INSPECTOR which
     // appends all in aNetCode to ret.
-    Visit( inspector, NULL, GENERAL_COLLECTOR::Tracks  );
+    Visit( inspector, NULL, GENERAL_COLLECTOR::Tracks );
 
     return ret;
 }
@@ -283,18 +278,14 @@ const PCB_LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         if ( IsCopperLayer( layer ) && ( m_Layer[ layer ].m_name == aLayerName ) )
-        {
             return ToLAYER_ID( layer );
-        }
     }
 
     // Otherwise fall back to the system standard layer names
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         if( GetStandardLayerName( ToLAYER_ID( layer ) ) == aLayerName )
-        {
             return ToLAYER_ID( layer );
-        }
     }
 
     return UNDEFINED_LAYER;
@@ -376,29 +367,14 @@ bool BOARD::SetLayerType( PCB_LAYER_ID aLayer, LAYER_T aLayerType )
 
 const char* LAYER::ShowType( LAYER_T aType )
 {
-    const char* cp;
-
     switch( aType )
     {
     default:
-    case LT_SIGNAL:
-        cp = "signal";
-        break;
-
-    case LT_POWER:
-        cp = "power";
-        break;
-
-    case LT_MIXED:
-        cp = "mixed";
-        break;
-
-    case LT_JUMPER:
-        cp = "jumper";
-        break;
+    case LT_SIGNAL: return "signal";
+    case LT_POWER:  return "power";
+    case LT_MIXED:  return "mixed";
+    case LT_JUMPER: return "jumper";
     }
-
-    return cp;
 }
 
 
@@ -507,20 +483,17 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
         // because we have a tool to show/hide ratsnest relative to a pad or a module
         // so the hide/show option is a per item selection
 
-        for( auto track : Tracks() )
+        for( TRACK* track : Tracks() )
             track->SetLocalRatsnestVisible( isEnabled );
 
-        for( auto mod : Modules() )
+        for( MODULE* mod : Modules() )
         {
-            for( auto pad : mod->Pads() )
+            for( D_PAD* pad : mod->Pads() )
                 pad->SetLocalRatsnestVisible( isEnabled );
         }
 
-        for( int i = 0; i<GetAreaCount(); i++ )
-        {
-            auto zone = GetArea( i );
+        for( ZONE_CONTAINER* zone : Zones() )
             zone->SetLocalRatsnestVisible( isEnabled );
-        }
 
         break;
     }
@@ -574,7 +547,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     // this one uses a vector
     case PCB_ZONE_AREA_T:
-        m_ZoneDescriptorList.push_back( (ZONE_CONTAINER*) aBoardItem );
+        m_zones.push_back( (ZONE_CONTAINER*) aBoardItem );
         break;
 
     case PCB_TRACE_T:
@@ -649,35 +622,27 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
     }
 
     case PCB_MARKER_T:
-
-        // find the item in the vector, then remove it
-        for( unsigned i = 0; i<m_markers.size(); ++i )
-        {
-            if( m_markers[i] == (MARKER_PCB*) aBoardItem )
-            {
-                m_markers.erase( m_markers.begin() + i );
-                break;
-            }
-        }
-
+        m_markers.erase( std::remove_if( m_markers.begin(), m_markers.end(),
+                                         [aBoardItem]( BOARD_ITEM* aItem )
+                                         {
+                                             return aItem == aBoardItem;
+                                         } ) );
         break;
 
     case PCB_GROUP_T:
         m_groups.erase( std::remove_if( m_groups.begin(), m_groups.end(),
-                [aBoardItem]( BOARD_ITEM* aItem ){ return aItem == aBoardItem; } ) );
-
+                                        [aBoardItem]( BOARD_ITEM* aItem )
+                                        {
+                                            return aItem == aBoardItem;
+                                        } ) );
         break;
 
-    case PCB_ZONE_AREA_T:    // this one uses a vector
-        // find the item in the vector, then delete then erase it.
-        for( unsigned i = 0; i<m_ZoneDescriptorList.size(); ++i )
-        {
-            if( m_ZoneDescriptorList[i] == (ZONE_CONTAINER*) aBoardItem )
-            {
-                m_ZoneDescriptorList.erase( m_ZoneDescriptorList.begin() + i );
-                break;
-            }
-        }
+    case PCB_ZONE_AREA_T:
+        m_zones.erase( std::remove_if( m_zones.begin(), m_zones.end(),
+                                       [aBoardItem]( BOARD_ITEM* aItem )
+                                       {
+                                           return aItem == aBoardItem;
+                                       } ) );
         break;
 
     case PCB_MODULE_T:
@@ -758,24 +723,16 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
 }
 
 
-void BOARD::DeleteZONEOutlines()
-{
-    // the vector does not know how to delete the ZONE Outlines, it holds pointers
-    for( ZONE_CONTAINER* zone : m_ZoneDescriptorList )
-        delete zone;
-
-    m_ZoneDescriptorList.clear();
-}
-
-
 BOARD_ITEM* BOARD::GetItem( const KIID& aID )
 {
     if( aID == niluuid )
         return nullptr;
 
     for( TRACK* track : Tracks() )
+    {
         if( track->m_Uuid == aID )
             return track;
+    }
 
     for( MODULE* module : Modules() )
     {
@@ -783,8 +740,10 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID )
             return module;
 
         for( D_PAD* pad : module->Pads() )
+        {
             if( pad->m_Uuid == aID )
                 return pad;
+        }
 
         if( module->Reference().m_Uuid == aID )
             return &module->Reference();
@@ -793,25 +752,35 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID )
             return &module->Value();
 
         for( BOARD_ITEM* drawing : module->GraphicalItems() )
+        {
             if( drawing->m_Uuid == aID )
                 return drawing;
+        }
     }
 
     for( ZONE_CONTAINER* zone : Zones() )
+    {
         if( zone->m_Uuid == aID )
             return zone;
+    }
 
     for( BOARD_ITEM* drawing : Drawings() )
+    {
         if( drawing->m_Uuid == aID )
             return drawing;
+    }
 
     for( MARKER_PCB* marker : m_markers )
+    {
         if( marker->m_Uuid == aID )
             return marker;
+    }
 
     for( PCB_GROUP* group : m_groups )
+    {
         if( group->m_Uuid == aID )
             return group;
+    }
 
     if( m_Uuid == aID )
         return this;
@@ -857,9 +826,10 @@ void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
 unsigned BOARD::GetNodesCount( int aNet )
 {
     unsigned retval = 0;
-    for( auto mod : Modules() )
+
+    for( MODULE* mod : Modules() )
     {
-        for( auto pad : mod->Pads() )
+        for( D_PAD* pad : mod->Pads() )
         {
             if( ( aNet == -1 && pad->GetNetCode() > 0 ) || aNet == pad->GetNetCode() )
                 retval++;
@@ -884,7 +854,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
                                  && PgmOrNull() && !PgmOrNull()->m_Printing;
 
     // Check segments, dimensions, texts, and fiducials
-    for( auto item : m_drawings )
+    for( BOARD_ITEM* item : m_drawings )
     {
         if( aBoardEdgesOnly && ( item->GetLayer() != Edge_Cuts ) )
             continue;
@@ -894,14 +864,14 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
     }
 
     // Check modules
-    for( auto module : m_modules )
+    for( MODULE* module : m_modules )
     {
         if( !( module->GetLayerSet() & visible ).any() )
             continue;
 
         if( aBoardEdgesOnly )
         {
-            for( const auto edge : module->GraphicalItems() )
+            for( const BOARD_ITEM* edge : module->GraphicalItems() )
             {
                 if( edge->GetLayer() == Edge_Cuts )
                     area.Merge( edge->GetBoundingBox() );
@@ -916,14 +886,14 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
     if( !aBoardEdgesOnly )
     {
         // Check tracks
-        for( auto track : m_tracks )
+        for( TRACK* track : m_tracks )
         {
             if( ( track->GetLayerSet() & visible ).any() )
                 area.Merge( track->GetBoundingBox() );
         }
 
         // Check zones
-        for( auto aZone : m_ZoneDescriptorList )
+        for( ZONE_CONTAINER* aZone : m_zones )
         {
             if( ( aZone->GetLayerSet() & visible ).any() )
                 area.Merge( aZone->GetBoundingBox() );
@@ -940,7 +910,7 @@ void BOARD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     int      viasCount = 0;
     int      trackSegmentsCount = 0;
 
-    for( auto item : m_tracks )
+    for( TRACK* item : m_tracks )
     {
         if( item->Type() == PCB_VIA_T )
             viasCount++;
@@ -972,8 +942,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
 {
     KICAD_T        stype;
     SEARCH_RESULT  result = SEARCH_RESULT::CONTINUE;
-    const KICAD_T* p    = scanTypes;
-    bool           done = false;
+    const KICAD_T* p      = scanTypes;
+    bool           done   = false;
 
 #if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';
@@ -1052,51 +1022,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 break;
             }
 
-            ;
             break;
 
-#if 0   // both these are on same list, so we must scan it twice in order
-        // to get VIA priority, using new #else code below.
-        // But we are not using separate lists for TRACKs and VIA, because
-        // items are ordered (sorted) in the linked
-        // list by netcode AND by physical distance:
-        // when created, if a track or via is connected to an existing track or
-        // via, it is put in linked list after this existing track or via
-        // So usually, connected tracks or vias are grouped in this list
-        // So the algorithm (used in ratsnest computations) which computes the
-        // track connectivity is faster (more than 100 time regarding to
-        // a non ordered list) because when it searches for a connection, first
-        // it tests the near (near in term of linked list) 50 items
-        // from the current item (track or via) in test.
-        // Usually, because of this sort, a connected item (if exists) is
-        // found.
-        // If not found (and only in this case) an exhaustive (and time
-        // consuming) search is made, but this case is statistically rare.
-        case PCB_VIA_T:
-        case PCB_TRACE_T:
-        case PCB_ARC_T:
-            result = IterateForward( m_Track, inspector, testData, p );
-
-            // skip over any types handled in the above call.
-            for( ; ; )
-            {
-                switch( stype = *++p )
-                {
-                case PCB_VIA_T:
-                case PCB_TRACE_T:
-                case PCB_ARC_T:
-                    continue;
-
-                default:
-                    ;
-                }
-
-                break;
-            }
-
-            break;
-
-#else
         case PCB_VIA_T:
             result = IterateForward<TRACK*>( m_tracks, inspector, testData, p );
             ++p;
@@ -1107,14 +1034,11 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             result = IterateForward<TRACK*>( m_tracks, inspector, testData, p );
             ++p;
             break;
-#endif
 
         case PCB_MARKER_T:
-
-            // MARKER_PCBS are in the m_markers std::vector
-            for( unsigned i = 0; i<m_markers.size(); ++i )
+            for( MARKER_PCB* marker : m_markers )
             {
-                result = m_markers[i]->Visit( inspector, testData, p );
+                result = marker->Visit( inspector, testData, p );
 
                 if( result == SEARCH_RESULT::QUIT )
                     break;
@@ -1124,11 +1048,9 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             break;
 
         case PCB_ZONE_AREA_T:
-
-            // PCB_ZONE_AREA_T are in the m_ZoneDescriptorList std::vector
-            for( unsigned i = 0; i< m_ZoneDescriptorList.size(); ++i )
+            for( ZONE_CONTAINER* zone : m_zones)
             {
-                result = m_ZoneDescriptorList[i]->Visit( inspector, testData, p );
+                result = zone->Visit( inspector, testData, p );
 
                 if( result == SEARCH_RESULT::QUIT )
                     break;
@@ -1183,18 +1105,18 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
     // search only for MODULES
     static const KICAD_T scanTypes[] = { PCB_MODULE_T, EOT };
 
-    INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
-    {
-        MODULE* module = (MODULE*) item;
+    INSPECTOR_FUNC inspector = [&]( EDA_ITEM* item, void* testData )
+                               {
+                                   MODULE* module = (MODULE*) item;
 
-        if( aReference == module->GetReference() )
-        {
-            found = module;
-            return SEARCH_RESULT::QUIT;
-        }
+                                   if( aReference == module->GetReference() )
+                                   {
+                                       found = module;
+                                       return SEARCH_RESULT::QUIT;
+                                   }
 
-        return SEARCH_RESULT::CONTINUE;
-    };
+                                   return SEARCH_RESULT::CONTINUE;
+                               };
 
     // visit this BOARD with the above inspector
     BOARD* nonconstMe = (BOARD*) this;
@@ -1356,30 +1278,28 @@ int BOARD::SetAreasNetCodesFromNetNames()
 {
     int error_count = 0;
 
-    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* zone : Zones() )
     {
-        ZONE_CONTAINER* it = GetArea( ii );
-
-        if( !it->IsOnCopperLayer() )
+        if( !zone->IsOnCopperLayer() )
         {
-            it->SetNetCode( NETINFO_LIST::UNCONNECTED );
+            zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
             continue;
         }
 
-        if( it->GetNetCode() != 0 )      // i.e. if this zone is connected to a net
+        if( zone->GetNetCode() != 0 )      // i.e. if this zone is connected to a net
         {
-            const NETINFO_ITEM* net = it->GetNet();
+            const NETINFO_ITEM* net = zone->GetNet();
 
             if( net )
             {
-                it->SetNetCode( net->GetNet() );
+                zone->SetNetCode( net->GetNet() );
             }
             else
             {
                 error_count++;
 
                 // keep Net Name and set m_NetCode to -1 : error flag.
-                it->SetNetCode( -1 );
+                zone->SetNetCode( -1 );
             }
         }
     }
@@ -1683,19 +1603,15 @@ std::list<ZONE_CONTAINER*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
 {
     std::list<ZONE_CONTAINER*> zones;
 
-    for( int ii = 0; ii < GetAreaCount(); ii++ )
-    {
-        zones.push_back( GetArea( ii ) );
-    }
+    for( ZONE_CONTAINER* zone : Zones() )
+        zones.push_back( zone );
 
     if( aIncludeZonesInFootprints )
     {
         for( MODULE* mod : m_modules )
         {
             for( MODULE_ZONE_CONTAINER* zone : mod->Zones() )
-            {
                 zones.push_back( zone );
-            }
         }
     }
 
@@ -1706,10 +1622,17 @@ std::list<ZONE_CONTAINER*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
 ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
                                 wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch )
 {
-    ZONE_CONTAINER* new_area = InsertArea( aNetcode,
-                                           m_ZoneDescriptorList.size( ) - 1,
-                                           aLayer, aStartPointPosition.x,
-                                           aStartPointPosition.y, aHatch );
+    ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
+
+    new_area->SetNetCode( aNetcode );
+    new_area->SetLayer( aLayer );
+
+    m_zones.push_back( new_area );
+
+    new_area->SetHatchStyle( (ZONE_BORDER_DISPLAY_STYLE) aHatch );
+
+    // Add the first corner to the new zone
+    new_area->AppendCorner( aStartPointPosition, -1 );
 
     if( aNewZonesList )
     {
@@ -1739,32 +1662,10 @@ void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to
 }
 
 
-ZONE_CONTAINER* BOARD::InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLayer, int aCornerX,
-                                   int aCornerY, ZONE_BORDER_DISPLAY_STYLE aHatch )
-{
-    ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
-
-    new_area->SetNetCode( aNetcode );
-    new_area->SetLayer( aLayer );
-
-    if( aAreaIdx < (int) ( m_ZoneDescriptorList.size() - 1 ) )
-        m_ZoneDescriptorList.insert( m_ZoneDescriptorList.begin() + aAreaIdx + 1, new_area );
-    else
-        m_ZoneDescriptorList.push_back( new_area );
-
-    new_area->SetHatchStyle( (ZONE_BORDER_DISPLAY_STYLE) aHatch );
-
-    // Add the first corner to the new zone
-    new_area->AppendCorner( wxPoint( aCornerX, aCornerY ), -1 );
-
-    return new_area;
-}
-
-
 bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAINER* aCurrArea )
 {
     // mark all areas as unmodified except this one, if modified
-    for( ZONE_CONTAINER* zone : m_ZoneDescriptorList )
+    for( ZONE_CONTAINER* zone : m_zones )
         zone->SetLocalFlags( 0 );
 
     aCurrArea->SetLocalFlags( 1 );
@@ -1816,8 +1717,8 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
  * return true if success, false if a contour is not valid
  */
 extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                wxString* aErrorText, unsigned int aTolerance,
-                                wxPoint* aErrorLocation = nullptr );
+                                       wxString* aErrorText, unsigned int aTolerance,
+                                       wxPoint* aErrorLocation = nullptr );
 
 
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText,
@@ -1851,33 +1752,10 @@ unsigned BOARD::GetPadCount()
 {
     unsigned retval = 0;
 
-    for( auto mod : Modules() )
+    for( MODULE* mod : Modules() )
         retval += mod->Pads().size();
 
     return retval;
-}
-
-
-/**
- * Function GetPad
- * @return D_PAD* - at the \a aIndex
- */
-D_PAD* BOARD::GetPad( unsigned aIndex ) const
-{
-    unsigned count = 0;
-
-    for( auto mod : m_modules )
-    {
-        for( auto pad : mod->Pads() )
-        {
-            if( count == aIndex )
-                return pad;
-
-            count++;
-        }
-    }
-
-    return nullptr;
 }
 
 
@@ -1885,24 +1763,17 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
 {
     std::vector<BOARD_CONNECTED_ITEM*> items;
 
-    for( auto track : Tracks() )
-    {
+    for( TRACK* track : Tracks() )
         items.push_back( track );
-    }
 
-    for( auto mod : Modules() )
+    for( MODULE* mod : Modules() )
     {
-        for( auto pad : mod->Pads() )
-        {
+        for( D_PAD* pad : mod->Pads() )
             items.push_back( pad );
-        }
     }
 
-    for( int i = 0; i<GetAreaCount(); i++ )
-    {
-        auto zone = GetArea( i );
+    for( ZONE_CONTAINER* zone : Zones() )
         items.push_back( zone );
-    }
 
     return items;
 }
@@ -2006,6 +1877,7 @@ PCB_GROUP* BOARD::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope  )
         for( PCB_GROUP* group : m_groups )
         {
             BOARD_ITEM* toFind = ( candidate == NULL ) ? item : candidate;
+
             if( group->GetItems().find( toFind ) != group->GetItems().end() )
             {
                 if( scope == group && candidate != NULL )

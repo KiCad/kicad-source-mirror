@@ -394,24 +394,17 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
 
 void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard )
 {
-    for( int i = 0; i<aBoard->GetAreaCount(); i++ )
-    {
-        auto zone = aBoard->GetArea( i );
+    for( ZONE_CONTAINER* zone : aBoard->Zones() )
         Add( zone );
-    }
 
-    for( auto tv : aBoard->Tracks() )
+    for( TRACK* tv : aBoard->Tracks() )
         Add( tv );
 
-    for( auto mod : aBoard->Modules() )
+    for( MODULE* mod : aBoard->Modules() )
     {
-        for( auto pad : mod->Pads() )
+        for( D_PAD* pad : mod->Pads() )
             Add( pad );
     }
-
-    /*wxLogTrace( "CN", "zones : %lu, pads : %lu vias : %lu tracks : %lu\n",
-            m_zoneList.Size(), m_padList.Size(),
-            m_viaList.Size(), m_trackList.Size() );*/
 }
 
 

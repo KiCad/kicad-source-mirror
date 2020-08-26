@@ -1024,10 +1024,8 @@ static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
 
 static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb, COMMIT* aCommit )
 {
-    for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* zone : aPcb->Zones() )
     {
-        ZONE_CONTAINER* zone = aPcb->GetArea( ii );
-
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
             VRML_LAYER* vl;

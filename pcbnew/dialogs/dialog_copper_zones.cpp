@@ -503,10 +503,8 @@ void DIALOG_COPPER_ZONE::ExportSetupToOtherCopperZones( wxCommandEvent& event )
     // Export settings ( but layer and netcode ) to others copper zones
     BOARD* pcb = m_Parent->GetBoard();
 
-    for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* zone : pcb->Zones() )
     {
-        ZONE_CONTAINER* zone = pcb->GetArea( ii );
-
         // Cannot export settings from a copper zone
         // to a zone keepout:
         if( zone->GetIsKeepout() )
