@@ -172,6 +172,7 @@ set( BMAPS_MID
     calculator
     cancel
     change_entry_orient
+    change_lib_symbols_in_schematic
     contrast_mode
     curved_ratsnest
     create_cmp_file
@@ -483,6 +484,7 @@ set( BMAPS_MID
     update_fields
     update_pcb_from_sch
     update_sch_from_pcb
+    update_lib_symbols_in_schematic
     use_3D_copper_thickness
     via
     via_annulus

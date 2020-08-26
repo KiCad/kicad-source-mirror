@@ -398,19 +398,19 @@ TOOL_ACTION EE_ACTIONS::updateFieldsFromLibrary( "eeschema.InteractiveEdit.updat
 
 TOOL_ACTION EE_ACTIONS::changeSymbols( "eeschema.InteractiveEdit.changeSymbols",
         AS_GLOBAL, 0, "", _( "Change Library Symbols..." ),
-        _( "Change library symbols in schematic" ), nullptr );
+        _( "Change library symbols in schematic" ), change_lib_symbols_in_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::updateSymbols( "eeschema.InteractiveEdit.updateSymbols",
         AS_GLOBAL, 0, "", _( "Update Library Symbols..." ),
-        _( "Update library symbols in schematic" ), nullptr );
+        _( "Update library symbols in schematic" ), update_lib_symbols_in_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::changeSymbol( "eeschema.InteractiveEdit.changeSymbol",
         AS_GLOBAL, 0, "", _( "Change Library Symbol..." ),
-        _( "Change library symbol for selected symbol" ), nullptr );
+        _( "Change library symbol for selected symbol" ), change_lib_symbols_in_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::updateSymbol( "eeschema.InteractiveEdit.updateSymbol",
         AS_GLOBAL, 0, "", _( "Update Library Symbol..." ),
-        _( "Update library symbol for selected symbol" ), nullptr );
+        _( "Update library symbol for selected symbol" ), update_lib_symbols_in_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::assignNetclass( "eeschema.InteractiveEdit.assignNetclass",
         AS_GLOBAL, 0, "",
