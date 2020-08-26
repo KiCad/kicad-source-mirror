@@ -641,16 +641,19 @@ void EDA_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     bool fileOpen = m_isClosing && m_isNonUserClose;
 
-    wxFileName rfn( GetCurrentFileName() );
-    rfn.MakeRelativeTo( Prj().GetProjectPath() );
-    Prj().GetLocalSettings().SaveFileState( rfn.GetFullPath(), &aCfg->m_Window, fileOpen );
+    wxString currentlyOpenedFile = GetCurrentFileName();
+
+    if( !currentlyOpenedFile.IsEmpty() )
+    {
+        wxFileName rfn( currentlyOpenedFile );
+        rfn.MakeRelativeTo( Prj().GetProjectPath() );
+        Prj().GetLocalSettings().SaveFileState( rfn.GetFullPath(), &aCfg->m_Window, fileOpen );
+    }
 
     // Save the recently used files list
     if( m_fileHistory )
     {
         // Save the currently opened file in the file history
-        wxString currentlyOpenedFile = GetCurrentFileName();
-
         if( !currentlyOpenedFile.IsEmpty() )
             UpdateFileHistory( currentlyOpenedFile );
 
