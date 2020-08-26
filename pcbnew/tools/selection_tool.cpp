@@ -317,11 +317,6 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight );
         }
 
-        else if( evt->Action() == TA_UNDO_REDO_PRE )
-        {
-            ClearSelection();
-        }
-
         else
             evt->SetPassEvent();
     }
