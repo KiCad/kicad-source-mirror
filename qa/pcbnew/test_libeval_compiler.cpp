@@ -78,7 +78,8 @@ const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
     { "(A.Netclass == 'HV') && (B.netclass == 'otherClass') && (B.netclass != 'F.Cu')", false, VAL( 1.0 ) },
     { "A.Netclass + 1.0", false, VAL( 1.0 ) },
     { "A.type == 'Track' && B.type == 'Track' && A.layer == 'F.Cu'", false, VAL( 1.0 ) },
-    { "(A.type == 'Track') && (B.type == 'Track') && (A.layer == 'F.Cu')", false, VAL( 1.0 ) }
+    { "(A.type == 'Track') && (B.type == 'Track') && (A.layer == 'F.Cu')", false, VAL( 1.0 ) },
+    { "A.type == 'Via' && A.isMicroVia()", false, VAL(0.0) }
 };
 
 
@@ -92,12 +93,18 @@ static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
 
     context.SetItems( itemA, itemB );
 
+
+    BOOST_TEST_MESSAGE("Expr: '" << expr.c_str() << "'");
+
     bool error = !compiler.Compile( expr, &ucode, &preflightContext );
 
     BOOST_CHECK_EQUAL( error, expectError );
 
     if( error != expectError )
     {
+        BOOST_TEST_MESSAGE( "Result: FAIL: " << compiler.GetError().message.c_str() <<
+                            " (code pos: " << compiler.GetError().srcPos << ")" );
+
         return false;
     }
 

@@ -199,3 +199,10 @@ nt(A) ::= G_IDENTIFIER(F) G_PARENL nt(B) G_PARENR.
     A->leaf[0] = newNode( pEval, TR_IDENTIFIER, F.value);
     A->leaf[1] = B;
 }
+
+nt(A) ::= G_IDENTIFIER(F) G_PARENL G_PARENR.
+{
+    A = newNode( pEval, TR_OP_FUNC_CALL );
+    A->leaf[0] = newNode( pEval, TR_IDENTIFIER, F.value);
+    A->leaf[1] = newNode( pEval, TR_NULL );
+}

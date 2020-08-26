@@ -542,6 +542,9 @@ void dumpNode( wxString& buf, TREE_NODE* tok, int depth = 0 )
 {
     wxString str;
 
+    if( !tok )
+        return;
+
     str.Printf( "\n[%p L0:%-20p L1:%-20p] ", tok, tok->leaf[0], tok->leaf[1] );
     buf += str;
 
