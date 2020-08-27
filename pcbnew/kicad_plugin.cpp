@@ -1028,7 +1028,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
             m_out->Print( 0, " excude_from_pos_files" );
 
         if( aModule->GetAttributes() & MOD_EXCLUDE_FROM_BOM )
-            m_out->Print( 9, " exclude_from_bom" );
+            m_out->Print( 0, " exclude_from_bom" );
 
         m_out->Print( 0, ")\n" );
     }
