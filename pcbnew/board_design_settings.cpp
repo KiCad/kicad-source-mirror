@@ -461,7 +461,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ), MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.courtyard_line_width",
-            &m_LineThickness[LAYER_CLASS_COURTYARD], Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ),
+            &m_LineThickness[LAYER_CLASS_COURTYARD], Millimeter2iu( DEFAULT_COURTYARD_WIDTH ),
             Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ), MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.fab_line_width",
