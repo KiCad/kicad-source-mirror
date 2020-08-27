@@ -697,8 +697,12 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         return true;
 
     // No MDI yet
-    if( aSetActive && !m_projects.empty() && !UnloadProject( m_projects.begin()->second.get() ) )
-        return false;
+    if( aSetActive && !m_projects.empty() )
+    {
+        PROJECT* oldProject = m_projects.begin()->second.get();
+        unloadProjectFile( oldProject, true );
+        m_projects.erase( m_projects.begin() );
+    }
 
     wxLogTrace( traceSettings, "Load project %s", fullPath );
 

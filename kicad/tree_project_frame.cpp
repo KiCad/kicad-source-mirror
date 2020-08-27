@@ -1179,6 +1179,9 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
 #else
     m_watcher->Add( fn );
 
+    if( m_TreeProject->IsEmpty() )
+        return;
+
     // Add subdirs
     wxTreeItemIdValue  cookie;
     wxTreeItemId       root_id = m_root;
