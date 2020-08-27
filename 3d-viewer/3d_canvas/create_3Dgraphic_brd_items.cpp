@@ -319,18 +319,23 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
 {
     SHAPE_POLY_SET poly;
 
-    if( aClearanceValue.x != aClearanceValue.y )
+    // Our shape-based builder can't handle differing x:y clearance values (which get generated
+    // when a relative paste margin is used with an oblong pad).  So we apply this huge hack and
+    // fake a larger pad to run the general-purpose polygon builder on.
+    // Of course being a hack it falls down when dealing with custom shape pads (where the size
+    // is only the size of the anchor), so for those we punt and just use aClearanceValue.x.
+
+    if( aClearanceValue.x != aClearanceValue.y && aPad->GetShape() != PAD_SHAPE_CUSTOM )
     {
-        // Our shape-based builder can't handle differing x:y clearance values (which
-        // get generated when relative paste margin is used with an oblong pad).  So
-        // we fake a larger pad and run the general-purpose polygon builder on it.
         D_PAD dummy( *aPad );
         dummy.SetSize( aPad->GetSize() + aClearanceValue + aClearanceValue );
         dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0 );
+        aClearanceValue = { 0, 0 };
     }
     else
     {
         auto padShapes = std::static_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+
         for( const SHAPE* shape : padShapes->Shapes() )
         {
             switch( shape->Type() )
@@ -456,7 +461,7 @@ void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule
 {
     wxSize margin;
 
-    for( auto pad : aModule->Pads() )
+    for( D_PAD* pad : aModule->Pads() )
     {
         if( !pad->IsOnLayer( aLayerId ) )
             continue;
