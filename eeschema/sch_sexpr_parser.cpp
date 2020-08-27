@@ -647,7 +647,10 @@ void SCH_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersio
         NeedLEFT();
         NeedSYMBOL();
         NeedSYMBOL();
-        NeedSYMBOL();
+
+        if( m_requiredVersion < 20200827 )
+            NeedSYMBOL();
+
         NeedRIGHT();
     }
     else

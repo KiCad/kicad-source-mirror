@@ -593,9 +593,8 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
     wxCHECK( screen, /* void */ );
 
-    m_out->Print( 0, "(kicad_sch (version %d) (host eeschema %s)\n\n",
-                  SEXPR_SCHEMATIC_FILE_VERSION,
-                  m_out->Quotew( GetBuildVersion() ).c_str() );
+    m_out->Print( 0, "(kicad_sch (version %d) (generator eeschema)\n\n",
+                  SEXPR_SCHEMATIC_FILE_VERSION );
 
     // Root sheet must have a permanent UUID.
     // if( aSheet->IsRootSheet() && aSheet->m_Uuid.IsLegacyTimestamp() )
@@ -1437,9 +1436,8 @@ void SCH_SEXPR_PLUGIN_CACHE::Save()
 
     std::unique_ptr< FILE_OUTPUTFORMATTER > formatter( new FILE_OUTPUTFORMATTER( fn.GetFullPath() ) );
 
-    formatter->Print( 0, "(kicad_symbol_lib (version %d) (host kicad_symbol_editor %s)\n",
-                      SEXPR_SYMBOL_LIB_FILE_VERSION,
-                      formatter->Quotew( GetBuildVersion() ).c_str() );
+    formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator kicad_symbol_editor)\n",
+                      SEXPR_SYMBOL_LIB_FILE_VERSION );
 
     for( auto parent : m_symbols )
     {

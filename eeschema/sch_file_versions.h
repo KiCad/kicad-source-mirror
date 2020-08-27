@@ -35,7 +35,9 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200126  // Initial version.  Add alternate pin
                                                    // definitions.
 
-#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200820
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200820
+
+#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200827 // Remove host tag
 
 /**
  * Symbol library file version.
@@ -56,4 +58,6 @@
 
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200714  // Add alternate pin definitions.
 
-#define SEXPR_SCHEMATIC_FILE_VERSION 20200820
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20200820
+
+#define SEXPR_SCHEMATIC_FILE_VERSION 20200827   // Remove host tag
