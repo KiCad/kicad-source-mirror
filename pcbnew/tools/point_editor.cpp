@@ -114,8 +114,7 @@ private:
                 points->AddLine( points->Point( i ), points->Point( i + 1 ) );
             }
 
-            points->Line( i ).SetConstraint( new EC_SNAPLINE( points->Line( i ),
-                            std::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
+            points->Line( i ).SetConstraint( new EC_PERPLINE( points->Line( i ) ) );
         }
 
         // The last missing line, connecting the last and the first polygon point
@@ -123,8 +122,7 @@ private:
                 points->Point( points->GetContourStartIdx( cornersCount - 1 ) ) );
 
         points->Line( points->LinesSize() - 1 ).SetConstraint(
-                new EC_SNAPLINE( points->Line( points->LinesSize() - 1 ),
-                        std::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
+                new EC_PERPLINE( points->Line( points->LinesSize() - 1 ) ) );
     }
 
 public:
@@ -402,6 +400,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 controls->SetAutoPan( true );
                 inDrag = true;
                 grid.SetAuxAxes( true, m_original.GetPosition() );
+                setAltConstraint( true );
                 m_editedPoint->SetActive();
             }
 
@@ -412,16 +411,15 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             // The alternative constraint limits to 45°
             bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
 
-            if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
-                setAltConstraint( enableAltConstraint );
-
-            if( m_altConstraint )
+            if( enableAltConstraint )
                 m_altConstraint->Apply();
             else
                 m_editedPoint->ApplyConstraint();
 
-            m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
-                                                             snapLayers, { item } ) );
+            // Don't snap the line center to the grid
+            if( !dynamic_cast<EDIT_LINE*>( m_editedPoint) )
+                m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
+                                                                 snapLayers, { item } ) );
 
             updateItem();
             updatePoints();
@@ -913,6 +911,12 @@ void POINT_EDITOR::updateItem() const
             for( int i = 0; i < outline.TotalVertices(); ++i )
                 outline.SetVertex( i, m_editPoints->Point( i ).GetPosition() );
 
+            for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
+            {
+                if( !isModified( m_editPoints->Line( i ) ) )
+                    m_editPoints->Line( i ).SetConstraint( new EC_PERPLINE( m_editPoints->Line( i ) ) );
+            }
+
             validatePolygon( outline );
         }
             break;
@@ -1390,10 +1394,20 @@ void POINT_EDITOR::setAltConstraint( bool aEnabled )
     if( aEnabled )
     {
         EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
+        bool isPoly = false;
 
-        if( line &&
-            ( m_editPoints->GetParent()->Type() == PCB_ZONE_AREA_T
-              || m_editPoints->GetParent()->Type() == PCB_MODULE_ZONE_AREA_T ) )
+        if( m_editPoints->GetParent()->Type() == PCB_ZONE_AREA_T
+                || m_editPoints->GetParent()->Type() == PCB_MODULE_ZONE_AREA_T )
+            isPoly = true;
+
+        else if( m_editPoints->GetParent()->Type() == PCB_LINE_T
+                || m_editPoints->GetParent()->Type() == PCB_MODULE_EDGE_T )
+        {
+            DRAWSEGMENT* seg = static_cast<DRAWSEGMENT*>( m_editPoints->GetParent() );
+            isPoly = seg->GetShape() == S_POLYGON;
+        }
+
+        if( line && isPoly )
         {
             m_altConstraint.reset( (EDIT_CONSTRAINT<EDIT_POINT>*)( new EC_CONVERGING( *line, *m_editPoints ) ) );
         }

@@ -196,3 +196,26 @@ void EC_SNAPLINE::Apply( EDIT_LINE& aHandle )
     aHandle.GetOrigin().SetPosition( m_snapFun( aHandle.GetOrigin().GetPosition() ) );
     aHandle.GetEnd().SetPosition( aHandle.GetOrigin().GetPosition() + delta );
 }
+
+
+EC_PERPLINE::EC_PERPLINE( EDIT_LINE& aLine ) :
+    EDIT_CONSTRAINT<EDIT_LINE>( aLine )
+{
+    m_mid = aLine.GetPosition();
+    m_line = ( aLine.GetEnd().GetPosition() - aLine.GetOrigin().GetPosition() ).Perpendicular();
+}
+
+
+void EC_PERPLINE::Apply( EDIT_LINE& aHandle )
+{
+    SEG main( m_mid, m_mid + m_line );
+    SEG projection( aHandle.GetPosition(), aHandle.GetPosition() + m_line.Perpendicular() );
+
+    if( OPT_VECTOR2I intersect = projection.IntersectLines( main ) )
+        aHandle.SetPosition( *intersect );
+
+    VECTOR2D delta = aHandle.GetEnd().GetPosition() - aHandle.GetOrigin().GetPosition();
+
+    aHandle.GetOrigin().SetPosition( aHandle.GetOrigin().GetPosition() );
+    aHandle.GetEnd().SetPosition( aHandle.GetOrigin().GetPosition() + delta );
+}

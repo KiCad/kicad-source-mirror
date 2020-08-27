@@ -264,4 +264,28 @@ private:
     V2D_TRANSFORM_FUN m_snapFun;
 };
 
+
+/**
+ * EC_PERPLINE
+ *
+ * EDIT_CONSTRAINT for a EDIT_LINE, that constrains the line to move perpendicular
+ * to the line itself.
+ */
+class EC_PERPLINE : public EDIT_CONSTRAINT<EDIT_LINE>
+{
+public:
+
+    EC_PERPLINE( EDIT_LINE& aLine );
+
+    virtual ~EC_PERPLINE()
+    {}
+
+    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    virtual void Apply( EDIT_LINE& aHandle ) override;
+
+private:
+    VECTOR2I m_mid;
+    VECTOR2I m_line;
+};
+
 #endif /* EDIT_CONSTRAINTS_H_ */
