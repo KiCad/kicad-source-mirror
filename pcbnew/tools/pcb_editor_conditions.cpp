@@ -41,7 +41,7 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::HasItems()
 
     wxASSERT( drwFrame );
 
-    return std::bind( &PCB_EDITOR_CONDITIONS::padNumberDisplayFunc, _1, drwFrame );
+    return std::bind( &PCB_EDITOR_CONDITIONS::hasItemsFunc, _1, drwFrame );
 }
 
 
