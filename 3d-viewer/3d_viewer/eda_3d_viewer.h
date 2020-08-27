@@ -115,7 +115,8 @@ class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
      */
     bool Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
                              CUSTOM_COLORS_LIST* aPredefinedColors,
-                             bool aAllowOpacityControl = false );
+                             bool aAllowOpacityControl = false,
+                             KIGFX::COLOR4D aDefaultColor = KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
 
     /**
      * Set the solder mask color from a set of colors

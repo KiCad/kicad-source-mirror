@@ -840,12 +840,13 @@ void EDA_3D_VIEWER::RenderEngineChanged()
 
 bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
                                         CUSTOM_COLORS_LIST* aPredefinedColors,
-                                        bool aAllowOpacityControl )
+                                        bool aAllowOpacityControl,
+                                        KIGFX::COLOR4D aDefaultColor )
 {
     KIGFX::COLOR4D newcolor;
     KIGFX::COLOR4D oldcolor( aColor.r,aColor.g, aColor.b, 1.0 - aColor.a );
 
-    DIALOG_COLOR_PICKER picker( this, oldcolor, aAllowOpacityControl, aPredefinedColors );
+    DIALOG_COLOR_PICKER picker( this, oldcolor, aAllowOpacityControl, aPredefinedColors, aDefaultColor );
 
     if( picker.ShowModal() != wxID_OK )
         return false;
@@ -871,7 +872,7 @@ bool EDA_3D_VIEWER::Set3DSilkScreenColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 241.0/255.0, 241.0/255.0, 241.0/255.0, "White" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 4.0/255.0, 18.0/255.0, 21.0/255.0, "Dark" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_SilkScreenColorTop, _( "Silkscreen Color" ), &colors ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_SilkScreenColorTop, _( "Silkscreen Color" ), &colors, false, colors[0].m_Color ) )
     {
         m_boardAdapter.m_SilkScreenColorBot = m_boardAdapter.m_SilkScreenColorTop;
         NewDisplay( true );
@@ -901,7 +902,7 @@ bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 119/255.0,  31/255.0,  91/255.0, 1.0 - 0.17, "Purple" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  32/255.0,   2/255.0,  53/255.0, 1.0 - 0.17, "Purple Dark" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_SolderMaskColorTop, _( "Solder Mask Color" ), &colors, true ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_SolderMaskColorTop, _( "Solder Mask Color" ), &colors, true, colors[0].m_Color ) )
     {
         m_boardAdapter.m_SolderMaskColorBot = m_boardAdapter.m_SolderMaskColorTop;
 
@@ -926,7 +927,7 @@ bool EDA_3D_VIEWER::Set3DCopperColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 213/255.0, 213/255.0, 213/255.0, "Silver" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 160/255.0, 160/255.0, "Tin" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_CopperColor, _( "Copper Color" ), &colors ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_CopperColor, _( "Copper Color" ), &colors, false, colors[0].m_Color ) )
     {
         NewDisplay( true );
         return true;
@@ -949,7 +950,7 @@ bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM(  63/255.0, 126/255.0, 71/255.0, 1.0 - 0.1, "green 1" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 117/255.0, 122/255.0, 90/255.0, 1.0 - 0.1, "green 2" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_BoardBodyColor, _( "Board Body Color" ), &colors, true ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_BoardBodyColor, _( "Board Body Color" ), &colors, true, colors[0].m_Color ) )
     {
         if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
             m_canvas->Request_refresh();
@@ -971,7 +972,7 @@ bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 213/255.0, 213/255.0, 213/255.0, "Silver" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  90/255.0,  90/255.0,  90/255.0, "grey 2" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_SolderPasteColor, _( "Solder Paste Color" ), &colors ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_SolderPasteColor, _( "Solder Paste Color" ), &colors, false, colors[0].m_Color ) )
     {
         NewDisplay( true );
         return true;
