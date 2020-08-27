@@ -805,11 +805,17 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( func )
                     {
                         // Preflight the function call
-                        wxString paramStr = *node->leaf[1]->leaf[1]->value.str;
-                        VALUE*   param = aPreflightContext->AllocValue();
+                        auto argsLeaf = node->leaf[1]->leaf[1];
+                        wxString paramStr;
 
-                        param->Set( paramStr );
-                        aPreflightContext->Push( param );
+                        if( argsLeaf->op != TR_NULL ) // function has an argument
+                        {
+                            paramStr = *node->leaf[1]->leaf[1]->value.str;
+                            VALUE*   param = aPreflightContext->AllocValue();
+
+                            param->Set( paramStr );
+                            aPreflightContext->Push( param );
+                        }
 
                         aPreflightContext->SetErrorCallback(
                                 [&]( const wxString& aMessage, int aOffset )
