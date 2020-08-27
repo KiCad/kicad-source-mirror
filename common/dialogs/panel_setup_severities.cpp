@@ -172,6 +172,9 @@ bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
         if( !m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
             continue;
 
+        if( m_pinMapSpecialCase && errorCode == m_pinMapSpecialCase->GetErrorCode() )
+            continue;
+
         switch( m_severities[ errorCode ] )
         {
         case RPT_SEVERITY_ERROR:   m_buttonMap[ errorCode ][0]->SetValue( true ); break;
