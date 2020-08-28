@@ -547,9 +547,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
                 // Note: NPTH pads are not drawn on copper layers when the pad
                 // has same shape as its hole
-                module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id,
-                                                                   *layerPoly,
-                                                                   0, true );
+                module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id, *layerPoly,
+                                                                   0, ARC_HIGH_DEF, true );
 
                 transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );
             }
@@ -921,8 +920,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
             else
             {
-                module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id, *layerPoly, 0,
-                                                                   false );
+                module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id, *layerPoly, 0 );
             }
 
             // On tech layers, use a poor circle approximation, only for texts (stroke font)
