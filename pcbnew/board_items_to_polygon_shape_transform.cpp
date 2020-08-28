@@ -116,8 +116,9 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
 
 
 void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
-        SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aMaxError,
-        bool aSkipNPTHPadsWihNoCopper ) const
+                                                        SHAPE_POLY_SET& aCornerBuffer,
+                                                        int aInflateValue, int aMaxError,
+                                                        bool aSkipNPTHPadsWihNoCopper ) const
 {
     for( D_PAD* pad : m_pads )
     {
@@ -151,27 +152,43 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
             }
         }
 
-        wxSize margin;
-        int clearance = aInflateValue;
+        wxSize clearance( aInflateValue, aInflateValue );
 
         switch( aLayer )
         {
         case F_Mask:
         case B_Mask:
-            clearance += pad->GetSolderMaskMargin();
+            clearance.x += pad->GetSolderMaskMargin();
+            clearance.y += pad->GetSolderMaskMargin();
             break;
 
         case F_Paste:
         case B_Paste:
-            margin = pad->GetSolderPasteMargin();
-            clearance += ( margin.x + margin.y ) / 2;
+            clearance += pad->GetSolderPasteMargin();
             break;
 
         default:
             break;
         }
 
-        pad->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, clearance );
+        // Our standard TransformShapeWithClearanceToPolygon() routines can't handle differing
+        // x:y clearance values (which get generated when a relative paste margin is used with
+        // an oblong pad).  So we apply this huge hack and fake a larger pad to run the transform
+        // on.
+        // Of course being a hack it falls down when dealing with custom shape pads (where the
+        // size is only the size of the anchor), so for those we punt and just use clearance.x.
+
+        if( clearance.x != clearance.y && pad->GetShape() != PAD_SHAPE_CUSTOM )
+        {
+            D_PAD dummy( *pad );
+            dummy.SetSize( pad->GetSize() + clearance + clearance );
+            dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0, aMaxError );
+        }
+        else
+        {
+            pad->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, clearance.x,
+                                                       aMaxError );
+        }
     }
 }
 

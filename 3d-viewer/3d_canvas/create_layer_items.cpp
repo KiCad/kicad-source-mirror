@@ -896,8 +896,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
             else
             {
-                AddPadsShapesWithClearanceToContainer(
-                        module, layerContainer, curr_layer_id, 0, false );
+                AddPadsShapesWithClearanceToContainer( module, layerContainer, curr_layer_id, 0,
+                                                       false );
             }
 
             AddGraphicsShapesWithClearanceToContainer( module, layerContainer, curr_layer_id, 0 );
