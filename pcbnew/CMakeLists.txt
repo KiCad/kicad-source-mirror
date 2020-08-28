@@ -441,6 +441,7 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
         DEPENDS pcbcommon
         DEPENDS plotcontroller.h
         DEPENDS exporters/gendrill_Excellon_writer.h
+        DEPENDS exporters/export_vrml.h
         DEPENDS swig/pcbnew.i
         DEPENDS swig/board.i
         DEPENDS swig/board_connected_item.i

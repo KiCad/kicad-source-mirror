@@ -79,6 +79,16 @@ wxArrayString GetFootprints( const wxString& aNickName );
 bool ExportSpecctraDSN( wxString& aFullFilename );
 
 /**
+ * will export the current BOARD to a VRML (wrl) file.
+ * See ExportVRML_File in pcb_edit_frame.h for detailed documentation.
+ * @return true if OK
+ */
+bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit,
+                 bool aExport3DFiles, bool aUseRelativePaths,
+                 bool aUsePlainPCB, const wxString& a3D_Subdir,
+                 double aXRef, double aYRef );
+
+/**
  * will import a specctra *.ses file and use it to relocate MODULEs and
  * to replace all vias and tracks in an existing and loaded BOARD.
  * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the

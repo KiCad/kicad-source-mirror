@@ -71,6 +71,7 @@ class BASE_SET {};
 #include <plotcontroller.h>
 #include <pcb_plot_params.h>
 #include <exporters/export_d356.h>
+#include <exporters/export_vrml.h>
 #include <exporters/gendrill_file_writer_base.h>
 #include <exporters/gendrill_Excellon_writer.h>
 #include <exporters/gendrill_gerber_writer.h>
@@ -114,6 +115,7 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 %include <pcb_plot_params.h>
 %include <plotter.h>
 %include <exporters/export_d356.h>
+%include <exporters/export_vrml.h>
 %include <exporters/gendrill_file_writer_base.h>
 %include <exporters/gendrill_Excellon_writer.h>
 %include <exporters/gendrill_gerber_writer.h>
