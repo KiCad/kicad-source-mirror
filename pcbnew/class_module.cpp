@@ -696,7 +696,7 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
     if( m_Attributs & MOD_EXCLUDE_FROM_POS_FILES )
         addToken( &attrs, _( "exclude from pos files" ) );
 
-    if( m_Attributs * MOD_EXCLUDE_FROM_BOM )
+    if( m_Attributs & MOD_EXCLUDE_FROM_BOM )
         addToken( &attrs, _( "exclude from BOM" ) );
 
     aList.emplace_back( _( "Status: " ) + status, _( "Attributes: " ) + attrs, BROWN );
