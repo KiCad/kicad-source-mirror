@@ -178,7 +178,8 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
         // Of course being a hack it falls down when dealing with custom shape pads (where the
         // size is only the size of the anchor), so for those we punt and just use clearance.x.
 
-        if( clearance.x != clearance.y && pad->GetShape() != PAD_SHAPE_CUSTOM )
+        if( ( clearance.x < 0 || clearance.x != clearance.y )
+                && pad->GetShape() != PAD_SHAPE_CUSTOM )
         {
             D_PAD dummy( *pad );
             dummy.SetSize( pad->GetSize() + clearance + clearance );

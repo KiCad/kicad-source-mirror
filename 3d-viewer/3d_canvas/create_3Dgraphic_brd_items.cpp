@@ -319,13 +319,15 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
 {
     SHAPE_POLY_SET poly;
 
-    // Our shape-based builder can't handle differing x:y clearance values (which get generated
-    // when a relative paste margin is used with an oblong pad).  So we apply this huge hack and
-    // fake a larger pad to run the general-purpose polygon builder on.
+    // Our shape-based builder can't handle negative or differing x:y clearance values (the
+    // former are common for solder paste whiel the later get generated when a relative paste
+    // margin is used with an oblong pad).  So we apply this huge hack and fake a larger pad to
+    // run the general-purpose polygon builder on.
     // Of course being a hack it falls down when dealing with custom shape pads (where the size
     // is only the size of the anchor), so for those we punt and just use aClearanceValue.x.
 
-    if( aClearanceValue.x != aClearanceValue.y && aPad->GetShape() != PAD_SHAPE_CUSTOM )
+    if( ( aClearanceValue.x < 0 || aClearanceValue.x != aClearanceValue.y )
+            && aPad->GetShape() != PAD_SHAPE_CUSTOM )
     {
         D_PAD dummy( *aPad );
         dummy.SetSize( aPad->GetSize() + aClearanceValue + aClearanceValue );
@@ -459,8 +461,6 @@ void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule
                                                            int aInflateValue,
                                                            bool aSkipNPTHPadsWihNoCopper )
 {
-    wxSize margin;
-
     for( D_PAD* pad : aModule->Pads() )
     {
         if( !pad->IsOnLayer( aLayerId ) )
@@ -495,22 +495,22 @@ void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule
             }
         }
 
+        wxSize margin( aInflateValue, aInflateValue );
+
         switch( aLayerId )
         {
         case F_Mask:
         case B_Mask:
-            margin.x = margin.y = pad->GetSolderMaskMargin() + aInflateValue;
+            margin.x += pad->GetSolderMaskMargin();
+            margin.y += pad->GetSolderMaskMargin();
             break;
 
         case F_Paste:
         case B_Paste:
-            margin = pad->GetSolderPasteMargin();
-            margin.x += aInflateValue;
-            margin.y += aInflateValue;
+            margin += pad->GetSolderPasteMargin();
             break;
 
         default:
-            margin.x = margin.y = aInflateValue;
             break;
         }
 
