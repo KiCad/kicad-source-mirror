@@ -444,9 +444,6 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
         }
 
         /// Step 3: using the same starting point, check points backwards for closer points
-        if( rev_it != m_nodes.rend() )
-            ++rev_it;
-
         for( ; rev_it != m_nodes.rend(); ++rev_it )
         {
             auto nodeB = *rev_it;
