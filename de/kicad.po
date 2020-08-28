@@ -15782,11 +15782,11 @@ msgstr "Beschichtungsstärke (T):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:577
 msgid "Via length:"
-msgstr "DoKu-Länge:"
+msgstr "DuKo-Länge:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:579
 msgid "Via length is the board thickness for through hole vias"
-msgstr "Länge der DoKu ist die Dicke der Platine für Durchkontaktierungen"
+msgstr "Länge der DuKo ist die Dicke der Platine für Durchkontaktierungen"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:591
 msgid "Via pad diameter:"
@@ -15794,7 +15794,7 @@ msgstr "DuKo-Pad Durchmesser:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:593
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "Durchmesser des Pads was das DoKu umgibt"
+msgstr "Durchmesser des Pads was das DuKo umgibt"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:605
 msgid "Clearance hole diameter:"
@@ -15864,7 +15864,7 @@ msgstr "Nanosekunden"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:703
 msgid "Top view of via"
-msgstr "Ansicht oben DoKu"
+msgstr "Ansicht oben DuKo"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:714
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1316
@@ -15949,7 +15949,7 @@ msgid ""
 "inside a copper zone."
 msgstr ""
 "Warnung:\n"
-"DoKu Durchmesser >= Durchmesser Durchgangsloch.\n"
+"DuKo Durchmesser >= Durchmesser Durchgangsloch.\n"
 "Einige Parameter können innerhalb einer Kupferfläche\n"
 "für ein Via nicht berechnet werden."
 
@@ -16354,7 +16354,7 @@ msgstr "Minimaler Abstand"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1663
 msgid "Via: (diam - drill)"
-msgstr "DoKu: (Durchmesser - Bohrung)"
+msgstr "DuKo: (Durchmesser - Bohrung)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1664
 msgid "Plated Pad: (diam - drill)"
@@ -17651,7 +17651,7 @@ msgstr "Micro DuKo %s %s auf %s - %s"
 #: pcbnew/class_track.cpp:115
 #, c-format
 msgid "Via %s %s on %s - %s"
-msgstr "DoKu %s %s auf %s - %s"
+msgstr "DuKo %s %s auf %s - %s"
 
 #: pcbnew/class_track.cpp:770
 msgid "Full Length"
@@ -17855,7 +17855,7 @@ msgstr "Text & Grafiken"
 #: pcbnew/dialogs/dialog_board_setup.cpp:68 pcbnew/edit_track_width.cpp:207
 #: pcbnew/edit_track_width.cpp:225
 msgid "Tracks & Vias"
-msgstr "Leiterbahnen und DoKu's"
+msgstr "Leiterbahnen und DuKo's"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:69
 msgid "Solder Mask/Paste"
@@ -19769,7 +19769,7 @@ msgstr "Inklusive &Platinenumrisslage"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:40
 msgid "Include &vias"
-msgstr "Inklusive &DoKu's"
+msgstr "Inklusive &DuKo's"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:43
 msgid "Include &zones"
@@ -20409,7 +20409,7 @@ msgstr "Benutze Werte der Netzklasse:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:73
 msgid "Set Track and Via Properties"
-msgstr "Eigenschaften Leiterbahn und DoKu's"
+msgstr "Eigenschaften Leiterbahn und DuKo's"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
 msgid "footprint"
@@ -21889,7 +21889,7 @@ msgstr "Abstand Durchkontaktierung:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr "Abstand DoKu gleich wie Abstand Zwischenraum"
+msgstr "Abstand DuKo gleich wie Abstand Zwischenraum"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
@@ -21981,7 +21981,7 @@ msgstr "DRC Verletzung: Hindernis hervorheben"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr "DRC Verletzung: Schieben von Leiterbahnen und DoKu's"
+msgstr "DRC Verletzung: Schieben von Leiterbahnen und DuKo's"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
@@ -22071,7 +22071,7 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
-"Wenn eingeschaltet versucht der Router Pads/DoKu's auf eine saubere Art "
+"Wenn eingeschaltet versucht der Router Pads/DuKo's auf eine saubere Art "
 "auszubrechen und große Winkel und unförmige Leiterbahnen zu vermeiden."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
@@ -22495,7 +22495,7 @@ msgstr "Fortfahren"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:383
 msgid "Via drill size must be smaller than via diameter"
-msgstr "DoKu Bohrdurchmesser muss kleiner als der DoKu Durchmesser sein"
+msgstr "DuKo Bohrdurchmesser muss kleiner als der DuKo Durchmesser sein"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:392
 msgid "Via start layer and end layer cannot be the same"
@@ -22503,7 +22503,7 @@ msgstr "Start Lage und End Lage für Via können nicht gleich sein"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:545
 msgid "Edit track/via properties"
-msgstr "Eigenschaften des Leiterzuges/DoKu editieren"
+msgstr "Eigenschaften des Leiterzuges/DuKo editieren"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
 msgid "Locked"
@@ -22582,11 +22582,11 @@ msgstr "Endlage:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:108
 msgid "Track & Via Properties"
-msgstr "Eigenschaften Leiterbahn und DoKu's"
+msgstr "Eigenschaften Leiterbahn und DuKo's"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size has to be smaller than via diameter"
-msgstr "DoKu Bohrdurchmesser muss kleiner als der DoKu Durchmesser sein"
+msgstr "DuKo Bohrdurchmesser muss kleiner als der DuKo Durchmesser sein"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
@@ -22839,7 +22839,7 @@ msgstr "Anzeige beim Erstellen von Leiterbahnen"
 
 #: pcbnew/dialogs/panel_pcbnew_display_options_base.cpp:53
 msgid "Show with via clearance at end"
-msgstr "Anzeige mit DoKu-Abstand am Ende"
+msgstr "Anzeige mit DuKo-Abstand am Ende"
 
 #: pcbnew/dialogs/panel_pcbnew_display_options_base.cpp:53
 msgid "Show when creating and editing tracks"
@@ -23737,12 +23737,12 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:255
 #, c-format
 msgid "Via diameter less than minimum via diameter (%s)."
-msgstr "DoKu Durchmesser ist kleiner als der minimale DoKu Durchmesser (%s)."
+msgstr "DuKo Durchmesser ist kleiner als der minimale DuKo Durchmesser (%s)."
 
 #: pcbnew/dialogs/panel_setup_netclasses.cpp:563
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:281
 msgid "Via drill larger than via diameter."
-msgstr "DoKu Bohrdurchmesser ist größer als der DoKu Durchmesser."
+msgstr "DuKo Bohrdurchmesser ist größer als der DuKo Durchmesser."
 
 #: pcbnew/dialogs/panel_setup_netclasses.cpp:570
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:272
@@ -23837,7 +23837,7 @@ msgstr "0.0001mm / 0.01 mil"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:265
 msgid "No via drill defined."
-msgstr "Kein DoKu Bohrdurchmesser definiert."
+msgstr "Kein DuKo Bohrdurchmesser definiert."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:297
 #, c-format
@@ -23856,7 +23856,7 @@ msgstr "Abstand Differentialpaar kann nicht negativ sein."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:326
 msgid "Differential pair via gap cannot be negative."
-msgstr "Abstand Differentialpaar DoKu kann nicht negativ sein."
+msgstr "Abstand Differentialpaar DuKo kann nicht negativ sein."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
@@ -24159,7 +24159,7 @@ msgstr "Größe Durchkontaktierung zu gering"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Micro via size too small"
-msgstr "Größe Mikro-DoKu zu klein"
+msgstr "Größe Mikro-DuKo zu klein"
 
 #: pcbnew/drc/drc_item.cpp:90
 msgid "Via drill too small"
@@ -24167,7 +24167,7 @@ msgstr "DuKu-Bohrdurchmesser zu klein"
 
 #: pcbnew/drc/drc_item.cpp:92
 msgid "Micro via drill too small"
-msgstr "Mikro-DoKu Bohrdurchmesser zu klein"
+msgstr "Mikro-DuKo Bohrdurchmesser zu klein"
 
 #: pcbnew/drc/drc_item.cpp:94
 msgid "Drilled holes too close together"
@@ -24259,7 +24259,7 @@ msgstr "Entfernen von Leiterbahnen die mehrere Netze kurzschließen"
 
 #: pcbnew/drc/drc_item.cpp:147
 msgid "Remove redundant via"
-msgstr "Entferne redundante DoKus"
+msgstr "Entferne redundante DuKos"
 
 #: pcbnew/drc/drc_item.cpp:149
 msgid "Remove duplicate track"
@@ -25752,7 +25752,7 @@ msgstr "Verbinde %s Pin %s zu %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:489
 #, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Verbinde DoKu von %s nach %s."
+msgstr "Verbinde DuKo von %s nach %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:509
 #, c-format
@@ -26495,7 +26495,7 @@ msgstr "Kann kein differenzielles Paar im Nirgendwo starten."
 #: pcbnew/router/pns_diff_pair_placer.cpp:582
 msgid "Current track/via gap setting violates design rules for this net."
 msgstr ""
-"Die derzeitige Einstellung für Abstände von Leiterbahn/DoKu's verletzt die "
+"Die derzeitige Einstellung für Abstände von Leiterbahn/DuKo's verletzt die "
 "Design Regeln für dieses Netz."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:589
@@ -26675,7 +26675,7 @@ msgstr "Benutzerdefinierte Leiterbahn/DuKo Größe..."
 #: pcbnew/router/router_tool.cpp:139
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
-"Zeigt einen Dialog zum Verändern der Leiterbahnbreite und der DoKu Größe."
+"Zeigt einen Dialog zum Verändern der Leiterbahnbreite und der DuKo Größe."
 
 #: pcbnew/router/router_tool.cpp:145
 msgid "Switch Track Posture"
@@ -26695,7 +26695,7 @@ msgstr "Ändern der Kurventypes vom aktuell gerouteten Leiterzug."
 
 #: pcbnew/router/router_tool.cpp:173
 msgid "Select Track/Via Width"
-msgstr "Breite Leiterbahn/DoKu wählen"
+msgstr "Breite Leiterbahn/DuKo wählen"
 
 #: pcbnew/router/router_tool.cpp:192
 msgid "Use Starting Track Width"
@@ -26732,7 +26732,7 @@ msgstr "Leiterbahn %s"
 
 #: pcbnew/router/router_tool.cpp:230
 msgid "Via netclass values"
-msgstr "DoKu Netzklassen Werte"
+msgstr "DuKo Netzklassen Werte"
 
 #: pcbnew/router/router_tool.cpp:234
 #, c-format
@@ -26766,14 +26766,14 @@ msgstr ", Abstand "
 
 #: pcbnew/router/router_tool.cpp:343
 msgid ", via gap "
-msgstr ", DoKu Abstand "
+msgstr ", DuKo Abstand "
 
 #: pcbnew/router/router_tool.cpp:576
 msgid ""
 "Blind/buried vias have to be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
-"Blinde/vergrabene DoKu's müssen in 'Platine/Board einrichten... > Design-"
+"Blinde/vergrabene DuKo's müssen in 'Platine/Board einrichten... > Design-"
 "Regeln > Beschränkungen' aktiviert werden."
 
 #: pcbnew/router/router_tool.cpp:583
@@ -26992,7 +26992,7 @@ msgstr "%.1f mils"
 #: pcbnew/toolbars_pcb_editor.cpp:570
 #, c-format
 msgid "Via: %s (%s)"
-msgstr "DoKu: %s (%s)"
+msgstr "DuKo: %s (%s)"
 
 #: pcbnew/tools/drawing_tool.cpp:162 pcbnew/tools/drawing_tool.cpp:1083
 msgid "Draw a line segment"
@@ -27492,7 +27492,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:384
 msgid "Edit Track & Via Properties..."
-msgstr "Bearbeiten Eigenschaften Leiterbahnen und DoKu's..."
+msgstr "Bearbeiten Eigenschaften Leiterbahnen und DuKo's..."
 
 #: pcbnew/tools/pcb_actions.cpp:390
 msgid "Edit Text and graphics properties globally across board"
@@ -27513,7 +27513,7 @@ msgstr "Leiterbahnen und Durchkontaktierungen aufräumen..."
 #: pcbnew/tools/pcb_actions.cpp:402
 msgid "Clean stubs, vias, delete break points or unconnected tracks"
 msgstr ""
-"Stubs entfernen, DoKu's, Break Points oder nicht verbundene Leiterbahnen "
+"Stubs entfernen, DuKo's, Break Points oder nicht verbundene Leiterbahnen "
 "löschen"
 
 #: pcbnew/tools/pcb_actions.cpp:410
@@ -28295,7 +28295,7 @@ msgstr "Leiterbahn/Durchkontaktierung ziehen"
 #: pcbnew/tools/pcb_actions.cpp:1151
 msgid "Drags tracks and vias without breaking connections"
 msgstr ""
-"Bewegen von Leiterbahnen und DoKus ohne bestehende Verbindungen zu "
+"Bewegen von Leiterbahnen und DuKos ohne bestehende Verbindungen zu "
 "unterbrechen"
 
 #: pcbnew/tools/pcb_actions.cpp:1157 pcbnew/tools/pcb_actions.cpp:1163
