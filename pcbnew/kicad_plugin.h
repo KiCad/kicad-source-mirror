@@ -81,7 +81,8 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200818  // Remove Status flag bitmap and setup counts
 //#define SEXPR_BOARD_FILE_VERSION    20200819  // Add board-level properties
 //#define SEXPR_BOARD_FILE_VERSION    20200825  // Remove host information
-#define SEXPR_BOARD_FILE_VERSION    20200828  // Add new fabrication attributes
+//#define SEXPR_BOARD_FILE_VERSION    20200828  // Add new fabrication attributes
+#define SEXPR_BOARD_FILE_VERSION    20200829  // Remove library name from exported footprints
 
 #define BOARD_FILE_HOST_VERSION     20200825    ///< Earlier files than this include the host tag
 
@@ -93,6 +94,7 @@ class TEXTE_PCB;
 #define CTL_OMIT_AT                 (1 << 5)    ///< Omit position and rotation
                                                 // (always saved with potion 0,0 and rotation = 0 in library)
 //#define CTL_OMIT_HIDE             (1 << 6)    // found and defined in eda_text.h
+#define CTL_OMIT_LIBNAME            (1 << 7)    ///< Omit lib alias when saving (used for board/not library)
 
 
 // common combinations of the above:
@@ -101,7 +103,7 @@ class TEXTE_PCB;
 #define CTL_FOR_CLIPBOARD           (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS)
 
 /// Format output for a footprint library instead of clipboard or BOARD
-#define CTL_FOR_LIBRARY             (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS|CTL_OMIT_TSTAMPS|CTL_OMIT_PATH|CTL_OMIT_AT)
+#define CTL_FOR_LIBRARY             (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS|CTL_OMIT_TSTAMPS|CTL_OMIT_PATH|CTL_OMIT_AT|CTL_OMIT_LIBNAME)
 
 /// The zero arg constructor when PCB_IO is used for PLUGIN::Load() and PLUGIN::Save()ing
 /// a BOARD file underneath IO_MGR.

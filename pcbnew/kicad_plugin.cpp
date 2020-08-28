@@ -927,8 +927,12 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         }
     }
 
-    m_out->Print( aNestLevel, "(module %s",
-                  m_out->Quotes( aModule->GetFPID().Format() ).c_str() );
+    if( m_ctl & CTL_OMIT_LIBNAME )
+        m_out->Print( aNestLevel, "(module %s",
+                      m_out->Quotes( aModule->GetFPID().GetLibItemNameAndRev() ).c_str() );
+    else
+        m_out->Print( aNestLevel, "(module %s",
+                      m_out->Quotes( aModule->GetFPID().Format() ).c_str() );
 
     if( aModule->IsLocked() )
         m_out->Print( 0, " locked" );

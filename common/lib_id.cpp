@@ -258,7 +258,7 @@ UTF8 LIB_ID::Format() const
 
 UTF8 LIB_ID::GetLibItemNameAndRev() const
 {
-    UTF8 ret;
+    UTF8 ret = item_name;
 
     if( revision.size() )
     {
