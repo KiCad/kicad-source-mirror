@@ -37,7 +37,7 @@
 EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aItems ) :
         EDA_VIEW_SWITCHER_BASE( aParent ),
         m_tabState( true ),
-        m_receivingEvents( true )
+        m_receivingEvents( false )
 {
     m_listBox->InsertItems( aItems, 0 );
     m_listBox->SetSelection( std::min( 1, (int) m_listBox->GetCount() - 1 ) );
@@ -63,6 +63,20 @@ EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aI
 }
 
 
+bool EDA_VIEW_SWITCHER::Show( bool aShow )
+{
+    if( !aShow )
+        m_receivingEvents = false;
+
+    bool ret = DIALOG_SHIM::Show( aShow );
+
+    if( aShow )
+        m_receivingEvents = true;
+
+    return ret;
+}
+
+
 // OK, this is *really* annoying, but wxWidgets doesn't give us key-down events while the
 // control key is being held down.  So we can't use OnKeyDown() or OnCharHook() and instead
 // must rely on watching key states in TryBefore().
@@ -77,13 +91,6 @@ bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
     if( !m_receivingEvents )
     {
         return DIALOG_SHIM::TryBefore( aEvent );
-    }
-
-    if( !wxGetKeyState( WXK_RAW_CONTROL ) )
-    {
-        m_receivingEvents = false;
-        EndModal( wxID_OK );
-        return true;
     }
 
     // Check for tab key leading edge
@@ -115,6 +122,12 @@ bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
     if( m_tabState && !wxGetKeyState( WXK_TAB ) )
     {
         m_tabState = false;
+    }
+
+    // Check for control key trailing edge
+    if( !wxGetKeyState( WXK_RAW_CONTROL ) )
+    {
+        EndModal( wxID_OK );
     }
 
     return DIALOG_SHIM::TryBefore( aEvent );

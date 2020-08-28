@@ -35,6 +35,7 @@ public:
 
 protected:
     bool TryBefore( wxEvent& aEvent ) override;
+    bool Show( bool show ) override;
 
 protected:
     bool m_tabState;
