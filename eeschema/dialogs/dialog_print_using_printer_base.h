@@ -17,7 +17,6 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
@@ -41,7 +40,6 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkMonochrome;
 		wxCheckBox* m_checkBackgroundColor;
 		wxCheckBox* m_checkUseColorTheme;
-		wxStaticText* m_lblTheme;
 		wxChoice* m_colorTheme;
 		wxStaticLine* m_staticline1;
 		wxButton* m_buttonPageSetup;

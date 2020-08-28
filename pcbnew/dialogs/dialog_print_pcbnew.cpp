@@ -99,7 +99,6 @@ private:
     wxCheckBox* m_checkAsItems;
     wxCheckBox* m_checkBackground;
     wxCheckBox* m_checkUseTheme;
-    wxStaticText* m_lblTheme;
     wxChoice* m_colorTheme;
 };
 
@@ -209,26 +208,19 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
     optionsSizer->Add( m_checkBackground, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
 
     m_checkUseTheme = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY,
-                                      _( "Use a different color theme for printing" ),
+                                      _( "Use a different color theme for printing:" ),
                                       wxDefaultPosition, wxDefaultSize, 0 );
-    optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ),
-                       wxLEFT | wxRIGHT | wxTOP, 5 );
+    optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
 
-    m_checkUseTheme->Bind(
-            wxEVT_COMMAND_CHECKBOX_CLICKED, &DIALOG_PRINT_PCBNEW::onUseThemeChecked, this );
-
-    m_lblTheme = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _( "Theme:" ),
-                                   wxDefaultPosition, wxDefaultSize, 0 );
-    m_lblTheme->Wrap( -1 );
-    optionsSizer->Add( m_lblTheme, wxGBPosition( rows, 0 ), wxGBSpan( 1, 1 ),
-                       wxALIGN_CENTER_VERTICAL | wxLEFT, 25 );
+    m_checkUseTheme->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &DIALOG_PRINT_PCBNEW::onUseThemeChecked, this );
 
     wxArrayString m_colorThemeChoices;
     m_colorTheme = new wxChoice( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition,
                                  wxDefaultSize, m_colorThemeChoices, 0 );
     m_colorTheme->SetSelection( 0 );
-    optionsSizer->Add( m_colorTheme, wxGBPosition( rows++, 1 ), wxGBSpan( 1, 2 ),
-                       wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5 );
+
+    optionsSizer->Add( m_colorTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
+                       wxALIGN_CENTER_VERTICAL | wxLEFT, 25 );
 
     // Drill marks option
     auto drillMarksLabel = new wxStaticText( box, wxID_ANY, _( "Drill marks:" ) );
@@ -338,7 +330,6 @@ void DIALOG_PRINT_PCBNEW::onDeselectAllClick( wxCommandEvent& event )
 
 void DIALOG_PRINT_PCBNEW::onUseThemeChecked( wxCommandEvent& event )
 {
-    m_lblTheme->Enable( m_checkUseTheme->GetValue() );
     m_colorTheme->Enable( m_checkUseTheme->GetValue() );
 }
 
@@ -351,7 +342,6 @@ void DIALOG_PRINT_PCBNEW::onColorModeChanged( wxCommandEvent& event )
 
     m_checkBackground->Enable( !m_settings->m_blackWhite );
     m_checkUseTheme->Enable( !m_settings->m_blackWhite );
-    m_lblTheme->Enable( !m_settings->m_blackWhite && cfg->m_Printing.use_theme );
     m_colorTheme->Enable( !m_settings->m_blackWhite && cfg->m_Printing.use_theme );
 }
 

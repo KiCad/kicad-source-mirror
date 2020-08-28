@@ -197,7 +197,6 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
 
     m_colorTheme->SetMinSize( wxSize( minwidth + 50, -1 ) );
 
-    m_lblTheme->Enable( cfg->m_Printing.use_theme );
     m_colorTheme->Enable( cfg->m_Printing.use_theme );
 
     // Initialize page specific print setup dialog settings.
@@ -226,7 +225,6 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
 
 void DIALOG_PRINT_USING_PRINTER::OnUseColorThemeChecked( wxCommandEvent& event )
 {
-    m_lblTheme->Enable( m_checkUseColorTheme->GetValue() );
     m_colorTheme->Enable( m_checkUseColorTheme->GetValue() );
 }
 

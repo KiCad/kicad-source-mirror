@@ -32,28 +32,23 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_checkBackgroundColor = new wxCheckBox( this, wxID_ANY, _("Print background color"), wxDefaultPosition, wxDefaultSize, 0 );
 	bleftSizer->Add( m_checkBackgroundColor, 0, wxALL, 5 );
 
-	m_checkUseColorTheme = new wxCheckBox( this, wxID_ANY, _("Use a different color theme for printing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkUseColorTheme = new wxCheckBox( this, wxID_ANY, _("Use a different color theme for printing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkUseColorTheme->SetValue(true);
 	bleftSizer->Add( m_checkUseColorTheme, 0, wxALL, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_lblTheme = new wxStaticText( this, wxID_ANY, _("Color theme:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_lblTheme->Wrap( -1 );
-	m_lblTheme->Enable( false );
-
-	bSizer4->Add( m_lblTheme, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
 	wxArrayString m_colorThemeChoices;
 	m_colorTheme = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_colorThemeChoices, 0 );
 	m_colorTheme->SetSelection( 0 );
 	m_colorTheme->Enable( false );
+	m_colorTheme->SetMinSize( wxSize( 200,-1 ) );
 
-	bSizer4->Add( m_colorTheme, 0, wxALL, 5 );
+	bSizer4->Add( m_colorTheme, 0, wxLEFT, 25 );
 
 
-	bleftSizer->Add( bSizer4, 1, wxEXPAND|wxLEFT, 5 );
+	bleftSizer->Add( bSizer4, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( bleftSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
