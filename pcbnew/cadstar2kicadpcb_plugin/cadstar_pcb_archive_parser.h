@@ -450,7 +450,7 @@ public:
         long       DrillDiameter   = UNDEFINED_VALUE;
         long       DrillOversize   = UNDEFINED_VALUE;
         long       SlotLength      = UNDEFINED_VALUE;
-        long       SlotOrientation = UNDEFINED_VALUE;
+        long       SlotOrientation = 0;
         long       DrillXoffset    = UNDEFINED_VALUE;
         long       DrillYoffset    = UNDEFINED_VALUE;
 
@@ -1058,20 +1058,15 @@ public:
      * e.g. Designator (called Component Name in CADSTAR), Part Name (name of component in the
      * libary), etc. The atom identifier is "TEXTLOC"
      */
-    struct TEXT_LOCATION
+    struct TEXT_LOCATION : ATTRIBUTE_LOCATION
     {
+        TEXT_LOCATION()
+        {
+            // The default alignment for TEXT_LOCATION (when "NO_ALIGNMENT" is selected) is
+            // Bottom left, matching CADSTAR's default behaviour
+            Alignment= ALIGNMENT::BOTTOMLEFT;
+        }
         ATTRIBUTE_ID  AttributeID;
-        TEXTCODE_ID   TextCodeID;
-        LAYER_ID      LayerID;
-        POINT         Position;
-        long          OrientAngle = 0;
-        bool          Mirror      = false;
-        bool          Fixed       = false;
-        JUSTIFICATION Justification =
-                JUSTIFICATION::LEFT; ///< Note: Justification has no effect on single lines of text
-        ALIGNMENT Alignment = ALIGNMENT::
-                BOTTOMLEFT; ///< The default alignment for TEXT_LOCATION (when "NO_ALIGNMENT" is
-                            ///< selected) is Bottom left, matching CADSTAR's default behaviour
 
         void Parse( XNODE* aNode );
     };

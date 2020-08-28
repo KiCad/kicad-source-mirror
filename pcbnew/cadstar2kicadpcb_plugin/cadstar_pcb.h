@@ -35,6 +35,7 @@ class CADSTAR_PCB : public CADSTAR_PCB_ARCHIVE_PARSER
 public:
     explicit CADSTAR_PCB( wxString aFilename ) : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
     {
+        mBoard          = nullptr;
         mDesignCenter.x = 0;
         mDesignCenter.y = 0;
     }
@@ -47,17 +48,34 @@ public:
     void Load( ::BOARD* aBoard );
 
 private:
-    ::BOARD*                              mBoard;
-    std::map<LAYER_ID, PCB_LAYER_ID>      mLayermap; ///<Map between Cadstar and KiCad Layers
-    std::map<PHYSICAL_LAYER_ID, LAYER_ID> mCopperLayers;
-    wxPoint                               mDesignCenter; ///< Used for calculating the required offset to apply to the Cadstar design so that it fits in KiCad canvas
+    ::BOARD*                         mBoard;
+    std::map<LAYER_ID, PCB_LAYER_ID> mLayermap;          ///< Map between Cadstar and KiCad Layers.
+                                                         ///< Populated by loadBoardStackup().
+    std::map<SYMDEF_ID, MODULE*> mLibraryMap;            ///< Map between Cadstar and KiCad
+                                                         ///< components in the library. Populated
+                                                         ///< by loadComponentLibrary().
+    std::map<PHYSICAL_LAYER_ID, LAYER_ID> mCopperLayers; ///< Map of CADSTAR Physical layers to
+                                                         ///< CADSTAR Layer IDs
+    wxPoint mDesignCenter;                               ///< Used for calculating the required
+                                                         ///< offset to apply to the Cadstar design
+                                                         ///< so that it fits in KiCad canvas
 
     // Functions for loading individual elements:
-
     void loadBoardStackup();
+    void loadComponentLibrary();
+    // clang-format off
+        // Helper functions for Component Library loading:
+        void loadLibraryFigures(const SYMDEF& aComponent, MODULE* aModule);
+        void loadLibraryPads(const SYMDEF& aComponent, MODULE* aModule);
+    // clang-format on
     void loadBoards();
     void loadFigures();
     void loadAreas();
+    void loadComponents();
+    // clang-format off
+        // Helper functions for Component loading:
+        void loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule );
+    // clang-format on
 
     /**
      * @brief 
@@ -65,9 +83,11 @@ private:
      * @param aCadstarLayerID KiCad layer to draw on
      * @param aCadstarLinecodeID Thickness of line to draw with
      * @param aShapeName for reporting warnings/errors to the user
+     * @param aContainer to draw on (e.g. mBoard)
      */
     void drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
-            const LINECODE_ID& aCadstarLinecodeID, const wxString& aShapeName );
+            const LINECODE_ID& aCadstarLinecodeID, const wxString& aShapeName,
+            BOARD_ITEM_CONTAINER* aContainer );
 
 
     /**
@@ -75,9 +95,11 @@ private:
      * @param aVertices 
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
+     * @param aContainer to draw on (e.g. mBoard)
      */
     void drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCutouts,
-            const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness );
+            const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
+            BOARD_ITEM_CONTAINER* aContainer );
 
 
     /**
@@ -85,16 +107,20 @@ private:
      * @param aCadstarVertices 
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
+     * @param aContainer to draw on (e.g. mBoard)
      */
     void drawCadstarVerticesAsSegments( const std::vector<VERTEX>& aCadstarVertices,
-            const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness );
+            const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
+            BOARD_ITEM_CONTAINER* aContainer );
 
     /**
      * @brief Returns a vector of pointers to DRAWSEGMENT objects. Caller owns the objects.
-     * @param aCadstarVertices 
+     * @param aCadstarVertices      * 
+     * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
      * @return 
      */
-    std::vector<DRAWSEGMENT *> getDrawSegmentsFromVertices( const std::vector<VERTEX>& aCadstarVertices );
+    std::vector<DRAWSEGMENT*> getDrawSegmentsFromVertices(
+            const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer = nullptr );
 
 
     /**
@@ -111,19 +137,29 @@ private:
      * @brief Returns a SHAPE_POLY_SET object from a Cadstar SHAPE
      * @param aCadstarShape
      * @param aLineThickness Thickness of line is used for expanding the polygon by half.
+     * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
      * @return 
      */
-    SHAPE_POLY_SET getPolySetFromCadstarShape(
-            const SHAPE& aCadstarShape, const int& aLineThickness = -1 );
+    SHAPE_POLY_SET getPolySetFromCadstarShape( const SHAPE& aCadstarShape,
+            const int& aLineThickness = -1, BOARD_ITEM_CONTAINER* aContainer = nullptr );
 
     /**
      * @brief Returns a SHAPE_LINE_CHAIN object from a series of DRAWSEGMENT objects
      * @param aDrawSegments
      * @return 
      */
-    SHAPE_LINE_CHAIN getLineChainFromDrawsegments(
-            const std::vector<DRAWSEGMENT*> aDrawSegments );
+    SHAPE_LINE_CHAIN getLineChainFromDrawsegments( const std::vector<DRAWSEGMENT*> aDrawSegments );
 
+    /**
+     * @brief Adds a CADSTAR Attribute to a KiCad module
+     * @param aCadstarAttrLoc 
+     * @param aCadstarAttributeID
+     * @param aModule 
+     * @param aAttributeValue 
+     */
+    void addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
+            const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aModule,
+            const wxString& aAttributeValue );
 
     /**
      * @brief If the LineCode ID is found, returns the thickness as defined in the Linecode,
@@ -134,6 +170,20 @@ private:
     int getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
 
 
+    TEXTCODE getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
+
+
+    PADCODE getPadCode( const PADCODE_ID& aCadstarPadCodeID );
+
+
+    wxString getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
+
+
+    wxString getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
+            const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
+
+    PART getPart( const PART_ID& aCadstarPartID );
+
     /**
      * @brief Scales, offsets and inverts y axis to make the point usable directly in KiCad
      * @param aCadstarPoint 
@@ -141,6 +191,25 @@ private:
      */
     wxPoint getKiCadPoint( wxPoint aCadstarPoint );
 
+    /**
+     * @brief 
+     * @param aCadstarLength 
+     * @return 
+    */
+    int getKiCadLength( long long aCadstarLength )
+    {
+        return aCadstarLength * KiCadUnitMultiplier;
+    }
+
+    /**
+     * @brief 
+     * @param aCadstarAngle 
+     * @return 
+    */
+    double getKiCadAngle( const long long& aCadstarAngle )
+    {
+        return (double) aCadstarAngle / 100.0;
+    }
 
     /**
      * @brief 
@@ -162,7 +231,7 @@ private:
      * @brief 
      * @param aCadstarLayerID 
      * @return true if the layer corresponds to a KiCad LSET or false if the layer maps directly
-    */
+     */
     bool isLayerSet( const LAYER_ID& aCadstarLayerID );
 
 
@@ -181,6 +250,11 @@ private:
      */
     LSET getKiCadLayerSet( const LAYER_ID& aCadstarLayerID );
 
+
+    bool isModule( BOARD_ITEM_CONTAINER* aContainer )
+    {
+        return aContainer && aContainer->GetClass() == wxT( "MODULE" );
+    }
 };
 
 

@@ -30,12 +30,20 @@
 #include <limits>                                          // std::numeric_limits
 #include <trigo.h>
 
+#include <class_board.h>
+#include <class_dimension.h>
+#include <class_edge_mod.h>
+#include <class_module.h>
+#include <class_pcb_text.h>
+#include <class_track.h>
+#include <class_zone.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 void CADSTAR_PCB::Load( ::BOARD* aBoard )
 {
     mBoard = aBoard;
     Parse();
-    
+
     wxPoint designSize =
             Assignments.Technology.DesignArea.first - Assignments.Technology.DesignArea.second;
 
@@ -61,10 +69,17 @@ void CADSTAR_PCB::Load( ::BOARD* aBoard )
 
 
     loadBoardStackup();
+    loadComponentLibrary();
     loadBoards();
     loadFigures();
     loadAreas();
+    loadComponents();
+
     //TODO: process all other items
+
+    wxLogMessage(
+            _( "The CADSTAR design has been imported successfully.\n"
+               "Please review the import errors and warnings (if any)." ) );
 }
 
 
@@ -255,7 +270,6 @@ void CADSTAR_PCB::loadBoardStackup()
             default:
                 wxASSERT_MSG( true, wxT( "Unknown CADSTAR Layer Sub-type" ) );
                 break;
-
             }
             break;
 
@@ -344,13 +358,196 @@ void CADSTAR_PCB::loadBoardStackup()
 }
 
 
+void CADSTAR_PCB::loadComponentLibrary()
+{
+    for( std::pair<SYMDEF_ID, SYMDEF> symPair : Library.ComponentDefinitions )
+    {
+        SYMDEF_ID key        = symPair.first;
+        SYMDEF    component  = symPair.second;
+        wxString  moduleName = component.ReferenceName
+                              + ( ( component.Alternate.size() > 0 ) ?
+                                              ( wxT( " (" ) + component.Alternate + wxT( ")" ) ) :
+                                              wxT( "" ) );
+        MODULE* m = new MODULE( mBoard );
+        m->SetPosition( getKiCadPoint( component.Origin ) );
+
+        LIB_ID libID;
+        libID.Parse( moduleName, LIB_ID::LIB_ID_TYPE::ID_PCB, true );
+
+        m->SetFPID( libID );
+        loadLibraryFigures( component, m );
+        loadLibraryPads( component, m );
+
+        mLibraryMap.insert( std::make_pair( key, m ) );
+    }
+}
+
+
+void CADSTAR_PCB::loadLibraryFigures( const SYMDEF& aComponent, MODULE* aModule )
+{
+    for( std::pair<FIGURE_ID, FIGURE> figPair : aComponent.Figures )
+    {
+        FIGURE& fig = figPair.second;
+        drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ), fig.LineCodeID,
+                wxString::Format( "Component %s:%s -> Figure %s", aComponent.ReferenceName,
+                        aComponent.Alternate, fig.ID ),
+                aModule );
+
+        //TODO process addition to a group
+    }
+}
+
+
+void CADSTAR_PCB::loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule )
+{
+    for( std::pair<PAD_ID, PAD> padPair : aComponent.Pads )
+    {
+        PAD& csPad = padPair.second; //Cadstar pad
+        PADCODE csPadcode = getPadCode( csPad.PadCodeID );
+
+        D_PAD* pad = new D_PAD( aModule );
+        aModule->Add( pad );
+
+        switch( csPad.Side )
+        {
+        case PAD_SIDE::MAXIMUM: //Bottom side
+            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+            pad->SetLayerSet( LSET( 3, B_Cu, B_Paste, B_Mask ) );
+            break;
+
+        case PAD_SIDE::MINIMUM: //TOP side
+            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+            pad->SetLayerSet( LSET( 3, F_Cu, F_Paste, F_Mask ) );
+            break;
+
+        case PAD_SIDE::THROUGH_HOLE:
+
+            if( csPadcode.Plated )
+                pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_STANDARD );
+            else
+                pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_HOLE_NOT_PLATED );
+
+            pad->SetLayerSet( pad->StandardMask() ); // for now we will assume no paste layers
+            //TODO: We need to read the csPad->Reassigns vector to make sure no paste
+            break;
+
+        default:
+            wxASSERT_MSG( true, "Unknown Pad type" );
+        }
+
+        pad->SetName( csPad.Identifier.IsEmpty() ? wxString::Format( wxT( "%i" ), csPad.ID ) :
+                                                   csPad.Identifier );
+
+        pad->SetPos0( getKiCadPoint( csPad.Position ) - aModule->GetPosition() );
+        pad->SetOrientation( getKiCadAngle( csPad.OrientAngle ) );
+
+        switch( csPadcode.Shape.ShapeType )
+        {
+        case PAD_SHAPE_TYPE::ANNULUS:
+            //todo fix: use custom shape instead
+            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
+            pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
+                    getKiCadLength( csPadcode.Shape.Size ) } );
+            break;
+
+        case PAD_SHAPE_TYPE::BULLET:
+            //todo fix: use custom shape instead (a bullet has the left size flat and right
+            //side rounded, before rotation is applied)
+            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_OVAL );             
+            pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
+                                            + (long long) csPadcode.Shape.LeftLength
+                                            + (long long) csPadcode.Shape.RightLength ),
+                    getKiCadLength( csPadcode.Shape.Size ) } );
+            break;
+
+        case PAD_SHAPE_TYPE::CIRCLE:
+            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
+            pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
+                    getKiCadLength( csPadcode.Shape.Size ) } );
+            break;
+
+        case PAD_SHAPE_TYPE::DIAMOND:
+            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
+            pad->SetOrientation( pad->GetOrientation() + 450.0 ); // rotate 45deg anticlockwise
+            pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
+                    getKiCadLength( csPadcode.Shape.Size ) } );
+            break;
+
+        case PAD_SHAPE_TYPE::FINGER:
+            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_OVAL );
+            pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
+                                            + (long long) csPadcode.Shape.LeftLength
+                                            + (long long) csPadcode.Shape.RightLength ),
+                    getKiCadLength( csPadcode.Shape.Size ) } );
+            break;
+
+        case PAD_SHAPE_TYPE::OCTAGON:
+            pad->SetShape( PAD_SHAPE_CHAMFERED_RECT );
+            pad->SetChamferPositions( RECT_CHAMFER_POSITIONS::RECT_CHAMFER_ALL );
+            pad->SetChamferRectRatio( 0.25 );
+            pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
+                    getKiCadLength( csPadcode.Shape.Size ) } );
+            break;
+
+        case PAD_SHAPE_TYPE::RECTANGLE:
+            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
+            pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
+                                            + (long long) csPadcode.Shape.LeftLength
+                                            + (long long) csPadcode.Shape.RightLength ),
+                    getKiCadLength( csPadcode.Shape.Size ) } );
+            break;
+
+        case PAD_SHAPE_TYPE::ROUNDED_RECT:
+            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
+            pad->SetRoundRectCornerRadius( getKiCadLength( csPadcode.Shape.InternalFeature ) );
+            pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
+                                            + (long long) csPadcode.Shape.LeftLength
+                                            + (long long) csPadcode.Shape.RightLength ),
+                    getKiCadLength( csPadcode.Shape.Size ) } );
+            break;
+
+
+        case PAD_SHAPE_TYPE::SQUARE:
+            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
+            pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
+                    getKiCadLength( csPadcode.Shape.Size ) } );
+            break;
+
+        default:
+            wxASSERT_MSG( true, "Unknown Pad Shape" );
+        }
+
+        if( csPadcode.ReliefClearance != UNDEFINED_VALUE )
+            pad->SetThermalGap( getKiCadLength( csPadcode.ReliefClearance ) );
+
+        if( csPadcode.ReliefWidth != UNDEFINED_VALUE )
+            pad->SetThermalWidth( getKiCadLength( csPadcode.ReliefWidth ) );
+
+        pad->SetOrientation( pad->GetOrientation() + getKiCadAngle( csPadcode.Shape.OrientAngle ) ); 
+
+        if( csPadcode.DrillDiameter != UNDEFINED_VALUE )
+        {
+            if( csPadcode.SlotLength != UNDEFINED_VALUE )
+                pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
+                        getKiCadLength( (long long) csPadcode.DrillOversize
+                                        + (long long) csPadcode.DrillDiameter ) } );
+            else
+                pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
+                        getKiCadLength( csPadcode.DrillDiameter ) } );
+        }
+        //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
+
+    }
+}
+
+
 void CADSTAR_PCB::loadBoards()
 {
     for( std::pair<BOARD_ID, BOARD> boardPair : Layout.Boards )
     {
         BOARD& board = boardPair.second;
         drawCadstarShape( board.Shape, PCB_LAYER_ID::Edge_Cuts, board.LineCodeID,
-                wxString::Format( "BOARD %s", board.ID ) );
+                wxString::Format( "BOARD %s", board.ID ), mBoard );
 
         //TODO process board attributes
         //TODO process addition to a group
@@ -364,12 +561,12 @@ void CADSTAR_PCB::loadFigures()
     {
         FIGURE& fig = figPair.second;
         drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ), fig.LineCodeID,
-                wxString::Format( "FIGURE %s", fig.ID ) );
+                wxString::Format( "FIGURE %s", fig.ID ), mBoard );
 
-        //TODO process attributes
         //TODO process addition to a group
         //TODO process "swaprule"
-        //TODO process re-use block
+        //TODO process re-use block when KiCad Supports it
+        //TODO process attributes when KiCad Supports attributes in figures
     }
 }
 
@@ -388,7 +585,7 @@ void CADSTAR_PCB::loadAreas()
             mBoard->Add( zone, ADD_MODE::APPEND );
 
             zone->SetLayer( getKiCadLayer( area.LayerID ) );
-            zone->SetIsKeepout( true ); //import all CADSTAR areas as Keepout zones
+            zone->SetIsKeepout( true );       //import all CADSTAR areas as Keepout zones
             zone->SetDoNotAllowPads( false ); //no CADSTAR equivalent
             zone->SetZoneName( area.Name );
 
@@ -408,10 +605,10 @@ void CADSTAR_PCB::loadAreas()
         }
         else
         {
-            wxLogError( wxString::Format(
-                    _( "The CADSTAR area '%s' does not have a KiCad equivalent. "
-                       "Pure Placement or Routing areas are not supported." ),
-                    area.Name ) );
+            wxLogError(
+                    wxString::Format( _( "The CADSTAR area '%s' does not have a KiCad equivalent. "
+                                         "Pure Placement or Routing areas are not supported." ),
+                            area.Name ) );
         }
 
         //todo Process area.AreaHeight when KiCad supports 3D design rules
@@ -423,8 +620,84 @@ void CADSTAR_PCB::loadAreas()
 }
 
 
+void CADSTAR_PCB::loadComponents()
+{
+    for( std::pair<COMPONENT_ID, COMPONENT> compPair : Layout.Components )
+    {
+        COMPONENT& comp = compPair.second;
+
+        auto moduleIter = mLibraryMap.find( comp.SymdefID );
+
+        if( moduleIter == mLibraryMap.end() )
+        {
+            THROW_IO_ERROR( wxString::Format( _( "Unable to find component '%s' in the library"
+                                                 "(Symdef ID: '%s')" ),
+                    comp.Name, comp.SymdefID ) );
+        }
+
+        // copy constructor to clone the module from the library
+        MODULE* m                      = new MODULE( *moduleIter->second );
+        const_cast<KIID&>( m->m_Uuid ) = KIID();
+
+        mBoard->Add( m, ADD_MODE::APPEND );
+
+        //set to empty string to avoid duplication when loading attributes:
+        m->SetValue( wxEmptyString );
+
+        m->SetPosition( getKiCadPoint( comp.Origin ) );
+        m->SetOrientation( getKiCadAngle( comp.OrientAngle ) );
+        m->SetReference( comp.Name );
+
+        if( comp.Mirror )
+        {
+            m->Flip( getKiCadPoint( comp.Origin ), false );
+            m->SetOrientation( m->GetOrientation() + 1800.0 );
+        }
+
+        loadComponentAttributes( comp, m );
+        m->SetDescription( getPart( comp.PartID ).Definition.Name );
+    }
+}
+
+
+void CADSTAR_PCB::loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule )
+{
+    for( std::pair<ATTRIBUTE_ID, ATTRIBUTE_VALUE> attrPair : aComponent.AttributeValues )
+    {
+        ATTRIBUTE_VALUE& attrval = attrPair.second;
+
+        if( attrval.HasLocation ) //only import attributes with location. Ignore the rest
+            addAttribute( attrval.AttributeLocation, attrval.AttributeID, aModule, attrval.Value );
+    }
+
+    for( std::pair<ATTRIBUTE_ID, TEXT_LOCATION> textlocPair : aComponent.TextLocations )
+    {
+        TEXT_LOCATION& textloc = textlocPair.second;
+        wxString       attrval;
+
+        if( textloc.AttributeID == COMPONENT_NAME_ATTRID )
+        {
+            attrval = wxEmptyString; // Designator is loaded separately
+        }
+        else if( textloc.AttributeID == COMPONENT_NAME_2_ATTRID )
+        {
+            attrval = wxT( "${REFERENCE}" );
+        }
+        else if( textloc.AttributeID == PART_NAME_ATTRID )
+        {
+            attrval = getPart( aComponent.PartID ).Name;
+        }
+        else
+            attrval = getAttributeValue( textloc.AttributeID, aComponent.AttributeValues );
+
+        addAttribute( textloc, textloc.AttributeID, aModule, attrval );
+    }
+}
+
+
 void CADSTAR_PCB::drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
-        const LINECODE_ID& aCadstarLinecodeID, const wxString& aShapeName )
+        const LINECODE_ID& aCadstarLinecodeID, const wxString& aShapeName,
+        BOARD_ITEM_CONTAINER* aContainer )
 {
     int lineThickness = getLineThickness( aCadstarLinecodeID );
 
@@ -433,8 +706,10 @@ void CADSTAR_PCB::drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_
     case SHAPE_TYPE::OPENSHAPE:
     case SHAPE_TYPE::OUTLINE:
         ///TODO update this when Polygons in KiCad can be defined with no fill
-        drawCadstarVerticesAsSegments( aCadstarShape.Vertices, aKiCadLayer, lineThickness );
-        drawCadstarCutoutsAsSegments( aCadstarShape.Cutouts, aKiCadLayer, lineThickness );
+        drawCadstarVerticesAsSegments(
+                aCadstarShape.Vertices, aKiCadLayer, lineThickness, aContainer );
+        drawCadstarCutoutsAsSegments(
+                aCadstarShape.Cutouts, aKiCadLayer, lineThickness, aContainer );
         break;
 
     case SHAPE_TYPE::HATCHED:
@@ -446,44 +721,56 @@ void CADSTAR_PCB::drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_
 
     case SHAPE_TYPE::SOLID:
     {
-        DRAWSEGMENT* ds = new DRAWSEGMENT( mBoard );
-        ds->SetShape( STROKE_T::S_POLYGON );
-        ds->SetPolyShape( getPolySetFromCadstarShape( aCadstarShape ) );
+        DRAWSEGMENT* ds;
+
+        if( isModule( aContainer ) )
+            ds = new EDGE_MODULE( (MODULE*) aContainer, STROKE_T::S_POLYGON );
+        else
+        {
+            ds = new DRAWSEGMENT( aContainer );
+            ds->SetShape( STROKE_T::S_POLYGON );
+        }
+
+        ds->SetPolyShape( getPolySetFromCadstarShape( aCadstarShape, -1, aContainer ) );
         ds->SetWidth( lineThickness );
         ds->SetLayer( aKiCadLayer );
-        mBoard->Add( ds, ADD_MODE::APPEND );
+        aContainer->Add( ds, ADD_MODE::APPEND );
     }
     break;
-
     }
 }
 
 
 void CADSTAR_PCB::drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCutouts,
-        const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness )
+        const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
+        BOARD_ITEM_CONTAINER* aContainer )
 {
     for( CUTOUT cutout : aCutouts )
     {
-        drawCadstarVerticesAsSegments( cutout.Vertices, aKiCadLayer, aLineThickness );
+        drawCadstarVerticesAsSegments( cutout.Vertices, aKiCadLayer, aLineThickness, aContainer );
     }
 }
 
 
 void CADSTAR_PCB::drawCadstarVerticesAsSegments( const std::vector<VERTEX>& aCadstarVertices,
-        const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness )
+        const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
+        BOARD_ITEM_CONTAINER* aContainer )
 {
-    std::vector<DRAWSEGMENT*> drawSegments = getDrawSegmentsFromVertices( aCadstarVertices );
+    std::vector<DRAWSEGMENT*> drawSegments =
+            getDrawSegmentsFromVertices( aCadstarVertices, aContainer );
 
     for( DRAWSEGMENT* ds : drawSegments )
     {
         ds->SetWidth( aLineThickness );
         ds->SetLayer( aKiCadLayer );
-        mBoard->Add( ds, ADD_MODE::APPEND );
+        ds->SetParent( aContainer );
+        aContainer->Add( ds, ADD_MODE::APPEND );
     }
 }
 
+
 std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegmentsFromVertices(
-        const std::vector<VERTEX>& aCadstarVertices )
+        const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer )
 {
     std::vector<DRAWSEGMENT*> drawSegments;
 
@@ -498,8 +785,8 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegmentsFromVertices(
     for( size_t i = 1; i < aCadstarVertices.size(); i++ )
     {
         const VERTEX* cur = &aCadstarVertices[i];
-        DRAWSEGMENT*  ds  = new DRAWSEGMENT( mBoard );
-        cw                = false;
+        DRAWSEGMENT*  ds;
+        cw = false;
 
         wxPoint startPoint = getKiCadPoint( prev->End );
         wxPoint endPoint   = getKiCadPoint( cur->End );
@@ -515,7 +802,15 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegmentsFromVertices(
         {
 
         case VERTEX_TYPE::POINT:
-            ds->SetShape( STROKE_T::S_SEGMENT );
+
+            if( isModule( aContainer ) )
+                ds = new EDGE_MODULE( (MODULE*) aContainer, STROKE_T::S_SEGMENT );
+            else
+            {
+                ds = new DRAWSEGMENT( aContainer );
+                ds->SetShape( STROKE_T::S_SEGMENT );
+            }
+
             ds->SetStart( startPoint );
             ds->SetEnd( endPoint );
             break;
@@ -525,7 +820,15 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegmentsFromVertices(
             cw = true;
         case VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE:
         case VERTEX_TYPE::ANTICLOCKWISE_ARC:
-            ds->SetShape( STROKE_T::S_ARC );
+
+            if( isModule( aContainer ) )
+                ds = new EDGE_MODULE( (MODULE*) aContainer, STROKE_T::S_ARC );
+            else
+            {
+                ds = new DRAWSEGMENT( aContainer );
+                ds->SetShape( STROKE_T::S_ARC );
+            }
+
             ds->SetArcStart( startPoint );
             ds->SetCenter( centerPoint );
 
@@ -541,6 +844,9 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegmentsFromVertices(
                 ds->SetAngle( NormalizeAngleNeg( arcAngle ) );
             break;
         }
+
+        if( isModule( aContainer ) && ds != nullptr )
+            ( (EDGE_MODULE*) ds )->SetLocalCoord();
 
         drawSegments.push_back( ds );
         prev = cur;
@@ -567,9 +873,9 @@ ZONE_CONTAINER* CADSTAR_PCB::getZoneFromCadstarShape(
 
     zone->AddPolygon( polygon.COutline( 0 ) );
 
-    for( int i = 0; i < polygon.HoleCount(0); i++ )
+    for( int i = 0; i < polygon.HoleCount( 0 ); i++ )
     {
-        zone->AddPolygon( polygon.CHole( 0, i ) );        
+        zone->AddPolygon( polygon.CHole( 0, i ) );
     }
 
     return zone;
@@ -577,10 +883,10 @@ ZONE_CONTAINER* CADSTAR_PCB::getZoneFromCadstarShape(
 
 
 SHAPE_POLY_SET CADSTAR_PCB::getPolySetFromCadstarShape(
-        const SHAPE& aCadstarShape, const int& aLineThickness )
+        const SHAPE& aCadstarShape, const int& aLineThickness, BOARD_ITEM_CONTAINER* aContainer )
 {
     std::vector<DRAWSEGMENT*> outlineSegments =
-            getDrawSegmentsFromVertices( aCadstarShape.Vertices );
+            getDrawSegmentsFromVertices( aCadstarShape.Vertices, aContainer );
 
     SHAPE_POLY_SET polySet( getLineChainFromDrawsegments( outlineSegments ) );
 
@@ -611,7 +917,7 @@ SHAPE_POLY_SET CADSTAR_PCB::getPolySetFromCadstarShape(
 
     //Make a new polyset with no holes
     //TODO: Using strictly simple to be safe, but need to find out if PM_FAST works okay
-    polySet.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE ); 
+    polySet.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
 
     return polySet;
 }
@@ -622,19 +928,37 @@ SHAPE_LINE_CHAIN CADSTAR_PCB::getLineChainFromDrawsegments(
 {
     SHAPE_LINE_CHAIN lineChain;
 
-    for( DRAWSEGMENT* dsP : aDrawsegments )
+    for( DRAWSEGMENT* ds : aDrawsegments )
     {
-        switch( dsP->GetShape() )
+        switch( ds->GetShape() )
         {
         case STROKE_T::S_ARC:
         {
-            SHAPE_ARC arc( dsP->GetCenter(), dsP->GetArcStart(), (double) dsP->GetAngle() / 10.0 );
-            lineChain.Append( arc );
+            if( ds->GetClass() == wxT( "MGRAPHIC" ) )
+            {
+                EDGE_MODULE* em = (EDGE_MODULE*) ds;
+                SHAPE_ARC    arc( em->GetStart0(), em->GetEnd0(), (double) em->GetAngle() / 10.0 );
+                lineChain.Append( arc );
+            }
+            else
+            {
+                SHAPE_ARC arc( ds->GetCenter(), ds->GetArcStart(), (double) ds->GetAngle() / 10.0 );
+                lineChain.Append( arc );
+            }
         }
         break;
         case STROKE_T::S_SEGMENT:
-            lineChain.Append( dsP->GetStartX(), dsP->GetStartY() );
-            lineChain.Append( dsP->GetEndX(), dsP->GetEndY() );
+            if( ds->GetClass() == wxT( "MGRAPHIC" ) )
+            {
+                EDGE_MODULE* em = (EDGE_MODULE*) ds;
+                lineChain.Append( em->GetStart0().x, em->GetStart0().y );
+                lineChain.Append( em->GetEnd0().x, em->GetEnd0().y );
+            }
+            else
+            {
+                lineChain.Append( ds->GetStartX(), ds->GetStartY() );
+                lineChain.Append( ds->GetEndX(), ds->GetEndY() );
+            }
             break;
 
         default:
@@ -648,13 +972,178 @@ SHAPE_LINE_CHAIN CADSTAR_PCB::getLineChainFromDrawsegments(
 }
 
 
+void CADSTAR_PCB::addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
+        const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aModule, const wxString& aAttributeValue )
+{
+    TEXTE_MODULE* txt;
+
+    if( aCadstarAttributeID == COMPONENT_NAME_ATTRID )
+        txt = &aModule->Reference(); //text should be set outside this function
+    else if( aCadstarAttributeID == PART_NAME_ATTRID )
+    {
+        if( aModule->Value().GetText().IsEmpty() )
+        {
+            // Use PART_NAME_ATTRID as the value is value field is blank
+            aModule->SetValue( aAttributeValue );
+            txt = &aModule->Value();
+        }
+        else
+        {
+            txt = new TEXTE_MODULE( aModule );
+            aModule->Add( txt );
+            txt->SetText( aAttributeValue );
+        }
+        txt->SetVisible( false ); //make invisible to avoid clutter.
+    }
+    else if( aCadstarAttributeID != COMPONENT_NAME_2_ATTRID
+             && getAttributeName( aCadstarAttributeID ) == wxT( "Value" ) )
+    {
+        if( !aModule->Value().GetText().IsEmpty() )
+        {
+            //copy the object
+            aModule->Add( new TEXTE_MODULE( aModule->Value() ) );
+        }
+
+        aModule->SetValue( aAttributeValue );
+        txt = &aModule->Value();
+        txt->SetVisible( false ); //make invisible to avoid clutter.
+    }
+    else
+    {
+        txt = new TEXTE_MODULE( aModule );
+        aModule->Add( txt );
+        txt->SetText( aAttributeValue );
+        txt->SetVisible( false ); //make all user attributes invisible to avoid clutter.
+        //TODO: Future improvement - allow user to decide what to do with attributes
+    }
+
+    wxPoint rotatedTextPos = getKiCadPoint( aCadstarAttrLoc.Position ) - aModule->GetPosition();
+    RotatePoint( &rotatedTextPos, -aModule->GetOrientation() );
+
+    txt->SetTextPos( getKiCadPoint( aCadstarAttrLoc.Position ) );
+    txt->SetPos0( rotatedTextPos );
+    txt->SetLayer( getKiCadLayer( aCadstarAttrLoc.LayerID ) );
+    txt->SetMirrored( aCadstarAttrLoc.Mirror );
+    txt->SetTextAngle( getKiCadAngle( aCadstarAttrLoc.OrientAngle ) - aModule->GetOrientation() );
+
+    TEXTCODE tc = getTextCode( aCadstarAttrLoc.TextCodeID );
+
+    txt->SetTextThickness( getKiCadLength( tc.LineWidth ) );
+    txt->SetTextSize( { getKiCadLength( tc.Width ), getKiCadLength( tc.Height ) } );
+
+    switch( aCadstarAttrLoc.Alignment )
+    {
+    case ALIGNMENT::NO_ALIGNMENT: // Default for Single line text is Bottom Left
+    case ALIGNMENT::BOTTOMLEFT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+
+    case ALIGNMENT::BOTTOMCENTER:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        break;
+
+    case ALIGNMENT::BOTTOMRIGHT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+
+    case ALIGNMENT::CENTERLEFT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+
+    case ALIGNMENT::CENTERCENTER:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        break;
+
+    case ALIGNMENT::CENTERRIGHT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+
+    case ALIGNMENT::TOPLEFT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+
+    case ALIGNMENT::TOPCENTER:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        break;
+
+    case ALIGNMENT::TOPRIGHT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+
+    default:
+        wxASSERT_MSG( true, "Unknown Aligment - needs review!" );
+    }
+
+    //TODO Handle different font types when KiCad can support it.
+}
+
+
 int CADSTAR_PCB::getLineThickness( const LINECODE_ID& aCadstarLineCodeID )
 {
-    if( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID )
-            == Assignments.Codedefs.LineCodes.end() )
-        return mBoard->GetDesignSettings().GetLineThickness( PCB_LAYER_ID::Edge_Cuts );
-    else
-        return Assignments.Codedefs.LineCodes[aCadstarLineCodeID].Width * KiCadUnitMultiplier;
+
+    wxCHECK( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID )
+                     != Assignments.Codedefs.LineCodes.end(),
+            mBoard->GetDesignSettings().GetLineThickness( PCB_LAYER_ID::Edge_Cuts ) );
+
+    return getKiCadLength( Assignments.Codedefs.LineCodes.at( aCadstarLineCodeID ).Width );
+}
+
+
+CADSTAR_PCB::TEXTCODE CADSTAR_PCB::getTextCode( const TEXTCODE_ID& aCadstarTextCodeID )
+{
+    wxCHECK( Assignments.Codedefs.TextCodes.find( aCadstarTextCodeID )
+                     != Assignments.Codedefs.TextCodes.end(),
+            TEXTCODE() );
+
+    return Assignments.Codedefs.TextCodes.at( aCadstarTextCodeID );
+}
+
+
+CADSTAR_PCB::PADCODE CADSTAR_PCB::getPadCode( const PADCODE_ID& aCadstarPadCodeID )
+{
+    wxCHECK( Assignments.Codedefs.PadCodes.find( aCadstarPadCodeID )
+                     != Assignments.Codedefs.PadCodes.end(),
+            PADCODE() );
+
+    return Assignments.Codedefs.PadCodes.at( aCadstarPadCodeID );
+}
+
+
+wxString CADSTAR_PCB::getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID )
+{
+    wxCHECK( Assignments.Codedefs.AttributeNames.find( aCadstarAttributeID )
+                     != Assignments.Codedefs.AttributeNames.end(),
+            wxEmptyString );
+
+    return Assignments.Codedefs.AttributeNames.at( aCadstarAttributeID ).Name;
+}
+
+
+wxString CADSTAR_PCB::getAttributeValue( const ATTRIBUTE_ID& aCadstarAttributeID,
+        const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>&       aCadstarAttributeMap )
+{
+    wxCHECK( aCadstarAttributeMap.find( aCadstarAttributeID ) != aCadstarAttributeMap.end(),
+            wxEmptyString );
+
+    return aCadstarAttributeMap.at( aCadstarAttributeID ).Value;
+}
+
+
+CADSTAR_PCB::PART CADSTAR_PCB::getPart( const PART_ID& aCadstarPartID )
+{
+    wxCHECK( Parts.PartDefinitions.find( aCadstarPartID ) != Parts.PartDefinitions.end(),
+            PART() );
+
+    return Parts.PartDefinitions.at( aCadstarPartID );
 }
 
 
@@ -680,71 +1169,42 @@ PCB_LAYER_ID CADSTAR_PCB::getKiCadCopperLayerID( unsigned int aLayerNum )
 {
     switch( aLayerNum )
     {
-    case 1:
-        return PCB_LAYER_ID::F_Cu;
-    case 2:
-        return PCB_LAYER_ID::In1_Cu;
-    case 3:
-        return PCB_LAYER_ID::In2_Cu;
-    case 4:
-        return PCB_LAYER_ID::In3_Cu;
-    case 5:
-        return PCB_LAYER_ID::In4_Cu;
-    case 6:
-        return PCB_LAYER_ID::In5_Cu;
-    case 7:
-        return PCB_LAYER_ID::In6_Cu;
-    case 8:
-        return PCB_LAYER_ID::In7_Cu;
-    case 9:
-        return PCB_LAYER_ID::In8_Cu;
-    case 10:
-        return PCB_LAYER_ID::In9_Cu;
-    case 11:
-        return PCB_LAYER_ID::In10_Cu;
-    case 12:
-        return PCB_LAYER_ID::In11_Cu;
-    case 13:
-        return PCB_LAYER_ID::In12_Cu;
-    case 14:
-        return PCB_LAYER_ID::In13_Cu;
-    case 15:
-        return PCB_LAYER_ID::In14_Cu;
-    case 16:
-        return PCB_LAYER_ID::In15_Cu;
-    case 17:
-        return PCB_LAYER_ID::In16_Cu;
-    case 18:
-        return PCB_LAYER_ID::In17_Cu;
-    case 19:
-        return PCB_LAYER_ID::In18_Cu;
-    case 20:
-        return PCB_LAYER_ID::In19_Cu;
-    case 21:
-        return PCB_LAYER_ID::In20_Cu;
-    case 22:
-        return PCB_LAYER_ID::In21_Cu;
-    case 23:
-        return PCB_LAYER_ID::In22_Cu;
-    case 24:
-        return PCB_LAYER_ID::In23_Cu;
-    case 25:
-        return PCB_LAYER_ID::In24_Cu;
-    case 26:
-        return PCB_LAYER_ID::In25_Cu;
-    case 27:
-        return PCB_LAYER_ID::In26_Cu;
-    case 28:
-        return PCB_LAYER_ID::In27_Cu;
-    case 29:
-        return PCB_LAYER_ID::In28_Cu;
-    case 30:
-        return PCB_LAYER_ID::In29_Cu;
-    case 31:
-        return PCB_LAYER_ID::In30_Cu;
-    case 32:
-        return PCB_LAYER_ID::B_Cu;
+    // clang-format off
+    case 1:   return PCB_LAYER_ID::F_Cu;
+    case 2:   return PCB_LAYER_ID::In1_Cu;
+    case 3:   return PCB_LAYER_ID::In2_Cu;
+    case 4:   return PCB_LAYER_ID::In3_Cu;
+    case 5:   return PCB_LAYER_ID::In4_Cu;
+    case 6:   return PCB_LAYER_ID::In5_Cu;
+    case 7:   return PCB_LAYER_ID::In6_Cu;
+    case 8:   return PCB_LAYER_ID::In7_Cu;
+    case 9:   return PCB_LAYER_ID::In8_Cu;
+    case 10:  return PCB_LAYER_ID::In9_Cu;
+    case 11:  return PCB_LAYER_ID::In10_Cu;
+    case 12:  return PCB_LAYER_ID::In11_Cu;
+    case 13:  return PCB_LAYER_ID::In12_Cu;
+    case 14:  return PCB_LAYER_ID::In13_Cu;
+    case 15:  return PCB_LAYER_ID::In14_Cu;
+    case 16:  return PCB_LAYER_ID::In15_Cu;
+    case 17:  return PCB_LAYER_ID::In16_Cu;
+    case 18:  return PCB_LAYER_ID::In17_Cu;
+    case 19:  return PCB_LAYER_ID::In18_Cu;
+    case 20:  return PCB_LAYER_ID::In19_Cu;
+    case 21:  return PCB_LAYER_ID::In20_Cu;
+    case 22:  return PCB_LAYER_ID::In21_Cu;
+    case 23:  return PCB_LAYER_ID::In22_Cu;
+    case 24:  return PCB_LAYER_ID::In23_Cu;
+    case 25:  return PCB_LAYER_ID::In24_Cu;
+    case 26:  return PCB_LAYER_ID::In25_Cu;
+    case 27:  return PCB_LAYER_ID::In26_Cu;
+    case 28:  return PCB_LAYER_ID::In27_Cu;
+    case 29:  return PCB_LAYER_ID::In28_Cu;
+    case 30:  return PCB_LAYER_ID::In29_Cu;
+    case 31:  return PCB_LAYER_ID::In30_Cu;
+    case 32:  return PCB_LAYER_ID::B_Cu;        
     }
+    // clang-format on
+
     return PCB_LAYER_ID::UNDEFINED_LAYER;
 }
 
@@ -770,8 +1230,7 @@ bool CADSTAR_PCB::isLayerSet( const LAYER_ID& aCadstarLayerID )
 PCB_LAYER_ID CADSTAR_PCB::getKiCadLayer( const LAYER_ID& aCadstarLayerID )
 {
     if( mLayermap.find( aCadstarLayerID ) == mLayermap.end() )
-        return PCB_LAYER_ID::UNDEFINED_LAYER; // TODO need to handle ALLELEC, ALLLAYER, ALLDOC,
-                                        // etc. For now just put unmapped layers here
+        return PCB_LAYER_ID::UNDEFINED_LAYER; //Possibly should be an ASSERT?
     else
         return mLayermap[aCadstarLayerID];
 }
