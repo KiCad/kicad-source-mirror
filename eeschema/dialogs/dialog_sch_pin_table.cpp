@@ -36,11 +36,13 @@ class SCH_PIN_TABLE_DATA_MODEL : public wxGridTableBase, public std::vector<SCH_
 {
 protected:
     std::vector<wxGridCellAttr*> m_nameAttrs;
+    wxGridCellAttr*              m_numberAttr;
     wxGridCellAttr*              m_typeAttr;
     wxGridCellAttr*              m_shapeAttr;
 
 public:
     SCH_PIN_TABLE_DATA_MODEL() :
+            m_numberAttr( nullptr ),
             m_typeAttr( nullptr ),
             m_shapeAttr( nullptr )
     {
@@ -51,12 +53,16 @@ public:
         for( wxGridCellAttr* attr : m_nameAttrs )
             attr->DecRef();
 
+        m_numberAttr->DecRef();
         m_typeAttr->DecRef();
         m_shapeAttr->DecRef();
     }
 
     void BuildAttrs()
     {
+        m_numberAttr = new wxGridCellAttr;
+        m_numberAttr->SetReadOnly( true );
+
         for( const SCH_PIN& pin : *this )
         {
             wxArrayString choices;
@@ -128,7 +134,8 @@ public:
             return m_nameAttrs[ aRow ];
 
         case COL_NUMBER:
-            return nullptr;
+            m_numberAttr->IncRef();
+            return m_numberAttr;
 
         case COL_TYPE:
             m_typeAttr->IncRef();
