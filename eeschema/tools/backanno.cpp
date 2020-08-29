@@ -68,8 +68,7 @@ void SCH_EDITOR_CONTROL::BackAnnotateFootprints( const std::string& aChangedSetO
 
             wxString reference = (UTF8&) ref->second.front().first;
 
-            // Ensure the "fpid" node contains a footprint name,
-            // and get it if exists
+            // Ensure the "fpid" node contains a footprint name, and get it if exists
             if( ref->second.get_child( "fpid" ).size() )
             {
                 wxString tmp = (UTF8&) ref->second.get_child( "fpid" ).front().first;
@@ -87,16 +86,17 @@ void SCH_EDITOR_CONTROL::BackAnnotateFootprints( const std::string& aChangedSetO
                     // Note: it can be not unique (multiple parts per package)
                     // So we *do not* stop the search here
                     SCH_COMPONENT*  component = refs[ii].GetComp();
-                    SCH_FIELD*      fpfield   = component->GetField( FOOTPRINT );
-                    const wxString& oldfp = fpfield->GetText();
+                    SCH_SHEET_PATH* sheetPath = &refs[ii].GetSheetPath();
+                    wxString        oldfp = refs[ii].GetFootprint();
 
-                    if( !oldfp && fpfield->IsVisible() )
-                        fpfield->SetVisible( false );
+                    if( oldfp.IsEmpty() && component->GetField( FOOTPRINT )->IsVisible() )
+                        component->GetField( FOOTPRINT )->SetVisible( false );
 
                     if( oldfp != footprint )
+                    {
                         isChanged = true;
-
-                    fpfield->SetText( footprint );
+                        component->SetFootprint( sheetPath, footprint );
+                    }
                 }
             }
         }
@@ -185,9 +185,9 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
                 // Note: it can be not unique (multiple units per part)
                 // So we *do not* stop the search here
                 SCH_COMPONENT*  component = referencesList[ii].GetComp();
-                SCH_FIELD*      fpfield = component->GetField( FOOTPRINT );
+                SCH_SHEET_PATH* sheetPath = &referencesList[ii].GetSheetPath();
 
-                fpfield->SetText( footprint );
+                component->SetFootprint( sheetPath, footprint );
 
                 if( aForceVisibilityState )
                     component->GetField( FOOTPRINT )->SetVisible( aVisibilityState );

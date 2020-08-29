@@ -1835,8 +1835,18 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
                     NeedRIGHT();
                     break;
 
+                case T_value:
+                    instance.m_Value = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                case T_footprint:
+                    instance.m_Footprint = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
                 default:
-                    Expecting( "path or unit" );
+                    Expecting( "path, unit, value or footprint" );
                 }
             }
 

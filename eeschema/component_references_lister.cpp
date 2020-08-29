@@ -646,11 +646,11 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                         flatList[ii].GetRef(),
                         flatList[ii].m_NumRef,
                         LIB_PART::SubReference( flatList[ii].m_Unit ),
-                        flatList[ii].m_Value->GetText(),
+                        flatList[ii].m_Value,
                         flatList[next].GetRef(),
                         flatList[next].m_NumRef,
                         LIB_PART::SubReference( flatList[next].m_Unit ),
-                        flatList[next].m_Value->GetText() );
+                        flatList[next].m_Value );
 
             aReporter.Report( msg, RPT_SEVERITY_ERROR );
             error++;
@@ -670,6 +670,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibPart,
     m_Entry     = aLibPart;     // Warning: can be nullptr for orphan components
                                 // (i.e. with a symbol library not found)
     m_Unit      = aComponent->GetUnitSelection( &aSheetPath );
+    m_Footprint = aComponent->GetFootprint( &aSheetPath );
     m_SheetPath = aSheetPath;
     m_IsNew     = false;
     m_Flag      = 0;
@@ -688,7 +689,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibPart,
     if( aComponent->GetField( VALUE )->GetText().IsEmpty() )
         aComponent->GetField( VALUE )->SetText( wxT( "~" ) );
 
-    m_Value = aComponent->GetField( VALUE );
+    m_Value = aComponent->GetValue( &aSheetPath );
 }
 
 

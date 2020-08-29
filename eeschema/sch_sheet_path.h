@@ -43,8 +43,14 @@
 struct COMPONENT_INSTANCE_REFERENCE
 {
     KIID_PATH m_Path;
+
+    // Things that can be annotated:
     wxString  m_Reference;
     int       m_Unit;
+
+    // Things that can be back-annotated:
+    wxString  m_Value;
+    wxString  m_Footprint;
 };
 
 
@@ -277,19 +283,6 @@ public:
                                  bool aIncludePowerSymbols = true ) const;
 
     /**
-     * Function SetFootprintField
-     * searches last sheet in the path for a component with \a aReference and set the footprint
-     * field to \a aFootPrint if found.
-     *
-     * @param aReference The reference designator of the component.
-     * @param aFootPrint The value to set the footprint field.
-     * @param aSetVisible The value to set the field visibility flag.
-     * @return true if \a aReference was found otherwise false.
-     */
-    bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
-                                bool aSetVisible );
-
-    /**
      * Function TestForRecursion
      *
      * test the SCH_SHEET_PATH file names to check adding the sheet stored in the file
@@ -408,19 +401,6 @@ public:
      */
     void GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                                  bool aIncludePowerSymbols = true ) const;
-
-    /**
-     * Function SetFootprintField
-     * searches all the sheets for a component with \a aReference and set the footprint
-     * field to \a aFootPrint if found.
-     *
-     * @param aReference The reference designator of the component.
-     * @param aFootPrint The value to set the footprint field.
-     * @param aSetVisible The value to set the field visibility flag.
-     * @return True if \a aReference was found otherwise false.
-     */
-    bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
-                                bool aSetVisible );
 
     /**
      * Function TestForRecursion

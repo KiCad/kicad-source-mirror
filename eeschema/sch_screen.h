@@ -453,19 +453,6 @@ public:
     SCH_TEXT* GetLabel( const wxPoint& aPosition, int aAccuracy = 0 );
 
     /**
-     * Search this screen for a symbol with \a aReference and set the footprint field to
-     * \a aFootPrint if found.
-     *
-     * @param aSheetPath The sheet path used to look up the reference designator.
-     * @param aReference The reference designator of the component.
-     * @param aFootPrint The value to set the footprint field.
-     * @param aSetVisible The value to set the field visibility flag.
-     * @return True if \a aReference was found otherwise false.
-     */
-    bool SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxString& aReference,
-                                const wxString& aFootPrint, bool aSetVisible );
-
-    /**
      * Fetch a list of unique #LIB_PART object pointers required to properly render each
      * #SCH_COMPONENT in this schematic.
      *

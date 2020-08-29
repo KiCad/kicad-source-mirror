@@ -514,7 +514,7 @@ public:
      *
      * @return the reference for the sheet.
      */
-    const wxString GetRef( const SCH_SHEET_PATH* aSheet, bool aIncludeUnit = false );
+    const wxString GetRef( const SCH_SHEET_PATH* aSheet, bool aIncludeUnit = false ) const;
 
     /**
      * Set the reference for the given sheet path for this symbol.
@@ -538,16 +538,27 @@ public:
      *              timestamp&gt like /05678E50/A23EF560)
      * @param aRef is the local reference like C45, R56
      * @param aUnit is the unit selection used for symbols with multiple units per package.
+     * @param aValue is the value used for this instance
+     * @param aFootprint is the footprint used for this instance (which might have different
+     *                   hole spacing or other board-specific changes from other intances)
      */
     void AddHierarchicalReference( const KIID_PATH& aPath,
                                    const wxString&  aRef,
-                                   int              aUnit );
+                                   int              aUnit,
+                                   const wxString&  aValue = wxEmptyString,
+                                   const wxString&  aFootprint = wxEmptyString );
 
-    // returns the unit selection, for the given sheet path.
+    // Returns the instance-specific unit selection for the given sheet path.
     int GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const;
-
-    // Set the unit selection, for the given sheet path.
     void SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelection );
+
+    // Returns the instance-specific value for the given sheet path.
+    const wxString GetValue( const SCH_SHEET_PATH* sheet ) const;
+    void SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue );
+
+    // Returns the instance-specific footprint assignment for the given sheet path.
+    const wxString GetFootprint( const SCH_SHEET_PATH* sheet ) const;
+    void SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFootprint );
 
     // Geometric transforms (used in block operations):
 

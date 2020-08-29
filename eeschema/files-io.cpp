@@ -926,7 +926,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                     SCH_COMPONENT*       cmp = static_cast<SCH_COMPONENT*>( item );
 
                     // Update footprint LIB_ID to point to the imported Eagle library
-                    auto fpField = cmp->GetField( FOOTPRINT );
+                    SCH_FIELD* fpField = cmp->GetField( FOOTPRINT );
 
                     if( !fpField->GetText().IsEmpty() )
                     {

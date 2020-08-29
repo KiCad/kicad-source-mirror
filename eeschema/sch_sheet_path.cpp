@@ -309,18 +309,6 @@ void SCH_SHEET_PATH::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP& aRefL
 }
 
 
-bool SCH_SHEET_PATH::SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
-                                            bool aSetVisible )
-{
-    SCH_SCREEN* screen = LastScreen();
-
-    if( screen == NULL )
-        return false;
-
-    return screen->SetComponentFootprint( this, aReference, aFootPrint, aSetVisible );
-}
-
-
 bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
 {
     return m_current_hash == d1.GetCurrentHash();
@@ -704,18 +692,6 @@ void SCH_SHEET_LIST::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefL
 }
 
 
-bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
-                                            const wxString& aFootPrint, bool aSetVisible )
-{
-    bool found = false;
-
-    for( SCH_SHEET_PATH& sheet : *this )
-        found = sheet.SetComponentFootprint( aReference, aFootPrint, aSetVisible );
-
-    return found;
-}
-
-
 bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
                                        const wxString& aDestFileName )
 {
@@ -767,7 +743,7 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( SCH_SCREEN* aScreen )
 
 
 void SCH_SHEET_LIST::UpdateSymbolInstances(
-        const std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances )
+                                const std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances )
 {
     SCH_REFERENCE_LIST symbolInstances;
 
@@ -777,15 +753,14 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
 
     // Calculating the name of a path is somewhat expensive; on large designs with many components
     // this can blow up to a serious amount of time when loading the schematic
-    auto getName =
-            [&pathNameCache]( const KIID_PATH& aPath ) -> const wxString&
-            {
-                if( pathNameCache.count( aPath ) )
-                    return pathNameCache.at( aPath );
+    auto getName = [&pathNameCache]( const KIID_PATH& aPath ) -> const wxString&
+                   {
+                       if( pathNameCache.count( aPath ) )
+                           return pathNameCache.at( aPath );
 
-                pathNameCache[aPath] = aPath.AsString();
-                return pathNameCache[aPath];
-            };
+                       pathNameCache[aPath] = aPath.AsString();
+                       return pathNameCache[aPath];
+                   };
 
     for( size_t i = 0; i < symbolInstances.GetCount(); i++ )
     {
@@ -794,11 +769,10 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
         wxString path = symbolInstances[i].GetPath();
 
         auto it = std::find_if( aSymbolInstances.begin(), aSymbolInstances.end(),
-                    [ path, &getName ]( const COMPONENT_INSTANCE_REFERENCE& r ) -> bool
-                    {
-                        return path == getName( r.m_Path );
-                    }
-                );
+                                [ path, &getName ]( const COMPONENT_INSTANCE_REFERENCE& r ) -> bool
+                                {
+                                    return path == getName( r.m_Path );
+                                } );
 
         if( it == aSymbolInstances.end() )
         {
@@ -813,7 +787,8 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
         // Symbol instance paths are stored and looked up in memory with the root path so use
         // the full path here.
         symbol->AddHierarchicalReference( symbolInstances[i].GetSheetPath().Path(),
-                it->m_Reference, it->m_Unit );
+                                          it->m_Reference, it->m_Unit, it->m_Value,
+                                          it->m_Footprint );
         symbol->GetField( REFERENCE )->SetText( it->m_Reference );
     }
 }

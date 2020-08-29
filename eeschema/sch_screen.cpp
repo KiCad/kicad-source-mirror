@@ -1084,49 +1084,6 @@ SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
 }
 
 
-bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxString& aReference,
-                                        const wxString& aFootPrint, bool aSetVisible )
-{
-    SCH_COMPONENT* component;
-    bool           found = false;
-
-    for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
-    {
-        component = static_cast<SCH_COMPONENT*>( item );
-
-        if( aReference.CmpNoCase( component->GetRef( aSheetPath ) ) == 0 )
-        {
-            // Found: Init Footprint Field
-
-            /* Give a reasonable value to the field position and
-             * orientation, if the text is empty at position 0, because
-             * it is probably not yet initialized
-             */
-            SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
-            if( fpfield->GetText().IsEmpty()
-              && ( fpfield->GetTextPos() == component->GetPosition() ) )
-            {
-                fpfield->SetTextAngle( component->GetField( VALUE )->GetTextAngle() );
-                fpfield->SetTextPos( component->GetField( VALUE )->GetTextPos() );
-                fpfield->SetTextSize( component->GetField( VALUE )->GetTextSize() );
-
-                if( fpfield->GetTextAngle() == 0.0 )
-                    fpfield->Offset( wxPoint( 0, Mils2iu( 100 ) ) );
-                else
-                    fpfield->Offset( wxPoint( Mils2iu( 100 ), 0 ) );
-            }
-
-            fpfield->SetText( aFootPrint );
-            fpfield->SetVisible( aSetVisible );
-
-            found = true;
-        }
-    }
-
-    return found;
-}
-
-
 void SCH_SCREEN::AddLibSymbol( LIB_PART* aLibSymbol )
 {
     wxCHECK( aLibSymbol, /* void */ );

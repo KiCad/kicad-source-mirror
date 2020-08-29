@@ -33,6 +33,7 @@ end
 extends
 fill
 font
+footprint
 global_label
 hide
 hierarchical_label
@@ -117,6 +118,7 @@ type
 unit
 unspecified
 uuid
+value
 version
 width
 wire

@@ -20,8 +20,6 @@
  */
 
 #include <algorithm>
-#include <boost/algorithm/string/join.hpp>
-#include <cctype>
 
 // For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
 // base64 code.
@@ -29,7 +27,6 @@
 #include <wx/base64.h>
 #include <wx/mstream.h>
 #include <advanced_config.h>
-#include <build_version.h>
 #include <pgm_base.h>
 #include <trace_helpers.h>
 #include <sch_bitmap.h>
@@ -183,22 +180,11 @@ static float getPinAngle( int aOrientation )
 {
     switch( aOrientation )
     {
-    case PIN_RIGHT:
-        return 0.0;
-
-    case PIN_LEFT:
-        return 180.0;
-
-    case PIN_UP:
-        return 90.0;
-
-    case PIN_DOWN:
-        return 270.0;
-
-    default:
-        wxFAIL_MSG( "Missing symbol library pin orientation type" );
-
-    return 0.0;
+    case PIN_RIGHT: return 0.0;
+    case PIN_LEFT:  return 180.0;
+    case PIN_UP:    return 90.0;
+    case PIN_DOWN:  return 270.0;
+    default:        wxFAIL_MSG( "Missing symbol library pin orientation type" ); return 0.0;
     }
 }
 
@@ -726,9 +712,11 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
             {
                 m_out->Print( 2, "(path %s\n",
                               m_out->Quotew( instances[i].GetPath() ).c_str() );
-                m_out->Print( 3, "(reference %s) (unit %d)\n",
+                m_out->Print( 3, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
                               m_out->Quotew( instances[i].GetRef() ).c_str(),
-                              instances[i].GetUnit() );
+                              instances[i].GetUnit(),
+                              m_out->Quotew( instances[i].GetValue() ).c_str(),
+                              m_out->Quotew( instances[i].GetFootprint() ).c_str() );
                 m_out->Print( 2, ")\n" );
             }
         }

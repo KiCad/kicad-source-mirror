@@ -44,20 +44,14 @@
  */
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200310  // Initial version.  Sheet fields were named
                                                  // incorectly (using symbol field vocabulary).
-
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200506  // Used "page" instead of "paper" for paper
                                                  // sizes.
-
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200512  // Add support for exclude from BOM.
-
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200602  // Add support for exclude from board.
-
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200608  // Add support for bus and junction properties.
-
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200618  // Disallow duplicate field ids.
-
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200714  // Add alternate pin definitions.
-
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200820
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20200827  // Remove host tag
 
-#define SEXPR_SCHEMATIC_FILE_VERSION 20200827   // Remove host tag
+#define SEXPR_SCHEMATIC_FILE_VERSION 20200828   // Add footprint to symbol_instances.

@@ -301,9 +301,9 @@ int ERC_TESTER::TestMultiunitFootprints()
     SCH_MULTI_UNIT_REFERENCE_MAP refMap;
     sheets.GetMultiUnitComponents( refMap, true );
 
-    for( auto& component : refMap )
+    for( std::pair<const wxString, SCH_REFERENCE_LIST>& component : refMap )
     {
-        auto& refList = component.second;
+        SCH_REFERENCE_LIST& refList = component.second;
 
         if( refList.GetCount() == 0 )
         {
@@ -316,10 +316,10 @@ int ERC_TESTER::TestMultiunitFootprints()
         wxString       unitName;
         wxString       unitFP;
 
-        for( unsigned i = 0; i < component.second.GetCount(); ++i )
+        for( unsigned i = 0; i < refList.GetCount(); ++i )
         {
             SCH_SHEET_PATH sheetPath = refList.GetItem( i ).GetSheetPath();
-            unitFP = refList.GetItem( i ).GetComp()->GetField( FOOTPRINT )->GetText();
+            unitFP = refList.GetItem( i ).GetFootprint();
 
             if( !unitFP.IsEmpty() )
             {
@@ -329,12 +329,12 @@ int ERC_TESTER::TestMultiunitFootprints()
             }
         }
 
-        for( unsigned i = 0; i < component.second.GetCount(); ++i )
+        for( unsigned i = 0; i < refList.GetCount(); ++i )
         {
             SCH_REFERENCE& secondRef = refList.GetItem( i );
             SCH_COMPONENT* secondUnit = secondRef.GetComp();
             wxString       secondName = secondUnit->GetRef( &secondRef.GetSheetPath(), true );
-            const wxString secondFp = secondUnit->GetField( FOOTPRINT )->GetText();
+            const wxString secondFp = secondRef.GetFootprint();
             wxString       msg;
 
             if( !secondFp.IsEmpty() && unitFP != secondFp )

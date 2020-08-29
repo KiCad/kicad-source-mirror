@@ -80,7 +80,6 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
 
     getChangeList();
     checkForUnusedSymbols();
-    checkSharedSchematicErrors();
 
     applyChangelist();
 
@@ -295,88 +294,6 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
 }
 
 
-bool BACK_ANNOTATE::checkReuseViolation( PCB_MODULE_DATA& aFirst, PCB_MODULE_DATA& aSecond )
-{
-    if( m_processFootprints && aFirst.m_footprint != aSecond.m_footprint )
-        return false;
-
-    if( m_processValues && aFirst.m_value != aSecond.m_value )
-        return false;
-
-    return true;
-}
-
-void BACK_ANNOTATE::checkSharedSchematicErrors()
-{
-    std::sort( m_changelist.begin(), m_changelist.end(),
-               []( CHANGELIST_ITEM& a, CHANGELIST_ITEM& b )
-               {
-                   return a.first.GetComp() > b.first.GetComp();
-               } );
-
-    // We don't check that if no footprints or values updating
-    if( !m_processFootprints && !m_processValues )
-        return;
-
-    // We will count how many times every component used in our changelist
-    // Component in this case is SCH_COMPONENT which can be used by more than one symbol
-    int usageCount = 1;
-
-    for( auto it = m_changelist.begin(); it != m_changelist.end(); ++it )
-    {
-        int compUsage = it->first.GetComp()->GetInstanceReferences().size();
-
-        if( compUsage == 1 )
-            continue;
-
-        // If that's not the last reference in list and references share same component
-        if( ( it + 1 ) != m_changelist.end() && it->first.GetComp() == ( it + 1 )->first.GetComp() )
-        {
-            ++usageCount;
-
-            if( !checkReuseViolation( *it->second, *( it + 1 )->second ) )
-            {
-                // Refs share same component but have different values or footprints
-                it->first.GetComp()->SetFlags( SKIP_STRUCT );
-
-                wxString msg;
-                msg.Printf( _( "\"%s\" and \"%s\" use the same schematic symbol.\n"
-                               "They cannot have different footprints or values." ),
-                            ( it + 1 )->second->m_ref,
-                            it->second->m_ref );
-                m_reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
-            }
-        }
-        else
-        {
-            /* Next ref uses different component, so we count all components number for current
-            one. We compare that number to stored in the component itself. If that differs, it
-            means that this particular component is reused in some other project. */
-            if( !m_ignoreOtherProjects && compUsage > usageCount )
-            {
-                SCH_COMPONENT*  comp = it->first.GetComp();
-                PCB_MODULE_DATA tmp{ "",
-                                     comp->GetField( FOOTPRINT )->GetText(),
-                                     comp->GetField( VALUE )->GetText(),
-                                     {} };
-
-                if( !checkReuseViolation( tmp, *it->second ) )
-                {
-                    it->first.GetComp()->SetFlags( SKIP_STRUCT );
-
-                    wxString msg;
-                    msg.Printf( _( "Unable to change \"%s\" footprint or value because associated"
-                                   " symbol is reused in the another project" ),
-                                it->second->m_ref );
-                    m_reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
-                }
-            }
-            usageCount = 1;
-        }
-    }
-}
-
-
 void BACK_ANNOTATE::applyChangelist()
 {
     std::set<wxString> handledNetChanges;
@@ -389,8 +306,8 @@ void BACK_ANNOTATE::applyChangelist()
         PCB_MODULE_DATA& module = *item.second;
         SCH_COMPONENT*   comp = ref.GetComp();
         SCH_SCREEN*      screen = ref.GetSheetPath().LastScreen();
-        wxString         oldFootprint = comp->GetField( FOOTPRINT )->GetText();
-        wxString         oldValue = comp->GetField( VALUE )->GetText();
+        wxString         oldFootprint = ref.GetFootprint();
+        wxString         oldValue = ref.GetValue();
         bool             skip = ( ref.GetComp()->GetFlags() & SKIP_STRUCT ) > 0;
 
         if( m_processReferences && ref.GetRef() != module.m_ref && !skip )
@@ -415,14 +332,14 @@ void BACK_ANNOTATE::applyChangelist()
             ++m_changesCount;
             msg.Printf( _( "Change %s footprint from \"%s\" to \"%s\"." ),
                         ref.GetFullRef(),
-                        comp->GetField( FOOTPRINT )->GetText(),
+                        oldFootprint,
                         module.m_footprint );
 
             if( !m_dryRun )
             {
                 m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
-                ref.GetComp()->GetField( FOOTPRINT )->SetText( module.m_footprint );
+                comp->SetFootprint( &ref.GetSheetPath(), module.m_footprint );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -433,14 +350,14 @@ void BACK_ANNOTATE::applyChangelist()
             ++m_changesCount;
             msg.Printf( _( "Change %s value from \"%s\" to \"%s\"." ),
                         ref.GetFullRef(),
-                        comp->GetField( VALUE )->GetText(),
+                        oldValue,
                         module.m_value );
 
             if( !m_dryRun )
             {
                 m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
-                comp->GetField( VALUE )->SetText( module.m_value );
+                comp->SetValue( &ref.GetSheetPath(), module.m_value );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );

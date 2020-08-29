@@ -54,12 +54,12 @@ class SCH_REFERENCE
                                         ///< used to annotate by X or Y position
     int            m_Unit;              ///< The unit number for components with multiple parts
                                         ///< per package.
+    wxString       m_Value;             ///< The component value.
+    wxString       m_Footprint;         ///< The footprint assigned.
     SCH_SHEET_PATH m_SheetPath;         ///< The sheet path for this reference.
     bool           m_IsNew;             ///< True if not yet annotated.
     int            m_SheetNum;          ///< The sheet number for the reference.
     KIID           m_Uuid;              ///< UUID of the component.
-    EDA_TEXT*      m_Value;             ///< The component value of the reference.  It is the
-                                        ///< same for all instances.
     int            m_NumRef;            ///< The numeric part of the reference designator.
     int            m_Flag;
 
@@ -74,7 +74,6 @@ public:
         m_Entry           = NULL;
         m_Unit            = 0;
         m_IsNew           = false;
-        m_Value           = NULL;
         m_NumRef          = 0;
         m_Flag            = 0;
         m_SheetNum        = 0;
@@ -92,8 +91,13 @@ public:
     SCH_SHEET_PATH& GetSheetPath()             { return m_SheetPath; }
 
     int GetUnit() const                        { return m_Unit; }
-
     void SetUnit( int aUnit )                  { m_Unit = aUnit; }
+
+    const wxString GetValue() const            { return m_Value; }
+    void SetValue( const wxString& aValue )    { m_Value = aValue; }
+
+    const wxString GetFootprint() const        { return m_Footprint; }
+    void SetFootprint( const wxString& aFP )   { m_Footprint = aFP; }
 
     void SetSheetNumber( int aSheetNumber )    { m_SheetNum = aSheetNumber; }
 
@@ -168,7 +172,7 @@ public:
 
     int CompareValue( const SCH_REFERENCE& item ) const
     {
-        return m_Value->GetText().Cmp( item.m_Value->GetText() );
+        return m_Value.Cmp( item.m_Value );
     }
 
     int CompareRef( const SCH_REFERENCE& item ) const

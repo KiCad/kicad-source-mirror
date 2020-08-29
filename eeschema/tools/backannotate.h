@@ -122,15 +122,6 @@ private:
     bool                         m_appendUndo;
 
     /**
-     * @brief Check if modules has different data. Check only if corresponding \ref m_boardAdapter
-     * flag is rised
-     * @param aFirst first module to compare
-     * @param aSecond second module to compare
-     * @return true if no violation
-     */
-    bool checkReuseViolation( PCB_MODULE_DATA& aFirst, PCB_MODULE_DATA& aSecond );
-
-    /**
      * @brief Parse netlist sent over KiWay epress mail interface and fill \ref m_pcbModules
      * @param aPayload - netlist from PCBnew
      * @return number of errors during parsing
@@ -145,11 +136,6 @@ private:
      * \ref m_refs must be sorted by path
      */
     void checkForUnusedSymbols();
-
-    /**
-     * @brief Check for errors connected to reusing schematic in project or between projects
-     */
-    void checkSharedSchematicErrors();
 
     /**
     * @brief Apply changelist to the schematic

@@ -369,17 +369,21 @@ void SCH_COMPONENT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 
 
 void SCH_COMPONENT::AddHierarchicalReference( const KIID_PATH& aPath, const wxString& aRef,
-                                              int aUnit )
+                                              int aUnit, const wxString& aValue,
+                                              const wxString& aFootprint )
 {
     // Search for an existing path and remove it if found (should not occur)
     for( unsigned ii = 0; ii < m_instanceReferences.size(); ii++ )
     {
         if( m_instanceReferences[ii].m_Path == aPath )
         {
-            wxLogTrace( traceSchSheetPaths,
-                    "Removing symbol instance:\n  sheet path %s\n  reference %s, unit %d\n  from symbol %s.",
-                    aPath.AsString(), m_instanceReferences[ii].m_Reference,
-                    m_instanceReferences[ii].m_Unit, m_Uuid.AsString() );
+            wxLogTrace( traceSchSheetPaths, "Removing symbol instance:\n"
+                                            "  sheet path %s\n"
+                                            "  reference %s, unit %d from symbol %s.",
+                                            aPath.AsString(),
+                                            m_instanceReferences[ii].m_Reference,
+                                            m_instanceReferences[ii].m_Unit,
+                                            m_Uuid.AsString() );
 
             m_instanceReferences.erase( m_instanceReferences.begin() + ii );
             ii--;
@@ -390,16 +394,22 @@ void SCH_COMPONENT::AddHierarchicalReference( const KIID_PATH& aPath, const wxSt
     instance.m_Path = aPath;
     instance.m_Reference = aRef;
     instance.m_Unit = aUnit;
+    instance.m_Value = aValue;
+    instance.m_Footprint = aFootprint;
 
-    wxLogTrace( traceSchSheetPaths,
-            "Adding symbol instance:\n  sheet path %s\n  reference %s, unit %d\n  to symbol %s.",
-            aPath.AsString(), aRef, aUnit, m_Uuid.AsString() );
+    wxLogTrace( traceSchSheetPaths, "Adding symbol instance:\n"
+                                    "  sheet path %s\n"
+                                    "  reference %s, unit %d to symbol %s.",
+                                    aPath.AsString(),
+                                    aRef,
+                                    aUnit,
+                                    m_Uuid.AsString() );
 
     m_instanceReferences.push_back( instance );
 }
 
 
-const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUnit )
+const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUnit ) const
 {
     KIID_PATH path = sheet->Path();
     wxString  ref;
@@ -408,10 +418,6 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
     {
         if( instance.m_Path == path )
         {
-            wxLogTrace( traceSchSheetPaths,
-                    "Setting symbol instance:\n  sheet path %s\n  reference %s, unit %d\n  found in symbol %s.",
-                    path.AsString(), instance.m_Reference, instance.m_Unit, m_Uuid.AsString() );
-
             ref = instance.m_Reference;
             break;
         }
@@ -423,7 +429,7 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
     // the same component references, but perhaps this is best.
     if( ref.IsEmpty() && !GetField( REFERENCE )->GetText().IsEmpty() )
     {
-        SetRef( sheet, GetField( REFERENCE )->GetText() );
+        const_cast<SCH_COMPONENT*>( this )->SetRef( sheet, GetField( REFERENCE )->GetText() );
         ref = GetField( REFERENCE )->GetText();
     }
 
@@ -541,7 +547,6 @@ int SCH_COMPONENT::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelection )
 {
     KIID_PATH path = aSheet->Path();
-    bool      notInArray = true;
 
     // check to see if it is already there before inserting it
     for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
@@ -549,12 +554,86 @@ void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSel
         if( instance.m_Path == path )
         {
             instance.m_Unit = aUnitSelection;
-            notInArray = false;
+            return;
         }
     }
 
-    if( notInArray )
-        AddHierarchicalReference( path, m_prefix, aUnitSelection );
+    // didn't find it; better add it
+    AddHierarchicalReference( path, m_prefix, aUnitSelection );
+}
+
+
+const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet ) const
+{
+    KIID_PATH path = sheet->Path();
+
+    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    {
+        if( instance.m_Path == path && !instance.m_Footprint.IsEmpty() )
+        {
+            SCH_FIELD dummy( wxDefaultPosition, VALUE, const_cast<SCH_COMPONENT*>( this ) );
+            dummy.SetText( instance.m_Value );
+            return dummy.GetShownText();
+        }
+    }
+
+    return GetField( VALUE )->GetShownText();
+}
+
+
+void SCH_COMPONENT::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue )
+{
+    KIID_PATH path = sheet->Path();
+
+    // check to see if it is already there before inserting it
+    for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    {
+        if( instance.m_Path == path )
+        {
+            instance.m_Value = aValue;
+            return;
+        }
+    }
+
+    // didn't find it; better add it
+    AddHierarchicalReference( path, m_prefix, m_unit, aValue, wxEmptyString );
+}
+
+
+const wxString SCH_COMPONENT::GetFootprint( const SCH_SHEET_PATH* sheet ) const
+{
+    KIID_PATH path = sheet->Path();
+
+    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    {
+        if( instance.m_Path == path && !instance.m_Footprint.IsEmpty() )
+        {
+            SCH_FIELD dummy( wxDefaultPosition, FOOTPRINT, const_cast<SCH_COMPONENT*>( this ) );
+            dummy.SetText( instance.m_Footprint );
+            return dummy.GetShownText();
+        }
+    }
+
+    return GetField( FOOTPRINT )->GetShownText();
+}
+
+
+void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFootprint )
+{
+    KIID_PATH path = sheet->Path();
+
+    // check to see if it is already there before inserting it
+    for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    {
+        if( instance.m_Path == path )
+        {
+            instance.m_Footprint = aFootprint;
+            return;
+        }
+    }
+
+    // didn't find it; better add it
+    AddHierarchicalReference( path, m_prefix, m_unit, wxEmptyString, aFootprint );
 }
 
 
@@ -793,11 +872,21 @@ void SCH_COMPONENT::GetContextualTextVars( wxArrayString* aVars ) const
 
 bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    SCHEMATIC* schematic = Schematic();
+
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
         if( token->IsSameAs( m_Fields[ i ].GetCanonicalName().Upper() ) )
         {
-            *token = m_Fields[ i ].GetShownText( aDepth + 1 );
+            if( i == REFERENCE && schematic )
+                *token = GetRef( &schematic->CurrentSheet(), true );
+            else if( i == VALUE && schematic )
+                *token = GetValue( &schematic->CurrentSheet() );
+            else if( i == FOOTPRINT && schematic )
+                *token = GetFootprint( &schematic->CurrentSheet() );
+            else
+                *token = m_Fields[ i ].GetShownText( aDepth + 1 );
+
             return true;
         }
     }
@@ -814,23 +903,42 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
 
     if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
     {
-        const SCH_FIELD& field = m_Fields[ FOOTPRINT ];
-        wxArrayString parts = wxSplit( field.GetText(), ':' );
+        wxString footprint;
+
+        if( schematic )
+            footprint = GetFootprint( &schematic->CurrentSheet() );
+        else
+            footprint = m_Fields[ FOOTPRINT ].GetShownText();
+
+        wxArrayString parts = wxSplit( footprint, ':' );
 
         *token = parts[ 0 ];
         return true;
     }
     else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
     {
-        const SCH_FIELD& field = m_Fields[ FOOTPRINT ];
-        wxArrayString parts = wxSplit( field.GetText(), ':' );
+        wxString footprint;
+
+        if( schematic )
+            footprint = GetFootprint( &schematic->CurrentSheet() );
+        else
+            footprint = m_Fields[ FOOTPRINT ].GetShownText();
+
+        wxArrayString parts = wxSplit( footprint, ':' );
 
         *token = parts[ std::min( 1, (int) parts.size() - 1 ) ];
         return true;
     }
     else if( token->IsSameAs( wxT( "UNIT" ) ) )
     {
-        *token = LIB_PART::SubReference( GetUnit() );
+        int unit;
+
+        if( schematic )
+            unit = GetUnitSelection( &schematic->CurrentSheet() );
+        else
+            unit = GetUnit();
+
+        *token = LIB_PART::SubReference( unit );
         return true;
     }
 
@@ -1238,9 +1346,9 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
             }
 
             // Display the current associated footprint, if exists.
-            if( !GetField( FOOTPRINT )->IsVoid() )
-                msg = GetField( FOOTPRINT )->GetShownText();
-            else
+            msg = GetFootprint( &schframe->GetCurrentSheet() );
+
+            if( msg.IsEmpty() )
                 msg = _( "<Unknown>" );
 
             aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKRED ) );
