@@ -279,7 +279,7 @@ TOOL_ACTION PCB_ACTIONS::changeTrackWidth( "pcbnew.InteractiveEdit.changeTrackWi
 
 TOOL_ACTION PCB_ACTIONS::deleteFull( "pcbnew.InteractiveEdit.deleteFull",
         AS_GLOBAL,
-        WXK_DELETE, LEGACY_HK_NAME( "Delete Full Track" ),
+        MD_SHIFT + WXK_DELETE, LEGACY_HK_NAME( "Delete Full Track" ),
         _( "Delete Full Track" ), _( "Deletes selected item(s) and copper connections" ),
         delete_xpm, AF_NONE, (void*) REMOVE_FLAGS::ALT );
 
