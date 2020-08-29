@@ -124,6 +124,7 @@ private:
     static int m_unitsOpt;
     static int m_fileOpt;
     static int m_fileFormat;
+    static bool m_negateBottomX;
 
     void initDialog();
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
@@ -158,6 +159,7 @@ private:
 int DIALOG_GEN_FOOTPRINT_POSITION::m_unitsOpt = 0;
 int DIALOG_GEN_FOOTPRINT_POSITION::m_fileOpt = 0;
 int DIALOG_GEN_FOOTPRINT_POSITION::m_fileFormat = 0;
+bool DIALOG_GEN_FOOTPRINT_POSITION::m_negateBottomX = false;
 
 // Use standard board side name. do not translate them,
 // they are keywords in place file
@@ -178,6 +180,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     m_radioBoxUnits->SetSelection( m_unitsOpt );
     m_radioBoxFilesCount->SetSelection( m_fileOpt );
     m_rbFormat->SetSelection( m_fileFormat );
+    m_negateXcb->SetValue( m_negateBottomX );
 
     // Update sizes and sizers:
     m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
@@ -218,6 +221,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     m_unitsOpt = m_radioBoxUnits->GetSelection();
     m_fileOpt = m_radioBoxFilesCount->GetSelection();
     m_fileFormat = m_rbFormat->GetSelection();
+    m_negateBottomX = m_negateXcb->GetValue();
 
 
     m_config->Write( PLACEFILE_UNITS_KEY, m_unitsOpt );
@@ -251,7 +255,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateFiles()
     // Count the footprints to place, do not yet create a file
     int fpcount = m_parent->DoGenFootprintsPositionFile( wxEmptyString, UnitsMM(),
                                                          ForceAllSmd(), PCB_BOTH_SIDES,
-                                                         useCSVfmt );
+                                                         useCSVfmt, m_negateBottomX );
     if( fpcount == 0)
     {
         wxMessageBox( _( "No footprint for automated placement." ) );
@@ -298,7 +302,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateFiles()
         fn.SetExt( FootprintPlaceFileExtension );
 
     fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
-                                                     ForceAllSmd(), side, useCSVfmt );
+                                                     ForceAllSmd(), side, useCSVfmt, m_negateBottomX );
     if( fpcount < 0 )
     {
         msg.Printf( _( "Unable to create \"%s\"." ), GetChars( fn.GetFullPath() ) );
@@ -339,7 +343,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateFiles()
         fn.SetExt( FootprintPlaceFileExtension );
 
     fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
-                                                    ForceAllSmd(), side, useCSVfmt );
+                                                    ForceAllSmd(), side, useCSVfmt, m_negateBottomX );
 
     if( fpcount < 0 )
     {
@@ -429,7 +433,7 @@ void PCB_EDIT_FRAME::GenFootprintsPositionFile( wxCommandEvent& event )
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                                                  bool aUnitsMM,
                                                  bool aForceSmdItems, int aSide,
-                                                 bool aFormatCSV )
+                                                 bool aFormatCSV, bool aNegateBottomX )
 {
     MODULE*     footprint;
 
@@ -533,7 +537,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
             LAYER_NUM layer = list[ii].m_Module->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
-            if( layer == B_Cu )
+            if( aNegateBottomX && layer == B_Cu )
                 footprint_pos.x = - footprint_pos.x;
 
             wxString line = "\"" + list[ii].m_Reference;
@@ -593,7 +597,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
             LAYER_NUM layer = list[ii].m_Module->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
-            if( layer == B_Cu )
+            if( aNegateBottomX && layer == B_Cu )
                 footprint_pos.x = - footprint_pos.x;
 
             wxString ref = list[ii].m_Reference;

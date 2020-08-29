@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -79,6 +79,9 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 
 	m_forceSMDOpt = new wxCheckBox( this, wxID_ANY, _("Include footprints with SMD pads even if not marked Surface Mount"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer7->Add( m_forceSMDOpt, 0, wxALL, 5 );
+
+	m_negateXcb = new wxCheckBox( this, wxID_ANY, _("Use negative X coordinates for footprints on bottom layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_negateXcb, 0, wxALL, 5 );
 
 	m_messagesPanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_messagesPanel->SetMinSize( wxSize( 300,150 ) );

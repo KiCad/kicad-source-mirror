@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,6 +49,7 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxRadioBox* m_radioBoxUnits;
 		wxRadioBox* m_radioBoxFilesCount;
 		wxCheckBox* m_forceSMDOpt;
+		wxCheckBox* m_negateXcb;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
