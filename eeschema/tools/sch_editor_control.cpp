@@ -1330,7 +1330,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     bool forceKeepAnnotations = false;
-    bool dropAnnotations      = true;
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
@@ -1356,21 +1355,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     {
         loadedItems.push_back( item );
 
-        if( item->Type() == SCH_COMPONENT_T )
-        {
-            if( !dropAnnotations && !forceKeepAnnotations )
-            {
-                for( SCH_ITEM* existingItem : m_frame->GetScreen()->Items() )
-                {
-                    if( item->m_Uuid == existingItem->m_Uuid )
-                    {
-                        dropAnnotations = true;
-                        break;
-                    }
-                }
-            }
-        }
-        else if( item->Type() == SCH_SHEET_T )
+        if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
             wxFileName srcFn = sheet->GetFileName();
@@ -1416,7 +1401,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             if( it != currentScreen->GetLibSymbols().end() )
                 component->SetLibSymbol( new LIB_PART( *it->second ) );
 
-            if( dropAnnotations )
+            if( !forceKeepAnnotations )
             {
                 const_cast<KIID&>( component->m_Uuid ) = KIID();
 
