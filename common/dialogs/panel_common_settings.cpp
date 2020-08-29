@@ -211,6 +211,7 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
 void PANEL_COMMON_SETTINGS::OnScaleSlider( wxScrollEvent& aEvent )
 {
     m_iconScaleAuto->SetValue( false );
+    aEvent.Skip();
 }
 
 
