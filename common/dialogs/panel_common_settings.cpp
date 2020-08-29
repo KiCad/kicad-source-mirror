@@ -174,6 +174,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 void PANEL_COMMON_SETTINGS::OnScaleSlider( wxScrollEvent& aEvent )
 {
     m_iconScaleAuto->SetValue( false );
+    aEvent.Skip();
 }
 
 
