@@ -657,23 +657,7 @@ void POINT_EDITOR::updateItem() const
                     segment->SetCenter( wxPoint( center.x, center.y ) );
                     m_editPoints->Point( ARC_CENTER ).SetPosition( center );
 
-                    // Check if the new arc is CW or CCW
-                    VECTOR2D startLine = start - center;
-                    VECTOR2D endLine   = end - center;
-                    newAngle           = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-                    VECTOR2D v1, v2;
-                    v1           = start - mid;
-                    v2           = end - mid;
-                    double theta = RAD2DECIDEG( v1.Angle() );
-                    RotatePoint( &( v1.x ), &( v1.y ), theta );
-                    RotatePoint( &( v2.x ), &( v2.y ), theta );
-                    clockwise = ( ( v1.Angle() - v2.Angle() ) > 0 );
-
-                    // Normalize the angle
-                    if( clockwise && newAngle < 0.0 )
-                        newAngle += 3600.0;
-                    else if( !clockwise && newAngle > 0.0 )
-                        newAngle -= 3600.0;
+                    newAngle = GetArcAngle( start, mid, end );
 
                     // Accuracy test
                     // First, get the angle

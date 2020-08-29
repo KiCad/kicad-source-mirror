@@ -73,7 +73,7 @@ bool CONVERT_TOOL::Init()
     // Create a context menu and make it available through selection tool
     m_menu = new CONDITIONAL_MENU( this );
     m_menu->SetIcon( refresh_xpm );
-    m_menu->SetTitle( _( "Convert" ) );
+    m_menu->SetTitle( _( "Convert..." ) );
 
     static KICAD_T convertableTracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
 
@@ -87,15 +87,17 @@ bool CONVERT_TOOL::Init()
     auto anyPolys     = ( S_C::OnlyType( PCB_ZONE_AREA_T ) ||
                           P_S_C::OnlyGraphicShapeTypes( { S_POLYGON } ) );
 
-    auto showConvert = anyPolys || anyLines;
+    auto lineToArc    = P_S_C::OnlyGraphicShapeTypes( { S_SEGMENT } ) ||
+                        S_C::OnlyType( PCB_TRACE_T );
+
+    auto showConvert = anyPolys || anyLines || lineToArc;
 
     m_menu->AddItem( PCB_ACTIONS::convertToPoly, anyLines );
     m_menu->AddItem( PCB_ACTIONS::convertToZone, anyLines );
     m_menu->AddItem( PCB_ACTIONS::convertToKeepout, anyLines );
     m_menu->AddItem( PCB_ACTIONS::convertToLines, anyPolys );
     m_menu->AddItem( PCB_ACTIONS::convertToTracks, anyPolys );
-    // Not yet
-    // m_menu->AddItem( PCB_ACTIONS::convertToArc, lineToArc );
+    m_menu->AddItem( PCB_ACTIONS::convertToArc, lineToArc );
 
     for( std::shared_ptr<ACTION_MENU>& subMenu : m_selectionTool->GetToolMenu().GetSubMenus() )
     {
@@ -491,13 +493,18 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
             } );
 
     EDA_ITEM* source = selection.Front();
-    wxPoint start, end, mid;
+    VECTOR2I start, end, mid;
 
-    if( OPT<SEG> optSeg = getStartEndPoints( source ) )
+    // Offset the midpoint along the normal a little bit so that it's more obviously an arc
+    const double offsetRatio = 0.1;
+
+    if( OPT<SEG> seg = getStartEndPoints( source ) )
     {
-        start = wxPoint( optSeg->A );
-        end   = wxPoint( optSeg->B );
-        mid   = wxPoint( optSeg->Center() );
+        start = seg->A;
+        end   = seg->B;
+
+        VECTOR2I normal = ( seg->B - seg->A ).Perpendicular().Resize( offsetRatio * seg->Length() );
+        mid = seg->Center() + normal;
     }
     else
         return -1;
@@ -517,16 +524,17 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
         DRAWSEGMENT* line = static_cast<DRAWSEGMENT*>( source );
         DRAWSEGMENT* arc  = new DRAWSEGMENT( parent );
 
-        wxPoint center = GetArcCenter( start, mid, end );
+        VECTOR2I center = GetArcCenter( start, mid, end );
 
         arc->SetShape( S_ARC );
         arc->SetLayer( layer );
         arc->SetWidth( line->GetWidth() );
-        arc->SetArcStart( start );
-        arc->SetCenter( center );
-        // TODO(JE): once !325 is merged
-        //arc->SetArcEnd( end );
 
+        arc->SetCenter( wxPoint( center ) );
+        arc->SetArcStart( wxPoint( start ) );
+        arc->SetAngle( GetArcAngle( start, mid, end ) );
+
+        arc->SetArcEnd( wxPoint( end ) );
         commit.Add( arc );
     }
     else
@@ -537,9 +545,9 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 
         arc->SetLayer( layer );
         arc->SetWidth( line->GetWidth() );
-        arc->SetStart( start );
-        arc->SetMid( mid );
-        arc->SetEnd( end );
+        arc->SetStart( wxPoint( start ) );
+        arc->SetMid( wxPoint( mid ) );
+        arc->SetEnd( wxPoint( end ) );
 
         commit.Add( arc );
     }
