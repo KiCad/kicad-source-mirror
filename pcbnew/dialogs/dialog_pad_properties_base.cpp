@@ -497,7 +497,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_copperLayersLabel->Wrap( -1 );
 	m_copperLayersLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	m_LayersSizer->Add( m_copperLayersLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 4 );
+	m_LayersSizer->Add( m_copperLayersLabel, 0, wxTOP|wxRIGHT|wxLEFT, 4 );
 
 	wxArrayString m_rbCopperLayersSelChoices;
 	m_rbCopperLayersSel = new wxChoice( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_rbCopperLayersSelChoices, 0 );
