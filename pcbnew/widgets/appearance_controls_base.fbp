@@ -1567,7 +1567,7 @@
                                                                 <property name="tooltip"></property>
                                                                 <property name="window_extra_style"></property>
                                                                 <property name="window_name"></property>
-                                                                <property name="window_style">wxHSCROLL|wxVSCROLL</property>
+                                                                <property name="window_style">wxVSCROLL</property>
                                                                 <object class="wxBoxSizer" expanded="0">
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">m_netclassOuterSizer</property>

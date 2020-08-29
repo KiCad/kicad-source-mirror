@@ -469,6 +469,9 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_netsGrid->GetGridWindow()->Bind( wxEVT_MIDDLE_UP,
                                        &APPEARANCE_CONTROLS::OnNetGridMouseEvent, this );
 
+    m_netsGrid->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT );
+    m_netclassScrolledWindow->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT );
+
     m_currentLayer = F_Cu;
 
     loadDefaultLayerPresets();

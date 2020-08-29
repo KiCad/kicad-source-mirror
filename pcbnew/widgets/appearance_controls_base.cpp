@@ -172,7 +172,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	bSizerNetClasses->Add( bSizer20, 0, wxEXPAND, 5 );
 
-	m_netclassScrolledWindow = new wxScrolledWindow( m_panelNetclasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_netclassScrolledWindow = new wxScrolledWindow( m_panelNetclasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 	m_netclassScrolledWindow->SetScrollRate( 5, 5 );
 	m_netclassOuterSizer = new wxBoxSizer( wxVERTICAL );
 
