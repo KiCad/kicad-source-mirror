@@ -312,7 +312,8 @@ LAYER_PRESET APPEARANCE_CONTROLS::presetNoLayers( _( "No Layers" ), LSET() );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetAllLayers( _( "All Layers" ), LSET::AllLayersMask() );
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetAllCopper( _( "All Copper Layers" ), LSET::AllCuMask() );
+LAYER_PRESET APPEARANCE_CONTROLS::presetAllCopper( _( "All Copper Layers" ),
+        LSET::AllCuMask().set( Edge_Cuts ) );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetInnerCopper( _( "Inner Copper Layers" ),
         LSET::InternalCuMask().set( Edge_Cuts ) );
