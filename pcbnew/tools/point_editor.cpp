@@ -469,6 +469,177 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+void POINT_EDITOR::editArcEndpointKeepTangent( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                               VECTOR2I aMid, VECTOR2I aEnd,
+                                               const VECTOR2I aCursor ) const
+{
+    VECTOR2D startLine = aStart - aCenter;
+    VECTOR2D endLine   = aEnd - aCenter;
+    double   newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+
+    bool clockwise;
+    bool movingStart;
+    bool arcValid = true;
+
+    VECTOR2I *p1, *p2, *p3;
+    // p1 does not move, p2 does.
+
+    if( aStart != aArc->GetArcStart() )
+    {
+        aStart      = aCursor;
+        p1          = &aEnd;
+        p2          = &aStart;
+        p3          = &aMid;
+        movingStart = true;
+    }
+    else
+    {
+        aEnd        = aCursor;
+        p1          = &aStart;
+        p2          = &aEnd;
+        p3          = &aMid;
+        movingStart = false;
+    }
+
+    VECTOR2D v1, v2, v3, v4;
+
+    // Move the coordinate system
+    v1 = *p1 - aCenter;
+    v2 = *p2 - aCenter;
+    v3 = *p3 - aCenter;
+
+    VECTOR2D u1, u2, u3;
+
+    // A point cannot be both the center and on the arc.
+    if( ( v1.EuclideanNorm() == 0 ) || ( v2.EuclideanNorm() == 0 ) )
+        return;
+
+    u1 = v1 / v1.EuclideanNorm();
+    u2 = v3 - ( u1.x * v3.x + u1.y * v3.y ) * u1;
+    u2 = u2 / u2.EuclideanNorm();
+
+    // [ u1, u3 ] is a base centered on the circle with:
+    //  u1 : unit vector toward the point that does not move
+    //  u2 : unit vector toward the mid point.
+
+    // Get vectors v1, and v2 in that coordinate system.
+
+    double det  = u1.x * u2.y - u2.x * u1.y;
+
+    // u1 and u2 are unit vectors, and perpendicular.
+    // det should not be 0. In case it is, do not change the arc.
+    if( det == 0 )
+        return;
+
+    double tmpx = v1.x * u2.y - v1.y * u2.x;
+    double tmpy = -v1.x * u1.y + v1.y * u1.x;
+    v1.x        = tmpx;
+    v1.y        = tmpy;
+    v1          = v1 / det;
+
+    tmpx = v2.x * u2.y - v2.y * u2.x;
+    tmpy = -v2.x * u1.y + v2.y * u1.x;
+    v2.x = tmpx;
+    v2.y = tmpy;
+    v2   = v2 / det;
+
+    double R               = v1.EuclideanNorm();
+    bool   transformCircle = false;
+
+    /*                    p2
+        *                     X***  
+        *                         **  <---- This is the arc
+        *            y ^            **
+        *              |      R       *
+        *              | <-----------> * 
+        *       x------x------>--------x p1 
+        *     C' <----> C      x
+        *         delta
+        * 
+        * p1 does not move, and the tangent at p1 remains the same. 
+        *  => The new center, C', will be on the C-p1 axis.
+        * p2 moves
+        * 
+        * The radius of the new circle is delta + R
+        * 
+        * || C' p2 || = || C' P1 || 
+        * is the same as :
+        * ( delta + p2.x ) ^ 2 + p2.y ^ 2 = ( R + delta ) ^ 2
+        * 
+        * delta = ( R^2  - p2.x ^ 2 - p2.y ^2 ) / ( 2 * p2.x - 2 * R )
+        * 
+        * We can use this equation for any point p2 with p2.x < R 
+        */
+
+    if( v2.x == R )
+    {
+        // Straight line, do nothing
+    }
+    else
+    {
+        if( v2.x > R )
+        {
+            // If we need to invert the curvature.
+            // We modify the input so we can use the same equation
+            transformCircle = true;
+            v2.x            = 2 * R - v2.x;
+        }
+        // We can keep the tangent constraint.
+        double delta = ( R * R - v2.x * v2.x - v2.y * v2.y ) / ( 2 * v2.x - 2 * R );
+
+        // This is just to limit the radius, so nothing overflows later when drawing.
+        if( abs( v2.y / ( R - v2.x ) ) > ADVANCED_CFG::GetCfg().m_drawArcCenterMaxAngle )
+        {
+            arcValid = false;
+        }
+        // Never recorded a problem, but still checking.
+        if( !std::isfinite( delta ) )
+        {
+            arcValid = false;
+        }
+        // v4 is the new center
+        v4 = ( !transformCircle ) ? VECTOR2D( -delta, 0 ) : VECTOR2D( 2 * R + delta, 0 );
+
+        clockwise = aArc->GetAngle() > 0;
+
+        if( transformCircle )
+            clockwise = !clockwise;
+
+        tmpx = v4.x * u1.x + v4.y * u2.x;
+        tmpy = v4.x * u1.y + v4.y * u2.y;
+        v4.x = tmpx;
+        v4.y = tmpy;
+
+        aCenter = v4 + aCenter;
+
+        startLine = aStart - aCenter;
+        endLine   = aEnd - aCenter;
+        newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+
+        if( clockwise && newAngle < 0.0 )
+            newAngle += 3600.0;
+        else if( !clockwise && newAngle > 0.0 )
+            newAngle -= 3600.0;
+
+        if( arcValid )
+        {
+            aArc->SetAngle( newAngle );
+            aArc->SetCenter( wxPoint( aCenter.x, aCenter.y ) );
+
+            if( movingStart )
+            {
+                aArc->SetArcStart( wxPoint( aStart.x, aStart.y ) );
+                // Set angle computes the end point, so re-force it now.
+                aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
+            }
+            else
+            {
+                aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
+            }
+        }
+    }
+}
+
 
 /**
  * Update the coordinates of 4 corners of a rectangle, according to pad constraints and the
@@ -572,6 +743,227 @@ static void pinEditedCorner( int aEditedPointIndex, int aMinWidth, int aMinHeigh
 }
 
 
+void POINT_EDITOR::editArcEndpointKeepCenter( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                              VECTOR2I aMid, VECTOR2I aEnd,
+                                              const VECTOR2I aCursor ) const
+{
+    bool clockwise;
+    bool movingStart;
+
+    VECTOR2I *p1, *p2;
+    VECTOR2I  target;
+
+    // p1 does not move, p2 does.
+
+    if( aStart != aArc->GetArcStart() )
+    {
+        p1          = &aEnd;
+        p2          = &aStart;
+        movingStart = true;
+    }
+    else
+    {
+        p1          = &aStart;
+        p2          = &aEnd;
+        movingStart = false;
+    }
+
+    target = *p2 - aCenter;
+
+    double sqRadius = ( *p1 - aCenter ).SquaredEuclideanNorm();
+
+    *p1 = *p1 - aCenter;
+    *p2 = *p2 - aCenter;
+
+    // Circle : x^2 + y^2 = R ^ 2
+    // In this coordinate system, the angular position of the cursor is (r, theta)
+    // The line coming from the center of the circle is y = start.y / start.x * x
+    // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
+
+    if( target.x == 0 )
+    {
+        p2->x = 0;
+        p2->y = ( target.y > 0 ) ? sqrt( sqRadius ) : -sqrt( sqRadius );
+    }
+    else
+    {
+        double tan = target.y / static_cast<double>( target.x );
+        // The divider is always greater than 1 ( cannot be 0 )
+        double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
+        // Move to the correct quadrant
+        tmp   = target.x > 0 ? tmp : -tmp;
+        p2->y = target.y / static_cast<double>( target.x ) * tmp;
+        p2->x = tmp;
+    }
+
+    *p1 = *p1 + aCenter;
+    *p2 = *p2 + aCenter;
+
+    clockwise = aArc->GetAngle() > 0;
+
+    VECTOR2D startLine = aStart - aCenter;
+    VECTOR2D endLine   = aEnd - aCenter;
+    double   newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+
+    if( clockwise && newAngle < 0.0 )
+        newAngle += 3600.0;
+    else if( !clockwise && newAngle > 0.0 )
+        newAngle -= 3600.0;
+
+    aArc->SetAngle( newAngle );
+    aArc->SetCenter( wxPoint( aCenter.x, aCenter.y ) );
+
+    if( movingStart )
+    {
+        aArc->SetArcStart( wxPoint( aStart.x, aStart.y ) );
+        // Set angle computes the end point, so re-force it now.
+        aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
+    }
+    else
+    {
+        aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
+    }
+}
+
+
+void POINT_EDITOR::editArcMidKeepCenter( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                        VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const
+{
+    // Now, update the edit point position
+    // Express the point in a cercle-centered coordinate system.
+    aStart = aStart - aCenter;
+    aEnd   = aEnd - aCenter;
+
+    double sqRadius = ( aCursor - aCenter ).SquaredEuclideanNorm();
+
+    // Special case, because the tangent would lead to +/- infinity
+    if( aStart.x == 0 )
+    {
+        aStart.y = aCursor.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
+    }
+    else
+    {
+        // Circle : x^2 + y^2 = R ^ 2
+        // In this coordinate system, the angular position of the cursor is (r, theta)
+        // The line coming from the center of the circle is y = start.y / start.x * x
+        // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
+
+        double tan = aStart.y / static_cast<double>( aStart.x );
+        double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
+        // Move to the correct quadrant
+        tmp      = aStart.x > 0 ? tmp : -tmp;
+        aStart.y = aStart.y / static_cast<double>( aStart.x ) * tmp;
+        aStart.x = tmp;
+    }
+
+    // Special case, because the tangent would lead to +/- infinity
+    if( aEnd.x == 0 )
+    {
+        aEnd.y = aMid.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
+    }
+    else
+    {
+        // Circle : x^2 + y^2 = R ^ 2
+        // In this coordinate system, the angular position of the cursor is (r, theta)
+        // The line coming from the center of the circle is y = start.y / start.x * x
+        // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
+
+        double tan = aEnd.y / static_cast<double>( aEnd.x );
+        double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
+        // Move to the correct quadrant
+        tmp    = aEnd.x > 0 ? tmp : -tmp;
+        aEnd.y = aEnd.y / static_cast<double>( aEnd.x ) * tmp;
+        aEnd.x = tmp;
+    }
+
+    aStart = aStart + aCenter;
+    aEnd   = aEnd + aCenter;
+
+    aArc->SetArcStart( wxPoint( aStart.x, aStart.y ) );
+    aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
+}
+
+
+void POINT_EDITOR::editArcMidKeepEnpoints( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+        VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const
+{
+    bool     clockwise;
+    VECTOR2I oldCenter = aArc->GetCenter();
+
+
+    // This allows the user to go on the sides of the arc
+    aMid = aCursor;
+    // Find the new center
+    aCenter = GetArcCenter( aStart, aMid, aEnd );
+
+    aArc->SetCenter( wxPoint( aCenter.x, aCenter.y ) );
+
+    // Check if the new arc is CW or CCW
+    VECTOR2D startLine = aStart - aCenter;
+    VECTOR2D endLine   = aEnd - aCenter;
+    double   newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+    VECTOR2D v1, v2;
+
+    v1           = aStart - aMid;
+    v2           = aEnd - aMid;
+    double theta = RAD2DECIDEG( v1.Angle() );
+    RotatePoint( &( v1.x ), &( v1.y ), theta );
+    RotatePoint( &( v2.x ), &( v2.y ), theta );
+    clockwise = ( ( v1.Angle() - v2.Angle() ) > 0 );
+
+    // Normalize the angle
+    if( clockwise && newAngle < 0.0 )
+        newAngle += 3600.0;
+    else if( !clockwise && newAngle > 0.0 )
+        newAngle -= 3600.0;
+
+    // Accuracy test
+    // First, get the angle
+    VECTOR2I endTest = aStart;
+    RotatePoint( &( endTest.x ), &( endTest.y ), aCenter.x, aCenter.y, -newAngle );
+    double distance = ( endTest - aEnd ).SquaredEuclideanNorm();
+
+    if( distance > ADVANCED_CFG::GetCfg().m_drawArcAccuracy )
+    {
+        // Cancel Everything
+        // If the accuracy is low, we can't draw precisely the arc.
+        // It may happen when the radius is *high*
+        aArc->SetCenter( wxPoint( oldCenter.x, oldCenter.y ) );
+    }
+    else
+    {
+        aArc->SetAngle( newAngle );
+        aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
+    }
+
+    // Now, update the edit point position
+    // Express the point in a cercle-centered coordinate system.
+    aMid = aCursor - aCenter;
+
+    double sqRadius = ( aEnd - aCenter ).SquaredEuclideanNorm();
+
+    // Special case, because the tangent would lead to +/- infinity
+    if( aMid.x == 0 )
+    {
+        aMid.y = aMid.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
+    }
+    else
+    {
+        // Circle : x^2 + y^2 = R ^ 2
+        // In this coordinate system, the angular position of the cursor is (r, theta)
+        // The line coming from the center of the circle is y = start.y / start.x * x
+        // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
+
+        double tan = aMid.y / static_cast<double>( aMid.x );
+        double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
+        // Move to the correct quadrant
+        tmp    = aMid.x > 0 ? tmp : -tmp;
+        aMid.y = aMid.y / static_cast<double>( aMid.x ) * tmp;
+        aMid.x = tmp;
+    }
+}
+
+
 void POINT_EDITOR::updateItem() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
@@ -631,241 +1023,34 @@ void POINT_EDITOR::updateItem() const
             VECTOR2I start = m_editPoints->Point( ARC_START ).GetPosition();
             VECTOR2I end = m_editPoints->Point( ARC_END ).GetPosition();
 
-            if( center != segment->GetCenter() )
+            const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition();
+
+            if( isModified( m_editPoints->Point( ARC_CENTER ) ) )
             {
                 wxPoint moveVector = wxPoint( center.x, center.y ) - segment->GetCenter();
                 segment->Move( moveVector );
-
-                m_editPoints->Point( ARC_START ).SetPosition( segment->GetArcStart() );
-                m_editPoints->Point( ARC_END ).SetPosition( segment->GetArcEnd() );
-                m_editPoints->Point( ARC_MID ).SetPosition( segment->GetArcMid() );
             }
-            else
+            else if( isModified( m_editPoints->Point( ARC_MID ) ) )
             {
-                const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition();
-                VECTOR2I        oldCenter = segment->GetCenter();
-                double newAngle;
-                bool   clockwise;
-
-                if( mid != segment->GetArcMid() )
+                if( m_altEditMethod )
                 {
-                    // This allows the user to go on the sides of the arc
-                    mid = cursorPos;
-                    // Find the new center
-                    center = GetArcCenter( start, mid, end );
-
-                    segment->SetCenter( wxPoint( center.x, center.y ) );
-                    m_editPoints->Point( ARC_CENTER ).SetPosition( center );
-
-                    newAngle = GetArcAngle( start, mid, end );
-
-                    // Accuracy test
-                    // First, get the angle
-                    VECTOR2I endTest = start;
-                    RotatePoint( &( endTest.x ), &( endTest.y ), center.x, center.y, -newAngle );
-                    double distance  = ( endTest - end ).SquaredEuclideanNorm();
-
-                    if( distance > ADVANCED_CFG::GetCfg().m_drawArcAccuracy )
-                    {
-                        // Cancel Everything
-                        // If the accuracy is low, we can't draw precisely the arc.
-                        // It may happen when the radius is *high*
-                        segment->SetCenter( wxPoint( oldCenter.x, oldCenter.y ) );
-                    }
-                    else
-                    {
-                        segment->SetAngle( newAngle );
-                        segment->SetArcEnd( wxPoint( end.x, end.y ) );
-                    }
-
-                    // Now, update the edit point position
-                    // Express the point in a cercle-centered coordinate system.
-                    mid = cursorPos - center;
-
-                    double sqRadius = ( end - center ).SquaredEuclideanNorm();
-
-                    // Special case, because the tangent would lead to +/- infinity
-                    if( mid.x == 0 )
-                    {
-                        mid.y = mid.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
-                    }
-                    else
-                    {
-                        // Circle : x^2 + y^2 = R ^ 2
-                        // In this coordinate system, the angular position of the cursor is (r, theta)
-                        // The line coming from the center of the circle is y = start.y / start.x * x
-                        // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
-                        double tmp = sqrt( sqRadius /
-                                           ( ( 1.0 + mid.y / static_cast<double>( mid.x ) * mid.y
-                                                     / static_cast<double>( mid.x ) ) ) );
-                        // Move to the correct quadrant
-                        tmp   = mid.x > 0 ? tmp : -tmp;
-                        mid.y = mid.y / static_cast<double>( mid.x ) * tmp;
-                        mid.x = tmp;
-                    }
-                    // Go back to the main coordinate system
-                    mid = mid + center;
-
-                    m_editPoints->Point( ARC_MID ).SetPosition( mid );
+                    editArcMidKeepCenter( segment, center, start, mid, end, cursorPos );
                 }
-                else if( ( start != segment->GetArcStart() ) || ( end != segment->GetArcEnd() ) )
+                else
                 {
-
-                    VECTOR2D startLine = start - center;
-                    VECTOR2D endLine   = end - center;
-                    newAngle           = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-
-                    VECTOR2I *p1, *p2, *p3;
-
-                    // p1 does not move, p2 does.
-                    bool movingStart;
-                    bool arcValid = true;
-
-                    if( start != segment->GetArcStart() )
-                    {
-                        start       = cursorPos;
-                        p1          = &end;
-                        p2          = &start;
-                        p3          = &mid;
-                        movingStart = true;
-                    }
-                    else
-                    {
-                        end         = cursorPos;
-                        p1          = &start;
-                        p2          = &end;
-                        p3          = &mid;
-                        movingStart = false;
-                    }
-
-                    VECTOR2D v1, v2, v3, v4;
-
-                    // Move the coordinate system
-                    v1 = *p1 - center;
-                    v2 = *p2 - center;
-                    v3 = *p3 - center;
-
-                    VECTOR2D u1, u2, u3;
-
-                    u1 = v1 / v1.EuclideanNorm();
-                    u2 = v3 - ( u1.x * v3.x + u1.y * v3.y ) * u1;
-                    u2 = u2 / u2.EuclideanNorm();
-
-                    // [ u1, u3 ] is a base centered on the circle with:
-                    //  u1 : unit vector toward the point that does not move
-                    //  u2 : unit vector toward the mid point.
-
-                    // Get vectors v1, and v2 in that coordinate system.
-
-                    double det  = u1.x * u2.y - u2.x * u1.y;
-                    double tmpx = v1.x * u2.y - v1.y * u2.x;
-                    double tmpy = -v1.x * u1.y + v1.y * u1.x;
-                    v1.x        = tmpx;
-                    v1.y        = tmpy;
-                    v1          = v1 / det;
-
-                    tmpx = v2.x * u2.y - v2.y * u2.x;
-                    tmpy = -v2.x * u1.y + v2.y * u1.x;
-                    v2.x = tmpx;
-                    v2.y = tmpy;
-                    v2   = v2 / det;
-
-                    double R               = v1.EuclideanNorm();
-                    bool   transformCircle = false;
-
-                    /*                    p2
-                     *                     X***
-                     *                         **  <---- This is the arc
-                     *            y ^            **
-                     *              |      R       *
-                     *              | <-----------> *
-                     *       x------x------>--------x p1
-                     *     C' <----> C      x
-                     *         delta
-                     *
-                     * p1 does not move, and the tangent at p1 remains the same.
-                     *  => The new center, C', will be on the C-p1 axis.
-                     * p2 moves
-                     *
-                     * The radius of the new circle is delta + R
-                     *
-                     * || C' p2 || = || C' P1 ||
-                     * is the same as :
-                     * ( delta + p2.x ) ^ 2 + p2.y ^ 2 = ( R + delta ) ^ 2
-                     *
-                     * delta = ( R^2  - p2.x ^ 2 - p2.y ^2 ) / ( 2 * p2.x - 2 * R )
-                     *
-                     * We can use this equation for any point p2 with p2.x < R
-                     */
-
-                    if( v2.x == R )
-                    {
-                        // Straight line, do nothing
-                    }
-                    else
-                    {
-                        if( v2.x > R )
-                        {
-                            // If we need to invert the curvature.
-                            // We modify the input so we can use the same equation
-                            transformCircle = true;
-                            v2.x            = 2 * R - v2.x;
-                        }
-                        // We can keep the tangent constraint.
-                        double delta = ( R * R - v2.x * v2.x - v2.y * v2.y ) / ( 2 * v2.x - 2 * R );
-
-                        // This is just to limit the radius, so nothing overflows later when drawing.
-                        if( abs( v2.y / ( R - v2.x ) )
-                                > ADVANCED_CFG::GetCfg().m_drawArcCenterMaxAngle )
-                        {
-                            arcValid = false;
-                        }
-                        // v4 is the new center
-                        v4 = ( !transformCircle ) ? VECTOR2D( -delta, 0 ) :
-                                                    VECTOR2D( 2 * R + delta, 0 );
-
-                        clockwise = segment->GetAngle() > 0;
-
-                        if( transformCircle )
-                            clockwise = !clockwise;
-
-                        tmpx = v4.x * u1.x + v4.y * u2.x;
-                        tmpy = v4.x * u1.y + v4.y * u2.y;
-                        v4.x = tmpx;
-                        v4.y = tmpy;
-
-                        center = v4 + center;
-
-                        startLine = start - center;
-                        endLine   = end - center;
-                        newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-
-                        if( clockwise && newAngle < 0.0 )
-                            newAngle += 3600.0;
-                        else if( !clockwise && newAngle > 0.0 )
-                            newAngle -= 3600.0;
-
-                        if( arcValid )
-                        {
-                            segment->SetAngle( newAngle );
-                            segment->SetCenter( wxPoint( center.x, center.y ) );
-
-                            if( movingStart )
-                            {
-                                segment->SetArcStart( wxPoint( start.x, start.y ) );
-                                // Set angle computes the end point, so re-force it now.
-                                segment->SetArcEnd( wxPoint( end.x, end.y ) );
-                                m_editPoints->Point( ARC_START ).SetPosition( start );
-                            }
-                            else
-                            {
-                                segment->SetArcEnd( wxPoint( end.x, end.y ) );
-                                m_editPoints->Point( ARC_END ).SetPosition( end );
-                            }
-
-                            m_editPoints->Point( ARC_CENTER ).SetPosition( center );
-                        }
-                    }
+                    editArcMidKeepEnpoints( segment, center, start, mid, end, cursorPos );
+                }
+            }
+            else if( isModified( m_editPoints->Point( ARC_START ) )
+                     || isModified( m_editPoints->Point( ARC_END ) ) )
+            {
+                if( m_altEditMethod )
+                {
+                    editArcEndpointKeepCenter( segment, center, start, mid, end, cursorPos );
+                }
+                else
+                {
+                    editArcEndpointKeepTangent( segment, center, start, mid, end, cursorPos );
                 }
             }
         }
@@ -982,17 +1167,17 @@ void POINT_EDITOR::updateItem() const
                 if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
                         || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
                 {
-                    dist[0] = center.x - topLeft.x;
-                    dist[1] = center.y - topLeft.y;
-                    dist[2] = botRight.x - center.x;
-                    dist[3] = botRight.y - center.y;
+                    dist[0] = center.x - m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().x;
+                    dist[1] = center.y - m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().y;
+                    dist[2] = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().x - center.x;
+                    dist[3] = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().y - center.y;
                 }
                 else
                 {
-                    dist[0] = center.x - botLeft.x;
-                    dist[1] = center.y - topRight.y;
-                    dist[2] = topRight.x - center.x;
-                    dist[3] = botLeft.y - center.y;
+                    dist[0] = center.x - m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x;
+                    dist[1] = center.y - m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y;
+                    dist[2] = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x - center.x;
+                    dist[3] = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y - center.y;
                 }
 
                 wxSize padSize( dist[0] + dist[2], dist[1] + dist[3] );
@@ -1015,17 +1200,17 @@ void POINT_EDITOR::updateItem() const
                 if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
                         || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
                 {
-                    left = topLeft.x;
-                    top = topLeft.y;
-                    right = botRight.x;
-                    bottom = botRight.y;
+                    left = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().x;
+                    top = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().y;
+                    right = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().x;
+                    bottom = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().y;
                 }
                 else
                 {
-                    left = botLeft.x;
-                    top = topRight.y;
-                    right = topRight.x;
-                    bottom = botLeft.y;
+                    left = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x;
+                    top = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y;
+                    right = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x;
+                    bottom = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y;
                 }
 
                 wxSize padSize( abs( right - left ), abs( bottom - top ) );
@@ -1754,6 +1939,11 @@ int POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+int POINT_EDITOR::changeEditMethod( const TOOL_EVENT& aEvent )
+{
+    m_altEditMethod = !m_altEditMethod;
+    return 0;
+}
 
 void POINT_EDITOR::setTransitions()
 {
@@ -1763,4 +1953,5 @@ void POINT_EDITOR::setTransitions()
     Go( &POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
     Go( &POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
     Go( &POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
+    Go( &POINT_EDITOR::changeEditMethod,  ACTIONS::changeEditMethod.MakeEvent() );
 }

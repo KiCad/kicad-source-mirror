@@ -89,6 +89,9 @@ private:
     // Flag indicating whether the selected zone needs to be refilled
     bool m_refill;
 
+    // Flag indicating whether the alternative edit method is enabled.
+    bool m_altEditMethod;
+
     std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
 
     ///> Updates item's points with edit points.
@@ -149,6 +152,33 @@ private:
     int addCorner( const TOOL_EVENT& aEvent );
     int removeCorner( const TOOL_EVENT& aEvent );
     int modifiedSelection( const TOOL_EVENT& aEvent );
+
+    /** Move an end point of the arc, while keeping the tangent at the other endpoint.
+     * 
+     */
+    void editArcEndpointKeepTangent( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                     VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const;
+
+    /** Move an end point of the arc, while keeping radius, and the other point position.
+     * 
+     */
+    void editArcEndpointKeepCenter( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                    VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const;
+
+    /** Move the mid point of the arc, while keeping the two endpoints.
+     * 
+     */
+    void editArcMidKeepEnpoints( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                 VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const;
+
+    /** Move the mid point of the arc, while keeping the angle.
+     * 
+     */
+    void editArcMidKeepCenter( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart, VECTOR2I aMid,
+                              VECTOR2I aEnd, const VECTOR2I aCursor ) const;
+
+    ///> Change the edit method to an alternative method ( currently, arcs only )
+    int changeEditMethod( const TOOL_EVENT& aEvent );
 };
 
 #endif

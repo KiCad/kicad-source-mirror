@@ -194,6 +194,9 @@ TOOL_ACTION ACTIONS::deleteTool( "common.Interactive.deleteTool",
 TOOL_ACTION ACTIONS::activatePointEditor( "common.Control.activatePointEditor",
         AS_GLOBAL );
 
+TOOL_ACTION ACTIONS::changeEditMethod( "common.Interactive.changeEditMethod", AS_GLOBAL,
+        MD_CTRL + ' ', "", _( "Change Edit Method" ), _( "Change edit method constraints" ) );
+
 TOOL_ACTION ACTIONS::find( "common.Interactive.find",
         AS_GLOBAL,
         MD_CTRL + 'F', LEGACY_HK_NAME( "Find" ),

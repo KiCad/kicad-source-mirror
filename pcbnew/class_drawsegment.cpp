@@ -1220,6 +1220,7 @@ void DRAWSEGMENT::SwapData( BOARD_ITEM* aImage )
     std::swap( m_Width, image->m_Width );
     std::swap( m_Start, image->m_Start );
     std::swap( m_End, image->m_End );
+    std::swap( m_ThirdPoint, image->m_ThirdPoint );
     std::swap( m_Shape, image->m_Shape );
     std::swap( m_Type, image->m_Type );
     std::swap( m_Angle, image->m_Angle );

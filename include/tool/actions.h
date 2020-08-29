@@ -163,6 +163,7 @@ public:
     // Internal
     static TOOL_ACTION updateMenu;
     static TOOL_ACTION activatePointEditor;
+    static TOOL_ACTION changeEditMethod;
 
     // Suite
     static TOOL_ACTION configurePaths;
