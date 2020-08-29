@@ -385,7 +385,7 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::FindItem( const LIB_ID& aLibId )
 unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( wxDataViewItem const&   aItem,
                                                   wxDataViewItemArray&    aChildren ) const
 {
-    auto node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
+    const LIB_TREE_NODE* node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
 
     if( node->m_Type != LIB_TREE_NODE::TYPE::LIBID
             || ( m_show_units && node->m_Type == LIB_TREE_NODE::TYPE::LIBID ) )
@@ -430,7 +430,7 @@ bool LIB_TREE_MODEL_ADAPTER::HasContainerColumns( wxDataViewItem const& aItem ) 
 
 bool LIB_TREE_MODEL_ADAPTER::IsContainer( wxDataViewItem const& aItem ) const
 {
-    auto node = ToNode( aItem );
+    LIB_TREE_NODE* node = ToNode( aItem );
     return node ? node->m_Children.size() : true;
 }
 
@@ -440,8 +440,8 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::GetParent( wxDataViewItem const& aItem ) 
     if( m_freeze )
         return ToItem( nullptr );
 
-    auto node = ToNode( aItem );
-    auto parent = node ? node->m_Parent : nullptr;
+    LIB_TREE_NODE* node   = ToNode( aItem );
+    LIB_TREE_NODE* parent = node ? node->m_Parent : nullptr;
 
     // wxDataViewModel has no root node, but rather top-level elements have
     // an invalid (null) parent.
@@ -462,7 +462,7 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
         return;
     }
 
-    auto node = ToNode( aItem );
+    LIB_TREE_NODE* node = ToNode( aItem );
     wxASSERT( node );
 
     switch( aCol )
@@ -485,7 +485,7 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( wxDataViewItem const&   aItem,
     if( IsFrozen() )
         return false;
 
-    auto node = ToNode( aItem );
+    LIB_TREE_NODE* node = ToNode( aItem );
     wxASSERT( node );
 
     if( node->m_Type != LIB_TREE_NODE::LIBID )

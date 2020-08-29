@@ -198,6 +198,11 @@ public:
     bool LibraryExists( const wxString& aLibrary, bool aCheckEnabled = false ) const;
 
     /**
+     * Returns true if the library was successfully loaded
+     */
+    bool IsLibraryLoaded( const wxString& aLibrary ) const;
+
+    /**
      * Returns true if library has unsaved modifications.
      */
     bool IsLibraryModified( const wxString& aLibrary ) const;

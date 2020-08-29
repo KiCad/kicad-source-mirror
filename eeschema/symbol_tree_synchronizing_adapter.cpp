@@ -241,6 +241,14 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
             node->m_Desc = m_frame->GetCurPart()->GetDescription();
 
         aVariant = node->m_Desc;
+
+        // Annotate that the library failed to load in the description column
+        if( node->m_Type == LIB_TREE_NODE::LIB )
+        {
+            if( !m_libMgr->IsLibraryLoaded( node->m_Name ) )
+                aVariant = _( "(failed to load) " ) + aVariant.GetString();
+        }
+
         break;
 
     default:    // column == -1 is used for default Compare function
@@ -256,12 +264,19 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
     if( IsFrozen() )
         return false;
 
-    // change attributes only for the name field
-    if( aCol != 0 )
-        return false;
-
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
+
+    // Mark both columns of unloaded libraries using grey text color (to look disabled)
+    if( node->m_Type == LIB_TREE_NODE::LIB && !m_libMgr->IsLibraryLoaded( node->m_Name ) )
+    {
+        aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT  ) );
+        return true;
+    }
+
+    // The remaining attributes are only for the name column
+    if( aCol != 0 )
+        return false;
 
     switch( node->m_Type )
     {

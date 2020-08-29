@@ -240,6 +240,15 @@ public:
      */
     bool IsSymbolLibWritable( const wxString& aNickname );
 
+    /**
+     * Return true if the library given by @a aNickname was successfully loaded.
+     *
+     * @param aNickname is the library nickname in the symbol library table.
+     *
+     * @throw IO_ERROR if no library at @a aNickname exists.
+     */
+    bool IsSymbolLibLoaded( const wxString& aNickname );
+
     void DeleteSymbolLib( const wxString& aNickname );
 
     void CreateSymbolLib( const wxString& aNickname );

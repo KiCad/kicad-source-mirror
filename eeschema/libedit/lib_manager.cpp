@@ -286,6 +286,14 @@ bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 }
 
 
+bool LIB_MANAGER::IsLibraryLoaded( const wxString& aLibrary ) const
+{
+    wxCHECK( LibraryExists( aLibrary ), false );
+
+    return symTable()->IsSymbolLibLoaded( aLibrary );
+}
+
+
 std::list<LIB_PART*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
 {
     std::list<LIB_PART*> ret;

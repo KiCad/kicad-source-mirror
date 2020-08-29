@@ -77,7 +77,8 @@ public:
                    const wxString& aDescr = wxEmptyString ) :
         nickName( aNick ),
         description( aDescr ),
-        enabled( true )
+        enabled( true ),
+        m_loaded( false )
     {
         properties.reset();
         SetOptions( aOptions );
@@ -86,17 +87,27 @@ public:
 
     bool operator==( const LIB_TABLE_ROW& r ) const;
 
-    bool operator!=( const LIB_TABLE_ROW& r ) const   { return !( *this == r ); }
+    bool operator!=( const LIB_TABLE_ROW& r ) const { return !( *this == r ); }
 
     /**
      * @return the logical name of this library table row.
      */
-    const wxString& GetNickName() const         { return nickName; }
+    const wxString& GetNickName() const { return nickName; }
 
     /**
      * Change the logical name of this library, useful for an editor.
      */
     void SetNickName( const wxString& aNickName ) { nickName = aNickName; }
+
+    /**
+     * @return true if the library was loaded without error
+     */
+    bool GetIsLoaded() const { return m_loaded; }
+
+    /**
+     * Mark the row as being a loaded library
+     */
+    void SetLoaded( bool aLoaded ) { m_loaded = aLoaded; };
 
     /**
      * @return the enabled status of this library row
@@ -183,7 +194,8 @@ protected:
 #endif
         options( aRow.options ),
         description( aRow.description ),
-        enabled( aRow.enabled )
+        enabled( aRow.enabled ),
+        m_loaded( aRow.m_loaded )
     {
         if( aRow.properties )
             properties = std::make_unique<PROPERTIES>( *aRow.properties.get() );
@@ -209,6 +221,7 @@ private:
     wxString          description;
 
     bool              enabled = true;     ///< Whether the LIB_TABLE_ROW is enabled
+    bool              m_loaded;           ///< Whether the LIB_TABLE_ROW is loaded
 
     std::unique_ptr< PROPERTIES > properties;
 };

@@ -78,7 +78,9 @@ bool SYMBOL_LIB_TABLE_ROW::Refresh()
         wxArrayString dummyList;
 
         plugin.set( SCH_IO_MGR::FindPlugin( type ) );
+        SetLoaded( false );
         plugin->EnumerateSymbolLib( dummyList, GetFullURI( true ), GetProperties() );
+        SetLoaded( true );
         return true;
     }
 
@@ -290,7 +292,9 @@ void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayStr
     if( aPowerSymbolsOnly )
         row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
 
+    row->SetLoaded( false );
     row->plugin->EnumerateSymbolLib( aAliasNames, row->GetFullURI( true ), row->GetProperties() );
+    row->SetLoaded( true );
 
     if( aPowerSymbolsOnly )
         row->SetOptions( options );
@@ -326,7 +330,9 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_PART*>& aSymbolList,
     if( aPowerSymbolsOnly )
         row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
 
+    row->SetLoaded( false );
     row->plugin->EnumerateSymbolLib( aSymbolList, row->GetFullURI( true ), row->GetProperties() );
+    row->SetLoaded( true );
 
     if( aPowerSymbolsOnly )
         row->SetOptions( options );
@@ -415,6 +421,13 @@ bool SYMBOL_LIB_TABLE::IsSymbolLibWritable( const wxString& aNickname )
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
     wxCHECK( row && row->plugin, false );
     return row->plugin->IsSymbolLibWritable( row->GetFullURI( true ) );
+}
+
+bool SYMBOL_LIB_TABLE::IsSymbolLibLoaded( const wxString& aNickname )
+{
+    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    wxCHECK( row, false );
+    return row->GetIsLoaded();
 }
 
 
