@@ -41,31 +41,6 @@
 #include "convert_tool.h"
 
 
-TOOL_ACTION PCB_ACTIONS::convertToPoly( "pcbnew.Convert.convertToPoly",
-        AS_GLOBAL, 0, "", _( "Convert to Polygon" ),
-        _( "Creates a graphic polygon from the selection" ), add_graphical_polygon_xpm );
-
-TOOL_ACTION PCB_ACTIONS::convertToZone( "pcbnew.Convert.convertToZone",
-        AS_GLOBAL, 0, "", _( "Convert to Zone" ), _( "Creates a copper zone from the selection" ),
-        add_zone_xpm );
-
-TOOL_ACTION PCB_ACTIONS::convertToKeepout( "pcbnew.Convert.convertToKeepout",
-        AS_GLOBAL, 0, "", _( "Convert to Keepout" ),
-        _( "Creates a keepout zone from the selection" ), add_keepout_area_xpm );
-
-TOOL_ACTION PCB_ACTIONS::convertToLines( "pcbnew.Convert.convertToLines",
-        AS_GLOBAL, 0, "", _( "Convert to Lines" ), _( "Creates graphic lines from the selection" ),
-        add_line_xpm );
-
-TOOL_ACTION PCB_ACTIONS::convertToArc( "pcbnew.Convert.convertToArc",
-        AS_GLOBAL, 0, "", _( "Convert to Arc" ), _( "Converts selected line segment to an arc" ),
-        add_arc_xpm );
-
-TOOL_ACTION PCB_ACTIONS::convertToTracks( "pcbnew.Convert.convertToTracks",
-        AS_GLOBAL, 0, "", _( "Convert to Tracks" ),
-        _( "Converts selected graphic lines to tracks" ), add_tracks_xpm );
-
-
 CONVERT_TOOL::CONVERT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.Convert" ), m_selectionTool( NULL ),
     m_menu( NULL ), m_frame( NULL )
@@ -157,6 +132,8 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
                     default:
                         aCollector.Remove( item );
                     }
+
+                    break;
 
                 case PCB_TRACE_T:
                 // case PCB_ARC_T: // Not yet
@@ -390,6 +367,8 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                     default:
                         aCollector.Remove( item );
                     }
+
+                    break;
 
                 case PCB_ZONE_AREA_T:
                     break;
