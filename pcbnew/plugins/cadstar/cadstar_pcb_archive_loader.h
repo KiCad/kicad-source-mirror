@@ -19,14 +19,15 @@
  */
 
 /**
- * @file cadstar_pcb.h
- * @brief Converts a CADSTAR_PCB_ARCHIVE_PARSER object into a KiCad BOARD object
+ * @file cadstar_pcb_archive_loader.h
+ * @brief Loads a cpa file into a KiCad BOARD object
  */
 
-#ifndef CADSTAR_PCB_H_
-#define CADSTAR_PCB_H_
+#ifndef CADSTAR_PCB_ARCHIVE_LOADER_H_
+#define CADSTAR_PCB_ARCHIVE_LOADER_H_
 
 #include <cadstar_pcb_archive_parser.h>
+#include <class_board.h>
 
 class BOARD;
 
@@ -258,4 +259,4 @@ private:
 };
 
 
-#endif // CADSTAR_PCB_H_
+#endif // CADSTAR_PCB_ARCHIVE_LOADER_H_

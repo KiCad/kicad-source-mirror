@@ -27,7 +27,7 @@
 #define CADSTAR_PCB_ARCHIVE_PARSER_H_
 
 #include <boost/serialization/strong_typedef.hpp>
-#include <cadstar_archive_common.h>
+#include <plugins/cadstar/cadstar_archive_parser.h>
 #include <map>
 #include <vector>
 
@@ -60,11 +60,11 @@
 /**
  * @brief Represents a CADSTAR PCB Archive (CPA) file
  */
-class CADSTAR_PCB_ARCHIVE_PARSER : public CADSTAR_ARCHIVE_COMMON
+class CADSTAR_PCB_ARCHIVE_PARSER : public CADSTAR_ARCHIVE_PARSER
 {
 public:
     explicit CADSTAR_PCB_ARCHIVE_PARSER( wxString aFilename )
-            : Filename( aFilename ), CADSTAR_ARCHIVE_COMMON()
+            : Filename( aFilename ), CADSTAR_ARCHIVE_PARSER()
     {
         KiCadUnitMultiplier = 10; // assume hundredth micron
     }

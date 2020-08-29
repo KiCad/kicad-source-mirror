@@ -75,7 +75,6 @@ target_link_libraries( libeval_compiler_test
     pcbcommon
     bitmaps
     gal
-    cadstar2kicadpcb
     common
     pcbcommon
     ${PCBNEW_IO_LIBRARIES}

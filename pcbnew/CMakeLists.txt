@@ -596,9 +596,9 @@ endif()
 
 add_subdirectory( pcad2kicadpcb_plugin )
 add_subdirectory( plugins/altium )
-add_subdirectory( cadstar2kicadpcb_plugin )
+add_subdirectory( plugins/cadstar )
 
-set( PCBNEW_IO_LIBRARIES pcad2kicadpcb altium2pcbnew CACHE INTERNAL "")
+set( PCBNEW_IO_LIBRARIES pcad2kicadpcb altium2pcbnew cadstar2pcbnew CACHE INTERNAL "")
 
 if( BUILD_GITHUB_PLUGIN )
     add_subdirectory( github )
@@ -693,7 +693,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     connectivity
     pcbcommon
     pnsrouter
-    cadstar2kicadpcb
     kiplatform
     common
     gal

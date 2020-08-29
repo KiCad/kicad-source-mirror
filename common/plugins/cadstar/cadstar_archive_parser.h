@@ -19,14 +19,13 @@
  */
 
 /**
- * @file cadstar_common.h
- * @brief Helper functions and common defines
+ * @file cadstar_archive_parser.h
+ * @brief Helper functions and common defines between schematic and PCB Archive files
  */
 
-#ifndef CADSTAR_ARHIVE_COMMON_H_
-#define CADSTAR_ARHIVE_COMMON_H_
+#ifndef CADSTAR_ARHIVE_PARSER_H_
+#define CADSTAR_ARHIVE_PARSER_H_
 
-#include <class_board.h>
 #include <dsnlexer.h>
 #include <macros.h>
 #include <vector>
@@ -54,7 +53,7 @@
 /**
  * @brief Helper functions and common structures for CADSTAR PCB and Schematic archive files.
 */
-class CADSTAR_ARCHIVE_COMMON
+class CADSTAR_ARCHIVE_PARSER
 {
 public:
     static const long UNDEFINED_VALUE = -1;
@@ -247,6 +246,6 @@ public:
             XNODE* aNode, bool aTestAllChildNodes = false );
 
 
-}; // class CADSTAR_ARCHIVE_COMMON
+}; // class CADSTAR_ARHIVE_PARSER
 
-#endif // CADSTAR_COMMON_H_
+#endif // CADSTAR_ARHIVE_PARSER_H_

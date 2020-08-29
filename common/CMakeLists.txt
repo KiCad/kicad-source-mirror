@@ -275,6 +275,11 @@ set( PLUGINS_ALTIUM_SRCS
     plugins/altium/altium_parser.cpp
     )
 
+    
+set( PLUGINS_CADSTAR_SRCS
+    plugins/cadstar/cadstar_archive_parser.cpp
+    )
+
 set( COMMON_SRCS
     ${LIB_KICAD_SRCS}
     ${COMMON_ABOUT_DLG_SRCS}
@@ -284,6 +289,7 @@ set( COMMON_SRCS
     ${COMMON_PREVIEW_ITEMS_SRCS}
     ${PLOTTERS_CONTROL_SRCS}
     ${PLUGINS_ALTIUM_SRCS}
+    ${PLUGINS_CADSTAR_SRCS}
     advanced_config.cpp
     array_axis.cpp
     array_options.cpp

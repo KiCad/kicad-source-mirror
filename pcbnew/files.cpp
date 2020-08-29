@@ -89,7 +89,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
         { AltiumDesignerPcbFileWildcard(),      IO_MGR::ALTIUM_DESIGNER },       // Import Altium Designer board files
         { AltiumCircuitStudioPcbFileWildcard(), IO_MGR::ALTIUM_CIRCUIT_STUDIO }, // Import Altium Circuit Studio board files
         { AltiumCircuitMakerPcbFileWildcard(),  IO_MGR::ALTIUM_CIRCUIT_MAKER },  // Import Altium Circuit Maker board files
-        { CadstarArchivePcbFileWildcard(),      IO_MGR::CADSTAR_ARCHIVE },       // Import Cadstar PCB Archive board files
+        { CadstarArchivePcbFileWildcard(),      IO_MGR::CADSTAR_PCB_ARCHIVE },   // Import Cadstar PCB Archive board files
     };
     // clang-format on
 
@@ -389,9 +389,9 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
     {
         pluginType = IO_MGR::ALTIUM_CIRCUIT_MAKER;
     }
-    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::CADSTAR_ARCHIVE ) ) == 0 )
+    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::CADSTAR_PCB_ARCHIVE ) ) == 0 )
     {
-        pluginType = IO_MGR::CADSTAR_ARCHIVE;
+        pluginType = IO_MGR::CADSTAR_PCB_ARCHIVE;
     }
     else
     {

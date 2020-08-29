@@ -67,7 +67,6 @@ set_target_properties( cvpcb_kiface PROPERTIES
     )
 target_link_libraries( cvpcb_kiface
     pcbcommon
-    cadstar2kicadpcb
     3d-viewer
     gal
     common

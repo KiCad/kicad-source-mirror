@@ -25,7 +25,6 @@
 #include <wx/filename.h>
 #include <wx/uri.h>
 
-#include <cadstar2kicadpcb_plugin/cadstar_pcb_archive_plugin.h>
 #include <config.h>
 #include <eagle_plugin.h>
 #include <gpcb_plugin.h>
@@ -36,6 +35,7 @@
 #include <plugins/altium/altium_circuit_maker_plugin.h>
 #include <plugins/altium/altium_circuit_studio_plugin.h>
 #include <plugins/altium/altium_designer_plugin.h>
+#include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 
 #if defined(BUILD_GITHUB_PLUGIN)
  #include <github/github_plugin.h>
@@ -216,7 +216,7 @@ static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitStudioPlugin( IO_MGR::ALTIUM
 static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin( IO_MGR::ALTIUM_CIRCUIT_MAKER,
         wxT( "Altium Circuit Maker" ),
         []() -> PLUGIN* { return new ALTIUM_CIRCUIT_MAKER_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerCadstarArchivePlugin( IO_MGR::CADSTAR_ARCHIVE,
+static IO_MGR::REGISTER_PLUGIN registerCadstarArchivePlugin( IO_MGR::CADSTAR_PCB_ARCHIVE,
         wxT( "CADSTAR PCB Archive" ), []() -> PLUGIN* { return new CADSTAR_PCB_ARCHIVE_PLUGIN; } );
 #ifdef BUILD_GITHUB_PLUGIN
 static IO_MGR::REGISTER_PLUGIN registerGithubPlugin( IO_MGR::GITHUB, wxT("Github"), []() -> PLUGIN* { return new GITHUB_PLUGIN; } );

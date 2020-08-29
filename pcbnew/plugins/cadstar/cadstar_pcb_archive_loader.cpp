@@ -19,11 +19,11 @@
  */
 
 /**
- * @file cadstar_pcb.cpp
- * @brief Converts a CADSTAR_PCB_ARCHIVE_PARSER object into a KiCad BOARD object
+ * @file cadstar_pcb_archive_loader.cpp
+ * @brief Loads a cpa file into a KiCad BOARD object
  */
 
-#include <cadstar_pcb.h>
+#include <cadstar_pcb_archive_loader.h>
 
 #include <board_stackup_manager/stackup_predefined_prms.h> // KEY_COPPER, KEY_CORE, KEY_PREPREG
 #include <class_drawsegment.h>                             // DRAWSEGMENT

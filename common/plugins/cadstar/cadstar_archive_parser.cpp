@@ -19,14 +19,14 @@
  */
 
 /**
- * @file cadstar_common.cpp
- * @brief Helper functions and common defines
+ * @file cadstar_archive_parser.cpp
+ * @brief Helper functions and common defines between schematic and PCB Archive files
  */
 
-#include <cadstar_archive_common.h>
+#include <plugins/cadstar/cadstar_archive_parser.h>
 
 
-void CADSTAR_ARCHIVE_COMMON::EVALUE::Parse( XNODE* aNode )
+void CADSTAR_ARCHIVE_PARSER::EVALUE::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "E" ) );
 
@@ -38,7 +38,7 @@ void CADSTAR_ARCHIVE_COMMON::EVALUE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_ARCHIVE_COMMON::POINT::Parse( XNODE* aNode )
+void CADSTAR_ARCHIVE_PARSER::POINT::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "PT" ) );
 
@@ -47,7 +47,7 @@ void CADSTAR_ARCHIVE_COMMON::POINT::Parse( XNODE* aNode )
 }
 
 
-bool CADSTAR_ARCHIVE_COMMON::VERTEX::IsVertex( XNODE* aNode )
+bool CADSTAR_ARCHIVE_PARSER::VERTEX::IsVertex( XNODE* aNode )
 {
     wxString aNodeName = aNode->GetName();
 
@@ -59,7 +59,7 @@ bool CADSTAR_ARCHIVE_COMMON::VERTEX::IsVertex( XNODE* aNode )
 }
 
 
-void CADSTAR_ARCHIVE_COMMON::VERTEX::Parse( XNODE* aNode )
+void CADSTAR_ARCHIVE_PARSER::VERTEX::Parse( XNODE* aNode )
 {
     wxASSERT( IsVertex( aNode ) );
 
@@ -105,13 +105,13 @@ void CADSTAR_ARCHIVE_COMMON::VERTEX::Parse( XNODE* aNode )
 }
 
 
-double CADSTAR_ARCHIVE_COMMON::EVALUE::GetDouble()
+double CADSTAR_ARCHIVE_PARSER::EVALUE::GetDouble()
 {
     return Base * std::pow( 10.0, Exponent );
 }
 
 
-void CADSTAR_ARCHIVE_COMMON::InsertAttributeAtEnd( XNODE* aNode, wxString aValue )
+void CADSTAR_ARCHIVE_PARSER::InsertAttributeAtEnd( XNODE* aNode, wxString aValue )
 {
     wxString result, paramName = "attr0";
     int      i = 0;
@@ -126,7 +126,7 @@ void CADSTAR_ARCHIVE_COMMON::InsertAttributeAtEnd( XNODE* aNode, wxString aValue
 }
 
 
-XNODE* CADSTAR_ARCHIVE_COMMON::LoadArchiveFile(
+XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile(
         const wxString& aFileName, const wxString& aFileTypeIdentifier )
 {
     KEYWORD   emptyKeywords[1] = {};
@@ -215,7 +215,7 @@ XNODE* CADSTAR_ARCHIVE_COMMON::LoadArchiveFile(
     return NULL;
 }
 
-wxString CADSTAR_ARCHIVE_COMMON::GetXmlAttributeIDString( XNODE* aNode, unsigned int aID )
+wxString CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDString( XNODE* aNode, unsigned int aID )
 {
     wxString attrName, retVal;
     attrName = "attr";
@@ -228,7 +228,7 @@ wxString CADSTAR_ARCHIVE_COMMON::GetXmlAttributeIDString( XNODE* aNode, unsigned
 }
 
 
-long CADSTAR_ARCHIVE_COMMON::GetXmlAttributeIDLong( XNODE* aNode, unsigned int aID )
+long CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDLong( XNODE* aNode, unsigned int aID )
 {
     long retVal;
 
@@ -239,7 +239,7 @@ long CADSTAR_ARCHIVE_COMMON::GetXmlAttributeIDLong( XNODE* aNode, unsigned int a
 }
 
 
-void CADSTAR_ARCHIVE_COMMON::CheckNoChildNodes( XNODE* aNode )
+void CADSTAR_ARCHIVE_PARSER::CheckNoChildNodes( XNODE* aNode )
 {
     if( aNode->GetChildren() )
     {
@@ -248,7 +248,7 @@ void CADSTAR_ARCHIVE_COMMON::CheckNoChildNodes( XNODE* aNode )
 }
 
 
-void CADSTAR_ARCHIVE_COMMON::CheckNoNextNodes( XNODE* aNode )
+void CADSTAR_ARCHIVE_PARSER::CheckNoNextNodes( XNODE* aNode )
 {
     if( aNode->GetNext() )
     {
@@ -257,7 +257,7 @@ void CADSTAR_ARCHIVE_COMMON::CheckNoNextNodes( XNODE* aNode )
 }
 
 
-void CADSTAR_ARCHIVE_COMMON::ParseChildEValue( XNODE* aNode, EVALUE& aValueToParse )
+void CADSTAR_ARCHIVE_PARSER::ParseChildEValue( XNODE* aNode, EVALUE& aValueToParse )
 {
     if( aNode->GetChildren()->GetName() == wxT( "E" ) )
     {
@@ -269,7 +269,7 @@ void CADSTAR_ARCHIVE_COMMON::ParseChildEValue( XNODE* aNode, EVALUE& aValueToPar
     }
 }
 
-std::vector<CADSTAR_ARCHIVE_COMMON::POINT> CADSTAR_ARCHIVE_COMMON::ParseAllChildPoints(
+std::vector<CADSTAR_ARCHIVE_PARSER::POINT> CADSTAR_ARCHIVE_PARSER::ParseAllChildPoints(
         XNODE* aNode, bool aTestAllChildNodes, int aExpectedNumPoints )
 {
     std::vector<POINT> retVal;
@@ -298,7 +298,7 @@ std::vector<CADSTAR_ARCHIVE_COMMON::POINT> CADSTAR_ARCHIVE_COMMON::ParseAllChild
 }
 
 
-std::vector<CADSTAR_ARCHIVE_COMMON::VERTEX> CADSTAR_ARCHIVE_COMMON::ParseAllChildVertices(
+std::vector<CADSTAR_ARCHIVE_PARSER::VERTEX> CADSTAR_ARCHIVE_PARSER::ParseAllChildVertices(
         XNODE* aNode, bool aTestAllChildNodes )
 {
     std::vector<VERTEX> retVal;
@@ -322,7 +322,7 @@ std::vector<CADSTAR_ARCHIVE_COMMON::VERTEX> CADSTAR_ARCHIVE_COMMON::ParseAllChil
 }
 
 
-std::vector<CADSTAR_ARCHIVE_COMMON::CUTOUT> CADSTAR_ARCHIVE_COMMON::ParseAllChildCutouts(
+std::vector<CADSTAR_ARCHIVE_PARSER::CUTOUT> CADSTAR_ARCHIVE_PARSER::ParseAllChildCutouts(
         XNODE* aNode, bool aTestAllChildNodes )
 {
     std::vector<CUTOUT> retVal;
@@ -345,7 +345,7 @@ std::vector<CADSTAR_ARCHIVE_COMMON::CUTOUT> CADSTAR_ARCHIVE_COMMON::ParseAllChil
     return retVal;
 }
 
-void CADSTAR_ARCHIVE_COMMON::CUTOUT::Parse( XNODE* aNode )
+void CADSTAR_ARCHIVE_PARSER::CUTOUT::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "CUTOUT" ) );
 
@@ -353,7 +353,7 @@ void CADSTAR_ARCHIVE_COMMON::CUTOUT::Parse( XNODE* aNode )
 }
 
 
-bool CADSTAR_ARCHIVE_COMMON::SHAPE::IsShape( XNODE* aNode )
+bool CADSTAR_ARCHIVE_PARSER::SHAPE::IsShape( XNODE* aNode )
 {
     wxString aNodeName = aNode->GetName();
 
@@ -364,7 +364,7 @@ bool CADSTAR_ARCHIVE_COMMON::SHAPE::IsShape( XNODE* aNode )
         return false;
 }
 
-void CADSTAR_ARCHIVE_COMMON::SHAPE::Parse( XNODE* aNode )
+void CADSTAR_ARCHIVE_PARSER::SHAPE::Parse( XNODE* aNode )
 {
     wxASSERT( IsShape( aNode ) );
 
