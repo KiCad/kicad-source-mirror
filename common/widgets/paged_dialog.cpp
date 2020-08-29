@@ -36,48 +36,6 @@ std::map<wxString, wxString> g_lastPage;
 std::map<wxString, wxString> g_lastParentPage;
 
 
-PAGED_TREEBOOK::PAGED_TREEBOOK( wxWindow* parent, wxWindowID id, const wxPoint& pos,
-        const wxSize& size, long style, const wxString& name )
-        : wxTreebook( parent, id, pos, size, style, name )
-{
-    GetTreeCtrl()->Bind( wxEVT_TREE_SEL_CHANGING, &PAGED_TREEBOOK::OnTreeSelChanging, this );
-}
-
-
-void PAGED_TREEBOOK::OnTreeSelChanging( wxTreeEvent& aEvent )
-{
-    wxTreeItemId pageId = aEvent.GetItem();
-
-    for( size_t i = 0; i < m_groupEntries.size(); ++i )
-    {
-        if( m_groupEntries[i] == pageId )
-        {
-            aEvent.Veto();
-
-            wxTreeItemIdValue cookie;
-            wxTreeItemId      firstSubPage = GetTreeCtrl()->GetFirstChild( pageId, cookie );
-
-            if( firstSubPage.IsOk() )
-            {
-                GetTreeCtrl()->SelectItem( firstSubPage, true );
-            }
-            break;
-        }
-    }
-}
-
-
-bool PAGED_TREEBOOK::AddGroupEntry( const wxString& text, int imageId )
-{
-    bool add = AddPage( new wxPanel(this), text, false, imageId );
-
-    wxTreeItemId newId = m_treeIds.back();
-    m_groupEntries.push_back(newId);
-
-    return add;
-}
-
-
 PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUseReset,
                             const wxString& aAuxiliaryAction ) :
         DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
@@ -95,7 +53,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
     m_infoBar = new WX_INFOBAR( this );
     mainSizer->Add( m_infoBar, 0, wxEXPAND, 0 );
 
-    m_treebook = new PAGED_TREEBOOK( this, wxID_ANY );
+    m_treebook = new wxTreebook( this, wxID_ANY );
     mainSizer->Add( m_treebook, 1, wxEXPAND|wxLEFT|wxTOP, 10 );
 
     auto line = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
@@ -355,12 +313,20 @@ void PAGED_DIALOG::OnUpdateUI( wxUpdateUIEvent& event )
             return;
         }
     }
+
+    if( m_treebook->GetCurrentPage()->GetChildren().IsEmpty() )
+    {
+        unsigned next = m_treebook->GetSelection() + 1;
+
+        if( next < m_treebook->GetPageCount() )
+            m_treebook->SetSelection( next );
+    }
 }
 
 
 void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
 {
-    int page = event.GetSelection();
+    size_t page = event.GetSelection();
 
     // Enable the reset button only if the page is resettable
     if( m_resetButton )

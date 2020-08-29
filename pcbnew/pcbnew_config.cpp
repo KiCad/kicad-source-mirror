@@ -57,9 +57,9 @@ void PCB_EDIT_FRAME::On3DShapeLibWizard( wxCommandEvent& event )
 void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
                                          PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
 {
-    PAGED_TREEBOOK* book = aParent->GetTreebook();
+    wxTreebook* book = aParent->GetTreebook();
 
-    book->AddGroupEntry( _( "Pcbnew" ) );
+    book->AddPage( new wxPanel( book ), _( "Pcbnew" ) );
     book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_EDIT_OPTIONS( this, aParent ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_PCBNEW_COLOR_SETTINGS( this, book ), _( "Colors" ) );

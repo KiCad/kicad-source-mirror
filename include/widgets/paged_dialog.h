@@ -28,22 +28,6 @@
 class WX_INFOBAR;
 
 
-class PAGED_TREEBOOK : public wxTreebook
-{
-public:
-    PAGED_TREEBOOK( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize, long style = wxBK_DEFAULT,
-            const wxString& name = wxEmptyString );
-
-    bool AddGroupEntry( const wxString& text, int imageId = NO_IMAGE );
-
-protected:
-    void OnTreeSelChanging( wxTreeEvent& aEvent );
-
-    wxVector<wxTreeItemId> m_groupEntries;
-};
-
-
 class PAGED_DIALOG : public DIALOG_SHIM
 {
 private:
@@ -63,7 +47,7 @@ public:
                   const wxString& aAuxiliaryAction = wxEmptyString );
     ~PAGED_DIALOG() override;
 
-    PAGED_TREEBOOK* GetTreebook() { return m_treebook; }
+    wxTreebook* GetTreebook() { return m_treebook; }
 
     void SetInitialPage( const wxString& aPage, const wxString& aParentPage = wxEmptyString );
 
@@ -88,7 +72,7 @@ protected:
     void OnUpdateUI( wxUpdateUIEvent& event );
     void OnPageChange( wxBookCtrlEvent& event );
 
-    PAGED_TREEBOOK* m_treebook;
+    wxTreebook* m_treebook;
     wxButton*   m_auxiliaryButton;
     wxButton*   m_resetButton;
     wxButton*   m_cancelButton;

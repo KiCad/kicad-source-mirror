@@ -218,9 +218,9 @@ COLOR4D GetInvisibleItemColor()
 void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
                                          PANEL_HOTKEYS_EDITOR* aHotkeysPanel  )
 {
-    PAGED_TREEBOOK* book = aParent->GetTreebook();
+    wxTreebook* book = aParent->GetTreebook();
 
-    book->AddGroupEntry( _( "Eeschema" ) );
+    book->AddPage( new wxPanel( book ), _( "Eeschema" ) );
     book->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_SETTINGS( this, book ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_COLOR_SETTINGS( this, book ), _( "Colors" ) );
@@ -422,9 +422,9 @@ void SCH_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
                                          PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
 {
-    PAGED_TREEBOOK* book = aParent->GetTreebook();
+    wxTreebook* book = aParent->GetTreebook();
 
-    book->AddGroupEntry( _( "Symbol Editor" ) );
+    book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
     book->AddSubPage( new PANEL_GAL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_LIBEDIT_COLOR_SETTINGS( this, book ), _( "Colors" ) );
