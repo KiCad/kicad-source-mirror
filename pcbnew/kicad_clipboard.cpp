@@ -133,9 +133,8 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
         // This means we also need layers and nets
         LOCALE_IO io;
 
-        m_formatter.Print( 0, "(kicad_pcb (version %d) (host pcbnew %s)\n",
-                           SEXPR_BOARD_FILE_VERSION,
-                           m_formatter.Quotew( GetBuildVersion() ).c_str() );
+        m_formatter.Print( 0, "(kicad_pcb (version %d) (generator pcbnew)\n",
+                           SEXPR_BOARD_FILE_VERSION );
 
         m_formatter.Print( 0, "\n" );
 
@@ -306,8 +305,7 @@ void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
 
     m_out = &formatter;
 
-    m_out->Print( 0, "(kicad_pcb (version %d) (host pcbnew %s)\n", SEXPR_BOARD_FILE_VERSION,
-                  formatter.Quotew( GetBuildVersion() ).c_str() );
+    m_out->Print( 0, "(kicad_pcb (version %d) (generator pcbnew)\n", SEXPR_BOARD_FILE_VERSION );
 
     Format( aBoard, 1 );
 

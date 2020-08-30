@@ -338,7 +338,7 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* a
     {
         KIDIALOG dlg( nullptr, wxString::Format(
              _( "Please report this bug.  Error validating group structure: %s"
-                "\n\nSave anyways?" ), sanityResult ),
+                "\n\nSave anyway?" ), sanityResult ),
                       _( "Internal group data structure corrupt" ),
                       wxOK | wxCANCEL | wxICON_ERROR );
         dlg.SetOKLabel( _( "Save Anyway" ) );
