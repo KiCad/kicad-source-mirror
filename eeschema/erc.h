@@ -118,6 +118,12 @@ public:
      */
     int TestMultUnitPinConflicts();
 
+    /**
+     * Checks for labels that differ only in capitalization
+     * @return the error count
+     */
+    int TestSimilarLabels();
+
 private:
     /**
      * Performs ERC testing and creates an ERC marker to show the ERC problem for aNetItemRef

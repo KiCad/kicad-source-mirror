@@ -2517,26 +2517,30 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( !text )
         return true;
 
-    bool is_global = text->Type() == SCH_GLOBAL_LABEL_T;
+    bool isGlobal = text->Type() == SCH_GLOBAL_LABEL_T;
 
     wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" );
 
     // Global label check can be disabled independently
-    if( !m_schematic->ErcSettings().IsTestEnabled( ERCE_GLOBLABEL ) && is_global )
+    if( !m_schematic->ErcSettings().IsTestEnabled( ERCE_GLOBLABEL ) && isGlobal )
         return true;
 
     wxString name = EscapeString( text->GetShownText(), CTX_NETNAME );
 
-    if( is_global )
+    if( isGlobal )
     {
         // This will be set to true if the global is connected to a pin above, but we
         // want to reset this to false so that globals get flagged if they only have a
         // single instance
         has_other_connections = false;
 
-        if( m_net_name_to_subgraphs_map.count( name )
-                && m_net_name_to_subgraphs_map.at( name ).size() > 1 )
-            has_other_connections = true;
+        if( m_net_name_to_subgraphs_map.count( name ) )
+        {
+            if( m_net_name_to_subgraphs_map.at( name ).size() > 1 )
+                has_other_connections = true;
+            else if( aSubgraph->m_multiple_drivers )
+                has_other_connections = true;
+        }
     }
     else if( text->Type() == SCH_HIER_LABEL_T )
     {
@@ -2560,7 +2564,8 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
     if( !has_other_connections )
     {
-        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( is_global ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED );
+        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( isGlobal ? ERCE_GLOBLABEL
+                                                                       : ERCE_LABEL_NOT_CONNECTED );
         ercItem->SetItems( text );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );

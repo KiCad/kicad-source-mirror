@@ -392,15 +392,6 @@ public:
      */
     void SortListbySheet();
 
-    /**
-     * Function TestforSimilarLabels
-     * detects labels which are different when using case sensitive comparisons
-     * but are equal when using case insensitive comparisons
-     * It can be due to a mistake from designer, so this kind of labels
-     * is reported by TestforSimilarLabels
-     */
-    void TestforSimilarLabels();
-
     #if defined(DEBUG)
     void DumpNetTable()
     {

@@ -713,198 +713,55 @@ int ERC_TESTER::TestMultUnitPinConflicts()
 }
 
 
-// this code try to detect similar labels, i.e. labels which are identical
-// when they are compared using case insensitive coparisons.
-
-
-// A helper struct to compare NETLIST_OBJECT items by sheetpath and label texts
-// for a std::set<NETLIST_OBJECT*> container
-// the full text is "sheetpath+label" for local labels and "label" for global labels
-struct compare_labels
+int ERC_TESTER::TestSimilarLabels()
 {
-    bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 ) const
+    const NET_MAP& nets = m_schematic->ConnectionGraph()->GetNetMap();
+
+    int errors = 0;
+
+    std::unordered_map<wxString, SCH_TEXT*> labelMap;
+
+    for( const std::pair<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
     {
-        wxString str1 = lab1->m_SheetPath.PathAsString() + lab1->m_Label;
-        wxString str2 = lab2->m_SheetPath.PathAsString() + lab2->m_Label;
+        const wxString& netName = net.first.first;
+        std::vector<SCH_PIN*> pins;
 
-        return str1.Cmp( str2 ) < 0;
-    }
-};
-
-struct compare_label_names
-{
-    bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 ) const
-    {
-        return lab1->m_Label.Cmp( lab2->m_Label ) < 0;
-    }
-};
-
-struct compare_paths
-{
-    bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 ) const
-    {
-        return lab1->m_SheetPath.Path() < lab2->m_SheetPath.Path();
-    }
-};
-
-// Helper functions to build the warning messages about Similar Labels:
-static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_OBJECT* aRef );
-static void SimilarLabelsDiagnose( NETLIST_OBJECT* aItemA, NETLIST_OBJECT* aItemB );
-
-
-void NETLIST_OBJECT_LIST::TestforSimilarLabels()
-{
-    // Similar labels which are different when using case sensitive comparisons
-    // but are equal when using case insensitive comparisons
-
-    // list of all labels (used the better item to build diag messages)
-    std::vector<NETLIST_OBJECT*> fullLabelList;
-    // list of all labels , each label appears only once (used to to detect similar labels)
-    std::set<NETLIST_OBJECT*, compare_labels> uniqueLabelList;
-    wxString msg;
-
-    // Build a list of differents labels. If inside a given sheet there are
-    // more than one given label, only one label is stored.
-    // not also the sheet labels are not taken in account for 2 reasons:
-    //  * they are in the root sheet but they are seen only from the child sheet
-    //  * any mismatch between child sheet hierarchical labels and the sheet label
-    //    already detected by ERC
-    for( unsigned netItem = 0; netItem < size(); ++netItem )
-    {
-        switch( GetItemType( netItem ) )
+        for( CONNECTION_SUBGRAPH* subgraph : net.second )
         {
-        case NETLIST_ITEM::LABEL:
-        case NETLIST_ITEM::BUSLABELMEMBER:
-        case NETLIST_ITEM::PINLABEL:
-        case NETLIST_ITEM::GLOBBUSLABELMEMBER:
-        case NETLIST_ITEM::HIERLABEL:
-        case NETLIST_ITEM::HIERBUSLABELMEMBER:
-        case NETLIST_ITEM::GLOBLABEL:
-            // add this label in lists
-            uniqueLabelList.insert( GetItem( netItem ) );
-            fullLabelList.push_back( GetItem( netItem ) );
-            break;
-
-        case NETLIST_ITEM::SHEETLABEL:
-        case NETLIST_ITEM::SHEETBUSLABELMEMBER:
-        default:
-            break;
-        }
-    }
-
-    // build global labels and compare
-    std::set<NETLIST_OBJECT*, compare_label_names> loc_labelList;
-
-    for( NETLIST_OBJECT* label : uniqueLabelList )
-    {
-        if( label->IsLabelGlobal() )
-            loc_labelList.insert( label );
-    }
-
-    // compare global labels (same label names appears only once in list)
-    for( auto it = loc_labelList.begin(); it != loc_labelList.end(); ++it )
-    {
-        auto it_aux = it;
-
-        for( ++it_aux; it_aux != loc_labelList.end(); ++it_aux )
-        {
-            if( (*it)->m_Label.CmpNoCase( (*it_aux)->m_Label ) == 0 )
+            for( EDA_ITEM* item : subgraph->m_items )
             {
-                // Create new marker for ERC.
-                int cntA = countIndenticalLabels( fullLabelList, *it );
-                int cntB = countIndenticalLabels( fullLabelList, *it_aux );
-
-                if( cntA <= cntB )
-                    SimilarLabelsDiagnose( (*it), (*it_aux) );
-                else
-                    SimilarLabelsDiagnose( (*it_aux), (*it) );
-            }
-        }
-    }
-
-    // Build paths list
-    std::set<NETLIST_OBJECT*, compare_paths> pathsList;
-
-    for( NETLIST_OBJECT* label : uniqueLabelList )
-        pathsList.insert( label );
-
-    // Examine each label inside a sheet path:
-    for( NETLIST_OBJECT* candidate : pathsList )
-    {
-        loc_labelList.clear();
-
-        for( NETLIST_OBJECT* uniqueLabel : uniqueLabelList)
-        {
-            if( candidate->m_SheetPath.Path() == uniqueLabel->m_SheetPath.Path() )
-                loc_labelList.insert( uniqueLabel );
-        }
-
-        // at this point, loc_labelList contains labels of the current sheet path.
-        // Detect similar labels (same label names appears only once in list)
-
-        for( auto ref_it = loc_labelList.begin(); ref_it != loc_labelList.end(); ++ref_it )
-        {
-            NETLIST_OBJECT* ref_item = *ref_it;
-            auto it_aux = ref_it;
-
-            for( ++it_aux; it_aux != loc_labelList.end(); ++it_aux )
-            {
-                // global label versus global label was already examined.
-                // here, at least one label must be local
-                if( ref_item->IsLabelGlobal() && ( *it_aux )->IsLabelGlobal() )
-                    continue;
-
-                if( ref_item->m_Label.CmpNoCase( ( *it_aux )->m_Label ) == 0 )
+                switch( item->Type() )
                 {
-                    // Create new marker for ERC.
-                    int cntA = countIndenticalLabels( fullLabelList, ref_item );
-                    int cntB = countIndenticalLabels( fullLabelList, *it_aux );
+                case SCH_LABEL_T:
+                case SCH_HIER_LABEL_T:
+                case SCH_GLOBAL_LABEL_T:
+                {
+                    SCH_TEXT* text = static_cast<SCH_TEXT*>( item );
 
-                    if( cntA <= cntB )
-                        SimilarLabelsDiagnose( ref_item, ( *it_aux ) );
-                    else
-                        SimilarLabelsDiagnose( ( *it_aux ), ref_item );
+                    wxString normalized = text->GetShownText().Lower();
+
+                    if( !labelMap.count( normalized ) )
+                    {
+                        labelMap[normalized] = text;
+                    }
+                    else if( labelMap.at( normalized )->GetShownText() != text->GetShownText() )
+                    {
+                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMILAR_LABELS );
+                        ercItem->SetItems( text, labelMap.at( normalized ) );
+
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
+                        subgraph->m_sheet.LastScreen()->Append( marker );
+                    }
+
+                    break;
+                }
+
+                default:
+                    break;
                 }
             }
         }
     }
-}
 
-
-// Helper function: count the number of labels identical to aLabel
-//  for global label: global labels in the full project
-//  for local label: all labels in the current sheet
-static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_OBJECT* aRef )
-{
-    int count = 0;
-
-    if( aRef->IsLabelGlobal() )
-    {
-        for( NETLIST_OBJECT* i : aList )
-        {
-            if( i->IsLabelGlobal() && i->m_Label == aRef->m_Label )
-                count++;
-        }
-    }
-    else
-    {
-        for( NETLIST_OBJECT* i : aList )
-        {
-            if( i->m_Label == aRef->m_Label && i->m_SheetPath.Path() == aRef->m_SheetPath.Path() )
-                count++;
-        }
-    }
-
-    return count;
-}
-
-
-// Helper function: creates a marker for similar labels ERC warning
-static void SimilarLabelsDiagnose( NETLIST_OBJECT* aItemA, NETLIST_OBJECT* aItemB )
-{
-    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMILAR_LABELS );
-    ercItem->SetItems( aItemA->m_Comp, aItemB->m_Comp );
-
-    SCH_MARKER* marker = new SCH_MARKER( ercItem, aItemA->m_Start );
-    aItemA->m_SheetPath.LastScreen()->Append( marker );
+    return errors;
 }

@@ -263,14 +263,8 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
     {
         aReporter.ReportTail( _( "Checking footprints...\n" ), RPT_SEVERITY_INFO );
-
         tester.TestMultiunitFootprints();
     }
-
-    std::unique_ptr<NETLIST_OBJECT_LIST> objectsConnectedList( m_parent->BuildNetListBase() );
-
-    // Reset the connection type indicator
-    objectsConnectedList->ResetConnectionsType();
 
     aReporter.ReportTail( _( "Checking pins...\n" ), RPT_SEVERITY_INFO );
 
@@ -286,7 +280,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     if( settings.IsTestEnabled( ERCE_SIMILAR_LABELS ) )
     {
         aReporter.ReportTail( _( "Checking labels...\n" ), RPT_SEVERITY_INFO );
-        objectsConnectedList->TestforSimilarLabels();
+        tester.TestSimilarLabels();
     }
 
     if( settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
