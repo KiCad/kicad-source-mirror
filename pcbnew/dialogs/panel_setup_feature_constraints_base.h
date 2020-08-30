@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,6 +56,8 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticBitmap* m_bitmapZoneFillOpt;
 		wxRadioButton* m_rbOutlinePolygonBestQ;
 		wxRadioButton* m_rbOutlinePolygonFastest;
+		wxStaticBitmap* m_filletBitmap;
+		wxCheckBox* m_allowExternalFilletsOpt;
 		wxStaticText* m_staticText23;
 		wxStaticBitmap* m_bitmapClearance;
 		wxStaticText* m_clearanceTitle;

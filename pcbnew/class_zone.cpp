@@ -1193,45 +1193,67 @@ void ZONE_CONTAINER::GetInteractingZones( PCB_LAYER_ID aLayer,
 
 bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer ) const
 {
-    if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations do not like it ...
+    if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations will not like it ...
         return false;
+
+    BOARD* board = GetBoard();
+    int    maxError = ARC_HIGH_DEF;
+    bool   keepExternalFillets = false;
+
+    if( board )
+    {
+        maxError = board->GetDesignSettings().m_MaxError;
+        keepExternalFillets = board->GetDesignSettings().m_ZoneKeepExternalFillets;
+    }
+
+    auto smooth = [&]( SHAPE_POLY_SET& aPoly )
+                  {
+                      switch( m_cornerSmoothingType )
+                      {
+                      case ZONE_SETTINGS::SMOOTHING_CHAMFER:
+                          aPoly = aPoly.Chamfer( (int) m_cornerRadius );
+                          break;
+
+                      case ZONE_SETTINGS::SMOOTHING_FILLET:
+                      {
+                          aPoly = aPoly.Fillet( (int) m_cornerRadius, maxError );
+                          break;
+                      }
+
+                      default:
+                          break;
+                      }
+                  };
 
     std::vector<ZONE_CONTAINER*> interactingZones;
     GetInteractingZones( aLayer, &interactingZones );
 
+    SHAPE_POLY_SET* maxExtents = m_Poly;
+    SHAPE_POLY_SET  withFillets;
+
     aSmoothedPoly = *m_Poly;
+
+    // Should external fillets (that is, those applied to concave corners) be kept?  While it
+    // seems safer to never have copper extend outside the zone outline, 5.1.x and prior did
+    // indeed fill them so we leave the mode available.
+    if( keepExternalFillets )
+    {
+        withFillets = *m_Poly;
+        smooth( withFillets );
+        withFillets.BooleanAdd( *m_Poly, SHAPE_POLY_SET::PM_FAST );
+        maxExtents = &withFillets;
+    }
 
     for( ZONE_CONTAINER* zone : interactingZones )
         aSmoothedPoly.BooleanAdd( *zone->Outline(), SHAPE_POLY_SET::PM_FAST );
 
-    // Make a smoothed polygon out of the user-drawn polygon if required
-    switch( m_cornerSmoothingType )
-    {
-    case ZONE_SETTINGS::SMOOTHING_CHAMFER:
-        aSmoothedPoly = aSmoothedPoly.Chamfer( m_cornerRadius );
-        break;
-
-    case ZONE_SETTINGS::SMOOTHING_FILLET:
-    {
-        BOARD* board = GetBoard();
-        int maxError = ARC_HIGH_DEF;
-
-        if( board )
-            maxError = board->GetDesignSettings().m_MaxError;
-
-        aSmoothedPoly = aSmoothedPoly.Fillet( m_cornerRadius, maxError );
-        break;
-    }
-
-    default:
-        break;
-    }
+    smooth( aSmoothedPoly );
 
     if( interactingZones.size() )
-        aSmoothedPoly.BooleanIntersection( *m_Poly, SHAPE_POLY_SET::PM_FAST );
+        aSmoothedPoly.BooleanIntersection( *maxExtents, SHAPE_POLY_SET::PM_FAST );
 
     return true;
-};
+}
 
 
 double ZONE_CONTAINER::CalculateFilledArea()

@@ -239,25 +239,28 @@ public:
     std::map< int, int >   m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
     std::set<wxString>     m_DrcExclusions;
 
-    /** Option to handle filled polygons in zones:
-     * the "legacy" option is using thick outlines around filled polygons: give the best shape
-     * the "new" option is using only filled polygons (no outline: give the faster redraw time
-     * moreover when exporting zone filled areas, the excatct shape is exported.
-     * the legacy option can really create redraw time issues for large boards.
-     */
-    bool       m_ZoneUseNoOutlineInFill;    ///< true for new zone filling option
+    // Option to handle filled polygons in zones:
+    // the "legacy" option is using thick outlines around filled polygons: give the best shape
+    // the "new" option is using only filled polygons (no outline: give the faster redraw time
+    // moreover when exporting zone filled areas, the excatct shape is exported.
+    // the legacy option can really create redraw time issues for large boards.
+    bool       m_ZoneUseNoOutlineInFill;
+
+    // When smoothing the zone's outline there's the question of external fillets (that is, those
+    // applied to concave corners).  While it seems safer to never have copper extend outside the
+    // zone outline, 5.1.x and prior did indeed fill them so we leave the mode available.
+    bool       m_ZoneKeepExternalFillets;
 
     // Maximum error allowed when approximating circles and arcs to segments
     int        m_MaxError;
 
     // Global mask margins:
-    int        m_SolderMaskMargin;          ///< Solder mask margin
-    int        m_SolderMaskMinWidth;        ///< Solder mask min width
-                                            // 2 areas near than m_SolderMaskMinWidth
-                                            // are merged
-    int        m_SolderPasteMargin;         ///< Solder paste margin absolute value
-    double     m_SolderPasteMarginRatio;    ///< Solder pask margin ratio value of pad size
-                                            ///< The final margin is the sum of these 2 values
+    int        m_SolderMaskMargin;          // Solder mask margin
+    int        m_SolderMaskMinWidth;        // Solder mask min width (2 areas closer than this
+                                            // width are merged)
+    int        m_SolderPasteMargin;         // Solder paste margin absolute value
+    double     m_SolderPasteMarginRatio;    // Solder pask margin ratio value of pad size
+                                            // The final margin is the sum of these 2 values
 
     // Variables used in footprint editing (default value in item/footprint creation)
     std::vector<TEXT_ITEM_INFO> m_DefaultFPTextItems;
@@ -276,16 +279,12 @@ public:
     wxPoint    m_AuxOrigin;                 ///< origin for plot exports
     wxPoint    m_GridOrigin;                ///< origin for grid offsets
 
-    D_PAD      m_Pad_Master;                ///< A dummy pad to store all default parameters
-                                            // when importing values or create a new pad
+    D_PAD      m_Pad_Master;                // A dummy pad to store all default parameters
+                                            // when importing values or creating a new pad
 
-    /** Set to true if the board has a stackup management.
-     * if m_hasStackup is false, a default basic stackup witll be used to
-     * generate the ;gbrjob file.
-     * if m_hasStackup is true, the stackup defined for the board is used.
-     * if not up to date, a error message will be set
-     * Could be removed later, or at least always set to true
-     */
+    // Set to true if the board has a stackup management.
+    // If not set a default basic stackup witll be used to generate the ;gbrjob file.
+    // Could be removed later, or at least always set to true
     bool m_HasStackup;
 
 private:

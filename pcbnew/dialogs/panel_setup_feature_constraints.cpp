@@ -66,6 +66,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 
     m_rbOutlinePolygonFastest->SetValue( m_BrdSettings->m_ZoneUseNoOutlineInFill );
     m_rbOutlinePolygonBestQ->SetValue( !m_BrdSettings->m_ZoneUseNoOutlineInFill );
+    m_allowExternalFilletsOpt->SetValue( m_BrdSettings->m_ZoneKeepExternalFillets );
 
     m_minClearance.SetValue( m_BrdSettings->m_MinClearance );
     m_trackMinWidth.SetValue( m_BrdSettings->m_TrackMinWidth );
@@ -113,6 +114,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
             m_maxError.GetValue(), IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
 
     m_BrdSettings->m_ZoneUseNoOutlineInFill = m_rbOutlinePolygonFastest->GetValue();
+    m_BrdSettings->m_ZoneKeepExternalFillets = m_allowExternalFilletsOpt->GetValue();
 
     m_BrdSettings->m_MinClearance = m_minClearance.GetValue();
     m_BrdSettings->m_TrackMinWidth = m_trackMinWidth.GetValue();
@@ -140,6 +142,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::Show( bool aShow )
         // first displayed.  However, on OSX 3.0.5 (at least), if another panel is displayed
         // first then the icons will be blank unless they're set here.
         m_bitmapZoneFillOpt->SetBitmap( KiBitmap( show_zone_xpm ) );
+        m_filletBitmap->SetBitmap( KiBitmap( zone_fillet_xpm ) );
         m_bitmapClearance->SetBitmap( KiBitmap( ps_diff_pair_gap_xpm ) );
         m_bitmapMinTrackWidth->SetBitmap( KiBitmap( width_track_xpm ) );
         m_bitmapMinViaAnnulus->SetBitmap( KiBitmap( via_annulus_xpm ) );

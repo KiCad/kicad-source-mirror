@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -131,6 +131,18 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 
 
 	m_bSizerPolygonFillOption->Add( bSizer5, 1, wxEXPAND, 15 );
+
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_filletBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_filletBitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_allowExternalFilletsOpt = new wxCheckBox( this, wxID_ANY, _("Allow fillets outside zone outline"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_allowExternalFilletsOpt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	m_bSizerPolygonFillOption->Add( bSizer9, 1, wxEXPAND, 5 );
 
 
 	sbFeatureRules->Add( m_bSizerPolygonFillOption, 0, wxEXPAND|wxTOP, 10 );

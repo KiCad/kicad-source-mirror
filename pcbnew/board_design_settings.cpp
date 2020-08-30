@@ -23,14 +23,13 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <class_board.h>
 #include <class_track.h>
 #include <layers_id_colors_and_visibility.h>
 #include <kiface_i.h>
-#include <pcbnew.h>
+//#include <pcbnew.h>
 #include <board_design_settings.h>
 #include <drc/drc.h>
-#include <widgets/ui_common.h>
+//#include <widgets/ui_common.h>
 #include <drc/drc_rule.h>
 #include <settings/parameters.h>
 #include <project/project_file.h>
@@ -157,7 +156,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DRCSeverities[ DRCE_EXTRA_FOOTPRINT ] = RPT_SEVERITY_WARNING;
 
     m_MaxError = ARC_HIGH_DEF;
-    m_ZoneUseNoOutlineInFill = true;            // Use new algo by default ti fill zones
+    m_ZoneUseNoOutlineInFill = true;            // Use new algo by default to fill zones
+    m_ZoneKeepExternalFillets = false;          // Use new algo by default.  Legacy boards might
+                                                // want to set it to true for old algo....
 
     // Global mask margins:
     m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE );
@@ -183,8 +184,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_params.emplace_back( new PARAM<bool>( "rules.allow_microvias", &m_MicroViasAllowed, false ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "rules.allow_blind_buried_vias", &m_BlindBuriedViaAllowed, false ) );
+    m_params.emplace_back( new PARAM<bool>( "rules.allow_blind_buried_vias",
+            &m_BlindBuriedViaAllowed, false ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_clearance", &m_MinClearance,
             Millimeter2iu( DEFAULT_MINCLEARANCE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
@@ -428,11 +429,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_TextThickness[LAYER_CLASS_SILK], Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH ), 1,
             TEXTS_MAX_WIDTH, MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "defaults.silk_text_italic", &m_TextItalic[LAYER_CLASS_SILK], false ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.silk_text_italic",
+            &m_TextItalic[LAYER_CLASS_SILK], false ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "defaults.silk_text_upright", &m_TextUpright[ LAYER_CLASS_SILK ], true ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.silk_text_upright",
+            &m_TextUpright[ LAYER_CLASS_SILK ], true ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.copper_line_width",
             &m_LineThickness[LAYER_CLASS_COPPER], Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ),
@@ -450,11 +451,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_TextThickness[LAYER_CLASS_COPPER], Millimeter2iu( DEFAULT_COPPER_TEXT_WIDTH ),
             Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "defaults.copper_text_italic", &m_TextItalic[LAYER_CLASS_COPPER], false ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.copper_text_italic",
+            &m_TextItalic[LAYER_CLASS_COPPER], false ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "defaults.copper_text_upright", &m_TextUpright[LAYER_CLASS_COPPER], true ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.copper_text_upright",
+            &m_TextUpright[LAYER_CLASS_COPPER], true ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.board_outline_line_width",
             &m_LineThickness[LAYER_CLASS_EDGES], Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ),
@@ -480,11 +481,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_TextThickness[LAYER_CLASS_FAB], Millimeter2iu( DEFAULT_TEXT_WIDTH ),
             Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "defaults.fab_text_italic", &m_TextItalic[LAYER_CLASS_FAB], false ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.fab_text_italic",
+            &m_TextItalic[LAYER_CLASS_FAB], false ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "defaults.fab_text_upright", &m_TextUpright[LAYER_CLASS_FAB], true ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.fab_text_upright",
+            &m_TextUpright[LAYER_CLASS_FAB], true ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.other_line_width",
             &m_LineThickness[LAYER_CLASS_OTHERS], Millimeter2iu( DEFAULT_LINE_WIDTH ),
@@ -502,20 +503,20 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_TextThickness[LAYER_CLASS_OTHERS], Millimeter2iu( DEFAULT_TEXT_WIDTH ),
             Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "defaults.other_text_italic", &m_TextItalic[LAYER_CLASS_OTHERS], false ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.other_text_italic",
+            &m_TextItalic[LAYER_CLASS_OTHERS], false ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "defaults.other_text_upright", &m_TextUpright[LAYER_CLASS_OTHERS], true ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.other_text_upright",
+            &m_TextUpright[LAYER_CLASS_OTHERS], true ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "defaults.dimension_units", &m_DimensionUnits, 0, 0, 2 ) );
+    m_params.emplace_back( new PARAM<int>( "defaults.dimension_units",
+            &m_DimensionUnits, 0, 0, 2 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "defaults.dimension_precision", &m_DimensionPrecision, 1, 0, 2 ) );
+    m_params.emplace_back( new PARAM<int>( "defaults.dimension_precision",
+            &m_DimensionPrecision, 1, 0, 2 ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "defaults.zones.45_degree_only", &m_defaultZoneSettings.m_Zone_45_Only, false ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.zones.45_degree_only",
+            &m_defaultZoneSettings.m_Zone_45_Only, false ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.zones.min_clearance",
             &m_defaultZoneSettings.m_ZoneClearance, Mils2iu( ZONE_CLEARANCE_MIL ),
@@ -553,8 +554,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.max_error", &m_MaxError, ARC_HIGH_DEF,
             Millimeter2iu( 0.0001 ), Millimeter2iu( 1.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "zones_use_no_outline", &m_ZoneUseNoOutlineInFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "zones_use_no_outline",
+            &m_ZoneUseNoOutlineInFill, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "zones_allow_external_fillets",
+            &m_ZoneKeepExternalFillets, false ) );
 }
 
 
@@ -607,6 +611,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_DRCSeverities          = aOther.m_DRCSeverities;
     m_DrcExclusions          = aOther.m_DrcExclusions;
     m_ZoneUseNoOutlineInFill = aOther.m_ZoneUseNoOutlineInFill;
+    m_ZoneKeepExternalFillets= aOther.m_ZoneKeepExternalFillets;
     m_MaxError               = aOther.m_MaxError;
     m_SolderMaskMargin       = aOther.m_SolderMaskMargin;
     m_SolderMaskMinWidth     = aOther.m_SolderMaskMinWidth;
@@ -709,7 +714,13 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
     }
 
     if( project->contains( "legacy" ) )
+    {
+        // This defaults to false for new boards, but version 5.1.x and prior kept the fillets
+        // so we do the same for legacy boards.
+        m_ZoneKeepExternalFillets = true;
+
         project->at( "legacy" ).erase( "pcbnew" );
+    }
 
     // Now that we have everything, we need to load again
     if( migrated )

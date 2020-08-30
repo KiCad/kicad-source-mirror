@@ -499,6 +499,7 @@ set( BMAPS_MID
     wizard_add_fplib_small
     zip
     zone_duplicate
+    zone_fillet
     zone_unfill
     zoom
     zoom_area
