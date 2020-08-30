@@ -1052,9 +1052,8 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
         break;
     }
 
-    // If there are no pads, and only drawings on a silkscreen layer, then
-    // report the silkscreen layer as well so that the component can be edited
-    // with the silkscreen layer
+    // If there are no pads, and only drawings on a silkscreen layer, then report the silkscreen
+    // layer as well so that the component can be edited with the silkscreen layer
     bool f_silk = false, b_silk = false, non_silk = false;
 
     for( auto item : m_drawings )
@@ -1083,7 +1082,8 @@ unsigned int MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     int layer = ( m_Layer == F_Cu ) ? LAYER_MOD_FR :
                 ( m_Layer == B_Cu ) ? LAYER_MOD_BK : LAYER_ANCHOR;
 
-    // Currently it is only for anchor layer
+    // Currently this is only pertinent for the anchor layer; everything else is drawn from the
+    // children.
     if( aView->IsLayerVisible( layer ) )
         return 3;
 
@@ -1099,9 +1099,8 @@ const BOX2I MODULE::ViewBBox() const
     area.Merge( m_Reference->GetBoundingBox() );
     area.Merge( m_Value->GetBoundingBox() );
 
-    // Add the Clearance shape size: (shape around the pads when the
-    // clearance is shown.  Not optimized, but the draw cost is small
-    // (perhaps smaller than optimization).
+    // Add the Clearance shape size: (shape around the pads when the clearance is shown.  Not
+    // optimized, but the draw cost is small (perhaps smaller than optimization).
     BOARD* board = GetBoard();
     if( board )
     {

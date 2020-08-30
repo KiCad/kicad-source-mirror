@@ -79,9 +79,9 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 {
     // Store the layerset, as it is going to be modified below and the original settings are
     // needed.
-    LSET lset = m_settings.m_layerSet;
-    int pageCount = lset.count();
-    wxString layer;
+    LSET         lset = m_settings.m_layerSet;
+    int          pageCount = lset.count();
+    wxString     layerName;
     PCB_LAYER_ID extractLayer;
 
     // compute layer mask from page number if we want one page per layer
@@ -102,15 +102,15 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
     extractLayer = m_settings.m_layerSet.ExtractLayer();
 
     if( extractLayer == UNDEFINED_LAYER )
-        layer = _( "Multiple Layers" );
+        layerName = _( "Multiple Layers" );
     else
-        layer = LSET::Name( extractLayer );
+        layerName = LSET::Name( extractLayer );
 
     // In Pcbnew we can want the layer EDGE always printed
     if( !m_pcbnewSettings.m_noEdgeLayer )
         m_settings.m_layerSet.set( Edge_Cuts );
 
-    DrawPage( layer, aPage, pageCount );
+    DrawPage( layerName, aPage, pageCount );
 
     // Restore the original layer set, so the next page can be printed
     m_settings.m_layerSet = lset;
@@ -130,7 +130,13 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
 
     for( LSEQ layerSeq = m_settings.m_layerSet.Seq(); layerSeq; ++layerSeq )
+    {
         aView.SetLayerVisible( PCBNEW_LAYER_ID_START + *layerSeq, true );
+
+        // Enable the corresponding zone layer
+        if( IsCopperLayer( *layerSeq ) )
+            aView.SetLayerVisible( LAYER_ZONE_START + *layerSeq, true );
+    }
 
     if( m_pcbnewSettings.m_asItemCheckboxes )
     {
@@ -161,6 +167,15 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_ANCHOR );
         setVisibility( LAYER_WORKSHEET );
         setVisibility( LAYER_GRID );
+
+        // Keep certain items always enabled and just rely on either the finer or coarser
+        // visibility controls
+        const int alwaysEnabled[] = {
+            LAYER_ZONES, LAYER_PADS, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND, LAYER_VIA_THROUGH
+        };
+
+        for( int item : alwaysEnabled )
+            aView.SetLayerVisible( item, true );
     }
     else
     {
@@ -194,7 +209,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         // Keep certain items always enabled/disabled and just rely on the layer visibility
         const int alwaysEnabled[] = {
             LAYER_MOD_TEXT_FR, LAYER_MOD_TEXT_BK, LAYER_MOD_FR, LAYER_MOD_BK,
-            LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS,
+            LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS, LAYER_ZONES, LAYER_PADS,
             LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND, LAYER_VIA_THROUGH
         };
 
