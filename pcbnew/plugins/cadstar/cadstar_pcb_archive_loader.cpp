@@ -83,6 +83,16 @@ void CADSTAR_PCB::Load( ::BOARD* aBoard )
 }
 
 
+void CADSTAR_PCB::logBoardStackupWarning(
+        const wxString& aCadstarLayerName, const PCB_LAYER_ID& aKiCadLayer )
+{
+    wxLogWarning( wxString::Format(
+            _( "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this "
+               "layer have been mapped to KiCad layer '%s' instead." ),
+            aCadstarLayerName, LSET::Name( aKiCadLayer ) ) );
+}
+
+
 void CADSTAR_PCB::loadBoardStackup()
 {
     std::map<LAYER_ID, LAYER>&       cpaLayers              = Assignments.Layerdefs.Layers;
@@ -176,6 +186,8 @@ void CADSTAR_PCB::loadBoardStackup()
             else
                 kicadLayerID = PCB_LAYER_ID::Cmts_User;
 
+            logBoardStackupWarning( curLayer.Name, kicadLayerID );
+            //TODO: allow user to decide which layer this should be mapped onto.
             break;
 
         case LAYER_TYPE::NONELEC:
@@ -208,6 +220,12 @@ void CADSTAR_PCB::loadBoardStackup()
                         kicadLayerID = PCB_LAYER_ID::B_Adhes;
                     else
                         kicadLayerID = PCB_LAYER_ID::F_Adhes;
+
+                    wxLogMessage( wxString::Format(
+                            _( "The CADSTAR layer '%s' has been assumed to be an adhesive layer. "
+                               "All elements on this layer have been mapped to KiCad layer '%s'." ),
+                            curLayer.Name, LSET::Name( kicadLayerID ) ) );
+                    //TODO: allow user to decide if this is actually an adhesive layer or not.
                 }
                 else
                 {
@@ -215,6 +233,9 @@ void CADSTAR_PCB::loadBoardStackup()
                         kicadLayerID = PCB_LAYER_ID::Eco2_User;
                     else
                         kicadLayerID = PCB_LAYER_ID::Eco1_User;
+
+                    logBoardStackupWarning( curLayer.Name, kicadLayerID );
+                    //TODO: allow user to decide which layer this should be mapped onto.
                 }
 
                 break;
@@ -402,7 +423,7 @@ void CADSTAR_PCB::loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule )
 {
     for( std::pair<PAD_ID, PAD> padPair : aComponent.Pads )
     {
-        PAD& csPad = padPair.second; //Cadstar pad
+        PAD&    csPad     = padPair.second; //Cadstar pad
         PADCODE csPadcode = getPadCode( csPad.PadCodeID );
 
         D_PAD* pad = new D_PAD( aModule );
@@ -453,7 +474,7 @@ void CADSTAR_PCB::loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule )
         case PAD_SHAPE_TYPE::BULLET:
             //todo fix: use custom shape instead (a bullet has the left size flat and right
             //side rounded, before rotation is applied)
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_OVAL );             
+            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_OVAL );
             pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
                                             + (long long) csPadcode.Shape.LeftLength
                                             + (long long) csPadcode.Shape.RightLength ),
@@ -523,7 +544,7 @@ void CADSTAR_PCB::loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule )
         if( csPadcode.ReliefWidth != UNDEFINED_VALUE )
             pad->SetThermalWidth( getKiCadLength( csPadcode.ReliefWidth ) );
 
-        pad->SetOrientation( pad->GetOrientation() + getKiCadAngle( csPadcode.Shape.OrientAngle ) ); 
+        pad->SetOrientation( pad->GetOrientation() + getKiCadAngle( csPadcode.Shape.OrientAngle ) );
 
         if( csPadcode.DrillDiameter != UNDEFINED_VALUE )
         {
@@ -536,7 +557,6 @@ void CADSTAR_PCB::loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule )
                         getKiCadLength( csPadcode.DrillDiameter ) } );
         }
         //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
-
     }
 }
 
@@ -1140,8 +1160,7 @@ wxString CADSTAR_PCB::getAttributeValue( const ATTRIBUTE_ID& aCadstarAttributeID
 
 CADSTAR_PCB::PART CADSTAR_PCB::getPart( const PART_ID& aCadstarPartID )
 {
-    wxCHECK( Parts.PartDefinitions.find( aCadstarPartID ) != Parts.PartDefinitions.end(),
-            PART() );
+    wxCHECK( Parts.PartDefinitions.find( aCadstarPartID ) != Parts.PartDefinitions.end(), PART() );
 
     return Parts.PartDefinitions.at( aCadstarPartID );
 }

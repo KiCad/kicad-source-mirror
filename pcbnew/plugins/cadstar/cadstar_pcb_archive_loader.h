@@ -64,19 +64,17 @@ private:
     // Functions for loading individual elements:
     void loadBoardStackup();
     void loadComponentLibrary();
-    // clang-format off
-        // Helper functions for Component Library loading:
-        void loadLibraryFigures(const SYMDEF& aComponent, MODULE* aModule);
-        void loadLibraryPads(const SYMDEF& aComponent, MODULE* aModule);
-    // clang-format on
     void loadBoards();
     void loadFigures();
     void loadAreas();
     void loadComponents();
-    // clang-format off
-        // Helper functions for Component loading:
-        void loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule );
-    // clang-format on
+
+    // Helper functions for loading:
+    void logBoardStackupWarning(
+            const wxString& aCadstarLayerName, const PCB_LAYER_ID& aKiCadLayer );
+    void loadLibraryFigures( const SYMDEF& aComponent, MODULE* aModule );
+    void loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule );
+    void loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule );
 
     /**
      * @brief 
@@ -121,7 +119,8 @@ private:
      * @return 
      */
     std::vector<DRAWSEGMENT*> getDrawSegmentsFromVertices(
-            const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer = nullptr );
+            const std::vector<VERTEX>& aCadstarVertices,
+            BOARD_ITEM_CONTAINER*      aContainer = nullptr );
 
 
     /**
