@@ -452,6 +452,9 @@ void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
 void EDA_BASE_FRAME::LoadWindowState( const wxString& aFileName )
 {
+    if( !Pgm().GetCommonSettings()->m_Session.remember_open_files )
+        return;
+
     const PROJECT_FILE_STATE* state = Prj().GetLocalSettings().GetFileState( aFileName );
 
     if( state != nullptr )
@@ -643,7 +646,7 @@ void EDA_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     wxString currentlyOpenedFile = GetCurrentFileName();
 
-    if( !currentlyOpenedFile.IsEmpty() )
+    if( Pgm().GetCommonSettings()->m_Session.remember_open_files && !currentlyOpenedFile.IsEmpty() )
     {
         wxFileName rfn( currentlyOpenedFile );
         rfn.MakeRelativeTo( Prj().GetProjectPath() );

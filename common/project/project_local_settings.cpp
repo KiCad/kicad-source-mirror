@@ -300,8 +300,8 @@ const PROJECT_FILE_STATE* PROJECT_LOCAL_SETTINGS::GetFileState( const wxString& 
 }
 
 
-void PROJECT_LOCAL_SETTINGS::SaveFileState( const wxString& aFileName, const WINDOW_SETTINGS* aWindowCfg, 
-                                            bool aOpen )
+void PROJECT_LOCAL_SETTINGS::SaveFileState( const wxString& aFileName,
+                                            const WINDOW_SETTINGS* aWindowCfg, bool aOpen )
 {
     auto it = std::find_if( m_files.begin(), m_files.end(),
                             [&aFileName]( const PROJECT_FILE_STATE& a ) 
