@@ -41,8 +41,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_TextOffsetRatio( 0.08 ),
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS ),
-        m_SpiceAdjustPassiveValues( false ),
-        m_TemplateFieldNames( nullptr )
+        m_SpiceAdjustPassiveValues( false )
 {
     EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
@@ -94,11 +93,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             {
                 nlohmann::json ret = nlohmann::json::array();
 
-                if( !m_TemplateFieldNames )
-                    return ret;
-
                 for( const TEMPLATE_FIELDNAME& field :
-                        m_TemplateFieldNames->GetTemplateFieldNames( false ) )
+                        m_TemplateFieldNames.GetTemplateFieldNames( false ) )
                 {
                     ret.push_back( nlohmann::json( {
                                 { "name",    field.m_Name },
@@ -107,14 +103,29 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                             } ) );
                 }
 
+                auto* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+                if( cfg )
+                {
+                    // Save global fieldname templates
+                    STRING_FORMATTER sf;
+                    m_TemplateFieldNames.Format( &sf, 0, true );
+
+                    wxString record = FROM_UTF8( sf.GetString().c_str() );
+                    record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
+                    record.Replace( wxT("  "), wxT(" "), true );  // double space to single
+
+                    cfg->m_Drawing.field_names = record.ToStdString();
+                }
+
                 return ret;
             },
             [&]( const nlohmann::json& aJson )
             {
-                if( !m_TemplateFieldNames || aJson.empty() || !aJson.is_array() )
+                if( aJson.empty() || !aJson.is_array() )
                     return;
 
-                m_TemplateFieldNames->DeleteAllFieldNameTemplates( false );
+                m_TemplateFieldNames.DeleteAllFieldNameTemplates( false );
 
                 for( const nlohmann::json& entry : aJson )
                 {
@@ -125,7 +136,28 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                     TEMPLATE_FIELDNAME field( entry["name"].get<wxString>() );
                     field.m_URL     = entry["url"].get<bool>();
                     field.m_Visible = entry["visible"].get<bool>();
-                    m_TemplateFieldNames->AddTemplateFieldName( field, false );
+                    m_TemplateFieldNames.AddTemplateFieldName( field, false );
+                }
+
+                auto* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+                if( cfg )
+                {
+                    // Read global fieldname templates
+                    wxString templateFieldNames = cfg->m_Drawing.field_names;
+
+                    if( !templateFieldNames.IsEmpty() )
+                    {
+                        TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
+
+                        try
+                        {
+                            m_TemplateFieldNames.Parse( &lexer, true );
+                        }
+                        catch( const IO_ERROR& )
+                        {
+                        }
+                    }
                 }
             }, {} ) );
 

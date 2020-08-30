@@ -34,7 +34,7 @@
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <wildcards_and_files_ext.h>
-
+#include <project/project_file.h>
 #include "eda_doc.h"
 
 
@@ -307,8 +307,10 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         }
         else
         {
-            wxString fieldname = GetValue( aRow, FDC_NAME );
-            const TEMPLATE_FIELDNAME* templateFn = m_frame->GetTemplateFieldName( fieldname );
+            wxString fn = GetValue( aRow, FDC_NAME );
+
+            SCHEMATIC_SETTINGS* settings = m_frame->Prj().GetProjectFile().m_SchematicSettings;
+            const TEMPLATE_FIELDNAME* templateFn = settings->m_TemplateFieldNames.GetFieldName( fn );
 
             if( templateFn && templateFn->m_URL )
             {

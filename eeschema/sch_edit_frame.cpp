@@ -26,12 +26,9 @@
 #include <class_library.h>
 #include <confirm.h>
 #include <connection_graph.h>
-#include <dialog_symbol_remap.h>
 #include <dialogs/dialog_schematic_find.h>
-#include <eeschema_config.h>
 #include <eeschema_id.h>
 #include <executable_names.h>
-#include <fctsys.h>
 #include <general.h>
 #include <gestfich.h>
 #include <gr_basic.h>
@@ -54,7 +51,6 @@
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
-#include <symbol_lib_table.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
@@ -526,7 +522,6 @@ void SCH_EDIT_FRAME::CreateScreens()
 {
     m_schematic->Reset();
     m_schematic->SetProject( &Prj() );
-    m_schematic->SetTemplateFieldNames( &m_templateFieldNames );
 
     m_schematic->SetRoot( new SCH_SHEET( m_schematic ) );
 
@@ -678,7 +673,6 @@ void SCH_EDIT_FRAME::doCloseWindow()
     SetScreen( nullptr );
 
     GetSettingsManager()->SaveProject();
-    Schematic().SetTemplateFieldNames( nullptr );
     Schematic().Reset();
 
     Destroy();

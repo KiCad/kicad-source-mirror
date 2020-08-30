@@ -375,26 +375,6 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     for( double& factor : aCfg->m_Window.zoom_factors )
         factor = std::min( factor, MAX_ZOOM_FACTOR );
-
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
-
-    if( cfg )
-    {
-        wxString templateFieldNames = cfg->m_Drawing.field_names;
-
-        if( !templateFieldNames.IsEmpty() )
-        {
-            TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
-
-            try
-            {
-                m_templateFieldNames.Parse( &lexer, true );
-            }
-            catch( const IO_ERROR& )
-            {
-            }
-        }
-    }
 }
 
 
@@ -403,19 +383,6 @@ void SCH_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     wxCHECK_RET( aCfg, "Call to SCH_BASE_FRAME::SaveSettings with null settings" );
 
     EDA_DRAW_FRAME::SaveSettings( aCfg );
-
-    if( eeconfig() )
-    {
-        // Save template fieldnames
-        STRING_FORMATTER sf;
-        m_templateFieldNames.Format( &sf, 0, true );
-
-        wxString record = FROM_UTF8( sf.GetString().c_str() );
-        record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
-        record.Replace( wxT("  "), wxT(" "), true );  // double space to single
-
-        eeconfig()->m_Drawing.field_names = record.ToStdString();
-    }
 }
 
 

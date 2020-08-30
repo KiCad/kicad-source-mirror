@@ -137,17 +137,6 @@ public:
     // Schematic editing and misc settings: lifecycle managed by SCHEMATIC
     SCHEMATIC_SETTINGS* m_SchematicSettings;
 
-    /**
-     * A pointer to the template fieldnames object owned by the parent SCH_BASE_FRAME.
-     * Note that this coupling is unfortunate; but the TEMPLATES object has to outlive any
-     * SCHEMATIC_SETTINGS object because it holds both global and project field names.
-     * This will be null if the project is opened outside a SCH_BASE_FRAME.  It is placed here
-     * instead of in SCHEMATIC_SETTINGS because SCHEMATIC_SETTINGS objects are created and destroyed
-     * when schematics are loaded, and it's inconvenient to make sure this pointer is set early so
-     * that load of the SCHEMATIC_SETTINGS works.
-     */
-    TEMPLATES* m_TemplateFieldNames;
-
     // Legacy parameters LibDir and LibName, for importing old projects
     wxString m_LegacyLibDir;
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,10 +90,8 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
 protected:
-    TEMPLATES m_templateFieldNames;
-
     /// These are only used by libedit.  Eeschema should be using the one inside the SCHEMATIC.
-    SCHEMATIC_SETTINGS m_base_frame_defaults;
+    SCHEMATIC_SETTINGS  m_base_frame_defaults;
 
     SCHEMATIC_SETTINGS* m_defaults;
 
@@ -179,33 +177,6 @@ public:
             bool aShowFootprints,
             const LIB_ID* aHighlight = nullptr,
             bool aAllowFields = true );
-
-    /**
-     * Return a template field names list for read only access.
-     */
-    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames()
-    {
-        return m_templateFieldNames.GetTemplateFieldNames();
-    }
-
-    /**
-     * Return a specific template field names list (global or project) for read only access.
-     */
-    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames( bool aGlobal )
-    {
-        return m_templateFieldNames.GetTemplateFieldNames( aGlobal );
-    }
-
-    /**
-     * Search for \a aName in the the template field name list.
-     *
-     * @param aName A wxString object containing the field name to search for.
-     * @return the template fieldname if found; NULL otherwise.
-     */
-    const TEMPLATE_FIELDNAME* GetTemplateFieldName( const wxString& aName )
-    {
-        return m_templateFieldNames.GetFieldName( aName );
-    }
 
     /**
      * Load symbol from symbol library table.

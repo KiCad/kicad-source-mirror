@@ -90,23 +90,9 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
         project.m_ErcSettings       = new ERC_SETTINGS( &project, "erc" );
         project.m_SchematicSettings = new SCHEMATIC_SETTINGS( &project, "schematic" );
 
-        project.m_SchematicSettings->m_TemplateFieldNames = project.m_TemplateFieldNames;
         project.m_SchematicSettings->LoadFromFile();
-
         project.m_ErcSettings->LoadFromFile();
     }
-}
-
-
-void SCHEMATIC::SetTemplateFieldNames( TEMPLATES* aTemplates )
-{
-    wxASSERT( m_project );
-    PROJECT_FILE& project = m_project->GetProjectFile();
-
-    project.m_TemplateFieldNames = aTemplates;
-
-    if( project.m_SchematicSettings )
-        project.m_SchematicSettings->m_TemplateFieldNames = aTemplates;
 }
 
 

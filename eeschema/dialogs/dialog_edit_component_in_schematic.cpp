@@ -149,7 +149,8 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     }
 
     // Add in any template fieldnames not yet defined:
-    for( const TEMPLATE_FIELDNAME& templateFieldname : GetParent()->GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateFieldname :
+            GetParent()->Schematic().Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {
@@ -400,6 +401,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
         return false;
 
     SCH_SCREEN* currentScreen = GetParent()->GetScreen();
+    SCHEMATIC&  schematic = GetParent()->Schematic();
 
     wxCHECK( currentScreen, false );
 
@@ -483,8 +485,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
     // Push all fields to the component -except- for those which are TEMPLATE_FIELDNAMES
     // with empty values.
-    TEMPLATE_FIELDNAMES templateFieldnames = GetParent()->GetTemplateFieldNames();
-    SCH_FIELDS&         fields = m_cmp->GetFields();
+    SCH_FIELDS& fields = m_cmp->GetFields();
 
     fields.clear();
 
@@ -495,7 +496,8 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
         if( i >= MANDATORY_FIELDS )
         {
-            for( const auto& fieldname : templateFieldnames )
+            for( const TEMPLATE_FIELDNAME& fieldname :
+                    schematic.Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
             {
                 if( field.GetName() == fieldname.m_Name && field.GetText().IsEmpty() )
                 {
@@ -746,7 +748,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent
     }
 
     // Add in any template fieldnames not yet defined:
-    for( const TEMPLATE_FIELDNAME& templateFieldname : GetParent()->GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateFieldname :
+            GetParent()->Schematic().Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {

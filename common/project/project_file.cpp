@@ -41,7 +41,6 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
         m_project( nullptr ),
         m_ErcSettings( nullptr ),
         m_SchematicSettings( nullptr ),
-        m_TemplateFieldNames( nullptr ),
         m_BoardSettings()
 {
     // Keep old files around

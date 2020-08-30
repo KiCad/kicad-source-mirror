@@ -957,10 +957,11 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
         AddField( fieldName, true, false );
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
-    for( const TEMPLATE_FIELDNAME& templateFieldName : m_parent->GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateFieldname :
+            m_parent->Schematic().Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
     {
-        if( userFieldNames.count( templateFieldName.m_Name ) == 0 )
-            AddField( templateFieldName.m_Name, false, false );
+        if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
+            AddField( templateFieldname.m_Name, false, false );
     }
 }
 

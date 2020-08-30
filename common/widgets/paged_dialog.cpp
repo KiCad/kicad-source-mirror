@@ -64,13 +64,13 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
     if( aUseReset )
     {
         m_resetButton = new wxButton( this, wxID_ANY, _( "Reset to Defaults" ) );
-        buttonsSizer->Add( m_resetButton, 0, wxRIGHT | wxLEFT, 5 );
+        buttonsSizer->Add( m_resetButton, 0, wxALL, 5 );
     }
 
     if( !aAuxiliaryAction.IsEmpty() )
     {
         m_auxiliaryButton = new wxButton( this, wxID_ANY, aAuxiliaryAction );
-        buttonsSizer->Add( m_auxiliaryButton, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+        buttonsSizer->Add( m_auxiliaryButton, 0, wxALL, 5 );
     }
 
     buttonsSizer->AddStretchSpacer();

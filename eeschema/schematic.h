@@ -81,9 +81,6 @@ public:
 
     void SetProject( PROJECT* aPrj );
 
-    /// Sets up the template fieldnames link if this project is opened in eeschema
-    void SetTemplateFieldNames( TEMPLATES* aTemplates );
-
     /**
      * Builds and returns an updated schematic hierarchy
      * TODO: can this be cached?

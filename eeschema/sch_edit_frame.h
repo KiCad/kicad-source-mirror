@@ -185,29 +185,6 @@ public:
 
     void ShowSchematicSetupDialog( const wxString& aInitialPage = wxEmptyString );
 
-    /**
-     * Insert or append a wanted symbol field name into the field names template.
-     *
-     * Should be used for any symbol property editor.  If the name already exists, it
-     * overwrites the same name.
-     *
-     * @param aFieldName is a full description of the wanted field, and it must not match
-     *          any of the default field names.
-     * @param aGlobal indicates whether to add to the global or project table
-     */
-    void AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool aGlobal )
-    {
-        m_templateFieldNames.AddTemplateFieldName( aFieldName, aGlobal );
-    }
-
-    /**
-     * Remove all global or project fieldname templates.
-     */
-    void DeleteAllTemplateFieldNames( bool aGlobal )
-    {
-        m_templateFieldNames.DeleteAllFieldNameTemplates( aGlobal );
-    }
-
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 

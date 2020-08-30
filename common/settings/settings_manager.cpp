@@ -798,7 +798,7 @@ bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath )
         return false;
 
     PROJECT_FILE* project     = m_project_files.at( path );
-    wxString   projectPath = GetPathForSettingsFile( project );
+    wxString      projectPath = GetPathForSettingsFile( project );
 
     project->SaveToFile( projectPath );
     Prj().GetLocalSettings().SaveToFile( projectPath );

@@ -42,25 +42,24 @@ public:
 
     // Default sizes are all stored in IU here, and im mils in the JSON file
 
-    int    m_DefaultLineWidth;
-    int    m_DefaultWireThickness;
-    int    m_DefaultBusThickness;
-    int    m_DefaultTextSize;
-    double m_TextOffsetRatio;
-    int    m_PinSymbolSize;
-    int    m_JunctionSize;
+    int       m_DefaultLineWidth;
+    int       m_DefaultWireThickness;
+    int       m_DefaultBusThickness;
+    int       m_DefaultTextSize;
+    double    m_TextOffsetRatio;
+    int       m_PinSymbolSize;
+    int       m_JunctionSize;
 
-    wxString m_PageLayoutDescrFile;
+    wxString  m_PageLayoutDescrFile;
 
-    wxString m_PlotDirectoryName;
+    wxString  m_PlotDirectoryName;
 
-    wxString m_NetFormatName;
+    wxString  m_NetFormatName;
 
-    bool     m_SpiceAdjustPassiveValues;
-    wxString m_SpiceCommandString;      // A command string to run external spice
+    bool      m_SpiceAdjustPassiveValues;
+    wxString  m_SpiceCommandString;      // A command string to run external spice
 
-    /// @see PROJECT_FILE::m_TemplateFieldNames
-    TEMPLATES* m_TemplateFieldNames;
+    TEMPLATES m_TemplateFieldNames;
 };
 
 #endif

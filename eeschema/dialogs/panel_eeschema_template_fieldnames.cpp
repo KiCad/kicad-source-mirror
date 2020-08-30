@@ -28,7 +28,7 @@
 #include <grid_tricks.h>
 #include <sch_edit_frame.h>
 #include <bitmaps.h>
-
+#include <schematic.h>
 #include <panel_eeschema_template_fieldnames.h>
 
 PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT_FRAME* aFrame,
@@ -67,7 +67,9 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::~PANEL_EESCHEMA_TEMPLATE_FIELDNAMES()
 
 bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataToWindow()
 {
-    m_fields = m_frame->GetTemplateFieldNames( m_global );
+    SCHEMATIC& schematic = m_frame->Schematic();
+
+    m_fields = schematic.Settings().m_TemplateFieldNames.GetTemplateFieldNames( m_global );
     return TransferDataToGrid();
 }
 
@@ -164,10 +166,12 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
     if( !TransferDataFromGrid() )
         return false;
 
-    m_frame->DeleteAllTemplateFieldNames( m_global );
+    SCHEMATIC& schematic = m_frame->Schematic();
+
+    schematic.Settings().m_TemplateFieldNames.DeleteAllFieldNameTemplates( m_global );
 
     for( const TEMPLATE_FIELDNAME& field : m_fields )
-        m_frame->AddTemplateFieldName( field, m_global );
+        schematic.Settings().m_TemplateFieldNames.AddTemplateFieldName( field, m_global );
 
     return true;
 }

@@ -153,23 +153,20 @@ void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
         return;
     }
 
-    PROJECT* otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
-
-    SCHEMATIC otherSch( otherPrj );
-
-    TEMPLATES templateMgr;
+    PROJECT*      otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
+    SCHEMATIC     otherSch( otherPrj );
+    TEMPLATES     templateMgr;
     PROJECT_FILE& file = otherPrj->GetProjectFile();
 
     wxASSERT( file.m_SchematicSettings );
 
-    file.m_SchematicSettings->m_TemplateFieldNames = &templateMgr;
     file.m_SchematicSettings->LoadFromFile();
 
     if( importDlg.m_FormattingOpt->GetValue() )
         m_formatting->ImportSettingsFrom( *file.m_SchematicSettings );
 
     if( importDlg.m_FieldNameTemplatesOpt->GetValue() )
-        m_fieldNameTemplates->ImportSettingsFrom( file.m_SchematicSettings->m_TemplateFieldNames );
+        m_fieldNameTemplates->ImportSettingsFrom( &otherSch.Settings().m_TemplateFieldNames );
 
     if( importDlg.m_PinMapOpt->GetValue() )
         m_pinMap->ImportSettingsFrom( file.m_ErcSettings->m_PinMap );

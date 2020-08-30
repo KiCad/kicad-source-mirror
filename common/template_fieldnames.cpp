@@ -23,7 +23,6 @@
  */
 
 #include <template_fieldnames.h>
-#include <dsnlexer.h>
 #include <fctsys.h>
 #include <macros.h>
 #include <pgm_base.h>
