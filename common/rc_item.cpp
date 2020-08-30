@@ -166,6 +166,9 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
     if( m_rcItemsProvider )
         m_rcItemsProvider->SetSeverities( m_severities );
 
+    for( RC_TREE_NODE* topLevelNode : m_tree )
+        delete topLevelNode;
+
     m_tree.clear();
 
     for( int i = 0; m_rcItemsProvider && i < m_rcItemsProvider->GetCount(); ++i )
