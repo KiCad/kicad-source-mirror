@@ -71,18 +71,22 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_DefaultBusThickness, Mils2iu( defaultBusThickness ),
             Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_text_size", &m_DefaultTextSize,
+    m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_text_size",
+            &m_DefaultTextSize,
             Mils2iu( defaultTextSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
             1 / IU_PER_MILS ) );
 
-    m_params.emplace_back( new PARAM<double>( "drawing.text_offset_ratio", &m_TextOffsetRatio,
+    m_params.emplace_back( new PARAM<double>( "drawing.text_offset_ratio",
+            &m_TextOffsetRatio,
             (double) TXT_MARGIN / DEFAULT_SIZE_TEXT, -200.0, 200.0 ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "drawing.pin_symbol_size", &m_PinSymbolSize,
+    m_params.emplace_back( new PARAM_SCALED<int>( "drawing.pin_symbol_size",
+            &m_PinSymbolSize,
             Mils2iu( defaultPinSymbolSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
             1 / IU_PER_MILS ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_junction_size", &m_JunctionSize,
+    m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_junction_size",
+            &m_JunctionSize,
             Mils2iu( defaultJunctionSize ), Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "drawing.field_names",
@@ -126,25 +130,27 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             }, {} ) );
 
     // TOOD(JE) get rid of this static
-    m_params.emplace_back( new PARAM<wxString>(
-            "page_layout_descr_file", &BASE_SCREEN::m_PageLayoutDescrFileName, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "page_layout_descr_file",
+            &BASE_SCREEN::m_PageLayoutDescrFileName, "" ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "plot_directory", &m_PlotDirectoryName, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "plot_directory",
+            &m_PlotDirectoryName, "" ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "net_format_name", &m_NetFormatName, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "net_format_name",
+            &m_NetFormatName, "" ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "spice_adjust_passive_values", &m_SpiceAdjustPassiveValues, false ) );
+    m_params.emplace_back( new PARAM<bool>( "spice_adjust_passive_values",
+            &m_SpiceAdjustPassiveValues, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "spice_external_command",
-                                                &m_SpiceCommandString, "spice \"%I\"" ) );
+            &m_SpiceCommandString, "spice \"%I\"" ) );
 
     // TODO(JE) should we keep these LIB_PART:: things around?
-    m_params.emplace_back( new PARAM<int>(
-            "subpart_id_separator", LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
+    m_params.emplace_back( new PARAM<int>( "subpart_id_separator",
+            LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "subpart_first_id", LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
+    m_params.emplace_back( new PARAM<int>( "subpart_first_id",
+            LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
 }
 
 
