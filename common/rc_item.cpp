@@ -92,7 +92,7 @@ KIID RC_TREE_MODEL::ToUUID( wxDataViewItem aItem )
 {
     const RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aItem );
 
-    if( node )
+    if( node && node->m_RcItem )
     {
         const std::shared_ptr<RC_ITEM> rc_item = node->m_RcItem;
 
