@@ -59,7 +59,7 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load(
     m_props = aProperties;
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
 
-    CADSTAR_PCB tempPCB( aFileName );
+    CADSTAR_PCB_ARCHIVE_LOADER tempPCB( aFileName );
     tempPCB.Load( m_board );
 
     return m_board;

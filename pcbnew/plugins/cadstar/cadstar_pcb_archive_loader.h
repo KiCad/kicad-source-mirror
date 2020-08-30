@@ -31,10 +31,10 @@
 
 class BOARD;
 
-class CADSTAR_PCB : public CADSTAR_PCB_ARCHIVE_PARSER
+class CADSTAR_PCB_ARCHIVE_LOADER : public CADSTAR_PCB_ARCHIVE_PARSER
 {
 public:
-    explicit CADSTAR_PCB( wxString aFilename ) : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
+    explicit CADSTAR_PCB_ARCHIVE_LOADER( wxString aFilename ) : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
     {
         mBoard          = nullptr;
         mDesignCenter.x = 0;

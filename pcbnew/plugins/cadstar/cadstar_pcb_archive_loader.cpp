@@ -39,7 +39,7 @@
 #include <class_zone.h>
 #include <convert_basic_shapes_to_polygon.h>
 
-void CADSTAR_PCB::Load( ::BOARD* aBoard )
+void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
 {
     mBoard = aBoard;
     Parse();
@@ -83,7 +83,7 @@ void CADSTAR_PCB::Load( ::BOARD* aBoard )
 }
 
 
-void CADSTAR_PCB::logBoardStackupWarning(
+void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupWarning(
         const wxString& aCadstarLayerName, const PCB_LAYER_ID& aKiCadLayer )
 {
     wxLogWarning( wxString::Format(
@@ -93,7 +93,7 @@ void CADSTAR_PCB::logBoardStackupWarning(
 }
 
 
-void CADSTAR_PCB::loadBoardStackup()
+void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 {
     std::map<LAYER_ID, LAYER>&       cpaLayers              = Assignments.Layerdefs.Layers;
     std::map<MATERIAL_ID, MATERIAL>& cpaMaterials           = Assignments.Layerdefs.Materials;
@@ -379,7 +379,7 @@ void CADSTAR_PCB::loadBoardStackup()
 }
 
 
-void CADSTAR_PCB::loadComponentLibrary()
+void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
 {
     for( std::pair<SYMDEF_ID, SYMDEF> symPair : Library.ComponentDefinitions )
     {
@@ -404,7 +404,7 @@ void CADSTAR_PCB::loadComponentLibrary()
 }
 
 
-void CADSTAR_PCB::loadLibraryFigures( const SYMDEF& aComponent, MODULE* aModule )
+void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryFigures( const SYMDEF& aComponent, MODULE* aModule )
 {
     for( std::pair<FIGURE_ID, FIGURE> figPair : aComponent.Figures )
     {
@@ -419,7 +419,7 @@ void CADSTAR_PCB::loadLibraryFigures( const SYMDEF& aComponent, MODULE* aModule 
 }
 
 
-void CADSTAR_PCB::loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule )
+void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule )
 {
     for( std::pair<PAD_ID, PAD> padPair : aComponent.Pads )
     {
@@ -427,7 +427,7 @@ void CADSTAR_PCB::loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule )
         PADCODE csPadcode = getPadCode( csPad.PadCodeID );
 
         D_PAD* pad = new D_PAD( aModule );
-        aModule->Add( pad );
+        aModule->Add( pad, ADD_MODE::APPEND );
 
         switch( csPad.Side )
         {
@@ -561,7 +561,7 @@ void CADSTAR_PCB::loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule )
 }
 
 
-void CADSTAR_PCB::loadBoards()
+void CADSTAR_PCB_ARCHIVE_LOADER::loadBoards()
 {
     for( std::pair<BOARD_ID, BOARD> boardPair : Layout.Boards )
     {
@@ -575,7 +575,7 @@ void CADSTAR_PCB::loadBoards()
 }
 
 
-void CADSTAR_PCB::loadFigures()
+void CADSTAR_PCB_ARCHIVE_LOADER::loadFigures()
 {
     for( std::pair<FIGURE_ID, FIGURE> figPair : Layout.Figures )
     {
@@ -591,7 +591,7 @@ void CADSTAR_PCB::loadFigures()
 }
 
 
-void CADSTAR_PCB::loadAreas()
+void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
 {
     for( std::pair<AREA_ID, AREA> areaPair : Layout.Areas )
     {
@@ -640,7 +640,7 @@ void CADSTAR_PCB::loadAreas()
 }
 
 
-void CADSTAR_PCB::loadComponents()
+void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
 {
     for( std::pair<COMPONENT_ID, COMPONENT> compPair : Layout.Components )
     {
@@ -680,7 +680,7 @@ void CADSTAR_PCB::loadComponents()
 }
 
 
-void CADSTAR_PCB::loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule )
+void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule )
 {
     for( std::pair<ATTRIBUTE_ID, ATTRIBUTE_VALUE> attrPair : aComponent.AttributeValues )
     {
@@ -715,7 +715,7 @@ void CADSTAR_PCB::loadComponentAttributes( const COMPONENT& aComponent, MODULE* 
 }
 
 
-void CADSTAR_PCB::drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
+void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
         const LINECODE_ID& aCadstarLinecodeID, const wxString& aShapeName,
         BOARD_ITEM_CONTAINER* aContainer )
 {
@@ -761,7 +761,7 @@ void CADSTAR_PCB::drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_
 }
 
 
-void CADSTAR_PCB::drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCutouts,
+void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCutouts,
         const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
         BOARD_ITEM_CONTAINER* aContainer )
 {
@@ -772,7 +772,7 @@ void CADSTAR_PCB::drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCuto
 }
 
 
-void CADSTAR_PCB::drawCadstarVerticesAsSegments( const std::vector<VERTEX>& aCadstarVertices,
+void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsSegments( const std::vector<VERTEX>& aCadstarVertices,
         const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
         BOARD_ITEM_CONTAINER* aContainer )
 {
@@ -789,7 +789,7 @@ void CADSTAR_PCB::drawCadstarVerticesAsSegments( const std::vector<VERTEX>& aCad
 }
 
 
-std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegmentsFromVertices(
+std::vector<DRAWSEGMENT*> CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentsFromVertices(
         const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer )
 {
     std::vector<DRAWSEGMENT*> drawSegments;
@@ -876,7 +876,7 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB::getDrawSegmentsFromVertices(
 }
 
 
-ZONE_CONTAINER* CADSTAR_PCB::getZoneFromCadstarShape(
+ZONE_CONTAINER* CADSTAR_PCB_ARCHIVE_LOADER::getZoneFromCadstarShape(
         const SHAPE& aCadstarShape, const int& aLineThickness )
 {
     ZONE_CONTAINER* zone = new ZONE_CONTAINER( mBoard );
@@ -902,7 +902,7 @@ ZONE_CONTAINER* CADSTAR_PCB::getZoneFromCadstarShape(
 }
 
 
-SHAPE_POLY_SET CADSTAR_PCB::getPolySetFromCadstarShape(
+SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape(
         const SHAPE& aCadstarShape, const int& aLineThickness, BOARD_ITEM_CONTAINER* aContainer )
 {
     std::vector<DRAWSEGMENT*> outlineSegments =
@@ -943,7 +943,7 @@ SHAPE_POLY_SET CADSTAR_PCB::getPolySetFromCadstarShape(
 }
 
 
-SHAPE_LINE_CHAIN CADSTAR_PCB::getLineChainFromDrawsegments(
+SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments(
         const std::vector<DRAWSEGMENT*> aDrawsegments )
 {
     SHAPE_LINE_CHAIN lineChain;
@@ -992,7 +992,7 @@ SHAPE_LINE_CHAIN CADSTAR_PCB::getLineChainFromDrawsegments(
 }
 
 
-void CADSTAR_PCB::addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
+void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
         const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aModule, const wxString& aAttributeValue )
 {
     TEXTE_MODULE* txt;
@@ -1107,7 +1107,7 @@ void CADSTAR_PCB::addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
 }
 
 
-int CADSTAR_PCB::getLineThickness( const LINECODE_ID& aCadstarLineCodeID )
+int CADSTAR_PCB_ARCHIVE_LOADER::getLineThickness( const LINECODE_ID& aCadstarLineCodeID )
 {
 
     wxCHECK( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID )
@@ -1118,7 +1118,7 @@ int CADSTAR_PCB::getLineThickness( const LINECODE_ID& aCadstarLineCodeID )
 }
 
 
-CADSTAR_PCB::TEXTCODE CADSTAR_PCB::getTextCode( const TEXTCODE_ID& aCadstarTextCodeID )
+CADSTAR_PCB_ARCHIVE_LOADER::TEXTCODE CADSTAR_PCB_ARCHIVE_LOADER::getTextCode( const TEXTCODE_ID& aCadstarTextCodeID )
 {
     wxCHECK( Assignments.Codedefs.TextCodes.find( aCadstarTextCodeID )
                      != Assignments.Codedefs.TextCodes.end(),
@@ -1128,7 +1128,7 @@ CADSTAR_PCB::TEXTCODE CADSTAR_PCB::getTextCode( const TEXTCODE_ID& aCadstarTextC
 }
 
 
-CADSTAR_PCB::PADCODE CADSTAR_PCB::getPadCode( const PADCODE_ID& aCadstarPadCodeID )
+CADSTAR_PCB_ARCHIVE_LOADER::PADCODE CADSTAR_PCB_ARCHIVE_LOADER::getPadCode( const PADCODE_ID& aCadstarPadCodeID )
 {
     wxCHECK( Assignments.Codedefs.PadCodes.find( aCadstarPadCodeID )
                      != Assignments.Codedefs.PadCodes.end(),
@@ -1138,7 +1138,7 @@ CADSTAR_PCB::PADCODE CADSTAR_PCB::getPadCode( const PADCODE_ID& aCadstarPadCodeI
 }
 
 
-wxString CADSTAR_PCB::getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID )
+wxString CADSTAR_PCB_ARCHIVE_LOADER::getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID )
 {
     wxCHECK( Assignments.Codedefs.AttributeNames.find( aCadstarAttributeID )
                      != Assignments.Codedefs.AttributeNames.end(),
@@ -1148,7 +1148,7 @@ wxString CADSTAR_PCB::getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID 
 }
 
 
-wxString CADSTAR_PCB::getAttributeValue( const ATTRIBUTE_ID& aCadstarAttributeID,
+wxString CADSTAR_PCB_ARCHIVE_LOADER::getAttributeValue( const ATTRIBUTE_ID& aCadstarAttributeID,
         const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>&       aCadstarAttributeMap )
 {
     wxCHECK( aCadstarAttributeMap.find( aCadstarAttributeID ) != aCadstarAttributeMap.end(),
@@ -1158,7 +1158,7 @@ wxString CADSTAR_PCB::getAttributeValue( const ATTRIBUTE_ID& aCadstarAttributeID
 }
 
 
-CADSTAR_PCB::PART CADSTAR_PCB::getPart( const PART_ID& aCadstarPartID )
+CADSTAR_PCB_ARCHIVE_LOADER::PART CADSTAR_PCB_ARCHIVE_LOADER::getPart( const PART_ID& aCadstarPartID )
 {
     wxCHECK( Parts.PartDefinitions.find( aCadstarPartID ) != Parts.PartDefinitions.end(), PART() );
 
@@ -1166,7 +1166,7 @@ CADSTAR_PCB::PART CADSTAR_PCB::getPart( const PART_ID& aCadstarPartID )
 }
 
 
-wxPoint CADSTAR_PCB::getKiCadPoint( wxPoint aCadstarPoint )
+wxPoint CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPoint( wxPoint aCadstarPoint )
 {
     wxPoint retval;
 
@@ -1177,14 +1177,14 @@ wxPoint CADSTAR_PCB::getKiCadPoint( wxPoint aCadstarPoint )
 }
 
 
-double CADSTAR_PCB::getPolarAngle( wxPoint aPoint )
+double CADSTAR_PCB_ARCHIVE_LOADER::getPolarAngle( wxPoint aPoint )
 {
 
     return NormalizeAnglePos( ArcTangente( aPoint.y, aPoint.x ) );
 }
 
 
-PCB_LAYER_ID CADSTAR_PCB::getKiCadCopperLayerID( unsigned int aLayerNum )
+PCB_LAYER_ID CADSTAR_PCB_ARCHIVE_LOADER::getKiCadCopperLayerID( unsigned int aLayerNum )
 {
     switch( aLayerNum )
     {
@@ -1227,7 +1227,7 @@ PCB_LAYER_ID CADSTAR_PCB::getKiCadCopperLayerID( unsigned int aLayerNum )
     return PCB_LAYER_ID::UNDEFINED_LAYER;
 }
 
-bool CADSTAR_PCB::isLayerSet( const LAYER_ID& aCadstarLayerID )
+bool CADSTAR_PCB_ARCHIVE_LOADER::isLayerSet( const LAYER_ID& aCadstarLayerID )
 {
     LAYER& layer = Assignments.Layerdefs.Layers.at( aCadstarLayerID );
 
@@ -1246,7 +1246,7 @@ bool CADSTAR_PCB::isLayerSet( const LAYER_ID& aCadstarLayerID )
 }
 
 
-PCB_LAYER_ID CADSTAR_PCB::getKiCadLayer( const LAYER_ID& aCadstarLayerID )
+PCB_LAYER_ID CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayer( const LAYER_ID& aCadstarLayerID )
 {
     if( mLayermap.find( aCadstarLayerID ) == mLayermap.end() )
         return PCB_LAYER_ID::UNDEFINED_LAYER; //Possibly should be an ASSERT?
@@ -1255,7 +1255,7 @@ PCB_LAYER_ID CADSTAR_PCB::getKiCadLayer( const LAYER_ID& aCadstarLayerID )
 }
 
 
-LSET CADSTAR_PCB::getKiCadLayerSet( const LAYER_ID& aCadstarLayerID )
+LSET CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayerSet( const LAYER_ID& aCadstarLayerID )
 {
     LAYER& layer = Assignments.Layerdefs.Layers.at( aCadstarLayerID );
 
