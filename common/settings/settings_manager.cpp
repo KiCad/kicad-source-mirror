@@ -741,7 +741,8 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 
     // Immediately reload a null project; this is required until the rest of the application
     // is refactored to not assume that Prj() always works
-    LoadProject( "" );
+    if( m_projects.empty() )
+        LoadProject( "" );
 
     // Remove the reference in the environment to the previous project
     wxSetEnv( PROJECT_VAR_NAME, "" );
