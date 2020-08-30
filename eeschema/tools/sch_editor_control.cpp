@@ -637,19 +637,12 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             if( !item )
                 return false;
 
+            SCH_SHEET_PATH& sheet = m_frame->GetCurrentSheet();
+
             if( item->IsType( wires ) )
             {
-                // TODO(JE) Port to connection graph
-                std::unique_ptr<NETLIST_OBJECT_LIST> netlist( m_frame->BuildNetListBase() );
-
-                for( NETLIST_OBJECT* obj : *netlist )
-                {
-                    if( obj->m_Comp == item )
-                    {
-                        simFrame->AddVoltagePlot( UnescapeString( obj->GetNetName() ) );
-                        break;
-                    }
-                }
+                if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection( sheet ) )
+                    simFrame->AddVoltagePlot( UnescapeString( conn->Name() ) );
             }
             else if( item->Type() == SCH_PIN_T )
             {
@@ -668,7 +661,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 else
                     param = wxString::Format( wxT( "I%s" ), pin->GetName().Lower() );
 
-                simFrame->AddCurrentPlot( comp->GetRef( &m_frame->GetCurrentSheet() ), param );
+                simFrame->AddCurrentPlot( comp->GetRef( &sheet ), param );
             }
 
             return true;
