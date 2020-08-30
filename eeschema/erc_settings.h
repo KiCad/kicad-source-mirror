@@ -114,7 +114,7 @@ public:
 
     bool IsTestEnabled( int aErrorCode ) const
     {
-        return m_Severities.at( aErrorCode ) != RPT_SEVERITY_IGNORE;
+        return GetSeverity( aErrorCode ) != RPT_SEVERITY_IGNORE;
     }
 
     int GetSeverity( int aErrorCode ) const;

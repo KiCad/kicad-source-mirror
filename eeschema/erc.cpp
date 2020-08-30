@@ -28,19 +28,20 @@
  * @brief Electrical Rules Check implementation.
  */
 
+#include "connection_graph.h"
+#include <erc.h>
 #include <fctsys.h>
 #include <kicad_string.h>
-#include <sch_edit_frame.h>
-#include <netlist_object.h>
 #include <lib_pin.h>
-#include <erc.h>
+#include <netlist_object.h>
+#include <sch_edit_frame.h>
 #include <sch_marker.h>
-#include <sch_sheet.h>
 #include <sch_reference_list.h>
+#include <sch_sheet.h>
 #include <schematic.h>
-#include <wx/ffile.h>
 #include <ws_draw_item.h>
 #include <ws_proxy_view_item.h>
+#include <wx/ffile.h>
 
 
 /* ERC tests :
@@ -577,6 +578,138 @@ int ERC_TESTER::TestNoConnectPins()
     }
 
     return err_count;
+}
+
+
+int ERC_TESTER::TestPinToPin()
+{
+    ERC_SETTINGS&  settings = m_schematic->ErcSettings();
+    const NET_MAP& nets     = m_schematic->ConnectionGraph()->GetNetMap();
+
+    int errors = 0;
+
+    for( const std::pair<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
+    {
+        std::vector<SCH_PIN*> pins;
+        std::unordered_map<EDA_ITEM*, SCH_SCREEN*> pinToScreenMap;
+
+        for( CONNECTION_SUBGRAPH* subgraph: net.second )
+        {
+            for( EDA_ITEM* item : subgraph->m_items )
+            {
+                if( item->Type() == SCH_PIN_T )
+                {
+                    pins.emplace_back( static_cast<SCH_PIN*>( item ) );
+                    pinToScreenMap[item] = subgraph->m_sheet.LastScreen();
+                }
+            }
+        }
+
+        // Single-pin nets are handled elsewhere
+        if( pins.size() < 2 )
+            continue;
+
+        std::set<std::pair<SCH_PIN*, SCH_PIN*>> tested;
+
+        for( SCH_PIN* refPin : pins )
+        {
+            ELECTRICAL_PINTYPE refType = refPin->GetType();
+
+            for( SCH_PIN* testPin : pins )
+            {
+                if( testPin == refPin )
+                    continue;
+
+                std::pair<SCH_PIN*, SCH_PIN*> pair1 = std::make_pair( refPin, testPin );
+                std::pair<SCH_PIN*, SCH_PIN*> pair2 = std::make_pair( testPin, refPin );
+
+                if( tested.count( pair1 ) || tested.count( pair2 ) )
+                    continue;
+
+                tested.insert( pair1 );
+                tested.insert( pair2 );
+
+                ELECTRICAL_PINTYPE testType = testPin->GetType();
+
+                PIN_ERROR erc = settings.GetPinMapValue( refType, testType );
+
+                if( erc != PIN_ERROR::OK )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem =
+                            ERC_ITEM::Create( erc == PIN_ERROR::WARNING ? ERCE_PIN_TO_PIN_WARNING :
+                                                                          ERCE_PIN_TO_PIN_ERROR );
+                    ercItem->SetItems( refPin, testPin );
+
+                    ercItem->SetErrorMessage(
+                            wxString::Format( _( "Pins of type %s and %s are connected" ),
+                                    ElectricalPinTypeGetText( refType ),
+                                    ElectricalPinTypeGetText( testType ) ) );
+
+                    SCH_MARKER* marker =
+                            new SCH_MARKER( ercItem, refPin->GetTransformedPosition() );
+                    pinToScreenMap[refPin]->Append( marker );
+                    errors++;
+                }
+            }
+        }
+    }
+
+    return errors;
+}
+
+
+int ERC_TESTER::TestMultUnitPinConflicts()
+{
+    const NET_MAP& nets = m_schematic->ConnectionGraph()->GetNetMap();
+
+    int errors = 0;
+
+    std::unordered_map<wxString, std::pair<wxString, SCH_PIN*>> pinToNetMap;
+
+    for( const std::pair<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
+    {
+        const wxString& netName = net.first.first;
+        std::vector<SCH_PIN*> pins;
+
+        for( CONNECTION_SUBGRAPH* subgraph : net.second )
+        {
+            for( EDA_ITEM* item : subgraph->m_items )
+            {
+                if( item->Type() == SCH_PIN_T )
+                {
+                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+
+                    if( !pin->GetLibPin()->GetParent()->IsMulti() )
+                        continue;
+
+                    wxString name = ( pin->GetParentComponent()->GetRef( &subgraph->m_sheet ) +
+                                      ":" + pin->GetName() );
+
+                    if( !pinToNetMap.count( name ) )
+                    {
+                        pinToNetMap[name] = std::make_pair( netName, pin );
+                    }
+                    else if( pinToNetMap[name].first != netName )
+                    {
+                        std::shared_ptr<ERC_ITEM> ercItem =
+                                ERC_ITEM::Create( ERCE_DIFFERENT_UNIT_NET );
+
+                        ercItem->SetErrorMessage( wxString::Format(
+                                _( "Pin %s is connected to both %s and %s" ),
+                                pin->GetNumber(), netName, pinToNetMap[name].first ) );
+
+                        ercItem->SetItems( pin, pinToNetMap[name].second );
+
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem,
+                                                             pin->GetTransformedPosition() );
+                        subgraph->m_sheet.LastScreen()->Append( marker );
+                    }
+                }
+            }
+        }
+    }
+
+    return errors;
 }
 
 

@@ -2421,7 +2421,11 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         {
             for( SCH_PIN* testPin : pins )
             {
-                if( testPin->ConnectedItems( sheet ).empty() )
+                // We only apply this test to power symbols, because other symbols have invisible
+                // pins that are meant to be dangling, but the KiCad standard library power symbols
+                // have invisible pins that are *not* meant to be dangling.
+                if( testPin->GetLibPin()->GetParent()->IsPower() &&
+                    testPin->ConnectedItems( sheet ).empty() )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
                     ercItem->SetItems( testPin );

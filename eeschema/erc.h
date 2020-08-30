@@ -106,6 +106,18 @@ public:
      */
     int TestNoConnectPins();
 
+    /**
+     * Checks the full netlist against the pin-to-pin connectivity requirements
+     * @return the error count
+     */
+    int TestPinToPin();
+
+    /**
+     * Checks if shared pins on multi-unit components have been connected to different nets
+     * @return the error count
+     */
+    int TestMultUnitPinConflicts();
+
 private:
     /**
      * Performs ERC testing and creates an ERC marker to show the ERC problem for aNetItemRef
