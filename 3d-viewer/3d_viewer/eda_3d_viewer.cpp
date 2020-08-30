@@ -844,7 +844,7 @@ bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
                                         KIGFX::COLOR4D aDefaultColor )
 {
     KIGFX::COLOR4D newcolor;
-    KIGFX::COLOR4D oldcolor( aColor.r,aColor.g, aColor.b, 1.0 - aColor.a );
+    KIGFX::COLOR4D oldcolor( aColor.r,aColor.g, aColor.b, aColor.a );
 
     DIALOG_COLOR_PICKER picker( this, oldcolor, aAllowOpacityControl, aPredefinedColors, aDefaultColor );
 
@@ -859,7 +859,7 @@ bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
     aColor.r = newcolor.r;
     aColor.g = newcolor.g;
     aColor.b = newcolor.b;
-    aColor.a = 1.0 - newcolor.a;
+    aColor.a = newcolor.a;
 
     return true;
 }
@@ -887,20 +887,20 @@ bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
 {
     CUSTOM_COLORS_LIST colors;
 
-    colors.push_back( CUSTOM_COLOR_ITEM(  20/255.0,  51/255.0,  36/255.0, 1.0 - 0.17, "Green" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  91/255.0, 168/255.0,  12/255.0, 1.0 - 0.17, "Light Green" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  13/255.0, 104/255.0,  11/255.0, 1.0 - 0.17, "Saturated Green" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 181/255.0,  19/255.0,  21/255.0, 1.0 - 0.17, "Red" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 239/255.0,  53/255.0,  41/255.0, 1.0 - 0.17, "Red Light Orange" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 210/255.0,  40/255.0,  14/255.0, 1.0 - 0.17, "Red 2" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(   2/255.0,  59/255.0, 162/255.0, 1.0 - 0.17, "Blue" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  54/255.0,  79/255.0, 116/255.0, 1.0 - 0.17, "Light blue 1" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  61/255.0,  85/255.0, 130/255.0, 1.0 - 0.17, "Light blue 2" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  21/255.0,  70/255.0,  80/255.0, 1.0 - 0.17, "Green blue (dark)" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  11/255.0,  11/255.0,  11/255.0, 1.0 - 0.17, "Black" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 245/255.0, 245/255.0, 245/255.0, 1.0 - 0.17, "White" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 119/255.0,  31/255.0,  91/255.0, 1.0 - 0.17, "Purple" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  32/255.0,   2/255.0,  53/255.0, 1.0 - 0.17, "Purple Dark" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  20/255.0,  51/255.0,  36/255.0, 0.83, "Green" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  91/255.0, 168/255.0,  12/255.0, 0.83, "Light Green" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  13/255.0, 104/255.0,  11/255.0, 0.83, "Saturated Green" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 181/255.0,  19/255.0,  21/255.0, 0.83, "Red" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 239/255.0,  53/255.0,  41/255.0, 0.83, "Red Light Orange" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 210/255.0,  40/255.0,  14/255.0, 0.83, "Red 2" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(   2/255.0,  59/255.0, 162/255.0, 0.83, "Blue" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  54/255.0,  79/255.0, 116/255.0, 0.83, "Light blue 1" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  61/255.0,  85/255.0, 130/255.0, 0.83, "Light blue 2" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  21/255.0,  70/255.0,  80/255.0, 0.83, "Green blue (dark)" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  11/255.0,  11/255.0,  11/255.0, 0.83, "Black" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 245/255.0, 245/255.0, 245/255.0, 0.83, "White" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 119/255.0,  31/255.0,  91/255.0, 0.83, "Purple" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  32/255.0,   2/255.0,  53/255.0, 0.83, "Purple Dark" ) );
 
     if( Set3DColorFromUser( m_boardAdapter.m_SolderMaskColorTop, _( "Solder Mask Color" ), &colors, true, colors[0].m_Color ) )
     {
@@ -941,14 +941,14 @@ bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
 {
     CUSTOM_COLORS_LIST colors;
 
-    colors.push_back( CUSTOM_COLOR_ITEM(  51/255.0,  43/255.0, 22/255.0, 1.0 - 0.1, "FR4 natural, dark" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 109/255.0, 116/255.0, 75/255.0, 1.0 - 0.1, "FR4 natural" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  78/255.0,  14/255.0,  5/255.0, 1.0 - 0.1, "brown/red" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, 1.0 - 0.1, "brown 1" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 123/255.0, 54/255.0, 1.0 - 0.1, "brown 2" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, 1.0 - 0.1, "brown 3" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  63/255.0, 126/255.0, 71/255.0, 1.0 - 0.1, "green 1" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 117/255.0, 122/255.0, 90/255.0, 1.0 - 0.1, "green 2" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  51/255.0,  43/255.0, 22/255.0, 0.9, "FR4 natural, dark" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 109/255.0, 116/255.0, 75/255.0, 0.9, "FR4 natural" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  78/255.0,  14/255.0,  5/255.0, 0.9, "brown/red" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, 0.9, "brown 1" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 123/255.0, 54/255.0, 0.9, "brown 2" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, 0.9, "brown 3" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  63/255.0, 126/255.0, 71/255.0, 0.9, "green 1" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 117/255.0, 122/255.0, 90/255.0, 0.9, "green 2" ) );
 
     if( Set3DColorFromUser( m_boardAdapter.m_BoardBodyColor, _( "Board Body Color" ), &colors, true, colors[0].m_Color ) )
     {

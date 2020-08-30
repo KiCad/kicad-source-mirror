@@ -51,17 +51,17 @@
 /**
  * @brief TransparencyAlphaControl
  * Perform an interpolation step to easy control the transparency based on the
- * gray color value and alpha
+ * gray color value and transparency
  * @param aGrayColorValue - diffuse gray value
- * @param aAlpha - control
+ * @param aTransparency - control
  * @return transparency to use in material
  */
-static float TransparencyAlphaControl( float aGrayColorValue, float aAlpha )
+static float TransparencyControl( float aGrayColorValue, float aTransparency )
 {
-    const float aaa = aAlpha * aAlpha * aAlpha;
+    const float aaa = aTransparency * aTransparency * aTransparency;
 
     // 1.00-1.05*(1.0-x)^3
-    float ca = 1.0f - aAlpha;
+    float ca = 1.0f - aTransparency;
     ca = 1.00f - 1.05f * ca * ca * ca;
 
     return glm::max( glm::min( aGrayColorValue * ca + aaa, 1.0f ), 0.0f );
@@ -137,8 +137,8 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
               + m_boardAdapter.m_SolderMaskColorTop.b )
             / 3.0f;
 
-    const float solderMask_transparency = TransparencyAlphaControl( solderMask_gray,
-                                                                    m_boardAdapter.m_SolderMaskColorTop.a );
+    const float solderMask_transparency = TransparencyControl( solderMask_gray,
+                                                               1.0f - m_boardAdapter.m_SolderMaskColorTop.a ); // opacity to transparency
 
     m_materials.m_SolderMask = CBLINN_PHONG_MATERIAL(
             ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderMaskColorTop ) * 0.10f, // ambient
@@ -168,7 +168,7 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                                               8.0f / 255.0f,
                                               10.0f / 255.0f ) ), // specular
                 0.1f * 128.0f,                                    // shiness
-                m_boardAdapter.m_BoardBodyColor.a,                // transparency
+                1.0f - m_boardAdapter.m_BoardBodyColor.a,         // opacity to transparency
                 0.0f );                                           // reflection
 
     m_materials.m_EpoxyBoard.SetAbsorvance( 10.0f );

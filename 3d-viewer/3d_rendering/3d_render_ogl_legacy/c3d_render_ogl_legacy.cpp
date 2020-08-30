@@ -325,7 +325,7 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
             const SFVEC4F layerColor = get_layer_color( aLayerID );
 
             m_materials.m_SolderMask.m_Diffuse = layerColor;
-            m_materials.m_SolderMask.m_Transparency = layerColor.a;
+            m_materials.m_SolderMask.m_Transparency = 1.0f - layerColor.a; // Convert Opacity to Transparency
 
             if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
             {
@@ -506,7 +506,7 @@ void C3D_RENDER_OGL_LEGACY::render_board_body( bool aSkipRenderHoles )
 
 
         m_materials.m_EpoxyBoard.m_Diffuse   = m_boardAdapter.m_BoardBodyColor;
-        m_materials.m_EpoxyBoard.m_Transparency = m_boardAdapter.m_BoardBodyColor.a;
+        m_materials.m_EpoxyBoard.m_Transparency = 1.0f - m_boardAdapter.m_BoardBodyColor.a; // opacity to transparency
 
         OGL_SetMaterial( m_materials.m_EpoxyBoard, 1.0f );
 
@@ -690,7 +690,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
         // Do not show inner layers when it is displaying the board
         // and board body is full opaque
         if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) &&
-            ( m_boardAdapter.m_BoardBodyColor.a < 0.01f ) )
+            ( m_boardAdapter.m_BoardBodyColor.a > 0.99f ) )
         {
             if( (layer_id > F_Cu) && (layer_id < B_Cu) )
                 continue;

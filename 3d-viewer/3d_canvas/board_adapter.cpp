@@ -112,9 +112,9 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 
     m_BgColorBot         = SFVEC4F( 0.4, 0.4, 0.5, 1.0 );
     m_BgColorTop         = SFVEC4F( 0.8, 0.8, 0.9, 1.0 );
-    m_BoardBodyColor     = SFVEC4F( 0.4, 0.4, 0.5, 1.0 );
-    m_SolderMaskColorTop = SFVEC4F( 0.1, 0.2, 0.1, 0.17 );
-    m_SolderMaskColorBot = SFVEC4F( 0.1, 0.2, 0.1, 0.17 );
+    m_BoardBodyColor     = SFVEC4F( 0.4, 0.4, 0.5, 0.9 );
+    m_SolderMaskColorTop = SFVEC4F( 0.1, 0.2, 0.1, 0.83 );
+    m_SolderMaskColorBot = SFVEC4F( 0.1, 0.2, 0.1, 0.83 );
     m_SolderPasteColor   = SFVEC4F( 0.4, 0.4, 0.4, 1.0 );
     m_SilkScreenColorTop = SFVEC4F( 0.9, 0.9, 0.9, 1.0 );
     m_SilkScreenColorBot = SFVEC4F( 0.9, 0.9, 0.9, 1.0 );
