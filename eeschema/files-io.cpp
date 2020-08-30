@@ -290,9 +290,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         Schematic().SetProject( nullptr );
         GetSettingsManager()->UnloadProject( &Prj() );
 
-        // Do not load a project if one doesn't exist.  This normally happens if we are
+        GetSettingsManager()->LoadProject( pro.GetFullPath() );
+
+        // Do not allow saving a project if one doesn't exist.  This normally happens if we are
         // standalone and opening a board that has been moved from its project folder.
-        GetSettingsManager()->LoadProject( pro.Exists() ? pro.GetFullPath() : "" );
+        if( !pro.Exists() )
+            Prj().SetReadOnly();
 
         CreateScreens();
     }

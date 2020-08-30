@@ -82,8 +82,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
                          wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), NULL, this );
 
-    if( Prj().IsNullProject() )
-        m_infoBar->ShowMessage( _( "No project is loaded. Changes will not be saved." ) );
+    if( Prj().IsReadOnly() )
+        m_infoBar->ShowMessage( _( "Project is missing or read-only. Changes will not be saved." ) );
 
     FinishDialogSettings();
 }

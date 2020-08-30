@@ -794,6 +794,10 @@ bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath )
     if( path.empty() )
         path = Prj().GetProjectFullName();
 
+    // TODO: refactor for MDI
+    if( Prj().IsReadOnly() )
+        return false;
+
     if( !m_project_files.count( path ) )
         return false;
 

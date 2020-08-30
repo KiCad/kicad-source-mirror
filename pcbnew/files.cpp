@@ -521,9 +521,12 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             mgr->UnloadProject( &mgr->Prj() );
 
-            // Do not load a project if one doesn't exist.  This normally happens if we are
+            mgr->LoadProject( pro.GetFullPath() );
+
+            // Do not allow saving a project if one doesn't exist.  This normally happens if we are
             // standalone and opening a board that has been moved from its project folder.
-            mgr->LoadProject( pro.Exists() ? pro.GetFullPath() : "" );
+            if( !pro.Exists() )
+                Prj().SetReadOnly();
         }
     }
 

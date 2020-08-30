@@ -40,6 +40,7 @@
 
 
 PROJECT::PROJECT() :
+        m_readOnly( false ),
         m_projectFile( nullptr ),
         m_localSettings( nullptr )
 {

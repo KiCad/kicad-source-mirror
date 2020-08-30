@@ -117,6 +117,10 @@ public:
      */
     VTBL_ENTRY bool IsNullProject() const;
 
+    VTBL_ENTRY bool IsReadOnly() const { return m_readOnly || IsNullProject(); }
+
+    VTBL_ENTRY void SetReadOnly( bool aReadOnly = true ) { m_readOnly = aReadOnly; }
+
     /**
      * Return the name of the sheet identified by the given UUID.
      */
@@ -331,6 +335,9 @@ private:
 
     wxFileName      m_project_name;         ///< \<fullpath\>/\<basename\>.pro
     wxString        m_pro_date_and_time;
+
+    ///> True if the project is read-only: no project files will be written
+    bool m_readOnly;
 
     /// Backing store for project data -- owned by SETTINGS_MANAGER
     PROJECT_FILE*   m_projectFile;
