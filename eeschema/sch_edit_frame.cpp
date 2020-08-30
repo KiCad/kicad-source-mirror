@@ -845,7 +845,7 @@ void SCH_EDIT_FRAME::NewProject()
     wxString pro_dir = m_mruPath;
 
     wxFileDialog dlg( this, _( "New Schematic" ), pro_dir, wxEmptyString,
-                      LegacySchematicFileWildcard(), wxFD_SAVE );
+                      KiCadSchematicFileWildcard(), wxFD_SAVE );
 
     if( dlg.ShowModal() != wxID_CANCEL )
     {
