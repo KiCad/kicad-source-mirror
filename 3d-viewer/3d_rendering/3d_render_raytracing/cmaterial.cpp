@@ -80,6 +80,7 @@ CMATERIAL::CMATERIAL( const SFVEC3F &aAmbient,
     m_cast_shadows  = true;
     m_refraction_nr_samples = 4;
     m_reflections_nr_samples = 3;
+    m_reflections_recursive_levels = 2;
 
     m_normal_perturbator = NULL;
 }

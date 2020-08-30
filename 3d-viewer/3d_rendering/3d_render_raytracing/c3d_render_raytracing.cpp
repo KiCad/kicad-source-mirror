@@ -1805,7 +1805,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
         if( !aIsInsideObject &&
             (objMaterial->GetReflection() > 0.0f) &&
-            m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) )
+            m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) &&
+            ( aRecursiveLevel < objMaterial->GetReflectionsRecursiveLevel() ) )
         {
             const unsigned int reflection_number_of_samples = objMaterial->GetNrReflectionsSamples();
 

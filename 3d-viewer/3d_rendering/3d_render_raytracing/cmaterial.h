@@ -215,10 +215,12 @@ public:
     float GetAbsorvance()   const { return m_absorbance; }
     unsigned int GetNrRefractionsSamples() const { return m_refraction_nr_samples; }
     unsigned int GetNrReflectionsSamples() const { return m_reflections_nr_samples; }
+    unsigned int GetReflectionsRecursiveLevel() const { return m_reflections_recursive_levels; }
 
     void SetAbsorvance( float aAbsorvanceFactor ) { m_absorbance = aAbsorvanceFactor; }
     void SetNrRefractionsSamples( unsigned int aNrRefractions ) { m_refraction_nr_samples = aNrRefractions; }
     void SetNrReflectionsSamples( unsigned int aNrReflections ) { m_reflections_nr_samples = aNrReflections; }
+    void SetReflectionsRecursiveLevel( unsigned int aReflectionsLevel ) { m_reflections_recursive_levels = aReflectionsLevel; }
 
     /**
      * @brief SetCastShadows - Set if the material can receive shadows
@@ -268,6 +270,7 @@ protected:
     bool    m_cast_shadows;                     ///< true if this object will block the light
     unsigned int     m_refraction_nr_samples;   ///< nr of rays that will be interpolated for this material if it is a transparent
     unsigned int     m_reflections_nr_samples;  ///< nr of rays that will be interpolated for this material if it is reflective
+    unsigned int     m_reflections_recursive_levels; ///< nr of levels it allows for reflection recursiveness
 
     const CPROCEDURALGENERATOR *m_normal_perturbator;
 };

@@ -188,6 +188,7 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 0.0f,                                   // transparency
                 0.50f );                                // reflection
     m_materials.m_Floor.SetCastShadows( false );
+    m_materials.m_Floor.SetReflectionsRecursiveLevel( 1 );
 }
 
 
