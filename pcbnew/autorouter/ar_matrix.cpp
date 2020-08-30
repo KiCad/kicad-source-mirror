@@ -39,8 +39,6 @@ AR_MATRIX::AR_MATRIX()
     m_BoardSide[1]       = nullptr;
     m_DistSide[0]        = nullptr;
     m_DistSide[1]        = nullptr;
-    m_DirSide[0]         = nullptr;
-    m_DirSide[1]         = nullptr;
     m_opWriteCell        = nullptr;
     m_Nrows              = 0;
     m_Ncols              = 0;
@@ -103,7 +101,6 @@ int AR_MATRIX::InitRoutingMatrix()
     {
         m_BoardSide[side] = nullptr;
         m_DistSide[side] = nullptr;
-        m_DirSide[side] = nullptr;
 
         // allocate matrix & initialize everything to empty
         m_BoardSide[side] = (MATRIX_CELL*) operator new( ii * sizeof( MATRIX_CELL ) );
@@ -117,13 +114,6 @@ int AR_MATRIX::InitRoutingMatrix()
         memset( m_DistSide[side], 0, ii * sizeof( DIST_CELL ) );
 
         if( m_DistSide[side] == nullptr )
-            return -1;
-
-        // allocate Dir (chars)
-        m_DirSide[side] = (char*) operator new( ii );
-        memset( m_DirSide[side], 0, ii );
-
-        if( m_DirSide[side] == nullptr )
             return -1;
 
         side = AR_SIDE_TOP;
@@ -142,13 +132,6 @@ void AR_MATRIX::UnInitRoutingMatrix()
 
     for( ii = 0; ii < AR_MAX_ROUTING_LAYERS_COUNT; ii++ )
     {
-        // de-allocate Dir matrix
-        if( m_DirSide[ii] )
-        {
-            delete m_DirSide[ii];
-            m_DirSide[ii] = nullptr;
-        }
-
         // de-allocate Distances matrix
         if( m_DistSide[ii] )
         {

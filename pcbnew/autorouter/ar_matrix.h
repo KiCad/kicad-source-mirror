@@ -51,13 +51,10 @@ class AR_MATRIX
 public:
     typedef unsigned char MATRIX_CELL;
     typedef int           DIST_CELL;
-    typedef char          DIR_CELL;
 
     MATRIX_CELL* m_BoardSide[AR_MAX_ROUTING_LAYERS_COUNT]; // the image map of 2 board sides
     DIST_CELL*   m_DistSide[AR_MAX_ROUTING_LAYERS_COUNT];  // the image map of 2 board sides:
                                                            // distance to cells
-    DIR_CELL* m_DirSide[AR_MAX_ROUTING_LAYERS_COUNT];      // the image map of 2 board sides:
-                                                           // pointers back to source
     int      m_RoutingLayersCount; // Number of layers for autorouting (0 or 1)
     int      m_GridRouting;        // Size of grid for autoplace/autoroute
     EDA_RECT m_BrdBox;             // Actual board bounding box
