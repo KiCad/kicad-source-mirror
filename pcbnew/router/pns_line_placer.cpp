@@ -980,7 +980,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     m_postureSolver.Clear();
     m_postureSolver.AddTrailPoint( aP );
-    m_postureSolver.SetTollerance( m_head.Width() );
+    m_postureSolver.SetTolerance( m_head.Width() );
     m_postureSolver.SetDefaultDirections( m_initial_direction, DIRECTION_45::UNDEFINED );
 
     NODE *n;
@@ -1211,7 +1211,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
 
         m_postureSolver.Clear();
-        m_postureSolver.SetTollerance( m_head.Width() );
+        m_postureSolver.SetTolerance( m_head.Width() );
         m_postureSolver.AddTrailPoint( m_currentStart );
         m_postureSolver.SetDefaultDirections( m_initial_direction, d_last );
 
@@ -1512,13 +1512,16 @@ int FIXED_TAIL::StageCount() const
     return m_stages.size();
 }
 
+
 POSTURE_SOLVER::POSTURE_SOLVER()
 {
     m_forced = false;
-    m_tollerance = 0;
+    m_tolerance = 0;
 }
 
+
 POSTURE_SOLVER::~POSTURE_SOLVER() {}
+
 
 void POSTURE_SOLVER::Clear()
 {
@@ -1526,18 +1529,22 @@ void POSTURE_SOLVER::Clear()
     m_trail.Clear();
 }
 
+
 void POSTURE_SOLVER::AddTrailPoint( const VECTOR2I& aP )
 {
     if( m_trail.SegmentCount() == 0 )
     {
-        m_trail.Append(aP);
-    } else {
-        SEG s_new ( m_trail.CPoint(-1), aP );
+        m_trail.Append( aP );
+    }
+    else
+    {
+        SEG s_new( m_trail.CPoint( -1 ), aP );
 
         for( int i = 0; i < m_trail.SegmentCount() - 1; i++ )
         {
-            const auto& s_trail = m_trail.CSegment(i);
-            if( s_trail.Distance( s_new ) <= m_tollerance )
+            const auto& s_trail = m_trail.CSegment( i );
+
+            if( s_trail.Distance( s_new ) <= m_tolerance )
             {
                 m_trail = m_trail.Slice( 0, i );
                 break;
@@ -1551,62 +1558,72 @@ void POSTURE_SOLVER::AddTrailPoint( const VECTOR2I& aP )
 
     auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
-    dbg->AddLine(m_trail, 5, 100000 );
-
+    dbg->AddLine( m_trail, 5, 100000 );
 }
+
 
 DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
 {
-    if( m_trail.PointCount() < 2)
-        return m_initDirection;
+    // Adjusts how far away from p0 we get before whatever posture we solved is locked in
+    const int lockDistanceFactor = 40;
+
+    // Adjusts how close to p0 we unlock the posture again if one was locked already
+    const int unlockDistanceFactor = 4;
+
+    if( m_trail.PointCount() < 2 )
+        return m_direction;
 
     auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
-    auto p0 = m_trail.CPoint(0);
-    auto bb = m_trail.BBox();
+    auto p0 = m_trail.CPoint( 0 );
 
-    double refArea = bb.GetArea();
-
+    double refLength = SEG( p0, aP ).Length();
 
     SHAPE_LINE_CHAIN straight( DIRECTION_45().BuildInitialTrace( p0, aP, false ) );
-    straight.SetClosed(true);
-    straight.Append(m_trail.Reverse());
-    dbg->AddLine(straight, 2, 100000 );
+    straight.SetClosed( true );
+    straight.Append( m_trail.Reverse() );
+    dbg->AddLine( straight, m_forced ? 3 : 2, 100000 );
 
     double areaS = straight.Area();
 
-    SHAPE_LINE_CHAIN diag ( DIRECTION_45().BuildInitialTrace( p0, aP, true ) );
-    diag.Append(m_trail.Reverse());
-    diag.SetClosed(true);
-    dbg->AddLine(diag, 1, 100000 );
+    SHAPE_LINE_CHAIN diag( DIRECTION_45().BuildInitialTrace( p0, aP, true ) );
+    diag.Append( m_trail.Reverse() );
+    diag.SetClosed( true );
+    dbg->AddLine( diag, 1, 100000 );
 
     double areaDiag = diag.Area();
-    double ratio = abs(areaS) / (fabs(areaDiag) + 1.0);
+    double ratio    = abs( areaS ) / ( fabs( areaDiag ) + 1.0 );
 
     // heuristic to detect that the user dragged back the cursor to the beginning of the trace
-    // in this case, we cancel any forced posture
-    if( sqrt(refArea) < 4 * m_tollerance )
+    // in this case, we cancel any forced posture and restart the trail
+    if( m_forced && refLength < unlockDistanceFactor * m_tolerance )
     {
         m_forced = false;
+        VECTOR2I start = p0;
+        m_trail.Clear();
+        m_trail.Append( start );
     }
 
-    if( m_forced )
-        return m_initDirection;
-    else if( ratio > areaRatioThreshold)
-        return DIRECTION_45::NE;
-    else if ( ratio < 1.0 / areaRatioThreshold )
-        return DIRECTION_45::N;
-    else if ( m_lastSegDirection != DIRECTION_45::UNDEFINED )
-        return m_lastSegDirection;
-    else
-        return m_initDirection;
+    // If we get far away from the initial point, lock in the current solution to prevent flutter
+    if( !m_forced && refLength > lockDistanceFactor * m_tolerance )
+        m_forced = true;
 
+    if( m_forced )
+        return m_direction;
+    else if( ratio > areaRatioThreshold + areaRatioEpsilon )
+        m_direction = DIRECTION_45::NE;
+    else if( ratio < ( 1.0 / areaRatioThreshold ) - areaRatioEpsilon )
+        m_direction = DIRECTION_45::N;
+    else if( m_lastSegDirection != DIRECTION_45::UNDEFINED )
+        m_direction = m_lastSegDirection;
+
+    return m_direction;
 }
 
 
 void POSTURE_SOLVER::FlipPosture()
 {
-    m_initDirection = m_initDirection.Right();
+    m_direction = m_direction.Right();
     m_forced = true;
 }
 

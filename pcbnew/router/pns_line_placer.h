@@ -78,11 +78,14 @@ public:
     ~POSTURE_SOLVER();
 
     void Clear();
+
     void AddTrailPoint( const VECTOR2I& aP );
-    void SetTollerance( int toll ) { m_tollerance = toll; }
+
+    void SetTolerance( int toll ) { m_tolerance = toll; }
+
     void SetDefaultDirections( DIRECTION_45 aInitDirection, DIRECTION_45 aLastSegDir ) 
     {
-        m_initDirection = aInitDirection;
+        m_direction        = aInitDirection;
         m_lastSegDirection = aLastSegDir;
     }
 
@@ -92,10 +95,11 @@ public:
 
 private:
     const double areaRatioThreshold = 1.5;
+    const double areaRatioEpsilon   = 0.2;
 
     SHAPE_LINE_CHAIN m_trail;
-    int m_tollerance;
-    DIRECTION_45 m_initDirection;
+    int              m_tolerance;
+    DIRECTION_45     m_direction;
     DIRECTION_45 m_lastSegDirection;
     bool m_forced;
 };
