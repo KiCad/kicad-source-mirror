@@ -85,6 +85,7 @@ public:
 
     void OnIdle( wxIdleEvent& event );
 
+    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
     void doCloseWindow() override;
     void OnSize( wxSizeEvent& event );
 

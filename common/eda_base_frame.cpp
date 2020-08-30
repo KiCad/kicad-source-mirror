@@ -144,7 +144,9 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
         quasiModal->Raise();
         wxBell();
 
-        event.Veto();
+        if( event.CanVeto() )
+            event.Veto();
+
         return;
     }
 
@@ -170,7 +172,8 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
     }
     else
     {
-        event.Veto();
+        if( event.CanVeto() )
+            event.Veto();
     }
 }
 

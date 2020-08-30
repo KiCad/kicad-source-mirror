@@ -324,6 +324,27 @@ void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
 }
 
 
+bool KICAD_MANAGER_FRAME::canCloseWindow( wxCloseEvent& aEvent )
+{
+    KICAD_SETTINGS* settings = kicadSettings();
+    settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
+
+    // CloseProject will recursively ask all the open editors if they need to save changes.
+    // If any of them cancel then we need to cancel closing the KICAD_MANAGER_FRAME.
+    if( CloseProject( true ) )
+    {
+        return true;
+    }
+    else
+    {
+        if( aEvent.CanVeto() )
+            aEvent.Veto();
+
+        return false;
+    }
+}
+
+
 void KICAD_MANAGER_FRAME::doCloseWindow()
 {
 #ifdef _WINDOWS_
@@ -342,16 +363,9 @@ void KICAD_MANAGER_FRAME::doCloseWindow()
     }
 #endif
 
-    // Save the list of open projects before closing the project
-    KICAD_SETTINGS* settings = kicadSettings();
-    settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
+    m_leftWin->Show( false );
 
-    if( CloseProject( true ) )
-    {
-        m_leftWin->Show( false );
-
-        Destroy();
-    }
+    Destroy();
 
 #ifdef _WINDOWS_
     lock_close_event = 0;   // Reenable event management
