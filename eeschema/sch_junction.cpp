@@ -37,7 +37,6 @@
 
 #include <sch_painter.h>
 #include <sch_junction.h>
-#include <netlist_object.h>
 #include <sch_connection.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
@@ -143,21 +142,6 @@ void SCH_JUNCTION::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 void SCH_JUNCTION::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_pos );
-}
-
-
-void SCH_JUNCTION::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                                   SCH_SHEET_PATH*          aSheetPath )
-{
-    NETLIST_OBJECT* item = new NETLIST_OBJECT();
-
-    item->m_SheetPath        = *aSheetPath;
-    item->m_SheetPathInclude = *aSheetPath;
-    item->m_Comp             = (SCH_ITEM*) this;
-    item->m_Type             = NETLIST_ITEM::JUNCTION;
-    item->m_Start = item->m_End = m_pos;
-
-    aNetListItems.push_back( item );
 }
 
 

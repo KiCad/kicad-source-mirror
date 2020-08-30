@@ -36,7 +36,6 @@
 #include <bitmaps.h>
 #include <schematic.h>
 #include <sch_no_connect.h>
-#include <netlist_object.h>
 #include <settings/color_settings.h>
 #include <default_values.h>    // For some default values
 
@@ -139,21 +138,6 @@ void SCH_NO_CONNECT::Rotate( wxPoint aPosition )
 void SCH_NO_CONNECT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_pos );
-}
-
-
-void SCH_NO_CONNECT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                                     SCH_SHEET_PATH*      aSheetPath )
-{
-    NETLIST_OBJECT* item = new NETLIST_OBJECT();
-
-    item->m_SheetPath = *aSheetPath;
-    item->m_SheetPathInclude = *aSheetPath;
-    item->m_Comp             = this;
-    item->m_Type             = NETLIST_ITEM::NOCONNECT;
-    item->m_Start = item->m_End = m_pos;
-
-    aNetListItems.push_back( item );
 }
 
 

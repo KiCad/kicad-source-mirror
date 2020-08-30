@@ -48,7 +48,6 @@
 #include <class_libentry.h>
 #include <connection_graph.h>
 #include <lib_pin.h>
-#include <netlist_object.h>
 #include <sch_component.h>
 #include <sch_junction.h>
 #include <sch_line.h>

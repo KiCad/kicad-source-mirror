@@ -37,7 +37,6 @@
 #include <bitmaps.h>
 #include <sch_text.h>
 #include <schematic.h>
-#include <netlist_object.h>
 #include <settings/color_settings.h>
 #include <sch_painter.h>
 #include <default_values.h>
@@ -553,34 +552,6 @@ wxString SCH_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 BITMAP_DEF SCH_TEXT::GetMenuImage() const
 {
     return text_xpm;
-}
-
-
-void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                               SCH_SHEET_PATH*      aSheetPath )
-{
-    if( GetLayer() == LAYER_NOTES || GetLayer() == LAYER_SHEETLABEL )
-        return;
-
-    NETLIST_OBJECT* item = new NETLIST_OBJECT();
-    item->m_SheetPath        = *aSheetPath;
-    item->m_SheetPathInclude = *aSheetPath;
-    item->m_Comp             = (SCH_ITEM*) this;
-    item->m_Type             = NETLIST_ITEM::LABEL;
-
-    if( GetLayer() == LAYER_GLOBLABEL )
-        item->m_Type = NETLIST_ITEM::GLOBLABEL;
-    else if( GetLayer() == LAYER_HIERLABEL )
-        item->m_Type = NETLIST_ITEM::HIERLABEL;
-
-    item->m_Label = GetText();
-    item->m_Start = item->m_End = GetTextPos();
-
-    aNetListItems.push_back( item );
-
-    // If a bus connects to label
-    if( SCH_CONNECTION::IsBusLabel( GetText() ) )
-        item->ConvertBusToNetListItems( aNetListItems );
 }
 
 

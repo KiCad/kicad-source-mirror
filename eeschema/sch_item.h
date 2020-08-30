@@ -483,18 +483,6 @@ public:
     virtual void Plot( PLOTTER* aPlotter );
 
     /**
-     * Create a new #NETLIST_OBJECT for the schematic object and adds it to \a aNetListItems.
-     *
-     * <p>
-     * Not all schematic objects have net list items associated with them.  This
-     * method only needs to be overridden for those schematic objects that have
-     * net list objects associated with them.
-     * </p>
-     */
-    virtual void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                                 SCH_SHEET_PATH*      aSheetPath ) { }
-
-    /**
      * Set the schematic item position to \a aPosition.
      *
      * @param aPosition A reference to a wxPoint object containing the new position.

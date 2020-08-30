@@ -558,9 +558,6 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                         SCH_SHEET_PATH*      aSheetPath ) override;
-
     SCH_SHEET& operator=( const SCH_ITEM& aSheet );
 
     bool operator <( const SCH_ITEM& aItem ) const override;

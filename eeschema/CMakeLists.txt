@@ -188,8 +188,6 @@ set( EESCHEMA_SRCS
     libarch.cpp
     menubar.cpp
     netlist_generator.cpp
-    netlist_object_list.cpp
-    netlist_object.cpp
     pin_number.cpp
     pin_type.cpp
     plot_schematic_DXF.cpp

@@ -38,7 +38,6 @@
 #include <netlist_exporters/netlist_exporter_pspice.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
-#include <netlist_object.h>
 #include <sch_edit_frame.h>
 #include <sch_sexpr_plugin.h>
 #include <sch_line.h>

@@ -358,15 +358,6 @@ public:
     }
 
     /**
-     * Create a flat list which stores all connected objects.
-     * TODO(JE) Remove this once ERC is moved off of it
-     *
-     * @param updateStatusText decides if window StatusText should be modified.
-     * @return NETLIST_OBJECT_LIST* - caller owns the object.
-     */
-    NETLIST_OBJECT_LIST* BuildNetListBase( bool updateStatusText = true );
-
-    /**
      * Checks if we are ready to write a netlist file for the current schematic
      *
      * - Test for some issues (missing or duplicate references and sheet names)

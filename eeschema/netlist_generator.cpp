@@ -211,33 +211,3 @@ void SCH_EDIT_FRAME::sendNetlistToCvpcb()
     Kiway().ExpressMail( FRAME_CVPCB, MAIL_EESCHEMA_NETLIST, packet, this );
 }
 
-
-NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase( bool updateStatusText )
-{
-    // Ensure netlist is up to date
-    RecalculateConnections( NO_CLEANUP );
-
-    // I own this list until I return it to the new owner.
-    std::unique_ptr<NETLIST_OBJECT_LIST> ret( new NETLIST_OBJECT_LIST() );
-
-    // Creates the flattened sheet list:
-    SCH_SHEET_LIST aSheets = Schematic().GetSheets();
-
-    // Build netlist info
-    bool success = ret->BuildNetListInfo( aSheets );
-
-    if( !success )
-    {
-        if( updateStatusText )
-            SetStatusText( _( "No Objects" ) );
-        return ret.release();
-    }
-
-    wxString msg = wxString::Format( _( "Net count = %d" ), int( ret->size() ) );
-
-    if( updateStatusText )
-         SetStatusText( msg );
-
-    return ret.release();
-}
-

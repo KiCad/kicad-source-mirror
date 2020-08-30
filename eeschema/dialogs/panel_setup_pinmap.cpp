@@ -29,7 +29,6 @@
 #include <bitmaps.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
-#include <netlist_object.h>
 #include <schematic.h>
 #include <connection_graph.h>
 #include <tools/ee_actions.h>

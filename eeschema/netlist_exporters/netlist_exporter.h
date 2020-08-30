@@ -29,7 +29,6 @@
 #include <kicad_string.h>
 
 #include <class_libentry.h>
-#include <netlist_object.h>
 #include <lib_pin.h>
 #include <sch_component.h>
 #include <sch_text.h>

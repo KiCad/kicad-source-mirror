@@ -32,7 +32,6 @@
 #include <sch_component.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>
-#include <netlist_object.h>
 #include <trace_helpers.h>
 
 
@@ -1537,55 +1536,6 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
     }
 
     return SEARCH_RESULT::CONTINUE;
-}
-
-
-void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                                    SCH_SHEET_PATH*      aSheetPath )
-{
-    if( !m_part || !m_onBoard )
-        return;
-
-    for( LIB_PIN* pin = m_part->GetNextPin();  pin;  pin = m_part->GetNextPin( pin ) )
-    {
-        wxASSERT( pin->Type() == LIB_PIN_T );
-
-        if( pin->GetUnit() && ( pin->GetUnit() != GetUnitSelection( aSheetPath ) ) )
-            continue;
-
-        if( pin->GetConvert() && ( pin->GetConvert() != GetConvert() ) )
-            continue;
-
-        wxPoint pos = GetTransform().TransformCoordinate( pin->GetPosition() ) + m_Pos;
-
-        NETLIST_OBJECT* item = new NETLIST_OBJECT();
-        item->m_SheetPathInclude = *aSheetPath;
-        item->m_Comp = m_pins[ m_pinMap.at( pin ) ].get();
-        item->m_SheetPath = *aSheetPath;
-        item->m_Type = NETLIST_ITEM::PIN;
-        item->m_Link = (SCH_ITEM*) this;
-        item->m_ElectricalPinType = pin->GetType();
-        item->m_PinNum = pin->GetNumber();
-        item->m_Label = pin->GetName();
-        item->m_Start = item->m_End = pos;
-
-        aNetListItems.push_back( item );
-
-        if( pin->IsPowerConnection() )
-        {
-            // There is an associated PIN_LABEL.
-            item = new NETLIST_OBJECT();
-            item->m_SheetPathInclude = *aSheetPath;
-            item->m_Comp = m_pins[ m_pinMap.at( pin ) ].get();
-            item->m_SheetPath = *aSheetPath;
-            item->m_Type = NETLIST_ITEM::PINLABEL;
-            item->m_Label = pin->GetName();
-            item->m_Start = pos;
-            item->m_End = item->m_Start;
-
-            aNetListItems.push_back( item );
-        }
-    }
 }
 
 

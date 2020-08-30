@@ -125,13 +125,6 @@ public:
     int TestSimilarLabels();
 
 private:
-    /**
-     * Performs ERC testing and creates an ERC marker to show the ERC problem for aNetItemRef
-     * or between aNetItemRef and aNetItemTst.
-     *  if MinConn < 0: this is an error on labels
-     */
-    void diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst, int MinConnexion,
-                   PIN_ERROR Diag );
 
     SCHEMATIC* m_schematic;
 };

@@ -33,7 +33,6 @@
 #include <fctsys.h>
 #include <kicad_string.h>
 #include <lib_pin.h>
-#include <netlist_object.h>
 #include <sch_edit_frame.h>
 #include <sch_marker.h>
 #include <sch_reference_list.h>
@@ -359,186 +358,6 @@ int ERC_TESTER::TestMultiunitFootprints()
 }
 
 
-void ERC_TESTER::diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMinConn,
-                           PIN_ERROR aDiag )
-{
-    if( aDiag == PIN_ERROR::OK || aMinConn < 1 || aNetItemRef->m_Type != NETLIST_ITEM::PIN )
-        return;
-
-    ERC_SETTINGS& settings = m_schematic->ErcSettings();
-
-    SCH_PIN* pin = static_cast<SCH_PIN*>( aNetItemRef->m_Comp );
-
-    if( aNetItemTst == NULL)
-    {
-        if( aMinConn == NOD )    /* Nothing driving the net. */
-        {
-            if( settings.GetSeverity( ERCE_PIN_NOT_DRIVEN ) != RPT_SEVERITY_IGNORE )
-            {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_DRIVEN );
-                ercItem->SetItems( pin );
-
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );
-                aNetItemRef->m_SheetPath.LastScreen()->Append( marker );
-            }
-            return;
-        }
-    }
-
-    if( aNetItemTst && aNetItemTst->m_Type == NETLIST_ITEM::PIN )  /* Error between 2 pins */
-    {
-        if( settings.GetSeverity( ERCE_PIN_TO_PIN_WARNING ) != RPT_SEVERITY_IGNORE )
-        {
-            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create(
-                    aDiag == PIN_ERROR::PP_ERROR ? ERCE_PIN_TO_PIN_ERROR : ERCE_PIN_TO_PIN_WARNING );
-            ercItem->SetItems( pin, static_cast<SCH_PIN*>( aNetItemTst->m_Comp ) );
-
-            SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );
-            aNetItemRef->m_SheetPath.LastScreen()->Append( marker );
-        }
-    }
-}
-
-
-void ERC_TESTER::TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef,
-                                  unsigned aNetStart, int* aMinConnexion )
-{
-    ERC_SETTINGS& settings = m_schematic->ErcSettings();
-
-    unsigned netItemTst = aNetStart;
-    ELECTRICAL_PINTYPE jj;
-    PIN_ERROR erc = PIN_ERROR::OK;
-
-    /* Analysis of the table of connections. */
-    ELECTRICAL_PINTYPE ref_elect_type = aList->GetItem( aNetItemRef )->m_ElectricalPinType;
-    int local_minconn = NOC;
-
-    if( ref_elect_type == ELECTRICAL_PINTYPE::PT_NC )
-        local_minconn = NPI;
-
-    /* Test pins connected to NetItemRef */
-    for( ; ; netItemTst++ )
-    {
-        if( aNetItemRef == netItemTst )
-            continue;
-
-        // We examine only a given net. We stop the search if the net changes
-        if( ( netItemTst >= aList->size() ) // End of list
-            || ( aList->GetItemNet( aNetItemRef ) !=
-                 aList->GetItemNet( netItemTst ) ) ) // End of net
-        {
-            /* End net code found: minimum connection test. */
-            if( ( *aMinConnexion < NET_NC ) && ( local_minconn < NET_NC ) )
-            {
-                /* Not connected or not driven pin. */
-                bool seterr = true;
-
-                if( local_minconn == NOC && aList->GetItemType( aNetItemRef ) == NETLIST_ITEM::PIN )
-                {
-                    /* This pin is not connected: for multiple part per
-                     * package, and duplicated pin,
-                     * search for another instance of this pin
-                     * this will be flagged only if all instances of this pin
-                     * are not connected
-                     * TODO test also if instances connected are connected to
-                     * the same net
-                     */
-                    for( unsigned duplicate = 0; duplicate < aList->size(); duplicate++ )
-                    {
-                        if( aList->GetItemType( duplicate ) != NETLIST_ITEM::PIN )
-                            continue;
-
-                        if( duplicate == aNetItemRef )
-                            continue;
-
-                        if( aList->GetItem( aNetItemRef )->m_PinNum !=
-                            aList->GetItem( duplicate )->m_PinNum )
-                            continue;
-
-                        if( ( (SCH_COMPONENT*) aList->GetItem( aNetItemRef )->
-                             m_Link )->GetRef( &aList->GetItem( aNetItemRef )-> m_SheetPath ) !=
-                            ( (SCH_COMPONENT*) aList->GetItem( duplicate )->m_Link )
-                           ->GetRef( &aList->GetItem( duplicate )->m_SheetPath ) )
-                            continue;
-
-                        // Same component and same pin. Do dot create error for this pin
-                        // if the other pin is connected (i.e. if duplicate net has another
-                        // item)
-                        if( (duplicate > 0)
-                          && ( aList->GetItemNet( duplicate ) ==
-                               aList->GetItemNet( duplicate - 1 ) ) )
-                            seterr = false;
-
-                        if( (duplicate < aList->size() - 1)
-                          && ( aList->GetItemNet( duplicate ) ==
-                               aList->GetItemNet( duplicate + 1 ) ) )
-                            seterr = false;
-                    }
-                }
-
-                if( seterr )
-                {
-                    diagnose( aList->GetItem( aNetItemRef ), nullptr, local_minconn,
-                            PIN_ERROR::WARNING );
-                }
-
-                *aMinConnexion = DRV;   // inhibiting other messages of this
-                                       // type for the net.
-            }
-            return;
-        }
-
-        switch( aList->GetItemType( netItemTst ) )
-        {
-        case NETLIST_ITEM::ITEM_UNSPECIFIED:
-        case NETLIST_ITEM::SEGMENT:
-        case NETLIST_ITEM::BUS:
-        case NETLIST_ITEM::JUNCTION:
-        case NETLIST_ITEM::LABEL:
-        case NETLIST_ITEM::HIERLABEL:
-        case NETLIST_ITEM::BUSLABELMEMBER:
-        case NETLIST_ITEM::HIERBUSLABELMEMBER:
-        case NETLIST_ITEM::SHEETBUSLABELMEMBER:
-        case NETLIST_ITEM::SHEETLABEL:
-        case NETLIST_ITEM::GLOBLABEL:
-        case NETLIST_ITEM::GLOBBUSLABELMEMBER:
-        case NETLIST_ITEM::PINLABEL:
-            break;
-
-        case NETLIST_ITEM::NOCONNECT:
-            local_minconn = std::max( NET_NC, local_minconn );
-            break;
-
-        case NETLIST_ITEM::PIN:
-            jj            = aList->GetItem( netItemTst )->m_ElectricalPinType;
-            local_minconn = std::max( settings.GetPinMinDrive( ref_elect_type, jj ),
-                                      local_minconn );
-
-            if( netItemTst <= aNetItemRef )
-                break;
-
-            if( erc == PIN_ERROR::OK )
-            {
-                erc = settings.GetPinMapValue( ref_elect_type, jj );
-
-                if( erc != PIN_ERROR::OK )
-                {
-                    if( aList->GetConnectionType( netItemTst ) == NET_CONNECTION::UNCONNECTED )
-                    {
-                        aList->SetConnectionType( netItemTst,
-                                                  NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT );
-                    }
-
-                    diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ), 1, erc );
-                }
-            }
-
-            break;
-        }
-    }
-}
-
-
 int ERC_TESTER::TestNoConnectPins()
 {
     int err_count = 0;
@@ -723,7 +542,6 @@ int ERC_TESTER::TestSimilarLabels()
 
     for( const std::pair<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
     {
-        const wxString& netName = net.first.first;
         std::vector<SCH_PIN*> pins;
 
         for( CONNECTION_SUBGRAPH* subgraph : net.second )

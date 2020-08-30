@@ -28,7 +28,6 @@
 #include <sch_line.h>
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>
-#include <netlist_object.h>
 #include <schematic.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
@@ -653,33 +652,6 @@ BITMAP_DEF SCH_LINE::GetMenuImage() const
         return add_line_xpm;
 
     return add_bus_xpm;
-}
-
-
-void SCH_LINE::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                               SCH_SHEET_PATH*      aSheetPath )
-{
-    // Net list item not required for graphic lines.
-    if( IsGraphicLine() )
-        return;
-
-    NETLIST_OBJECT* item = new NETLIST_OBJECT();
-    item->m_SheetPath = *aSheetPath;
-    item->m_SheetPathInclude = *aSheetPath;
-    item->m_Comp = (SCH_ITEM*) this;
-    item->m_Start = m_start;
-    item->m_End = m_end;
-
-    if( GetLayer() == LAYER_BUS )
-    {
-        item->m_Type = NETLIST_ITEM::BUS;
-    }
-    else            /* WIRE */
-    {
-        item->m_Type = NETLIST_ITEM::SEGMENT;
-    }
-
-    aNetListItems.push_back( item );
 }
 
 

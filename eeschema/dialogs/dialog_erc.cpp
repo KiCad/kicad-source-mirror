@@ -36,7 +36,6 @@
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_view.h>
-#include <netlist_object.h>
 #include <sch_marker.h>
 #include <sch_component.h>
 #include <connection_graph.h>

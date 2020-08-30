@@ -103,8 +103,6 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
-
     wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }
 

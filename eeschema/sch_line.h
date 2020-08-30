@@ -207,8 +207,6 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
-
     bool operator <( const SCH_ITEM& aItem ) const override;
 
     wxPoint GetPosition() const override { return m_start; }

@@ -37,7 +37,6 @@
 #include <sch_painter.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
-#include <netlist_object.h>
 #include <trace_helpers.h>
 #include <pgm_base.h>
 
@@ -933,29 +932,6 @@ bool SCH_SHEET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         return rect.Contains( GetBodyBoundingBox() );
 
     return rect.Intersects( GetBodyBoundingBox() );
-}
-
-
-void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath )
-{
-    SCH_SHEET_PATH sheetPath = *aSheetPath;
-    sheetPath.push_back( this );
-
-    for( SCH_SHEET_PIN* sheetPin : m_pins )
-    {
-        NETLIST_OBJECT* item = new NETLIST_OBJECT();
-        item->m_SheetPathInclude = sheetPath;
-        item->m_SheetPath = *aSheetPath;
-        item->m_Comp = sheetPin;
-        item->m_Link = this;
-        item->m_Type = NETLIST_ITEM::SHEETLABEL;
-        item->m_Label = sheetPin->GetText();
-        item->m_Start = item->m_End = sheetPin->GetPosition();
-        aNetListItems.push_back( item );
-
-        if( SCH_CONNECTION::IsBusLabel( sheetPin->GetShownText() ) )
-            item->ConvertBusToNetListItems( aNetListItems );
-    }
 }
 
 
