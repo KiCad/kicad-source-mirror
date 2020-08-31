@@ -311,7 +311,7 @@ void WIDGET_HOTKEY_LIST::UpdateFromClientData()
 
             // mark unsaved changes
             if( changed_hk.m_EditKeycode != changed_hk.m_Actions[ 0 ]->GetHotKey() )
-                key_text += " *";
+                label += " *";
 
             SetItemText( i, 0, label );
             SetItemText( i, 1, key_text);
