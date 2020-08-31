@@ -77,7 +77,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
     if( GetBoard()->Modules().empty() )
     {
-        DisplayError( this, _( "Cannot export BOM: there are no footprints in the PCB" ) );
+        ShowInfoBarError( _( "Cannot export BOM: there are no footprints on the PCB." ) );
         return;
     }
 

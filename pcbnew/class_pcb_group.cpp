@@ -294,7 +294,7 @@ void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFuncti
     }
     catch( std::bad_function_call& )
     {
-        DisplayError( NULL, wxT( "Error running PCB_GROUP::RunOnChildren" ) );
+        wxFAIL_MSG( "Error running PCB_GROUP::RunOnChildren" );
     }
 }
 
@@ -312,6 +312,6 @@ void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
     }
     catch( std::bad_function_call& )
     {
-        DisplayError( NULL, wxT( "Error running PCB_GROUP::RunOnDescendants" ) );
+        wxFAIL_MSG( "Error running PCB_GROUP::RunOnDescendants" );
     }
 }

@@ -266,13 +266,13 @@ MODULE* MICROWAVE_TOOL::createPolygonShape()
 
     if( ( ShapeSize.x ) == 0 || ( ShapeSize.y == 0 ) )
     {
-        DisplayError( &editFrame, _( "Shape has a null size!" ) );
+        editFrame.ShowInfoBarError( _( "Shape has a null size!" ) );
         return NULL;
     }
 
     if( PolyEdges.size() == 0 )
     {
-        DisplayError( &editFrame, _( "Shape has no points!" ) );
+        editFrame.ShowInfoBarError( _( "Shape has no points!" ) );
         return NULL;
     }
 

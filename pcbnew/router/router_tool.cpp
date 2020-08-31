@@ -728,22 +728,22 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         // Cannot place microvias or blind vias if not allowed (obvious)
         if( ( viaType == VIATYPE::BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
         {
-            DisplayError( frame(),
-                    _( "Blind/buried vias have to be enabled in Board Setup > Design Rules > Constraints." ) );
+            frame()->ShowInfoBarError( _( "Blind/buried vias have to be enabled in "
+                                          "Board Setup > Design Rules > Constraints." ) );
             return false;
         }
 
         if( ( viaType == VIATYPE::MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
         {
-            DisplayError( frame(),
-                    _( "Microvias have to be enabled in Board Setup > Design Rules > Constraints." ) );
+            frame()->ShowInfoBarError( _( "Microvias have to be enabled in "
+                                          "Board Setup > Design Rules > Constraints." ) );
             return false;
         }
 
         // Can only place through vias on 2-layer boards
         if( ( viaType != VIATYPE::THROUGH ) && ( layerCount <= 2 ) )
         {
-            DisplayError( frame(), _( "Only through vias are allowed on 2 layer boards." ) );
+            frame()->ShowInfoBarError( _( "Only through vias are allowed on 2 layer boards." ) );
             return false;
         }
 
@@ -751,8 +751,8 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         if( ( viaType == VIATYPE::MICROVIA ) && ( currentLayer > In1_Cu )
                 && ( currentLayer < layerCount - 2 ) )
         {
-            DisplayError( frame(), _( "Microvias can be placed only between the outer layers "
-                                      "(F.Cu/B.Cu) and the ones directly adjacent to them." ) );
+            frame()->ShowInfoBarError( _( "Microvias can only be placed between the outer layers "
+                                          "(F.Cu/B.Cu) and the ones directly adjacent to them." ) );
             return false;
         }
     }
@@ -860,7 +860,7 @@ bool ROUTER_TOOL::prepareInteractive()
 
     if( !IsCopperLayer( routingLayer ) )
     {
-        DisplayError( frame(), _( "Tracks on Copper layers only" ) );
+        frame()->ShowInfoBarError( _( "Tracks on Copper layers only" ) );
         return false;
     }
 

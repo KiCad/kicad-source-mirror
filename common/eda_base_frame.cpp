@@ -45,6 +45,7 @@
 #include <tool/tool_dispatcher.h>
 #include <trace_helpers.h>
 #include <widgets/paged_dialog.h>
+#include <widgets/infobar.h>
 #include <wx/display.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
@@ -696,6 +697,24 @@ wxString EDA_BASE_FRAME::help_name()
 void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 {
     SetStatusText( text );
+}
+
+
+void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg )
+{
+    GetInfoBar()->ShowMessageFor( aErrorMsg, 5000, wxICON_ERROR );
+}
+
+
+void EDA_BASE_FRAME::ShowInfoBarWarning( const wxString& aWarningMsg )
+{
+    GetInfoBar()->ShowMessageFor( aWarningMsg, 5000, wxICON_WARNING );
+}
+
+
+void EDA_BASE_FRAME::ShowInfoBarMsg( const wxString& aMsg )
+{
+    GetInfoBar()->ShowMessageFor( aMsg, 10000, wxICON_INFORMATION );
 }
 
 

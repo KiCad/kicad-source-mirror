@@ -261,8 +261,8 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     if( !success )
     {
         delete drill_layer;
-        msg.Printf( _( "File %s not found" ), aFullFileName );
-        DisplayError( this, msg );
+        msg.Printf( _( "File %s not found." ), aFullFileName );
+        ShowInfoBarError( msg );
         return false;
     }
 
@@ -271,7 +271,7 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     if( layerId < 0 )
     {
         delete drill_layer;
-        DisplayError( this, _( "No room to load file" ) );
+        ShowInfoBarError( _( "No empty layers to load file into." ) );
         return false;
     }
 

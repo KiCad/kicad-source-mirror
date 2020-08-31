@@ -310,7 +310,7 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
     if ( !inductorModule || !errorMessage.IsEmpty() )
     {
         if ( !errorMessage.IsEmpty() )
-            DisplayError( &editFrame, errorMessage );
+            editFrame.ShowInfoBarError( errorMessage );
     }
     else
     {

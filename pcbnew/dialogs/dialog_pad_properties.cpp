@@ -1745,7 +1745,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         break;
 
     default:
-        DisplayError( NULL, wxT( "Error: unknown pad type" ) );
+        wxFAIL_MSG( "DIALOG_PAD_PROPERTIES::transferDataToPad: unknown pad type" );
         break;
     }
 

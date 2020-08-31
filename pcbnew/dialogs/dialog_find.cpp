@@ -299,7 +299,7 @@ void DIALOG_FIND::search( bool aDirection )
                 else
                 {
                     m_frame->SetStatusText( wxEmptyString );
-                    DisplayError( this, _( "No more item to show" ), 10 );
+                    m_frame->ShowInfoBarMsg( _( "No more item to show" ) );
                     return;
                 }
             }
@@ -315,7 +315,7 @@ void DIALOG_FIND::search( bool aDirection )
                 else
                 {
                     m_frame->SetStatusText( wxEmptyString );
-                    DisplayError( this, _( "No more item to show" ), 10 );
+                    m_frame->ShowInfoBarMsg( _( "No more item to show" ) );
                     return;
                 }
             }
@@ -342,7 +342,7 @@ void DIALOG_FIND::search( bool aDirection )
         m_frame->SetStatusText( wxEmptyString );
 
         msg.Printf( _( "\"%s\" not found" ), searchString );
-        DisplayError( this, msg, 10 );
+        m_frame->ShowInfoBarMsg( msg );
 
         m_status->SetLabel( _( "No hits" ) );
     }

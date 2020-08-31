@@ -343,6 +343,10 @@ public:
 
     WX_INFOBAR* GetInfoBar() { return m_infoBar; }
 
+    void ShowInfoBarError( const wxString& aErrorMsg );
+    void ShowInfoBarWarning( const wxString& aWarningMsg );
+    void ShowInfoBarMsg( const wxString& aMsg );
+
     /**
      * Returns the settings object used in SaveSettings(), and is overloaded in
      * KICAD_MANAGER_FRAME

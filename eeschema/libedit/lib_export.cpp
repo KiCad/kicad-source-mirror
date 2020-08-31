@@ -111,7 +111,7 @@ void LIB_EDIT_FRAME::ExportPart()
 
     if( !part )
     {
-        DisplayError( this, _( "There is no symbol selected to save." ) );
+        ShowInfoBarError( _( "There is no symbol selected to save." ) );
         return;
     }
 

@@ -435,9 +435,8 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary( const wxString& aLibName,
         {
             if( !writable )
             {
-                wxString msg = wxString::Format( _( "Library \"%s\" is read only, not writable" ),
-                                                 libPath );
-                DisplayError( this, msg );
+                wxString msg = wxString::Format( _( "Library \"%s\" is read only." ), libPath );
+                ShowInfoBarError( msg );
                 return wxEmptyString;
             }
             else
@@ -586,8 +585,8 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aC
 
     if( !Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname ) )
     {
-        wxString msg = wxString::Format( _( "Library '%s' is read only" ), nickname );
-        DisplayError( this, msg );
+        wxString msg = wxString::Format( _( "Library '%s' is read only." ), nickname );
+        ShowInfoBarError( msg );
         return false;
     }
 
@@ -779,7 +778,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
     if( pcbframe == NULL )      // happens when the board editor is not active (or closed)
     {
-        DisplayErrorMessage( this, _( "No board currently open." ) );
+        ShowInfoBarError( _( "No board currently open." ) );
         return false;
     }
 

@@ -24,6 +24,7 @@
 
 #include <class_library.h>
 #include <confirm.h>
+#include <widgets/infobar.h>
 #include <connection_graph.h>
 #include <dialogs/dialog_fields_editor_global.h>
 #include <dialogs/dialog_page_settings.h>
@@ -916,7 +917,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 
         if( conn->Name( true ).IsEmpty() )
         {
-            DisplayError( m_frame, _( "Net must be labelled to assign a netclass." ) );
+            m_frame->ShowInfoBarError( _( "Net must be labelled to assign a netclass." ) );
             highlightNet( m_toolMgr, CLEAR );
             return 0;
         }

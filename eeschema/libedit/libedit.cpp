@@ -79,7 +79,7 @@ wxString LIB_EDIT_FRAME::SelectLibraryFromList()
 
     if( prj.SchSymbolLibTable()->IsEmpty() )
     {
-        DisplayError( this, _( "No symbol libraries are loaded." ) );
+        ShowInfoBarError( _( "No symbol libraries are loaded." ) );
         return wxEmptyString;
     }
 
@@ -481,7 +481,7 @@ void LIB_EDIT_FRAME::savePartAs()
 
         if( new_name.IsEmpty() )
         {
-            DisplayError( this, _( "No symbol name specified.  Symbol could not be saved." ) );
+            // This is effectively a cancel.  No need to nag the user about it.
             return;
         }
 
@@ -796,7 +796,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     if( !aNewFile && ( aLibrary.empty() || !prj.SchSymbolLibTable()->HasLibrary( aLibrary ) ) )
     {
-        DisplayError( this, _( "No library specified." ) );
+        ShowInfoBarError( _( "No library specified." ) );
         return false;
     }
 

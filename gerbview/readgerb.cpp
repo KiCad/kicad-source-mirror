@@ -60,7 +60,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     {
         delete gerber;
         msg.Printf( _( "File \"%s\" not found" ), GERBER_FullFileName );
-        DisplayError( this, msg, 10 );
+        ShowInfoBarError( msg );
         return false;
     }
 

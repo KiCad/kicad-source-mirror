@@ -1000,7 +1000,7 @@ void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
     }
     catch( std::bad_function_call& )
     {
-        DisplayError( NULL, wxT( "Error running MODULE::RunOnChildren" ) );
+        wxFAIL_MSG( "Error running MODULE::RunOnChildren" );
     }
 }
 

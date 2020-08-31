@@ -1252,7 +1252,8 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aS
                     break;
 
                 default:
-                    DisplayError( NULL, wxString::Format( "Type Edge Module %d invalid.", PtStruct->Type() ) );
+                    wxFAIL_MSG( wxString::Format( "Type Edge Module %d invalid.",
+                                                  PtStruct->Type() ) );
                     break;
                 }
             }

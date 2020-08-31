@@ -59,16 +59,8 @@ using P_S_C = PCB_SELECTION_CONDITIONS;
 
 bool CONVERT_TOOL::Init()
 {
-    m_selectionTool =
-            static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
-
-    if( !m_selectionTool )
-    {
-        DisplayError( NULL, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
-        return false;
-    }
-
-    m_frame = getEditFrame<PCB_BASE_FRAME>();
+    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    m_frame         = getEditFrame<PCB_BASE_FRAME>();
 
     // Create a context menu and make it available through selection tool
     m_menu = new CONDITIONAL_MENU( this );

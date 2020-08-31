@@ -154,7 +154,7 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataFromWindow()
         ! m_zonesettings.GetDoNotAllowFootprints() &&
         ! m_zonesettings.GetDoNotAllowCopperPour() )
     {
-        DisplayError( NULL, _("Tracks, vias, and pads are allowed. The keepout will have no effect." ) );
+        DisplayError( NULL, _("No items are disallowed. The keepout will have no effect." ) );
         return false;
     }
 

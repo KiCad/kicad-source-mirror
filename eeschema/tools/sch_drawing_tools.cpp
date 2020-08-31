@@ -612,7 +612,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         break;
 
     default:
-        DisplayError( m_frame, wxT( "SCH_EDIT_FRAME::CreateNewText() Internal error" ) );
+        wxFAIL_MSG( "SCH_EDIT_FRAME::CreateNewText() unknown layer type" );
         return nullptr;
     }
 
