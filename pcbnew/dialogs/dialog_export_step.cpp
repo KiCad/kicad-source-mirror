@@ -271,7 +271,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
 #ifdef __WXMAC__
     // On macOS, we have standalone applications inside the main bundle, so we handle that here:
-        if( appK2S.GetPath().find( "/Contents/Applications/pcbnew.app/Contents/MacOS" ) != wxNOT_FOUND )
+        if( appK2S.GetPath().Find( "/Contents/Applications/pcbnew.app/Contents/MacOS" ) != wxNOT_FOUND )
         {
             appK2S.AppendDir( ".." );
             appK2S.AppendDir( ".." );
