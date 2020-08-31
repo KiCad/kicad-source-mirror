@@ -27,6 +27,7 @@
 #include <cadstar_pcb_archive_loader.h>
 #include <cadstar_pcb_archive_plugin.h>
 #include <class_board.h>
+#include <properties.h>
 
 
 CADSTAR_PCB_ARCHIVE_PLUGIN::CADSTAR_PCB_ARCHIVE_PLUGIN()
@@ -61,6 +62,27 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load(
 
     CADSTAR_PCB_ARCHIVE_LOADER tempPCB( aFileName );
     tempPCB.Load( m_board );
+
+    //center the board:
+    if( aProperties )
+    {
+        UTF8 page_width;
+        UTF8 page_height;
+
+        if( aProperties->Value( "page_width", &page_width )
+                && aProperties->Value( "page_height", &page_height ) )
+        {
+            EDA_RECT bbbox = m_board->GetBoardEdgesBoundingBox();
+
+            int w = atoi( page_width.c_str() );
+            int h = atoi( page_height.c_str() );
+
+            int desired_x = ( w - bbbox.GetWidth() ) / 2;
+            int desired_y = ( h - bbbox.GetHeight() ) / 2;
+
+            m_board->Move( wxPoint( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() ) );
+        }
+    }
 
     return m_board;
 }

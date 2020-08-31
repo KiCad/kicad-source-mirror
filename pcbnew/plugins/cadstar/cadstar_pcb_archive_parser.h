@@ -26,9 +26,8 @@
 #ifndef CADSTAR_PCB_ARCHIVE_PARSER_H_
 #define CADSTAR_PCB_ARCHIVE_PARSER_H_
 
-#include <boost/serialization/strong_typedef.hpp>
-#include <plugins/cadstar/cadstar_archive_parser.h>
 #include <map>
+#include <plugins/cadstar/cadstar_archive_parser.h>
 #include <vector>
 
 
@@ -39,10 +38,6 @@
 #define UNDEFINED_MATERIAL_ID ( MATERIAL_ID ) wxEmptyString
 #define UNDEFINED_PHYSICAL_LAYER ( PHYSICAL_LAYER_ID ) - 1
 
-/**
- * Default spacing class for all nets
- */
-#define NO_SPACE_CLASS_ID ( SPACING_CLASS_ID ) wxT( "NO_SPACE_CLASS" )
 
 /**
  * Component Name Attribute ID - typically used for placement of designators on silk screen.
@@ -86,6 +81,7 @@ public:
     typedef wxString COPPERCODE_ID;
     typedef wxString PADCODE_ID;
     typedef wxString VIACODE_ID;
+    typedef wxString SPACINGCODE_ID;
     typedef wxString LAYERPAIR_ID;
     typedef wxString ATTRIBUTE_ID;
     typedef wxString NETCLASS_ID;
@@ -394,7 +390,45 @@ public:
             void Parse( XNODE* aNode );
         };
 
-        wxString              Code; //TODO convert to an enum class containing all valid spacings
+        /**
+         * @brief Possible spacing rules:
+         *        - A_A = Component Placement to Component Placement
+         *        - C_B = Copper to Board
+         *        - C_C = Copper to Copper
+         *        - H_H = Hole to Hole
+         *        - OT_P = Optimal Route to Pad (Optional Rule)
+         *        - OT_T = Optimal Route to Route (Optional Rule)
+         *        - OT_V = Optimal Route to Via (Optional Rule)
+         *        - P_B = Pad to Board
+         *        - P_C = Pad to Copper
+         *        - P_P = Pad to Pad
+         *        - P_S = Pad to SMD pad (Optional Rule)
+         *        - P_V = Pad to Via
+         *        - T_B = Route to Board outline
+         *        - T_C = Route to Copper
+         *        - T_P = Route to Pad
+         *        - T_T = Route to Route
+         *        - T_S = Route to SMD Pad (Optional Rule)
+         *        - T_V = Route to Via
+         *        - S_B = SMD Pad to Board (Optional Rule)
+         *        - S_C = SMD Pad to Copper (Optional Rule)
+         *        - S_S = SMD Pad to SMD Pad (Optional Rule)
+         *        - L_B = Test Land to Board
+         *        - L_O = Test Land to Component
+         *        - L_L = Test Land to Test Land
+         *        - V_B = Via to Board
+         *        - V_C = Via to Copper
+         *        - V_S = Via to SMD Pad (Optional Rule)
+         *        - V_V = Via to Via
+         *
+         * Other design rules are in: 
+         * TECHNOLOGY->MAXMITER = Maximum Mitre (This parameter is not actually checked in Cadstar)
+         * TECHNOLOGY->MINMITER = Minimum Mitre (This parameter is not actually checked in Cadstar)
+         * TECHNOLOGY->MINUNNECKED = Minimum Thicker Track Length
+         * TECHNOLOGY->MINNECKED = Minimum Thinner Track Length
+         * TECHNOLOGY->MINROUTEWIDTH = Thin Route Width
+         */
+        SPACINGCODE_ID        ID;
         long                  Spacing;
         std::vector<REASSIGN> Reassigns; ///< Can have different spacings on differnt layers
 
@@ -720,23 +754,24 @@ public:
                                       ///< will be used when inserting new vias within an area that
                                       ///< has been assigned this rule set. ("VIACODEREF")
 
-        std::vector<SPACINGCODE> SpacingCodes; ///< Overrides these spacing rules in the specific
-                                               ///< area.
+        std::map<SPACINGCODE_ID, SPACINGCODE>
+                SpacingCodes; ///< Overrides these spacing rules in the specific
+                              ///< area.
         void Parse( XNODE* aNode );
     };
 
 
     struct CODEDEFS
     {
-        std::map<LINECODE_ID, LINECODE>     LineCodes;
-        std::map<HATCHCODE_ID, HATCHCODE>   HatchCodes;
-        std::map<TEXTCODE_ID, TEXTCODE>     TextCodes;
-        std::map<ROUTECODE_ID, ROUTECODE>   RouteCodes;
-        std::map<COPPERCODE_ID, COPPERCODE> CopperCodes;
-        std::vector<SPACINGCODE>            SpacingCodes; ///< Spacing Design Rules
-        std::map<RULESET_ID, RULESET>       Rulesets;     ///< Used for area design rules
-        std::map<PADCODE_ID, PADCODE>       PadCodes;
-        std::map<VIACODE_ID, VIACODE>       ViaCodes;
+        std::map<LINECODE_ID, LINECODE>       LineCodes;
+        std::map<HATCHCODE_ID, HATCHCODE>     HatchCodes;
+        std::map<TEXTCODE_ID, TEXTCODE>       TextCodes;
+        std::map<ROUTECODE_ID, ROUTECODE>     RouteCodes;
+        std::map<COPPERCODE_ID, COPPERCODE>   CopperCodes;
+        std::map<SPACINGCODE_ID, SPACINGCODE> SpacingCodes; ///< Spacing Design Rules
+        std::map<RULESET_ID, RULESET>         Rulesets;     ///< Used for area design rules
+        std::map<PADCODE_ID, PADCODE>         PadCodes;
+        std::map<VIACODE_ID, VIACODE>         ViaCodes;
         std::map<LAYERPAIR_ID, LAYERPAIR>
                 LayerPairs; ///< Default vias to use between pairs of layers
 
@@ -790,10 +825,10 @@ public:
         long TrackGrid;         ///< Grid for Routes (equal X and Y steps)
         long ViaGrid;           ///< Grid for Vias (equal X and Y steps)
 
-        POINT                   DesignOrigin;
+        LONGPOINT               DesignOrigin;
         std::pair<POINT, POINT> DesignArea;
-        POINT                   DesignRef; ///< Appears to be 0,0 always
-        POINT                   DesignLimit;
+        LONGPOINT               DesignRef; ///< Appears to be 0,0 always
+        LONGPOINT               DesignLimit;
 
         bool BackOffJunctions   = false;
         bool BackOffWidthChange = false;
@@ -1064,9 +1099,9 @@ public:
         {
             // The default alignment for TEXT_LOCATION (when "NO_ALIGNMENT" is selected) is
             // Bottom left, matching CADSTAR's default behaviour
-            Alignment= ALIGNMENT::BOTTOMLEFT;
+            Alignment = ALIGNMENT::BOTTOMLEFT;
         }
-        ATTRIBUTE_ID  AttributeID;
+        ATTRIBUTE_ID AttributeID;
 
         void Parse( XNODE* aNode );
     };
@@ -1850,13 +1885,20 @@ public:
                                               ///< aperture etc ...) used on a plotting machine"
                                               ///< (param1)
 
-            long ClearanceWidth;         ///< (param2)
-            long SliverWidth;            ///< (param3)
-            long AdditionalIsolation;    ///< (param4)
-            long ThermalReliefPadsAngle; ///< Disabled when !ThermalReliefOnPads (param5)
+            long ClearanceWidth;      ///< Specifies the space around pads when pouring
+                                      ///< (i.e. Thermal relief clearance)
+            long SliverWidth;         ///< Minimum width of copper that may be created
+            long AdditionalIsolation; ///< This is the gap to apply in routes and pads
+                                      ///< in addition to the existing pad-to-copper or
+                                      ///< route-to-copper spacing (see SPACINGCODE.ID)
+            long ThermalReliefPadsAngle; ///< Orientation for the thermal reliefs. Disabled when !ThermalReliefOnPads (param5)
             long ThermalReliefViasAngle; ///< Disabled when !ThermalReliefOnVias (param6)
-            long MinIsolatedCopper = UNDEFINED_VALUE; ///< Disabled when UNDEFINED_VALUE (param7)
-            long MinDisjointCopper = UNDEFINED_VALUE; ///< Disabled when UNDEFINED_VALUE (param8)
+            long MinIsolatedCopper = UNDEFINED_VALUE; ///< The value is the length of one side of
+                                                      ///< a notional square. Disabled when
+                                                      ///< UNDEFINED_VALUE
+            long MinDisjointCopper = UNDEFINED_VALUE; ///< The value is the length of one side of
+                                                      ///< a notional square. Disabled when
+                                                      ///< UNDEFINED_VALUE
 
             bool ThermalReliefOnPads  = true;  ///< false when subnode "NOPINRELIEF" is present
             bool ThermalReliefOnVias  = true;  ///< false when subnode "NOVIARELIEF" is present

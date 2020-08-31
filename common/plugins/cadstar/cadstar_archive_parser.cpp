@@ -47,6 +47,17 @@ void CADSTAR_ARCHIVE_PARSER::POINT::Parse( XNODE* aNode )
 }
 
 
+
+
+void CADSTAR_ARCHIVE_PARSER::LONGPOINT::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "PT" ) );
+
+    x = GetXmlAttributeIDLong( aNode, 0 );
+    y = GetXmlAttributeIDLong( aNode, 1 );
+}
+
+
 bool CADSTAR_ARCHIVE_PARSER::VERTEX::IsVertex( XNODE* aNode )
 {
     wxString aNodeName = aNode->GetName();
@@ -241,7 +252,7 @@ long CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDLong( XNODE* aNode, unsigned int a
 
 void CADSTAR_ARCHIVE_PARSER::CheckNoChildNodes( XNODE* aNode )
 {
-    if( aNode->GetChildren() )
+    if( aNode && aNode->GetChildren() )
     {
         THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
     }
@@ -250,7 +261,7 @@ void CADSTAR_ARCHIVE_PARSER::CheckNoChildNodes( XNODE* aNode )
 
 void CADSTAR_ARCHIVE_PARSER::CheckNoNextNodes( XNODE* aNode )
 {
-    if( aNode->GetNext() )
+    if( aNode && aNode->GetNext() )
     {
         THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetNext()->GetName(), aNode->GetParent()->GetName() );
     }

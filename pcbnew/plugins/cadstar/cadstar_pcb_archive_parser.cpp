@@ -268,9 +268,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::RULESET::Parse( XNODE* aNode )
             AreaViaCodeID = GetXmlAttributeIDString( cNode, 0 );
         else if( nodeName == wxT( "SPACINGCODE" ) )
         {
-            SPACINGCODE scode;
-            scode.Parse( cNode );
-            SpacingCodes.push_back( scode );
+            SPACINGCODE spacingcode;
+            spacingcode.Parse( cNode );
+            SpacingCodes.insert( std::make_pair( spacingcode.ID, spacingcode ) );
         }
         else
             THROW_UNKNOWN_NODE_IO_ERROR( nodeName, aNode->GetName() );
@@ -322,7 +322,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::CODEDEFS::Parse( XNODE* aNode )
         {
             SPACINGCODE spacingcode;
             spacingcode.Parse( cNode );
-            SpacingCodes.push_back( spacingcode );
+            SpacingCodes.insert( std::make_pair( spacingcode.ID, spacingcode ) );
         }
         else if( nodeName == wxT( "RULESET" ) )
         {
@@ -883,7 +883,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "SPACINGCODE" ) );
 
-    Code    = GetXmlAttributeIDString( aNode, 0 );
+    ID      = GetXmlAttributeIDString( aNode, 0 );
     Spacing = GetXmlAttributeIDLong( aNode, 1 );
 
     XNODE* cNode = aNode->GetChildren();
@@ -1390,8 +1390,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TECHNOLOGY_SECTION::Parse( XNODE* aNode )
             ViaGrid = GetXmlAttributeIDLong( cNode, 0 );
         else if( cNodeName == wxT( "DESIGNORIGIN" ) )
         {
-            std::vector<POINT> pts = ParseAllChildPoints( cNode, true, 1 );
-            DesignOrigin           = pts[0];
+            DesignOrigin.Parse( cNode->GetChildren() );
         }
         else if( cNodeName == wxT( "DESIGNAREA" ) )
         {
@@ -1400,13 +1399,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TECHNOLOGY_SECTION::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "DESIGNREF" ) )
         {
-            std::vector<POINT> pts = ParseAllChildPoints( cNode, true, 1 );
-            DesignRef              = pts[0];
+            DesignOrigin.Parse( cNode->GetChildren() );
         }
         else if( cNodeName == wxT( "DESIGNLIMIT" ) )
         {
-            std::vector<POINT> pts = ParseAllChildPoints( cNode, true, 1 );
-            DesignLimit            = pts[0];
+            DesignLimit.Parse( cNode->GetChildren() );
         }
         else if( cNodeName == wxT( "BACKOFFJCTS" ) )
             BackOffJunctions = true;

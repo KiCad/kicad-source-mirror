@@ -28,19 +28,33 @@
 
 #include <cadstar_pcb_archive_parser.h>
 #include <class_board.h>
+#include <set>
 
 class BOARD;
 
 class CADSTAR_PCB_ARCHIVE_LOADER : public CADSTAR_PCB_ARCHIVE_PARSER
 {
 public:
-    explicit CADSTAR_PCB_ARCHIVE_LOADER( wxString aFilename ) : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
+    explicit CADSTAR_PCB_ARCHIVE_LOADER( wxString aFilename )
+            : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
     {
-        mBoard          = nullptr;
-        mDesignCenter.x = 0;
-        mDesignCenter.y = 0;
+        mBoard             = nullptr;
+        mDesignCenter.x    = 0;
+        mDesignCenter.y    = 0;
+        mDoneCopperWarning = false;
+        mNumNets           = 0;
     }
 
+    ~CADSTAR_PCB_ARCHIVE_LOADER()
+    {
+        for( std::pair<SYMDEF_ID, MODULE*> libItem : mLibraryMap )
+        {
+            MODULE* mod = libItem.second;
+
+            if( mod )
+                delete mod;
+        }
+    }
 
     /**
      * @brief Loads a CADSTAR PCB Archive file into the KiCad BOARD object given
@@ -54,12 +68,27 @@ private:
                                                          ///< Populated by loadBoardStackup().
     std::map<SYMDEF_ID, MODULE*> mLibraryMap;            ///< Map between Cadstar and KiCad
                                                          ///< components in the library. Populated
-                                                         ///< by loadComponentLibrary().
+                                                         ///< by loadComponentLibrary(). Owns the
+                                                         ///< MODULE objects.
+    std::map<COMPONENT_ID, MODULE*> mComponentMap;       ///< Map between Cadstar and KiCad
+                                                         ///< components on the board. Does NOT own
+                                                         ///< the MODULE objects (these should have
+                                                         ///< been loaded to mBoard).
+    std::map<NET_ID, NETINFO_ITEM*>       mNetMap;       ///< Map between Cadstar and KiCad Nets
     std::map<PHYSICAL_LAYER_ID, LAYER_ID> mCopperLayers; ///< Map of CADSTAR Physical layers to
                                                          ///< CADSTAR Layer IDs
+    std::vector<LAYER_ID> mPowerPlaneLayers;             ///< List of layers that are marked as 
+                                                         ///< power plane in CADSTAR. This is used 
+                                                         ///< by "loadtemplates"
     wxPoint mDesignCenter;                               ///< Used for calculating the required
                                                          ///< offset to apply to the Cadstar design
                                                          ///< so that it fits in KiCad canvas
+    std::set<HATCHCODE_ID> mHatchcodesTested;            ///< Used by checkAndLogHatchCode() to
+                                                         ///< avoid multiple duplicate warnings
+    bool mDoneCopperWarning;                             ///< Used by loadCoppers() to avoid
+                                                         ///< multiple duplicate warnings
+    int mNumNets;                                        ///< Number of nets loaded so far 
+
 
     // Functions for loading individual elements:
     void loadBoardStackup();
@@ -68,6 +97,9 @@ private:
     void loadFigures();
     void loadAreas();
     void loadComponents();
+    void loadTemplates();
+    void loadCoppers();
+    void loadNets();
 
     // Helper functions for loading:
     void logBoardStackupWarning(
@@ -75,6 +107,8 @@ private:
     void loadLibraryFigures( const SYMDEF& aComponent, MODULE* aModule );
     void loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule );
     void loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule );
+    void loadNetTracks( const NET_ID& aCadstarNetID, const NET::ROUTE& aCadstarRoute );
+    void loadNetVia( const NET_ID& aCadstarNetID, const NET::VIA& aCadstarVia );
 
     /**
      * @brief 
@@ -114,7 +148,7 @@ private:
 
     /**
      * @brief Returns a vector of pointers to DRAWSEGMENT objects. Caller owns the objects.
-     * @param aCadstarVertices      * 
+     * @param aCadstarVertices
      * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
      * @return 
      */
@@ -122,6 +156,15 @@ private:
             const std::vector<VERTEX>& aCadstarVertices,
             BOARD_ITEM_CONTAINER*      aContainer = nullptr );
 
+    /**
+     * @brief Returns a pointer to a DRAWSEGMENT object. Caller owns the object.
+     * @param aCadstarStartPoint
+     * @param aCadstarVertex
+     * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
+     * @return 
+     */
+    DRAWSEGMENT* getDrawSegmentFromVertex( const POINT& aCadstarStartPoint,
+            const VERTEX& aCadstarVertex, BOARD_ITEM_CONTAINER* aContainer = nullptr );
 
     /**
      * @brief 
@@ -151,6 +194,22 @@ private:
     SHAPE_LINE_CHAIN getLineChainFromDrawsegments( const std::vector<DRAWSEGMENT*> aDrawSegments );
 
     /**
+     * @brief Returns a vector of pointers to TRACK/ARC objects. Caller owns the objects
+     * @param aDrawsegments 
+     * @param aParentContainer sets this as the parent of each TRACK object and Add()s it to the parent
+     * @param aNet sets all the tracks to this net, unless nullptr
+     * @param aLayerOverride Sets all tracks to this layer, or, if it is UNDEFINED_LAYER, uses the layers
+     *                       in the DrawSegments
+     * @param aWidthOverride Sets all tracks to this width, or, if it is UNDEFINED_LAYER, uses the width
+     *                       in the DrawSegments
+     * @return 
+    */
+    std::vector<TRACK*> makeTracksFromDrawsegments( const std::vector<DRAWSEGMENT*> aDrawsegments,
+            BOARD_ITEM_CONTAINER* aParentContainer, NETINFO_ITEM* aNet = nullptr,
+            const PCB_LAYER_ID& aLayerOverride = PCB_LAYER_ID::UNDEFINED_LAYER,
+            int                 aWidthOverride = -1 );
+
+    /**
      * @brief Adds a CADSTAR Attribute to a KiCad module
      * @param aCadstarAttrLoc 
      * @param aCadstarAttributeID
@@ -170,11 +229,11 @@ private:
     int getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
 
 
-    TEXTCODE getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
-
-
-    PADCODE getPadCode( const PADCODE_ID& aCadstarPadCodeID );
-
+    COPPERCODE getCopperCode( const COPPERCODE_ID& aCadstaCopperCodeID );
+    TEXTCODE   getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
+    PADCODE    getPadCode( const PADCODE_ID& aCadstarPadCodeID );
+    VIACODE    getViaCode( const VIACODE_ID& aCadstarViaCodeID );
+    LAYERPAIR  getLayerPair( const LAYERPAIR_ID& aCadstarLayerPairID );
 
     wxString getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
 
@@ -183,6 +242,13 @@ private:
             const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
 
     PART getPart( const PART_ID& aCadstarPartID );
+
+    HATCHCODE getHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
+    void      checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
+    MODULE*   getModuleFromCadstarID( const COMPONENT_ID& aCadstarComponentID );
+    double    getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
+    int       getKiCadHatchCodeThickness( const HATCHCODE_ID& aCadstarHatchcodeID );
+    int       getKiCadHatchCodeGap( const HATCHCODE_ID& aCadstarHatchcodeID );
 
     /**
      * @brief Scales, offsets and inverts y axis to make the point usable directly in KiCad
@@ -206,9 +272,19 @@ private:
      * @param aCadstarAngle 
      * @return 
     */
-    double getKiCadAngle( const long long& aCadstarAngle )
+    double getAngleTenthDegree( const long long& aCadstarAngle )
     {
         return (double) aCadstarAngle / 100.0;
+    }
+
+    /**
+     * @brief 
+     * @param aCadstarAngle 
+     * @return 
+     */
+    double getAngleDegrees( const long long& aCadstarAngle )
+    {
+        return (double) aCadstarAngle / 1000.0;
     }
 
     /**
@@ -217,6 +293,14 @@ private:
      * @return Angle in decidegrees of the polar representation of the point, scaled 0..360
      */
     double getPolarAngle( wxPoint aPoint );
+
+    /**
+     * @brief Searches mNetMap and returns the NETINFO_ITEM pointer if exists. Otherwise
+     * creates a new one and adds it to mBoard.
+     * @param aCadstarNetID 
+     * @return 
+     */
+    NETINFO_ITEM* getKiCadNet( const NET_ID& aCadstarNetID );
 
 
     /**

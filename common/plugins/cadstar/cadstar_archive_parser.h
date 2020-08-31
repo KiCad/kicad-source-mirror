@@ -82,6 +82,15 @@ public:
         void Parse( XNODE* aNode );
     };
 
+    
+    struct LONGPOINT
+    {
+        long x = UNDEFINED_VALUE;
+        long y = UNDEFINED_VALUE;
+
+        void Parse( XNODE* aNode );
+    };
+
 
     enum class VERTEX_TYPE
     {
