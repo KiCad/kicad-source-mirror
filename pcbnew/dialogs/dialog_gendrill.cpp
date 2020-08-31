@@ -23,9 +23,7 @@
  */
 
 #include <fctsys.h>
-#include <kiface_i.h>
 #include <confirm.h>
-#include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
@@ -87,7 +85,7 @@ DIALOG_GENDRILL::DIALOG_GENDRILL(  PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aPar
 int DIALOG_GENDRILL::m_UnitDrillIsInch  = true;     // Only for Excellon format
 int DIALOG_GENDRILL::m_ZerosFormat      = EXCELLON_WRITER::DECIMAL_FORMAT;
 bool DIALOG_GENDRILL::m_MinimalHeader   = false;    // Only for Excellon format
-bool DIALOG_GENDRILL::m_Mirror = false;             // Only for Excellon format
+bool DIALOG_GENDRILL::m_Mirror          = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::m_Merge_PTH_NPTH  = false;    // Only for Excellon format
 int DIALOG_GENDRILL::m_mapFileType      = 1;
 int DIALOG_GENDRILL::m_drillFileType    = 0;
@@ -142,9 +140,9 @@ void DIALOG_GENDRILL::InitDisplayParams()
     m_microViasCount   = 0;
     m_blindOrBuriedViasCount = 0;
 
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
             if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
             {
@@ -169,27 +167,17 @@ void DIALOG_GENDRILL::InitDisplayParams()
         }
     }
 
-    for( auto track : m_board->Tracks() )
+    for( TRACK* track : m_board->Tracks() )
     {
         const VIA *via = dynamic_cast<const VIA*>( track );
         if( via )
         {
             switch( via->GetViaType() )
             {
-            case VIATYPE::THROUGH:
-                m_throughViasCount++;
-                break;
-
-            case VIATYPE::MICROVIA:
-                m_microViasCount++;
-                break;
-
-            case VIATYPE::BLIND_BURIED:
-                m_blindOrBuriedViasCount++;
-                break;
-
-            default:
-                break;
+            case VIATYPE::THROUGH:      m_throughViasCount++;       break;
+            case VIATYPE::MICROVIA:     m_microViasCount++;         break;
+            case VIATYPE::BLIND_BURIED: m_blindOrBuriedViasCount++; break;
+            default:                                                break;
             }
         }
     }

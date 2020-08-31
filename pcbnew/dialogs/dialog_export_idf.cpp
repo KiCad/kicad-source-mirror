@@ -23,12 +23,9 @@
  */
 
 #include <pcb_edit_frame.h>
-#include <kiface_i.h>
 #include <class_board.h>
-#include <convert_to_biu.h>
 #include <widgets/text_ctrl_eval.h>
 #include <dialog_export_idf_base.h>
-#include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <confirm.h>

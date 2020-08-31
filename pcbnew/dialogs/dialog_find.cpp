@@ -28,12 +28,10 @@
 #include <class_module.h>
 #include <class_pcb_text.h>
 #include <class_text_mod.h>
-#include <confirm.h>
 #include <dialog_find.h>
 #include <fctsys.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew.h>
 #include <string>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

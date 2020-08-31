@@ -24,7 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <cmath>
+//#include <cmath>
 #include <exception>
 #include <fstream>
 #include <iomanip>
@@ -42,16 +42,12 @@
 #include "convert_to_biu.h"
 #include <filename_resolver.h>
 #include "gr_text.h"
-#include "macros.h"
-#include "pgm_base.h"
 #include "plugins/3dapi/ifsg_all.h"
 #include "streamwrapper.h"
 #include "vrml_layer.h"
 #include "pcb_edit_frame.h"
-
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
-#include <board_commit.h>
 #include <zone_filler.h>
 
 // minimum width (mm) of a VRML line
@@ -291,27 +287,12 @@ static bool GetLayer( MODEL_VRML& aModel, LAYER_NUM layer, VRML_LAYER** vlayer )
 {
     switch( layer )
     {
-    case B_Cu:
-        *vlayer = &aModel.m_bot_copper;
-        break;
-
-    case F_Cu:
-        *vlayer = &aModel.m_top_copper;
-        break;
-
-    case B_SilkS:
-        *vlayer = &aModel.m_bot_silk;
-        break;
-
-    case F_SilkS:
-        *vlayer = &aModel.m_top_silk;
-        break;
-
-    default:
-        return false;
+    case B_Cu:    *vlayer = &aModel.m_bot_copper; return true;
+    case F_Cu:    *vlayer = &aModel.m_top_copper; return true;
+    case B_SilkS: *vlayer = &aModel.m_bot_silk;   return true;
+    case F_SilkS: *vlayer = &aModel.m_top_silk;   return true;
+    default:                                      return false;
     }
-
-    return true;
 }
 
 static void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
@@ -952,13 +933,13 @@ static void export_round_padstack( MODEL_VRML& aModel, BOARD* pcb,
 
 static void export_vrml_via( MODEL_VRML& aModel, BOARD* aPcb, const VIA* aVia )
 {
-    double      x, y, r, hole;
-    PCB_LAYER_ID    top_layer, bottom_layer;
+    double       x, y, r, hole;
+    PCB_LAYER_ID top_layer, bottom_layer;
 
     hole = aVia->GetDrillValue() * BOARD_SCALE / 2.0;
-    r   = aVia->GetWidth() * BOARD_SCALE / 2.0;
-    x   = aVia->GetStart().x * BOARD_SCALE;
-    y   = aVia->GetStart().y * BOARD_SCALE;
+    r    = aVia->GetWidth() * BOARD_SCALE / 2.0;
+    x    = aVia->GetStart().x * BOARD_SCALE;
+    y    = aVia->GetStart().y * BOARD_SCALE;
     aVia->LayerPair( &top_layer, &bottom_layer );
 
     // do not render a buried via
@@ -1356,9 +1337,7 @@ static void from_quat( double q[4], double rot[4] )
     rot[3] = acos( q[3] ) * 2;
 
     for( int i = 0; i < 3; i++ )
-    {
         rot[i] = q[i] / sin( rot[3] / 2 );
-    }
 }
 
 
@@ -1619,7 +1598,6 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
 
     try
     {
-
         // Preliminary computation: the z value for each layer
         compute_layer_Zs( model3d, pcb );
 

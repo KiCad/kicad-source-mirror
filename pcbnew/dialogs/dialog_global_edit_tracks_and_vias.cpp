@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2016 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,15 +23,12 @@
  */
 
 #include <fctsys.h>
-#include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_track.h>
 #include <connectivity/connectivity_data.h>
-#include <view/view.h>
 #include <pcb_layer_box_selector.h>
 #include <tool/tool_manager.h>
-#include <tool/selection.h>
 #include <tools/selection_tool.h>
 #include <tools/global_edit_tool.h>
 #include "dialog_global_edit_tracks_and_vias_base.h"
