@@ -74,7 +74,7 @@ public:
                 choices.push_back( alt.first );
 
             wxGridCellAttr* attr = new wxGridCellAttr();
-            attr->SetEditor( new GRID_CELL_COMBOBOX( choices ) );
+            attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
 
             m_nameAttrs.push_back( attr );
         }
