@@ -67,7 +67,7 @@ public:
     LIB_PIN* GetLibPin() const { return m_libPin; }
 
     void ClearDefaultNetName( const SCH_SHEET_PATH* aPath );
-    wxString GetDefaultNetName( const SCH_SHEET_PATH aPath );
+    wxString GetDefaultNetName( const SCH_SHEET_PATH& aPath );
 
     wxString GetAlt() const { return m_alt; }
     void SetAlt( const wxString& aAlt ) { m_alt = aAlt; }
@@ -109,13 +109,7 @@ public:
 
     wxString GetName() const;
 
-    wxString GetNumber() const
-    {
-        if( m_libPin )
-            return m_libPin->GetNumber();
-        else
-            return m_number;
-    }
+    wxString GetNumber() const { return m_number; }
     void SetNumber( const wxString& aNumber ) { m_number = aNumber; }
 
     ELECTRICAL_PINTYPE GetType() const;

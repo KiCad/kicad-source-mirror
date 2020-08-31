@@ -27,9 +27,11 @@
 
 
 SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent ) :
-    SCH_ITEM( aParentComponent, SCH_PIN_T ),
-    m_libPin( aLibPin )
+    SCH_ITEM( aParentComponent, SCH_PIN_T )
 {
+    m_alt = wxEmptyString;
+    m_number = aLibPin->GetNumber();
+    m_libPin = aLibPin;
     SetPosition( aLibPin->GetPosition() );
     m_isDangling = true;
 }
@@ -39,6 +41,7 @@ SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
         SCH_ITEM( aPin )
 {
     m_alt = aPin.m_alt;
+    m_number = aPin.m_number;
     m_libPin = aPin.m_libPin;
     m_position = aPin.m_position;
     m_isDangling = aPin.m_isDangling;
@@ -50,6 +53,7 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
     SCH_ITEM::operator=( aPin );
 
     m_alt = aPin.m_alt;
+    m_number = aPin.m_number;
     m_libPin = aPin.m_libPin;
     m_position = aPin.m_position;
     m_isDangling = aPin.m_isDangling;
@@ -210,7 +214,7 @@ void SCH_PIN::ClearDefaultNetName( const SCH_SHEET_PATH* aPath )
 }
 
 
-wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
+wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath )
 {
     if( m_libPin->IsPowerConnection() )
         return m_libPin->GetName();
