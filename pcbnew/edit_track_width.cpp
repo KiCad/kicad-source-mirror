@@ -27,7 +27,8 @@
 #include <pcbnew_id.h>
 #include <board_design_settings.h>
 #include <class_track.h>
-
+#include <tools/pcb_actions.h>
+#include <tool/tool_manager.h>
 
 void PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
                                            PICKED_ITEMS_LIST* aItemsListPicker,
@@ -225,4 +226,6 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     default:
         break;
     }
+
+    m_toolManager->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
 }

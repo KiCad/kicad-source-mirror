@@ -24,27 +24,21 @@
 
 #include <sch_line_wire_bus_tool.h>
 
-#include <boost/optional/optional.hpp>
 #include <wx/debug.h>
 #include <wx/gdicmn.h>
-#include <wx/menu.h>
 #include <wx/string.h>
 #include <wx/stringimpl.h>
 #include <wx/translation.h>
 #include <algorithm>
 #include <cstdlib>
-#include <deque>
 #include <iterator>
 #include <memory>
-#include <string>
 #include <utility>
 #include <vector>
 
-#include <base_screen.h>
 #include <base_struct.h>
 #include <bitmaps.h>
 #include <core/typeinfo.h>
-#include <eda_text.h>
 #include <layers_id_colors_and_visibility.h>
 #include <math/vector2d.h>
 #include <advanced_config.h>
@@ -52,28 +46,20 @@
 #include <tool/conditional_menu.h>
 #include <tool/selection.h>
 #include <tool/selection_conditions.h>
-#include <tool/tool_action.h>
 #include <tool/tool_event.h>
-#include <tool/tool_interactive.h>
-#include <tool/tool_manager.h>
 #include <trigo.h>
 #include <undo_redo_container.h>
-#include <view/view_controls.h>
 
 #include <connection_graph.h>
 #include <eeschema_id.h>
-#include <general.h>
 #include <sch_bus_entry.h>
 #include <sch_connection.h>
-#include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sch_item.h>
 #include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
-#include <sch_sheet_path.h>
 #include <sch_text.h>
-#include <sch_view.h>
 #include <schematic.h>
 
 #include <ee_actions.h>

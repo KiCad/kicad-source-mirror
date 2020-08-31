@@ -184,6 +184,10 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
         {
             m_menu.ShowContextMenu( selection() );
         }
+        else if( evt->IsAction( &PCB_ACTIONS::trackViaSizeChanged ) )
+        {
+            m_toolMgr->RunAction( ACTIONS::refreshPreview );
+        }
         else if( newItem && evt->Category() == TC_COMMAND )
         {
             /*
@@ -211,7 +215,8 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                 preview.Clear();
                 newItem.release();
 
-                makeNewItem( controls()->GetCursorPosition() );
+                makeNewItem( (wxPoint) cursorPos );
+                aPlacer->SnapItem( newItem.get() );
                 view()->Update( &preview );
             }
         }
@@ -219,7 +224,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
         else if( newItem && evt->IsMotion() )
         {
             // track the cursor
-            newItem->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            newItem->SetPosition( (wxPoint) cursorPos );
             aPlacer->SnapItem( newItem.get() );
 
             // Show a preview of the item

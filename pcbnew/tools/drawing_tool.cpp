@@ -55,8 +55,91 @@
 #include <tools/selection_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
+#include <pcbnew_id.h>
+#include <dialogs/dialog_track_via_size.h>
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
+
+
+class VIA_SIZE_MENU : public ACTION_MENU
+{
+public:
+    VIA_SIZE_MENU() :
+        ACTION_MENU( true )
+    {
+        SetIcon( width_track_via_xpm );
+        SetTitle( _( "Select Via Size" ) );
+    }
+
+protected:
+    ACTION_MENU* create() const override
+    {
+        return new VIA_SIZE_MENU();
+    }
+
+    void update() override
+    {
+        PCB_EDIT_FRAME*        frame = (PCB_EDIT_FRAME*) getToolManager()->GetToolHolder();
+        EDA_UNITS              units = frame->GetUserUnits();
+        BOARD_DESIGN_SETTINGS& bds = frame->GetBoard()->GetDesignSettings();
+        bool                   useIndex = !bds.m_UseConnectedTrackWidth
+                                                && !bds.UseCustomTrackViaSize();
+        wxString               msg;
+
+        Clear();
+
+        Append( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Use Custom Values..." ),
+                _( "Specify custom track and via sizes" ), wxITEM_CHECK );
+        Check( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, bds.UseCustomTrackViaSize() );
+
+        AppendSeparator();
+
+        for( unsigned i = 1; i < bds.m_ViasDimensionsList.size(); i++ )
+        {
+            VIA_DIMENSION via = bds.m_ViasDimensionsList[i];
+
+            if( via.m_Drill > 0 )
+                msg.Printf( _("Via %s, drill %s" ),
+                            MessageTextFromValue( units, via.m_Diameter, true ),
+                            MessageTextFromValue( units, via.m_Drill, true ) );
+            else
+                msg.Printf( _( "Via %s" ), MessageTextFromValue( units, via.m_Diameter, true ) );
+
+            int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;
+            Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
+            Check( menuIdx, useIndex && bds.GetViaSizeIndex() == i );
+        }
+    }
+
+    OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override
+    {
+        PCB_EDIT_FRAME*        frame = (PCB_EDIT_FRAME*) getToolManager()->GetToolHolder();
+        BOARD_DESIGN_SETTINGS& bds = frame->GetBoard()->GetDesignSettings();
+        int                    id = aEvent.GetId();
+
+        // On Windows, this handler can be called with an event ID not existing in any
+        // menuitem, so only set flags when we have an ID match.
+
+        if( id == ID_POPUP_PCB_SELECT_CUSTOM_WIDTH )
+        {
+            DIALOG_TRACK_VIA_SIZE sizeDlg( frame, bds );
+
+            if( sizeDlg.ShowModal() )
+            {
+                bds.UseCustomTrackViaSize( true );
+                bds.m_UseConnectedTrackWidth = false;
+            }
+        }
+        else if( id >= ID_POPUP_PCB_SELECT_VIASIZE1 && id <= ID_POPUP_PCB_SELECT_VIASIZE16 )
+        {
+            bds.UseCustomTrackViaSize( false );
+            bds.m_UseConnectedTrackWidth = false;
+            bds.SetViaSizeIndex( id - ID_POPUP_PCB_SELECT_VIASIZE1 );
+        }
+
+        return OPT_TOOL_EVENT( PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
+    }
+};
 
 
 DRAWING_TOOL::DRAWING_TOOL() :
@@ -75,13 +158,13 @@ DRAWING_TOOL::~DRAWING_TOOL()
 
 bool DRAWING_TOOL::Init()
 {
-    auto activeToolFunctor = [ this ] ( const SELECTION& aSel )
+    auto activeToolFunctor = [this]( const SELECTION& aSel )
                              {
                                  return m_mode != MODE::NONE;
                              };
 
     // some interactive drawing tools can undo the last point
-    auto canUndoPoint = [ this ] ( const SELECTION& aSel )
+    auto canUndoPoint = [this]( const SELECTION& aSel )
                         {
                             return (   m_mode == MODE::ARC
                                     || m_mode == MODE::ZONE
@@ -90,12 +173,17 @@ bool DRAWING_TOOL::Init()
                         };
 
     // functor for tools that can automatically close the outline
-    auto canCloseOutline = [ this ] ( const SELECTION& aSel )
+    auto canCloseOutline = [this]( const SELECTION& aSel )
                            {
                                 return (   m_mode == MODE::ZONE
                                         || m_mode == MODE::KEEPOUT
                                         || m_mode == MODE::GRAPHIC_POLYGON );
                            };
+
+    auto viaToolActive = [this]( const SELECTION& aSel )
+                         {
+                             return m_mode == MODE::VIA;
+                         };
 
     auto& ctxMenu = m_menu.GetMenu();
 
@@ -106,6 +194,13 @@ bool DRAWING_TOOL::Init()
     // tool-specific actions
     ctxMenu.AddItem( PCB_ACTIONS::closeOutline,    canCloseOutline, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint, canUndoPoint, 200 );
+
+    ctxMenu.AddSeparator( 500 );
+
+    std::shared_ptr<VIA_SIZE_MENU> viaSizeMenu = std::make_shared<VIA_SIZE_MENU>();
+    viaSizeMenu->SetTool( this );
+    m_menu.AddSubMenu( viaSizeMenu );
+    ctxMenu.AddMenu( viaSizeMenu.get(),            viaToolActive, 500 );
 
     ctxMenu.AddSeparator( 500 );
 
