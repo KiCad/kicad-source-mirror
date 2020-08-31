@@ -554,14 +554,12 @@ TOOL_ACTION ACTIONS::updateSchematicFromPcb( "common.Control.updateSchematicFrom
         _( "Push changes from PCB to Schematic" ), update_sch_from_pcb_xpm );
 
 TOOL_ACTION ACTIONS::acceleratedGraphics( "common.Control.acceleratedGraphics",
-        AS_GLOBAL,
-        LEGACY_HK_NAME( "Switch to Modern Toolset with hardware-accelerated graphics (recommended)" ),
+        AS_GLOBAL, 0, "",
         _( "Accelerated Graphics" ), _( "Use hardware-accelerated graphics (recommended)" ),
         tools_xpm );
 
 TOOL_ACTION ACTIONS::standardGraphics( "common.Control.standardGraphics",
-        AS_GLOBAL,
-        LEGACY_HK_NAME( "Switch to Modern Toolset with software graphics (fall-back)" ),
+        AS_GLOBAL, 0, "",
         _( "Standard Graphics" ), _( "Use software graphics (fall-back)" ),
         tools_xpm );
 
