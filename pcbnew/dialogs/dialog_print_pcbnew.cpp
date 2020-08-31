@@ -198,7 +198,7 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
     int cols = optionsSizer->GetEffectiveColsCount();
 
     m_checkAsItems = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY,
-                                     _( "Print according to Items tab of Layers Manager" ),
+                                     _( "Print according to objects tab of appearance manager" ),
                                      wxDefaultPosition, wxDefaultSize, 0 );
     optionsSizer->Add( m_checkAsItems, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
 

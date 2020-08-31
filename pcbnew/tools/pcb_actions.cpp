@@ -727,7 +727,7 @@ TOOL_ACTION PCB_ACTIONS::showPythonConsole( "pcbnew.Control.showPythonConsole",
 
 TOOL_ACTION PCB_ACTIONS::showLayersManager( "pcbnew.Control.showLayersManager",
         AS_GLOBAL, 0, "",
-        _( "Show Layers Manager" ), _( "Show/hide the layers manager" ),
+        _( "Show Appearance Manager" ), _( "Show/hide the appearance manager" ),
         layers_manager_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showMicrowaveToolbar( "pcbnew.Control.showMicrowaveToolbar",
