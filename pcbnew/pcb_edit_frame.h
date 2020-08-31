@@ -68,16 +68,6 @@ enum LAST_PATH_TYPE : unsigned int;
 namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
 
 /**
- * Enum to signify the result of editing tracks and vias
- */
-enum TRACK_ACTION_RESULT
-{
-    TRACK_ACTION_DRC_ERROR = -1,//!< TRACK_ACTION_DRC_ERROR - Track not changed to to DRC
-    TRACK_ACTION_SUCCESS,       //!< TRACK_ACTION_SUCCESS - Track changed successfully
-    TRACK_ACTION_NONE           //!< TRACK_ACTION_NONE - Nothing to change
-};
-
-/**
  * PCB_EDIT_FRAME
  * is the main frame for Pcbnew.
  *
@@ -810,11 +800,8 @@ public:
      *                           (can be NULL)
      * @param aUseNetclassValue = true to use NetClass value, false to use
      *                            current designSettings value
-     * @return  0 if items successfully changed,
-     *          -1 if there was a DRC error,
-     *          1 if items were changed successfully
      */
-    int SetTrackSegmentWidth( TRACK*             aTrackItem,
+    void SetTrackSegmentWidth( TRACK*             aTrackItem,
                                PICKED_ITEMS_LIST* aItemsListPicker,
                                bool               aUseNetclassValue );
 

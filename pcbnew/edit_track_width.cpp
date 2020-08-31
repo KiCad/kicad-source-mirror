@@ -30,9 +30,9 @@
 #include <drc/drc.h>
 
 
-int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
-                                          PICKED_ITEMS_LIST* aItemsListPicker,
-                                          bool               aUseNetclassValue )
+void PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
+                                           PICKED_ITEMS_LIST* aItemsListPicker,
+                                           bool               aUseNetclassValue )
 {
     int           initial_width;
     int           new_width;
@@ -119,12 +119,6 @@ int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
                     via->SetDrillDefault();
             }
         }
-
-        return TRACK_ACTION_SUCCESS;
-    }
-    else
-    {
-        return TRACK_ACTION_NONE;
     }
 }
 
