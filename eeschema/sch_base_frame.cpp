@@ -304,7 +304,7 @@ void SCH_BASE_FRAME::createCanvas()
 
     // Allows only a CAIRO or OPENGL canvas:
     if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL
-            && m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO )
+            && m_canvasType != EDA_DRAW_PANEL_GAL::GAL_FALLBACK )
     {
         m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
     }

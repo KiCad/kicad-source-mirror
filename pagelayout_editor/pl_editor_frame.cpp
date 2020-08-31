@@ -96,12 +96,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetIcon( icon );
 
     // Create GAL canvas
-#ifdef __WXMAC__
-    // Cairo renderer doesn't handle Retina displays
-    m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-#else
-    m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-#endif
+    m_canvasType = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
 
     auto* drawPanel = new PL_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                              GetGalDisplayOptions(), m_canvasType );

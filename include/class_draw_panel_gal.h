@@ -63,6 +63,13 @@ public:
         GAL_TYPE_LAST           ///< Sentinel, do not use as a parameter
     };
 
+#ifdef __WXMAC__
+    // Cairo doesn't work on OSX so we really have no fallback available.
+    static constexpr GAL_TYPE GAL_FALLBACK = GAL_TYPE_OPENGL;
+#else
+    static constexpr GAL_TYPE GAL_FALLBACK = GAL_TYPE_CAIRO;
+#endif
+
     /**
      * Create a drawing panel that is contained inside \p aParentWindow.
      *

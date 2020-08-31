@@ -42,7 +42,6 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <title_block.h>
-#include <tool/action_manager.h>
 #include <tool/actions.h>
 #include <tool/common_tools.h>
 #include <tool/grid_menu.h>
@@ -651,6 +650,12 @@ void EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 
 EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
 {
+#ifdef __WXMAC__
+    // Cairo renderer doesn't handle Retina displays so there's really only one game
+    // in town for Mac
+    return EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+#endif
+
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
 
@@ -667,14 +672,7 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
     // Legacy canvas no longer supported.  Switch to Cairo, and on the first instantiation
     // the user will be prompted to switch to OpenGL
     if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-    {
-#ifdef __WXMAC__
-        // Cairo renderer doesn't handle Retina displays
-        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-#else
-        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-#endif
-    }
+        canvasType = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
 
     return canvasType;
 }

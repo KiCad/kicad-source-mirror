@@ -45,7 +45,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
 {
     // Make Coverity happy:
     m_LibTree.column_width = 360;
-    m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+    m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
 
     // Build parameters list:
     m_params.emplace_back( new PARAM<int>( "find_replace.flags", &m_FindReplace.flags, 1 ) );
@@ -62,14 +62,8 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM_LIST<wxString>( "find_replace.replace_history",
             &m_FindReplace.replace_history, {} ) );
 
-#ifdef __WXMAC__
-    // Cairo renderer doesn't handle Retina displays so default to OpenGL
     m_params.emplace_back( new PARAM<int>( "graphics.canvas_type",
-            &m_Graphics.canvas_type, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) );
-#else
-    m_params.emplace_back( new PARAM<int>( "graphics.canvas_type",
-            &m_Graphics.canvas_type, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) );
-#endif
+            &m_Graphics.canvas_type, EDA_DRAW_PANEL_GAL::GAL_FALLBACK ) );
 
     m_params.emplace_back( new PARAM<float>(
             "graphics.highlight_factor", &m_Graphics.highlight_factor, 0.5f, 0.0, 1.0f ) );

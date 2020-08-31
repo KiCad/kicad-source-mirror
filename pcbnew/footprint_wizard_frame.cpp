@@ -126,14 +126,10 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
     // Create GAL canvas
-#ifdef __WXMAC__
-    // Cairo renderer doesn't handle Retina displays
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-#else
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-#endif
-    PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            GetGalDisplayOptions(), backend );
+    PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
+                                                                m_FrameSize,
+                                                                GetGalDisplayOptions(),
+                                                                EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
     SetCanvas( gal_drawPanel );
 
     PCB_DISPLAY_OPTIONS disp_opts = GetDisplayOptions();

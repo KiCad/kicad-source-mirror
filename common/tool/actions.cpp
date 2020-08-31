@@ -555,22 +555,14 @@ TOOL_ACTION ACTIONS::updateSchematicFromPcb( "common.Control.updateSchematicFrom
 
 TOOL_ACTION ACTIONS::acceleratedGraphics( "common.Control.acceleratedGraphics",
         AS_GLOBAL,
-#ifdef __WXMAC__
-        MD_ALT + WXK_F11,
-#else
         WXK_F11,
-#endif
         LEGACY_HK_NAME( "Switch to Modern Toolset with hardware-accelerated graphics (recommended)" ),
         _( "Accelerated Graphics" ), _( "Use hardware-accelerated graphics (recommended)" ),
         tools_xpm );
 
 TOOL_ACTION ACTIONS::standardGraphics( "common.Control.standardGraphics",
         AS_GLOBAL,
-#ifdef __WXMAC__
-        MD_ALT + WXK_F12,
-#else
         WXK_F12,
-#endif
         LEGACY_HK_NAME( "Switch to Modern Toolset with software graphics (fall-back)" ),
         _( "Standard Graphics" ), _( "Use software graphics (fall-back)" ),
         tools_xpm );

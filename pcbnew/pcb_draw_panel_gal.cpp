@@ -424,12 +424,16 @@ void PCB_DRAW_PANEL_GAL::OnShow()
     }
     catch( const std::runtime_error& e )
     {
-        // Fallback to software renderer
         DisplayError( GetParent(), e.what() );
-        SwitchBackend( GAL_TYPE_CAIRO );
 
-        if( frame )
-            frame->ActivateGalCanvas();
+        // Use the fallback if we have one
+        if( GAL_FALLBACK != m_backend )
+        {
+            SwitchBackend( GAL_FALLBACK );
+
+            if( frame )
+                frame->ActivateGalCanvas();
+        }
     }
 
     if( frame )

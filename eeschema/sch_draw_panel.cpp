@@ -192,12 +192,16 @@ void SCH_DRAW_PANEL::OnShow()
     }
     catch( const std::runtime_error& e )
     {
-        // Fallback to software renderer
         DisplayInfoMessage( frame, e.what() );
-        SwitchBackend( GAL_TYPE_CAIRO );
 
-        if( frame )
-            frame->ActivateGalCanvas();
+        // Use fallback if one is available
+        if( GAL_FALLBACK != m_backend )
+        {
+            SwitchBackend( GAL_FALLBACK );
+
+            if( frame )
+                frame->ActivateGalCanvas();
+        }
     }
 }
 

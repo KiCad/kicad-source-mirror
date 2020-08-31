@@ -522,8 +522,10 @@ int COMMON_TOOLS::SwitchCanvas( const TOOL_EVENT& aEvent )
 {
     if( aEvent.IsAction( &ACTIONS::acceleratedGraphics ) )
         m_frame->SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+#ifndef __WXMAC__
     else if( aEvent.IsAction( &ACTIONS::standardGraphics ) )
         m_frame->SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+#endif
     else
         wxFAIL_MSG( "Unknown canvas type" );
 

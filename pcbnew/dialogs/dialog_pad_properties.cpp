@@ -255,14 +255,10 @@ void DIALOG_PAD_PROPERTIES::enablePrimitivePage( bool aEnable )
 void DIALOG_PAD_PROPERTIES::prepareCanvas()
 {
     // Initialize the canvas to display the pad
-#ifdef __WXMAC__
-    // Cairo renderer doesn't handle Retina displays
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-#else
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-#endif
-    m_padPreviewGAL = new PCB_DRAW_PANEL_GAL( m_boardViewPanel, -1, wxDefaultPosition, wxDefaultSize,
-                                              m_parent->GetGalDisplayOptions(), backend );
+    m_padPreviewGAL = new PCB_DRAW_PANEL_GAL( m_boardViewPanel, -1, wxDefaultPosition,
+                                              wxDefaultSize,
+                                              m_parent->GetGalDisplayOptions(),
+                                              EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
 
     m_padPreviewSizer->Add( m_padPreviewGAL, 12, wxEXPAND | wxALL, 5 );
 

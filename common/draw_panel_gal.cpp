@@ -233,13 +233,19 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
     }
     catch( std::runtime_error& err )
     {
-        constexpr auto GAL_FALLBACK = GAL_TYPE_CAIRO;
+        if( GAL_FALLBACK != m_backend )
+        {
+            SwitchBackend( GAL_FALLBACK );
 
-        SwitchBackend( GAL_FALLBACK );
-
-        DisplayInfoMessage( m_parent,
-                            _( "Could not use OpenGL, falling back to software rendering" ),
-                            wxString( err.what() ) );
+            DisplayInfoMessage( m_parent,
+                                _( "Could not use OpenGL, falling back to software rendering" ),
+                                wxString( err.what() ) );
+        }
+        else
+        {
+            // We're well and truly banjaxed if we get here without a fallback.
+            DisplayInfoMessage( m_parent, _( "Could not use OpenGL" ), wxString( err.what() ) );
+        }
     }
 
 #ifdef PROFILE
@@ -398,10 +404,19 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             }
             else
             {
-                aGalType = GAL_TYPE_CAIRO;
-                DisplayInfoMessage( m_parent,
-                        _( "Could not use OpenGL, falling back to software rendering" ), errormsg );
-                new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
+                if( GAL_FALLBACK != aGalType )
+                {
+                    aGalType = GAL_FALLBACK;
+                    DisplayInfoMessage( m_parent,
+                                        _( "Could not use OpenGL, falling back to software rendering" ),
+                                        errormsg );
+                    new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
+                }
+                else
+                {
+                    // We're well and truly banjaxed if we get here without a fallback.
+                    DisplayInfoMessage( m_parent, _( "Could not use OpenGL" ), errormsg );
+                }
             }
             break;
         }

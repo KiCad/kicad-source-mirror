@@ -239,9 +239,11 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     preferencesMenu->AppendSeparator();
     AddMenuLanguageList( preferencesMenu, selTool );
 
+#ifndef __WXMAC__
     preferencesMenu->AppendSeparator();
     preferencesMenu->Add( ACTIONS::acceleratedGraphics, ACTION_MENU::CHECK );
     preferencesMenu->Add( ACTIONS::standardGraphics,    ACTION_MENU::CHECK );
+#endif
 
 
     //-- Menubar -------------------------------------------------------------
