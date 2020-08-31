@@ -124,7 +124,7 @@ public:
      * of time.
      *
      * @param aMessage is the message to display
-     * @param aTime is the amount of time in microseconds to show the infobar
+     * @param aTime is the amount of time in milliseconds to show the infobar
      * @param aFlags is the flag containing the icon to display on the left side of the infobar
      */
     void ShowMessageFor( const wxString& aMessage, int aTime, int aFlags = wxICON_INFORMATION );
