@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2020 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,24 +23,13 @@
 
 
 #include <board_commit.h>
-#include <class_draw_panel_gal.h>
-#include <confirm.h>
-#include <gal/graphics_abstraction_layer.h>
-#include <preview_items/centreline_rect_item.h>
-#include <preview_items/two_point_geom_manager.h>
-#include <tool/tool_manager.h>
-#include <view/view.h>
-#include <view/view_controls.h>
-
-// For action icons
-#include <bitmaps.h>
-
-#include <class_board_item.h>
-#include <class_module.h>
+//#include <confirm.h>
+//#include <tool/tool_manager.h>
+//#include <view/view_controls.h>
+//#include <bitmaps.h>
+//#include <class_module.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
-#include <tools/tool_event_utils.h>
-
+#include <widgets/infobar.h>
 #include <widgets/progress_reporter.h>
 
 #include "ar_autoplacer.h"
@@ -61,6 +50,7 @@ AUTOPLACE_TOOL::~AUTOPLACE_TOOL()
 // It is called by the autoplacer to update the view, when something must be displayed
 // especially each time a footprint is autoplaced,
 static PCB_BASE_EDIT_FRAME* fparent;
+
 static int refreshCallback( MODULE* aModule )
 {
     if( aModule )
@@ -76,15 +66,25 @@ static int refreshCallback( MODULE* aModule )
 
 int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aModules, bool aPlaceOffboard )
 {
-    auto overlay = view()->MakeOverlay();
+    EDA_RECT bbox = board()->GetBoardEdgesBoundingBox();
+
+    if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
+    {
+        wxString msg = wxString::Format( _( "Board edges must be defined on the %s layer." ),
+                                         LayerName( Edge_Cuts ) );
+
+        frame()->GetInfoBar()->ShowMessageFor( msg, 4000, wxICON_ERROR );
+        return 0;
+    }
 
     Activate();
 
     AR_AUTOPLACER autoplacer( board() );
+    BOARD_COMMIT  commit( frame() );
 
-    BOARD_COMMIT commit( frame() );
-
+    std::shared_ptr<KIGFX::VIEW_OVERLAY> overlay = view()->MakeOverlay();
     autoplacer.SetOverlay( overlay );
+
     fparent = frame();
     std::function<int( MODULE* aModule )> callback = refreshCallback;
     autoplacer.SetRefreshCallback( callback );
@@ -108,7 +108,7 @@ int AUTOPLACE_TOOL::autoplaceSelected( const TOOL_EVENT& aEvent )
 {
     std::vector<MODULE*> mods;
 
-    for( auto item : selection() )
+    for( EDA_ITEM* item : selection() )
     {
         if( item->Type() == PCB_MODULE_T )
             mods.push_back( static_cast<MODULE*>( item ) );

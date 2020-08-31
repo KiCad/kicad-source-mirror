@@ -81,7 +81,7 @@
 #include <tools/pcb_actions.h>
 #include <router/router_tool.h>
 #include <router/length_tuner_tool.h>
-#include <autorouter/autoplacer_tool.h>
+#include <autorouter/autoplace_tool.h>
 #include <gestfich.h>
 #include <executable_names.h>
 #include <netlist_reader/board_netlist_updater.h>
@@ -366,7 +366,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxString strK2S = Pgm().GetExecutablePath();
 
 #ifdef __WXMAC__
-    if (strK2S.find( "pcbnew.app" ) != wxNOT_FOUND )
+    if( strK2S.Find( "pcbnew.app" ) != wxNOT_FOUND )
     {
         // On macOS, we have standalone applications inside the main bundle, so we handle that here:
         strK2S += "../../";
