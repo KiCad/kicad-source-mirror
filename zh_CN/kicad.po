@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: KiCad_zh_CN_Master_v0.0.26\n"
+"Project-Id-Version: KiCad_zh_CN_Master_v0.0.27\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-31 19:52+0800\n"
-"PO-Revision-Date: 2020-09-01 00:44+0800\n"
+"PO-Revision-Date: 2020-09-01 00:57+0800\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: kicad-cn\n"
 "Language: zh_CN\n"
@@ -1444,7 +1444,7 @@ msgstr "图框"
 
 #: common/base_struct.cpp:778
 msgid "Field Locate Reference"
-msgstr "字段定位参考"
+msgstr "字段定位位号"
 
 #: common/base_struct.cpp:779
 msgid "Field Locate Value"
@@ -4371,7 +4371,7 @@ msgstr "引脚名称"
 
 #: common/layer_id.cpp:100
 msgid "Symbol reference"
-msgstr "符号引用"
+msgstr "符号位号"
 
 #: common/layer_id.cpp:101
 msgid "Symbol value"
@@ -4797,7 +4797,7 @@ msgstr " (封装)"
 #: eeschema/dialogs/dialog_rescue_each.cpp:130 eeschema/sch_component.cpp:1204
 #: eeschema/sch_component.cpp:1259 pcbnew/class_module.cpp:1715
 msgid "Reference"
-msgstr "参考"
+msgstr "位号"
 
 #: common/template_fieldnames.cpp:47
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
@@ -7064,7 +7064,7 @@ msgstr "%s 选择符号"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
 #, c-format
 msgid "%s by reference:"
-msgstr "%s (按引用)："
+msgstr "%s (按位号)："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:36
 #, c-format
@@ -7147,7 +7147,7 @@ msgstr "没有选择符号"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:222
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:332
 msgid "References must start with a letter."
-msgstr "参考编号必须以字母开头。"
+msgstr "位号必须以字母开头。"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:242
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:385
@@ -7505,7 +7505,7 @@ msgstr "库符号属性"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:344
 msgid "Library reference is not valid."
-msgstr "库参考无效。"
+msgstr "库位号无效。"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:364
 #, c-format
@@ -7537,7 +7537,7 @@ msgstr "将符号字段设置为原始库值"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:126
 msgid "Library Reference:"
-msgstr "库参考："
+msgstr "库位号："
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:134
 msgid "Name of the symbol in the library to which this symbol is linked"
@@ -7699,11 +7699,11 @@ msgstr "符号"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:38
 msgid "Current Library Reference"
-msgstr "当前库参考"
+msgstr "当前库位号"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:39
 msgid "New Library Reference"
-msgstr "新的库参考"
+msgstr "新的库位号"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:58
 msgid "Map Orphans"
@@ -7720,7 +7720,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:55
 msgid "Symbol Library References"
-msgstr "符号库参考"
+msgstr "符号库位号"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:58
 msgid "Global Label Properties"
@@ -7874,7 +7874,7 @@ msgstr "组合！"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:218
 msgid "Illegal reference designator value!"
-msgstr "非法引用位号值！"
+msgstr "非法位号值！"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:226
 msgid "Value may not be empty."
@@ -8121,7 +8121,7 @@ msgstr "在浏览器中显示数据书册"
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:112
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:1038
 msgid "The Reference column cannot be hidden."
-msgstr "无法隐藏“参考”列。"
+msgstr "无法隐藏“位号”列。"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:224
 msgid "Qty"
@@ -9357,7 +9357,7 @@ msgstr "仅搜索当前图框 (&S)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
 msgid "Replace matches in reference designators"
-msgstr "替换引用位号中的匹配项"
+msgstr "替换位号中的匹配项"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:115
 msgid "&Find"
@@ -10363,7 +10363,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:60
 msgid "Update references of symbols that have been changed in the PCB editor."
-msgstr "更新 PCB 编辑器中已更改的符号的引用。"
+msgstr "更新 PCB 编辑器中已更改的符号的位号。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 msgid "Footprint assignments"
@@ -27913,7 +27913,7 @@ msgstr "电路板中未找到组 %s"
 #: pcbnew/pcb_parser.cpp:762 pcbnew/pcb_parser.cpp:774
 #, c-format
 msgid "Group %s references missing item %s"
-msgstr "组 %s 引用缺少的项目 %s"
+msgstr "组 %s 位号缺少的项目 %s"
 
 #: pcbnew/pcb_parser.cpp:789
 #, c-format
@@ -28541,12 +28541,12 @@ msgstr "无法导出，请修正错误后再试"
 #: pcbnew/specctra_import_export/specctra_export.cpp:910
 #, c-format
 msgid "Symbol with value of \"%s\" has empty reference id."
-msgstr "符号 \"%s\" 的值有空的参考 ID。"
+msgstr "符号 \"%s\" 的值有空的位号 ID。"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:918
 #, c-format
 msgid "Multiple symbols have identical reference IDs of \"%s\"."
-msgstr "多个符号使用了相同的参考编号 \"%s\"。"
+msgstr "多个符号使用了相同的位号 \"%s\"。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:71
 msgid ""
@@ -28593,7 +28593,7 @@ msgstr "会话文件缺少“库”部分"
 #: pcbnew/specctra_import_export/specctra_import.cpp:359
 #, c-format
 msgid "Reference '%s' not found."
-msgstr "未找到引用 \"%s\"。"
+msgstr "未找到位号 \"%s\"。"
 
 # padstack 焊盘槽/孔
 #: pcbnew/specctra_import_export/specctra_import.cpp:498
@@ -28757,7 +28757,7 @@ msgstr "放置 DXF_SVG 图形"
 
 #: pcbnew/tools/drawing_tool.cpp:943
 msgid "Move the footprint reference anchor"
-msgstr "移动封装参考锚点"
+msgstr "移动封装位号锚点"
 
 #: pcbnew/tools/drawing_tool.cpp:1537
 msgid "Self-intersecting polygons are not allowed"
@@ -29059,7 +29059,7 @@ msgstr "按位号选择封装，并将其放置在光标下以进行移动"
 
 #: pcbnew/tools/pcb_actions.cpp:230
 msgid "Move with Reference"
-msgstr "随参考移动"
+msgstr "随位号移动"
 
 #: pcbnew/tools/pcb_actions.cpp:231
 msgid "Moves the selected item(s) with a specified starting point"
@@ -30335,7 +30335,7 @@ msgstr "相対位置"
 
 #: pcbnew/tools/position_relative_tool.cpp:136
 msgid "Select reference item..."
-msgstr "选择参考项目..."
+msgstr "选择位号项目..."
 
 #: pcbnew/tools/selection_tool.cpp:67
 msgid "Select"
@@ -30408,11 +30408,11 @@ msgstr "显示通孔焊盘"
 
 #: pcbnew/widgets/appearance_controls.cpp:294
 msgid "References"
-msgstr "参考"
+msgstr "位号"
 
 #: pcbnew/widgets/appearance_controls.cpp:294
 msgid "Show footprint references"
-msgstr "显示封装工位"
+msgstr "显示封装位号"
 
 #: pcbnew/widgets/appearance_controls.cpp:295
 msgid "Show footprint text"
