@@ -4529,16 +4529,6 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
             pushValueIntoMap( newnetcode, net->GetNet() );
             // and update the zone netcode
             zone->SetNetCode( net->GetNet() );
-
-            // FIXME: a call to any GUI item is not allowed in io plugins:
-            // Change this code to generate a warning message outside this plugin
-            // Prompt the user
-            wxString msg;
-            msg.Printf( _( "There is a zone that belongs to a not existing net\n"
-                           "\"%s\"\n"
-                           "you should verify and edit it (run DRC test)." ),
-                           GetChars( netnameFromfile ) );
-            DisplayError( NULL, msg );
         }
     }
 
