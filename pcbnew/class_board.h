@@ -623,7 +623,7 @@ public:
     static wxString GetStandardLayerName( PCB_LAYER_ID aLayerId )
     {
         // a BOARD's standard layer name is the PCB_LAYER_ID fixed name
-        return LSET::Name( aLayerId );
+        return LayerName( aLayerId );
     }
 
     /**
