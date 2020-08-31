@@ -40,6 +40,7 @@
 #include <kicad_string.h>
 #include <tool/actions.h>
 #include <scintilla_tricks.h>
+#include <sch_iref.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -344,6 +345,19 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     m_Parent->UpdateItem( m_CurrentText );
     m_Parent->GetCanvas()->Refresh();
     m_Parent->OnModify();
+
+    if( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( m_CurrentText );
+        SCH_IREF*        iref  = label->GetIref();
+
+        if( iref )
+        {
+            if( iref->GetBoundingBox().Intersects( label->GetBoundingBox() ) )
+                iref->PlaceAtDefaultPosition();
+            iref->CopyParentStyle();
+        }
+    }
 
     return true;
 }

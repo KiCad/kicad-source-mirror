@@ -41,6 +41,7 @@
 #include <sch_bitmap.h>
 #include <sch_view.h>
 #include <sch_line.h>
+#include <sch_iref.h>
 #include <sch_bus_entry.h>
 #include <sch_junction.h>
 #include <sch_edit_frame.h>
@@ -458,6 +459,15 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             else
                 textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().RotateCCW() );
 
+            if( item->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
+                SCH_IREF*        iref  = label->GetIref();
+
+                if( iref )
+                    iref->CopyParentStyle();
+            }
+
             break;
         }
 
@@ -641,6 +651,16 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().MirrorX() );
             else
                 textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().MirrorY() );
+
+            if( item->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
+                SCH_IREF*        iref  = label->GetIref();
+
+                if( iref )
+                    iref->CopyParentStyle();
+            }
+
             break;
         }
 
@@ -828,6 +848,14 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         case SCH_NO_CONNECT_T:
             newItem->SetParent( m_frame->GetScreen() );
             m_frame->AddToScreen( newItem, m_frame->GetScreen() );
+
+            if( newItem->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( newItem );
+                label->SetIref( nullptr );
+                label->SetIrefSavedPosition( wxDefaultPosition );
+            }
+
             break;
 
         case SCH_SHEET_T:
@@ -1027,6 +1055,16 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                 SCH_SHEET*     sheet = pin->GetParent();
 
                 sheet->RemovePin( pin );
+            }
+            else if( sch_item->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                SCH_GLOBALLABEL* label = (SCH_GLOBALLABEL*) sch_item;
+                SCH_IREF*        iref  = label->GetIref();
+
+                m_frame->RemoveFromScreen( sch_item, m_frame->GetScreen() );
+
+                if( iref )
+                    m_frame->RemoveFromScreen( iref, m_frame->GetScreen() );
             }
             else
             {

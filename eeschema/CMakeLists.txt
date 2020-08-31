@@ -238,6 +238,7 @@ set( EESCHEMA_SRCS
     toolbars_lib_view.cpp
     toolbars_sch_editor.cpp
     transform.cpp
+    sch_iref.cpp
 
     netlist_exporters/netlist_exporter.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp

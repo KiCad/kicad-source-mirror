@@ -50,6 +50,11 @@ public:
     int       m_PinSymbolSize;
     int       m_JunctionSize;
 
+    bool      m_IntersheetsRefShow;
+    bool      m_IntersheetsRefFormatShort;
+    wxString  m_IntersheetsRefPrefix;
+    wxString  m_IntersheetsRefSuffix;
+
     wxString  m_PageLayoutDescrFile;
 
     wxString  m_PlotDirectoryName;

@@ -338,6 +338,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_symbol_lib_dir",
             &m_lastSymbolLibDir, "" ) );
+
 }
 
 

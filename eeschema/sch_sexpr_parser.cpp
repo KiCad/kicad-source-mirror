@@ -2692,8 +2692,19 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
             parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
             break;
 
+        case T_iref:
+        {
+            if( text->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( text.get() );
+                label->SetIrefSavedPosition( parseXY() );
+                NeedRIGHT();
+            }
+            break;
+        }
+
         default:
-            Expecting( "at, shape, or effects" );
+            Expecting( "at, shape, iref or effects" );
         }
     }
 

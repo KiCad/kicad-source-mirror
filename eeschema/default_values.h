@@ -66,4 +66,10 @@
 ///< The offset of the pin name string from the end of the pin in mils.
 #define DEFAULT_PIN_NAME_OFFSET 20
 
+///< The intersheets references prefix string
+#define DEFAULT_IREF_PREFIX "["
+
+///< The intersheets references suffix string
+#define DEFAULT_IREF_SUFFIX "]"
+
 #endif

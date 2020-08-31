@@ -51,6 +51,7 @@
 #include <sch_component.h>
 #include <sch_edit_frame.h>
 #include <sch_field.h>
+#include <sch_iref.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_marker.h>
@@ -220,6 +221,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     HANDLE_ITEM( SCH_BUS_BUS_ENTRY_T, SCH_BUS_ENTRY_BASE );
     HANDLE_ITEM( SCH_BITMAP_T, SCH_BITMAP );
     HANDLE_ITEM( SCH_MARKER_T, SCH_MARKER );
+    HANDLE_ITEM( SCH_IREF_T, SCH_TEXT );
 
     default: return false;
     }
@@ -1287,6 +1289,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     case SCH_SHEET_PIN_T:     aLayer = LAYER_SHEETLABEL; break;
     case SCH_HIER_LABEL_T:    aLayer = LAYER_HIERLABEL;  break;
     case SCH_GLOBAL_LABEL_T:  aLayer = LAYER_GLOBLABEL;  break;
+    case SCH_IREF_T:          aLayer = LAYER_GLOBLABEL;  break;
     case SCH_LABEL_T:         aLayer = LAYER_LOCLABEL;   break;
     default:                  aLayer = LAYER_NOTES;      break;
     }
@@ -1352,6 +1355,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
         drawDanglingSymbol( aText->GetTextPos(), Mils2iu( DANGLING_SYMBOL_SIZE / 2 ),
                             drawingShadows );
     }
+
 }
 
 

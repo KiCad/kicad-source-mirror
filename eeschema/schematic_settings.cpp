@@ -41,7 +41,11 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_TextOffsetRatio( 0.08 ),
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS ),
-        m_SpiceAdjustPassiveValues( false )
+        m_SpiceAdjustPassiveValues( false ),
+        m_IntersheetsRefShow ( false ),
+        m_IntersheetsRefFormatShort (false ),
+        m_IntersheetsRefPrefix ( DEFAULT_IREF_PREFIX ),
+        m_IntersheetsRefSuffix ( DEFAULT_IREF_SUFFIX )
 {
     EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
@@ -57,6 +61,26 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             appSettings ? appSettings->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;
     int defaultJunctionSize =
             appSettings ? appSettings->m_Drawing.default_junction_size : DEFAULT_JUNCTION_DIAM;
+    bool defaultIntersheetsRefShow =
+            appSettings ? appSettings->m_Drawing.intersheets_ref_show : false;
+    bool defaultIntersheetsRefFormatShort =
+            appSettings ? appSettings->m_Drawing.intersheets_ref_short : false;
+    wxString defaultIntersheetsRefPrefix =
+            appSettings ? appSettings->m_Drawing.intersheets_ref_prefix : DEFAULT_IREF_PREFIX;
+    wxString defaultIntersheetsRefSuffix =
+            appSettings ? appSettings->m_Drawing.intersheets_ref_suffix : DEFAULT_IREF_SUFFIX;
+
+    m_params.emplace_back( new PARAM<bool>( "drawing.intersheets_ref_show",
+            &m_IntersheetsRefShow, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "drawing.intersheets_ref_short",
+            &m_IntersheetsRefFormatShort, false ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "drawing.intersheets_ref_prefix",
+            &m_IntersheetsRefPrefix, "[" ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "drawing.intersheets_ref_suffix",
+            &m_IntersheetsRefSuffix, "]" ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_line_thickness",
             &m_DefaultLineWidth, Mils2iu( defaultLineThickness ),

@@ -136,6 +136,8 @@ private:
 
     static PINSHEETLABEL_SHAPE m_lastSheetPinType;    ///< Last sheet pin type.
 
+    std::vector<SCH_GLOBALLABEL*> m_labelTable;
+
 protected:
     /**
      * Save the schematic files that have been modified and not yet saved.
@@ -945,6 +947,10 @@ public:
      * @param aSymbol is the #LIB_PART to update.
      */
     void UpdateSymbolFromEditor( const LIB_PART& aSymbol );
+
+    int RecomputeIntersheetsRefs();
+
+    void RemoveAllIntersheetsRefs();
 
     DECLARE_EVENT_TABLE()
 };

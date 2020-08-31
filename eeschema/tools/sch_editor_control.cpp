@@ -1529,6 +1529,13 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             updatePastedInstances( pastePath, clipPath, sheet, forceKeepAnnotations );
         }
 
+        if( item->Type() == SCH_GLOBAL_LABEL_T )
+        {
+            SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
+            label->SetIref( nullptr );
+            label->SetIrefSavedPosition( wxDefaultPosition );
+        }
+
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVED );
         m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, i > 0 );
 

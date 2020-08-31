@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 17 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,8 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
+#include <wx/checkbox.h>
+#include <wx/radiobut.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -49,10 +51,17 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_jctSizeLabel;
 		wxTextCtrl* m_jctSizeCtrl;
 		wxStaticText* m_jctSizeUnits;
+		wxCheckBox* m_showIntersheetsReferences;
+		wxRadioButton* m_radioFormatStandard;
+		wxRadioButton* m_radioFormatAbbreviated;
+		wxStaticText* m_prefixLabel;
+		wxTextCtrl* m_prefixCtrl;
+		wxStaticText* m_suffixLabel;
+		wxTextCtrl* m_suffixCtrl;
 
 	public:
 
-		PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 633,418 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SETUP_FORMATTING_BASE();
 
 };

@@ -137,6 +137,7 @@ enum KICAD_T
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     SCH_PIN_T,
+    SCH_IREF_T,
 
     // Be prudent with these types:
     // they should be used only to locate a specific field type among SCH_FIELD_Ts

@@ -44,6 +44,7 @@
 #include <html_messagebox.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <sch_iref.h>
 
 using KIGFX::SCH_RENDER_SETTINGS;
 
@@ -808,7 +809,9 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text )
     m_Layer      = LAYER_GLOBLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_BIDI;
     m_isDangling = true;
+    m_iref       = nullptr;
     SetMultilineAllowed( false );
+    m_savedIrefPos = wxDefaultPosition;
 }
 
 

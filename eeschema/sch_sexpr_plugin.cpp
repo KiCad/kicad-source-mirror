@@ -37,6 +37,7 @@
 #include <sch_line.h>
 #include <sch_no_connect.h>
 #include <sch_text.h>
+#include <sch_iref.h>
 #include <sch_sheet.h>
 #include <schematic.h>
 #include <sch_sexpr_plugin.h>
@@ -1180,6 +1181,18 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
 
     if( ( aText->Type() == SCH_GLOBAL_LABEL_T ) || ( aText->Type() == SCH_HIER_LABEL_T ) )
         m_out->Print( 0, " (shape %s)", getSheetPinShapeToken( aText->GetShape() ) );
+
+    if( ( aText->Type() == SCH_GLOBAL_LABEL_T ) )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( aText );
+
+        if( label->GetIref() != nullptr )
+        {
+            SCH_IREF* iref = label->GetIref();
+            m_out->Print( 0, " (iref %s %s)", FormatInternalUnits( iref->GetPosition().x ).c_str(),
+                          FormatInternalUnits( iref->GetPosition().y ).c_str() );
+        }
+    }
 
     if( aText->GetText().Length() < 50 )
     {

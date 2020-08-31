@@ -34,7 +34,7 @@
 
 class NETLIST_OBJECT_LIST;
 class HTML_MESSAGE_BOX;
-
+class SCH_IREF;
 
 /*
  * Spin style for text items of all kinds on schematics
@@ -418,8 +418,16 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    SCH_IREF* GetIref() { return m_iref; }
+    void SetIref( SCH_IREF* iref ) { m_iref = iref; }
+
+    wxPoint GetIrefSavedPosition() { return m_savedIrefPos; }
+    void SetIrefSavedPosition( wxPoint pos ) { m_savedIrefPos = pos; }
+
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override { return EDA_TEXT::GetTextPos() == aPosition; }
+    SCH_IREF* m_iref;
+    wxPoint   m_savedIrefPos;
 };
 
 
