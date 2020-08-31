@@ -139,7 +139,7 @@ public:
                    const wxPoint& pos = wxPoint( 0, 0 )  );
 
     SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet, COMPONENT_SELECTION& aSel,
-            const wxPoint& pos = wxPoint( 0, 0 ) );
+                   const wxPoint& pos = wxPoint( 0, 0 ) );
     /**
      * Clones \a aComponent into a new schematic symbol object.
      *
