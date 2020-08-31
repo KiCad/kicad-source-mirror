@@ -793,7 +793,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     {
         source_module = nullptr;
 
-        for( auto mod : mainpcb->Modules() )
+        for( MODULE* mod : mainpcb->Modules() )
         {
             if( module_in_edit->GetLink() == mod->m_Uuid )
             {
@@ -806,12 +806,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     if( !aAddNew && source_module == NULL ) // source not found
     {
         DisplayError( this, _( "Unable to find the footprint on the main board.\nCannot save." ) );
-        return false;
-    }
-
-    if( aAddNew && source_module != NULL )
-    {
-        DisplayError( this, _( "Footprint already exists on board." ) );
         return false;
     }
 
