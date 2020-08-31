@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -455,6 +455,38 @@ int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
 }
 
 
+int LIB_CONTROL::UpdateSymbolInSchematic( const TOOL_EVENT& aEvent )
+{
+    wxCHECK( m_isLibEdit, 0 );
+
+    LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
+
+    wxCHECK( editFrame, 0 );
+
+    LIB_PART* currentPart = editFrame->GetCurPart();
+
+    wxCHECK( currentPart, 0 );
+
+    SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH, false );
+
+    if( !schframe )      // happens when the schematic editor is not active (or closed)
+    {
+        DisplayErrorMessage( m_frame, _( "No schematic currently open." ) );
+        return 0;
+    }
+
+    schframe->UpdateSymbolFromEditor( *currentPart );
+
+    SCH_SCREEN* currentScreen = editFrame->GetScreen();
+
+    wxCHECK( currentScreen, 0 );
+
+    currentScreen->ClrModify();
+
+    return 0;
+}
+
+
 void LIB_CONTROL::setTransitions()
 {
     Go( &LIB_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
@@ -468,6 +500,8 @@ void LIB_CONTROL::setTransitions()
     Go( &LIB_CONTROL::Save,                  ACTIONS::saveCopyAs.MakeEvent() ); // for symbols
     Go( &LIB_CONTROL::Save,                  ACTIONS::saveAll.MakeEvent() );
     Go( &LIB_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
+    Go( &LIB_CONTROL::UpdateSymbolInSchematic,
+            EE_ACTIONS::saveInSchematic.MakeEvent() );
 
     Go( &LIB_CONTROL::DuplicateSymbol,       EE_ACTIONS::duplicateSymbol.MakeEvent() );
     Go( &LIB_CONTROL::CutCopyDelete,         EE_ACTIONS::deleteSymbol.MakeEvent() );

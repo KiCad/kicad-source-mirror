@@ -27,6 +27,7 @@
 #include <pgm_base.h>
 #include <confirm.h>
 #include <gestfich.h>
+#include <widgets/infobar.h>
 #include <tools/ee_actions.h>
 #include <tools/lib_drawing_tools.h>
 #include <lib_edit_frame.h>
@@ -44,16 +45,24 @@
 #include <dialog_helpers.h>
 #include <wx/clipbrd.h>
 
+
 void LIB_EDIT_FRAME::updateTitle()
 {
     wxString lib = GetCurLib();
     wxString title = _( "Symbol Editor" );
 
-    if( GetCurPart() )
-        title += wxT( " \u2014 " ) + GetCurPart()->GetLibId().Format();
+    if( IsSymbolFromSchematic() )
+    {
+        title += wxString::Format( _( " \u2014 %s from schematic" ), m_reference );
+    }
+    else
+    {
+        if( GetCurPart() )
+            title += wxT( " \u2014 " ) + GetCurPart()->GetLibId().Format();
 
-    if( GetCurPart() && m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
-        title += " [Read Only Library]";
+        if( GetCurPart() && m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
+            title += _( " \u2014 [Read Only Library]" );
+    }
 
     SetTitle( title );
 }
@@ -197,10 +206,12 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
     return true;
 }
 
+
 bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aLibrary,
                                             int aUnit, int aConvert )
 {
     wxString msg, rootName;
+    bool rebuildMenuAndToolbar = false;
 
     if( !aEntry || aLibrary.empty() )
         return false;
@@ -209,6 +220,19 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aL
     {
         wxLogWarning( "Symbol in library \"%s\" has empty name field.", aLibrary );
         return false;
+    }
+
+    // Symbols from the schematic are edited in place and not managed by the library manager.
+    if( IsSymbolFromSchematic() )
+    {
+        delete m_my_part;
+        m_my_part = nullptr;
+
+        SCH_SCREEN* screen = GetScreen();
+        delete screen;
+        SetScreen( m_dummyScreen );
+        m_isSymbolFromSchematic = false;
+        rebuildMenuAndToolbar = true;
     }
 
     LIB_PART* lib_part = m_libMgr->GetBufferedPart( aEntry->GetName(), aLibrary );
@@ -223,6 +247,13 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aL
     SetScreen( part_screen );
     SetCurPart( new LIB_PART( *lib_part ) );
     SetCurLib( aLibrary );
+
+    if( rebuildMenuAndToolbar )
+    {
+        ReCreateMenuBar();
+        ReCreateHToolbar();
+        GetInfoBar()->Dismiss();
+    }
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     updateTitle();

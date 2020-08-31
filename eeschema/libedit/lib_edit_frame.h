@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -64,6 +64,16 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 
     // Show the normal shape ( m_convert <= 1 ) or the converted shape ( m_convert > 1 )
     int m_convert;
+
+    ///< Flag if the symbol being edited was loaded directly from a schematic.
+    bool m_isSymbolFromSchematic;
+
+    /**
+     * The reference of the symbol.
+     *
+     * @note This is only valid when the current symbol was loaded from the schematic.
+     */
+    wxString m_reference;
 
     // True to force DeMorgan/normal tools selection enabled.
     // They are enabled when the loaded component has graphic items for converted shape
@@ -259,6 +269,8 @@ public:
 
     void ClearMsgPanel() override { DisplayCmpDoc(); }
 
+    bool IsSymbolFromSchematic() const { return m_isSymbolFromSchematic; }
+
 protected:
     void setupUIConditions() override;
 
@@ -439,6 +451,17 @@ public:
     void HardRedraw() override;
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
+
+    /**
+     * Load a symbol from the schematic to edit in place.
+     *
+     * @param aSymbol the symbol to edit.
+     * @param aReference the reference of the symbol to edit.
+     * @param aUnit the unit of the symbol to edit.
+     * @param aConvert the alternate body style of the symbol to edit.
+     */
+    void LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>& aSymbol,
+            const wxString& aReference, int aUnit, int aConvert );
 
     ///> Restores the empty editor screen, without any part or library selected.
     void emptyScreen();

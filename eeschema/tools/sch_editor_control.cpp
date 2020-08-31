@@ -61,6 +61,7 @@
 #include <dialog_update_from_pcb.h>
 #include <dialog_helpers.h>
 
+
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {
     m_frame->NewProject();
@@ -233,11 +234,13 @@ int SCH_EDITOR_CONTROL::FindAndReplace( const TOOL_EVENT& aEvent )
     return UpdateFind( aEvent );
 }
 
+
 int SCH_EDITOR_CONTROL::NavigateHierarchy( const TOOL_EVENT& aEvent )
 {
     m_frame->UpdateHierarchyNavigator( true );
     return 0;
 }
+
 
 int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 {
@@ -1505,6 +1508,7 @@ int SCH_EDITOR_CONTROL::EditWithLibEdit( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+    SCH_SHEET_PATH&    currentSheet = m_frame->GetCurrentSheet();
     SCH_COMPONENT*     sym = nullptr;
     LIB_EDIT_FRAME*    libEdit;
 
@@ -1518,7 +1522,8 @@ int SCH_EDITOR_CONTROL::EditWithLibEdit( const TOOL_EVENT& aEvent )
     libEdit = (LIB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
 
     if( libEdit )
-        libEdit->LoadComponentAndSelectLib( sym->GetLibId(), sym->GetUnit(), sym->GetConvert() );
+        libEdit->LoadSymbolFromSchematic( sym->GetPartRef(), sym->GetRef( &currentSheet ),
+                sym->GetUnit(), sym->GetConvert() );
 
     return 0;
 }

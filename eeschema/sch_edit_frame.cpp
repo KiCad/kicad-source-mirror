@@ -767,6 +767,7 @@ HIERARCHY_NAVIG_DLG* SCH_EDIT_FRAME::FindHierarchyNavigator()
     return static_cast< HIERARCHY_NAVIG_DLG* >( navigator );
 }
 
+
 void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool aForceUpdate )
 {
     if( aForceUpdate )
@@ -1216,6 +1217,7 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents() const
     return BOX2I( VECTOR2I(0, 0), VECTOR2I( sizeX, sizeY ) );
 }
 
+
 void SCH_EDIT_FRAME::FixupJunctions()
 {
     // Save the current sheet, to retrieve it later
@@ -1363,4 +1365,56 @@ void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 
     // Skip() is called in the base class.
     EDA_DRAW_FRAME::OnSize( aEvent );
+}
+
+
+void SCH_EDIT_FRAME::UpdateSymbolFromEditor( const LIB_PART& aSymbol )
+{
+    wxString msg;
+    bool appendToUndo = false;
+
+    wxCHECK( m_toolManager, /* void */ );
+
+    EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+
+    wxCHECK( selectionTool, /* void */ );
+
+    EE_SELECTION& selection = selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+
+    if( selection.Empty() )
+        return;
+
+    SCH_SCREEN* currentScreen = GetScreen();
+
+    wxCHECK( currentScreen, /* void */ );
+
+    // This should work for multiple selections of the same symbol even though the editor
+    // only works for a single symbol selection.
+    for( auto item : selection )
+    {
+        SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
+
+        wxCHECK( symbol, /* void */ );
+
+        // This needs to be done before the LIB_PART is changed to prevent stale library symbols in
+        // the schematic file.
+        currentScreen->Remove( symbol );
+
+        if( !symbol->IsNew() )
+        {
+            SaveCopyInUndoList( currentScreen, symbol, UNDO_REDO::CHANGED, appendToUndo );
+            appendToUndo = true;
+        }
+
+        symbol->SetLibSymbol( aSymbol.Flatten().release() );
+        currentScreen->Append( symbol );
+        selectionTool->SelectHighlightItem( symbol );
+        GetCanvas()->GetView()->Update( symbol );
+    }
+
+    if( selection.IsHover() )
+        m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+
+    GetCanvas()->Refresh();
+    OnModify();
 }

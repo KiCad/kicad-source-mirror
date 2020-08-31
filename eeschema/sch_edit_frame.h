@@ -255,7 +255,7 @@ public:
     void UpdateHierarchyNavigator( bool aForceUpdate = false );
 
     /**
-      * @return a reference to the Hierarchy Navigator dialog if exists, or nullptr.
+     * @return a reference to the Hierarchy Navigator dialog if exists, or nullptr.
      */
     HIERARCHY_NAVIG_DLG* FindHierarchyNavigator();
 
@@ -936,6 +936,15 @@ public:
      *          the schematic and board.
      */
     void ConvertTimeStampUuids();
+
+    /**
+     * Update the #LIB_PART of the currently selected symbol.
+     *
+     * This is typically called from the symbol editor when editing symbols in place.
+     *
+     * @param aSymbol is the #LIB_PART to update.
+     */
+    void UpdateSymbolFromEditor( const LIB_PART& aSymbol );
 
     DECLARE_EVENT_TABLE()
 };

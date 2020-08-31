@@ -86,7 +86,11 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     // Set up toolbar
     m_mainToolBar->Add( EE_ACTIONS::newSymbol );
-    m_mainToolBar->Add( ACTIONS::saveAll );
+
+    if( !IsSymbolFromSchematic() )
+        m_mainToolBar->Add( ACTIONS::saveAll );
+    else
+        m_mainToolBar->Add( EE_ACTIONS::saveInSchematic );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::undo );

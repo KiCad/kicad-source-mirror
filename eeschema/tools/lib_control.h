@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +32,7 @@
 class LIB_EDIT_FRAME;
 
 /**
- * LIB_CONTROL
- *
- * Handles actions for the various symbol editor and viewers.
+ * Handle actions for the various symbol editor and viewers.
  */
 class LIB_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_BASE_FRAME>
 {
@@ -61,6 +59,7 @@ public:
     int ExportView( const TOOL_EVENT& aEvent );
     int ExportSymbolAsSVG( const TOOL_EVENT& aEvent );
     int AddSymbolToSchematic( const TOOL_EVENT& aEvent );
+    int UpdateSymbolInSchematic( const TOOL_EVENT& aEvent );
 
     int OnDeMorgan( const TOOL_EVENT& aEvent );
 

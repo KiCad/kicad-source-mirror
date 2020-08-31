@@ -53,7 +53,12 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
     fileMenu->Add( ACTIONS::save );
     fileMenu->Add( ACTIONS::saveCopyAs );
-    fileMenu->Add( ACTIONS::saveAll );
+
+    if( !IsSymbolFromSchematic() )
+        fileMenu->Add( ACTIONS::saveAll );
+    else
+        fileMenu->Add( EE_ACTIONS::saveInSchematic );
+
     fileMenu->Add( ACTIONS::revert );
 
     fileMenu->AppendSeparator();

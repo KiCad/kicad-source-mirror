@@ -71,6 +71,7 @@
 
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
 
+
 BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_SIZE( LIB_EDIT_FRAME::OnSize )
 
@@ -90,11 +91,13 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
 END_EVENT_TABLE()
 
+
 LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_LIB_EDITOR, _( "Library Editor" ),
                         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
                         LIB_EDIT_FRAME_NAME ),
-        m_unitSelectBox( nullptr )
+        m_unitSelectBox( nullptr ),
+        m_isSymbolFromSchematic( false )
 {
     SetShowDeMorgan( false );
     m_SyncPinEdit = false;
@@ -200,6 +203,15 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
+    if( IsSymbolFromSchematic() )
+    {
+        delete m_my_part;
+        m_my_part = nullptr;
+
+        SCH_SCREEN* screen = GetScreen();
+        delete screen;
+        m_isSymbolFromSchematic = false;
+    }
     // current screen is destroyed in EDA_DRAW_FRAME
     SetScreen( m_dummyScreen );
 
@@ -299,7 +311,10 @@ void LIB_EDIT_FRAME::setupUIConditions()
     auto libMgrModifiedCond =
         [this] ( const SELECTION& )
         {
-            return m_libMgr->HasModifications();
+            if( IsSymbolFromSchematic() )
+                return GetScreen() && GetScreen()->IsModify();
+            else
+                return m_libMgr->HasModifications();
         };
 
     auto modifiedDocumentCondition =
@@ -319,6 +334,7 @@ void LIB_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::saveAll,             ENABLE( libMgrModifiedCond ) );
     mgr->SetConditions( ACTIONS::save,                ENABLE( haveSymbolCond && modifiedDocumentCondition ) );
+    mgr->SetConditions( EE_ACTIONS::saveInSchematic,  ENABLE( libMgrModifiedCond ) );
     mgr->SetConditions( ACTIONS::undo,                ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
     mgr->SetConditions( ACTIONS::revert,              ENABLE( haveSymbolCond && modifiedDocumentCondition ) );
@@ -574,8 +590,6 @@ wxString LIB_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 
     m_libMgr->SetCurrentLib( aLibNickname );
 
-    ReCreateMenuBar();
-
     return old;
 }
 
@@ -588,11 +602,18 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     m_my_part = aPart;
 
     // select the current component in the tree widget
-    if( m_my_part )
+    if( !IsSymbolFromSchematic() && m_my_part )
+    {
         m_treePane->GetLibTree()->SelectLibId( m_my_part->GetLibId() );
+    }
+    else
+    {
+        m_treePane->GetLibTree()->Unselect();
+        m_libMgr->SetCurrentLib( wxEmptyString );
+        m_libMgr->SetCurrentPart( wxEmptyString );
+    }
 
     wxString partName = m_my_part ? m_my_part->GetName() : wxString();
-    m_libMgr->SetCurrentPart( partName );
 
     // retain in case this wxFrame is re-opened later on the same PROJECT
     Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, partName );
@@ -600,17 +621,15 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
     m_SyncPinEdit = aPart && aPart->IsRoot() && aPart->IsMulti() && !aPart->UnitsLocked();
 
-    /* TODO: enable when we have schematic-symbol editing...
-    if( IsCurrentPartFromSchematic() )
+    if( IsSymbolFromSchematic() )
     {
         wxString msg;
-        msg.Printf( _( "Editing %s from schematic.  Saving will update the schematic only." ),
-                    partName );
+        msg.Printf( _( "Editing symbol %s from schematic.  Saving will update the schematic "
+                       "only." ), m_reference );
 
         GetInfoBar()->RemoveAllButtons();
         GetInfoBar()->ShowMessage( msg, wxICON_INFORMATION );
     }
-     */
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
@@ -1123,4 +1142,42 @@ void LIB_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCou
 SELECTION& LIB_EDIT_FRAME::GetCurrentSelection()
 {
     return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+}
+
+
+void LIB_EDIT_FRAME::LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>& aSymbol,
+        const wxString& aReference, int aUnit, int aConvert )
+{
+    std::unique_ptr<LIB_PART> symbol = aSymbol->Flatten();
+    wxCHECK( symbol, /* void */ );
+
+    if( m_my_part )
+        SetCurPart( nullptr );
+
+    m_isSymbolFromSchematic = true;
+    m_reference = aReference;
+    m_unit = aUnit > 0 ? aUnit : 1;
+    m_convert = aConvert > 0 ? aConvert : 1;
+
+    // The buffered screen for the part
+    SCH_SCREEN* tmpScreen = new SCH_SCREEN();
+
+    SetScreen( tmpScreen );
+    SetCurPart( symbol.release() );
+
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    ReCreateMenuBar();
+    ReCreateHToolbar();
+
+    if( IsSearchTreeShown() )
+    {
+        wxCommandEvent evt;
+        OnToggleSearchTree( evt );
+    }
+
+    updateTitle();
+    RebuildSymbolUnitsList();
+    SetShowDeMorgan( GetCurPart()->HasConversion() );
+    DisplayCmpDoc();
+    Refresh();
 }

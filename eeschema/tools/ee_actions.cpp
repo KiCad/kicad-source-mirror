@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,6 +184,11 @@ TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( "eeschema.SymbolLibraryControl.tog
            "Enabled by default for multiunit parts with interchangeable units." ),
         pin2pin_xpm );
 
+TOOL_ACTION EE_ACTIONS::saveInSchematic( "eeschema.SymbolLibraryControl.saveInSchematic",
+        AS_GLOBAL, 0, "",
+        _( "Save In Schematic" ), _( "Save the current symbol in the schematic" ),
+        import_part_xpm );
+
 
 // LIB_DRAWING_TOOLS
 //
@@ -227,7 +232,6 @@ TOOL_ACTION EE_ACTIONS::finishDrawing( "eeschema.SymbolDrawing.finishDrawing",
         AS_GLOBAL, 0, "",
         _( "Finish Drawing" ), _( "Finish drawing shape" ),
         checked_ok_xpm, AF_NONE );
-
 
 // LIB_PIN_TOOL
 //
