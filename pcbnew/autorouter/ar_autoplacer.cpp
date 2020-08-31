@@ -880,14 +880,13 @@ void AR_AUTOPLACER::drawPlacementRoutingMatrix( )
 }
 
 
-AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
-                                           BOARD_COMMIT* aCommit, bool aPlaceOffboardModules )
+AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD_COMMIT* aCommit,
+                                           bool aPlaceOffboardModules )
 {
-    wxPoint             PosOK;
-    wxPoint             memopos;
-    int                 error;
+    wxPoint memopos;
+    int     error;
     MODULE* module = nullptr;
-    bool cancelled = false;
+    bool    cancelled = false;
 
     memopos = m_curPosition;
 
@@ -908,32 +907,30 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
         m->SetNeedsPlaced( false );
     }
 
-    std::vector<MODULE *> offboardMods;
+    std::vector<MODULE*> offboardMods;
 
     if( aPlaceOffboardModules )
     {
-        for ( auto m : m_board->Modules() )
+        for( MODULE* m : m_board->Modules() )
         {
             if( !m_matrix.m_BrdBox.Contains( m->GetPosition() ) )
-            {
                 offboardMods.push_back( m );
-            }
         }
     }
 
-    for ( auto m : aModules )
+    for( MODULE* m : aModules )
     {
         m->SetNeedsPlaced( true );
         aCommit->Modify(m);
     }
 
-    for ( auto m : offboardMods )
+    for( MODULE* m : offboardMods )
     {
         m->SetNeedsPlaced( true );
         aCommit->Modify(m);
     }
 
-    for ( auto m : m_board->Modules() )
+    for( MODULE* m : m_board->Modules() )
     {
         if( m->NeedsPlaced() )    // Erase from screen
             moduleCount++;
@@ -972,7 +969,6 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
         double bestScore = m_minCost;
         double bestRotation = 0.0;
         int rotAllowed;
-        PosOK = m_curPosition;
 
         if( error == AR_ABORT_PLACEMENT )
             goto end_of_tst;
@@ -988,7 +984,6 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
 
             if( bestScore > m_minCost )    // This orientation is better.
             {
-                PosOK       = m_curPosition;
                 bestScore   = m_minCost;
                 bestRotation = 1800.0;
             }
@@ -1012,7 +1007,6 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
 
             if( bestScore > m_minCost )    // This orientation is better.
             {
-                PosOK       = m_curPosition;
                 bestScore   = m_minCost;
                 bestRotation = 900.0;
             }
@@ -1034,7 +1028,6 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
 
             if( bestScore > m_minCost )    // This orientation is better.
             {
-                PosOK       = m_curPosition;
                 bestScore   = m_minCost;
                 bestRotation = 2700.0;
             }
@@ -1090,10 +1083,8 @@ end_of_tst:
 
     m_matrix.UnInitRoutingMatrix();
 
-    for ( auto m : m_board->Modules() )
-    {
+    for( MODULE* m : m_board->Modules() )
         m->CalculateBoundingBox();
-    }
 
     return cancelled ? AR_CANCELLED : AR_COMPLETED;
 }

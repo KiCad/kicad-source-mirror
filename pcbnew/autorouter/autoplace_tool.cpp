@@ -23,17 +23,12 @@
 
 
 #include <board_commit.h>
-//#include <confirm.h>
-//#include <tool/tool_manager.h>
-//#include <view/view_controls.h>
-//#include <bitmaps.h>
-//#include <class_module.h>
 #include <tools/pcb_actions.h>
 #include <widgets/infobar.h>
 #include <widgets/progress_reporter.h>
 
 #include "ar_autoplacer.h"
-#include "autoplacer_tool.h"
+#include "autoplace_tool.h"
 
 
 AUTOPLACE_TOOL::AUTOPLACE_TOOL() : PCB_TOOL_BASE( "pcbnew.Autoplacer" )
@@ -73,7 +68,7 @@ int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aModules, bool aPlaceOffboa
         wxString msg = wxString::Format( _( "Board edges must be defined on the %s layer." ),
                                          LayerName( Edge_Cuts ) );
 
-        frame()->GetInfoBar()->ShowMessageFor( msg, 4000, wxICON_ERROR );
+        frame()->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_ERROR );
         return 0;
     }
 

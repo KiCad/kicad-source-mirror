@@ -59,8 +59,8 @@ class AR_AUTOPLACER
 public:
     AR_AUTOPLACER( BOARD* aBoard );
 
-    AR_RESULT AutoplaceModules( std::vector<MODULE*> aModules, BOARD_COMMIT* aCommit,
-            bool aPlaceOffboardModules = false );
+    AR_RESULT AutoplaceModules( std::vector<MODULE*>& aModules, BOARD_COMMIT* aCommit,
+                                bool aPlaceOffboardModules = false );
 
     /**
      * Set a VIEW overlay to draw items during a autoplace session.

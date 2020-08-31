@@ -257,7 +257,7 @@ set( PCBNEW_CLASS_SRCS
     autorouter/spread_footprints.cpp
     autorouter/ar_autoplacer.cpp
     autorouter/ar_matrix.cpp
-    autorouter/autoplacer_tool.cpp
+    autorouter/autoplace_tool.cpp
 
     action_plugin.cpp
     array_creator.cpp
