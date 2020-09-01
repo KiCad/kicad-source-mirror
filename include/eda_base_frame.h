@@ -125,6 +125,14 @@ class EDA_BASE_FRAME : public wxFrame, public TOOLS_HOLDER, public KIWAY_HOLDER
 
     wxWindow* findQuasiModalDialog();
 
+    /**
+     * Return true if the frame is shown in our modal mode
+     * and false  if the frame is shown as an usual frame
+     * In modal mode, the caller that created the frame is responsible to Destroy()
+     * this frame after closing
+     */
+    virtual bool IsModal() const { return false; }
+
 protected:
     FRAME_T         m_Ident;                // Id Type (pcb, schematic, library..)
     wxPoint         m_FramePos;

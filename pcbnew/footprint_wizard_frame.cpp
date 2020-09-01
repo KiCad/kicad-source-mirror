@@ -255,10 +255,7 @@ void FOOTPRINT_WIZARD_FRAME::doCloseWindow()
         if( !IsDismissed() )
             DismissModal( false );
     }
-    else
-    {
-        Destroy();
-    }
+    // else do nothing
 }
 
 

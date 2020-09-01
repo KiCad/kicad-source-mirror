@@ -190,48 +190,48 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 }
             }
 
-            auto wizard = (FOOTPRINT_WIZARD_FRAME*) Kiway().Player( FRAME_FOOTPRINT_WIZARD, true,
-                                                                    this );
+            FOOTPRINT_WIZARD_FRAME* wizard =
+                (FOOTPRINT_WIZARD_FRAME*) Kiway().Player( FRAME_FOOTPRINT_WIZARD, true, this );
 
             if( wizard->ShowModal( NULL, this ) )
             {
                 // Creates the new footprint from python script wizard
                 MODULE* module = wizard->GetBuiltFootprint();
 
-                if( module == NULL )        // i.e. if create module command aborted
-                    break;
-
-                Clear_Pcb( false );
-
-                GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-                //  Add the new object to board
-                AddModuleToBoard( module );
-
-                // Initialize data relative to nets and netclasses (for a new
-                // module the defaults are used)
-                // This is mandatory to handle and draw pads
-                GetBoard()->BuildListOfNets();
-                module->SetPosition( wxPoint( 0, 0 ) );
-                module->ClearFlags();
-
-                Zoom_Automatique( false );
-                GetScreen()->SetModify();
-
-                // If selected from the library tree then go ahead and save it there
-                if( !selected.GetLibNickname().empty() )
+                if( module )    // i.e. if create module command is OK
                 {
-                    LIB_ID fpid = module->GetFPID();
-                    fpid.SetLibNickname( selected.GetLibNickname() );
-                    module->SetFPID( fpid );
-                    SaveFootprint( module );
-                    GetScreen()->ClrModify();
+                    Clear_Pcb( false );
+
+                    GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+                    //  Add the new object to board
+                    AddModuleToBoard( module );
+
+                    // Initialize data relative to nets and netclasses (for a new
+                    // module the defaults are used)
+                    // This is mandatory to handle and draw pads
+                    GetBoard()->BuildListOfNets();
+                    module->SetPosition( wxPoint( 0, 0 ) );
+                    module->ClearFlags();
+
+                    Zoom_Automatique( false );
+                    GetScreen()->SetModify();
+
+                    // If selected from the library tree then go ahead and save it there
+                    if( !selected.GetLibNickname().empty() )
+                    {
+                        LIB_ID fpid = module->GetFPID();
+                        fpid.SetLibNickname( selected.GetLibNickname() );
+                        module->SetFPID( fpid );
+                        SaveFootprint( module );
+                        GetScreen()->ClrModify();
+                    }
+
+                    updateView();
+                    GetCanvas()->Refresh();
+                    Update3DView( true );
+
+                    SyncLibraryTree( false );
                 }
-
-                updateView();
-                GetCanvas()->Refresh();
-                Update3DView( true );
-
-                SyncLibraryTree( false );
             }
 
             wizard->Destroy();

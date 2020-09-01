@@ -153,7 +153,7 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
     }
 
 
-    if( event.GetId() == wxEVT_QUERY_END_SESSION 
+    if( event.GetId() == wxEVT_QUERY_END_SESSION
         || event.GetId() == wxEVT_END_SESSION )
     {
         // End session means the OS is going to terminate us
@@ -170,7 +170,10 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 
         doCloseWindow();
 
-        Destroy();
+        // Destroy (safe delete frame) this frame only in non modal mode.
+        // In modal mode, the caller will call Destroy().
+        if( !IsModal() )
+            Destroy();
     }
     else
     {
