@@ -452,6 +452,8 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 
     switch( aA->Type() )
     {
+    case SH_NULL: 
+        return false;
     case SH_RECT:
         switch( aB->Type() )
         {
@@ -472,6 +474,9 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 
         case SH_ARC:
             return CollCaseReversed<SHAPE_RECT, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
+
+        case SH_NULL:
+            return false;
 
         default:
             break;
@@ -498,6 +503,9 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 
         case SH_ARC:
             return CollCaseReversed<SHAPE_CIRCLE, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
+    
+        case SH_NULL:
+            return false;
 
         default:
             break;
@@ -525,6 +533,9 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
         case SH_ARC:
             return CollCaseReversed<SHAPE_LINE_CHAIN, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
 
+        case SH_NULL:
+            return false;
+
         default:
             break;
         }
@@ -550,6 +561,9 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 
         case SH_ARC:
             return CollCaseReversed<SHAPE_SEGMENT, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
+
+        case SH_NULL:
+            return false;
 
         default:
             break;
@@ -577,6 +591,9 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
         case SH_ARC:
             return CollCaseReversed<SHAPE_SIMPLE, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
 
+        case SH_NULL:
+            return false;
+
         default:
             break;
         }
@@ -602,6 +619,9 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 
         case SH_ARC:
             return CollCase<SHAPE_ARC, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
+
+        case SH_NULL:
+            return false;
 
         default:
             break;
