@@ -391,7 +391,7 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary( const wxString& aLibName,
         fn = initialPath;
 
         if( !LibraryFileBrowser( false, fn,
-                                 KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension) )
+                                 KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension ) )
         {
             return wxEmptyString;
         }
@@ -413,15 +413,15 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary( const wxString& aLibName,
     }
 
     // We can save fp libs only using IO_MGR::KICAD_SEXP format (.pretty libraries)
-    IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD_SEXP;
-    wxString libPath = fn.GetFullPath();
+    IO_MGR::PCB_FILE_T piType  = IO_MGR::KICAD_SEXP;
+    wxString           libPath = fn.GetFullPath();
 
     try
     {
-        PLUGIN::RELEASER  pi( IO_MGR::PluginFind( piType ) );
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( piType ) );
 
-        bool    writable = false;
-        bool    exists   = false;
+        bool writable = false;
+        bool exists   = false;
 
         try
         {
@@ -488,8 +488,8 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
     if( libName.IsEmpty() )
         return false;
 
-    bool          saveInGlobalTable = false;
-    bool          saveInProjectTable = false;
+    bool saveInGlobalTable = false;
+    bool saveInProjectTable = false;
 
     if( Prj().IsNullProject() )
     {
@@ -505,16 +505,9 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
         switch( SelectSingleOption( this, _( "Select Library Table" ),
                 _( "Choose the Library Table to add the library to:" ), libTableNames ) )
         {
-        case 0:
-            saveInGlobalTable = true;
-            break;
-
-        case 1:
-            saveInProjectTable = true;
-            break;
-
-        default:
-            return false;
+        case 0:  saveInGlobalTable  = true;  break;
+        case 1:  saveInProjectTable = true;  break;
+        default: return false;
         }
     }
 

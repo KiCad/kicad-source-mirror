@@ -884,6 +884,10 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
     }
     else
     {
+        // Ensure the file has a dummy name, otherwise GTK will display the regex from the filter
+        if( aFilename.GetName().empty() )
+            aFilename.SetName( "Library" );
+
         wxString dir = Prj().IsNullProject() ? aFilename.GetFullPath() : Prj().GetProjectPath();
 
         wxFileDialog dlg( this, prompt, dir, aFilename.GetFullName(),
