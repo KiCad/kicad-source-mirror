@@ -282,7 +282,11 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem, wxT( "Cannot delete invalid item from screen." ) );
 
-    SetModify();
+    // Markers are not saved in the file, no need to flag as modified.
+    // TODO: Maybe we should have a listing somewhere of items that aren't saved?
+    if( aItem->Type() != SCH_MARKER_T )
+        SetModify();
+
     Remove( aItem );
 
     if( aItem->Type() == SCH_SHEET_PIN_T )
