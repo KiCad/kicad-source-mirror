@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 #include <config.h>
 #include <id.h>
 #include <settings/settings_manager.h>
+#include <logging.h>
 
 #include <wx/stdpaths.h>
 #include <wx/debug.h>
@@ -439,8 +440,39 @@ void KIWAY::ExpressMail( FRAME_T aDestination, MAIL_T aCommand, std::string& aPa
 
 void KIWAY::SetLanguage( int aLanguage )
 {
-    Pgm().SetLanguageIdentifier( aLanguage );
-    Pgm().SetLanguage();
+    wxString errMsg;
+    bool     ret = false;
+
+    {
+        // Only allow the traces to be logged by wx. We use our own system to log when the
+        // OS doesn't support the language, so we want to hide the wx error.
+        WX_LOG_TRACE_ONLY logtraceOnly;
+        Pgm().SetLanguageIdentifier( aLanguage );
+        ret = Pgm().SetLanguage( errMsg );
+    }
+
+    if( !ret )
+    {
+        wxString lang;
+
+        for( unsigned ii = 0;  LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
+        {
+            if( aLanguage == LanguagesList[ii].m_KI_Lang_Identifier )
+            {
+                if( LanguagesList[ii].m_DoNotTranslate )
+                    lang = LanguagesList[ii].m_Lang_Label;
+                else
+                    lang = wxGetTranslation( LanguagesList[ii].m_Lang_Label );
+
+                break;
+            }
+        }
+
+        DisplayErrorMessage( nullptr,
+                             wxString::Format( _( "Unable to switch language to %s" ), lang ),
+                             errMsg );
+        return;
+    }
 
 #if 1
     // This is a risky hack that goes away if we allow the language to be

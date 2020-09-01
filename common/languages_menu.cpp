@@ -36,9 +36,7 @@
 #include <tool/action_menu.h>
 #include <tool/conditional_menu.h>
 #include <bitmaps.h>
-
-// Contained inside pgm_base.cpp
-extern LANGUAGE_DESCR LanguagesList[];
+#include <pgm_base.h>
 
 /**
  * Function AddMenuLanguageList

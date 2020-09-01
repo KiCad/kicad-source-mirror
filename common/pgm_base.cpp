@@ -72,23 +72,23 @@ LANGUAGE_DESCR LanguagesList[] =
 {
     { wxLANGUAGE_DEFAULT,    ID_LANGUAGE_DEFAULT,    _( "Default" ),    false },
     { wxLANGUAGE_ENGLISH,    ID_LANGUAGE_ENGLISH,    wxT( "English" ),  true },
-    { wxLANGUAGE_FRENCH,     ID_LANGUAGE_FRENCH,     wxT( "Français" ), false },
-    { wxLANGUAGE_SPANISH,    ID_LANGUAGE_SPANISH,    wxT( "Español" ),  false },
-    { wxLANGUAGE_PORTUGUESE, ID_LANGUAGE_PORTUGUESE, wxT( "Português" ),false },
-    { wxLANGUAGE_ITALIAN,    ID_LANGUAGE_ITALIAN,    wxT( "Italiano" ), false },
-    { wxLANGUAGE_GERMAN,     ID_LANGUAGE_GERMAN,     wxT( "Deutsch" ),  false },
-    { wxLANGUAGE_GREEK,      ID_LANGUAGE_GREEK,      wxT( "Ελληνικά" ), false },
-    { wxLANGUAGE_HUNGARIAN,  ID_LANGUAGE_HUNGARIAN,  wxT( "Magyar" ),   false },
-    { wxLANGUAGE_POLISH,     ID_LANGUAGE_POLISH,     wxT( "Polski" ),   false },
-    { wxLANGUAGE_CZECH,      ID_LANGUAGE_CZECH,      wxT( "Čeština" ),  false },
-    { wxLANGUAGE_RUSSIAN,    ID_LANGUAGE_RUSSIAN,    wxT( "Русский" ),  false },
+    { wxLANGUAGE_FRENCH,     ID_LANGUAGE_FRENCH,     wxT( "Français" ), true },
+    { wxLANGUAGE_SPANISH,    ID_LANGUAGE_SPANISH,    wxT( "Español" ),  true },
+    { wxLANGUAGE_PORTUGUESE, ID_LANGUAGE_PORTUGUESE, wxT( "Português" ),true },
+    { wxLANGUAGE_ITALIAN,    ID_LANGUAGE_ITALIAN,    wxT( "Italiano" ), true },
+    { wxLANGUAGE_GERMAN,     ID_LANGUAGE_GERMAN,     wxT( "Deutsch" ),  true },
+    { wxLANGUAGE_GREEK,      ID_LANGUAGE_GREEK,      wxT( "Ελληνικά" ), true },
+    { wxLANGUAGE_HUNGARIAN,  ID_LANGUAGE_HUNGARIAN,  wxT( "Magyar" ),   true },
+    { wxLANGUAGE_POLISH,     ID_LANGUAGE_POLISH,     wxT( "Polski" ),   true },
+    { wxLANGUAGE_CZECH,      ID_LANGUAGE_CZECH,      wxT( "Čeština" ),  true },
+    { wxLANGUAGE_RUSSIAN,    ID_LANGUAGE_RUSSIAN,    wxT( "Русский" ),  true },
     { wxLANGUAGE_CHINESE_SIMPLIFIED, ID_LANGUAGE_CHINESE_SIMPLIFIED,
-            wxT( "简体中文" ), false },
+            wxT( "简体中文" ), true },
     { wxLANGUAGE_CHINESE_TRADITIONAL, ID_LANGUAGE_CHINESE_TRADITIONAL,
             wxT( "繁體中文" ), false },
-    { wxLANGUAGE_CATALAN,    ID_LANGUAGE_CATALAN,    wxT( "Català" ),   false },
-    { wxLANGUAGE_JAPANESE,   ID_LANGUAGE_JAPANESE,   wxT( "日本語" ),    false },
-    { wxLANGUAGE_LITHUANIAN, ID_LANGUAGE_LITHUANIAN, wxT( "Lietuvių" ), false },
+    { wxLANGUAGE_CATALAN,    ID_LANGUAGE_CATALAN,    wxT( "Català" ),   true },
+    { wxLANGUAGE_JAPANESE,   ID_LANGUAGE_JAPANESE,   wxT( "日本語" ),    true },
+    { wxLANGUAGE_LITHUANIAN, ID_LANGUAGE_LITHUANIAN, wxT( "Lietuvių" ), true },
     { 0, 0, "", false }         // Sentinel
 };
 #undef _
@@ -434,7 +434,8 @@ bool PGM_BASE::InitPgm()
     // Init user language *before* calling loadCommonSettings, because
     // env vars could be incorrectly initialized on Linux
     // (if the value contains some non ASCII7 chars, the env var is not initialized)
-    SetLanguage( true );
+    wxString tmp;
+    SetLanguage( tmp, true );
 
     loadCommonSettings();
 
@@ -559,10 +560,8 @@ COMMON_SETTINGS* PGM_BASE::GetCommonSettings() const
 }
 
 
-bool PGM_BASE::SetLanguage( bool first_time )
+bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
 {
-    bool     retv = true;
-
     if( first_time )
     {
         setLanguageId( wxLANGUAGE_DEFAULT );
@@ -596,7 +595,9 @@ bool PGM_BASE::SetLanguage( bool first_time )
 
         m_locale = new wxLocale;
         m_locale->Init();
-        retv = false;
+
+        aErrMsg = _( "This language is not supported by the operating system." );
+        return false;
     }
     else if( !first_time )
     {
@@ -636,18 +637,32 @@ bool PGM_BASE::SetLanguage( bool first_time )
     double result;
     msg.ToDouble( &result );
 
+    // string to double encode/decode does not work! Bug detected:
+    // Disable floating point localization:
     if( result != dtst )
-        // string to double encode/decode does not work! Bug detected:
-        // Disable floating point localization:
         setlocale( LC_NUMERIC, "C" );
 
+    // Try adding the dictionary if it is not currently loaded
     if( !m_locale->IsLoaded( dictionaryName ) )
         m_locale->AddCatalog( dictionaryName );
 
-    if( !retv )
-        return retv;
+    // Verify the dictionary was loaded properly
+    if( !m_locale->IsLoaded( dictionaryName ) )
+    {
+        wxLogTrace( traceLocale, "Unable to load dictionary %s.mo in %s",
+                    GetChars( dictionaryName ), GetChars( m_locale->GetName() ) );
 
-    return m_locale->IsOk();
+        setLanguageId( wxLANGUAGE_DEFAULT );
+        delete m_locale;
+
+        m_locale = new wxLocale;
+        m_locale->Init();
+
+        aErrMsg = _( "The KiCad language file for this language is not installed." );
+        return false;
+    }
+
+    return true;
 }
 
 

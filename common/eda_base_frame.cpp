@@ -36,6 +36,7 @@
 #include <settings/app_settings.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <pgm_base.h>
 #include <project/project_local_settings.h>
 #include <tool/action_manager.h>
 #include <tool/action_menu.h>
@@ -342,9 +343,6 @@ void EDA_BASE_FRAME::HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAM
         aEvent.Check( checkRes );
 }
 
-
-// Contained inside pgm_base.cpp
-extern LANGUAGE_DESCR LanguagesList[];
 
 void EDA_BASE_FRAME::setupUIConditions()
 {

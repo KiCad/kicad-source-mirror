@@ -52,7 +52,7 @@ class SETTINGS_MANAGER;
  *   The locale translation is automatic.
  *   The selection of languages is mainly for maintainer's convenience
  *   To add a support to a new translation:
- *   add a new item to s_Languages[].
+ *   add a new item to LanguagesList[].
  */
 struct LANGUAGE_DESCR
 {
@@ -69,6 +69,10 @@ struct LANGUAGE_DESCR
     bool        m_DoNotTranslate;
 };
 
+/**
+ * An array containing all the languages that KiCad supports.
+ */
+extern LANGUAGE_DESCR LanguagesList[];
 
 // inter program module calling
 #define VTBL_ENTRY      virtual
@@ -224,16 +228,16 @@ public:
     VTBL_ENTRY void ForceSystemPdfBrowser( bool aFlg ) { m_use_system_pdf_browser = aFlg; }
 
     /**
-     * Function SetLanguage
      * sets the dictionary file name for internationalization.
      * <p>
      * The files are in kicad/internat/xx or kicad/internat/xx_XX and are named kicad.mo
      * </p>
-     * @param   first_time  must be set to true the first time this funct is
-     *          called, false otherwise
-     * @return  true if the language can be set (i.e. if the locale is available)
+     * @param aErrMsg is the string to return the error message it
+     * @param first_time  must be set to true the first time this function is
+     *        called, false otherwise
+     * @return false if there was an error setting the language
      */
-    VTBL_ENTRY bool SetLanguage( bool first_time = false );
+    VTBL_ENTRY bool SetLanguage( wxString& aErrMsg, bool first_time = false );
 
     /**
      * Function SetLanguageIdentifier
