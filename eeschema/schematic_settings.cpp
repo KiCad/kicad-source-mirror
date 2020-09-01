@@ -148,11 +148,11 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
                     if( !templateFieldNames.IsEmpty() )
                     {
-                        TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
+                        TEMPLATE_FIELDNAMES_LEXER  field_lexer( TO_UTF8( templateFieldNames ) );
 
                         try
                         {
-                            m_TemplateFieldNames.Parse( &lexer, true );
+                            m_TemplateFieldNames.Parse( &field_lexer, true );
                         }
                         catch( const IO_ERROR& )
                         {
