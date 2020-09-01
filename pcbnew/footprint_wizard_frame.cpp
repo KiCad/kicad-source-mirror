@@ -4,7 +4,7 @@
  * Copyright (C) 2012-2015 Miguel Angel Ajo Pelayo <miguelangel@nbee.es>
  * Copyright (C) 2012-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,6 +105,14 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
 
+    // Create the GAL canvas.
+    // Must be created before calling LoadSettings() that needs a valid GAL canvas
+    PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
+                                                                m_FrameSize,
+                                                                GetGalDisplayOptions(),
+                                                                EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
+    SetCanvas( gal_drawPanel );
+
     LoadSettings( config() );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -124,13 +132,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     // The footprint or pad specific clearance will be shown
     GetBoard()->GetDesignSettings().GetDefault()->SetClearance( 0 );
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
-
-    // Create GAL canvas
-    PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
-                                                                m_FrameSize,
-                                                                GetGalDisplayOptions(),
-                                                                EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
-    SetCanvas( gal_drawPanel );
 
     PCB_DISPLAY_OPTIONS disp_opts = GetDisplayOptions();
 
