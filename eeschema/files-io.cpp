@@ -347,13 +347,13 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
     else
     {
+        // This will rename the file if there is an autosave and the user want to recover.
+		CheckForAutoSaveFile( fullFileName );
+
         SetScreen( nullptr );
 
         SCH_PLUGIN* plugin = SCH_IO_MGR::FindPlugin( schFileType );
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( plugin );
-
-        // This will rename the file if there is an autosave and the user want to recover
-		CheckForAutoSaveFile( fullFileName );
 
         try
         {
