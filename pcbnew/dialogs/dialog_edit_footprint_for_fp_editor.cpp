@@ -35,6 +35,7 @@
 #include <board_design_settings.h>
 #include <board_commit.h>
 #include <bitmaps.h>
+#include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/text_ctrl_eval.h>
 #include <class_module.h>
@@ -45,6 +46,7 @@
 #include <pgm_base.h>
 #include "3d_cache/dialogs/panel_prev_3d.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
+#include <settings/settings_manager.h>
 
 #include <fp_lib_table.h>
 
@@ -88,8 +90,19 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     // Show/hide columns according to the user's preference
     m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
 
-    // Set up the 3D models grid
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    if( cfg->m_lastFootprint3dDir.IsEmpty() )
+    {
+        wxGetEnv( KISYS3DMOD, &cfg->m_lastFootprint3dDir );
+    }
+
     wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, &cfg->m_lastFootprint3dDir, "*.*",
+                                                true, Prj().GetProjectPath() ) );
+    m_modelsGrid->SetColAttr( 0, attr );
+
+    // Show checkbox
+    attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
     attr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );

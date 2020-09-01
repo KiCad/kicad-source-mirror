@@ -59,6 +59,7 @@
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <pcbnew_id.h>          // For ID_PCBNEW_END_LIST
+#include <settings/settings_manager.h>
 
 // clang-format off
 
@@ -387,6 +388,10 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     /* PCAD_PLUGIN does not support Footprint*() functions
     choices.Add( IO_MGR::ShowType( IO_MGR::PCAD ) );
     */
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
+    if( cfg->m_lastFootprintLibDir.IsEmpty() )
+        cfg->m_lastFootprintLibDir = m_projectBasePath;
 
     auto setupGrid =
             [&]( WX_GRID* aGrid )
@@ -403,8 +408,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
                 wxGridCellAttr* attr;
 
                 attr = new wxGridCellAttr;
-                attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &m_lastBrowseDir,
-                                                            wxEmptyString ) );
+                attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &cfg->m_lastFootprintLibDir,
+                                                            wxEmptyString, true, m_projectBasePath ) );
                 aGrid->SetColAttr( COL_URI, attr );
 
                 attr = new wxGridCellAttr;
@@ -770,8 +775,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     supportedFileType fileType = fileTypeIt->second;
 
-    if( m_lastBrowseDir.IsEmpty() )
-        m_lastBrowseDir = m_projectBasePath;
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
     wxArrayString files;
 
@@ -781,7 +785,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     if( fileType.m_IsFile )
     {
-        wxFileDialog dlg( this, title, m_lastBrowseDir, wxEmptyString,
+        wxFileDialog dlg( this, title, cfg->m_lastFootprintLibDir, wxEmptyString,
                 fileType.m_FileFilter, wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
         int result = dlg.ShowModal();
@@ -791,11 +795,11 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
         dlg.GetPaths( files );
 
-        m_lastBrowseDir = dlg.GetDirectory();
+        cfg->m_lastFootprintLibDir = dlg.GetDirectory();
     }
     else
     {
-        wxDirDialog dlg( nullptr, title, m_lastBrowseDir,
+        wxDirDialog dlg( nullptr, title, cfg->m_lastFootprintLibDir,
                 wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
         int result = dlg.ShowModal();
@@ -831,12 +835,12 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             files.Add( dlg.GetPath() );
         }
 
-        m_lastBrowseDir = dlg.GetPath();
+        cfg->m_lastFootprintLibDir = dlg.GetPath();
     }
 
     // Drop the last directory if the path is a .pretty folder
-    if( m_lastBrowseDir.EndsWith( KiCadFootprintLibPathExtension ) )
-        m_lastBrowseDir = m_lastBrowseDir.BeforeLast( wxFileName::GetPathSeparator() );
+    if( cfg->m_lastFootprintLibDir.EndsWith( KiCadFootprintLibPathExtension ) )
+        cfg->m_lastFootprintLibDir = cfg->m_lastFootprintLibDir.BeforeLast( wxFileName::GetPathSeparator() );
 
     const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
     bool               addDuplicates = false;
@@ -1016,8 +1020,6 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
 
 
 size_t   PANEL_FP_LIB_TABLE::m_pageNdx = 0;
-
-wxString PANEL_FP_LIB_TABLE::m_lastBrowseDir;
 
 
 void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )

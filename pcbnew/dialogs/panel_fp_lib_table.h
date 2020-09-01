@@ -89,7 +89,6 @@ private:
 
     WX_GRID*         m_cur_grid;      // changed based on tab choice
     static size_t    m_pageNdx;       // Remember last notebook page selected during a session
-    static wxString  m_lastBrowseDir; // Remember last directory browsed during a session
 };
 
 #endif    // PANEL_FP_LIB_TABLE_H

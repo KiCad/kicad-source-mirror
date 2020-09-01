@@ -471,6 +471,12 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_FootprintViewerZoom, 1.0 ) );
 
     addParamsForWindow( &m_FootprintWizard, "footprint_wizard" );
+
+    m_params.emplace_back( new PARAM<wxString>( "system.last_footprint_lib_dir",
+                                                &m_lastFootprintLibDir, "" ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "system.last_footprint3d_dir",
+                                                &m_lastFootprint3dDir, "" ) );
 }
 
 

@@ -79,7 +79,6 @@ private:
 
     WX_GRID*         m_cur_grid;     ///< changed based on tab choice
     static size_t    m_pageNdx;      ///< Remember the last notebook page selected during a session
-    wxString         m_lastBrowseDir; ///< last browsed directory
 };
 
 

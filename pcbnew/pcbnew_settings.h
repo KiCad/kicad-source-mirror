@@ -296,6 +296,10 @@ public:
 
     double m_FootprintViewerZoom;       ///< The last zoom level in the footprint viewer
 
+    wxString m_lastFootprintLibDir;
+
+    wxString m_lastFootprint3dDir;
+
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     ACTION_PLUGIN_SETTINGS_LIST m_VisibleActionPlugins;
 #endif

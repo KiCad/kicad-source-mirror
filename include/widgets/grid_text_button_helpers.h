@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,13 +128,27 @@ protected:
 };
 
 
+/**
+ *  Editor for wxGrid cells that adds a file/folder browser to the grid input field
+ */
 class GRID_CELL_PATH_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
-    GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParent, wxString* aCurrentDir, const wxString& aExt ) :
+    /**
+     * Constructor
+     *
+     * @param aCurrentDir is current directory the path editor will open at
+     * @param aExt is the file extension(s) to filter by. If empty, the path editor will switch to folder mode instead of file.
+     * @param aNormalize indicates whether to normalize the selected path (replace part of path with variables or relative path)
+     * @param aNormalizeBasePath is the path to use when trying to base variables (generally current project path)
+     */
+    GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParent, wxString* aCurrentDir, const wxString& aExt, 
+                           bool aNormalize = false, wxString aNormalizeBasePath = wxEmptyString ) :
             m_dlg( aParent ),
             m_currentDir( aCurrentDir ),
-            m_ext( aExt )
+            m_ext( aExt ),
+            m_normalize( aNormalize ),
+            m_normalizeBasePath( aNormalizeBasePath )
     { }
 
     wxGridCellEditor* Clone() const override
@@ -148,29 +162,8 @@ protected:
     DIALOG_SHIM* m_dlg;
     wxString*    m_currentDir;
     wxString     m_ext;
-};
-
-
-class GRID_CELL_SYMLIB_EDITOR : public GRID_CELL_TEXT_BUTTON
-{
-public:
-    GRID_CELL_SYMLIB_EDITOR( DIALOG_SHIM* aParent, wxString* aCurrentDir, const wxString& aExt ) :
-            m_dlg( aParent ),
-            m_currentDir( aCurrentDir ),
-            m_ext( aExt )
-    { }
-
-    wxGridCellEditor* Clone() const override
-    {
-        return new GRID_CELL_SYMLIB_EDITOR( m_dlg, m_currentDir, m_ext );
-    }
-
-    void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
-
-protected:
-    DIALOG_SHIM* m_dlg;
-    wxString*    m_currentDir;
-    wxString     m_ext;
+    bool         m_normalize;
+    wxString     m_normalizeBasePath;
 };
 
 

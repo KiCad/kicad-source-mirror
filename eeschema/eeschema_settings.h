@@ -209,6 +209,8 @@ public:
 
     bool m_RescueNeverShow;
 
+    wxString m_lastSymbolLibDir;
+
 protected:
 
     virtual std::string getLegacyFrameName() const override { return "SchematicFrame"; }

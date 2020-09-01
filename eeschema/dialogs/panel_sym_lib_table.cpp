@@ -39,7 +39,9 @@
 #include <lib_view_frame.h>
 #include <sch_edit_frame.h>
 #include <kiway.h>
+#include <pgm_base.h>
 #include <sch_screen.h>
+#include <settings/settings_manager.h>
 
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
@@ -214,8 +216,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_globalTable( aGlobal ),
     m_projectTable( aProject ),
     m_projectBasePath( aProjectBasePath ),
-    m_parent( aParent ),
-    m_lastBrowseDir( aProjectBasePath )
+    m_parent( aParent )
 {
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
     // so make it a grid owned table.
@@ -228,6 +229,13 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
+
+    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+
+    if( cfg->m_lastSymbolLibDir.IsEmpty() )
+    {
+        cfg->m_lastSymbolLibDir = m_projectBasePath;
+    }
 
     auto setupGrid =
             [&]( WX_GRID* aGrid )
@@ -245,8 +253,13 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
                 wxGridCellAttr* attr;
 
                 attr = new wxGridCellAttr;
-                attr->SetEditor( new GRID_CELL_SYMLIB_EDITOR( m_parent, &m_lastBrowseDir,
-                                                              KiCadSymbolLibFileWildcard() ) );
+
+                wxString wildcards = AllSymbolLibFilesWildcard()
+                                     + "|" + KiCadSymbolLibFileWildcard()
+                                     + "|" + LegacySymbolLibFileWildcard();
+                attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &cfg->m_lastSymbolLibDir,
+                                                            wildcards,
+                                                            true, m_projectBasePath ) );
                 aGrid->SetColAttr( COL_URI, attr );
 
                 attr = new wxGridCellAttr;
@@ -467,7 +480,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                             + "|" + KiCadSymbolLibFileWildcard()
                             + "|" + LegacySymbolLibFileWildcard();
 
-    wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir, wxEmptyString, wildcards,
+    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    wxFileDialog dlg( this, _( "Select Library" ), cfg->m_lastSymbolLibDir, wxEmptyString, wildcards,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     auto result = dlg.ShowModal();
@@ -475,7 +489,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( result == wxID_CANCEL )
         return;
 
-    m_lastBrowseDir = dlg.GetDirectory();
+    cfg->m_lastSymbolLibDir = dlg.GetDirectory();
 
     const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
     bool               addDuplicates = false;

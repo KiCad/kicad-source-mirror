@@ -37,8 +37,10 @@
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <validators.h>
+#include <widgets/grid_text_button_helpers.h>
 #include <widgets/text_ctrl_eval.h>
 #include <widgets/wx_grid.h>
+#include <settings/settings_manager.h>
 
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include "3d_cache/dialogs/panel_prev_3d.h"
@@ -47,6 +49,7 @@
 
 
 int DIALOG_FOOTPRINT_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
+
 
 DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aParent,
                                                               MODULE* aModule ) :
@@ -94,7 +97,20 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_itemsGrid->ShowHideColumns( m_frame->GetPcbNewSettings()->m_FootprintTextShownColumns );
 
     // Set up the 3D models grid
+    // Path selector
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    if( cfg->m_lastFootprint3dDir.IsEmpty() )
+    {
+        wxGetEnv( KISYS3DMOD, &cfg->m_lastFootprint3dDir );
+    }
+
     wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, &cfg->m_lastFootprint3dDir, "*.*",
+                                                true, Prj().GetProjectPath() ) );
+    m_modelsGrid->SetColAttr( 0, attr );
+
+    // Show checkbox
+    attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
     attr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
