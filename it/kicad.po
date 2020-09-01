@@ -89,12 +89,13 @@
 # mc: - annotation = annotazione
 # mc: - back annotation = annotazione inversa
 # mc: - power / power supply = potenza / alimentazione
+# mc: - backup (TT - "salvataggio aggiuntivo di sicurezza" è veramente troppo lungo)
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-01 10:18+0200\n"
-"PO-Revision-Date: 2020-09-01 10:17+0200\n"
+"PO-Revision-Date: 2020-09-01 10:39+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -596,7 +597,7 @@ msgstr "Anti-aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:330
 msgid "Disabled"
-msgstr ""
+msgstr "Disabilitato"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:330
 msgid "2x"
@@ -612,7 +613,7 @@ msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr ""
+msgstr "Il visualizzatore 3D deve essere chiuso e riaperto per applicare questa impostazione"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:345
 msgid "While Moving"
@@ -2363,7 +2364,7 @@ msgstr "Seleziona il percorso delle impostazioni"
 
 #: common/dialogs/dialog_page_settings.cpp:64
 msgid "A5 148x210mm"
-msgstr ""
+msgstr "A5 148x210mm"
 
 #: common/dialogs/dialog_page_settings.cpp:65
 msgid "A4 210x297mm"
@@ -2839,7 +2840,7 @@ msgstr "Elementi:"
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr ""
+msgstr "Visualizza commutatore preimpostazioni"
 
 #: common/dialogs/panel_color_settings.cpp:49
 msgid "Reveal Themes in Finder"
@@ -2959,9 +2960,8 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
-"Ritardo dopo l'ultima modifica prima della creazione del file di salvataggio "
-"su disco.\n"
-"Se impostato a 0, l'auto salvataggio è disabilitato"
+"Ritardo dopo la prima modifica della creazione del backup della scheda su disco.\n"
+"Se impostato a 0, l'auto backup è disabilitato"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 #: common/dialogs/panel_common_settings_base.cpp:258
@@ -2977,10 +2977,12 @@ msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"I file cache 3D più vecchi di questo vengono cancellati.\n"
+"Se impostato a 0, la cancellazione della cache è disabilitata"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
-msgstr ""
+msgstr "Giorni"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
 msgid "Accelerated graphics:"
@@ -3025,7 +3027,7 @@ msgstr "Antialiasing ad alta qualità"
 
 #: common/dialogs/panel_common_settings_base.cpp:90
 msgid "3D cache file duration:"
-msgstr ""
+msgstr "Durata file cache 3D:"
 
 #: common/dialogs/panel_common_settings_base.cpp:100
 msgid "Helper Applications"
@@ -3094,52 +3096,52 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:214
 msgid "Project Backup"
-msgstr "Salvataggio progetto"
+msgstr "Backup progetto"
 
 #: common/dialogs/panel_common_settings_base.cpp:221
 msgid "Automatically backup projects"
-msgstr "Salva automaticamente i progetti"
+msgstr "Backup automatico dei progetti"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 msgid ""
 "Automatically create backup archives of the current project when saving files"
-msgstr ""
+msgstr "Crea automaticamente archivi di backup del progetto corrente quando si salvano i file"
 
 #: common/dialogs/panel_common_settings_base.cpp:226
 msgid "Create backups when auto save occurs"
-msgstr ""
+msgstr "Crea backup all'autosalvataggio"
 
 #: common/dialogs/panel_common_settings_base.cpp:227
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
-msgstr ""
+msgstr "Crea backup se l'impostazione di autosalvataggio è abilitata. Se non abilitata, i backup verranno creati solo quando si salva manualmente un file."
 
 #: common/dialogs/panel_common_settings_base.cpp:231
 msgid "Maximum backups to keep:"
-msgstr ""
+msgstr "N° max di backup da tenere:"
 
 #: common/dialogs/panel_common_settings_base.cpp:233
 msgid "How many backup files total to keep (set to 0 for no limit)"
-msgstr ""
+msgstr "Quanti file di backup totali da tenere (impostare a 0 per nessun limite)"
 
 #: common/dialogs/panel_common_settings_base.cpp:240
 msgid "Maximum backups per day:"
-msgstr ""
+msgstr "N° max backup per giorno:"
 
 #: common/dialogs/panel_common_settings_base.cpp:242
 msgid "How many backup files to keep each day (set to 0 for no limit)"
-msgstr ""
+msgstr "Quanti file di backup da tenere per ogni giorno (impostare a 0 per nessun limite)"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Minimum time between backups:"
-msgstr ""
+msgstr "Tempo minimo tra i backup:"
 
 #: common/dialogs/panel_common_settings_base.cpp:251
 msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
-msgstr ""
+msgstr "Numero di minuti dall'ultimo backup prima che un altro venga creato al successivo salvataggio (impostare a 0 per nessun numero minimo)"
 
 #: common/dialogs/panel_common_settings_base.cpp:262
 msgid "Maximum total backup size:"
@@ -3513,7 +3515,7 @@ msgstr "Ignora"
 
 #: common/dialogs/panel_setup_severities.cpp:92
 msgid "From Pin Conflicts Map"
-msgstr ""
+msgstr "Dalla mappa conflitti pin"
 
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
@@ -3680,7 +3682,7 @@ msgstr "Comuni"
 
 #: common/eda_base_frame.cpp:811
 msgid "Mouse and Touchpad"
-msgstr ""
+msgstr "Mouse e touchpad"
 
 #: common/eda_base_frame.cpp:814
 msgid "Hotkeys"
@@ -7381,7 +7383,7 @@ msgstr "I campi devono avere un nome."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:259
 msgid "Aliased symbol must have a parent selected"
-msgstr ""
+msgstr "Un simbolo alias deve avere un parente selezionato"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:267
 msgid "Delete extra units from symbol?"
@@ -18472,11 +18474,8 @@ msgid "Update Physical Stackup"
 msgstr "Aggiorna stackup fisico"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1540
-#, fuzzy
 msgid "Update dielectric thickness from board thickness"
-msgstr ""
-"Uno spessore dielettrico bloccato è < 0\n"
-"Sbloccarlo o cambiarne lo spessore"
+msgstr "Aggiorna lo spessore dielettrico dallo spessore scheda"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 msgid "Board thickness:"
@@ -18719,22 +18718,22 @@ msgstr "Non sbrogliato"
 #: pcbnew/class_board.cpp:1946
 #, c-format
 msgid "Group Uuid %s maps to 2 different BOARD_ITEMS: %p and %p"
-msgstr ""
+msgstr "L'uuid del gruppo %s mappa a 2 differenti BOARD_ITEMS: %p e %p"
 
 #: pcbnew/class_board.cpp:1958
 #, c-format
 msgid "Two groups of identical name: %s"
-msgstr ""
+msgstr "Due gruppi con nome identico: %s"
 
 #: pcbnew/class_board.cpp:1972
 #, c-format
 msgid "Group %s contains deleted item %s"
-msgstr ""
+msgstr "Il gruppo %s contiene l'elemento cancellato %s"
 
 #: pcbnew/class_board.cpp:1981
 #, c-format
 msgid "Uuid %s maps to 2 different BOARD_ITEMS: %s %p %s and %p %s"
-msgstr ""
+msgstr "L'uuid %s mappa a 2 differenti BOARD_ITEMS: %s %p %s e %p %s"
 
 #: pcbnew/class_board.cpp:1996
 #, c-format
@@ -18876,13 +18875,12 @@ msgid "not in schematic"
 msgstr "non nello schema"
 
 #: pcbnew/class_module.cpp:697
-#, fuzzy
 msgid "exclude from pos files"
-msgstr "Esclude piazzole dalla serigrafia"
+msgstr "escludi dai file posizioni"
 
 #: pcbnew/class_module.cpp:700
 msgid "exclude from BOM"
-msgstr ""
+msgstr "escludi dalla DIBA"
 
 #: pcbnew/class_module.cpp:702
 msgid "Status: "
@@ -19385,7 +19383,7 @@ msgstr "Impossibile trovare segmento con una estremità di (%s, %s)."
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:788
 msgid "No edges found on Edge.Cuts layer."
-msgstr ""
+msgstr "Nessun bordo trovato sullo strato Edge.Cuts."
 
 #: pcbnew/cross-probing.cpp:163 pcbnew/cross-probing.cpp:182
 #, c-format
@@ -19462,7 +19460,7 @@ msgstr ""
 msgid ""
 "\n"
 "Any reference types %s will not be annotated."
-msgstr ""
+msgstr "\nOgni riferimento di tipo %s non verrà riannotato."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:310
 msgid ""
@@ -19477,7 +19475,7 @@ msgstr ""
 msgid ""
 "\n"
 "Front footprints will start at %s"
-msgstr ""
+msgstr "\nLe impronte fronte cominceranno da %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:323
 #, fuzzy, c-format
@@ -19496,7 +19494,7 @@ msgstr "Da impronta genitore"
 msgid ""
 "\n"
 "Front footprints starting with '%s' will have the prefix removed."
-msgstr ""
+msgstr "\nLe impronte fronte che cominciano con \"%s\" avranno il prefisso rimosso."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:338
 #, c-format
