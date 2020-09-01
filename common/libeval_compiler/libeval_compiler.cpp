@@ -1022,10 +1022,15 @@ void UOP::Exec( CONTEXT* ctx )
 
 VALUE* UCODE::Run( CONTEXT* ctx )
 {
+    static VALUE g_false( 0 );
+
     for( UOP* op : m_ucode )
         op->Exec( ctx );
 
-    assert( ctx->SP() == 1 );
+    // non-well-formed rules should not be fired
+    if( ctx->SP() != 1 )
+        return &g_false;
+
     return ctx->Pop();
 }
 
