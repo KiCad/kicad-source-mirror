@@ -36,20 +36,20 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
         m_items( aItems ),
         m_pinMapSpecialCase( aPinMapSpecialCase )
 {
-    wxString          severities[] = { _( "Error" ), _( "Warning" ), _( "Ignore" ) };
+    wxString          severities[]  = { _( "Error" ), _( "Warning" ), _( "Ignore" ) };
     int               severityCount = sizeof( severities ) / sizeof( wxString );
-    int               baseID = 1000;
-    wxBoxSizer*       panelSizer = new wxBoxSizer( wxVERTICAL );
-    wxScrolledWindow* scrollWin = new wxScrolledWindow( this, wxID_ANY,
-                                                        wxDefaultPosition, wxDefaultSize,
-                                                        wxTAB_TRAVERSAL | wxVSCROLL );
+    int               baseID        = 1000;
+    wxBoxSizer*       panelSizer    = new wxBoxSizer( wxVERTICAL );
+    wxScrolledWindow* scrollWin     = new wxScrolledWindow( this, wxID_ANY,
+                                                            wxDefaultPosition, wxDefaultSize,
+                                                            wxTAB_TRAVERSAL | wxVSCROLL );
 
     scrollWin->SetScrollRate( 0, 5 );
 
     wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 5 );
     gridSizer->SetFlexibleDirection( wxBOTH );
 
-   	for( const RC_ITEM& item : m_items )
+    for( const RC_ITEM& item : m_items )
     {
         int      errorCode = item.GetErrorCode();
         wxString msg       = item.GetErrorText();
@@ -60,15 +60,15 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
         // When msg is empty, for some reason, the current errorCode is not supported
         // by the RC_ITEM aDummyItem.
         // Skip this errorCode.
-   	    if( !msg.IsEmpty() )
+        if( !msg.IsEmpty() )
         {
             wxStaticText* errorLabel = new wxStaticText( scrollWin, wxID_ANY, msg + wxT( ":" ) );
             gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 4  );
 
             // OSX can't handle more than 100 radio buttons in a single window (yes, seriously),
             // so we have to create a window for each set
-   	        wxPanel*    radioPanel = new wxPanel( scrollWin );
-   	        wxBoxSizer* radioSizer = new wxBoxSizer( wxHORIZONTAL );
+            wxPanel*    radioPanel = new wxPanel( scrollWin );
+            wxBoxSizer* radioSizer = new wxBoxSizer( wxHORIZONTAL );
 
             for( int i = 0; i < severityCount; ++i )
             {
@@ -87,7 +87,8 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
         }
     }
 
-   	if( m_pinMapSpecialCase )
+
+    if( m_pinMapSpecialCase )
     {
         wxString pinMapSeverities[] = { _( "From Pin Conflicts Map" ), wxT( "" ), _( "Ignore" ) };
         int      errorCode          = m_pinMapSpecialCase->GetErrorCode();
@@ -125,12 +126,12 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
 
     scrollWin->SetSizer( gridSizer );
     scrollWin->Layout();
-   	gridSizer->Fit( scrollWin );
+    gridSizer->Fit( scrollWin );
     panelSizer->Add( scrollWin, 1, wxEXPAND | wxALL, 5 );
 
     this->SetSizer( panelSizer );
-   	this->Layout();
-   	panelSizer->Fit( this );
+    this->Layout();
+    panelSizer->Fit( this );
 }
 
 
