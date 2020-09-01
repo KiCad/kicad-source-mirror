@@ -48,6 +48,7 @@
 #include <fp_lib_table.h>
 #include <kicad_plugin.h>
 #include <kiface_i.h>
+#include <kiplatform/app.h>
 #include <kiway.h>
 #include <panel_hotkeys_editor.h>
 #include <pcb_draw_panel_gal.h>
@@ -246,7 +247,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     InitExitKey();
 
     // Default shutdown reason until a file is loaded
-    SetShutdownBlockReason( _( "Footprint changes are unsaved" ) );
+    KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Footprint changes are unsaved" ) );
 
     // Ensure the window is on top
     Raise();
@@ -540,7 +541,7 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( IsContentModified() )
     {
         // Shutdown blocks must be determined and vetoed as early as possible
-        if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+        if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
         {
             aEvent.Veto();
             return false;

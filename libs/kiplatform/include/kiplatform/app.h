@@ -22,24 +22,48 @@
 #define KIPLATFORM_APP_H_
 
 class wxString;
+class wxWindow;
 
 namespace KIPLATFORM
 {
     namespace APP
     {
         /**
-        * Registers the application for restart with the OS with the given command line string to pass as args
-        *
-        * @param aCommandLine is string the OS will invoke the application with
-        */
+         * Registers the application for restart with the OS with the given command line string to pass as args
+         *
+         * @param aCommandLine is string the OS will invoke the application with
+         */
         bool RegisterApplicationRestart( const wxString& aCommandLine );
 
         /**
-        * Unregisters the application from automatic restart
-        *
-        * Depending on OS, this may not be required
-        */
+         * Unregisters the application from automatic restart
+         *
+         * Depending on OS, this may not be required
+         */
         bool UnregisterApplicationRestart();
+
+        /**
+         * Whether or not the window supports setting a shutdown block reason
+         */
+        bool SupportsShutdownBlockReason();
+
+        /**
+         * Sets the block reason why the window/application is preventing OS shutdown.
+         * This should be set far ahead of any close event.
+         *
+         * This is mainly intended for Windows platforms where this is a native feature.
+         *
+         * @param aWindow that will have a shutdown blocker message
+         * @param aReason to display why the shutdown block is occuring
+         */
+        void SetShutdownBlockReason( wxWindow* aWindow, const wxString& aReason );
+
+        /**
+         * Removes any shutdown block reason set
+         *
+         * @param aWindow that has a shutdown block reason set
+         */
+        void RemoveShutdownBlockReason( wxWindow* aWindow );
     }
 }
 

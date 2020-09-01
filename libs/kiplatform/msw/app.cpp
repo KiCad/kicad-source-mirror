@@ -20,7 +20,9 @@
 
 #include <kiplatform/app.h>
 
+#include <wx/log.h>
 #include <wx/string.h>
+#include <wx/window.h>
 
 #include <windows.h>
 #include <strsafe.h>
@@ -44,4 +46,29 @@ bool KIPLATFORM::APP::UnregisterApplicationRestart()
 {
     // Note, this isn't required to be used on Windows if you are just closing the program
     return SUCCEEDED( ::UnregisterApplicationRestart() );
+}
+
+
+bool KIPLATFORM::APP::SupportsShutdownBlockReason()
+{
+    return true;
+}
+
+
+void KIPLATFORM::APP::RemoveShutdownBlockReason( wxWindow* aWindow )
+{
+    // Destroys any block reason that may have existed
+    ShutdownBlockReasonDestroy( aWindow->GetHandle() );
+}
+
+
+void KIPLATFORM::APP::SetShutdownBlockReason( wxWindow* aWindow, const wxString& aReason )
+{
+    // Sets up the pretty message on the shutdown page on why it's being "blocked"
+    // This is used in conjunction with handling WM_QUERYENDSESSION (wxCloseEvent)
+    // ShutdownBlockReasonCreate does not block by itself
+
+    ShutdownBlockReasonDestroy( aWindow->GetHandle() ); // Destroys any existing or nonexisting reason
+
+    ShutdownBlockReasonCreate( aWindow->GetHandle(), aReason.wc_str() );
 }

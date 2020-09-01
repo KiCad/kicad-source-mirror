@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <general.h>
 #include <kiface_i.h>
+#include <kiplatform/app.h>
 #include <kiway_express.h>
 #include <lib_edit_frame.h>
 #include <lib_manager.h>
@@ -186,7 +187,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 
-    SetShutdownBlockReason( _( "Library changes are unsaved" ) );
+    KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Library changes are unsaved" ) );
 
     // Ensure the window is on top
     Raise();
@@ -433,8 +434,8 @@ void LIB_EDIT_FRAME::setupUIConditions()
 bool LIB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
-    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-        && IsContentModified() )
+    if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+            && IsContentModified() )
     {
         return false;
     }

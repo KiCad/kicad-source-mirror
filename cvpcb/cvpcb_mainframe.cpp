@@ -28,6 +28,7 @@
 #include <eda_dde.h>
 #include <fp_lib_table.h>
 #include <kiface_i.h>
+#include <kiplatform/app.h>
 #include <kiway_express.h>
 #include <macros.h>
 #include <netlist_reader/netlist_reader.h>
@@ -167,7 +168,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Start the main processing loop
     m_toolManager->InvokeTool( "cvpcb.Control" );
 
-    SetShutdownBlockReason( _( "Symbol to footprint changes are unsaved" ) );
+    KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Symbol to footprint changes are unsaved" ) );
 }
 
 
@@ -340,7 +341,8 @@ bool CVPCB_MAINFRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( m_modified )
     {
         // Shutdown blocks must be determined and vetoed as early as possible
-        if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+        if( KIPLATFORM::APP::SupportsShutdownBlockReason()
+                && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
         {
             return false;
         }

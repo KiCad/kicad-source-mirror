@@ -36,6 +36,7 @@
 #include <html_messagebox.h>
 #include <invoke_sch_dialog.h>
 #include <kiface_i.h>
+#include <kiplatform/app.h>
 #include <kiway.h>
 #include <lib_edit_frame.h>
 #include <lib_view_frame.h>
@@ -291,7 +292,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     UpdateTitle();
 
     // Default shutdown reason until a file is loaded
-    SetShutdownBlockReason( _( "New schematic file is unsaved" ) );
+    KIPLATFORM::APP::SetShutdownBlockReason( this, _( "New schematic file is unsaved" ) );
 
     // Ensure the window is on top
     Raise();
@@ -573,8 +574,8 @@ void SCH_EDIT_FRAME::HardRedraw()
 bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
-    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-        && Schematic().GetSheets().IsModified() )
+    if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+            && Schematic().GetSheets().IsModified() )
     {
         return false;
     }

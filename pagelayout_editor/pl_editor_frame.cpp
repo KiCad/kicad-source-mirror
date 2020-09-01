@@ -41,6 +41,7 @@
 #include <panel_hotkeys_editor.h>
 #include <view/view.h>
 #include <confirm.h>
+#include <kiplatform/app.h>
 #include <tool/selection.h>
 #include <tool/action_toolbar.h>
 #include <tool/editor_conditions.h>
@@ -326,7 +327,7 @@ void PL_EDITOR_FRAME::OnExit( wxCommandEvent& aEvent )
 bool PL_EDITOR_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
-    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+    if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
             && IsContentModified() )
     {
         return false;
@@ -882,11 +883,11 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
     if( GetCurrentFileName().IsEmpty() )
     {
         // Default shutdown reason until a file is loaded
-        SetShutdownBlockReason( _( "New page layout file is unsaved" ) );
+        KIPLATFORM::APP::SetShutdownBlockReason( this, _( "New page layout file is unsaved" ) );
     }
     else
     {
-        SetShutdownBlockReason( _( "Page layout changes are unsaved" ) );
+        KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Page layout changes are unsaved" ) );
     }
 }
 

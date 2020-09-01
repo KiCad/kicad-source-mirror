@@ -92,6 +92,7 @@
 #include <ratsnest/ratsnest_viewitem.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/panel_selection_filter.h>
+#include <kiplatform/app.h>
 
 
 #include <widgets/infobar.h>
@@ -360,7 +361,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ActivateGalCanvas();
 
     // Default shutdown reason until a file is loaded
-    SetShutdownBlockReason( _( "New PCB file is unsaved" ) );
+    KIPLATFORM::APP::SetShutdownBlockReason( this, _( "New PCB file is unsaved" ) );
 
     // disable Export STEP item if kicad2step does not exist
     wxString strK2S = Pgm().GetExecutablePath();
@@ -796,8 +797,8 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
 bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
-    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-        && IsContentModified() )
+    if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+            && IsContentModified() )
     {
         return false;
     }
@@ -1045,7 +1046,7 @@ void PCB_EDIT_FRAME::onBoardLoaded()
 
     m_toolManager->GetTool<DRC>()->LoadRules();
 
-    SetShutdownBlockReason( _( "PCB file changes are unsaved" ) );
+    KIPLATFORM::APP::SetShutdownBlockReason( this, _( "PCB file changes are unsaved" ) );
 }
 
 

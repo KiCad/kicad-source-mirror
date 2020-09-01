@@ -35,3 +35,19 @@ bool KIPLATFORM::APP::UnregisterApplicationRestart()
     // Not implemented on this platform
     return true;
 }
+
+
+bool KIPLATFORM::APP::SupportsShutdownBlockReason()
+{
+    return false;
+}
+
+
+void KIPLATFORM::APP::RemoveShutdownBlockReason( wxWindow* aWindow )
+{
+}
+
+
+void KIPLATFORM::APP::SetShutdownBlockReason( wxWindow* aWindow, const wxString& aReason )
+{
+}

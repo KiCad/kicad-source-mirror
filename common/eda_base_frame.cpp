@@ -49,6 +49,7 @@
 #include <wx/display.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
+#include <kiplatform/app.h>
 
 #include <functional>
 
@@ -186,45 +187,7 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
 
     ClearUndoRedoList();
 
-    if( SupportsShutdownBlockReason() )
-        RemoveShutdownBlockReason();
-}
-
-
-bool EDA_BASE_FRAME::SupportsShutdownBlockReason()
-{
-#if defined( _WIN32 )
-    return true;
-#else
-    return false;
-#endif
-}
-
-
-void EDA_BASE_FRAME::RemoveShutdownBlockReason()
-{
-#if defined( _WIN32 )
-    // Windows: Destroys any block reason that may have existed
-    ShutdownBlockReasonDestroy( GetHandle() );
-#endif
-}
-
-
-void EDA_BASE_FRAME::SetShutdownBlockReason( const wxString& aReason )
-{
-#if defined( _WIN32 )
-    // Windows: sets up the pretty message on the shutdown page on why it's being "blocked"
-    // This is used in conjunction with handling WM_QUERYENDSESSION (wxCloseEvent)
-    // ShutdownBlockReasonCreate does not block by itself
-
-    ShutdownBlockReasonDestroy( GetHandle() ); // Destroys any existing or nonexisting reason
-
-    if( !ShutdownBlockReasonCreate( GetHandle(), aReason.wc_str() ) )
-    {
-        // Nothing bad happens if this fails, at worst it uses a generic application is
-        // preventing shutdown message
-    }
-#endif
+    KIPLATFORM::APP::RemoveShutdownBlockReason( this );
 }
 
 
