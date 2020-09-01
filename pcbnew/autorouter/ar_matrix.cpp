@@ -100,17 +100,17 @@ int AR_MATRIX::InitRoutingMatrix()
     for( int jj = 0; jj < m_RoutingLayersCount; jj++ ) // m_RoutingLayersCount = 1 or 2
     {
         m_BoardSide[side] = nullptr;
-        m_DistSide[side] = nullptr;
+        m_DistSide[side]  = nullptr;
 
         // allocate matrix & initialize everything to empty
-        m_BoardSide[side] = (MATRIX_CELL*) operator new( ii * sizeof( MATRIX_CELL ) );
+        m_BoardSide[side] = new MATRIX_CELL[ ii * sizeof( MATRIX_CELL ) ];
         memset( m_BoardSide[side], 0, ii * sizeof( MATRIX_CELL ) );
 
         if( m_BoardSide[side] == nullptr )
             return -1;
 
         // allocate Distances
-        m_DistSide[side] = (DIST_CELL*) operator new( ii * sizeof( DIST_CELL ) );
+        m_DistSide[side] = new DIST_CELL[ ii * sizeof( DIST_CELL ) ];
         memset( m_DistSide[side], 0, ii * sizeof( DIST_CELL ) );
 
         if( m_DistSide[side] == nullptr )
@@ -119,8 +119,7 @@ int AR_MATRIX::InitRoutingMatrix()
         side = AR_SIDE_TOP;
     }
 
-    m_MemSize =
-            m_RouteCount * ii * ( sizeof( MATRIX_CELL ) + sizeof( DIST_CELL ) + sizeof( char ) );
+    m_MemSize = m_RouteCount * ii * ( sizeof( MATRIX_CELL ) + sizeof( DIST_CELL ) );
 
     return m_MemSize;
 }
@@ -135,14 +134,14 @@ void AR_MATRIX::UnInitRoutingMatrix()
         // de-allocate Distances matrix
         if( m_DistSide[ii] )
         {
-            delete m_DistSide[ii];
+            delete[] m_DistSide[ii];
             m_DistSide[ii] = nullptr;
         }
 
         // de-allocate cells matrix
         if( m_BoardSide[ii] )
         {
-            delete m_BoardSide[ii];
+            delete[] m_BoardSide[ii];
             m_BoardSide[ii] = nullptr;
         }
     }
