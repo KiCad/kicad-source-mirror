@@ -284,13 +284,13 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
     else
     {
+        // This will rename the file if there is an autosave and the user want to recover
+		CheckForAutoSaveFile( fullFileName );
+
         SetScreen( nullptr );
         delete g_RootSheet;   // Delete the current project.
         g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
-
-        // This will rename the file if there is an autosave and the user want to recover
-		CheckForAutoSaveFile( fullFileName );
 
         try
         {
