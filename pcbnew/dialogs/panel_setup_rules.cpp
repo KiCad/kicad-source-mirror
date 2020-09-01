@@ -49,6 +49,9 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
     for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
         m_textEditor->StyleSetFont( i, fixedFont );
 
+    m_netClassRegex.Compile( "NetClass\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_netNameRegex.Compile( "NetName\\s*[!=]=\\s*$", wxRE_ADVANCED );
+
     m_compileButton->SetBitmap( KiBitmap( drc_xpm ) );
 
     m_textEditor->Bind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
@@ -94,6 +97,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
     std::stack<wxString> sexprs;
     wxString             partial;
+    wxString             last;
     int                  context = NONE;
     int                  expr_context = NONE;
 
@@ -122,6 +126,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 }
                 else if( c == '\'' )
                 {
+                    last = partial;
                     partial = wxEmptyString;
                     expr_context = STRING;
                 }
@@ -138,6 +143,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
         else if( c == '"' )
         {
+            last = partial;
             partial = wxEmptyString;
             context = STRING;
         }
@@ -223,9 +229,9 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             tokens = "inner outer \"x\"";
         }
     }
-    else if( context == STRING && expr_context == STRUCT_REF )
+    else if( context == STRING && !sexprs.empty() && sexprs.top() == "condition" )
     {
-        if( !sexprs.empty() && sexprs.top() == "condition" )
+        if( expr_context == STRUCT_REF )
         {
             PROPERTY_MANAGER&  propMgr = PROPERTY_MANAGER::Instance();
             std::set<wxString> propNames;
@@ -249,6 +255,24 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
             for( const wxString& funcSig : functions.GetSignatures() )
                 tokens += " " + funcSig;
+        }
+        else if( expr_context == STRING )
+        {
+            if( m_netClassRegex.Matches( last ) )
+            {
+                BOARD*                 board = m_frame->GetBoard();
+                BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+
+                for( const std::pair<const wxString, NETCLASSPTR>& entry : bds.GetNetClasses() )
+                    tokens += " " + entry.first;
+            }
+            else if( m_netNameRegex.Matches( last ) )
+            {
+                BOARD* board = m_frame->GetBoard();
+
+                for( const wxString& netnameCandidate : board->GetNetClassAssignmentCandidates() )
+                    tokens += " " + netnameCandidate;
+            }
         }
     }
 

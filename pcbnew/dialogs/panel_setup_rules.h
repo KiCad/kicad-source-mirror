@@ -25,6 +25,7 @@
 #ifndef PANEL_SETUP_RULES_H
 #define PANEL_SETUP_RULES_H
 
+#include <wx/regex.h>
 #include <panel_setup_rules_base.h>
 
 class DRC;
@@ -40,6 +41,9 @@ private:
     PCB_EDIT_FRAME*   m_frame;
     SCINTILLA_TRICKS* m_scintillaTricks;
     wxString          m_originalText;
+
+    wxRegEx           m_netClassRegex;
+    wxRegEx           m_netNameRegex;
 
 public:
     PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
