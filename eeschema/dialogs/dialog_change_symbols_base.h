@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,8 +26,11 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/gbsizer.h>
+#include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
+#include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
 
@@ -53,9 +56,16 @@ class DIALOG_CHANGE_SYMBOLS_BASE : public DIALOG_SHIM
 		wxRadioButton* m_matchById;
 		wxTextCtrl* m_specifiedId;
 		wxBitmapButton* m_matchIdBrowserButton;
+		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_newIdSizer;
 		wxTextCtrl* m_newId;
 		wxBitmapButton* m_newIdBrowserButton;
+		wxStaticBoxSizer* m_updateOptionsSizer;
+		wxCheckBox* m_removeExtraBox;
+		wxCheckBox* m_resetEmptyFields;
+		wxCheckBox* m_resetFieldVisibilities;
+		wxCheckBox* m_resetFieldEffects;
+		wxCheckBox* m_resetFieldPositions;
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

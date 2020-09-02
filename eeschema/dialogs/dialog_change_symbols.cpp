@@ -37,6 +37,13 @@
 #include <wx_html_report_panel.h>
 
 
+bool g_removeExtraFields      = false;
+bool g_resetEmptyFields       = false;
+bool g_resetFieldVisibilities = false;
+bool g_resetFieldEffects      = false;
+bool g_resetFieldPositions    = false;
+
+
 DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aSymbol,
         MODE aMode ) :
     DIALOG_CHANGE_SYMBOLS_BASE( aParent ),
@@ -103,6 +110,12 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
             m_matchByReference->SetValue( true );
     }
 
+    m_removeExtraBox->SetValue( g_removeExtraFields );
+    m_resetEmptyFields->SetValue( g_resetEmptyFields );
+    m_resetFieldVisibilities->SetValue( g_resetFieldVisibilities );
+    m_resetFieldEffects->SetValue( g_resetFieldEffects );
+    m_resetFieldPositions->SetValue( g_resetFieldPositions );
+
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because the update and change versions of this dialog have different controls.
     m_hash_key = TO_UTF8( GetTitle() );
@@ -138,6 +151,11 @@ void DIALOG_CHANGE_SYMBOLS::onMatchById( wxCommandEvent& aEvent )
 
 DIALOG_CHANGE_SYMBOLS::~DIALOG_CHANGE_SYMBOLS()
 {
+    g_removeExtraFields = m_removeExtraBox->GetValue();
+    g_resetEmptyFields = m_resetEmptyFields->GetValue();
+    g_resetFieldVisibilities = m_resetFieldVisibilities->GetValue();
+    g_resetFieldEffects = m_resetFieldEffects->GetValue();
+    g_resetFieldPositions = m_resetFieldPositions->GetValue();
 }
 
 
@@ -340,6 +358,70 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
         aSymbol->SetLibId( aNewId );
 
     aSymbol->SetLibSymbol( flattenedSymbol.release() );
+
+    bool removeExtras = m_removeExtraBox->GetValue();
+    bool resetEmpty = m_resetEmptyFields->GetValue();
+    bool resetVis = m_resetFieldVisibilities->GetValue();
+    bool resetEffects = m_resetFieldEffects->GetValue();
+    bool resetPositions = m_resetFieldPositions->GetValue();
+
+    for( unsigned i = 0; i < aSymbol->GetFields().size(); ++i )
+    {
+        SCH_FIELD* field = aSymbol->GetField( (int) i ) ;
+        LIB_FIELD* libField = nullptr;
+
+        if( i < MANDATORY_FIELDS )
+            libField = libSymbol->GetField( (int) i );
+        else
+            libField = libSymbol->FindField( field->GetName() );
+
+        if( libField )
+        {
+            if( resetEmpty && libField->GetText().IsEmpty() )
+                field->SetText( wxEmptyString );
+
+            if( resetVis )
+                field->SetVisible( libField->IsVisible() );
+
+            if( resetEffects )
+            {
+                // Careful: the visible bit is also in Effects
+                bool visible = field->IsVisible();
+                field->SetEffects( *libField );
+                field->SetVisible( visible );
+            }
+
+            if( resetPositions )
+            {
+                field->SetTextPos( aSymbol->GetPosition() + libField->GetTextPos() );
+            }
+        }
+        else if( i >= MANDATORY_FIELDS && removeExtras )
+        {
+            aSymbol->RemoveField( field->GetName() );
+            i--;
+        }
+    }
+
+    LIB_FIELDS libFields;
+    libSymbol->GetFields( libFields );
+
+    for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
+    {
+        LIB_FIELD& libField = libFields[i];
+
+        if( !aSymbol->FindField( libField.GetName(), false ) )
+        {
+            wxString   fieldName = libField.GetCanonicalName();
+            SCH_FIELD  newField( wxPoint( 0, 0), aSymbol->GetFieldCount(), aSymbol, fieldName );
+            SCH_FIELD* schField = aSymbol->AddField( newField );
+
+            schField->SetEffects( libField );
+            schField->SetText( libField.GetText() );
+            schField->SetTextPos( aSymbol->GetPosition() + libField.GetTextPos() );
+        }
+    }
+
     aScreen->Append( aSymbol );
     frame->GetCanvas()->GetView()->Update( aSymbol );
 

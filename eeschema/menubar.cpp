@@ -152,7 +152,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AppendSeparator();
     editMenu->Add( ACTIONS::deleteTool );
     editMenu->Add( EE_ACTIONS::editTextAndGraphics );
-    editMenu->Add( EE_ACTIONS::updateFieldsFromLibrary );
     editMenu->Add( EE_ACTIONS::changeSymbols );
     editMenu->Add( EE_ACTIONS::updateSymbols );
 
