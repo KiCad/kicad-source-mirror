@@ -119,6 +119,11 @@ public:
     virtual void Update3DView( bool aForceReload, const wxString* aTitle = nullptr );
 
     /**
+     * Request a redraw of 3D-Viewer canvas
+     */
+    void Redraw3Dview();
+
+    /**
      * Function LoadFootprint
      * attempts to load \a aFootprintId from the footprint library table.
      *

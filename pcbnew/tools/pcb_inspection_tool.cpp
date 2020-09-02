@@ -471,6 +471,8 @@ int PCB_INSPECTION_TOOL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
     else
         m_frame->SendMessageToEESCHEMA( nullptr );
 
+    m_frame->Redraw3Dview();
+
     return 0;
 }
 

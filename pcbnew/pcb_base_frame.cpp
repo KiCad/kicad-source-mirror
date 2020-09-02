@@ -95,6 +95,17 @@ void PCB_BASE_FRAME::Update3DView( bool aForceReload, const wxString* aTitle )
 }
 
 
+void PCB_BASE_FRAME::Redraw3Dview()
+{
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
+
+    if( draw3DFrame )
+    {
+        draw3DFrame->Redraw();
+    }
+}
+
+
 FP_LIB_TABLE* PROJECT::PcbFootprintLibs()
 {
     // This is a lazy loading function, it loads the project specific table when

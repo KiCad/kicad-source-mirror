@@ -101,6 +101,8 @@ class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
      */
     void NewDisplay( bool aForceImmediateRedraw = false );
 
+    void Redraw();
+
     BOARD_ADAPTER& GetAdapter() override { return m_boardAdapter; }
     CCAMERA& GetCurrentCamera() override { return m_currentCamera; }
 
