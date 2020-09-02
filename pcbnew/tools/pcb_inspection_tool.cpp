@@ -490,6 +490,15 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     }
     m_probingSchToPcb = false;
 
+    bool request3DviewRedraw = true;
+
+    if( item )
+        if( item->Type() != PCB_MODULE_T )
+            request3DviewRedraw = false;
+
+    if( request3DviewRedraw )
+        m_frame->Redraw3Dview();
+
     return 0;
 }
 
