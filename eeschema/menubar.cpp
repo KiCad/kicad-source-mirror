@@ -153,7 +153,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::deleteTool );
     editMenu->Add( EE_ACTIONS::editTextAndGraphics );
     editMenu->Add( EE_ACTIONS::changeSymbols );
-    editMenu->Add( EE_ACTIONS::updateSymbols );
 
 
     //-- View menu -----------------------------------------------------------
@@ -237,6 +236,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showSymbolEditor );
+    toolsMenu->Add( EE_ACTIONS::updateSymbols );
     toolsMenu->Add( EE_ACTIONS::rescueSymbols );
     toolsMenu->Add( EE_ACTIONS::remapSymbols );
 

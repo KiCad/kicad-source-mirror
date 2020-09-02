@@ -401,20 +401,28 @@ TOOL_ACTION EE_ACTIONS::updateFieldsFromLibrary( "eeschema.InteractiveEdit.updat
         update_fields_xpm );
 
 TOOL_ACTION EE_ACTIONS::changeSymbols( "eeschema.InteractiveEdit.changeSymbols",
-        AS_GLOBAL, 0, "", _( "Change Library Symbols..." ),
-        _( "Change library symbols in schematic" ), change_lib_symbols_in_schematic_xpm );
+        AS_GLOBAL, 0, "",
+        _( "Change Symbols..." ),
+        _( "Assign different symbols from the library" ),
+        change_lib_symbols_in_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::updateSymbols( "eeschema.InteractiveEdit.updateSymbols",
-        AS_GLOBAL, 0, "", _( "Update Library Symbols..." ),
-        _( "Update library symbols in schematic" ), update_lib_symbols_in_schematic_xpm );
+        AS_GLOBAL, 0, "",
+        _( "Update Symbols from Library..." ),
+        _( "Update symbols to include any changes from the library" ),
+        update_lib_symbols_in_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::changeSymbol( "eeschema.InteractiveEdit.changeSymbol",
-        AS_GLOBAL, 0, "", _( "Change Library Symbol..." ),
-        _( "Change library symbol for selected symbol" ), change_lib_symbols_in_schematic_xpm );
+        AS_GLOBAL, 0, "",
+        _( "Change Symbol..." ),
+        _( "Assign a different symbol from the library" ),
+        change_lib_symbols_in_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::updateSymbol( "eeschema.InteractiveEdit.updateSymbol",
-        AS_GLOBAL, 0, "", _( "Update Library Symbol..." ),
-        _( "Update library symbol for selected symbol" ), update_lib_symbols_in_schematic_xpm );
+        AS_GLOBAL, 0, "",
+        _( "Update Symbol..." ),
+        _( "Update symbol to include any changes from the library" ),
+        update_lib_symbols_in_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::assignNetclass( "eeschema.InteractiveEdit.assignNetclass",
         AS_GLOBAL, 0, "",
@@ -564,8 +572,8 @@ TOOL_ACTION EE_ACTIONS::rescueSymbols( "eeschema.EditorControl.rescueSymbols",
 
 TOOL_ACTION EE_ACTIONS::remapSymbols( "eeschema.EditorControl.remapSymbols",
         AS_GLOBAL, 0, "",
-        _( "Remap Symbols..." ),
-        _( "Remap legacy library symbols to symbol library table" ),
+        _( "Remap Legacy Library Symbols..." ),
+        _( "Remap library symbol references in legacy schematics to the symbol library table" ),
         rescue_xpm );
 
 TOOL_ACTION EE_ACTIONS::refreshSymbolFromLibrary( "eeschema.EditorControl.refreshSymbolFromLibrary",
