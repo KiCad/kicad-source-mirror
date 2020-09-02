@@ -1217,24 +1217,24 @@ bool DRC::doPadToPadsDrc( BOARD_COMMIT& aCommit, D_PAD* aRefPad, D_PAD** aStart,
         for( PCB_LAYER_ID layer : aRefPad->GetLayerSet().Seq() )
         {
             int  minClearance = aRefPad->GetClearance( layer, pad, &m_clearanceSource );
-        int  clearanceAllowed = minClearance - m_pcb->GetDesignSettings().GetDRCEpsilon();
-        int  actual;
+            int  clearanceAllowed = minClearance - m_pcb->GetDesignSettings().GetDRCEpsilon();
+            int  actual;
 
-        if( aRefPad->Collide( pad, clearanceAllowed, &actual ) )
-        {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+            if( aRefPad->Collide( pad, clearanceAllowed, &actual ) )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                          m_clearanceSource,
-                          MessageTextFromValue( userUnits(), minClearance, true ),
-                          MessageTextFromValue( userUnits(), actual, true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              m_clearanceSource,
+                              MessageTextFromValue( userUnits(), minClearance, true ),
+                              MessageTextFromValue( userUnits(), actual, true ) );
 
-            drcItem->SetErrorMessage( m_msg );
-            drcItem->SetItems( aRefPad, pad );
+                drcItem->SetErrorMessage( m_msg );
+                drcItem->SetItems( aRefPad, pad );
 
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
-            addMarkerToPcb( aCommit, marker );
-            return false;
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
+                addMarkerToPcb( aCommit, marker );
+                return false;
             }
         }
     }
