@@ -418,6 +418,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
+                bool requestRedraw3Dview = false;
+
                 VECTOR2I mousePos( controls->GetMousePosition() );
 
                 m_cursor = grid.BestSnapAnchor( mousePos, item_layers, sel_items );
@@ -450,7 +452,13 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     // group and not its descendants.
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
                         static_cast<BOARD_ITEM*>( item )->Move( movement );
+
+                    if( item->Type() == PCB_MODULE_T )
+                        requestRedraw3Dview = true;
                 }
+
+                if( requestRedraw3Dview )
+                    editFrame->Redraw3Dview();
 
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
             }
