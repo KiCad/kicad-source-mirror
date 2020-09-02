@@ -26,12 +26,13 @@
 #define _DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_H_
 
 #include <dialog_edit_component_in_schematic_base.h>
-
 #include <fields_grid_table.h>
+#include <sch_pin.h>
 
 
-class SCH_EDIT_FRAME;
 class LIB_PART;
+class SCH_PIN_TABLE_DATA_MODEL;
+class SCH_EDIT_FRAME;
 
 
 // The dialog can be closed for several reasons.
@@ -71,7 +72,8 @@ private:
     void OnMoveUp( wxCommandEvent& event ) override;
     void OnMoveDown( wxCommandEvent& event ) override;
     void OnEditSpiceModel( wxCommandEvent& event ) override;
-    void OnEditPinTable( wxCommandEvent& event ) override;
+    void OnPinTableColSort( wxGridEvent& aEvent );
+    void OnPinTableCellEdited( wxGridEvent& event ) override;
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
@@ -86,7 +88,7 @@ private:
     void AdjustGridColumns( int aWidth );
 
 private:
-    SCH_COMPONENT* m_cmp;
+    SCH_COMPONENT* m_comp;
     LIB_PART*      m_part;
 
     int            m_width;
@@ -95,6 +97,7 @@ private:
     wxString       m_shownColumns;
 
     FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
+    SCH_PIN_TABLE_DATA_MODEL*     m_dataModel;
 };
 
 #endif // _DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_H_

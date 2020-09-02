@@ -30,7 +30,8 @@ class WX_GRID;
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
-#include <wx/statline.h>
+#include <wx/panel.h>
+#include <wx/notebook.h>
 #include <wx/textctrl.h>
 #include <wx/dialog.h>
 
@@ -45,7 +46,9 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		WX_GRID* m_grid;
+		wxNotebook* m_notebook1;
+		wxPanel* generalPage;
+		WX_GRID* m_fieldsGrid;
 		wxBitmapButton* m_bpAdd;
 		wxBitmapButton* m_bpMoveUp;
 		wxBitmapButton* m_bpMoveDown;
@@ -64,9 +67,9 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxButton* m_updateSymbolBtn;
 		wxButton* m_changeSymbolBtn;
 		wxButton* m_editSchematicSymbolBtn;
-		wxButton* m_pinTableButton;
 		wxButton* m_editLibrarySymbolBtn;
-		wxStaticLine* m_staticline1;
+		wxPanel* m_pinTablePage;
+		WX_GRID* m_pinGrid;
 		wxStaticText* m_libraryIDLabel;
 		wxTextCtrl* m_tcLibraryID;
 		wxButton* m_spiceFieldsButton;
@@ -85,8 +88,8 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 		virtual void OnUpdateSymbol( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExchangeSymbol( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditSymbol( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnEditPinTable( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditLibrarySymbol( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPinTableCellEdited( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 

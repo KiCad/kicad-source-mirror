@@ -94,8 +94,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_edit_sheet_pin.cpp
     dialogs/dialog_sch_import_settings.cpp
     dialogs/dialog_sch_import_settings_base.cpp
-    dialogs/dialog_sch_pin_table.cpp
-    dialogs/dialog_sch_pin_table_base.cpp
     dialogs/dialog_sch_sheet_props.cpp
     dialogs/dialog_sch_sheet_props_base.cpp
     dialogs/dialog_schematic_find.cpp

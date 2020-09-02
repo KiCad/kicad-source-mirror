@@ -24,10 +24,12 @@
 #include "dialog_edit_component_in_schematic.h"
 
 #include <wx/tooltip.h>
-
+#include <grid_tricks.h>
 #include <confirm.h>
 #include <kiface_i.h>
+#include <pin_number.h>
 #include <menus_helpers.h>
+#include <widgets/grid_icon_text_helpers.h>
 #include <widgets/wx_grid.h>
 #include <settings/settings_manager.h>
 #include <ee_collectors.h>
@@ -38,19 +40,240 @@
 #include <schematic.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
-#include <dialog_sch_pin_table.h>
 
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
 #endif /* KICAD_SPICE */
 
 
+enum PIN_TABLE_COL_ORDER
+{
+    COL_NUMBER,
+    COL_BASE_NAME,
+    COL_ALT_NAME,
+    COL_TYPE,
+    COL_SHAPE,
+
+    COL_COUNT       // keep as last
+};
+
+
+class SCH_PIN_TABLE_DATA_MODEL : public wxGridTableBase, public std::vector<SCH_PIN>
+{
+protected:
+    std::vector<wxGridCellAttr*> m_nameAttrs;
+    wxGridCellAttr*              m_readOnlyAttr;
+    wxGridCellAttr*              m_typeAttr;
+    wxGridCellAttr*              m_shapeAttr;
+
+public:
+    SCH_PIN_TABLE_DATA_MODEL() :
+            m_readOnlyAttr( nullptr ),
+            m_typeAttr( nullptr ),
+            m_shapeAttr( nullptr )
+    {
+    }
+
+    ~SCH_PIN_TABLE_DATA_MODEL()
+    {
+        for( wxGridCellAttr* attr : m_nameAttrs )
+            attr->DecRef();
+
+        m_readOnlyAttr->DecRef();
+        m_typeAttr->DecRef();
+        m_shapeAttr->DecRef();
+    }
+
+    void BuildAttrs()
+    {
+        m_readOnlyAttr = new wxGridCellAttr;
+        m_readOnlyAttr->SetReadOnly( true );
+
+        for( const SCH_PIN& pin : *this )
+        {
+            LIB_PIN*        lib_pin = pin.GetLibPin();
+            wxGridCellAttr* attr = nullptr;
+
+            if( lib_pin->GetAlternates().empty() )
+            {
+                attr = new wxGridCellAttr;
+                attr->SetReadOnly( true );
+            }
+            else
+            {
+                wxArrayString choices;
+                choices.push_back( lib_pin->GetName() );
+
+                for( const std::pair<const wxString, LIB_PIN::ALT>& alt : lib_pin->GetAlternates() )
+                    choices.push_back( alt.first );
+
+                attr = new wxGridCellAttr();
+                attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
+            }
+
+            m_nameAttrs.push_back( attr );
+        }
+
+        m_typeAttr = new wxGridCellAttr;
+        m_typeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinTypeIcons(), PinTypeNames() ) );
+        m_typeAttr->SetReadOnly( true );
+
+        m_shapeAttr = new wxGridCellAttr;
+        m_shapeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinShapeIcons(), PinShapeNames() ) );
+        m_shapeAttr->SetReadOnly( true );
+    }
+
+    int GetNumberRows() override { return (int) size(); }
+    int GetNumberCols() override { return COL_COUNT; }
+
+    wxString GetColLabelValue( int aCol ) override
+    {
+        switch( aCol )
+        {
+        case COL_NUMBER:    return _( "Number" );
+        case COL_BASE_NAME: return _( "Base Name" );
+        case COL_ALT_NAME:  return _( "Alternate Assignment" );
+        case COL_TYPE:      return _( "Electrical Type" );
+        case COL_SHAPE:     return _( "Graphic Style" );
+        default:   wxFAIL;  return wxEmptyString;
+        }
+    }
+
+    bool IsEmptyCell( int row, int col ) override
+    {
+        return false;   // don't allow adjacent cell overflow, even if we are actually empty
+    }
+
+    wxString GetValue( int aRow, int aCol ) override
+    {
+        return GetValue( at( aRow ), aCol );
+    }
+
+    static wxString GetValue( const SCH_PIN& aPin, int aCol )
+    {
+        switch( aCol )
+        {
+        case COL_NUMBER:    return aPin.GetNumber();
+        case COL_BASE_NAME: return aPin.GetLibPin()->GetName();
+        case COL_ALT_NAME:  return aPin.GetAlt();
+        case COL_TYPE:      return PinTypeNames()[static_cast<int>( aPin.GetType() )];
+        case COL_SHAPE:     return PinShapeNames()[static_cast<int>( aPin.GetShape() )];
+        default:   wxFAIL;  return wxEmptyString;
+        }
+    }
+
+    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  ) override
+    {
+        switch( aCol )
+        {
+        case COL_NUMBER:
+        case COL_BASE_NAME:
+            m_readOnlyAttr->IncRef();
+            return m_readOnlyAttr;
+
+        case COL_ALT_NAME:
+            m_nameAttrs[ aRow ]->IncRef();
+            return m_nameAttrs[ aRow ];
+
+        case COL_TYPE:
+            m_typeAttr->IncRef();
+            return m_typeAttr;
+
+        case COL_SHAPE:
+            m_shapeAttr->IncRef();
+            return m_shapeAttr;
+
+        default:
+            wxFAIL;
+            return nullptr;
+        }
+    }
+
+    void SetValue( int aRow, int aCol, const wxString &aValue ) override
+    {
+        switch( aCol )
+        {
+        case COL_ALT_NAME:
+            if( aValue == at( aRow ).GetName() )
+                at( aRow ).SetAlt( wxEmptyString );
+            else
+                at( aRow ).SetAlt( aValue );
+            break;
+
+        case COL_NUMBER:
+        case COL_BASE_NAME:
+        case COL_TYPE:
+        case COL_SHAPE:
+            // Read-only.
+            break;
+
+        default:
+            wxFAIL;
+            break;
+        }
+    }
+
+    static bool compare( const SCH_PIN& lhs, const SCH_PIN& rhs, int sortCol, bool ascending )
+    {
+        wxString lhStr = GetValue( lhs, sortCol );
+        wxString rhStr = GetValue( rhs, sortCol );
+
+        if( lhStr == rhStr )
+        {
+            // Secondary sort key is always COL_NUMBER
+            sortCol = COL_NUMBER;
+            lhStr = GetValue( lhs, sortCol );
+            rhStr = GetValue( rhs, sortCol );
+        }
+
+        bool res;
+
+        // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
+        // to get the opposite sort.  i.e. ~(a<b) != (a>b)
+        auto cmp = [ ascending ]( const auto a, const auto b )
+                   {
+                       if( ascending )
+                           return a < b;
+                       else
+                           return b < a;
+                   };
+
+        switch( sortCol )
+        {
+        case COL_NUMBER:
+        case COL_BASE_NAME:
+        case COL_ALT_NAME:
+            res = cmp( PinNumbers::Compare( lhStr, rhStr ), 0 );
+            break;
+        case COL_TYPE:
+        case COL_SHAPE:
+            res = cmp( lhStr.CmpNoCase( rhStr ), 0 );
+            break;
+        default:
+            res = cmp( StrNumCmp( lhStr, rhStr ), 0 );
+            break;
+        }
+
+        return res;
+    }
+
+    void SortRows( int aSortCol, bool ascending )
+    {
+        std::sort( begin(), end(),
+                   [ aSortCol, ascending ]( const SCH_PIN& lhs, const SCH_PIN& rhs ) -> bool
+                   {
+                       return compare( lhs, rhs, aSortCol, ascending );
+                   } );
+    }
+};
+
+
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT_FRAME* aParent,
                                                                         SCH_COMPONENT* aComponent ) :
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE( aParent )
 {
-    m_cmp = aComponent;
-    m_part = m_cmp->GetPartRef().get();
+    m_comp = aComponent;
+    m_part = m_comp->GetPartRef().get();
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_part );
 
     m_width = 0;
@@ -62,7 +285,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
 #endif /* not KICAD_SPICE */
 
     // disable some options inside the edit dialog which can cause problems while dragging
-    if( m_cmp->IsDragging() )
+    if( m_comp->IsDragging() )
     {
         m_orientationLabel->Disable();
         m_orientationCtrl->Disable();
@@ -71,10 +294,11 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     }
 
     // Give a bit more room for combobox editors
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
+    m_fieldsGrid->SetDefaultRowSize( m_fieldsGrid->GetDefaultRowSize() + 4 );
+    m_pinGrid->SetDefaultRowSize( m_pinGrid->GetDefaultRowSize() + 4 );
 
-    m_grid->SetTable( m_fields );
-    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
+    m_fieldsGrid->SetTable( m_fields );
+    m_fieldsGrid->PushEventHandler( new FIELDS_GRID_TRICKS( m_fieldsGrid, this ) );
 
     // Show/hide columns according to user's preference
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
@@ -82,8 +306,20 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     if( cfg )
     {
         m_shownColumns = cfg->m_Appearance.edit_component_visible_columns;
-        m_grid->ShowHideColumns( m_shownColumns );
+        m_fieldsGrid->ShowHideColumns( m_shownColumns );
     }
+
+    m_dataModel = new SCH_PIN_TABLE_DATA_MODEL();
+
+    // Make a copy of the pins for editing
+    for( const std::unique_ptr<SCH_PIN>& pin : m_comp->GetRawPins() )
+        m_dataModel->push_back( *pin );
+
+    m_dataModel->SortRows( COL_NUMBER, true );
+    m_dataModel->BuildAttrs();
+
+    m_pinGrid->SetTable( m_dataModel );
+    m_pinGrid->PushEventHandler( new GRID_TRICKS( m_pinGrid ) );
 
     // Set font size for items showing long strings:
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -102,9 +338,13 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     m_bpMoveDown->SetBitmap( KiBitmap( small_down_xpm ) );
 
     // wxFormBuilder doesn't include this event...
-    m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
-                     wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ),
-                     NULL, this );
+    m_fieldsGrid->Connect( wxEVT_GRID_CELL_CHANGING,
+                    wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ),
+                    nullptr, this );
+
+    m_pinGrid->Connect( wxEVT_GRID_COL_SORT,
+                    wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnPinTableColSort ),
+                    nullptr, this );
 
     FinishDialogSettings();
 }
@@ -115,17 +355,22 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC()
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( cfg )
-        cfg->m_Appearance.edit_component_visible_columns = m_grid->GetShownColumns();
+        cfg->m_Appearance.edit_component_visible_columns = m_fieldsGrid->GetShownColumns();
 
     // Prevents crash bug in wxGrid's d'tor
-    m_grid->DestroyTable( m_fields );
+    m_fieldsGrid->DestroyTable( m_fields );
+    m_pinGrid->DestroyTable( m_dataModel );
 
-    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                        wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ),
-                        NULL, this );
+    m_fieldsGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                    wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ),
+                    nullptr, this );
+    m_pinGrid->Disconnect( wxEVT_GRID_COL_SORT,
+                           wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnPinTableColSort ),
+                           nullptr, this );
 
     // Delete the GRID_TRICKS.
-    m_grid->PopEventHandler( true );
+    m_fieldsGrid->PopEventHandler( true );
+    m_pinGrid->PopEventHandler( true );
 }
 
 
@@ -143,12 +388,12 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     std::set<wxString> defined;
 
     // Push a copy of each field into m_updateFields
-    for( int i = 0; i < m_cmp->GetFieldCount(); ++i )
+    for( int i = 0; i < m_comp->GetFieldCount(); ++i )
     {
-        SCH_FIELD field( *m_cmp->GetField( i ) );
+        SCH_FIELD field( *m_comp->GetField( i ) );
 
         // change offset to be symbol-relative
-        field.Offset( -m_cmp->GetPosition() );
+        field.Offset( -m_comp->GetPosition() );
 
         defined.insert( field.GetName() );
         m_fields->push_back( field );
@@ -160,7 +405,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {
-            SCH_FIELD field( wxPoint( 0, 0 ), -1, m_cmp, templateFieldname.m_Name );
+            SCH_FIELD field( wxPoint( 0, 0 ), -1, m_comp, templateFieldname.m_Name );
             field.SetVisible( templateFieldname.m_Visible );
             m_fields->push_back( field );
         }
@@ -168,17 +413,17 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
 
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->size() );
-    m_grid->ProcessTableMessage( msg );
-    AdjustGridColumns( m_grid->GetRect().GetWidth() );
+    m_fieldsGrid->ProcessTableMessage( msg );
+    AdjustGridColumns( m_fieldsGrid->GetRect().GetWidth() );
 
     // If a multi-unit component, set up the unit selector and interchangeable checkbox.
-    if( m_cmp->GetUnitCount() > 1 )
+    if( m_comp->GetUnitCount() > 1 )
     {
-        for( int ii = 1; ii <= m_cmp->GetUnitCount(); ii++ )
+        for( int ii = 1; ii <= m_comp->GetUnitCount(); ii++ )
             m_unitChoice->Append( LIB_PART::SubReference( ii, false ) );
 
-        if( m_cmp->GetUnit() <= ( int )m_unitChoice->GetCount() )
-            m_unitChoice->SetSelection( m_cmp->GetUnit() - 1 );
+        if( m_comp->GetUnit() <= ( int )m_unitChoice->GetCount() )
+            m_unitChoice->SetSelection( m_comp->GetUnit() - 1 );
     }
     else
     {
@@ -188,14 +433,14 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
 
     if( m_part != nullptr && m_part->HasConversion() )
     {
-        if( m_cmp->GetConvert() > LIB_ITEM::LIB_CONVERT::BASE )
+        if( m_comp->GetConvert() > LIB_ITEM::LIB_CONVERT::BASE )
             m_cbAlternateSymbol->SetValue( true );
     }
     else
         m_cbAlternateSymbol->Enable( false );
 
     // Set the symbol orientation and mirroring.
-    int orientation = m_cmp->GetOrientation() & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
+    int orientation = m_comp->GetOrientation() & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
 
     switch( orientation )
     {
@@ -206,7 +451,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     case CMP_ORIENT_180: m_orientationCtrl->SetSelection( 3 ); break;
     }
 
-    int mirror = m_cmp->GetOrientation() & ( CMP_MIRROR_X | CMP_MIRROR_Y );
+    int mirror = m_comp->GetOrientation() & ( CMP_MIRROR_X | CMP_MIRROR_Y );
 
     switch( mirror )
     {
@@ -215,14 +460,14 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     case CMP_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 ); break;
     }
 
-    m_cbExcludeFromBom->SetValue( !m_cmp->GetIncludeInBom() );
-    m_cbExcludeFromBoard->SetValue( !m_cmp->GetIncludeOnBoard() );
+    m_cbExcludeFromBom->SetValue( !m_comp->GetIncludeInBom() );
+    m_cbExcludeFromBoard->SetValue( !m_comp->GetIncludeOnBoard() );
 
     m_ShowPinNumButt->SetValue( m_part->ShowPinNumbers() );
     m_ShowPinNameButt->SetValue( m_part->ShowPinNames() );
 
     // Set the component's library name.
-    m_tcLibraryID->SetValue( m_cmp->GetLibId().Format() );
+    m_tcLibraryID->SetValue( m_comp->GetLibId().Format() );
 
     Layout();
 
@@ -235,7 +480,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSpiceModel( wxCommandEvent& event
 #ifdef KICAD_SPICE
     int diff = m_fields->size();
 
-    DIALOG_SPICE_MODEL dialog( this, *m_cmp, m_fields );
+    DIALOG_SPICE_MODEL dialog( this, *m_comp, m_fields );
 
     if( dialog.ShowModal() != wxID_OK )
         return;
@@ -245,24 +490,16 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSpiceModel( wxCommandEvent& event
     if( diff > 0 )
     {
         wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, diff );
-        m_grid->ProcessTableMessage( msg );
+        m_fieldsGrid->ProcessTableMessage( msg );
     }
     else if( diff < 0 )
     {
         wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, -diff );
-        m_grid->ProcessTableMessage( msg );
+        m_fieldsGrid->ProcessTableMessage( msg );
     }
 
-    m_grid->ForceRefresh();
+    m_fieldsGrid->ForceRefresh();
 #endif /* KICAD_SPICE */
-}
-
-
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditPinTable( wxCommandEvent& event )
-{
-    DIALOG_SCH_PIN_TABLE dialog( GetParent(), m_cmp );
-
-    dialog.ShowModal();
 }
 
 
@@ -279,7 +516,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
     wxString msg;
     LIB_ID   id;
 
-    if( !m_grid->CommitPendingChanges() || !m_grid->Validate() )
+    if( !m_fieldsGrid->CommitPendingChanges() || !m_fieldsGrid->Validate() )
         return false;
 
     if( !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE ).GetText() ) )
@@ -318,6 +555,12 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
 
+    if( !m_fieldsGrid->CommitPendingChanges() )
+        return false;
+
+    if( !m_pinGrid->CommitPendingChanges() )
+        return false;
+
     SCH_SCREEN* currentScreen = GetParent()->GetScreen();
     SCHEMATIC&  schematic = GetParent()->Schematic();
 
@@ -325,62 +568,62 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
     // This needs to be done before the LIB_ID is changed to prevent stale library symbols in
     // the schematic file.
-    currentScreen->Remove( m_cmp );
+    currentScreen->Remove( m_comp );
 
     wxString msg;
 
     // save old cmp in undo list if not already in edit, or moving ...
-    if( m_cmp->GetEditFlags() == 0 )
-        GetParent()->SaveCopyInUndoList( currentScreen, m_cmp, UNDO_REDO::CHANGED, false );
+    if( m_comp->GetEditFlags() == 0 )
+        GetParent()->SaveCopyInUndoList( currentScreen, m_comp, UNDO_REDO::CHANGED, false );
 
     // Save current flags which could be modified by next change settings
-    STATUS_FLAGS flags = m_cmp->GetFlags();
+    STATUS_FLAGS flags = m_comp->GetFlags();
 
     // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
     if( m_cbAlternateSymbol->IsEnabled() && m_cbAlternateSymbol->GetValue() )
-        m_cmp->SetConvert( LIB_ITEM::LIB_CONVERT::DEMORGAN );
+        m_comp->SetConvert( LIB_ITEM::LIB_CONVERT::DEMORGAN );
     else
-        m_cmp->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
+        m_comp->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
 
     //Set the part selection in multiple part per package
     int unit_selection = m_unitChoice->IsEnabled() ? m_unitChoice->GetSelection() + 1 : 1;
-    m_cmp->SetUnitSelection( &GetParent()->GetCurrentSheet(), unit_selection );
-    m_cmp->SetUnit( unit_selection );
+    m_comp->SetUnitSelection( &GetParent()->GetCurrentSheet(), unit_selection );
+    m_comp->SetUnit( unit_selection );
 
     switch( m_orientationCtrl->GetSelection() )
     {
-    case 0: m_cmp->SetOrientation( CMP_ORIENT_0 );   break;
-    case 1: m_cmp->SetOrientation( CMP_ORIENT_90 );  break;
-    case 2: m_cmp->SetOrientation( CMP_ORIENT_270 ); break;
-    case 3: m_cmp->SetOrientation( CMP_ORIENT_180 ); break;
+    case 0: m_comp->SetOrientation( CMP_ORIENT_0 );   break;
+    case 1: m_comp->SetOrientation( CMP_ORIENT_90 );  break;
+    case 2: m_comp->SetOrientation( CMP_ORIENT_270 ); break;
+    case 3: m_comp->SetOrientation( CMP_ORIENT_180 ); break;
     }
 
     switch( m_mirrorCtrl->GetSelection() )
     {
     case 0:                                        break;
-    case 1: m_cmp->SetOrientation( CMP_MIRROR_X ); break;
-    case 2: m_cmp->SetOrientation( CMP_MIRROR_Y ); break;
+    case 1: m_comp->SetOrientation( CMP_MIRROR_X ); break;
+    case 2: m_comp->SetOrientation( CMP_MIRROR_Y ); break;
     }
 
     m_part->SetShowPinNames( m_ShowPinNameButt->GetValue() );
     m_part->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
 
     // Restore m_Flag modified by SetUnit() and other change settings
-    m_cmp->ClearFlags();
-    m_cmp->SetFlags( flags );
+    m_comp->ClearFlags();
+    m_comp->SetFlags( flags );
 
     // change all field positions from relative to absolute
     for( unsigned i = 0;  i < m_fields->size();  ++i )
-        m_fields->at( i ).Offset( m_cmp->GetPosition() );
+        m_fields->at( i ).Offset( m_comp->GetPosition() );
 
-    LIB_PART* entry = GetParent()->GetLibPart( m_cmp->GetLibId() );
+    LIB_PART* entry = GetParent()->GetLibPart( m_comp->GetLibId() );
 
     if( entry && entry->IsPower() )
-        m_fields->at( VALUE ).SetText( m_cmp->GetLibId().GetLibItemName() );
+        m_fields->at( VALUE ).SetText( m_comp->GetLibId().GetLibItemName() );
 
     // Push all fields to the component -except- for those which are TEMPLATE_FIELDNAMES
     // with empty values.
-    SCH_FIELDS& fields = m_cmp->GetFields();
+    SCH_FIELDS& fields = m_comp->GetFields();
 
     fields.clear();
 
@@ -409,21 +652,21 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given component, in a complex hierarchy, there are more than one
     // reference.
-    m_cmp->SetRef( &GetParent()->GetCurrentSheet(), m_fields->at( REFERENCE ).GetText() );
+    m_comp->SetRef( &GetParent()->GetCurrentSheet(), m_fields->at( REFERENCE ).GetText() );
 
-    m_cmp->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
-    m_cmp->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
+    m_comp->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
+    m_comp->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
 
     // The value, footprint and datasheet fields and exclude from bill of materials setting
     // should be kept in sync in multi-unit parts.
-    if( m_cmp->GetUnitCount() > 1 )
+    if( m_comp->GetUnitCount() > 1 )
     {
         for( SCH_SHEET_PATH& sheet : GetParent()->Schematic().GetSheets() )
         {
             SCH_SCREEN*                 screen = sheet.LastScreen();
             std::vector<SCH_COMPONENT*> otherUnits;
 
-            CollectOtherUnits( sheet, m_cmp, &otherUnits );
+            CollectOtherUnits( sheet, m_comp, &otherUnits );
 
             for( SCH_COMPONENT* otherUnit : otherUnits )
             {
@@ -438,9 +681,17 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
         }
     }
 
-    currentScreen->Append( m_cmp );
+    // Update any assignments
+    for( const SCH_PIN& model_pin : *m_dataModel )
+    {
+        // map from the edited copy back to the "real" pin in the component
+        SCH_PIN* src_pin = m_comp->GetPin( model_pin.GetLibPin() );
+        src_pin->SetAlt( model_pin.GetAlt() );
+    }
+
+    currentScreen->Append( m_comp );
     GetParent()->TestDanglingEnds();
-    GetParent()->UpdateItem( m_cmp );
+    GetParent()->UpdateItem( m_comp );
     GetParent()->OnModify();
 
     // This must go after OnModify() so that the connectivity graph will have been updated.
@@ -452,7 +703,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging( wxGridEvent& event )
 {
-    wxGridCellEditor* editor = m_grid->GetCellEditor( event.GetRow(), event.GetCol() );
+    wxGridCellEditor* editor = m_fieldsGrid->GetCellEditor( event.GetRow(), event.GetCol() );
     wxControl* control = editor->GetControl();
 
     if( control && control->GetValidator() && !control->GetValidator()->Validate( control ) )
@@ -465,12 +716,12 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging( wxGridEvent& event 
     {
         wxString newName = event.GetString();
 
-        for( int i = 0; i < m_grid->GetNumberRows(); ++i )
+        for( int i = 0; i < m_fieldsGrid->GetNumberRows(); ++i )
         {
             if( i == event.GetRow() )
                 continue;
 
-            if( newName.CmpNoCase( m_grid->GetCellValue( i, FDC_NAME ) ) == 0 )
+            if( newName.CmpNoCase( m_fieldsGrid->GetCellValue( i, FDC_NAME ) ) == 0 )
             {
                 DisplayError( this, wxString::Format( _( "The name '%s' is already in use." ),
                                                       newName ) );
@@ -487,12 +738,12 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging( wxGridEvent& event 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
+    if( !m_fieldsGrid->CommitPendingChanges() )
         return;
 
-    SCHEMATIC_SETTINGS& settings = m_cmp->Schematic()->Settings();
+    SCHEMATIC_SETTINGS& settings = m_comp->Schematic()->Settings();
     int                 fieldID = m_fields->size();
-    SCH_FIELD           newField( wxPoint( 0, 0 ), fieldID, m_cmp,
+    SCH_FIELD           newField( wxPoint( 0, 0 ), fieldID, m_comp,
                                   TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID ) );
 
     newField.SetTextAngle( m_fields->at( REFERENCE ).GetTextAngle() );
@@ -502,19 +753,19 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
 
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
-    m_grid->ProcessTableMessage( msg );
+    m_fieldsGrid->ProcessTableMessage( msg );
 
-    m_grid->MakeCellVisible( (int) m_fields->size() - 1, 0 );
-    m_grid->SetGridCursor( (int) m_fields->size() - 1, 0 );
+    m_fieldsGrid->MakeCellVisible( (int) m_fields->size() - 1, 0 );
+    m_fieldsGrid->SetGridCursor( (int) m_fields->size() - 1, 0 );
 
-    m_grid->EnableCellEditControl();
-    m_grid->ShowCellEditControl();
+    m_fieldsGrid->EnableCellEditControl();
+    m_fieldsGrid->ShowCellEditControl();
 }
 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnDeleteField( wxCommandEvent& event )
 {
-    int curRow = m_grid->GetGridCursorRow();
+    int curRow = m_fieldsGrid->GetGridCursorRow();
 
     if( curRow < 0 )
     {
@@ -527,38 +778,38 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnDeleteField( wxCommandEvent& event )
         return;
     }
 
-    m_grid->CommitPendingChanges( true /* quiet mode */ );
+    m_fieldsGrid->CommitPendingChanges( true /* quiet mode */ );
 
     m_fields->erase( m_fields->begin() + curRow );
 
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, curRow, 1 );
-    m_grid->ProcessTableMessage( msg );
+    m_fieldsGrid->ProcessTableMessage( msg );
 
-    if( m_grid->GetNumberRows() > 0 )
+    if( m_fieldsGrid->GetNumberRows() > 0 )
     {
-        m_grid->MakeCellVisible( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
-        m_grid->SetGridCursor( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
+        m_fieldsGrid->MakeCellVisible( std::max( 0, curRow-1 ), m_fieldsGrid->GetGridCursorCol() );
+        m_fieldsGrid->SetGridCursor( std::max( 0, curRow-1 ), m_fieldsGrid->GetGridCursorCol() );
     }
 }
 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveUp( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
+    if( !m_fieldsGrid->CommitPendingChanges() )
         return;
 
-    int i = m_grid->GetGridCursorRow();
+    int i = m_fieldsGrid->GetGridCursorRow();
 
     if( i > MANDATORY_FIELDS )
     {
         SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
         m_fields->insert( m_fields->begin() + i - 1, tmp );
-        m_grid->ForceRefresh();
+        m_fieldsGrid->ForceRefresh();
 
-        m_grid->SetGridCursor( i - 1, m_grid->GetGridCursorCol() );
-        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
+        m_fieldsGrid->SetGridCursor( i - 1, m_fieldsGrid->GetGridCursorCol() );
+        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(), m_fieldsGrid->GetGridCursorCol() );
     }
     else
     {
@@ -569,20 +820,20 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveUp( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveDown( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
+    if( !m_fieldsGrid->CommitPendingChanges() )
         return;
 
-    int i = m_grid->GetGridCursorRow();
+    int i = m_fieldsGrid->GetGridCursorRow();
 
-    if( i >= MANDATORY_FIELDS && i < m_grid->GetNumberRows() - 1 )
+    if( i >= MANDATORY_FIELDS && i < m_fieldsGrid->GetNumberRows() - 1 )
     {
         SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
         m_fields->insert( m_fields->begin() + i + 1, tmp );
-        m_grid->ForceRefresh();
+        m_fieldsGrid->ForceRefresh();
 
-        m_grid->SetGridCursor( i + 1, m_grid->GetGridCursorCol() );
-        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
+        m_fieldsGrid->SetGridCursor( i + 1, m_fieldsGrid->GetGridCursorCol() );
+        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(), m_fieldsGrid->GetGridCursorCol() );
     }
     else
     {
@@ -615,45 +866,95 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnExchangeSymbol( wxCommandEvent&  )
 }
 
 
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnPinTableCellEdited( wxGridEvent& aEvent )
+{
+    int row = aEvent.GetRow();
+
+    if( m_pinGrid->GetCellValue( row, COL_ALT_NAME ) == m_dataModel->GetValue( row, COL_BASE_NAME ) )
+        m_dataModel->SetValue( row, COL_ALT_NAME, wxEmptyString );
+
+    // These are just to get the cells refreshed
+    m_dataModel->SetValue( row, COL_TYPE, m_dataModel->GetValue( row, COL_TYPE ) );
+    m_dataModel->SetValue( row, COL_SHAPE, m_dataModel->GetValue( row, COL_SHAPE ) );
+
+    m_modified = true;
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnPinTableColSort( wxGridEvent& aEvent )
+{
+    int sortCol = aEvent.GetCol();
+    bool ascending;
+
+    // This is bonkers, but wxWidgets doesn't tell us ascending/descending in the
+    // event, and if we ask it will give us pre-event info.
+    if( m_pinGrid->IsSortingBy( sortCol ) )
+        // same column; invert ascending
+        ascending = !m_pinGrid->IsSortOrderAscending();
+    else
+        // different column; start with ascending
+        ascending = true;
+
+    m_dataModel->SortRows( sortCol, ascending );
+}
+
+
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::AdjustGridColumns( int aWidth )
 {
+    wxGridUpdateLocker deferRepaintsTillLeavingScope;
+
     m_width = aWidth;
+
     // Account for scroll bars
-    aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
+    int fieldsWidth = aWidth - ( m_fieldsGrid->GetSize().x - m_fieldsGrid->GetClientSize().x );
+    int pinTblWidth = aWidth - ( m_pinGrid->GetSize().x - m_pinGrid->GetClientSize().x );
 
-    m_grid->AutoSizeColumn( 0 );
+    m_fieldsGrid->AutoSizeColumn( 0 );
 
-    int fixedColsWidth = m_grid->GetColSize( 0 );
+    int fixedColsWidth = m_fieldsGrid->GetColSize( 0 );
 
-    for( int i = 2; i < m_grid->GetNumberCols(); i++ )
-        fixedColsWidth += m_grid->GetColSize( i );
+    for( int i = 2; i < m_fieldsGrid->GetNumberCols(); i++ )
+        fixedColsWidth += m_fieldsGrid->GetColSize( i );
 
-    m_grid->SetColSize( 1, aWidth - fixedColsWidth );
+    m_fieldsGrid->SetColSize( 1, fieldsWidth - fixedColsWidth );
+
+    // Stretch the Base Name and Alternate Assignment columns to fit.
+    for( int i = 0; i < COL_COUNT; ++i )
+    {
+        if( i != COL_BASE_NAME && i != COL_ALT_NAME )
+            pinTblWidth -= m_pinGrid->GetColSize( i );
+    }
+
+    // Why?  I haven't a clue....
+    pinTblWidth += 22;
+
+    m_pinGrid->SetColSize( COL_BASE_NAME, pinTblWidth / 2 );
+    m_pinGrid->SetColSize( COL_ALT_NAME, pinTblWidth / 2 );
 }
 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    wxString shownColumns = m_grid->GetShownColumns();
+    wxString shownColumns = m_fieldsGrid->GetShownColumns();
 
     if( shownColumns != m_shownColumns )
     {
         m_shownColumns = shownColumns;
 
-        if( !m_grid->IsCellEditControlShown() )
-            AdjustGridColumns( m_grid->GetRect().GetWidth() );
+        if( !m_fieldsGrid->IsCellEditControlShown() )
+            AdjustGridColumns( m_fieldsGrid->GetRect().GetWidth() );
     }
 
     // Handle a delayed focus
     if( m_delayedFocusRow >= 0 )
     {
-        m_grid->SetFocus();
-        m_grid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
-        m_grid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
+        m_fieldsGrid->SetFocus();
+        m_fieldsGrid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
+        m_fieldsGrid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
 
 
-        m_grid->EnableCellEditControl( true );
-        m_grid->ShowCellEditControl();
+        m_fieldsGrid->EnableCellEditControl( true );
+        m_fieldsGrid->ShowCellEditControl();
 
         m_delayedFocusRow = -1;
         m_delayedFocusColumn = -1;

@@ -18,58 +18,63 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbFields;
-	sbFields = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fields") ), wxVERTICAL );
+	m_notebook1 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	generalPage = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* generalPageSizer;
+	generalPageSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_grid = new WX_GRID( sbFields->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	wxStaticBoxSizer* sbFields;
+	sbFields = new wxStaticBoxSizer( new wxStaticBox( generalPage, wxID_ANY, _("Fields") ), wxVERTICAL );
+
+	m_fieldsGrid = new WX_GRID( sbFields->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_grid->CreateGrid( 4, 11 );
-	m_grid->EnableEditing( true );
-	m_grid->EnableGridLines( true );
-	m_grid->EnableDragGridSize( false );
-	m_grid->SetMargins( 0, 0 );
+	m_fieldsGrid->CreateGrid( 4, 11 );
+	m_fieldsGrid->EnableEditing( true );
+	m_fieldsGrid->EnableGridLines( true );
+	m_fieldsGrid->EnableDragGridSize( false );
+	m_fieldsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_grid->SetColSize( 0, 72 );
-	m_grid->SetColSize( 1, 120 );
-	m_grid->SetColSize( 2, 48 );
-	m_grid->SetColSize( 3, 72 );
-	m_grid->SetColSize( 4, 72 );
-	m_grid->SetColSize( 5, 48 );
-	m_grid->SetColSize( 6, 48 );
-	m_grid->SetColSize( 7, 84 );
-	m_grid->SetColSize( 8, 84 );
-	m_grid->SetColSize( 9, 84 );
-	m_grid->SetColSize( 10, 84 );
-	m_grid->EnableDragColMove( false );
-	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 22 );
-	m_grid->SetColLabelValue( 0, _("Name") );
-	m_grid->SetColLabelValue( 1, _("Value") );
-	m_grid->SetColLabelValue( 2, _("Show") );
-	m_grid->SetColLabelValue( 3, _("H Align") );
-	m_grid->SetColLabelValue( 4, _("V Align") );
-	m_grid->SetColLabelValue( 5, _("Italic") );
-	m_grid->SetColLabelValue( 6, _("Bold") );
-	m_grid->SetColLabelValue( 7, _("Text Size") );
-	m_grid->SetColLabelValue( 8, _("Orientation") );
-	m_grid->SetColLabelValue( 9, _("X Position") );
-	m_grid->SetColLabelValue( 10, _("Y Position") );
-	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+	m_fieldsGrid->SetColSize( 0, 72 );
+	m_fieldsGrid->SetColSize( 1, 120 );
+	m_fieldsGrid->SetColSize( 2, 48 );
+	m_fieldsGrid->SetColSize( 3, 72 );
+	m_fieldsGrid->SetColSize( 4, 72 );
+	m_fieldsGrid->SetColSize( 5, 48 );
+	m_fieldsGrid->SetColSize( 6, 48 );
+	m_fieldsGrid->SetColSize( 7, 84 );
+	m_fieldsGrid->SetColSize( 8, 84 );
+	m_fieldsGrid->SetColSize( 9, 84 );
+	m_fieldsGrid->SetColSize( 10, 84 );
+	m_fieldsGrid->EnableDragColMove( false );
+	m_fieldsGrid->EnableDragColSize( true );
+	m_fieldsGrid->SetColLabelSize( 22 );
+	m_fieldsGrid->SetColLabelValue( 0, _("Name") );
+	m_fieldsGrid->SetColLabelValue( 1, _("Value") );
+	m_fieldsGrid->SetColLabelValue( 2, _("Show") );
+	m_fieldsGrid->SetColLabelValue( 3, _("H Align") );
+	m_fieldsGrid->SetColLabelValue( 4, _("V Align") );
+	m_fieldsGrid->SetColLabelValue( 5, _("Italic") );
+	m_fieldsGrid->SetColLabelValue( 6, _("Bold") );
+	m_fieldsGrid->SetColLabelValue( 7, _("Text Size") );
+	m_fieldsGrid->SetColLabelValue( 8, _("Orientation") );
+	m_fieldsGrid->SetColLabelValue( 9, _("X Position") );
+	m_fieldsGrid->SetColLabelValue( 10, _("Y Position") );
+	m_fieldsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
-	m_grid->EnableDragRowSize( true );
-	m_grid->SetRowLabelSize( 0 );
-	m_grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+	m_fieldsGrid->EnableDragRowSize( true );
+	m_fieldsGrid->SetRowLabelSize( 0 );
+	m_fieldsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
 
 	// Cell Defaults
-	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_grid->SetMinSize( wxSize( -1,180 ) );
+	m_fieldsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_fieldsGrid->SetMinSize( wxSize( -1,180 ) );
 
-	sbFields->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
+	sbFields->Add( m_fieldsGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bButtonSize;
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
@@ -104,13 +109,13 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	sbFields->Add( bButtonSize, 0, wxALL|wxEXPAND, 5 );
 
 
-	mainSizer->Add( sbFields, 1, wxALL|wxEXPAND, 10 );
+	generalPageSizer->Add( sbFields, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticBoxSizer* sbGeneralProps;
-	sbGeneralProps = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General") ), wxHORIZONTAL );
+	sbGeneralProps = new wxStaticBoxSizer( new wxStaticBox( generalPage, wxID_ANY, _("General") ), wxHORIZONTAL );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 3, 3 );
@@ -166,7 +171,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	bMiddleCol = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerPinTextOpts;
-	sbSizerPinTextOpts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pin Text") ), wxVERTICAL );
+	sbSizerPinTextOpts = new wxStaticBoxSizer( new wxStaticBox( generalPage, wxID_ANY, _("Pin Text") ), wxVERTICAL );
 
 	m_ShowPinNumButt = new wxCheckBox( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Show pin numbers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowPinNumButt->SetValue(true);
@@ -184,7 +189,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	bMiddleCol->Add( sbSizerPinTextOpts, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbAttributes;
-	sbAttributes = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Attributes") ), wxVERTICAL );
+	sbAttributes = new wxStaticBoxSizer( new wxStaticBox( generalPage, wxID_ANY, _("Attributes") ), wxVERTICAL );
 
 	m_cbExcludeFromBom = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExcludeFromBom->SetToolTip( _("This is useful for adding symbols for board footprints such as fiducials\nand logos that you do not want to appear in the bill of materials export") );
@@ -205,34 +210,87 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	wxBoxSizer* buttonsSizer;
 	buttonsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_updateSymbolBtn = new wxButton( this, wxID_ANY, _("Update Symbol from Library..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateSymbolBtn = new wxButton( generalPage, wxID_ANY, _("Update Symbol from Library..."), wxDefaultPosition, wxDefaultSize, 0 );
 	buttonsSizer->Add( m_updateSymbolBtn, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_changeSymbolBtn = new wxButton( this, wxID_ANY, _("Change Symbol..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_changeSymbolBtn = new wxButton( generalPage, wxID_ANY, _("Change Symbol..."), wxDefaultPosition, wxDefaultSize, 0 );
 	buttonsSizer->Add( m_changeSymbolBtn, 0, wxEXPAND|wxALL, 5 );
 
-	m_editSchematicSymbolBtn = new wxButton( this, wxID_ANY, _("Edit Symbol..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_editSchematicSymbolBtn = new wxButton( generalPage, wxID_ANY, _("Edit Symbol..."), wxDefaultPosition, wxDefaultSize, 0 );
 	buttonsSizer->Add( m_editSchematicSymbolBtn, 0, wxEXPAND|wxALL, 5 );
 
-	m_pinTableButton = new wxButton( this, wxID_ANY, _("Alternate Pin Assignments..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_pinTableButton->SetMinSize( wxSize( 112,-1 ) );
 
-	buttonsSizer->Add( m_pinTableButton, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 5 );
+	buttonsSizer->Add( 0, 20, 0, wxEXPAND, 5 );
 
-
-	buttonsSizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-	m_editLibrarySymbolBtn = new wxButton( this, wxID_ANY, _("Edit Library Symbol..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_editLibrarySymbolBtn = new wxButton( generalPage, wxID_ANY, _("Edit Library Symbol..."), wxDefaultPosition, wxDefaultSize, 0 );
 	buttonsSizer->Add( m_editLibrarySymbolBtn, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bLowerSizer->Add( buttonsSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLowerSizer->Add( buttonsSizer, 1, wxEXPAND|wxALL, 5 );
 
 
-	mainSizer->Add( bLowerSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	generalPageSizer->Add( bLowerSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	generalPage->SetSizer( generalPageSizer );
+	generalPage->Layout();
+	generalPageSizer->Fit( generalPage );
+	m_notebook1->AddPage( generalPage, _("General"), false );
+	m_pinTablePage = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* pinTableSizer;
+	pinTableSizer = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bMargins;
+	bMargins = new wxBoxSizer( wxVERTICAL );
+
+	m_pinGrid = new WX_GRID( m_pinTablePage, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+
+	// Grid
+	m_pinGrid->CreateGrid( 5, 5 );
+	m_pinGrid->EnableEditing( true );
+	m_pinGrid->EnableGridLines( true );
+	m_pinGrid->EnableDragGridSize( false );
+	m_pinGrid->SetMargins( 0, 0 );
+
+	// Columns
+	m_pinGrid->SetColSize( 0, 160 );
+	m_pinGrid->SetColSize( 1, 160 );
+	m_pinGrid->SetColSize( 2, 160 );
+	m_pinGrid->SetColSize( 3, 140 );
+	m_pinGrid->SetColSize( 4, 140 );
+	m_pinGrid->EnableDragColMove( false );
+	m_pinGrid->EnableDragColSize( true );
+	m_pinGrid->SetColLabelSize( 24 );
+	m_pinGrid->SetColLabelValue( 0, _("Pin Number") );
+	m_pinGrid->SetColLabelValue( 1, _("Base Pin Name") );
+	m_pinGrid->SetColLabelValue( 2, _("Alternate Assignment") );
+	m_pinGrid->SetColLabelValue( 3, _("Electrical Type") );
+	m_pinGrid->SetColLabelValue( 4, _("Graphic Style") );
+	m_pinGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_pinGrid->EnableDragRowSize( false );
+	m_pinGrid->SetRowLabelSize( 0 );
+	m_pinGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_pinGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_pinGrid->SetMinSize( wxSize( 512,320 ) );
+
+	bMargins->Add( m_pinGrid, 1, wxEXPAND|wxALL, 5 );
+
+
+	pinTableSizer->Add( bMargins, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	m_pinTablePage->SetSizer( pinTableSizer );
+	m_pinTablePage->Layout();
+	pinTableSizer->Fit( m_pinTablePage );
+	m_notebook1->AddPage( m_pinTablePage, _("Alternate Pin Assignments"), false );
+
+	mainSizer->Add( m_notebook1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
@@ -281,7 +339,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnInitDlg ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnUpdateUI ) );
-	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnSizeGrid ), NULL, this );
+	m_fieldsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnSizeGrid ), NULL, this );
 	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnAddField ), NULL, this );
 	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnMoveDown ), NULL, this );
@@ -289,8 +347,8 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_updateSymbolBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnUpdateSymbol ), NULL, this );
 	m_changeSymbolBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnExchangeSymbol ), NULL, this );
 	m_editSchematicSymbolBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSymbol ), NULL, this );
-	m_pinTableButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditPinTable ), NULL, this );
 	m_editLibrarySymbolBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditLibrarySymbol ), NULL, this );
+	m_pinGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnPinTableCellEdited ), NULL, this );
 	m_spiceFieldsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSpiceModel ), NULL, this );
 	m_stdDialogButtonSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnCancelButtonClick ), NULL, this );
 }
@@ -300,7 +358,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BAS
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnInitDlg ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnUpdateUI ) );
-	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnSizeGrid ), NULL, this );
+	m_fieldsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnSizeGrid ), NULL, this );
 	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnAddField ), NULL, this );
 	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnMoveDown ), NULL, this );
@@ -308,8 +366,8 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BAS
 	m_updateSymbolBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnUpdateSymbol ), NULL, this );
 	m_changeSymbolBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnExchangeSymbol ), NULL, this );
 	m_editSchematicSymbolBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSymbol ), NULL, this );
-	m_pinTableButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditPinTable ), NULL, this );
 	m_editLibrarySymbolBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditLibrarySymbol ), NULL, this );
+	m_pinGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnPinTableCellEdited ), NULL, this );
 	m_spiceFieldsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSpiceModel ), NULL, this );
 	m_stdDialogButtonSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnCancelButtonClick ), NULL, this );
 
