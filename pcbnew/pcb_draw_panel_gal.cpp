@@ -130,11 +130,14 @@ PCB_DRAW_PANEL_GAL::PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     // Load display options (such as filled/outline display of items).
     // Can be made only if the parent window is an EDA_DRAW_FRAME (or a derived class)
     // which is not always the case (namely when it is used from a wxDialog like the pad editor)
-    PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
+    if( !IsDialogPreview() )
+    {
+        KIGFX::PCB_VIEW* view = static_cast<KIGFX::PCB_VIEW*>( m_view );
+        PCB_BASE_FRAME*  frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
 
-    if( frame )
-        static_cast<KIGFX::PCB_VIEW*>( m_view )->UpdateDisplayOptions(
-                frame->GetDisplayOptions() );
+        if( frame )
+            view->UpdateDisplayOptions( frame->GetDisplayOptions() );
+    }
 }
 
 
@@ -210,7 +213,7 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
 {
     COLOR_SETTINGS* cs = nullptr;
 
-    auto frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
+    PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
 
     if( frame )
     {
@@ -385,7 +388,7 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     int viasCount = 0;
     int trackSegmentsCount = 0;
 
-    for( auto item : board->Tracks() )
+    for( TRACK* item : board->Tracks() )
     {
         if( item->Type() == PCB_VIA_T )
             viasCount++;
@@ -415,7 +418,10 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
 void PCB_DRAW_PANEL_GAL::OnShow()
 {
-    PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
+    PCB_BASE_FRAME* frame = nullptr;
+
+    if( !IsDialogPreview() )
+        frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
 
     try
     {

@@ -291,6 +291,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     settings->SetSketchModeGraphicItems( sketchMode );
 
     settings->SetHighContrast( false );
+    settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
 
     // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
     double gridsize = 0.001 * IU_PER_MM;
@@ -786,6 +787,7 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
     settings->SetSketchModeGraphicItems( m_sketchPreview );
 
     settings->SetHighContrast( false );
+    settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
 
     m_previewNotebook->ChangeSelection( 0 );
     redraw();

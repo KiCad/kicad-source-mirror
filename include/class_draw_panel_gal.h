@@ -177,6 +177,8 @@ public:
      */
     EDA_DRAW_FRAME* GetParentEDAFrame() const { return m_edaFrame; }
 
+    bool IsDialogPreview() const { return m_parent != (wxWindow*) m_edaFrame; }
+
     /**
      * Function OnShow()
      * Called when the window is shown for the first time.

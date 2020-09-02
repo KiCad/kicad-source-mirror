@@ -170,7 +170,7 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
     // Update current zoom settings if the canvas is managed by a EDA frame
     // (i.e. not by a preview panel in a dialog)
-    if( GetParentEDAFrame() && GetParentEDAFrame()->GetScreen() )
+    if( !IsDialogPreview() && GetParentEDAFrame() && GetParentEDAFrame()->GetScreen() )
         GetParentEDAFrame()->GetScreen()->m_ScrollCenter = GetView()->GetCenter();
 
     m_viewControls->UpdateScrollbars();
