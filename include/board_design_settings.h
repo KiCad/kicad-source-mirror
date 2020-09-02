@@ -89,8 +89,8 @@
 #define MINIMUM_ERROR_SIZE_MM         0.001
 #define MAXIMUM_ERROR_SIZE_MM         0.1
 
-#define DRC_EPSILON                   5;      // An epsilon to account for rounding errors, etc.
-                                              // 5nm is small enough not to materially violate
+#define DRC_EPSILON                   500;    // An epsilon to account for rounding errors, etc.
+                                              // 500nm is small enough not to materially violate
                                               // any constraints.
 
 /**
@@ -797,10 +797,10 @@ public:
 
     /*
      * Function GetDRCEpsilon
-     * an epsilon which accounts for rounding errors, etc.  While currently a global, going
-     * through this API allows us to easily change it to board-specific if so desired.
+     * an epsilon which accounts for rounding errors, etc.  While currently an advanced cfg,
+     * going through this API allows us to easily change it to board-specific if so desired.
      */
-    int GetDRCEpsilon() const { return DRC_EPSILON; }
+    int GetDRCEpsilon() const;
 
     /**
      * Function GetLineThickness

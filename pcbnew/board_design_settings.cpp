@@ -33,7 +33,7 @@
 #include <drc/drc_rule.h>
 #include <settings/parameters.h>
 #include <project/project_file.h>
-
+#include <advanced_config.h>
 
 const int bdsSchemaVersion = 0;
 
@@ -957,6 +957,12 @@ int BOARD_DESIGN_SETTINGS::GetLayerClass( PCB_LAYER_ID aLayer ) const
         return LAYER_CLASS_FAB;
     else
         return LAYER_CLASS_OTHERS;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetDRCEpsilon() const
+{
+    return Millimeter2iu( ADVANCED_CFG::GetCfg().m_DRCEpsilon );
 }
 
 

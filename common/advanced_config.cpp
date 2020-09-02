@@ -68,6 +68,13 @@ namespace AC_KEYS
 static const wxChar ExtraFillMargin[] = wxT( "ExtraFillMargin" );
 
 /**
+ * A fudge factor for DRC.  Required to prevent false positives due to rounding errors, errors
+ * in polygonalization, etc.
+ * Previous versions hard-coded various values from 0.000005mm to 0.002mm.
+ */
+static const wxChar DRCEpsilon[] = wxT( "DRCEpsilon" );
+
+/**
  * Testing mode for new connectivity algorithm.  Setting this to on will cause all modifications
  * to the netlist to be recalculated on the fly.  This may be slower than the standard process
  * at the moment
@@ -203,6 +210,9 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DrawTriangulationOutlines = false;
     m_PluginAltiumSch           = false;
 
+    m_extraClearance            = 0.0005;
+    m_DRCEpsilon                = 0.0005;   // 500nm is small enough not to materially violate
+                                            // any constraints.
     loadFromConfigFile();
 }
 
@@ -244,7 +254,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_realTimeConnectivity, true ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
-                                                  &m_extraClearance, 0.001, 0.0, 1.0 ) );
+                                                  &m_extraClearance, 0.0005, 0.0, 1.0 ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCEpsilon,
+                                                  &m_DRCEpsilon, 0.0005, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
                                                &m_coroutineStackSize, AC_STACK::default_stack,

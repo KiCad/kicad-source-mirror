@@ -33,7 +33,6 @@
 #include <geometry/polygon_test_point_inside.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
-#include <convert_basic_shapes_to_polygon.h>
 
 void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
 {
@@ -419,7 +418,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             if( !m_reportAllTrackErrors )
                 return;
         }
-        else if( refSeg.Collide( &trackSeg, minClearance, &actual ) )
+        else if( refSeg.Collide( &trackSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
         {
             wxPoint   pos = GetLocation( aRefSeg, trackSeg.GetSeg() );
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
@@ -458,14 +457,8 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             if( zone->GetFilledPolysList( aLayer ).IsEmpty() )
                 continue;
 
-            // to avoid false positive, due to rounding issues and approxiamtions
-            // in distance and clearance calculations, use a small threshold for distance
-            // (1 micron)
-            #define THRESHOLD_DIST Millimeter2iu( 0.001 )
-
-
             int minClearance = aRefSeg->GetClearance( aLayer, zone, &m_clearanceSource );
-            int allowedDist  = minClearance + halfWidth - THRESHOLD_DIST;
+            int allowedDist  = minClearance + halfWidth - bds.GetDRCEpsilon();
             int actual;
 
             if( zone->GetFilledPolysList( aLayer ).Collide( testSeg, allowedDist, &actual ) )
@@ -502,7 +495,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         aRefSeg->GetRuleClearance( &dummyEdge, aRefSeg->GetLayer(), &minClearance,
                                    &m_clearanceSource );
 
-        int center2centerAllowed = minClearance + halfWidth;
+        int center2centerAllowed = minClearance + halfWidth - bds.GetDRCEpsilon();
 
         for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )
         {
@@ -534,7 +527,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 // Best-efforts search for edge segment
                 BOARD::IterateForward<BOARD_ITEM*>( m_pcb->Drawings(), inspector, nullptr, types );
 
-                int       actual  = std::max( 0.0, sqrt( center2center_squared ) - halfWidth );
+                int actual  = std::max( 0.0, sqrt( center2center_squared ) - halfWidth );
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),

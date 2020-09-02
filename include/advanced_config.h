@@ -83,9 +83,16 @@ public:
     double m_drawArcCenterMaxAngle;
 
     /**
-     * Extra fill clearance for zone fills
+     * Extra fill clearance for zone fills.  Note that for zone tests this is essentially
+     * additive with m_DRCEpsilon.
      */
     double m_extraClearance;
+
+    /**
+     * Epsilon for DRC tests.  Note that for zone tests this is essentially additive with
+     * m_extraClearance.
+     */
+    double m_DRCEpsilon;
 
     /**
      * Do real-time connectivity
