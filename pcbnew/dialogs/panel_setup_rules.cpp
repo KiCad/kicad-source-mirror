@@ -385,6 +385,7 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
     wxString msg;
     msg << "<b>" << _( "Top-level Clauses" ) << "</b>";
     msg <<  "<pre>"
+            "# version must be first clause in file\r"
             "(version &lt;number>)\r"
             "(rule &lt;rule_name> &lt;rule_clause> ...)\r"
             "\r</pre><b>";
@@ -393,6 +394,7 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
             "<pre>"
             "(constraint &lt;constraint_type> ...)\r"
             "(condition \"&lt;expression>\")\r"
+            "(layer \"&lt;layer name>\")\r"
             "\r</pre>"
             "<b>";
     msg << _( "Constraint Types" );
@@ -426,6 +428,7 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
             "   (condition \"A.netclass == 'HV'\"))\r"
             "\r"
             "(rule HV_HV\r"
+            "   # wider clearance between HV tracks\r"
             "   (constraint clearance (min \"1.5mm + 2.0mm\"))\r"
             "   (condition \"A.netclass == 'HV' && B.netclass == 'HV'\"))\r"
             "</pre>";
