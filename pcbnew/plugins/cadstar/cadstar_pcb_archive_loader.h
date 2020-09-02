@@ -92,6 +92,7 @@ private:
 
     // Functions for loading individual elements:
     void loadBoardStackup();
+    void loadDesignRules();
     void loadComponentLibrary();
     void loadBoards();
     void loadFigures();

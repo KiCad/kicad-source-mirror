@@ -75,6 +75,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
                    "PCB and the schematic. " ) );
 
     loadBoardStackup();
+    loadDesignRules();
     loadComponentLibrary();
     loadBoards();
     loadFigures();
@@ -386,6 +387,45 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
     mBoard->SetVisibleLayers( LSET( &layerIDs[0], layerIDs.size() ) );
 
     mBoard->SetCopperLayerCount( numElecAndPowerLayers );
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
+{
+    BOARD_DESIGN_SETTINGS&                 ds = mBoard->GetDesignSettings();
+    std::map<SPACINGCODE_ID, SPACINGCODE>& spacingCodes   = Assignments.Codedefs.SpacingCodes;
+
+    auto applyRule = [&]( wxString aID, int* aVal ) {
+        if( spacingCodes.find( aID ) == spacingCodes.end() )
+            wxLogWarning( _( "Design rule %s was not found. This was ignored." ) );
+        else
+            *aVal = getKiCadLength( spacingCodes.at( aID ).Spacing );
+    };
+
+    //Note: for details on the different spacing codes see SPACINGCODE::ID
+
+    applyRule( "T_T", &ds.m_MinClearance );
+    applyRule( "C_B", &ds.m_CopperEdgeClearance );
+    applyRule( "H_H", &ds.m_HoleToHoleMin );    
+
+    ds.m_TrackMinWidth = Assignments.Technology.MinRouteWidth;
+
+    auto applyNetClassRule = 
+        [&]( wxString aID, ::NETCLASS* aNetClassPtr, void (::NETCLASS::*aFunc)(int) ) 
+        {
+            int value = -1;
+            applyRule(aID, &value);
+
+            if( value != -1 )
+                (aNetClassPtr->*aFunc)(value);
+            
+        };
+
+    applyNetClassRule( "T_T", ds.GetDefault(), &::NETCLASS::SetClearance );
+
+    wxLogWarning( _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
+                     "design rules were imported. It is recommended that you review the design "
+                     "rules that have been applied." ) );
 }
 
 
