@@ -79,6 +79,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     loadComponentLibrary();
     loadBoards();
     loadFigures();
+    loadTexts();
     loadAreas();
     loadComponents();
     loadTemplates();
@@ -638,6 +639,106 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadFigures()
         //TODO process "swaprule"
         //TODO process re-use block when KiCad Supports it
         //TODO process attributes when KiCad Supports attributes in figures
+    }
+}
+
+void CADSTAR_PCB_ARCHIVE_LOADER::loadTexts()
+{
+    for( std::pair<TEXT_ID, TEXT> txtPair : Layout.Texts )
+    {
+        TEXT& csTxt = txtPair.second;
+
+        TEXTE_PCB* txt = new TEXTE_PCB( mBoard );
+        mBoard->Add( txt );
+        txt->SetText( csTxt.Text );
+
+        /*wxPoint rotatedTextPos = getKiCadPoint( aCadstarAttrLoc.Position ) - aModule->GetPosition();
+        RotatePoint( &rotatedTextPos, -aModule->GetOrientation() );*/
+
+        txt->SetTextPos( getKiCadPoint( csTxt.Position ) );
+        txt->SetPosition( getKiCadPoint( csTxt.Position ) );
+
+        txt->SetMirrored( csTxt.Mirror );
+        txt->SetTextAngle( getAngleTenthDegree( csTxt.OrientAngle ) );
+
+        TEXTCODE tc = getTextCode( csTxt.TextCodeID );
+
+        txt->SetTextThickness( getKiCadLength( tc.LineWidth ) );
+        txt->SetTextSize( { getKiCadLength( tc.Width ), getKiCadLength( tc.Height ) } );
+
+        switch( csTxt.Alignment )
+        {
+        case ALIGNMENT::NO_ALIGNMENT: // Default for Single line text is Bottom Left
+        case ALIGNMENT::BOTTOMLEFT:
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            break;
+
+        case ALIGNMENT::BOTTOMCENTER:
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+            break;
+
+        case ALIGNMENT::BOTTOMRIGHT:
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            break;
+
+        case ALIGNMENT::CENTERLEFT:
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            break;
+
+        case ALIGNMENT::CENTERCENTER:
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+            break;
+
+        case ALIGNMENT::CENTERRIGHT:
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            break;
+
+        case ALIGNMENT::TOPLEFT:
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            break;
+
+        case ALIGNMENT::TOPCENTER:
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+            break;
+
+        case ALIGNMENT::TOPRIGHT:
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            break;
+
+        default:
+            wxASSERT_MSG( true, "Unknown Aligment - needs review!" );
+        }
+
+        if( isLayerSet( csTxt.LayerID ) )
+        {
+            //Make a copy on each layer
+
+            LSEQ layers = getKiCadLayerSet( csTxt.LayerID ).Seq();
+            TEXTE_PCB* newtxt;
+
+            for( PCB_LAYER_ID layer : layers )
+            {
+                txt->SetLayer( layer );
+                newtxt = new TEXTE_PCB( *txt );
+                mBoard->Add( newtxt, ADD_MODE::APPEND );
+            }
+
+            mBoard->Remove( txt );
+            delete txt;
+        }
+        else
+            txt->SetLayer( getKiCadLayer( csTxt.LayerID ) );
+
+        //TODO Handle different font types when KiCad can support it.
     }
 }
 
@@ -1851,11 +1952,16 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
         wxCHECK( Layout.Nets.find( aCadstarNetID ) != Layout.Nets.end(), nullptr );
         
         NET csNet = Layout.Nets.at( aCadstarNetID );
+        wxString newName = wxEmptyString;
+
+        if( csNet.Name.IsEmpty() )
+            newName = "CSNET" + ( csNet.SignalNum );
 
         NETINFO_ITEM* netInfo = new NETINFO_ITEM( mBoard, csNet.Name, ++mNumNets );
         mBoard->Add( netInfo, ADD_MODE::APPEND );
         //todo also add the Netclass
 
+        mNetMap.insert( { aCadstarNetID, netInfo } );
         return netInfo;
     }
 

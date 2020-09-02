@@ -217,7 +217,10 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYERDEFS::Parse( XNODE* aNode )
 
             for( ; xmlAttribute; xmlAttribute = xmlAttribute->GetNext() )
             {
-                LayerStack.push_back( (LAYER_ID) xmlAttribute->GetValue() );
+                if( !IsValidAttribute( xmlAttribute ) )
+                    continue;
+                else
+                    LayerStack.push_back( (LAYER_ID) xmlAttribute->GetValue() );
             }
 
             CheckNoChildNodes( cNode );
@@ -1580,6 +1583,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_COPPER::Parse( XNODE* aNode )
 
             for( ; xmlAttribute; xmlAttribute = xmlAttribute->GetNext() )
             {
+                if( !IsValidAttribute( xmlAttribute ) )
+                    continue;
+
                 long padId;
 
                 if( !xmlAttribute->GetValue().ToLong( &padId ) )
@@ -1630,6 +1636,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_AREA::Parse( XNODE* aNode )
 
             for( ; xmlAttribute; xmlAttribute = xmlAttribute->GetNext() )
             {
+                if( !IsValidAttribute( xmlAttribute ) )
+                    continue;
+
                 if( xmlAttribute->GetValue() == wxT( "NO_TRACKS" ) )
                     NoTracks = true;
                 else if( xmlAttribute->GetValue() == wxT( "NO_VIAS" ) )
@@ -1654,6 +1663,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD_EXITS::Parse( XNODE* aNode )
 
     for( ; xmlAttribute; xmlAttribute = xmlAttribute->GetNext() )
     {
+        if( !IsValidAttribute( xmlAttribute ) )
+            continue;
+
         if( xmlAttribute->GetValue() == wxT( "FREE" ) )
             FreeAngle = true;
         else if( xmlAttribute->GetValue() == wxT( "N" ) )
@@ -2391,6 +2403,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PART::DEFINITION::PIN_EQUIVALENCE::Parse( XNODE
 
     for( ; xmlAttribute; xmlAttribute = xmlAttribute->GetNext() )
     {
+        if( !IsValidAttribute( xmlAttribute ) )
+            continue;
+
         long pinId;
 
         if( !xmlAttribute->GetValue().ToLong( &pinId ) )
@@ -2411,6 +2426,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PART::DEFINITION::SWAP_GATE::Parse( XNODE* aNod
 
     for( ; xmlAttribute; xmlAttribute = xmlAttribute->GetNext() )
     {
+        if( !IsValidAttribute( xmlAttribute ) )
+            continue;
+
         long pinId;
 
         if( !xmlAttribute->GetValue().ToLong( &pinId ) )
@@ -2636,6 +2654,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::AREA::Parse( XNODE* aNode )
 
             for( ; xmlAttribute; xmlAttribute = xmlAttribute->GetNext() )
             {
+                if( !IsValidAttribute( xmlAttribute ) )
+                    continue;
+
                 if( xmlAttribute->GetValue() == wxT( "PLACEMENT" ) )
                     Placement = true;
                 else if( xmlAttribute->GetValue() == wxT( "ROUTING" ) )

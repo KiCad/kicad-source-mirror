@@ -124,14 +124,20 @@ double CADSTAR_ARCHIVE_PARSER::EVALUE::GetDouble()
 
 void CADSTAR_ARCHIVE_PARSER::InsertAttributeAtEnd( XNODE* aNode, wxString aValue )
 {
-    wxString result, paramName = "attr0";
-    int      i = 0;
-
-    while( aNode->GetAttribute( paramName, &result ) )
+    wxString result;
+    int      numAttributes = 0;
+    
+    if( aNode->GetAttribute( wxT( "numAttributes" ), &result ) )
     {
-        paramName = wxT( "attr" );
-        paramName << i++;
+        numAttributes = wxAtoi( result );
+        aNode->DeleteAttribute( wxT( "numAttributes" ) );
+        ++numAttributes;
     }
+
+    aNode->AddAttribute( wxT( "numAttributes" ), wxString::Format( wxT( "%i" ), numAttributes ) );
+
+    wxString paramName = wxT( "attr" );
+    paramName << numAttributes;
 
     aNode->AddAttribute( paramName, aValue );
 }
@@ -225,6 +231,13 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile(
 
     return NULL;
 }
+
+
+bool CADSTAR_ARCHIVE_PARSER::IsValidAttribute( wxXmlAttribute* aAttribute )
+{
+    return aAttribute->GetName() != wxT( "numAttributes" );
+}
+
 
 wxString CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDString( XNODE* aNode, unsigned int aID )
 {

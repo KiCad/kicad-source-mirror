@@ -163,6 +163,13 @@ public:
      */
     static XNODE* LoadArchiveFile( const wxString& aFileName, const wxString& aFileTypeIdentifier );
 
+    /**
+     * @brief 
+     * @param aAttribute 
+     * @return 
+     */
+    static bool IsValidAttribute( wxXmlAttribute* aAttribute );
+
 
     /**
      * @brief 

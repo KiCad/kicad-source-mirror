@@ -96,6 +96,7 @@ private:
     void loadComponentLibrary();
     void loadBoards();
     void loadFigures();
+    void loadTexts();
     void loadAreas();
     void loadComponents();
     void loadTemplates();
