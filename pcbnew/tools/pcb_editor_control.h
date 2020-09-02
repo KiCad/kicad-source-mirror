@@ -58,7 +58,7 @@ public:
     int SaveCopyAs( const TOOL_EVENT& aEvent );
     int PageSettings( const TOOL_EVENT& aEvent );
     int Plot( const TOOL_EVENT& aEvent );
-    
+
     int BoardSetup( const TOOL_EVENT& aEvent );
     int ImportNetlist( const TOOL_EVENT& aEvent );
     int ImportSpecctraSession( const TOOL_EVENT& aEvent );
@@ -125,8 +125,11 @@ public:
     ///> Collaps subgroups to single group.
     int GroupFlattenSelected( const TOOL_EVENT& aEvent );
 
-    ///> Restrit seletion to only member of the group.
+    ///> Restrict seletion to only member of the group.
     int GroupEnterSelected( const TOOL_EVENT& aEvent );
+
+    ///> Leave the current group (deselect its members and select the group as a whole)
+    int GroupLeave( const TOOL_EVENT& aEvent );
 
     ///> Runs the drill origin tool for setting the origin for drill and pick-and-place files.
     int DrillOrigin( const TOOL_EVENT& aEvent );

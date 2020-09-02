@@ -403,6 +403,7 @@ public:
     static TOOL_ACTION groupRemoveItems;
     static TOOL_ACTION groupFlatten;
     static TOOL_ACTION groupEnter;
+    static TOOL_ACTION groupLeave;
 
     // Miscellaneous
     static TOOL_ACTION selectionTool;

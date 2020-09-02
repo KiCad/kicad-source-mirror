@@ -843,7 +843,17 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
             const_cast<KIID&>( item->m_Uuid ) = KIID();
 
             if( item->Type() == PCB_MODULE_T )
+            {
                 static_cast<MODULE*>( item )->SetPath( KIID_PATH() );
+            }
+            else if( item->Type() == PCB_GROUP_T )
+            {
+                // If pasting a group, its immediate children must be updated to have its new KIID
+                static_cast<PCB_GROUP*>( item )->RunOnChildren( [item] ( BOARD_ITEM* aBrdItem )
+                                                                {
+                                                                    aBrdItem->SetGroup( item->m_Uuid );
+                                                                } );
+            }
         }
 
         // Add or just select items for the move/place command

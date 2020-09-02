@@ -1214,7 +1214,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         board()->GroupRemoveItems( removed, m_commit.get() );
 
         if( m_commit->HasRemoveEntry( enteredGroup ) )
-            m_selectionTool->exitGroup();
+            m_selectionTool->ExitGroup();
     }
 
     if( isCut )

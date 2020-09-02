@@ -149,11 +149,18 @@ bool SELECTION_TOOL::Init()
                 return !frame->ToolStackIsEmpty();
             };
 
+    auto inGroupCondition =
+            [this] ( const SELECTION& )
+            {
+                return m_enteredGroup != nullptr;
+            };
+
     menu.AddMenu( selectMenu.get(), SELECTION_CONDITIONS::NotEmpty );
     menu.AddSeparator( 1000 );
 
     // "Cancel" goes at the top of the context menu when a tool is active
     menu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
+    menu.AddItem( PCB_ACTIONS::groupLeave,    inGroupCondition,    1);
     menu.AddSeparator( 1 );
 
     if( frame )
@@ -169,7 +176,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
     m_locked = true;
 
     if( m_enteredGroup != NULL )
-        exitGroup();
+        ExitGroup();
 
     if( aReason == TOOL_BASE::MODEL_RELOAD )
     {
@@ -309,7 +316,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_frame->FocusOnItem( nullptr );
 
             if( m_enteredGroup != NULL )
-                exitGroup();
+                ExitGroup();
 
             ClearSelection();
 
@@ -332,9 +339,7 @@ void SELECTION_TOOL::EnterGroup()
     PCB_GROUP* aGroup = static_cast<PCB_GROUP*>( m_selection[0] );
 
     if( m_enteredGroup != NULL )
-    {
-        exitGroup();
-    }
+        ExitGroup();
 
     ClearSelection();
     m_enteredGroup = aGroup;
@@ -342,8 +347,17 @@ void SELECTION_TOOL::EnterGroup()
 }
 
 
-void SELECTION_TOOL::exitGroup()
+void SELECTION_TOOL::ExitGroup( bool aSelectGroup )
 {
+    // Only continue if there is a group entered
+    if( m_enteredGroup == nullptr )
+        return;
+
+    ClearSelection();
+
+    if( aSelectGroup )
+        select( m_enteredGroup );
+
     m_enteredGroup = NULL;
 }
 
@@ -352,9 +366,6 @@ PCBNEW_SELECTION& SELECTION_TOOL::GetSelection()
 {
     return m_selection;
 }
-
-
-
 
 
 PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
@@ -479,7 +490,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     if( m_enteredGroup &&
         !m_enteredGroup->GetBoundingBox().Contains( wxPoint( aWhere.x, aWhere.y ) ) )
-        exitGroup();
+    {
+            ExitGroup();
+    }
 
     collector.Collect( board(),
         m_editModules ? GENERAL_COLLECTOR::ModuleItems : GENERAL_COLLECTOR::AllBoardItems,

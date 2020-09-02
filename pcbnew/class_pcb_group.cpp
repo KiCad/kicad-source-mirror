@@ -22,25 +22,43 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <bitmaps.h>
+#include <class_board.h>
+#include <class_board_item.h>
 #include <class_pcb_group.h>
 #include <confirm.h>
 #include <msgpanel.h>
 #include <view/view.h>
 
-PCB_GROUP::PCB_GROUP( BOARD* parent ) : BOARD_ITEM( (BOARD_ITEM*) parent, PCB_GROUP_T )
+PCB_GROUP::PCB_GROUP( BOARD*aParent ) : BOARD_ITEM( aParent, PCB_GROUP_T )
 {
 }
 
 
-bool PCB_GROUP::AddItem( BOARD_ITEM* item )
+bool PCB_GROUP::AddItem( BOARD_ITEM* aItem )
 {
-    return m_items.insert( item ).second;
+    // Items can only be in one group at a time
+    if( aItem->IsInGroup() )
+        return false;
+
+    m_items.insert( aItem );
+    aItem->SetGroup( m_Uuid );
+    return true;
 }
 
 
-bool PCB_GROUP::RemoveItem( const BOARD_ITEM* item )
+bool PCB_GROUP::RemoveItem( BOARD_ITEM* aItem )
 {
-    return m_items.erase( const_cast<BOARD_ITEM*>( item ) ) == 1;
+    if( !aItem->IsInGroup() )
+        return false;
+
+    // Only clear the item's group field if it was inside this group
+    if( m_items.erase( aItem ) == 1 )
+    {
+        aItem->SetGroup( niluuid );
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -50,9 +68,9 @@ wxPoint PCB_GROUP::GetPosition() const
 }
 
 
-void PCB_GROUP::SetPosition( const wxPoint& newpos )
+void PCB_GROUP::SetPosition( const wxPoint& aNewpos )
 {
-    wxPoint delta = newpos - GetPosition();
+    wxPoint delta = aNewpos - GetPosition();
 
     Move( delta );
 }
@@ -72,16 +90,12 @@ PCB_GROUP* PCB_GROUP::DeepClone() const
     PCB_GROUP* newGroup = new PCB_GROUP( *this );
     newGroup->m_items.clear();
 
-    for( auto member : m_items )
+    for( BOARD_ITEM* member : m_items )
     {
         if( member->Type() == PCB_GROUP_T )
-        {
             newGroup->AddItem( static_cast<PCB_GROUP*>( member )->DeepClone() );
-        }
         else
-        {
             newGroup->AddItem( static_cast<BOARD_ITEM*>( member->Clone() ) );
-        }
     }
 
     return newGroup;
@@ -93,16 +107,12 @@ PCB_GROUP* PCB_GROUP::DeepDuplicate() const
     PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( this->Duplicate() );
     newGroup->m_items.clear();
 
-    for( auto member : m_items )
+    for( BOARD_ITEM* member : m_items )
     {
         if( member->Type() == PCB_GROUP_T )
-        {
             newGroup->AddItem( static_cast<PCB_GROUP*>( member )->DeepDuplicate() );
-        }
         else
-        {
             newGroup->AddItem( static_cast<BOARD_ITEM*>( member->Duplicate() ) );
-        }
     }
 
     return newGroup;
@@ -132,7 +142,9 @@ bool PCB_GROUP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     EDA_RECT bbox = GetBoundingBox();
 
     if( aContained )
+    {
         return arect.Contains( bbox );
+    }
     else
     {
         // If the rect does not intersect the bounding box, skip any tests
@@ -144,44 +156,34 @@ bool PCB_GROUP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
             if( member->HitTest( arect, false, 0 ) )
                 return true;
         }
-
-        // No items were hit
-        return false;
     }
+
+    // No items were hit
+    return false;
 }
 
 
 const EDA_RECT PCB_GROUP::GetBoundingBox() const
 {
     EDA_RECT area;
-    bool     isFirst = true;
 
     for( BOARD_ITEM* item : m_items )
-    {
-        if( isFirst )
-        {
-            area    = item->GetBoundingBox();
-            isFirst = false;
-        }
-        else
-        {
-            area.Merge( item->GetBoundingBox() );
-        }
-    }
+        area.Merge( item->GetBoundingBox() );
+
     area.Inflate( Millimeter2iu( 0.25 ) ); // Give a min size to the area
 
     return area;
 }
 
 
-SEARCH_RESULT PCB_GROUP::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+SEARCH_RESULT PCB_GROUP::Visit( INSPECTOR aInspector, void* aTestData, const KICAD_T aScanTypes[] )
 {
-    for( const KICAD_T* stype = scanTypes; *stype != EOT; ++stype )
+    for( const KICAD_T* stype = aScanTypes; *stype != EOT; ++stype )
     {
         // If caller wants to inspect my type
         if( *stype == Type() )
         {
-            if( SEARCH_RESULT::QUIT == inspector( this, testData ) )
+            if( SEARCH_RESULT::QUIT == aInspector( this, aTestData ) )
                 return SEARCH_RESULT::QUIT;
         }
     }
@@ -195,10 +197,22 @@ LSET PCB_GROUP::GetLayerSet() const
     LSET aSet;
 
     for( BOARD_ITEM* item : m_items )
-    {
         aSet |= item->GetLayerSet();
-    }
+
     return aSet;
+}
+
+
+bool PCB_GROUP::IsOnLayer( PCB_LAYER_ID aLayer ) const
+{
+    // A group is on a layer if any item is on the layer
+    for( BOARD_ITEM* item : m_items )
+    {
+        if( item->IsOnLayer( aLayer ) )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -235,28 +249,22 @@ unsigned int PCB_GROUP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 void PCB_GROUP::Move( const wxPoint& aMoveVector )
 {
-    for( auto member : m_items )
-    {
+    for( BOARD_ITEM* member : m_items )
         member->Move( aMoveVector );
-    }
 }
 
 
 void PCB_GROUP::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     for( BOARD_ITEM* item : m_items )
-    {
         item->Rotate( aRotCentre, aAngle );
-    }
 }
 
 
 void PCB_GROUP::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     for( BOARD_ITEM* item : m_items )
-    {
         item->Flip( aCentre, aFlipLeftRight );
-    }
 }
 
 
@@ -264,10 +272,11 @@ wxString PCB_GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     if( m_name.empty() )
     {
-        return wxString::Format( _( "Anonymous group %s with %ld members" ),
+        return wxString::Format( _( "Anonymous group %s with %zu members" ),
                                  m_Uuid.AsString(), m_items.size() );
     }
-    return wxString::Format( _( "Group \"%s\" with %ld members" ), m_name, m_items.size() );
+
+    return wxString::Format( _( "Group \"%s\" with %zu members" ), m_name, m_items.size() );
 }
 
 
@@ -281,7 +290,7 @@ void PCB_GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 {
     aList.emplace_back( _( "Group" ), m_name.empty() ? _( "Anonymous" ) :
                         wxString::Format( "\"%s\"", m_name ), DARKCYAN );
-    aList.emplace_back( _( "Members" ), wxString::Format( "%ld", m_items.size() ), BROWN );
+    aList.emplace_back( _( "Members" ), wxString::Format( "%zu", m_items.size() ), BROWN );
 }
 
 
@@ -294,7 +303,7 @@ void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFuncti
     }
     catch( std::bad_function_call& )
     {
-        wxFAIL_MSG( "Error running PCB_GROUP::RunOnChildren" );
+        wxFAIL_MSG( wxT( "Error calling function in PCB_GROUP::RunOnChildren" ) );
     }
 }
 
@@ -306,12 +315,13 @@ void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
         for( BOARD_ITEM* item : m_items )
         {
             aFunction( item );
+
             if( item->Type() == PCB_GROUP_T )
                 static_cast<PCB_GROUP*>( item )->RunOnDescendants( aFunction );
         }
     }
     catch( std::bad_function_call& )
     {
-        wxFAIL_MSG( "Error running PCB_GROUP::RunOnDescendants" );
+        wxFAIL_MSG( wxT( "Error calling function in PCB_GROUP::RunOnDescendants" ) );
     }
 }

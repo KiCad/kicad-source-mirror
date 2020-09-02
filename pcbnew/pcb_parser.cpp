@@ -737,6 +737,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
     }
 
     wxString error;
+
     for( size_t idx = 0; idx < m_groupInfos.size(); idx++ )
     {
         auto&  aGrp  = m_groupInfos[idx];
@@ -753,26 +754,33 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
         for( const auto& aUuid : aGrp.memberUuids )
         {
-            KIID        tUuid = aUuid;
+            KIID tUuid = aUuid;
+
             if( m_resetKIIDs )
             {
                 if( m_resetKIIDMap.find( aUuid.AsString() ) == m_resetKIIDMap.end() )
                 {
                     if( error == wxEmptyString )
+                    {
                         error = wxString::Format( _( "Group %s references missing item %s" ),
                                                   aGrp.uuid.AsString(), aUuid.AsString() );
+                    }
                 }
                 else
                 {
                     tUuid = m_resetKIIDMap[ aUuid.AsString() ];
                 }
             }
+
             BOARD_ITEM* item = m_board->GetItem( tUuid );
+
             if( ( item == nullptr ) || ( item->Type() == NOT_USED ) )
             {
                 if( error == wxEmptyString )
+                {
                     error = wxString::Format( _( "Group %s references missing item %s" ),
                                               aGrp.uuid.AsString(), tUuid.AsString() );
+                }
             }
             else
             {
@@ -782,12 +790,13 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
     }
 
     wxString sanityResult = m_board->GroupsSanityCheck();
+
     if( error != wxEmptyString || sanityResult != wxEmptyString )
     {
         wxString errMsg = ( error != wxEmptyString ) ? error : sanityResult;
         KIDIALOG dlg( nullptr, wxString::Format(
-               _( "Error in group structure in file: %s\n\nAttempt repair?" ), errMsg ),
-               _( "File data error" ), wxOK | wxCANCEL | wxICON_ERROR );
+                      _( "Error in group structure in file: %s\n\nAttempt repair?" ), errMsg ),
+                      _( "File data error" ), wxOK | wxCANCEL | wxICON_ERROR );
         dlg.SetOKLabel( _( "Attempt repair" ) );
 
         if( dlg.ShowModal() == wxID_CANCEL )

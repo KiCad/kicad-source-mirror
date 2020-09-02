@@ -53,7 +53,7 @@ typedef std::unordered_set<BOARD_ITEM*> ITEM_SET;
 class PCB_GROUP : public BOARD_ITEM
 {
 public:
-    PCB_GROUP( BOARD* parent );
+    PCB_GROUP( BOARD* aParent );
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -70,22 +70,24 @@ public:
         return m_items;
     }
 
-    void SetName( wxString name )
+    void SetName( wxString aName )
     {
-        m_name = name;
+        m_name = aName;
     }
 
     /**
      * Adds item to group. Does not take ownership of item.
-     * @return true if item was added (false if item was already in set).
+     *
+     * @return true if item was added (false if item belongs to a different group).
      */
-    bool AddItem( BOARD_ITEM* item );
+    bool AddItem( BOARD_ITEM* aItem );
 
     /**
      * Removes item from group.
+     *
      * @return true if item was removed (false if item was not in the group).
      */
-    bool RemoveItem( const BOARD_ITEM* item );
+    bool RemoveItem( BOARD_ITEM* aItem );
 
     wxString GetClass() const override
     {
@@ -103,7 +105,7 @@ public:
     wxPoint GetPosition() const override;
 
     ///> @copydoc EDA_ITEM::SetPosition
-    void SetPosition( const wxPoint& ) override;
+    void SetPosition( const wxPoint& aNewpos ) override;
 
     ///> @copydoc BOARD_ITEM::GetLayerSet
     LSET GetLayerSet() const override;
@@ -131,11 +133,7 @@ public:
     void SwapData( BOARD_ITEM* aImage ) override;
 
     ///> @copydoc BOARD_ITEM::IsOnLayer
-    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override
-    {
-        wxFAIL_MSG( "groups don't support layer IsOnLayer" );
-        return false;
-    }
+    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
     ///> @copydoc EDA_ITEM::HitTest
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
@@ -147,7 +145,7 @@ public:
     const EDA_RECT GetBoundingBox() const override;
 
     ///> @copydoc EDA_ITEM::Visit
-    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    SEARCH_RESULT Visit( INSPECTOR aInspector, void* aTestData, const KICAD_T aScanTypes[] ) override;
 
     ///> @copydoc VIEW_ITEM::ViewGetLayers
     void ViewGetLayers( int aLayers[], int& aCount ) const override;

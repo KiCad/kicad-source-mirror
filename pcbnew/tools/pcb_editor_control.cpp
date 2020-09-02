@@ -28,6 +28,7 @@
 #include "pcbnew_picker_tool.h"
 #include "selection_tool.h"
 #include "edit_tool.h"
+#include "tool/tool_event.h"
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <class_board.h>
@@ -1019,14 +1020,7 @@ int PCB_EDITOR_CONTROL::GroupSelected( const TOOL_EVENT& aEvent )
     PCB_GROUP* group = new PCB_GROUP( board );
 
     for( EDA_ITEM* item : selection )
-    {
-        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
-
-        // Should be impossible to generate a selection with duplicates
-        wxCHECK_MSG( group->AddItem( board_item ), 0,
-                     wxString::Format( _( "Item %s appears in selection multiple times" ),
-                                       board_item->m_Uuid.AsString() ) );
-    }
+        group->AddItem( static_cast<BOARD_ITEM*>( item ) );
 
 
     commit.Add( group );
@@ -1079,12 +1073,7 @@ int PCB_EDITOR_CONTROL::GroupMergeSelected( const TOOL_EVENT& aEvent )
         BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
 
         if( board_item != firstGroup )
-        {
-            // Should be impossible to generate a selection with duplicates
-            wxCHECK_MSG( firstGroup->AddItem( board_item ), 0,
-                         wxString::Format( _( "Item %s is already in group for merge"),
-                                           board_item->m_Uuid.AsString() ) );
-        }
+            firstGroup->AddItem( board_item );
     }
 
     commit.Push( "GroupMerge" );
@@ -1257,12 +1246,16 @@ int PCB_EDITOR_CONTROL::GroupEnterSelected( const TOOL_EVENT& aEvent )
     SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
     const PCBNEW_SELECTION& selection = selTool->GetSelection();
 
-    wxCHECK( selection.GetSize() == 1, 0 );
-    BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( selection[0] );
-    wxCHECK( board_item->Type() == PCB_GROUP_T, 0 );
+    if( selection.GetSize() == 1 && selection[0]->Type() == PCB_GROUP_T )
+        selTool->EnterGroup();
 
-    selTool->EnterGroup();
+    return 0;
+}
 
+
+int PCB_EDITOR_CONTROL::GroupLeave( const TOOL_EVENT& aEvent )
+{
+    m_toolMgr->GetTool<SELECTION_TOOL>()->ExitGroup( true /* Select the group */ );
     return 0;
 }
 
@@ -1631,24 +1624,25 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::EditFpInFpEditor,         PCB_ACTIONS::editFpInFpEditor.MakeEvent() );
 
     // Other
-    Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,     PCB_ACTIONS::toggleLock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::LockSelected,           PCB_ACTIONS::lock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::UnlockSelected,         PCB_ACTIONS::unlock.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,       PCB_ACTIONS::toggleLock.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::LockSelected,             PCB_ACTIONS::lock.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::UnlockSelected,           PCB_ACTIONS::unlock.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::GroupSelected,            PCB_ACTIONS::groupCreate.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::GroupMergeSelected,       PCB_ACTIONS::groupMerge.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UngroupSelected,          PCB_ACTIONS::groupUngroup.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::GroupRemoveItemsSelected, PCB_ACTIONS::groupRemoveItems.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::GroupFlattenSelected,     PCB_ACTIONS::groupFlatten.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::GroupEnterSelected,       PCB_ACTIONS::groupEnter.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::GroupLeave,               PCB_ACTIONS::groupLeave.MakeEvent() );
 
-    Go( &PCB_EDITOR_CONTROL::UpdatePCBFromSchematic, ACTIONS::updatePcbFromSchematic.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::UpdateSchematicFromPCB, ACTIONS::updateSchematicFromPcb.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ShowEeschema,           PCB_ACTIONS::showEeschema.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ToggleLayersManager,    PCB_ACTIONS::showLayersManager.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ToggleMicrowaveToolbar, PCB_ACTIONS::showMicrowaveToolbar.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::TogglePythonConsole,    PCB_ACTIONS::showPythonConsole.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::FlipPcbView,            PCB_ACTIONS::flipBoard.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::RepairBoard,            PCB_ACTIONS::repairBoard.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::UpdatePCBFromSchematic,   ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::UpdateSchematicFromPCB,   ACTIONS::updateSchematicFromPcb.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ShowEeschema,             PCB_ACTIONS::showEeschema.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ToggleLayersManager,      PCB_ACTIONS::showLayersManager.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ToggleMicrowaveToolbar,   PCB_ACTIONS::showMicrowaveToolbar.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::TogglePythonConsole,      PCB_ACTIONS::showPythonConsole.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::FlipPcbView,              PCB_ACTIONS::flipBoard.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::RepairBoard,              PCB_ACTIONS::repairBoard.MakeEvent() );
 }
 
 

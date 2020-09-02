@@ -185,12 +185,20 @@ public:
     }
 
     void EnterGroup();
-    void exitGroup();
+
+    /**
+     * Leave the currently entered group.
+     *
+     * @param aSelectGroup when true will select the group after leaving
+     */
+    void ExitGroup( bool aSelectGroup = false );
+
     void FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) const;
 
     PCB_GROUP* GetEnteredGroup() { return m_enteredGroup; }
 
 private:
+
     /**
      * Function selectPoint()
      * Selects an item pointed by the parameter aWhere. If there is more than one item at that

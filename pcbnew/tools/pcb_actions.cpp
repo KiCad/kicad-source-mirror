@@ -629,7 +629,7 @@ TOOL_ACTION PCB_ACTIONS::unlock( "pcbnew.EditorControl.unlock",
 
 TOOL_ACTION PCB_ACTIONS::groupCreate( "pcbnew.EditorControl.groupCreate",
         AS_GLOBAL, 0, "",
-        _( "Group" ), "",
+        _( "Group" ), _( "Add the selected items to a new group" ),
         locked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::groupMerge( "pcbnew.EditorControl.groupMerge",
@@ -644,18 +644,23 @@ TOOL_ACTION PCB_ACTIONS::groupUngroup( "pcbnew.EditorControl.groupUngroup",
 
 TOOL_ACTION PCB_ACTIONS::groupRemoveItems( "pcbnew.EditorControl.groupRemoveItems",
         AS_GLOBAL, 0, "",
-        _( "Remove Items" ), "",
+        _( "Remove Items" ), _( "Remove items from group" ),
         unlocked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::groupFlatten( "pcbnew.EditorControl.groupFlatten",
         AS_GLOBAL, 0, "",
-        _( "Flatten" ), "",
+        _( "Flatten Group" ), "",
         unlocked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::groupEnter( "pcbnew.EditorControl.groupEnter",
         AS_GLOBAL, 0, "",
-        _( "Enter" ), "",
+        _( "Enter Group" ), _( "Enter the group to edit items" ),
         unlocked_xpm );
+
+TOOL_ACTION PCB_ACTIONS::groupLeave( "pcbnew.EditorControl.groupLeave",
+        AS_GLOBAL, 0, "",
+        _( "Leave Group" ), _( "Leave the current group" ),
+        cancel_xpm );
 
 TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         AS_GLOBAL, 0, "",

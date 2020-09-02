@@ -1943,6 +1943,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
         {
             if( repair )
                 board.Groups().erase( board.Groups().begin() + idx );
+
             return  wxString::Format( _( "Group Uuid %s maps to 2 different BOARD_ITEMS: %p and %p" ),
                                       group.m_Uuid.AsString(),
                                       testItem, groups[idx] );
@@ -1955,13 +1956,15 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
             {
                 if( repair )
                     group.SetName( group.GetName() + "-" + group.m_Uuid.AsString() );
+
                 return wxString::Format( _( "Two groups of identical name: %s" ), group.GetName() );
             }
+
             wxCHECK( groupNames.insert( group.GetName() ).second == true,
                      "Insert failed of new group" );
         }
 
-        for( const BOARD_ITEM* member : group.GetItems() )
+        for( BOARD_ITEM* member : group.GetItems() )
         {
             BOARD_ITEM* item = board.GetItem( member->m_Uuid );
 
@@ -1969,6 +1972,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
             {
                 if( repair )
                     group.RemoveItem( member );
+
                 return wxString::Format( _( "Group %s contains deleted item %s" ),
                                             group.m_Uuid.AsString(),
                                             member->m_Uuid.AsString() );
@@ -1978,6 +1982,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
             {
                 if( repair )
                     group.RemoveItem( member );
+
                 return wxString::Format( _( "Uuid %s maps to 2 different BOARD_ITEMS: %s %p %s and %p %s" ),
                                           member->m_Uuid.AsString(),
                                           item->m_Uuid.AsString(),
@@ -1992,11 +1997,13 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
             {
                 if( repair )
                     group.RemoveItem( member );
+
                 return wxString::Format(
                         _( "BOARD_ITEM %s appears multiple times in groups (either in the "
                            "same group or in multiple groups) " ),
                         item->m_Uuid.AsString() );
             }
+
             wxCHECK( allMembers.insert( member->m_Uuid.AsString() ).second == true,
                      "Insert failed of new member" );
 
@@ -2022,6 +2029,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
         {
             if( repair )
                 board.Groups().erase( board.Groups().begin() + idx );
+
             return wxString::Format( _( "Group must have at least one member: %s" ), group.m_Uuid.AsString() );
         }
     }
@@ -2053,12 +2061,14 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
     {
         currentChainGroups.clear();
         int currIdx = *toCheckGroups.begin();
+
         while( true )
         {
             if( currentChainGroups.find( currIdx ) != currentChainGroups.end() )
             {
                 if( repair )
                     board.Groups().erase( board.Groups().begin() + currIdx );
+
                 return "Cycle detected in group membership";
             }
             else if( knownCycleFreeGroups.find( currIdx ) != knownCycleFreeGroups.end() )
@@ -2066,21 +2076,25 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
                 // Parent is a group we know does not lead to a cycle
                 break;
             }
+
             wxCHECK( currentChainGroups.insert( currIdx ).second == true,
                      "Insert of new group to check failed" );
             // We haven't visited currIdx yet, so it must be in toCheckGroups
             wxCHECK( toCheckGroups.erase( currIdx ) == 1,
                      "Erase of idx for group just checked failed" );
             currIdx = parentGroupIdx[currIdx];
+
             if( currIdx == -1 )
             {
                 // end of chain and no cycles found in this chain
                 break;
             }
         }
+
         // No cycles found in chain, so add it to set of groups we know don't participate in a cycle.
         knownCycleFreeGroups.insert( currentChainGroups.begin(), currentChainGroups.end() );
     }
+
     // Success
     return "";
 }
