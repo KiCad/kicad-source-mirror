@@ -53,7 +53,8 @@ void LIB_EDIT_FRAME::updateTitle()
 
     if( IsSymbolFromSchematic() )
     {
-        title += wxString::Format( _( " \u2014 %s from schematic" ), m_reference );
+        title +=  wxT( " \u2014 " );
+        title += wxString::Format( _( "%s from schematic" ), m_reference );
     }
     else
     {
@@ -61,7 +62,7 @@ void LIB_EDIT_FRAME::updateTitle()
             title += wxT( " \u2014 " ) + GetCurPart()->GetLibId().Format();
 
         if( GetCurPart() && m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
-            title += _( " \u2014 [Read Only Library]" );
+            title += wxT( " \u2014 " ) + _( "[Read Only Library]" );
     }
 
     SetTitle( title );
