@@ -150,7 +150,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.module.Value().SetPos0(pos)
         self.module.Value().SetTextHeight(self.textHeight)
         self.module.Value().SetTextWidth(self.textWidth)
-        self.module.Value().SetThickness(self.textThickness)
+        self.module.Value().SetTextThickness(self.textThickness)
 
         # Add Reference field
         pos = pcbnew.wxPoint(0, textPosition)

@@ -133,7 +133,7 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
         self.draw.Line(-xstart, posy, -xend, yend)
 
         # set SMD attribute
-        self.module.SetAttributes(pcbnew.MOD_CMS)
+        self.module.SetAttributes(pcbnew.MOD_SMD)
 
         # vertical segment at left of the pad
         xstart = xend
@@ -162,18 +162,18 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
 
         # right pad side
         self.draw.Line(-xstart, posy, -xend, yend)
-        
+
         # Courtyard
         self.draw.SetLayer(pcbnew.F_CrtYd)
         max_x = max_x + linewidth + margin
         min_y = min_y - linewidth - margin
-        max_y = max_y + linewidth + margin 
-        
+        max_y = max_y + linewidth + margin
+
         # round size to nearest 0.1mm, rectangle will thus land on a 0.05mm grid
         max_x = pcbnew.PutOnGridMM(max_x, 0.05)
         max_y = pcbnew.PutOnGridMM(max_y, 0.05)
         min_y = pcbnew.PutOnGridMM(min_y, 0.05)
-        
+
         # set courtyard line thickness to the one defined in KLC
         self.draw.SetLineThickness(pcbnew.FromMM(0.05))
         self.draw.Line( -max_x, min_y, max_x, min_y )

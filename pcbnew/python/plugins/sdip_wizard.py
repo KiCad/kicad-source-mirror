@@ -132,9 +132,9 @@ class RowedFootprint(FootprintWizardBase.FootprintWizard):
 
         # set the attribute
         if self.GetName() == "S-DIP":
-            self.module.SetAttributes(pcbnew.MOD_DEFAULT)
+            self.module.SetAttributes(pcbnew.MOD_THROUGH_HOLE)
         elif self.GetName() == "SOIC":
-            self.module.SetAttributes(pcbnew.MOD_CMS)
+            self.module.SetAttributes(pcbnew.MOD_SMD)
 
 class SDIPWizard(RowedFootprint):
 
