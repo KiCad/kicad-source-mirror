@@ -53,12 +53,12 @@ public:
     /**
      * @brief Draw_opaque - render the model into the current context
      */
-    void Draw_opaque() const { Draw( false, 1.0f ); }
+    void Draw_opaque( bool aUseSelectedMaterial ) const { Draw( false, 1.0f, aUseSelectedMaterial ); }
 
     /**
      * @brief Draw_transparent - render the model into the current context
      */
-    void Draw_transparent( float aOpacity ) const { Draw( true, aOpacity ); }
+    void Draw_transparent( float aOpacity, bool aUseSelectedMaterial ) const { Draw( true, aOpacity, aUseSelectedMaterial ); }
 
     /**
      * @brief Have_opaque - return true if have opaque meshs to render
@@ -89,7 +89,7 @@ public:
     /**
      * @brief BeginDrawMulti - set some basic render states before drawing multiple models
      */
-    static void BeginDrawMulti();
+    static void BeginDrawMulti( bool aUseColorInformation );
 
     /**
      * @brief EndDrawMulti - cleanup render states after drawing multiple models
@@ -155,7 +155,7 @@ private:
                           VERTEX *aVtxOut, GLuint *aIdxOut,
                           const glm::vec4 &aColor );
 
-    void Draw( bool aTransparent, float aOpacity ) const;
+    void Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial ) const;
 };
 
 #endif // _C_OGL_3DMODEL_H_

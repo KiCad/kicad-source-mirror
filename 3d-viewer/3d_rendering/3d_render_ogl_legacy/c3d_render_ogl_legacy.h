@@ -190,6 +190,8 @@ private:
      */
     void render_3D_models( bool aRenderTopOrBot, bool aRenderTransparentOnly );
 
+    void render_3D_models_selected( bool aRenderTopOrBot, bool aRenderTransparentOnly, bool aRenderSelectedOnly );
+
     void render_3D_module( const MODULE* module, bool aRenderTransparentOnly );
 
     void setLight_Front( bool enabled );

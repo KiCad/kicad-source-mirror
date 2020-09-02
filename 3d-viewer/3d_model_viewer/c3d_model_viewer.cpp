@@ -310,10 +310,10 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
 
         glTranslatef( -model_center.x, -model_center.y, -model_center.z );
 
-        m_ogl_3dmodel->BeginDrawMulti();
+        m_ogl_3dmodel->BeginDrawMulti( true );
 
-        m_ogl_3dmodel->Draw_opaque();
-        m_ogl_3dmodel->Draw_transparent( 1.0f );
+        m_ogl_3dmodel->Draw_opaque( false );
+        m_ogl_3dmodel->Draw_transparent( 1.0f, false );
 
         m_ogl_3dmodel->EndDrawMulti();
 

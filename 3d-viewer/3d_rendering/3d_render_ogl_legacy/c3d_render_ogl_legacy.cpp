@@ -1233,15 +1233,18 @@ void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer(PCB_LAYER_ID aLayerID,
     }
 }
 
-
-void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot,
-                                              bool aRenderTransparentOnly )
+void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot, bool aRenderTransparentOnly, bool aRenderSelectedOnly )
 {
-    C_OGL_3DMODEL::BeginDrawMulti();
+
+    C_OGL_3DMODEL::BeginDrawMulti( !aRenderSelectedOnly );
 
     // Go for all modules
     for( auto module : m_boardAdapter.GetBoard()->Modules() )
     {
+        if( ( aRenderSelectedOnly && !module->IsSelected() ) ||
+            ( !aRenderSelectedOnly && module->IsSelected() ) )
+            continue;
+
         if( !module->Models().empty() )
             if( m_boardAdapter.ShouldModuleBeDisplayed((MODULE_ATTR_T) module->GetAttributes() ) )
                 if( ( aRenderTopOrBot && !module->IsFlipped() )
@@ -1250,6 +1253,13 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot,
     }
 
     C_OGL_3DMODEL::EndDrawMulti();
+}
+
+void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot,
+                                              bool aRenderTransparentOnly )
+{
+    render_3D_models_selected( aRenderTopOrBot, aRenderTransparentOnly, true );
+    render_3D_models_selected( aRenderTopOrBot, aRenderTransparentOnly, false );
 }
 
 
@@ -1318,9 +1328,9 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
                     glMultMatrixf( glm::value_ptr( mtx ) );
 
                     if( aRenderTransparentOnly )
-                        modelPtr->Draw_transparent( sM.m_Opacity );
+                        modelPtr->Draw_transparent( sM.m_Opacity, module->IsSelected() );
                     else
-                        modelPtr->Draw_opaque();
+                        modelPtr->Draw_opaque( module->IsSelected() );
 
                     if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) )
                     {
