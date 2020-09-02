@@ -250,7 +250,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	presetsLabel->Wrap( -1 );
 	bPresetsLabels->Add( presetsLabel, 1, wxTOP|wxRIGHT|wxLEFT, 2 );
 
-	presetsHotkey = new wxStaticText( this, wxID_ANY, wxT("(Crtl+Tab)"), wxDefaultPosition, wxDefaultSize, 0 );
+	presetsHotkey = new wxStaticText( this, wxID_ANY, wxT("(Ctrl+Tab)"), wxDefaultPosition, wxDefaultSize, 0 );
 	presetsHotkey->Wrap( -1 );
 	bPresetsLabels->Add( presetsHotkey, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 
