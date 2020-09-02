@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialogs/dialog_edit_component_in_schematic.h>
+#include "dialog_edit_component_in_schematic.h"
 
 #include <wx/tooltip.h>
 
@@ -33,7 +33,6 @@
 #include <ee_collectors.h>
 #include <class_library.h>
 #include <fields_grid_table.h>
-#include <invoke_sch_dialog.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
@@ -65,9 +64,10 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     // disable some options inside the edit dialog which can cause problems while dragging
     if( m_cmp->IsDragging() )
     {
-        m_rbOrientation->Disable();
-        m_rbMirror->Disable();
-        m_libraryNameTextCtrl->Disable();
+        m_orientationLabel->Disable();
+        m_orientationCtrl->Disable();
+        m_mirrorLabel->Disable();
+        m_mirrorCtrl->Disable();
     }
 
     // Give a bit more room for combobox editors
@@ -85,11 +85,17 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
         m_grid->ShowHideColumns( m_shownColumns );
     }
 
+    // Set font size for items showing long strings:
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+
+    m_libraryIDLabel->SetFont( infoFont );
+    m_tcLibraryID->SetFont( infoFont );
+
     wxToolTip::Enable( true );
     m_stdDialogButtonSizerOK->SetDefault();
 
     // Configure button logos
-    m_buttonBrowseLibrary->SetBitmap( KiBitmap( small_library_xpm ) );
     m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_bpDelete->SetBitmap( KiBitmap( trash_xpm ) );
     m_bpMoveUp->SetBitmap( KiBitmap( small_up_xpm ) );
@@ -191,87 +197,36 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     // Set the symbol orientation and mirroring.
     int orientation = m_cmp->GetOrientation() & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
 
-    if( orientation == CMP_ORIENT_90 )
-        m_rbOrientation->SetSelection( 1 );
-    else if( orientation == CMP_ORIENT_180 )
-        m_rbOrientation->SetSelection( 2 );
-    else if( orientation == CMP_ORIENT_270 )
-        m_rbOrientation->SetSelection( 3 );
-    else
-        m_rbOrientation->SetSelection( 0 );
+    switch( orientation )
+    {
+    default:
+    case CMP_ORIENT_0:   m_orientationCtrl->SetSelection( 0 ); break;
+    case CMP_ORIENT_90:  m_orientationCtrl->SetSelection( 1 ); break;
+    case CMP_ORIENT_270: m_orientationCtrl->SetSelection( 2 ); break;
+    case CMP_ORIENT_180: m_orientationCtrl->SetSelection( 3 ); break;
+    }
 
     int mirror = m_cmp->GetOrientation() & ( CMP_MIRROR_X | CMP_MIRROR_Y );
 
-    if( mirror == CMP_MIRROR_X )
-        m_rbMirror->SetSelection( 1 );
-    else if( mirror == CMP_MIRROR_Y )
-        m_rbMirror->SetSelection( 2 );
-    else
-        m_rbMirror->SetSelection( 0 );
-
-    // Set the component's library name.
-    m_libraryNameTextCtrl->SetValue( m_cmp->GetLibId().Format() );
+    switch( mirror )
+    {
+    default:           m_mirrorCtrl->SetSelection( 0 ) ; break;
+    case CMP_MIRROR_X: m_mirrorCtrl->SetSelection( 1 ); break;
+    case CMP_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 ); break;
+    }
 
     m_cbExcludeFromBom->SetValue( !m_cmp->GetIncludeInBom() );
     m_cbExcludeFromBoard->SetValue( !m_cmp->GetIncludeOnBoard() );
 
+    m_ShowPinNumButt->SetValue( m_part->ShowPinNumbers() );
+    m_ShowPinNameButt->SetValue( m_part->ShowPinNames() );
+
+    // Set the component's library name.
+    m_tcLibraryID->SetValue( m_cmp->GetLibId().Format() );
+
     Layout();
 
     return true;
-}
-
-
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnBrowseLibrary( wxCommandEvent& event )
-{
-    std::vector<COMPONENT_SELECTION> dummy;
-
-    LIB_ID id;
-    id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH );
-
-    auto sel = GetParent()->SelectCompFromLibTree( nullptr, dummy, true, 0, 0, false, &id );
-
-    if( !sel.LibId.IsValid() )
-        return;
-
-    m_libraryNameTextCtrl->SetValue( sel.LibId.Format() );
-
-    LIB_PART* entry = GetParent()->GetLibPart( sel.LibId );
-
-    if( entry )
-    {
-        // Update the value field for Power symbols
-        if( entry->IsPower() )
-            m_grid->SetCellValue( VALUE, FDC_VALUE, sel.LibId.GetLibItemName() );
-
-        // Update the units control
-        int unit = m_unitChoice->GetSelection();
-        m_unitChoice->Clear();
-
-        if( entry->GetUnitCount() > 1 )
-        {
-            for( int ii = 1; ii <= entry->GetUnitCount(); ii++ )
-                m_unitChoice->Append( LIB_PART::SubReference( ii, false ) );
-
-            if( unit < 0 || static_cast<unsigned>( unit ) >= m_unitChoice->GetCount() )
-                unit = 0;
-
-            m_unitChoice->SetSelection( unit );
-            m_unitLabel->Enable( true );
-            m_unitChoice->Enable( true );
-        }
-        else
-        {
-            m_unitChoice->SetSelection( -1 );
-            m_unitLabel->Enable( false );
-            m_unitChoice->Enable( false );
-        }
-
-        // Update the deMorgan conversion controls
-        bool conversion = m_cbAlternateSymbol->GetValue();
-
-        m_cbAlternateSymbol->SetValue( conversion && entry->HasConversion() );
-        m_cbAlternateSymbol->Enable( entry->HasConversion() );
-    }
 }
 
 
@@ -337,43 +292,6 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
         return false;
     }
 
-    id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH );
-
-    if( !id.IsValid() )
-    {
-        DisplayErrorMessage( this, _( "Library reference is not valid." ) );
-
-        m_libraryNameTextCtrl->SetFocus();
-
-        return false;
-    }
-    else if( id != m_cmp->GetLibId() )
-    {
-        LIB_PART* alias = nullptr;
-
-        try
-        {
-            alias = Prj().SchSymbolLibTable()->LoadSymbol( id );
-        }
-        catch( ... )
-        {
-        }
-
-        if( !alias )
-        {
-            msg.Printf( _( "Symbol \"%s\" not found in library \"%s\"." ),
-                        id.GetLibItemName().wx_str(),
-                        id.GetLibNickname().wx_str() );
-            DisplayErrorMessage( this, msg );
-
-            m_libraryNameTextCtrl->SetFocus();
-
-            return false;
-        }
-    }
-
-    m_libraryNameTextCtrl->SetValue( id.Format() );
-
     // Check for missing field names.
     for( size_t i = MANDATORY_FIELDS;  i < m_fields->size(); ++i )
     {
@@ -418,30 +336,6 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     // Save current flags which could be modified by next change settings
     STATUS_FLAGS flags = m_cmp->GetFlags();
 
-    // Library symbol identifier
-    LIB_ID id;
-
-    if( id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH, true ) >= 0 )
-    {
-        msg.Printf( _( "'%s' is not a valid library indentifier." ),
-                    m_libraryNameTextCtrl->GetValue() );
-        DisplayError( this, msg );
-        return false;
-    }
-
-    LIB_PART* libSymbol = Prj().SchSymbolLibTable()->LoadSymbol( id );
-
-    if( !libSymbol )
-    {
-        msg.Printf( _( "Symbol '%s' not found in symbol library '%s'." ),
-                    id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
-        DisplayError( this, msg );
-        return false;
-    }
-
-    m_cmp->SetLibSymbol( libSymbol->Flatten().release() );
-    m_cmp->SetLibId( id );
-
     // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
     if( m_cbAlternateSymbol->IsEnabled() && m_cbAlternateSymbol->GetValue() )
         m_cmp->SetConvert( LIB_ITEM::LIB_CONVERT::DEMORGAN );
@@ -449,26 +343,27 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
         m_cmp->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
 
     //Set the part selection in multiple part per package
-    int unit_selection = m_unitChoice->IsEnabled()
-                            ? m_unitChoice->GetSelection() + 1
-                            : 1;
+    int unit_selection = m_unitChoice->IsEnabled() ? m_unitChoice->GetSelection() + 1 : 1;
     m_cmp->SetUnitSelection( &GetParent()->GetCurrentSheet(), unit_selection );
     m_cmp->SetUnit( unit_selection );
 
-    switch( m_rbOrientation->GetSelection() )
+    switch( m_orientationCtrl->GetSelection() )
     {
     case 0: m_cmp->SetOrientation( CMP_ORIENT_0 );   break;
     case 1: m_cmp->SetOrientation( CMP_ORIENT_90 );  break;
-    case 2: m_cmp->SetOrientation( CMP_ORIENT_180 ); break;
-    case 3: m_cmp->SetOrientation( CMP_ORIENT_270 ); break;
+    case 2: m_cmp->SetOrientation( CMP_ORIENT_270 ); break;
+    case 3: m_cmp->SetOrientation( CMP_ORIENT_180 ); break;
     }
 
-    switch( m_rbMirror->GetSelection() )
+    switch( m_mirrorCtrl->GetSelection() )
     {
     case 0:                                        break;
     case 1: m_cmp->SetOrientation( CMP_MIRROR_X ); break;
     case 2: m_cmp->SetOrientation( CMP_MIRROR_Y ); break;
     }
+
+    m_part->SetShowPinNames( m_ShowPinNameButt->GetValue() );
+    m_part->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
 
     // Restore m_Flag modified by SetUnit() and other change settings
     m_cmp->ClearFlags();
@@ -696,71 +591,27 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveDown( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent& event )
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSymbol( wxCommandEvent&  )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
+    EndQuasiModal( SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL );
+}
 
-    LIB_ID id;
-    wxString msg;
-    SCH_COMPONENT copy( *m_cmp );
 
-    copy.SetFields( *m_fields );
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditLibrarySymbol( wxCommandEvent&  )
+{
+    EndQuasiModal( SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL );
+}
 
-    id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH, true );
 
-    if( id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH, true ) >= 0 )
-    {
-        msg.Printf( _( "'%s' is not a valid library indentifier." ),
-                    m_libraryNameTextCtrl->GetValue() );
-        DisplayError( this, msg );
-        return;
-    }
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnUpdateSymbol( wxCommandEvent&  )
+{
+    EndQuasiModal( SYMBOL_PROPS_WANT_UPDATE_SYMBOL );
+}
 
-    LIB_PART* libSymbol = Prj().SchSymbolLibTable()->LoadSymbol( id );
 
-    if( !libSymbol )
-    {
-        msg.Printf( _( "Symbol '%s' not found in symbol library '%s'." ),
-                    id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
-        DisplayError( this, msg );
-        return;
-    }
-
-    copy.SetLibSymbol( libSymbol->Flatten().release() );
-
-    // Update the requested fields in the component copy
-    InvokeDialogUpdateFields( GetParent(), &copy, false );
-
-    wxGridTableMessage clear( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_fields->size() );
-    m_grid->ProcessTableMessage( clear );
-
-    // Copy fields from the component copy to the dialog buffer
-    m_fields->clear();
-    std::set<wxString> defined;
-
-    for( int i = 0; i < copy.GetFieldCount(); ++i )
-    {
-        copy.GetField( i )->SetParent( m_cmp );
-
-        defined.insert( copy.GetField( i )->GetName() );
-        m_fields->push_back( *copy.GetField( i ) );
-    }
-
-    // Add in any template fieldnames not yet defined:
-    for( const TEMPLATE_FIELDNAME& templateFieldname :
-            GetParent()->Schematic().Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
-    {
-        if( defined.count( templateFieldname.m_Name ) <= 0 )
-        {
-            SCH_FIELD field( wxPoint( 0, 0 ), -1, m_cmp, templateFieldname.m_Name );
-            field.SetVisible( templateFieldname.m_Visible );
-            m_fields->push_back( field );
-        }
-    }
-
-    wxGridTableMessage refresh( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->size() );
-    m_grid->ProcessTableMessage( refresh );
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnExchangeSymbol( wxCommandEvent&  )
+{
+    EndQuasiModal( SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL );
 }
 
 

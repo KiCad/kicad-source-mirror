@@ -100,108 +100,136 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 
 	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_updateFieldValues = new wxButton( sbFields->GetStaticBox(), wxID_ANY, _("Update Fields from Library..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateFieldValues->SetToolTip( _("Sets fields to the original library values") );
-
-	bButtonSize->Add( m_updateFieldValues, 0, wxEXPAND, 5 );
-
 
 	sbFields->Add( bButtonSize, 0, wxALL|wxEXPAND, 5 );
 
 
-	mainSizer->Add( sbFields, 1, wxALL|wxEXPAND, 5 );
+	mainSizer->Add( sbFields, 1, wxALL|wxEXPAND, 10 );
 
-	wxBoxSizer* lowerSizer;
-	lowerSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bLowerSizer;
+	bLowerSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxStaticBoxSizer* sbSizerLibraryReference;
-	sbSizerLibraryReference = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbol") ), wxVERTICAL );
+	wxStaticBoxSizer* sbGeneralProps;
+	sbGeneralProps = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General") ), wxHORIZONTAL );
 
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 5, 2, 0, 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 3 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	gbSizer1->SetEmptyCellSize( wxSize( -1,10 ) );
 
-	m_staticText3 = new wxStaticText( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, _("Library Reference:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText3->Wrap( -1 );
-	fgSizer1->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	wxBoxSizer* bLibraryReferenceSizer;
-	bLibraryReferenceSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	m_libraryNameTextCtrl = new wxTextCtrl( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_libraryNameTextCtrl->SetToolTip( _("Name of the symbol in the library to which this symbol is linked") );
-
-	bLibraryReferenceSizer->Add( m_libraryNameTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_buttonBrowseLibrary = new wxBitmapButton( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_buttonBrowseLibrary->SetToolTip( _("Browse library") );
-
-	bLibraryReferenceSizer->Add( m_buttonBrowseLibrary, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-
-	fgSizer1->Add( bLibraryReferenceSizer, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
-
-	m_unitLabel = new wxStaticText( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, _("Unit:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitLabel = new wxStaticText( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Unit:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitLabel->Wrap( -1 );
-	fgSizer1->Add( m_unitLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	gbSizer1->Add( m_unitLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT, 5 );
 
 	wxArrayString m_unitChoiceChoices;
-	m_unitChoice = new wxChoice( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_unitChoiceChoices, 0 );
+	m_unitChoice = new wxChoice( sbGeneralProps->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_unitChoiceChoices, 0 );
 	m_unitChoice->SetSelection( 0 );
 	m_unitChoice->SetMinSize( wxSize( 100,-1 ) );
 
-	fgSizer1->Add( m_unitChoice, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
+	gbSizer1->Add( m_unitChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-
-	fgSizer1->Add( 0, 0, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_cbAlternateSymbol = new wxCheckBox( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, _("Alternate symbol (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbAlternateSymbol = new wxCheckBox( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Alternate symbol (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbAlternateSymbol->SetToolTip( _("Use the alternate shape of this symbol.\nFor gates, this is the \"De Morgan\" conversion") );
 
-	fgSizer1->Add( m_cbAlternateSymbol, 0, wxRIGHT|wxTOP, 5 );
+	gbSizer1->Add( m_cbAlternateSymbol, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+
+	m_orientationLabel = new wxStaticText( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_orientationLabel->Wrap( -1 );
+	gbSizer1->Add( m_orientationLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+	wxString m_orientationCtrlChoices[] = { _("0"), _("+90"), _("-90"), _("180") };
+	int m_orientationCtrlNChoices = sizeof( m_orientationCtrlChoices ) / sizeof( wxString );
+	m_orientationCtrl = new wxChoice( sbGeneralProps->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_orientationCtrlNChoices, m_orientationCtrlChoices, 0 );
+	m_orientationCtrl->SetSelection( 0 );
+	gbSizer1->Add( m_orientationCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+
+	m_mirrorLabel = new wxStaticText( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Mirror:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_mirrorLabel->Wrap( -1 );
+	gbSizer1->Add( m_mirrorLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT, 5 );
+
+	wxString m_mirrorCtrlChoices[] = { _("Not mirrored"), _("Around X axis"), _("Around Y axis") };
+	int m_mirrorCtrlNChoices = sizeof( m_mirrorCtrlChoices ) / sizeof( wxString );
+	m_mirrorCtrl = new wxChoice( sbGeneralProps->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_mirrorCtrlNChoices, m_mirrorCtrlChoices, 0 );
+	m_mirrorCtrl->SetSelection( 0 );
+	gbSizer1->Add( m_mirrorCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer1->AddGrowableCol( 1 );
 
-	m_cbExcludeFromBom = new wxCheckBox( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbGeneralProps->Add( gbSizer1, 1, wxEXPAND, 5 );
+
+
+	bLowerSizer->Add( sbGeneralProps, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bMiddleCol;
+	bMiddleCol = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* sbSizerPinTextOpts;
+	sbSizerPinTextOpts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pin Text") ), wxVERTICAL );
+
+	m_ShowPinNumButt = new wxCheckBox( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Show pin numbers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowPinNumButt->SetValue(true);
+	m_ShowPinNumButt->SetToolTip( _("Show or hide pin numbers") );
+
+	sbSizerPinTextOpts->Add( m_ShowPinNumButt, 0, wxRIGHT|wxLEFT, 4 );
+
+	m_ShowPinNameButt = new wxCheckBox( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Show pin names"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowPinNameButt->SetValue(true);
+	m_ShowPinNameButt->SetToolTip( _("Show or hide pin names") );
+
+	sbSizerPinTextOpts->Add( m_ShowPinNameButt, 0, wxALL, 4 );
+
+
+	bMiddleCol->Add( sbSizerPinTextOpts, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticBoxSizer* sbAttributes;
+	sbAttributes = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Attributes") ), wxVERTICAL );
+
+	m_cbExcludeFromBom = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExcludeFromBom->SetToolTip( _("This is useful for adding symbols for board footprints such as fiducials\nand logos that you do not want to appear in the bill of materials export") );
 
-	fgSizer1->Add( m_cbExcludeFromBom, 0, 0, 5 );
+	sbAttributes->Add( m_cbExcludeFromBom, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbExcludeFromBoard = new wxCheckBox( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExcludeFromBoard = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExcludeFromBoard->SetToolTip( _("This is useful for adding symbols that only get exported to the bill of materials but\nnot required to layout the board such as mechanical fasteners and enclosures") );
 
-	fgSizer1->Add( m_cbExcludeFromBoard, 0, wxBOTTOM, 5 );
+	sbAttributes->Add( m_cbExcludeFromBoard, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 
-	sbSizerLibraryReference->Add( fgSizer1, 0, wxEXPAND, 5 );
+	bMiddleCol->Add( sbAttributes, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	lowerSizer->Add( sbSizerLibraryReference, 5, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bLowerSizer->Add( bMiddleCol, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_rbOrientationChoices[] = { _("0"), _("+90"), _("+180"), _("-90") };
-	int m_rbOrientationNChoices = sizeof( m_rbOrientationChoices ) / sizeof( wxString );
-	m_rbOrientation = new wxRadioBox( this, wxID_ANY, _("Orientation"), wxDefaultPosition, wxDefaultSize, m_rbOrientationNChoices, m_rbOrientationChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbOrientation->SetSelection( 0 );
-	m_rbOrientation->SetToolTip( _("Select if the symbol is to be rotated when drawn") );
+	wxBoxSizer* buttonsSizer;
+	buttonsSizer = new wxBoxSizer( wxVERTICAL );
 
-	lowerSizer->Add( m_rbOrientation, 2, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_updateSymbolBtn = new wxButton( this, wxID_ANY, _("Update Symbol from Library..."), wxDefaultPosition, wxDefaultSize, 0 );
+	buttonsSizer->Add( m_updateSymbolBtn, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_rbMirrorChoices[] = { _("Default"), _("Mirror around X axis"), _("Mirror around Y axis") };
-	int m_rbMirrorNChoices = sizeof( m_rbMirrorChoices ) / sizeof( wxString );
-	m_rbMirror = new wxRadioBox( this, wxID_ANY, _("Aspect"), wxDefaultPosition, wxDefaultSize, m_rbMirrorNChoices, m_rbMirrorChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbMirror->SetSelection( 1 );
-	m_rbMirror->SetToolTip( _("Pick the graphical transformation to be used when displaying the symbol") );
+	m_changeSymbolBtn = new wxButton( this, wxID_ANY, _("Change Symbol..."), wxDefaultPosition, wxDefaultSize, 0 );
+	buttonsSizer->Add( m_changeSymbolBtn, 0, wxEXPAND|wxALL, 5 );
 
-	lowerSizer->Add( m_rbMirror, 2, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_editSchematicSymbolBtn = new wxButton( this, wxID_ANY, _("Edit Symbol..."), wxDefaultPosition, wxDefaultSize, 0 );
+	buttonsSizer->Add( m_editSchematicSymbolBtn, 0, wxEXPAND|wxALL, 5 );
+
+	m_pinTableButton = new wxButton( this, wxID_ANY, _("Alternate Pin Assignments..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pinTableButton->SetMinSize( wxSize( 112,-1 ) );
+
+	buttonsSizer->Add( m_pinTableButton, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 5 );
 
 
-	mainSizer->Add( lowerSizer, 0, wxEXPAND|wxBOTTOM, 5 );
+	buttonsSizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	m_editLibrarySymbolBtn = new wxButton( this, wxID_ANY, _("Edit Library Symbol..."), wxDefaultPosition, wxDefaultSize, 0 );
+	buttonsSizer->Add( m_editLibrarySymbolBtn, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bLowerSizer->Add( buttonsSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	mainSizer->Add( bLowerSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -209,18 +237,29 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
+	wxBoxSizer* bLibLink;
+	bLibLink = new wxBoxSizer( wxHORIZONTAL );
+
+	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_libraryIDLabel->Wrap( -1 );
+	bLibLink->Add( m_libraryIDLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
+	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+	m_tcLibraryID->SetToolTip( _("The library ID and footprint ID currently assigned.  Use “Change Footprint…” to assign a different footprint.") );
+
+	bLibLink->Add( m_tcLibraryID, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bSizerBottom->Add( bLibLink, 1, wxEXPAND|wxLEFT, 10 );
+
+
+	bSizerBottom->Add( 20, 0, 0, wxEXPAND, 5 );
+
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Spice Model..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_spiceFieldsButton->SetMinSize( wxSize( 112,-1 ) );
 
-	bSizerBottom->Add( m_spiceFieldsButton, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 10 );
-
-	m_pinTableButton = new wxButton( this, wxID_ANY, _("Pin Table..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_pinTableButton->SetMinSize( wxSize( 112,-1 ) );
-
-	bSizerBottom->Add( m_pinTableButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-
-	bSizerBottom->Add( 10, 0, 1, wxEXPAND, 5 );
+	bSizerBottom->Add( m_spiceFieldsButton, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 5 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
@@ -247,10 +286,12 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnMoveDown ), NULL, this );
 	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnDeleteField ), NULL, this );
-	m_updateFieldValues->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::UpdateFieldsFromLibrary ), NULL, this );
-	m_buttonBrowseLibrary->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnBrowseLibrary ), NULL, this );
-	m_spiceFieldsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSpiceModel ), NULL, this );
+	m_updateSymbolBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnUpdateSymbol ), NULL, this );
+	m_changeSymbolBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnExchangeSymbol ), NULL, this );
+	m_editSchematicSymbolBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSymbol ), NULL, this );
 	m_pinTableButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditPinTable ), NULL, this );
+	m_editLibrarySymbolBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditLibrarySymbol ), NULL, this );
+	m_spiceFieldsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSpiceModel ), NULL, this );
 	m_stdDialogButtonSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnCancelButtonClick ), NULL, this );
 }
 
@@ -264,10 +305,12 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BAS
 	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnMoveDown ), NULL, this );
 	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnDeleteField ), NULL, this );
-	m_updateFieldValues->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::UpdateFieldsFromLibrary ), NULL, this );
-	m_buttonBrowseLibrary->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnBrowseLibrary ), NULL, this );
-	m_spiceFieldsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSpiceModel ), NULL, this );
+	m_updateSymbolBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnUpdateSymbol ), NULL, this );
+	m_changeSymbolBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnExchangeSymbol ), NULL, this );
+	m_editSchematicSymbolBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSymbol ), NULL, this );
 	m_pinTableButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditPinTable ), NULL, this );
+	m_editLibrarySymbolBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditLibrarySymbol ), NULL, this );
+	m_spiceFieldsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSpiceModel ), NULL, this );
 	m_stdDialogButtonSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnCancelButtonClick ), NULL, this );
 
 }

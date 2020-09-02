@@ -27,11 +27,11 @@ class WX_GRID;
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/stattext.h>
-#include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
-#include <wx/radiobox.h>
+#include <wx/gbsizer.h>
 #include <wx/statline.h>
+#include <wx/textctrl.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -50,20 +50,26 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_bpMoveUp;
 		wxBitmapButton* m_bpMoveDown;
 		wxBitmapButton* m_bpDelete;
-		wxButton* m_updateFieldValues;
-		wxStaticText* m_staticText3;
-		wxTextCtrl* m_libraryNameTextCtrl;
-		wxBitmapButton* m_buttonBrowseLibrary;
 		wxStaticText* m_unitLabel;
 		wxChoice* m_unitChoice;
 		wxCheckBox* m_cbAlternateSymbol;
+		wxStaticText* m_orientationLabel;
+		wxChoice* m_orientationCtrl;
+		wxStaticText* m_mirrorLabel;
+		wxChoice* m_mirrorCtrl;
+		wxCheckBox* m_ShowPinNumButt;
+		wxCheckBox* m_ShowPinNameButt;
 		wxCheckBox* m_cbExcludeFromBom;
 		wxCheckBox* m_cbExcludeFromBoard;
-		wxRadioBox* m_rbOrientation;
-		wxRadioBox* m_rbMirror;
-		wxStaticLine* m_staticline1;
-		wxButton* m_spiceFieldsButton;
+		wxButton* m_updateSymbolBtn;
+		wxButton* m_changeSymbolBtn;
+		wxButton* m_editSchematicSymbolBtn;
 		wxButton* m_pinTableButton;
+		wxButton* m_editLibrarySymbolBtn;
+		wxStaticLine* m_staticline1;
+		wxStaticText* m_libraryIDLabel;
+		wxTextCtrl* m_tcLibraryID;
+		wxButton* m_spiceFieldsButton;
 		wxStdDialogButtonSizer* m_stdDialogButtonSizer;
 		wxButton* m_stdDialogButtonSizerOK;
 		wxButton* m_stdDialogButtonSizerCancel;
@@ -76,10 +82,12 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 		virtual void OnMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
-		virtual void UpdateFieldsFromLibrary( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnBrowseLibrary( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateSymbol( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExchangeSymbol( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEditSymbol( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditPinTable( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEditLibrarySymbol( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 
 

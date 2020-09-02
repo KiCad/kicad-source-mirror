@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <kiway.h>
 #include <tool/picker_tool.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/ee_selection_tool.h>
@@ -1417,19 +1418,52 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_COMPONENT_T:
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-        DIALOG_EDIT_COMPONENT_IN_SCHEMATIC dlg( m_frame, component );
+        DIALOG_EDIT_COMPONENT_IN_SCHEMATIC symbolPropsDialog( m_frame, component );
 
         // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
         // frame. Therefore this dialog as a modal frame parent, MUST be run under
         // quasimodal mode for the quasimodal frame support to work.  So don't use
         // the QUASIMODAL macros here.
-        if( dlg.ShowQuasiModal() == wxID_OK )
+        int retval = symbolPropsDialog.ShowQuasiModal();
+
+        if( retval == SYMBOL_PROPS_EDIT_OK )
         {
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                 component->AutoAutoplaceFields( m_frame->GetScreen() );
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();
+        }
+        else if( retval == SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL )
+        {
+            auto editor = (LIB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_LIB_EDITOR, true );
+
+            editor->LoadSymbolFromSchematic( component->GetPartRef(),
+                                             component->GetRef( &m_frame->GetCurrentSheet() ),
+                                             component->GetUnit(), component->GetConvert() );
+
+            editor->Show( true );
+            editor->Raise();
+        }
+        else if( retval == SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL )
+        {
+            auto editor = (LIB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_LIB_EDITOR, true );
+
+            editor->LoadComponentAndSelectLib( component->GetLibId(), component->GetUnit(),
+                                               component->GetConvert() );
+
+            editor->Show( true );
+            editor->Raise();
+        }
+        else if( retval == SYMBOL_PROPS_WANT_UPDATE_SYMBOL )
+        {
+            DIALOG_CHANGE_SYMBOLS dlg( m_frame, component, DIALOG_CHANGE_SYMBOLS::MODE::UPDATE );
+            dlg.ShowModal();
+        }
+        else if( retval == SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL )
+        {
+            DIALOG_CHANGE_SYMBOLS dlg( m_frame, component, DIALOG_CHANGE_SYMBOLS::MODE::CHANGE );
+            dlg.ShowModal();
         }
     }
         break;

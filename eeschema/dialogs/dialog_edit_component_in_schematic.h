@@ -34,6 +34,17 @@ class SCH_EDIT_FRAME;
 class LIB_PART;
 
 
+// The dialog can be closed for several reasons.
+enum SYMBOL_PROPS_RETVALUE
+{
+    SYMBOL_PROPS_WANT_UPDATE_SYMBOL,
+    SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL,
+    SYMBOL_PROPS_EDIT_OK,
+    SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL,
+    SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL
+};
+
+
 /**
  * Dialog used to edit #SCH_COMPONENT objects in a schematic.
  *
@@ -49,28 +60,16 @@ public:
     SCH_EDIT_FRAME* GetParent();
 
 private:
-    SCH_COMPONENT* m_cmp;
-    LIB_PART*      m_part;
-
-    int      m_width;
-    int      m_delayedFocusRow;
-    int      m_delayedFocusColumn;
-    wxString m_shownColumns;
-
-    FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
-
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     bool Validate() override;
 
     // event handlers
-    void UpdateFieldsFromLibrary( wxCommandEvent& event ) override;
     void OnAddField( wxCommandEvent& event ) override;
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnMoveUp( wxCommandEvent& event ) override;
     void OnMoveDown( wxCommandEvent& event ) override;
-    void OnBrowseLibrary( wxCommandEvent& event ) override;
     void OnEditSpiceModel( wxCommandEvent& event ) override;
     void OnEditPinTable( wxCommandEvent& event ) override;
     void OnSizeGrid( wxSizeEvent& event ) override;
@@ -79,7 +78,23 @@ private:
     void OnCancelButtonClick( wxCommandEvent& event ) override;
     void OnInitDlg( wxInitDialogEvent& event ) override;
 
+    void OnEditSymbol( wxCommandEvent&  ) override;
+    void OnEditLibrarySymbol( wxCommandEvent&  ) override;
+    void OnUpdateSymbol( wxCommandEvent&  ) override;
+    void OnExchangeSymbol( wxCommandEvent&  ) override;
+
     void AdjustGridColumns( int aWidth );
+
+private:
+    SCH_COMPONENT* m_cmp;
+    LIB_PART*      m_part;
+
+    int            m_width;
+    int            m_delayedFocusRow;
+    int            m_delayedFocusColumn;
+    wxString       m_shownColumns;
+
+    FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
 };
 
 #endif // _DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_H_
