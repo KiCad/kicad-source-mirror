@@ -871,7 +871,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 #endif
 
 
-    load_3D_models();
+    load_3D_models( false );
 
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
@@ -1250,7 +1250,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
 }
 
 
-void C3D_RENDER_RAYTRACING::load_3D_models()
+void C3D_RENDER_RAYTRACING::load_3D_models( bool aSkipMaterialInformation )
 {
     // Go for all modules
     for( auto module : m_boardAdapter.GetBoard()->Modules() )
@@ -1341,7 +1341,7 @@ void C3D_RENDER_RAYTRACING::load_3D_models()
                                                            sM->m_Scale.y,
                                                            sM->m_Scale.z ) );
 
-                        add_3D_models( modelPtr, modelMatrix, (float)sM->m_Opacity );
+                        add_3D_models( modelPtr, modelMatrix, (float)sM->m_Opacity, aSkipMaterialInformation );
                     }
                 }
 
@@ -1351,10 +1351,121 @@ void C3D_RENDER_RAYTRACING::load_3D_models()
     }
 }
 
+MODEL_MATERIALS *C3D_RENDER_RAYTRACING::get_3D_model_material( const S3DMODEL *a3DModel )
+{
+    MODEL_MATERIALS *materialVector;
+
+    // Try find if the materials already exists in the map list
+    if( m_model_materials.find( a3DModel ) != m_model_materials.end() )
+    {
+        // Found it, so get the pointer
+        materialVector = &m_model_materials[a3DModel];
+    }
+    else
+    {
+        // Materials was not found in the map, so it will create a new for
+        // this model.
+
+        m_model_materials[a3DModel] = MODEL_MATERIALS();
+        materialVector = &m_model_materials[a3DModel];
+
+        materialVector->resize( a3DModel->m_MaterialsSize );
+
+        for( unsigned int imat = 0;
+             imat < a3DModel->m_MaterialsSize;
+             ++imat )
+        {
+            if( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::NORMAL )
+            {
+                const SMATERIAL &material = a3DModel->m_Materials[imat];
+
+                // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiJtaW4oc3FydCh4LTAuMzUpKjAuNDAtMC4wNSwxLjApIiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiMC4wNzA3NzM2NzMyMzY1OTAxMiIsIjEuNTY5NTcxNjI5MjI1NDY5OCIsIi0wLjI3NDYzNTMyMTc1OTkyOTMiLCIwLjY0NzcwMTg4MTkyNTUzNjIiXSwic2l6ZSI6WzY0NCwzOTRdfV0-
+
+                float reflectionFactor = 0.0f;
+
+                if( (material.m_Shininess - 0.35f) > FLT_EPSILON )
+                {
+                    reflectionFactor = glm::clamp( glm::sqrt( (material.m_Shininess - 0.35f) ) *
+                                                   0.40f - 0.05f,
+                                                   0.0f,
+                                                   0.5f );
+                }
+
+                CBLINN_PHONG_MATERIAL &blinnMaterial = (*materialVector)[imat];
+
+                blinnMaterial = CBLINN_PHONG_MATERIAL(
+                                          ConvertSRGBToLinear( material.m_Ambient ),
+                                          ConvertSRGBToLinear( material.m_Emissive ),
+                                          ConvertSRGBToLinear( material.m_Specular ),
+                                          material.m_Shininess * 180.0f,
+                                          material.m_Transparency,
+                                          reflectionFactor );
+
+                if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+                {
+                    // Guess material type and apply a normal perturbator
+
+                    if( ( RGBtoGray(material.m_Diffuse) < 0.3f ) &&
+                        ( material.m_Shininess < 0.36f ) &&
+                        ( material.m_Transparency == 0.0f ) &&
+                        ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) < 0.15f) &&
+                          (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) < 0.15f) &&
+                          (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.15f) ) )
+                    {
+                        // This may be a black plastic..
+
+                        if( material.m_Shininess < 0.26f )
+                            blinnMaterial.SetNormalPerturbator( &m_plastic_normal_perturbator );
+                        else
+                            blinnMaterial.SetNormalPerturbator( &m_plastic_shine_normal_perturbator );
+                    }
+                    else
+                    {
+                        if( ( RGBtoGray(material.m_Diffuse) > 0.3f ) &&
+                            ( material.m_Shininess < 0.30f ) &&
+                            ( material.m_Transparency == 0.0f ) &&
+                            ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) > 0.25f) ||
+                              (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) > 0.25f) ||
+                              (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) > 0.25f) ) )
+                        {
+                            // This may be a color plastic ...
+                            blinnMaterial.SetNormalPerturbator( &m_plastic_shine_normal_perturbator );
+                        }
+                        else
+                        {
+                            if( ( RGBtoGray(material.m_Diffuse) > 0.6f ) &&
+                                ( material.m_Shininess > 0.35f ) &&
+                                ( material.m_Transparency == 0.0f ) &&
+                                ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) < 0.40f) &&
+                                  (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) < 0.40f) &&
+                                  (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.40f) ) )
+                            {
+                                // This may be a brushed metal
+                                blinnMaterial.SetNormalPerturbator( &m_brushed_metal_normal_perturbator );
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                (*materialVector)[imat] = CBLINN_PHONG_MATERIAL( SFVEC3F( 0.2f ),
+                                                                 SFVEC3F( 0.0f ),
+                                                                 SFVEC3F( 0.0f ),
+                                                                 0.0f,
+                                                                 0.0f,
+                                                                 0.0f );
+            }
+        }
+    }
+
+    return materialVector;
+}
 
 void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
                                            const glm::mat4 &aModelMatrix,
-                                           float aModuleOpacity )
+                                           float aModuleOpacity,
+                                           bool aSkipMaterialInformation )
 {
 
     // Validate a3DModel pointers
@@ -1379,110 +1490,11 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
         (a3DModel->m_MaterialsSize > 0) && (a3DModel->m_MeshesSize > 0) )
     {
 
-        MODEL_MATERIALS *materialVector;
+        MODEL_MATERIALS *materialVector = NULL;
 
-        // Try find if the materials already exists in the map list
-        if( m_model_materials.find( a3DModel ) != m_model_materials.end() )
+        if( !aSkipMaterialInformation )
         {
-            // Found it, so get the pointer
-            materialVector = &m_model_materials[a3DModel];
-        }
-        else
-        {
-            // Materials was not found in the map, so it will create a new for
-            // this model.
-
-            m_model_materials[a3DModel] = MODEL_MATERIALS();
-            materialVector = &m_model_materials[a3DModel];
-
-            materialVector->resize( a3DModel->m_MaterialsSize );
-
-            for( unsigned int imat = 0;
-                 imat < a3DModel->m_MaterialsSize;
-                 ++imat )
-            {
-                if( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::NORMAL )
-                {
-                    const SMATERIAL &material = a3DModel->m_Materials[imat];
-
-                    // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiJtaW4oc3FydCh4LTAuMzUpKjAuNDAtMC4wNSwxLjApIiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiMC4wNzA3NzM2NzMyMzY1OTAxMiIsIjEuNTY5NTcxNjI5MjI1NDY5OCIsIi0wLjI3NDYzNTMyMTc1OTkyOTMiLCIwLjY0NzcwMTg4MTkyNTUzNjIiXSwic2l6ZSI6WzY0NCwzOTRdfV0-
-
-                    float reflectionFactor = 0.0f;
-
-                    if( (material.m_Shininess - 0.35f) > FLT_EPSILON )
-                    {
-                        reflectionFactor = glm::clamp( glm::sqrt( (material.m_Shininess - 0.35f) ) *
-                                                       0.40f - 0.05f,
-                                                       0.0f,
-                                                       0.5f );
-                    }
-
-                    CBLINN_PHONG_MATERIAL &blinnMaterial = (*materialVector)[imat];
-
-                    blinnMaterial = CBLINN_PHONG_MATERIAL(
-                                              ConvertSRGBToLinear( material.m_Ambient ),
-                                              ConvertSRGBToLinear( material.m_Emissive ),
-                                              ConvertSRGBToLinear( material.m_Specular ),
-                                              material.m_Shininess * 180.0f,
-                                              material.m_Transparency,
-                                              reflectionFactor );
-
-                    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
-                    {
-                        // Guess material type and apply a normal perturbator
-
-                        if( ( RGBtoGray(material.m_Diffuse) < 0.3f ) &&
-                            ( material.m_Shininess < 0.36f ) &&
-                            ( material.m_Transparency == 0.0f ) &&
-                            ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) < 0.15f) &&
-                              (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) < 0.15f) &&
-                              (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.15f) ) )
-                        {
-                            // This may be a black plastic..
-
-                            if( material.m_Shininess < 0.26f )
-                                blinnMaterial.SetNormalPerturbator( &m_plastic_normal_perturbator );
-                            else
-                                blinnMaterial.SetNormalPerturbator( &m_plastic_shine_normal_perturbator );
-                        }
-                        else
-                        {
-                            if( ( RGBtoGray(material.m_Diffuse) > 0.3f ) &&
-                                ( material.m_Shininess < 0.30f ) &&
-                                ( material.m_Transparency == 0.0f ) &&
-                                ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) > 0.25f) ||
-                                  (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) > 0.25f) ||
-                                  (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) > 0.25f) ) )
-                            {
-                                // This may be a color plastic ...
-                                blinnMaterial.SetNormalPerturbator( &m_plastic_shine_normal_perturbator );
-                            }
-                            else
-                            {
-                                if( ( RGBtoGray(material.m_Diffuse) > 0.6f ) &&
-                                    ( material.m_Shininess > 0.35f ) &&
-                                    ( material.m_Transparency == 0.0f ) &&
-                                    ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) < 0.40f) &&
-                                      (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) < 0.40f) &&
-                                      (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.40f) ) )
-                                {
-                                    // This may be a brushed metal
-                                    blinnMaterial.SetNormalPerturbator( &m_brushed_metal_normal_perturbator );
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    (*materialVector)[imat] = CBLINN_PHONG_MATERIAL( SFVEC3F( 0.2f ),
-                                                                     SFVEC3F( 0.0f ),
-                                                                     SFVEC3F( 0.0f ),
-                                                                     0.0f,
-                                                                     0.0f,
-                                                                     0.0f );
-                }
-            }
+            materialVector = get_3D_model_material( a3DModel );
         }
 
         const glm::mat3 normalMatrix = glm::transpose( glm::inverse( glm::mat3( aModelMatrix ) ) );
@@ -1551,30 +1563,33 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
                                                                  nt0, nt2, nt1 );
 
                         m_object_container.Add( newTriangle );
-                        newTriangle->SetMaterial( (const CMATERIAL *)&blinn_material );
 
-                        newTriangle->SetModelTransparency( moduleTransparency );
-
-                        if( mesh.m_Color == NULL )
+                        if( !aSkipMaterialInformation )
                         {
-                            const SFVEC3F diffuseColor =
-                                a3DModel->m_Materials[mesh.m_MaterialIdx].m_Diffuse;
+                            newTriangle->SetMaterial( (const CMATERIAL *)&blinn_material );
+                            newTriangle->SetModelTransparency( moduleTransparency );
 
-                            if( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::CAD_MODE )
-                                newTriangle->SetColor( ConvertSRGBToLinear( MaterialDiffuseToColorCAD( diffuseColor ) ) );
+                            if( mesh.m_Color == NULL )
+                            {
+                                const SFVEC3F diffuseColor =
+                                    a3DModel->m_Materials[mesh.m_MaterialIdx].m_Diffuse;
+
+                                if( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::CAD_MODE )
+                                    newTriangle->SetColor( ConvertSRGBToLinear( MaterialDiffuseToColorCAD( diffuseColor ) ) );
+                                else
+                                    newTriangle->SetColor( ConvertSRGBToLinear( diffuseColor ) );
+                            }
                             else
-                                newTriangle->SetColor( ConvertSRGBToLinear( diffuseColor ) );
-                        }
-                        else
-                        {
-                            if( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::CAD_MODE )
-                                newTriangle->SetColor( ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx0] ) ),
-                                                       ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx1] ) ),
-                                                       ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx2] ) ) );
-                            else
-                                newTriangle->SetColor( ConvertSRGBToLinear( mesh.m_Color[idx0] ),
-                                                       ConvertSRGBToLinear( mesh.m_Color[idx1] ),
-                                                       ConvertSRGBToLinear( mesh.m_Color[idx2] ) );
+                            {
+                                if( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::CAD_MODE )
+                                    newTriangle->SetColor( ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx0] ) ),
+                                                           ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx1] ) ),
+                                                           ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx2] ) ) );
+                                else
+                                    newTriangle->SetColor( ConvertSRGBToLinear( mesh.m_Color[idx0] ),
+                                                           ConvertSRGBToLinear( mesh.m_Color[idx1] ),
+                                                           ConvertSRGBToLinear( mesh.m_Color[idx2] ) );
+                            }
                         }
                     }
                 }

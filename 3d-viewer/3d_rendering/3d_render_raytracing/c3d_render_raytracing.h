@@ -201,10 +201,13 @@ private:
     void add_3D_vias_and_pads_to_container();
     void insert3DViaHole( const VIA* aVia );
     void insert3DPadHole( const D_PAD* aPad );
-    void load_3D_models();
+    void load_3D_models( bool aSkipMaterialInformation );
     void add_3D_models( const S3DMODEL *a3DModel,
                         const glm::mat4 &aModelMatrix,
-                        float aModuleOpacity );
+                        float aModuleOpacity,
+                        bool aSkipMaterialInformation );
+
+    MODEL_MATERIALS *get_3D_model_material( const S3DMODEL *a3DModel );
 
     /// Stores materials of the 3D models
     MAP_MODEL_MATERIALS m_model_materials;
