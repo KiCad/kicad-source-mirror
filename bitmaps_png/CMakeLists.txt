@@ -424,6 +424,7 @@ set( BMAPS_MID
     rotate_neg_z
     rotate_pos_z
     save_as
+    save_symbol_to_schematic
     save_fp_to_board
     save
     select_grid
@@ -574,8 +575,13 @@ function( svg2png inputFile outFile pngWidth pngHeight )
 
     add_custom_command(
         OUTPUT ${outFile}
-        COMMAND ${Inkscape_EXECUTABLE} --without-gui --export-area-snap -f ${inputFile} -e ${outFile}
+        # this Inkscape command line is for old Inkscape version < 1.0
+        COMMAND ${Inkscape_EXECUTABLE} --without-gui --export-area-snap -f ${inputFile} --export-png ${outFile}
+
+        # this Inkscape command line is for Inkscape >= 1.0
+        #COMMAND ${Inkscape_EXECUTABLE} --export-area-snap --export-type="png" ${inputFile} --export-filename ${outFile}
             -w ${pngWidth} -h ${pngHeight} > ${logfile}
+
         DEPENDS ${inputFile}
         COMMENT "Creating ${pngHeight} pixel tall ${outFile}"
         )

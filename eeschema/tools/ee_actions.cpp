@@ -187,7 +187,7 @@ TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( "eeschema.SymbolLibraryControl.tog
 TOOL_ACTION EE_ACTIONS::saveInSchematic( "eeschema.SymbolLibraryControl.saveInSchematic",
         AS_GLOBAL, 0, "",
         _( "Save In Schematic" ), _( "Save the current symbol in the schematic" ),
-        import_part_xpm );
+        save_symbol_to_schematic_xpm );
 
 
 // LIB_DRAWING_TOOLS
