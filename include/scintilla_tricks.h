@@ -41,6 +41,8 @@ public:
     void DoAutocomplete( const wxString& aPartial, const wxArrayString& aTokens );
 
 protected:
+    int firstNonWhitespace( int aLine, int* aWhitespaceCount = nullptr );
+
     void onCharHook( wxKeyEvent& aEvent );
     void onScintillaUpdateUI( wxStyledTextEvent& aEvent );
 

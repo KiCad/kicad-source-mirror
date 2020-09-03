@@ -406,9 +406,9 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
     msg << _( "Item Types" );
     msg <<  "</b>"
             "<pre>"
-            "track         via               zone\r"
-            "pad           micro_via         text\r"
-            "hole          buried_via        graphic\r"
+            "track           via                 zone\r"
+            "pad             micro_via           text\r"
+            "hole            buried_via          graphic\r"
             "\r</pre>"
             "<b>";
     msg << _( "Examples" );
@@ -431,6 +431,12 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
             "   # wider clearance between HV tracks\r"
             "   (constraint clearance (min \"1.5mm + 2.0mm\"))\r"
             "   (condition \"A.netclass == 'HV' && B.netclass == 'HV'\"))\r"
+            "\r"
+#ifdef __WXMAC__
+            "# Use Cmd+/ to comment or uncomment line(s)\r"
+#else
+            "# Use Ctrl+/ to comment or uncomment line(s)\r"
+#endif
             "</pre>";
 
     HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );

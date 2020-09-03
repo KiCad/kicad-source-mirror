@@ -147,10 +147,60 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         else
             m_te->DeleteRange( m_te->GetSelectionStart(), 1 );
     }
+    else if( ( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == '/' ) )
+    {
+        int  startLine = m_te->LineFromPosition( m_te->GetSelectionStart() );
+        int  endLine = m_te->LineFromPosition( m_te->GetSelectionEnd() );
+        bool comment = firstNonWhitespace( startLine ) != '#';
+        int  whitespaceCount;
+
+        m_te->BeginUndoAction();
+
+        for( int ii = startLine; ii <= endLine; ++ii )
+        {
+            if( comment )
+                m_te->InsertText( m_te->PositionFromLine( ii ), "#" );
+            else if( firstNonWhitespace( ii, &whitespaceCount ) == '#' )
+                m_te->DeleteRange( m_te->PositionFromLine( ii ) + whitespaceCount, 1 );
+        }
+
+        m_te->SetSelection( m_te->PositionFromLine( startLine ),
+                            m_te->PositionFromLine( endLine ) + m_te->GetLineLength( endLine ) );
+
+        m_te->EndUndoAction();
+    }
     else
     {
         aEvent.Skip();
     }
+}
+
+
+int SCINTILLA_TRICKS::firstNonWhitespace( int aLine, int* aWhitespaceCharCount )
+{
+    int lineStart = m_te->PositionFromLine( aLine );
+
+    if( aWhitespaceCharCount )
+        *aWhitespaceCharCount = 0;
+
+    for( int ii = 0; ii < m_te->GetLineLength( aLine ); ++ii )
+    {
+        int c = m_te->GetCharAt( lineStart + ii );
+
+        if( c == ' ' || c == '\t' )
+        {
+            if( aWhitespaceCharCount )
+                *aWhitespaceCharCount += 1;
+
+            continue;
+        }
+        else
+        {
+            return c;
+        }
+    }
+
+    return '\r';
 }
 
 
