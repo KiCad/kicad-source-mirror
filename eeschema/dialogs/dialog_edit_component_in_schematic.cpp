@@ -274,6 +274,11 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
 {
     m_comp = aComponent;
     m_part = m_comp->GetPartRef().get();
+
+    // GetPartRef() now points to the cached part in the schematic, which should always be
+    // there
+    wxASSERT( m_part );
+
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_part );
 
     m_width = 0;
@@ -431,13 +436,15 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
         m_unitChoice->Enable( false );
     }
 
-    if( m_part != nullptr && m_part->HasConversion() )
+    if( m_part->HasConversion() )
     {
         if( m_comp->GetConvert() > LIB_ITEM::LIB_CONVERT::BASE )
             m_cbAlternateSymbol->SetValue( true );
     }
     else
+    {
         m_cbAlternateSymbol->Enable( false );
+    }
 
     // Set the symbol orientation and mirroring.
     int orientation = m_comp->GetOrientation() & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
