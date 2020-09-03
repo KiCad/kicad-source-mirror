@@ -50,7 +50,6 @@
 #include <eeschema_id.h>
 #include <status_popup.h>
 #include <wx/gdicmn.h>
-#include <invoke_sch_dialog.h>
 #include <dialogs/dialog_change_symbols.h>
 #include <dialogs/dialog_image_editor.h>
 #include <dialogs/dialog_edit_line_style.h>
