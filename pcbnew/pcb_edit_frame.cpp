@@ -1187,6 +1187,12 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
         layerEnum.Map( *seq, GetBoard()->GetLayerName( *seq ) );
 
+    // Sync visibility with canvas
+    KIGFX::VIEW* view = GetCanvas()->GetView();
+
+    for( PCB_LAYER_ID layer : GetBoard()->GetVisibleLayers().Seq() )
+        view->SetLayerVisible( layer, true );
+
     // Stackup and/or color theme may have changed
     m_appearancePanel->OnBoardChanged();
 }
