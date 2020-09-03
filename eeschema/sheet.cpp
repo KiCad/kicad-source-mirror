@@ -170,8 +170,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     // If the loaded schematic is in a different folder from the current project and
     // it contains hierarchical sheets, the hierarchical sheet paths need to be updated.
-    if( fileName.GetPath( wxPATH_GET_SEPARATOR ) != Prj().GetProjectPath()
-      && newSheet->CountSheets() )
+    if( fileName.GetPathWithSep() != Prj().GetProjectPath() && newSheet->CountSheets() )
     {
         // Give the user the option to choose relative path if possible.
         if( tmp.MakeRelativeTo( Prj().GetProjectPath() ) )
@@ -227,7 +226,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     wxMessageDialog::ButtonLabel okButtonLabel( _( "Continue Load" ) );
     wxMessageDialog::ButtonLabel cancelButtonLabel( _( "Cancel Load" ) );
 
-    if( fileName.GetPath( wxPATH_GET_SEPARATOR ) == Prj().GetProjectPath()
+    if( fileName.GetPathWithSep() == Prj().GetProjectPath()
       && !prjScreens.HasSchematic( fullFilename ) )
     {
         // A schematic in the current project path that isn't part of the current project.
@@ -254,7 +253,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 return false;
         }
     }
-    else if( fileName.GetPath( wxPATH_GET_SEPARATOR ) != Prj().GetProjectPath() )
+    else if( fileName.GetPathWithSep() != Prj().GetProjectPath() )
     {
         // A schematic loaded from a path other than the current project path.
 
