@@ -159,7 +159,11 @@ bool KICADMODULE::parseModel( SEXPR::SEXPR* data )
         return false;
     }
 
-    m_models.push_back( mp );
+    if( mp->Hide() )
+        delete mp;
+    else
+        m_models.push_back( mp );
+
     return true;
 }
 

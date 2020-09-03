@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,17 +32,16 @@
 
 
 KICADMODEL::KICADMODEL() :
+    m_hide( false ),
     m_scale( 1.0, 1.0, 1.0 ),
     m_offset( 0.0, 0.0, 0.0 ),
     m_rotation( 0.0, 0.0, 0.0 )
 {
-    return;
 }
 
 
 KICADMODEL::~KICADMODEL()
 {
-    return;
 }
 
 
@@ -61,9 +61,13 @@ bool KICADMODEL::Read( SEXPR::SEXPR* aEntry )
     SEXPR::SEXPR* child = aEntry->GetChild( 1 );
 
     if( child->IsSymbol() )
+    {
         m_modelname = child->GetSymbol();
+    }
     else if( child->IsString() )
+    {
         m_modelname = child->GetString();
+    }
     else
     {
         std::ostringstream ostr;
@@ -76,46 +80,50 @@ bool KICADMODEL::Read( SEXPR::SEXPR* aEntry )
     {
         child = aEntry->GetChild( i );
 
-        if( !child->IsList() )
-            continue;
-
-        std::string name = child->GetChild( 0 )->GetSymbol();
-        bool ret = true;
-
-        /*
-         * Version 4.x and prior used 'at' parameter,
-         * which was specified in inches.
-         */
-        if( name == "at" )
+        if( child->IsSymbol() && child->GetSymbol() == "hide" )
         {
-            ret = Get3DCoordinate( child->GetChild( 1 ), m_offset );
+            m_hide = true;
+        }
+        else if( child->IsList() )
+        {
+            std::string name = child->GetChild( 0 )->GetSymbol();
+            bool ret = true;
 
-            if( ret )
+            /*
+             * Version 4.x and prior used 'at' parameter,
+             * which was specified in inches.
+             */
+            if( name == "at" )
             {
-                m_offset.x *= 25.4f;
-                m_offset.y *= 25.4f;
-                m_offset.z *= 25.4f;
-            }
-        }
-        /*
-         * From 5.x onwards, 3D model is provided in 'offset',
-         * which is in millimetres
-         */
-        else if( name == "offset" )
-        {
-            ret = Get3DCoordinate( child->GetChild( 1 ), m_offset );
-        }
-        else if( name == "scale" )
-        {
-            ret = Get3DCoordinate( child->GetChild( 1 ), m_scale );
-        }
-        else if( name == "rotate" )
-        {
-            ret = GetXYZRotation( child->GetChild( 1 ), m_rotation );
-        }
+                ret = Get3DCoordinate( child->GetChild( 1 ), m_offset );
 
-        if( !ret )
-            return false;
+                if( ret )
+                {
+                    m_offset.x *= 25.4f;
+                    m_offset.y *= 25.4f;
+                    m_offset.z *= 25.4f;
+                }
+            }
+            /*
+             * From 5.x onwards, 3D model is provided in 'offset',
+             * which is in millimetres
+             */
+            else if( name == "offset" )
+            {
+                ret = Get3DCoordinate( child->GetChild( 1 ), m_offset );
+            }
+            else if( name == "scale" )
+            {
+                ret = Get3DCoordinate( child->GetChild( 1 ), m_scale );
+            }
+            else if( name == "rotate" )
+            {
+                ret = GetXYZRotation( child->GetChild( 1 ), m_rotation );
+            }
+
+            if( !ret )
+                return false;
+        }
     }
 
     return true;

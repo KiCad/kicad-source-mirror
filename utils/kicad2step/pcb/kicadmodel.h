@@ -38,8 +38,10 @@ public:
     virtual ~KICADMODEL();
 
     bool Read( SEXPR::SEXPR* aEntry );
+    bool Hide() const { return m_hide; }
 
     std::string m_modelname;
+    bool        m_hide;
     TRIPLET     m_scale;
     TRIPLET     m_offset;
     TRIPLET     m_rotation;
