@@ -1155,7 +1155,7 @@ void PCB_EDIT_FRAME::UpdateTitle()
         fileinfo = _( " [Unsaved]" );
 
     SetTitle( wxString::Format( wxT( "%s%s \u2014 " ) + _( "Pcbnew" ),
-                                fileName.GetFullPath(),
+                                fileName.GetName(),
                                 fileinfo ) );
 }
 

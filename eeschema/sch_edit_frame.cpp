@@ -1116,7 +1116,7 @@ void SCH_EDIT_FRAME::UpdateTitle()
             append = _( "[no file] " );
 
         title.Printf( wxT( "%s [%s] \u2014 %s %s\u2014 " ) + _( "Eeschema" ),
-                      fn.GetFullName(),
+                      fn.GetName(),
                       GetCurrentSheet().PathHumanReadable(),
                       fn.GetPath(),
                       append );

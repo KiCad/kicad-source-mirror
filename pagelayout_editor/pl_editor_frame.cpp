@@ -529,10 +529,10 @@ void PL_EDITOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 void PL_EDITOR_FRAME::UpdateTitleAndInfo()
 {
     wxString title;
-    wxString file = GetCurrentFileName();
+    wxFileName file( GetCurrentFileName() );
 
     title.Printf( wxT( "%s \u2014 " ) + _( "Page Layout Editor" ),
-                  file.Length() ? file : _( "no file selected" ) );
+                  file.IsOk() ? file.GetName() : _( "no file selected" ) );
     SetTitle( title );
 }
 
