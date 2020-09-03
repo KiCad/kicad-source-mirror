@@ -426,11 +426,30 @@ bool hasThermalConnection( D_PAD* pad, const ZONE_CONTAINER* aZone )
  */
 static void setupDummyPadForHole( const D_PAD* aPad, D_PAD& aDummyPad )
 {
+    // People may author clearance rules that look at a bunch of different stuff so we need
+    // to copy over pretty much everything except the shape info, which we fill from the drill
+    // info.
+    aDummyPad.SetLayerSet( aPad->GetLayerSet() );
+    aDummyPad.SetAttribute( aPad->GetAttribute() );
+    aDummyPad.SetProperty( aPad->GetProperty() );
+
     aDummyPad.SetNetCode( aPad->GetNetCode() );
+    aDummyPad.SetLocalClearance( aPad->GetLocalClearance() );
+    aDummyPad.SetLocalSolderMaskMargin( aPad->GetLocalSolderMaskMargin() );
+    aDummyPad.SetLocalSolderPasteMargin( aPad->GetLocalSolderPasteMargin() );
+    aDummyPad.SetLocalSolderPasteMarginRatio( aPad->GetLocalSolderPasteMarginRatio() );
+
+    aDummyPad.SetZoneConnection( aPad->GetEffectiveZoneConnection() );
+    aDummyPad.SetThermalWidth( aPad->GetThermalWidth() );
+    aDummyPad.SetThermalGap( aPad->GetThermalGap() );
+
+    aDummyPad.SetCustomShapeInZoneOpt( aPad->GetCustomShapeInZoneOpt() );
+    
+    aDummyPad.SetOffset( wxPoint( 0, 0 ) );
     aDummyPad.SetSize( aPad->GetDrillSize() );
-    aDummyPad.SetOrientation( aPad->GetOrientation() );
     aDummyPad.SetShape( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL
                                                                         : PAD_SHAPE_CIRCLE );
+    aDummyPad.SetOrientation( aPad->GetOrientation() );
     aDummyPad.SetPosition( aPad->GetPosition() );
 }
 
