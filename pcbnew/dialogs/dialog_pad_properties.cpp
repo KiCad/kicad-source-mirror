@@ -1473,11 +1473,11 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     }
 
     m_currentPad->SetLayerSet( m_padMaster->GetLayerSet() );
+    m_currentPad->SetRemoveUnconnected( m_padMaster->GetRemoveUnconnected() );
+    m_currentPad->SetKeepTopBottom( m_padMaster->GetKeepTopBottom() );
 
     if( m_isFlipped )
-    {
         m_currentPad->SetLayerSet( FlipLayerMask( m_currentPad->GetLayerSet() ) );
-    }
 
     m_currentPad->SetName( m_padMaster->GetName() );
 
