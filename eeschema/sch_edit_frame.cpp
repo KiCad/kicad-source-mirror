@@ -1096,15 +1096,16 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
 void SCH_EDIT_FRAME::UpdateTitle()
 {
     wxString title;
+    wxString nofile = _( "[no file]" ) + wxS(" ");
+    wxString app = _( "Eeschema" );
 
     if( GetScreen()->GetFileName().IsEmpty() )
     {
-        title.Printf( _( "[no file]" ) + wxT( " \u2014 " ) + _( "Eeschema" ) );
+        title = nofile + wxT( "\u2014 " ) + app;
     }
     else
     {
-        wxString    fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
-        wxFileName  fn = fileName;
+        wxFileName  fn( Prj().AbsolutePath( GetScreen()->GetFileName() ) );
         wxString    append;
 
         if( fn.FileExists() )
@@ -1113,12 +1114,11 @@ void SCH_EDIT_FRAME::UpdateTitle()
                 append = _( "[Read Only] " );
         }
         else
-            append = _( "[no file] " );
+            append = nofile;
 
-        title.Printf( wxT( "%s [%s] \u2014 %s %s\u2014 " ) + _( "Eeschema" ),
+        title.Printf( wxT( "%s [%s] %s\u2014 " ) + app,
                       fn.GetName(),
                       GetCurrentSheet().PathHumanReadable(),
-                      fn.GetPath(),
                       append );
     }
 
