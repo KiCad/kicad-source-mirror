@@ -966,6 +966,12 @@ int BOARD_DESIGN_SETTINGS::GetDRCEpsilon() const
 }
 
 
+int BOARD_DESIGN_SETTINGS::GetHolePlatingThickness() const
+{
+    return Millimeter2iu( ADVANCED_CFG::GetCfg().m_holeWallThickness );
+}
+
+
 int BOARD_DESIGN_SETTINGS::GetLineThickness( PCB_LAYER_ID aLayer ) const
 {
     return m_LineThickness[ GetLayerClass( aLayer ) ];

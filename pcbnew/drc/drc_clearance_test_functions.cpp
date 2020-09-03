@@ -319,6 +319,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                                                           &m_clearanceSource );
                 }
 
+                if( pad->GetAttribute() == PAD_ATTRIB_STANDARD )
+                    minClearance += bds.GetHolePlatingThickness();
+
                 if( slot->Collide( &refSeg, minClearance + bds.GetDRCEpsilon(), &actual ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );

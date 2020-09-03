@@ -444,9 +444,16 @@ static void setupDummyPadForHole( const D_PAD* aPad, D_PAD& aDummyPad )
     aDummyPad.SetThermalGap( aPad->GetThermalGap() );
 
     aDummyPad.SetCustomShapeInZoneOpt( aPad->GetCustomShapeInZoneOpt() );
-    
+
+    // Note: drill size represents finish size, which means the actual holes size is the
+    // plating thickness larger.
+    int platingThickness = 0;
+
+    if( aPad->GetAttribute() == PAD_ATTRIB_STANDARD )
+        platingThickness = aPad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
+
     aDummyPad.SetOffset( wxPoint( 0, 0 ) );
-    aDummyPad.SetSize( aPad->GetDrillSize() );
+    aDummyPad.SetSize( aPad->GetDrillSize() + wxSize( platingThickness, platingThickness ) );
     aDummyPad.SetShape( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL
                                                                         : PAD_SHAPE_CIRCLE );
     aDummyPad.SetOrientation( aPad->GetOrientation() );

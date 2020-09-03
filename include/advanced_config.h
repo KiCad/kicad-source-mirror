@@ -95,6 +95,11 @@ public:
     double m_DRCEpsilon;
 
     /**
+     * Hole wall plating thickness.  Used to determine actual hole size from finish hole size.
+     */
+    double m_holeWallThickness;
+
+    /**
      * Do real-time connectivity
      */
     bool m_realTimeConnectivity;

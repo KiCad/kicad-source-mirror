@@ -89,9 +89,6 @@
 #define MINIMUM_ERROR_SIZE_MM         0.001
 #define MAXIMUM_ERROR_SIZE_MM         0.1
 
-#define DRC_EPSILON                   500;    // An epsilon to account for rounding errors, etc.
-                                              // 500nm is small enough not to materially violate
-                                              // any constraints.
 
 /**
  * Struct VIA_DIMENSION
@@ -801,6 +798,12 @@ public:
      * going through this API allows us to easily change it to board-specific if so desired.
      */
     int GetDRCEpsilon() const;
+
+    /**
+     * Pad & via drills are finish size.  Adding the hole plating thickness gives you the
+     * acutal hole size.
+     */
+    int GetHolePlatingThickness() const;
 
     /**
      * Function GetLineThickness

@@ -530,7 +530,6 @@ public:
      */
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const
     {
-
         return *m_designSettings;
     }
 

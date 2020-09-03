@@ -75,6 +75,13 @@ static const wxChar ExtraFillMargin[] = wxT( "ExtraFillMargin" );
 static const wxChar DRCEpsilon[] = wxT( "DRCEpsilon" );
 
 /**
+ * Used to calculate the actual hole size from the finish hole size.
+ * IPC-6012 says 15-18um; Cadence says at least 0.020 for a Class 2 board and at least 0.025
+ * for Class 3.
+ */
+static const wxChar HoleWallThickness[] = wxT( "HoleWallPlatingThickness" );
+
+/**
  * Testing mode for new connectivity algorithm.  Setting this to on will cause all modifications
  * to the netlist to be recalculated on the fly.  This may be slower than the standard process
  * at the moment
@@ -213,6 +220,10 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_extraClearance            = 0.0005;
     m_DRCEpsilon                = 0.0005;   // 500nm is small enough not to materially violate
                                             // any constraints.
+
+    m_holeWallThickness         = 0.020;    // IPC-6012 says 15-18um; Cadence says at least
+                                            // 0.020 for a Class 2 board and at least 0.025
+                                            // for Class 3.
     loadFromConfigFile();
 }
 
@@ -259,6 +270,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCEpsilon,
                                                   &m_DRCEpsilon, 0.0005, 0.0, 1.0 ) );
 
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::HoleWallThickness,
+                                                  &m_holeWallThickness, 0.020, 0.0, 1.0 ) );
+
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
                                                &m_coroutineStackSize, AC_STACK::default_stack,
                                                AC_STACK::min_stack, AC_STACK::max_stack ) );
@@ -278,12 +292,12 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::StrokeTriangulation,
                                                 &m_DrawTriangulationOutlines, false ) );
 
-    configParams.push_back(
-            new PARAM_CFG_BOOL( true, AC_KEYS::PluginAltiumSch, &m_PluginAltiumSch, false ) );
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::PluginAltiumSch,
+                                                &m_PluginAltiumSch, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 
-    for( auto param : configParams )
+    for( PARAM_CFG* param : configParams )
         delete param;
 
     dumpCfg( configParams );
