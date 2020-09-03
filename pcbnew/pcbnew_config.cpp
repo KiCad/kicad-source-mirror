@@ -121,10 +121,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     netclassColors.clear();
 
     for( const auto& pair : netSettings.m_NetClasses )
-    {
-        if( pair.second->GetPcbColor() != COLOR4D::UNSPECIFIED )
-            netclassColors[pair.first] = pair.second->GetPcbColor();
-    }
+        netclassColors[pair.first] = pair.second->GetPcbColor();
 
     m_appearancePanel->SetUserLayerPresets( project.m_LayerPresets );
 
@@ -207,11 +204,8 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 
     netSettings.m_PcbNetColors.clear();
 
-    for( const auto& pair : rs->GetNetColorMap() )
+    for( const std::pair<const int, KIGFX::COLOR4D>& pair : rs->GetNetColorMap() )
     {
-        if( pair.second == COLOR4D::UNSPECIFIED )
-            continue;
-
         if( NETINFO_ITEM* net = nets.GetNetItem( pair.first ) )
             netSettings.m_PcbNetColors[net->GetNetname()] = pair.second;
     }
@@ -219,10 +213,9 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
 
     // NOTE: this assumes netclasses will have already been updated, which I think is the case
-    for( const auto& pair : netSettings.m_NetClasses )
+    for( const std::pair<const wxString, NETCLASSPTR>& pair : netSettings.m_NetClasses )
     {
-        if( netclassColors.count( pair.first )
-                && netclassColors.at( pair.first ) != COLOR4D::UNSPECIFIED )
+        if( netclassColors.count( pair.first ) )
             pair.second->SetPcbColor( netclassColors.at( pair.first ) );
     }
 

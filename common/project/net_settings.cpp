@@ -62,23 +62,19 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         { "diff_pair_via_gap", PcbIu2Millimeter( netclass->GetDiffPairViaGap() ) },
                         { "wire_width",        SchIu2Mils( netclass->GetWireWidth() ) },
                         { "bus_width",         SchIu2Mils( netclass->GetBusWidth() ) },
-                        { "line_style",        netclass->GetLineStyle() }
+                        { "line_style",        netclass->GetLineStyle() },
+                        { "schematic_color",   netclass->GetSchematicColor() },
+                        { "pcb_color",         netclass->GetPcbColor() }
                         };
 
-                    if( netclass->GetSchematicColor() != KIGFX::COLOR4D::UNSPECIFIED )
-                        netclassJson["schematic_color"] = netclass->GetSchematicColor();
-
-                    if( idx > 0 )
+                    if( idx > 0 )   // No need to store members of Default netclass
                     {
-                        if( netclass->GetPcbColor() != KIGFX::COLOR4D::UNSPECIFIED )
-                            netclassJson["pcb_color"] = netclass->GetPcbColor();
-
                         nlohmann::json membersJson = nlohmann::json::array();
 
-                        for( const auto& ii : *netclass )
+                        for( const wxString& member : *netclass )
                         {
-                            if( !ii.empty() )
-                                membersJson.push_back( ii );
+                            if( !member.empty() )
+                                membersJson.push_back( member );
                         }
 
                         netclassJson["nets"] = membersJson;
