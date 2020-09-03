@@ -930,6 +930,12 @@ void DIALOG_SELECT_NET_FROM_LIST::onRenameNet( wxCommandEvent& aEvent )
 
         buildNetsList();
         m_netsList->Refresh();
+
+        // Currently only tracks and pads have netname annotations and need to be redrawn,
+        // but zones are likely to follow.  Since we don't have a way to ask what is current,
+        // just refresh all items.
+        m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
+        m_frame->GetCanvas()->Refresh();
     }
 }
 
