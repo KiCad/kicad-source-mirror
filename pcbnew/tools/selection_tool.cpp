@@ -1873,6 +1873,12 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         break;
 
     case PCB_MODULE_EDGE_T:
+        // Module edge selections are only allowed in modedit mode.
+        if( !m_editModules )
+            return false;
+
+        break;
+
     case PCB_PAD_T:
     {
         // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
