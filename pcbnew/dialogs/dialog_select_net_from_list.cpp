@@ -129,7 +129,8 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
     m_brd = aParent->GetBoard();
     m_wasSelected = false;
 
-#define ADD_COL( name, flag, align ) m_netsList->AppendTextColumn( name, flag, 0, align, 0 );
+#define ADD_COL( name, flag, align ) m_netsList->AppendTextColumn( name, flag, 0, align, \
+    wxDATAVIEW_COL_RESIZABLE );
 
     ADD_COL( COLUMN_NET.display_name,          wxDATAVIEW_CELL_INERT, wxALIGN_LEFT );
     ADD_COL( COLUMN_NAME.display_name,         wxDATAVIEW_CELL_INERT, wxALIGN_LEFT );
@@ -1003,4 +1004,3 @@ void DIALOG_SELECT_NET_FROM_LIST::onReport( wxCommandEvent& aEvent )
    f.Write();
    f.Close();
 }
-
