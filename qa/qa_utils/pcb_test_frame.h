@@ -46,44 +46,27 @@ namespace KIGFX {
     class VIEW;
 };
 
-// Define a new application type
-class GAL_TEST_APP : public wxApp
+class PCB_TEST_FRAME_BASE
 {
 public:
-    virtual bool OnInit() override;
+    PCB_TEST_FRAME_BASE();  
+    virtual ~PCB_TEST_FRAME_BASE();
 
-    virtual void OnInitCmdLine( wxCmdLineParser& parser ) override;
-    virtual bool OnCmdLineParsed( wxCmdLineParser& parser ) override;
+    virtual void SetBoard( std::shared_ptr<BOARD> b);
+    virtual BOARD* LoadAndDisplayBoard ( const std::string& filename );
 
-private:
-    wxString m_filename;
-};
+    std::shared_ptr < PCB_DRAW_PANEL_GAL > GetPanel() { return m_galPanel; }
+    std::shared_ptr < BOARD > GetBoard() { return m_board; }
 
-class PCB_TEST_FRAME : public wxFrame
-{
-public:
-    PCB_TEST_FRAME(wxFrame *frame,
-            const wxString& title,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE,
-            PCB_DRAW_PANEL_GAL::GAL_TYPE aGalType = PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-
-    virtual ~PCB_TEST_FRAME();
-
-    void SetBoard( BOARD * b);
-    BOARD* LoadAndDisplayBoard ( const std::string& filename );
+    void LoadSettings();
 
 protected:
 
-    virtual void OnExit(wxCommandEvent& event);
-    virtual void OnMotion( wxMouseEvent& aEvent );
-    virtual void OnMenuFileOpen( wxCommandEvent& WXUNUSED( event ) );
+    void createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL_TYPE aGalType = PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+    virtual void createUserTools() {};
 
-    void buildView();
-
-    unique_ptr < PCB_DRAW_PANEL_GAL > m_galPanel;
-    unique_ptr < BOARD > m_board;
+    std::shared_ptr < PCB_DRAW_PANEL_GAL > m_galPanel;
+    std::shared_ptr < BOARD > m_board;
 #ifdef USE_TOOL_MANAGER
     unique_ptr < TOOL_MANAGER > m_toolManager;
     unique_ptr < TOOL_DISPATCHER > m_toolDispatcher;
@@ -91,6 +74,6 @@ protected:
 #endif
 };
 
-wxFrame* CreateMainFrame( const std::string& aFileName );
+void SetTopFrame ( wxFrame* aFrame );
 
 #endif
