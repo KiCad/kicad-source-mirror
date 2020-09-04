@@ -1836,11 +1836,13 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
                     break;
 
                 case T_value:
+                    NeedSYMBOL();
                     instance.m_Value = FromUTF8();
                     NeedRIGHT();
                     break;
 
                 case T_footprint:
+                    NeedSYMBOL();
                     instance.m_Footprint = FromUTF8();
                     NeedRIGHT();
                     break;
