@@ -31,6 +31,11 @@
 #include <3d_math.h>
 #include <wx/debug.h>
 
+int CMATERIAL::m_default_nrsamples_refractions = 4;
+int CMATERIAL::m_default_nrsamples_reflections = 3;
+int CMATERIAL::m_default_refractions_recursive_levels = 2;
+int CMATERIAL::m_default_reflections_recursive_levels = 3;
+
 // This may be a good value if based on nr of lights
 // that contribute to the illumination of that point
 #define AMBIENT_FACTOR  (1.0f / 6.0f)
@@ -46,8 +51,10 @@ CMATERIAL::CMATERIAL()
     m_cast_shadows  = true;
     m_reflection    = 0.0f;
     m_absorbance    = 1.0f;
-    m_refraction_nr_samples = 4;
-    m_reflections_nr_samples = 3;
+    m_refraction_nr_samples = m_default_nrsamples_refractions;
+    m_reflections_nr_samples = m_default_nrsamples_reflections;
+    m_refractions_recursive_levels = m_default_refractions_recursive_levels;
+    m_reflections_recursive_levels = m_default_reflections_recursive_levels;
 
     m_normal_perturbator = NULL;
 }
@@ -78,9 +85,10 @@ CMATERIAL::CMATERIAL( const SFVEC3F &aAmbient,
     m_absorbance    = 1.0f;
     m_reflection    = aReflection;
     m_cast_shadows  = true;
-    m_refraction_nr_samples = 4;
-    m_reflections_nr_samples = 3;
-    m_reflections_recursive_levels = 2;
+    m_refraction_nr_samples = m_default_nrsamples_refractions;
+    m_reflections_nr_samples = m_default_nrsamples_reflections;
+    m_refractions_recursive_levels = m_default_refractions_recursive_levels;
+    m_reflections_recursive_levels = m_default_reflections_recursive_levels;
 
     m_normal_perturbator = NULL;
 }

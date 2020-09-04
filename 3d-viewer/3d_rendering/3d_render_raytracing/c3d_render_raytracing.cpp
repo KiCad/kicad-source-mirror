@@ -1663,7 +1663,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
     SFVEC3F outColor = objMaterial->GetEmissiveColor() + objMaterial->GetAmbientColor();
 
-    if( aRecursiveLevel > 5 )
+    if( aRecursiveLevel > 7 )
         return outColor;
 
     SFVEC3F hitPoint = aHitInfo.m_HitPoint;
@@ -1718,14 +1718,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
             {
                 nr_lights_that_can_cast_shadows++;
 #if USE_EXPERIMENTAL_SOFT_SHADOWS
-                if( (!is_aa_enabled) ||
-
-                    // For rays that are recursive, just calculate one hit shadow
-                    (aRecursiveLevel > 0) ||
-
-                    // Only use soft shadows if using post processing
-                    (!m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
-                  )
+                // For rays that are recursive, just calculate one hit shadow
+                if( aRecursiveLevel > 0 )
                 {
 #endif
                     RAY rayToLight;
@@ -1743,18 +1737,26 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                 else
                 {
 
-                    const unsigned int shadow_number_of_samples = 3;
+                    const unsigned int shadow_number_of_samples = m_boardAdapter.m_raytrace_nrsamples_shadows;
                     const float shadow_inc_factor = 1.0f / (float)(shadow_number_of_samples);
 
                     for( unsigned int i = 0; i < shadow_number_of_samples; ++i )
                     {
-                        const SFVEC3F unifVector = UniformRandomHemisphereDirection();
-                        const SFVEC3F disturbed_vector_to_light = glm::normalize( vectorToLight +
-                                                                                  unifVector *
-                                                                                  0.05f );
-
                         RAY rayToLight;
-                        rayToLight.Init( hitPoint, disturbed_vector_to_light );
+
+                        if( i == 0 )
+                        {
+                            rayToLight.Init( hitPoint, vectorToLight );
+                        }
+                        else
+                        {
+                            const SFVEC3F unifVector = UniformRandomHemisphereDirection();
+                            const SFVEC3F disturbed_vector_to_light = glm::normalize( vectorToLight +
+                                                                                      unifVector *
+                                                                                      m_boardAdapter.m_raytrace_spread_shadows );
+
+                            rayToLight.Init( hitPoint, disturbed_vector_to_light );
+                        }
 
                         // !TODO: there are multiple ways that this tests can be
                         // optimized. Eg: by packing rays or to test against the
@@ -1803,8 +1805,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
         // Reflections
         // /////////////////////////////////////////////////////////////////////
 
-        if( !aIsInsideObject &&
-            (objMaterial->GetReflection() > 0.0f) &&
+        if( ( objMaterial->GetReflection() > 0.0f ) &&
             m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) &&
             ( aRecursiveLevel < objMaterial->GetReflectionsRecursiveLevel() ) )
         {
@@ -1818,14 +1819,22 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
             for( unsigned int i = 0; i < reflection_number_of_samples; ++i )
             {
-                // Apply some randomize to the reflected vector
-                 const SFVEC3F random_reflectVector =
-                         glm::normalize( reflectVector +
-                                         UniformRandomHemisphereDirection() *
-                                         0.025f );
-
                 RAY reflectedRay;
-                reflectedRay.Init( hitPoint, random_reflectVector );
+
+                if( i == 0 )
+                {
+                    reflectedRay.Init( hitPoint, reflectVector );
+                }
+                else
+                {
+                    // Apply some randomize to the reflected vector
+                    const SFVEC3F random_reflectVector =
+                            glm::normalize( reflectVector +
+                                            UniformRandomHemisphereDirection() *
+                                            m_boardAdapter.m_raytrace_spread_reflections );
+
+                    reflectedRay.Init( hitPoint, random_reflectVector );
+                }
 
                 HITINFO reflectedHit;
                 reflectedHit.m_tHit = std::numeric_limits<float>::infinity();
@@ -1856,7 +1865,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
         const float objTransparency = aHitInfo.pHitObject->GetModelTransparency();
 
         if( ( objTransparency > 0.0f ) &&
-            m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) )
+            m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) &&
+            ( aRecursiveLevel < objMaterial->GetRefractionsRecursiveLevel() ) )
         {
             const float airIndex = 1.000293f;
             const float glassIndex = 1.49f;
@@ -1884,19 +1894,18 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                 {
                     RAY refractedRay;
 
-                    if( refractions_number_of_samples > 1 )
+                    if( i == 0 )
+                    {
+                        refractedRay.Init( startPoint, refractedVector );
+                    }
+                    else
                     {
                         // apply some randomize to the refracted vector
                         const SFVEC3F randomizeRefractedVector = glm::normalize( refractedVector +
                                                                                  UniformRandomHemisphereDirection() *
-                                                                                 0.15f *
-                                                                                 (1.0f - objTransparency) );
+                                                                                 m_boardAdapter.m_raytrace_spread_refractions );
 
                         refractedRay.Init( startPoint, randomizeRefractedVector );
-                    }
-                    else
-                    {
-                        refractedRay.Init( startPoint, refractedVector );
                     }
 
                     HITINFO refractedHit;

@@ -191,9 +191,23 @@ private:
     float                       m_scale;
 };
 
+
 /// A base material class that can be used to derive a material implementation
 class  CMATERIAL
 {
+public:
+    static void SetDefaultNrRefractionsSamples( unsigned int aNrRefractions ) { m_default_nrsamples_refractions = aNrRefractions; }
+    static void SetDefaultNrReflectionsSamples( unsigned int aNrReflections ) { m_default_nrsamples_reflections = aNrReflections; }
+
+    static void SetDefaultRefractionsLevel( unsigned int aRefractionLevel ) { m_default_refractions_recursive_levels = aRefractionLevel; }
+    static void SetDefaultReflectionsLevel( unsigned int aReflectionLevel ) { m_default_reflections_recursive_levels = aReflectionLevel; }
+
+private:
+    static int m_default_nrsamples_refractions;
+    static int m_default_nrsamples_reflections;
+    static int m_default_refractions_recursive_levels;
+    static int m_default_reflections_recursive_levels;
+
 public:
     CMATERIAL();
     CMATERIAL( const SFVEC3F &aAmbient,
@@ -216,11 +230,13 @@ public:
     unsigned int GetNrRefractionsSamples() const { return m_refraction_nr_samples; }
     unsigned int GetNrReflectionsSamples() const { return m_reflections_nr_samples; }
     unsigned int GetReflectionsRecursiveLevel() const { return m_reflections_recursive_levels; }
+    unsigned int GetRefractionsRecursiveLevel() const { return m_refractions_recursive_levels; }
 
     void SetAbsorvance( float aAbsorvanceFactor ) { m_absorbance = aAbsorvanceFactor; }
     void SetNrRefractionsSamples( unsigned int aNrRefractions ) { m_refraction_nr_samples = aNrRefractions; }
     void SetNrReflectionsSamples( unsigned int aNrReflections ) { m_reflections_nr_samples = aNrReflections; }
     void SetReflectionsRecursiveLevel( unsigned int aReflectionsLevel ) { m_reflections_recursive_levels = aReflectionsLevel; }
+    void SetRefractionsRecursiveLevel( unsigned int aRefractionsLevel ) { m_refractions_recursive_levels = aRefractionsLevel; }
 
     /**
      * @brief SetCastShadows - Set if the material can receive shadows
@@ -270,6 +286,7 @@ protected:
     bool    m_cast_shadows;                     ///< true if this object will block the light
     unsigned int     m_refraction_nr_samples;   ///< nr of rays that will be interpolated for this material if it is a transparent
     unsigned int     m_reflections_nr_samples;  ///< nr of rays that will be interpolated for this material if it is reflective
+    unsigned int     m_refractions_recursive_levels; ///< nr of levels it allows for refractions recursiveness
     unsigned int     m_reflections_recursive_levels; ///< nr of levels it allows for reflection recursiveness
 
     const CPROCEDURALGENERATOR *m_normal_perturbator;

@@ -404,16 +404,9 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	sbSizerRaytracingRenderOptions->SetMinSize( wxSize( -1,32 ) );
 	wxFlexGridSizer* fgSizer9;
-	fgSizer9 = new wxFlexGridSizer( 4, 4, 0, 0 );
+	fgSizer9 = new wxFlexGridSizer( 2, 4, 0, 0 );
 	fgSizer9->SetFlexibleDirection( wxBOTH );
 	fgSizer9->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
-
-
-	fgSizer9->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
-
-	m_checkBoxRaytracing_renderShadows = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Shadows"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxRaytracing_renderShadows->SetValue(true);
-	fgSizer9->Add( m_checkBoxRaytracing_renderShadows, 0, wxALL, 5 );
 
 
 	fgSizer9->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
@@ -432,20 +425,6 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	fgSizer9->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
 
-	m_checkBoxRaytracing_showRefractions = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Refractions"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxRaytracing_showRefractions->SetValue(true);
-	fgSizer9->Add( m_checkBoxRaytracing_showRefractions, 0, wxALL, 5 );
-
-
-	fgSizer9->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
-
-	m_checkBoxRaytracing_showReflections = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Reflections"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxRaytracing_showReflections->SetValue(true);
-	fgSizer9->Add( m_checkBoxRaytracing_showReflections, 0, wxALL, 5 );
-
-
-	fgSizer9->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
-
 	m_checkBoxRaytracing_antiAliasing = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Anti-aliasing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxRaytracing_antiAliasing->SetValue(true);
 	fgSizer9->Add( m_checkBoxRaytracing_antiAliasing, 0, wxALL, 5 );
@@ -458,7 +437,106 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer9->Add( m_checkBoxRaytracing_postProcessing, 0, wxALL, 5 );
 
 
-	sbSizerRaytracingRenderOptions->Add( fgSizer9, 1, wxALL, 5 );
+	sbSizerRaytracingRenderOptions->Add( fgSizer9, 0, wxALL, 5 );
+
+	m_staticline4 = new wxStaticLine( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	sbSizerRaytracingRenderOptions->Add( m_staticline4, 0, wxEXPAND | wxALL, 5 );
+
+	wxFlexGridSizer* fgSizer111;
+	fgSizer111 = new wxFlexGridSizer( 0, 5, 0, 0 );
+	fgSizer111->SetFlexibleDirection( wxBOTH );
+	fgSizer111->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	fgSizer111->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
+
+
+	fgSizer111->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_staticText19 = new wxStaticText( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Number of Samples"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19->Wrap( -1 );
+	fgSizer111->Add( m_staticText19, 0, wxALL, 5 );
+
+	m_staticText201 = new wxStaticText( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Spread Factor %"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText201->Wrap( -1 );
+	fgSizer111->Add( m_staticText201, 0, wxALL, 5 );
+
+	m_staticText211 = new wxStaticText( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Recursive Level"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText211->Wrap( -1 );
+	fgSizer111->Add( m_staticText211, 0, wxALL, 5 );
+
+
+	fgSizer111->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_checkBoxRaytracing_renderShadows = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Shadows"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxRaytracing_renderShadows->SetValue(true);
+	fgSizer111->Add( m_checkBoxRaytracing_renderShadows, 0, wxALL, 5 );
+
+	m_spinCtrl_NrSamples_Shadows = new wxSpinCtrl( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, 1, 64, 0 );
+	m_spinCtrl_NrSamples_Shadows->SetToolTip( _("Number of rays that will be cast, into light direction, to evaluate a shadow point") );
+
+	fgSizer111->Add( m_spinCtrl_NrSamples_Shadows, 0, wxALL, 5 );
+
+	m_spinCtrlDouble_SpreadFactor_Shadows = new wxSpinCtrlDouble( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, 0.1, 25, 0, 1 );
+	m_spinCtrlDouble_SpreadFactor_Shadows->SetDigits( 1 );
+	m_spinCtrlDouble_SpreadFactor_Shadows->SetToolTip( _("Random direction factor of the cast rays") );
+
+	fgSizer111->Add( m_spinCtrlDouble_SpreadFactor_Shadows, 0, wxALL, 5 );
+
+
+	fgSizer111->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer111->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
+
+	m_checkBoxRaytracing_showReflections = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Reflections"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxRaytracing_showReflections->SetValue(true);
+	fgSizer111->Add( m_checkBoxRaytracing_showReflections, 0, wxALL, 5 );
+
+	m_spinCtrl_NrSamples_Reflections = new wxSpinCtrl( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, 1, 32, 0 );
+	m_spinCtrl_NrSamples_Reflections->SetToolTip( _("Number of rays that will be cast to evaluate a reflection point") );
+
+	fgSizer111->Add( m_spinCtrl_NrSamples_Reflections, 0, wxALL, 5 );
+
+	m_spinCtrlDouble_SpreadFactor_Reflections = new wxSpinCtrlDouble( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, 0.1, 25, 0, 1 );
+	m_spinCtrlDouble_SpreadFactor_Reflections->SetDigits( 1 );
+	m_spinCtrlDouble_SpreadFactor_Reflections->SetToolTip( _("Random direction factor of the cast rays") );
+
+	fgSizer111->Add( m_spinCtrlDouble_SpreadFactor_Reflections, 0, wxALL, 5 );
+
+	m_spinCtrlRecursiveLevel_Reflections = new wxSpinCtrl( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, 1, 5, 0 );
+	m_spinCtrlRecursiveLevel_Reflections->SetToolTip( _("Interactions number that a ray can travel through objects. (higher number of levels improve results, specially on very transparent boards)") );
+
+	fgSizer111->Add( m_spinCtrlRecursiveLevel_Reflections, 0, wxALL, 5 );
+
+
+	fgSizer111->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
+
+	m_checkBoxRaytracing_showRefractions = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Refractions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxRaytracing_showRefractions->SetValue(true);
+	fgSizer111->Add( m_checkBoxRaytracing_showRefractions, 0, wxALL, 5 );
+
+	m_spinCtrl_NrSamples_Refractions = new wxSpinCtrl( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, 1, 5, 0 );
+	m_spinCtrl_NrSamples_Refractions->SetToolTip( _("Number of rays that will be cast to evaluate a refraction point") );
+
+	fgSizer111->Add( m_spinCtrl_NrSamples_Refractions, 0, wxALL, 5 );
+
+	m_spinCtrlDouble_SpreadFactor_Refractions = new wxSpinCtrlDouble( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, 0.1, 25, 0, 1 );
+	m_spinCtrlDouble_SpreadFactor_Refractions->SetDigits( 1 );
+	m_spinCtrlDouble_SpreadFactor_Refractions->SetToolTip( _("Random direction factor of the cast rays") );
+
+	fgSizer111->Add( m_spinCtrlDouble_SpreadFactor_Refractions, 0, wxALL, 5 );
+
+	m_spinCtrlRecursiveLevel_Refractions = new wxSpinCtrl( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, 1, 7, 0 );
+	m_spinCtrlRecursiveLevel_Refractions->SetToolTip( _("Number of bounces that a ray can hit reflective objects") );
+
+	fgSizer111->Add( m_spinCtrlRecursiveLevel_Refractions, 0, wxALL, 5 );
+
+
+	sbSizerRaytracingRenderOptions->Add( fgSizer111, 1, wxALL, 5 );
+
+
+	sbSizerRaytracingRenderOptions->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	bSizer12->Add( sbSizerRaytracingRenderOptions, 0, wxALL|wxEXPAND, 5 );
@@ -470,7 +548,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_panel4->SetSizer( bSizerRaytracing );
 	m_panel4->Layout();
 	bSizerRaytracing->Fit( m_panel4 );
-	m_notebook2->AddPage( m_panel4, _("Render Options"), false );
+	m_notebook2->AddPage( m_panel4, _("Render Options"), true );
 	m_panel5 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxVERTICAL );
@@ -700,7 +778,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_panel5->SetSizer( bSizer17 );
 	m_panel5->Layout();
 	bSizer17->Fit( m_panel5 );
-	m_notebook2->AddPage( m_panel5, _("Lights configuration"), true );
+	m_notebook2->AddPage( m_panel5, _("Lights configuration"), false );
 
 	bSizer14->Add( m_notebook2, 1, wxEXPAND | wxALL, 5 );
 

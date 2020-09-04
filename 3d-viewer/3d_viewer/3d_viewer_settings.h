@@ -49,6 +49,17 @@ public:
         bool raytrace_refractions;
         bool raytrace_shadows;
 
+        int raytrace_nrsamples_shadows;
+        int raytrace_nrsamples_reflections;
+        int raytrace_nrsamples_refractions;
+
+        float raytrace_spread_shadows;
+        float raytrace_spread_reflections;
+        float raytrace_spread_refractions;
+
+        int raytrace_recursivelevel_reflections;
+        int raytrace_recursivelevel_refractions;
+
         KIGFX::COLOR4D raytrace_lightColorCamera;
         KIGFX::COLOR4D raytrace_lightColorTop;
         KIGFX::COLOR4D raytrace_lightColorBottom;

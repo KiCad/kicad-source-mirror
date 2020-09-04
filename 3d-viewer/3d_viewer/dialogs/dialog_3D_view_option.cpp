@@ -217,6 +217,17 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     m_checkBoxRaytracing_antiAliasing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
     m_checkBoxRaytracing_proceduralTextures->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
 
+    m_spinCtrl_NrSamples_Shadows->SetValue( m_settings.m_raytrace_nrsamples_shadows );
+    m_spinCtrl_NrSamples_Reflections->SetValue( m_settings.m_raytrace_nrsamples_reflections );
+    m_spinCtrl_NrSamples_Refractions->SetValue( m_settings.m_raytrace_nrsamples_refractions );
+
+    m_spinCtrlDouble_SpreadFactor_Shadows->SetValue( m_settings.m_raytrace_spread_shadows * 100.0f );
+    m_spinCtrlDouble_SpreadFactor_Reflections->SetValue( m_settings.m_raytrace_spread_reflections * 100.0f );
+    m_spinCtrlDouble_SpreadFactor_Refractions->SetValue( m_settings.m_raytrace_spread_refractions * 100.0f );
+
+    m_spinCtrlRecursiveLevel_Reflections->SetValue( m_settings.m_raytrace_recursivelevel_reflections );
+    m_spinCtrlRecursiveLevel_Refractions->SetValue( m_settings.m_raytrace_recursivelevel_refractions );
+
     TransferLightDataToWindow();
 
     // Camera Options
@@ -273,6 +284,17 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING, m_checkBoxRaytracing_postProcessing->GetValue() );
     m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING, m_checkBoxRaytracing_antiAliasing->GetValue() );
     m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, m_checkBoxRaytracing_proceduralTextures->GetValue() );
+
+    m_settings.m_raytrace_nrsamples_shadows = m_spinCtrl_NrSamples_Shadows->GetValue();
+    m_settings.m_raytrace_nrsamples_reflections = m_spinCtrl_NrSamples_Reflections->GetValue();
+    m_settings.m_raytrace_nrsamples_refractions= m_spinCtrl_NrSamples_Refractions->GetValue();
+
+    m_settings.m_raytrace_spread_shadows = static_cast<float>( m_spinCtrlDouble_SpreadFactor_Shadows->GetValue() ) / 100.0f;
+    m_settings.m_raytrace_spread_reflections = static_cast<float>( m_spinCtrlDouble_SpreadFactor_Reflections->GetValue() ) / 100.0f;
+    m_settings.m_raytrace_spread_refractions = static_cast<float>( m_spinCtrlDouble_SpreadFactor_Refractions->GetValue() ) / 100.0f;
+
+    m_settings.m_raytrace_recursivelevel_reflections = m_spinCtrlRecursiveLevel_Reflections->GetValue();
+    m_settings.m_raytrace_recursivelevel_refractions = m_spinCtrlRecursiveLevel_Refractions->GetValue();
 
     auto Transfer_color = [] ( SFVEC3F& aTarget, wxColourPickerCtrl *aSource )
     {

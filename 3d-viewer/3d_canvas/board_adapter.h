@@ -655,6 +655,18 @@ public:
     std::vector<SFVEC3F> m_raytrace_lightColor;
     std::vector<SFVEC2F> m_raytrace_lightSphericalCoords;
 
+    // Raytracing options
+    int m_raytrace_nrsamples_shadows;
+    int m_raytrace_nrsamples_reflections;
+    int m_raytrace_nrsamples_refractions;
+
+    float m_raytrace_spread_shadows;
+    float m_raytrace_spread_reflections;
+    float m_raytrace_spread_refractions;
+
+    int m_raytrace_recursivelevel_reflections;
+    int m_raytrace_recursivelevel_refractions;
+
 private:
 
     BOARD*              m_board;

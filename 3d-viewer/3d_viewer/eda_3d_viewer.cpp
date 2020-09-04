@@ -535,6 +535,17 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         m_boardAdapter.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
         m_boardAdapter.AntiAliasingSet( static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode ) );
 
+        m_boardAdapter.m_raytrace_nrsamples_shadows = cfg->m_Render.raytrace_nrsamples_shadows;
+        m_boardAdapter.m_raytrace_nrsamples_reflections = cfg->m_Render.raytrace_nrsamples_reflections;
+        m_boardAdapter.m_raytrace_nrsamples_refractions = cfg->m_Render.raytrace_nrsamples_refractions;
+
+        m_boardAdapter.m_raytrace_spread_shadows = cfg->m_Render.raytrace_spread_shadows;
+        m_boardAdapter.m_raytrace_spread_reflections = cfg->m_Render.raytrace_spread_reflections;
+        m_boardAdapter.m_raytrace_spread_refractions = cfg->m_Render.raytrace_spread_refractions;
+
+        m_boardAdapter.m_raytrace_recursivelevel_refractions = cfg->m_Render.raytrace_recursivelevel_refractions;
+        m_boardAdapter.m_raytrace_recursivelevel_reflections = cfg->m_Render.raytrace_recursivelevel_reflections;
+
         // When opening the 3D viewer, we use the opengl mode, not the ray tracing engine
         // because the ray tracing is very time consumming, and can be seen as not working
         // (freeze window) with large boards.
@@ -607,6 +618,17 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
             cfg->m_Render.raytrace_lightElevation[i] = (int)( m_boardAdapter.m_raytrace_lightSphericalCoords[i].x * 180.0f - 90.0f );
             cfg->m_Render.raytrace_lightAzimuth[i] = (int)( m_boardAdapter.m_raytrace_lightSphericalCoords[i].y * 180.0f );
         }
+
+        cfg->m_Render.raytrace_nrsamples_shadows = m_boardAdapter.m_raytrace_nrsamples_shadows;
+        cfg->m_Render.raytrace_nrsamples_reflections = m_boardAdapter.m_raytrace_nrsamples_reflections;
+        cfg->m_Render.raytrace_nrsamples_refractions = m_boardAdapter.m_raytrace_nrsamples_refractions;
+
+        cfg->m_Render.raytrace_spread_shadows = m_boardAdapter.m_raytrace_spread_shadows;
+        cfg->m_Render.raytrace_spread_reflections = m_boardAdapter.m_raytrace_spread_reflections;
+        cfg->m_Render.raytrace_spread_refractions = m_boardAdapter.m_raytrace_spread_refractions;
+
+        cfg->m_Render.raytrace_recursivelevel_refractions = m_boardAdapter.m_raytrace_recursivelevel_refractions;
+        cfg->m_Render.raytrace_recursivelevel_reflections = m_boardAdapter.m_raytrace_recursivelevel_reflections;
 
 #define TRANSFER_SETTING( field, flag ) cfg->m_Render.field = m_boardAdapter.GetFlag( flag )
 

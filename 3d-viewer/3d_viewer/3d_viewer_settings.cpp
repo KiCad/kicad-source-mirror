@@ -88,6 +88,25 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "render.raytrace_shadows",
             &m_Render.raytrace_shadows, true ) );
 
+    m_params.emplace_back( new PARAM<int>( "render.raytrace_nrsamples_shadows",
+            &m_Render.raytrace_nrsamples_shadows, 3 ) );
+    m_params.emplace_back( new PARAM<int>( "render.raytrace_nrsamples_reflections",
+            &m_Render.raytrace_nrsamples_reflections, 3 ) );
+    m_params.emplace_back( new PARAM<int>( "render.raytrace_nrsamples_refractions",
+            &m_Render.raytrace_nrsamples_refractions, 4 ) );
+
+    m_params.emplace_back( new PARAM<int>( "render.raytrace_recursivelevel_reflections",
+            &m_Render.raytrace_recursivelevel_reflections, 3 ) );
+    m_params.emplace_back( new PARAM<int>( "render.raytrace_recursivelevel_refractions",
+            &m_Render.raytrace_recursivelevel_refractions, 2 ) );
+
+    m_params.emplace_back( new PARAM<float>( "render.raytrace_spread_shadows",
+            &m_Render.raytrace_spread_shadows, 0.05f ) );
+    m_params.emplace_back( new PARAM<float>( "render.raytrace_spread_reflections",
+            &m_Render.raytrace_spread_reflections, 0.025f ) );
+    m_params.emplace_back( new PARAM<float>( "render.raytrace_spread_refractions",
+            &m_Render.raytrace_spread_refractions, 0.025f ) );
+
     m_params.emplace_back( new PARAM<COLOR4D>( "render.raytrace_lightColorCamera",
                                                &m_Render.raytrace_lightColorCamera,
                                                COLOR4D( 0.2, 0.2, 0.2, 1.0 ) ) );

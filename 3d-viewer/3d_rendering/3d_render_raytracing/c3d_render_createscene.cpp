@@ -74,6 +74,12 @@ static float TransparencyControl( float aGrayColorValue, float aTransparency )
 
 void C3D_RENDER_RAYTRACING::setupMaterials()
 {
+    CMATERIAL::SetDefaultNrRefractionsSamples( m_boardAdapter.m_raytrace_nrsamples_refractions );
+    CMATERIAL::SetDefaultNrReflectionsSamples( m_boardAdapter.m_raytrace_nrsamples_reflections );
+
+    CMATERIAL::SetDefaultRefractionsLevel( m_boardAdapter.m_raytrace_recursivelevel_refractions );
+    CMATERIAL::SetDefaultReflectionsLevel( m_boardAdapter.m_raytrace_recursivelevel_reflections );
+
     double mmTo3Dunits = IU_PER_MM * m_boardAdapter.BiuTo3Dunits();
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
@@ -154,7 +160,6 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
 
     m_materials.m_SolderMask.SetCastShadows( true );
     m_materials.m_SolderMask.SetNrRefractionsSamples( 1 );
-    m_materials.m_SolderMask.SetNrReflectionsSamples( 2 );
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
         m_materials.m_SolderMask.SetNormalPerturbator( &m_solder_mask_normal_perturbator );
@@ -172,7 +177,6 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 0.0f );                                           // reflection
 
     m_materials.m_EpoxyBoard.SetAbsorvance( 10.0f );
-    m_materials.m_EpoxyBoard.SetNrRefractionsSamples( 3 );
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
         m_materials.m_EpoxyBoard.SetNormalPerturbator( &m_board_normal_perturbator );
