@@ -53,7 +53,7 @@ public:
 
     BOX2() {};
 
-    BOX2( const Vec& aPos, const Vec& aSize ) :
+    BOX2( const Vec& aPos, const Vec& aSize = Vec(0, 0) ) :
         m_Pos( aPos ),
         m_Size( aSize )
     {
