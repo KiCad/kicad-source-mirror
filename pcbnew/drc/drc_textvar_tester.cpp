@@ -89,6 +89,12 @@ bool DRC_TEXTVAR_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
     if( m_worksheet )
     {
         wsItems.SetMilsToIUfactor( IU_PER_MILS );
+        wsItems.SetSheetNumber( 1 );
+        wsItems.SetSheetCount( 1 );
+        wsItems.SetFileName( "dummyFilename" );
+        wsItems.SetSheetName( "dummySheet" );
+        wsItems.SetSheetLayer( "dummyLayer" );
+        wsItems.SetProject( m_board->GetProject() );
         wsItems.BuildWorkSheetGraphicList( m_worksheet->GetPageInfo(),
                                            m_worksheet->GetTitleBlock() );
 
@@ -107,8 +113,6 @@ bool DRC_TEXTVAR_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
             }
         }
     }
-
-    // JEY TODO: Test text vars in worksheet...
 
     return success;
 }
