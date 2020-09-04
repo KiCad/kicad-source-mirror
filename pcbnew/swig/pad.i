@@ -43,9 +43,9 @@
             raise TypeError("Arguments not recognized.")
 
     # GetCustomShapeAsPolygon() is the old accessor to get custom shapes
-    def GetCustomShapeAsPolygon(self):
+    def GetCustomShapeAsPolygon(self, layer=UNDEFINED_LAYER):
         polygon_set = SHAPE_POLY_SET()
-        self.MergePrimitivesAsPolygon(polygon_set)
+        self.MergePrimitivesAsPolygon(polygon_set, layer)
         return polygon_set
     %}
 }
