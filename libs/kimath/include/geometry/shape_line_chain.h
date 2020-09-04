@@ -43,7 +43,7 @@
  *
  * SHAPE_LINE_CHAIN class shall not be used for polygons!
  */
-class SHAPE_LINE_CHAIN : public SHAPE
+class SHAPE_LINE_CHAIN : public SHAPE_LINE_CHAIN_BASE
 {
 private:
     typedef std::vector<VECTOR2I>::iterator point_iter;
@@ -99,7 +99,7 @@ public:
      * Constructor
      * Initializes an empty line chain.
      */
-    SHAPE_LINE_CHAIN() : SHAPE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
+    SHAPE_LINE_CHAIN() : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
     {}
 
     /**
@@ -107,7 +107,7 @@ public:
      */
 
     SHAPE_LINE_CHAIN( const SHAPE_LINE_CHAIN& aShape )
-            : SHAPE( SH_LINE_CHAIN ),
+            : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
               m_points( aShape.m_points ),
               m_shapes( aShape.m_shapes ),
               m_arcs( aShape.m_arcs ),
@@ -119,7 +119,7 @@ public:
     SHAPE_LINE_CHAIN( const std::vector<int>& aV);
 
     SHAPE_LINE_CHAIN( const std::vector<wxPoint>& aV, bool aClosed = false )
-            : SHAPE( SH_LINE_CHAIN ), m_closed( aClosed ), m_width( 0 )
+            : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( aClosed ), m_width( 0 )
     {
         m_points.reserve( aV.size() );
 
@@ -130,14 +130,14 @@ public:
     }
 
     SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false )
-            : SHAPE( SH_LINE_CHAIN ), m_closed( aClosed ), m_width( 0 )
+            : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( aClosed ), m_width( 0 )
     {
         m_points = aV;
         m_shapes = std::vector<ssize_t>( aV.size(), ssize_t( SHAPE_IS_PT ) );
     }
 
     SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed = false )
-            : SHAPE( SH_LINE_CHAIN ),
+            : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
               m_closed( aClosed ),
               m_width( 0 )
     {
@@ -147,7 +147,7 @@ public:
     }
 
     SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath ) :
-        SHAPE( SH_LINE_CHAIN ),
+        SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
         m_closed( true ),
         m_width( 0 )
     {
@@ -194,7 +194,7 @@ public:
      *
      * @return aClosed: true, when our line is closed.
      */
-    bool IsClosed() const
+    bool IsClosed() const override
     {
         return m_closed;
     }
@@ -373,30 +373,6 @@ public:
     }
 
     /**
-     * Function Collide()
-     *
-     * Checks if point aP lies closer to us than aClearance.
-     * @param aP the point to check for collisions with
-     * @param aClearance minimum distance that does not qualify as a collision.
-     * @param aActual an optional pointer to an int to store the actual distance in the event
-     *                of a collision.
-     * @return true, when a collision has been found
-     */
-    bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const override;
-
-    /**
-     * Function Collide()
-     *
-     * Checks if segment aSeg lies closer to us than aClearance.
-     * @param aSeg the segment to check for collisions with
-     * @param aClearance minimum distance that does not qualify as a collision.
-     * @param aActual an optional pointer to an int to store the actual distance in the event
-     *                of a collision.
-     * @return true, when a collision has been found
-     */
-    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
-
-    /**
      * Function Distance()
      *
      * Computes the minimum distance between the line chain and a point aP.
@@ -404,7 +380,6 @@ public:
      * @return minimum distance.
      */
     int Distance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
-    SEG::ecoord SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
 
     /**
      * Function Reverse()
@@ -601,37 +576,6 @@ public:
     int PathLength( const VECTOR2I& aP ) const;
 
     /**
-     * Function PointInside()
-     *
-     * Checks if point aP lies inside a polygon (any type) defined by the line chain.
-     * For closed shapes only.
-     * @param aPt point to check
-     * @param aUseBBoxCache gives better peformance if the bounding box caches have been
-     *                      generated.
-     * @return true if the point is inside the shape (edge is not treated as being inside).
-     */
-    bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const;
-
-    
-    /**
-     * Function PointOnEdge()
-     *
-     * Checks if point aP lies on an edge or vertex of the line chain.
-     * @param aP point to check
-     * @return true if the point lies on the edge.
-     */
-    bool PointOnEdge( const VECTOR2I& aP, int aAccuracy = 0 ) const;
-
-    /**
-     * Function EdgeContainingPoint()
-     *
-     * Checks if point aP lies on an edge or vertex of the line chain.
-     * @param aP point to check
-     * @return index of the first edge containing the point, otherwise negative
-     */
-    int EdgeContainingPoint( const VECTOR2I& aP, int aAccuracy = 0 ) const;
-
-    /**
      * Function CheckClearance()
      *
      * Checks if point aP is closer to (or on) an edge or vertex of the line chain.
@@ -774,6 +718,11 @@ public:
     {
         return aSegment < m_shapes.size() && m_shapes[aSegment] != SHAPE_IS_PT;
     }
+
+    virtual const VECTOR2I GetPoint( int aIndex ) const override { return CPoint(aIndex); }
+    virtual const SEG GetSegment( int aIndex ) const override { return CSegment(aIndex); }
+    virtual size_t GetPointCount() const override { return PointCount(); }
+    virtual size_t GetSegmentCount() const override { return SegmentCount(); }
 
 private:
 

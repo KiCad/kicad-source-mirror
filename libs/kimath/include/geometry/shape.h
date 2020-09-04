@@ -30,6 +30,7 @@
 #include <math/vector2d.h>
 #include <math/box2.h>
 
+class SHAPE_LINE_CHAIN;
 
 /**
  * Enum SHAPE_TYPE
@@ -38,15 +39,16 @@
 
 enum SHAPE_TYPE
 {
-    SH_RECT = 0,        ///> axis-aligned rectangle
-    SH_SEGMENT,         ///> line segment
-    SH_LINE_CHAIN,      ///> line chain (polyline)
-    SH_CIRCLE,          ///> circle
+    SH_RECT = 0,         ///> axis-aligned rectangle
+    SH_SEGMENT,          ///> line segment
+    SH_LINE_CHAIN,       ///> line chain (polyline)
+    SH_CIRCLE,           ///> circle
     SH_SIMPLE,          ///> simple polygon
-    SH_POLY_SET,        ///> set of polygons (with holes, etc.)
-    SH_COMPOUND,        ///> compound shape, consisting of multiple simple shapes
-    SH_ARC,             ///> circular arc
-    SH_NULL             ///> empty shape (no shape...)
+    SH_POLY_SET,         ///> set of polygons (with holes, etc.)
+    SH_COMPOUND,         ///> compound shape, consisting of multiple simple shapes
+    SH_ARC,              ///> circular arc
+    SH_NULL,             ///> empty shape (no shape...),
+    SH_POLY_SET_TRIANGLE ///> a single triangle belonging to a POLY_SET triangulation
 };
 
 static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
@@ -62,22 +64,15 @@ static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
     case SH_COMPOUND:   return "SH_COMPOUND";
     case SH_ARC:        return "SH_ARC";
     case SH_NULL:       return "SH_NULL";
+    case SH_POLY_SET_TRIANGLE:       return "SH_POLY_SET_TRIANGLE";
     }
 
     return wxEmptyString;  // Just to quiet GCC.
 }
 
 
-/**
- * SHAPE
- *
- * Represents an abstract shape on 2D plane.
- */
-class SHAPE
+class SHAPE_BASE
 {
-protected:
-    typedef VECTOR2I::extended_type ecoord;
-
 public:
     /**
      * Constructor
@@ -85,11 +80,11 @@ public:
      * Creates an empty shape of type aType
      */
 
-    SHAPE( SHAPE_TYPE aType ) : m_type( aType )
+    SHAPE_BASE( SHAPE_TYPE aType ) : m_type( aType )
     {}
 
     // Destructor
-    virtual ~SHAPE()
+    virtual ~SHAPE_BASE()
     {}
 
     /**
@@ -103,6 +98,45 @@ public:
         return m_type;
     }
 
+    virtual bool HasIndexableSubshapes() const
+    {
+        return false;
+    }
+
+    virtual size_t GetIndexableSubshapeCount() { return 0; }
+
+    virtual void GetIndexableSubshape( SHAPE_BASE& aSubshape ) const {};
+
+protected:
+    ///> type of our shape
+    SHAPE_TYPE m_type;
+};
+
+/**
+ * SHAPE
+ *
+ * Represents an abstract shape on 2D plane.
+ */
+class SHAPE : public SHAPE_BASE
+{
+protected:
+    typedef VECTOR2I::extended_type ecoord;
+
+public:
+    /**
+     * Constructor
+     *
+     * Creates an empty shape of type aType
+     */
+
+    SHAPE( SHAPE_TYPE aType ) : SHAPE_BASE( aType )
+    {}
+
+    // Destructor
+    virtual ~SHAPE()
+    {}
+
+  
     /**
      * Function Clone()
      *
@@ -202,11 +236,82 @@ public:
     virtual bool Parse( std::stringstream& aStream );
 
     virtual const std::string Format( ) const;
-
-protected:
-    ///> type of our shape
-    SHAPE_TYPE m_type;
 };
 
+
+class SHAPE_LINE_CHAIN_BASE : public SHAPE
+{
+public:
+    SHAPE_LINE_CHAIN_BASE( SHAPE_TYPE aType ) : SHAPE( aType )
+    {
+    }
+
+    // Destructor
+    virtual ~SHAPE_LINE_CHAIN_BASE()
+    {
+    }
+
+    /**
+     * Function Collide()
+     *
+     * Checks if point aP lies closer to us than aClearance.
+     * @param aP the point to check for collisions with
+     * @param aClearance minimum distance that does not qualify as a collision.
+     * @param aActual an optional pointer to an int to store the actual distance in the event
+     *                of a collision.
+     * @return true, when a collision has been found
+     */
+    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const override;
+
+    /**
+     * Function Collide()
+     *
+     * Checks if segment aSeg lies closer to us than aClearance.
+     * @param aSeg the segment to check for collisions with
+     * @param aClearance minimum distance that does not qualify as a collision.
+     * @param aActual an optional pointer to an int to store the actual distance in the event
+     *                of a collision.
+     * @return true, when a collision has been found
+     */
+
+    virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
+    SEG::ecoord SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
+
+    /**
+     * Function PointInside()
+     *
+     * Checks if point aP lies inside a polygon (any type) defined by the line chain.
+     * For closed shapes only.
+     * @param aPt point to check
+     * @param aUseBBoxCache gives better peformance if the bounding box caches have been
+     *                      generated.
+     * @return true if the point is inside the shape (edge is not treated as being inside).
+     */
+    bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const;
+
+    /**
+     * Function PointOnEdge()
+     *
+     * Checks if point aP lies on an edge or vertex of the line chain.
+     * @param aP point to check
+     * @return true if the point lies on the edge.
+     */
+    bool PointOnEdge( const VECTOR2I& aP, int aAccuracy = 0 ) const;
+
+    /**
+     * Function EdgeContainingPoint()
+     *
+     * Checks if point aP lies on an edge or vertex of the line chain.
+     * @param aP point to check
+     * @return index of the first edge containing the point, otherwise negative
+     */
+    int EdgeContainingPoint( const VECTOR2I& aP, int aAccuracy = 0 ) const;
+
+    virtual const VECTOR2I GetPoint( int aIndex ) const   = 0;
+    virtual const SEG      GetSegment( int aIndex ) const = 0;
+    virtual size_t         GetPointCount() const          = 0;
+    virtual size_t         GetSegmentCount() const        = 0;
+    virtual bool IsClosed() const = 0;
+};
 
 #endif // __SHAPE_H

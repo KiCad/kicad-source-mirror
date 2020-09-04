@@ -37,7 +37,7 @@
 class SHAPE;
 
 SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV)
-    : SHAPE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
+    : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
 {
     for(size_t i = 0; i < aV.size(); i+= 2 )
     {
@@ -85,14 +85,16 @@ void SHAPE_LINE_CHAIN::convertArc( ssize_t aArcIndex )
 }
 
 
-bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance, int* aActual ) const
+bool SHAPE_LINE_CHAIN_BASE::Collide( const VECTOR2I& aP, int aClearance, int* aActual ) const
 {
     SEG::ecoord dist_sq = VECTOR2I::ECOORD_MAX;
     SEG::ecoord clearance_sq = SEG::Square( aClearance );
 
-    for( int i = 0; i < SegmentCount(); i++ )
+    // fixme: why this only checks open curves?
+
+    for( int i = 0; i < GetSegmentCount(); i++ )
     {
-        const SEG& s = CSegment( i );
+        const SEG& s = GetSegment( i );
         dist_sq = std::min( dist_sq, s.SquaredDistance( aP ) );
 
         if( ( dist_sq == 0 || dist_sq < clearance_sq ) && !aActual )
@@ -125,14 +127,14 @@ void SHAPE_LINE_CHAIN::Rotate( double aAngle, const VECTOR2I& aCenter )
 }
 
 
-bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
+bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 {
     SEG::ecoord dist_sq = VECTOR2I::ECOORD_MAX;
     SEG::ecoord clearance_sq = SEG::Square( aClearance );
 
-    for( int i = 0; i < SegmentCount(); i++ )
+    for( int i = 0; i < GetSegmentCount(); i++ )
     {
-        const SEG& s = CSegment( i );
+        const SEG& s = GetSegment( i );
         dist_sq = std::min( dist_sq, s.SquaredDistance( aSeg ) );
 
         if( ( dist_sq == 0 || dist_sq < clearance_sq ) && !aActual )
@@ -292,15 +294,15 @@ int SHAPE_LINE_CHAIN::Distance( const VECTOR2I& aP, bool aOutlineOnly ) const
 }
 
 
-SEG::ecoord SHAPE_LINE_CHAIN::SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly ) const
+SEG::ecoord SHAPE_LINE_CHAIN_BASE::SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly ) const
 {
     ecoord d = VECTOR2I::ECOORD_MAX;
 
     if( IsClosed() && PointInside( aP ) && !aOutlineOnly )
         return 0;
 
-    for( int s = 0; s < SegmentCount(); s++ )
-        d = std::min( d, CSegment( s ).SquaredDistance( aP ) );
+    for( int s = 0; s < GetSegmentCount(); s++ )
+        d = std::min( d, GetSegment( s ).SquaredDistance( aP ) );
 
     return d;
 }
@@ -601,16 +603,18 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP ) const
 }
 
 
-bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUseBBoxCache ) const
+bool SHAPE_LINE_CHAIN_BASE::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUseBBoxCache ) const
 {
     /*
      * Don't check the bounding box unless it's cached.  Building it is about the same speed as
      * the rigorous test below and so just slows things down by doing potentially two tests.
      */
-    if( aUseBBoxCache && !m_bbox.Contains( aPt ) )
-        return false;
+    //if( aUseBBoxCache && !m_bbox.Contains( aPt ) )
+        //return false;
 
-    if( !m_closed || PointCount() < 3 )
+    // fixme: bbox cache...
+
+    if( !IsClosed() || GetPointCount() < 3 )
         return false;
 
     bool inside = false;
@@ -626,13 +630,12 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUs
      * Note: we open-code CPoint() here so that we don't end up calculating the size of the
      * vector number-of-points times.  This has a non-trivial impact on zone fill times.
      */
-    const std::vector<VECTOR2I>& points = CPoints();
-    int pointCount = points.size();
+    int pointCount = GetPointCount();
 
     for( int i = 0; i < pointCount; )
     {
-        const auto p1 = points[ i++ ];
-        const auto p2 = points[ i == pointCount ? 0 : i ];
+        const auto p1 = GetPoint( i++ );
+        const auto p2 = GetPoint( i == pointCount ? 0 : i );
         const auto diff = p2 - p1;
 
         if( diff.y != 0 )
@@ -653,25 +656,25 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUs
 }
 
 
-bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aPt, int aAccuracy ) const
+bool SHAPE_LINE_CHAIN_BASE::PointOnEdge( const VECTOR2I& aPt, int aAccuracy ) const
 {
 	return EdgeContainingPoint( aPt, aAccuracy ) >= 0;
 }
 
-int SHAPE_LINE_CHAIN::EdgeContainingPoint( const VECTOR2I& aPt, int aAccuracy ) const
+int SHAPE_LINE_CHAIN_BASE::EdgeContainingPoint( const VECTOR2I& aPt, int aAccuracy ) const
 {
-    if( !PointCount() )
+    if( !GetPointCount() )
 		return -1;
 
-	else if( PointCount() == 1 )
+	else if( GetPointCount() == 1 )
     {
-	    VECTOR2I dist = m_points[0] - aPt;
+	    VECTOR2I dist = GetPoint(0) - aPt;
 	    return ( hypot( dist.x, dist.y ) <= aAccuracy + 1 ) ? 0 : -1;
     }
 
-    for( int i = 0; i < SegmentCount(); i++ )
+    for( int i = 0; i < GetSegmentCount(); i++ )
     {
-        const SEG s = CSegment( i );
+        const SEG s = GetSegment( i );
 
         if( s.A == aPt || s.B == aPt )
             return i;

@@ -71,13 +71,64 @@ class SHAPE_POLY_SET : public SHAPE
         class TRIANGULATED_POLYGON
         {
         public:
-            struct TRI
+            struct TRI : public SHAPE_LINE_CHAIN_BASE
             {
-                TRI( int _a = 0, int _b = 0, int _c = 0 ) : a( _a ), b( _b ), c( _c )
+                TRI( int _a = 0, int _b = 0, int _c = 0, TRIANGULATED_POLYGON* aParent = nullptr ) :
+                    SHAPE_LINE_CHAIN_BASE( SH_POLY_SET_TRIANGLE ),
+                    a( _a ), b( _b ), c( _c ), parent( aParent )
                 {
                 }
 
+                virtual void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override {};
+
+                virtual void Move( const VECTOR2I& aVector ) override {};
+
+                virtual bool IsSolid() const override { return true; }
+
+                virtual bool IsClosed() const override { return true; }
+
+                virtual const BOX2I BBox( int aClearance = 0 ) const override
+                {
+                    BOX2I bbox( parent->m_vertices[a] );
+                    bbox.Merge( parent->m_vertices[b] );
+                    bbox.Merge( parent->m_vertices[c] );
+
+                    if( aClearance != 0 )
+                        bbox.Inflate( aClearance );
+
+                    return bbox;
+                }
+
+                virtual const VECTOR2I GetPoint( int aIndex ) const override 
+                {
+                    switch(aIndex)
+                    {
+                        case 0: return parent->m_vertices[a];
+                        case 1: return parent->m_vertices[b];
+                        case 2: return parent->m_vertices[c];
+                        default: assert(false);
+                    }
+                    return VECTOR2I(0, 0);
+                }
+
+                virtual const SEG GetSegment( int aIndex ) const override
+                {
+                    switch(aIndex)
+                    {
+                        case 0: return SEG( parent->m_vertices[a], parent->m_vertices[b] );
+                        case 1: return SEG( parent->m_vertices[b], parent->m_vertices[c] );
+                        case 2: return SEG( parent->m_vertices[c], parent->m_vertices[a] );
+                        default: assert(false);
+                    }
+                    return SEG();
+                }
+
+                virtual size_t GetPointCount() const override { return 3; }
+                virtual size_t GetSegmentCount() const override { return 3; }
+
+
                 int a, b, c;
+                TRIANGULATED_POLYGON* parent;
             };
 
             void Clear()
@@ -101,7 +152,7 @@ class SHAPE_POLY_SET : public SHAPE
 
             void AddTriangle( int a, int b, int c )
             {
-                m_triangles.emplace_back( a, b, c );
+                m_triangles.emplace_back( a, b, c, this );
             }
 
             void AddVertex( const VECTOR2I& aP )
@@ -114,7 +165,7 @@ class SHAPE_POLY_SET : public SHAPE
                 return m_triangles.size();
             }
 
-            size_t GetVertexCount() const
+            size_t GetVertexCount() const 
             {
                 return m_vertices.size();
             }

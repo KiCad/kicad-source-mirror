@@ -39,7 +39,8 @@
  * Internally the vertices are held in a SHAPE_LINE_CHAIN, please note that
  * there is a "virtual" line segment between the last and first vertex.
  */
-class SHAPE_SIMPLE : public SHAPE
+
+class SHAPE_SIMPLE : public SHAPE_LINE_CHAIN_BASE
 {
 public:
     /**
@@ -47,20 +48,20 @@ public:
      * Creates an empty polygon
      */
     SHAPE_SIMPLE() :
-        SHAPE( SH_SIMPLE )
+        SHAPE_LINE_CHAIN_BASE( SH_SIMPLE )
     {
         m_points.SetClosed( true );
     }
 
     SHAPE_SIMPLE( const SHAPE_LINE_CHAIN& aPoly ) :
-        SHAPE( SH_SIMPLE ),
+        SHAPE_LINE_CHAIN_BASE( SH_SIMPLE ),
         m_points( aPoly )
     {
         m_points.SetClosed( true );
     }
 
     SHAPE_SIMPLE( const SHAPE_SIMPLE& aOther ) :
-       SHAPE( SH_SIMPLE ), m_points( aOther.m_points )
+       SHAPE_LINE_CHAIN_BASE( SH_SIMPLE ), m_points( aOther.m_points )
     {}
 
     SHAPE* Clone() const override
@@ -175,6 +176,16 @@ public:
     }
 
     bool IsSolid() const override
+    {
+        return true;
+    }
+
+    virtual const VECTOR2I GetPoint( int aIndex ) const override { return m_points.CPoint(aIndex); }
+    virtual const SEG GetSegment( int aIndex ) const override { return m_points.CSegment(aIndex); }
+    virtual size_t GetPointCount() const override { return m_points.PointCount(); }
+    virtual size_t GetSegmentCount() const override { return m_points.SegmentCount(); }
+
+    bool IsClosed() const override
     {
         return true;
     }
