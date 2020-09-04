@@ -453,9 +453,9 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     if( !m_readOnly )
         command_header << " " << _( "(double-click to edit)" );
 
-    AppendColumn( command_header, 320 );
-    AppendColumn( _( "Hotkey" ), 110 );
-    AppendColumn( _( "Description" ), 1000 );
+    AppendColumn( command_header, 320, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
+    AppendColumn( _( "Hotkey" ), 110, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
+    AppendColumn( _( "Description" ), 1000, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
     GetDataView()->SetIndent( 10 );
 
     if( !m_readOnly )
@@ -572,4 +572,3 @@ long WIDGET_HOTKEY_LIST::MapKeypressToKeycode( const wxKeyEvent& aEvent )
         return key;
     }
 }
-
