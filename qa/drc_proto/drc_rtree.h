@@ -41,7 +41,7 @@
 class DRC_RTREE
 {
 private:
-    using drc_rtree = RTree<BOARD_CONNECTED_ITEM*, int, 2, double>;
+    using drc_rtree = RTree<BOARD_ITEM*, int, 2, double>;
 
 public:
     DRC_RTREE()
@@ -62,14 +62,46 @@ public:
      * Function Insert()
      * Inserts an item into the tree. Item's bounding box is taken via its GetBoundingBox() method.
      */
-    void insert( BOARD_CONNECTED_ITEM* aItem )
+    void insert( BOARD_ITEM* aItem )
     {
-        const EDA_RECT& bbox    = aItem->GetBoundingBox();
-        const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
-        const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+        if( ZONE_CONTAINER* zone = dyn_cast<ZONE_CONTAINER*>( aItem ) )
+        {
+            for( int layer : zone->GetLayerSet().Seq() )
+            {
+                const SHAPE_POLY_SET& polyset = zone->GetFilledPolysList( PCB_LAYER_ID( layer ) );
 
-        for( int layer : aItem->GetLayerSet().Seq() )
-            m_tree[layer]->Insert( mmin, mmax, aItem );
+                for( int ii = 0; ii < polyset.TriangulatedPolyCount(); ++ii )
+                {
+                    const auto poly = polyset.TriangulatedPolygon( ii );
+
+                    for( int jj = 0; jj < poly->GetTriangleCount(); ++jj )
+                    {
+                        VECTOR2I a;
+                        VECTOR2I b;
+                        VECTOR2I c;
+                        poly->GetTriangle( jj, a, b, c );
+
+                        const int mmin2[2] = { std::min( a.x, std::min( b.x, c.x ) ),
+                                               std::min( a.y, std::min( b.y, c.y ) ) };
+                        const int mmax2[2] = { std::max( a.x, std::max( b.x, c.x ) ),
+                                               std::max( a.y, std::max( b.y, c.y ) ) };
+
+                        m_tree[layer]->Insert( mmin2, mmax2, aItem );
+                    }
+                }
+            }
+        }
+        else
+        {
+            const EDA_RECT& bbox    = aItem->GetBoundingBox();
+            const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
+            const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+
+            for( int layer : aItem->GetLayerSet().Seq() )
+            {
+                m_tree[layer]->Insert( mmin, mmax, aItem );
+            }
+        }
 
         m_count++;
     }
@@ -79,7 +111,7 @@ public:
      * Removes an item from the tree. Removal is done by comparing pointers, attempting
      * to remove a copy of the item will fail.
      */
-    bool remove( BOARD_CONNECTED_ITEM* aItem )
+    bool remove( BOARD_ITEM* aItem )
     {
         // First, attempt to remove the item using its given BBox
         const EDA_RECT& bbox    = aItem->GetBoundingBox();
@@ -89,8 +121,26 @@ public:
 
         for( auto layer : aItem->GetLayerSet().Seq() )
         {
-            // If we are not successful ( true == not found ), then we expand
-            // the search to the full tree
+            if( ZONE_CONTAINER* zone = dyn_cast<ZONE_CONTAINER*>( aItem ) )
+            {
+                // Continue removing the zone elements from the tree until they cannot be found
+                while( !m_tree[int( layer )]->Remove( mmin, mmax, aItem ) )
+                    ;
+
+                const int mmin2[2] = { INT_MIN, INT_MIN };
+                const int mmax2[2] = { INT_MAX, INT_MAX };
+
+                // If we are not successful ( true == not found ), then we expand
+                // the search to the full tree
+                while( !m_tree[int( layer )]->Remove( mmin2, mmax2, aItem ) )
+                    ;
+
+                // Loop to the next layer
+                continue;
+            }
+
+            // The non-zone search expects only a single element in the tree with the same
+            // pointer aItem
             if( m_tree[int( layer )]->Remove( mmin, mmax, aItem ) )
             {
                 // N.B. We must search the whole tree for the pointer to remove
@@ -131,14 +181,14 @@ public:
      * @param aRobust If true, search the whole tree, not just the bounding box
      * @return true if the item definitely exists, false if it does not exist within bbox
      */
-    bool contains( BOARD_CONNECTED_ITEM* aItem, bool aRobust = false )
+    bool contains( BOARD_ITEM* aItem, bool aRobust = false )
     {
         const EDA_RECT& bbox    = aItem->GetBoundingBox();
         const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
         const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
         bool            found   = false;
 
-        auto search = [&found, &aItem]( const BOARD_CONNECTED_ITEM* aSearchItem ) {
+        auto search = [&found, &aItem]( const BOARD_ITEM* aSearchItem ) {
             if( aSearchItem == aItem )
             {
                 found = true;
@@ -177,7 +227,7 @@ public:
         return found;
     }
 
-    std::vector<std::pair<int, BOARD_CONNECTED_ITEM*>> GetNearest( const wxPoint &aPoint,
+    std::vector<std::pair<int, BOARD_ITEM*>> GetNearest( const wxPoint &aPoint,
                                                                    PCB_LAYER_ID aLayer,
                                                                    int aLimit )
     {
@@ -188,12 +238,12 @@ public:
                 {
                     return a_count >= aLimit;
                 },
-                []( BOARD_CONNECTED_ITEM* aElement) -> bool
+                []( BOARD_ITEM* aElement) -> bool
                 {
                     // Don't remove any elements from the list
                     return false;
                 },
-                [aLayer]( const int* a_point, BOARD_CONNECTED_ITEM* a_data ) -> int
+                [aLayer]( const int* a_point, BOARD_ITEM* a_data ) -> int
                 {
                     switch( a_data->Type() )
                     {
