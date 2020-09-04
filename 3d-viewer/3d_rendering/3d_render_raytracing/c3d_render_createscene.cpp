@@ -1545,9 +1545,15 @@ void C3D_RENDER_RAYTRACING::add_3D_models( CCONTAINER &aDstContainer,
                 ((mesh.m_FaceIdxSize % 3) == 0) &&
                 (mesh.m_MaterialIdx < a3DModel->m_MaterialsSize) )
             {
-                const CBLINN_PHONG_MATERIAL &blinn_material = (*materialVector)[mesh.m_MaterialIdx];
+                float moduleTransparency;
+                const CBLINN_PHONG_MATERIAL *blinn_material;
 
-                const float moduleTransparency = 1.0f - ( ( 1.0f - blinn_material.GetTransparency() ) * aModuleOpacity );
+                if( !aSkipMaterialInformation )
+                {
+                    blinn_material = &(*materialVector)[mesh.m_MaterialIdx];
+
+                    moduleTransparency = 1.0f - ( ( 1.0f - blinn_material->GetTransparency() ) * aModuleOpacity );
+                }
 
                 // Add all face triangles
                 for( unsigned int faceIdx = 0;
@@ -1592,7 +1598,7 @@ void C3D_RENDER_RAYTRACING::add_3D_models( CCONTAINER &aDstContainer,
 
                         if( !aSkipMaterialInformation )
                         {
-                            newTriangle->SetMaterial( (const CMATERIAL *)&blinn_material );
+                            newTriangle->SetMaterial( blinn_material );
                             newTriangle->SetModelTransparency( moduleTransparency );
 
                             if( mesh.m_Color == NULL )
