@@ -675,7 +675,8 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
     const wxPoint eventPosition = event.GetPosition();
     m_camera.SetCurMousePosition( eventPosition );
 
-    if( !event.Dragging() )
+    if( !event.Dragging() &&
+        ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
         STATUSBAR_REPORTER activityReporter(
                 m_parentStatusBar, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT ) );
@@ -691,8 +692,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
                 m_3d_render_ogl_legacy->SetCurrentIntersectedBoardItem( intersectedBoardItem );
                 m_currentIntersectedBoardItem = intersectedBoardItem;
 
-                if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-                    Request_refresh();
+                Request_refresh();
             }
 
             switch( intersectedBoardItem->Type() )
