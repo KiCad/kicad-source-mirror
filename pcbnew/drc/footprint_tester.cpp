@@ -52,15 +52,15 @@ void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<std::shared_p
         }
     }
 
-    if( !aBoard->GetDesignSettings().Ignore( DRCE_MISSING_FOOTPRINT ) )
+    // Search for component footprints in the netlist but not on the board.
+    for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
     {
-        // Search for component footprints in the netlist but not on the board.
-        for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
-        {
-            COMPONENT* component = aNetlist.GetComponent( ii );
-            MODULE*    module = aBoard->FindModuleByReference( component->GetReference() );
+        COMPONENT* component = aNetlist.GetComponent( ii );
+        MODULE*    module = aBoard->FindModuleByReference( component->GetReference() );
 
-            if( module == NULL )
+        if( module == nullptr )
+        {
+            if( !aBoard->GetDesignSettings().Ignore( DRCE_MISSING_FOOTPRINT ) && module == NULL )
             {
                 msg.Printf( _( "Missing footprint %s (%s)" ),
                             component->GetReference(),
@@ -69,6 +69,64 @@ void TestFootprints( NETLIST& aNetlist, BOARD* aBoard, std::vector<std::shared_p
                 std::shared_ptr<DRC_ITEM> item = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
                 item->SetErrorMessage( msg );
                 aDRCList.push_back( item );
+            }
+        }
+        else
+        {
+            if( !aBoard->GetDesignSettings().Ignore( DRCE_NET_CONFLICT ) )
+            {
+                for( D_PAD* pad : module->Pads() )
+                {
+                    const COMPONENT_NET& sch_net = component->GetNet( pad->GetName() );
+                    const wxString&      pcb_netname = pad->GetNetname();
+
+                    if( !pcb_netname.IsEmpty() && sch_net.GetPinName().IsEmpty() )
+                    {
+                        msg.Printf( _( "No corresponding pin found in schematic." ) );
+
+                        std::shared_ptr<DRC_ITEM> item = DRC_ITEM::Create( DRCE_NET_CONFLICT );
+                        item->SetErrorMessage( msg );
+                        item->SetItems( pad );
+                        aDRCList.push_back( item );
+                    }
+                    else if( pcb_netname.IsEmpty() && !sch_net.GetNetName().IsEmpty() )
+                    {
+                        msg.Printf( _( "Pad missing net given by schematic (%s)." ),
+                                    sch_net.GetNetName() );
+
+                        std::shared_ptr<DRC_ITEM> item = DRC_ITEM::Create( DRCE_NET_CONFLICT );
+                        item->SetErrorMessage( msg );
+                        item->SetItems( pad );
+                        aDRCList.push_back( item );
+                    }
+                    else if( pcb_netname != sch_net.GetNetName() )
+                    {
+                        msg.Printf( _( "Pad net (%s) doesn't match net given by schematic (%s)." ),
+                                    pcb_netname,
+                                    sch_net.GetNetName() );
+
+                        std::shared_ptr<DRC_ITEM> item = DRC_ITEM::Create( DRCE_NET_CONFLICT );
+                        item->SetErrorMessage( msg );
+                        item->SetItems( pad );
+                        aDRCList.push_back( item );
+                    }
+                }
+
+                for( unsigned jj = 0; jj < component->GetNetCount(); ++jj )
+                {
+                    const COMPONENT_NET& sch_net = component->GetNet( jj );
+
+                    if( !module->FindPadByName( sch_net.GetPinName() ) )
+                    {
+                        msg.Printf( _( "No pad found for pin %s in schematic." ),
+                                    sch_net.GetPinName() );
+
+                        std::shared_ptr<DRC_ITEM> item = DRC_ITEM::Create( DRCE_NET_CONFLICT );
+                        item->SetErrorMessage( msg );
+                        item->SetItems( module );
+                        aDRCList.push_back( item );
+                    }
+                }
             }
         }
     }

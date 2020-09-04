@@ -154,6 +154,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DRCSeverities[ DRCE_MISSING_FOOTPRINT ] = RPT_SEVERITY_WARNING;
     m_DRCSeverities[ DRCE_DUPLICATE_FOOTPRINT ] = RPT_SEVERITY_WARNING;
     m_DRCSeverities[ DRCE_EXTRA_FOOTPRINT ] = RPT_SEVERITY_WARNING;
+    m_DRCSeverities[ DRCE_NET_CONFLICT ] = RPT_SEVERITY_WARNING;
 
     m_MaxError = ARC_HIGH_DEF;
     m_ZoneUseNoOutlineInFill = true;            // Use new algo by default to fill zones

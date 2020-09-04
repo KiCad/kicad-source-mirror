@@ -98,6 +98,7 @@ private:
     static DRC_ITEM duplicateFootprints;
     static DRC_ITEM missingFootprint;
     static DRC_ITEM extraFootprint;
+    static DRC_ITEM netConflict;
     static DRC_ITEM unresolvedVariable;
 };
 

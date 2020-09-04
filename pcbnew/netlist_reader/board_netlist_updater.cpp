@@ -169,7 +169,8 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
 
     // Set the pads ratsnest settings to the global settings
     bool set_ratsnest = m_frame->GetDisplayOptions().m_ShowGlobalRatsnest;
-    for ( auto pad : footprint->Pads() )
+
+    for ( D_PAD* pad : footprint->Pads() )
         pad->SetLocalRatsnestVisible( set_ratsnest );
 
     m_newFootprintsCount++;

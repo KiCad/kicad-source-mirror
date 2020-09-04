@@ -1100,29 +1100,13 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 
 MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 {
-    MODULE* found = nullptr;
+    for( MODULE* module : m_modules )
+    {
+        if( aReference == module->GetReference() )
+            return module;
+    }
 
-    // search only for MODULES
-    static const KICAD_T scanTypes[] = { PCB_MODULE_T, EOT };
-
-    INSPECTOR_FUNC inspector = [&]( EDA_ITEM* item, void* testData )
-                               {
-                                   MODULE* module = (MODULE*) item;
-
-                                   if( aReference == module->GetReference() )
-                                   {
-                                       found = module;
-                                       return SEARCH_RESULT::QUIT;
-                                   }
-
-                                   return SEARCH_RESULT::CONTINUE;
-                               };
-
-    // visit this BOARD with the above inspector
-    BOARD* nonconstMe = (BOARD*) this;
-    nonconstMe->Visit( inspector, NULL, scanTypes );
-
-    return found;
+    return nullptr;
 }
 
 

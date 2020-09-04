@@ -159,6 +159,10 @@ DRC_ITEM DRC_ITEM::extraFootprint( DRCE_EXTRA_FOOTPRINT,
         _( "Extra footprint" ),
         wxT( "extra_footprint" ) );
 
+DRC_ITEM DRC_ITEM::netConflict( DRCE_NET_CONFLICT,
+        _( "Pad net doesn't match schematic" ),
+        wxT( "net_conflict" ) );
+
 DRC_ITEM DRC_ITEM::unresolvedVariable( DRCE_UNRESOLVED_VARIABLE,
         _( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
@@ -232,6 +236,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_INVALID_OUTLINE:          return std::make_shared<DRC_ITEM>( invalidOutline );
     case DRCE_MISSING_FOOTPRINT:        return std::make_shared<DRC_ITEM>( missingFootprint );
     case DRCE_DUPLICATE_FOOTPRINT:      return std::make_shared<DRC_ITEM>( duplicateFootprints );
+    case DRCE_NET_CONFLICT:             return std::make_shared<DRC_ITEM>( netConflict );
     case DRCE_EXTRA_FOOTPRINT:          return std::make_shared<DRC_ITEM>( extraFootprint );
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );
 

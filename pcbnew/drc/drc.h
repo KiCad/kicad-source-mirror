@@ -70,6 +70,7 @@ enum PCB_DRC_CODE {
     DRCE_MISSING_FOOTPRINT,                 ///< footprint not found for netlist item
     DRCE_DUPLICATE_FOOTPRINT,               ///< more than one footprints found for netlist item
     DRCE_EXTRA_FOOTPRINT,                   ///< netlist item not found for footprint
+    DRCE_NET_CONFLICT,                      ///< pad net doesn't match netlist
 
     DRCE_UNRESOLVED_VARIABLE,
 
