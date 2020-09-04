@@ -29,7 +29,7 @@
 
 #include <painter.h>
 #include <pcb_display_options.h>
-
+#include <math/vector2d.h>
 #include <memory>
 
 
@@ -183,6 +183,8 @@ public:
 
     std::set<int>& GetHiddenNets() { return m_hiddenNets; }
     const std::set<int>& GetHiddenNets() const { return m_hiddenNets; }
+
+    void SetZoneDisplayMode( ZONE_DISPLAY_MODE mode ) { m_zoneDisplayMode = mode; }
 
 protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
