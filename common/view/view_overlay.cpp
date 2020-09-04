@@ -335,16 +335,19 @@ void VIEW_OVERLAY::Segment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoi
 
 void VIEW_OVERLAY::Polyline( std::deque<VECTOR2D>& aPointList )
 {
+    // fixme: implement
 }
 
 
 void VIEW_OVERLAY::Polyline( const VECTOR2D aPointList[], int aListSize )
 {
+    // fixme: implement
 }
 
 
 void VIEW_OVERLAY::Polyline( const SHAPE_LINE_CHAIN& aLineChain )
 {
+    m_commands.push_back( new COMMAND_POLY_POLYLINE( aLineChain ) );
 }
 
 
