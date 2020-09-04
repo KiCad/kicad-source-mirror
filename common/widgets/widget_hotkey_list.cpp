@@ -31,20 +31,6 @@
 
 
 /**
- * Minimum width of the hotkey column
- */
-static const int HOTKEY_MIN_WIDTH = 100;
-
-
-/**
- * Extra margin to compensate for vertical scrollbar
- */
-static const int HORIZ_MARGIN = 30;
-
-
-std::map<wxString, int> WIDGET_HOTKEY_LIST::m_width_cache;
-
-/**
  * Menu IDs for the hotkey context menu
  */
 enum ID_WHKL_MENU_IDS
@@ -302,9 +288,10 @@ void WIDGET_HOTKEY_LIST::UpdateFromClientData()
 
         if( hkdata )
         {
-            const auto& changed_hk = hkdata->GetChangedHotkey();
-            wxString    label = changed_hk.m_Actions[ 0 ]->GetLabel();
-            wxString    key_text = KeyNameFromKeyCode( changed_hk.m_EditKeycode );
+            const HOTKEY& changed_hk = hkdata->GetChangedHotkey();
+            wxString      label = changed_hk.m_Actions[ 0 ]->GetLabel();
+            wxString      key_text = KeyNameFromKeyCode( changed_hk.m_EditKeycode );
+            wxString      description = changed_hk.m_Actions[ 0 ]->GetDescription();
 
             if( label.IsEmpty() )
                 label = changed_hk.m_Actions[ 0 ]->GetName();
@@ -315,12 +302,9 @@ void WIDGET_HOTKEY_LIST::UpdateFromClientData()
 
             SetItemText( i, 0, label );
             SetItemText( i, 1, key_text);
+            SetItemText( i, 2, description );
         }
     }
-
-    // Trigger a resize in case column widths have changed
-    wxSizeEvent dummy_evt;
-    OnSize( dummy_evt );
 }
 
 
@@ -366,7 +350,7 @@ void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem, int aResetId )
     if( !hkdata )
         return;
 
-    auto& changed_hk = hkdata->GetChangedHotkey();
+    HOTKEY& changed_hk = hkdata->GetChangedHotkey();
 
     if( aResetId == ID_RESET )
         changeHotkey( changed_hk, changed_hk.m_Actions[ 0 ]->GetHotKey() );
@@ -428,92 +412,6 @@ void WIDGET_HOTKEY_LIST::OnMenu( wxCommandEvent& aEvent )
 }
 
 
-void WIDGET_HOTKEY_LIST::OnSize( wxSizeEvent& aEvent )
-{
-    wxDataViewCtrl* view = GetDataView();
-
-    if( !view )
-        return;
-
-    wxRect rect = GetClientRect();
-    view->SetSize( rect );
-
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
-    {
-        wxWindow* win_view = GetView();
-        win_view->Refresh();
-        win_view->Update();
-    }
-#endif
-
-    // Find the maximum width of both columns
-    int clamped_column = ( m_rubber_band_column == 0 ) ? 1 : 0;
-    int clamped_column_width = 0;
-    int rubber_max_width = 0;
-
-    for( wxTreeListItem item = GetFirstItem(); item.IsOk(); item = GetNextItem( item ) )
-    {
-        const wxString& text = GetItemText( item, clamped_column );
-        int width = WidthFor( text );
-
-        if( clamped_column == 0 )
-        {
-            width += 4 * view->GetIndent();
-        }
-
-        if( width > clamped_column_width )
-            clamped_column_width = width;
-
-        width = MemoWidthFor( GetItemText( item, m_rubber_band_column ) );
-        if( width > rubber_max_width )
-            rubber_max_width = width;
-    }
-
-    if( clamped_column_width < m_clamped_min_width )
-        clamped_column_width = m_clamped_min_width;
-
-    // Rubber column width is only limited if the rubber column is on the LEFT.
-    // If on the right, let the horiz scrollbar show.
-
-    int rubber_width = 0;
-
-    if( m_rubber_band_column == 0 )
-        rubber_width = rect.width - clamped_column_width - HORIZ_MARGIN;
-    else
-        rubber_width = rubber_max_width;
-
-    if( rubber_width <= 0 )
-        rubber_width = 1;
-
-    wxASSERT( m_rubber_band_column == 0 || m_rubber_band_column == 1 );
-
-    if( GetColumnCount() >= 2 )
-    {
-        SetColumnWidth( m_rubber_band_column, rubber_width );
-        SetColumnWidth( clamped_column, clamped_column_width );
-    }
-}
-
-
-int WIDGET_HOTKEY_LIST::MemoWidthFor( const wxString& aStr )
-{
-    int width;
-    auto found = m_width_cache.find( aStr );
-
-    if( found == m_width_cache.end() )
-    {
-        width = WidthFor( aStr );
-        m_width_cache[aStr] = width;
-    }
-    else
-    {
-        width = found->second;
-    }
-
-    return width;
-}
-
-
 bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
 {
     HOTKEY* conflictingHotKey = nullptr;
@@ -548,17 +446,16 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
                                         bool aReadOnly )
     :   wxTreeListCtrl( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
         m_hk_store( aHotkeyStore ),
-        m_readOnly( aReadOnly ),
-        m_rubber_band_column( 0 ),
-        m_clamped_min_width( HOTKEY_MIN_WIDTH )
+        m_readOnly( aReadOnly )
 {
     wxString command_header = _( "Command" );
 
     if( !m_readOnly )
         command_header << " " << _( "(double-click to edit)" );
 
-    AppendColumn( command_header );
-    AppendColumn( _( "Hotkey" ) );
+    AppendColumn( command_header, 320 );
+    AppendColumn( _( "Hotkey" ), 110 );
+    AppendColumn( _( "Description" ), 1000 );
     GetDataView()->SetIndent( 10 );
 
     if( !m_readOnly )
@@ -568,8 +465,6 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
         Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::OnContextMenu, this );
         Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::OnMenu, this );
     }
-
-    Bind( wxEVT_SIZE, &WIDGET_HOTKEY_LIST::OnSize, this );
 }
 
 

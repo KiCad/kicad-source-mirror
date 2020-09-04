@@ -997,7 +997,8 @@ TOOL_ACTION PCB_ACTIONS::layerPrev( "pcbnew.Control.layerPrev",
 TOOL_ACTION PCB_ACTIONS::layerToggle( "pcbnew.Control.layerToggle",
         AS_GLOBAL,
         'V', LEGACY_HK_NAME( "Add Through Via" ),
-        _( "Add Through Via" ), "", nullptr, AF_NOTIFY );
+        _( "Toggle Layer" ), _( "Switch between layers in active layer pair" ),
+        nullptr, AF_NOTIFY );
 
 TOOL_ACTION PCB_ACTIONS::layerAlphaInc( "pcbnew.Control.layerAlphaInc",
         AS_GLOBAL,

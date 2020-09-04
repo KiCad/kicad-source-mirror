@@ -39,15 +39,10 @@ class WIDGET_HOTKEY_CLIENT_DATA;
 
 class WIDGET_HOTKEY_LIST : public wxTreeListCtrl
 {
-    HOTKEY_STORE&               m_hk_store;
-    bool                        m_readOnly;
+    HOTKEY_STORE&  m_hk_store;
+    bool           m_readOnly;
 
-    wxTreeListItem              m_context_menu_item;
-
-    int                         m_rubber_band_column;
-    int                         m_clamped_min_width;
-
-    static std::map<wxString, int> m_width_cache;
+    wxTreeListItem m_context_menu_item;
 
     /**
      * Method GetHKClientData
@@ -117,18 +112,6 @@ protected:
      * Handle activation of a context menu item.
      */
     void OnMenu( wxCommandEvent& aEvent );
-
-    /**
-     * Function OnSize
-     * Handle resizing of the control. Overrides the buggy wxTreeListCtrl::OnSize.
-     */
-    void OnSize( wxSizeEvent& aEvent );
-
-    /**
-     * Memoized version of wxWidthFor(), which returns the width in pixels required to display
-     * a string. The wx version is REALLY SLOW on macOS.
-     */
-    int MemoWidthFor( const wxString& aStr );
 
     /**
      * Method ResolveKeyConflicts
