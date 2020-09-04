@@ -586,7 +586,13 @@ const test::DRC_CONSTRAINT& test::DRC_ENGINE::EvalRulesForItems( test::DRC_CONST
         }
     }
 
-    assert(false); // should never hapen
+    // fixme: return optional<drc_constraint>, let the particular test decide what to do if no matching constraint
+    // is found
+    static test::DRC_CONSTRAINT nullConstraint;
+    nullConstraint.m_DisallowFlags = 0;
+    nullConstraint.m_LayerCondition.reset();
+
+    return nullConstraint;
 }
 
 
