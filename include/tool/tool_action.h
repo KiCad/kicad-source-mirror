@@ -122,7 +122,7 @@ public:
 
     wxString GetLabel() const;
     wxString GetMenuItem() const;
-    wxString GetDescription() const;
+    wxString GetDescription( bool aIncludeHotkey = true ) const;
 
     TOOL_ACTION_SCOPE GetScope() const { return m_scope; }
 

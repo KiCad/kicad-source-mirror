@@ -9,6 +9,8 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+class WX_GRID;
+
 #include <wx/scrolwin.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -65,7 +67,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxStaticText* m_staticTextNets;
 		wxTextCtrl* m_txtNetFilter;
 		wxBitmapButton* m_btnNetInspector;
-		wxGrid* m_netsGrid;
+		WX_GRID* m_netsGrid;
 		wxPanel* m_panelNetclasses;
 		wxStaticText* m_staticText14;
 		wxBitmapButton* m_btnConfigureNetClasses;
@@ -95,7 +97,7 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 
 	public:
 
-		APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 215,400 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~APPEARANCE_CONTROLS_BASE();
 
 		void m_netsTabSplitterOnIdle( wxIdleEvent& )

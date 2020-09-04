@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "appearance_controls_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -12,7 +14,7 @@
 APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	this->SetFont( wxFont( 10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	this->SetMinSize( wxSize( 160,360 ) );
+	this->SetMinSize( wxSize( 200,360 ) );
 
 	m_sizerOuter = new wxBoxSizer( wxVERTICAL );
 
@@ -120,7 +122,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	bSizer192->Add( bSizer17, 0, wxEXPAND, 5 );
 
-	m_netsGrid = new wxGrid( m_panelNets, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_netsGrid = new WX_GRID( m_panelNets, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_netsGrid->CreateGrid( 5, 3 );
@@ -130,7 +132,9 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_netsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_netsGrid->AutoSizeColumns();
+	m_netsGrid->SetColSize( 0, 40 );
+	m_netsGrid->SetColSize( 1, 40 );
+	m_netsGrid->SetColSize( 2, 400 );
 	m_netsGrid->EnableDragColMove( false );
 	m_netsGrid->EnableDragColSize( false );
 	m_netsGrid->SetColLabelSize( 0 );
@@ -145,7 +149,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	// Cell Defaults
 	m_netsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer192->Add( m_netsGrid, 1, wxALL|wxEXPAND, 5 );
+	bSizer192->Add( m_netsGrid, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_panelNets->SetSizer( bSizer192 );
@@ -274,7 +278,6 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	this->SetSizer( m_sizerOuter );
 	this->Layout();
-	m_sizerOuter->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ) );

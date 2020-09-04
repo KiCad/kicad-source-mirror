@@ -33,10 +33,54 @@
 #include <tools/pcb_actions.h>
 #include <widgets/bitmap_toggle.h>
 #include <widgets/color_swatch.h>
+#include <widgets/wx_grid.h>
 #include <widgets/grid_bitmap_toggle.h>
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_text_helpers.h>
 #include <widgets/indicator_icon.h>
+
+
+NET_GRID_TABLE::NET_GRID_TABLE( PCB_BASE_FRAME* aFrame, wxColor aBackgroundColor ) :
+        wxGridTableBase(),
+        m_frame( aFrame )
+{
+    m_defaultAttr = new wxGridCellAttr;
+    m_defaultAttr->SetBackgroundColour( aBackgroundColor );
+
+    m_labelAttr = new wxGridCellAttr;
+    m_labelAttr->SetRenderer( new GRID_CELL_ESCAPED_TEXT_RENDERER );
+    m_labelAttr->SetBackgroundColour( aBackgroundColor );
+}
+
+
+NET_GRID_TABLE::~NET_GRID_TABLE()
+{
+    m_defaultAttr->DecRef();
+    m_labelAttr->DecRef();
+}
+
+
+wxGridCellAttr* NET_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind )
+{
+    switch( aCol )
+    {
+    case COL_COLOR:
+        m_defaultAttr->IncRef();
+        return m_defaultAttr;
+
+    case COL_VISIBILITY:
+        m_defaultAttr->IncRef();
+        return m_defaultAttr;
+
+    case COL_LABEL:
+        m_labelAttr->IncRef();
+        return m_labelAttr;
+
+    default:
+        wxFAIL;
+        return nullptr;
+    }
+}
 
 
 wxString NET_GRID_TABLE::GetValue( int aRow, int aCol )
@@ -219,8 +263,6 @@ void NET_GRID_TABLE::Rebuild()
     {
         wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_nets.size() );
         GetView()->ProcessTableMessage( msg );
-
-        GetView()->AutoSizeColumn( NET_GRID_TABLE::COL_LABEL );
     }
 }
 
@@ -346,6 +388,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     int pointSize     = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
     int screenHeight  = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
 
+    m_layerPanelColour = m_panelLayers->GetBackgroundColour().ChangeLightness( 110 );
+
     m_layersOuterSizer = new wxBoxSizer( wxVERTICAL );
     m_windowLayers->SetSizer( m_layersOuterSizer );
     m_windowLayers->SetScrollRate( 0, 5 );
@@ -438,18 +482,20 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                                   new GRID_CELL_COLOR_RENDERER( m_frame, SWATCH_SMALL ),
                                   new GRID_CELL_COLOR_SELECTOR( m_frame, m_netsGrid ) );
 
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetRenderer( new GRID_CELL_ESCAPED_TEXT_RENDERER );
-    m_netsGrid->SetColAttr( NET_GRID_TABLE::COL_LABEL, attr );
+    m_netsTable = new NET_GRID_TABLE( m_frame, m_panelNets->GetBackgroundColour() );
+    m_netsGrid->SetTable( m_netsTable, true );
+    m_netsGrid->SetColLabelSize( 0 );
 
-    m_netsTable = new NET_GRID_TABLE( m_frame );
-    m_netsGrid->SetTable( m_netsTable, true, wxGrid::wxGridSelectRows );
-
+    m_netsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
     m_netsGrid->SetSelectionForeground( m_netsGrid->GetDefaultCellTextColour() );
-    m_netsGrid->SetSelectionBackground( m_netsGrid->GetBackgroundColour() );
+    m_netsGrid->SetSelectionBackground( m_panelNets->GetBackgroundColour() );
 
     const int cellPadding      = 6;
-    const int rowHeightPadding = 4;
+#ifdef __WXMAC__
+    const int rowHeightPadding = 5;
+#else
+    const int rowHeightPadding = 3;
+#endif
 
     wxSize size = ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );
     m_netsGrid->SetColSize( NET_GRID_TABLE::COL_COLOR, size.x + cellPadding );
@@ -1001,7 +1047,6 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
                 panel->SetSizer( sizer );
 
-                m_layerPanelColour = panel->GetBackgroundColour().ChangeLightness( 110 );
                 panel->SetBackgroundColour( m_layerPanelColour );
 
                 aSetting->visible = visible[layer];

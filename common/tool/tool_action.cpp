@@ -80,11 +80,11 @@ wxString TOOL_ACTION::GetMenuItem() const
 }
 
 
-wxString TOOL_ACTION::GetDescription() const
+wxString TOOL_ACTION::GetDescription( bool aIncludeHotkey ) const
 {
     wxString tooltip = wxGetTranslation( m_tooltip );
 
-    if( GetHotKey() )
+    if( aIncludeHotkey && GetHotKey() )
         tooltip += wxString::Format( wxT( "  (%s)" ), KeyNameFromKeyCode( GetHotKey() ) );
 
     return tooltip;

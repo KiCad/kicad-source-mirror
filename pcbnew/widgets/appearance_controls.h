@@ -79,10 +79,8 @@ public:
     }
 
 public:
-    NET_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
-            wxGridTableBase(),
-            m_frame( aFrame )
-    {}
+    NET_GRID_TABLE( PCB_BASE_FRAME* aFrame, wxColor aBackgroundColor );
+    ~NET_GRID_TABLE();
 
     int GetNumberRows() override
     {
@@ -93,6 +91,8 @@ public:
     {
         return COL_SIZE;
     }
+
+    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind ) override;
 
     wxString GetValue( int aRow, int aCol ) override;
 
@@ -127,6 +127,9 @@ private:
     PCB_BASE_FRAME* m_frame;
 
     std::vector<NET_GRID_ENTRY> m_nets;
+
+    wxGridCellAttr* m_defaultAttr;
+    wxGridCellAttr* m_labelAttr;
 };
 
 

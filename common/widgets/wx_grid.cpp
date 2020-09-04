@@ -48,6 +48,12 @@ WX_GRID::~WX_GRID()
 
 void WX_GRID::SetColLabelSize( int aHeight )
 {
+    if( aHeight == 0 )
+    {
+        wxGrid::SetColLabelSize( 0 );
+        return;
+    }
+
     // correct wxFormBuilder height for large fonts
     wxFont guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     int minHeight = guiFont.GetPixelSize().y + 2 * MIN_GRIDCELL_MARGIN;
