@@ -117,7 +117,9 @@ void test::DRC_TEST_PROVIDER_MISC::testDisabledLayers()
     disabledLayers &= LSET::AllCuMask();
 
     auto checkDisabledLayers = [&]( BOARD_ITEM* item ) -> bool {
-        if( ( disabledLayers & item->GetLayerSet() ).any() )
+        LSET refLayers ( item->GetLayer() );
+
+        if( ( disabledLayers & refLayers ).any() )
         {
             wxString                  msg;
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
