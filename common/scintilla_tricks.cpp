@@ -147,7 +147,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         else
             m_te->DeleteRange( m_te->GetSelectionStart(), 1 );
     }
-    else if( ( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == '/' ) )
+    else if( ( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetUnicodeKey() == '/' ) )
     {
         int  startLine = m_te->LineFromPosition( m_te->GetSelectionStart() );
         int  endLine = m_te->LineFromPosition( m_te->GetSelectionEnd() );
