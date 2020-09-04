@@ -428,8 +428,6 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                 m_frame->GetToolManager()->RunAction( PCB_ACTIONS::flipBoard, true );
             } );
 
-    m_paneLayerDisplay->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-
     m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER( KiBitmap( visibility_xpm ),
                                                             KiBitmap( visibility_off_xpm ) );
 
@@ -502,26 +500,6 @@ wxSize APPEARANCE_CONTROLS::GetBestSize() const
 }
 
 
-void APPEARANCE_CONTROLS::OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event )
-{
-    // Because wxWidgets is broken and will not properly lay these out automatically
-    Freeze();
-    m_panelLayers->Fit();
-    m_sizerOuter->Layout();
-    Thaw();
-}
-
-
-void APPEARANCE_CONTROLS::OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event )
-{
-    // Because wxWidgets is broken and will not properly lay these out automatically
-    Freeze();
-    m_panelNetsAndClasses->Fit();
-    m_sizerOuter->Layout();
-    Thaw();
-}
-
-
 void APPEARANCE_CONTROLS::OnNotebookPageChanged( wxNotebookEvent& aEvent )
 {
     // Work around wxMac issue where the notebook pages are blank
@@ -564,7 +542,7 @@ void APPEARANCE_CONTROLS::OnSetFocus( wxFocusEvent& aEvent )
         wxPostEvent( btn, evt );
     }
 #endif
-        
+
     passOnFocus();
     aEvent.Skip();
 }
@@ -775,21 +753,17 @@ void APPEARANCE_CONTROLS::OnColorThemeChanged()
 
 void APPEARANCE_CONTROLS::OnLayerChanged()
 {
-    const wxColour  normalColor    = m_panelLayers->GetBackgroundColour();
-    static wxColour highlightColor = wxSystemSettings::GetColour( wxSYS_COLOUR_SCROLLBAR );
+    for( const std::pair<const PCB_LAYER_ID, APPEARANCE_SETTING*>& pair : m_layerSettingsMap )
+    {
+        pair.second->ctl_panel->SetBackgroundColour( m_layerPanelColour );
+        pair.second->ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
+    }
 
-    PCB_LAYER_ID current = m_frame->GetActiveLayer();
+    wxColour            highlightColor = m_layerPanelColour.ChangeLightness( 160 );
+    PCB_LAYER_ID        current = m_frame->GetActiveLayer();
+    APPEARANCE_SETTING* newSetting = m_layerSettingsMap[ current ];
 
-    wxASSERT( m_layerSettingsMap.count( current ) );
-    wxASSERT( m_layerSettingsMap.count( m_currentLayer ) );
-
-    APPEARANCE_SETTING* oldSetting = m_layerSettingsMap.at( m_currentLayer );
-    APPEARANCE_SETTING* newSetting = m_layerSettingsMap.at( current );
-
-    oldSetting->ctl_panel->SetBackgroundColour( normalColor );
     newSetting->ctl_panel->SetBackgroundColour( highlightColor );
-
-    oldSetting->ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
     newSetting->ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::ON );
 
     m_currentLayer = current;
@@ -995,21 +969,26 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
                 panel->SetSizer( sizer );
 
+                m_layerPanelColour = panel->GetBackgroundColour().ChangeLightness( 110 );
+                panel->SetBackgroundColour( m_layerPanelColour );
+
                 aSetting->visible = visible[layer];
 
                 // TODO(JE) consider restyling this indicator
                 INDICATOR_ICON* indicator = new INDICATOR_ICON( panel, *m_iconProvider,
-                        ROW_ICON_PROVIDER::STATE::OFF, layer );
+                                                                ROW_ICON_PROVIDER::STATE::OFF,
+                                                                layer );
 
                 COLOR_SWATCH* swatch = new COLOR_SWATCH( panel, COLOR4D::UNSPECIFIED, layer,
                                                          bgColor, theme->GetColor( layer ),
                                                          SWATCH_SMALL );
-                swatch->SetToolTip( _( "Left double click or middle click for color change, "
+                swatch->SetToolTip( _( "Double click or middle click for color change, "
                                        "right click for menu" ) );
 
-                BITMAP_TOGGLE* btn_visible =
-                        new BITMAP_TOGGLE( panel, layer, KiBitmap( visibility_xpm ),
-                                           KiBitmap( visibility_off_xpm ), aSetting->visible );
+                BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( panel, layer,
+                                                                KiBitmap( visibility_xpm ),
+                                                                KiBitmap( visibility_off_xpm ),
+                                                                aSetting->visible );
                 btn_visible->SetToolTip( _( "Show or hide this layer" ) );
 
                 wxStaticText* label = new wxStaticText( panel, layer, aSetting->label );
@@ -1053,8 +1032,8 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                                                       isVisible, true );
                         } );
 
-                swatch->Bind( COLOR_SWATCH_CHANGED,
-                              &APPEARANCE_CONTROLS::OnColorSwatchChanged, this );
+                swatch->Bind( COLOR_SWATCH_CHANGED, &APPEARANCE_CONTROLS::OnColorSwatchChanged,
+                              this );
 
                 auto rightClickHandler =
                         [&]( wxMouseEvent& aEvent )
@@ -1158,6 +1137,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
     }
 
     m_layersOuterSizer->AddSpacer( 10 );
+    m_windowLayers->SetBackgroundColour( m_layerPanelColour );
     m_windowLayers->Layout();
 }
 

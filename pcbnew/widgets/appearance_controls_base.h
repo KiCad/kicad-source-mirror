@@ -20,7 +20,6 @@
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/checkbox.h>
-#include <wx/collpane.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -49,7 +48,6 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxPanel* m_panelLayers;
 		wxBoxSizer* m_panelLayersSizer;
 		wxScrolledCanvas* m_windowLayers;
-		wxCollapsiblePane* m_paneLayerDisplay;
 		wxStaticText* m_staticText13;
 		wxRadioButton* m_rbHighContrastNormal;
 		wxRadioButton* m_rbHighContrastDim;
@@ -71,7 +69,6 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxBitmapButton* m_btnConfigureNetClasses;
 		wxScrolledWindow* m_netclassScrolledWindow;
 		wxBoxSizer* m_netclassOuterSizer;
-		wxCollapsiblePane* m_paneNetDisplay;
 		wxStaticText* m_staticTextNetDsplayTitle;
 		wxRadioButton* m_rbNetColorAll;
 		wxRadioButton* m_rbNetColorRatsnest;
@@ -84,12 +81,10 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		virtual void OnSetFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnNotebookPageChanged( wxNotebookEvent& event ) { event.Skip(); }
-		virtual void OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
 		virtual void OnFlipBoardChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNetGridClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnNetGridDoubleClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnNetGridRightClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event ) { event.Skip(); }
 		virtual void onLayerPresetChanged( wxCommandEvent& event ) { event.Skip(); }
 
 

@@ -248,10 +248,6 @@ public:
 
 protected:
 
-    void OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event ) override;
-
-    void OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event ) override;
-
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
 
     void OnSetFocus( wxFocusEvent& aEvent ) override;
@@ -335,6 +331,8 @@ private:
 
     int m_pointSize;
 
+    wxColour m_layerPanelColour;
+
     enum POPUP_ID
     {
         ID_CHANGE_COLOR = wxID_HIGHEST,
@@ -410,8 +408,6 @@ private:
     void passOnFocus();
 
     void idleFocusHandler( wxIdleEvent& aEvent );
-
-    void updateNetsDataViewToolTip( wxMouseEvent& aEvent );
 };
 
 #endif
