@@ -692,7 +692,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
     // This is a cancel, so commit quietly as we're going to throw the results away anyway.
     m_grid->CommitPendingChanges( true );
 
-    int retval = wxCANCEL;
+    int retval = wxID_CANCEL;
 
     if( m_dataModel->IsEdited() )
     {
@@ -701,7 +701,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
                                   {
                                       if( TransferDataFromWindow() )
                                       {
-                                          retval = wxOK;
+                                          retval = wxID_OK;
                                           return true;
                                       }
 
@@ -722,7 +722,13 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
         }
     }
 
-    event.Skip();
+    // No change in dialog: we can close it
+    if( IsQuasiModal() )
+        EndQuasiModal( retval );
+    else
+        EndModal( retval );
+
+    return;
 }
 
 
