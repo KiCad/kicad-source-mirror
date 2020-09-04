@@ -312,7 +312,7 @@ void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
     }
 
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_COMBOBOX( netclassNames ) );
+    attr->SetEditor( new wxGridCellChoiceEditor( netclassNames ) );
     m_membershipGrid->SetColAttr( 1, attr );
 
     m_assignNetClass->Set( netclassNames );
