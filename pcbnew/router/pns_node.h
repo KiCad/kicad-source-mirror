@@ -410,7 +410,7 @@ public:
     ///> Destroys all child nodes. Applicable only to the root node.
     void KillChildren();
 
-    void AllItemsInNet( int aNet, std::set<ITEM*>& aItems );
+    void AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask = -1 );
 
     void ClearRanks( int aMarkerMask = MK_HEAD | MK_VIOLATION );
 

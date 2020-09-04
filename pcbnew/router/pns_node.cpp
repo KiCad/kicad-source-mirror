@@ -1295,14 +1295,15 @@ void NODE::KillChildren()
 }
 
 
-void NODE::AllItemsInNet( int aNet, std::set<ITEM*>& aItems )
+void NODE::AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask)
 {
     INDEX::NET_ITEMS_LIST* l_cur = m_index->GetItemsForNet( aNet );
 
     if( l_cur )
     {
         for( ITEM*item : *l_cur )
-            aItems.insert( item );
+            if( item->OfKind( aKindMask ) )
+                aItems.insert( item );
     }
 
     if( !isRoot() )
@@ -1311,7 +1312,7 @@ void NODE::AllItemsInNet( int aNet, std::set<ITEM*>& aItems )
 
         if( l_root )
             for( INDEX::NET_ITEMS_LIST::iterator i = l_root->begin(); i!= l_root->end(); ++i )
-                if( !Overrides( *i ) )
+                if( !Overrides( *i ) && (*i)->OfKind( aKindMask ))
                     aItems.insert( *i );
     }
 }
