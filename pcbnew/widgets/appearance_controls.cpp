@@ -817,10 +817,10 @@ void APPEARANCE_CONTROLS::OnColorThemeChanged()
 
 void APPEARANCE_CONTROLS::OnLayerChanged()
 {
-    for( const std::pair<const PCB_LAYER_ID, APPEARANCE_SETTING*>& pair : m_layerSettingsMap )
+    for( const std::unique_ptr<APPEARANCE_SETTING>& setting : m_layerSettings )
     {
-        pair.second->ctl_panel->SetBackgroundColour( m_layerPanelColour );
-        pair.second->ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
+        setting->ctl_panel->SetBackgroundColour( m_layerPanelColour );
+        setting->ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
     }
 
     wxChar r, g, b;
