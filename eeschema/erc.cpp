@@ -157,6 +157,12 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
     if( aWorksheet )
     {
         wsItems.SetMilsToIUfactor( IU_PER_MILS );
+        wsItems.SetSheetNumber( 1 );
+        wsItems.SetSheetCount( 1 );
+        wsItems.SetFileName( "dummyFilename" );
+        wsItems.SetSheetName( "dummySheet" );
+        wsItems.SetSheetLayer( "dummyLayer" );
+        wsItems.SetProject( &m_schematic->Prj() );
         wsItems.BuildWorkSheetGraphicList( aWorksheet->GetPageInfo(), aWorksheet->GetTitleBlock() );
     }
 

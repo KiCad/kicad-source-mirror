@@ -250,7 +250,10 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
         BOARD_ITEM*  c = board->GetItem( rc_item->GetAuxItem2ID() );
         BOARD_ITEM*  d = board->GetItem( rc_item->GetAuxItem3ID() );
 
-        LSET violationLayers = a->GetLayerSet();
+        LSET violationLayers;
+
+        if( a )
+            violationLayers &= a->GetLayerSet();
 
         if( b )
             violationLayers &= b->GetLayerSet();
