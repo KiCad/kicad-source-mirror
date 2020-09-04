@@ -34,6 +34,10 @@
 #include <reporter.h>
 #include <widgets/progress_reporter.h>
 
+#include <project.h>
+#include <settings/settings_manager.h>
+#include <wildcards_and_files_ext.h>
+
 class CONSOLE_LOG
 {
 public:
@@ -154,6 +158,32 @@ private:
     CONSOLE_LOG* m_log;
 };
 
+
+struct PROJECT_CONTEXT {
+    PROJECT* project;
+    std::shared_ptr<BOARD> board;
+};
+
+SETTINGS_MANAGER g_settingsManager( true );
+
+PROJECT_CONTEXT loadKicadProject( wxString filename )
+{
+    PROJECT_CONTEXT rv;
+    wxFileName pro( filename );
+    wxFileName brdName ( filename );
+    pro.SetExt( ProjectFileExtension );
+    brdName.SetExt( KiCadPcbFileExtension );
+
+    g_settingsManager.LoadProject( pro.GetFullPath() );
+
+    rv.project = &g_settingsManager.Prj();
+    rv.board.reset( KI_TEST::ReadBoardFromFileOrStream( (const char *) brdName.GetFullPath().c_str() ).release() );
+    rv.board->SetProject( rv.project );
+
+    return rv;
+}
+
+
 int main( int argc, char *argv[] )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -166,9 +196,11 @@ int main( int argc, char *argv[] )
         return -1;
     }
 
-    auto brd =  KI_TEST::ReadBoardFromFileOrStream( argv[1] );
+    PROJECT_CONTEXT project = loadKicadProject( argv[1] );
 
-    test::DRC_ENGINE drcEngine( brd.get(), &brd->GetDesignSettings() );
+
+
+    test::DRC_ENGINE drcEngine( project.board.get(), &project.board->GetDesignSettings() );
 
     CONSOLE_LOG consoleLog;
 

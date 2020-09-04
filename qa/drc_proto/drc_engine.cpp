@@ -297,9 +297,25 @@ void test::DRC_ENGINE::inferLegacyRules()
 
     std::vector<NETCLASS_ENTRY> netclassesByClearance, netclassesByWidth;
 
+    m_board->SynchronizeNetsAndNetClasses();
+
+    // fixme: make this conditional for standalone tests
+    bds.SetNetClasses( nullptr ); // load legacy
+
+    std::vector<NETCLASSPTR> netclasses;
+
+    netclasses.push_back( bds.GetNetClasses().GetDefault() );
+    
+    for( auto netclass : bds.GetNetClasses() )
+        netclasses.push_back( netclass.second );
+
+    ReportAux( wxString::Format( "Importing %d legacy net classes", (int) netclasses.size() ) );
+
+#if 0
     for( auto netclass : bds.GetNetClasses() )
     {
         auto className = netclass.second->GetName();
+        drc_dbg(1,"Process netclass '%s'\n", className );
         NETCLASS_ENTRY ent;
         ent.name = className;
         ent.clearance = netclass.second->GetClearance();
@@ -319,12 +335,17 @@ void test::DRC_ENGINE::inferLegacyRules()
     {
         return a.width > b.width;
     } );
-
+#endif
     
 
+#if 0
     for( int i = 0; i <  netclassesByClearance.size(); i++ )
     {
-        wxString className = netclassesByClearance[i].name;
+#endif
+    int i = 0;
+    for( auto &nc : netclasses )
+    {
+        wxString className = nc->GetName();
 
         const auto expr = wxString::Format( "A.NetClass == '%s' || B.NetClass == '%s'", className, className );
 
@@ -336,10 +357,8 @@ void test::DRC_ENGINE::inferLegacyRules()
         netclassRule->SetCondition( inNetclassCondition );
 
         DRC_CONSTRAINT ncClearanceConstraint ( DRC_CONSTRAINT_TYPE_CLEARANCE );
-        ncClearanceConstraint.Value().SetMin( netclassesByClearance[i].clearance );
+        ncClearanceConstraint.Value().SetMin( nc->GetClearance() );
         netclassRule->AddConstraint( ncClearanceConstraint );
-
-        className = netclassesByWidth[i].name;
 
         netclassRule = createInferredRule( wxString::Format( "inferred-netclass-width-%s", className ),
             {}, priorityRangeMin + i );
@@ -347,11 +366,13 @@ void test::DRC_ENGINE::inferLegacyRules()
         netclassRule->SetCondition( inNetclassCondition );
 
         DRC_CONSTRAINT ncWidthConstraint ( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
-        ncWidthConstraint.Value().SetMin( netclassesByWidth[i].width );
+        ncWidthConstraint.Value().SetMin( nc->GetTrackWidth() );
         netclassRule->AddConstraint( ncWidthConstraint );
 
         // TODO: should we import diff pair gaps/widths here?
+        i++;
     }
+
 
 
 

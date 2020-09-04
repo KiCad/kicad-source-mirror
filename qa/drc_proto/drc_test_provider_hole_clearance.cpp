@@ -237,7 +237,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
 
 //        drc_dbg(10," chk2 against -> %p ds %d %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
 
-        drc_dbg(1," chk1 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
+        drc_dbg(10," chk1 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
 
         // No problem if pads which are on copper layers are on different copper layers,
         // (pads can be only on a technical layer, to build complex pads)
@@ -262,7 +262,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
                     continue;
             }
 
-            drc_dbg(1," chk3 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
+            drc_dbg(10," chk3 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
 
             /* Here, we must test clearance between holes and pads
              * pad size and shape is adjusted to pad drill size and shape
@@ -275,7 +275,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
                 auto minClearance = constraint.GetValue().Min();
                 int actual;
 
-                drc_dbg(1,"check pad %p rule '%s' cl %d\n", pad, constraint.GetParentRule()->GetName(), minClearance );
+                drc_dbg(10,"check pad %p rule '%s' cl %d\n", pad, constraint.GetParentRule()->GetName(), minClearance );
 
                 accountCheck( constraint.GetParentRule() );
 
@@ -310,7 +310,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
 
                 accountCheck( constraint.GetParentRule() );
 
-                drc_dbg(1,"check pad %p rule '%s' cl %d\n", aRefPad, constraint.GetParentRule()->GetName(), minClearance );
+                drc_dbg(10,"check pad %p rule '%s' cl %d\n", aRefPad, constraint.GetParentRule()->GetName(), minClearance );
 
                 auto padShape = pad->GetEffectiveShape();
                 if( padShape->Collide( aRefPad->GetEffectiveHoleShape(), minClearance, &actual ) )

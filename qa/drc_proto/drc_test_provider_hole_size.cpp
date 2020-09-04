@@ -92,6 +92,8 @@ bool test::DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 {
     ReportStage( ( "Testing pad holes" ), 0, 2 );
 
+    m_board = m_drcEngine->GetBoard();
+
     for( auto module : m_board->Modules() )
     {
         for( auto pad : module->Pads() )
