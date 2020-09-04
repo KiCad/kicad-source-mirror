@@ -24,7 +24,7 @@ import PadArray as PA
 class RowedGridArray(PA.PadGridArray):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(RowedGridArray, self).__init__(*args, **kwargs)
 
     def NamingFunction(self, x, y):
         pad_cnt = self.nx*self.ny
