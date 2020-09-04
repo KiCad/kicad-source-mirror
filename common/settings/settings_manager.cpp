@@ -326,6 +326,10 @@ void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::
     ( *aSettings )[ptr].update( backup );
     aSettings->Load();
 
+    // Ensure the folder to store the config exists:
+    if( !wxDir::Exists( SETTINGS_MANAGER::GetColorSettingsPath() ) )
+        wxDir::Make( SETTINGS_MANAGER::GetColorSettingsPath() );
+
     aSettings->SaveToFile( path, true );
 }
 
