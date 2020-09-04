@@ -268,23 +268,38 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     // Apply net color overrides
     if( conItem && m_netColorMode == NET_COLOR_MODE::ALL && IsNetCopperLayer( aLayer ) )
     {
-        if( m_netColors.count( netCode ) )
-            color = m_netColors.at( netCode );
-        else if( m_netclassColors.count( conItem->GetNetClassName() ) )
-            color = m_netclassColors.at( conItem->GetNetClassName() );
+        COLOR4D netColor = COLOR4D::UNSPECIFIED;
 
-        if( item->IsSelected() )
+        auto ii = m_netColors.find( netCode );
+
+        if( ii != m_netColors.end() )
+            netColor = ii->second;
+
+        if( netColor == COLOR4D::UNSPECIFIED )
         {
-            // Selection brightening overrides highlighting
-            color.Brighten( m_selectFactor );
+            auto jj = m_netclassColors.find( conItem->GetNetClassName() );
+
+            if( jj != m_netclassColors.end() )
+                netColor = jj->second;
         }
-        else if( m_highlightEnabled )
+
+        if( netColor != COLOR4D::UNSPECIFIED )
         {
-            // Highlight brightens objects on all layers and darkens everything else for contrast
-            if( highlighted )
-                color.Brighten( m_highlightFactor );
-            else
-                color.Darken( 1.0 - m_highlightFactor );
+            if( item->IsSelected() )
+            {
+                // Selection brightening overrides highlighting
+                netColor.Brighten( m_selectFactor );
+            }
+            else if( m_highlightEnabled )
+            {
+                // Highlight brightens objects on all layers and darkens everything else for contrast
+                if( highlighted )
+                    netColor.Brighten( m_highlightFactor );
+                else
+                    netColor.Darken( 1.0 - m_highlightFactor );
+            }
+
+            color = netColor;
         }
     }
     else if( !item->IsSelected() && m_highlightEnabled )
