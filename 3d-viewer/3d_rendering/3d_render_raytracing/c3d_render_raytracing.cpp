@@ -179,7 +179,7 @@ bool C3D_RENDER_RAYTRACING::Redraw(
 
         //aIsMoving = true;
         requestRedraw = true;
-        reload( aStatusReporter, aWarningReporter );
+        Reload( aStatusReporter, aWarningReporter, false );
     }
 
 
@@ -2078,4 +2078,19 @@ void C3D_RENDER_RAYTRACING::initialize_block_positions()
     m_shaderBuffer = new SFVEC3F[m_realBufferSize.x * m_realBufferSize.y];
 
     opengl_init_pbo();
+}
+
+BOARD_ITEM *C3D_RENDER_RAYTRACING::IntersectBoardItem( const RAY &aRay )
+{
+    HITINFO hitInfo;
+    hitInfo.m_tHit = std::numeric_limits<float>::infinity();
+
+    if( m_accelerator )
+        if( m_accelerator->Intersect( aRay, hitInfo ) )
+        {
+            if( hitInfo.pHitObject )
+                return hitInfo.pHitObject->GetBoardItem();
+        }
+
+    return nullptr;
 }

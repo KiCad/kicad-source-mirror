@@ -36,6 +36,7 @@
 #include <eda_3d_viewer.h>
 #include <3d_rendering/3d_render_raytracing/c3d_render_raytracing.h>
 #include <3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.h>
+#include <3d_rendering/3d_render_raytracing/accelerators/cbvh_pbrt.h>
 #include <3d_viewer_id.h>
 #include <class_board.h>
 #include <reporter.h>
@@ -112,7 +113,9 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
           m_camera( aCamera ),
           m_3d_render( nullptr ),
           m_opengl_supports_raytracing( false ),
-          m_render_raytracing_was_requested( false )
+          m_render_raytracing_was_requested( false ),
+          m_accelerator3DShapes( nullptr ),
+          m_currentIntersectedBoardItem( nullptr )
 {
     wxLogTrace( m_logTrace, "EDA_3D_CANVAS::EDA_3D_CANVAS" );
 
@@ -175,6 +178,9 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
 EDA_3D_CANVAS::~EDA_3D_CANVAS()
 {
     wxLogTrace( m_logTrace, "EDA_3D_CANVAS::~EDA_3D_CANVAS" );
+
+    delete m_accelerator3DShapes;
+    m_accelerator3DShapes = NULL;
 
     releaseOpenGL();
 }
@@ -462,8 +468,17 @@ void EDA_3D_CANVAS::DoRePaint()
     {
         m_3d_render->SetCurWindowSize( clientSize );
 
+        bool reloadRaytracingForIntersectionCalculations = false;
+
+        if( ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY ) &&
+            m_3d_render_ogl_legacy->IsReloadRequestPending() )
+            reloadRaytracingForIntersectionCalculations = true;
+
         requested_redraw = m_3d_render->Redraw( m_mouse_was_moved || m_camera_is_moving,
                                                 &activityReporter, &warningReporter );
+
+        if( reloadRaytracingForIntersectionCalculations )
+            m_3d_render_raytracing->Reload( nullptr, nullptr, true );
     }
 
     if( m_render_pivot )
@@ -659,6 +674,102 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
 
     const wxPoint eventPosition = event.GetPosition();
     m_camera.SetCurMousePosition( eventPosition );
+
+    if( !event.Dragging() )
+    {
+        STATUSBAR_REPORTER activityReporter(
+                m_parentStatusBar, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT ) );
+
+        RAY mouseRay = getRayAtCurrrentMousePosition();
+
+        BOARD_ITEM *intersectedBoardItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
+
+        if( intersectedBoardItem )
+        {
+            if( intersectedBoardItem != m_currentIntersectedBoardItem )
+            {
+                m_3d_render_ogl_legacy->SetCurrentIntersectedBoardItem( intersectedBoardItem );
+                m_currentIntersectedBoardItem = intersectedBoardItem;
+
+                if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+                    Request_refresh();
+            }
+
+            switch( intersectedBoardItem->Type() )
+            {
+                case PCB_PAD_T:
+                {
+                    D_PAD* item = dynamic_cast<D_PAD *>( intersectedBoardItem );
+
+                    if( item )
+                    {
+                        if( item->IsOnCopperLayer() )
+                            activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s\tPadName %s" ),
+                                                     item->GetNet()->GetNetname(),
+                                                     item->GetNet()->GetClassName(),
+                                                     item->GetName() ) );
+                    }
+                }
+                break;
+
+                case PCB_MODULE_T:
+                {
+                    MODULE* module = dynamic_cast<MODULE *>( intersectedBoardItem );
+
+                    if( module )
+                    {
+                        activityReporter.Report( module->GetReference() );
+                    }
+                }
+                break;
+
+                case PCB_TRACE_T:
+                case PCB_VIA_T:
+                case PCB_ARC_T:
+                {
+                    TRACK* item = dynamic_cast<TRACK *>( intersectedBoardItem );
+
+                    if( item )
+                    {
+                        activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
+                                                 item->GetNet()->GetNetname(),
+                                                 item->GetNet()->GetClassName() ) );
+                    }
+                }
+                break;
+
+                case PCB_ZONE_AREA_T:
+                {
+                    ZONE_CONTAINER* item = dynamic_cast<ZONE_CONTAINER *>( intersectedBoardItem );
+
+                    if( item )
+                    {
+                        if( item->IsOnCopperLayer() )
+                            activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
+                                                     item->GetNet()->GetNetname(),
+                                                     item->GetNet()->GetClassName() ) );
+                    }
+                }
+                break;
+
+                default:
+                break;
+            }
+        }
+        else
+        {
+            if( ( m_currentIntersectedBoardItem != nullptr ) &&
+                ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY ) )
+            {
+                m_3d_render_ogl_legacy->SetCurrentIntersectedBoardItem( nullptr );
+                Request_refresh();
+
+                activityReporter.Report( "" );
+            }
+
+            m_currentIntersectedBoardItem = nullptr;
+        }
+    }
 }
 
 
@@ -666,6 +777,15 @@ void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent &event )
 {
     SetFocus();
     stop_editingTimeOut_Timer();
+
+    if( !event.Dragging() && ( m_3d_render_raytracing != nullptr ) )
+    {
+        RAY mouseRay = getRayAtCurrrentMousePosition();
+
+        BOARD_ITEM *intersectedBoardItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
+
+        // !TODO: send a selection item to pcbnew, eg: via kiway?
+    }
 }
 
 
@@ -793,14 +913,7 @@ void EDA_3D_CANVAS::request_start_moving_camera( float aMovingSpeed, bool aRende
 
 void EDA_3D_CANVAS::move_pivot_based_on_cur_mouse_position()
 {
-    SFVEC3F rayOrigin;
-    SFVEC3F rayDir;
-
-    // Generate a ray origin and direction based on current mouser position and camera
-    m_camera.MakeRayAtCurrrentMousePosition( rayOrigin, rayDir );
-
-    RAY mouseRay;
-    mouseRay.Init( rayOrigin, rayDir );
+    RAY mouseRay = getRayAtCurrrentMousePosition();
 
     float hit_t;
 
@@ -993,4 +1106,19 @@ void EDA_3D_CANVAS::RenderEngineChanged()
     m_mouse_was_moved = false;
 
     Request_refresh();
+}
+
+
+RAY EDA_3D_CANVAS::getRayAtCurrrentMousePosition()
+{
+    SFVEC3F rayOrigin;
+    SFVEC3F rayDir;
+
+    // Generate a ray origin and direction based on current mouser position and camera
+    m_camera.MakeRayAtCurrrentMousePosition( rayOrigin, rayDir );
+
+    RAY mouseRay;
+    mouseRay.Init( rayOrigin, rayDir );
+
+    return mouseRay;
 }

@@ -69,6 +69,8 @@ public:
 
     int GetWaitForEditingTimeOut() override;
 
+    void SetCurrentIntersectedBoardItem( BOARD_ITEM* aCurrentIntersectedBoardItem ) { m_currentIntersectedBoardItem = aCurrentIntersectedBoardItem; }
+
 private:
     bool initializeOpenGL();
     void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
@@ -107,6 +109,8 @@ private:
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_pads_holes;
 
     MAP_3DMODEL m_3dmodel_map;
+
+    BOARD_ITEM* m_currentIntersectedBoardItem;
 
 private:
     CLAYERS_OGL_DISP_LISTS *generate_holes_display_list( const LIST_OBJECT2D &aListHolesObject2d,
@@ -192,7 +196,7 @@ private:
 
     void render_3D_models_selected( bool aRenderTopOrBot, bool aRenderTransparentOnly, bool aRenderSelectedOnly );
 
-    void render_3D_module( const MODULE* module, bool aRenderTransparentOnly );
+    void render_3D_module( const MODULE* module, bool aRenderTransparentOnly, bool aIsSelected );
 
     void setLight_Front( bool enabled );
     void setLight_Top( bool enabled );

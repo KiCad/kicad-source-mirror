@@ -75,6 +75,7 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& 
     m_ogl_circle_texture = 0;
     m_ogl_disp_list_grid = 0;
     m_last_grid_type     = GRID3D_TYPE::NONE;
+    m_currentIntersectedBoardItem = nullptr;
 
     m_3dmodel_map.clear();
 }
@@ -1241,15 +1242,34 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot, boo
     // Go for all modules
     for( auto module : m_boardAdapter.GetBoard()->Modules() )
     {
-        if( ( aRenderSelectedOnly && !module->IsSelected() ) ||
-            ( !aRenderSelectedOnly && module->IsSelected() ) )
+        const bool isIntersected = ( module == m_currentIntersectedBoardItem );
+
+        if( !isIntersected &&
+            ( ( aRenderSelectedOnly && !module->IsSelected() ) ||
+              ( !aRenderSelectedOnly && module->IsSelected() ) ) )
             continue;
+
+        if( isIntersected && aRenderSelectedOnly )
+        {
+            glEnable( GL_POLYGON_OFFSET_LINE );
+            glPolygonOffset( 8.0, 1.0 );
+
+            glPolygonMode( GL_FRONT, GL_LINE );
+            glLineWidth( 6 );
+        }
 
         if( !module->Models().empty() )
             if( m_boardAdapter.ShouldModuleBeDisplayed((MODULE_ATTR_T) module->GetAttributes() ) )
                 if( ( aRenderTopOrBot && !module->IsFlipped() )
                         || ( !aRenderTopOrBot && module->IsFlipped() ) )
-                    render_3D_module( module, aRenderTransparentOnly );
+                    render_3D_module( module, aRenderTransparentOnly, isIntersected );
+
+        if( isIntersected && aRenderSelectedOnly )
+        {
+            // Restore
+            glDisable( GL_POLYGON_OFFSET_LINE );
+            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+        }
     }
 
     C_OGL_3DMODEL::EndDrawMulti();
@@ -1264,7 +1284,8 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot,
 
 
 void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
-                                              bool aRenderTransparentOnly )
+                                              bool aRenderTransparentOnly,
+                                              bool aIsSelected )
 {
     if( !module->Models().empty() )
     {
@@ -1328,9 +1349,9 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
                     glMultMatrixf( glm::value_ptr( mtx ) );
 
                     if( aRenderTransparentOnly )
-                        modelPtr->Draw_transparent( sM.m_Opacity, module->IsSelected() );
+                        modelPtr->Draw_transparent( sM.m_Opacity, module->IsSelected() || aIsSelected );
                     else
-                        modelPtr->Draw_opaque( module->IsSelected() );
+                        modelPtr->Draw_opaque( module->IsSelected() || aIsSelected );
 
                     if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) )
                     {

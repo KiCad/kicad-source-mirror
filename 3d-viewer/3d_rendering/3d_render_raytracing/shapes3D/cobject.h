@@ -34,6 +34,7 @@
 #include "../hitinfo.h"
 #include "../cmaterial.h"
 
+#include <class_board_item.h>
 
 enum class OBJECT3D_TYPE
 {
@@ -55,6 +56,8 @@ protected:
     OBJECT3D_TYPE m_obj_type;
     const CMATERIAL *m_material;
 
+    BOARD_ITEM *m_boardItem;
+
     // m_modelTransparency combines the material and model opacity
     // 0.0 full opaque, 1.0 full transparent.
     float m_modelTransparency;
@@ -62,6 +65,9 @@ protected:
 public:
 
     explicit COBJECT( OBJECT3D_TYPE aObjType );
+
+    const void SetBoardItem( BOARD_ITEM *aBoardItem ) { m_boardItem = aBoardItem; }
+    BOARD_ITEM *GetBoardItem() const { return m_boardItem; }
 
     void SetMaterial( const CMATERIAL *aMaterial )
     {

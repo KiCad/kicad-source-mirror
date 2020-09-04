@@ -440,7 +440,9 @@ void C3D_RENDER_RAYTRACING::createItemsFromContainer( const CBVHCONTAINER2D *aCo
     }
 }
 
-void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
+void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
+                                    REPORTER* aWarningReporter,
+                                    bool aOnlyLoadCopperAndShapes )
 {
     m_reloadRequested = false;
 
@@ -451,10 +453,13 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
     unsigned stats_startReloadTime = GetRunningMicroSecs();
 
-    m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
+    if( !aOnlyLoadCopperAndShapes )
+    {
+        m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
 
-    SFVEC3F camera_pos = m_boardAdapter.GetBoardCenter3DU();
-    m_camera.SetBoardLookAtPos( camera_pos );
+        SFVEC3F camera_pos = m_boardAdapter.GetBoardCenter3DU();
+        m_camera.SetBoardLookAtPos( camera_pos );
+    }
 
     m_object_container.Clear();
     m_containerWithObjectsToDelete.Clear();
@@ -468,153 +473,156 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
     m_outlineBoard2dObjects = new CCONTAINER2D;
 
-    const int outlineCount = m_boardAdapter.GetBoardPoly().OutlineCount();
-
-    if( outlineCount > 0 )
+    if( !aOnlyLoadCopperAndShapes )
     {
-        float divFactor = 0.0f;
+        const int outlineCount = m_boardAdapter.GetBoardPoly().OutlineCount();
 
-        if( m_boardAdapter.GetStats_Nr_Vias() )
-            divFactor = m_boardAdapter.GetStats_Med_Via_Hole_Diameter3DU() * 18.0f;
-        else
-            if( m_boardAdapter.GetStats_Nr_Holes() )
-                divFactor = m_boardAdapter.GetStats_Med_Hole_Diameter3DU() * 8.0f;
-
-        SHAPE_POLY_SET boardPolyCopy = m_boardAdapter.GetBoardPoly();
-        boardPolyCopy.Fracture( SHAPE_POLY_SET::PM_FAST );
-
-        for( int iOutlinePolyIdx = 0; iOutlinePolyIdx < outlineCount; iOutlinePolyIdx++ )
+        if( outlineCount > 0 )
         {
-            Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
-                    boardPolyCopy,
-                    *m_outlineBoard2dObjects,
-                    m_boardAdapter.BiuTo3Dunits(),
-                    divFactor,
-                    *dynamic_cast<const BOARD_ITEM*>( m_boardAdapter.GetBoard() ),
-                    iOutlinePolyIdx );
-        }
+            float divFactor = 0.0f;
 
-        if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) )
-        {
-            const LIST_OBJECT2D &listObjects = m_outlineBoard2dObjects->GetList();
+            if( m_boardAdapter.GetStats_Nr_Vias() )
+                divFactor = m_boardAdapter.GetStats_Med_Via_Hole_Diameter3DU() * 18.0f;
+            else
+                if( m_boardAdapter.GetStats_Nr_Holes() )
+                    divFactor = m_boardAdapter.GetStats_Med_Hole_Diameter3DU() * 8.0f;
 
-            for( LIST_OBJECT2D::const_iterator object2d_iterator = listObjects.begin();
-                 object2d_iterator != listObjects.end();
-                 ++object2d_iterator )
+            SHAPE_POLY_SET boardPolyCopy = m_boardAdapter.GetBoardPoly();
+            boardPolyCopy.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+            for( int iOutlinePolyIdx = 0; iOutlinePolyIdx < outlineCount; iOutlinePolyIdx++ )
             {
-                const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*object2d_iterator);
-
-                std::vector<const COBJECT2D *> *object2d_B = new std::vector<const COBJECT2D *>();
-
-                // Check if there are any THT that intersects this outline object part
-                if( !m_boardAdapter.GetThroughHole_Outer().GetList().empty() )
-                {
-
-                    CONST_LIST_OBJECT2D intersectionList;
-                    m_boardAdapter.GetThroughHole_Outer().GetListObjectsIntersects(
-                                object2d_A->GetBBox(),
-                                intersectionList );
-
-                    if( !intersectionList.empty() )
-                    {
-                        for( CONST_LIST_OBJECT2D::const_iterator hole = intersectionList.begin();
-                             hole != intersectionList.end();
-                             ++hole )
-                        {
-                            const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
-
-                            if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                            //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
-                                object2d_B->push_back( hole2d );
-                        }
-                    }
-                }
-
-                if( object2d_B->empty() )
-                {
-                    delete object2d_B;
-                    object2d_B = CSGITEM_EMPTY;
-                }
-
-                if( object2d_B == CSGITEM_EMPTY )
-                {
-        #if 0
-                    create_3d_object_from( m_object_container, object2d_A,
-                                           m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ),
-                                           m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ),
-                                           &m_materials.m_EpoxyBoard,
-                                           g_epoxyColor );
-        #else
-
-                    CLAYERITEM *objPtr = new CLAYERITEM( object2d_A,
-                                                         m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ),
-                                                         m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ) );
-
-                    objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
-                    objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BoardBodyColor ) );
-                    m_object_container.Add( objPtr );
-        #endif
-                }
-                else
-                {
-
-                    CITEMLAYERCSG2D *itemCSG2d = new CITEMLAYERCSG2D(
-                                object2d_A,
-                                object2d_B,
-                                CSGITEM_FULL,
-                                (const BOARD_ITEM &)*m_boardAdapter.GetBoard() );
-
-                    m_containerWithObjectsToDelete.Add( itemCSG2d );
-
-                    CLAYERITEM *objPtr = new CLAYERITEM( itemCSG2d,
-                                                         m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ),
-                                                         m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ) );
-
-                    objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
-                    objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BoardBodyColor ) );
-                    m_object_container.Add( objPtr );
-
-                }
+                Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
+                        boardPolyCopy,
+                        *m_outlineBoard2dObjects,
+                        m_boardAdapter.BiuTo3Dunits(),
+                        divFactor,
+                        *dynamic_cast<const BOARD_ITEM*>( m_boardAdapter.GetBoard() ),
+                        iOutlinePolyIdx );
             }
 
-            // Add cylinders of the board body to container
-            // Note: This is actually a workarround for the holes in the board.
-            // The issue is because if a hole is in a border of a divided polygon ( ex
-            // a polygon or dummyblock) it will cut also the render of the hole.
-            // So this will add a full hole.
-            // In fact, that is not need if the hole have copper.
-            // /////////////////////////////////////////////////////////////////////////
-            if( !m_boardAdapter.GetThroughHole_Outer().GetList().empty() )
+            if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) )
             {
-                const LIST_OBJECT2D &holeList = m_boardAdapter.GetThroughHole_Outer().GetList();
+                const LIST_OBJECT2D &listObjects = m_outlineBoard2dObjects->GetList();
 
-                for( LIST_OBJECT2D::const_iterator hole = holeList.begin();
-                     hole != holeList.end();
-                     ++hole )
+                for( LIST_OBJECT2D::const_iterator object2d_iterator = listObjects.begin();
+                     object2d_iterator != listObjects.end();
+                     ++object2d_iterator )
                 {
-                    const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
+                    const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*object2d_iterator);
 
-                    switch( hole2d->GetObjectType() )
-                    {
-                    case OBJECT2D_TYPE::FILLED_CIRCLE:
-                    {
-                        const float radius = hole2d->GetBBox().GetExtent().x * 0.5f * 0.999f;
+                    std::vector<const COBJECT2D *> *object2d_B = new std::vector<const COBJECT2D *>();
 
-                        CVCYLINDER *objPtr = new CVCYLINDER(
-                                    hole2d->GetCentroid(),
-                                    NextFloatDown( m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ) ),
-                                    NextFloatUp( m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ) ),
-                                    radius );
+                    // Check if there are any THT that intersects this outline object part
+                    if( !m_boardAdapter.GetThroughHole_Outer().GetList().empty() )
+                    {
+
+                        CONST_LIST_OBJECT2D intersectionList;
+                        m_boardAdapter.GetThroughHole_Outer().GetListObjectsIntersects(
+                                    object2d_A->GetBBox(),
+                                    intersectionList );
+
+                        if( !intersectionList.empty() )
+                        {
+                            for( CONST_LIST_OBJECT2D::const_iterator hole = intersectionList.begin();
+                                 hole != intersectionList.end();
+                                 ++hole )
+                            {
+                                const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
+
+                                if( object2d_A->Intersects( hole2d->GetBBox() ) )
+                                //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
+                                    object2d_B->push_back( hole2d );
+                            }
+                        }
+                    }
+
+                    if( object2d_B->empty() )
+                    {
+                        delete object2d_B;
+                        object2d_B = CSGITEM_EMPTY;
+                    }
+
+                    if( object2d_B == CSGITEM_EMPTY )
+                    {
+            #if 0
+                        create_3d_object_from( m_object_container, object2d_A,
+                                               m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ),
+                                               m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ),
+                                               &m_materials.m_EpoxyBoard,
+                                               g_epoxyColor );
+            #else
+
+                        CLAYERITEM *objPtr = new CLAYERITEM( object2d_A,
+                                                             m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ),
+                                                             m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ) );
 
                         objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
                         objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BoardBodyColor ) );
-
                         m_object_container.Add( objPtr );
+            #endif
                     }
-                    break;
+                    else
+                    {
 
-                    default:
+                        CITEMLAYERCSG2D *itemCSG2d = new CITEMLAYERCSG2D(
+                                    object2d_A,
+                                    object2d_B,
+                                    CSGITEM_FULL,
+                                    (const BOARD_ITEM &)*m_boardAdapter.GetBoard() );
+
+                        m_containerWithObjectsToDelete.Add( itemCSG2d );
+
+                        CLAYERITEM *objPtr = new CLAYERITEM( itemCSG2d,
+                                                             m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ),
+                                                             m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ) );
+
+                        objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
+                        objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BoardBodyColor ) );
+                        m_object_container.Add( objPtr );
+
+                    }
+                }
+
+                // Add cylinders of the board body to container
+                // Note: This is actually a workarround for the holes in the board.
+                // The issue is because if a hole is in a border of a divided polygon ( ex
+                // a polygon or dummyblock) it will cut also the render of the hole.
+                // So this will add a full hole.
+                // In fact, that is not need if the hole have copper.
+                // /////////////////////////////////////////////////////////////////////////
+                if( !m_boardAdapter.GetThroughHole_Outer().GetList().empty() )
+                {
+                    const LIST_OBJECT2D &holeList = m_boardAdapter.GetThroughHole_Outer().GetList();
+
+                    for( LIST_OBJECT2D::const_iterator hole = holeList.begin();
+                         hole != holeList.end();
+                         ++hole )
+                    {
+                        const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
+
+                        switch( hole2d->GetObjectType() )
+                        {
+                        case OBJECT2D_TYPE::FILLED_CIRCLE:
+                        {
+                            const float radius = hole2d->GetBBox().GetExtent().x * 0.5f * 0.999f;
+
+                            CVCYLINDER *objPtr = new CVCYLINDER(
+                                        hole2d->GetCentroid(),
+                                        NextFloatDown( m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ) ),
+                                        NextFloatUp( m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ) ),
+                                        radius );
+
+                            objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
+                            objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BoardBodyColor ) );
+
+                            m_object_container.Add( objPtr );
+                        }
                         break;
+
+                        default:
+                            break;
+                        }
                     }
                 }
             }
@@ -630,6 +638,9 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
          ++ii )
     {
         PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
+
+        if( aOnlyLoadCopperAndShapes && !IsCopperLayer( layer_id ) )
+            continue;
 
         // Mask kayers are not processed here because they are a special case
         if( (layer_id == B_Mask) || (layer_id == F_Mask) )
@@ -718,152 +729,155 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
         createItemsFromContainer( m_boardAdapter.GetPlatedPads_Back(), B_Cu, &m_materials.m_Copper, layerColor_B_Cu, -m_boardAdapter.GetCopperThickness3DU() * 0.1f );
     }
 
-    // Add Mask layer
-    // Solder mask layers are "negative" layers so the elements that we have
-    // (in the container) should remove the board outline.
-    // We will check for all objects in the outline if it intersects any object
-    // in the layer container and also any hole.
-    // /////////////////////////////////////////////////////////////////////////
-    if( m_boardAdapter.GetFlag( FL_SOLDERMASK ) &&
-        (m_outlineBoard2dObjects->GetList().size() >= 1) )
+    if( !aOnlyLoadCopperAndShapes )
     {
-        const CMATERIAL *materialLayer = &m_materials.m_SolderMask;
-
-        for( MAP_CONTAINER_2D::const_iterator ii = m_boardAdapter.GetMapLayers().begin();
-             ii != m_boardAdapter.GetMapLayers().end();
-             ++ii )
+        // Add Mask layer
+        // Solder mask layers are "negative" layers so the elements that we have
+        // (in the container) should remove the board outline.
+        // We will check for all objects in the outline if it intersects any object
+        // in the layer container and also any hole.
+        // /////////////////////////////////////////////////////////////////////////
+        if( m_boardAdapter.GetFlag( FL_SOLDERMASK ) &&
+            (m_outlineBoard2dObjects->GetList().size() >= 1) )
         {
-            PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
+            const CMATERIAL *materialLayer = &m_materials.m_SolderMask;
 
-            const CBVHCONTAINER2D *containerLayer2d =
-                    static_cast<const CBVHCONTAINER2D *>(ii->second);
-
-            // Only get the Solder mask layers
-            if( !((layer_id == B_Mask) || (layer_id == F_Mask)) )
-                continue;
-
-            SFVEC3F layerColor;
-            if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+            for( MAP_CONTAINER_2D::const_iterator ii = m_boardAdapter.GetMapLayers().begin();
+                 ii != m_boardAdapter.GetMapLayers().end();
+                 ++ii )
             {
-                if( layer_id == B_Mask )
-                    layerColor = m_boardAdapter.m_SolderMaskColorBot;
-                else
-                    layerColor = m_boardAdapter.m_SolderMaskColorTop;
-            }
-            else
-                layerColor = m_boardAdapter.GetLayerColor( layer_id );
+                PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
 
-            const float zLayerMin = m_boardAdapter.GetLayerBottomZpos3DU( layer_id );
-            const float zLayerMax = m_boardAdapter.GetLayerTopZpos3DU( layer_id );
+                const CBVHCONTAINER2D *containerLayer2d =
+                        static_cast<const CBVHCONTAINER2D *>(ii->second);
 
-            // Get the outline board objects
-            const LIST_OBJECT2D &listObjects = m_outlineBoard2dObjects->GetList();
+                // Only get the Solder mask layers
+                if( !((layer_id == B_Mask) || (layer_id == F_Mask)) )
+                    continue;
 
-            for( LIST_OBJECT2D::const_iterator object2d_iterator = listObjects.begin();
-                 object2d_iterator != listObjects.end();
-                 ++object2d_iterator )
-            {
-                const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*object2d_iterator);
-
-                std::vector<const COBJECT2D *> *object2d_B = new std::vector<const COBJECT2D *>();
-
-                // Check if there are any THT that intersects this outline object part
-                if( !m_boardAdapter.GetThroughHole_Outer().GetList().empty() )
+                SFVEC3F layerColor;
+                if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
                 {
-
-                    CONST_LIST_OBJECT2D intersectionList;
-
-                    m_boardAdapter.GetThroughHole_Outer().GetListObjectsIntersects(
-                                object2d_A->GetBBox(),
-                                intersectionList );
-
-                    if( !intersectionList.empty() )
-                    {
-                        for( CONST_LIST_OBJECT2D::const_iterator hole = intersectionList.begin();
-                             hole != intersectionList.end();
-                             ++hole )
-                        {
-                            const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
-
-                            if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                            //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
-                                object2d_B->push_back( hole2d );
-                        }
-                    }
-                }
-
-                // Check if there are any objects in the layer to subtract with the
-                // corrent object
-                if( !containerLayer2d->GetList().empty() )
-                {
-                    CONST_LIST_OBJECT2D intersectionList;
-
-                    containerLayer2d->GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                                intersectionList );
-
-                    if( !intersectionList.empty() )
-                    {
-                        for( CONST_LIST_OBJECT2D::const_iterator obj = intersectionList.begin();
-                             obj != intersectionList.end();
-                             ++obj )
-                        {
-                            const COBJECT2D *obj2d = static_cast<const COBJECT2D *>(*obj);
-
-                            //if( object2d_A->Intersects( obj2d->GetBBox() ) )
-                            //if( object2d_A->GetBBox().Intersects( obj2d->GetBBox() ) )
-                                object2d_B->push_back( obj2d );
-                        }
-                    }
-                }
-
-                if( object2d_B->empty() )
-                {
-                    delete object2d_B;
-                    object2d_B = CSGITEM_EMPTY;
-                }
-
-                if( object2d_B == CSGITEM_EMPTY )
-                {
-        #if 0
-                   create_3d_object_from( m_object_container,
-                                          object2d_A,
-                                          zLayerMin,
-                                          zLayerMax,
-                                          materialLayer,
-                                          layerColor );
-        #else
-                    CLAYERITEM *objPtr =  new CLAYERITEM( object2d_A,
-                                                          zLayerMin,
-                                                          zLayerMax );
-
-                    objPtr->SetMaterial( materialLayer );
-                    objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
-
-                    m_object_container.Add( objPtr );
-        #endif
+                    if( layer_id == B_Mask )
+                        layerColor = m_boardAdapter.m_SolderMaskColorBot;
+                    else
+                        layerColor = m_boardAdapter.m_SolderMaskColorTop;
                 }
                 else
+                    layerColor = m_boardAdapter.GetLayerColor( layer_id );
+
+                const float zLayerMin = m_boardAdapter.GetLayerBottomZpos3DU( layer_id );
+                const float zLayerMax = m_boardAdapter.GetLayerTopZpos3DU( layer_id );
+
+                // Get the outline board objects
+                const LIST_OBJECT2D &listObjects = m_outlineBoard2dObjects->GetList();
+
+                for( LIST_OBJECT2D::const_iterator object2d_iterator = listObjects.begin();
+                     object2d_iterator != listObjects.end();
+                     ++object2d_iterator )
                 {
-                    CITEMLAYERCSG2D *itemCSG2d = new CITEMLAYERCSG2D( object2d_A,
-                                                                      object2d_B,
-                                                                      CSGITEM_FULL,
-                                                                      object2d_A->GetBoardItem() );
+                    const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*object2d_iterator);
 
-                    m_containerWithObjectsToDelete.Add( itemCSG2d );
+                    std::vector<const COBJECT2D *> *object2d_B = new std::vector<const COBJECT2D *>();
 
-                    CLAYERITEM *objPtr =  new CLAYERITEM( itemCSG2d,
-                                                          zLayerMin,
-                                                          zLayerMax );
-                    objPtr->SetMaterial( materialLayer );
-                    objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
+                    // Check if there are any THT that intersects this outline object part
+                    if( !m_boardAdapter.GetThroughHole_Outer().GetList().empty() )
+                    {
 
-                    m_object_container.Add( objPtr );
+                        CONST_LIST_OBJECT2D intersectionList;
+
+                        m_boardAdapter.GetThroughHole_Outer().GetListObjectsIntersects(
+                                    object2d_A->GetBBox(),
+                                    intersectionList );
+
+                        if( !intersectionList.empty() )
+                        {
+                            for( CONST_LIST_OBJECT2D::const_iterator hole = intersectionList.begin();
+                                 hole != intersectionList.end();
+                                 ++hole )
+                            {
+                                const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
+
+                                if( object2d_A->Intersects( hole2d->GetBBox() ) )
+                                //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
+                                    object2d_B->push_back( hole2d );
+                            }
+                        }
+                    }
+
+                    // Check if there are any objects in the layer to subtract with the
+                    // corrent object
+                    if( !containerLayer2d->GetList().empty() )
+                    {
+                        CONST_LIST_OBJECT2D intersectionList;
+
+                        containerLayer2d->GetListObjectsIntersects( object2d_A->GetBBox(),
+                                                                    intersectionList );
+
+                        if( !intersectionList.empty() )
+                        {
+                            for( CONST_LIST_OBJECT2D::const_iterator obj = intersectionList.begin();
+                                 obj != intersectionList.end();
+                                 ++obj )
+                            {
+                                const COBJECT2D *obj2d = static_cast<const COBJECT2D *>(*obj);
+
+                                //if( object2d_A->Intersects( obj2d->GetBBox() ) )
+                                //if( object2d_A->GetBBox().Intersects( obj2d->GetBBox() ) )
+                                    object2d_B->push_back( obj2d );
+                            }
+                        }
+                    }
+
+                    if( object2d_B->empty() )
+                    {
+                        delete object2d_B;
+                        object2d_B = CSGITEM_EMPTY;
+                    }
+
+                    if( object2d_B == CSGITEM_EMPTY )
+                    {
+            #if 0
+                       create_3d_object_from( m_object_container,
+                                              object2d_A,
+                                              zLayerMin,
+                                              zLayerMax,
+                                              materialLayer,
+                                              layerColor );
+            #else
+                        CLAYERITEM *objPtr =  new CLAYERITEM( object2d_A,
+                                                              zLayerMin,
+                                                              zLayerMax );
+
+                        objPtr->SetMaterial( materialLayer );
+                        objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
+
+                        m_object_container.Add( objPtr );
+            #endif
+                    }
+                    else
+                    {
+                        CITEMLAYERCSG2D *itemCSG2d = new CITEMLAYERCSG2D( object2d_A,
+                                                                          object2d_B,
+                                                                          CSGITEM_FULL,
+                                                                          object2d_A->GetBoardItem() );
+
+                        m_containerWithObjectsToDelete.Add( itemCSG2d );
+
+                        CLAYERITEM *objPtr =  new CLAYERITEM( itemCSG2d,
+                                                              zLayerMin,
+                                                              zLayerMax );
+                        objPtr->SetMaterial( materialLayer );
+                        objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
+
+                        m_object_container.Add( objPtr );
+                    }
                 }
             }
         }
-    }
 
-    add_3D_vias_and_pads_to_container();
+        add_3D_vias_and_pads_to_container();
+    }
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endConvertTime = GetRunningMicroSecs();
@@ -871,135 +885,137 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 #endif
 
 
-    load_3D_models( false );
+    load_3D_models( m_object_container, aOnlyLoadCopperAndShapes );
 
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endLoad3DmodelsTime = GetRunningMicroSecs();
 #endif
 
-    // Add floor
-    // /////////////////////////////////////////////////////////////////////////
-    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) )
+    if( !aOnlyLoadCopperAndShapes )
     {
-        CBBOX boardBBox = m_boardAdapter.GetBBox3DU();
-
-        if( boardBBox.IsInitialized() )
+        // Add floor
+        // /////////////////////////////////////////////////////////////////////////
+        if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) )
         {
-            boardBBox.Scale( 3.0f );
+            CBBOX boardBBox = m_boardAdapter.GetBBox3DU();
 
-            if( m_object_container.GetList().size() > 0 )
+            if( boardBBox.IsInitialized() )
             {
-                CBBOX containerBBox = m_object_container.GetBBox();
+                boardBBox.Scale( 3.0f );
 
-                containerBBox.Scale( 1.3f );
+                if( m_object_container.GetList().size() > 0 )
+                {
+                    CBBOX containerBBox = m_object_container.GetBBox();
 
-                const SFVEC3F centerBBox = containerBBox.GetCenter();
+                    containerBBox.Scale( 1.3f );
 
-                // Floor triangles
-                const float minZ = glm::min( containerBBox.Min().z,
-                                             boardBBox.Min().z );
+                    const SFVEC3F centerBBox = containerBBox.GetCenter();
 
-                const SFVEC3F v1 = SFVEC3F( -RANGE_SCALE_3D * 4.0f,
-                                            -RANGE_SCALE_3D * 4.0f,
-                                            minZ ) +
-                                   SFVEC3F( centerBBox.x,
-                                            centerBBox.y,
-                                            0.0f );
+                    // Floor triangles
+                    const float minZ = glm::min( containerBBox.Min().z,
+                                                 boardBBox.Min().z );
 
-                const SFVEC3F v3 = SFVEC3F( +RANGE_SCALE_3D * 4.0f,
-                                            +RANGE_SCALE_3D * 4.0f,
-                                            minZ ) +
-                                   SFVEC3F( centerBBox.x,
-                                            centerBBox.y,
-                                            0.0f );
+                    const SFVEC3F v1 = SFVEC3F( -RANGE_SCALE_3D * 4.0f,
+                                                -RANGE_SCALE_3D * 4.0f,
+                                                minZ ) +
+                                       SFVEC3F( centerBBox.x,
+                                                centerBBox.y,
+                                                0.0f );
 
-                const SFVEC3F v2 = SFVEC3F( v1.x, v3.y, v1.z );
-                const SFVEC3F v4 = SFVEC3F( v3.x, v1.y, v1.z );
+                    const SFVEC3F v3 = SFVEC3F( +RANGE_SCALE_3D * 4.0f,
+                                                +RANGE_SCALE_3D * 4.0f,
+                                                minZ ) +
+                                       SFVEC3F( centerBBox.x,
+                                                centerBBox.y,
+                                                0.0f );
 
-                SFVEC3F backgroundColor =
-                        ConvertSRGBToLinear( static_cast<SFVEC3F>( m_boardAdapter.m_BgColorTop ) );
+                    const SFVEC3F v2 = SFVEC3F( v1.x, v3.y, v1.z );
+                    const SFVEC3F v4 = SFVEC3F( v3.x, v1.y, v1.z );
 
-                CTRIANGLE *newTriangle1 = new CTRIANGLE( v1, v2, v3 );
-                CTRIANGLE *newTriangle2 = new CTRIANGLE( v3, v4, v1 );
+                    SFVEC3F backgroundColor =
+                            ConvertSRGBToLinear( static_cast<SFVEC3F>( m_boardAdapter.m_BgColorTop ) );
 
-                m_object_container.Add( newTriangle1 );
-                m_object_container.Add( newTriangle2 );
+                    CTRIANGLE *newTriangle1 = new CTRIANGLE( v1, v2, v3 );
+                    CTRIANGLE *newTriangle2 = new CTRIANGLE( v3, v4, v1 );
 
-                newTriangle1->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
-                newTriangle2->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
+                    m_object_container.Add( newTriangle1 );
+                    m_object_container.Add( newTriangle2 );
 
-                newTriangle1->SetColor( backgroundColor );
-                newTriangle2->SetColor( backgroundColor );
+                    newTriangle1->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
+                    newTriangle2->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
 
-                // Ceiling triangles
-                const float maxZ = glm::max( containerBBox.Max().z,
-                                             boardBBox.Max().z );
+                    newTriangle1->SetColor( backgroundColor );
+                    newTriangle2->SetColor( backgroundColor );
 
-                const SFVEC3F v5 = SFVEC3F( v1.x, v1.y, maxZ );
-                const SFVEC3F v6 = SFVEC3F( v2.x, v2.y, maxZ );
-                const SFVEC3F v7 = SFVEC3F( v3.x, v3.y, maxZ );
-                const SFVEC3F v8 = SFVEC3F( v4.x, v4.y, maxZ );
+                    // Ceiling triangles
+                    const float maxZ = glm::max( containerBBox.Max().z,
+                                                 boardBBox.Max().z );
 
-                CTRIANGLE *newTriangle3 = new CTRIANGLE( v7, v6, v5 );
-                CTRIANGLE *newTriangle4 = new CTRIANGLE( v5, v8, v7 );
+                    const SFVEC3F v5 = SFVEC3F( v1.x, v1.y, maxZ );
+                    const SFVEC3F v6 = SFVEC3F( v2.x, v2.y, maxZ );
+                    const SFVEC3F v7 = SFVEC3F( v3.x, v3.y, maxZ );
+                    const SFVEC3F v8 = SFVEC3F( v4.x, v4.y, maxZ );
 
-                m_object_container.Add( newTriangle3 );
-                m_object_container.Add( newTriangle4 );
+                    CTRIANGLE *newTriangle3 = new CTRIANGLE( v7, v6, v5 );
+                    CTRIANGLE *newTriangle4 = new CTRIANGLE( v5, v8, v7 );
 
-                newTriangle3->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
-                newTriangle4->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
+                    m_object_container.Add( newTriangle3 );
+                    m_object_container.Add( newTriangle4 );
 
-                newTriangle3->SetColor( backgroundColor );
-                newTriangle4->SetColor( backgroundColor );
+                    newTriangle3->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
+                    newTriangle4->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
+
+                    newTriangle3->SetColor( backgroundColor );
+                    newTriangle4->SetColor( backgroundColor );
+                }
+            }
+        }
+
+
+        // Init initial lights
+        // /////////////////////////////////////////////////////////////////////////
+        m_lights.Clear();
+
+        auto IsColorZero = [] ( const SFVEC3F& aSource )
+        {
+            return ( ( aSource.r < ( 1.0f / 255.0f ) ) &&
+                     ( aSource.g < ( 1.0f / 255.0f ) ) &&
+                     ( aSource.b < ( 1.0f / 255.0f ) ) );
+        };
+
+        m_camera_light = new CDIRECTIONALLIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ),
+                                                m_boardAdapter.m_raytrace_lightColorCamera );
+        m_camera_light->SetCastShadows( false );
+
+        if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorCamera ) )
+            m_lights.Add( m_camera_light );
+
+        const SFVEC3F& boardCenter = m_boardAdapter.GetBBox3DU().GetCenter();
+
+        if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorTop ) )
+            m_lights.Add( new CPOINTLIGHT( SFVEC3F( boardCenter.x, boardCenter.y, +RANGE_SCALE_3D * 2.0f ),
+                                           m_boardAdapter.m_raytrace_lightColorTop ) );
+
+        if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorBottom ) )
+            m_lights.Add( new CPOINTLIGHT( SFVEC3F( boardCenter.x, boardCenter.y, -RANGE_SCALE_3D * 2.0f ),
+                                           m_boardAdapter.m_raytrace_lightColorBottom ) );
+
+        wxASSERT( m_boardAdapter.m_raytrace_lightColor.size()
+                  == m_boardAdapter.m_raytrace_lightSphericalCoords.size() );
+
+        for( size_t i = 0; i < m_boardAdapter.m_raytrace_lightColor.size(); ++i )
+        {
+            if( !IsColorZero( m_boardAdapter.m_raytrace_lightColor[i] ) )
+            {
+                const SFVEC2F sc = m_boardAdapter.m_raytrace_lightSphericalCoords[i];
+
+                m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * sc.x,
+                                                                           glm::pi<float>() * sc.y ),
+                                                     m_boardAdapter.m_raytrace_lightColor[i] ) );
             }
         }
     }
-
-
-    // Init initial lights
-    // /////////////////////////////////////////////////////////////////////////
-    m_lights.Clear();
-
-    auto IsColorZero = [] ( const SFVEC3F& aSource )
-    {
-        return ( ( aSource.r < ( 1.0f / 255.0f ) ) &&
-                 ( aSource.g < ( 1.0f / 255.0f ) ) &&
-                 ( aSource.b < ( 1.0f / 255.0f ) ) );
-    };
-
-    m_camera_light = new CDIRECTIONALLIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                                            m_boardAdapter.m_raytrace_lightColorCamera );
-    m_camera_light->SetCastShadows( false );
-
-    if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorCamera ) )
-        m_lights.Add( m_camera_light );
-
-    const SFVEC3F& boardCenter = m_boardAdapter.GetBBox3DU().GetCenter();
-
-    if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorTop ) )
-        m_lights.Add( new CPOINTLIGHT( SFVEC3F( boardCenter.x, boardCenter.y, +RANGE_SCALE_3D * 2.0f ),
-                                       m_boardAdapter.m_raytrace_lightColorTop ) );
-
-    if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorBottom ) )
-        m_lights.Add( new CPOINTLIGHT( SFVEC3F( boardCenter.x, boardCenter.y, -RANGE_SCALE_3D * 2.0f ),
-                                       m_boardAdapter.m_raytrace_lightColorBottom ) );
-
-    wxASSERT( m_boardAdapter.m_raytrace_lightColor.size()
-              == m_boardAdapter.m_raytrace_lightSphericalCoords.size() );
-
-    for( size_t i = 0; i < m_boardAdapter.m_raytrace_lightColor.size(); ++i )
-    {
-        if( !IsColorZero( m_boardAdapter.m_raytrace_lightColor[i] ) )
-        {
-            const SFVEC2F sc = m_boardAdapter.m_raytrace_lightSphericalCoords[i];
-
-            m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * sc.x,
-                                                                       glm::pi<float>() * sc.y ),
-                                                 m_boardAdapter.m_raytrace_lightColor[i] ) );
-        }
-    }
-
 
     // Create an accelerator
     // /////////////////////////////////////////////////////////////////////////
@@ -1250,7 +1266,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
 }
 
 
-void C3D_RENDER_RAYTRACING::load_3D_models( bool aSkipMaterialInformation )
+void C3D_RENDER_RAYTRACING::load_3D_models( CCONTAINER &aDstContainer, bool aSkipMaterialInformation )
 {
     // Go for all modules
     for( auto module : m_boardAdapter.GetBoard()->Modules() )
@@ -1297,6 +1313,7 @@ void C3D_RENDER_RAYTRACING::load_3D_models( bool aSkipMaterialInformation )
                                                 modelunit_to_3d_units_factor,
                                                 modelunit_to_3d_units_factor ) );
 
+            BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( module );
 
             // Get the list of model files for this model
             S3D_CACHE* cacheMgr = m_boardAdapter.Get3DCacheManager();
@@ -1341,7 +1358,12 @@ void C3D_RENDER_RAYTRACING::load_3D_models( bool aSkipMaterialInformation )
                                                            sM->m_Scale.y,
                                                            sM->m_Scale.z ) );
 
-                        add_3D_models( modelPtr, modelMatrix, (float)sM->m_Opacity, aSkipMaterialInformation );
+                        add_3D_models( aDstContainer,
+                                       modelPtr,
+                                       modelMatrix,
+                                       (float)sM->m_Opacity,
+                                       aSkipMaterialInformation,
+                                       boardItem );
                     }
                 }
 
@@ -1462,10 +1484,12 @@ MODEL_MATERIALS *C3D_RENDER_RAYTRACING::get_3D_model_material( const S3DMODEL *a
     return materialVector;
 }
 
-void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
+void C3D_RENDER_RAYTRACING::add_3D_models( CCONTAINER &aDstContainer,
+                                           const S3DMODEL *a3DModel,
                                            const glm::mat4 &aModelMatrix,
                                            float aModuleOpacity,
-                                           bool aSkipMaterialInformation )
+                                           bool aSkipMaterialInformation,
+                                           BOARD_ITEM *aBoardItem )
 {
 
     // Validate a3DModel pointers
@@ -1562,7 +1586,9 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
                         CTRIANGLE *newTriangle = new  CTRIANGLE( vt0, vt2, vt1,
                                                                  nt0, nt2, nt1 );
 
-                        m_object_container.Add( newTriangle );
+                        newTriangle->SetBoardItem( aBoardItem );
+
+                        aDstContainer.Add( newTriangle );
 
                         if( !aSkipMaterialInformation )
                         {

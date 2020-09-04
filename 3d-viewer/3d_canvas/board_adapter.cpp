@@ -425,10 +425,13 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
     wxString msg;
 
-    if( !createBoardPolygon( &msg ) )
-        aWarningReporter->Report( _( "Board outline is not closed: " ) + msg, RPT_SEVERITY_WARNING );
-    else
-        aWarningReporter->Report( wxEmptyString );
+    if( aWarningReporter )
+    {
+        if( !createBoardPolygon( &msg ) )
+            aWarningReporter->Report( _( "Board outline is not closed: " ) + msg, RPT_SEVERITY_WARNING );
+        else
+            aWarningReporter->Report( wxEmptyString );
+    }
 
     if( aStatusReporter )
         aStatusReporter->Report( _( "Create layers" ) );

@@ -69,12 +69,15 @@ public:
 
     int GetWaitForEditingTimeOut() override;
 
+    void Reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter, bool aOnlyLoadCopperAndShapes );
+
+    BOARD_ITEM *IntersectBoardItem( const RAY &aRay );
+
 private:
     bool initializeOpenGL();
     void initializeNewWindowSize();
     void opengl_init_pbo();
     void opengl_delete_pbo();
-    void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
     void createItemsFromContainer( const CBVHCONTAINER2D *aContainer2d,
                                    PCB_LAYER_ID aLayer_id,
                                    const CMATERIAL *aMaterialLayer,
@@ -201,11 +204,13 @@ private:
     void add_3D_vias_and_pads_to_container();
     void insert3DViaHole( const VIA* aVia );
     void insert3DPadHole( const D_PAD* aPad );
-    void load_3D_models( bool aSkipMaterialInformation );
-    void add_3D_models( const S3DMODEL *a3DModel,
+    void load_3D_models( CCONTAINER &aDstContainer, bool aSkipMaterialInformation );
+    void add_3D_models( CCONTAINER &aDstContainer,
+                        const S3DMODEL *a3DModel,
                         const glm::mat4 &aModelMatrix,
                         float aModuleOpacity,
-                        bool aSkipMaterialInformation );
+                        bool aSkipMaterialInformation,
+                        BOARD_ITEM *aBoardItem );
 
     MODEL_MATERIALS *get_3D_model_material( const S3DMODEL *a3DModel );
 

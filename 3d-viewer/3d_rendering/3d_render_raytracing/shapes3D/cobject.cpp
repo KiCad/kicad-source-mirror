@@ -42,6 +42,7 @@ COBJECT::COBJECT( OBJECT3D_TYPE aObjType )
     COBJECT3D_STATS::Instance().AddOne( aObjType );
     m_material = &s_defaultMaterial;
     m_modelTransparency = 0.0f;
+    m_boardItem = nullptr;
 }
 
 

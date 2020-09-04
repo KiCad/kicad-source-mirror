@@ -275,7 +275,7 @@ void EDA_3D_VIEWER::Redraw()
 {
     // Only update in OpenGL for an interactive interaction
     if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-        m_canvas->Refresh();
+        m_canvas->Request_refresh( true );
 }
 
 void EDA_3D_VIEWER::Exit3DFrame( wxCommandEvent &event )

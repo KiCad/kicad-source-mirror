@@ -27,6 +27,7 @@
 
 
 #include "board_adapter.h"
+#include "3d_rendering/3d_render_raytracing/accelerators/caccelerator.h"
 #include "3d_rendering/c3d_render_base.h"
 #include "3d_cache/3d_cache.h"
 #include <gal/hidpi_gl_canvas.h>
@@ -233,6 +234,8 @@ private:
      */
     void releaseOpenGL();
 
+    RAY getRayAtCurrrentMousePosition();
+
  private:
 
     TOOL_DISPATCHER*       m_eventDispatcher;
@@ -266,6 +269,11 @@ private:
 
     bool                   m_opengl_supports_raytracing;
     bool                   m_render_raytracing_was_requested;
+
+    CCONTAINER             m_3DShapes_container;      // Holds 3D shapes from modules
+    CGENERICACCELERATOR    *m_accelerator3DShapes;    // used for mouse over searching
+
+    BOARD_ITEM*            m_currentIntersectedBoardItem;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

@@ -380,9 +380,13 @@ void CCAMERA::MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &
 void CCAMERA::MakeRayAtCurrrentMousePosition( SFVEC3F &aOutOrigin,
                                               SFVEC3F &aOutDirection ) const
 {
-    MakeRay( SFVEC2I( m_lastPosition.x,
-                      m_windowSize.y - m_lastPosition.y ),
-             aOutOrigin, aOutDirection );
+    const SFVEC2I windowPos = SFVEC2I( m_lastPosition.x,
+                                       m_windowSize.y - m_lastPosition.y );
+
+    if( ( windowPos.x < m_windowSize.x ) &&
+        ( windowPos.y < m_windowSize.y ) )
+        MakeRay( windowPos,
+                 aOutOrigin, aOutDirection );
 }
 
 
