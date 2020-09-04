@@ -142,7 +142,7 @@ void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog )
     m_boolAttr = new wxGridCellAttr;
     m_boolAttr->SetRenderer( new wxGridCellBoolRenderer() );
     m_boolAttr->SetEditor( new wxGridCellBoolEditor() );
-    m_boolAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    m_boolAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
     wxArrayString vAlignNames;
     vAlignNames.Add( _( "Top" ) );
