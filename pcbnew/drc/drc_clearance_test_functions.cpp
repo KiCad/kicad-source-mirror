@@ -315,8 +315,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 }
                 else
                 {
-                    minClearance = aRefSeg->GetClearance( aLayer, nullptr,
-                                                          &m_clearanceSource );
+                    minClearance = aRefSeg->GetClearance( aLayer, nullptr, &m_clearanceSource );
                 }
 
                 if( pad->GetAttribute() == PAD_ATTRIB_STANDARD )
@@ -346,8 +345,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             if( !pad->IsPadOnLayer( aLayer ) )
                 continue;
 
-            int minClearance = aRefSeg->GetClearance( aRefSeg->GetLayer(), pad,
-                                                      &m_clearanceSource );
+            int minClearance = aRefSeg->GetClearance( aLayer, pad, &m_clearanceSource );
             int actual;
 
             if( pad->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
@@ -394,8 +392,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         if( !trackBB.Intersects( refSegBB ) )
             continue;
 
-        int           minClearance = aRefSeg->GetClearance( aRefSeg->GetLayer(), track,
-                                                            &m_clearanceSource );
+        int           minClearance = aRefSeg->GetClearance( aLayer, track, &m_clearanceSource );
         int           actual;
         SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
 
@@ -495,8 +492,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         dummyEdge.SetParent( m_pcb );
         dummyEdge.SetLayer( Edge_Cuts );
 
-        aRefSeg->GetRuleClearance( &dummyEdge, aRefSeg->GetLayer(), &minClearance,
-                                   &m_clearanceSource );
+        aRefSeg->GetRuleClearance( &dummyEdge, aLayer, &minClearance, &m_clearanceSource );
 
         int center2centerAllowed = minClearance + halfWidth - bds.GetDRCEpsilon();
 
