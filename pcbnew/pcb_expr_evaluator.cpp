@@ -185,17 +185,10 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( zone )
     {
-        const SHAPE_POLY_SET* zonePoly;
-        SHAPE_POLY_SET        testPoly;
-
-        // Do a layer-specific test if we can; otherwise a general outline test
-        if( zone->GetLayerSet().test( context->GetLayer() ) )
-            zonePoly = &zone->GetFilledPolysList( context->GetLayer() );
-        else
-            zonePoly = zone->Outline();
+        SHAPE_POLY_SET testPoly;
 
         item->TransformShapeWithClearanceToPolygon( testPoly, context->GetLayer(), 0 );
-        testPoly.BooleanIntersection( *zonePoly, SHAPE_POLY_SET::PM_FAST );
+        testPoly.BooleanIntersection( *zone->Outline(), SHAPE_POLY_SET::PM_FAST );
 
         if( testPoly.OutlineCount() )
             result->Set( 1.0 );

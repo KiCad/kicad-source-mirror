@@ -163,7 +163,7 @@ int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
 {
     BOARD_COMMIT commit( this );
 
-    for( auto item : selection() )
+    for( EDA_ITEM* item : selection() )
     {
         assert( item->Type() == PCB_ZONE_AREA_T );
 
@@ -186,7 +186,7 @@ int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
 {
     BOARD_COMMIT commit( this );
 
-    for ( auto zone : board()->Zones() )
+    for( ZONE_CONTAINER* zone : board()->Zones() )
     {
         commit.Modify( zone );
 
