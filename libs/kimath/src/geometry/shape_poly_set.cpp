@@ -1900,6 +1900,72 @@ bool SHAPE_POLY_SET::IsTriangulationUpToDate() const
 }
 
 
+static void partitionPolyIntoRegularCellGrid(
+        const SHAPE_POLY_SET& aPoly, int aCells, SHAPE_POLY_SET& aOut )
+{
+    BOX2I bb = aPoly.BBox();
+
+    double w = bb.GetWidth();
+    double h = bb.GetHeight();
+
+    if( w == 0.0 || h == 0.0 )
+        return;
+
+    int n_cells_x, n_cells_y;
+
+    if( w > h )
+    {
+        n_cells_x = aCells;
+        n_cells_y = (int) floor( h / w * (double) aCells ) + 1;
+    }
+    else
+    {
+        n_cells_x = (int) floor( w / h * (double) aCells ) + 1;
+        n_cells_y = aCells;
+    }
+
+    SHAPE_POLY_SET ps1( aPoly ), ps2( aPoly ), maskSetOdd, maskSetEven;
+
+    for( int yy = 0; yy < n_cells_y; yy++ )
+        for( int xx = 0; xx < n_cells_x; xx++ )
+        {
+            VECTOR2I p;
+
+            p.x = bb.GetX() + w * xx / n_cells_x;
+            p.y = bb.GetY() + h * yy / n_cells_y;
+
+            VECTOR2I p2;
+
+            p2.x = bb.GetX() + w * ( xx + 1 ) / n_cells_x;
+            p2.y = bb.GetY() + h * ( yy + 1 ) / n_cells_y;
+
+
+            SHAPE_LINE_CHAIN mask;
+            mask.Append( VECTOR2I( p.x, p.y ) );
+            mask.Append( VECTOR2I( p2.x, p.y ) );
+            mask.Append( VECTOR2I( p2.x, p2.y ) );
+            mask.Append( VECTOR2I( p.x, p2.y ) );
+            mask.SetClosed( true );
+
+            if( ( xx ^ yy ) & 1 )
+                maskSetOdd.AddOutline( mask );
+            else
+                maskSetEven.AddOutline( mask );
+        }
+
+    ps1.BooleanIntersection( maskSetOdd, SHAPE_POLY_SET::PM_FAST );
+    ps2.BooleanIntersection( maskSetEven, SHAPE_POLY_SET::PM_FAST );
+    ps1.Fracture( SHAPE_POLY_SET::PM_FAST );
+    ps2.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+    aOut = ps1;
+    for( int i = 0; i < ps2.OutlineCount(); i++ )
+    {
+        aOut.AddOutline( ps2.COutline( i ) );
+    }
+}
+
+
 void SHAPE_POLY_SET::CacheTriangulation()
 {
     bool recalculate = !m_hash.IsValid();
@@ -1922,10 +1988,9 @@ void SHAPE_POLY_SET::CacheTriangulation()
     if( !recalculate )
         return;
 
-    SHAPE_POLY_SET tmpSet = *this;
-
-    if( tmpSet.HasHoles() )
-        tmpSet.Fracture( PM_FAST );
+    SHAPE_POLY_SET tmpSet;
+    
+    partitionPolyIntoRegularCellGrid( *this, 20, tmpSet );
 
     m_triangulatedPolys.clear();
     m_triangulationValid = true;
