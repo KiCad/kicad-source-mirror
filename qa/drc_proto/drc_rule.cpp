@@ -90,8 +90,7 @@ bool test::DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, in
 {
     PCB_EXPR_COMPILER compiler;
 
-    if (!m_ucode)
-        m_ucode.reset( new PCB_EXPR_UCODE );
+    m_ucode.reset( new PCB_EXPR_UCODE );
 
     PCB_EXPR_CONTEXT preflightContext( F_Cu );
 
