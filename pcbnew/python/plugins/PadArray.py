@@ -212,7 +212,7 @@ class PadGridArray(PadArray):
         @param py: pitch in y-direction
         @param centre: array centre point
         """
-        super().__init__(pad)
+        super(PadGridArray, self).__init__(pad)
 
         self.nx = int(nx)
         self.ny = int(ny)
@@ -302,7 +302,7 @@ class PadZGridArray(PadArray):
         @param pad_pitch: distance between pads in a line
         @param centre: array centre point
         """
-        super().__init__(pad)
+        super(PadZGridArray, self).__init__(pad)
 
         self.pad_count = int(pad_count)
         self.line_count = int(line_count)
@@ -360,9 +360,9 @@ class PadLineArray(PadGridArray):
         """
 
         if isVertical:
-            super().__init__(pad, 1, n, 0, pitch, centre)
+            super(PadLineArray, self).__init__(pad, 1, n, 0, pitch, centre)
         else:
-            super().__init__(pad, n, 1, pitch, 0, centre)
+            super(PadLineArray, self).__init__(pad, n, 1, pitch, 0, centre)
 
 
 class PadCircleArray(PadArray):
@@ -383,7 +383,7 @@ class PadCircleArray(PadArray):
         @param padRotationOffset: rotation of first pad
         """
 
-        super().__init__(pad)
+        super(PadCircleArray, self).__init__(pad)
 
         self.n = int(n)
         self.r = r
@@ -434,7 +434,7 @@ class PadCustomArray(PadArray):
         @param pad: the prototypical pad
         @param array: the position data array
         """
-        super().__init__(pad)
+        super(PadCustomArray, self).__init__(pad)
 
         self.array = array
 
