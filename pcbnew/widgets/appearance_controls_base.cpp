@@ -23,46 +23,49 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_windowLayers = new wxScrolledCanvas( m_panelLayers, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 	m_panelLayersSizer->Add( m_windowLayers, 1, wxEXPAND, 5 );
 
+	m_paneLayerDisplay = new wxCollapsiblePane( m_panelLayers, wxID_ANY, wxT("Layer Display Options"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
+	m_paneLayerDisplay->Collapse( true );
+
 	wxBoxSizer* bSizer121;
 	bSizer121 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText13 = new wxStaticText( m_panelLayers, wxID_ANY, wxT("Non-active layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13 = new wxStaticText( m_paneLayerDisplay->GetPane(), wxID_ANY, wxT("Non-active layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13->Wrap( -1 );
 	bSizer121->Add( m_staticText13, 0, wxEXPAND|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer19;
 	bSizer19 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_rbHighContrastNormal = new wxRadioButton( m_panelLayers, wxID_ANY, wxT("Normal"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbHighContrastNormal = new wxRadioButton( m_paneLayerDisplay->GetPane(), wxID_ANY, wxT("Normal"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbHighContrastNormal->SetValue( true );
 	m_rbHighContrastNormal->SetToolTip( wxT("Non-active layers will be shown in full color") );
 
-	bSizer19->Add( m_rbHighContrastNormal, 0, wxRIGHT, 8 );
+	bSizer19->Add( m_rbHighContrastNormal, 0, wxRIGHT, 4 );
 
-	m_rbHighContrastDim = new wxRadioButton( m_panelLayers, wxID_ANY, wxT("Dim"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbHighContrastDim = new wxRadioButton( m_paneLayerDisplay->GetPane(), wxID_ANY, wxT("Dim"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbHighContrastDim->SetToolTip( wxT("Non-active layers will be dimmed") );
 
-	bSizer19->Add( m_rbHighContrastDim, 0, wxRIGHT, 14 );
+	bSizer19->Add( m_rbHighContrastDim, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_rbHighContrastOff = new wxRadioButton( m_panelLayers, wxID_ANY, wxT("Hide"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbHighContrastOff = new wxRadioButton( m_paneLayerDisplay->GetPane(), wxID_ANY, wxT("Hide"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbHighContrastOff->SetToolTip( wxT("Non-active layers will be hidden") );
 
-	bSizer19->Add( m_rbHighContrastOff, 0, wxRIGHT, 5 );
+	bSizer19->Add( m_rbHighContrastOff, 0, 0, 5 );
 
 
 	bSizer121->Add( bSizer19, 0, wxEXPAND, 5 );
 
-	m_staticline5 = new wxStaticLine( m_panelLayers, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer121->Add( m_staticline5, 0, wxEXPAND|wxTOP, 5 );
+	m_staticline5 = new wxStaticLine( m_paneLayerDisplay->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer121->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	m_cbFlipBoard = new wxCheckBox( m_paneLayerDisplay->GetPane(), wxID_ANY, wxT("Flip board view"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer121->Add( m_cbFlipBoard, 0, 0, 5 );
 
 
-	bSizer121->Add( 0, 3, 1, wxEXPAND, 5 );
-
-	m_cbFlipBoard = new wxCheckBox( m_panelLayers, wxID_ANY, wxT("Flip board view"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer121->Add( m_cbFlipBoard, 0, wxRIGHT, 5 );
-
-
-	m_panelLayersSizer->Add( bSizer121, 0, wxEXPAND|wxTOP, 5 );
+	m_paneLayerDisplay->GetPane()->SetSizer( bSizer121 );
+	m_paneLayerDisplay->GetPane()->Layout();
+	bSizer121->Fit( m_paneLayerDisplay->GetPane() );
+	m_panelLayersSizer->Add( m_paneLayerDisplay, 0, wxBOTTOM|wxTOP|wxEXPAND, 5 );
 
 
 	m_panelLayers->SetSizer( m_panelLayersSizer );
@@ -186,39 +189,45 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_netsTabSplitter->SplitHorizontally( m_panelNets, m_panelNetclasses, 300 );
 	bSizer16->Add( m_netsTabSplitter, 1, wxEXPAND, 5 );
 
+	m_paneNetDisplay = new wxCollapsiblePane( m_panelNetsAndClasses, wxID_ANY, wxT("Net Display Options"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
+	m_paneNetDisplay->Collapse( true );
+
 	wxBoxSizer* bSizerNetDisplay;
 	bSizerNetDisplay = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextNetDsplayTitle = new wxStaticText( m_panelNetsAndClasses, wxID_ANY, wxT("Apply net and netclass colors to:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNetDsplayTitle = new wxStaticText( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("Net colors:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNetDsplayTitle->Wrap( -1 );
 	m_staticTextNetDsplayTitle->SetToolTip( wxT("Choose when to show net and netclass colors") );
 
-	bSizerNetDisplay->Add( m_staticTextNetDsplayTitle, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 2 );
+	bSizerNetDisplay->Add( m_staticTextNetDsplayTitle, 0, wxEXPAND|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer191;
 	bSizer191 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_rbNetColorAll = new wxRadioButton( m_panelNetsAndClasses, wxID_ANY, wxT("All"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbNetColorAll = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("All"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbNetColorAll->SetToolTip( wxT("Net and netclass colors are shown on all copper items") );
 
-	bSizer191->Add( m_rbNetColorAll, 0, wxRIGHT, 16 );
+	bSizer191->Add( m_rbNetColorAll, 0, wxRIGHT, 10 );
 
-	m_rbNetColorRatsnest = new wxRadioButton( m_panelNetsAndClasses, wxID_ANY, wxT("Ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbNetColorRatsnest = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("Ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbNetColorRatsnest->SetValue( true );
 	m_rbNetColorRatsnest->SetToolTip( wxT("Net and netclass colors are shown on the ratsnest only") );
 
-	bSizer191->Add( m_rbNetColorRatsnest, 0, wxRIGHT, 8 );
+	bSizer191->Add( m_rbNetColorRatsnest, 0, wxRIGHT, 4 );
 
-	m_rbNetColorOff = new wxRadioButton( m_panelNetsAndClasses, wxID_ANY, wxT("None"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbNetColorOff = new wxRadioButton( m_paneNetDisplay->GetPane(), wxID_ANY, wxT("None"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbNetColorOff->SetToolTip( wxT("Net and netclass colors are not shown") );
 
 	bSizer191->Add( m_rbNetColorOff, 0, 0, 5 );
 
 
-	bSizerNetDisplay->Add( bSizer191, 0, wxEXPAND, 5 );
+	bSizerNetDisplay->Add( bSizer191, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bSizer16->Add( bSizerNetDisplay, 0, wxEXPAND|wxTOP, 5 );
+	m_paneNetDisplay->GetPane()->SetSizer( bSizerNetDisplay );
+	m_paneNetDisplay->GetPane()->Layout();
+	bSizerNetDisplay->Fit( m_paneNetDisplay->GetPane() );
+	bSizer16->Add( m_paneNetDisplay, 0, wxEXPAND|wxTOP, 5 );
 
 
 	m_panelNetsAndClasses->SetSizer( bSizer16 );
@@ -239,14 +248,14 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	presetsLabel = new wxStaticText( this, wxID_ANY, wxT("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
 	presetsLabel->Wrap( -1 );
-	bPresetsLabels->Add( presetsLabel, 1, wxTOP|wxRIGHT|wxLEFT, 2 );
+	bPresetsLabels->Add( presetsLabel, 1, wxRIGHT|wxLEFT, 2 );
 
 	presetsHotkey = new wxStaticText( this, wxID_ANY, wxT("(Ctrl+Tab)"), wxDefaultPosition, wxDefaultSize, 0 );
 	presetsHotkey->Wrap( -1 );
-	bPresetsLabels->Add( presetsHotkey, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+	bPresetsLabels->Add( presetsHotkey, 0, wxRIGHT|wxLEFT, 2 );
 
 
-	bPresets->Add( bPresetsLabels, 1, wxEXPAND|wxTOP, 3 );
+	bPresets->Add( bPresetsLabels, 1, wxEXPAND|wxTOP, 7 );
 
 	wxString m_cbLayerPresetsChoices[] = { wxT("All Layers"), wxT("(unsaved)") };
 	int m_cbLayerPresetsNChoices = sizeof( m_cbLayerPresetsChoices ) / sizeof( wxString );
@@ -273,6 +282,8 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( APPEARANCE_CONTROLS_BASE::OnNotebookPageChanged ), NULL, this );
 	m_notebook->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelLayers->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
+	m_paneLayerDisplay->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( APPEARANCE_CONTROLS_BASE::OnLayerDisplayPaneChanged ), NULL, this );
+	m_paneLayerDisplay->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_cbFlipBoard->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::OnFlipBoardChecked ), NULL, this );
 	m_panelObjects->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelNetsAndClasses->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
@@ -282,6 +293,8 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_netsGrid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( APPEARANCE_CONTROLS_BASE::OnNetGridRightClick ), NULL, this );
 	m_netsGrid->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelNetclasses->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
+	m_paneNetDisplay->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( APPEARANCE_CONTROLS_BASE::OnNetDisplayPaneChanged ), NULL, this );
+	m_paneNetDisplay->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_cbLayerPresets->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::onLayerPresetChanged ), NULL, this );
 }
 
@@ -293,6 +306,8 @@ APPEARANCE_CONTROLS_BASE::~APPEARANCE_CONTROLS_BASE()
 	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( APPEARANCE_CONTROLS_BASE::OnNotebookPageChanged ), NULL, this );
 	m_notebook->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelLayers->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
+	m_paneLayerDisplay->Disconnect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( APPEARANCE_CONTROLS_BASE::OnLayerDisplayPaneChanged ), NULL, this );
+	m_paneLayerDisplay->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_cbFlipBoard->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::OnFlipBoardChecked ), NULL, this );
 	m_panelObjects->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelNetsAndClasses->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
@@ -302,6 +317,8 @@ APPEARANCE_CONTROLS_BASE::~APPEARANCE_CONTROLS_BASE()
 	m_netsGrid->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( APPEARANCE_CONTROLS_BASE::OnNetGridRightClick ), NULL, this );
 	m_netsGrid->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelNetclasses->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
+	m_paneNetDisplay->Disconnect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( APPEARANCE_CONTROLS_BASE::OnNetDisplayPaneChanged ), NULL, this );
+	m_paneNetDisplay->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_cbLayerPresets->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::onLayerPresetChanged ), NULL, this );
 
 }

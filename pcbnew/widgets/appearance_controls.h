@@ -248,6 +248,10 @@ public:
 
 protected:
 
+    void OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event ) override;
+
+    void OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event ) override;
+
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
 
     void OnSetFocus( wxFocusEvent& aEvent ) override;
@@ -280,8 +284,6 @@ private:
 
     /// Grid cell that is being hovered over, for tooltips
     wxGridCellCoords m_hoveredCell;
-
-    PCB_LAYER_ID m_currentLayer;
 
     std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_layerSettings;
 

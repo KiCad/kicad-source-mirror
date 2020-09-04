@@ -470,8 +470,6 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_netsGrid->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT );
     m_netclassScrolledWindow->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT );
 
-    m_currentLayer = F_Cu;
-
     loadDefaultLayerPresets();
     rebuildObjects();
     OnBoardChanged();
@@ -497,6 +495,26 @@ wxSize APPEARANCE_CONTROLS::GetBestSize() const
     wxSize size( 220, 480 );
     // TODO(JE) appropriate logic
     return size;
+}
+
+
+void APPEARANCE_CONTROLS::OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event )
+{
+    // Because wxWidgets is broken and will not properly lay these out automatically
+    Freeze();
+    m_panelLayers->Fit();
+    m_sizerOuter->Layout();
+    Thaw();
+}
+
+
+void APPEARANCE_CONTROLS::OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event )
+{
+    // Because wxWidgets is broken and will not properly lay these out automatically
+    Freeze();
+    m_panelNetsAndClasses->Fit();
+    m_sizerOuter->Layout();
+    Thaw();
 }
 
 
@@ -759,18 +777,32 @@ void APPEARANCE_CONTROLS::OnLayerChanged()
         pair.second->ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
     }
 
-    wxColour            highlightColor = m_layerPanelColour.ChangeLightness( 160 );
+    wxChar r, g, b;
+
+    r = m_layerPanelColour.Red();
+    g = m_layerPanelColour.Green();
+    b = m_layerPanelColour.Blue();
+
+    if( r < 240 || g < 240 || b < 240 )
+    {
+        r = std::min( r + 15, 255 );
+        g = std::min( g + 15, 255 );
+        b = std::min( b + 15, 255 );
+    }
+    else
+    {
+        r = std::max( r - 15, 0 );
+        g = std::max( g - 15, 0 );
+        b = std::max( b - 15, 0 );
+    }
+
     PCB_LAYER_ID        current = m_frame->GetActiveLayer();
     APPEARANCE_SETTING* newSetting = m_layerSettingsMap[ current ];
 
-    newSetting->ctl_panel->SetBackgroundColour( highlightColor );
+    newSetting->ctl_panel->SetBackgroundColour( wxColour( r, g, b ) );
     newSetting->ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::ON );
 
-    m_currentLayer = current;
-
-#if defined( __WXMAC__ ) || defined( __WXMSW__ )
     Refresh();
-#endif
 }
 
 
