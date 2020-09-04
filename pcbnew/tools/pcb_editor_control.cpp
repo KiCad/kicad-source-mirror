@@ -1026,7 +1026,7 @@ int PCB_EDITOR_CONTROL::GroupSelected( const TOOL_EVENT& aEvent )
     commit.Add( group );
     commit.Push( _( "GroupCreate" ) );
     wxString check = board->GroupsSanityCheck();
-    wxCHECK_MSG( check == wxEmptyString, 0, _( "Group create resulted in inconsistent state: " ) + check );
+    wxCHECK_MSG( check == wxEmptyString, 0,wxT( "Group create resulted in inconsistent state: " ) + check );
 
     selTool->ClearSelection();
     selTool->select( group );
@@ -1064,7 +1064,7 @@ int PCB_EDITOR_CONTROL::GroupMergeSelected( const TOOL_EVENT& aEvent )
     }
     // The group submenu update() call only enabled merge if there was a group
     // in the selection.
-    wxCHECK_MSG( firstGroup != NULL, 0, _( "Group not found in selection though selection was checked" ) );
+    wxCHECK_MSG( firstGroup != NULL, 0, "Group not found in selection though selection was checked" );
 
     commit.Modify( firstGroup );
 
@@ -1078,7 +1078,7 @@ int PCB_EDITOR_CONTROL::GroupMergeSelected( const TOOL_EVENT& aEvent )
 
     commit.Push( "GroupMerge" );
     wxString check = board->GroupsSanityCheck();
-    wxCHECK_MSG( check == wxEmptyString, 0, _( "Group merge resulted in inconsistent state: " ) + check );
+    wxCHECK_MSG( check == wxEmptyString, 0, wxT( "Group merge resulted in inconsistent state: " ) + check );
 
     selTool->ClearSelection();
     selTool->select( firstGroup );
@@ -1109,7 +1109,7 @@ int PCB_EDITOR_CONTROL::UngroupSelected( const TOOL_EVENT& aEvent )
         BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
 
         wxCHECK_MSG( board_item->Type() == PCB_GROUP_T, 0,
-                     _( "Selection for ungroup should only have groups in it - was checked." ) );
+                     "Selection for ungroup should only have groups in it - was checked." );
 
         commit.Remove( board_item );
 
@@ -1121,7 +1121,7 @@ int PCB_EDITOR_CONTROL::UngroupSelected( const TOOL_EVENT& aEvent )
 
     commit.Push( "GroupUngroup" );
     wxString check = board->GroupsSanityCheck();
-    wxCHECK_MSG( check == wxEmptyString, 0, _( "Group merge resulted in inconsistent state: " ) + check );
+    wxCHECK_MSG( check == wxEmptyString, 0, wxT( "Group merge resulted in inconsistent state: " ) + check );
 
     selTool->ClearSelection();
     for( BOARD_ITEM* item : ungroupedItems )
@@ -1156,7 +1156,7 @@ int PCB_EDITOR_CONTROL::GroupRemoveItemsSelected( const TOOL_EVENT& aEvent )
 
     commit.Push( "GroupRemoveItems" );
     wxString check = board->GroupsSanityCheck();
-    wxCHECK_MSG( check == wxEmptyString, 0, _( "Group removeItems resulted in inconsistent state: " ) + check );
+    wxCHECK_MSG( check == wxEmptyString, 0, wxT( "Group removeItems resulted in inconsistent state: " ) + check );
 
     // Should I call PostEvent and onModify() ?
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
@@ -1226,7 +1226,7 @@ int PCB_EDITOR_CONTROL::GroupFlattenSelected( const TOOL_EVENT& aEvent )
 
     commit.Push( "GroupFlatten" );
     wxString check = board->GroupsSanityCheck();
-    wxCHECK_MSG( check == wxEmptyString, 0, _( "Group flatten resulted in inconsistent state: " ) + check );
+    wxCHECK_MSG( check == wxEmptyString, 0, wxT( "Group flatten resulted in inconsistent state: " ) + check );
 
     // Removing subgroups deselects the items in them. So reselect everything no that it's flattened.
     selTool->ClearSelection();

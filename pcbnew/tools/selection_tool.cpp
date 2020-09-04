@@ -335,7 +335,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 void SELECTION_TOOL::EnterGroup()
 {
     wxCHECK_RET( m_selection.GetSize() == 1 && m_selection[0]->Type() == PCB_GROUP_T,
-                 _( "EnterGroup called when selection is not a single group") );
+                 "EnterGroup called when selection is not a single group" );
     PCB_GROUP* aGroup = static_cast<PCB_GROUP*>( m_selection[0] );
 
     if( m_enteredGroup != NULL )
