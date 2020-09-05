@@ -36,6 +36,8 @@ class INDICATOR_ICON;
 class PCB_BASE_FRAME;
 class ROW_ICON_PROVIDER;
 class GRID_BITMAP_TOGGLE_RENDERER;
+class WX_COLLAPSIBLE_PANE;
+class wxStaticLine;
 
 using KIGFX::COLOR4D;
 
@@ -251,10 +253,6 @@ public:
 
 protected:
 
-    void OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event ) override;
-
-    void OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event ) override;
-
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
 
     void OnSetFocus( wxFocusEvent& aEvent ) override;
@@ -338,6 +336,24 @@ private:
 
     wxColour m_layerPanelColour;
 
+    // Layer display options controls
+
+    WX_COLLAPSIBLE_PANE* m_paneLayerDisplayOptions;
+    wxStaticText*        m_staticTextContrastModeTitle;
+    wxRadioButton*       m_rbHighContrastNormal;
+    wxRadioButton*       m_rbHighContrastDim;
+    wxRadioButton*       m_rbHighContrastOff;
+    wxStaticLine*        m_layerDisplaySeparator;
+    wxCheckBox*          m_cbFlipBoard;
+
+    // Net display options controls
+
+    WX_COLLAPSIBLE_PANE* m_paneNetDisplayOptions;
+    wxStaticText*        m_staticTextNetDisplayTitle;
+    wxRadioButton*       m_rbNetColorAll;
+    wxRadioButton*       m_rbNetColorRatsnest;
+    wxRadioButton*       m_rbNetColorOff;
+
     enum POPUP_ID
     {
         ID_CHANGE_COLOR = wxID_HIGHEST,
@@ -361,6 +377,8 @@ private:
         ID_SHOW_ALL_NON_COPPER,
         ID_LAST_VALUE
     };
+
+    void createControls();
 
     void rebuildLayers();
 

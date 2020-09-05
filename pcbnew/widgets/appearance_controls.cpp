@@ -32,12 +32,14 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <widgets/bitmap_toggle.h>
+#include <widgets/collapsible_pane.h>
 #include <widgets/color_swatch.h>
 #include <widgets/wx_grid.h>
 #include <widgets/grid_bitmap_toggle.h>
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_text_helpers.h>
 #include <widgets/indicator_icon.h>
+#include <wx/statline.h>
 
 
 NET_GRID_TABLE::NET_GRID_TABLE( PCB_BASE_FRAME* aFrame, wxColor aBackgroundColor ) :
@@ -400,6 +402,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_windowObjects->SetScrollRate( 0, 5 );
     m_windowObjects->Bind( wxEVT_SET_FOCUS, &APPEARANCE_CONTROLS::OnSetFocus, this );
 
+    createControls();
+
     m_btnNetInspector->SetBitmapLabel( KiBitmap( list_nets_xpm ) );
     m_btnConfigureNetClasses->SetBitmapLabel( KiBitmap( options_generic_xpm ) );
 
@@ -522,11 +526,6 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     Bind( wxEVT_COMMAND_MENU_SELECTED, &APPEARANCE_CONTROLS::OnLayerContextMenu, this,
           ID_CHANGE_COLOR, ID_LAST_VALUE );
-
-    m_rbNetColorAll->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
-    m_rbNetColorOff->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
-    m_rbNetColorRatsnest->Bind( wxEVT_RADIOBUTTON,
-                                &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
 }
 
 
@@ -536,31 +535,141 @@ APPEARANCE_CONTROLS::~APPEARANCE_CONTROLS()
 }
 
 
+void APPEARANCE_CONTROLS::createControls()
+{
+    // Create layer display options
+    m_paneLayerDisplayOptions = new WX_COLLAPSIBLE_PANE( m_panelLayers, wxID_ANY,
+                                                         _( "Layer Display Options" ) );
+    m_paneLayerDisplayOptions->Collapse();
+    m_paneLayerDisplayOptions->SetBackgroundColour( m_notebook->GetThemeBackgroundColour() );
+
+    wxWindow* layerDisplayPane = m_paneLayerDisplayOptions->GetPane();
+
+    wxBoxSizer* layerDisplayOptionsSizer;
+    layerDisplayOptionsSizer = new wxBoxSizer( wxVERTICAL );
+
+    m_staticTextContrastModeTitle = new wxStaticText( layerDisplayPane, wxID_ANY,
+                                                      _( "Non-active layers:" ), wxDefaultPosition,
+                                                      wxDefaultSize, 0 );
+    m_staticTextContrastModeTitle->Wrap( -1 );
+    layerDisplayOptionsSizer->Add( m_staticTextContrastModeTitle, 0,
+                                   wxEXPAND | wxBOTTOM | wxLEFT, 2 );
+
+    wxBoxSizer* contrastModeSizer;
+    contrastModeSizer = new wxBoxSizer( wxHORIZONTAL );
+
+    m_rbHighContrastNormal = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Normal" ),
+                                                wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+    m_rbHighContrastNormal->SetValue( true );
+    m_rbHighContrastNormal->SetToolTip( _( "Non-active layers will be shown in full color" ) );
+
+    contrastModeSizer->Add( m_rbHighContrastNormal, 0, wxRIGHT, 4 );
+
+    m_rbHighContrastDim = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Dim" ),
+                                             wxDefaultPosition, wxDefaultSize, 0 );
+    m_rbHighContrastDim->SetToolTip( _( "Non-active layers will be dimmed" ) );
+
+    contrastModeSizer->Add( m_rbHighContrastDim, 0, wxRIGHT | wxLEFT, 10 );
+
+    m_rbHighContrastOff = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Hide" ),
+                                             wxDefaultPosition, wxDefaultSize, 0 );
+    m_rbHighContrastOff->SetToolTip( _( "Non-active layers will be hidden" ) );
+
+    contrastModeSizer->Add( m_rbHighContrastOff, 0, 0, 5 );
+
+    layerDisplayOptionsSizer->Add( contrastModeSizer, 0, wxEXPAND, 5 );
+
+    m_layerDisplaySeparator = new wxStaticLine( layerDisplayPane, wxID_ANY, wxDefaultPosition,
+                                                wxDefaultSize, wxLI_HORIZONTAL );
+    layerDisplayOptionsSizer->Add( m_layerDisplaySeparator, 0, wxEXPAND | wxTOP | wxBOTTOM, 5 );
+
+    m_cbFlipBoard = new wxCheckBox( layerDisplayPane, wxID_ANY, _( "Flip board view" ),
+                                    wxDefaultPosition, wxDefaultSize, 0 );
+    layerDisplayOptionsSizer->Add( m_cbFlipBoard, 0, 0, 5 );
+
+    layerDisplayPane->SetSizer( layerDisplayOptionsSizer );
+    layerDisplayPane->Layout();
+    layerDisplayOptionsSizer->Fit( layerDisplayPane );
+
+    m_panelLayersSizer->Add( m_paneLayerDisplayOptions, 0, wxEXPAND | wxTOP, 5 );
+
+    m_paneLayerDisplayOptions->Bind( WX_COLLAPSIBLE_PANE_CHANGED,
+                                     [&]( wxCommandEvent& aEvent )
+                                     {
+                                         Freeze();
+                                         m_panelLayers->Fit();
+                                         m_sizerOuter->Layout();
+                                         Thaw();
+                                     } );
+
+    // Create net display options
+
+    m_paneNetDisplayOptions = new WX_COLLAPSIBLE_PANE( m_panelNetsAndClasses, wxID_ANY,
+                                                       _( "Net Display Options" ) );
+    m_paneNetDisplayOptions->Collapse();
+    m_paneNetDisplayOptions->SetBackgroundColour( m_notebook->GetThemeBackgroundColour() );
+
+    wxBoxSizer* netDisplayOptionsSizer = new wxBoxSizer( wxVERTICAL );
+
+    wxWindow* netDisplayPane = m_paneNetDisplayOptions->GetPane();
+
+    m_staticTextNetDisplayTitle = new wxStaticText( netDisplayPane, wxID_ANY, _( "Net colors:" ),
+                                                    wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticTextNetDisplayTitle->Wrap( -1 );
+    m_staticTextNetDisplayTitle->SetToolTip( _( "Choose when to show net and netclass colors" ) );
+
+    netDisplayOptionsSizer->Add( m_staticTextNetDisplayTitle, 0, wxEXPAND | wxBOTTOM | wxLEFT, 2 );
+
+    wxBoxSizer* netColorSizer = new wxBoxSizer( wxHORIZONTAL );
+
+    m_rbNetColorAll = new wxRadioButton( netDisplayPane, wxID_ANY, _( "All" ), wxDefaultPosition,
+                                         wxDefaultSize, wxRB_GROUP );
+    m_rbNetColorAll->SetToolTip( _( "Net and netclass colors are shown on all copper items" ) );
+
+    netColorSizer->Add( m_rbNetColorAll, 0, wxRIGHT, 10 );
+
+    m_rbNetColorRatsnest = new wxRadioButton( netDisplayPane, wxID_ANY, _( "Ratsnest" ),
+                                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_rbNetColorRatsnest->SetValue( true );
+    m_rbNetColorRatsnest->SetToolTip( _( "Net and netclass colors are shown on the ratsnest only" ) );
+
+    netColorSizer->Add( m_rbNetColorRatsnest, 0, wxRIGHT, 4 );
+
+    m_rbNetColorOff = new wxRadioButton( netDisplayPane, wxID_ANY, _( "None" ), wxDefaultPosition,
+                                         wxDefaultSize, 0 );
+    m_rbNetColorOff->SetToolTip( _( "Net and netclass colors are not shown" ) );
+
+    netColorSizer->Add( m_rbNetColorOff, 0, 0, 5 );
+
+    netDisplayOptionsSizer->Add( netColorSizer, 0, wxEXPAND|wxBOTTOM, 5 );
+
+    netDisplayPane->SetSizer( netDisplayOptionsSizer );
+    netDisplayPane->Layout();
+    netDisplayOptionsSizer->Fit( netDisplayPane );
+
+    m_netsTabOuterSizer->Add( m_paneNetDisplayOptions, 0, wxEXPAND | wxTOP, 5 );
+
+    m_paneNetDisplayOptions->Bind( WX_COLLAPSIBLE_PANE_CHANGED,
+                                   [&]( wxCommandEvent& aEvent )
+                                   {
+                                       Freeze();
+                                       m_panelNetsAndClasses->Fit();
+                                       m_sizerOuter->Layout();
+                                       Thaw();
+                                   } );
+
+    m_rbNetColorAll->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
+    m_rbNetColorOff->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
+    m_rbNetColorRatsnest->Bind( wxEVT_RADIOBUTTON,
+                                &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
+}
+
+
 wxSize APPEARANCE_CONTROLS::GetBestSize() const
 {
     wxSize size( 220, 480 );
     // TODO(JE) appropriate logic
     return size;
-}
-
-
-void APPEARANCE_CONTROLS::OnLayerDisplayPaneChanged( wxCollapsiblePaneEvent& event )
-{
-    // Because wxWidgets is broken and will not properly lay these out automatically
-    Freeze();
-    m_panelLayers->Fit();
-    m_sizerOuter->Layout();
-    Thaw();
-}
-
-
-void APPEARANCE_CONTROLS::OnNetDisplayPaneChanged( wxCollapsiblePaneEvent& event )
-{
-    // Because wxWidgets is broken and will not properly lay these out automatically
-    Freeze();
-    m_panelNetsAndClasses->Fit();
-    m_sizerOuter->Layout();
-    Thaw();
 }
 
 
