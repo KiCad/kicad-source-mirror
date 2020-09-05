@@ -51,8 +51,13 @@ public:
     /**
      * Adds a TOOL_ACTION-based button to the toolbar. After selecting the entry,
      * a TOOL_EVENT command containing name of the action is sent.
+     *
+     * @param aAction is the action to add
+     * @param aIsToggleEntry makes the toolbar item a toggle entry when true
+     * @param aIsCancellable when true, cancels the tool if clicked when tool is active
      */
-    void Add( const TOOL_ACTION& aAction, bool aIsToggleEntry = false );
+    void Add( const TOOL_ACTION& aAction, bool aIsToggleEntry = false,
+              bool aIsCancellable = false );
 
     /**
      * Adds a large button such as used in the Kicad Manager Frame's launch bar.
@@ -99,6 +104,7 @@ public:
     void Toggle( const TOOL_ACTION& aAction, bool aEnabled, bool aChecked );
 
     static constexpr bool TOGGLE = true;
+    static constexpr bool CANCEL = true;
 
 protected:
     ///> The default tool event handler.
@@ -110,6 +116,7 @@ protected:
 protected:
     TOOL_MANAGER* m_toolManager;
     std::map<int, bool>               m_toolKinds;
+    std::map<int, bool>               m_toolCancellable;
     std::map<int, const TOOL_ACTION*> m_toolActions;
     std::map<int, ACTION_MENU*>       m_toolMenus;
 };

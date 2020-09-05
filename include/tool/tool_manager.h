@@ -180,6 +180,11 @@ public:
     const std::map<std::string, TOOL_ACTION*>& GetActions();
 
     /**
+     * Send a cancel event to the tool currently at the top of the tool stack.
+     */
+    void CancelTool();
+
+    /**
      * Function PrimeTool()
      * "Primes" a tool by sending a cursor left-click event with the mouse position set
      * to the passed in position.

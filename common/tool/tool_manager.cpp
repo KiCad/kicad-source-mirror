@@ -337,6 +337,14 @@ bool TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
 }
 
 
+void TOOL_MANAGER::CancelTool()
+{
+    TOOL_EVENT evt( TC_COMMAND, TA_CANCEL_TOOL );
+
+    processEvent( evt );
+}
+
+
 void TOOL_MANAGER::PrimeTool( const VECTOR2D& aPosition )
 {
     int modifiers = 0;

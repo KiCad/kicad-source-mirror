@@ -273,7 +273,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool,                       ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( ACTIONS::zoomTool,                       ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
     m_mainToolBar->Add( PCB_ACTIONS::zoomFootprintAutomatically, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddScaledSeparator( this );

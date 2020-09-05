@@ -57,16 +57,19 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 }
 
 
-void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry )
+void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool aIsCancellable )
 {
+    wxASSERT_MSG( !( aIsCancellable && !aIsToggleEntry ), "aIsCancellable requires aIsToggleEntry" );
+
     wxWindow* parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
     int       toolId = aAction.GetUIId();
 
     AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), parent ),
              aAction.GetDescription(), aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
-    m_toolKinds[ toolId ] = aIsToggleEntry;
-    m_toolActions[ toolId ] = &aAction;
+    m_toolKinds[ toolId ]       = aIsToggleEntry;
+    m_toolActions[ toolId ]     = &aAction;
+    m_toolCancellable[ toolId ] = aIsCancellable;
 }
 
 
@@ -168,29 +171,37 @@ void ACTION_TOOLBAR::Toggle( const TOOL_ACTION& aAction, bool aEnabled, bool aCh
 
 void ACTION_TOOLBAR::onToolEvent( wxAuiToolBarEvent& aEvent )
 {
+    int            id   = aEvent.GetId();
+    wxEventType    type = aEvent.GetEventType();
     OPT_TOOL_EVENT evt;
-    wxString menuText;
 
-    wxEventType type = aEvent.GetEventType();
+    bool handled = false;
 
-    if( type == wxEVT_COMMAND_TOOL_CLICKED && aEvent.GetId() >= TOOL_ACTION::GetBaseUIId() )
+    if( m_toolManager && type == wxEVT_COMMAND_TOOL_CLICKED  && id >= TOOL_ACTION::GetBaseUIId() )
     {
-        const auto it = m_toolActions.find( aEvent.GetId() );
+        const auto actionIt = m_toolActions.find( id );
 
-        if( it != m_toolActions.end() )
-            evt = it->second->MakeEvent();
+        // The toolbar item is toggled before the event is sent, so we check for it not being
+        // toggled to see if it was toggled originally
+        if( m_toolCancellable[id] && !GetToolToggled( id ) )
+        {
+            // Send a cancel event
+            m_toolManager->CancelTool();
+            handled = true;
+        }
+        else if( actionIt != m_toolActions.end() )
+        {
+            // Dispatch a tool event
+            evt = actionIt->second->MakeEvent();
+            evt->SetHasPosition( false );
+            m_toolManager->ProcessEvent( *evt );
+            handled = true;
+        }
     }
 
-    // forward the action/update event to the TOOL_MANAGER
-    if( evt && m_toolManager )
-    {
-        evt->SetHasPosition( false );
-        m_toolManager->ProcessEvent( *evt );
-    }
-    else
-    {
+    // Skip the event if we don't handle it
+    if( !handled )
         aEvent.Skip();
-    }
 }
 
 
