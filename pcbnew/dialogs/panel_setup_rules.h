@@ -32,6 +32,7 @@ class DRC;
 class PAGED_DIALOG;
 class PCB_EDIT_FRAME;
 class SCINTILLA_TRICKS;
+class HTML_MESSAGE_BOX;
 
 
 class PANEL_SETUP_RULES : public PANEL_SETUP_RULES_BASE
@@ -44,6 +45,8 @@ private:
 
     wxRegEx           m_netClassRegex;
     wxRegEx           m_netNameRegex;
+
+    HTML_MESSAGE_BOX* m_helpDialog;
 
 public:
     PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );

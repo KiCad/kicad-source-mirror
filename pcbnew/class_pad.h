@@ -350,7 +350,8 @@ public:
     int GetLocalSolderMaskMargin() const        { return m_localSolderMaskMargin; }
     void SetLocalSolderMaskMargin( int aMargin ) { m_localSolderMaskMargin = aMargin; }
 
-    int GetLocalClearance( wxString* aSource = nullptr ) const override;
+    int GetLocalClearance( wxString* aSource ) const override;
+    int GetLocalClearance() const               { return m_localClearance; }
     void SetLocalClearance( int aClearance )    { m_localClearance = aClearance; }
 
     int GetLocalSolderPasteMargin() const       { return m_localSolderPasteMargin; }
@@ -408,7 +409,7 @@ public:
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    int GetLocalClearanceOverrides( wxString* aSource = nullptr ) const override;
+    int GetLocalClearanceOverrides( wxString* aSource ) const override;
 
    // Mask margins handling:
 

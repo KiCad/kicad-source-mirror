@@ -39,7 +39,8 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
         PANEL_SETUP_RULES_BASE( aParent->GetTreebook() ),
         m_Parent( aParent ),
         m_frame( aFrame ),
-        m_scintillaTricks( nullptr )
+        m_scintillaTricks( nullptr ),
+        m_helpDialog( nullptr )
 {
     m_scintillaTricks = new SCINTILLA_TRICKS( m_textEditor, wxT( "()" ) );
 
@@ -62,6 +63,9 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
 PANEL_SETUP_RULES::~PANEL_SETUP_RULES( )
 {
     delete m_scintillaTricks;
+
+    if( m_helpDialog )
+        m_helpDialog->Destroy();
 };
 
 
@@ -380,68 +384,17 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 
 void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
 {
-    // Do not make this full sentence translatable: it contains keywords
-    // Only a few titles can be traslated.
-    wxString msg;
-    msg << "<b>" << _( "Top-level Clauses" ) << "</b>";
-    msg <<  "<pre>"
-            "# version must be first clause in file\r"
-            "(version &lt;number>)\r"
-            "(rule &lt;rule_name> &lt;rule_clause> ...)\r"
-            "\r</pre><b>";
-    msg << _( "Rule Clauses" );
-    msg <<  "</b>"
-            "<pre>"
-            "(constraint &lt;constraint_type> ...)\r"
-            "(condition \"&lt;expression>\")\r"
-            "(layer \"&lt;layer name>\")\r"
-            "\r</pre>"
-            "<b>";
-    msg << _( "Constraint Types" );
-    msg <<  "</b>"
-            "<pre>"
-            "clearance    annulus_width   track_width     hole     dissallow\r"
-            "\r</pre>"
-            "<b>";
-    msg << _( "Item Types" );
-    msg <<  "</b>"
-            "<pre>"
-            "track           via                 zone\r"
-            "pad             micro_via           text\r"
-            "hole            buried_via          graphic\r"
-            "\r</pre>"
-            "<b>";
-    msg << _( "Examples" );
-    msg <<  "</b>"
-            "<pre>"
-            "(rule \"copper keepout\"\r"
-            "   (constraint disallow track via zone)\r"
-            "   (condition \"A.insideArea('zone_name')\"))\r"
-            "\r"
-            "(rule \"BGA neckdown\"\r"
-            "   (constraint track_width (min 0.2mm) (opt 0.25mm))\r"
-            "   (constraint clearance (min 0.05) (opt 0.08mm))\r"
-            "   (condition \"A.insideCourtyard('U3')\"))\r"
-            "\r"
-            "(rule HV\r"
-            "   (constraint clearance (min 1.5mm))\r"
-            "   (condition \"A.netclass == 'HV'\"))\r"
-            "\r"
-            "(rule HV_HV\r"
-            "   # wider clearance between HV tracks\r"
-            "   (constraint clearance (min \"1.5mm + 2.0mm\"))\r"
-            "   (condition \"A.netclass == 'HV' && B.netclass == 'HV'\"))\r"
-            "\r"
+    wxString msg =
+#include "dialogs/panel_setup_rules_help_txt.h"
+    ;
+
 #ifdef __WXMAC__
-            "# Use Cmd+/ to comment or uncomment line(s)\r"
-#else
-            "# Use Ctrl+/ to comment or uncomment line(s)\r"
+    msg.Replace( "Ctrl+", "Cmd+" );
 #endif
-            "</pre>";
 
-    HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
-    dlg->SetDialogSizeInDU( 320, 320 );
+    m_helpDialog = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
+    m_helpDialog->SetDialogSizeInDU( 320, 320 );
 
-    dlg->AddHTML_Text( msg );
-    dlg->ShowModeless();
+    m_helpDialog->AddHTML_Text( "<pre>" + EscapedHTML( msg ) + "</pre>" );
+    m_helpDialog->ShowModeless();
 }

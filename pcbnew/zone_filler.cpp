@@ -1012,7 +1012,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone, PCB_LAYER_ID 
                                       std::deque<SHAPE_LINE_CHAIN>& aSpokesList )
 {
     auto zoneBB = aZone->GetBoundingBox();
-    int  zone_clearance = aZone->GetZoneClearance();
+    int  zone_clearance = aZone->GetLocalClearance();
     int  biggest_clearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
     biggest_clearance = std::max( biggest_clearance, zone_clearance );
     zoneBB.Inflate( biggest_clearance );

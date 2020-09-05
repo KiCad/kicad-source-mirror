@@ -93,7 +93,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
 {
     m_ZonePriority                = aSource.GetPriority();
     m_FillMode                    = aSource.GetFillMode();
-    m_ZoneClearance               = aSource.GetZoneClearance();
+    m_ZoneClearance               = aSource.GetLocalClearance();
     m_ZoneMinThickness            = aSource.GetMinThickness();
     m_HatchThickness              = aSource.GetHatchThickness();
     m_HatchGap                    = aSource.GetHatchGap();
@@ -129,7 +129,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
 void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) const
 {
     aTarget.SetFillMode( m_FillMode );
-    aTarget.SetZoneClearance( m_ZoneClearance );
+    aTarget.SetLocalClearance( m_ZoneClearance );
     aTarget.SetMinThickness( m_ZoneMinThickness );
     aTarget.SetHatchThickness( m_HatchThickness );
     aTarget.SetHatchGap( m_HatchGap );

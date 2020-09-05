@@ -26,6 +26,7 @@
 #include <sch_sheet.h>
 #include <sch_validators.h>
 #include <dialog_edit_sheet_pin.h>
+#include <html_messagebox.h>
 
 
 static wxString sheetPinTypes[] =
@@ -42,7 +43,8 @@ DIALOG_EDIT_SHEET_PIN::DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_
     DIALOG_EDIT_SHEET_PIN_BASE( parent ),
     m_frame( parent ),
     m_sheetPin( aPin ),
-    m_textSize( parent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true )
+    m_textSize( parent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
+    m_helpWindow( nullptr )
 {
     for( const wxString& sheetPinType : sheetPinTypes )
         m_choiceConnectionType->Append( sheetPinType );
@@ -71,6 +73,13 @@ DIALOG_EDIT_SHEET_PIN::DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_
     // not always raised, depending on this dialog is run.
     // Force it to be raised
     Raise();
+}
+
+
+DIALOG_EDIT_SHEET_PIN::~DIALOG_EDIT_SHEET_PIN()
+{
+    if( m_helpWindow )
+        m_helpWindow->Destroy();
 }
 
 
@@ -126,7 +135,7 @@ void DIALOG_EDIT_SHEET_PIN::onOKButton( wxCommandEvent& event )
 
 void DIALOG_EDIT_SHEET_PIN::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
 {
-    SCH_TEXT::ShowSyntaxHelp( this );
+    m_helpWindow = SCH_TEXT::ShowSyntaxHelp( this );
 }
 
 

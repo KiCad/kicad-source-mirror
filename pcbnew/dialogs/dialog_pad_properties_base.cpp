@@ -555,7 +555,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_middleBoxSizer->Add( 0, 2, 0, wxEXPAND, 5 );
 
-	wxString m_choiceFabPropertyChoices[] = { _("None"), _("BGA pad"), _("Fiducial, local to footprint"), _("Fiducial, global to board"), _("Test Point Pad"), _("Heatsink pad"), _("Castellated pad (through hole only)") };
+	wxString m_choiceFabPropertyChoices[] = { _("None"), _("BGA pad"), _("Fiducial, local to footprint"), _("Fiducial, global to board"), _("Test point pad"), _("Heatsink pad"), _("Castellated pad (through hole only)") };
 	int m_choiceFabPropertyNChoices = sizeof( m_choiceFabPropertyChoices ) / sizeof( wxString );
 	m_choiceFabProperty = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceFabPropertyNChoices, m_choiceFabPropertyChoices, 0 );
 	m_choiceFabProperty->SetSelection( 0 );

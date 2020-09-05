@@ -562,6 +562,23 @@ else()
 endif()
 
 
+# Create a C++ compilable string initializer containing text into a *.h file:
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_txt.h
+    COMMAND ${CMAKE_COMMAND}
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.txt
+        -DoutputFile=${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_txt.h
+        -P ${CMAKE_MODULE_PATH}/Txt2C.cmake
+    DEPENDS ${CMAKE_MODULE_PATH}/Txt2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.txt
+    COMMENT "creating ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_txt.h
+       from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.txt"
+    )
+
+set_source_files_properties( dialogs/panel_setup_rules.cpp
+    PROPERTIES
+        OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_txt.h
+    )
+
 if( APPLE )
     # setup bundle
     set( PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns )

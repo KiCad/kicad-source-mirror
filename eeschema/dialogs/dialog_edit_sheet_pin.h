@@ -31,17 +31,21 @@
 
 
 class SCH_SHEET_PIN;
+class HTML_MESSAGE_BOX;
 
 
 class DIALOG_EDIT_SHEET_PIN : public DIALOG_EDIT_SHEET_PIN_BASE
 {
-    SCH_EDIT_FRAME* m_frame;
-    SCH_SHEET_PIN*  m_sheetPin;
+    SCH_EDIT_FRAME*   m_frame;
+    SCH_SHEET_PIN*    m_sheetPin;
 
-    UNIT_BINDER     m_textSize;
+    UNIT_BINDER       m_textSize;
+
+    HTML_MESSAGE_BOX* m_helpWindow;
 
 public:
     DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin );
+    ~DIALOG_EDIT_SHEET_PIN();
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

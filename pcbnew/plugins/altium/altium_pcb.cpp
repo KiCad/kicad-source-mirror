@@ -1284,7 +1284,7 @@ void ALTIUM_PCB::ParsePolygons6Data(
 
         if( clearanceRule != nullptr )
         {
-            zone->SetZoneClearance( clearanceRule->planeclearanceClearance );
+            zone->SetLocalClearance( clearanceRule->planeclearanceClearance );
         }
 
         const ARULE6* polygonConnectRule = GetRuleDefault( ALTIUM_RULE_KIND::POLYGON_CONNECT );
@@ -2426,7 +2426,7 @@ void ALTIUM_PCB::ParseFills6Data(
             zone->AppendCorner( p21, outlineIdx );
 
             // should be correct?
-            zone->SetZoneClearance( 0 );
+            zone->SetLocalClearance( 0 );
             zone->SetPadConnection( ZONE_CONNECTION::FULL );
 
             if( elem.is_keepout )

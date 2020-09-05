@@ -4114,7 +4114,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                     break;
 
                 case T_clearance:
-                    zone->SetZoneClearance( parseBoardUnits( "zone clearance" ) );
+                    zone->SetLocalClearance( parseBoardUnits( "zone clearance" ) );
                     NeedRIGHT();
                     break;
 

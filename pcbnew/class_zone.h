@@ -111,7 +111,6 @@ public:
     virtual LSET GetLayerSet() const override;
 
     wxString GetZoneName() const { return m_zoneName; }
-
     void SetZoneName( const wxString& aName ) { m_zoneName = aName; }
 
     /** Function GetBoundingBox (virtual)
@@ -126,7 +125,10 @@ public:
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    int GetLocalClearance( wxString* aSource = nullptr ) const override;
+    int GetLocalClearance( wxString* aSource ) const override;
+
+    int GetLocalClearance() const { return GetLocalClearance( nullptr ); }
+    void SetLocalClearance( int aClearance ) { m_ZoneClearance = aClearance; }
 
     /**
      * Function IsOnCopperLayer
@@ -153,8 +155,15 @@ public:
     void SetFillMode( ZONE_FILL_MODE aFillMode ) { m_FillMode = aFillMode; }
     ZONE_FILL_MODE GetFillMode() const { return m_FillMode; }
 
-    void SetThermalReliefGap( int aThermalReliefGap )   { m_ThermalReliefGap = aThermalReliefGap; }
-    int GetThermalReliefGap( D_PAD* aPad = NULL ) const;
+    void SetThermalReliefGap( int aThermalReliefGap )
+    {
+        if( m_ThermalReliefGap != aThermalReliefGap )
+            SetNeedRefill( true );
+
+        m_ThermalReliefGap = aThermalReliefGap;
+    }
+    int GetThermalReliefGap() const { return m_ThermalReliefGap; }
+    int GetThermalReliefGap( D_PAD* aPad ) const;
 
     void SetThermalReliefCopperBridge( int aThermalReliefCopperBridge )
     {
@@ -163,7 +172,8 @@ public:
 
         m_ThermalReliefCopperBridge = aThermalReliefCopperBridge;
     }
-    int GetThermalReliefCopperBridge( D_PAD* aPad = NULL ) const;
+    int GetThermalReliefCopperBridge() const { return m_ThermalReliefCopperBridge; }
+    int GetThermalReliefCopperBridge( D_PAD* aPad ) const;
 
     /**
      * Compute the area currently occupied by the zone fill.
@@ -194,15 +204,9 @@ public:
     bool NeedRefill() const { return m_needRefill; }
     void SetNeedRefill( bool aNeedRefill ) { m_needRefill = aNeedRefill; }
 
-    int GetZoneClearance() const { return m_ZoneClearance; }
-    void SetZoneClearance( int aZoneClearance ) { m_ZoneClearance = aZoneClearance; }
-
-    ZONE_CONNECTION GetPadConnection( D_PAD* aPad = NULL ) const;
-
-    void SetPadConnection( ZONE_CONNECTION aPadConnection )
-    {
-        m_PadConnection = aPadConnection;
-    }
+    ZONE_CONNECTION GetPadConnection( D_PAD* aPad ) const;
+    ZONE_CONNECTION GetPadConnection() const { return m_PadConnection; }
+    void SetPadConnection( ZONE_CONNECTION aPadConnection ) { m_PadConnection = aPadConnection; }
 
     int GetMinThickness() const { return m_ZoneMinThickness; }
     void SetMinThickness( int aMinThickness )

@@ -1717,17 +1717,22 @@ static struct MODULE_DESC
         propMgr.AddProperty( new PROPERTY<MODULE, wxString>( _( "Value" ),
                     &MODULE::SetValue, &MODULE::GetValue ) );
         propMgr.AddProperty( new PROPERTY<MODULE, double>( _( "Orientation" ),
-                    &MODULE::SetOrientationDegrees, &MODULE::GetOrientationDegrees, PROPERTY_DISPLAY::DEGREE ) );
+                    &MODULE::SetOrientationDegrees, &MODULE::GetOrientationDegrees,
+                    PROPERTY_DISPLAY::DEGREE ) );
         propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Local Clearance" ),
-                    &MODULE::SetLocalClearance, &MODULE::GetLocalClearance, PROPERTY_DISPLAY::DISTANCE ) );
+                    &MODULE::SetLocalClearance, &MODULE::GetLocalClearance,
+                    PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Local Solderpaste Margin" ),
-                    &MODULE::SetLocalSolderPasteMargin, &MODULE::GetLocalSolderPasteMargin, PROPERTY_DISPLAY::DISTANCE ) );
+                    &MODULE::SetLocalSolderPasteMargin, &MODULE::GetLocalSolderPasteMargin,
+                    PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<MODULE, double>( _( "Local Solderpaste Margin Ratio" ),
                     &MODULE::SetLocalSolderPasteMarginRatio, &MODULE::GetLocalSolderPasteMarginRatio ) );
         propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Thermal Width" ),
-                    &MODULE::SetThermalWidth, &MODULE::GetThermalWidth, PROPERTY_DISPLAY::DISTANCE ) );
+                    &MODULE::SetThermalWidth, &MODULE::GetThermalWidth,
+                    PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Thermal Gap" ),
-                    &MODULE::SetThermalGap, &MODULE::GetThermalGap, PROPERTY_DISPLAY::DISTANCE ) );
+                    &MODULE::SetThermalGap, &MODULE::GetThermalGap,
+                    PROPERTY_DISPLAY::DISTANCE ) );
         // TODO zone connection, FPID?
     }
 } _MODULE_DESC;

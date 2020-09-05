@@ -2632,7 +2632,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 THROW_IO_ERROR( m_error );
             }
 
-            zc->SetZoneClearance( clearance );
+            zc->SetLocalClearance( clearance );
             zc->SetPadConnection( popt );
         }
 

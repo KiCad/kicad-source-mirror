@@ -198,7 +198,7 @@ void PCB_POLYGON::AddToBoard()
                                          KiROUND( m_outline[i]->y ) ), -1 );
         }
 
-        zone->SetZoneClearance( m_width );
+        zone->SetLocalClearance( m_width );
 
         zone->SetPriority( m_priority );
 

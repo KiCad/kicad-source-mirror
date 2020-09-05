@@ -31,11 +31,17 @@
 
 static void onLayer( LIBEVAL::CONTEXT* aCtx, void *self )
 {
-    LIBEVAL::VALUE* arg = aCtx->Pop();
-    LIBEVAL::VALUE* result = aCtx->AllocValue();
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+
+    LIBEVAL::VALUE*   arg = aCtx->Pop();
+    LIBEVAL::VALUE*   result = aCtx->AllocValue();
 
     result->Set( 0.0 );
     aCtx->Push( result );
+
+    if( !item )
+        return;
 
     if( !arg )
     {
@@ -45,19 +51,27 @@ static void onLayer( LIBEVAL::CONTEXT* aCtx, void *self )
     }
 
     wxString     layerName = arg->AsString();
-    PCB_LAYER_ID layer = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( layerName );
+    wxPGChoices& layerMap = ENUM_MAP<PCB_LAYER_ID>::Instance().Choices();
+    bool         anyMatch = false;
 
-    if( layer == UNDEFINED_LAYER )
+    for( unsigned ii = 0; ii < layerMap.GetCount(); ++ii )
     {
-        aCtx->ReportError( wxString::Format( _( "Unrecognized layer '%s' " ), layerName ) );
-        return;
+        wxPGChoiceEntry& entry = layerMap[ii];
+
+        if( entry.GetText().Matches( layerName ) )
+        {
+            anyMatch = true;
+
+            if( item->IsOnLayer( ToLAYER_ID( entry.GetValue() ) ) )
+            {
+                result->Set( 1.0 );
+                return;
+            }
+        }
     }
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
-
-    if( item && item->IsOnLayer( layer ) )
-        result->Set( 1.0 );
+    if( !anyMatch )
+        aCtx->ReportError( wxString::Format( _( "Unrecognized layer '%s' " ), layerName ) );
 }
 
 

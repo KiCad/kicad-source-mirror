@@ -1232,7 +1232,7 @@ BITMAP_DEF SCH_HIERLABEL::GetMenuImage() const
 }
 
 
-void SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
+HTML_MESSAGE_BOX* SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
 {
     wxString msg = _(
             "<table>"
@@ -1365,4 +1365,6 @@ void SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
 
     dlg->AddHTML_Text( msg );
     dlg->ShowModeless();
+
+    return dlg;
 }

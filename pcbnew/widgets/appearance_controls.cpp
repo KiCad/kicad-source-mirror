@@ -831,15 +831,15 @@ void APPEARANCE_CONTROLS::OnLayerChanged()
 
     if( r < 240 || g < 240 || b < 240 )
     {
-        r = std::min( r + 15, 255 );
-        g = std::min( g + 15, 255 );
-        b = std::min( b + 15, 255 );
+        r = wxChar( std::min( (int) r + 15, 255 ) );
+        g = wxChar( std::min( (int) g + 15, 255 ) );
+        b = wxChar( std::min( (int) b + 15, 255 ) );
     }
     else
     {
-        r = std::max( r - 15, 0 );
-        g = std::max( g - 15, 0 );
-        b = std::max( b - 15, 0 );
+        r = wxChar( std::max( (int) r - 15, 0 ) );
+        g = wxChar( std::max( (int) g - 15, 0 ) );
+        b = wxChar( std::max( (int) b - 15, 0 ) );
     }
 
     PCB_LAYER_ID        current = m_frame->GetActiveLayer();

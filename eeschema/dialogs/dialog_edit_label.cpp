@@ -35,6 +35,7 @@
 #include <sch_reference_list.h>
 #include <schematic.h>
 #include <widgets/unit_binder.h>
+#include <html_messagebox.h>
 #include <dialog_edit_label.h>
 #include <kicad_string.h>
 #include <tool/actions.h>
@@ -48,7 +49,8 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     DIALOG_LABEL_EDITOR_BASE( aParent ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
     m_netNameValidator( true ),
-    m_scintillaTricks( nullptr )
+    m_scintillaTricks( nullptr ),
+    m_helpWindow( nullptr )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
@@ -140,6 +142,9 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
 {
     delete m_scintillaTricks;
+
+    if( m_helpWindow )
+        m_helpWindow->Destroy();
 }
 
 
@@ -346,5 +351,5 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 
 void DIALOG_LABEL_EDITOR::OnFormattingHelp( wxHyperlinkEvent& aEvent )
 {
-    SCH_TEXT::ShowSyntaxHelp( this );
+    m_helpWindow = SCH_TEXT::ShowSyntaxHelp( this );
 }

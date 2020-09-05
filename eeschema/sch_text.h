@@ -33,6 +33,8 @@
 
 
 class NETLIST_OBJECT_LIST;
+class HTML_MESSAGE_BOX;
+
 
 /*
  * Spin style for text items of all kinds on schematics
@@ -324,7 +326,7 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
-    static void ShowSyntaxHelp( wxWindow* aParentWindow );
+    static HTML_MESSAGE_BOX* ShowSyntaxHelp( wxWindow* aParentWindow );
 };
 
 

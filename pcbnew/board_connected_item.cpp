@@ -95,10 +95,10 @@ int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
 
     // LEVEL 1: local overrides (pad, footprint, etc.)
     //
-    if( GetLocalClearanceOverrides() > clearance )
+    if( GetLocalClearanceOverrides( nullptr ) > clearance )
         clearance = GetLocalClearanceOverrides( localSource );
 
-    if( second && second->GetLocalClearanceOverrides() > clearance )
+    if( second && second->GetLocalClearanceOverrides( nullptr ) > clearance )
         clearance = second->GetLocalClearanceOverrides( localSource );
 
     if( clearance )
@@ -142,10 +142,10 @@ int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
         clearance = bds.m_CopperEdgeClearance;
     }
 
-    if( GetLocalClearance() > clearance )
+    if( GetLocalClearance( nullptr ) > clearance )
         clearance = GetLocalClearance( aSource );
 
-    if( second && second->GetLocalClearance() > clearance )
+    if( second && second->GetLocalClearance( nullptr ) > clearance )
         clearance = second->GetLocalClearance( aSource );
 
     return clearance;

@@ -186,7 +186,7 @@ public:
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    virtual int GetLocalClearanceOverrides( wxString* aSource = nullptr ) const { return 0; }
+    virtual int GetLocalClearanceOverrides( wxString* aSource ) const { return 0; }
 
     /**
      * Function GetLocalClearance
@@ -195,7 +195,7 @@ public:
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    virtual int GetLocalClearance( wxString* aSource = nullptr ) const { return 0; }
+    virtual int GetLocalClearance( wxString* aSource ) const { return 0; }
 
     /**
      * Function GetNetClassPtr

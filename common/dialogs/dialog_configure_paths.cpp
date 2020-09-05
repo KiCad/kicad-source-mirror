@@ -53,9 +53,12 @@ enum SEARCH_PATH_GRID_COLUMNS
 
 DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESOLVER* aResolver ) :
     DIALOG_CONFIGURE_PATHS_BASE( aParent ),
-    m_errorGrid( nullptr ), m_errorRow( -1 ), m_errorCol( -1 ),
+    m_errorGrid( nullptr ),
+    m_errorRow( -1 ),
+    m_errorCol( -1 ),
     m_resolver( aResolver ),
-    m_gridWidthsDirty( true )
+    m_gridWidthsDirty( true ),
+    m_helpDialog( nullptr )
 {
     m_btnAddEnvVar->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_btnDeleteEnvVar->SetBitmap( KiBitmap( trash_xpm ) );
@@ -116,6 +119,9 @@ DIALOG_CONFIGURE_PATHS::~DIALOG_CONFIGURE_PATHS()
     // Delete the GRID_TRICKS.
     m_SearchPaths->PopEventHandler( true );
     m_EnvVars->PopEventHandler( true );
+
+    if( m_helpDialog )
+        m_helpDialog->Destroy();
 
     m_EnvVars->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_CONFIGURE_PATHS::OnGridCellChanging ), NULL, this );
     m_SearchPaths->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_CONFIGURE_PATHS::OnGridCellChanging ), NULL, this );

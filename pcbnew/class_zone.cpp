@@ -1367,19 +1367,37 @@ static struct ZONE_CONTAINER_DESC
 {
     ZONE_CONTAINER_DESC()
     {
+        ENUM_MAP<ZONE_CONNECTION>::Instance()
+                .Map( ZONE_CONNECTION::INHERITED,   _( "Inherited" ) )
+                .Map( ZONE_CONNECTION::NONE,        _( "None" ) )
+                .Map( ZONE_CONNECTION::THERMAL,     _( "Thermal reliefs" ) )
+                .Map( ZONE_CONNECTION::FULL,        _( "Solid" ) )
+                .Map( ZONE_CONNECTION::THT_THERMAL, _( "Reliefs for PTH" ) );
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( ZONE_CONTAINER );
         propMgr.InheritsAfter( TYPE_HASH( ZONE_CONTAINER ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Clearance" ),
-                    &ZONE_CONTAINER::SetZoneClearance, &ZONE_CONTAINER::GetZoneClearance, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, unsigned>( _( "Priority" ),
                     &ZONE_CONTAINER::SetPriority, &ZONE_CONTAINER::GetPriority ) );
         //propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, bool>( "Filled",
                     //&ZONE_CONTAINER::SetIsFilled, &ZONE_CONTAINER::IsFilled ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Min Thickness" ),
-                    &ZONE_CONTAINER::SetMinThickness, &ZONE_CONTAINER::GetMinThickness, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, wxString>( _( "Name" ),
                     &ZONE_CONTAINER::SetZoneName, &ZONE_CONTAINER::GetZoneName ) );
-        // TODO pad connection, thermal relief gap, thermal relief copper bridge
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Clearance" ),
+                    &ZONE_CONTAINER::SetLocalClearance, &ZONE_CONTAINER::GetLocalClearance,
+                    PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Min Width" ),
+                    &ZONE_CONTAINER::SetMinThickness, &ZONE_CONTAINER::GetMinThickness,
+                    PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE_CONTAINER, ZONE_CONNECTION>( _( "Pad Connections" ),
+                    &ZONE_CONTAINER::SetPadConnection, &ZONE_CONTAINER::GetPadConnection ) );
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Thermal Clearance" ),
+                    &ZONE_CONTAINER::SetThermalReliefGap, &ZONE_CONTAINER::GetThermalReliefGap,
+                    PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Thermal Spoke Width" ),
+                    &ZONE_CONTAINER::SetThermalReliefCopperBridge, &ZONE_CONTAINER::GetThermalReliefCopperBridge,
+                    PROPERTY_DISPLAY::DISTANCE ) );
     }
 } _ZONE_CONTAINER_DESC;
+
+ENUM_TO_WXANY( ZONE_CONNECTION );

@@ -214,7 +214,7 @@ public:
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    int GetLocalClearance( wxString* aSource = nullptr ) const override;
+    int GetLocalClearance( wxString* aSource ) const override;
 
     void GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const;
 

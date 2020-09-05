@@ -33,6 +33,7 @@
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
 class SCINTILLA_TRICKS;
+class HTML_MESSAGE_BOX;
 
 
 class DIALOG_LABEL_EDITOR : public DIALOG_LABEL_EDITOR_BASE
@@ -78,6 +79,8 @@ private:
     UNIT_BINDER           m_textSize;
     SCH_NETNAME_VALIDATOR m_netNameValidator;
     SCINTILLA_TRICKS*     m_scintillaTricks;
+
+    HTML_MESSAGE_BOX*     m_helpWindow;
 };
 
 

@@ -1740,7 +1740,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     }
 
     m_out->Print( 0, " (clearance %s))\n",
-                  FormatInternalUnits( aZone->GetZoneClearance() ).c_str() );
+                  FormatInternalUnits( aZone->GetLocalClearance() ).c_str() );
 
     m_out->Print( aNestLevel+1, "(min_thickness %s)",
                   FormatInternalUnits( aZone->GetMinThickness() ).c_str() );

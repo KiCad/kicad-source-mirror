@@ -442,12 +442,18 @@ LSET DRC_RULES_PARSER::parseLayer()
     else
     {
         wxString     layerName = FromUTF8();
-        PCB_LAYER_ID layer = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( layerName );
+        wxPGChoices& layerMap = ENUM_MAP<PCB_LAYER_ID>::Instance().Choices();
 
-        if( layer == UNDEFINED_LAYER )
+        for( unsigned ii = 0; ii < layerMap.GetCount(); ++ii )
+        {
+            wxPGChoiceEntry& entry = layerMap[ii];
+
+            if( entry.GetText().Matches( layerName ) )
+                retVal.set( ToLAYER_ID( entry.GetValue() ) );
+        }
+
+        if( !retVal.any() )
             reportError( wxString::Format( _( "Unrecognized layer '%s' " ), layerName ) );
-
-        retVal.set( layer );
     }
 
     if( (int) NextTok() != DSN_RIGHT )

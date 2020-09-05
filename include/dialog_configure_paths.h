@@ -33,6 +33,7 @@
 
 class EDA_DRAW_FRAME;
 class FILENAME_RESOLVER;
+class HTML_MESSAGE_BOX;
 
 
 class DIALOG_CONFIGURE_PATHS: public DIALOG_CONFIGURE_PATHS_BASE
@@ -73,6 +74,8 @@ private:
     wxTextValidator     m_aliasValidator;
 
     bool                m_gridWidthsDirty;
+
+    HTML_MESSAGE_BOX*   m_helpDialog;
 };
 
 #endif    // _DIALOG_CONFIGURE_PATHS_H_

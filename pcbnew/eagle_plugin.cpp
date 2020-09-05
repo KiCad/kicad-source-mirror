@@ -1348,9 +1348,9 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
             std::max<int>( ZONE_THICKNESS_MIN_VALUE_MIL * IU_PER_MILS, p.width.ToPcbUnits() / 2 ) );
 
     if( p.isolate )
-        zone->SetZoneClearance( p.isolate->ToPcbUnits() );
+        zone->SetLocalClearance( p.isolate->ToPcbUnits() );
     else
-        zone->SetZoneClearance( 1 ); // @todo: set minimum clearance value based on board settings
+        zone->SetLocalClearance( 1 ); // @todo: set minimum clearance value based on board settings
 
     // missing == yes per DTD.
     bool thermals = !p.thermals || *p.thermals;

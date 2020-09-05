@@ -178,7 +178,7 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
             if( area_to_test->GetThermalReliefCopperBridge() != area2->GetThermalReliefCopperBridge() )
                 continue;
 
-            if( area_to_test->GetZoneClearance() != area2->GetZoneClearance() )
+            if( area_to_test->GetLocalClearance() != area2->GetLocalClearance() )
                 continue;
 
             if( area_to_test->GetPadConnection() != area2->GetPadConnection() )
