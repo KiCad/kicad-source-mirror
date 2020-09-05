@@ -664,6 +664,8 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                         static_cast<DRAWSEGMENT*>( pastedDrawSeg )->SwapData( clipDrawSeg );
                         pastedDrawSeg->SetLocalCoord();
 
+                        // Replace parent nuked by above call to SwapData()
+                        pastedDrawSeg->SetParent( editModule );
                         pastedItems.push_back( pastedDrawSeg );
                     }
                     else if( clipDrawItem->Type() == PCB_TEXT_T )
@@ -675,6 +677,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapText( *clipTextItem );
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapEffects( *clipTextItem );
 
+                        pastedTextItem->SetParent( editModule );
                         pastedItems.push_back( pastedTextItem );
                     }
                 }
