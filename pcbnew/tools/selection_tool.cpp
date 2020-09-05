@@ -1874,7 +1874,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
     case PCB_MODULE_EDGE_T:
         // Module edge selections are only allowed in modedit mode.
-        if( !m_editModules )
+        if( !m_editModules && !checkVisibilityOnly )
             return false;
 
         break;
