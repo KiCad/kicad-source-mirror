@@ -71,7 +71,7 @@ A.insideArea('<zone_name>')
 A.isPlated()
 
 
-# True if 'A' exists on the given layer.  The layer name can be
+# True if A exists on the given layer.  The layer name can be
 # either the name assigned in Board Setup > Board Editor Layers or
 # the canonical name (ie: F.Cu).
 
