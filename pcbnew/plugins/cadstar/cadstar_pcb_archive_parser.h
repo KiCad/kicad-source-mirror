@@ -1710,6 +1710,11 @@ public:
         bool          Fixed       = false;
         READABILITY   Readability = READABILITY::BOTTOM_TO_TOP;
 
+        long ScaleRatioNumerator = 1;   ///< Documentation symbols can be arbitrarily scaled when
+                                        ///< added to a design
+        long ScaleRatioDenominator = 1; ///< Documentation symbols can be arbitrarily scaled when
+                                        ///< added to a design
+
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
         void Parse( XNODE* aNode );
@@ -1822,6 +1827,7 @@ public:
                                                     ///< given a name. "SIGNUM" subnode.
         wxString Name = wxEmptyString; ///< This is undefined (wxEmptyString) if the net
                                        ///< is unnamed. "SIGNAME" subnode
+        bool Highlight = false;
 
         std::map<NETELEMENT_ID, PIN>             Pins;
         std::map<NETELEMENT_ID, VIA>             Vias;

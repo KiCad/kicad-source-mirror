@@ -82,6 +82,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     loadTexts();
     loadAreas();
     loadComponents();
+    loadDocumentationSymbols();
     loadTemplates();
     loadCoppers();
     loadNets();
@@ -514,6 +515,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF& aComponent, MODU
         pad->SetPos0( getKiCadPoint( csPad.Position ) - aModule->GetPosition() );
         pad->SetOrientation( getAngleTenthDegree( csPad.OrientAngle ) );
 
+        if( csPadcode.Shape.Size == 0 )
+            // zero sized pads seems to break KiCad so lets make it very small instead
+            csPadcode.Shape.Size = 1; 
+
         switch( csPadcode.Shape.ShapeType )
         {
         case PAD_SHAPE_TYPE::ANNULUS:
@@ -647,98 +652,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTexts()
     for( std::pair<TEXT_ID, TEXT> txtPair : Layout.Texts )
     {
         TEXT& csTxt = txtPair.second;
-
-        TEXTE_PCB* txt = new TEXTE_PCB( mBoard );
-        mBoard->Add( txt );
-        txt->SetText( csTxt.Text );
-
-        /*wxPoint rotatedTextPos = getKiCadPoint( aCadstarAttrLoc.Position ) - aModule->GetPosition();
-        RotatePoint( &rotatedTextPos, -aModule->GetOrientation() );*/
-
-        txt->SetTextPos( getKiCadPoint( csTxt.Position ) );
-        txt->SetPosition( getKiCadPoint( csTxt.Position ) );
-
-        txt->SetMirrored( csTxt.Mirror );
-        txt->SetTextAngle( getAngleTenthDegree( csTxt.OrientAngle ) );
-
-        TEXTCODE tc = getTextCode( csTxt.TextCodeID );
-
-        txt->SetTextThickness( getKiCadLength( tc.LineWidth ) );
-        txt->SetTextSize( { getKiCadLength( tc.Width ), getKiCadLength( tc.Height ) } );
-
-        switch( csTxt.Alignment )
-        {
-        case ALIGNMENT::NO_ALIGNMENT: // Default for Single line text is Bottom Left
-        case ALIGNMENT::BOTTOMLEFT:
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-            break;
-
-        case ALIGNMENT::BOTTOMCENTER:
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-            break;
-
-        case ALIGNMENT::BOTTOMRIGHT:
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-            break;
-
-        case ALIGNMENT::CENTERLEFT:
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-            break;
-
-        case ALIGNMENT::CENTERCENTER:
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-            break;
-
-        case ALIGNMENT::CENTERRIGHT:
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-            break;
-
-        case ALIGNMENT::TOPLEFT:
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-            break;
-
-        case ALIGNMENT::TOPCENTER:
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-            break;
-
-        case ALIGNMENT::TOPRIGHT:
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-            break;
-
-        default:
-            wxASSERT_MSG( true, "Unknown Aligment - needs review!" );
-        }
-
-        if( isLayerSet( csTxt.LayerID ) )
-        {
-            //Make a copy on each layer
-
-            LSEQ layers = getKiCadLayerSet( csTxt.LayerID ).Seq();
-            TEXTE_PCB* newtxt;
-
-            for( PCB_LAYER_ID layer : layers )
-            {
-                txt->SetLayer( layer );
-                newtxt = new TEXTE_PCB( *txt );
-                mBoard->Add( newtxt, ADD_MODE::APPEND );
-            }
-
-            mBoard->Remove( txt );
-            delete txt;
-        }
-        else
-            txt->SetLayer( getKiCadLayer( csTxt.LayerID ) );
-
-        //TODO Handle different font types when KiCad can support it.
+        drawCadstarText( csTxt, mBoard );
     }
 }
 
@@ -756,7 +670,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
 
             mBoard->Add( zone, ADD_MODE::APPEND );
 
-            zone->SetLayer( getKiCadLayer( area.LayerID ) );
+            if( isLayerSet( area.LayerID ) )
+                zone->SetLayerSet( getKiCadLayerSet( area.LayerID ) );
+            else
+                zone->SetLayer( getKiCadLayer( area.LayerID ) );
+
             zone->SetIsKeepout( true );       //import all CADSTAR areas as Keepout zones
             zone->SetDoNotAllowPads( false ); //no CADSTAR equivalent
             zone->SetZoneName( area.Name );
@@ -834,6 +752,58 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
 }
 
 
+void CADSTAR_PCB_ARCHIVE_LOADER::loadDocumentationSymbols()
+{
+    //No KiCad equivalent. Loaded as graphic and text elements instead
+
+    for( std::pair<DOCUMENTATION_SYMBOL_ID, DOCUMENTATION_SYMBOL> docPair :
+            Layout.DocumentationSymbols )
+    {
+        DOCUMENTATION_SYMBOL& docSymInstance = docPair.second;
+
+        auto docSymIter = Library.ComponentDefinitions.find( docSymInstance.SymdefID );
+
+        if( docSymIter == Library.ComponentDefinitions.end() )
+        {
+            THROW_IO_ERROR( wxString::Format( _( "Unable to find documentation symbol in the "
+                                                 "library (Symdef ID: '%s')" ),
+                    docSymInstance.SymdefID ) );
+        }
+
+        SYMDEF&    docSymDefinition = ( *docSymIter ).second;
+        wxPoint moveVector =
+                getKiCadPoint( docSymInstance.Origin ) - getKiCadPoint( docSymDefinition.Origin );
+        double     rotationAngle = getAngleTenthDegree( docSymInstance.OrientAngle );
+        double     scalingFactor =
+                (double) docSymInstance.ScaleRatioNumerator / (double) docSymInstance.ScaleRatioDenominator;
+        wxPoint centreOfTransform = getKiCadPoint( docSymDefinition.Origin );
+        bool    mirrorInvert      = docSymInstance.Mirror;
+
+        LSEQ layers = getKiCadLayerSet( docSymInstance.LayerID ).Seq();
+
+        for( PCB_LAYER_ID layer : layers )
+        {
+            for( std::pair<FIGURE_ID, FIGURE> figPair : docSymDefinition.Figures )
+            {
+                FIGURE fig = figPair.second;
+                drawCadstarShape( fig.Shape, layer, fig.LineCodeID,
+                        wxString::Format( "DOCUMENTATION SYMBOL %s, FIGURE %s",
+                                docSymDefinition.ReferenceName, fig.ID ),
+                        mBoard, moveVector, rotationAngle, scalingFactor, centreOfTransform,
+                        mirrorInvert );
+            }
+        }
+
+        for( std::pair<TEXT_ID, TEXT> textPair : docSymDefinition.Texts )
+        {
+            TEXT txt = textPair.second;
+            drawCadstarText( txt, mBoard, docSymInstance.LayerID, moveVector, rotationAngle,
+                    scalingFactor, centreOfTransform, mirrorInvert );
+        }
+    }
+}
+
+
 void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
 {
     for( std::pair<TEMPLATE_ID, TEMPLATE> tempPair : Layout.Templates )
@@ -848,7 +818,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
         zone->SetZoneName( csTemplate.Name );
         zone->SetLayer( getKiCadLayer( csTemplate.LayerID ) );
 
-        if( !csTemplate.NetID.IsEmpty() )
+        if( !(csTemplate.NetID.IsEmpty() || csTemplate.NetID == wxT("NONE") ) )
             zone->SetNet( getKiCadNet( csTemplate.NetID ) );
 
         if( csTemplate.Pouring.AllowInNoRouting )
@@ -1076,10 +1046,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
     for( std::pair<NET_ID, NET> netPair : Layout.Nets )
     {
         NET net = netPair.second;
-        wxString netname = net.Name;
+        wxString netnameForErrorReporting = net.Name;
         
-        if( netname.IsEmpty() )
-            netname = "$" + net.SignalNum;
+        if( netnameForErrorReporting.IsEmpty() )
+            netnameForErrorReporting = "$" + net.SignalNum;
 
         for( NET::CONNECTION connection : net.Connections )
         {
@@ -1105,14 +1075,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
                 wxLogWarning( wxString::Format(
                         _( "The net '%s' references component ID '%s' which does not exist. "
                            "This has been ignored," ),
-                        netname, pin.ComponentID ) );
+                        netnameForErrorReporting, pin.ComponentID ) );
             }
             else if( ( pin.PadID - (long) 1 ) > m->Pads().size() )
             {
                 wxLogWarning( wxString::Format(
                         _( "The net '%s' references non-existent pad index '%d' in component '%s'. "
                            "This has been ignored." ),
-                        netname, pin.PadID, m->GetReference() ) );
+                        netnameForErrorReporting, pin.PadID, m->GetReference() ) );
             }
             else
             {
@@ -1239,10 +1209,139 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
     ///todo add netcode to the via
 }
 
+void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
+        BOARD_ITEM_CONTAINER* aContainer, const LAYER_ID& aCadstarLayerOverride,
+        const wxPoint& aMoveVector, const double& aRotationAngle, const double& aScalingFactor,
+        const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+{
+    TEXTE_PCB* txt = new TEXTE_PCB( aContainer );
+    aContainer->Add( txt );
+    txt->SetText( aCadstarText.Text );
+
+    wxPoint rotatedTextPos = getKiCadPoint( aCadstarText.Position );
+    RotatePoint( &rotatedTextPos, aTransformCentre, aRotationAngle );
+    rotatedTextPos.x = KiROUND( (double) ( rotatedTextPos.x - aTransformCentre.x ) * aScalingFactor );
+    rotatedTextPos.y = KiROUND( (double) ( rotatedTextPos.y - aTransformCentre.y ) * aScalingFactor );
+    rotatedTextPos += aTransformCentre;
+    txt->SetTextPos( rotatedTextPos );
+    txt->SetPosition( rotatedTextPos );
+
+    txt->SetTextAngle( getAngleTenthDegree( aCadstarText.OrientAngle ) + aRotationAngle );
+    txt->SetMirrored( aCadstarText.Mirror );    
+
+    TEXTCODE tc = getTextCode( aCadstarText.TextCodeID );
+
+    txt->SetTextThickness( getKiCadLength( tc.LineWidth ) );
+
+    wxSize unscaledTextSize;
+    unscaledTextSize.x = getKiCadLength( tc.Width );
+    unscaledTextSize.y = getKiCadLength( tc.Height );
+    txt->SetTextSize( unscaledTextSize );
+
+    switch( aCadstarText.Alignment )
+    {
+    case ALIGNMENT::NO_ALIGNMENT: // Default for Single line text is Bottom Left
+    case ALIGNMENT::BOTTOMLEFT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+
+    case ALIGNMENT::BOTTOMCENTER:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        break;
+
+    case ALIGNMENT::BOTTOMRIGHT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+
+    case ALIGNMENT::CENTERLEFT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+
+    case ALIGNMENT::CENTERCENTER:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        break;
+
+    case ALIGNMENT::CENTERRIGHT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+
+    case ALIGNMENT::TOPLEFT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+
+    case ALIGNMENT::TOPCENTER:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        break;
+
+    case ALIGNMENT::TOPRIGHT:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+
+    default:
+        wxASSERT_MSG( true, "Unknown Aligment - needs review!" );
+    }
+
+    if( aMirrorInvert )
+    {
+        txt->Flip( aTransformCentre, true );
+    }
+    
+    //scale it after flipping:
+    if( aScalingFactor != 1.0 )
+    {
+        wxSize scaledTextSize;
+        scaledTextSize.x = KiROUND( (double) getKiCadLength( tc.Width ) * aScalingFactor );
+        scaledTextSize.y = KiROUND( (double) getKiCadLength( tc.Height ) * aScalingFactor );
+        txt->SetTextSize( scaledTextSize );
+        txt->SetTextThickness(
+                KiROUND( (double) getKiCadLength( tc.LineWidth ) * aScalingFactor ) );
+    }
+
+    txt->Move( aMoveVector );
+
+    LAYER_ID layersToDrawOn = aCadstarLayerOverride;
+
+    if( layersToDrawOn.IsEmpty() )
+        layersToDrawOn = aCadstarText.LayerID;
+
+    if( isLayerSet( layersToDrawOn ) )
+    {
+        //Make a copy on each layer
+
+        LSEQ       layers = getKiCadLayerSet( layersToDrawOn ).Seq();
+        TEXTE_PCB* newtxt;
+
+        for( PCB_LAYER_ID layer : layers )
+        {
+            txt->SetLayer( layer );
+            newtxt = new TEXTE_PCB( *txt );
+            mBoard->Add( newtxt, ADD_MODE::APPEND );
+        }
+
+        mBoard->Remove( txt );
+        delete txt;
+    }
+    else
+        txt->SetLayer( getKiCadLayer( layersToDrawOn ) );
+
+    //TODO Handle different font types when KiCad can support it.
+}
+
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
         const PCB_LAYER_ID& aKiCadLayer, const LINECODE_ID& aCadstarLinecodeID,
-        const wxString& aShapeName, BOARD_ITEM_CONTAINER* aContainer )
+        const wxString& aShapeName, BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector,
+        const double& aRotationAngle, const double& aScalingFactor, const wxPoint& aTransformCentre,
+        const bool& aMirrorInvert )
 {
     int lineThickness = getLineThickness( aCadstarLinecodeID );
 
@@ -1251,10 +1350,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
     case SHAPE_TYPE::OPENSHAPE:
     case SHAPE_TYPE::OUTLINE:
         ///TODO update this when Polygons in KiCad can be defined with no fill
-        drawCadstarVerticesAsSegments(
-                aCadstarShape.Vertices, aKiCadLayer, lineThickness, aContainer );
-        drawCadstarCutoutsAsSegments(
-                aCadstarShape.Cutouts, aKiCadLayer, lineThickness, aContainer );
+        drawCadstarVerticesAsSegments( aCadstarShape.Vertices, aKiCadLayer, lineThickness,
+                aContainer, aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre,
+                aMirrorInvert );
+        drawCadstarCutoutsAsSegments( aCadstarShape.Cutouts, aKiCadLayer, lineThickness, aContainer,
+                aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
         break;
 
     case SHAPE_TYPE::HATCHED:
@@ -1276,7 +1376,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
             ds->SetShape( STROKE_T::S_POLYGON );
         }
 
-        ds->SetPolyShape( getPolySetFromCadstarShape( aCadstarShape, -1, aContainer ) );
+        ds->SetPolyShape( getPolySetFromCadstarShape( aCadstarShape, -1, aContainer, aMoveVector,
+                aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert ) );
         ds->SetWidth( lineThickness );
         ds->SetLayer( aKiCadLayer );
         aContainer->Add( ds, ADD_MODE::APPEND );
@@ -1288,21 +1389,26 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCutouts,
         const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
-        BOARD_ITEM_CONTAINER* aContainer )
+        BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector, const double& aRotationAngle,
+        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
 {
     for( CUTOUT cutout : aCutouts )
     {
-        drawCadstarVerticesAsSegments( cutout.Vertices, aKiCadLayer, aLineThickness, aContainer );
+        drawCadstarVerticesAsSegments( cutout.Vertices, aKiCadLayer, aLineThickness, aContainer,
+                aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
     }
 }
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsSegments(
         const std::vector<VERTEX>& aCadstarVertices, const PCB_LAYER_ID& aKiCadLayer,
-        const int& aLineThickness, BOARD_ITEM_CONTAINER* aContainer )
+        const int& aLineThickness, BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector,
+        const double& aRotationAngle, const double& aScalingFactor, const wxPoint& aTransformCentre,
+        const bool& aMirrorInvert )
 {
     std::vector<DRAWSEGMENT*> drawSegments =
-            getDrawSegmentsFromVertices( aCadstarVertices, aContainer );
+            getDrawSegmentsFromVertices( aCadstarVertices, aContainer, aMoveVector, aRotationAngle,
+                    aScalingFactor, aTransformCentre, aMirrorInvert );
 
     for( DRAWSEGMENT* ds : drawSegments )
     {
@@ -1315,7 +1421,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsSegments(
 
 
 std::vector<DRAWSEGMENT*> CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentsFromVertices(
-        const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer )
+        const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer,
+        const wxPoint& aMoveVector, const double& aRotationAngle, const double& aScalingFactor,
+        const wxPoint& aTransformCentre, const bool& aMirrorInvert )
 {
     std::vector<DRAWSEGMENT*> drawSegments;
 
@@ -1329,7 +1437,8 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentsFromVertice
     for( size_t i = 1; i < aCadstarVertices.size(); i++ )
     {
         cur = &aCadstarVertices.at( i );
-        drawSegments.push_back( getDrawSegmentFromVertex( prev->End, *cur, aContainer ) );
+        drawSegments.push_back( getDrawSegmentFromVertex( prev->End, *cur, aContainer, aMoveVector,
+                aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert ) );
         prev = cur;
     }
 
@@ -1338,9 +1447,11 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentsFromVertice
 
 
 DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aCadstarStartPoint,
-        const VERTEX& aCadstarVertex, BOARD_ITEM_CONTAINER* aContainer )
+        const VERTEX& aCadstarVertex, BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector,
+        const double& aRotationAngle, const double& aScalingFactor, const wxPoint& aTransformCentre,
+        const bool& aMirrorInvert )
 {
-    DRAWSEGMENT* ds;
+    DRAWSEGMENT* ds = nullptr;
     bool         cw = false;
     double       arcStartAngle, arcEndAngle, arcAngle;
 
@@ -1401,6 +1512,23 @@ DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& 
         break;
     }
 
+    //Apply transforms
+    if( aMirrorInvert )
+        ds->Flip( aTransformCentre, true );
+    
+    if( aScalingFactor != 1.0 )
+    {
+        ds->Move( -aTransformCentre );
+        ds->Scale( aScalingFactor );
+        ds->Move( aTransformCentre );
+    }
+
+    if( aRotationAngle != 0.0 )
+        ds->Rotate( aTransformCentre, aRotationAngle );
+
+    if( aMoveVector != wxPoint{ 0, 0 } )
+        ds->Move( aMoveVector );
+
     if( isModule( aContainer ) && ds != nullptr )
         ( (EDGE_MODULE*) ds )->SetLocalCoord();
 
@@ -1434,11 +1562,14 @@ ZONE_CONTAINER* CADSTAR_PCB_ARCHIVE_LOADER::getZoneFromCadstarShape(
 }
 
 
-SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape(
-        const SHAPE& aCadstarShape, const int& aLineThickness, BOARD_ITEM_CONTAINER* aContainer )
+SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHAPE& aCadstarShape,
+        const int& aLineThickness, BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector,
+        const double& aRotationAngle, const double& aScalingFactor, const wxPoint& aTransformCentre,
+        const bool& aMirrorInvert )
 {
     std::vector<DRAWSEGMENT*> outlineSegments =
-            getDrawSegmentsFromVertices( aCadstarShape.Vertices, aContainer );
+            getDrawSegmentsFromVertices( aCadstarShape.Vertices, aContainer, aMoveVector,
+                    aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
 
     SHAPE_POLY_SET polySet( getLineChainFromDrawsegments( outlineSegments ) );
 
@@ -1451,7 +1582,8 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape(
 
     for( CUTOUT cutout : aCadstarShape.Cutouts )
     {
-        std::vector<DRAWSEGMENT*> cutoutSeg = getDrawSegmentsFromVertices( cutout.Vertices );
+        std::vector<DRAWSEGMENT*> cutoutSeg = getDrawSegmentsFromVertices( cutout.Vertices,
+                aContainer, aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre );
 
         polySet.AddHole( getLineChainFromDrawsegments( cutoutSeg ) );
 
@@ -1470,6 +1602,18 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape(
     //Make a new polyset with no holes
     //TODO: Using strictly simple to be safe, but need to find out if PM_FAST works okay
     polySet.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+
+#ifdef DEBUG
+    for( int i = 0; i < polySet.OutlineCount(); ++i )
+    {
+        wxASSERT( polySet.Outline( i ).PointCount() > 2 );
+        
+        for( int j = 0; j < polySet.HoleCount( i ); ++j )
+        {
+            wxASSERT( polySet.Hole( i, j ).PointCount() > 2 );
+        }
+    }
+#endif
 
     return polySet;
 }
@@ -1519,6 +1663,8 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments(
     }
 
     lineChain.SetClosed( true ); //todo check if it is closed
+
+    wxASSERT( lineChain.PointCount() > 2 );
 
     return lineChain;
 }
@@ -1952,12 +2098,30 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
         wxCHECK( Layout.Nets.find( aCadstarNetID ) != Layout.Nets.end(), nullptr );
         
         NET csNet = Layout.Nets.at( aCadstarNetID );
-        wxString newName = wxEmptyString;
+        wxString newName = csNet.Name;
 
         if( csNet.Name.IsEmpty() )
-            newName = "CSNET" + ( csNet.SignalNum );
+        {
+            if( csNet.Pins.size() > 0 )
+            {
+                // Create default KiCad net naming:
 
-        NETINFO_ITEM* netInfo = new NETINFO_ITEM( mBoard, csNet.Name, ++mNumNets );
+                NET::PIN firstPin = (*csNet.Pins.begin()).second;
+                //we should have already loaded the component with loadComponents() :
+                MODULE* m = getModuleFromCadstarID( firstPin.ComponentID ); 
+                newName   = wxT( "Net-(" );
+                newName << m->Reference().GetText();
+                newName << "-Pad" << wxString::Format( "%i", firstPin.PadID) << ")";
+            }
+            else
+            {
+                wxASSERT_MSG( false, "A net with no pins associated?" );
+                newName = wxT( "csNet-" );
+                newName << wxString::Format( "%i", csNet.SignalNum );
+            }
+        }            
+
+        NETINFO_ITEM* netInfo = new NETINFO_ITEM( mBoard, newName, ++mNumNets );
         mBoard->Add( netInfo, ADD_MODE::APPEND );
         //todo also add the Netclass
 

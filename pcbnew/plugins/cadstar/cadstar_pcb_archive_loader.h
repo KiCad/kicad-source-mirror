@@ -99,11 +99,12 @@ private:
     void loadTexts();
     void loadAreas();
     void loadComponents();
+    void loadDocumentationSymbols();
     void loadTemplates();
     void loadCoppers();
     void loadNets();
 
-    // Helper functions for loading:
+    // Helper functions for element loading:
     void logBoardStackupWarning(
             const wxString& aCadstarLayerName, const PCB_LAYER_ID& aKiCadLayer );
     void loadLibraryFigures( const SYMDEF& aComponent, MODULE* aModule );
@@ -114,16 +115,39 @@ private:
 
     /**
      * @brief 
+     * @param aCadstarText 
+     * @param aContainer to draw on (e.g. mBoard)
+     * @param aCadstarLayerOverride if not empty, overrides the LayerID in aCadstarText
+     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
+     * @param aScalingFactor scale draw segment by this amount
+     * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
+     * @param aMirrorInvert if true, it inverts the Mirror status of aCadstarText
+     */
+    void drawCadstarText( const TEXT& aCadstarText, BOARD_ITEM_CONTAINER* aContainer,
+            const LAYER_ID& aCadstarLayerOverride = wxEmptyString,
+            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngle = 0.0,
+            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
+            const bool& aMirrorInvert = false );
+
+    /**
+     * @brief 
      * @param aCadstarShape 
      * @param aCadstarLayerID KiCad layer to draw on
      * @param aCadstarLinecodeID Thickness of line to draw with
      * @param aShapeName for reporting warnings/errors to the user
      * @param aContainer to draw on (e.g. mBoard)
+     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
+     * @param aScalingFactor scale draw segment by this amount
+     * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
+     * @param aMirrorInvert if true, it inverts the Mirror status of aCadstarText
      */
     void drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
             const LINECODE_ID& aCadstarLinecodeID, const wxString& aShapeName,
-            BOARD_ITEM_CONTAINER* aContainer );
-
+            BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector = { 0, 0 },
+            const double& aRotationAngle = 0.0, const double& aScalingFactor = 1.0,
+            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
 
     /**
      * @brief Uses DRAWSEGMENT to draw the cutouts on mBoard object
@@ -131,11 +155,17 @@ private:
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
      * @param aContainer to draw on (e.g. mBoard)
+     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
+     * @param aScalingFactor scale draw segment by this amount
+     * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
+     * @param aMirrorInvert if true, it inverts the Mirror status of aCadstarText
      */
     void drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCutouts,
             const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
-            BOARD_ITEM_CONTAINER* aContainer );
-
+            BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector = { 0, 0 },
+            const double& aRotationAngle = 0.0, const double& aScalingFactor = 1.0,
+            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
 
     /**
      * @brief Uses DRAWSEGMENT to draw the vertices on mBoard object
@@ -143,30 +173,52 @@ private:
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
      * @param aContainer to draw on (e.g. mBoard)
+     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
+     * @param aScalingFactor scale draw segment by this amount
+     * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
+     * @param aMirrorInvert if true, it inverts the Mirror status of aCadstarText
      */
     void drawCadstarVerticesAsSegments( const std::vector<VERTEX>& aCadstarVertices,
             const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
-            BOARD_ITEM_CONTAINER* aContainer );
+            BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector = { 0, 0 },
+            const double& aRotationAngle = 0.0, const double& aScalingFactor = 1.0,
+            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
 
     /**
      * @brief Returns a vector of pointers to DRAWSEGMENT objects. Caller owns the objects.
      * @param aCadstarVertices
      * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
+     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
+     * @param aScalingFactor scale draw segment by this amount
+     * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
+     * @param aMirrorInvert if true, it inverts the Mirror status of aCadstarText
      * @return 
      */
     std::vector<DRAWSEGMENT*> getDrawSegmentsFromVertices(
-            const std::vector<VERTEX>& aCadstarVertices,
-            BOARD_ITEM_CONTAINER*      aContainer = nullptr );
+            const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer = nullptr,
+            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngle = 0.0,
+            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
+            const bool& aMirrorInvert = false );
 
     /**
      * @brief Returns a pointer to a DRAWSEGMENT object. Caller owns the object.
      * @param aCadstarStartPoint
      * @param aCadstarVertex
      * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
+     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
+     * @param aScalingFactor scale draw segment by this amount
+     * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
+     * @param aMirrorInvert if true, it inverts the Mirror status of aCadstarText
      * @return 
      */
     DRAWSEGMENT* getDrawSegmentFromVertex( const POINT& aCadstarStartPoint,
-            const VERTEX& aCadstarVertex, BOARD_ITEM_CONTAINER* aContainer = nullptr );
+            const VERTEX& aCadstarVertex, BOARD_ITEM_CONTAINER* aContainer = nullptr,
+            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngle = 0.0,
+            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
+            const bool& aMirrorInvert = false );
 
     /**
      * @brief 
@@ -177,16 +229,23 @@ private:
     ZONE_CONTAINER* getZoneFromCadstarShape(
             const SHAPE& aCadstarShape, const int& aLineThickness );
 
-
     /**
      * @brief Returns a SHAPE_POLY_SET object from a Cadstar SHAPE
      * @param aCadstarShape
      * @param aLineThickness Thickness of line is used for expanding the polygon by half.
      * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
+     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
+     * @param aScalingFactor scale draw segment by this amount
+     * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
+     * @param aMirrorInvert if true, it inverts the Mirror status of aCadstarText
      * @return 
      */
     SHAPE_POLY_SET getPolySetFromCadstarShape( const SHAPE& aCadstarShape,
-            const int& aLineThickness = -1, BOARD_ITEM_CONTAINER* aContainer = nullptr );
+            const int& aLineThickness = -1, BOARD_ITEM_CONTAINER* aContainer = nullptr,
+            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngle = 0.0,
+            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
+            const bool& aMirrorInvert = false );
 
     /**
      * @brief Returns a SHAPE_LINE_CHAIN object from a series of DRAWSEGMENT objects
@@ -232,23 +291,21 @@ private:
 
 
     COPPERCODE getCopperCode( const COPPERCODE_ID& aCadstaCopperCodeID );
-    TEXTCODE   getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
-    PADCODE    getPadCode( const PADCODE_ID& aCadstarPadCodeID );
-    VIACODE    getViaCode( const VIACODE_ID& aCadstarViaCodeID );
+    HATCHCODE  getHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
     LAYERPAIR  getLayerPair( const LAYERPAIR_ID& aCadstarLayerPairID );
+    PADCODE    getPadCode( const PADCODE_ID& aCadstarPadCodeID );
+    PART       getPart( const PART_ID& aCadstarPartID );
+    VIACODE    getViaCode( const VIACODE_ID& aCadstarViaCodeID );
+    TEXTCODE   getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
 
     wxString getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
-
 
     wxString getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
             const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
 
-    PART getPart( const PART_ID& aCadstarPartID );
-
-    HATCHCODE getHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
     void      checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
-    MODULE*   getModuleFromCadstarID( const COMPONENT_ID& aCadstarComponentID );
     double    getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
+    MODULE*   getModuleFromCadstarID( const COMPONENT_ID& aCadstarComponentID );
     int       getKiCadHatchCodeThickness( const HATCHCODE_ID& aCadstarHatchcodeID );
     int       getKiCadHatchCodeGap( const HATCHCODE_ID& aCadstarHatchcodeID );
 

@@ -2835,6 +2835,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DOCUMENTATION_SYMBOL::Parse( XNODE* aNode )
             attr.Parse( cNode );
             AttributeValues.insert( std::make_pair( attr.AttributeID, attr ) );
         }
+        else if( cNodeName == wxT( "SCALE" ) )
+        {
+            ScaleRatioNumerator   = GetXmlAttributeIDLong( cNode, 0 );
+            ScaleRatioDenominator = GetXmlAttributeIDLong( cNode, 1 );
+        }
         else
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
@@ -3098,6 +3103,10 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "SIGNUM" ) )
         {
             SignalNum = GetXmlAttributeIDLong( cNode, 0 );
+        }
+        else if( cNodeName == wxT( "HIGHLIT" ) )
+        {
+            Highlight = true;
         }
         else if( cNodeName == wxT( "PIN" ) )
         {
@@ -3583,6 +3592,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode )
             DRILL_TABLE drilltable;
             drilltable.Parse( cNode );
             DrillTables.insert( std::make_pair( drilltable.ID, drilltable ) );
+        }
+        else if( cNodeName == wxT( "ERRORMARK" ) )
+        {
+            //ignore (this is a DRC error marker in cadstar)
+            continue;
         }
         else
         {
