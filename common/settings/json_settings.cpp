@@ -326,6 +326,14 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
         return false;
     }
 
+    // Ensure the path exists, and create it if not.
+    if( !path.DirExists() && !path.Mkdir() )
+    {
+        wxLogTrace( traceSettings, "Warning: could not create path %s, can't save %s",
+                    path.GetPath(), GetFullFilename() );
+        return false;
+    }
+
     if( ( path.FileExists() && !path.IsFileWritable() ) ||
         ( !path.FileExists() && !path.IsDirWritable() ) )
     {
@@ -350,13 +358,6 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
         wxLogTrace( traceSettings,
                 "%s contents still default and m_createIfDefault == false; not saving",
                     GetFullFilename() );
-        return false;
-    }
-
-    if( !path.DirExists() && !path.Mkdir() )
-    {
-        wxLogTrace( traceSettings, "Warning: could not create path %s, can't save %s",
-                    path.GetPath(), GetFullFilename() );
         return false;
     }
 
@@ -448,7 +449,7 @@ nlohmann::json::json_pointer JSON_SETTINGS::PointerFromString( std::string aPath
 }
 
 
-bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, 
+bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
                                   wxString& aTarget )
 {
     nlohmann::json::json_pointer ptr = PointerFromString( aPath );
@@ -463,7 +464,7 @@ bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string&
 }
 
 
-bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, 
+bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
                                   bool& aTarget )
 {
     nlohmann::json::json_pointer ptr = PointerFromString( aPath );
@@ -478,7 +479,7 @@ bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string&
 }
 
 
-bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, 
+bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
                                   int& aTarget )
 {
     nlohmann::json::json_pointer ptr = PointerFromString( aPath );
@@ -493,7 +494,7 @@ bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string&
 }
 
 
-bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, 
+bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
                                   unsigned int& aTarget )
 {
     nlohmann::json::json_pointer ptr = PointerFromString( aPath );
