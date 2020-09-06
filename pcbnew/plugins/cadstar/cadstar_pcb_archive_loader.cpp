@@ -865,7 +865,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
                     (long long) getKiCadLength( csTemplate.Pouring.MinDisjointCopper )
                     * (long long) getKiCadLength( csTemplate.Pouring.MinDisjointCopper ) );
 
-        zone->SetZoneClearance( getKiCadLength( csTemplate.Pouring.AdditionalIsolation ) );
+        zone->SetLocalClearance( getKiCadLength( csTemplate.Pouring.AdditionalIsolation ) );
 
         if( csTemplate.Pouring.FillType == TEMPLATE::POURING::COPPER_FILL_TYPE::HATCHED )
         {
@@ -1946,6 +1946,17 @@ CADSTAR_PCB_ARCHIVE_LOADER::PART CADSTAR_PCB_ARCHIVE_LOADER::getPart(
 }
 
 
+CADSTAR_PCB_ARCHIVE_LOADER::ROUTECODE CADSTAR_PCB_ARCHIVE_LOADER::getRouteCode(
+        const ROUTECODE_ID& aCadstarRouteCodeID )
+{
+    wxCHECK( Assignments.Codedefs.RouteCodes.find( aCadstarRouteCodeID )
+                     != Assignments.Codedefs.RouteCodes.end(),
+            ROUTECODE() );
+
+    return Assignments.Codedefs.RouteCodes.at( aCadstarRouteCodeID );
+}
+
+
 CADSTAR_PCB_ARCHIVE_LOADER::HATCHCODE CADSTAR_PCB_ARCHIVE_LOADER::getHatchCode(
         const HATCHCODE_ID& aCadstarHatchcodeID )
 {
@@ -2119,11 +2130,46 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
                 newName = wxT( "csNet-" );
                 newName << wxString::Format( "%i", csNet.SignalNum );
             }
-        }            
+        }
+
+        if( !mDoneNetClassWarning && !csNet.NetClassID.IsEmpty()
+                && csNet.NetClassID != wxT( "NONE" ) )
+        {
+            wxLogMessage( _(
+                    "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does "
+                    "not have an equivalent to CADSTAR's Net Class so these elements were not "
+                    "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's "
+                    "'Net Route Code' (which has been imported for all nets)." ) );
+            mDoneNetClassWarning = true;
+        }
+
+        if( !mDoneSpacingClassWarning && !csNet.SpacingClassID.IsEmpty()
+                && csNet.SpacingClassID != wxT( "NONE" ) )
+        {
+            wxLogWarning( _(
+                    "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
+                    "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
+                    "imported. Please review the design rules as copper pours will affected by "
+                    "this." ) );
+            mDoneSpacingClassWarning = true;
+        }
 
         NETINFO_ITEM* netInfo = new NETINFO_ITEM( mBoard, newName, ++mNumNets );
         mBoard->Add( netInfo, ADD_MODE::APPEND );
-        //todo also add the Netclass
+
+        if( mNetClassMap.find( csNet.RouteCodeID ) != mNetClassMap.end() )
+        {
+            NETCLASSPTR netclass = mNetClassMap.at( csNet.RouteCodeID );
+            netInfo->SetClass( netclass );
+        }
+        else
+        {
+            ROUTECODE   rc = getRouteCode( csNet.RouteCodeID );
+            NETCLASSPTR netclass( new ::NETCLASS( rc.Name ) );
+            netclass->SetTrackWidth( getKiCadLength( rc.OptimalWidth ) );
+            netInfo->SetClass( netclass );
+            mNetClassMap.insert( { csNet.RouteCodeID, netclass } );
+        }
 
         mNetMap.insert( { aCadstarNetID, netInfo } );
         return netInfo;

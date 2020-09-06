@@ -38,11 +38,13 @@ public:
     explicit CADSTAR_PCB_ARCHIVE_LOADER( wxString aFilename )
             : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
     {
-        mBoard             = nullptr;
-        mDesignCenter.x    = 0;
-        mDesignCenter.y    = 0;
-        mDoneCopperWarning = false;
-        mNumNets           = 0;
+        mBoard                   = nullptr;
+        mDesignCenter.x          = 0;
+        mDesignCenter.y          = 0;
+        mDoneCopperWarning       = false;
+        mDoneSpacingClassWarning = false;
+        mDoneNetClassWarning     = false;
+        mNumNets                 = 0;
     }
 
     ~CADSTAR_PCB_ARCHIVE_LOADER()
@@ -75,6 +77,7 @@ private:
                                                          ///< the MODULE objects (these should have
                                                          ///< been loaded to mBoard).
     std::map<NET_ID, NETINFO_ITEM*>       mNetMap;       ///< Map between Cadstar and KiCad Nets
+    std::map<ROUTECODE_ID, NETCLASSPTR>   mNetClassMap;  ///< Map between Cadstar and KiCad classes
     std::map<PHYSICAL_LAYER_ID, LAYER_ID> mCopperLayers; ///< Map of CADSTAR Physical layers to
                                                          ///< CADSTAR Layer IDs
     std::vector<LAYER_ID> mPowerPlaneLayers;             ///< List of layers that are marked as 
@@ -86,6 +89,10 @@ private:
     std::set<HATCHCODE_ID> mHatchcodesTested;            ///< Used by checkAndLogHatchCode() to
                                                          ///< avoid multiple duplicate warnings
     bool mDoneCopperWarning;                             ///< Used by loadCoppers() to avoid
+                                                         ///< multiple duplicate warnings
+    bool mDoneSpacingClassWarning;                       ///< Used by getKiCadNet() to avoid
+                                                         ///< multiple duplicate warnings
+    bool mDoneNetClassWarning;                           ///< Used by getKiCadNet() to avoid
                                                          ///< multiple duplicate warnings
     int mNumNets;                                        ///< Number of nets loaded so far 
 
@@ -295,8 +302,9 @@ private:
     LAYERPAIR  getLayerPair( const LAYERPAIR_ID& aCadstarLayerPairID );
     PADCODE    getPadCode( const PADCODE_ID& aCadstarPadCodeID );
     PART       getPart( const PART_ID& aCadstarPartID );
-    VIACODE    getViaCode( const VIACODE_ID& aCadstarViaCodeID );
+    ROUTECODE  getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID );
     TEXTCODE   getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
+    VIACODE    getViaCode( const VIACODE_ID& aCadstarViaCodeID );
 
     wxString getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
 
