@@ -327,7 +327,7 @@ public:
      * @param aSheetPath is the hierarchical path of the symbol to clear or remove all
      *                   annotations for this symbol if NULL.
      */
-    void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
+    void ClearAnnotation( const SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Add an instance to the alternate references list (m_instanceReferences), if this entry

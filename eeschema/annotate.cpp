@@ -70,11 +70,6 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool* aAppendUndo
                     SaveCopyInUndoList( aScreen, component, UNDO_REDO::CHANGED, *aAppendUndo );
                     *aAppendUndo = true;
                     component->ClearAnnotation( aSheet );
-
-                    // Clear the modified component flag set by component->ClearAnnotation
-                    // because we do not use it here and we should not leave this flag set,
-                    // when an editing is finished:
-                    component->ClearFlags();
                 }
             };
 

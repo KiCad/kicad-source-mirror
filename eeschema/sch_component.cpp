@@ -946,7 +946,7 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
 }
 
 
-void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
+void SCH_COMPONENT::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
 {
     // Build a reference with no annotation,
     // i.e. a reference ended by only one '?'
@@ -986,8 +986,6 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
     // UpdateAllScreenReferences for the active sheet.
     // But this call cannot made here.
     m_Fields[REFERENCE].SetText( defRef ); //for drawing.
-
-    SetModified();
 }
 
 

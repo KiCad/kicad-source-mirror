@@ -929,11 +929,6 @@ void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
         SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
 
         component->ClearAnnotation( aSheetPath );
-
-        // Clear the modified component flag set by component->ClearAnnotation
-        // because we do not use it here and we should not leave this flag set,
-        // when an editing is finished:
-        component->ClearFlags();
     }
 }
 
@@ -945,10 +940,10 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
 
     for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
     {
-        auto component = static_cast<SCH_COMPONENT*>( item );
+        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
 
         // Add (when not existing) all sheet path entries
-        for( const auto& sheet : GetClientSheetPaths() )
+        for( const SCH_SHEET_PATH& sheet : GetClientSheetPaths() )
             component->AddSheetPathReferenceEntryIfMissing( sheet.Path() );
     }
 }
